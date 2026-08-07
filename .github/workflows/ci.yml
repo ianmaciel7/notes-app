@@ -6,6 +6,13 @@ on:
       - main
       - staging
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   quality:
     name: Quality
@@ -31,6 +38,9 @@ jobs:
 
       - name: Biome
         run: pnpm lint
+
+      - name: Generate Next.js types
+        run: pnpm exec next typegen
 
       - name: TypeScript
         run: pnpm exec tsc --noEmit
