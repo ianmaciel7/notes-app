@@ -1,17 +1,35 @@
 {
   "version": 1,
   "skills": {
+    "acquire-codebase-knowledge": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/acquire-codebase-knowledge/SKILL.md",
+      "computedHash": "06b7a3d0bb44b70b470247aacc2ffffe37c8ce64cc3f9178be6f392c81cb6d22"
+    },
     "agent-browser": {
       "source": "vercel-labs/agent-browser",
       "sourceType": "github",
       "skillPath": "skills/agent-browser/SKILL.md",
       "computedHash": "a674b7d81066e3cc471a7512ddb4ae724418cbfefa75cbb050b0dc430e4d57a0"
     },
+    "agent-creator": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/agent-creator/SKILL.md",
+      "computedHash": "080e77862c8745df4769ea30bbaf722615e93bf8e111685071c77ab6c4ff6d1c"
+    },
     "agents-md": {
       "source": "getsentry/skills",
       "sourceType": "github",
       "skillPath": "skills/agents-md/SKILL.md",
       "computedHash": "7ff79d6771cdf3db33606251eb15bbc5203b68a94b036ee471869842118ea02a"
+    },
+    "context-engineering-collection": {
+      "source": "muratcankoylan/agent-skills-for-context-engineering",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "4668764a23f9c7b6a3952db02c58d5ecab568db2a7a927f55808e410bbaa55a2"
     },
     "design-md": {
       "source": "google-labs-code/stitch-skills",
@@ -61,6 +79,18 @@
       "skillPath": "packages/playground/.agents/skills/frontend-design/SKILL.md",
       "computedHash": "537c1df9d0c694ecf9139a911f9ad0bd111a7ebc173a55457568459e543fe75b"
     },
+    "graph-orchestrator": {
+      "source": "VineeTagarwaL-code/graph-engineering",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "fa78dd47d2d07443207a9c9a041c88371c8a162d31f207d0b0f759911831df63"
+    },
+    "harness-engineering": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/harness-engineering/SKILL.md",
+      "computedHash": "a442c82ec3f8cb2d25f33f18bb28c586af3402d7b630bcc38501d7182a1d782d"
+    },
     "next-best-practices": {
       "source": "vercel-labs/openreview",
       "sourceType": "github",
@@ -73,11 +103,41 @@
       "skillPath": ".agents/skills/next-cache-components/SKILL.md",
       "computedHash": "f835d8226c28abf012cc013928e2627c8a7a046de61127ef229be1711bd1f255"
     },
+    "react-vite-dashboard": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-build/skills/react-vite-dashboard/SKILL.md",
+      "computedHash": "0e876b7af074b77a237df2fd539c66f3ebe5fac7a8b64189c58ef0aa3c5f6518"
+    },
+    "remotion": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-build/skills/remotion/SKILL.md",
+      "computedHash": "05fdf6dec07727614f6394d564d5f271f9c46f422ec8135997d15ddcdd214dce"
+    },
     "shadcn": {
       "source": "shadcn/ui",
       "sourceType": "github",
       "skillPath": "skills/shadcn/SKILL.md",
       "computedHash": "c1a68ee06a668aced9ab2b5fbdea5f989864123794eb2e056b339a072dbb7f10"
+    },
+    "shadcn-ui": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+      "computedHash": "6c1f0ce10a1ceaee5715a1e50a2e3a3159496910364d643bc2a8cab3f2eec4a8"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "computedHash": "5ea13a6d9f0d4bb694405d79acd00cadec0d21bb138c4dd10fcf3c500cb835c2"
+    },
+    "skill-writer": {
+      "source": "getsentry/skills",
+      "sourceType": "github",
+      "skillPath": "skills/skill-writer/SKILL.md",
+      "computedHash": "a716c1791f543c0b83bf6671b63b39c3b9d4cfcfa9fa6332d4bedbde32b148fb"
     },
     "smithery-ai-cli": {
       "source": "smithery-ai/cli",
@@ -85,11 +145,71 @@
       "skillPath": "skills/smithery-ai-cli/SKILL.md",
       "computedHash": "dc17f090c975afe1d96a25dbe843fc9c978e96d5699eed1bb7c12b411e10b830"
     },
+    "stitch-loop": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-utilities/skills/stitch-loop/SKILL.md",
+      "computedHash": "e04912a9719b855afa733cc928d30dde0b8a5b91707ca27b98f0efcb8d9310a9"
+    },
+    "stitch::code-to-design": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-design/skills/code-to-design/SKILL.md",
+      "computedHash": "712f46377fc87da5836bf230acd607923ad598791c609766b58dd9b8db00eef7"
+    },
+    "stitch::extract-design-md": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-design/skills/extract-design-md/SKILL.md",
+      "computedHash": "8a449121ccd91cd78294d063468e770d9caf0d16b820c0447d93c5e542ea9219"
+    },
+    "stitch::extract-static-html": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-design/skills/extract-static-html/SKILL.md",
+      "computedHash": "41740a7ab1851442bc3b8e0cba1e99850d084fcdc2c9ecccb56b436e8d5996c2"
+    },
+    "stitch::generate-design": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-design/skills/generate-design/SKILL.md",
+      "computedHash": "c5cf0685e477166e16283b5c2ee08c5b5022f0712d2a5988fdb475a9de79ad40"
+    },
+    "stitch::manage-design-system": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-design/skills/manage-design-system/SKILL.md",
+      "computedHash": "e55ef1adf10175b9ce3915f0bc7208904805ff14ce954349365dc5aabaa8359b"
+    },
+    "stitch::react-components": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-build/skills/react-components/SKILL.md",
+      "computedHash": "e4f9aaccf174f414274873cbeeee1bb6fa8833ae50457246d670872b0c3e063a"
+    },
+    "stitch::upload-to-stitch": {
+      "source": "google-labs-code/stitch-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/stitch-design/skills/upload-to-stitch/SKILL.md",
+      "computedHash": "3f9f27b6be1c3ddccc22891ae227037e836e0079a404a87f1be0ac5f0cd1de3b"
+    },
     "taste-design": {
       "source": "google-labs-code/stitch-skills",
       "sourceType": "github",
       "skillPath": "plugins/stitch-utilities/skills/taste-design/SKILL.md",
       "computedHash": "1891625787d6f0f3bc45d4a9437c187277af66c219e3ec799b1b4e67822b6146"
+    },
+    "tdd-red-green-refactor": {
+      "source": "google-labs-code/design.md",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/tdd/SKILL.md",
+      "computedHash": "aa567771e6963cb2b34115db22a3f6417f0c910d76d0e7d695b544f502d936f1"
+    },
+    "typed-service-contracts": {
+      "source": "google-labs-code/design.md",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/typed-service-contracts/SKILL.md",
+      "computedHash": "e3b4c278b545b842245f0edbbf4da3c682ec22c8ad543e7210edb3bff2765e0f"
     },
     "vercel-composition-patterns": {
       "source": "vercel-labs/agent-skills",
