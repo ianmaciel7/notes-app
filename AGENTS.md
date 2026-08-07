@@ -32,6 +32,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | --- | --- |
 | Setup | `README.md` |
 | Local agents | `.agents/agents/` |
+| Local workflows | `.agents/workflows/` |
 | Frontend accessibility | `https://github.com/fecarrico/A11Y.md/blob/main/docs/en/A11Y.md` |
 | Production hosting | `apphosting.yaml` |
 | Staging hosting | `apphosting.staging.yaml` |
@@ -45,6 +46,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - There is no test script configured; add one before documenting or relying on `pnpm test`.
 - Do not edit generated output such as `.next/`, `next-env.d.ts`, or `tsconfig.tsbuildinfo`.
 - Use `.agents/agents/architect/agent.md`, `code-reviewer/agent.md`, `test-engineer/agent.md`, and `security-reviewer/agent.md` for specialized review or planning work.
+- Use `.agents/workflows/` for OpenSpec change workflows when a task involves specs, proposals, or change verification.
 
 ### Frontend Accessibility
 

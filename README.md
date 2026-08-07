@@ -15,7 +15,7 @@ App Router source lives in `src/app`. Start with `src/app/page.tsx` and `src/app
 ## Commands
 
 | Task | Command |
-|------|---------|
+| --- | --- |
 | Install dependencies | `pnpm install` |
 | Dev server | `pnpm dev` |
 | Build | `pnpm build` |
@@ -32,14 +32,16 @@ Frontend work must follow the [A11Y.md Standard](https://github.com/fecarrico/A1
 
 ## Local Agents
 
-Specialized agent definitions live under `.agents/agents/`:
+Specialized agent definitions live under `.agents/agents/`.
 
 | Agent | Purpose |
-|-------|---------|
+| --- | --- |
 | `architect` | System design, architecture tradeoffs, and implementation planning |
 | `code-reviewer` | Code review for defects, regressions, accessibility, and missing verification |
 | `test-engineer` | Test strategy, regression coverage, and verification commands |
 | `security-reviewer` | Security, privacy, secrets, dependencies, and deployment exposure |
+
+OpenSpec workflows live under `.agents/workflows/` for spec proposals, applying changes, archiving changes, and verification.
 
 ## Hosting
 
