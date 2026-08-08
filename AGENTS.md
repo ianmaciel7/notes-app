@@ -20,7 +20,7 @@ This block is written and re-added by `next dev` - verify at `node_modules/next/
 
 | Need | Document |
 | --- | --- |
-| Setup, commands, Git, PRs, CI, merge rules | `CONTRIBUTING.md` |
+| Setup, commands, Git, commits, PRs, CI, merge, versioning, tags | `CONTRIBUTING.md` |
 | Security, secrets, dependency review | `SECURITY.md` |
 | Architecture and project structure | `docs/ARCHITECTURE.md` |
 | Design principles and accessibility | `docs/DESIGN.md` |
@@ -30,7 +30,10 @@ This block is written and re-added by `next dev` - verify at `node_modules/next/
 
 ## Mandatory Conventions
 
-- Follow `CONTRIBUTING.md` for branch, commit, push, pull request, CI, and merge work.
+- Follow `CONTRIBUTING.md` for branch, commit, push, pull request, CI, merge, versioning, tag, and release preparation work.
+- Follow `docs/DEPLOYMENT.md` for deployment triggers, environment promotion, deployment verification, and rollback behavior.
+- Do not push directly to protected branches.
+- Do not create, delete, move, or force-update release tags unless explicitly instructed.
 - For Next.js API, routing, caching, or file-convention work, read the relevant guide in `node_modules/next/dist/docs/` after dependencies are installed.
 - Keep `CLAUDE.md` and `GEMINI.md` as pointers to `AGENTS.md`; do not duplicate instructions there.
 - Do not edit generated output such as `.next/`, `next-env.d.ts`, or `tsconfig.tsbuildinfo`.
