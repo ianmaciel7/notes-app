@@ -38,6 +38,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | --- | --- |
 | Setup | `README.md` |
 | CI | `.github/workflows/ci.yml` |
+| Git workflow | `docs/git-workflow.md` |
+| Agent Git rule | `.agents/rules/git-workflow.md` |
 | Local agents | `.agents/agents/` |
 | Local workflows | `.agents/workflows/` |
 | Project MCP manifest | `.agents/mcp-servers.json` |
@@ -49,6 +51,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ### Key Conventions
 
 - App Router source lives under `src/app`; there is no top-level `app/` directory.
+- For branch, commit, push, pull request, and merge work, follow `docs/git-workflow.md`.
 - For Next.js API, routing, caching, or file-convention work, read the relevant guide in `node_modules/next/dist/docs/` after dependencies are installed.
 - Use Tailwind CSS v4 from `src/app/globals.css`.
 - Keep `CLAUDE.md` as a pointer to `AGENTS.md`; do not duplicate instructions there.
