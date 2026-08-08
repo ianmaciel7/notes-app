@@ -4,6 +4,20 @@
   "host": "codex",
   "scope": "user",
   "codexConfigPath": "~/.codex/config.toml",
+  "clientConfigPaths": {
+    "codex": "~/.codex/config.toml",
+    "antigravity": "~/.gemini/config/mcp_config.json",
+    "agy": "~/.gemini/config/mcp_config.json"
+  },
+  "env": {
+    "localFile": ".env",
+    "exampleFile": ".env.example",
+    "loadPolicy": "Read .env before starting MCP servers and export any configured values into the agent process environment. Keep .env ignored; commit only .env.example.",
+    "variables": [
+      "STITCH_API_KEY",
+      "STITCH_USE_SYSTEM_GCLOUD"
+    ]
+  },
   "policy": {
     "purpose": "Project-recommended generic MCP servers for agents working in this repository.",
     "secrets": "Never store API keys, PATs, OAuth tokens, or application-default credential files in this repository.",
@@ -49,6 +63,11 @@
       "installCommand": "codex mcp add github-readonly --url https://api.githubcopilot.com/mcp/readonly",
       "url": "https://api.githubcopilot.com/mcp/readonly",
       "readOnly": true,
+      "clients": {
+        "codex": "supported",
+        "antigravity": "not configured; local Antigravity docs only document stdio and SSE serverUrl transports",
+        "agy": "not configured; uses Antigravity/Gemini MCP config"
+      },
       "auth": {
         "required": true,
         "method": "codex mcp login github-readonly",
@@ -107,8 +126,12 @@
     ]
   },
   "verification": [
+    "Read .env first and export configured values into the shell or Codex environment.",
     "Restart Codex after changing MCP or plugin config.",
+    "For Codex CLI verification in this environment, set CODEX_HOME=C:\\Users\\ianma\\.codex before running codex mcp list or plugin list.",
+    "Restart Antigravity IDE after changing ~/.gemini/config/mcp_config.json.",
     "Use /mcp in Codex UI to inspect active MCP servers.",
+    "Use Additional Options (...) > MCP Servers in Antigravity IDE to inspect active MCP servers.",
     "Use codex mcp get <server-name> to inspect a configured server.",
     "Confirm required environment variables are available before startup."
   ]
