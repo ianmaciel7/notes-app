@@ -66,6 +66,8 @@ Reuse existing agents in `.agents/agents/` before creating new ones.
 - `code-reviewer`: use for meaningful implemented diffs, user-visible behavior, important logic, regression risk, accessibility, or missing verification.
 - `security-reviewer`: use for auth, authorization, secrets, user data, dependencies, deployment exposure, external integrations, or trust boundaries.
 
+For multi-file, user-visible, architectural, security, dependency, or deployment changes, use the appropriate independent reviewer or record why independent review was not justified.
+
 Delegation should be one level by default. Give subagents compact packets containing only:
 
 - objective;
