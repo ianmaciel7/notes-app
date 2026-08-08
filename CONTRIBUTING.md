@@ -41,6 +41,7 @@ Rules:
 - Pull requests should target `staging` unless explicitly specified otherwise.
 - Required CI checks must pass before merge.
 - Use squash merge.
+- Do not use merge-time branch deletion.
 - Do not bypass branch protection unless explicitly requested.
 - Investigate unexpectedly large diffs before pushing or merging.
 - Prefer safe and non-destructive Git commands.
@@ -282,6 +283,30 @@ Merge only after required checks pass:
 ```powershell
 gh pr merge --squash
 ```
+
+Do not use merge-time branch deletion:
+
+```powershell
+gh pr merge --squash --delete-branch
+```
+
+Branch cleanup must be explicit and separate from merge.
+
+After merge, verify the target branch updated correctly:
+
+```powershell
+git fetch origin
+git log --oneline --decorate -n 5 origin/staging
+```
+
+Then delete the working branch only after confirmation:
+
+```powershell
+git branch -d <task-branch>
+git push origin --delete <task-branch>
+```
+
+Never delete protected branches. Never delete branches containing unmerged work.
 
 Do not bypass branch protection unless the user explicitly instructs it.
 
