@@ -51,12 +51,20 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - For Next.js API, routing, caching, or file-convention work, read the relevant guide in `node_modules/next/dist/docs/` after dependencies are installed.
 - Use Tailwind CSS v4 from `src/app/globals.css`.
 - Keep `CLAUDE.md` as a pointer to `AGENTS.md`; do not duplicate instructions there.
+- Keep `GEMINI.md` as a pointer to `AGENTS.md`; do not duplicate instructions there.
 - React Compiler is enabled in `next.config.ts`; preserve that setting unless intentionally changing React compilation behavior.
 - There is no test script configured; add one before documenting or relying on `pnpm test`.
 - Do not edit generated output such as `.next/`, `next-env.d.ts`, or `tsconfig.tsbuildinfo`.
 - Keep CLI context, cache, session, memory, and repository-intelligence audit details in `docs/agent-context-efficiency-audit.md`; reference it instead of duplicating tool-specific measurements here.
 - Use `.agents/agents/architect/agent.md`, `code-reviewer/agent.md`, `test-engineer/agent.md`, and `security-reviewer/agent.md` for specialized review or planning work.
 - Use `.agents/workflows/` for OpenSpec change workflows when a task involves specs, proposals, or change verification.
+
+### Context and Simplicity
+
+- Prefer native CLI context controls, deterministic shell filtering, and existing project Skills before adding MCP servers or middleware.
+- Use `rg`, targeted `git diff`, `git diff --stat`, `git log --oneline`, `jq`, and command-specific `--tail` or filter flags instead of dumping large outputs into agent context.
+- Do not create unnecessary abstractions. Prefer existing code, platform-native capabilities, standard library features, and existing dependencies. Implement the simplest correct solution.
+- Before adding semantic indexes, memory systems, or context middleware, record the security review and benchmark evidence in `docs/agent-context-efficiency-audit.md`.
 
 ### Frontend Accessibility
 

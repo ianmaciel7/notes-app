@@ -241,3 +241,258 @@ Before changing CLI config, collect this evidence:
 - Session limits are selected from observed task behavior, not arbitrary context-window size.
 - Masking, distillation, summarization, truncation, and durable memory are treated as separate mechanisms.
 - Pricing and long-context thresholds are rechecked against official provider docs before budgeting or changing model policy.
+
+## Final Stack Selection
+
+Decision date: 2026-08-08.
+
+Only static, project-local context configuration was installed. No MCP server, global package, hook, binary, worker service, or external memory system was installed.
+
+| Tool / Skill | Purpose | Existing equivalent? | Security assessment | Expected token benefit | Complexity | Decision |
+| --- | --- | --- | --- | --- | --- | --- |
+| `GEMINI.md` | Gemini entrypoint that points to shared rules. | `CLAUDE.md` already does this for Claude. | Low; one-line project file. | Prevents duplicated Gemini instructions. | Low. | INSTALL |
+| `.geminiignore` | Keep generated output, secrets, and local indexes out of Gemini context. | `.gitignore` partially overlaps. | Low; denylist only. | Reduces accidental context bloat and secret exposure. | Low. | INSTALL |
+| `AGENTS.md` context rules | Shared native-first, output-filtering, and YAGNI policy. | No concise shared rule existed. | Low; project instructions only. | Prevents repeated tool/output waste. | Low. | INSTALL |
+| Existing `filesystem-context` Skill | File-backed scratch/state guidance. | Already project-local under `.agents/skills`. | Low to medium; instructions must not be used to store secrets. | High when sessions need overflow state. | Low. | KEEP |
+| NeoLab `context-engineering` Skill | General context-engineering guidance. | Existing project skills already cover context fundamentals and optimization. | Low for selected file, but duplicate. | Low incremental benefit. | Low. | DEFER |
+| `codebase-memory-mcp` | Semantic repository index and MCP tools. | Native shell search is sufficient for current repo size; Gemini native investigator exists but cannot be benchmarked without auth. | Medium; reads source tree, writes agent config, and spawns background process. | Unproven for this repo. | Medium. | DEFER |
+| CodeGraph | Local code graph and auto agent integration. | Overlaps semantic-index role. | Medium; telemetry defaults and Node engine mismatch with local Node 25.2.1. | Unproven, and README notes possible higher residual context. | Medium. | DEFER |
+| Serena | LSP-backed semantic navigation, editing, and memory. | Overlaps semantic-index and memory roles. | Medium; broad dependency and tool surface. | Unproven for this small repo. | High. | DEFER |
+| Context Mode | Tool-output/session context middleware. | Native filtering and ignores cover current need. | Medium to high; hooks, SQLite storage, and command/tool interception. | Needs pilot evidence. | High. | PILOT / DEFER |
+| RTK | Command-output token proxy. | Deterministic shell filtering covers current need. | Medium; command interception hooks. | Marketing claim only for this repo. | Medium. | REJECT / DEFER |
+| Headroom | Compression proxy/MCP/SDK for tool outputs and contexts. | Overlaps Context Mode and native output controls. | Medium to high; proxy/MCP and optional broad dependencies. | Unproven and redundant now. | High. | DEFER |
+| `claude-mem` | Persistent memory and cross-session injection. | Native memory should be evaluated first; project memory need not proven. | Medium to high; session capture, worker service, local UI, provider integration. | Unproven; memory generation has its own cost. | High. | DEFER |
+| Caveman | Output style compression and optional memory rewrite. | Concise agent responses and small context files cover current need. | Medium; installer/hooks if enabled. | Does not stop irrelevant context entering prompts. | Medium. | REJECT |
+
+### Installed
+
+- `GEMINI.md`: one-line pointer to `AGENTS.md`.
+- `.geminiignore`: excludes dependencies, generated output, secrets, local agent indexes, and debug logs from Gemini context.
+- `.gitignore`: excludes local agent/context indexes and scratch state.
+- `AGENTS.md`: adds concise context efficiency, deterministic output filtering, and YAGNI rules, plus a pointer to this audit.
+
+### Project-Local Skills Kept
+
+Top-level project-local skills observed under `.agents/skills`:
+
+`acquire-codebase-knowledge`, `agent-browser`, `agent-governance`, `agentic-eval`, `agents-md`, `context-engineering-collection`, `design-md`, `enhance-prompt`, `find-skills`, `firebase-app-hosting-basics`, `firebase-auth-basics`, `firebase-basics`, `firebase-security-rules-auditor`, `frontend-design`, `gh-address-comments`, `gh-fix-ci`, `github`, `graph-orchestrator`, `harness-engineering`, `next-best-practices`, `next-cache-components`, `openspec-apply-change`, `openspec-archive-change`, `openspec-bulk-archive-change`, `openspec-continue-change`, `openspec-explore`, `openspec-ff-change`, `openspec-new-change`, `openspec-onboard`, `openspec-sync-specs`, `openspec-verify-change`, `shadcn`, `skill-creator`, `smithery-ai-cli`, `stitch-code-to-design`, `stitch-extract-design-md`, `stitch-extract-static-html`, `stitch-generate-design`, `stitch-loop`, `stitch-manage-design-system`, `stitch-react-components`, `stitch-upload-to-stitch`, `taste-design`, `tdd-red-green-refactor`, `typed-service-contracts`, `vercel-composition-patterns`, `vercel-react-best-practices`, `vitest`, `web-design-guidelines`.
+
+Relevant context stack skills already present:
+
+- `.agents/skills/context-engineering-collection/skills/context-optimization/SKILL.md`
+- `.agents/skills/context-engineering-collection/skills/filesystem-context/SKILL.md`
+- `.agents/skills/context-engineering-collection/skills/context-compression/SKILL.md`
+- `.agents/skills/context-engineering-collection/skills/memory-systems/SKILL.md`
+
+No duplicate Skill was installed.
+
+### Semantic Code Intelligence
+
+Selected solution: native and deterministic search for now.
+
+Evidence:
+
+- `rg --files src` found only `src/app/page.tsx`, `src/app/layout.tsx`, `src/app/globals.css`, and `src/app/favicon.ico`.
+- `rg -n "export|function|const|metadata|Home|RootLayout" src` found `Home`, `RootLayout`, font constants, and metadata in one targeted pass.
+- For this repository size, a semantic MCP index would add installation, indexing, permissions, and maintenance overhead before there is evidence of repeated semantic-navigation waste.
+- Gemini CLI includes a native `codebase_investigator` subagent, but Gemini auth is not configured, so it must be benchmarked before any external index is installed.
+
+### OpenSpec
+
+Status: existing and preserved.
+
+`openspec/config.yaml` exists and is minimal. There are no `openspec/specs/` or `openspec/changes/` directories in the observed repo state. OpenSpec remains the canonical place for governed behavior and change artifacts if the project later needs spec-driven work. No competing spec system was installed.
+
+### Context Middleware
+
+Status: none retained.
+
+Context Mode is a pilot candidate only. It was not installed because it participates deeply in execution through hooks/tool interception and SQLite storage, and the repository does not yet show a large-output problem that native filtering and `.geminiignore` cannot handle.
+
+### Third-Party Security Classifications
+
+Tool: NeoLab `context-engineering` Skill
+Source: `NeoLabHQ/context-engineering-kit`
+Maintainer: NeoLabHQ
+Purpose: Context-window management and progressive-disclosure guidance.
+Install scope: Not installed; evaluated as a project-local Skill candidate.
+Filesystem access: Instructional only in inspected `SKILL.md`.
+Network access: None observed in inspected `SKILL.md`.
+Shell execution: None observed in inspected `SKILL.md`.
+Hooks: None observed in inspected `SKILL.md`.
+Telemetry: None observed.
+Secrets exposure risk: Low for the selected file.
+Supply-chain protections: GitHub source only; no release signing evidence used.
+Security scanner findings: None found during audit.
+Overlap with existing tools: Overlaps local `context-engineering-collection` skills.
+Recommendation: DEFER.
+
+Tool: `filesystem-context` Skill
+Source: `muratcankoylan/Agent-Skills-for-Context-Engineering`
+Maintainer: Murat Can Koylan
+Purpose: File-backed context overflow, scratchpads, indexes, and just-in-time retrieval.
+Install scope: Existing project-local copy under `.agents/skills`.
+Filesystem access: Instructional writes to project scratch/context files.
+Network access: None observed in inspected `SKILL.md`.
+Shell execution: None observed in inspected `SKILL.md`.
+Hooks: None observed in inspected `SKILL.md`.
+Telemetry: None observed.
+Secrets exposure risk: Medium if misused to store secrets; mitigated by `.gitignore`, `.geminiignore`, and policy not to persist secrets.
+Supply-chain protections: GitHub source only; no release signing evidence used.
+Security scanner findings: None found during audit.
+Overlap with existing tools: Exact desired capability already installed locally.
+Recommendation: KEEP.
+
+Tool: `codebase-memory-mcp`
+Source: `DeusData/codebase-memory-mcp`
+Maintainer: DeusData
+Purpose: Semantic repository index, graph search, snippets, ADR/memory, and MCP code-intelligence tools.
+Install scope: Not installed; would be project/user MCP if later selected.
+Filesystem access: Reads source tree, writes cache and agent config files.
+Network access: Local processing; security docs mention an optional GitHub release update check.
+Shell execution: Spawns background processes per security docs.
+Hooks: MCP server integration; no project hooks installed.
+Telemetry: Security docs say no telemetry or source upload.
+Secrets exposure risk: Medium because repository-wide reads can include accidental secrets.
+Supply-chain protections: Security docs claim SLSA provenance, Sigstore signing, and SHA-256 checksums.
+Security scanner findings: No independent scanner result used.
+Overlap with existing tools: Overlaps Gemini native investigator and shell/native repository navigation.
+Recommendation: DEFER.
+
+Tool: CodeGraph
+Source: `colbymchenry/codegraph`
+Maintainer: Colby McHenry
+Purpose: Local code graph, symbol/references/call graph, and agent integrations.
+Install scope: Not installed.
+Filesystem access: Indexes repository and creates `.codegraph/` state when installed.
+Network access: README advertises local-first behavior; package/docs include telemetry controls.
+Shell execution: CLI install/integration commands.
+Hooks: Agent integration may add instructions/configuration.
+Telemetry: Enabled unless disabled according to project docs.
+Secrets exposure risk: Medium because it reads project source.
+Supply-chain protections: GitHub/npm source; release pipeline claims were noted but not relied on.
+Security scanner findings: None used.
+Overlap with existing tools: Same semantic-index role as `codebase-memory-mcp` and Serena.
+Recommendation: DEFER.
+
+Tool: Serena
+Source: `oraios/serena`
+Maintainer: Oraios
+Purpose: LSP-backed semantic navigation, editing, refactoring, memory, and MCP tools.
+Install scope: Not installed.
+Filesystem access: Broad repository read/write if used for editing/refactoring.
+Network access: Dependency ecosystem may fetch packages; runtime network not required for core local analysis.
+Shell execution: uv/python CLI and MCP server.
+Hooks: No project hooks installed.
+Telemetry: None confirmed during audit.
+Secrets exposure risk: Medium because repository-wide tools can read sensitive files if not excluded.
+Supply-chain protections: GitHub/uv source; no signing evidence used.
+Security scanner findings: None used.
+Overlap with existing tools: Overlaps semantic index plus external memory role.
+Recommendation: DEFER.
+
+Tool: Context Mode
+Source: `mksglu/context-mode`
+Maintainer: mksglu
+Purpose: Tool-output/session-history capture, filtering, indexing, and retrieval middleware.
+Install scope: Not installed; pilot only if later needed.
+Filesystem access: Stores indexed content under local context storage.
+Network access: Package install/network required; runtime network not required for local storage in inspected docs.
+Shell execution: CLI plus command/tool interception.
+Hooks: Claude/Codex hooks and Gemini/Antigravity MCP-style integration per docs.
+Telemetry: None relied on during audit.
+Secrets exposure risk: Medium to high because it can capture tool outputs and session data.
+Supply-chain protections: npm/GitHub source; no signing evidence used.
+Security scanner findings: None used.
+Overlap with existing tools: Overlaps native truncation, summarization, `.geminiignore`, and deterministic shell filtering.
+Recommendation: PILOT / DEFER.
+
+Tool: RTK
+Source: `rtk-ai/rtk`
+Maintainer: RTK AI
+Purpose: Command proxy that rewrites or compresses common developer command output.
+Install scope: Not installed.
+Filesystem access: Depends on integration; command proxy may observe shell command paths/output.
+Network access: Install/update path not evaluated beyond public repo docs.
+Shell execution: Core function is shell command interception/proxying.
+Hooks: PreToolUse/BeforeTool-style hooks for multiple agents per docs.
+Telemetry: Not fully audited because it is explicitly not needed now.
+Secrets exposure risk: Medium because shell output can include sensitive data.
+Supply-chain protections: Rust single-binary claim noted; signatures/checksums not verified.
+Security scanner findings: None used.
+Overlap with existing tools: Overlaps deterministic local filtering and Context Mode.
+Recommendation: REJECT / DEFER.
+
+Tool: Headroom
+Source: `chopratejas/headroom`
+Maintainer: Headroom project maintainers
+Purpose: Compress tool outputs, logs, RAG chunks, files, and prompts through SDK/proxy/MCP.
+Install scope: Not installed.
+Filesystem access: Depends on integration; can process files/tool output.
+Network access: Proxy and package integrations may involve provider or local service traffic.
+Shell execution: Installer and wrapper commands.
+Hooks: MCP/proxy/wrapper integrations.
+Telemetry: Not fully audited because no install need was found.
+Secrets exposure risk: Medium to high because it can sit between tools/app and model/provider.
+Supply-chain protections: Public package/container ecosystem; signatures/checksums not verified.
+Security scanner findings: None used.
+Overlap with existing tools: Overlaps Context Mode and native output controls.
+Recommendation: DEFER.
+
+Tool: `claude-mem`
+Source: `thedotmack/claude-mem`
+Maintainer: thedotmack
+Purpose: Persistent memory capture, semantic summaries, retrieval, and future-session injection.
+Install scope: Not installed.
+Filesystem access: Captures and stores session/tool observations.
+Network access: May call configured AI providers and exposes a local web UI per docs.
+Shell execution: Installer, worker, and plugin setup commands.
+Hooks: Claude/Gemini style session/tool hooks per docs.
+Telemetry: Not fully audited because no install need was found.
+Secrets exposure risk: High unless private data exclusions are proven and enforced; session capture can include sensitive output.
+Supply-chain protections: Public GitHub/npm/plugin paths; signatures/checksums not verified.
+Security scanner findings: None used.
+Overlap with existing tools: Overlaps native memory and local curated memory policy.
+Recommendation: DEFER.
+
+Tool: Caveman
+Source: `JuliusBrussee/caveman`
+Maintainer: Julius Brussee
+Purpose: Output style compression, optional memory file compression, and related agent integrations.
+Install scope: Not installed.
+Filesystem access: Optional memory compression can rewrite project instruction files with backups.
+Network access: Installer fetches remote scripts.
+Shell execution: Install scripts and commands.
+Hooks: Agent integrations can add hooks/rules.
+Telemetry: Not fully audited because it is not needed.
+Secrets exposure risk: Low to medium; memory rewrite can accidentally degrade important instructions.
+Supply-chain protections: Public GitHub source; signatures/checksums not verified.
+Security scanner findings: None used.
+Overlap with existing tools: Overlaps concise response style, not true context selection.
+Recommendation: REJECT.
+
+## Verification
+
+- `git status --short` shows only intended project changes: `.gitignore`, `AGENTS.md`, `.geminiignore`, and `GEMINI.md`.
+- `git diff --stat` shows 17 tracked-line additions across `.gitignore` and `AGENTS.md`; new untracked files are intentionally separate.
+- `pnpm` is not on PATH in this shell, so project lint/format commands could not be run without changing the package-manager setup.
+- The environment instruction says WSL2 should be used, but no WSL distribution is installed in this runtime; Windows PowerShell was used for verification.
+
+## Source Links
+
+- OpenAI `gpt-5.5` model docs: https://developers.openai.com/api/docs/models/gpt-5.5
+- Claude Code commands: https://code.claude.com/docs/en/commands
+- Claude Code hooks: https://code.claude.com/docs/en/hooks
+- Gemini CLI configuration: https://github.com/google-gemini/gemini-cli/blob/main/docs/reference/configuration.md
+- Gemini CLI memory file docs: https://google-gemini.github.io/gemini-cli/docs/cli/gemini-md.html
+- Gemini CLI ignore docs: https://google-gemini.github.io/gemini-cli/docs/cli/gemini-ignore.html
+- NeoLab context-engineering Skill: https://raw.githubusercontent.com/NeoLabHQ/context-engineering-kit/master/plugins/customaize-agent/skills/context-engineering/SKILL.md
+- Filesystem-context Skill: https://raw.githubusercontent.com/muratcankoylan/Agent-Skills-for-Context-Engineering/main/skills/filesystem-context/SKILL.md
+- `codebase-memory-mcp`: https://github.com/DeusData/codebase-memory-mcp
+- CodeGraph: https://github.com/colbymchenry/codegraph
+- Serena: https://github.com/oraios/serena
+- Context Mode: https://github.com/mksglu/context-mode
+- RTK: https://github.com/rtk-ai/rtk
+- Headroom: https://github.com/chopratejas/headroom
+- `claude-mem`: https://github.com/thedotmack/claude-mem
+- Caveman: https://github.com/JuliusBrussee/caveman

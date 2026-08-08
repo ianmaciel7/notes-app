@@ -1,0 +1,27 @@
+# Dependencies and generated artifacts
+/node_modules/
+/.next/
+/out/
+/build/
+/coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets and local machine state
+.env*
+*.pem
+
+# Local agent/context indexes and scratch state
+/.codebase-memory/
+/.codegraph/
+/.codegraph-*/
+/.context-mode/
+/.serena/
+/.gemini/plans/
+/.gemini/tmp/
+
+# Package-manager and debug noise
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
