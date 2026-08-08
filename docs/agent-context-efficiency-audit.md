@@ -246,7 +246,9 @@ Before changing CLI config, collect this evidence:
 
 Decision date: 2026-08-08.
 
-Only static, project-local context configuration was installed. No MCP server, global package, hook, binary, worker service, or external memory system was installed.
+Only static, project-local context configuration was installed during this audit. No repository-intelligence MCP, global package, hook, binary, worker service, or external memory system was installed.
+
+Follow-up on 2026-08-08: a user-requested generic MCP manifest was added at `.agents/mcp-servers.json` for Context7, Chrome DevTools, GitHub read-only, Google Cloud `gcloud`, and Stitch. These are external service integrations, not semantic repository indexes, memory systems, or context middleware. Do not store credentials in the manifest.
 
 | Tool / Skill | Purpose | Existing equivalent? | Security assessment | Expected token benefit | Complexity | Decision |
 | --- | --- | --- | --- | --- | --- | --- |

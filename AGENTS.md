@@ -40,6 +40,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | CI | `.github/workflows/ci.yml` |
 | Local agents | `.agents/agents/` |
 | Local workflows | `.agents/workflows/` |
+| Project MCP manifest | `.agents/mcp-servers.json` |
 | Agent context efficiency audit | `docs/agent-context-efficiency-audit.md` |
 | Frontend accessibility | `https://github.com/fecarrico/A11Y.md/blob/main/docs/en/A11Y.md` |
 | Production hosting | `apphosting.yaml` |
@@ -58,6 +59,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Keep CLI context, cache, session, memory, and repository-intelligence audit details in `docs/agent-context-efficiency-audit.md`; reference it instead of duplicating tool-specific measurements here.
 - Use `.agents/agents/architect/agent.md`, `code-reviewer/agent.md`, `test-engineer/agent.md`, and `security-reviewer/agent.md` for specialized review or planning work.
 - Use `.agents/workflows/` for OpenSpec change workflows when a task involves specs, proposals, or change verification.
+- Keep generic MCP server recommendations in `.agents/mcp-servers.json`; do not store secrets there.
 
 ### Context and Simplicity
 

@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "updated": "2026-08-08",
+  "host": "codex",
+  "scope": "user",
+  "codexConfigPath": "~/.codex/config.toml",
+  "policy": {
+    "purpose": "Project-recommended generic MCP servers for agents working in this repository.",
+    "secrets": "Never store API keys, PATs, OAuth tokens, or application-default credential files in this repository.",
+    "excludedByDefault": [
+      "figma"
+    ],
+    "notes": [
+      "Use these MCPs only when they help the current task.",
+      "Keep repository-intelligence MCPs out unless benchmark and security evidence is recorded in docs/agent-context-efficiency-audit.md."
+    ]
+  },
+  "servers": {
+    "context7": {
+      "transport": "stdio",
+      "purpose": "Fetch current library and framework documentation during coding tasks.",
+      "installCommand": "codex mcp add context7 -- npx -y @upstash/context7-mcp",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "auth": {
+        "required": false,
+        "optionalEnv": [
+          "CONTEXT7_API_KEY"
+        ]
+      }
+    },
+    "chrome-devtools": {
+      "transport": "stdio",
+      "purpose": "Inspect and automate Chrome DevTools for browser debugging and UI verification.",
+      "installCommand": "codex mcp add chrome-devtools -- npx -y chrome-devtools-mcp@latest",
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest"
+      ],
+      "auth": {
+        "required": false
+      }
+    },
+    "github-readonly": {
+      "transport": "streamable_http",
+      "purpose": "Read GitHub repositories, issues, pull requests, and related metadata without write tools.",
+      "installCommand": "codex mcp add github-readonly --url https://api.githubcopilot.com/mcp/readonly --bearer-token-env-var GITHUB_PAT_TOKEN",
+      "url": "https://api.githubcopilot.com/mcp/readonly",
+      "readOnly": true,
+      "auth": {
+        "required": true,
+        "bearerTokenEnvVar": "GITHUB_PAT_TOKEN",
+        "secretStorage": "Set in the shell or Codex environment before startup; do not commit it."
+      }
+    },
+    "gcloud": {
+      "transport": "stdio",
+      "purpose": "Use Google Cloud through the local gcloud CLI with the active gcloud identity.",
+      "installCommand": "codex mcp add gcloud -- npx -y @google-cloud/gcloud-mcp",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@google-cloud/gcloud-mcp"
+      ],
+      "auth": {
+        "required": true,
+        "prerequisites": [
+          "Install Google Cloud CLI.",
+          "Run gcloud init.",
+          "Authenticate with gcloud auth login and application-default credentials when needed."
+        ]
+      }
+    },
+    "stitch": {
+      "transport": "stdio",
+      "purpose": "Use Google Stitch design workflows through a local MCP proxy, without Figma.",
+      "installCommand": "codex mcp add stitch -- npx -y @_davideast/stitch-mcp proxy",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@_davideast/stitch-mcp",
+        "proxy"
+      ],
+      "auth": {
+        "required": true,
+        "options": [
+          "Run npx @_davideast/stitch-mcp init for guided setup.",
+          "Set STITCH_API_KEY for API key auth.",
+          "Use Google Cloud ADC with GOOGLE_CLOUD_PROJECT when using project credentials."
+        ],
+        "env": [
+          "STITCH_API_KEY",
+          "GOOGLE_CLOUD_PROJECT",
+          "STITCH_USE_SYSTEM_GCLOUD"
+        ]
+      }
+    }
+  },
+  "stitchPlugins": {
+    "marketplace": "google-labs-code/stitch-skills",
+    "installCommand": "codex plugin marketplace add google-labs-code/stitch-skills --ref main --sparse .agents/plugins --sparse plugins/stitch-design --sparse plugins/stitch-build --sparse plugins/stitch-utilities",
+    "plugins": [
+      "stitch-design@stitch-skills",
+      "stitch-build@stitch-skills",
+      "stitch-utilities@stitch-skills"
+    ]
+  },
+  "verification": [
+    "Restart Codex after changing MCP or plugin config.",
+    "Use /mcp in Codex UI to inspect active MCP servers.",
+    "Use codex mcp get <server-name> to inspect a configured server.",
+    "Confirm required environment variables are available before startup."
+  ]
+}
