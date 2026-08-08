@@ -2,57 +2,33 @@
 
 A Next.js notes application using the App Router, React Compiler, Tailwind CSS v4, pnpm, and Biome.
 
-## Environment
-
-Develop from WSL2 and prefer Linux paths and shell commands. The project uses pnpm 11.20.0, as declared in `package.json`.
-
 ## Getting Started
 
-```bash
+Use pnpm 11.20.0, as declared in `package.json`.
+
+```powershell
 pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-App Router source lives in `src/app`. Start with `src/app/page.tsx` and `src/app/layout.tsx`.
+## Project Docs
 
-## Commands
-
-| Task | Command |
+| Need | Document |
 | --- | --- |
-| Install dependencies | `pnpm install` |
-| Dev server | `pnpm dev` |
-| Build | `pnpm build` |
-| Start production server | `pnpm start` |
-| Generate Next types | `pnpm exec next typegen` |
-| Check repo | `pnpm lint` |
-| Check file | `pnpm exec biome check path/to/file` |
-| Format repo | `pnpm format` |
-| Format file | `pnpm exec biome format --write path/to/file` |
-| Typecheck | `pnpm exec tsc --noEmit` |
+| Contributing, Git workflow, commands, CI, PRs | `CONTRIBUTING.md` |
+| Security and secrets | `SECURITY.md` |
+| System structure | `docs/ARCHITECTURE.md` |
+| Design principles and accessibility | `docs/DESIGN.md` |
+| Testing and verification | `docs/TESTING.md` |
+| Build and deployment | `docs/DEPLOYMENT.md` |
+| Coding agent entry point | `AGENTS.md` |
 
-There is no test script configured yet.
+## Source
 
-## Accessibility
+App Router source lives in `src/app`. There is no top-level `app/` directory.
 
-Frontend work must follow the [A11Y.md Standard](https://github.com/fecarrico/A11Y.md/blob/main/docs/en/A11Y.md) profile for WCAG 2.2 AA unless a task explicitly sets a different compliance profile.
+## Proposals And Decisions
 
-## Local Agents
-
-Specialized agent definitions live under `.agents/agents/`.
-
-| Agent | Purpose |
-| --- | --- |
-| `architect` | System design, architecture tradeoffs, and implementation planning |
-| `code-reviewer` | Code review for defects, regressions, accessibility, and missing verification |
-| `test-engineer` | Test strategy, regression coverage, and verification commands |
-| `security-reviewer` | Security, privacy, secrets, dependencies, and deployment exposure |
-
-OpenSpec workflows live under `.agents/workflows/` for spec proposals, applying changes, archiving changes, and verification.
-
-Repository-wide agent instructions live in `AGENTS.md`. `CLAUDE.md` is only a pointer to `AGENTS.md`.
-
-## Hosting
-
-Firebase App Hosting configuration is in `apphosting.yaml` and `apphosting.staging.yaml`.
+This repository uses OpenSpec for significant proposals, architectural changes, rationale, alternatives, and trade-offs. Current accepted documentation lives under `docs/`.
