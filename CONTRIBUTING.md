@@ -17,9 +17,11 @@ Use pnpm 11.20.0, as declared in `package.json`.
 | Check file | `pnpm exec biome check path/to/file` |
 | Format repo | `pnpm format` |
 | Format file | `pnpm exec biome format --write path/to/file` |
-| Typecheck | `pnpm exec tsc --noEmit` |
+| Typecheck | `pnpm typecheck` |
+| Test | `pnpm test` |
+| Verify repo | `pnpm verify` |
 
-There is no test script configured yet. Follow `docs/TESTING.md` before adding or documenting test commands.
+Use `pnpm verify` as the canonical local health check before opening or updating pull requests unless the task has a narrower, explicitly justified verification path. Follow `docs/TESTING.md` for testing strategy, E2E triggers, and Definition of Done expectations.
 
 ## Git Workflow
 
@@ -277,6 +279,8 @@ Required checks must pass before merge:
 ```powershell
 gh pr checks
 ```
+
+The required `Quality` job runs `pnpm verify`. Keep that job name stable because branch rulesets require the `Quality` check context.
 
 Merge only after required checks pass:
 

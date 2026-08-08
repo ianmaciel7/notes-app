@@ -36,14 +36,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Biome
-        run: pnpm lint
-
-      - name: Generate Next.js types
-        run: pnpm exec next typegen
-
-      - name: TypeScript
-        run: pnpm exec tsc --noEmit
-
-      - name: Next.js build
-        run: pnpm build
+      - name: Verify
+        run: pnpm verify
