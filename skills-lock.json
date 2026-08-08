@@ -91,6 +91,12 @@
       "skillPath": "skills/.curated/gh-fix-ci/SKILL.md",
       "computedHash": "62b4c9b9aeb0e52925882185019e65c7785da8e7fa16ddb95dd3aaa00883961a"
     },
+    "github": {
+      "source": "odyssey4me/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/github/SKILL.md",
+      "computedHash": "518e12c1959e38c40e23756261478be0ccfb172f105cba2ba1e1b8d3e22d8640"
+    },
     "graph-orchestrator": {
       "source": "VineeTagarwaL-code/graph-engineering",
       "sourceType": "github",
