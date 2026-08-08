@@ -10,9 +10,14 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Agent Instructions
 
+### Environment
+
+- Work from WSL2; prefer Linux paths, shell commands, and assumptions.
+- Convert Windows paths from prompts to WSL paths before running commands when needed.
+
 ### Package Manager
 
-- Use **pnpm**: `pnpm install`
+- Use **pnpm 11.20.0**: `pnpm install`
 
 ### Commands
 
@@ -20,6 +25,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | --- | --- |
 | Dev server | `pnpm dev` |
 | Build | `pnpm build` |
+| Generate Next types | `pnpm exec next typegen` |
 | Check repo | `pnpm lint` |
 | Check file | `pnpm exec biome check path/to/file` |
 | Format | `pnpm format` |
@@ -31,6 +37,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | Need | File |
 | --- | --- |
 | Setup | `README.md` |
+| CI | `.github/workflows/ci.yml` |
 | Local agents | `.agents/agents/` |
 | Local workflows | `.agents/workflows/` |
 | Frontend accessibility | `https://github.com/fecarrico/A11Y.md/blob/main/docs/en/A11Y.md` |
@@ -40,6 +47,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ### Key Conventions
 
 - App Router source lives under `src/app`; there is no top-level `app/` directory.
+- For Next.js API, routing, caching, or file-convention work, read the relevant guide in `node_modules/next/dist/docs/` after dependencies are installed.
 - Use Tailwind CSS v4 from `src/app/globals.css`.
 - Keep `CLAUDE.md` as a pointer to `AGENTS.md`; do not duplicate instructions there.
 - React Compiler is enabled in `next.config.ts`; preserve that setting unless intentionally changing React compilation behavior.
