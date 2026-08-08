@@ -40,6 +40,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | CI | `.github/workflows/ci.yml` |
 | Local agents | `.agents/agents/` |
 | Local workflows | `.agents/workflows/` |
+| Agent context efficiency audit | `docs/agent-context-efficiency-audit.md` |
 | Frontend accessibility | `https://github.com/fecarrico/A11Y.md/blob/main/docs/en/A11Y.md` |
 | Production hosting | `apphosting.yaml` |
 | Staging hosting | `apphosting.staging.yaml` |
@@ -53,6 +54,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - React Compiler is enabled in `next.config.ts`; preserve that setting unless intentionally changing React compilation behavior.
 - There is no test script configured; add one before documenting or relying on `pnpm test`.
 - Do not edit generated output such as `.next/`, `next-env.d.ts`, or `tsconfig.tsbuildinfo`.
+- Keep CLI context, cache, session, memory, and repository-intelligence audit details in `docs/agent-context-efficiency-audit.md`; reference it instead of duplicating tool-specific measurements here.
 - Use `.agents/agents/architect/agent.md`, `code-reviewer/agent.md`, `test-engineer/agent.md`, and `security-reviewer/agent.md` for specialized review or planning work.
 - Use `.agents/workflows/` for OpenSpec change workflows when a task involves specs, proposals, or change verification.
 
