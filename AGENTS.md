@@ -40,3 +40,58 @@ This block is written and re-added by `next dev` - verify at `node_modules/next/
 - Use `.agents/workflows/` and OpenSpec for proposals, significant architectural changes, rationale, alternatives, and trade-offs.
 - Use `.agents/agents/` only when a specialized role is useful for review or planning.
 - Keep generic MCP server recommendations in `.agents/mcp-servers.json`; do not store secrets there.
+
+## Minimal Agent Loop
+
+The main agent is the loop controller. Use the existing harness instead of creating duplicate rules, agents, skills, workflows, state files, memory files, scripts, or documentation.
+
+Use this loop for meaningful work:
+
+```text
+discover -> decide OpenSpec need -> delegate if useful -> implement -> verify software -> verify OpenSpec when applicable -> review if justified -> PR -> stop
+```
+
+- Start from repository evidence: relevant docs, code, tests, package scripts, OpenSpec specs/changes, Git status, and CI.
+- Use OpenSpec for durable requirements, behavior, acceptance criteria, design rationale, and change lifecycle. Do not create parallel planning, task, memory, or spec files.
+- Keep transient loop state in the agent session. Persist only useful outcomes in the right owner: OpenSpec, tests, code, docs, Git commits, PRs, or CI.
+- Keep software verification separate from OpenSpec verification. Passing tests does not prove requirements were met; valid OpenSpec artifacts do not prove the software works.
+- Prefer `pnpm verify` for ordinary local completion evidence unless a narrower verification path is explicitly justified.
+
+## Subagent Delegation
+
+Reuse existing agents in `.agents/agents/` before creating new ones.
+
+- `architect`: use for architectural boundaries, data flow, server/client tradeoffs, persistence, auth, hosting, dependencies, or migrations.
+- `test-engineer`: use for verification strategy, regression coverage, reproductions, or test infrastructure.
+- `code-reviewer`: use for meaningful implemented diffs, user-visible behavior, important logic, regression risk, accessibility, or missing verification.
+- `security-reviewer`: use for auth, authorization, secrets, user data, dependencies, deployment exposure, external integrations, or trust boundaries.
+
+Delegation should be one level by default. Give subagents compact packets containing only:
+
+- objective;
+- relevant OpenSpec change or requirement;
+- relevant files or search scope;
+- constraints and allowed tools;
+- expected output.
+
+Use parallel subagents only for independent analysis. Do not allow simultaneous writes to the same working tree; parallel implementation requires isolated workspaces or Git worktrees and explicit justification.
+
+## Failure And Stop Conditions
+
+- Verification failures require diagnosis: identify the failing check, classify the likely root cause, make a targeted change, and rerun the narrowest useful verification before broader verification.
+- Retries must be bounded. If the same root cause repeats without meaningful progress, change strategy, delegate to the right specialist, report BLOCKED, or ESCALATE.
+- DONE requires evidence such as relevant checks, tests, build, OpenSpec verification, review results, and CI status appropriate to the change.
+- BLOCKED means progress depends on an external condition such as credentials, permissions, unavailable services, missing runtimes, or environment failures. Report evidence, attempts, and what is needed next.
+- ESCALATE means human judgment or authorization is required for ambiguity, security tradeoffs, destructive operations, production impact, protected-branch bypass, release tags, IAM, billing, or repeated no-progress failures.
+
+## Human Gates
+
+Do not autonomously perform high-impact actions unless explicitly authorized:
+
+- bypassing branch protection or required CI;
+- pushing directly to `main` or `staging`;
+- merging pull requests;
+- production deployments or rollbacks;
+- destructive database, cloud, or filesystem operations;
+- credential, secret, IAM, billing, or release-tag changes;
+- force-pushing protected history or deleting protected branches.
