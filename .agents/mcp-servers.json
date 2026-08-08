@@ -26,7 +26,7 @@
     ],
     "notes": [
       "Use these MCPs only when they help the current task.",
-      "Keep repository-intelligence MCPs out unless benchmark and security evidence is recorded in docs/agent-context-efficiency-audit.md."
+      "Keep repository-intelligence MCPs out unless benchmark and security evidence is recorded in docs/AGENT_CONTEXT_EFFICIENCY_AUDIT.md."
     ]
   },
   "servers": {

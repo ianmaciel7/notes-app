@@ -202,7 +202,7 @@ Avoid repeating the same project knowledge across agent documents.
 | Behavior and requirements | OpenSpec specs |
 | Durable operational lessons | Memory system, only when enabled and curated |
 | Procedures and reusable workflows | Skills and `.agents/workflows/` |
-| Context/cache/session audit | `docs/agent-context-efficiency-audit.md` |
+| Context/cache/session audit | `docs/AGENT_CONTEXT_EFFICIENCY_AUDIT.md` |
 
 References are preferred to copies. If this audit leads to a permanent universal rule, add the shortest possible pointer to `AGENTS.md`; keep measurements and tool-specific details here.
 
