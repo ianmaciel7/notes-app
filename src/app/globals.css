@@ -1,26 +1,131 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafaf9;
+  --foreground: #1a1a1a;
+  --canvas: #ffffff;
+  --surface: #f6f5f4;
+  --surface-soft: #fafaf9;
+  --hairline: #e5e3df;
+  --hairline-soft: #ede9e4;
+  --hairline-strong: #c8c4be;
+  --ink: #1a1a1a;
+  --primary: #5645d4;
+  --primary-pressed: #4534b3;
+  --brand-navy: #0a1530;
+  --brand-navy-mid: #1a2a52;
+  --link-blue: #0075de;
+  --brand-orange: #dd5b00;
+  --brand-pink: #ff64c8;
+  --brand-purple: #7b3ff2;
+  --brand-teal: #2a9d99;
+  --brand-green: #1aae39;
+  --card-tint-peach: #ffe8d4;
+  --card-tint-rose: #fde0ec;
+  --card-tint-mint: #d9f3e1;
+  --card-tint-lavender: #e6e0f5;
+  --card-tint-sky: #dcecfa;
+  --card-tint-yellow: #fef7d6;
+  --card-tint-yellow-bold: #f9e79f;
+  --charcoal: #37352f;
+  --slate: #5d5b54;
+  --steel: #787671;
+  --stone: #a4a097;
+  --muted: #bbb8b1;
+  --on-primary: #ffffff;
+  --on-dark: #ffffff;
+  --on-dark-muted: #a4a097;
+  --shadow-mockup: rgba(15, 15, 15, 0.2) 0 24px 48px -8px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+  --color-hairline: var(--hairline);
+  --color-hairline-soft: var(--hairline-soft);
+  --color-hairline-strong: var(--hairline-strong);
+  --color-ink: var(--ink);
+  --color-primary: var(--primary);
+  --color-primary-pressed: var(--primary-pressed);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-navy-mid: var(--brand-navy-mid);
+  --color-link-blue: var(--link-blue);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-green: var(--brand-green);
+  --color-card-tint-peach: var(--card-tint-peach);
+  --color-card-tint-rose: var(--card-tint-rose);
+  --color-card-tint-mint: var(--card-tint-mint);
+  --color-card-tint-lavender: var(--card-tint-lavender);
+  --color-card-tint-sky: var(--card-tint-sky);
+  --color-card-tint-yellow: var(--card-tint-yellow);
+  --color-card-tint-yellow-bold: var(--card-tint-yellow-bold);
+  --color-charcoal: var(--charcoal);
+  --color-slate: var(--slate);
+  --color-steel: var(--steel);
+  --color-stone: var(--stone);
+  --color-muted: var(--muted);
+  --color-on-primary: var(--on-primary);
+  --color-on-dark: var(--on-dark);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #070f24;
+    --foreground: #ffffff;
+    --canvas: #0a1530;
+    --surface: #101d3b;
+    --surface-soft: #0d1834;
+    --hairline: #1a2a52;
+    --hairline-soft: #162546;
+    --hairline-strong: #2a3d68;
+    --ink: #ffffff;
+    --charcoal: #ffffff;
+    --slate: #d7d4cd;
+    --steel: #bbb8b1;
+    --stone: #a4a097;
+    --muted: #787671;
   }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:
+    var(--font-geist-sans), Inter, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary) 24%, transparent);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
 }
