@@ -1,39 +1,37 @@
 {
   "version": 1,
-  "updated": "2026-08-08",
-  "host": "codex",
-  "scope": "user",
-  "codexConfigPath": "~/.codex/config.toml",
-  "clientConfigPaths": {
-    "codex": "~/.codex/config.toml",
-    "antigravity": "~/.gemini/config/mcp_config.json",
-    "agy": "~/.gemini/config/mcp_config.json"
+  "updated": "2026-08-10",
+  "purpose": "Project-recommended MCP servers for agents working in this repository.",
+  "consumerStatus": {
+    "projectManifest": ".agents/mcp-servers.json is a repository manifest. Keep its server names, commands, args, and URLs in parity with .codex/config.toml.",
+    "codex": "Use .codex/config.toml for this repository Codex MCP configuration; it must mirror this manifest without operating-system-specific launchers.",
+    "antigravity": "Antigravity/Gemini uses its own mcp_config.json format outside this manifest.",
+    "jsonInterpolation": "Do not assume ${ENV_VAR}, $ENV_VAR, or .env loading in this JSON. JSON has no interpolation by itself."
   },
   "env": {
     "localFile": ".env",
     "exampleFile": ".env.example",
-    "loadPolicy": "Read .env before starting MCP servers and export any configured values into the agent process environment. Keep .env ignored; commit only .env.example.",
+    "loadPolicy": "Secrets stay in local .env. Each MCP client must load .env through its official mechanism, inherited process environment, or an explicit launcher.",
     "variables": [
       "STITCH_API_KEY",
       "STITCH_USE_SYSTEM_GCLOUD"
     ]
   },
   "policy": {
-    "purpose": "Project-recommended generic MCP servers for agents working in this repository.",
     "secrets": "Never store API keys, PATs, OAuth tokens, or application-default credential files in this repository.",
     "excludedByDefault": [
       "figma"
     ],
     "notes": [
       "Use these MCPs only when they help the current task.",
-      "Keep repository-intelligence MCPs out unless benchmark and security evidence is recorded in docs/AGENT_CONTEXT_EFFICIENCY_AUDIT.md."
+      "Keep repository-intelligence MCPs out unless benchmark and security evidence is recorded in docs/AGENT_CONTEXT_EFFICIENCY_AUDIT.md.",
+      "Keep this manifest and .codex/config.toml operating-system neutral; do not use powershell.exe, cmd.exe, npx.cmd, bash, sh, or absolute OS-specific paths in committed MCP launch config."
     ]
   },
   "servers": {
     "context7": {
       "transport": "stdio",
       "purpose": "Fetch current library and framework documentation during coding tasks.",
-      "installCommand": "codex mcp add context7 -- npx -y @upstash/context7-mcp",
       "command": "npx",
       "args": [
         "-y",
@@ -47,7 +45,6 @@
     "chrome-devtools": {
       "transport": "stdio",
       "purpose": "Inspect and automate Chrome DevTools for browser debugging and UI verification.",
-      "installCommand": "codex mcp add chrome-devtools -- npx -y chrome-devtools-mcp@latest",
       "command": "npx",
       "args": [
         "-y",
@@ -60,24 +57,16 @@
     "github-readonly": {
       "transport": "streamable_http",
       "purpose": "Read GitHub repositories, issues, pull requests, and related metadata without write tools.",
-      "installCommand": "codex mcp add github-readonly --url https://api.githubcopilot.com/mcp/readonly",
       "url": "https://api.githubcopilot.com/mcp/readonly",
       "readOnly": true,
-      "clients": {
-        "codex": "supported",
-        "antigravity": "not configured; local Antigravity docs only document stdio and SSE serverUrl transports",
-        "agy": "not configured; uses Antigravity/Gemini MCP config"
-      },
       "auth": {
         "required": true,
-        "method": "codex mcp login github-readonly",
-        "secretStorage": "Use Codex OAuth/session storage; do not commit tokens."
+        "secretStorage": "Use the MCP client's OAuth/session storage; do not commit tokens."
       }
     },
     "gcloud": {
       "transport": "stdio",
       "purpose": "Use Google Cloud through the local gcloud CLI with the active gcloud identity.",
-      "installCommand": "codex mcp add gcloud -- npx -y @google-cloud/gcloud-mcp",
       "command": "npx",
       "args": [
         "-y",
@@ -95,7 +84,6 @@
     "stitch": {
       "transport": "stdio",
       "purpose": "Use Google Stitch design workflows through a local MCP proxy, without Figma.",
-      "installCommand": "codex mcp add stitch -- npx -y @_davideast/stitch-mcp proxy",
       "command": "npx",
       "args": [
         "-y",
@@ -104,21 +92,22 @@
       ],
       "auth": {
         "required": true,
-        "options": [
-          "Run npx @_davideast/stitch-mcp init for guided setup.",
-          "Set STITCH_API_KEY for API key auth only when needed.",
-          "Use existing Google Cloud CLI defaults if the proxy requests Google credentials."
-        ],
+        "secretStorage": "Put secret values in local .env only. Do not put API keys in this JSON or in client MCP config files.",
         "env": [
           "STITCH_API_KEY",
           "STITCH_USE_SYSTEM_GCLOUD"
+        ],
+        "options": [
+          "Run npx @_davideast/stitch-mcp init for guided setup.",
+          "Set STITCH_API_KEY in .env for API key auth only when needed.",
+          "Set STITCH_USE_SYSTEM_GCLOUD=false in .env to avoid system gcloud ADC when using API key auth.",
+          "Use existing Google Cloud CLI defaults only when intentionally using OAuth/ADC instead of STITCH_API_KEY."
         ]
       }
     }
   },
   "stitchPlugins": {
     "marketplace": "google-labs-code/stitch-skills",
-    "installCommand": "codex plugin marketplace add google-labs-code/stitch-skills --ref main --sparse .agents/plugins --sparse plugins/stitch-design --sparse plugins/stitch-build --sparse plugins/stitch-utilities",
     "plugins": [
       "stitch-design@stitch-skills",
       "stitch-build@stitch-skills",
@@ -126,13 +115,8 @@
     ]
   },
   "verification": [
-    "Read .env first and export configured values into the shell or Codex environment.",
-    "Restart Codex after changing MCP or plugin config.",
-    "For Codex CLI verification in this environment, set CODEX_HOME=C:\\Users\\ianma\\.codex before running codex mcp list or plugin list.",
-    "Restart Antigravity IDE after changing ~/.gemini/config/mcp_config.json.",
-    "Use /mcp in Codex UI to inspect active MCP servers.",
-    "Use Additional Options (...) > MCP Servers in Antigravity IDE to inspect active MCP servers.",
-    "Use codex mcp get <server-name> to inspect a configured server.",
-    "Confirm required environment variables are available before startup."
+    "Validate environment loading without printing secret values, for example by checking Boolean(process.env.STITCH_API_KEY).",
+    "Restart the MCP client after changing its active MCP config.",
+    "Use the MCP client server inspection command or UI to confirm active servers."
   ]
 }
