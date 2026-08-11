@@ -318,14 +318,14 @@ git fetch origin
 git log --oneline --decorate -n 5 origin/staging
 ```
 
-Then delete the working branch only after confirmation:
+Then delete the merged working branch as the default post-merge cleanup step:
 
 ```powershell
 git branch -d <task-branch>
 git push origin --delete <task-branch>
 ```
 
-Never delete protected branches. Never delete branches containing unmerged work.
+Never delete protected branches. Never delete branches containing unmerged work. Do not force-delete branches unless explicitly authorized.
 
 Do not bypass branch protection unless the user explicitly instructs it.
 

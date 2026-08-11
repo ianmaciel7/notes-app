@@ -13,3 +13,14 @@ The umbrella change SHALL not duplicate detailed feature requirements that are o
 #### Scenario: A feature requirement changes
 - **WHEN** a requirement for a specific feature area is revised
 - **THEN** the owning feature change is updated and the umbrella remains an index unless the feature split itself changes
+
+### Requirement: Ordered Implementation Roadmap
+The umbrella roadmap SHALL define a recommended implementation order for active workspace-related OpenSpec changes.
+
+#### Scenario: Team plans implementation sequence
+- **WHEN** the team selects the next workspace implementation change
+- **THEN** it follows the roadmap order by default: Next.js server architecture, competitive reference audit, workspace foundation, visual experience, spaces, object model, navigation, rich editor, collections/search/calendar, relations/graph discovery, onboarding education, support/community knowledge base, AI assistant, and portability/offline quality
+
+#### Scenario: Team implements out of order
+- **WHEN** a change is implemented before an earlier roadmap prerequisite
+- **THEN** the implementation plan records why the dependency is not required for that PR or how the missing prerequisite is safely mocked, deferred, or constrained
