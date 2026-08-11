@@ -2,7 +2,7 @@
 
 ## Current State
 
-Vitest and React Testing Library are configured for unit and component tests. The current test suite protects the observable home page workspace behavior.
+Vitest and React Testing Library are configured for unit and component tests. The current test suite protects the observable home page workspace behavior. Coverage is generated as a quality signal for pull requests and local verification, but the repository does not enforce an arbitrary global percentage gate yet.
 
 End-to-end testing is not configured yet. Add E2E only when the app has behavior that justifies browser-level coverage, such as authentication, persistent note creation or editing, important navigation, deployment smoke checks, or another critical user flow.
 
@@ -11,11 +11,13 @@ End-to-end testing is not configured yet. Add E2E only when the app has behavior
 | Task | Command |
 | --- | --- |
 | Verify repo | `pnpm verify` |
+| Check formatting | `pnpm format:check` |
 | Check repo | `pnpm lint` |
 | Check file | `pnpm exec biome check path/to/file` |
-| Generate Next.js types | `pnpm exec next typegen` |
+| Generate Next.js types | `pnpm typegen` |
 | Typecheck | `pnpm typecheck` |
 | Run tests once | `pnpm test` |
+| Run tests with coverage | `pnpm test:coverage` |
 | Build | `pnpm build` |
 
 Use `pnpm verify` before opening or updating a pull request unless the task has a narrower, explicitly justified verification path.
@@ -38,15 +40,39 @@ Retries must be bounded. If the same root cause repeats without progress, stop a
 
 ## CI
 
-The `Quality` job in `.github/workflows/ci.yml` runs on pull requests targeting `main` or `staging`.
+Pull request CI in `.github/workflows/ci.yml` runs on pull requests targeting `main` or `staging`, and also validates pushes to those protected branches.
 
-It installs dependencies with `pnpm install --frozen-lockfile` and then runs:
+Each CI job installs dependencies with:
 
 ```powershell
-pnpm verify
+pnpm install --frozen-lockfile
 ```
 
-Keep local verification and CI aligned unless there is a documented reason to diverge.
+The workflow exposes separate job names for:
+
+- `Format`
+- `Lint`
+- `Typecheck`
+- `Tests`
+- `Build`
+- `Quality`
+
+`Quality` is an aggregate check used as a stable branch-protection context. Individual job names remain visible so contributors can identify the failing category quickly.
+
+The separate `Security` workflow runs CodeQL as a high-signal merge signal. It is intentionally not required by the versioned rulesets until CodeQL/code scanning availability is confirmed for the repository.
+
+Keep local verification and CI aligned unless there is a documented reason to diverge. `pnpm verify` remains the canonical local completion command and runs formatting, linting, Next.js type generation, TypeScript checking, tests with coverage, and production build.
+
+## Coverage
+
+Coverage is generated with Vitest's V8 provider and uploaded by CI as a short-retention artifact. It is a regression and review signal, not the definition of quality.
+
+Current policy:
+
+- No 100% coverage mandate.
+- No global threshold until the project has enough stable behavior to establish a real baseline.
+- Generated shadcn component sources under `src/components/ui/` are excluded from coverage metrics.
+- Future thresholds should focus on new business logic, validation, auth, authorization, data transformations, destructive operations, and critical state transitions.
 
 ## Test Strategy
 

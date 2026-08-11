@@ -1,0 +1,63 @@
+name: Security
+
+on:
+  pull_request:
+    branches:
+      - main
+      - staging
+  schedule:
+    - cron: "17 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  codeql:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript-typescript
+          queries: security-extended,security-and-quality
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:javascript-typescript"
+
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: always()
+    needs:
+      - codeql
+
+    steps:
+      - name: Check required security jobs
+        env:
+          CODEQL_RESULT: ${{ needs.codeql.result }}
+        run: |
+          failed=0
+
+          if [ "$CODEQL_RESULT" != "success" ]; then
+            echo "::error title=CodeQL failed::CodeQL finished with result '$CODEQL_RESULT'"
+            failed=1
+          fi
+
+          exit "$failed"
