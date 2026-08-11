@@ -1,7 +1,12 @@
-- [x] Bring forward relevant OpenSpec requirements from `old/plan-shadcn-workspace-redesign`.
-- [x] Remove superseded static page-graph and shadcn-redesign changes from the active import scope.
-- [x] Rename the program away from direct competitor replication.
-- [x] Split the broad workspace plan into feature-scoped specs.
-- [x] Validate OpenSpec artifacts.
-- [x] Review and refine requirements before implementation begins.
-- [ ] Sync accepted stable requirements into `openspec/specs/` whenever possible.
+## 1. Split Planning
+
+- [x] Identify focused feature boundaries.
+- [x] Create dedicated OpenSpec changes for each feature group.
+- [x] Move detailed requirements out of the umbrella change.
+- [x] Keep this change as a roadmap/index only.
+
+## 2. Verification
+
+- [x] Validate the umbrella change.
+- [x] Validate each split feature change.
+- [x] Review the active OpenSpec list and start implementation from focused changes, not this umbrella.

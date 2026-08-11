@@ -1,11 +1,15 @@
 ## ADDED Requirements
 
 ### Requirement: Global Content and Action Palette
-The system SHALL search authorized objects and executable actions in one keyboard-navigable palette with type badges and current-space context.
+The system SHALL expose a global command palette, available from `Ctrl+K` and equivalent platform/accessibility entry points, that searches authorized objects and executable actions in one keyboard-navigable surface with type badges and current-space context.
 
 #### Scenario: User executes a search result
 - **WHEN** the user selects a result normally, in a new tab, or in a side panel
 - **THEN** the requested open mode is honored and the palette closes without losing navigation history
+
+#### Scenario: User opens the global palette
+- **WHEN** the user presses `Ctrl+K` or invokes the equivalent configured command-palette shortcut
+- **THEN** the palette opens with focus in the query field and exposes both object results and executable workspace actions
 
 ### Requirement: Extended Search
 The system SHALL provide a dedicated search view with query, count, filters, sorting, result view controls, loading, empty, and error states.

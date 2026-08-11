@@ -1,11 +1,22 @@
 ## ADDED Requirements
 
 ### Requirement: Typed Extensible Objects
-The system SHALL store every object with stable identity, space ownership, object type, title, icon, timestamps, properties, content, collections, and relationships, while allowing custom object-type schemas.
+The system SHALL store every idea or note as an individual object with stable identity, space ownership, object type, title, icon, timestamps, properties, content, collections, and relationships instead of treating it as a file buried in a folder tree.
 
 #### Scenario: User creates a custom object type
 - **WHEN** an authorized user defines its name, icon, color, and properties
 - **THEN** new and existing compatible objects can use the versioned schema without corrupting prior data
+
+#### Scenario: User creates a typed object
+- **WHEN** a user creates an object as Pessoa, Reuniao, Livro, or another configured type
+- **THEN** the object receives a stable identity and type-specific behavior rather than becoming an untyped document record
+
+### Requirement: Editable Type Metadata
+Object types SHALL define editable custom metadata properties that determine which fields are available on objects of that type.
+
+#### Scenario: User edits metadata for a typed object
+- **WHEN** a user edits a type-specific property such as Autor for a Livro object
+- **THEN** the property is validated, persisted, and reflected in collection views, search, relationships, and export according to the type schema
 
 ### Requirement: Durable Authorized Mutations
 Create, update, move, archive, restore, and delete operations SHALL be validated, authorized, revisioned, and durable across reloads.
