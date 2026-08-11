@@ -13,6 +13,8 @@
 # testing
 /coverage
 /.vitest
+/test-results/
+/playwright-report/
 
 # next.js
 /.next/
@@ -39,6 +41,7 @@ temp/
 !.env.example
 
 # local agent/context indexes and scratch state
+/.playwright-mcp/
 .codebase-memory/
 .codegraph/
 .codegraph-*/
