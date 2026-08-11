@@ -1,44 +1,23 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { expect, test } from "vitest";
 import Home from "../src/app/page";
 
-test("renders the notes workspace home page", () => {
+test("renders the default Next.js home page", () => {
   render(<Home />);
 
-  expect(
-    screen.getByRole("heading", {
-      level: 1,
-      name: "Meet your focused workspace.",
-    }),
-  ).toBeInTheDocument();
+  expect(screen.getByAltText("Next.js logo")).toBeInTheDocument();
+  expect(screen.getByText("src/app/page.tsx")).toBeInTheDocument();
 
-  expect(screen.getByRole("link", { name: "Start writing" })).toHaveAttribute(
+  expect(screen.getByRole("link", { name: /deploy now/i })).toHaveAttribute(
     "href",
-    "#workspace",
+    expect.stringContaining("https://vercel.com/new"),
   );
-  expect(screen.getByRole("link", { name: "View notes" })).toHaveAttribute(
+  expect(screen.getByRole("link", { name: "Read our docs" })).toHaveAttribute(
     "href",
-    "#notes",
+    expect.stringContaining("https://nextjs.org/docs"),
   );
-
-  const workspace = screen.getByRole("region", { name: "Notes workspace" });
-  expect(
-    within(workspace).getByRole("heading", {
-      level: 2,
-      name: "Product notes",
-    }),
-  ).toBeInTheDocument();
-
-  for (const noteTitle of ["Launch checklist", "Research clips", "Team sync"]) {
-    expect(
-      within(workspace).getByRole("heading", {
-        level: 4,
-        name: noteTitle,
-      }),
-    ).toBeInTheDocument();
-  }
-
-  for (const status of ["Done", "In review", "Next"]) {
-    expect(within(workspace).getByText(status)).toBeInTheDocument();
-  }
+  expect(screen.getByRole("link", { name: "Learn" })).toHaveAttribute(
+    "href",
+    expect.stringContaining("https://nextjs.org/learn"),
+  );
 });
