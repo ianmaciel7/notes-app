@@ -20,6 +20,16 @@ There is no top-level `app/` directory.
 - Next.js types are generated with `pnpm exec next typegen`.
 - Next.js framework APIs and file conventions should be checked against `node_modules/next/dist/docs/` before code changes because this project uses a version with breaking changes.
 
+## Server Architecture
+
+This project treats Next.js App Router as the primary architecture. Server-rendered data consumption should use Server Components and direct server-side functions. UI mutations should use Server Actions / Server Functions. Route Handlers should be added only when an HTTP endpoint, webhook, non-UI response, or external/client API surface is actually required.
+
+Protected data access belongs in server-only modules with `import "server-only"` once the application adds database access, Firebase Admin, private APIs, secrets, authentication, authorization, or permission-sensitive business data. Those modules should authenticate, authorize the specific resource, validate input, access infrastructure, and return minimal safe data.
+
+The current source tree does not yet contain protected data access, a database/Firebase Admin client, auth modules, or internal Route Handlers, so no empty `src/server`, repository, use-case, or composition-root structure is required. Add optional patterns such as use cases, ports, repositories, explicit dependency injection, or a composition root only when complexity creates a concrete need.
+
+Repository rule: `.agents/rules/nextjs-server-architecture.md`.
+
 ## Styling
 
 Tailwind CSS v4 is configured through `src/app/globals.css` and `@theme inline` tokens. Global color and font tokens are defined there.
