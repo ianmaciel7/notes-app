@@ -12,13 +12,15 @@ Use pnpm 11.20.0, as declared in `package.json`.
 | Dev server | `pnpm dev` |
 | Build | `pnpm build` |
 | Start production server | `pnpm start` |
-| Generate Next.js types | `pnpm exec next typegen` |
+| Generate Next.js types | `pnpm typegen` |
 | Check repo | `pnpm lint` |
+| Check formatting | `pnpm format:check` |
 | Check file | `pnpm exec biome check path/to/file` |
 | Format repo | `pnpm format` |
 | Format file | `pnpm exec biome format --write path/to/file` |
 | Typecheck | `pnpm typecheck` |
 | Test | `pnpm test` |
+| Test with coverage | `pnpm test:coverage` |
 | Verify repo | `pnpm verify` |
 
 Use `pnpm verify` as the canonical local health check before opening or updating pull requests unless the task has a narrower, explicitly justified verification path. Follow `docs/TESTING.md` for testing strategy, E2E triggers, and Definition of Done expectations.
@@ -42,6 +44,7 @@ Rules:
 - Reuse an existing pull request when one already exists for the branch.
 - Pull requests should target `staging` unless explicitly specified otherwise.
 - Required CI checks must pass before merge.
+- CODEOWNERS documents sensitive areas, but this solo-maintained repository does not require approval by default.
 - Use squash merge.
 - Do not use merge-time branch deletion.
 - Do not bypass branch protection unless explicitly requested.
@@ -244,6 +247,18 @@ Pull requests should:
 - Pass required CI checks.
 - Be reviewed for unexpected files before merge.
 
+## Required Checks
+
+The intended required protected-branch check is:
+
+| Check | Purpose |
+| --- | --- |
+| `Quality` | Aggregate CI gate preserving a stable required status context. |
+
+`Quality` depends on `Format`, `Lint`, `Typecheck`, `Tests`, and `Build`. Keeping the required branch-protection context aggregate avoids brittle required-check configuration when individual jobs are skipped by dependencies or renamed.
+
+The separate `Security` workflow should be treated as a merge signal and may become a required check after CodeQL/code scanning support is confirmed for the repository. Contributors should inspect the failed job name first, such as `Format`, `Lint`, `Typecheck`, `Tests`, `Build`, or `CodeQL`.
+
 New commits pushed to the branch update the existing pull request automatically.
 
 ## Squash Merge
@@ -280,7 +295,7 @@ Required checks must pass before merge:
 gh pr checks
 ```
 
-The required `Quality` job runs `pnpm verify`. Keep that job name stable because branch rulesets require the `Quality` check context.
+The required `Quality` job aggregates the split Format, Lint, Typecheck, Tests, and Build jobs. Keep that job name stable because branch rulesets require the `Quality` check context. `pnpm verify` remains the local equivalent completion command.
 
 Merge only after required checks pass:
 

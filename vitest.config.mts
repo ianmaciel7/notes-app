@@ -9,5 +9,14 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json-summary", "lcov"],
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/app/**/{layout,loading,not-found,error,global-error}.tsx",
+        "src/components/ui/**",
+      ],
+    },
   },
 });
