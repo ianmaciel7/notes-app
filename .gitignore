@@ -13,6 +13,8 @@
 # testing
 /coverage
 /.vitest
+/test-results/
+/playwright-report/
 
 # next.js
 /.next/
@@ -38,14 +40,20 @@ temp/
 .env*
 !.env.example
 
+# AI agent vendor-specific local configuration
+# The repository uses AGENTS.md + .agents/ as the canonical
+# vendor-neutral agent configuration.
+.agent/
+.codex/
+.gemini/
+
 # local agent/context indexes and scratch state
+/.playwright-mcp/
 .codebase-memory/
 .codegraph/
 .codegraph-*/
 .context-mode/
 .serena/
-.gemini/plans/
-.gemini/tmp/
 
 # vercel
 .vercel
