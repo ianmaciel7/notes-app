@@ -121,6 +121,12 @@
       "skillPath": "SKILL.md",
       "computedHash": "c6c8c6c6df610e93591620298c6692e5c09c471fff77339491740867958f2193"
     },
+    "graphify": {
+      "source": "Graphify-Labs/graphify",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/graphify/SKILL.md",
+      "computedHash": "7a6d60d8c3fd4384252c23c69c1c82643c6a86dee967f5dfa9f23169fea2cb1a"
+    },
     "harness-engineering": {
       "source": "github/awesome-copilot",
       "sourceType": "github",

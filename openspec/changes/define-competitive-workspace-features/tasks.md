@@ -1,0 +1,7 @@
+- [x] Bring forward relevant OpenSpec requirements from `old/plan-shadcn-workspace-redesign`.
+- [x] Remove superseded static page-graph and shadcn-redesign changes from the active import scope.
+- [x] Rename the program away from direct competitor replication.
+- [x] Split the broad workspace plan into feature-scoped specs.
+- [x] Validate OpenSpec artifacts.
+- [ ] Review and refine requirements before implementation begins.
+- [ ] Sync accepted stable requirements into `openspec/specs/` whenever possible.
