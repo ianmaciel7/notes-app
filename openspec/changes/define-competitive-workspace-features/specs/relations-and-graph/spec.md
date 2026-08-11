@@ -8,11 +8,19 @@ Objects SHALL support typed directed relationships and derived backlinks with au
 - **THEN** both endpoint context views, related counts, search metadata, and graph data update consistently
 
 ### Requirement: Context Panels
-Internal Objects and Related Content SHALL open as optional panels with counts, grouped or configurable views, accessible empty states, and object navigation.
+Internal Objects, backlinks or incoming links, and Related Content SHALL open as optional panels with counts, grouped or configurable views, accessible empty states, and object navigation.
 
 #### Scenario: No related content exists
 - **WHEN** the semantic-related query returns no authorized objects
 - **THEN** the panel reports zero and explains the empty state without fabricating relationships
+
+#### Scenario: User opens backlinks
+- **WHEN** the user opens Links de entrada, backlinks, or an equivalent incoming-links panel
+- **THEN** authorized objects that link to the active object are grouped or listed with labels, counts, and navigation without exposing unauthorized object titles or metadata
+
+#### Scenario: User explores related content
+- **WHEN** the user opens Explore, Content Relevante, Encontrar mais, or an equivalent semantic-discovery surface
+- **THEN** suggested related objects are marked as derived suggestions, remain authorization-aware, expose enough rationale to distinguish them from explicit links, and provide an empty state when no safe suggestion exists
 
 ### Requirement: Interactive Graph
 The graph SHALL render authorized object nodes and edges with selected state, depth controls, pan, zoom, fullscreen, keyboard access, and deterministic layout fallback.

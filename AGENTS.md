@@ -63,6 +63,9 @@ discover -> decide OpenSpec need -> delegate if useful -> implement -> verify so
 ```
 
 - Start from repository evidence: relevant docs, code, tests, package scripts, OpenSpec specs/changes, Git status, and CI.
+- If `graphify-out/graph.json` exists and the task asks about architecture, file relationships, data flow, ownership, or project content, query Graphify first with `graphify query`, `graphify path`, or `graphify explain` before broad file reads to reduce context use.
+- If `graphify` is not installed, explain that the CLI comes from the Python package `graphifyy` and install it with `uv tool install graphifyy` or `pipx install graphifyy`; then run `graphify install` to register the assistant skill.
+- Rebuild or update Graphify only when explicitly requested, when `graphify-out/graph.json` is missing, or when stale graph evidence would affect the answer.
 - Use OpenSpec for durable requirements, behavior, acceptance criteria, design rationale, and change lifecycle. Do not create parallel planning, task, memory, or spec files.
 - Keep transient loop state in the agent session. Persist only useful outcomes in the right owner: OpenSpec, tests, code, docs, Git commits, PRs, or CI.
 - Keep software verification separate from OpenSpec verification. Passing tests does not prove requirements were met; valid OpenSpec artifacts do not prove the software works.

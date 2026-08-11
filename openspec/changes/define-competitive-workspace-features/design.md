@@ -23,6 +23,12 @@ Each feature area gets its own OpenSpec capability. This keeps future PRs smalle
 
 Workspace features SHALL compose existing shadcn source components for common UI primitives. Custom markup is allowed only when the installed primitives do not cover the required semantic or interaction behavior, and the implementation must record why.
 
+### Position the workspace as "Studio for the Mind"
+
+The product design SHALL position the workspace as a studio for thought, not a productivity dashboard. The interface should make ideas feel like connected semantic objects rather than files buried in folders. Visual hierarchy stays light; object identity, relationships, backlinks, graph context, and semantic grouping carry the sense of structure.
+
+This means the UI should avoid heavy dashboard chrome, KPI framing, deeply nested folder metaphors as the primary model, and decorative effects that compete with thinking. Motion, hover, depth, transparency, and visual effects are acceptable only when they clarify state, relationship, layering, or available action.
+
 ### Adopt an initial competitor-informed color baseline
 
 The workspace starts from a neutral object-workspace palette rather than the current starter-page black/white baseline. The initial values are:
@@ -63,6 +69,7 @@ Billing, OAuth provider authorization, API credentials, public publishing, destr
 - **Offline conflict risk**: Require versioned mutations, explicit conflict states, and recovery before local-first editing is treated as complete.
 - **AI privacy risk**: Keep provider credentials server-side and require permission-filtered retrieval and redacted observability.
 - **Custom UI drift**: Prefer shadcn composition and require justification for custom common controls.
+- **Aesthetic ambiguity**: Keep the "Studio for the Mind" direction testable through semantic object cues, relationship affordances, interaction states, and accessibility parity rather than subjective decoration alone.
 
 ## Migration Path
 

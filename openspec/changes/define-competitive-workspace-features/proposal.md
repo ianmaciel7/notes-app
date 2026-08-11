@@ -9,20 +9,21 @@ This change brings forward only the product-relevant OpenSpec requirements and r
 - Define a competitor-informed workspace product baseline without copying a specific competitor's branding, proprietary behavior, source code, private APIs, or undisclosed algorithms.
 - Split the broad prior workspace plan into capability-scoped specs that can be implemented, tested, synced, and archived independently.
 - Preserve shadcn-first composition as a product requirement for common controls, overlays, forms, navigation, and data display.
-- Define the major feature areas required for a mature notes workspace: object model, editor, collections, search, calendar, relations, graph, AI, settings, import/export, sharing, offline sync, accessibility, and resilience.
+- Define the major feature areas required for a mature notes workspace: studio-for-the-mind aesthetics, object model, editor, presentation, collections, search, in-page find, calendar, relations, backlinks, semantic discovery, graph, motion, hover/depth effects, AI, settings, import/export, sharing, offline sync, accessibility, and resilience.
 - Keep reference-app audit evidence as its own capability so confirmed behavior, inferred behavior, unknowns, and blocked flows do not get mixed with product requirements.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `workspace-foundation`: Product visual system, shadcn composition, theme support, responsive layout, and interaction states.
+- `workspace-foundation`: shadcn composition, feature-owned styling boundaries, action contracts, theme support, responsive layout, and canonical design documentation.
+- `workspace-visual-experience`: Studio-for-the-mind visual positioning, semantic-object appearance, product color tokens, interaction states, motion, hover affordances, depth/transparency effects, and pointer/keyboard parity.
 - `workspace-navigation`: Space selector, object-centric sidebar, tabs, contextual panels, history, focus mode, and responsive navigation.
 - `knowledge-object-model`: Typed objects, custom object types, properties, relationships, authorization, revisions, and safe creation.
-- `rich-object-editor`: Persisted block editor, metadata editing, keyboard behavior, outline, autosave, and recovery states.
+- `rich-object-editor`: Persisted block editor, metadata editing, keyboard behavior, outline, presentation mode, autosave, and recovery states.
 - `collections-and-views`: Object-type pages, saved List, Wall, Kanban, Gallery, Table, and Embed views with filtering, sorting, grouping, and contextual creation.
-- `search-and-calendar`: Command palette, extended search, date navigation, calendar views, daily notes, and date-based collections.
-- `relations-and-graph`: Typed relations, backlinks, internal objects, related content, graph panels, and deterministic graph interaction.
+- `search-and-calendar`: Command palette, in-page find, extended search, date navigation, calendar views, daily notes, and date-based collections.
+- `relations-and-graph`: Typed relations, backlinks and incoming-link panels, internal objects, semantic related content, graph panels, and deterministic graph interaction.
 - `ai-assistant`: Provider-neutral AI panel, object mentions, retrieval boundaries, streaming, citations, and explicit confirmation for persistent actions.
 - `settings-and-portability`: Account/workspace settings, preferences, import, export, sharing, integrations, and API boundaries.
 - `offline-sync-and-quality`: Local cache, mutation queue, synchronization, conflicts, accessibility gates, resilience, and tenant-safe observability.

@@ -14,6 +14,13 @@ The system SHALL provide a dedicated search view with query, count, filters, sor
 - **WHEN** no authorized object matches the active query and filters
 - **THEN** a concise empty state is shown without suggesting that unrelated content be created
 
+### Requirement: In-Page Find
+The object page SHALL provide a keyboard-accessible Find in Page action that searches within the active object's visible editable content without changing the global search context.
+
+#### Scenario: User finds text inside an object
+- **WHEN** the user invokes Find in Page from the keyboard shortcut or object action menu and enters a query
+- **THEN** matches in the active object are highlighted, the active match is navigable forward and backward, no unrelated workspace results are shown, and closing find restores focus to the documented object location
+
 ### Requirement: Calendar and Daily Notes
 The calendar SHALL provide month, week, three-day, and day views, Today navigation, date selection, one daily note per space/date, and date-based object collections.
 

@@ -20,3 +20,10 @@ The editor SHALL provide documented keyboard commands, slash insertion, visible 
 #### Scenario: Keyboard-only editing
 - **WHEN** a user edits and navigates without a pointer
 - **THEN** every editing, formatting, property, outline, and save/error action remains operable and announced
+
+### Requirement: Object Presentation Mode
+The object page SHALL provide a presentation mode for supported objects that prioritizes readable document content while preserving a safe exit path and object context.
+
+#### Scenario: User presents an object
+- **WHEN** the user activates Present or an equivalent presentation action
+- **THEN** the object opens in a presentation-oriented view with non-document chrome minimized, a labelled exit control, preserved document position where applicable, and no mutation to the object content unless the user explicitly edits it
