@@ -79,6 +79,29 @@ Every interactive control SHALL provide visually coherent hover, focus-visible, 
 - **WHEN** a control is reached by pointer, keyboard, or assistive technology
 - **THEN** its state remains perceivable without layout shift or reliance on color alone
 
+#### Scenario: User hovers a control
+- **WHEN** a pointer rests on an enabled button, icon button, link, menu item, tab, row action, field affordance, panel control, or draggable handle
+- **THEN** the hover state communicates affordance, keeps the accessible name and target size stable, and does not reveal unrelated layout-changing content
+
+#### Scenario: User presses a control
+- **WHEN** a user activates a control by pointer, keyboard, or assistive technology
+- **THEN** the active or pressed state is visible immediately, the resulting behavior matches the control label, and the control exposes loading, completion, error, or unchanged feedback when the result is not instantaneous
+
+### Requirement: Action Interaction Contract
+Every actionable workspace control SHALL define its precondition, trigger methods, immediate visual feedback, resulting state transition, persistence behavior, cancellation or undo path where applicable, and safe failure behavior.
+
+#### Scenario: User invokes a non-destructive action
+- **WHEN** an enabled navigation, opening, filtering, sorting, formatting, panel, view, or selection action is invoked
+- **THEN** the UI updates deterministically, the new state is reflected in the relevant URL, tab, panel, selection, or persisted preference when applicable, and keyboard focus moves or remains in a documented accessible location
+
+#### Scenario: User invokes a mutating action
+- **WHEN** a create, update, move, archive, restore, duplicate, import, export, share, sync, or AI-assisted mutation is invoked
+- **THEN** authorization is checked before commit, the user receives optimistic or confirmed feedback appropriate to the operation, failures are recoverable, and destructive or externally visible actions require confirmation or an explicit undo path
+
+#### Scenario: User opens an overlay action
+- **WHEN** a button or command opens a menu, popover, command palette, dialog, sheet, tooltip, date picker, object picker, or settings panel
+- **THEN** open and closed states are visible, focus is trapped or managed according to the overlay type, Escape and outside-click behavior are defined, and closing the overlay does not accidentally commit partial data
+
 ### Requirement: Theme and Viewport Support
 The workspace SHALL support light and dark themes and responsive desktop, tablet, and mobile layouts without overlapping or hiding required content.
 
