@@ -53,6 +53,7 @@ temp/
 .codegraph/
 .codegraph-*/
 .context-mode/
+graphify-out/
 .serena/
 
 # vercel

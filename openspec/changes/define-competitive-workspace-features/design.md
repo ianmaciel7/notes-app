@@ -23,6 +23,31 @@ Each feature area gets its own OpenSpec capability. This keeps future PRs smalle
 
 Workspace features SHALL compose existing shadcn source components for common UI primitives. Custom markup is allowed only when the installed primitives do not cover the required semantic or interaction behavior, and the implementation must record why.
 
+### Adopt an initial competitor-informed color baseline
+
+The workspace starts from a neutral object-workspace palette rather than the current starter-page black/white baseline. The initial values are:
+
+| Token | Light | Dark |
+| --- | --- | --- |
+| `workspace-bg` | `#f7f5f0` | `#1f1d1a` |
+| `workspace-surface` | `#fffdf8` | `#292622` |
+| `workspace-surface-muted` | `#f0eee8` | `#34302a` |
+| `workspace-sidebar` | `#efede6` | `#25221f` |
+| `workspace-panel` | `#fbfaf6` | `#2d2924` |
+| `workspace-border` | `#ded9cf` | `#49433b` |
+| `workspace-border-subtle` | `#ebe6dc` | `#3b362f` |
+| `workspace-text` | `#2b2926` | `#f1eee7` |
+| `workspace-text-muted` | `#6f6a61` | `#c4bdb1` |
+| `workspace-text-subtle` | `#9a9388` | `#90877a` |
+| `workspace-accent` | `#3f7fba` | `#7ab8ae` |
+| `workspace-accent-muted` | `#dcecea` | `#244540` |
+| `workspace-accent-foreground` | `#123f3a` | `#e7fffb` |
+| `workspace-danger` | `#b42318` | `#ff8a80` |
+| `workspace-warning` | `#a15c07` | `#f5b461` |
+| `workspace-success` | `#2f7d52` | `#8fd4aa` |
+
+These values are a starting baseline for implementation. A later `competitive-reference-audit` pass may replace them with measured evidence, but any replacement must preserve accessible contrast, non-color state cues, and the boundary between global shadcn/Tailwind baseline styles and feature-owned workspace styling.
+
 ### Separate domain contracts from presentation
 
 Typed objects, properties, blocks, views, relationships, authorization, revisions, import/export, sync, and AI retrieval should live behind domain/service contracts. UI components should not call storage, AI, or cloud provider APIs directly.
