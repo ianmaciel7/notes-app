@@ -2,6 +2,7 @@
 
 - [ ] Add accepted workspace visual tokens and state styles.
 - [ ] Implement Studio-for-the-Mind surfaces and semantic object cues.
+- [ ] Implement lightweight hierarchy cues for connected objects instead of folder/dashboard metaphors.
 - [ ] Implement restrained motion, hover, and depth behavior.
 - [ ] Ensure keyboard/focus equivalents for hover-revealed controls.
 

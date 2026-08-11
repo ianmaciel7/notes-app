@@ -4,6 +4,7 @@
 - [ ] Ensure every idea or note is modeled as an individual object with stable identity.
 - [ ] Implement typed custom object schemas.
 - [ ] Implement editable type-specific metadata properties.
+- [ ] Implement object type schema versioning and migration previews.
 - [ ] Implement authorized durable mutations and revisions.
 - [ ] Implement safe object creation and object action availability.
 
@@ -11,5 +12,6 @@
 
 - [ ] Test create/update/archive/restore/delete/duplicate behavior.
 - [ ] Test built-in type-specific fields and validation.
+- [ ] Test property add/remove/rename/type-change migrations and data preservation choices.
 - [ ] Verify dependent indexes/views update after mutations.
 - [ ] Run focused tests and `pnpm verify` or document a narrower justified path.

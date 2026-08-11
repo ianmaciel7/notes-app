@@ -12,6 +12,10 @@ Editor serialization should be deterministic and schema-valid so revisions, impo
 
 Icon, type, collections, title, aliases, description, tags, properties, and body content should update dependent views consistently.
 
+### Separate structure from prose visually
+
+Metadata should appear as structured object fields near the header or contextual area, while the body remains a calm writing surface made of modular blocks.
+
 ### Presentation is a view mode, not mutation
 
 Presentation mode changes how content is displayed; it should not alter object content unless the user explicitly edits.

@@ -11,12 +11,27 @@ The system SHALL expose a global command palette, available from `Ctrl+K` and eq
 - **WHEN** the user presses `Ctrl+K` or invokes the equivalent configured command-palette shortcut
 - **THEN** the palette opens with focus in the query field and exposes both object results and executable workspace actions
 
+#### Scenario: Palette is visually presented
+- **WHEN** the global palette opens
+- **THEN** it appears as a centered minimal command surface with lightweight backdrop treatment, type badges for object results, command affordances for actions, keyboard navigation, and no persistent sidebar or panel chrome
+
 ### Requirement: Extended Search
 The system SHALL provide a dedicated search view with query, count, filters, sorting, result view controls, loading, empty, and error states.
 
 #### Scenario: Query returns no objects
 - **WHEN** no authorized object matches the active query and filters
 - **THEN** a concise empty state is shown without suggesting that unrelated content be created
+
+### Requirement: Search Index Freshness and Performance
+Search indexes SHALL update after authorized object, metadata, collection, relationship, calendar, import, export-relevant, and type-schema mutations while preserving authorization boundaries and bounded query latency.
+
+#### Scenario: Indexed data changes
+- **WHEN** an object title, content, type, property, collection membership, relationship, date, permission, or schema version changes
+- **THEN** affected search indexes are updated or invalidated deterministically, stale results are not shown as current, and unauthorized objects remain excluded
+
+#### Scenario: Search index is rebuilding
+- **WHEN** a space search index is unavailable, stale, or rebuilding
+- **THEN** search surfaces show a clear degraded or rebuilding state and avoid returning misleading partial results as complete
 
 ### Requirement: In-Page Find
 The object page SHALL provide a keyboard-accessible Find in Page action that searches within the active object's visible editable content without changing the global search context.

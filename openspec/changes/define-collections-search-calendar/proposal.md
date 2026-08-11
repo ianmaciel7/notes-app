@@ -9,6 +9,7 @@ Collections, saved views, search, in-page find, calendar, and daily notes are re
 - Define global Ctrl+K action/content palette and extended search.
 - Define in-page find.
 - Define calendar and daily notes.
+- Define search index freshness, authorization, and degraded-state behavior.
 
 ## Impact
 

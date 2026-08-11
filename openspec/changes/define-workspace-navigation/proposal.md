@@ -6,6 +6,7 @@ Workspace navigation should be implemented independently from domain modeling an
 
 - Define persistent object-centric workspace shell behavior.
 - Define tabs and contextual right-side panels.
+- Define visual placement for space selector, object-centric sidebar sections, compact tabs, and sliding contextual panels.
 - Define focus mode and responsive navigation behavior.
 
 ## Impact

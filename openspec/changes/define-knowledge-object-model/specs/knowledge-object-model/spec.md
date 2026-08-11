@@ -18,6 +18,17 @@ Object types SHALL define editable custom metadata properties that determine whi
 - **WHEN** a user edits a type-specific property such as Autor for a Livro object
 - **THEN** the property is validated, persisted, and reflected in collection views, search, relationships, and export according to the type schema
 
+### Requirement: Object Type Schema Versioning and Migration
+Object type schemas SHALL be versioned, and changes to type properties, validation, display behavior, or relationship constraints SHALL produce explicit migration plans for existing objects of that type.
+
+#### Scenario: User changes a type schema
+- **WHEN** an authorized user adds, removes, renames, changes, or reorders properties on an object type
+- **THEN** the system previews affected objects, incompatible values, index updates, export impact, and migration choices before applying the schema version
+
+#### Scenario: Migration cannot safely preserve data
+- **WHEN** a type migration would drop, coerce, or make existing property values invalid
+- **THEN** the system blocks silent data loss and requires the user to choose preserve-as-legacy, map, convert, archive, or cancel behavior
+
 ### Requirement: Durable Authorized Mutations
 Create, update, move, archive, restore, and delete operations SHALL be validated, authorized, revisioned, and durable across reloads.
 

@@ -18,6 +18,10 @@ Users SHALL be able to create and persist List, Wall, Kanban, Gallery, Table, an
 - **WHEN** the user selects List, Wall, Kanban, Gallery, Table, or Embed
 - **THEN** the same authorized result set is presented using that mode without losing the saved filter, sort, group, or property configuration
 
+#### Scenario: User compares visual modes
+- **WHEN** the user switches between List, Wall, Kanban, Gallery, Table, or Embed
+- **THEN** each mode uses a distinct visual layout while preserving the same authorized objects, filters, sort order, grouping, and visible property configuration
+
 ### Requirement: Contextual Creation
 Collection and empty-state creation SHALL prefill the active type and applicable collection constraints.
 

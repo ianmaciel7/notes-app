@@ -7,6 +7,7 @@ The object model is the product domain backbone. It should be specified separate
 - Define unique object identity for ideas and notes instead of file-folder records.
 - Define typed extensible objects with examples such as Pessoa, Reuniao, and Livro.
 - Define editable custom metadata by object type.
+- Define object type schema versioning and migration behavior.
 - Define durable authorized mutations and revision behavior.
 - Define safe object creation and built-in type behavior.
 - Define the complete object action surface.

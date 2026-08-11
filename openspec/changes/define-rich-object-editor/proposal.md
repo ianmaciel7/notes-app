@@ -6,6 +6,7 @@ The rich object editor is a distinct implementation surface with editing, metada
 
 - Define persisted rich block editing.
 - Define editable object metadata from the object page.
+- Define visual separation between structured metadata and freeform body blocks.
 - Define keyboard and document navigation.
 - Define object presentation mode.
 

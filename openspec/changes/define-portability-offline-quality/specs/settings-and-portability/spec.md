@@ -26,6 +26,24 @@ The system SHALL validate imports before commit and generate authorized full exp
 - **WHEN** an authorized user requests a full export
 - **THEN** the export includes authorized objects, type definitions, editable metadata, collections, relationships, backlinks where representable, and file attachments in documented formats without exposing unauthorized content
 
+### Requirement: Portable Export Manifest
+Full exports SHALL include a documented manifest that preserves object identity, type schema versions, metadata, content, collection membership, relationship edges, backlinks where representable, attachments, created/updated timestamps, and import compatibility metadata.
+
+#### Scenario: User inspects export contents
+- **WHEN** a full export completes
+- **THEN** the export contains a manifest in a documented machine-readable format, such as JSON, plus user-readable content files where applicable, and the manifest explains how object relationships and type schema versions can be reconstructed
+
+#### Scenario: Export format cannot represent a feature
+- **WHEN** a selected export format cannot preserve relationships, backlinks, metadata, attachments, or type schema versions losslessly
+- **THEN** the system warns the user, offers a lossless manifest-backed export option, and records any intentional omissions in the export report
+
+### Requirement: Import Compatibility With Export Manifest
+The importer SHALL validate exported manifests before commit and report compatibility, schema migration needs, missing attachments, relationship reconstruction issues, and permission constraints.
+
+#### Scenario: User imports a prior full export
+- **WHEN** a user selects a prior full export package
+- **THEN** the system previews objects, types, metadata, collections, relationships, attachments, conflicts, and required schema migrations before importing anything
+
 ### Requirement: Sharing and Access Management
 Authorized users SHALL be able to grant, inspect, and revoke supported object or space access without exposing private content by default.
 

@@ -5,6 +5,7 @@ The workspace visual direction is large enough to stand alone. It defines the pr
 ## What Changes
 
 - Define the "Studio for the Mind" appearance.
+- Define lightweight semantic visual hierarchy for connected objects.
 - Define product color tokens and visual states.
 - Define motion, transition, hover, depth, transparency, and effect constraints.
 - Require pointer, keyboard, and assistive-technology parity for visual affordances.

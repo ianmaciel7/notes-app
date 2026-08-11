@@ -18,6 +18,17 @@ The workspace SHALL express a "Studio for the Mind" aesthetic that prioritizes c
 - **WHEN** the UI represents where an idea belongs
 - **THEN** it emphasizes connected objects, typed relationships, collections, backlinks, and contextual panels over the impression that ideas are files buried inside folders
 
+### Requirement: Lightweight Semantic Visual Hierarchy
+The workspace SHALL use lightweight visual hierarchy where object identity, semantic connections, hover states, relation cues, and contextual panels guide the user's eye instead of heavy dashboard framing.
+
+#### Scenario: Interface is visually reviewed
+- **WHEN** a reviewer evaluates the workspace appearance
+- **THEN** the UI reads as a network of connected objects, not files inside folders or KPI cards inside a productivity dashboard
+
+#### Scenario: Object connection is visually implied
+- **WHEN** an object surface appears near backlinks, relation chips, graph cues, collection membership, or semantic suggestions
+- **THEN** spacing, grouping, hover, focus, and subtle connector treatments reinforce the relationship without adding decorative clutter
+
 ### Requirement: Workspace Color Tokens
 The workspace SHALL define product color tokens before implementation, using a neutral object-workspace palette with subtle warm surfaces, restrained blue selection, muted secondary text, and accessible semantic status colors.
 

@@ -6,6 +6,7 @@ Settings, import/export, sharing, integrations, offline sync, accessibility gate
 
 - Define account/workspace settings and persisted preferences.
 - Define import and total export behavior for objects, metadata, collections, relationships, and files.
+- Define a portable export manifest and import compatibility checks.
 - Define sharing and access management.
 - Define guarded integrations and developer API documentation/resources.
 - Define offline reads, queued edits, conflict recovery, accessibility/resilience gates, and tenant-safe observability.

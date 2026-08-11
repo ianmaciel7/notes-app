@@ -8,6 +8,7 @@ Relations, backlinks, semantic discovery, and graph interaction are the core of 
 - Define context panels for internal objects, incoming links, and related content.
 - Define semantic discovery surfaces.
 - Define interactive graph behavior.
+- Define graph/backlink index freshness and large-graph degradation behavior.
 
 ## Impact
 
