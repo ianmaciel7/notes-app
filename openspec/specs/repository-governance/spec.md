@@ -1,9 +1,7 @@
 ## Purpose
 
 Define durable repository governance requirements for agent work, canonical documentation ownership, environment assumptions, framework-specific documentation checks, component discovery, research separation, dependency inspection, and protected local directories.
-
 ## Requirements
-
 ### Requirement: Environment Contract
 Agents and contributors SHALL follow the repository environment contract when running commands or documenting examples.
 
@@ -52,12 +50,16 @@ Agents SHALL avoid manual edits to generated output and durable build artifacts.
 - **THEN** the agent SHALL NOT edit them manually
 
 ### Requirement: Pointer File Consistency
-Agent pointer files SHALL remain lightweight pointers to the canonical agent instructions.
+Agent instruction entrypoints SHALL avoid duplicating project instructions and SHALL preserve `AGENTS.md` as the canonical repository instruction file.
 
 #### Scenario: Updating agent instructions
-- **WHEN** `AGENTS.md` changes in a way that affects Claude or Gemini entry points
-- **THEN** `CLAUDE.md` and `GEMINI.md` SHALL remain pointers to `AGENTS.md`
-- **AND** agent instructions SHALL NOT be duplicated into those files
+- **WHEN** project-wide agent instructions change
+- **THEN** `AGENTS.md` SHALL remain the canonical project instruction file
+- **AND** vendor-specific repository instruction files such as `GEMINI.md` SHALL NOT duplicate those instructions
+
+#### Scenario: Vendor-specific entrypoint is redundant
+- **WHEN** a vendor-specific repository instruction file only duplicates or points to `AGENTS.md`
+- **THEN** the file SHALL be removed from the repository
 
 ### Requirement: Dependency Inspection Before Use
 Agents SHALL inspect newly added libraries from the exact installed package before writing integration code.
@@ -124,3 +126,34 @@ Generic MCP server recommendations SHALL be stored without secrets in the reposi
 - **WHEN** a generic MCP server recommendation is documented
 - **THEN** it SHALL be stored in `.agents/mcp-servers.json`
 - **AND** secrets SHALL NOT be stored there
+
+### Requirement: Agent-Agnostic Configuration Ownership
+Repository agent configuration SHALL use `AGENTS.md` and `.agents/` as the canonical vendor-neutral source of truth.
+
+#### Scenario: Storing reusable agent behavior
+- **WHEN** project instructions, skills, rules, reusable workflows, subagent definitions, or portable MCP recommendations are stored in the repository
+- **THEN** they SHALL live under `AGENTS.md` or `.agents/`
+- **AND** they SHALL NOT be duplicated under vendor-specific project directories
+
+#### Scenario: Retaining project skills
+- **WHEN** a reusable project skill is retained in the repository
+- **THEN** it SHALL have exactly one canonical copy under `.agents/skills/<skill-name>/SKILL.md`
+
+#### Scenario: Vendor-specific project directories are generated
+- **WHEN** tools generate project-local `.agent/`, `.codex/`, or `.gemini/` directories
+- **THEN** those directories SHALL be treated as local tool configuration
+- **AND** they SHALL remain ignored and untracked
+
+#### Scenario: Vendor-specific settings are unavoidable
+- **WHEN** a coding agent requires vendor-specific settings to operate
+- **THEN** those settings SHALL NOT duplicate project instructions, skills, architecture knowledge, workflows, coding standards, or reusable agent behavior
+- **AND** supported user-level or global tool configuration SHALL be preferred over repository-local vendor configuration
+
+### Requirement: OpenSpec Responsibility Boundary
+Repository agent configuration SHALL reference OpenSpec without replacing or duplicating it.
+
+#### Scenario: Durable requirements are needed
+- **WHEN** work needs durable requirements, behavior, acceptance criteria, design rationale, alternatives, or change lifecycle artifacts
+- **THEN** the agent SHALL use OpenSpec under `openspec/`
+- **AND** `AGENTS.md` or `.agents/` SHALL reference OpenSpec rather than duplicating specs
+

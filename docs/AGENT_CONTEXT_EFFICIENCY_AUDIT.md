@@ -10,8 +10,8 @@ Core rule: measure before adding infrastructure or raising context budgets. Larg
 
 | Area | Observed state | Decision |
 | --- | --- | --- |
-| Project agent rules | `AGENTS.md` owns universal execution rules; `CLAUDE.md` is a pointer to `AGENTS.md`. | Keep shared rules concise and reference this audit instead of copying it. |
-| OpenSpec | `openspec/config.yaml` is minimal and OpenSpec workflows live in `.agents/workflows/`. | Use OpenSpec config for OpenSpec-specific context only. |
+| Project agent rules | `AGENTS.md` owns universal execution rules and `.agents/` owns portable skills, rules, agents, workflows, and MCP recommendations. | Keep shared rules concise and do not reintroduce vendor-specific project config. |
+| OpenSpec | `openspec/config.yaml` is minimal and OpenSpec workflows live in `.agents/workflows/`. | Use OpenSpec for durable requirements and change lifecycle work. |
 | Gemini CLI | `gemini.cmd --version` reports `0.49.0`; `~/.gemini/settings.json` was absent; `GEMINI_API_KEY`, `GOOGLE_GENAI_USE_VERTEXAI`, and `GOOGLE_GENAI_USE_GCA` were not set. | Gemini auth, `/stats`, sessions, and investigator benchmarks are blocked until auth is configured. |
 | Codex CLI | `codex.cmd --version` reports `0.147.0`; `~/.codex/config.toml` has `model = "gpt-5.5"` and `model_reasoning_effort = "xhigh"`. | Codex is the only locally inspectable configured agent runtime in this audit. |
 | Claude Code | No `claude` or `claude.cmd` executable was found on PATH, and no `~/.claude` directory was observed. | Mark Claude Code behavior as not locally verifiable until an install path/version is provided. |
@@ -197,7 +197,7 @@ Avoid repeating the same project knowledge across agent documents.
 | Knowledge type | Owner |
 | --- | --- |
 | Universal agent execution rules | `AGENTS.md` |
-| Claude entrypoint pointer | `CLAUDE.md` |
+| Portable agent configuration | `.agents/` |
 | OpenSpec-specific project/spec context | `openspec/config.yaml` |
 | Behavior and requirements | OpenSpec specs |
 | Durable operational lessons | Memory system, only when enabled and curated |
@@ -252,8 +252,8 @@ Follow-up on 2026-08-08: a user-requested generic MCP manifest was added at `.ag
 
 | Tool / Skill | Purpose | Existing equivalent? | Security assessment | Expected token benefit | Complexity | Decision |
 | --- | --- | --- | --- | --- | --- | --- |
-| `GEMINI.md` | Gemini entrypoint that points to shared rules. | `CLAUDE.md` already does this for Claude. | Low; one-line project file. | Prevents duplicated Gemini instructions. | Low. | INSTALL |
-| `.geminiignore` | Keep generated output, secrets, and local indexes out of Gemini context. | `.gitignore` partially overlaps. | Low; denylist only. | Reduces accidental context bloat and secret exposure. | Low. | INSTALL |
+| `GEMINI.md` | Gemini entrypoint that points to shared rules. | `AGENTS.md` is the canonical cross-agent entrypoint. | Low; one-line project file. | No durable benefit after vendor-neutral standardization. | Low. | REMOVE |
+| `.geminiignore` | Keep generated output, secrets, and local indexes out of Gemini context. | `.gitignore` covers repository ignore behavior. | Low; denylist only. | No durable benefit after vendor-neutral standardization. | Low. | REMOVE |
 | `AGENTS.md` context rules | Shared native-first, output-filtering, and YAGNI policy. | No concise shared rule existed. | Low; project instructions only. | Prevents repeated tool/output waste. | Low. | INSTALL |
 | Existing `filesystem-context` Skill | File-backed scratch/state guidance. | Already project-local under `.agents/skills`. | Low to medium; instructions must not be used to store secrets. | High when sessions need overflow state. | Low. | KEEP |
 | NeoLab `context-engineering` Skill | General context-engineering guidance. | Existing project skills already cover context fundamentals and optimization. | Low for selected file, but duplicate. | Low incremental benefit. | Low. | DEFER |
@@ -268,10 +268,9 @@ Follow-up on 2026-08-08: a user-requested generic MCP manifest was added at `.ag
 
 ### Installed
 
-- `GEMINI.md`: one-line pointer to `AGENTS.md`.
-- `.geminiignore`: excludes dependencies, generated output, secrets, local agent indexes, and debug logs from Gemini context.
-- `.gitignore`: excludes local agent/context indexes and scratch state.
-- `AGENTS.md`: adds concise context efficiency, deterministic output filtering, and YAGNI rules, plus a pointer to this audit.
+- `.gitignore`: excludes local agent/context indexes, scratch state, and vendor-specific agent directories.
+- `AGENTS.md`: owns concise project agent instructions.
+- `.agents/`: owns portable repository skills, rules, agents, workflows, and MCP recommendations.
 
 ### Project-Local Skills Kept
 
@@ -309,7 +308,7 @@ Status: existing and preserved.
 
 Status: none retained.
 
-Context Mode is a pilot candidate only. It was not installed because it participates deeply in execution through hooks/tool interception and SQLite storage, and the repository does not yet show a large-output problem that native filtering and `.geminiignore` cannot handle.
+Context Mode is a pilot candidate only. It was not installed because it participates deeply in execution through hooks/tool interception and SQLite storage, and the repository does not yet show a large-output problem that native filtering and repository ignore rules cannot handle.
 
 ### Third-Party Security Classifications
 
@@ -339,7 +338,7 @@ Network access: None observed in inspected `SKILL.md`.
 Shell execution: None observed in inspected `SKILL.md`.
 Hooks: None observed in inspected `SKILL.md`.
 Telemetry: None observed.
-Secrets exposure risk: Medium if misused to store secrets; mitigated by `.gitignore`, `.geminiignore`, and policy not to persist secrets.
+Secrets exposure risk: Medium if misused to store secrets; mitigated by `.gitignore` and policy not to persist secrets.
 Supply-chain protections: GitHub source only; no release signing evidence used.
 Security scanner findings: None found during audit.
 Overlap with existing tools: Exact desired capability already installed locally.
@@ -406,7 +405,7 @@ Telemetry: None relied on during audit.
 Secrets exposure risk: Medium to high because it can capture tool outputs and session data.
 Supply-chain protections: npm/GitHub source; no signing evidence used.
 Security scanner findings: None used.
-Overlap with existing tools: Overlaps native truncation, summarization, `.geminiignore`, and deterministic shell filtering.
+Overlap with existing tools: Overlaps native truncation, summarization, repository ignore rules, and deterministic shell filtering.
 Recommendation: PILOT / DEFER.
 
 Tool: RTK
@@ -475,7 +474,7 @@ Recommendation: REJECT.
 
 ## Verification
 
-- `git status --short` shows only intended project changes: `.gitignore`, `AGENTS.md`, `.geminiignore`, and `GEMINI.md`.
+- `git status --short` showed the intended audit-era project changes at the time this audit was written. Later repository-governance changes standardized project agent configuration on `AGENTS.md` and `.agents/`.
 - `git diff --stat` shows 17 tracked-line additions across `.gitignore` and `AGENTS.md`; new untracked files are intentionally separate.
 - `pnpm` is not on PATH in this shell, so project lint/format commands could not be run without changing the package-manager setup.
 - The environment instruction says WSL2 should be used, but no WSL distribution is installed in this runtime; Windows PowerShell was used for verification.
