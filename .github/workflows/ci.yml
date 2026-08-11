@@ -34,7 +34,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: ${{ env.PNPM_VERSION }}
           run_install: false
 
       - name: Setup Node.js
@@ -42,6 +41,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+
+      - name: Verify pnpm version
+        run: test "$(pnpm --version)" = "$PNPM_VERSION"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -61,7 +63,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: ${{ env.PNPM_VERSION }}
           run_install: false
 
       - name: Setup Node.js
@@ -69,6 +70,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+
+      - name: Verify pnpm version
+        run: test "$(pnpm --version)" = "$PNPM_VERSION"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -88,7 +92,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: ${{ env.PNPM_VERSION }}
           run_install: false
 
       - name: Setup Node.js
@@ -96,6 +99,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+
+      - name: Verify pnpm version
+        run: test "$(pnpm --version)" = "$PNPM_VERSION"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -122,7 +128,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: ${{ env.PNPM_VERSION }}
           run_install: false
 
       - name: Setup Node.js
@@ -130,6 +135,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+
+      - name: Verify pnpm version
+        run: test "$(pnpm --version)" = "$PNPM_VERSION"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -162,7 +170,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: ${{ env.PNPM_VERSION }}
           run_install: false
 
       - name: Setup Node.js
@@ -170,6 +177,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+
+      - name: Verify pnpm version
+        run: test "$(pnpm --version)" = "$PNPM_VERSION"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
