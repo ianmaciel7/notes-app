@@ -2,30 +2,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Next.js: debug server-side",
-      "type": "node",
+      "name": "Next.js: Server",
+      "type": "node-terminal",
       "request": "launch",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
-      "skipFiles": ["<node_internals>/**"]
+      "command": "pnpm dev",
+      "cwd": "${workspaceFolder}"
     },
     {
-      "name": "Next.js: debug client-side",
+      "name": "Next.js: Client",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "Next.js: debug full stack",
-      "type": "node",
+      "name": "Next.js: Full Stack",
+      "type": "node-terminal",
       "request": "launch",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
-      "skipFiles": ["<node_internals>/**"],
+      "command": "pnpm dev",
+      "cwd": "${workspaceFolder}",
       "serverReadyAction": {
         "action": "debugWithChrome",
+        "killOnServerStop": true,
         "pattern": "- Local:.+(https?://.+)",
-        "uriFormat": "%s"
+        "uriFormat": "%s",
+        "webRoot": "${workspaceFolder}"
       }
     }
   ]
