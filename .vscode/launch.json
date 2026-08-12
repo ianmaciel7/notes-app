@@ -31,9 +31,7 @@
         "action": "startDebugging",
         "name": "Next.js: Client",
         "killOnServerStop": true,
-        "pattern": "- Local:.+(https?://.+)",
-        "uriFormat": "%s",
-        "webRoot": "${workspaceFolder}"
+        "pattern": "- Local:.+(https?://.+)"
       }
     }
   ]
