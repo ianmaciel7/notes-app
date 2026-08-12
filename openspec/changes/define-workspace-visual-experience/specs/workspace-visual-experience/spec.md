@@ -1,5 +1,53 @@
 ## ADDED Requirements
 
+### Requirement: Capacities Reference Is Authoritative
+The authenticated Capacities route supplied for this change SHALL be the visual and behavioral source of truth. A local behavior or style SHALL NOT be accepted merely because it is similar, aesthetically coherent, or already implemented.
+
+#### Scenario: Reviewer compares the applications
+- **WHEN** the reference and localhost are placed side by side in the same viewport and state
+- **THEN** every reproducible difference in appearance, wording, geometry, typography, iconography, state, motion, overlay, scrolling, or interaction remains pending work until matched or documented as technically infeasible
+
+#### Scenario: Reference evidence is unavailable
+- **WHEN** a state cannot be reached safely or inspected reliably
+- **THEN** the state remains explicitly unverified and the implementation does not invent behavior and call it parity
+
+### Requirement: Inspected Desktop Geometry
+At the inspected 1536 px desktop width, the workspace SHALL reproduce the measured reference geometry within normal browser subpixel tolerance.
+
+#### Scenario: Authenticated object renders at desktop width
+- **WHEN** the target object opens with the graph panel visible
+- **THEN** the sidebar is 288 px wide, the top rail is 46 px high, the editor begins near x=298/y=46 at about 772 px width, and the graph begins near x=1080/y=46 at about 446 px width
+- **AND** both cards use about 12 px radii, a subtle 0.8 px border, the observed bottom inset, and independent internal behavior
+
+### Requirement: Exact Authenticated Object Presentation
+The local target state SHALL reproduce the visible identity and content of the authenticated reference object rather than substitute sample content.
+
+#### Scenario: Target object opens
+- **WHEN** the workspace finishes rendering
+- **THEN** it shows workspace `Tech`, the wolf object identity, type `Página`, title `ADK 2.0: referência rápida de conceitos, ferramentas e comandos`, the observed properties, the exact visible Portuguese editor content, and the matching graph context
+
+### Requirement: Measured Visual Tokens
+The desktop light theme SHALL derive its shell, surfaces, borders, text hierarchy, and hover treatment from directly measured reference values.
+
+#### Scenario: Light workspace renders
+- **WHEN** no transient overlay is active
+- **THEN** the shell/sidebar background is `oklch(0.9856 0.0016 67)`, editor/graph surfaces are `oklch(1 0.0001 263.28)`, the subtle border is `oklch(0.9163 0.0017 67.07)`, and primary/secondary/muted text use the measured values recorded in the design
+
+#### Scenario: Pointer hovers a reference row
+- **WHEN** a hoverable sidebar row is under the pointer
+- **THEN** it uses the measured `oklch(0.9676 0.0016 67.02)` hover surface, 8 px radius, matching foreground treatment, and reference-timed contextual-control reveal without shifting layout
+
+### Requirement: Reference Typography
+The workspace SHALL match the reference's Inter-based typography, hierarchy, wrapping, clipping, and editable text presentation.
+
+#### Scenario: Object title renders
+- **WHEN** the authenticated object is visible at the inspected desktop width
+- **THEN** its editable title uses Inter at 30 px/33 px and weight 700, wraps to the same two lines, and uses the observed margins and content width
+
+#### Scenario: Editor body renders
+- **WHEN** the user reads or scrolls the document
+- **THEN** body text uses the reference 16 px/24 px treatment and headings, lists, properties, code blocks, and embedded media retain their observed type metrics and spacing
+
 ### Requirement: Product Visual System
 The workspace SHALL use a calm product visual system with neutral surfaces, compact typography, low-contrast borders, restrained selected colors, small radii, minimal static elevation, and accessible density.
 
@@ -30,47 +78,28 @@ The workspace SHALL use lightweight visual hierarchy where object identity, sema
 - **THEN** spacing, grouping, hover, focus, and subtle connector treatments reinforce the relationship without adding decorative clutter
 
 ### Requirement: Workspace Color Tokens
-The workspace SHALL define product color tokens before implementation, using a neutral object-workspace palette with subtle warm surfaces, restrained blue selection, muted secondary text, and accessible semantic status colors.
+The workspace SHALL define product color tokens from measured reference evidence, with unmeasured accents remaining provisional until inspected.
 
 #### Scenario: Light theme tokens are applied
 - **WHEN** the workspace renders in light theme
 - **THEN** it uses the following initial token values unless later reference-audit evidence updates them:
-  - `workspace-bg`: `#f7f5f0`
-  - `workspace-surface`: `#fffdf8`
-  - `workspace-surface-muted`: `#f0eee8`
-  - `workspace-sidebar`: `#efede6`
-  - `workspace-panel`: `#fbfaf6`
-  - `workspace-border`: `#ded9cf`
-  - `workspace-border-subtle`: `#ebe6dc`
-  - `workspace-text`: `#2b2926`
-  - `workspace-text-muted`: `#6f6a61`
-  - `workspace-text-subtle`: `#9a9388`
-  - `workspace-accent`: `#3f7fba`
-  - `workspace-accent-muted`: `#dcecea`
-  - `workspace-accent-foreground`: `#123f3a`
+  - `workspace-bg`: `oklch(0.9856 0.0016 67)`
+  - `workspace-surface`: `oklch(1 0.0001 263.28)`
+  - `workspace-sidebar`: `oklch(0.9856 0.0016 67)`
+  - `workspace-border`: `oklch(0.9163 0.0017 67.07)`
+  - `workspace-border-strong`: `oklch(0.8643 0.0017 67.13)`
+  - `workspace-text`: `oklch(0.2191 0.0058 285.84)`
+  - `workspace-text-muted`: `oklch(0.3887 0.0052 301.05)`
+  - `workspace-text-subtle`: `oklch(0.5725 0.0051 33.89)`
+  - `workspace-hover`: `oklch(0.9676 0.0016 67.02)`
+  - selection and accent values: pending direct measurement of the relevant reference states
   - `workspace-danger`: `#b42318`
   - `workspace-warning`: `#a15c07`
   - `workspace-success`: `#2f7d52`
 
 #### Scenario: Dark theme tokens are applied
 - **WHEN** the workspace renders in dark theme
-- **THEN** it uses the following initial token values unless later reference-audit evidence updates them:
-  - `workspace-bg`: `#1f1d1a`
-  - `workspace-surface`: `#292622`
-  - `workspace-surface-muted`: `#34302a`
-  - `workspace-sidebar`: `#25221f`
-  - `workspace-panel`: `#2d2924`
-  - `workspace-border`: `#49433b`
-  - `workspace-border-subtle`: `#3b362f`
-  - `workspace-text`: `#f1eee7`
-  - `workspace-text-muted`: `#c4bdb1`
-  - `workspace-text-subtle`: `#90877a`
-  - `workspace-accent`: `#7ab8ae`
-  - `workspace-accent-muted`: `#244540`
-  - `workspace-accent-foreground`: `#e7fffb`
-  - `workspace-danger`: `#ff8a80`
-  - `workspace-warning`: `#f5b461`
-  - `workspace-success`: `#8fd4aa`
+- **THEN** it uses values measured from the same reference state, and remains unverified until that state is directly inspected
 
 #### Scenario: Color state is represented
 - **WHEN** a UI surface needs hover, selected, focus, disabled, loading, empty, success, warning, danger, or error color treatment
