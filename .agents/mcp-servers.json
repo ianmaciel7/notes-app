@@ -132,9 +132,22 @@
       "stitch-utilities@stitch-skills"
     ]
   },
+  "browserPlugins": {
+    "marketplace": "openai-bundled",
+    "plugins": [
+      "chrome@openai-bundled"
+    ],
+    "purpose": "Control the user's authenticated Chrome session for visual inspection and interactive browser verification.",
+    "runtime": {
+      "mcpServer": "node_repl",
+      "managedBy": "Codex",
+      "notes": "The Chrome plugin owns its managed node_repl browser runtime. Do not add a duplicate raw Chrome MCP command to this manifest."
+    }
+  },
   "verification": [
     "Validate environment loading without printing secret values, for example by checking Boolean(process.env.STITCH_API_KEY).",
     "Restart the MCP client after changing its active MCP config.",
-    "Use the MCP client server inspection command or UI to confirm active servers."
+    "Use the MCP client server inspection command or UI to confirm active servers.",
+    "Confirm chrome@openai-bundled is enabled and its managed node_repl MCP runtime is active before using existing Chrome tabs."
   ]
 }
