@@ -1,14 +1,17 @@
 # Design
 
-This document is the canonical design reference for the workspace UI. The
-implemented source of truth is `src/app/globals.css` together with the Tailwind
-utilities in `src/components/workspace-shell.tsx`.
+This document is the canonical accepted design guidance for the workspace UI.
+OpenSpec owns behavioral requirements and acceptance criteria; runtime tokens
+and component styles live in `src/app/globals.css` and
+`src/components/workspace-shell.tsx`.
 
 ## Direction
 
-Use editorial minimalism with utilitarian productivity UI. The workspace takes
-layout cues from object-centered knowledge tools such as Capacities and Notion,
-without copying their product data, branding, or proprietary assets.
+Use editorial minimalism with utilitarian productivity UI. For the active
+Capacities parity change, the authenticated reference route is authoritative
+for observable geometry, wording, state, motion, and interaction behavior.
+Proprietary application assets and private user data remain excluded unless
+the user explicitly supplies them as part of the fixture.
 
 - Put content first: navigation and context support the document rather than
   competing with it.
@@ -21,19 +24,17 @@ without copying their product data, branding, or proprietary assets.
 
 ## Application Shell
 
-The desktop shell has three working regions. The document toolbar uses a 46 px
-top row, while the contextual tabs use a second 46 px row above the context
-panel only:
+The inspected desktop shell has three working regions under one 46 px top rail:
 
 | Region | Default width | Purpose |
 | --- | ---: | --- |
 | Sidebar | 288 px | Creation, search, pinned items, and object types |
-| Editor | 55% of work area | Active object content and properties |
-| Context | 45% of work area | Views, links, related objects, search, and chat |
+| Editor allocation | 792 px at 1536 px | 772 px framed active object after gutters |
+| Context allocation | Remaining 456 px | 446 px framed graph/context after gutters |
 
-The editor and context regions use white surfaces, a 1 px neutral border, and a
-12 px radius. The workspace background remains slightly darker so panel
-boundaries stay visible without shadows.
+The editor and context regions start at y=46, use white surfaces, a 0.8 px
+neutral border, and a 12 px radius. The editor uses the measured subtle layered
+shadow; the graph panel does not add a heavy elevation treatment.
 
 At widths below 1250 px, hide the context panel and preserve the editor. At
 widths below 760 px, hide the desktop sidebar and expose it through a left-side
@@ -66,12 +67,15 @@ prefix. Component CSS consumes aliases rather than duplicating literal palettes.
 
 ```yaml
 light:
-  background: "#f8f8f7"
-  surface: "#ffffff"
-  surface-muted: "#f1f1ef"
-  border: "#e5e5e3"
-  text: "#222221"
-  text-muted: "#747472"
+  background: "oklch(0.9856 0.0016 67)"
+  surface: "oklch(1 0.0001 263.28)"
+  surface-muted: "oklch(0.9676 0.0016 67.02)"
+  border: "oklch(0.9163 0.0017 67.07)"
+  border-strong: "oklch(0.8643 0.0017 67.13)"
+  text: "oklch(0.2191 0.0058 285.84)"
+  text-muted: "oklch(0.3887 0.0052 301.05)"
+  text-subtle: "oklch(0.5725 0.0051 33.89)"
+  hover: "oklch(0.9676 0.0016 67.02)"
   accent: "#3f6fae"
   accent-muted: "#e8f1ff"
 dark:
@@ -89,10 +93,10 @@ are reserved for danger, warning, and success feedback.
 
 ## Typography And Shape
 
-- Use Geist Sans with Inter and system sans-serif fallbacks.
-- Body and navigation: 13-16 px.
-- Document title: 30-38 px with compact line height.
-- Section heading: 23-27 px.
+- Use Inter with system sans-serif fallbacks.
+- Editor body: 16 px/24 px; compact navigation remains 12-14 px.
+- Document title: 30 px/33 px at the inspected desktop viewport.
+- Section heading: 24 px/32 px with -0.24 px letter spacing where measured.
 - Controls: 29-32 px high with 6-8 px radius.
 - Framed panels: maximum 12 px radius.
 - Letter spacing remains `0`; do not scale type directly with viewport width.
@@ -115,4 +119,5 @@ are reserved for danger, warning, and success feedback.
   gradients, or floating color shapes.
 - Do not fill the UI with one dominant hue; neutral surfaces should carry most
   of the interface.
-- Do not copy reference application names, user content, icons, or assets.
+- Do not import proprietary assets or private user data that were not supplied
+  for the parity fixture.

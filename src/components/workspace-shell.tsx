@@ -1,39 +1,46 @@
 "use client";
 
 import {
-  AlignLeft,
   ArrowLeft,
   ArrowRight,
   Boxes,
   CalendarDays,
   ChevronDown,
-  CircleHelp,
   CircleUserRound,
-  Command,
   FileImage,
   FileText,
   GalleryVerticalEnd,
   Grid2X2,
+  HelpCircle,
+  ImageIcon,
   Lightbulb,
   Link2,
   ListFilter,
-  type LucideIcon,
+  Maximize2,
   MessageSquareText,
   Moon,
   Network,
   PanelLeft,
   PanelRight,
+  Pin,
   Plus,
   Search,
-  Settings,
+  Settings2,
+  Share2,
   Sparkles,
   Tag,
   Trash2,
-  UsersRound,
   X,
+  ZoomIn,
+  ZoomOut,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
@@ -42,7 +49,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
@@ -51,137 +57,39 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-const styles = {
-  workspace:
-    "grid h-dvh w-full grid-cols-[288px_minmax(0,55fr)_minmax(360px,45fr)] grid-rows-[46px_46px_minmax(0,1fr)] gap-0 gap-x-2 overflow-hidden bg-[var(--workspace-bg)] font-sans text-sm text-[var(--workspace-text)] dark:bg-[var(--workspace-dark-bg)] dark:text-[var(--workspace-dark-text)] max-[1250px]:grid-cols-[250px_minmax(0,1fr)] max-[1250px]:grid-rows-[46px_minmax(0,1fr)] max-[760px]:grid-cols-1",
-  topbar: "contents",
-  workspaceSwitch:
-    "col-start-1 row-start-1 flex h-full min-w-0 items-center gap-2 border-b border-[var(--workspace-border)] px-3 pl-[18px] font-semibold dark:border-[var(--workspace-dark-border)] max-[760px]:hidden [&>svg:first-child]:size-4 [&>svg:nth-of-type(2)]:size-[13px] [&>svg:nth-of-type(2)]:text-[var(--workspace-text-subtle)]",
-  documentTabs:
-    "col-start-2 col-end-[-1] row-start-1 flex h-full min-w-0 items-center gap-0.5 border-b border-[var(--workspace-border)] px-2 dark:border-[var(--workspace-dark-border)] max-[1250px]:col-start-2 max-[760px]:col-start-1 max-[760px]:px-2.5",
-  contextTabs:
-    "col-start-3 row-start-2 flex h-full min-w-0 items-center justify-end gap-px overflow-hidden px-2.5 pl-1 max-[1250px]:hidden",
-  contextTabsList: "h-full gap-px bg-transparent p-0",
-  contextTab:
-    "h-8 min-w-[34px] flex-none gap-1.5 rounded-lg border border-transparent px-2 text-[13px] font-normal text-[var(--workspace-text-muted)] data-[active]:border-[var(--workspace-border)] data-[active]:bg-[var(--workspace-surface)] data-[active]:text-[var(--workspace-text)] dark:text-[var(--workspace-dark-text-muted)] dark:data-[active]:border-[var(--workspace-dark-border)] dark:data-[active]:bg-[var(--workspace-dark-surface)] dark:data-[active]:text-[var(--workspace-dark-text)] [&_svg]:size-[15px]",
-  iconButton:
-    "size-[30px] shrink-0 rounded-lg text-[var(--workspace-text-muted)] dark:text-[var(--workspace-dark-text-muted)]",
-  activeDocumentTab:
-    "ml-1 h-8 min-w-0 max-w-[450px] justify-start gap-[7px] px-2.5 text-[13px] font-normal text-[var(--workspace-text)] dark:text-[var(--workspace-dark-text)] max-[760px]:max-w-none max-[760px]:flex-1 [&>span]:truncate [&_svg]:text-[#7b8592]",
-  sidebar:
-    "col-start-1 row-start-2 row-end-[-1] min-h-0 overflow-hidden max-[1250px]:row-start-2 max-[760px]:hidden",
-  sidebarScroll: "h-full w-full",
-  sidebarContent:
-    "flex min-h-[calc(100dvh-46px)] flex-col justify-between px-2 pb-2 pt-1",
-  sidebarTop: "flex flex-col",
-  sidebarBottom: "flex flex-col pt-3",
-  sidebarRow:
-    "h-[29px] w-full flex-none justify-start gap-[9px] overflow-hidden rounded-lg px-2.5 text-left text-sm font-normal text-[var(--workspace-text-muted)] data-[selected]:bg-[var(--workspace-selected)] data-[selected]:font-medium data-[selected]:text-[var(--workspace-text)] dark:text-[var(--workspace-dark-text-muted)] dark:data-[selected]:bg-[var(--workspace-dark-selected)] dark:data-[selected]:text-[var(--workspace-dark-text)] [&>span:last-child]:truncate",
-  sidebarIcon:
-    "grid size-[17px] flex-none place-items-center text-[var(--workspace-text-muted)] data-[tone=blue]:text-[#5689d6] data-[tone=red]:text-[#cf6f73] data-[tone=violet]:text-[#7d74d8] [&_svg]:size-[15px]",
-  sidebarGap: "h-2 flex-none",
-  sectionLabel:
-    "mx-2.5 mb-0 mt-[5px] h-[25px] text-[13px] leading-[25px] text-[var(--workspace-text-muted)] dark:text-[var(--workspace-dark-text-muted)]",
-  sidebarFooter: "flex h-[34px] items-center gap-0.5 px-1.5 pt-[3px]",
-  planBadge:
-    "ml-auto rounded-md bg-[var(--workspace-surface-muted)] px-[7px] py-[3px] text-xs font-semibold text-[var(--workspace-text-muted)] dark:bg-[var(--workspace-dark-surface-muted)] dark:text-[var(--workspace-dark-text-muted)]",
-  mobileNavButton: "hidden max-[760px]:inline-flex",
-  mobileSheet:
-    "w-[min(288px,calc(100vw-32px))] gap-0 bg-[var(--workspace-bg)] text-[var(--workspace-text)] dark:bg-[var(--workspace-dark-bg)] dark:text-[var(--workspace-dark-text)]",
-  mobileNav: "min-h-0 flex-1 pt-[38px]",
-  sheetClose: "absolute right-2.5 top-2.5 z-[1]",
-  editorPanel:
-    "col-start-2 row-start-2 row-end-[-1] mb-2.5 min-h-0 min-w-0 overflow-auto rounded-xl border border-[var(--workspace-border)] bg-[var(--workspace-surface)] [scrollbar-color:#dededb_transparent] [scrollbar-width:thin] dark:border-[var(--workspace-dark-border)] dark:bg-[var(--workspace-dark-surface)] max-[1250px]:row-start-2 max-[760px]:col-start-1 max-[760px]:mx-2 max-[760px]:mb-2",
-  contextPanel:
-    "col-start-3 row-start-3 mb-2.5 min-h-0 min-w-0 overflow-auto rounded-xl border border-[var(--workspace-border)] bg-[var(--workspace-surface)] [scrollbar-color:#dededb_transparent] [scrollbar-width:thin] dark:border-[var(--workspace-dark-border)] dark:bg-[var(--workspace-dark-surface)] max-[1250px]:hidden",
-  document:
-    "relative mx-auto min-h-full w-[min(760px,calc(100%-72px))] pb-20 pt-12 max-[1250px]:w-[min(720px,calc(100%-64px))] max-[760px]:w-[calc(100%-40px)] max-[760px]:pt-7 [&_h1]:mb-2.5 [&_h1]:max-w-[680px] [&_h1]:text-[clamp(30px,2.45vw,38px)] [&_h1]:font-bold [&_h1]:leading-[1.08] max-[760px]:[&_h1]:text-[29px]",
-  documentGlyph:
-    "mb-[18px] ml-2 grid size-[70px] place-items-center rounded-[18px] bg-[var(--workspace-surface-muted)] text-[var(--workspace-text-muted)] dark:bg-[var(--workspace-dark-surface-muted)] dark:text-[var(--workspace-dark-text-muted)] max-[760px]:size-[52px] max-[760px]:rounded-[14px] [&_svg]:size-[34px] [&_svg]:stroke-[1.4] max-[760px]:[&_svg]:size-[26px]",
-  documentActions: "mb-3.5 flex min-w-0 items-center gap-1.5",
-  typeButton:
-    "h-[30px] gap-[7px] border-[#bdd5f7] bg-[var(--workspace-accent-muted)] px-[9px] text-sm font-normal text-[var(--workspace-accent)] dark:bg-[var(--workspace-dark-accent-muted)] dark:text-[var(--workspace-dark-accent)] [&_svg]:size-[15px]",
-  quietAction:
-    "h-[30px] gap-[7px] px-2 text-sm font-normal text-[var(--workspace-text-muted)] dark:text-[var(--workspace-dark-text-muted)] max-[760px]:hidden [&_svg]:size-[15px]",
-  actionSpacer: "flex-1",
-  properties:
-    "mb-7 flex flex-col items-start gap-[5px] text-base text-[var(--workspace-text-muted)] dark:text-[var(--workspace-dark-text-muted)] max-[760px]:text-base [&_p]:m-0",
-  propertyChip:
-    "rounded-md border border-[var(--workspace-border)] bg-[var(--workspace-surface-muted)] px-2 py-[3px] text-[13px] dark:border-[var(--workspace-dark-border)] dark:bg-[var(--workspace-dark-surface-muted)]",
-  propertyRow:
-    "h-[30px] gap-[7px] p-0 text-sm font-normal text-[var(--workspace-text-muted)] dark:text-[var(--workspace-dark-text-muted)] [&_svg]:size-[15px]",
-  noteSection:
-    "mt-7 text-lg leading-[1.55] max-[760px]:text-base [&_h2]:mb-[13px] [&_h2]:text-[27px] [&_h2]:font-bold [&_h2]:leading-[1.2] max-[760px]:[&_h2]:text-[23px] [&_p]:mb-[18px] [&_p]:max-w-[690px] [&_ol]:grid [&_ol]:gap-2.5 [&_ol]:pl-7",
-  documentOutline:
-    "absolute right-[-2px] top-[285px] grid gap-2 max-[760px]:hidden [&_span]:block [&_span]:h-0.5 [&_span]:w-[18px] [&_span]:bg-[#dededb] [&_span[data-active]]:bg-[var(--workspace-text)] dark:[&_span[data-active]]:bg-[var(--workspace-dark-text)]",
-  exploreContent: "mx-auto w-3/4 min-w-[300px] pb-10 pt-[72px]",
-  contextContent: "block [&[hidden]]:hidden",
-  exploreTitle:
-    "mb-2.5 text-[var(--workspace-text-muted)] dark:text-[var(--workspace-dark-text-muted)]",
-  exploreGrid: "grid grid-cols-3 gap-2",
-  exploreTile:
-    "h-[62px] w-full min-w-0 justify-start gap-[9px] rounded-lg border-[var(--workspace-border)] bg-[var(--workspace-surface-muted)] p-3 text-[13px] font-normal text-[var(--workspace-text-muted)] dark:border-[var(--workspace-dark-border)] dark:bg-[var(--workspace-dark-surface-muted)] dark:text-[var(--workspace-dark-text-muted)] [&_svg]:size-[21px] [&_svg]:text-[var(--workspace-text)] dark:[&_svg]:text-[var(--workspace-dark-text)] [&_span]:truncate",
-  relatedHeader:
-    "mt-[38px] flex items-center justify-between gap-3 text-[13px] text-[var(--workspace-text-muted)] dark:text-[var(--workspace-dark-text-muted)] [&_button]:gap-1.5 [&_svg]:size-3.5",
-  relatedList:
-    "mt-4 grid gap-0.5 [&_button]:h-9 [&_button]:justify-start [&_button]:gap-[9px] [&_button]:px-2 [&_button]:text-sm [&_button]:font-normal [&_svg]:size-4 [&_svg]:text-[#668ac4]",
-  contextPlaceholder:
-    "grid min-h-[260px] place-items-center content-center gap-2.5 text-center text-[var(--workspace-text-muted)] dark:text-[var(--workspace-dark-text-muted)] [&_svg]:size-7 [&_strong]:text-[15px] [&_strong]:text-[var(--workspace-text)] dark:[&_strong]:text-[var(--workspace-dark-text)] [&_p]:m-0 [&_p]:text-[13px]",
-} as const;
-
-type NavItem = {
+type SidebarItem = {
   label: string;
-  icon: LucideIcon;
+  icon: typeof FileText;
+  count?: string;
   tone?: "blue" | "red" | "violet";
+  selected?: boolean;
+  contextual?: boolean;
 };
 
-const primaryItems: NavItem[] = [
-  { label: "Novo", icon: Plus },
-  { label: "Buscar", icon: Search },
-  { label: "Calendario", icon: CalendarDays },
+const objectItems: SidebarItem[] = [
+  { label: "Notas Diárias", icon: CalendarDays, count: "1", tone: "blue" },
+  { label: "Áreas", icon: Grid2X2, count: "1", tone: "violet" },
+  { label: "Imagens", icon: FileImage, count: "1", tone: "red" },
+  { label: "Páginas", icon: FileText, count: "1", tone: "blue" },
 ];
 
-const objectItems: NavItem[] = [
-  { label: "Notas diarias", icon: CalendarDays, tone: "blue" },
-  { label: "Areas", icon: Grid2X2, tone: "violet" },
-  { label: "Imagens", icon: FileImage, tone: "red" },
-  { label: "Paginas", icon: FileText, tone: "blue" },
-];
-
-const utilityItems: NavItem[] = [
-  { label: "Ajuda e recursos", icon: CircleHelp },
-  { label: "Primeiros passos", icon: Sparkles },
-  { label: "Fazer uma pergunta", icon: MessageSquareText },
-  { label: "Documentacao", icon: FileText },
-];
-
-const contextTabs = [
-  { label: "Visual", icon: Network },
-  { label: "Objetos", icon: Boxes },
-  { label: "Conexoes", icon: Link2 },
-  { label: "Chat", icon: MessageSquareText },
-  { label: "Explorar", icon: Command },
-];
-
-const exploreItems = [
-  { label: "Visualizacao", icon: Network },
-  { label: "Links", icon: Link2 },
-  { label: "Objetos", icon: Boxes },
-  { label: "Conteudo", icon: GalleryVerticalEnd },
-  { label: "Chat", icon: MessageSquareText },
-  { label: "Buscar", icon: ListFilter },
+const modes = [
+  { label: "Objetos internos", icon: Boxes },
+  { label: "Conteúdo relacionado", icon: Link2 },
+  { label: "Chat de IA", icon: MessageSquareText },
+  { label: "Visualização em grafo", icon: Network },
 ];
 
 function IconButton({
   label,
   icon: Icon,
+  className,
   onClick,
-  pressed,
 }: {
   label: string;
-  icon: LucideIcon;
+  icon: typeof Plus;
+  className?: string;
   onClick?: () => void;
-  pressed?: boolean;
 }) {
   return (
     <Tooltip>
@@ -190,226 +98,469 @@ function IconButton({
           <Button
             variant="ghost"
             size="icon-sm"
-            className={styles.iconButton}
+            className={cn("workspace-icon-button", className)}
             aria-label={label}
-            aria-pressed={pressed}
             onClick={onClick}
           />
         }
       >
         <Icon aria-hidden="true" />
       </TooltipTrigger>
-      <TooltipContent>{label}</TooltipContent>
+      <TooltipContent className="workspace-tooltip">{label}</TooltipContent>
     </Tooltip>
   );
 }
 
-function SidebarRow({
-  item,
-  selected,
-  onSelect,
-}: {
-  item: NavItem;
-  selected?: boolean;
-  onSelect: () => void;
-}) {
+function SidebarRow({ item }: { item: SidebarItem }) {
   const Icon = item.icon;
 
   return (
     <Button
       variant="ghost"
-      className={styles.sidebarRow}
-      data-selected={selected || undefined}
-      aria-current={selected ? "page" : undefined}
-      onClick={onSelect}
+      className="workspace-sidebar-row"
+      data-selected={item.selected || undefined}
+      aria-current={item.selected ? "page" : undefined}
     >
-      <span className={styles.sidebarIcon} data-tone={item.tone}>
+      <span className="workspace-sidebar-icon" data-tone={item.tone}>
         <Icon aria-hidden="true" />
       </span>
-      <span>{item.label}</span>
+      <span className="workspace-sidebar-label">{item.label}</span>
+      {item.count && (
+        <span className="workspace-sidebar-count">{item.count}</span>
+      )}
+      {item.contextual && (
+        <span className="workspace-row-action" aria-hidden="true">
+          ···
+        </span>
+      )}
     </Button>
   );
 }
 
-function SidebarContent({
-  selectedItem,
-  onSelect,
-  darkTheme,
-  onToggleTheme,
-}: {
-  selectedItem: string;
-  onSelect: (label: string) => void;
-  darkTheme: boolean;
-  onToggleTheme: () => void;
-}) {
+function SidebarContent({ onToggleTheme }: { onToggleTheme: () => void }) {
   return (
-    <div className={styles.sidebarContent}>
-      <div className={styles.sidebarTop}>
-        {primaryItems.map((item) => (
-          <SidebarRow
-            key={item.label}
-            item={item}
-            selected={selectedItem === item.label}
-            onSelect={() => onSelect(item.label)}
-          />
-        ))}
+    <div className="workspace-sidebar-content">
+      <div>
+        <div className="workspace-sidebar-quick">
+          <SidebarRow item={{ label: "Novo", icon: Plus }} />
+          <span className="workspace-new-action" aria-hidden="true">
+            <Sparkles />
+          </span>
+        </div>
+        <SidebarRow item={{ label: "Buscar", icon: Search }} />
+        <SidebarRow item={{ label: "Calendário", icon: CalendarDays }} />
 
-        <div className={styles.sidebarGap} />
+        <div className="workspace-section-row">
+          <span>
+            <Sparkles aria-hidden="true" /> oi
+          </span>
+          <span>1</span>
+        </div>
         <SidebarRow
-          item={{ label: "Exemplo", icon: Tag }}
-          selected={selectedItem === "Exemplo"}
-          onSelect={() => onSelect("Exemplo")}
-        />
-        <SidebarRow
-          item={{ label: "Sem titulo", icon: FileText, tone: "blue" }}
-          selected={selectedItem === "Sem titulo"}
-          onSelect={() => onSelect("Sem titulo")}
-        />
-
-        <p className={styles.sectionLabel}>Fixados</p>
-        <SidebarRow
-          item={{ label: "Imagem", icon: FileImage, tone: "red" }}
-          selected={selectedItem === "Imagem"}
-          onSelect={() => onSelect("Imagem")}
+          item={{
+            label: "Sem título",
+            icon: FileText,
+            selected: true,
+            contextual: true,
+            tone: "blue",
+          }}
         />
 
-        <p className={styles.sectionLabel}>Tipos de objeto</p>
+        <div className="workspace-section-row">
+          <span>
+            <Pin aria-hidden="true" /> Fixados
+          </span>
+          <span>1</span>
+        </div>
+        <SidebarRow
+          item={{
+            label: "image",
+            icon: FileImage,
+            tone: "red",
+            contextual: true,
+          }}
+        />
+
+        <div className="workspace-section-row">
+          <span>
+            <GalleryVerticalEnd aria-hidden="true" /> Tipos de objeto
+          </span>
+          <span>4</span>
+        </div>
         {objectItems.map((item) => (
-          <SidebarRow
-            key={item.label}
-            item={item}
-            selected={selectedItem === item.label}
-            onSelect={() => onSelect(item.label)}
-          />
+          <SidebarRow key={item.label} item={item} />
         ))}
+        <Button variant="ghost" className="workspace-add-section">
+          <Plus aria-hidden="true" /> Adicionar seção
+        </Button>
       </div>
 
-      <div className={styles.sidebarBottom}>
-        <SidebarRow
-          item={{ label: "Lixeira", icon: Trash2 }}
-          selected={selectedItem === "Lixeira"}
-          onSelect={() => onSelect("Lixeira")}
-        />
-        <div className={styles.sidebarGap} />
-        {utilityItems.map((item) => (
-          <SidebarRow
-            key={item.label}
-            item={item}
-            selected={selectedItem === item.label}
-            onSelect={() => onSelect(item.label)}
-          />
-        ))}
-        <div className={styles.sidebarFooter}>
-          <IconButton label="Configuracoes" icon={Settings} />
-          <IconButton
-            label="Tema"
-            icon={Moon}
-            pressed={darkTheme}
-            onClick={onToggleTheme}
-          />
+      <div className="workspace-sidebar-bottom">
+        <SidebarRow item={{ label: "Lixeira", icon: Trash2 }} />
+        <div className="workspace-help-label">Ajuda e recursos</div>
+        <SidebarRow item={{ label: "Primeiros passos", icon: Sparkles }} />
+        <SidebarRow item={{ label: "Fazer uma pergunta", icon: HelpCircle }} />
+        <SidebarRow item={{ label: "Documentação", icon: FileText }} />
+        <SidebarRow item={{ label: "Novidades", icon: Sparkles }} />
+        <SidebarRow item={{ label: "Feedback", icon: MessageSquareText }} />
+        <div className="workspace-sidebar-footer">
+          <IconButton label="Configurações" icon={Settings2} />
+          <IconButton label="Tema" icon={Moon} onClick={onToggleTheme} />
           <IconButton label="Perfil" icon={CircleUserRound} />
-          <span className={styles.planBadge}>Pro</span>
+          <span className="workspace-pro">
+            <Share2 aria-hidden="true" /> Pro
+          </span>
+          <IconButton
+            label="Compartilhar"
+            icon={Share2}
+            className="workspace-share"
+          />
         </div>
       </div>
     </div>
   );
 }
 
-function ContextPanel({ label }: { label: string }) {
+function TypePopover() {
   return (
-    <TabsContent value={label} className={styles.contextContent}>
-      <p className={styles.exploreTitle}>{label}</p>
-      {label === "Explorar" ? (
-        <>
-          <div className={styles.exploreGrid}>
-            {exploreItems.map(({ label: itemLabel, icon: Icon }) => (
-              <Button
-                key={itemLabel}
-                variant="outline"
-                className={styles.exploreTile}
-              >
-                <Icon aria-hidden="true" />
-                <span>{itemLabel}</span>
-              </Button>
-            ))}
-          </div>
+    <Popover>
+      <PopoverTrigger
+        render={
+          <Button variant="outline" className="workspace-type-button">
+            <FileText aria-hidden="true" />
+            Página
+            <ChevronDown aria-hidden="true" />
+          </Button>
+        }
+      />
+      <PopoverContent
+        side="right"
+        align="start"
+        sideOffset={2}
+        className="workspace-type-popover ring-0"
+        style={{
+          width: 258,
+          height: 84,
+          gap: 0,
+          borderRadius: 12,
+          padding: 6,
+          boxShadow:
+            "0 3px 5px rgb(0 0 0 / 1%), 0 5px 10px rgb(0 0 0 / 2%), 0 10px 14px rgb(0 0 0 / 1%)",
+        }}
+      >
+        <label className="workspace-type-search">
+          <span className="sr-only">Buscar tipo</span>
+          <input placeholder="Buscar" />
+        </label>
+        <button type="button" className="workspace-type-result">
+          <Grid2X2 aria-hidden="true" /> Área
+        </button>
+      </PopoverContent>
+    </Popover>
+  );
+}
 
-          <div className={styles.relatedHeader}>
-            <span>Conteudo relacionado</span>
-            <Button variant="ghost" size="sm">
-              <Search aria-hidden="true" />
-              Encontrar mais
-            </Button>
-          </div>
-          <div className={styles.relatedList}>
-            <Button variant="ghost">
-              <FileText aria-hidden="true" />
-              Sem titulo
-            </Button>
-            <Button variant="ghost">
-              <FileImage aria-hidden="true" />
-              Imagem
-            </Button>
-            <Button variant="ghost">
-              <UsersRound aria-hidden="true" />
-              Referencia
-            </Button>
-          </div>
-        </>
-      ) : (
-        <div className={styles.contextPlaceholder}>
-          <Network aria-hidden="true" />
-          <strong>{label}</strong>
-          <p>Contexto disponivel para o objeto atual.</p>
+function GraphPanel() {
+  const [zoom, setZoom] = useState(1);
+
+  return (
+    <div className="workspace-graph-wrap">
+      <svg
+        className="workspace-graph"
+        viewBox="0 0 444 644"
+        role="img"
+        aria-label="Grafo do objeto atual"
+      >
+        <g transform={`translate(222 285) scale(${zoom}) translate(-222 -285)`}>
+          <line
+            x1="159"
+            y1="225"
+            x2="222"
+            y2="285"
+            className="workspace-graph-edge"
+          />
+          <g className="workspace-graph-node">
+            <rect
+              x="145"
+              y="211"
+              width="28"
+              height="28"
+              rx="8"
+              className="workspace-graph-image-node"
+            />
+            <foreignObject x="151" y="217" width="16" height="16">
+              <ImageIcon aria-hidden="true" />
+            </foreignObject>
+          </g>
+          <g className="workspace-graph-node workspace-graph-node-active">
+            <rect x="208" y="271" width="29" height="29" rx="8" />
+            <text x="222.5" y="291" textAnchor="middle">
+              🐺
+            </text>
+            <text
+              x="222.5"
+              y="327"
+              textAnchor="middle"
+              className="workspace-graph-label"
+            >
+              ADK 2.0: referência...
+            </text>
+          </g>
+        </g>
+      </svg>
+      <div className="workspace-graph-toolbar">
+        <div className="workspace-graph-density">
+          <Button variant="ghost">
+            <Link2 aria-hidden="true" /> Mostrar menos
+          </Button>
+          <Button variant="ghost">
+            <Network aria-hidden="true" /> Mostrar mais
+          </Button>
         </div>
-      )}
-    </TabsContent>
+        <div className="workspace-graph-actions">
+          <IconButton label="Filtros" icon={ListFilter} />
+          <IconButton label="Ajustar à tela" icon={Maximize2} />
+          <IconButton
+            label="Diminuir zoom"
+            icon={ZoomOut}
+            onClick={() => setZoom((v) => Math.max(0.8, v - 0.1))}
+          />
+          <IconButton
+            label="Aumentar zoom"
+            icon={ZoomIn}
+            onClick={() => setZoom((v) => Math.min(1.3, v + 0.1))}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RelatedPanel() {
+  return (
+    <div className="workspace-related-empty">
+      <div className="workspace-related-heading">
+        <strong>Conteúdo relacionado</strong>
+        <span>0</span>
+        <IconButton label="Ordenar" icon={ListFilter} />
+      </div>
+      <div className="workspace-related-message">
+        <Link2 aria-hidden="true" />
+        <strong>Nenhum conteúdo relacionado ainda</strong>
+        <p>
+          Objetos semanticamente relacionados dos seus espaços aparecerão aqui.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ContextPanel({ activeMode }: { activeMode: string }) {
+  if (activeMode === "Visualização em grafo") return <GraphPanel />;
+  if (activeMode === "Conteúdo relacionado") return <RelatedPanel />;
+
+  return (
+    <div className="workspace-context-empty">
+      <Network aria-hidden="true" />
+      <strong>{activeMode}</strong>
+    </div>
+  );
+}
+
+function DocumentContent() {
+  return (
+    <article className="workspace-document">
+      <button
+        type="button"
+        className="workspace-object-emoji"
+        aria-label="Alterar emoji"
+      >
+        🐺
+      </button>
+      <div className="workspace-document-actions">
+        <TypePopover />
+        <Button variant="ghost" className="workspace-quiet-action">
+          <Boxes aria-hidden="true" /> Coleções
+        </Button>
+        <div className="workspace-action-spacer" />
+        <Button
+          variant="ghost"
+          className="workspace-quiet-action workspace-customize"
+        >
+          <Settings2 aria-hidden="true" /> Personalizar{" "}
+          <ChevronDown aria-hidden="true" />
+        </Button>
+        <IconButton label="Mais opções" icon={Settings2} />
+      </div>
+
+      <textarea
+        className="workspace-title"
+        aria-label="Título"
+        placeholder="Título"
+        defaultValue="ADK 2.0: referência rápida de conceitos, ferramentas e comandos"
+        rows={2}
+      />
+      <div className="workspace-properties">
+        <div className="workspace-alias-row">
+          <span className="workspace-alias-chip">asaa</span>
+          <label className="workspace-property-field">
+            <span>Aliases</span>
+            <input aria-label="Aliases" />
+          </label>
+        </div>
+        <textarea
+          aria-label="Descrição"
+          placeholder="Descrição..."
+          defaultValue="aaaaaaaaaaaaaaaa"
+          rows={1}
+        />
+        <label className="workspace-property-field workspace-tags">
+          <Tag aria-hidden="true" />
+          <span>Etiquetas</span>
+          <input aria-label="Etiquetas" />
+        </label>
+      </div>
+
+      <div className="workspace-editor-body">
+        <h2>ADK 2.0 — Ecossistema local de desenvolvimento</h2>
+        <p>
+          Para desenvolver agentes localmente no ADK 2.0, o fluxo gira em torno
+          de duas ferramentas:
+        </p>
+        <ol>
+          <li>
+            <strong>Antigravity IDE:</strong> Ambiente para escrever, editar e
+            organizar o código do agente.
+          </li>
+          <li>
+            <strong>agents-cli:</strong> usada para criar, testar, avaliar e
+            publicar agentes ADK ou seja operar o ciclo de desenvolvimento do
+            agente.
+          </li>
+        </ol>
+
+        <h2>Estrategias de desvolvimento</h2>
+        <ol>
+          <li>
+            <strong>vibe coding:</strong> facil prototipação delega
+            implementação foco na arquitetura regras de roteamento e os
+            requisitos de segurança.
+          </li>
+          <li>
+            <strong>Spec-Driven Development (SDD):</strong> A prototipação fica
+            mais difícil no início, porque exige uma especificação arquitetural
+            bem definida. Mas isso facilita a portabilidade do código e evita
+            context fragmentation.
+          </li>
+        </ol>
+        <pre>specs/expense-agent.md</pre>
+        <p>
+          Assim, o código pode ser regenerado ou restaurado com mais facilidade.
+          O código se torna descartável; a especificação vira a bússola
+          arquitetural.
+        </p>
+
+        <h2>Etapas do Vibe Coding</h2>
+        <ol>
+          <li>
+            <strong>Prompt Arquitetural</strong>
+            <br />O primeiro prompt que deve ser usado ao criar o ADK, sendo
+            responsável por criar a versão inicial de um agente ou workflow.
+          </li>
+          <li>
+            <strong>Verificação de discrepacia:</strong> peça que ele explique o
+            que construiu antes de prosseguir e compare com seu projeto.
+          </li>
+        </ol>
+        <pre>{`Estou criando um agente de aprovação de despesas em tempo real como um workflow gráfico no ADK 2.0.
+
+Um relatório de despesa chega como um evento JSON com os campos: valor, solicitante, categoria, descrição e data.
+
+Aplique uma regra: despesas abaixo de US$ 100 devem ser aprovadas automaticamente e instantaneamente, sem envolvimento do LLM.`}</pre>
+
+        <h2>Etapas do SSD</h2>
+        <ol>
+          <li>
+            <strong>criar especificações:</strong> mapeie funcionalidades do
+            sistema e seus cenários observáveis.
+          </li>
+        </ol>
+        <pre>{`Feature: Expense Report Processing
+
+Scenario: Low-value expense auto-approval
+Given an expense report with amount: 45
+When the agent processes the report
+Then it auto-approves with no LLM call`}</pre>
+
+        <h2>Fluxo de trabalho antigravidade</h2>
+        <p>
+          Conecte a especificação, o código, a avaliação e a revisão humana em
+          um fluxo verificável.
+        </p>
+
+        <h2>Glosario</h2>
+        <ol>
+          <li>
+            <strong>edge conditions:</strong> casos de borda que podem acontecer
+            no fluxo do agente.
+          </li>
+          <li>
+            <strong>human-in-the-loop:</strong> quando o agente pausa o fluxo e
+            pede participação humana.
+          </li>
+          <li>
+            <strong>routing outcome:</strong> resultado interno que define para
+            qual agente, node, tool ou caminho o fluxo deve seguir.
+          </li>
+          <li>
+            <strong>boundary conditions:</strong> regras de limite que definem
+            até onde o agente pode agir sozinho.
+          </li>
+          <li>architectural prompts</li>
+          <li>Gherkin</li>
+          <li>LLM-as-judge</li>
+          <li>session-start prompt pattern</li>
+        </ol>
+        <div className="workspace-document-spacer" />
+      </div>
+
+      <div className="workspace-document-outline" aria-hidden="true">
+        <span data-active="true" />
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+    </article>
   );
 }
 
 export function WorkspaceShell() {
-  const [selectedItem, setSelectedItem] = useState("Sem titulo");
-  const [activeContext, setActiveContext] = useState("Explorar");
+  const [activeMode, setActiveMode] = useState("Visualização em grafo");
   const [rightPanelOpen, setRightPanelOpen] = useState(true);
   const [darkTheme, setDarkTheme] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkTheme);
-
     return () => document.documentElement.classList.remove("dark");
   }, [darkTheme]);
 
-  const sidebarProps = {
-    selectedItem,
-    onSelect: setSelectedItem,
-    darkTheme,
-    onToggleTheme: () => setDarkTheme((dark) => !dark),
-  };
-
   return (
-    <TooltipProvider>
-      <Tabs
-        value={activeContext}
-        onValueChange={setActiveContext}
-        className={cn(
-          styles.workspace,
-          !rightPanelOpen &&
-            "grid-cols-[288px_minmax(0,1fr)] max-[1250px]:grid-cols-[250px_minmax(0,1fr)] max-[760px]:grid-cols-1",
-        )}
-        data-panel-open={rightPanelOpen}
-        data-theme={darkTheme ? "dark" : "light"}
-      >
-        <header className={styles.topbar}>
-          <div className={styles.workspaceSwitch}>
-            <Lightbulb aria-hidden="true" />
-            <span>Espaco</span>
-            <ChevronDown aria-hidden="true" />
+    <TooltipProvider delay={850}>
+      <div className="workspace-shell" data-panel-open={rightPanelOpen}>
+        <header className="workspace-topbar">
+          <div className="workspace-switch">
+            <Button variant="ghost" className="workspace-switch-trigger">
+              <Lightbulb aria-hidden="true" />
+              <span>Tech</span>
+              <ChevronDown aria-hidden="true" />
+            </Button>
             <IconButton label="Alternar barra lateral" icon={PanelLeft} />
           </div>
 
-          <div className={styles.documentTabs}>
+          <div className="workspace-document-tabbar">
             <Sheet>
-              <span className={styles.mobileNavButton}>
+              <span className="workspace-mobile-trigger">
                 <Tooltip>
                   <TooltipTrigger
                     render={
@@ -418,7 +569,7 @@ export function WorkspaceShell() {
                           <Button
                             variant="ghost"
                             size="icon-sm"
-                            className={styles.iconButton}
+                            className="workspace-mobile-nav"
                             aria-label="Abrir navegacao"
                           />
                         }
@@ -427,152 +578,99 @@ export function WorkspaceShell() {
                   >
                     <PanelLeft aria-hidden="true" />
                   </TooltipTrigger>
-                  <TooltipContent>Abrir navegacao</TooltipContent>
+                  <TooltipContent>Abrir navegação</TooltipContent>
                 </Tooltip>
               </span>
               <SheetContent
                 side="left"
                 showCloseButton={false}
-                className={styles.mobileSheet}
-                data-theme={darkTheme ? "dark" : "light"}
+                className="workspace-mobile-sheet"
               >
-                <SheetTitle className="sr-only">Navegacao</SheetTitle>
+                <SheetTitle className="sr-only">Navegação</SheetTitle>
                 <SheetClose
                   render={
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      className={styles.sheetClose}
+                      className="workspace-sheet-close"
                       aria-label="Fechar navegacao"
                     />
                   }
                 >
                   <X aria-hidden="true" />
                 </SheetClose>
-                <nav aria-label="Navegacao movel" className={styles.mobileNav}>
-                  <ScrollArea className={styles.sidebarScroll}>
-                    <SidebarContent {...sidebarProps} />
-                  </ScrollArea>
+                <nav aria-label="Navegacao movel">
+                  <SidebarContent
+                    onToggleTheme={() => setDarkTheme((v) => !v)}
+                  />
                 </nav>
               </SheetContent>
             </Sheet>
-            <IconButton label="Voltar" icon={ArrowLeft} />
-            <IconButton label="Avancar" icon={ArrowRight} />
-            <Button variant="ghost" className={styles.activeDocumentTab}>
-              <FileText aria-hidden="true" />
-              <span>Nota de exemplo</span>
+            <IconButton label="Navegar para trás" icon={ArrowLeft} />
+            <IconButton label="Navegar para frente" icon={ArrowRight} />
+            <Button variant="ghost" className="workspace-active-document">
+              <span aria-hidden="true">🐺</span>
+              <span>
+                ADK 2.0: referência rápida de conceitos, ferramentas e coman...
+              </span>
             </Button>
             <IconButton label="Novo documento" icon={Plus} />
           </div>
 
           <nav
-            className={cn(styles.contextTabs, !rightPanelOpen && "hidden")}
+            className="workspace-context-tabs"
             aria-label="Modos contextuais"
           >
-            <TabsList variant="line" className={styles.contextTabsList}>
-              {contextTabs.map(({ label, icon: Icon }) => (
-                <TabsTrigger
-                  key={label}
-                  value={label}
-                  className={styles.contextTab}
-                >
-                  <Icon aria-hidden="true" />
-                  <span>{label}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
+            <span className="workspace-sync" aria-hidden="true" />
+            {modes.map(({ label, icon: Icon }) => (
+              <Button
+                key={label}
+                variant="ghost"
+                className="workspace-context-tab"
+                data-active={activeMode === label || undefined}
+                aria-pressed={activeMode === label}
+                onClick={() => {
+                  setActiveMode(label);
+                  setRightPanelOpen(true);
+                }}
+              >
+                <Icon aria-hidden="true" />
+                <span>{label}</span>
+              </Button>
+            ))}
             <IconButton label="Adicionar modo" icon={Plus} />
             <IconButton
               label={rightPanelOpen ? "Fechar painel" : "Abrir painel"}
               icon={PanelRight}
-              pressed={rightPanelOpen}
-              onClick={() => setRightPanelOpen((open) => !open)}
+              onClick={() => setRightPanelOpen((v) => !v)}
+            />
+            <IconButton
+              label="Mais opções do painel"
+              icon={ChevronDown}
+              className="workspace-panel-chevron"
             />
           </nav>
         </header>
 
-        <nav className={styles.sidebar} aria-label="Navegacao do workspace">
-          <ScrollArea className={styles.sidebarScroll}>
-            <SidebarContent {...sidebarProps} />
+        <nav className="workspace-sidebar" aria-label="Navegacao do workspace">
+          <ScrollArea className="workspace-sidebar-scroll">
+            <SidebarContent onToggleTheme={() => setDarkTheme((v) => !v)} />
           </ScrollArea>
         </nav>
 
-        <main className={styles.editorPanel} aria-label="Documento ativo">
-          <article className={styles.document}>
-            <div className={styles.documentGlyph} aria-hidden="true">
-              <AlignLeft />
-            </div>
-
-            <div className={styles.documentActions}>
-              <Button variant="outline" className={styles.typeButton}>
-                <FileText aria-hidden="true" />
-                Pagina
-                <ChevronDown aria-hidden="true" />
-              </Button>
-              <Button variant="ghost" className={styles.quietAction}>
-                <Boxes aria-hidden="true" />
-                Colecoes
-              </Button>
-              <div className={styles.actionSpacer} />
-              <Button variant="ghost" className={styles.quietAction}>
-                Personalizar
-              </Button>
-              <IconButton label="Mais opcoes" icon={Settings} />
-            </div>
-
-            <h1>Nota de exemplo</h1>
-            <div className={styles.properties}>
-              <span className={styles.propertyChip}>rascunho</span>
-              <p>Uma superficie simples para organizar ideias relacionadas.</p>
-              <Button variant="ghost" className={styles.propertyRow}>
-                <Tag aria-hidden="true" />
-                Etiquetas
-              </Button>
-            </div>
-
-            <section className={styles.noteSection}>
-              <h2>Primeiro topico</h2>
-              <p>
-                Ideias ganham contexto quando aparecem perto das pessoas,
-                projetos e notas com que se relacionam.
-              </p>
-              <ol>
-                <li>
-                  <strong>Conectar:</strong> associe esta nota a um objeto.
-                </li>
-                <li>
-                  <strong>Revisar:</strong> mantenha o proximo passo visivel.
-                </li>
-              </ol>
-            </section>
-
-            <section className={styles.noteSection}>
-              <h2>Proximo topico</h2>
-              <p>Continue escrevendo sem sair do contexto atual.</p>
-            </section>
-
-            <div className={styles.documentOutline} aria-hidden="true">
-              <span data-active="true" />
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-          </article>
+        <main className="workspace-editor-panel" aria-label="Documento ativo">
+          <DocumentContent />
         </main>
 
-        <aside
-          className={cn(styles.contextPanel, !rightPanelOpen && "hidden")}
-          aria-label="Contexto do objeto"
-          data-open={rightPanelOpen}
-        >
-          <div className={styles.exploreContent}>
-            {contextTabs.map(({ label }) => (
-              <ContextPanel key={label} label={label} />
-            ))}
-          </div>
-        </aside>
-      </Tabs>
+        {rightPanelOpen && (
+          <aside
+            className="workspace-context-panel"
+            aria-label="Contexto do objeto"
+          >
+            <ContextPanel activeMode={activeMode} />
+          </aside>
+        )}
+      </div>
     </TooltipProvider>
   );
 }
