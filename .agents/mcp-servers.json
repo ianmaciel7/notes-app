@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-08-10",
+  "updated": "2026-08-12",
   "purpose": "Project-recommended MCP servers for agents working in this repository.",
   "consumerStatus": {
     "projectManifest": ".agents/mcp-servers.json is a repository manifest. Keep its server names, commands, args, and URLs in parity with .codex/config.toml.",
@@ -44,15 +44,20 @@
     },
     "chrome-devtools": {
       "transport": "stdio",
-      "purpose": "Inspect and automate Chrome DevTools for browser debugging and UI verification.",
+      "purpose": "Inspect and automate the running Chrome profile for browser debugging and UI verification.",
       "command": "npx",
       "args": [
         "-y",
-        "chrome-devtools-mcp@latest"
+        "chrome-devtools-mcp@latest",
+        "--autoConnect"
       ],
       "auth": {
         "required": false
-      }
+      },
+      "prerequisites": [
+        "Use Chrome 144 or newer.",
+        "Enable remote debugging at chrome://inspect/#remote-debugging and approve the incoming connection."
+      ]
     },
     "github-readonly": {
       "transport": "streamable_http",

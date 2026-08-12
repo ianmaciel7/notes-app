@@ -13,7 +13,13 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "windows": {
+        "runtimeExecutable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      },
+      "linux": {
+        "runtimeExecutable": "/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
+      }
     },
     {
       "name": "Next.js: Full Stack",
@@ -22,7 +28,8 @@
       "command": "pnpm dev",
       "cwd": "${workspaceFolder}",
       "serverReadyAction": {
-        "action": "debugWithChrome",
+        "action": "startDebugging",
+        "name": "Next.js: Client",
         "killOnServerStop": true,
         "pattern": "- Local:.+(https?://.+)",
         "uriFormat": "%s",
