@@ -111,7 +111,7 @@
 ## 10. Hover, Focus, Active, And Selected States
 
 - [x] Match reference row hover background, foreground change, 8 px radius, and approximately 200 ms emphasized-decelerate opacity behavior.
-- [ ] Reveal each sidebar row's contextual controls only for parent hover, keyboard focus-within, or selection, using reserved/overlay space.
+- [x] Reveal each sidebar row's contextual controls only for parent hover, keyboard focus-within, or selection, using reserved/overlay space.
 - [x] Match the pinned-row ellipsis action at 22 px and approximately 0.7 visible opacity on hover.
 - [ ] Match reference immediate pressed feedback (`brightness` treatment) without the local 1 px translate effect where it is not observed.
 - [x] Match selected sidebar item background, text weight, icon color, and count visibility.
@@ -123,9 +123,9 @@
 ## 11. Animations And Transitions
 
 - [x] Match reference control hover opacity transitions around 200 ms with the observed cubic-bezier timing.
-- [ ] Match hover-only contextual action fades, including the observed slower approximately 500 ms linear reveal where used.
-- [ ] Match sidebar width collapse/expand duration of approximately 300 ms and verify content clipping during the transition.
-- [ ] Match object-type menu transform/scale transition at approximately 250 ms with the observed standard easing.
+- [x] Match hover-only contextual action fades, including the observed slower approximately 500 ms linear reveal where used.
+- [x] Match sidebar width collapse/expand duration of approximately 300 ms and verify content clipping during the transition.
+- [x] Match object-type menu transform/scale transition at approximately 250 ms with the observed standard easing.
 - [ ] Measure and match graph tab, panel open/close, graph zoom, and graph-node selection transitions without adding arbitrary motion.
 - [ ] Implement `prefers-reduced-motion` behavior that preserves final states and removes nonessential movement.
 
@@ -136,7 +136,7 @@
 - [x] Match its 32 px inset search field with exact `Buscar` placeholder and the observed `Área` result row.
 - [ ] Match dropdown keyboard focus, arrow navigation, selection, Escape dismissal, outside-click dismissal, and focus return.
 - [ ] Inspect and reproduce the ellipsis, `Coleções`, `Personalizar`, workspace, `Novo`, and graph toolbar menus before marking their triggers complete.
-- [ ] Reproduce the observed selected-row object menu at about x=278/y=188 and 269 x 401 px with 12 px radius, subtle border/shadow, 6 px inner padding, 32 px items, separators, and exact entries `Abrir`, `Fixar na Barra Lateral`, `Mudar Tipo`, `Configurações do Tipo de Objeto`, `Compartilhar`, `Apresentar`, `Exportar`, `Importar`, `Copiar`, `Duplicar`, and red `Excluir Objeto`, including visible submenus and the `Ctrl I` shortcut.
+- [x] Reproduce the observed selected-row object menu at about x=176/y=187 and 269 x 401 px with 12 px radius, subtle border/shadow, 6 px inner padding, 32 px items, separators, and exact entries `Abrir`, `Fixar na Barra Lateral`, `Mudar Tipo`, `Configurações do Tipo de Objeto`, `Compartilhar`, `Apresentar`, `Exportar`, `Importar`, `Copiar`, `Duplicar`, and red `Excluir Objeto`, including visible submenus and the `Ctrl I` shortcut.
 - [ ] Replace the local black one-line `Voltar` tooltip with the reference delayed rich tooltip `Navegar para trás` and its `Ctrl` + arrow / `Ctrl` + `[` shortcut keys.
 - [ ] Match tooltip delay, white surface, border, shadow, offset, radius, typography, keyboard-key styling, and dismissal.
 - [ ] Inspect every icon-only control for a reference tooltip and reproduce only those tooltips that exist.

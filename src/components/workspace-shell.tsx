@@ -13,6 +13,7 @@ import {
   Download,
   FileImage,
   FileText,
+  Forward,
   GalleryVerticalEnd,
   Grid2X2,
   HelpCircle,
@@ -41,7 +42,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -82,13 +83,20 @@ type SidebarItem = {
   tone?: "blue" | "red" | "violet";
   selected?: boolean;
   contextual?: boolean;
+  compact?: boolean;
 };
 
 const objectItems: SidebarItem[] = [
-  { label: "Notas Diárias", icon: CalendarDays, count: "1", tone: "blue" },
-  { label: "Áreas", icon: Grid2X2, count: "1", tone: "violet" },
-  { label: "Imagens", icon: FileImage, count: "1", tone: "red" },
-  { label: "Páginas", icon: FileText, count: "1", tone: "blue" },
+  {
+    label: "Notas Diárias",
+    icon: CalendarDays,
+    count: "1",
+    tone: "blue",
+    compact: true,
+  },
+  { label: "Áreas", icon: Grid2X2, count: "1", tone: "violet", compact: true },
+  { label: "Imagens", icon: FileImage, count: "1", tone: "red", compact: true },
+  { label: "Páginas", icon: FileText, count: "1", tone: "blue", compact: true },
 ];
 
 const modes = [
@@ -147,8 +155,9 @@ function ObjectActionMenu({ objectLabel }: { objectLabel: string }) {
       <DropdownMenuContent
         side="right"
         align="start"
-        sideOffset={2}
+        sideOffset={-88}
         className="workspace-object-menu"
+        style={{ width: 269 }}
       >
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="workspace-object-menu-item">
@@ -221,9 +230,11 @@ function SidebarRow({ item }: { item: SidebarItem }) {
     <div
       className="workspace-sidebar-row-wrap"
       data-selected={item.selected || undefined}
+      data-compact={item.compact || undefined}
     >
       <Button
         variant="ghost"
+        size={item.compact ? "sm" : "default"}
         className="workspace-sidebar-row"
         data-selected={item.selected || undefined}
         aria-current={item.selected ? "page" : undefined}
@@ -241,65 +252,70 @@ function SidebarRow({ item }: { item: SidebarItem }) {
   );
 }
 
-function SidebarContent({ onToggleTheme }: { onToggleTheme: () => void }) {
+function SidebarPrimary() {
   return (
-    <div className="workspace-sidebar-content">
-      <div>
-        <div className="workspace-sidebar-quick">
-          <SidebarRow item={{ label: "Novo", icon: Plus }} />
-          <span className="workspace-new-action" aria-hidden="true">
-            <Sparkles />
-          </span>
-        </div>
-        <SidebarRow item={{ label: "Buscar", icon: Search }} />
-        <SidebarRow item={{ label: "Calendário", icon: CalendarDays }} />
-
-        <div className="workspace-section-row">
-          <span>
-            <Sparkles aria-hidden="true" /> oi
-          </span>
-          <span>1</span>
-        </div>
-        <SidebarRow
-          item={{
-            label: "Sem título",
-            icon: FileText,
-            selected: true,
-            contextual: true,
-            tone: "blue",
-          }}
-        />
-
-        <div className="workspace-section-row">
-          <span>
-            <Pin aria-hidden="true" /> Fixados
-          </span>
-          <span>1</span>
-        </div>
-        <SidebarRow
-          item={{
-            label: "image",
-            icon: FileImage,
-            tone: "red",
-            contextual: true,
-          }}
-        />
-
-        <div className="workspace-section-row">
-          <span>
-            <GalleryVerticalEnd aria-hidden="true" /> Tipos de objeto
-          </span>
-          <span>4</span>
-        </div>
-        {objectItems.map((item) => (
-          <SidebarRow key={item.label} item={item} />
-        ))}
-        <Button variant="ghost" className="workspace-add-section">
-          <Plus aria-hidden="true" /> Adicionar seção
-        </Button>
+    <div className="workspace-sidebar-primary">
+      <div className="workspace-sidebar-quick">
+        <SidebarRow item={{ label: "Novo", icon: Plus }} />
+        <span className="workspace-new-action" aria-hidden="true">
+          <Sparkles />
+        </span>
       </div>
+      <SidebarRow item={{ label: "Buscar", icon: Search }} />
+      <SidebarRow item={{ label: "Calendário", icon: CalendarDays }} />
+    </div>
+  );
+}
 
-      <div className="workspace-sidebar-bottom">
+function SidebarMiddle() {
+  return (
+    <div className="workspace-sidebar-middle">
+      <div className="workspace-section-row workspace-section-row-first">
+        <span>
+          <Sparkles aria-hidden="true" /> oi
+        </span>
+        <span>1</span>
+      </div>
+      <SidebarRow
+        item={{
+          label: "Sem título",
+          icon: FileText,
+          selected: true,
+          contextual: true,
+          tone: "blue",
+          compact: true,
+        }}
+      />
+
+      <div className="workspace-section-row">
+        <span>
+          <Pin aria-hidden="true" /> Fixados
+        </span>
+        <span>1</span>
+      </div>
+      <SidebarRow
+        item={{
+          label: "image",
+          icon: FileImage,
+          tone: "red",
+          contextual: true,
+          compact: true,
+        }}
+      />
+
+      <div className="workspace-section-row">
+        <span>
+          <GalleryVerticalEnd aria-hidden="true" /> Tipos de objeto
+        </span>
+        <span>4</span>
+      </div>
+      {objectItems.map((item) => (
+        <SidebarRow key={item.label} item={item} />
+      ))}
+      <Button variant="ghost" size="sm" className="workspace-add-section">
+        <Plus aria-hidden="true" /> Adicionar seção
+      </Button>
+      <div className="workspace-sidebar-lower">
         <SidebarRow item={{ label: "Lixeira", icon: Trash2 }} />
         <div className="workspace-help-label">Ajuda e recursos</div>
         <SidebarRow item={{ label: "Primeiros passos", icon: Sparkles }} />
@@ -307,20 +323,52 @@ function SidebarContent({ onToggleTheme }: { onToggleTheme: () => void }) {
         <SidebarRow item={{ label: "Documentação", icon: FileText }} />
         <SidebarRow item={{ label: "Novidades", icon: Sparkles }} />
         <SidebarRow item={{ label: "Feedback", icon: MessageSquareText }} />
-        <div className="workspace-sidebar-footer">
-          <IconButton label="Configurações" icon={Settings2} />
-          <IconButton label="Tema" icon={Moon} onClick={onToggleTheme} />
-          <IconButton label="Perfil" icon={CircleUserRound} />
-          <span className="workspace-pro">
-            <Share2 aria-hidden="true" /> Pro
-          </span>
-          <IconButton
-            label="Compartilhar"
-            icon={Share2}
-            className="workspace-share"
-          />
-        </div>
       </div>
+    </div>
+  );
+}
+
+function SidebarUtilityFooter({
+  onToggleTheme,
+}: {
+  onToggleTheme: () => void;
+}) {
+  return (
+    <div className="workspace-sidebar-footer">
+      <IconButton
+        label="Configurações"
+        icon={Settings2}
+        className="size-8"
+      />
+      <IconButton
+        label="Tema"
+        icon={Moon}
+        className="size-8"
+        onClick={onToggleTheme}
+      />
+      <Button
+        variant="ghost"
+        className="workspace-profile-button"
+        aria-label="Perfil e plano Pro"
+      >
+        <CircleUserRound aria-hidden="true" />
+        <span className="workspace-pro">Pro</span>
+      </Button>
+      <IconButton
+        label="Compartilhar"
+        icon={Forward}
+        className="workspace-share size-8"
+      />
+    </div>
+  );
+}
+
+function SidebarContent({ onToggleTheme }: { onToggleTheme: () => void }) {
+  return (
+    <div className="workspace-sidebar-content">
+      <SidebarPrimary />
+      <SidebarMiddle />
+      <SidebarUtilityFooter onToggleTheme={onToggleTheme} />
     </div>
   );
 }
@@ -330,7 +378,10 @@ function TypePopover() {
     <Popover>
       <PopoverTrigger
         render={
-          <Button variant="outline" className="workspace-type-button">
+          <Button
+            variant="outline"
+            className="workspace-type-button h-[25.4px] w-[101.375px] self-start rounded-[6.65px] border-[0.8px] border-[oklch(0.8091_0.0957_251.83)] bg-[oklch(0.9513_0.0235_256.13)] px-2 text-[14px] leading-5 font-normal text-[oklch(0.5035_0.1579_264.41)] hover:bg-[oklch(0.9513_0.0235_256.13)] hover:text-[oklch(0.5035_0.1579_264.41)] active:translate-y-0 active:brightness-[.94]"
+          >
             <FileText aria-hidden="true" />
             Página
             <ChevronDown aria-hidden="true" />
@@ -366,6 +417,14 @@ function TypePopover() {
 
 function GraphPanel() {
   const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const drag = useRef<{
+    pointerId: number;
+    x: number;
+    y: number;
+    panX: number;
+    panY: number;
+  } | null>(null);
 
   return (
     <div className="workspace-graph-wrap">
@@ -374,10 +433,41 @@ function GraphPanel() {
         viewBox="0 0 444 644"
         role="img"
         aria-label="Grafo do objeto atual"
+        onPointerDown={(event) => {
+          event.currentTarget.setPointerCapture(event.pointerId);
+          drag.current = {
+            pointerId: event.pointerId,
+            x: event.clientX,
+            y: event.clientY,
+            panX: pan.x,
+            panY: pan.y,
+          };
+        }}
+        onPointerMove={(event) => {
+          if (!drag.current || drag.current.pointerId !== event.pointerId) {
+            return;
+          }
+          const bounds = event.currentTarget.getBoundingClientRect();
+          setPan({
+            x:
+              drag.current.panX +
+              ((event.clientX - drag.current.x) * 444) / bounds.width,
+            y:
+              drag.current.panY +
+              ((event.clientY - drag.current.y) * 644) / bounds.height,
+          });
+        }}
+        onPointerUp={(event) => {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+          drag.current = null;
+        }}
+        onPointerCancel={() => {
+          drag.current = null;
+        }}
       >
         <g
           className="workspace-graph-stage"
-          transform={`translate(222 98) scale(${zoom}) translate(-222 -98)`}
+          transform={`translate(${pan.x} ${pan.y}) translate(222 98) scale(${zoom}) translate(-222 -98)`}
         >
           <line
             x1="134"
@@ -474,7 +564,9 @@ function ContextPanel({ activeMode }: { activeMode: string }) {
   );
 }
 
-function DocumentContent() {
+function DocumentContent({ scrollTop }: { scrollTop: number }) {
+  const activeOutline = Math.min(5, Math.floor(scrollTop / 650));
+
   return (
     <article className="workspace-document">
       <button
@@ -631,12 +723,17 @@ Then it auto-approves with no LLM call`}</pre>
         <div className="workspace-document-spacer" />
       </div>
 
-      <div className="workspace-document-outline" aria-hidden="true">
-        <span data-active="true" />
-        <span />
-        <span />
-        <span />
-        <span />
+      <div
+        className="workspace-document-outline"
+        aria-hidden="true"
+        style={{ transform: `translateY(${scrollTop}px)` }}
+      >
+        {[0, 1, 2, 3, 4, 5].map((index) => (
+          <span
+            key={index}
+            data-active={index === activeOutline || undefined}
+          />
+        ))}
       </div>
     </article>
   );
@@ -645,7 +742,19 @@ Then it auto-approves with no LLM call`}</pre>
 export function WorkspaceShell() {
   const [activeMode, setActiveMode] = useState("Visualização em grafo");
   const [rightPanelOpen, setRightPanelOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [darkTheme, setDarkTheme] = useState(false);
+  const [editorScrollTop, setEditorScrollTop] = useState(0);
+
+  const setSidebarWithFocus = (open: boolean) => {
+    setSidebarOpen(open);
+    requestAnimationFrame(() => {
+      const label = open ? "Recolher barra lateral" : "Expandir barra lateral";
+      document
+        .querySelector<HTMLButtonElement>(`button[aria-label="${label}"]`)
+        ?.focus();
+    });
+  };
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkTheme);
@@ -654,7 +763,11 @@ export function WorkspaceShell() {
 
   return (
     <TooltipProvider delay={850}>
-      <div className="workspace-shell" data-panel-open={rightPanelOpen}>
+      <div
+        className="workspace-shell"
+        data-panel-open={rightPanelOpen}
+        data-sidebar-open={sidebarOpen}
+      >
         <header className="workspace-topbar">
           <div className="workspace-switch">
             <Button variant="ghost" className="workspace-switch-trigger">
@@ -662,10 +775,21 @@ export function WorkspaceShell() {
               <span>Tech</span>
               <ChevronDown aria-hidden="true" />
             </Button>
-            <IconButton label="Alternar barra lateral" icon={PanelLeft} />
+            <IconButton
+              label="Recolher barra lateral"
+              icon={PanelLeft}
+              onClick={() => setSidebarWithFocus(false)}
+            />
           </div>
 
           <div className="workspace-document-tabbar">
+            {!sidebarOpen && (
+              <IconButton
+                label="Expandir barra lateral"
+                icon={PanelLeft}
+                onClick={() => setSidebarWithFocus(true)}
+              />
+            )}
             <Sheet>
               <span className="workspace-mobile-trigger">
                 <Tooltip>
@@ -733,7 +857,7 @@ export function WorkspaceShell() {
               <Button
                 key={label}
                 variant="ghost"
-                className="workspace-context-tab"
+                className="workspace-context-tab min-w-0 shrink"
                 data-active={activeMode === label || undefined}
                 aria-pressed={activeMode === label}
                 onClick={() => {
@@ -759,14 +883,29 @@ export function WorkspaceShell() {
           </nav>
         </header>
 
-        <nav className="workspace-sidebar" aria-label="Navegacao do workspace">
-          <ScrollArea className="workspace-sidebar-scroll">
-            <SidebarContent onToggleTheme={() => setDarkTheme((v) => !v)} />
+        <nav
+          className="workspace-sidebar"
+          aria-label="Navegacao do workspace"
+          aria-hidden={!sidebarOpen}
+        >
+          <SidebarPrimary />
+          <ScrollArea
+            className="workspace-sidebar-scroll"
+            style={{ height: "calc(100% - 148px)" }}
+          >
+            <SidebarMiddle />
           </ScrollArea>
+          <SidebarUtilityFooter onToggleTheme={() => setDarkTheme((v) => !v)} />
         </nav>
 
-        <main className="workspace-editor-panel" aria-label="Documento ativo">
-          <DocumentContent />
+        <main
+          className="workspace-editor-panel"
+          aria-label="Documento ativo"
+          onScroll={(event) =>
+            setEditorScrollTop(event.currentTarget.scrollTop)
+          }
+        >
+          <DocumentContent scrollTop={editorScrollTop} />
         </main>
 
         {rightPanelOpen && (

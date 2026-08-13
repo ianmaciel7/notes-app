@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a71fa77a`
+- Built from commit: `4f1ff693`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -50,7 +50,7 @@
 - Workspace Visual Experience Specification
 - toggle-group.tsx
 - navigation-menu.tsx
-- page.tsx
+- progress.tsx
 - Agent Governance Pipeline
 - Knowledge Graph Interface
 - OpenSpec Apply Change
@@ -61,16 +61,19 @@
 - Software and OpenSpec Verification Separation
 - shadcn Composition Requirement
 - breadcrumb.tsx
-- hover-card.tsx
+- utils.ts
 - empty.tsx
+- page.tsx
 - bubble.tsx
 - message.tsx
 - button.tsx
 - scripts
 - alert.tsx
 - tabs.tsx
+- @biomejs/biome
 - input-otp.tsx
 - marker.tsx
+- tailwindcss
 - OpenSpec Onboarding
 - Measure Before Context Infrastructure
 - Pull Request Quality Gates
@@ -114,17 +117,14 @@
 - Next.js Wordmark
 - check-graphify.mjs
 - Graphify Infrastructure
-- progress.tsx
+- @tailwindcss/postcss
 - package.json
-- utils.ts
+- hover-card.tsx
+- @testing-library/dom
 - rules/graphify.md
 - workflows/graphify.md
-- @biomejs/biome
-- GEMINI.md
-- tailwindcss
-- @tailwindcss/postcss
-- @testing-library/dom
 - @testing-library/jest-dom
+- GEMINI.md
 - @types/node
 - @types/react
 - typescript
@@ -332,6 +332,10 @@ Nodes (5): ToggleGroup(), ToggleGroupContext, ToggleGroupItem(), Toggle(), toggl
 Cohesion: 0.22
 Nodes (9): NavigationMenu(), NavigationMenuContent(), NavigationMenuIndicator(), NavigationMenuItem(), NavigationMenuLink(), NavigationMenuList(), NavigationMenuPositioner(), NavigationMenuTrigger() (+1 more)
 
+### Community 35 - "progress.tsx"
+Cohesion: 0.33
+Nodes (5): Progress(), ProgressIndicator(), ProgressLabel(), ProgressTrack(), ProgressValue()
+
 ### Community 36 - "Agent Governance Pipeline"
 Cohesion: 0.28
 Nodes (9): Agent Governance Pipeline, Append-only Audit Trail, Agent Framework Governance Integration, Risk-matched Governance Levels, Governance Policy, Most-restrictive Policy Composition, Semantic Intent Classification, Tool-level Governance Decorator (+1 more)
@@ -371,6 +375,10 @@ Nodes (8): Workspace Foundation Proposal, shadcn Composition Requirement, Theme 
 ### Community 45 - "breadcrumb.tsx"
 Cohesion: 0.25
 Nodes (7): Breadcrumb(), BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink(), BreadcrumbList(), BreadcrumbPage(), BreadcrumbSeparator()
+
+### Community 46 - "utils.ts"
+Cohesion: 0.22
+Nodes (5): Badge(), badgeVariants, Checkbox(), ResizableHandle(), ResizablePanelGroup()
 
 ### Community 47 - "empty.tsx"
 Cohesion: 0.29
@@ -480,17 +488,9 @@ Nodes (10): fail(), failures, graphDir, graphPath, htmlPath, manifestPath, readJ
 Cohesion: 0.22
 Nodes (8): Agent Integrations, Failure Behavior, Graphify Infrastructure, Maintenance, Semantic Content, Version, Versioned Artifacts, Worktrees
 
-### Community 106 - "progress.tsx"
-Cohesion: 0.33
-Nodes (5): Progress(), ProgressIndicator(), ProgressLabel(), ProgressTrack(), ProgressValue()
-
 ### Community 107 - "package.json"
 Cohesion: 0.40
 Nodes (4): name, packageManager, private, version
-
-### Community 108 - "utils.ts"
-Cohesion: 0.22
-Nodes (5): Badge(), badgeVariants, Checkbox(), ResizableHandle(), ResizablePanelGroup()
 
 ## Knowledge Gaps
 - **308 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `ignoreUnknown` (+303 more)
@@ -500,11 +500,11 @@ Nodes (5): Badge(), badgeVariants, Checkbox(), ResizableHandle(), ResizablePanel
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `cn` to `combobox.tsx`, `sidebar.tsx`, `sheet.tsx`, `workspace-shell.tsx`, `menubar.tsx`, `item.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `field.tsx`, `alert-dialog.tsx`, `chart.tsx`, `toast.tsx`, `attachment.tsx`, `questionnaire.tsx`, `toggle-group.tsx`, `navigation-menu.tsx`, `pagination.tsx`, `table.tsx`, `breadcrumb.tsx`, `hover-card.tsx`, `empty.tsx`, `bubble.tsx`, `message.tsx`, `button.tsx`, `alert.tsx`, `tabs.tsx`, `input-otp.tsx`, `marker.tsx`, `progress.tsx`, `utils.ts`?**
+- **Why does `cn()` connect `cn` to `combobox.tsx`, `sidebar.tsx`, `sheet.tsx`, `workspace-shell.tsx`, `menubar.tsx`, `item.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `field.tsx`, `alert-dialog.tsx`, `chart.tsx`, `toast.tsx`, `attachment.tsx`, `questionnaire.tsx`, `toggle-group.tsx`, `navigation-menu.tsx`, `progress.tsx`, `pagination.tsx`, `table.tsx`, `breadcrumb.tsx`, `utils.ts`, `empty.tsx`, `bubble.tsx`, `message.tsx`, `button.tsx`, `alert.tsx`, `tabs.tsx`, `input-otp.tsx`, `marker.tsx`, `hover-card.tsx`?**
   _High betweenness centrality (0.195) - this node is a cross-community bridge._
 - **Why does `dependencies` connect `dependencies` to `package.json`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **Why does `devDependencies` connect `devDependencies` to `package.json`, `@biomejs/biome`, `tailwindcss`, `@tailwindcss/postcss`, `@testing-library/dom`, `@testing-library/jest-dom`, `@types/node`, `@types/react`, `typescript`, `@vitest/coverage-v8`?**
+- **Why does `devDependencies` connect `devDependencies` to `@tailwindcss/postcss`, `package.json`, `@testing-library/dom`, `@testing-library/jest-dom`, `@types/node`, `@types/react`, `typescript`, `@vitest/coverage-v8`, `@biomejs/biome`, `tailwindcss`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **What connects `$schema`, `enabled`, `clientKind` to the rest of the system?**
   _308 weakly-connected nodes found - possible documentation gaps or missing edges._

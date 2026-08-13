@@ -1157,124 +1157,40 @@
       "norm_label": "readjson()"
     },
     {
-      "label": "Progress()",
+      "label": "HoverCard()",
       "file_type": "code",
-      "source_file": "src/components/ui/progress.tsx",
+      "source_file": "src/components/ui/hover-card.tsx",
       "source_location": "L7",
       "_callable": true,
       "_origin": "ast",
-      "id": "src_components_ui_progress_progress",
-      "community": 106,
-      "community_name": "progress.tsx",
-      "norm_label": "progress()"
-    },
-    {
-      "label": "ProgressIndicator()",
-      "file_type": "code",
-      "source_file": "src/components/ui/progress.tsx",
-      "source_location": "L41",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "src_components_ui_progress_progressindicator",
-      "community": 106,
-      "community_name": "progress.tsx",
-      "norm_label": "progressindicator()"
-    },
-    {
-      "label": "ProgressLabel()",
-      "file_type": "code",
-      "source_file": "src/components/ui/progress.tsx",
-      "source_location": "L54",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "src_components_ui_progress_progresslabel",
-      "community": 106,
-      "community_name": "progress.tsx",
-      "norm_label": "progresslabel()"
-    },
-    {
-      "label": "ProgressTrack()",
-      "file_type": "code",
-      "source_file": "src/components/ui/progress.tsx",
-      "source_location": "L28",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "src_components_ui_progress_progresstrack",
-      "community": 106,
-      "community_name": "progress.tsx",
-      "norm_label": "progresstrack()"
-    },
-    {
-      "label": "ProgressValue()",
-      "file_type": "code",
-      "source_file": "src/components/ui/progress.tsx",
-      "source_location": "L64",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "src_components_ui_progress_progressvalue",
-      "community": 106,
-      "community_name": "progress.tsx",
-      "norm_label": "progressvalue()"
-    },
-    {
-      "label": "Badge()",
-      "file_type": "code",
-      "source_file": "src/components/ui/badge.tsx",
-      "source_location": "L30",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "src_components_ui_badge_badge",
+      "id": "src_components_ui_hover_card_hovercard",
       "community": 108,
-      "community_name": "utils.ts",
-      "norm_label": "badge()"
+      "community_name": "hover-card.tsx",
+      "norm_label": "hovercard()"
     },
     {
-      "label": "Checkbox()",
+      "label": "HoverCardContent()",
       "file_type": "code",
-      "source_file": "src/components/ui/checkbox.tsx",
-      "source_location": "L7",
+      "source_file": "src/components/ui/hover-card.tsx",
+      "source_location": "L17",
       "_callable": true,
       "_origin": "ast",
-      "id": "src_components_ui_checkbox_checkbox",
+      "id": "src_components_ui_hover_card_hovercardcontent",
       "community": 108,
-      "community_name": "utils.ts",
-      "norm_label": "checkbox()"
+      "community_name": "hover-card.tsx",
+      "norm_label": "hovercardcontent()"
     },
     {
-      "label": "ResizableHandle()",
+      "label": "HoverCardTrigger()",
       "file_type": "code",
-      "source_file": "src/components/ui/resizable.tsx",
-      "source_location": "L27",
+      "source_file": "src/components/ui/hover-card.tsx",
+      "source_location": "L11",
       "_callable": true,
       "_origin": "ast",
-      "id": "src_components_ui_resizable_resizablehandle",
+      "id": "src_components_ui_hover_card_hovercardtrigger",
       "community": 108,
-      "community_name": "utils.ts",
-      "norm_label": "resizablehandle()"
-    },
-    {
-      "label": "ResizablePanel()",
-      "file_type": "code",
-      "source_file": "src/components/ui/resizable.tsx",
-      "source_location": "L23",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "src_components_ui_resizable_resizablepanel",
-      "community": 108,
-      "community_name": "utils.ts",
-      "norm_label": "resizablepanel()"
-    },
-    {
-      "label": "ResizablePanelGroup()",
-      "file_type": "code",
-      "source_file": "src/components/ui/resizable.tsx",
-      "source_location": "L7",
-      "_callable": true,
-      "_origin": "ast",
-      "id": "src_components_ui_resizable_resizablepanelgroup",
-      "community": 108,
-      "community_name": "utils.ts",
-      "norm_label": "resizablepanelgroup()"
+      "community_name": "hover-card.tsx",
+      "norm_label": "hovercardtrigger()"
     },
     {
       "label": "Accordion()",
@@ -3665,28 +3581,64 @@
       "norm_label": "navigationmenutrigger()"
     },
     {
-      "label": "Home()",
+      "label": "Progress()",
       "file_type": "code",
-      "source_file": "src/app/page.tsx",
-      "source_location": "L3",
+      "source_file": "src/components/ui/progress.tsx",
+      "source_location": "L7",
       "_callable": true,
       "_origin": "ast",
-      "id": "src_app_page_home",
+      "id": "src_components_ui_progress_progress",
       "community": 35,
-      "community_name": "page.tsx",
-      "norm_label": "home()"
+      "community_name": "progress.tsx",
+      "norm_label": "progress()"
     },
     {
-      "label": "WorkspaceShell()",
+      "label": "ProgressIndicator()",
       "file_type": "code",
-      "source_file": "src/components/workspace-shell.tsx",
-      "source_location": "L645",
+      "source_file": "src/components/ui/progress.tsx",
+      "source_location": "L41",
       "_callable": true,
       "_origin": "ast",
-      "id": "src_components_workspace_shell_workspaceshell",
+      "id": "src_components_ui_progress_progressindicator",
       "community": 35,
-      "community_name": "page.tsx",
-      "norm_label": "workspaceshell()"
+      "community_name": "progress.tsx",
+      "norm_label": "progressindicator()"
+    },
+    {
+      "label": "ProgressLabel()",
+      "file_type": "code",
+      "source_file": "src/components/ui/progress.tsx",
+      "source_location": "L54",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "src_components_ui_progress_progresslabel",
+      "community": 35,
+      "community_name": "progress.tsx",
+      "norm_label": "progresslabel()"
+    },
+    {
+      "label": "ProgressTrack()",
+      "file_type": "code",
+      "source_file": "src/components/ui/progress.tsx",
+      "source_location": "L28",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "src_components_ui_progress_progresstrack",
+      "community": 35,
+      "community_name": "progress.tsx",
+      "norm_label": "progresstrack()"
+    },
+    {
+      "label": "ProgressValue()",
+      "file_type": "code",
+      "source_file": "src/components/ui/progress.tsx",
+      "source_location": "L64",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "src_components_ui_progress_progressvalue",
+      "community": 35,
+      "community_name": "progress.tsx",
+      "norm_label": "progressvalue()"
     },
     {
       "label": "RootLayout()",
@@ -3965,40 +3917,64 @@
       "norm_label": "breadcrumbseparator()"
     },
     {
-      "label": "HoverCard()",
+      "label": "Badge()",
       "file_type": "code",
-      "source_file": "src/components/ui/hover-card.tsx",
+      "source_file": "src/components/ui/badge.tsx",
+      "source_location": "L30",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "src_components_ui_badge_badge",
+      "community": 46,
+      "community_name": "utils.ts",
+      "norm_label": "badge()"
+    },
+    {
+      "label": "Checkbox()",
+      "file_type": "code",
+      "source_file": "src/components/ui/checkbox.tsx",
       "source_location": "L7",
       "_callable": true,
       "_origin": "ast",
-      "id": "src_components_ui_hover_card_hovercard",
+      "id": "src_components_ui_checkbox_checkbox",
       "community": 46,
-      "community_name": "hover-card.tsx",
-      "norm_label": "hovercard()"
+      "community_name": "utils.ts",
+      "norm_label": "checkbox()"
     },
     {
-      "label": "HoverCardContent()",
+      "label": "ResizableHandle()",
       "file_type": "code",
-      "source_file": "src/components/ui/hover-card.tsx",
-      "source_location": "L17",
+      "source_file": "src/components/ui/resizable.tsx",
+      "source_location": "L27",
       "_callable": true,
       "_origin": "ast",
-      "id": "src_components_ui_hover_card_hovercardcontent",
+      "id": "src_components_ui_resizable_resizablehandle",
       "community": 46,
-      "community_name": "hover-card.tsx",
-      "norm_label": "hovercardcontent()"
+      "community_name": "utils.ts",
+      "norm_label": "resizablehandle()"
     },
     {
-      "label": "HoverCardTrigger()",
+      "label": "ResizablePanel()",
       "file_type": "code",
-      "source_file": "src/components/ui/hover-card.tsx",
-      "source_location": "L11",
+      "source_file": "src/components/ui/resizable.tsx",
+      "source_location": "L23",
       "_callable": true,
       "_origin": "ast",
-      "id": "src_components_ui_hover_card_hovercardtrigger",
+      "id": "src_components_ui_resizable_resizablepanel",
       "community": 46,
-      "community_name": "hover-card.tsx",
-      "norm_label": "hovercardtrigger()"
+      "community_name": "utils.ts",
+      "norm_label": "resizablepanel()"
+    },
+    {
+      "label": "ResizablePanelGroup()",
+      "file_type": "code",
+      "source_file": "src/components/ui/resizable.tsx",
+      "source_location": "L7",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "src_components_ui_resizable_resizablepanelgroup",
+      "community": 46,
+      "community_name": "utils.ts",
+      "norm_label": "resizablepanelgroup()"
     },
     {
       "label": "Empty()",
@@ -4071,6 +4047,30 @@
       "community": 47,
       "community_name": "empty.tsx",
       "norm_label": "emptytitle()"
+    },
+    {
+      "label": "Home()",
+      "file_type": "code",
+      "source_file": "src/app/page.tsx",
+      "source_location": "L3",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "src_app_page_home",
+      "community": 48,
+      "community_name": "page.tsx",
+      "norm_label": "home()"
+    },
+    {
+      "label": "WorkspaceShell()",
+      "file_type": "code",
+      "source_file": "src/components/workspace-shell.tsx",
+      "source_location": "L645",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "src_components_workspace_shell_workspaceshell",
+      "community": 48,
+      "community_name": "page.tsx",
+      "norm_label": "workspaceshell()"
     },
     {
       "label": "Bubble()",
@@ -5899,15 +5899,26 @@
       "norm_label": "worktrees"
     },
     {
-      "label": "progress.tsx",
+      "label": "@tailwindcss/postcss",
       "file_type": "code",
-      "source_file": "src/components/ui/progress.tsx",
-      "source_location": "L1",
+      "source_file": "package.json",
+      "source_location": "L42",
       "_origin": "ast",
-      "id": "src_components_ui_progress",
+      "id": "package_devdependencies_tailwindcss_postcss",
       "community": 106,
-      "community_name": "progress.tsx",
-      "norm_label": "progress.tsx"
+      "community_name": "@tailwindcss/postcss",
+      "norm_label": "@tailwindcss/postcss"
+    },
+    {
+      "label": "@tailwindcss/postcss",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "tailwindcss_postcss",
+      "community": 106,
+      "community_name": "@tailwindcss/postcss",
+      "norm_label": "@tailwindcss/postcss"
     },
     {
       "label": "package.json",
@@ -5965,59 +5976,37 @@
       "norm_label": "version"
     },
     {
-      "label": "badge.tsx",
+      "label": "hover-card.tsx",
       "file_type": "code",
-      "source_file": "src/components/ui/badge.tsx",
+      "source_file": "src/components/ui/hover-card.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_components_ui_badge",
+      "id": "src_components_ui_hover_card",
       "community": 108,
-      "community_name": "utils.ts",
-      "norm_label": "badge.tsx"
+      "community_name": "hover-card.tsx",
+      "norm_label": "hover-card.tsx"
     },
     {
-      "label": "badgeVariants",
+      "label": "@testing-library/dom",
       "file_type": "code",
-      "source_file": "src/components/ui/badge.tsx",
-      "source_location": "L7",
+      "source_file": "package.json",
+      "source_location": "L43",
       "_origin": "ast",
-      "id": "src_components_ui_badge_badgevariants",
-      "community": 108,
-      "community_name": "utils.ts",
-      "norm_label": "badgevariants"
+      "id": "package_devdependencies_testing_library_dom",
+      "community": 109,
+      "community_name": "@testing-library/dom",
+      "norm_label": "@testing-library/dom"
     },
     {
-      "label": "checkbox.tsx",
-      "file_type": "code",
-      "source_file": "src/components/ui/checkbox.tsx",
-      "source_location": "L1",
+      "label": "@testing-library/dom",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L43",
       "_origin": "ast",
-      "id": "src_components_ui_checkbox",
-      "community": 108,
-      "community_name": "utils.ts",
-      "norm_label": "checkbox.tsx"
-    },
-    {
-      "label": "resizable.tsx",
-      "file_type": "code",
-      "source_file": "src/components/ui/resizable.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_components_ui_resizable",
-      "community": 108,
-      "community_name": "utils.ts",
-      "norm_label": "resizable.tsx"
-    },
-    {
-      "label": "utils.ts",
-      "file_type": "code",
-      "source_file": "src/lib/utils.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_lib_utils",
-      "community": 108,
-      "community_name": "utils.ts",
-      "norm_label": "utils.ts"
+      "id": "testing_library_dom",
+      "community": 109,
+      "community_name": "@testing-library/dom",
+      "norm_label": "@testing-library/dom"
     },
     {
       "label": "accordion.tsx",
@@ -6185,26 +6174,26 @@
       "norm_label": "workflow: graphify"
     },
     {
-      "label": "@biomejs/biome",
+      "label": "@testing-library/jest-dom",
       "file_type": "code",
       "source_file": "package.json",
-      "source_location": "L41",
+      "source_location": "L44",
       "_origin": "ast",
-      "id": "package_devdependencies_biomejs_biome",
+      "id": "package_devdependencies_testing_library_jest_dom",
       "community": 112,
-      "community_name": "@biomejs/biome",
-      "norm_label": "@biomejs/biome"
+      "community_name": "@testing-library/jest-dom",
+      "norm_label": "@testing-library/jest-dom"
     },
     {
-      "label": "@biomejs/biome",
+      "label": "@testing-library/jest-dom",
       "file_type": "concept",
       "source_file": "package.json",
-      "source_location": "L41",
+      "source_location": "L44",
       "_origin": "ast",
-      "id": "biomejs_biome",
+      "id": "testing_library_jest_dom",
       "community": 112,
-      "community_name": "@biomejs/biome",
-      "norm_label": "@biomejs/biome"
+      "community_name": "@testing-library/jest-dom",
+      "norm_label": "@testing-library/jest-dom"
     },
     {
       "label": "GEMINI.md",
@@ -6229,101 +6218,13 @@
       "norm_label": "gemini cli adapter"
     },
     {
-      "label": "tailwindcss",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L53",
-      "_origin": "ast",
-      "id": "package_devdependencies_tailwindcss",
-      "community": 114,
-      "community_name": "tailwindcss",
-      "norm_label": "tailwindcss"
-    },
-    {
-      "label": "tailwindcss",
-      "file_type": "concept",
-      "source_file": "package.json",
-      "source_location": "L53",
-      "_origin": "ast",
-      "id": "tailwindcss",
-      "community": 114,
-      "community_name": "tailwindcss",
-      "norm_label": "tailwindcss"
-    },
-    {
-      "label": "@tailwindcss/postcss",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "package_devdependencies_tailwindcss_postcss",
-      "community": 115,
-      "community_name": "@tailwindcss/postcss",
-      "norm_label": "@tailwindcss/postcss"
-    },
-    {
-      "label": "@tailwindcss/postcss",
-      "file_type": "concept",
-      "source_file": "package.json",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "tailwindcss_postcss",
-      "community": 115,
-      "community_name": "@tailwindcss/postcss",
-      "norm_label": "@tailwindcss/postcss"
-    },
-    {
-      "label": "@testing-library/dom",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "package_devdependencies_testing_library_dom",
-      "community": 116,
-      "community_name": "@testing-library/dom",
-      "norm_label": "@testing-library/dom"
-    },
-    {
-      "label": "@testing-library/dom",
-      "file_type": "concept",
-      "source_file": "package.json",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "testing_library_dom",
-      "community": 116,
-      "community_name": "@testing-library/dom",
-      "norm_label": "@testing-library/dom"
-    },
-    {
-      "label": "@testing-library/jest-dom",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L44",
-      "_origin": "ast",
-      "id": "package_devdependencies_testing_library_jest_dom",
-      "community": 117,
-      "community_name": "@testing-library/jest-dom",
-      "norm_label": "@testing-library/jest-dom"
-    },
-    {
-      "label": "@testing-library/jest-dom",
-      "file_type": "concept",
-      "source_file": "package.json",
-      "source_location": "L44",
-      "_origin": "ast",
-      "id": "testing_library_jest_dom",
-      "community": 117,
-      "community_name": "@testing-library/jest-dom",
-      "norm_label": "@testing-library/jest-dom"
-    },
-    {
       "label": "@types/node",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L46",
       "_origin": "ast",
       "id": "package_devdependencies_types_node",
-      "community": 118,
+      "community": 114,
       "community_name": "@types/node",
       "norm_label": "@types/node"
     },
@@ -6334,7 +6235,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "types_node",
-      "community": 118,
+      "community": 114,
       "community_name": "@types/node",
       "norm_label": "@types/node"
     },
@@ -6345,7 +6246,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "package_devdependencies_types_react",
-      "community": 119,
+      "community": 115,
       "community_name": "@types/react",
       "norm_label": "@types/react"
     },
@@ -6356,7 +6257,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "types_react",
-      "community": 119,
+      "community": 115,
       "community_name": "@types/react",
       "norm_label": "@types/react"
     },
@@ -6367,7 +6268,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "package_devdependencies_typescript",
-      "community": 120,
+      "community": 116,
       "community_name": "typescript",
       "norm_label": "typescript"
     },
@@ -6378,7 +6279,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "typescript",
-      "community": 120,
+      "community": 116,
       "community_name": "typescript",
       "norm_label": "typescript"
     },
@@ -6389,7 +6290,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "package_devdependencies_vitest_coverage_v8",
-      "community": 121,
+      "community": 117,
       "community_name": "@vitest/coverage-v8",
       "norm_label": "@vitest/coverage-v8"
     },
@@ -6400,7 +6301,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "vitest_coverage_v8",
-      "community": 121,
+      "community": 117,
       "community_name": "@vitest/coverage-v8",
       "norm_label": "@vitest/coverage-v8"
     },
@@ -7065,26 +6966,15 @@
       "norm_label": "navigationmenutriggerstyle"
     },
     {
-      "label": "page.tsx",
+      "label": "progress.tsx",
       "file_type": "code",
-      "source_file": "src/app/page.tsx",
+      "source_file": "src/components/ui/progress.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_app_page",
+      "id": "src_components_ui_progress",
       "community": 35,
-      "community_name": "page.tsx",
-      "norm_label": "page.tsx"
-    },
-    {
-      "label": "page.test.tsx",
-      "file_type": "code",
-      "source_file": "__tests__/page.test.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tests_page_test",
-      "community": 35,
-      "community_name": "page.tsx",
-      "norm_label": "page.test.tsx"
+      "community_name": "progress.tsx",
+      "norm_label": "progress.tsx"
     },
     {
       "label": "biome.json",
@@ -7571,15 +7461,59 @@
       "norm_label": "breadcrumb.tsx"
     },
     {
-      "label": "hover-card.tsx",
+      "label": "badge.tsx",
       "file_type": "code",
-      "source_file": "src/components/ui/hover-card.tsx",
+      "source_file": "src/components/ui/badge.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_components_ui_hover_card",
+      "id": "src_components_ui_badge",
       "community": 46,
-      "community_name": "hover-card.tsx",
-      "norm_label": "hover-card.tsx"
+      "community_name": "utils.ts",
+      "norm_label": "badge.tsx"
+    },
+    {
+      "label": "badgeVariants",
+      "file_type": "code",
+      "source_file": "src/components/ui/badge.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_components_ui_badge_badgevariants",
+      "community": 46,
+      "community_name": "utils.ts",
+      "norm_label": "badgevariants"
+    },
+    {
+      "label": "checkbox.tsx",
+      "file_type": "code",
+      "source_file": "src/components/ui/checkbox.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_ui_checkbox",
+      "community": 46,
+      "community_name": "utils.ts",
+      "norm_label": "checkbox.tsx"
+    },
+    {
+      "label": "resizable.tsx",
+      "file_type": "code",
+      "source_file": "src/components/ui/resizable.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_ui_resizable",
+      "community": 46,
+      "community_name": "utils.ts",
+      "norm_label": "resizable.tsx"
+    },
+    {
+      "label": "utils.ts",
+      "file_type": "code",
+      "source_file": "src/lib/utils.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_lib_utils",
+      "community": 46,
+      "community_name": "utils.ts",
+      "norm_label": "utils.ts"
     },
     {
       "label": "empty.tsx",
@@ -7602,6 +7536,28 @@
       "community": 47,
       "community_name": "empty.tsx",
       "norm_label": "emptymediavariants"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "src/app/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_app_page",
+      "community": 48,
+      "community_name": "page.tsx",
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "page.test.tsx",
+      "file_type": "code",
+      "source_file": "__tests__/page.test.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_page_test",
+      "community": 48,
+      "community_name": "page.tsx",
+      "norm_label": "page.test.tsx"
     },
     {
       "label": "bubble.tsx",
@@ -7945,6 +7901,28 @@
       "norm_label": "tabslistvariants"
     },
     {
+      "label": "@biomejs/biome",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "package_devdependencies_biomejs_biome",
+      "community": 55,
+      "community_name": "@biomejs/biome",
+      "norm_label": "@biomejs/biome"
+    },
+    {
+      "label": "@biomejs/biome",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "biomejs_biome",
+      "community": 55,
+      "community_name": "@biomejs/biome",
+      "norm_label": "@biomejs/biome"
+    },
+    {
       "label": "input-otp.tsx",
       "file_type": "code",
       "source_file": "src/components/ui/input-otp.tsx",
@@ -7976,6 +7954,28 @@
       "community": 57,
       "community_name": "marker.tsx",
       "norm_label": "markervariants"
+    },
+    {
+      "label": "tailwindcss",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "package_devdependencies_tailwindcss",
+      "community": 58,
+      "community_name": "tailwindcss",
+      "norm_label": "tailwindcss"
+    },
+    {
+      "label": "tailwindcss",
+      "file_type": "concept",
+      "source_file": "package.json",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "tailwindcss",
+      "community": 58,
+      "community_name": "tailwindcss",
+      "norm_label": "tailwindcss"
     },
     {
       "label": "dependencies",
@@ -32551,5 +32551,5 @@
       "source_file": ".agents/skills/vitest/references/core-test-api.md"
     }
   ],
-  "built_at_commit": "a71fa77a4c3ed14f08a8f2b0248973008fbe32bc"
+  "built_at_commit": "4f1ff69342f284ab100a4aca07c07d161c17b9cc"
 }

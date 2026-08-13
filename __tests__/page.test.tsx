@@ -73,6 +73,24 @@ test("opens the selected object action menu", () => {
   ).toBeInTheDocument();
 });
 
+test("collapses and restores the desktop sidebar", () => {
+  render(<Home />);
+
+  fireEvent.click(
+    screen.getByRole("button", { name: "Recolher barra lateral" }),
+  );
+  expect(
+    screen.queryByRole("navigation", { name: "Navegacao do workspace" }),
+  ).not.toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole("button", { name: "Expandir barra lateral" }),
+  );
+  expect(
+    screen.getByRole("navigation", { name: "Navegacao do workspace" }),
+  ).toBeInTheDocument();
+});
+
 test("closes and reopens the context panel", () => {
   render(<Home />);
 
