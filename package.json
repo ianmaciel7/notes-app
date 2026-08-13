@@ -6,8 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "biome check",
-    "format": "biome format --write"
+    "lint": "biome ci --formatter-enabled=false .",
+    "format:check": "biome ci --linter-enabled=false --assist-enabled=false .",
+    "format": "biome format --write .",
+    "typegen": "next typegen",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "graphify:check": "node scripts/check-graphify.mjs",
+    "graphify:update": "graphify update .",
+    "verify": "pnpm format:check && pnpm lint && pnpm typegen && pnpm typecheck && pnpm test:coverage && pnpm graphify:check && pnpm build"
   },
   "dependencies": {
     "next": "16.3.0",
@@ -17,12 +25,19 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.2",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "7.0.0",
+    "@testing-library/react": "16.3.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "6.0.5",
+    "@vitest/coverage-v8": "4.1.10",
     "babel-plugin-react-compiler": "1.0.0",
+    "jsdom": "30.0.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "4.1.10"
   },
   "packageManager": "pnpm@11.20.0"
 }

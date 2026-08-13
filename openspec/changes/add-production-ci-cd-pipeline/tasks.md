@@ -1,0 +1,10 @@
+- [x] Inspect old branch CI/CD and current `stag` baseline for portable scope.
+- [x] Add OpenSpec requirements for CI/CD and verification harness behavior.
+- [x] Add GitHub Actions workflows for quality and security validation.
+- [x] Add Dependabot and CODEOWNERS governance files.
+- [x] Add ruleset source files for `main` and `stag`.
+- [x] Add CI/CD documentation for contribution, testing, security, and deployment boundaries.
+- [x] Add Firebase App Hosting run configuration files.
+- [x] Configure Vitest, setup, and page test files for the current baseline.
+- [x] Add local package scripts that mirror CI checks.
+- [x] Run local verification and inspect the final diff.
