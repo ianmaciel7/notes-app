@@ -34,6 +34,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | Design principles and accessibility | `docs/DESIGN.md` |
 | Testing and verification | `docs/TESTING.md` |
 | Build, environments, deployment | `docs/DEPLOYMENT.md` |
+| Graphify infrastructure, hooks, CI, upgrades | `docs/GRAPHIFY.md` |
 | Agent context audit | `docs/AGENT_CONTEXT_EFFICIENCY_AUDIT.md` |
 | Accepted repository requirements | `openspec/specs/` |
 | Active proposed changes | `openspec/changes/` |
@@ -63,13 +64,36 @@ discover -> decide OpenSpec need -> delegate if useful -> implement -> verify so
 ```
 
 - Start from repository evidence: relevant docs, code, tests, package scripts, OpenSpec specs/changes, Git status, and CI.
-- If `graphify-out/graph.json` exists and the task asks about architecture, file relationships, data flow, ownership, or project content, query Graphify first with `graphify query`, `graphify path`, or `graphify explain` before broad file reads to reduce context use.
-- If `graphify` is not installed, explain that the CLI comes from the Python package `graphifyy` and install it with `uv tool install graphifyy` or `pipx install graphifyy`; then run `graphify install` to register the assistant skill.
-- Rebuild or update Graphify only when explicitly requested, when `graphify-out/graph.json` is missing, or when stale graph evidence would affect the answer.
+- Follow the Graphify policy below before broad repository exploration.
 - Use OpenSpec for durable requirements, behavior, acceptance criteria, design rationale, and change lifecycle. Do not create parallel planning, task, memory, or spec files.
 - Keep transient loop state in the agent session. Persist only useful outcomes in the right owner: OpenSpec, tests, code, docs, Git commits, PRs, or CI.
 - Keep software verification separate from OpenSpec verification. Passing tests does not prove requirements were met; valid OpenSpec artifacts do not prove the software works.
 - Prefer `pnpm verify` for ordinary local completion evidence unless a narrower verification path is explicitly justified.
+
+## Graphify
+
+Use Graphify as the primary codebase navigation and architecture discovery layer.
+
+Before broad repository exploration:
+
+- Prefer `graphify query` for architecture and conceptual questions.
+- Prefer `graphify explain` for understanding a specific component.
+- Prefer `graphify path` for discovering relationships and execution paths.
+- Consult `graphify-out/GRAPH_REPORT.md` when broad architectural context is needed.
+
+Prefer Graphify to narrow the search space before performing repository-wide searches.
+
+Raw repository search remains allowed when:
+
+- an exact symbol or string is required;
+- Graphify does not contain enough information;
+- Graphify appears stale;
+- Graphify fails;
+- source-code verification is required.
+
+Graph maintenance is handled by repository automation.
+
+Do not rebuild the entire graph unnecessarily.
 
 ## Subagent Delegation
 
@@ -101,3 +125,4 @@ Do not autonomously perform high-impact actions unless explicitly authorized:
 - destructive database, cloud, or filesystem operations;
 - credential, secret, IAM, billing, or release-tag changes;
 - force-pushing protected history or deleting protected branches.
+

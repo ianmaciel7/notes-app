@@ -3,10 +3,14 @@
 import {
   ArrowLeft,
   ArrowRight,
+  ArrowUpRight,
   Boxes,
   CalendarDays,
   ChevronDown,
   CircleUserRound,
+  Copy,
+  CopyPlus,
+  Download,
   FileImage,
   FileText,
   GalleryVerticalEnd,
@@ -19,23 +23,37 @@ import {
   Maximize2,
   MessageSquareText,
   Moon,
+  MoreHorizontal,
   Network,
   PanelLeft,
   PanelRight,
   Pin,
   Plus,
+  Presentation,
   Search,
   Settings2,
   Share2,
   Sparkles,
   Tag,
   Trash2,
+  Upload,
   X,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Popover,
   PopoverContent,
@@ -111,29 +129,115 @@ function IconButton({
   );
 }
 
+function ObjectActionMenu({ objectLabel }: { objectLabel: string }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="workspace-row-action"
+            aria-label={`Ações de ${objectLabel}`}
+          />
+        }
+      >
+        <MoreHorizontal aria-hidden="true" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        side="right"
+        align="start"
+        sideOffset={2}
+        className="workspace-object-menu"
+      >
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="workspace-object-menu-item">
+            <ArrowUpRight aria-hidden="true" /> Abrir
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="workspace-object-submenu">
+            <DropdownMenuItem>Abrir no painel atual</DropdownMenuItem>
+            <DropdownMenuItem>Abrir em novo painel</DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="workspace-object-menu-item">
+            <Pin aria-hidden="true" /> Fixar na Barra Lateral
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="workspace-object-submenu">
+            <DropdownMenuItem>Fixar acima</DropdownMenuItem>
+            <DropdownMenuItem>Fixar abaixo</DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="workspace-object-menu-item">
+          <GalleryVerticalEnd aria-hidden="true" /> Mudar Tipo
+        </DropdownMenuItem>
+        <DropdownMenuItem className="workspace-object-menu-item">
+          <Settings2 aria-hidden="true" /> Configurações do Tipo de Objeto
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="workspace-object-menu-item">
+          <Share2 aria-hidden="true" /> Compartilhar
+        </DropdownMenuItem>
+        <DropdownMenuItem className="workspace-object-menu-item">
+          <Presentation aria-hidden="true" /> Apresentar
+        </DropdownMenuItem>
+        <DropdownMenuItem className="workspace-object-menu-item">
+          <Download aria-hidden="true" /> Exportar
+        </DropdownMenuItem>
+        <DropdownMenuItem className="workspace-object-menu-item">
+          <Upload aria-hidden="true" /> Importar
+          <DropdownMenuShortcut>Ctrl I</DropdownMenuShortcut>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="workspace-object-menu-item">
+            <Copy aria-hidden="true" /> Copiar
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="workspace-object-submenu">
+            <DropdownMenuItem>Copiar link</DropdownMenuItem>
+            <DropdownMenuItem>Copiar conteúdo</DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuItem className="workspace-object-menu-item">
+          <CopyPlus aria-hidden="true" /> Duplicar
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          variant="destructive"
+          className="workspace-object-menu-item"
+        >
+          <Trash2 aria-hidden="true" /> Excluir Objeto
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 function SidebarRow({ item }: { item: SidebarItem }) {
   const Icon = item.icon;
 
   return (
-    <Button
-      variant="ghost"
-      className="workspace-sidebar-row"
+    <div
+      className="workspace-sidebar-row-wrap"
       data-selected={item.selected || undefined}
-      aria-current={item.selected ? "page" : undefined}
     >
-      <span className="workspace-sidebar-icon" data-tone={item.tone}>
-        <Icon aria-hidden="true" />
-      </span>
-      <span className="workspace-sidebar-label">{item.label}</span>
-      {item.count && (
-        <span className="workspace-sidebar-count">{item.count}</span>
-      )}
-      {item.contextual && (
-        <span className="workspace-row-action" aria-hidden="true">
-          ···
+      <Button
+        variant="ghost"
+        className="workspace-sidebar-row"
+        data-selected={item.selected || undefined}
+        aria-current={item.selected ? "page" : undefined}
+      >
+        <span className="workspace-sidebar-icon" data-tone={item.tone}>
+          <Icon aria-hidden="true" />
         </span>
-      )}
-    </Button>
+        <span className="workspace-sidebar-label">{item.label}</span>
+        {item.count && (
+          <span className="workspace-sidebar-count">{item.count}</span>
+        )}
+      </Button>
+      {item.contextual && <ObjectActionMenu objectLabel={item.label} />}
+    </div>
   );
 }
 
@@ -271,35 +375,38 @@ function GraphPanel() {
         role="img"
         aria-label="Grafo do objeto atual"
       >
-        <g transform={`translate(222 285) scale(${zoom}) translate(-222 -285)`}>
+        <g
+          className="workspace-graph-stage"
+          transform={`translate(222 98) scale(${zoom}) translate(-222 -98)`}
+        >
           <line
-            x1="159"
-            y1="225"
+            x1="134"
+            y1="54"
             x2="222"
-            y2="285"
+            y2="98"
             className="workspace-graph-edge"
           />
           <g className="workspace-graph-node">
             <rect
-              x="145"
-              y="211"
+              x="120"
+              y="40"
               width="28"
               height="28"
               rx="8"
               className="workspace-graph-image-node"
             />
-            <foreignObject x="151" y="217" width="16" height="16">
+            <foreignObject x="126" y="46" width="16" height="16">
               <ImageIcon aria-hidden="true" />
             </foreignObject>
           </g>
           <g className="workspace-graph-node workspace-graph-node-active">
-            <rect x="208" y="271" width="29" height="29" rx="8" />
-            <text x="222.5" y="291" textAnchor="middle">
+            <rect x="208" y="84" width="29" height="29" rx="8" />
+            <text x="222.5" y="104" textAnchor="middle">
               🐺
             </text>
             <text
               x="222.5"
-              y="327"
+              y="137"
               textAnchor="middle"
               className="workspace-graph-label"
             >

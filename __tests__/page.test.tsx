@@ -59,6 +59,20 @@ test("opens the object type picker", () => {
   expect(screen.getByRole("button", { name: "Área" })).toBeInTheDocument();
 });
 
+test("opens the selected object action menu", () => {
+  render(<Home />);
+
+  fireEvent.click(screen.getByRole("button", { name: "Ações de Sem título" }));
+
+  expect(screen.getByRole("menuitem", { name: "Abrir" })).toBeInTheDocument();
+  expect(
+    screen.getByRole("menuitem", { name: "Fixar na Barra Lateral" }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("menuitem", { name: "Excluir Objeto" }),
+  ).toBeInTheDocument();
+});
+
 test("closes and reopens the context panel", () => {
   render(<Home />);
 

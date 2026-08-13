@@ -13,6 +13,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "graphify:check": "node scripts/check-graphify.mjs",
+    "graphify:update": "graphify update .",
     "verify": "pnpm format:check && pnpm lint && pnpm typegen && pnpm typecheck && pnpm test:coverage && pnpm build"
   },
   "dependencies": {
