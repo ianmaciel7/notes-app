@@ -1,0 +1,21 @@
+## Implementation
+
+- [x] Audit the current `stag` baseline for existing `AGENTS.md`, `.agents/`, and OpenSpec structure.
+- [x] Inspect `origin/old` for the historical `.agents/` tree and accepted governance specs.
+- [x] Restore `.agents/` as the vendor-neutral repository agent configuration surface.
+- [x] Update `AGENTS.md` for current Windows/PowerShell defaults and OpenSpec ownership.
+- [x] Update `openspec/config.yaml` with project context and artifact rules.
+- [x] Add OpenSpec deltas for repository governance and agent loop behavior.
+- [x] Ignore local vendor-specific agent configuration directories.
+- [x] Add `.env.example` for documented MCP environment-variable names.
+- [x] Adjust restored Graphify rules so they do not claim missing graph automation is already present.
+- [x] Restore root and `docs/` Markdown documentation from `origin/old`.
+- [x] Update restored workflow docs to use the current `stag` branch name.
+- [x] Revise restored docs to reflect the current starter app and avoid claiming absent CI, tests, deployment, shadcn, or Graphify automation.
+- [x] Add the OpenSpec change gate rule for all future code and documentation changes.
+- [x] Generate a code-only Graphify graph for the current branch.
+- [x] Document Graphify's current code-only scope and semantic extraction blocker.
+- [x] Add Graphify ignore and merge-driver metadata for stable graph artifacts.
+- [x] Add the shadcn-first UI composition rule for future UI work.
+- [ ] Restore or rewrite broader non-doc governance support in later scoped changes: `.github/`, Graphify automation/output, package verification scripts, and `skills-lock.json`.
+- [ ] Validate OpenSpec with the local OpenSpec CLI once available in this branch.

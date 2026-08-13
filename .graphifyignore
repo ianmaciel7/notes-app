@@ -1,0 +1,43 @@
+# Graphify-specific exclusions. Graphify may also honor .gitignore; keep this
+# file focused on graph safety and sources that should never become graph input.
+
+graphify-out/
+.git/
+node_modules/
+.next/
+out/
+build/
+coverage/
+.vitest/
+test-results/
+playwright-report/
+temp/
+tmp/
+cache/
+generated/
+vendor/
+.playwright-mcp/
+.codebase-memory/
+.codegraph/
+.codegraph-*/
+.context-mode/
+.serena/
+.agent/
+.codex/
+.gemini/
+
+# Reusable agent implementation helpers are not application architecture.
+.agents/skills/*/scripts/
+.agents/skills/*/examples/
+.agents/skills/*/templates/
+
+# Secrets and local credentials.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+service-account*.json
+credentials*

@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Notes App
+
+A minimal Next.js starter for the notes app using the App Router, React Compiler, Tailwind CSS v4, pnpm, and Biome.
 
 ## Getting Started
 
-First, run the development server:
+Use pnpm 11.20.0, as declared in `package.json`.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
+```powershell
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Docs
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Need | Document |
+| --- | --- |
+| Contributing, Git workflow, commands, CI, PRs | `CONTRIBUTING.md` |
+| Security and secrets | `SECURITY.md` |
+| System structure | `docs/ARCHITECTURE.md` |
+| Design principles and accessibility | `docs/DESIGN.md` |
+| Testing and verification | `docs/TESTING.md` |
+| Build and deployment | `docs/DEPLOYMENT.md` |
+| Coding agent entry point | `AGENTS.md` |
 
-## Learn More
+## Source
 
-To learn more about Next.js, take a look at the following resources:
+App Router source lives in `src/app`. There is no top-level `app/` directory.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Proposals And Decisions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This repository uses OpenSpec for significant proposals, architectural changes, rationale, alternatives, and trade-offs. Current branch documentation lives under `docs/`.
