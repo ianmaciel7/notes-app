@@ -6,6 +6,7 @@ context: |
   Baseline branch: stag
   Development flow: create focused feature branches and open pull requests into stag.
   Use OpenSpec for durable product requirements, behavior, acceptance criteria, design rationale, alternatives, and trade-offs.
+  Agent configuration is owned by AGENTS.md and .agents/; OpenSpec owns durable requirements and change lifecycle.
 
 rules:
   proposal:
