@@ -54,6 +54,8 @@ Rules:
 
 Use one dedicated branch per logical task.
 
+Branch names must use a conventional change-type prefix, a short English description, lowercase letters, numbers, and hyphen-separated words. Do not use personal, agent, language-specific, localized, or vague prefixes for repository work.
+
 Recommended prefixes:
 
 ```text
