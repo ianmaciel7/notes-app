@@ -5,6 +5,7 @@ import {
   ArrowRight,
   ArrowUpRight,
   Boxes,
+  CalendarCheck,
   CalendarDays,
   ChevronDown,
   CircleUserRound,
@@ -15,13 +16,17 @@ import {
   FileText,
   Forward,
   GalleryVerticalEnd,
+  GraduationCap,
   Grid2X2,
   HelpCircle,
   ImageIcon,
+  Inbox,
+  LibraryBig,
   Lightbulb,
   Link2,
   ListFilter,
   Maximize2,
+  Megaphone,
   MessageSquareText,
   Moon,
   MoreHorizontal,
@@ -35,6 +40,7 @@ import {
   Settings2,
   Share2,
   Sparkles,
+  Square,
   Tag,
   Trash2,
   Upload,
@@ -42,8 +48,19 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import {
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,6 +72,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import {
   Popover,
   PopoverContent,
@@ -89,13 +107,13 @@ type SidebarItem = {
 const objectItems: SidebarItem[] = [
   {
     label: "Notas Diárias",
-    icon: CalendarDays,
+    icon: CalendarCheck,
     count: "1",
     tone: "blue",
     compact: true,
   },
-  { label: "Áreas", icon: Grid2X2, count: "1", tone: "violet", compact: true },
-  { label: "Imagens", icon: FileImage, count: "1", tone: "red", compact: true },
+  { label: "Áreas", icon: Square, count: "1", tone: "violet", compact: true },
+  { label: "Imagens", icon: ImageIcon, count: "1", tone: "red", compact: true },
   { label: "Páginas", icon: FileText, count: "1", tone: "blue", compact: true },
 ];
 
@@ -137,6 +155,52 @@ function IconButton({
   );
 }
 
+function BackNavigationButton() {
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="workspace-icon-button"
+            aria-label="Navegar para trás"
+            aria-keyshortcuts="Control+ArrowLeft Control+["
+            onClick={() => window.history.back()}
+          />
+        }
+      >
+        <ArrowLeft aria-hidden="true" />
+      </TooltipTrigger>
+      <TooltipContent
+        side="bottom"
+        align="start"
+        sideOffset={8}
+        className="workspace-tooltip workspace-rich-tooltip grid min-w-[210px] justify-items-start gap-2 rounded-lg border-[0.8px] border-[var(--workspace-border)] bg-[var(--workspace-surface)] px-3 py-2.5 text-[12px] leading-4 text-[var(--workspace-text)] shadow-sm"
+      >
+        <strong>Navegar para trás</strong>
+        <KbdGroup>
+          <Kbd className="!border-[var(--workspace-border)] !bg-[var(--workspace-bg)] !text-[var(--workspace-text-muted)]">
+            Ctrl
+          </Kbd>
+          <span>+</span>
+          <Kbd className="!border-[var(--workspace-border)] !bg-[var(--workspace-bg)] !text-[var(--workspace-text-muted)]">
+            ←
+          </Kbd>
+          <span>/</span>
+          <Kbd className="!border-[var(--workspace-border)] !bg-[var(--workspace-bg)] !text-[var(--workspace-text-muted)]">
+            Ctrl
+          </Kbd>
+          <span>+</span>
+          <Kbd className="!border-[var(--workspace-border)] !bg-[var(--workspace-bg)] !text-[var(--workspace-text-muted)]">
+            [
+          </Kbd>
+        </KbdGroup>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
 function ObjectActionMenu({ objectLabel }: { objectLabel: string }) {
   return (
     <DropdownMenu>
@@ -145,7 +209,7 @@ function ObjectActionMenu({ objectLabel }: { objectLabel: string }) {
           <Button
             variant="ghost"
             size="icon-sm"
-            className="workspace-row-action"
+            className="workspace-row-action size-[22px]"
             aria-label={`Ações de ${objectLabel}`}
           />
         }
@@ -157,7 +221,6 @@ function ObjectActionMenu({ objectLabel }: { objectLabel: string }) {
         align="start"
         sideOffset={-88}
         className="workspace-object-menu"
-        style={{ width: 269 }}
       >
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="workspace-object-menu-item">
@@ -235,7 +298,7 @@ function SidebarRow({ item }: { item: SidebarItem }) {
       <Button
         variant="ghost"
         size={item.compact ? "sm" : "default"}
-        className="workspace-sidebar-row"
+        className="workspace-sidebar-row justify-start"
         data-selected={item.selected || undefined}
         aria-current={item.selected ? "page" : undefined}
       >
@@ -267,62 +330,102 @@ function SidebarPrimary() {
   );
 }
 
+function SidebarSection({
+  label,
+  icon: Icon,
+  count,
+  children,
+  first = false,
+  help = false,
+}: {
+  label: string;
+  icon?: typeof Pin;
+  count?: string;
+  children: ReactNode;
+  first?: boolean;
+  help?: boolean;
+}) {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <CollapsibleTrigger
+        render={
+          <Button
+            variant="ghost"
+            className={cn(
+              help ? "workspace-help-label" : "workspace-section-row",
+              first && "workspace-section-row-first",
+            )}
+          />
+        }
+      >
+        <span>
+          {Icon && <Icon aria-hidden="true" />}
+          {label}
+        </span>
+        {count && <span>{count}</span>}
+      </CollapsibleTrigger>
+      <CollapsibleContent className="workspace-section-content">
+        {children}
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
 function SidebarMiddle() {
   return (
     <div className="workspace-sidebar-middle">
-      <div className="workspace-section-row workspace-section-row-first">
-        <span>
-          <Sparkles aria-hidden="true" /> oi
-        </span>
-        <span>1</span>
-      </div>
-      <SidebarRow
-        item={{
-          label: "Sem título",
-          icon: FileText,
-          selected: true,
-          contextual: true,
-          tone: "blue",
-          compact: true,
-        }}
-      />
+      <SidebarSection label="oi" icon={Sparkles} count="1" first>
+        <SidebarRow
+          item={{
+            label: "Sem título",
+            icon: Square,
+            selected: true,
+            contextual: true,
+            tone: "violet",
+            compact: true,
+          }}
+        />
+      </SidebarSection>
 
-      <div className="workspace-section-row">
-        <span>
-          <Pin aria-hidden="true" /> Fixados
-        </span>
-        <span>1</span>
-      </div>
-      <SidebarRow
-        item={{
-          label: "image",
-          icon: FileImage,
-          tone: "red",
-          contextual: true,
-          compact: true,
-        }}
-      />
+      <SidebarSection label="Fixados" icon={Pin} count="1">
+        <SidebarRow
+          item={{
+            label: "image",
+            icon: FileImage,
+            tone: "red",
+            contextual: true,
+            compact: true,
+          }}
+        />
+      </SidebarSection>
 
-      <div className="workspace-section-row">
-        <span>
-          <GalleryVerticalEnd aria-hidden="true" /> Tipos de objeto
-        </span>
-        <span>4</span>
-      </div>
-      {objectItems.map((item) => (
-        <SidebarRow key={item.label} item={item} />
-      ))}
+      <SidebarSection
+        label="Tipos de objeto"
+        icon={GalleryVerticalEnd}
+        count="4"
+      >
+        {objectItems.map((item) => (
+          <SidebarRow key={item.label} item={item} />
+        ))}
+      </SidebarSection>
       <Button variant="ghost" size="sm" className="workspace-add-section">
         <Plus aria-hidden="true" /> Adicionar seção
       </Button>
       <div className="workspace-sidebar-lower">
         <SidebarRow item={{ label: "Lixeira", icon: Trash2 }} />
-        <div className="workspace-help-label">Ajuda e recursos</div>
-        <SidebarRow item={{ label: "Primeiros passos", icon: Sparkles }} />
-        <SidebarRow item={{ label: "Fazer uma pergunta", icon: HelpCircle }} />
-        <SidebarRow item={{ label: "Documentação", icon: FileText }} />
-        <SidebarRow item={{ label: "Novidades", icon: Sparkles }} />
-        <SidebarRow item={{ label: "Feedback", icon: MessageSquareText }} />
+        <SidebarSection label="Ajuda e recursos" help>
+          <SidebarRow
+            item={{ label: "Primeiros passos", icon: GraduationCap }}
+          />
+          <SidebarRow
+            item={{ label: "Fazer uma pergunta", icon: HelpCircle }}
+          />
+          <SidebarRow item={{ label: "Documentação", icon: LibraryBig }} />
+          <SidebarRow item={{ label: "Novidades", icon: Megaphone }} />
+          <SidebarRow item={{ label: "Feedback", icon: Inbox }} />
+        </SidebarSection>
       </div>
     </div>
   );
@@ -335,11 +438,7 @@ function SidebarUtilityFooter({
 }) {
   return (
     <div className="workspace-sidebar-footer">
-      <IconButton
-        label="Configurações"
-        icon={Settings2}
-        className="size-8"
-      />
+      <IconButton label="Configurações" icon={Settings2} className="size-8" />
       <IconButton
         label="Tema"
         icon={Moon}
@@ -374,16 +473,22 @@ function SidebarContent({ onToggleTheme }: { onToggleTheme: () => void }) {
 }
 
 function TypePopover() {
+  const [open, setOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState("Página");
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const resultRef = useRef<HTMLButtonElement>(null);
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         render={
           <Button
+            ref={triggerRef}
             variant="outline"
             className="workspace-type-button h-[25.4px] w-[101.375px] self-start rounded-[6.65px] border-[0.8px] border-[oklch(0.8091_0.0957_251.83)] bg-[oklch(0.9513_0.0235_256.13)] px-2 text-[14px] leading-5 font-normal text-[oklch(0.5035_0.1579_264.41)] hover:bg-[oklch(0.9513_0.0235_256.13)] hover:text-[oklch(0.5035_0.1579_264.41)] active:translate-y-0 active:brightness-[.94]"
           >
             <FileText aria-hidden="true" />
-            Página
+            {selectedType}
             <ChevronDown aria-hidden="true" />
           </Button>
         }
@@ -393,23 +498,32 @@ function TypePopover() {
         align="start"
         sideOffset={2}
         className="workspace-type-popover ring-0"
-        style={{
-          width: 258,
-          height: 84,
-          gap: 0,
-          borderRadius: 12,
-          padding: 6,
-          boxShadow:
-            "0 3px 5px rgb(0 0 0 / 1%), 0 5px 10px rgb(0 0 0 / 2%), 0 10px 14px rgb(0 0 0 / 1%)",
-        }}
       >
         <label className="workspace-type-search">
           <span className="sr-only">Buscar tipo</span>
-          <input placeholder="Buscar" />
+          <input
+            placeholder="Buscar"
+            onKeyDown={(event) => {
+              if (event.key === "ArrowDown") {
+                event.preventDefault();
+                resultRef.current?.focus();
+              }
+            }}
+          />
         </label>
-        <button type="button" className="workspace-type-result">
+        <Button
+          ref={resultRef}
+          type="button"
+          variant="ghost"
+          className="workspace-type-result justify-start"
+          onClick={() => {
+            setSelectedType("Área");
+            setOpen(false);
+            triggerRef.current?.focus();
+          }}
+        >
           <Grid2X2 aria-hidden="true" /> Área
-        </button>
+        </Button>
       </PopoverContent>
     </Popover>
   );
@@ -418,6 +532,8 @@ function TypePopover() {
 function GraphPanel() {
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [connectionsVisible, setConnectionsVisible] = useState(true);
+  const [selectedNode, setSelectedNode] = useState<"page" | "image">("page");
   const drag = useRef<{
     pointerId: number;
     x: number;
@@ -426,14 +542,22 @@ function GraphPanel() {
     panY: number;
   } | null>(null);
 
+  const selectNode = (node: "page" | "image") => setSelectedNode(node);
+  const selectNodeFromKeyboard = (
+    event: ReactKeyboardEvent,
+    node: "page" | "image",
+  ) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    selectNode(node);
+  };
+
   return (
     <div className="workspace-graph-wrap">
-      <svg
+      <div
         className="workspace-graph"
-        viewBox="0 0 444 644"
-        role="img"
-        aria-label="Grafo do objeto atual"
         onPointerDown={(event) => {
+          if ((event.target as HTMLElement).closest("button")) return;
           event.currentTarget.setPointerCapture(event.pointerId);
           drag.current = {
             pointerId: event.pointerId,
@@ -447,76 +571,98 @@ function GraphPanel() {
           if (!drag.current || drag.current.pointerId !== event.pointerId) {
             return;
           }
-          const bounds = event.currentTarget.getBoundingClientRect();
           setPan({
-            x:
-              drag.current.panX +
-              ((event.clientX - drag.current.x) * 444) / bounds.width,
-            y:
-              drag.current.panY +
-              ((event.clientY - drag.current.y) * 644) / bounds.height,
+            x: drag.current.panX + event.clientX - drag.current.x,
+            y: drag.current.panY + event.clientY - drag.current.y,
           });
         }}
         onPointerUp={(event) => {
-          event.currentTarget.releasePointerCapture(event.pointerId);
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }
           drag.current = null;
         }}
         onPointerCancel={() => {
           drag.current = null;
         }}
       >
-        <g
+        <div
           className="workspace-graph-stage"
-          transform={`translate(${pan.x} ${pan.y}) translate(222 98) scale(${zoom}) translate(-222 -98)`}
+          style={{
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          }}
         >
-          <line
-            x1="134"
-            y1="54"
-            x2="222"
-            y2="98"
-            className="workspace-graph-edge"
-          />
-          <g className="workspace-graph-node">
-            <rect
-              x="120"
-              y="40"
-              width="28"
-              height="28"
-              rx="8"
-              className="workspace-graph-image-node"
-            />
-            <foreignObject x="126" y="46" width="16" height="16">
-              <ImageIcon aria-hidden="true" />
-            </foreignObject>
-          </g>
-          <g className="workspace-graph-node workspace-graph-node-active">
-            <rect x="208" y="84" width="29" height="29" rx="8" />
-            <text x="222.5" y="104" textAnchor="middle">
-              🐺
-            </text>
-            <text
-              x="222.5"
-              y="137"
-              textAnchor="middle"
-              className="workspace-graph-label"
+          <div
+            className="workspace-graph-visual"
+            role="img"
+            aria-label="Grafo do objeto atual"
+          >
+            {connectionsVisible && <span className="workspace-graph-edge" />}
+          </div>
+          {connectionsVisible && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="workspace-graph-node workspace-graph-image-node"
+              aria-label="Selecionar image no grafo"
+              aria-pressed={selectedNode === "image"}
+              data-selected={selectedNode === "image" || undefined}
+              onClick={() => selectNode("image")}
+              onKeyDown={(event) => selectNodeFromKeyboard(event, "image")}
             >
-              ADK 2.0: referência...
-            </text>
-          </g>
-        </g>
-      </svg>
+              <ImageIcon aria-hidden="true" />
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="workspace-graph-node workspace-graph-page-node"
+            aria-label="Selecionar ADK 2.0: referência rápida de conceitos, ferramentas e comandos no grafo"
+            aria-pressed={selectedNode === "page"}
+            data-selected={selectedNode === "page" || undefined}
+            onClick={() => selectNode("page")}
+            onKeyDown={(event) => selectNodeFromKeyboard(event, "page")}
+          >
+            <span aria-hidden="true">🐺</span>
+          </Button>
+          <span className="workspace-graph-label">ADK 2.0: referência...</span>
+        </div>
+      </div>
+      <output className="sr-only">
+        {selectedNode === "image" ? "image" : "ADK 2.0"} selecionado no grafo
+      </output>
       <div className="workspace-graph-toolbar">
         <div className="workspace-graph-density">
-          <Button variant="ghost">
+          <Button
+            variant="ghost"
+            className="!px-2 !text-xs !font-normal"
+            aria-pressed={!connectionsVisible}
+            onClick={() => {
+              setConnectionsVisible(false);
+              setSelectedNode("page");
+            }}
+          >
             <Link2 aria-hidden="true" /> Mostrar menos
           </Button>
-          <Button variant="ghost">
+          <Button
+            variant="ghost"
+            className="!px-2 !text-xs !font-normal"
+            aria-pressed={connectionsVisible}
+            onClick={() => setConnectionsVisible(true)}
+          >
             <Network aria-hidden="true" /> Mostrar mais
           </Button>
         </div>
         <div className="workspace-graph-actions">
           <IconButton label="Filtros" icon={ListFilter} />
-          <IconButton label="Ajustar à tela" icon={Maximize2} />
+          <IconButton
+            label="Ajustar à tela"
+            icon={Maximize2}
+            onClick={() => {
+              setZoom(1);
+              setPan({ x: 0, y: 0 });
+            }}
+          />
           <IconButton
             label="Diminuir zoom"
             icon={ZoomOut}
@@ -564,18 +710,22 @@ function ContextPanel({ activeMode }: { activeMode: string }) {
   );
 }
 
-function DocumentContent({ scrollTop }: { scrollTop: number }) {
-  const activeOutline = Math.min(5, Math.floor(scrollTop / 650));
-
+function DocumentContent({
+  scrollTop,
+  activeOutline,
+}: {
+  scrollTop: number;
+  activeOutline: number;
+}) {
   return (
     <article className="workspace-document">
-      <button
-        type="button"
+      <Button
+        variant="ghost"
         className="workspace-object-emoji"
         aria-label="Alterar emoji"
       >
         🐺
-      </button>
+      </Button>
       <div className="workspace-document-actions">
         <TypePopover />
         <Button variant="ghost" className="workspace-quiet-action">
@@ -584,12 +734,16 @@ function DocumentContent({ scrollTop }: { scrollTop: number }) {
         <div className="workspace-action-spacer" />
         <Button
           variant="ghost"
-          className="workspace-quiet-action workspace-customize"
+          className="workspace-quiet-action workspace-customize focus-visible:pointer-events-auto focus-visible:opacity-100"
         >
           <Settings2 aria-hidden="true" /> Personalizar{" "}
           <ChevronDown aria-hidden="true" />
         </Button>
-        <IconButton label="Mais opções" icon={Settings2} />
+        <IconButton
+          label="Mais opções"
+          icon={MoreHorizontal}
+          className="workspace-document-more"
+        />
       </div>
 
       <textarea
@@ -639,7 +793,7 @@ function DocumentContent({ scrollTop }: { scrollTop: number }) {
         </ol>
 
         <h2>Estrategias de desvolvimento</h2>
-        <ol>
+        <ol start={3}>
           <li>
             <strong>vibe coding:</strong> facil prototipação delega
             implementação foco na arquitetura regras de roteamento e os
@@ -745,6 +899,8 @@ export function WorkspaceShell() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [darkTheme, setDarkTheme] = useState(false);
   const [editorScrollTop, setEditorScrollTop] = useState(0);
+  const [activeOutline, setActiveOutline] = useState(0);
+  const editorPanelRef = useRef<HTMLElement>(null);
 
   const setSidebarWithFocus = (open: boolean) => {
     setSidebarOpen(open);
@@ -760,6 +916,57 @@ export function WorkspaceShell() {
     document.documentElement.classList.toggle("dark", darkTheme);
     return () => document.documentElement.classList.remove("dark");
   }, [darkTheme]);
+
+  useEffect(() => {
+    const navigateBack = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) return;
+
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.isContentEditable || target.matches("input, textarea, select"))
+      ) {
+        return;
+      }
+
+      const matchesShortcut =
+        event.ctrlKey &&
+        !event.altKey &&
+        !event.metaKey &&
+        (event.key === "ArrowLeft" || event.key === "[");
+      if (!matchesShortcut) return;
+
+      event.preventDefault();
+      window.history.back();
+    };
+    window.addEventListener("keydown", navigateBack);
+    return () => window.removeEventListener("keydown", navigateBack);
+  }, []);
+
+  useEffect(() => {
+    const editor = editorPanelRef.current;
+    if (!editor) return;
+
+    const updateOutline = () => {
+      const scrollTop = editor.scrollTop;
+      const activeLine = scrollTop + 180;
+      const headings = editor.querySelectorAll<HTMLElement>(
+        ".workspace-editor-body h2",
+      );
+      let nextActive = 0;
+
+      headings.forEach((heading, index) => {
+        if (heading.offsetTop <= activeLine) {
+          nextActive = index;
+        }
+      });
+
+      setEditorScrollTop(scrollTop);
+      setActiveOutline(nextActive);
+    };
+    editor.addEventListener("scroll", updateOutline, { passive: true });
+    return () => editor.removeEventListener("scroll", updateOutline);
+  }, []);
 
   return (
     <TooltipProvider delay={850}>
@@ -815,7 +1022,7 @@ export function WorkspaceShell() {
               <SheetContent
                 side="left"
                 showCloseButton={false}
-                className="workspace-mobile-sheet"
+                className="workspace-mobile-sheet max-w-none data-[side=left]:w-[min(288px,calc(100vw-32px))] data-[side=left]:max-w-none"
               >
                 <SheetTitle className="sr-only">Navegação</SheetTitle>
                 <SheetClose
@@ -837,7 +1044,7 @@ export function WorkspaceShell() {
                 </nav>
               </SheetContent>
             </Sheet>
-            <IconButton label="Navegar para trás" icon={ArrowLeft} />
+            <BackNavigationButton />
             <IconButton label="Navegar para frente" icon={ArrowRight} />
             <Button variant="ghost" className="workspace-active-document">
               <span aria-hidden="true">🐺</span>
@@ -889,23 +1096,21 @@ export function WorkspaceShell() {
           aria-hidden={!sidebarOpen}
         >
           <SidebarPrimary />
-          <ScrollArea
-            className="workspace-sidebar-scroll"
-            style={{ height: "calc(100% - 148px)" }}
-          >
+          <ScrollArea className="workspace-sidebar-scroll">
             <SidebarMiddle />
           </ScrollArea>
           <SidebarUtilityFooter onToggleTheme={() => setDarkTheme((v) => !v)} />
         </nav>
 
         <main
+          ref={editorPanelRef}
           className="workspace-editor-panel"
           aria-label="Documento ativo"
-          onScroll={(event) =>
-            setEditorScrollTop(event.currentTarget.scrollTop)
-          }
         >
-          <DocumentContent scrollTop={editorScrollTop} />
+          <DocumentContent
+            scrollTop={editorScrollTop}
+            activeOutline={activeOutline}
+          />
         </main>
 
         {rightPanelOpen && (

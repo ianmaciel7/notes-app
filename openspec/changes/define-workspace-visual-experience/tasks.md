@@ -23,11 +23,11 @@
 - [x] Use the exact workspace label `Tech` and match its 32 px trigger, 12 px semibold text, lightbulb icon, chevron, and 8 px radius.
 - [x] Match the 28 px sidebar-collapse control and 14 px icon at the reference top-right position.
 - [x] Match exact labels, capitalization, and accents: `Novo`, `Buscar`, and `Calendário`.
-- [ ] Match the reference 32 px primary navigation row height, 8 px horizontal inset, 8 px radius, 14 px text, and 14–16 px icons.
+- [x] Match the reference 32 px primary navigation row height, 8 px horizontal inset, 8 px radius, 14 px text, and 14–16 px icons.
 - [ ] Add the purple contextual action beside `Novo` and match its placement and hover behavior.
 - [x] Replace local `Exemplo` with the observed `oi` section row and display the observed count `1`.
 - [x] Match `Sem título`, its page icon, selected/unselected treatment, count behavior, and exact truncation.
-- [ ] Match section labels `Fixados` and `Tipos de objeto`, including their icons/counts, 12 px typography, spacing, and collapse affordances.
+- [x] Match section labels `Fixados` and `Tipos de objeto`, including their icons/counts, 12 px typography, spacing, and collapse affordances.
 - [x] Use exact pinned label `image` and show its 22 px trailing ellipsis action only on row hover or keyboard focus.
 - [x] Use exact object labels and accents: `Notas Diárias`, `Áreas`, `Imagens`, and `Páginas`.
 - [x] Display the observed object-type count `1` on each object row and section count `4` using the reference alignment and muted styling.
@@ -36,7 +36,7 @@
 - [x] Match `Lixeira` placement and the reference spacing that separates it from the help section.
 - [x] Use exact utility labels `Ajuda e recursos`, `Primeiros passos`, `Fazer uma pergunta`, and `Documentação`.
 - [ ] Add the missing `Novidades` and `Feedback` rows and preserve the external-link behavior of `Documentação`.
-- [ ] Match the footer icon controls, `Pro` treatment, and the far-right share/sync control rather than the local profile-only grouping.
+- [x] Match the footer icon controls, `Pro` treatment, and the far-right share/sync control rather than the local profile-only grouping.
 - [x] Give the sidebar its own vertical scroll range while keeping the workspace/footer layout consistent with the reference at short heights.
 
 ## 4. Top Rail And Navigation
@@ -59,14 +59,14 @@
 - [x] Position the object controls at y≈185 px in the inspected state and preserve their relationship to the title.
 - [x] Use exact object type label `Página`, its page icon, chevron segment, blue selected surface, border, 28 px height, and 8 px radius.
 - [x] Use exact `Coleções` label and reference collection icon, size, gap, muted color, and inline field behavior.
-- [ ] Match `Personalizar`, its leading icon, conditional visibility, trailing chevron, and position near the right edge.
-- [ ] Replace the local settings icon with the reference 28 px ellipsis menu trigger.
+- [x] Match `Personalizar`, its leading icon, conditional visibility, trailing chevron, and position near the right edge.
+- [x] Replace the local settings icon with the reference 28 px ellipsis menu trigger.
 - [x] Use exact editable title `ADK 2.0: referência rápida de conceitos, ferramentas e comandos` and preserve its two-line wrap.
 - [x] Implement the title as the reference-like editable textbox with `Título` placeholder semantics rather than static placeholder copy.
 - [x] Add the observed alias chip `asaa`, `Aliases` field/label, and reference spacing.
 - [x] Use the exact visible description `aaaaaaaaaaaaaaaa` in an editable `Descrição...` field.
 - [x] Match the `Etiquetas` property row, tag icon, editable field semantics, and vertical spacing.
-- [ ] Match the right-side document outline at the reference x-position, line lengths, colors, active marker, and scroll synchronization.
+- [x] Match the right-side document outline at the reference x-position, line lengths, colors, active marker, and scroll synchronization.
 
 ## 6. Editor Body And Written Content
 
@@ -104,7 +104,7 @@
 
 - [ ] Audit every local Lucide substitution against the visible reference glyph and choose the closest available project-library icon.
 - [x] Match standard top-rail controls at 14 px icons inside 28 px targets.
-- [ ] Match sidebar icon sizes, stroke weights, baselines, and per-object colors rather than applying one generic 16 px treatment.
+- [x] Match sidebar icon sizes, stroke weights, baselines, and per-object colors rather than applying one generic 16 px treatment.
 - [ ] Match page, collections, personalization, tags, aliases, graph, expand, fit, zoom, and panel-layout icon designs and alignments.
 - [x] Use the wolf emoji consistently in the document tab, object header, and graph node with the reference rendering size.
 
@@ -134,11 +134,11 @@
 - [x] Implement the `Página` type dropdown instead of leaving the local button inert.
 - [x] Match the observed type dropdown at about 258 x 84 px, x≈442/y≈184, 12 px radius, subtle border/shadow, and z-index layering.
 - [x] Match its 32 px inset search field with exact `Buscar` placeholder and the observed `Área` result row.
-- [ ] Match dropdown keyboard focus, arrow navigation, selection, Escape dismissal, outside-click dismissal, and focus return.
+- [x] Match dropdown keyboard focus, arrow navigation, selection, Escape dismissal, outside-click dismissal, and focus return.
 - [ ] Inspect and reproduce the ellipsis, `Coleções`, `Personalizar`, workspace, `Novo`, and graph toolbar menus before marking their triggers complete.
 - [x] Reproduce the observed selected-row object menu at about x=176/y=187 and 269 x 401 px with 12 px radius, subtle border/shadow, 6 px inner padding, 32 px items, separators, and exact entries `Abrir`, `Fixar na Barra Lateral`, `Mudar Tipo`, `Configurações do Tipo de Objeto`, `Compartilhar`, `Apresentar`, `Exportar`, `Importar`, `Copiar`, `Duplicar`, and red `Excluir Objeto`, including visible submenus and the `Ctrl I` shortcut.
-- [ ] Replace the local black one-line `Voltar` tooltip with the reference delayed rich tooltip `Navegar para trás` and its `Ctrl` + arrow / `Ctrl` + `[` shortcut keys.
-- [ ] Match tooltip delay, white surface, border, shadow, offset, radius, typography, keyboard-key styling, and dismissal.
+- [x] Replace the local black one-line `Voltar` tooltip with the reference delayed rich tooltip `Navegar para trás` and its `Ctrl` + arrow / `Ctrl` + `[` shortcut keys.
+- [x] Match tooltip delay, white surface, border, shadow, offset, radius, typography, keyboard-key styling, and dismissal.
 - [ ] Inspect every icon-only control for a reference tooltip and reproduce only those tooltips that exist.
 - [ ] Record dialogs as uninspected unless a non-destructive reference workflow exposes one; do not invent a dialog solely for checklist coverage.
 
@@ -147,7 +147,7 @@
 - [x] Make `Visualização em grafo` the active desktop right-panel mode in the target state.
 - [x] Replace the local Explore/placeholder panel with the observed full-panel graph canvas.
 - [x] Match the two observed graph nodes, connecting edge geometry, selected blue node outline, red image node outline, wolf content, and truncated title.
-- [ ] Match graph node label font sizes, offsets, icon/emoji sizes, and selection/hover treatments.
+- [x] Match graph node label font sizes, offsets, icon/emoji sizes, and selection/hover treatments.
 - [ ] Match graph panning, node selection, drag behavior, background, clipping, and cursor feedback.
 - [x] Add exact bottom controls `Mostrar menos` and `Mostrar mais` with their icons, 32 px height, grouped radii, and 12 px typography.
 - [x] Add the reference filter/settings, fit-to-view, zoom-out, zoom-in, and related bottom-right controls with correct grouping.
@@ -159,9 +159,9 @@
 ## 14. Scrolling And Positioning
 
 - [ ] Give the editor its own approximately 760 x 644 px scroll area at the inspected viewport and preserve the shell position.
-- [ ] Reproduce the full reference document scroll range of approximately 4548 px for the authenticated object.
+- [x] Reproduce the full reference document scroll range of approximately 4548 px for the authenticated object.
 - [ ] Match scrollbar width, track/thumb colors, visibility-on-hover behavior, and right inset.
-- [ ] Keep object header/content and document outline behavior synchronized with editor scrolling as observed.
+- [x] Keep object header/content and document outline behavior synchronized with editor scrolling as observed.
 - [x] Keep the graph toolbar fixed to the graph card bottom and prevent editor scrolling from moving it.
 - [x] Match sidebar internal scrolling independently from editor and graph overflow.
 - [x] Verify no page-level body scroll appears when the reference confines scrolling to internal regions.
