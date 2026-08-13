@@ -1,0 +1,6 @@
+- [x] Audit installed Biome version, existing config, package scripts, CI, TypeScript config, ignore files, editor settings, shadcn config, source layout, and overlapping tooling.
+- [x] Check current official Biome documentation for relevant configuration and CI behavior.
+- [x] Add OpenSpec requirements for Biome governance.
+- [x] Update Biome configuration and package scripts.
+- [x] Update CI and contributor documentation.
+- [x] Run focused Biome/OpenSpec/project validation.

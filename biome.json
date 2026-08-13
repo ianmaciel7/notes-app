@@ -3,27 +3,34 @@
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true
+    "useIgnoreFile": true,
+    "defaultBranch": "stag"
   },
   "files": {
     "ignoreUnknown": true,
     "includes": [
       "**",
-      "!node_modules",
-      "!.next",
-      "!dist",
-      "!build",
-      "!graphify-out"
+      "!!node_modules",
+      "!!.next",
+      "!!dist",
+      "!!build",
+      "!!coverage",
+      "!!out",
+      "!!graphify-out"
     ]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "indentWidth": 2
+    "indentWidth": 2,
+    "lineEnding": "auto"
   },
   "css": {
     "parser": {
       "tailwindDirectives": true
+    },
+    "formatter": {
+      "enabled": true
     }
   },
   "linter": {
@@ -37,10 +44,9 @@
     }
   },
   "assist": {
+    "enabled": true,
     "actions": {
-      "source": {
-        "organizeImports": "on"
-      }
+      "recommended": true
     }
   }
 }
