@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1786660227.1770067,
-    "ast_hash": "c210e4a9c157b6dc9445f340b18765e4",
+    "mtime": 1786661475.1494384,
+    "ast_hash": "9323872f25b7e2eba7c1fc7656bf83e9",
     "semantic_hash": ""
   },
   ".github/workflows/security.yml": {
@@ -65,7 +65,7 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786659532.5164201,
+    "mtime": 1786661459.1263983,
     "ast_hash": "9162add00befbcdb432430f405c4ad8d",
     "semantic_hash": ""
   },
@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/add-production-ci-cd-pipeline/specs/ci-cd-pipeline/spec.md": {
-    "mtime": 1786661108.5453775,
-    "ast_hash": "c10932da32422c09772687d67847b36c",
+    "mtime": 1786661479.572867,
+    "ast_hash": "4b9c7c10a01ca9f1e16cabb40e17417b",
     "semantic_hash": ""
   },
   "openspec/changes/add-production-ci-cd-pipeline/specs/verification-harness/spec.md": {
@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "docs/TESTING.md": {
-    "mtime": 1786660651.9537857,
-    "ast_hash": "31d4e41613bc207590622a7a1bbd3ab5",
+    "mtime": 1786661481.6682918,
+    "ast_hash": "5c967ae7b80d9b9a9250a68c21bf2d93",
     "semantic_hash": ""
   },
   "vitest.config.mts": {

@@ -15,8 +15,7 @@ Pull requests targeting `stag` or `main` SHALL run deterministic quality gates f
 
 #### Scenario: Graphify freshness validation
 - **WHEN** CI runs Graphify validation
-- **THEN** it SHALL regenerate Graphify artifacts deterministically
-- **AND** it SHALL fail if `graphify-out` differs from committed output
+- **THEN** it SHALL validate that committed Graphify artifacts are fresh for the source tree
 - **AND** it SHALL reject empty, missing, machine-specific, or secret-like Graphify artifacts
 
 ### Requirement: Security Validation

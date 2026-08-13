@@ -63,6 +63,8 @@ The separate `Security` workflow runs CodeQL as a high-signal merge signal. It i
 
 Keep local verification and CI aligned unless there is a documented reason to diverge. `pnpm verify` remains the canonical local completion command and runs formatting, linting, Next.js type generation, TypeScript checking, tests with coverage, Graphify artifact validation, and production build.
 
+Run `pnpm graphify:update` locally before committing source changes that affect the code graph. CI validates committed Graphify artifacts but does not rewrite them, because GitHub checkout timestamps are not stable enough for committed manifest metadata.
+
 ## Coverage
 
 Coverage is generated with Vitest's V8 provider and uploaded by CI as a short-retention artifact. It is a regression and review signal, not the definition of quality.

@@ -213,16 +213,8 @@ jobs:
           PYTHONHASHSEED: "0"
         run: |
           graphify --version
-          graphify update .
           graphify check-update .
           node scripts/check-graphify.mjs
-
-          if [ -n "$(git status --porcelain -- graphify-out)" ]; then
-            echo "::error title=Graphify stale::Run 'graphify update .' locally and commit the deterministic graphify-out artifacts."
-            git status --short -- graphify-out
-            git diff -- graphify-out
-            exit 1
-          fi
 
   quality:
     name: Quality
