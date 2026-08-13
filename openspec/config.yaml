@@ -1,0 +1,20 @@
+schema: spec-driven
+
+context: |
+  Project: notes-app
+  Product direction: Portuguese, object-centric knowledge workspace inspired by Capacities-like workflows.
+  Baseline branch: stag
+  Development flow: create focused feature branches and open pull requests into stag.
+  Use OpenSpec for durable product requirements, behavior, acceptance criteria, design rationale, alternatives, and trade-offs.
+
+rules:
+  proposal:
+    - Keep scope focused on one coherent product or repository change.
+    - Include non-goals when boundaries could be ambiguous.
+    - Reference supporting research or implementation files with relative paths.
+  tasks:
+    - Separate implementation verification from OpenSpec validation.
+    - Keep tasks independently reviewable and PR-friendly.
+  spec:
+    - Use MUST and SHOULD language for normative requirements.
+    - Prefer observable behavior and acceptance criteria over implementation guesses.
