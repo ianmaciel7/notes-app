@@ -1,9 +1,0 @@
-- [x] Inspect repository tooling, GitHub Actions, rulesets, docs, and deployment evidence.
-- [x] Add local scripts for explicit format checking, type generation, coverage, and canonical verification.
-- [x] Split CI into readable required checks with least-privilege permissions and frozen lockfile installs.
-- [x] Add GitHub-native security workflow for CodeQL.
-- [x] Add Dependabot configuration for npm dependencies and GitHub Actions.
-- [x] Add CODEOWNERS for sensitive repository governance files.
-- [x] Update canonical documentation for CI/CD, security, deployment, and testing.
-- [x] Update ruleset source files for the intended required checks.
-- [x] Run local verification and inspect the final diff.

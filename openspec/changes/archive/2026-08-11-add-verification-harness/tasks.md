@@ -1,8 +1,0 @@
-- [x] Add repository text normalization for deterministic formatting.
-- [x] Add Vitest and React Testing Library dependencies.
-- [x] Add Vitest configuration for React component tests.
-- [x] Add a real test for the current notes workspace page.
-- [x] Add `typecheck`, `test`, and `verify` scripts.
-- [x] Update CI to run `pnpm verify` while keeping the `Quality` job name.
-- [x] Update canonical docs for testing, verification, and Definition of Done.
-- [x] Run verification and mark tasks complete only after evidence exists.
