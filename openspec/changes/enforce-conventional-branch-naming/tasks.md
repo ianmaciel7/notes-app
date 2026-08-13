@@ -1,0 +1,5 @@
+- [x] Inspect current Git workflow documentation and OpenSpec structure.
+- [x] Add OpenSpec requirements for conventional branch naming.
+- [x] Update contributor documentation with the branch naming rule.
+- [x] Add an agent-facing reminder that points to the canonical rule.
+- [x] Validate the OpenSpec change.

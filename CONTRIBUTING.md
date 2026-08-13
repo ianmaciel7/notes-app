@@ -13,6 +13,10 @@ Use pnpm 11.20.0, as declared in `package.json`.
 | Build | `pnpm build` |
 | Start production server | `pnpm start` |
 | Generate Next.js types | `pnpm typegen` |
+| Check Biome in CI mode | `pnpm biome:ci` |
+| Apply safe Biome fixes | `pnpm biome:fix` |
+| Apply safe Biome fixes to staged files | `pnpm biome:staged` |
+| Check files changed from Biome's default branch | `pnpm biome:changed` |
 | Check repo | `pnpm lint` |
 | Check formatting | `pnpm format:check` |
 | Format repo | `pnpm format` |
@@ -23,7 +27,7 @@ Use pnpm 11.20.0, as declared in `package.json`.
 | Update Graphify artifacts | `pnpm graphify:update` |
 | Verify repo | `pnpm verify` |
 
-Use `pnpm verify` as the canonical local health check before opening or updating pull requests unless the task has a narrower, explicitly justified verification path. Follow `docs/TESTING.md` for testing strategy and Definition of Done expectations.
+Use `pnpm verify` as the canonical local health check before opening or updating pull requests unless the task has a narrower, explicitly justified verification path. `pnpm biome:ci` is the canonical Biome validation command and must not write changes in CI. Follow `docs/TESTING.md` for testing strategy and Definition of Done expectations.
 
 ## Git Workflow
 
@@ -53,6 +57,8 @@ Rules:
 ## Branch Naming
 
 Use one dedicated branch per logical task.
+
+Branch names must use a conventional change-type prefix, a short English description, lowercase letters, numbers, and hyphen-separated words. Do not use personal, agent, language-specific, localized, or vague prefixes for repository work.
 
 Recommended prefixes:
 
