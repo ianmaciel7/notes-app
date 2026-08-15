@@ -1,16 +1,16 @@
 # Graph Report - notes-app  (2026-08-15)
 
 ## Corpus Check
-- 512 files · ~558,107 words
+- 525 files · ~628,549 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4926 nodes · 5187 edges · 460 communities (395 shown, 65 thin omitted)
+- 4994 nodes · 5318 edges · 461 communities (399 shown, 62 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4229c9c4`
+- Built from commit: `629c0a31`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -30,7 +30,7 @@
 - README.md
 - AGENTS.md
 - postcss.config.mjs
-- page.tsx
+- src/components/workspace-shell.tsx
 - ADDED Requirements
 - Contributing
 - Deployment
@@ -382,7 +382,7 @@
 - define-workspace-spaces/tasks.md
 - .implement-capacities-layout-sidebar/next.config.ts
 - @biomejs/biome
-- tailwindcss
+- dependencies
 - @vitest/coverage-v8
 - .implement-capacities-layout-sidebar/postcss.config.mjs
 - .implement-object-studio-worktree/next.config.ts
@@ -415,46 +415,47 @@
 - @shadcn/react
 - @testing-library/dom
 - .old-reference-worktree/postcss.config.mjs
-- @biomejs/biome
+- @radix-ui/react-scroll-area
+- @radix-ui/react-separator
 - jsdom
-- tailwindcss
+- lefthook
 - @tailwindcss/postcss
-- @testing-library/dom
-- @testing-library/react
+- @testing-library/jest-dom
+- typescript
 - @vitejs/plugin-react
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 362 edges
-2. `cn()` - 26 edges
-3. `scripts` - 21 edges
+2. `cn()` - 29 edges
+3. `cn()` - 26 edges
 4. `scripts` - 21 edges
-5. `Vi Utilities` - 18 edges
-6. `Button()` - 17 edges
-7. `Contributing` - 17 edges
-8. `compilerOptions` - 16 edges
+5. `scripts` - 21 edges
+6. `Vi Utilities` - 18 edges
+7. `Button()` - 17 edges
+8. `Contributing` - 17 edges
 9. `compilerOptions` - 16 edges
-10. `compilerOptions` - 16 edges
+10. `Mocking` - 16 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `AlertDialogOverlay()` --calls--> `cn()`  [EXTRACTED]
-  .old-reference-worktree/src/components/ui/alert-dialog.tsx → .old-reference-worktree/src/lib/utils.ts
-- `AlertDialogContent()` --calls--> `cn()`  [EXTRACTED]
-  .old-reference-worktree/src/components/ui/alert-dialog.tsx → .old-reference-worktree/src/lib/utils.ts
-- `AlertDialogHeader()` --calls--> `cn()`  [EXTRACTED]
-  .old-reference-worktree/src/components/ui/alert-dialog.tsx → .old-reference-worktree/src/lib/utils.ts
-- `AlertDialogFooter()` --calls--> `cn()`  [EXTRACTED]
-  .old-reference-worktree/src/components/ui/alert-dialog.tsx → .old-reference-worktree/src/lib/utils.ts
-- `AlertDialogMedia()` --calls--> `cn()`  [EXTRACTED]
-  .old-reference-worktree/src/components/ui/alert-dialog.tsx → .old-reference-worktree/src/lib/utils.ts
+- `Command()` --calls--> `cn()`  [EXTRACTED]
+  .old-reference-worktree/src/components/ui/command.tsx → .old-reference-worktree/src/lib/utils.ts
+- `CommandDialog()` --calls--> `cn()`  [EXTRACTED]
+  .old-reference-worktree/src/components/ui/command.tsx → .old-reference-worktree/src/lib/utils.ts
+- `CommandEmpty()` --calls--> `cn()`  [EXTRACTED]
+  .old-reference-worktree/src/components/ui/command.tsx → .old-reference-worktree/src/lib/utils.ts
+- `CommandGroup()` --calls--> `cn()`  [EXTRACTED]
+  .old-reference-worktree/src/components/ui/command.tsx → .old-reference-worktree/src/lib/utils.ts
+- `CommandInput()` --calls--> `cn()`  [EXTRACTED]
+  .old-reference-worktree/src/components/ui/command.tsx → .old-reference-worktree/src/lib/utils.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (460 total, 65 thin omitted)
+## Communities (461 total, 62 thin omitted)
 
 ### Community 0 - "devDependencies"
-Cohesion: 0.12
-Nodes (17): devDependencies, babel-plugin-react-compiler, @testing-library/jest-dom, @types/node, @types/react, @types/react-dom, typescript, vitest (+9 more)
+Cohesion: 0.06
+Nodes (31): babel-plugin-react-compiler, @biomejs/biome, jsdom, devDependencies, babel-plugin-react-compiler, @biomejs/biome, jsdom, tailwindcss (+23 more)
 
 ### Community 1 - "compilerOptions"
 Cohesion: 0.07
@@ -503,6 +504,10 @@ Nodes (4): MODIFIED Requirements, Requirement: Local Verification Command, Scena
 ### Community 12 - "README.md"
 Cohesion: 0.50
 Nodes (3): Deploy on Vercel, Getting Started, Learn More
+
+### Community 15 - "src/components/workspace-shell.tsx"
+Cohesion: 0.07
+Nodes (37): Home(), Badge(), badgeVariants, Button, ButtonProps, buttonVariants, DropdownMenuCheckboxItem(), DropdownMenuContent() (+29 more)
 
 ### Community 18 - "ADDED Requirements"
 Cohesion: 0.05
@@ -773,8 +778,8 @@ Cohesion: 0.07
 Nodes (27): @base-ui/react, cmdk, date-fns, embla-carousel-react, input-otp, dependencies, @base-ui/react, clsx (+19 more)
 
 ### Community 89 - "devDependencies"
-Cohesion: 0.07
-Nodes (27): devDependencies, babel-plugin-react-compiler, jsdom, lefthook, @tailwindcss/postcss, @testing-library/dom, @testing-library/jest-dom, @testing-library/react (+19 more)
+Cohesion: 0.12
+Nodes (17): devDependencies, babel-plugin-react-compiler, tailwindcss, @testing-library/dom, @testing-library/react, @types/node, @types/react, @types/react-dom (+9 more)
 
 ### Community 90 - "Tier A - Official platform sources"
 Cohesion: 0.08
@@ -785,8 +790,8 @@ Cohesion: 0.08
 Nodes (25): Purpose, Requirement: Bounded Failure Handling, Requirement: Focused Subagent Delegation, Requirement: Human Gates, Requirement: Main Agent Loop, Requirement: OpenSpec Routing, Requirement: Risk-Proportional Review, Requirement: Runtime-Compatible Subagent Definitions (+17 more)
 
 ### Community 92 - "dependencies"
-Cohesion: 0.08
-Nodes (25): dependencies, class-variance-authority, clsx, lucide-react, next, @radix-ui/react-dropdown-menu, @radix-ui/react-scroll-area, @radix-ui/react-separator (+17 more)
+Cohesion: 0.10
+Nodes (21): dependencies, class-variance-authority, clsx, lucide-react, next, @radix-ui/react-dropdown-menu, @radix-ui/react-slot, react (+13 more)
 
 ### Community 93 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -1141,8 +1146,8 @@ Cohesion: 0.17
 Nodes (11): ADDED Requirements, Requirement: Community Feedback Loop, Requirement: Configurable Community Destinations, Requirement: Detailed UI Reference, Requirement: Feedback Privacy and Triage Metadata, Requirement: In-App Knowledge Base, Scenario: Community destination is unavailable, Scenario: Diagnostic context is attached (+3 more)
 
 ### Community 181 - "package.json"
-Cohesion: 0.17
-Nodes (11): dependencies, next, react, react-dom, next, react, react-dom, name (+3 more)
+Cohesion: 0.40
+Nodes (4): name, packageManager, private, version
 
 ### Community 182 - "Architecture"
 Cohesion: 0.18
@@ -1820,25 +1825,37 @@ Nodes (3): Impact, What Changes, Why
 Cohesion: 0.50
 Nodes (3): Impact, What Changes, Why
 
+### Community 372 - "dependencies"
+Cohesion: 0.11
+Nodes (18): class-variance-authority, clsx, @radix-ui/react-tooltip, lucide-react, next, dependencies, class-variance-authority, clsx (+10 more)
+
+### Community 405 - "@radix-ui/react-scroll-area"
+Cohesion: 0.67
+Nodes (3): @radix-ui/react-scroll-area, @radix-ui/react-scroll-area, @radix-ui/react-scroll-area
+
+### Community 406 - "@radix-ui/react-separator"
+Cohesion: 0.67
+Nodes (3): @radix-ui/react-separator, @radix-ui/react-separator, @radix-ui/react-separator
+
 ## Knowledge Gaps
-- **3049 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `defaultBranch` (+3044 more)
+- **3054 isolated node(s):** `nextConfig`, `name`, `version`, `private`, `dev` (+3049 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **65 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **62 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `cn` to `bubble.tsx`, `context-menu.tsx`, `sidebar.tsx`, `alert-dialog.tsx`, `chart.tsx`, `command.tsx`, `empty.tsx`, `marker.tsx`, `.old-reference-worktree/src/lib/utils.ts`, `questionnaire.tsx`, `drawer.tsx`, `field.tsx`, `combobox.tsx`, `toast.tsx`, `alert.tsx`, `tabs.tsx`, `.old-reference-worktree/src/components/workspace-shell.tsx`, `carousel.tsx`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
-- **Why does `Configuration` connect `Configuration` to `vitest/SKILL.md`?**
+- **Why does `Test Context & Fixtures` connect `Test Context & Fixtures` to `vitest/SKILL.md`?**
+  _High betweenness centrality (0.002) - this node is a cross-community bridge._
+- **Why does `Test API` connect `Test API` to `vitest/SKILL.md`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
-- **What connects `$schema`, `enabled`, `clientKind` to the rest of the system?**
-  _3049 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `nextConfig`, `name`, `version` to the rest of the system?**
+  _3054 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `devDependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._
 - **Should `compilerOptions` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `biome.json` be split into smaller, more focused modules?**
   _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
-- **Should `ADDED Requirements` be split into smaller, more focused modules?**
-  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
