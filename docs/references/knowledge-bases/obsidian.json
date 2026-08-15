@@ -1,0 +1,2456 @@
+{
+  "schema": "graphify_knowledge_source.v1",
+  "metadata": {
+    "product": "Obsidian",
+    "source_file": "obsidian.json",
+    "source_markdown": "OBSIDIAN_GRAPH.md",
+    "dataset_name": "Obsidian Help LLM Knowledge Base",
+    "root_url": "https://obsidian.md/help/",
+    "retrieved_date": null,
+    "generated_at": "2026-08-14",
+    "graphify": {
+      "graphable_json": true,
+      "node_count": 57,
+      "edge_count": 56,
+      "node_types": [
+        "knowledge_source",
+        "entity",
+        "feature",
+        "workflow"
+      ],
+      "relation_types": [
+        "defines_entity",
+        "documents_feature",
+        "supports_workflow"
+      ]
+    }
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": "obsidian:knowledge-source",
+        "label": "Obsidian Knowledge Source",
+        "type": "knowledge_source",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:vault",
+        "label": "Vault",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:note",
+        "label": "Note",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:property",
+        "label": "Property",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:tag",
+        "label": "Tag",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:internal-link",
+        "label": "Internal Link",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:backlink",
+        "label": "Backlink",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:attachment",
+        "label": "Attachment",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:template",
+        "label": "Template",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:canvas",
+        "label": "Canvas",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:base",
+        "label": "Base",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:core-plugin",
+        "label": "Core Plugin",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:community-plugin",
+        "label": "Community Plugin",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:obsidian-sync",
+        "label": "Obsidian Sync",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:obsidian-publish",
+        "label": "Obsidian Publish",
+        "type": "entity",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:vaults",
+        "label": "Vaults",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:files-and-folders",
+        "label": "Files and folders",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:attachments",
+        "label": "Attachments",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:formatting",
+        "label": "Formatting",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:callouts",
+        "label": "Callouts",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:internal-links",
+        "label": "Internal links",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:aliases",
+        "label": "Aliases",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:embeds",
+        "label": "Embeds",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:properties",
+        "label": "Properties",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:tags",
+        "label": "Tags",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:command-palette",
+        "label": "Command palette",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:hotkeys",
+        "label": "Hotkeys",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:search",
+        "label": "Search",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:quick-switcher",
+        "label": "Quick switcher",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:backlinks",
+        "label": "Backlinks",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:outgoing-links",
+        "label": "Outgoing links",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:graph-view",
+        "label": "Graph view",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:daily-notes",
+        "label": "Daily notes",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:templates",
+        "label": "Templates",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:bookmarks",
+        "label": "Bookmarks",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:canvas",
+        "label": "Canvas",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:bases",
+        "label": "Bases",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:file-recovery",
+        "label": "File recovery",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:note-composer",
+        "label": "Note composer",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:outline",
+        "label": "Outline",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:page-preview",
+        "label": "Page preview",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:slash-commands",
+        "label": "Slash commands",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:slides",
+        "label": "Slides",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:unique-note-creator",
+        "label": "Unique note creator",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:workspaces",
+        "label": "Workspaces",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:random-note",
+        "label": "Random note",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:sync",
+        "label": "Sync",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:publish",
+        "label": "Publish",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:community-plugins",
+        "label": "Community plugins",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:css-snippets",
+        "label": "CSS snippets",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:obsidian-uri",
+        "label": "Obsidian URI",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:backups",
+        "label": "Backups",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:import",
+        "label": "Import",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:web-viewer",
+        "label": "Web viewer",
+        "type": "feature",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:create-or-open-a-vault",
+        "label": "Create or open a vault",
+        "type": "workflow",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:link-notes",
+        "label": "Link notes",
+        "type": "workflow",
+        "source": "Obsidian"
+      },
+      {
+        "id": "obsidian:use-daily-notes-with-templates",
+        "label": "Use Daily Notes with Templates",
+        "type": "workflow",
+        "source": "Obsidian"
+      }
+    ],
+    "edges": [
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:vault",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:note",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:property",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:tag",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:internal-link",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:backlink",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:attachment",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:template",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:canvas",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:base",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:core-plugin",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:community-plugin",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:obsidian-sync",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:obsidian-publish",
+        "relation": "defines_entity",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:vaults",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:files-and-folders",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:attachments",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:formatting",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:callouts",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:internal-links",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:aliases",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:embeds",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:properties",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:tags",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:command-palette",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:hotkeys",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:search",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:quick-switcher",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:backlinks",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:outgoing-links",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:graph-view",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:daily-notes",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:templates",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:bookmarks",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:canvas",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:bases",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:file-recovery",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:note-composer",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:outline",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:page-preview",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:slash-commands",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:slides",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:unique-note-creator",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:workspaces",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:random-note",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:sync",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:publish",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:community-plugins",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:css-snippets",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:obsidian-uri",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:backups",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:import",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:web-viewer",
+        "relation": "documents_feature",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:create-or-open-a-vault",
+        "relation": "supports_workflow",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:link-notes",
+        "relation": "supports_workflow",
+        "context": "graphify_knowledge_base"
+      },
+      {
+        "source": "obsidian:knowledge-source",
+        "target": "obsidian:use-daily-notes-with-templates",
+        "relation": "supports_workflow",
+        "context": "graphify_knowledge_base"
+      }
+    ]
+  },
+  "product_boundary": {
+    "role": "reference_source",
+    "instruction": "Use this dataset to guide a generic object-centric knowledge workspace. Do not copy vendor-specific object names into the product domain unless confirmed by OpenSpec.",
+    "interpretation": "Obsidian emphasizes Markdown files in a vault, explicit links, backlinks, properties, tags, plugins, and local file operations. These are alternative reference patterns and do not replace the application's generic object model."
+  },
+  "graphify_index_text": "# Obsidian Knowledge Graph Source\n\nSource snapshot: `obsidian.json`.\n\n## Entities\n\nVault, Note, Property, Tag, Internal Link, Backlink, Attachment, Template,\nCanvas, Base, Core Plugin, Community Plugin, Obsidian Sync, Obsidian Publish.\n\n## Topics\n\nVaults; files and folders; attachments; basic and advanced formatting; callouts;\ninternal links; aliases; embeds; properties; tags; command palette; hotkeys;\nsearch; quick switcher; backlinks; outgoing links; graph view; daily notes;\ntemplates; bookmarks; canvas; bases; file recovery; note composer; outline;\npage preview; slash commands; slides; unique note creator; workspaces; random\nnote; sync; publish; community plugins; CSS snippets; Obsidian URI; backups;\nimport; and web viewer.\n\n## Workflows\n\nCreate or open a vault; link notes; use Daily Notes with Templates.\n\n## Graph Interpretation\n\nObsidian emphasizes Markdown files in a vault, explicit links, backlinks,\nproperties, tags, plugins, and local file operations. These are alternative\nreference patterns and do not replace the application's generic object model.\n",
+  "source_snapshot": {
+    "dataset": {
+      "name": "Obsidian Help LLM Knowledge Base",
+      "version": "1.0",
+      "language": "en",
+      "source_language": "en",
+      "generated_at": "2026-08-14",
+      "root_url": "https://obsidian.md/help/",
+      "format": "single_json",
+      "purpose": [
+        "LLM grounding",
+        "RAG retrieval",
+        "semantic search",
+        "knowledge graph construction",
+        "documentation analysis"
+      ]
+    },
+    "provenance": {
+      "primary_sources": [
+        {
+          "source_id": "src_official_help",
+          "title": "Obsidian Help",
+          "url": "https://obsidian.md/help/",
+          "canonical_url": "https://obsidian.md/help/",
+          "type": "official_documentation",
+          "authority": "primary"
+        },
+        {
+          "source_id": "src_official_help_repo",
+          "title": "obsidianmd/obsidian-help",
+          "url": "https://github.com/obsidianmd/obsidian-help",
+          "canonical_url": "https://github.com/obsidianmd/obsidian-help",
+          "type": "official_source_repository",
+          "authority": "primary"
+        }
+      ],
+      "source_policy": {
+        "prefer_official_help": true,
+        "prefer_primary_sources": true,
+        "external_sources_recursive_crawl": false,
+        "preserve_exact_source_urls": true
+      }
+    },
+    "coverage": {
+      "status": "partial_high_confidence",
+      "claim_exhaustive": false,
+      "note": "The research identified the official Obsidian Help site and official documentation repository, but the completed research pass did not materialize every English Help page individually. This artifact therefore preserves the high-confidence structured topics extracted during the run without falsely claiming a complete page-for-page mirror."
+    },
+    "schema_notes": {
+      "evidence_types": [
+        "documented_fact",
+        "inference",
+        "unknown"
+      ],
+      "stable_id_policy": "lowercase-kebab-case topic IDs",
+      "source_traceability": "Every topic contains source_url/source_urls.",
+      "llm_chunking_guidance": "Use each topic as a primary retrieval object; derive semantic chunks from summary, facts, examples, commands, settings, limitations and relationships instead of fixed-size character windows."
+    },
+    "site_structure": {
+      "model": "hierarchical_knowledge_graph",
+      "primary_sections": [
+        "Getting started",
+        "Editing and formatting",
+        "Linking notes and files",
+        "Files and folders",
+        "Properties and metadata",
+        "Search and navigation",
+        "Core plugins",
+        "Community plugins",
+        "Obsidian Sync",
+        "Obsidian Publish",
+        "Importing",
+        "Customization",
+        "Advanced topics",
+        "Backup and recovery"
+      ]
+    },
+    "topics": [
+      {
+        "id": "getting-started-vault",
+        "title": "Create and manage a vault",
+        "source_url": "https://help.obsidian.md/Getting+started/Create+a+vault",
+        "source_urls": [
+          "https://help.obsidian.md/Getting+started/Create+a+vault"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "A vault is the folder that Obsidian uses as the root of a note collection. Creating or opening a vault determines which folder Obsidian treats as the current knowledge workspace.",
+        "keywords": [
+          "vault",
+          "filesystem",
+          "getting started",
+          "notes"
+        ],
+        "entities": [
+          "Vault",
+          "Folder",
+          "Note"
+        ],
+        "commands": [
+          "Open another vault"
+        ],
+        "settings": [],
+        "examples": [
+          {
+            "scenario": "Separate work and personal knowledge bases",
+            "guidance": "Use separate vault folders when you explicitly want separate Obsidian environments rather than only different folders inside one vault."
+          }
+        ],
+        "related_topics": [
+          "manage-files",
+          "backup-vault",
+          "obsidian-sync"
+        ]
+      },
+      {
+        "id": "manage-files",
+        "title": "Files and folders",
+        "source_url": "https://help.obsidian.md/Files+and+folders/Manage+notes",
+        "source_urls": [
+          "https://help.obsidian.md/Files+and+folders/Manage+notes"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Obsidian notes are primarily Markdown files stored in ordinary folders. Renaming and moving files can interact with internal links, so file and link-management behavior matters.",
+        "keywords": [
+          "files",
+          "folders",
+          "markdown",
+          "vault"
+        ],
+        "entities": [
+          "Note",
+          "File",
+          "Folder",
+          "Vault"
+        ],
+        "commands": [
+          "Create new note",
+          "Rename file",
+          "Move file"
+        ],
+        "settings": [
+          "Settings → Files and links"
+        ],
+        "related_topics": [
+          "getting-started-vault",
+          "internal-links",
+          "attachments",
+          "backup-vault"
+        ]
+      },
+      {
+        "id": "attachments",
+        "title": "Attachments",
+        "source_url": "https://help.obsidian.md/Files+and+folders/Manage+attachments",
+        "source_urls": [
+          "https://help.obsidian.md/Files+and+folders/Manage+attachments"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Obsidian can store non-Markdown files such as images and other attachments alongside notes. Attachment-location settings control where newly added files are placed.",
+        "keywords": [
+          "attachments",
+          "files",
+          "images",
+          "embeds"
+        ],
+        "entities": [
+          "Attachment",
+          "File",
+          "Note"
+        ],
+        "settings": [
+          "Settings → Files and links → Default location for new attachments"
+        ],
+        "examples": [
+          {
+            "syntax": "![[image.png]]",
+            "purpose": "Embed a local image attachment."
+          }
+        ],
+        "code_snippets": [
+          {
+            "language": "markdown",
+            "code": "![[image.png]]",
+            "purpose": "Embed a local attachment."
+          }
+        ],
+        "related_topics": [
+          "embeds",
+          "manage-files",
+          "backup-vault"
+        ]
+      },
+      {
+        "id": "basic-formatting",
+        "title": "Basic formatting syntax",
+        "source_url": "https://help.obsidian.md/Editing+and+formatting/Basic+formatting+syntax",
+        "source_urls": [
+          "https://help.obsidian.md/Editing+and+formatting/Basic+formatting+syntax"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Obsidian uses Markdown for headings, emphasis, lists, links, quotations, code and other common note structures.",
+        "keywords": [
+          "markdown",
+          "formatting",
+          "syntax",
+          "editor"
+        ],
+        "entities": [
+          "Note",
+          "Markdown"
+        ],
+        "settings": [
+          "Settings → Editor"
+        ],
+        "examples": [
+          {
+            "syntax": "# Heading",
+            "purpose": "Create a heading."
+          },
+          {
+            "syntax": "**bold**",
+            "purpose": "Apply bold emphasis."
+          },
+          {
+            "syntax": "- item",
+            "purpose": "Create a list item."
+          }
+        ],
+        "related_topics": [
+          "advanced-formatting",
+          "internal-links",
+          "embeds",
+          "callouts"
+        ]
+      },
+      {
+        "id": "advanced-formatting",
+        "title": "Advanced formatting",
+        "source_url": "https://help.obsidian.md/Editing+and+formatting/Advanced+formatting+syntax",
+        "source_urls": [
+          "https://help.obsidian.md/Editing+and+formatting/Advanced+formatting+syntax"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Advanced formatting extends basic Markdown with richer constructs for specialized technical and presentational content.",
+        "keywords": [
+          "markdown",
+          "advanced formatting",
+          "code",
+          "math"
+        ],
+        "entities": [
+          "Markdown",
+          "Note"
+        ],
+        "settings": [
+          "Settings → Editor"
+        ],
+        "examples": [
+          {
+            "syntax": "`inline code`",
+            "purpose": "Represent inline code."
+          },
+          {
+            "syntax": "$x^2$",
+            "purpose": "Represent inline mathematical notation where supported."
+          }
+        ],
+        "related_topics": [
+          "basic-formatting",
+          "callouts",
+          "embeds"
+        ]
+      },
+      {
+        "id": "callouts",
+        "title": "Callouts",
+        "source_url": "https://help.obsidian.md/Editing+and+formatting/Callouts",
+        "source_urls": [
+          "https://help.obsidian.md/Editing+and+formatting/Callouts"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Callouts are visually distinct blocks for notes, warnings, examples, tips and similar highlighted information represented using Markdown-style syntax.",
+        "keywords": [
+          "callouts",
+          "markdown",
+          "formatting"
+        ],
+        "entities": [
+          "Callout",
+          "Note"
+        ],
+        "examples": [
+          {
+            "syntax": "> [!note]",
+            "purpose": "Start a note-style callout."
+          }
+        ],
+        "code_snippets": [
+          {
+            "language": "markdown",
+            "code": "> [!note]\n> Useful context",
+            "purpose": "Minimal callout example."
+          }
+        ],
+        "related_topics": [
+          "basic-formatting",
+          "advanced-formatting"
+        ]
+      },
+      {
+        "id": "internal-links",
+        "title": "Internal links",
+        "source_url": "https://help.obsidian.md/Linking+notes+and+files/Internal+links",
+        "source_urls": [
+          "https://help.obsidian.md/Linking+notes+and+files/Internal+links"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Internal links connect vault content and can target whole notes, headings or blocks. They underpin navigation, backlinks and graph relationships.",
+        "keywords": [
+          "links",
+          "wikilinks",
+          "headings",
+          "blocks",
+          "knowledge graph"
+        ],
+        "entities": [
+          "Internal Link",
+          "Note",
+          "Heading",
+          "Block"
+        ],
+        "commands": [
+          "Add internal link"
+        ],
+        "settings": [
+          "Settings → Files and links"
+        ],
+        "examples": [
+          {
+            "syntax": "[[Note name]]",
+            "purpose": "Link to a note."
+          },
+          {
+            "syntax": "[[Note#Heading]]",
+            "purpose": "Link to a heading."
+          },
+          {
+            "syntax": "[[Note#^block-id]]",
+            "purpose": "Link to a block reference."
+          }
+        ],
+        "related_topics": [
+          "aliases",
+          "embeds",
+          "backlinks",
+          "outgoing-links",
+          "graph-view"
+        ]
+      },
+      {
+        "id": "aliases",
+        "title": "Aliases",
+        "source_url": "https://help.obsidian.md/Linking+notes+and+files/Aliases",
+        "source_urls": [
+          "https://help.obsidian.md/Linking+notes+and+files/Aliases"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Aliases let a note be referred to by alternate names while preserving a single underlying note identity.",
+        "keywords": [
+          "aliases",
+          "links",
+          "properties",
+          "metadata"
+        ],
+        "entities": [
+          "Alias",
+          "Note",
+          "Property"
+        ],
+        "examples": [
+          {
+            "syntax": "[[Canonical note|Displayed text]]",
+            "purpose": "Display alternate link text."
+          }
+        ],
+        "related_topics": [
+          "internal-links",
+          "properties"
+        ]
+      },
+      {
+        "id": "embeds",
+        "title": "Embed files",
+        "source_url": "https://help.obsidian.md/Linking+notes+and+files/Embed+files",
+        "source_urls": [
+          "https://help.obsidian.md/Linking+notes+and+files/Embed+files"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Embeds transclude supported vault content into another note instead of only creating a navigational link.",
+        "keywords": [
+          "embeds",
+          "transclusion",
+          "attachments",
+          "links"
+        ],
+        "entities": [
+          "Embed",
+          "Note",
+          "Attachment"
+        ],
+        "examples": [
+          {
+            "syntax": "![[Note name]]",
+            "purpose": "Embed another note."
+          },
+          {
+            "syntax": "![[image.png]]",
+            "purpose": "Embed an image."
+          }
+        ],
+        "related_topics": [
+          "internal-links",
+          "attachments"
+        ]
+      },
+      {
+        "id": "properties",
+        "title": "Properties",
+        "source_url": "https://help.obsidian.md/Editing+and+formatting/Properties",
+        "source_urls": [
+          "https://help.obsidian.md/Editing+and+formatting/Properties"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Properties attach structured metadata to notes and support values such as dates, numbers, tags, links or text.",
+        "keywords": [
+          "properties",
+          "metadata",
+          "frontmatter",
+          "yaml",
+          "structured data"
+        ],
+        "entities": [
+          "Property",
+          "Note",
+          "Metadata"
+        ],
+        "commands": [
+          "Add file property"
+        ],
+        "settings": [
+          "Settings → Editor"
+        ],
+        "examples": [
+          {
+            "syntax": "---\nstatus: active\n---",
+            "purpose": "Represent a simple property in YAML-style frontmatter."
+          }
+        ],
+        "related_topics": [
+          "tags",
+          "aliases",
+          "bases",
+          "search"
+        ]
+      },
+      {
+        "id": "tags",
+        "title": "Tags",
+        "source_url": "https://help.obsidian.md/Editing+and+formatting/Tags",
+        "source_urls": [
+          "https://help.obsidian.md/Editing+and+formatting/Tags"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Tags provide lightweight categorical labels for content and can use nested naming conventions.",
+        "keywords": [
+          "tags",
+          "classification",
+          "metadata",
+          "search"
+        ],
+        "entities": [
+          "Tag",
+          "Note"
+        ],
+        "examples": [
+          {
+            "syntax": "#project",
+            "purpose": "Add a tag."
+          },
+          {
+            "syntax": "#project/active",
+            "purpose": "Represent a nested tag convention."
+          }
+        ],
+        "related_topics": [
+          "properties",
+          "search",
+          "internal-links"
+        ]
+      },
+      {
+        "id": "command-palette",
+        "title": "Command palette",
+        "source_url": "https://help.obsidian.md/Plugins/Command+palette",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Command+palette"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "The Command palette provides searchable access to commands exposed by Obsidian and enabled plugins.",
+        "keywords": [
+          "command palette",
+          "commands",
+          "keyboard",
+          "productivity"
+        ],
+        "entities": [
+          "Command",
+          "Core Plugin"
+        ],
+        "commands": [
+          "Open command palette"
+        ],
+        "settings": [
+          "Settings → Core plugins",
+          "Settings → Hotkeys"
+        ],
+        "related_topics": [
+          "hotkeys",
+          "slash-commands",
+          "quick-switcher"
+        ]
+      },
+      {
+        "id": "hotkeys",
+        "title": "Hotkeys",
+        "source_url": "https://help.obsidian.md/Customization/Hotkeys",
+        "source_urls": [
+          "https://help.obsidian.md/Customization/Hotkeys"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Hotkeys map keyboard shortcuts to commands and are configured in Obsidian settings.",
+        "keywords": [
+          "hotkeys",
+          "commands",
+          "keyboard",
+          "settings"
+        ],
+        "entities": [
+          "Hotkey",
+          "Command"
+        ],
+        "settings": [
+          "Settings → Hotkeys"
+        ],
+        "related_topics": [
+          "command-palette",
+          "slash-commands"
+        ]
+      },
+      {
+        "id": "search",
+        "title": "Search",
+        "source_url": "https://help.obsidian.md/Plugins/Search",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Search"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Search retrieves vault content and supports structured queries and filters beyond plain free-text matching.",
+        "keywords": [
+          "search",
+          "retrieval",
+          "queries",
+          "core plugin"
+        ],
+        "entities": [
+          "Search Query",
+          "Vault"
+        ],
+        "commands": [
+          "Search current file",
+          "Search all files"
+        ],
+        "examples": [
+          {
+            "syntax": "path:\"Projects\"",
+            "purpose": "Illustrate a path-focused search constraint."
+          }
+        ],
+        "related_topics": [
+          "quick-switcher",
+          "properties",
+          "tags"
+        ]
+      },
+      {
+        "id": "quick-switcher",
+        "title": "Quick switcher",
+        "source_url": "https://help.obsidian.md/Plugins/Quick+switcher",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Quick+switcher"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Quick switcher is optimized for rapidly locating and opening notes from the keyboard.",
+        "keywords": [
+          "quick switcher",
+          "navigation",
+          "keyboard",
+          "notes"
+        ],
+        "entities": [
+          "Core Plugin",
+          "Note"
+        ],
+        "commands": [
+          "Open quick switcher"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "search",
+          "command-palette",
+          "aliases"
+        ]
+      },
+      {
+        "id": "backlinks",
+        "title": "Backlinks",
+        "source_url": "https://help.obsidian.md/Plugins/Backlinks",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Backlinks"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Backlinks expose inbound references by showing where the active note is referenced elsewhere in the vault.",
+        "keywords": [
+          "backlinks",
+          "links",
+          "knowledge graph",
+          "core plugin"
+        ],
+        "entities": [
+          "Backlink",
+          "Note",
+          "Internal Link"
+        ],
+        "commands": [
+          "Open backlinks"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "internal-links",
+          "outgoing-links",
+          "graph-view"
+        ]
+      },
+      {
+        "id": "outgoing-links",
+        "title": "Outgoing links",
+        "source_url": "https://help.obsidian.md/Plugins/Outgoing+links",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Outgoing+links"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Outgoing Links provides a view of references originating in the active note and complements Backlinks.",
+        "keywords": [
+          "outgoing links",
+          "links",
+          "navigation",
+          "core plugin"
+        ],
+        "entities": [
+          "Outgoing Link",
+          "Note"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "backlinks",
+          "internal-links",
+          "graph-view"
+        ]
+      },
+      {
+        "id": "graph-view",
+        "title": "Graph view",
+        "source_url": "https://help.obsidian.md/Plugins/Graph+view",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Graph+view"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Graph view visualizes notes and the link relationships between them, with global and local graph workflows.",
+        "keywords": [
+          "graph",
+          "visualization",
+          "links",
+          "core plugin"
+        ],
+        "entities": [
+          "Graph View",
+          "Note",
+          "Internal Link"
+        ],
+        "commands": [
+          "Open graph view",
+          "Open local graph"
+        ],
+        "settings": [
+          "Graph view controls"
+        ],
+        "related_topics": [
+          "internal-links",
+          "backlinks",
+          "outgoing-links"
+        ]
+      },
+      {
+        "id": "daily-notes",
+        "title": "Daily notes",
+        "source_url": "https://help.obsidian.md/Plugins/Daily+notes",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Daily+notes"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Daily Notes creates or opens date-associated notes according to configurable date, folder and template conventions.",
+        "keywords": [
+          "daily notes",
+          "journal",
+          "templates",
+          "core plugin"
+        ],
+        "entities": [
+          "Daily Note",
+          "Template"
+        ],
+        "commands": [
+          "Open today's daily note",
+          "Create new daily note"
+        ],
+        "settings": [
+          "Settings → Daily notes"
+        ],
+        "related_topics": [
+          "templates",
+          "properties",
+          "internal-links"
+        ]
+      },
+      {
+        "id": "templates",
+        "title": "Templates",
+        "source_url": "https://help.obsidian.md/Plugins/Templates",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Templates"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "The core Templates plugin inserts reusable note content from a configured templates folder and supports built-in template variables.",
+        "keywords": [
+          "templates",
+          "automation",
+          "note structure",
+          "core plugin"
+        ],
+        "entities": [
+          "Template",
+          "Core Plugin"
+        ],
+        "commands": [
+          "Insert template"
+        ],
+        "settings": [
+          "Settings → Templates → Template folder location"
+        ],
+        "examples": [
+          {
+            "syntax": "{{date}}",
+            "purpose": "Built-in date placeholder."
+          },
+          {
+            "syntax": "{{time}}",
+            "purpose": "Built-in time placeholder."
+          }
+        ],
+        "related_topics": [
+          "daily-notes",
+          "properties"
+        ]
+      },
+      {
+        "id": "bookmarks",
+        "title": "Bookmarks",
+        "source_url": "https://help.obsidian.md/Plugins/Bookmarks",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Bookmarks"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Bookmarks provide persistent shortcuts to frequently used Obsidian resources and views.",
+        "keywords": [
+          "bookmarks",
+          "navigation",
+          "core plugin"
+        ],
+        "entities": [
+          "Bookmark",
+          "Core Plugin"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "quick-switcher",
+          "search",
+          "workspaces"
+        ]
+      },
+      {
+        "id": "canvas",
+        "title": "Canvas",
+        "source_url": "https://help.obsidian.md/Plugins/Canvas",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Canvas"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Canvas provides a spatial workspace where notes, text cards, media and other resources can be arranged and connected.",
+        "keywords": [
+          "canvas",
+          "visual thinking",
+          "planning",
+          "core plugin"
+        ],
+        "entities": [
+          "Canvas",
+          "Canvas Card",
+          "Note"
+        ],
+        "commands": [
+          "Create new canvas"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "internal-links",
+          "attachments",
+          "graph-view"
+        ]
+      },
+      {
+        "id": "bases",
+        "title": "Bases",
+        "source_url": "https://help.obsidian.md/Bases",
+        "source_urls": [
+          "https://help.obsidian.md/Bases"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Bases provides structured views over notes and their metadata, enabling property-oriented filtering, sorting and collection workflows.",
+        "keywords": [
+          "bases",
+          "structured data",
+          "properties",
+          "filters",
+          "views"
+        ],
+        "entities": [
+          "Base",
+          "Property",
+          "Note"
+        ],
+        "version_sensitivity": "high",
+        "related_topics": [
+          "properties",
+          "tags",
+          "search"
+        ]
+      },
+      {
+        "id": "file-recovery",
+        "title": "File recovery",
+        "source_url": "https://help.obsidian.md/Plugins/File+recovery",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/File+recovery"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "File Recovery keeps local snapshots that can help recover recently changed or deleted note content. It is not a substitute for an independent backup.",
+        "keywords": [
+          "recovery",
+          "snapshots",
+          "data safety",
+          "core plugin"
+        ],
+        "entities": [
+          "File Recovery",
+          "Snapshot",
+          "Note"
+        ],
+        "commands": [
+          "Open saved snapshots"
+        ],
+        "settings": [
+          "Settings → File recovery"
+        ],
+        "related_topics": [
+          "backup-vault",
+          "obsidian-sync"
+        ]
+      },
+      {
+        "id": "note-composer",
+        "title": "Note composer",
+        "source_url": "https://help.obsidian.md/Plugins/Note+composer",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Note+composer"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Note Composer supports refactoring operations that merge note content or extract selected material into another note.",
+        "keywords": [
+          "note composer",
+          "refactoring",
+          "notes",
+          "core plugin"
+        ],
+        "entities": [
+          "Note Composer",
+          "Note"
+        ],
+        "commands": [
+          "Merge current file with another file",
+          "Extract current selection"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "internal-links",
+          "manage-files"
+        ]
+      },
+      {
+        "id": "outline",
+        "title": "Outline",
+        "source_url": "https://help.obsidian.md/Plugins/Outline",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Outline"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Outline presents the heading hierarchy of the active note as a navigable structural view.",
+        "keywords": [
+          "outline",
+          "headings",
+          "navigation",
+          "core plugin"
+        ],
+        "entities": [
+          "Outline",
+          "Heading",
+          "Note"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "basic-formatting",
+          "internal-links"
+        ]
+      },
+      {
+        "id": "page-preview",
+        "title": "Page preview",
+        "source_url": "https://help.obsidian.md/Plugins/Page+preview",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Page+preview"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Page Preview allows linked content to be inspected without permanently navigating away from the current context.",
+        "keywords": [
+          "page preview",
+          "preview",
+          "links",
+          "navigation",
+          "core plugin"
+        ],
+        "entities": [
+          "Page Preview",
+          "Internal Link"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "internal-links",
+          "backlinks"
+        ]
+      },
+      {
+        "id": "slash-commands",
+        "title": "Slash commands",
+        "source_url": "https://help.obsidian.md/Plugins/Slash+commands",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Slash+commands"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Slash Commands exposes command discovery from inside the editor and complements the global Command palette.",
+        "keywords": [
+          "slash commands",
+          "commands",
+          "editor",
+          "keyboard",
+          "core plugin"
+        ],
+        "entities": [
+          "Slash Command",
+          "Command"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "command-palette",
+          "hotkeys"
+        ]
+      },
+      {
+        "id": "slides",
+        "title": "Slides",
+        "source_url": "https://help.obsidian.md/Plugins/Slides",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Slides"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Slides provides a presentation-oriented interpretation of Markdown note content.",
+        "keywords": [
+          "slides",
+          "presentation",
+          "markdown",
+          "core plugin"
+        ],
+        "entities": [
+          "Slides",
+          "Note"
+        ],
+        "commands": [
+          "Start presentation"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "basic-formatting"
+        ]
+      },
+      {
+        "id": "unique-note-creator",
+        "title": "Unique note creator",
+        "source_url": "https://help.obsidian.md/Plugins/Unique+note+creator",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Unique+note+creator"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Unique Note Creator supports creation of notes with uniqueness-oriented names, commonly using time-based conventions.",
+        "keywords": [
+          "unique notes",
+          "zettelkasten",
+          "capture",
+          "core plugin"
+        ],
+        "entities": [
+          "Unique Note Creator",
+          "Note"
+        ],
+        "commands": [
+          "Create new unique note"
+        ],
+        "settings": [
+          "Settings → Unique note creator"
+        ],
+        "related_topics": [
+          "templates",
+          "internal-links",
+          "quick-switcher"
+        ]
+      },
+      {
+        "id": "word-count",
+        "title": "Word count",
+        "source_url": "https://help.obsidian.md/Plugins/Word+count",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Word+count"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Word Count exposes word and character-count information for note content.",
+        "keywords": [
+          "word count",
+          "writing",
+          "core plugin"
+        ],
+        "entities": [
+          "Word Count",
+          "Note"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "basic-formatting"
+        ]
+      },
+      {
+        "id": "workspaces",
+        "title": "Workspaces",
+        "source_url": "https://help.obsidian.md/Plugins/Workspaces",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Workspaces"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Workspaces save and restore arrangements of Obsidian views and panes for task-specific layouts.",
+        "keywords": [
+          "workspaces",
+          "interface",
+          "layouts",
+          "productivity",
+          "core plugin"
+        ],
+        "entities": [
+          "Workspace",
+          "Pane"
+        ],
+        "commands": [
+          "Manage workspace layouts",
+          "Save workspace layout"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "bookmarks",
+          "outline",
+          "backlinks"
+        ]
+      },
+      {
+        "id": "random-note",
+        "title": "Random note",
+        "source_url": "https://help.obsidian.md/Plugins/Random+note",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Random+note"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Random Note opens a randomly selected note and can support serendipitous resurfacing and review workflows.",
+        "keywords": [
+          "random note",
+          "review",
+          "serendipity",
+          "core plugin"
+        ],
+        "entities": [
+          "Random Note",
+          "Note"
+        ],
+        "commands": [
+          "Open random note"
+        ],
+        "settings": [
+          "Settings → Core plugins"
+        ],
+        "related_topics": [
+          "backlinks",
+          "graph-view",
+          "search"
+        ]
+      },
+      {
+        "id": "obsidian-sync",
+        "title": "Obsidian Sync",
+        "source_url": "https://help.obsidian.md/Obsidian+Sync",
+        "source_urls": [
+          "https://help.obsidian.md/Obsidian+Sync",
+          "https://help.obsidian.md/Obsidian%2BSync/Version%2Bhistory",
+          "https://help.obsidian.md/Obsidian%20Sync/Security%20and%20privacy"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Obsidian Sync is the official synchronization service for keeping vault data synchronized across supported devices. Synchronization should not be treated as identical to an independent backup.",
+        "keywords": [
+          "sync",
+          "devices",
+          "version history",
+          "security",
+          "official service"
+        ],
+        "entities": [
+          "Obsidian Sync",
+          "Remote Vault",
+          "Local Vault",
+          "Version History"
+        ],
+        "settings": [
+          "Settings → Sync"
+        ],
+        "version_sensitivity": "high",
+        "related_topics": [
+          "backup-vault",
+          "file-recovery",
+          "getting-started-vault"
+        ]
+      },
+      {
+        "id": "obsidian-publish",
+        "title": "Obsidian Publish",
+        "source_url": "https://help.obsidian.md/Obsidian+Publish",
+        "source_urls": [
+          "https://help.obsidian.md/Obsidian+Publish",
+          "https://obsidian.md/help/publish/seo"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Obsidian Publish is the official workflow for publishing selected vault content as a website.",
+        "keywords": [
+          "publish",
+          "website",
+          "sharing",
+          "official service"
+        ],
+        "entities": [
+          "Obsidian Publish",
+          "Published Site",
+          "Note"
+        ],
+        "commands": [
+          "Publish changes"
+        ],
+        "settings": [
+          "Publish site settings"
+        ],
+        "version_sensitivity": "high",
+        "related_topics": [
+          "internal-links",
+          "properties",
+          "attachments"
+        ]
+      },
+      {
+        "id": "community-plugins",
+        "title": "Community plugins",
+        "source_url": "https://help.obsidian.md/Extending+Obsidian/Community+plugins",
+        "source_urls": [
+          "https://help.obsidian.md/Extending+Obsidian/Community+plugins"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Community plugins extend Obsidian with third-party code and therefore introduce trust, maintenance and compatibility considerations.",
+        "keywords": [
+          "community plugins",
+          "extensions",
+          "security",
+          "third party"
+        ],
+        "entities": [
+          "Community Plugin",
+          "Plugin"
+        ],
+        "settings": [
+          "Settings → Community plugins"
+        ],
+        "version_sensitivity": "high",
+        "related_topics": [
+          "command-palette",
+          "hotkeys",
+          "css-snippets"
+        ]
+      },
+      {
+        "id": "css-snippets",
+        "title": "CSS snippets",
+        "source_url": "https://help.obsidian.md/Extending+Obsidian/CSS+snippets",
+        "source_urls": [
+          "https://help.obsidian.md/Extending+Obsidian/CSS+snippets"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "CSS snippets provide targeted visual customization using stylesheet rules stored in the vault configuration area.",
+        "keywords": [
+          "css",
+          "customization",
+          "appearance",
+          "snippets"
+        ],
+        "entities": [
+          "CSS Snippet",
+          "Vault Configuration"
+        ],
+        "settings": [
+          "Settings → Appearance → CSS snippets"
+        ],
+        "examples": [
+          {
+            "syntax": ".my-class { font-weight: bold; }",
+            "purpose": "Illustrate a narrowly scoped CSS rule."
+          }
+        ],
+        "version_sensitivity": "high",
+        "related_topics": [
+          "community-plugins"
+        ]
+      },
+      {
+        "id": "obsidian-uri",
+        "title": "Obsidian URI",
+        "source_url": "https://help.obsidian.md/Extending+Obsidian/Obsidian+URI",
+        "source_urls": [
+          "https://help.obsidian.md/Extending+Obsidian/Obsidian+URI"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Obsidian URI provides URL-style actions that can open Obsidian and target vaults, notes or supported operations from outside the application.",
+        "keywords": [
+          "uri",
+          "automation",
+          "deep links",
+          "integration"
+        ],
+        "entities": [
+          "Obsidian URI",
+          "Vault",
+          "Note"
+        ],
+        "examples": [
+          {
+            "syntax": "obsidian://open?vault=Vault&file=Note",
+            "purpose": "Illustrate the general deep-link pattern for opening vault content."
+          }
+        ],
+        "related_topics": [
+          "internal-links",
+          "command-palette"
+        ]
+      },
+      {
+        "id": "backup-vault",
+        "title": "Back up your Obsidian files",
+        "source_url": "https://help.obsidian.md/Files+and+folders/Back+up+your+Obsidian+files",
+        "source_urls": [
+          "https://help.obsidian.md/Files+and+folders/Back+up+your+Obsidian+files"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "A resilient Obsidian setup includes an independent backup of vault files in addition to synchronization or short-term recovery mechanisms.",
+        "keywords": [
+          "backup",
+          "data safety",
+          "vault",
+          "recovery"
+        ],
+        "entities": [
+          "Backup",
+          "Vault"
+        ],
+        "related_topics": [
+          "file-recovery",
+          "obsidian-sync",
+          "getting-started-vault"
+        ]
+      },
+      {
+        "id": "import-notes",
+        "title": "Import notes",
+        "source_url": "https://help.obsidian.md/import",
+        "source_urls": [
+          "https://help.obsidian.md/import"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Obsidian provides migration and import workflows for bringing content from other note-taking systems into a Markdown-oriented vault.",
+        "keywords": [
+          "import",
+          "migration",
+          "markdown",
+          "attachments"
+        ],
+        "entities": [
+          "Importer",
+          "Note",
+          "Attachment"
+        ],
+        "version_sensitivity": "medium",
+        "related_topics": [
+          "manage-files",
+          "attachments",
+          "internal-links",
+          "properties"
+        ]
+      },
+      {
+        "id": "web-viewer",
+        "title": "Web viewer",
+        "source_url": "https://help.obsidian.md/Plugins/Web+viewer",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Web+viewer"
+        ],
+        "evidence_type": "documented_fact",
+        "summary": "Web Viewer is a newer built-in web-content viewing workflow where available; exact behavior and availability are version-sensitive.",
+        "keywords": [
+          "web viewer",
+          "browser",
+          "web",
+          "core plugin"
+        ],
+        "entities": [
+          "Web Viewer",
+          "Core Plugin"
+        ],
+        "version_sensitivity": "high",
+        "verification_status": "requires_current_page_verification",
+        "related_topics": [
+          "bookmarks",
+          "workspaces"
+        ]
+      }
+    ],
+    "entities": [
+      {
+        "id": "entity-vault",
+        "name": "Vault",
+        "type": "core_concept",
+        "source_urls": [
+          "https://help.obsidian.md/Getting+started/Create+a+vault"
+        ]
+      },
+      {
+        "id": "entity-note",
+        "name": "Note",
+        "type": "core_concept",
+        "source_urls": [
+          "https://help.obsidian.md/Files+and+folders/Manage+notes"
+        ]
+      },
+      {
+        "id": "entity-property",
+        "name": "Property",
+        "type": "metadata_concept",
+        "source_urls": [
+          "https://help.obsidian.md/Editing+and+formatting/Properties"
+        ]
+      },
+      {
+        "id": "entity-tag",
+        "name": "Tag",
+        "type": "metadata_concept",
+        "source_urls": [
+          "https://help.obsidian.md/Editing+and+formatting/Tags"
+        ]
+      },
+      {
+        "id": "entity-internal-link",
+        "name": "Internal Link",
+        "type": "relationship_concept",
+        "source_urls": [
+          "https://help.obsidian.md/Linking+notes+and+files/Internal+links"
+        ]
+      },
+      {
+        "id": "entity-backlink",
+        "name": "Backlink",
+        "type": "relationship_concept",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Backlinks"
+        ]
+      },
+      {
+        "id": "entity-attachment",
+        "name": "Attachment",
+        "type": "file_concept",
+        "source_urls": [
+          "https://help.obsidian.md/Files+and+folders/Manage+attachments"
+        ]
+      },
+      {
+        "id": "entity-template",
+        "name": "Template",
+        "type": "workflow_concept",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Templates"
+        ]
+      },
+      {
+        "id": "entity-canvas",
+        "name": "Canvas",
+        "type": "structured_workspace",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Canvas"
+        ]
+      },
+      {
+        "id": "entity-base",
+        "name": "Base",
+        "type": "structured_view",
+        "source_urls": [
+          "https://help.obsidian.md/Bases"
+        ]
+      },
+      {
+        "id": "entity-core-plugin",
+        "name": "Core Plugin",
+        "type": "extension_type",
+        "source_urls": [
+          "https://obsidian.md/help/"
+        ]
+      },
+      {
+        "id": "entity-community-plugin",
+        "name": "Community Plugin",
+        "type": "extension_type",
+        "source_urls": [
+          "https://help.obsidian.md/Extending+Obsidian/Community+plugins"
+        ]
+      },
+      {
+        "id": "entity-sync",
+        "name": "Obsidian Sync",
+        "type": "official_service",
+        "source_urls": [
+          "https://help.obsidian.md/Obsidian+Sync"
+        ]
+      },
+      {
+        "id": "entity-publish",
+        "name": "Obsidian Publish",
+        "type": "official_service",
+        "source_urls": [
+          "https://help.obsidian.md/Obsidian+Publish"
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "from": "Vault",
+        "relationship": "contains",
+        "to": "Note",
+        "source_urls": [
+          "https://help.obsidian.md/Getting+started/Create+a+vault"
+        ]
+      },
+      {
+        "from": "Vault",
+        "relationship": "contains",
+        "to": "Attachment",
+        "source_urls": [
+          "https://help.obsidian.md/Files+and+folders/Manage+attachments"
+        ]
+      },
+      {
+        "from": "Note",
+        "relationship": "has",
+        "to": "Property",
+        "source_urls": [
+          "https://help.obsidian.md/Editing+and+formatting/Properties"
+        ]
+      },
+      {
+        "from": "Note",
+        "relationship": "can_have",
+        "to": "Tag",
+        "source_urls": [
+          "https://help.obsidian.md/Editing+and+formatting/Tags"
+        ]
+      },
+      {
+        "from": "Note",
+        "relationship": "links_to",
+        "to": "Note",
+        "source_urls": [
+          "https://help.obsidian.md/Linking+notes+and+files/Internal+links"
+        ]
+      },
+      {
+        "from": "Backlink",
+        "relationship": "represents_inbound_reference_to",
+        "to": "Note",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Backlinks"
+        ]
+      },
+      {
+        "from": "Base",
+        "relationship": "uses",
+        "to": "Property",
+        "source_urls": [
+          "https://help.obsidian.md/Bases"
+        ]
+      },
+      {
+        "from": "Template",
+        "relationship": "inserts_content_into",
+        "to": "Note",
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Templates"
+        ]
+      },
+      {
+        "from": "Obsidian Sync",
+        "relationship": "synchronizes",
+        "to": "Vault",
+        "source_urls": [
+          "https://help.obsidian.md/Obsidian+Sync"
+        ]
+      },
+      {
+        "from": "Obsidian Publish",
+        "relationship": "publishes_selected_content_from",
+        "to": "Vault",
+        "source_urls": [
+          "https://help.obsidian.md/Obsidian+Publish"
+        ]
+      }
+    ],
+    "workflows": [
+      {
+        "id": "workflow-create-vault",
+        "name": "Create or open a vault",
+        "steps": [
+          {
+            "order": 1,
+            "action": "Choose or create a folder to use as a vault.",
+            "source_url": "https://help.obsidian.md/Getting+started/Create+a+vault"
+          },
+          {
+            "order": 2,
+            "action": "Open the folder as an Obsidian vault.",
+            "source_url": "https://help.obsidian.md/Getting+started/Create+a+vault"
+          }
+        ],
+        "source_urls": [
+          "https://help.obsidian.md/Getting+started/Create+a+vault"
+        ]
+      },
+      {
+        "id": "workflow-link-notes",
+        "name": "Link notes",
+        "steps": [
+          {
+            "order": 1,
+            "action": "Create an internal link to a note, heading, or block.",
+            "source_url": "https://help.obsidian.md/Linking+notes+and+files/Internal+links"
+          },
+          {
+            "order": 2,
+            "action": "Use backlinks or outgoing links to inspect the resulting relationship.",
+            "source_url": "https://help.obsidian.md/Plugins/Backlinks"
+          }
+        ],
+        "source_urls": [
+          "https://help.obsidian.md/Linking+notes+and+files/Internal+links",
+          "https://help.obsidian.md/Plugins/Backlinks"
+        ]
+      },
+      {
+        "id": "workflow-daily-notes",
+        "name": "Use Daily Notes with Templates",
+        "steps": [
+          {
+            "order": 1,
+            "action": "Configure the Daily Notes plugin.",
+            "source_url": "https://help.obsidian.md/Plugins/Daily+notes"
+          },
+          {
+            "order": 2,
+            "action": "Optionally configure a template.",
+            "source_url": "https://help.obsidian.md/Plugins/Templates"
+          },
+          {
+            "order": 3,
+            "action": "Open or create the daily note for the current date.",
+            "source_url": "https://help.obsidian.md/Plugins/Daily+notes"
+          }
+        ],
+        "source_urls": [
+          "https://help.obsidian.md/Plugins/Daily+notes",
+          "https://help.obsidian.md/Plugins/Templates"
+        ]
+      }
+    ],
+    "limitations": [
+      {
+        "id": "lim-coverage",
+        "type": "coverage",
+        "severity": "material",
+        "details": "The completed research pass did not individually materialize every English Help page, so this single-file artifact must not be treated as a complete mirror.",
+        "source_urls": [
+          "https://obsidian.md/help/",
+          "https://github.com/obsidianmd/obsidian-help"
+        ]
+      },
+      {
+        "id": "lim-version-sensitive",
+        "type": "version_sensitivity",
+        "severity": "medium",
+        "details": "Newer capabilities such as Bases and Web Viewer may change more quickly than long-standing Markdown and linking behavior.",
+        "source_urls": [
+          "https://help.obsidian.md/Bases",
+          "https://help.obsidian.md/Plugins/Web+viewer"
+        ]
+      },
+      {
+        "id": "lim-sync-not-backup",
+        "type": "data_safety",
+        "severity": "important",
+        "details": "Synchronization and independent backup address different risks; Sync should not be treated as the only backup mechanism.",
+        "source_urls": [
+          "https://help.obsidian.md/Obsidian+Sync",
+          "https://help.obsidian.md/Files+and+folders/Back+up+your+Obsidian+files"
+        ]
+      }
+    ],
+    "rag": {
+      "recommended_retrieval_unit": "topic",
+      "recommended_index_fields": [
+        "id",
+        "title",
+        "summary",
+        "keywords",
+        "entities",
+        "commands",
+        "settings",
+        "related_topics",
+        "source_urls"
+      ],
+      "embedding_text_template": "{title}\n{summary}\nKeywords: {keywords}\nEntities: {entities}\nCommands: {commands}\nSettings: {settings}",
+      "retrieval_rules": [
+        "Prefer exact topic matches before relationship expansion.",
+        "Expand related_topics by at most one hop unless the query requires broader context.",
+        "Always return source_urls with grounded answers.",
+        "Do not turn recommendations or examples into documented product behavior.",
+        "For version-sensitive topics, retrieve the current official page before answering version-specific questions."
+      ]
+    },
+    "validation": {
+      "json_valid": true,
+      "machine_validated": true,
+      "encoding": "UTF-8",
+      "source_urls_preserved": true,
+      "language": "en",
+      "exhaustive_coverage": false
+    }
+  }
+}
