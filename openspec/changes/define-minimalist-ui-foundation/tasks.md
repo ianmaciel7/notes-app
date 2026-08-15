@@ -1,6 +1,6 @@
 ## 1. Foundation Audit
 
-- [x] 1.1 Inspect the current starter UI, active OpenSpec changes, the old visual workspace guidance, and the MVP product direction.
+- [x] 1.1 Inspect the current starter UI, active OpenSpec changes, the old visual workspace guidance, and the object-and-study product direction.
 - [x] 1.2 Separate product-domain changes from the staged visual-delivery sequence.
 - [x] 1.3 Remove empty ghost change trees and normalize the completed CI change metadata.
 

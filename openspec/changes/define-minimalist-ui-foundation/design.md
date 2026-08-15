@@ -1,6 +1,6 @@
 ## Context
 
-The active branch contains a default Next.js starter rather than an accepted product workspace. The `old` branch demonstrates a detailed Capacities-inspired shell, while `mvp` demonstrates a more functional object-and-study workflow. Neither should be imported wholesale: the old visual change is too broad for incremental review, and the MVP surface should not define the product as a dashboard or study-only application.
+The active branch contains a default Next.js starter rather than an accepted product workspace. The `old` branch demonstrates a detailed Capacities-inspired shell, while `object-and-study` demonstrates a more functional workflow. Neither should be imported wholesale: the old visual change is too broad for incremental review, and the object-and-study surface should not define the product as a dashboard or study-only application.
 
 The user wants to review and confirm small visual stages in this order: design foundation, sidebar, remaining shell layout, then progressively smaller component groups.
 
