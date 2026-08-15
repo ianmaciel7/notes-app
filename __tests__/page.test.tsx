@@ -7,26 +7,24 @@ afterEach(cleanup);
 test("renders the starter page with primary navigation targets", () => {
   render(<Home />);
 
-  expect(screen.getByRole("img", { name: "Next.js logo" })).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Calendário" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
   expect(
-    screen.getByRole("heading", {
-      name: /to get started, edit the page\.tsx file/i,
-    }),
+    screen.getByRole("heading", { name: "11 De Agosto De 2026" }),
   ).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: "Templates" })).toHaveAttribute(
-    "href",
-    expect.stringContaining("vercel.com/templates"),
-  );
-  expect(screen.getByRole("link", { name: "Learning" })).toHaveAttribute(
-    "href",
-    expect.stringContaining("nextjs.org/learn"),
-  );
-  expect(screen.getByRole("link", { name: /deploy now/i })).toHaveAttribute(
-    "href",
-    expect.stringContaining("vercel.com/new"),
-  );
-  expect(screen.getByRole("link", { name: "Documentation" })).toHaveAttribute(
-    "href",
-    expect.stringContaining("nextjs.org/docs"),
-  );
+  expect(screen.getAllByText("AUDIT-OK")).toHaveLength(2);
+  expect(
+    screen.getByPlaceholderText(
+      "Pergunte algo. @ para mencionar qualquer objeto.",
+    ),
+  ).toBeInTheDocument();
+  expect(screen.getAllByRole("article")).toHaveLength(12);
+  expect(
+    screen.queryByRole("link", { name: "Documentação" }),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Enviar mensagem" }),
+  ).toBeDisabled();
 });

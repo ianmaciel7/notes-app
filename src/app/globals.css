@@ -1,26 +1,162 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/inter-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/inter-medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/inter-semibold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/inter-bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/inter-italic.woff2") format("woff2");
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --workspace: oklch(0.9856 0.0016 67);
+  --workspace-surface: oklch(1 0.0001 263.28);
+  --workspace-hover: oklch(0.9676 0.0016 67.02);
+  --workspace-selected: oklch(0.955 0.002 67);
+  --workspace-border: oklch(0.9163 0.0017 67.07);
+  --workspace-text: oklch(0.2191 0.0058 285.84);
+  --workspace-muted: oklch(0.3887 0.0052 301.05);
+  --workspace-subtle: oklch(0.5725 0.0051 33.89);
+  --workspace-focus: oklch(0.54 0.14 250);
+  --object-blue: oklch(0.54 0.14 250);
+  --object-blue-soft: oklch(0.94 0.035 250);
+  --object-violet: oklch(0.58 0.13 305);
+  --object-violet-soft: oklch(0.95 0.03 305);
+  --object-pink: oklch(0.65 0.17 350);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-workspace: var(--workspace);
+  --color-workspace-surface: var(--workspace-surface);
+  --color-workspace-hover: var(--workspace-hover);
+  --color-workspace-selected: var(--workspace-selected);
+  --color-workspace-border: var(--workspace-border);
+  --color-workspace-text: var(--workspace-text);
+  --color-workspace-muted: var(--workspace-muted);
+  --color-workspace-subtle: var(--workspace-subtle);
+  --color-workspace-focus: var(--workspace-focus);
+  --color-object-blue: var(--object-blue);
+  --color-object-blue-soft: var(--object-blue-soft);
+  --color-object-violet: var(--object-violet);
+  --color-object-violet-soft: var(--object-violet-soft);
+  --color-object-pink: var(--object-pink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --shadow-workspace-panel: 0 1px 3px rgb(25 25 24 / 6%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme="dark"] {
+  --workspace: #1f1f1e;
+  --workspace-surface: #282827;
+  --workspace-hover: #373735;
+  --workspace-selected: #3d4142;
+  --workspace-border: #444442;
+  --workspace-text: #f0f0ed;
+  --workspace-muted: #b9b9b4;
+  --workspace-subtle: #858581;
+  --workspace-focus: #8db6e8;
+  --object-blue: #8db6e8;
+  --object-blue-soft: #263b55;
+  --object-violet: #c4a7e7;
+  --object-violet-soft: #40354f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--workspace);
+  color: var(--workspace-text);
+  font-family:
+    Inter, var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0;
+}
+
+.workspace-scrollbar {
+  scrollbar-color: color-mix(in oklch, var(--workspace-subtle) 22%, transparent)
+    transparent;
+  scrollbar-width: thin;
+}
+
+.workspace-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.workspace-scrollbar::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--workspace-subtle) 22%, transparent);
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-visual-audit="true"] *,
+  [data-visual-audit="true"] *::before,
+  [data-visual-audit="true"] *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+  }
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
 }
