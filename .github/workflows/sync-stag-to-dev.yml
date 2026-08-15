@@ -1,0 +1,119 @@
+name: Sync stag to dev
+
+on:
+  push:
+    branches:
+      - stag
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: sync-stag-to-dev
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: Open stag to dev sync PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout stag
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: stag
+
+      - name: Inspect branch state
+        id: inspect
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          if ! git ls-remote --exit-code --heads origin dev >/dev/null 2>&1; then
+            echo "dev_exists=false" >> "$GITHUB_OUTPUT"
+            echo "needs_sync=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=dev branch missing::origin/dev does not exist yet; skipping stag to dev sync PR creation."
+            exit 0
+          fi
+
+          git fetch --no-tags origin \
+            +refs/heads/dev:refs/remotes/origin/dev \
+            +refs/heads/stag:refs/remotes/origin/stag
+
+          missing_patches="$(git cherry origin/dev origin/stag | awk '$1 == "+" { count++ } END { print count + 0 }')"
+          echo "dev_exists=true" >> "$GITHUB_OUTPUT"
+          echo "missing_patches=$missing_patches" >> "$GITHUB_OUTPUT"
+
+          if [ "$missing_patches" -eq 0 ]; then
+            echo "needs_sync=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=No sync needed::No non-equivalent patches from stag are missing in dev."
+            exit 0
+          fi
+
+          existing_pr="$(gh pr list \
+            --repo "$REPOSITORY" \
+            --base dev \
+            --head stag \
+            --state open \
+            --json number \
+            --jq '.[0].number // ""')"
+
+          echo "needs_sync=true" >> "$GITHUB_OUTPUT"
+          echo "existing_pr=$existing_pr" >> "$GITHUB_OUTPUT"
+
+          if [ -n "$existing_pr" ]; then
+            echo "::notice title=Sync PR already open::PR #$existing_pr already syncs stag into dev."
+            exit 0
+          fi
+
+          if git merge-tree --write-tree origin/dev origin/stag >/tmp/stag-dev-merge-tree 2>/tmp/stag-dev-merge-tree.err; then
+            echo "has_conflicts=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_conflicts=true" >> "$GITHUB_OUTPUT"
+            echo "::warning title=Manual conflict resolution likely::Git detected conflicts when previewing stag into dev."
+          fi
+
+      - name: Create sync pull request
+        if: steps.inspect.outputs.needs_sync == 'true' && steps.inspect.outputs.existing_pr == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          MISSING_PATCHES: ${{ steps.inspect.outputs.missing_patches }}
+          HAS_CONFLICTS: ${{ steps.inspect.outputs.has_conflicts }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          conflict_note="No conflicts detected by merge-tree preview."
+          if [ "$HAS_CONFLICTS" = "true" ]; then
+            conflict_note="Potential conflicts detected by merge-tree preview. Leave this PR open and resolve manually."
+          fi
+
+          {
+            echo "## Summary"
+            echo
+            echo "This automated PR keeps \`dev\` aligned after a push or merge into \`stag\`."
+            echo
+            echo "- Source branch: \`stag\`"
+            echo "- Target branch: \`dev\`"
+            echo "- Source SHA: \`$SOURCE_SHA\`"
+            echo "- Missing non-equivalent patch count: \`$MISSING_PATCHES\`"
+            echo "- Conflict preview: $conflict_note"
+            echo
+            echo "## Merge policy"
+            echo
+            echo "Do not merge this PR until the normal CI checks pass. If conflicts are reported, resolve them manually in the PR flow. This workflow never pushes, force-pushes, or merges directly into \`dev\`."
+          } > /tmp/sync-pr-body.md
+
+          gh pr create \
+            --repo "$REPOSITORY" \
+            --base dev \
+            --head stag \
+            --title "chore: sync stag into dev" \
+            --body-file /tmp/sync-pr-body.md

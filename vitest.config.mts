@@ -14,6 +14,12 @@ export default defineConfig({
       reporter: ["text", "json-summary", "lcov"],
       include: ["src/**/*.{ts,tsx}"],
       exclude: ["src/app/**/{layout,loading,not-found,error,global-error}.tsx"],
+      thresholds: {
+        statements: 80,
+        branches: 70,
+        functions: 80,
+        lines: 80,
+      },
     },
   },
 });

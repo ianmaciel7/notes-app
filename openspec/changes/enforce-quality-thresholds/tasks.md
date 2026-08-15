@@ -1,0 +1,8 @@
+- [x] Research current official tool guidance for coverage thresholds, complexity, and Lefthook AI hooks.
+- [x] Add Vitest coverage thresholds.
+- [x] Add a cyclomatic complexity gate.
+- [x] Enable Biome cognitive complexity.
+- [x] Wire the quality gates into local scripts and CI.
+- [x] Add a shared Lefthook AI hook configuration.
+- [x] Add project-local Lefthook installation scripts and pnpm build-script policy.
+- [x] Document the policy and validate the implementation.
