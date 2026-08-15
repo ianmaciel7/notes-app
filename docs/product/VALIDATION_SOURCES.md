@@ -1,10 +1,10 @@
-# MVP Validation Sources
+# Validation Sources
 
 ## Purpose
 
 This guide records the documents selected to validate the first object-studio workflow. The dataset is specific to the owner's first real use case; it does not define the product as an assessment-only or DATAPREV-only application.
 
-Versioned reference and acceptance copies are stored under `data/mvp-validation-sources`. Original files remain under `C:\Users\ianma\Downloads`.
+Versioned reference and acceptance copies are stored under `data/validation-sources`. Original files remain under `C:\Users\ianma\Downloads`.
 
 These files are documentation and acceptance fixtures only. The application must not scan or auto-ingest this directory, and runtime uploads must never be written into it. During acceptance testing, a fixture is selected in the browser and uploaded through the same PDF/text flow available for arbitrary user documents; the runtime copy is stored under the configured upload directory.
 
@@ -27,13 +27,13 @@ Use this smallest set first to validate the complete flow from browser upload to
 The acceptance goal is **DATAPREV 2026, Perfil 3 - Desenvolvimento de Software**, with target date **11 October 2026**, target question volume **70**, and study days **Monday through Friday**. The target edital defines that goal and scope. The related PPSA development proof is a separate 60-question extraction fixture and must retain its related, non-DATAPREV classification.
 
 1. Target scope:
-   `data\mvp-validation-sources\target\2026-dataprev\edital-001.pdf`
+   `data\validation-sources\target\2026-dataprev\edital-001.pdf`
 2. Related proof:
-   `data\mvp-validation-sources\related\2025-ppsa\analista-ti-desenvolvimento-sistemas\prova.pdf`
+   `data\validation-sources\related\2025-ppsa\analista-ti-desenvolvimento-sistemas\prova.pdf`
 3. Historical DATAPREV proof:
-   `data\mvp-validation-sources\historical\2024-fgv-dataprev-desenvolvimento-software\prova-tipo-1.pdf`
+   `data\validation-sources\historical\2024-fgv-dataprev-desenvolvimento-software\prova-tipo-1.pdf`
 4. Answer validation:
-   `data\mvp-validation-sources\historical\2024-fgv-dataprev-desenvolvimento-software\gabarito-definitivo.pdf`
+   `data\validation-sources\historical\2024-fgv-dataprev-desenvolvimento-software\gabarito-definitivo.pdf`
 
 The proof document must be used to generate question drafts before its answer key is consulted. The answer key validates or corrects the extracted answer during review; it must not silently overwrite a user-approved answer.
 
@@ -49,7 +49,7 @@ The related source set comes from PPSA Edital 001/2025. Use all five profiles to
 | IT Governance | `related\2025-ppsa\analista-ti-governanca-ti\prova.pdf` | Cross-area topic and question extraction |
 | IT Projects | `related\2025-ppsa\analista-ti-projetos-ti\prova.pdf` | Cross-area topic and question extraction |
 
-Paths in this and later sections are relative to `data\mvp-validation-sources` unless stated otherwise.
+Paths in this and later sections are relative to `data\validation-sources` unless stated otherwise.
 
 ## Historical DATAPREV Corpus
 
@@ -93,7 +93,7 @@ Excluded material may later test the generic object model with other workflows, 
 
 ## Completion Evidence
 
-The dataset has served its MVP purpose when the owner can:
+The dataset has served its validation purpose when the owner can:
 
 - upload and register the DATAPREV edital and related sources as connected objects;
 - distinguish target, related, historical, excluded, and duplicate import attempts;
