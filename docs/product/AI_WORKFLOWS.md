@@ -4,15 +4,15 @@
 
 Gemini is a core product capability. It should convert study material into structured objects while keeping the user in control of what gets saved.
 
-The MVP should treat AI output as suggestions, not truth. Gemini must return structured output validated against application-owned schemas, and generated objects must pass through a review step before they become part of the object graph.
+The initial product foundation should treat AI output as suggestions, not truth. Gemini must return structured output validated against application-owned schemas, and generated objects must pass through a review step before they become part of the object graph.
 
-## Supported MVP Inputs
+## Supported Inputs
 
 - User-uploaded PDFs with a usable text layer.
 - User-uploaded UTF-8 text containing a syllabus, exam guide, certification objective, course outline, proof, lesson, summary, or custom study scope.
 - Versioned validation PDFs only when the user explicitly uploads them through the browser acceptance flow.
 
-Perfect PDF parsing and OCR are not MVP requirements. The first implementation should validate and store uploads locally, extract text from PDFs with a usable text layer, preserve page boundaries, and mark image-only or malformed documents for OCR or manual input.
+Perfect PDF parsing and OCR are not first-release requirements. The first implementation should validate and store uploads locally, extract text from PDFs with a usable text layer, preserve page boundaries, and mark image-only or malformed documents for OCR or manual input.
 
 ## Document Processing Pipeline
 

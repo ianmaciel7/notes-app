@@ -5,7 +5,7 @@
 - Every meaningful item should be an object, not a loose file.
 - Objects should have typed properties, tags, views, and relationships.
 - Object types should be customizable. Study Goal, Study Topic, Question, Flashcard, and Study Session are the first workflow pack, not the product boundary.
-- The MVP should support a generic object studio first and validate it through a study workflow.
+- The initial product foundation should support a generic object studio first and validate it through a study workflow.
 - Filters must work from object properties, not from presentation-only labels.
 - Tags connect themes across object types. Saved views, manual collections, and advanced queries follow after the first two-week slice.
 - Object types, property definitions, and objects have immutable identifiers. Editable names are presentation, not identity.
@@ -15,7 +15,7 @@
 
 The product should be an object studio where each object type can define its own structure.
 
-MVP-supported customization should include:
+initial product foundation-supported customization should include:
 
 - custom text, number, date, boolean, single-select, multi-select, and object-link properties;
 - relationship properties that link one object type to another;
@@ -172,7 +172,7 @@ Question attempts and flashcard reviews are immutable internal activity records.
 
 Analytics are derived from these records so repeated practice never overwrites history.
 
-## MVP Filters
+## initial product foundation Filters
 
 The first version should support filters for:
 
@@ -192,7 +192,7 @@ The first version should support filters for:
 
 ## Future Objects
 
-These are not MVP objects unless a study-critical need appears:
+These are not initial product foundation objects unless a study-critical need appears:
 
 - Note
 - Source

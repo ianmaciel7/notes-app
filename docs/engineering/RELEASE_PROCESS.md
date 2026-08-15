@@ -41,7 +41,7 @@ A release candidate should have:
 
 Before the first public release, use simple internal milestones:
 
-- `0.1.0`: personal study MVP
+- `0.1.0`: personal study foundation
 - `0.2.0`: improved ingestion and study analytics
 - `0.3.0`: richer object relationships and graph behavior
 

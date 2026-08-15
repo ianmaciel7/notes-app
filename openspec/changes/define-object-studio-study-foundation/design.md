@@ -1,6 +1,6 @@
 ## Overview
 
-The MVP should ship as a single-user personal object studio inside the existing Next.js App Router application. It should prioritize configurable objects, clear visual hierarchy, and relationships over folder/file note-taking. Study is the first packaged workflow, not the product boundary.
+The initial product foundation should ship as a single-user personal object studio inside the existing Next.js App Router application. It should prioritize configurable objects, clear visual hierarchy, and relationships over folder/file note-taking. Study is the first packaged workflow, not the product boundary.
 
 For the first local deployment, structured application data should be persisted in SQLite behind a server-only DAL and uploaded binaries should be persisted through a filesystem-backed blob-storage adapter. Runtime data defaults to ignored paths under `var/`; the versioned validation corpus is never used as runtime storage. "Local" means a single-user application and local persistence, not an offline browser application or a promise of durable hosted persistence. These providers can be replaced later without changing feature code.
 
@@ -8,7 +8,7 @@ The implementation should avoid unnecessary service layers until persistence, au
 
 ## Architecture Boundary
 
-The MVP should follow current Next.js App Router guidance:
+The initial product foundation should follow current Next.js App Router guidance:
 
 - prefer Server Components for server data reads;
 - use Client Components only for interactivity, browser APIs, effects, or local UI state;
@@ -21,7 +21,7 @@ Application data should pass through a server-side DAL. The DAL should hide SQLi
 
 Infrastructure must remain replaceable. Provider-specific imports such as Firebase Admin, AWS SDK, Cloudflare SDK, or `node:fs` should stay inside adapters, not UI or feature modules.
 
-Files and blobs use a `BlobStorage` contract that stores, opens, and removes content by opaque storage key. The MVP selects a local-filesystem adapter in one composition root. Only the adapter may import filesystem APIs; features and UI must not depend on physical paths.
+Files and blobs use a `BlobStorage` contract that stores, opens, and removes content by opaque storage key. The initial product foundation selects a local-filesystem adapter in one composition root. Only the adapter may import filesystem APIs; features and UI must not depend on physical paths.
 
 ## Domain Shape
 
@@ -39,7 +39,7 @@ Question attempts and flashcard reviews should be immutable activity records rat
 
 ## Customization Foundation
 
-The MVP should treat the starter study objects as configured object types. The user should be able to extend them with custom properties and add future object types without changing application code for every new workflow.
+The initial product foundation should treat the starter study objects as configured object types. The user should be able to extend them with custom properties and add future object types without changing application code for every new workflow.
 
 Object types, property definitions, and objects need immutable identifiers. Property definitions also need stable semantic keys that are independent from editable display names. Workflow-required properties may be renamed visually but cannot be deleted or changed to an incompatible type while the workflow is enabled.
 
@@ -92,7 +92,7 @@ Gemini must be isolated behind a server-only provider adapter. `GEMINI_API_KEY` 
 
 ## Scheduling
 
-Scheduling should be deterministic in the MVP. Gemini can assist with explanations or generation, but daily planning and spaced repetition should be computed from stored data:
+Scheduling should be deterministic in the initial product foundation. Gemini can assist with explanations or generation, but daily planning and spaced repetition should be computed from stored data:
 
 - target date;
 - remaining questions;
@@ -109,6 +109,6 @@ Acceptance uses DATAPREV 2026, Perfil 3 - Desenvolvimento de Software, with a 20
 
 Use unit tests for semantic-property protection, scheduling inputs, filters, attempt analytics, and AI-output validation. Use the FSRS library's behavior rather than reimplementing its algorithm. Use component or browser-level checks for the complete capture-to-review and study-session workflows once the UI exists.
 
-Use contract tests for storage adapters if file/blob support ships in the MVP. Add import-boundary enforcement only when the project contains provider-specific infrastructure worth protecting.
+Use contract tests for storage adapters if file/blob support ships in the initial product foundation. Add import-boundary enforcement only when the project contains provider-specific infrastructure worth protecting.
 
 OpenSpec validation should run for this change before implementation is considered ready.

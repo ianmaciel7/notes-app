@@ -1,8 +1,8 @@
-# MVP
+# Object Studio Foundation
 
 ## Product Promise
 
-The MVP is a personal object studio that starts with a study workflow, but is not limited to study. It should let the user create customizable object types, properties, relations, tags, and filtered views, then use those objects for the first real workflow: turning syllabi, exam guides, past exams, certification objectives, course material, and study notes into structured study objects.
+The initial product foundation is a personal object studio that starts with a study workflow, but is not limited to study. It should let the user create customizable object types, properties, relations, tags, and filtered views, then use those objects for the first real workflow: turning syllabi, exam guides, past exams, certification objectives, course material, and study notes into structured study objects.
 
 The first promise is:
 
@@ -10,7 +10,7 @@ The first promise is:
 Create object types and properties, connect them through structured relations, then use a ready-made study workflow to turn material into topics, questions, flashcards, reviews, and a daily plan.
 ```
 
-The product direction is a Portuguese-first, object-centric knowledge studio inspired by Capacities and Readwise. The MVP validates that direction through one useful workflow, but the product must not be framed or implemented as only a study app.
+The product direction is a Portuguese-first, object-centric knowledge studio inspired by Capacities and Readwise. The initial product foundation validates that direction through one useful workflow, but the product must not be framed or implemented as only a study app.
 
 ## Initial User
 
@@ -30,7 +30,7 @@ The primary pain is not generic note organization. The primary pain is knowing w
 8. Study through questions and flashcards.
 9. Track errors, correct answers, overdue reviews, and weak topics.
 
-## MVP Scope
+## Foundation Scope
 
 - Generic object studio foundation with configurable object types, stable property definitions, tags, relations, and property-based list views.
 - First workflow pack for Study Goal, Study Topic, Question, Flashcard, and Study Session.
@@ -63,7 +63,7 @@ The primary pain is not generic note organization. The primary pain is knowing w
 
 ## Success Criteria
 
-The MVP is successful when the owner can use it as a generic object workspace and also complete the first study workflow for at least one assessment goal:
+The foundation is successful when the owner can use it as a generic object workspace and also complete the first study workflow for at least one assessment goal:
 
 - create and edit object types with custom properties;
 - create a useful non-study object type without changing application code;
@@ -77,10 +77,10 @@ The MVP is successful when the owner can use it as a generic object workspace an
 
 ## Product Boundaries
 
-The MVP should feel fast, clear, and focused. It should not look like a folder/file notes app, a narrow flashcard app, or a KPI dashboard. The interface should foreground objects, properties, relationships, filters, views, and next actions.
+The foundation should feel fast, clear, and focused. It should not look like a folder/file notes app, a narrow flashcard app, or a KPI dashboard. The interface should foreground objects, properties, relationships, filters, views, and next actions.
 
-The MVP should not postpone the object model. It can ship with a limited starter set of object types, but those types should already behave like configurable object types with stable properties, relationships, tags, and property-based views. Workflow-required properties use stable semantic keys so visual customization cannot silently break behavior.
+The foundation should not postpone the object model. It can ship with a limited starter set of object types, but those types should already behave like configurable object types with stable properties, relationships, tags, and property-based views. Workflow-required properties use stable semantic keys so visual customization cannot silently break behavior.
 
-The study workflow is the first validation path, not the product boundary. Future object-studio behavior belongs in the roadmap when it is broad, visual, or advanced, but the generic object foundation belongs in the MVP.
+The study workflow is the first validation path, not the product boundary. Future object-studio behavior belongs in the roadmap when it is broad, visual, or advanced, but the generic object foundation belongs in this foundation.
 
-The concrete documents selected for the first real validation are recorded in `docs/product/MVP_VALIDATION_SOURCES.md`. They are versioned reference and acceptance fixtures, not a product boundary or runtime document store. Acceptance testing uploads them through the same browser flow used for arbitrary supported user documents.
+The concrete documents selected for the first real validation are recorded in `docs/product/VALIDATION_SOURCES.md`. They are versioned reference and acceptance fixtures, not a product boundary or runtime document store. Acceptance testing uploads them through the same browser flow used for arbitrary supported user documents.

@@ -6,13 +6,13 @@ The application should stay idiomatic to the current Next.js App Router while ke
 
 The goal is low coupling, simple boundaries, and easy provider replacement without changing UI or business rules.
 
-## MVP Persistence Decision
+## Foundation Persistence Decision
 
-The first MVP is a single-user application running with a local SQLite database. "Local" describes the deployment and ownership model; it does not promise browser-only or offline-first persistence.
+The first product foundation is a single-user application running with a local SQLite database. "Local" describes the deployment and ownership model; it does not promise browser-only or offline-first persistence.
 
 SQLite access stays behind a server-only DAL. It uses numbered migrations, foreign keys, WAL, and transactions where workflows require atomic writes. The default database path is the ignored `var/notes-app.sqlite`, configurable through `NOTES_APP_DB_PATH`. Feature code depends on application-oriented data functions, so a later remote database can replace SQLite without changing UI components or workflow rules.
 
-Uploaded binaries are separate from SQLite and use an ignored local filesystem directory, `var/uploads` by default and configurable through `NOTES_APP_UPLOAD_DIR`. This local persistence is suitable for the single-user MVP and is not a claim of durable Firebase App Hosting or other hosted storage.
+Uploaded binaries are separate from SQLite and use an ignored local filesystem directory, `var/uploads` by default and configurable through `NOTES_APP_UPLOAD_DIR`. This local persistence is suitable for the single-user product foundation and is not a claim of durable Firebase App Hosting or other hosted storage.
 
 ## Next.js Guidance
 
@@ -55,7 +55,7 @@ export interface BlobStorage {
 }
 ```
 
-Keys are opaque to callers. The MVP adapter stores content on the local filesystem; later adapters can use Firebase, S3, Cloudflare R2, or MinIO. Provider selection belongs in one composition root.
+Keys are opaque to callers. The foundation adapter stores content on the local filesystem; later adapters can use Firebase, S3, Cloudflare R2, or MinIO. Provider selection belongs in one composition root.
 
 `POST /api/sources` is the multipart/binary upload boundary and `GET /api/sources/[id]/content` is the content-streaming boundary. Server Components do not call these handlers for ordinary reads; they call DAL functions directly. Uploaded PDF and UTF-8 text content is validated against `NOTES_APP_MAX_UPLOAD_BYTES` and its signature or encoding before registration.
 
@@ -72,7 +72,7 @@ Provider code belongs in infrastructure adapters. The rest of the app should dep
 
 ## Gemini Boundary
 
-The MVP uses a server-only Gemini adapter. Runtime configuration comes from:
+The product foundation uses a server-only Gemini adapter. Runtime configuration comes from:
 
 - `GEMINI_API_KEY`: secret API credential;
 - `GEMINI_MODEL`: current supported model identifier selected through configuration.
