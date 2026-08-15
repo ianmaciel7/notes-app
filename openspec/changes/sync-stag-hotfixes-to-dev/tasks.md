@@ -1,0 +1,7 @@
+- [x] Audit current workflows, ruleset source files, and remote branch state.
+- [x] Add a `stag -> dev` sync workflow with least-privilege permissions.
+- [x] Add duplicate-PR and concurrency protection.
+- [x] Extend CI coverage to PRs targeting `dev`.
+- [x] Add versioned protected-branch ruleset source for `dev`.
+- [x] Document the delivery path and hotfix back-sync behavior.
+- [x] Validate workflow syntax and local repository checks.

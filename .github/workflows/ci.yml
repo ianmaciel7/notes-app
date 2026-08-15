@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - stag
+      - dev
   push:
     branches:
       - main
       - stag
+      - dev
 
 permissions:
   contents: read
