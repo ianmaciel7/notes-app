@@ -21,6 +21,7 @@ because they duplicate the proposal and can drift.
 | Workstream | Change | State | Responsibility |
 | --- | --- | --- | --- |
 | Governance | `add-production-ci-cd-pipeline` | Implementation complete; archive separately | Repository delivery controls and verification gates |
+| Product baseline | `add-mvp` | Imported from `mvp`; preserved reference | Generic object studio, AI capture, study workflow, and deterministic review scheduling |
 | Product domain | `add-generic-objectives` | Planned | Desired outcomes, lifecycle, requirements, evidence, and results |
 | Product domain | `add-recurring-commitment-tracking` | Planned | Quantitative targets, periods, pace, balances, carryover, and consistency |
 | Visual foundation | `define-minimalist-ui-foundation` | Current review stage | Canonical design language and UI delivery gates |

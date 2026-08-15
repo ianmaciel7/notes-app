@@ -1,0 +1,26 @@
+- [x] Configure the acceptance goal as DATAPREV 2026, Perfil 3 - Desenvolvimento de Software, target date 2026-10-11, target volume 70, and study days Monday through Friday.
+- [x] Upload the checked-in target edital and related PPSA proof through the browser as acceptance fixtures; do not auto-ingest files from `data/`.
+- [x] Re-check the relevant current Next.js App Router docs before implementing server data, mutations, caching, or runtimes.
+- [x] Implement numbered SQLite migrations, WAL, foreign keys, and transactions behind a minimal server-only DAL; document the ignored local database lifecycle.
+- [x] Implement the `BlobStorage` contract and local-filesystem adapter using opaque keys and the configured ignored upload directory.
+- [x] Implement object types, stable property definitions, object records, tags, and object-link relations.
+- [x] Protect workflow-required semantic property keys while allowing editable display names and additional custom properties.
+- [x] Implement create/edit flows for a user-defined non-study object type and its objects.
+- [x] Implement an object-type list view with property-based filtering and sorting.
+- [x] Seed configurable Study Goal, Study Topic, Question, Flashcard, and Study Session types.
+- [x] Implement immutable Question Attempt and Flashcard Review activity records.
+- [x] Implement manual question and flashcard creation and editing.
+- [x] Implement the multipart PDF/UTF-8 text upload and content-streaming Route Handlers with size, signature/encoding, SHA-256 deduplication, metadata, provenance, and processing-status validation.
+- [x] Implement server-only page-aware PDF text extraction with stable source chunks and resumable statuses.
+- [x] Mark image-only or unusable PDFs as requiring OCR or manual text input without fabricating extracted content.
+- [x] Implement versioned structured-output schemas for scope topics, questions, answer-key entries, and flashcards.
+- [x] Implement the server-only Gemini adapter with environment validation and configurable current model identifier.
+- [x] Implement role-specific prompts and chunk generation for edital, proof, answer-key, and flashcard flows.
+- [x] Implement question-to-answer-key matching with assessment, profile, proof-version, and question-number validation.
+- [x] Implement review, source-page inspection, edit, approve, discard, partial-error, resumable-chunk, and idempotent-approval behavior.
+- [x] Implement question practice and analytics from attempt records.
+- [x] Integrate an established FSRS library and implement Again, Hard, Good, and Easy review actions.
+- [x] Implement a deterministic Today view using due reviews, daily question target, and weak-topic ranking.
+- [x] Add focused tests for source deduplication, page provenance, chunk retry, role schemas, answer matching, secret boundaries, AI output, idempotent approval, target calculation, filters, and attempt analytics.
+- [x] Add browser checks for creating a non-study type, uploading a reference fixture, and completing the capture-to-study workflow.
+- [x] Keep `AGENTS.md` architecture rules aligned, run OpenSpec strict validation, and run repository verification.
