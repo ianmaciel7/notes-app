@@ -2,15 +2,17 @@
 
 ## Product Promise
 
-The initial product foundation is a personal object studio that starts with a study workflow, but is not limited to study. It should let the user create customizable object types, properties, relations, tags, and filtered views, then use those objects for the first real workflow: turning syllabi, exam guides, past exams, certification objectives, course material, and study notes into structured study objects.
+The foundation is a personal object studio whose primary unit is a generic, behavior-light object. It starts with a study workflow, but is not limited to study. It should let the user create customizable object types, properties, relations, tags, and filtered views, then use those objects for the first real workflow: turning syllabi, exam guides, past exams, certification objectives, course material, and study notes into structured study objects.
 
-The first promise is:
+The platform promise is:
 
 ```text
 Create object types and properties, connect them through structured relations, then use a ready-made study workflow to turn material into topics, questions, flashcards, reviews, and a daily plan.
 ```
 
-The product direction is a Portuguese-first, object-centric knowledge studio inspired by Capacities and Readwise. The initial product foundation validates that direction through one useful workflow, but the product must not be framed or implemented as only a study app.
+Study Goal, Question, Objective, and Recurring Commitment are configured object types or workflow presets. They are not separate root entities that replace the generic object contract.
+
+The product direction is a Portuguese-first, object-centric knowledge studio inspired by Capacities and Readwise. The study workflow validates that direction through one useful workflow, but the product must not be framed or implemented as only a study app.
 
 ## Initial User
 

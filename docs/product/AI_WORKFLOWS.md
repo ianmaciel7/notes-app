@@ -4,6 +4,8 @@
 
 Gemini is a core product capability. It should convert study material into structured objects while keeping the user in control of what gets saved.
 
+AI-assisted capture produces drafts for configured generic object types. A study prompt, source role, or generation schema may guide the draft, but it must not create a separate content primitive outside the object contract.
+
 The initial product foundation should treat AI output as suggestions, not truth. Gemini must return structured output validated against application-owned schemas, and generated objects must pass through a review step before they become part of the object graph.
 
 ## Supported Inputs

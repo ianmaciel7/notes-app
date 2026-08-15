@@ -3,9 +3,13 @@
 ## Principles
 
 - Every meaningful item should be an object, not a loose file.
+- An object is a behavior-light record with a stable identity, object type, title, properties, optional body content, tags, and structured relations.
+- Object type is configuration that describes the shape of records; creating a new type must not require a new application entity or code path.
+- Workflow behavior belongs outside the generic record. Study, objectives, commitments, and other workflows operate on objects and activity records rather than turning each workflow into a special root entity.
+- The product is object-first rather than folder-first. Folders and files are storage or presentation concerns, not the primary domain model.
 - Objects should have typed properties, tags, views, and relationships.
 - Object types should be customizable. Study Goal, Study Topic, Question, Flashcard, and Study Session are the first workflow pack, not the product boundary.
-- The initial product foundation should support a generic object studio first and validate it through a study workflow.
+- The foundation should support a generic object studio first and validate it through a study workflow.
 - Filters must work from object properties, not from presentation-only labels.
 - Tags connect themes across object types. Saved views, manual collections, and advanced queries follow after the first two-week slice.
 - Object types, property definitions, and objects have immutable identifiers. Editable names are presentation, not identity.
@@ -15,7 +19,7 @@
 
 The product should be an object studio where each object type can define its own structure.
 
-initial product foundation-supported customization should include:
+Foundation-supported customization should include:
 
 - custom text, number, date, boolean, single-select, multi-select, and object-link properties;
 - relationship properties that link one object type to another;
@@ -26,7 +30,7 @@ Future customization can add manual collections, saved views, grouping, page lay
 
 ## Starter Objects
 
-These are the first starter object types for the initial study workflow. They should be user-visible as configurable object types, not hard-coded as the only domain the product supports.
+These are the first starter object types for the study workflow. They should be user-visible as configurable object types, not hard-coded as the only domain the product supports.
 
 ### Study Goal
 
@@ -172,7 +176,7 @@ Question attempts and flashcard reviews are immutable internal activity records.
 
 Analytics are derived from these records so repeated practice never overwrites history.
 
-## initial product foundation Filters
+## Foundation Filters
 
 The first version should support filters for:
 
@@ -190,9 +194,9 @@ The first version should support filters for:
 - overdue
 - weak topic
 
-## Future Objects
+## Potential Object Types
 
-These are not initial product foundation objects unless a study-critical need appears:
+These are valid future object types, not separate core entities:
 
 - Note
 - Source
@@ -205,4 +209,4 @@ These are not initial product foundation objects unless a study-critical need ap
 - Collection
 - Calendar Event
 
-They should be introduced through OpenSpec changes when they become part of a real workflow or when the generic object studio needs broader defaults.
+They should be introduced as configured types through OpenSpec changes when they become part of a real workflow or when the generic object studio needs broader defaults.
