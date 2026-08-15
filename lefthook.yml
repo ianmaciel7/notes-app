@@ -1,0 +1,11 @@
+ai:
+  codex:
+    Stop: agent-validate
+  claude:
+    Stop: agent-validate
+
+agent-validate:
+  jobs:
+    - run: pnpm biome:ci
+    - run: pnpm complexity
+    - run: pnpm test:coverage

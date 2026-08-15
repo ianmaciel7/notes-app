@@ -113,6 +113,38 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+  complexity:
+    name: Complexity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs:
+      - format
+      - lint
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Verify pnpm version
+        run: test "$(pnpm --version)" = "$PNPM_VERSION"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check cyclomatic complexity
+        run: pnpm complexity
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -224,6 +256,7 @@ jobs:
     needs:
       - format
       - lint
+      - complexity
       - typecheck
       - tests
       - build
@@ -234,6 +267,7 @@ jobs:
         env:
           FORMAT_RESULT: ${{ needs.format.result }}
           LINT_RESULT: ${{ needs.lint.result }}
+          COMPLEXITY_RESULT: ${{ needs.complexity.result }}
           TYPECHECK_RESULT: ${{ needs.typecheck.result }}
           TESTS_RESULT: ${{ needs.tests.result }}
           BUILD_RESULT: ${{ needs.build.result }}
@@ -244,6 +278,7 @@ jobs:
           for check in \
             "Format:$FORMAT_RESULT" \
             "Lint:$LINT_RESULT" \
+            "Complexity:$COMPLEXITY_RESULT" \
             "Typecheck:$TYPECHECK_RESULT" \
             "Tests:$TESTS_RESULT" \
             "Build:$BUILD_RESULT" \
