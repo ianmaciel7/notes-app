@@ -1,0 +1,159 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - banner [ref=f1e3]:
+      - generic [ref=f1e4]:
+        - button "Tech" [ref=f1e5]
+        - button "Recolher barra lateral" [ref=f1e7]
+      - generic [ref=f1e8]:
+        - button "Navegar para trás" [ref=f1e9]
+        - button "Navegar para frente" [ref=f1e10]
+        - 'button "ADK 2.0: referência rápida de conceitos, ferramentas e coman..." [ref=f1e11]':
+          - generic [ref=f1e12]: 🐺
+        - button "Novo documento" [ref=f1e14]
+      - navigation "Modos contextuais" [ref=f1e15]:
+        - button "Objetos internos" [ref=f1e17]
+        - button "Conteúdo relacionado" [ref=f1e19]
+        - button "Chat de IA" [ref=f1e21]
+        - button "Visualização em grafo" [pressed] [ref=f1e23]
+        - button "Adicionar modo" [ref=f1e25]
+        - button "Fechar painel" [ref=f1e26]
+        - button "Mais opções do painel" [ref=f1e27]
+    - navigation "Navegacao do workspace" [ref=f1e28]:
+      - generic [ref=f1e29]:
+        - button "Novo" [ref=f1e32]
+        - button "Buscar" [ref=f1e40]
+        - button "Calendário" [ref=f1e44]
+      - generic [ref=f1e48]:
+        - generic [ref=f1e49]:
+          - generic [ref=f1e50]: oi
+          - generic [ref=f1e54]: "1"
+        - generic [ref=f1e55]:
+          - button "Sem título" [ref=f1e56]
+          - button "Ações de Sem título"
+        - generic [ref=f1e59]:
+          - generic [ref=f1e60]: Fixados
+          - generic [ref=f1e63]: "1"
+        - generic [ref=f1e64]:
+          - button "image" [ref=f1e65]
+          - button "Ações de image"
+        - generic [ref=f1e68]:
+          - generic [ref=f1e69]: Tipos de objeto
+          - generic [ref=f1e72]: "4"
+        - button "Notas Diárias 1" [ref=f1e74]:
+          - generic [ref=f1e76]: Notas Diárias
+          - generic [ref=f1e77]: "1"
+        - button "Áreas 1" [ref=f1e79]:
+          - generic [ref=f1e81]: Áreas
+          - generic [ref=f1e82]: "1"
+        - button "Imagens 1" [ref=f1e84]:
+          - generic [ref=f1e86]: Imagens
+          - generic [ref=f1e87]: "1"
+        - button "Páginas 1" [ref=f1e89]:
+          - generic [ref=f1e91]: Páginas
+          - generic [ref=f1e92]: "1"
+        - button "Adicionar seção" [ref=f1e93]
+        - button "Lixeira" [ref=f1e95]
+        - generic [ref=f1e98]: Ajuda e recursos
+        - button "Primeiros passos" [ref=f1e100]
+        - button "Fazer uma pergunta" [ref=f1e104]
+        - button "Documentação" [ref=f1e108]
+        - button "Novidades" [ref=f1e112]
+        - button "Feedback" [ref=f1e116]
+      - generic [ref=f1e119]:
+        - button "Configurações" [ref=f1e120]
+        - button "Tema" [ref=f1e121]
+        - button "Perfil" [ref=f1e122]
+        - generic [ref=f1e123]: Pro
+        - button "Compartilhar" [ref=f1e130]
+    - main "Documento ativo" [ref=f1e131]:
+      - article [ref=f1e132]:
+        - button "Alterar emoji" [ref=f1e133] [cursor=pointer]: 🐺
+        - generic [ref=f1e134]:
+          - button "Página" [ref=f1e135]
+          - button "Coleções" [ref=f1e136]
+          - button "Personalizar" [ref=f1e137]
+          - button "Mais opções" [ref=f1e138]
+        - textbox "Título" [ref=f1e139]: "ADK 2.0: referência rápida de conceitos, ferramentas e comandos"
+        - generic [ref=f1e140]:
+          - generic [ref=f1e141]:
+            - generic [ref=f1e142]: asaa
+            - generic [ref=f1e143]:
+              - generic [ref=f1e144]: Aliases
+              - textbox "Aliases" [ref=f1e145]
+          - textbox "Descrição" [ref=f1e146]:
+            - /placeholder: Descrição...
+            - text: aaaaaaaaaaaaaaaa
+          - generic [ref=f1e147]:
+            - generic [ref=f1e151]: Etiquetas
+            - textbox "Etiquetas" [ref=f1e152]
+        - generic [ref=f1e153]:
+          - heading "ADK 2.0 — Ecossistema local de desenvolvimento" [level=2] [ref=f1e154]
+          - paragraph [ref=f1e155]: "Para desenvolver agentes localmente no ADK 2.0, o fluxo gira em torno de duas ferramentas:"
+          - list [ref=f1e156]:
+            - listitem [ref=f1e157]:
+              - strong [ref=f1e158]: "Antigravity IDE:"
+              - text: Ambiente para escrever, editar e organizar o código do agente.
+            - listitem [ref=f1e159]:
+              - strong [ref=f1e160]: "agents-cli:"
+              - text: usada para criar, testar, avaliar e publicar agentes ADK ou seja operar o ciclo de desenvolvimento do agente.
+          - heading "Estrategias de desvolvimento" [level=2] [ref=f1e161]
+          - list [ref=f1e162]:
+            - listitem [ref=f1e163]:
+              - strong [ref=f1e164]: "vibe coding:"
+              - text: facil prototipação delega implementação foco na arquitetura regras de roteamento e os requisitos de segurança.
+            - listitem [ref=f1e165]:
+              - strong [ref=f1e166]: "Spec-Driven Development (SDD):"
+              - text: A prototipação fica mais difícil no início, porque exige uma especificação arquitetural bem definida. Mas isso facilita a portabilidade do código e evita context fragmentation.
+          - generic [ref=f1e167]: specs/expense-agent.md
+          - paragraph [ref=f1e168]: Assim, o código pode ser regenerado ou restaurado com mais facilidade. O código se torna descartável; a especificação vira a bússola arquitetural.
+          - heading "Etapas do Vibe Coding" [level=2] [ref=f1e169]
+          - list [ref=f1e170]:
+            - listitem [ref=f1e171]:
+              - strong [ref=f1e172]: Prompt Arquitetural
+              - text: O primeiro prompt que deve ser usado ao criar o ADK, sendo responsável por criar a versão inicial de um agente ou workflow.
+            - listitem [ref=f1e173]:
+              - strong [ref=f1e174]: "Verificação de discrepacia:"
+              - text: peça que ele explique o que construiu antes de prosseguir e compare com seu projeto.
+          - generic [ref=f1e175]: "Estou criando um agente de aprovação de despesas em tempo real como um workflow gráfico no ADK 2.0. Um relatório de despesa chega como um evento JSON com os campos: valor, solicitante, categoria, descrição e data. Aplique uma regra: despesas abaixo de US$ 100 devem ser aprovadas automaticamente e instantaneamente, sem envolvimento do LLM."
+          - heading "Etapas do SSD" [level=2] [ref=f1e176]
+          - list [ref=f1e177]:
+            - listitem [ref=f1e178]:
+              - strong [ref=f1e179]: "criar especificações:"
+              - text: mapeie funcionalidades do sistema e seus cenários observáveis.
+          - generic [ref=f1e180]: "Feature: Expense Report Processing Scenario: Low-value expense auto-approval Given an expense report with amount: 45 When the agent processes the report Then it auto-approves with no LLM call"
+          - heading "Fluxo de trabalho antigravidade" [level=2] [ref=f1e181]
+          - paragraph [ref=f1e182]: Conecte a especificação, o código, a avaliação e a revisão humana em um fluxo verificável.
+          - heading "Glosario" [level=2] [ref=f1e183]
+          - list [ref=f1e184]:
+            - listitem [ref=f1e185]:
+              - strong [ref=f1e186]: "edge conditions:"
+              - text: casos de borda que podem acontecer no fluxo do agente.
+            - listitem [ref=f1e187]:
+              - strong [ref=f1e188]: "human-in-the-loop:"
+              - text: quando o agente pausa o fluxo e pede participação humana.
+            - listitem [ref=f1e189]:
+              - strong [ref=f1e190]: "routing outcome:"
+              - text: resultado interno que define para qual agente, node, tool ou caminho o fluxo deve seguir.
+            - listitem [ref=f1e191]:
+              - strong [ref=f1e192]: "boundary conditions:"
+              - text: regras de limite que definem até onde o agente pode agir sozinho.
+            - listitem [ref=f1e193]: architectural prompts
+            - listitem [ref=f1e194]: Gherkin
+            - listitem [ref=f1e195]: LLM-as-judge
+            - listitem [ref=f1e196]: session-start prompt pattern
+    - complementary "Contexto do objeto" [ref=f1e204]:
+      - generic [ref=f1e205]:
+        - img "Grafo do objeto atual" [ref=f1e206]:
+          - generic [ref=f1e216]:
+            - generic [ref=f1e218]: 🐺
+            - generic [ref=f1e219]: "ADK 2.0: referência..."
+        - generic [ref=f1e220]:
+          - generic [ref=f1e221]:
+            - button "Mostrar menos" [ref=f1e222]
+            - button "Mostrar mais" [ref=f1e223]
+          - generic [ref=f1e224]:
+            - button "Filtros" [ref=f1e225]
+            - button "Ajustar à tela" [ref=f1e226]
+            - button "Diminuir zoom" [ref=f1e227]
+            - button "Aumentar zoom" [ref=f1e228]
+  - button "Open Next.js Dev Tools" [ref=f1e234] [cursor=pointer]

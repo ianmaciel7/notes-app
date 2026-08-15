@@ -1,0 +1,160 @@
+- generic [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - banner [ref=f1e3]:
+      - generic [ref=f1e8]:
+        - button [expanded] [active] [ref=f1e265]
+        - button [ref=f1e266]
+        - button [ref=f1e267]
+        - button [ref=f1e268]:
+          - generic [ref=f1e12]: 🐺
+          - generic [ref=f1e13]: "ADK 2.0: referência rápida de conceitos, ferramentas e coman..."
+        - button [ref=f1e269]
+    - main [ref=f1e270]:
+      - article [ref=f1e132]:
+        - button [ref=f1e271] [cursor=pointer]: 🐺
+        - generic [ref=f1e134]:
+          - button [ref=f1e272]: Página
+          - button [ref=f1e273]: Coleções
+          - button [ref=f1e274]
+        - textbox [ref=f1e275]:
+          - /placeholder: Título
+          - text: "ADK 2.0: referência rápida de conceitos, ferramentas e comandos"
+        - generic [ref=f1e140]:
+          - generic [ref=f1e141]:
+            - generic [ref=f1e142]: asaa
+            - generic [ref=f1e143]:
+              - generic [ref=f1e144]: Aliases
+              - textbox [ref=f1e276]
+          - textbox [ref=f1e277]:
+            - /placeholder: Descrição...
+            - text: aaaaaaaaaaaaaaaa
+          - generic [ref=f1e147]:
+            - generic [ref=f1e151]: Etiquetas
+            - textbox [ref=f1e278]
+        - generic [ref=f1e153]:
+          - heading [level=2] [ref=f1e279]: ADK 2.0 — Ecossistema local de desenvolvimento
+          - paragraph [ref=f1e155]: "Para desenvolver agentes localmente no ADK 2.0, o fluxo gira em torno de duas ferramentas:"
+          - list [ref=f1e156]:
+            - listitem [ref=f1e157]:
+              - strong [ref=f1e158]: "Antigravity IDE:"
+              - text: Ambiente para escrever, editar e organizar o código do agente.
+            - listitem [ref=f1e159]:
+              - strong [ref=f1e160]: "agents-cli:"
+              - text: usada para criar, testar, avaliar e publicar agentes ADK ou seja operar o ciclo de desenvolvimento do agente.
+          - heading [level=2] [ref=f1e280]: Estrategias de desvolvimento
+          - list [ref=f1e162]:
+            - listitem [ref=f1e163]:
+              - strong [ref=f1e164]: "vibe coding:"
+              - text: facil prototipação delega implementação foco na arquitetura regras de roteamento e os requisitos de segurança.
+            - listitem [ref=f1e165]:
+              - strong [ref=f1e166]: "Spec-Driven Development (SDD):"
+              - text: A prototipação fica mais difícil no início, porque exige uma especificação arquitetural bem definida. Mas isso facilita a portabilidade do código e evita context fragmentation.
+          - generic [ref=f1e167]: specs/expense-agent.md
+          - paragraph [ref=f1e168]: Assim, o código pode ser regenerado ou restaurado com mais facilidade. O código se torna descartável; a especificação vira a bússola arquitetural.
+          - heading [level=2] [ref=f1e281]: Etapas do Vibe Coding
+          - list [ref=f1e170]:
+            - listitem [ref=f1e171]:
+              - strong [ref=f1e172]: Prompt Arquitetural
+              - text: O primeiro prompt que deve ser usado ao criar o ADK, sendo responsável por criar a versão inicial de um agente ou workflow.
+            - listitem [ref=f1e173]:
+              - strong [ref=f1e174]: "Verificação de discrepacia:"
+              - text: peça que ele explique o que construiu antes de prosseguir e compare com seu projeto.
+          - generic [ref=f1e175]: "Estou criando um agente de aprovação de despesas em tempo real como um workflow gráfico no ADK 2.0. Um relatório de despesa chega como um evento JSON com os campos: valor, solicitante, categoria, descrição e data. Aplique uma regra: despesas abaixo de US$ 100 devem ser aprovadas automaticamente e instantaneamente, sem envolvimento do LLM."
+          - heading [level=2] [ref=f1e282]: Etapas do SSD
+          - list [ref=f1e177]:
+            - listitem [ref=f1e178]:
+              - strong [ref=f1e179]: "criar especificações:"
+              - text: mapeie funcionalidades do sistema e seus cenários observáveis.
+          - generic [ref=f1e180]: "Feature: Expense Report Processing Scenario: Low-value expense auto-approval Given an expense report with amount: 45 When the agent processes the report Then it auto-approves with no LLM call"
+          - heading [level=2] [ref=f1e283]: Fluxo de trabalho antigravidade
+          - paragraph [ref=f1e182]: Conecte a especificação, o código, a avaliação e a revisão humana em um fluxo verificável.
+          - heading [level=2] [ref=f1e284]: Glosario
+          - list [ref=f1e184]:
+            - listitem [ref=f1e185]:
+              - strong [ref=f1e186]: "edge conditions:"
+              - text: casos de borda que podem acontecer no fluxo do agente.
+            - listitem [ref=f1e187]:
+              - strong [ref=f1e188]: "human-in-the-loop:"
+              - text: quando o agente pausa o fluxo e pede participação humana.
+            - listitem [ref=f1e189]:
+              - strong [ref=f1e190]: "routing outcome:"
+              - text: resultado interno que define para qual agente, node, tool ou caminho o fluxo deve seguir.
+            - listitem [ref=f1e191]:
+              - strong [ref=f1e192]: "boundary conditions:"
+              - text: regras de limite que definem até onde o agente pode agir sozinho.
+            - listitem [ref=f1e193]: architectural prompts
+            - listitem [ref=f1e194]: Gherkin
+            - listitem [ref=f1e195]: LLM-as-judge
+            - listitem [ref=f1e196]: session-start prompt pattern
+  - button "Open Next.js Dev Tools" [ref=f1e234] [cursor=pointer]
+  - alert [ref=f1e238]
+  - menu:
+    - menuitem: Abrir
+    - menuitem: Fixar na Barra Lateral
+    - separator
+    - menuitem: Mudar Tipo
+    - menuitem: Configurações do Tipo de Objeto
+    - separator
+    - menuitem: Compartilhar
+    - menuitem: Apresentar
+    - menuitem: Exportar
+    - menuitem:
+      - text: Importar
+      - generic: Ctrl I
+    - separator
+    - menuitem: Copiar
+    - menuitem: Duplicar
+    - separator
+    - menuitem: Excluir Objeto
+  - generic: Abrir navegação
+  - dialog [ref=f1e288]:
+    - heading "Navegação" [level=2] [ref=f1e289]
+    - button "Fechar navegacao" [ref=f1e290]
+    - navigation "Navegacao movel" [ref=f1e291]:
+      - generic [ref=f1e292]:
+        - generic [ref=f1e293]:
+          - button "Novo" [ref=f1e296]
+          - button "Buscar" [ref=f1e304]
+          - button "Calendário" [ref=f1e308]
+        - generic [ref=f1e311]:
+          - generic [ref=f1e312]:
+            - generic [ref=f1e313]: oi
+            - generic [ref=f1e317]: "1"
+          - generic [ref=f1e318]:
+            - button "Sem título" [ref=f1e319]
+            - button "Ações de Sem título"
+          - generic [ref=f1e322]:
+            - generic [ref=f1e323]: Fixados
+            - generic [ref=f1e326]: "1"
+          - generic [ref=f1e327]:
+            - button "image" [ref=f1e328]
+            - button "Ações de image"
+          - generic [ref=f1e331]:
+            - generic [ref=f1e332]: Tipos de objeto
+            - generic [ref=f1e335]: "4"
+          - button "Notas Diárias 1" [ref=f1e337]:
+            - generic [ref=f1e339]: Notas Diárias
+            - generic [ref=f1e340]: "1"
+          - button "Áreas 1" [ref=f1e342]:
+            - generic [ref=f1e344]: Áreas
+            - generic [ref=f1e345]: "1"
+          - button "Imagens 1" [ref=f1e347]:
+            - generic [ref=f1e349]: Imagens
+            - generic [ref=f1e350]: "1"
+          - button "Páginas 1" [ref=f1e352]:
+            - generic [ref=f1e354]: Páginas
+            - generic [ref=f1e355]: "1"
+          - button "Adicionar seção" [ref=f1e356]
+          - button "Lixeira" [ref=f1e358]
+          - generic [ref=f1e361]: Ajuda e recursos
+          - button "Primeiros passos" [ref=f1e363]
+          - button "Fazer uma pergunta" [ref=f1e367]
+          - button "Documentação" [ref=f1e371]
+          - button "Novidades" [ref=f1e375]
+          - button "Feedback" [ref=f1e379]
+        - generic [ref=f1e382]:
+          - button "Configurações" [ref=f1e383]
+          - button "Tema" [ref=f1e384]
+          - button "Perfil" [ref=f1e385]
+          - generic [ref=f1e386]: Pro
+          - button "Compartilhar" [ref=f1e393]

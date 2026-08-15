@@ -1,0 +1,32 @@
+﻿[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+enabled = true
+
+[mcp_servers.gcloud]
+command = "npx"
+args = ["-y", "@google-cloud/gcloud-mcp"]
+enabled = true
+
+[mcp_servers.firebase]
+command = 'C:\Users\ianma\AppData\Local\OpenAI\Codex\runtimes\cua_node\ecfc0d9aa02807e3\bin\npx.cmd'
+args = ["-y", "firebase-tools@latest", "mcp", "--dir", 'C:\Users\ianma\workspace\notes-app']
+enabled = true
+
+[mcp_servers.firebase.env]
+IS_FIREBASE_MCP = "true"
+
+[mcp_servers.playwright]
+command = "powershell.exe"
+args = ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", 'C:\Users\ianma\.codex\bin\playwright-mcp.ps1']
+enabled = true
+
+[mcp_servers.graphify]
+command = 'C:\Users\ianma\AppData\Roaming\uv\tools\graphifyy\Scripts\python.exe'
+args = ["-m", "graphify.serve", 'C:\Users\ianma\workspace\notes-app\graphify-out\graph.json']
+enabled = true
+
+[mcp_servers.chrome-devtools]
+command = "npx"
+args = ["-y", "chrome-devtools-mcp@latest"]
+enabled = false

@@ -1,0 +1,170 @@
+$ next dev "--port" "3000"
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.25.160.1:3000
+- Environments: .env.local, .env
+✓ Ready in 600ms
+✓ Running next.config.ts took 127ms
+
+ GET /hoje 200 in 992ms (next.js: 394ms, application-code: 598ms)
+ GET /hoje 200 in 118ms (next.js: 13ms, application-code: 104ms)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/node_modules__pnpm_1rs1ws1._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/src_1ko1ahx._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/src_components_1281zb6._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/node_modules__pnpm_20jfl4i._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/src_components_1r3_w6b._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/node_modules__pnpm_1qs72n0._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+⚠ Blocked cross-origin request to Next.js dev resource /_next/hmr from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /hoje 200 in 82ms (next.js: 4ms, application-code: 78ms)
+ GET /hoje 200 in 84ms (next.js: 6ms, application-code: 78ms)
+ GET /hoje 200 in 73ms (next.js: 3ms, application-code: 70ms)
+ GET /estudar 200 in 250ms (next.js: 170ms, application-code: 80ms)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/src_0cbkpsj._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/node_modules__pnpm_0hp7w4_._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /revisar 200 in 156ms (next.js: 91ms, application-code: 66ms)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/_1rhxmcn._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /hoje 200 in 61ms (next.js: 4ms, application-code: 57ms)
+ GET /capturar 200 in 201ms (next.js: 143ms, application-code: 58ms)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/_060aq-7._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /objetos 200 in 1145ms (next.js: 1064ms, application-code: 82ms)
+ GET /capturar 200 in 109ms (next.js: 54ms, application-code: 55ms)
+ GET /objetos 200 in 127ms (next.js: 60ms, application-code: 67ms)
+ GET /objetos/11111111-1111-4111-8111-111111111104 200 in 2.2s
+ GET /objetos/11111111-1111-4111-8111-111111111104 200 in 1049ms (next.js: 895ms, application-code: 155ms)
+ GET /revisar 200 in 58ms (next.js: 13ms, application-code: 45ms)
+ GET /estudar 200 in 61ms (next.js: 13ms, application-code: 48ms)
+ GET /tipos 200 in 137ms (next.js: 53ms, application-code: 85ms)
+ GET /hoje 200 in 66ms (next.js: 9ms, application-code: 57ms)
+ GET /tipos 200 in 57ms (next.js: 3ms, application-code: 54ms)
+ GET /estudar/manual 200 in 776ms (next.js: 684ms, application-code: 92ms)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/src_components_ui_label_tsx_0dhfhor._.js from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /revisar 200 in 49ms (next.js: 3ms, application-code: 45ms)
+ GET /capturar 200 in 51ms (next.js: 3ms, application-code: 48ms)
+ GET /objetos 200 in 66ms (next.js: 3ms, application-code: 63ms)
+ GET /objetos/11111111-1111-4111-8111-111111111103 200 in 111ms (next.js: 22ms, application-code: 89ms)
+ GET /tipos?tipo=11111111-1111-4111-8111-111111111103 200 in 71ms (next.js: 8ms, application-code: 63ms)
+ GET /estudar/manual 200 in 60ms (next.js: 8ms, application-code: 53ms)
+ GET /revisar 200 in 54ms (next.js: 6ms, application-code: 48ms)
+ GET /revisar 200 in 47ms (next.js: 4ms, application-code: 44ms)
+[?25h
+[ELIFECYCLE] Command failed with exit code 1073807364.

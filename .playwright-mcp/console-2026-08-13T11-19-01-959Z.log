@@ -1,0 +1,14 @@
+[    1536ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[   92530ms] [LOG] .workspace-editor-panel {x: 298, y: 46, w: 620, h: 856} 620px @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[   92542ms] [LOG] .workspace-document {x: 339, y: 47, w: 688, h: 3024} 688px @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[   92546ms] [LOG] .workspace-document-outline {x: 1033, y: 438, w: 18, h: 72} 18px @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[   92550ms] [LOG] .workspace-context-panel {x: 928, y: 46, w: 410, h: 856} 410px @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[  160741ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[  161128ms] [LOG] [Fast Refresh] done in 941ms @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[  161177ms] [LOG] [Fast Refresh] done in 941ms @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[  190462ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[  190492ms] [LOG] [Fast Refresh] done in 245ms @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[  208190ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[  208233ms] [LOG] [Fast Refresh] done in 360ms @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[  215765ms] [LOG] [Fast Refresh] done in 360ms @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776
+[  219783ms] [LOG] [Fast Refresh] done in 360ms @ http://localhost:3000/_next/static/chunks/1485_next_dist_0-wws0s._.js:776

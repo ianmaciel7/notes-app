@@ -1,0 +1,86 @@
+- generic [ref=f2e1]:
+  - generic [ref=f2e2]:
+    - banner [ref=f2e3]:
+      - generic [ref=f2e4]:
+        - button "Abrir navegacao" [ref=f2e6]
+        - button "Navegar para trás" [ref=f2e7]
+        - button "Navegar para frente" [ref=f2e8]
+        - 'button "ADK 2.0: referência rápida de conceitos, ferramentas e coman..." [ref=f2e9]':
+          - generic [ref=f2e10]: 🐺
+        - button "Novo documento" [ref=f2e12]
+    - main "Documento ativo" [ref=f2e13]:
+      - article [ref=f2e14]:
+        - button "Alterar emoji" [ref=f2e15] [cursor=pointer]: 🐺
+        - generic [ref=f2e16]:
+          - button "Página" [ref=f2e17]
+          - button "Coleções" [ref=f2e18]
+          - button "Mais opções" [ref=f2e19]
+        - textbox "Título" [ref=f2e20]: "ADK 2.0: referência rápida de conceitos, ferramentas e comandos"
+        - generic [ref=f2e21]:
+          - generic [ref=f2e22]:
+            - generic [ref=f2e23]: asaa
+            - generic [ref=f2e24]:
+              - generic [ref=f2e25]: Aliases
+              - textbox "Aliases" [ref=f2e26]
+          - textbox "Descrição" [ref=f2e27]:
+            - /placeholder: Descrição...
+            - text: aaaaaaaaaaaaaaaa
+          - generic [ref=f2e28]:
+            - generic [ref=f2e32]: Etiquetas
+            - textbox "Etiquetas" [ref=f2e33]
+        - generic [ref=f2e34]:
+          - heading "ADK 2.0 — Ecossistema local de desenvolvimento" [level=2] [ref=f2e35]
+          - paragraph [ref=f2e36]: "Para desenvolver agentes localmente no ADK 2.0, o fluxo gira em torno de duas ferramentas:"
+          - list [ref=f2e37]:
+            - listitem [ref=f2e38]:
+              - strong [ref=f2e39]: "Antigravity IDE:"
+              - text: Ambiente para escrever, editar e organizar o código do agente.
+            - listitem [ref=f2e40]:
+              - strong [ref=f2e41]: "agents-cli:"
+              - text: usada para criar, testar, avaliar e publicar agentes ADK ou seja operar o ciclo de desenvolvimento do agente.
+          - heading "Estrategias de desvolvimento" [level=2] [ref=f2e42]
+          - list [ref=f2e43]:
+            - listitem [ref=f2e44]:
+              - strong [ref=f2e45]: "vibe coding:"
+              - text: facil prototipação delega implementação foco na arquitetura regras de roteamento e os requisitos de segurança.
+            - listitem [ref=f2e46]:
+              - strong [ref=f2e47]: "Spec-Driven Development (SDD):"
+              - text: A prototipação fica mais difícil no início, porque exige uma especificação arquitetural bem definida. Mas isso facilita a portabilidade do código e evita context fragmentation.
+          - generic [ref=f2e48]: specs/expense-agent.md
+          - paragraph [ref=f2e49]: Assim, o código pode ser regenerado ou restaurado com mais facilidade. O código se torna descartável; a especificação vira a bússola arquitetural.
+          - heading "Etapas do Vibe Coding" [level=2] [ref=f2e50]
+          - list [ref=f2e51]:
+            - listitem [ref=f2e52]:
+              - strong [ref=f2e53]: Prompt Arquitetural
+              - text: O primeiro prompt que deve ser usado ao criar o ADK, sendo responsável por criar a versão inicial de um agente ou workflow.
+            - listitem [ref=f2e54]:
+              - strong [ref=f2e55]: "Verificação de discrepacia:"
+              - text: peça que ele explique o que construiu antes de prosseguir e compare com seu projeto.
+          - generic [ref=f2e56]: "Estou criando um agente de aprovação de despesas em tempo real como um workflow gráfico no ADK 2.0. Um relatório de despesa chega como um evento JSON com os campos: valor, solicitante, categoria, descrição e data. Aplique uma regra: despesas abaixo de US$ 100 devem ser aprovadas automaticamente e instantaneamente, sem envolvimento do LLM."
+          - heading "Etapas do SSD" [level=2] [ref=f2e57]
+          - list [ref=f2e58]:
+            - listitem [ref=f2e59]:
+              - strong [ref=f2e60]: "criar especificações:"
+              - text: mapeie funcionalidades do sistema e seus cenários observáveis.
+          - generic [ref=f2e61]: "Feature: Expense Report Processing Scenario: Low-value expense auto-approval Given an expense report with amount: 45 When the agent processes the report Then it auto-approves with no LLM call"
+          - heading "Fluxo de trabalho antigravidade" [level=2] [ref=f2e62]
+          - paragraph [ref=f2e63]: Conecte a especificação, o código, a avaliação e a revisão humana em um fluxo verificável.
+          - heading "Glosario" [level=2] [ref=f2e64]
+          - list [ref=f2e65]:
+            - listitem [ref=f2e66]:
+              - strong [ref=f2e67]: "edge conditions:"
+              - text: casos de borda que podem acontecer no fluxo do agente.
+            - listitem [ref=f2e68]:
+              - strong [ref=f2e69]: "human-in-the-loop:"
+              - text: quando o agente pausa o fluxo e pede participação humana.
+            - listitem [ref=f2e70]:
+              - strong [ref=f2e71]: "routing outcome:"
+              - text: resultado interno que define para qual agente, node, tool ou caminho o fluxo deve seguir.
+            - listitem [ref=f2e72]:
+              - strong [ref=f2e73]: "boundary conditions:"
+              - text: regras de limite que definem até onde o agente pode agir sozinho.
+            - listitem [ref=f2e74]: architectural prompts
+            - listitem [ref=f2e75]: Gherkin
+            - listitem [ref=f2e76]: LLM-as-judge
+            - listitem [ref=f2e77]: session-start prompt pattern
+  - button "Open Next.js Dev Tools" [ref=f2e84] [cursor=pointer]

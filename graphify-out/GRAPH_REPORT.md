@@ -1,7 +1,7 @@
 # Graph Report - notes-app  (2026-08-15)
 
 ## Corpus Check
-- 67 files · ~128,757 words
+- 67 files · ~133,451 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `89eb52cd`
+- Built from commit: `f3ede0f6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -75,12 +75,12 @@
 1. `compilerOptions` - 16 edges
 2. `scripts` - 14 edges
 3. `Contributing` - 12 edges
-4. `ADDED Requirements` - 11 edges
-5. `Requirements` - 11 edges
-6. `Design` - 10 edges
-7. `Architecture` - 10 edges
-8. `AI Workflows` - 10 edges
-9. `ADDED Requirements` - 10 edges
+4. `Requirements` - 11 edges
+5. `ADDED Requirements` - 11 edges
+6. `ADDED Requirements` - 10 edges
+7. `Design` - 10 edges
+8. `Architecture` - 10 edges
+9. `AI Workflows` - 10 edges
 10. `Requirements` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -296,7 +296,7 @@ Cohesion: 0.33
 Nodes (5): Entities, Features, Graph Interpretation, Readwise / Reader Knowledge Graph Source, Workflows
 
 ## Knowledge Gaps
-- **529 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `ignoreUnknown` (+524 more)
+- **529 isolated node(s):** `Overview`, `Architecture Boundary`, `Domain Shape`, `Customization Foundation`, `AI Generation Flow` (+524 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -305,7 +305,7 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `devDependencies` connect `devDependencies` to `scripts`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **What connects `$schema`, `enabled`, `clientKind` to the rest of the system?**
+- **What connects `Overview`, `Architecture Boundary`, `Domain Shape` to the rest of the system?**
   _529 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._

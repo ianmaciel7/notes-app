@@ -316,17 +316,17 @@
   },
   ".github/rulesets/main.json": {
     "mtime": 1786705846.9079237,
-    "ast_hash": "",
+    "ast_hash": "238cfbd874a5b106dff05c047a036efb",
     "semantic_hash": ""
   },
   ".github/rulesets/stag.json": {
     "mtime": 1786705846.9079237,
-    "ast_hash": "",
+    "ast_hash": "c0460bdde969cfc06c7ec87bb239699c",
     "semantic_hash": ""
   },
   "var/e2e/test-results/.last-run.json": {
     "mtime": 1786707253.244291,
-    "ast_hash": "",
+    "ast_hash": "f196824657d8858bc7fa44eecbba38b1",
     "semantic_hash": ""
   },
   "docs/DESIGN.md": {
@@ -490,13 +490,13 @@
     "semantic_hash": ""
   },
   "openspec/changes/define-object-studio-study-foundation/design.md": {
-    "mtime": 1786803229.074573,
-    "ast_hash": "9dfe9b28646f280758e5654d9fb0e9cb",
+    "mtime": 1786805200.220144,
+    "ast_hash": "dad057e845d2cd3e295e4d91a94d5b35",
     "semantic_hash": ""
   },
   "openspec/changes/define-object-studio-study-foundation/proposal.md": {
-    "mtime": 1786802933.0294437,
-    "ast_hash": "36010d3d8b90a4fca7b0f49520c0cc13",
+    "mtime": 1786805188.3691952,
+    "ast_hash": "b659d43d6740f33dc450ff5843ccdd9f",
     "semantic_hash": ""
   },
   "openspec/changes/define-object-studio-study-foundation/specs/ai-assisted-capture/spec.md": {
@@ -547,6 +547,21 @@
   "docs/references/knowledge-bases/READWISE_GRAPH.md": {
     "mtime": 1786804313.8648798,
     "ast_hash": "52895d3e036f6caae19e69b672a4262f",
+    "semantic_hash": ""
+  },
+  "docs/references/knowledge-bases/capacities.json": {
+    "mtime": 1786804713.6114252,
+    "ast_hash": "4fa6975be2625bedcb2289cbb1a06076",
+    "semantic_hash": ""
+  },
+  "docs/references/knowledge-bases/obsidian.json": {
+    "mtime": 1786804713.6145496,
+    "ast_hash": "d56903b84225d74c49376bfe77ed8366",
+    "semantic_hash": ""
+  },
+  "docs/references/knowledge-bases/readwise.json": {
+    "mtime": 1786804766.8186393,
+    "ast_hash": "693619a05229f596e08d80ce55198986",
     "semantic_hash": ""
   }
 }
