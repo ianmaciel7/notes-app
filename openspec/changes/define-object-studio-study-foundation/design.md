@@ -123,12 +123,24 @@ OpenSpec validation should run for this change before implementation is consider
 
 ## Reference Model
 
-The object model follows the observable structure documented by Capacities: objects are the fundamental content unit; object types define recurring structure; properties apply to every object of a type; object links connect types; and tags connect content across types. This is a product reference, not a pixel-perfect or proprietary implementation target.
+The object model follows the observable structure documented by Capacities:
+objects are the fundamental content unit; object types define recurring
+structure; properties apply to every object of a type; object links connect
+types; and tags connect content across types. Readwise / Reader and Obsidian
+provide secondary reference patterns for capture, review, source provenance,
+links, backlinks, local-first files, and plugin boundaries.
 
-Reference pages:
+The local graphable reference sources live under
+`docs/references/knowledge-bases/`:
 
-- https://docs.capacities.io/reference/content-types
-- https://docs.capacities.io/reference/properties
-- https://docs.capacities.io/reference/object-properties
-- https://docs.capacities.io/reference/organizational-structures
-- https://docs.capacities.io/reference/queries
+- `capacities.json` and `CAPACITIES_GRAPH.md` for configurable objects,
+  object types, properties, collections, queries, and graph behavior.
+- `readwise.json` and `READWISE_GRAPH.md` for capture, highlights, review,
+  annotations, export, API, MCP, and source workflows.
+- `obsidian.json` and `OBSIDIAN_GRAPH.md` for vaults, Markdown notes,
+  properties, links, backlinks, attachments, templates, canvas, bases, and
+  plugin boundaries.
+
+These sources are product references, not a pixel-perfect, proprietary, or
+vendor-specific implementation target. They must be distilled into product
+documents or OpenSpec changes before they become application requirements.

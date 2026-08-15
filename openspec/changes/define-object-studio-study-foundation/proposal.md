@@ -27,6 +27,8 @@ The generic object contract is the platform boundary. Workflow packs may add req
 - `docs/product/OBJECT_MODEL.md`
 - `docs/product/AI_WORKFLOWS.md`
 - `docs/product/VALIDATION_SOURCES.md`
+- `docs/references/knowledge-bases/README.md`
+- `docs/references/knowledge-bases/KNOWLEDGE_BASE_SUMMARY.md`
 - `docs/engineering/ARCHITECTURE.md`
 - `docs/engineering/RELEASE_PROCESS.md`
 
