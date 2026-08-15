@@ -20,6 +20,7 @@ Use pnpm 11.20.0, as declared in `package.json`.
 | Check repo | `pnpm lint` |
 | Check formatting | `pnpm format:check` |
 | Format repo | `pnpm format` |
+| Check cyclomatic complexity | `pnpm complexity` |
 | Typecheck | `pnpm typecheck` |
 | Test | `pnpm test` |
 | Test with coverage | `pnpm test:coverage` |
@@ -145,7 +146,7 @@ The intended required protected-branch check is:
 | --- | --- |
 | `Quality` | Aggregate CI gate preserving a stable required status context. |
 
-`Quality` depends on `Format`, `Lint`, `Typecheck`, `Tests`, `Build`, and `Graphify`. Keeping the required branch-protection context aggregate avoids brittle required-check configuration when individual jobs are skipped by dependencies or renamed.
+`Quality` depends on `Format`, `Lint`, `Complexity`, `Typecheck`, `Tests`, `Build`, and `Graphify`. Keeping the required branch-protection context aggregate avoids brittle required-check configuration when individual jobs are skipped by dependencies or renamed.
 
 The separate `Security` workflow should be treated as a merge signal and may become a required check after CodeQL/code scanning support is confirmed for the repository.
 
