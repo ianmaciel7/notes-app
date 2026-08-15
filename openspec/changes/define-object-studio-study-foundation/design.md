@@ -1,6 +1,6 @@
 ## Overview
 
-The initial product foundation should ship as a single-user personal object studio inside the existing Next.js App Router application. It should prioritize configurable objects, clear visual hierarchy, and relationships over folder/file note-taking. Study is the first packaged workflow, not the product boundary.
+The initial product foundation should ship as a single-user personal object studio inside the existing Next.js App Router application. Objects are the primary content unit: records are generic and behavior-light, while object types, properties, tags, relations, and workflows provide structure around them. It should prioritize configurable objects, clear visual hierarchy, and relationships over folder/file note-taking. Study is the first packaged workflow, not the product boundary.
 
 For the first local deployment, structured application data should be persisted in SQLite behind a server-only DAL and uploaded binaries should be persisted through a filesystem-backed blob-storage adapter. Runtime data defaults to ignored paths under `var/`; the versioned validation corpus is never used as runtime storage. "Local" means a single-user application and local persistence, not an offline browser application or a promise of durable hosted persistence. These providers can be replaced later without changing feature code.
 
@@ -25,6 +25,10 @@ Files and blobs use a `BlobStorage` contract that stores, opens, and removes con
 
 ## Domain Shape
 
+The base record contract is intentionally generic. Every user-facing record has a stable identifier, an object type, a title, typed property values, optional body content, tags, relations, and timestamps. A record does not contain study-specific, objective-specific, or commitment-specific behavior. Those behaviors live in workflow boundaries and immutable activity records that reference generic objects.
+
+Object types are configuration, not subclasses or separate persistence primitives. A user-created type such as Book, Person, Project, Meeting, Source, or Note must be representable through the same object record and property-definition contracts as Study Goal or Question. A new type must not require an application-code change.
+
 Starter object types for the first workflow:
 
 - Study Goal
@@ -33,11 +37,13 @@ Starter object types for the first workflow:
 - Flashcard
 - Study Session
 
-The UI should expose these as configurable typed objects with properties and relationships rather than folders and files. The same foundation should support a user-created non-study object type without an application-code change.
+The UI should expose these as configurable typed objects with properties and relationships rather than folders and files. The same foundation should support user-created non-study types without an application-code change.
 
 Question attempts and flashcard reviews should be immutable activity records rather than arrays embedded in Question or Flashcard properties. Study Session may aggregate and relate those records for navigation and analytics.
 
 ## Customization Foundation
+
+Study, Objective, and Recurring Commitment are workflow presets over generic objects. They may define required semantic properties and workflow validations, but they must not become the only object model or introduce parallel persistence primitives.
 
 The initial product foundation should treat the starter study objects as configured object types. The user should be able to extend them with custom properties and add future object types without changing application code for every new workflow.
 
@@ -54,6 +60,8 @@ Initial property types should cover the study use case:
 - object link
 
 The first object-type view should be property-driven and support filtering and sorting. Saved layouts, advanced grouping, and manual collections are deferred from the two-week slice. Tags should connect themes across object types and object-link properties should preserve structured relations.
+
+Tags are cross-type organization, while labels are type-local properties. Object-select properties create structured links to one or more configured object types and may support reverse links when the workflow needs them.
 
 ## AI Generation Flow
 
@@ -112,3 +120,15 @@ Use unit tests for semantic-property protection, scheduling inputs, filters, att
 Use contract tests for storage adapters if file/blob support ships in the initial product foundation. Add import-boundary enforcement only when the project contains provider-specific infrastructure worth protecting.
 
 OpenSpec validation should run for this change before implementation is considered ready.
+
+## Reference Model
+
+The object model follows the observable structure documented by Capacities: objects are the fundamental content unit; object types define recurring structure; properties apply to every object of a type; object links connect types; and tags connect content across types. This is a product reference, not a pixel-perfect or proprietary implementation target.
+
+Reference pages:
+
+- https://docs.capacities.io/reference/content-types
+- https://docs.capacities.io/reference/properties
+- https://docs.capacities.io/reference/object-properties
+- https://docs.capacities.io/reference/organizational-structures
+- https://docs.capacities.io/reference/queries
