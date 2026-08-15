@@ -2,17 +2,17 @@
 
 ## Purpose
 
-Define how the workspace represents concrete desired outcomes, their lifecycle, requirements, supporting preparation, assessment evidence, and final results without fragmenting each outcome type into a separate core concept.
+Define how the generic object studio represents concrete desired outcomes as a configured Objective type, with lifecycle, requirements, supporting preparation, assessment evidence, and final results without introducing a separate persistence primitive.
 
 ## Requirements
 
-### Requirement: Generic Objective
-The system SHALL represent a concrete desired outcome as an Objective rather than requiring a separate core concept for each kind of exam, certification, competition, interview, course, assessment, or milestone.
+### Requirement: Objective As Configured Object Type
+The system SHALL represent a concrete desired outcome as a generic object configured as an Objective type rather than requiring a separate core entity for each kind of exam, certification, competition, interview, course, assessment, or milestone.
 
 #### Scenario: Define a certification Objective
 - **WHEN** a person creates an Objective classified as a certification
-- **THEN** the system SHALL represent it using the same Objective concept used for other outcome classifications
-- **AND** certification SHALL be its classification rather than a separate core concept
+- **THEN** the system SHALL represent it using the generic object record and the configured Objective type
+- **AND** certification SHALL be its classification rather than a separate core entity
 
 #### Scenario: Define a competitive-exam Objective
 - **WHEN** a person creates an Objective classified as a competitive exam

@@ -1,15 +1,15 @@
 ## Purpose
 
-Define reusable recurring quantitative commitments and the period-based semantics needed to compare planned and actual performance, pace, balances, carryover, consistency, and history.
+Define a configurable Recurring Commitment object type and the period-based semantics needed to compare planned and actual performance, pace, balances, carryover, consistency, and history.
 
 ## ADDED Requirements
 
 ### Requirement: Quantitative Commitment Definition
-The system SHALL let a person define a quantitative commitment with a positive regular target, a unit, a bounded period, and a recurrence rule.
+The system SHALL let a person create a generic object configured as a quantitative Recurring Commitment with a positive regular target, a unit, a bounded period, and a recurrence rule.
 
 #### Scenario: Define a recurring commitment
 - **WHEN** a person defines a target of 10 units for each week
-- **THEN** the system SHALL represent 10 as the regular target, units as the measurement, and each week as a distinct period
+- **THEN** the system SHALL represent the commitment through the generic object record, with 10 as the regular target, units as the measurement, and each week as a distinct period
 - **AND** the commitment SHALL remain quantitative rather than being reduced to a completed or incomplete checkbox
 
 #### Scenario: Use a custom period
