@@ -3,6 +3,9 @@ export type CreatedObjectFixture = {
   type: string;
   title: string;
   preview: string;
+  url?: string;
+  metadata?: string;
+  tableRows?: readonly (readonly [string, string])[];
   tone: "blue" | "cyan" | "green" | "orange" | "red" | "sky" | "violet";
 };
 
@@ -35,36 +38,44 @@ export const workspaceAuditFixture = {
       id: "audit-page",
       type: "Página",
       title: "AUDIT - Página completa",
-      preview: "AUDIT-CODEX:\nconteúdo sintético",
+      preview:
+        "AUDIT-CODEX: conteúdo sintético para validar persistência.\n\nEditor rico do Capacities\nItem de lista\n/",
       tone: "blue",
     },
     {
       id: "audit-table",
       type: "Tabela",
       title: "AUDIT - Tabela persistida",
-      preview:
-        "Nome        Status\nItem Alfa   Em revisão\nItem Beta   Concluído",
+      preview: "Nome\tStatus\nItem Alfa\tEm revisão\nItem Beta\tConcluído",
+      tableRows: [
+        ["Nome", "Status"],
+        ["Item Alfa", "Em revisão"],
+        ["Item Beta", "Concluído"],
+      ],
       tone: "blue",
-    },
-    {
-      id: "audit-list-item",
-      type: "Item de lista",
-      title: "/",
-      preview: "Item persistido para auditoria",
-      tone: "violet",
     },
     {
       id: "audit-weblink-example",
       type: "Weblink",
       title: "Example Domain",
       preview: "example.com/?utm_source=capacities-audit",
+      url: "https://example.com/?utm_source=capacities-audit",
       tone: "cyan",
     },
     {
       id: "audit-image",
       type: "Imagem",
       title: "Sem título",
-      preview: "Imagem de auditoria",
+      preview: "0",
+      metadata: "Imagem persistida",
+      tone: "red",
+    },
+    {
+      id: "audit-file",
+      type: "Arquivo",
+      title: "Sem título",
+      preview: "0",
+      metadata: "Arquivo persistido",
       tone: "red",
     },
     {
@@ -79,6 +90,7 @@ export const workspaceAuditFixture = {
       type: "Weblink",
       title: "Sem título",
       preview: "www.w3.org/TR/PNG/iso_8859-1.txt",
+      url: "https://www.w3.org/TR/PNG/iso_8859-1.txt",
       tone: "cyan",
     },
     {
@@ -99,15 +111,8 @@ export const workspaceAuditFixture = {
       id: "audit-query",
       type: "Query",
       title: "Sem título",
-      preview: "Sem definição · 0 entradas",
+      preview: "Sem definição\n0 entradas",
       tone: "green",
-    },
-    {
-      id: "audit-audio",
-      type: "Áudio",
-      title: "Sem título",
-      preview: "Arquivo de áudio",
-      tone: "orange",
     },
     {
       id: "audit-entity",
@@ -115,6 +120,13 @@ export const workspaceAuditFixture = {
       title: "AUDIT - Custom entity",
       preview: "Entidade personalizada persistida",
       tone: "violet",
+    },
+    {
+      id: "audit-audio",
+      type: "Áudio",
+      title: "Sem título",
+      preview: "Arquivo de áudio",
+      tone: "orange",
     },
   ] satisfies CreatedObjectFixture[],
 } as const;

@@ -141,6 +141,9 @@ export function WorkspaceShell({ pathname }: { pathname: string }) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [darkTheme, setDarkTheme] = useState(false);
   const [wideLayout, setWideLayout] = useState(false);
+  const [contextTrackWidth, setContextTrackWidth] = useState<number | null>(
+    null,
+  );
   const mobileTriggerRef = useRef<HTMLButtonElement>(null);
   const mobileCloseRef = useRef<HTMLButtonElement>(null);
 
@@ -176,6 +179,13 @@ export function WorkspaceShell({ pathname }: { pathname: string }) {
         )}
         data-visual-audit="true"
         data-theme={darkTheme ? "dark" : "light"}
+        style={
+          contextTrackWidth
+            ? ({
+                "--context-track": `${contextTrackWidth}px`,
+              } as React.CSSProperties)
+            : undefined
+        }
       >
         <WorkspaceHeader
           desktopSidebarOpen={desktopSidebarOpen}
@@ -261,14 +271,45 @@ export function WorkspaceShell({ pathname }: { pathname: string }) {
           className="mx-2 mb-2 min-h-0 min-w-0 rounded-xl border border-workspace-border bg-workspace-surface shadow-workspace-panel [grid-area:main] md:mx-2.5 md:mb-2.5"
           data-region="day-panel"
         >
-          <DailyWorkspace wideLayout={wideLayout} />
+          <DailyWorkspace
+            onToggleWideLayout={() => setWideLayout((current) => !current)}
+            wideLayout={wideLayout}
+          />
         </main>
 
         <aside
           aria-label="Contexto do objeto"
-          className="mr-2.5 mb-2.5 hidden min-h-0 min-w-0 rounded-xl border border-workspace-border bg-workspace-surface [grid-area:context] min-[1100px]:block"
+          className="relative mr-2.5 mb-2.5 hidden min-h-0 min-w-0 rounded-xl border border-workspace-border bg-workspace-surface [grid-area:context] min-[1100px]:block"
           data-region="chat-panel"
         >
+          <hr
+            aria-label="Redimensionar painel de contexto"
+            aria-valuemax={620}
+            aria-valuemin={380}
+            aria-valuenow={contextTrackWidth ?? 496}
+            aria-orientation="vertical"
+            className="absolute inset-y-1 -left-2 z-20 hidden h-auto w-3 cursor-ew-resize touch-none select-none border-0 before:mx-auto before:block before:h-full before:w-0.5 before:rounded-full before:bg-workspace-border before:opacity-0 before:transition-opacity hover:before:opacity-100 focus-visible:before:opacity-100 min-[1250px]:block"
+            onKeyDown={(event) => {
+              if (event.key !== "ArrowLeft" && event.key !== "ArrowRight")
+                return;
+              event.preventDefault();
+              const direction = event.key === "ArrowLeft" ? 16 : -16;
+              setContextTrackWidth((current) =>
+                Math.min(620, Math.max(380, (current ?? 496) + direction)),
+              );
+            }}
+            onPointerDown={(event) =>
+              event.currentTarget.setPointerCapture(event.pointerId)
+            }
+            onPointerMove={(event) => {
+              if (!event.currentTarget.hasPointerCapture(event.pointerId))
+                return;
+              setContextTrackWidth(
+                Math.min(620, Math.max(380, window.innerWidth - event.clientX)),
+              );
+            }}
+            tabIndex={0}
+          />
           <ContextPanel />
         </aside>
 
@@ -313,7 +354,13 @@ export function WorkspaceShell({ pathname }: { pathname: string }) {
   );
 }
 
-function DailyWorkspace({ wideLayout }: { wideLayout: boolean }) {
+function DailyWorkspace({
+  onToggleWideLayout,
+  wideLayout,
+}: {
+  onToggleWideLayout: () => void;
+  wideLayout: boolean;
+}) {
   const fixture = workspaceAuditFixture;
 
   return (
@@ -333,16 +380,20 @@ function DailyWorkspace({ wideLayout }: { wideLayout: boolean }) {
         className="workspace-scrollbar min-h-0 flex-1 overflow-y-auto px-8 pt-12 pb-24 sm:px-10"
         data-scroll-container="day-view"
       >
-        <div className={cn("mx-auto", wideLayout ? "max-w-none" : "max-w-2xl")}>
+        <div
+          className={cn("mx-auto", wideLayout ? "max-w-none" : "max-w-[682px]")}
+        >
           <p className="text-base leading-6 font-normal tracking-[0.4px] text-object-pink">
             {fixture.weekdayLabel}
           </p>
-          <h1 className="mt-1 h-[38px] text-[30px] leading-[33px] font-bold tracking-[0.4px] text-workspace-text">
-            {fixture.formattedDate}
-          </h1>
-          <p className="mt-2 text-sm tracking-[0.4px] text-workspace-subtle">
-            Semana {fixture.weekNumber}
-          </p>
+          <div className="mt-1 flex max-w-[410px] flex-wrap items-baseline gap-x-3 gap-y-2">
+            <h1 className="shrink-0 text-[30px] leading-[33px] font-bold tracking-[0.4px] text-workspace-text">
+              {fixture.formattedDate}
+            </h1>
+            <p className="text-sm tracking-[0.4px] text-workspace-subtle">
+              Semana {fixture.weekNumber}
+            </p>
+          </div>
           <div className="mt-5 flex items-center gap-2">
             <Button
               className="gap-1 px-2 font-normal"
@@ -360,8 +411,23 @@ function DailyWorkspace({ wideLayout }: { wideLayout: boolean }) {
               Tarefa
             </Button>
           </div>
-          <div className="mt-4 border-b border-workspace-border pb-14">
-            <h2 className="text-sm font-medium">Nota diária</h2>
+          <div className="group/daily-note mt-4 border-b border-workspace-border pb-14">
+            <div className="flex items-center">
+              <h2 className="text-sm font-medium">Nota diária</h2>
+              <div className="ml-auto flex opacity-0 transition-opacity group-hover/daily-note:opacity-100 group-focus-within/daily-note:opacity-100">
+                <IconButton
+                  className="size-7"
+                  icon={Maximize2}
+                  label="Layout amplo da nota diária"
+                  onClick={onToggleWideLayout}
+                />
+                <IconButton
+                  className="size-7"
+                  icon={MoreHorizontal}
+                  label="Mais opções da nota diária"
+                />
+              </div>
+            </div>
             <Button
               className="mt-5 text-sm font-normal"
               size="sm"
@@ -393,9 +459,12 @@ function DailyWorkspace({ wideLayout }: { wideLayout: boolean }) {
               <h2 className="text-sm font-medium" id="created-today-heading">
                 Criado Nesse Dia
               </h2>
-              <span className="text-xs tabular-nums text-workspace-subtle">
+              <Badge
+                className="border-0 px-1.5 py-0 text-xs font-normal tabular-nums"
+                variant="secondary"
+              >
                 {fixture.createdObjects.length}
-              </span>
+              </Badge>
             </div>
             <div className="mt-5 grid grid-cols-2 gap-3">
               {fixture.createdObjects.map((object) => (
@@ -506,7 +575,7 @@ function ContextPanel() {
 
 function CreatedObjectCard({ object }: { object: CreatedObjectFixture }) {
   const toneClass = navigationToneSurfaceClasses[object.tone];
-  const tablePreview = object.id === "audit-table";
+  const tablePreview = object.tableRows != null;
 
   return (
     <article
@@ -521,20 +590,36 @@ function CreatedObjectCard({ object }: { object: CreatedObjectFixture }) {
         {object.title}
       </h3>
       {tablePreview ? (
-        <div className="mt-2 overflow-hidden rounded-lg border border-workspace-border text-xs">
-          {object.preview.split("\n").map((row, index) => (
-            <div
-              className={cn(
-                "grid grid-cols-2 px-2 py-1.5",
-                index > 0 && "border-t border-workspace-border",
-              )}
-              key={row}
-            >
-              {row.split(/\s{2,}/).map((cell) => (
-                <span key={cell}>{cell}</span>
+        <div className="mt-2 overflow-x-auto rounded-lg border border-workspace-border text-xs">
+          <table className="w-full table-fixed border-collapse text-left">
+            <thead>
+              <tr>
+                {object.tableRows?.[0].map((cell) => (
+                  <th
+                    className="px-2 py-1.5 font-normal"
+                    key={cell}
+                    scope="col"
+                  >
+                    {cell}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {object.tableRows?.slice(1).map((row) => (
+                <tr
+                  className="border-t border-workspace-border"
+                  key={row.join("-")}
+                >
+                  {row.map((cell) => (
+                    <td className="px-2 py-1.5" key={cell}>
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
               ))}
-            </div>
-          ))}
+            </tbody>
+          </table>
         </div>
       ) : (
         <p className="mt-2 whitespace-pre-line rounded-lg border border-workspace-border bg-workspace px-3 py-3 text-sm leading-5">
@@ -679,18 +764,7 @@ function NavigationGroups({
     "Ajuda e recursos": true,
   });
 
-  const visibleGroups = navigationGroups.map((group) =>
-    group.label === "Ajuda e recursos"
-      ? {
-          ...group,
-          items: group.items.filter((item) =>
-            ["/ajuda/primeiros-passos", "/ajuda/perguntas"].includes(item.href),
-          ),
-        }
-      : group,
-  );
-
-  return visibleGroups.map((group) => (
+  return navigationGroups.map((group) => (
     <NavigationGroupView
       group={group}
       key={group.label ?? group.items.map((item) => item.href).join("-")}
@@ -751,8 +825,9 @@ function NavigationGroupView({
 
   const SectionIcon = sectionIcons[group.label];
   return (
-    <section className="mt-4">
+    <section className="group/section mt-4">
       <Button
+        aria-label={group.label}
         aria-expanded={open}
         className="h-7 w-full justify-start gap-[3px] px-2 text-xs font-medium text-workspace-subtle"
         onClick={onToggle}
@@ -763,6 +838,11 @@ function NavigationGroupView({
           <SectionIcon aria-hidden="true" className="size-4" />
         ) : null}
         <span>{group.label}</span>
+        {group.count != null ? (
+          <span className="ml-auto max-w-0 overflow-hidden text-[11px] tabular-nums opacity-0 transition-[max-width,opacity] group-hover/section:max-w-8 group-hover/section:opacity-100 group-focus-within/section:max-w-8 group-focus-within/section:opacity-100">
+            {group.count}
+          </span>
+        ) : null}
       </Button>
       {open ? (
         <div className="mt-1 space-y-0">
@@ -804,7 +884,7 @@ function NavigationLink({
   return (
     <Button
       asChild
-      className={`${objectType ? "h-[29px]" : "h-7"} w-full min-w-0 justify-start gap-[5px] px-2 text-sm leading-[18.2px] font-normal ${
+      className={`${objectType ? "h-[29px]" : "h-7"} group/nav-item w-full min-w-0 justify-start gap-[5px] px-2 text-sm leading-[18.2px] font-normal ${
         active
           ? "bg-workspace-selected font-medium text-workspace-text"
           : "text-workspace-muted hover:bg-workspace-hover hover:text-workspace-text"
@@ -812,6 +892,7 @@ function NavigationLink({
       size="sm"
     >
       <Link
+        aria-label={item.label}
         aria-current={active ? "page" : undefined}
         href={item.href}
         onClick={onNavigate}
@@ -831,6 +912,11 @@ function NavigationLink({
           />
         </span>
         <span className="min-w-0 truncate">{item.label}</span>
+        {item.count != null ? (
+          <span className="ml-auto max-w-0 overflow-hidden text-[11px] tabular-nums text-workspace-subtle opacity-0 transition-[max-width,opacity] group-hover/nav-item:max-w-8 group-hover/nav-item:opacity-100 group-focus-within/nav-item:max-w-8 group-focus-within/nav-item:opacity-100">
+            {item.count}
+          </span>
+        ) : null}
       </Link>
     </Button>
   );

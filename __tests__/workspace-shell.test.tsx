@@ -18,16 +18,9 @@ test("renders the Portuguese navigation contract with real links", () => {
     name: "Navegação principal",
   });
 
-  const visibleNavigationItems = navigationGroups
-    .flatMap((group) => group.items)
-    .filter(
-      (item) =>
-        ![
-          "/ajuda/documentacao",
-          "/ajuda/novidades",
-          "/ajuda/feedback",
-        ].includes(item.href),
-    );
+  const visibleNavigationItems = navigationGroups.flatMap(
+    (group) => group.items,
+  );
 
   for (const item of visibleNavigationItems) {
     expect(
@@ -47,7 +40,7 @@ test("renders the Portuguese navigation contract with real links", () => {
     "System Audit Response Test",
   );
   expect(screen.getByText("Nenhum conteúdo fixado")).toBeInTheDocument();
-  expect(within(navigation).queryByText("13")).not.toBeInTheDocument();
+  expect(within(navigation).getByText("13")).toBeInTheDocument();
 });
 
 test("keeps the parent destination active on a nested route", () => {
@@ -124,4 +117,24 @@ test("toggles the wide daily layout from the top rail", () => {
     "aria-pressed",
     "true",
   );
+});
+
+test("keeps contextual controls available and resizes the context panel by keyboard", () => {
+  render(<Home />);
+
+  expect(
+    screen.getByRole("button", { name: "Mais opções da nota diária" }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("link", { name: "Documentação" }),
+  ).toBeInTheDocument();
+
+  const separator = screen.getByRole("separator", {
+    name: "Redimensionar painel de contexto",
+  });
+  expect(separator).toHaveAttribute("aria-valuenow", "496");
+  fireEvent.keyDown(separator, { key: "ArrowLeft" });
+  expect(separator).toHaveAttribute("aria-valuenow", "512");
+  fireEvent.keyDown(separator, { key: "ArrowRight" });
+  expect(separator).toHaveAttribute("aria-valuenow", "496");
 });

@@ -23,6 +23,9 @@
 
 @media (min-width: 1250px) {
   .shell {
-    grid-template-columns: var(--sidebar-width) minmax(0, 1.74fr) minmax(0, 1fr);
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(
+        --context-track,
+        496px
+      );
   }
 }

@@ -22,8 +22,8 @@ test("renders the starter page with primary navigation targets", () => {
   ).toBeInTheDocument();
   expect(screen.getAllByRole("article")).toHaveLength(12);
   expect(
-    screen.queryByRole("link", { name: "Documentação" }),
-  ).not.toBeInTheDocument();
+    screen.getByRole("link", { name: "Documentação" }),
+  ).toBeInTheDocument();
   expect(
     screen.getByRole("button", { name: "Enviar mensagem" }),
   ).toBeDisabled();

@@ -1,16 +1,16 @@
 # Graph Report - notes-app  (2026-08-15)
 
 ## Corpus Check
-- 525 files · ~628,549 words
+- 530 files · ~970,956 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4994 nodes · 5318 edges · 461 communities (399 shown, 62 thin omitted)
+- 5050 nodes · 5385 edges · 464 communities (399 shown, 65 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `629c0a31`
+- Built from commit: `7375582c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -381,9 +381,9 @@
 - define-workspace-onboarding-education/tasks.md
 - define-workspace-spaces/tasks.md
 - .implement-capacities-layout-sidebar/next.config.ts
-- @biomejs/biome
+- audit-capacities-visual.mjs
 - dependencies
-- @vitest/coverage-v8
+- extract-capacities-reference.mjs
 - .implement-capacities-layout-sidebar/postcss.config.mjs
 - .implement-object-studio-worktree/next.config.ts
 - jsdom
@@ -415,14 +415,17 @@
 - @shadcn/react
 - @testing-library/dom
 - .old-reference-worktree/postcss.config.mjs
-- @radix-ui/react-scroll-area
-- @radix-ui/react-separator
+- @biomejs/biome
 - jsdom
-- lefthook
+- playwright
+- sharp
 - @tailwindcss/postcss
-- @testing-library/jest-dom
+- @testing-library/dom
+- @testing-library/react
+- @types/node
 - typescript
 - @vitejs/plugin-react
+- vitest
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 362 edges
@@ -451,11 +454,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (461 total, 62 thin omitted)
+## Communities (464 total, 65 thin omitted)
 
 ### Community 0 - "devDependencies"
-Cohesion: 0.06
-Nodes (31): babel-plugin-react-compiler, @biomejs/biome, jsdom, devDependencies, babel-plugin-react-compiler, @biomejs/biome, jsdom, tailwindcss (+23 more)
+Cohesion: 0.15
+Nodes (13): babel-plugin-react-compiler, devDependencies, babel-plugin-react-compiler, tailwindcss, @testing-library/jest-dom, @types/react, @types/react-dom, @vitest/coverage-v8 (+5 more)
 
 ### Community 1 - "compilerOptions"
 Cohesion: 0.07
@@ -507,7 +510,7 @@ Nodes (3): Deploy on Vercel, Getting Started, Learn More
 
 ### Community 15 - "src/components/workspace-shell.tsx"
 Cohesion: 0.07
-Nodes (37): Home(), Badge(), badgeVariants, Button, ButtonProps, buttonVariants, DropdownMenuCheckboxItem(), DropdownMenuContent() (+29 more)
+Nodes (36): Badge(), badgeVariants, Button, ButtonProps, buttonVariants, DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuItem() (+28 more)
 
 ### Community 18 - "ADDED Requirements"
 Cohesion: 0.05
@@ -778,8 +781,8 @@ Cohesion: 0.07
 Nodes (27): @base-ui/react, cmdk, date-fns, embla-carousel-react, input-otp, dependencies, @base-ui/react, clsx (+19 more)
 
 ### Community 89 - "devDependencies"
-Cohesion: 0.12
-Nodes (17): devDependencies, babel-plugin-react-compiler, tailwindcss, @testing-library/dom, @testing-library/react, @types/node, @types/react, @types/react-dom (+9 more)
+Cohesion: 0.06
+Nodes (33): devDependencies, babel-plugin-react-compiler, @biomejs/biome, jsdom, lefthook, tailwindcss, @tailwindcss/postcss, @testing-library/dom (+25 more)
 
 ### Community 90 - "Tier A - Official platform sources"
 Cohesion: 0.08
@@ -946,7 +949,7 @@ Cohesion: 0.12
 Nodes (16): By File Path, By Test Name, Changed Files, CLI Filtering, Combining Filters, Environment-based Filtering, Focus Tests (.only), Include/Exclude Patterns (+8 more)
 
 ### Community 131 - "Snapshot Testing"
-Cohesion: 0.12
+Cohesion: 0.13
 Nodes (15): Basic Snapshot, Concurrent Test Snapshots, Custom Serializers, Custom Snapshot Matchers (4.1+), Error Snapshots, File Snapshots, Inline Snapshots, Key Points (+7 more)
 
 ### Community 132 - "ADDED Requirements"
@@ -966,7 +969,7 @@ Cohesion: 0.13
 Nodes (14): Activity Records, Customization Model, Flashcard, Flashcard Review, Foundation Filters, Object Model, Potential Object Types, Principles (+6 more)
 
 ### Community 136 - "vitest/SKILL.md"
-Cohesion: 0.24
+Cohesion: 0.18
 Nodes (3): Advanced, Core, Features
 
 ### Community 137 - "Commands"
@@ -1825,37 +1828,37 @@ Nodes (3): Impact, What Changes, Why
 Cohesion: 0.50
 Nodes (3): Impact, What Changes, Why
 
+### Community 371 - "audit-capacities-visual.mjs"
+Cohesion: 0.06
+Nodes (24): artifactsDir, beforePath, chatPanel, consoleErrors, correctedPath, dayPanel, designTokens, diffPath (+16 more)
+
 ### Community 372 - "dependencies"
-Cohesion: 0.11
-Nodes (18): class-variance-authority, clsx, @radix-ui/react-tooltip, lucide-react, next, dependencies, class-variance-authority, clsx (+10 more)
+Cohesion: 0.08
+Nodes (24): class-variance-authority, clsx, @radix-ui/react-scroll-area, @radix-ui/react-separator, @radix-ui/react-tooltip, lucide-react, next, dependencies (+16 more)
 
-### Community 405 - "@radix-ui/react-scroll-area"
-Cohesion: 0.67
-Nodes (3): @radix-ui/react-scroll-area, @radix-ui/react-scroll-area, @radix-ui/react-scroll-area
-
-### Community 406 - "@radix-ui/react-separator"
-Cohesion: 0.67
-Nodes (3): @radix-ui/react-separator, @radix-ui/react-separator, @radix-ui/react-separator
+### Community 373 - "extract-capacities-reference.mjs"
+Cohesion: 0.17
+Nodes (19): allElements, attributesFor(), designTokens, dom, elementIdByElement, elements, indexByElement, isRelevant() (+11 more)
 
 ## Knowledge Gaps
-- **3054 isolated node(s):** `nextConfig`, `name`, `version`, `private`, `dev` (+3049 more)
+- **3086 isolated node(s):** `name`, `version`, `private`, `dev`, `build` (+3081 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **62 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **65 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `cn` to `bubble.tsx`, `context-menu.tsx`, `sidebar.tsx`, `alert-dialog.tsx`, `chart.tsx`, `command.tsx`, `empty.tsx`, `marker.tsx`, `.old-reference-worktree/src/lib/utils.ts`, `questionnaire.tsx`, `drawer.tsx`, `field.tsx`, `combobox.tsx`, `toast.tsx`, `alert.tsx`, `tabs.tsx`, `.old-reference-worktree/src/components/workspace-shell.tsx`, `carousel.tsx`?**
-  _High betweenness centrality (0.008) - this node is a cross-community bridge._
-- **Why does `Test Context & Fixtures` connect `Test Context & Fixtures` to `vitest/SKILL.md`?**
-  _High betweenness centrality (0.002) - this node is a cross-community bridge._
+  _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **Why does `Test API` connect `Test API` to `vitest/SKILL.md`?**
   _High betweenness centrality (0.001) - this node is a cross-community bridge._
-- **What connects `nextConfig`, `name`, `version` to the rest of the system?**
-  _3054 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `devDependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._
+- **Why does `Mocking` connect `Mocking` to `vitest/SKILL.md`?**
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
+- **What connects `name`, `version`, `private` to the rest of the system?**
+  _3086 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `compilerOptions` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `biome.json` be split into smaller, more focused modules?**
   _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
+- **Should `ADDED Requirements` be split into smaller, more focused modules?**
+  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._

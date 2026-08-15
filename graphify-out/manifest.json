@@ -10,8 +10,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1786817517.5594368,
-    "ast_hash": "7a33f29f8ede4cbf1f805f648ee181ca",
+    "mtime": 1786822067.7819495,
+    "ast_hash": "3d46d6fbe6fa54cb8c546bcf43795cc9",
     "semantic_hash": ""
   },
   "postcss.config.mjs": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "__tests__/page.test.tsx": {
-    "mtime": 1786818428.8562284,
-    "ast_hash": "f673553103a04e78e8b0d4bc797dbbb6",
+    "mtime": 1786822702.5671635,
+    "ast_hash": "4a0764303fd0b97059da12a293d21cbc",
     "semantic_hash": ""
   },
   ".playwright-mcp/page-2026-08-13T10-56-32-296Z.yml": {
@@ -3185,13 +3185,13 @@
     "semantic_hash": ""
   },
   "__tests__/workspace-shell.test.tsx": {
-    "mtime": 1786818414.1425068,
-    "ast_hash": "21674d2b6517efa4373f2e8478caf62a",
+    "mtime": 1786823478.2353232,
+    "ast_hash": "304e2cd331d8258b0063f7758db6df19",
     "semantic_hash": ""
   },
   "artifacts/capacities-page-structure.json": {
     "mtime": 1786819862.6207159,
-    "ast_hash": "2b245f367da38ef4a39d9e40a87b1bba",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/app/[...route]/page.tsx": {
@@ -3230,8 +3230,8 @@
     "semantic_hash": ""
   },
   "src/components/workspace-shell.tsx": {
-    "mtime": 1786820023.8644226,
-    "ast_hash": "adacec547866bc934c2fcbd1abef74fb",
+    "mtime": 1786822702.5671635,
+    "ast_hash": "24bb57b64b4039b1c48ef7793502e982",
     "semantic_hash": ""
   },
   "src/lib/utils.ts": {
@@ -3240,8 +3240,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-audit-fixture.ts": {
-    "mtime": 1786818253.1808841,
-    "ast_hash": "cc07c3b150cc94fb17b2ec6e9981517a",
+    "mtime": 1786823171.108857,
+    "ast_hash": "1243489df76b20c09800326b162348f0",
     "semantic_hash": ""
   },
   "src/lib/workspace-navigation.ts": {
@@ -3277,6 +3277,41 @@
   "artifacts/capacities-visual-diff.png": {
     "mtime": 1786819882.75362,
     "ast_hash": "ff04b2ebeb7e90dacb5cc7485aafcdda",
+    "semantic_hash": ""
+  },
+  "scripts/audit-capacities-visual.mjs": {
+    "mtime": 1786823665.1628153,
+    "ast_hash": "7ca6ec250dd4efe15d8df1cf8df8eb2e",
+    "semantic_hash": ""
+  },
+  "scripts/extract-capacities-reference.mjs": {
+    "mtime": 1786822954.798154,
+    "ast_hash": "8992de2f75423654688c5b48f4b45656",
+    "semantic_hash": ""
+  },
+  "artifacts/capacities-before-1647x912.png": {
+    "mtime": 1786822324.8000877,
+    "ast_hash": "43f4439cd2cf7ebe214b953a7d3d28e0",
+    "semantic_hash": ""
+  },
+  "artifacts/capacities-corrected-1647x912.png": {
+    "mtime": 1786823680.6585958,
+    "ast_hash": "a9c6733b5bab5f82c85846e30edbb403",
+    "semantic_hash": ""
+  },
+  "artifacts/capacities-diff-1647x912.png": {
+    "mtime": 1786823680.718,
+    "ast_hash": "8cf35597304be62c1fec6599cabcd4e7",
+    "semantic_hash": ""
+  },
+  "artifacts/capacities-official-1647x912.png": {
+    "mtime": 1786823679.6297493,
+    "ast_hash": "6c958f0f7452c48bc50f559394868cf1",
+    "semantic_hash": ""
+  },
+  "artifacts/capacities-overlay-1647x912.png": {
+    "mtime": 1786823680.73,
+    "ast_hash": "6c472b0b876767f5682b7b46ef4e7925",
     "semantic_hash": ""
   }
 }
