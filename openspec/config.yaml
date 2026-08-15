@@ -11,10 +11,12 @@ rules:
   proposal:
     - Keep scope focused on one coherent product or repository change.
     - Include non-goals when boundaries could be ambiguous.
+    - Declare cross-change dependencies, independence, and implementation order when capabilities interact.
     - Reference supporting research or implementation files with relative paths.
   tasks:
     - Separate implementation verification from OpenSpec validation.
     - Keep tasks independently reviewable and PR-friendly.
-  spec:
+    - Identify prerequisites before dependent integration work.
+  specs:
     - Use MUST and SHOULD language for normative requirements.
     - Prefer observable behavior and acceptance criteria over implementation guesses.
