@@ -14,7 +14,9 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "graphify:check": "node scripts/check-graphify.mjs",
+    "reverse:assets": "node scripts/extract-capacities-assets.mjs",
     "graphify:update": "graphify update .",
+    "reverse:capture": "node scripts/reverse-engineering-capture.mjs",
     "verify": "pnpm format:check && pnpm lint && pnpm typegen && pnpm typecheck && pnpm test:coverage && pnpm graphify:check && pnpm build"
   },
   "dependencies": {
