@@ -1,0 +1,16 @@
+# Generated Graphify artifacts and feedback-loop memory must never be indexed
+# back into the source graph.
+graphify-out/
+graphify-out/**
+
+# Local build, browser, audit, and worktree artifacts are not project source.
+node_modules/
+.next/
+coverage/
+artifacts/
+.playwright-mcp/
+.implement-capacities-layout-sidebar/
+.implement-object-studio-worktree/
+.old-reference-worktree/
+var/
+var.backup-*/

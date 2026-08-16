@@ -61,7 +61,7 @@
   --workspace: oklch(0.9856 0.0016 67);
   --workspace-surface: var(--bg-base);
   --workspace-hover: oklch(0.9676 0.0016 67.02);
-  --workspace-selected: oklch(0.955 0.002 67);
+  --workspace-selected: var(--workspace-hover);
   --workspace-border: var(--border-base);
   --workspace-text: var(--text-primary);
   --workspace-muted: var(--text-secondary);
@@ -72,6 +72,16 @@
   --object-violet: oklch(0.58 0.13 305);
   --object-violet-soft: oklch(0.95 0.03 305);
   --object-pink: oklch(0.65 0.17 350);
+  --type-label-bg-blue: oklch(0.9513 0.0235 256.13);
+  --type-label-text-blue: oklch(0.5035 0.1579 264.41);
+  --type-label-bg-red: oklch(0.953 0.0218 17.35);
+  --type-label-text-red: oklch(0.506 0.1552 24.58);
+  --type-label-bg-green: oklch(0.9732 0.0311 157.36);
+  --type-label-text-green: oklch(0.5327 0.1221 151.7);
+  --type-label-bg-orange: oklch(0.9668 0.0264 74.74);
+  --type-label-text-orange: oklch(0.557 0.1387 43.21);
+  --type-label-bg-purple: oklch(0.963 0.0229 308.05);
+  --type-label-text-purple: oklch(0.5082 0.1955 304.61);
 }
 
 @theme inline {
@@ -89,9 +99,23 @@
   --color-object-violet: var(--object-violet);
   --color-object-violet-soft: var(--object-violet-soft);
   --color-object-pink: var(--object-pink);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   --shadow-workspace-panel: 0 1px 3px rgb(25 25 24 / 6%);
+}
+
+@media (width >= 1100px) {
+  .workspace-context-open {
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) 378px;
+  }
+}
+
+@media (width >= 1250px) {
+  .workspace-context-open {
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr) var(
+        --context-track
+      );
+  }
 }
 
 [data-theme="dark"] {
@@ -108,6 +132,16 @@
   --object-blue-soft: #263b55;
   --object-violet: #c4a7e7;
   --object-violet-soft: #40354f;
+  --type-label-bg-blue: #263b55;
+  --type-label-text-blue: #8db6e8;
+  --type-label-bg-red: #4c2d32;
+  --type-label-text-red: #ef9a9a;
+  --type-label-bg-green: #263f34;
+  --type-label-text-green: #86c99b;
+  --type-label-bg-orange: #49372a;
+  --type-label-text-orange: #e8ad72;
+  --type-label-bg-purple: #40354f;
+  --type-label-text-purple: #c4a7e7;
 }
 
 * {

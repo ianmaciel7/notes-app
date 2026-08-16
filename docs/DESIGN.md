@@ -34,31 +34,39 @@ not mean removing context, relationships, state, or necessary controls.
 
 ### Color
 
-Neutral surfaces carry most of the interface. Blue is the primary action and
-focus color; green, amber, red, and violet are reserved for distinct semantic
-roles. State must never depend on color alone.
+Neutral surfaces carry most of the interface. The confirmed Capacities light
+palette is the baseline for workspace surfaces and text. Blue remains the
+notes-app focus color so keyboard focus is more visible than the neutral
+reference ring; green, amber, red, and violet are reserved for distinct
+semantic roles. State must never depend on color alone.
 
 | Token role | Light baseline | Dark baseline | Use |
 | --- | --- | --- | --- |
-| Background | `oklch(0.985 0.002 260)` | `oklch(0.18 0.004 260)` | App canvas |
-| Surface | `oklch(1 0 0)` | `oklch(0.23 0.005 260)` | Active work regions and overlays |
-| Muted surface | `oklch(0.965 0.003 260)` | `oklch(0.28 0.006 260)` | Hover and secondary regions |
-| Border | `oklch(0.90 0.004 260)` | `oklch(0.36 0.007 260)` | Dividers and control outlines |
-| Foreground | `oklch(0.21 0.006 260)` | `oklch(0.94 0.003 260)` | Primary text |
-| Muted foreground | `oklch(0.48 0.008 260)` | `oklch(0.72 0.007 260)` | Secondary text |
+| Background | `oklch(0.9856 0.0016 67)` | `#1f1f1e` | App canvas |
+| Surface | `oklch(1 0.0001 263.28)` | `#282827` | Active work regions and overlays |
+| Hover surface | `oklch(0.9676 0.0016 67.02)` | `#373735` | Hover and selected navigation |
+| Border | `oklch(0.9163 0.0017 67.07)` | `#444442` | Dividers and control outlines |
+| Strong border | `oklch(0.8643 0.0017 67.13)` | `#444442` | Emphasized control outlines |
+| Foreground | `oklch(0.2191 0.0058 285.84)` | `#f0f0ed` | Primary text |
+| Muted foreground | `oklch(0.3887 0.0052 301.05)` | `#b9b9b4` | Secondary text |
+| Subtle foreground | `oklch(0.5725 0.0051 33.89)` | `#858581` | Labels, counts, and placeholders |
 | Primary | `oklch(0.54 0.14 250)` | `oklch(0.72 0.11 250)` | Primary action, focus, selection |
 | Success | `oklch(0.56 0.12 155)` | `oklch(0.72 0.11 155)` | Confirmed success |
 | Warning | `oklch(0.67 0.14 75)` | `oklch(0.78 0.12 75)` | Attention and recoverable risk |
 | Danger | `oklch(0.58 0.19 25)` | `oklch(0.72 0.16 25)` | Destructive actions and errors |
 | Relation | `oklch(0.58 0.13 305)` | `oklch(0.73 0.11 305)` | Relationship and graph cues |
 
-Future implementation must expose these roles through semantic CSS variables.
-Feature components consume roles rather than duplicating literal colors.
+The light values above were measured from the authenticated Capacities
+calendar on 2026-08-15. Dark values remain the notes-app baseline until a
+separate authenticated dark-theme audit replaces them. Implementation exposes
+these roles through semantic CSS variables; feature components consume roles
+rather than duplicating literal colors.
 
 ### Typography
 
-- Use Geist Sans with system sans-serif fallbacks on `body`, overlays, and
-  portals. Use Geist Mono only for code or identifiers.
+- Use Inter with `ui-sans-serif` and system sans-serif fallbacks on `body`,
+  overlays, portals, and the Tailwind `font-sans` token. Use Geist Mono only
+  for code or identifiers.
 - Body and editor copy begin at 16 px with a 1.5 line height.
 - Workspace navigation and controls use 12-14 px text.
 - Compact panel headings use 14-18 px; reserve 24-32 px for the active object
@@ -73,6 +81,9 @@ Feature components consume roles rather than duplicating literal colors.
   32 px.
 - Icon controls use stable square dimensions; text controls have stable minimum
   heights.
+- Compact control sizes are 22, 28, 32, and 36 px (`xs`, `sm`, `base`, and
+  `lg`). The default workspace control is 32 px high with 14 px text and a
+  20 px line height.
 - Controls use 6-8 px radii. Repeated cards and framed tools use at most 8 px
   unless a proven component contract requires otherwise.
 - Page sections remain unframed. Do not place cards inside cards.
@@ -84,6 +95,20 @@ Feature components consume roles rather than duplicating literal colors.
 The workspace will be designed in independently reviewable regions. Exact
 dimensions and breakpoint behavior belong to the OpenSpec change for that
 region and are not pre-approved by this foundation.
+
+For the current workspace shell, authenticated reference measurements establish
+a 288 px desktop sidebar and a 46 px top rail. The context panel is removed
+below 1100 px; at 1250 px and above it uses a bounded 380-620 px resizable
+track, with 496 px as the default desktop width. Its vertical area includes the
+46 px context top rail and the standard 10 px panel inset, so the visible panel
+body subtracts both instead of adding another full-height row. These values are
+implementation contracts, not general-purpose spacing tokens.
+
+The named layout utility `workspace-context-open` owns both the 1100 px fluid
+layout and the 1250 px fixed context-track transition. Do not stack arbitrary
+`min-[…]` variants for competing declarations of the same grid property because
+their generated order is not a reliable substitute for one explicit layout
+utility.
 
 1. Sidebar.
 2. Workspace shell and primary layout regions.
@@ -100,8 +125,13 @@ interactive, empty, loading, and error states that are reachable in scope.
 ## Components
 
 - Prefer existing shadcn primitives and Tailwind utilities/tokens.
-- Use Lucide icons when an established symbol exists. Icon-only controls need
-  an accessible name and a tooltip when the meaning is not self-evident.
+- Keep workspace layout in Tailwind utilities, using explicit responsive grid
+  tracks and child placement. Reserve CSS Modules for scoped rules that
+  Tailwind cannot express cleanly.
+- Use the local Capacities-compatible icon set for workspace navigation where a
+  verified glyph exists. Use Lucide for uncovered generic actions. Icon-only
+  controls need an accessible name and a tooltip when the meaning is not
+  self-evident.
 - Use familiar icon controls for actions such as close, back, search, settings,
   zoom, save, and overflow.
 - Use segmented controls for modes, tabs for views, checkboxes or switches for
@@ -117,6 +147,8 @@ interactive, empty, loading, and error states that are reachable in scope.
 - Hover-only actions become visible on `focus-within` and reserve their layout
   space before appearing.
 - Focus indicators meet WCAG 2.2 AA and remain visible against every surface.
+- Keyboard focus intentionally uses the blue `--workspace-focus` ring instead
+  of the lower-contrast neutral ring observed in the reference.
 - Use 120-220 ms transitions for local feedback and up to 300 ms for spatial
   panel changes.
 - Respect `prefers-reduced-motion` and preserve the final state without

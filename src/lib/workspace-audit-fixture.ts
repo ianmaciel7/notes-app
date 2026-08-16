@@ -11,11 +11,18 @@ export type CreatedObjectFixture = {
 
 export const workspaceAuditFixture = {
   activeDate: "2026-08-11",
+  locale: "pt-BR",
+  timezone: "America/Sao_Paulo",
   activeView: "Dia",
   weekdayLabel: "Terça-Feira",
   formattedDate: "11 De Agosto De 2026",
   weekNumber: 33,
   taskCount: 0,
+  tasks: [],
+  dailyNote: {
+    available: true,
+    title: "Nota Diária",
+  },
   selectedModel: "Gemini 3.1 Flash Lite",
   chat: {
     type: "Chat de IA",

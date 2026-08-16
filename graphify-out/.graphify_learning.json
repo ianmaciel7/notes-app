@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-08-16T00:34:11.476745+00:00",
+  "nodes": {
+    "src_components_workspace_shell": {
+      "code_fingerprint": "7889d5135bd3161a6e927491ce031ace486a2b02e221d34c1c1162a67a8e213a",
+      "label": "workspace-shell.tsx",
+      "last": "2026-08-15T22:00:48.487511+00:00",
+      "neg": 1,
+      "provenance": [
+        {
+          "date": "2026-08-15T22:00:48.487511+00:00",
+          "outcome": "corrected",
+          "q": "Como as abas do painel de contexto do Capacities se comportam?"
+        },
+        {
+          "date": "2026-08-15T21:48:04.809834+00:00",
+          "outcome": "useful",
+          "q": "Quais estados do painel contextual precisam de teste de regressao?"
+        },
+        {
+          "date": "2026-08-15T21:47:50.201475+00:00",
+          "outcome": "useful",
+          "q": "Qual fonte canonica governa o painel contextual e como preservar sua paridade?"
+        }
+      ],
+      "score": 0.997130689,
+      "source_file": "src/components/workspace-shell.tsx",
+      "status": "contested",
+      "uses": 2,
+      "verdict": "useful"
+    },
+    "tests_workspace_shell_test": {
+      "code_fingerprint": "bdf5185a656030b460e0ca45cc2def7e7411159113c5b28e87e9c7be4316f154",
+      "label": "workspace-shell.test.tsx",
+      "last": "2026-08-15T22:00:48.487511+00:00",
+      "neg": 1,
+      "provenance": [
+        {
+          "date": "2026-08-15T22:00:48.487511+00:00",
+          "outcome": "corrected",
+          "q": "Como as abas do painel de contexto do Capacities se comportam?"
+        },
+        {
+          "date": "2026-08-15T21:48:04.809834+00:00",
+          "outcome": "useful",
+          "q": "Quais estados do painel contextual precisam de teste de regressao?"
+        },
+        {
+          "date": "2026-08-15T21:47:50.201475+00:00",
+          "outcome": "useful",
+          "q": "Qual fonte canonica governa o painel contextual e como preservar sua paridade?"
+        }
+      ],
+      "score": 0.997130689,
+      "source_file": "__tests__/workspace-shell.test.tsx",
+      "status": "contested",
+      "uses": 2,
+      "verdict": "useful"
+    }
+  },
+  "version": 1
+}
