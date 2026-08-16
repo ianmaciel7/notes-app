@@ -1,0 +1,30 @@
+{
+  "runId": "reverse-cycle-001",
+  "timestamp": "2026-08-16T00:00:00Z",
+  "surface": "routing-and-flows",
+  "route": "/tipos/tabelas",
+  "viewport": "1128x912",
+  "inputType": "network",
+  "steps": [
+    "open route",
+    "capture request waterfall",
+    "navigate to /tipos/arquivos",
+    "capture request waterfall",
+    "search with test keyword (if safe data available)"
+  ],
+  "result": {
+    "stateBefore": "ObjectTypePageLoaded",
+    "stateAfter": "LocalObjectTypeEmptyState",
+    "outcomes": [],
+    "notObserved": [
+      "exact route transition requests",
+      "mutating flow requests"
+    ],
+    "errors": []
+  },
+  "artifacts": {
+    "networkHar": "reverse-engineering/network/har/tabelas-to-arquivos.har",
+    "trace": "reverse-engineering/capture/traces/network-tabelas-to-arquivos.jsonl"
+  },
+  "confidence": "UNKNOWN"
+}

@@ -1,0 +1,42 @@
+{
+  "source": "capacities-local-parity",
+  "recordedAt": "2026-08-16",
+  "components": [
+    {
+      "localName": "workspace-shell",
+      "referenceRole": "main-shell",
+      "observedPurpose": "route-aware shell with contextual toolbar and page title",
+      "provenance": {
+        "state": "ObjectTypePageLoaded",
+        "evidence": "page screenshots + local render checks"
+      }
+    },
+    {
+      "localName": "object-type-workspace",
+      "referenceRole": "object-list",
+      "observedPurpose": "renders title/header, count chip, object cards, empty state and secondary context text",
+      "provenance": {
+        "state": "ObjectTypePageLoaded",
+        "evidence": "reference/local comparison"
+      }
+    },
+    {
+      "localName": "workspace-sidebar",
+      "referenceRole": "navigation rail",
+      "observedPurpose": "type switching and command entry",
+      "provenance": {
+        "state": "ObjectTypePageLoaded",
+        "evidence": "browser audit across /tipos routes"
+      }
+    },
+    {
+      "localName": "ObjectTypeRouteList",
+      "referenceRole": "reference list mapping layer",
+      "observedPurpose": "maps selected route to title/count/object content metadata for type pages",
+      "provenance": {
+        "state": "ObjectTypePageLoaded",
+        "evidence": "workspace-navigation.ts, state graph, reference manifest route mapping"
+      }
+    }
+  ]
+}

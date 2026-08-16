@@ -1,0 +1,70 @@
+{
+  "states": [
+    {
+      "id": "DailyPageReady",
+      "description": "Home daily workspace and list visible",
+      "url": "/",
+      "domMutationObserved": true,
+      "transitions": [
+        {
+          "from": "DailyPageReady",
+          "trigger": "open context menu or quick action",
+          "to": "ObjectTypeMenuOpen",
+          "urlBefore": "/",
+          "urlAfter": "/",
+          "networkActivity": [],
+          "domMutation": false
+        }
+      ],
+      "evidence": ["local-render-check", "browser-audit"]
+    },
+    {
+      "id": "ObjectTypePageLoaded",
+      "description": "Type list route loaded with title, toolbar and objects or empty state",
+      "url": "/tipos/*",
+      "domMutationObserved": true,
+      "transitions": [
+        {
+          "from": "DailyPageReady",
+          "trigger": "select object type in left rail",
+          "to": "ObjectTypePageLoaded",
+          "urlBefore": "/",
+          "urlAfter": "/tipos/tabelas",
+          "networkActivity": [],
+          "domMutation": true
+        },
+        {
+          "from": "ObjectTypePageLoaded",
+          "trigger": "open context menu or quick action",
+          "to": "ObjectTypeMenuOpen",
+          "urlBefore": "/tipos/*",
+          "urlAfter": "/tipos/*",
+          "networkActivity": [],
+          "domMutation": false
+        }
+      ],
+      "evidence": ["browser-audit"]
+    },
+    {
+      "id": "ObjectTypeMenuOpen",
+      "description": "Context menu or quick actions panel is visible",
+      "url": "/tipos/*",
+      "domMutationObserved": true,
+      "transitions": [
+        {
+          "from": "ObjectTypeMenuOpen",
+          "trigger": "close context menu or quick action",
+          "to": "ObjectTypePageLoaded",
+          "urlBefore": "/tipos/*",
+          "urlAfter": "/tipos/*",
+          "networkActivity": [],
+          "domMutation": true
+        }
+      ],
+      "evidence": [
+        "local/states/state-transitions.json",
+        "capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_tabelas-capture.json"
+      ]
+    }
+  ]
+}

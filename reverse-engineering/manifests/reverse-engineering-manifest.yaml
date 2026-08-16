@@ -1,0 +1,40 @@
+reference:
+  name: capacities
+  manifest: reference/manifest.json
+local:
+  evidence: local/implementation-evidence.json
+artifacts:
+  - pages/page-catalog.json
+  - states/state-graph.json
+  - flows/flows.json
+  - flows/interaction-flow-catalog.json
+  - local/flows/local-flow-index.json
+  - capture/index.jsonl
+  - capture/observations.schema.json
+  - capture/template-keyboard-observation.json
+  - capture/template-network-observation.json
+  - capture/template-screenshot-observation.json
+  - capture/README.md
+  - network/requests.json
+  - network/interaction-requests.json
+  - network/storage-state.json
+  - styles/coverage.json
+  - components/component-catalog.json
+  - tokens/design-tokens.json
+  - screenshots/index.json
+  - screenshots/plan.json
+  - comparisons/gaps.json
+  - comparisons/acceptance-criteria.json
+  - comparisons/confidence-matrix.json
+  - accessibility/roles.json
+  - accessibility/keyboard-matrix.json
+  - accessibility/interaction-tree.json
+  - comparisons/coverage-summary.json
+  - comparisons/coverage-report.json
+  - comparisons/difference-score.json
+  - knowledge/knowledge-graph.json
+  - knowledge/state-events.json
+  - evidence-catalog.jsonl
+  - runbook.md
+updatedAt: 2026-08-16
+status: active

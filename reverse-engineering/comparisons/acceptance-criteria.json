@@ -1,0 +1,55 @@
+{
+  "version": "0.1.0",
+  "scope": "object-type and workspace parity",
+  "criteria": [
+    {
+      "id": "C1",
+      "name": "State coverage",
+      "mustHave": [
+        "reference state and local state mapping populated",
+        "at least two states per object type route with deterministic fixture evidence"
+      ],
+      "status": "partially_met"
+    },
+    {
+      "id": "C2",
+      "name": "Interaction parity",
+      "mustHave": [
+        "non-button controls discovered by role",
+        "keyboard key mapping and state transitions recorded",
+        "interaction transitions exported as state events"
+      ],
+      "status": "partially_met"
+    },
+    {
+      "id": "C3",
+      "name": "Network observability",
+      "mustHave": [
+        "captured route transition request chain",
+        "captured mutating flows (create/edit/delete) with request snapshots"
+      ],
+      "status": "not_met"
+    },
+    {
+      "id": "C4",
+      "name": "Visual regression evidence",
+      "mustHave": [
+        "reference screenshot",
+        "local screenshot",
+        "diff artifact",
+        "capture metadata"
+      ],
+      "status": "not_met"
+    },
+    {
+      "id": "C5",
+      "name": "Accessibility structure",
+      "mustHave": [
+        "complete role tree snapshots",
+        "selected/expanded/checked state capture",
+        "keyboard navigation assertions"
+      ],
+      "status": "not_met"
+    }
+  ]
+}

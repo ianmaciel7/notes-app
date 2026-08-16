@@ -1,0 +1,105 @@
+{
+  "runId": "local-2026-08-16T16-36-33-478Z",
+  "source": "capacities + local parity implementation",
+  "routesDiscovered": 13,
+  "routesVisited": 14,
+  "statesDiscovered": 2,
+  "statesReproduced": 2,
+  "interactiveElementsDiscovered": 5,
+  "interactiveElementsExercised": 154,
+  "flowsCaptured": 1,
+  "flowsReproduced": 1,
+  "screenshotsCaptured": 14,
+  "screenshotsPlanned": 0,
+  "unknownStates": 9,
+  "blockedStates": 0,
+  "destructiveActionsSkipped": 1,
+  "referenceToLocalMappings": [
+    {
+      "reference": "/",
+      "local": "/",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/notas",
+      "local": "/tipos/notas",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/chats",
+      "local": "/tipos/chats",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/imagens",
+      "local": "/tipos/imagens",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/arquivos",
+      "local": "/tipos/arquivos",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/audios",
+      "local": "/tipos/audios",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/pdfs",
+      "local": "/tipos/pdfs",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/queries",
+      "local": "/tipos/queries",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/etiquetas",
+      "local": "/tipos/etiquetas",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/tweets",
+      "local": "/tipos/tweets",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/links",
+      "local": "/tipos/links",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/tabelas",
+      "local": "/tipos/tabelas",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/paginas",
+      "local": "/tipos/paginas",
+      "status": "implemented"
+    },
+    {
+      "reference": "/tipos/audit-entities",
+      "local": "/tipos/audit-entities",
+      "status": "implemented"
+    }
+  ],
+  "remainingDeltas": [
+    "keyboard parity for modal/dialog/tabmenu contexts",
+    "mutating network flows and API contracts",
+    "visual diff baselines against reference URLs"
+  ],
+  "categoryScores": {
+    "structure": 4,
+    "layout": 4,
+    "typography": 3,
+    "spacing": 4,
+    "color": 3,
+    "icons": 2,
+    "interaction": 2,
+    "accessibility": 2,
+    "responsive": 1
+  }
+}

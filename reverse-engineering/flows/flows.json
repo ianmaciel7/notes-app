@@ -1,0 +1,1715 @@
+{
+  "flows": [
+    {
+      "name": "Navigate object type list",
+      "startingState": "DailyPageReady",
+      "steps": [
+        {
+          "id": "open-type",
+          "action": "openSidebarItem",
+          "target": "tipos/tabelas"
+        },
+        {
+          "id": "verify-state",
+          "action": "assert",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/",
+        "/tipos/tabelas"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace",
+        "workspace-sidebar"
+      ],
+      "networkRequests": [],
+      "screenshots": [
+        "reverse-engineering/screenshots/local-tabelas.png"
+      ]
+    },
+    {
+      "name": "Navigate initial route /",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "DailyPageReady",
+      "finalState": "DailyPageReady",
+      "routes": [
+        "/"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeOpen",
+          "target": "/"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "DailyPageReady"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/root-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/root-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:33:58.867Z"
+      }
+    },
+    {
+      "name": "Navigate from / to /tipos/notas",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/",
+        "/tipos/notas"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/notas"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_notas-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_notas-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:04.381Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/notas to /tipos/chats",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/notas",
+        "/tipos/chats"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/chats"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_chats-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_chats-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:09.882Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/chats to /tipos/imagens",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/chats",
+        "/tipos/imagens"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/imagens"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_imagens-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_imagens-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:15.380Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/imagens to /tipos/arquivos",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/imagens",
+        "/tipos/arquivos"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/arquivos"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_arquivos-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_arquivos-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:20.637Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/arquivos to /tipos/audios",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/arquivos",
+        "/tipos/audios"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/audios"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audios-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audios-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:25.828Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/audios to /tipos/pdfs",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/audios",
+        "/tipos/pdfs"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/pdfs"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_pdfs-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_pdfs-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:31.081Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/pdfs to /tipos/queries",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/pdfs",
+        "/tipos/queries"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/queries"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_queries-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_queries-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:36.257Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/queries to /tipos/etiquetas",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/queries",
+        "/tipos/etiquetas"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/etiquetas"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_etiquetas-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_etiquetas-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:41.652Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/etiquetas to /tipos/tweets",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/etiquetas",
+        "/tipos/tweets"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/tweets"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tweets-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tweets-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:46.808Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/tweets to /tipos/links",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/tweets",
+        "/tipos/links"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/links"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_links-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_links-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:52.142Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/links to /tipos/tabelas",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/links",
+        "/tipos/tabelas"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/tabelas"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tabelas-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tabelas-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:57.434Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/tabelas to /tipos/paginas",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/tabelas",
+        "/tipos/paginas"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/paginas"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_paginas-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_paginas-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:35:02.949Z"
+      }
+    },
+    {
+      "name": "Navigate from /tipos/paginas to /tipos/audit-entities",
+      "status": "captured",
+      "category": "navigation",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/paginas",
+        "/tipos/audit-entities"
+      ],
+      "components": [
+        "workspace-shell",
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "open-route",
+          "action": "routeSelect",
+          "target": "/tipos/audit-entities"
+        },
+        {
+          "id": "observe",
+          "action": "observeState",
+          "target": "ObjectTypePageLoaded"
+        }
+      ],
+      "screenshots": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audit-entities-capture.json"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audit-entities-capture.json",
+        "local/states/state-transitions.json"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:35:08.365Z"
+      }
+    },
+    {
+      "name": "menu on /",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "DailyPageReady",
+      "finalState": "DailyPageReady",
+      "routes": [
+        "/"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\root-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\root-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/root-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\root-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\root-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:33:58.867Z"
+      }
+    },
+    {
+      "name": "dialog on /",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "DailyPageReady",
+      "finalState": "DailyPageReady",
+      "routes": [
+        "/"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\root-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\root-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/root-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\root-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\root-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:33:58.867Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/notas",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/notas"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_notas-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_notas-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_notas-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_notas-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_notas-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:04.381Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/notas",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/notas"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_notas-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_notas-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_notas-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_notas-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_notas-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:04.381Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/chats",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/chats"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_chats-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_chats-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_chats-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_chats-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_chats-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:09.882Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/chats",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/chats"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_chats-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_chats-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_chats-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_chats-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_chats-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:09.882Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/imagens",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/imagens"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_imagens-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_imagens-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_imagens-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_imagens-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_imagens-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:15.380Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/imagens",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/imagens"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_imagens-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_imagens-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_imagens-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_imagens-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_imagens-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:15.380Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/arquivos",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/arquivos"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_arquivos-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_arquivos-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_arquivos-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_arquivos-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_arquivos-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:20.637Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/arquivos",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/arquivos"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_arquivos-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_arquivos-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_arquivos-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_arquivos-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_arquivos-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:20.637Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/audios",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/audios"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audios-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audios-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audios-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audios-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audios-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:25.828Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/audios",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/audios"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audios-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audios-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audios-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audios-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audios-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:25.828Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/pdfs",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/pdfs"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_pdfs-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_pdfs-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_pdfs-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_pdfs-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_pdfs-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:31.081Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/pdfs",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/pdfs"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_pdfs-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_pdfs-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_pdfs-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_pdfs-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_pdfs-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:31.081Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/queries",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/queries"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_queries-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_queries-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_queries-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_queries-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_queries-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:36.257Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/queries",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/queries"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_queries-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_queries-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_queries-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_queries-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_queries-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:36.257Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/etiquetas",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/etiquetas"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_etiquetas-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_etiquetas-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_etiquetas-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_etiquetas-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_etiquetas-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:41.652Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/etiquetas",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/etiquetas"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_etiquetas-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_etiquetas-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_etiquetas-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_etiquetas-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_etiquetas-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:41.652Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/tweets",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/tweets"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tweets-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tweets-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tweets-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tweets-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tweets-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:46.808Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/tweets",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/tweets"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tweets-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tweets-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tweets-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tweets-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tweets-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:46.808Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/links",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/links"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_links-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_links-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_links-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_links-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_links-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:52.142Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/links",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/links"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_links-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_links-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_links-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_links-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_links-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:52.142Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/tabelas",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/tabelas"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tabelas-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tabelas-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tabelas-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tabelas-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tabelas-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:57.434Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/tabelas",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/tabelas"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tabelas-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tabelas-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tabelas-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tabelas-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_tabelas-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:34:57.434Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/paginas",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/paginas"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_paginas-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_paginas-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_paginas-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_paginas-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_paginas-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:35:02.949Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/paginas",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/paginas"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_paginas-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_paginas-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_paginas-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_paginas-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_paginas-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:35:02.949Z"
+      }
+    },
+    {
+      "name": "menu on /tipos/audit-entities",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/audit-entities"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "menu-start",
+          "action": "interaction",
+          "target": "menu"
+        },
+        {
+          "id": "menu-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audit-entities-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audit-entities-interaction-menu-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audit-entities-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audit-entities-interaction-menu-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audit-entities-interaction-menu-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:35:08.365Z"
+      }
+    },
+    {
+      "name": "dialog on /tipos/audit-entities",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "startingState": "ObjectTypePageLoading",
+      "finalState": "ObjectTypePageLoaded",
+      "routes": [
+        "/tipos/audit-entities"
+      ],
+      "components": [
+        "object-type-workspace"
+      ],
+      "steps": [
+        {
+          "id": "dialog-start",
+          "action": "interaction",
+          "target": "dialog"
+        },
+        {
+          "id": "dialog-result",
+          "action": "result",
+          "target": "stateTransition"
+        }
+      ],
+      "screenshots": [
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audit-entities-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audit-entities-interaction-dialog-close.png"
+      ],
+      "evidence": [
+        "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audit-entities-capture.json",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audit-entities-interaction-dialog-open.png",
+        "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\capture\\runs\\reverse-run-2026-08-16T16-33-51-296Z\\tipos_audit-entities-interaction-dialog-close.png"
+      ],
+      "metadata": {
+        "source": "reverse-capture",
+        "runId": "reverse-run-2026-08-16T16-33-51-296Z",
+        "capturedAt": "2026-08-16T16:35:08.365Z"
+      }
+    }
+  ],
+  "generatedAt": "2026-08-16",
+  "source": "capacities-reference-and-capture"
+}

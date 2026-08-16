@@ -1,0 +1,45 @@
+{
+  "capturesPlanned": [
+    {
+      "type": "reference",
+      "route": "/tipos/tabelas",
+      "viewport": "1128x912",
+      "state": "loaded",
+      "theme": "default",
+      "scrollPosition": "top",
+      "action": "baseline capture after route load"
+    },
+    {
+      "type": "local",
+      "route": "/tipos/tabelas",
+      "viewport": "1128x912",
+      "state": "loaded",
+      "theme": "default",
+      "scrollPosition": "top",
+      "artifact": "reverse-engineering/screenshots/local-tabelas-1128x912.png"
+    },
+    {
+      "type": "local",
+      "route": "/tipos/arquivos",
+      "viewport": "1128x912",
+      "state": "empty",
+      "theme": "default",
+      "artifact": "reverse-engineering/screenshots/local-arquivos-1128x912.png",
+      "notes": "empty-state parity target"
+    },
+    {
+      "type": "local",
+      "route": "/tipos/audios",
+      "viewport": "768x1024",
+      "state": "loaded",
+      "notes": "responsive baseline"
+    }
+  ],
+  "status": "planned",
+  "evidenceRequired": [
+    "reference.png",
+    "local.png",
+    "diff.png",
+    "metadata.json"
+  ]
+}

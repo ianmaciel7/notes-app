@@ -1,0 +1,56 @@
+{
+  "url": "http://localhost:3000/tipos/chats",
+  "readyState": "ready",
+  "readinessConditions": [
+    "bootstrap",
+    "hydration",
+    "index",
+    "daily-note-query",
+    "tasks-query",
+    "created-today-query",
+    "chat-query",
+    "no-pending-requests"
+  ],
+  "pendingRequests": 0,
+  "snapshotCount": 2,
+  "focusElement": {
+    "tag": "button",
+    "id": "radix-_R_8kpi9bn5rlb_",
+    "role": null,
+    "name": "Adicionar aos Fixados"
+  },
+  "snapshots": [
+    {
+      "role": "tablist",
+      "name": "Abas do painel de contexto",
+      "id": null,
+      "tag": "div",
+      "selected": null,
+      "expanded": null,
+      "checked": null,
+      "disabled": false,
+      "inView": true,
+      "focused": false,
+      "x": 754,
+      "y": 7,
+      "width": 285,
+      "height": 32
+    },
+    {
+      "role": "tab",
+      "name": null,
+      "id": null,
+      "tag": "button",
+      "selected": "true",
+      "expanded": null,
+      "checked": null,
+      "disabled": false,
+      "inView": true,
+      "focused": false,
+      "x": 754,
+      "y": 7,
+      "width": 280,
+      "height": 32
+    }
+  ]
+}

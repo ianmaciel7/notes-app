@@ -1,0 +1,19 @@
+{
+  "referenceComponent": "ObjectTypePage",
+  "expectedStructure": {
+    "title": "h1",
+    "toolbar": "header actions row",
+    "content": "object list or empty state",
+    "sidePane": "context/Explorer panel"
+  },
+  "interactionHypotheses": [
+    {
+      "name": "newItem",
+      "role": "button",
+      "state": "notObserved",
+      "confidence": "UNKNOWN",
+      "notes": "visual presence inferred from existing labels"
+    }
+  ],
+  "semanticAnchor": "state graph transition from workspace selection to object list render"
+}

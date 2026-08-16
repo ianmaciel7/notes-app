@@ -86,6 +86,15 @@ test("renders the Portuguese navigation contract with real links", async () => {
 });
 
 test("keeps the parent destination active on a nested route", () => {
+  render(<WorkspaceShell pathname="/tipos/chats/system-1" />);
+
+  expect(screen.getByRole("link", { name: "Chats de IA" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+});
+
+test("supports legacy nested object-type slug through compatibility mapping", () => {
   render(<WorkspaceShell pathname="/tipos/chats-de-ia/system-1" />);
 
   expect(screen.getByRole("link", { name: "Chats de IA" })).toHaveAttribute(

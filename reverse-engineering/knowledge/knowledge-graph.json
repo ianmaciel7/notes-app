@@ -1,0 +1,1079 @@
+{
+  "version": "0.1.0",
+  "createdAt": "2026-08-16",
+  "nodes": [
+    {
+      "id": "comp:workspace-shell",
+      "type": "Component",
+      "label": "workspace-shell"
+    },
+    {
+      "id": "comp:object-type-workspace",
+      "type": "Component",
+      "label": "object-type-workspace"
+    },
+    {
+      "id": "state:daily-ready",
+      "type": "State",
+      "label": "DailyPageReady"
+    },
+    {
+      "id": "state:object-type-page-loaded",
+      "type": "State",
+      "label": "ObjectTypePageLoaded"
+    },
+    {
+      "id": "state:local-object-type-empty-state",
+      "type": "State",
+      "label": "LocalObjectTypeEmptyState"
+    },
+    {
+      "id": "evidence:coverage-report",
+      "type": "Evidence",
+      "label": "comparisons/coverage-report.json"
+    },
+    {
+      "id": "evidence:coverage-summary",
+      "type": "Evidence",
+      "label": "comparisons/coverage-summary.json"
+    },
+    {
+      "id": "ref:route-root",
+      "type": "Route",
+      "label": "/"
+    },
+    {
+      "id": "evidence:route-root",
+      "type": "Evidence",
+      "label": "/-capture"
+    },
+    {
+      "id": "ref:route-tipos-notas",
+      "type": "Route",
+      "label": "/tipos/notas"
+    },
+    {
+      "id": "evidence:route-tipos-notas",
+      "type": "Evidence",
+      "label": "/tipos/notas-capture"
+    },
+    {
+      "id": "ref:route-tipos-chats",
+      "type": "Route",
+      "label": "/tipos/chats"
+    },
+    {
+      "id": "evidence:route-tipos-chats",
+      "type": "Evidence",
+      "label": "/tipos/chats-capture"
+    },
+    {
+      "id": "ref:route-tipos-imagens",
+      "type": "Route",
+      "label": "/tipos/imagens"
+    },
+    {
+      "id": "evidence:route-tipos-imagens",
+      "type": "Evidence",
+      "label": "/tipos/imagens-capture"
+    },
+    {
+      "id": "ref:route-tipos-arquivos",
+      "type": "Route",
+      "label": "/tipos/arquivos"
+    },
+    {
+      "id": "evidence:route-tipos-arquivos",
+      "type": "Evidence",
+      "label": "/tipos/arquivos-capture"
+    },
+    {
+      "id": "ref:route-tipos-audios",
+      "type": "Route",
+      "label": "/tipos/audios"
+    },
+    {
+      "id": "evidence:route-tipos-audios",
+      "type": "Evidence",
+      "label": "/tipos/audios-capture"
+    },
+    {
+      "id": "ref:route-tipos-pdfs",
+      "type": "Route",
+      "label": "/tipos/pdfs"
+    },
+    {
+      "id": "evidence:route-tipos-pdfs",
+      "type": "Evidence",
+      "label": "/tipos/pdfs-capture"
+    },
+    {
+      "id": "ref:route-tipos-queries",
+      "type": "Route",
+      "label": "/tipos/queries"
+    },
+    {
+      "id": "evidence:route-tipos-queries",
+      "type": "Evidence",
+      "label": "/tipos/queries-capture"
+    },
+    {
+      "id": "ref:route-tipos-etiquetas",
+      "type": "Route",
+      "label": "/tipos/etiquetas"
+    },
+    {
+      "id": "evidence:route-tipos-etiquetas",
+      "type": "Evidence",
+      "label": "/tipos/etiquetas-capture"
+    },
+    {
+      "id": "ref:route-tipos-tweets",
+      "type": "Route",
+      "label": "/tipos/tweets"
+    },
+    {
+      "id": "evidence:route-tipos-tweets",
+      "type": "Evidence",
+      "label": "/tipos/tweets-capture"
+    },
+    {
+      "id": "ref:route-tipos-links",
+      "type": "Route",
+      "label": "/tipos/links"
+    },
+    {
+      "id": "evidence:route-tipos-links",
+      "type": "Evidence",
+      "label": "/tipos/links-capture"
+    },
+    {
+      "id": "ref:route-tipos-tabelas",
+      "type": "Route",
+      "label": "/tipos/tabelas"
+    },
+    {
+      "id": "evidence:route-tipos-tabelas",
+      "type": "Evidence",
+      "label": "/tipos/tabelas-capture"
+    },
+    {
+      "id": "ref:route-tipos-paginas",
+      "type": "Route",
+      "label": "/tipos/paginas"
+    },
+    {
+      "id": "evidence:route-tipos-paginas",
+      "type": "Evidence",
+      "label": "/tipos/paginas-capture"
+    },
+    {
+      "id": "ref:route-tipos-audit-entities",
+      "type": "Route",
+      "label": "/tipos/audit-entities"
+    },
+    {
+      "id": "evidence:route-tipos-audit-entities",
+      "type": "Evidence",
+      "label": "/tipos/audit-entities-capture"
+    },
+    {
+      "id": "evidence:route:root",
+      "type": "Evidence",
+      "label": "/-capture"
+    },
+    {
+      "id": "evidence:route:tipos-notas",
+      "type": "Evidence",
+      "label": "/tipos/notas-capture"
+    },
+    {
+      "id": "evidence:route:tipos-chats",
+      "type": "Evidence",
+      "label": "/tipos/chats-capture"
+    },
+    {
+      "id": "evidence:route:tipos-imagens",
+      "type": "Evidence",
+      "label": "/tipos/imagens-capture"
+    },
+    {
+      "id": "evidence:route:tipos-arquivos",
+      "type": "Evidence",
+      "label": "/tipos/arquivos-capture"
+    },
+    {
+      "id": "evidence:route:tipos-audios",
+      "type": "Evidence",
+      "label": "/tipos/audios-capture"
+    },
+    {
+      "id": "evidence:route:tipos-pdfs",
+      "type": "Evidence",
+      "label": "/tipos/pdfs-capture"
+    },
+    {
+      "id": "evidence:route:tipos-queries",
+      "type": "Evidence",
+      "label": "/tipos/queries-capture"
+    },
+    {
+      "id": "evidence:route:tipos-etiquetas",
+      "type": "Evidence",
+      "label": "/tipos/etiquetas-capture"
+    },
+    {
+      "id": "evidence:route:tipos-tweets",
+      "type": "Evidence",
+      "label": "/tipos/tweets-capture"
+    },
+    {
+      "id": "evidence:route:tipos-links",
+      "type": "Evidence",
+      "label": "/tipos/links-capture"
+    },
+    {
+      "id": "evidence:route:tipos-tabelas",
+      "type": "Evidence",
+      "label": "/tipos/tabelas-capture"
+    },
+    {
+      "id": "evidence:route:tipos-paginas",
+      "type": "Evidence",
+      "label": "/tipos/paginas-capture"
+    },
+    {
+      "id": "evidence:route:tipos-audit-entities",
+      "type": "Evidence",
+      "label": "/tipos/audit-entities-capture"
+    }
+  ],
+  "edges": [
+    {
+      "from": "state:daily-ready",
+      "to": "state:object-type-page-loaded",
+      "label": "navigate"
+    },
+    {
+      "from": "state:daily-ready",
+      "to": "state:object-type-page-loaded",
+      "label": "sidebarSelect"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:daily-ready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "evidence:route-root",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "evidence:route-tipos-notas",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "evidence:route-tipos-chats",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "evidence:route-tipos-imagens",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "evidence:route-tipos-arquivos",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "evidence:route-tipos-audios",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "evidence:route-tipos-pdfs",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "evidence:route-tipos-queries",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "evidence:route-tipos-etiquetas",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "evidence:route-tipos-tweets",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "evidence:route-tipos-links",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "evidence:route-tipos-tabelas",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "evidence:route-tipos-paginas",
+      "label": "provenance"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "state:object-type-page-loaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "evidence:route-tipos-audit-entities",
+      "label": "provenance"
+    },
+    {
+      "from": "comp:workspace-shell",
+      "to": "state:object-type-page-loaded",
+      "label": "implements"
+    },
+    {
+      "from": "comp:object-type-workspace",
+      "to": "state:object-type-page-loaded",
+      "label": "implements"
+    },
+    {
+      "from": "comp:object-type-workspace",
+      "to": "evidence:coverage-report",
+      "label": "provenance"
+    },
+    {
+      "from": "state:object-type-page-loaded",
+      "to": "evidence:coverage-summary",
+      "label": "validatedBy"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:daily-ready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:dailypageready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:dailypageready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:dailypageready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:dailypageready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:dailypageready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:dailypageready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:dailypageready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:dailypageready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:dailypageready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-root",
+      "to": "state:dailypageready",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-notas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-chats",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-imagens",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-arquivos",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audios",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-pdfs",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-queries",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-etiquetas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tweets",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-links",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-tabelas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-paginas",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    },
+    {
+      "from": "ref:route-tipos-audit-entities",
+      "to": "state:objecttypepageloaded",
+      "label": "renders"
+    }
+  ],
+  "updatedAt": "2026-08-16"
+}

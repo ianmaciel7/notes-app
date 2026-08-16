@@ -1,0 +1,164 @@
+{
+  "reference": "capacities",
+  "kind": "ui",
+  "routes": [
+    {
+      "slug": "notas-diarias",
+      "url": "/",
+      "label": "Notas Diárias",
+      "objectType": "RootDailyNote",
+      "countObserved": 1,
+      "notes": "root route entry point used during parity audit",
+      "lastCapturedAt": "2026-08-16T16:33:58.867Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/root-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 102,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "notas",
+      "url": "/tipos/notas",
+      "label": "Notas",
+      "objectType": "Daily",
+      "countObserved": 1,
+      "notes": "object center route discovered during local reference alignment",
+      "lastCapturedAt": "2026-08-16T16:34:04.381Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_notas-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 107,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "chats",
+      "url": "/tipos/chats",
+      "label": "Chats",
+      "objectType": "RootAIChat",
+      "countObserved": 1,
+      "lastCapturedAt": "2026-08-16T16:34:09.882Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_chats-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 105,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "imagens",
+      "url": "/tipos/imagens",
+      "label": "Imagens",
+      "objectType": "MediaImage",
+      "countObserved": 1,
+      "lastCapturedAt": "2026-08-16T16:34:15.380Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_imagens-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 108,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "arquivos",
+      "url": "/tipos/arquivos",
+      "label": "Arquivos",
+      "objectType": "MediaFile",
+      "countObserved": 1,
+      "lastCapturedAt": "2026-08-16T16:34:20.637Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_arquivos-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 107,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "audios",
+      "url": "/tipos/audios",
+      "label": "Audios",
+      "objectType": "MediaAudio",
+      "countObserved": 1,
+      "lastCapturedAt": "2026-08-16T16:34:25.828Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_audios-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 108,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "pdfs",
+      "url": "/tipos/pdfs",
+      "label": "PDFs",
+      "objectType": "MediaPDF",
+      "countObserved": 1,
+      "lastCapturedAt": "2026-08-16T16:34:31.081Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_pdfs-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 108,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "queries",
+      "url": "/tipos/queries",
+      "label": "Queries",
+      "objectType": "RootQuery",
+      "countObserved": 1,
+      "lastCapturedAt": "2026-08-16T16:34:36.257Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_queries-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 108,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "etiquetas",
+      "url": "/tipos/etiquetas",
+      "label": "Etiquetas",
+      "objectType": "RootTag",
+      "countObserved": 1,
+      "lastCapturedAt": "2026-08-16T16:34:41.652Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_etiquetas-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 108,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "tweets",
+      "url": "/tipos/tweets",
+      "label": "Tweets",
+      "objectType": "MediaTweet",
+      "countObserved": 1,
+      "lastCapturedAt": "2026-08-16T16:34:46.808Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_tweets-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 108,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "weblinks",
+      "url": "/tipos/links",
+      "label": "Links",
+      "objectType": "MediaWebResource",
+      "countObserved": 2,
+      "lastCapturedAt": "2026-08-16T16:34:52.142Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_links-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 108,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "tabelas",
+      "url": "/tipos/tabelas",
+      "label": "Tabelas",
+      "objectType": "RootSimpleTable",
+      "countObserved": 1,
+      "notes": "known visual baseline: card region at x311,y160,w202,h322 at 1128x912",
+      "lastCapturedAt": "2026-08-16T16:34:57.434Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_tabelas-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 108,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "paginas",
+      "url": "/tipos/paginas",
+      "label": "Páginas",
+      "objectType": "RootPage",
+      "countObserved": 1,
+      "lastCapturedAt": "2026-08-16T16:35:02.949Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_paginas-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 108,
+      "confidence": "OBSERVED"
+    },
+    {
+      "slug": "audit-entities",
+      "url": "/tipos/audit-entities",
+      "label": "AUDIT Entities",
+      "objectType": null,
+      "countObserved": 1,
+      "lastCapturedAt": "2026-08-16T16:35:08.365Z",
+      "lastCapturedScreenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_audit-entities-1128x912-loaded.png",
+      "lastSeenSnapshotCount": 108,
+      "confidence": "OBSERVED"
+    }
+  ],
+  "updatedAt": "2026-08-16"
+}

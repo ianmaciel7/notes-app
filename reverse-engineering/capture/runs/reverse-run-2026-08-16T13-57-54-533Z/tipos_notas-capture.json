@@ -1,0 +1,652 @@
+{
+  "route": "/tipos/notas",
+  "url": "http://localhost:3000/tipos/notas",
+  "runId": "reverse-run-2026-08-16T13-57-54-533Z",
+  "capturedAt": "2026-08-16T13:57:57.662Z",
+  "viewport": {
+    "width": 1128,
+    "height": 912
+  },
+  "durationMs": 1426,
+  "stateBefore": "ObjectTypePageLoaded",
+  "stateAfter": "ObjectTypePageLoaded",
+  "snapshots": {
+    "before": {
+      "url": "http://localhost:3000/tipos/notas",
+      "readyState": "ready",
+      "readinessConditions": [
+        "bootstrap",
+        "hydration",
+        "index",
+        "daily-note-query",
+        "tasks-query",
+        "created-today-query",
+        "chat-query",
+        "no-pending-requests"
+      ],
+      "pendingRequests": 0,
+      "snapshotCount": 2,
+      "focusElement": {
+        "tag": "body",
+        "id": null,
+        "role": null,
+        "name": "Codex Capacities Audit 2026-08-1111 de agosto de 2026ExplorarNovoBuscarCalendárioTarefas[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}Fixados0Nenhum conteúdo fixadoTipos de objeto13Notas Diárias0AUDIT Entities1Chats de IA1Imagens1Arquivos0Áudios1PDFs1Queries1Etiquetas1Tweets1Weblinks2Tabelas1Páginas1Adicionar seçãoLixeiraAjuda e recursosPrimeiros passosFazer uma perguntaDocumentaçãoNovidadesFeedbackProDiaHojeTerça-Feira11 De Agosto De 2026Semana 33✓TarefaNota diáriaNota DiáriaTarefasNenhuma tarefa neste diaVocê pode mudar isso criando um novo objeto.Criado Nesse Dia12PáginaAUDIT - Página completaAUDIT-CODEX: conteúdo sintético para validar persistência.\n\nEditor rico do Capacities\nItem de lista\n/TabelaAUDIT - Tabela persistidaNomeStatusItem AlfaEm revisãoItem BetaConcluídoWeblinkExample Domainexample.com/?utm_source=capacities-auditImagemSem título0ArquivoSem título0PDFSem títuloDocumento PDFWeblinkSem títulowww.w3.org/TR/PNG/iso_8859-1.txtChat de IASystem Audit Response TestAUDIT-OKTweetDefaulttwitter.com/jack/status/20QuerySem títuloSem definição\n0 entradasAUDIT EntityAUDIT - Custom entityEntidade personalizada persistidaÁudioSem títuloArquivo de áudioExplorarChat de IABuscarConteúdo relevanteEncontrar maisAUDIT - Página completaAUDIT - Custom entitySem títuloSem títuloSem títuloself.__next_r=\"Y9r6WN_3JaHihzERpm72h\";if(document.cookie.indexOf('next-instant-navigation-testing=')>-1){self.__next_instant_test=fetch(location.pathname+'?_rsc=xhdorIanPcIpYSsE',{credentials:'same-origin',headers:{'rsc':'1','next-router-prefetch':'1','next-router-segment-prefetch':'/_full'}})}(self.__next_f=self.__next_f||[]).push([0])self.__next_f.push([1,\"9:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/next-devtools/userspace/app/segment-explorer-node.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"SegmentViewNode\\\"]\\nb:\\\"$Sreact.fragment\\\"\\n1d:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/client/components/layout-router.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"default\\\"]\\n1f:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/client/components/render-from-template-context.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"default\\\"]\\n41:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"OutletBoundary\\\"]\\n43:\\\"$Sreact.suspense\\\"\\n51:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"ViewportBoundary\\\"]\\n5b:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"MetadataBoundary\\\"]\\n62:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/client/components/builtin/global-error.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"default\\\",1]\\n:HL[\\\"/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css\\\",\\\"style\\\"]\\n:HL[\\\"/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2\\\",\\\"font\\\",{\\\"crossOrigin\\\":\\\"\\\",\\\"type\\\":\\\"font/woff2\\\"}]\\n:HL[\\\"/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2\\\",\\\"font\\\",{\\\"crossOrigin\\\":\\\"\\\",\\\"type\\\":\\\"font/woff2\\\"}]\\n1:D\\\"$6\\\"\\n1:D\\\"$2\\\"\\n1:D\\\"$7\\\"\\n1:null\\ne:D\\\"$18\\\"\\ne:D\\\"$f\\\"\\ne:D\\\"$1a\\\"\\n21:D\\\"$23\\\"\\n21:D\\\"$22\\\"\\n21:D\\\"$25\\\"\\n21:D\\\"$24\\\"\\n21:D\\\"$26\\\"\\n21:[[\\\"$\\\",\\\"title\\\",null,{\\\"children\\\":\\\"404: This page could not be found.\\\"},\\\"$24\\\",\\\"$27\\\",1],[\\\"$\\\",\\\"div\\\",null,{\\\"style\\\":{\\\"fontFamily\\\":\\\"system-ui,\\\\\\\"Segoe UI\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\"Apple Color Emoji\\\\\\\",\\\\\\\"Segoe UI Emoji\\\\\\\"\\\",\\\"height\\\":\\\"100vh\\\",\\\"textAlign\\\":\\\"center\\\",\\\"display\\\":\\\"flex\\\",\\\"flexDirection\\\":\\\"column\\\",\\\"alignItems\\\":\\\"center\\\",\\\"justifyContent\\\":\\\"center\\\"},\\\"children\\\":[\\\"$\\\",\\\"div\\\",null,{\\\"children\\\":[[\\\"$\\\",\\\"style\\\",null,{\\\"dangerouslySetInnerHTML\\\":{\\\"__html\\\":\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\"}},\\\"$24\\\",\\\"$2a\\\",1],[\\\"$\\\",\\\"h1\\\",null,{\\\"className\\\":\\\"next-error-h1\\\",\\\"style\\\":{\\\"display\\\":\\\"inline-block\\\",\\\"margin\\\":\\\"0 20px 0 0\\\",\\\"padding\\\":\\\"0 23px 0 0\\\",\\\"fontSize\\\":24,\\\"fontWeight\\\":500,\\\"verticalAlign\\\":\\\"top\\\",\\\"lineHeight\\\":\\\"49px\\\"},\\\"children\\\":404},\\\"$24\\\",\\\"$2b\\\",1],[\\\"$\\\",\\\"div\\\",null,{\\\"style\\\":{\\\"display\\\":\\\"inline-block\\\"},\\\"children\\\":[\\\"$\\\",\\\"h2\\\",null,{\\\"style\\\":{\\\"fontSize\\\":14,\\\"fontWeight\\\":400,\\\"lineHeight\\\":\\\"49px\\\",\\\"margin\\\":0},\\\"children\\\":\\\"This page could not be found.\\\"},\\\"$24\\\",\\\"$2d\\\",1]},\\\"$24\\\",\\\"$2c\\\",1]]},\\\"$24\\\",\\\"$29\\\",1]},\\\"$24\\\",\\\"$28\\\",1]]\\ne:[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"pt-BR\\\",\\\"className\\\":\\\"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable h-full antialiased\\\",\\\"children\\\":[\\\"$\\\",\\\"body\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$L1d\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$L1f\\\",null,{},null,\\\"$1e\\\",1],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":[\\\"$\\\",\\\"$L9\\\",\\\"c-not-found\\\",{\\\"type\\\":\\\"not-found\\\",\\\"pagePath\\\":\\\"__next_builtin__not-found.js\\\",\\\"children\\\":[\\\"$21\\\",[]]},null,\\\"$20\\\",0],\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\",\\\"segmentViewBoundaries\\\":[[\\\"$\\\",\\\"$L9\\\",null,{\\\"type\\\":\\\"boundary:not-found\\\",\\\"pagePath\\\":\\\"__next_builtin__not-found.js@boundary\\\"},null,\\\"$2e\\\",1],\\\"$undefined\\\",\\\"$undefined\\\",[\\\"$\\\",\\\"$L9\\\",null,{\\\"type\\\":\\\"boundary:global-error\\\",\\\"pagePath\\\":\\\"__next_builtin__global-error.js\\\"},null,\\\"$2f\\\",1]]},null,\\\"$1c\\\",1]},\\\"$f\\\",\\\"$1b\\\",1]},\\\"$f\\\",\\\"$19\\\",1]\\n35:D\\\"$39\\\"\\n35:D\\\"$36\\\"\\n3c:D\\\"$3e\\\"\\n3c:D\\\"$3d\\\"\\n3c:D\\\"$40\\\"\\n3c:[\\\"$\\\",\\\"$L41\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$43\\\",null,{\\\"name\\\":\\\"Next.MetadataOutlet\\\",\\\"children\\\":\\\"$@44\\\"},\\\"$3d\\\",\\\"$42\\\",1]},\\\"$3d\\\",\\\"$3f\\\",1]\\n45:X\\n47:D\\\"$4a\\\"\\n47:D\\\"$48\\\"\\n47:D\\\"$4b\\\"\\n47:null\\n4c:D\\\"$4e\\\"\\n4c:D\\\"$4d\\\"\\n4c:D\\\"$50\\\"\\n52:D\\\"$54\\\"\\n52:D\\\"$53\\\"\\n4c:[\\\"$\\\",\\\"$L51\\\",null,{\\\"children\\\":\\\"$L52\\\"},\\\"$4d\\\",\\\"$4f\\\",1]\\n55:D\\\"$57\\\"\\n55:D\\\"$56\\\"\\n55:D\\\"$59\\\"\\n5d:D\\\"$5f\\\"\\n5d:D\\\"$5e\\\"\\n55:[\\\"$\\\",\\\"div\\\",null,{\\\"hidden\\\":true,\\\"children\\\":[\\\"$\\\",\\\"$L5b\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$43\\\",null,{\\\"name\\\":\\\"Next.Metadata\\\",\\\"children\\\":\\\"$L5d\\\"},\\\"$56\\\",\\\"$5c\\\",1]},\\\"$56\\\",\\\"$5a\\\",1]},\\\"$56\\\",\\\"$58\\\",1]\\n61:[]\\n0:{\\\"P\\\":\\\"$1\\\",\\\"c\\\":[\\\"\\\",\\\"tipos\\\",\\\"notas\\\"],\\\"q\\\":\\\"\\\",\\\"i\\\":true,\\\"f\\\":[[[\\\"\\\",{\\\"children\\\":[[\\\"route\\\",\\\"tipos/notas\\\",\\\"c\\\",[]],{\\\"children\\\":[\\\"__PAGE__\\\",{},\\\"$undefined\\\",\\\"$undefined\\\",4096]},\\\"$undefined\\\",\\\"$undefined\\\",4096]},\\\"$undefined\\\",\\\"$undefined\\\",4112],[[\\\"$\\\",\\\"$L9\\\",\\\"layout\\\",{\\\"type\\\":\\\"layout\\\",\\\"pagePath\\\":\\\"layout.tsx\\\",\\\"children\\\":[\\\"$\\\",\\\"$b\\\",\\\"c\\\",{\\\"children\\\":[[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css\\\",\\\"precedence\\\":\\\"next_static/chunks/[root-of-the-server]__04kpziu._.css\\\",\\\"crossOrigin\\\":\\\"$undefined\\\",\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$c\\\",0],[\\\"$\\\",\\\"script\\\",\\\"script-0\\\",{\\\"src\\\":\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$d\\\",0]],\\\"$e\\\"]},null,\\\"$a\\\",1]},null,\\\"$8\\\",0],{\\\"children\\\":[[\\\"$\\\",\\\"$b\\\",\\\"c\\\",{\\\"children\\\":[null,[\\\"$\\\",\\\"$L1d\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$L1f\\\",null,{},null,\\\"$32\\\",1],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":\\\"$undefined\\\",\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\",\\\"segmentViewBoundaries\\\":[\\\"$undefined\\\",\\\"$undefined\\\",\\\"$undefined\\\",\\\"$undefined\\\"]},null,\\\"$31\\\",1]]},null,\\\"$30\\\",0],{\\\"children\\\":[[\\\"$\\\",\\\"$b\\\",\\\"c\\\",{\\\"children\\\":[[\\\"$\\\",\\\"$L9\\\",\\\"c-page\\\",{\\\"type\\\":\\\"page\\\",\\\"pagePath\\\":\\\"[...route]/page.tsx\\\",\\\"children\\\":\\\"$L35\\\"},null,\\\"$34\\\",1],[[\\\"$\\\",\\\"script\\\",\\\"script-0\\\",{\\\"src\\\":\\\"/_next/static/chunks/src_1k-i_m0._.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$3a\\\",0],[\\\"$\\\",\\\"script\\\",\\\"script-1\\\",{\\\"src\\\":\\\"/_next/static/chunks/node_modules__pnpm_16et5t9._.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$3b\\\",0]],\\\"$3c\\\"]},null,\\\"$33\\\",0],{},null,false,null]},null,false,\\\"$45\\\"]},null,false,null],[\\\"$\\\",\\\"$b\\\",\\\"h\\\",{\\\"children\\\":[\\\"$47\\\",\\\"$4c\\\",\\\"$55\\\",[\\\"$\\\",\\\"meta\\\",null,{\\\"name\\\":\\\"next-size-adjust\\\",\\\"content\\\":\\\"\\\"},null,\\\"$60\\\",1]]},null,\\\"$46\\\",0],false]],\\\"m\\\":\\\"$W61\\\",\\\"G\\\":[\\\"$62\\\",[\\\"$\\\",\\\"$L9\\\",\\\"ge-svn\\\",{\\\"type\\\":\\\"global-error\\\",\\\"pagePath\\\":\\\"__next_builtin__global-error.js\\\",\\\"children\\\":[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css\\\",\\\"precedence\\\":\\\"next_static/chunks/[root-of-the-server]__04kpziu._.css\\\",\\\"crossOrigin\\\":\\\"$undefined\\\",\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$64\\\",0]]},null,\\\"$63\\\",0]],\\\"S\\\":false,\\\"h\\\":null,\\\"r\\\":\\\"$undefined\\\",\\\"s\\\":\\\"$undefined\\\",\\\"a\\\":\\\"$undefined\\\",\\\"l\\\":\\\"$undefined\\\",\\\"p\\\":\\\"$undefined\\\",\\\"d\\\":\\\"$undefined\\\",\\\"b\\\":\\\"development\\\"}\\n67:I[\\\"[project]/src/components/workspace-shell.tsx [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\",\\\"/_next/static/chunks/src_1k-i_m0._.js\\\",\\\"/_next/static/chunks/node_modules__pnpm_16et5t9._.js\\\"],\\\"WorkspaceShell\\\"]\\n45:C\\n35:D\\\"$66\\\"\\n35:[\\\"$\\\",\\\"$L67\\\",null,{\\\"pathname\\\":\\\"/tipos/notas\\\"},\\\"$36\\\",\\\"$65\\\",1]\\n52:D\\\"$68\\\"\\n52:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"charSet\\\":\\\"utf-8\\\"},\\\"$3d\\\",\\\"$69\\\",0],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"viewport\\\",\\\"content\\\":\\\"width=device-width, initial-scale=1\\\"},\\\"$3d\\\",\\\"$6a\\\",0]]\\n71:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/metadata/generate/icon-mark.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"IconMark\\\"]\\n44:D\\\"$6b\\\"\\n44:null\\n5d:D\\\"$6c\\\"\\n5d:[[\\\"$\\\",\\\"title\\\",\\\"0\\\",{\\\"children\\\":\\\"Ateliê\\\"},\\\"$3d\\\",\\\"$6d\\\",0],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"description\\\",\\\"content\\\":\\\"Studio pessoal de objetos conectados.\\\"},\\\"$3d\\\",\\\"$6e\\\",0],[\\\"$\\\",\\\"link\\\",\\\"2\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon.ico?favicon.2vob68tjqpejf.ico\\\",\\\"sizes\\\":\\\"256x256\\\",\\\"type\\\":\\\"image/x-icon\\\"},\\\"$3d\\\",\\\"$6f\\\",0],[\\\"$\\\",\\\"$L71\\\",\\\"3\\\",{},\\\"$3d\\\",\\\"$70\\\",0]]\\n\"])"
+      },
+      "snapshots": [
+        {
+          "role": "tablist",
+          "name": "Abas do painel de contexto",
+          "id": null,
+          "tag": "div",
+          "selected": null,
+          "expanded": null,
+          "checked": null,
+          "disabled": false,
+          "inView": true,
+          "focused": false,
+          "x": 754,
+          "y": 7,
+          "width": 285,
+          "height": 32
+        },
+        {
+          "role": "tab",
+          "name": null,
+          "id": null,
+          "tag": "button",
+          "selected": "true",
+          "expanded": null,
+          "checked": null,
+          "disabled": false,
+          "inView": true,
+          "focused": false,
+          "x": 754,
+          "y": 7,
+          "width": 280,
+          "height": 32
+        }
+      ]
+    },
+    "after": {
+      "url": "http://localhost:3000/tipos/notas",
+      "readyState": "ready",
+      "readinessConditions": [
+        "bootstrap",
+        "hydration",
+        "index",
+        "daily-note-query",
+        "tasks-query",
+        "created-today-query",
+        "chat-query",
+        "no-pending-requests"
+      ],
+      "pendingRequests": 0,
+      "snapshotCount": 2,
+      "focusElement": {
+        "tag": "body",
+        "id": null,
+        "role": null,
+        "name": "Codex Capacities Audit 2026-08-1111 de agosto de 2026ExplorarNovoBuscarCalendárioTarefas[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}Fixados0Nenhum conteúdo fixadoTipos de objeto13Notas Diárias0AUDIT Entities1Chats de IA1Imagens1Arquivos0Áudios1PDFs1Queries1Etiquetas1Tweets1Weblinks2Tabelas1Páginas1Adicionar seçãoLixeiraAjuda e recursosPrimeiros passosFazer uma perguntaDocumentaçãoNovidadesFeedbackProDiaHojeTerça-Feira11 De Agosto De 2026Semana 33✓TarefaNota diáriaNota DiáriaTarefasNenhuma tarefa neste diaVocê pode mudar isso criando um novo objeto.Criado Nesse Dia12PáginaAUDIT - Página completaAUDIT-CODEX: conteúdo sintético para validar persistência.\n\nEditor rico do Capacities\nItem de lista\n/TabelaAUDIT - Tabela persistidaNomeStatusItem AlfaEm revisãoItem BetaConcluídoWeblinkExample Domainexample.com/?utm_source=capacities-auditImagemSem título0ArquivoSem título0PDFSem títuloDocumento PDFWeblinkSem títulowww.w3.org/TR/PNG/iso_8859-1.txtChat de IASystem Audit Response TestAUDIT-OKTweetDefaulttwitter.com/jack/status/20QuerySem títuloSem definição\n0 entradasAUDIT EntityAUDIT - Custom entityEntidade personalizada persistidaÁudioSem títuloArquivo de áudioExplorarChat de IABuscarConteúdo relevanteEncontrar maisAUDIT - Página completaAUDIT - Custom entitySem títuloSem títuloSem títuloself.__next_r=\"Y9r6WN_3JaHihzERpm72h\";if(document.cookie.indexOf('next-instant-navigation-testing=')>-1){self.__next_instant_test=fetch(location.pathname+'?_rsc=xhdorIanPcIpYSsE',{credentials:'same-origin',headers:{'rsc':'1','next-router-prefetch':'1','next-router-segment-prefetch':'/_full'}})}(self.__next_f=self.__next_f||[]).push([0])self.__next_f.push([1,\"9:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/next-devtools/userspace/app/segment-explorer-node.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"SegmentViewNode\\\"]\\nb:\\\"$Sreact.fragment\\\"\\n1d:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/client/components/layout-router.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"default\\\"]\\n1f:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/client/components/render-from-template-context.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"default\\\"]\\n41:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"OutletBoundary\\\"]\\n43:\\\"$Sreact.suspense\\\"\\n51:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"ViewportBoundary\\\"]\\n5b:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"MetadataBoundary\\\"]\\n62:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/client/components/builtin/global-error.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"default\\\",1]\\n:HL[\\\"/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css\\\",\\\"style\\\"]\\n:HL[\\\"/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2\\\",\\\"font\\\",{\\\"crossOrigin\\\":\\\"\\\",\\\"type\\\":\\\"font/woff2\\\"}]\\n:HL[\\\"/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2\\\",\\\"font\\\",{\\\"crossOrigin\\\":\\\"\\\",\\\"type\\\":\\\"font/woff2\\\"}]\\n1:D\\\"$6\\\"\\n1:D\\\"$2\\\"\\n1:D\\\"$7\\\"\\n1:null\\ne:D\\\"$18\\\"\\ne:D\\\"$f\\\"\\ne:D\\\"$1a\\\"\\n21:D\\\"$23\\\"\\n21:D\\\"$22\\\"\\n21:D\\\"$25\\\"\\n21:D\\\"$24\\\"\\n21:D\\\"$26\\\"\\n21:[[\\\"$\\\",\\\"title\\\",null,{\\\"children\\\":\\\"404: This page could not be found.\\\"},\\\"$24\\\",\\\"$27\\\",1],[\\\"$\\\",\\\"div\\\",null,{\\\"style\\\":{\\\"fontFamily\\\":\\\"system-ui,\\\\\\\"Segoe UI\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\"Apple Color Emoji\\\\\\\",\\\\\\\"Segoe UI Emoji\\\\\\\"\\\",\\\"height\\\":\\\"100vh\\\",\\\"textAlign\\\":\\\"center\\\",\\\"display\\\":\\\"flex\\\",\\\"flexDirection\\\":\\\"column\\\",\\\"alignItems\\\":\\\"center\\\",\\\"justifyContent\\\":\\\"center\\\"},\\\"children\\\":[\\\"$\\\",\\\"div\\\",null,{\\\"children\\\":[[\\\"$\\\",\\\"style\\\",null,{\\\"dangerouslySetInnerHTML\\\":{\\\"__html\\\":\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\"}},\\\"$24\\\",\\\"$2a\\\",1],[\\\"$\\\",\\\"h1\\\",null,{\\\"className\\\":\\\"next-error-h1\\\",\\\"style\\\":{\\\"display\\\":\\\"inline-block\\\",\\\"margin\\\":\\\"0 20px 0 0\\\",\\\"padding\\\":\\\"0 23px 0 0\\\",\\\"fontSize\\\":24,\\\"fontWeight\\\":500,\\\"verticalAlign\\\":\\\"top\\\",\\\"lineHeight\\\":\\\"49px\\\"},\\\"children\\\":404},\\\"$24\\\",\\\"$2b\\\",1],[\\\"$\\\",\\\"div\\\",null,{\\\"style\\\":{\\\"display\\\":\\\"inline-block\\\"},\\\"children\\\":[\\\"$\\\",\\\"h2\\\",null,{\\\"style\\\":{\\\"fontSize\\\":14,\\\"fontWeight\\\":400,\\\"lineHeight\\\":\\\"49px\\\",\\\"margin\\\":0},\\\"children\\\":\\\"This page could not be found.\\\"},\\\"$24\\\",\\\"$2d\\\",1]},\\\"$24\\\",\\\"$2c\\\",1]]},\\\"$24\\\",\\\"$29\\\",1]},\\\"$24\\\",\\\"$28\\\",1]]\\ne:[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"pt-BR\\\",\\\"className\\\":\\\"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable h-full antialiased\\\",\\\"children\\\":[\\\"$\\\",\\\"body\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$L1d\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$L1f\\\",null,{},null,\\\"$1e\\\",1],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":[\\\"$\\\",\\\"$L9\\\",\\\"c-not-found\\\",{\\\"type\\\":\\\"not-found\\\",\\\"pagePath\\\":\\\"__next_builtin__not-found.js\\\",\\\"children\\\":[\\\"$21\\\",[]]},null,\\\"$20\\\",0],\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\",\\\"segmentViewBoundaries\\\":[[\\\"$\\\",\\\"$L9\\\",null,{\\\"type\\\":\\\"boundary:not-found\\\",\\\"pagePath\\\":\\\"__next_builtin__not-found.js@boundary\\\"},null,\\\"$2e\\\",1],\\\"$undefined\\\",\\\"$undefined\\\",[\\\"$\\\",\\\"$L9\\\",null,{\\\"type\\\":\\\"boundary:global-error\\\",\\\"pagePath\\\":\\\"__next_builtin__global-error.js\\\"},null,\\\"$2f\\\",1]]},null,\\\"$1c\\\",1]},\\\"$f\\\",\\\"$1b\\\",1]},\\\"$f\\\",\\\"$19\\\",1]\\n35:D\\\"$39\\\"\\n35:D\\\"$36\\\"\\n3c:D\\\"$3e\\\"\\n3c:D\\\"$3d\\\"\\n3c:D\\\"$40\\\"\\n3c:[\\\"$\\\",\\\"$L41\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$43\\\",null,{\\\"name\\\":\\\"Next.MetadataOutlet\\\",\\\"children\\\":\\\"$@44\\\"},\\\"$3d\\\",\\\"$42\\\",1]},\\\"$3d\\\",\\\"$3f\\\",1]\\n45:X\\n47:D\\\"$4a\\\"\\n47:D\\\"$48\\\"\\n47:D\\\"$4b\\\"\\n47:null\\n4c:D\\\"$4e\\\"\\n4c:D\\\"$4d\\\"\\n4c:D\\\"$50\\\"\\n52:D\\\"$54\\\"\\n52:D\\\"$53\\\"\\n4c:[\\\"$\\\",\\\"$L51\\\",null,{\\\"children\\\":\\\"$L52\\\"},\\\"$4d\\\",\\\"$4f\\\",1]\\n55:D\\\"$57\\\"\\n55:D\\\"$56\\\"\\n55:D\\\"$59\\\"\\n5d:D\\\"$5f\\\"\\n5d:D\\\"$5e\\\"\\n55:[\\\"$\\\",\\\"div\\\",null,{\\\"hidden\\\":true,\\\"children\\\":[\\\"$\\\",\\\"$L5b\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$43\\\",null,{\\\"name\\\":\\\"Next.Metadata\\\",\\\"children\\\":\\\"$L5d\\\"},\\\"$56\\\",\\\"$5c\\\",1]},\\\"$56\\\",\\\"$5a\\\",1]},\\\"$56\\\",\\\"$58\\\",1]\\n61:[]\\n0:{\\\"P\\\":\\\"$1\\\",\\\"c\\\":[\\\"\\\",\\\"tipos\\\",\\\"notas\\\"],\\\"q\\\":\\\"\\\",\\\"i\\\":true,\\\"f\\\":[[[\\\"\\\",{\\\"children\\\":[[\\\"route\\\",\\\"tipos/notas\\\",\\\"c\\\",[]],{\\\"children\\\":[\\\"__PAGE__\\\",{},\\\"$undefined\\\",\\\"$undefined\\\",4096]},\\\"$undefined\\\",\\\"$undefined\\\",4096]},\\\"$undefined\\\",\\\"$undefined\\\",4112],[[\\\"$\\\",\\\"$L9\\\",\\\"layout\\\",{\\\"type\\\":\\\"layout\\\",\\\"pagePath\\\":\\\"layout.tsx\\\",\\\"children\\\":[\\\"$\\\",\\\"$b\\\",\\\"c\\\",{\\\"children\\\":[[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css\\\",\\\"precedence\\\":\\\"next_static/chunks/[root-of-the-server]__04kpziu._.css\\\",\\\"crossOrigin\\\":\\\"$undefined\\\",\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$c\\\",0],[\\\"$\\\",\\\"script\\\",\\\"script-0\\\",{\\\"src\\\":\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$d\\\",0]],\\\"$e\\\"]},null,\\\"$a\\\",1]},null,\\\"$8\\\",0],{\\\"children\\\":[[\\\"$\\\",\\\"$b\\\",\\\"c\\\",{\\\"children\\\":[null,[\\\"$\\\",\\\"$L1d\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$L1f\\\",null,{},null,\\\"$32\\\",1],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":\\\"$undefined\\\",\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\",\\\"segmentViewBoundaries\\\":[\\\"$undefined\\\",\\\"$undefined\\\",\\\"$undefined\\\",\\\"$undefined\\\"]},null,\\\"$31\\\",1]]},null,\\\"$30\\\",0],{\\\"children\\\":[[\\\"$\\\",\\\"$b\\\",\\\"c\\\",{\\\"children\\\":[[\\\"$\\\",\\\"$L9\\\",\\\"c-page\\\",{\\\"type\\\":\\\"page\\\",\\\"pagePath\\\":\\\"[...route]/page.tsx\\\",\\\"children\\\":\\\"$L35\\\"},null,\\\"$34\\\",1],[[\\\"$\\\",\\\"script\\\",\\\"script-0\\\",{\\\"src\\\":\\\"/_next/static/chunks/src_1k-i_m0._.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$3a\\\",0],[\\\"$\\\",\\\"script\\\",\\\"script-1\\\",{\\\"src\\\":\\\"/_next/static/chunks/node_modules__pnpm_16et5t9._.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$3b\\\",0]],\\\"$3c\\\"]},null,\\\"$33\\\",0],{},null,false,null]},null,false,\\\"$45\\\"]},null,false,null],[\\\"$\\\",\\\"$b\\\",\\\"h\\\",{\\\"children\\\":[\\\"$47\\\",\\\"$4c\\\",\\\"$55\\\",[\\\"$\\\",\\\"meta\\\",null,{\\\"name\\\":\\\"next-size-adjust\\\",\\\"content\\\":\\\"\\\"},null,\\\"$60\\\",1]]},null,\\\"$46\\\",0],false]],\\\"m\\\":\\\"$W61\\\",\\\"G\\\":[\\\"$62\\\",[\\\"$\\\",\\\"$L9\\\",\\\"ge-svn\\\",{\\\"type\\\":\\\"global-error\\\",\\\"pagePath\\\":\\\"__next_builtin__global-error.js\\\",\\\"children\\\":[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css\\\",\\\"precedence\\\":\\\"next_static/chunks/[root-of-the-server]__04kpziu._.css\\\",\\\"crossOrigin\\\":\\\"$undefined\\\",\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$64\\\",0]]},null,\\\"$63\\\",0]],\\\"S\\\":false,\\\"h\\\":null,\\\"r\\\":\\\"$undefined\\\",\\\"s\\\":\\\"$undefined\\\",\\\"a\\\":\\\"$undefined\\\",\\\"l\\\":\\\"$undefined\\\",\\\"p\\\":\\\"$undefined\\\",\\\"d\\\":\\\"$undefined\\\",\\\"b\\\":\\\"development\\\"}\\n67:I[\\\"[project]/src/components/workspace-shell.tsx [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\",\\\"/_next/static/chunks/src_1k-i_m0._.js\\\",\\\"/_next/static/chunks/node_modules__pnpm_16et5t9._.js\\\"],\\\"WorkspaceShell\\\"]\\n45:C\\n35:D\\\"$66\\\"\\n35:[\\\"$\\\",\\\"$L67\\\",null,{\\\"pathname\\\":\\\"/tipos/notas\\\"},\\\"$36\\\",\\\"$65\\\",1]\\n52:D\\\"$68\\\"\\n52:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"charSet\\\":\\\"utf-8\\\"},\\\"$3d\\\",\\\"$69\\\",0],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"viewport\\\",\\\"content\\\":\\\"width=device-width, initial-scale=1\\\"},\\\"$3d\\\",\\\"$6a\\\",0]]\\n71:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/metadata/generate/icon-mark.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"IconMark\\\"]\\n44:D\\\"$6b\\\"\\n44:null\\n5d:D\\\"$6c\\\"\\n5d:[[\\\"$\\\",\\\"title\\\",\\\"0\\\",{\\\"children\\\":\\\"Ateliê\\\"},\\\"$3d\\\",\\\"$6d\\\",0],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"description\\\",\\\"content\\\":\\\"Studio pessoal de objetos conectados.\\\"},\\\"$3d\\\",\\\"$6e\\\",0],[\\\"$\\\",\\\"link\\\",\\\"2\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon.ico?favicon.2vob68tjqpejf.ico\\\",\\\"sizes\\\":\\\"256x256\\\",\\\"type\\\":\\\"image/x-icon\\\"},\\\"$3d\\\",\\\"$6f\\\",0],[\\\"$\\\",\\\"$L71\\\",\\\"3\\\",{},\\\"$3d\\\",\\\"$70\\\",0]]\\n\"])"
+      },
+      "snapshots": [
+        {
+          "role": "tablist",
+          "name": "Abas do painel de contexto",
+          "id": null,
+          "tag": "div",
+          "selected": null,
+          "expanded": null,
+          "checked": null,
+          "disabled": false,
+          "inView": true,
+          "focused": false,
+          "x": 754,
+          "y": 7,
+          "width": 285,
+          "height": 32
+        },
+        {
+          "role": "tab",
+          "name": null,
+          "id": null,
+          "tag": "button",
+          "selected": "true",
+          "expanded": null,
+          "checked": null,
+          "disabled": false,
+          "inView": true,
+          "focused": false,
+          "x": 754,
+          "y": 7,
+          "width": 280,
+          "height": 32
+        }
+      ]
+    }
+  },
+  "keyboardTrace": [
+    {
+      "key": "Tab",
+      "focusedRole": null,
+      "focusedTag": "button",
+      "focusedId": "radix-_R_8pbn5rlb_"
+    },
+    {
+      "key": "Shift+Tab",
+      "focusedRole": null,
+      "focusedTag": "body",
+      "focusedId": null
+    },
+    {
+      "key": "Enter",
+      "focusedRole": null,
+      "focusedTag": "body",
+      "focusedId": null
+    },
+    {
+      "key": "ArrowDown",
+      "focusedRole": null,
+      "focusedTag": "body",
+      "focusedId": null
+    },
+    {
+      "key": "ArrowUp",
+      "focusedRole": null,
+      "focusedTag": "body",
+      "focusedId": null
+    },
+    {
+      "key": "ArrowLeft",
+      "focusedRole": null,
+      "focusedTag": "body",
+      "focusedId": null
+    },
+    {
+      "key": "ArrowRight",
+      "focusedRole": null,
+      "focusedTag": "body",
+      "focusedId": null
+    },
+    {
+      "key": "Home",
+      "focusedRole": null,
+      "focusedTag": "body",
+      "focusedId": null
+    },
+    {
+      "key": "End",
+      "focusedRole": null,
+      "focusedTag": "body",
+      "focusedId": null
+    },
+    {
+      "key": "Space",
+      "focusedRole": null,
+      "focusedTag": "body",
+      "focusedId": null
+    },
+    {
+      "key": "Escape",
+      "focusedRole": null,
+      "focusedTag": "body",
+      "focusedId": null
+    }
+  ],
+  "readyState": "ready",
+  "pendingRequests": 0,
+  "readinessConditions": [
+    "bootstrap",
+    "hydration",
+    "index",
+    "daily-note-query",
+    "tasks-query",
+    "created-today-query",
+    "chat-query",
+    "no-pending-requests"
+  ],
+  "routeResult": {
+    "readyState": "ObjectTypePageLoaded",
+    "focusElement": {
+      "tag": "body",
+      "id": null,
+      "role": null,
+      "name": "Codex Capacities Audit 2026-08-1111 de agosto de 2026ExplorarNovoBuscarCalendárioTarefas[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}Fixados0Nenhum conteúdo fixadoTipos de objeto13Notas Diárias0AUDIT Entities1Chats de IA1Imagens1Arquivos0Áudios1PDFs1Queries1Etiquetas1Tweets1Weblinks2Tabelas1Páginas1Adicionar seçãoLixeiraAjuda e recursosPrimeiros passosFazer uma perguntaDocumentaçãoNovidadesFeedbackProDiaHojeTerça-Feira11 De Agosto De 2026Semana 33✓TarefaNota diáriaNota DiáriaTarefasNenhuma tarefa neste diaVocê pode mudar isso criando um novo objeto.Criado Nesse Dia12PáginaAUDIT - Página completaAUDIT-CODEX: conteúdo sintético para validar persistência.\n\nEditor rico do Capacities\nItem de lista\n/TabelaAUDIT - Tabela persistidaNomeStatusItem AlfaEm revisãoItem BetaConcluídoWeblinkExample Domainexample.com/?utm_source=capacities-auditImagemSem título0ArquivoSem título0PDFSem títuloDocumento PDFWeblinkSem títulowww.w3.org/TR/PNG/iso_8859-1.txtChat de IASystem Audit Response TestAUDIT-OKTweetDefaulttwitter.com/jack/status/20QuerySem títuloSem definição\n0 entradasAUDIT EntityAUDIT - Custom entityEntidade personalizada persistidaÁudioSem títuloArquivo de áudioExplorarChat de IABuscarConteúdo relevanteEncontrar maisAUDIT - Página completaAUDIT - Custom entitySem títuloSem títuloSem títuloself.__next_r=\"Y9r6WN_3JaHihzERpm72h\";if(document.cookie.indexOf('next-instant-navigation-testing=')>-1){self.__next_instant_test=fetch(location.pathname+'?_rsc=xhdorIanPcIpYSsE',{credentials:'same-origin',headers:{'rsc':'1','next-router-prefetch':'1','next-router-segment-prefetch':'/_full'}})}(self.__next_f=self.__next_f||[]).push([0])self.__next_f.push([1,\"9:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/next-devtools/userspace/app/segment-explorer-node.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"SegmentViewNode\\\"]\\nb:\\\"$Sreact.fragment\\\"\\n1d:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/client/components/layout-router.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"default\\\"]\\n1f:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/client/components/render-from-template-context.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"default\\\"]\\n41:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"OutletBoundary\\\"]\\n43:\\\"$Sreact.suspense\\\"\\n51:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"ViewportBoundary\\\"]\\n5b:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/framework/boundary-components.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"MetadataBoundary\\\"]\\n62:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/client/components/builtin/global-error.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"default\\\",1]\\n:HL[\\\"/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css\\\",\\\"style\\\"]\\n:HL[\\\"/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2\\\",\\\"font\\\",{\\\"crossOrigin\\\":\\\"\\\",\\\"type\\\":\\\"font/woff2\\\"}]\\n:HL[\\\"/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2\\\",\\\"font\\\",{\\\"crossOrigin\\\":\\\"\\\",\\\"type\\\":\\\"font/woff2\\\"}]\\n1:D\\\"$6\\\"\\n1:D\\\"$2\\\"\\n1:D\\\"$7\\\"\\n1:null\\ne:D\\\"$18\\\"\\ne:D\\\"$f\\\"\\ne:D\\\"$1a\\\"\\n21:D\\\"$23\\\"\\n21:D\\\"$22\\\"\\n21:D\\\"$25\\\"\\n21:D\\\"$24\\\"\\n21:D\\\"$26\\\"\\n21:[[\\\"$\\\",\\\"title\\\",null,{\\\"children\\\":\\\"404: This page could not be found.\\\"},\\\"$24\\\",\\\"$27\\\",1],[\\\"$\\\",\\\"div\\\",null,{\\\"style\\\":{\\\"fontFamily\\\":\\\"system-ui,\\\\\\\"Segoe UI\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\"Apple Color Emoji\\\\\\\",\\\\\\\"Segoe UI Emoji\\\\\\\"\\\",\\\"height\\\":\\\"100vh\\\",\\\"textAlign\\\":\\\"center\\\",\\\"display\\\":\\\"flex\\\",\\\"flexDirection\\\":\\\"column\\\",\\\"alignItems\\\":\\\"center\\\",\\\"justifyContent\\\":\\\"center\\\"},\\\"children\\\":[\\\"$\\\",\\\"div\\\",null,{\\\"children\\\":[[\\\"$\\\",\\\"style\\\",null,{\\\"dangerouslySetInnerHTML\\\":{\\\"__html\\\":\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\"}},\\\"$24\\\",\\\"$2a\\\",1],[\\\"$\\\",\\\"h1\\\",null,{\\\"className\\\":\\\"next-error-h1\\\",\\\"style\\\":{\\\"display\\\":\\\"inline-block\\\",\\\"margin\\\":\\\"0 20px 0 0\\\",\\\"padding\\\":\\\"0 23px 0 0\\\",\\\"fontSize\\\":24,\\\"fontWeight\\\":500,\\\"verticalAlign\\\":\\\"top\\\",\\\"lineHeight\\\":\\\"49px\\\"},\\\"children\\\":404},\\\"$24\\\",\\\"$2b\\\",1],[\\\"$\\\",\\\"div\\\",null,{\\\"style\\\":{\\\"display\\\":\\\"inline-block\\\"},\\\"children\\\":[\\\"$\\\",\\\"h2\\\",null,{\\\"style\\\":{\\\"fontSize\\\":14,\\\"fontWeight\\\":400,\\\"lineHeight\\\":\\\"49px\\\",\\\"margin\\\":0},\\\"children\\\":\\\"This page could not be found.\\\"},\\\"$24\\\",\\\"$2d\\\",1]},\\\"$24\\\",\\\"$2c\\\",1]]},\\\"$24\\\",\\\"$29\\\",1]},\\\"$24\\\",\\\"$28\\\",1]]\\ne:[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"pt-BR\\\",\\\"className\\\":\\\"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable h-full antialiased\\\",\\\"children\\\":[\\\"$\\\",\\\"body\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$L1d\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$L1f\\\",null,{},null,\\\"$1e\\\",1],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":[\\\"$\\\",\\\"$L9\\\",\\\"c-not-found\\\",{\\\"type\\\":\\\"not-found\\\",\\\"pagePath\\\":\\\"__next_builtin__not-found.js\\\",\\\"children\\\":[\\\"$21\\\",[]]},null,\\\"$20\\\",0],\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\",\\\"segmentViewBoundaries\\\":[[\\\"$\\\",\\\"$L9\\\",null,{\\\"type\\\":\\\"boundary:not-found\\\",\\\"pagePath\\\":\\\"__next_builtin__not-found.js@boundary\\\"},null,\\\"$2e\\\",1],\\\"$undefined\\\",\\\"$undefined\\\",[\\\"$\\\",\\\"$L9\\\",null,{\\\"type\\\":\\\"boundary:global-error\\\",\\\"pagePath\\\":\\\"__next_builtin__global-error.js\\\"},null,\\\"$2f\\\",1]]},null,\\\"$1c\\\",1]},\\\"$f\\\",\\\"$1b\\\",1]},\\\"$f\\\",\\\"$19\\\",1]\\n35:D\\\"$39\\\"\\n35:D\\\"$36\\\"\\n3c:D\\\"$3e\\\"\\n3c:D\\\"$3d\\\"\\n3c:D\\\"$40\\\"\\n3c:[\\\"$\\\",\\\"$L41\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$43\\\",null,{\\\"name\\\":\\\"Next.MetadataOutlet\\\",\\\"children\\\":\\\"$@44\\\"},\\\"$3d\\\",\\\"$42\\\",1]},\\\"$3d\\\",\\\"$3f\\\",1]\\n45:X\\n47:D\\\"$4a\\\"\\n47:D\\\"$48\\\"\\n47:D\\\"$4b\\\"\\n47:null\\n4c:D\\\"$4e\\\"\\n4c:D\\\"$4d\\\"\\n4c:D\\\"$50\\\"\\n52:D\\\"$54\\\"\\n52:D\\\"$53\\\"\\n4c:[\\\"$\\\",\\\"$L51\\\",null,{\\\"children\\\":\\\"$L52\\\"},\\\"$4d\\\",\\\"$4f\\\",1]\\n55:D\\\"$57\\\"\\n55:D\\\"$56\\\"\\n55:D\\\"$59\\\"\\n5d:D\\\"$5f\\\"\\n5d:D\\\"$5e\\\"\\n55:[\\\"$\\\",\\\"div\\\",null,{\\\"hidden\\\":true,\\\"children\\\":[\\\"$\\\",\\\"$L5b\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$43\\\",null,{\\\"name\\\":\\\"Next.Metadata\\\",\\\"children\\\":\\\"$L5d\\\"},\\\"$56\\\",\\\"$5c\\\",1]},\\\"$56\\\",\\\"$5a\\\",1]},\\\"$56\\\",\\\"$58\\\",1]\\n61:[]\\n0:{\\\"P\\\":\\\"$1\\\",\\\"c\\\":[\\\"\\\",\\\"tipos\\\",\\\"notas\\\"],\\\"q\\\":\\\"\\\",\\\"i\\\":true,\\\"f\\\":[[[\\\"\\\",{\\\"children\\\":[[\\\"route\\\",\\\"tipos/notas\\\",\\\"c\\\",[]],{\\\"children\\\":[\\\"__PAGE__\\\",{},\\\"$undefined\\\",\\\"$undefined\\\",4096]},\\\"$undefined\\\",\\\"$undefined\\\",4096]},\\\"$undefined\\\",\\\"$undefined\\\",4112],[[\\\"$\\\",\\\"$L9\\\",\\\"layout\\\",{\\\"type\\\":\\\"layout\\\",\\\"pagePath\\\":\\\"layout.tsx\\\",\\\"children\\\":[\\\"$\\\",\\\"$b\\\",\\\"c\\\",{\\\"children\\\":[[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css\\\",\\\"precedence\\\":\\\"next_static/chunks/[root-of-the-server]__04kpziu._.css\\\",\\\"crossOrigin\\\":\\\"$undefined\\\",\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$c\\\",0],[\\\"$\\\",\\\"script\\\",\\\"script-0\\\",{\\\"src\\\":\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$d\\\",0]],\\\"$e\\\"]},null,\\\"$a\\\",1]},null,\\\"$8\\\",0],{\\\"children\\\":[[\\\"$\\\",\\\"$b\\\",\\\"c\\\",{\\\"children\\\":[null,[\\\"$\\\",\\\"$L1d\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$L1f\\\",null,{},null,\\\"$32\\\",1],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":\\\"$undefined\\\",\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\",\\\"segmentViewBoundaries\\\":[\\\"$undefined\\\",\\\"$undefined\\\",\\\"$undefined\\\",\\\"$undefined\\\"]},null,\\\"$31\\\",1]]},null,\\\"$30\\\",0],{\\\"children\\\":[[\\\"$\\\",\\\"$b\\\",\\\"c\\\",{\\\"children\\\":[[\\\"$\\\",\\\"$L9\\\",\\\"c-page\\\",{\\\"type\\\":\\\"page\\\",\\\"pagePath\\\":\\\"[...route]/page.tsx\\\",\\\"children\\\":\\\"$L35\\\"},null,\\\"$34\\\",1],[[\\\"$\\\",\\\"script\\\",\\\"script-0\\\",{\\\"src\\\":\\\"/_next/static/chunks/src_1k-i_m0._.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$3a\\\",0],[\\\"$\\\",\\\"script\\\",\\\"script-1\\\",{\\\"src\\\":\\\"/_next/static/chunks/node_modules__pnpm_16et5t9._.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$3b\\\",0]],\\\"$3c\\\"]},null,\\\"$33\\\",0],{},null,false,null]},null,false,\\\"$45\\\"]},null,false,null],[\\\"$\\\",\\\"$b\\\",\\\"h\\\",{\\\"children\\\":[\\\"$47\\\",\\\"$4c\\\",\\\"$55\\\",[\\\"$\\\",\\\"meta\\\",null,{\\\"name\\\":\\\"next-size-adjust\\\",\\\"content\\\":\\\"\\\"},null,\\\"$60\\\",1]]},null,\\\"$46\\\",0],false]],\\\"m\\\":\\\"$W61\\\",\\\"G\\\":[\\\"$62\\\",[\\\"$\\\",\\\"$L9\\\",\\\"ge-svn\\\",{\\\"type\\\":\\\"global-error\\\",\\\"pagePath\\\":\\\"__next_builtin__global-error.js\\\",\\\"children\\\":[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css\\\",\\\"precedence\\\":\\\"next_static/chunks/[root-of-the-server]__04kpziu._.css\\\",\\\"crossOrigin\\\":\\\"$undefined\\\",\\\"nonce\\\":\\\"$undefined\\\"},null,\\\"$64\\\",0]]},null,\\\"$63\\\",0]],\\\"S\\\":false,\\\"h\\\":null,\\\"r\\\":\\\"$undefined\\\",\\\"s\\\":\\\"$undefined\\\",\\\"a\\\":\\\"$undefined\\\",\\\"l\\\":\\\"$undefined\\\",\\\"p\\\":\\\"$undefined\\\",\\\"d\\\":\\\"$undefined\\\",\\\"b\\\":\\\"development\\\"}\\n67:I[\\\"[project]/src/components/workspace-shell.tsx [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\",\\\"/_next/static/chunks/src_1k-i_m0._.js\\\",\\\"/_next/static/chunks/node_modules__pnpm_16et5t9._.js\\\"],\\\"WorkspaceShell\\\"]\\n45:C\\n35:D\\\"$66\\\"\\n35:[\\\"$\\\",\\\"$L67\\\",null,{\\\"pathname\\\":\\\"/tipos/notas\\\"},\\\"$36\\\",\\\"$65\\\",1]\\n52:D\\\"$68\\\"\\n52:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"charSet\\\":\\\"utf-8\\\"},\\\"$3d\\\",\\\"$69\\\",0],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"viewport\\\",\\\"content\\\":\\\"width=device-width, initial-scale=1\\\"},\\\"$3d\\\",\\\"$6a\\\",0]]\\n71:I[\\\"[project]/node_modules/.pnpm/next@16.3.0_@types+node@20._798f763bdce94b066a9c294dbe44cdbf/node_modules/next/dist/lib/metadata/generate/icon-mark.js [app-client] (ecmascript)\\\",[\\\"/_next/static/chunks/1cb0_next_dist_1qaa88d._.js\\\"],\\\"IconMark\\\"]\\n44:D\\\"$6b\\\"\\n44:null\\n5d:D\\\"$6c\\\"\\n5d:[[\\\"$\\\",\\\"title\\\",\\\"0\\\",{\\\"children\\\":\\\"Ateliê\\\"},\\\"$3d\\\",\\\"$6d\\\",0],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"description\\\",\\\"content\\\":\\\"Studio pessoal de objetos conectados.\\\"},\\\"$3d\\\",\\\"$6e\\\",0],[\\\"$\\\",\\\"link\\\",\\\"2\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon.ico?favicon.2vob68tjqpejf.ico\\\",\\\"sizes\\\":\\\"256x256\\\",\\\"type\\\":\\\"image/x-icon\\\"},\\\"$3d\\\",\\\"$6f\\\",0],[\\\"$\\\",\\\"$L71\\\",\\\"3\\\",{},\\\"$3d\\\",\\\"$70\\\",0]]\\n\"])"
+    }
+  },
+  "network": [
+    {
+      "url": "http://localhost:3000/tipos/notas",
+      "method": "GET",
+      "resourceType": "document",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/tipos/notas",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 445.873046875,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+      "method": "GET",
+      "resourceType": "font",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 1.58203125,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "method": "GET",
+      "resourceType": "font",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 2.462158203125,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+      "method": "GET",
+      "resourceType": "stylesheet",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_next-devtools_index_1r6qwvs.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-dom_1x7hnrb._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_client_0vr4v5o._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_0bxp7vd._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/0vvp_%40swc_helpers_cjs_0vb02wp._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/turbopack-_1h8_yl9._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_0_zep5z._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_1qaa88d._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/src_1k-i_m0._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/node_modules__pnpm_16et5t9._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 0.672119140625,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 6.123046875,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/fonts/inter-medium.woff2",
+      "method": "GET",
+      "resourceType": "font",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/fonts/inter-regular.woff2",
+      "method": "GET",
+      "resourceType": "font",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/fonts/inter-italic.woff2",
+      "method": "GET",
+      "resourceType": "font",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 19.79296875,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 24.43798828125,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/fonts/inter-medium.woff2",
+      "method": "",
+      "resourceType": "",
+      "status": 304,
+      "durationMs": 1.994140625,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/fonts/inter-regular.woff2",
+      "method": "",
+      "resourceType": "",
+      "status": 304,
+      "durationMs": 3.865966796875,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/fonts/inter-italic.woff2",
+      "method": "",
+      "resourceType": "",
+      "status": 304,
+      "durationMs": 3.4970703125,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 19.72509765625,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/0vvp_%40swc_helpers_cjs_0vb02wp._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 20.037109375,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_0bxp7vd._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 28.940185546875,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/_0_zep5z._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 14.272705078125,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/turbopack-_1h8_yl9._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 17.866943359375,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_1qaa88d._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 13.300048828125,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_client_0vr4v5o._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 31.51708984375,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/src_1k-i_m0._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 12.782958984375,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_next-devtools_index_1r6qwvs.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 33.699951171875,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-dom_1x7hnrb._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 33.93017578125,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js",
+      "method": "GET",
+      "resourceType": "script",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/node_modules__pnpm_16et5t9._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 35.556884765625,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js",
+      "method": "",
+      "resourceType": "",
+      "status": 200,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/fonts/inter-bold.woff2",
+      "method": "GET",
+      "resourceType": "font",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/fonts/inter-semibold.woff2",
+      "method": "GET",
+      "resourceType": "font",
+      "status": null,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/fonts/inter-bold.woff2",
+      "method": "",
+      "resourceType": "",
+      "status": 304,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    },
+    {
+      "url": "http://localhost:3000/fonts/inter-semibold.woff2",
+      "method": "",
+      "resourceType": "",
+      "status": 304,
+      "durationMs": 0,
+      "fromServiceWorker": false,
+      "fromCache": false
+    }
+  ],
+  "networkMutatingGuessed": 0,
+  "screenshotPath": "C:\\Users\\ianma\\workspace\\notes-app\\reverse-engineering\\screenshots\\tipos_notas-1128x912-loaded.png"
+}

@@ -45,6 +45,11 @@ export type NavigationGroup = {
   items: NavigationItem[];
 };
 
+export type ObjectTypeNavigationItem = NavigationItem & {
+  allowCreate: boolean;
+  singularLabel: string;
+};
+
 export const navigationGroups: NavigationGroup[] = [
   {
     items: [
@@ -66,7 +71,7 @@ export const navigationGroups: NavigationGroup[] = [
     items: [
       {
         count: 0,
-        href: "/tipos/notas-diarias",
+        href: "/tipos/notas",
         icon: "page",
         label: "Notas Diárias",
         tone: "blue",
@@ -80,7 +85,7 @@ export const navigationGroups: NavigationGroup[] = [
       },
       {
         count: 1,
-        href: "/tipos/chats-de-ia",
+        href: "/tipos/chats",
         icon: "ai",
         label: "Chats de IA",
         tone: "violet",
@@ -136,7 +141,7 @@ export const navigationGroups: NavigationGroup[] = [
       },
       {
         count: 2,
-        href: "/tipos/weblinks",
+        href: "/tipos/links",
         icon: "weblink",
         label: "Weblinks",
         tone: "blue",
@@ -182,4 +187,61 @@ export const navigationGroups: NavigationGroup[] = [
 
 export function isNavigationItemActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export function normalizeObjectTypePath(pathname: string): string {
+  const aliasMap: Record<string, string> = {
+    "/tipos/notas-diarias": "/tipos/notas",
+    "/tipos/chats-de-ia": "/tipos/chats",
+    "/tipos/weblinks": "/tipos/links",
+  };
+
+  if (pathname in aliasMap) {
+    return aliasMap[pathname];
+  }
+  if (pathname.startsWith("/tipos/notas-diarias/")) {
+    return pathname.replace("/tipos/notas-diarias/", "/tipos/notas/");
+  }
+  if (pathname.startsWith("/tipos/chats-de-ia/")) {
+    return pathname.replace("/tipos/chats-de-ia/", "/tipos/chats/");
+  }
+  if (pathname.startsWith("/tipos/weblinks/")) {
+    return pathname.replace("/tipos/weblinks/", "/tipos/links/");
+  }
+  return pathname;
+}
+
+const objectTypeSingularLabels: Partial<Record<NavigationIcon, string>> = {
+  ai: "Chat de IA",
+  audio: "Áudio",
+  audit: "AUDIT Entity",
+  file: "Arquivo",
+  image: "Imagem",
+  page: "Página",
+  pdf: "PDF",
+  query: "Query",
+  table: "Tabela",
+  tag: "Etiqueta",
+  tweet: "Tweet",
+  weblink: "Weblink",
+};
+
+export function getObjectTypeNavigationItem(
+  pathname: string,
+): ObjectTypeNavigationItem | null {
+  const objectTypeGroup = navigationGroups.find(
+    (group) => group.label === "Tipos de objeto",
+  );
+  const normalizedPathname = normalizeObjectTypePath(pathname);
+  const item = objectTypeGroup?.items.find((candidate) =>
+    isNavigationItemActive(normalizedPathname, candidate.href),
+  );
+
+  if (!item) return null;
+
+  return {
+    ...item,
+    allowCreate: item.icon !== "ai",
+    singularLabel: objectTypeSingularLabels[item.icon] ?? item.label,
+  };
 }

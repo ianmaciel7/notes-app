@@ -42,6 +42,7 @@ import {
   CapacitiesSidebarIcon,
   type CapacitiesSidebarIconName,
 } from "@/components/capacities-sidebar-icon";
+import { ObjectTypeWorkspace } from "@/components/object-type-workspace";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -71,7 +72,9 @@ import {
 } from "@/lib/workspace-audit-data";
 import type { CreatedObjectFixture } from "@/lib/workspace-audit-fixture";
 import {
+  getObjectTypeNavigationItem,
   isNavigationItemActive,
+  normalizeObjectTypePath,
   type NavigationGroup,
   type NavigationIcon,
   type NavigationItem,
@@ -250,6 +253,7 @@ const pinnableSidebarItems: NavigationItem[] = [
 ];
 
 export function WorkspaceShell({ pathname }: { pathname: string }) {
+  const activeObjectType = getObjectTypeNavigationItem(pathname);
   const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [darkTheme, setDarkTheme] = useState(false);
@@ -529,14 +533,26 @@ export function WorkspaceShell({ pathname }: { pathname: string }) {
           <div className="flex min-w-0 flex-1 items-center gap-1">
             <div className="group/current-tab flex h-8 min-w-0 cursor-pointer items-center gap-[0.3em] rounded-lg border border-transparent py-[3px] pr-px pl-1.5 text-[13px] leading-[1.3] text-workspace-text transition-colors duration-150 ease-out hover:bg-workspace-hover">
               <span className="grid size-[17px] shrink-0 place-items-center rounded-[4px] bg-workspace-hover text-workspace-subtle">
-                <CalendarDays aria-hidden="true" className="size-3.5" />
+                {activeObjectType ? (
+                  <CapacitiesSidebarIcon
+                    aria-hidden="true"
+                    className="size-3.5"
+                    name={sidebarIcons[activeObjectType.icon]}
+                  />
+                ) : (
+                  <CalendarDays aria-hidden="true" className="size-3.5" />
+                )}
               </span>
               <span className="hidden min-w-0 truncate text-left sm:block">
-                11 de agosto de 2026
+                {activeObjectType?.label ?? "11 de agosto de 2026"}
               </span>
               <span className="flex h-full w-5 shrink-0 items-center justify-end pr-0.5">
                 <button
-                  aria-label="Fechar data atual"
+                  aria-label={
+                    activeObjectType
+                      ? `Fechar ${activeObjectType.label}`
+                      : "Fechar data atual"
+                  }
                   className="pointer-events-none grid h-7 w-[18px] place-items-center rounded-lg text-workspace-subtle opacity-0 transition-[background-color,color,opacity] duration-100 group-hover/current-tab:pointer-events-auto group-hover/current-tab:opacity-100 hover:bg-workspace-selected hover:text-workspace-muted focus-visible:pointer-events-auto focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-workspace-focus"
                   type="button"
                 >
@@ -686,12 +702,22 @@ export function WorkspaceShell({ pathname }: { pathname: string }) {
         >
           <div className="flex h-full min-h-0 min-w-0">
             <div className="min-h-0 min-w-0 flex-1">
-              <DailyWorkspace
-                data={auditRuntime.result?.data ?? null}
-                error={auditRuntime.error}
-                onToggleWideLayout={() => setWideLayout((current) => !current)}
-                wideLayout={wideLayout}
-              />
+              {activeObjectType ? (
+                <ObjectTypeWorkspace
+                  data={auditRuntime.result?.data ?? null}
+                  error={auditRuntime.error}
+                  objectType={activeObjectType}
+                />
+              ) : (
+                <DailyWorkspace
+                  data={auditRuntime.result?.data ?? null}
+                  error={auditRuntime.error}
+                  onToggleWideLayout={() =>
+                    setWideLayout((current) => !current)
+                  }
+                  wideLayout={wideLayout}
+                />
+              )}
             </div>
             {!contextPanelOpen ? <MonthlyCalendarPanel /> : null}
           </div>
@@ -2181,7 +2207,10 @@ function NavigationLink({
   primary?: boolean;
 }) {
   const iconName = sidebarIcons[item.icon];
-  const active = isNavigationItemActive(pathname, item.href);
+  const activePath = objectType
+    ? normalizeObjectTypePath(pathname)
+    : pathname;
+  const active = isNavigationItemActive(activePath, item.href);
 
   if (objectType) {
     return (
@@ -2486,60 +2515,89 @@ function TopRailTab({
   tabId: ContextTabId;
 }) {
   return (
-    <div className="group/tab relative min-w-0 flex-1 transition-[width] duration-150 ease-out">
-      <Button
-        aria-selected={active}
+    <div
+      className="outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0 focus-visible:ring-0 no-drag relative flex min-w-0 items-center transition-[width] duration-150 ease-out"
+      draggable={false}
+      style={{ maxWidth: 400, transition: "width 150ms ease-out", gap: "4px" }}
+      data-dnd-type="draggable"
+      data-dnd-item={tabId}
+      data-sidepanel-tab-active={active ? "true" : "false"}
+      data-dnd-id={tabId}
+    >
+      <span
         className={cn(
-          "h-8 w-full min-w-0 cursor-pointer justify-start gap-[0.3em] rounded-lg border border-transparent py-[3px] pr-px pl-1.5 text-[13px] leading-[1.3] font-normal text-workspace-subtle transition-colors duration-150 ease-out hover:bg-workspace-hover hover:text-workspace-muted",
-          active &&
-            "border-workspace-border bg-workspace-surface pr-7 font-medium text-workspace-text hover:bg-workspace-surface hover:text-workspace-text",
-        )}
-        data-context-tab={tabId}
-        onClick={onActivate}
-        role="tab"
-        type="button"
-        variant="ghost"
-      >
-        <Icon
-          aria-hidden="true"
-          className={cn("size-3.5 shrink-0", active && "text-object-violet")}
-        />
-        <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
-          {label}
-        </span>
-      </Button>
-      <div
-        className={cn(
-          "pointer-events-none absolute inset-y-0 right-0 hidden items-center group-hover/tab:flex group-focus-within/tab:flex",
-          active && "flex",
+          "inline-flex max-w-full min-w-0 group/tab pointer-events-auto relative min-w-0 max-w-full rounded-md",
         )}
       >
         <div
-          aria-hidden="true"
+          aria-selected={active}
           className={cn(
-            "h-full w-5 bg-linear-to-r from-transparent",
-            active ? "to-workspace-surface" : "to-workspace-hover",
+            "relative w-full flex min-w-0 items-center",
           )}
-        />
-        <div
-          className={cn(
-            "pointer-events-auto flex h-full items-center rounded-r-lg pr-0.5",
-            active ? "bg-workspace-surface" : "bg-workspace-hover",
-          )}
+          data-context-tab={tabId}
+          onClick={onActivate}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            event.preventDefault();
+            onActivate();
+          }}
+          role="tab"
+          tabIndex={0}
         >
-          <button
-            aria-label={`Fechar ${label}`}
-            className="grid h-7 w-[18px] place-items-center rounded-lg bg-transparent text-workspace-subtle transition-colors duration-150 ease-out hover:bg-workspace-selected hover:text-workspace-muted focus-visible:outline-2 focus-visible:outline-workspace-focus"
-            onClick={(event) => {
-              event.stopPropagation();
-              onClose();
-            }}
-            type="button"
+            <span className="relative flex min-w-0 items-center">
+            <span className="border-[0.5px] w-auto border-transparent text-primary relative flex h-8 min-h-8 min-w-0 cursor-pointer items-center gap-x-[0.3em] rounded-lg py-[3px] pl-[6px] pr-px text-[13px] leading-[1.3] transition duration-150 ease-out select-none outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0 focus-visible:ring-0 active:ring-0">
+              <span
+                className="inline-flex h-[1.3em] w-[1.3em] min-h-[1.3em] min-w-[1.3em] shrink-0 grow-0 items-center justify-center rounded-[0.33em]"
+                style={{
+                  backgroundColor: "var(--type-label-bg-gray)",
+                  color: "var(--type-label-text-gray)",
+                }}
+              >
+                <span
+                  className="inline-flex size-full items-center justify-center [&>svg]:size-full"
+                  style={{ verticalAlign: "-0.125em" }}
+                >
+                  <Icon
+                    aria-hidden="true"
+                    className="size-full shrink-0 text-current"
+                  />
+                </span>
+              </span>
+              <span className="min-w-0 truncate text-left">{label}</span>
+            </span>
+          </span>
+          <span
+            className={cn(
+              "flex h-full shrink-0 items-center pr-[2px] duration-200",
+            )}
           >
-            <X aria-hidden="true" className="size-3" />
-          </button>
+            <div
+              aria-label={`Fechar ${label}`}
+              className={cn(
+                "bg-transparent has-touch:hover:bg-front-hover mobile:active:bg-front-hover hover:bg-front-hover border border-transparent text-secondary hover:text-primary active:text-state-active active:brightness-95 w-[18px] h-sm text-xs justify-center ring-state-active box-border cursor-pointer gap-x-1.5 max-w-full truncate rounded-base phone:rounded-xl relative shrink-0 items-center transition-[opacity] duration-100 ease-out no-drag opacity-0 pointer-events-none group-hover/tab:opacity-100 group-hover/tab:pointer-events-auto",
+              )}
+              onClick={(event) => {
+                event.stopPropagation();
+                onClose();
+              }}
+              onKeyDown={(event) => {
+                if (event.key !== "Enter" && event.key !== " ") return;
+                event.preventDefault();
+                event.stopPropagation();
+                onClose();
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              <span className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative">
+                <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+                  <X aria-hidden="true" className="size-3" />
+                </span>
+              </span>
+            </div>
+          </span>
         </div>
-      </div>
+      </span>
     </div>
   );
 }

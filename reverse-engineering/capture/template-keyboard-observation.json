@@ -1,0 +1,33 @@
+{
+  "runId": "reverse-cycle-001",
+  "timestamp": "2026-08-16T00:00:00Z",
+  "surface": "object-type-workspace",
+  "route": "/tipos/tabelas",
+  "viewport": "1128x912",
+  "inputType": "keyboard",
+  "steps": [
+    "focus first interactive element",
+    "press Tab",
+    "record focus target and state",
+    "press Shift+Tab",
+    "press ArrowDown",
+    "press Escape"
+  ],
+  "result": {
+    "stateBefore": "ObjectTypePageLoaded",
+    "stateAfter": "ObjectTypePageLoaded",
+    "outcomes": [],
+    "notObserved": [
+      "focus target",
+      "state transition after Tab",
+      "aria expanded/selected updates"
+    ],
+    "errors": []
+  },
+  "artifacts": {
+    "screenshot": "reverse-engineering/screenshots/local-tabelas-1128x912.png",
+    "trace": "reverse-engineering/capture/traces/keyboard-tabelas-step001.jsonl",
+    "ariaSnapshot": "reverse-engineering/capture/aria/object-type-workspace-tabelas.json"
+  },
+  "confidence": "UNKNOWN"
+}

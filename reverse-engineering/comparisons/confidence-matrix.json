@@ -1,0 +1,53 @@
+{
+  "asOf": "2026-08-16",
+  "items": [
+    {
+      "property": "Route inventory",
+      "value": 13,
+      "status": "OBSERVED",
+      "source": "reference/manifest.json"
+    },
+    {
+      "property": "State transitions (reference -> local)",
+      "value": "daily->tipos",
+      "status": "WEAKLY_INFERRED",
+      "source": "states/state-graph.json"
+    },
+    {
+      "property": "Object card count parity",
+      "value": "implemented",
+      "status": "OBSERVED",
+      "source": "comparisons/coverage-report.json"
+    },
+    {
+      "property": "Empty state parity",
+      "value": "Arquivos",
+      "status": "OBSERVED",
+      "source": "coverage-report.json"
+    },
+    {
+      "property": "Layout metrics",
+      "value": "x311/y160/w202/h322",
+      "status": "OBSERVED",
+      "source": "styles/coverage.json"
+    },
+    {
+      "property": "Network traces",
+      "value": "route-level only",
+      "status": "WEAKLY_INFERRED",
+      "source": "network/interaction-requests.json"
+    },
+    {
+      "property": "Keyboard outcomes",
+      "value": "WEAKLY_INFERRED",
+      "status": "OBSERVED",
+      "source": "accessibility/keyboard-matrix.json"
+    },
+    {
+      "property": "Screenshot baselines",
+      "value": "planned",
+      "status": "UNKNOWN",
+      "source": "screenshots/plan.json"
+    }
+  ]
+}

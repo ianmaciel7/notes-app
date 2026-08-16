@@ -1,0 +1,14 @@
+{
+  "scope": "capacities + local",
+  "collectedAt": "2026-08-16",
+  "storageMechanisms": [
+    "cookies: not extracted",
+    "localStorage: not extracted",
+    "sessionStorage: not extracted",
+    "IndexedDB: not extracted",
+    "serviceWorker: not extracted"
+  ],
+  "evidenceType": "sanitized-shape-only",
+  "sensitiveDataHandled": "No tokens or session identifiers recorded",
+  "nextCapture": "Add storage state snapshots during authenticated reference/local parity sessions if scope requires"
+}

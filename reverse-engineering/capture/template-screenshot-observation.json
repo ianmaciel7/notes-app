@@ -1,0 +1,34 @@
+{
+  "runId": "reverse-cycle-001",
+  "timestamp": "2026-08-16T00:00:00Z",
+  "surface": "object-type-workspace",
+  "route": "/tipos/tabelas",
+  "viewport": "1128x912",
+  "inputType": "screenshot",
+  "steps": [
+    "render reference route",
+    "capture reference.png",
+    "render local route",
+    "capture local.png",
+    "generate diff with aligned viewport/theme/scroll"
+  ],
+  "result": {
+    "stateBefore": "ObjectTypePageLoaded",
+    "stateAfter": "ObjectTypePageLoaded",
+    "outcomes": [
+      "Reference screenshot captured",
+      "Local screenshot captured",
+      "Diff artifact generated"
+    ],
+    "notObserved": [
+      "difference ratio",
+      "structural diff markers"
+    ],
+    "errors": []
+  },
+  "artifacts": {
+    "screenshot": "reverse-engineering/screenshots/local-tabelas-1128x912.png",
+    "ariaSnapshot": "reverse-engineering/capture/aria/object-type-workspace-tabelas-visual.json"
+  },
+  "confidence": "UNKNOWN"
+}

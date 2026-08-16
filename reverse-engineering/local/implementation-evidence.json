@@ -1,0 +1,28 @@
+{
+  "project": "notes-app",
+  "baselineDate": "2026-08-16",
+  "state": "partial-parity",
+  "implementedRoutes": [
+    "/",
+    "/tipos/notas",
+    "/tipos/audit-entities",
+    "/tipos/chats",
+    "/tipos/imagens",
+    "/tipos/arquivos",
+    "/tipos/audios",
+    "/tipos/pdfs",
+    "/tipos/queries",
+    "/tipos/etiquetas",
+    "/tipos/tweets",
+    "/tipos/links",
+    "/tipos/tabelas",
+    "/tipos/paginas"
+  ],
+  "notes": [
+    "Local object-type route layout and zero overflow checks were completed for key surfaces.",
+    "Tabelas and several route counts now map to fixture parity model.",
+    "A base de evidência estruturada em reverse-engineering foi expandida com páginas/estados/fluxos locais e referências de cobertura.",
+    "Página de auditoria de entidades (/tipos/audit-entities) já está no mapa de evidência.",
+    "Acceptance criteria now explicit: interaction/network/visual/accessibility remain pending."
+  ]
+}

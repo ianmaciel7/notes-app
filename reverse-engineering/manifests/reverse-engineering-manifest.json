@@ -1,0 +1,26 @@
+{
+  "name": "notes-app reverse engineering",
+  "version": "0.1.0",
+  "updatedAt": "2026-08-16",
+  "purpose": [
+    "persisted structured evidence",
+    "state/interaction coverage planning",
+    "OpenSpec derivation",
+    "Graphify-indexed reference"
+  ],
+  "dataFiles": [
+    "manifest.json",
+    "reference/manifest.json",
+    "pages/page-catalog.json",
+    "states/state-graph.json",
+    "flows/flows.json",
+    "network/requests.json",
+    "styles/coverage.json",
+    "components/component-catalog.json",
+    "tokens/design-tokens.json",
+    "screenshots/index.json",
+    "accessibility/roles.json",
+    "comparisons/coverage-summary.json",
+    "local/implementation-evidence.json"
+  ]
+}

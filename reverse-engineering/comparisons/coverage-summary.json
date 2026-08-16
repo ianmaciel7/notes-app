@@ -1,0 +1,29 @@
+{
+  "referenceVisited": 14,
+  "localVisited": 14,
+  "statesCaptured": [
+    "DailyPageReady",
+    "ObjectTypePageLoaded"
+  ],
+  "coverageReport": "comparisons/coverage-report.json",
+  "interactiveRolesDiscovered": [
+    "button",
+    "menu",
+    "menuitem",
+    "separator",
+    "tab",
+    "tablist"
+  ],
+  "coverageGaps": [
+    "menu/dialog/modal role coverage still partial",
+    "full request mutation/submit matrix pending",
+    "pixel diff artifacts not yet committed"
+  ],
+  "confidenceByCategory": {
+    "structure": 4,
+    "layout": 4,
+    "interaction": 3,
+    "accessibility": 3,
+    "responsive": 1
+  }
+}

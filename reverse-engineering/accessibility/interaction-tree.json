@@ -1,0 +1,47 @@
+{
+  "version": "0.1.0",
+  "scope": "object workspace routes",
+  "capturedAt": "2026-08-16",
+  "roleGraph": [
+    {
+      "role": "heading",
+      "namePattern": "h1",
+      "observed": 1,
+      "stateRole": "page title / context",
+      "confidence": "OBSERVED"
+    },
+    {
+      "role": "button",
+      "namePattern": "Novo, Visão geral, Tudo",
+      "observed": 1,
+      "stateRole": "actions",
+      "confidence": "OBSERVED"
+    },
+    {
+      "role": "list",
+      "namePattern": "object list",
+      "observed": 1,
+      "stateRole": "collection container",
+      "confidence": "OBSERVED"
+    },
+    {
+      "role": "tab",
+      "namePattern": "global top tabs",
+      "observed": 0,
+      "stateRole": "not fully captured",
+      "confidence": "UNKNOWN"
+    },
+    {
+      "role": "menuitem",
+      "namePattern": "sidebar actions",
+      "observed": 0,
+      "stateRole": "not fully captured",
+      "confidence": "UNKNOWN"
+    }
+  ],
+  "pending": [
+    "aria-expanded/selected/disabled states for nav/menu controls",
+    "dialog/grids/combobox traversal",
+    "tooltip/popover visibility states"
+  ]
+}

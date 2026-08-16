@@ -1,0 +1,24 @@
+{
+  "runId": "reverse-run-2026-08-16T14-10-18-150Z",
+  "generatedAt": "2026-08-16T14:10:19.643Z",
+  "baseUrl": "http://localhost:3000",
+  "viewport": {
+    "width": 1128,
+    "height": 912
+  },
+  "routes": [
+    "/tipos/tabelas",
+    "/tipos/arquivos",
+    "/tipos/chats",
+    "/tipos/imagens",
+    "/tipos/audios"
+  ],
+  "keyboardKeys": [
+    "Tab",
+    "ArrowDown",
+    "ArrowUp",
+    "Enter",
+    "Escape"
+  ],
+  "captureMode": "local"
+}

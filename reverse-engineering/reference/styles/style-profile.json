@@ -1,0 +1,24 @@
+{
+  "surface": "object-type surfaces",
+  "renderingConstraints": {
+    "noProprietaryCopy": true,
+    "deriveFromComputed": true,
+    "deriveFromObservedLayout": true
+  },
+  "tokensObserved": {
+    "sidebarWidthPx": 288,
+    "topNavHeightPx": 46,
+    "cardX": 311,
+    "cardY": 160,
+    "cardWidth": 202,
+    "cardHeight": 322,
+    "mainStartX": 298,
+    "mainWidth": 442,
+    "contextStartX": 750
+  },
+  "typography": {
+    "language": "pt-BR",
+    "primary": "unresolved",
+    "status": "to confirm with captured computed styles"
+  }
+}

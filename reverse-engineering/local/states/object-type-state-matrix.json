@@ -1,0 +1,44 @@
+{
+  "states": [
+    {
+      "id": "LocalObjectTypeReady",
+      "scope": "routes /tipos/*",
+      "conditions": [
+        "fixture loaded",
+        "header visible",
+        "toolbar visible"
+      ],
+      "dom": {
+        "hasHeading": true,
+        "hasObjectList": true
+      },
+      "confidence": "OBSERVED"
+    },
+    {
+      "id": "LocalObjectTypeEmptyState",
+      "scope": "empty fixture routes",
+      "conditions": [
+        "no row items",
+        "emptyState text visible"
+      ],
+      "dom": {
+        "hasHeading": true,
+        "hasEmptyAction": true
+      },
+      "confidence": "OBSERVED"
+    },
+    {
+      "id": "LocalObjectTypeMenuOpen",
+      "scope": "routes /tipos/* and /",
+      "conditions": [
+        "menu overlay visible",
+        "action labels present"
+      ],
+      "dom": {
+        "menuSnapshot": true,
+        "actionMenuExpanded": true
+      },
+      "confidence": "OBSERVED"
+    }
+  ]
+}

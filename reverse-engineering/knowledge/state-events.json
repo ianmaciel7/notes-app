@@ -1,0 +1,80 @@
+{
+  "version": "0.1.0",
+  "events": [
+    {
+      "id": "evt:object-menu-open",
+      "name": "object-context-menu-open",
+      "fromState": "ObjectTypePageLoaded",
+      "toState": "ObjectTypePageLoaded",
+      "trigger": "menuActionOpen",
+      "evidence": [
+        "local/states/state-transitions.json",
+        "capture/runs/reverse-run-2026-08-16T14-04-07-256Z/root-capture.json",
+        "capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_tabelas-capture.json"
+      ],
+      "confidence": "OBSERVED"
+    },
+    {
+      "id": "evt:object-dialog-like-open",
+      "name": "object-context-action-open",
+      "fromState": "ObjectTypePageLoaded",
+      "toState": "ObjectTypePageLoaded",
+      "trigger": "dialogLikeActionOpen",
+      "evidence": [
+        "local/states/state-transitions.json",
+        "capture/runs/reverse-run-2026-08-16T14-04-07-256Z/root-capture.json",
+        "capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_tabelas-capture.json"
+      ],
+      "confidence": "OBSERVED"
+    },
+    {
+      "id": "evt:object-home-menu-open",
+      "name": "object-home-context-menu-open",
+      "fromState": "DailyPageReady",
+      "toState": "DailyPageReady",
+      "trigger": "menuActionOpen",
+      "evidence": [
+        "local/states/state-transitions.json",
+        "capture/runs/reverse-run-2026-08-16T14-04-07-256Z/root-capture.json"
+      ],
+      "confidence": "OBSERVED"
+    },
+    {
+      "id": "evt:route-select-tabelas",
+      "name": "route-select-tabelas",
+      "fromState": "DailyPageReady",
+      "toState": "ObjectTypePageLoaded",
+      "trigger": "sidebarSelect",
+      "evidence": [
+        "flows/flows.json",
+        "states/state-graph.json",
+        "comparisons/coverage-report.json"
+      ],
+      "confidence": "WEAKLY_INFERRED"
+    },
+    {
+      "id": "evt:route-select-arquivos",
+      "name": "route-select-arquivos",
+      "fromState": "ObjectTypePageLoaded",
+      "toState": "LocalObjectTypeEmptyState",
+      "trigger": "sidebarSelect",
+      "evidence": [
+        "flows/flows.json",
+        "local/states/object-type-state-matrix.json",
+        "comparisons/coverage-report.json"
+      ],
+      "confidence": "WEAKLY_INFERRED"
+    },
+    {
+      "id": "evt:keyboard-tab",
+      "name": "keyboard-tab",
+      "fromState": "ObjectTypePageLoaded",
+      "toState": "ObjectTypePageLoaded",
+      "trigger": "tab",
+      "evidence": [
+        "accessibility/keyboard-matrix.json"
+      ],
+      "confidence": "UNVERIFIED"
+    }
+  ]
+}

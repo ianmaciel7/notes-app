@@ -1,0 +1,512 @@
+{
+  "version": "0.1.0",
+  "source": "reverse-capture",
+  "updatedAt": "2026-08-16",
+  "pages": [
+    {
+      "id": "page-root",
+      "route": "/",
+      "title": "Notas Diárias",
+      "objectType": "RootDailyNote",
+      "slug": "notas-diarias",
+      "state": "DailyPageReady",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/root-1128x912-loaded.png",
+      "snapshotCount": 102,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:33:58.867Z"
+    },
+    {
+      "id": "page-tipos-notas",
+      "route": "/tipos/notas",
+      "title": "Notas",
+      "objectType": "Daily",
+      "slug": "notas",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_notas-1128x912-loaded.png",
+      "snapshotCount": 107,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:04.381Z"
+    },
+    {
+      "id": "page-tipos-chats",
+      "route": "/tipos/chats",
+      "title": "Chats",
+      "objectType": "RootAIChat",
+      "slug": "chats",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_chats-1128x912-loaded.png",
+      "snapshotCount": 105,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:09.882Z"
+    },
+    {
+      "id": "page-tipos-imagens",
+      "route": "/tipos/imagens",
+      "title": "Imagens",
+      "objectType": "MediaImage",
+      "slug": "imagens",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_imagens-1128x912-loaded.png",
+      "snapshotCount": 108,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:15.380Z"
+    },
+    {
+      "id": "page-tipos-arquivos",
+      "route": "/tipos/arquivos",
+      "title": "Arquivos",
+      "objectType": "MediaFile",
+      "slug": "arquivos",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_arquivos-1128x912-loaded.png",
+      "snapshotCount": 107,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:20.637Z"
+    },
+    {
+      "id": "page-tipos-audios",
+      "route": "/tipos/audios",
+      "title": "Audios",
+      "objectType": "MediaAudio",
+      "slug": "audios",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_audios-1128x912-loaded.png",
+      "snapshotCount": 108,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:25.828Z"
+    },
+    {
+      "id": "page-tipos-pdfs",
+      "route": "/tipos/pdfs",
+      "title": "PDFs",
+      "objectType": "MediaPDF",
+      "slug": "pdfs",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_pdfs-1128x912-loaded.png",
+      "snapshotCount": 108,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:31.081Z"
+    },
+    {
+      "id": "page-tipos-queries",
+      "route": "/tipos/queries",
+      "title": "Queries",
+      "objectType": "RootQuery",
+      "slug": "queries",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_queries-1128x912-loaded.png",
+      "snapshotCount": 108,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:36.257Z"
+    },
+    {
+      "id": "page-tipos-etiquetas",
+      "route": "/tipos/etiquetas",
+      "title": "Etiquetas",
+      "objectType": "RootTag",
+      "slug": "etiquetas",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_etiquetas-1128x912-loaded.png",
+      "snapshotCount": 108,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:41.652Z"
+    },
+    {
+      "id": "page-tipos-tweets",
+      "route": "/tipos/tweets",
+      "title": "Tweets",
+      "objectType": "MediaTweet",
+      "slug": "tweets",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_tweets-1128x912-loaded.png",
+      "snapshotCount": 108,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:46.808Z"
+    },
+    {
+      "id": "page-tipos-links",
+      "route": "/tipos/links",
+      "title": "Links",
+      "objectType": "MediaWebResource",
+      "slug": "weblinks",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_links-1128x912-loaded.png",
+      "snapshotCount": 108,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:52.142Z"
+    },
+    {
+      "id": "page-tipos-tabelas",
+      "route": "/tipos/tabelas",
+      "title": "Tabelas",
+      "objectType": "RootSimpleTable",
+      "slug": "tabelas",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_tabelas-1128x912-loaded.png",
+      "snapshotCount": 108,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:34:57.434Z"
+    },
+    {
+      "id": "page-tipos-paginas",
+      "route": "/tipos/paginas",
+      "title": "Páginas",
+      "objectType": "RootPage",
+      "slug": "paginas",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_paginas-1128x912-loaded.png",
+      "snapshotCount": 108,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:35:02.949Z"
+    },
+    {
+      "id": "page-tipos-audit-entities",
+      "route": "/tipos/audit-entities",
+      "title": "AUDIT Entities",
+      "objectType": null,
+      "slug": "audit-entities",
+      "state": "ObjectTypePageLoaded",
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_audit-entities-1128x912-loaded.png",
+      "snapshotCount": 108,
+      "keyboardKeys": [
+        "Tab",
+        "Shift+Tab",
+        "Enter",
+        "Space",
+        "Escape",
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "Home",
+        "End"
+      ],
+      "interactions": [
+        {
+          "name": "menu",
+          "status": "captured",
+          "safety": "SAFE"
+        },
+        {
+          "name": "dialog",
+          "status": "captured",
+          "safety": "SAFE"
+        }
+      ],
+      "capturedAt": "2026-08-16T16:35:08.365Z"
+    }
+  ],
+  "generatedAt": "2026-08-16"
+}

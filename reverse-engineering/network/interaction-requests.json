@@ -1,0 +1,1175 @@
+{
+  "reference": "capacities",
+  "capturedAt": "2026-08-16",
+  "collectedRunId": "reverse-run-2026-08-16T16-33-51-296Z",
+  "interactions": [
+    {
+      "name": "visit /",
+      "trigger": "app bootstrap",
+      "urlBefore": null,
+      "urlAfter": "/",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0vvp_%40swc_helpers_cjs_0vb02wp._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_0bxp7vd._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_219uq1s._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_1qaa88d._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/notas",
+      "trigger": "sidebar selection",
+      "urlBefore": "/",
+      "urlAfter": "/tipos/notas",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/notas",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/chats",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/notas",
+      "urlAfter": "/tipos/chats",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/chats",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/imagens",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/chats",
+      "urlAfter": "/tipos/imagens",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/imagens",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0vvp_%40swc_helpers_cjs_0vb02wp._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/arquivos",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/imagens",
+      "urlAfter": "/tipos/arquivos",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/arquivos",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_0bxp7vd._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/audios",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/arquivos",
+      "urlAfter": "/tipos/audios",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/audios",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_0bxp7vd._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_client_0vr4v5o._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-dom_1x7hnrb._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/pdfs",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/audios",
+      "urlAfter": "/tipos/pdfs",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/pdfs",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/queries",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/pdfs",
+      "urlAfter": "/tipos/queries",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/queries",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/etiquetas",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/queries",
+      "urlAfter": "/tipos/etiquetas",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/etiquetas",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/tweets",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/etiquetas",
+      "urlAfter": "/tipos/tweets",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/tweets",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/links",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/tweets",
+      "urlAfter": "/tipos/links",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/links",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0vvp_%40swc_helpers_cjs_0vb02wp._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/tabelas",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/links",
+      "urlAfter": "/tipos/tabelas",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/tabelas",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0vvp_%40swc_helpers_cjs_0vb02wp._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_0_zep5z._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/paginas",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/tabelas",
+      "urlAfter": "/tipos/paginas",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/paginas",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    },
+    {
+      "name": "visit /tipos/audit-entities",
+      "trigger": "sidebar selection",
+      "urlBefore": "/tipos/paginas",
+      "urlAfter": "/tipos/audit-entities",
+      "networkRequests": [
+        {
+          "url": "http://localhost:3000/tipos/audit-entities",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ],
+      "networkConfidence": "OBSERVED",
+      "requestSamples": 24,
+      "notes": "Captured in route scope at viewport 1128x912"
+    }
+  ],
+  "storage": {
+    "observedMechanisms": [
+      "local route transitions (DOMContentLoaded + static route loads)",
+      "navigation-only capture (no mutating form submits observed in this run)"
+    ]
+  }
+}

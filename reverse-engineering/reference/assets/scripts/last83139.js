@@ -1,0 +1,1 @@
+(function(){try{var e=typeof window<`u`?window:typeof global<`u`?global:typeof globalThis<`u`?globalThis:typeof self<`u`?self:{};e.SENTRY_RELEASE={id:`cc818b413d67b39ed6e7293300830f9a783b1aa8`}}catch{}})();function e(e){var t=e==null?0:e.length;return t?e[t-1]:void 0}export{e as t};

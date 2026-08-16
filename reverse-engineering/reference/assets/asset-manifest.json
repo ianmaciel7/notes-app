@@ -1,0 +1,789 @@
+{
+  "source": {
+    "pageSnapshot": "C:/Users/ianma/Downloads/Capacities.html",
+    "harvestedAt": "2026-08-16T16:36:33.221Z",
+    "totalDiscovered": 78
+  },
+  "localFiles": [
+    {
+      "sourceReference": "https://app.capacities.io/chunk83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/chunk83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/preload-helper83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/preload-helper83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/reactivity.esm-bundler83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/reactivity.esm-bundler83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/runtime-core.esm-bundler83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/runtime-core.esm-bundler83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/dist83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/dist83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/environment83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/environment83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/RenderIcon83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/RenderIcon83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/_baseFor83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/_baseFor83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/merge83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/merge83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/isEmpty83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/isEmpty83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/_baseClone83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/_baseClone83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/defaults83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/defaults83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/v483139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/v483139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/shortcuts83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/shortcuts83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/Interactable83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/Interactable83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/definitions83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/definitions83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/definitions831392.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/definitions831392.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/dist831392.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/dist831392.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/dayjs.min83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/dayjs.min83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/isoWeek83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/isoWeek83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/_baseProperty83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/_baseProperty83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/now83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/now83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/vue-router83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/vue-router83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/dState83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/dState83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/notificationManager831392.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/notificationManager831392.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/virtual_intlify-i18n-0831392.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/virtual_intlify-i18n-0831392.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/storing83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/storing83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/definitions831393.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/definitions831393.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/uiColorValues83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/uiColorValues83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/MainButton83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/MainButton83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/throttle83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/throttle83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/TextLabel83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/TextLabel83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/TagInlineView83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/TagInlineView83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/ai-property-write83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/ai-property-write83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/embeddingLocation83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/embeddingLocation83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/BlockList83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/BlockList83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/memoize83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/memoize83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/_baseUniq83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/_baseUniq83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/last83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/last83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/ScrollContainer83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/ScrollContainer83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/UIBadge83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/UIBadge83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/SearchInput83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/SearchInput83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/AppMenu83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/AppMenu83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/pdfjs83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/pdfjs83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/TeleportModal83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/TeleportModal83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/safeAreaInsets83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/safeAreaInsets83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/AutosizeTextInput83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/AutosizeTextInput83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/ListDropdown83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/ListDropdown83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/PDFViewer83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/PDFViewer83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/CategoryBox83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/CategoryBox83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/AIErrorBox83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/AIErrorBox83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/StructureLabel83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/StructureLabel83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/PasswordStrengthIndicator83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/PasswordStrengthIndicator83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/src83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/src83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/_baseEach83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/_baseEach83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/union83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/union83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/useInDocumentSearchShortcut83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/useInDocumentSearchShortcut83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/ControlDropdownItem83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/ControlDropdownItem83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/useTurnstile83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/useTurnstile83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/CapacitiesProButton83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/CapacitiesProButton83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/Logo83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/Logo83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/embeddingNavigation83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/embeddingNavigation83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/emoji83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/emoji83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/LocationManager83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/LocationManager83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/CapacitiesAppButton83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/CapacitiesAppButton83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/AddPlusModal83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/AddPlusModal83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/LogoHeader83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/LogoHeader83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/useDiagnostics83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/useDiagnostics83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "./Capacities_files/Interactable83139.css",
+      "type": "style",
+      "sourceAvailable": true,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/styles/Interactable83139.css",
+      "bytes": 269,
+      "sha256": "764dfec7322044e08191afe27506eb9dc36bd0730dbac14c8bfdf4b52f53f1d3",
+      "status": "copied"
+    },
+    {
+      "sourceReference": "./Capacities_files/BlockList83139.css",
+      "type": "style",
+      "sourceAvailable": true,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/styles/BlockList83139.css",
+      "bytes": 45671,
+      "sha256": "ab14e603da43d5910b56957694141721bb6840996fe1ace50c100204fdb39180",
+      "status": "copied"
+    },
+    {
+      "sourceReference": "./Capacities_files/PDFViewer83139.css",
+      "type": "style",
+      "sourceAvailable": true,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/styles/PDFViewer83139.css",
+      "bytes": 567,
+      "sha256": "d6f5ffc796046a74f69377731b3642bcddea9079b762da6fcfc4f29dcb968053",
+      "status": "copied"
+    },
+    {
+      "sourceReference": "./Capacities_files/PasswordStrengthIndicator83139.css",
+      "type": "style",
+      "sourceAvailable": true,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/styles/PasswordStrengthIndicator83139.css",
+      "bytes": 1025,
+      "sha256": "c11dea843e3c156d0637c9644a81ab7946ca08018f3c8ab637b3f135419681de",
+      "status": "copied"
+    },
+    {
+      "sourceReference": "./Capacities_files/LocationManager83139.css",
+      "type": "style",
+      "sourceAvailable": true,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/styles/LocationManager83139.css",
+      "bytes": 35464,
+      "sha256": "276a06d61a273240c5c166dac6545bd1d6e36081b820bfaf96778ffa21ad43ce",
+      "status": "copied"
+    },
+    {
+      "sourceReference": "./Capacities_files/index83139.css",
+      "type": "style",
+      "sourceAvailable": true,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/styles/index83139.css",
+      "bytes": 341606,
+      "sha256": "f9dd36d9ad3335b7259a22813212a4964b12caca35c6af82031014be0d9cfc48",
+      "status": "copied"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/_...location_83139.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/_...location_83139.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "https://app.capacities.io/web831397.js",
+      "type": "script",
+      "sourceAvailable": false,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/web831397.js",
+      "bytes": 0,
+      "sha256": null,
+      "error": "fetch failed"
+    },
+    {
+      "sourceReference": "./Capacities_files/index83139.js.download",
+      "type": "script",
+      "sourceAvailable": true,
+      "destinationPath": "C:/Users/ianma/workspace/notes-app/reverse-engineering/reference/assets/scripts/index83139.js.download",
+      "bytes": 292151,
+      "sha256": "0fad999abe8f6efe60d9082b5e8c2c3c927ef97d47dc0aa8472f251a4c3a8d03",
+      "status": "copied"
+    }
+  ],
+  "remoteMissing": [
+    "chunk83139.js",
+    "preload-helper83139.js",
+    "reactivity.esm-bundler83139.js",
+    "runtime-core.esm-bundler83139.js",
+    "dist83139.js",
+    "environment83139.js",
+    "RenderIcon83139.js",
+    "_baseFor83139.js",
+    "merge83139.js",
+    "isEmpty83139.js",
+    "_baseClone83139.js",
+    "defaults83139.js",
+    "v483139.js",
+    "shortcuts83139.js",
+    "Interactable83139.js",
+    "definitions83139.js",
+    "definitions831392.js",
+    "dist831392.js",
+    "dayjs.min83139.js",
+    "isoWeek83139.js",
+    "_baseProperty83139.js",
+    "now83139.js",
+    "vue-router83139.js",
+    "dState83139.js",
+    "notificationManager831392.js",
+    "virtual_intlify-i18n-0831392.js",
+    "storing83139.js",
+    "definitions831393.js",
+    "uiColorValues83139.js",
+    "MainButton83139.js",
+    "throttle83139.js",
+    "TextLabel83139.js",
+    "TagInlineView83139.js",
+    "ai-property-write83139.js",
+    "embeddingLocation83139.js",
+    "BlockList83139.js",
+    "memoize83139.js",
+    "_baseUniq83139.js",
+    "last83139.js",
+    "ScrollContainer83139.js",
+    "UIBadge83139.js",
+    "SearchInput83139.js",
+    "AppMenu83139.js",
+    "pdfjs83139.js",
+    "TeleportModal83139.js",
+    "safeAreaInsets83139.js",
+    "AutosizeTextInput83139.js",
+    "ListDropdown83139.js",
+    "PDFViewer83139.js",
+    "CategoryBox83139.js",
+    "AIErrorBox83139.js",
+    "StructureLabel83139.js",
+    "PasswordStrengthIndicator83139.js",
+    "src83139.js",
+    "_baseEach83139.js",
+    "union83139.js",
+    "useInDocumentSearchShortcut83139.js",
+    "ControlDropdownItem83139.js",
+    "useTurnstile83139.js",
+    "CapacitiesProButton83139.js",
+    "Logo83139.js",
+    "embeddingNavigation83139.js",
+    "emoji83139.js",
+    "LocationManager83139.js",
+    "CapacitiesAppButton83139.js",
+    "AddPlusModal83139.js",
+    "LogoHeader83139.js",
+    "useDiagnostics83139.js",
+    "_...location_83139.js",
+    "web831397.js",
+    "v4513226cdae34746b4dedf0b4dfa099e1781791509496 (ignored non-css/js)"
+  ],
+  "copied": [
+    "Interactable83139.css",
+    "BlockList83139.css",
+    "PDFViewer83139.css",
+    "PasswordStrengthIndicator83139.css",
+    "LocationManager83139.css",
+    "index83139.css",
+    "index83139.js.download"
+  ],
+  "counts": {
+    "css": 6,
+    "scripts": 1,
+    "total": 7
+  }
+}

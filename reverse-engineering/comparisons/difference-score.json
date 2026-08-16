@@ -1,0 +1,21 @@
+{
+  "referenceDate": "2026-08-16",
+  "scope": "object-type route parity",
+  "scores": {
+    "Structure": 4,
+    "Layout": 4,
+    "Typography": 3,
+    "Spacing": 4,
+    "Color": 3,
+    "Icons": 2,
+    "Interaction": 2,
+    "Accessibility": 2,
+    "ResponsiveBehavior": 1
+  },
+  "threshold": {
+    "criticalMin": 3,
+    "blockedIfBelow": ["Interaction", "Accessibility", "ResponsiveBehavior"]
+  },
+  "overallStatus": "in_progress",
+  "nextAction": "collect keyboard + interaction + responsive screenshots before re-score"
+}

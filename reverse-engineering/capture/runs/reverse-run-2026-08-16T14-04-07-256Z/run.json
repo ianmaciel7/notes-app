@@ -1,0 +1,38 @@
+{
+  "runId": "reverse-run-2026-08-16T14-04-07-256Z",
+  "generatedAt": "2026-08-16T14:04:07.643Z",
+  "baseUrl": "http://localhost:3000",
+  "viewport": {
+    "width": 1128,
+    "height": 912
+  },
+  "routes": [
+    "/",
+    "/tipos/notas",
+    "/tipos/chats",
+    "/tipos/imagens",
+    "/tipos/arquivos",
+    "/tipos/audios",
+    "/tipos/pdfs",
+    "/tipos/queries",
+    "/tipos/etiquetas",
+    "/tipos/tweets",
+    "/tipos/links",
+    "/tipos/tabelas",
+    "/tipos/paginas"
+  ],
+  "keyboardKeys": [
+    "Tab",
+    "Shift+Tab",
+    "Enter",
+    "ArrowDown",
+    "ArrowUp",
+    "ArrowLeft",
+    "ArrowRight",
+    "Escape",
+    "Home",
+    "End",
+    "Space"
+  ],
+  "captureMode": "local"
+}

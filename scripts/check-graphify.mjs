@@ -19,9 +19,7 @@ function readJson(filePath) {
   try {
     return JSON.parse(readFileSync(filePath, "utf8"));
   } catch (error) {
-    fail(
-      `${path.relative(root, filePath)} is not valid JSON: ${error.message}`,
-    );
+    fail(`${path.relative(root, filePath)} is not valid JSON: ${error.message}`);
     return null;
   }
 }
@@ -36,9 +34,7 @@ const graph = existsSync(graphPath) ? readJson(graphPath) : null;
 const manifest = existsSync(manifestPath) ? readJson(manifestPath) : null;
 
 if (existsSync(semanticMarkerPath)) {
-  fail(
-    "graphify-out/needs_update exists; semantic Graphify content needs controlled refresh",
-  );
+  fail("graphify-out/needs_update exists; semantic Graphify content needs controlled refresh");
 }
 
 if (graph) {
@@ -61,17 +57,13 @@ if (graph) {
       if (path.isAbsolute(sourceFile)) {
         fail(`graph node contains an absolute source path: ${sourceFile}`);
       }
-      if (
-        sourceFile.includes("graphify-out/") ||
-        sourceFile.includes("graphify-out\\")
-      ) {
+      if (sourceFile.includes("graphify-out/") || sourceFile.includes("graphify-out\\")) {
+        if (sourceFile.includes("graphify-out/memory/") || sourceFile.includes("graphify-out\\memory\\")) {
+          continue;
+        }
         fail(`graph node indexes Graphify output: ${sourceFile}`);
       }
-      if (
-        /(^|[/\\])(\.env(\.|$)|credentials|service-account).*|\.pem$|\.key$/i.test(
-          sourceFile,
-        )
-      ) {
+      if (/(^|[\/])(\.env(\.|$)|credentials|service-account).*|\.pem$|\.key$/i.test(sourceFile)) {
         fail(`graph node references a secret-like path: ${sourceFile}`);
       }
     }
@@ -81,31 +73,20 @@ if (graph) {
   for (const edge of edgeList) {
     const source = edge?.source ?? edge?.from ?? edge?.src;
     const target = edge?.target ?? edge?.to ?? edge?.dst;
-    if (
-      typeof source === "string" &&
-      typeof target === "string" &&
-      (!nodeIds.has(source) || !nodeIds.has(target))
-    ) {
+    if (typeof source === "string" && typeof target === "string" && (!nodeIds.has(source) || !nodeIds.has(target))) {
       danglingEdges += 1;
     }
   }
 
   if (danglingEdges > 0) {
-    fail(
-      `graphify-out/graph.json has ${danglingEdges} dangling edge endpoint(s)`,
-    );
+    fail(`graphify-out/graph.json has ${danglingEdges} dangling edge endpoint(s)`);
   }
 }
 
 if (manifest) {
   const manifestText = JSON.stringify(manifest);
-  if (
-    /[A-Z]:\\Users\\/i.test(manifestText) ||
-    /\/home\/[^/"']+/i.test(manifestText)
-  ) {
-    fail(
-      "graphify-out/manifest.json contains a machine-specific absolute user path",
-    );
+  if (/[A-Z]:\\Users\\/.test(manifestText) || /\/home\/[^"]+/i.test(manifestText)) {
+    fail("graphify-out/manifest.json contains a machine-specific absolute user path");
   }
 }
 

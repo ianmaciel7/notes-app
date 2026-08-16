@@ -1,0 +1,36 @@
+{
+  "page": "ObjectTypePage",
+  "routePatterns": [
+    "/tipos/*"
+  ],
+  "roles": [
+    "heading",
+    "button",
+    "link",
+    "textbox"
+  ],
+  "layout": {
+    "viewport": "1128x912",
+    "sidebarWidthPx": 288,
+    "topBarHeightPx": 46,
+    "contentStartX": 298,
+    "contextPanelX": 750
+  },
+  "observations": [
+    {
+      "metric": "scrollWidth",
+      "result": "matches clientWidth",
+      "confidence": "OBSERVED"
+    },
+    {
+      "metric": "objectCardPresence",
+      "result": "present on non-empty routes",
+      "confidence": "OBSERVED"
+    }
+  ],
+  "gaps": [
+    "no full keyboard map captured",
+    "no full accessibility tree snapshots",
+    "no screenshot diff files committed yet"
+  ]
+}

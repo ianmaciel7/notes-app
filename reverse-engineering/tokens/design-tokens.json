@@ -1,0 +1,21 @@
+{
+  "source": "computed-style",
+  "updatedAt": "2026-08-16",
+  "tokens": {
+    "spacing": {
+      "layoutX": 298,
+      "contentX": 750,
+      "mainWidth": 442
+    },
+    "stateBadges": {
+      "format": "inline chips"
+    },
+    "navigation": {
+      "sidebarWidth": 288,
+      "topRailHeight": 46
+    }
+  },
+  "status": "partiallyObserved",
+  "confidence": "STRONGLY_INFERRED",
+  "notes": "Tokens are derived from observed metrics and used as implementation anchors, not copied CSS."
+}

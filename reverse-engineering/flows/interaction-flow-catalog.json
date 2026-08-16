@@ -1,0 +1,109 @@
+{
+  "flows": [
+    {
+      "name": "Open object context menu",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "requirements": [
+        "discover menu trigger in route",
+        "capture menu-open and menu-close focus/DOM deltas",
+        "capture role snapshots for menu/menuitem",
+        "record interaction artifacts"
+      ],
+      "evidence": [
+        "local/states/state-transitions.json",
+        "capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_tabelas-capture.json",
+        "accessibility/keyboard-matrix.json"
+      ]
+    },
+    {
+      "name": "Open object quick actions",
+      "status": "captured",
+      "category": "safe",
+      "risk": "SAFE",
+      "requirements": [
+        "identify quick action trigger",
+        "capture action list visibility and focus transitions",
+        "capture before/after accessibility state"
+      ],
+      "evidence": [
+        "local/states/state-transitions.json",
+        "capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_tabelas-capture.json"
+      ]
+    },
+    {
+      "name": "Create object",
+      "status": "notCaptured",
+      "category": "mutating",
+      "risk": "MUTATING",
+      "requirements": [
+        "identify trigger",
+        "identify required properties",
+        "capture optimistic/state transitions",
+        "capture confirmation/error states"
+      ]
+    },
+    {
+      "name": "Edit object",
+      "status": "notCaptured",
+      "category": "mutating",
+      "risk": "MUTATING",
+      "requirements": [
+        "open object detail",
+        "edit fields",
+        "persist/update indicators",
+        "network evidence"
+      ]
+    },
+    {
+      "name": "Delete object",
+      "status": "notCaptured",
+      "category": "destructive",
+      "risk": "DESTRUCTIVE",
+      "requirements": [
+        "do not execute without safe sandbox",
+        "if executed, capture confirmation/undo behavior"
+      ]
+    },
+    {
+      "name": "Filter list",
+      "status": "notCaptured",
+      "category": "safe",
+      "risk": "SAFE",
+      "requirements": [
+        "capture available filters",
+        "capture result-state change",
+        "capture empty fallback"
+      ]
+    },
+    {
+      "name": "Sort list",
+      "status": "notCaptured",
+      "category": "safe",
+      "risk": "SAFE",
+      "requirements": [
+        "capture sorting controls",
+        "capture reorder proof"
+      ]
+    },
+    {
+      "name": "Search",
+      "status": "notCaptured",
+      "category": "safe",
+      "risk": "SAFE",
+      "requirements": [
+        "input semantics",
+        "search result mutation",
+        "empty result state"
+      ]
+    }
+  ],
+  "captureClassifications": {
+    "safe": ["open menu", "open page", "select tab", "hover", "focus", "expand", "search with disposable data"],
+    "mutating": ["create", "edit", "change preference"],
+    "destructive": ["delete", "remove", "reset", "billing", "security changes"],
+    "external": ["open external links", "oauth redirects"],
+    "unknown": ["custom quick actions", "context menus not yet inspected"]
+  }
+}

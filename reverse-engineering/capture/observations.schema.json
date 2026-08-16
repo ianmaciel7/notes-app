@@ -1,0 +1,52 @@
+{
+  "title": "Reverse engineering observation record",
+  "type": "object",
+  "required": [
+    "runId",
+    "timestamp",
+    "surface",
+    "route",
+    "viewport",
+    "inputType",
+    "steps",
+    "result",
+    "artifacts",
+    "confidence"
+  ],
+  "properties": {
+    "runId": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "surface": { "type": "string" },
+    "route": { "type": "string" },
+    "viewport": { "type": "string" },
+    "inputType": {
+      "type": "string",
+      "enum": ["keyboard", "mouse", "touch", "programmatic", "network", "screenshot"]
+    },
+    "steps": { "type": "array", "items": { "type": "string" } },
+    "result": {
+      "type": "object",
+      "required": ["stateBefore", "stateAfter", "outcomes", "notObserved"],
+      "properties": {
+        "stateBefore": { "type": "string" },
+        "stateAfter": { "type": "string" },
+        "outcomes": { "type": "array", "items": { "type": "string" } },
+        "notObserved": { "type": "array", "items": { "type": "string" } },
+        "errors": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "properties": {
+        "screenshot": { "type": "string" },
+        "trace": { "type": "string" },
+        "networkHar": { "type": "string" },
+        "ariaSnapshot": { "type": "string" }
+      }
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["OBSERVED", "WEAKLY_INFERRED", "UNKNOWN"]
+    }
+  }
+}

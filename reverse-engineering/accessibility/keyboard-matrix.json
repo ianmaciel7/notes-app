@@ -1,0 +1,790 @@
+{
+  "reference": "capacities",
+  "sessionDate": "2026-08-16",
+  "status": "partial",
+  "keys": [
+    {
+      "key": "Tab",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "route-local transition observed 14x",
+      "coverage": {
+        "observedTransitions": 14,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "Tab",
+          "before": "null:body:",
+          "after": "null:button:"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "Tab",
+          "before": "null:body:",
+          "after": "null:button:"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "Tab",
+          "before": "null:body:",
+          "after": "null:button:"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "Tab",
+          "before": "null:body:",
+          "after": "null:button:"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "Tab",
+          "before": "null:body:",
+          "after": "null:button:"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "Tab",
+          "before": "null:body:",
+          "after": "null:button:"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "Tab",
+          "before": "null:body:",
+          "after": "null:button:"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "Tab",
+          "before": "null:body:",
+          "after": "null:button:"
+        }
+      ]
+    },
+    {
+      "key": "Shift+Tab",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "route-local transition observed 14x",
+      "coverage": {
+        "observedTransitions": 14,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "Shift+Tab",
+          "before": "null:button:",
+          "after": "null:button:radix-_R_4clrlb_"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "Shift+Tab",
+          "before": "null:button:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "Shift+Tab",
+          "before": "null:button:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "Shift+Tab",
+          "before": "null:button:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "Shift+Tab",
+          "before": "null:button:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "Shift+Tab",
+          "before": "null:button:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "Shift+Tab",
+          "before": "null:button:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "Shift+Tab",
+          "before": "null:button:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        }
+      ]
+    },
+    {
+      "key": "Enter",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "route-local transition observed 14x",
+      "coverage": {
+        "observedTransitions": 14,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "Enter",
+          "before": "null:button:radix-_R_4clrlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "Enter",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "Enter",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "Enter",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "Enter",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "Enter",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "Enter",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "Enter",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        }
+      ]
+    },
+    {
+      "key": "ArrowDown",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "route-local transition observed 14x",
+      "coverage": {
+        "observedTransitions": 14,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "ArrowDown",
+          "before": "null:button:radix-_R_4clrlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowDown",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowDown",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowDown",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowDown",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowDown",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowDown",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowDown",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "menuitem:div:"
+        }
+      ]
+    },
+    {
+      "key": "ArrowUp",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "no focus movement",
+      "coverage": {
+        "observedTransitions": 0,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "ArrowUp",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowUp",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowUp",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowUp",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowUp",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowUp",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowUp",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowUp",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        }
+      ]
+    },
+    {
+      "key": "Escape",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "no focus movement",
+      "coverage": {
+        "observedTransitions": 0,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "Escape",
+          "before": "null:button:radix-_R_4clrlb_",
+          "after": "null:button:radix-_R_4clrlb_"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "Escape",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "Escape",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "Escape",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "Escape",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "Escape",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "Escape",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "Escape",
+          "before": "null:button:radix-_R_8pbn5rlb_",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        }
+      ]
+    },
+    {
+      "key": "Space",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "route-local transition observed 14x",
+      "coverage": {
+        "observedTransitions": 14,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "Space",
+          "before": "menuitem:div:",
+          "after": "null:button:radix-_R_4clrlb_"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "Space",
+          "before": "menuitem:div:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "Space",
+          "before": "menuitem:div:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "Space",
+          "before": "menuitem:div:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "Space",
+          "before": "menuitem:div:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "Space",
+          "before": "menuitem:div:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "Space",
+          "before": "menuitem:div:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "Space",
+          "before": "menuitem:div:",
+          "after": "null:button:radix-_R_8pbn5rlb_"
+        }
+      ]
+    },
+    {
+      "key": "ArrowLeft",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "no focus movement",
+      "coverage": {
+        "observedTransitions": 0,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "ArrowLeft",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowLeft",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowLeft",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowLeft",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowLeft",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowLeft",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowLeft",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowLeft",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        }
+      ]
+    },
+    {
+      "key": "ArrowRight",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "no focus movement",
+      "coverage": {
+        "observedTransitions": 0,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "ArrowRight",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowRight",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowRight",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowRight",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowRight",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowRight",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowRight",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "ArrowRight",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        }
+      ]
+    },
+    {
+      "key": "Home",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "no focus movement",
+      "coverage": {
+        "observedTransitions": 0,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "Home",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "Home",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "Home",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "Home",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "Home",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "Home",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "Home",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "Home",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        }
+      ]
+    },
+    {
+      "key": "End",
+      "scope": "workspace shell",
+      "result": "recorded",
+      "stateTransition": "no focus movement",
+      "coverage": {
+        "observedTransitions": 0,
+        "totalObservedRoutes": 14
+      },
+      "sample": [
+        {
+          "route": "/",
+          "state": "DailyPageReady",
+          "key": "End",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/notas",
+          "state": "ObjectTypePageLoaded",
+          "key": "End",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/chats",
+          "state": "ObjectTypePageLoaded",
+          "key": "End",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/imagens",
+          "state": "ObjectTypePageLoaded",
+          "key": "End",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/arquivos",
+          "state": "ObjectTypePageLoaded",
+          "key": "End",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/audios",
+          "state": "ObjectTypePageLoaded",
+          "key": "End",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/pdfs",
+          "state": "ObjectTypePageLoaded",
+          "key": "End",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        },
+        {
+          "route": "/tipos/queries",
+          "state": "ObjectTypePageLoaded",
+          "key": "End",
+          "before": "menuitem:div:",
+          "after": "menuitem:div:"
+        }
+      ]
+    }
+  ],
+  "coverageGaps": [
+    "no key-action mapping attached to explicit reference outcomes",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "menuitem and submenu navigation should be captured with visible actions",
+    "modal/dialog keyboard context requires separate modal fixture capture",
+    "menuitem and submenu navigation should be captured with visible actions"
+  ]
+}

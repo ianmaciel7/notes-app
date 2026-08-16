@@ -137,3 +137,16 @@ export const workspaceAuditFixture = {
     },
   ] satisfies CreatedObjectFixture[],
 } as const;
+
+export const workspaceObjectTypeFixture = [
+  ...workspaceAuditFixture.createdObjects.filter(
+    (object) => object.id !== "audit-file",
+  ),
+  {
+    id: "audit-tag",
+    type: "Etiqueta",
+    title: "Sem título",
+    preview: "Etiqueta persistida",
+    tone: "orange",
+  },
+] satisfies CreatedObjectFixture[];

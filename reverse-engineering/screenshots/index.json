@@ -1,0 +1,126 @@
+{
+  "reference": [],
+  "local": [
+    {
+      "route": "/",
+      "viewport": "1128x912",
+      "state": "DailyPageReady",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/root-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/arquivos",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_arquivos-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/audios",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_audios-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/audit-entities",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_audit-entities-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/audits",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_audits-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T13-50-06-739Z"
+    },
+    {
+      "route": "/tipos/chats",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_chats-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/etiquetas",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_etiquetas-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/imagens",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_imagens-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/links",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_links-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/notas",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_notas-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/paginas",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_paginas-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/pdfs",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_pdfs-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/queries",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_queries-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/tabelas",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_tabelas-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    },
+    {
+      "route": "/tipos/tweets",
+      "viewport": "1128x912",
+      "state": "ObjectTypePageLoaded",
+      "path": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_tweets-1128x912-loaded.png",
+      "status": "captured",
+      "notes": "Captured from run reverse-run-2026-08-16T16-33-51-296Z"
+    }
+  ],
+  "comparisons": []
+}

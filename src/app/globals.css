@@ -82,6 +82,8 @@
   --type-label-text-orange: oklch(0.557 0.1387 43.21);
   --type-label-bg-purple: oklch(0.963 0.0229 308.05);
   --type-label-text-purple: oklch(0.5082 0.1955 304.61);
+  --type-label-bg-gray: oklch(0.94 0.01 80);
+  --type-label-text-gray: oklch(0.47 0.015 80);
 }
 
 @theme inline {
@@ -142,6 +144,8 @@
   --type-label-text-orange: #e8ad72;
   --type-label-bg-purple: #40354f;
   --type-label-text-purple: #c4a7e7;
+  --type-label-bg-gray: #3c3b38;
+  --type-label-text-gray: #c0bfb6;
 }
 
 * {

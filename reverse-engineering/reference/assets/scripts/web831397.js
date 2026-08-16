@@ -1,0 +1,1 @@
+(function(){try{var e=typeof window<`u`?window:typeof global<`u`?global:typeof globalThis<`u`?globalThis:typeof self<`u`?self:{};e.SENTRY_RELEASE={id:`cc818b413d67b39ed6e7293300830f9a783b1aa8`}}catch{}})();import{r as e}from"./dist83139.js";var t=class extends e{async show(e){}async hide(e){}};export{t as SplashScreenWeb};

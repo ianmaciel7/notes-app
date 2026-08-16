@@ -1,0 +1,75 @@
+{
+  "version": "0.1.0",
+  "asOf": "2026-08-16",
+  "domains": {
+    "interaction": {
+      "missingObserved": [
+        "tab roles and state transitions",
+        "menuitem/dialog/combobox interactions",
+        "tooltip/popover behavior",
+        "keyboard action->outcome mapping"
+      ],
+      "status": "critical"
+    },
+    "network": {
+      "missingObserved": [
+        "route transition network trace",
+        "mutation request sequences (create/edit/filter/sort/search)",
+        "storage mechanism evidence snapshots"
+      ],
+      "status": "high"
+    },
+    "visual": {
+      "missingObserved": [
+        "reference and local baseline screenshots",
+        "diff screenshots",
+        "metadata for capture (viewport/theme/scroll/state)"
+      ],
+      "status": "high"
+    },
+    "accessibility": {
+      "missingObserved": [
+        "complete accessibility tree snapshots for /tipos/*",
+        "selected/expanded/disabled state assertions",
+        "focus order assertions"
+      ],
+      "status": "medium"
+    },
+    "responsive": {
+      "missingObserved": [
+        "breakpoint matrix capture",
+        "mobile/tablet parity state"
+      ],
+      "status": "medium"
+    }
+  },
+  "mitigations": [
+    "Do not treat weakly inferred network claims as behavior contract",
+    "Do not mark interaction parity complete until keyboard + menu/dialog roles are observed",
+    "Classify all untested state transitions as UNKNOWN"
+  ],
+  "gaps": [
+    {
+      "category": "interaction",
+      "remaining": [
+        "menu/dialog/contextual action parity"
+      ],
+      "priority": "high"
+    },
+    {
+      "category": "network",
+      "remaining": [
+        "mutating requests (create/edit/delete/search submit)"
+      ],
+      "priority": "high"
+    },
+    {
+      "category": "visual",
+      "remaining": [
+        "deterministic diff artifacts vs reference"
+      ],
+      "priority": "medium"
+    }
+  ],
+  "updatedAt": "2026-08-16"
+}

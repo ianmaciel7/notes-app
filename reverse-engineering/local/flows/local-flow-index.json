@@ -1,0 +1,20 @@
+{
+  "flows": [
+    {
+      "name": "Navigate to each object type",
+      "status": "implemented",
+      "routesCovered": 13,
+      "startingState": "DailyPageReady",
+      "endingState": "ObjectTypePageLoaded",
+      "notes": "covered via route-based parity pass and overflow/layout checks"
+    },
+    {
+      "name": "Empty-state reproduction",
+      "status": "partiallyImplemented",
+      "routesCovered": [
+        "/tipos/arquivos"
+      ],
+      "notes": "visual placeholder exists; full interaction assertions pending"
+    }
+  ]
+}

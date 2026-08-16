@@ -1,0 +1,26 @@
+{
+  "runId": "reverse-run-2026-08-16T16-36-07-133Z",
+  "generatedAt": "2026-08-16T16:36:07.714Z",
+  "baseUrl": "http://localhost:3000",
+  "viewport": {
+    "width": 1128,
+    "height": 912
+  },
+  "routes": [
+    "/tipos/tabelas"
+  ],
+  "keyboardKeys": [
+    "Tab",
+    "Shift+Tab",
+    "Enter",
+    "Space",
+    "Escape",
+    "ArrowDown",
+    "ArrowUp",
+    "ArrowLeft",
+    "ArrowRight",
+    "Home",
+    "End"
+  ],
+  "captureMode": "local"
+}

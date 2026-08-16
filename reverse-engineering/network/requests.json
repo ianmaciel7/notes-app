@@ -1,0 +1,1161 @@
+{
+  "source": "capacities",
+  "collectedAt": "2026-08-16",
+  "observability": "enhanced",
+  "notes": [
+    "Route-level request traces captured for local UI routes.",
+    "No API mutation capture in this iteration."
+  ],
+  "flows": [
+    {
+      "name": "visit /",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0vvp_%40swc_helpers_cjs_0vb02wp._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_0bxp7vd._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_219uq1s._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_1qaa88d._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/notas",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/notas",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/chats",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/chats",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/imagens",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/imagens",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0vvp_%40swc_helpers_cjs_0vb02wp._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/arquivos",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/arquivos",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_0bxp7vd._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/audios",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/audios",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_0bxp7vd._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_client_0vr4v5o._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-dom_1x7hnrb._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/pdfs",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/pdfs",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/queries",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/queries",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/etiquetas",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/etiquetas",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/tweets",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/tweets",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/links",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/links",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0vvp_%40swc_helpers_cjs_0vb02wp._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/tabelas",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/tabelas",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0vvp_%40swc_helpers_cjs_0vb02wp._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_0_zep5z._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/paginas",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/paginas",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "visit /tipos/audit-entities",
+      "requestSamples": [
+        {
+          "url": "http://localhost:3000/tipos/audit-entities",
+          "method": "GET",
+          "resourceType": "document",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__04kpziu._.css",
+          "method": "GET",
+          "resourceType": "stylesheet",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0-cqm-u._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-medium.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-italic.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-bold.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/fonts/inter-regular.woff2",
+          "method": "GET",
+          "resourceType": "font",
+          "status": 304
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_react-server-dom-turbopack_0-o1kja._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1cb0_next_dist_compiled_0y4mwd5._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/_1anvha4._.js",
+          "method": "GET",
+          "resourceType": "script",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "statusByRoute": {
+    "/": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/root-1128x912-loaded.png"
+    },
+    "/tipos/notas": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_notas-1128x912-loaded.png"
+    },
+    "/tipos/chats": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_chats-1128x912-loaded.png"
+    },
+    "/tipos/imagens": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_imagens-1128x912-loaded.png"
+    },
+    "/tipos/arquivos": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_arquivos-1128x912-loaded.png"
+    },
+    "/tipos/audios": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_audios-1128x912-loaded.png"
+    },
+    "/tipos/pdfs": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_pdfs-1128x912-loaded.png"
+    },
+    "/tipos/queries": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_queries-1128x912-loaded.png"
+    },
+    "/tipos/etiquetas": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_etiquetas-1128x912-loaded.png"
+    },
+    "/tipos/tweets": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_tweets-1128x912-loaded.png"
+    },
+    "/tipos/links": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_links-1128x912-loaded.png"
+    },
+    "/tipos/tabelas": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_tabelas-1128x912-loaded.png"
+    },
+    "/tipos/paginas": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_paginas-1128x912-loaded.png"
+    },
+    "/tipos/audit-entities": {
+      "totalRequests": 48,
+      "mutatingRequests": 0,
+      "screenshot": "C:/Users/ianma/workspace/notes-app/reverse-engineering/screenshots/tipos_audit-entities-1128x912-loaded.png"
+    }
+  }
+}

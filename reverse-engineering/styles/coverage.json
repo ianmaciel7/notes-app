@@ -1,0 +1,33 @@
+{
+  "reference": "capacities",
+  "capturedAt": "2026-08-16",
+  "method": "computed-style + observed-layout metrics",
+  "uiLanguage": "pt-BR",
+  "layoutObservations": [
+    {
+      "surface": "ObjectTypeWorkspace",
+      "viewport": "1128x912",
+      "sidebarWidthPx": 288,
+      "topNavHeightPx": 46,
+      "objectCard": {
+        "x": 311,
+        "y": 160,
+        "width": 202,
+        "height": 322,
+        "confidence": "OBSERVED"
+      }
+    }
+  ],
+  "palette": [
+    "neutral-gray base shell",
+    "contrasting accent for action chips"
+  ],
+  "notes": [
+    "Avoid copying proprietary stylesheets; recreate from observed tokens and computed tokens."
+  ],
+  "pending": [
+    "formal token extraction",
+    "font token mapping",
+    "hover/focus motion states"
+  ]
+}

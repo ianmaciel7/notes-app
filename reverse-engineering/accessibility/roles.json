@@ -1,0 +1,95 @@
+{
+  "source": "reference-and-local-semantic-checks",
+  "updatedAt": "2026-08-16",
+  "requiredRoles": [
+    "button",
+    "heading",
+    "link",
+    "list",
+    "listitem",
+    "menu",
+    "menuitem",
+    "separator",
+    "tab",
+    "tablist"
+  ],
+  "optionalRolesToCapture": [
+    "dialog",
+    "menu",
+    "navigation",
+    "tab",
+    "textbox"
+  ],
+  "capturedState": {
+    "button": {
+      "present": "yes",
+      "confidence": "OBSERVED",
+      "samples": {
+        "observedCount": 28,
+        "focusedCount": 0
+      }
+    },
+    "heading": {
+      "present": "no",
+      "confidence": "UNOBSERVED"
+    },
+    "link": {
+      "present": "no",
+      "confidence": "UNOBSERVED"
+    },
+    "list": {
+      "present": "no",
+      "confidence": "UNOBSERVED"
+    },
+    "listitem": {
+      "present": "no",
+      "confidence": "UNOBSERVED"
+    },
+    "menu": {
+      "present": "yes",
+      "confidence": "OBSERVED",
+      "samples": {
+        "observedCount": 14,
+        "focusedCount": 0
+      }
+    },
+    "menuitem": {
+      "present": "yes",
+      "confidence": "OBSERVED",
+      "samples": {
+        "observedCount": 140,
+        "focusedCount": 14
+      }
+    },
+    "separator": {
+      "present": "yes",
+      "confidence": "OBSERVED",
+      "samples": {
+        "observedCount": 14,
+        "focusedCount": 0
+      }
+    },
+    "tab": {
+      "present": "yes",
+      "confidence": "OBSERVED",
+      "samples": {
+        "observedCount": 28,
+        "focusedCount": 0
+      }
+    },
+    "tablist": {
+      "present": "yes",
+      "confidence": "OBSERVED",
+      "samples": {
+        "observedCount": 28,
+        "focusedCount": 0
+      }
+    }
+  },
+  "nextCaptureActions": [
+    "Capture full accessibility tree snapshots for hidden object-type sections",
+    "Capture keyboard navigation outcomes in dialog/menu contexts",
+    "Collect checked/expanded state transitions for controls"
+  ],
+  "routeSampleCount": 14
+}
