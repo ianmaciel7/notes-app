@@ -176,12 +176,12 @@
   },
   ".github/rulesets/main.json": {
     "mtime": 1786705846.9079237,
-    "ast_hash": "",
+    "ast_hash": "238cfbd874a5b106dff05c047a036efb",
     "semantic_hash": ""
   },
   ".github/rulesets/stag.json": {
     "mtime": 1786705846.9079237,
-    "ast_hash": "",
+    "ast_hash": "c0460bdde969cfc06c7ec87bb239699c",
     "semantic_hash": ""
   },
   "docs/DESIGN.md": {
@@ -406,17 +406,17 @@
   },
   "docs/references/knowledge-bases/capacities.json": {
     "mtime": 1786816871.086792,
-    "ast_hash": "",
+    "ast_hash": "98e335d09d9d517c1ea967ff9b49814b",
     "semantic_hash": ""
   },
   "docs/references/knowledge-bases/obsidian.json": {
     "mtime": 1786816871.0877805,
-    "ast_hash": "",
+    "ast_hash": "fb23fcf224e8912b2dee3fe0eb31dedd",
     "semantic_hash": ""
   },
   "docs/references/knowledge-bases/readwise.json": {
     "mtime": 1786816871.0937774,
-    "ast_hash": "",
+    "ast_hash": "205aa1f634dabda31284e78d0539b280",
     "semantic_hash": ""
   },
   "__tests__/workspace-shell.test.tsx": {
@@ -460,8 +460,8 @@
     "semantic_hash": "6e6b202905a7a75e40b0b79b105a21f5"
   },
   "src/components/workspace-shell.tsx": {
-    "mtime": 1786895780.288434,
-    "ast_hash": "ecc9d3261273e91fa27ba599717ca841",
+    "mtime": 1786896988.6045275,
+    "ast_hash": "9a55e8dfd1f8e59ac5aefd7e7ee94528",
     "semantic_hash": ""
   },
   "src/lib/utils.ts": {
@@ -600,13 +600,13 @@
     "semantic_hash": ""
   },
   "reverse-engineering/manifest.json": {
-    "mtime": 1786895748.7173793,
-    "ast_hash": "6117dcb312f04ff0939af7cf60b87829",
+    "mtime": 1786898193.5159564,
+    "ast_hash": "401aa89361f4a3716e31b20ad7e9951c",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/manifest.json": {
-    "mtime": 1786895748.699564,
-    "ast_hash": "76548c5a77bac9d71993a029559c791f",
+    "mtime": 1786898193.4994304,
+    "ast_hash": "a421027032a6432d57556b1b0be97420",
     "semantic_hash": ""
   },
   "scripts/consolidate-reverse-capture-artifacts.mjs": {
@@ -645,18 +645,18 @@
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/root-1128x912-loaded.png": {
-    "mtime": 1786895645.2637606,
-    "ast_hash": "dfcd5fc79c4b6f25dc748f0c1db203b2",
+    "mtime": 1786898034.4969516,
+    "ast_hash": "d58a6c677d5c1353e04aa3b74359d8fa",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_arquivos-1128x912-loaded.png": {
-    "mtime": 1786895672.6151953,
-    "ast_hash": "c471bd19e069600e63b0f9714e9d95a6",
+    "mtime": 1786898056.497424,
+    "ast_hash": "4ad497bab8e0dea4b39fc059ef0042fd",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_audios-1128x912-loaded.png": {
-    "mtime": 1786895678.4464707,
-    "ast_hash": "68aa379e0ecd0e5ca4504dcbfe101b4c",
+    "mtime": 1786898061.761784,
+    "ast_hash": "b03c11e38baad5ba28e581179a5c2f40",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_audits-1128x912-loaded.png": {
@@ -665,53 +665,53 @@
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_chats-1128x912-loaded.png": {
-    "mtime": 1786895658.959792,
-    "ast_hash": "7f489dfae3767d3ea0d45630c27ddf72",
+    "mtime": 1786898045.712758,
+    "ast_hash": "e1d7bb6b5ca2a55b43931cc67e896a5b",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_etiquetas-1128x912-loaded.png": {
-    "mtime": 1786895698.8393862,
-    "ast_hash": "5355fc14c4683dc39281b732990f68c8",
+    "mtime": 1786898077.587509,
+    "ast_hash": "f60356f9fe8c726b732499d0f8ee4f2d",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_imagens-1128x912-loaded.png": {
-    "mtime": 1786895666.2766826,
-    "ast_hash": "756b00b6eb056f351b677db28e5473a4",
+    "mtime": 1786898051.2118638,
+    "ast_hash": "e54cfad33fdb865d3c204bf289054019",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_links-1128x912-loaded.png": {
-    "mtime": 1786895712.106197,
-    "ast_hash": "f8017ffd98f9edf329a93b601a9a7d57",
+    "mtime": 1786898087.9028387,
+    "ast_hash": "c6f68527fb1c73c3901476f6da6854c8",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_notas-1128x912-loaded.png": {
-    "mtime": 1786895652.1818368,
-    "ast_hash": "89cdfa93337bd3b8717c4164d4f7f7ad",
+    "mtime": 1786898040.2751167,
+    "ast_hash": "db38376d08bb2337a1883917208521e1",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_paginas-1128x912-loaded.png": {
-    "mtime": 1786895724.7448592,
-    "ast_hash": "b6f4535ca442c45ff0ed2b2b8151f503",
+    "mtime": 1786898098.9042416,
+    "ast_hash": "5444b2bdf2750c454ce34bf0c182a2f1",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_pdfs-1128x912-loaded.png": {
-    "mtime": 1786895685.4045837,
-    "ast_hash": "a47c3de68b9b7a81625fe7d548898aff",
+    "mtime": 1786898066.941501,
+    "ast_hash": "c1544799fc9130848ab50f9a47c4397e",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_queries-1128x912-loaded.png": {
-    "mtime": 1786895692.5336716,
-    "ast_hash": "b822400a6e97cd254fc2f50d0e8e0530",
+    "mtime": 1786898072.1521034,
+    "ast_hash": "15d15fc5d09ff23b24c6ab45e46ae3bc",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_tabelas-1128x912-loaded.png": {
-    "mtime": 1786895718.4344985,
-    "ast_hash": "584b5d390f0131e3b8431746ea829d62",
+    "mtime": 1786898169.085605,
+    "ast_hash": "4e30111a5d98b52d4312feb823a16a9c",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_tweets-1128x912-loaded.png": {
-    "mtime": 1786895705.2547224,
-    "ast_hash": "b371f6e0ce181b902d5e7b49e8c6063a",
+    "mtime": 1786898082.734774,
+    "ast_hash": "3eca2f3ee55bdf4b33cc7b2ff793697a",
     "semantic_hash": ""
   },
   "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-03-55-707Z/tipos_tabelas-interaction-dialog-close.png": {
@@ -1410,72 +1410,72 @@
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/AIErrorBox83139.js": {
-    "mtime": 1786894865.4809136,
+    "mtime": 1786897820.9927235,
     "ast_hash": "5b349e9d40d1f95a6d62673cbd17f451",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/AppMenu83139.js": {
-    "mtime": 1786894863.519125,
+    "mtime": 1786897820.90754,
     "ast_hash": "da37808f6e8c68921bf522d4235a45e3",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/AutosizeTextInput83139.js": {
-    "mtime": 1786894864.812189,
+    "mtime": 1786897820.9369438,
     "ast_hash": "f3a4d103fdcffacfabdcd77592b70530",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/BlockList83139.js": {
-    "mtime": 1786894862.4835136,
+    "mtime": 1786897820.820529,
     "ast_hash": "02f6fafed7674c707135f73f70b14336",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/CapacitiesAppButton83139.js": {
-    "mtime": 1786894867.9749465,
+    "mtime": 1786897821.14792,
     "ast_hash": "4f4263c69ad451942ef3652737cc2f0d",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/CapacitiesProButton83139.js": {
-    "mtime": 1786894866.5559216,
+    "mtime": 1786897821.057375,
     "ast_hash": "edd6f0ea1208c686f10b9f068144ed63",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/CategoryBox83139.js": {
-    "mtime": 1786894865.5979488,
+    "mtime": 1786897820.9645145,
     "ast_hash": "1177db4fc7b673f57c9225345511450d",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/ControlDropdownItem83139.js": {
-    "mtime": 1786894866.3493676,
+    "mtime": 1786897821.0371475,
     "ast_hash": "53a5a273d94f081cab5cd664de74424b",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/Interactable83139.js": {
-    "mtime": 1786894861.9635363,
+    "mtime": 1786897820.4589312,
     "ast_hash": "74b848135f9b113d4f287b8a3ba06ed4",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/ListDropdown83139.js": {
-    "mtime": 1786894865.1275275,
+    "mtime": 1786897820.9379427,
     "ast_hash": "9a0595b530ccf27103583f129f82646a",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/LocationManager83139.js": {
-    "mtime": 1786894861.288065,
+    "mtime": 1786897821.1288354,
     "ast_hash": "de54a7fecc71f82c407d70b3d93dbe7e",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/Logo83139.js": {
-    "mtime": 1786894866.6455483,
+    "mtime": 1786897821.0583758,
     "ast_hash": "3c01b1ce2db21533095af40aca076448",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/LogoHeader83139.js": {
-    "mtime": 1786894867.6313827,
+    "mtime": 1786897821.1499245,
     "ast_hash": "c48eee7a4ab58aa19c208b63517e3e6b",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/MainButton83139.js": {
-    "mtime": 1786894862.6285198,
+    "mtime": 1786897820.6789918,
     "ast_hash": "a62759acd67aedfdb7d007bc75e81ff7",
     "semantic_hash": ""
   },
@@ -1485,52 +1485,52 @@
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/PDFViewer83139.js": {
-    "mtime": 1786894864.3616207,
+    "mtime": 1786897820.9409425,
     "ast_hash": "aa9114619b9e1fa15200705af5b7d14c",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/PasswordStrengthIndicator83139.js": {
-    "mtime": 1786894865.3445525,
+    "mtime": 1786897820.9957314,
     "ast_hash": "9dd69a6ff3f08c5f6689194e6b10c85a",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/RenderIcon83139.js": {
-    "mtime": 1786894862.103547,
+    "mtime": 1786897820.4160497,
     "ast_hash": "30710b20123555fca30cc252b36ac053",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/ScrollContainer83139.js": {
-    "mtime": 1786894864.0176768,
+    "mtime": 1786897820.8257613,
     "ast_hash": "43f414182b6a36f62dc23d801dfa634a",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/SearchInput83139.js": {
-    "mtime": 1786894864.246902,
+    "mtime": 1786897820.8277617,
     "ast_hash": "20d31c9218089e370acab656fded4019",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/StructureLabel83139.js": {
-    "mtime": 1786894865.703704,
+    "mtime": 1786897820.994732,
     "ast_hash": "ae692839db56c7ee742b4e554ca0f860",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/TagInlineView83139.js": {
-    "mtime": 1786894863.1994867,
+    "mtime": 1786897820.681989,
     "ast_hash": "3df939b73363eec5f2d3cb3b3c4fec7a",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/TeleportModal83139.js": {
-    "mtime": 1786894864.9274895,
+    "mtime": 1786897820.9105372,
     "ast_hash": "b0c02fe99b191fac2a40d0c77ea7e751",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/TextLabel83139.js": {
-    "mtime": 1786894863.0870914,
+    "mtime": 1786897820.680992,
     "ast_hash": "e2845ad9c2115286e07b4fb119587bec",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/UIBadge83139.js": {
-    "mtime": 1786894864.1360948,
+    "mtime": 1786897820.826764,
     "ast_hash": "352f9e77e241e7e938201733e81796eb",
     "semantic_hash": ""
   },
@@ -1540,117 +1540,117 @@
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/_...location_83139.js": {
-    "mtime": 1786894868.2036464,
+    "mtime": 1786897821.2152603,
     "ast_hash": "c250cc6b8dd9318b0a9eadc07c1b3cdf",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/_baseClone83139.js": {
-    "mtime": 1786894859.2649987,
+    "mtime": 1786897820.4248579,
     "ast_hash": "481b7e15e2f79d50f55085ed2f78577a",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/_baseEach83139.js": {
-    "mtime": 1786894866.0407743,
+    "mtime": 1786897820.9987526,
     "ast_hash": "f57e4de2a1c909a7464b4c652f470c77",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/_baseFor83139.js": {
-    "mtime": 1786894858.8472705,
+    "mtime": 1786897820.4180496,
     "ast_hash": "e1d1b40a67aea5962c6543a6bcba01f1",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/_baseProperty83139.js": {
-    "mtime": 1786894860.2237911,
+    "mtime": 1786897820.6129856,
     "ast_hash": "2eb2fdd87d842101d71a4c114e9bf5a7",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/_baseUniq83139.js": {
-    "mtime": 1786894863.6752975,
+    "mtime": 1786897820.823763,
     "ast_hash": "694ed08010ffc80007e069b6c838af8c",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/ai-property-write83139.js": {
-    "mtime": 1786894862.9635522,
+    "mtime": 1786897820.724075,
     "ast_hash": "f3bbad8377f51954711975930725fb6e",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/chunk83139.js": {
-    "mtime": 1786894857.733297,
+    "mtime": 1786897820.3783238,
     "ast_hash": "b05c4eae230aa621fd6da47c39d683ac",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/dState83139.js": {
-    "mtime": 1786894860.6266603,
+    "mtime": 1786897820.6395438,
     "ast_hash": "47d4480766793386cdb5ab8544e9b680",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/dayjs.min83139.js": {
-    "mtime": 1786894859.9221373,
+    "mtime": 1786897820.611477,
     "ast_hash": "85b418251023dc27a01d70d2531d753d",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/defaults83139.js": {
-    "mtime": 1786894859.142737,
+    "mtime": 1786897820.4514108,
     "ast_hash": "9cd9b7bb935523d5304504df973206cd",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/definitions83139.js": {
-    "mtime": 1786894858.1711218,
+    "mtime": 1786897820.4888453,
     "ast_hash": "b67588f88f6ff3c23ab1b9848e39da79",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/definitions831392.js": {
-    "mtime": 1786894858.2640688,
+    "mtime": 1786897820.512728,
     "ast_hash": "c5eabe0be44d01cff11172ee623d87f7",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/definitions831393.js": {
-    "mtime": 1786894862.357707,
+    "mtime": 1786897820.6759877,
     "ast_hash": "57cd88c4f0975c0d6ca7622e628c5601",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/dist83139.js": {
-    "mtime": 1786894858.0598595,
+    "mtime": 1786897820.412703,
     "ast_hash": "47379e78b215e90c8ed4a58822c955ab",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/dist831392.js": {
-    "mtime": 1786894859.8060346,
+    "mtime": 1786897820.5514686,
     "ast_hash": "17aecf6dc695c62a4276831c9a1b69cf",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/embeddingLocation83139.js": {
-    "mtime": 1786894863.2996333,
+    "mtime": 1786897820.7571976,
     "ast_hash": "c9092e3b8715bbcf3e3058e9c43737e8",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/embeddingNavigation83139.js": {
-    "mtime": 1786894866.7608213,
+    "mtime": 1786897821.0933993,
     "ast_hash": "638e29cc22e9e524e65dd6e470bf628e",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/emoji83139.js": {
-    "mtime": 1786894866.894824,
+    "mtime": 1786897821.1188126,
     "ast_hash": "5aefd4720334712fb1e3d9324656cc49",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/environment83139.js": {
-    "mtime": 1786894859.532122,
+    "mtime": 1786897820.4140508,
     "ast_hash": "6ef35bcd0b03a59aa68d4ad4adcad4ee",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/isEmpty83139.js": {
-    "mtime": 1786894859.3941,
+    "mtime": 1786897820.423503,
     "ast_hash": "a5f96c4d71a5bd071e8bad71056f2906",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/isoWeek83139.js": {
-    "mtime": 1786894860.0611863,
+    "mtime": 1786897820.611477,
     "ast_hash": "7e60802765f65ea28f7a24faa84a21bb",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/last83139.js": {
-    "mtime": 1786894863.9068048,
+    "mtime": 1786897820.8247647,
     "ast_hash": "30848f325136b79c60b9793a8349abde",
     "semantic_hash": ""
   },
@@ -1660,12 +1660,12 @@
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/memoize83139.js": {
-    "mtime": 1786894863.8074539,
+    "mtime": 1786897820.8210354,
     "ast_hash": "d860d4841a12735a57bdff3551870823",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/merge83139.js": {
-    "mtime": 1786894858.9857204,
+    "mtime": 1786897820.4205532,
     "ast_hash": "f1fe8c34032bc46144cb7b93dcd53587",
     "semantic_hash": ""
   },
@@ -1675,12 +1675,12 @@
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/notificationManager831392.js": {
-    "mtime": 1786894860.7456572,
+    "mtime": 1786897820.640542,
     "ast_hash": "96c16c6f9bcc468dd07a2bfb4987b862",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/now83139.js": {
-    "mtime": 1786894860.3661306,
+    "mtime": 1786897820.6139915,
     "ast_hash": "510ea0ee0c6767e015cdcddbc2f16789",
     "semantic_hash": ""
   },
@@ -1695,17 +1695,17 @@
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/pdfjs83139.js": {
-    "mtime": 1786894864.5875018,
+    "mtime": 1786897820.9095397,
     "ast_hash": "db1887648e85d8b9d94cad4d50606dbf",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/preload-helper83139.js": {
-    "mtime": 1786894857.906439,
+    "mtime": 1786897820.3793242,
     "ast_hash": "e24b08db56a6d05b8468b2c7c81d439f",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/reactivity.esm-bundler83139.js": {
-    "mtime": 1786894858.5748355,
+    "mtime": 1786897820.3803232,
     "ast_hash": "31845cd48bec35d72fa86ffe1643f2c8",
     "semantic_hash": ""
   },
@@ -1715,22 +1715,22 @@
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/runtime-core.esm-bundler83139.js": {
-    "mtime": 1786894858.6993816,
+    "mtime": 1786897820.3813238,
     "ast_hash": "0610627008c20397df088ebdf295ddb1",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/safeAreaInsets83139.js": {
-    "mtime": 1786894865.0184896,
+    "mtime": 1786897820.9115365,
     "ast_hash": "9d00328efc058aef9565ad52838c2ed4",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/shortcuts83139.js": {
-    "mtime": 1786894858.3934033,
+    "mtime": 1786897820.45793,
     "ast_hash": "c39e095230fc0761eeb8e04c33beb468",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/src83139.js": {
-    "mtime": 1786894865.8919039,
+    "mtime": 1786897820.9977527,
     "ast_hash": "795378ea0f5b1e6ac40cc3ec43e363e1",
     "semantic_hash": ""
   },
@@ -1740,47 +1740,47 @@
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/storing83139.js": {
-    "mtime": 1786894856.763369,
+    "mtime": 1786897820.651761,
     "ast_hash": "08d2b4537e1dd78aee557f5530021f8b",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/throttle83139.js": {
-    "mtime": 1786894862.8413887,
+    "mtime": 1786897820.6799912,
     "ast_hash": "356610ddcdec349c6486b7b96c6f7b9f",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/uiColorValues83139.js": {
-    "mtime": 1786894862.7415874,
+    "mtime": 1786897820.677995,
     "ast_hash": "ed9425b2d28d12242c29e63c1489b0fc",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/union83139.js": {
-    "mtime": 1786894866.1281242,
+    "mtime": 1786897820.999753,
     "ast_hash": "581871b0b7dba5257eca91a15bbd1a75",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/useInDocumentSearchShortcut83139.js": {
-    "mtime": 1786894866.2255433,
+    "mtime": 1786897821.00377,
     "ast_hash": "dfc98e5cef9a1d20b2305647b10404be",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/useTurnstile83139.js": {
-    "mtime": 1786894866.4576204,
+    "mtime": 1786897821.0381482,
     "ast_hash": "0f4f0b89bcfd42094a2b883144579fba",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/v483139.js": {
-    "mtime": 1786894859.6978393,
+    "mtime": 1786897820.453924,
     "ast_hash": "2413c334b910a1092976313589f62632",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/virtual_intlify-i18n-0831392.js": {
-    "mtime": 1786894860.9001138,
+    "mtime": 1786897820.6437652,
     "ast_hash": "883ead01a1f3de69ae02fb852e903982",
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/vue-router83139.js": {
-    "mtime": 1786894860.4780357,
+    "mtime": 1786897820.6149957,
     "ast_hash": "b61e3ad9956f59e503fde297b22b5054",
     "semantic_hash": ""
   },
@@ -1790,7 +1790,7 @@
     "semantic_hash": ""
   },
   "reverse-engineering/reference/assets/scripts/web831397.js": {
-    "mtime": 1786894869.3247113,
+    "mtime": 1786897821.2152603,
     "ast_hash": "fcd1df55d3b938f64f09330cd2cc3cb8",
     "semantic_hash": ""
   },
@@ -1800,8 +1800,8 @@
     "semantic_hash": ""
   },
   "scripts/extract-capacities-assets.mjs": {
-    "mtime": 1786895338.9637449,
-    "ast_hash": "d87e2ed221510015a6252ecbed61f0a8",
+    "mtime": 1786897853.0277388,
+    "ast_hash": "282d055c3a3948f931d70dde8285c572",
     "semantic_hash": ""
   },
   "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/root-interaction-dialog-close.png": {
@@ -3660,8 +3660,8 @@
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_audit-entities-1128x912-loaded.png": {
-    "mtime": 1786895730.8569627,
-    "ast_hash": "f55e50f93872329ec9bfe86d1917867f",
+    "mtime": 1786898104.2684574,
+    "ast_hash": "5bcffbfd55a2fa2e5a45e89113993f9d",
     "semantic_hash": ""
   },
   "reverse-engineering/screenshots/tipos_audit-entities-390x844-loaded.png": {
@@ -4002,6 +4002,4381 @@
   "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_tweets-interaction-menu-open.png": {
     "mtime": 1786895706.064224,
     "ast_hash": "ec1e17ae44f426705aab1261cb46807f",
+    "semantic_hash": ""
+  },
+  ".tmp-compare.mjs": {
+    "mtime": 1786896533.1504264,
+    "ast_hash": "c0bf136b5f5738c8688e72a39e5df87f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/accessibility/interaction-tree.json": {
+    "mtime": 1786887581.1580594,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/accessibility/keyboard-matrix.json": {
+    "mtime": 1786898193.4612477,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/accessibility/roles.json": {
+    "mtime": 1786898193.458246,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/observations.schema.json": {
+    "mtime": 1786887787.5460007,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/observations.json": {
+    "mtime": 1786888004.4711976,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/run.json": {
+    "mtime": 1786887996.9012258,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/tipos_arquivos-aria.json": {
+    "mtime": 1786888000.3087845,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/tipos_arquivos-capture.json": {
+    "mtime": 1786888000.2877667,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/tipos_audios-aria.json": {
+    "mtime": 1786888004.3945434,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/tipos_audios-capture.json": {
+    "mtime": 1786888004.375154,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/tipos_chats-aria.json": {
+    "mtime": 1786888001.4935484,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/tipos_chats-capture.json": {
+    "mtime": 1786888001.475387,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/tipos_imagens-aria.json": {
+    "mtime": 1786888002.9878356,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/tipos_imagens-capture.json": {
+    "mtime": 1786888002.958012,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/tipos_tabelas-aria.json": {
+    "mtime": 1786887998.5615819,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-46-32-651Z/tipos_tabelas-capture.json": {
+    "mtime": 1786887998.5384424,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/observations.json": {
+    "mtime": 1786888221.4546194,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/root-aria.json": {
+    "mtime": 1786888208.5298147,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/root-capture.json": {
+    "mtime": 1786888208.5144875,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/run.json": {
+    "mtime": 1786888207.113629,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_arquivos-aria.json": {
+    "mtime": 1786888212.6920404,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_arquivos-capture.json": {
+    "mtime": 1786888212.6746893,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_audios-aria.json": {
+    "mtime": 1786888213.6703587,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_audios-capture.json": {
+    "mtime": 1786888213.6563625,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_audits-aria.json": {
+    "mtime": 1786888221.3763394,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_audits-capture.json": {
+    "mtime": 1786888221.3584251,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_chats-aria.json": {
+    "mtime": 1786888210.8474813,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_chats-capture.json": {
+    "mtime": 1786888210.8313231,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786888216.4883041,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786888216.4684658,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_imagens-aria.json": {
+    "mtime": 1786888211.7194874,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_imagens-capture.json": {
+    "mtime": 1786888211.704495,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_links-aria.json": {
+    "mtime": 1786888218.41355,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_links-capture.json": {
+    "mtime": 1786888218.395222,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_notas-aria.json": {
+    "mtime": 1786888209.7840261,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_notas-capture.json": {
+    "mtime": 1786888209.764309,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_paginas-aria.json": {
+    "mtime": 1786888220.4055283,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_paginas-capture.json": {
+    "mtime": 1786888220.3885972,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_pdfs-aria.json": {
+    "mtime": 1786888214.6864214,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_pdfs-capture.json": {
+    "mtime": 1786888214.6701448,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_queries-aria.json": {
+    "mtime": 1786888215.5735738,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_queries-capture.json": {
+    "mtime": 1786888215.556573,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_tabelas-aria.json": {
+    "mtime": 1786888219.419799,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_tabelas-capture.json": {
+    "mtime": 1786888219.4051998,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_tweets-aria.json": {
+    "mtime": 1786888217.4271617,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-50-06-739Z/tipos_tweets-capture.json": {
+    "mtime": 1786888217.4092767,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/observations.json": {
+    "mtime": 1786888585.1962316,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/root-aria.json": {
+    "mtime": 1786888571.825912,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/root-capture.json": {
+    "mtime": 1786888571.8078108,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/run.json": {
+    "mtime": 1786888570.1736145,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_arquivos-aria.json": {
+    "mtime": 1786888576.775553,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_arquivos-capture.json": {
+    "mtime": 1786888576.7578466,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_audios-aria.json": {
+    "mtime": 1786888577.8334458,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_audios-capture.json": {
+    "mtime": 1786888577.8159525,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_chats-aria.json": {
+    "mtime": 1786888574.3477705,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_chats-capture.json": {
+    "mtime": 1786888574.3322177,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786888580.9461768,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786888580.927001,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_imagens-aria.json": {
+    "mtime": 1786888575.5635822,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_imagens-capture.json": {
+    "mtime": 1786888575.5457728,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_links-aria.json": {
+    "mtime": 1786888582.9680855,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_links-capture.json": {
+    "mtime": 1786888582.9518812,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_notas-aria.json": {
+    "mtime": 1786888573.0885725,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_notas-capture.json": {
+    "mtime": 1786888573.0680134,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_paginas-aria.json": {
+    "mtime": 1786888585.0913992,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_paginas-capture.json": {
+    "mtime": 1786888585.0764904,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_pdfs-aria.json": {
+    "mtime": 1786888578.860691,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_pdfs-capture.json": {
+    "mtime": 1786888578.8422747,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_queries-aria.json": {
+    "mtime": 1786888579.9143026,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_queries-capture.json": {
+    "mtime": 1786888579.8946512,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_tabelas-aria.json": {
+    "mtime": 1786888584.0590506,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_tabelas-capture.json": {
+    "mtime": 1786888584.0434334,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_tweets-aria.json": {
+    "mtime": 1786888582.003389,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-56-09-480Z/tipos_tweets-capture.json": {
+    "mtime": 1786888581.9827487,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/observations.json": {
+    "mtime": 1786888689.3345966,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/root-aria.json": {
+    "mtime": 1786888676.2481358,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/root-capture.json": {
+    "mtime": 1786888676.2312202,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/run.json": {
+    "mtime": 1786888674.9127736,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_arquivos-aria.json": {
+    "mtime": 1786888680.966506,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_arquivos-capture.json": {
+    "mtime": 1786888680.9481354,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_audios-aria.json": {
+    "mtime": 1786888681.8114064,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_audios-capture.json": {
+    "mtime": 1786888681.7930782,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_chats-aria.json": {
+    "mtime": 1786888679.0193844,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_chats-capture.json": {
+    "mtime": 1786888678.9928846,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786888684.891195,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786888684.8747852,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_imagens-aria.json": {
+    "mtime": 1786888680.1128151,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_imagens-capture.json": {
+    "mtime": 1786888680.0770075,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_links-aria.json": {
+    "mtime": 1786888687.0969467,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_links-capture.json": {
+    "mtime": 1786888687.0789657,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_notas-aria.json": {
+    "mtime": 1786888677.6992867,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_notas-capture.json": {
+    "mtime": 1786888677.677135,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_paginas-aria.json": {
+    "mtime": 1786888689.2246811,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_paginas-capture.json": {
+    "mtime": 1786888689.2001233,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_pdfs-aria.json": {
+    "mtime": 1786888682.6892586,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_pdfs-capture.json": {
+    "mtime": 1786888682.6642282,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_queries-aria.json": {
+    "mtime": 1786888683.7519612,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_queries-capture.json": {
+    "mtime": 1786888683.708496,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_tabelas-aria.json": {
+    "mtime": 1786888688.0216887,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_tabelas-capture.json": {
+    "mtime": 1786888687.9884748,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_tweets-aria.json": {
+    "mtime": 1786888685.9646714,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T13-57-54-533Z/tipos_tweets-capture.json": {
+    "mtime": 1786888685.9221654,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/observations.json": {
+    "mtime": 1786888993.5522685,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/root-aria.json": {
+    "mtime": 1786888980.6596522,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/root-capture.json": {
+    "mtime": 1786888980.6089313,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/run.json": {
+    "mtime": 1786888979.1935852,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_arquivos-aria.json": {
+    "mtime": 1786888985.0507958,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_arquivos-capture.json": {
+    "mtime": 1786888985.0336823,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_audios-aria.json": {
+    "mtime": 1786888985.897478,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_audios-capture.json": {
+    "mtime": 1786888985.8810391,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_chats-aria.json": {
+    "mtime": 1786888983.0281177,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_chats-capture.json": {
+    "mtime": 1786888983.0093136,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786888988.7527492,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786888988.7358074,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_imagens-aria.json": {
+    "mtime": 1786888984.0412824,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_imagens-capture.json": {
+    "mtime": 1786888984.0220406,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_links-aria.json": {
+    "mtime": 1786888990.6347709,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_links-capture.json": {
+    "mtime": 1786888990.6177087,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_notas-aria.json": {
+    "mtime": 1786888981.8226397,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_notas-capture.json": {
+    "mtime": 1786888981.804255,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_paginas-aria.json": {
+    "mtime": 1786888992.4513762,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_paginas-capture.json": {
+    "mtime": 1786888992.4355886,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_pdfs-aria.json": {
+    "mtime": 1786888986.931244,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_pdfs-capture.json": {
+    "mtime": 1786888986.9147127,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_queries-aria.json": {
+    "mtime": 1786888993.446875,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_queries-capture.json": {
+    "mtime": 1786888993.4317818,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_tabelas-aria.json": {
+    "mtime": 1786888991.6153786,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_tabelas-capture.json": {
+    "mtime": 1786888991.5994933,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_tweets-aria.json": {
+    "mtime": 1786888989.6003444,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-02-58-805Z/tipos_tweets-capture.json": {
+    "mtime": 1786888989.5839193,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-03-55-707Z/observations.json": {
+    "mtime": 1786889039.1405346,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-03-55-707Z/run.json": {
+    "mtime": 1786889036.0947301,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-03-55-707Z/tipos_tabelas-aria.json": {
+    "mtime": 1786889039.0675635,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-03-55-707Z/tipos_tabelas-capture.json": {
+    "mtime": 1786889039.0504215,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/observations.json": {
+    "mtime": 1786889084.4008772,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/root-aria.json": {
+    "mtime": 1786889050.81707,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/root-capture.json": {
+    "mtime": 1786889050.7962346,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/run.json": {
+    "mtime": 1786889047.6431785,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_arquivos-aria.json": {
+    "mtime": 1786889062.6426597,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_arquivos-capture.json": {
+    "mtime": 1786889062.6155176,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_audios-aria.json": {
+    "mtime": 1786889065.3641691,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_audios-capture.json": {
+    "mtime": 1786889065.343791,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_chats-aria.json": {
+    "mtime": 1786889056.9513903,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_chats-capture.json": {
+    "mtime": 1786889056.929897,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786889073.1530602,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786889073.1316707,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_imagens-aria.json": {
+    "mtime": 1786889059.8082776,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_imagens-capture.json": {
+    "mtime": 1786889059.7917287,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_links-aria.json": {
+    "mtime": 1786889078.8138022,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_links-capture.json": {
+    "mtime": 1786889078.7957513,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_notas-aria.json": {
+    "mtime": 1786889053.8807132,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_notas-capture.json": {
+    "mtime": 1786889053.8575418,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_paginas-aria.json": {
+    "mtime": 1786889084.2946312,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_paginas-capture.json": {
+    "mtime": 1786889084.2760847,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_pdfs-aria.json": {
+    "mtime": 1786889068.0163007,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_pdfs-capture.json": {
+    "mtime": 1786889067.9967415,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_queries-aria.json": {
+    "mtime": 1786889070.66529,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_queries-capture.json": {
+    "mtime": 1786889070.6466727,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_tabelas-aria.json": {
+    "mtime": 1786889081.5671327,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_tabelas-capture.json": {
+    "mtime": 1786889081.542923,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_tweets-aria.json": {
+    "mtime": 1786889075.8567767,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-04-07-256Z/tipos_tweets-capture.json": {
+    "mtime": 1786889075.8329175,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/observations.json": {
+    "mtime": 1786889430.5270765,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/run.json": {
+    "mtime": 1786889419.644716,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/tipos_arquivos-aria.json": {
+    "mtime": 1786889424.340536,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/tipos_arquivos-capture.json": {
+    "mtime": 1786889424.3235385,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/tipos_audios-aria.json": {
+    "mtime": 1786889430.4248748,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/tipos_audios-capture.json": {
+    "mtime": 1786889430.4049072,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/tipos_chats-aria.json": {
+    "mtime": 1786889426.5468674,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/tipos_chats-capture.json": {
+    "mtime": 1786889426.5269585,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/tipos_imagens-aria.json": {
+    "mtime": 1786889428.622845,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/tipos_imagens-capture.json": {
+    "mtime": 1786889428.6027339,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/tipos_tabelas-aria.json": {
+    "mtime": 1786889422.1923275,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-18-150Z/tipos_tabelas-capture.json": {
+    "mtime": 1786889422.1651306,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/observations.json": {
+    "mtime": 1786889456.2006454,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/run.json": {
+    "mtime": 1786889445.751941,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/tipos_arquivos-aria.json": {
+    "mtime": 1786889450.220602,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/tipos_arquivos-capture.json": {
+    "mtime": 1786889450.1966062,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/tipos_audios-aria.json": {
+    "mtime": 1786889456.1307201,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/tipos_audios-capture.json": {
+    "mtime": 1786889456.1122074,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/tipos_chats-aria.json": {
+    "mtime": 1786889452.4447794,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/tipos_chats-capture.json": {
+    "mtime": 1786889452.4261436,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/tipos_imagens-aria.json": {
+    "mtime": 1786889454.400939,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/tipos_imagens-capture.json": {
+    "mtime": 1786889454.3769019,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/tipos_tabelas-aria.json": {
+    "mtime": 1786889448.0599592,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-10-45-401Z/tipos_tabelas-capture.json": {
+    "mtime": 1786889448.0409582,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/observations.json": {
+    "mtime": 1786889491.0883484,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/run.json": {
+    "mtime": 1786889480.617775,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/tipos_arquivos-aria.json": {
+    "mtime": 1786889484.8757174,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/tipos_arquivos-capture.json": {
+    "mtime": 1786889484.8526168,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/tipos_audios-aria.json": {
+    "mtime": 1786889491.007204,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/tipos_audios-capture.json": {
+    "mtime": 1786889490.9868624,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/tipos_chats-aria.json": {
+    "mtime": 1786889487.01477,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/tipos_chats-capture.json": {
+    "mtime": 1786889486.997314,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/tipos_imagens-aria.json": {
+    "mtime": 1786889489.0608435,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/tipos_imagens-capture.json": {
+    "mtime": 1786889489.04291,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/tipos_tabelas-aria.json": {
+    "mtime": 1786889482.7331076,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-11-20-236Z/tipos_tabelas-capture.json": {
+    "mtime": 1786889482.717098,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/observations.json": {
+    "mtime": 1786889665.1346917,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/root-aria.json": {
+    "mtime": 1786889603.4564235,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/root-capture.json": {
+    "mtime": 1786889603.4584239,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/run.json": {
+    "mtime": 1786889598.1363873,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_arquivos-aria.json": {
+    "mtime": 1786889624.0053527,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_arquivos-capture.json": {
+    "mtime": 1786889624.006367,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_audios-aria.json": {
+    "mtime": 1786889629.0723042,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_audios-capture.json": {
+    "mtime": 1786889629.0733035,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_chats-aria.json": {
+    "mtime": 1786889613.8073144,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_chats-capture.json": {
+    "mtime": 1786889613.808306,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786889644.310419,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786889644.311819,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_imagens-aria.json": {
+    "mtime": 1786889618.9096825,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_imagens-capture.json": {
+    "mtime": 1786889618.9117756,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_links-aria.json": {
+    "mtime": 1786889654.6885428,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_links-capture.json": {
+    "mtime": 1786889654.6905406,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_notas-aria.json": {
+    "mtime": 1786889608.7397914,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_notas-capture.json": {
+    "mtime": 1786889608.7417915,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_paginas-aria.json": {
+    "mtime": 1786889665.0353987,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_paginas-capture.json": {
+    "mtime": 1786889665.0363977,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_pdfs-aria.json": {
+    "mtime": 1786889634.1412807,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_pdfs-capture.json": {
+    "mtime": 1786889634.142789,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_queries-aria.json": {
+    "mtime": 1786889639.192526,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_queries-capture.json": {
+    "mtime": 1786889639.194857,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_tabelas-aria.json": {
+    "mtime": 1786889659.819149,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_tabelas-capture.json": {
+    "mtime": 1786889659.8211565,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_tweets-aria.json": {
+    "mtime": 1786889649.4249907,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-13-17-762Z/tipos_tweets-capture.json": {
+    "mtime": 1786889649.4269922,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/observations.json": {
+    "mtime": 1786890971.7665987,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/root-aria.json": {
+    "mtime": 1786890910.6050653,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/root-capture.json": {
+    "mtime": 1786890910.6060638,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/run.json": {
+    "mtime": 1786890905.0235631,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_arquivos-aria.json": {
+    "mtime": 1786890930.8105214,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_arquivos-capture.json": {
+    "mtime": 1786890930.8125215,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_audios-aria.json": {
+    "mtime": 1786890935.7961001,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_audios-capture.json": {
+    "mtime": 1786890935.7970998,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_chats-aria.json": {
+    "mtime": 1786890920.7402751,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_chats-capture.json": {
+    "mtime": 1786890920.7416227,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786890951.0102243,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786890951.0112207,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_imagens-aria.json": {
+    "mtime": 1786890925.7041643,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_imagens-capture.json": {
+    "mtime": 1786890925.705152,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_links-aria.json": {
+    "mtime": 1786890961.2788732,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_links-capture.json": {
+    "mtime": 1786890961.280861,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_notas-aria.json": {
+    "mtime": 1786890915.5986197,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_notas-capture.json": {
+    "mtime": 1786890915.5996199,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_paginas-aria.json": {
+    "mtime": 1786890971.549738,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_paginas-capture.json": {
+    "mtime": 1786890971.5507388,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_pdfs-aria.json": {
+    "mtime": 1786890940.8791714,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_pdfs-capture.json": {
+    "mtime": 1786890940.8801768,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_queries-aria.json": {
+    "mtime": 1786890945.884377,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_queries-capture.json": {
+    "mtime": 1786890945.8853793,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_tabelas-aria.json": {
+    "mtime": 1786890966.3846276,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_tabelas-capture.json": {
+    "mtime": 1786890966.3866212,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_tweets-aria.json": {
+    "mtime": 1786890956.1021285,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-35-03-687Z/tipos_tweets-capture.json": {
+    "mtime": 1786890956.1041298,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/observations.json": {
+    "mtime": 1786891545.3341105,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/root-aria.json": {
+    "mtime": 1786891484.0798051,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/root-capture.json": {
+    "mtime": 1786891484.0818114,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/run.json": {
+    "mtime": 1786891478.536869,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_arquivos-aria.json": {
+    "mtime": 1786891504.2767112,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_arquivos-capture.json": {
+    "mtime": 1786891504.2787168,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_audios-aria.json": {
+    "mtime": 1786891509.313311,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_audios-capture.json": {
+    "mtime": 1786891509.3143094,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_chats-aria.json": {
+    "mtime": 1786891494.319375,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_chats-capture.json": {
+    "mtime": 1786891494.3213742,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786891524.7329087,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786891524.7339132,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_imagens-aria.json": {
+    "mtime": 1786891499.2226477,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_imagens-capture.json": {
+    "mtime": 1786891499.2246597,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_links-aria.json": {
+    "mtime": 1786891534.9886012,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_links-capture.json": {
+    "mtime": 1786891534.9896061,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_notas-aria.json": {
+    "mtime": 1786891489.176069,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_notas-capture.json": {
+    "mtime": 1786891489.1770885,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_paginas-aria.json": {
+    "mtime": 1786891545.2479186,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_paginas-capture.json": {
+    "mtime": 1786891545.2499237,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_pdfs-aria.json": {
+    "mtime": 1786891514.495573,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_pdfs-capture.json": {
+    "mtime": 1786891514.49957,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_queries-aria.json": {
+    "mtime": 1786891519.5635135,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_queries-capture.json": {
+    "mtime": 1786891519.5665138,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_tabelas-aria.json": {
+    "mtime": 1786891540.097139,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_tabelas-capture.json": {
+    "mtime": 1786891540.0992928,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_tweets-aria.json": {
+    "mtime": 1786891529.8332455,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-44-35-828Z/tipos_tweets-capture.json": {
+    "mtime": 1786891529.836337,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/observations.json": {
+    "mtime": 1786891672.7829938,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/root-aria.json": {
+    "mtime": 1786891616.8997157,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/root-capture.json": {
+    "mtime": 1786891616.911574,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/run.json": {
+    "mtime": 1786891612.8149607,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_arquivos-aria.json": {
+    "mtime": 1786891635.3912466,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_arquivos-capture.json": {
+    "mtime": 1786891635.3922472,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_audios-aria.json": {
+    "mtime": 1786891640.148891,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_audios-capture.json": {
+    "mtime": 1786891640.1637642,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_chats-aria.json": {
+    "mtime": 1786891625.761446,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_chats-capture.json": {
+    "mtime": 1786891625.761446,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786891654.1002154,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786891654.1002154,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_imagens-aria.json": {
+    "mtime": 1786891630.6352897,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_imagens-capture.json": {
+    "mtime": 1786891630.6352897,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_links-aria.json": {
+    "mtime": 1786891663.4986105,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_links-capture.json": {
+    "mtime": 1786891663.4986105,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_notas-aria.json": {
+    "mtime": 1786891621.8152645,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_notas-capture.json": {
+    "mtime": 1786891621.8152645,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_paginas-aria.json": {
+    "mtime": 1786891672.6710944,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_paginas-capture.json": {
+    "mtime": 1786891672.6710944,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_pdfs-aria.json": {
+    "mtime": 1786891644.7655966,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_pdfs-capture.json": {
+    "mtime": 1786891644.7655966,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_queries-aria.json": {
+    "mtime": 1786891649.449096,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_queries-capture.json": {
+    "mtime": 1786891649.449096,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_tabelas-aria.json": {
+    "mtime": 1786891668.1549425,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_tabelas-capture.json": {
+    "mtime": 1786891668.156942,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_tweets-aria.json": {
+    "mtime": 1786891658.8235452,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-46-52-348Z/tipos_tweets-capture.json": {
+    "mtime": 1786891658.825683,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/observations.json": {
+    "mtime": 1786891759.213528,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/root-aria.json": {
+    "mtime": 1786891696.2028148,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/root-capture.json": {
+    "mtime": 1786891696.20583,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/run.json": {
+    "mtime": 1786891690.5479505,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_arquivos-aria.json": {
+    "mtime": 1786891717.1177204,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_arquivos-capture.json": {
+    "mtime": 1786891717.1187203,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_audios-aria.json": {
+    "mtime": 1786891722.1995032,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_audios-capture.json": {
+    "mtime": 1786891722.2014942,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_chats-aria.json": {
+    "mtime": 1786891706.6648602,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_chats-capture.json": {
+    "mtime": 1786891706.6668594,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786891738.1551535,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786891738.1571393,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_imagens-aria.json": {
+    "mtime": 1786891711.8885422,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_imagens-capture.json": {
+    "mtime": 1786891711.8905392,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_links-aria.json": {
+    "mtime": 1786891748.388973,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_links-capture.json": {
+    "mtime": 1786891748.3909733,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_notas-aria.json": {
+    "mtime": 1786891701.4389565,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_notas-capture.json": {
+    "mtime": 1786891701.440956,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_paginas-aria.json": {
+    "mtime": 1786891759.084787,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_paginas-capture.json": {
+    "mtime": 1786891759.0867906,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_pdfs-aria.json": {
+    "mtime": 1786891727.4983745,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_pdfs-capture.json": {
+    "mtime": 1786891727.4994457,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_queries-aria.json": {
+    "mtime": 1786891732.7767372,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_queries-capture.json": {
+    "mtime": 1786891732.7773852,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_tabelas-aria.json": {
+    "mtime": 1786891753.705737,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_tabelas-capture.json": {
+    "mtime": 1786891753.7077348,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_tweets-aria.json": {
+    "mtime": 1786891743.3157985,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-48-10-122Z/tipos_tweets-capture.json": {
+    "mtime": 1786891743.317798,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/observations.json": {
+    "mtime": 1786891919.5355833,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/root-aria.json": {
+    "mtime": 1786891863.6704216,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/root-capture.json": {
+    "mtime": 1786891863.6704216,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/run.json": {
+    "mtime": 1786891859.7146716,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_arquivos-aria.json": {
+    "mtime": 1786891882.0049808,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_arquivos-capture.json": {
+    "mtime": 1786891882.0049808,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_audios-aria.json": {
+    "mtime": 1786891886.654284,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_audios-capture.json": {
+    "mtime": 1786891886.654284,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_chats-aria.json": {
+    "mtime": 1786891872.4912298,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_chats-capture.json": {
+    "mtime": 1786891872.503997,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786891900.7111511,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786891900.712151,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_imagens-aria.json": {
+    "mtime": 1786891877.3068945,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_imagens-capture.json": {
+    "mtime": 1786891877.3068945,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_links-aria.json": {
+    "mtime": 1786891909.9673033,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_links-capture.json": {
+    "mtime": 1786891909.9673033,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_notas-aria.json": {
+    "mtime": 1786891868.5611572,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_notas-capture.json": {
+    "mtime": 1786891868.5611572,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_paginas-aria.json": {
+    "mtime": 1786891919.405826,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_paginas-capture.json": {
+    "mtime": 1786891919.405826,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_pdfs-aria.json": {
+    "mtime": 1786891891.3222258,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_pdfs-capture.json": {
+    "mtime": 1786891891.3313766,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_queries-aria.json": {
+    "mtime": 1786891896.0394773,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_queries-capture.json": {
+    "mtime": 1786891896.0394773,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_tabelas-aria.json": {
+    "mtime": 1786891914.7298548,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_tabelas-capture.json": {
+    "mtime": 1786891914.7298548,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_tweets-aria.json": {
+    "mtime": 1786891905.1634786,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-50-59-271Z/tipos_tweets-capture.json": {
+    "mtime": 1786891905.1665893,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-52-47-722Z/observations.json": {
+    "mtime": 1786891973.356256,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-52-47-722Z/run.json": {
+    "mtime": 1786891968.166606,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-52-47-722Z/tipos_audit-entities-aria.json": {
+    "mtime": 1786891973.2729297,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-52-47-722Z/tipos_audit-entities-capture.json": {
+    "mtime": 1786891973.2729297,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/observations.json": {
+    "mtime": 1786892088.292967,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/root-aria.json": {
+    "mtime": 1786892021.3097692,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/root-capture.json": {
+    "mtime": 1786892021.3117702,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/run.json": {
+    "mtime": 1786892015.8612506,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_arquivos-aria.json": {
+    "mtime": 1786892041.8124971,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_arquivos-capture.json": {
+    "mtime": 1786892041.8139944,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_audios-aria.json": {
+    "mtime": 1786892046.983558,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_audios-capture.json": {
+    "mtime": 1786892046.9855528,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_audit-entities-aria.json": {
+    "mtime": 1786892088.167476,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_audit-entities-capture.json": {
+    "mtime": 1786892088.169476,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_chats-aria.json": {
+    "mtime": 1786892031.623696,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_chats-capture.json": {
+    "mtime": 1786892031.6256962,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786892062.5953996,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786892062.5973978,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_imagens-aria.json": {
+    "mtime": 1786892036.7717395,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_imagens-capture.json": {
+    "mtime": 1786892036.77274,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_links-aria.json": {
+    "mtime": 1786892072.9312599,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_links-capture.json": {
+    "mtime": 1786892072.932259,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_notas-aria.json": {
+    "mtime": 1786892026.5553298,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_notas-capture.json": {
+    "mtime": 1786892026.5563302,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_paginas-aria.json": {
+    "mtime": 1786892083.1903203,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_paginas-capture.json": {
+    "mtime": 1786892083.1923118,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_pdfs-aria.json": {
+    "mtime": 1786892051.993024,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_pdfs-capture.json": {
+    "mtime": 1786892051.9940228,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_queries-aria.json": {
+    "mtime": 1786892057.2606938,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_queries-capture.json": {
+    "mtime": 1786892057.261695,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_tabelas-aria.json": {
+    "mtime": 1786892078.1558104,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_tabelas-capture.json": {
+    "mtime": 1786892078.1568081,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_tweets-aria.json": {
+    "mtime": 1786892067.8507712,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T14-53-35-382Z/tipos_tweets-capture.json": {
+    "mtime": 1786892067.8531826,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/observations.json": {
+    "mtime": 1786892533.7024033,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/root-aria.json": {
+    "mtime": 1786892467.490026,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/root-capture.json": {
+    "mtime": 1786892467.4910378,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/run.json": {
+    "mtime": 1786892462.184895,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_arquivos-aria.json": {
+    "mtime": 1786892487.9552915,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_arquivos-capture.json": {
+    "mtime": 1786892487.9562893,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_audios-aria.json": {
+    "mtime": 1786892493.0581865,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_audios-capture.json": {
+    "mtime": 1786892493.0603747,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_audit-entities-aria.json": {
+    "mtime": 1786892533.5920298,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_audit-entities-capture.json": {
+    "mtime": 1786892533.594029,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_chats-aria.json": {
+    "mtime": 1786892477.7446816,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_chats-capture.json": {
+    "mtime": 1786892477.7456975,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786892508.309775,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786892508.3107762,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_imagens-aria.json": {
+    "mtime": 1786892482.863764,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_imagens-capture.json": {
+    "mtime": 1786892482.8657732,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_links-aria.json": {
+    "mtime": 1786892518.6690073,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_links-capture.json": {
+    "mtime": 1786892518.6710074,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_notas-aria.json": {
+    "mtime": 1786892472.6080437,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_notas-capture.json": {
+    "mtime": 1786892472.609044,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_paginas-aria.json": {
+    "mtime": 1786892528.5059738,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_paginas-capture.json": {
+    "mtime": 1786892528.507978,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_pdfs-aria.json": {
+    "mtime": 1786892498.0388951,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_pdfs-capture.json": {
+    "mtime": 1786892498.0398967,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_queries-aria.json": {
+    "mtime": 1786892503.1665869,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_queries-capture.json": {
+    "mtime": 1786892503.1685915,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_tabelas-aria.json": {
+    "mtime": 1786892523.587258,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_tabelas-capture.json": {
+    "mtime": 1786892523.5882497,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_tweets-aria.json": {
+    "mtime": 1786892513.4876554,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-01-01-734Z/tipos_tweets-capture.json": {
+    "mtime": 1786892513.4896562,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/observations.json": {
+    "mtime": 1786895735.6306355,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/root-aria.json": {
+    "mtime": 1786895650.2418673,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/root-capture.json": {
+    "mtime": 1786895650.2439637,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/run.json": {
+    "mtime": 1786895642.9316804,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_arquivos-aria.json": {
+    "mtime": 1786895677.0997317,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_arquivos-capture.json": {
+    "mtime": 1786895677.1020427,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_audios-aria.json": {
+    "mtime": 1786895683.0462098,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_audios-capture.json": {
+    "mtime": 1786895683.0632613,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_audit-entities-aria.json": {
+    "mtime": 1786895735.1952672,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_audit-entities-capture.json": {
+    "mtime": 1786895735.1972632,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_chats-aria.json": {
+    "mtime": 1786895663.8654778,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_chats-capture.json": {
+    "mtime": 1786895663.8674774,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786895703.1832087,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786895703.1852095,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_imagens-aria.json": {
+    "mtime": 1786895670.7772286,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_imagens-capture.json": {
+    "mtime": 1786895670.779357,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_links-aria.json": {
+    "mtime": 1786895716.727223,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_links-capture.json": {
+    "mtime": 1786895716.7297273,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_notas-aria.json": {
+    "mtime": 1786895656.7281992,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_notas-capture.json": {
+    "mtime": 1786895656.7305863,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_paginas-aria.json": {
+    "mtime": 1786895729.1645331,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_paginas-capture.json": {
+    "mtime": 1786895729.1655376,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_pdfs-aria.json": {
+    "mtime": 1786895690.672224,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_pdfs-capture.json": {
+    "mtime": 1786895690.679686,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_queries-aria.json": {
+    "mtime": 1786895697.0358267,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_queries-capture.json": {
+    "mtime": 1786895697.0383413,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_tabelas-aria.json": {
+    "mtime": 1786895723.075958,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_tabelas-capture.json": {
+    "mtime": 1786895723.077959,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_tweets-aria.json": {
+    "mtime": 1786895709.978658,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T15-54-00-587Z/tipos_tweets-capture.json": {
+    "mtime": 1786895709.9809372,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/observations.json": {
+    "mtime": 1786896655.6979358,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/root-aria.json": {
+    "mtime": 1786896579.1248913,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/root-capture.json": {
+    "mtime": 1786896579.1280022,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/run.json": {
+    "mtime": 1786896572.3565536,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_arquivos-aria.json": {
+    "mtime": 1786896602.0852246,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_arquivos-capture.json": {
+    "mtime": 1786896602.0862312,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audios-aria.json": {
+    "mtime": 1786896607.884142,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audios-capture.json": {
+    "mtime": 1786896607.8851447,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audit-entities-aria.json": {
+    "mtime": 1786896655.5688248,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audit-entities-capture.json": {
+    "mtime": 1786896655.5701914,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_chats-aria.json": {
+    "mtime": 1786896590.4737053,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_chats-capture.json": {
+    "mtime": 1786896590.4757175,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786896626.0669165,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786896626.0679142,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_imagens-aria.json": {
+    "mtime": 1786896596.383624,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_imagens-capture.json": {
+    "mtime": 1786896596.3856215,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_links-aria.json": {
+    "mtime": 1786896637.8882847,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_links-capture.json": {
+    "mtime": 1786896637.8902843,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_notas-aria.json": {
+    "mtime": 1786896584.6072798,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_notas-capture.json": {
+    "mtime": 1786896584.6082902,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_paginas-aria.json": {
+    "mtime": 1786896649.1434326,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_paginas-capture.json": {
+    "mtime": 1786896649.152234,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_pdfs-aria.json": {
+    "mtime": 1786896613.7984147,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_pdfs-capture.json": {
+    "mtime": 1786896613.80106,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_queries-aria.json": {
+    "mtime": 1786896620.4285998,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_queries-capture.json": {
+    "mtime": 1786896620.4321082,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tabelas-aria.json": {
+    "mtime": 1786896643.4393716,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tabelas-capture.json": {
+    "mtime": 1786896643.4413714,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tweets-aria.json": {
+    "mtime": 1786896631.7867594,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tweets-capture.json": {
+    "mtime": 1786896631.7887592,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/observations.json": {
+    "mtime": 1786896915.4170196,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/root-aria.json": {
+    "mtime": 1786896909.3823707,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/root-capture.json": {
+    "mtime": 1786896909.3845482,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/run.json": {
+    "mtime": 1786896903.030118,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/tipos_tabelas-aria.json": {
+    "mtime": 1786896915.2067027,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/tipos_tabelas-capture.json": {
+    "mtime": 1786896915.2087018,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/observations.json": {
+    "mtime": 1786897056.3202002,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/root-aria.json": {
+    "mtime": 1786896972.6995895,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/root-capture.json": {
+    "mtime": 1786896972.7035158,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/run.json": {
+    "mtime": 1786896966.1646173,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_arquivos-aria.json": {
+    "mtime": 1786896997.0181048,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_arquivos-capture.json": {
+    "mtime": 1786896997.0221589,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audios-aria.json": {
+    "mtime": 1786897004.0733612,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audios-capture.json": {
+    "mtime": 1786897004.075359,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audit-entities-aria.json": {
+    "mtime": 1786897056.125772,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audit-entities-capture.json": {
+    "mtime": 1786897056.1277804,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_chats-aria.json": {
+    "mtime": 1786896984.2063253,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_chats-capture.json": {
+    "mtime": 1786896984.2073283,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786897022.9797187,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786897022.9807296,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_imagens-aria.json": {
+    "mtime": 1786896990.1138904,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_imagens-capture.json": {
+    "mtime": 1786896990.1161075,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_links-aria.json": {
+    "mtime": 1786897036.4085162,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_links-capture.json": {
+    "mtime": 1786897036.410517,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_notas-aria.json": {
+    "mtime": 1786896978.6341083,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_notas-capture.json": {
+    "mtime": 1786896978.636116,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_paginas-aria.json": {
+    "mtime": 1786897049.1175337,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_paginas-capture.json": {
+    "mtime": 1786897049.119769,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_pdfs-aria.json": {
+    "mtime": 1786897010.1744566,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_pdfs-capture.json": {
+    "mtime": 1786897010.1774678,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_queries-aria.json": {
+    "mtime": 1786897016.989503,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_queries-capture.json": {
+    "mtime": 1786897016.992019,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tabelas-aria.json": {
+    "mtime": 1786897042.5989451,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tabelas-capture.json": {
+    "mtime": 1786897042.6009455,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tweets-aria.json": {
+    "mtime": 1786897028.9262698,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tweets-capture.json": {
+    "mtime": 1786897028.9292688,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-21-262Z/observations.json": {
+    "mtime": 1786897409.8452456,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-21-262Z/run.json": {
+    "mtime": 1786897403.1192582,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-21-262Z/tipos_tabelas-aria.json": {
+    "mtime": 1786897409.6888573,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-21-262Z/tipos_tabelas-capture.json": {
+    "mtime": 1786897409.6908586,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/observations.json": {
+    "mtime": 1786897516.3719835,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/root-aria.json": {
+    "mtime": 1786897440.1101825,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/root-capture.json": {
+    "mtime": 1786897440.1131887,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/run.json": {
+    "mtime": 1786897433.00779,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_arquivos-aria.json": {
+    "mtime": 1786897464.0940635,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_arquivos-capture.json": {
+    "mtime": 1786897464.096583,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audios-aria.json": {
+    "mtime": 1786897469.6704319,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audios-capture.json": {
+    "mtime": 1786897469.672431,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audit-entities-aria.json": {
+    "mtime": 1786897516.1675625,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audit-entities-capture.json": {
+    "mtime": 1786897516.1685631,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_chats-aria.json": {
+    "mtime": 1786897453.0462005,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_chats-capture.json": {
+    "mtime": 1786897453.0492005,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786897488.6614516,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786897488.6639695,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_imagens-aria.json": {
+    "mtime": 1786897458.5948675,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_imagens-capture.json": {
+    "mtime": 1786897458.5960362,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_links-aria.json": {
+    "mtime": 1786897500.0091045,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_links-capture.json": {
+    "mtime": 1786897500.0111027,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_notas-aria.json": {
+    "mtime": 1786897446.480213,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_notas-capture.json": {
+    "mtime": 1786897446.484253,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_paginas-aria.json": {
+    "mtime": 1786897510.7835052,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_paginas-capture.json": {
+    "mtime": 1786897510.7850113,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_pdfs-aria.json": {
+    "mtime": 1786897475.821534,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_pdfs-capture.json": {
+    "mtime": 1786897475.8235357,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_queries-aria.json": {
+    "mtime": 1786897482.322377,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_queries-capture.json": {
+    "mtime": 1786897482.3248713,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tabelas-aria.json": {
+    "mtime": 1786897505.4948978,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tabelas-capture.json": {
+    "mtime": 1786897505.4964206,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tweets-aria.json": {
+    "mtime": 1786897494.3348126,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tweets-capture.json": {
+    "mtime": 1786897494.3368704,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/observations.json": {
+    "mtime": 1786898108.574612,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/root-aria.json": {
+    "mtime": 1786898038.8904614,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/root-capture.json": {
+    "mtime": 1786898038.892966,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/run.json": {
+    "mtime": 1786898031.855886,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_arquivos-aria.json": {
+    "mtime": 1786898060.6563911,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_arquivos-capture.json": {
+    "mtime": 1786898060.6583886,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audios-aria.json": {
+    "mtime": 1786898065.8578572,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audios-capture.json": {
+    "mtime": 1786898065.8600848,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audit-entities-aria.json": {
+    "mtime": 1786898108.3816016,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audit-entities-capture.json": {
+    "mtime": 1786898108.3841205,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_chats-aria.json": {
+    "mtime": 1786898049.9053116,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_chats-capture.json": {
+    "mtime": 1786898049.906307,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_etiquetas-aria.json": {
+    "mtime": 1786898081.669731,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_etiquetas-capture.json": {
+    "mtime": 1786898081.6717308,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_imagens-aria.json": {
+    "mtime": 1786898055.4120457,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_imagens-capture.json": {
+    "mtime": 1786898055.4130447,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_links-aria.json": {
+    "mtime": 1786898092.1658678,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_links-capture.json": {
+    "mtime": 1786898092.1668727,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_notas-aria.json": {
+    "mtime": 1786898044.409483,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_notas-capture.json": {
+    "mtime": 1786898044.4114754,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_paginas-aria.json": {
+    "mtime": 1786898102.9685893,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_paginas-capture.json": {
+    "mtime": 1786898102.9705877,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_pdfs-aria.json": {
+    "mtime": 1786898071.0974965,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_pdfs-capture.json": {
+    "mtime": 1786898071.0994978,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_queries-aria.json": {
+    "mtime": 1786898076.2853234,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_queries-capture.json": {
+    "mtime": 1786898076.2873216,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tabelas-aria.json": {
+    "mtime": 1786898097.4705515,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tabelas-capture.json": {
+    "mtime": 1786898097.4730825,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tweets-aria.json": {
+    "mtime": 1786898086.8276377,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tweets-capture.json": {
+    "mtime": 1786898086.8296366,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-36-07-133Z/observations.json": {
+    "mtime": 1786898173.4017434,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-36-07-133Z/run.json": {
+    "mtime": 1786898167.7150211,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-36-07-133Z/tipos_tabelas-aria.json": {
+    "mtime": 1786898173.2940326,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-36-07-133Z/tipos_tabelas-capture.json": {
+    "mtime": 1786898173.2960308,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/template-keyboard-observation.json": {
+    "mtime": 1786887790.3460188,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/template-network-observation.json": {
+    "mtime": 1786887793.0637968,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/template-screenshot-observation.json": {
+    "mtime": 1786887795.8926623,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/comparisons/acceptance-criteria.json": {
+    "mtime": 1786889269.3744447,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/comparisons/confidence-matrix.json": {
+    "mtime": 1786888449.3611722,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/comparisons/coverage-report.json": {
+    "mtime": 1786898193.4797802,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/comparisons/coverage-summary.json": {
+    "mtime": 1786898193.480785,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/comparisons/difference-score.json": {
+    "mtime": 1786887547.034206,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/comparisons/gaps.json": {
+    "mtime": 1786898193.4817839,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/components/component-catalog.json": {
+    "mtime": 1786887597.8647318,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/flows/flows.json": {
+    "mtime": 1786898193.49178,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/flows/interaction-flow-catalog.json": {
+    "mtime": 1786889256.657023,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/knowledge/knowledge-graph.json": {
+    "mtime": 1786898193.4852848,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/knowledge/state-events.json": {
+    "mtime": 1786889252.9959319,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/local/flows/local-flow-index.json": {
+    "mtime": 1786887490.1898718,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/local/implementation-evidence.json": {
+    "mtime": 1786892758.8425455,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/local/states/object-type-state-matrix.json": {
+    "mtime": 1786889276.8624856,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/local/states/state-transitions.json": {
+    "mtime": 1786898193.4877965,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/manifests/reverse-engineering-manifest.json": {
+    "mtime": 1786887427.5403588,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/network/interaction-requests.json": {
+    "mtime": 1786898193.462244,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/network/requests.json": {
+    "mtime": 1786898193.463241,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/network/storage-state.json": {
+    "mtime": 1786887583.6599214,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/pages/page-catalog.json": {
+    "mtime": 1786898193.4888427,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/reference/assets/asset-manifest.json": {
+    "mtime": 1786898193.4557326,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/reference/components/object-type-workspace-reference.json": {
+    "mtime": 1786887474.4065115,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/reference/pages/object-type-page.json": {
+    "mtime": 1786887470.011135,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/reference/styles/style-profile.json": {
+    "mtime": 1786887478.3730412,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/screenshots/index.json": {
+    "mtime": 1786898193.4777753,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/screenshots/plan.json": {
+    "mtime": 1786887591.6916518,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/states/state-graph.json": {
+    "mtime": 1786889266.6814198,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/styles/coverage.json": {
+    "mtime": 1786887400.2221556,
+    "ast_hash": "",
+    "semantic_hash": ""
+  },
+  "tmp-cap-download.mjs": {
+    "mtime": 1786897016.233902,
+    "ast_hash": "025b31cdf2839018418c4d12898fd4b3",
+    "semantic_hash": ""
+  },
+  "tmp-check-tab.mjs": {
+    "mtime": 1786895965.5749435,
+    "ast_hash": "23188be86bba3834900bf8dcfce0b09f",
+    "semantic_hash": ""
+  },
+  "tmp-check-tab2.mjs": {
+    "mtime": 1786895979.204043,
+    "ast_hash": "c169f186632b106d587bf58bab1899a1",
+    "semantic_hash": ""
+  },
+  "tmp-check-tab3.mjs": {
+    "mtime": 1786895991.0525086,
+    "ast_hash": "ad316a9e63ad38554dfa21e6740f0792",
+    "semantic_hash": ""
+  },
+  "tmp-check-tab4.mjs": {
+    "mtime": 1786896724.7489202,
+    "ast_hash": "3f3dea891c065da66593cefae0f09375",
+    "semantic_hash": ""
+  },
+  "tmp-check-tab5.mjs": {
+    "mtime": 1786896895.5834334,
+    "ast_hash": "68f3e963b7e85d352e06253876cb94ae",
+    "semantic_hash": ""
+  },
+  "tmp-check-tab6.mjs": {
+    "mtime": 1786896949.8222325,
+    "ast_hash": "42323027a02f46886d086bb235e701bf",
+    "semantic_hash": ""
+  },
+  "tools/install-recommendations.ps1": {
+    "mtime": 1786897538.359684,
+    "ast_hash": "da606cd8dadc2ac816b16bda7f92c340",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/root-interaction-dialog-close.png": {
+    "mtime": 1786896576.9790504,
+    "ast_hash": "40be40d85711e5c13efd4f325bf94148",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/root-interaction-dialog-open.png": {
+    "mtime": 1786896576.4144125,
+    "ast_hash": "f2bb2d30a3e42478eeee657ca3c003ba",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/root-interaction-menu-close.png": {
+    "mtime": 1786896575.5724273,
+    "ast_hash": "941f39fe9c515e1c0a3653ab739ebbe4",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/root-interaction-menu-open.png": {
+    "mtime": 1786896575.0345984,
+    "ast_hash": "f2bb2d30a3e42478eeee657ca3c003ba",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_arquivos-interaction-dialog-close.png": {
+    "mtime": 1786896600.220455,
+    "ast_hash": "916f76d37da484605e6ba83fdc30c18c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_arquivos-interaction-dialog-open.png": {
+    "mtime": 1786896599.7527413,
+    "ast_hash": "ef0d55dfa6c8081db4de5a92b19b8459",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_arquivos-interaction-menu-close.png": {
+    "mtime": 1786896599.0724807,
+    "ast_hash": "916f76d37da484605e6ba83fdc30c18c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_arquivos-interaction-menu-open.png": {
+    "mtime": 1786896598.5934558,
+    "ast_hash": "b0af60434dfa33a214d8304aed723082",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audios-interaction-dialog-close.png": {
+    "mtime": 1786896605.951099,
+    "ast_hash": "4bca30169cc094df78dcdcaa5ef3222d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audios-interaction-dialog-open.png": {
+    "mtime": 1786896605.5070698,
+    "ast_hash": "38f4b7ea57da8b01d0204385a44d9054",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audios-interaction-menu-close.png": {
+    "mtime": 1786896604.8008676,
+    "ast_hash": "4bca30169cc094df78dcdcaa5ef3222d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audios-interaction-menu-open.png": {
+    "mtime": 1786896604.3329964,
+    "ast_hash": "80adc3e543f29602d6ff57aa67205e8c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audit-entities-interaction-dialog-close.png": {
+    "mtime": 1786896653.6248171,
+    "ast_hash": "256c71b25d6c276618e76c37c58e9983",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audit-entities-interaction-dialog-open.png": {
+    "mtime": 1786896653.1158187,
+    "ast_hash": "b86b45959b7130ea69c4378c813323d1",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audit-entities-interaction-menu-close.png": {
+    "mtime": 1786896652.3460922,
+    "ast_hash": "256c71b25d6c276618e76c37c58e9983",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_audit-entities-interaction-menu-open.png": {
+    "mtime": 1786896651.8524125,
+    "ast_hash": "2d37a60989f33825d99fbc83fd469859",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_chats-interaction-dialog-close.png": {
+    "mtime": 1786896588.4319692,
+    "ast_hash": "de45b917cb6f0c19136dd8c55810a173",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_chats-interaction-dialog-open.png": {
+    "mtime": 1786896587.942517,
+    "ast_hash": "c66f1f7935ec0428b952fefa128ce735",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_chats-interaction-menu-close.png": {
+    "mtime": 1786896587.2059422,
+    "ast_hash": "de45b917cb6f0c19136dd8c55810a173",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_chats-interaction-menu-open.png": {
+    "mtime": 1786896586.737069,
+    "ast_hash": "b9386ada400d1da54a06eb8fc14c723d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_etiquetas-interaction-dialog-close.png": {
+    "mtime": 1786896624.2445128,
+    "ast_hash": "f1a3d978a250f612a6ad3a87ca561c27",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_etiquetas-interaction-dialog-open.png": {
+    "mtime": 1786896623.7522495,
+    "ast_hash": "39e2a4d71426b0a68b3700e59b046a68",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_etiquetas-interaction-menu-close.png": {
+    "mtime": 1786896623.022442,
+    "ast_hash": "96a4a9afe3328d61c8f5074869b6057d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_etiquetas-interaction-menu-open.png": {
+    "mtime": 1786896622.552125,
+    "ast_hash": "ceb0fc328c8f824296c4dce6ed8b9c35",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_imagens-interaction-dialog-close.png": {
+    "mtime": 1786896594.479496,
+    "ast_hash": "383550b21e36d15c49c47af4cc2056d5",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_imagens-interaction-dialog-open.png": {
+    "mtime": 1786896593.9921885,
+    "ast_hash": "dd62cfc6930c3f70f27809081ee48413",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_imagens-interaction-menu-close.png": {
+    "mtime": 1786896593.2680714,
+    "ast_hash": "053a7b4c166e4fd860bfeb738d8a4937",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_imagens-interaction-menu-open.png": {
+    "mtime": 1786896592.7867289,
+    "ast_hash": "9470e393963ebe176c4f6043f28fcd0d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_links-interaction-dialog-close.png": {
+    "mtime": 1786896635.8108506,
+    "ast_hash": "4777424f929485e31e6d203318dc0776",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_links-interaction-dialog-open.png": {
+    "mtime": 1786896635.2732008,
+    "ast_hash": "3851e340904f0c4f406a3e45f023c944",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_links-interaction-menu-close.png": {
+    "mtime": 1786896634.468321,
+    "ast_hash": "4777424f929485e31e6d203318dc0776",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_links-interaction-menu-open.png": {
+    "mtime": 1786896633.9623754,
+    "ast_hash": "7e8c2dbea406d2fe1d200df89f2a5386",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_notas-interaction-dialog-close.png": {
+    "mtime": 1786896582.6805465,
+    "ast_hash": "54c7dfced65d9ac05a98b352da03e40c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_notas-interaction-dialog-open.png": {
+    "mtime": 1786896582.2381206,
+    "ast_hash": "b22620ebabb76c43b2b8f2fb251e6172",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_notas-interaction-menu-close.png": {
+    "mtime": 1786896581.5055754,
+    "ast_hash": "54c7dfced65d9ac05a98b352da03e40c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_notas-interaction-menu-open.png": {
+    "mtime": 1786896581.0206013,
+    "ast_hash": "439500dfec11e9f190db92afb82e80d8",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_paginas-interaction-dialog-close.png": {
+    "mtime": 1786896647.1154351,
+    "ast_hash": "acf714fe3d71a40793270b0f0eb47f13",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_paginas-interaction-dialog-open.png": {
+    "mtime": 1786896646.6232975,
+    "ast_hash": "547dba35e0698ae5913aa3ea31901858",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_paginas-interaction-menu-close.png": {
+    "mtime": 1786896645.8869343,
+    "ast_hash": "acf714fe3d71a40793270b0f0eb47f13",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_paginas-interaction-menu-open.png": {
+    "mtime": 1786896645.4132545,
+    "ast_hash": "59eb5edd1845986c20e9bfb24cc21d86",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_pdfs-interaction-dialog-close.png": {
+    "mtime": 1786896611.7480173,
+    "ast_hash": "1d74c9841da5f20cae167c495e26b622",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_pdfs-interaction-dialog-open.png": {
+    "mtime": 1786896611.2534356,
+    "ast_hash": "de362d4213002f18f5137849c1af6623",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_pdfs-interaction-menu-close.png": {
+    "mtime": 1786896610.5355213,
+    "ast_hash": "fda49713dbb7d24e4657391cab7056f9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_pdfs-interaction-menu-open.png": {
+    "mtime": 1786896610.0663111,
+    "ast_hash": "8f06e5f3a43519784c8cb21cf680aaed",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_queries-interaction-dialog-close.png": {
+    "mtime": 1786896618.4395816,
+    "ast_hash": "bfa91af7b7e9fc45243a1a3e19e813ac",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_queries-interaction-dialog-open.png": {
+    "mtime": 1786896617.8693824,
+    "ast_hash": "544796c6b6a699e9f1b1d1b33c79d3d8",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_queries-interaction-menu-close.png": {
+    "mtime": 1786896616.7322598,
+    "ast_hash": "50eb36dbb20ae03e0bc8db2c5929d410",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_queries-interaction-menu-open.png": {
+    "mtime": 1786896616.2337134,
+    "ast_hash": "544796c6b6a699e9f1b1d1b33c79d3d8",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tabelas-interaction-dialog-close.png": {
+    "mtime": 1786896641.6422484,
+    "ast_hash": "f6607b53fd90eb90fd2759ada0705bd5",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tabelas-interaction-dialog-open.png": {
+    "mtime": 1786896641.1708007,
+    "ast_hash": "ff4666d335abcf3aa4c9c44cd7436f66",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tabelas-interaction-menu-close.png": {
+    "mtime": 1786896640.4009235,
+    "ast_hash": "f6607b53fd90eb90fd2759ada0705bd5",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tabelas-interaction-menu-open.png": {
+    "mtime": 1786896639.9175265,
+    "ast_hash": "bb5498ab73dbd121c6bcf06023fc6d0c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tweets-interaction-dialog-close.png": {
+    "mtime": 1786896629.9468873,
+    "ast_hash": "0ef0a90951455e514170c0e232fb925f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tweets-interaction-dialog-open.png": {
+    "mtime": 1786896629.456547,
+    "ast_hash": "73adebfe45aeac7f1263fc9dea81dc84",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tweets-interaction-menu-close.png": {
+    "mtime": 1786896628.720499,
+    "ast_hash": "0ef0a90951455e514170c0e232fb925f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-09-31-484Z/tipos_tweets-interaction-menu-open.png": {
+    "mtime": 1786896628.2487473,
+    "ast_hash": "9b988ff1410a0f5a835ed00c716a2a22",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/root-interaction-dialog-close.png": {
+    "mtime": 1786896907.3572686,
+    "ast_hash": "ba11b920189a61928403f37b3cfc66fc",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/root-interaction-dialog-open.png": {
+    "mtime": 1786896906.8093963,
+    "ast_hash": "c02171a581bb8c919200e6b17527286b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/root-interaction-menu-close.png": {
+    "mtime": 1786896906.0448296,
+    "ast_hash": "31c87778a2e4baf0f85111f92e8c4a4a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/root-interaction-menu-open.png": {
+    "mtime": 1786896905.5150485,
+    "ast_hash": "c02171a581bb8c919200e6b17527286b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/tipos_tabelas-interaction-dialog-close.png": {
+    "mtime": 1786896913.1723492,
+    "ast_hash": "209a1aab72a1045d70948dfdc721a6df",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/tipos_tabelas-interaction-dialog-open.png": {
+    "mtime": 1786896912.6747215,
+    "ast_hash": "82b550f556f7c100c875ef6151a8a0aa",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/tipos_tabelas-interaction-menu-close.png": {
+    "mtime": 1786896911.939453,
+    "ast_hash": "209a1aab72a1045d70948dfdc721a6df",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-15-02-403Z/tipos_tabelas-interaction-menu-open.png": {
+    "mtime": 1786896911.4405913,
+    "ast_hash": "ff2a528035c9b2d7372c90f7f730db61",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/root-interaction-dialog-close.png": {
+    "mtime": 1786896970.651161,
+    "ast_hash": "31b9af77f7760f5182c85ae9509331d9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/root-interaction-dialog-open.png": {
+    "mtime": 1786896970.1062844,
+    "ast_hash": "6dbaac36f308d1976212445ed61487ea",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/root-interaction-menu-close.png": {
+    "mtime": 1786896969.3532436,
+    "ast_hash": "e3c576a2f363d1aaa8eaa080c93683db",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/root-interaction-menu-open.png": {
+    "mtime": 1786896968.799322,
+    "ast_hash": "371ed975b46378d671b007b02f1699aa",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_arquivos-interaction-dialog-close.png": {
+    "mtime": 1786896994.9587862,
+    "ast_hash": "43621dab0d2c24650d8e56af9c180738",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_arquivos-interaction-dialog-open.png": {
+    "mtime": 1786896994.4735296,
+    "ast_hash": "201bb9bce350ac3ece6e47b141fc21b7",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_arquivos-interaction-menu-close.png": {
+    "mtime": 1786896993.7180398,
+    "ast_hash": "43621dab0d2c24650d8e56af9c180738",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_arquivos-interaction-menu-open.png": {
+    "mtime": 1786896993.229833,
+    "ast_hash": "5c2727b0cfa785d73e23b86ab92297e3",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audios-interaction-dialog-close.png": {
+    "mtime": 1786897002.1834502,
+    "ast_hash": "cb5a04774fd139787ab1b786e4f0af97",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audios-interaction-dialog-open.png": {
+    "mtime": 1786897001.6855884,
+    "ast_hash": "9f143b05df52ce0a0e136f13302ff67f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audios-interaction-menu-close.png": {
+    "mtime": 1786897000.8905942,
+    "ast_hash": "74bd9a500ebfc31a347280ff06946b61",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audios-interaction-menu-open.png": {
+    "mtime": 1786897000.3685179,
+    "ast_hash": "bc94021ea2fb35ad513eb1e6e1ef5e3f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audit-entities-interaction-dialog-close.png": {
+    "mtime": 1786897054.1365294,
+    "ast_hash": "5eca0e51df21f574f6b40c1d79dd305a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audit-entities-interaction-dialog-open.png": {
+    "mtime": 1786897053.5966964,
+    "ast_hash": "6ebc9e11e748c1c313899092b0c5d478",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audit-entities-interaction-menu-close.png": {
+    "mtime": 1786897052.7806833,
+    "ast_hash": "5eca0e51df21f574f6b40c1d79dd305a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_audit-entities-interaction-menu-open.png": {
+    "mtime": 1786897052.252335,
+    "ast_hash": "848edabb9f5708e956843790db547407",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_chats-interaction-dialog-close.png": {
+    "mtime": 1786896982.3674295,
+    "ast_hash": "5f36ceaee47b5c79f20baf8a5ee3c61a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_chats-interaction-dialog-open.png": {
+    "mtime": 1786896981.8909724,
+    "ast_hash": "3fe1f60941f98c627935168754fb0f9c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_chats-interaction-menu-close.png": {
+    "mtime": 1786896981.160779,
+    "ast_hash": "5f36ceaee47b5c79f20baf8a5ee3c61a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_chats-interaction-menu-open.png": {
+    "mtime": 1786896980.6706233,
+    "ast_hash": "365df2c31a05fa787ebd64b42b761425",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_etiquetas-interaction-dialog-close.png": {
+    "mtime": 1786897021.0349648,
+    "ast_hash": "4458a337d03cfcd618d9e22e837cd856",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_etiquetas-interaction-dialog-open.png": {
+    "mtime": 1786897020.5375557,
+    "ast_hash": "6ac4f443116286b20186b8c4a84ec510",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_etiquetas-interaction-menu-close.png": {
+    "mtime": 1786897019.8095024,
+    "ast_hash": "4458a337d03cfcd618d9e22e837cd856",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_etiquetas-interaction-menu-open.png": {
+    "mtime": 1786897019.331016,
+    "ast_hash": "d134d5b7c6335ed55ff0b46a9440ddb0",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_imagens-interaction-dialog-close.png": {
+    "mtime": 1786896988.147072,
+    "ast_hash": "589c5c84bd51dde9ad5d1bbcf500b18d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_imagens-interaction-dialog-open.png": {
+    "mtime": 1786896987.6445253,
+    "ast_hash": "7fae2bd04b7e9830539f3748b602b6ea",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_imagens-interaction-menu-close.png": {
+    "mtime": 1786896986.8823583,
+    "ast_hash": "f909b4d0a2fb317a17f7b9b645381739",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_imagens-interaction-menu-open.png": {
+    "mtime": 1786896986.3958545,
+    "ast_hash": "3d2097580e371edd0f28498f008e2926",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_links-interaction-dialog-close.png": {
+    "mtime": 1786897034.3722367,
+    "ast_hash": "f8e58491505c31abb53350e684d29f87",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_links-interaction-dialog-open.png": {
+    "mtime": 1786897033.842405,
+    "ast_hash": "fcd3f1e688971fd080d5e904888b89f4",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_links-interaction-menu-close.png": {
+    "mtime": 1786897033.0258908,
+    "ast_hash": "b9f47392e3590d28ed5ae5ee1a667ba9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_links-interaction-menu-open.png": {
+    "mtime": 1786897032.4297683,
+    "ast_hash": "fcd3f1e688971fd080d5e904888b89f4",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_notas-interaction-dialog-close.png": {
+    "mtime": 1786896976.7043731,
+    "ast_hash": "e2f0daa6775a8d555ad6dcedabd1c89e",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_notas-interaction-dialog-open.png": {
+    "mtime": 1786896976.24752,
+    "ast_hash": "ab5c0a5bd1e7941c14049fced619b311",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_notas-interaction-menu-close.png": {
+    "mtime": 1786896975.534017,
+    "ast_hash": "e2f0daa6775a8d555ad6dcedabd1c89e",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_notas-interaction-menu-open.png": {
+    "mtime": 1786896975.066084,
+    "ast_hash": "90b96efd85ffdc066473a1c26133b0ec",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_paginas-interaction-dialog-close.png": {
+    "mtime": 1786897047.1257436,
+    "ast_hash": "c3a5797ad328cf66a32729a4c819b6c9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_paginas-interaction-dialog-open.png": {
+    "mtime": 1786897046.6419108,
+    "ast_hash": "d28fc4750a845557e2a545287bc9b35c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_paginas-interaction-menu-close.png": {
+    "mtime": 1786897045.949491,
+    "ast_hash": "c3a5797ad328cf66a32729a4c819b6c9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_paginas-interaction-menu-open.png": {
+    "mtime": 1786897045.4819293,
+    "ast_hash": "1ef8a92f1c67c4c4572be52a9f342abd",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_pdfs-interaction-dialog-close.png": {
+    "mtime": 1786897008.1509278,
+    "ast_hash": "95b3012cb24a8703019254e1ca2afa71",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_pdfs-interaction-dialog-open.png": {
+    "mtime": 1786897007.618179,
+    "ast_hash": "be7d136a5249a01af5b7578b00f4cc7f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_pdfs-interaction-menu-close.png": {
+    "mtime": 1786897006.8851402,
+    "ast_hash": "95b3012cb24a8703019254e1ca2afa71",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_pdfs-interaction-menu-open.png": {
+    "mtime": 1786897006.4062572,
+    "ast_hash": "545855962f2c357216187257cfef3e21",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_queries-interaction-dialog-close.png": {
+    "mtime": 1786897014.9669015,
+    "ast_hash": "8e0e608711185997fe93d6786e260d6d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_queries-interaction-dialog-open.png": {
+    "mtime": 1786897014.4537668,
+    "ast_hash": "8294dc2f719699ef024129cabbabb54a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_queries-interaction-menu-close.png": {
+    "mtime": 1786897013.658681,
+    "ast_hash": "8e0e608711185997fe93d6786e260d6d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_queries-interaction-menu-open.png": {
+    "mtime": 1786897013.1278932,
+    "ast_hash": "f5397d01acaf4bfb32bba84050ebf5d9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tabelas-interaction-dialog-close.png": {
+    "mtime": 1786897040.5819101,
+    "ast_hash": "88e3aab77a4669024c0f14b2260a7e5b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tabelas-interaction-dialog-open.png": {
+    "mtime": 1786897040.0734699,
+    "ast_hash": "918bf9b901e0ac603b6abe41fee46f4a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tabelas-interaction-menu-close.png": {
+    "mtime": 1786897039.2922108,
+    "ast_hash": "88e3aab77a4669024c0f14b2260a7e5b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tabelas-interaction-menu-open.png": {
+    "mtime": 1786897038.7976613,
+    "ast_hash": "a4b0135299b2f24a88d937aea6d0c83b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tweets-interaction-dialog-close.png": {
+    "mtime": 1786897026.6358225,
+    "ast_hash": "ca36551850452648cad6c1dfa0e8ec46",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tweets-interaction-dialog-open.png": {
+    "mtime": 1786897026.1277595,
+    "ast_hash": "343f9b153ffbb97c97f45afcd3086ce9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tweets-interaction-menu-close.png": {
+    "mtime": 1786897025.3799586,
+    "ast_hash": "a1c3fa0cacc9248061dae5adebedb150",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-16-05-460Z/tipos_tweets-interaction-menu-open.png": {
+    "mtime": 1786897024.8822837,
+    "ast_hash": "1ce4771b1a54180270c4ddf341d4c367",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-21-262Z/tipos_tabelas-interaction-dialog-close.png": {
+    "mtime": 1786897407.761489,
+    "ast_hash": "88e3aab77a4669024c0f14b2260a7e5b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-21-262Z/tipos_tabelas-interaction-dialog-open.png": {
+    "mtime": 1786897407.263432,
+    "ast_hash": "918bf9b901e0ac603b6abe41fee46f4a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-21-262Z/tipos_tabelas-interaction-menu-close.png": {
+    "mtime": 1786897406.5449555,
+    "ast_hash": "88e3aab77a4669024c0f14b2260a7e5b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-21-262Z/tipos_tabelas-interaction-menu-open.png": {
+    "mtime": 1786897406.0189278,
+    "ast_hash": "a4b0135299b2f24a88d937aea6d0c83b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/root-interaction-dialog-close.png": {
+    "mtime": 1786897437.8866234,
+    "ast_hash": "31b9af77f7760f5182c85ae9509331d9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/root-interaction-dialog-open.png": {
+    "mtime": 1786897437.3272882,
+    "ast_hash": "6dbaac36f308d1976212445ed61487ea",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/root-interaction-menu-close.png": {
+    "mtime": 1786897436.517627,
+    "ast_hash": "e3c576a2f363d1aaa8eaa080c93683db",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/root-interaction-menu-open.png": {
+    "mtime": 1786897435.9607496,
+    "ast_hash": "6dbaac36f308d1976212445ed61487ea",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_arquivos-interaction-dialog-close.png": {
+    "mtime": 1786897462.2394125,
+    "ast_hash": "43621dab0d2c24650d8e56af9c180738",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_arquivos-interaction-dialog-open.png": {
+    "mtime": 1786897461.762659,
+    "ast_hash": "201bb9bce350ac3ece6e47b141fc21b7",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_arquivos-interaction-menu-close.png": {
+    "mtime": 1786897461.0739677,
+    "ast_hash": "43621dab0d2c24650d8e56af9c180738",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_arquivos-interaction-menu-open.png": {
+    "mtime": 1786897460.6069505,
+    "ast_hash": "5c2727b0cfa785d73e23b86ab92297e3",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audios-interaction-dialog-close.png": {
+    "mtime": 1786897467.7958899,
+    "ast_hash": "cb5a04774fd139787ab1b786e4f0af97",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audios-interaction-dialog-open.png": {
+    "mtime": 1786897467.3488407,
+    "ast_hash": "9f143b05df52ce0a0e136f13302ff67f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audios-interaction-menu-close.png": {
+    "mtime": 1786897466.6293216,
+    "ast_hash": "cb5a04774fd139787ab1b786e4f0af97",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audios-interaction-menu-open.png": {
+    "mtime": 1786897466.1495025,
+    "ast_hash": "4770779836690e6e733e974fb21602b8",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audit-entities-interaction-dialog-close.png": {
+    "mtime": 1786897514.3401065,
+    "ast_hash": "5eca0e51df21f574f6b40c1d79dd305a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audit-entities-interaction-dialog-open.png": {
+    "mtime": 1786897513.862026,
+    "ast_hash": "6ebc9e11e748c1c313899092b0c5d478",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audit-entities-interaction-menu-close.png": {
+    "mtime": 1786897513.137452,
+    "ast_hash": "9b3d88018cfe32a083aa06301c5a5510",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_audit-entities-interaction-menu-open.png": {
+    "mtime": 1786897512.6641226,
+    "ast_hash": "e252bf4f4a70adf88b5a53a5f3467871",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_chats-interaction-dialog-close.png": {
+    "mtime": 1786897451.171676,
+    "ast_hash": "5f36ceaee47b5c79f20baf8a5ee3c61a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_chats-interaction-dialog-open.png": {
+    "mtime": 1786897450.6602156,
+    "ast_hash": "3fe1f60941f98c627935168754fb0f9c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_chats-interaction-menu-close.png": {
+    "mtime": 1786897449.8683753,
+    "ast_hash": "7333555f6b93a32765f57522e0babaf4",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_chats-interaction-menu-open.png": {
+    "mtime": 1786897449.3362474,
+    "ast_hash": "365df2c31a05fa787ebd64b42b761425",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_etiquetas-interaction-dialog-close.png": {
+    "mtime": 1786897486.7222724,
+    "ast_hash": "4458a337d03cfcd618d9e22e837cd856",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_etiquetas-interaction-dialog-open.png": {
+    "mtime": 1786897486.1980171,
+    "ast_hash": "3a306aab74794b7a3992dcbc106deb82",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_etiquetas-interaction-menu-close.png": {
+    "mtime": 1786897485.3848445,
+    "ast_hash": "4458a337d03cfcd618d9e22e837cd856",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_etiquetas-interaction-menu-open.png": {
+    "mtime": 1786897484.868636,
+    "ast_hash": "d134d5b7c6335ed55ff0b46a9440ddb0",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_imagens-interaction-dialog-close.png": {
+    "mtime": 1786897456.6652148,
+    "ast_hash": "f909b4d0a2fb317a17f7b9b645381739",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_imagens-interaction-dialog-open.png": {
+    "mtime": 1786897456.1856034,
+    "ast_hash": "81af6e812270026e777317e52e205486",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_imagens-interaction-menu-close.png": {
+    "mtime": 1786897455.4621637,
+    "ast_hash": "589c5c84bd51dde9ad5d1bbcf500b18d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_imagens-interaction-menu-open.png": {
+    "mtime": 1786897454.9829252,
+    "ast_hash": "3d2097580e371edd0f28498f008e2926",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_links-interaction-dialog-close.png": {
+    "mtime": 1786897498.1539643,
+    "ast_hash": "cf822bd9e278b32a97d0bac725cadb43",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_links-interaction-dialog-open.png": {
+    "mtime": 1786897497.669348,
+    "ast_hash": "fcd3f1e688971fd080d5e904888b89f4",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_links-interaction-menu-close.png": {
+    "mtime": 1786897496.9040189,
+    "ast_hash": "b9f47392e3590d28ed5ae5ee1a667ba9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_links-interaction-menu-open.png": {
+    "mtime": 1786897496.4440663,
+    "ast_hash": "fcd3f1e688971fd080d5e904888b89f4",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_notas-interaction-dialog-close.png": {
+    "mtime": 1786897444.3364701,
+    "ast_hash": "e2f0daa6775a8d555ad6dcedabd1c89e",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_notas-interaction-dialog-open.png": {
+    "mtime": 1786897443.8288386,
+    "ast_hash": "ab5c0a5bd1e7941c14049fced619b311",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_notas-interaction-menu-close.png": {
+    "mtime": 1786897443.0717702,
+    "ast_hash": "e2f0daa6775a8d555ad6dcedabd1c89e",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_notas-interaction-menu-open.png": {
+    "mtime": 1786897442.5773332,
+    "ast_hash": "90b96efd85ffdc066473a1c26133b0ec",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_paginas-interaction-dialog-close.png": {
+    "mtime": 1786897508.9639654,
+    "ast_hash": "c3a5797ad328cf66a32729a4c819b6c9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_paginas-interaction-dialog-open.png": {
+    "mtime": 1786897508.4948735,
+    "ast_hash": "7016991d37b8fa047d45983f2583f67d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_paginas-interaction-menu-close.png": {
+    "mtime": 1786897507.8082793,
+    "ast_hash": "c3a5797ad328cf66a32729a4c819b6c9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_paginas-interaction-menu-open.png": {
+    "mtime": 1786897507.3284447,
+    "ast_hash": "1ef8a92f1c67c4c4572be52a9f342abd",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_pdfs-interaction-dialog-close.png": {
+    "mtime": 1786897473.6881783,
+    "ast_hash": "51ab27ad00d011a55079e872ac3f01ae",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_pdfs-interaction-dialog-open.png": {
+    "mtime": 1786897473.1722028,
+    "ast_hash": "be7d136a5249a01af5b7578b00f4cc7f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_pdfs-interaction-menu-close.png": {
+    "mtime": 1786897472.3781955,
+    "ast_hash": "95b3012cb24a8703019254e1ca2afa71",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_pdfs-interaction-menu-open.png": {
+    "mtime": 1786897471.8632202,
+    "ast_hash": "545855962f2c357216187257cfef3e21",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_queries-interaction-dialog-close.png": {
+    "mtime": 1786897480.3651998,
+    "ast_hash": "8e0e608711185997fe93d6786e260d6d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_queries-interaction-dialog-open.png": {
+    "mtime": 1786897479.90005,
+    "ast_hash": "f5397d01acaf4bfb32bba84050ebf5d9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_queries-interaction-menu-close.png": {
+    "mtime": 1786897479.2005188,
+    "ast_hash": "8e0e608711185997fe93d6786e260d6d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_queries-interaction-menu-open.png": {
+    "mtime": 1786897478.7277925,
+    "ast_hash": "f5397d01acaf4bfb32bba84050ebf5d9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tabelas-interaction-dialog-close.png": {
+    "mtime": 1786897503.573071,
+    "ast_hash": "88e3aab77a4669024c0f14b2260a7e5b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tabelas-interaction-dialog-open.png": {
+    "mtime": 1786897503.1014528,
+    "ast_hash": "918bf9b901e0ac603b6abe41fee46f4a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tabelas-interaction-menu-close.png": {
+    "mtime": 1786897502.3729105,
+    "ast_hash": "88e3aab77a4669024c0f14b2260a7e5b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tabelas-interaction-menu-open.png": {
+    "mtime": 1786897501.897444,
+    "ast_hash": "a4b0135299b2f24a88d937aea6d0c83b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tweets-interaction-dialog-close.png": {
+    "mtime": 1786897492.51132,
+    "ast_hash": "ca36551850452648cad6c1dfa0e8ec46",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tweets-interaction-dialog-open.png": {
+    "mtime": 1786897492.0679283,
+    "ast_hash": "343f9b153ffbb97c97f45afcd3086ce9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tweets-interaction-menu-close.png": {
+    "mtime": 1786897491.3818192,
+    "ast_hash": "a1c3fa0cacc9248061dae5adebedb150",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-23-52-174Z/tipos_tweets-interaction-menu-open.png": {
+    "mtime": 1786897490.8929727,
+    "ast_hash": "1ce4771b1a54180270c4ddf341d4c367",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/root-interaction-dialog-close.png": {
+    "mtime": 1786898036.997105,
+    "ast_hash": "b82447af4c4d9c8f44483d85b6b0421e",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/root-interaction-dialog-open.png": {
+    "mtime": 1786898036.5106802,
+    "ast_hash": "97ba966d1c6ba738c04ed47b56e1d0bc",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/root-interaction-menu-close.png": {
+    "mtime": 1786898035.7632842,
+    "ast_hash": "31b9af77f7760f5182c85ae9509331d9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/root-interaction-menu-open.png": {
+    "mtime": 1786898035.2551417,
+    "ast_hash": "6dbaac36f308d1976212445ed61487ea",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_arquivos-interaction-dialog-close.png": {
+    "mtime": 1786898058.8149743,
+    "ast_hash": "43621dab0d2c24650d8e56af9c180738",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_arquivos-interaction-dialog-open.png": {
+    "mtime": 1786898058.3534498,
+    "ast_hash": "201bb9bce350ac3ece6e47b141fc21b7",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_arquivos-interaction-menu-close.png": {
+    "mtime": 1786898057.663053,
+    "ast_hash": "43621dab0d2c24650d8e56af9c180738",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_arquivos-interaction-menu-open.png": {
+    "mtime": 1786898057.2095034,
+    "ast_hash": "5c2727b0cfa785d73e23b86ab92297e3",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audios-interaction-dialog-close.png": {
+    "mtime": 1786898064.0680952,
+    "ast_hash": "74bd9a500ebfc31a347280ff06946b61",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audios-interaction-dialog-open.png": {
+    "mtime": 1786898063.6148052,
+    "ast_hash": "9f143b05df52ce0a0e136f13302ff67f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audios-interaction-menu-close.png": {
+    "mtime": 1786898062.9189441,
+    "ast_hash": "74bd9a500ebfc31a347280ff06946b61",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audios-interaction-menu-open.png": {
+    "mtime": 1786898062.4580646,
+    "ast_hash": "bc94021ea2fb35ad513eb1e6e1ef5e3f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audit-entities-interaction-dialog-close.png": {
+    "mtime": 1786898106.579276,
+    "ast_hash": "5eca0e51df21f574f6b40c1d79dd305a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audit-entities-interaction-dialog-open.png": {
+    "mtime": 1786898106.1165829,
+    "ast_hash": "6ebc9e11e748c1c313899092b0c5d478",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audit-entities-interaction-menu-close.png": {
+    "mtime": 1786898105.4113681,
+    "ast_hash": "9b3d88018cfe32a083aa06301c5a5510",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_audit-entities-interaction-menu-open.png": {
+    "mtime": 1786898104.955231,
+    "ast_hash": "e252bf4f4a70adf88b5a53a5f3467871",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_chats-interaction-dialog-close.png": {
+    "mtime": 1786898048.0605998,
+    "ast_hash": "5f36ceaee47b5c79f20baf8a5ee3c61a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_chats-interaction-dialog-open.png": {
+    "mtime": 1786898047.5920713,
+    "ast_hash": "3fe1f60941f98c627935168754fb0f9c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_chats-interaction-menu-close.png": {
+    "mtime": 1786898046.8796155,
+    "ast_hash": "5f36ceaee47b5c79f20baf8a5ee3c61a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_chats-interaction-menu-open.png": {
+    "mtime": 1786898046.4371874,
+    "ast_hash": "040b9da9c2148b89b501c2f12c0af14c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_etiquetas-interaction-dialog-close.png": {
+    "mtime": 1786898079.8719656,
+    "ast_hash": "e3161cc37fa9ac44bdac8a2e494405a1",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_etiquetas-interaction-dialog-open.png": {
+    "mtime": 1786898079.4197462,
+    "ast_hash": "6ac4f443116286b20186b8c4a84ec510",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_etiquetas-interaction-menu-close.png": {
+    "mtime": 1786898078.7213902,
+    "ast_hash": "8b67275a3e808b334ff2380a05dd37f6",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_etiquetas-interaction-menu-open.png": {
+    "mtime": 1786898078.2720375,
+    "ast_hash": "2e976a38b9b2cfb2fc207b6503d3bde5",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_imagens-interaction-dialog-close.png": {
+    "mtime": 1786898053.5500863,
+    "ast_hash": "f909b4d0a2fb317a17f7b9b645381739",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_imagens-interaction-dialog-open.png": {
+    "mtime": 1786898053.088444,
+    "ast_hash": "81af6e812270026e777317e52e205486",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_imagens-interaction-menu-close.png": {
+    "mtime": 1786898052.362005,
+    "ast_hash": "f909b4d0a2fb317a17f7b9b645381739",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_imagens-interaction-menu-open.png": {
+    "mtime": 1786898051.9011257,
+    "ast_hash": "81af6e812270026e777317e52e205486",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_links-interaction-dialog-close.png": {
+    "mtime": 1786898090.2584574,
+    "ast_hash": "cf822bd9e278b32a97d0bac725cadb43",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_links-interaction-dialog-open.png": {
+    "mtime": 1786898089.8100033,
+    "ast_hash": "7a1ace00439a1ba76c06c96eed479020",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_links-interaction-menu-close.png": {
+    "mtime": 1786898089.113847,
+    "ast_hash": "9484a5a340c43fb1bd1578f4d952b4ba",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_links-interaction-menu-open.png": {
+    "mtime": 1786898088.6265101,
+    "ast_hash": "fcd3f1e688971fd080d5e904888b89f4",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_notas-interaction-dialog-close.png": {
+    "mtime": 1786898042.615376,
+    "ast_hash": "e2f0daa6775a8d555ad6dcedabd1c89e",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_notas-interaction-dialog-open.png": {
+    "mtime": 1786898042.145149,
+    "ast_hash": "ab5c0a5bd1e7941c14049fced619b311",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_notas-interaction-menu-close.png": {
+    "mtime": 1786898041.4397197,
+    "ast_hash": "e2f0daa6775a8d555ad6dcedabd1c89e",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_notas-interaction-menu-open.png": {
+    "mtime": 1786898040.9829035,
+    "ast_hash": "90b96efd85ffdc066473a1c26133b0ec",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_paginas-interaction-dialog-close.png": {
+    "mtime": 1786898101.1779287,
+    "ast_hash": "83e6a690813efd7efe7421f94fb4cb3c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_paginas-interaction-dialog-open.png": {
+    "mtime": 1786898100.7204695,
+    "ast_hash": "d28fc4750a845557e2a545287bc9b35c",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_paginas-interaction-menu-close.png": {
+    "mtime": 1786898100.048502,
+    "ast_hash": "65dbada687ad8fd55b97b3c3d33c3a95",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_paginas-interaction-menu-open.png": {
+    "mtime": 1786898099.567945,
+    "ast_hash": "e7f309e3d29cbedf9befd002f6ce50f6",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_pdfs-interaction-dialog-close.png": {
+    "mtime": 1786898069.3070145,
+    "ast_hash": "95b3012cb24a8703019254e1ca2afa71",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_pdfs-interaction-dialog-open.png": {
+    "mtime": 1786898068.8557293,
+    "ast_hash": "be7d136a5249a01af5b7578b00f4cc7f",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_pdfs-interaction-menu-close.png": {
+    "mtime": 1786898068.1565979,
+    "ast_hash": "51ab27ad00d011a55079e872ac3f01ae",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_pdfs-interaction-menu-open.png": {
+    "mtime": 1786898067.6862123,
+    "ast_hash": "bca0cca2a4ed423f84aa9b05925460b8",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_queries-interaction-dialog-close.png": {
+    "mtime": 1786898074.4751117,
+    "ast_hash": "8e0e608711185997fe93d6786e260d6d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_queries-interaction-dialog-open.png": {
+    "mtime": 1786898074.0057065,
+    "ast_hash": "8294dc2f719699ef024129cabbabb54a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_queries-interaction-menu-close.png": {
+    "mtime": 1786898073.3284829,
+    "ast_hash": "8e0e608711185997fe93d6786e260d6d",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_queries-interaction-menu-open.png": {
+    "mtime": 1786898072.854187,
+    "ast_hash": "f5397d01acaf4bfb32bba84050ebf5d9",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tabelas-interaction-dialog-close.png": {
+    "mtime": 1786898095.6142528,
+    "ast_hash": "88e3aab77a4669024c0f14b2260a7e5b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tabelas-interaction-dialog-open.png": {
+    "mtime": 1786898095.1286013,
+    "ast_hash": "a4b0135299b2f24a88d937aea6d0c83b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tabelas-interaction-menu-close.png": {
+    "mtime": 1786898094.3969572,
+    "ast_hash": "88e3aab77a4669024c0f14b2260a7e5b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tabelas-interaction-menu-open.png": {
+    "mtime": 1786898093.9237487,
+    "ast_hash": "442741bfad0a901142e8b297dece6bff",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tweets-interaction-dialog-close.png": {
+    "mtime": 1786898085.0258012,
+    "ast_hash": "ca36551850452648cad6c1dfa0e8ec46",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tweets-interaction-dialog-open.png": {
+    "mtime": 1786898084.5574567,
+    "ast_hash": "094fcc79c85d2a82e40b558b8509c4af",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tweets-interaction-menu-close.png": {
+    "mtime": 1786898083.875079,
+    "ast_hash": "a1c3fa0cacc9248061dae5adebedb150",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-33-51-296Z/tipos_tweets-interaction-menu-open.png": {
+    "mtime": 1786898083.4229212,
+    "ast_hash": "1ce4771b1a54180270c4ddf341d4c367",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-36-07-133Z/tipos_tabelas-interaction-dialog-close.png": {
+    "mtime": 1786898171.449585,
+    "ast_hash": "88e3aab77a4669024c0f14b2260a7e5b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-36-07-133Z/tipos_tabelas-interaction-dialog-open.png": {
+    "mtime": 1786898170.9938543,
+    "ast_hash": "918bf9b901e0ac603b6abe41fee46f4a",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-36-07-133Z/tipos_tabelas-interaction-menu-close.png": {
+    "mtime": 1786898170.2858853,
+    "ast_hash": "88e3aab77a4669024c0f14b2260a7e5b",
+    "semantic_hash": ""
+  },
+  "reverse-engineering/capture/runs/reverse-run-2026-08-16T16-36-07-133Z/tipos_tabelas-interaction-menu-open.png": {
+    "mtime": 1786898169.8174174,
+    "ast_hash": "442741bfad0a901142e8b297dece6bff",
+    "semantic_hash": ""
+  },
+  "tmp-audit-page.png": {
+    "mtime": 1786895974.5787754,
+    "ast_hash": "3b09ed9fac38528ede3e269ee06d2914",
     "semantic_hash": ""
   }
 }

@@ -1,16 +1,16 @@
 # Graph Report - notes-app  (2026-08-16)
 
 ## Corpus Check
-- 680 files · ~4,650,665 words
+- 823 files · ~6,652,819 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 6375 nodes · 26320 edges · 197 communities (182 shown, 15 thin omitted)
+- 6383 nodes · 26328 edges · 190 communities (177 shown, 13 thin omitted)
 - Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 3691 edges (avg confidence: 0.69)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `83ab4ba6`
+- Built from commit: `27231b7c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -31,29 +31,29 @@
 - workspace-audit-data.ts
 - check-graphify.mjs
 - workspace-navigation.ts
-- WorkspaceShell
+- sb
 - reference/manifest.json
 - next-env.d.ts
 - postcss.config.mjs
 - pdfjs83139.js
 - LocationManager83139.js
 - setup
-- Ht
+- l
 - push
-- _i
+- AppMenu83139.js
 - shortcuts83139.js
 - runtime-core.esm-bundler83139.js
 - BlockList83139.js
-- t
-- sr
+- constructor
+- V
 - add
 - n
 - addEventListener
-- error
+- D
 - innerExtract
 - V
 - RenderIcon83139.js
-- r
+- error
 - PasswordStrengthIndicator83139.js
 - render
 - i
@@ -65,8 +65,8 @@
 - PDFViewer83139.js
 - startOf
 - _grabArticle
-- paste
-- V
+- Ls
+- c
 - T
 - Requirements
 - ADDED Requirements
@@ -75,24 +75,24 @@
 - ADDED Requirements
 - push
 - TN
-- toSVGPath
-- E
-- serialize
+- updateProperties
+- notificationManager831392.js
+- constructor
 - Qx
 - D
-- yx
-- ADDED Requirements
-- _baseClone83139.js
-- _baseFor83139.js
-- Mt
-- create
-- sb
 - t
-- _baseUniq83139.js
-- AppMenu83139.js
-- setup
-- _g
+- ADDED Requirements
+- _baseFor83139.js
+- _baseClone83139.js
+- Mt
+- lR
+- embeddingNavigation83139.js
+- t
 - _baseProperty83139.js
+- _baseUniq83139.js
+- xe
+- _g
+- get
 - extract-capacities-assets.mjs
 - ADDED Requirements
 - constructor
@@ -104,28 +104,28 @@
 - ADDED Requirements
 - nT
 - scripts
-- ir
+- _l
 - Object Model
 - ki
-- ux
+- PS
 - me
 - updateMode
 - Design
 - Decisions
 - Decisions
 - implement-workspace-sidebar/design.md
-- xe
-- ZU
-- resolve
-- e
+- emoji83139.js
+- Nh
+- emit
+- tde
 - Reverse-Engineering Evidence Cycle
 - Contributing
 - Decisions
 - ADDED Requirements
-- pX
+- i
 - U3
 - ADDED Requirements
-- Kk
+- tr
 - on
 - jh
 - Architecture
@@ -151,7 +151,7 @@
 - add-generic-objectives/tasks.md
 - add-production-ci-cd-pipeline/proposal.md
 - define-object-studio-study-foundation/proposal.md
-- wx
+- write
 - Capacities Knowledge Graph Source
 - Obsidian Knowledge Graph Source
 - Readwise / Reader Knowledge Graph Source
@@ -172,12 +172,12 @@
 - implement-workspace-sidebar/tasks.md
 - package.json
 - Object Type Page (Local)
-- Zm
+- ci
 - README.md
-- emoji83139.js
+- addEditToolbar
 - External Knowledge Base Snapshots
 - Reverse Engineering Knowledge Base
-- isoWeek83139.js
+- install-recommendations.ps1
 - AGENTS.md
 - capacities-sidebar-parity.md
 - workspace-tailwind-layout.md
@@ -187,26 +187,19 @@
 - @vitejs/plugin-react
 - @vitest/coverage-v8
 - capture/README.md
-- ht
-- format
+- gne
+- e
 - to
-- tr
+- button.tsx
 - getPrimaryTimePatternThroughCache
 - Browser Recovery Runbook
 - ad
 - xn
-- mo
 - v0
-- tI
-- Pb
-- rotate
-- now83139.js
-- Fy
+- isValidDate
+- rM
 - qc
-- du
-- i
-- B
-- unshift
+- zte
 
 ## God Nodes (most connected - your core abstractions)
 1. `setup()` - 1104 edges
@@ -223,19 +216,19 @@
 ## Surprising Connections (you probably didn't know these)
 - `main()` --indirect_call--> `ref()`  [INFERRED]
   scripts/extract-capacities-assets.mjs → reverse-engineering/reference/assets/scripts/pdfjs83139.js
-- `setup()` --indirect_call--> `Ai()`  [INFERRED]
-  reverse-engineering/reference/assets/scripts/PDFViewer83139.js → reverse-engineering/reference/assets/scripts/AppMenu83139.js
 - `setup()` --indirect_call--> `cs()`  [INFERRED]
   reverse-engineering/reference/assets/scripts/BlockList83139.js → reverse-engineering/reference/assets/scripts/shortcuts83139.js
 - `setup()` --indirect_call--> `hs()`  [INFERRED]
   reverse-engineering/reference/assets/scripts/BlockList83139.js → reverse-engineering/reference/assets/scripts/shortcuts83139.js
 - `setup()` --indirect_call--> `Ts()`  [INFERRED]
   reverse-engineering/reference/assets/scripts/BlockList83139.js → reverse-engineering/reference/assets/scripts/shortcuts83139.js
+- `setup()` --indirect_call--> `us()`  [INFERRED]
+  reverse-engineering/reference/assets/scripts/BlockList83139.js → reverse-engineering/reference/assets/scripts/shortcuts83139.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (197 total, 15 thin omitted)
+## Communities (190 total, 13 thin omitted)
 
 ### Community 0 - "dependencies"
 Cohesion: 0.08
@@ -263,7 +256,7 @@ Nodes (23): DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuItem(
 
 ### Community 6 - "storing83139.js"
 Cohesion: 0.01
-Nodes (183): n(), ./esm83139.js, oh(), abort(), _addCheck(), addUnit(), assert(), B4() (+175 more)
+Nodes (183): n(), ./esm83139.js, rB(), aB(), abort(), _addCheck(), args(), assert() (+175 more)
 
 ### Community 7 - "biome.json"
 Cohesion: 0.05
@@ -286,8 +279,8 @@ Cohesion: 0.07
 Nodes (28): dom, dom.iterable, esnext, **/*.mts, .next/dev/types/**/*.ts, next-env.d.ts, .next/types/**/*.ts, **/*.ts (+20 more)
 
 ### Community 12 - "object-type-workspace.tsx"
-Cohesion: 0.16
-Nodes (13): CapacitiesSidebarIcon(), CapacitiesSidebarIconName, IconPath, paths, iconNames, ObjectTypeCard(), ObjectTypeWorkspace(), typeToneClasses (+5 more)
+Cohesion: 0.21
+Nodes (10): CapacitiesSidebarIcon(), CapacitiesSidebarIconName, IconPath, paths, iconNames, ObjectTypeCard(), ObjectTypeWorkspace(), typeToneClasses (+2 more)
 
 ### Community 13 - "workspace-audit-data.ts"
 Cohesion: 0.20
@@ -298,8 +291,12 @@ Cohesion: 0.20
 Nodes (10): fail(), failures, graphDir, graphPath, htmlPath, manifestPath, readJson(), reportPath (+2 more)
 
 ### Community 15 - "workspace-navigation.ts"
-Cohesion: 0.24
-Nodes (10): NavigationLink(), getObjectTypeNavigationItem(), isNavigationItemActive(), NavigationGroup, navigationGroups, NavigationIcon, NavigationItem, normalizeObjectTypePath() (+2 more)
+Cohesion: 0.16
+Nodes (11): NavigationLink(), WorkspaceShell(), getObjectTypeNavigationItem(), isNavigationItemActive(), NavigationGroup, navigationGroups, NavigationIcon, NavigationItem (+3 more)
+
+### Community 16 - "sb"
+Cohesion: 0.08
+Nodes (28): add(), Jv(), Kv(), makeRe(), nw(), sb(), tw(), ty() (+20 more)
 
 ### Community 17 - "reference/manifest.json"
 Cohesion: 0.40
@@ -307,67 +304,67 @@ Nodes (4): kind, reference, routes, updatedAt
 
 ### Community 22 - "pdfjs83139.js"
 Cohesion: 0.01
-Nodes (89): addChangedExistingAnnotation(), addDeletedAnnotationElement(), annotationStorage(), bbox(), beginMarkedContentProps(), beginText(), capPixels(), ce() (+81 more)
+Nodes (97): addChangedExistingAnnotation(), addDeletedAnnotationElement(), annotationStorage(), bbox(), beginMarkedContentProps(), beginText(), capPixels(), ce() (+89 more)
 
 ### Community 23 - "LocationManager83139.js"
 Cohesion: 0.02
-Nodes (115): V(), yo(), g(), m(), T(), w(), Kt(), $A() (+107 more)
+Nodes (120): V(), g(), h(), m(), T(), v(), w(), $A() (+112 more)
 
 ### Community 24 - "setup"
 Cohesion: 0.01
-Nodes (259): ue(), zo(), ag(), bV(), dispatchEvent(), F7(), FF(), Hee() (+251 more)
+Nodes (241): ue(), zo(), ag(), bV(), dispatchEvent(), F7(), FF(), Hee() (+233 more)
 
-### Community 25 - "Ht"
-Cohesion: 0.15
-Nodes (95): be(), Se(), setup(), so(), S(), u(), setup(), At() (+87 more)
+### Community 25 - "l"
+Cohesion: 0.13
+Nodes (126): be(), de(), Se(), setup(), O(), setup(), so(), S() (+118 more)
 
 ### Community 26 - "push"
 Cohesion: 0.03
-Nodes (187): ih(), Ja(), Wa(), $0(), accessor(), Ace(), add(), _addObject() (+179 more)
+Nodes (201): ch(), ih(), Ja(), vh(), $0(), A0(), Ace(), add() (+193 more)
 
-### Community 27 - "_i"
-Cohesion: 0.10
-Nodes (28): $a(), bi(), Ci(), di(), ee(), eo(), gi(), _i() (+20 more)
+### Community 27 - "AppMenu83139.js"
+Cohesion: 0.04
+Nodes (125): $a(), Ai(), an(), Ar(), At(), bi(), bn(), Br() (+117 more)
 
 ### Community 28 - "shortcuts83139.js"
 Cohesion: 0.02
-Nodes (108): co(), ac(), Af(), and(), ap(), ay(), Bb(), bc() (+100 more)
+Nodes (120): ke(), ac(), Af(), and(), ay(), bc(), bf(), bh() (+112 more)
 
 ### Community 29 - "runtime-core.esm-bundler83139.js"
-Cohesion: 0.03
-Nodes (164): setup(), B(), be(), concat(), constructor(), deleteProperty(), dep(), dirty() (+156 more)
+Cohesion: 0.04
+Nodes (160): setup(), eO(), kF(), B(), be(), concat(), constructor(), deleteProperty() (+152 more)
 
 ### Community 30 - "BlockList83139.js"
-Cohesion: 0.05
-Nodes (136): Me(), xe(), a(), ac(), add(), __addSublanguage(), addText(), Ao() (+128 more)
+Cohesion: 0.04
+Nodes (109): Me(), xe(), ac(), __addSublanguage(), Ao(), Ar(), Bi(), bo() (+101 more)
 
-### Community 31 - "t"
-Cohesion: 0.07
-Nodes (43): Q(), AD(), addEventListener(), b1(), cameraExperience(), d1(), defaults(), e9() (+35 more)
-
-### Community 32 - "sr"
+### Community 31 - "constructor"
 Cohesion: 0.08
-Nodes (90): Ir(), lr(), setup(), setup(), Mt(), AK(), ED(), $k() (+82 more)
+Nodes (37): Ho(), Uo(), addBindings(), Bo(), checkIntentionality(), clean(), Co(), constructor() (+29 more)
+
+### Community 32 - "V"
+Cohesion: 0.09
+Nodes (83): lr(), setup(), setup(), AK(), ED(), $k(), lA(), LN() (+75 more)
 
 ### Community 33 - "add"
 Cohesion: 0.04
-Nodes (93): add(), addEditor(), addMissingCanvas(), addNewEditor(), addOrRebuild(), addToAnnotationStorage(), addUndoableEditor(), attach() (+85 more)
+Nodes (104): add(), addEditor(), addMissingCanvas(), addNewEditor(), addOrRebuild(), addToAnnotationStorage(), addUndoableEditor(), attach() (+96 more)
 
 ### Community 34 - "n"
-Cohesion: 0.06
-Nodes (108): a(), o(), zo(), zt(), kb(), vh(), wy(), _7() (+100 more)
+Cohesion: 0.05
+Nodes (139): a(), sv(), o(), zo(), D(), Ht(), zt(), kb() (+131 more)
 
 ### Community 35 - "addEventListener"
-Cohesion: 0.03
-Nodes (132): A(), addAlphaFilter(), addAltText(), addButton(), addButtonBefore(), addColorPicker(), addCommands(), addComment() (+124 more)
-
-### Community 36 - "error"
 Cohesion: 0.04
-Nodes (100): s(), D(), vo(), H(), hh(), Ky(), aae(), afe() (+92 more)
+Nodes (98): A(), addAlphaFilter(), addAltText(), addButton(), addButtonBefore(), addColorPicker(), addCommands(), addComment() (+90 more)
+
+### Community 36 - "D"
+Cohesion: 0.06
+Nodes (57): D(), every(), filter(), find(), findLast(), findLastIndex(), H(), map() (+49 more)
 
 ### Community 37 - "innerExtract"
-Cohesion: 0.06
-Nodes (80): addTag(), addTags(), ak(), assign(), bk(), checkAndReturnWithFollowingPattern(), checkAndReturnWithoutFollowingPattern(), cj() (+72 more)
+Cohesion: 0.07
+Nodes (69): addTag(), addTags(), ak(), assign(), checkAndReturnWithFollowingPattern(), checkAndReturnWithoutFollowingPattern(), cj(), ck() (+61 more)
 
 ### Community 38 - "V"
 Cohesion: 0.06
@@ -375,67 +372,67 @@ Nodes (89): applyTransferMapsToBitmap(), applyTransferMapsToCanvas(), beginAnnot
 
 ### Community 39 - "RenderIcon83139.js"
 Cohesion: 0.04
-Nodes (84): kr(), Or(), E(), M(), mt(), S(), T(), w() (+76 more)
+Nodes (81): E(), M(), mt(), S(), T(), w(), x(), findIndex() (+73 more)
 
-### Community 40 - "r"
-Cohesion: 0.10
-Nodes (74): de(), O(), setup(), setup(), setup(), setup(), je(), Jy() (+66 more)
+### Community 40 - "error"
+Cohesion: 0.06
+Nodes (61): Ky(), _4(), are(), aue(), Ay(), Bae(), bw(), By() (+53 more)
 
 ### Community 41 - "PasswordStrengthIndicator83139.js"
-Cohesion: 0.09
-Nodes (73): je(), Oe(), a(), aa(), Ai(), b(), c(), Cr() (+65 more)
+Cohesion: 0.06
+Nodes (100): Ae(), je(), Oe(), $r(), ui(), Gn(), s(), ./IconPickerEmoji83139.js (+92 more)
 
 ### Community 42 - "render"
-Cohesion: 0.05
-Nodes (46): addHighlightArea(), addLinkAnnotations(), _bindLink(), _bindNamedAction(), _bindResetFormAction(), _continue(), createAltText(), _dispatchEventFromSandbox() (+38 more)
+Cohesion: 0.03
+Nodes (78): abort(), _abortOperatorList(), _abortRequest(), addLinkAnnotations(), addNativeFontFace(), _bindLink(), _bindNamedAction(), _bindResetFormAction() (+70 more)
 
 ### Community 43 - "i"
-Cohesion: 0.08
-Nodes (67): g(), m(), p(), qe(), u(), f(), i(), n() (+59 more)
+Cohesion: 0.07
+Nodes (68): g(), m(), p(), u(), f(), i(), n(), qv() (+60 more)
 
 ### Community 44 - "check"
 Cohesion: 0.05
-Nodes (50): A(), al(), bl(), bm(), check(), D(), Df(), endsWith() (+42 more)
+Nodes (58): al(), At(), bm(), bt(), catchall(), check(), cl(), clone() (+50 more)
 
 ### Community 45 - "vue-router83139.js"
-Cohesion: 0.09
-Nodes (47): kn(), Pe(), A(), at(), B(), be(), ce(), dt() (+39 more)
+Cohesion: 0.08
+Nodes (52): te(), kn(), Pe(), Z(), An(), A(), at(), B() (+44 more)
 
 ### Community 46 - "Interactable83139.js"
 Cohesion: 0.12
-Nodes (57): o(), Ae(), at(), B(), be(), bt(), ce(), ct() (+49 more)
+Nodes (59): o(), Ae(), at(), B(), be(), bt(), ce(), ct() (+51 more)
 
 ### Community 47 - "match"
 Cohesion: 0.07
-Nodes (66): aB(), Az(), bB(), BR(), braceExpand(), bz(), cz(), DB() (+58 more)
+Nodes (67): aB(), Az(), bB(), BR(), braceExpand(), bz(), cz(), DB() (+59 more)
 
 ### Community 48 - "src83139.js"
 Cohesion: 0.05
-Nodes (19): window(), ce(), displayable(), Er(), ge(), ht(), ii(), jt() (+11 more)
+Nodes (24): window(), ce(), clamp(), cn(), displayable(), dn(), Er(), formatHsl() (+16 more)
 
 ### Community 49 - "PDFViewer83139.js"
-Cohesion: 0.02
-Nodes (179): Hr(), rr(), Vr(), da(), Ho(), Uo(), eO(), Aa() (+171 more)
+Cohesion: 0.03
+Nodes (116): m(), p(), Aa(), abort(), al(), Ao(), at(), attach() (+108 more)
 
 ### Community 50 - "startOf"
 Cohesion: 0.04
-Nodes (73): Ei(), abutsStart(), addDay(), addHour(), addMinute(), addMonth(), after(), b7() (+65 more)
+Nodes (72): Ei(), abutsStart(), addDay(), addHour(), addMinute(), addMonth(), after(), before() (+64 more)
 
 ### Community 51 - "_grabArticle"
 Cohesion: 0.08
-Nodes (56): _clean(), _cleanClasses(), _cleanConditionally(), _cleanHeaders(), _cleanMatchedNodes(), _cleanStyles(), _everyNode(), _fixLazyImages() (+48 more)
+Nodes (54): _clean(), _cleanClasses(), _cleanConditionally(), _cleanHeaders(), _cleanMatchedNodes(), _cleanStyles(), _everyNode(), _fixLazyImages() (+46 more)
 
-### Community 52 - "paste"
+### Community 52 - "Ls"
 Cohesion: 0.13
-Nodes (17): addFakeAnnotation(), commentButtonPositionInPage(), commentData(), createOrUpdatePopup(), _createPopup(), dragOver(), drop(), editorDivPaste() (+9 more)
+Nodes (29): bs(), _c(), fc(), Fs(), gc(), Gs(), hc(), hs() (+21 more)
 
-### Community 53 - "V"
-Cohesion: 0.09
-Nodes (43): vo(), h(), v(), a(), c(), d(), f(), g() (+35 more)
+### Community 53 - "c"
+Cohesion: 0.16
+Nodes (42): a(), add(), addText(), b(), Bn(), C(), d(), eo() (+34 more)
 
 ### Community 54 - "T"
-Cohesion: 0.06
-Nodes (40): add(), constructor(), dt(), ea(), emit(), F(), get(), has() (+32 more)
+Cohesion: 0.07
+Nodes (33): add(), B(), bv(), default(), describe(), ea(), Fm(), has() (+25 more)
 
 ### Community 55 - "Requirements"
 Cohesion: 0.05
@@ -458,88 +455,88 @@ Cohesion: 0.05
 Nodes (38): ADDED Requirements, Purpose, Requirement: Objective As Configured Object Type, Requirement: Objective Context, Requirement: Objective Identity And Classification, Requirement: Objective Lifecycle, Requirement: Objective Preparation Progress, Requirement: Objective Requirements And Topics (+30 more)
 
 ### Community 60 - "push"
-Cohesion: 0.07
-Nodes (42): addNamespaces(), addResource(), addResourceBundle(), addResources(), adjascentGlobstarOptimize(), c1(), cancel(), clearSelection() (+34 more)
+Cohesion: 0.06
+Nodes (43): adjascentGlobstarOptimize(), c1(), clearSelection(), copyIn(), cQ(), #d(), _delayedTapMove(), deselect() (+35 more)
 
 ### Community 61 - "TN"
-Cohesion: 0.10
-Nodes (39): m(), ep(), Pt(), bn(), DN(), en(), eP(), eras() (+31 more)
+Cohesion: 0.18
+Nodes (26): m(), ep(), Pt(), bn(), DN(), en(), eP(), FN() (+18 more)
 
-### Community 62 - "toSVGPath"
-Cohesion: 0.23
-Nodes (12): defaultProperties(), defaultSVGProperties(), end(), getPathResizedSVGProperties(), getPathResizingSVGProperties(), getPathTranslatedSVGProperties(), _rescale(), rotationTransform() (+4 more)
+### Community 62 - "updateProperties"
+Cohesion: 0.06
+Nodes (45): clone(), commentSelection(), createDrawerInstance(), createDrawingOptions(), defaultProperties(), defaultSVGProperties(), _drawMove(), end() (+37 more)
 
-### Community 63 - "E"
+### Community 63 - "notificationManager831392.js"
+Cohesion: 0.20
+Nodes (16): a(), c(), d(), f(), g(), h(), m(), p() (+8 more)
+
+### Community 64 - "constructor"
 Cohesion: 0.05
-Nodes (56): abort(), _abortOperatorList(), _abortRequest(), addNativeFontFace(), addProgressiveDoneListener(), addProgressiveReadListener(), addProgressListener(), addRangeListener() (+48 more)
-
-### Community 64 - "serialize"
-Cohesion: 0.07
-Nodes (33): addCommentButton(), addCommentButtonInToolbar(), addEditToolbar(), addStandaloneCommentButton(), _bindJSAction(), comment(), commentButtonColor(), computeTelemetryFinalData() (+25 more)
+Nodes (54): addEditListeners(), addHighlightArea(), addProgressiveDoneListener(), addProgressiveReadListener(), addProgressListener(), addRangeListener(), ae(), _bindJSAction() (+46 more)
 
 ### Community 65 - "Qx"
 Cohesion: 0.13
-Nodes (19): Ax(), Ex(), f_e(), Fx(), getSelection(), kx(), Lx(), Ox() (+11 more)
+Nodes (18): Ax(), cD(), Ex(), f_e(), Fx(), getSelection(), kx(), Lx() (+10 more)
 
 ### Community 66 - "D"
 Cohesion: 0.07
-Nodes (32): beginImageData(), beginInlineImage(), box(), create(), _createCanvas(), _createSVG(), Ct(), D() (+24 more)
+Nodes (35): beginImageData(), beginInlineImage(), box(), create(), _createCanvas(), _createSVG(), Ct(), D() (+27 more)
 
-### Community 67 - "yx"
-Cohesion: 0.11
-Nodes (38): ace(), Aj(), Bj(), deprecate(), error(), forward(), Gj(), Hj() (+30 more)
+### Community 67 - "t"
+Cohesion: 0.08
+Nodes (43): Q(), setup(), AD(), addEventListener(), b1(), cameraExperience(), d1(), defaults() (+35 more)
 
 ### Community 68 - "ADDED Requirements"
 Cohesion: 0.07
 Nodes (28): ADDED Requirements, Requirement: Gemini Secret Boundary, Requirement: Page-Aware Document Extraction, Requirement: Registered Source Content, Requirement: Review Before Save, Requirement: Role-Specific Structured Extraction, Requirement: Source Registration And Classification, Requirement: Structured Gemini Suggestions (+20 more)
 
-### Community 69 - "_baseClone83139.js"
-Cohesion: 0.18
-Nodes (22): ae(), ce(), E(), fe(), ie(), k(), me(), oe() (+14 more)
+### Community 69 - "_baseFor83139.js"
+Cohesion: 0.10
+Nodes (13): b(), ct(), dt(), he(), J(), K(), lt(), me() (+5 more)
 
-### Community 70 - "_baseFor83139.js"
-Cohesion: 0.08
-Nodes (19): i(), r(), b(), c(), ct(), dt(), he(), J() (+11 more)
+### Community 70 - "_baseClone83139.js"
+Cohesion: 0.14
+Nodes (27): ae(), ce(), E(), fe(), ie(), k(), me(), oe() (+19 more)
 
 ### Community 71 - "Mt"
 Cohesion: 0.04
-Nodes (81): _e(), C(), p(), setup(), a1(), add(), cD(), cx() (+73 more)
+Nodes (105): _e(), C(), p(), Kt(), ace(), Aj(), Bj(), deprecate() (+97 more)
 
-### Community 72 - "create"
-Cohesion: 0.05
-Nodes (44): St(), _addString(), args(), brand(), ci(), create(), deepPartial(), default() (+36 more)
+### Community 72 - "lR"
+Cohesion: 0.09
+Nodes (25): dtFormatter(), eras(), formatDateTime(), formatDateTimeParts(), formatInterval(), ianaName(), lR(), meridiems() (+17 more)
 
-### Community 73 - "sb"
-Cohesion: 0.18
-Nodes (21): a(), e(), i(), o(), r(), t(), b(), d() (+13 more)
+### Community 73 - "embeddingNavigation83139.js"
+Cohesion: 0.25
+Nodes (16): a(), e(), i(), o(), r(), t(), b(), d() (+8 more)
 
 ### Community 74 - "t"
 Cohesion: 0.15
-Nodes (20): bt(), cr(), fn(), fr(), gr(), hr(), jr(), mn() (+12 more)
+Nodes (24): be(), c(), cr(), en(), fn(), fr(), gr(), hr() (+16 more)
 
-### Community 75 - "_baseUniq83139.js"
+### Community 75 - "_baseProperty83139.js"
+Cohesion: 0.17
+Nodes (18): c(), R(), w(), wt(), b(), C(), D(), g() (+10 more)
+
+### Community 76 - "_baseUniq83139.js"
 Cohesion: 0.20
-Nodes (22): te(), O(), Z(), b(), C(), F(), G(), H() (+14 more)
+Nodes (21): te(), O(), b(), C(), F(), G(), H(), I() (+13 more)
 
-### Community 76 - "AppMenu83139.js"
-Cohesion: 0.08
-Nodes (65): Ai(), an(), At(), bn(), Bt(), cn(), dn(), Dt() (+57 more)
-
-### Community 77 - "setup"
-Cohesion: 0.07
-Nodes (33): Ae(), ke(), Oi(), $r(), ui(), ./IconPickerEmoji83139.js, ./IconPickerIconify83139.js, co() (+25 more)
+### Community 77 - "xe"
+Cohesion: 0.24
+Nodes (18): E(), xe(), ye(), K(), A(), de(), F(), j() (+10 more)
 
 ### Community 78 - "_g"
-Cohesion: 0.14
-Nodes (20): ag(), Bg(), Cg(), dg(), Eg(), fg(), _g(), gg() (+12 more)
+Cohesion: 0.13
+Nodes (22): ag(), Bg(), Cg(), dg(), Eg(), fg(), _g(), gg() (+14 more)
 
-### Community 79 - "_baseProperty83139.js"
-Cohesion: 0.24
-Nodes (13): R(), w(), b(), C(), D(), g(), h(), se() (+5 more)
+### Community 79 - "get"
+Cohesion: 0.11
+Nodes (21): constructor(), emit(), F(), get(), Hg(), meta(), ng(), nu() (+13 more)
 
 ### Community 80 - "extract-capacities-assets.mjs"
-Cohesion: 0.16
-Nodes (19): ref(), cwd, hydrateAsset(), inferType(), main(), manifestFromEntries(), manifestPath, outputDir (+11 more)
+Cohesion: 0.15
+Nodes (20): ref(), cwd, hydrateAsset(), inferType(), localFallbackDirectories, main(), manifestFromEntries(), manifestPath (+12 more)
 
 ### Community 81 - "ADDED Requirements"
 Cohesion: 0.11
@@ -547,15 +544,15 @@ Nodes (18): ADDED Requirements, Purpose, Requirement: Canonical Visual Foundatio
 
 ### Community 82 - "constructor"
 Cohesion: 0.11
-Nodes (30): bitLength(), _block(), calculate(), clamp(), concat(), constructor(), create(), digest() (+22 more)
+Nodes (29): bitLength(), _block(), calculate(), clamp(), concat(), constructor(), create(), digest() (+21 more)
 
 ### Community 83 - "Rv"
-Cohesion: 0.11
-Nodes (24): ae(), N(), se(), Av(), ey(), Fb(), Hg(), ig() (+16 more)
+Cohesion: 0.20
+Nodes (16): Av(), ey(), ig(), kg(), kv(), lv(), ly(), Mv() (+8 more)
 
 ### Community 84 - "S6"
-Cohesion: 0.08
-Nodes (36): _6(), ame(), Ape(), b6(), C6(), eme(), f6(), fme() (+28 more)
+Cohesion: 0.18
+Nodes (19): _6(), b6(), C6(), eme(), f6(), fme(), g6(), h6() (+11 more)
 
 ### Community 85 - "ADDED Requirements"
 Cohesion: 0.11
@@ -574,36 +571,36 @@ Cohesion: 0.12
 Nodes (16): ADDED Requirements, Purpose, Requirement: Accessible Sidebar Controls, Requirement: Active Destination, Requirement: Responsive Navigation, Requirement: Workspace Identity, Requirement: Workspace Navigation Region, Scenario: Close navigation on mobile (+8 more)
 
 ### Community 89 - "nT"
-Cohesion: 0.12
-Nodes (22): b0(), C0(), daysInYear(), due(), eue(), getUTCDate(), getUTCDay(), getUTCFullYear() (+14 more)
+Cohesion: 0.10
+Nodes (25): b0(), C0(), daysInYear(), due(), eue(), getUTCDate(), getUTCDay(), getUTCFullYear() (+17 more)
 
 ### Community 90 - "scripts"
 Cohesion: 0.12
 Nodes (16): scripts, build, dev, format, format:check, graphify:check, graphify:update, lint (+8 more)
 
-### Community 91 - "ir"
-Cohesion: 0.40
-Nodes (5): ar(), copy(), ir(), kr(), oi()
+### Community 91 - "_l"
+Cohesion: 0.16
+Nodes (16): A(), bl(), D(), gl(), _l(), lc(), normalize(), overwrite() (+8 more)
 
 ### Community 92 - "Object Model"
 Cohesion: 0.13
 Nodes (14): Activity Records, Customization Model, Flashcard, Flashcard Review, Foundation Filters, Object Model, Potential Object Types, Principles (+6 more)
 
 ### Community 93 - "ki"
-Cohesion: 0.20
-Nodes (15): ae(), b(), c(), ie(), ki(), l(), ne(), oe() (+7 more)
+Cohesion: 0.23
+Nodes (12): ae(), b(), ie(), ki(), l(), ne(), oe(), rn() (+4 more)
 
-### Community 94 - "ux"
-Cohesion: 0.32
-Nodes (8): Fi(), ate(), dx(), ite(), rte(), ux(), S0(), wue()
+### Community 94 - "PS"
+Cohesion: 0.13
+Nodes (16): Fi(), a1(), ate(), dx(), ite(), PS(), rte(), u1() (+8 more)
 
 ### Community 95 - "me"
-Cohesion: 0.16
-Nodes (15): br(), d(), dt(), f(), fe(), h(), he(), m() (+7 more)
+Cohesion: 0.19
+Nodes (13): br(), dt(), f(), fe(), h(), he(), m(), me() (+5 more)
 
 ### Community 96 - "updateMode"
-Cohesion: 0.06
-Nodes (50): addLayer(), addNewEditorFromKeyboard(), center(), commit(), dblclick(), de(), deleteComment(), disable() (+42 more)
+Cohesion: 0.05
+Nodes (55): addFakeAnnotation(), addLayer(), addNewEditorFromKeyboard(), commentButtonPositionInPage(), commentData(), createOrUpdatePopup(), _createPopup(), de() (+47 more)
 
 ### Community 97 - "Design"
 Cohesion: 0.14
@@ -621,21 +618,21 @@ Nodes (13): Compare progress with both the endpoint and the current expected pos
 Cohesion: 0.14
 Nodes (13): Accessibility And Evidence, Active state is semantic, Context, Decisions, Goals / Non-Goals, Identity stays compact, Migration Plan, Mobile uses the same navigation model (+5 more)
 
-### Community 101 - "xe"
-Cohesion: 0.31
-Nodes (14): E(), xe(), ye(), A(), de(), F(), j(), k() (+6 more)
-
-### Community 102 - "ZU"
+### Community 101 - "emoji83139.js"
 Cohesion: 0.17
-Nodes (20): cV(), EV(), gV(), Hh(), hV(), lV(), mV(), oV() (+12 more)
+Nodes (11): ./data83139.js, ./data831392.js, ./data831393.js, ./data831394.js, ./data831395.js, l(), ./messages83139.js, ./messages831392.js (+3 more)
 
-### Community 103 - "resolve"
-Cohesion: 0.12
-Nodes (29): changeLanguage(), dir(), exists(), extendTranslation(), extractFromKey(), formatLanguageCode(), getBestMatchFromCodes(), getFallbackCodes() (+21 more)
+### Community 102 - "Nh"
+Cohesion: 0.24
+Nodes (13): cV(), dV(), gV(), hV(), lV(), mV(), oV(), pV() (+5 more)
 
-### Community 104 - "e"
-Cohesion: 0.06
-Nodes (104): setup(), Se(), Ze(), de(), le(), ue(), b(), sv() (+96 more)
+### Community 103 - "emit"
+Cohesion: 0.10
+Nodes (37): addNamespaces(), addResource(), addResourceBundle(), addResources(), changeLanguage(), clone(), cloneInstance(), dir() (+29 more)
+
+### Community 104 - "tde"
+Cohesion: 0.08
+Nodes (88): setup(), Se(), Ze(), de(), le(), ue(), Z(), b() (+80 more)
 
 ### Community 105 - "Reverse-Engineering Evidence Cycle"
 Cohesion: 0.14
@@ -653,29 +650,29 @@ Nodes (12): Context, Decisions, Documentation precedes component implementation,
 Cohesion: 0.15
 Nodes (12): ADDED Requirements, Requirement: Focused Study Session, Requirement: Immutable Question Attempts, Requirement: Packaged Study Object Types, Requirement: Study Filters And Weakness Analytics, Scenario: Complete a study session, Scenario: Create a study goal, Scenario: Filter study objects (+4 more)
 
-### Community 109 - "pX"
-Cohesion: 0.50
-Nodes (4): hX(), iie(), Mx(), pX()
+### Community 109 - "i"
+Cohesion: 0.21
+Nodes (12): a(), an(), bt(), ct(), d(), _e(), i(), qe() (+4 more)
 
 ### Community 110 - "U3"
-Cohesion: 0.09
-Nodes (34): _8(), A8(), b8(), dme(), E6(), E8(), f8(), g8() (+26 more)
+Cohesion: 0.11
+Nodes (30): _8(), A8(), ame(), b8(), dme(), E8(), f8(), g8() (+22 more)
 
 ### Community 111 - "ADDED Requirements"
 Cohesion: 0.17
 Nodes (11): ADDED Requirements, Purpose, Requirement: Object List Controls, Requirement: Responsive Object List Geometry, Requirement: Route-Aware Object Type Surface, Requirement: Shared Object Type Contract, Scenario: Inspect the type toolbar, Scenario: Open a populated type (+3 more)
 
-### Community 112 - "Kk"
-Cohesion: 0.16
-Nodes (15): BK(), eq(), GK(), HK(), JK(), Kk(), nq(), qK() (+7 more)
+### Community 112 - "tr"
+Cohesion: 0.25
+Nodes (9): ai(), fi(), g(), li(), pi(), rr(), tr(), vr() (+1 more)
 
 ### Community 113 - "on"
-Cohesion: 0.17
-Nodes (13): clamp(), cn(), ei(), formatHsl(), ft(), it(), k(), lr() (+5 more)
+Cohesion: 0.13
+Nodes (18): ar(), copy(), ei(), ft(), ir(), it(), jr(), k() (+10 more)
 
 ### Community 114 - "jh"
-Cohesion: 0.22
-Nodes (9): jh(), _getInvalidInput(), _getOrReturnCtx(), _getType(), _parseAsync(), _processInputParams(), safeParseAsync(), zq() (+1 more)
+Cohesion: 0.14
+Nodes (15): jh(), _getInvalidInput(), _getOrReturnCtx(), _getType(), JU(), _parseAsync(), _processInputParams(), qU() (+7 more)
 
 ### Community 115 - "Architecture"
 Cohesion: 0.18
@@ -769,9 +766,9 @@ Nodes (6): Capabilities, Modified Capabilities, New Capabilities, Non-Goals, Wha
 Cohesion: 0.29
 Nodes (6): Capabilities, New Capabilities, Non-Goals, Supporting Docs, What Changes, Why
 
-### Community 138 - "wx"
-Cohesion: 0.19
-Nodes (14): addToNumericResult(), Dx(), emitNamedEntityData(), emitNotTerminatedNamedEntity(), emitNumericEntity(), end(), startEntity(), stateNamedEntity() (+6 more)
+### Community 138 - "write"
+Cohesion: 0.16
+Nodes (18): addToNumericResult(), Dx(), emitNamedEntityData(), emitNotTerminatedNamedEntity(), emitNumericEntity(), end(), jae(), startEntity() (+10 more)
 
 ### Community 139 - "Capacities Knowledge Graph Source"
 Cohesion: 0.33
@@ -853,33 +850,37 @@ Nodes (4): name, packageManager, private, version
 Cohesion: 0.40
 Nodes (4): Evidence link, Object Type Page (Local), Route, State behavior
 
-### Community 159 - "Zm"
-Cohesion: 0.15
-Nodes (13): ble(), fm(), from(), id(), keys(), pm(), rD(), resolveField() (+5 more)
+### Community 159 - "ci"
+Cohesion: 0.25
+Nodes (8): ci(), toHTTP(), toISOWeekDate(), toRFC2822(), toSQL(), toSQLDate(), toSQLTime(), toUTC()
 
 ### Community 160 - "README.md"
 Cohesion: 0.50
 Nodes (3): Deploy on Vercel, Getting Started, Learn More
 
-### Community 161 - "emoji83139.js"
-Cohesion: 0.17
-Nodes (11): ./data83139.js, ./data831392.js, ./data831393.js, ./data831394.js, ./data831395.js, l(), ./messages83139.js, ./messages831392.js (+3 more)
+### Community 161 - "addEditToolbar"
+Cohesion: 0.20
+Nodes (10): addCommentButton(), addCommentButtonInToolbar(), addEditToolbar(), addStandaloneCommentButton(), comment(), description(), removeCommentButtonFromToolbar(), removeStandaloneCommentButton() (+2 more)
 
-### Community 177 - "ht"
-Cohesion: 0.12
-Nodes (24): At(), bt(), catchall(), cl(), clone(), extend(), gt(), ht() (+16 more)
+### Community 164 - "install-recommendations.ps1"
+Cohesion: 0.43
+Nodes (4): Ensure-Bun(), Has-Network(), Install-BunFromScript(), Test-Command()
 
-### Community 178 - "format"
-Cohesion: 0.11
-Nodes (22): am(), AS(), format(), formatDateTimeFromString(), formatDurationFromString(), formatOffset(), formatToParts(), formatWithSystemDefault() (+14 more)
+### Community 177 - "gne"
+Cohesion: 0.50
+Nodes (4): kf(), gne(), Nv(), Vy()
+
+### Community 178 - "e"
+Cohesion: 0.05
+Nodes (67): e(), Jy(), $a(), _addString(), Az(), ble(), clear(), cm() (+59 more)
 
 ### Community 179 - "to"
-Cohesion: 0.25
-Nodes (9): no(), ao(), Fee(), Ree(), ro(), to(), wee(), yo() (+1 more)
+Cohesion: 0.20
+Nodes (11): io(), no(), ao(), bee(), Fee(), Ree(), ro(), to() (+3 more)
 
-### Community 180 - "tr"
-Cohesion: 0.25
-Nodes (9): ai(), fi(), g(), li(), pi(), rr(), tr(), vr() (+1 more)
+### Community 180 - "button.tsx"
+Cohesion: 0.67
+Nodes (3): Button, ButtonProps, buttonVariants
 
 ### Community 181 - "getPrimaryTimePatternThroughCache"
 Cohesion: 0.25
@@ -897,68 +898,40 @@ Nodes (8): od(), ad(), dd(), fd(), hD(), md(), pd(), ud()
 Cohesion: 0.25
 Nodes (8): bn(), Jn(), qn(), Un(), x(), xn(), yn(), Zn()
 
-### Community 185 - "mo"
-Cohesion: 0.11
-Nodes (18): Ar(), Br(), fo(), Fr(), Gr(), jr(), kr(), Lr() (+10 more)
-
 ### Community 186 - "v0"
 Cohesion: 0.25
 Nodes (8): d0(), E0(), fromFormat(), fromString(), jue(), mue(), v0(), w0()
 
-### Community 187 - "tI"
-Cohesion: 0.29
-Nodes (8): getMinDaysInFirstWeek(), getMinimumDaysInFirstWeek(), getStartOfWeek(), getWeekendDays(), getWeekendWeekdays(), getWeekSettings(), nI(), tI()
+### Community 187 - "isValidDate"
+Cohesion: 0.08
+Nodes (32): addUnit(), applyDateOperation(), bk(), dateWithoutTimezoneAdjustment(), dstEnd(), dstStart(), getDate(), getDay() (+24 more)
 
-### Community 188 - "Pb"
-Cohesion: 0.29
-Nodes (7): rB(), aB(), iB(), lB(), oB(), Pb(), sB()
-
-### Community 189 - "rotate"
-Cohesion: 0.13
-Nodes (16): CMYK_HTML(), CMYK_RGB(), G_HTML(), G_RGB(), getHash(), getIR(), hasInitialVisibility(), hexdigest() (+8 more)
-
-### Community 190 - "now83139.js"
-Cohesion: 0.60
-Nodes (4): O(), f(), i(), o()
-
-### Community 191 - "Fy"
+### Community 191 - "rM"
 Cohesion: 0.40
-Nodes (5): apply(), catch(), Fy(), Gy(), Zp()
+Nodes (5): Qoe(), rM(), Xj(), Yoe(), Zoe()
 
 ### Community 192 - "qc"
 Cohesion: 0.40
 Nodes (5): Ax(), jie(), kx(), qc(), ux()
 
-### Community 193 - "du"
-Cohesion: 0.40
-Nodes (5): du(), isOptional(), kU(), pU(), shape()
-
-### Community 194 - "i"
-Cohesion: 0.20
-Nodes (16): a(), an(), be(), ct(), dn(), _e(), en(), hn() (+8 more)
-
-### Community 195 - "B"
-Cohesion: 0.18
-Nodes (11): B(), bv(), default(), describe(), Fm(), Mm(), nullable(), readonly() (+3 more)
-
-### Community 196 - "unshift"
-Cohesion: 0.40
-Nodes (6): createCasualConfiguration(), createConfiguration(), hj(), jq(), tk(), unshift()
+### Community 193 - "zte"
+Cohesion: 0.22
+Nodes (9): hte(), hu(), jte(), kte(), Ou(), qte(), Vte(), Xte() (+1 more)
 
 ## Knowledge Gaps
-- **745 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `ignoreUnknown` (+740 more)
+- **746 isolated node(s):** `Objetivo`, `Situação aplicada`, `Regras de prioridade`, `Procedimento operacional`, `Resultado esperado` (+741 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `setup()` connect `setup` to `storing83139.js`, `wx`, `LocationManager83139.js`, `Ht`, `push`, `_i`, `shortcuts83139.js`, `runtime-core.esm-bundler83139.js`, `BlockList83139.js`, `t`, `sr`, `Zm`, `n`, `error`, `innerExtract`, `RenderIcon83139.js`, `r`, `PasswordStrengthIndicator83139.js`, `i`, `check`, `vue-router83139.js`, `Interactable83139.js`, `match`, `src83139.js`, `PDFViewer83139.js`, `startOf`, `ht`, `to`, `V`, `T`, `ad`, `format`, `mo`, `v0`, `tI`, `push`, `TN`, `Pb`, `qc`, `Qx`, `D`, `yx`, `B`, `du`, `unshift`, `Mt`, `create`, `sb`, `AppMenu83139.js`, `setup`, `_g`, `constructor`, `Rv`, `S6`, `tm`, `nT`, `ki`, `ux`, `xe`, `ZU`, `resolve`, `e`, `pX`, `U3`, `Kk`, `jh`?**
-  _High betweenness centrality (0.055) - this node is a cross-community bridge._
-- **Why does `De()` connect `PDFViewer83139.js` to `sr`, `RenderIcon83139.js`, `e`, `src83139.js`, `pdfjs83139.js`, `LocationManager83139.js`, `setup`, `BlockList83139.js`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+- **Why does `setup()` connect `setup` to `storing83139.js`, `write`, `sb`, `LocationManager83139.js`, `l`, `push`, `AppMenu83139.js`, `shortcuts83139.js`, `runtime-core.esm-bundler83139.js`, `BlockList83139.js`, `constructor`, `V`, `ci`, `n`, `D`, `innerExtract`, `RenderIcon83139.js`, `error`, `PasswordStrengthIndicator83139.js`, `i`, `check`, `vue-router83139.js`, `Interactable83139.js`, `match`, `src83139.js`, `PDFViewer83139.js`, `startOf`, `e`, `Ls`, `c`, `gne`, `T`, `ad`, `to`, `v0`, `isValidDate`, `push`, `TN`, `rM`, `qc`, `Qx`, `D`, `t`, `zte`, `Mt`, `lR`, `embeddingNavigation83139.js`, `xe`, `_g`, `get`, `constructor`, `Rv`, `S6`, `tm`, `nT`, `ki`, `PS`, `Nh`, `emit`, `tde`, `U3`, `jh`?**
+  _High betweenness centrality (0.043) - this node is a cross-community bridge._
+- **Why does `De()` connect `RenderIcon83139.js` to `V`, `tde`, `src83139.js`, `PDFViewer83139.js`, `pdfjs83139.js`, `LocationManager83139.js`, `setup`, `l`, `AppMenu83139.js`, `BlockList83139.js`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
 - **Why does `item()` connect `consolidate-reverse-capture-artifacts.mjs` to `n`, `storing83139.js`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Are the 831 inferred relationships involving `setup()` (e.g. with `Q()` and `ue()`) actually correct?**
   _`setup()` has 831 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 139 inferred relationships involving `n()` (e.g. with `_7()` and `ad()`) actually correct?**

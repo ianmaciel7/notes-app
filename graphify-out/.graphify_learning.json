@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-16T00:34:11.476745+00:00",
+  "generated_at": "2026-08-16T17:00:25.359206+00:00",
   "nodes": {
     "src_components_workspace_shell": {
-      "code_fingerprint": "7889d5135bd3161a6e927491ce031ace486a2b02e221d34c1c1162a67a8e213a",
+      "code_fingerprint": "541d0510520177b20c42d34906d7bf652cdecff3ea3bbf1ad65ab619491c2847",
       "label": "workspace-shell.tsx",
       "last": "2026-08-15T22:00:48.487511+00:00",
       "neg": 1,
@@ -23,14 +23,14 @@
           "q": "Qual fonte canonica governa o painel contextual e como preservar sua paridade?"
         }
       ],
-      "score": 0.997130689,
+      "score": 0.981476125,
       "source_file": "src/components/workspace-shell.tsx",
       "status": "contested",
       "uses": 2,
       "verdict": "useful"
     },
     "tests_workspace_shell_test": {
-      "code_fingerprint": "bdf5185a656030b460e0ca45cc2def7e7411159113c5b28e87e9c7be4316f154",
+      "code_fingerprint": "e180021480a1d94079b95a954c2411afa45c47fb2cb2d741736ee474c5243cda",
       "label": "workspace-shell.test.tsx",
       "last": "2026-08-15T22:00:48.487511+00:00",
       "neg": 1,
@@ -51,7 +51,7 @@
           "q": "Qual fonte canonica governa o painel contextual e como preservar sua paridade?"
         }
       ],
-      "score": 0.997130689,
+      "score": 0.981476125,
       "source_file": "__tests__/workspace-shell.test.tsx",
       "status": "contested",
       "uses": 2,
