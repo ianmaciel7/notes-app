@@ -512,21 +512,16 @@ button:not(:disabled) {
 }
 
 .cap-sidebar {
-  position: relative;
-  top: -1px;
-
   display: flex;
+  flex-direction: column;
+
+  width: var(--sidebar-width);
 
   grid-column: 1;
   grid-row: 2;
 
-  width: var(--sidebar-width);
-  height: calc(100% + 1px);
-
   min-width: 0;
   min-height: 0;
-
-  flex-direction: column;
 
   overflow: hidden;
 }
@@ -662,23 +657,11 @@ button:not(:disabled) {
 
   overflow-x: hidden;
   overflow-y: auto;
-
-  margin-top: 2px;
-
-  scrollbar-color: color-mix(in oklch, var(--text-subtle) 20%, transparent)
-    transparent;
-
-  scrollbar-width: thin;
+  scrollbar-width: none;
 }
 
 .cap-sidebar-scroll::-webkit-scrollbar {
-  width: 5px;
-}
-
-.cap-sidebar-scroll::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-
-  background: color-mix(in oklch, var(--text-subtle) 20%, transparent);
+  display: none;
 }
 
 .cap-sidebar-section {
@@ -688,14 +671,12 @@ button:not(:disabled) {
 .cap-section-title {
   display: flex;
 
-  width: 257px;
-  height: 32px;
+  width: calc(100% - 36px);
+  height: 30px;
 
   align-items: center;
 
   gap: 6px;
-
-  margin-left: 9px;
 
   padding: 0 8px;
 
@@ -706,10 +687,87 @@ button:not(:disabled) {
   font-size: 12px;
   font-weight: 500;
   line-height: 16px;
+
+  border: 0;
 }
 
-.cap-section-title:hover {
+.cap-section-header {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  column-gap: 2px;
+
+  padding-right: 4px;
+}
+
+.cap-section-title:hover,
+.cap-section-title:focus-visible {
   background: var(--bg-hover);
+}
+
+.cap-section-chevron {
+  display: inline-flex;
+
+  width: 14px;
+  height: 14px;
+
+  margin-left: auto;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.cap-section-actions {
+  display: flex;
+
+  margin-left: auto;
+
+  align-items: center;
+  gap: 2px;
+}
+
+.cap-section-action-button {
+  display: inline-flex;
+
+  width: 22px;
+  height: 22px;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  padding: 0;
+  border-radius: 6px;
+
+  color: var(--text-subtle);
+  background: transparent;
+  opacity: 0;
+
+  transition:
+    opacity 120ms ease,
+    background-color 120ms ease;
+}
+
+.cap-section-actions .cap-section-action-button {
+  pointer-events: none;
+}
+
+.cap-section-header:hover .cap-section-action-button,
+.cap-section-header:focus-within .cap-section-action-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cap-section-action-button:hover {
+  background: var(--bg-hover);
+}
+
+.cap-section-action-button svg {
+  width: 12px;
+  height: 12px;
 }
 
 .cap-section-title > svg {
@@ -732,7 +790,7 @@ button:not(:disabled) {
   margin-left: auto;
 }
 
-.cap-empty-section {
+.cap-empty {
   height: 40px;
 
   margin: 0;
@@ -778,6 +836,10 @@ button:not(:disabled) {
     color 120ms ease;
 }
 
+.cap-sidebar-block {
+  position: relative;
+}
+
 .cap-object-row:hover,
 .cap-object-row-active {
   background: var(--bg-hover);
@@ -785,6 +847,52 @@ button:not(:disabled) {
   color: var(--text-primary);
 
   filter: brightness(0.965);
+}
+
+.cap-object-row-shell {
+  position: relative;
+
+  margin: 0 8px;
+}
+
+.cap-object-menu-toggle {
+  position: absolute;
+  right: 3px;
+
+  display: grid;
+
+  width: 20px;
+  height: 20px;
+
+  border: 0;
+
+  border-radius: 7px;
+
+  place-items: center;
+
+  background: transparent;
+  color: var(--text-secondary);
+
+  opacity: 0;
+
+  transition:
+    opacity 120ms ease,
+    background-color 120ms ease;
+}
+
+.cap-object-row-shell:hover .cap-object-menu-toggle,
+.cap-object-row-shell:focus-within .cap-object-menu-toggle {
+  opacity: 1;
+}
+
+.cap-object-menu-toggle:hover,
+.cap-object-menu-toggle:focus-visible {
+  background: var(--bg-hover);
+}
+
+.cap-object-menu-toggle svg {
+  width: 13px;
+  height: 13px;
 }
 
 .cap-object-icon {
@@ -823,7 +931,7 @@ button:not(:disabled) {
 .cap-add-section {
   display: flex;
 
-  width: 259px;
+  width: calc(100% - 16px);
   height: 32px;
 
   align-items: center;
@@ -863,16 +971,178 @@ button:not(:disabled) {
   height: 16px;
 }
 
-.cap-trash-section {
-  margin: 48px 4px 0 8px;
-}
-
-.cap-help-section {
-  margin-top: 8px;
-}
-
 .cap-help-rows {
   padding: 0 4px 0 8px;
+
+  display: flex;
+
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cap-sidebar-menu-wrap {
+  position: relative;
+}
+
+.cap-sidebar-menu {
+  position: absolute;
+  z-index: 40;
+
+  left: 9px;
+
+  min-width: 224px;
+
+  margin-top: 4px;
+
+  padding: 5px;
+
+  border: 1px solid var(--border-base);
+  border-radius: 10px;
+
+  background: var(--bg-base);
+  box-shadow: 0 4px 12px rgb(25 25 24 / 10%);
+}
+
+.cap-sidebar-menu-item {
+  width: 100%;
+
+  min-height: 30px;
+
+  padding: 0 10px;
+
+  border-radius: 7px;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+  text-align: left;
+}
+
+.cap-sidebar-menu-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.cap-sidebar-menu-item:not(:last-child) {
+  margin-bottom: 1px;
+}
+
+.cap-custom-section .cap-sidebar-menu-item {
+  margin: 6px 8px 0;
+  width: calc(100% - 16px);
+}
+
+.cap-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+
+  display: grid;
+
+  place-items: center;
+
+  background: rgb(20 19 17 / 24%);
+
+  border: 0;
+
+  padding: 0;
+
+  cursor: pointer;
+}
+
+.cap-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 81;
+
+  margin: auto;
+
+  width: min(360px, calc(100% - 40px));
+
+  border: 1px solid var(--border-base);
+  border-radius: 10px;
+  padding: 12px;
+
+  background: var(--bg-base);
+
+  height: fit-content;
+}
+
+.cap-dialog-title {
+  margin: 0;
+  color: var(--text-primary);
+
+  font-size: 14px;
+}
+
+.cap-dialog-form {
+  margin-top: 12px;
+}
+
+.cap-dialog-field {
+  display: block;
+
+  margin-top: 2px;
+  color: var(--text-subtle);
+  font-size: 11px;
+}
+
+.cap-dialog-field span {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.cap-dialog-field input {
+  width: 100%;
+  height: 30px;
+
+  border: 1px solid var(--border-base);
+  border-radius: 8px;
+  padding: 0 8px;
+
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.cap-dialog-field input:focus-visible {
+  outline: 2px solid var(--text-subtle);
+  outline-offset: 1px;
+}
+
+.cap-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  margin-top: 12px;
+
+  gap: 8px;
+}
+
+.cap-dialog-cancel,
+.cap-dialog-confirm {
+  min-height: 30px;
+
+  padding: 0 12px;
+
+  border-radius: 7px;
+
+  border: 1px solid var(--border-base);
+}
+
+.cap-dialog-cancel:hover {
+  background: var(--bg-hover);
+}
+
+.cap-dialog-confirm {
+  border-color: var(--text-primary);
+
+  color: var(--bg-base);
+  background: var(--text-primary);
+}
+
+.cap-dialog-confirm:disabled {
+  opacity: 0.5;
 }
 
 .cap-sidebar-footer {
@@ -888,6 +1158,8 @@ button:not(:disabled) {
   gap: 2px;
 
   padding: 6px 4px 6px 10px;
+
+  flex: 0 0 auto;
 }
 
 .cap-footer-button {
@@ -1598,105 +1870,3 @@ button:not(:disabled) {
     padding-top: 48px;
   }
 }
-
-/* CAPACITIES-SIDEBAR-FINAL:BEGIN */
-
-/*
- * Mantém a rolagem funcional, mas remove a barra nativa,
- * a seta inferior e o trilho visível.
- */
-.cap-sidebar-scroll {
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  padding-bottom: 4px;
-
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.cap-sidebar-scroll::-webkit-scrollbar {
-  display: none;
-
-  width: 0;
-  height: 0;
-}
-
-.cap-sidebar-scroll::-webkit-scrollbar-button {
-  display: none;
-
-  width: 0;
-  height: 0;
-}
-
-/* Densidade vertical mais próxima da interface capturada. */
-
-.cap-sidebar-primary .cap-nav-item,
-.cap-trash-section .cap-nav-item,
-.cap-help-rows .cap-nav-item {
-  height: 30px;
-
-  font-size: 13px;
-  line-height: 18px;
-}
-
-.cap-section-title {
-  height: 30px;
-
-  font-size: 11px;
-  line-height: 16px;
-}
-
-.cap-empty-section {
-  height: 36px;
-
-  padding-top: 4px;
-  padding-bottom: 4px;
-
-  font-size: 11px;
-  line-height: 17px;
-}
-
-.cap-object-row {
-  height: 28px;
-
-  font-size: 13px;
-  line-height: 18px;
-}
-
-.cap-object-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.cap-object-icon svg {
-  width: 13px;
-  height: 13px;
-}
-
-.cap-add-section {
-  height: 30px;
-
-  font-size: 13px;
-  line-height: 18px;
-}
-
-.cap-trash-section {
-  margin-top: 40px;
-}
-
-.cap-help-section {
-  margin-top: 6px;
-}
-
-.cap-sidebar-footer {
-  height: 42px;
-}
-
-/* Garante que Feedback continue acessível sem tocar no footer fixo. */
-
-.cap-help-rows {
-  padding-bottom: 4px;
-}
-
-/* CAPACITIES-SIDEBAR-FINAL:END */

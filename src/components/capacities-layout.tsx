@@ -1,11 +1,8 @@
 "use client";
 
 import { type ReactNode, useEffect, useState } from "react";
-
-import {
-  CapacitiesSidebarIcon,
-  type CapacitiesSidebarIconName,
-} from "@/components/capacities-sidebar-icon";
+import { CapacitiesSidebar } from "@/components/capacities-sidebar";
+import { CapacitiesSidebarIcon } from "@/components/capacities-sidebar-icon";
 
 type UiIconName =
   | "arrow-left"
@@ -268,54 +265,6 @@ function IconButton({
   );
 }
 
-function SidebarNavItem({
-  children,
-  count,
-  icon,
-  onClick,
-}: {
-  children: ReactNode;
-  count?: number;
-  icon: CapacitiesSidebarIconName;
-  onClick?: () => void;
-}) {
-  return (
-    <button className="cap-nav-item" onClick={onClick} type="button">
-      <span className="cap-nav-icon">
-        <CapacitiesSidebarIcon name={icon} />
-      </span>
-
-      <span className="cap-nav-label">{children}</span>
-
-      {typeof count === "number" ? (
-        <span className="cap-nav-count">{count}</span>
-      ) : null}
-    </button>
-  );
-}
-
-function SidebarSectionTitle({
-  children,
-  count,
-  icon,
-}: {
-  children: ReactNode;
-  count?: number;
-  icon: CapacitiesSidebarIconName;
-}) {
-  return (
-    <div className="cap-section-title">
-      <CapacitiesSidebarIcon name={icon} />
-
-      <span className="cap-section-label">{children}</span>
-
-      {typeof count === "number" ? (
-        <span className="cap-section-count">{count}</span>
-      ) : null}
-    </div>
-  );
-}
-
 function WorkspaceHeader({
   menuOpen,
   onCollapse,
@@ -546,148 +495,6 @@ function ContextHeader({
         </div>
       ) : null}
     </header>
-  );
-}
-
-function Sidebar({
-  onOpenDocument,
-  onOpenExplore,
-  onOpenSearch,
-}: {
-  onOpenDocument: () => void;
-  onOpenExplore: () => void;
-  onOpenSearch: () => void;
-}) {
-  return (
-    <aside className="cap-sidebar">
-      <div className="cap-sidebar-primary">
-        <div className="cap-new-row">
-          <SidebarNavItem icon="add" onClick={onOpenDocument}>
-            Novo
-          </SidebarNavItem>
-
-          <button
-            aria-label="Abrir Chat de IA"
-            className="cap-assistant-button"
-            onClick={onOpenExplore}
-            type="button"
-          >
-            <CapacitiesSidebarIcon name="assistant" />
-          </button>
-        </div>
-
-        <SidebarNavItem icon="search" onClick={onOpenSearch}>
-          Buscar
-        </SidebarNavItem>
-
-        <div className="cap-nav-gap" />
-
-        <SidebarNavItem icon="rocket" onClick={onOpenExplore}>
-          Explorar
-        </SidebarNavItem>
-
-        <SidebarNavItem icon="calendar">Calendário</SidebarNavItem>
-      </div>
-
-      <div className="cap-sidebar-scroll">
-        <section className="cap-sidebar-section">
-          <SidebarSectionTitle count={0} icon="pin">
-            Fixados
-          </SidebarSectionTitle>
-
-          <p className="cap-empty-section">Nenhum conteúdo fixado</p>
-        </section>
-
-        <section className="cap-sidebar-section">
-          <SidebarSectionTitle count={1} icon="types">
-            Tipos de objeto
-          </SidebarSectionTitle>
-
-          <button
-            aria-current="page"
-            className="cap-object-row cap-object-row-active"
-            onClick={onOpenDocument}
-            type="button"
-          >
-            <span className="cap-object-icon">
-              <CapacitiesSidebarIcon name="page" />
-            </span>
-
-            <span className="cap-object-label">Páginas</span>
-
-            <span className="cap-object-count">1</span>
-          </button>
-
-          <button className="cap-add-section" type="button">
-            <CapacitiesSidebarIcon name="add" />
-            <span>Adicionar seção</span>
-          </button>
-        </section>
-
-        <div className="cap-trash-section">
-          <SidebarNavItem icon="trash">Lixeira</SidebarNavItem>
-        </div>
-
-        <section className="cap-help-section">
-          <SidebarSectionTitle icon="help">
-            Ajuda e recursos
-          </SidebarSectionTitle>
-
-          <div className="cap-help-rows">
-            <SidebarNavItem icon="graduation">Primeiros passos</SidebarNavItem>
-
-            <SidebarNavItem icon="help">Fazer uma pergunta</SidebarNavItem>
-
-            <SidebarNavItem icon="documentation">Documentação</SidebarNavItem>
-
-            <SidebarNavItem icon="news">Novidades</SidebarNavItem>
-
-            <SidebarNavItem icon="feedback">Feedback</SidebarNavItem>
-          </div>
-        </section>
-      </div>
-
-      <footer className="cap-sidebar-footer">
-        <button
-          aria-label="Configurações"
-          className="cap-footer-button"
-          type="button"
-        >
-          <CapacitiesSidebarIcon name="settings" />
-        </button>
-
-        <button
-          aria-label="Usar tema escuro"
-          className="cap-footer-button"
-          type="button"
-        >
-          <CapacitiesSidebarIcon name="moon" />
-        </button>
-
-        <button
-          aria-label="Perfil pessoal"
-          className="cap-footer-button"
-          type="button"
-        >
-          <CapacitiesSidebarIcon name="user" />
-        </button>
-
-        <span className="cap-pro-pill">
-          <CapacitiesSidebarIcon name="rocket" />
-          <span>Pro</span>
-        </span>
-
-        <div className="cap-grow" />
-
-        <button
-          aria-label="Compartilhar"
-          className="cap-footer-button"
-          type="button"
-        >
-          <CapacitiesSidebarIcon name="share" />
-        </button>
-      </footer>
-    </aside>
   );
 }
 
@@ -968,7 +775,7 @@ export function CapacitiesLayout() {
       ) : null}
 
       {sidebarOpen ? (
-        <Sidebar
+        <CapacitiesSidebar
           onOpenDocument={() => setDocumentOpen(true)}
           onOpenExplore={() => openContextTab("explore")}
           onOpenSearch={() => openContextTab("search")}
