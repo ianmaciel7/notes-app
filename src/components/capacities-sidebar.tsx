@@ -1,12 +1,13 @@
 "use client";
 
+import { ChevronDown, ChevronUp, Ellipsis, Plus } from "lucide-react";
 import { type FormEvent, type ReactNode, useEffect, useState } from "react";
-
 import {
   CapacitiesSidebarIcon,
   type CapacitiesSidebarIconName,
 } from "@/components/capacities-sidebar-icon";
 import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import {
   Dialog,
   DialogContent,
@@ -22,10 +23,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChevronDown, ChevronUp, Ellipsis, Plus } from "lucide-react";
 
 type SectionKey = "pinned" | "types" | "help";
 type PinnedSort = "manual" | "alphabetical";
@@ -119,7 +118,10 @@ function parseV2CustomSections(
       return {
         id: item.id,
         label: item.label,
-        open: asBoolean((rawOpenRecord as Record<string, unknown>)[item.id], true),
+        open: asBoolean(
+          (rawOpenRecord as Record<string, unknown>)[item.id],
+          true,
+        ),
       };
     })
     .filter((item): item is SidebarCustomSection => item !== null);
@@ -131,7 +133,9 @@ function fromV2State(raw: unknown): SidebarState | null {
   }
 
   const candidate = {
-    openSections: toOpenSections((raw as { openSections: unknown }).openSections),
+    openSections: toOpenSections(
+      (raw as { openSections: unknown }).openSections,
+    ),
     pinnedPage: asBoolean((raw as { pinnedPage: unknown }).pinnedPage, false),
     pinnedSort: asSort((raw as { pinnedSort: unknown }).pinnedSort),
     customSections: parseV2CustomSections(
@@ -154,10 +158,7 @@ function parseV3CustomSections(raw: unknown): SidebarCustomSection[] {
         return null;
       }
 
-      if (
-        typeof section.id !== "string" ||
-        typeof section.label !== "string"
-      ) {
+      if (typeof section.id !== "string" || typeof section.label !== "string") {
         return null;
       }
 
@@ -188,12 +189,16 @@ function fromV3State(raw: unknown): SidebarState | null {
     openSections: toOpenSections(raw.openSections),
     pinnedPage: asBoolean(raw.pinnedPage, false),
     pinnedSort: asSort(raw.pinnedSort),
-    customSections: parseV3CustomSections((raw as { customSections: unknown }).customSections),
+    customSections: parseV3CustomSections(
+      (raw as { customSections: unknown }).customSections,
+    ),
   };
 }
 
 function toLabelSortText(sort: PinnedSort) {
-  return sort === "alphabetical" ? "Ordenar alfabeticamente" : "Ordenar manualmente";
+  return sort === "alphabetical"
+    ? "Ordenar alfabeticamente"
+    : "Ordenar manualmente";
 }
 
 function SidebarNavItem({
@@ -202,14 +207,15 @@ function SidebarNavItem({
   label,
   onClick,
 }: {
-  children: string;
+  children?: string;
   icon: CapacitiesSidebarIconName;
-  label: string;
+  label?: string;
   onClick: () => void;
 }) {
+  const text = children ?? label ?? "";
   return (
     <Button
-      aria-label={label}
+      aria-label={label ?? text}
       className="cap-nav-item"
       onClick={onClick}
       size="default"
@@ -220,7 +226,7 @@ function SidebarNavItem({
         <CapacitiesSidebarIcon name={icon} />
       </span>
 
-      <span className="cap-nav-label">{children}</span>
+      <span className="cap-nav-label">{text}</span>
     </Button>
   );
 }
@@ -276,13 +282,15 @@ function SectionHeader({
 
 function SidebarObjectRow({
   actions,
+  children,
   count = 1,
   icon,
   onClick,
   testId,
   title,
 }: {
-  actions: ReactNode;
+  actions?: ReactNode;
+  children?: ReactNode;
   count?: number;
   icon: CapacitiesSidebarIconName;
   onClick: () => void;
@@ -310,7 +318,11 @@ function SidebarObjectRow({
         </span>
       </Button>
 
-      <div className="cap-object-menu-trigger" data-testid={testId ? `${testId}-menu` : undefined}>
+      <div
+        className="cap-object-menu-trigger"
+        data-testid={testId ? `${testId}-menu` : undefined}
+      >
+        {children}
         {actions}
       </div>
     </div>
@@ -419,7 +431,9 @@ export function CapacitiesSidebar({
   const removeCustomSection = (id: string) => {
     setState((previous) => ({
       ...previous,
-      customSections: previous.customSections.filter((section) => section.id !== id),
+      customSections: previous.customSections.filter(
+        (section) => section.id !== id,
+      ),
     }));
   };
 
@@ -477,7 +491,11 @@ export function CapacitiesSidebar({
           Explorar
         </SidebarNavItem>
 
-        <SidebarNavItem icon="calendar" label="Calendário" onClick={onOpenExplore}>
+        <SidebarNavItem
+          icon="calendar"
+          label="Calendário"
+          onClick={onOpenExplore}
+        >
           Calendário
         </SidebarNavItem>
       </div>
@@ -487,7 +505,7 @@ export function CapacitiesSidebar({
           <section className="cap-sidebar-section" data-testid="pinned-section">
             <SectionHeader
               count={pinnedCount}
-              icon={ICONS.pinned}
+              icon="pin"
               onToggle={() => toggleSection("pinned")}
               open={state.openSections.pinned}
               section="pinned"
@@ -506,19 +524,21 @@ export function CapacitiesSidebar({
                     title="Páginas"
                   >
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-label="Mais opções de Fixados"
-                          className="cap-section-action-button"
-                          size="icon-sm"
-                          variant="ghost"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                          }}
-                        >
-                          <Ellipsis size={13} />
-                        </Button>
-                      </DropdownMenuTrigger>
+                      <DropdownMenuTrigger
+                        render={
+                          <Button
+                            aria-label="Mais opções de Fixados"
+                            className="cap-section-action-button"
+                            size="icon-sm"
+                            variant="ghost"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                            }}
+                          >
+                            <Ellipsis size={13} />
+                          </Button>
+                        }
+                      />
 
                       <DropdownMenuContent
                         align="start"
@@ -559,7 +579,9 @@ export function CapacitiesSidebar({
                             }));
                           }}
                         >
-                          {state.pinnedPage ? "Desafixar Páginas" : "Fixar Páginas"}
+                          {state.pinnedPage
+                            ? "Desafixar Páginas"
+                            : "Fixar Páginas"}
                         </DropdownMenuItem>
 
                         {state.pinnedPage ? (
@@ -583,7 +605,7 @@ export function CapacitiesSidebar({
           <section className="cap-sidebar-section" data-testid="types-section">
             <SectionHeader
               count={1}
-              icon={ICONS.types}
+              icon="types"
               onToggle={() => toggleSection("types")}
               open={state.openSections.types}
               section="types"
@@ -600,19 +622,21 @@ export function CapacitiesSidebar({
                   title="Páginas"
                 >
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        aria-label="Mais opções de Página"
-                        className="cap-object-menu-button"
-                        size="icon-sm"
-                        variant="ghost"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                        }}
-                      >
-                        <Ellipsis size={13} />
-                      </Button>
-                    </DropdownMenuTrigger>
+                    <DropdownMenuTrigger
+                      render={
+                        <Button
+                          aria-label="Mais opções de Página"
+                          className="cap-object-menu-button"
+                          size="icon-sm"
+                          variant="ghost"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                          }}
+                        >
+                          <Ellipsis size={13} />
+                        </Button>
+                      }
+                    />
 
                     <DropdownMenuContent
                       align="start"
@@ -683,24 +707,31 @@ export function CapacitiesSidebar({
           {state.customSections.length > 0 ? (
             <div>
               {state.customSections.map((section) => (
-                <section className="cap-sidebar-section cap-custom-section" key={section.id}>
+                <section
+                  className="cap-sidebar-section cap-custom-section"
+                  key={section.id}
+                >
                   <SectionHeader
                     icon="file"
-                    onToggle={() => setCustomSectionOpen(section.id, !section.open)}
+                    onToggle={() =>
+                      setCustomSectionOpen(section.id, !section.open)
+                    }
                     open={section.open}
                     section={`custom:${section.id}`}
                     actions={
                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-label={`Opções de ${section.label}`}
-                            className="cap-section-action-button"
-                            size="icon-sm"
-                            variant="ghost"
-                          >
-                            <Ellipsis size={13} />
-                          </Button>
-                        </DropdownMenuTrigger>
+                        <DropdownMenuTrigger
+                          render={
+                            <Button
+                              aria-label={`Opções de ${section.label}`}
+                              className="cap-section-action-button"
+                              size="icon-sm"
+                              variant="ghost"
+                            >
+                              <Ellipsis size={13} />
+                            </Button>
+                          }
+                        />
 
                         <DropdownMenuContent
                           align="start"
@@ -731,7 +762,10 @@ export function CapacitiesSidebar({
                     {section.label}
                   </SectionHeader>
 
-                  <Collapsible open={section.open} id={`custom:${section.id}-content`}>
+                  <Collapsible
+                    open={section.open}
+                    id={`custom:${section.id}-content`}
+                  >
                     <CollapsibleContent className="cap-sidebar-block">
                       <p className="cap-sidebar-empty">Sem itens</p>
                     </CollapsibleContent>
@@ -752,7 +786,7 @@ export function CapacitiesSidebar({
 
           <section className="cap-sidebar-section" data-testid="help-section">
             <SectionHeader
-              icon={ICONS.help}
+              icon="help"
               onToggle={() => toggleSection("help")}
               open={state.openSections.help}
               section="help"
@@ -787,7 +821,11 @@ export function CapacitiesSidebar({
                     Documentação
                   </SidebarNavItem>
 
-                  <SidebarNavItem icon="news" label="Novidades" onClick={onOpenExplore}>
+                  <SidebarNavItem
+                    icon="news"
+                    label="Novidades"
+                    onClick={onOpenExplore}
+                  >
                     Novidades
                   </SidebarNavItem>
 
@@ -835,12 +873,16 @@ export function CapacitiesSidebar({
           <DialogHeader>
             <DialogTitle>Adicionar seção</DialogTitle>
             <DialogDescription>
-              Nomeie a nova seção personalizada para organizar itens dentro da barra lateral.
+              Nomeie a nova seção personalizada para organizar itens dentro da
+              barra lateral.
             </DialogDescription>
           </DialogHeader>
 
           <form className="cap-sidebar-dialog-form" onSubmit={createSection}>
-            <label className="cap-sidebar-dialog-field" htmlFor="cap-section-name">
+            <label
+              className="cap-sidebar-dialog-field"
+              htmlFor="cap-section-name"
+            >
               Nome da seção
             </label>
 

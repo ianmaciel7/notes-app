@@ -1,32 +1,21 @@
-import { cleanup, render, screen } from "@testing-library/react";
+﻿import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, test } from "vitest";
 import Home from "../src/app/page";
 
 afterEach(cleanup);
 
-test("renders the starter page with primary navigation targets", () => {
+test("renders the notes app shell with primary controls", () => {
   render(<Home />);
 
-  expect(screen.getByRole("img", { name: "Next.js logo" })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: "Sem título" })).toBeInTheDocument();
   expect(
-    screen.getByRole("heading", {
-      name: /to get started, edit the page\.tsx file/i,
-    }),
+    screen.getByRole("button", { name: "Seleção de espaço" }),
   ).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: "Templates" })).toHaveAttribute(
-    "href",
-    expect.stringContaining("vercel.com/templates"),
-  );
-  expect(screen.getByRole("link", { name: "Learning" })).toHaveAttribute(
-    "href",
-    expect.stringContaining("nextjs.org/learn"),
-  );
-  expect(screen.getByRole("link", { name: /deploy now/i })).toHaveAttribute(
-    "href",
-    expect.stringContaining("vercel.com/new"),
-  );
-  expect(screen.getByRole("link", { name: "Documentation" })).toHaveAttribute(
-    "href",
-    expect.stringContaining("nextjs.org/docs"),
-  );
+  expect(screen.getByText("Teste")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Recolher barra lateral" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Adicionar objeto" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Fechar Sem título" })).toBeInTheDocument();
+  expect(screen.getAllByRole("heading", { name: "Explorar" })).toHaveLength(2);
+  expect(screen.getByRole("button", { name: "Nova aba de contexto" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Abrir Páginas" })).toBeInTheDocument();
 });

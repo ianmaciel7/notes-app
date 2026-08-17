@@ -1,33 +1,41 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
-
-import { CapacitiesSidebar } from "@/components/capacities-sidebar";
-import { CapacitiesSidebarIcon } from "@/components/capacities-sidebar-icon";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   ArrowLeft,
   ArrowRight,
+  Box,
   ChevronDown,
+  Compass,
   FolderPlus,
-  ListFilter,
+  Link,
   Maximize2,
-  Minimize2,
   MessageSquare,
+  Minimize2,
+  MoreHorizontal,
   Network,
   PanelLeft,
   PanelRight,
   Plus,
   Search,
-  Settings,
-  Box,
-  Compass,
   X,
-  MoreHorizontal,
 } from "lucide-react";
+import { type ReactNode, useState } from "react";
+import { CapacitiesSidebar } from "@/components/capacities-sidebar";
+import { CapacitiesSidebarIcon } from "@/components/capacities-sidebar-icon";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type UiIconName =
   | "arrow-left"
@@ -113,11 +121,12 @@ const contextIcons: Record<Exclude<ContextTabId, "chat">, UiIconName> = {
   links: "link",
   objects: "cube",
   related: "search",
-  search: "list-filter",
+  search: "search",
 };
 
 function UiIcon({ className, name }: UiIconProps) {
   const iconClassName = className ?? "cap-top-icon";
+
   if (name === "arrow-left") {
     return <ArrowLeft className={iconClassName} />;
   }
@@ -134,7 +143,7 @@ function UiIcon({ className, name }: UiIconProps) {
     return <Box className={iconClassName} />;
   }
   if (name === "link") {
-    return <ListFilter className={iconClassName} />;
+    return <Link className={iconClassName} />;
   }
   if (name === "network") {
     return <Network className={iconClassName} />;
@@ -148,6 +157,7 @@ function UiIcon({ className, name }: UiIconProps) {
   if (name === "plus") {
     return <Plus className={iconClassName} />;
   }
+
   return <Search className={iconClassName} />;
 }
 
@@ -163,47 +173,61 @@ function IconWithTooltip({
   onClick?: () => void;
 }) {
   return (
-    <Tooltip delay={200}>
-      <TooltipTrigger asChild>
-        <Button
-          aria-label={label}
-          className="cap-top-button cap-icon-button"
-          disabled={disabled}
-          onClick={onClick}
-          size="icon-sm"
-          variant="ghost"
-        >
-          {icon}
-        </Button>
-      </TooltipTrigger>
+    <Tooltip>
+      <TooltipTrigger
+        disabled={disabled}
+        onClick={onClick}
+        render={
+          <Button
+            aria-label={label}
+            className="cap-top-button cap-icon-button"
+            size="icon-sm"
+            variant="ghost"
+          >
+            {icon}
+          </Button>
+        }
+      />
       <TooltipContent>{label}</TooltipContent>
     </Tooltip>
   );
 }
 
-function WorkspaceHeader({
-  onCollapse,
-}: {
-  onCollapse: () => void;
-}) {
+function WorkspaceHeader({ onCollapse }: { onCollapse: () => void }) {
   return (
     <header className="cap-workspace-header">
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="Seleção de espaço"
-            className="cap-workspace-picker"
-            variant="ghost"
-          >
-            <CapacitiesSidebarIcon className="cap-workspace-main-icon" name="workspace" />
-            <span className="cap-workspace-name">Teste</span>
-            <UiIcon className="cap-workspace-switch-icon" name="chevron-down" />
-          </Button>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              aria-label="Seleção de espaço"
+              className="cap-workspace-picker"
+              variant="ghost"
+            >
+              <CapacitiesSidebarIcon
+                className="cap-workspace-main-icon"
+                name="workspace"
+              />
+              <span className="cap-workspace-name">Teste</span>
+              <UiIcon
+                className="cap-workspace-switch-icon"
+                name="chevron-down"
+              />
+            </Button>
+          }
+        />
 
-        <DropdownMenuContent align="start" className="cap-dropdown-content" sideOffset={4}>
-          <DropdownMenuItem className="cap-dropdown-item">Teste</DropdownMenuItem>
-          <DropdownMenuItem className="cap-dropdown-item">Ideias</DropdownMenuItem>
+        <DropdownMenuContent
+          align="start"
+          className="cap-dropdown-content"
+          sideOffset={4}
+        >
+          <DropdownMenuItem className="cap-dropdown-item">
+            Teste
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cap-dropdown-item">
+            Ideias
+          </DropdownMenuItem>
           <DropdownMenuItem className="cap-dropdown-item">
             <Plus className="cap-dropdown-inline-icon" size={14} />
             <span>Criar espaço</span>
@@ -297,11 +321,19 @@ function MainHeader({
 
       <div className="cap-grow" />
 
-      <IconWithTooltip
-        icon={<(wideLayout ? Minimize2 : Maximize2) className="cap-top-icon" />}
-        label={wideLayout ? "Layout normal" : "Layout amplo"}
-        onClick={onToggleWideLayout}
-      />
+      {wideLayout ? (
+        <IconWithTooltip
+          icon={<Minimize2 className="cap-top-icon" />}
+          label="Layout normal"
+          onClick={onToggleWideLayout}
+        />
+      ) : (
+        <IconWithTooltip
+          icon={<Maximize2 className="cap-top-icon" />}
+          label="Layout amplo"
+          onClick={onToggleWideLayout}
+        />
+      )}
 
       {contextOpen ? null : (
         <IconWithTooltip
@@ -333,10 +365,15 @@ function ContextHeader({
         {activeTab === "chat" ? (
           <CapacitiesSidebarIcon className="cap-context-tab-icon" name="chat" />
         ) : (
-          <UiIcon className="cap-context-tab-icon" name={contextIcons[activeTab]} />
+          <UiIcon
+            className="cap-context-tab-icon"
+            name={contextIcons[activeTab]}
+          />
         )}
 
-        <span className="cap-context-tab-label">{contextLabels[activeTab]}</span>
+        <span className="cap-context-tab-label">
+          {contextLabels[activeTab]}
+        </span>
 
         <button
           aria-label={`Fechar ${contextLabels[activeTab]}`}
@@ -362,43 +399,53 @@ function ContextHeader({
 
       <div className="cap-context-header-actions">
         <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              aria-label="Fechar painel de contexto"
-              className="cap-top-button"
-              onClick={onClose}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <PanelRight className="cap-top-icon" />
-            </Button>
-          </TooltipTrigger>
+          <TooltipTrigger
+            render={
+              <Button
+                aria-label="Fechar painel de contexto"
+                className="cap-top-button"
+                onClick={onClose}
+                size="icon-sm"
+                variant="ghost"
+              >
+                <PanelRight className="cap-top-icon" />
+              </Button>
+            }
+          />
           <TooltipContent>Fechar painel</TooltipContent>
         </Tooltip>
 
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              aria-label="Mais opções"
-              className="cap-top-button cap-context-menu-trigger"
-              size="icon-sm"
-              variant="ghost"
-            >
-              <MoreHorizontal className="cap-top-icon" />
-              <ChevronDown className="cap-top-icon" />
-            </Button>
-          </DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                aria-label="Mais opções"
+                className="cap-top-button cap-context-menu-trigger"
+                size="icon-sm"
+                variant="ghost"
+              >
+                <MoreHorizontal className="cap-top-icon" />
+                <ChevronDown className="cap-top-icon" />
+              </Button>
+            }
+          />
 
           <DropdownMenuContent
             align="end"
             className="cap-dropdown-content"
             sideOffset={6}
           >
-            <DropdownMenuItem className="cap-dropdown-item" onClick={onOpenExplore}>
+            <DropdownMenuItem
+              className="cap-dropdown-item"
+              onClick={onOpenExplore}
+            >
               Voltar para Explorar
             </DropdownMenuItem>
 
-            <DropdownMenuItem className="cap-dropdown-item" onClick={onOpenGraph}>
+            <DropdownMenuItem
+              className="cap-dropdown-item"
+              onClick={onOpenGraph}
+            >
               Abrir grafo
             </DropdownMenuItem>
 
@@ -406,7 +453,10 @@ function ContextHeader({
               Fechar painel
             </DropdownMenuItem>
 
-            <DropdownMenuItem className="cap-dropdown-item" onClick={onOpenSearch}>
+            <DropdownMenuItem
+              className="cap-dropdown-item"
+              onClick={onOpenSearch}
+            >
               Buscar
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -501,7 +551,9 @@ function ExploreAction({
       <span className="cap-explore-card-icon">
         <UiIcon
           className="cap-top-icon"
-          name={id === "chat" ? "compass" : id === "search" ? "search" : "network"}
+          name={
+            id === "chat" ? "compass" : id === "search" ? "search" : "network"
+          }
         />
       </span>
 
@@ -655,7 +707,9 @@ export function CapacitiesLayout() {
   return (
     <TooltipProvider>
       <div className={rootClassName}>
-        {sidebarOpen ? <WorkspaceHeader onCollapse={() => setSidebarOpen(false)} /> : null}
+        {sidebarOpen ? (
+          <WorkspaceHeader onCollapse={() => setSidebarOpen(false)} />
+        ) : null}
 
         <MainHeader
           contextOpen={contextOpen}
@@ -693,7 +747,10 @@ export function CapacitiesLayout() {
         />
 
         {contextOpen ? (
-          <ContextPanel activeTab={activeContextTab} onSelect={openContextTab} />
+          <ContextPanel
+            activeTab={activeContextTab}
+            onSelect={openContextTab}
+          />
         ) : null}
       </div>
     </TooltipProvider>
