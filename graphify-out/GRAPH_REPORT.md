@@ -1,16 +1,16 @@
-# Graph Report - notes-app  (2026-08-15)
+# Graph Report - notes-app  (2026-08-17)
 
 ## Corpus Check
-- 67 files · ~128,757 words
+- 81 files · ~126,495 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 752 nodes · 696 edges · 60 communities (56 shown, 4 thin omitted)
+- 861 nodes · 797 edges · 74 communities (70 shown, 4 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `89eb52cd`
+- Built from commit: `edc5014c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -70,11 +70,21 @@
 - Capacities Knowledge Graph Source
 - Obsidian Knowledge Graph Source
 - Readwise / Reader Knowledge Graph Source
+- ADDED Requirements
+- ADDED Requirements
+- check-complexity.mjs
+- ADDED Requirements
+- ADDED Requirements
+- sync-stag-hotfixes-to-dev/proposal.md
+- configure-biome-governance/proposal.md
+- enforce-conventional-branch-naming/proposal.md
+- enforce-quality-thresholds/proposal.md
+- MODIFIED Requirements
 
 ## God Nodes (most connected - your core abstractions)
-1. `compilerOptions` - 16 edges
-2. `scripts` - 14 edges
-3. `Contributing` - 12 edges
+1. `scripts` - 21 edges
+2. `compilerOptions` - 16 edges
+3. `Contributing` - 13 edges
 4. `ADDED Requirements` - 11 edges
 5. `Requirements` - 11 edges
 6. `Design` - 10 edges
@@ -89,31 +99,31 @@
 ## Import Cycles
 - None detected.
 
-## Communities (60 total, 4 thin omitted)
+## Communities (74 total, 4 thin omitted)
 
 ### Community 0 - "devDependencies"
 Cohesion: 0.06
-Nodes (31): babel-plugin-react-compiler, @biomejs/biome, jsdom, devDependencies, babel-plugin-react-compiler, @biomejs/biome, jsdom, tailwindcss (+23 more)
+Nodes (33): babel-plugin-react-compiler, @biomejs/biome, jsdom, lefthook, devDependencies, babel-plugin-react-compiler, @biomejs/biome, jsdom (+25 more)
 
 ### Community 1 - "compilerOptions"
 Cohesion: 0.07
 Nodes (28): dom, dom.iterable, esnext, **/*.mts, .next/dev/types/**/*.ts, next-env.d.ts, .next/types/**/*.ts, **/*.ts (+20 more)
 
 ### Community 2 - "biome.json"
-Cohesion: 0.08
-Nodes (23): source, assist, actions, css, parser, next, react, formatter (+15 more)
+Cohesion: 0.06
+Nodes (31): recommended, assist, actions, enabled, noExcessiveCognitiveComplexity, css, formatter, parser (+23 more)
 
 ### Community 3 - "includes"
-Cohesion: 0.12
-Nodes (13): files, ignoreUnknown, includes, !node_modules, nextConfig, **, !build, !dist (+5 more)
+Cohesion: 0.11
+Nodes (15): files, ignoreUnknown, includes, !!node_modules, nextConfig, **, !!build, !!coverage (+7 more)
 
 ### Community 4 - "ADDED Requirements"
 Cohesion: 0.11
 Nodes (17): ADDED Requirements, Requirement: Branch Protection Source Files, Requirement: Dependency Maintenance, Requirement: Deployment Boundary, Requirement: Pull Request Quality Gates, Requirement: Security Validation, Scenario: Cloud deployment is added, Scenario: Code scanning (+9 more)
 
 ### Community 5 - "scripts"
-Cohesion: 0.08
-Nodes (25): next, dependencies, next, react, react-dom, name, packageManager, private (+17 more)
+Cohesion: 0.06
+Nodes (32): next, dependencies, next, react, react-dom, name, packageManager, private (+24 more)
 
 ### Community 6 - "Requirements"
 Cohesion: 0.05
@@ -148,8 +158,8 @@ Cohesion: 0.05
 Nodes (38): ADDED Requirements, Purpose, Requirement: Objective As Configured Object Type, Requirement: Objective Context, Requirement: Objective Identity And Classification, Requirement: Objective Lifecycle, Requirement: Objective Preparation Progress, Requirement: Objective Requirements And Topics (+30 more)
 
 ### Community 19 - "Contributing"
-Cohesion: 0.15
-Nodes (12): Branch Naming, CI And Merge, Commit, Contributing, Git Workflow, Local Development, Production Promotion, Pull Request (+4 more)
+Cohesion: 0.14
+Nodes (13): Branch Naming, CI And Merge, Commit, Contributing, Git Workflow, Local Development, Production Promotion, Pull Request (+5 more)
 
 ### Community 20 - "Deployment"
 Cohesion: 0.20
@@ -160,8 +170,8 @@ Cohesion: 0.22
 Nodes (8): Agent Work, Application Expectations, Dependencies, GitHub Actions Supply Chain, Reporting, Secrets, Security, Static Analysis
 
 ### Community 22 - "Testing"
-Cohesion: 0.25
-Nodes (7): CI, Coverage, Current State, Definition Of Done, Local Verification, Testing, Verification Loop
+Cohesion: 0.20
+Nodes (9): Agent Hooks, CI, Complexity, Coverage, Current State, Definition Of Done, Local Verification, Testing (+1 more)
 
 ### Community 25 - "ADDED Requirements"
 Cohesion: 0.11
@@ -295,8 +305,48 @@ Nodes (5): Entities, Graph Interpretation, Obsidian Knowledge Graph Source, Topi
 Cohesion: 0.33
 Nodes (5): Entities, Features, Graph Interpretation, Readwise / Reader Knowledge Graph Source, Workflows
 
+### Community 60 - "ADDED Requirements"
+Cohesion: 0.17
+Nodes (11): ADDED Requirements, Requirement: Agent Validation Hook Source, Requirement: CI Quality Gate Includes Complexity, Requirement: Coverage Thresholds, Requirement: Function Complexity Gate, Scenario: Agent hook tooling is installed, Scenario: Agent hooks are installed locally, Scenario: Cognitive complexity is checked (+3 more)
+
+### Community 61 - "ADDED Requirements"
+Cohesion: 0.18
+Nodes (10): ADDED Requirements, Requirement: Back-Sync Safety, Requirement: Stag To Dev Back-Sync Detection, Requirement: Stag To Dev Sync Pull Request, Scenario: Back-sync workflow runs, Scenario: Conflicts are likely, Scenario: Dev branch is unavailable, Scenario: Stag receives a push (+2 more)
+
+### Community 62 - "check-complexity.mjs"
+Cohesion: 0.27
+Nodes (9): allowedExtensions, branchWeight(), cyclomaticComplexity(), failures, functionName(), isFunctionLike(), root, sourceRoot (+1 more)
+
+### Community 63 - "ADDED Requirements"
+Cohesion: 0.20
+Nodes (9): ADDED Requirements, Requirement: Biome Configuration Baseline, Requirement: Deterministic Biome Commands, Requirement: Generated File Scanning, Scenario: Biome configuration is reviewed, Scenario: Biome runs locally or in CI, Scenario: CI validates Biome, Scenario: Developer fixes safe Biome issues (+1 more)
+
+### Community 64 - "ADDED Requirements"
+Cohesion: 0.29
+Nodes (6): ADDED Requirements, Requirement: Agent Workflow Entrypoint, Requirement: Conventional Branch Names, Scenario: Agent starts Git work, Scenario: Agent starts repository work, Scenario: Contributor creates a working branch
+
+### Community 65 - "sync-stag-hotfixes-to-dev/proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Modified Capabilities, New Capabilities, Non-Goals, What Changes, Why
+
+### Community 66 - "configure-biome-governance/proposal.md"
+Cohesion: 0.33
+Nodes (5): Capabilities, New Capabilities, Non-Goals, What Changes, Why
+
+### Community 67 - "enforce-conventional-branch-naming/proposal.md"
+Cohesion: 0.33
+Nodes (5): Capabilities, New Capabilities, Non-Goals, What Changes, Why
+
+### Community 68 - "enforce-quality-thresholds/proposal.md"
+Cohesion: 0.33
+Nodes (5): Capabilities, New Capabilities, Non-Goals, What Changes, Why
+
+### Community 69 - "MODIFIED Requirements"
+Cohesion: 0.33
+Nodes (5): MODIFIED Requirements, Requirement: Branch Protection Source Files, Requirement: Pull Request Quality Gates, Scenario: Protected branch rules are reviewed, Scenario: Pull request validation
+
 ## Knowledge Gaps
-- **529 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `ignoreUnknown` (+524 more)
+- **590 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `defaultBranch` (+585 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -306,14 +356,14 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `devDependencies` connect `devDependencies` to `scripts`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **What connects `$schema`, `enabled`, `clientKind` to the rest of the system?**
-  _529 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _590 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `devDependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
 - **Should `compilerOptions` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `biome.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._
 - **Should `includes` be split into smaller, more focused modules?**
-  _Cohesion score 0.125 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
 - **Should `ADDED Requirements` be split into smaller, more focused modules?**
   _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
