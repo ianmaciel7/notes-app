@@ -31,6 +31,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -40,7 +49,6 @@ import {
 type UiIconName =
   | "arrow-left"
   | "arrow-right"
-  | "chevron-down"
   | "compass"
   | "cube"
   | "link"
@@ -133,9 +141,6 @@ function UiIcon({ className, name }: UiIconProps) {
   if (name === "arrow-right") {
     return <ArrowRight className={iconClassName} />;
   }
-  if (name === "chevron-down") {
-    return <ChevronDown className={iconClassName} />;
-  }
   if (name === "compass") {
     return <Compass className={iconClassName} />;
   }
@@ -209,10 +214,7 @@ function WorkspaceHeader({ onCollapse }: { onCollapse: () => void }) {
                 name="workspace"
               />
               <span className="cap-workspace-name">Teste</span>
-              <UiIcon
-                className="cap-workspace-switch-icon"
-                name="chevron-down"
-              />
+              <UiIcon className="cap-workspace-switch-icon" name="arrow-right" />
             </Button>
           }
         />
@@ -265,6 +267,8 @@ function MainHeader({
   onOpenSidebar: () => void;
   onToggleWideLayout: () => void;
 }) {
+  const WideLayoutIcon = wideLayout ? Minimize2 : Maximize2;
+
   return (
     <header className="cap-main-header">
       {!sidebarOpen ? (
@@ -321,19 +325,11 @@ function MainHeader({
 
       <div className="cap-grow" />
 
-      {wideLayout ? (
-        <IconWithTooltip
-          icon={<Minimize2 className="cap-top-icon" />}
-          label="Layout normal"
-          onClick={onToggleWideLayout}
-        />
-      ) : (
-        <IconWithTooltip
-          icon={<Maximize2 className="cap-top-icon" />}
-          label="Layout amplo"
-          onClick={onToggleWideLayout}
-        />
-      )}
+      <IconWithTooltip
+        icon={<WideLayoutIcon className="cap-top-icon" />}
+        label={wideLayout ? "Layout normal" : "Layout amplo"}
+        onClick={onToggleWideLayout}
+      />
 
       {contextOpen ? null : (
         <IconWithTooltip
@@ -371,9 +367,7 @@ function ContextHeader({
           />
         )}
 
-        <span className="cap-context-tab-label">
-          {contextLabels[activeTab]}
-        </span>
+        <span className="cap-context-tab-label">{contextLabels[activeTab]}</span>
 
         <button
           aria-label={`Fechar ${contextLabels[activeTab]}`}
@@ -501,7 +495,6 @@ function MainPanel({
 
             <div className="cap-property-row">
               <span className="cap-property-label">Etiquetas</span>
-
               <span className="cap-property-value">—</span>
             </div>
 
@@ -551,12 +544,9 @@ function ExploreAction({
       <span className="cap-explore-card-icon">
         <UiIcon
           className="cap-top-icon"
-          name={
-            id === "chat" ? "compass" : id === "search" ? "search" : "network"
-          }
+          name={id === "chat" ? "compass" : id === "search" ? "search" : "network"}
         />
       </span>
-
       <span className="cap-explore-card-label">{label}</span>
     </button>
   );
@@ -706,53 +696,75 @@ export function CapacitiesLayout() {
 
   return (
     <TooltipProvider>
-      <div className={rootClassName}>
-        {sidebarOpen ? (
+      <SidebarProvider
+        open={sidebarOpen}
+        onOpenChange={setSidebarOpen}
+        style={
+          {
+            "--sidebar-width": "18rem",
+            "--sidebar-width-mobile": "18rem",
+          } as React.CSSProperties
+        }
+      >
+        <div className={rootClassName}>
           <WorkspaceHeader onCollapse={() => setSidebarOpen(false)} />
-        ) : null}
 
-        <MainHeader
-          contextOpen={contextOpen}
-          documentOpen={documentOpen}
-          sidebarOpen={sidebarOpen}
-          wideLayout={wideLayout}
-          onCloseDocument={() => setDocumentOpen(false)}
-          onCreateDocument={() => setDocumentOpen(true)}
-          onOpenContext={() => openContextTab("explore")}
-          onOpenSidebar={() => setSidebarOpen(true)}
-          onToggleWideLayout={() => setWideLayout((current) => !current)}
-        />
-
-        {contextOpen ? (
-          <ContextHeader
-            activeTab={activeContextTab}
-            onClose={() => setContextOpen(false)}
-            onOpenExplore={() => openContextTab("explore")}
-            onOpenGraph={() => openContextTab("graph")}
-            onOpenSearch={() => openContextTab("search")}
-          />
-        ) : null}
-
-        {sidebarOpen ? (
           <CapacitiesSidebar
+            onOpenCalendar={() => openContextTab("explore")}
             onOpenDocument={() => setDocumentOpen(true)}
             onOpenExplore={() => openContextTab("explore")}
             onOpenSearch={() => openContextTab("search")}
           />
-        ) : null}
 
-        <MainPanel
-          documentOpen={documentOpen}
-          onCreateDocument={() => setDocumentOpen(true)}
-        />
+          <SidebarInset className="cap-app-shell">
+            <MainHeader
+              contextOpen={contextOpen}
+              documentOpen={documentOpen}
+              sidebarOpen={sidebarOpen}
+              wideLayout={wideLayout}
+              onCloseDocument={() => setDocumentOpen(false)}
+              onCreateDocument={() => setDocumentOpen(true)}
+              onOpenContext={() => openContextTab("explore")}
+              onOpenSidebar={() => setSidebarOpen(true)}
+              onToggleWideLayout={() => setWideLayout((current) => !current)}
+            />
 
-        {contextOpen ? (
-          <ContextPanel
-            activeTab={activeContextTab}
-            onSelect={openContextTab}
-          />
-        ) : null}
-      </div>
+            {contextOpen ? (
+              <ContextHeader
+                activeTab={activeContextTab}
+                onClose={() => setContextOpen(false)}
+                onOpenExplore={() => openContextTab("explore")}
+                onOpenGraph={() => openContextTab("graph")}
+                onOpenSearch={() => openContextTab("search")}
+              />
+            ) : null}
+
+            <ResizablePanelGroup
+              className="cap-app-content"
+              orientation="horizontal"
+            >
+              <ResizablePanel defaultSize={contextOpen ? 72 : 100} minSize={40}>
+                <MainPanel
+                  documentOpen={documentOpen}
+                  onCreateDocument={() => setDocumentOpen(true)}
+                />
+              </ResizablePanel>
+
+              {contextOpen ? (
+                <>
+                  <ResizableHandle />
+                  <ResizablePanel defaultSize={28} minSize={24} maxSize={56}>
+                    <ContextPanel
+                      activeTab={activeContextTab}
+                      onSelect={openContextTab}
+                    />
+                  </ResizablePanel>
+                </>
+              ) : null}
+            </ResizablePanelGroup>
+          </SidebarInset>
+        </div>
+      </SidebarProvider>
     </TooltipProvider>
   );
 }
