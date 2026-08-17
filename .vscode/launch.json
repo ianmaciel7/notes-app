@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: dev (debug)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "node",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "args": ["dev", "-p", "3000"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "serverReadyAction": {
+        "action": "startDebugging",
+        "pattern": "Local:.*?http://localhost:3000",
+        "name": "Chrome: attach to app",
+        "killOnServerStop": true
+      }
+    },
+    {
+      "name": "Chrome: attach to app",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "runtimeExecutable": "${env:PROGRAMFILES}\\Google\\Chrome\\Application\\chrome.exe"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Next.js + Chrome",
+      "configurations": ["Next.js: dev (debug)"]
+    }
+  ]
+}
