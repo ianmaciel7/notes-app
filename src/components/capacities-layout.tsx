@@ -1,25 +1,46 @@
 "use client";
 
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useState } from "react";
+
 import { CapacitiesSidebar } from "@/components/capacities-sidebar";
 import { CapacitiesSidebarIcon } from "@/components/capacities-sidebar-icon";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronDown,
+  FolderPlus,
+  ListFilter,
+  Maximize2,
+  Minimize2,
+  MessageSquare,
+  Network,
+  PanelLeft,
+  PanelRight,
+  Plus,
+  Search,
+  Settings,
+  Box,
+  Compass,
+  X,
+  MoreHorizontal,
+} from "lucide-react";
 
 type UiIconName =
   | "arrow-left"
   | "arrow-right"
   | "chevron-down"
-  | "close"
   | "compass"
   | "cube"
-  | "expand"
   | "link"
   | "network"
   | "panel-left"
   | "panel-right"
   | "plus"
-  | "related"
-  | "search"
-  | "shrink";
+  | "search";
 
 type ContextTabId =
   | "explore"
@@ -30,110 +51,9 @@ type ContextTabId =
   | "chat"
   | "search";
 
-const uiIconPaths: Record<UiIconName, ReactNode> = {
-  "arrow-left": (
-    <>
-      <path d="M19 12H5" />
-      <path d="m11 18-6-6 6-6" />
-    </>
-  ),
-  "arrow-right": (
-    <>
-      <path d="M5 12h14" />
-      <path d="m13 6 6 6-6 6" />
-    </>
-  ),
-  "chevron-down": <path d="m8 10 4 4 4-4" />,
-  close: (
-    <>
-      <path d="M7 7l10 10" />
-      <path d="M17 7 7 17" />
-    </>
-  ),
-  compass: (
-    <>
-      <circle cx="12" cy="12" r="8" />
-      <path d="m15.5 8.5-2 5-5 2 2-5 5-2Z" />
-    </>
-  ),
-  cube: (
-    <>
-      <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z" />
-      <path d="m4 7.5 8 4.5 8-4.5" />
-      <path d="M12 12v9" />
-    </>
-  ),
-  expand: (
-    <>
-      <path d="M8 3H3v5" />
-      <path d="m3 3 6 6" />
-      <path d="M16 3h5v5" />
-      <path d="m21 3-6 6" />
-      <path d="M8 21H3v-5" />
-      <path d="m3 21 6-6" />
-      <path d="M16 21h5v-5" />
-      <path d="m21 21-6-6" />
-    </>
-  ),
-  link: (
-    <>
-      <path d="M10 13a4 4 0 0 0 5.66 0l2.12-2.12a4 4 0 0 0-5.66-5.66L11 6.34" />
-      <path d="M14 11a4 4 0 0 0-5.66 0l-2.12 2.12a4 4 0 0 0 5.66 5.66L13 17.66" />
-    </>
-  ),
-  network: (
-    <>
-      <circle cx="7" cy="12" r="2" />
-      <circle cx="17" cy="7" r="2" />
-      <circle cx="17" cy="17" r="2" />
-      <path d="m9 11 6-3" />
-      <path d="m9 13 6 3" />
-    </>
-  ),
-  "panel-left": (
-    <>
-      <rect x="3" y="4" width="18" height="16" rx="2" />
-      <path d="M9 4v16" />
-    </>
-  ),
-  "panel-right": (
-    <>
-      <rect x="3" y="4" width="18" height="16" rx="2" />
-      <path d="M15 4v16" />
-    </>
-  ),
-  plus: (
-    <>
-      <path d="M12 5v14" />
-      <path d="M5 12h14" />
-    </>
-  ),
-  related: (
-    <>
-      <rect x="3" y="4" width="18" height="16" rx="2" />
-      <path d="M15 4v16" />
-      <path d="M7 9h4" />
-      <path d="M7 13h4" />
-    </>
-  ),
-  search: (
-    <>
-      <circle cx="11" cy="11" r="6" />
-      <path d="m16 16 4 4" />
-    </>
-  ),
-  shrink: (
-    <>
-      <path d="M8 8H3V3" />
-      <path d="m3 8 5-5" />
-      <path d="M16 8h5V3" />
-      <path d="m21 8-5-5" />
-      <path d="M8 16H3v5" />
-      <path d="m3 16 5 5" />
-      <path d="M16 16h5v5" />
-      <path d="m21 16-5 5" />
-    </>
-  ),
+type UiIconProps = {
+  className?: string;
+  name: UiIconName;
 };
 
 const contextLabels: Record<ContextTabId, string> = {
@@ -187,154 +107,115 @@ const contextItems: ReadonlyArray<{
   },
 ];
 
-const contextUiIcons: Record<Exclude<ContextTabId, "chat">, UiIconName> = {
+const contextIcons: Record<Exclude<ContextTabId, "chat">, UiIconName> = {
   explore: "compass",
   graph: "network",
   links: "link",
   objects: "cube",
-  related: "related",
-  search: "search",
+  related: "search",
+  search: "list-filter",
 };
 
-function UiIcon({ className, name }: { className?: string; name: UiIconName }) {
-  return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      focusable="false"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.65"
-      viewBox="0 0 24 24"
-    >
-      {uiIconPaths[name]}
-    </svg>
-  );
-}
-
-function ContextTabIcon({
-  className,
-  tab,
-}: {
-  className?: string;
-  tab: ContextTabId;
-}) {
-  if (tab === "chat") {
-    return <CapacitiesSidebarIcon className={className} name="chat" />;
+function UiIcon({ className, name }: UiIconProps) {
+  const iconClassName = className ?? "cap-top-icon";
+  if (name === "arrow-left") {
+    return <ArrowLeft className={iconClassName} />;
   }
-
-  return <UiIcon className={className} name={contextUiIcons[tab]} />;
+  if (name === "arrow-right") {
+    return <ArrowRight className={iconClassName} />;
+  }
+  if (name === "chevron-down") {
+    return <ChevronDown className={iconClassName} />;
+  }
+  if (name === "compass") {
+    return <Compass className={iconClassName} />;
+  }
+  if (name === "cube") {
+    return <Box className={iconClassName} />;
+  }
+  if (name === "link") {
+    return <ListFilter className={iconClassName} />;
+  }
+  if (name === "network") {
+    return <Network className={iconClassName} />;
+  }
+  if (name === "panel-left") {
+    return <PanelLeft className={iconClassName} />;
+  }
+  if (name === "panel-right") {
+    return <PanelRight className={iconClassName} />;
+  }
+  if (name === "plus") {
+    return <Plus className={iconClassName} />;
+  }
+  return <Search className={iconClassName} />;
 }
 
-function IconButton({
-  active = false,
-  className,
+function IconWithTooltip({
   disabled = false,
   icon,
   label,
   onClick,
 }: {
-  active?: boolean;
-  className?: string;
   disabled?: boolean;
-  icon: UiIconName;
+  icon: ReactNode;
   label: string;
   onClick?: () => void;
 }) {
-  const buttonClassName = [
-    "cap-icon-button",
-    active ? "cap-icon-button-active" : "",
-    className ?? "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <button
-      aria-label={label}
-      aria-pressed={active || undefined}
-      className={buttonClassName}
-      disabled={disabled}
-      onClick={onClick}
-      type="button"
-    >
-      <UiIcon name={icon} />
-    </button>
+    <Tooltip delay={200}>
+      <TooltipTrigger asChild>
+        <Button
+          aria-label={label}
+          className="cap-top-button cap-icon-button"
+          disabled={disabled}
+          onClick={onClick}
+          size="icon-sm"
+          variant="ghost"
+        >
+          {icon}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{label}</TooltipContent>
+    </Tooltip>
   );
 }
 
 function WorkspaceHeader({
-  menuOpen,
   onCollapse,
-  onToggleMenu,
 }: {
-  menuOpen: boolean;
   onCollapse: () => void;
-  onToggleMenu: () => void;
 }) {
   return (
     <header className="cap-workspace-header">
-      <button
-        aria-expanded={menuOpen}
-        className="cap-workspace-picker"
-        onClick={onToggleMenu}
-        type="button"
-      >
-        <CapacitiesSidebarIcon
-          className="cap-workspace-main-icon"
-          name="workspace"
-        />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            aria-label="Seleção de espaço"
+            className="cap-workspace-picker"
+            variant="ghost"
+          >
+            <CapacitiesSidebarIcon className="cap-workspace-main-icon" name="workspace" />
+            <span className="cap-workspace-name">Teste</span>
+            <UiIcon className="cap-workspace-switch-icon" name="chevron-down" />
+          </Button>
+        </DropdownMenuTrigger>
 
-        <span className="cap-workspace-name">Teste</span>
+        <DropdownMenuContent align="start" className="cap-dropdown-content" sideOffset={4}>
+          <DropdownMenuItem className="cap-dropdown-item">Teste</DropdownMenuItem>
+          <DropdownMenuItem className="cap-dropdown-item">Ideias</DropdownMenuItem>
+          <DropdownMenuItem className="cap-dropdown-item">
+            <Plus className="cap-dropdown-inline-icon" size={14} />
+            <span>Criar espaço</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
-        <CapacitiesSidebarIcon
-          className="cap-workspace-switch-icon"
-          name="switch"
-        />
-      </button>
-
-      <IconButton
-        icon="panel-left"
+      <IconWithTooltip
+        icon={<PanelLeft className="cap-top-icon" />}
         label="Recolher barra lateral"
         onClick={onCollapse}
       />
-
-      {menuOpen ? (
-        <div className="cap-workspace-menu">
-          <div className="cap-menu-label">Espaços</div>
-
-          <button
-            className="cap-menu-item cap-menu-item-active"
-            onClick={onToggleMenu}
-            type="button"
-          >
-            <CapacitiesSidebarIcon name="workspace" />
-            <span>Teste</span>
-          </button>
-
-          <button
-            className="cap-menu-item"
-            onClick={onToggleMenu}
-            type="button"
-          >
-            <CapacitiesSidebarIcon name="workspace" />
-            <span>Ideias</span>
-          </button>
-
-          <div className="cap-menu-separator" />
-
-          <button
-            className="cap-menu-item"
-            onClick={onToggleMenu}
-            type="button"
-          >
-            <UiIcon name="plus" />
-            <span>Criar espaço</span>
-          </button>
-        </div>
-      ) : null}
     </header>
   );
 }
@@ -363,17 +244,25 @@ function MainHeader({
   return (
     <header className="cap-main-header">
       {!sidebarOpen ? (
-        <IconButton
-          icon="panel-left"
-          label="Expandir barra lateral"
+        <IconWithTooltip
+          icon={<PanelLeft className="cap-top-icon" />}
+          label="Abrir barra lateral"
           onClick={onOpenSidebar}
         />
       ) : null}
 
       <div className="cap-history-controls">
-        <IconButton disabled icon="arrow-left" label="Voltar" />
+        <IconWithTooltip
+          disabled
+          icon={<ArrowLeft className="cap-top-icon" />}
+          label="Voltar"
+        />
 
-        <IconButton disabled icon="arrow-right" label="Avançar" />
+        <IconWithTooltip
+          disabled
+          icon={<ArrowRight className="cap-top-icon" />}
+          label="Avançar"
+        />
       </div>
 
       {documentOpen ? (
@@ -390,58 +279,64 @@ function MainHeader({
             onClick={onCloseDocument}
             type="button"
           >
-            <UiIcon name="close" />
+            <X className="cap-close-icon" />
           </button>
         </div>
       ) : null}
 
-      <IconButton
-        icon="plus"
-        label="Adicionar objeto"
+      <Button
+        aria-label="Adicionar objeto"
+        className="cap-top-add-button"
         onClick={onCreateDocument}
-      />
+        size="default"
+        variant="outline"
+      >
+        <Plus className="cap-top-icon" />
+        <span>Adicionar</span>
+      </Button>
 
       <div className="cap-grow" />
 
-      <IconButton
-        active={wideLayout}
-        icon={wideLayout ? "shrink" : "expand"}
+      <IconWithTooltip
+        icon={<(wideLayout ? Minimize2 : Maximize2) className="cap-top-icon" />}
         label={wideLayout ? "Layout normal" : "Layout amplo"}
         onClick={onToggleWideLayout}
       />
 
-      {!contextOpen ? (
-        <IconButton
-          icon="panel-right"
+      {contextOpen ? null : (
+        <IconWithTooltip
+          icon={<PanelRight className="cap-top-icon" />}
           label="Abrir painel de contexto"
           onClick={onOpenContext}
         />
-      ) : null}
+      )}
     </header>
   );
 }
 
 function ContextHeader({
   activeTab,
-  menuOpen,
   onClose,
   onOpenExplore,
-  onToggleMenu,
+  onOpenSearch,
+  onOpenGraph,
 }: {
   activeTab: ContextTabId;
-  menuOpen: boolean;
   onClose: () => void;
   onOpenExplore: () => void;
-  onToggleMenu: () => void;
+  onOpenSearch: () => void;
+  onOpenGraph: () => void;
 }) {
   return (
     <header className="cap-context-header">
       <div className="cap-context-tab">
-        <ContextTabIcon className="cap-context-tab-icon" tab={activeTab} />
+        {activeTab === "chat" ? (
+          <CapacitiesSidebarIcon className="cap-context-tab-icon" name="chat" />
+        ) : (
+          <UiIcon className="cap-context-tab-icon" name={contextIcons[activeTab]} />
+        )}
 
-        <span className="cap-context-tab-label">
-          {contextLabels[activeTab]}
-        </span>
+        <span className="cap-context-tab-label">{contextLabels[activeTab]}</span>
 
         <button
           aria-label={`Fechar ${contextLabels[activeTab]}`}
@@ -449,51 +344,74 @@ function ContextHeader({
           onClick={onClose}
           type="button"
         >
-          <UiIcon name="close" />
+          <X className="cap-close-icon" />
         </button>
       </div>
 
-      <IconButton
-        icon="plus"
-        label="Nova aba de contexto"
+      <Button
+        aria-label="Nova aba de contexto"
+        className="cap-top-button"
         onClick={onOpenExplore}
-      />
+        size="icon-sm"
+        variant="ghost"
+      >
+        <FolderPlus className="cap-top-icon" />
+      </Button>
 
       <div className="cap-grow" />
 
       <div className="cap-context-header-actions">
-        <IconButton
-          icon="panel-right"
-          label="Fechar painel de contexto"
-          onClick={onClose}
-        />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              aria-label="Fechar painel de contexto"
+              className="cap-top-button"
+              onClick={onClose}
+              size="icon-sm"
+              variant="ghost"
+            >
+              <PanelRight className="cap-top-icon" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Fechar painel</TooltipContent>
+        </Tooltip>
 
-        <IconButton
-          active={menuOpen}
-          className="cap-context-menu-trigger"
-          icon="chevron-down"
-          label="Opções do painel de contexto"
-          onClick={onToggleMenu}
-        />
-      </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              aria-label="Mais opções"
+              className="cap-top-button cap-context-menu-trigger"
+              size="icon-sm"
+              variant="ghost"
+            >
+              <MoreHorizontal className="cap-top-icon" />
+              <ChevronDown className="cap-top-icon" />
+            </Button>
+          </DropdownMenuTrigger>
 
-      {menuOpen ? (
-        <div className="cap-context-menu">
-          <button
-            className="cap-menu-item"
-            onClick={onOpenExplore}
-            type="button"
+          <DropdownMenuContent
+            align="end"
+            className="cap-dropdown-content"
+            sideOffset={6}
           >
-            <UiIcon name="compass" />
-            <span>Voltar para Explorar</span>
-          </button>
+            <DropdownMenuItem className="cap-dropdown-item" onClick={onOpenExplore}>
+              Voltar para Explorar
+            </DropdownMenuItem>
 
-          <button className="cap-menu-item" onClick={onClose} type="button">
-            <UiIcon name="panel-right" />
-            <span>Fechar painel</span>
-          </button>
-        </div>
-      ) : null}
+            <DropdownMenuItem className="cap-dropdown-item" onClick={onOpenGraph}>
+              Abrir grafo
+            </DropdownMenuItem>
+
+            <DropdownMenuItem className="cap-dropdown-item" onClick={onClose}>
+              Fechar painel
+            </DropdownMenuItem>
+
+            <DropdownMenuItem className="cap-dropdown-item" onClick={onOpenSearch}>
+              Buscar
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </header>
   );
 }
@@ -550,14 +468,15 @@ function MainPanel({
 
           <p>Crie uma nova página ou escolha um objeto na barra lateral.</p>
 
-          <button
-            className="cap-primary-button"
+          <Button
+            className="cap-top-button"
             onClick={onCreateDocument}
-            type="button"
+            size="default"
+            variant="outline"
           >
-            <UiIcon name="plus" />
+            <Plus className="cap-top-icon" />
             <span>Criar página</span>
-          </button>
+          </Button>
         </div>
       )}
     </main>
@@ -580,7 +499,10 @@ function ExploreAction({
       type="button"
     >
       <span className="cap-explore-card-icon">
-        <ContextTabIcon tab={id} />
+        <UiIcon
+          className="cap-top-icon"
+          name={id === "chat" ? "compass" : id === "search" ? "search" : "network"}
+        />
       </span>
 
       <span className="cap-explore-card-label">{label}</span>
@@ -595,6 +517,8 @@ function ContextPanel({
   activeTab: ContextTabId;
   onSelect: (tab: ContextTabId) => void;
 }) {
+  const [query, setQuery] = useState("");
+
   if (activeTab === "explore") {
     return (
       <aside aria-label="Contexto do objeto" className="cap-context-card">
@@ -605,7 +529,7 @@ function ContextPanel({
                 <span className="cap-explore-sheet cap-explore-sheet-back" />
 
                 <span className="cap-explore-sheet cap-explore-sheet-front">
-                  <UiIcon name="panel-right" />
+                  <PanelRight className="cap-top-icon" />
                 </span>
 
                 <span className="cap-explore-dot cap-explore-dot-one" />
@@ -642,7 +566,7 @@ function ContextPanel({
       <aside aria-label="Busca contextual" className="cap-context-card">
         <div className="cap-context-tool-view">
           <span className="cap-context-tool-icon">
-            <UiIcon name="search" />
+            <Search className="cap-top-icon" />
           </span>
 
           <h2>Buscar</h2>
@@ -650,22 +574,27 @@ function ContextPanel({
           <p>{contextDescriptions.search}</p>
 
           <div className="cap-context-search-box">
-            <UiIcon name="search" />
+            <Search className="cap-top-icon" />
 
-            <input
+            <Input
               aria-label="Buscar objetos"
+              onChange={(event) => setQuery(event.target.value)}
               placeholder="Buscar"
               type="search"
+              value={query}
             />
           </div>
 
-          <button
+          <Button
+            aria-label="Voltar para Explorar"
             className="cap-context-back-button"
             onClick={() => onSelect("explore")}
+            size="sm"
+            variant="outline"
             type="button"
           >
             Voltar para Explorar
-          </button>
+          </Button>
         </div>
       </aside>
     );
@@ -675,20 +604,27 @@ function ContextPanel({
     <aside aria-label={contextLabels[activeTab]} className="cap-context-card">
       <div className="cap-context-tool-view">
         <span className="cap-context-tool-icon">
-          <ContextTabIcon tab={activeTab} />
+          {activeTab === "chat" ? (
+            <MessageSquare className="cap-top-icon" />
+          ) : (
+            <UiIcon className="cap-top-icon" name={contextIcons[activeTab]} />
+          )}
         </span>
 
         <h2>{contextLabels[activeTab]}</h2>
 
         <p>{contextDescriptions[activeTab]}</p>
 
-        <button
+        <Button
+          aria-label="Voltar para Explorar"
           className="cap-context-back-button"
           onClick={() => onSelect("explore")}
+          size="sm"
+          variant="outline"
           type="button"
         >
           Voltar para Explorar
-        </button>
+        </Button>
       </div>
     </aside>
   );
@@ -699,32 +635,12 @@ export function CapacitiesLayout() {
   const [contextOpen, setContextOpen] = useState(true);
   const [wideLayout, setWideLayout] = useState(false);
   const [documentOpen, setDocumentOpen] = useState(true);
-  const [workspaceMenuOpen, setWorkspaceMenuOpen] = useState(false);
-  const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [activeContextTab, setActiveContextTab] =
     useState<ContextTabId>("explore");
-
-  useEffect(() => {
-    const closeMenus = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") {
-        return;
-      }
-
-      setWorkspaceMenuOpen(false);
-      setContextMenuOpen(false);
-    };
-
-    window.addEventListener("keydown", closeMenus);
-
-    return () => {
-      window.removeEventListener("keydown", closeMenus);
-    };
-  }, []);
 
   const openContextTab = (tab: ContextTabId) => {
     setActiveContextTab(tab);
     setContextOpen(true);
-    setContextMenuOpen(false);
   };
 
   const rootClassName = [
@@ -737,59 +653,49 @@ export function CapacitiesLayout() {
     .join(" ");
 
   return (
-    <div className={rootClassName}>
-      {sidebarOpen ? (
-        <WorkspaceHeader
-          menuOpen={workspaceMenuOpen}
-          onCollapse={() => {
-            setSidebarOpen(false);
-            setWorkspaceMenuOpen(false);
-          }}
-          onToggleMenu={() => setWorkspaceMenuOpen((current) => !current)}
+    <TooltipProvider>
+      <div className={rootClassName}>
+        {sidebarOpen ? <WorkspaceHeader onCollapse={() => setSidebarOpen(false)} /> : null}
+
+        <MainHeader
+          contextOpen={contextOpen}
+          documentOpen={documentOpen}
+          sidebarOpen={sidebarOpen}
+          wideLayout={wideLayout}
+          onCloseDocument={() => setDocumentOpen(false)}
+          onCreateDocument={() => setDocumentOpen(true)}
+          onOpenContext={() => openContextTab("explore")}
+          onOpenSidebar={() => setSidebarOpen(true)}
+          onToggleWideLayout={() => setWideLayout((current) => !current)}
         />
-      ) : null}
 
-      <MainHeader
-        contextOpen={contextOpen}
-        documentOpen={documentOpen}
-        sidebarOpen={sidebarOpen}
-        wideLayout={wideLayout}
-        onCloseDocument={() => setDocumentOpen(false)}
-        onCreateDocument={() => setDocumentOpen(true)}
-        onOpenContext={() => openContextTab("explore")}
-        onOpenSidebar={() => setSidebarOpen(true)}
-        onToggleWideLayout={() => setWideLayout((current) => !current)}
-      />
+        {contextOpen ? (
+          <ContextHeader
+            activeTab={activeContextTab}
+            onClose={() => setContextOpen(false)}
+            onOpenExplore={() => openContextTab("explore")}
+            onOpenGraph={() => openContextTab("graph")}
+            onOpenSearch={() => openContextTab("search")}
+          />
+        ) : null}
 
-      {contextOpen ? (
-        <ContextHeader
-          activeTab={activeContextTab}
-          menuOpen={contextMenuOpen}
-          onClose={() => {
-            setContextOpen(false);
-            setContextMenuOpen(false);
-          }}
-          onOpenExplore={() => openContextTab("explore")}
-          onToggleMenu={() => setContextMenuOpen((current) => !current)}
+        {sidebarOpen ? (
+          <CapacitiesSidebar
+            onOpenDocument={() => setDocumentOpen(true)}
+            onOpenExplore={() => openContextTab("explore")}
+            onOpenSearch={() => openContextTab("search")}
+          />
+        ) : null}
+
+        <MainPanel
+          documentOpen={documentOpen}
+          onCreateDocument={() => setDocumentOpen(true)}
         />
-      ) : null}
 
-      {sidebarOpen ? (
-        <CapacitiesSidebar
-          onOpenDocument={() => setDocumentOpen(true)}
-          onOpenExplore={() => openContextTab("explore")}
-          onOpenSearch={() => openContextTab("search")}
-        />
-      ) : null}
-
-      <MainPanel
-        documentOpen={documentOpen}
-        onCreateDocument={() => setDocumentOpen(true)}
-      />
-
-      {contextOpen ? (
-        <ContextPanel activeTab={activeContextTab} onSelect={openContextTab} />
-      ) : null}
-    </div>
+        {contextOpen ? (
+          <ContextPanel activeTab={activeContextTab} onSelect={openContextTab} />
+        ) : null}
+      </div>
+    </TooltipProvider>
   );
 }

@@ -1,38 +1,60 @@
 "use client";
 
-import {
-  type FormEvent,
-  type ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type FormEvent, type ReactNode, useEffect, useState } from "react";
 
 import {
   CapacitiesSidebarIcon,
   type CapacitiesSidebarIconName,
 } from "@/components/capacities-sidebar-icon";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ChevronDown, ChevronUp, Ellipsis, Plus } from "lucide-react";
 
 type SectionKey = "pinned" | "types" | "help";
-type MenuKey = "pinned" | "page" | null;
 type PinnedSort = "manual" | "alphabetical";
 
-type CustomSection = {
+type SidebarCustomSection = {
   id: string;
   label: string;
+  open: boolean;
 };
-
-type OpenSections = Record<SectionKey, boolean>;
 
 type SidebarState = {
-  openSections: OpenSections;
+  openSections: {
+    pinned: boolean;
+    types: boolean;
+    help: boolean;
+  };
   pinnedPage: boolean;
   pinnedSort: PinnedSort;
-  customSections: CustomSection[];
-  customOpen: Record<string, boolean>;
+  customSections: SidebarCustomSection[];
 };
 
-const STORAGE_KEY = "notes-app:capacities-sidebar:v2";
+type CapacitiesSidebarProps = {
+  onOpenDocument: () => void;
+  onOpenExplore: () => void;
+  onOpenSearch: () => void;
+};
+
+const STORAGE_KEY_V3 = "notes-app:capacities-sidebar:v3";
+const STORAGE_KEY_V2 = "notes-app:capacities-sidebar:v2";
 
 const DEFAULT_STATE: SidebarState = {
   openSections: {
@@ -43,196 +65,258 @@ const DEFAULT_STATE: SidebarState = {
   pinnedPage: false,
   pinnedSort: "manual",
   customSections: [],
-  customOpen: {},
 };
 
-type UiIconName = "chevron-down" | "chevron-up" | "dots" | "plus" | "search";
-
-type CapacitiesSidebarProps = {
-  onOpenDocument: () => void;
-  onOpenExplore: () => void;
-  onOpenSearch: () => void;
-};
-
-const uiIconPaths: Record<UiIconName, ReactNode> = {
-  "chevron-down": (
-    <>
-      <path d="m6 9 6 6 6-6" />
-    </>
-  ),
-  "chevron-up": (
-    <>
-      <path d="m6 15 6-6 6 6" />
-    </>
-  ),
-  dots: (
-    <>
-      <circle cx="5" cy="12" r="1.25" />
-      <circle cx="12" cy="12" r="1.25" />
-      <circle cx="19" cy="12" r="1.25" />
-    </>
-  ),
-  plus: (
-    <>
-      <path d="M12 5v14" />
-      <path d="M5 12h14" />
-    </>
-  ),
-  search: (
-    <>
-      <circle cx="11" cy="11" r="6" />
-      <path d="m16 16 4 4" />
-    </>
-  ),
-};
-
-function isSidebarState(value: unknown): value is Partial<SidebarState> {
-  return Boolean(value && typeof value === "object" && !Array.isArray(value));
+function createSectionId() {
+  const randomSuffix = Math.random().toString(36).slice(2, 10);
+  return `section-${Date.now().toString(36)}-${randomSuffix}`;
 }
 
-function Icon({ className, name }: { className?: string; name: UiIconName }) {
-  return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      focusable="false"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.65"
-      viewBox="0 0 24 24"
-    >
-      {uiIconPaths[name]}
-    </svg>
-  );
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function ActionIconButton({
-  "aria-label": ariaLabel,
-  children,
-  onClick,
-  title,
-}: {
-  "aria-label": string;
-  children: ReactNode;
-  onClick: () => void;
-  title: string;
-}) {
-  return (
-    <button
-      aria-label={ariaLabel}
-      className="cap-section-action-button"
-      onClick={onClick}
-      title={title}
-      type="button"
-    >
-      {children}
-    </button>
-  );
+function asBoolean(value: unknown, fallback: boolean): boolean {
+  return value === true ? true : value === false ? false : fallback;
+}
+
+function asSort(value: unknown): PinnedSort {
+  return value === "alphabetical" ? "alphabetical" : "manual";
+}
+
+function toOpenSections(value: unknown): SidebarState["openSections"] {
+  if (!isRecord(value)) {
+    return { pinned: true, types: true, help: true };
+  }
+
+  return {
+    pinned: asBoolean(value.pinned, true),
+    types: asBoolean(value.types, true),
+    help: asBoolean(value.help, true),
+  };
+}
+
+function parseV2CustomSections(
+  raw: unknown,
+  rawOpen: unknown,
+): SidebarCustomSection[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  const rawOpenRecord = isRecord(rawOpen) ? rawOpen : {};
+
+  return raw
+    .map((item) => {
+      if (!isRecord(item)) {
+        return null;
+      }
+
+      if (typeof item.id !== "string" || typeof item.label !== "string") {
+        return null;
+      }
+
+      return {
+        id: item.id,
+        label: item.label,
+        open: asBoolean((rawOpenRecord as Record<string, unknown>)[item.id], true),
+      };
+    })
+    .filter((item): item is SidebarCustomSection => item !== null);
+}
+
+function fromV2State(raw: unknown): SidebarState | null {
+  if (!isRecord(raw)) {
+    return null;
+  }
+
+  const candidate = {
+    openSections: toOpenSections((raw as { openSections: unknown }).openSections),
+    pinnedPage: asBoolean((raw as { pinnedPage: unknown }).pinnedPage, false),
+    pinnedSort: asSort((raw as { pinnedSort: unknown }).pinnedSort),
+    customSections: parseV2CustomSections(
+      (raw as { customSections: unknown }).customSections,
+      (raw as { customOpen: unknown }).customOpen,
+    ),
+  };
+
+  return candidate;
+}
+
+function parseV3CustomSections(raw: unknown): SidebarCustomSection[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+
+  return raw
+    .map((section) => {
+      if (!isRecord(section)) {
+        return null;
+      }
+
+      if (
+        typeof section.id !== "string" ||
+        typeof section.label !== "string"
+      ) {
+        return null;
+      }
+
+      return {
+        id: section.id,
+        label: section.label,
+        open: asBoolean((section as { open: unknown }).open, true),
+      };
+    })
+    .filter((section): section is SidebarCustomSection => section !== null);
+}
+
+function fromV3State(raw: unknown): SidebarState | null {
+  if (!isRecord(raw)) {
+    return null;
+  }
+
+  if (
+    !isRecord(raw.openSections) ||
+    !Array.isArray(raw.customSections) ||
+    typeof raw.pinnedPage !== "boolean" ||
+    (raw.pinnedSort !== "manual" && raw.pinnedSort !== "alphabetical")
+  ) {
+    return null;
+  }
+
+  return {
+    openSections: toOpenSections(raw.openSections),
+    pinnedPage: asBoolean(raw.pinnedPage, false),
+    pinnedSort: asSort(raw.pinnedSort),
+    customSections: parseV3CustomSections((raw as { customSections: unknown }).customSections),
+  };
+}
+
+function toLabelSortText(sort: PinnedSort) {
+  return sort === "alphabetical" ? "Ordenar alfabeticamente" : "Ordenar manualmente";
 }
 
 function SidebarNavItem({
   children,
-  count,
   icon,
+  label,
   onClick,
 }: {
-  children: ReactNode;
-  count?: number;
+  children: string;
   icon: CapacitiesSidebarIconName;
-  onClick?: () => void;
+  label: string;
+  onClick: () => void;
 }) {
   return (
-    <button className="cap-nav-item" onClick={onClick} type="button">
+    <Button
+      aria-label={label}
+      className="cap-nav-item"
+      onClick={onClick}
+      size="default"
+      variant="ghost"
+      type="button"
+    >
       <span className="cap-nav-icon">
         <CapacitiesSidebarIcon name={icon} />
       </span>
+
       <span className="cap-nav-label">{children}</span>
-      {typeof count === "number" ? (
-        <span className="cap-nav-count">{count}</span>
-      ) : null}
-    </button>
+    </Button>
   );
 }
 
 function SectionHeader({
+  actions,
   children,
   count,
   icon,
-  expanded,
+  open,
   onToggle,
-  onAdd,
-  onMenu,
-  menuOpen,
+  section,
 }: {
-  children: ReactNode;
+  actions?: ReactNode;
+  children: string;
   count?: number;
   icon: CapacitiesSidebarIconName;
-  expanded: boolean;
+  open: boolean;
   onToggle: () => void;
-  onAdd?: () => void;
-  onMenu?: () => void;
-  menuOpen?: boolean;
+  section: SectionKey | `custom:${string}`;
 }) {
   return (
-    <div className="cap-section-header">
+    <div className="cap-section-header" data-testid={`${section}-header`}>
       <button
-        aria-expanded={expanded}
+        aria-controls={`${section}-content`}
+        aria-expanded={open}
         className="cap-section-title"
         onClick={onToggle}
         type="button"
       >
         <CapacitiesSidebarIcon name={icon} />
+
         <span className="cap-section-label">{children}</span>
-        {typeof count === "number" ? (
-          <span className="cap-section-count">{count}</span>
-        ) : null}
-        <span className="cap-section-chevron" aria-hidden="true">
-          <Icon name={expanded ? "chevron-up" : "chevron-down"} />
+
+        <span
+          aria-hidden="true"
+          className={`cap-section-chevron ${open ? "cap-section-chevron-open" : ""}`}
+        >
+          {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
         </span>
       </button>
 
-      <div className="cap-section-actions">
-        {onAdd ? (
-          <ActionIconButton
-            aria-label="Adicionar"
-            onClick={onAdd}
-            title="Adicionar"
-          >
-            <Icon name="plus" />
-          </ActionIconButton>
-        ) : null}
-        {onMenu ? (
-          <ActionIconButton
-            aria-label={menuOpen ? "Ocultar opções" : "Mais opções"}
-            aria-expanded={menuOpen}
-            onClick={onMenu}
-            title={menuOpen ? "Ocultar opções" : "Mais opções"}
-          >
-            <Icon name="dots" />
-          </ActionIconButton>
-        ) : null}
+      {typeof count === "number" ? (
+        <span className="cap-section-count" aria-live="polite">
+          {count}
+        </span>
+      ) : null}
+
+      {actions ? <div className="cap-section-actions">{actions}</div> : null}
+    </div>
+  );
+}
+
+function SidebarObjectRow({
+  actions,
+  count = 1,
+  icon,
+  onClick,
+  testId,
+  title,
+}: {
+  actions: ReactNode;
+  count?: number;
+  icon: CapacitiesSidebarIconName;
+  onClick: () => void;
+  testId?: string;
+  title: string;
+}) {
+  return (
+    <div className="cap-object-row-shell" data-testid={testId}>
+      <Button
+        aria-label={`Abrir ${title}`}
+        className="cap-object-row cap-object-row-active"
+        onClick={onClick}
+        size="default"
+        variant="ghost"
+        type="button"
+      >
+        <span className="cap-object-icon">
+          <CapacitiesSidebarIcon name={icon} />
+        </span>
+
+        <span className="cap-object-label">{title}</span>
+
+        <span className="cap-object-count" aria-live="polite">
+          {count}
+        </span>
+      </Button>
+
+      <div className="cap-object-menu-trigger" data-testid={testId ? `${testId}-menu` : undefined}>
+        {actions}
       </div>
     </div>
   );
 }
 
-function MenuItem({
-  onClick,
-  children,
-}: {
-  onClick: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <button className="cap-sidebar-menu-item" onClick={onClick} type="button">
-      {children}
-    </button>
-  );
-}
-
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Main component contains intentional branching per sidebar interaction states.
 export function CapacitiesSidebar({
   onOpenDocument,
   onOpenExplore,
@@ -240,43 +324,42 @@ export function CapacitiesSidebar({
 }: CapacitiesSidebarProps) {
   const [state, setState] = useState<SidebarState>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
-  const [menuOpen, setMenuOpen] = useState<MenuKey>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sectionName, setSectionName] = useState("");
-
-  const pinnedRowMenuRef = useRef<HTMLDivElement>(null);
-  const pageRowMenuRef = useRef<HTMLDivElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const sectionNameInputRef = useRef<HTMLInputElement>(null);
+  const [needsCleanupV2, setNeedsCleanupV2] = useState(false);
 
   const pinnedCount = state.pinnedPage ? 1 : 0;
 
   useEffect(() => {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    let nextState: SidebarState | null = null;
+    let migratedFromV2 = false;
 
-    if (raw) {
+    try {
+      const rawV3 = window.localStorage.getItem(STORAGE_KEY_V3);
+      if (rawV3) {
+        nextState = fromV3State(JSON.parse(rawV3));
+      }
+    } catch {
+      nextState = null;
+    }
+
+    if (!nextState) {
       try {
-        const parsed: unknown = JSON.parse(raw);
-
-        if (isSidebarState(parsed)) {
-          const saved = parsed as Partial<SidebarState>;
-
-          setState({
-            ...DEFAULT_STATE,
-            ...saved,
-            openSections: {
-              ...DEFAULT_STATE.openSections,
-              ...saved.openSections,
-            },
-            customOpen: saved.customOpen ?? {},
-            customSections: saved.customSections ?? [],
-          });
+        const rawV2 = window.localStorage.getItem(STORAGE_KEY_V2);
+        if (rawV2) {
+          const parsedV2 = fromV2State(JSON.parse(rawV2));
+          if (parsedV2) {
+            nextState = parsedV2;
+            migratedFromV2 = true;
+          }
         }
       } catch {
-        window.localStorage.removeItem(STORAGE_KEY);
+        nextState = null;
       }
     }
 
+    setState(nextState ?? DEFAULT_STATE);
+    setNeedsCleanupV2(migratedFromV2);
     setHydrated(true);
   }, []);
 
@@ -285,79 +368,13 @@ export function CapacitiesSidebar({
       return;
     }
 
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }, [hydrated, state]);
+    window.localStorage.setItem(STORAGE_KEY_V3, JSON.stringify(state));
 
-  useEffect(() => {
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") {
-        return;
-      }
-
-      setMenuOpen(null);
-      setDialogOpen(false);
-    };
-
-    window.addEventListener("keydown", closeOnEscape);
-
-    return () => {
-      window.removeEventListener("keydown", closeOnEscape);
-    };
-  }, []);
-
-  useEffect(() => {
-    const closeOnPointerDown = (event: PointerEvent) => {
-      const target = event.target as Node | null;
-
-      if (!target) {
-        return;
-      }
-
-      if (
-        menuOpen === "pinned" &&
-        pinnedRowMenuRef.current &&
-        !pinnedRowMenuRef.current.contains(target)
-      ) {
-        setMenuOpen(null);
-      }
-
-      if (
-        menuOpen === "page" &&
-        pageRowMenuRef.current &&
-        !pageRowMenuRef.current.contains(target)
-      ) {
-        setMenuOpen(null);
-      }
-
-      if (
-        dialogOpen &&
-        dialogRef.current &&
-        !dialogRef.current.contains(target)
-      ) {
-        setDialogOpen(false);
-      }
-    };
-
-    window.addEventListener("pointerdown", closeOnPointerDown);
-
-    return () => {
-      window.removeEventListener("pointerdown", closeOnPointerDown);
-    };
-  }, [dialogOpen, menuOpen]);
-
-  useEffect(() => {
-    if (!dialogOpen) {
-      return;
+    if (needsCleanupV2) {
+      window.localStorage.removeItem(STORAGE_KEY_V2);
+      setNeedsCleanupV2(false);
     }
-
-    const frame = requestAnimationFrame(() => {
-      sectionNameInputRef.current?.focus();
-    });
-
-    return () => {
-      cancelAnimationFrame(frame);
-    };
-  }, [dialogOpen]);
+  }, [hydrated, needsCleanupV2, state]);
 
   const toggleSection = (section: SectionKey) => {
     setState((previous) => ({
@@ -374,15 +391,13 @@ export function CapacitiesSidebar({
       ...previous,
       pinnedSort: sort,
     }));
-    setMenuOpen(null);
   };
 
-  const togglePinPage = () => {
+  const togglePinnedPage = () => {
     setState((previous) => ({
       ...previous,
       pinnedPage: !previous.pinnedPage,
     }));
-    setMenuOpen(null);
   };
 
   const clearPinned = () => {
@@ -390,376 +405,473 @@ export function CapacitiesSidebar({
       ...previous,
       pinnedPage: false,
     }));
-    setMenuOpen(null);
   };
 
-  const toggleSectionMenu = (key: MenuKey) => {
-    setMenuOpen((current) => (current === key ? null : key));
+  const setCustomSectionOpen = (id: string, open: boolean) => {
+    setState((previous) => ({
+      ...previous,
+      customSections: previous.customSections.map((section) =>
+        section.id === id ? { ...section, open } : section,
+      ),
+    }));
   };
 
-  const openDialog = () => {
-    setDialogOpen(true);
+  const removeCustomSection = (id: string) => {
+    setState((previous) => ({
+      ...previous,
+      customSections: previous.customSections.filter((section) => section.id !== id),
+    }));
   };
 
   const createSection = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const label = sectionName.trim();
-    if (!label) {
+    const trimmed = sectionName.trim();
+    if (!trimmed) {
       return;
     }
 
-    const id = `section-${Date.now().toString(36)}-${Math.random()
-      .toString(36)
-      .slice(2, 9)}`;
-
     setState((previous) => ({
       ...previous,
-      customSections: [...previous.customSections, { id, label }],
-      customOpen: {
-        ...previous.customOpen,
-        [id]: true,
-      },
+      customSections: [
+        ...previous.customSections,
+        { id: createSectionId(), label: trimmed, open: true },
+      ],
     }));
 
     setSectionName("");
     setDialogOpen(false);
   };
 
-  const removeSection = (id: string) => {
-    setState((previous) => {
-      const customOpen = { ...previous.customOpen };
-      delete customOpen[id];
-
-      return {
-        ...previous,
-        customSections: previous.customSections.filter(
-          (section) => section.id !== id,
-        ),
-        customOpen,
-      };
-    });
-  };
-
-  const toggleCustomSection = (id: string) => {
-    setState((previous) => ({
-      ...previous,
-      customOpen: {
-        ...previous.customOpen,
-        [id]: !previous.customOpen[id],
-      },
-    }));
-  };
-
   return (
-    <aside className="cap-sidebar">
+    <aside className="cap-sidebar" aria-label="Barra lateral">
       <div className="cap-sidebar-primary">
         <div className="cap-new-row">
-          <SidebarNavItem icon="add" onClick={onOpenDocument}>
+          <SidebarNavItem
+            icon="add"
+            label="Criar novo documento"
+            onClick={onOpenDocument}
+          >
             Novo
           </SidebarNavItem>
-          <button
-            aria-label="Abrir assistente de IA"
+
+          <Button
+            aria-label="Abrir assistente"
             className="cap-assistant-button"
-            onClick={onOpenExplore}
+            onClick={onOpenSearch}
+            size="icon-sm"
             type="button"
+            variant="ghost"
           >
             <CapacitiesSidebarIcon name="assistant" />
-          </button>
+            <span className="sr-only">Assistente de IA</span>
+          </Button>
         </div>
 
-        <SidebarNavItem icon="search" onClick={onOpenSearch}>
+        <SidebarNavItem icon="search" label="Buscar" onClick={onOpenSearch}>
           Buscar
         </SidebarNavItem>
 
         <div className="cap-nav-gap" />
 
-        <SidebarNavItem icon="rocket" onClick={onOpenExplore}>
+        <SidebarNavItem icon="rocket" label="Explorar" onClick={onOpenExplore}>
           Explorar
         </SidebarNavItem>
 
-        <SidebarNavItem icon="calendar">Calendário</SidebarNavItem>
+        <SidebarNavItem icon="calendar" label="Calendário" onClick={onOpenExplore}>
+          Calendário
+        </SidebarNavItem>
       </div>
 
-      <div className="cap-sidebar-scroll">
-        <section className="cap-sidebar-section">
-          <SectionHeader
-            count={pinnedCount}
-            expanded={state.openSections.pinned}
-            icon="pin"
-            menuOpen={menuOpen === "pinned"}
-            onAdd={() => {
-              if (!state.pinnedPage) {
-                togglePinPage();
-              }
-              setMenuOpen(null);
-            }}
-            onMenu={() => toggleSectionMenu("pinned")}
-            onToggle={() => toggleSection("pinned")}
-          >
-            Fixados
-          </SectionHeader>
+      <ScrollArea className="cap-sidebar-scroll" data-testid="sidebar-scroll">
+        <div className="cap-sidebar-content">
+          <section className="cap-sidebar-section" data-testid="pinned-section">
+            <SectionHeader
+              count={pinnedCount}
+              icon={ICONS.pinned}
+              onToggle={() => toggleSection("pinned")}
+              open={state.openSections.pinned}
+              section="pinned"
+            >
+              Fixados
+            </SectionHeader>
 
-          {state.openSections.pinned ? (
-            <div className="cap-sidebar-block">
-              {state.pinnedPage ? (
-                <button
-                  aria-current="page"
-                  aria-label="Abrir página"
-                  className="cap-object-row cap-object-row-active"
+            <Collapsible open={state.openSections.pinned} id="pinned-content">
+              <CollapsibleContent className="cap-sidebar-block">
+                {state.pinnedPage ? (
+                  <SidebarObjectRow
+                    count={1}
+                    icon="page"
+                    onClick={onOpenDocument}
+                    testId="pinned-page-row"
+                    title="Páginas"
+                  >
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          aria-label="Mais opções de Fixados"
+                          className="cap-section-action-button"
+                          size="icon-sm"
+                          variant="ghost"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                          }}
+                        >
+                          <Ellipsis size={13} />
+                        </Button>
+                      </DropdownMenuTrigger>
+
+                      <DropdownMenuContent
+                        align="start"
+                        className="cap-dropdown-content"
+                        sideOffset={4}
+                      >
+                        <DropdownMenuItem
+                          className="cap-dropdown-item"
+                          onClick={() => togglePinnedSort("manual")}
+                        >
+                          Ordenar manualmente
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          className="cap-dropdown-item"
+                          onClick={() => togglePinnedSort("alphabetical")}
+                        >
+                          Ordenar alfabeticamente
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                          className="cap-dropdown-item"
+                          onClick={() => {
+                            onOpenSearch();
+                          }}
+                        >
+                          {toLabelSortText(state.pinnedSort)}
+                        </DropdownMenuItem>
+
+                        <DropdownMenuSeparator className="cap-dropdown-separator" />
+
+                        <DropdownMenuItem
+                          className="cap-dropdown-item"
+                          onClick={() => {
+                            setState((previous) => ({
+                              ...previous,
+                              pinnedPage: !previous.pinnedPage,
+                            }));
+                          }}
+                        >
+                          {state.pinnedPage ? "Desafixar Páginas" : "Fixar Páginas"}
+                        </DropdownMenuItem>
+
+                        {state.pinnedPage ? (
+                          <DropdownMenuItem
+                            className="cap-dropdown-item"
+                            onClick={clearPinned}
+                          >
+                            Limpar Fixados
+                          </DropdownMenuItem>
+                        ) : null}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </SidebarObjectRow>
+                ) : (
+                  <p className="cap-sidebar-empty">Nenhum conteúdo fixado</p>
+                )}
+              </CollapsibleContent>
+            </Collapsible>
+          </section>
+
+          <section className="cap-sidebar-section" data-testid="types-section">
+            <SectionHeader
+              count={1}
+              icon={ICONS.types}
+              onToggle={() => toggleSection("types")}
+              open={state.openSections.types}
+              section="types"
+            >
+              Tipos de objeto
+            </SectionHeader>
+
+            <Collapsible open={state.openSections.types} id="types-content">
+              <CollapsibleContent className="cap-sidebar-block">
+                <SidebarObjectRow
+                  icon="page"
                   onClick={onOpenDocument}
-                  type="button"
+                  testId="types-page-row"
+                  title="Páginas"
                 >
-                  <span className="cap-object-icon">
-                    <CapacitiesSidebarIcon name="page" />
-                  </span>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        aria-label="Mais opções de Página"
+                        className="cap-object-menu-button"
+                        size="icon-sm"
+                        variant="ghost"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                        }}
+                      >
+                        <Ellipsis size={13} />
+                      </Button>
+                    </DropdownMenuTrigger>
 
-                  <span className="cap-object-label">Páginas</span>
-
-                  <span className="cap-object-count">1</span>
-                </button>
-              ) : (
-                <p className="cap-empty">Nenhum conteúdo fixado</p>
-              )}
-
-              <div className="cap-sidebar-menu-wrap" ref={pinnedRowMenuRef}>
-                {menuOpen === "pinned" ? (
-                  <div className="cap-sidebar-menu">
-                    <MenuItem onClick={() => togglePinnedSort("manual")}>
-                      Ordenar manualmente
-                    </MenuItem>
-                    <MenuItem onClick={() => togglePinnedSort("alphabetical")}>
-                      Ordenar alfabeticamente
-                    </MenuItem>
-                    <MenuItem onClick={togglePinPage}>
-                      {state.pinnedPage ? "Desafixar Páginas" : "Fixar Páginas"}
-                    </MenuItem>
-                    {state.pinnedPage ? (
-                      <MenuItem onClick={clearPinned}>Limpar fixados</MenuItem>
-                    ) : null}
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          ) : null}
-        </section>
-
-        <section className="cap-sidebar-section">
-          <SectionHeader
-            count={1}
-            expanded={state.openSections.types}
-            icon="types"
-            onToggle={() => toggleSection("types")}
-          >
-            Tipos de objeto
-          </SectionHeader>
-
-          {state.openSections.types ? (
-            <div className="cap-sidebar-block">
-              <div className="cap-object-row-shell" ref={pageRowMenuRef}>
-                <button
-                  aria-label="Abrir Páginas"
-                  aria-current="page"
-                  className="cap-object-row cap-object-row-active"
-                  onClick={onOpenDocument}
-                  type="button"
-                >
-                  <span className="cap-object-icon">
-                    <CapacitiesSidebarIcon name="page" />
-                  </span>
-                  <span className="cap-object-label">Páginas</span>
-                  <span className="cap-object-count">1</span>
-                </button>
-
-                <button
-                  aria-expanded={menuOpen === "page"}
-                  aria-label="Mais opções do tipo"
-                  className="cap-object-menu-toggle"
-                  onClick={() => {
-                    toggleSectionMenu("page");
-                  }}
-                  type="button"
-                >
-                  <Icon name="dots" />
-                </button>
-
-                {menuOpen === "page" ? (
-                  <div className="cap-sidebar-menu">
-                    <MenuItem onClick={onOpenDocument}>Abrir</MenuItem>
-                    <MenuItem onClick={onOpenDocument}>Criar Página</MenuItem>
-                    <MenuItem onClick={togglePinPage}>
-                      {state.pinnedPage
-                        ? "Desafixar da Barra Lateral"
-                        : "Fixar na Barra Lateral"}
-                    </MenuItem>
-                    <MenuItem onClick={onOpenSearch}>Nova Query</MenuItem>
-                    <MenuItem onClick={onOpenSearch}>Nova Coleção</MenuItem>
-                    <MenuItem onClick={onOpenExplore}>
-                      Configurações do Tipo de Objeto
-                    </MenuItem>
-                  </div>
-                ) : null}
-              </div>
-
-              <button
-                aria-label="Adicionar seção"
-                className="cap-add-section"
-                onClick={openDialog}
-                type="button"
-              >
-                <CapacitiesSidebarIcon name="add" />
-                <span>Adicionar seção</span>
-              </button>
-            </div>
-          ) : null}
-        </section>
-
-        {state.customSections.length > 0 ? (
-          <div>
-            {state.customSections.map((section) => (
-              <section className="cap-sidebar-section" key={section.id}>
-                <SectionHeader
-                  expanded={state.customOpen[section.id] ?? true}
-                  icon="file"
-                  onToggle={() => toggleCustomSection(section.id)}
-                >
-                  {section.label}
-                </SectionHeader>
-
-                {(state.customOpen[section.id] ?? true) ? (
-                  <div className="cap-sidebar-block cap-custom-section">
-                    <button
-                      className="cap-sidebar-menu-item"
-                      onClick={() => {
-                        removeSection(section.id);
-                      }}
-                      type="button"
+                    <DropdownMenuContent
+                      align="start"
+                      className="cap-dropdown-content"
+                      sideOffset={4}
                     >
-                      Remover seção
-                    </button>
-                  </div>
-                ) : null}
-              </section>
-            ))}
-          </div>
-        ) : null}
+                      <DropdownMenuItem
+                        className="cap-dropdown-item"
+                        onClick={onOpenDocument}
+                      >
+                        Abrir
+                      </DropdownMenuItem>
 
-        <section className="cap-sidebar-section">
-          <SidebarNavItem icon="trash">Lixeira</SidebarNavItem>
-        </section>
+                      <DropdownMenuItem
+                        className="cap-dropdown-item"
+                        onClick={onOpenDocument}
+                      >
+                        Criar Página
+                      </DropdownMenuItem>
 
-        <section className="cap-sidebar-section">
-          <SectionHeader
-            expanded={state.openSections.help}
-            icon="help"
-            onToggle={() => toggleSection("help")}
-          >
-            Ajuda e recursos
-          </SectionHeader>
+                      <DropdownMenuItem
+                        className="cap-dropdown-item"
+                        onClick={togglePinnedPage}
+                      >
+                        {state.pinnedPage
+                          ? "Desafixar da Barra Lateral"
+                          : "Fixar na Barra Lateral"}
+                      </DropdownMenuItem>
 
-          {state.openSections.help ? (
-            <div className="cap-help-rows">
-              <SidebarNavItem icon="graduation">
-                Primeiros passos
-              </SidebarNavItem>
-              <SidebarNavItem icon="help">Fazer uma pergunta</SidebarNavItem>
-              <SidebarNavItem icon="documentation">Documentação</SidebarNavItem>
-              <SidebarNavItem icon="news">Novidades</SidebarNavItem>
-              <SidebarNavItem icon="feedback">Feedback</SidebarNavItem>
+                      <DropdownMenuItem
+                        className="cap-dropdown-item"
+                        onClick={onOpenSearch}
+                      >
+                        Nova Query
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem
+                        className="cap-dropdown-item"
+                        onClick={onOpenSearch}
+                      >
+                        Nova Coleção
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem
+                        className="cap-dropdown-item"
+                        onClick={onOpenExplore}
+                      >
+                        Configurações do Tipo de Objeto
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </SidebarObjectRow>
+
+                <Button
+                  aria-label="Adicionar seção"
+                  className="cap-add-section"
+                  onClick={() => setDialogOpen(true)}
+                  size="default"
+                  variant="ghost"
+                >
+                  <Plus className="cap-add-section-icon" size={14} />
+                  <span>Adicionar seção</span>
+                </Button>
+              </CollapsibleContent>
+            </Collapsible>
+          </section>
+
+          {state.customSections.length > 0 ? (
+            <div>
+              {state.customSections.map((section) => (
+                <section className="cap-sidebar-section cap-custom-section" key={section.id}>
+                  <SectionHeader
+                    icon="file"
+                    onToggle={() => setCustomSectionOpen(section.id, !section.open)}
+                    open={section.open}
+                    section={`custom:${section.id}`}
+                    actions={
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            aria-label={`Opções de ${section.label}`}
+                            className="cap-section-action-button"
+                            size="icon-sm"
+                            variant="ghost"
+                          >
+                            <Ellipsis size={13} />
+                          </Button>
+                        </DropdownMenuTrigger>
+
+                        <DropdownMenuContent
+                          align="start"
+                          className="cap-dropdown-content"
+                          sideOffset={4}
+                        >
+                          <DropdownMenuItem
+                            className="cap-dropdown-item"
+                            onClick={() =>
+                              setCustomSectionOpen(section.id, !section.open)
+                            }
+                          >
+                            {section.open ? "Ocultar seção" : "Mostrar seção"}
+                          </DropdownMenuItem>
+
+                          <DropdownMenuSeparator className="cap-dropdown-separator" />
+
+                          <DropdownMenuItem
+                            className="cap-dropdown-item"
+                            onClick={() => removeCustomSection(section.id)}
+                          >
+                            Remover seção
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    }
+                  >
+                    {section.label}
+                  </SectionHeader>
+
+                  <Collapsible open={section.open} id={`custom:${section.id}-content`}>
+                    <CollapsibleContent className="cap-sidebar-block">
+                      <p className="cap-sidebar-empty">Sem itens</p>
+                    </CollapsibleContent>
+                  </Collapsible>
+                </section>
+              ))}
             </div>
           ) : null}
-        </section>
-      </div>
 
-      <footer className="cap-sidebar-footer">
-        <button
-          aria-label="Configurações"
-          className="cap-footer-button"
-          type="button"
-        >
+          <section
+            className="cap-sidebar-section cap-sidebar-trash"
+            data-testid="trash-section"
+          >
+            <SidebarNavItem icon="trash" label="Lixeira" onClick={() => {}}>
+              Lixeira
+            </SidebarNavItem>
+          </section>
+
+          <section className="cap-sidebar-section" data-testid="help-section">
+            <SectionHeader
+              icon={ICONS.help}
+              onToggle={() => toggleSection("help")}
+              open={state.openSections.help}
+              section="help"
+            >
+              Ajuda e recursos
+            </SectionHeader>
+
+            <Collapsible open={state.openSections.help}>
+              <CollapsibleContent className="cap-sidebar-block">
+                <div className="cap-help-rows">
+                  <SidebarNavItem
+                    icon="graduation"
+                    label="Primeiros passos"
+                    onClick={onOpenExplore}
+                  >
+                    Primeiros passos
+                  </SidebarNavItem>
+
+                  <SidebarNavItem
+                    icon="chat"
+                    label="Fazer uma pergunta"
+                    onClick={onOpenSearch}
+                  >
+                    Fazer uma pergunta
+                  </SidebarNavItem>
+
+                  <SidebarNavItem
+                    icon="documentation"
+                    label="Documentação"
+                    onClick={onOpenExplore}
+                  >
+                    Documentação
+                  </SidebarNavItem>
+
+                  <SidebarNavItem icon="news" label="Novidades" onClick={onOpenExplore}>
+                    Novidades
+                  </SidebarNavItem>
+
+                  <SidebarNavItem
+                    icon="feedback"
+                    label="Feedback"
+                    onClick={onOpenSearch}
+                  >
+                    Feedback
+                  </SidebarNavItem>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </section>
+        </div>
+      </ScrollArea>
+
+      <footer className="cap-sidebar-footer" data-testid="sidebar-footer">
+        <Button aria-label="Configurações" size="icon-sm" variant="ghost">
           <CapacitiesSidebarIcon name="settings" />
-        </button>
+        </Button>
 
-        <button aria-label="Tema" className="cap-footer-button" type="button">
+        <Button aria-label="Tema" size="icon-sm" variant="ghost">
           <CapacitiesSidebarIcon name="moon" />
-        </button>
+        </Button>
 
-        <button aria-label="Perfil" className="cap-footer-button" type="button">
+        <Button aria-label="Perfil" size="icon-sm" variant="ghost">
           <CapacitiesSidebarIcon name="user" />
-        </button>
+        </Button>
 
-        <button aria-label="Plano Pro" className="cap-pro-pill" type="button">
+        <button className="cap-pro-pill" type="button">
           <CapacitiesSidebarIcon name="rocket" />
           <span>Pro</span>
         </button>
 
         <div className="cap-grow" />
 
-        <button
-          aria-label="Compartilhar"
-          className="cap-footer-button"
-          type="button"
-        >
+        <Button aria-label="Compartilhar" size="icon-sm" variant="ghost">
           <CapacitiesSidebarIcon name="share" />
-        </button>
+        </Button>
       </footer>
 
-      {dialogOpen ? (
-        <button
-          aria-label="Fechar diálogo"
-          className="cap-dialog-backdrop"
-          onMouseDown={() => setDialogOpen(false)}
-          type="button"
-        />
-      ) : null}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="cap-sidebar-dialog">
+          <DialogHeader>
+            <DialogTitle>Adicionar seção</DialogTitle>
+            <DialogDescription>
+              Nomeie a nova seção personalizada para organizar itens dentro da barra lateral.
+            </DialogDescription>
+          </DialogHeader>
 
-      {dialogOpen ? (
-        <div
-          className="cap-dialog"
-          onMouseDown={(event) => event.stopPropagation()}
-          ref={dialogRef}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="cap-add-section-title"
-        >
-          <h2 className="cap-dialog-title" id="cap-add-section-title">
-            Adicionar seção
-          </h2>
-
-          <form className="cap-dialog-form" onSubmit={createSection}>
-            <label className="cap-dialog-field" htmlFor="cap-section-name">
-              <span>Nome</span>
-              <input
-                aria-required={true}
-                id="cap-section-name"
-                maxLength={80}
-                onChange={(event) => setSectionName(event.target.value)}
-                placeholder="Nome"
-                ref={sectionNameInputRef}
-                type="text"
-                value={sectionName}
-              />
+          <form className="cap-sidebar-dialog-form" onSubmit={createSection}>
+            <label className="cap-sidebar-dialog-field" htmlFor="cap-section-name">
+              Nome da seção
             </label>
 
-            <div className="cap-dialog-actions">
-              <button
-                className="cap-dialog-cancel"
-                onClick={() => setDialogOpen(false)}
+            <Input
+              autoFocus
+              id="cap-section-name"
+              onChange={(event) => setSectionName(event.target.value)}
+              placeholder="Ex.: Projetos"
+              type="text"
+              value={sectionName}
+            />
+
+            <DialogFooter className="cap-sidebar-dialog-actions">
+              <Button
+                onClick={() => {
+                  setDialogOpen(false);
+                  setSectionName("");
+                }}
                 type="button"
+                variant="outline"
               >
                 Cancelar
-              </button>
-              <button
-                className="cap-dialog-confirm"
-                disabled={sectionName.trim().length === 0}
-                type="submit"
-              >
+              </Button>
+
+              <Button disabled={!sectionName.trim()} type="submit">
                 Criar
-              </button>
-            </div>
+              </Button>
+            </DialogFooter>
           </form>
-        </div>
-      ) : null}
+        </DialogContent>
+      </Dialog>
     </aside>
   );
 }
