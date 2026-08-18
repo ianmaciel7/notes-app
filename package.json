@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "biome:ci": "biome ci .",
-    "format:check": "biome format --write=false package.json biome.json",
+    "format:check": "biome format package.json biome.json",
     "lint": "biome lint src scripts tests",
     "typegen": "next typegen",
     "typecheck": "tsc --noEmit",
