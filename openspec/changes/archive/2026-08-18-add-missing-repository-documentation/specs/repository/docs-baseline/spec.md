@@ -15,6 +15,11 @@ The system SHALL provide repository rule files:
 - `.agents/rules/git-workflow-rule.md`
 - `.agents/rules/graphify.md`
 
+The system SHALL provide AI agent entrypoint documentation files:
+- `AGENTS.md`
+- `CLAUDE.md`
+- `GEMINI.md`
+
 #### Scenario: New setup
 - **WHEN** the repository is checked out for contribution or automation work,
 - **THEN** the baseline files SHALL be present and readable in their expected paths.
@@ -36,8 +41,12 @@ Baseline practical docs SHALL be authored in English and remain aligned with `.a
 ### Requirement: Contributor entry point consistency
 `AGENTS.md` SHALL remain the canonical practical entry point for agent instructions, with references to OpenSpec workflow artifacts where applicable.
 
+#### Scenario: AI entrypoint convergence
+- **WHEN** multiple AI entrypoint docs exist (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`),
+- **THEN** all three SHALL point to the same rule set and OpenSpec workflow to reduce onboarding divergence.
+
 ### Requirement: Rule discoverability
-`README.md`, `AGENTS.md`, and `CLAUDE.md` SHALL include references to the rule set that governs contribution, architecture, and agent work.
+`README.md`, `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` SHALL include references to the rule set and onboarding docs.
 
 #### Scenario: Agent onboarding
 - **WHEN** contributors or agents start a task,

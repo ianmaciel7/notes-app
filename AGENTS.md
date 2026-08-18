@@ -6,12 +6,14 @@ This repository uses OpenSpec for significant proposals, workflow changes, and d
 
 - `CONTRIBUTING.md`
 - `SECURITY.md`
+- `GEMINI.md`
 - `CLAUDE.md`
 - `AGENTS.md`
 - `docs/ARCHITECTURE.md`
 - `docs/DESIGN.md`
 - `docs/TESTING.md`
 - `docs/DEPLOYMENT.md`
+- `docs/GRAPHIFY.md`
 
 ## Operational policy
 - Use and keep `.agents/rules/*` aligned with contributor and agent workflows, including OpenSpec, English-first, UI, architecture, Git, and Graphify guidance.
@@ -24,5 +26,3 @@ This repository uses OpenSpec for significant proposals, workflow changes, and d
 - Practical documentation baseline is maintained under this repo with the change `add-missing-repository-documentation`.
 - Prefer small, atomic changes on dedicated branches and include clear verification notes in PRs.
 - If this repository has a `CLAUDE.md`, follow instructions there as the top-priority AI agent entrypoint.
-
-

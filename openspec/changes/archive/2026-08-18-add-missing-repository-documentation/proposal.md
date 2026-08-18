@@ -7,6 +7,7 @@ The repository currently lacks essential project documentation files referenced 
 - Add missing contributor and governance documentation: CONTRIBUTING.md, SECURITY.md, and AGENTS.md.
 - Add missing project documentation hub files: docs/ARCHITECTURE.md, docs/DESIGN.md, docs/TESTING.md, and docs/DEPLOYMENT.md.
 - Add operational repository rule files under `.agents/rules` for UI component reuse, Next.js architecture defaults, Git workflow discipline, and graph-aware codebase discovery.
+- Add AI assistant entrypoint guidance file `GEMINI.md` aligned with OpenSpec and repository process docs.
 - Tie documentation delivery to the practical documentation workflow so stale files do not drift.
 - Ensure each added document points to the repo’s OpenSpec-driven practices.
 
@@ -14,6 +15,7 @@ The repository currently lacks essential project documentation files referenced 
 
 ### New Capabilities
 - `repository/docs-baseline`: Define required repository documentation baseline files and keep them synchronized when process or governance rules change.
+- `repository/ai-entrypoints`: Define and maintain AI agent entrypoint docs (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) for consistent onboarding.
 - `repository/rules-baseline`: Require and centralize agent/process guidance rules used by contributors and automation.
 
 ### Modified Capabilities

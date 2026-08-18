@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "updated": "2026-08-12",
+  "purpose": "Project-recommended MCP servers for agents working in this repository.",
+  "consumerStatus": {
+    "projectManifest": ".agents/mcp-servers.json is a repository manifest. Keep its server names, commands, args, and URLs in parity with .codex/config.toml.",
+    "codex": "Use .codex/config.toml for this repository Codex MCP configuration; it must mirror this manifest without operating-system-specific launchers.",
+    "antigravity": "Antigravity/Gemini uses its own mcp_config.json format outside this manifest.",
+    "jsonInterpolation": "Do not assume ${ENV_VAR}, $ENV_VAR, or .env loading in this JSON. JSON has no interpolation by itself."
+  },
+  "env": {
+    "localFile": ".env",
+    "exampleFile": ".env.example",
+    "loadPolicy": "Secrets stay in local .env. Each MCP client must load .env through its official mechanism, inherited process environment, or an explicit launcher.",
+    "variables": [
+      "PLAYWRIGHT_MCP_EXTENSION_TOKEN",
+      "STITCH_API_KEY",
+      "STITCH_USE_SYSTEM_GCLOUD"
+    ]
+  },
+  "policy": {
+    "secrets": "Never store API keys, PATs, OAuth tokens, or application-default credential files in this repository.",
+    "excludedByDefault": [
+      "figma"
+    ],
+    "notes": [
+      "Use these MCPs only when they help the current task.",
+      "Keep repository-intelligence MCPs out unless benchmark and security evidence is recorded in docs/AGENT_CONTEXT_EFFICIENCY_AUDIT.md.",
+      "Keep this manifest and .codex/config.toml operating-system neutral; do not use powershell.exe, cmd.exe, npx.cmd, bash, sh, or absolute OS-specific paths in committed MCP launch config."
+    ]
+  },
+  "servers": {
+    "context7": {
+      "transport": "stdio",
+      "purpose": "Fetch current library and framework documentation during coding tasks.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "auth": {
+        "required": false,
+        "mode": "free"
+      }
+    },
+    "chrome-devtools": {
+      "transport": "stdio",
+      "purpose": "Inspect and automate Chrome DevTools for browser debugging and UI verification.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest"
+      ],
+      "auth": {
+        "required": false
+      }
+    },
+    "playwright": {
+      "transport": "stdio",
+      "purpose": "Inspect and automate existing tabs in the authenticated Chrome profile selected by the Playwright MCP extension token.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--extension"
+      ],
+      "auth": {
+        "required": true,
+        "secretStorage": "Put PLAYWRIGHT_MCP_EXTENSION_TOKEN in local .env only and load it into the MCP client process environment; never commit its value.",
+        "env": [
+          "PLAYWRIGHT_MCP_EXTENSION_TOKEN"
+        ]
+      }
+    },
+    "github-readonly": {
+      "transport": "streamable_http",
+      "purpose": "Read GitHub repositories, issues, pull requests, and related metadata without write tools.",
+      "url": "https://api.githubcopilot.com/mcp/readonly",
+      "readOnly": true,
+      "auth": {
+        "required": true,
+        "secretStorage": "Use the MCP client's OAuth/session storage; do not commit tokens."
+      }
+    },
+    "gcloud": {
+      "transport": "stdio",
+      "purpose": "Use Google Cloud through the local gcloud CLI with the active gcloud identity.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@google-cloud/gcloud-mcp"
+      ],
+      "auth": {
+        "required": true,
+        "prerequisites": [
+          "Install Google Cloud CLI.",
+          "Run gcloud init.",
+          "Authenticate with gcloud auth login and application-default credentials when needed."
+        ]
+      }
+    },
+    "stitch": {
+      "transport": "stdio",
+      "purpose": "Use Google Stitch design workflows through a local MCP proxy, without Figma.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@_davideast/stitch-mcp",
+        "proxy"
+      ],
+      "auth": {
+        "required": true,
+        "secretStorage": "Put secret values in local .env only. Do not put API keys in this JSON or in client MCP config files.",
+        "env": [
+          "STITCH_API_KEY",
+          "STITCH_USE_SYSTEM_GCLOUD"
+        ],
+        "options": [
+          "Run npx @_davideast/stitch-mcp init for guided setup.",
+          "Set STITCH_API_KEY in .env for API key auth only when needed.",
+          "Set STITCH_USE_SYSTEM_GCLOUD=false in .env to avoid system gcloud ADC when using API key auth.",
+          "Use existing Google Cloud CLI defaults only when intentionally using OAuth/ADC instead of STITCH_API_KEY."
+        ]
+      }
+    }
+  },
+  "stitchPlugins": {
+    "marketplace": "google-labs-code/stitch-skills",
+    "plugins": [
+      "stitch-design@stitch-skills",
+      "stitch-build@stitch-skills",
+      "stitch-utilities@stitch-skills"
+    ]
+  },
+  "browserPlugins": {
+    "marketplace": "openai-bundled",
+    "plugins": [
+      "chrome@openai-bundled"
+    ],
+    "purpose": "Control the user's authenticated Chrome session for visual inspection and interactive browser verification.",
+    "runtime": {
+      "mcpServer": "node_repl",
+      "managedBy": "Codex",
+      "notes": "The Chrome plugin owns its managed node_repl browser runtime. Do not add a duplicate raw Chrome MCP command to this manifest."
+    }
+  },
+  "verification": [
+    "Validate environment loading without printing secret values, for example by checking Boolean(process.env.STITCH_API_KEY).",
+    "Restart the MCP client after changing its active MCP config.",
+    "Use the MCP client server inspection command or UI to confirm active servers.",
+    "Confirm chrome@openai-bundled is enabled and its managed node_repl MCP runtime is active before using existing Chrome tabs."
+  ]
+}

@@ -9,6 +9,7 @@ The repository already uses OpenSpec for significant planning, but baseline docu
 - Enforce a no-stale-doc policy for practical docs that affect contributor process.
 - Keep docs in English and concise.
 - Add rule baseline files under `.agents/rules` for reusable UI/building, architecture, Git, and graph-navigation guidance.
+- Ensure AI agent entrypoint docs (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) remain aligned and discoverable.
 
 **Non-Goals:**
 - Modifying application runtime behavior.

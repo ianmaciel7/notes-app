@@ -30,7 +30,9 @@
 - `README.md`
 - `AGENTS.md`
 - `CLAUDE.md`
+- `GEMINI.md`
 - `docs/ARCHITECTURE.md`
 - `docs/DESIGN.md`
 - `docs/TESTING.md`
 - `docs/DEPLOYMENT.md`
+- `docs/GRAPHIFY.md`
