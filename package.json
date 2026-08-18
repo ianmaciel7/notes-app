@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "biome check ."
+    "lint": "biome check .",
+    "graphify:install": "node ./scripts/graphify-install.mjs",
+    "graphify:build": "graphify build",
+    "graphify:status": "graphify status"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

@@ -16,6 +16,9 @@
 # next.js
 /.next/
 /out/
+/graphify-out/
+.uv-cache/
+.uv-tools/
 
 # production
 /build
