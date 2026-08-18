@@ -55,6 +55,38 @@ If you prefer not to restore docs after bootstrap, restore only required files l
 - `ESLint`: required baseline from `create-next-app` for project lint compatibility.
 - `Biome`: optional but recommended for fast formatter/linter workflows.
 
+### next-intl baseline (locale-ready)
+
+- Install and configure i18n baseline for App Router locales:
+
+```powershell
+pnpm add next-intl
+```
+
+- Keep locale contract config in these files:
+  - `src/i18n/routing.ts`
+  - `src/i18n/request.ts`
+  - `src/middleware.ts`
+  - `next.config.ts` (next-intl plugin wiring)
+
+- Add message catalogs:
+  - `src/messages/en.json`
+  - `src/messages/es.json`
+  - `src/messages/pt-BR.json`
+
+- Keep user-facing routes under `src/app/[locale]/` and root redirect in `src/app/page.tsx`.
+
+- Verify with:
+
+```powershell
+pnpm install
+pnpm dev
+# open:
+# http://localhost:3000/en
+# http://localhost:3000/es
+# http://localhost:3000/pt-BR
+```
+
 Initialize and align scripts:
 
 ```powershell
@@ -79,4 +111,3 @@ pnpm run format
 ```
 
 If any command fails, share the error output and fix by rerunning the setup steps above.
-

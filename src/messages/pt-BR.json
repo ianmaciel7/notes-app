@@ -1,0 +1,20 @@
+{
+  "home": {
+    "starter": "Modelo inicial",
+    "title": "Next.js + shadcn",
+    "description": "Este projeto agora opera com internacionalização via rotas de locale e carregamento padronizado de mensagens com next-intl.",
+    "quickStart": {
+      "title": "Início rápido",
+      "step1": "Abra src/app/[locale]/page.tsx e edite a home.",
+      "step2": "Adicione novas chaves em src/messages/*.json.",
+      "step3": "Execute pnpm dev e abra http://localhost:3000/pt-BR."
+    },
+    "links": {
+      "nextjs": "Documentação do Next.js",
+      "nextjsDesc": "Documentação oficial do App Router.",
+      "shadcn": "Documentação do shadCN",
+      "shadcnDesc": "Convenções de componentes e design tokens."
+    },
+    "cta": "Começar a construir"
+  }
+}
