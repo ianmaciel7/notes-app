@@ -1,0 +1,64 @@
+name: Sync stag to dev
+
+on:
+  push:
+    branches: [stag]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: sync-stag-to-dev
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: Open stag to dev sync PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout stag
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: stag
+
+      - name: Inspect branch state
+        id: inspect
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin \
+            +refs/heads/dev:refs/remotes/origin/dev \
+            +refs/heads/stag:refs/remotes/origin/stag
+
+          missing_patches="$(git cherry origin/dev origin/stag | awk '$1 == "+" { count++ } END { print count + 0 }')"
+          echo "missing_patches=$missing_patches" >> "$GITHUB_OUTPUT"
+
+          if [ "$missing_patches" -eq 0 ]; then
+            echo "needs_sync=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          existing_pr="$(gh pr list --repo "$REPOSITORY" --base dev --head stag --state open --json number --jq '.[0].number // ""')"
+          echo "needs_sync=true" >> "$GITHUB_OUTPUT"
+          echo "existing_pr=$existing_pr" >> "$GITHUB_OUTPUT"
+
+      - name: Create sync pull request
+        if: steps.inspect.outputs.needs_sync == 'true' && steps.inspect.outputs.existing_pr == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          MISSING_PATCHES: ${{ steps.inspect.outputs.missing_patches }}
+        run: |
+          gh pr create \
+            --repo "$REPOSITORY" \
+            --base dev \
+            --head stag \
+            --title "chore: sync stag into dev" \
+            --body "Automated back-sync after stag changed. Missing non-equivalent patches: $MISSING_PATCHES. Merge only after normal CI passes."
