@@ -14,7 +14,13 @@
     "complexity": "node scripts/check-complexity.mjs",
     "test": "node --test tests/ci-baseline.test.mjs",
     "test:coverage": "node --test --experimental-test-coverage --test-coverage-lines=70 --test-coverage-functions=70 --test-coverage-branches=60 tests/ci-baseline.test.mjs",
-    "verify": "pnpm format:check && pnpm lint && pnpm complexity && pnpm typegen && pnpm typecheck && pnpm test:coverage && pnpm build"
+    "verify": "pnpm format:check && pnpm lint && pnpm complexity && pnpm typegen && pnpm typecheck && pnpm test:coverage && pnpm build",
+    "graphify:knowledge": "node ./scripts/graphify-ingest-legacy.mjs",
+    "graphify:knowledge:build": "node ./scripts/graphify-ingest-legacy.mjs --build",
+    "graphify:install": "node ./scripts/graphify-install.mjs",
+    "graphify:build": "graphify build",
+    "graphify:update:code": "graphify extract . --code-only --output . --no-cluster && graphify cluster-only . --graph graphify-out/graph.json --no-viz --no-label",
+    "graphify:status": "graphify status"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

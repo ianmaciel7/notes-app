@@ -8,12 +8,19 @@ Graphify is the repository's primary codebase and architecture navigation layer 
 
 1. Install Graphify CLI (`graphify` command).
 2. In this project, run:
+   - `pnpm run graphify:install` (recommended; includes fallback install attempts and config)
+   - `pnpm run graphify:build`
+   - `pnpm run graphify:status`
+3. If installation fails, try the CLI install directly:
+   - `python -m pip install graphifyy`
    - `graphify install --platform codex --project`
    - `graphify install --platform codex`
-3. Generate or refresh the knowledge graph as needed using:
+4. Windows + uv cache issues:
+   - `UV_CACHE_DIR=%CD%\.uv-cache UV_TOOL_DIR=%CD%\.uv-tools uv tool install graphifyy`
+5. Generate or refresh the knowledge graph as needed using:
    - `graphify build`
    - `graphify status`
-4. Use in sessions:
+6. Use in sessions:
    - `graphify query ...`
    - `graphify explain ...`
    - `graphify path ...`
