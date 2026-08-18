@@ -14,9 +14,8 @@ This repository uses OpenSpec for significant proposals, workflow changes, and d
 - `docs/DEPLOYMENT.md`
 
 ## Operational policy
-
+- Use and keep `.agents/rules/*` aligned with contributor and agent workflows, including OpenSpec, English-first, UI, architecture, Git, and Graphify guidance.
 - Use English-first for repository documentation and code-facing text.
-- Use OpenSpec for significant changes: proposal, spec, design, tasks.
 - Keep practical docs synchronized in the same change when process or contributor rules change.
 - When modifying behavior or contributor process, update related docs in the same change.
 
@@ -25,3 +24,5 @@ This repository uses OpenSpec for significant proposals, workflow changes, and d
 - Practical documentation baseline is maintained under this repo with the change `add-missing-repository-documentation`.
 - Prefer small, atomic changes on dedicated branches and include clear verification notes in PRs.
 - If this repository has a `CLAUDE.md`, follow instructions there as the top-priority AI agent entrypoint.
+
+

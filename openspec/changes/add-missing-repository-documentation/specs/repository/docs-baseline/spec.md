@@ -7,6 +7,14 @@ Defines minimum repository documentation baseline requirements and ensures new o
 ### Requirement: Documentation baseline presence
 The system SHALL provide the baseline documentation files `CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md`, `docs/TESTING.md`, and `docs/DEPLOYMENT.md`.
 
+The system SHALL provide repository rule files:
+- `.agents/rules/openspec-first.md`
+- `.agents/rules/english-first.md`
+- `.agents/rules/shadcn-first.md`
+- `.agents/rules/nextjs-server-architecture.md`
+- `.agents/rules/git-workflow-rule.md`
+- `.agents/rules/graphify.md`
+
 #### Scenario: New setup
 - **WHEN** the repository is checked out for contribution or automation work,
 - **THEN** the baseline files SHALL be present and readable in their expected paths.
@@ -27,6 +35,9 @@ Baseline practical docs SHALL be authored in English and remain aligned with `.a
 
 ### Requirement: Contributor entry point consistency
 `AGENTS.md` SHALL remain the canonical practical entry point for agent instructions, with references to OpenSpec workflow artifacts where applicable.
+
+### Requirement: Rule discoverability
+`README.md`, `AGENTS.md`, and `CLAUDE.md` SHALL include references to the rule set that governs contribution, architecture, and agent work.
 
 #### Scenario: Agent onboarding
 - **WHEN** contributors or agents start a task,

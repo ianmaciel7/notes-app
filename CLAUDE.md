@@ -14,13 +14,13 @@
   - Specs
   - Design
   - Tasks
-- Keep practical documentation synchronized (`CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`, `docs/*`) whenever process rules change.
+- Keep practical documentation synchronized (`CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`, `CLAUDE.md`, `.agents/rules/*`) whenever process rules change.
 
 ## Priority for Decisions
 
 1. User request for the current task.
 2. OpenSpec specs in the active change.
-3. `AGENTS.md` and this file.
+3. `AGENTS.md`, `CLAUDE.md`, and `.agents/rules/*`.
 4. Existing repository docs and coding conventions.
 
 ## Helpful Entry Documents
@@ -28,6 +28,8 @@
 - `CONTRIBUTING.md`
 - `SECURITY.md`
 - `README.md`
+- `AGENTS.md`
+- `CLAUDE.md`
 - `docs/ARCHITECTURE.md`
 - `docs/DESIGN.md`
 - `docs/TESTING.md`

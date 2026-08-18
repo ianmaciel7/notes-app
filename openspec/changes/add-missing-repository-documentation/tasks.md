@@ -11,6 +11,13 @@
 - [x] 2.3 Add `docs/TESTING.md` with validation commands and review criteria.
 - [x] 2.4 Add `docs/DEPLOYMENT.md` with local and production deployment procedures.
 
+## 2.5 Repository Rules
+
+- [x] 2.5.1 Add `.agents/rules/shadcn-first.md` for UI component sourcing and composition guidance.
+- [x] 2.5.2 Add `.agents/rules/nextjs-server-architecture.md` for App Router-first architecture defaults.
+- [x] 2.5.3 Add `.agents/rules/git-workflow-rule.md` for branching, PR, merge, CI, and release guardrails.
+- [x] 2.5.4 Add `.agents/rules/graphify.md` for graph-based codebase and architecture discovery.
+
 ## 3. Synchronization and Validation
 
 - [x] 3.1 Update practical docs index references in README and applicable files to include the new baselines.

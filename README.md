@@ -28,3 +28,9 @@ Additional repository links and usage notes are maintained here.
 - docs/DESIGN.md
 - docs/TESTING.md
 - docs/DEPLOYMENT.md
+- .agents/rules/openspec-first.md
+- .agents/rules/english-first.md
+- .agents/rules/shadcn-first.md
+- .agents/rules/nextjs-server-architecture.md
+- .agents/rules/git-workflow-rule.md
+- .agents/rules/graphify.md

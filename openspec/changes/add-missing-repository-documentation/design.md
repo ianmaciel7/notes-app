@@ -8,6 +8,7 @@ The repository already uses OpenSpec for significant planning, but baseline docu
 - Restore missing baseline docs for contributors and automation.
 - Enforce a no-stale-doc policy for practical docs that affect contributor process.
 - Keep docs in English and concise.
+- Add rule baseline files under `.agents/rules` for reusable UI/building, architecture, Git, and graph-navigation guidance.
 
 **Non-Goals:**
 - Modifying application runtime behavior.
