@@ -1,10 +1,12 @@
 "use client"
 
 import * as React from "react"
+import { cva } from "class-variance-authority"
 import { PanelLeftIcon, PanelRightIcon } from "lucide-react"
 import { usePanelRef } from "react-resizable-panels"
 
 import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import {
   ResizableHandle,
   ResizablePanel,
@@ -27,14 +29,31 @@ const APP_SHELL_RIGHT_DEFAULT = "45%"
 const APP_SHELL_RIGHT_MIN = "10%"
 const APP_SHELL_RIGHT_MAX = "90%"
 
+const appShellPanelGroupVariants = cva("h-full w-full", {
+  variants: {
+    resizing: {
+      true: "[&>[data-panel]]:transition-none",
+      false:
+        "[&>[data-panel]]:transition-[flex-grow] [&>[data-panel]]:duration-300 [&>[data-panel]]:ease-in-out",
+    },
+  },
+  defaultVariants: {
+    resizing: false,
+  },
+})
+
+type AppShellResizeSide = "left" | "right"
+
 type AppShellContextValue = {
   leftCollapsed: boolean
   rightCollapsed: boolean
+  resizingSide: AppShellResizeSide | null
   leftPanelRef: ReturnType<typeof usePanelRef>
   rightPanelRef: ReturnType<typeof usePanelRef>
   leftPanelElementRef: React.RefObject<HTMLDivElement | null>
   setLeftCollapsed: React.Dispatch<React.SetStateAction<boolean>>
   setRightCollapsed: React.Dispatch<React.SetStateAction<boolean>>
+  setResizingSide: React.Dispatch<React.SetStateAction<AppShellResizeSide | null>>
   toggleLeft: () => void
   toggleRight: () => void
 }
@@ -54,6 +73,7 @@ function useAppShell() {
 function AppShellProvider({
   className,
   children,
+  style,
   ...props
 }: React.ComponentProps<"div">) {
   const rootRef = React.useRef<HTMLDivElement>(null)
@@ -62,6 +82,8 @@ function AppShellProvider({
   const leftPanelElementRef = React.useRef<HTMLDivElement>(null)
   const [leftCollapsed, setLeftCollapsed] = React.useState(false)
   const [rightCollapsed, setRightCollapsed] = React.useState(false)
+  const [resizingSide, setResizingSide] =
+    React.useState<AppShellResizeSide | null>(null)
 
   const toggleLeft = React.useCallback(() => {
     const panel = leftPanelRef.current
@@ -114,19 +136,41 @@ function AppShellProvider({
     return () => observer.disconnect()
   }, [])
 
+  React.useEffect(() => {
+    const stopResize = () => setResizingSide(null)
+
+    window.addEventListener("pointerup", stopResize)
+    window.addEventListener("pointercancel", stopResize)
+
+    return () => {
+      window.removeEventListener("pointerup", stopResize)
+      window.removeEventListener("pointercancel", stopResize)
+    }
+  }, [])
+
   const value = React.useMemo<AppShellContextValue>(
     () => ({
       leftCollapsed,
       rightCollapsed,
+      resizingSide,
       leftPanelRef,
       rightPanelRef,
       leftPanelElementRef,
       setLeftCollapsed,
       setRightCollapsed,
+      setResizingSide,
       toggleLeft,
       toggleRight,
     }),
-    [leftCollapsed, rightCollapsed, leftPanelRef, rightPanelRef, toggleLeft, toggleRight]
+    [
+      leftCollapsed,
+      rightCollapsed,
+      resizingSide,
+      leftPanelRef,
+      rightPanelRef,
+      toggleLeft,
+      toggleRight,
+    ]
   )
 
   return (
@@ -141,6 +185,7 @@ function AppShellProvider({
         style={
           {
             "--app-shell-left-width": APP_SHELL_LEFT_DEFAULT,
+            ...style,
           } as React.CSSProperties
         }
         {...props}
@@ -163,13 +208,22 @@ function AppShell({ className, ...props }: React.ComponentProps<"div">) {
 
 function AppShellPanelGroup({
   className,
+  resizeSide = "left",
   ...props
-}: React.ComponentProps<typeof ResizablePanelGroup>) {
+}: React.ComponentProps<typeof ResizablePanelGroup> & {
+  resizeSide?: AppShellResizeSide
+}) {
+  const { resizingSide } = useAppShell()
+
   return (
     <ResizablePanelGroup
       data-slot="app-shell-panel-group"
+      data-resize-side={resizeSide}
       orientation="horizontal"
-      className={cn("h-full w-full", className)}
+      className={cn(
+        appShellPanelGroupVariants({ resizing: resizingSide === resizeSide }),
+        className
+      )}
       {...props}
     />
   )
@@ -178,6 +232,7 @@ function AppShellPanelGroup({
 function AppShellSidebar({
   className,
   children,
+  onResize,
   ...props
 }: React.ComponentProps<typeof ResizablePanel>) {
   const {
@@ -198,7 +253,10 @@ function AppShellSidebar({
         collapsedSize="0%"
         collapsible
         groupResizeBehavior="preserve-pixel-size"
-        onResize={(size) => setLeftCollapsed(size.inPixels <= 1)}
+        onResize={(size, id, previousSize) => {
+          setLeftCollapsed(size.inPixels <= 1)
+          onResize?.(size, id, previousSize)
+        }}
         className={cn("h-full overflow-hidden bg-sidebar", className)}
         {...props}
       >
@@ -228,7 +286,7 @@ function AppShellWorkspace({
       className={cn("h-full min-w-0 overflow-hidden bg-sidebar", className)}
       {...props}
     >
-      <AppShellPanelGroup>{children}</AppShellPanelGroup>
+      <AppShellPanelGroup resizeSide="right">{children}</AppShellPanelGroup>
     </ResizablePanel>
   )
 }
@@ -267,6 +325,7 @@ function AppShellMain({
 function AppShellSidePanel({
   className,
   children,
+  onResize,
   ...props
 }: React.ComponentProps<typeof ResizablePanel>) {
   const { rightPanelRef, rightCollapsed, setRightCollapsed } = useAppShell()
@@ -281,7 +340,10 @@ function AppShellSidePanel({
       collapsedSize="0%"
       collapsible
       groupResizeBehavior="preserve-relative-size"
-      onResize={(size) => setRightCollapsed(size.inPixels <= 1)}
+      onResize={(size, id, previousSize) => {
+        setRightCollapsed(size.inPixels <= 1)
+        onResize?.(size, id, previousSize)
+      }}
       className={cn(
         "flex h-full min-w-0 flex-col overflow-hidden bg-sidebar transition-opacity duration-300 ease-in-out",
         rightCollapsed && "opacity-0",
@@ -329,7 +391,7 @@ function AppShellSurface({
   className,
   side = "main",
   ...props
-}: React.ComponentProps<"div"> & {
+}: React.ComponentProps<typeof Card> & {
   side?: "main" | "side-panel"
 }) {
   return (
@@ -341,10 +403,10 @@ function AppShellSurface({
         side === "main" ? "pl-2.5 pr-1" : "pl-1 pr-2.5"
       )}
     >
-      <div
+      <Card
         data-slot="app-shell-surface"
         className={cn(
-          "h-full w-full overflow-hidden rounded-xl border border-border bg-background",
+          "h-full w-full gap-0 overflow-hidden rounded-xl bg-background py-0 shadow-none",
           className
         )}
         {...props}
@@ -356,11 +418,18 @@ function AppShellSurface({
 function AppShellResizeHandle({
   className,
   side,
+  onPointerDown,
+  onKeyDown,
+  onKeyUp,
   ...props
 }: React.ComponentProps<typeof ResizableHandle> & {
-  side: "left" | "right"
+  side: AppShellResizeSide
 }) {
-  const { leftCollapsed, rightCollapsed } = useAppShell()
+  const {
+    leftCollapsed,
+    rightCollapsed,
+    setResizingSide,
+  } = useAppShell()
   const collapsed = side === "left" ? leftCollapsed : rightCollapsed
 
   return (
@@ -373,6 +442,18 @@ function AppShellResizeHandle({
         collapsed && "pointer-events-none before:opacity-0",
         className
       )}
+      onPointerDown={(event) => {
+        setResizingSide(side)
+        onPointerDown?.(event)
+      }}
+      onKeyDown={(event) => {
+        setResizingSide(side)
+        onKeyDown?.(event)
+      }}
+      onKeyUp={(event) => {
+        setResizingSide(null)
+        onKeyUp?.(event)
+      }}
       {...props}
     />
   )
@@ -380,6 +461,7 @@ function AppShellResizeHandle({
 
 function AppShellSidebarTrigger({
   className,
+  onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { leftCollapsed, toggleLeft } = useAppShell()
@@ -403,7 +485,7 @@ function AppShellSidebarTrigger({
           leftCollapsed ? "Expand left sidebar" : "Collapse left sidebar"
         }
         onClick={(event) => {
-          props.onClick?.(event)
+          onClick?.(event)
           if (!event.defaultPrevented) toggleLeft()
         }}
         {...props}
@@ -416,6 +498,7 @@ function AppShellSidebarTrigger({
 
 function AppShellSidePanelTrigger({
   className,
+  onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { rightCollapsed, toggleRight } = useAppShell()
@@ -435,7 +518,7 @@ function AppShellSidePanelTrigger({
           rightCollapsed ? "Expand right panel" : "Collapse right panel"
         }
         onClick={(event) => {
-          props.onClick?.(event)
+          onClick?.(event)
           if (!event.defaultPrevented) toggleRight()
         }}
         {...props}
@@ -448,24 +531,22 @@ function AppShellSidePanelTrigger({
 
 function AppShellMobile({
   className,
-  children,
   ...props
 }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="app-shell-mobile"
       className={cn(
-        "flex h-full w-full flex-col overflow-hidden bg-sidebar md:hidden",
+        "relative flex h-full w-full flex-col overflow-hidden bg-sidebar md:hidden",
         className
       )}
       {...props}
-    >
-      {children}
-    </div>
+    />
   )
 }
 
 function AppShellMobileSidebar({
+  className,
   children,
   ...props
 }: React.ComponentProps<typeof SheetContent>) {
@@ -484,7 +565,11 @@ function AppShellMobileSidebar({
       >
         <PanelLeftIcon />
       </SheetTrigger>
-      <SheetContent side="left" className="w-3/4 bg-sidebar p-0" {...props}>
+      <SheetContent
+        side="left"
+        className={cn("w-3/4 bg-sidebar p-0", className)}
+        {...props}
+      >
         <SheetHeader className="sr-only">
           <SheetTitle>Navigation</SheetTitle>
           <SheetDescription>Application navigation</SheetDescription>
@@ -496,6 +581,7 @@ function AppShellMobileSidebar({
 }
 
 function AppShellMobileSidePanel({
+  className,
   children,
   ...props
 }: React.ComponentProps<typeof SheetContent>) {
@@ -514,7 +600,11 @@ function AppShellMobileSidePanel({
       >
         <PanelRightIcon />
       </SheetTrigger>
-      <SheetContent side="right" className="w-3/4 bg-sidebar p-2.5" {...props}>
+      <SheetContent
+        side="right"
+        className={cn("w-3/4 bg-sidebar p-2.5", className)}
+        {...props}
+      >
         <SheetHeader className="sr-only">
           <SheetTitle>Side panel</SheetTitle>
           <SheetDescription>Secondary application panel</SheetDescription>
