@@ -8,7 +8,16 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!!node_modules", "!!.next", "!!build", "!!coverage", "!!out"]
+    "includes": [
+      "**",
+      "!!node_modules",
+      "!!.next",
+      "!!build",
+      "!!coverage",
+      "!!out",
+      "!!.agents",
+      "!!src/components/ui"
+    ]
   },
   "formatter": {
     "enabled": true,
