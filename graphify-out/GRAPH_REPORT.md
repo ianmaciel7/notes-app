@@ -1,16 +1,16 @@
 # Graph Report - notes-app  (2026-08-19)
 
 ## Corpus Check
-- 220 files · ~131,261 words
+- 231 files · ~137,082 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1863 nodes · 2354 edges · 173 communities (159 shown, 14 thin omitted)
+- 1877 nodes · 2402 edges · 175 communities (161 shown, 14 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `dfe5a3d6`
+- Built from commit: `30c3c247`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -22,12 +22,12 @@
 - menubar.tsx
 - scripts
 - compilerOptions
-- combobox.tsx
+- app-sidebar.tsx
 - graphify-ingest-legacy.mjs
 - biome.json
 - components.json
-- popover.tsx
-- questionnaire.tsx
+- command.tsx
+- button.tsx
 - routing.ts
 - context-menu.tsx
 - drawer.tsx
@@ -171,13 +171,15 @@
 - 2026-08-18-restore-legacy-agents-assets/tasks.md
 - configure-ci-cd/tasks.md
 - ci-baseline.test.mjs
+- alert-dialog.tsx
+- input-otp.tsx
 
 ## God Nodes (most connected - your core abstractions)
-1. `cn()` - 374 edges
+1. `cn()` - 377 edges
 2. `main()` - 20 edges
 3. `scripts` - 19 edges
-4. `Vi Utilities` - 18 edges
-5. `Button()` - 17 edges
+4. `Button()` - 18 edges
+5. `Vi Utilities` - 18 edges
 6. `Find Plugins` - 16 edges
 7. `Mocking` - 16 edges
 8. `Type Testing` - 16 edges
@@ -185,21 +187,21 @@
 10. `Snapshot Testing` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `AppShellContent()` --calls--> `cn()`  [EXTRACTED]
-  src/components/app-shell.tsx → src/lib/utils.ts
-- `Command()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/command.tsx → src/lib/utils.ts
-- `CommandDialog()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/command.tsx → src/lib/utils.ts
-- `CommandEmpty()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/command.tsx → src/lib/utils.ts
-- `CommandGroup()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/command.tsx → src/lib/utils.ts
+- `AppSidebar()` --calls--> `cn()`  [EXTRACTED]
+  src/components/app-sidebar.tsx → src/lib/utils.ts
+- `PopoverContent()` --calls--> `cn()`  [EXTRACTED]
+  src/components/ui/popover.tsx → src/lib/utils.ts
+- `PopoverDescription()` --calls--> `cn()`  [EXTRACTED]
+  src/components/ui/popover.tsx → src/lib/utils.ts
+- `PopoverHeader()` --calls--> `cn()`  [EXTRACTED]
+  src/components/ui/popover.tsx → src/lib/utils.ts
+- `PopoverTitle()` --calls--> `cn()`  [EXTRACTED]
+  src/components/ui/popover.tsx → src/lib/utils.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (173 total, 14 thin omitted)
+## Communities (175 total, 14 thin omitted)
 
 ### Community 0 - "scan.py"
 Cohesion: 0.09
@@ -215,7 +217,7 @@ Nodes (41): Input(), Sheet(), SheetContent(), SheetDescription(), SheetFooter(),
 
 ### Community 3 - "cn"
 Cohesion: 0.05
-Nodes (59): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup() (+51 more)
+Nodes (61): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup() (+53 more)
 
 ### Community 4 - "menubar.tsx"
 Cohesion: 0.09
@@ -229,9 +231,9 @@ Nodes (40): @biomejs/biome, devDependencies, @biomejs/biome, tailwindcss, @tailw
 Cohesion: 0.07
 Nodes (28): dom, dom.iterable, esnext, **/*.mts, .next/dev/types/**/*.ts, next-env.d.ts, .next/types/**/*.ts, **/*.ts (+20 more)
 
-### Community 7 - "combobox.tsx"
-Cohesion: 0.05
-Nodes (38): ComboboxChip(), ComboboxChips(), ComboboxChipsInput(), ComboboxClear(), ComboboxContent(), ComboboxEmpty(), ComboboxGroup(), ComboboxInput() (+30 more)
+### Community 7 - "app-sidebar.tsx"
+Cohesion: 0.06
+Nodes (38): AppShellContent(), AppSidebar(), AppSidebarLabels, AppSidebarProps, AppSidebarSpace, AppSidebarSpaceSwitcher(), areOrdersEqual(), defaultLabels (+30 more)
 
 ### Community 8 - "graphify-ingest-legacy.mjs"
 Cohesion: 0.13
@@ -245,13 +247,13 @@ Nodes (7): css, parser, quoteStyle, javascript, formatter, tailwindDirectives, $
 Cohesion: 0.09
 Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent (+13 more)
 
-### Community 11 - "popover.tsx"
-Cohesion: 0.29
-Nodes (4): PopoverContent(), PopoverDescription(), PopoverHeader(), PopoverTitle()
+### Community 11 - "command.tsx"
+Cohesion: 0.12
+Nodes (16): Command(), CommandDialog(), CommandEmpty(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator() (+8 more)
 
-### Community 12 - "questionnaire.tsx"
-Cohesion: 0.05
-Nodes (40): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia(), AlertDialogOverlay() (+32 more)
+### Community 12 - "button.tsx"
+Cohesion: 0.12
+Nodes (16): Button(), buttonVariants, Calendar(), CalendarDayButton(), MessageScroller(), MessageScrollerButton(), MessageScrollerContent(), MessageScrollerItem() (+8 more)
 
 ### Community 13 - "routing.ts"
 Cohesion: 0.25
@@ -274,8 +276,8 @@ Cohesion: 0.16
 Nodes (12): Field(), FieldContent(), FieldDescription(), FieldError(), FieldGroup(), FieldLabel(), FieldLegend(), FieldSeparator() (+4 more)
 
 ### Community 18 - "app-shell.tsx"
-Cohesion: 0.13
-Nodes (24): AppShell(), AppShellContent(), AppShellContext, AppShellContextValue, AppShellHeader(), AppShellMain(), AppShellMobile(), AppShellMobileSidebar() (+16 more)
+Cohesion: 0.10
+Nodes (30): AppShell(), AppShellContext, AppShellContextValue, AppShellHeader(), AppShellMain(), AppShellMobile(), AppShellMobileSidebar(), AppShellMobileSidePanel() (+22 more)
 
 ### Community 19 - "chart.tsx"
 Cohesion: 0.21
@@ -298,8 +300,8 @@ Cohesion: 0.40
 Nodes (5): Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger()
 
 ### Community 24 - "utils.ts"
-Cohesion: 0.07
-Nodes (15): AspectRatio(), Badge(), badgeVariants, Checkbox(), HoverCardContent(), InputOTP(), InputOTPGroup(), InputOTPSlot() (+7 more)
+Cohesion: 0.06
+Nodes (21): AspectRatio(), Badge(), badgeVariants, Checkbox(), Kbd(), KbdGroup(), NativeSelect(), NativeSelectOptGroup() (+13 more)
 
 ### Community 25 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -390,7 +392,7 @@ Cohesion: 0.12
 Nodes (16): By File Path, By Test Name, Changed Files, CLI Filtering, Combining Filters, Environment-based Filtering, Focus Tests (.only), Include/Exclude Patterns (+8 more)
 
 ### Community 50 - "Snapshot Testing"
-Cohesion: 0.12
+Cohesion: 0.13
 Nodes (15): Basic Snapshot, Concurrent Test Snapshots, Custom Serializers, Custom Snapshot Matchers (4.1+), Error Snapshots, File Snapshots, Inline Snapshots, Key Points (+7 more)
 
 ### Community 51 - "ADDED Requirements"
@@ -769,20 +771,28 @@ Nodes (3): 1. Project dependencies and i18n config, 2. Locale routes and transla
 Cohesion: 0.50
 Nodes (3): 1. Reusable app-shell primitive, 2. Composition and responsive behavior, 3. Integration and verification
 
+### Community 173 - "alert-dialog.tsx"
+Cohesion: 0.15
+Nodes (9): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia(), AlertDialogOverlay() (+1 more)
+
+### Community 174 - "input-otp.tsx"
+Cohesion: 0.40
+Nodes (3): InputOTP(), InputOTPGroup(), InputOTPSlot()
+
 ## Knowledge Gaps
-- **941 isolated node(s):** `AppShellResizeSide`, `AppShellContextValue`, `AppShellContext`, `PaginationLinkProps`, `LocaleLayoutProps` (+936 more)
+- **949 isolated node(s):** `AppSidebarSpace`, `AppSidebarLabels`, `AppSidebarProps`, `DropPosition`, `DragSession` (+944 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `cn` to `sidebar.tsx`, `menubar.tsx`, `combobox.tsx`, `popover.tsx`, `questionnaire.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `field.tsx`, `app-shell.tsx`, `chart.tsx`, `toast.tsx`, `attachment.tsx`, `tabs.tsx`, `utils.ts`, `navigation-menu.tsx`, `marker.tsx`, `empty.tsx`, `bubble.tsx`, `alert.tsx`, `item.tsx`, `toggle-group.tsx`?**
+- **Why does `cn()` connect `cn` to `sidebar.tsx`, `menubar.tsx`, `app-sidebar.tsx`, `command.tsx`, `button.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `field.tsx`, `app-shell.tsx`, `chart.tsx`, `toast.tsx`, `attachment.tsx`, `tabs.tsx`, `utils.ts`, `navigation-menu.tsx`, `marker.tsx`, `empty.tsx`, `bubble.tsx`, `alert.tsx`, `alert-dialog.tsx`, `input-otp.tsx`, `item.tsx`, `toggle-group.tsx`?**
   _High betweenness centrality (0.073) - this node is a cross-community bridge._
-- **Why does `Mocking` connect `Mocking` to `vitest/SKILL.md`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **What connects `AppShellResizeSide`, `AppShellContextValue`, `AppShellContext` to the rest of the system?**
-  _941 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `Test Filtering` connect `Test Filtering` to `vitest/SKILL.md`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+- **What connects `AppSidebarSpace`, `AppSidebarLabels`, `AppSidebarProps` to the rest of the system?**
+  _949 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `scan.py` be split into smaller, more focused modules?**
   _Cohesion score 0.08658536585365853 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
@@ -790,4 +800,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `sidebar.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.053877551020408164 - nodes in this community are weakly interconnected._
 - **Should `cn` be split into smaller, more focused modules?**
-  _Cohesion score 0.0525879917184265 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05456095481670929 - nodes in this community are weakly interconnected._
