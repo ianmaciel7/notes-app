@@ -13,7 +13,7 @@ import {
   AppShellSidePanelTrigger,
   AppShellSurface,
   AppShellWorkspace,
-} from "@/components/ui/app-shell"
+} from "@/components/app-shell"
 
 export default function HomePage() {
   return (
