@@ -45,8 +45,8 @@
     "semantic_hash": "bfe5e2c3a81d48228f88ed10294f38fb"
   },
   "src/app/[locale]/page.tsx": {
-    "mtime": 1787133306.7418056,
-    "ast_hash": "8ace92746343e327d97c985517ea9b58",
+    "mtime": 1787133477.7176433,
+    "ast_hash": "c924ede2743f3c766e2b5e09da265327",
     "semantic_hash": ""
   },
   "src/app/layout.tsx": {
@@ -397,11 +397,6 @@
   "scripts/check-complexity.mjs": {
     "mtime": 1787133306.7374835,
     "ast_hash": "f3ae58c97e33ec2e856905377eedf9b6",
-    "semantic_hash": ""
-  },
-  "src/components/ui/app-shell.tsx": {
-    "mtime": 1787133306.746812,
-    "ast_hash": "1f8b1c1f27316dc4c2b889a43b2393c8",
     "semantic_hash": ""
   },
   "tests/ci-baseline.test.mjs": {
@@ -1167,6 +1162,51 @@
   "public/window.svg": {
     "mtime": 1787133306.7374835,
     "ast_hash": "a2760511c65806022ad20adf74370ff3",
+    "semantic_hash": ""
+  },
+  ".agents/mcp-servers.json": {
+    "mtime": 1787133306.6192646,
+    "ast_hash": "a9db9f3db7697d190e2a28e3eb36a6a7",
+    "semantic_hash": ""
+  },
+  ".github/rulesets/dev.json": {
+    "mtime": 1787133306.6755476,
+    "ast_hash": "d4ca8b95acabfffb3960badc31d7aea5",
+    "semantic_hash": ""
+  },
+  ".github/rulesets/main.json": {
+    "mtime": 1787133306.6765468,
+    "ast_hash": "6e0a6e44b4b0a279ed852a9a6b73442a",
+    "semantic_hash": ""
+  },
+  ".github/rulesets/stag.json": {
+    "mtime": 1787133306.6765468,
+    "ast_hash": "e9f511393b613fd1a4b4749c2e7c0f1e",
+    "semantic_hash": ""
+  },
+  "skills-lock.json": {
+    "mtime": 1787133306.7394814,
+    "ast_hash": "6efa8baf08c3e8edc685f14b040bbf8e",
+    "semantic_hash": ""
+  },
+  "src/components/app-shell.tsx": {
+    "mtime": 1787133306.746812,
+    "ast_hash": "1f8b1c1f27316dc4c2b889a43b2393c8",
+    "semantic_hash": ""
+  },
+  "src/messages/en.json": {
+    "mtime": 1787133306.7755978,
+    "ast_hash": "0a98988ad0bd17ebc175504fb0ed6ce4",
+    "semantic_hash": ""
+  },
+  "src/messages/es.json": {
+    "mtime": 1787133306.7765956,
+    "ast_hash": "60dd02c5c0eb9aa596ba3076679cfee7",
+    "semantic_hash": ""
+  },
+  "src/messages/pt-BR.json": {
+    "mtime": 1787133306.7765956,
+    "ast_hash": "0c71aa7d14c98a648e89bba6253b6c06",
     "semantic_hash": ""
   }
 }

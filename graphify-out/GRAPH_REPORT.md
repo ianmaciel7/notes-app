@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `076a0b4e`
+- Built from commit: `dfe5a3d6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -26,8 +26,8 @@
 - graphify-ingest-legacy.mjs
 - biome.json
 - components.json
-- command.tsx
-- button.tsx
+- popover.tsx
+- questionnaire.tsx
 - routing.ts
 - context-menu.tsx
 - drawer.tsx
@@ -178,23 +178,23 @@
 3. `scripts` - 19 edges
 4. `Vi Utilities` - 18 edges
 5. `Button()` - 17 edges
-6. `compilerOptions` - 16 edges
-7. `Find Plugins` - 16 edges
+6. `Find Plugins` - 16 edges
+7. `Mocking` - 16 edges
 8. `Type Testing` - 16 edges
-9. `Mocking` - 16 edges
+9. `compilerOptions` - 16 edges
 10. `Snapshot Testing` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `AlertDialogOverlay()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/alert-dialog.tsx → src/lib/utils.ts
-- `AlertDialogContent()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/alert-dialog.tsx → src/lib/utils.ts
-- `AlertDialogHeader()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/alert-dialog.tsx → src/lib/utils.ts
-- `AlertDialogFooter()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/alert-dialog.tsx → src/lib/utils.ts
-- `AlertDialogMedia()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/alert-dialog.tsx → src/lib/utils.ts
+- `AppShellContent()` --calls--> `cn()`  [EXTRACTED]
+  src/components/app-shell.tsx → src/lib/utils.ts
+- `Command()` --calls--> `cn()`  [EXTRACTED]
+  src/components/ui/command.tsx → src/lib/utils.ts
+- `CommandDialog()` --calls--> `cn()`  [EXTRACTED]
+  src/components/ui/command.tsx → src/lib/utils.ts
+- `CommandEmpty()` --calls--> `cn()`  [EXTRACTED]
+  src/components/ui/command.tsx → src/lib/utils.ts
+- `CommandGroup()` --calls--> `cn()`  [EXTRACTED]
+  src/components/ui/command.tsx → src/lib/utils.ts
 
 ## Import Cycles
 - None detected.
@@ -210,12 +210,12 @@ Cohesion: 0.05
 Nodes (39): @base-ui/react, class-variance-authority, clsx, cmdk, date-fns, embla-carousel-react, input-otp, lucide-react (+31 more)
 
 ### Community 2 - "sidebar.tsx"
-Cohesion: 0.06
-Nodes (40): Sheet(), SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle(), SheetTrigger() (+32 more)
+Cohesion: 0.05
+Nodes (41): Input(), Sheet(), SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle() (+33 more)
 
 ### Community 3 - "cn"
 Cohesion: 0.05
-Nodes (70): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup() (+62 more)
+Nodes (59): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup() (+51 more)
 
 ### Community 4 - "menubar.tsx"
 Cohesion: 0.09
@@ -230,8 +230,8 @@ Cohesion: 0.07
 Nodes (28): dom, dom.iterable, esnext, **/*.mts, .next/dev/types/**/*.ts, next-env.d.ts, .next/types/**/*.ts, **/*.ts (+20 more)
 
 ### Community 7 - "combobox.tsx"
-Cohesion: 0.09
-Nodes (23): ComboboxChip(), ComboboxChips(), ComboboxChipsInput(), ComboboxClear(), ComboboxContent(), ComboboxEmpty(), ComboboxGroup(), ComboboxInput() (+15 more)
+Cohesion: 0.05
+Nodes (38): ComboboxChip(), ComboboxChips(), ComboboxChipsInput(), ComboboxClear(), ComboboxContent(), ComboboxEmpty(), ComboboxGroup(), ComboboxInput() (+30 more)
 
 ### Community 8 - "graphify-ingest-legacy.mjs"
 Cohesion: 0.13
@@ -245,13 +245,13 @@ Nodes (7): css, parser, quoteStyle, javascript, formatter, tailwindDirectives, $
 Cohesion: 0.09
 Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent (+13 more)
 
-### Community 11 - "command.tsx"
-Cohesion: 0.12
-Nodes (16): Command(), CommandDialog(), CommandEmpty(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator() (+8 more)
+### Community 11 - "popover.tsx"
+Cohesion: 0.29
+Nodes (4): PopoverContent(), PopoverDescription(), PopoverHeader(), PopoverTitle()
 
-### Community 12 - "button.tsx"
-Cohesion: 0.07
-Nodes (25): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia(), AlertDialogOverlay() (+17 more)
+### Community 12 - "questionnaire.tsx"
+Cohesion: 0.05
+Nodes (40): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia(), AlertDialogOverlay() (+32 more)
 
 ### Community 13 - "routing.ts"
 Cohesion: 0.25
@@ -270,8 +270,8 @@ Cohesion: 0.19
 Nodes (13): Carousel(), CarouselApi, CarouselContent(), CarouselContext, CarouselContextProps, CarouselItem(), CarouselNext(), CarouselOptions (+5 more)
 
 ### Community 17 - "field.tsx"
-Cohesion: 0.12
-Nodes (17): ButtonGroup(), ButtonGroupSeparator(), ButtonGroupText(), buttonGroupVariants, Field(), FieldContent(), FieldDescription(), FieldError() (+9 more)
+Cohesion: 0.16
+Nodes (12): Field(), FieldContent(), FieldDescription(), FieldError(), FieldGroup(), FieldLabel(), FieldLegend(), FieldSeparator() (+4 more)
 
 ### Community 18 - "app-shell.tsx"
 Cohesion: 0.13
@@ -298,8 +298,8 @@ Cohesion: 0.40
 Nodes (5): Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger()
 
 ### Community 24 - "utils.ts"
-Cohesion: 0.05
-Nodes (23): AspectRatio(), Badge(), badgeVariants, Checkbox(), HoverCardContent(), InputOTP(), InputOTPGroup(), InputOTPSlot() (+15 more)
+Cohesion: 0.07
+Nodes (15): AspectRatio(), Badge(), badgeVariants, Checkbox(), HoverCardContent(), InputOTP(), InputOTPGroup(), InputOTPSlot() (+7 more)
 
 ### Community 25 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -454,8 +454,8 @@ Cohesion: 0.23
 Nodes (12): allowedExtensions, branchWeight(), collectSourceFiles(), cyclomaticComplexity(), failures, functionName(), ignoredDirectories, isFunctionLike() (+4 more)
 
 ### Community 66 - "item.tsx"
-Cohesion: 0.18
-Nodes (12): Item(), ItemActions(), ItemContent(), ItemDescription(), ItemFooter(), ItemGroup(), ItemHeader(), ItemMedia() (+4 more)
+Cohesion: 0.13
+Nodes (17): ButtonGroup(), ButtonGroupSeparator(), ButtonGroupText(), buttonGroupVariants, Item(), ItemActions(), ItemContent(), ItemDescription() (+9 more)
 
 ### Community 67 - "Acquire Codebase Knowledge"
 Cohesion: 0.17
@@ -770,24 +770,24 @@ Cohesion: 0.50
 Nodes (3): 1. Reusable app-shell primitive, 2. Composition and responsive behavior, 3. Integration and verification
 
 ## Knowledge Gaps
-- **941 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `defaultBranch` (+936 more)
+- **941 isolated node(s):** `AppShellResizeSide`, `AppShellContextValue`, `AppShellContext`, `PaginationLinkProps`, `LocaleLayoutProps` (+936 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `cn` to `sidebar.tsx`, `menubar.tsx`, `combobox.tsx`, `command.tsx`, `button.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `field.tsx`, `app-shell.tsx`, `chart.tsx`, `toast.tsx`, `attachment.tsx`, `tabs.tsx`, `utils.ts`, `navigation-menu.tsx`, `marker.tsx`, `empty.tsx`, `bubble.tsx`, `alert.tsx`, `item.tsx`, `toggle-group.tsx`?**
-  _High betweenness centrality (0.056) - this node is a cross-community bridge._
-- **Why does `Test API` connect `Test API` to `vitest/SKILL.md`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `$schema`, `enabled`, `clientKind` to the rest of the system?**
+- **Why does `cn()` connect `cn` to `sidebar.tsx`, `menubar.tsx`, `combobox.tsx`, `popover.tsx`, `questionnaire.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `field.tsx`, `app-shell.tsx`, `chart.tsx`, `toast.tsx`, `attachment.tsx`, `tabs.tsx`, `utils.ts`, `navigation-menu.tsx`, `marker.tsx`, `empty.tsx`, `bubble.tsx`, `alert.tsx`, `item.tsx`, `toggle-group.tsx`?**
+  _High betweenness centrality (0.073) - this node is a cross-community bridge._
+- **Why does `Mocking` connect `Mocking` to `vitest/SKILL.md`?**
+  _High betweenness centrality (0.003) - this node is a cross-community bridge._
+- **What connects `AppShellResizeSide`, `AppShellContextValue`, `AppShellContext` to the rest of the system?**
   _941 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `scan.py` be split into smaller, more focused modules?**
   _Cohesion score 0.08658536585365853 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
 - **Should `sidebar.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.05585106382978723 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.053877551020408164 - nodes in this community are weakly interconnected._
 - **Should `cn` be split into smaller, more focused modules?**
-  _Cohesion score 0.04683544303797468 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0525879917184265 - nodes in this community are weakly interconnected._
