@@ -537,7 +537,6 @@ function AppSidebarSpaceSwitcher({
         inline={isMobile}
         inputValue={query}
         autoHighlight={false}
-        fillInputOnItemPress={false}
         itemToStringLabel={(space: AppSidebarSpace) => space.name}
         itemToStringValue={(space: AppSidebarSpace) => space.name}
         onInputValueChange={setQuery}
