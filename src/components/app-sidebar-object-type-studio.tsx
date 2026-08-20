@@ -145,6 +145,36 @@ function AppSidebarObjectTypeStudio({
   className,
 }: AppSidebarObjectTypeStudioProps) {
   const [open, setOpen] = React.useState(false)
+  const dialogContentRef = React.useRef<HTMLDivElement>(null)
+
+  React.useEffect(() => {
+    if (!open) return
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const content = dialogContentRef.current
+      const target = event.target
+
+      if (!content || !(target instanceof Node)) return
+
+      if (!content.contains(target)) {
+        setOpen(false)
+      }
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown, true)
+    document.addEventListener("keydown", handleKeyDown, true)
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown, true)
+      document.removeEventListener("keydown", handleKeyDown, true)
+    }
+  }, [open])
 
   function selectPreset(preset: AppSidebarObjectTypePreset) {
     onSelect?.(preset)
@@ -153,7 +183,7 @@ function AppSidebarObjectTypeStudio({
 
   return (
     <div data-slot="app-sidebar-object-type-studio" className={cn("px-2", className)}>
-      <Dialog open={open} onOpenChange={(nextOpen) => setOpen(nextOpen)}>
+      <Dialog open={open} onOpenChange={setOpen}>
         <Button
           type="button"
           variant="ghost"
@@ -166,6 +196,7 @@ function AppSidebarObjectTypeStudio({
         </Button>
 
         <DialogContent
+          ref={dialogContentRef}
           showCloseButton={false}
           className={cn(
             "flex h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] max-w-6xl flex-col gap-0 overflow-hidden p-0",
