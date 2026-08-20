@@ -15,7 +15,7 @@ import {
   SparklesIcon,
 } from "lucide-react"
 
-import { AppSidebarObjectTypeStudio } from "@/components/app-sidebar-object-type-studio"
+import { AppSidebarOverview } from "@/components/app-sidebar-overview"
 import {
   AppSidebar,
   type AppSidebarSpace,
@@ -326,7 +326,7 @@ function AppSidebarPrimaryActionsDemo() {
           />
         </div>
 
-        <AppSidebarObjectTypeStudio className="pt-2" />
+        <AppSidebarOverview />
       </div>
     </AppSidebar>
   )
