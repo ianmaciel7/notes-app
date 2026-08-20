@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: server (Node)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev",
+      "skipFiles": ["<node_internals>/**"],
+      "serverReadyAction": {
+        "action": "startDebugging",
+        "name": "Next.js: client (Chrome)",
+        "pattern": "- Local:.+(https?://.+)"
+      }
+    },
+    {
+      "name": "Next.js: client (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMaps": true,
+      "windows": {
+        "runtimeExecutable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+      },
+      "linux": {
+        "runtimeExecutable": "/usr/bin/google-chrome"
+      }
+    }
+  ]
+}
