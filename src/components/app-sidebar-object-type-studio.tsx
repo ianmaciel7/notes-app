@@ -58,6 +58,7 @@ type AppSidebarObjectTypePreset = {
 
 type AppSidebarObjectTypeStudioProps = {
   onSelect?: (preset: AppSidebarObjectTypePreset) => void
+  trigger?: React.ReactNode
   className?: string
 }
 
@@ -142,6 +143,7 @@ function AppSidebarObjectTypeCard({
 
 function AppSidebarObjectTypeStudio({
   onSelect,
+  trigger,
   className,
 }: AppSidebarObjectTypeStudioProps) {
   const [open, setOpen] = React.useState(false)
@@ -155,16 +157,11 @@ function AppSidebarObjectTypeStudio({
       const target = event.target
 
       if (!content || !(target instanceof Node)) return
-
-      if (!content.contains(target)) {
-        setOpen(false)
-      }
+      if (!content.contains(target)) setOpen(false)
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false)
-      }
+      if (event.key === "Escape") setOpen(false)
     }
 
     document.addEventListener("pointerdown", handlePointerDown, true)
@@ -182,18 +179,24 @@ function AppSidebarObjectTypeStudio({
   }
 
   return (
-    <div data-slot="app-sidebar-object-type-studio" className={cn("px-2", className)}>
+    <div
+      data-slot="app-sidebar-object-type-studio"
+      className={cn(trigger ? "inline-flex" : "px-2", className)}
+    >
       <Dialog open={open} onOpenChange={setOpen}>
-        <Button
-          type="button"
-          variant="ghost"
-          size="default"
-          className="w-full justify-start px-2 font-normal text-muted-foreground"
-          onClick={() => setOpen(true)}
-        >
-          <PlusIcon data-icon="inline-start" />
-          <span className="min-w-0 truncate">Add object type</span>
-        </Button>
+        <span className="inline-flex" onClick={() => setOpen(true)}>
+          {trigger ?? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="default"
+              className="w-full justify-start px-2 font-normal text-muted-foreground"
+            >
+              <PlusIcon data-icon="inline-start" />
+              <span className="min-w-0 truncate">Add object type</span>
+            </Button>
+          )}
+        </span>
 
         <DialogContent
           ref={dialogContentRef}
@@ -239,18 +242,14 @@ function AppSidebarObjectTypeStudio({
                       <PlusIcon className="size-4" />
                     </span>
                   </ItemMedia>
-
                   <ItemContent className="min-w-0">
-                    <ItemTitle className="w-full truncate font-semibold">
-                      Create your own
-                    </ItemTitle>
+                    <ItemTitle className="w-full truncate font-semibold">Create your own</ItemTitle>
                   </ItemContent>
                 </Item>
               </div>
 
               <section className="flex flex-col pb-4">
                 <h2 className="py-2 text-base font-medium">Basic types</h2>
-
                 <div className="grid grid-cols-2 gap-3 py-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                   {basicObjectTypes.map((preset) => (
                     <AppSidebarObjectTypeCard
