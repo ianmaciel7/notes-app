@@ -1,0 +1,34 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+enabled = true
+
+[mcp_servers.chrome-devtools]
+command = "npx"
+args = ["-y", "chrome-devtools-mcp@latest"]
+enabled = false
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest", "--extension"]
+enabled = true
+env_vars = ["PLAYWRIGHT_MCP_EXTENSION_TOKEN"]
+
+[mcp_servers.github-readonly]
+url = "https://api.githubcopilot.com/mcp/readonly"
+enabled = true
+bearer_token_env_var = "GITHUB_MCP_TOKEN"
+
+[mcp_servers.gcloud]
+command = "npx"
+args = ["-y", "@google-cloud/gcloud-mcp"]
+enabled = true
+
+[mcp_servers.stitch]
+command = "npx"
+args = ["-y", "@_davideast/stitch-mcp", "proxy"]
+enabled = true
+env_vars = ["STITCH_API_KEY", "STITCH_USE_SYSTEM_GCLOUD"]
+

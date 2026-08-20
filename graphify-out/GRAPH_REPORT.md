@@ -1,68 +1,69 @@
-# Graph Report - notes-app  (2026-08-19)
+# Graph Report - .  (2026-08-20)
 
 ## Corpus Check
-- 231 files · ~137,082 words
-- Verdict: corpus is large enough that graph structure adds value.
+- cluster-only mode — file stats not available
 
 ## Summary
-- 1877 nodes · 2402 edges · 175 communities (161 shown, 14 thin omitted)
+- 1918 nodes · 2522 edges · 180 communities (165 shown, 15 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `30c3c247`
+- Built from commit: `70c0468e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- scan.py
-- dependencies
-- sidebar.tsx
 - cn
-- menubar.tsx
+- sidebar.tsx
+- scan.py
 - scripts
+- utils.ts
+- dependencies
+- menubar.tsx
 - compilerOptions
-- app-sidebar.tsx
+- app-shell.tsx
 - graphify-ingest-legacy.mjs
-- biome.json
+- app-sidebar-overview.tsx
 - components.json
+- app-sidebar-primary-actions.tsx
+- field.tsx
 - command.tsx
-- button.tsx
-- routing.ts
+- app-sidebar.tsx
+- combobox.tsx
 - context-menu.tsx
 - drawer.tsx
 - carousel.tsx
-- field.tsx
-- app-shell.tsx
-- chart.tsx
 - Tier A - Official platform sources
-- toast.tsx
-- attachment.tsx
-- tabs.tsx
-- utils.ts
+- check-complexity.mjs
+- alert-dialog.tsx
+- chart.tsx
+- item.tsx
 - What You Must Do When Invoked
-- navigation-menu.tsx
-- marker.tsx
+- toast.tsx
+- app-sidebar-object-type-studio.tsx
 - Find Plugins
 - openspec-onboard/SKILL.md
 - Test API
-- empty.tsx
+- attachment.tsx
 - Mocking
-- bubble.tsx
+- routing.ts
 - Agent Governance Patterns
 - Trust, Provenance, and Safety Model
 - Vi Utilities
-- graphify-install.mjs
-- alert.tsx
+- input-group.tsx
+- includes
 - Describe API
 - Code Coverage
 - Expect API
 - Test Environments
+- navigation-menu.tsx
 - vitest/SKILL.md
 - Type Testing
 - app/layout.tsx
 - Test Filtering
-- postcss.config.mjs
+- pagination.tsx
+- biome.json
 - Snapshot Testing
 - ADDED Requirements
 - Commands
@@ -78,8 +79,8 @@
 - ADDED Requirements
 - ADDED Requirements
 - ADDED Requirements
-- check-complexity.mjs
-- item.tsx
+- card.tsx
+- empty.tsx
 - Acquire Codebase Knowledge
 - Compatibility and Capability Evidence
 - Graph Orchestrator
@@ -94,7 +95,7 @@
 - Core Sections (Required)
 - Graph Engineering: Patterns and Failure Modes
 - Test Context & Fixtures
-- includes
+- linter
 - Requirements
 - Core Sections (Required)
 - Sources
@@ -116,7 +117,7 @@
 - 2026-08-18-enforce-openspec-and-english-first-rules/design.md
 - Benchmarking (v5)
 - Test Tags (4.1+)
-- linter
+- bubble.tsx
 - 2026-08-18-add-missing-repository-documentation/design.md
 - 2026-08-18-add-missing-repository-documentation/proposal.md
 - 2026-08-18-codify-practical-documentation-workflow/proposal.md
@@ -142,8 +143,8 @@
 - create-app-shell/design.md
 - Notes
 - Next.js Server Architecture Rule
-- formatter
-- vcs
+- graphify-install.mjs
+- alert.tsx
 - Architecture
 - 2026-08-18-restore-legacy-agents-assets/design.md
 - Configure CI/CD
@@ -151,7 +152,7 @@
 - graphify reference: add a URL and watch a folder
 - graphify reference: commit hook and native AGENTS.md integration
 - graphify reference: incremental update and cluster-only
-- assist
+- tabs.tsx
 - Contributing
 - Design Principles
 - 2026-08-18-codify-practical-documentation-workflow/tasks.md
@@ -170,15 +171,19 @@
 - 2026-08-18-restore-legacy-agents-assets/README.md
 - 2026-08-18-restore-legacy-agents-assets/tasks.md
 - configure-ci-cd/tasks.md
+- formatter
+- vcs
+- marker.tsx
+- assist
+- badge.tsx
+- postcss.config.mjs
 - ci-baseline.test.mjs
-- alert-dialog.tsx
-- input-otp.tsx
 
 ## God Nodes (most connected - your core abstractions)
-1. `cn()` - 377 edges
-2. `main()` - 20 edges
-3. `scripts` - 19 edges
-4. `Button()` - 18 edges
+1. `cn()` - 389 edges
+2. `Button()` - 22 edges
+3. `main()` - 20 edges
+4. `scripts` - 19 edges
 5. `Vi Utilities` - 18 edges
 6. `Find Plugins` - 16 edges
 7. `Mocking` - 16 edges
@@ -187,133 +192,133 @@
 10. `Snapshot Testing` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `AppSidebar()` --calls--> `cn()`  [EXTRACTED]
-  src/components/app-sidebar.tsx → src/lib/utils.ts
-- `PopoverContent()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/popover.tsx → src/lib/utils.ts
-- `PopoverDescription()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/popover.tsx → src/lib/utils.ts
-- `PopoverHeader()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/popover.tsx → src/lib/utils.ts
-- `PopoverTitle()` --calls--> `cn()`  [EXTRACTED]
-  src/components/ui/popover.tsx → src/lib/utils.ts
+- `AppHeaderHistory()` --calls--> `cn()`  [EXTRACTED]
+  src/components/app-header.tsx → src/lib/utils.ts
+- `AppSidebarObjectTypeCard()` --calls--> `cn()`  [EXTRACTED]
+  src/components/app-sidebar-object-type-studio.tsx → src/lib/utils.ts
+- `AppSidebarEntityPicker()` --calls--> `cn()`  [EXTRACTED]
+  src/components/app-sidebar-overview.tsx → src/lib/utils.ts
+- `AppSidebarEntityRow()` --calls--> `cn()`  [EXTRACTED]
+  src/components/app-sidebar-overview.tsx → src/lib/utils.ts
+- `AppSidebarPrimaryActions()` --calls--> `cn()`  [EXTRACTED]
+  src/components/app-sidebar-primary-actions.tsx → src/lib/utils.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (175 total, 14 thin omitted)
+## Communities (180 total, 15 thin omitted)
 
-### Community 0 - "scan.py"
+### Community 0 - "cn"
+Cohesion: 0.05
+Nodes (57): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup() (+49 more)
+
+### Community 1 - "sidebar.tsx"
+Cohesion: 0.05
+Nodes (40): Input(), Sheet(), SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle() (+32 more)
+
+### Community 2 - "scan.py"
 Cohesion: 0.09
 Nodes (40): collect_code_metrics(), detect_ci_cd_pipelines(), detect_containers(), detect_monorepo(), detect_performance_markers(), detect_security_configs(), find_entry_points(), find_env_templates() (+32 more)
 
-### Community 1 - "dependencies"
-Cohesion: 0.05
-Nodes (39): @base-ui/react, class-variance-authority, clsx, cmdk, date-fns, embla-carousel-react, input-otp, lucide-react (+31 more)
-
-### Community 2 - "sidebar.tsx"
-Cohesion: 0.05
-Nodes (41): Input(), Sheet(), SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle() (+33 more)
-
-### Community 3 - "cn"
-Cohesion: 0.05
-Nodes (61): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup() (+53 more)
-
-### Community 4 - "menubar.tsx"
-Cohesion: 0.09
-Nodes (26): DropdownMenu(), DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuPortal(), DropdownMenuRadioGroup() (+18 more)
-
-### Community 5 - "scripts"
+### Community 3 - "scripts"
 Cohesion: 0.05
 Nodes (40): @biomejs/biome, devDependencies, @biomejs/biome, tailwindcss, @tailwindcss/postcss, @types/node, @types/react, @types/react-dom (+32 more)
 
-### Community 6 - "compilerOptions"
+### Community 4 - "utils.ts"
+Cohesion: 0.07
+Nodes (30): AppHeader(), AppHeaderHistory(), AppHeaderProps, AspectRatio(), Button(), buttonVariants, Calendar(), CalendarDayButton() (+22 more)
+
+### Community 5 - "dependencies"
+Cohesion: 0.05
+Nodes (39): @base-ui/react, class-variance-authority, clsx, cmdk, date-fns, embla-carousel-react, input-otp, lucide-react (+31 more)
+
+### Community 6 - "menubar.tsx"
+Cohesion: 0.09
+Nodes (26): DropdownMenu(), DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuPortal(), DropdownMenuRadioGroup() (+18 more)
+
+### Community 7 - "compilerOptions"
 Cohesion: 0.07
 Nodes (28): dom, dom.iterable, esnext, **/*.mts, .next/dev/types/**/*.ts, next-env.d.ts, .next/types/**/*.ts, **/*.ts (+20 more)
 
-### Community 7 - "app-sidebar.tsx"
-Cohesion: 0.06
-Nodes (38): AppShellContent(), AppSidebar(), AppSidebarLabels, AppSidebarProps, AppSidebarSpace, AppSidebarSpaceSwitcher(), areOrdersEqual(), defaultLabels (+30 more)
+### Community 8 - "app-shell.tsx"
+Cohesion: 0.13
+Nodes (24): AppShell(), AppShellContext, AppShellContextValue, AppShellHeader(), AppShellMain(), AppShellMobile(), AppShellMobileSidebar(), AppShellMobileSidePanel() (+16 more)
 
-### Community 8 - "graphify-ingest-legacy.mjs"
+### Community 9 - "graphify-ingest-legacy.mjs"
 Cohesion: 0.13
 Nodes (23): allowedCodeExt, allowedDocExt, allowedSpecialFiles, BUILD_AFTER_SYNC, cleanWorkspace(), collectBranch(), DEFAULT_BRANCHES, fileExists() (+15 more)
 
-### Community 9 - "biome.json"
-Cohesion: 0.25
-Nodes (7): css, parser, quoteStyle, javascript, formatter, tailwindDirectives, $schema
+### Community 10 - "app-sidebar-overview.tsx"
+Cohesion: 0.11
+Nodes (16): AppSidebarEntity, AppSidebarEntityPicker(), AppSidebarEntityRow(), AppSidebarSectionProps, AppSidebarSortMode, demoEntities, initialObjectTypes, Collapsible() (+8 more)
 
-### Community 10 - "components.json"
+### Community 11 - "components.json"
 Cohesion: 0.09
 Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent (+13 more)
 
-### Community 11 - "command.tsx"
+### Community 12 - "app-sidebar-primary-actions.tsx"
+Cohesion: 0.12
+Nodes (17): AppSidebar(), AppSidebarSpace, AppSidebarOverview(), AppSidebarPrimaryAction, AppSidebarPrimaryActionHint, AppSidebarPrimaryActionId, AppSidebarPrimaryActionItem(), AppSidebarPrimaryActions() (+9 more)
+
+### Community 13 - "field.tsx"
+Cohesion: 0.12
+Nodes (17): ButtonGroup(), ButtonGroupSeparator(), ButtonGroupText(), buttonGroupVariants, Field(), FieldContent(), FieldDescription(), FieldError() (+9 more)
+
+### Community 14 - "command.tsx"
 Cohesion: 0.12
 Nodes (16): Command(), CommandDialog(), CommandEmpty(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator() (+8 more)
 
-### Community 12 - "button.tsx"
+### Community 15 - "app-sidebar.tsx"
+Cohesion: 0.14
+Nodes (15): AppShellContent(), AppSidebarLabels, AppSidebarProps, AppSidebarSpaceSwitcher(), areOrdersEqual(), defaultLabels, demoSpaces, DragPreview (+7 more)
+
+### Community 16 - "combobox.tsx"
 Cohesion: 0.12
-Nodes (16): Button(), buttonVariants, Calendar(), CalendarDayButton(), MessageScroller(), MessageScrollerButton(), MessageScrollerContent(), MessageScrollerItem() (+8 more)
+Nodes (12): ComboboxChip(), ComboboxChips(), ComboboxChipsInput(), ComboboxClear(), ComboboxContent(), ComboboxEmpty(), ComboboxGroup(), ComboboxInput() (+4 more)
 
-### Community 13 - "routing.ts"
-Cohesion: 0.25
-Nodes (4): LocaleLayoutProps, locales, routing, config
-
-### Community 14 - "context-menu.tsx"
+### Community 17 - "context-menu.tsx"
 Cohesion: 0.12
 Nodes (9): ContextMenuCheckboxItem(), ContextMenuContent(), ContextMenuItem(), ContextMenuLabel(), ContextMenuRadioItem(), ContextMenuSeparator(), ContextMenuShortcut(), ContextMenuSubTrigger() (+1 more)
 
-### Community 15 - "drawer.tsx"
+### Community 18 - "drawer.tsx"
 Cohesion: 0.14
 Nodes (10): DrawerContent(), DrawerContext, DrawerContextProps, DrawerDescription(), DrawerFooter(), DrawerHeader(), DrawerOverlay(), DrawerSwipeHandle() (+2 more)
 
-### Community 16 - "carousel.tsx"
+### Community 19 - "carousel.tsx"
 Cohesion: 0.19
 Nodes (13): Carousel(), CarouselApi, CarouselContent(), CarouselContext, CarouselContextProps, CarouselItem(), CarouselNext(), CarouselOptions (+5 more)
-
-### Community 17 - "field.tsx"
-Cohesion: 0.16
-Nodes (12): Field(), FieldContent(), FieldDescription(), FieldError(), FieldGroup(), FieldLabel(), FieldLegend(), FieldSeparator() (+4 more)
-
-### Community 18 - "app-shell.tsx"
-Cohesion: 0.10
-Nodes (30): AppShell(), AppShellContext, AppShellContextValue, AppShellHeader(), AppShellMain(), AppShellMobile(), AppShellMobileSidebar(), AppShellMobileSidePanel() (+22 more)
-
-### Community 19 - "chart.tsx"
-Cohesion: 0.21
-Nodes (11): ChartConfig, ChartContainer(), ChartContext, ChartContextProps, ChartLegendContent(), ChartTooltipContent(), getPayloadConfigFromPayload(), INITIAL_DIMENSION (+3 more)
 
 ### Community 20 - "Tier A - Official platform sources"
 Cohesion: 0.08
 Nodes (25): 777genius universal plugins, Agent Plugins Directory, Agent Plugins standard, AI Plugin Marketplace, Anthropic / Claude Code, Claude Code Plugins Plus Skills / CCPI catalog, Completeness, Cursor (+17 more)
 
-### Community 21 - "toast.tsx"
+### Community 21 - "check-complexity.mjs"
+Cohesion: 0.23
+Nodes (12): allowedExtensions, branchWeight(), collectSourceFiles(), cyclomaticComplexity(), failures, functionName(), ignoredDirectories, isFunctionLike() (+4 more)
+
+### Community 22 - "alert-dialog.tsx"
 Cohesion: 0.15
-Nodes (7): toast, ToastAction(), ToastClose(), ToastContent(), ToastDescription(), ToastTitle(), ToastViewport()
+Nodes (9): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia(), AlertDialogOverlay() (+1 more)
 
-### Community 22 - "attachment.tsx"
-Cohesion: 0.20
-Nodes (11): Attachment(), AttachmentAction(), AttachmentActions(), AttachmentContent(), AttachmentDescription(), AttachmentGroup(), AttachmentMedia(), attachmentMediaVariants (+3 more)
+### Community 23 - "chart.tsx"
+Cohesion: 0.21
+Nodes (11): ChartConfig, ChartContainer(), ChartContext, ChartContextProps, ChartLegendContent(), ChartTooltipContent(), getPayloadConfigFromPayload(), INITIAL_DIMENSION (+3 more)
 
-### Community 23 - "tabs.tsx"
-Cohesion: 0.40
-Nodes (5): Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger()
-
-### Community 24 - "utils.ts"
-Cohesion: 0.06
-Nodes (21): AspectRatio(), Badge(), badgeVariants, Checkbox(), Kbd(), KbdGroup(), NativeSelect(), NativeSelectOptGroup() (+13 more)
+### Community 24 - "item.tsx"
+Cohesion: 0.18
+Nodes (12): Item(), ItemActions(), ItemContent(), ItemDescription(), ItemFooter(), ItemGroup(), ItemHeader(), ItemMedia() (+4 more)
 
 ### Community 25 - "What You Must Do When Invoked"
 Cohesion: 0.08
 Nodes (24): For /graphify add and --watch, For /graphify query, For the commit hook and native AGENTS.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+16 more)
 
-### Community 26 - "navigation-menu.tsx"
-Cohesion: 0.22
-Nodes (9): NavigationMenu(), NavigationMenuContent(), NavigationMenuIndicator(), NavigationMenuItem(), NavigationMenuLink(), NavigationMenuList(), NavigationMenuPositioner(), NavigationMenuTrigger() (+1 more)
+### Community 26 - "toast.tsx"
+Cohesion: 0.15
+Nodes (7): toast, ToastAction(), ToastClose(), ToastContent(), ToastDescription(), ToastTitle(), ToastViewport()
 
-### Community 27 - "marker.tsx"
-Cohesion: 0.50
-Nodes (4): Marker(), MarkerContent(), MarkerIcon(), markerVariants
+### Community 27 - "app-sidebar-object-type-studio.tsx"
+Cohesion: 0.18
+Nodes (10): AppSidebarObjectTypeCard(), AppSidebarObjectTypePreset, AppSidebarObjectTypeStudio(), AppSidebarObjectTypeStudioProps, AppSidebarObjectTypeTone, basicObjectTypes, suggestedObjectTypes, toneClasses (+2 more)
 
 ### Community 28 - "Find Plugins"
 Cohesion: 0.09
@@ -327,17 +332,17 @@ Nodes (19): Codebase Analysis, Graceful Exit Handling, Guardrails, Phase 10: Arc
 Cohesion: 0.10
 Nodes (20): Async Tests, Basic Test, Benchmarks (v5), Concurrent Tests, Custom Test with Fixtures, Failing Tests, Focus Tests, Key Points (+12 more)
 
-### Community 31 - "empty.tsx"
-Cohesion: 0.29
-Nodes (7): Empty(), EmptyContent(), EmptyDescription(), EmptyHeader(), EmptyMedia(), emptyMediaVariants, EmptyTitle()
+### Community 31 - "attachment.tsx"
+Cohesion: 0.20
+Nodes (11): Attachment(), AttachmentAction(), AttachmentActions(), AttachmentContent(), AttachmentDescription(), AttachmentGroup(), AttachmentMedia(), attachmentMediaVariants (+3 more)
 
 ### Community 32 - "Mocking"
 Cohesion: 0.10
 Nodes (20): Async Timer Methods, Auto-Cleanup with `using`, Auto-mock with Spy, Clearing Mocks, Conditional Mocking with vi.when (v5), Config Auto-Reset, Dynamic Mocking (vi.doMock), Hoisted Variables for Mocks (+12 more)
 
-### Community 33 - "bubble.tsx"
-Cohesion: 0.38
-Nodes (6): Bubble(), BubbleContent(), BubbleGroup(), BubbleReactions(), bubbleReactionsVariants, bubbleVariants
+### Community 33 - "routing.ts"
+Cohesion: 0.25
+Nodes (4): LocaleLayoutProps, locales, routing, config
 
 ### Community 34 - "Agent Governance Patterns"
 Cohesion: 0.11
@@ -351,13 +356,13 @@ Nodes (18): 1. Trust, 2. Format / schema status, 3. Provenance chain, 4. Officia
 Cohesion: 0.11
 Nodes (18): Assertion Helpers — vi.defineHelper (4.1+), Conditional Mocking — vi.when (v5), Dynamic Mocking, Fake Timers, Global/Env Mocking, Global Mock Management, Hoisted Code, Key Points (+10 more)
 
-### Community 37 - "graphify-install.mjs"
-Cohesion: 0.53
-Nodes (4): configureProjectAfterInstall(), installWithPip(), installWithUv(), run()
+### Community 37 - "input-group.tsx"
+Cohesion: 0.24
+Nodes (9): InputGroup(), InputGroupAddon(), inputGroupAddonVariants, InputGroupButton(), inputGroupButtonVariants, InputGroupInput(), InputGroupText(), InputGroupTextarea() (+1 more)
 
-### Community 38 - "alert.tsx"
-Cohesion: 0.40
-Nodes (5): Alert(), AlertAction(), AlertDescription(), AlertTitle(), alertVariants
+### Community 38 - "includes"
+Cohesion: 0.20
+Nodes (10): files, ignoreUnknown, includes, !!node_modules, **, !!.agents, !!build, !!coverage (+2 more)
 
 ### Community 39 - "Describe API"
 Cohesion: 0.11
@@ -375,8 +380,12 @@ Nodes (16): Assertion Count, Asymmetric Matchers, Basic Assertions, Chai-Style S
 Cohesion: 0.12
 Nodes (15): Available Environments, Browser Mode (Separate from Environments), Configuration, CSS and Assets, Custom Environment, Environment with VM, Fixing External Dependencies, happy-dom Environment (+7 more)
 
-### Community 44 - "vitest/SKILL.md"
+### Community 43 - "navigation-menu.tsx"
 Cohesion: 0.22
+Nodes (9): NavigationMenu(), NavigationMenuContent(), NavigationMenuIndicator(), NavigationMenuItem(), NavigationMenuLink(), NavigationMenuList(), NavigationMenuPositioner(), NavigationMenuTrigger() (+1 more)
+
+### Community 44 - "vitest/SKILL.md"
+Cohesion: 0.20
 Nodes (3): Advanced, Core, Features
 
 ### Community 45 - "Type Testing"
@@ -390,6 +399,14 @@ Nodes (6): nextConfig, withNextIntl, !!.next, geistMono, geistSans, metadata
 ### Community 47 - "Test Filtering"
 Cohesion: 0.12
 Nodes (16): By File Path, By Test Name, Changed Files, CLI Filtering, Combining Filters, Environment-based Filtering, Focus Tests (.only), Include/Exclude Patterns (+8 more)
+
+### Community 48 - "pagination.tsx"
+Cohesion: 0.22
+Nodes (7): Pagination(), PaginationContent(), PaginationEllipsis(), PaginationLink(), PaginationLinkProps, PaginationNext(), PaginationPrevious()
+
+### Community 49 - "biome.json"
+Cohesion: 0.25
+Nodes (7): css, parser, quoteStyle, javascript, formatter, tailwindDirectives, $schema
 
 ### Community 50 - "Snapshot Testing"
 Cohesion: 0.13
@@ -451,13 +468,13 @@ Nodes (12): ADDED Requirements, Purpose, Requirement: Documentation change class
 Cohesion: 0.15
 Nodes (12): ADDED Requirements, CI/CD, Requirement: Deployment configuration, Requirement: Deterministic quality gate, Requirement: Repository hygiene, Requirement: Safe branch promotion, Requirement: Security gate, Scenario: Environment-specific rollout (+4 more)
 
-### Community 65 - "check-complexity.mjs"
-Cohesion: 0.23
-Nodes (12): allowedExtensions, branchWeight(), collectSourceFiles(), cyclomaticComplexity(), failures, functionName(), ignoredDirectories, isFunctionLike() (+4 more)
+### Community 65 - "card.tsx"
+Cohesion: 0.25
+Nodes (7): Card(), CardAction(), CardContent(), CardDescription(), CardFooter(), CardHeader(), CardTitle()
 
-### Community 66 - "item.tsx"
-Cohesion: 0.13
-Nodes (17): ButtonGroup(), ButtonGroupSeparator(), ButtonGroupText(), buttonGroupVariants, Item(), ItemActions(), ItemContent(), ItemDescription() (+9 more)
+### Community 66 - "empty.tsx"
+Cohesion: 0.29
+Nodes (7): Empty(), EmptyContent(), EmptyDescription(), EmptyHeader(), EmptyMedia(), emptyMediaVariants, EmptyTitle()
 
 ### Community 67 - "Acquire Codebase Knowledge"
 Cohesion: 0.17
@@ -515,9 +532,9 @@ Nodes (9): A worked example, Contents, Dependency audit, Failure modes, Graph En
 Cohesion: 0.20
 Nodes (10): Built-in Context, Composing & Hooks, Custom Fixtures — Builder Pattern (4.1+, recommended), Fixture Options, Fixture Scopes (3.2+), Injected Fixtures (per-project values), Key Points, Object Syntax (Playwright-compatible) (+2 more)
 
-### Community 81 - "includes"
-Cohesion: 0.20
-Nodes (10): files, ignoreUnknown, includes, !!node_modules, **, !!.agents, !!build, !!coverage (+2 more)
+### Community 81 - "linter"
+Cohesion: 0.29
+Nodes (7): next, react, linter, domains, enabled, rules, recommended
 
 ### Community 82 - "Requirements"
 Cohesion: 0.20
@@ -603,9 +620,9 @@ Nodes (7): Benchmarking (v5), Comparing Implementations, Defining & Running, Key
 Cohesion: 0.29
 Nodes (7): Applying Tags, Checking the Filter at Runtime, Defining Tags, Filtering by Tag, Key Points, Option conflict resolution, Test Tags (4.1+)
 
-### Community 103 - "linter"
-Cohesion: 0.29
-Nodes (7): next, react, linter, domains, enabled, rules, recommended
+### Community 103 - "bubble.tsx"
+Cohesion: 0.38
+Nodes (6): Bubble(), BubbleContent(), BubbleGroup(), BubbleReactions(), bubbleReactionsVariants, bubbleVariants
 
 ### Community 104 - "2026-08-18-add-missing-repository-documentation/design.md"
 Cohesion: 0.29
@@ -703,13 +720,13 @@ Nodes (5): Available repo docs, Notes, Notes, Practical documentation synchroniz
 Cohesion: 0.40
 Nodes (4): Default Architecture, Explicitly Avoid By Default, Next.js Server Architecture Rule, Required Practices
 
-### Community 129 - "formatter"
-Cohesion: 0.40
-Nodes (5): formatter, enabled, indentStyle, indentWidth, lineEnding
+### Community 129 - "graphify-install.mjs"
+Cohesion: 0.53
+Nodes (4): configureProjectAfterInstall(), installWithPip(), installWithUv(), run()
 
-### Community 130 - "vcs"
+### Community 130 - "alert.tsx"
 Cohesion: 0.40
-Nodes (5): vcs, clientKind, defaultBranch, enabled, useIgnoreFile
+Nodes (5): Alert(), AlertAction(), AlertDescription(), AlertTitle(), alertVariants
 
 ### Community 131 - "Architecture"
 Cohesion: 0.40
@@ -739,9 +756,9 @@ Nodes (3): For git commit hook, For native AGENTS.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
-### Community 138 - "assist"
-Cohesion: 0.50
-Nodes (4): recommended, assist, actions, enabled
+### Community 138 - "tabs.tsx"
+Cohesion: 0.40
+Nodes (5): Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger()
 
 ### Community 139 - "Contributing"
 Cohesion: 0.50
@@ -771,33 +788,41 @@ Nodes (3): 1. Project dependencies and i18n config, 2. Locale routes and transla
 Cohesion: 0.50
 Nodes (3): 1. Reusable app-shell primitive, 2. Composition and responsive behavior, 3. Integration and verification
 
-### Community 173 - "alert-dialog.tsx"
-Cohesion: 0.15
-Nodes (9): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia(), AlertDialogOverlay() (+1 more)
-
-### Community 174 - "input-otp.tsx"
+### Community 157 - "formatter"
 Cohesion: 0.40
-Nodes (3): InputOTP(), InputOTPGroup(), InputOTPSlot()
+Nodes (5): formatter, enabled, indentStyle, indentWidth, lineEnding
+
+### Community 173 - "vcs"
+Cohesion: 0.40
+Nodes (5): vcs, clientKind, defaultBranch, enabled, useIgnoreFile
+
+### Community 174 - "marker.tsx"
+Cohesion: 0.50
+Nodes (4): Marker(), MarkerContent(), MarkerIcon(), markerVariants
+
+### Community 175 - "assist"
+Cohesion: 0.50
+Nodes (4): recommended, assist, actions, enabled
 
 ## Knowledge Gaps
-- **949 isolated node(s):** `AppSidebarSpace`, `AppSidebarLabels`, `AppSidebarProps`, `DropPosition`, `DragSession` (+944 more)
+- **966 isolated node(s):** `Context`, `Decision: Add capability path `developer-workflows/openspec-enforcement``, `Decision: Use repository-local OpenSpec store`, `Goals / Non-Goals`, `Migration Plan` (+961 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `cn` to `sidebar.tsx`, `menubar.tsx`, `app-sidebar.tsx`, `command.tsx`, `button.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `field.tsx`, `app-shell.tsx`, `chart.tsx`, `toast.tsx`, `attachment.tsx`, `tabs.tsx`, `utils.ts`, `navigation-menu.tsx`, `marker.tsx`, `empty.tsx`, `bubble.tsx`, `alert.tsx`, `alert-dialog.tsx`, `input-otp.tsx`, `item.tsx`, `toggle-group.tsx`?**
-  _High betweenness centrality (0.073) - this node is a cross-community bridge._
-- **Why does `Test Filtering` connect `Test Filtering` to `vitest/SKILL.md`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **What connects `AppSidebarSpace`, `AppSidebarLabels`, `AppSidebarProps` to the rest of the system?**
-  _949 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `cn()` connect `cn` to `sidebar.tsx`, `alert.tsx`, `utils.ts`, `menubar.tsx`, `app-shell.tsx`, `app-sidebar-overview.tsx`, `tabs.tsx`, `app-sidebar-primary-actions.tsx`, `field.tsx`, `command.tsx`, `app-sidebar.tsx`, `combobox.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `alert-dialog.tsx`, `chart.tsx`, `item.tsx`, `toast.tsx`, `app-sidebar-object-type-studio.tsx`, `attachment.tsx`, `input-group.tsx`, `navigation-menu.tsx`, `marker.tsx`, `badge.tsx`, `pagination.tsx`, `card.tsx`, `empty.tsx`, `bubble.tsx`, `toggle-group.tsx`?**
+  _High betweenness centrality (0.069) - this node is a cross-community bridge._
+- **Why does `Vi Utilities` connect `Vi Utilities` to `vitest/SKILL.md`?**
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **Why does `Mocking` connect `Mocking` to `vitest/SKILL.md`?**
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **What connects `Context`, `Decision: Add capability path `developer-workflows/openspec-enforcement``, `Decision: Use repository-local OpenSpec store` to the rest of the system?**
+  _966 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `cn` be split into smaller, more focused modules?**
+  _Cohesion score 0.05134575569358178 - nodes in this community are weakly interconnected._
+- **Should `sidebar.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.0549645390070922 - nodes in this community are weakly interconnected._
 - **Should `scan.py` be split into smaller, more focused modules?**
   _Cohesion score 0.08658536585365853 - nodes in this community are weakly interconnected._
-- **Should `dependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
-- **Should `sidebar.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.053877551020408164 - nodes in this community are weakly interconnected._
-- **Should `cn` be split into smaller, more focused modules?**
-  _Cohesion score 0.05456095481670929 - nodes in this community are weakly interconnected._
