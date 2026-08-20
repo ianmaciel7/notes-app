@@ -15,6 +15,7 @@ import {
   SparklesIcon,
 } from "lucide-react"
 
+import { AppSidebarObjectTypeStudio } from "@/components/app-sidebar-object-type-studio"
 import {
   AppSidebar,
   type AppSidebarSpace,
@@ -315,13 +316,17 @@ function AppSidebarPrimaryActionsDemo() {
       onValueChange={setSpaceId}
       onReorder={setSpaces}
     >
-      <div className="px-2 pt-1">
-        <AppSidebarPrimaryActions
-          activeAction={activeAction}
-          onAction={(action) => {
-            if (action !== "new") setActiveAction(action)
-          }}
-        />
+      <div className="flex min-h-0 flex-1 flex-col">
+        <div className="px-2 pt-1">
+          <AppSidebarPrimaryActions
+            activeAction={activeAction}
+            onAction={(action) => {
+              if (action !== "new") setActiveAction(action)
+            }}
+          />
+        </div>
+
+        <AppSidebarObjectTypeStudio className="pt-2" />
       </div>
     </AppSidebar>
   )
