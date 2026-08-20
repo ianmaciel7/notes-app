@@ -37,6 +37,7 @@
 /build
 
 # misc
+.temp/
 .tmp/
 .DS_Store
 *.pem
