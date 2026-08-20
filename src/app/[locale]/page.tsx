@@ -1,3 +1,4 @@
+import { AppHeader } from "@/components/app-header"
 import { AppSidebarPrimaryActionsDemo } from "@/components/app-sidebar-primary-actions"
 import {
   AppShell,
@@ -27,7 +28,7 @@ export default function HomePage() {
 
           <AppShellWorkspace>
             <AppShellMain>
-              <AppShellHeader />
+              <AppHeader />
               <AppShellSurface />
             </AppShellMain>
 
