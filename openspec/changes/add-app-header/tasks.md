@@ -12,12 +12,16 @@
 - [x] 2.4 Add controlled drag reorder with before/after insertion feedback.
 - [x] 2.5 Add the main `AppSpaceHeader` responsive 200/60/5 sizing and active-centered overflow/tab-list behavior.
 - [x] 2.6 Add the side-panel header responsive 160/44/4 sizing, non-draggable `explore`, tab-list/create controls, and no pin action.
+- [x] 2.7 Add source-matched side-panel hide/caret controls and remove the duplicate open-panel shell overlay while the panel is expanded.
+- [x] 2.8 Add the side-panel special-entry dropdown for graph view, backlinks, objects inside, related content, AI chat, and local search.
+- [x] 2.9 Reproduce the side-panel plus behavior: activate Explore first, then open side-panel search when Explore is already active.
 
 ## 3. App header and focus mode
 
 - [x] 3.1 Move create-new-tab behavior out of the history group and into `AppSpaceHeader`.
-- [x] 3.2 Keep back/forward on the left and focus action on the right with existing shadcn button semantics.
+- [x] 3.2 Keep back/forward on the left and focus action on the right with existing project button semantics.
 - [x] 3.3 Add floating focus-mode controls with a primary exit action and hover-expanding history actions.
+- [x] 3.4 Show the reopen-sidepanel control in the main header only while the side panel is collapsed.
 
 ## 4. Integration demo
 
@@ -25,6 +29,7 @@
 - [x] 4.2 Demonstrate the pinned state and reject attempts to close a pinned main tab with user feedback.
 - [x] 4.3 Demonstrate side-panel tabs: Visualização em grafo and Explorar, with Explorar non-draggable.
 - [x] 4.4 Integrate the demo main and side-panel headers into the current desktop app shell while leaving mobile composition unchanged.
+- [x] 4.5 Demonstrate the side-panel search overlay opened by the plus action while Explore is active.
 
 ## 5. Verification
 
