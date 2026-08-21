@@ -1010,8 +1010,23 @@ const initialObjectTypes: AppSidebarEntity[] = [
   },
 ]
 
-function AppSidebarOverview() {
-  const [activeId, setActiveId] = React.useState<string | null>(null)
+type AppSidebarOverviewProps = {
+  activeId?: string | null
+  onActiveIdChange?: (id: string | null) => void
+}
+
+function AppSidebarOverview({
+  activeId: controlledActiveId,
+  onActiveIdChange,
+}: AppSidebarOverviewProps = {}) {
+  const [internalActiveId, setInternalActiveId] = React.useState<string | null>(null)
+  const isControlled = controlledActiveId !== undefined
+  const activeId = isControlled ? controlledActiveId : internalActiveId
+
+  function setActiveId(id: string | null) {
+    if (!isControlled) setInternalActiveId(id)
+    onActiveIdChange?.(id)
+  }
   const [pinnedSort, setPinnedSort] = React.useState<AppSidebarSortMode>("manual")
   const [objectSort, setObjectSort] = React.useState<AppSidebarSortMode>("manual")
   const [pinned, setPinned] = React.useState<AppSidebarEntity[]>([])
@@ -1118,7 +1133,7 @@ function AppSidebarOverview() {
               onDuplicate={() => duplicateEntity(entity)}
               onDelete={() => {
                 setPinned((current) => current.filter((item) => item.id !== entity.id))
-                setActiveId((current) => (current === entity.id ? null : current))
+                if (activeId === entity.id) setActiveId(null)
               }}
             />
           ))}
@@ -1157,7 +1172,7 @@ function AppSidebarOverview() {
               }}
               onDelete={() => {
                 setObjectTypes((current) => current.filter((item) => item.id !== entity.id))
-                setActiveId((current) => (current === entity.id ? null : current))
+                if (activeId === entity.id) setActiveId(null)
               }}
             />
           ))}
