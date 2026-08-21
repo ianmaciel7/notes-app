@@ -10,6 +10,9 @@ type AppSidebarIconName =
   | "pin"
   | "objects"
   | "flask"
+  | "atomic-note"
+  | "quote"
+  | "page"
 
 type AppSidebarIconProps = React.ComponentProps<"svg"> & {
   name: AppSidebarIconName
@@ -106,14 +109,44 @@ function AppSidebarFlaskIcon(props: Omit<AppSidebarIconProps, "name">) {
   )
 }
 
+function AppSidebarAtomicNoteIcon(props: Omit<AppSidebarIconProps, "name">) {
+  return (
+    <AppSidebarIcon name="atomic-note" {...props}>
+      <path d="M7 3.5h10v17H7z" />
+      <path d="M10 8h4M10 12h4M10 16h4" />
+    </AppSidebarIcon>
+  )
+}
+
+function AppSidebarQuoteIcon(props: Omit<AppSidebarIconProps, "name">) {
+  return (
+    <AppSidebarIcon name="quote" {...props}>
+      <path d="M8.75 7H5.5v5.25h3.25V17H5.5" />
+      <path d="M18.5 7h-3.25v5.25h3.25V17h-3.25" />
+    </AppSidebarIcon>
+  )
+}
+
+function AppSidebarPageIcon(props: Omit<AppSidebarIconProps, "name">) {
+  return (
+    <AppSidebarIcon name="page" {...props}>
+      <path d="M7 3.5h7l3.5 3.5v13.5H7z" />
+      <path d="M14 3.5V7h3.5M9.75 11.5h5M9.75 15h5" />
+    </AppSidebarIcon>
+  )
+}
+
 export {
+  AppSidebarAtomicNoteIcon,
   AppSidebarCalendarIcon,
   AppSidebarExploreIcon,
   AppSidebarFlaskIcon,
   AppSidebarIcon,
   AppSidebarObjectsIcon,
+  AppSidebarPageIcon,
   AppSidebarPinIcon,
   AppSidebarPlusIcon,
+  AppSidebarQuoteIcon,
   AppSidebarSearchIcon,
   type AppSidebarIconName,
   type AppSidebarIconProps,
