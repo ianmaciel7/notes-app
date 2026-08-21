@@ -2,14 +2,20 @@
 
 import * as React from "react"
 
-import { AppFocusModeControls, AppHeader } from "@/components/app-header"
+import {
+  AppFocusModeControls,
+  AppHeader,
+  AppHeaderAction,
+} from "@/components/app-header"
 import {
   AppHeaderBookOpenIcon,
+  AppHeaderCaretDownIcon,
   AppHeaderCompassIcon,
   AppHeaderFileIcon,
   AppHeaderFolderIcon,
   AppHeaderGraphIcon,
   AppHeaderLightbulbIcon,
+  AppHeaderSidebarSimpleIcon,
 } from "@/components/app-header-icons"
 import {
   AppSidePanelHeader,
@@ -241,7 +247,7 @@ function AppHeaderDemoMain() {
     setSideValue,
     showMessage,
   } = useAppHeaderDemo()
-
+  const { rightCollapsed, toggleRight } = useAppShell()
   const createIndexRef = React.useRef(1)
 
   if (focusMode) {
@@ -276,6 +282,7 @@ function AppHeaderDemoMain() {
       return [...current, { ...tab, pinned: undefined, draggable: true }]
     })
     setSideValue(tab.id)
+    if (rightCollapsed) toggleRight()
     showMessage(`Opened ${tab.label} in the side panel`)
   }
 
@@ -284,6 +291,28 @@ function AppHeaderDemoMain() {
       onBack={() => showMessage("Back")}
       onForward={() => showMessage("Forward")}
       onFocus={() => setFocusMode(true)}
+      end={
+        rightCollapsed ? (
+          <div className="flex items-center">
+            <AppHeaderAction
+              aria-label="Show side panel"
+              tooltip="Show side panel"
+              className="rounded-r-none border-r-0"
+              onClick={toggleRight}
+            >
+              <AppHeaderSidebarSimpleIcon className="size-4 rotate-180" />
+            </AppHeaderAction>
+            <AppHeaderAction
+              aria-label="Side-panel options"
+              tooltip="Side-panel options"
+              className="h-7 w-4 rounded-l-none px-0 text-[9px]"
+              onClick={() => showMessage("Side-panel options")}
+            >
+              <AppHeaderCaretDownIcon className="size-2.5" />
+            </AppHeaderAction>
+          </div>
+        ) : null
+      }
     >
       <AppSpaceHeader
         tabs={mainTabs}
@@ -310,7 +339,6 @@ function AppHeaderDemoSidePanel() {
     setSideTabs,
     setSideValue,
     setSideSearchOpen,
-    showMessage,
   } = useAppHeaderDemo()
   const { toggleRight } = useAppShell()
 
@@ -373,11 +401,6 @@ function AppHeaderDemoSidePanel() {
       onCreate={createSideTab}
       onHide={toggleRight}
       onSpecialEntrySelect={openSpecialEntry}
-      onCloseRequest={(tab) => {
-        if (tab.id !== "explore") return true
-        showMessage("Explore stays available as the side-panel search entry point")
-        return true
-      }}
     />
   )
 }
@@ -489,7 +512,12 @@ function SidePanelSearchOverlay() {
                     <Icon className="size-4" />
                   </span>
                   <span className="min-w-0 flex-1 truncate">{item.label}</span>
-                  <span className={cn("rounded-md border px-2 py-1 text-xs", item.iconClassName)}>
+                  <span
+                    className={cn(
+                      "rounded-md border border-current/50 px-2 py-1 text-xs",
+                      item.iconClassName
+                    )}
+                  >
                     {item.label}
                   </span>
                 </button>
