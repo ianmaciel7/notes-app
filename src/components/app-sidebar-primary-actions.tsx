@@ -311,7 +311,8 @@ function AppSidebarPrimaryActionsDemo() {
   const [spaces, setSpaces] = React.useState(demoSpaces)
   const [spaceId, setSpaceId] = React.useState("labs")
   const [activeAction, setActiveAction] =
-    React.useState<AppSidebarPrimaryNavigationAction>("calendar")
+    React.useState<AppSidebarPrimaryNavigationAction | undefined>("calendar")
+  const [activeEntityId, setActiveEntityId] = React.useState<string | null>(null)
 
   return (
     <TooltipProvider delay={200}>
@@ -326,12 +327,21 @@ function AppSidebarPrimaryActionsDemo() {
             <AppSidebarPrimaryActions
               activeAction={activeAction}
               onAction={(action) => {
-                if (action !== "new") setActiveAction(action)
+                if (action !== "new") {
+                  setActiveAction(action)
+                  setActiveEntityId(null)
+                }
               }}
             />
           </div>
 
-          <AppSidebarOverview />
+          <AppSidebarOverview
+            activeId={activeEntityId}
+            onActiveIdChange={(id) => {
+              setActiveEntityId(id)
+              if (id !== null) setActiveAction(undefined)
+            }}
+          />
         </div>
       </AppSidebar>
     </TooltipProvider>

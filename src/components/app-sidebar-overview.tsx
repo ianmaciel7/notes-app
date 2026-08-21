@@ -920,8 +920,23 @@ function AppSidebarFooter() {
   )
 }
 
-function AppSidebarOverview() {
-  const [activeId, setActiveId] = React.useState<string | null>("page-1")
+type AppSidebarOverviewProps = {
+  activeId?: string | null
+  onActiveIdChange?: (id: string | null) => void
+}
+
+function AppSidebarOverview({
+  activeId: controlledActiveId,
+  onActiveIdChange,
+}: AppSidebarOverviewProps = {}) {
+  const [internalActiveId, setInternalActiveId] = React.useState<string | null>("page-1")
+  const isControlled = controlledActiveId !== undefined
+  const activeId = isControlled ? controlledActiveId : internalActiveId
+
+  function setActiveId(id: string | null) {
+    if (!isControlled) setInternalActiveId(id)
+    onActiveIdChange?.(id)
+  }
   const [pinnedOpen, setPinnedOpen] = React.useState(true)
   const [objectTypesOpen, setObjectTypesOpen] = React.useState(true)
   const [pinnedSort, setPinnedSort] = React.useState<AppSidebarSortMode>("manual")
@@ -1030,7 +1045,7 @@ function AppSidebarOverview() {
         data-slot="app-sidebar-scroll-area"
         className={cn(
           "group/section-container relative mt-0.5 h-32 min-h-0 grow",
-          "[&_[data-slot=scroll-area-viewport]>div]:!block",
+          "[&_[data-slot=scroll-area-viewport]>div]:!flex",
           "[&_[data-slot=scroll-area-viewport]>div]:!min-h-full",
           "[&_[data-slot=scroll-area-viewport]>div]:!w-full",
           "[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]]:!w-[6px]",
