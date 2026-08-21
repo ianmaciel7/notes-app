@@ -581,7 +581,7 @@ function AppSidebarSpaceSwitcher({
         <div
           data-slot="app-sidebar-space-switcher"
           className={cn(
-            "relative -ml-[14px] inline-flex min-w-0 max-w-full",
+            "relative inline-flex min-w-0 max-w-full",
             className
           )}
           onPointerEnter={scheduleHint}
