@@ -85,7 +85,7 @@ The system SHALL preserve the selected Capacities-inspired desktop popup geometr
 - **AND** the search field SHALL remain outside the vertically scrolling body.
 
 ### Requirement: Narrow-screen presentation
-The system SHALL provide a mobile-appropriate presentation using existing shadcn Sheet primitives.
+The system SHALL provide a mobile-appropriate workspace-selector presentation using existing shadcn Sheet primitives.
 
 #### Scenario: Viewport is below 768px
 - **WHEN** the workspace selector is opened
@@ -102,3 +102,115 @@ The system SHALL display the create-space action only when the filtered list has
 #### Scenario: No spaces match the query
 - **WHEN** zero spaces are visible
 - **THEN** the footer and its separator SHALL be omitted.
+
+### Requirement: Source-derived primary navigation
+The system SHALL render New, Search, Explore, and Calendar as compact full-width navigation rows below the workspace header using the captured Capacities iconography and the repository sidebar theme tokens.
+
+#### Scenario: Primary navigation is rendered
+- **WHEN** the app sidebar is visible
+- **THEN** each navigation row SHALL use the compact 32px interaction height, a left-aligned icon and label, and semantic `sidebar-accent` hover treatment
+- **AND** the active navigation row SHALL retain the selected background and approximately `0.965` brightness treatment
+- **AND** the rows SHALL remain aligned to the source-derived left inset instead of using large card-style padding.
+
+### Requirement: Persistent pinned region
+The system SHALL keep the Pinned heading and its pinned entities outside the main overview scroll area so they remain visible while lower sidebar content scrolls.
+
+#### Scenario: User scrolls the sidebar overview
+- **WHEN** object types, custom sections, Trash, or Help/resources overflow vertically and the user scrolls them
+- **THEN** the workspace header, primary navigation, Pinned region, and footer SHALL remain visible
+- **AND** only the overview region below Pinned SHALL scroll.
+
+### Requirement: Pinned entities use a dedicated row contract
+The system SHALL render pinned content using a pinned-entity row distinct from object-type rows.
+
+#### Scenario: Pinned entity is rendered
+- **WHEN** a pinned entity is visible on desktop
+- **THEN** its row SHALL use the source-derived 29px height with approximately 3px left inset and 1.5 spacing units at the right
+- **AND** its compact type label SHALL use the source-derived label padding and icon wrapper geometry
+- **AND** it SHALL NOT show an object-count badge.
+
+#### Scenario: Pinned entity is selected
+- **WHEN** a pinned entity is active
+- **THEN** it SHALL retain the sidebar-accent selected background and approximately `0.965` brightness treatment
+- **AND** its label SHALL use medium font weight.
+
+#### Scenario: Pointer hovers a pinned entity
+- **WHEN** the row is hovered
+- **THEN** its action rail SHALL expand from zero to approximately 80px over approximately 300ms
+- **AND** its context-menu action SHALL fade from hidden to visible without moving the entity label vertically.
+
+### Requirement: Object types use source-derived rows
+The system SHALL render object types with their own row contract and hover metadata.
+
+#### Scenario: Object type is rendered
+- **WHEN** an object type is visible on desktop
+- **THEN** its row SHALL use the source-derived 29px height, approximately 3px left inset, and compact type label geometry
+- **AND** its type label SHALL use approximately `0.49em` horizontal padding, `0.2em` vertical padding, a `0.33em` icon radius, `0.4em` icon-to-label spacing, and the negative icon-leading inset from the captured source.
+
+#### Scenario: Pointer hovers an object type
+- **WHEN** the row is hovered
+- **THEN** an approximately 80px action rail SHALL expand over approximately 300ms
+- **AND** the object count SHALL appear before the context-menu action
+- **AND** the context-menu action SHALL become fully opaque when hovered directly.
+
+### Requirement: Section affordances match source interaction
+The system SHALL render overview section headings, sort controls, add controls, and Add section using source-derived hover visibility without permanent layout shifts.
+
+#### Scenario: Pointer hovers a section header
+- **WHEN** the pointer enters the section header
+- **THEN** the chevron, count, sort action, and add action SHALL become visible using approximately 200ms transitions
+- **AND** hidden actions SHALL keep their intended alignment without pushing the section label.
+
+#### Scenario: Pointer enters the section container
+- **WHEN** the pointer is over the overview section container
+- **THEN** `Add section` SHALL become visible at approximately 60% opacity
+- **AND** direct hover on `Add section` SHALL raise it to full opacity and apply the normal sidebar-accent hover background.
+
+### Requirement: Lower utility navigation
+The system SHALL render Trash and Help/resources using the full-row source-derived interaction pattern.
+
+#### Scenario: Lower utility row is hovered
+- **WHEN** the pointer hovers Trash, a Help/resources child, or another utility row
+- **THEN** the entire 32px row SHALL receive the sidebar-accent hover treatment
+- **AND** the icon and label SHALL remain aligned with a compact `gap-x-1.5` and `px-2` geometry.
+
+#### Scenario: External help action is hovered
+- **WHEN** the pointer hovers Ask, Documentation, or Feedback
+- **THEN** an external-link affordance SHALL transition from zero to full opacity over approximately 200ms
+- **AND** it SHALL NOT reserve distracting visible decoration when the row is idle.
+
+#### Scenario: Ask action tooltip is shown
+- **WHEN** the Ask row triggers its help tooltip
+- **THEN** the tooltip SHALL use the captured text `Faça perguntas sobre o Capacities`.
+
+### Requirement: Fixed source-derived footer
+The system SHALL keep the sidebar footer fixed below the scroll region and reproduce the reference control spacing using shadcn interactions.
+
+#### Scenario: Footer is rendered
+- **WHEN** the sidebar is visible
+- **THEN** the footer SHALL use approximately `px-2.5`, `pr-1`, `py-1.5`, and `gap-x-0.5`
+- **AND** Settings and theme SHALL use independent 32px hover targets
+- **AND** account and `Pro` SHALL render as one combined control
+- **AND** a flexible spacer SHALL keep Share aligned to the far right.
+
+#### Scenario: Settings is rendered
+- **WHEN** the footer is displayed
+- **THEN** Settings SHALL use an outline gear appearance rather than a visually filled blob.
+
+### Requirement: AppShell retains layout ownership
+The system SHALL rely on the existing AppShell for sidebar width, resize, collapse, and mobile shell behavior.
+
+#### Scenario: Desktop sidebar is resized or collapsed
+- **WHEN** the user resizes or collapses the left sidebar
+- **THEN** the existing AppShell `18rem` default, `14rem` minimum, `24rem` maximum, resizable rail, collapse transition, and sidebar trigger SHALL remain authoritative
+- **AND** the app-sidebar feature SHALL NOT instantiate a second resizable panel, SidebarProvider, or offcanvas implementation.
+
+### Requirement: Shadcn-first styling and theme ownership
+The system SHALL compose existing project shadcn/Base UI primitives and semantic global theme tokens without modifying shared primitives or adding sidebar-specific global CSS.
+
+#### Scenario: Sidebar feature is implemented
+- **WHEN** feature components are added or updated
+- **THEN** reusable component roots and meaningful subcomponents SHALL expose stable `data-slot` attributes
+- **AND** buttons, popovers, dropdowns, collapsibles, dialogs, scroll areas, badges, and tooltips SHALL reuse project primitives where applicable
+- **AND** colors SHALL come from semantic tokens such as `sidebar`, `sidebar-accent`, `muted`, `popover`, `border`, and their foreground tokens
+- **AND** `src/components/ui/*` and the native `src/app/globals.css` SHALL NOT be modified solely to achieve sidebar fidelity.
