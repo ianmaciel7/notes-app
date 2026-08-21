@@ -1,58 +1,111 @@
 ## Context
 
-The project already has a reusable `AppShell` and a Base UI-backed shadcn component set. The sidebar feature should therefore be implemented as a focused client component that composes existing primitives rather than extending the shell or adding a second layout system.
+The repository already has a reusable `AppShell`, an 18rem/14rem/24rem left `ResizablePanel`, and a Base UI-backed shadcn component set. The captured Capacities source provides the visual and interaction reference for the sidebar. The implementation therefore needs to preserve source-derived geometry and interaction semantics without introducing a parallel primitive or global-theme system.
+
+The existing workspace selector is already robust and should remain in place. The remaining work is the navigation/body/footer composition.
 
 ## Goals / Non-Goals
 
 **Goals:**
-- Add a reusable workspace selector for the left sidebar.
-- Follow existing shadcn source conventions: named exports, `data-slot`, `cn`, native props, and composition of existing primitives.
-- Match the selected Capacities-inspired selector behavior for desktop sizing, search, empty state, hover hint, reorder affordance, focus handling, and mobile fallback.
-- Keep drag reorder client-side and controlled through `onReorder`.
-- Keep the combobox open after reorder.
-- Avoid popup flicker on outside press and avoid focus moving back to the trigger while the popup is open.
+- Keep the workspace selector behavior already implemented.
+- Match the reference sidebar appearance and interaction model closely enough that row height, inset, type-label geometry, selected state, section actions, lower utility rows, footer spacing, and hover transitions line up with the captured source.
+- Keep `Pinned` visible while object types and lower navigation scroll.
+- Keep pinned entities and object types as different row contracts.
+- Use existing shadcn/Base UI primitives for interaction-heavy controls and semantic theme tokens from the current `globals.css`.
+- Follow repository shadcn conventions: `data-slot`, `cn`, native props, semantic tokens, primitive state attributes, and no unnecessary custom CSS.
+- Keep resize/collapse behavior owned by `AppShell`.
 
 **Non-Goals:**
-- No persistence layer for spaces or their order.
-- No create-space flow; the action remains disabled.
-- No navigation tree or additional sidebar sections.
-- No modification of app-shell geometry or global theme tokens.
+- No persistence layer for pinned content, object types, custom sections, theme, or account state.
+- No backend navigation or data loading.
+- No changes to `src/components/ui/*`.
+- No sidebar-specific global CSS variables or new global stylesheet rules.
+- No second sidebar provider/offcanvas/resize implementation inside the feature.
 
 ## Decisions
 
-- Use the existing `Combobox` primitive as the popup/search/selection foundation.
-  - **Why:** It already provides keyboard navigation, filtering hooks, popup positioning, focus management, and item indicators.
-- Keep the popup controlled through `open` and keep the query controlled through `inputValue`.
-  - **Why:** The component must preserve the search content during close so the exit does not visually rebuild or flash.
-- Clear the query before the next open, not during close.
-  - **Why:** This avoids a second state transition while the popup is closing.
-- Use `initialFocus={searchInputRef}` and `finalFocus={false}` on desktop popup content.
-  - **Why:** Search owns focus while open, and outside clicks should not briefly restore focus to the trigger.
-- Keep `ComboboxList` mounted even when filtering yields zero results.
-  - **Why:** This preserves the focus tree and follows the Base UI input-inside-popup composition pattern.
-- Use a manually controlled `HoverCard` whose `open` state is driven only by pointer enter/leave timers.
-  - **Why:** The hint must never open because of click, focus, or selection.
-- Implement reorder with pointer events initiated only from the left grab handle.
-  - **Why:** This reproduces the interaction model without adding a sortable dependency and avoids making the whole item draggable.
-- Use FLIP-style `Element.animate` transitions with 200ms duration after interim reorder.
-  - **Why:** It approximates the reference sortable animation while keeping state controlled.
-- Keep desktop menu width at `18rem` and cap the scroll body at `27rem`.
-  - **Why:** These are the selected source-derived constraints for the workspace menu.
-- Explicitly hide horizontal overflow on the scroll body and keep vertical scrolling only.
-  - **Why:** The shadcn separator uses negative horizontal margin and can otherwise create a horizontal scrollbar.
-- Use the repository's 768px mobile breakpoint and a bottom `Sheet` presentation.
-  - **Why:** This matches existing responsive conventions and keeps the selector usable on narrow viewports.
+### Preserve `AppShell` ownership of geometry
+
+The sidebar SHALL continue to render inside `AppShellSidebar` and SHALL NOT introduce its own `ResizablePanel`, `SidebarProvider`, or offcanvas system.
+
+- **Why:** `AppShell` already owns the stable 18rem default, 14rem minimum, 24rem maximum, collapse transition, resize rail, and mobile sheet integration.
+
+### Keep the workspace selector implementation
+
+The existing `AppSidebarSpaceSwitcher` remains the header control.
+
+- **Why:** Its controlled selection, filtering, focus management, pointer reorder, FLIP animation, desktop popup, and mobile sheet behavior are already aligned with the active change.
+
+### Separate fixed and scrollable regions
+
+The sidebar body is divided into:
+
+1. primary navigation;
+2. persistent pinned region;
+3. scrollable overview region for object types, custom sections, Add section, Trash, and Help/resources;
+4. fixed footer.
+
+- **Why:** Pinned content must remain visible while the object overview can independently scroll.
+
+### Separate pinned and object-type row contracts
+
+`PinnedEntityRow` and `ObjectTypeRow` are distinct components.
+
+Pinned rows:
+- source-derived 29px desktop row;
+- selected row uses the persistent background treatment and `font-medium` label;
+- hover expands an 80px action rail over 300ms;
+- no object count is rendered.
+
+Object-type rows:
+- same 29px desktop row geometry;
+- label uses the source-derived compact type-label structure (`px-[0.49em]`, `py-[0.2em]`, rounded type icon, `mr-[0.4em]`, `ml-[-0.1em]`);
+- hover expands an 80px action rail over 300ms;
+- the object count is visible inside the hover rail before the context menu.
+
+### Use shadcn/Base UI for behavior, not custom primitives
+
+Use project `Button`, `Popover`, `DropdownMenu`, `Collapsible`, `Dialog`, `ScrollArea`, `Badge`, and `Tooltip` components for their native interaction behavior.
+
+- **Why:** This preserves keyboard/focus/ARIA behavior and matches the repository `shadcn-first` contract.
+
+### Use semantic theme tokens
+
+Use `bg-sidebar`, `text-sidebar-foreground`, `bg-sidebar-accent`, `text-sidebar-accent-foreground`, `text-muted-foreground`, `bg-popover`, `border-border`, and related project tokens.
+
+- **Why:** The current `globals.css` already defines the light/dark theme and sidebar palette. The feature must not duplicate or override it.
+
+### Source-derived lower navigation behavior
+
+Trash and Help/resources rows use a full-row ghost interaction with `h-8`, `px-2`, and `gap-x-1.5`. External-link affordances on Ask, Documentation, and Feedback remain opacity-zero until row hover and transition over approximately 200ms.
+
+The Ask row uses the tooltip text `Faça perguntas sobre o Capacities` from the captured source.
+
+### Footer behavior
+
+The footer uses `px-2.5 pr-1 py-1.5`, `gap-x-0.5`, independent 32px icon buttons, a combined account/Pro control, a flexible spacer, and the Share control on the far right.
+
+Settings uses an outline gear icon so it matches the reference appearance instead of a filled source glyph.
+
+### Object-type studio
+
+Keep `AppSidebarObjectTypeStudio` as a shadcn `Dialog`/`ScrollArea` flow rather than a small side popover.
+
+- **Why:** The reference object-type creation flow is a larger studio, and the existing component already provides the correct reusable boundary.
 
 ## Risks / Trade-offs
 
-- [Risk] Pointer-based reorder has more state than a sortable library. → Mitigation: isolate drag-session refs and expose only `onReorder` to callers.
-- [Risk] Base UI popup state and controlled React state can compete during pointer-up after reorder. → Mitigation: temporarily cancel close/selection events around the reorder completion window.
-- [Risk] Very long space names can expand content. → Mitigation: every row and trigger uses `min-w-0` + `truncate` and the popup constrains horizontal overflow.
-- [Risk] The component currently uses demo/local labels. → Mitigation: keep user-facing labels configurable through props so later feature work can connect them to `next-intl` without changing interaction logic.
+- [Risk] Exact visual fidelity can conflict with generic shadcn spacing. → Mitigation: use source-derived values only where they represent concrete feature geometry (29px row, 80px hover rail, compact label padding, footer inset) and keep all theme behavior semantic.
+- [Risk] Keeping Pinned outside the scroll region reduces available scroll height when many pinned items exist. → Mitigation: pinned content is intentionally persistent per the requested behavior; callers can later cap the number of visible pinned rows if product requirements change.
+- [Risk] Custom drag behavior can diverge from the reference. → Mitigation: keep sorting visual duration at approximately 200ms and isolate reorder state from normal selection.
+- [Risk] Demo-only local state can be mistaken for application data. → Mitigation: keep data contracts and callbacks separable from presentation so persistence can be connected later.
 
 ## Migration Plan
 
-- Add the new app-sidebar component without changing `AppShell`.
-- Compose it inside the existing left `AppShellSidebar` header/content region.
-- Keep the existing starter page otherwise minimal.
-- Verify formatting, lint, typecheck, tests, and build using the project `pnpm verify` workflow when run in a development checkout.
+- Update the existing OpenSpec delta first.
+- Keep `src/components/app-sidebar.tsx` focused on the workspace selector and shell-level composition.
+- Refactor `src/components/app-sidebar-overview.tsx` into source-derived pinned/type/utility/footer composition.
+- Update `src/components/app-sidebar-primary-actions.tsx` only where spacing/icons need to match the reference.
+- Reuse `src/components/app-sidebar-object-type-studio.tsx` and existing project primitives.
+- Keep the locale page integration through `AppSidebarPrimaryActionsDemo`.
+- Verify with the repository `pnpm verify` workflow in a development checkout when available.
