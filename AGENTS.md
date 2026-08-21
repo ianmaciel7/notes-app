@@ -19,6 +19,7 @@ This repository uses OpenSpec for significant proposals, workflow changes, and d
 - Use and keep `.agents/rules/*` aligned with contributor and agent workflows, including OpenSpec, English-first, UI, architecture, Git, and Graphify guidance.
 - Use English-first for repository documentation and code-facing text.
 - Keep practical docs synchronized in the same change when process or contributor rules change.
+- Follow `.agents/rules/git-workflow-rule.md` for branch, worktree, protected-branch, integration, and local-server provenance checks.
 - When modifying behavior or contributor process, update related docs in the same change.
 
 ## Workflow notes
