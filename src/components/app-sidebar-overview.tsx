@@ -6,15 +6,20 @@ import {
   CopyIcon,
   EllipsisIcon,
   ExternalLinkIcon,
-  FilesIcon,
   LayoutListIcon,
-  PinIcon,
   PinOffIcon,
   PlusIcon,
   SettingsIcon,
   Trash2Icon,
 } from "lucide-react"
 
+import {
+  AppSidebarAtomicNoteIcon,
+  AppSidebarObjectsIcon,
+  AppSidebarPageIcon,
+  AppSidebarPinIcon,
+  AppSidebarQuoteIcon,
+} from "@/components/app-sidebar-icons"
 import {
   AppSidebarObjectTypeStudio,
   type AppSidebarObjectTypePreset,
@@ -113,18 +118,18 @@ function AppSidebarSection({
   const hasChildren = React.Children.count(children) > 0
 
   return (
-    <Collapsible open={open} onOpenChange={setOpen}>
-      <div className="group/app-sidebar-section sticky top-0 z-10 bg-sidebar px-2">
-        <div className="flex h-8 items-center gap-1 rounded-md px-2 text-xs text-muted-foreground hover:bg-muted/50">
+    <Collapsible open={open} onOpenChange={setOpen} className="shrink-0">
+      <div className="group/app-sidebar-section sticky top-0 z-10 bg-sidebar pl-5 pr-4">
+        <div className="flex h-8 items-center gap-1 rounded-md text-xs text-muted-foreground hover:bg-muted/50">
           <CollapsibleTrigger
             render={
               <button
                 type="button"
-                className="flex min-w-0 flex-1 items-center gap-1.5 text-left outline-none"
+                className="flex min-w-0 flex-1 items-center gap-2 px-1 text-left outline-none"
               />
             }
           >
-            <Icon className="size-3.5 shrink-0" />
+            <Icon className="size-[14px] shrink-0 stroke-[1.7]" />
             <span className="truncate font-medium">{label}</span>
           </CollapsibleTrigger>
 
@@ -143,11 +148,13 @@ function AppSidebarSection({
         </div>
       </div>
 
-      <CollapsibleContent className="flex flex-col gap-0.5 pb-1.5">
+      <CollapsibleContent className="flex flex-col pb-2">
         {hasChildren ? (
           children
         ) : emptyLabel ? (
-          <div className="px-5 py-2 text-xs italic text-muted-foreground">{emptyLabel}</div>
+          <div className="pl-6 pr-4 py-2 text-xs italic text-muted-foreground">
+            {emptyLabel}
+          </div>
         ) : null}
       </CollapsibleContent>
     </Collapsible>
@@ -235,7 +242,7 @@ function AppSidebarEntityPicker({
                       setOpen(false)
                     }}
                   >
-                    <span className={cn("flex size-7 items-center justify-center rounded-md border bg-background", entity.toneClassName)}>
+                    <span className={cn("flex size-7 items-center justify-center rounded-md border", entity.toneClassName)}>
                       <Icon className="size-4" />
                     </span>
                     <span className="truncate">{entity.label}</span>
@@ -290,7 +297,7 @@ function AppSidebarObjectMenu({
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onTogglePin}>
-          {pinned ? <PinOffIcon /> : <PinIcon />}
+          {pinned ? <PinOffIcon /> : <AppSidebarPinIcon />}
           {pinned ? "Desafixar do Espaço" : "Fixar na Barra Lateral"}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -332,19 +339,27 @@ function AppSidebarEntityRow({
   const Icon = entity.icon
 
   return (
-    <div className="group/app-sidebar-entity-row mx-2 flex h-9 items-center rounded-md pr-1 hover:bg-muted/60 data-[active=true]:bg-muted" data-active={active || undefined}>
+    <div
+      className="group/app-sidebar-entity-row ml-5 mr-4 flex h-[45px] items-center rounded-md pr-1 hover:bg-muted/60 data-[active=true]:bg-muted"
+      data-active={active || undefined}
+    >
       <Item
         size="xs"
         render={<button type="button" onClick={onClick} />}
-        className="min-w-0 flex-1 flex-nowrap border-0 bg-transparent px-2 py-1 hover:bg-transparent"
+        className="min-w-0 flex-1 flex-nowrap gap-2 border-0 bg-transparent px-1 py-1 hover:bg-transparent"
       >
         <ItemMedia>
-          <span className={cn("flex size-6 items-center justify-center rounded-md border bg-background", entity.toneClassName)}>
-            <Icon className="size-3.5" />
+          <span
+            className={cn(
+              "flex size-7 shrink-0 items-center justify-center rounded-[7px] border",
+              entity.toneClassName
+            )}
+          >
+            <Icon className="size-[15px] stroke-[1.7]" />
           </span>
         </ItemMedia>
         <ItemContent className="min-w-0">
-          <ItemTitle className="w-full truncate font-normal">{entity.label}</ItemTitle>
+          <ItemTitle className="w-full truncate text-[15px] font-normal">{entity.label}</ItemTitle>
         </ItemContent>
       </Item>
 
@@ -361,15 +376,45 @@ function AppSidebarEntityRow({
 }
 
 const demoEntities: AppSidebarEntity[] = [
-  { id: "page-1", label: "aaaaaaaaaaaaa", icon: FilesIcon, toneClassName: "text-blue-600" },
-  { id: "note-1", label: "Ideias do produto", icon: FilesIcon, toneClassName: "text-amber-600" },
-  { id: "quote-1", label: "Design is how it works", icon: FilesIcon, toneClassName: "text-rose-600" },
+  {
+    id: "page-1",
+    label: "aaaaaaaaaaaaa",
+    icon: AppSidebarPageIcon,
+    toneClassName: "border-blue-200 bg-blue-50 text-blue-600",
+  },
+  {
+    id: "note-1",
+    label: "Ideias do produto",
+    icon: AppSidebarAtomicNoteIcon,
+    toneClassName: "border-amber-200 bg-amber-50 text-amber-600",
+  },
+  {
+    id: "quote-1",
+    label: "Design is how it works",
+    icon: AppSidebarQuoteIcon,
+    toneClassName: "border-rose-200 bg-rose-50 text-rose-600",
+  },
 ]
 
 const initialObjectTypes: AppSidebarEntity[] = [
-  { id: "atomic-note", label: "Notas atômicas", icon: FilesIcon, toneClassName: "text-amber-600" },
-  { id: "quote", label: "Citações", icon: FilesIcon, toneClassName: "text-rose-600" },
-  { id: "page", label: "Páginas", icon: FilesIcon, toneClassName: "text-blue-600" },
+  {
+    id: "atomic-note",
+    label: "Notas atômicas",
+    icon: AppSidebarAtomicNoteIcon,
+    toneClassName: "border-amber-200 bg-amber-50 text-amber-600",
+  },
+  {
+    id: "quote",
+    label: "Citações",
+    icon: AppSidebarQuoteIcon,
+    toneClassName: "border-rose-200 bg-rose-50 text-rose-600",
+  },
+  {
+    id: "page",
+    label: "Páginas",
+    icon: AppSidebarPageIcon,
+    toneClassName: "border-blue-200 bg-blue-50 text-blue-600",
+  },
 ]
 
 function AppSidebarOverview() {
@@ -399,7 +444,11 @@ function AppSidebarOverview() {
   )
 
   function duplicateEntity(entity: AppSidebarEntity) {
-    const copy = { ...entity, id: `${entity.id}-${crypto.randomUUID()}`, label: `${entity.label} (cópia)` }
+    const copy = {
+      ...entity,
+      id: `${entity.id}-${crypto.randomUUID()}`,
+      label: `${entity.label} (cópia)`,
+    }
     setEntities((current) => [...current, copy])
     if (pinnedIds.has(entity.id)) setPinned((current) => [...current, copy])
     setActiveId(copy.id)
@@ -415,21 +464,35 @@ function AppSidebarOverview() {
     setObjectTypes((current) =>
       current.some((entity) => entity.id === preset.id)
         ? current
-        : [...current, { id: preset.id, label: preset.label, icon: preset.icon, toneClassName: `text-${preset.tone}-600` }]
+        : [
+            ...current,
+            {
+              id: preset.id,
+              label: preset.label,
+              icon: preset.icon,
+              toneClassName: `text-${preset.tone}-600`,
+            },
+          ]
     )
   }
 
   return (
     <ScrollArea className="min-h-0 flex-1">
-      <div className="flex min-h-full flex-col py-1">
+      <div className="flex min-h-full flex-col pt-2">
         <AppSidebarSection
-          icon={PinIcon}
+          icon={AppSidebarPinIcon}
           label="Fixados"
           count={pinned.length}
           sort={pinnedSort}
           onSortChange={setPinnedSort}
           emptyLabel="Nenhum conteúdo fixado"
-          action={<AppSidebarEntityPicker entities={entities} selectedIds={pinnedIds} onPick={(entity) => setPinned((current) => [...current, entity])} />}
+          action={
+            <AppSidebarEntityPicker
+              entities={entities}
+              selectedIds={pinnedIds}
+              onPick={(entity) => setPinned((current) => [...current, entity])}
+            />
+          }
         >
           {visiblePinned.map((entity) => (
             <AppSidebarEntityRow
@@ -438,7 +501,9 @@ function AppSidebarOverview() {
               active={activeId === entity.id}
               pinned
               onClick={() => setActiveId(entity.id)}
-              onTogglePin={() => setPinned((current) => current.filter((item) => item.id !== entity.id))}
+              onTogglePin={() =>
+                setPinned((current) => current.filter((item) => item.id !== entity.id))
+              }
               onDuplicate={() => duplicateEntity(entity)}
               onDelete={() => deleteEntity(entity.id)}
             />
@@ -446,7 +511,7 @@ function AppSidebarOverview() {
         </AppSidebarSection>
 
         <AppSidebarSection
-          icon={FilesIcon}
+          icon={AppSidebarObjectsIcon}
           label="Tipos de objeto"
           count={objectTypes.length}
           sort={objectSort}
@@ -454,9 +519,7 @@ function AppSidebarOverview() {
           action={
             <AppSidebarObjectTypeStudio
               onSelect={addObjectType}
-              trigger={
-                <AppSidebarSectionAction label="Criar tipo de objeto" />
-              }
+              trigger={<AppSidebarSectionAction label="Criar tipo de objeto" />}
             />
           }
         >
@@ -475,7 +538,11 @@ function AppSidebarOverview() {
                 )
               }}
               onDuplicate={() => duplicateEntity(entity)}
-              onDelete={() => setObjectTypes((current) => current.filter((item) => item.id !== entity.id))}
+              onDelete={() =>
+                setObjectTypes((current) =>
+                  current.filter((item) => item.id !== entity.id)
+                )
+              }
             />
           ))}
         </AppSidebarSection>
