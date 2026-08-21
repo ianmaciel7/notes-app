@@ -106,6 +106,15 @@ The system SHALL keep section controls visually quiet until hover while preservi
 - **THEN** `Add section` SHALL become visible at approximately 60% opacity
 - **AND** direct hover SHALL raise it to full opacity with sidebar-accent hover treatment.
 
+### Requirement: Equivalent section actions reuse one shared component
+Equivalent section-level controls SHALL be implemented through the same reusable component rather than duplicated markup or merely matching classes.
+
+#### Scenario: Pinned and object-type add actions are rendered
+- **WHEN** Pinned and Object types expose their add action
+- **THEN** both SHALL render through the same `AppSidebarSectionAction` component
+- **AND** both SHALL share the same outline variant, icon-xs sizing, 22px interaction geometry, 14px plus glyph, hover transition, border, radius, and open-state treatment
+- **AND** only the action behavior after activation MAY differ, such as opening a Popover versus opening the object-type studio.
+
 ### Requirement: Lower utility navigation
 The system SHALL render Trash and Help/resources as full-row compact interactions.
 
