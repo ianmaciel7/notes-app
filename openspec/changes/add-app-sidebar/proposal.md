@@ -1,23 +1,27 @@
 ## Why
 
-The existing application shell needs the primary left-sidebar workspace selector so feature navigation can be built on top of a stable, reusable sidebar foundation.
+The left application sidebar now needs to move beyond the workspace selector and become a faithful, reusable navigation surface that matches the captured Capacities reference while remaining native to the repository's shadcn/Base UI design system.
+
+The current implementation mixes pinned content and object-type rows, scrolls content that must remain visible, and does not yet reproduce the reference geometry and lower-sidebar hover behavior closely enough.
 
 ## What Changes
 
-- Add a reusable app-sidebar workspace selector composed from existing shadcn/Base UI primitives.
-- Support controlled space selection, search, search clearing, empty results, and a disabled `Create space` action.
-- Support left-handle reordering with a 200ms visual transition while keeping the combobox open after reordering.
-- Keep focus on the search field while the popup is open and avoid visible focus/flicker artifacts on empty results and outside clicks.
-- Match the selected Capacities-inspired desktop constraints: `18rem` menu width, `27rem` maximum scroll-body height, `right-start` placement, small offsets, no horizontal scrolling, and viewport collision safety.
-- Make the `Change space` hint hover-only.
-- Use the project 768px mobile breakpoint and a bottom-sheet presentation on narrow viewports.
-- Integrate the new component into `AppShellSidebar` without changing the app-shell contract.
+- Keep the existing workspace selector, search, reorder, focus, and responsive behavior.
+- Extend the app sidebar with the primary navigation rows for New, Search, Explore, and Calendar.
+- Render `Pinned` as a dedicated fixed region below primary navigation so the heading and pinned entities remain visible while the object-type area scrolls.
+- Model pinned entities separately from object types: pinned rows use the selected `font-medium` treatment and hover actions without an object-count badge.
+- Render object-type rows using the source-derived 29px desktop geometry, compact type labels, hover count, and an 80px action rail.
+- Add section headers, sort/add affordances, custom-section creation, Trash, Help and resources, external-hover indicators, and source-derived tooltip behavior.
+- Add the fixed footer with Settings, theme, account/Pro, and Share controls using the reference spacing and hover model.
+- Prefer existing shadcn/Base UI primitives for buttons, popovers, dropdown menus, collapsibles, dialogs, scroll areas, badges, tooltips, and the app-shell resizable layout.
+- Use the existing `globals.css` semantic tokens (`sidebar`, `sidebar-accent`, `muted`, `popover`, `border`, and related foreground tokens) instead of adding sidebar-specific global CSS variables.
+- Keep resize and collapse ownership in `AppShell`; the sidebar must not introduce a second resize/offcanvas layout system.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `ui/app-sidebar`: Reusable workspace selector for the application sidebar with search, reorder interaction, responsive presentation, and Base UI/shadcn composition.
+- `ui/app-sidebar`: Reusable Capacities-inspired application sidebar with workspace switching, primary navigation, persistent pinned content, scrollable object sections, lower utility navigation, footer controls, and source-derived interaction fidelity.
 
 ### Modified Capabilities
 
@@ -25,6 +29,9 @@ The existing application shell needs the primary left-sidebar workspace selector
 
 ## Impact
 
-- Adds a new component under `src/components`.
-- Updates the starter locale page to render it inside the existing application shell.
-- Reuses existing dependencies and theme tokens; no new package or global CSS change is required.
+- Updates `src/components/app-sidebar.tsx` and the existing `app-sidebar-*` composition components.
+- May add focused `app-sidebar-*` components for reusable lower navigation/footer behavior.
+- Updates the locale starter page only as needed to render the completed sidebar demo in the existing `AppShellSidebar` contract.
+- Updates the OpenSpec delta and canonical UI spec.
+- Does not modify `src/components/ui/*` or add sidebar-specific rules to `src/app/globals.css`.
+- Reuses existing dependencies; no new package is required.
