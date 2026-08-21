@@ -14,10 +14,10 @@ import { AppSidebarOverview } from "@/components/app-sidebar-overview"
 import {
   AppSidebarCalendarIcon,
   AppSidebarExploreIcon,
-  AppSidebarFlaskIcon,
   AppSidebarPlusIcon,
   AppSidebarSearchIcon,
 } from "@/components/app-sidebar-icons"
+import { AppSidebarWorkspaceIcon } from "@/components/app-sidebar-source-icon"
 import {
   AppSidebar,
   type AppSidebarSpace,
@@ -300,7 +300,7 @@ function AppSidebarPrimaryActions({
 const demoSpaces: AppSidebarSpace[] = [
   { id: "studies", name: "Studies", icon: BookOpenIcon },
   { id: "ideas", name: "Ideas", icon: LightbulbIcon },
-  { id: "labs", name: "zzzzzzzzzz", icon: AppSidebarFlaskIcon },
+  { id: "labs", name: "zzzzzzzzzz", icon: AppSidebarWorkspaceIcon },
   { id: "projects", name: "Projects", icon: BriefcaseBusinessIcon },
   { id: "dev", name: "Dev", icon: Code2Icon },
   { id: "knowledge", name: "Knowledge", icon: BrainCircuitIcon },
@@ -321,7 +321,7 @@ function AppSidebarPrimaryActionsDemo() {
         onValueChange={setSpaceId}
         onReorder={setSpaces}
       >
-        <div className="flex min-h-0 flex-1 flex-col">
+        <div className="flex h-full min-h-0 flex-col">
           <div className="my-px mt-0 shrink-0 px-2 pr-1 pb-1.5">
             <AppSidebarPrimaryActions
               activeAction={activeAction}
