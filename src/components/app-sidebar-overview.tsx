@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { CheckIcon, CopyIcon, PinOffIcon, PlusIcon, SunIcon, Trash2Icon } from "lucide-react"
+import { CheckIcon, CopyIcon, PinOffIcon, SunIcon, Trash2Icon } from "lucide-react"
 
 import {
   AppSidebarAtomicNoteIcon,
@@ -78,6 +78,11 @@ type AppSidebarSectionProps = {
   onOpenChange: (open: boolean) => void
   sticky?: boolean
   children?: React.ReactNode
+}
+
+type AppSidebarSectionActionProps = {
+  label: string
+  asPopoverTrigger?: boolean
 }
 
 const toneClasses: Record<AppSidebarTone, string> = {
@@ -213,6 +218,44 @@ function AppSidebarSectionMenu({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  )
+}
+
+function AppSidebarSectionAction({
+  label,
+  asPopoverTrigger = false,
+}: AppSidebarSectionActionProps) {
+  const className = cn(
+    buttonVariants({ variant: "outline", size: "icon-xs" }),
+    "size-[22px] shrink-0 opacity-0 transition-opacity duration-200",
+    "group-hover/app-sidebar-section:opacity-100 data-popup-open:opacity-100"
+  )
+
+  const icon = <AppSidebarPlusIcon className="size-[14px]" />
+
+  if (asPopoverTrigger) {
+    return (
+      <PopoverTrigger
+        data-slot="app-sidebar-section-action"
+        aria-label={label}
+        className={className}
+      >
+        {icon}
+      </PopoverTrigger>
+    )
+  }
+
+  return (
+    <Button
+      data-slot="app-sidebar-section-action"
+      type="button"
+      variant="outline"
+      size="icon-xs"
+      aria-label={label}
+      className={className}
+    >
+      {icon}
+    </Button>
   )
 }
 
@@ -549,16 +592,10 @@ function AppSidebarPinnedPicker({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger
-        aria-label="Adicionar conteúdo aos Fixados"
-        className={cn(
-          buttonVariants({ variant: "outline", size: "icon-xs" }),
-          "size-[22px] shrink-0 opacity-0 transition-opacity duration-200",
-          "group-hover/app-sidebar-section:opacity-100 data-popup-open:opacity-100"
-        )}
-      >
-        <AppSidebarPlusIcon />
-      </PopoverTrigger>
+      <AppSidebarSectionAction
+        label="Adicionar conteúdo aos Fixados"
+        asPopoverTrigger
+      />
 
       <PopoverContent side="right" align="start" sideOffset={8} className="w-72 gap-1 p-1.5">
         <Input
@@ -596,21 +633,6 @@ function AppSidebarPinnedPicker({
         </div>
       </PopoverContent>
     </Popover>
-  )
-}
-
-function AppSidebarSectionAction({ label }: { label: string }) {
-  return (
-    <Button
-      data-slot="app-sidebar-section-action"
-      type="button"
-      variant="outline"
-      size="icon-xs"
-      aria-label={label}
-      className="size-[22px] opacity-0 transition-opacity duration-200 group-hover/app-sidebar-section:opacity-100"
-    >
-      <PlusIcon />
-    </Button>
   )
 }
 
