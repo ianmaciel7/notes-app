@@ -350,12 +350,16 @@ function AppSidePanelHeader({
   }, [tabs.length, width])
 
   function closeTab(tab: AppHeaderTab) {
-    if (tabs.length <= 1) return
     if (onCloseRequest?.(tab) === false) return
 
     const index = tabs.findIndex((item) => item.id === tab.id)
     const next = tabs.filter((item) => item.id !== tab.id)
     onTabsChange(next)
+
+    if (next.length === 0) {
+      onHide?.()
+      return
+    }
 
     if (value === tab.id) {
       const fallback = next[index] ?? next[index - 1] ?? next[0]
@@ -422,7 +426,7 @@ function AppSidePanelHeader({
                     active={tab.id === value}
                     neutral={tabs.length === 1}
                     fitContent={tabs.length === 1}
-                    closable={tabs.length > 1}
+                    closable={tabs.length > 0}
                     dragging={draggingId === tab.id}
                     actionLabels={{ close: closeLabel }}
                     onOpen={() => onValueChange(tab.id)}

@@ -376,7 +376,7 @@ function AppHeaderTabItem({
             {tab.label}
           </span>
 
-          {!fitContent && (pinnable || closable) && (
+          {((!fitContent && (pinnable || closable)) || (fitContent && closable)) && (
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
               <div
                 className={cn(

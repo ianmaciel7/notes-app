@@ -765,7 +765,7 @@ function AppSidebarHelpSection() {
   const [open, setOpen] = React.useState(true)
 
   const HelpHeaderIcon = React.useCallback(
-    (props: React.ComponentProps<"svg">) => <AppSidebarSourceIcon name="help" {...props} />,
+    (props: React.ComponentProps<"svg">) => <AppSidebarSourceIcon {...props} name="help" />,
     []
   )
 
