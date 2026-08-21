@@ -12,11 +12,11 @@ The system SHALL provide a reusable 46px application header matching the compact
 - **AND** the create-new-tab control SHALL belong to the center tab strip rather than the history group.
 
 ### Requirement: Header navigation actions
-The system SHALL provide back and forward navigation actions using the existing ghost icon button primitive.
+The system SHALL provide back and forward navigation actions using compact source-matched icon controls.
 
 #### Scenario: History controls render
 - **WHEN** the header is rendered
-- **THEN** back and forward actions SHALL appear as compact icon buttons
+- **THEN** back and forward actions SHALL appear as 28px compact icon buttons
 - **AND** each action SHALL invoke its corresponding caller-provided callback when activated
 - **AND** callers SHALL be able to disable each history action independently.
 
@@ -26,9 +26,9 @@ The system SHALL provide a reusable main header tab primitive matching the captu
 #### Scenario: Main tab renders
 - **WHEN** a main tab is rendered in a multi-tab strip
 - **THEN** it SHALL use a 32px height, 13px label, 0.5px border, 6px left padding, 1px right padding, and compact entity icon chip
-- **AND** an inactive tab SHALL use a transparent border and muted/subtle text
-- **AND** hovering an inactive tab SHALL reveal the hover background and secondary text state
-- **AND** the active tab SHALL use the base surface, visible border, foreground text, and medium font weight.
+- **AND** an inactive tab SHALL use a transparent border and subtle text
+- **AND** hovering an inactive tab SHALL reveal the back-hover surface and secondary text state
+- **AND** the active tab SHALL use the base surface, visible front border, primary text, and medium font weight.
 
 #### Scenario: Single main tab renders
 - **WHEN** only one main tab remains
@@ -47,13 +47,12 @@ The system SHALL implement the captured main-tab pin behavior without using pin 
 
 #### Scenario: Unpinned main tab is hovered
 - **WHEN** an unpinned main tab is hovered
-- **THEN** its pin action SHALL become available
+- **THEN** its outline pin action SHALL become available
 - **AND** its close action SHALL become available when the tab is closable.
 
 #### Scenario: Main tab is pinned
 - **WHEN** a main tab is pinned
-- **THEN** the pin action SHALL remain visible without hover
-- **AND** the pin visual SHALL indicate the pinned state
+- **THEN** the filled pin action SHALL remain visible without hover
 - **AND** pinning SHALL NOT reorder the tab
 - **AND** pinning SHALL NOT force the tab to become active
 - **AND** pinning SHALL NOT change overflow-window selection.
@@ -109,7 +108,7 @@ The system SHALL expose a create-new-tab action from the main space header.
 - **AND** the reusable component SHALL NOT own routing, persistence, or global-search implementation.
 
 ### Requirement: Side-panel tab header
-The system SHALL provide a reusable side-panel header using the same tab visual primitive with side-panel-specific layout rules.
+The system SHALL provide a reusable side-panel header using the same tab visual primitive with side-panel-specific layout and shell controls.
 
 #### Scenario: Side-panel tabs render
 - **WHEN** the side-panel tab collection is rendered
@@ -128,12 +127,49 @@ The system SHALL provide a reusable side-panel header using the same tab visual 
 - **THEN** it SHALL remain selectable and closable
 - **AND** it SHALL be non-draggable.
 
-#### Scenario: Side-panel controls render
+#### Scenario: Side-panel tab controls render
 - **WHEN** side-panel tabs are visible
 - **THEN** the tab row SHALL occupy the flexible grid column
 - **AND** the tab-list/create controls SHALL occupy the adjacent fit-content column
 - **AND** the create action SHALL appear after the tab-list control
 - **AND** main-tab pin actions SHALL NOT be rendered in side-panel tabs.
+
+#### Scenario: Side-panel shell controls render while the panel is open
+- **WHEN** the side panel is expanded
+- **THEN** its header SHALL own the 28px hide-sidepanel action followed by the 16px caret menu action
+- **AND** the shell SHALL NOT overlay a duplicate panel toggle on top of the open header.
+
+#### Scenario: Side-panel shell controls render while the panel is collapsed
+- **WHEN** the side panel is collapsed
+- **THEN** the main application header SHALL expose the reopen-sidepanel action and adjacent menu control.
+
+### Requirement: Side-panel special-entry menu
+The system SHALL reproduce the captured side-panel special-entry menu behavior.
+
+#### Scenario: Side-panel menu is opened
+- **WHEN** the caret control is activated
+- **THEN** a bottom-end menu with a 6px offset SHALL expose the available special entries
+- **AND** the menu SHALL support Graph View, Backlinks, Objects Inside, Related Content, AI Chat, and Local Search entries with source-matched icons.
+
+#### Scenario: Existing special entry is selected
+- **WHEN** a special entry already exists in the side panel
+- **THEN** selecting it SHALL activate that existing entry instead of duplicating it.
+
+#### Scenario: Missing special entry is selected
+- **WHEN** a supported special entry is not yet present
+- **THEN** selecting it SHALL add or create the corresponding side-panel entry and activate it.
+
+### Requirement: Side-panel create action
+The system SHALL reproduce the captured `New Sidepanel Tab` action rather than treating the plus as a generic empty-tab creator.
+
+#### Scenario: Plus is activated without Explore open
+- **WHEN** the create-sidepanel action is activated and the Explore entry is missing or not active
+- **THEN** the owning state SHALL open or activate Explore.
+
+#### Scenario: Plus is activated while Explore is active
+- **WHEN** the create-sidepanel action is activated while Explore is already active
+- **THEN** the owning state SHALL open search in side-panel mode
+- **AND** selecting a search result SHALL open that result in the side panel.
 
 ### Requirement: Inactive tab preview
 The system SHALL support delayed preview content for eligible inactive tabs using the existing project preview/hover primitive.
@@ -156,13 +192,13 @@ The system SHALL provide focus-mode controls matching the captured header transi
 - **THEN** back and forward secondary actions SHALL expand horizontally beside the primary exit action
 - **AND** the expansion SHALL use a 300ms transition with the reference delayed-hover behavior.
 
-### Requirement: shadcn-style composition
-The system SHALL implement the header and tab components as application components composed from existing project primitives.
+### Requirement: Source-matched composition
+The system SHALL implement the header and tab components as application components composed from existing project primitives while preserving source-matched Capacities geometry and glyphs.
 
 #### Scenario: Component implementation is reviewed
 - **WHEN** the component source is inspected
-- **THEN** it SHALL reuse existing `Button`, `Tooltip`, `Popover`, `HoverCard`, and input primitives where applicable
-- **AND** it SHALL use the repository-configured Lucide icon library
+- **THEN** it SHALL reuse existing `Button`, `Tooltip`, `DropdownMenu`, `HoverCard`, and input primitives where applicable
+- **AND** Capacities-specific header controls MAY use local SVG components for the exact captured Phosphor glyphs
 - **AND** it SHALL expose stable `data-slot` attributes on exported component roots and meaningful subcomponents
 - **AND** it SHALL use `cn()` for caller class merging
 - **AND** it SHALL NOT add new dependencies or global CSS.
@@ -174,5 +210,6 @@ The system SHALL integrate the expanded header into the current desktop app shel
 - **WHEN** the locale starter page renders the desktop app shell
 - **THEN** the main panel SHALL render the application header and all representative main-tab states before the main surface
 - **AND** the side panel SHALL render the side-panel tab header before the side-panel surface
+- **AND** open side-panel controls SHALL be owned by that header rather than a duplicate absolute shell trigger
 - **AND** the existing shell resize behavior SHALL remain unchanged
 - **AND** the existing mobile shell composition SHALL remain unchanged.
