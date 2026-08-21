@@ -437,8 +437,8 @@ function AppSidePanelHeader({
             </div>
           </div>
 
-          {tabs.length > 0 && (
-            <div data-slot="app-side-panel-tab-controls" className="flex shrink-0 items-center gap-1">
+          <div data-slot="app-side-panel-tab-controls" className="flex shrink-0 items-center gap-1">
+            {tabs.length > 0 && (
               <SideTabList
                 tabs={tabs}
                 value={value}
@@ -446,15 +446,15 @@ function AppSidePanelHeader({
                 onValueChange={onValueChange}
                 onClose={closeTab}
               />
-              <SideHeaderAction
-                label={createLabel}
-                placement="left"
-                onClick={onCreate}
-              >
-                <AppHeaderPlusIcon />
-              </SideHeaderAction>
-            </div>
-          )}
+            )}
+            <SideHeaderAction
+              label={createLabel}
+              placement="left"
+              onClick={onCreate}
+            >
+              <AppHeaderPlusIcon />
+            </SideHeaderAction>
+          </div>
         </div>
       </div>
 
