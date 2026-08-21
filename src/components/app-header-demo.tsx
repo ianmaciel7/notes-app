@@ -23,7 +23,8 @@ const initialMainTabs: AppHeaderTab[] = [
     id: "cloud-monitoring",
     label: "Cloud Monitoring",
     icon: FolderIcon,
-    iconClassName: "border border-orange-300/70 bg-orange-50 text-orange-600",
+    iconClassName:
+      "bg-[oklch(0.967_0.035_67)] text-[oklch(0.57_0.16_48)]",
     pinned: true,
     preview: <TabPreview eyebrow="Folder" title="Cloud Monitoring" />,
   },
@@ -31,28 +32,32 @@ const initialMainTabs: AppHeaderTab[] = [
     id: "azure",
     label: "Azure",
     icon: FileTextIcon,
-    iconClassName: "border border-blue-300/70 bg-blue-50 text-blue-600",
+    iconClassName:
+      "bg-[oklch(0.9513_0.0235_256.13)] text-[oklch(0.5035_0.1579_264.41)]",
     preview: <TabPreview eyebrow="Page" title="Azure" />,
   },
   {
     id: "courses",
     label: "Cursos",
     icon: BookOpenIcon,
-    iconClassName: "border border-emerald-300/70 bg-emerald-50 text-emerald-600",
+    iconClassName:
+      "bg-[oklch(0.966_0.0361_163.39)] text-[oklch(0.4933_0.0939_167.09)]",
     preview: <TabPreview eyebrow="Collection" title="Cursos" />,
   },
   {
     id: "ideas-one",
     label: "Ideias",
     icon: LightbulbIcon,
-    iconClassName: "border border-amber-300/70 bg-amber-50 text-amber-600",
+    iconClassName:
+      "bg-[oklch(0.981_0.048_103.47)] text-[oklch(0.5532_0.105_76.42)]",
     preview: <TabPreview eyebrow="Page" title="Ideias" />,
   },
   {
     id: "ideas-two",
     label: "Ideias",
     icon: LightbulbIcon,
-    iconClassName: "border border-amber-300/70 bg-amber-50 text-amber-600",
+    iconClassName:
+      "bg-[oklch(0.981_0.048_103.47)] text-[oklch(0.5532_0.105_76.42)]",
     preview: <TabPreview eyebrow="Page" title="Ideias" />,
   },
 ]
@@ -62,13 +67,13 @@ const initialSideTabs: AppHeaderTab[] = [
     id: "graph-view",
     label: "Visualização em grafo",
     icon: NetworkIcon,
-    iconClassName: "bg-muted text-muted-foreground",
+    iconClassName: "bg-[oklch(0.94_0.002_67)] text-[oklch(0.50_0.008_67)]",
   },
   {
     id: "explore",
     label: "Explorar",
     icon: CompassIcon,
-    iconClassName: "bg-muted text-muted-foreground",
+    iconClassName: "bg-[oklch(0.94_0.002_67)] text-[oklch(0.50_0.008_67)]",
     draggable: false,
   },
 ]
@@ -205,12 +210,14 @@ function AppHeaderDemoMain() {
   function createTab() {
     const index = createIndexRef.current++
     const id = `new-page-${index}`
+    const label = index === 1 ? "Nova página" : `Nova página ${index}`
     const tab: AppHeaderTab = {
       id,
-      label: index === 1 ? "Nova página" : `Nova página ${index}`,
+      label,
       icon: FileTextIcon,
-      iconClassName: "border border-blue-300/70 bg-blue-50 text-blue-600",
-      preview: <TabPreview eyebrow="Page" title={index === 1 ? "Nova página" : `Nova página ${index}`} />,
+      iconClassName:
+        "bg-[oklch(0.9513_0.0235_256.13)] text-[oklch(0.5035_0.1579_264.41)]",
+      preview: <TabPreview eyebrow="Page" title={label} />,
     }
 
     setMainTabs((current) => [...current, tab])
