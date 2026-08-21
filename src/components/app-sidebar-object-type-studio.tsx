@@ -62,7 +62,7 @@ type AppSidebarObjectTypePreset = {
 
 type AppSidebarObjectTypeStudioProps = {
   onSelect?: (preset: AppSidebarObjectTypePreset) => void
-  trigger?: React.ReactNode
+  trigger?: React.ReactElement
   className?: string
 }
 
@@ -339,25 +339,26 @@ function AppSidebarObjectTypeStudio({
     resetSelection()
   }
 
+  const triggerElement =
+    trigger ?? (
+      <Button
+        type="button"
+        variant="ghost"
+        size="default"
+        className="w-full justify-start px-2 font-normal text-muted-foreground"
+      >
+        <PlusIcon data-icon="inline-start" />
+        <span className="min-w-0 truncate">Add object type</span>
+      </Button>
+    )
+
   return (
     <div
       data-slot="app-sidebar-object-type-studio"
       className={cn(trigger ? "inline-flex" : "px-2", className)}
     >
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogTrigger render={<span className="inline-flex" />}>
-          {trigger ?? (
-            <Button
-              type="button"
-              variant="ghost"
-              size="default"
-              className="w-full justify-start px-2 font-normal text-muted-foreground"
-            >
-              <PlusIcon data-icon="inline-start" />
-              <span className="min-w-0 truncate">Add object type</span>
-            </Button>
-          )}
-        </DialogTrigger>
+        <DialogTrigger render={triggerElement} />
 
         <DialogContent
           showCloseButton={false}
