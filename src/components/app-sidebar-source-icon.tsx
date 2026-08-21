@@ -137,10 +137,7 @@ function AppSidebarWorkspaceIcon({
   return (
     <AppSidebarSourceIcon
       name="workspace"
-      className={cn(
-        "data-[icon=inline-start]:-ml-3 data-[icon=inline-start]:mr-0.5",
-        className
-      )}
+      className={cn("data-[icon=inline-start]:mr-0.5", className)}
       {...props}
     />
   )
