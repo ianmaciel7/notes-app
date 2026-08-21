@@ -27,6 +27,7 @@ import {
 } from "@/components/app-header-tabs"
 import { useAppShell } from "@/components/app-shell"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 
 const initialMainTabs: AppHeaderTab[] = [
   {
