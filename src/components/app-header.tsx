@@ -16,6 +16,17 @@ import {
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 
+const appHeaderTheme = {
+  "--app-header-bg-base": "oklch(1 0.0001 263.28)",
+  "--app-header-bg-back": "oklch(0.9856 0.0016 67)",
+  "--app-header-bg-back-hover": "oklch(0.9676 0.0016 67.02)",
+  "--app-header-bg-front-hover": "oklch(0.9856 0.0016 67)",
+  "--app-header-border-front": "oklch(0.9163 0.0017 67.07)",
+  "--app-header-text-primary": "oklch(0.2191 0.0058 285.84)",
+  "--app-header-text-secondary": "oklch(0.3887 0.0052 301.05)",
+  "--app-header-text-subtle": "oklch(0.5725 0.0051 33.89)",
+} as React.CSSProperties
+
 type AppHeaderProps = React.ComponentProps<"header"> & {
   backDisabled?: boolean
   forwardDisabled?: boolean
@@ -49,15 +60,19 @@ function AppHeader({
   backLabel = "Back",
   forwardLabel = "Forward",
   focusLabel = "Enter focus mode",
+  style,
   ...props
 }: AppHeaderProps) {
   return (
     <header
       data-slot="app-header"
       className={cn(
-        "flex h-[46px] w-full shrink-0 grow-0 items-center justify-between bg-sidebar",
+        "flex h-[46px] w-full shrink-0 grow-0 items-center justify-between",
+        "bg-[var(--app-header-bg-back)] text-[var(--app-header-text-secondary)]",
+        "[font-family:Inter,ui-sans-serif,system-ui,sans-serif]",
         className
       )}
+      style={{ ...appHeaderTheme, ...style }}
       {...props}
     >
       <div
@@ -83,7 +98,7 @@ function AppHeader({
 
       <div
         data-slot="app-header-end"
-        className="flex max-w-max shrink-0 items-center justify-end pr-2.5 text-xs text-muted-foreground"
+        className="flex max-w-max shrink-0 items-center justify-end pr-2.5 text-xs text-[var(--app-header-text-secondary)]"
       >
         <div className="flex items-center gap-1 px-1">
           <AppHeaderAction aria-label={focusLabel} tooltip={focusLabel} onClick={onFocus}>
@@ -156,7 +171,9 @@ function AppHeaderAction({
       variant={variant}
       size={size}
       className={cn(
-        "active:translate-y-0 active:brightness-[0.97] focus-visible:ring-0",
+        "border-transparent bg-transparent text-[var(--app-header-text-secondary)] shadow-none",
+        "hover:bg-[var(--app-header-bg-front-hover)] hover:text-[var(--app-header-text-primary)]",
+        "active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
         className
       )}
       {...props}
@@ -187,6 +204,7 @@ function AppFocusModeControls({
   backLabel = "Back",
   forwardLabel = "Forward",
   exitLabel = "Leave focus mode",
+  style,
   ...props
 }: AppFocusModeControlsProps) {
   return (
@@ -194,8 +212,10 @@ function AppFocusModeControls({
       data-slot="app-focus-mode-controls"
       className={cn(
         "pointer-events-none fixed inset-x-0 top-0 z-50 flex items-start justify-center px-4 pt-2",
+        "[font-family:Inter,ui-sans-serif,system-ui,sans-serif]",
         className
       )}
+      style={{ ...appHeaderTheme, ...style }}
       {...props}
     >
       <div className="group/focus pointer-events-auto flex flex-row">
@@ -206,7 +226,7 @@ function AppFocusModeControls({
                 aria-label={backLabel}
                 tooltip={backLabel}
                 disabled={backDisabled}
-                className="border-border bg-background/70 shadow-sm backdrop-blur"
+                className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
                 onClick={onBack}
               >
                 <ChevronLeftIcon />
@@ -215,7 +235,7 @@ function AppFocusModeControls({
                 aria-label={forwardLabel}
                 tooltip={forwardLabel}
                 disabled={forwardDisabled}
-                className="border-border bg-background/70 shadow-sm backdrop-blur"
+                className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
                 onClick={onForward}
               >
                 <ChevronRightIcon />
@@ -224,12 +244,12 @@ function AppFocusModeControls({
           </div>
         </div>
 
-        <div className="h-0 w-0 bg-border opacity-0 transition-[width,height,opacity] duration-300 ease-out group-hover/focus:h-7 group-hover/focus:w-px group-hover/focus:opacity-100 group-hover/focus:delay-50" />
+        <div className="h-0 w-0 bg-[var(--app-header-border-front)] opacity-0 transition-[width,height,opacity] duration-300 ease-out group-hover/focus:h-7 group-hover/focus:w-px group-hover/focus:opacity-100 group-hover/focus:delay-50" />
 
         <AppHeaderAction
           aria-label={exitLabel}
           tooltip={exitLabel}
-          className="border-border bg-background/70 shadow-sm backdrop-blur"
+          className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
           onClick={onExit}
         >
           <XIcon />
