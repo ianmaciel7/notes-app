@@ -1,13 +1,13 @@
 "use client"
 
 import * as React from "react"
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CircleDashedIcon,
-  XIcon,
-} from "lucide-react"
 
+import {
+  AppHeaderCaretLeftIcon,
+  AppHeaderCaretRightIcon,
+  AppHeaderCircleDashedIcon,
+  AppHeaderCloseIcon,
+} from "@/components/app-header-icons"
 import { Button } from "@/components/ui/button"
 import {
   Tooltip,
@@ -17,14 +17,14 @@ import {
 import { cn } from "@/lib/utils"
 
 const appHeaderTheme = {
-  "--app-header-bg-base": "oklch(1 0.0001 263.28)",
-  "--app-header-bg-back": "oklch(0.9856 0.0016 67)",
-  "--app-header-bg-back-hover": "oklch(0.9676 0.0016 67.02)",
-  "--app-header-bg-front-hover": "oklch(0.9856 0.0016 67)",
-  "--app-header-border-front": "oklch(0.9163 0.0017 67.07)",
-  "--app-header-text-primary": "oklch(0.2191 0.0058 285.84)",
-  "--app-header-text-secondary": "oklch(0.3887 0.0052 301.05)",
-  "--app-header-text-subtle": "oklch(0.5725 0.0051 33.89)",
+  "--app-header-bg-base": "#ffffff",
+  "--app-header-bg-back": "#f8f7f5",
+  "--app-header-bg-back-hover": "#eeece9",
+  "--app-header-bg-front-hover": "#efeeec",
+  "--app-header-border-front": "rgba(36, 32, 28, 0.12)",
+  "--app-header-text-primary": "#282522",
+  "--app-header-text-secondary": "#595550",
+  "--app-header-text-subtle": "#837d76",
 } as React.CSSProperties
 
 type AppHeaderProps = React.ComponentProps<"header"> & {
@@ -67,9 +67,8 @@ function AppHeader({
     <header
       data-slot="app-header"
       className={cn(
-        "flex h-[46px] w-full shrink-0 grow-0 items-center justify-between",
+        "flex h-[46px] w-full shrink-0 grow-0 items-center justify-between border-b-0",
         "bg-[var(--app-header-bg-back)] text-[var(--app-header-text-secondary)]",
-        "[font-family:Inter,ui-sans-serif,system-ui,sans-serif]",
         className
       )}
       style={{ ...appHeaderTheme, ...style }}
@@ -102,7 +101,7 @@ function AppHeader({
       >
         <div className="flex items-center gap-1 px-1">
           <AppHeaderAction aria-label={focusLabel} tooltip={focusLabel} onClick={onFocus}>
-            <CircleDashedIcon />
+            <AppHeaderCircleDashedIcon className="size-4" />
           </AppHeaderAction>
         </div>
       </div>
@@ -139,7 +138,7 @@ function AppHeaderHistory({
         disabled={backDisabled}
         onClick={onBack}
       >
-        <ChevronLeftIcon />
+        <AppHeaderCaretLeftIcon className="size-4" />
       </AppHeaderAction>
 
       <AppHeaderAction
@@ -148,7 +147,7 @@ function AppHeaderHistory({
         disabled={forwardDisabled}
         onClick={onForward}
       >
-        <ChevronRightIcon />
+        <AppHeaderCaretRightIcon className="size-4" />
       </AppHeaderAction>
     </div>
   )
@@ -171,7 +170,7 @@ function AppHeaderAction({
       variant={variant}
       size={size}
       className={cn(
-        "border-transparent bg-transparent text-[var(--app-header-text-secondary)] shadow-none",
+        "rounded-lg border border-transparent bg-transparent text-[var(--app-header-text-secondary)] shadow-none",
         "hover:bg-[var(--app-header-bg-front-hover)] hover:text-[var(--app-header-text-primary)]",
         "active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
         className
@@ -212,7 +211,6 @@ function AppFocusModeControls({
       data-slot="app-focus-mode-controls"
       className={cn(
         "pointer-events-none fixed inset-x-0 top-0 z-50 flex items-start justify-center px-4 pt-2",
-        "[font-family:Inter,ui-sans-serif,system-ui,sans-serif]",
         className
       )}
       style={{ ...appHeaderTheme, ...style }}
@@ -229,7 +227,7 @@ function AppFocusModeControls({
                 className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
                 onClick={onBack}
               >
-                <ChevronLeftIcon />
+                <AppHeaderCaretLeftIcon className="size-4" />
               </AppHeaderAction>
               <AppHeaderAction
                 aria-label={forwardLabel}
@@ -238,7 +236,7 @@ function AppFocusModeControls({
                 className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
                 onClick={onForward}
               >
-                <ChevronRightIcon />
+                <AppHeaderCaretRightIcon className="size-4" />
               </AppHeaderAction>
             </div>
           </div>
@@ -252,7 +250,7 @@ function AppFocusModeControls({
           className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
           onClick={onExit}
         >
-          <XIcon />
+          <AppHeaderCloseIcon className="size-4" />
         </AppHeaderAction>
       </div>
     </div>
