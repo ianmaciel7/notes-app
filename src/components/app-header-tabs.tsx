@@ -1,14 +1,14 @@
 "use client"
 
 import * as React from "react"
-import {
-  ChevronDownIcon,
-  GripVerticalIcon,
-  PinIcon,
-  PlusIcon,
-  XIcon,
-} from "lucide-react"
 
+import {
+  AppHeaderCaretDownIcon,
+  AppHeaderCloseIcon,
+  AppHeaderPlusIcon,
+  AppHeaderPushPinFillIcon,
+  AppHeaderPushPinIcon,
+} from "@/components/app-header-icons"
 import { Button } from "@/components/ui/button"
 import {
   HoverCard,
@@ -28,16 +28,18 @@ const SIDE_TAB_CONTROLS_WIDTH = 28
 const TAB_PREVIEW_DELAY = 200
 
 const appHeaderTabTheme = {
-  "--app-tab-bg-base": "oklch(1 0.0001 263.28)",
-  "--app-tab-bg-back": "oklch(0.9856 0.0016 67)",
-  "--app-tab-bg-back-hover": "oklch(0.9676 0.0016 67.02)",
-  "--app-tab-bg-front": "oklch(1 0.0001 263.28)",
-  "--app-tab-bg-front-hover": "oklch(0.9856 0.0016 67)",
-  "--app-tab-border-front": "oklch(0.9163 0.0017 67.07)",
-  "--app-tab-border-front-strong": "oklch(0.8643 0.0017 67.13)",
-  "--app-tab-text-primary": "oklch(0.2191 0.0058 285.84)",
-  "--app-tab-text-secondary": "oklch(0.3887 0.0052 301.05)",
-  "--app-tab-text-subtle": "oklch(0.5725 0.0051 33.89)",
+  "--app-tab-bg-base": "#ffffff",
+  "--app-tab-bg-back": "#f8f7f5",
+  "--app-tab-bg-back-hover": "#eeece9",
+  "--app-tab-bg-front": "#ffffff",
+  "--app-tab-bg-front-hover": "#efeeec",
+  "--app-tab-border-base": "rgba(36, 32, 28, 0.10)",
+  "--app-tab-border-front": "rgba(36, 32, 28, 0.12)",
+  "--app-tab-border-front-strong": "rgba(36, 32, 28, 0.16)",
+  "--app-tab-text-primary": "#282522",
+  "--app-tab-text-secondary": "#595550",
+  "--app-tab-text-subtle": "#837d76",
+  "--app-tab-text-active": "#5c6fbd",
 } as React.CSSProperties
 
 type DropPosition = "before" | "after"
@@ -122,7 +124,6 @@ function useElementWidth<T extends HTMLElement>() {
 
     const observer = new ResizeObserver(update)
     observer.observe(element)
-
     return () => observer.disconnect()
   }, [])
 
@@ -156,9 +157,9 @@ function getMainLayout(width: number, count: number): HeaderTabLayout {
     return { tabWidth: MAIN_TAB_MAX_WIDTH, cramped: false, maxVisible: count }
   }
 
-  const controlsWidth = 28 + MAIN_TAB_GAP
   const gaps = Math.max(0, count - 1) * MAIN_TAB_GAP
-  const initialAvailable = width - controlsWidth - gaps
+  const reservedControls = 28 + MAIN_TAB_GAP
+  const initialAvailable = width - reservedControls - gaps
   const initialWidth =
     initialAvailable <= 0
       ? 1
@@ -180,40 +181,16 @@ function getMainLayout(width: number, count: number): HeaderTabLayout {
     return { tabWidth, cramped, maxVisible: count }
   }
 
+  const maxVisible = Math.max(
+    1,
+    Math.floor((width + MAIN_TAB_GAP) / (MAIN_TAB_MIN_WIDTH + MAIN_TAB_GAP))
+  )
+
   return {
     tabWidth: MAIN_TAB_MIN_WIDTH,
     cramped: true,
-    maxVisible: Math.min(
-      count,
-      Math.max(
-        1,
-        Math.floor((width + MAIN_TAB_GAP) / (MAIN_TAB_MIN_WIDTH + MAIN_TAB_GAP))
-      )
-    ),
+    maxVisible: Math.min(maxVisible, count),
   }
-}
-
-function getSideLayout(width: number, count: number): HeaderTabLayout {
-  if (!count || width <= 0) {
-    return { tabWidth: SIDE_TAB_MAX_WIDTH, cramped: false, maxVisible: count }
-  }
-
-  const gaps = Math.max(0, count - 1) * SIDE_TAB_GAP
-  const available = width - gaps
-  const rawWidth =
-    available <= 0
-      ? 1
-      : Math.max(
-          1,
-          Math.floor(Math.min(SIDE_TAB_MAX_WIDTH, available / count))
-        )
-  const cramped = rawWidth < SIDE_TAB_MIN_WIDTH
-  const crampedAvailable = width - SIDE_TAB_CONTROLS_WIDTH - gaps
-  const tabWidth = cramped
-    ? Math.max(1, Math.floor(Math.max(1, crampedAvailable) / count))
-    : rawWidth
-
-  return { tabWidth, cramped, maxVisible: count }
 }
 
 function getVisibleRange(tabs: AppHeaderTab[], value: string, maxVisible: number) {
@@ -236,10 +213,15 @@ function AppHeaderTabIcon({ tab }: { tab: AppHeaderTab }) {
       data-slot="app-header-tab-icon"
       className={cn(
         "inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 grow-0 items-center justify-center rounded-[0.33em]",
-        tab.iconClassName ?? "bg-[oklch(0.94_0.002_67)] text-[oklch(0.50_0.008_67)]"
+        tab.iconClassName ?? "bg-[#ebeae8] text-[#68635e]"
       )}
     >
-      <Icon className="min-h-[1.3em] min-w-[1.3em] rounded-[0.33em] p-[0.1em] text-[0.94em]" />
+      <span
+        className="inline-flex min-h-[1.3em] min-w-[1.3em] items-center justify-center rounded-[0.33em] p-[0.1em] text-[0.94em]"
+        style={{ verticalAlign: "-0.125em" }}
+      >
+        <Icon className="size-[1em]" />
+      </span>
     </span>
   )
 }
@@ -256,23 +238,24 @@ function AppHeaderTabAction({
   onClick?: React.MouseEventHandler<HTMLButtonElement>
 }) {
   return (
-    <Button
+    <button
       data-slot="app-header-tab-action"
       type="button"
-      variant="ghost"
       aria-label={label}
       title={label}
       className={cn(
-        "h-7 w-[18px] rounded-lg border border-transparent bg-transparent p-0 text-xs",
-        "text-[var(--app-tab-text-subtle)] shadow-none transition-[opacity] duration-200 ease-out",
+        "relative flex h-7 w-[18px] shrink-0 items-center justify-center rounded-lg border border-transparent bg-transparent",
+        "text-xs text-[var(--app-tab-text-subtle)] transition-[opacity] duration-200 ease-out",
         "hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)]",
-        "active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
+        "active:z-20 active:brightness-[0.97] focus:outline-none",
         className
       )}
       onClick={onClick}
     >
-      {children}
-    </Button>
+      <span className="inline-flex size-3 items-center justify-center [&>svg]:size-full">
+        {children}
+      </span>
+    </button>
   )
 }
 
@@ -293,6 +276,7 @@ function AppHeaderTabItem({
   className,
   onPointerEnter,
   onPointerLeave,
+  style,
   ...props
 }: AppHeaderTabProps) {
   const labels = {
@@ -301,6 +285,7 @@ function AppHeaderTabItem({
     close: "Close tab",
     ...actionLabels,
   }
+
   const [previewOpen, setPreviewOpen] = React.useState(false)
   const previewTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const activeVisual = active && !neutral
@@ -328,7 +313,6 @@ function AppHeaderTabItem({
 
   const schedulePreview = React.useCallback(() => {
     if (!tab.preview || active || dragging) return
-
     clearPreviewTimer()
     previewTimerRef.current = setTimeout(() => {
       previewTimerRef.current = null
@@ -349,6 +333,7 @@ function AppHeaderTabItem({
         fitContent ? "inline-flex" : "w-full",
         className
       )}
+      style={{ ...appHeaderTabTheme, ...style }}
       onPointerEnter={(event) => {
         schedulePreview()
         onPointerEnter?.(event)
@@ -423,7 +408,7 @@ function AppHeaderTabItem({
                         onTogglePin()
                       }}
                     >
-                      <PinIcon className={cn("size-3", tab.pinned && "fill-current")} />
+                      {tab.pinned ? <AppHeaderPushPinFillIcon /> : <AppHeaderPushPinIcon />}
                     </AppHeaderTabAction>
                   )}
 
@@ -437,7 +422,7 @@ function AppHeaderTabItem({
                         onClose()
                       }}
                     >
-                      <XIcon className="size-3" />
+                      <AppHeaderCloseIcon />
                     </AppHeaderTabAction>
                   )}
                 </div>
@@ -461,7 +446,7 @@ function AppHeaderTabItem({
                   onTogglePin()
                 }}
               >
-                <PinIcon className={cn("size-3", tab.pinned && "fill-current")} />
+                {tab.pinned ? <AppHeaderPushPinFillIcon /> : <AppHeaderPushPinIcon />}
               </AppHeaderTabAction>
             </div>
           )}
@@ -478,14 +463,13 @@ function AppHeaderTabItem({
 
   return (
     <HoverCard open={previewOpen}>
-      <HoverCardTrigger render={<span className="inline-flex min-w-0 max-w-full" />}>
-        {tabNode}
-      </HoverCardTrigger>
+      <HoverCardTrigger render={<div className="min-w-0" />}>{tabNode}</HoverCardTrigger>
       <HoverCardContent
         side="bottom"
         align="center"
         sideOffset={8}
-        className="pointer-events-none w-64"
+        className="w-64 border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-front)]"
+        style={appHeaderTabTheme}
       >
         {tab.preview}
       </HoverCardContent>
@@ -512,7 +496,6 @@ function AppHeaderTabList({
 }) {
   const [open, setOpen] = React.useState(false)
   const [query, setQuery] = React.useState("")
-  const [draggingId, setDraggingId] = React.useState<string | null>(null)
 
   if (!visible) return null
 
@@ -522,21 +505,13 @@ function AppHeaderTabList({
     : tabs
 
   return (
-    <div data-slot="app-header-tab-list" className="relative shrink-0">
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        aria-label={label}
-        aria-expanded={open}
-        className="size-7 border-transparent bg-transparent text-[var(--app-tab-text-secondary)] shadow-none hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)] focus-visible:ring-0"
-        onClick={() => setOpen((current) => !current)}
-      >
-        <ChevronDownIcon />
-      </Button>
+    <div data-slot="app-header-tab-list" className="relative shrink-0" style={appHeaderTabTheme}>
+      <HeaderControlButton label={label} onClick={() => setOpen((current) => !current)}>
+        <AppHeaderCaretDownIcon className="size-4" />
+      </HeaderControlButton>
 
       {open && (
-        <div className="absolute right-0 top-[34px] z-[80] w-64 rounded-lg border bg-popover p-2 shadow-xl">
+        <div className="absolute right-0 top-[34px] z-[80] w-64 rounded-lg border border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-front)] p-2 shadow-xl">
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -547,25 +522,15 @@ function AppHeaderTabList({
             {filteredTabs.map((tab) => (
               <div
                 key={tab.id}
-                draggable={tab.draggable !== false}
                 className={cn(
-                  "group/list flex h-9 items-center gap-1 rounded-md px-1 text-sm hover:bg-muted",
-                  tab.id === value && "bg-muted"
+                  "group/list flex h-9 items-center gap-1 rounded-md px-1",
+                  "hover:bg-[var(--app-tab-bg-back-hover)]",
+                  tab.id === value && "bg-[var(--app-tab-bg-back-hover)]"
                 )}
-                onDragStart={() => setDraggingId(tab.id)}
-                onDragOver={(event) => event.preventDefault()}
-                onDrop={(event) => {
-                  event.preventDefault()
-                  setDraggingId(null)
-                }}
-                onDragEnd={() => setDraggingId(null)}
               >
-                {tab.draggable !== false && (
-                  <GripVerticalIcon className="size-3 shrink-0 cursor-grab text-muted-foreground" />
-                )}
                 <button
                   type="button"
-                  className="flex min-w-0 flex-1 items-center gap-2 px-1 text-left"
+                  className="flex min-w-0 flex-1 items-center gap-2 px-1 text-left text-sm"
                   onClick={() => {
                     onValueChange(tab.id)
                     setOpen(false)
@@ -573,19 +538,17 @@ function AppHeaderTabList({
                 >
                   <AppHeaderTabIcon tab={tab} />
                   <span className="min-w-0 flex-1 truncate">{tab.label}</span>
-                  {tab.pinned && <PinIcon className="size-3 fill-current text-muted-foreground" />}
+                  {tab.pinned && <AppHeaderPushPinFillIcon className="size-3 text-[var(--app-tab-text-subtle)]" />}
                 </button>
                 {tabs.length > 1 && (
-                  <Button
+                  <button
                     type="button"
-                    variant="ghost"
-                    size="icon-xs"
                     aria-label={`Close ${tab.label}`}
-                    className="opacity-0 group-hover/list:opacity-100"
+                    className="flex size-6 items-center justify-center rounded-md text-[var(--app-tab-text-subtle)] opacity-0 hover:bg-[var(--app-tab-bg-front-hover)] group-hover/list:opacity-100"
                     onClick={() => onClose(tab)}
                   >
-                    <XIcon />
-                  </Button>
+                    <AppHeaderCloseIcon className="size-3" />
+                  </button>
                 )}
               </div>
             ))}
@@ -593,6 +556,36 @@ function AppHeaderTabList({
         </div>
       )}
     </div>
+  )
+}
+
+function HeaderControlButton({
+  label,
+  children,
+  className,
+  onClick,
+}: {
+  label: string
+  children: React.ReactNode
+  className?: string
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      className={cn(
+        "relative flex size-7 shrink-0 items-center justify-center rounded-lg border border-transparent bg-transparent",
+        "text-sm text-[var(--app-tab-text-secondary)] transition-[opacity] duration-200 ease-out",
+        "hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)]",
+        "active:z-20 active:brightness-[0.97] focus:outline-none",
+        className
+      )}
+      onClick={onClick}
+    >
+      <span className="inline-flex size-4 items-center justify-center [&>svg]:size-full">{children}</span>
+    </button>
   )
 }
 
@@ -654,8 +647,7 @@ function AppSpaceHeader({
     <div
       data-slot="app-space-header"
       className={cn(
-        "sticky top-0 z-[41] flex min-w-0 flex-1 select-none items-center justify-between",
-        "bg-[var(--app-tab-bg-back)] [font-family:Inter,ui-sans-serif,system-ui,sans-serif]",
+        "sticky top-0 z-[41] flex min-w-0 flex-1 select-none items-center justify-between bg-[var(--app-tab-bg-back)]",
         className
       )}
       style={{ ...appHeaderTabTheme, ...style }}
@@ -664,32 +656,24 @@ function AppSpaceHeader({
       <div
         ref={containerRef}
         data-slot="app-space-header-viewport"
-        className="flex w-0 min-w-0 grow items-center overflow-hidden px-1 [contain:layout_style_paint]"
+        className="flex w-0 min-w-0 grow cursor-default items-center overflow-hidden px-1 [contain:layout_style_paint]"
       >
-        <div
-          role="tablist"
-          aria-label="Open tabs"
-          className="flex w-full min-w-0 items-center"
-          style={{ gap: MAIN_TAB_GAP }}
-        >
+        <div className="flex w-full min-w-0 items-center" style={{ gap: MAIN_TAB_GAP }}>
           {visibleTabs.map((tab, localIndex) => {
             const active = tab.id === value
-            const absoluteIndex = range.start + localIndex
             const before = dropTarget?.id === tab.id && dropTarget.position === "before"
             const after = dropTarget?.id === tab.id && dropTarget.position === "after"
+            const absoluteIndex = range.start + localIndex
 
             return (
               <React.Fragment key={tab.id}>
-                {before && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-blue-300" />}
+                {before && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />}
                 <div
                   draggable={tab.draggable !== false}
                   data-slot="app-space-header-tab-wrapper"
                   data-tab-id={tab.id}
-                  className={cn(
-                    "relative min-w-0 outline-none ring-0",
-                    tabs.length > 1 && "shrink-0",
-                    draggingId ? "cursor-grabbing" : "cursor-pointer"
-                  )}
+                  data-tab-active={active || undefined}
+                  className={cn("relative min-w-0", tabs.length > 1 && "shrink-0")}
                   style={
                     tabs.length === 1
                       ? { maxWidth: 500, transition: "width 150ms ease-out" }
@@ -750,24 +734,15 @@ function AppSpaceHeader({
                     onTogglePin={() => togglePin(tab)}
                   />
                 </div>
-                {after && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-blue-300" />}
+                {after && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />}
               </React.Fragment>
             )
           })}
 
           {!layout.cramped && (
-            <Button
-              data-slot="app-space-header-create"
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              className="size-7 shrink-0 border-transparent bg-transparent text-[var(--app-tab-text-secondary)] shadow-none hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)] focus-visible:ring-0"
-              aria-label={createLabel}
-              title={createLabel}
-              onClick={onCreate}
-            >
-              <PlusIcon />
-            </Button>
+            <HeaderControlButton label={createLabel} onClick={onCreate}>
+              <AppHeaderPlusIcon className="size-4" />
+            </HeaderControlButton>
           )}
         </div>
       </div>
@@ -784,18 +759,9 @@ function AppSpaceHeader({
         />
 
         {layout.cramped && (
-          <Button
-            data-slot="app-space-header-create"
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            className="size-7 shrink-0 border-transparent bg-transparent text-[var(--app-tab-text-secondary)] shadow-none hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)] focus-visible:ring-0"
-            aria-label={createLabel}
-            title={createLabel}
-            onClick={onCreate}
-          >
-            <PlusIcon />
-          </Button>
+          <HeaderControlButton label={createLabel} onClick={onCreate}>
+            <AppHeaderPlusIcon className="size-4" />
+          </HeaderControlButton>
         )}
       </div>
     </div>
@@ -810,7 +776,7 @@ function AppSidePanelHeader({
   onCreate,
   onCloseRequest,
   onMenu,
-  createLabel = "New side-panel tab",
+  createLabel = "Create new side-panel tab",
   tabListLabel = "Tab list",
   menuLabel = "Side-panel options",
   searchTabsPlaceholder = "Search tabs",
@@ -819,13 +785,31 @@ function AppSidePanelHeader({
   style,
   ...props
 }: AppSidePanelHeaderProps) {
-  const [tabsRef, tabsWidth] = useElementWidth<HTMLDivElement>()
+  const [tabsRef, width] = useElementWidth<HTMLDivElement>()
   const [draggingId, setDraggingId] = React.useState<string | null>(null)
-  const layout = React.useMemo(
-    () => getSideLayout(tabsWidth, tabs.length),
-    [tabs.length, tabsWidth]
-  )
-  const showTabList = layout.cramped && tabs.length > 1
+
+  const layout = React.useMemo<HeaderTabLayout>(() => {
+    if (!tabs.length || width <= 0) {
+      return { tabWidth: SIDE_TAB_MAX_WIDTH, cramped: false, maxVisible: tabs.length }
+    }
+
+    const gaps = Math.max(0, tabs.length - 1) * SIDE_TAB_GAP
+    const available = width - gaps
+    const rawWidth = Math.max(
+      1,
+      Math.floor(Math.min(SIDE_TAB_MAX_WIDTH, available / tabs.length))
+    )
+    const cramped = rawWidth < SIDE_TAB_MIN_WIDTH
+    const crampedAvailable = Math.max(1, width - SIDE_TAB_CONTROLS_WIDTH - gaps)
+
+    return {
+      tabWidth: cramped
+        ? Math.max(1, Math.floor(crampedAvailable / tabs.length))
+        : rawWidth,
+      cramped,
+      maxVisible: tabs.length,
+    }
+  }, [tabs.length, width])
 
   function closeTab(tab: AppHeaderTab) {
     if (tabs.length <= 1) return
@@ -845,8 +829,7 @@ function AppSidePanelHeader({
     <header
       data-slot="app-side-panel-header"
       className={cn(
-        "flex h-[46px] w-full shrink-0 items-center justify-between px-1",
-        "bg-[var(--app-tab-bg-back)] [font-family:Inter,ui-sans-serif,system-ui,sans-serif]",
+        "flex h-[46px] shrink-0 items-center justify-between bg-[var(--app-tab-bg-back)] px-1",
         className
       )}
       style={{ ...appHeaderTabTheme, ...style }}
@@ -854,29 +837,16 @@ function AppSidePanelHeader({
     >
       <div className="flex min-w-0 grow flex-col items-center justify-center gap-1">
         <div className="grid w-full grid-cols-[minmax(0,1fr)_fit-content(100%)] items-center gap-1">
-          <div ref={tabsRef} className="relative flex min-w-0 w-full items-center justify-start">
-            <div
-              role="tablist"
-              aria-label="Side-panel tabs"
-              className="flex w-full min-w-0 items-center overflow-hidden"
-              style={{ gap: SIDE_TAB_GAP }}
-            >
+          <div ref={tabsRef} className="relative flex min-w-0 w-full items-center justify-start overflow-hidden">
+            <div className="flex min-w-0 items-center" style={{ gap: SIDE_TAB_GAP }}>
               {tabs.map((tab) => (
                 <div
                   key={tab.id}
                   draggable={tab.draggable !== false}
                   data-slot="app-side-panel-tab-wrapper"
-                  data-dnd-item={tab.id}
                   data-sidepanel-tab-active={tab.id === value || undefined}
-                  className={cn(
-                    "relative min-w-0 outline-none ring-0",
-                    tabs.length > 1 && "shrink-0"
-                  )}
-                  style={
-                    tabs.length === 1
-                      ? { maxWidth: 400, transition: "width 150ms ease-out" }
-                      : { width: layout.tabWidth, transition: "width 150ms ease-out" }
-                  }
+                  className="relative min-w-0 shrink-0 outline-none ring-0"
+                  style={{ width: layout.tabWidth, transition: "width 150ms ease-out" }}
                   onDragStart={(event) => {
                     if (tab.draggable === false) {
                       event.preventDefault()
@@ -900,8 +870,6 @@ function AppSidePanelHeader({
                   <AppHeaderTabItem
                     tab={tab}
                     active={tab.id === value}
-                    neutral={tabs.length === 1}
-                    fitContent={tabs.length === 1}
                     closable
                     dragging={draggingId === tab.id}
                     actionLabels={{ close: closeLabel }}
@@ -917,39 +885,30 @@ function AppSidePanelHeader({
             <AppHeaderTabList
               tabs={tabs}
               value={value}
-              visible={showTabList}
+              visible={layout.cramped && tabs.length > 1}
               label={tabListLabel}
               searchPlaceholder={searchTabsPlaceholder}
               onValueChange={onValueChange}
               onClose={closeTab}
             />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              className="size-7 shrink-0 border-transparent bg-transparent text-[var(--app-tab-text-secondary)] shadow-none hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)] focus-visible:ring-0"
-              aria-label={createLabel}
-              title={createLabel}
-              onClick={onCreate}
-            >
-              <PlusIcon />
-            </Button>
+            <HeaderControlButton label={createLabel} onClick={onCreate}>
+              <AppHeaderPlusIcon className="size-4" />
+            </HeaderControlButton>
           </div>
         </div>
       </div>
 
-      <div data-slot="app-side-panel-shell-controls" className="ml-1 flex shrink-0 items-center">
+      <div data-slot="app-side-panel-shell-controls" className="ml-1 flex shrink-0 items-center gap-x-1">
         <div aria-hidden="true" className="w-7 shrink-0" />
-        <Button
+        <button
           type="button"
-          variant="ghost"
           aria-label={menuLabel}
           title={menuLabel}
-          className="h-7 w-4 rounded-lg border-transparent bg-transparent px-0 text-[9px] text-[var(--app-tab-text-secondary)] shadow-none hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)] focus-visible:ring-0"
+          className="relative flex h-7 w-4 shrink-0 items-center justify-center rounded-lg border border-transparent bg-transparent text-[9px] text-[var(--app-tab-text-secondary)] hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)] active:brightness-[0.97] focus:outline-none"
           onClick={onMenu}
         >
-          <ChevronDownIcon className="size-2.5" />
-        </Button>
+          <AppHeaderCaretDownIcon className="size-2.5" />
+        </button>
       </div>
     </header>
   )
