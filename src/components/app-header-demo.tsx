@@ -13,9 +13,13 @@ import {
 } from "@/components/app-header-icons"
 import {
   AppSidePanelHeader,
+  type SidePanelSpecialEntryId,
+} from "@/components/app-side-panel-header"
+import {
   AppSpaceHeader,
   type AppHeaderTab,
 } from "@/components/app-header-tabs"
+import { useAppShell } from "@/components/app-shell"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
 const initialMainTabs: AppHeaderTab[] = [
@@ -59,7 +63,7 @@ const initialMainTabs: AppHeaderTab[] = [
 
 const initialSideTabs: AppHeaderTab[] = [
   {
-    id: "graph-view",
+    id: "graphView",
     label: "Visualização em grafo",
     icon: AppHeaderGraphIcon,
     iconClassName: "bg-[#ebeae8] text-[#68635e]",
@@ -73,18 +77,53 @@ const initialSideTabs: AppHeaderTab[] = [
   },
 ]
 
+const specialSideTabs: Record<SidePanelSpecialEntryId, Omit<AppHeaderTab, "id">> = {
+  graphView: {
+    label: "Visualização em grafo",
+    icon: AppHeaderGraphIcon,
+    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+  },
+  backlinks: {
+    label: "Links de entrada",
+    icon: AppHeaderFileIcon,
+    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+  },
+  objectsInside: {
+    label: "Objetos internos",
+    icon: AppHeaderFolderIcon,
+    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+  },
+  relatedContent: {
+    label: "Conteúdo relacionado",
+    icon: AppHeaderGraphIcon,
+    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+  },
+  aiAssistantChat: {
+    label: "Chat de IA",
+    icon: AppHeaderFileIcon,
+    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+  },
+  localSpaceQuery: {
+    label: "Buscar",
+    icon: AppHeaderFileIcon,
+    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+  },
+}
+
 type AppHeaderDemoContextValue = {
   mainTabs: AppHeaderTab[]
   mainValue: string
   sideTabs: AppHeaderTab[]
   sideValue: string
   focusMode: boolean
+  sideSearchOpen: boolean
   message: string | null
   setMainTabs: React.Dispatch<React.SetStateAction<AppHeaderTab[]>>
   setMainValue: React.Dispatch<React.SetStateAction<string>>
   setSideTabs: React.Dispatch<React.SetStateAction<AppHeaderTab[]>>
   setSideValue: React.Dispatch<React.SetStateAction<string>>
   setFocusMode: React.Dispatch<React.SetStateAction<boolean>>
+  setSideSearchOpen: React.Dispatch<React.SetStateAction<boolean>>
   showMessage: (message: string) => void
 }
 
@@ -106,6 +145,7 @@ function AppHeaderDemoProvider({ children }: { children: React.ReactNode }) {
   const [sideTabs, setSideTabs] = React.useState(initialSideTabs)
   const [sideValue, setSideValue] = React.useState("explore")
   const [focusMode, setFocusMode] = React.useState(false)
+  const [sideSearchOpen, setSideSearchOpen] = React.useState(false)
   const [message, setMessage] = React.useState<string | null>(null)
   const messageTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -148,21 +188,33 @@ function AppHeaderDemoProvider({ children }: { children: React.ReactNode }) {
       sideTabs,
       sideValue,
       focusMode,
+      sideSearchOpen,
       message,
       setMainTabs,
       setMainValue,
       setSideTabs,
       setSideValue,
       setFocusMode,
+      setSideSearchOpen,
       showMessage,
     }),
-    [focusMode, mainTabs, mainValue, message, showMessage, sideTabs, sideValue]
+    [
+      focusMode,
+      mainTabs,
+      mainValue,
+      message,
+      showMessage,
+      sideSearchOpen,
+      sideTabs,
+      sideValue,
+    ]
   )
 
   return (
     <TooltipProvider delay={200}>
       <AppHeaderDemoContext.Provider value={value}>
         {children}
+        {sideSearchOpen && <SidePanelSearchOverlay />}
         {message && (
           <div
             data-slot="app-header-demo-message"
@@ -257,25 +309,59 @@ function AppHeaderDemoSidePanel() {
     focusMode,
     setSideTabs,
     setSideValue,
+    setSideSearchOpen,
     showMessage,
   } = useAppHeaderDemo()
+  const { toggleRight } = useAppShell()
 
   if (focusMode) return null
+
+  function openSpecialEntry(entryId: SidePanelSpecialEntryId) {
+    if (entryId === "localSpaceQuery") {
+      setSideSearchOpen(true)
+      return
+    }
+
+    const existing = sideTabs.find((tab) => {
+      if (entryId === "aiAssistantChat") return tab.id.startsWith("aiAssistantChat_")
+      return tab.id === entryId
+    })
+
+    if (existing) {
+      setSideValue(existing.id)
+      return
+    }
+
+    const descriptor = specialSideTabs[entryId]
+    const id = entryId === "aiAssistantChat" ? `aiAssistantChat_${Date.now()}` : entryId
+    const next: AppHeaderTab = {
+      id,
+      ...descriptor,
+      draggable: true,
+    }
+
+    setSideTabs((current) => [...current, next])
+    setSideValue(id)
+  }
 
   function createSideTab() {
     const explore = sideTabs.find((tab) => tab.id === "explore")
 
-    if (explore) {
-      setSideValue(explore.id)
-      showMessage("Explore is already open")
+    if (!explore) {
+      const nextExplore = initialSideTabs.find((tab) => tab.id === "explore")
+      if (!nextExplore) return
+
+      setSideTabs((current) => [...current, nextExplore])
+      setSideValue(nextExplore.id)
       return
     }
 
-    const nextExplore = initialSideTabs.find((tab) => tab.id === "explore")
-    if (!nextExplore) return
+    if (sideValue === explore.id) {
+      setSideSearchOpen(true)
+      return
+    }
 
-    setSideTabs((current) => [...current, nextExplore])
-    setSideValue(nextExplore.id)
+    setSideValue(explore.id)
   }
 
   return (
@@ -285,8 +371,156 @@ function AppHeaderDemoSidePanel() {
       onValueChange={setSideValue}
       onTabsChange={setSideTabs}
       onCreate={createSideTab}
-      onMenu={() => showMessage("Side-panel options")}
+      onHide={toggleRight}
+      onSpecialEntrySelect={openSpecialEntry}
+      onCloseRequest={(tab) => {
+        if (tab.id !== "explore") return true
+        showMessage("Explore stays available as the side-panel search entry point")
+        return true
+      }}
     />
+  )
+}
+
+function SidePanelSearchOverlay() {
+  const { setSideSearchOpen, setSideTabs, setSideValue } = useAppHeaderDemo()
+  const [query, setQuery] = React.useState("")
+
+  const recentItems = React.useMemo(
+    () => [
+      {
+        id: "recent-atomic-notes",
+        label: "Notas atômicas",
+        icon: AppHeaderFolderIcon,
+        iconClassName: "bg-[#fff0d6] text-[#b96b0e]",
+      },
+      {
+        id: "recent-pages",
+        label: "Páginas",
+        icon: AppHeaderFileIcon,
+        iconClassName: "bg-[#e8f0ff] text-[#3f6fce]",
+      },
+      {
+        id: "recent-citations",
+        label: "Citações",
+        icon: AppHeaderFileIcon,
+        iconClassName: "bg-[#ffe8ed] text-[#d74b67]",
+      },
+    ],
+    []
+  )
+
+  const normalized = query.trim().toLocaleLowerCase("pt-BR")
+  const filtered = normalized
+    ? recentItems.filter((item) =>
+        item.label.toLocaleLowerCase("pt-BR").includes(normalized)
+      )
+    : recentItems
+
+  function openRecent(item: (typeof recentItems)[number]) {
+    const tab: AppHeaderTab = {
+      id: item.id,
+      label: item.label,
+      icon: item.icon,
+      iconClassName: item.iconClassName,
+      draggable: true,
+    }
+
+    setSideTabs((current) => {
+      if (current.some((entry) => entry.id === tab.id)) return current
+      return [...current, tab]
+    })
+    setSideValue(tab.id)
+    setSideSearchOpen(false)
+  }
+
+  return (
+    <div
+      data-slot="side-panel-search-overlay"
+      className="fixed inset-0 z-[120] flex items-start justify-center bg-black/50 px-4 pt-[10vh]"
+      onMouseDown={() => setSideSearchOpen(false)}
+    >
+      <div
+        className="w-full max-w-[50rem] overflow-hidden rounded-xl border border-black/10 bg-white text-[#282522] shadow-2xl"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="flex h-[58px] items-center gap-3 border-b border-black/10 px-4">
+          <span className="text-xl">⌕</span>
+          <input
+            autoFocus
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Buscar por conteúdo e ações, ou colar da área de transferência"
+            className="min-w-0 flex-1 bg-transparent text-[17px] outline-none placeholder:text-[#9a9692]"
+          />
+          <span className="text-sm text-[#6b6661]">ⓘ</span>
+          <span className="text-sm text-[#6b6661]">↗</span>
+        </div>
+
+        <div className="px-4 pt-2">
+          <span className="inline-flex h-6 items-center rounded-md bg-[#f1efed] px-2 text-xs text-[#595550]">
+            ▣ Abrir no painel lateral
+          </span>
+        </div>
+
+        <div className="max-h-[520px] overflow-y-auto px-4 pb-4 pt-4">
+          <div className="mb-3 text-[15px] text-[#595550]">Recentemente abertos</div>
+          <div className="mb-2 text-xs text-[#837d76]">Ontem</div>
+
+          <div className="space-y-0.5">
+            {filtered.map((item, index) => {
+              const Icon = item.icon
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={cn(
+                    "flex h-11 w-full items-center gap-3 rounded-lg px-1.5 text-left text-[15px]",
+                    index === 0 && !normalized ? "bg-[#f2f0ee]" : "hover:bg-[#f2f0ee]"
+                  )}
+                  onClick={() => openRecent(item)}
+                >
+                  <span
+                    className={cn(
+                      "inline-flex size-6 items-center justify-center rounded-md",
+                      item.iconClassName
+                    )}
+                  >
+                    <Icon className="size-4" />
+                  </span>
+                  <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                  <span className={cn("rounded-md border px-2 py-1 text-xs", item.iconClassName)}>
+                    {item.label}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          <div className="mb-2 mt-5 text-[15px] text-[#595550]">Todas as ações</div>
+          {[
+            "Abrir calendário",
+            "Abrir hoje",
+            "Abrir configurações",
+            "Abrir visualização em gráfico",
+            "Abrir objetos internos",
+            "Abrir conteúdo relacionado",
+            "Alternar modo de foco",
+          ].map((label) => (
+            <div key={label} className="flex h-11 items-center gap-3 px-1.5 text-[15px]">
+              <span className="flex size-6 items-center justify-center rounded-md border border-black/10 text-[#837d76]">
+                ◇
+              </span>
+              <span className="flex-1">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex h-8 items-center border-t border-black/10 px-3 text-xs text-[#595550]">
+          ↑↓ para navegar　 Esc para abortar　 ↵ para selecionar　 ⌘↵ / Ctrl↵ em nova aba　 ⇧↵ no painel lateral
+        </div>
+      </div>
+    </div>
   )
 }
 
