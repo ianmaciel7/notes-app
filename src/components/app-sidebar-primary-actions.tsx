@@ -7,7 +7,6 @@ import {
   BrainCircuitIcon,
   BriefcaseBusinessIcon,
   Code2Icon,
-  FlaskConicalIcon,
   LightbulbIcon,
 } from "lucide-react"
 
@@ -15,6 +14,7 @@ import { AppSidebarOverview } from "@/components/app-sidebar-overview"
 import {
   AppSidebarCalendarIcon,
   AppSidebarExploreIcon,
+  AppSidebarFlaskIcon,
   AppSidebarPlusIcon,
   AppSidebarSearchIcon,
 } from "@/components/app-sidebar-icons"
@@ -29,6 +29,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
 
@@ -70,11 +71,11 @@ type AppSidebarPrimaryActionsProps = {
 const defaultActions: AppSidebarPrimaryAction[] = [
   {
     id: "new",
-    label: "New",
+    label: "Novo",
     icon: AppSidebarPlusIcon,
     hints: [
       {
-        description: "New",
+        description: "Novo",
         shortcut: {
           windows: ["Ctrl", "U"],
           mac: ["⌘", "U"],
@@ -84,18 +85,18 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   },
   {
     id: "search",
-    label: "Search",
+    label: "Buscar",
     icon: AppSidebarSearchIcon,
     hints: [
       {
-        description: "Search",
+        description: "Buscar",
         shortcut: {
           windows: ["Ctrl", "P", "or", "Ctrl", "K"],
           mac: ["⌘", "P", "or", "⌘", "K"],
         },
       },
       {
-        description: "Open extended search",
+        description: "Abrir busca estendida",
         shortcut: {
           windows: ["Ctrl", "⇧", "P"],
           mac: ["⌘", "⇧", "P"],
@@ -105,19 +106,18 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   },
   {
     id: "explore",
-    label: "Explore",
+    label: "Explorar",
     icon: AppSidebarExploreIcon,
     hints: [
       {
-        description:
-          "Open Explore. Use the shortcut again to start a new chat.",
+        description: "Abrir Explorar. Use o atalho novamente para iniciar um novo chat.",
         shortcut: {
           windows: ["Ctrl", "J"],
           mac: ["⌘", "J"],
         },
       },
       {
-        description: "Open Explore in the side panel",
+        description: "Abrir Explorar no painel lateral",
         shortcut: {
           windows: ["Ctrl", "⇧", "J"],
           mac: ["⇧", "⌘", "J"],
@@ -127,12 +127,11 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   },
   {
     id: "calendar",
-    label: "Calendar",
+    label: "Calendário",
     icon: AppSidebarCalendarIcon,
     hints: [
       {
-        description:
-          "Go to Calendar. Double-click or use the keyboard shortcut twice to jump to today.",
+        description: "Ir para o Calendário. Clique duas vezes para ir para hoje.",
         shortcut: {
           windows: ["Ctrl", "Alt", "H"],
           mac: ["⌃", "⌘", "H"],
@@ -164,7 +163,7 @@ function AppSidebarShortcut({ shortcut }: { shortcut: AppSidebarShortcut }) {
             key={`${key}-${index}`}
             className="px-0.5 text-xs text-muted-foreground"
           >
-            or
+            ou
           </span>
         ) : (
           <Kbd key={`${key}-${index}`}>{key}</Kbd>
@@ -243,10 +242,12 @@ function AppSidebarPrimaryActionItem({
             size="default"
             data-active={active || undefined}
             className={cn(
-              "w-full justify-start gap-2 px-2 font-normal",
-              "text-[15px] leading-none",
-              "[&_svg]:size-[17px] [&_svg]:stroke-[1.7]",
-              "data-[active=true]:bg-muted data-[active=true]:hover:bg-muted"
+              "h-8 w-full justify-start gap-x-1.5 px-2 font-normal",
+              "text-sm text-muted-foreground",
+              "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              "[&_svg]:size-4",
+              "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
+              "data-[active=true]:brightness-[0.965] data-[active=true]:hover:bg-sidebar-accent"
             )}
             onPointerDown={closeHint}
             onClick={() => {
@@ -260,11 +261,10 @@ function AppSidebarPrimaryActionItem({
         </HoverCardTrigger>
 
         <HoverCardContent
-          side="bottom"
-          align="start"
+          side="right"
+          align="center"
           sideOffset={8}
-          alignOffset={0}
-          className="pointer-events-none w-max max-w-40 text-sm leading-snug"
+          className="pointer-events-none w-max max-w-56 text-sm leading-snug"
         >
           <AppSidebarPrimaryActionHintContent hints={action.hints} />
         </HoverCardContent>
@@ -300,7 +300,7 @@ function AppSidebarPrimaryActions({
 const demoSpaces: AppSidebarSpace[] = [
   { id: "studies", name: "Studies", icon: BookOpenIcon },
   { id: "ideas", name: "Ideas", icon: LightbulbIcon },
-  { id: "labs", name: "Labs", icon: FlaskConicalIcon },
+  { id: "labs", name: "zzzzzzzzzz", icon: AppSidebarFlaskIcon },
   { id: "projects", name: "Projects", icon: BriefcaseBusinessIcon },
   { id: "dev", name: "Dev", icon: Code2Icon },
   { id: "knowledge", name: "Knowledge", icon: BrainCircuitIcon },
@@ -314,25 +314,27 @@ function AppSidebarPrimaryActionsDemo() {
     React.useState<AppSidebarPrimaryNavigationAction>("calendar")
 
   return (
-    <AppSidebar
-      spaces={spaces}
-      value={spaceId}
-      onValueChange={setSpaceId}
-      onReorder={setSpaces}
-    >
-      <div className="flex min-h-0 flex-1 flex-col">
-        <div className="px-5 pt-1 pr-4">
-          <AppSidebarPrimaryActions
-            activeAction={activeAction}
-            onAction={(action) => {
-              if (action !== "new") setActiveAction(action)
-            }}
-          />
-        </div>
+    <TooltipProvider delay={200}>
+      <AppSidebar
+        spaces={spaces}
+        value={spaceId}
+        onValueChange={setSpaceId}
+        onReorder={setSpaces}
+      >
+        <div className="flex min-h-0 flex-1 flex-col">
+          <div className="my-px mt-0 shrink-0 px-2 pr-1 pb-1.5">
+            <AppSidebarPrimaryActions
+              activeAction={activeAction}
+              onAction={(action) => {
+                if (action !== "new") setActiveAction(action)
+              }}
+            />
+          </div>
 
-        <AppSidebarOverview />
-      </div>
-    </AppSidebar>
+          <AppSidebarOverview />
+        </div>
+      </AppSidebar>
+    </TooltipProvider>
   )
 }
 
