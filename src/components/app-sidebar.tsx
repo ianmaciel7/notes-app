@@ -580,7 +580,10 @@ function AppSidebarSpaceSwitcher({
       >
         <div
           data-slot="app-sidebar-space-switcher"
-          className={cn("relative inline-flex min-w-0 max-w-full", className)}
+          className={cn(
+            "relative -ml-[14px] inline-flex min-w-0 max-w-full",
+            className
+          )}
           onPointerEnter={scheduleHint}
           onPointerLeave={hideHint}
         >
@@ -607,7 +610,7 @@ function AppSidebarSpaceSwitcher({
                 <span className="inline-flex w-auto min-w-0 items-center overflow-hidden text-sm font-medium text-foreground">
                   <SelectedIcon
                     data-icon="inline-start"
-                    className="mr-2 size-[14px] shrink-0"
+                    className="!mr-2 size-[14px] shrink-0"
                   />
                   <span className="truncate">{selectedSpace.name}</span>
                 </span>
