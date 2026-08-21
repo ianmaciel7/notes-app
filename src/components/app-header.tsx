@@ -36,6 +36,7 @@ type AppHeaderProps = React.ComponentProps<"header"> & {
   backLabel?: string
   forwardLabel?: string
   focusLabel?: string
+  end?: React.ReactNode
 }
 
 type AppFocusModeControlsProps = React.ComponentProps<"div"> & {
@@ -60,6 +61,7 @@ function AppHeader({
   backLabel = "Back",
   forwardLabel = "Forward",
   focusLabel = "Enter focus mode",
+  end,
   style,
   ...props
 }: AppHeaderProps) {
@@ -103,6 +105,7 @@ function AppHeader({
           <AppHeaderAction aria-label={focusLabel} tooltip={focusLabel} onClick={onFocus}>
             <AppHeaderCircleDashedIcon className="size-4" />
           </AppHeaderAction>
+          {end}
         </div>
       </div>
     </header>
