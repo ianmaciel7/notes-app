@@ -15,6 +15,7 @@
   - Design
   - Tasks
 - Keep practical documentation synchronized (`CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`, `CLAUDE.md`, `.agents/rules/*`) whenever process rules change.
+- Follow `.agents/rules/git-workflow-rule.md` before any branch or worktree operation; protected branches are updated through pull requests only.
 
 ## Priority for Decisions
 
