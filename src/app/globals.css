@@ -129,6 +129,3 @@
   }
 }
 
-[data-slot="app-sidebar"] > [data-slot="app-shell-header"] {
-  padding-left: 1.25rem;
-}
