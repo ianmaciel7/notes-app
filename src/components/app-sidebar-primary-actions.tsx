@@ -6,16 +6,18 @@ import {
   BookOpenIcon,
   BrainCircuitIcon,
   BriefcaseBusinessIcon,
-  CalendarDaysIcon,
   Code2Icon,
   FlaskConicalIcon,
   LightbulbIcon,
-  PlusIcon,
-  SearchIcon,
-  SparklesIcon,
 } from "lucide-react"
 
 import { AppSidebarOverview } from "@/components/app-sidebar-overview"
+import {
+  AppSidebarCalendarIcon,
+  AppSidebarExploreIcon,
+  AppSidebarPlusIcon,
+  AppSidebarSearchIcon,
+} from "@/components/app-sidebar-icons"
 import {
   AppSidebar,
   type AppSidebarSpace,
@@ -69,7 +71,7 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   {
     id: "new",
     label: "New",
-    icon: PlusIcon,
+    icon: AppSidebarPlusIcon,
     hints: [
       {
         description: "New",
@@ -83,7 +85,7 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   {
     id: "search",
     label: "Search",
-    icon: SearchIcon,
+    icon: AppSidebarSearchIcon,
     hints: [
       {
         description: "Search",
@@ -104,7 +106,7 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   {
     id: "explore",
     label: "Explore",
-    icon: SparklesIcon,
+    icon: AppSidebarExploreIcon,
     hints: [
       {
         description:
@@ -126,7 +128,7 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   {
     id: "calendar",
     label: "Calendar",
-    icon: CalendarDaysIcon,
+    icon: AppSidebarCalendarIcon,
     hints: [
       {
         description:
@@ -241,7 +243,9 @@ function AppSidebarPrimaryActionItem({
             size="default"
             data-active={active || undefined}
             className={cn(
-              "w-full justify-start px-2 font-normal",
+              "w-full justify-start gap-2 px-2 font-normal",
+              "text-[15px] leading-none",
+              "[&_svg]:size-[17px] [&_svg]:stroke-[1.7]",
               "data-[active=true]:bg-muted data-[active=true]:hover:bg-muted"
             )}
             onPointerDown={closeHint}
@@ -317,7 +321,7 @@ function AppSidebarPrimaryActionsDemo() {
       onReorder={setSpaces}
     >
       <div className="flex min-h-0 flex-1 flex-col">
-        <div className="px-2 pt-1">
+        <div className="px-5 pt-1 pr-4">
           <AppSidebarPrimaryActions
             activeAction={activeAction}
             onAction={(action) => {
