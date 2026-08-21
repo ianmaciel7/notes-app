@@ -1,16 +1,16 @@
 "use client"
 
 import * as React from "react"
-import {
-  BookOpenIcon,
-  CompassIcon,
-  FileTextIcon,
-  FolderIcon,
-  LightbulbIcon,
-  NetworkIcon,
-} from "lucide-react"
 
 import { AppFocusModeControls, AppHeader } from "@/components/app-header"
+import {
+  AppHeaderBookOpenIcon,
+  AppHeaderCompassIcon,
+  AppHeaderFileIcon,
+  AppHeaderFolderIcon,
+  AppHeaderGraphIcon,
+  AppHeaderLightbulbIcon,
+} from "@/components/app-header-icons"
 import {
   AppSidePanelHeader,
   AppSpaceHeader,
@@ -22,42 +22,37 @@ const initialMainTabs: AppHeaderTab[] = [
   {
     id: "cloud-monitoring",
     label: "Cloud Monitoring",
-    icon: FolderIcon,
-    iconClassName:
-      "bg-[oklch(0.967_0.035_67)] text-[oklch(0.57_0.16_48)]",
+    icon: AppHeaderFolderIcon,
+    iconClassName: "bg-[#fff0d6] text-[#b96b0e]",
     pinned: true,
     preview: <TabPreview eyebrow="Folder" title="Cloud Monitoring" />,
   },
   {
     id: "azure",
     label: "Azure",
-    icon: FileTextIcon,
-    iconClassName:
-      "bg-[oklch(0.9513_0.0235_256.13)] text-[oklch(0.5035_0.1579_264.41)]",
+    icon: AppHeaderFileIcon,
+    iconClassName: "bg-[#e8f0ff] text-[#3f6fce]",
     preview: <TabPreview eyebrow="Page" title="Azure" />,
   },
   {
     id: "courses",
     label: "Cursos",
-    icon: BookOpenIcon,
-    iconClassName:
-      "bg-[oklch(0.966_0.0361_163.39)] text-[oklch(0.4933_0.0939_167.09)]",
+    icon: AppHeaderBookOpenIcon,
+    iconClassName: "bg-[#e7f4e9] text-[#39774b]",
     preview: <TabPreview eyebrow="Collection" title="Cursos" />,
   },
   {
     id: "ideas-one",
     label: "Ideias",
-    icon: LightbulbIcon,
-    iconClassName:
-      "bg-[oklch(0.981_0.048_103.47)] text-[oklch(0.5532_0.105_76.42)]",
+    icon: AppHeaderLightbulbIcon,
+    iconClassName: "bg-[#fff5d6] text-[#927019]",
     preview: <TabPreview eyebrow="Page" title="Ideias" />,
   },
   {
     id: "ideas-two",
     label: "Ideias",
-    icon: LightbulbIcon,
-    iconClassName:
-      "bg-[oklch(0.981_0.048_103.47)] text-[oklch(0.5532_0.105_76.42)]",
+    icon: AppHeaderLightbulbIcon,
+    iconClassName: "bg-[#fff5d6] text-[#927019]",
     preview: <TabPreview eyebrow="Page" title="Ideias" />,
   },
 ]
@@ -66,14 +61,14 @@ const initialSideTabs: AppHeaderTab[] = [
   {
     id: "graph-view",
     label: "Visualização em grafo",
-    icon: NetworkIcon,
-    iconClassName: "bg-[oklch(0.94_0.002_67)] text-[oklch(0.50_0.008_67)]",
+    icon: AppHeaderGraphIcon,
+    iconClassName: "bg-[#ebeae8] text-[#68635e]",
   },
   {
     id: "explore",
     label: "Explorar",
-    icon: CompassIcon,
-    iconClassName: "bg-[oklch(0.94_0.002_67)] text-[oklch(0.50_0.008_67)]",
+    icon: AppHeaderCompassIcon,
+    iconClassName: "bg-[#ebeae8] text-[#68635e]",
     draggable: false,
   },
 ]
@@ -214,9 +209,8 @@ function AppHeaderDemoMain() {
     const tab: AppHeaderTab = {
       id,
       label,
-      icon: FileTextIcon,
-      iconClassName:
-        "bg-[oklch(0.9513_0.0235_256.13)] text-[oklch(0.5035_0.1579_264.41)]",
+      icon: AppHeaderFileIcon,
+      iconClassName: "bg-[#e8f0ff] text-[#3f6fce]",
       preview: <TabPreview eyebrow="Page" title={label} />,
     }
 
