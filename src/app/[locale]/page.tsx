@@ -16,7 +16,6 @@ import {
   AppShellSidebar,
   AppShellSidebarTrigger,
   AppShellSidePanel,
-  AppShellSidePanelTrigger,
   AppShellSurface,
   AppShellWorkspace,
 } from "@/components/app-shell"
@@ -45,7 +44,6 @@ export default function HomePage() {
           </AppShellPanelGroup>
 
           <AppShellSidebarTrigger />
-          <AppShellSidePanelTrigger />
         </AppShell>
 
         <AppShellMobile>
