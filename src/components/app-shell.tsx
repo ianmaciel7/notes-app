@@ -479,7 +479,7 @@ function AppShellSidebarTrigger({
         type="button"
         variant="ghost"
         size="icon-sm"
-        className={className}
+        className={cn("bg-transparent aria-expanded:bg-transparent", className)}
         aria-expanded={!leftCollapsed}
         aria-label={
           leftCollapsed ? "Expand left sidebar" : "Collapse left sidebar"
@@ -512,7 +512,7 @@ function AppShellSidePanelTrigger({
         type="button"
         variant="ghost"
         size="icon-sm"
-        className={className}
+        className={cn("bg-transparent aria-expanded:bg-transparent", className)}
         aria-expanded={!rightCollapsed}
         aria-label={
           rightCollapsed ? "Expand right panel" : "Collapse right panel"

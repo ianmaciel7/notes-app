@@ -3,11 +3,25 @@
 import * as React from "react"
 import {
   ArchiveIcon,
+  AudioLinesIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
   BookOpenIcon,
   BrainCircuitIcon,
   BriefcaseBusinessIcon,
+  ChevronRightIcon,
   Code2Icon,
+  CornerDownLeftIcon,
+  FileIcon,
+  FileImageIcon,
+  FileTextIcon,
+  FileType2Icon,
+  Globe2Icon,
+  ImageIcon,
   LightbulbIcon,
+  SearchIcon,
+  Table2Icon,
+  CheckCircle2Icon,
 } from "lucide-react"
 
 import { AppSidebarOverview } from "@/components/app-sidebar-overview"
@@ -29,6 +43,8 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { Kbd, KbdGroup } from "@/components/ui/kbd"
+import { Input } from "@/components/ui/input"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -52,6 +68,85 @@ type AppSidebarShortcut = {
 type AppSidebarPrimaryActionHint = {
   description: string
   shortcut?: AppSidebarShortcut
+}
+
+const newContentItems = [
+  { label: "Página", icon: FileTextIcon, tone: "text-blue-500" },
+  { label: "Tabela", icon: Table2Icon, tone: "text-blue-500" },
+  { label: "Tarefa", icon: CheckCircle2Icon, tone: "text-orange-500" },
+  { label: "Imagem", icon: ImageIcon, tone: "text-red-400" },
+  { label: "Weblink", icon: Globe2Icon, tone: "text-blue-500" },
+  { label: "Tweet", icon: FileImageIcon, tone: "text-sky-500" },
+  { label: "PDF", icon: FileType2Icon, tone: "text-red-400" },
+  { label: "Áudio", icon: AudioLinesIcon, tone: "text-red-400" },
+  { label: "Arquivo", icon: FileIcon, tone: "text-red-400" },
+]
+
+function NewContentMenu({ action }: { action: AppSidebarPrimaryAction }) {
+  const [query, setQuery] = React.useState("")
+  const Icon = action.icon
+  const items = newContentItems.filter((item) =>
+    item.label.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())
+  )
+
+  return (
+    <Popover>
+      <PopoverTrigger
+        render={
+          <Button
+            type="button"
+            variant="ghost"
+            size="default"
+            className="h-8 w-full justify-start gap-x-1.5 px-2 font-normal text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground [&_svg]:size-4"
+          />
+        }
+      >
+        <Icon data-icon="inline-start" />
+        <span className="min-w-0 truncate">{action.label}</span>
+      </PopoverTrigger>
+      <PopoverContent
+        side="bottom"
+        align="start"
+        sideOffset={4}
+        className="w-[22rem] max-w-[calc(100vw-1rem)] gap-2 rounded-xl p-2"
+      >
+        <div className="relative">
+          <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Buscar"
+            aria-label="Buscar tipo de conteúdo"
+            className="h-8 bg-muted/60 pl-8"
+            autoFocus
+          />
+        </div>
+
+        <div className="max-h-[19rem] overflow-y-auto pr-0.5">
+          {items.map(({ label, icon: Icon, tone }) => (
+            <Button
+              key={label}
+              type="button"
+              variant="ghost"
+              className="h-8 w-full justify-start gap-2 px-1.5 font-normal"
+            >
+              <span className={cn("flex size-6 items-center justify-center rounded-md bg-muted", tone)}>
+                <Icon className="size-4" />
+              </span>
+              <span className="truncate">{label}</span>
+              <ChevronRightIcon className="ml-auto size-4 text-muted-foreground" />
+            </Button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2 border-t px-1 pt-2 text-[11px] text-muted-foreground">
+          <span><Kbd><ArrowUpIcon /></Kbd><Kbd><ArrowDownIcon /></Kbd> para navegar</span>
+          <span><Kbd>Esc</Kbd> para abortar</span>
+          <span><Kbd><CornerDownLeftIcon /></Kbd> para selecionar</span>
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
 }
 
 type AppSidebarPrimaryAction = {
@@ -203,6 +298,10 @@ function AppSidebarPrimaryActionItem({
   const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const [open, setOpen] = React.useState(false)
   const Icon = action.icon
+
+  if (action.id === "new") {
+    return <NewContentMenu action={action} />
+  }
 
   function clearTimer() {
     if (!timerRef.current) return
