@@ -1,4 +1,4 @@
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Reusable application header
 The system SHALL provide a reusable 46px application header matching the compact Capacities-inspired desktop reference.

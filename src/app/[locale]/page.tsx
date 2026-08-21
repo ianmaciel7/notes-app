@@ -1,4 +1,8 @@
-import { AppHeader } from "@/components/app-header"
+import {
+  AppHeaderDemoMain,
+  AppHeaderDemoProvider,
+  AppHeaderDemoSidePanel,
+} from "@/components/app-header-demo"
 import { AppSidebarPrimaryActionsDemo } from "@/components/app-sidebar-primary-actions"
 import {
   AppShell,
@@ -12,46 +16,46 @@ import {
   AppShellSidebar,
   AppShellSidebarTrigger,
   AppShellSidePanel,
-  AppShellSidePanelTrigger,
   AppShellSurface,
   AppShellWorkspace,
 } from "@/components/app-shell"
 
 export default function HomePage() {
   return (
-    <AppShellProvider>
-      <AppShell>
-        <AppShellPanelGroup>
-          <AppShellSidebar>
-            <AppSidebarPrimaryActionsDemo />
-          </AppShellSidebar>
+    <AppHeaderDemoProvider>
+      <AppShellProvider>
+        <AppShell>
+          <AppShellPanelGroup>
+            <AppShellSidebar>
+              <AppSidebarPrimaryActionsDemo />
+            </AppShellSidebar>
 
-          <AppShellWorkspace>
-            <AppShellMain>
-              <AppHeader />
-              <AppShellSurface />
-            </AppShellMain>
+            <AppShellWorkspace>
+              <AppShellMain>
+                <AppHeaderDemoMain />
+                <AppShellSurface />
+              </AppShellMain>
 
-            <AppShellSidePanel>
-              <AppShellHeader />
-              <AppShellSurface side="side-panel" />
-            </AppShellSidePanel>
-          </AppShellWorkspace>
-        </AppShellPanelGroup>
+              <AppShellSidePanel>
+                <AppHeaderDemoSidePanel />
+                <AppShellSurface side="side-panel" />
+              </AppShellSidePanel>
+            </AppShellWorkspace>
+          </AppShellPanelGroup>
 
-        <AppShellSidebarTrigger />
-        <AppShellSidePanelTrigger />
-      </AppShell>
+          <AppShellSidebarTrigger />
+        </AppShell>
 
-      <AppShellMobile>
-        <AppShellHeader className="relative">
-          <AppShellMobileSidebar>
-            <AppSidebarPrimaryActionsDemo />
-          </AppShellMobileSidebar>
-          <AppShellMobileSidePanel />
-        </AppShellHeader>
-        <AppShellSurface />
-      </AppShellMobile>
-    </AppShellProvider>
+        <AppShellMobile>
+          <AppShellHeader className="relative">
+            <AppShellMobileSidebar>
+              <AppSidebarPrimaryActionsDemo />
+            </AppShellMobileSidebar>
+            <AppShellMobileSidePanel />
+          </AppShellHeader>
+          <AppShellSurface />
+        </AppShellMobile>
+      </AppShellProvider>
+    </AppHeaderDemoProvider>
   )
 }
