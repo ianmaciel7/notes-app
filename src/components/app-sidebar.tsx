@@ -580,7 +580,10 @@ function AppSidebarSpaceSwitcher({
       >
         <div
           data-slot="app-sidebar-space-switcher"
-          className={cn("relative inline-flex min-w-0 max-w-full", className)}
+          className={cn(
+            "relative -ml-[14px] inline-flex min-w-0 max-w-full",
+            className
+          )}
           onPointerEnter={scheduleHint}
           onPointerLeave={hideHint}
         >
@@ -600,15 +603,20 @@ function AppSidebarSpaceSwitcher({
                     type="button"
                     variant="ghost"
                     size="default"
-                    className="w-auto max-w-full min-w-0 justify-start truncate px-2"
+                    className="w-auto max-w-full min-w-0 justify-start gap-0 px-2"
                   />
                 }
               >
-                <SelectedIcon data-icon="inline-start" />
-                <span className="truncate">{selectedSpace.name}</span>
+                <span className="inline-flex w-auto min-w-0 items-center overflow-hidden text-sm font-medium text-foreground">
+                  <SelectedIcon
+                    data-icon="inline-start"
+                    className="!mr-2 size-[14px] shrink-0"
+                  />
+                  <span className="truncate">{selectedSpace.name}</span>
+                </span>
                 <ChevronsUpDownIcon
                   data-icon="inline-end"
-                  className="text-muted-foreground"
+                  className="ml-1 size-[14px] shrink-0 text-muted-foreground"
                 />
               </ComboboxTrigger>
             </HoverCardTrigger>
