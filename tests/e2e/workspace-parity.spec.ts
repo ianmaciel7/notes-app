@@ -139,6 +139,40 @@ test("compound type chip separates navigation from disclosure", async ({
   expect(errors).toEqual([]);
 });
 
+test("sidebar row and nested menu keep distinct full-row targets", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  const row = page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" });
+  const primary = row.getByRole("button").filter({ hasText: "Páginas" });
+
+  await primary.click();
+  await expect(row).toHaveAttribute("data-active", "true");
+  await row.hover();
+
+  const nested = row.getByRole("button", { name: "Ações de Páginas" });
+  await expect(nested).toBeVisible();
+  const primaryBox = await primary.boundingBox();
+  const nestedBox = await nested.boundingBox();
+  expect(
+    primaryBox && nestedBox
+      ? nestedBox.x >= primaryBox.x + primaryBox.width
+      : true,
+  ).toBe(true);
+
+  await nested.click();
+  await expect(
+    page.locator('[data-slot="dropdown-menu-content"][data-open]'),
+  ).toBeVisible();
+  await expect(row).toHaveAttribute("data-active", "true");
+  await page.keyboard.press("Escape");
+  await expect(nested).toBeFocused();
+  expect(errors).toEqual([]);
+});
+
 test("workspace overflow menu supports submenu, outside click, and Escape", async ({
   page,
 }) => {
@@ -230,6 +264,25 @@ test("reduced motion keeps state changes immediate", async ({ page }) => {
     (element) => getComputedStyle(element).transitionProperty,
   );
   expect(transitionProperty).toBe("none");
+
+  const newButton = page.getByRole("button", { name: "Novo", exact: true });
+  await newButton.focus();
+  await expect(newButton).toBeFocused();
+  expect(await newButton.evaluate((element) => element.matches(":focus-visible"))).toBe(true);
+  await newButton.press("Enter");
+  const menu = page.locator('[data-slot="popover-content"][data-open]');
+  await expect(menu).toBeVisible();
+  const menuMotion = await menu.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      animationName: style.animationName,
+      transitionProperty: style.transitionProperty,
+    };
+  });
+  expect(menuMotion).toEqual({
+    animationName: "none",
+    transitionProperty: "none",
+  });
   expect(errors).toEqual([]);
 });
 
@@ -240,6 +293,18 @@ test("every supported New family persists once and reopens from its tab projecti
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
   const families = [
+    { id: "book", label: "Livro", kind: "title" },
+    { id: "person", label: "Pessoa", kind: "title" },
+    { id: "area", label: "Área", kind: "title" },
+    { id: "meeting", label: "Reunião", kind: "title" },
+    { id: "definition", label: "Definição", kind: "title" },
+    { id: "idea", label: "Ideia", kind: "title" },
+    { id: "place", label: "Lugar", kind: "title" },
+    { id: "project", label: "Projeto", kind: "title" },
+    { id: "organization", label: "Organização", kind: "title" },
+    { id: "media", label: "Mídia", kind: "title" },
+    { id: "travel", label: "Viagem", kind: "title" },
+    { id: "ai-chat", label: "Chat de IA", kind: "title" },
     { id: "atomic-note", label: "Nota atômica", kind: "title" },
     { id: "quote", label: "Citação", kind: "title" },
     { id: "page", label: "Página", kind: "title" },

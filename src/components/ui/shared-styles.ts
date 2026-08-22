@@ -1,7 +1,7 @@
 const floatingPositionerClass = "isolate z-50"
 
 const overlayClass =
-  "fixed inset-0 isolate z-50 bg-black/45 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
+  "fixed inset-0 isolate z-50 bg-black/45 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const floatingSurfaceBaseClass =
   "rounded-[12px] border border-[#dedbd7] bg-white text-[#1f1c19] shadow-[0_12px_34px_rgb(0_0_0/0.16),0_2px_8px_rgb(0_0_0/0.08)] outline-hidden ring-1 ring-black/5 dark:border-border dark:bg-popover dark:text-popover-foreground dark:ring-white/10"
@@ -10,10 +10,10 @@ const dialogSurfaceBaseClass =
   "rounded-[8px] border border-[#dedbd7] bg-white text-[#1f1c19] shadow-[0_18px_60px_rgb(0_0_0/0.22)] outline-none ring-1 ring-black/10 dark:border-border dark:bg-popover dark:text-popover-foreground dark:ring-white/10"
 
 const floatingSurfaceClass =
-  "origin-(--transform-origin) duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
+  "origin-(--transform-origin) duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const dialogSurfaceClass =
-  "duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
+  "duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const floatingListItemClass =
   "relative flex h-8 min-h-8 cursor-default items-center gap-2 rounded-[8px] px-1 py-0 text-sm leading-normal outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-[#8f8983] [&_svg:not([class*='size-'])]:size-3"
