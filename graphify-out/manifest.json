@@ -1385,18 +1385,18 @@
     "semantic_hash": ""
   },
   "src/messages/en.json": {
-    "mtime": 1787426454.0485785,
-    "ast_hash": "",
+    "mtime": 1787430778.357681,
+    "ast_hash": "19bf070f1bf399548cdf50564cf3a031",
     "semantic_hash": ""
   },
   "src/messages/es.json": {
-    "mtime": 1787426459.1341505,
-    "ast_hash": "",
+    "mtime": 1787430788.4711099,
+    "ast_hash": "d0e2ef193ce5309b5b4648e2bea671c7",
     "semantic_hash": ""
   },
   "src/messages/pt-BR.json": {
-    "mtime": 1787426456.7815917,
-    "ast_hash": "",
+    "mtime": 1787430797.0635028,
+    "ast_hash": "d21c8ec1a7f6b66da76b3d7e0eefcaa3",
     "semantic_hash": ""
   },
   ".playwright-mcp/page-2026-08-21T23-49-10-333Z.yml": {
@@ -1430,8 +1430,8 @@
     "semantic_hash": "f5621fdc1c3d426f296a1a273e802b43"
   },
   "src/components/workspace-content.tsx": {
-    "mtime": 1787430768.6790943,
-    "ast_hash": "08d945504dfca2bb73725d288fcb8ca2",
+    "mtime": 1787431120.0106795,
+    "ast_hash": "5c236f65750d19dd73a7e81ffa0125d5",
     "semantic_hash": ""
   },
   "src/components/workspace-controller.tsx": {
@@ -1620,8 +1620,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/add-block-editor/tasks.md": {
-    "mtime": 1787430535.6171305,
-    "ast_hash": "4827c26f216ee969c5a5122e83c314e3",
+    "mtime": 1787431012.770469,
+    "ast_hash": "53137c4a53bfa11a210f54e9a37ecd94",
     "semantic_hash": ""
   },
   "playwright.config.ts": {
