@@ -215,6 +215,138 @@ test("workspace overflow menu supports submenu, outside click, and Escape", asyn
   expect(errors).toEqual([]);
 });
 
+test("object type collection and query actions open editable item screens", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .getByRole("button")
+    .filter({ hasText: "Páginas" })
+    .click();
+  await page.getByRole("tab", { name: "Tudo", exact: true }).click();
+  await expect(page.getByRole("tab", { name: "Tudo", exact: true })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+
+  await page
+    .getByRole("button", { name: "Mais opções", exact: true })
+    .last()
+    .click();
+  await page.getByRole("menuitem", { name: "Nova coleção" }).click();
+
+  const collectionScreen = page.locator(
+    '[data-slot="object-type-named-item-workspace"][data-kind="collection"]',
+  ).filter({ visible: true });
+  await expect(collectionScreen).toBeVisible();
+  await expect(collectionScreen).toContainText("Páginas");
+  await expect(collectionScreen).toContainText("0 entradas");
+  await expect(collectionScreen).toContainText("A visão ainda não está pronta");
+  const collectionInput = collectionScreen.getByRole("textbox", {
+    name: "Título",
+    exact: true,
+  });
+  await expect(collectionInput).toHaveValue("Sem título");
+  await expect(collectionInput).toBeFocused();
+  await collectionInput.fill("Coleção local");
+  await expect(
+    page.locator('[aria-label="Workspace tabs"] [role="tab"]').filter({
+      hasText: "Coleção local",
+    }),
+  ).toHaveAttribute("aria-selected", "true");
+
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .getByRole("button")
+    .filter({ hasText: "Páginas" })
+    .click();
+  await page.getByRole("tab", { name: "Tudo", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Mais opções", exact: true })
+    .last()
+    .click();
+  await page.getByRole("menuitem", { name: "Nova query" }).click();
+
+  const queryScreen = page.locator(
+    '[data-slot="object-type-named-item-workspace"][data-kind="query"]',
+  ).filter({ visible: true });
+  await expect(queryScreen).toBeVisible();
+  await expect(queryScreen).toContainText("Páginas");
+  await expect(queryScreen).toContainText("0 entradas");
+  const queryInput = queryScreen.getByRole("textbox", {
+    name: "Título",
+    exact: true,
+  });
+  await expect(queryInput).toHaveValue("Sem título");
+  await expect(queryInput).toBeFocused();
+  expect(errors).toEqual([]);
+});
+
+test("workspace text entry buffers global persistence while typing", async ({
+  page,
+}) => {
+  const typedTitle = "Digitação sem travar no editor";
+  const typedBody =
+    "Escrever texto longo precisa continuar fluido enquanto o workspace salva depois.";
+
+  await page.addInitScript(() => {
+    const originalSetItem = Storage.prototype.setItem;
+    let workspaceSetItemCount = 0;
+    Storage.prototype.setItem = function setItem(key, value) {
+      if (key === "notes-app:workspace-objects:v1") workspaceSetItemCount += 1;
+      return originalSetItem.call(this, key, value);
+    };
+    Object.defineProperty(window, "__workspaceSetItemCount", {
+      value: () => workspaceSetItemCount,
+    });
+  });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  await createPageObject(page);
+
+  const workspace = page
+    .locator('[data-slot="created-object-workspace"][data-object-type="page"]')
+    .filter({ visible: true });
+  await expect(workspace).toBeVisible();
+
+  const title = workspace.getByRole("textbox", { name: "Título" });
+  await title.click();
+  await title.pressSequentially(typedTitle, { delay: 2 });
+  await expect(title).toContainText(typedTitle);
+
+  const body = workspace.getByRole("textbox", { name: "Text" });
+  await body.click();
+  await body.pressSequentially(typedBody, { delay: 2 });
+  await expect(body).toContainText(typedBody);
+
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      const entity = entities.find(
+        (candidate: { objectTypeId?: string }) =>
+          candidate.objectTypeId === "page",
+      );
+      return JSON.stringify(entity ?? {});
+    })
+    .toContain(typedBody);
+
+  const storageWrites = await page.evaluate(() =>
+    (
+      window as unknown as {
+        __workspaceSetItemCount: () => number;
+      }
+    ).__workspaceSetItemCount(),
+  );
+  expect(storageWrites).toBeLessThan(10);
+  expect(storageWrites).toBeLessThan(typedTitle.length + typedBody.length);
+  expect(errors).toEqual([]);
+});
+
 for (const viewport of [
   { width: 480, height: 844 },
   { width: 390, height: 844 },
@@ -366,6 +498,20 @@ test("every supported New family persists once and reopens from its tab projecti
       await workspace.getByRole("textbox", { name: "Título" }).fill(title);
     } else if (family.kind === "file") {
       await workspace.getByRole("textbox", { name: "Título" }).fill(title);
+    }
+    if (family.kind !== "task" && family.kind !== "query") {
+      await workspace.getByRole("textbox", { name: "Título" }).blur();
+      await expect
+        .poll(async () => {
+          const entities = await persistedEntities(page);
+          return (
+            entities.find(
+              (candidate: { objectTypeId: string }) =>
+                candidate.objectTypeId === family.id,
+            )?.title ?? ""
+          );
+        })
+        .toBe(title);
     }
 
     await expect

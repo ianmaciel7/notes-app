@@ -18,6 +18,7 @@ This repository uses OpenSpec for significant proposals, workflow changes, and d
 ## Operational policy
 - Use and keep `.agents/rules/*` aligned with contributor and agent workflows, including OpenSpec, English-first, UI, architecture, Git, and Graphify guidance.
 - For reference-style workspace UI, follow `.agents/rules/workspace-ui-parity.md` before editing components, copy, icons, headers, sidebars, tabs, or workspace content.
+- For workspace text entry, follow `.agents/rules/input-performance.md` before changing editors, text fields, search fields, or persistence paths.
 - Use English-first for repository documentation and code-facing text.
 - Keep practical docs synchronized in the same change when process or contributor rules change.
 - When modifying behavior or contributor process, update related docs in the same change.

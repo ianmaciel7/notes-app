@@ -2,6 +2,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
+  blockEditorDocumentFromPlainText,
+  blockEditorDocumentToPlainText,
+} from "../src/editor/document.ts";
+import {
   parseWorkspaceObjectSnapshot,
   serializeWorkspaceObjectState,
 } from "../src/lib/workspace-object-storage.ts";
@@ -166,11 +170,14 @@ test("canonical edits update one entity without inflating counts", () => {
   const edited = workspaceObjectReducer(created, {
     type: "updateEntity",
     id,
-    patch: { title: "Typed page", body: "Body" },
+    patch: {
+      title: "Typed page",
+      body: blockEditorDocumentFromPlainText("Body"),
+    },
   });
 
   assert.equal(edited.entities[0].title, "Typed page");
-  assert.equal(edited.entities[0].body, "Body");
+  assert.equal(blockEditorDocumentToPlainText(edited.entities[0].body), "Body");
   assert.deepEqual(countEntitiesByType(edited.entities), { page: 1 });
 });
 
@@ -181,7 +188,10 @@ test("document menu lifecycle changes type, duplicates, and deletes canonically"
     {
       type: "updateEntity",
       id: "created-page-1",
-      patch: { title: "Reference page", body: "Preserved body" },
+      patch: {
+        title: "Reference page",
+        body: blockEditorDocumentFromPlainText("Preserved body"),
+      },
     },
     { type: "duplicateEntity", id: "created-page-1" },
   );
@@ -316,7 +326,10 @@ test("imports create active entities and reject incompatible files", () => {
   });
   assert.equal(state.entities.length, 1);
   assert.equal(state.entities[0].title, "research");
-  assert.equal(state.entities[0].body, "Imported body");
+  assert.equal(
+    blockEditorDocumentToPlainText(state.entities[0].body),
+    "Imported body",
+  );
   assert.equal(state.activeEntityId, state.entities[0].id);
 
   state = workspaceObjectReducer(state, {

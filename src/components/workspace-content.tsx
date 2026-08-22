@@ -25,6 +25,8 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 
+import { BlockEditor } from "@/components/block-editor";
+
 import {
   AppHeaderCaretDownIcon,
   AppHeaderGraphIcon,
@@ -82,6 +84,12 @@ import { floatingSearchListItemClass } from "@/components/ui/shared-styles";
 import { Textarea } from "@/components/ui/textarea";
 import { useWorkspace } from "@/components/workspace-controller";
 import { cn } from "@/lib/utils";
+import {
+  blockEditorDocumentFromMarkdown,
+  blockEditorDocumentFromPlainText,
+  blockEditorDocumentToMarkdown,
+} from "@/editor/document";
+import { useBufferedTextCommit } from "@/hooks/use-buffered-text-commit";
 import {
   acceptsFileForType,
   applyQueryDescription,
@@ -396,6 +404,88 @@ function AutosizeTextarea({
   );
 }
 
+type BufferedTextInputProps<TValue> = Omit<
+  React.ComponentProps<"input">,
+  "onBlur" | "onChange" | "value"
+> & {
+  value: TValue;
+  onCommit: (value: TValue) => void;
+  delay?: number;
+  format?: (value: TValue) => string;
+  inputRef?: React.Ref<HTMLInputElement>;
+  parse?: (draft: string) => TValue;
+};
+
+function BufferedTextInput<TValue>({
+  value,
+  onCommit,
+  delay,
+  format,
+  inputRef,
+  parse,
+  ...props
+}: BufferedTextInputProps<TValue>) {
+  const { inputProps } = useBufferedTextCommit({
+    value,
+    onCommit,
+    delay,
+    format,
+    parse,
+  });
+
+  return <input ref={inputRef} {...props} {...inputProps} />;
+}
+
+type BufferedInputProps<TValue> = Omit<
+  React.ComponentProps<typeof Input>,
+  "onBlur" | "onChange" | "value"
+> & {
+  value: TValue;
+  onCommit: (value: TValue) => void;
+  delay?: number;
+  format?: (value: TValue) => string;
+  parse?: (draft: string) => TValue;
+};
+
+function BufferedInput<TValue>({
+  value,
+  onCommit,
+  delay,
+  format,
+  parse,
+  ...props
+}: BufferedInputProps<TValue>) {
+  const { inputProps } = useBufferedTextCommit({
+    value,
+    onCommit,
+    delay,
+    format,
+    parse,
+  });
+
+  return <Input {...props} {...inputProps} />;
+}
+
+type BufferedAutosizeTextareaProps = Omit<
+  AutosizeTextareaProps,
+  "onBlur" | "onChange"
+> & {
+  onCommit: (value: string) => void;
+};
+
+function BufferedAutosizeTextarea({
+  value,
+  onCommit,
+  ...props
+}: BufferedAutosizeTextareaProps) {
+  const { inputProps } = useBufferedTextCommit({
+    value,
+    onCommit,
+  });
+
+  return <AutosizeTextarea {...props} {...inputProps} />;
+}
+
 function EditableTitle({
   label,
   placeholder,
@@ -410,12 +500,16 @@ function EditableTitle({
   className?: string;
 }) {
   const ref = React.useRef<HTMLDivElement>(null);
+  const { draft, inputProps, setDraft, commitNow } = useBufferedTextCommit({
+    value,
+    onCommit: onValueChange,
+  });
 
   React.useLayoutEffect(() => {
     const heading = ref.current;
     if (!heading || document.activeElement === heading) return;
-    if (heading.textContent !== value) heading.textContent = value;
-  }, [value]);
+    if (heading.textContent !== draft) heading.textContent = draft;
+  }, [draft]);
 
   return (
     // biome-ignore lint/a11y/useSemanticElements: Capacities-style editable titles need contentEditable wrapping and selection behavior that input/textarea cannot match here.
@@ -434,11 +528,16 @@ function EditableTitle({
         className,
       )}
       onInput={(event) =>
-        onValueChange(event.currentTarget.textContent ?? "")
+        setDraft(event.currentTarget.textContent ?? "")
       }
+      onBlur={inputProps.onBlur}
+      onCompositionEnd={inputProps.onCompositionEnd}
+      onCompositionStart={inputProps.onCompositionStart}
+      onFocus={inputProps.onFocus}
       onKeyDown={(event) => {
         if (event.key !== "Enter") return;
         event.preventDefault();
+        commitNow();
       }}
     />
   );
@@ -521,7 +620,7 @@ function DocumentObjectEditor({
   }
 
   function exportMarkdown() {
-    const source = `# ${entity.title}\n\n${entity.body}`;
+    const source = `# ${entity.title}\n\n${blockEditorDocumentToMarkdown(entity.body)}`;
     const url = URL.createObjectURL(
       new Blob([source], { type: "text/markdown" }),
     );
@@ -536,7 +635,19 @@ function DocumentObjectEditor({
   async function importMarkdown(file: File | undefined) {
     if (!file) return;
     const text = await file.text();
-    update({ body: text });
+    const normalized = text.replace(/\r\n?/g, "\n");
+    const isMarkdown = file.name.toLowerCase().endsWith(".md");
+    const titleMatch = isMarkdown
+      ? normalized.match(/^#\s+(.+?)(?:\n+|$)/)
+      : null;
+    update({
+      ...(titleMatch ? { title: titleMatch[1].trim() } : {}),
+      body: isMarkdown
+        ? blockEditorDocumentFromMarkdown(
+            titleMatch ? normalized.slice(titleMatch[0].length) : normalized,
+          )
+        : blockEditorDocumentFromPlainText(normalized),
+    });
     showMessage(t("documentMenu.imported"));
   }
 
@@ -572,7 +683,7 @@ function DocumentObjectEditor({
     >
       <div
         className={cn(
-          "mx-auto w-full pb-12 pl-10 pr-8 pt-[100px] transition-[max-width]",
+          "mx-auto w-full pb-12 pl-10 pr-8 pt-9 transition-[max-width]",
           wideLayout ? "max-w-none" : "max-w-[50rem]",
         )}
       >
@@ -667,27 +778,27 @@ function DocumentObjectEditor({
           </button>
         )}
         {showDescription && (
-          <input
+          <BufferedInput
             aria-label={t("documentMenu.description")}
             placeholder={t("documentMenu.description")}
             value={entity.description ?? ""}
-            onChange={(event) => update({ description: event.target.value })}
+            onCommit={(description) => update({ description })}
             className="mt-1 block w-full bg-transparent text-sm text-muted-foreground outline-none"
           />
         )}
         {showAliases && (
-          <input
+          <BufferedTextInput
             aria-label={t("documentMenu.aliases")}
             placeholder={t("documentMenu.aliases")}
-            value={(entity.aliases ?? []).join(", ")}
-            onChange={(event) =>
-              update({
-                aliases: event.target.value
-                  .split(",")
-                  .map((item) => item.trim())
-                  .filter(Boolean),
-              })
+            value={entity.aliases ?? []}
+            format={(aliases) => aliases.join(", ")}
+            parse={(draft) =>
+              draft
+                .split(",")
+                .map((item) => item.trim())
+                .filter(Boolean)
             }
+            onCommit={(aliases) => update({ aliases })}
             className="mt-1 block w-full bg-transparent text-sm text-muted-foreground outline-none"
           />
         )}
@@ -705,16 +816,31 @@ function DocumentObjectEditor({
           ).filter(Boolean)}
           update={update}
         />
-        <AutosizeTextarea
-          aria-label={
+        <BlockEditor
+          ariaLabel={
             entity.kind === "quote"
               ? t("fields.quoteContent")
               : t("fields.text")
           }
           placeholder={t("fields.text")}
           value={entity.body}
-          onChange={(event) => update({ body: event.target.value })}
-          className={bodyFieldClass}
+          onChange={(body) => update({ body })}
+          labels={{
+            bold: t("editor.bold"),
+            italic: t("editor.italic"),
+            code: t("editor.code"),
+            slashMenu: {
+              empty: t("editor.slashMenu.empty"),
+              text: t("editor.slashMenu.text"),
+              heading1: t("editor.slashMenu.heading1"),
+              heading2: t("editor.slashMenu.heading2"),
+              heading3: t("editor.slashMenu.heading3"),
+              bulletList: t("editor.slashMenu.bulletList"),
+              orderedList: t("editor.slashMenu.orderedList"),
+              blockquote: t("editor.slashMenu.blockquote"),
+              codeBlock: t("editor.slashMenu.codeBlock"),
+            },
+          }}
         />
         <input
           ref={importInputRef}
@@ -1414,27 +1540,27 @@ function TableObjectEditor({
     >
       {header}
       <EntityTitleField title={entity.title} update={update} />
-      <AutosizeTextarea
+      <BufferedAutosizeTextarea
         aria-label={t("lifecycle.table.notes")}
         placeholder={t("lifecycle.table.notes")}
         value={entity.notes}
-        onChange={(event) => update({ notes: event.target.value })}
+        onCommit={(notes) => update({ notes })}
         className="mt-1 min-h-16 w-full resize-none overflow-x-hidden overflow-y-hidden bg-transparent px-0 py-0 text-sm shadow-none outline-none [overflow-wrap:anywhere]"
       />
       <div className="mt-3 grid grid-cols-2 overflow-hidden rounded-lg border">
         {entity.cells.map((cell) => (
-          <Input
+          <BufferedTextInput
             key={cell.id}
             aria-label={t("lifecycle.table.cell", {
               column: cell.column + 1,
               row: cell.row + 1,
             })}
             value={cell.value}
-            onChange={(event) =>
+            onCommit={(value) =>
               update({
                 cells: entity.cells.map((item) =>
                   item.id === cell.id
-                    ? { ...item, value: event.target.value }
+                    ? { ...item, value }
                     : item,
                 ),
               })
@@ -1474,11 +1600,11 @@ function TaskObjectEditor({
           className="h-8 w-auto"
         />
       </div>
-      <AutosizeTextarea
+      <BufferedAutosizeTextarea
         aria-label={t("fields.text")}
         placeholder={t("fields.text")}
         value={entity.body}
-        onChange={(event) => update({ body: event.target.value })}
+        onCommit={(body) => update({ body })}
         className={bodyFieldClass}
       />
     </section>
@@ -1503,11 +1629,11 @@ function UrlObjectEditor({
         {entity.url}
       </a>
       <EntityTitleField title={entity.title} update={update} />
-      <AutosizeTextarea
+      <BufferedAutosizeTextarea
         aria-label={t("lifecycle.url.notes")}
         placeholder={t("lifecycle.url.notes")}
         value={entity.body}
-        onChange={(event) => update({ body: event.target.value })}
+        onCommit={(body) => update({ body })}
         className={bodyFieldClass}
       />
     </section>
@@ -1557,7 +1683,12 @@ function QueryObjectEditor({
 }: ObjectEditorProps & { entity: QueryEntity; entities: WorkspaceEntity[] }) {
   const t = useTranslations("workspace");
   const [description, setDescription] = React.useState(entity.description);
-  const results = selectQueryResults(entities, entity);
+  const deferredEntity = React.useDeferredValue(entity);
+  const deferredEntities = React.useDeferredValue(entities);
+  const results = React.useMemo(
+    () => selectQueryResults(deferredEntities, deferredEntity),
+    [deferredEntities, deferredEntity],
+  );
 
   function generate(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -1625,18 +1756,22 @@ function QueryObjectEditor({
           <option value="">{t("lifecycle.query.anyDate")}</option>
           <option value="today">{t("lifecycle.query.today")}</option>
         </select>
-        <Input
+        <BufferedInput
           aria-label={t("fields.tags")}
           placeholder={t("fields.tags")}
-          value={entity.filters.tags.join(", ")}
-          onChange={(event) =>
+          value={entity.filters.tags}
+          format={(tags) => tags.join(", ")}
+          parse={(draft) =>
+            draft
+              .split(",")
+              .map((tag) => tag.trim())
+              .filter(Boolean)
+          }
+          onCommit={(tags) =>
             update({
               filters: {
                 ...entity.filters,
-                tags: event.target.value
-                  .split(",")
-                  .map((tag) => tag.trim())
-                  .filter(Boolean),
+                tags,
               },
             })
           }
@@ -1850,11 +1985,14 @@ function ObjectTypeWorkspace({
   React.useEffect(() => {
     if (searchOpen) searchInputRef.current?.focus();
   }, [searchOpen]);
-  const recentEntities = createdEntities.filter(
-    (entity) => entity.objectTypeId === objectType.id,
+  const deferredSearchQuery = React.useDeferredValue(searchQuery);
+  const recentEntities = React.useMemo(
+    () =>
+      createdEntities.filter((entity) => entity.objectTypeId === objectType.id),
+    [createdEntities, objectType.id],
   );
   const visibleEntities = React.useMemo(() => {
-    const normalizedQuery = searchQuery.trim().toLocaleLowerCase();
+    const normalizedQuery = deferredSearchQuery.trim().toLocaleLowerCase();
     const searched = normalizedQuery
       ? recentEntities.filter((entity) =>
           entity.title.toLocaleLowerCase().includes(normalizedQuery),
@@ -1871,7 +2009,7 @@ function ObjectTypeWorkspace({
       : [...filtered].sort((left, right) =>
           right.createdAt.localeCompare(left.createdAt),
         );
-  }, [filterMode, recentEntities, searchQuery, sortMode]);
+  }, [deferredSearchQuery, filterMode, recentEntities, sortMode]);
 
   function openEntity(entityId: string) {
     selectEntity(entityId);
@@ -3320,6 +3458,7 @@ function ObjectTypeAllView({
 
 function CitationWorkspace() {
   const t = useTranslations("workspace");
+  const [body, setBody] = React.useState(() => blockEditorDocumentFromMarkdown(""));
 
   return (
     <div
@@ -3372,10 +3511,28 @@ function CitationWorkspace() {
           />
         </label>
 
-        <Textarea
-          aria-label={t("fields.quoteContent")}
+        <BlockEditor
+          ariaLabel={t("fields.quoteContent")}
           placeholder={t("fields.text")}
-          className="mt-1 min-h-20 w-full resize-none overflow-x-hidden bg-transparent px-0 py-0 text-base text-foreground shadow-none outline-none placeholder:text-sidebar-foreground [overflow-wrap:anywhere]"
+          value={body}
+          onChange={setBody}
+          labels={{
+            bold: t("editor.bold"),
+            italic: t("editor.italic"),
+            code: t("editor.code"),
+            slashMenu: {
+              empty: t("editor.slashMenu.empty"),
+              text: t("editor.slashMenu.text"),
+              heading1: t("editor.slashMenu.heading1"),
+              heading2: t("editor.slashMenu.heading2"),
+              heading3: t("editor.slashMenu.heading3"),
+              bulletList: t("editor.slashMenu.bulletList"),
+              orderedList: t("editor.slashMenu.orderedList"),
+              blockquote: t("editor.slashMenu.blockquote"),
+              codeBlock: t("editor.slashMenu.codeBlock"),
+            },
+          }}
+          className="mt-1 min-h-20"
         />
       </section>
 

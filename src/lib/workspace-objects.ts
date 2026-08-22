@@ -1,3 +1,11 @@
+import {
+  blockEditorDocumentFromPlainText,
+  blockEditorDocumentToPlainText,
+  createEmptyBlockEditorDocument,
+  normalizeBlockEditorDocument,
+  type BlockEditorDocument,
+} from "../editor/document.ts";
+
 type ObjectTypeId =
   | "book"
   | "person"
@@ -58,7 +66,7 @@ type DocumentEntity = WorkspaceEntityBase & {
     | "travel"
     | "page"
     | "ai-chat";
-  body: string;
+  body: BlockEditorDocument;
   collections: string[];
   tags: string[];
   description?: string;
@@ -70,7 +78,7 @@ type DocumentEntity = WorkspaceEntityBase & {
 type QuoteEntity = WorkspaceEntityBase & {
   kind: "quote";
   objectTypeId: "quote";
-  body: string;
+  body: BlockEditorDocument;
   collections: string[];
   tags: string[];
   description?: string;
@@ -198,7 +206,7 @@ type WorkspaceObjectAction =
       patch: Record<string, unknown>;
     };
 
-const WORKSPACE_OBJECT_SCHEMA_VERSION = 1;
+const WORKSPACE_OBJECT_SCHEMA_VERSION = 2;
 
 const objectTypeIds: ObjectTypeId[] = [
   "book",
@@ -303,7 +311,7 @@ function createEntity(
   if (objectTypeId === "quote") {
     entity = {
       ...base,
-      body: "",
+      body: createEmptyBlockEditorDocument(),
       collections: [],
       kind: "quote",
       objectTypeId,
@@ -313,7 +321,7 @@ function createEntity(
   } else if (flow === "document") {
     entity = {
       ...base,
-      body: "",
+      body: createEmptyBlockEditorDocument(),
       collections: [],
       kind: "document",
       objectTypeId,
@@ -542,7 +550,13 @@ function importTextWorkspaceObject(
       title: description || title,
     });
   }
-  return createEntity(state, objectTypeId, { body: text, title });
+  return createEntity(state, objectTypeId, {
+    body:
+      flow === "document"
+        ? blockEditorDocumentFromPlainText(text)
+        : text,
+    title,
+  });
 }
 
 function commitTaskDraft(
@@ -622,7 +636,12 @@ function reduceEntityMenuAction(
       action.objectTypeId === "task"
         ? {
             ...base,
-            body: "body" in source ? source.body : "",
+            body:
+              "body" in source
+                ? typeof source.body === "string"
+                  ? source.body
+                  : blockEditorDocumentToPlainText(source.body)
+                : "",
             completed: false,
             dueDate: null,
             kind: "task",
@@ -644,7 +663,7 @@ function reduceEntityMenuAction(
     if (!source) return state;
     const id = `created-${source.objectTypeId}-${state.nextId}`;
     const duplicate = {
-      ...source,
+      ...structuredClone(source),
       createdAt: new Date().toISOString(),
       id,
       title: source.title,
@@ -701,18 +720,26 @@ function workspaceObjectReducer(
   if (action.type === "updateEntity") {
     return {
       ...state,
-      entities: state.entities.map((entity) =>
-        entity.id === action.id
-          ? ({
-              ...entity,
-              ...action.patch,
-              createdAt: entity.createdAt,
-              id: entity.id,
-              kind: entity.kind,
-              objectTypeId: entity.objectTypeId,
-            } as WorkspaceEntity)
-          : entity,
-      ),
+      entities: state.entities.map((entity) => {
+        if (entity.id !== action.id) return entity;
+        let patch = action.patch;
+        if (
+          (entity.kind === "document" || entity.kind === "quote") &&
+          Object.hasOwn(action.patch, "body")
+        ) {
+          const { body: proposedBody, ...rest } = action.patch;
+          const body = normalizeBlockEditorDocument(proposedBody);
+          patch = body ? { ...rest, body } : rest;
+        }
+        return {
+          ...entity,
+          ...patch,
+          createdAt: entity.createdAt,
+          id: entity.id,
+          kind: entity.kind,
+          objectTypeId: entity.objectTypeId,
+        } as WorkspaceEntity;
+      }),
       error: null,
     };
   }
@@ -816,6 +843,7 @@ function selectQueryResults(
 }
 
 export type {
+  BlockEditorDocument,
   CreationFlow,
   FileEntity,
   ObjectTypeId,

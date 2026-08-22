@@ -20,7 +20,7 @@ test("workspace panel presentation preserves the desktop sidebar breakpoint", ()
   assert.equal(getWorkspacePanelPresentation(1536), "inline");
 });
 
-test("workspace persistence schema remains unchanged by layout parity", () => {
-  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 1);
+test("workspace persistence uses the block-document schema version", () => {
+  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 2);
   assert.equal(WORKSPACE_OBJECT_STORAGE_KEY, "notes-app:workspace-objects:v1");
 });

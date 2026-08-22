@@ -145,6 +145,22 @@
       "useDarkTheme": "Usar tema oscuro",
       "useLightTheme": "Usar tema claro"
     },
+    "editor": {
+      "bold": "Negrita",
+      "code": "Código en línea",
+      "italic": "Cursiva",
+      "slashMenu": {
+        "empty": "No hay comandos del editor que coincidan",
+        "text": "Texto",
+        "heading1": "Título 1",
+        "heading2": "Título 2",
+        "heading3": "Título 3",
+        "bulletList": "Lista con viñetas",
+        "orderedList": "Lista numerada",
+        "blockquote": "Cita",
+        "codeBlock": "Bloque de código"
+      }
+    },
     "fields": {
       "quoteContent": "Contenido de la cita",
       "tags": "Etiquetas",

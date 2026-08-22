@@ -1,4 +1,8 @@
 import {
+  blockEditorDocumentFromPlainText,
+  isBlockEditorDocument,
+} from "../editor/document.ts";
+import {
   WORKSPACE_OBJECT_SCHEMA_VERSION,
   createInitialWorkspaceObjectState,
   isObjectTypeId,
@@ -58,11 +62,11 @@ const entityValidators: Record<
   (value: Record<string, unknown>) => boolean
 > = {
   document: (value) =>
-    typeof value.body === "string" &&
+    isBlockEditorDocument(value.body) &&
     isStringArray(value.collections) &&
     isStringArray(value.tags),
   quote: (value) =>
-    typeof value.body === "string" &&
+    isBlockEditorDocument(value.body) &&
     isStringArray(value.collections) &&
     isStringArray(value.tags),
   table: (value) =>
@@ -118,9 +122,34 @@ function parseWorkspaceObjectSnapshot(raw: string): SnapshotParseResult {
     return { ok: false, reason: "invalid-json" };
   }
   if (!isRecord(value)) return { ok: false, reason: "invalid-record" };
-  if (value.version !== WORKSPACE_OBJECT_SCHEMA_VERSION) {
+  if (value.version === 1) {
+    if (!Array.isArray(value.entities)) {
+      return { ok: false, reason: "invalid-record" };
+    }
+    const migratedEntities: unknown[] = [];
+    for (const entity of value.entities) {
+      if (!isRecord(entity)) return { ok: false, reason: "invalid-record" };
+      if (entity.kind === "document" || entity.kind === "quote") {
+        if (typeof entity.body !== "string") {
+          return { ok: false, reason: "invalid-record" };
+        }
+        migratedEntities.push({
+          ...entity,
+          body: blockEditorDocumentFromPlainText(entity.body),
+        });
+      } else {
+        migratedEntities.push(entity);
+      }
+    }
+    value = {
+      ...value,
+      entities: migratedEntities,
+      version: WORKSPACE_OBJECT_SCHEMA_VERSION,
+    };
+  } else if (value.version !== WORKSPACE_OBJECT_SCHEMA_VERSION) {
     return { ok: false, reason: "unsupported-version" };
   }
+  if (!isRecord(value)) return { ok: false, reason: "invalid-record" };
   if (
     !Array.isArray(value.entities) ||
     !value.entities.every(isWorkspaceEntity) ||

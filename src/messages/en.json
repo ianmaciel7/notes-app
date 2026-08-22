@@ -145,6 +145,22 @@
       "useDarkTheme": "Use dark theme",
       "useLightTheme": "Use light theme"
     },
+    "editor": {
+      "bold": "Bold",
+      "code": "Inline code",
+      "italic": "Italic",
+      "slashMenu": {
+        "empty": "No matching editor commands",
+        "text": "Text",
+        "heading1": "Heading 1",
+        "heading2": "Heading 2",
+        "heading3": "Heading 3",
+        "bulletList": "Bulleted list",
+        "orderedList": "Numbered list",
+        "blockquote": "Quote",
+        "codeBlock": "Code block"
+      }
+    },
     "fields": {
       "quoteContent": "Quote content",
       "tags": "Tags",
