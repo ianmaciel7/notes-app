@@ -7,20 +7,11 @@ import {
   AppSidebarAlertIcon,
   AppSidebarCheckIcon,
   AppSidebarChevronsUpDownIcon,
-  AppSidebarFlaskIcon,
   AppSidebarGripVerticalIcon,
   AppSidebarPlusIcon,
   AppSidebarXIcon,
 } from "@/components/app-sidebar-icons"
 import { AppShellContent, AppShellHeader } from "@/components/app-shell"
-import {
-  ObjectArchiveIcon,
-  ObjectBookIcon,
-  ObjectCodeIcon,
-  ObjectIdeaIcon,
-  ObjectKnowledgeIcon,
-  ObjectProjectIcon,
-} from "@/components/object-icons"
 import { Button } from "@/components/ui/button"
 import {
   Combobox,
@@ -110,11 +101,11 @@ type DragPreview = {
 }
 
 const defaultLabels: AppSidebarLabels = {
-  changeSpace: "Alterar espaço",
-  search: "Buscar",
-  clearSearch: "Limpar busca",
-  empty: "Nenhum espaço encontrado.",
-  createSpace: "Criar espaço",
+  changeSpace: "Change space",
+  search: "Search",
+  clearSearch: "Clear search",
+  empty: "No spaces found.",
+  createSpace: "Create space",
 }
 
 function areOrdersEqual(a: AppSidebarSpace[], b: AppSidebarSpace[]) {
@@ -815,33 +806,8 @@ function AppSidebar({
   )
 }
 
-const fixtureSpaces: AppSidebarSpace[] = [
-  { id: "studies", name: "Studies", icon: ObjectBookIcon },
-  { id: "ideas", name: "Ideas", icon: ObjectIdeaIcon },
-  { id: "labs", name: "Labs", icon: AppSidebarFlaskIcon },
-  { id: "projects", name: "Projects", icon: ObjectProjectIcon },
-  { id: "dev", name: "Dev", icon: ObjectCodeIcon },
-  { id: "knowledge", name: "Knowledge", icon: ObjectKnowledgeIcon },
-  { id: "archive", name: "Archive", icon: ObjectArchiveIcon },
-]
-
-function AppSidebarFixture() {
-  const [spaces, setSpaces] = React.useState(fixtureSpaces)
-  const [spaceId, setSpaceId] = React.useState("labs")
-
-  return (
-    <AppSidebar
-      spaces={spaces}
-      value={spaceId}
-      onValueChange={setSpaceId}
-      onReorder={setSpaces}
-    />
-  )
-}
-
 export {
   AppSidebar,
-  AppSidebarFixture,
   AppSidebarSpaceSwitcher,
   type AppSidebarLabels,
   type AppSidebarProps,

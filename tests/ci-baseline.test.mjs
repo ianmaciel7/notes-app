@@ -148,8 +148,8 @@ test("the localized workspace boots into the workspace fixture", async () => {
     header,
     /current\.some\(\(tab\) => tab\.id === MAIN_DRAFT_TAB_ID\)/,
   );
-  assert.match(header, /createLabel="Criar nova aba"/);
-  assert.match(headerTabs, /MAIN_TAB_MIN_WIDTH = 64/);
+  assert.match(header, /createLabel=\{t\("tabs\.create"\)\}/);
+  assert.match(headerTabs, /MAIN_TAB_MIN_WIDTH = 82/);
   assert.match(headerTabs, /role="tablist"/);
   assert.match(headerTabs, /event\.key === "Enter" \|\| event\.key === " "/);
   assert.match(headerTabs, /"ArrowLeft", "ArrowRight", "Home", "End"/);

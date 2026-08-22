@@ -183,6 +183,8 @@ const availablePinnedEntities: AppSidebarPinnedEntity[] = [
   },
 ];
 
+const initialPinnedEntities = availablePinnedEntities.slice(0, 1);
+
 const initialObjectTypes: AppSidebarObjectType[] = [
   {
     id: "atomic-note",
@@ -306,7 +308,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   );
   const [pinnedEntities, setPinnedEntities] = React.useState<
     AppSidebarPinnedEntity[]
-  >([availablePinnedEntities[0]!]);
+  >(initialPinnedEntities);
   const [baseObjectTypes, setBaseObjectTypes] =
     React.useState(initialObjectTypes);
   const [workspaceObjects, dispatchWorkspaceObjects] = React.useReducer(
@@ -906,6 +908,7 @@ function WorkspaceCreationDialog() {
 }
 
 function WorkspaceMainHeader() {
+  const t = useTranslations("workspace");
   const {
     mainTabs,
     mainValue,
@@ -933,7 +936,7 @@ function WorkspaceMainHeader() {
   function createTab() {
     const draft: AppHeaderTab = {
       id: MAIN_DRAFT_TAB_ID,
-      label: "Nova aba",
+      label: t("tabs.new"),
       icon: ObjectPageIcon,
       iconClassName: objectIconToneBadgeClass.blue,
       draggable: false,
@@ -985,9 +988,9 @@ function WorkspaceMainHeader() {
         }}
         onTabsChange={setMainTabs}
         onCreate={createTab}
-        createLabel="Criar nova aba"
-        tabListLabel="Lista de abas"
-        searchTabsPlaceholder="Buscar abas"
+        createLabel={t("tabs.create")}
+        tabListLabel={t("tabs.list")}
+        searchTabsPlaceholder={t("tabs.search")}
         onShiftOpen={(tab) => {
           openInSidePanel(tab);
           if (rightCollapsed) toggleRight();
@@ -1004,20 +1007,25 @@ function WorkspaceMainHeader() {
 }
 
 function MainTabSearchOverlay() {
+  const t = useTranslations("workspace");
   const { mainTabs, setMainTabs, setMainValue, setMainSearchOpen } =
     useWorkspace();
   const [query, setQuery] = React.useState("");
 
   const options = [
-    { id: "atomic-note", label: "Notas atômicas", icon: ObjectAtomicNoteIcon },
+    {
+      id: "atomic-note",
+      label: t("objectTypeStudio.objectTypes.atomic-note"),
+      icon: ObjectAtomicNoteIcon,
+    },
     { id: "page-1", label: "aaaaaaaaaaaaa", icon: ObjectPageIcon },
-    { id: "page", label: "Páginas", icon: ObjectPageIcon },
-    { id: "quote", label: "Citações", icon: ObjectQuoteIcon },
+    { id: "page", label: t("objectTypeStudio.objectTypes.page"), icon: ObjectPageIcon },
+    { id: "quote", label: t("objectTypeStudio.objectTypes.quote"), icon: ObjectQuoteIcon },
   ];
-  const normalized = query.trim().toLocaleLowerCase("pt-BR");
+  const normalized = query.trim().toLocaleLowerCase();
   const filtered = normalized
     ? options.filter((option) =>
-        option.label.toLocaleLowerCase("pt-BR").includes(normalized),
+        option.label.toLocaleLowerCase().includes(normalized),
       )
     : options;
 
@@ -1062,24 +1070,24 @@ function MainTabSearchOverlay() {
     <div className="fixed inset-0 z-[120] flex items-start justify-center bg-black/15 px-4 pt-[10vh]">
       <button
         type="button"
-        aria-label="Cancelar criação de nova aba"
+        aria-label={t("tabs.cancelCreate")}
         className="absolute inset-0 cursor-default"
         onClick={cancel}
       />
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Criar nova aba"
+        aria-label={t("tabs.create")}
         className="relative w-full max-w-[42rem] overflow-hidden rounded-xl border border-black/10 bg-popover text-popover-foreground shadow-2xl"
       >
         <div className="flex h-12 items-center gap-2 border-b px-3">
           <AppSidebarSearchIcon className="size-4 text-muted-foreground" />
-          <input
+          <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar conteúdo para abrir em uma nova aba"
-            aria-label="Buscar conteúdo para nova aba"
-            className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+            placeholder={t("tabs.searchContentPlaceholder")}
+            aria-label={t("tabs.searchContent")}
+            className="h-auto min-w-0 flex-1 border-0 bg-transparent px-0 py-0 text-sm shadow-none focus-visible:ring-0"
           />
           <span className="rounded-md bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
             Esc
@@ -1087,21 +1095,22 @@ function MainTabSearchOverlay() {
         </div>
         <div className="p-2">
           <p className="px-2 pb-1.5 text-xs text-muted-foreground">
-            Recentemente abertos
+            {t("tabs.recentlyOpened")}
           </p>
           {filtered.map((option) => {
             const Icon = option.icon;
             const tone = objectTypeDefinitionById[option.id]?.tone ?? "blue";
             return (
-              <button
+              <Button
                 key={option.id}
                 type="button"
+                variant="ghost"
                 className="flex h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-sm hover:bg-muted"
                 onClick={() => select(option)}
               >
                 <ObjectIconBadge icon={Icon} tone={tone} />
                 <span className="truncate">{option.label}</span>
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -1111,6 +1120,7 @@ function MainTabSearchOverlay() {
 }
 
 function WorkspaceSidePanelHeader() {
+  const t = useTranslations("workspace");
   const {
     sideTabs,
     sideValue,
@@ -1182,11 +1192,16 @@ function WorkspaceSidePanelHeader() {
       onCreate={createSideTab}
       onHide={toggleRight}
       onSpecialEntrySelect={openSpecialEntry}
+      createLabel={t("tabs.createSidePanel")}
+      hideLabel={t("tabs.hideSidePanel")}
+      menuLabel={t("tabs.sidePanelMenu")}
+      closeLabel={t("tabs.close")}
     />
   );
 }
 
 function SidePanelSearchOverlay() {
+  const t = useTranslations("workspace");
   const { setSideSearchOpen, setSideTabs, setSideValue } = useWorkspace();
   const [query, setQuery] = React.useState("");
   const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -1199,30 +1214,30 @@ function SidePanelSearchOverlay() {
     () => [
       {
         id: "recent-atomic-note",
-        label: "Notas atômicas",
+        label: t("objectTypeStudio.objectTypes.atomic-note"),
         icon: ObjectAtomicNoteIcon,
         iconClassName: objectIconToneBadgeClass.amber,
       },
       {
         id: "recent-page",
-        label: "Páginas",
+        label: t("objectTypeStudio.objectTypes.page"),
         icon: ObjectPageIcon,
         iconClassName: objectIconToneBadgeClass.blue,
       },
       {
         id: "recent-citations",
-        label: "Citações",
+        label: t("objectTypeStudio.objectTypes.quote"),
         icon: ObjectQuoteIcon,
         iconClassName: objectIconToneBadgeClass.rose,
       },
     ],
-    [],
+    [t],
   );
 
-  const normalized = query.trim().toLocaleLowerCase("pt-BR");
+  const normalized = query.trim().toLocaleLowerCase();
   const filtered = normalized
     ? recentItems.filter((item) =>
-        item.label.toLocaleLowerCase("pt-BR").includes(normalized),
+        item.label.toLocaleLowerCase().includes(normalized),
       )
     : recentItems;
 
@@ -1259,12 +1274,12 @@ function SidePanelSearchOverlay() {
       >
         <div className="flex h-[58px] items-center gap-3 border-b border-black/10 px-4">
           <span className="text-xl">⌕</span>
-          <input
+          <Input
             ref={searchInputRef}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar por conteúdo e ações, ou colar da área de transferência"
-            className="min-w-0 flex-1 bg-transparent text-[17px] outline-none placeholder:text-[#9a9692]"
+            placeholder={t("tabs.sidePanelSearchPlaceholder")}
+            className="h-auto min-w-0 flex-1 border-0 bg-transparent px-0 py-0 text-[17px] shadow-none placeholder:text-muted-foreground focus-visible:ring-0"
           />
           <span className="text-sm text-[#6b6661]">ⓘ</span>
           <span className="text-sm text-[#6b6661]">↗</span>
@@ -1272,25 +1287,28 @@ function SidePanelSearchOverlay() {
 
         <div className="px-4 pt-2">
           <span className="inline-flex h-6 items-center rounded-md bg-[#f1efed] px-2 text-xs text-[#595550]">
-            ▣ Abrir no painel lateral
+            ▣ {t("tabs.openInSidePanel")}
           </span>
         </div>
 
         <div className="max-h-[520px] overflow-y-auto px-4 pb-4 pt-4">
           <div className="mb-3 text-[15px] text-[#595550]">
-            Recentemente abertos
+            {t("tabs.recentlyOpened")}
           </div>
-          <div className="mb-2 text-xs text-[#837d76]">Ontem</div>
+          <div className="mb-2 text-xs text-[#837d76]">
+            {t("tabs.yesterday")}
+          </div>
 
           <div className="space-y-0.5">
             {filtered.map((item, index) => {
               const Icon = item.icon;
               return (
-                <button
+                <Button
                   key={item.id}
                   type="button"
+                  variant="ghost"
                   className={cn(
-                    "flex h-11 w-full items-center gap-3 rounded-lg px-1.5 text-left text-[15px]",
+                    "flex h-11 w-full items-center justify-start gap-3 rounded-lg px-1.5 text-left text-[15px] font-normal",
                     index === 0 && !normalized
                       ? "bg-[#f2f0ee]"
                       : "hover:bg-[#f2f0ee]",
@@ -1314,22 +1332,22 @@ function SidePanelSearchOverlay() {
                   >
                     {item.label}
                   </span>
-                </button>
+                </Button>
               );
             })}
           </div>
 
           <div className="mb-2 mt-5 text-[15px] text-[#595550]">
-            Todas as ações
+            {t("tabs.allActions")}
           </div>
           {[
-            "Abrir calendário",
-            "Abrir hoje",
-            "Abrir configurações",
-            "Abrir visualização em gráfico",
-            "Abrir objetos internos",
-            "Abrir conteúdo relacionado",
-            "Alternar modo de foco",
+            t("tabs.actions.openCalendar"),
+            t("tabs.actions.openToday"),
+            t("tabs.actions.openSettings"),
+            t("tabs.actions.openGraph"),
+            t("tabs.actions.openObjectsInside"),
+            t("tabs.actions.openRelatedContent"),
+            t("tabs.actions.toggleFocusMode"),
           ].map((label) => (
             <div
               key={label}
@@ -1344,8 +1362,7 @@ function SidePanelSearchOverlay() {
         </div>
 
         <div className="flex h-8 items-center border-t border-black/10 px-3 text-xs text-[#595550]">
-          ↑↓ para navegar　 Esc para abortar　 ↵ para selecionar　 ⌘↵ / Ctrl↵ em
-          nova aba　 ⇧↵ no painel lateral
+          {t("tabs.keyboardHelp")}
         </div>
       </div>
     </div>

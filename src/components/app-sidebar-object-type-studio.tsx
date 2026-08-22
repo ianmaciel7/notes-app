@@ -409,7 +409,7 @@ function AppSidebarObjectTypeDetails({
           onClick={onConfirm}
         >
           <span className="mr-1">
-            {isCustom ? "Criar tipo de objeto" : t("details.confirm")}
+            {isCustom ? t("trigger") : t("details.confirm")}
           </span>
           {isCustom && <ObjectTypeDetailsIcon name="arrowRight" />}
         </Button>

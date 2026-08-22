@@ -1,6 +1,7 @@
 "use client";
 
 import { cva } from "class-variance-authority";
+import { useTranslations } from "next-intl";
 import * as React from "react";
 import { usePanelRef } from "react-resizable-panels";
 
@@ -22,7 +23,7 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
-const APP_SHELL_LEFT_DEFAULT = "18rem";
+const APP_SHELL_LEFT_DEFAULT = "14rem";
 const APP_SHELL_LEFT_MIN = "14rem";
 const APP_SHELL_LEFT_MAX = "24rem";
 const APP_SHELL_RIGHT_DEFAULT = "45%";
@@ -47,12 +48,15 @@ type AppShellResizeSide = "left" | "right";
 type AppShellContextValue = {
   leftCollapsed: boolean;
   rightCollapsed: boolean;
+  compactDesktop: boolean;
+  rightOverlayOpen: boolean;
   resizingSide: AppShellResizeSide | null;
   leftPanelRef: ReturnType<typeof usePanelRef>;
   rightPanelRef: ReturnType<typeof usePanelRef>;
   leftPanelElementRef: React.RefObject<HTMLDivElement | null>;
   setLeftCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
   setRightCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  setRightOverlayOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setResizingSide: React.Dispatch<
     React.SetStateAction<AppShellResizeSide | null>
   >;
@@ -84,6 +88,9 @@ function AppShellProvider({
   const leftPanelElementRef = React.useRef<HTMLDivElement>(null);
   const [leftCollapsed, setLeftCollapsed] = React.useState(false);
   const [rightCollapsed, setRightCollapsed] = React.useState(false);
+  const [compactDesktop, setCompactDesktop] = React.useState(false);
+  const [rightOverlayOpen, setRightOverlayOpen] = React.useState(false);
+  const rightOverlayReturnFocusRef = React.useRef<HTMLElement | null>(null);
   const [resizingSide, setResizingSide] =
     React.useState<AppShellResizeSide | null>(null);
 
@@ -103,6 +110,16 @@ function AppShellProvider({
   }, [leftPanelRef]);
 
   const toggleRight = React.useCallback(() => {
+    if (compactDesktop) {
+      setRightOverlayOpen((open) => {
+        if (!open && document.activeElement instanceof HTMLElement) {
+          rightOverlayReturnFocusRef.current = document.activeElement;
+        }
+        return !open;
+      });
+      return;
+    }
+
     const panel = rightPanelRef.current;
 
     if (!panel) return;
@@ -115,7 +132,31 @@ function AppShellProvider({
 
     setRightCollapsed(true);
     panel.collapse();
-  }, [rightPanelRef]);
+  }, [compactDesktop, rightPanelRef]);
+
+  React.useEffect(() => {
+    const media = window.matchMedia(
+      "(min-width: 768px) and (max-width: 1023px)",
+    );
+    const sync = () => setCompactDesktop(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  React.useEffect(() => {
+    if (compactDesktop) return;
+    setRightOverlayOpen(false);
+  }, [compactDesktop]);
+
+  const previousRightOverlayOpen = React.useRef(false);
+  React.useEffect(() => {
+    if (previousRightOverlayOpen.current && !rightOverlayOpen) {
+      rightOverlayReturnFocusRef.current?.focus({ preventScroll: true });
+      rightOverlayReturnFocusRef.current = null;
+    }
+    previousRightOverlayOpen.current = rightOverlayOpen;
+  }, [rightOverlayOpen]);
 
   React.useEffect(() => {
     const root = rootRef.current;
@@ -153,13 +194,16 @@ function AppShellProvider({
   const value = React.useMemo<AppShellContextValue>(
     () => ({
       leftCollapsed,
-      rightCollapsed,
+      rightCollapsed: compactDesktop ? !rightOverlayOpen : rightCollapsed,
+      compactDesktop,
+      rightOverlayOpen,
       resizingSide,
       leftPanelRef,
       rightPanelRef,
       leftPanelElementRef,
       setLeftCollapsed,
       setRightCollapsed,
+      setRightOverlayOpen,
       setResizingSide,
       toggleLeft,
       toggleRight,
@@ -167,6 +211,8 @@ function AppShellProvider({
     [
       leftCollapsed,
       rightCollapsed,
+      compactDesktop,
+      rightOverlayOpen,
       resizingSide,
       leftPanelRef,
       rightPanelRef,
@@ -294,6 +340,8 @@ function AppShellMain({
   children,
   ...props
 }: React.ComponentProps<typeof ResizablePanel>) {
+  const { compactDesktop } = useAppShell();
+
   return (
     <>
       <ResizablePanel
@@ -315,7 +363,7 @@ function AppShellMain({
         </main>
       </ResizablePanel>
 
-      <AppShellResizeHandle side="right" />
+      {!compactDesktop && <AppShellResizeHandle side="right" />}
     </>
   );
 }
@@ -326,7 +374,37 @@ function AppShellSidePanel({
   onResize,
   ...props
 }: React.ComponentProps<typeof ResizablePanel>) {
-  const { rightPanelRef, rightCollapsed, setRightCollapsed } = useAppShell();
+  const {
+    rightPanelRef,
+    rightCollapsed,
+    compactDesktop,
+    rightOverlayOpen,
+    setRightCollapsed,
+    setRightOverlayOpen,
+  } = useAppShell();
+
+  if (compactDesktop) {
+    return (
+      <Sheet open={rightOverlayOpen} onOpenChange={setRightOverlayOpen}>
+        <SheetContent
+          side="right"
+          overlayClassName="motion-reduce:transition-none"
+          className={cn(
+            "w-[min(24rem,calc(100vw-2.5rem))] max-w-none gap-0 bg-sidebar p-2.5 motion-reduce:transition-none",
+            className,
+          )}
+        >
+          <aside
+            data-slot="app-shell-side-panel"
+            data-presentation="overlay"
+            className="flex h-full min-w-0 flex-col"
+          >
+            {children}
+          </aside>
+        </SheetContent>
+      </Sheet>
+    );
+  }
 
   return (
     <ResizablePanel
@@ -456,6 +534,7 @@ function AppShellSidebarTrigger({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { leftCollapsed, toggleLeft } = useAppShell();
+  const t = useTranslations("workspace.shell");
 
   return (
     <div
@@ -472,7 +551,7 @@ function AppShellSidebarTrigger({
         className={cn("bg-transparent aria-expanded:bg-transparent", className)}
         aria-expanded={!leftCollapsed}
         aria-label={
-          leftCollapsed ? "Expand left sidebar" : "Collapse left sidebar"
+          leftCollapsed ? t("expandNavigation") : t("collapseNavigation")
         }
         onClick={(event) => {
           onClick?.(event);
@@ -492,6 +571,7 @@ function AppShellSidePanelTrigger({
   ...props
 }: React.ComponentProps<typeof Button>) {
   const { rightCollapsed, toggleRight } = useAppShell();
+  const t = useTranslations("workspace.shell");
 
   return (
     <div
@@ -505,7 +585,7 @@ function AppShellSidePanelTrigger({
         className={cn("bg-transparent aria-expanded:bg-transparent", className)}
         aria-expanded={!rightCollapsed}
         aria-label={
-          rightCollapsed ? "Expand right panel" : "Collapse right panel"
+          rightCollapsed ? t("expandContext") : t("collapseContext")
         }
         onClick={(event) => {
           onClick?.(event);
@@ -537,6 +617,7 @@ function AppShellMobileSidebar({
   children,
   ...props
 }: React.ComponentProps<typeof SheetContent>) {
+  const t = useTranslations("workspace.shell");
   return (
     <Sheet>
       <SheetTrigger
@@ -546,7 +627,7 @@ function AppShellMobileSidebar({
             variant="ghost"
             size="icon-sm"
             className="absolute left-2.5 top-[9px]"
-            aria-label="Open navigation"
+            aria-label={t("openNavigation")}
           />
         }
       >
@@ -562,8 +643,8 @@ function AppShellMobileSidebar({
         {...props}
       >
         <SheetHeader className="sr-only">
-          <SheetTitle>Navigation</SheetTitle>
-          <SheetDescription>Application navigation</SheetDescription>
+          <SheetTitle>{t("navigationTitle")}</SheetTitle>
+          <SheetDescription>{t("navigationDescription")}</SheetDescription>
         </SheetHeader>
         {children}
       </SheetContent>
@@ -576,6 +657,7 @@ function AppShellMobileSidePanel({
   children,
   ...props
 }: React.ComponentProps<typeof SheetContent>) {
+  const t = useTranslations("workspace.shell");
   return (
     <Sheet>
       <SheetTrigger
@@ -585,7 +667,7 @@ function AppShellMobileSidePanel({
             variant="ghost"
             size="icon-sm"
             className="absolute right-[26px] top-[9px]"
-            aria-label="Open side panel"
+            aria-label={t("openContext")}
           />
         }
       >
@@ -601,8 +683,8 @@ function AppShellMobileSidePanel({
         {...props}
       >
         <SheetHeader className="sr-only">
-          <SheetTitle>Side panel</SheetTitle>
-          <SheetDescription>Secondary application panel</SheetDescription>
+          <SheetTitle>{t("contextTitle")}</SheetTitle>
+          <SheetDescription>{t("contextDescription")}</SheetDescription>
         </SheetHeader>
         {children}
       </SheetContent>

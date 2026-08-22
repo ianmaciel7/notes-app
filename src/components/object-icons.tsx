@@ -1,4 +1,4 @@
-import { type ComponentPropsWithoutRef, type ElementType } from "react"
+import type { ComponentPropsWithoutRef, ElementType } from "react"
 
 type ObjectIconProps = Omit<ComponentPropsWithoutRef<"svg">, "name">
 type ObjectIconTone =

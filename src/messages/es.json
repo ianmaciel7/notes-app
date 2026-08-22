@@ -18,6 +18,18 @@
     "cta": "Comenzar"
   },
   "workspace": {
+    "shell": {
+      "collapseContext": "Ocultar panel lateral",
+      "collapseNavigation": "Contraer barra lateral izquierda",
+      "contextDescription": "Panel secundario de la aplicación",
+      "contextTitle": "Panel lateral",
+      "expandContext": "Mostrar panel lateral",
+      "expandNavigation": "Expandir barra lateral izquierda",
+      "navigationDescription": "Navegación de la aplicación",
+      "navigationTitle": "Navegación",
+      "openContext": "Abrir panel lateral",
+      "openNavigation": "Abrir navegación"
+    },
     "actions": {
       "collapse": "Contraer",
       "collapseEditor": "Contraer editor",
@@ -103,6 +115,14 @@
       "relevantContent": "Contenido relevante",
       "title": "Explorar"
     },
+    "footer": {
+      "objectTypes": "Tipos de objeto",
+      "profile": "Perfil personal",
+      "settings": "Configuración",
+      "signOut": "Cerrar sesión",
+      "useDarkTheme": "Usar tema oscuro",
+      "useLightTheme": "Usar tema claro"
+    },
     "fields": {
       "quoteContent": "Contenido de la cita",
       "tags": "Etiquetas",
@@ -112,6 +132,34 @@
     "objects": {
       "collections": "Colecciones",
       "quote": "Cita"
+    },
+    "tabs": {
+      "actions": {
+        "openCalendar": "Abrir calendario",
+        "openGraph": "Abrir vista de grafo",
+        "openObjectsInside": "Abrir objetos internos",
+        "openRelatedContent": "Abrir contenido relacionado",
+        "openSettings": "Abrir configuración",
+        "openToday": "Abrir hoy",
+        "toggleFocusMode": "Alternar modo de enfoque"
+      },
+      "allActions": "Todas las acciones",
+      "cancelCreate": "Cancelar creación de nueva pestaña",
+      "close": "Cerrar pestaña",
+      "create": "Crear nueva pestaña",
+      "createSidePanel": "Nueva pestaña lateral",
+      "hideSidePanel": "Ocultar panel lateral",
+      "keyboardHelp": "↑↓ para navegar　 Esc para cancelar　 ↵ para seleccionar　 ⌘↵ / Ctrl↵ en una nueva pestaña　 ⇧↵ en el panel lateral",
+      "list": "Lista de pestañas",
+      "new": "Nueva pestaña",
+      "openInSidePanel": "Abrir en el panel lateral",
+      "recentlyOpened": "Abiertos recientemente",
+      "search": "Buscar pestañas",
+      "searchContent": "Buscar contenido para nueva pestaña",
+      "searchContentPlaceholder": "Buscar contenido para abrir en una nueva pestaña",
+      "sidePanelMenu": "Abrir menú del panel lateral",
+      "sidePanelSearchPlaceholder": "Buscar contenido y acciones, o pegar desde el portapapeles",
+      "yesterday": "Ayer"
     },
     "openedTab": {
       "description": "Empieza a escribir o agrega contenido a este objeto."
@@ -231,7 +279,7 @@
       "addQuery": "Query",
       "collections": "Colecciones",
       "collectionCreated": "Colección creada.",
-      "demoActionComplete": "Acción aplicada a la demostración local.",
+      "localActionComplete": "Acción aplicada localmente.",
       "expandSection": "Expandir abiertos recientemente",
       "export": "Exportar",
       "exportComplete": "Exportación preparada.",

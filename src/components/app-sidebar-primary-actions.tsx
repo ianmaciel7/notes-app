@@ -41,6 +41,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { workspaceRowStateClass } from "@/components/ui/shared-styles";
 import { useWorkspace } from "@/components/workspace-controller";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -507,12 +508,10 @@ function AppSidebarPrimaryActionItem({
             size="default"
             data-active={active || undefined}
             className={cn(
-              "h-8 w-full justify-start gap-x-1.5 px-2 font-normal",
+              "group/interactive h-8 w-full justify-start gap-x-1.5 px-2 font-normal",
               "text-sm text-muted-foreground",
-              "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              workspaceRowStateClass,
               "[&_svg]:size-4",
-              "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
-              "data-[active=true]:brightness-[0.965] data-[active=true]:hover:bg-sidebar-accent",
             )}
             onPointerDown={closeHint}
             onClick={() => {

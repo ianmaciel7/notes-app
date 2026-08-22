@@ -50,7 +50,7 @@ type AppSidePanelHeaderProps = React.ComponentProps<"header"> & {
   onCreate?: () => void
   onHide?: () => void
   onSpecialEntrySelect?: (entryId: SidePanelSpecialEntryId) => void
-  onCloseRequest?: (tab: AppHeaderTab) => boolean | void
+  onCloseRequest?: (tab: AppHeaderTab) => boolean | undefined
   createLabel?: string
   tabListLabel?: string
   hideLabel?: string
@@ -310,10 +310,10 @@ function AppSidePanelHeader({
   onHide,
   onSpecialEntrySelect,
   onCloseRequest,
-  createLabel = "Nova aba lateral",
-  hideLabel = "Ocultar painel lateral",
-  menuLabel = "Abrir menu do painel lateral",
-  closeLabel = "Fechar aba",
+  createLabel = "Create new side-panel tab",
+  hideLabel = "Hide side panel",
+  menuLabel = "Open side-panel menu",
+  closeLabel = "Close tab",
   className,
   style,
   ...props

@@ -41,6 +41,11 @@ const sidebarContextMenuContentClass = "w-[269px]"
 
 const sidebarContextSubmenuContentClass = "w-[269px]"
 
+const workspaceOverflowMenuContentClass = sidebarContextMenuContentClass
+
+const workspaceOverflowMenuItemClass =
+  "h-8 min-h-8 rounded-[8px] px-1 text-sm leading-normal transition-colors duration-200 ease-out motion-reduce:transition-none"
+
 const compactMenuActionButtonClass =
   "relative flex h-6 w-full shrink-0 cursor-pointer items-center justify-center gap-x-1.5 truncate rounded-lg border border-[#dedbd7] bg-[#f3f1ee] px-3 text-sm font-normal text-[#595550] transition-[opacity] duration-200 ease-out hover:border-[#cbc7c1] hover:bg-[#f3f1ee] hover:text-[#595550] active:brightness-[0.97] focus:outline-none disabled:pointer-events-none disabled:opacity-50"
 
@@ -162,4 +167,6 @@ export {
   compactMenuSurfaceClass,
   sidebarContextMenuContentClass,
   sidebarContextSubmenuContentClass,
+  workspaceOverflowMenuContentClass,
+  workspaceOverflowMenuItemClass,
 }

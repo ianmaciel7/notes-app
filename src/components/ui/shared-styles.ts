@@ -44,6 +44,18 @@ const floatingIndicatorClass =
 
 const floatingSeparatorClass = "my-1 h-px bg-[#dedbd7] dark:bg-border"
 
+const workspaceRowStateClass =
+  "transition-[background-color,color,filter,opacity] duration-200 ease-out motion-reduce:transition-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground data-[active=true]:brightness-[0.965]"
+
+const workspaceRevealActionClass =
+  "pointer-events-none invisible opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/interactive:pointer-events-auto group-hover/interactive:visible group-hover/interactive:opacity-100 group-focus-within/interactive:pointer-events-auto group-focus-within/interactive:visible group-focus-within/interactive:opacity-100"
+
+const workspaceTabStateClass =
+  "transition-[background-color,border-color,color,opacity] duration-150 ease-out motion-reduce:transition-none"
+
+const workspaceCompoundControlClass =
+  "transition-[background-color,border-color,color,opacity,transform] duration-250 ease-out motion-reduce:transition-none"
+
 export {
   controlIconClass,
   controlIconSelectorClass,
@@ -61,4 +73,8 @@ export {
   floatingSurfaceBaseClass,
   floatingSurfaceClass,
   overlayClass,
+  workspaceCompoundControlClass,
+  workspaceRevealActionClass,
+  workspaceRowStateClass,
+  workspaceTabStateClass,
 }

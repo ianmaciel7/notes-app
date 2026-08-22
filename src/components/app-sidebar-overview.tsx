@@ -56,6 +56,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  workspaceRevealActionClass,
+  workspaceRowStateClass,
+} from "@/components/ui/shared-styles"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 
@@ -436,12 +440,10 @@ function AppSidebarPinnedRow({
         data-active={active || undefined}
         data-dragging={dragging || undefined}
         className={cn(
-          "group/pinned-row flex h-[29px] w-full shrink-0 items-center rounded-md py-px pr-1.5 pl-[3px]",
+          "group/interactive group/pinned-row flex h-[29px] w-full shrink-0 items-center rounded-md py-px pr-1.5 pl-[3px]",
           "text-left text-sm font-normal text-muted-foreground",
-          "transition-[background-color,color,filter,opacity] duration-150",
-          "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-          "data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground",
-          "data-[active=true]:brightness-[0.965] data-[dragging=true]:opacity-40"
+          workspaceRowStateClass,
+          "data-[dragging=true]:opacity-40"
         )}
       >
         <button
@@ -463,9 +465,8 @@ function AppSidebarPinnedRow({
 
         <div
           className={cn(
-            "flex w-0 max-w-max shrink-0 items-center overflow-hidden opacity-0",
-            "transition-[width,opacity] duration-300 ease-in",
-            "group-hover/pinned-row:w-[80px] group-hover/pinned-row:opacity-100 group-hover/pinned-row:ease-out"
+            "flex w-[26px] shrink-0 items-center justify-end",
+            workspaceRevealActionClass
           )}
         >
           <span className="ml-auto" />
@@ -593,12 +594,10 @@ function AppSidebarObjectTypeRow({
         data-active={active || undefined}
         data-dragging={dragging || undefined}
         className={cn(
-          "group/object-type-row flex h-[29px] w-full shrink-0 items-center rounded-md py-px pr-1.5 pl-[3px]",
+          "group/interactive group/object-type-row flex h-[29px] w-full shrink-0 items-center rounded-md py-px pr-1.5 pl-[3px]",
           "text-left text-sm font-normal text-muted-foreground",
-          "transition-[background-color,color,filter,opacity] duration-150",
-          "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-          "data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground",
-          "data-[active=true]:brightness-[0.965] data-[dragging=true]:opacity-40"
+          workspaceRowStateClass,
+          "data-[dragging=true]:opacity-40"
         )}
       >
         {hasCollections && (
@@ -639,9 +638,8 @@ function AppSidebarObjectTypeRow({
 
         <div
           className={cn(
-            "flex w-0 max-w-max shrink-0 items-center overflow-hidden opacity-0",
-            "transition-[width,opacity] duration-300 ease-in",
-            "group-hover/object-type-row:w-[80px] group-hover/object-type-row:opacity-100 group-hover/object-type-row:ease-out"
+            "flex w-12 shrink-0 items-center justify-end",
+            workspaceRevealActionClass
           )}
         >
           <span
@@ -847,8 +845,9 @@ function AppSidebarAddSection({
 
 const utilityRowClass = cn(
   buttonVariants({ variant: "ghost", size: "default" }),
-  "group/utility h-8 w-full justify-start gap-x-1.5 px-2 font-normal text-muted-foreground",
-  "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:brightness-[0.97]"
+  "group/interactive group/utility h-8 w-full justify-start gap-x-1.5 px-2 font-normal text-muted-foreground",
+  workspaceRowStateClass,
+  "active:brightness-[0.97]"
 )
 
 function AppSidebarUtilityRow({
@@ -993,6 +992,7 @@ function AppSidebarFooterTooltip({
 }
 
 function AppSidebarFooter() {
+  const t = useTranslations("workspace")
   const [dark, setDark] = React.useState(false)
 
   React.useEffect(() => {
@@ -1006,12 +1006,12 @@ function AppSidebarFooter() {
       className="flex shrink-0 flex-col gap-y-px px-2.5 py-1.5 pr-1 text-xs"
     >
       <div className="flex w-full flex-wrap items-center gap-x-0.5">
-        <AppSidebarFooterTooltip label="Configurações">
+        <AppSidebarFooterTooltip label={t("footer.settings")}>
           <AppSidebarSourceIcon name="settings" className="size-4" />
         </AppSidebarFooterTooltip>
 
         <AppSidebarFooterTooltip
-          label={dark ? "Usar tema claro" : "Usar tema escuro"}
+          label={dark ? t("footer.useLightTheme") : t("footer.useDarkTheme")}
           onClick={() => setDark((value) => !value)}
         >
           {dark ? (
@@ -1023,7 +1023,7 @@ function AppSidebarFooter() {
 
         <DropdownMenu>
           <DropdownMenuTrigger
-            aria-label="Perfil pessoal"
+            aria-label={t("footer.profile")}
             className={cn(
               buttonVariants({ variant: "ghost", size: "default" }),
               "h-8 w-auto shrink-0 gap-x-1.5 px-1.5 text-xs font-normal text-muted-foreground",
@@ -1059,13 +1059,14 @@ function AppSidebarFooter() {
                 />
               }
               action={
-              <button
-                type="button"
-                className={compactMenuActionButtonClass}
-              >
-                <AppSidebarSourceIcon name="logout" className="size-[1em]" />
-                <span>Sair</span>
-              </button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className={compactMenuActionButtonClass}
+                >
+                  <AppSidebarSourceIcon name="logout" className="size-[1em]" />
+                  <span>{t("footer.signOut")}</span>
+                </Button>
               }
             />
           </DropdownMenuContent>
@@ -1073,7 +1074,7 @@ function AppSidebarFooter() {
 
         <span className="min-w-0 flex-1" />
 
-        <AppSidebarFooterTooltip label="Compartilhar">
+        <AppSidebarFooterTooltip label={t("documentMenu.share")}>
           <AppSidebarSourceIcon name="share" className="size-4" />
         </AppSidebarFooterTooltip>
       </div>
@@ -1208,6 +1209,7 @@ function AppSidebarOverview({
   onCustomSectionsChange,
   onCollectionAction,
 }: AppSidebarOverviewProps = {}) {
+  const t = useTranslations("workspace")
   const [internalActiveId, setInternalActiveId] = React.useState<string | null>("page-1")
   const isControlled = controlledActiveId !== undefined
   const activeId = isControlled ? controlledActiveId : internalActiveId
@@ -1380,7 +1382,7 @@ function AppSidebarOverview({
         <div className="flex min-h-full w-full flex-col">
           <AppSidebarSection
             icon={AppSidebarObjectsIcon}
-            label="Tipos de objeto"
+            label={t("footer.objectTypes")}
             count={objectTypes.length}
             sort={objectSort}
             onSortChange={setObjectSort}
@@ -1389,7 +1391,7 @@ function AppSidebarOverview({
             action={
               <AppSidebarObjectTypeStudio
                 onSelect={addObjectType}
-                trigger={<AppSidebarSectionAction label="Criar tipo de objeto" />}
+                trigger={<AppSidebarSectionAction label={t("objectTypeStudio.trigger")} />}
               />
             }
           >

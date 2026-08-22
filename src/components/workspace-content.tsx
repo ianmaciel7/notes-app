@@ -21,6 +21,7 @@ import {
   UploadIcon,
   WandSparklesIcon,
 } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 
@@ -50,6 +51,15 @@ import {
 } from "@/components/object-icons";
 import { ObjectTypeToolbarIcon } from "@/components/object-type-toolbar-icon";
 import { Button } from "@/components/ui/button";
+import {
+  workspaceOverflowMenuContentClass,
+  workspaceOverflowMenuItemClass,
+} from "@/components/ui/compact-menu";
+import {
+  CompoundChip,
+  CompoundChipDisclosure,
+  CompoundChipPrimary,
+} from "@/components/ui/compound-chip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -383,24 +393,21 @@ function DocumentObjectEditor({
         )}
         <div className="group/page-view-header flex h-[26px] items-center gap-1.5">
           <div className="flex min-w-0 items-center gap-1.5 text-sm text-sidebar-foreground">
-            <div
+            <CompoundChip
               className={cn(
-                "inline-flex shrink-0 items-stretch overflow-hidden whitespace-nowrap rounded-[0.475em] border leading-[1.3]",
                 objectIconToneBadgeClass[definition.tone],
               )}
             >
-              <button
-                type="button"
+              <CompoundChipPrimary
                 onClick={() => selectEntity(entity.objectTypeId)}
-                className="inline-flex items-center py-[0.2em] pl-[0.49em] pr-[0.214em] active:brightness-[0.94]"
               >
                 <InlinePropertyIcon icon={Icon} className="mr-[0.325em]" />
                 <span className="min-w-[1.3em] text-center text-[1em]">
                   {objectTypeLabel}
                 </span>
-              </button>
+              </CompoundChipPrimary>
               <ObjectTypePickerTrigger onSelect={changeType} />
-            </div>
+            </CompoundChip>
             <CollectionPropertyEditor
               collections={entity.collections}
               objectTypeId={entity.objectTypeId}
@@ -545,13 +552,11 @@ function ObjectTypePickerTrigger({
     <DropdownMenu onOpenChange={(open) => !open && setQuery("")}>
       <DropdownMenuTrigger
         render={
-          <button
-            type="button"
+          <CompoundChipDisclosure
             aria-label={t("lifecycle.changeObjectType")}
-            className="inline-flex items-center justify-center self-stretch border-l border-current/25 px-[0.43em] active:brightness-[0.94]"
           >
             <AppHeaderCaretDownIcon className="size-[1em]" />
-          </button>
+          </CompoundChipDisclosure>
         }
       />
       <DropdownMenuContent
@@ -709,7 +714,7 @@ function CollectionPropertyEditor({
   );
 }
 
-const documentMenuItemClass = "h-8 gap-2 rounded-lg px-2 text-sm";
+const documentMenuItemClass = cn(workspaceOverflowMenuItemClass, "gap-2 px-2");
 
 function CustomizeDocumentMenu({
   wideLayout,
@@ -900,7 +905,7 @@ function DocumentMoreMenu({
       <DropdownMenuContent
         align="end"
         sideOffset={5}
-        className="w-[269px] min-w-[269px] p-1.5"
+        className={cn(workspaceOverflowMenuContentClass, "min-w-[269px] p-1.5")}
       >
         <DropdownMenuItem className={documentMenuItemClass} onClick={onFind}>
           <SearchIcon className="size-4" />
@@ -1465,9 +1470,12 @@ function FileObjectEditor({
         <dd>{entity.size} B</dd>
       </dl>
       {entity.previewUrl && entity.objectTypeId === "image" ? (
-        <img
+        <Image
           src={entity.previewUrl}
           alt={entity.title || entity.fileName}
+          width={320}
+          height={208}
+          unoptimized
           className="mt-4 max-h-52 rounded-lg border object-contain"
         />
       ) : entity.previewUrl && entity.objectTypeId === "audio" ? (

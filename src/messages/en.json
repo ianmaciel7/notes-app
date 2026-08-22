@@ -18,10 +18,22 @@
     "cta": "Start building"
   },
   "workspace": {
+    "shell": {
+      "collapseContext": "Hide side panel",
+      "collapseNavigation": "Collapse left sidebar",
+      "contextDescription": "Secondary application panel",
+      "contextTitle": "Side panel",
+      "expandContext": "Show side panel",
+      "expandNavigation": "Expand left sidebar",
+      "navigationDescription": "Application navigation",
+      "navigationTitle": "Navigation",
+      "openContext": "Open side panel",
+      "openNavigation": "Open navigation"
+    },
     "actions": {
       "collapse": "Collapse",
       "collapseEditor": "Collapse editor",
-      "customize": "Personalizar",
+      "customize": "Customize",
       "filter": "Filter",
       "grid": "Grid",
       "importFiles": "Import file(s)",
@@ -30,7 +42,7 @@
       "moreViews": "More views",
       "new": "New",
       "newObjectOptions": "New object options",
-      "search": "Buscar",
+      "search": "Search",
       "sort": "Sort"
     },
     "sidebarCollections": {
@@ -103,6 +115,14 @@
       "relevantContent": "Relevant content",
       "title": "Explore"
     },
+    "footer": {
+      "objectTypes": "Object types",
+      "profile": "Personal profile",
+      "settings": "Settings",
+      "signOut": "Sign out",
+      "useDarkTheme": "Use dark theme",
+      "useLightTheme": "Use light theme"
+    },
     "fields": {
       "quoteContent": "Quote content",
       "tags": "Tags",
@@ -110,8 +130,36 @@
       "title": "Title"
     },
     "objects": {
-      "collections": "Coleções",
+      "collections": "Collections",
       "quote": "Quote"
+    },
+    "tabs": {
+      "actions": {
+        "openCalendar": "Open calendar",
+        "openGraph": "Open graph view",
+        "openObjectsInside": "Open objects inside",
+        "openRelatedContent": "Open related content",
+        "openSettings": "Open settings",
+        "openToday": "Open today",
+        "toggleFocusMode": "Toggle focus mode"
+      },
+      "allActions": "All actions",
+      "cancelCreate": "Cancel new tab creation",
+      "close": "Close tab",
+      "create": "Create new tab",
+      "createSidePanel": "Create new side-panel tab",
+      "hideSidePanel": "Hide side panel",
+      "keyboardHelp": "↑↓ to navigate　 Esc to cancel　 ↵ to select　 ⌘↵ / Ctrl↵ in a new tab　 ⇧↵ in the side panel",
+      "list": "Tab list",
+      "new": "New tab",
+      "openInSidePanel": "Open in side panel",
+      "recentlyOpened": "Recently opened",
+      "search": "Search tabs",
+      "searchContent": "Search content for new tab",
+      "searchContentPlaceholder": "Search content to open in a new tab",
+      "sidePanelMenu": "Open side-panel menu",
+      "sidePanelSearchPlaceholder": "Search content and actions, or paste from clipboard",
+      "yesterday": "Yesterday"
     },
     "openedTab": {
       "description": "Start writing or add content to this object."
@@ -142,7 +190,7 @@
         "media": "Media",
         "meeting": "Meeting",
         "organization": "Organization",
-        "page": "Página",
+        "page": "Page",
         "pdf": "PDF",
         "person": "Person",
         "place": "Place",
@@ -150,8 +198,8 @@
         "query": "Query",
         "quote": "Quote",
         "table": "Table",
-        "tag": "Etiqueta",
-        "task": "Tarefa",
+        "tag": "Tag",
+        "task": "Task",
         "travel": "Travel",
         "tweet": "Tweet",
         "weblink": "Weblink"
@@ -161,7 +209,7 @@
     },
     "lifecycle": {
       "cancel": "Cancel",
-      "changeObjectType": "Alterar tipo de objeto",
+      "changeObjectType": "Change object type",
       "errors": {
         "incompatible-file": "Choose a file compatible with this object type.",
         "invalid-url": "Enter a valid URL for this object type.",
@@ -231,7 +279,7 @@
       "addQuery": "Query",
       "collections": "Collections",
       "collectionCreated": "Collection created.",
-      "demoActionComplete": "Action applied to the local demo.",
+      "localActionComplete": "Action applied locally.",
       "expandSection": "Expand recently opened",
       "export": "Export",
       "exportComplete": "Export prepared.",
