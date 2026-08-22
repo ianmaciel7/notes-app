@@ -377,7 +377,9 @@ function AppSidebarPinnedRow({
   onDrop: () => void
 }) {
   return (
-    <div
+    <>
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: Drag events are a pointer enhancement around the nested semantic row control. */}
+      <div
       data-slot="app-sidebar-pinned-row-wrapper"
       className="mx-2"
       draggable={draggable}
@@ -432,7 +434,8 @@ function AppSidebarPinnedRow({
           <AppSidebarPinnedMenu entity={entity} onUnpin={onUnpin} />
         </div>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
 
@@ -502,7 +505,9 @@ function AppSidebarObjectTypeRow({
   onDrop: () => void
 }) {
   return (
-    <div
+    <>
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: Drag events are a pointer enhancement around the nested semantic row control. */}
+      <div
       data-slot="app-sidebar-object-type-row-wrapper"
       className="mx-2"
       draggable={draggable}
@@ -566,7 +571,8 @@ function AppSidebarObjectTypeRow({
           />
         </div>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
 
@@ -941,9 +947,9 @@ function AppSidebarOverview({
   const [objectTypesOpen, setObjectTypesOpen] = React.useState(true)
   const [pinnedSort, setPinnedSort] = React.useState<AppSidebarSortMode>("manual")
   const [objectSort, setObjectSort] = React.useState<AppSidebarSortMode>("manual")
-  const [pinned, setPinned] = React.useState<AppSidebarPinnedEntity[]>([
-    allPinnedEntities[0]!,
-  ])
+  const [pinned, setPinned] = React.useState<AppSidebarPinnedEntity[]>(() =>
+    allPinnedEntities.length > 0 ? [allPinnedEntities[0]] : []
+  )
   const [objectTypes, setObjectTypes] = React.useState(initialObjectTypes)
   const [customSections, setCustomSections] = React.useState<AppSidebarCustomSection[]>([])
   const [drag, setDrag] = React.useState<AppSidebarDragState>(null)

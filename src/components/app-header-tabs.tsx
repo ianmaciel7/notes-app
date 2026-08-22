@@ -9,7 +9,6 @@ import {
   AppHeaderPushPinFillIcon,
   AppHeaderPushPinIcon,
 } from "@/components/app-header-icons"
-import { Button } from "@/components/ui/button"
 import {
   HoverCard,
   HoverCardContent,
@@ -28,18 +27,18 @@ const SIDE_TAB_CONTROLS_WIDTH = 28
 const TAB_PREVIEW_DELAY = 200
 
 const appHeaderTabTheme = {
-  "--app-tab-bg-base": "#ffffff",
-  "--app-tab-bg-back": "#f8f7f5",
-  "--app-tab-bg-back-hover": "#eeece9",
-  "--app-tab-bg-front": "#ffffff",
-  "--app-tab-bg-front-hover": "#efeeec",
-  "--app-tab-border-base": "rgba(36, 32, 28, 0.10)",
-  "--app-tab-border-front": "rgba(36, 32, 28, 0.12)",
-  "--app-tab-border-front-strong": "rgba(36, 32, 28, 0.16)",
-  "--app-tab-text-primary": "#282522",
-  "--app-tab-text-secondary": "#595550",
-  "--app-tab-text-subtle": "#837d76",
-  "--app-tab-text-active": "#5c6fbd",
+  "--app-tab-bg-base": "var(--surface-panel)",
+  "--app-tab-bg-back": "var(--surface-panel-muted)",
+  "--app-tab-bg-back-hover": "var(--surface-hover)",
+  "--app-tab-bg-front": "var(--surface-panel)",
+  "--app-tab-bg-front-hover": "var(--surface-hover)",
+  "--app-tab-border-base": "var(--border-subtle)",
+  "--app-tab-border-front": "var(--border-subtle)",
+  "--app-tab-border-front-strong": "var(--border)",
+  "--app-tab-text-primary": "var(--content-primary)",
+  "--app-tab-text-secondary": "var(--content-secondary)",
+  "--app-tab-text-subtle": "var(--content-tertiary)",
+  "--app-tab-text-active": "var(--content-active)",
 } as React.CSSProperties
 
 type DropPosition = "before" | "after"
@@ -89,7 +88,7 @@ export type AppSpaceHeaderProps = React.ComponentProps<"div"> & {
   onTabsChange: (tabs: AppHeaderTab[]) => void
   onCreate?: () => void
   onShiftOpen?: (tab: AppHeaderTab) => void
-  onCloseRequest?: (tab: AppHeaderTab) => boolean | void
+  onCloseRequest?: (tab: AppHeaderTab) => boolean | undefined
   createLabel?: string
   tabListLabel?: string
   searchTabsPlaceholder?: string
@@ -102,7 +101,7 @@ export type AppSidePanelHeaderProps = React.ComponentProps<"header"> & {
   onValueChange: (value: string) => void
   onTabsChange: (tabs: AppHeaderTab[]) => void
   onCreate?: () => void
-  onCloseRequest?: (tab: AppHeaderTab) => boolean | void
+  onCloseRequest?: (tab: AppHeaderTab) => boolean | undefined
   onMenu?: () => void
   createLabel?: string
   tabListLabel?: string
@@ -362,6 +361,12 @@ function AppHeaderTabItem({
             dragging && "cursor-grabbing opacity-40"
           )}
           onClick={(event) => {
+            if (event.shiftKey) onShiftOpen?.()
+            else onOpen?.()
+          }}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter" && event.key !== " ") return
+            event.preventDefault()
             if (event.shiftKey) onShiftOpen?.()
             else onOpen?.()
           }}
@@ -667,7 +672,8 @@ function AppSpaceHeader({
 
             return (
               <React.Fragment key={tab.id}>
-                {before && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />}
+      {before && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-content-active" />}
+                {/* biome-ignore lint/a11y/noStaticElementInteractions: Drag events are a pointer enhancement around the nested semantic tab control. */}
                 <div
                   draggable={tab.draggable !== false}
                   data-slot="app-space-header-tab-wrapper"
@@ -734,7 +740,7 @@ function AppSpaceHeader({
                     onTogglePin={() => togglePin(tab)}
                   />
                 </div>
-                {after && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />}
+      {after && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-content-active" />}
               </React.Fragment>
             )
           })}
@@ -839,8 +845,9 @@ function AppSidePanelHeader({
         <div className="grid w-full grid-cols-[minmax(0,1fr)_fit-content(100%)] items-center gap-1">
           <div ref={tabsRef} className="relative flex min-w-0 w-full items-center justify-start overflow-hidden">
             <div className="flex min-w-0 items-center" style={{ gap: SIDE_TAB_GAP }}>
-              {tabs.map((tab) => (
-                <div
+              {tabs.map((tab) => {
+                // biome-ignore lint/a11y/noStaticElementInteractions: Drag events are a pointer enhancement around the nested semantic tab control.
+                return <div
                   key={tab.id}
                   draggable={tab.draggable !== false}
                   data-slot="app-side-panel-tab-wrapper"
@@ -877,7 +884,7 @@ function AppSidePanelHeader({
                     onClose={() => closeTab(tab)}
                   />
                 </div>
-              ))}
+              })}
             </div>
           </div>
 

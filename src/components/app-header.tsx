@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import type * as React from "react"
 
 import {
   AppHeaderCaretLeftIcon,
@@ -17,14 +17,14 @@ import {
 import { cn } from "@/lib/utils"
 
 const appHeaderTheme = {
-  "--app-header-bg-base": "#ffffff",
-  "--app-header-bg-back": "#f8f7f5",
-  "--app-header-bg-back-hover": "#eeece9",
-  "--app-header-bg-front-hover": "#efeeec",
-  "--app-header-border-front": "rgba(36, 32, 28, 0.12)",
-  "--app-header-text-primary": "#282522",
-  "--app-header-text-secondary": "#595550",
-  "--app-header-text-subtle": "#837d76",
+  "--app-header-bg-base": "var(--surface-panel)",
+  "--app-header-bg-back": "var(--surface-panel-muted)",
+  "--app-header-bg-back-hover": "var(--surface-hover)",
+  "--app-header-bg-front-hover": "var(--surface-hover)",
+  "--app-header-border-front": "var(--border-subtle)",
+  "--app-header-text-primary": "var(--content-primary)",
+  "--app-header-text-secondary": "var(--content-secondary)",
+  "--app-header-text-subtle": "var(--content-tertiary)",
 } as React.CSSProperties
 
 type AppHeaderProps = React.ComponentProps<"header"> & {

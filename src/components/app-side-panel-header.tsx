@@ -31,14 +31,14 @@ const SIDE_TAB_GAP = 4
 const SIDE_TAB_CONTROLS_WIDTH = 28
 
 const sideHeaderTheme = {
-  "--side-header-bg-base": "#ffffff",
-  "--side-header-bg-back": "#f8f7f5",
-  "--side-header-bg-back-hover": "#eeece9",
-  "--side-header-bg-front-hover": "#efeeec",
-  "--side-header-border-front": "rgba(36, 32, 28, 0.12)",
-  "--side-header-text-primary": "#282522",
-  "--side-header-text-secondary": "#595550",
-  "--side-header-text-subtle": "#837d76",
+  "--side-header-bg-base": "var(--surface-panel)",
+  "--side-header-bg-back": "var(--surface-panel-muted)",
+  "--side-header-bg-back-hover": "var(--surface-hover)",
+  "--side-header-bg-front-hover": "var(--surface-hover)",
+  "--side-header-border-front": "var(--border-subtle)",
+  "--side-header-text-primary": "var(--content-primary)",
+  "--side-header-text-secondary": "var(--content-secondary)",
+  "--side-header-text-subtle": "var(--content-tertiary)",
 } as React.CSSProperties
 
 type SidePanelSpecialEntryId =
@@ -57,7 +57,7 @@ type AppSidePanelHeaderProps = React.ComponentProps<"header"> & {
   onCreate?: () => void
   onHide?: () => void
   onSpecialEntrySelect?: (entryId: SidePanelSpecialEntryId) => void
-  onCloseRequest?: (tab: AppHeaderTab) => boolean | void
+  onCloseRequest?: (tab: AppHeaderTab) => boolean | undefined
   createLabel?: string
   tabListLabel?: string
   hideLabel?: string
@@ -230,7 +230,7 @@ function SideHeaderAction({
       <TooltipContent
         side={placement}
         sideOffset={8}
-        className="rounded-lg border border-[var(--side-header-border-front)] bg-white/95 px-2 py-1.5 text-xs text-[var(--side-header-text-primary)] shadow-md backdrop-blur"
+    className="rounded-lg border border-[var(--side-header-border-front)] bg-surface-panel/95 px-2 py-1.5 text-xs text-[var(--side-header-text-primary)] shadow-md backdrop-blur"
       >
         {label}
       </TooltipContent>
@@ -381,8 +381,9 @@ function AppSidePanelHeader({
               className="flex w-full min-w-0 items-center overflow-hidden"
               style={{ gap: SIDE_TAB_GAP }}
             >
-              {tabs.map((tab) => (
-                <div
+              {tabs.map((tab) => {
+                // biome-ignore lint/a11y/noStaticElementInteractions: Drag events are a pointer enhancement around the nested semantic tab control.
+                return <div
                   key={tab.id}
                   draggable={tab.draggable !== false}
                   data-dnd-type="draggable"
@@ -429,7 +430,7 @@ function AppSidePanelHeader({
                     onClose={() => closeTab(tab)}
                   />
                 </div>
-              ))}
+              })}
             </div>
           </div>
 
