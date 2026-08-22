@@ -27,13 +27,14 @@ import {
 } from "@/components/app-header-tabs"
 import { useAppShell } from "@/components/app-shell"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 
 const initialMainTabs: AppHeaderTab[] = [
   {
     id: "cloud-monitoring",
     label: "Cloud Monitoring",
     icon: AppHeaderFolderIcon,
-    iconClassName: "bg-[#fff0d6] text-[#b96b0e]",
+    iconClassName: "bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300",
     pinned: true,
     preview: <TabPreview eyebrow="Folder" title="Cloud Monitoring" />,
   },
@@ -41,28 +42,28 @@ const initialMainTabs: AppHeaderTab[] = [
     id: "azure",
     label: "Azure",
     icon: AppHeaderFileIcon,
-    iconClassName: "bg-[#e8f0ff] text-[#3f6fce]",
+    iconClassName: "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300",
     preview: <TabPreview eyebrow="Page" title="Azure" />,
   },
   {
     id: "courses",
     label: "Cursos",
     icon: AppHeaderBookOpenIcon,
-    iconClassName: "bg-[#e7f4e9] text-[#39774b]",
+    iconClassName: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300",
     preview: <TabPreview eyebrow="Collection" title="Cursos" />,
   },
   {
     id: "ideas-one",
     label: "Ideias",
     icon: AppHeaderLightbulbIcon,
-    iconClassName: "bg-[#fff5d6] text-[#927019]",
+    iconClassName: "bg-yellow-100 text-yellow-700 dark:bg-yellow-950/50 dark:text-yellow-300",
     preview: <TabPreview eyebrow="Page" title="Ideias" />,
   },
   {
     id: "ideas-two",
     label: "Ideias",
     icon: AppHeaderLightbulbIcon,
-    iconClassName: "bg-[#fff5d6] text-[#927019]",
+    iconClassName: "bg-yellow-100 text-yellow-700 dark:bg-yellow-950/50 dark:text-yellow-300",
     preview: <TabPreview eyebrow="Page" title="Ideias" />,
   },
 ]
@@ -72,13 +73,13 @@ const initialSideTabs: AppHeaderTab[] = [
     id: "graphView",
     label: "Visualização em grafo",
     icon: AppHeaderGraphIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: "bg-muted text-muted-foreground",
   },
   {
     id: "explore",
     label: "Explorar",
     icon: AppHeaderCompassIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: "bg-muted text-muted-foreground",
     draggable: false,
   },
 ]
@@ -87,32 +88,32 @@ const specialSideTabs: Record<SidePanelSpecialEntryId, Omit<AppHeaderTab, "id">>
   graphView: {
     label: "Visualização em grafo",
     icon: AppHeaderGraphIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: "bg-muted text-muted-foreground",
   },
   backlinks: {
     label: "Links de entrada",
     icon: AppHeaderFileIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: "bg-muted text-muted-foreground",
   },
   objectsInside: {
     label: "Objetos internos",
     icon: AppHeaderFolderIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: "bg-muted text-muted-foreground",
   },
   relatedContent: {
     label: "Conteúdo relacionado",
     icon: AppHeaderGraphIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: "bg-muted text-muted-foreground",
   },
   aiAssistantChat: {
     label: "Chat de IA",
     icon: AppHeaderFileIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: "bg-muted text-muted-foreground",
   },
   localSpaceQuery: {
     label: "Buscar",
     icon: AppHeaderFileIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: "bg-muted text-muted-foreground",
   },
 }
 
@@ -268,7 +269,7 @@ function AppHeaderDemoMain() {
       id,
       label,
       icon: AppHeaderFileIcon,
-      iconClassName: "bg-[#e8f0ff] text-[#3f6fce]",
+    iconClassName: "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300",
       preview: <TabPreview eyebrow="Page" title={label} />,
     }
 
@@ -408,6 +409,11 @@ function AppHeaderDemoSidePanel() {
 function SidePanelSearchOverlay() {
   const { setSideSearchOpen, setSideTabs, setSideValue } = useAppHeaderDemo()
   const [query, setQuery] = React.useState("")
+  const searchInputRef = React.useRef<HTMLInputElement>(null)
+
+  React.useEffect(() => {
+    searchInputRef.current?.focus()
+  }, [])
 
   const recentItems = React.useMemo(
     () => [
@@ -415,19 +421,19 @@ function SidePanelSearchOverlay() {
         id: "recent-atomic-notes",
         label: "Notas atômicas",
         icon: AppHeaderFolderIcon,
-        iconClassName: "bg-[#fff0d6] text-[#b96b0e]",
+    iconClassName: "bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300",
       },
       {
         id: "recent-pages",
         label: "Páginas",
         icon: AppHeaderFileIcon,
-        iconClassName: "bg-[#e8f0ff] text-[#3f6fce]",
+    iconClassName: "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300",
       },
       {
         id: "recent-citations",
         label: "Citações",
         icon: AppHeaderFileIcon,
-        iconClassName: "bg-[#ffe8ed] text-[#d74b67]",
+    iconClassName: "bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300",
       },
     ],
     []
@@ -460,35 +466,39 @@ function SidePanelSearchOverlay() {
   return (
     <div
       data-slot="side-panel-search-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Busca no painel lateral"
       className="fixed inset-0 z-[120] flex items-start justify-center bg-black/50 px-4 pt-[10vh]"
-      onMouseDown={() => setSideSearchOpen(false)}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) setSideSearchOpen(false)
+      }}
     >
       <div
-        className="w-full max-w-[50rem] overflow-hidden rounded-xl border border-black/10 bg-white text-[#282522] shadow-2xl"
-        onMouseDown={(event) => event.stopPropagation()}
+        className="w-full max-w-[50rem] overflow-hidden rounded-xl border border-border-subtle bg-surface-panel text-content-primary shadow-2xl"
       >
-        <div className="flex h-[58px] items-center gap-3 border-b border-black/10 px-4">
+        <div className="flex h-[58px] items-center gap-3 border-b border-border-subtle px-4">
           <span className="text-xl">⌕</span>
           <input
-            autoFocus
+            ref={searchInputRef}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Buscar por conteúdo e ações, ou colar da área de transferência"
-            className="min-w-0 flex-1 bg-transparent text-[17px] outline-none placeholder:text-[#9a9692]"
+            className="min-w-0 flex-1 bg-transparent text-[17px] outline-none placeholder:text-content-tertiary"
           />
-          <span className="text-sm text-[#6b6661]">ⓘ</span>
-          <span className="text-sm text-[#6b6661]">↗</span>
+          <span className="text-sm text-content-secondary">ⓘ</span>
+          <span className="text-sm text-content-secondary">↗</span>
         </div>
 
         <div className="px-4 pt-2">
-          <span className="inline-flex h-6 items-center rounded-md bg-[#f1efed] px-2 text-xs text-[#595550]">
+          <span className="inline-flex h-6 items-center rounded-md bg-muted px-2 text-xs text-content-secondary">
             ▣ Abrir no painel lateral
           </span>
         </div>
 
         <div className="max-h-[520px] overflow-y-auto px-4 pb-4 pt-4">
-          <div className="mb-3 text-[15px] text-[#595550]">Recentemente abertos</div>
-          <div className="mb-2 text-xs text-[#837d76]">Ontem</div>
+          <div className="mb-3 text-[15px] text-content-secondary">Recentemente abertos</div>
+          <div className="mb-2 text-xs text-content-tertiary">Ontem</div>
 
           <div className="space-y-0.5">
             {filtered.map((item, index) => {
@@ -499,7 +509,7 @@ function SidePanelSearchOverlay() {
                   type="button"
                   className={cn(
                     "flex h-11 w-full items-center gap-3 rounded-lg px-1.5 text-left text-[15px]",
-                    index === 0 && !normalized ? "bg-[#f2f0ee]" : "hover:bg-[#f2f0ee]"
+                    index === 0 && !normalized ? "bg-surface-hover" : "hover:bg-surface-hover"
                   )}
                   onClick={() => openRecent(item)}
                 >
@@ -525,7 +535,7 @@ function SidePanelSearchOverlay() {
             })}
           </div>
 
-          <div className="mb-2 mt-5 text-[15px] text-[#595550]">Todas as ações</div>
+          <div className="mb-2 mt-5 text-[15px] text-content-secondary">Todas as ações</div>
           {[
             "Abrir calendário",
             "Abrir hoje",
@@ -536,7 +546,7 @@ function SidePanelSearchOverlay() {
             "Alternar modo de foco",
           ].map((label) => (
             <div key={label} className="flex h-11 items-center gap-3 px-1.5 text-[15px]">
-              <span className="flex size-6 items-center justify-center rounded-md border border-black/10 text-[#837d76]">
+              <span className="flex size-6 items-center justify-center rounded-md border border-border-subtle text-content-tertiary">
                 ◇
               </span>
               <span className="flex-1">{label}</span>
@@ -544,7 +554,7 @@ function SidePanelSearchOverlay() {
           ))}
         </div>
 
-        <div className="flex h-8 items-center border-t border-black/10 px-3 text-xs text-[#595550]">
+        <div className="flex h-8 items-center border-t border-border-subtle px-3 text-xs text-content-secondary">
           ↑↓ para navegar　 Esc para abortar　 ↵ para selecionar　 ⌘↵ / Ctrl↵ em nova aba　 ⇧↵ no painel lateral
         </div>
       </div>

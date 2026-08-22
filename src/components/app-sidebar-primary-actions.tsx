@@ -252,16 +252,16 @@ function AppSidebarShortcut({ shortcut }: { shortcut: AppSidebarShortcut }) {
 
   return (
     <KbdGroup className="flex-wrap">
-      {keys.map((key, index) =>
+      {keys.map((key) =>
         key === "or" ? (
           <span
-            key={`${key}-${index}`}
+            key="or"
             className="px-0.5 text-xs text-muted-foreground"
           >
             ou
           </span>
         ) : (
-          <Kbd key={`${key}-${index}`}>{key}</Kbd>
+          <Kbd key={key}>{key}</Kbd>
         )
       )}
     </KbdGroup>
@@ -275,8 +275,8 @@ function AppSidebarPrimaryActionHintContent({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      {hints.map((hint, index) => (
-        <div key={index} className="flex flex-col gap-1.5">
+      {hints.map((hint) => (
+        <div key={hint.description} className="flex flex-col gap-1.5">
           <p>{hint.description}</p>
           {hint.shortcut && <AppSidebarShortcut shortcut={hint.shortcut} />}
         </div>
@@ -299,14 +299,16 @@ function AppSidebarPrimaryActionItem({
   const [open, setOpen] = React.useState(false)
   const Icon = action.icon
 
-  if (action.id === "new") {
-    return <NewContentMenu action={action} />
-  }
-
-  function clearTimer() {
+  const clearTimer = React.useCallback(() => {
     if (!timerRef.current) return
     clearTimeout(timerRef.current)
     timerRef.current = null
+  }, [])
+
+  React.useEffect(() => () => clearTimer(), [clearTimer])
+
+  if (action.id === "new") {
+    return <NewContentMenu action={action} />
   }
 
   function scheduleOpen() {
@@ -323,8 +325,6 @@ function AppSidebarPrimaryActionItem({
     clearTimer()
     setOpen(false)
   }
-
-  React.useEffect(() => () => clearTimer(), [])
 
   return (
     <div

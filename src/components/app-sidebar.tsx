@@ -193,6 +193,8 @@ function AppSidebarSpaceSwitcher({
     }, 400)
   }
 
+  // This effect intentionally mounts once; the timer only references a ref.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: The cleanup is stable because it only reads hintTimerRef.
   React.useEffect(() => () => clearHintTimer(), [])
 
   function measureItems() {
@@ -215,7 +217,9 @@ function AppSidebarSpaceSwitcher({
         const delta = previousTop - currentTop
         if (Math.abs(delta) < 0.5) return
 
-        element.getAnimations().forEach((animation) => animation.cancel())
+        element.getAnimations().forEach((animation) => {
+          animation.cancel()
+        })
         element.animate(
           [{ transform: `translateY(${delta}px)` }, { transform: "translateY(0)" }],
           { duration: 200, easing: "ease-out" }
@@ -275,6 +279,8 @@ function AppSidebarSpaceSwitcher({
     return true
   }
 
+  // Pointer sorting is installed once and reads mutable refs for current state.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Rebinding these window listeners would interrupt an active drag.
   React.useEffect(() => {
     function handlePointerMove(event: PointerEvent) {
       const session = dragSessionRef.current
@@ -375,6 +381,8 @@ function AppSidebarSpaceSwitcher({
     }
   }, [])
 
+  // Cleanup intentionally mounts once; the active session is stored in a ref.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Rebinding cleanup is unnecessary because restoreBody uses the current ref value.
   React.useEffect(
     () => () => {
       const session = dragSessionRef.current
