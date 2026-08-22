@@ -969,7 +969,7 @@ function CollectionPropertyEditor({
     setOpen(false);
   }
   return (
-    <div className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden">
+    <div className="flex min-w-0 shrink items-center gap-1 overflow-hidden">
       {collections.map((collection) => (
         <button
           key={collection}
@@ -991,7 +991,7 @@ function CollectionPropertyEditor({
           render={
             <label
               role="presentation"
-              className="inline-flex min-w-0 max-w-full shrink items-center overflow-hidden whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3] hover:bg-muted/70"
+              className="inline-flex min-w-0 shrink items-center overflow-hidden whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3] hover:bg-muted/70"
             >
               <InlinePropertyIcon icon={ObjectCollectionIcon} />
               <input
@@ -1003,7 +1003,7 @@ function CollectionPropertyEditor({
                   setQuery(event.target.value);
                   setOpen(true);
                 }}
-                className="ml-1.5 min-w-0 flex-1 truncate bg-transparent leading-[18.2px] outline-none placeholder:text-sidebar-foreground"
+                className="ml-1.5 w-[62px] min-w-0 flex-none truncate bg-transparent leading-[18.2px] outline-none placeholder:text-sidebar-foreground"
               />
             </label>
           }
