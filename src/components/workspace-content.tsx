@@ -24,9 +24,6 @@ import {
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import * as React from "react";
-
-import { BlockEditor } from "@/components/block-editor";
-
 import {
   AppHeaderCaretDownIcon,
   AppHeaderGraphIcon,
@@ -39,6 +36,7 @@ import {
 } from "@/components/app-sidebar-icons";
 import type { AppSidebarObjectType } from "@/components/app-sidebar-overview";
 import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon";
+import { BlockEditor } from "@/components/block-editor";
 import {
   ObjectAiChatIcon,
   ObjectAreaIcon,
@@ -83,13 +81,13 @@ import {
 import { floatingSearchListItemClass } from "@/components/ui/shared-styles";
 import { Textarea } from "@/components/ui/textarea";
 import { useWorkspace } from "@/components/workspace-controller";
-import { cn } from "@/lib/utils";
 import {
   blockEditorDocumentFromMarkdown,
   blockEditorDocumentFromPlainText,
   blockEditorDocumentToMarkdown,
 } from "@/editor/document";
 import { useBufferedTextCommit } from "@/hooks/use-buffered-text-commit";
+import { cn } from "@/lib/utils";
 import {
   acceptsFileForType,
   applyQueryDescription,
@@ -288,7 +286,9 @@ function ObjectTypeNamedItemWorkspace({
 
   function rename(value: string) {
     const setter =
-      item.kind === "collection" ? setObjectTypeCollections : setObjectTypeQueries;
+      item.kind === "collection"
+        ? setObjectTypeCollections
+        : setObjectTypeQueries;
     setter((current) => ({
       ...current,
       [item.objectTypeId]: (current[item.objectTypeId] ?? []).map(
@@ -326,7 +326,9 @@ function ObjectTypeNamedItemWorkspace({
           </div>
           <Button
             className="h-8 rounded-lg px-3 text-sm font-normal"
-            onClick={() => createWorkspaceEntity(objectType.id, objectType.label)}
+            onClick={() =>
+              createWorkspaceEntity(objectType.id, objectType.label)
+            }
           >
             <AppSidebarPlusIcon className="size-4" />
             {t("actions.new")}
@@ -375,9 +377,7 @@ const titleFieldClass =
 const bodyFieldClass =
   "mt-3 min-h-28 w-full resize-none overflow-x-hidden overflow-y-hidden bg-transparent px-0 py-0 text-base leading-6 text-foreground shadow-none outline-none placeholder:text-sidebar-foreground [overflow-wrap:anywhere]";
 
-function useAutosizeTextarea(
-  ref: React.RefObject<HTMLTextAreaElement | null>,
-) {
+function useAutosizeTextarea(ref: React.RefObject<HTMLTextAreaElement | null>) {
   React.useLayoutEffect(() => {
     const textarea = ref.current;
     if (!textarea) return;
@@ -399,9 +399,7 @@ function AutosizeTextarea({
   const ref = React.useRef<HTMLTextAreaElement>(null);
   useAutosizeTextarea(ref);
 
-  return (
-    <Textarea ref={ref} value={value} className={className} {...props} />
-  );
+  return <Textarea ref={ref} value={value} className={className} {...props} />;
 }
 
 type BufferedTextInputProps<TValue> = Omit<
@@ -527,9 +525,7 @@ function EditableTitle({
         "cursor-text whitespace-pre-wrap empty:before:text-sidebar-foreground empty:before:content-[attr(data-placeholder)]",
         className,
       )}
-      onInput={(event) =>
-        setDraft(event.currentTarget.textContent ?? "")
-      }
+      onInput={(event) => setDraft(event.currentTarget.textContent ?? "")}
       onBlur={inputProps.onBlur}
       onCompositionEnd={inputProps.onCompositionEnd}
       onCompositionStart={inputProps.onCompositionStart}
@@ -714,9 +710,7 @@ function DocumentObjectEditor({
         <div className="group/page-view-header flex h-[26px] min-w-0 items-center gap-1.5 overflow-hidden">
           <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden text-sm text-sidebar-foreground">
             <CompoundChip
-              className={cn(
-                objectIconToneBadgeClass[definition.tone],
-              )}
+              className={cn(objectIconToneBadgeClass[definition.tone])}
             >
               <CompoundChipPrimary
                 onClick={() => selectEntity(entity.objectTypeId)}
@@ -830,15 +824,19 @@ function DocumentObjectEditor({
             italic: t("editor.italic"),
             code: t("editor.code"),
             slashMenu: {
+              cancel: t("editor.slashMenu.cancel"),
               empty: t("editor.slashMenu.empty"),
               text: t("editor.slashMenu.text"),
               heading1: t("editor.slashMenu.heading1"),
               heading2: t("editor.slashMenu.heading2"),
               heading3: t("editor.slashMenu.heading3"),
+              navigate: t("editor.slashMenu.navigate"),
               bulletList: t("editor.slashMenu.bulletList"),
               orderedList: t("editor.slashMenu.orderedList"),
+              select: t("editor.slashMenu.select"),
               blockquote: t("editor.slashMenu.blockquote"),
               codeBlock: t("editor.slashMenu.codeBlock"),
+              title: t("editor.slashMenu.title"),
             },
           }}
         />
@@ -887,9 +885,7 @@ function ObjectTypePickerTrigger({
     <DropdownMenu onOpenChange={(open) => !open && setQuery("")}>
       <DropdownMenuTrigger
         render={
-          <CompoundChipDisclosure
-            aria-label={t("lifecycle.changeObjectType")}
-          >
+          <CompoundChipDisclosure aria-label={t("lifecycle.changeObjectType")}>
             <AppHeaderCaretDownIcon className="size-[1em]" />
           </CompoundChipDisclosure>
         }
@@ -1003,7 +999,7 @@ function CollectionPropertyEditor({
                   setQuery(event.target.value);
                   setOpen(true);
                 }}
-                className="ml-1.5 w-[62px] min-w-0 flex-none truncate bg-transparent leading-[18.2px] outline-none placeholder:text-sidebar-foreground"
+                className="ml-1.5 w-[68px] min-w-0 flex-none truncate bg-transparent leading-[18.2px] outline-none placeholder:text-sidebar-foreground"
               />
             </label>
           }
@@ -1559,9 +1555,7 @@ function TableObjectEditor({
             onCommit={(value) =>
               update({
                 cells: entity.cells.map((item) =>
-                  item.id === cell.id
-                    ? { ...item, value }
-                    : item,
+                  item.id === cell.id ? { ...item, value } : item,
                 ),
               })
             }
@@ -3458,7 +3452,9 @@ function ObjectTypeAllView({
 
 function CitationWorkspace() {
   const t = useTranslations("workspace");
-  const [body, setBody] = React.useState(() => blockEditorDocumentFromMarkdown(""));
+  const [body, setBody] = React.useState(() =>
+    blockEditorDocumentFromMarkdown(""),
+  );
 
   return (
     <div
@@ -3521,15 +3517,19 @@ function CitationWorkspace() {
             italic: t("editor.italic"),
             code: t("editor.code"),
             slashMenu: {
+              cancel: t("editor.slashMenu.cancel"),
               empty: t("editor.slashMenu.empty"),
               text: t("editor.slashMenu.text"),
               heading1: t("editor.slashMenu.heading1"),
               heading2: t("editor.slashMenu.heading2"),
               heading3: t("editor.slashMenu.heading3"),
+              navigate: t("editor.slashMenu.navigate"),
               bulletList: t("editor.slashMenu.bulletList"),
               orderedList: t("editor.slashMenu.orderedList"),
+              select: t("editor.slashMenu.select"),
               blockquote: t("editor.slashMenu.blockquote"),
               codeBlock: t("editor.slashMenu.codeBlock"),
+              title: t("editor.slashMenu.title"),
             },
           }}
           className="mt-1 min-h-20"

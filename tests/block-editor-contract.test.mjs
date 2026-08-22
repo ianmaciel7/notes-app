@@ -31,6 +31,7 @@ test("slash commands use the shared suggestion menu contract", () => {
   assert.match(editorSource, /createSlashCommandExtension/);
   assert.match(slashCommandSource, /Suggestion</);
   assert.match(slashCommandSource, /data-slot="block-editor-slash-menu"/);
-  assert.match(slashCommandSource, /CommandEmpty/);
+  assert.match(slashCommandSource, /CompactMenuIconFrame/);
+  assert.match(slashCommandSource, /role="listbox"/);
   assert.match(slashCommandSource, /exitSuggestion/);
 });

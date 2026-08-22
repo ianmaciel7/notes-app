@@ -150,15 +150,19 @@
       "code": "Código inline",
       "italic": "Itálico",
       "slashMenu": {
+        "cancel": "para abortar",
         "empty": "Nenhum comando do editor corresponde à busca",
         "text": "Texto",
         "heading1": "Título 1",
         "heading2": "Título 2",
         "heading3": "Título 3",
+        "navigate": "para navegar",
         "bulletList": "Lista com marcadores",
         "orderedList": "Lista numerada",
+        "select": "para selecionar",
         "blockquote": "Citação",
-        "codeBlock": "Bloco de código"
+        "codeBlock": "Bloco de código",
+        "title": "Criar um bloco"
       }
     },
     "fields": {

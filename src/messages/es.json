@@ -150,15 +150,19 @@
       "code": "Código en línea",
       "italic": "Cursiva",
       "slashMenu": {
+        "cancel": "para cancelar",
         "empty": "No hay comandos del editor que coincidan",
         "text": "Texto",
         "heading1": "Título 1",
         "heading2": "Título 2",
         "heading3": "Título 3",
+        "navigate": "para navegar",
         "bulletList": "Lista con viñetas",
         "orderedList": "Lista numerada",
+        "select": "para seleccionar",
         "blockquote": "Cita",
-        "codeBlock": "Bloque de código"
+        "codeBlock": "Bloque de código",
+        "title": "Crear un bloque"
       }
     },
     "fields": {

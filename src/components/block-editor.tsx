@@ -6,13 +6,12 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
 import * as React from "react";
-
-import { createSlashCommandExtension } from "@/editor/slash-command";
 import {
+  type BlockEditorDocument,
   createEmptyBlockEditorDocument,
   normalizeBlockEditorDocument,
-  type BlockEditorDocument,
 } from "@/editor/document";
+import { createSlashCommandExtension } from "@/editor/slash-command";
 import { useBufferedTextCommit } from "@/hooks/use-buffered-text-commit";
 import { cn } from "@/lib/utils";
 
@@ -22,14 +21,18 @@ type BlockEditorLabels = {
   italic: string;
   slashMenu: {
     empty: string;
+    cancel: string;
     text: string;
     heading1: string;
     heading2: string;
     heading3: string;
+    navigate: string;
     bulletList: string;
     orderedList: string;
+    select: string;
     blockquote: string;
     codeBlock: string;
+    title: string;
   };
 };
 
@@ -76,17 +79,7 @@ export function BlockEditor({
   );
   const slashCommandExtension = React.useMemo(
     () => createSlashCommandExtension(labels.slashMenu),
-    [
-      labels.slashMenu.blockquote,
-      labels.slashMenu.bulletList,
-      labels.slashMenu.codeBlock,
-      labels.slashMenu.empty,
-      labels.slashMenu.heading1,
-      labels.slashMenu.heading2,
-      labels.slashMenu.heading3,
-      labels.slashMenu.orderedList,
-      labels.slashMenu.text,
-    ],
+    [labels.slashMenu],
   );
   const editor = useEditor({
     immediatelyRender: false,
