@@ -949,7 +949,7 @@ function AppSidePanelHeader({
     <header
       data-slot="app-side-panel-header"
       className={cn(
-        "flex h-[46px] shrink-0 items-center justify-between bg-[var(--app-tab-bg-back)] px-1",
+        "flex h-[58px] shrink-0 items-center justify-between bg-[var(--app-tab-bg-back)] px-1",
         className,
       )}
       style={{ ...appHeaderTabTheme, ...style }}

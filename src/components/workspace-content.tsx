@@ -3605,7 +3605,7 @@ function ExploreWorkspace() {
               <button
                 key={action.label}
                 type="button"
-                className="flex h-[90px] min-w-0 flex-col justify-between rounded-[8px] border border-border bg-card p-4 text-left transition-colors duration-150 hover:bg-accent motion-reduce:transition-none"
+                className="flex h-[112px] min-w-0 flex-col justify-between rounded-[8px] border border-border bg-card p-4 text-left transition-colors duration-150 hover:bg-accent motion-reduce:transition-none"
               >
                 <Icon className="size-5 shrink-0 text-foreground" />
                 <span className="truncate text-xs text-muted-foreground">

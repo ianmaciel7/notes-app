@@ -1,27 +1,34 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   AppHeaderCaretDownIcon,
   AppHeaderGraphIcon,
   AppHeaderPlusIcon,
   AppHeaderSidebarSimpleIcon,
-} from "@/components/app-header-icons"
-import { AppHeaderTabItem, type AppHeaderTab } from "@/components/app-header-tabs"
+} from "@/components/app-header-icons";
+import {
+  type AppHeaderTab,
+  AppHeaderTabItem,
+} from "@/components/app-header-tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
-const SIDE_TAB_MAX_WIDTH = 160
-const SIDE_TAB_MIN_WIDTH = 44
-const SIDE_TAB_GAP = 4
-const SIDE_TAB_CONTROLS_WIDTH = 28
+const SIDE_TAB_MAX_WIDTH = 160;
+const SIDE_TAB_MIN_WIDTH = 44;
+const SIDE_TAB_GAP = 4;
+const SIDE_TAB_CONTROLS_WIDTH = 28;
 
 const sideHeaderTheme = {
   "--side-header-bg-base": "#ffffff",
@@ -32,7 +39,7 @@ const sideHeaderTheme = {
   "--side-header-text-primary": "#282522",
   "--side-header-text-secondary": "#595550",
   "--side-header-text-subtle": "#837d76",
-} as React.CSSProperties
+} as React.CSSProperties;
 
 type SidePanelSpecialEntryId =
   | "graphView"
@@ -40,29 +47,29 @@ type SidePanelSpecialEntryId =
   | "objectsInside"
   | "relatedContent"
   | "aiAssistantChat"
-  | "localSpaceQuery"
+  | "localSpaceQuery";
 
 type AppSidePanelHeaderProps = React.ComponentProps<"header"> & {
-  tabs: AppHeaderTab[]
-  value: string
-  onValueChange: (value: string) => void
-  onTabsChange: (tabs: AppHeaderTab[]) => void
-  onCreate?: () => void
-  onHide?: () => void
-  onSpecialEntrySelect?: (entryId: SidePanelSpecialEntryId) => void
-  onCloseRequest?: (tab: AppHeaderTab) => boolean | undefined
-  createLabel?: string
-  tabListLabel?: string
-  hideLabel?: string
-  menuLabel?: string
-  closeLabel?: string
-}
+  tabs: AppHeaderTab[];
+  value: string;
+  onValueChange: (value: string) => void;
+  onTabsChange: (tabs: AppHeaderTab[]) => void;
+  onCreate?: () => void;
+  onHide?: () => void;
+  onSpecialEntrySelect?: (entryId: SidePanelSpecialEntryId) => void;
+  onCloseRequest?: (tab: AppHeaderTab) => boolean | undefined;
+  createLabel?: string;
+  tabListLabel?: string;
+  hideLabel?: string;
+  menuLabel?: string;
+  closeLabel?: string;
+};
 
 type SideSpecialItem = {
-  id: SidePanelSpecialEntryId
-  label: string
-  icon: React.ElementType
-}
+  id: SidePanelSpecialEntryId;
+  label: string;
+  icon: React.ElementType;
+};
 
 function PhosphorIcon({
   children,
@@ -80,7 +87,7 @@ function PhosphorIcon({
     >
       {children}
     </svg>
-  )
+  );
 }
 
 function LinkIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -91,7 +98,7 @@ function LinkIcon(props: React.SVGProps<SVGSVGElement>) {
         d="M240 88.23a54.43 54.43 0 0 1-16 37L189.25 160a54.27 54.27 0 0 1-38.63 16h-.05A54.63 54.63 0 0 1 96 119.84a8 8 0 0 1 16 .45A38.62 38.62 0 0 0 150.58 160h.04a38.39 38.39 0 0 0 27.31-11.31l34.75-34.75a38.63 38.63 0 0 0-54.63-54.63l-11 11A8 8 0 0 1 135.7 59l11-11A54.65 54.65 0 0 1 224 48a54.86 54.86 0 0 1 16 40.23ZM109 185.66l-11 11A38.41 38.41 0 0 1 70.6 208h-.04a38.63 38.63 0 0 1-27.29-65.94L78 107.31A38.63 38.63 0 0 1 144 135.71a8 8 0 0 0 16 .45A54.86 54.86 0 0 0 144 96a54.65 54.65 0 0 0-77.27 0L32 130.75A54.62 54.62 0 0 0 70.56 224h.04a54.28 54.28 0 0 0 38.64-16l11-11A8 8 0 0 0 109 185.66Z"
       />
     </PhosphorIcon>
-  )
+  );
 }
 
 function CubeIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -102,7 +109,7 @@ function CubeIcon(props: React.SVGProps<SVGSVGElement>) {
         d="M223.68 66.15 135.68 18a15.88 15.88 0 0 0-15.36 0l-88 48.17a16 16 0 0 0-8.32 14v95.64a16 16 0 0 0 8.32 14l88 48.17a15.88 15.88 0 0 0 15.36 0l88-48.17a16 16 0 0 0 8.32-14V80.18a16 16 0 0 0-8.32-14.03ZM128 32l80.34 44L128 120 47.66 76ZM40 90l80 43.78v85.79l-80-43.75Zm96 129.57v-85.75L216 90v85.78Z"
       />
     </PhosphorIcon>
-  )
+  );
 }
 
 function RelatedContentIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -113,7 +120,7 @@ function RelatedContentIcon(props: React.SVGProps<SVGSVGElement>) {
         d="M172 76a44 44 0 1 0-44 44 44.05 44.05 0 0 0 44-44Zm-44 28a28 28 0 1 1 28-28 28 28 0 0 1-28 28Zm60 24a44 44 0 1 0 44 44 44.05 44.05 0 0 0-44-44Zm0 72a28 28 0 1 1 28-28 28 28 0 0 1-28 28ZM68 128a44 44 0 1 0 44 44 44.05 44.05 0 0 0-44-44Zm0 72a28 28 0 1 1 28-28 28 28 0 0 1-28 28Z"
       />
     </PhosphorIcon>
-  )
+  );
 }
 
 function ChatIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -124,7 +131,7 @@ function ChatIcon(props: React.SVGProps<SVGSVGElement>) {
         d="M140 128a12 12 0 1 1-12-12 12 12 0 0 1 12 12Zm-56-12a12 12 0 1 0 12 12 12 12 0 0 0-12-12Zm88 0a12 12 0 1 0 12 12 12 12 0 0 0-12-12Zm60 12A104 104 0 0 1 79.12 219.82l-34.05 11.35a16 16 0 0 1-20.24-20.24l11.35-34.05A104 104 0 1 1 232 128Zm-16 0A88 88 0 1 0 51.81 172.06a8 8 0 0 1 .66 6.54L40 216l37.4-12.47a7.85 7.85 0 0 1 2.53-.42 8 8 0 0 1 4 1.08A88 88 0 0 0 216 128Z"
       />
     </PhosphorIcon>
-  )
+  );
 }
 
 function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -135,7 +142,7 @@ function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
         d="m229.66 218.34-50.07-50.06a88.11 88.11 0 1 0-11.31 11.31l50.06 50.07a8 8 0 0 0 11.32-11.32ZM40 112a72 72 0 1 1 72 72 72.08 72.08 0 0 1-72-72Z"
       />
     </PhosphorIcon>
-  )
+  );
 }
 
 const defaultSpecialItems: SideSpecialItem[] = [
@@ -149,41 +156,41 @@ const defaultSpecialItems: SideSpecialItem[] = [
   },
   { id: "aiAssistantChat", label: "Chat de IA", icon: ChatIcon },
   { id: "localSpaceQuery", label: "Buscar", icon: SearchIcon },
-]
+];
 
 function useElementWidth<T extends HTMLElement>() {
-  const ref = React.useRef<T>(null)
-  const [width, setWidth] = React.useState(0)
+  const ref = React.useRef<T>(null);
+  const [width, setWidth] = React.useState(0);
 
   React.useEffect(() => {
-    const element = ref.current
-    if (!element) return
+    const element = ref.current;
+    if (!element) return;
 
-    const update = () => setWidth(element.getBoundingClientRect().width)
-    update()
+    const update = () => setWidth(element.getBoundingClientRect().width);
+    update();
 
-    const observer = new ResizeObserver(update)
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [])
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
 
-  return [ref, width] as const
+  return [ref, width] as const;
 }
 
 function moveTab(tabs: AppHeaderTab[], sourceId: string, targetId: string) {
-  if (sourceId === targetId) return tabs
+  if (sourceId === targetId) return tabs;
 
-  const sourceIndex = tabs.findIndex((tab) => tab.id === sourceId)
-  const targetIndex = tabs.findIndex((tab) => tab.id === targetId)
-  if (sourceIndex < 0 || targetIndex < 0) return tabs
+  const sourceIndex = tabs.findIndex((tab) => tab.id === sourceId);
+  const targetIndex = tabs.findIndex((tab) => tab.id === targetId);
+  if (sourceIndex < 0 || targetIndex < 0) return tabs;
 
-  const next = [...tabs]
-  const [moving] = next.splice(sourceIndex, 1)
-  if (!moving) return tabs
+  const next = [...tabs];
+  const [moving] = next.splice(sourceIndex, 1);
+  if (!moving) return tabs;
 
-  const nextTargetIndex = next.findIndex((tab) => tab.id === targetId)
-  next.splice(Math.max(0, nextTargetIndex), 0, moving)
-  return next
+  const nextTargetIndex = next.findIndex((tab) => tab.id === targetId);
+  next.splice(Math.max(0, nextTargetIndex), 0, moving);
+  return next;
 }
 
 function SideHeaderAction({
@@ -194,12 +201,12 @@ function SideHeaderAction({
   children,
   onClick,
 }: {
-  label: string
-  placement?: "bottom" | "left"
-  width?: number
-  className?: string
-  children: React.ReactNode
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  label: string;
+  placement?: "bottom" | "left";
+  width?: number;
+  className?: string;
+  children: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }) {
   const button = (
     <button
@@ -219,16 +226,20 @@ function SideHeaderAction({
         {children}
       </span>
     </button>
-  )
+  );
 
   return (
     <Tooltip>
       <TooltipTrigger render={button} />
-      <TooltipContent side={placement} sideOffset={8} className="px-2 py-1.5 text-xs">
+      <TooltipContent
+        side={placement}
+        sideOffset={8}
+        className="px-2 py-1.5 text-xs"
+      >
         {label}
       </TooltipContent>
     </Tooltip>
-  )
+  );
 }
 
 function SideTabList({
@@ -238,13 +249,13 @@ function SideTabList({
   onValueChange,
   onClose,
 }: {
-  tabs: AppHeaderTab[]
-  value: string
-  show: boolean
-  onValueChange: (value: string) => void
-  onClose: (tab: AppHeaderTab) => void
+  tabs: AppHeaderTab[];
+  value: string;
+  show: boolean;
+  onValueChange: (value: string) => void;
+  onClose: (tab: AppHeaderTab) => void;
 }) {
-  if (!show) return null
+  if (!show) return null;
 
   return (
     <DropdownMenu>
@@ -259,13 +270,21 @@ function SideTabList({
           </button>
         }
       />
-      <DropdownMenuContent side="bottom" align="end" sideOffset={6} className="w-60">
+      <DropdownMenuContent
+        side="bottom"
+        align="end"
+        sideOffset={6}
+        className="w-60"
+      >
         {tabs.map((tab) => {
-          const Icon = tab.icon
+          const Icon = tab.icon;
           return (
             <DropdownMenuItem
               key={tab.id}
-              className={cn("group/tab-list h-9 gap-2", tab.id === value && "bg-accent")}
+              className={cn(
+                "group/tab-list h-9 gap-2",
+                tab.id === value && "bg-accent",
+              )}
               onClick={() => onValueChange(tab.id)}
             >
               {Icon && (
@@ -285,20 +304,20 @@ function SideTabList({
                   aria-label={`Fechar ${tab.label}`}
                   className="flex size-6 items-center justify-center rounded-md opacity-0 group-hover/tab-list:opacity-100 hover:bg-background"
                   onClick={(event) => {
-                    event.preventDefault()
-                    event.stopPropagation()
-                    onClose(tab)
+                    event.preventDefault();
+                    event.stopPropagation();
+                    onClose(tab);
                   }}
                 >
                   ×
                 </button>
               )}
             </DropdownMenuItem>
-          )
+          );
         })}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 function AppSidePanelHeader({
@@ -318,38 +337,46 @@ function AppSidePanelHeader({
   style,
   ...props
 }: AppSidePanelHeaderProps) {
-  const [tabsRef, width] = useElementWidth<HTMLDivElement>()
-  const [draggingId, setDraggingId] = React.useState<string | null>(null)
+  const [tabsRef, width] = useElementWidth<HTMLDivElement>();
+  const [draggingId, setDraggingId] = React.useState<string | null>(null);
 
   const layout = React.useMemo(() => {
-    const count = tabs.length
+    const count = tabs.length;
     if (!count || width <= 0) {
-      return { tabWidth: SIDE_TAB_MAX_WIDTH, cramped: false }
+      return { tabWidth: SIDE_TAB_MAX_WIDTH, cramped: false };
     }
 
-    const gaps = Math.max(0, count - 1) * SIDE_TAB_GAP
-    const available = width - gaps
-    const rawWidth = Math.max(1, Math.floor(Math.min(SIDE_TAB_MAX_WIDTH, available / count)))
-    const cramped = rawWidth < SIDE_TAB_MIN_WIDTH
-    const crampedAvailable = Math.max(1, width - SIDE_TAB_CONTROLS_WIDTH - gaps)
+    const gaps = Math.max(0, count - 1) * SIDE_TAB_GAP;
+    const available = width - gaps;
+    const rawWidth = Math.max(
+      1,
+      Math.floor(Math.min(SIDE_TAB_MAX_WIDTH, available / count)),
+    );
+    const cramped = rawWidth < SIDE_TAB_MIN_WIDTH;
+    const crampedAvailable = Math.max(
+      1,
+      width - SIDE_TAB_CONTROLS_WIDTH - gaps,
+    );
 
     return {
-      tabWidth: cramped ? Math.max(1, Math.floor(crampedAvailable / count)) : rawWidth,
+      tabWidth: cramped
+        ? Math.max(1, Math.floor(crampedAvailable / count))
+        : rawWidth,
       cramped,
-    }
-  }, [tabs.length, width])
+    };
+  }, [tabs.length, width]);
 
   function closeTab(tab: AppHeaderTab) {
-    if (tabs.length <= 1) return
-    if (onCloseRequest?.(tab) === false) return
+    if (tabs.length <= 1) return;
+    if (onCloseRequest?.(tab) === false) return;
 
-    const index = tabs.findIndex((item) => item.id === tab.id)
-    const next = tabs.filter((item) => item.id !== tab.id)
-    onTabsChange(next)
+    const index = tabs.findIndex((item) => item.id === tab.id);
+    const next = tabs.filter((item) => item.id !== tab.id);
+    onTabsChange(next);
 
     if (value === tab.id) {
-      const fallback = next[index] ?? next[index - 1] ?? next[0]
-      if (fallback) onValueChange(fallback.id)
+      const fallback = next[index] ?? next[index - 1] ?? next[0];
+      if (fallback) onValueChange(fallback.id);
     }
   }
 
@@ -357,7 +384,7 @@ function AppSidePanelHeader({
     <header
       data-slot="app-side-panel-header"
       className={cn(
-        "flex h-[46px] w-full shrink-0 items-center justify-between bg-[var(--side-header-bg-back)] px-1",
+        "flex h-[58px] w-full shrink-0 items-center justify-between bg-[var(--side-header-bg-back)] px-1",
         className,
       )}
       style={{ ...sideHeaderTheme, ...style }}
@@ -377,47 +404,51 @@ function AppSidePanelHeader({
                 <React.Fragment key={tab.id}>
                   {/* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual tab wrapper */}
                   <div
-                  role="presentation"
-                  draggable={tab.draggable !== false}
-                  data-dnd-type="draggable"
-                  data-dnd-item={tab.id}
-                  data-sidepanel-tab-active={tab.id === value || undefined}
-                  className={cn(
-                    "relative min-w-0 outline-none ring-0 transition-[width] duration-150 ease-out motion-reduce:transition-none",
-                    tabs.length > 1 && "shrink-0",
-                  )}
-                  style={tabs.length === 1 ? { maxWidth: 400 } : { width: layout.tabWidth }}
-                  onDragStart={(event) => {
-                    if (tab.draggable === false) {
-                      event.preventDefault()
-                      return
+                    role="presentation"
+                    draggable={tab.draggable !== false}
+                    data-dnd-type="draggable"
+                    data-dnd-item={tab.id}
+                    data-sidepanel-tab-active={tab.id === value || undefined}
+                    className={cn(
+                      "relative min-w-0 outline-none ring-0 transition-[width] duration-150 ease-out motion-reduce:transition-none",
+                      tabs.length > 1 && "shrink-0",
+                    )}
+                    style={
+                      tabs.length === 1
+                        ? { maxWidth: 400 }
+                        : { width: layout.tabWidth }
                     }
-                    event.dataTransfer.effectAllowed = "move"
-                    event.dataTransfer.setData("text/plain", tab.id)
-                    setDraggingId(tab.id)
-                  }}
-                  onDragOver={(event) => event.preventDefault()}
-                  onDrop={(event) => {
-                    event.preventDefault()
-                    const sourceId = event.dataTransfer.getData("text/plain")
-                    if (sourceId && sourceId !== tab.id) {
-                      onTabsChange(moveTab(tabs, sourceId, tab.id))
-                    }
-                    setDraggingId(null)
-                  }}
-                  onDragEnd={() => setDraggingId(null)}
-                >
-                  <AppHeaderTabItem
-                    tab={tab}
-                    active={tab.id === value}
-                    neutral={tabs.length === 1}
-                    fitContent={tabs.length === 1}
-                    closable={tabs.length > 1}
-                    dragging={draggingId === tab.id}
-                    actionLabels={{ close: closeLabel }}
-                    onOpen={() => onValueChange(tab.id)}
-                    onClose={() => closeTab(tab)}
-                  />
+                    onDragStart={(event) => {
+                      if (tab.draggable === false) {
+                        event.preventDefault();
+                        return;
+                      }
+                      event.dataTransfer.effectAllowed = "move";
+                      event.dataTransfer.setData("text/plain", tab.id);
+                      setDraggingId(tab.id);
+                    }}
+                    onDragOver={(event) => event.preventDefault()}
+                    onDrop={(event) => {
+                      event.preventDefault();
+                      const sourceId = event.dataTransfer.getData("text/plain");
+                      if (sourceId && sourceId !== tab.id) {
+                        onTabsChange(moveTab(tabs, sourceId, tab.id));
+                      }
+                      setDraggingId(null);
+                    }}
+                    onDragEnd={() => setDraggingId(null)}
+                  >
+                    <AppHeaderTabItem
+                      tab={tab}
+                      active={tab.id === value}
+                      neutral={tabs.length === 1}
+                      fitContent={tabs.length === 1}
+                      closable={tabs.length > 1}
+                      dragging={draggingId === tab.id}
+                      actionLabels={{ close: closeLabel }}
+                      onOpen={() => onValueChange(tab.id)}
+                      onClose={() => closeTab(tab)}
+                    />
                   </div>
                 </React.Fragment>
               ))}
@@ -436,7 +467,11 @@ function AppSidePanelHeader({
                 onValueChange={onValueChange}
                 onClose={closeTab}
               />
-              <SideHeaderAction label={createLabel} placement="left" onClick={onCreate}>
+              <SideHeaderAction
+                label={createLabel}
+                placement="left"
+                onClick={onCreate}
+              >
                 <AppHeaderPlusIcon />
               </SideHeaderAction>
             </div>
@@ -469,9 +504,14 @@ function AppSidePanelHeader({
                 </button>
               }
             />
-            <DropdownMenuContent side="bottom" align="end" sideOffset={6} className="w-64 p-1.5">
+            <DropdownMenuContent
+              side="bottom"
+              align="end"
+              sideOffset={6}
+              className="w-64 p-1.5"
+            >
               {defaultSpecialItems.map((item) => {
-                const Icon = item.icon
+                const Icon = item.icon;
                 return (
                   <DropdownMenuItem
                     key={item.id}
@@ -481,14 +521,18 @@ function AppSidePanelHeader({
                     <Icon className="size-4 text-muted-foreground" />
                     <span>{item.label}</span>
                   </DropdownMenuItem>
-                )
+                );
               })}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
     </header>
-  )
+  );
 }
 
-export { AppSidePanelHeader, type AppSidePanelHeaderProps, type SidePanelSpecialEntryId }
+export {
+  AppSidePanelHeader,
+  type AppSidePanelHeaderProps,
+  type SidePanelSpecialEntryId,
+};

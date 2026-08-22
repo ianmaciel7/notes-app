@@ -50,7 +50,7 @@ for (const viewport of desktopViewports) {
     await expect(sidebar).toBeVisible();
     await expect
       .poll(async () => (await sidebar.boundingBox())?.width)
-      .toBeCloseTo(224, 0);
+      .toBeCloseTo(288, 0);
     await expect
       .poll(async () => (await main.boundingBox())?.width ?? 0)
       .toBeGreaterThan(0);
@@ -228,10 +228,9 @@ test("object type collection and query actions open editable item screens", asyn
     .filter({ hasText: "Páginas" })
     .click();
   await page.getByRole("tab", { name: "Tudo", exact: true }).click();
-  await expect(page.getByRole("tab", { name: "Tudo", exact: true })).toHaveAttribute(
-    "aria-selected",
-    "true",
-  );
+  await expect(
+    page.getByRole("tab", { name: "Tudo", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
 
   await page
     .getByRole("button", { name: "Mais opções", exact: true })
@@ -239,9 +238,11 @@ test("object type collection and query actions open editable item screens", asyn
     .click();
   await page.getByRole("menuitem", { name: "Nova coleção" }).click();
 
-  const collectionScreen = page.locator(
-    '[data-slot="object-type-named-item-workspace"][data-kind="collection"]',
-  ).filter({ visible: true });
+  const collectionScreen = page
+    .locator(
+      '[data-slot="object-type-named-item-workspace"][data-kind="collection"]',
+    )
+    .filter({ visible: true });
   await expect(collectionScreen).toBeVisible();
   await expect(collectionScreen).toContainText("Páginas");
   await expect(collectionScreen).toContainText("0 entradas");
@@ -272,9 +273,11 @@ test("object type collection and query actions open editable item screens", asyn
     .click();
   await page.getByRole("menuitem", { name: "Nova query" }).click();
 
-  const queryScreen = page.locator(
-    '[data-slot="object-type-named-item-workspace"][data-kind="query"]',
-  ).filter({ visible: true });
+  const queryScreen = page
+    .locator(
+      '[data-slot="object-type-named-item-workspace"][data-kind="query"]',
+    )
+    .filter({ visible: true });
   await expect(queryScreen).toBeVisible();
   await expect(queryScreen).toContainText("Páginas");
   await expect(queryScreen).toContainText("0 entradas");
@@ -400,7 +403,9 @@ test("reduced motion keeps state changes immediate", async ({ page }) => {
   const newButton = page.getByRole("button", { name: "Novo", exact: true });
   await newButton.focus();
   await expect(newButton).toBeFocused();
-  expect(await newButton.evaluate((element) => element.matches(":focus-visible"))).toBe(true);
+  expect(
+    await newButton.evaluate((element) => element.matches(":focus-visible")),
+  ).toBe(true);
   await newButton.press("Enter");
   const menu = page.locator('[data-slot="popover-content"][data-open]');
   await expect(menu).toBeVisible();
@@ -469,7 +474,9 @@ test("every supported New family persists once and reopens from its tab projecti
             ? "https://x.com/openai/status/123456789"
             : "https://example.com/parity",
         );
-      await page.getByRole("button", { name: "Adicionar", exact: true }).click();
+      await page
+        .getByRole("button", { name: "Adicionar", exact: true })
+        .click();
     } else if (family.kind === "file") {
       await page.getByLabel("Escolher arquivo local").setInputFiles({
         buffer: Buffer.from(family.id === "pdf" ? "%PDF-1.4" : "parity"),
@@ -486,7 +493,9 @@ test("every supported New family persists once and reopens from its tab projecti
     await expect(workspace).toBeVisible();
 
     if (family.kind === "query") {
-      await workspace.getByLabel("Descrição da Query").fill("páginas criadas hoje");
+      await workspace
+        .getByLabel("Descrição da Query")
+        .fill("páginas criadas hoje");
       await workspace.getByRole("button", { name: "Gerar" }).click();
     } else if (family.kind === "table") {
       await workspace.getByRole("textbox", { name: "Título" }).fill(title);
@@ -531,7 +540,9 @@ test("every supported New family persists once and reopens from its tab projecti
     );
     expect(entity?.id).toBeTruthy();
     await expect(
-      page.locator(`[data-tab-id="${entity.id}"] [role="tab"]`).filter({ visible: true }),
+      page
+        .locator(`[data-tab-id="${entity.id}"] [role="tab"]`)
+        .filter({ visible: true }),
     ).toHaveAttribute("aria-selected", "true");
     await page
       .locator('[aria-label="Workspace tabs"] [role="tab"]')

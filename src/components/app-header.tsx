@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import type * as React from "react"
+import type * as React from "react";
 
 import {
   AppHeaderCaretLeftIcon,
   AppHeaderCaretRightIcon,
   AppHeaderCircleDashedIcon,
   AppHeaderCloseIcon,
-} from "@/components/app-header-icons"
-import { Button } from "@/components/ui/button"
+} from "@/components/app-header-icons";
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 const appHeaderTheme = {
   "--app-header-bg-base": "#ffffff",
@@ -25,30 +25,30 @@ const appHeaderTheme = {
   "--app-header-text-primary": "#282522",
   "--app-header-text-secondary": "#595550",
   "--app-header-text-subtle": "#837d76",
-} as React.CSSProperties
+} as React.CSSProperties;
 
 type AppHeaderProps = React.ComponentProps<"header"> & {
-  backDisabled?: boolean
-  forwardDisabled?: boolean
-  onBack?: () => void
-  onForward?: () => void
-  onFocus?: () => void
-  backLabel?: string
-  forwardLabel?: string
-  focusLabel?: string
-  end?: React.ReactNode
-}
+  backDisabled?: boolean;
+  forwardDisabled?: boolean;
+  onBack?: () => void;
+  onForward?: () => void;
+  onFocus?: () => void;
+  backLabel?: string;
+  forwardLabel?: string;
+  focusLabel?: string;
+  end?: React.ReactNode;
+};
 
 type AppFocusModeControlsProps = React.ComponentProps<"div"> & {
-  backDisabled?: boolean
-  forwardDisabled?: boolean
-  onBack?: () => void
-  onForward?: () => void
-  onExit?: () => void
-  backLabel?: string
-  forwardLabel?: string
-  exitLabel?: string
-}
+  backDisabled?: boolean;
+  forwardDisabled?: boolean;
+  onBack?: () => void;
+  onForward?: () => void;
+  onExit?: () => void;
+  backLabel?: string;
+  forwardLabel?: string;
+  exitLabel?: string;
+};
 
 function AppHeader({
   className,
@@ -69,9 +69,9 @@ function AppHeader({
     <header
       data-slot="app-header"
       className={cn(
-        "flex h-[46px] w-full shrink-0 grow-0 items-center justify-between border-b-0",
+        "flex h-[58px] w-full shrink-0 grow-0 items-center justify-between border-b-0",
         "bg-[var(--app-header-bg-back)] text-[var(--app-header-text-secondary)]",
-        className
+        className,
       )}
       style={{ ...appHeaderTheme, ...style }}
       {...props}
@@ -102,14 +102,18 @@ function AppHeader({
         className="flex max-w-max shrink-0 items-center justify-end pr-2.5 text-xs text-[var(--app-header-text-secondary)]"
       >
         <div className="flex items-center gap-1 px-1">
-          <AppHeaderAction aria-label={focusLabel} tooltip={focusLabel} onClick={onFocus}>
+          <AppHeaderAction
+            aria-label={focusLabel}
+            tooltip={focusLabel}
+            onClick={onFocus}
+          >
             <AppHeaderCircleDashedIcon className="size-4" />
           </AppHeaderAction>
           {end}
         </div>
       </div>
     </header>
-  )
+  );
 }
 
 function AppHeaderHistory({
@@ -122,12 +126,12 @@ function AppHeaderHistory({
   className,
   ...props
 }: React.ComponentProps<"div"> & {
-  backDisabled?: boolean
-  forwardDisabled?: boolean
-  onBack?: () => void
-  onForward?: () => void
-  backLabel?: string
-  forwardLabel?: string
+  backDisabled?: boolean;
+  forwardDisabled?: boolean;
+  onBack?: () => void;
+  onForward?: () => void;
+  backLabel?: string;
+  forwardLabel?: string;
 }) {
   return (
     <div
@@ -153,7 +157,7 @@ function AppHeaderHistory({
         <AppHeaderCaretRightIcon className="size-4" />
       </AppHeaderAction>
     </div>
-  )
+  );
 }
 
 function AppHeaderAction({
@@ -164,7 +168,7 @@ function AppHeaderAction({
   children,
   ...props
 }: React.ComponentProps<typeof Button> & {
-  tooltip?: React.ReactNode
+  tooltip?: React.ReactNode;
 }) {
   const button = (
     <Button
@@ -176,15 +180,15 @@ function AppHeaderAction({
         "rounded-lg border border-transparent bg-transparent text-[var(--app-header-text-secondary)] shadow-none",
         "hover:bg-[var(--app-header-bg-front-hover)] hover:text-[var(--app-header-text-primary)]",
         "active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
-        className
+        className,
       )}
       {...props}
     >
       {children}
     </Button>
-  )
+  );
 
-  if (!tooltip) return button
+  if (!tooltip) return button;
 
   return (
     <Tooltip>
@@ -193,7 +197,7 @@ function AppHeaderAction({
         {tooltip}
       </TooltipContent>
     </Tooltip>
-  )
+  );
 }
 
 function AppFocusModeControls({
@@ -214,7 +218,7 @@ function AppFocusModeControls({
       data-slot="app-focus-mode-controls"
       className={cn(
         "pointer-events-none fixed inset-x-0 top-0 z-50 flex items-start justify-center px-4 pt-2",
-        className
+        className,
       )}
       style={{ ...appHeaderTheme, ...style }}
       {...props}
@@ -257,14 +261,14 @@ function AppFocusModeControls({
         </AppHeaderAction>
       </div>
     </div>
-  )
+  );
 }
 
 export {
   AppFocusModeControls,
+  type AppFocusModeControlsProps,
   AppHeader,
   AppHeaderAction,
   AppHeaderHistory,
-  type AppFocusModeControlsProps,
   type AppHeaderProps,
-}
+};

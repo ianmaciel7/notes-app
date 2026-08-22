@@ -13,6 +13,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { workspaceSurfaceMotionClass } from "@/components/ui/shared-styles";
 import {
   Sheet,
   SheetContent,
@@ -21,16 +22,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { workspaceSurfaceMotionClass } from "@/components/ui/shared-styles";
 import { cn } from "@/lib/utils";
 import { getWorkspacePanelPresentation } from "@/lib/workspace-layout";
 
-const APP_SHELL_LEFT_DEFAULT = "14rem";
-const APP_SHELL_LEFT_MIN = "14rem";
+const APP_SHELL_LEFT_DEFAULT = "18rem";
+const APP_SHELL_LEFT_MIN = "18rem";
 const APP_SHELL_LEFT_MAX = "24rem";
-const APP_SHELL_RIGHT_DEFAULT = "45%";
-const APP_SHELL_RIGHT_MIN = "10%";
-const APP_SHELL_RIGHT_MAX = "90%";
+const APP_SHELL_RIGHT_DEFAULT = "28.5rem";
+const APP_SHELL_RIGHT_MIN = "20rem";
+const APP_SHELL_RIGHT_MAX = "28.5rem";
 
 const appShellPanelGroupVariants = cva("h-full w-full", {
   variants: {
@@ -417,7 +417,7 @@ function AppShellSidePanel({
       maxSize={APP_SHELL_RIGHT_MAX}
       collapsedSize="0%"
       collapsible
-      groupResizeBehavior="preserve-relative-size"
+      groupResizeBehavior="preserve-pixel-size"
       onResize={(size, id, previousSize) => {
         setRightCollapsed(size.inPixels <= 1);
         onResize?.(size, id, previousSize);
@@ -447,7 +447,7 @@ function AppShellHeader({
   return (
     <header
       data-slot="app-shell-header"
-      className={cn("flex h-[46px] shrink-0 items-center", className)}
+      className={cn("flex h-[58px] shrink-0 items-center", className)}
       {...props}
     />
   );
@@ -476,7 +476,7 @@ function AppShellSurface({
       data-side={side}
       className={cn(
         "min-h-0 flex-1 pb-2.5 pt-0",
-        side === "main" ? "px-2.5" : "pl-0 pr-2.5",
+        side === "main" ? "pl-0 pr-3" : "pl-0 pr-2.5",
       )}
     >
       <Card
@@ -587,9 +587,7 @@ function AppShellSidePanelTrigger({
         size="icon-sm"
         className={cn("bg-transparent aria-expanded:bg-transparent", className)}
         aria-expanded={!rightCollapsed}
-        aria-label={
-          rightCollapsed ? t("expandContext") : t("collapseContext")
-        }
+        aria-label={rightCollapsed ? t("expandContext") : t("collapseContext")}
         onClick={(event) => {
           onClick?.(event);
           if (!event.defaultPrevented) toggleRight();

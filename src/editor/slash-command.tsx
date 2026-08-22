@@ -179,15 +179,30 @@ const SlashCommandMenu = React.forwardRef<
 });
 
 function filterCommandItems(items: BlockCommandCatalogItem[], query: string) {
-  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const normalizedQuery = normalizeCommandQuery(query);
   if (!normalizedQuery) return items;
 
   return items.filter((item) => {
-    const haystack = [item.title, ...item.searchTerms]
-      .join(" ")
-      .toLocaleLowerCase();
-    return haystack.includes(normalizedQuery);
+    return [item.title, ...item.searchTerms].some((term) =>
+      commandTermMatches(term, normalizedQuery),
+    );
   });
+}
+
+function normalizeCommandQuery(value: string) {
+  return value
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase();
+}
+
+function commandTermMatches(term: string, query: string) {
+  const normalizedTerm = normalizeCommandQuery(term);
+  if (normalizedTerm.startsWith(query)) return true;
+  return normalizedTerm
+    .split(/[\s-]+/)
+    .some((token) => token.startsWith(query));
 }
 
 function createSlashCommandExtension(labels: BlockEditorSlashMenuLabels) {
