@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import * as React from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
@@ -9,9 +10,14 @@ import {
   AppSidebarPlusIcon,
   AppSidebarSearchIcon,
 } from "@/components/app-sidebar-icons";
-import { AppSidebarOverview } from "@/components/app-sidebar-overview";
-import { useWorkspace } from "@/components/workspace-controller";
 import {
+  type AppSidebarCollectionAction,
+  type AppSidebarObjectType,
+  AppSidebarOverview,
+  appSidebarCollectionId,
+} from "@/components/app-sidebar-overview";
+import {
+  ObjectCollectionIcon,
   ObjectIconBadge,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
@@ -35,6 +41,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useWorkspace } from "@/components/workspace-controller";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
@@ -85,18 +92,27 @@ function NewContentMenu({
   action: AppSidebarPrimaryAction;
   onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
 }) {
+  const t = useTranslations("workspace");
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [activeIndex, setActiveIndex] = React.useState(0);
   const optionRefs = React.useRef(new Map<string, HTMLButtonElement>());
   const Icon = action.icon;
   const normalizedQuery = normalizeMenuQuery(query.trim());
+  const localizedItems = React.useMemo(
+    () =>
+      newContentItems.map((item) => ({
+        ...item,
+        label: t(`objectTypeStudio.objectTypes.${item.objectTypeId}`),
+      })),
+    [t],
+  );
   const items = React.useMemo(
     () =>
-      newContentItems.filter((item) =>
+      localizedItems.filter((item) =>
         normalizeMenuQuery(item.label).includes(normalizedQuery),
       ),
-    [normalizedQuery],
+    [localizedItems, normalizedQuery],
   );
 
   function resetMenu() {
@@ -110,7 +126,7 @@ function NewContentMenu({
   }
 
   function selectItem(objectTypeId: string) {
-    const selectedItem = newContentItems.find(
+    const selectedItem = localizedItems.find(
       (item) => item.objectTypeId === objectTypeId,
     );
     onSelectObjectType?.(objectTypeId, selectedItem?.label);
@@ -130,8 +146,8 @@ function NewContentMenu({
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       const direction = event.key === "ArrowDown" ? 1 : -1;
-      setActiveIndex((current) =>
-        (current + direction + items.length) % items.length,
+      setActiveIndex(
+        (current) => (current + direction + items.length) % items.length,
       );
       return;
     }
@@ -151,11 +167,26 @@ function NewContentMenu({
       ?.scrollIntoView({ block: "nearest" });
   }, [activeIndex, items, open]);
 
+  React.useEffect(() => {
+    function openFromWorkspace() {
+      setQuery("");
+      setActiveIndex(0);
+      setOpen(true);
+    }
+    window.addEventListener("workspace:open-new-palette", openFromWorkspace);
+    return () =>
+      window.removeEventListener(
+        "workspace:open-new-palette",
+        openFromWorkspace,
+      );
+  }, []);
+
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger
         render={
           <Button
+            id="workspace-new-trigger"
             type="button"
             variant="ghost"
             size="default"
@@ -252,16 +283,16 @@ function NewContentMenu({
 
         <div className="mx-1 flex h-[29px] shrink-0 items-center gap-x-3 border-t border-border px-1 py-1.5 text-xs leading-4 text-muted-foreground">
           <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">↑↓</span>{" "}
-            para navegar
+            <span className="font-medium text-muted-foreground">↑↓</span> para
+            navegar
           </span>
           <span className="whitespace-nowrap">
             <span className="font-medium text-muted-foreground">Esc</span> para
             abortar
           </span>
           <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">↵</span>{" "}
-            para selecionar
+            <span className="font-medium text-muted-foreground">↵</span> para
+            selecionar
           </span>
         </div>
       </PopoverContent>
@@ -436,10 +467,7 @@ function AppSidebarPrimaryActionItem({
 
   if (action.id === "new") {
     return (
-      <NewContentMenu
-        action={action}
-        onSelectObjectType={onSelectObjectType}
-      />
+      <NewContentMenu action={action} onSelectObjectType={onSelectObjectType} />
     );
   }
 
@@ -537,6 +565,7 @@ function AppSidebarPrimaryActions({
 }
 
 function WorkspaceSidebar() {
+  const t = useTranslations("workspace");
   const {
     spaces,
     setSpaces,
@@ -550,14 +579,131 @@ function WorkspaceSidebar() {
     pinnedEntities,
     availablePinnedEntities,
     objectTypes,
+    objectTypeCollections,
     customSections,
     setPinnedEntities,
     setObjectTypes,
+    setObjectTypeCollections,
     setCustomSections,
     setSideSearchOpen,
     setSideValue,
     createWorkspaceEntity,
+    showMessage,
   } = useWorkspace();
+  const [hiddenCollectionIds, setHiddenCollectionIds] = React.useState<
+    Set<string>
+  >(() => new Set());
+
+  const visibleObjectTypeCollections = React.useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(objectTypeCollections).map(([objectTypeId, collections]) => [
+          objectTypeId,
+          collections.filter(
+            (collection) =>
+              !hiddenCollectionIds.has(
+                appSidebarCollectionId(objectTypeId, collection),
+              ),
+          ),
+        ]),
+      ),
+    [hiddenCollectionIds, objectTypeCollections],
+  );
+
+  function handleCollectionAction(
+    action: AppSidebarCollectionAction,
+    objectType: AppSidebarObjectType,
+    collection: string,
+  ) {
+    const collectionId = appSidebarCollectionId(objectType.id, collection);
+
+    if (action === "open") {
+      selectEntity(objectType.id);
+      setActiveEntityId(collectionId);
+      return;
+    }
+
+    if (action === "create" || action === "template") {
+      createWorkspaceEntity(objectType.id, objectType.label);
+      if (action === "template") {
+        showMessage(t("objectTypeOverview.templateCreated"));
+      }
+      return;
+    }
+
+    if (action === "pin") {
+      setPinnedEntities((current) =>
+        current.some((item) => item.id === collectionId)
+          ? current
+          : [
+              ...current,
+              {
+                id: collectionId,
+                label: collection,
+                icon: ObjectCollectionIcon,
+                tone: "gray",
+              },
+            ],
+      );
+      showMessage(t("objectTypeOverview.pinnedToSidebar"));
+      return;
+    }
+
+    if (action === "unpin-type") {
+      setHiddenCollectionIds((current) => new Set(current).add(collectionId));
+      setActiveEntityId(objectType.id);
+      showMessage(t("objectTypeOverview.unpinnedFromSidebar"));
+      return;
+    }
+
+    if (action === "settings") {
+      selectEntity(objectType.id);
+      showMessage(t("objectTypeOverview.settingsDescription"));
+      return;
+    }
+
+    if (action === "share") {
+      void navigator.clipboard?.writeText(collection);
+      showMessage(t("documentMenu.shareHint"));
+      return;
+    }
+
+    if (action === "import") {
+      selectEntity(objectType.id);
+      window.setTimeout(() => {
+        document
+          .getElementById(`object-type-import-${objectType.id}`)
+          ?.click();
+      }, 0);
+      return;
+    }
+
+    if (action === "duplicate") {
+      setObjectTypeCollections((current) => {
+        const existing = current[objectType.id] ?? [];
+        let suffix = 1;
+        let copy = `${collection} copy`;
+        while (existing.includes(copy)) {
+          suffix += 1;
+          copy = `${collection} copy ${suffix}`;
+        }
+        return { ...current, [objectType.id]: [...existing, copy] };
+      });
+      showMessage(t("objectTypeOverview.collectionCreated"));
+      return;
+    }
+
+    setObjectTypeCollections((current) => ({
+      ...current,
+      [objectType.id]: (current[objectType.id] ?? []).filter(
+        (item) => item !== collection,
+      ),
+    }));
+    setPinnedEntities((current) =>
+      current.filter((item) => item.id !== collectionId),
+    );
+    setActiveEntityId(objectType.id);
+  }
 
   return (
     <TooltipProvider delay={200}>
@@ -591,10 +737,12 @@ function WorkspaceSidebar() {
             pinnedEntities={pinnedEntities}
             availablePinnedEntities={availablePinnedEntities}
             objectTypes={objectTypes}
+            objectTypeCollections={visibleObjectTypeCollections}
             customSections={customSections}
             onPinnedEntitiesChange={setPinnedEntities}
             onObjectTypesChange={setObjectTypes}
             onCustomSectionsChange={setCustomSections}
+            onCollectionAction={handleCollectionAction}
           />
         </div>
       </AppSidebar>
@@ -607,9 +755,9 @@ export {
   type AppSidebarPrimaryActionHint,
   type AppSidebarPrimaryActionId,
   AppSidebarPrimaryActions,
-  WorkspaceSidebar,
   type AppSidebarPrimaryActionsProps,
   type AppSidebarPrimaryNavigationAction,
   type AppSidebarShortcut,
   defaultActions,
+  WorkspaceSidebar,
 };

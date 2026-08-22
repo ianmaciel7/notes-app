@@ -126,3 +126,43 @@ The corpus is complete for the captured HTML/CSS/JavaScript/JSON UI resources, a
 - PASS: the six ADDED delta requirements were merged into `openspec/specs/ui/capacities-en-fidelity/spec.md` without copying delta-operation headers.
 - PASS: `openspec validate ui/capacities-en-fidelity --type spec --strict`, `openspec validate refine-capacities-en-fidelity --strict`, and `openspec validate --all --strict --no-interactive` all exit 0. In this CLI version, bare `openspec validate --specs` reports no discovered items for the repository's nested capability layout, so the synchronized capability was also addressed explicitly.
 - OPEN: task 5.3 remains unchecked because synchronization and strict validation are complete, but archival is intentionally deferred while the documented repository-wide `pnpm verify` baseline is red and no archive skill was requested.
+
+## Shared object-type listing completion
+
+- PASS: the authenticated `Lugares` target established one reusable object-type structure: type header, `Visão geral`/`Tudo` views, recently opened content, collections, and queries. The implementation applies that composition to every registered object type rather than special-casing Places.
+- PASS at 1294×912: local `Páginas` renders the same section hierarchy and switches to the complete-list view with its count and list controls. Creating another Page increments its sidebar count from 1 to 2, adds `Sem título` under recently opened, and selecting that row reopens the existing editor.
+- PASS at 390×844: the shared listing remains fully reachable inside the mobile composition and reports `scrollWidth === clientWidth === 390`, with no document overflow.
+- PASS: localized object-type overview copy is present in English, Spanish, and Brazilian Portuguese. Structural tests cover tab semantics, type-filtered recent entities, localized labels, and entity reopening.
+- PASS: `pnpm typecheck`, `pnpm test` (23/23), strict OpenSpec validation, and `git diff --check` exit 0. Focused Biome lint exits 0 with one warning from the concurrently integrated image editor's existing raw `<img>` element; no listing diagnostic is reported.
+- PASS: retained browser checkpoints are `artifacts/browser-validation/refine-capacities-en-fidelity/object-type-overview-1294x912.png` and `artifacts/browser-validation/refine-capacities-en-fidelity/object-type-overview-390x844.png`.
+- SCOPE: concurrent lifecycle source was preserved and integrated only where its evolving types/messages intersected the shared listing; its separate `implement-object-lifecycle` OpenSpec artifacts were not modified.
+
+## Functional object-type actions and controls
+
+- PASS against authenticated `Lugares`: the target title search replaces the icon group with `Buscar título…`; collapse hides the view toolbar while leaving content; filter and sort add inline rows; list/grid change the presentation; the options menu exposes template, query, collection, pin, settings, export, and import; the split-New menu exposes current-type creation, import, and the global object chooser.
+- PASS on localhost: the active-type header `New` created an Atomic note, activated its editor, and incremented the sidebar count from 1 to 2. The empty-list `New` shares the same creation callback and required-input types retain their existing draft dialogs.
+- PASS on localhost: visible `Import file(s)` opened a multiple-file chooser. Selecting `import-sample.md` created and activated an Atomic note titled `import-sample`, populated its body, incremented the type count from 0 to 1, and displayed `Imported 1 object.`
+- PASS: importing that same Markdown file twice through the Weblink split menu produced the localized rejection twice, retained the single existing Weblink, and proved that resetting the input permits repeated selection without a stale-change failure.
+- PASS: title search focused and reduced two Atomic notes to the matching `import-sample`; Escape cleared it. Collapse removed only the view tabs/actions. Filter and sort rows appeared inline, grid exposed `aria-pressed`, overview settings and recent expansion exposed their states, and query/collection actions created type-scoped local rows with status feedback.
+- PASS: an Atomic-note collection remained present after switching to Weblink and back, while it did not leak into the Weblink sections; collection/query state is provider-owned and keyed by object type.
+- PASS: the options and split-New menus expose keyboard/ARIA menu semantics and every item performs an action, opens import/settings, exports current local JSON, creates local query/collection state, or provides explicit localized demo feedback instead of remaining decorative.
+- PASS: `pnpm typecheck`, `pnpm test` (25/25), strict OpenSpec validation, and `git diff --check` exit 0. Focused lint of the new listing/reducer/tests reports no new error; the wider controller file retains previously documented overlay accessibility diagnostics and import-style warnings outside these controls.
+
+## 2026-08-22 exhaustive Atomic Notes listing audit
+
+- `PASS` authenticated control/state matrix: `artifacts/capacities-reference/atomic-notes-listing-control-matrix.md` records the measured badge, heading, split-New, view controls, 170 px section cadence, settings, recent expansion, collection/query creation, and complete-list controls.
+- `PASS` reference cleanup: opening Collection proved that Capacities creates an untitled collection immediately; the audit-created collection was then deleted through the authenticated object menu and confirmation dialog.
+- `PASS` local behavior: browser checks confirmed checkbox-driven visible/hidden sections, section collapse buttons, collection creation with focused editable title, recent expansion to `All`, global New palette opening from the split menu, and provider-owned pinning (pinned count changed from 1 to 2). Validation-only local pin/collection state was cleared by reload.
+- `PASS` equal-viewport geometry at 1294 x 912: local heading measured x=353/y=69, 20 px Inter weight 700/20 px line-height, matching the target; local overview controls measured y=111 versus target y=112, and section cadence matched 170 px.
+- `PASS` focused checks: Biome parses all changed listing/localization/test files with only the pre-existing `<img>` performance warning; 25/25 Node tests pass; strict OpenSpec validation passes.
+- `PASS` production build before the final geometry-only pass: Next.js compiled, typechecked, generated all pages, and finalized successfully.
+- `BLOCKED` final repeated whole-repository TypeScript/build pass: concurrent edits outside this change left `src/components/app-side-panel-header.tsx` with incomplete JSX (errors beginning at line 357). This change did not modify or overwrite that concurrent file; focused source parsing and tests remain green.
+
+## 2026-08-22 integrated final checkpoint
+
+- `PASS` the incomplete drag-wrapper JSX was repaired without changing tab behavior; native drag wrappers retain their interactive descendants and documented lint suppression.
+- `PASS` overview settings hid and restored Collections immediately, and recent expansion selected the `All` tab with the three Atomic-note entries visible.
+- `PASS` at 390 x 844 the document reported `scrollWidth === innerWidth === 390`, the active editor remained reachable, and the console stayed clean.
+- `PASS` `pnpm verify` completed the full repository gate, including the complexity refactors for tab actions, pointer sorting, and the object-type composition.
+- `PASS` the authenticated Atomic Notes matrix remains the authoritative reference evidence; this final local run introduced no temporary authenticated-reference data.
+- `PASS` all eight solid Phosphor path signatures used by `ObjectTypeToolbarIcon` were found verbatim in the sanitized source corpus, and the rendered Overview/All tablist retained its selected state and accessible names.

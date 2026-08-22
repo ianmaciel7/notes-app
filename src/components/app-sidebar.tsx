@@ -94,6 +94,13 @@ type DragSession = {
   lastTargetKey: string | null
 }
 
+function isPointerForSession(
+  session: DragSession | null,
+  event: PointerEvent
+): session is DragSession {
+  return session !== null && event.pointerId === session.pointerId
+}
+
 type DragPreview = {
   space: AppSidebarSpace
   left: number
@@ -204,6 +211,8 @@ function AppSidebarSpaceSwitcher({
     }, 400)
   }
 
+  // The timer lives in a ref and this effect intentionally installs one unmount cleanup.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: ref-backed cleanup is mount-scoped
   React.useEffect(() => () => clearHintTimer(), [])
 
   function measureItems() {
@@ -226,7 +235,9 @@ function AppSidebarSpaceSwitcher({
         const delta = previousTop - currentTop
         if (Math.abs(delta) < 0.5) return
 
-        element.getAnimations().forEach((animation) => animation.cancel())
+        element.getAnimations().forEach((animation) => {
+          animation.cancel()
+        })
         element.animate(
           [{ transform: `translateY(${delta}px)` }, { transform: "translateY(0)" }],
           { duration: 200, easing: "ease-out" }
@@ -286,10 +297,12 @@ function AppSidebarSpaceSwitcher({
     return true
   }
 
+  // Pointer listeners are installed once; every mutable value they consume is ref-backed.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: global drag session is mount-scoped
   React.useEffect(() => {
     function handlePointerMove(event: PointerEvent) {
       const session = dragSessionRef.current
-      if (!session || event.pointerId !== session.pointerId) return
+      if (!isPointerForSession(session, event)) return
 
       const distance = Math.hypot(
         event.clientX - session.startX,
@@ -386,6 +399,7 @@ function AppSidebarSpaceSwitcher({
     }
   }, [])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: ref-backed cleanup is mount-scoped
   React.useEffect(
     () => () => {
       const session = dragSessionRef.current

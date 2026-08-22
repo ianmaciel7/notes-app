@@ -18,93 +18,281 @@
     "cta": "Start building"
   },
   "workspace": {
-      "actions": {
-        "collapse": "Collapse",
-        "collapseEditor": "Collapse editor",
-        "filter": "Filter",
-        "grid": "Grid",
-        "importFiles": "Import file(s)",
-        "list": "List",
-        "moreOptions": "More options",
-        "moreViews": "More views",
-        "new": "New",
-        "newObjectOptions": "New object options",
-        "search": "Search",
-        "sort": "Sort"
+    "actions": {
+      "collapse": "Collapse",
+      "collapseEditor": "Collapse editor",
+      "customize": "Personalizar",
+      "filter": "Filter",
+      "grid": "Grid",
+      "importFiles": "Import file(s)",
+      "list": "List",
+      "moreOptions": "More options",
+      "moreViews": "More views",
+      "new": "New",
+      "newObjectOptions": "New object options",
+      "search": "Buscar",
+      "sort": "Sort"
+    },
+    "sidebarCollections": {
+      "createObject": "Create {type}",
+      "deleteCollection": "Delete collection",
+      "unpinFromType": "Unpin from object type"
+    },
+    "documentMenu": {
+      "addAliases": "Add aliases",
+      "addCover": "Add cover image",
+      "addDescription": "Add description",
+      "addIcon": "Add icon",
+      "aiUnavailable": "AI autofill is not available locally yet.",
+      "aliases": "Aliases",
+      "changeType": "Change type",
+      "collectionsHint": "Use the Collections control in the header.",
+      "copy": "Copy",
+      "copied": "Text is ready to copy.",
+      "copyText": "Copy text",
+      "coverReady": "The cover image picker will open here.",
+      "customizeHint": "Use the Customize button in the header.",
+      "defaultTemplate": "Default template",
+      "deleteObject": "Delete object",
+      "description": "Description",
+      "duplicate": "Duplicate",
+      "editCollections": "Edit collections",
+      "export": "Export",
+      "exported": "Page exported.",
+      "fillAliases": "Fill aliases",
+      "fillDescription": "Fill description",
+      "fillProperties": "Fill all properties",
+      "findPage": "Find in page",
+      "iconReady": "The icon picker will open here.",
+      "import": "Import",
+      "imported": "Content imported.",
+      "newTag": "New ‘{tag}’",
+      "newTagEmpty": "New tag",
+      "newCollection": "New collection",
+      "newCollectionNamed": "New ‘{collection}’",
+      "untitledCollection": "Untitled",
+      "noCollections": "No collections found",
+      "pinSidebar": "Pin to sidebar",
+      "pinned": "Pinned to the sidebar.",
+      "present": "Present",
+      "presentHint": "Presentation mode is ready.",
+      "searchAllTags": "Search all tags",
+      "share": "Share",
+      "shareHint": "Sharing options opened.",
+      "statsHint": "Statistics calculated for the current text.",
+      "templateApplied": "Default template applied.",
+      "textStats": "Text statistics",
+      "typeSettings": "Object type settings",
+      "typeSettingsHint": "Object type settings opened.",
+      "unpinSidebar": "Unpin from sidebar",
+      "unpinned": "Removed from the sidebar.",
+      "useTemplate": "Use template",
+      "wideLayout": "Wide layout"
+    },
+    "empty": {
+      "description": "You can change this by creating a new object.",
+      "title": "There is nothing here yet."
+    },
+    "explore": {
+      "aiChat": "AI chat",
+      "backlinks": "Backlinks",
+      "findMore": "Find more",
+      "graphView": "Graph view",
+      "objectsInside": "Objects inside",
+      "relatedContent": "Related content",
+      "relevantContent": "Relevant content",
+      "title": "Explore"
+    },
+    "fields": {
+      "quoteContent": "Quote content",
+      "tags": "Tags",
+      "text": "Text",
+      "title": "Title"
+    },
+    "objects": {
+      "collections": "Coleções",
+      "quote": "Quote"
+    },
+    "openedTab": {
+      "description": "Start writing or add content to this object."
+    },
+    "objectTypeStudio": {
+      "basicTypes": "Basic types",
+      "createOwn": "Create your own",
+      "description": "Choose a suggested or basic object type to add to the current space.",
+      "details": {
+        "close": "Close object type details",
+        "confirm": "Add object type",
+        "description": "Object type setup",
+        "name": "Name",
+        "namePlaceholder": "Object type name",
+        "preset": "Preset",
+        "review": "Review this preset before adding it to the current space."
       },
-      "empty": {
-        "description": "You can change this by creating a new object.",
-        "title": "There is nothing here yet."
+      "objectTypes": {
+        "ai-chat": "AI chat",
+        "area": "Area",
+        "atomic-note": "Atomic note",
+        "audio": "Audio",
+        "book": "Book",
+        "definition": "Definition",
+        "file": "File",
+        "idea": "Idea",
+        "image": "Image",
+        "media": "Media",
+        "meeting": "Meeting",
+        "organization": "Organization",
+        "page": "Página",
+        "pdf": "PDF",
+        "person": "Person",
+        "place": "Place",
+        "project": "Project",
+        "query": "Query",
+        "quote": "Quote",
+        "table": "Table",
+        "tag": "Etiqueta",
+        "task": "Tarefa",
+        "travel": "Travel",
+        "tweet": "Tweet",
+        "weblink": "Weblink"
       },
-      "explore": {
-        "aiChat": "AI chat",
-        "backlinks": "Backlinks",
-        "findMore": "Find more",
-        "graphView": "Graph view",
-        "objectsInside": "Objects inside",
-        "relatedContent": "Related content",
-        "relevantContent": "Relevant content",
-        "title": "Explore"
+      "title": "Add new object type",
+      "trigger": "Add object type"
+    },
+    "lifecycle": {
+      "cancel": "Cancel",
+      "changeObjectType": "Alterar tipo de objeto",
+      "errors": {
+        "incompatible-file": "Choose a file compatible with this object type.",
+        "invalid-url": "Enter a valid URL for this object type.",
+        "required-title": "Enter a task title.",
+        "unsupported-object-type": "This object type is not supported."
       },
-      "fields": {
-        "quoteContent": "Quote content",
-        "tags": "Tags",
-        "text": "Text",
-        "title": "Title"
-      },
-      "objects": {
-        "collections": "Collections",
-        "quote": "Quote"
-      },
-      "openedTab": {
-        "description": "Start writing or add content to this object."
-      },
-      "objectTypeStudio": {
-        "basicTypes": "Basic types",
-        "createOwn": "Create your own",
-        "description": "Choose a suggested or basic object type to add to the current space.",
-        "details": {
-          "close": "Close object type details",
-          "confirm": "Add object type",
-          "description": "Object type setup",
-          "name": "Name",
-          "namePlaceholder": "Object type name",
-          "preset": "Preset",
-          "review": "Review this preset before adding it to the current space."
+      "file": {
+        "choose": "Choose a local file",
+        "createTitle": {
+          "audio": "Add audio",
+          "file": "Add file",
+          "image": "Add image",
+          "pdf": "Add PDF"
         },
-        "objectTypes": {
-          "ai-chat": "AI chat",
-          "area": "Area",
-          "atomic-note": "Atomic note",
-          "audio": "Audio",
-          "book": "Book",
-          "definition": "Definition",
-          "file": "File",
-          "idea": "Idea",
-          "image": "Image",
-          "media": "Media",
-          "meeting": "Meeting",
-          "organization": "Organization",
-          "page": "Page",
-          "pdf": "PDF",
-          "person": "Person",
-          "place": "Place",
-          "project": "Project",
-          "query": "Query",
-          "quote": "Quote",
-          "table": "Table",
-          "tag": "Tag",
-          "task": "Task",
-          "travel": "Travel",
-          "tweet": "Tweet",
-          "weblink": "Weblink"
-        },
-        "title": "Add new object type",
-        "trigger": "Add object type"
+        "description": "The file stays on this device; only its metadata is saved.",
+        "name": "Name",
+        "reselect": "Select the local file again to restore its preview.",
+        "reselectAction": "Select file again",
+        "size": "Size",
+        "type": "Type",
+        "unknownType": "Unknown type"
       },
-      "views": {
-        "all": "All",
-        "overview": "Overview"
+      "query": {
+        "allTypes": "All object types",
+        "anyDate": "Any date",
+        "created": "Created date filter",
+        "description": "Query description",
+        "generate": "Generate",
+        "objectType": "Object type filter",
+        "placeholder": "Describe the query you want…",
+        "resultCount": "{count, plural, =0 {No results} one {# result} other {# results}}",
+        "today": "Today"
+      },
+      "storageRecovered": "The saved workspace could not be restored. The default workspace was kept.",
+      "table": {
+        "cell": "Row {row}, column {column}",
+        "notes": "Notes"
+      },
+      "tag": {
+        "empty": "No local objects use this tag yet.",
+        "matches": "Tagged objects"
+      },
+      "task": {
+        "completed": "Completed",
+        "created": "Task created",
+        "createTitle": "Add task",
+        "description": "Capture a task without leaving the current object.",
+        "dueDate": "Due date",
+        "open": "Open",
+        "placeholder": "Task title",
+        "submit": "Add task"
+      },
+      "untitled": "Untitled",
+      "url": {
+        "createTitle": {
+          "tweet": "Add Tweet",
+          "weblink": "Add Weblink"
+        },
+        "description": "Paste a URL to create this object locally.",
+        "notes": "Notes",
+        "placeholder": "Paste URL",
+        "submit": "Add"
       }
+    },
+    "objectTypeOverview": {
+      "addCollection": "Collection",
+      "addQuery": "Query",
+      "collections": "Collections",
+      "collectionCreated": "Collection created.",
+      "demoActionComplete": "Action applied to the local demo.",
+      "expandSection": "Expand recently opened",
+      "export": "Export",
+      "exportComplete": "Export prepared.",
+      "filter": "Filter",
+      "import": "Import",
+      "importComplete": "Imported {count, plural, one {# object} other {# objects}}.",
+      "importFiles": "Import file(s)",
+      "importPartial": "Imported {accepted}; skipped {rejected} incompatible files.",
+      "importRejected": "No compatible files were imported.",
+      "moreOptions": "More options",
+      "newCollection": "New collection",
+      "newCurrentType": "New {type}",
+      "newFromTemplate": "New from template",
+      "newObject": "New object",
+      "newObjectOptions": "New object options",
+      "newQuery": "New query",
+      "noCollections": "No collections",
+      "noCollectionsDescription": "You can change this by creating a new collection.",
+      "noQueries": "No queries",
+      "noQueriesDescription": "Queries created for this database will appear here.",
+      "noRecentDescription": "Objects you recently accessed will appear here.",
+      "noRecentTitle": "No recently accessed content",
+      "queries": "Queries",
+      "queryCreated": "Query created.",
+      "recentSort": "Recently created",
+      "recentlyOpened": "Recently opened",
+      "remove": "Remove",
+      "searchPlaceholder": "Search title…",
+      "settingsDescription": "Overview settings are active for this local object type.",
+      "sortBy": "Sort by",
+      "titleSort": "Title",
+      "typeSettings": "Object type settings",
+      "untitled": "Untitled",
+      "untitledCollection": "Untitled collection {count}",
+      "untitledQuery": "Untitled query {count}",
+      "useSidebarNew": "Use New in the sidebar to choose another object type.",
+      "viewLabel": "Object type views",
+      "viewSettings": "Overview settings",
+      "where": "where",
+      "pinToSidebar": "Pin to sidebar",
+      "unpinFromSidebar": "Unpin from sidebar",
+      "pinnedToSidebar": "Pinned to sidebar.",
+      "unpinnedFromSidebar": "Unpinned from sidebar.",
+      "templateCreated": "Created from the default local template.",
+      "addView": "Add view",
+      "allObjects": "All objects",
+      "untitledOnly": "Untitled",
+      "visibleSections": "Visible sections",
+      "hiddenSections": "Hidden sections",
+      "noHiddenSections": "No hidden sections",
+      "closeSettings": "Close settings",
+      "overviewOnly": "Overview only",
+      "noCollection": "Not in any collection",
+      "untagged": "Untagged",
+      "noBacklinks": "No backlinks",
+      "noMatchingObjects": "No matching objects",
+      "noMatchingObjectsDescription": "Objects matching this view will appear here."
+    },
+    "views": {
+      "all": "All",
+      "overview": "Overview"
+    }
   }
 }

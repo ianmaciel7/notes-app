@@ -4,7 +4,7 @@ const overlayClass =
   "fixed inset-0 isolate z-50 bg-black/45 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
 
 const floatingSurfaceBaseClass =
-  "rounded-xl border border-[#dedbd7] bg-white text-[#1f1c19] shadow-[0_12px_34px_rgb(0_0_0/0.16),0_2px_8px_rgb(0_0_0/0.08)] outline-hidden ring-1 ring-black/5 dark:border-border dark:bg-popover dark:text-popover-foreground dark:ring-white/10"
+  "rounded-[12px] border border-[#dedbd7] bg-white text-[#1f1c19] shadow-[0_12px_34px_rgb(0_0_0/0.16),0_2px_8px_rgb(0_0_0/0.08)] outline-hidden ring-1 ring-black/5 dark:border-border dark:bg-popover dark:text-popover-foreground dark:ring-white/10"
 
 const dialogSurfaceBaseClass =
   "rounded-[8px] border border-[#dedbd7] bg-white text-[#1f1c19] shadow-[0_18px_60px_rgb(0_0_0/0.22)] outline-none ring-1 ring-black/10 dark:border-border dark:bg-popover dark:text-popover-foreground dark:ring-white/10"
@@ -20,6 +20,9 @@ const floatingListItemClass =
 
 const floatingListItemFocusClass =
   "focus:bg-[#f3f1ee] focus:text-[#1f1c19] not-data-[variant=destructive]:focus:**:text-[#1f1c19] dark:focus:bg-accent dark:focus:text-accent-foreground"
+
+const floatingSearchListItemClass =
+  "flex h-8 w-full items-center gap-2 rounded-lg px-1.5 text-left text-sm outline-none hover:bg-[#f3f1ee] focus-visible:bg-[#f3f1ee]"
 
 const floatingListItemHighlightedClass =
   "data-highlighted:bg-[#f3f1ee] data-highlighted:text-[#1f1c19] not-data-[variant=destructive]:data-highlighted:**:text-[#1f1c19] dark:data-highlighted:bg-accent dark:data-highlighted:text-accent-foreground"
@@ -50,6 +53,7 @@ export {
   floatingIndicatorClass,
   floatingListItemClass,
   floatingListItemFocusClass,
+  floatingSearchListItemClass,
   floatingListItemHighlightedClass,
   floatingListItemSelectedClass,
   floatingPositionerClass,

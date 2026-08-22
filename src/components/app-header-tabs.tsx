@@ -273,6 +273,182 @@ function handleTabKeyDown(event: React.KeyboardEvent<HTMLElement>, onOpen?: () =
   tabs[getNextTabFocusIndex(event.key, currentIndex, tabs.length)]?.focus()
 }
 
+function dataFlag(value: boolean) {
+  return value || undefined
+}
+
+function getTabActionSurface(active: boolean, neutral: boolean) {
+  if (active && !neutral) return "bg-[var(--app-tab-bg-base)]"
+  if (neutral) return "bg-[var(--app-tab-bg-back)]"
+  return "bg-[var(--app-tab-bg-back)] group-hover/tab:bg-[var(--app-tab-bg-back-hover)]"
+}
+
+function getTabActionGradient(active: boolean, neutral: boolean) {
+  if (active && !neutral) return "to-[var(--app-tab-bg-base)]"
+  if (neutral) return "to-[var(--app-tab-bg-back)]"
+  return "to-[var(--app-tab-bg-back)] group-hover/tab:to-[var(--app-tab-bg-back-hover)]"
+}
+
+function getTabButtonClassName({
+  active,
+  neutral,
+  fitContent,
+  dragging,
+}: Pick<AppHeaderTabProps, "active" | "neutral" | "fitContent" | "dragging">) {
+  return cn(
+    "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] rounded-[8px] border-[0.5px] py-[3px] pl-[6px] pr-px text-[13px] leading-[1.3] outline-none ring-0 transition duration-150 ease-out motion-reduce:transition-none",
+    fitContent ? "w-auto" : "w-full",
+    neutral && "border-transparent text-[var(--app-tab-text-primary)]",
+    !neutral && active &&
+      "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)] font-medium text-[var(--app-tab-text-primary)]",
+    !neutral && !active &&
+      "border-transparent text-[var(--app-tab-text-subtle)] hover:bg-[var(--app-tab-bg-back-hover)] hover:text-[var(--app-tab-text-secondary)]",
+    dragging && "cursor-grabbing opacity-40",
+  )
+}
+
+function OverlayPinAction({
+  pinned,
+  labels,
+  onTogglePin,
+}: {
+  pinned: boolean
+  labels: { pin: string; unpin: string }
+  onTogglePin?: () => void
+}) {
+  if (!onTogglePin) return null
+  return (
+    <AppHeaderTabAction
+      label={pinned ? labels.unpin : labels.pin}
+      className={pinned ? "flex" : "hidden group-hover/tab:flex"}
+      onClick={(event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        onTogglePin()
+      }}
+    >
+      {pinned ? <AppHeaderPushPinFillIcon /> : <AppHeaderPushPinIcon />}
+    </AppHeaderTabAction>
+  )
+}
+
+function OverlayCloseAction({
+  active,
+  label,
+  onClose,
+}: {
+  active: boolean
+  label: string
+  onClose?: () => void
+}) {
+  if (!onClose) return null
+  return (
+    <AppHeaderTabAction
+      label={label}
+      className={active ? "flex" : "hidden group-hover/tab:flex"}
+      onClick={(event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        onClose()
+      }}
+    >
+      <AppHeaderCloseIcon />
+    </AppHeaderTabAction>
+  )
+}
+
+function TabOverlayActions({
+  active,
+  neutral,
+  fitContent,
+  closable,
+  pinnable,
+  pinned,
+  labels,
+  onClose,
+  onTogglePin,
+}: {
+  active: boolean
+  neutral: boolean
+  fitContent: boolean
+  closable: boolean
+  pinnable: boolean
+  pinned: boolean
+  labels: { pin: string; unpin: string; close: string }
+  onClose?: () => void
+  onTogglePin?: () => void
+}) {
+  if (fitContent || (!pinnable && !closable)) return null
+  return (
+    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
+      <div
+        className={cn(
+          "flex h-full items-center transition-opacity duration-100 ease-out",
+          pinned || (active && closable)
+            ? "opacity-100"
+            : "opacity-0 group-hover/tab:opacity-100",
+        )}
+      >
+        <div
+          className={cn(
+            "pointer-events-none h-full w-5 bg-linear-to-r from-transparent",
+            getTabActionGradient(active, neutral),
+          )}
+        />
+        <div
+          className={cn(
+            "pointer-events-auto flex h-full items-center rounded-r-lg pr-[2px]",
+            getTabActionSurface(active, neutral),
+          )}
+        >
+          {pinnable ? (
+            <OverlayPinAction pinned={pinned} labels={labels} onTogglePin={onTogglePin} />
+          ) : null}
+          {closable ? (
+            <OverlayCloseAction active={active} label={labels.close} onClose={onClose} />
+          ) : null}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function FitContentPinAction({
+  fitContent,
+  pinnable,
+  pinned,
+  labels,
+  onTogglePin,
+}: {
+  fitContent: boolean
+  pinnable: boolean
+  pinned: boolean
+  labels: { pin: string; unpin: string }
+  onTogglePin?: () => void
+}) {
+  if (!fitContent || !pinnable || !onTogglePin) return null
+  return (
+    <div className="flex h-full shrink-0 items-center pr-[2px]">
+      <AppHeaderTabAction
+        label={pinned ? labels.unpin : labels.pin}
+        className={cn(
+          "transition-opacity duration-100 ease-out",
+          pinned
+            ? "opacity-100"
+            : "pointer-events-none opacity-0 group-hover/tab:pointer-events-auto group-hover/tab:opacity-100",
+        )}
+        onClick={(event) => {
+          event.preventDefault()
+          event.stopPropagation()
+          onTogglePin()
+        }}
+      >
+        {pinned ? <AppHeaderPushPinFillIcon /> : <AppHeaderPushPinIcon />}
+      </AppHeaderTabAction>
+    </div>
+  )
+}
+
 function AppHeaderTabItem({
   tab,
   active = false,
@@ -302,18 +478,6 @@ function AppHeaderTabItem({
 
   const [previewOpen, setPreviewOpen] = React.useState(false)
   const previewTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
-  const activeVisual = active && !neutral
-  const keepActionRegionVisible = Boolean(tab.pinned) || (active && closable)
-  const actionBackground = activeVisual
-    ? "bg-[var(--app-tab-bg-base)]"
-    : neutral
-      ? "bg-[var(--app-tab-bg-back)]"
-      : "bg-[var(--app-tab-bg-back)] group-hover/tab:bg-[var(--app-tab-bg-back-hover)]"
-  const actionGradient = activeVisual
-    ? "to-[var(--app-tab-bg-base)]"
-    : neutral
-      ? "to-[var(--app-tab-bg-back)]"
-      : "to-[var(--app-tab-bg-back)] group-hover/tab:to-[var(--app-tab-bg-back-hover)]"
 
   const clearPreviewTimer = React.useCallback(() => {
     if (previewTimerRef.current) clearTimeout(previewTimerRef.current)
@@ -339,9 +503,9 @@ function AppHeaderTabItem({
   const tabNode = (
     <div
       data-slot="app-header-tab"
-      data-active={active || undefined}
-      data-neutral={neutral || undefined}
-      data-pinned={tab.pinned || undefined}
+      data-active={dataFlag(active)}
+      data-neutral={dataFlag(neutral)}
+      data-pinned={dataFlag(Boolean(tab.pinned))}
       className={cn(
         "group/tab pointer-events-auto relative min-w-0 max-w-full rounded-md",
         fitContent ? "inline-flex" : "w-full",
@@ -358,23 +522,12 @@ function AppHeaderTabItem({
       }}
       {...props}
     >
-      <div className={cn("relative flex min-w-0 items-center", !fitContent && "w-full")}>
+      <div className={cn("relative flex min-w-0 items-center", fitContent ? undefined : "w-full")}>
         <div
           role="tab"
           aria-selected={active}
           tabIndex={active ? 0 : -1}
-          className={cn(
-            "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] rounded-[8px] border-[0.5px] py-[3px] pl-[6px] pr-px text-[13px] leading-[1.3] outline-none ring-0 transition duration-150 ease-out motion-reduce:transition-none",
-            fitContent ? "w-auto" : "w-full",
-            neutral && "border-transparent text-[var(--app-tab-text-primary)]",
-            !neutral &&
-              active &&
-              "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)] font-medium text-[var(--app-tab-text-primary)]",
-            !neutral &&
-              !active &&
-              "border-transparent text-[var(--app-tab-text-subtle)] hover:bg-[var(--app-tab-bg-back-hover)] hover:text-[var(--app-tab-text-secondary)]",
-            dragging && "cursor-grabbing opacity-40",
-          )}
+          className={getTabButtonClassName({ active, neutral, fitContent, dragging })}
           onClick={(event) => {
             if (event.shiftKey) onShiftOpen?.()
             else onOpen?.()
@@ -387,82 +540,27 @@ function AppHeaderTabItem({
           }}
         >
           <AppHeaderTabIcon tab={tab} />
-          <span className={cn("min-w-0 truncate text-left", !fitContent && "flex-1")}>
+          <span className={cn("min-w-0 truncate text-left", fitContent ? undefined : "flex-1")}>
             {tab.label}
           </span>
-
-          {!fitContent && (pinnable || closable) && (
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-              <div
-                className={cn(
-                  "flex h-full items-center transition-opacity duration-100 ease-out",
-                  keepActionRegionVisible ? "opacity-100" : "opacity-0 group-hover/tab:opacity-100",
-                )}
-              >
-                <div
-                  className={cn(
-                    "pointer-events-none h-full w-5 bg-linear-to-r from-transparent",
-                    actionGradient,
-                  )}
-                />
-                <div
-                  className={cn(
-                    "pointer-events-auto flex h-full items-center rounded-r-lg pr-[2px]",
-                    actionBackground,
-                  )}
-                >
-                  {pinnable && onTogglePin && (
-                    <AppHeaderTabAction
-                      label={tab.pinned ? labels.unpin : labels.pin}
-                      className={tab.pinned ? "flex" : "hidden group-hover/tab:flex"}
-                      onClick={(event) => {
-                        event.preventDefault()
-                        event.stopPropagation()
-                        onTogglePin()
-                      }}
-                    >
-                      {tab.pinned ? <AppHeaderPushPinFillIcon /> : <AppHeaderPushPinIcon />}
-                    </AppHeaderTabAction>
-                  )}
-
-                  {closable && onClose && (
-                    <AppHeaderTabAction
-                      label={labels.close}
-                      className={active ? "flex" : "hidden group-hover/tab:flex"}
-                      onClick={(event) => {
-                        event.preventDefault()
-                        event.stopPropagation()
-                        onClose()
-                      }}
-                    >
-                      <AppHeaderCloseIcon />
-                    </AppHeaderTabAction>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {fitContent && pinnable && onTogglePin && (
-            <div className="flex h-full shrink-0 items-center pr-[2px]">
-              <AppHeaderTabAction
-                label={tab.pinned ? labels.unpin : labels.pin}
-                className={cn(
-                  "transition-opacity duration-100 ease-out",
-                  tab.pinned
-                    ? "opacity-100"
-                    : "pointer-events-none opacity-0 group-hover/tab:pointer-events-auto group-hover/tab:opacity-100",
-                )}
-                onClick={(event) => {
-                  event.preventDefault()
-                  event.stopPropagation()
-                  onTogglePin()
-                }}
-              >
-                {tab.pinned ? <AppHeaderPushPinFillIcon /> : <AppHeaderPushPinIcon />}
-              </AppHeaderTabAction>
-            </div>
-          )}
+          <TabOverlayActions
+            active={active}
+            neutral={neutral}
+            fitContent={fitContent}
+            closable={closable}
+            pinnable={pinnable}
+            pinned={Boolean(tab.pinned)}
+            labels={labels}
+            onClose={onClose}
+            onTogglePin={onTogglePin}
+          />
+          <FitContentPinAction
+            fitContent={fitContent}
+            pinnable={pinnable}
+            pinned={Boolean(tab.pinned)}
+            labels={labels}
+            onTogglePin={onTogglePin}
+          />
         </div>
 
         {showSeparator && (
@@ -682,7 +780,9 @@ function AppSpaceHeader({
             return (
               <React.Fragment key={tab.id}>
                 {before && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />}
+                {/* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual tab wrapper */}
                 <div
+                  role="presentation"
                   draggable={tab.draggable !== false}
                   data-slot="app-space-header-tab-wrapper"
                   data-tab-id={tab.id}
@@ -859,8 +959,10 @@ function AppSidePanelHeader({
               style={{ gap: SIDE_TAB_GAP }}
             >
               {tabs.map((tab) => (
-                <div
-                  key={tab.id}
+                <React.Fragment key={tab.id}>
+                  {/* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual tab wrapper */}
+                  <div
+                  role="presentation"
                   draggable={tab.draggable !== false}
                   data-slot="app-side-panel-tab-wrapper"
                   data-sidepanel-tab-active={tab.id === value || undefined}
@@ -895,7 +997,8 @@ function AppSidePanelHeader({
                     onOpen={() => onValueChange(tab.id)}
                     onClose={() => closeTab(tab)}
                   />
-                </div>
+                  </div>
+                </React.Fragment>
               ))}
             </div>
           </div>

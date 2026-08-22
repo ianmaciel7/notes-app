@@ -23,7 +23,7 @@ The implementation MUST resolve visual and behavioral mismatches using the live 
 - **THEN** the evaluation SHALL record the evidence gap and SHALL NOT invent bundle-derived measurements or claim that captured-source verification passed
 
 ### Requirement: Canonical modular architecture preservation
-The implementation SHALL preserve the current `dev` component architecture, public component APIs, `data-slot` contracts, Base UI/shadcn `base-nova` primitives, Tailwind CSS 4 conventions, and configured Lucide icon library.
+The implementation SHALL preserve the current `dev` component architecture, public component APIs, `data-slot` contracts, Base UI/shadcn `base-nova` primitives, Tailwind CSS 4 conventions, and configured Lucide icon library while permitting narrow composition-owned SVG glyphs verified against authenticated target evidence.
 
 #### Scenario: Historical donor reuse
 - **WHEN** useful behavior or measurements are found in `old`, `old-2`, `old-3`, or `feat/app-sidebar`
@@ -73,3 +73,61 @@ The change SHALL use a bounded evaluator-optimizer loop and SHALL not be conside
 #### Scenario: Final verification
 - **WHEN** the implementation is ready for completion
 - **THEN** focused interaction checks, responsive checks, OpenSpec verification/sync/strict validation, `pnpm typecheck`, `pnpm verify`, Graphify status evidence, and an independent fresh-context review SHALL complete or any proven pre-existing failure SHALL be reported precisely
+
+### Requirement: Shared object-type listing structure
+Every selectable object type SHALL use one reusable listing composition with a type header, `Overview` and `All` view controls, and Capacities-style overview sections for recently opened content, collections, and queries.
+
+#### Scenario: Empty object-type overview
+- **WHEN** a user opens any object type that has no matching created entities, collections, or queries
+- **THEN** `Overview` SHALL be selected and the recently opened, collections, and queries sections SHALL render their localized empty states and creation affordances
+
+#### Scenario: Recently created object
+- **WHEN** an ephemeral object has been created for the selected object type
+- **THEN** its title and type badge SHALL appear in the recently opened section and selecting it SHALL reactivate its existing editor tab
+
+#### Scenario: All objects view
+- **WHEN** the user selects `All`
+- **THEN** the composition SHALL switch to the complete-list state while preserving the active object-type header and shared actions
+
+#### Scenario: Reused across object types
+- **WHEN** the user switches between different sidebar object types
+- **THEN** the same semantic structure and interaction contract SHALL remain present while the label, icon, tone, count, and matching recent entities update for the selected type
+
+### Requirement: Functional object-type creation and import actions
+The object-type listing SHALL connect its visible `New` and `Import file(s)` affordances to the local workspace lifecycle rather than rendering decorative controls.
+
+#### Scenario: Create from the active object type
+- **WHEN** a user activates `New` in either the object-type header or empty complete-list state
+- **THEN** the workspace SHALL start the existing creation flow for the active object type and SHALL create or request the fields required by that type
+
+#### Scenario: Import compatible local files
+- **WHEN** a user activates `Import file(s)` and selects one or more compatible files
+- **THEN** the workspace SHALL create one local entity per accepted file under the active object type, update its count and listing, and activate the last imported entity
+
+#### Scenario: Reject an incompatible import
+- **WHEN** a selected file does not satisfy the active file-backed type's accepted format
+- **THEN** the workspace SHALL preserve existing entities, expose a localized error, and allow the user to select a different file
+
+#### Scenario: Operate the listing toolbar
+- **WHEN** a user activates search, collapse, filter, sort, list, grid, recent expansion, settings, or either menu
+- **THEN** the associated visible list state SHALL update and every enabled command SHALL perform a concrete local state transition; feedback alone SHALL NOT satisfy the command
+
+#### Scenario: Match listing toolbar glyphs
+- **WHEN** the reusable object-type toolbar renders Overview or All state
+- **THEN** its view, add, count, filter, sort, list, grid, caret, and settings controls SHALL use the target-measured semantic Phosphor glyph, size, tone, and alignment without changing their accessible names or stateful behavior
+
+#### Scenario: Configure overview sections
+- **WHEN** a user opens overview settings and toggles a visible or hidden section
+- **THEN** the corresponding overview section SHALL hide or reappear immediately while the settings control remains keyboard accessible
+
+#### Scenario: Expand recently opened
+- **WHEN** a user activates the recent-section expand control
+- **THEN** the composition SHALL open the dedicated complete-list state for recent objects and preserve an accessible path back to Overview
+
+#### Scenario: Create collection or query
+- **WHEN** a user activates the Collection or Query affordance
+- **THEN** an untitled sequential local entry SHALL be created, selected, and opened for editing without persistence or backend mutation
+
+#### Scenario: Pin and open the global New palette
+- **WHEN** a user pins the active type or chooses New object from the split menu
+- **THEN** the active type SHALL be added to or removed from the provider-owned pinned list, or the existing sidebar New palette SHALL open, respectively

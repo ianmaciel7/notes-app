@@ -34,6 +34,13 @@ When implementing the reference-style workspace, do not treat prototype/demo cod
 - Prefer existing theme tokens and shared constants. Hard-coded colors and arbitrary Tailwind values are allowed only when they are documented reference parity values and are centralized in a shared helper as soon as they repeat.
 - Do not make screenshot-only fixes that diverge from shared primitives. If a component looks wrong, fix the shared primitive or add a well-named variant instead of layering overrides at every call site.
 
+### Popup appearance contract
+
+- Treat an existing popup for the same product area as the canonical visual reference. Sidebar context menus must use the shared sidebar context-menu width exported by `src/components/ui/compact-menu.tsx` so object-type and collection menus cannot drift apart.
+- Feature components must not set popup surface width, background, border, radius, shadow, padding, row height, row radius, hover/focus color, separator spacing, icon sizing, or keyboard-shortcut styling with one-off classes. Put a documented semantic variant in `src/components/ui` and reuse it instead.
+- Call sites may control placement through primitive props such as `side`, `align`, and offsets. A visual override is allowed only when current reference evidence proves a distinct pattern and the override is promoted to a named shared variant.
+- When changing a popup, compare it in the browser with the canonical popup from the same area and add a focused source or component test that confirms both consumers use the shared contract.
+
 ## Completion check
 
 Before finishing a workspace UI change, verify:
@@ -44,4 +51,5 @@ Before finishing a workspace UI change, verify:
 - object icons and object colors are imported from `@/components/object-icons`;
 - repeated reference-style classes were extracted to a shared component/helper instead of copied into multiple feature components;
 - Tooltip, HoverCard, DropdownMenu, Popover, Combobox, Dialog, compact menus, account panels, and object labels use the matching shared primitive or helper;
+- popup consumers do not own one-off surface or row appearance classes, and related sidebar context menus use the same exported width contract;
 - a browser or DOM inspection of the reference UI backs any claimed visual parity change.

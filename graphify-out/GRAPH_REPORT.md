@@ -1,47 +1,47 @@
-# Graph Report - .  (2026-08-20)
+# Graph Report - .  (2026-08-22)
 
 ## Corpus Check
 - cluster-only mode — file stats not available
 
 ## Summary
-- 1918 nodes · 2522 edges · 180 communities (165 shown, 15 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
+- 2854 nodes · 3845 edges · 246 communities (222 shown, 24 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.71)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `70c0468e`
+- Built from commit: `60dfa9b9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - cn
-- sidebar.tsx
+- button.tsx
 - scan.py
-- scripts
-- utils.ts
-- dependencies
-- menubar.tsx
-- compilerOptions
+- app-header-tabs.tsx
+- context-menu.tsx
+- workspace-controller.tsx
+- app-header.tsx
+- workspace-content.tsx
 - app-shell.tsx
 - graphify-ingest-legacy.mjs
-- app-sidebar-overview.tsx
+- app-sidebar-icons.tsx
 - components.json
 - app-sidebar-primary-actions.tsx
+- app-sidebar-overview.tsx
+- menubar.tsx
 - field.tsx
-- command.tsx
-- app-sidebar.tsx
 - combobox.tsx
-- context-menu.tsx
+- compilerOptions
 - drawer.tsx
 - carousel.tsx
 - Tier A - Official platform sources
 - check-complexity.mjs
-- alert-dialog.tsx
+- ADDED Requirements
 - chart.tsx
 - item.tsx
 - What You Must Do When Invoked
-- toast.tsx
-- app-sidebar-object-type-studio.tsx
+- object-icons.tsx
+- app-header-icons.tsx
 - Find Plugins
 - openspec-onboard/SKILL.md
 - Test API
@@ -51,19 +51,19 @@
 - Agent Governance Patterns
 - Trust, Provenance, and Safety Model
 - Vi Utilities
-- input-group.tsx
-- includes
+- dependencies
+- sidebar.tsx
 - Describe API
 - Code Coverage
 - Expect API
 - Test Environments
-- navigation-menu.tsx
+- app-side-panel-header.tsx
 - vitest/SKILL.md
 - Type Testing
 - app/layout.tsx
 - Test Filtering
-- pagination.tsx
-- biome.json
+- alert-dialog.tsx
+- extract-capacities-wacz-visual-contract.mjs
 - Snapshot Testing
 - ADDED Requirements
 - Commands
@@ -79,7 +79,7 @@
 - ADDED Requirements
 - ADDED Requirements
 - ADDED Requirements
-- card.tsx
+- Requirements
 - empty.tsx
 - Acquire Codebase Knowledge
 - Compatibility and Capability Evidence
@@ -95,7 +95,7 @@
 - Core Sections (Required)
 - Graph Engineering: Patterns and Failure Modes
 - Test Context & Fixtures
-- linter
+- workspace-objects.ts
 - Requirements
 - Core Sections (Required)
 - Sources
@@ -126,7 +126,7 @@
 - 2026-08-18-restore-legacy-agents-assets/proposal.md
 - configure-next-intl/proposal.md
 - create-app-shell/proposal.md
-- toggle-group.tsx
+- Requirements
 - AGENT Instructions
 - openspec-first.md
 - acquire-codebase-knowledge/SKILL.md
@@ -152,7 +152,7 @@
 - graphify reference: add a URL and watch a folder
 - graphify reference: commit hook and native AGENTS.md integration
 - graphify reference: incremental update and cluster-only
-- tabs.tsx
+- scripts
 - Contributing
 - Design Principles
 - 2026-08-18-codify-practical-documentation-workflow/tasks.md
@@ -165,120 +165,185 @@
 - graphify reference: transcribe video and audio
 - Handoff Note
 - git-workflow-rule.md
-- shadcn-first.md
+- Shadcn First
 - extraction-spec.md
 - GENERATION.md
 - 2026-08-18-restore-legacy-agents-assets/README.md
 - 2026-08-18-restore-legacy-agents-assets/tasks.md
 - configure-ci-cd/tasks.md
-- formatter
-- vcs
-- marker.tsx
-- assist
-- badge.tsx
+- Requirement: Functional object-type creation and import actions
+- Requirement: Disabled create-space affordance
+- devDependencies
+- biome.json
+- Requirement: Functional object-type creation and import actions
 - postcss.config.mjs
+- navigation-menu.tsx
+- utils.ts
+- MODIFIED Requirements
+- Requirement: Type-specific creation workflows
+- Requirement: Type-specific creation workflows
+- includes
+- Capacities `/en` Fidelity Evidence
 - ci-baseline.test.mjs
+- Decisions
+- Decisions
+- Workspace UI Parity
+- Decisions
+- Decisions
+- MODIFIED Requirements
+- MODIFIED Requirements
+- ADDED Requirements
+- 2026-08-22-refine-capacities-en-fidelity/tasks.md
+- app-sidebar.tsx
+- add-app-header/proposal.md
+- add-app-sidebar-object-type-studio/proposal.md
+- add-app-sidebar-primary-actions/proposal.md
+- add-app-sidebar/proposal.md
+- refine-app-sidebar-overview/proposal.md
+- linter
+- add-app-header/design.md
+- add-app-header/tasks.md
+- add-app-sidebar-object-type-studio/design.md
+- add-app-sidebar-primary-actions/design.md
+- add-app-sidebar/tasks.md
+- refine-app-sidebar-overview/tasks.md
+- add-app-sidebar-object-type-studio/tasks.md
+- add-app-sidebar-primary-actions/tasks.md
+- Requirement: Lower utility navigation
+- Requirement: Pinned entities use a dedicated row contract
+- Requirement: Reorder spaces from a dedicated handle
+- Requirement: Search and empty-state behavior
+- marker.tsx
+- Requirement: Fixed source-derived footer
+- Requirement: Hover-only workspace hint
+- Requirement: Object types use source-derived rows
+- Requirement: Section affordances match source interaction
+- Requirement: Stable popup focus and closing
+- package.json
+- tabs.tsx
+- vcs
+- 2026-08-22-implement-object-lifecycle/proposal.md
+- assist
+- Requirement: Narrow-screen presentation
+- class-variance-authority
+- cmdk
+- command.tsx
+- next
+- 2026-08-22-implement-object-lifecycle/tasks.md
+- react
+- react-day-picker
+- Verification Report: implement-object-lifecycle
+- 2026-08-22-refine-capacities-en-fidelity/proposal.md
+- Requirement: Desktop workspace-menu geometry
+- Atomic Notes listing control matrix
+- date-fns
+- recharts
+- Object lifecycle verification evidence
+- Q: existem componentes pasta ui ou algum n estao seguindo capcities corrija
+- Q: veja n esqueceu dennhum componente
+- tw-animate-css
+- Q: veja capcities io veja veja se precisa ataulizar DESING.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `cn()` - 389 edges
-2. `Button()` - 22 edges
+1. `cn()` - 450 edges
+2. `Button()` - 24 edges
 3. `main()` - 20 edges
 4. `scripts` - 19 edges
-5. `Vi Utilities` - 18 edges
-6. `Find Plugins` - 16 edges
-7. `Mocking` - 16 edges
-8. `Type Testing` - 16 edges
-9. `compilerOptions` - 16 edges
-10. `Snapshot Testing` - 15 edges
+5. `ADDED Requirements` - 18 edges
+6. `Vi Utilities` - 18 edges
+7. `buttonVariants` - 17 edges
+8. `compilerOptions` - 17 edges
+9. `Capacities `/en` Fidelity Evidence` - 17 edges
+10. `ADDED Requirements` - 16 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `reduce()` --indirect_call--> `workspaceObjectReducer()`  [INFERRED]
+  tests/workspace-objects.test.mjs → src/lib/workspace-objects.ts
 - `AppHeaderHistory()` --calls--> `cn()`  [EXTRACTED]
   src/components/app-header.tsx → src/lib/utils.ts
-- `AppSidebarObjectTypeCard()` --calls--> `cn()`  [EXTRACTED]
-  src/components/app-sidebar-object-type-studio.tsx → src/lib/utils.ts
-- `AppSidebarEntityPicker()` --calls--> `cn()`  [EXTRACTED]
-  src/components/app-sidebar-overview.tsx → src/lib/utils.ts
-- `AppSidebarEntityRow()` --calls--> `cn()`  [EXTRACTED]
-  src/components/app-sidebar-overview.tsx → src/lib/utils.ts
-- `AppSidebarPrimaryActions()` --calls--> `cn()`  [EXTRACTED]
-  src/components/app-sidebar-primary-actions.tsx → src/lib/utils.ts
+- `AppHeaderTabAction()` --calls--> `cn()`  [EXTRACTED]
+  src/components/app-header-tabs.tsx → src/lib/utils.ts
+- `AppHeaderTabIcon()` --calls--> `cn()`  [EXTRACTED]
+  src/components/app-header-tabs.tsx → src/lib/utils.ts
+- `AppHeaderTabList()` --calls--> `cn()`  [EXTRACTED]
+  src/components/app-header-tabs.tsx → src/lib/utils.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (180 total, 15 thin omitted)
+## Communities (246 total, 24 thin omitted)
 
 ### Community 0 - "cn"
-Cohesion: 0.05
-Nodes (57): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), Avatar(), AvatarBadge(), AvatarFallback(), AvatarGroup() (+49 more)
+Cohesion: 0.04
+Nodes (77): AppSidebarAddSection(), AppSidebarCollectionMenu(), AppSidebarFooter(), AppSidebarObjectTypeMenu(), AppSidebarPinnedMenu(), AppSidebarPinnedPicker(), AppSidebarSectionMenu(), Accordion() (+69 more)
 
-### Community 1 - "sidebar.tsx"
-Cohesion: 0.05
-Nodes (40): Input(), Sheet(), SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle() (+32 more)
+### Community 1 - "button.tsx"
+Cohesion: 0.07
+Nodes (21): Button(), CalendarDayButton(), MessageScroller(), MessageScrollerButton(), MessageScrollerContent(), MessageScrollerItem(), MessageScrollerViewport(), Pagination() (+13 more)
 
 ### Community 2 - "scan.py"
 Cohesion: 0.09
 Nodes (40): collect_code_metrics(), detect_ci_cd_pipelines(), detect_containers(), detect_monorepo(), detect_performance_markers(), detect_security_configs(), find_entry_points(), find_env_templates() (+32 more)
 
-### Community 3 - "scripts"
-Cohesion: 0.05
-Nodes (40): @biomejs/biome, devDependencies, @biomejs/biome, tailwindcss, @tailwindcss/postcss, @types/node, @types/react, @types/react-dom (+32 more)
-
-### Community 4 - "utils.ts"
-Cohesion: 0.07
-Nodes (30): AppHeader(), AppHeaderHistory(), AppHeaderProps, AspectRatio(), Button(), buttonVariants, Calendar(), CalendarDayButton() (+22 more)
-
-### Community 5 - "dependencies"
-Cohesion: 0.05
-Nodes (39): @base-ui/react, class-variance-authority, clsx, cmdk, date-fns, embla-carousel-react, input-otp, lucide-react (+31 more)
-
-### Community 6 - "menubar.tsx"
+### Community 3 - "app-header-tabs.tsx"
 Cohesion: 0.09
-Nodes (26): DropdownMenu(), DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuPortal(), DropdownMenuRadioGroup() (+18 more)
+Nodes (27): AppHeaderTabAction(), AppHeaderTabActionLabels, AppHeaderTabIcon(), AppHeaderTabItem(), AppHeaderTabList(), AppHeaderTabProps, appHeaderTabTheme, AppSidePanelHeader() (+19 more)
 
-### Community 7 - "compilerOptions"
+### Community 4 - "context-menu.tsx"
+Cohesion: 0.12
+Nodes (9): ContextMenuCheckboxItem(), ContextMenuContent(), ContextMenuItem(), ContextMenuLabel(), ContextMenuRadioItem(), ContextMenuSeparator(), ContextMenuShortcut(), ContextMenuSubTrigger() (+1 more)
+
+### Community 5 - "workspace-controller.tsx"
 Cohesion: 0.07
-Nodes (28): dom, dom.iterable, esnext, **/*.mts, .next/dev/types/**/*.ts, next-env.d.ts, .next/types/**/*.ts, **/*.ts (+20 more)
+Nodes (25): AppSidebarCustomSection, AppSidebarPinnedEntity, AppSidebarSourceIcon(), AppSidebarSourceIconName, AppSidebarSourceIconPath, AppSidebarSourceIconProps, AppSidebarWorkspaceIcon(), sourceIconPaths (+17 more)
+
+### Community 6 - "app-header.tsx"
+Cohesion: 0.14
+Nodes (14): AppFocusModeControls(), AppFocusModeControlsProps, AppHeader(), AppHeaderAction(), AppHeaderHistory(), AppHeaderProps, appHeaderTheme, AppHeaderCaretLeftIcon() (+6 more)
+
+### Community 7 - "workspace-content.tsx"
+Cohesion: 0.04
+Nodes (38): AppHeaderGraphIcon(), AppSidebarSearchIcon(), ObjectTypeToolbarIcon(), ObjectTypeToolbarIconName, objectTypeToolbarIconPaths, ObjectTypeToolbarIconProps, AtomicNotesWorkspace(), both() (+30 more)
 
 ### Community 8 - "app-shell.tsx"
 Cohesion: 0.13
-Nodes (24): AppShell(), AppShellContext, AppShellContextValue, AppShellHeader(), AppShellMain(), AppShellMobile(), AppShellMobileSidebar(), AppShellMobileSidePanel() (+16 more)
+Nodes (25): AppShell(), AppShellContext, AppShellContextValue, AppShellHeader(), AppShellMain(), AppShellMobile(), AppShellMobileSidebar(), AppShellMobileSidePanel() (+17 more)
 
 ### Community 9 - "graphify-ingest-legacy.mjs"
 Cohesion: 0.13
 Nodes (23): allowedCodeExt, allowedDocExt, allowedSpecialFiles, BUILD_AFTER_SYNC, cleanWorkspace(), collectBranch(), DEFAULT_BRANCHES, fileExists() (+15 more)
 
-### Community 10 - "app-sidebar-overview.tsx"
-Cohesion: 0.11
-Nodes (16): AppSidebarEntity, AppSidebarEntityPicker(), AppSidebarEntityRow(), AppSidebarSectionProps, AppSidebarSortMode, demoEntities, initialObjectTypes, Collapsible() (+8 more)
+### Community 10 - "app-sidebar-icons.tsx"
+Cohesion: 0.06
+Nodes (27): AppSidebarArchiveIcon, AppSidebarArrowDownIcon, AppSidebarArrowUpIcon, AppSidebarAudioIcon, AppSidebarBookIcon, AppSidebarCodeIcon, AppSidebarCopyIcon, AppSidebarCornerDownLeftIcon (+19 more)
 
 ### Community 11 - "components.json"
 Cohesion: 0.09
 Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent (+13 more)
 
 ### Community 12 - "app-sidebar-primary-actions.tsx"
-Cohesion: 0.12
-Nodes (17): AppSidebar(), AppSidebarSpace, AppSidebarOverview(), AppSidebarPrimaryAction, AppSidebarPrimaryActionHint, AppSidebarPrimaryActionId, AppSidebarPrimaryActionItem(), AppSidebarPrimaryActions() (+9 more)
+Cohesion: 0.07
+Nodes (34): AppSidebar(), AppSidebarCalendarIcon(), AppSidebarChevronRightIcon, AppSidebarExploreIcon(), AppSidebarCollectionAction, appSidebarCollectionId(), AppSidebarObjectType, AppSidebarObjectTypeRow() (+26 more)
 
-### Community 13 - "field.tsx"
-Cohesion: 0.12
-Nodes (17): ButtonGroup(), ButtonGroupSeparator(), ButtonGroupText(), buttonGroupVariants, Field(), FieldContent(), FieldDescription(), FieldError() (+9 more)
+### Community 13 - "app-sidebar-overview.tsx"
+Cohesion: 0.05
+Nodes (43): AppSidebarCheckIcon, AppSidebarPinIcon(), AppSidebarPlusIcon(), AppSidebarCustomObjectTypeCard(), AppSidebarObjectTypeCard(), AppSidebarObjectTypeDetails(), AppSidebarObjectTypeIcon(), AppSidebarObjectTypePreset (+35 more)
 
-### Community 14 - "command.tsx"
-Cohesion: 0.12
-Nodes (16): Command(), CommandDialog(), CommandEmpty(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator() (+8 more)
+### Community 14 - "menubar.tsx"
+Cohesion: 0.09
+Nodes (26): DropdownMenu(), DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuPortal(), DropdownMenuRadioGroup() (+18 more)
 
-### Community 15 - "app-sidebar.tsx"
-Cohesion: 0.14
-Nodes (15): AppShellContent(), AppSidebarLabels, AppSidebarProps, AppSidebarSpaceSwitcher(), areOrdersEqual(), defaultLabels, demoSpaces, DragPreview (+7 more)
+### Community 15 - "field.tsx"
+Cohesion: 0.16
+Nodes (12): Field(), FieldContent(), FieldDescription(), FieldError(), FieldGroup(), FieldLabel(), FieldLegend(), FieldSeparator() (+4 more)
 
 ### Community 16 - "combobox.tsx"
-Cohesion: 0.12
-Nodes (12): ComboboxChip(), ComboboxChips(), ComboboxChipsInput(), ComboboxClear(), ComboboxContent(), ComboboxEmpty(), ComboboxGroup(), ComboboxInput() (+4 more)
+Cohesion: 0.09
+Nodes (23): ComboboxChip(), ComboboxChips(), ComboboxChipsInput(), ComboboxClear(), ComboboxContent(), ComboboxEmpty(), ComboboxGroup(), ComboboxInput() (+15 more)
 
-### Community 17 - "context-menu.tsx"
-Cohesion: 0.12
-Nodes (9): ContextMenuCheckboxItem(), ContextMenuContent(), ContextMenuItem(), ContextMenuLabel(), ContextMenuRadioItem(), ContextMenuSeparator(), ContextMenuShortcut(), ContextMenuSubTrigger() (+1 more)
+### Community 17 - "compilerOptions"
+Cohesion: 0.07
+Nodes (29): dom, dom.iterable, esnext, **/*.mts, .next/dev/types/**/*.ts, next-env.d.ts, .next/types/**/*.ts, node_modules (+21 more)
 
 ### Community 18 - "drawer.tsx"
 Cohesion: 0.14
@@ -296,29 +361,29 @@ Nodes (25): 777genius universal plugins, Agent Plugins Directory, Agent Plugins 
 Cohesion: 0.23
 Nodes (12): allowedExtensions, branchWeight(), collectSourceFiles(), cyclomaticComplexity(), failures, functionName(), ignoredDirectories, isFunctionLike() (+4 more)
 
-### Community 22 - "alert-dialog.tsx"
-Cohesion: 0.15
-Nodes (9): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia(), AlertDialogOverlay() (+1 more)
+### Community 22 - "ADDED Requirements"
+Cohesion: 0.04
+Nodes (46): ADDED Requirements, Requirement: Existing app-shell integration, Requirement: Focus mode header controls, Requirement: Header navigation actions, Requirement: Inactive tab preview, Requirement: Main create action, Requirement: Main space tab visual states, Requirement: Main tab drag reorder (+38 more)
 
 ### Community 23 - "chart.tsx"
 Cohesion: 0.21
 Nodes (11): ChartConfig, ChartContainer(), ChartContext, ChartContextProps, ChartLegendContent(), ChartTooltipContent(), getPayloadConfigFromPayload(), INITIAL_DIMENSION (+3 more)
 
 ### Community 24 - "item.tsx"
-Cohesion: 0.18
-Nodes (12): Item(), ItemActions(), ItemContent(), ItemDescription(), ItemFooter(), ItemGroup(), ItemHeader(), ItemMedia() (+4 more)
+Cohesion: 0.13
+Nodes (17): ButtonGroup(), ButtonGroupSeparator(), ButtonGroupText(), buttonGroupVariants, Item(), ItemActions(), ItemContent(), ItemDescription() (+9 more)
 
 ### Community 25 - "What You Must Do When Invoked"
 Cohesion: 0.08
 Nodes (24): For /graphify add and --watch, For /graphify query, For the commit hook and native AGENTS.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+16 more)
 
-### Community 26 - "toast.tsx"
-Cohesion: 0.15
-Nodes (7): toast, ToastAction(), ToastClose(), ToastContent(), ToastDescription(), ToastTitle(), ToastViewport()
+### Community 26 - "object-icons.tsx"
+Cohesion: 0.08
+Nodes (23): ObjectAiChatIcon, ObjectAudioIcon, ObjectDefinitionIcon, ObjectFileIcon, ObjectIconBadgeProps, ObjectIconName, objectIconPath, objectIconToneTextClass (+15 more)
 
-### Community 27 - "app-sidebar-object-type-studio.tsx"
-Cohesion: 0.18
-Nodes (10): AppSidebarObjectTypeCard(), AppSidebarObjectTypePreset, AppSidebarObjectTypeStudio(), AppSidebarObjectTypeStudioProps, AppSidebarObjectTypeTone, basicObjectTypes, suggestedObjectTypes, toneClasses (+2 more)
+### Community 27 - "app-header-icons.tsx"
+Cohesion: 0.15
+Nodes (7): AppHeaderCaretDownIcon(), AppHeaderCompassIcon(), AppHeaderIconProps, AppHeaderPlusIcon(), AppHeaderPushPinFillIcon(), AppHeaderPushPinIcon(), AppHeaderSidebarSimpleIcon()
 
 ### Community 28 - "Find Plugins"
 Cohesion: 0.09
@@ -356,13 +421,13 @@ Nodes (18): 1. Trust, 2. Format / schema status, 3. Provenance chain, 4. Officia
 Cohesion: 0.11
 Nodes (18): Assertion Helpers — vi.defineHelper (4.1+), Conditional Mocking — vi.when (v5), Dynamic Mocking, Fake Timers, Global/Env Mocking, Global Mock Management, Hoisted Code, Key Points (+10 more)
 
-### Community 37 - "input-group.tsx"
-Cohesion: 0.24
-Nodes (9): InputGroup(), InputGroupAddon(), inputGroupAddonVariants, InputGroupButton(), inputGroupButtonVariants, InputGroupInput(), InputGroupText(), InputGroupTextarea() (+1 more)
+### Community 37 - "dependencies"
+Cohesion: 0.09
+Nodes (23): @base-ui/react, clsx, embla-carousel-react, input-otp, lucide-react, next-intl, dependencies, @base-ui/react (+15 more)
 
-### Community 38 - "includes"
-Cohesion: 0.20
-Nodes (10): files, ignoreUnknown, includes, !!node_modules, **, !!.agents, !!build, !!coverage (+2 more)
+### Community 38 - "sidebar.tsx"
+Cohesion: 0.06
+Nodes (37): Sheet(), SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle(), SheetTrigger() (+29 more)
 
 ### Community 39 - "Describe API"
 Cohesion: 0.11
@@ -380,12 +445,12 @@ Nodes (16): Assertion Count, Asymmetric Matchers, Basic Assertions, Chai-Style S
 Cohesion: 0.12
 Nodes (15): Available Environments, Browser Mode (Separate from Environments), Configuration, CSS and Assets, Custom Environment, Environment with VM, Fixing External Dependencies, happy-dom Environment (+7 more)
 
-### Community 43 - "navigation-menu.tsx"
-Cohesion: 0.22
-Nodes (9): NavigationMenu(), NavigationMenuContent(), NavigationMenuIndicator(), NavigationMenuItem(), NavigationMenuLink(), NavigationMenuList(), NavigationMenuPositioner(), NavigationMenuTrigger() (+1 more)
+### Community 43 - "app-side-panel-header.tsx"
+Cohesion: 0.12
+Nodes (11): AppHeaderTab, AppSidePanelHeader(), AppSidePanelHeaderProps, defaultSpecialItems, moveTab(), SideHeaderAction(), sideHeaderTheme, SidePanelSpecialEntryId (+3 more)
 
 ### Community 44 - "vitest/SKILL.md"
-Cohesion: 0.20
+Cohesion: 0.24
 Nodes (3): Advanced, Core, Features
 
 ### Community 45 - "Type Testing"
@@ -393,23 +458,23 @@ Cohesion: 0.12
 Nodes (16): assertType, Branded Types, Configuration, Equality vs Matching, expectTypeOf API, Function Types, Generic Types, Key Points (+8 more)
 
 ### Community 46 - "app/layout.tsx"
-Cohesion: 0.22
-Nodes (6): nextConfig, withNextIntl, !!.next, geistMono, geistSans, metadata
+Cohesion: 0.29
+Nodes (4): nextConfig, withNextIntl, !!.next, metadata
 
 ### Community 47 - "Test Filtering"
 Cohesion: 0.12
 Nodes (16): By File Path, By Test Name, Changed Files, CLI Filtering, Combining Filters, Environment-based Filtering, Focus Tests (.only), Include/Exclude Patterns (+8 more)
 
-### Community 48 - "pagination.tsx"
-Cohesion: 0.22
-Nodes (7): Pagination(), PaginationContent(), PaginationEllipsis(), PaginationLink(), PaginationLinkProps, PaginationNext(), PaginationPrevious()
+### Community 48 - "alert-dialog.tsx"
+Cohesion: 0.15
+Nodes (9): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia(), AlertDialogOverlay() (+1 more)
 
-### Community 49 - "biome.json"
-Cohesion: 0.25
-Nodes (7): css, parser, quoteStyle, javascript, formatter, tailwindDirectives, $schema
+### Community 49 - "extract-capacities-wacz-visual-contract.mjs"
+Cohesion: 0.10
+Nodes (16): archiveEvidence, audit, contract, cssResources, customProperties, customPropertyEvidence, lightTheme, lines (+8 more)
 
 ### Community 50 - "Snapshot Testing"
-Cohesion: 0.13
+Cohesion: 0.12
 Nodes (15): Basic Snapshot, Concurrent Test Snapshots, Custom Serializers, Custom Snapshot Matchers (4.1+), Error Snapshots, File Snapshots, Inline Snapshots, Key Points (+7 more)
 
 ### Community 51 - "ADDED Requirements"
@@ -468,9 +533,9 @@ Nodes (12): ADDED Requirements, Purpose, Requirement: Documentation change class
 Cohesion: 0.15
 Nodes (12): ADDED Requirements, CI/CD, Requirement: Deployment configuration, Requirement: Deterministic quality gate, Requirement: Repository hygiene, Requirement: Safe branch promotion, Requirement: Security gate, Scenario: Environment-specific rollout (+4 more)
 
-### Community 65 - "card.tsx"
-Cohesion: 0.25
-Nodes (7): Card(), CardAction(), CardContent(), CardDescription(), CardFooter(), CardHeader(), CardTitle()
+### Community 65 - "Requirements"
+Cohesion: 0.04
+Nodes (46): Requirement: Existing app-shell integration, Requirement: Focus mode header controls, Requirement: Header navigation actions, Requirement: Inactive tab preview, Requirement: Main create action, Requirement: Main space tab visual states, Requirement: Main tab drag reorder, Requirement: Main tab list (+38 more)
 
 ### Community 66 - "empty.tsx"
 Cohesion: 0.29
@@ -532,9 +597,9 @@ Nodes (9): A worked example, Contents, Dependency audit, Failure modes, Graph En
 Cohesion: 0.20
 Nodes (10): Built-in Context, Composing & Hooks, Custom Fixtures — Builder Pattern (4.1+, recommended), Fixture Options, Fixture Scopes (3.2+), Injected Fixtures (per-project values), Key Points, Object Syntax (Playwright-compatible) (+2 more)
 
-### Community 81 - "linter"
-Cohesion: 0.29
-Nodes (7): next, react, linter, domains, enabled, rules, recommended
+### Community 81 - "workspace-objects.ts"
+Cohesion: 0.08
+Nodes (49): QueryObjectEditor(), WorkspaceProvider(), entityValidators, hasEntityBase(), isRecord(), isTableCell(), isWorkspaceEntity(), parseWorkspaceObjectSnapshot() (+41 more)
 
 ### Community 82 - "Requirements"
 Cohesion: 0.20
@@ -656,9 +721,9 @@ Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What C
 Cohesion: 0.29
 Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
 
-### Community 112 - "toggle-group.tsx"
-Cohesion: 0.43
-Nodes (5): ToggleGroup(), ToggleGroupContext, ToggleGroupItem(), Toggle(), toggleVariants
+### Community 112 - "Requirements"
+Cohesion: 0.05
+Nodes (38): App Sidebar Specification, Purpose, Requirement: AppShell retains layout ownership, Requirement: Composable app-sidebar workspace selector, Requirement: Equivalent section actions reuse one shared component, Requirement: Fixed source-derived footer, Requirement: Lower utility navigation, Requirement: Object types use source-derived rows (+30 more)
 
 ### Community 113 - "AGENT Instructions"
 Cohesion: 0.33
@@ -756,17 +821,17 @@ Nodes (3): For git commit hook, For native AGENTS.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
-### Community 138 - "tabs.tsx"
-Cohesion: 0.40
-Nodes (5): Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger()
+### Community 138 - "scripts"
+Cohesion: 0.11
+Nodes (19): scripts, biome:ci, build, complexity, dev, format:check, graphify:build, graphify:install (+11 more)
 
 ### Community 139 - "Contributing"
 Cohesion: 0.50
 Nodes (3): Branching, Contributing, Required checks
 
 ### Community 140 - "Design Principles"
-Cohesion: 0.50
-Nodes (3): Accessibility, Coding Standards, Design Principles
+Cohesion: 0.40
+Nodes (4): Accessibility, Coding Standards, Component Style Contracts, Design Principles
 
 ### Community 141 - "2026-08-18-codify-practical-documentation-workflow/tasks.md"
 Cohesion: 0.50
@@ -788,41 +853,270 @@ Nodes (3): 1. Project dependencies and i18n config, 2. Locale routes and transla
 Cohesion: 0.50
 Nodes (3): 1. Reusable app-shell primitive, 2. Composition and responsive behavior, 3. Integration and verification
 
-### Community 157 - "formatter"
-Cohesion: 0.40
-Nodes (5): formatter, enabled, indentStyle, indentWidth, lineEnding
+### Community 151 - "Shadcn First"
+Cohesion: 0.33
+Nodes (5): Completion check, Component selection, `data-slot` contract, Native shadcn implementation contract, Shadcn First
 
-### Community 173 - "vcs"
-Cohesion: 0.40
-Nodes (5): vcs, clientKind, defaultBranch, enabled, useIgnoreFile
+### Community 157 - "Requirement: Functional object-type creation and import actions"
+Cohesion: 0.05
+Nodes (38): capacities-en-fidelity Specification, Purpose, Requirement: Canonical modular architecture preservation, Requirement: Complete interaction and responsive preservation, Requirement: Deterministic Capacities fidelity acceptance surface, Requirement: Evidence-governed visual convergence, Requirement: Functional object-type creation and import actions, Requirement: Iterative visual evaluation and regression evidence (+30 more)
 
-### Community 174 - "marker.tsx"
+### Community 173 - "Requirement: Disabled create-space affordance"
+Cohesion: 0.67
+Nodes (3): Requirement: Disabled create-space affordance, Scenario: No spaces match the query, Scenario: Spaces are available
+
+### Community 174 - "devDependencies"
+Cohesion: 0.13
+Nodes (15): @biomejs/biome, devDependencies, @biomejs/biome, tailwindcss, @tailwindcss/postcss, @types/node, @types/react, @types/react-dom (+7 more)
+
+### Community 175 - "biome.json"
+Cohesion: 0.15
+Nodes (12): css, parser, formatter, enabled, indentStyle, indentWidth, lineEnding, quoteStyle (+4 more)
+
+### Community 176 - "Requirement: Functional object-type creation and import actions"
+Cohesion: 0.05
+Nodes (36): ADDED Requirements, Requirement: Canonical modular architecture preservation, Requirement: Complete interaction and responsive preservation, Requirement: Deterministic Capacities fidelity acceptance surface, Requirement: Evidence-governed visual convergence, Requirement: Functional object-type creation and import actions, Requirement: Iterative visual evaluation and regression evidence, Requirement: Measured shell and surface fidelity (+28 more)
+
+### Community 178 - "navigation-menu.tsx"
+Cohesion: 0.22
+Nodes (9): NavigationMenu(), NavigationMenuContent(), NavigationMenuIndicator(), NavigationMenuItem(), NavigationMenuLink(), NavigationMenuList(), NavigationMenuPositioner(), NavigationMenuTrigger() (+1 more)
+
+### Community 180 - "utils.ts"
+Cohesion: 0.09
+Nodes (15): AspectRatio(), Checkbox(), InputOTP(), InputOTPGroup(), InputOTPSlot(), RadioGroup(), RadioGroupItem(), Slider() (+7 more)
+
+### Community 181 - "MODIFIED Requirements"
+Cohesion: 0.10
+Nodes (20): MODIFIED Requirements, Requirement: Compact responsive section presentation, Requirement: Composable app-sidebar overview, Requirement: Context-specific object menus, Requirement: Custom sidebar sections, Requirement: Local styling and static tone mappings, Requirement: Pinned-content picker, Requirement: Source-inspired object-type studio (+12 more)
+
+### Community 182 - "Requirement: Type-specific creation workflows"
+Cohesion: 0.07
+Nodes (27): object-lifecycle Specification, Purpose, Requirement: Behavioral acceptance is evidence-backed, Requirement: Editing synchronizes every workspace projection, Requirement: Localized and accessible lifecycle surfaces, Requirement: Type-specific creation workflows, Requirement: Typed workspace object state, Requirement: Versioned local workspace persistence (+19 more)
+
+### Community 183 - "Requirement: Type-specific creation workflows"
+Cohesion: 0.08
+Nodes (25): ADDED Requirements, Requirement: Behavioral acceptance is evidence-backed, Requirement: Editing synchronizes every workspace projection, Requirement: Localized and accessible lifecycle surfaces, Requirement: Type-specific creation workflows, Requirement: Typed workspace object state, Requirement: Versioned local workspace persistence, Scenario: File-backed object is created (+17 more)
+
+### Community 184 - "includes"
+Cohesion: 0.20
+Nodes (10): files, ignoreUnknown, includes, !!node_modules, **, !!.agents, !!build, !!coverage (+2 more)
+
+### Community 185 - "Capacities `/en` Fidelity Evidence"
+Cohesion: 0.11
+Nodes (17): 2026-08-22 exhaustive Atomic Notes listing audit, 2026-08-22 integrated final checkpoint, Baseline mismatch ledger, Baseline visual assets, Capacities `/en` Fidelity Evidence, Final verification checkpoint, Functional object-type actions and controls, Header-tab regression correction (+9 more)
+
+### Community 187 - "Decisions"
+Cohesion: 0.12
+Nodes (15): Bound contextual sizing without replacing resize infrastructure, Context, Decisions, Goals / Non-Goals, Keep route acceptance state outside the primitives, Migration Plan, Model collection, query, and settings commands as local state transitions, Open Questions (+7 more)
+
+### Community 188 - "Decisions"
+Cohesion: 0.13
+Nodes (14): Context, Decisions, Footer behavior, Goals / Non-Goals, Keep the workspace selector implementation, Migration Plan, Object-type studio, Preserve `AppShell` ownership of geometry (+6 more)
+
+### Community 189 - "Workspace UI Parity"
+Cohesion: 0.25
+Nodes (7): Completion check, Localization contract, Naming contract, Object icon contract, Popup appearance contract, Shared component and style contract, Workspace UI Parity
+
+### Community 190 - "Decisions"
+Cohesion: 0.15
+Nodes (12): Context, Decisions, Goals / Non-Goals, Keep locale-neutral data and localized projections, Migration Plan, Open Questions, Persist a validated versioned snapshot after mount, Render by workflow family, not one component per palette label (+4 more)
+
+### Community 191 - "Decisions"
+Cohesion: 0.13
+Nodes (14): Context, Custom sections, Decisions, Entity rows, Goals, Menus, Non-Goals, Object-type studio (+6 more)
+
+### Community 192 - "MODIFIED Requirements"
+Cohesion: 0.15
+Nodes (12): MODIFIED Requirements, Requirement: Compact object-type preset cards, Requirement: Composable app-sidebar content, Requirement: Fixed studio header and scrollable body, Requirement: Object-type studio dialog, Requirement: Responsive object-type grid, Scenario: Grid responds to viewport width, Scenario: Object-type content exceeds available height (+4 more)
+
+### Community 193 - "MODIFIED Requirements"
+Cohesion: 0.15
+Nodes (12): MODIFIED Requirements, Requirement: Composable app-sidebar workspace selector, Requirement: Enabled primary sidebar actions, Requirement: Primary-action hover hints, Requirement: Primary-action shortcut presentation, Scenario: Action has multiple hint entries, Scenario: Active navigation action is supplied, Scenario: Pointer leaves or action is pressed (+4 more)
+
+### Community 194 - "ADDED Requirements"
+Cohesion: 0.17
+Nodes (11): ADDED Requirements, Requirement: AppShell retains layout ownership, Requirement: Composable app-sidebar workspace selector, Requirement: Persistent pinned region, Requirement: Shadcn-first styling and theme ownership, Requirement: Source-derived primary navigation, Scenario: Desktop sidebar is resized or collapsed, Scenario: Primary navigation is rendered (+3 more)
+
+### Community 195 - "2026-08-22-refine-capacities-en-fidelity/tasks.md"
+Cohesion: 0.22
+Nodes (8): 1. Evidence and Baseline, 2. Acceptance Composition, 3. Evidence-Backed Component Refinement, 4. Visual Fidelity Loop, 5. Final Verification and Spec Completion, 6. Shared Object-Type Listings, 7. Functional Object-Type Actions, 8. Exhaustive Object-Type Control Parity
+
+### Community 196 - "app-sidebar.tsx"
+Cohesion: 0.07
+Nodes (34): AppShellContent(), AppSidebarLabels, AppSidebarProps, AppSidebarSpace, AppSidebarSpaceSwitcher(), areOrdersEqual(), defaultLabels, DragPreview (+26 more)
+
+### Community 197 - "add-app-header/proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 198 - "add-app-sidebar-object-type-studio/proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 199 - "add-app-sidebar-primary-actions/proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 200 - "add-app-sidebar/proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 201 - "refine-app-sidebar-overview/proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 202 - "linter"
+Cohesion: 0.29
+Nodes (7): next, react, linter, domains, enabled, rules, recommended
+
+### Community 203 - "add-app-header/design.md"
+Cohesion: 0.33
+Nodes (5): Context, Decisions, Goals / Non-Goals, Migration Plan, Risks / Trade-offs
+
+### Community 204 - "add-app-header/tasks.md"
+Cohesion: 0.33
+Nodes (5): 1. OpenSpec alignment, 2. Reusable header tabs, 3. App header and focus mode, 4. Integration demo, 5. Verification
+
+### Community 205 - "add-app-sidebar-object-type-studio/design.md"
+Cohesion: 0.33
+Nodes (5): Context, Decisions, Goals / Non-Goals, Migration Plan, Risks / Trade-offs
+
+### Community 206 - "add-app-sidebar-primary-actions/design.md"
+Cohesion: 0.33
+Nodes (5): Context, Decisions, Goals / Non-Goals, Migration Plan, Risks / Trade-offs
+
+### Community 207 - "add-app-sidebar/tasks.md"
+Cohesion: 0.33
+Nodes (5): 1. App-sidebar workspace selector, 2. Source-derived navigation and overview, 3. Lower navigation and footer, 4. Shadcn and AppShell integration, 5. Integration and verification
+
+### Community 208 - "refine-app-sidebar-overview/tasks.md"
+Cohesion: 0.40
+Nodes (4): 1. Overview structure, 2. Menus, 3. Object-type studio, 4. Integration and verification
+
+### Community 209 - "add-app-sidebar-object-type-studio/tasks.md"
+Cohesion: 0.50
+Nodes (3): 1. Object-type studio component, 2. Integration, 3. Verification
+
+### Community 210 - "add-app-sidebar-primary-actions/tasks.md"
+Cohesion: 0.50
+Nodes (3): 1. Primary sidebar actions, 2. Integration, 3. Verification
+
+### Community 211 - "Requirement: Lower utility navigation"
+Cohesion: 0.50
+Nodes (4): Requirement: Lower utility navigation, Scenario: Ask action tooltip is shown, Scenario: External help action is hovered, Scenario: Lower utility row is hovered
+
+### Community 212 - "Requirement: Pinned entities use a dedicated row contract"
+Cohesion: 0.50
+Nodes (4): Requirement: Pinned entities use a dedicated row contract, Scenario: Pinned entity is rendered, Scenario: Pinned entity is selected, Scenario: Pointer hovers a pinned entity
+
+### Community 213 - "Requirement: Reorder spaces from a dedicated handle"
+Cohesion: 0.50
+Nodes (4): Requirement: Reorder spaces from a dedicated handle, Scenario: User drags a space, Scenario: User hovers a space row, Scenario: User releases the drag
+
+### Community 214 - "Requirement: Search and empty-state behavior"
+Cohesion: 0.50
+Nodes (4): Requirement: Search and empty-state behavior, Scenario: Search returns no spaces, Scenario: User clears search, Scenario: User types a matching query
+
+### Community 215 - "marker.tsx"
 Cohesion: 0.50
 Nodes (4): Marker(), MarkerContent(), MarkerIcon(), markerVariants
 
-### Community 175 - "assist"
+### Community 216 - "Requirement: Fixed source-derived footer"
+Cohesion: 0.67
+Nodes (3): Requirement: Fixed source-derived footer, Scenario: Footer is rendered, Scenario: Settings is rendered
+
+### Community 217 - "Requirement: Hover-only workspace hint"
+Cohesion: 0.67
+Nodes (3): Requirement: Hover-only workspace hint, Scenario: Pointer rests over the selector, Scenario: User clicks or selects a workspace
+
+### Community 218 - "Requirement: Object types use source-derived rows"
+Cohesion: 0.67
+Nodes (3): Requirement: Object types use source-derived rows, Scenario: Object type is rendered, Scenario: Pointer hovers an object type
+
+### Community 219 - "Requirement: Section affordances match source interaction"
+Cohesion: 0.67
+Nodes (3): Requirement: Section affordances match source interaction, Scenario: Pointer enters the section container, Scenario: Pointer hovers a section header
+
+### Community 220 - "Requirement: Stable popup focus and closing"
+Cohesion: 0.67
+Nodes (3): Requirement: Stable popup focus and closing, Scenario: Popup opens, Scenario: User clicks outside
+
+### Community 221 - "package.json"
+Cohesion: 0.29
+Nodes (6): engines, node, name, packageManager, private, version
+
+### Community 222 - "tabs.tsx"
+Cohesion: 0.40
+Nodes (5): Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger()
+
+### Community 223 - "vcs"
+Cohesion: 0.40
+Nodes (5): vcs, clientKind, defaultBranch, enabled, useIgnoreFile
+
+### Community 224 - "2026-08-22-implement-object-lifecycle/proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 225 - "assist"
 Cohesion: 0.50
 Nodes (4): recommended, assist, actions, enabled
 
+### Community 229 - "command.tsx"
+Cohesion: 0.09
+Nodes (21): Command(), CommandDialog(), CommandEmpty(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator() (+13 more)
+
+### Community 231 - "2026-08-22-implement-object-lifecycle/tasks.md"
+Cohesion: 0.29
+Nodes (6): 1. Baseline and Domain Contract, 2. Persistence and Provider Integration, 3. Immediate Editors, 4. Drafted Creation Flows, 5. Query Workflow and Cross-Surface Synchronization, 6. Localization, Accessibility, and Verification
+
+### Community 234 - "Verification Report: implement-object-lifecycle"
+Cohesion: 0.29
+Nodes (6): Critical issues before archive, Final assessment, Implementation mapping, Summary, Verification Report: implement-object-lifecycle, Warnings
+
+### Community 235 - "2026-08-22-refine-capacities-en-fidelity/proposal.md"
+Cohesion: 0.29
+Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
+
+### Community 237 - "Atomic Notes listing control matrix"
+Cohesion: 0.40
+Nodes (4): Atomic Notes listing control matrix, Measured desktop geometry, Observed state transitions, Reference cleanup
+
+### Community 241 - "Q: existem componentes pasta ui ou algum n estao seguindo capcities corrija"
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: existem componentes pasta ui ou algum n estao seguindo capcities corrija, Source Nodes
+
+### Community 242 - "Q: veja n esqueceu dennhum componente"
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: veja n esqueceu dennhum componente, Source Nodes
+
+### Community 248 - "Q: veja capcities io veja veja se precisa ataulizar DESING.md"
+Cohesion: 0.40
+Nodes (4): Answer, Outcome, Q: veja capcities io veja veja se precisa ataulizar DESING.md, Source Nodes
+
 ## Knowledge Gaps
-- **966 isolated node(s):** `Context`, `Decision: Add capability path `developer-workflows/openspec-enforcement``, `Decision: Use repository-local OpenSpec store`, `Goals / Non-Goals`, `Migration Plan` (+961 more)
+- **1489 isolated node(s):** `PaginationLinkProps`, `AppSidebarIconName`, `AppSidebarIconProps`, `IconPath`, `AppSidebarPrimaryAction` (+1484 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **24 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+
+## Work-memory lessons
+
+**Preferred sources** — corroborated by past sessions; start here.
+- `shared-styles.ts` (2× useful, score=1.998105315)
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `cn` to `sidebar.tsx`, `alert.tsx`, `utils.ts`, `menubar.tsx`, `app-shell.tsx`, `app-sidebar-overview.tsx`, `tabs.tsx`, `app-sidebar-primary-actions.tsx`, `field.tsx`, `command.tsx`, `app-sidebar.tsx`, `combobox.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `alert-dialog.tsx`, `chart.tsx`, `item.tsx`, `toast.tsx`, `app-sidebar-object-type-studio.tsx`, `attachment.tsx`, `input-group.tsx`, `navigation-menu.tsx`, `marker.tsx`, `badge.tsx`, `pagination.tsx`, `card.tsx`, `empty.tsx`, `bubble.tsx`, `toggle-group.tsx`?**
-  _High betweenness centrality (0.069) - this node is a cross-community bridge._
+- **Why does `cn()` connect `cn` to `button.tsx`, `alert.tsx`, `app-header-tabs.tsx`, `context-menu.tsx`, `workspace-controller.tsx`, `app-header.tsx`, `workspace-content.tsx`, `app-shell.tsx`, `app-sidebar-icons.tsx`, `app-sidebar-primary-actions.tsx`, `app-sidebar-overview.tsx`, `menubar.tsx`, `field.tsx`, `combobox.tsx`, `drawer.tsx`, `carousel.tsx`, `chart.tsx`, `item.tsx`, `attachment.tsx`, `sidebar.tsx`, `app-side-panel-header.tsx`, `alert-dialog.tsx`, `navigation-menu.tsx`, `utils.ts`, `empty.tsx`, `app-sidebar.tsx`, `workspace-objects.ts`, `marker.tsx`, `tabs.tsx`, `command.tsx`, `bubble.tsx`?**
+  _High betweenness centrality (0.074) - this node is a cross-community bridge._
 - **Why does `Vi Utilities` connect `Vi Utilities` to `vitest/SKILL.md`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
-- **Why does `Mocking` connect `Mocking` to `vitest/SKILL.md`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `Context`, `Decision: Add capability path `developer-workflows/openspec-enforcement``, `Decision: Use repository-local OpenSpec store` to the rest of the system?**
-  _966 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
+- **What connects `PaginationLinkProps`, `AppSidebarIconName`, `AppSidebarIconProps` to the rest of the system?**
+  _1489 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `cn` be split into smaller, more focused modules?**
-  _Cohesion score 0.05134575569358178 - nodes in this community are weakly interconnected._
-- **Should `sidebar.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.0549645390070922 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.04487004103967168 - nodes in this community are weakly interconnected._
+- **Should `button.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.06818181818181818 - nodes in this community are weakly interconnected._
 - **Should `scan.py` be split into smaller, more focused modules?**
   _Cohesion score 0.08658536585365853 - nodes in this community are weakly interconnected._
+- **Should `app-header-tabs.tsx` be split into smaller, more focused modules?**
+  _Cohesion score 0.09425287356321839 - nodes in this community are weakly interconnected._

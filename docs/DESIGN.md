@@ -35,6 +35,9 @@
   they must inherit the shared surface color, border, radius, shadow, focus,
   highlighted, and selected-state contracts unless current reference evidence
   demonstrates a real contextual difference.
+- Sidebar context menus use the semantic width variants exported by
+  `src/components/ui/compact-menu.tsx`. Feature components may choose popup
+  placement, but they must not redefine the surface or row appearance locally.
 - Control icons and menu/list items must use the shared icon and item classes
   instead of redefining SVG sizing, pointer events, radius, hover, or selected
   states in each component.

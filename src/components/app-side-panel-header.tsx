@@ -374,8 +374,10 @@ function AppSidePanelHeader({
               style={{ gap: SIDE_TAB_GAP }}
             >
               {tabs.map((tab) => (
-                <div
-                  key={tab.id}
+                <React.Fragment key={tab.id}>
+                  {/* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual tab wrapper */}
+                  <div
+                  role="presentation"
                   draggable={tab.draggable !== false}
                   data-dnd-type="draggable"
                   data-dnd-item={tab.id}
@@ -416,7 +418,8 @@ function AppSidePanelHeader({
                     onOpen={() => onValueChange(tab.id)}
                     onClose={() => closeTab(tab)}
                   />
-                </div>
+                  </div>
+                </React.Fragment>
               ))}
             </div>
           </div>
