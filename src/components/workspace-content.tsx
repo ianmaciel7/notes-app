@@ -29,6 +29,7 @@ import {
   AppHeaderCaretDownIcon,
   AppHeaderGraphIcon,
 } from "@/components/app-header-icons";
+import type { AppHeaderTab } from "@/components/app-header-tabs";
 import {
   AppSidebarDotsIcon,
   AppSidebarPlusIcon,
@@ -101,6 +102,9 @@ function AtomicNotesWorkspace() {
   const activeCreatedEntity = createdEntities.find(
     (entity) => entity.id === mainValue,
   );
+  const activeNamedItem = activeTab
+    ? parseObjectTypeNamedItemTabId(activeTab.id)
+    : null;
 
   if (activeAction === "explore") {
     return <ExploreWorkspace />;
@@ -116,6 +120,10 @@ function AtomicNotesWorkspace() {
 
   if (activeObjectType) {
     return <ObjectTypeWorkspace objectType={activeObjectType} />;
+  }
+
+  if (activeNamedItem) {
+    return <ObjectTypeNamedItemWorkspace item={activeNamedItem} />;
   }
 
   if (activeTab && activeTab.id !== "new-tab-draft") {
@@ -218,6 +226,131 @@ function CreatedObjectWorkspace({ entity }: { entity: WorkspaceEntity }) {
       className="relative flex h-full min-h-0 flex-col text-foreground"
     >
       {content}
+    </div>
+  );
+}
+
+function ObjectTypeNamedItemWorkspace({
+  item,
+}: {
+  item: ObjectTypeNamedItemTab;
+}) {
+  const t = useTranslations("workspace");
+  const {
+    createWorkspaceEntity,
+    createdEntities,
+    objectTypes,
+    objectTypeCollections,
+    objectTypeQueries,
+    setMainTabs,
+    setObjectTypeCollections,
+    setObjectTypeQueries,
+  } = useWorkspace();
+  const titleRef = React.useRef<HTMLInputElement>(null);
+  const objectType = objectTypes.find((type) => type.id === item.objectTypeId);
+  const items =
+    item.kind === "collection"
+      ? (objectTypeCollections[item.objectTypeId] ?? [])
+      : (objectTypeQueries[item.objectTypeId] ?? []);
+  const title = items[item.index] ?? t("objectTypeOverview.untitled");
+  const count =
+    item.kind === "collection"
+      ? createdEntities.filter(
+          (entity) =>
+            entity.objectTypeId === item.objectTypeId &&
+            "collections" in entity &&
+            entity.collections.includes(title),
+        ).length
+      : 0;
+
+  React.useEffect(() => {
+    titleRef.current?.focus();
+    titleRef.current?.select();
+  }, []);
+
+  if (!objectType) return null;
+
+  const ItemIcon =
+    item.kind === "collection" ? ObjectCollectionIcon : ObjectQueryIcon;
+  const tabId = objectTypeNamedItemTabId(
+    item.kind,
+    item.objectTypeId,
+    item.index,
+  );
+
+  function rename(value: string) {
+    const setter =
+      item.kind === "collection" ? setObjectTypeCollections : setObjectTypeQueries;
+    setter((current) => ({
+      ...current,
+      [item.objectTypeId]: (current[item.objectTypeId] ?? []).map(
+        (currentItem, currentIndex) =>
+          currentIndex === item.index ? value : currentItem,
+      ),
+    }));
+    setMainTabs((current) =>
+      current.map((tab) =>
+        tab.id === tabId
+          ? {
+              ...tab,
+              label: value.trim() || t("objectTypeOverview.untitled"),
+            }
+          : tab,
+      ),
+    );
+  }
+
+  return (
+    <div
+      data-slot="object-type-named-item-workspace"
+      data-kind={item.kind}
+      className="relative flex h-full min-h-0 flex-col text-[#282522]"
+    >
+      <div className="mx-auto flex w-full max-w-[50rem] flex-1 flex-col px-10 pb-12 pt-9">
+        <div className="flex items-center justify-between">
+          <div className="inline-flex min-w-0 items-center gap-2 rounded-lg px-1.5 py-1 text-sm text-[#77716b]">
+            <ObjectIconBadge
+              icon={objectType.icon}
+              tone={objectType.tone}
+              variant="menu"
+            />
+            <span className="truncate">{objectType.label}</span>
+          </div>
+          <Button
+            className="h-8 rounded-lg px-3 text-sm font-normal"
+            onClick={() => createWorkspaceEntity(objectType.id, objectType.label)}
+          >
+            <AppSidebarPlusIcon className="size-4" />
+            {t("actions.new")}
+          </Button>
+        </div>
+
+        <div className="mt-8 flex items-center gap-3 text-[#77716b]">
+          <ObjectIconBadge icon={ItemIcon} tone="gray" />
+          <span className="text-sm">
+            {t("objectTypeOverview.entryCount", { count })}
+          </span>
+        </div>
+
+        <input
+          ref={titleRef}
+          aria-label={t("fields.title")}
+          value={title}
+          onChange={(event) => rename(event.target.value)}
+          className="mt-3 w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-[#282522] outline-none placeholder:text-[#b8b2ac]"
+          placeholder={t("objectTypeOverview.untitled")}
+        />
+
+        <section className="mt-10 flex min-h-[220px] flex-col items-center justify-center rounded-2xl text-center">
+          <ItemIcon className="mb-3 size-5 text-[#77716b]" />
+          <p className="text-sm font-medium text-[#34312f]">
+            {t("objectTypeOverview.namedItemViewNotReady")}
+          </p>
+          <p className="mt-1 max-w-md text-[13px] leading-5 text-[#77716b]">
+            {t("objectTypeOverview.namedItemViewNotReadyDescription")}
+          </p>
+        </section>
+      </div>
     </div>
   );
 }
@@ -1629,6 +1762,32 @@ type OptionalOverviewSection = Exclude<
 >;
 
 type ObjectTypeView = "overview" | "all" | OptionalOverviewSection;
+type ObjectTypeNamedItemKind = "collection" | "query";
+type ObjectTypeNamedItemTab = {
+  kind: ObjectTypeNamedItemKind;
+  objectTypeId: string;
+  index: number;
+};
+
+function objectTypeNamedItemTabId(
+  kind: ObjectTypeNamedItemKind,
+  objectTypeId: string,
+  index: number,
+) {
+  return `object-type-item:${kind}:${objectTypeId}:${index}`;
+}
+
+function parseObjectTypeNamedItemTabId(
+  id: string,
+): ObjectTypeNamedItemTab | null {
+  const match = /^object-type-item:(collection|query):([^:]+):(\d+)$/.exec(id);
+  if (!match) return null;
+  return {
+    kind: match[1] as ObjectTypeNamedItemKind,
+    objectTypeId: match[2],
+    index: Number(match[3]),
+  };
+}
 
 function ObjectTypeWorkspace({
   objectType,
@@ -1645,6 +1804,10 @@ function ObjectTypeWorkspace({
     objectTypeQueries: queriesByType,
     pinnedEntities,
     selectEntity,
+    setActiveAction,
+    setActiveEntityId,
+    setMainTabs,
+    setMainValue,
     setPinnedEntities,
     setObjectTypeCollections: setCollectionsByType,
     setObjectTypeQueries: setQueriesByType,
@@ -1718,27 +1881,53 @@ function ObjectTypeWorkspace({
     createWorkspaceEntity(objectType.id, objectType.label);
   }
 
+  function openNamedItem(
+    kind: ObjectTypeNamedItemKind,
+    index: number,
+    label: string,
+  ) {
+    const tabId = objectTypeNamedItemTabId(kind, objectType.id, index);
+    const Icon = kind === "collection" ? ObjectCollectionIcon : ObjectQueryIcon;
+    const tab: AppHeaderTab = {
+      id: tabId,
+      label,
+      icon: Icon,
+      iconClassName: objectIconToneBadgeClass.gray,
+      draggable: true,
+    };
+    setMainTabs((current) =>
+      current.some((currentTab) => currentTab.id === tabId)
+        ? current.map((currentTab) =>
+            currentTab.id === tabId ? { ...currentTab, ...tab } : currentTab,
+          )
+        : [...current, tab],
+    );
+    setMainValue(tabId);
+    setActiveEntityId(tabId);
+    setActiveAction(undefined);
+  }
+
   function addCollection() {
-    const nextCollection = t("objectTypeOverview.untitledCollection", {
-      count: collections.length + 1,
-    });
+    const nextCollection = t("objectTypeOverview.untitled");
+    const nextIndex = collections.length;
     setCollectionsByType((current) => ({
       ...current,
       [objectType.id]: [...(current[objectType.id] ?? []), nextCollection],
     }));
-    setEditingItem({ kind: "collection", index: collections.length });
+    setEditingItem(null);
+    openNamedItem("collection", nextIndex, nextCollection);
     showMessage(t("objectTypeOverview.collectionCreated"));
   }
 
   function addQuery() {
-    const nextQuery = t("objectTypeOverview.untitledQuery", {
-      count: queries.length + 1,
-    });
+    const nextQuery = t("objectTypeOverview.untitled");
+    const nextIndex = queries.length;
     setQueriesByType((current) => ({
       ...current,
       [objectType.id]: [...(current[objectType.id] ?? []), nextQuery],
     }));
-    setEditingItem({ kind: "query", index: queries.length });
+    setEditingItem(null);
+    openNamedItem("query", nextIndex, nextQuery);
     showMessage(t("objectTypeOverview.queryCreated"));
   }
 
@@ -1779,6 +1968,15 @@ function ObjectTypeWorkspace({
       () => window.dispatchEvent(new CustomEvent("workspace:open-new-palette")),
       0,
     );
+  }
+
+  function openOverviewSettings() {
+    setView("overview");
+    setToolbarCollapsed(false);
+    setSearchOpen(false);
+    setFilterOpen(false);
+    setSortOpen(false);
+    setSettingsOpen(true);
   }
 
   function renameNamedItem(
@@ -1918,7 +2116,7 @@ function ObjectTypeWorkspace({
               )}
               onExport={exportObjects}
               onImport={() => fileInputRef.current?.click()}
-              onOpenSettings={() => setSettingsOpen(true)}
+              onOpenSettings={openOverviewSettings}
               onCreateFromTemplate={createFromTemplate}
               onTogglePin={togglePin}
             />
@@ -2667,6 +2865,14 @@ function ObjectTypeOverview({
               {collections.length > 0 ? (
                 <ObjectTypeNamedItems
                   items={collections}
+                  itemCounts={collections.map(
+                    (collection) =>
+                      entities.filter(
+                        (entity) =>
+                          "collections" in entity &&
+                          entity.collections.includes(collection),
+                      ).length,
+                  )}
                   kind="collection"
                   editingIndex={
                     editingItem?.kind === "collection"
@@ -2707,6 +2913,7 @@ function ObjectTypeOverview({
               {queries.length > 0 ? (
                 <ObjectTypeNamedItems
                   items={queries}
+                  itemCounts={queries.map(() => 0)}
                   kind="query"
                   editingIndex={
                     editingItem?.kind === "query" ? editingItem.index : null
@@ -2921,44 +3128,66 @@ function ObjectTypeSectionHeader({
 
 function ObjectTypeNamedItems({
   items,
+  itemCounts,
   kind,
   editingIndex,
   onRename,
 }: {
   items: string[];
+  itemCounts: number[];
   kind: "collection" | "query";
   editingIndex: number | null;
   onRename: (index: number, value: string) => void;
 }) {
+  const t = useTranslations("workspace.objectTypeOverview");
   const inputRefs = React.useRef(new Map<number, HTMLInputElement>());
   React.useEffect(() => {
     if (editingIndex === null) return;
     inputRefs.current.get(editingIndex)?.focus();
     inputRefs.current.get(editingIndex)?.select();
   }, [editingIndex]);
+  const keyedItems = React.useMemo(() => {
+    const seen = new Map<string, number>();
+    return items.map((item, index) => {
+      const occurrence = (seen.get(item) ?? 0) + 1;
+      seen.set(item, occurrence);
+      return {
+        item,
+        index,
+        key: `${kind}-${item}-${occurrence}`,
+      };
+    });
+  }, [items, kind]);
 
   return (
     <div className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2">
-      {items.map((item, index) => (
+      {keyedItems.map(({ item, index, key }) => (
         <label
-          key={`${kind}-${item}`}
-          className="flex h-10 items-center gap-2 rounded-lg bg-muted/60 px-3 text-sm hover:bg-muted"
+          key={key}
+          data-slot="object-type-named-card"
+          data-kind={kind}
+          className="group/object-type-named-card flex min-h-[68px] cursor-text flex-col justify-center rounded-xl border border-[#e4e0dc] bg-card px-3 py-2 text-left shadow-[0_1px_2px_rgb(0_0_0/0.02)] transition-colors duration-150 hover:bg-[#faf9f8] focus-within:border-[#cfc8c1] focus-within:bg-[#faf9f8] focus-within:ring-2 focus-within:ring-ring/20"
         >
-          {kind === "collection" ? (
-            <ObjectCollectionIcon className="size-4 shrink-0" />
-          ) : (
-            <ObjectQueryIcon className="size-4 shrink-0" />
-          )}
-          <input
-            ref={(node) => {
-              if (node) inputRefs.current.set(index, node);
-              else inputRefs.current.delete(index);
-            }}
-            aria-label={item}
-            value={item}
-            onChange={(event) => onRename(index, event.target.value)}
-            className="min-w-0 flex-1 bg-transparent outline-none"
-          />
+          <span className="flex min-w-0 items-center gap-2">
+            {kind === "collection" ? (
+              <ObjectCollectionIcon className="size-4 shrink-0 text-[#77716b]" />
+            ) : (
+              <ObjectQueryIcon className="size-4 shrink-0 text-[#77716b]" />
+            )}
+            <input
+              ref={(node) => {
+                if (node) inputRefs.current.set(index, node);
+                else inputRefs.current.delete(index);
+              }}
+              aria-label={item}
+              value={item}
+              onChange={(event) => onRename(index, event.target.value)}
+              className="min-w-0 flex-1 truncate bg-transparent text-[15px] font-medium leading-5 text-[#34312f] outline-none"
+            />
+          </span>
+          <span className="mt-1 text-xs leading-4 text-[#77716b]">
+            {t("entryCount", { count: itemCounts[index] ?? 0 })}
+          </span>
         </label>
       ))}
     </div>
