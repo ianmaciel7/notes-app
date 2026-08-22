@@ -144,13 +144,15 @@ function AtomicNotesWorkspace() {
 
 function CreatedObjectWorkspace({ entity }: { entity: WorkspaceEntity }) {
   const t = useTranslations("workspace");
-  const { createdEntities, updateWorkspaceEntity } = useWorkspace();
-  const definition = objectTypeDefinitionById[entity.objectTypeId];
-  if (!definition) return null;
+  const { createdEntities, structures, updateWorkspaceEntity } = useWorkspace();
+  const structure = structures.find((item) => item.id === entity.objectTypeId);
+  if (!structure) return null;
+  const definition = objectTypeDefinitionById[structure.iconName];
   const Icon = definition.icon;
-  const objectTypeLabel = t(
-    `objectTypeStudio.objectTypes.${entity.objectTypeId}`,
-  );
+  const objectTypeLabel =
+    structure.ownership === "custom"
+      ? structure.singularName
+      : t(`objectTypeStudio.objectTypes.${entity.objectTypeId}`);
 
   const header = (
     <div className="flex items-center justify-between">
@@ -1683,6 +1685,7 @@ function QueryObjectEditor({
   update,
 }: ObjectEditorProps & { entity: QueryEntity; entities: WorkspaceEntity[] }) {
   const t = useTranslations("workspace");
+  const { objectTypes } = useWorkspace();
   const [description, setDescription] = React.useState(entity.description);
   const deferredEntity = React.useDeferredValue(entity);
   const deferredEntities = React.useDeferredValue(entities);
@@ -1732,14 +1735,11 @@ function QueryObjectEditor({
           className="h-9 rounded-lg border bg-background px-2 text-sm"
         >
           <option value="">{t("lifecycle.query.allTypes")}</option>
-          <option value="page">{t("objectTypeStudio.objectTypes.page")}</option>
-          <option value="quote">
-            {t("objectTypeStudio.objectTypes.quote")}
-          </option>
-          <option value="table">
-            {t("objectTypeStudio.objectTypes.table")}
-          </option>
-          <option value="task">{t("objectTypeStudio.objectTypes.task")}</option>
+          {objectTypes.map((objectType) => (
+            <option key={objectType.id} value={objectType.id}>
+              {objectType.label}
+            </option>
+          ))}
         </select>
         <select
           aria-label={t("lifecycle.query.created")}

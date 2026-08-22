@@ -104,7 +104,7 @@ test("sidebar context menus share the canonical appearance contract", async () =
     2,
   );
   assert.match(overview, /className=\{sidebarContextSubmenuContentClass\}/);
-  assert.equal(overview.match(/<DropdownMenuShortcut>/g)?.length, 2);
+  assert.equal(overview.match(/<DropdownMenuShortcut>/g)?.length, 1);
 });
 
 test("the localized workspace boots into the workspace fixture", async () => {
@@ -181,7 +181,7 @@ test("the localized workspace boots into the workspace fixture", async () => {
   assert.match(headerTabs, /\?\.focus\(\)/);
   assert.match(header, /useState<string \| null>\([\s\S]*?"quote"/);
   assert.match(sidebar, /function WorkspaceSidebar/);
-  assert.match(sidebar, /objectTypeDefinitionById/);
+  assert.match(sidebar, /objectTypes=\{objectTypes\}/);
   assert.match(sidebar, /open=\{open\} onOpenChange=\{handleOpenChange\}/);
   assert.match(sidebar, /role="combobox"/);
   assert.match(sidebar, /aria-activedescendant/);

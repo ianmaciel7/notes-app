@@ -215,6 +215,7 @@
     "objectTypeStudio": {
       "basicTypes": "Basic types",
       "createOwn": "Create your own",
+      "actionsLabel": "Actions for {type}",
       "description": "Choose a suggested or basic object type to add to the current space.",
       "details": {
         "close": "Close object type details",
@@ -223,7 +224,19 @@
         "name": "Name",
         "namePlaceholder": "Object type name",
         "preset": "Preset",
-        "review": "Review this preset before adding it to the current space."
+        "review": "Review this preset before adding it to the current space.",
+        "customTitle": "Create your object type",
+        "learnMore": "Learn more",
+        "customDescription": "Object types are categories for your content, such as books, projects, or meeting notes.",
+        "icon": "Icon",
+        "color": "Color",
+        "pluralName": "Plural name",
+        "pluralNamePlaceholder": "Plural name",
+        "customHint": "You can customize properties after creating the object type in its settings.",
+        "settings": "Object type settings",
+        "settingsDescription": "Change the names and appearance used by every object of this type.",
+        "save": "Save changes",
+        "delete": "Delete object type"
       },
       "objectTypes": {
         "ai-chat": "AI chat",
@@ -253,7 +266,8 @@
         "weblink": "Weblink"
       },
       "title": "Add new object type",
-      "trigger": "Add object type"
+      "trigger": "Add object type",
+      "operationFailed": "The object type could not be changed."
     },
     "lifecycle": {
       "cancel": "Cancel",

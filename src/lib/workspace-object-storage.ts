@@ -5,10 +5,14 @@ import {
 import {
   WORKSPACE_OBJECT_SCHEMA_VERSION,
   createInitialWorkspaceObjectState,
-  isObjectTypeId,
   type WorkspaceEntity,
   type WorkspaceObjectState,
 } from "./workspace-objects.ts";
+import {
+  createInitialStructureRegistry,
+  validateStructureRegistry,
+  type WorkspaceStructure,
+} from "./workspace-object-types.ts";
 
 const WORKSPACE_OBJECT_STORAGE_KEY = "notes-app:workspace-objects:v1";
 
@@ -16,6 +20,7 @@ type WorkspaceObjectSnapshot = {
   activeEntityId: string | null;
   entities: WorkspaceEntity[];
   nextId: number;
+  structures: readonly WorkspaceStructure[];
   version: typeof WORKSPACE_OBJECT_SCHEMA_VERSION;
 };
 
@@ -42,7 +47,7 @@ function hasEntityBase(value: Record<string, unknown>): boolean {
     typeof value.title === "string" &&
     typeof value.createdAt === "string" &&
     typeof value.objectTypeId === "string" &&
-    isObjectTypeId(value.objectTypeId) &&
+    value.objectTypeId.trim().length > 0 &&
     typeof value.kind === "string"
   );
 }
@@ -95,6 +100,33 @@ function isWorkspaceEntity(value: unknown): value is WorkspaceEntity {
   return entityValidators[value.kind as string]?.(value) ?? false;
 }
 
+const entityKindByLifecycle = {
+  document: "document",
+  file: "file",
+  query: "query",
+  quote: "quote",
+  table: "table",
+  tag: "tag",
+  task: "task",
+  url: "url",
+} as const;
+
+function entitiesReferenceValidStructures(
+  entities: readonly WorkspaceEntity[],
+  structures: readonly WorkspaceStructure[],
+): boolean {
+  const structuresById = new Map(
+    structures.map((structure) => [structure.id, structure]),
+  );
+  return entities.every((entity) => {
+    const structure = structuresById.get(entity.objectTypeId);
+    return (
+      structure !== undefined &&
+      entityKindByLifecycle[structure.lifecycleKind] === entity.kind
+    );
+  });
+}
+
 function toWorkspaceObjectSnapshot(
   state: WorkspaceObjectState,
 ): WorkspaceObjectSnapshot {
@@ -106,6 +138,7 @@ function toWorkspaceObjectSnapshot(
       return persisted;
     }) as WorkspaceEntity[],
     nextId: state.nextId,
+    structures: structuredClone(state.structures),
     version: WORKSPACE_OBJECT_SCHEMA_VERSION,
   };
 }
@@ -144,13 +177,25 @@ function parseWorkspaceObjectSnapshot(raw: string): SnapshotParseResult {
     value = {
       ...value,
       entities: migratedEntities,
+      version: 2,
+    };
+  }
+  if (isRecord(value) && value.version === 2) {
+    value = {
+      ...value,
+      structures: createInitialStructureRegistry(),
       version: WORKSPACE_OBJECT_SCHEMA_VERSION,
     };
-  } else if (value.version !== WORKSPACE_OBJECT_SCHEMA_VERSION) {
+  } else if (
+    !isRecord(value) ||
+    value.version !== WORKSPACE_OBJECT_SCHEMA_VERSION
+  ) {
     return { ok: false, reason: "unsupported-version" };
   }
   if (!isRecord(value)) return { ok: false, reason: "invalid-record" };
+  const structureValidation = validateStructureRegistry(value.structures);
   if (
+    !structureValidation.ok ||
     !Array.isArray(value.entities) ||
     !value.entities.every(isWorkspaceEntity) ||
     typeof value.nextId !== "number" ||
@@ -166,6 +211,10 @@ function parseWorkspaceObjectSnapshot(raw: string): SnapshotParseResult {
     const { previewUrl: _previewUrl, ...persisted } = entity;
     return persisted;
   }) as WorkspaceEntity[];
+  const structures = structureValidation.value;
+  if (!entitiesReferenceValidStructures(entities, structures)) {
+    return { ok: false, reason: "invalid-record" };
+  }
   const activeEntityId = entities.some(
     (entity) => entity.id === value.activeEntityId,
   )
@@ -180,6 +229,7 @@ function parseWorkspaceObjectSnapshot(raw: string): SnapshotParseResult {
       entities,
       hydrationStatus: "ready",
       nextId: value.nextId,
+      structures,
     },
   };
 }

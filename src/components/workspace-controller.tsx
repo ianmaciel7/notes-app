@@ -61,6 +61,13 @@ import { Input } from "@/components/ui/input";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import {
+  selectCreatableStructures,
+  type CreateStructureInput,
+  type ObjectIconName,
+  type ObjectIconTone,
+  type WorkspaceStructure,
+} from "@/lib/workspace-object-types";
+import {
   parseWorkspaceObjectSnapshot,
   serializeWorkspaceObjectState,
   WORKSPACE_OBJECT_STORAGE_KEY,
@@ -185,30 +192,6 @@ const availablePinnedEntities: AppSidebarPinnedEntity[] = [
 
 const initialPinnedEntities = availablePinnedEntities.slice(0, 1);
 
-const initialObjectTypes: AppSidebarObjectType[] = [
-  {
-    id: "atomic-note",
-    label: "Notas atômicas",
-    icon: ObjectAtomicNoteIcon,
-    tone: "amber",
-    count: 0,
-  },
-  {
-    id: "quote",
-    label: "Citações",
-    icon: ObjectQuoteIcon,
-    tone: "rose",
-    count: 1,
-  },
-  {
-    id: "page",
-    label: "Páginas",
-    icon: ObjectPageIcon,
-    tone: "blue",
-    count: 1,
-  },
-];
-
 type WorkspaceContextValue = {
   spaces: AppSidebarSpace[];
   spaceId: string;
@@ -224,6 +207,7 @@ type WorkspaceContextValue = {
   pinnedEntities: AppSidebarPinnedEntity[];
   availablePinnedEntities: AppSidebarPinnedEntity[];
   objectTypes: AppSidebarObjectType[];
+  structures: readonly WorkspaceStructure[];
   createdEntities: WorkspaceEntity[];
   workspaceDraft: WorkspaceDraft | null;
   workspaceError: WorkspaceObjectError | null;
@@ -247,7 +231,6 @@ type WorkspaceContextValue = {
   setPinnedEntities: React.Dispatch<
     React.SetStateAction<AppSidebarPinnedEntity[]>
   >;
-  setObjectTypes: React.Dispatch<React.SetStateAction<AppSidebarObjectType[]>>;
   setCustomSections: React.Dispatch<
     React.SetStateAction<AppSidebarCustomSection[]>
   >;
@@ -258,6 +241,18 @@ type WorkspaceContextValue = {
     React.SetStateAction<Record<string, string[]>>
   >;
   showMessage: (message: string) => void;
+  createWorkspaceStructure: (input: CreateStructureInput) => string;
+  createWorkspaceStructureFromPreset: (presetId: string) => string;
+  updateWorkspaceStructure: (
+    id: string,
+    input: {
+      singularName: string;
+      pluralName: string;
+      iconName: ObjectIconName;
+      tone: ObjectIconTone;
+    },
+  ) => void;
+  deleteWorkspaceStructure: (id: string) => void;
   createWorkspaceEntity: (
     objectTypeId: string,
     objectTypeLabel?: string,
@@ -310,8 +305,6 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [pinnedEntities, setPinnedEntities] = React.useState<
     AppSidebarPinnedEntity[]
   >(initialPinnedEntities);
-  const [baseObjectTypes, setBaseObjectTypes] =
-    React.useState(initialObjectTypes);
   const [workspaceObjects, dispatchWorkspaceObjects] = React.useReducer(
     workspaceObjectReducer,
     undefined,
@@ -342,27 +335,25 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [workspaceObjects.entities],
   );
   const objectTypes = React.useMemo(() => {
-    const existingIds = new Set(baseObjectTypes.map((item) => item.id));
-    const withCounts = baseObjectTypes.map((objectType) => ({
-      ...objectType,
-      count:
-        objectType.count +
-        (createdCounts[objectType.id as keyof typeof createdCounts] ?? 0),
-    }));
-    for (const [id, count] of Object.entries(createdCounts)) {
-      if (!count || existingIds.has(id)) continue;
-      const definition = objectTypeDefinitionById[id];
-      if (!definition) continue;
-      withCounts.push({
-        id,
-        label: t(`objectTypeStudio.objectTypes.${id}`),
-        icon: definition.icon,
-        tone: definition.tone,
-        count,
-      });
-    }
-    return withCounts;
-  }, [baseObjectTypes, createdCounts, t]);
+    return selectCreatableStructures(workspaceObjects.structures).map(
+      (structure) => {
+        const definition = objectTypeDefinitionById[structure.iconName];
+        return {
+          id: structure.id,
+          iconName: structure.iconName,
+          label:
+            structure.ownership === "custom"
+              ? structure.pluralName
+              : t(`objectTypeStudio.objectTypes.${structure.id}`),
+          icon: definition.icon,
+          ownership: structure.ownership,
+          singularLabel: structure.singularName,
+          tone: structure.tone,
+          count: createdCounts[structure.id] ?? 0,
+        };
+      },
+    );
+  }, [createdCounts, t, workspaceObjects.structures]);
 
   const showMessage = React.useCallback((nextMessage: string) => {
     setMessage(nextMessage);
@@ -421,12 +412,20 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   }, [showMessage, t, workspaceObjects.draft, workspaceObjects.error]);
 
   React.useEffect(() => {
+    if (!workspaceObjects.structureError) return;
+    showMessage(t("objectTypeStudio.operationFailed"));
+  }, [showMessage, t, workspaceObjects.structureError]);
+
+  React.useEffect(() => {
     if (workspaceObjects.entities.length === 0) return;
     setMainTabs((current) => {
       const next = [...current];
       for (const entity of workspaceObjects.entities) {
-        const definition = objectTypeDefinitionById[entity.objectTypeId];
-        if (!definition) continue;
+        const structure = workspaceObjects.structures.find(
+          (item) => item.id === entity.objectTypeId,
+        );
+        if (!structure) continue;
+        const definition = objectTypeDefinitionById[structure.iconName];
         const label = entity.title.trim() || t("lifecycle.untitled");
         const existingIndex = next.findIndex((tab) => tab.id === entity.id);
         const tab: AppHeaderTab = {
@@ -436,7 +435,11 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           iconClassName: objectIconToneBadgeClass[definition.tone],
           preview: (
             <TabPreview
-              eyebrow={t(`objectTypeStudio.objectTypes.${entity.objectTypeId}`)}
+              eyebrow={
+                structure.ownership === "custom"
+                  ? structure.singularName
+                  : t(`objectTypeStudio.objectTypes.${entity.objectTypeId}`)
+              }
               title={label}
             />
           ),
@@ -452,7 +455,12 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       }
       return next;
     });
-  }, [t, workspaceObjects.activeEntityId, workspaceObjects.entities]);
+  }, [
+    t,
+    workspaceObjects.activeEntityId,
+    workspaceObjects.entities,
+    workspaceObjects.structures,
+  ]);
 
   React.useEffect(() => {
     if (!workspaceObjects.activeEntityId) return;
@@ -528,11 +536,11 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const createWorkspaceEntity = React.useCallback(
     (objectTypeId: string, _objectTypeLabel?: string) => {
       dispatchWorkspaceObjects({ type: "beginCreate", objectTypeId });
-      if (!getCreationFlow(objectTypeId)) {
+      if (!getCreationFlow(objectTypeId, workspaceObjects.structures)) {
         showMessage(t("lifecycle.errors.unsupported-object-type"));
       }
     },
-    [showMessage, t],
+    [showMessage, t, workspaceObjects.structures],
   );
 
   const createWorkspacePage = React.useCallback((title: string) => {
@@ -579,7 +587,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   const importWorkspaceFiles = React.useCallback(
     async (objectTypeId: string, files: File[]) => {
-      const flow = getCreationFlow(objectTypeId);
+      const flow = getCreationFlow(objectTypeId, workspaceObjects.structures);
       if (!flow) {
         showMessage(t("lifecycle.errors.unsupported-object-type"));
         return;
@@ -602,6 +610,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           file.type,
           file.name,
           text,
+          workspaceObjects.structures,
         );
         if (importError) {
           rejected += 1;
@@ -631,7 +640,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         showMessage(t("objectTypeOverview.importRejected"));
       }
     },
-    [showMessage, t],
+    [showMessage, t, workspaceObjects.structures],
   );
 
   const updateWorkspaceEntity = React.useCallback(
@@ -656,6 +665,58 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     dispatchWorkspaceObjects({ type: "duplicateEntity", id });
   }, []);
 
+  const createWorkspaceStructure = React.useCallback(
+    (input: CreateStructureInput) => {
+      const id = crypto.randomUUID();
+      dispatchWorkspaceObjects({ type: "createStructure", id, input });
+      return id;
+    },
+    [],
+  );
+
+  const createWorkspaceStructureFromPreset = React.useCallback(
+    (presetId: string) => {
+      const id = crypto.randomUUID();
+      dispatchWorkspaceObjects({
+        type: "createStructureFromPreset",
+        id,
+        presetId,
+      });
+      return id;
+    },
+    [],
+  );
+
+  const updateWorkspaceStructure = React.useCallback(
+    (
+      id: string,
+      input: {
+        singularName: string;
+        pluralName: string;
+        iconName: ObjectIconName;
+        tone: ObjectIconTone;
+      },
+    ) => {
+      dispatchWorkspaceObjects({
+        type: "renameStructure",
+        id,
+        singularName: input.singularName,
+        pluralName: input.pluralName,
+      });
+      dispatchWorkspaceObjects({
+        type: "updateStructureAppearance",
+        id,
+        iconName: input.iconName,
+        tone: input.tone,
+      });
+    },
+    [],
+  );
+
+  const deleteWorkspaceStructure = React.useCallback((id: string) => {
+    dispatchWorkspaceObjects({ type: "deleteStructure", id });
+  }, []);
+
   const value = React.useMemo<WorkspaceContextValue>(
     () => ({
       spaces,
@@ -672,6 +733,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       pinnedEntities,
       availablePinnedEntities,
       objectTypes,
+      structures: workspaceObjects.structures,
       createdEntities: workspaceObjects.entities,
       workspaceDraft: workspaceObjects.draft,
       workspaceError: workspaceObjects.error,
@@ -691,11 +753,14 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setActiveAction,
       setActiveEntityId,
       setPinnedEntities,
-      setObjectTypes: setBaseObjectTypes,
       setCustomSections,
       setObjectTypeCollections,
       setObjectTypeQueries,
       showMessage,
+      createWorkspaceStructure,
+      createWorkspaceStructureFromPreset,
+      updateWorkspaceStructure,
+      deleteWorkspaceStructure,
       createWorkspaceEntity,
       createWorkspacePage,
       importWorkspaceFiles,
@@ -726,6 +791,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       activeEntityId,
       pinnedEntities,
       objectTypes,
+      workspaceObjects.structures,
       workspaceObjects.draft,
       workspaceObjects.entities,
       workspaceObjects.error,
@@ -733,6 +799,10 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       objectTypeCollections,
       objectTypeQueries,
       selectEntity,
+      createWorkspaceStructure,
+      createWorkspaceStructureFromPreset,
+      updateWorkspaceStructure,
+      deleteWorkspaceStructure,
       createWorkspaceEntity,
       createWorkspacePage,
       importWorkspaceFiles,

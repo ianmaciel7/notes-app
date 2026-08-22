@@ -44,7 +44,7 @@ test("creation flows cover every New palette family", () => {
   }
   assert.equal(getCreationFlow("atomic-note"), "document");
   assert.equal(getCreationFlow("page"), "document");
-  assert.equal(getCreationFlow("quote"), "document");
+  assert.equal(getCreationFlow("quote"), "quote");
   assert.equal(getCreationFlow("table"), "table");
   assert.equal(getCreationFlow("task"), "task");
   assert.equal(getCreationFlow("weblink"), "url");

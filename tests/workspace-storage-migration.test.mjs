@@ -15,7 +15,7 @@ test("new document entities use the structured block schema", () => {
     objectTypeId: "page",
   });
 
-  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 2);
+  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 3);
   assert.deepEqual(state.entities[0].body, {
     schemaVersion: 1,
     doc: { type: "doc", content: [{ type: "paragraph" }] },
@@ -54,8 +54,14 @@ test("version 1 document and quote strings migrate to version 2 block bodies", (
   );
 
   assert.equal(parsed.ok, true);
-  assert.equal(blockEditorDocumentToPlainText(parsed.state.entities[0].body), "First\n\nThird");
-  assert.equal(blockEditorDocumentToPlainText(parsed.state.entities[1].body), "Words");
+  assert.equal(
+    blockEditorDocumentToPlainText(parsed.state.entities[0].body),
+    "First\n\nThird",
+  );
+  assert.equal(
+    blockEditorDocumentToPlainText(parsed.state.entities[1].body),
+    "Words",
+  );
 });
 
 test("version 2 rejects malformed structured document bodies", () => {
@@ -69,7 +75,10 @@ test("version 2 rejects malformed structured document bodies", () => {
           createdAt: "2026-01-01T00:00:00.000Z",
           objectTypeId: "page",
           kind: "document",
-          body: { schemaVersion: 1, doc: { type: "doc", content: [{ type: "image" }] } },
+          body: {
+            schemaVersion: 1,
+            doc: { type: "doc", content: [{ type: "image" }] },
+          },
           collections: [],
           tags: [],
         },

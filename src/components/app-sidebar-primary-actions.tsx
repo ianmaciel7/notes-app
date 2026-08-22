@@ -19,7 +19,6 @@ import {
 import {
   ObjectCollectionIcon,
   ObjectIconBadge,
-  objectTypeDefinitionById,
 } from "@/components/object-icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,8 +39,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { workspaceRowStateClass } from "@/components/ui/shared-styles";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { useWorkspace } from "@/components/workspace-controller";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -63,34 +62,6 @@ type AppSidebarPrimaryActionHint = {
   shortcut?: AppSidebarShortcut;
 };
 
-const newContentItems = [
-  { label: "Livro", objectTypeId: "book" },
-  { label: "Pessoa", objectTypeId: "person" },
-  { label: "Área", objectTypeId: "area" },
-  { label: "Reunião", objectTypeId: "meeting" },
-  { label: "Nota atômica", objectTypeId: "atomic-note" },
-  { label: "Definição", objectTypeId: "definition" },
-  { label: "Ideia", objectTypeId: "idea" },
-  { label: "Lugar", objectTypeId: "place" },
-  { label: "Projeto", objectTypeId: "project" },
-  { label: "Organização", objectTypeId: "organization" },
-  { label: "Mídia", objectTypeId: "media" },
-  { label: "Viagem", objectTypeId: "travel" },
-  { label: "Citação", objectTypeId: "quote" },
-  { label: "Página", objectTypeId: "page" },
-  { label: "Chat de IA", objectTypeId: "ai-chat" },
-  { label: "Tabela", objectTypeId: "table" },
-  { label: "Tarefa", objectTypeId: "task" },
-  { label: "Imagem", objectTypeId: "image" },
-  { label: "Weblink", objectTypeId: "weblink" },
-  { label: "Tweet", objectTypeId: "tweet" },
-  { label: "PDF", objectTypeId: "pdf" },
-  { label: "Áudio", objectTypeId: "audio" },
-  { label: "Arquivo", objectTypeId: "file" },
-  { label: "Etiqueta", objectTypeId: "tag" },
-  { label: "Query", objectTypeId: "query" },
-];
-
 function normalizeMenuQuery(value: string) {
   return value
     .normalize("NFD")
@@ -100,9 +71,11 @@ function normalizeMenuQuery(value: string) {
 
 function NewContentMenu({
   action,
+  objectTypes,
   onSelectObjectType,
 }: {
   action: AppSidebarPrimaryAction;
+  objectTypes: readonly AppSidebarObjectType[];
   onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
 }) {
   const t = useTranslations("workspace");
@@ -112,14 +85,7 @@ function NewContentMenu({
   const optionRefs = React.useRef(new Map<string, HTMLButtonElement>());
   const Icon = action.icon;
   const normalizedQuery = normalizeMenuQuery(query.trim());
-  const localizedItems = React.useMemo(
-    () =>
-      newContentItems.map((item) => ({
-        ...item,
-        label: t(`objectTypeStudio.objectTypes.${item.objectTypeId}`),
-      })),
-    [t],
-  );
+  const localizedItems = objectTypes;
   const items = React.useMemo(
     () =>
       localizedItems.filter((item) =>
@@ -140,7 +106,7 @@ function NewContentMenu({
 
   function selectItem(objectTypeId: string) {
     const selectedItem = localizedItems.find(
-      (item) => item.objectTypeId === objectTypeId,
+      (item) => item.id === objectTypeId,
     );
     onSelectObjectType?.(objectTypeId, selectedItem?.label);
     setOpen(false);
@@ -168,16 +134,14 @@ function NewContentMenu({
     if (event.key === "Enter") {
       event.preventDefault();
       const activeItem = items[activeIndex];
-      if (activeItem) selectItem(activeItem.objectTypeId);
+      if (activeItem) selectItem(activeItem.id);
     }
   }
 
   React.useEffect(() => {
     const activeItem = items[activeIndex];
     if (!open || !activeItem) return;
-    optionRefs.current
-      .get(activeItem.objectTypeId)
-      ?.scrollIntoView({ block: "nearest" });
+    optionRefs.current.get(activeItem.id)?.scrollIntoView({ block: "nearest" });
   }, [activeIndex, items, open]);
 
   React.useEffect(() => {
@@ -239,7 +203,7 @@ function NewContentMenu({
               aria-controls="new-content-menu-listbox"
               aria-activedescendant={
                 items[activeIndex]
-                  ? `new-content-option-${items[activeIndex].objectTypeId}`
+                  ? `new-content-option-${items[activeIndex].id}`
                   : undefined
               }
               role="combobox"
@@ -257,36 +221,28 @@ function NewContentMenu({
           aria-label={t("primaryNavigation.typesLabel")}
           className="h-72 min-h-0 shrink-0 overflow-y-auto px-1.5"
         >
-          {items.map(({ label, objectTypeId }, index) => {
-            const definition = objectTypeDefinitionById[objectTypeId];
-            if (!definition) return null;
-            const Icon = definition.icon;
-
+          {items.map(({ id, icon: Icon, label, tone }, index) => {
             return (
               <button
-                key={objectTypeId}
+                key={id}
                 ref={(node) => {
-                  if (node) optionRefs.current.set(objectTypeId, node);
-                  else optionRefs.current.delete(objectTypeId);
+                  if (node) optionRefs.current.set(id, node);
+                  else optionRefs.current.delete(id);
                 }}
-                id={`new-content-option-${objectTypeId}`}
+                id={`new-content-option-${id}`}
                 type="button"
                 role="option"
                 aria-selected={index === activeIndex}
                 tabIndex={-1}
                 data-active={index === activeIndex || undefined}
                 onPointerMove={() => setActiveIndex(index)}
-                onClick={() => selectItem(objectTypeId)}
+                onClick={() => selectItem(id)}
                 className={cn(
                   compactMenuItemClass,
                   "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] px-1 text-left font-normal outline-none hover:bg-[#f3f1ee] data-[active=true]:bg-[#f3f1ee]",
                 )}
               >
-                <ObjectIconBadge
-                  icon={Icon}
-                  tone={definition.tone}
-                  variant="menu"
-                />
+                <ObjectIconBadge icon={Icon} tone={tone} variant="menu" />
                 <CompactMenuItemText>{label}</CompactMenuItemText>
                 <AppSidebarChevronRightIcon className="ml-auto size-3 text-muted-foreground" />
               </button>
@@ -324,6 +280,7 @@ type AppSidebarPrimaryActionsProps = {
   activeAction?: AppSidebarPrimaryNavigationAction;
   onAction?: (action: AppSidebarPrimaryActionId) => void;
   onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
+  objectTypes?: readonly AppSidebarObjectType[];
   actions?: AppSidebarPrimaryAction[];
   className?: string;
 };
@@ -459,11 +416,13 @@ function AppSidebarPrimaryActionHintContent({
 function AppSidebarPrimaryActionItem({
   action,
   active,
+  objectTypes,
   onAction,
   onSelectObjectType,
 }: {
   action: AppSidebarPrimaryAction;
   active: boolean;
+  objectTypes: readonly AppSidebarObjectType[];
   onAction?: (action: AppSidebarPrimaryActionId) => void;
   onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
 }) {
@@ -481,7 +440,11 @@ function AppSidebarPrimaryActionItem({
 
   if (action.id === "new") {
     return (
-      <NewContentMenu action={action} onSelectObjectType={onSelectObjectType} />
+      <NewContentMenu
+        action={action}
+        objectTypes={objectTypes}
+        onSelectObjectType={onSelectObjectType}
+      />
     );
   }
 
@@ -554,6 +517,7 @@ function AppSidebarPrimaryActions({
   activeAction,
   onAction,
   onSelectObjectType,
+  objectTypes = [],
   actions = defaultActions,
   className,
 }: AppSidebarPrimaryActionsProps) {
@@ -594,6 +558,7 @@ function AppSidebarPrimaryActions({
           key={action.id}
           action={action}
           active={action.id !== "new" && action.id === activeAction}
+          objectTypes={objectTypes}
           onAction={onAction}
           onSelectObjectType={onSelectObjectType}
         />
@@ -620,7 +585,10 @@ function WorkspaceSidebar() {
     objectTypeCollections,
     customSections,
     setPinnedEntities,
-    setObjectTypes,
+    createWorkspaceStructureFromPreset,
+    createWorkspaceStructure,
+    updateWorkspaceStructure,
+    deleteWorkspaceStructure,
     setObjectTypeCollections,
     setCustomSections,
     setSideSearchOpen,
@@ -635,15 +603,17 @@ function WorkspaceSidebar() {
   const visibleObjectTypeCollections = React.useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(objectTypeCollections).map(([objectTypeId, collections]) => [
-          objectTypeId,
-          collections.filter(
-            (collection) =>
-              !hiddenCollectionIds.has(
-                appSidebarCollectionId(objectTypeId, collection),
-              ),
-          ),
-        ]),
+        Object.entries(objectTypeCollections).map(
+          ([objectTypeId, collections]) => [
+            objectTypeId,
+            collections.filter(
+              (collection) =>
+                !hiddenCollectionIds.has(
+                  appSidebarCollectionId(objectTypeId, collection),
+                ),
+            ),
+          ],
+        ),
       ),
     [hiddenCollectionIds, objectTypeCollections],
   );
@@ -709,9 +679,7 @@ function WorkspaceSidebar() {
     if (action === "import") {
       selectEntity(objectType.id);
       window.setTimeout(() => {
-        document
-          .getElementById(`object-type-import-${objectType.id}`)
-          ?.click();
+        document.getElementById(`object-type-import-${objectType.id}`)?.click();
       }, 0);
       return;
     }
@@ -755,6 +723,7 @@ function WorkspaceSidebar() {
           <div className="my-px mt-0 shrink-0 px-2 pr-1 pb-1.5">
             <AppSidebarPrimaryActions
               activeAction={activeAction}
+              objectTypes={objectTypes}
               onSelectObjectType={createWorkspaceEntity}
               onAction={(action) => {
                 if (action !== "new") {
@@ -777,8 +746,11 @@ function WorkspaceSidebar() {
             objectTypes={objectTypes}
             objectTypeCollections={visibleObjectTypeCollections}
             customSections={customSections}
+            onCreateObjectTypeFromPreset={createWorkspaceStructureFromPreset}
+            onCreateObjectType={createWorkspaceStructure}
+            onUpdateObjectType={updateWorkspaceStructure}
+            onDeleteObjectType={deleteWorkspaceStructure}
             onPinnedEntitiesChange={setPinnedEntities}
-            onObjectTypesChange={setObjectTypes}
             onCustomSectionsChange={setCustomSections}
             onCollectionAction={handleCollectionAction}
           />

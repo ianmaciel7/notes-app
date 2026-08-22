@@ -5,36 +5,31 @@ import {
   createEmptyBlockEditorDocument,
   normalizeBlockEditorDocument,
 } from "../editor/document.ts";
+import {
+  createCustomStructure,
+  createInitialStructureRegistry,
+  deleteStructure,
+  instantiateObjectTypePreset,
+  renameStructure,
+  replaceStructureSchema,
+  selectCreatableStructures,
+  selectStructureById,
+  updateStructureAppearance,
+  type CreateStructureInput,
+  type DomainResult,
+  type ObjectIconName,
+  type ObjectIconTone,
+  type PropertyDefinition,
+  type StructureDomainError,
+  type StructureId,
+  type WorkspaceStructure,
+} from "./workspace-object-types.ts";
 
-type ObjectTypeId =
-  | "book"
-  | "person"
-  | "area"
-  | "meeting"
-  | "definition"
-  | "idea"
-  | "place"
-  | "project"
-  | "organization"
-  | "atomic-note"
-  | "media"
-  | "travel"
-  | "quote"
-  | "page"
-  | "ai-chat"
-  | "table"
-  | "task"
-  | "image"
-  | "weblink"
-  | "tweet"
-  | "pdf"
-  | "audio"
-  | "file"
-  | "tag"
-  | "query";
+type ObjectTypeId = StructureId;
 
 type CreationFlow =
   | "document"
+  | "quote"
   | "table"
   | "task"
   | "url"
@@ -44,28 +39,13 @@ type CreationFlow =
 
 type WorkspaceEntityBase = {
   id: string;
-  objectTypeId: ObjectTypeId;
+  objectTypeId: StructureId;
   title: string;
   createdAt: string;
 };
 
 type DocumentEntity = WorkspaceEntityBase & {
   kind: "document";
-  objectTypeId:
-    | "book"
-    | "person"
-    | "area"
-    | "meeting"
-    | "definition"
-    | "idea"
-    | "place"
-    | "project"
-    | "organization"
-    | "atomic-note"
-    | "media"
-    | "travel"
-    | "page"
-    | "ai-chat";
   body: BlockEditorDocument;
   collections: string[];
   tags: string[];
@@ -77,7 +57,6 @@ type DocumentEntity = WorkspaceEntityBase & {
 
 type QuoteEntity = WorkspaceEntityBase & {
   kind: "quote";
-  objectTypeId: "quote";
   body: BlockEditorDocument;
   collections: string[];
   tags: string[];
@@ -96,14 +75,12 @@ type TableCell = {
 
 type TableEntity = WorkspaceEntityBase & {
   kind: "table";
-  objectTypeId: "table";
   cells: TableCell[];
   notes: string;
 };
 
 type TaskEntity = WorkspaceEntityBase & {
   kind: "task";
-  objectTypeId: "task";
   body: string;
   completed: boolean;
   dueDate: string | null;
@@ -111,14 +88,12 @@ type TaskEntity = WorkspaceEntityBase & {
 
 type UrlEntity = WorkspaceEntityBase & {
   kind: "url";
-  objectTypeId: "tweet" | "weblink";
   body: string;
   url: string;
 };
 
 type TagEntity = WorkspaceEntityBase & {
   kind: "tag";
-  objectTypeId: "tag";
 };
 
 type QueryFilters = {
@@ -129,14 +104,12 @@ type QueryFilters = {
 
 type QueryEntity = WorkspaceEntityBase & {
   kind: "query";
-  objectTypeId: "query";
   description: string;
   filters: QueryFilters;
 };
 
 type FileEntity = WorkspaceEntityBase & {
   kind: "file";
-  objectTypeId: "audio" | "file" | "image" | "pdf";
   fileName: string;
   mimeType: string;
   previewUrl?: string;
@@ -154,9 +127,9 @@ type WorkspaceEntity =
   | UrlEntity;
 
 type WorkspaceDraft =
-  | { kind: "file"; objectTypeId: FileEntity["objectTypeId"] }
-  | { kind: "task"; objectTypeId: "task" }
-  | { kind: "url"; objectTypeId: UrlEntity["objectTypeId"] };
+  | { kind: "file"; objectTypeId: StructureId }
+  | { kind: "task"; objectTypeId: StructureId }
+  | { kind: "url"; objectTypeId: StructureId };
 
 type WorkspaceObjectError =
   | "incompatible-file"
@@ -171,6 +144,8 @@ type WorkspaceObjectState = {
   error: WorkspaceObjectError | null;
   hydrationStatus: "ready" | "recovered" | "seed";
   nextId: number;
+  structureError: StructureDomainError | null;
+  structures: readonly WorkspaceStructure[];
 };
 
 type WorkspaceObjectAction =
@@ -201,76 +176,52 @@ type WorkspaceObjectAction =
   | { type: "changeEntityType"; id: string; objectTypeId: "tag" | "task" }
   | { type: "deleteEntity"; id: string }
   | { type: "duplicateEntity"; id: string }
+  | { type: "createStructure"; input: CreateStructureInput; id?: string }
+  | { type: "createStructureFromPreset"; presetId: string; id?: string }
+  | {
+      type: "renameStructure";
+      id: StructureId;
+      singularName: string;
+      pluralName: string;
+    }
+  | {
+      type: "updateStructureAppearance";
+      id: StructureId;
+      iconName?: ObjectIconName;
+      tone?: ObjectIconTone;
+    }
+  | {
+      type: "replaceStructureSchema";
+      id: StructureId;
+      propertyDefinitions: readonly PropertyDefinition[];
+      unsafePropertyDefinitionIds?: readonly string[];
+    }
+  | { type: "deleteStructure"; id: StructureId }
   | {
       type: "updateEntity";
       id: string;
       patch: Record<string, unknown>;
     };
 
-const WORKSPACE_OBJECT_SCHEMA_VERSION = 2;
+const WORKSPACE_OBJECT_SCHEMA_VERSION = 3;
 
-const objectTypeIds: ObjectTypeId[] = [
-  "book",
-  "person",
-  "area",
-  "meeting",
-  "definition",
-  "idea",
-  "place",
-  "project",
-  "organization",
-  "atomic-note",
-  "media",
-  "travel",
-  "quote",
-  "page",
-  "ai-chat",
-  "table",
-  "task",
-  "image",
-  "weblink",
-  "tweet",
-  "pdf",
-  "audio",
-  "file",
-  "tag",
-  "query",
-];
-
-const creationFlowByType: Record<ObjectTypeId, CreationFlow> = {
-  book: "document",
-  person: "document",
-  area: "document",
-  meeting: "document",
-  definition: "document",
-  idea: "document",
-  place: "document",
-  project: "document",
-  organization: "document",
-  "atomic-note": "document",
-  media: "document",
-  travel: "document",
-  quote: "document",
-  page: "document",
-  "ai-chat": "document",
-  table: "table",
-  task: "task",
-  image: "file",
-  weblink: "url",
-  tweet: "url",
-  pdf: "file",
-  audio: "file",
-  file: "file",
-  tag: "tag",
-  query: "query",
-};
+const initialStructures = createInitialStructureRegistry();
+const objectTypeIds: ObjectTypeId[] = selectCreatableStructures(
+  initialStructures,
+).map((structure) => structure.id);
 
 function isObjectTypeId(value: string): value is ObjectTypeId {
-  return objectTypeIds.includes(value as ObjectTypeId);
+  return objectTypeIds.includes(value);
 }
 
-function getCreationFlow(value: string): CreationFlow | null {
-  return isObjectTypeId(value) ? creationFlowByType[value] : null;
+function getCreationFlow(
+  value: string,
+  structures: readonly WorkspaceStructure[] = initialStructures,
+): CreationFlow | null {
+  const structure = selectStructureById(structures, value);
+  return structure?.ownership === "reserved"
+    ? null
+    : (structure?.lifecycleKind ?? null);
 }
 
 function createInitialWorkspaceObjectState(): WorkspaceObjectState {
@@ -281,6 +232,8 @@ function createInitialWorkspaceObjectState(): WorkspaceObjectState {
     error: null,
     hydrationStatus: "seed",
     nextId: 1,
+    structureError: null,
+    structures: createInitialStructureRegistry(),
   };
 }
 
@@ -295,7 +248,7 @@ function createTableCells(): TableCell[] {
 
 function createEntity(
   state: WorkspaceObjectState,
-  objectTypeId: ObjectTypeId,
+  objectTypeId: StructureId,
   fields: Record<string, unknown> = {},
   activate = true,
 ): WorkspaceObjectState {
@@ -306,10 +259,13 @@ function createEntity(
     objectTypeId,
     title: "",
   };
-  const flow = creationFlowByType[objectTypeId];
+  const flow = getCreationFlow(objectTypeId, state.structures);
+  if (!flow) {
+    return { ...state, error: "unsupported-object-type" };
+  }
   let entity: WorkspaceEntity;
 
-  if (objectTypeId === "quote") {
+  if (flow === "quote") {
     entity = {
       ...base,
       body: createEmptyBlockEditorDocument(),
@@ -391,7 +347,7 @@ function createEntity(
 }
 
 function deriveUrlMetadata(
-  objectTypeId: UrlEntity["objectTypeId"],
+  objectTypeId: StructureId,
   input: string,
 ): { ok: false } | { ok: true; title: string; url: string } {
   try {
@@ -423,7 +379,7 @@ function deriveUrlMetadata(
 }
 
 function acceptsFileForType(
-  objectTypeId: FileEntity["objectTypeId"],
+  objectTypeId: StructureId,
   mimeType: string,
   fileName: string,
 ): boolean {
@@ -445,23 +401,17 @@ function getWorkspaceImportError(
   mimeType: string,
   fileName: string,
   text: string,
+  structures: readonly WorkspaceStructure[] = initialStructures,
 ): WorkspaceObjectError | null {
-  if (!isObjectTypeId(objectTypeId)) return "unsupported-object-type";
-  const flow = creationFlowByType[objectTypeId];
+  const flow = getCreationFlow(objectTypeId, structures);
+  if (!flow) return "unsupported-object-type";
   if (
     flow === "file" &&
-    !acceptsFileForType(
-      objectTypeId as FileEntity["objectTypeId"],
-      mimeType,
-      fileName,
-    )
+    !acceptsFileForType(objectTypeId, mimeType, fileName)
   ) {
     return "incompatible-file";
   }
-  if (
-    flow === "url" &&
-    !deriveUrlMetadata(objectTypeId as UrlEntity["objectTypeId"], text).ok
-  ) {
+  if (flow === "url" && !deriveUrlMetadata(objectTypeId, text).ok) {
     return "invalid-url";
   }
   return null;
@@ -471,8 +421,8 @@ function beginWorkspaceObjectCreation(
   state: WorkspaceObjectState,
   objectTypeId: string,
 ): WorkspaceObjectState {
-  const flow = getCreationFlow(objectTypeId);
-  if (!flow || !isObjectTypeId(objectTypeId)) {
+  const flow = getCreationFlow(objectTypeId, state.structures);
+  if (!flow) {
     return { ...state, error: "unsupported-object-type" };
   }
   if (!(["task", "url", "file"] as CreationFlow[]).includes(flow)) {
@@ -494,12 +444,14 @@ function importWorkspaceObject(
     action.mimeType,
     action.fileName,
     action.text,
+    state.structures,
   );
-  if (importError || !isObjectTypeId(action.objectTypeId)) {
-    return { ...state, error: importError ?? "unsupported-object-type" };
+  if (importError) {
+    return { ...state, error: importError };
   }
   const objectTypeId = action.objectTypeId;
-  const flow = creationFlowByType[objectTypeId];
+  const flow = getCreationFlow(objectTypeId, state.structures);
+  if (!flow) return { ...state, error: "unsupported-object-type" };
   const title = action.fileName.replace(/\.[^.]+$/, "").trim();
   if (flow === "file") {
     return createEntity(state, objectTypeId, {
@@ -511,10 +463,7 @@ function importWorkspaceObject(
     });
   }
   if (flow === "url") {
-    const metadata = deriveUrlMetadata(
-      objectTypeId as UrlEntity["objectTypeId"],
-      action.text,
-    );
+    const metadata = deriveUrlMetadata(objectTypeId, action.text);
     return metadata.ok ? createEntity(state, objectTypeId, metadata) : state;
   }
   return importTextWorkspaceObject(
@@ -528,7 +477,7 @@ function importWorkspaceObject(
 
 function importTextWorkspaceObject(
   state: WorkspaceObjectState,
-  objectTypeId: ObjectTypeId,
+  objectTypeId: StructureId,
   flow: CreationFlow,
   text: string,
   title: string,
@@ -687,10 +636,82 @@ function reduceEntityMenuAction(
   };
 }
 
+function reduceStructureAction(
+  state: WorkspaceObjectState,
+  action: Extract<
+    WorkspaceObjectAction,
+    {
+      type:
+        | "createStructure"
+        | "createStructureFromPreset"
+        | "deleteStructure"
+        | "renameStructure"
+        | "replaceStructureSchema"
+        | "updateStructureAppearance";
+    }
+  >,
+): WorkspaceObjectState {
+  let result: DomainResult<readonly WorkspaceStructure[]>;
+  if (action.type === "createStructure") {
+    result = createCustomStructure(
+      state.structures,
+      action.input,
+      action.id ? () => action.id as string : undefined,
+    );
+  } else if (action.type === "createStructureFromPreset") {
+    result = instantiateObjectTypePreset(
+      state.structures,
+      action.presetId,
+      action.id ? () => action.id as string : undefined,
+    );
+  } else if (action.type === "renameStructure") {
+    result = renameStructure(
+      state.structures,
+      action.id,
+      action.singularName,
+      action.pluralName,
+    );
+  } else if (action.type === "updateStructureAppearance") {
+    result = updateStructureAppearance(state.structures, action.id, {
+      iconName: action.iconName,
+      tone: action.tone,
+    });
+  } else if (action.type === "replaceStructureSchema") {
+    result = replaceStructureSchema(
+      state.structures,
+      action.id,
+      action.propertyDefinitions,
+      { unsafePropertyDefinitionIds: action.unsafePropertyDefinitionIds },
+    );
+  } else {
+    const structure = selectStructureById(state.structures, action.id);
+    result = deleteStructure(state.structures, action.id, {
+      dependentCollectionIds: structure?.collectionIds ?? [],
+      instanceCount: state.entities.filter(
+        (entity) => entity.objectTypeId === action.id,
+      ).length,
+    });
+  }
+  return result.ok
+    ? { ...state, structureError: null, structures: result.value }
+    : { ...state, structureError: result.error };
+}
+
 function workspaceObjectReducer(
   state: WorkspaceObjectState,
   action: WorkspaceObjectAction,
 ): WorkspaceObjectState {
+  if (
+    action.type === "createStructure" ||
+    action.type === "createStructureFromPreset" ||
+    action.type === "deleteStructure" ||
+    action.type === "renameStructure" ||
+    action.type === "replaceStructureSchema" ||
+    action.type === "updateStructureAppearance"
+  ) {
+    return reduceStructureAction(state, action);
+  }
+
   if (action.type === "beginCreate") {
     return beginWorkspaceObjectCreation(state, action.objectTypeId);
   }
@@ -762,6 +783,7 @@ function workspaceObjectReducer(
       draft: null,
       error: null,
       hydrationStatus: "ready",
+      structureError: null,
     };
   }
 

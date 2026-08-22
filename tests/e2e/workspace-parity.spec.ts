@@ -50,7 +50,7 @@ for (const viewport of desktopViewports) {
     await expect(sidebar).toBeVisible();
     await expect
       .poll(async () => (await sidebar.boundingBox())?.width)
-      .toBeCloseTo(288, 0);
+      .toBeCloseTo(224, 0);
     await expect
       .poll(async () => (await main.boundingBox())?.width ?? 0)
       .toBeGreaterThan(0);

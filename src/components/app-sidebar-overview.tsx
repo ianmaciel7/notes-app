@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useTranslations } from "next-intl"
+import { useTranslations } from "next-intl";
+import * as React from "react";
 
 import {
   AppSidebarCheckIcon,
@@ -12,36 +12,40 @@ import {
   AppSidebarPinOffIcon,
   AppSidebarPlusIcon,
   AppSidebarSunIcon,
-} from "@/components/app-sidebar-icons"
-import {
-  AppSidebarObjectTypeStudio,
-  type AppSidebarObjectTypePreset,
-} from "@/components/app-sidebar-object-type-studio"
-import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon"
+} from "@/components/app-sidebar-icons";
+import { AppSidebarObjectTypeStudio } from "@/components/app-sidebar-object-type-studio";
+import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon";
 import {
   ObjectAreaIcon,
-  ObjectAtomicNoteIcon,
   ObjectCollectionIcon,
   ObjectIconBadge,
   ObjectPageIcon,
-  ObjectQuoteIcon,
+  objectIconToneBadgeClass,
   type ObjectIconProps,
   type ObjectIconTone,
-} from "@/components/object-icons"
-import { Badge } from "@/components/ui/badge"
-import { Button, buttonVariants } from "@/components/ui/button"
+} from "@/components/object-icons";
+import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   CompactMenuAccountPanel,
   CompactMenuPlanBadge,
   compactMenuActionButtonClass,
   sidebarContextMenuContentClass,
   sidebarContextSubmenuContentClass,
-} from "@/components/ui/compact-menu"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/compact-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,46 +56,60 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   workspaceRevealActionClass,
   workspaceRowStateClass,
-} from "@/components/ui/shared-styles"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/shared-styles";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import {
+  OBJECT_ICON_NAMES,
+  type CreateStructureInput,
+  type ObjectIconName,
+  type StructureOwnership,
+} from "@/lib/workspace-object-types";
 
-type AppSidebarSortMode = "manual" | "alphabetical"
+type AppSidebarSortMode = "manual" | "alphabetical";
 
-type AppSidebarTone = ObjectIconTone
+type AppSidebarTone = ObjectIconTone;
 
 type AppSidebarPinnedEntity = {
-  id: string
-  label: string
-  icon: React.ElementType<ObjectIconProps>
-  tone: AppSidebarTone
-}
+  id: string;
+  label: string;
+  icon: React.ElementType<ObjectIconProps>;
+  tone: AppSidebarTone;
+};
 
 type AppSidebarObjectType = {
-  id: string
-  label: string
-  icon: React.ElementType<ObjectIconProps>
-  tone: AppSidebarTone
-  count: number
-}
+  id: string;
+  label: string;
+  icon: React.ElementType<ObjectIconProps>;
+  tone: AppSidebarTone;
+  count: number;
+  iconName?: ObjectIconName;
+  ownership?: StructureOwnership;
+  singularLabel?: string;
+};
 
 type AppSidebarCustomSection = {
-  id: string
-  label: string
-  open: boolean
-}
+  id: string;
+  label: string;
+  open: boolean;
+};
 
-type AppSidebarDragState =
-  | { kind: "pinned"; id: string }
-  | { kind: "object-type"; id: string }
-  | null
+type AppSidebarDragState = { kind: "pinned"; id: string } | null;
 
 type AppSidebarCollectionAction =
   | "open"
@@ -103,10 +121,10 @@ type AppSidebarCollectionAction =
   | "share"
   | "import"
   | "duplicate"
-  | "delete"
+  | "delete";
 
 function appSidebarCollectionId(objectTypeId: string, collection: string) {
-  return `collection:${objectTypeId}:${encodeURIComponent(collection)}`
+  return `collection:${objectTypeId}:${encodeURIComponent(collection)}`;
 }
 
 const objectTypeMenuIconPaths = {
@@ -114,21 +132,19 @@ const objectTypeMenuIconPaths = {
     "m181.66 133.66l-80 80a8 8 0 0 1-11.32-11.32L164.69 128L90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32",
   import:
     "M205.66 117.66a8 8 0 0 1-11.32 0L136 59.31V216a8 8 0 0 1-16 0V59.31l-58.34 58.35a8 8 0 0 1-11.32-11.32l72-72a8 8 0 0 1 11.32 0l72 72a8 8 0 0 1 0 11.32",
-  pin:
-    "m235.32 81.37l-60.69-60.68a16 16 0 0 0-22.63 0l-53.63 53.8c-10.66-3.34-35-7.37-60.4 13.14a16 16 0 0 0-1.29 23.78L85 159.71l-42.66 42.63a8 8 0 0 0 11.32 11.32L96.29 171l48.29 48.29A16 16 0 0 0 155.9 224h1.13a15.93 15.93 0 0 0 11.64-6.33c19.64-26.1 17.75-47.32 13.19-60L235.33 104a16 16 0 0 0-.01-22.63M224 92.69l-57.27 57.46a8 8 0 0 0-1.49 9.22c9.46 18.93-1.8 38.59-9.34 48.62L48 100.08c12.08-9.74 23.64-12.31 32.48-12.31A40.1 40.1 0 0 1 96.81 91a8 8 0 0 0 9.25-1.51L163.32 32L224 92.68Z",
-  plus:
-    "M224 128a8 8 0 0 1-8 8h-80v80a8 8 0 0 1-16 0v-80H40a8 8 0 0 1 0-16h80V40a8 8 0 0 1 16 0v80h80a8 8 0 0 1 8 8",
+  pin: "m235.32 81.37l-60.69-60.68a16 16 0 0 0-22.63 0l-53.63 53.8c-10.66-3.34-35-7.37-60.4 13.14a16 16 0 0 0-1.29 23.78L85 159.71l-42.66 42.63a8 8 0 0 0 11.32 11.32L96.29 171l48.29 48.29A16 16 0 0 0 155.9 224h1.13a15.93 15.93 0 0 0 11.64-6.33c19.64-26.1 17.75-47.32 13.19-60L235.33 104a16 16 0 0 0-.01-22.63M224 92.69l-57.27 57.46a8 8 0 0 0-1.49 9.22c9.46 18.93-1.8 38.59-9.34 48.62L48 100.08c12.08-9.74 23.64-12.31 32.48-12.31A40.1 40.1 0 0 1 96.81 91a8 8 0 0 0 9.25-1.51L163.32 32L224 92.68Z",
+  plus: "M224 128a8 8 0 0 1-8 8h-80v80a8 8 0 0 1-16 0v-80H40a8 8 0 0 1 0-16h80V40a8 8 0 0 1 16 0v80h80a8 8 0 0 1 8 8",
   settings:
     "M128 80a48 48 0 1 0 48 48a48.05 48.05 0 0 0-48-48m0 80a32 32 0 1 1 32-32a32 32 0 0 1-32 32m88-29.84q.06-2.16 0-4.32l14.92-18.64a8 8 0 0 0 1.48-7.06a107.2 107.2 0 0 0-10.88-26.25a8 8 0 0 0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186 40.54a8 8 0 0 0-3.94-6a107.7 107.7 0 0 0-26.25-10.87a8 8 0 0 0-7.06 1.49L130.16 40h-4.32L107.2 25.11a8 8 0 0 0-7.06-1.48a107.6 107.6 0 0 0-26.25 10.88a8 8 0 0 0-3.93 6l-2.64 23.76q-1.56 1.49-3 3L40.54 70a8 8 0 0 0-6 3.94a107.7 107.7 0 0 0-10.87 26.25a8 8 0 0 0 1.49 7.06L40 125.84v4.32L25.11 148.8a8 8 0 0 0-1.48 7.06a107.2 107.2 0 0 0 10.88 26.25a8 8 0 0 0 6 3.93l23.72 2.64q1.49 1.56 3 3L70 215.46a8 8 0 0 0 3.94 6a107.7 107.7 0 0 0 26.25 10.87a8 8 0 0 0 7.06-1.49L125.84 216q2.16.06 4.32 0l18.64 14.92a8 8 0 0 0 7.06 1.48a107.2 107.2 0 0 0 26.25-10.88a8 8 0 0 0 3.93-6l2.64-23.72q1.56-1.48 3-3l23.78-2.8a8 8 0 0 0 6-3.94a107.7 107.7 0 0 0 10.87-26.25a8 8 0 0 0-1.49-7.06Zm-16.1-6.5a74 74 0 0 1 0 8.68a8 8 0 0 0 1.74 5.48l14.19 17.73a91.6 91.6 0 0 1-6.23 15l-22.6 2.56a8 8 0 0 0-5.1 2.64a74 74 0 0 1-6.14 6.14a8 8 0 0 0-2.64 5.1l-2.51 22.58a91.3 91.3 0 0 1-15 6.23l-17.74-14.19a8 8 0 0 0-5-1.75h-.48a74 74 0 0 1-8.68 0a8 8 0 0 0-5.48 1.74l-17.78 14.2a91.6 91.6 0 0 1-15-6.23L82.89 187a8 8 0 0 0-2.64-5.1a74 74 0 0 1-6.14-6.14a8 8 0 0 0-5.1-2.64l-22.58-2.52a91.3 91.3 0 0 1-6.23-15l14.19-17.74a8 8 0 0 0 1.74-5.48a74 74 0 0 1 0-8.68a8 8 0 0 0-1.74-5.48L40.2 100.45a91.6 91.6 0 0 1 6.23-15L69 82.89a8 8 0 0 0 5.1-2.64a74 74 0 0 1 6.14-6.14A8 8 0 0 0 82.89 69l2.51-22.57a91.3 91.3 0 0 1 15-6.23l17.74 14.19a8 8 0 0 0 5.48 1.74a74 74 0 0 1 8.68 0a8 8 0 0 0 5.48-1.74l17.77-14.19a91.6 91.6 0 0 1 15 6.23L173.11 69a8 8 0 0 0 2.64 5.1a74 74 0 0 1 6.14 6.14a8 8 0 0 0 5.1 2.64l22.58 2.51a91.3 91.3 0 0 1 6.23 15l-14.19 17.74a8 8 0 0 0-1.74 5.53Z",
-} as const
+} as const;
 
 function AppSidebarObjectTypeMenuIcon({
   name,
   className,
   ...props
 }: {
-  name: keyof typeof objectTypeMenuIconPaths
-  className?: string
+  name: keyof typeof objectTypeMenuIconPaths;
+  className?: string;
 } & React.ComponentPropsWithoutRef<"span">) {
   return (
     <span
@@ -144,7 +160,7 @@ function AppSidebarObjectTypeMenuIcon({
         <path d={objectTypeMenuIconPaths[name]} />
       </svg>
     </span>
-  )
+  );
 }
 
 const allPinnedEntities: AppSidebarPinnedEntity[] = [
@@ -166,45 +182,25 @@ const allPinnedEntities: AppSidebarPinnedEntity[] = [
     icon: ObjectPageIcon,
     tone: "blue",
   },
-]
+];
 
-const initialObjectTypes: AppSidebarObjectType[] = [
-  {
-    id: "atomic-note",
-    label: "Notas atômicas",
-    icon: ObjectAtomicNoteIcon,
-    tone: "amber",
-    count: 0,
-  },
-  {
-    id: "quote",
-    label: "Citações",
-    icon: ObjectQuoteIcon,
-    tone: "red",
-    count: 0,
-  },
-  {
-    id: "page",
-    label: "Páginas",
-    icon: ObjectPageIcon,
-    tone: "blue",
-    count: 1,
-  },
-]
+function reorderById<T extends { id: string }>(
+  items: T[],
+  fromId: string,
+  toId: string,
+) {
+  if (fromId === toId) return items;
 
-function reorderById<T extends { id: string }>(items: T[], fromId: string, toId: string) {
-  if (fromId === toId) return items
+  const from = items.findIndex((item) => item.id === fromId);
+  const to = items.findIndex((item) => item.id === toId);
+  if (from < 0 || to < 0) return items;
 
-  const from = items.findIndex((item) => item.id === fromId)
-  const to = items.findIndex((item) => item.id === toId)
-  if (from < 0 || to < 0) return items
+  const next = [...items];
+  const [moving] = next.splice(from, 1);
+  if (!moving) return items;
 
-  const next = [...items]
-  const [moving] = next.splice(from, 1)
-  if (!moving) return items
-
-  next.splice(to, 0, moving)
-  return next
+  next.splice(to, 0, moving);
+  return next;
 }
 
 function AppSidebarTypeLabel({
@@ -212,37 +208,35 @@ function AppSidebarTypeLabel({
   tone,
   children,
 }: {
-  icon: React.ElementType<ObjectIconProps>
-  tone: AppSidebarTone
-  children: React.ReactNode
+  icon: React.ElementType<ObjectIconProps>;
+  tone: AppSidebarTone;
+  children: React.ReactNode;
 }) {
   return (
     <span
       data-slot="app-sidebar-type-label"
       className={cn(
         "inline-flex max-w-full min-w-0 items-center overflow-x-clip whitespace-nowrap",
-        "rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3]"
+        "rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3]",
       )}
     >
       <span className="mr-[0.4em] ml-[-0.1em] inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 items-center justify-center">
-        <ObjectIconBadge
-          icon={Icon}
-          tone={tone}
-          variant="sidebar"
-        />
+        <ObjectIconBadge icon={Icon} tone={tone} variant="sidebar" />
       </span>
 
-      <span className="block min-w-0 truncate text-left text-[1em]">{children}</span>
+      <span className="block min-w-0 truncate text-left text-[1em]">
+        {children}
+      </span>
     </span>
-  )
+  );
 }
 
 function AppSidebarSectionMenu({
   value,
   onValueChange,
 }: {
-  value: AppSidebarSortMode
-  onValueChange: (value: AppSidebarSortMode) => void
+  value: AppSidebarSortMode;
+  onValueChange: (value: AppSidebarSortMode) => void;
 }) {
   return (
     <DropdownMenu>
@@ -251,24 +245,31 @@ function AppSidebarSectionMenu({
         className={cn(
           buttonVariants({ variant: "ghost", size: "icon-xs" }),
           "size-[22px] shrink-0 opacity-0 transition-opacity duration-200",
-          "group-hover/app-sidebar-section:opacity-70 hover:!opacity-100 data-popup-open:opacity-100"
+          "group-hover/app-sidebar-section:opacity-70 hover:!opacity-100 data-popup-open:opacity-100",
         )}
       >
         <AppSidebarDotsIcon />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent side="right" align="start" sideOffset={8} className="w-56">
+      <DropdownMenuContent
+        side="right"
+        align="start"
+        sideOffset={8}
+        className="w-56"
+      >
         <DropdownMenuItem onClick={() => onValueChange("manual")}>
           Ordenar manualmente
           {value === "manual" && <AppSidebarCheckIcon className="ml-auto" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onValueChange("alphabetical")}>
           Ordenar alfabeticamente
-          {value === "alphabetical" && <AppSidebarCheckIcon className="ml-auto" />}
+          {value === "alphabetical" && (
+            <AppSidebarCheckIcon className="ml-auto" />
+          )}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 function AppSidebarSection({
@@ -283,16 +284,16 @@ function AppSidebarSection({
   sticky = true,
   children,
 }: {
-  icon: React.ElementType<ObjectIconProps>
-  label: string
-  count?: number
-  sort?: AppSidebarSortMode
-  onSortChange?: (sort: AppSidebarSortMode) => void
-  action?: React.ReactNode
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  sticky?: boolean
-  children?: React.ReactNode
+  icon: React.ElementType<ObjectIconProps>;
+  label: string;
+  count?: number;
+  sort?: AppSidebarSortMode;
+  onSortChange?: (sort: AppSidebarSortMode) => void;
+  action?: React.ReactNode;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  sticky?: boolean;
+  children?: React.ReactNode;
 }) {
   return (
     <Collapsible
@@ -304,13 +305,13 @@ function AppSidebarSection({
       <div
         className={cn(
           "group/app-sidebar-section mt-0 mr-2 ml-px bg-sidebar px-2 pr-1",
-          sticky && "sticky top-0 z-[5]"
+          sticky && "sticky top-0 z-[5]",
         )}
       >
         <div
           className={cn(
             "flex h-6 w-full select-none items-center gap-x-1.5 truncate rounded-md px-2 py-1",
-            "text-[12px] text-muted-foreground transition duration-200 ease-out hover:bg-sidebar-accent"
+            "text-[12px] text-muted-foreground transition duration-200 ease-out hover:bg-sidebar-accent",
           )}
         >
           <CollapsibleTrigger className="flex min-w-0 flex-1 items-center gap-x-1.5 overflow-hidden text-left outline-none">
@@ -319,16 +320,21 @@ function AppSidebarSection({
             <span
               className={cn(
                 "-ml-0.5 mr-1 flex size-4 shrink-0 items-center justify-center opacity-0",
-                "transition duration-200 ease-in-out group-hover/app-sidebar-section:opacity-80"
+                "transition duration-200 ease-in-out group-hover/app-sidebar-section:opacity-80",
               )}
             >
               <span
                 className={cn(
                   "inline-flex size-3 items-center justify-center transition-transform duration-200",
-                  !open && "-rotate-90"
+                  !open && "-rotate-90",
                 )}
               >
-                <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" className="size-full">
+                <svg
+                  viewBox="0 0 256 256"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  className="size-full"
+                >
                   <path d="m216.49 104.49-80 80a12 12 0 0 1-17 0l-80-80a12 12 0 0 1 17-17L128 159l71.51-71.52a12 12 0 0 1 17 17Z" />
                 </svg>
               </span>
@@ -343,7 +349,7 @@ function AppSidebarSection({
                   "inline-flex min-w-[1.3em] items-center justify-center rounded-[0.475em]",
                   "border border-transparent px-[0.49em] py-[0.2em] text-[11px] leading-[1.3]",
                   "text-muted-foreground opacity-0 transition-opacity duration-200",
-                  "group-hover/app-sidebar-section:opacity-80"
+                  "group-hover/app-sidebar-section:opacity-80",
                 )}
               >
                 {count}
@@ -351,7 +357,10 @@ function AppSidebarSection({
             )}
 
             {sort && onSortChange && (
-              <AppSidebarSectionMenu value={sort} onValueChange={onSortChange} />
+              <AppSidebarSectionMenu
+                value={sort}
+                onValueChange={onSortChange}
+              />
             )}
 
             {action}
@@ -363,15 +372,15 @@ function AppSidebarSection({
         {children}
       </CollapsibleContent>
     </Collapsible>
-  )
+  );
 }
 
 function AppSidebarPinnedMenu({
   entity,
   onUnpin,
 }: {
-  entity: AppSidebarPinnedEntity
-  onUnpin: () => void
+  entity: AppSidebarPinnedEntity;
+  onUnpin: () => void;
 }) {
   return (
     <DropdownMenu>
@@ -380,13 +389,18 @@ function AppSidebarPinnedMenu({
         className={cn(
           buttonVariants({ variant: "ghost", size: "icon-xs" }),
           "size-[22px] shrink-0 opacity-0 transition-opacity duration-150",
-          "group-hover/pinned-row:opacity-70 hover:!opacity-100 data-popup-open:opacity-100"
+          "group-hover/pinned-row:opacity-70 hover:!opacity-100 data-popup-open:opacity-100",
         )}
       >
         <AppSidebarDotsIcon />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent side="right" align="start" sideOffset={8} className="w-64">
+      <DropdownMenuContent
+        side="right"
+        align="start"
+        sideOffset={8}
+        className="w-64"
+      >
         <DropdownMenuItem>
           <AppSidebarSourceIcon name="external" />
           Abrir
@@ -400,7 +414,7 @@ function AppSidebarPinnedMenu({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 function AppSidebarPinnedRow({
@@ -413,14 +427,14 @@ function AppSidebarPinnedRow({
   onDragStart,
   onDrop,
 }: {
-  entity: AppSidebarPinnedEntity
-  active: boolean
-  dragging: boolean
-  draggable: boolean
-  onSelect: () => void
-  onUnpin: () => void
-  onDragStart: () => void
-  onDrop: () => void
+  entity: AppSidebarPinnedEntity;
+  active: boolean;
+  dragging: boolean;
+  draggable: boolean;
+  onSelect: () => void;
+  onUnpin: () => void;
+  onDragStart: () => void;
+  onDrop: () => void;
 }) {
   return (
     /* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual row wrapper */
@@ -431,12 +445,12 @@ function AppSidebarPinnedRow({
       draggable={draggable}
       onDragStart={onDragStart}
       onDragOver={(event) => {
-        if (draggable) event.preventDefault()
+        if (draggable) event.preventDefault();
       }}
       onDrop={(event) => {
-        if (!draggable) return
-        event.preventDefault()
-        onDrop()
+        if (!draggable) return;
+        event.preventDefault();
+        onDrop();
       }}
     >
       <div
@@ -447,7 +461,7 @@ function AppSidebarPinnedRow({
           "group/interactive group/pinned-row flex h-[29px] w-full shrink-0 items-center rounded-md py-px pr-1.5 pl-[3px]",
           "text-left text-sm font-normal text-muted-foreground",
           workspaceRowStateClass,
-          "data-[dragging=true]:opacity-40"
+          "data-[dragging=true]:opacity-40",
         )}
       >
         <button
@@ -458,7 +472,7 @@ function AppSidebarPinnedRow({
           <span
             className={cn(
               "flex w-12 min-w-0 flex-1 items-center gap-x-1.5 truncate",
-              active && "font-medium"
+              active && "font-medium",
             )}
           >
             <AppSidebarTypeLabel icon={entity.icon} tone={entity.tone}>
@@ -470,7 +484,7 @@ function AppSidebarPinnedRow({
         <div
           className={cn(
             "flex w-[26px] shrink-0 items-center justify-end",
-            workspaceRevealActionClass
+            workspaceRevealActionClass,
           )}
         >
           <span className="ml-auto" />
@@ -478,67 +492,188 @@ function AppSidebarPinnedRow({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function AppSidebarObjectTypeMenu({
   objectType,
-  onDuplicate,
+  onUpdate,
+  onDelete,
 }: {
-  objectType: AppSidebarObjectType
-  onDuplicate: () => void
+  objectType: AppSidebarObjectType;
+  onUpdate?: (
+    id: string,
+    input: {
+      singularName: string;
+      pluralName: string;
+      iconName: ObjectIconName;
+      tone: AppSidebarTone;
+    },
+  ) => void;
+  onDelete?: (id: string) => void;
 }) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        aria-label={`Ações de ${objectType.label}`}
-        className={cn(
-          buttonVariants({ variant: "ghost", size: "icon-xs" }),
-          "size-[22px] shrink-0 opacity-0 transition-opacity duration-150",
-          "group-hover/object-type-row:opacity-70 hover:!opacity-100 data-popup-open:opacity-100"
-        )}
-      >
-        <AppSidebarDotsIcon />
-      </DropdownMenuTrigger>
+  const t = useTranslations("workspace.objectTypeStudio");
+  const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const settingsNameInputId = React.useId();
+  const settingsPluralInputId = React.useId();
+  const settingsIconInputId = React.useId();
+  const settingsToneInputId = React.useId();
+  const [singularName, setSingularName] = React.useState(
+    objectType.singularLabel ?? objectType.label,
+  );
+  const [pluralName, setPluralName] = React.useState(objectType.label);
+  const [iconName, setIconName] = React.useState<ObjectIconName>(
+    objectType.iconName ?? "area",
+  );
+  const [tone, setTone] = React.useState<AppSidebarTone>(objectType.tone);
+  const editable =
+    objectType.ownership === "custom" || objectType.ownership === "legacy";
 
-      <DropdownMenuContent
-        side="right"
-        align="start"
-        sideOffset={8}
-        className={sidebarContextMenuContentClass}
-      >
-        <DropdownMenuItem>
-          <AppSidebarSourceIcon name="external" />
-          Abrir
-          <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <AppSidebarObjectTypeMenuIcon name="plus" />
-          Criar {objectType.label}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={onDuplicate}>
-          <ObjectAtomicNoteIcon className="size-3" />
-          Nova Coleção
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <AppSidebarObjectTypeMenuIcon name="pin" />
-          Fixar na Barra Lateral
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <AppSidebarObjectTypeMenuIcon name="settings" />
-          Configurações do Tipo de Objeto
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <AppSidebarObjectTypeMenuIcon name="import" />
-          Importar
-          <DropdownMenuShortcut>Ctrl I</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
+  function openSettings() {
+    setSingularName(objectType.singularLabel ?? objectType.label);
+    setPluralName(objectType.label);
+    setIconName(objectType.iconName ?? "area");
+    setTone(objectType.tone);
+    setSettingsOpen(true);
+  }
+
+  function saveSettings(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!singularName.trim() || !pluralName.trim()) return;
+    onUpdate?.(objectType.id, {
+      singularName: singularName.trim(),
+      pluralName: pluralName.trim(),
+      iconName,
+      tone,
+    });
+    setSettingsOpen(false);
+  }
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          aria-label={t("actionsLabel", { type: objectType.label })}
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "icon-xs" }),
+            "size-[22px] shrink-0 opacity-0 transition-opacity duration-150",
+            "group-hover/object-type-row:opacity-70 hover:!opacity-100 data-popup-open:opacity-100",
+          )}
+        >
+          <AppSidebarDotsIcon />
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent
+          side="right"
+          align="start"
+          sideOffset={8}
+          className={sidebarContextMenuContentClass}
+        >
+          <DropdownMenuItem onClick={openSettings} disabled={!editable}>
+            <AppSidebarObjectTypeMenuIcon name="settings" />
+            {t("details.settings")}
+          </DropdownMenuItem>
+          {editable && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => onDelete?.(objectType.id)}
+              >
+                {t("details.delete")}
+              </DropdownMenuItem>
+            </>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
+        <DialogContent>
+          <form onSubmit={saveSettings}>
+            <DialogHeader>
+              <DialogTitle>{t("details.settings")}</DialogTitle>
+              <DialogDescription>
+                {t("details.settingsDescription")}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-3 py-4">
+              <label
+                htmlFor={settingsNameInputId}
+                className="grid gap-1 text-sm"
+              >
+                {t("details.name")}
+                <Input
+                  id={settingsNameInputId}
+                  value={singularName}
+                  onChange={(event) => setSingularName(event.target.value)}
+                  autoFocus
+                />
+              </label>
+              <label
+                htmlFor={settingsPluralInputId}
+                className="grid gap-1 text-sm"
+              >
+                {t("details.pluralName")}
+                <Input
+                  id={settingsPluralInputId}
+                  value={pluralName}
+                  onChange={(event) => setPluralName(event.target.value)}
+                />
+              </label>
+              <label
+                htmlFor={settingsIconInputId}
+                className="grid gap-1 text-sm"
+              >
+                {t("details.icon")}
+                <select
+                  id={settingsIconInputId}
+                  value={iconName}
+                  onChange={(event) =>
+                    setIconName(event.target.value as ObjectIconName)
+                  }
+                  className="h-9 rounded-md border bg-background px-2"
+                >
+                  {OBJECT_ICON_NAMES.map((name) => (
+                    <option key={name} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label
+                htmlFor={settingsToneInputId}
+                className="grid gap-1 text-sm"
+              >
+                {t("details.color")}
+                <select
+                  id={settingsToneInputId}
+                  value={tone}
+                  onChange={(event) =>
+                    setTone(event.target.value as AppSidebarTone)
+                  }
+                  className="h-9 rounded-md border bg-background px-2"
+                >
+                  {Object.keys(objectIconToneBadgeClass).map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <DialogFooter>
+              <Button
+                type="submit"
+                disabled={!singularName.trim() || !pluralName.trim()}
+              >
+                {t("details.save")}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
 }
 
 function AppSidebarObjectTypeRow({
@@ -547,61 +682,46 @@ function AppSidebarObjectTypeRow({
   collectionsOpen,
   active,
   activeId,
-  dragging,
-  draggable,
   onSelect,
   onCollectionsOpenChange,
   onCollectionAction,
-  onDuplicate,
-  onDragStart,
-  onDrop,
+  onUpdate,
+  onDelete,
 }: {
-  objectType: AppSidebarObjectType
-  collections: string[]
-  collectionsOpen: boolean
-  active: boolean
-  activeId: string | null
-  dragging: boolean
-  draggable: boolean
-  onSelect: () => void
-  onCollectionsOpenChange: (open: boolean) => void
+  objectType: AppSidebarObjectType;
+  collections: string[];
+  collectionsOpen: boolean;
+  active: boolean;
+  activeId: string | null;
+  onSelect: () => void;
+  onCollectionsOpenChange: (open: boolean) => void;
   onCollectionAction: (
     action: AppSidebarCollectionAction,
     objectType: AppSidebarObjectType,
-    collection: string
-  ) => void
-  onDuplicate: () => void
-  onDragStart: () => void
-  onDrop: () => void
+    collection: string,
+  ) => void;
+  onUpdate?: (
+    id: string,
+    input: {
+      singularName: string;
+      pluralName: string;
+      iconName: ObjectIconName;
+      tone: AppSidebarTone;
+    },
+  ) => void;
+  onDelete?: (id: string) => void;
 }) {
-  const hasCollections = collections.length > 0
+  const hasCollections = collections.length > 0;
 
   return (
-    /* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual row wrapper */
-    <div
-      role="presentation"
-      data-slot="app-sidebar-object-type-row-wrapper"
-      className="mx-2"
-      draggable={draggable}
-      onDragStart={onDragStart}
-      onDragOver={(event) => {
-        if (draggable) event.preventDefault()
-      }}
-      onDrop={(event) => {
-        if (!draggable) return
-        event.preventDefault()
-        onDrop()
-      }}
-    >
+    <div data-slot="app-sidebar-object-type-row-wrapper" className="mx-2">
       <div
         data-slot="app-sidebar-object-type-row"
         data-active={active || undefined}
-        data-dragging={dragging || undefined}
         className={cn(
           "group/interactive group/object-type-row flex h-[29px] w-full shrink-0 items-center rounded-md py-px pr-1.5 pl-[3px]",
           "text-left text-sm font-normal text-muted-foreground",
           workspaceRowStateClass,
-          "data-[dragging=true]:opacity-40"
         )}
       >
         {hasCollections && (
@@ -613,7 +733,7 @@ function AppSidebarObjectTypeRow({
               "relative ml-[5px] inline-flex size-[21px] shrink-0 items-center justify-center rounded-md bg-transparent text-muted-foreground",
               "transition-[background-color,opacity] duration-150 ease-out motion-reduce:transition-none",
               "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:bg-sidebar-accent focus-visible:text-sidebar-accent-foreground",
-              "focus-visible:[&_[data-slot=app-sidebar-object-type-icon]]:opacity-0 focus-visible:[&_[data-slot=app-sidebar-object-type-chevron]]:opacity-100"
+              "focus-visible:[&_[data-slot=app-sidebar-object-type-icon]]:opacity-0 focus-visible:[&_[data-slot=app-sidebar-object-type-chevron]]:opacity-100",
             )}
             onClick={() => onCollectionsOpenChange(!collectionsOpen)}
           >
@@ -632,7 +752,7 @@ function AppSidebarObjectTypeRow({
               name="chevronRight"
               className={cn(
                 "size-3 opacity-0 transition-[opacity,transform] duration-150 motion-reduce:transition-none group-hover/object-type-row:opacity-100",
-                collectionsOpen && "rotate-90"
+                collectionsOpen && "rotate-90",
               )}
             />
           </button>
@@ -649,7 +769,10 @@ function AppSidebarObjectTypeRow({
                 {objectType.label}
               </span>
             ) : (
-              <AppSidebarTypeLabel icon={objectType.icon} tone={objectType.tone}>
+              <AppSidebarTypeLabel
+                icon={objectType.icon}
+                tone={objectType.tone}
+              >
                 {objectType.label}
               </AppSidebarTypeLabel>
             )}
@@ -659,13 +782,13 @@ function AppSidebarObjectTypeRow({
         <div
           className={cn(
             "flex w-12 shrink-0 items-center justify-end",
-            workspaceRevealActionClass
+            workspaceRevealActionClass,
           )}
         >
           <span
             className={cn(
               "text-[11px] text-muted-foreground opacity-0 transition-opacity duration-200",
-              "group-hover/object-type-row:opacity-80"
+              "group-hover/object-type-row:opacity-80",
             )}
           >
             <span className="inline-flex min-w-[1.3em] items-center justify-center rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3]">
@@ -675,7 +798,8 @@ function AppSidebarObjectTypeRow({
 
           <AppSidebarObjectTypeMenu
             objectType={objectType}
-            onDuplicate={onDuplicate}
+            onUpdate={onUpdate}
+            onDelete={onDelete}
           />
         </div>
       </div>
@@ -683,7 +807,10 @@ function AppSidebarObjectTypeRow({
       {hasCollections && collectionsOpen && (
         <div data-slot="app-sidebar-object-type-collections">
           {collections.map((collection) => {
-            const collectionId = appSidebarCollectionId(objectType.id, collection)
+            const collectionId = appSidebarCollectionId(
+              objectType.id,
+              collection,
+            );
             return (
               <div
                 key={collection}
@@ -698,7 +825,9 @@ function AppSidebarObjectTypeRow({
                   type="button"
                   draggable={false}
                   className="flex min-w-0 flex-1 items-center text-left"
-                  onClick={() => onCollectionAction("open", objectType, collection)}
+                  onClick={() =>
+                    onCollectionAction("open", objectType, collection)
+                  }
                 >
                   <span className="mr-1.5 inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 items-center justify-center">
                     <ObjectIconBadge
@@ -715,12 +844,12 @@ function AppSidebarObjectTypeRow({
                   onAction={onCollectionAction}
                 />
               </div>
-            )
+            );
           })}
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function AppSidebarPinnedPicker({
@@ -728,20 +857,23 @@ function AppSidebarPinnedPicker({
   selectedIds,
   onPick,
 }: {
-  entities: AppSidebarPinnedEntity[]
-  selectedIds: Set<string>
-  onPick: (entity: AppSidebarPinnedEntity) => void
+  entities: AppSidebarPinnedEntity[];
+  selectedIds: Set<string>;
+  onPick: (entity: AppSidebarPinnedEntity) => void;
 }) {
-  const [open, setOpen] = React.useState(false)
-  const [query, setQuery] = React.useState("")
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
 
   const results = React.useMemo(() => {
-    const normalized = query.trim().toLocaleLowerCase("pt-BR")
+    const normalized = query.trim().toLocaleLowerCase("pt-BR");
     return entities.filter((entity) => {
-      if (selectedIds.has(entity.id)) return false
-      return !normalized || entity.label.toLocaleLowerCase("pt-BR").includes(normalized)
-    })
-  }, [entities, query, selectedIds])
+      if (selectedIds.has(entity.id)) return false;
+      return (
+        !normalized ||
+        entity.label.toLocaleLowerCase("pt-BR").includes(normalized)
+      );
+    });
+  }, [entities, query, selectedIds]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -750,13 +882,18 @@ function AppSidebarPinnedPicker({
         className={cn(
           buttonVariants({ variant: "outline", size: "icon-xs" }),
           "size-[22px] shrink-0 opacity-0 transition-opacity duration-200",
-          "group-hover/app-sidebar-section:opacity-100 data-popup-open:opacity-100"
+          "group-hover/app-sidebar-section:opacity-100 data-popup-open:opacity-100",
         )}
       >
         <AppSidebarPlusIcon />
       </PopoverTrigger>
 
-      <PopoverContent side="right" align="start" sideOffset={8} className="w-72 gap-1 p-1.5">
+      <PopoverContent
+        side="right"
+        align="start"
+        sideOffset={8}
+        className="w-72 gap-1 p-1.5"
+      >
         <Input
           autoFocus
           value={query}
@@ -773,9 +910,9 @@ function AppSidebarPinnedPicker({
               variant="ghost"
               className="h-8 w-full justify-start px-1.5 font-normal"
               onClick={() => {
-                onPick(entity)
-                setQuery("")
-                setOpen(false)
+                onPick(entity);
+                setQuery("");
+                setOpen(false);
               }}
             >
               <AppSidebarTypeLabel icon={entity.icon} tone={entity.tone}>
@@ -792,10 +929,16 @@ function AppSidebarPinnedPicker({
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
 
-function AppSidebarSectionAction({ label, onClick }: { label: string; onClick?: () => void }) {
+function AppSidebarSectionAction({
+  label,
+  onClick,
+}: {
+  label: string;
+  onClick?: () => void;
+}) {
   return (
     <Button
       data-slot="app-sidebar-section-action"
@@ -808,28 +951,31 @@ function AppSidebarSectionAction({ label, onClick }: { label: string; onClick?: 
     >
       <AppSidebarPlusIcon />
     </Button>
-  )
+  );
 }
 
 function AppSidebarAddSection({
   onCreate,
 }: {
-  onCreate: (section: AppSidebarCustomSection) => void
+  onCreate: (section: AppSidebarCustomSection) => void;
 }) {
-  const [open, setOpen] = React.useState(false)
-  const [name, setName] = React.useState("")
+  const [open, setOpen] = React.useState(false);
+  const [name, setName] = React.useState("");
 
   function create() {
-    const label = name.trim()
-    if (!label) return
+    const label = name.trim();
+    if (!label) return;
 
-    onCreate({ id: crypto.randomUUID(), label, open: true })
-    setName("")
-    setOpen(false)
+    onCreate({ id: crypto.randomUUID(), label, open: true });
+    setName("");
+    setOpen(false);
   }
 
   return (
-    <div data-slot="app-sidebar-add-section" className="mt-0 mr-2 ml-px bg-sidebar px-2 pr-0.5">
+    <div
+      data-slot="app-sidebar-add-section"
+      className="mt-0 mr-2 ml-px bg-sidebar px-2 pr-0.5"
+    >
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger
           className={cn(
@@ -837,14 +983,19 @@ function AppSidebarAddSection({
             "pointer-events-none h-8 w-full justify-start gap-x-1.5 px-2 font-normal text-muted-foreground",
             "opacity-0 transition-opacity duration-200",
             "group-hover/section-container:pointer-events-auto group-hover/section-container:opacity-60",
-            "hover:!opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100"
+            "hover:!opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100",
           )}
         >
           <AppSidebarPlusIcon />
           <span className="min-w-0 truncate">Adicionar seção</span>
         </PopoverTrigger>
 
-        <PopoverContent side="right" align="start" sideOffset={8} className="w-72 gap-2 p-2">
+        <PopoverContent
+          side="right"
+          align="start"
+          sideOffset={8}
+          className="w-72 gap-2 p-2"
+        >
           <Input
             autoFocus
             value={name}
@@ -852,26 +1003,32 @@ function AppSidebarAddSection({
             placeholder="Nome da seção"
             onChange={(event) => setName(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key !== "Enter") return
-              event.preventDefault()
-              create()
+              if (event.key !== "Enter") return;
+              event.preventDefault();
+              create();
             }}
           />
-          <Button type="button" size="sm" className="w-full" disabled={!name.trim()} onClick={create}>
+          <Button
+            type="button"
+            size="sm"
+            className="w-full"
+            disabled={!name.trim()}
+            onClick={create}
+          >
             Criar
           </Button>
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }
 
 const utilityRowClass = cn(
   buttonVariants({ variant: "ghost", size: "default" }),
   "group/interactive group/utility h-8 w-full justify-start gap-x-1.5 px-2 font-normal text-muted-foreground",
   workspaceRowStateClass,
-  "active:brightness-[0.97]"
-)
+  "active:brightness-[0.97]",
+);
 
 function AppSidebarUtilityRow({
   icon: Icon,
@@ -881,12 +1038,12 @@ function AppSidebarUtilityRow({
   active,
   onClick,
 }: {
-  icon: React.ElementType<ObjectIconProps>
-  label: string
-  external?: boolean
-  tooltip?: string
-  active?: boolean
-  onClick?: () => void
+  icon: React.ElementType<ObjectIconProps>;
+  label: string;
+  external?: boolean;
+  tooltip?: string;
+  active?: boolean;
+  onClick?: () => void;
 }) {
   const row = (
     <span className="flex w-full min-w-0 items-center">
@@ -897,12 +1054,12 @@ function AppSidebarUtilityRow({
           name="external"
           className={cn(
             "ml-auto size-3 shrink-0 opacity-0 transition-opacity duration-200 ease-out",
-            "group-hover/utility:opacity-100"
+            "group-hover/utility:opacity-100",
           )}
         />
       )}
     </span>
-  )
+  );
 
   if (tooltip) {
     return (
@@ -911,7 +1068,8 @@ function AppSidebarUtilityRow({
           data-slot="app-sidebar-utility-row"
           className={cn(
             utilityRowClass,
-            active && "bg-sidebar-accent text-sidebar-accent-foreground brightness-[0.965]"
+            active &&
+              "bg-sidebar-accent text-sidebar-accent-foreground brightness-[0.965]",
           )}
           onClick={onClick}
         >
@@ -921,7 +1079,7 @@ function AppSidebarUtilityRow({
           {tooltip}
         </TooltipContent>
       </Tooltip>
-    )
+    );
   }
 
   return (
@@ -931,17 +1089,18 @@ function AppSidebarUtilityRow({
       variant="ghost"
       className={cn(
         utilityRowClass,
-        active && "bg-sidebar-accent text-sidebar-accent-foreground brightness-[0.965]"
+        active &&
+          "bg-sidebar-accent text-sidebar-accent-foreground brightness-[0.965]",
       )}
       onClick={onClick}
     >
       {row}
     </Button>
-  )
+  );
 }
 
 function AppSidebarHelpSection() {
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = React.useState(true);
 
   return (
     <AppSidebarSection
@@ -950,9 +1109,14 @@ function AppSidebarHelpSection() {
       open={open}
       onOpenChange={setOpen}
     >
-      <div data-slot="app-sidebar-help-items" className="flex flex-col px-2 pr-0.5">
+      <div
+        data-slot="app-sidebar-help-items"
+        className="flex flex-col px-2 pr-0.5"
+      >
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="graduation" {...props} />}
+          icon={(props) => (
+            <AppSidebarSourceIcon name="graduation" {...props} />
+          )}
           label="Primeiros passos"
         />
         <AppSidebarUtilityRow
@@ -962,7 +1126,9 @@ function AppSidebarHelpSection() {
           tooltip="Faça perguntas sobre o Capacities"
         />
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="documentation" {...props} />}
+          icon={(props) => (
+            <AppSidebarSourceIcon name="documentation" {...props} />
+          )}
           label="Documentação"
           external
           tooltip="Saiba mais sobre o Capacities e como você pode usá-lo"
@@ -979,23 +1145,23 @@ function AppSidebarHelpSection() {
         />
       </div>
     </AppSidebarSection>
-  )
+  );
 }
 
 const footerIconClass = cn(
   buttonVariants({ variant: "ghost", size: "icon" }),
   "size-8 shrink-0 text-muted-foreground",
-  "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:brightness-[0.97]"
-)
+  "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:brightness-[0.97]",
+);
 
 function AppSidebarFooterTooltip({
   label,
   children,
   onClick,
 }: {
-  label: string
-  children: React.ReactNode
-  onClick?: () => void
+  label: string;
+  children: React.ReactNode;
+  onClick?: () => void;
 }) {
   return (
     <Tooltip>
@@ -1011,17 +1177,17 @@ function AppSidebarFooterTooltip({
         {label}
       </TooltipContent>
     </Tooltip>
-  )
+  );
 }
 
 function AppSidebarFooter() {
-  const t = useTranslations("workspace")
-  const [dark, setDark] = React.useState(false)
+  const t = useTranslations("workspace");
+  const [dark, setDark] = React.useState(false);
 
   React.useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark)
-    return () => document.documentElement.classList.remove("dark")
-  }, [dark])
+    document.documentElement.classList.toggle("dark", dark);
+    return () => document.documentElement.classList.remove("dark");
+  }, [dark]);
 
   return (
     <footer
@@ -1051,7 +1217,7 @@ function AppSidebarFooter() {
               buttonVariants({ variant: "ghost", size: "default" }),
               "h-8 w-auto shrink-0 gap-x-1.5 px-1.5 text-xs font-normal text-muted-foreground",
               "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-              "active:brightness-[0.97] data-popup-open:bg-sidebar-accent data-popup-open:text-sidebar-accent-foreground"
+              "active:brightness-[0.97] data-popup-open:bg-sidebar-accent data-popup-open:text-sidebar-accent-foreground",
             )}
           >
             <AppSidebarSourceIcon name="user" className="size-4" />
@@ -1102,44 +1268,59 @@ function AppSidebarFooter() {
         </AppSidebarFooterTooltip>
       </div>
     </footer>
-  )
+  );
 }
 
 type AppSidebarOverviewProps = {
-  activeId?: string | null
-  onActiveIdChange?: (id: string | null) => void
-  pinnedEntities?: AppSidebarPinnedEntity[]
-  availablePinnedEntities?: AppSidebarPinnedEntity[]
-  objectTypes?: AppSidebarObjectType[]
-  objectTypeCollections?: Record<string, string[]>
-  customSections?: AppSidebarCustomSection[]
+  activeId?: string | null;
+  onActiveIdChange?: (id: string | null) => void;
+  pinnedEntities?: AppSidebarPinnedEntity[];
+  availablePinnedEntities?: AppSidebarPinnedEntity[];
+  objectTypes?: AppSidebarObjectType[];
+  objectTypeCollections?: Record<string, string[]>;
+  customSections?: AppSidebarCustomSection[];
+  onCreateObjectTypeFromPreset?: (presetId: string) => void;
+  onCreateObjectType?: (input: CreateStructureInput) => void;
+  onUpdateObjectType?: (
+    id: string,
+    input: {
+      singularName: string;
+      pluralName: string;
+      iconName: ObjectIconName;
+      tone: AppSidebarTone;
+    },
+  ) => void;
+  onDeleteObjectType?: (id: string) => void;
   onCollectionAction?: (
     action: AppSidebarCollectionAction,
     objectType: AppSidebarObjectType,
-    collection: string
-  ) => void
-  onPinnedEntitiesChange?: React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>
-  onObjectTypesChange?: React.Dispatch<React.SetStateAction<AppSidebarObjectType[]>>
-  onCustomSectionsChange?: React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>
-}
+    collection: string,
+  ) => void;
+  onPinnedEntitiesChange?: React.Dispatch<
+    React.SetStateAction<AppSidebarPinnedEntity[]>
+  >;
+  onCustomSectionsChange?: React.Dispatch<
+    React.SetStateAction<AppSidebarCustomSection[]>
+  >;
+};
 
 function AppSidebarCollectionMenu({
   collection,
   objectType,
   onAction,
 }: {
-  collection: string
-  objectType: AppSidebarObjectType
+  collection: string;
+  objectType: AppSidebarObjectType;
   onAction: (
     action: AppSidebarCollectionAction,
     objectType: AppSidebarObjectType,
-    collection: string
-  ) => void
+    collection: string,
+  ) => void;
 }) {
-  const t = useTranslations("workspace")
-  const objectTypeName = t(`objectTypeStudio.objectTypes.${objectType.id}`)
+  const t = useTranslations("workspace");
+  const objectTypeName = t(`objectTypeStudio.objectTypes.${objectType.id}`);
   const action = (name: AppSidebarCollectionAction) => () =>
-    onAction(name, objectType, collection)
+    onAction(name, objectType, collection);
 
   return (
     <DropdownMenu>
@@ -1148,7 +1329,7 @@ function AppSidebarCollectionMenu({
         className={cn(
           buttonVariants({ variant: "ghost", size: "icon-xs" }),
           "size-[22px] shrink-0 opacity-0 transition-opacity duration-150",
-          "group-hover/collection-row:opacity-70 hover:!opacity-100 data-popup-open:opacity-100"
+          "group-hover/collection-row:opacity-70 hover:!opacity-100 data-popup-open:opacity-100",
         )}
       >
         <AppSidebarDotsIcon />
@@ -1162,7 +1343,10 @@ function AppSidebarCollectionMenu({
         <DropdownMenuItem onClick={action("open")}>
           <AppSidebarSourceIcon name="external" />
           {t("lifecycle.task.open")}
-          <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
+          <AppSidebarObjectTypeMenuIcon
+            name="chevronRight"
+            className="ml-auto"
+          />
         </DropdownMenuItem>
         <DropdownMenuItem onClick={action("create")}>
           <AppSidebarPlusIcon />
@@ -1172,7 +1356,10 @@ function AppSidebarCollectionMenu({
         <DropdownMenuItem onClick={action("template")}>
           <AppSidebarCopyIcon />
           {t("objectTypeOverview.newFromTemplate")}
-          <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
+          <AppSidebarObjectTypeMenuIcon
+            name="chevronRight"
+            className="ml-auto"
+          />
         </DropdownMenuItem>
         <DropdownMenuItem onClick={action("pin")}>
           <AppSidebarPinIcon />
@@ -1216,7 +1403,7 @@ function AppSidebarCollectionMenu({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 function AppSidebarOverview({
@@ -1224,127 +1411,105 @@ function AppSidebarOverview({
   onActiveIdChange,
   pinnedEntities: controlledPinned,
   availablePinnedEntities = allPinnedEntities,
-  objectTypes: controlledObjectTypes,
+  objectTypes = [],
   objectTypeCollections = {},
   customSections: controlledCustomSections,
+  onCreateObjectTypeFromPreset,
+  onCreateObjectType,
+  onUpdateObjectType,
+  onDeleteObjectType,
   onPinnedEntitiesChange,
-  onObjectTypesChange,
   onCustomSectionsChange,
   onCollectionAction,
 }: AppSidebarOverviewProps = {}) {
-  const t = useTranslations("workspace")
-  const [internalActiveId, setInternalActiveId] = React.useState<string | null>("page-1")
-  const isControlled = controlledActiveId !== undefined
-  const activeId = isControlled ? controlledActiveId : internalActiveId
+  const t = useTranslations("workspace");
+  const [internalActiveId, setInternalActiveId] = React.useState<string | null>(
+    "page-1",
+  );
+  const isControlled = controlledActiveId !== undefined;
+  const activeId = isControlled ? controlledActiveId : internalActiveId;
 
   function setActiveId(id: string | null) {
-    if (!isControlled) setInternalActiveId(id)
-    onActiveIdChange?.(id)
+    if (!isControlled) setInternalActiveId(id);
+    onActiveIdChange?.(id);
   }
-  const [pinnedOpen, setPinnedOpen] = React.useState(true)
-  const [objectTypesOpen, setObjectTypesOpen] = React.useState(true)
-  const [objectTypeCollectionsOpen, setObjectTypeCollectionsOpen] = React.useState<
-    Record<string, boolean>
-  >({})
-  const [pinnedSort, setPinnedSort] = React.useState<AppSidebarSortMode>("manual")
-  const [objectSort, setObjectSort] = React.useState<AppSidebarSortMode>("manual")
-  const [internalPinned, setInternalPinned] = React.useState<AppSidebarPinnedEntity[]>(
-    allPinnedEntities.slice(0, 1)
-  )
-  const [internalObjectTypes, setInternalObjectTypes] = React.useState(initialObjectTypes)
-  const [internalCustomSections, setInternalCustomSections] = React.useState<AppSidebarCustomSection[]>([])
-  const [drag, setDrag] = React.useState<AppSidebarDragState>(null)
+  const [pinnedOpen, setPinnedOpen] = React.useState(true);
+  const [objectTypesOpen, setObjectTypesOpen] = React.useState(true);
+  const [objectTypeCollectionsOpen, setObjectTypeCollectionsOpen] =
+    React.useState<Record<string, boolean>>({});
+  const [pinnedSort, setPinnedSort] =
+    React.useState<AppSidebarSortMode>("manual");
+  const [objectSort, setObjectSort] =
+    React.useState<AppSidebarSortMode>("manual");
+  const [internalPinned, setInternalPinned] = React.useState<
+    AppSidebarPinnedEntity[]
+  >(allPinnedEntities.slice(0, 1));
+  const [internalCustomSections, setInternalCustomSections] = React.useState<
+    AppSidebarCustomSection[]
+  >([]);
+  const [drag, setDrag] = React.useState<AppSidebarDragState>(null);
 
-  const pinned = controlledPinned ?? internalPinned
-  const objectTypes = controlledObjectTypes ?? internalObjectTypes
-  const customSections = controlledCustomSections ?? internalCustomSections
-  const setPinned = React.useCallback<React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>>(
+  const pinned = controlledPinned ?? internalPinned;
+  const customSections = controlledCustomSections ?? internalCustomSections;
+  const setPinned = React.useCallback<
+    React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>
+  >(
     (next) => {
       if (controlledPinned !== undefined) {
         const resolved =
-          typeof next === "function" ? next(controlledPinned) : next
-        onPinnedEntitiesChange?.(resolved)
-        return
+          typeof next === "function" ? next(controlledPinned) : next;
+        onPinnedEntitiesChange?.(resolved);
+        return;
       }
 
-      setInternalPinned(next)
+      setInternalPinned(next);
     },
-    [controlledPinned, onPinnedEntitiesChange]
-  )
-  const setObjectTypes = React.useCallback<React.Dispatch<React.SetStateAction<AppSidebarObjectType[]>>>(
-    (next) => {
-      if (controlledObjectTypes !== undefined) {
-        const resolved =
-          typeof next === "function" ? next(controlledObjectTypes) : next
-        onObjectTypesChange?.(resolved)
-        return
-      }
-
-      setInternalObjectTypes(next)
-    },
-    [controlledObjectTypes, onObjectTypesChange]
-  )
-  const setCustomSections = React.useCallback<React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>>(
+    [controlledPinned, onPinnedEntitiesChange],
+  );
+  const setCustomSections = React.useCallback<
+    React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>
+  >(
     (next) => {
       if (controlledCustomSections !== undefined) {
         const resolved =
-          typeof next === "function" ? next(controlledCustomSections) : next
-        onCustomSectionsChange?.(resolved)
-        return
+          typeof next === "function" ? next(controlledCustomSections) : next;
+        onCustomSectionsChange?.(resolved);
+        return;
       }
 
-      setInternalCustomSections(next)
+      setInternalCustomSections(next);
     },
-    [controlledCustomSections, onCustomSectionsChange]
-  )
+    [controlledCustomSections, onCustomSectionsChange],
+  );
 
-  const pinnedIds = React.useMemo(() => new Set(pinned.map((entity) => entity.id)), [pinned])
+  const pinnedIds = React.useMemo(
+    () => new Set(pinned.map((entity) => entity.id)),
+    [pinned],
+  );
 
   const visiblePinned = React.useMemo(
     () =>
       pinnedSort === "alphabetical"
         ? [...pinned].sort((a, b) => a.label.localeCompare(b.label, "pt-BR"))
         : pinned,
-    [pinned, pinnedSort]
-  )
+    [pinned, pinnedSort],
+  );
 
   const visibleObjectTypes = React.useMemo(
     () =>
       objectSort === "alphabetical"
-        ? [...objectTypes].sort((a, b) => a.label.localeCompare(b.label, "pt-BR"))
+        ? [...objectTypes].sort((a, b) =>
+            a.label.localeCompare(b.label, "pt-BR"),
+          )
         : objectTypes,
-    [objectSort, objectTypes]
-  )
-
-  function addObjectType(preset: AppSidebarObjectTypePreset) {
-    setObjectTypes((current) => {
-      if (current.some((entity) => entity.id === preset.id)) return current
-
-      return [
-        ...current,
-        {
-          id: preset.id,
-          label: preset.label,
-          icon: preset.icon,
-          tone: preset.tone,
-          count: 0,
-        },
-      ]
-    })
-  }
-
-  function duplicateObjectType(objectType: AppSidebarObjectType) {
-    const copy = {
-      ...objectType,
-      id: `${objectType.id}-${crypto.randomUUID()}`,
-      label: `${objectType.label} (cópia)`,
-    }
-    setObjectTypes((current) => [...current, copy])
-    setActiveId(copy.id)
-  }
+    [objectSort, objectTypes],
+  );
 
   return (
-    <div data-slot="app-sidebar-overview" className="flex min-h-0 flex-1 flex-col">
+    <div
+      data-slot="app-sidebar-overview"
+      className="flex min-h-0 flex-1 flex-col"
+    >
       <div data-slot="app-sidebar-pinned-region" className="shrink-0">
         <AppSidebarSection
           icon={AppSidebarPinIcon}
@@ -1377,13 +1542,18 @@ function AppSidebarOverview({
                 draggable={pinnedSort === "manual"}
                 onSelect={() => setActiveId(entity.id)}
                 onUnpin={() =>
-                  setPinned((current) => current.filter((item) => item.id !== entity.id))
+                  setPinned((current) =>
+                    current.filter((item) => item.id !== entity.id),
+                  )
                 }
                 onDragStart={() => setDrag({ kind: "pinned", id: entity.id })}
                 onDrop={() => {
-                  if (drag?.kind !== "pinned" || pinnedSort !== "manual") return
-                  setPinned((current) => reorderById(current, drag.id, entity.id))
-                  setDrag(null)
+                  if (drag?.kind !== "pinned" || pinnedSort !== "manual")
+                    return;
+                  setPinned((current) =>
+                    reorderById(current, drag.id, entity.id),
+                  );
+                  setDrag(null);
                 }}
               />
             ))
@@ -1399,7 +1569,7 @@ function AppSidebarOverview({
           "[&_[data-slot=scroll-area-viewport]>div]:!min-h-full",
           "[&_[data-slot=scroll-area-viewport]>div]:!w-full",
           "[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]]:!w-[6px]",
-          "[&_[data-slot=scroll-area-scrollbar]]:!p-0"
+          "[&_[data-slot=scroll-area-scrollbar]]:!p-0",
         )}
       >
         <div className="flex min-h-full w-full flex-col">
@@ -1413,8 +1583,13 @@ function AppSidebarOverview({
             onOpenChange={setObjectTypesOpen}
             action={
               <AppSidebarObjectTypeStudio
-                onSelect={addObjectType}
-                trigger={<AppSidebarSectionAction label={t("objectTypeStudio.trigger")} />}
+                onCreateFromPreset={onCreateObjectTypeFromPreset}
+                onCreateCustom={onCreateObjectType}
+                trigger={
+                  <AppSidebarSectionAction
+                    label={t("objectTypeStudio.trigger")}
+                  />
+                }
               />
             }
           >
@@ -1423,11 +1598,11 @@ function AppSidebarOverview({
                 key={objectType.id}
                 objectType={objectType}
                 collections={objectTypeCollections[objectType.id] ?? []}
-                collectionsOpen={objectTypeCollectionsOpen[objectType.id] ?? true}
+                collectionsOpen={
+                  objectTypeCollectionsOpen[objectType.id] ?? true
+                }
                 active={activeId === objectType.id}
                 activeId={activeId}
-                dragging={drag?.kind === "object-type" && drag.id === objectType.id}
-                draggable={objectSort === "manual"}
                 onSelect={() => setActiveId(objectType.id)}
                 onCollectionsOpenChange={(open) =>
                   setObjectTypeCollectionsOpen((current) => ({
@@ -1437,17 +1612,12 @@ function AppSidebarOverview({
                 }
                 onCollectionAction={(action, type, collection) => {
                   if (action === "open") {
-                    setActiveId(appSidebarCollectionId(type.id, collection))
+                    setActiveId(appSidebarCollectionId(type.id, collection));
                   }
-                  onCollectionAction?.(action, type, collection)
+                  onCollectionAction?.(action, type, collection);
                 }}
-                onDuplicate={() => duplicateObjectType(objectType)}
-                onDragStart={() => setDrag({ kind: "object-type", id: objectType.id })}
-                onDrop={() => {
-                  if (drag?.kind !== "object-type" || objectSort !== "manual") return
-                  setObjectTypes((current) => reorderById(current, drag.id, objectType.id))
-                  setDrag(null)
-                }}
+                onUpdate={onUpdateObjectType}
+                onDelete={onDeleteObjectType}
               />
             ))}
           </AppSidebarSection>
@@ -1461,8 +1631,8 @@ function AppSidebarOverview({
               onOpenChange={(open) =>
                 setCustomSections((current) =>
                   current.map((item) =>
-                    item.id === section.id ? { ...item, open } : item
-                  )
+                    item.id === section.id ? { ...item, open } : item,
+                  ),
                 )
               }
             >
@@ -1473,15 +1643,22 @@ function AppSidebarOverview({
           ))}
 
           <AppSidebarAddSection
-            onCreate={(section) => setCustomSections((current) => [...current, section])}
+            onCreate={(section) =>
+              setCustomSections((current) => [...current, section])
+            }
           />
 
           <div className="h-4 w-full shrink-0" />
 
-          <div data-slot="app-sidebar-lower-content" className="mt-auto flex w-full flex-col pb-2">
+          <div
+            data-slot="app-sidebar-lower-content"
+            className="mt-auto flex w-full flex-col pb-2"
+          >
             <div className="flex flex-col px-2 pr-0.5">
               <AppSidebarUtilityRow
-                icon={(props) => <AppSidebarSourceIcon name="trash" {...props} />}
+                icon={(props) => (
+                  <AppSidebarSourceIcon name="trash" {...props} />
+                )}
                 label="Lixeira"
                 active={activeId === "trash"}
                 onClick={() => setActiveId("trash")}
@@ -1497,7 +1674,7 @@ function AppSidebarOverview({
 
       <AppSidebarFooter />
     </div>
-  )
+  );
 }
 
 export {
@@ -1520,4 +1697,4 @@ export {
   type AppSidebarPinnedEntity,
   type AppSidebarSortMode,
   type AppSidebarTone,
-}
+};

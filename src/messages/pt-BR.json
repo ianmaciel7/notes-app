@@ -215,6 +215,7 @@
     "objectTypeStudio": {
       "basicTypes": "Tipos básicos",
       "createOwn": "Crie o seu próprio",
+      "actionsLabel": "Ações de {type}",
       "description": "Escolha um tipo de objeto sugerido ou básico para adicionar ao espaço atual.",
       "details": {
         "close": "Fechar detalhes do tipo de objeto",
@@ -223,7 +224,19 @@
         "name": "Nome",
         "namePlaceholder": "Nome do tipo de objeto",
         "preset": "Preset",
-        "review": "Revise este preset antes de adicioná-lo ao espaço atual."
+        "review": "Revise este preset antes de adicioná-lo ao espaço atual.",
+        "customTitle": "Crie seu tipo de objeto",
+        "learnMore": "Saiba mais",
+        "customDescription": "Tipos de objeto são categorias para o seu conteúdo, como livros, projetos ou notas de reuniões.",
+        "icon": "Ícone",
+        "color": "Cor",
+        "pluralName": "Plural do nome",
+        "pluralNamePlaceholder": "Plural do nome",
+        "customHint": "Você pode personalizar as propriedades depois de criar o tipo de objeto nas configurações do tipo de objeto.",
+        "settings": "Configurações do tipo de objeto",
+        "settingsDescription": "Altere os nomes e a aparência usados por todos os objetos deste tipo.",
+        "save": "Salvar alterações",
+        "delete": "Excluir tipo de objeto"
       },
       "objectTypes": {
         "ai-chat": "Chat de IA",
@@ -253,7 +266,8 @@
         "weblink": "Weblink"
       },
       "title": "Adicione novo tipo de objeto",
-      "trigger": "Adicionar tipo de objeto"
+      "trigger": "Adicionar tipo de objeto",
+      "operationFailed": "Não foi possível alterar o tipo de objeto."
     },
     "lifecycle": {
       "cancel": "Cancelar",
