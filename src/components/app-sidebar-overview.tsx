@@ -690,7 +690,7 @@ function AppSidebarObjectTypeRow({
                 data-slot="app-sidebar-collection-row"
                 data-active={collectionId === activeId || undefined}
                 className={cn(
-                  "group/collection-row group/interactive flex h-[29px] w-full min-w-0 items-center rounded-md pl-[26px] pr-1 text-sm font-normal text-muted-foreground",
+                  "group/collection-row group/interactive flex h-[29px] w-full min-w-0 items-center rounded-md pl-[3px] pr-1 text-sm font-normal text-muted-foreground",
                   workspaceRowStateClass,
                 )}
               >
