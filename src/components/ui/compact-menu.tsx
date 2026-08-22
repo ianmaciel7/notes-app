@@ -2,6 +2,7 @@
 
 import type { ElementType, ReactNode } from "react"
 
+import { floatingSurfaceBaseClass } from "@/components/ui/shared-styles"
 import { cn } from "@/lib/utils"
 
 type CompactMenuIconFrameProps = {
@@ -25,8 +26,10 @@ type CompactMenuAccountPanelProps = {
   className?: string
 }
 
-const compactMenuSurfaceClass =
-  "box-content flex w-auto min-w-[18rem] max-w-[calc(100vw-1.75rem)] flex-col overflow-hidden rounded-xl border-[#dedbd7] bg-white p-0 text-left text-xs font-normal shadow-[0_12px_34px_rgb(0_0_0/0.16),0_2px_8px_rgb(0_0_0/0.08)]"
+const compactMenuSurfaceClass = cn(
+  floatingSurfaceBaseClass,
+  "box-content flex w-auto min-w-[18rem] max-w-[calc(100vw-1.75rem)] flex-col overflow-hidden p-0 text-left text-xs font-normal",
+)
 
 const compactMenuSearchClass =
   "h-6 w-full rounded-[7px] border-0 bg-[#f3f1ee] px-[9px] text-sm text-[#595550] shadow-none [&>input]:h-full [&>input]:px-0 [&>input]:py-0 [&>input]:text-sm [&>input]:placeholder:text-[#8f8983] [&>input]:placeholder:opacity-60"
