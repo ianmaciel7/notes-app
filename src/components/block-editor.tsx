@@ -1,6 +1,8 @@
 "use client";
 
 import Placeholder from "@tiptap/extension-placeholder";
+import TaskItem from "@tiptap/extension-task-item";
+import TaskList from "@tiptap/extension-task-list";
 import { Markdown } from "@tiptap/markdown";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
@@ -22,16 +24,21 @@ type BlockEditorLabels = {
   slashMenu: {
     empty: string;
     cancel: string;
+    createPage: string;
     text: string;
+    page: string;
     heading1: string;
     heading2: string;
     heading3: string;
+    heading4: string;
     navigate: string;
     bulletList: string;
     orderedList: string;
+    taskList: string;
     select: string;
     blockquote: string;
     codeBlock: string;
+    horizontalRule: string;
     title: string;
   };
 };
@@ -54,6 +61,7 @@ function parseBlockEditorDocument(serialized: string) {
 export function BlockEditor({
   value,
   onChange,
+  onCreatePageRequest,
   placeholder,
   ariaLabel,
   className,
@@ -61,6 +69,7 @@ export function BlockEditor({
 }: {
   value: BlockEditorDocument;
   onChange: (document: BlockEditorDocument) => void;
+  onCreatePageRequest?: (title: string) => void;
   placeholder: string;
   ariaLabel: string;
   className?: string;
@@ -78,13 +87,18 @@ export function BlockEditor({
     [draft],
   );
   const slashCommandExtension = React.useMemo(
-    () => createSlashCommandExtension(labels.slashMenu),
-    [labels.slashMenu],
+    () =>
+      createSlashCommandExtension(labels.slashMenu, {
+        onCreatePageRequest,
+      }),
+    [labels.slashMenu, onCreatePageRequest],
   );
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      StarterKit.configure({ heading: { levels: [1, 2, 3, 4] } }),
+      TaskList,
+      TaskItem.configure({ nested: true }),
       Placeholder.configure({ placeholder }),
       Markdown,
       slashCommandExtension,

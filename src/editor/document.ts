@@ -28,6 +28,7 @@ const blockTypes = new Set([
   "taskItem",
   "blockquote",
   "codeBlock",
+  "horizontalRule",
 ]);
 const inlineTypes = new Set(["text", "hardBreak"]);
 
@@ -84,7 +85,7 @@ function isNode(value: unknown): value is BlockEditorNode {
     return (
       isRecord(value.attrs) &&
       hasOnlyKeys(value.attrs, ["level"]) &&
-      [1, 2, 3].includes(value.attrs.level as number)
+      [1, 2, 3, 4].includes(value.attrs.level as number)
     );
   }
   if (value.type === "taskItem") {
@@ -111,6 +112,9 @@ function isNode(value: unknown): value is BlockEditorNode {
         (value.attrs.language === null ||
           typeof value.attrs.language === "string"))
     );
+  }
+  if (value.type === "horizontalRule") {
+    return value.attrs === undefined && value.content === undefined;
   }
   return value.attrs === undefined;
 }

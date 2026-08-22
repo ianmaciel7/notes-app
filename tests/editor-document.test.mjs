@@ -22,6 +22,16 @@ test("supported Markdown converts to validated JSON and round-trips", () => {
   assert.deepEqual(blockEditorDocumentFromMarkdown(markdown), document);
 });
 
+test("validated documents support Capacities-style heading 4 and horizontal lines", () => {
+  const document = blockEditorDocumentFromMarkdown("#### Detail\n\n---");
+
+  assert.equal(isBlockEditorDocument(document), true);
+  assert.equal(document.doc.content[0].type, "heading");
+  assert.equal(document.doc.content[0].attrs.level, 4);
+  assert.equal(document.doc.content[1].type, "horizontalRule");
+  assert.match(blockEditorDocumentToMarkdown(document), /^#### Detail/m);
+});
+
 test("empty block documents are valid, normalized, and independent", () => {
   const first = createEmptyBlockEditorDocument();
   const second = createEmptyBlockEditorDocument();

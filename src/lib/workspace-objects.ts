@@ -1,9 +1,9 @@
 import {
+  type BlockEditorDocument,
   blockEditorDocumentFromPlainText,
   blockEditorDocumentToPlainText,
   createEmptyBlockEditorDocument,
   normalizeBlockEditorDocument,
-  type BlockEditorDocument,
 } from "../editor/document.ts";
 
 type ObjectTypeId =
@@ -176,6 +176,7 @@ type WorkspaceObjectState = {
 type WorkspaceObjectAction =
   | { type: "beginCreate"; objectTypeId: string }
   | { type: "cancelDraft" }
+  | { type: "createDocument"; objectTypeId: "page"; title: string }
   | {
       type: "importFile";
       fileName: string;
@@ -551,10 +552,7 @@ function importTextWorkspaceObject(
     });
   }
   return createEntity(state, objectTypeId, {
-    body:
-      flow === "document"
-        ? blockEditorDocumentFromPlainText(text)
-        : text,
+    body: flow === "document" ? blockEditorDocumentFromPlainText(text) : text,
     title,
   });
 }
@@ -699,6 +697,12 @@ function workspaceObjectReducer(
 
   if (action.type === "cancelDraft") {
     return { ...state, draft: null, error: null };
+  }
+
+  if (action.type === "createDocument") {
+    const title = action.title.trim();
+    if (!title) return { ...state, error: "required-title" };
+    return createEntity(state, action.objectTypeId, { title });
   }
 
   if (action.type === "importFile") {

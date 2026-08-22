@@ -262,6 +262,7 @@ type WorkspaceContextValue = {
     objectTypeId: string,
     objectTypeLabel?: string,
   ) => void;
+  createWorkspacePage: (title: string) => void;
   importWorkspaceFiles: (objectTypeId: string, files: File[]) => Promise<void>;
   cancelWorkspaceDraft: () => void;
   commitWorkspaceFile: (file: File) => void;
@@ -534,6 +535,14 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [showMessage, t],
   );
 
+  const createWorkspacePage = React.useCallback((title: string) => {
+    dispatchWorkspaceObjects({
+      type: "createDocument",
+      objectTypeId: "page",
+      title,
+    });
+  }, []);
+
   const cancelWorkspaceDraft = React.useCallback(() => {
     dispatchWorkspaceObjects({ type: "cancelDraft" });
   }, []);
@@ -688,6 +697,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setObjectTypeQueries,
       showMessage,
       createWorkspaceEntity,
+      createWorkspacePage,
       importWorkspaceFiles,
       cancelWorkspaceDraft,
       commitWorkspaceFile,
@@ -724,6 +734,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       objectTypeQueries,
       selectEntity,
       createWorkspaceEntity,
+      createWorkspacePage,
       importWorkspaceFiles,
       cancelWorkspaceDraft,
       commitWorkspaceFile,
@@ -1019,8 +1030,16 @@ function MainTabSearchOverlay() {
       icon: ObjectAtomicNoteIcon,
     },
     { id: "page-1", label: "aaaaaaaaaaaaa", icon: ObjectPageIcon },
-    { id: "page", label: t("objectTypeStudio.objectTypes.page"), icon: ObjectPageIcon },
-    { id: "quote", label: t("objectTypeStudio.objectTypes.quote"), icon: ObjectQuoteIcon },
+    {
+      id: "page",
+      label: t("objectTypeStudio.objectTypes.page"),
+      icon: ObjectPageIcon,
+    },
+    {
+      id: "quote",
+      label: t("objectTypeStudio.objectTypes.quote"),
+      icon: ObjectQuoteIcon,
+    },
   ];
   const normalized = query.trim().toLocaleLowerCase();
   const filtered = normalized

@@ -6,19 +6,25 @@ type BlockCommandIcon = ComponentType<BlockCommandIconProps>;
 
 type BlockCommandCatalogLabels = {
   text: string;
+  createPage: string;
+  page: string;
   heading1: string;
   heading2: string;
   heading3: string;
+  heading4: string;
   bulletList: string;
   orderedList: string;
+  taskList: string;
   blockquote: string;
   codeBlock: string;
+  horizontalRule: string;
 };
 
 type BlockCommandCatalogItem = {
   id: string;
   icon: BlockCommandIcon;
   title: string;
+  badge?: string;
   searchTerms: string[];
   execute: (editor: Editor, range: Range) => void;
 };
@@ -75,6 +81,19 @@ function HeadingThreeIcon(props: BlockCommandIconProps) {
   );
 }
 
+function HeadingFourIcon(props: BlockCommandIconProps) {
+  return (
+    <svg
+      viewBox="0 0 256 256"
+      fill="currentColor"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M152 56v120a8 8 0 0 1-16 0v-52H48v52a8 8 0 0 1-16 0V56a8 8 0 0 1 16 0v52h88V56a8 8 0 0 1 16 0m94.7 116.46A8 8 0 0 0 240 168h-8v-56a8 8 0 0 0-14.66-4.44l-40 60A8 8 0 0 0 184 180h32v20a8 8 0 0 0 16 0v-20h8a8 8 0 0 0 6.7-12.46M216 168h-17.05L216 142.42Z" />
+    </svg>
+  );
+}
+
 function BulletListIcon(props: BlockCommandIconProps) {
   return (
     <svg
@@ -97,6 +116,19 @@ function OrderedListIcon(props: BlockCommandIconProps) {
       {...props}
     >
       <path d="M88 64a8 8 0 0 1 8-8h120a8 8 0 0 1 0 16H96a8 8 0 0 1-8-8m128 56H96a8 8 0 0 0 0 16h120a8 8 0 0 0 0-16m0 64H96a8 8 0 0 0 0 16h120a8 8 0 0 0 0-16M43.58 55.16L32 63.89a8 8 0 1 0 9.64 12.78L44 74.89V112a8 8 0 0 0 16 0V64a8 8 0 0 0-12.42-8.84m17.23 100.3A8 8 0 0 0 53.66 152H40a8 8 0 0 0 0 16h2.69l-8.35 9.74A8 8 0 0 0 40.41 192H56a8 8 0 0 0 0-16H49.11l10.48-12.23a8 8 0 0 0 1.22-8.31" />
+    </svg>
+  );
+}
+
+function TaskListIcon(props: BlockCommandIconProps) {
+  return (
+    <svg
+      viewBox="0 0 256 256"
+      fill="currentColor"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M229.66 77.66l-128 128a8 8 0 0 1-11.32 0l-56-56a8 8 0 0 1 11.32-11.32L96 188.69L218.34 66.34a8 8 0 0 1 11.32 11.32M104 80h104a8 8 0 0 0 0-16H104a8 8 0 0 0 0 16m104 40h-72a8 8 0 0 0 0 16h72a8 8 0 0 0 0-16" />
     </svg>
   );
 }
@@ -127,6 +159,19 @@ function CodeBlockIcon(props: BlockCommandIconProps) {
   );
 }
 
+function HorizontalRuleIcon(props: BlockCommandIconProps) {
+  return (
+    <svg
+      viewBox="0 0 256 256"
+      fill="currentColor"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M224 128a8 8 0 0 1-8 8H40a8 8 0 0 1 0-16h176a8 8 0 0 1 8 8" />
+    </svg>
+  );
+}
+
 function runWithDeletedTrigger(
   editor: Editor,
   range: Range,
@@ -143,7 +188,16 @@ function createBlockCommandCatalog(
       id: "text",
       icon: TextBlockIcon,
       title: labels.text,
-      searchTerms: ["text", "texto", "paragraph", "paragrafo", "paragrafo"],
+      searchTerms: [
+        "default",
+        "padrao",
+        "padrão",
+        "text",
+        "texto",
+        "paragraph",
+        "paragrafo",
+        "parágrafo",
+      ],
       execute: (editor, range) =>
         runWithDeletedTrigger(editor, range, (chain) => chain.setParagraph()),
     },
@@ -151,7 +205,16 @@ function createBlockCommandCatalog(
       id: "heading-1",
       icon: HeadingOneIcon,
       title: labels.heading1,
-      searchTerms: ["h1", "heading 1", "title 1", "titulo 1", "titulo 1"],
+      searchTerms: [
+        "h1",
+        "heading 1",
+        "header 1",
+        "cabecalho 1",
+        "cabeçalho 1",
+        "title 1",
+        "titulo 1",
+        "título 1",
+      ],
       execute: (editor, range) =>
         runWithDeletedTrigger(editor, range, (chain) =>
           chain.setHeading({ level: 1 }),
@@ -161,7 +224,16 @@ function createBlockCommandCatalog(
       id: "heading-2",
       icon: HeadingTwoIcon,
       title: labels.heading2,
-      searchTerms: ["h2", "heading 2", "title 2", "titulo 2", "titulo 2"],
+      searchTerms: [
+        "h2",
+        "heading 2",
+        "header 2",
+        "cabecalho 2",
+        "cabeçalho 2",
+        "title 2",
+        "titulo 2",
+        "título 2",
+      ],
       execute: (editor, range) =>
         runWithDeletedTrigger(editor, range, (chain) =>
           chain.setHeading({ level: 2 }),
@@ -171,10 +243,38 @@ function createBlockCommandCatalog(
       id: "heading-3",
       icon: HeadingThreeIcon,
       title: labels.heading3,
-      searchTerms: ["h3", "heading 3", "title 3", "titulo 3", "titulo 3"],
+      searchTerms: [
+        "h3",
+        "heading 3",
+        "header 3",
+        "cabecalho 3",
+        "cabeçalho 3",
+        "title 3",
+        "titulo 3",
+        "título 3",
+      ],
       execute: (editor, range) =>
         runWithDeletedTrigger(editor, range, (chain) =>
           chain.setHeading({ level: 3 }),
+        ),
+    },
+    {
+      id: "heading-4",
+      icon: HeadingFourIcon,
+      title: labels.heading4,
+      searchTerms: [
+        "h4",
+        "heading 4",
+        "header 4",
+        "cabecalho 4",
+        "cabeçalho 4",
+        "title 4",
+        "titulo 4",
+        "título 4",
+      ],
+      execute: (editor, range) =>
+        runWithDeletedTrigger(editor, range, (chain) =>
+          chain.setHeading({ level: 4 }),
         ),
     },
     {
@@ -186,6 +286,7 @@ function createBlockCommandCatalog(
         "bulleted list",
         "unordered list",
         "lista",
+        "lista de marcadores",
         "lista com marcadores",
       ],
       execute: (editor, range) =>
@@ -210,10 +311,35 @@ function createBlockCommandCatalog(
         ),
     },
     {
+      id: "task-list",
+      icon: TaskListIcon,
+      title: labels.taskList,
+      searchTerms: [
+        "task",
+        "tasks",
+        "task list",
+        "todo",
+        "checkbox",
+        "tarefa",
+        "tarefas",
+        "lista de tarefas",
+      ],
+      execute: (editor, range) =>
+        runWithDeletedTrigger(editor, range, (chain) => chain.toggleTaskList()),
+    },
+    {
       id: "blockquote",
       icon: BlockquoteIcon,
       title: labels.blockquote,
-      searchTerms: ["quote", "blockquote", "citacao", "cita", "cita"],
+      searchTerms: [
+        "quote",
+        "blockquote",
+        "block quote",
+        "bloco de citacao",
+        "bloco de citação",
+        "citacao",
+        "citação",
+      ],
       execute: (editor, range) =>
         runWithDeletedTrigger(editor, range, (chain) =>
           chain.toggleBlockquote(),
@@ -223,10 +349,28 @@ function createBlockCommandCatalog(
       id: "code-block",
       icon: CodeBlockIcon,
       title: labels.codeBlock,
-      searchTerms: ["code", "code block", "codigo", "codigo", "fenced code"],
+      searchTerms: ["code", "code block", "codigo", "código", "fenced code"],
       execute: (editor, range) =>
         runWithDeletedTrigger(editor, range, (chain) =>
           chain.toggleCodeBlock(),
+        ),
+    },
+    {
+      id: "horizontal-rule",
+      icon: HorizontalRuleIcon,
+      title: labels.horizontalRule,
+      searchTerms: [
+        "divider",
+        "rule",
+        "horizontal line",
+        "horizontal rule",
+        "linha",
+        "linha horizontal",
+        "separador",
+      ],
+      execute: (editor, range) =>
+        runWithDeletedTrigger(editor, range, (chain) =>
+          chain.setHorizontalRule(),
         ),
     },
   ];

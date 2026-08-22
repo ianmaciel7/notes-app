@@ -574,6 +574,7 @@ function DocumentObjectEditor({
   const Icon = definition.icon;
   const {
     changeWorkspaceEntityType,
+    createWorkspacePage,
     createdEntities,
     deleteWorkspaceEntity,
     duplicateWorkspaceEntity,
@@ -819,23 +820,29 @@ function DocumentObjectEditor({
           placeholder={t("fields.text")}
           value={entity.body}
           onChange={(body) => update({ body })}
+          onCreatePageRequest={createWorkspacePage}
           labels={{
             bold: t("editor.bold"),
             italic: t("editor.italic"),
             code: t("editor.code"),
             slashMenu: {
               cancel: t("editor.slashMenu.cancel"),
+              createPage: t("editor.slashMenu.createPage"),
               empty: t("editor.slashMenu.empty"),
               text: t("editor.slashMenu.text"),
+              page: t("editor.slashMenu.page"),
               heading1: t("editor.slashMenu.heading1"),
               heading2: t("editor.slashMenu.heading2"),
               heading3: t("editor.slashMenu.heading3"),
+              heading4: t("editor.slashMenu.heading4"),
               navigate: t("editor.slashMenu.navigate"),
               bulletList: t("editor.slashMenu.bulletList"),
               orderedList: t("editor.slashMenu.orderedList"),
+              taskList: t("editor.slashMenu.taskList"),
               select: t("editor.slashMenu.select"),
               blockquote: t("editor.slashMenu.blockquote"),
               codeBlock: t("editor.slashMenu.codeBlock"),
+              horizontalRule: t("editor.slashMenu.horizontalRule"),
               title: t("editor.slashMenu.title"),
             },
           }}
@@ -3452,6 +3459,7 @@ function ObjectTypeAllView({
 
 function CitationWorkspace() {
   const t = useTranslations("workspace");
+  const { createWorkspacePage } = useWorkspace();
   const [body, setBody] = React.useState(() =>
     blockEditorDocumentFromMarkdown(""),
   );
@@ -3512,23 +3520,29 @@ function CitationWorkspace() {
           placeholder={t("fields.text")}
           value={body}
           onChange={setBody}
+          onCreatePageRequest={createWorkspacePage}
           labels={{
             bold: t("editor.bold"),
             italic: t("editor.italic"),
             code: t("editor.code"),
             slashMenu: {
               cancel: t("editor.slashMenu.cancel"),
+              createPage: t("editor.slashMenu.createPage"),
               empty: t("editor.slashMenu.empty"),
               text: t("editor.slashMenu.text"),
+              page: t("editor.slashMenu.page"),
               heading1: t("editor.slashMenu.heading1"),
               heading2: t("editor.slashMenu.heading2"),
               heading3: t("editor.slashMenu.heading3"),
+              heading4: t("editor.slashMenu.heading4"),
               navigate: t("editor.slashMenu.navigate"),
               bulletList: t("editor.slashMenu.bulletList"),
               orderedList: t("editor.slashMenu.orderedList"),
+              taskList: t("editor.slashMenu.taskList"),
               select: t("editor.slashMenu.select"),
               blockquote: t("editor.slashMenu.blockquote"),
               codeBlock: t("editor.slashMenu.codeBlock"),
+              horizontalRule: t("editor.slashMenu.horizontalRule"),
               title: t("editor.slashMenu.title"),
             },
           }}

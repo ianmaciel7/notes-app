@@ -151,17 +151,22 @@
       "italic": "Cursiva",
       "slashMenu": {
         "cancel": "para cancelar",
+        "createPage": "Crear",
         "empty": "No hay comandos del editor que coincidan",
         "text": "Texto",
+        "page": "Página",
         "heading1": "Título 1",
         "heading2": "Título 2",
         "heading3": "Título 3",
+        "heading4": "Título 4",
         "navigate": "para navegar",
         "bulletList": "Lista con viñetas",
         "orderedList": "Lista numerada",
+        "taskList": "Tareas",
         "select": "para seleccionar",
         "blockquote": "Cita",
         "codeBlock": "Bloque de código",
+        "horizontalRule": "Línea horizontal",
         "title": "Crear un bloque"
       }
     },

@@ -265,12 +265,32 @@ test("slash menu filters commands, supports keyboard selection, and keeps editor
   });
 
   await editor.click();
-  await editor.pressSequentially("/h");
+  await editor.pressSequentially("/");
 
   const slashMenu = page.locator('[data-slot="block-editor-slash-menu"]');
+  await expect(slashMenu).toHaveCount(1);
   await expect(slashMenu).toBeVisible();
-  await expect(slashMenu).toContainText("Título 1");
-  await expect(slashMenu).toContainText("Título 2");
+  const slashMenuBox = await slashMenu.boundingBox();
+  const workspaceBox = await workspace.boundingBox();
+  expect(slashMenuBox).not.toBeNull();
+  expect(workspaceBox).not.toBeNull();
+  expect(slashMenuBox?.x).toBeGreaterThanOrEqual((workspaceBox?.x ?? 0) - 8);
+  expect(slashMenuBox?.y).toBeGreaterThanOrEqual((workspaceBox?.y ?? 0) - 8);
+  await expect(slashMenu).toContainText("Padrão");
+  await expect(slashMenu).toContainText("Tarefas");
+  await expect(slashMenu).not.toContainText("Novo Página");
+
+  await editor.press("Escape");
+  await expect(slashMenu).toBeHidden();
+  await editor.press("ControlOrMeta+A");
+  await editor.press("Backspace");
+  await editor.pressSequentially("/h");
+
+  await expect(slashMenu).toHaveCount(1);
+  await expect(slashMenu).toBeVisible();
+  await expect(slashMenu).toContainText("Cabeçalho 1");
+  await expect(slashMenu).toContainText("Cabeçalho 2");
+  await expect(slashMenu).toContainText("Cabeçalho 4");
 
   await editor.press("ArrowDown");
   await editor.press("Enter");
@@ -279,14 +299,27 @@ test("slash menu filters commands, supports keyboard selection, and keeps editor
 
   await editor.press("Enter");
   await editor.pressSequentially("/zzz");
+  await expect(slashMenu).toHaveCount(1);
   await expect(slashMenu).toBeVisible();
-  await expect(slashMenu).toContainText(
-    "Nenhum comando do editor corresponde à busca",
-  );
+  await expect(slashMenu).toContainText("Criar 'zzz'");
+  await expect(slashMenu).toContainText("Página");
 
   await editor.press("Escape");
   await expect(slashMenu).toBeHidden();
   await editor.pressSequentially("a");
   await expect(editor).toContainText("/zzza");
+
+  await editor.press("ControlOrMeta+A");
+  await editor.press("Backspace");
+  await editor.pressSequentially("/nova");
+  await expect(slashMenu).toHaveCount(1);
+  await expect(slashMenu).toContainText("Criar 'nova'");
+  await editor.press("Enter");
+  const createdPage = page
+    .locator('[data-slot="created-object-workspace"][data-object-type="page"]')
+    .filter({ visible: true });
+  await expect(
+    createdPage.getByRole("textbox", { name: "Título", exact: true }),
+  ).toHaveText("nova");
   expect(errors).toEqual([]);
 });

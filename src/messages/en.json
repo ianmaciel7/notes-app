@@ -151,17 +151,22 @@
       "italic": "Italic",
       "slashMenu": {
         "cancel": "to cancel",
+        "createPage": "Create",
         "empty": "No matching editor commands",
         "text": "Text",
+        "page": "Page",
         "heading1": "Heading 1",
         "heading2": "Heading 2",
         "heading3": "Heading 3",
+        "heading4": "Heading 4",
         "navigate": "to navigate",
         "bulletList": "Bulleted list",
         "orderedList": "Numbered list",
+        "taskList": "Tasks",
         "select": "to select",
         "blockquote": "Quote",
         "codeBlock": "Code block",
+        "horizontalRule": "Horizontal line",
         "title": "Create a block"
       }
     },
