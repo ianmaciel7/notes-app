@@ -125,12 +125,16 @@ const objectTypeMenuIconPaths = {
 function AppSidebarObjectTypeMenuIcon({
   name,
   className,
+  ...props
 }: {
   name: keyof typeof objectTypeMenuIconPaths
   className?: string
-}) {
+} & React.ComponentPropsWithoutRef<"span">) {
   return (
-    <span className={cn("flex size-3 items-center justify-center", className)}>
+    <span
+      {...props}
+      className={cn("flex size-3 items-center justify-center", className)}
+    >
       <svg
         viewBox="0 0 256 256"
         fill="currentColor"
@@ -605,13 +609,29 @@ function AppSidebarObjectTypeRow({
             type="button"
             aria-label={objectType.label}
             aria-expanded={collectionsOpen}
-            className="inline-flex size-[21px] shrink-0 items-center justify-center rounded-md bg-sidebar-accent text-muted-foreground"
+            className={cn(
+              "relative inline-flex size-[21px] shrink-0 items-center justify-center rounded-md bg-transparent text-muted-foreground",
+              "transition-[background-color,opacity] duration-150 ease-out motion-reduce:transition-none",
+              "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:bg-sidebar-accent focus-visible:text-sidebar-accent-foreground",
+              "focus-visible:[&_[data-slot=app-sidebar-object-type-icon]]:opacity-0 focus-visible:[&_[data-slot=app-sidebar-object-type-chevron]]:opacity-100"
+            )}
             onClick={() => onCollectionsOpenChange(!collectionsOpen)}
           >
+            <span
+              data-slot="app-sidebar-object-type-icon"
+              className="absolute inset-0 flex items-center justify-center opacity-100 transition-opacity duration-150 motion-reduce:transition-none group-hover/object-type-row:opacity-0"
+            >
+              <ObjectIconBadge
+                icon={objectType.icon}
+                tone={objectType.tone}
+                variant="sidebar"
+              />
+            </span>
             <AppSidebarObjectTypeMenuIcon
+              data-slot="app-sidebar-object-type-chevron"
               name="chevronRight"
               className={cn(
-                "size-3 transition-transform duration-150",
+                "size-3 opacity-0 transition-[opacity,transform] duration-150 motion-reduce:transition-none group-hover/object-type-row:opacity-100",
                 collectionsOpen && "rotate-90"
               )}
             />
