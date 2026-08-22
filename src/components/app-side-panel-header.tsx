@@ -8,21 +8,14 @@ import {
   AppHeaderPlusIcon,
   AppHeaderSidebarSimpleIcon,
 } from "@/components/app-header-icons"
-import {
-  AppHeaderTabItem,
-  type AppHeaderTab,
-} from "@/components/app-header-tabs"
+import { AppHeaderTabItem, type AppHeaderTab } from "@/components/app-header-tabs"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 
 const SIDE_TAB_MAX_WIDTH = 160
@@ -149,7 +142,11 @@ const defaultSpecialItems: SideSpecialItem[] = [
   { id: "graphView", label: "Visualização em grafo", icon: AppHeaderGraphIcon },
   { id: "backlinks", label: "Links de entrada", icon: LinkIcon },
   { id: "objectsInside", label: "Objetos internos", icon: CubeIcon },
-  { id: "relatedContent", label: "Conteúdo relacionado", icon: RelatedContentIcon },
+  {
+    id: "relatedContent",
+    label: "Conteúdo relacionado",
+    icon: RelatedContentIcon,
+  },
   { id: "aiAssistantChat", label: "Chat de IA", icon: ChatIcon },
   { id: "localSpaceQuery", label: "Buscar", icon: SearchIcon },
 ]
@@ -213,7 +210,7 @@ function SideHeaderAction({
         "text-sm text-[var(--side-header-text-secondary)] transition-[opacity] duration-200 ease-out",
         "hover:bg-[var(--side-header-bg-front-hover)] hover:text-[var(--side-header-text-primary)]",
         "active:z-20 active:brightness-[0.97] focus:outline-none",
-        className
+        className,
       )}
       style={{ width }}
       onClick={onClick}
@@ -227,11 +224,7 @@ function SideHeaderAction({
   return (
     <Tooltip>
       <TooltipTrigger render={button} />
-      <TooltipContent
-        side={placement}
-        sideOffset={8}
-        className="px-2 py-1.5 text-xs"
-      >
+      <TooltipContent side={placement} sideOffset={8} className="px-2 py-1.5 text-xs">
         {label}
       </TooltipContent>
     </Tooltip>
@@ -276,7 +269,12 @@ function SideTabList({
               onClick={() => onValueChange(tab.id)}
             >
               {Icon && (
-                <span className={cn("inline-flex size-[1.3em] items-center justify-center rounded-[0.33em]", tab.iconClassName)}>
+                <span
+                  className={cn(
+                    "inline-flex size-[1.3em] items-center justify-center rounded-[0.33em]",
+                    tab.iconClassName,
+                  )}
+                >
                   <Icon className="size-[0.94em]" />
                 </span>
               )}
@@ -331,20 +329,12 @@ function AppSidePanelHeader({
 
     const gaps = Math.max(0, count - 1) * SIDE_TAB_GAP
     const available = width - gaps
-    const rawWidth = Math.max(
-      1,
-      Math.floor(Math.min(SIDE_TAB_MAX_WIDTH, available / count))
-    )
+    const rawWidth = Math.max(1, Math.floor(Math.min(SIDE_TAB_MAX_WIDTH, available / count)))
     const cramped = rawWidth < SIDE_TAB_MIN_WIDTH
-    const crampedAvailable = Math.max(
-      1,
-      width - SIDE_TAB_CONTROLS_WIDTH - gaps
-    )
+    const crampedAvailable = Math.max(1, width - SIDE_TAB_CONTROLS_WIDTH - gaps)
 
     return {
-      tabWidth: cramped
-        ? Math.max(1, Math.floor(crampedAvailable / count))
-        : rawWidth,
+      tabWidth: cramped ? Math.max(1, Math.floor(crampedAvailable / count)) : rawWidth,
       cramped,
     }
   }, [tabs.length, width])
@@ -368,7 +358,7 @@ function AppSidePanelHeader({
       data-slot="app-side-panel-header"
       className={cn(
         "flex h-[46px] w-full shrink-0 items-center justify-between bg-[var(--side-header-bg-back)] px-1",
-        className
+        className,
       )}
       style={{ ...sideHeaderTheme, ...style }}
       {...props}
@@ -378,6 +368,8 @@ function AppSidePanelHeader({
           <div className="relative flex min-w-0 w-full items-center justify-start">
             <div
               ref={tabsRef}
+              role="tablist"
+              aria-label="Side panel tabs"
               className="flex w-full min-w-0 items-center overflow-hidden"
               style={{ gap: SIDE_TAB_GAP }}
             >
@@ -389,14 +381,10 @@ function AppSidePanelHeader({
                   data-dnd-item={tab.id}
                   data-sidepanel-tab-active={tab.id === value || undefined}
                   className={cn(
-                    "relative min-w-0 outline-none ring-0",
-                    tabs.length > 1 && "shrink-0"
+                    "relative min-w-0 outline-none ring-0 transition-[width] duration-150 ease-out motion-reduce:transition-none",
+                    tabs.length > 1 && "shrink-0",
                   )}
-                  style={
-                    tabs.length === 1
-                      ? { maxWidth: 400, transition: "width 150ms ease-out" }
-                      : { width: layout.tabWidth, transition: "width 150ms ease-out" }
-                  }
+                  style={tabs.length === 1 ? { maxWidth: 400 } : { width: layout.tabWidth }}
                   onDragStart={(event) => {
                     if (tab.draggable === false) {
                       event.preventDefault()
@@ -434,7 +422,10 @@ function AppSidePanelHeader({
           </div>
 
           {tabs.length > 0 && (
-            <div data-slot="app-side-panel-tab-controls" className="flex shrink-0 items-center gap-1">
+            <div
+              data-slot="app-side-panel-tab-controls"
+              className="flex shrink-0 items-center gap-1"
+            >
               <SideTabList
                 tabs={tabs}
                 value={value}
@@ -442,11 +433,7 @@ function AppSidePanelHeader({
                 onValueChange={onValueChange}
                 onClose={closeTab}
               />
-              <SideHeaderAction
-                label={createLabel}
-                placement="left"
-                onClick={onCreate}
-              >
+              <SideHeaderAction label={createLabel} placement="left" onClick={onCreate}>
                 <AppHeaderPlusIcon />
               </SideHeaderAction>
             </div>
@@ -454,7 +441,10 @@ function AppSidePanelHeader({
         </div>
       </div>
 
-      <div data-slot="app-side-panel-shell-controls" className="ml-1 flex shrink-0 items-center gap-x-1">
+      <div
+        data-slot="app-side-panel-shell-controls"
+        className="ml-1 flex shrink-0 items-center gap-x-1"
+      >
         <div className="flex items-center">
           <SideHeaderAction
             label={hideLabel}
@@ -476,12 +466,7 @@ function AppSidePanelHeader({
                 </button>
               }
             />
-            <DropdownMenuContent
-              side="bottom"
-              align="end"
-              sideOffset={6}
-              className="w-64 p-1.5"
-            >
+            <DropdownMenuContent side="bottom" align="end" sideOffset={6} className="w-64 p-1.5">
               {defaultSpecialItems.map((item) => {
                 const Icon = item.icon
                 return (
@@ -503,8 +488,4 @@ function AppSidePanelHeader({
   )
 }
 
-export {
-  AppSidePanelHeader,
-  type AppSidePanelHeaderProps,
-  type SidePanelSpecialEntryId,
-}
+export { AppSidePanelHeader, type AppSidePanelHeaderProps, type SidePanelSpecialEntryId }

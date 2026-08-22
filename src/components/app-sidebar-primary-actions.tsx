@@ -83,7 +83,7 @@ function NewContentMenu({
   onSelectObjectType,
 }: {
   action: AppSidebarPrimaryAction;
-  onSelectObjectType?: (objectTypeId: string) => void;
+  onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
 }) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
@@ -110,7 +110,10 @@ function NewContentMenu({
   }
 
   function selectItem(objectTypeId: string) {
-    onSelectObjectType?.(objectTypeId);
+    const selectedItem = newContentItems.find(
+      (item) => item.objectTypeId === objectTypeId,
+    );
+    onSelectObjectType?.(objectTypeId, selectedItem?.label);
     setOpen(false);
     resetMenu();
   }
@@ -276,7 +279,7 @@ type AppSidebarPrimaryAction = {
 type AppSidebarPrimaryActionsProps = {
   activeAction?: AppSidebarPrimaryNavigationAction;
   onAction?: (action: AppSidebarPrimaryActionId) => void;
-  onSelectObjectType?: (objectTypeId: string) => void;
+  onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
   actions?: AppSidebarPrimaryAction[];
   className?: string;
 };
@@ -417,7 +420,7 @@ function AppSidebarPrimaryActionItem({
   action: AppSidebarPrimaryAction;
   active: boolean;
   onAction?: (action: AppSidebarPrimaryActionId) => void;
-  onSelectObjectType?: (objectTypeId: string) => void;
+  onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
 }) {
   const isMobile = useIsMobile();
   const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);

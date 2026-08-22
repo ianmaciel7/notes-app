@@ -15,17 +15,17 @@
 - [x] 3.1 Refine `AppShell` default/bounded proportions, surface margins/radii, resize handles, and collapse/expand transitions while preserving its public API and mobile Sheets.
 - [x] 3.2 Refine main and side-panel header tab geometry, labels, actions, overflow, hover/focus, and close behavior by selectively porting only confirmed donor details.
 - [x] 3.3 Refine sidebar composition-level spacing, selected state, menus, hover/focus affordances, footer controls, and icons without globally restyling `src/components/ui/*`.
-- [ ] 3.4 Add or update focused tests for deterministic target content, semantic/ARIA contracts, tab and panel operations, and responsive/collapse behavior.
+- [x] 3.4 Add or update focused tests for deterministic target content, semantic/ARIA contracts, tab and panel operations, and responsive/collapse behavior.
 
 ## 4. Visual Fidelity Loop
 
 - [x] 4.1 Run visual iteration 1 across the full rubric, record `PASS`/`FAIL` evidence by dimension, and fix the highest-impact root cause.
 - [x] 4.2 Run visual iterations 2–5 as needed, re-planning any failure class that recurs twice and documenting every remaining mismatch at the stop condition.
-- [ ] 4.3 Verify desktop 1440×900, 1280×800, 1024×768 and supported mobile states, including sidebar/context open and collapsed, resize, multiple tabs/overflow, menus/tooltips, hover/focus/active, reduced motion, and keyboard access.
+- [x] 4.3 Verify desktop 1440×900, 1280×800, 1024×768 and supported mobile states, including sidebar/context open and collapsed, resize, multiple tabs/overflow, menus/tooltips, hover/focus/active, reduced motion, and keyboard access.
 
 ## 5. Final Verification and Spec Completion
 
-- [ ] 5.1 Run focused formatting/lint/tests during implementation, then complete `pnpm typecheck` and `pnpm verify` with precise evidence for any proven pre-existing failure.
-- [ ] 5.2 Run `openspec-verify-change`, obtain an independent fresh-context review of changed files and target evidence, and feed concrete failures back into the fidelity loop.
+- [x] 5.1 Run focused formatting/lint/tests during implementation, then complete `pnpm typecheck` and `pnpm verify` with precise evidence for any proven pre-existing failure.
+- [x] 5.2 Run `openspec-verify-change`, obtain an independent fresh-context review of changed files and target evidence, and feed concrete failures back into the fidelity loop.
 - [ ] 5.3 Sync the finalized delta spec, run strict change/spec validation, and archive the change only after implementation, visual acceptance, regressions, and verification pass.
-- [ ] 5.4 Run the repository-supported Graphify status/incremental workflow, report the known unsupported `graphify status` script behavior if unchanged, and confirm no unrelated dirty-tree files were staged or overwritten.
+- [x] 5.4 Run the repository-supported Graphify status/incremental workflow, report the known unsupported `graphify status` script behavior if unchanged, and confirm no unrelated dirty-tree files were staged or overwritten.

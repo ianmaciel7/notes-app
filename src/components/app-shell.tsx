@@ -34,7 +34,7 @@ const appShellPanelGroupVariants = cva("h-full w-full", {
     resizing: {
       true: "[&>[data-panel]]:transition-none",
       false:
-        "[&>[data-panel]]:transition-[flex-grow] [&>[data-panel]]:duration-300 [&>[data-panel]]:ease-in-out",
+        "[&>[data-panel]]:transition-[flex-grow] [&>[data-panel]]:duration-300 [&>[data-panel]]:ease-in-out motion-reduce:[&>[data-panel]]:transition-none",
     },
   },
   defaultVariants: {
@@ -343,7 +343,7 @@ function AppShellSidePanel({
         onResize?.(size, id, previousSize);
       }}
       className={cn(
-        "flex h-full min-w-0 flex-col overflow-hidden bg-sidebar transition-opacity duration-300 ease-in-out",
+        "flex h-full min-w-0 flex-col overflow-hidden bg-sidebar transition-opacity duration-300 ease-in-out motion-reduce:transition-none",
         rightCollapsed && "opacity-0",
         className,
       )}
@@ -429,7 +429,7 @@ function AppShellResizeHandle({
       data-side={side}
       disabled={collapsed}
       className={cn(
-        "group !w-0 !bg-transparent after:!w-3 after:!bg-transparent before:pointer-events-none before:absolute before:inset-y-1 before:left-1/2 before:w-0.5 before:-translate-x-1/2 before:rounded-full before:bg-border before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-60 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0",
+        "group !w-0 !bg-transparent after:!w-3 after:!bg-transparent before:pointer-events-none before:absolute before:inset-y-1 before:left-1/2 before:w-0.5 before:-translate-x-1/2 before:rounded-full before:bg-border before:opacity-0 before:transition-opacity before:duration-500 motion-reduce:before:transition-none hover:before:opacity-60 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0",
         collapsed && "pointer-events-none before:opacity-0",
         className,
       )}
@@ -554,7 +554,11 @@ function AppShellMobileSidebar({
       </SheetTrigger>
       <SheetContent
         side="left"
-        className={cn("w-3/4 bg-sidebar p-0", className)}
+        overlayClassName="motion-reduce:transition-none"
+        className={cn(
+          "w-3/4 bg-sidebar p-0 motion-reduce:transition-none",
+          className,
+        )}
         {...props}
       >
         <SheetHeader className="sr-only">
@@ -589,7 +593,11 @@ function AppShellMobileSidePanel({
       </SheetTrigger>
       <SheetContent
         side="right"
-        className={cn("w-3/4 bg-sidebar p-2.5", className)}
+        overlayClassName="motion-reduce:transition-none"
+        className={cn(
+          "w-3/4 bg-sidebar p-2.5 motion-reduce:transition-none",
+          className,
+        )}
         {...props}
       >
         <SheetHeader className="sr-only">

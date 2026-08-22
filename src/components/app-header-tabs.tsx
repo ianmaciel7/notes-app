@@ -9,11 +9,7 @@ import {
   AppHeaderPushPinFillIcon,
   AppHeaderPushPinIcon,
 } from "@/components/app-header-icons"
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card"
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
@@ -129,12 +125,7 @@ function useElementWidth<T extends HTMLElement>() {
   return [ref, width] as const
 }
 
-function moveTab(
-  tabs: AppHeaderTab[],
-  sourceId: string,
-  targetId: string,
-  position: DropPosition
-) {
+function moveTab(tabs: AppHeaderTab[], sourceId: string, targetId: string, position: DropPosition) {
   if (sourceId === targetId) return tabs
 
   const sourceIndex = tabs.findIndex((tab) => tab.id === sourceId)
@@ -162,19 +153,11 @@ function getMainLayout(width: number, count: number): HeaderTabLayout {
   const initialWidth =
     initialAvailable <= 0
       ? 1
-      : Math.max(
-          1,
-          Math.floor(Math.min(MAIN_TAB_MAX_WIDTH, initialAvailable / count))
-        )
+      : Math.max(1, Math.floor(Math.min(MAIN_TAB_MAX_WIDTH, initialAvailable / count)))
   const cramped = initialWidth < MAIN_TAB_MAX_WIDTH - 1
   const available = cramped ? width - gaps : initialAvailable
   const tabWidth =
-    available <= 0
-      ? 1
-      : Math.max(
-          1,
-          Math.floor(Math.min(MAIN_TAB_MAX_WIDTH, available / count))
-        )
+    available <= 0 ? 1 : Math.max(1, Math.floor(Math.min(MAIN_TAB_MAX_WIDTH, available / count)))
 
   if (tabWidth >= MAIN_TAB_MIN_WIDTH) {
     return { tabWidth, cramped, maxVisible: count }
@@ -182,7 +165,7 @@ function getMainLayout(width: number, count: number): HeaderTabLayout {
 
   const maxVisible = Math.max(
     1,
-    Math.floor((width + MAIN_TAB_GAP) / (MAIN_TAB_MIN_WIDTH + MAIN_TAB_GAP))
+    Math.floor((width + MAIN_TAB_GAP) / (MAIN_TAB_MIN_WIDTH + MAIN_TAB_GAP)),
   )
 
   return {
@@ -196,7 +179,10 @@ function getVisibleRange(tabs: AppHeaderTab[], value: string, maxVisible: number
   const count = tabs.length
   if (!count || maxVisible >= count) return { start: 0, end: count }
 
-  const activeIndex = Math.max(0, tabs.findIndex((tab) => tab.id === value))
+  const activeIndex = Math.max(
+    0,
+    tabs.findIndex((tab) => tab.id === value),
+  )
   let start = activeIndex >= maxVisible ? activeIndex - maxVisible + 1 : 0
   start = Math.min(start, Math.max(0, count - maxVisible))
 
@@ -212,8 +198,7 @@ function AppHeaderTabIcon({ tab }: { tab: AppHeaderTab }) {
       data-slot="app-header-tab-icon"
       className={cn(
         "inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 grow-0 items-center justify-center rounded-[0.33em]",
-        tab.iconClassName ??
-          "bg-[oklch(0.9766_0.0016_67.01)] text-[oklch(0.4289_0.0021_324.71)]"
+        tab.iconClassName ?? "bg-[oklch(0.9766_0.0016_67.01)] text-[oklch(0.4289_0.0021_324.71)]",
       )}
     >
       <span
@@ -248,7 +233,7 @@ function AppHeaderTabAction({
         "text-xs text-[var(--app-tab-text-subtle)] transition-[opacity] duration-200 ease-out",
         "hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)]",
         "active:z-20 active:brightness-[0.97] focus:outline-none",
-        className
+        className,
       )}
       onClick={onClick}
     >
@@ -257,6 +242,35 @@ function AppHeaderTabAction({
       </span>
     </button>
   )
+}
+
+const tabNavigationKeys = new Set(["ArrowLeft", "ArrowRight", "Home", "End"])
+
+function getNextTabFocusIndex(key: string, currentIndex: number, count: number) {
+  if (key === "Home") return 0
+  if (key === "End") return count - 1
+  const direction = key === "ArrowRight" ? 1 : -1
+  return (currentIndex + direction + count) % count
+}
+
+function handleTabKeyDown(event: React.KeyboardEvent<HTMLElement>, onOpen?: () => void) {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault()
+    onOpen?.()
+    return
+  }
+
+  if (!tabNavigationKeys.has(event.key)) return
+  const tabList = event.currentTarget.closest('[role="tablist"]')
+  if (!tabList) return
+  const tabs = Array.from(tabList.querySelectorAll<HTMLElement>('[role="tab"]')).filter(
+    (candidate) => candidate.getClientRects().length > 0,
+  )
+  const currentIndex = tabs.indexOf(event.currentTarget)
+  if (currentIndex < 0 || tabs.length < 2) return
+
+  event.preventDefault()
+  tabs[getNextTabFocusIndex(event.key, currentIndex, tabs.length)]?.focus()
 }
 
 function AppHeaderTabItem({
@@ -331,7 +345,7 @@ function AppHeaderTabItem({
       className={cn(
         "group/tab pointer-events-auto relative min-w-0 max-w-full rounded-md",
         fitContent ? "inline-flex" : "w-full",
-        className
+        className,
       )}
       style={{ ...appHeaderTabTheme, ...style }}
       onPointerEnter={(event) => {
@@ -350,7 +364,7 @@ function AppHeaderTabItem({
           aria-selected={active}
           tabIndex={active ? 0 : -1}
           className={cn(
-            "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] rounded-[8px] border-[0.5px] py-[3px] pl-[6px] pr-px text-[13px] leading-[1.3] outline-none ring-0 transition duration-150 ease-out",
+            "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] rounded-[8px] border-[0.5px] py-[3px] pl-[6px] pr-px text-[13px] leading-[1.3] outline-none ring-0 transition duration-150 ease-out motion-reduce:transition-none",
             fitContent ? "w-auto" : "w-full",
             neutral && "border-transparent text-[var(--app-tab-text-primary)]",
             !neutral &&
@@ -359,12 +373,13 @@ function AppHeaderTabItem({
             !neutral &&
               !active &&
               "border-transparent text-[var(--app-tab-text-subtle)] hover:bg-[var(--app-tab-bg-back-hover)] hover:text-[var(--app-tab-text-secondary)]",
-            dragging && "cursor-grabbing opacity-40"
+            dragging && "cursor-grabbing opacity-40",
           )}
           onClick={(event) => {
             if (event.shiftKey) onShiftOpen?.()
             else onOpen?.()
           }}
+          onKeyDown={(event) => handleTabKeyDown(event, onOpen)}
           onDoubleClick={(event) => {
             event.preventDefault()
             event.stopPropagation()
@@ -381,21 +396,19 @@ function AppHeaderTabItem({
               <div
                 className={cn(
                   "flex h-full items-center transition-opacity duration-100 ease-out",
-                  keepActionRegionVisible
-                    ? "opacity-100"
-                    : "opacity-0 group-hover/tab:opacity-100"
+                  keepActionRegionVisible ? "opacity-100" : "opacity-0 group-hover/tab:opacity-100",
                 )}
               >
                 <div
                   className={cn(
                     "pointer-events-none h-full w-5 bg-linear-to-r from-transparent",
-                    actionGradient
+                    actionGradient,
                   )}
                 />
                 <div
                   className={cn(
                     "pointer-events-auto flex h-full items-center rounded-r-lg pr-[2px]",
-                    actionBackground
+                    actionBackground,
                   )}
                 >
                   {pinnable && onTogglePin && (
@@ -438,7 +451,7 @@ function AppHeaderTabItem({
                   "transition-opacity duration-100 ease-out",
                   tab.pinned
                     ? "opacity-100"
-                    : "pointer-events-none opacity-0 group-hover/tab:pointer-events-auto group-hover/tab:opacity-100"
+                    : "pointer-events-none opacity-0 group-hover/tab:pointer-events-auto group-hover/tab:opacity-100",
                 )}
                 onClick={(event) => {
                   event.preventDefault()
@@ -464,12 +477,7 @@ function AppHeaderTabItem({
   return (
     <HoverCard open={previewOpen}>
       <HoverCardTrigger render={<div className="min-w-0" />}>{tabNode}</HoverCardTrigger>
-      <HoverCardContent
-        side="bottom"
-        align="center"
-        sideOffset={8}
-        className="w-64"
-      >
+      <HoverCardContent side="bottom" align="center" sideOffset={8} className="w-64">
         {tab.preview}
       </HoverCardContent>
     </HoverCard>
@@ -524,7 +532,7 @@ function AppHeaderTabList({
                 className={cn(
                   "group/list flex h-9 items-center gap-1 rounded-md px-1",
                   "hover:bg-[var(--app-tab-bg-back-hover)]",
-                  tab.id === value && "bg-[var(--app-tab-bg-back-hover)]"
+                  tab.id === value && "bg-[var(--app-tab-bg-back-hover)]",
                 )}
               >
                 <button
@@ -537,7 +545,9 @@ function AppHeaderTabList({
                 >
                   <AppHeaderTabIcon tab={tab} />
                   <span className="min-w-0 flex-1 truncate">{tab.label}</span>
-                  {tab.pinned && <AppHeaderPushPinFillIcon className="size-3 text-[var(--app-tab-text-subtle)]" />}
+                  {tab.pinned && (
+                    <AppHeaderPushPinFillIcon className="size-3 text-[var(--app-tab-text-subtle)]" />
+                  )}
                 </button>
                 {tabs.length > 1 && (
                   <button
@@ -579,11 +589,13 @@ function HeaderControlButton({
         "text-sm text-[var(--app-tab-text-secondary)] transition-[opacity] duration-200 ease-out",
         "hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)]",
         "active:z-20 active:brightness-[0.97] focus:outline-none",
-        className
+        className,
       )}
       onClick={onClick}
     >
-      <span className="inline-flex size-4 items-center justify-center [&>svg]:size-full">{children}</span>
+      <span className="inline-flex size-4 items-center justify-center [&>svg]:size-full">
+        {children}
+      </span>
     </button>
   )
 }
@@ -614,7 +626,7 @@ function AppSpaceHeader({
   const layout = React.useMemo(() => getMainLayout(width, tabs.length), [tabs.length, width])
   const range = React.useMemo(
     () => getVisibleRange(tabs, value, layout.maxVisible),
-    [layout.maxVisible, tabs, value]
+    [layout.maxVisible, tabs, value],
   )
   const visibleTabs = tabs.slice(range.start, range.end)
   const hasHiddenTabs = layout.maxVisible > 0 && layout.maxVisible < tabs.length
@@ -622,9 +634,7 @@ function AppSpaceHeader({
 
   function togglePin(tab: AppHeaderTab) {
     onTabsChange(
-      tabs.map((item) =>
-        item.id === tab.id ? { ...item, pinned: !item.pinned } : item
-      )
+      tabs.map((item) => (item.id === tab.id ? { ...item, pinned: !item.pinned } : item)),
     )
   }
 
@@ -647,7 +657,7 @@ function AppSpaceHeader({
       data-slot="app-space-header"
       className={cn(
         "sticky top-0 z-[41] flex min-w-0 flex-1 select-none items-center justify-between bg-[var(--app-tab-bg-back)]",
-        className
+        className,
       )}
       style={{ ...appHeaderTabTheme, ...style }}
       {...props}
@@ -657,7 +667,12 @@ function AppSpaceHeader({
         data-slot="app-space-header-viewport"
         className="flex w-0 min-w-0 grow cursor-default items-center overflow-hidden px-1 [contain:layout_style_paint]"
       >
-        <div className="flex w-full min-w-0 items-center" style={{ gap: MAIN_TAB_GAP }}>
+        <div
+          role="tablist"
+          aria-label="Workspace tabs"
+          className="flex w-full min-w-0 items-center"
+          style={{ gap: MAIN_TAB_GAP }}
+        >
           {visibleTabs.map((tab, localIndex) => {
             const active = tab.id === value
             const before = dropTarget?.id === tab.id && dropTarget.position === "before"
@@ -672,12 +687,11 @@ function AppSpaceHeader({
                   data-slot="app-space-header-tab-wrapper"
                   data-tab-id={tab.id}
                   data-tab-active={active || undefined}
-                  className={cn("relative min-w-0", tabs.length > 1 && "shrink-0")}
-                  style={
-                    tabs.length === 1
-                      ? { maxWidth: 500, transition: "width 150ms ease-out" }
-                      : { width: layout.tabWidth, transition: "width 150ms ease-out" }
-                  }
+                  className={cn(
+                    "relative min-w-0 transition-[width] duration-150 ease-out motion-reduce:transition-none",
+                    tabs.length > 1 && "shrink-0",
+                  )}
+                  style={tabs.length === 1 ? { maxWidth: 500 } : { width: layout.tabWidth }}
                   onDragStart={(event) => {
                     if (tab.draggable === false) {
                       event.preventDefault()
@@ -692,8 +706,7 @@ function AppSpaceHeader({
                     const rect = event.currentTarget.getBoundingClientRect()
                     setDropTarget({
                       id: tab.id,
-                      position:
-                        event.clientX < rect.left + rect.width / 2 ? "before" : "after",
+                      position: event.clientX < rect.left + rect.width / 2 ? "before" : "after",
                     })
                   }}
                   onDrop={(event) => {
@@ -705,8 +718,8 @@ function AppSpaceHeader({
                           tabs,
                           sourceId,
                           tab.id,
-                          dropTarget?.id === tab.id ? dropTarget.position : "after"
-                        )
+                          dropTarget?.id === tab.id ? dropTarget.position : "after",
+                        ),
                       )
                     }
                     setDraggingId(null)
@@ -789,22 +802,21 @@ function AppSidePanelHeader({
 
   const layout = React.useMemo<HeaderTabLayout>(() => {
     if (!tabs.length || width <= 0) {
-      return { tabWidth: SIDE_TAB_MAX_WIDTH, cramped: false, maxVisible: tabs.length }
+      return {
+        tabWidth: SIDE_TAB_MAX_WIDTH,
+        cramped: false,
+        maxVisible: tabs.length,
+      }
     }
 
     const gaps = Math.max(0, tabs.length - 1) * SIDE_TAB_GAP
     const available = width - gaps
-    const rawWidth = Math.max(
-      1,
-      Math.floor(Math.min(SIDE_TAB_MAX_WIDTH, available / tabs.length))
-    )
+    const rawWidth = Math.max(1, Math.floor(Math.min(SIDE_TAB_MAX_WIDTH, available / tabs.length)))
     const cramped = rawWidth < SIDE_TAB_MIN_WIDTH
     const crampedAvailable = Math.max(1, width - SIDE_TAB_CONTROLS_WIDTH - gaps)
 
     return {
-      tabWidth: cramped
-        ? Math.max(1, Math.floor(crampedAvailable / tabs.length))
-        : rawWidth,
+      tabWidth: cramped ? Math.max(1, Math.floor(crampedAvailable / tabs.length)) : rawWidth,
       cramped,
       maxVisible: tabs.length,
     }
@@ -829,23 +841,31 @@ function AppSidePanelHeader({
       data-slot="app-side-panel-header"
       className={cn(
         "flex h-[46px] shrink-0 items-center justify-between bg-[var(--app-tab-bg-back)] px-1",
-        className
+        className,
       )}
       style={{ ...appHeaderTabTheme, ...style }}
       {...props}
     >
       <div className="flex min-w-0 grow flex-col items-center justify-center gap-1">
         <div className="grid w-full grid-cols-[minmax(0,1fr)_fit-content(100%)] items-center gap-1">
-          <div ref={tabsRef} className="relative flex min-w-0 w-full items-center justify-start overflow-hidden">
-            <div className="flex min-w-0 items-center" style={{ gap: SIDE_TAB_GAP }}>
+          <div
+            ref={tabsRef}
+            className="relative flex min-w-0 w-full items-center justify-start overflow-hidden"
+          >
+            <div
+              role="tablist"
+              aria-label="Side panel tabs"
+              className="flex min-w-0 items-center"
+              style={{ gap: SIDE_TAB_GAP }}
+            >
               {tabs.map((tab) => (
                 <div
                   key={tab.id}
                   draggable={tab.draggable !== false}
                   data-slot="app-side-panel-tab-wrapper"
                   data-sidepanel-tab-active={tab.id === value || undefined}
-                  className="relative min-w-0 shrink-0 outline-none ring-0"
-                  style={{ width: layout.tabWidth, transition: "width 150ms ease-out" }}
+                  className="relative min-w-0 shrink-0 outline-none ring-0 transition-[width] duration-150 ease-out motion-reduce:transition-none"
+                  style={{ width: layout.tabWidth }}
                   onDragStart={(event) => {
                     if (tab.draggable === false) {
                       event.preventDefault()
@@ -897,7 +917,10 @@ function AppSidePanelHeader({
         </div>
       </div>
 
-      <div data-slot="app-side-panel-shell-controls" className="ml-1 flex shrink-0 items-center gap-x-1">
+      <div
+        data-slot="app-side-panel-shell-controls"
+        className="ml-1 flex shrink-0 items-center gap-x-1"
+      >
         <div aria-hidden="true" className="w-7 shrink-0" />
         <button
           type="button"

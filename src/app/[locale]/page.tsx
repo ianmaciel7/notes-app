@@ -59,7 +59,12 @@ export default function HomePage() {
             <AppShellMobileSidebar>
               <WorkspaceSidebar />
             </AppShellMobileSidebar>
-            <AppShellMobileSidePanel />
+            <AppShellMobileSidePanel className="flex flex-col p-0">
+              <WorkspaceSidePanelHeader />
+              <AppShellSurface side="side-panel">
+                <ExploreWorkspace />
+              </AppShellSurface>
+            </AppShellMobileSidePanel>
           </AppShellHeader>
           <AppShellSurface>
             <AtomicNotesWorkspace />

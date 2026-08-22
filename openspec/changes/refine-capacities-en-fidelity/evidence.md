@@ -45,8 +45,8 @@ The corpus is complete for the captured HTML/CSS/JavaScript/JSON UI resources, a
 
 ## Baseline visual assets
 
-- `capacities-reference-1440x900.png`: accepted authenticated state captured at its actual 1294x912 viewport.
-- `notes-app-before-1440x900.png`: initial local state with empty surfaces and unrelated tabs.
+- The historical `capacities-reference-1440x900.png` and `notes-app-before-1440x900.png` filenames were referenced by the earlier audit but are not retained in this worktree, so they are not used as final proof.
+- Current retained browser checkpoints are listed in the responsive completion section below.
 - Transient Capacities "view not ready" reload states are not accepted as the canonical target.
 
 ## Header-tab regression correction
@@ -56,7 +56,7 @@ The corpus is complete for the captured HTML/CSS/JavaScript/JSON UI resources, a
 - Corrected local behavior: the add action creates one reusable `Nova aba` draft and opens a search dialog; repeated add actions do not accumulate drafts, Escape cancels the draft, and selecting an item replaces the draft with a deduplicated tab whose label also drives the main heading.
 - At 1294x912, three selected tabs remained usable at the 96px minimum and the tab-list affordance remained available. The document reported `scrollWidth === clientWidth === 1294`.
 - At 390x844, the desktop shell was hidden, the mobile shell remained usable, and the document reported `scrollWidth === clientWidth === 390` with no fresh console errors.
-- The browser backend returned 1280x720 when asked for 1024x768, so exact 1024px desktop fidelity is not claimed and task 4.3 remains open.
+- A later explicit viewport override rendered the exact 1024x768 checkpoint with zero overflow, superseding the earlier backend limitation and closing task 4.3.
 
 ## Latest authenticated citation target
 
@@ -69,3 +69,60 @@ The corpus is complete for the captured HTML/CSS/JavaScript/JSON UI resources, a
 - The space switcher is x=152, y=45, w=300.5, h=476 with a 12px radius and `Criar espaço` footer. The prior local switcher was x=148, y=13, w=288, h=299 with an 8px radius and English labels.
 - `artifacts/capacities-reference/visual-contract-2026-08-22.json` stores sanitized asset URLs, computed tokens, geometry, and visible labels. It intentionally excludes cookies, authentication state, full HTML, and proprietary CSS/JavaScript source.
 - `artifacts/capacities-reference/capacities-wacz-visual-contract.json` stores the reproducible captured-source color/radius/shadow contract and supersedes guessed icon-tone hex values.
+
+## New-content palette parity and ephemeral creation
+
+- PASS at 1294x912: the local palette measures x=14, y=77, 354x363 externally and uses `box-sizing: content-box`; its search starts at x=30/y=84 with 322x32 input content, the list is 352x288, options are 32px tall with 8px radii, badges are 22x22 with 6.65px radii, and the footer is 344x29 at y=410.
+- PASS: computed border is the captured `oklch(0.9163 0.0017 67.07)` token and the three-layer shadow matches the authenticated target. Tailwind represents the requested badge hairline as `[border-width:0.5px]`; Chromium at devicePixelRatio 1 reports the rasterized used width as 1px.
+- PASS: typing `citacao` produces only `Citação`, preserves focus in the combobox, and updates `aria-activedescendant`. Escape closes and clears the palette; reopening restores all 13 options and the atomic-note active item. ArrowUp from the first item wraps to Query.
+- PASS: Enter on Query creates and activates a generic `Sem título` editor. Three repeated Query creations remain as three distinct tabs in addition to the initial untitled citation tab, proving sequential IDs do not collide. Creating Citação opens the existing citation editor; returning to the Citações object-type surface shows its count incremented from 1 to 2.
+- PASS: the object-type studio referenced by the latest browser comment remains 1152x784 at 1294x912, centered at x=71/y=64, with zero document horizontal overflow.
+- PASS: `node --test tests/ci-baseline.test.mjs` reports 13/13 passing structural contract tests, and `tsc --noEmit` exits 0.
+- PARTIAL: focused Biome lint reports no new diagnostics in the palette/create path, but the touched files retain proven pre-existing diagnostics (array-index keys, import-type style, existing overlay accessibility, and existing non-null assertions). Exact 1440x900, 1280x800, 1024x768, and mobile viewport evidence remains required before task 4.3 can close.
+
+## Final verification checkpoint
+
+- PASS: `pnpm typecheck`, `pnpm test`, `pnpm typegen`, `pnpm test:coverage`, and strict `openspec validate refine-capacities-en-fidelity --strict` complete successfully. Coverage reports 100% for the structural CI contract.
+- BLOCKED (pre-existing worktree state): `pnpm verify` stops at `format:check` because committed `package.json` and `biome.json` use CRLF while Biome requires LF. Running the later steps independently confirms existing repository-wide lint and complexity failures; the production build compiles but type checking then fails because `AppSidebarCopyIcon` is referenced without a matching symbol in `app-sidebar-overview.tsx`.
+- PASS with documented compatibility fallback: `pnpm graphify:status` still invokes unsupported `graphify status` on Graphify 0.9.41 and exits 1. The supported `graphify update .` workflow exits 0 and refreshes the code graph to 2,541 nodes, 3,367 edges, and 231 communities; it reports 11 non-code/config sources with zero nodes and recommends relabeling because the community set changed.
+- PASS: `git diff --cached --name-only` is empty. Graphify changed only its existing generated `GRAPH_REPORT.md`, `graph.json`, and `manifest.json`; no unrelated file was staged or overwritten by this verification step.
+
+## Responsive and interaction completion
+
+- PASS: explicit browser viewport overrides rendered the desktop shell at 1440×900, 1280×800, and 1024×768 with exact requested `innerWidth`/`innerHeight` and zero document overflow on both axes. The measured main/context surfaces remained bounded at every checkpoint.
+- PASS: at 1024×768 the left sidebar and right contextual panel each collapsed to 0px, exposed their corresponding reopen controls, and restored without document overflow. Pointer-dragging the contextual resize handle changed its width from 446.4px to 486.4px while preserving zero overflow.
+- PASS: repeated ephemeral Query creation produced five visible 64px main tabs plus the localized `Lista de abas` overflow control; the document remained bounded. The `Novo` combobox retained focus, localized filtering, circular ArrowUp navigation, Enter creation, and Escape reset behavior.
+- PASS: at 390×844 the desktop shell was hidden, the 390×844 mobile shell had zero overflow, and both Sheet triggers were usable. The navigation Sheet contained the complete workspace sidebar. The contextual Sheet initially exposed only its hidden title/description; `src/app/[locale]/page.tsx` now composes `WorkspaceSidePanelHeader` and the six-action `ExploreWorkspace` surface into it, and the rendered dialog confirms that content is present.
+- PASS: the object-type action menu opens from its hover-revealed trigger with keyboard/ARIA menu semantics. Reduced-motion emulation reports `matchMedia('(prefers-reduced-motion: reduce)') === true` and `transition-property: none` for visible tabs and resizable panels after component-owned `motion-reduce:transition-none` rules were added.
+- PASS: hovering `Buscar` renders its shortcut help card; keyboard focus on `Novo` reports `:focus-visible === true`. Main tabs now use named `tablist` containers, Enter/Space activation, and ArrowLeft/ArrowRight/Home/End roving focus. Browser verification moved focus visibly from active `Sem título` to inactive `Páginas` with ArrowLeft and activated `Páginas` with Enter.
+- PASS: reduced-motion emulation at 390×844 reports `transition-property: none` on both the contextual Sheet popup and overlay while retaining all six Explore actions. The Sheet primitive exposes an additive `overlayClassName` hook so the behavior stays owned by the mobile AppShell composition.
+- PASS after concurrent integration: the shared `compact-menu` helper remains in use, while composition-level overrides restore the `Novo` popup to x=14/y=77, 354×363 externally, `content-box`, 12px radius, 32px search, 288px list, 32px options, and 29px footer.
+- PASS: retained browser checkpoints now exist at `artifacts/browser-validation/refine-capacities-en-fidelity/desktop-1440x900.png`, `desktop-1280x800.png`, `desktop-1024x768.png`, and `mobile-390x844-side-panel.png`.
+
+## Verification completion with baseline blockers
+
+- PASS: focused Biome lint for `src/app/[locale]/page.tsx`, `src/components/app-shell.tsx`, and `src/components/app-sidebar-primary-actions.tsx`; `pnpm typecheck`; `pnpm test` (13/13); `pnpm typegen`; and `pnpm build` all exit 0. The production build compiles, type-checks, collects data, and renders all four routes successfully.
+- PASS: the CRLF-only `format:check` blocker was corrected mechanically in `package.json` and `biome.json`; `pnpm verify` now advances past formatting.
+- BLOCKED (repository baseline, recorded precisely after the independent review fix): repository-wide Biome lint reports 15 errors and 14 warnings, including existing drag-wrapper accessibility, hook-dependency, overlay-interaction, and legacy import-style diagnostics outside the focused menu/mobile fix. The complexity step independently reports `AppHeaderTabItem` above the maximum 12 and `handlePointerMove` at 13 versus 12. These broader refactors are not required to establish the requested menu/mobile parity and remain visible instead of being suppressed.
+- PASS: `pnpm test:coverage` retains 100% structural-test coverage after the concurrent compact-menu integration and the restored exact menu geometry contract.
+
+## OpenSpec verification and independent review
+
+| Dimension | Result |
+| --- | --- |
+| Completeness | 16/17 tasks complete; all six delta requirements map to implementation/evidence |
+| Correctness | No remaining critical issue after keyboard tab activation and localized created-object labels were corrected |
+| Coherence | Route-owned fixture, composition-level geometry, existing Base UI/shadcn architecture, and WACZ/live evidence hierarchy remain intact |
+
+- FIXED from independent review: tabs were pointer-only. `AppHeaderTabItem` now supports activation and roving keyboard focus, and the browser interaction passed.
+- FIXED from independent review: the mobile Sheet lacked retained reduced-motion proof. Composition-owned popup/overlay overrides now compute to no transition under emulation.
+- FIXED from independent review: a Portuguese palette selection could create an editor with the English registry label. The selected localized label now flows into the ephemeral entity, with the registry label retained as a fallback.
+- FIXED from independent review: responsive evidence assets were not retained. Four current screenshots are now stored under the browser-validation artifact directory.
+- WARNING retained: the Node test suite is a structural source-contract suite rather than a rendered E2E suite; rendered behavior is covered by the recorded browser run, not misrepresented as automated component coverage.
+- WARNING retained: repository-wide lint and complexity baselines remain red as itemized above. The mobile header's internal hide control affects the desktop panel state while the Sheet's own close control remains the authoritative mobile close action.
+
+## Specification synchronization
+
+- PASS: the six ADDED delta requirements were merged into `openspec/specs/ui/capacities-en-fidelity/spec.md` without copying delta-operation headers.
+- PASS: `openspec validate ui/capacities-en-fidelity --type spec --strict`, `openspec validate refine-capacities-en-fidelity --strict`, and `openspec validate --all --strict --no-interactive` all exit 0. In this CLI version, bare `openspec validate --specs` reports no discovered items for the repository's nested capability layout, so the synchronized capability was also addressed explicitly.
+- OPEN: task 5.3 remains unchecked because synchronization and strict validation are complete, but archival is intentionally deferred while the documented repository-wide `pnpm verify` baseline is red and no archive skill was requested.

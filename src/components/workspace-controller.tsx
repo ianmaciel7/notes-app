@@ -218,7 +218,10 @@ type WorkspaceContextValue = {
   setObjectTypes: React.Dispatch<React.SetStateAction<AppSidebarObjectType[]>>;
   setCustomSections: React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>;
   showMessage: (message: string) => void;
-  createWorkspaceEntity: (objectTypeId: string) => void;
+  createWorkspaceEntity: (
+    objectTypeId: string,
+    objectTypeLabel?: string,
+  ) => void;
   selectEntity: (id: string) => void;
   openInSidePanel: (tab: AppHeaderTab) => void;
 };
@@ -346,7 +349,10 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [ensureMainTab, objectTypes],
   );
 
-  const createWorkspaceEntity = React.useCallback((objectTypeId: string) => {
+  const createWorkspaceEntity = React.useCallback((
+    objectTypeId: string,
+    objectTypeLabel?: string,
+  ) => {
     const definition = objectTypeDefinitionById[objectTypeId];
     if (!definition) return;
 
@@ -355,7 +361,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     const entity: WorkspaceCreatedEntity = {
       id,
       objectTypeId,
-      objectTypeLabel: definition.label,
+      objectTypeLabel: objectTypeLabel ?? definition.label,
       label: "Sem título",
       icon: definition.icon,
       tone: definition.tone,

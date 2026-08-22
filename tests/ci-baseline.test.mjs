@@ -57,6 +57,11 @@ test("the localized workspace boots into the workspace fixture", async () => {
 	assert.match(header, /current\.some\(\(tab\) => tab\.id === MAIN_DRAFT_TAB_ID\)/);
 	assert.match(header, /createLabel="Criar nova aba"/);
 	assert.match(headerTabs, /MAIN_TAB_MIN_WIDTH = 64/);
+	assert.match(headerTabs, /role="tablist"/);
+	assert.match(headerTabs, /event\.key === "Enter" \|\| event\.key === " "/);
+	assert.match(headerTabs, /"ArrowLeft", "ArrowRight", "Home", "End"/);
+	assert.match(headerTabs, /getNextTabFocusIndex/);
+	assert.match(headerTabs, /\?\.focus\(\)/);
 	assert.match(header, /useState<string \| null>\([\s\S]*?"quote"/);
 	assert.match(sidebar, /function WorkspaceSidebar/);
 	assert.match(sidebar, /objectTypeDefinitionById/);
@@ -78,7 +83,8 @@ test("the localized workspace boots into the workspace fixture", async () => {
 	assert.match(header, /createdEntitySequenceRef\.current \+= 1/);
 	assert.match(header, /created-\$\{objectTypeId\}-\$\{createdEntitySequenceRef\.current\}/);
 	assert.match(header, /objectType\.count \+ 1/);
-	assert.match(header, /objectTypeLabel: definition\.label/);
+	assert.match(header, /objectTypeLabel: objectTypeLabel \?\? definition\.label/);
+	assert.match(sidebar, /onSelectObjectType\?\.\(objectTypeId, selectedItem\?\.label\)/);
 	assert.match(header, /setMainValue\(id\)/);
 	assert.match(fixture, /activeCreatedEntity\?\.objectTypeId === "quote"/);
 	assert.match(fixture, /data-slot="created-object-workspace"/);
