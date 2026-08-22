@@ -78,6 +78,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { floatingSearchListItemClass } from "@/components/ui/shared-styles";
+import { Textarea } from "@/components/ui/textarea";
 import { useWorkspace } from "@/components/workspace-controller";
 import { cn } from "@/lib/utils";
 import {
@@ -229,9 +230,86 @@ type ObjectEditorProps = {
 const editorCardClass =
   "mx-3 mt-6 min-h-[302px] shrink-0 rounded-2xl border border-border bg-card px-10 pt-8";
 const titleFieldClass =
-  "mt-[14px] block h-[39px] w-full resize-none overflow-hidden bg-transparent py-0 text-[30px] font-bold leading-[33px] tracking-[-0.025em] text-foreground outline-none placeholder:text-sidebar-foreground";
+  "mt-[14px] block min-h-[39px] w-full resize-none overflow-x-hidden overflow-y-hidden bg-transparent px-0 py-0 text-[30px] font-bold leading-[33px] tracking-normal text-foreground shadow-none outline-none placeholder:text-sidebar-foreground [overflow-wrap:anywhere]";
 const bodyFieldClass =
-  "mt-3 min-h-28 w-full max-w-[68ch] resize-none bg-transparent text-[11pt] leading-[1.7] text-foreground outline-none placeholder:text-sidebar-foreground";
+  "mt-3 min-h-28 w-full resize-none overflow-x-hidden overflow-y-hidden bg-transparent px-0 py-0 text-base leading-6 text-foreground shadow-none outline-none placeholder:text-sidebar-foreground [overflow-wrap:anywhere]";
+
+function useAutosizeTextarea(
+  ref: React.RefObject<HTMLTextAreaElement | null>,
+) {
+  React.useLayoutEffect(() => {
+    const textarea = ref.current;
+    if (!textarea) return;
+
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  });
+}
+
+type AutosizeTextareaProps = React.ComponentProps<typeof Textarea> & {
+  value: string;
+};
+
+function AutosizeTextarea({
+  value,
+  className,
+  ...props
+}: AutosizeTextareaProps) {
+  const ref = React.useRef<HTMLTextAreaElement>(null);
+  useAutosizeTextarea(ref);
+
+  return (
+    <Textarea ref={ref} value={value} className={className} {...props} />
+  );
+}
+
+function EditableTitle({
+  label,
+  placeholder,
+  value,
+  onValueChange,
+  className,
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  className?: string;
+}) {
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  React.useLayoutEffect(() => {
+    const heading = ref.current;
+    if (!heading || document.activeElement === heading) return;
+    if (heading.textContent !== value) heading.textContent = value;
+  }, [value]);
+
+  return (
+    // biome-ignore lint/a11y/useSemanticElements: Capacities-style editable titles need contentEditable wrapping and selection behavior that input/textarea cannot match here.
+    <div
+      ref={ref}
+      role="textbox"
+      aria-label={label}
+      aria-multiline={false}
+      tabIndex={0}
+      contentEditable="plaintext-only"
+      data-placeholder={placeholder}
+      suppressContentEditableWarning
+      className={cn(
+        titleFieldClass,
+        "cursor-text whitespace-pre-wrap empty:before:text-sidebar-foreground empty:before:content-[attr(data-placeholder)]",
+        className,
+      )}
+      onInput={(event) =>
+        onValueChange(event.currentTarget.textContent ?? "")
+      }
+      onKeyDown={(event) => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+      }}
+    />
+  );
+}
 
 function EntityTitleField({
   title,
@@ -242,13 +320,11 @@ function EntityTitleField({
 }) {
   const t = useTranslations("workspace");
   return (
-    <textarea
-      aria-label={t("fields.title")}
+    <EditableTitle
+      label={t("fields.title")}
       placeholder={t("fields.title")}
-      rows={1}
       value={title}
-      onChange={(event) => update({ title: event.target.value })}
-      className={titleFieldClass}
+      onValueChange={(value) => update({ title: value })}
     />
   );
 }
@@ -496,7 +572,7 @@ function DocumentObjectEditor({
           ).filter(Boolean)}
           update={update}
         />
-        <textarea
+        <AutosizeTextarea
           aria-label={
             entity.kind === "quote"
               ? t("fields.quoteContent")
@@ -1205,12 +1281,12 @@ function TableObjectEditor({
     >
       {header}
       <EntityTitleField title={entity.title} update={update} />
-      <textarea
+      <AutosizeTextarea
         aria-label={t("lifecycle.table.notes")}
         placeholder={t("lifecycle.table.notes")}
         value={entity.notes}
         onChange={(event) => update({ notes: event.target.value })}
-        className="mt-1 min-h-16 w-full resize-none bg-transparent text-sm outline-none"
+        className="mt-1 min-h-16 w-full resize-none overflow-x-hidden overflow-y-hidden bg-transparent px-0 py-0 text-sm shadow-none outline-none [overflow-wrap:anywhere]"
       />
       <div className="mt-3 grid grid-cols-2 overflow-hidden rounded-lg border">
         {entity.cells.map((cell) => (
@@ -1265,7 +1341,7 @@ function TaskObjectEditor({
           className="h-8 w-auto"
         />
       </div>
-      <textarea
+      <AutosizeTextarea
         aria-label={t("fields.text")}
         placeholder={t("fields.text")}
         value={entity.body}
@@ -1294,7 +1370,7 @@ function UrlObjectEditor({
         {entity.url}
       </a>
       <EntityTitleField title={entity.title} update={update} />
-      <textarea
+      <AutosizeTextarea
         aria-label={t("lifecycle.url.notes")}
         placeholder={t("lifecycle.url.notes")}
         value={entity.body}
@@ -3050,11 +3126,12 @@ function CitationWorkspace() {
           </Button>
         </div>
 
-        <textarea
-          aria-label={t("fields.title")}
+        <EditableTitle
+          label={t("fields.title")}
           placeholder={t("fields.title")}
-          rows={1}
-          className="mt-1.5 block h-[41px] w-full resize-none overflow-hidden bg-transparent py-0 text-[30px] font-bold leading-[41px] tracking-[-0.025em] text-foreground outline-none placeholder:text-sidebar-foreground"
+          value=""
+          onValueChange={() => {}}
+          className="mt-1.5 min-h-[41px] leading-[41px]"
         />
 
         <label className="mt-1 flex h-7 items-center gap-1.5 text-sm text-sidebar-foreground">
@@ -3066,10 +3143,10 @@ function CitationWorkspace() {
           />
         </label>
 
-        <textarea
+        <Textarea
           aria-label={t("fields.quoteContent")}
           placeholder={t("fields.text")}
-          className="mt-1 min-h-20 w-full resize-none bg-transparent text-base text-foreground outline-none placeholder:text-sidebar-foreground"
+          className="mt-1 min-h-20 w-full resize-none overflow-x-hidden bg-transparent px-0 py-0 text-base text-foreground shadow-none outline-none placeholder:text-sidebar-foreground [overflow-wrap:anywhere]"
         />
       </section>
 
