@@ -467,8 +467,8 @@ function DocumentObjectEditor({
             </button>
           </div>
         )}
-        <div className="group/page-view-header flex h-[26px] items-center gap-1.5">
-          <div className="flex min-w-0 items-center gap-1.5 text-sm text-sidebar-foreground">
+        <div className="group/page-view-header flex h-[26px] min-w-0 items-center gap-1.5 overflow-hidden">
+          <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden text-sm text-sidebar-foreground">
             <CompoundChip
               className={cn(
                 objectIconToneBadgeClass[definition.tone],
@@ -498,7 +498,7 @@ function DocumentObjectEditor({
               update={update}
             />
           </div>
-          <div className="ml-auto flex h-[26px] min-w-0 items-center justify-end gap-1.5">
+          <div className="ml-auto flex h-[26px] max-w-[9rem] shrink-0 items-center justify-end gap-1.5 overflow-hidden">
             <CustomizeDocumentMenu
               wideLayout={wideLayout}
               onWideLayoutChange={setWideLayout}
@@ -710,7 +710,7 @@ function CollectionPropertyEditor({
     setOpen(false);
   }
   return (
-    <div className="flex min-w-0 items-center gap-1">
+    <div className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden">
       {collections.map((collection) => (
         <button
           key={collection}
@@ -721,7 +721,7 @@ function CollectionPropertyEditor({
               collections: collections.filter((item) => item !== collection),
             })
           }
-          className="inline-flex max-w-32 min-w-0 shrink-0 items-center overflow-x-clip whitespace-nowrap rounded-[0.475em] border border-[oklch(0.9856_0.0016_67)] bg-[oklch(0.9856_0.0016_67)] px-[0.49em] py-[0.2em] leading-[1.3] text-[oklch(0.2987_0.0072_285.88)] active:brightness-[0.94]"
+          className="inline-flex max-w-24 min-w-0 shrink items-center overflow-x-clip whitespace-nowrap rounded-[0.475em] border border-[oklch(0.9856_0.0016_67)] bg-[oklch(0.9856_0.0016_67)] px-[0.49em] py-[0.2em] leading-[1.3] text-[oklch(0.2987_0.0072_285.88)] active:brightness-[0.94] sm:max-w-32"
         >
           <span className="truncate">{collection}</span>
         </button>
@@ -732,7 +732,7 @@ function CollectionPropertyEditor({
           render={
             <label
               role="presentation"
-              className="inline-flex min-w-0 items-center whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3] hover:bg-muted/70"
+              className="inline-flex min-w-0 max-w-full shrink items-center overflow-hidden whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3] hover:bg-muted/70"
             >
               <InlinePropertyIcon icon={ObjectCollectionIcon} />
               <input
@@ -744,7 +744,7 @@ function CollectionPropertyEditor({
                   setQuery(event.target.value);
                   setOpen(true);
                 }}
-                className="ml-1.5 min-w-[3.9rem] max-w-48 bg-transparent leading-[18.2px] outline-none [field-sizing:content] placeholder:text-sidebar-foreground"
+                className="ml-1.5 min-w-0 flex-1 truncate bg-transparent leading-[18.2px] outline-none placeholder:text-sidebar-foreground"
               />
             </label>
           }
@@ -818,7 +818,7 @@ function CustomizeDocumentMenu({
         render={
           <button
             type="button"
-            className="pointer-events-none flex h-[26px] max-w-full items-center gap-1.5 rounded-[0.475em] border border-transparent bg-transparent px-2 pr-1 text-sm text-sidebar-foreground opacity-0 transition-opacity duration-200 hover:bg-muted/70 group-hover/page-view-header:pointer-events-auto group-hover/page-view-header:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100"
+            className="pointer-events-none flex h-[26px] max-w-full min-w-0 items-center gap-1.5 rounded-[0.475em] border border-transparent bg-transparent px-2 pr-1 text-sm text-sidebar-foreground opacity-0 transition-opacity duration-200 hover:bg-muted/70 group-hover/page-view-header:pointer-events-auto group-hover/page-view-header:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100"
           >
             <Settings2Icon className="size-3.5 shrink-0" />
             <span className="truncate">{t("actions.customize")}</span>
