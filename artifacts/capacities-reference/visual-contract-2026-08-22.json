@@ -1,0 +1,117 @@
+{
+  "capturedAt": "2026-08-22",
+  "referenceOrigin": "https://app.capacities.io",
+  "policy": {
+    "stored": [
+      "sanitized asset URLs",
+      "computed styles",
+      "component geometry",
+      "visible component labels"
+    ],
+    "excluded": [
+      "authentication data",
+      "cookies or local storage",
+      "proprietary JavaScript source",
+      "full proprietary CSS source",
+      "unsanitized authenticated HTML"
+    ]
+  },
+  "assetManifest": {
+    "scripts": [
+      "https://app.capacities.io/index59846.js"
+    ],
+    "stylesheets": [
+      "https://app.capacities.io/Interactable59846.css",
+      "https://app.capacities.io/AppMenu59846.css",
+      "https://app.capacities.io/QuickTipButton59846.css",
+      "https://app.capacities.io/RootEntity59846.css",
+      "https://app.capacities.io/CommandPalette59846.css",
+      "https://app.capacities.io/LocationManager59846.css",
+      "https://app.capacities.io/index59846.css"
+    ]
+  },
+  "viewport": {
+    "width": 1294,
+    "height": 912,
+    "devicePixelRatio": 1
+  },
+  "tokens": {
+    "fontFamily": "Inter, ui-sans-serif, system-ui",
+    "shellBackground": "oklch(0.9856 0.0016 67)",
+    "surfaceBackground": "oklch(1 0.0001 263.28)",
+    "foreground": "oklch(0.2191 0.0058 285.84)",
+    "sidebarForeground": "oklch(0.3887 0.0052 301.05)",
+    "mutedForeground": "oklch(0.5725 0.0051 33.89)",
+    "border": "oklch(0.9163 0.0017 67.07)",
+    "mutedControl": "oklch(0.9676 0.0016 67.02)"
+  },
+  "components": {
+    "mainSurface": {
+      "x": 298,
+      "y": 46,
+      "width": 533.3,
+      "height": 856,
+      "radius": 12,
+      "borderWidth": 1
+    },
+    "contextSurface": {
+      "x": 841.3,
+      "y": 46,
+      "width": 442.7,
+      "height": 856,
+      "radius": 12,
+      "borderWidth": 1
+    },
+    "citationEditor": {
+      "x": 311,
+      "y": 71,
+      "width": 507.3,
+      "height": 301.8,
+      "radius": 16,
+      "titleFontSize": 30,
+      "titleFontWeight": 700,
+      "titleLineHeight": 33
+    },
+    "exploreGrid": {
+      "width": 330.5,
+      "columns": 3,
+      "rows": 2,
+      "gap": 8,
+      "cardHeight": 90,
+      "cardRadius": 8,
+      "cardPadding": 16
+    },
+    "newContentPalette": {
+      "x": 15,
+      "y": 78,
+      "width": 352,
+      "height": 361,
+      "radius": 12,
+      "searchHeight": 32,
+      "labels": [
+        "Nota atômica",
+        "Citação",
+        "Página",
+        "Tabela",
+        "Tarefa",
+        "Imagem",
+        "Weblink",
+        "Tweet",
+        "PDF",
+        "Áudio",
+        "Arquivo",
+        "Etiqueta",
+        "Query"
+      ]
+    },
+    "spaceSwitcher": {
+      "x": 152,
+      "y": 45,
+      "width": 300.5,
+      "height": 476,
+      "radius": 12,
+      "searchHeight": 32,
+      "footerLabel": "Criar espaço"
+    }
+  }
+}

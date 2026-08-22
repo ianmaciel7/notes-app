@@ -20,7 +20,7 @@ The latest exact authenticated Capacities URL supplied by the user is the primar
 - No restoration of `WorkspaceShell`, `CapacitiesLayout`, `SidebarProvider`, or another historical monolith.
 - No production persistence, backend, router/history integration, search implementation, or real Capacities data mutation.
 - No third-party component framework, Base UI replacement, broad primitive restyling, or screenshot-only CSS hacks.
-- No byte-identical reproduction of proprietary icon glyphs when the configured Lucide set provides the semantic equivalent.
+- No broad icon-library replacement or unverified proprietary asset copying; exact composition-owned SVG paths are permitted when authenticated evidence identifies the public Phosphor glyph and visible approximation remains material.
 
 ## Decisions
 
@@ -31,9 +31,34 @@ Create a focused route-owned Capacities fidelity composition/fixture for the mai
 - **Why:** The missing content is a route integration gap, not a reason to hardcode product data into `AppShell`, header, sidebar, or `src/components/ui`.
 - **Alternative considered:** Restore `old-2`'s monolithic `WorkspaceShell` or `old-3`'s `CapacitiesLayout`. Rejected because it would replace the canonical architecture and duplicate already-split components.
 
+### Reuse one object-type listing composition
+
+Extend `ObjectTypeWorkspace` so every sidebar object type shares the same `Overview`/`All` structure. The overview owns recently opened entities filtered by the active type plus presentation-only collection and query sections; the all view retains the existing complete-list empty state.
+
+- **Why:** Live Capacities evidence shows the same information architecture for object types such as Places, while the current local component already owns every generic type route.
+- **Alternative considered:** Add a bespoke Places page and duplicate it for each preset. Rejected because it would drift visually, split interaction state, and contradict the shared object-type contract.
+
+### Route listing actions through the workspace lifecycle
+
+Wire both object-type `New` entry points to `createWorkspaceEntity(objectType.id)` and keep one visually hidden multi-file input owned by `ObjectTypeWorkspace`. Route selected files through an explicit workspace import action that validates file-backed types, reads textual content where useful, creates one local entity per accepted file, activates the last imported entity, and clears the input so the same file can be chosen again.
+
+Keep the remaining listing controls in the same composition owner: title search filters the current type, collapse hides only the view toolbar, filter and sort expose inline rows, list/grid switch presentation, recent expansion opens the dedicated complete-list state, and the options/split-New menus route to concrete create/import/query/collection/pin/template/export/settings actions. Overview settings own explicit visible/hidden section state. Commands shown as available MUST change local state; localized feedback may confirm an action but cannot be its only effect.
+
+- **Why:** A Capacities-style affordance must change workspace state; a decorative button or a file input that only works for file object types is not functional parity.
+- **Alternative considered:** Reuse `beginCreate` followed by `commitFile` for every import. Rejected because document, task, URL, tag, table, and query imports do not own a file draft and would silently fail.
+
+### Model collection, query, and settings commands as local state transitions
+
+Create collection/query entries immediately with an untitled sequential identifier, select the created entry, and expose an inline editable title/details surface. Keep overview section visibility as local per-component state and allow every section to be restored from the settings popover. Dispatch the split-New global command to the existing sidebar palette and add/remove the active object type through the provider-owned pinned-entity state.
+
+- **Why:** Authenticated inspection showed that collection/query creation is immediate, settings are checkbox-driven, recent expansion changes the active list state, and pin/global-New commands alter navigation state rather than displaying a toast.
+- **Alternative considered:** Keep status banners or demo-complete messages for these controls. Rejected because visible commands that do not change application state fail the user's behavioral parity requirement.
+
 ### Refine composition owners before primitives
 
 Apply measured values in `app-shell.tsx`, header/tab owners, sidebar consumers, and the route fixture. Change `src/components/ui/*` only when direct evidence proves a primitive-level mismatch shared by all consumers.
+
+The object-type view/action toolbar owns a narrow `ObjectTypeToolbarIcon` map containing the measured Phosphor paths for Overview, All, add view, count, filter, sort, list, grid, and caret. The overview settings control reuses the already verified sidebar source gear. These glyphs remain 14px except the measured 12px caret and settings icons; the existing buttons, ARIA state, and local behavior remain the interaction owners.
 
 - **Why:** This preserves shadcn `base-nova` behavior and avoids turning a Capacities-specific rule into a global regression.
 - **Alternative considered:** Globally restyle buttons, menus, cards, and tooltips. Rejected because the current primitives serve unrelated surfaces and already provide required semantics.
@@ -73,7 +98,7 @@ For each render, record `PASS` or `FAIL`, evidence, remaining mismatch, and owni
 - [Risk] Context-panel tuning can break collapse, resizing, or narrow desktop widths. → Mitigation: preserve `ResizablePanel` APIs and test open, collapsed, expanded, resized, and mobile Sheet states at the defined checkpoints.
 - [Risk] Route fixture content can be mistaken for persistent production data. → Mitigation: keep it in a clearly named demo/fidelity component with controlled callbacks and no storage/backend access.
 - [Risk] Active component-scoped OpenSpec changes overlap implementation files. → Mitigation: preserve their requirements, avoid duplicate capabilities, and reconcile the new route-level delta during sync.
-- [Risk] Exact Capacities icons are unavailable under the Lucide-only rule. → Mitigation: match size, tone, container, and alignment while documenting glyph approximation where visible.
+- [Risk] Target-specific icons could spread into global primitives. → Mitigation: keep the verified Phosphor paths in the object-type toolbar composition and reuse them only where the authenticated target proves the exact semantic glyph.
 
 ## Migration Plan
 

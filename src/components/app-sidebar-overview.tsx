@@ -1,9 +1,11 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 
 import {
   AppSidebarCheckIcon,
+  AppSidebarCopyIcon,
   AppSidebarDotsIcon,
   AppSidebarObjectsIcon,
   AppSidebarPinIcon,
@@ -19,6 +21,7 @@ import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon"
 import {
   ObjectAreaIcon,
   ObjectAtomicNoteIcon,
+  ObjectCollectionIcon,
   ObjectIconBadge,
   ObjectPageIcon,
   ObjectQuoteIcon,
@@ -31,6 +34,8 @@ import {
   CompactMenuAccountPanel,
   CompactMenuPlanBadge,
   compactMenuActionButtonClass,
+  sidebarContextMenuContentClass,
+  sidebarContextSubmenuContentClass,
 } from "@/components/ui/compact-menu"
 import {
   Collapsible,
@@ -42,6 +47,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -79,6 +87,22 @@ type AppSidebarDragState =
   | { kind: "pinned"; id: string }
   | { kind: "object-type"; id: string }
   | null
+
+type AppSidebarCollectionAction =
+  | "open"
+  | "create"
+  | "template"
+  | "pin"
+  | "unpin-type"
+  | "settings"
+  | "share"
+  | "import"
+  | "duplicate"
+  | "delete"
+
+function appSidebarCollectionId(objectTypeId: string, collection: string) {
+  return `collection:${objectTypeId}:${encodeURIComponent(collection)}`
+}
 
 const objectTypeMenuIconPaths = {
   chevronRight:
@@ -390,7 +414,9 @@ function AppSidebarPinnedRow({
   onDrop: () => void
 }) {
   return (
+    /* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual row wrapper */
     <div
+      role="presentation"
       data-slot="app-sidebar-pinned-row-wrapper"
       className="mx-2"
       draggable={draggable}
@@ -469,7 +495,12 @@ function AppSidebarObjectTypeMenu({
         <AppSidebarDotsIcon />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent side="right" align="start" sideOffset={8} className="w-64">
+      <DropdownMenuContent
+        side="right"
+        align="start"
+        sideOffset={8}
+        className={sidebarContextMenuContentClass}
+      >
         <DropdownMenuItem>
           <AppSidebarSourceIcon name="external" />
           Abrir
@@ -509,25 +540,43 @@ function AppSidebarObjectTypeMenu({
 
 function AppSidebarObjectTypeRow({
   objectType,
+  collections,
+  collectionsOpen,
   active,
+  activeId,
   dragging,
   draggable,
   onSelect,
+  onCollectionsOpenChange,
+  onCollectionAction,
   onDuplicate,
   onDragStart,
   onDrop,
 }: {
   objectType: AppSidebarObjectType
+  collections: string[]
+  collectionsOpen: boolean
   active: boolean
+  activeId: string | null
   dragging: boolean
   draggable: boolean
   onSelect: () => void
+  onCollectionsOpenChange: (open: boolean) => void
+  onCollectionAction: (
+    action: AppSidebarCollectionAction,
+    objectType: AppSidebarObjectType,
+    collection: string
+  ) => void
   onDuplicate: () => void
   onDragStart: () => void
   onDrop: () => void
 }) {
+  const hasCollections = collections.length > 0
+
   return (
+    /* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual row wrapper */
     <div
+      role="presentation"
       data-slot="app-sidebar-object-type-row-wrapper"
       className="mx-2"
       draggable={draggable}
@@ -554,15 +603,39 @@ function AppSidebarObjectTypeRow({
           "data-[active=true]:brightness-[0.965] data-[dragging=true]:opacity-40"
         )}
       >
+        {hasCollections && (
+          <button
+            type="button"
+            aria-label={objectType.label}
+            aria-expanded={collectionsOpen}
+            className="inline-flex size-[21px] shrink-0 items-center justify-center rounded-md bg-sidebar-accent text-muted-foreground"
+            onClick={() => onCollectionsOpenChange(!collectionsOpen)}
+          >
+            <AppSidebarObjectTypeMenuIcon
+              name="chevronRight"
+              className={cn(
+                "size-3 transition-transform duration-150",
+                collectionsOpen && "rotate-90"
+              )}
+            />
+          </button>
+        )}
+
         <button
           type="button"
           className="relative flex min-w-0 flex-1 items-center py-px text-left outline-none"
           onClick={onSelect}
         >
           <span className="flex w-12 min-w-0 flex-1 items-center gap-x-1.5 truncate">
-            <AppSidebarTypeLabel icon={objectType.icon} tone={objectType.tone}>
-              {objectType.label}
-            </AppSidebarTypeLabel>
+            {hasCollections ? (
+              <span className="block min-w-0 truncate px-[0.49em] py-[0.2em] text-left leading-[1.3]">
+                {objectType.label}
+              </span>
+            ) : (
+              <AppSidebarTypeLabel icon={objectType.icon} tone={objectType.tone}>
+                {objectType.label}
+              </AppSidebarTypeLabel>
+            )}
           </span>
         </button>
 
@@ -590,6 +663,43 @@ function AppSidebarObjectTypeRow({
           />
         </div>
       </div>
+
+      {hasCollections && collectionsOpen && (
+        <div data-slot="app-sidebar-object-type-collections">
+          {collections.map((collection) => {
+            const collectionId = appSidebarCollectionId(objectType.id, collection)
+            return (
+              <div
+                key={collection}
+                data-slot="app-sidebar-collection-row"
+                data-active={collectionId === activeId || undefined}
+                className="group/collection-row flex h-[29px] w-full min-w-0 items-center rounded-md pl-[26px] pr-1 text-sm font-normal text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground"
+              >
+                <button
+                  type="button"
+                  draggable={false}
+                  className="flex min-w-0 flex-1 items-center text-left"
+                  onClick={() => onCollectionAction("open", objectType, collection)}
+                >
+                  <span className="mr-1.5 inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 items-center justify-center">
+                    <ObjectIconBadge
+                      icon={ObjectCollectionIcon}
+                      tone="gray"
+                      variant="sidebar"
+                    />
+                  </span>
+                  <span className="min-w-0 truncate">{collection}</span>
+                </button>
+                <AppSidebarCollectionMenu
+                  collection={collection}
+                  objectType={objectType}
+                  onAction={onCollectionAction}
+                />
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
@@ -979,10 +1089,112 @@ type AppSidebarOverviewProps = {
   pinnedEntities?: AppSidebarPinnedEntity[]
   availablePinnedEntities?: AppSidebarPinnedEntity[]
   objectTypes?: AppSidebarObjectType[]
+  objectTypeCollections?: Record<string, string[]>
   customSections?: AppSidebarCustomSection[]
+  onCollectionAction?: (
+    action: AppSidebarCollectionAction,
+    objectType: AppSidebarObjectType,
+    collection: string
+  ) => void
   onPinnedEntitiesChange?: React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>
   onObjectTypesChange?: React.Dispatch<React.SetStateAction<AppSidebarObjectType[]>>
   onCustomSectionsChange?: React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>
+}
+
+function AppSidebarCollectionMenu({
+  collection,
+  objectType,
+  onAction,
+}: {
+  collection: string
+  objectType: AppSidebarObjectType
+  onAction: (
+    action: AppSidebarCollectionAction,
+    objectType: AppSidebarObjectType,
+    collection: string
+  ) => void
+}) {
+  const t = useTranslations("workspace")
+  const objectTypeName = t(`objectTypeStudio.objectTypes.${objectType.id}`)
+  const action = (name: AppSidebarCollectionAction) => () =>
+    onAction(name, objectType, collection)
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        aria-label={`${t("actions.moreOptions")}: ${collection}`}
+        className={cn(
+          buttonVariants({ variant: "ghost", size: "icon-xs" }),
+          "size-[22px] shrink-0 opacity-0 transition-opacity duration-150",
+          "group-hover/collection-row:opacity-70 hover:!opacity-100 data-popup-open:opacity-100"
+        )}
+      >
+        <AppSidebarDotsIcon />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        side="right"
+        align="start"
+        sideOffset={8}
+        className={sidebarContextMenuContentClass}
+      >
+        <DropdownMenuItem onClick={action("open")}>
+          <AppSidebarSourceIcon name="external" />
+          {t("lifecycle.task.open")}
+          <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={action("create")}>
+          <AppSidebarPlusIcon />
+          {t("sidebarCollections.createObject", { type: objectTypeName })}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={action("template")}>
+          <AppSidebarCopyIcon />
+          {t("objectTypeOverview.newFromTemplate")}
+          <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={action("pin")}>
+          <AppSidebarPinIcon />
+          {t("documentMenu.pinSidebar")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={action("unpin-type")}>
+          <AppSidebarPinOffIcon />
+          {t("sidebarCollections.unpinFromType")}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={action("settings")}>
+          <AppSidebarSourceIcon name="settings" />
+          {t("documentMenu.typeSettings")}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={action("share")}>
+          <AppSidebarSourceIcon name="share" />
+          {t("documentMenu.share")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={action("import")}>
+          <AppSidebarObjectTypeMenuIcon name="import" />
+          {t("documentMenu.import")}
+          <span className="ml-auto text-xs text-muted-foreground">Ctrl I</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <AppSidebarCopyIcon />
+            {t("documentMenu.copy")}
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className={sidebarContextSubmenuContentClass}>
+            <DropdownMenuItem onClick={action("duplicate")}>
+              <AppSidebarCopyIcon />
+              {t("documentMenu.duplicate")}
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuItem variant="destructive" onClick={action("delete")}>
+          <AppSidebarSourceIcon name="trash" />
+          {t("sidebarCollections.deleteCollection")}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
 }
 
 function AppSidebarOverview({
@@ -991,10 +1203,12 @@ function AppSidebarOverview({
   pinnedEntities: controlledPinned,
   availablePinnedEntities = allPinnedEntities,
   objectTypes: controlledObjectTypes,
+  objectTypeCollections = {},
   customSections: controlledCustomSections,
   onPinnedEntitiesChange,
   onObjectTypesChange,
   onCustomSectionsChange,
+  onCollectionAction,
 }: AppSidebarOverviewProps = {}) {
   const [internalActiveId, setInternalActiveId] = React.useState<string | null>("page-1")
   const isControlled = controlledActiveId !== undefined
@@ -1006,6 +1220,9 @@ function AppSidebarOverview({
   }
   const [pinnedOpen, setPinnedOpen] = React.useState(true)
   const [objectTypesOpen, setObjectTypesOpen] = React.useState(true)
+  const [objectTypeCollectionsOpen, setObjectTypeCollectionsOpen] = React.useState<
+    Record<string, boolean>
+  >({})
   const [pinnedSort, setPinnedSort] = React.useState<AppSidebarSortMode>("manual")
   const [objectSort, setObjectSort] = React.useState<AppSidebarSortMode>("manual")
   const [internalPinned, setInternalPinned] = React.useState<AppSidebarPinnedEntity[]>([
@@ -1182,10 +1399,25 @@ function AppSidebarOverview({
               <AppSidebarObjectTypeRow
                 key={objectType.id}
                 objectType={objectType}
+                collections={objectTypeCollections[objectType.id] ?? []}
+                collectionsOpen={objectTypeCollectionsOpen[objectType.id] ?? true}
                 active={activeId === objectType.id}
+                activeId={activeId}
                 dragging={drag?.kind === "object-type" && drag.id === objectType.id}
                 draggable={objectSort === "manual"}
                 onSelect={() => setActiveId(objectType.id)}
+                onCollectionsOpenChange={(open) =>
+                  setObjectTypeCollectionsOpen((current) => ({
+                    ...current,
+                    [objectType.id]: open,
+                  }))
+                }
+                onCollectionAction={(action, type, collection) => {
+                  if (action === "open") {
+                    setActiveId(appSidebarCollectionId(type.id, collection))
+                  }
+                  onCollectionAction?.(action, type, collection)
+                }}
                 onDuplicate={() => duplicateObjectType(objectType)}
                 onDragStart={() => setDrag({ kind: "object-type", id: objectType.id })}
                 onDrop={() => {
@@ -1246,6 +1478,7 @@ function AppSidebarOverview({
 }
 
 export {
+  appSidebarCollectionId,
   AppSidebarAddSection,
   AppSidebarFooter,
   AppSidebarHelpSection,
@@ -1259,6 +1492,7 @@ export {
   AppSidebarTypeLabel,
   AppSidebarUtilityRow,
   type AppSidebarCustomSection,
+  type AppSidebarCollectionAction,
   type AppSidebarObjectType,
   type AppSidebarPinnedEntity,
   type AppSidebarSortMode,

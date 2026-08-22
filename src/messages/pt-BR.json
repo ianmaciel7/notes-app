@@ -18,93 +18,281 @@
     "cta": "Começar a construir"
   },
   "workspace": {
-      "actions": {
-        "collapse": "Recolher",
-        "collapseEditor": "Recolher editor",
-        "filter": "Filtrar",
-        "grid": "Grade",
-        "importFiles": "Importar arquivo(s)",
-        "list": "Lista",
-        "moreOptions": "Mais opções",
-        "moreViews": "Mais visualizações",
-        "new": "Novo",
-        "newObjectOptions": "Opções de novo objeto",
-        "search": "Buscar",
-        "sort": "Ordenar"
+    "actions": {
+      "collapse": "Recolher",
+      "collapseEditor": "Recolher editor",
+      "customize": "Personalizar",
+      "filter": "Filtrar",
+      "grid": "Grade",
+      "importFiles": "Importar arquivo(s)",
+      "list": "Lista",
+      "moreOptions": "Mais opções",
+      "moreViews": "Mais visualizações",
+      "new": "Novo",
+      "newObjectOptions": "Opções de novo objeto",
+      "search": "Buscar",
+      "sort": "Ordenar"
+    },
+    "sidebarCollections": {
+      "createObject": "Criar {type}",
+      "deleteCollection": "Excluir coleção",
+      "unpinFromType": "Desafixar do tipo de objeto"
+    },
+    "documentMenu": {
+      "addAliases": "Adicionar Aliases",
+      "addCover": "Adicionar Imagem de Capa",
+      "addDescription": "Adicionar Descrição",
+      "addIcon": "Adicionar Ícone",
+      "aiUnavailable": "O preenchimento por IA ainda não está disponível localmente.",
+      "aliases": "Aliases",
+      "changeType": "Mudar Tipo",
+      "collectionsHint": "Use o controle Coleções no cabeçalho.",
+      "copy": "Copiar",
+      "copied": "Texto pronto para copiar.",
+      "copyText": "Copiar texto",
+      "coverReady": "O seletor de imagem de capa será aberto aqui.",
+      "customizeHint": "Use o botão Personalizar no cabeçalho.",
+      "defaultTemplate": "Template padrão",
+      "deleteObject": "Excluir Objeto",
+      "description": "Descrição",
+      "duplicate": "Duplicar",
+      "editCollections": "Editar Coleções",
+      "export": "Exportar",
+      "exported": "Página exportada.",
+      "fillAliases": "Preencher Aliases",
+      "fillDescription": "Preencher Descrição",
+      "fillProperties": "Preencher Todas as Propriedades",
+      "findPage": "Encontrar na Página",
+      "iconReady": "O seletor de ícone será aberto aqui.",
+      "import": "Importar",
+      "imported": "Conteúdo importado.",
+      "newTag": "Novo ‘{tag}’",
+      "newTagEmpty": "Novo Etiqueta",
+      "newCollection": "Novo Coleção",
+      "newCollectionNamed": "Novo ‘{collection}’",
+      "untitledCollection": "Sem título",
+      "noCollections": "Nenhuma coleção encontrada",
+      "pinSidebar": "Fixar na Barra Lateral",
+      "pinned": "Fixado na barra lateral.",
+      "present": "Apresentar",
+      "presentHint": "Modo de apresentação preparado.",
+      "searchAllTags": "Procurar todos(as) Etiquetas",
+      "share": "Compartilhar",
+      "shareHint": "Opções de compartilhamento abertas.",
+      "statsHint": "Estatísticas calculadas para o texto atual.",
+      "templateApplied": "Template padrão aplicado.",
+      "textStats": "Estatísticas de Texto",
+      "typeSettings": "Configurações do Tipo de Objeto",
+      "typeSettingsHint": "Configurações do tipo abertas.",
+      "unpinSidebar": "Desafixar da Barra Lateral",
+      "unpinned": "Removido da barra lateral.",
+      "useTemplate": "Usar Template",
+      "wideLayout": "Layout Amplo"
+    },
+    "empty": {
+      "description": "Você pode mudar isso criando um novo objeto.",
+      "title": "Não há nada aqui (por enquanto)."
+    },
+    "explore": {
+      "aiChat": "Chat de IA",
+      "backlinks": "Links de entrada",
+      "findMore": "Encontrar mais",
+      "graphView": "Visualização em grafo",
+      "objectsInside": "Objetos internos",
+      "relatedContent": "Conteúdo relacionado",
+      "relevantContent": "Conteúdo relevante",
+      "title": "Explorar"
+    },
+    "fields": {
+      "quoteContent": "Conteúdo da citação",
+      "tags": "Etiquetas",
+      "text": "Text",
+      "title": "Título"
+    },
+    "objects": {
+      "collections": "Coleções",
+      "quote": "Citação"
+    },
+    "openedTab": {
+      "description": "Comece a escrever ou adicione conteúdo a este objeto."
+    },
+    "objectTypeStudio": {
+      "basicTypes": "Tipos básicos",
+      "createOwn": "Crie o seu próprio",
+      "description": "Escolha um tipo de objeto sugerido ou básico para adicionar ao espaço atual.",
+      "details": {
+        "close": "Fechar detalhes do tipo de objeto",
+        "confirm": "Adicionar tipo de objeto",
+        "description": "Configuração do tipo de objeto",
+        "name": "Nome",
+        "namePlaceholder": "Nome do tipo de objeto",
+        "preset": "Preset",
+        "review": "Revise este preset antes de adicioná-lo ao espaço atual."
       },
-      "empty": {
-        "description": "Você pode mudar isso criando um novo objeto.",
-        "title": "Não há nada aqui (por enquanto)."
+      "objectTypes": {
+        "ai-chat": "Chat de IA",
+        "area": "Área",
+        "atomic-note": "Nota atômica",
+        "audio": "Áudio",
+        "book": "Livro",
+        "definition": "Definição",
+        "file": "Arquivo",
+        "idea": "Ideia",
+        "image": "Imagem",
+        "media": "Mídia",
+        "meeting": "Reunião",
+        "organization": "Organização",
+        "page": "Página",
+        "pdf": "PDF",
+        "person": "Pessoa",
+        "place": "Lugar",
+        "project": "Projeto",
+        "query": "Query",
+        "quote": "Citação",
+        "table": "Tabela",
+        "tag": "Etiqueta",
+        "task": "Tarefa",
+        "travel": "Viagem",
+        "tweet": "Tweet",
+        "weblink": "Weblink"
       },
-      "explore": {
-        "aiChat": "Chat de IA",
-        "backlinks": "Links de entrada",
-        "findMore": "Encontrar mais",
-        "graphView": "Visualização em grafo",
-        "objectsInside": "Objetos internos",
-        "relatedContent": "Conteúdo relacionado",
-        "relevantContent": "Conteúdo relevante",
-        "title": "Explorar"
+      "title": "Adicione novo tipo de objeto",
+      "trigger": "Adicionar tipo de objeto"
+    },
+    "lifecycle": {
+      "cancel": "Cancelar",
+      "changeObjectType": "Alterar tipo de objeto",
+      "errors": {
+        "incompatible-file": "Escolha um arquivo compatível com este tipo de objeto.",
+        "invalid-url": "Digite uma URL válida para este tipo de objeto.",
+        "required-title": "Digite o título da tarefa.",
+        "unsupported-object-type": "Este tipo de objeto não é compatível."
       },
-      "fields": {
-        "quoteContent": "Conteúdo da citação",
-        "tags": "Etiquetas",
-        "text": "Text",
-        "title": "Título"
-      },
-      "objects": {
-        "collections": "Coleções",
-        "quote": "Citação"
-      },
-      "openedTab": {
-        "description": "Comece a escrever ou adicione conteúdo a este objeto."
-      },
-      "objectTypeStudio": {
-        "basicTypes": "Tipos básicos",
-        "createOwn": "Crie o seu próprio",
-        "description": "Escolha um tipo de objeto sugerido ou básico para adicionar ao espaço atual.",
-        "details": {
-          "close": "Fechar detalhes do tipo de objeto",
-          "confirm": "Adicionar tipo de objeto",
-          "description": "Configuração do tipo de objeto",
-          "name": "Nome",
-          "namePlaceholder": "Nome do tipo de objeto",
-          "preset": "Preset",
-          "review": "Revise este preset antes de adicioná-lo ao espaço atual."
+      "file": {
+        "choose": "Escolher arquivo local",
+        "createTitle": {
+          "audio": "Adicionar áudio",
+          "file": "Adicionar arquivo",
+          "image": "Adicionar imagem",
+          "pdf": "Adicionar PDF"
         },
-        "objectTypes": {
-          "ai-chat": "Chat de IA",
-          "area": "Área",
-          "atomic-note": "Nota atômica",
-          "audio": "Áudio",
-          "book": "Livro",
-          "definition": "Definição",
-          "file": "Arquivo",
-          "idea": "Ideia",
-          "image": "Imagem",
-          "media": "Mídia",
-          "meeting": "Reunião",
-          "organization": "Organização",
-          "page": "Página",
-          "pdf": "PDF",
-          "person": "Pessoa",
-          "place": "Lugar",
-          "project": "Projeto",
-          "query": "Query",
-          "quote": "Citação",
-          "table": "Tabela",
-          "tag": "Etiqueta",
-          "task": "Tarefa",
-          "travel": "Viagem",
-          "tweet": "Tweet",
-          "weblink": "Weblink"
-        },
-        "title": "Adicione novo tipo de objeto",
-        "trigger": "Adicionar tipo de objeto"
+        "description": "O arquivo permanece neste dispositivo; apenas seus metadados são salvos.",
+        "name": "Nome",
+        "reselect": "Selecione o arquivo local novamente para restaurar a prévia.",
+        "reselectAction": "Selecionar arquivo novamente",
+        "size": "Tamanho",
+        "type": "Tipo",
+        "unknownType": "Tipo desconhecido"
       },
-      "views": {
-        "all": "Tudo",
-        "overview": "Visão geral"
+      "query": {
+        "allTypes": "Todos os tipos de objeto",
+        "anyDate": "Qualquer data",
+        "created": "Filtro de data de criação",
+        "description": "Descrição da Query",
+        "generate": "Gerar",
+        "objectType": "Filtro de tipo de objeto",
+        "placeholder": "Descreva a Query que você quer…",
+        "resultCount": "{count, plural, =0 {Nenhum resultado} one {# resultado} other {# resultados}}",
+        "today": "Hoje"
+      },
+      "storageRecovered": "Não foi possível restaurar o espaço salvo. O espaço padrão foi mantido.",
+      "table": {
+        "cell": "Linha {row}, coluna {column}",
+        "notes": "Notas"
+      },
+      "tag": {
+        "empty": "Nenhum objeto local usa esta etiqueta ainda.",
+        "matches": "Objetos com esta etiqueta"
+      },
+      "task": {
+        "completed": "Concluída",
+        "created": "Tarefa criada",
+        "createTitle": "Adicionar tarefa",
+        "description": "Capture uma tarefa sem sair do objeto atual.",
+        "dueDate": "Data de vencimento",
+        "open": "Abrir",
+        "placeholder": "Título da tarefa",
+        "submit": "Adicionar tarefa"
+      },
+      "untitled": "Sem título",
+      "url": {
+        "createTitle": {
+          "tweet": "Adicionar Tweet",
+          "weblink": "Adicionar Weblink"
+        },
+        "description": "Cole uma URL para criar este objeto localmente.",
+        "notes": "Notas",
+        "placeholder": "Cole a URL",
+        "submit": "Adicionar"
       }
+    },
+    "objectTypeOverview": {
+      "addCollection": "Coleção",
+      "addQuery": "Query",
+      "collections": "Coleções",
+      "collectionCreated": "Coleção criada.",
+      "demoActionComplete": "Ação aplicada à demonstração local.",
+      "expandSection": "Expandir recentemente aberto",
+      "export": "Exportar",
+      "exportComplete": "Exportação preparada.",
+      "filter": "Filtro",
+      "import": "Importar",
+      "importComplete": "{count, plural, one {# objeto importado} other {# objetos importados}}.",
+      "importFiles": "Importar arquivo(s)",
+      "importPartial": "{accepted} importados; {rejected} arquivos incompatíveis ignorados.",
+      "importRejected": "Nenhum arquivo compatível foi importado.",
+      "moreOptions": "Mais opções",
+      "newCollection": "Nova coleção",
+      "newCurrentType": "Novo {type}",
+      "newFromTemplate": "Novo a partir do modelo",
+      "newObject": "Novo objeto",
+      "newObjectOptions": "Opções de novo objeto",
+      "newQuery": "Nova query",
+      "noCollections": "Sem coleções",
+      "noCollectionsDescription": "Você pode mudar isso criando uma nova coleção.",
+      "noQueries": "Sem queries",
+      "noQueriesDescription": "As Queries que você criar neste banco de dados aparecerão aqui.",
+      "noRecentDescription": "Os objetos que você acessou recentemente aparecerão aqui.",
+      "noRecentTitle": "Nenhum conteúdo acessado recentemente",
+      "queries": "Queries",
+      "queryCreated": "Query criada.",
+      "recentSort": "Criados recentemente",
+      "recentlyOpened": "Recentemente aberto",
+      "remove": "Remover",
+      "searchPlaceholder": "Buscar título…",
+      "settingsDescription": "As configurações da visão geral estão ativas para este tipo local.",
+      "sortBy": "Classificar por",
+      "titleSort": "Título",
+      "typeSettings": "Configurações do tipo de objeto",
+      "untitled": "Sem título",
+      "untitledCollection": "Coleção sem título {count}",
+      "untitledQuery": "Query sem título {count}",
+      "useSidebarNew": "Use Novo na barra lateral para escolher outro tipo de objeto.",
+      "viewLabel": "Visualizações do tipo de objeto",
+      "viewSettings": "Configurações da visão geral",
+      "where": "onde",
+      "pinToSidebar": "Fixar na barra lateral",
+      "unpinFromSidebar": "Desafixar da barra lateral",
+      "pinnedToSidebar": "Fixado na barra lateral.",
+      "unpinnedFromSidebar": "Desafixado da barra lateral.",
+      "templateCreated": "Criado a partir do modelo local padrão.",
+      "addView": "Adicionar visualização",
+      "allObjects": "Todos os objetos",
+      "untitledOnly": "Sem título",
+      "visibleSections": "Seções visíveis",
+      "hiddenSections": "Seções ocultas",
+      "noHiddenSections": "Nenhuma seção oculta",
+      "closeSettings": "Fechar configurações",
+      "overviewOnly": "Somente visão geral",
+      "noCollection": "Não em nenhuma coleção",
+      "untagged": "Não etiquetado",
+      "noBacklinks": "Sem backlinks",
+      "noMatchingObjects": "Nenhum objeto correspondente",
+      "noMatchingObjectsDescription": "Os objetos que corresponderem a esta visão aparecerão aqui."
+    },
+    "views": {
+      "all": "Tudo",
+      "overview": "Visão geral"
+    }
   }
 }

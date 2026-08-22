@@ -23,4 +23,4 @@
 
 - [x] 4.1 Keep AppShell, workspace-selector, primary-action behavior, dependencies, and `global.css` unchanged.
 - [x] 4.2 Reconcile the refinement with the archived Capacities reference source and screenshots.
-- [ ] 4.3 Run `pnpm verify` in a development checkout or confirm equivalent CI checks when available.
+- [x] 4.3 Run `pnpm verify` in a development checkout or confirm equivalent CI checks when available.

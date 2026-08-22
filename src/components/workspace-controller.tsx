@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import * as React from "react";
 
 import {
@@ -17,15 +18,19 @@ import {
   type AppHeaderTab,
   AppSpaceHeader,
 } from "@/components/app-header-tabs";
-import { type AppSidebarSpace } from "@/components/app-sidebar";
 import { useAppShell } from "@/components/app-shell";
-import { AppSidebarSearchIcon } from "@/components/app-sidebar-icons";
-import { AppSidebarWorkspaceIcon } from "@/components/app-sidebar-source-icon";
 import {
-  type AppSidebarCustomSection,
-  type AppSidebarObjectType,
-  type AppSidebarPinnedEntity,
+  AppSidePanelHeader,
+  type SidePanelSpecialEntryId,
+} from "@/components/app-side-panel-header";
+import type { AppSidebarSpace } from "@/components/app-sidebar";
+import { AppSidebarSearchIcon } from "@/components/app-sidebar-icons";
+import type {
+  AppSidebarCustomSection,
+  AppSidebarObjectType,
+  AppSidebarPinnedEntity,
 } from "@/components/app-sidebar-overview";
+import { AppSidebarWorkspaceIcon } from "@/components/app-sidebar-source-icon";
 import {
   ObjectAiChatIcon,
   ObjectArchiveIcon,
@@ -40,17 +45,36 @@ import {
   ObjectProjectIcon,
   ObjectQueryIcon,
   ObjectQuoteIcon,
-  type ObjectIconProps,
-  type ObjectIconTone,
   objectIconToneBadgeClass,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
+import { Button } from "@/components/ui/button";
 import {
-  AppSidePanelHeader,
-  type SidePanelSpecialEntryId,
-} from "@/components/app-side-panel-header";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import {
+  parseWorkspaceObjectSnapshot,
+  serializeWorkspaceObjectState,
+  WORKSPACE_OBJECT_STORAGE_KEY,
+} from "@/lib/workspace-object-storage";
+import {
+  countEntitiesByType,
+  createInitialWorkspaceObjectState,
+  getCreationFlow,
+  getWorkspaceImportError,
+  type WorkspaceDraft,
+  type WorkspaceEntity,
+  type WorkspaceObjectError,
+  workspaceObjectReducer,
+} from "@/lib/workspace-objects";
 
 const initialMainTabs: AppHeaderTab[] = [
   {
@@ -198,8 +222,12 @@ type WorkspaceContextValue = {
   pinnedEntities: AppSidebarPinnedEntity[];
   availablePinnedEntities: AppSidebarPinnedEntity[];
   objectTypes: AppSidebarObjectType[];
-  createdEntities: WorkspaceCreatedEntity[];
+  createdEntities: WorkspaceEntity[];
+  workspaceDraft: WorkspaceDraft | null;
+  workspaceError: WorkspaceObjectError | null;
   customSections: AppSidebarCustomSection[];
+  objectTypeCollections: Record<string, string[]>;
+  objectTypeQueries: Record<string, string[]>;
   setSpaces: React.Dispatch<React.SetStateAction<AppSidebarSpace[]>>;
   setSpaceId: React.Dispatch<React.SetStateAction<string>>;
   message: string | null;
@@ -214,43 +242,53 @@ type WorkspaceContextValue = {
     React.SetStateAction<AppSidebarPrimaryNavigationAction | undefined>
   >;
   setActiveEntityId: React.Dispatch<React.SetStateAction<string | null>>;
-  setPinnedEntities: React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>;
+  setPinnedEntities: React.Dispatch<
+    React.SetStateAction<AppSidebarPinnedEntity[]>
+  >;
   setObjectTypes: React.Dispatch<React.SetStateAction<AppSidebarObjectType[]>>;
-  setCustomSections: React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>;
+  setCustomSections: React.Dispatch<
+    React.SetStateAction<AppSidebarCustomSection[]>
+  >;
+  setObjectTypeCollections: React.Dispatch<
+    React.SetStateAction<Record<string, string[]>>
+  >;
+  setObjectTypeQueries: React.Dispatch<
+    React.SetStateAction<Record<string, string[]>>
+  >;
   showMessage: (message: string) => void;
   createWorkspaceEntity: (
     objectTypeId: string,
     objectTypeLabel?: string,
   ) => void;
+  importWorkspaceFiles: (objectTypeId: string, files: File[]) => Promise<void>;
+  cancelWorkspaceDraft: () => void;
+  commitWorkspaceFile: (file: File) => void;
+  commitWorkspaceTask: (title: string) => void;
+  commitWorkspaceUrl: (url: string) => void;
+  updateWorkspaceEntity: (id: string, patch: Record<string, unknown>) => void;
+  changeWorkspaceEntityType: (id: string, objectTypeId: "tag" | "task") => void;
+  deleteWorkspaceEntity: (id: string) => void;
+  duplicateWorkspaceEntity: (id: string) => void;
   selectEntity: (id: string) => void;
   openInSidePanel: (tab: AppHeaderTab) => void;
 };
 
-type WorkspaceCreatedEntity = {
-  id: string;
-  objectTypeId: string;
-  objectTypeLabel: string;
-  label: string;
-  icon: React.ElementType<ObjectIconProps>;
-  tone: ObjectIconTone;
-};
-
-const WorkspaceContext =
-  React.createContext<WorkspaceContextValue | null>(null);
+const WorkspaceContext = React.createContext<WorkspaceContextValue | null>(
+  null,
+);
 
 function useWorkspace() {
   const context = React.useContext(WorkspaceContext);
 
   if (!context) {
-    throw new Error(
-      "useWorkspace must be used within WorkspaceProvider.",
-    );
+    throw new Error("useWorkspace must be used within WorkspaceProvider.");
   }
 
   return context;
 }
 
 function WorkspaceProvider({ children }: { children: React.ReactNode }) {
+  const t = useTranslations("workspace");
   const [spaces, setSpaces] = React.useState(initialSpaces);
   const [spaceId, setSpaceId] = React.useState("labs");
   const [mainTabs, setMainTabs] = React.useState(initialMainTabs);
@@ -260,24 +298,68 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [focusMode, setFocusMode] = React.useState(false);
   const [sideSearchOpen, setSideSearchOpen] = React.useState(false);
   const [mainSearchOpen, setMainSearchOpen] = React.useState(false);
-  const [activeAction, setActiveAction] =
-    React.useState<AppSidebarPrimaryNavigationAction | undefined>(undefined);
-  const [activeEntityId, setActiveEntityId] =
-    React.useState<string | null>("quote");
-  const [pinnedEntities, setPinnedEntities] =
-    React.useState<AppSidebarPinnedEntity[]>([availablePinnedEntities[0]!]);
-  const [objectTypes, setObjectTypes] = React.useState(initialObjectTypes);
-  const [createdEntities, setCreatedEntities] = React.useState<
-    WorkspaceCreatedEntity[]
-  >([]);
+  const [activeAction, setActiveAction] = React.useState<
+    AppSidebarPrimaryNavigationAction | undefined
+  >(undefined);
+  const [activeEntityId, setActiveEntityId] = React.useState<string | null>(
+    "quote",
+  );
+  const [pinnedEntities, setPinnedEntities] = React.useState<
+    AppSidebarPinnedEntity[]
+  >([availablePinnedEntities[0]!]);
+  const [baseObjectTypes, setBaseObjectTypes] =
+    React.useState(initialObjectTypes);
+  const [workspaceObjects, dispatchWorkspaceObjects] = React.useReducer(
+    workspaceObjectReducer,
+    undefined,
+    createInitialWorkspaceObjectState,
+  );
   const [customSections, setCustomSections] = React.useState<
     AppSidebarCustomSection[]
   >([]);
+  const [objectTypeCollections, setObjectTypeCollections] = React.useState<
+    Record<string, string[]>
+  >({});
+  const [objectTypeQueries, setObjectTypeQueries] = React.useState<
+    Record<string, string[]>
+  >({});
   const [message, setMessage] = React.useState<string | null>(null);
+  const [createdTaskId, setCreatedTaskId] = React.useState<string | null>(null);
   const messageTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
-  const createdEntitySequenceRef = React.useRef(0);
+  const taskToastTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const hydrationStartedRef = React.useRef(false);
+  const [storageReady, setStorageReady] = React.useState(false);
+
+  const createdCounts = React.useMemo(
+    () => countEntitiesByType(workspaceObjects.entities),
+    [workspaceObjects.entities],
+  );
+  const objectTypes = React.useMemo(() => {
+    const existingIds = new Set(baseObjectTypes.map((item) => item.id));
+    const withCounts = baseObjectTypes.map((objectType) => ({
+      ...objectType,
+      count:
+        objectType.count +
+        (createdCounts[objectType.id as keyof typeof createdCounts] ?? 0),
+    }));
+    for (const [id, count] of Object.entries(createdCounts)) {
+      if (!count || existingIds.has(id)) continue;
+      const definition = objectTypeDefinitionById[id];
+      if (!definition) continue;
+      withCounts.push({
+        id,
+        label: t(`objectTypeStudio.objectTypes.${id}`),
+        icon: definition.icon,
+        tone: definition.tone,
+        count,
+      });
+    }
+    return withCounts;
+  }, [baseObjectTypes, createdCounts, t]);
 
   const showMessage = React.useCallback((nextMessage: string) => {
     setMessage(nextMessage);
@@ -292,8 +374,89 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     return () => {
       if (messageTimerRef.current) clearTimeout(messageTimerRef.current);
+      if (taskToastTimerRef.current) clearTimeout(taskToastTimerRef.current);
     };
   }, []);
+
+  React.useEffect(() => {
+    if (hydrationStartedRef.current) return;
+    hydrationStartedRef.current = true;
+    try {
+      const raw = window.localStorage.getItem(WORKSPACE_OBJECT_STORAGE_KEY);
+      if (!raw) {
+        dispatchWorkspaceObjects({
+          type: "hydrate",
+          state: createInitialWorkspaceObjectState(),
+        });
+      } else {
+        const parsed = parseWorkspaceObjectSnapshot(raw);
+        if (parsed.ok) {
+          dispatchWorkspaceObjects({ type: "hydrate", state: parsed.state });
+        } else {
+          dispatchWorkspaceObjects({ type: "recover" });
+          showMessage(t("lifecycle.storageRecovered"));
+        }
+      }
+    } catch {
+      dispatchWorkspaceObjects({ type: "recover" });
+      showMessage(t("lifecycle.storageRecovered"));
+    }
+    setStorageReady(true);
+  }, [showMessage, t]);
+
+  React.useEffect(() => {
+    if (!storageReady) return;
+    window.localStorage.setItem(
+      WORKSPACE_OBJECT_STORAGE_KEY,
+      serializeWorkspaceObjectState(workspaceObjects),
+    );
+  }, [storageReady, workspaceObjects]);
+
+  React.useEffect(() => {
+    if (!workspaceObjects.error || workspaceObjects.draft) return;
+    showMessage(t(`lifecycle.errors.${workspaceObjects.error}`));
+  }, [showMessage, t, workspaceObjects.draft, workspaceObjects.error]);
+
+  React.useEffect(() => {
+    if (workspaceObjects.entities.length === 0) return;
+    setMainTabs((current) => {
+      const next = [...current];
+      for (const entity of workspaceObjects.entities) {
+        const definition = objectTypeDefinitionById[entity.objectTypeId];
+        if (!definition) continue;
+        const label = entity.title.trim() || t("lifecycle.untitled");
+        const existingIndex = next.findIndex((tab) => tab.id === entity.id);
+        const tab: AppHeaderTab = {
+          id: entity.id,
+          label,
+          icon: definition.icon,
+          iconClassName: objectIconToneBadgeClass[definition.tone],
+          preview: (
+            <TabPreview
+              eyebrow={t(`objectTypeStudio.objectTypes.${entity.objectTypeId}`)}
+              title={label}
+            />
+          ),
+        };
+        if (
+          existingIndex === -1 &&
+          entity.id !== workspaceObjects.activeEntityId
+        ) {
+          continue;
+        }
+        if (existingIndex === -1) next.push(tab);
+        else next[existingIndex] = { ...next[existingIndex], ...tab };
+      }
+      return next;
+    });
+  }, [t, workspaceObjects.activeEntityId, workspaceObjects.entities]);
+
+  React.useEffect(() => {
+    if (!workspaceObjects.activeEntityId) return;
+    setMainValue(workspaceObjects.activeEntityId);
+    setActiveEntityId(workspaceObjects.activeEntityId);
+    setActiveAction(undefined);
+  }, [workspaceObjects.activeEntityId]);
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -328,12 +491,23 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   const selectEntity = React.useCallback(
     (id: string) => {
+      const createdEntity = workspaceObjects.entities.find(
+        (item) => item.id === id,
+      );
       const objectType = objectTypes.find((item) => item.id === id);
-      const pinnedEntity = availablePinnedEntities.find((item) => item.id === id);
+      const pinnedEntity = availablePinnedEntities.find(
+        (item) => item.id === id,
+      );
       const entity = objectType ?? pinnedEntity;
 
       setActiveEntityId(id);
       setActiveAction(undefined);
+
+      if (createdEntity) {
+        dispatchWorkspaceObjects({ type: "selectEntity", id });
+        setMainValue(id);
+        return;
+      }
 
       if (!entity) return;
 
@@ -341,55 +515,134 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         id: entity.id,
         label: entity.label,
         icon: entity.icon,
-        iconClassName:
-          objectIconToneBadgeClass[entity.tone],
+        iconClassName: objectIconToneBadgeClass[entity.tone],
         preview: <TabPreview eyebrow="Objeto" title={entity.label} />,
       });
     },
-    [ensureMainTab, objectTypes],
+    [ensureMainTab, objectTypes, workspaceObjects.entities],
   );
 
-  const createWorkspaceEntity = React.useCallback((
-    objectTypeId: string,
-    objectTypeLabel?: string,
-  ) => {
-    const definition = objectTypeDefinitionById[objectTypeId];
-    if (!definition) return;
+  const createWorkspaceEntity = React.useCallback(
+    (objectTypeId: string, _objectTypeLabel?: string) => {
+      dispatchWorkspaceObjects({ type: "beginCreate", objectTypeId });
+      if (!getCreationFlow(objectTypeId)) {
+        showMessage(t("lifecycle.errors.unsupported-object-type"));
+      }
+    },
+    [showMessage, t],
+  );
 
-    createdEntitySequenceRef.current += 1;
-    const id = `created-${objectTypeId}-${createdEntitySequenceRef.current}`;
-    const entity: WorkspaceCreatedEntity = {
-      id,
-      objectTypeId,
-      objectTypeLabel: objectTypeLabel ?? definition.label,
-      label: "Sem título",
-      icon: definition.icon,
-      tone: definition.tone,
-    };
+  const cancelWorkspaceDraft = React.useCallback(() => {
+    dispatchWorkspaceObjects({ type: "cancelDraft" });
+  }, []);
 
-    setCreatedEntities((current) => [...current, entity]);
-    setObjectTypes((current) =>
-      current.map((objectType) =>
-        objectType.id === objectTypeId
-          ? { ...objectType, count: objectType.count + 1 }
-          : objectType,
-      ),
-    );
-    setMainTabs((current) => [
-      ...current,
-      {
-        id,
-        label: entity.label,
-        icon: entity.icon,
-        iconClassName: objectIconToneBadgeClass[entity.tone],
-        preview: (
-          <TabPreview eyebrow={definition.label} title={entity.label} />
-        ),
-      },
-    ]);
-    setMainValue(id);
-    setActiveEntityId(id);
-    setActiveAction(undefined);
+  const commitWorkspaceTask = React.useCallback(
+    (title: string) => {
+      if (title.trim()) {
+        const id = `created-task-${workspaceObjects.nextId}`;
+        setCreatedTaskId(id);
+        if (taskToastTimerRef.current) clearTimeout(taskToastTimerRef.current);
+        taskToastTimerRef.current = setTimeout(() => {
+          setCreatedTaskId(null);
+          taskToastTimerRef.current = null;
+        }, 5000);
+      }
+      dispatchWorkspaceObjects({ type: "commitTask", title });
+    },
+    [workspaceObjects.nextId],
+  );
+
+  const commitWorkspaceUrl = React.useCallback((url: string) => {
+    dispatchWorkspaceObjects({ type: "commitUrl", url });
+  }, []);
+
+  const commitWorkspaceFile = React.useCallback((file: File) => {
+    dispatchWorkspaceObjects({
+      type: "commitFile",
+      fileName: file.name,
+      mimeType: file.type,
+      previewUrl: URL.createObjectURL(file),
+      size: file.size,
+    });
+  }, []);
+
+  const importWorkspaceFiles = React.useCallback(
+    async (objectTypeId: string, files: File[]) => {
+      const flow = getCreationFlow(objectTypeId);
+      if (!flow) {
+        showMessage(t("lifecycle.errors.unsupported-object-type"));
+        return;
+      }
+
+      let accepted = 0;
+      let rejected = 0;
+      for (const file of files) {
+        let text = "";
+        if (flow !== "file") {
+          try {
+            text = await file.text();
+          } catch {
+            rejected += 1;
+            continue;
+          }
+        }
+        const importError = getWorkspaceImportError(
+          objectTypeId,
+          file.type,
+          file.name,
+          text,
+        );
+        if (importError) {
+          rejected += 1;
+          continue;
+        }
+        dispatchWorkspaceObjects({
+          type: "importFile",
+          fileName: file.name,
+          mimeType: file.type,
+          objectTypeId,
+          previewUrl: flow === "file" ? URL.createObjectURL(file) : undefined,
+          size: file.size,
+          text,
+        });
+        accepted += 1;
+      }
+
+      if (accepted > 0 && rejected > 0) {
+        showMessage(
+          t("objectTypeOverview.importPartial", { accepted, rejected }),
+        );
+      } else if (accepted > 0) {
+        showMessage(
+          t("objectTypeOverview.importComplete", { count: accepted }),
+        );
+      } else {
+        showMessage(t("objectTypeOverview.importRejected"));
+      }
+    },
+    [showMessage, t],
+  );
+
+  const updateWorkspaceEntity = React.useCallback(
+    (id: string, patch: Record<string, unknown>) => {
+      dispatchWorkspaceObjects({ type: "updateEntity", id, patch });
+    },
+    [],
+  );
+
+  const changeWorkspaceEntityType = React.useCallback(
+    (id: string, objectTypeId: "tag" | "task") => {
+      dispatchWorkspaceObjects({ type: "changeEntityType", id, objectTypeId });
+    },
+    [],
+  );
+
+  const deleteWorkspaceEntity = React.useCallback((id: string) => {
+    dispatchWorkspaceObjects({ type: "deleteEntity", id });
+  }, []);
+
+  const duplicateWorkspaceEntity = React.useCallback((id: string) => {
+    dispatchWorkspaceObjects({ type: "duplicateEntity", id });
   }, []);
 
   const value = React.useMemo<WorkspaceContextValue>(
@@ -408,8 +661,12 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       pinnedEntities,
       availablePinnedEntities,
       objectTypes,
-      createdEntities,
+      createdEntities: workspaceObjects.entities,
+      workspaceDraft: workspaceObjects.draft,
+      workspaceError: workspaceObjects.error,
       customSections,
+      objectTypeCollections,
+      objectTypeQueries,
       setSpaces,
       setSpaceId,
       message,
@@ -423,10 +680,21 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setActiveAction,
       setActiveEntityId,
       setPinnedEntities,
-      setObjectTypes,
+      setObjectTypes: setBaseObjectTypes,
       setCustomSections,
+      setObjectTypeCollections,
+      setObjectTypeQueries,
       showMessage,
       createWorkspaceEntity,
+      importWorkspaceFiles,
+      cancelWorkspaceDraft,
+      commitWorkspaceFile,
+      commitWorkspaceTask,
+      commitWorkspaceUrl,
+      updateWorkspaceEntity,
+      changeWorkspaceEntityType,
+      deleteWorkspaceEntity,
+      duplicateWorkspaceEntity,
       selectEntity,
       openInSidePanel,
     }),
@@ -446,10 +714,23 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       activeEntityId,
       pinnedEntities,
       objectTypes,
-      createdEntities,
+      workspaceObjects.draft,
+      workspaceObjects.entities,
+      workspaceObjects.error,
       customSections,
+      objectTypeCollections,
+      objectTypeQueries,
       selectEntity,
       createWorkspaceEntity,
+      importWorkspaceFiles,
+      cancelWorkspaceDraft,
+      commitWorkspaceFile,
+      commitWorkspaceTask,
+      commitWorkspaceUrl,
+      updateWorkspaceEntity,
+      changeWorkspaceEntityType,
+      deleteWorkspaceEntity,
+      duplicateWorkspaceEntity,
       openInSidePanel,
     ],
   );
@@ -460,6 +741,27 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         {children}
         {sideSearchOpen && <SidePanelSearchOverlay />}
         {mainSearchOpen && <MainTabSearchOverlay />}
+        {workspaceObjects.draft && <WorkspaceCreationDialog />}
+        {createdTaskId && (
+          <div
+            data-slot="workspace-task-created"
+            role="status"
+            className="fixed bottom-4 right-4 z-[130] flex items-center gap-3 rounded-xl border bg-popover px-3 py-2 text-sm text-popover-foreground shadow-lg"
+          >
+            <span>{t("lifecycle.task.created")}</span>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                selectEntity(createdTaskId);
+                setCreatedTaskId(null);
+              }}
+            >
+              {t("lifecycle.task.open")}
+            </Button>
+          </div>
+        )}
         {message && (
           <div
             data-slot="workspace-message"
@@ -474,6 +776,135 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+function getDraftAccept(draft: WorkspaceDraft): string | undefined {
+  if (draft.objectTypeId === "image") return "image/*";
+  if (draft.objectTypeId === "pdf") return "application/pdf,.pdf";
+  if (draft.objectTypeId === "audio") return "audio/*";
+  return undefined;
+}
+
+function WorkspaceDraftError({
+  error,
+}: {
+  error: WorkspaceObjectError | null;
+}) {
+  const t = useTranslations("workspace");
+  if (!error) return null;
+  return (
+    <p
+      id="workspace-draft-error"
+      role="alert"
+      className="text-sm text-destructive"
+    >
+      {t(`lifecycle.errors.${error}`)}
+    </p>
+  );
+}
+
+function WorkspaceCreationDialog() {
+  const t = useTranslations("workspace");
+  const {
+    workspaceDraft,
+    workspaceError,
+    cancelWorkspaceDraft,
+    commitWorkspaceFile,
+    commitWorkspaceTask,
+    commitWorkspaceUrl,
+  } = useWorkspace();
+  const [value, setValue] = React.useState("");
+
+  if (!workspaceDraft) return null;
+
+  const isTask = workspaceDraft.kind === "task";
+  const isUrl = workspaceDraft.kind === "url";
+  const accept = getDraftAccept(workspaceDraft);
+  const titleKey = isTask
+    ? "lifecycle.task.createTitle"
+    : `lifecycle.${isUrl ? "url" : "file"}.createTitle.${workspaceDraft.objectTypeId}`;
+  const descriptionKey = `lifecycle.${isTask ? "task" : isUrl ? "url" : "file"}.description`;
+
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (isTask) commitWorkspaceTask(value);
+    else if (isUrl) commitWorkspaceUrl(value);
+  }
+
+  function cancelAndRestoreFocus() {
+    cancelWorkspaceDraft();
+    window.requestAnimationFrame(() => {
+      document.getElementById("workspace-new-trigger")?.focus();
+    });
+  }
+
+  return (
+    <Dialog
+      open
+      onOpenChange={(open) => {
+        if (!open) cancelAndRestoreFocus();
+      }}
+    >
+      <DialogContent
+        data-slot="workspace-creation-dialog"
+        showCloseButton={false}
+        className="gap-3 rounded-xl sm:max-w-md"
+      >
+        <form onSubmit={submit} className="contents">
+          <DialogHeader>
+            <DialogTitle>{t(titleKey)}</DialogTitle>
+            <DialogDescription>{t(descriptionKey)}</DialogDescription>
+          </DialogHeader>
+
+          {workspaceDraft.kind === "file" ? (
+            <Input
+              type="file"
+              accept={accept}
+              aria-label={t("lifecycle.file.choose")}
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) commitWorkspaceFile(file);
+              }}
+            />
+          ) : (
+            <Input
+              autoFocus
+              value={value}
+              onChange={(event) => setValue(event.target.value)}
+              aria-invalid={workspaceError ? true : undefined}
+              aria-describedby={
+                workspaceError ? "workspace-draft-error" : undefined
+              }
+              placeholder={
+                isTask
+                  ? t("lifecycle.task.placeholder")
+                  : t("lifecycle.url.placeholder")
+              }
+            />
+          )}
+
+          <WorkspaceDraftError error={workspaceError} />
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={cancelAndRestoreFocus}
+            >
+              {t("lifecycle.cancel")}
+            </Button>
+            {workspaceDraft.kind !== "file" && (
+              <Button type="submit">
+                {isTask
+                  ? t("lifecycle.task.submit")
+                  : t("lifecycle.url.submit")}
+              </Button>
+            )}
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function WorkspaceMainHeader() {
   const {
     mainTabs,
@@ -484,6 +915,7 @@ function WorkspaceMainHeader() {
     setFocusMode,
     setMainSearchOpen,
     openInSidePanel,
+    selectEntity,
     showMessage,
   } = useWorkspace();
   const { rightCollapsed, toggleRight } = useAppShell();
@@ -547,7 +979,10 @@ function WorkspaceMainHeader() {
       <AppSpaceHeader
         tabs={mainTabs}
         value={mainValue}
-        onValueChange={setMainValue}
+        onValueChange={(id) => {
+          setMainValue(id);
+          selectEntity(id);
+        }}
         onTabsChange={setMainTabs}
         onCreate={createTab}
         createLabel="Criar nova aba"
@@ -569,12 +1004,8 @@ function WorkspaceMainHeader() {
 }
 
 function MainTabSearchOverlay() {
-  const {
-    mainTabs,
-    setMainTabs,
-    setMainValue,
-    setMainSearchOpen,
-  } = useWorkspace();
+  const { mainTabs, setMainTabs, setMainValue, setMainSearchOpen } =
+    useWorkspace();
   const [query, setQuery] = React.useState("");
 
   const options = [
@@ -608,7 +1039,9 @@ function MainTabSearchOverlay() {
         ],
     };
     setMainTabs((current) => {
-      const withoutDraft = current.filter((tab) => tab.id !== MAIN_DRAFT_TAB_ID);
+      const withoutDraft = current.filter(
+        (tab) => tab.id !== MAIN_DRAFT_TAB_ID,
+      );
       return withoutDraft.some((tab) => tab.id === selected.id)
         ? withoutDraft
         : [...withoutDraft, selected];
@@ -626,9 +1059,7 @@ function MainTabSearchOverlay() {
   });
 
   return (
-    <div
-      className="fixed inset-0 z-[120] flex items-start justify-center bg-black/15 px-4 pt-[10vh]"
-    >
+    <div className="fixed inset-0 z-[120] flex items-start justify-center bg-black/15 px-4 pt-[10vh]">
       <button
         type="button"
         aria-label="Cancelar criação de nova aba"
@@ -650,14 +1081,17 @@ function MainTabSearchOverlay() {
             aria-label="Buscar conteúdo para nova aba"
             className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
-          <span className="rounded-md bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">Esc</span>
+          <span className="rounded-md bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+            Esc
+          </span>
         </div>
         <div className="p-2">
-          <p className="px-2 pb-1.5 text-xs text-muted-foreground">Recentemente abertos</p>
+          <p className="px-2 pb-1.5 text-xs text-muted-foreground">
+            Recentemente abertos
+          </p>
           {filtered.map((option) => {
             const Icon = option.icon;
-            const tone =
-              objectTypeDefinitionById[option.id]?.tone ?? "blue";
+            const tone = objectTypeDefinitionById[option.id]?.tone ?? "blue";
             return (
               <button
                 key={option.id}
@@ -755,6 +1189,11 @@ function WorkspaceSidePanelHeader() {
 function SidePanelSearchOverlay() {
   const { setSideSearchOpen, setSideTabs, setSideValue } = useWorkspace();
   const [query, setQuery] = React.useState("");
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    searchInputRef.current?.focus({ preventScroll: true });
+  }, []);
 
   const recentItems = React.useMemo(
     () => [
@@ -805,19 +1244,23 @@ function SidePanelSearchOverlay() {
   }
 
   return (
+    /* biome-ignore lint/a11y/noStaticElementInteractions: the backdrop dismisses the semantic dialog nested inside */
     <div
+      role="presentation"
       data-slot="side-panel-search-overlay"
       className="fixed inset-0 z-[120] flex items-start justify-center bg-black/50 px-4 pt-[10vh]"
       onMouseDown={() => setSideSearchOpen(false)}
     >
       <div
+        role="dialog"
+        aria-modal="true"
         className="w-full max-w-[50rem] overflow-hidden rounded-xl border border-black/10 bg-white text-[#282522] shadow-2xl"
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="flex h-[58px] items-center gap-3 border-b border-black/10 px-4">
           <span className="text-xl">⌕</span>
           <input
-            autoFocus
+            ref={searchInputRef}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Buscar por conteúdo e ações, ou colar da área de transferência"
@@ -922,9 +1365,8 @@ function TabPreview({ eyebrow, title }: { eyebrow: string; title: string }) {
 }
 
 export {
-  type WorkspaceCreatedEntity,
+  useWorkspace,
   WorkspaceMainHeader,
   WorkspaceProvider,
   WorkspaceSidePanelHeader,
-  useWorkspace,
 };
