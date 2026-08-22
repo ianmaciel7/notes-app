@@ -19,7 +19,7 @@
 
 ## 4. Block interaction surfaces
 
-- [ ] 4.1 Implement a shared block-command catalog and slash menu using Suggestion and Command with filtering, keyboard navigation, Enter, Escape, empty state, and focus restoration.
+- [x] 4.1 Implement a shared block-command catalog and slash menu using Suggestion and Command with filtering, keyboard navigation, Enter, Escape, empty state, and focus restoration.
 - [ ] 4.2 Implement the headless BubbleMenu selection toolbar using only local Button, ToggleGroup, DropdownMenu, and Popover primitives while preserving the editor selection for formatting and link editing.
 - [ ] 4.3 Implement top-level-only insertion and drag handles with `nested: false`, reuse the slash catalog for insertion, support reordering, and hide drag affordances on touch/mobile.
 - [ ] 4.4 Extend the local Popover neutrally only if a virtual anchor is required, and give every exported editor component a neutral English `data-slot`.
