@@ -173,6 +173,157 @@ test("sidebar row and nested menu keep distinct full-row targets", async ({
   expect(errors).toEqual([]);
 });
 
+test("sidebar object rows align and collection rows keep nested indentation", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .getByRole("button")
+    .filter({ hasText: "Páginas" })
+    .click();
+  await page.getByRole("tab", { name: "Tudo", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Mais opções", exact: true })
+    .last()
+    .click();
+  await page.getByRole("menuitem", { name: "Nova coleção" }).click();
+
+  const pageRow = page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" });
+  await expect(
+    pageRow.locator('[data-slot="app-sidebar-object-type-chevron"]'),
+  ).toBeVisible();
+  await expect
+    .poll(() =>
+      pageRow
+        .locator('[data-slot="app-sidebar-object-type-chevron"]')
+        .evaluate((element) => getComputedStyle(element).opacity),
+    )
+    .toBe("0");
+  await expect
+    .poll(() =>
+      pageRow
+        .locator('[data-slot="app-sidebar-object-type-icon"]')
+        .evaluate((element) => getComputedStyle(element).opacity),
+    )
+    .toBe("1");
+
+  await pageRow.hover();
+  await expect
+    .poll(() =>
+      pageRow
+        .locator('[data-slot="app-sidebar-object-type-chevron"]')
+        .evaluate((element) => getComputedStyle(element).opacity),
+    )
+    .toBe("1");
+  await expect
+    .poll(() =>
+      pageRow
+        .locator('[data-slot="app-sidebar-object-type-icon"]')
+        .evaluate((element) => getComputedStyle(element).opacity),
+    )
+    .toBe("0");
+
+  const textColumns = await page.evaluate(() => {
+    function visible(element: Element) {
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      return (
+        rect.width > 0 &&
+        rect.height > 0 &&
+        style.display !== "none" &&
+        style.visibility !== "hidden"
+      );
+    }
+
+    const expectedLabels = new Set([
+      "Notas atômicas",
+      "Citações",
+      "Páginas",
+      "Sem título",
+    ]);
+
+    return Array.from(
+      document.querySelectorAll(
+        [
+          '[data-slot="app-sidebar-object-type-row"]',
+          '[data-slot="app-sidebar-collection-row"]',
+        ].join(","),
+      ),
+    )
+      .filter(visible)
+      .map((row) => {
+        const labels = Array.from(row.querySelectorAll("span"))
+          .filter(visible)
+          .map((span) => ({
+            text: span.textContent?.trim() ?? "",
+            left: span.getBoundingClientRect().left,
+            className: span.className.toString(),
+          }))
+          .filter((span) => expectedLabels.has(span.text));
+        const label =
+          labels.find(
+            (span) =>
+              span.className.includes("text-[1em]") ||
+              span.className === "min-w-0 truncate",
+          ) ?? labels.sort((a, b) => b.left - a.left)[0];
+        const iconLeft = row.querySelector("svg")?.getBoundingClientRect().left;
+
+        return label
+          ? {
+              iconLeft,
+              text: label.text,
+              left: label.left,
+            }
+          : null;
+      })
+      .filter(
+        (
+          row,
+        ): row is {
+          iconLeft: number;
+          text: string;
+          left: number;
+        } => row !== null && row.iconLeft !== undefined,
+      );
+  });
+
+  expect(textColumns.map((row) => row.text)).toEqual(
+    expect.arrayContaining([
+      "Notas atômicas",
+      "Citações",
+      "Páginas",
+      "Sem título",
+    ]),
+  );
+  const typeLefts = textColumns
+    .filter((row) => row.text !== "Sem título")
+    .map((row) => row.left);
+  expect(Math.max(...typeLefts) - Math.min(...typeLefts)).toBeLessThanOrEqual(
+    1,
+  );
+  const typeIconLefts = textColumns
+    .filter((row) => row.text !== "Sem título")
+    .map((row) => row.iconLeft);
+  expect(
+    Math.max(...typeIconLefts) - Math.min(...typeIconLefts),
+  ).toBeLessThanOrEqual(1);
+  const typeColumn = typeLefts[0];
+  const collectionColumn = textColumns.find(
+    (row) => row.text === "Sem título",
+  )?.left;
+  expect(collectionColumn).toBeDefined();
+  const nestedOffset = (collectionColumn ?? typeColumn) - typeColumn;
+  expect(nestedOffset).toBeGreaterThanOrEqual(16);
+  expect(nestedOffset).toBeLessThanOrEqual(20);
+  expect(errors).toEqual([]);
+});
+
 test("workspace overflow menu supports submenu, outside click, and Escape", async ({
   page,
 }) => {

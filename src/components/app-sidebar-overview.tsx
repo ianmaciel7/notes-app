@@ -610,7 +610,7 @@ function AppSidebarObjectTypeRow({
             aria-label={objectType.label}
             aria-expanded={collectionsOpen}
             className={cn(
-              "relative inline-flex size-[21px] shrink-0 items-center justify-center rounded-md bg-transparent text-muted-foreground",
+              "relative ml-[5px] inline-flex size-[21px] shrink-0 items-center justify-center rounded-md bg-transparent text-muted-foreground",
               "transition-[background-color,opacity] duration-150 ease-out motion-reduce:transition-none",
               "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:bg-sidebar-accent focus-visible:text-sidebar-accent-foreground",
               "focus-visible:[&_[data-slot=app-sidebar-object-type-icon]]:opacity-0 focus-visible:[&_[data-slot=app-sidebar-object-type-chevron]]:opacity-100"
@@ -645,7 +645,7 @@ function AppSidebarObjectTypeRow({
         >
           <span className="flex w-12 min-w-0 flex-1 items-center gap-x-1.5 truncate">
             {hasCollections ? (
-              <span className="block min-w-0 truncate px-[0.49em] py-[0.2em] text-left leading-[1.3]">
+              <span className="ml-[4px] block min-w-0 truncate px-[0.49em] py-[0.2em] text-left leading-[1.3]">
                 {objectType.label}
               </span>
             ) : (
@@ -690,7 +690,7 @@ function AppSidebarObjectTypeRow({
                 data-slot="app-sidebar-collection-row"
                 data-active={collectionId === activeId || undefined}
                 className={cn(
-                  "group/collection-row group/interactive flex h-[29px] w-full min-w-0 items-center rounded-md pl-[3px] pr-1 text-sm font-normal text-muted-foreground",
+                  "group/collection-row group/interactive flex h-[29px] w-full min-w-0 items-center rounded-md pl-[26px] pr-1 text-sm font-normal text-muted-foreground",
                   workspaceRowStateClass,
                 )}
               >
