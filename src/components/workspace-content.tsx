@@ -83,7 +83,7 @@ function CreatedObjectWorkspace({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-sidebar-foreground">
             <ObjectIconBadge icon={Icon} tone={entity.tone} variant="menu" />
-            <span>{entity.objectTypeId}</span>
+            <span>{entity.objectTypeLabel}</span>
           </div>
           <Button
             variant="ghost"

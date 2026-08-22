@@ -226,6 +226,7 @@ type WorkspaceContextValue = {
 type WorkspaceCreatedEntity = {
   id: string;
   objectTypeId: string;
+  objectTypeLabel: string;
   label: string;
   icon: React.ElementType<ObjectIconProps>;
   tone: ObjectIconTone;
@@ -354,6 +355,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     const entity: WorkspaceCreatedEntity = {
       id,
       objectTypeId,
+      objectTypeLabel: definition.label,
       label: "Sem título",
       icon: definition.icon,
       tone: definition.tone,

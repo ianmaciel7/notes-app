@@ -3,11 +3,8 @@
 import * as React from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
-  AppSidebarArrowDownIcon,
-  AppSidebarArrowUpIcon,
   AppSidebarCalendarIcon,
   AppSidebarChevronRightIcon,
-  AppSidebarCornerDownLeftIcon,
   AppSidebarExploreIcon,
   AppSidebarPlusIcon,
   AppSidebarSearchIcon,
@@ -19,6 +16,12 @@ import {
   objectTypeDefinitionById,
 } from "@/components/object-icons";
 import { Button } from "@/components/ui/button";
+import {
+  CompactMenuItemText,
+  compactMenuItemClass,
+  compactMenuSearchClass,
+  compactMenuSurfaceClass,
+} from "@/components/ui/compact-menu";
 import {
   HoverCard,
   HoverCardContent,
@@ -165,16 +168,24 @@ function NewContentMenu({
         align="start"
         sideOffset={-1}
         alignOffset={6}
-        className="box-content h-[361px] w-[22rem] max-w-[calc(100vw-1rem)] gap-0 overflow-hidden rounded-[12px] border-[oklch(0.9163_0.0017_67.07)] bg-popover p-0 shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0"
+        className={cn(
+          compactMenuSurfaceClass,
+          "box-content h-[361px] w-[22rem] min-w-0 max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-[oklch(0.9163_0.0017_67.07)] shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
+        )}
       >
         <div className="h-11 shrink-0 p-1.5">
-          <div className="flex h-8 items-center rounded-[8px] bg-[oklch(0.9676_0.0016_67.02)] px-[9px]">
+          <div
+            className={cn(
+              compactMenuSearchClass,
+              "flex h-8 items-center rounded-[8px] bg-[oklch(0.9676_0.0016_67.02)]",
+            )}
+          >
             <Input
               value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setActiveIndex(0);
-            }}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setActiveIndex(0);
+              }}
               onKeyDown={handleInputKeyDown}
               placeholder="Buscar"
               aria-label="Buscar tipo de conteúdo"
@@ -187,7 +198,7 @@ function NewContentMenu({
               role="combobox"
               aria-autocomplete="list"
               aria-expanded={open}
-              className="h-full border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
+              className="h-full border-0 bg-transparent p-0 shadow-none placeholder:text-muted-foreground placeholder:opacity-60 focus-visible:ring-0"
               autoFocus
             />
           </div>
@@ -206,7 +217,7 @@ function NewContentMenu({
 
             return (
               <button
-                key={label}
+                key={objectTypeId}
                 ref={(node) => {
                   if (node) optionRefs.current.set(objectTypeId, node);
                   else optionRefs.current.delete(objectTypeId);
@@ -219,37 +230,34 @@ function NewContentMenu({
                 data-active={index === activeIndex || undefined}
                 onPointerMove={() => setActiveIndex(index)}
                 onClick={() => selectItem(objectTypeId)}
-                className="flex h-8 w-full items-center gap-2 rounded-[8px] px-1 text-left text-sm font-normal outline-none hover:bg-sidebar-accent data-[active=true]:bg-sidebar-accent"
+                className={cn(
+                  compactMenuItemClass,
+                  "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] px-1 text-left font-normal outline-none hover:bg-[#f3f1ee] data-[active=true]:bg-[#f3f1ee]",
+                )}
               >
                 <ObjectIconBadge
                   icon={Icon}
                   tone={definition.tone}
                   variant="menu"
                 />
-                <span className="truncate">{label}</span>
-                <AppSidebarChevronRightIcon className="ml-auto size-4 text-muted-foreground" />
+                <CompactMenuItemText>{label}</CompactMenuItemText>
+                <AppSidebarChevronRightIcon className="ml-auto size-3 text-muted-foreground" />
               </button>
             );
           })}
         </div>
 
         <div className="mx-1 flex h-[29px] shrink-0 items-center gap-x-3 border-t border-border px-1 py-1.5 text-xs leading-4 text-muted-foreground">
-          <span>
-            <Kbd>
-              <AppSidebarArrowUpIcon />
-            </Kbd>
-            <Kbd>
-              <AppSidebarArrowDownIcon />
-            </Kbd>{" "}
+          <span className="whitespace-nowrap">
+            <span className="font-medium text-muted-foreground">↑↓</span>{" "}
             para navegar
           </span>
-          <span>
-            <Kbd>Esc</Kbd> para abortar
+          <span className="whitespace-nowrap">
+            <span className="font-medium text-muted-foreground">Esc</span> para
+            abortar
           </span>
-          <span>
-            <Kbd>
-              <AppSidebarCornerDownLeftIcon />
-            </Kbd>{" "}
+          <span className="whitespace-nowrap">
+            <span className="font-medium text-muted-foreground">↵</span>{" "}
             para selecionar
           </span>
         </div>
@@ -361,19 +369,22 @@ function useIsMac() {
 function AppSidebarShortcut({ shortcut }: { shortcut: AppSidebarShortcut }) {
   const isMac = useIsMac();
   const keys = isMac ? shortcut.mac : shortcut.windows;
+  const keyOccurrences = new Map<string, number>();
+  const keyedKeys = keys.map((key) => {
+    const occurrence = (keyOccurrences.get(key) ?? 0) + 1;
+    keyOccurrences.set(key, occurrence);
+    return { id: `${key}-${occurrence}`, value: key };
+  });
 
   return (
     <KbdGroup className="flex-wrap">
-      {keys.map((key, index) =>
-        key === "or" ? (
-          <span
-            key={`${key}-${index}`}
-            className="px-0.5 text-xs text-muted-foreground"
-          >
+      {keyedKeys.map(({ id, value }) =>
+        value === "or" ? (
+          <span key={id} className="px-0.5 text-xs text-muted-foreground">
             ou
           </span>
         ) : (
-          <Kbd key={`${key}-${index}`}>{key}</Kbd>
+          <Kbd key={id}>{value}</Kbd>
         ),
       )}
     </KbdGroup>
@@ -387,8 +398,8 @@ function AppSidebarPrimaryActionHintContent({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      {hints.map((hint, index) => (
-        <div key={index} className="flex flex-col gap-1.5">
+      {hints.map((hint) => (
+        <div key={hint.description} className="flex flex-col gap-1.5">
           <p>{hint.description}</p>
           {hint.shortcut && <AppSidebarShortcut shortcut={hint.shortcut} />}
         </div>

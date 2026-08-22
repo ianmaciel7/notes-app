@@ -5,6 +5,7 @@ import { createPortal } from "react-dom"
 
 import {
   AppSidebarAlertIcon,
+  AppSidebarCheckIcon,
   AppSidebarChevronsUpDownIcon,
   AppSidebarFlaskIcon,
   AppSidebarGripVerticalIcon,
@@ -31,6 +32,14 @@ import {
   ComboboxSeparator,
   ComboboxTrigger,
 } from "@/components/ui/combobox"
+import {
+  CompactMenuIconFrame,
+  CompactMenuItemText,
+  compactMenuActionButtonClass,
+  compactMenuItemClass,
+  compactMenuSearchClass,
+  compactMenuSurfaceClass,
+} from "@/components/ui/compact-menu"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { InputGroupAddon, InputGroupButton } from "@/components/ui/input-group"
 import {
@@ -427,7 +436,7 @@ function AppSidebarSpaceSwitcher({
         showClear={false}
         placeholder={text.search}
         aria-label={text.search}
-        className={cn(mobile && "h-9 w-full")}
+        className={cn(compactMenuSearchClass, mobile && "h-9")}
       >
         {query.length > 0 && (
           <InputGroupAddon align="inline-end">
@@ -450,6 +459,7 @@ function AppSidebarSpaceSwitcher({
   function renderSpaceItem(space: AppSidebarSpace) {
     const Icon = space.icon
     const isDragging = draggingId === space.id
+    const isSelected = space.id === selectedSpace.id
 
     return (
       <ComboboxItem
@@ -463,26 +473,20 @@ function AppSidebarSpaceSwitcher({
         data-dragging={isDragging ? "true" : undefined}
         aria-grabbed={isDragging}
         className={cn(
-          "group/space min-w-0",
-          "data-[dragging=true]:pointer-events-none data-[dragging=true]:opacity-30"
+          compactMenuItemClass,
+          "group/space [&>span:last-child]:hidden",
+          "data-[dragging=true]:pointer-events-none data-[dragging=true]:opacity-30",
         )}
       >
-        <span className="relative flex size-4 shrink-0 items-center justify-center">
-          <Icon
-            className={cn(
-              "transition-opacity duration-100",
-              !isSorting && query.length === 0 && "group-hover/space:opacity-0",
-              isDragging && "opacity-0"
-            )}
-          />
-
+        <span className="relative flex h-6 shrink-0 flex-row items-center justify-center">
           {query.length === 0 && (
             <span
               aria-hidden="true"
               className={cn(
-                "grab-handle absolute left-1/2 top-1/2 flex size-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-sm bg-accent text-muted-foreground opacity-0 transition-opacity duration-100 touch-none select-none cursor-grab",
+                "grab-handle invisible absolute bottom-0 left-0 top-0 z-10 flex items-center justify-start bg-[#f3f1ee] pr-px text-[#8f8983]",
+                "cursor-grab transition-none hover:text-[#595550] group-hover/space:visible",
                 !isSorting && "group-hover/space:opacity-100",
-                isDragging && "cursor-grabbing opacity-100"
+                isDragging && "visible cursor-grabbing opacity-100",
               )}
               onPointerDown={(event) => startPointerSort(event, space.id)}
               onClick={(event) => {
@@ -490,12 +494,26 @@ function AppSidebarSpaceSwitcher({
                 event.stopPropagation()
               }}
             >
-              <AppSidebarGripVerticalIcon />
+              <CompactMenuIconFrame variant="ghost">
+                <AppSidebarGripVerticalIcon />
+              </CompactMenuIconFrame>
+            </span>
+          )}
+
+          <CompactMenuIconFrame>
+            <Icon />
+          </CompactMenuIconFrame>
+        </span>
+
+        <CompactMenuItemText>{space.name}</CompactMenuItemText>
+
+        <span className="ml-1 flex flex-row items-center gap-1">
+          {isSelected && (
+            <span className="flex items-center justify-center text-[#282522]">
+              <AppSidebarCheckIcon className="size-[1em]" />
             </span>
           )}
         </span>
-
-        <span className="min-w-0 flex-1 truncate">{space.name}</span>
       </ComboboxItem>
     )
   }
@@ -506,22 +524,19 @@ function AppSidebarSpaceSwitcher({
     return (
       <>
         <ComboboxSeparator />
-        <div
-          className={cn(
-            "min-w-0 pt-1",
-            mobile
-              ? "px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
-              : "px-1.5 pb-1.5"
-          )}
-        >
+        <div className={cn("min-w-0", mobile ? "px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]" : "px-1.5 pb-1.5")}>
           <Button
             type="button"
             variant="ghost"
             size="default"
-            className="w-full min-w-0 justify-start"
+            className={cn(compactMenuActionButtonClass, "justify-start px-1 text-[#282522]")}
             disabled
           >
-            <AppSidebarPlusIcon data-icon="inline-start" />
+            <span className="flex h-6 shrink-0 flex-row items-center justify-center">
+              <CompactMenuIconFrame variant="ghost">
+                <AppSidebarPlusIcon />
+              </CompactMenuIconFrame>
+            </span>
             {text.createSpace}
           </Button>
         </div>
@@ -644,7 +659,8 @@ function AppSidebarSpaceSwitcher({
             finalFocus={false}
             aria-label={text.changeSpace}
             className={cn(
-              "mt-1 flex h-[476px] w-[300.5px] min-w-[300.5px] max-w-[calc(100vw-1.75rem)] flex-col overflow-hidden",
+              "mt-1",
+              compactMenuSurfaceClass,
               "data-closed:animate-none data-closed:duration-0 data-closed:opacity-0 data-closed:zoom-out-100",
               "*:data-[slot=input-group]:!m-0 *:data-[slot=input-group]:!mx-1.5 *:data-[slot=input-group]:!mt-1.5 *:data-[slot=input-group]:!mb-1.5 *:data-[slot=input-group]:shrink-0",
               "*:data-[slot=input-group]:[&>[data-slot=input-group-addon]:empty]:hidden"
@@ -653,7 +669,7 @@ function AppSidebarSpaceSwitcher({
             {renderSearch()}
 
             <div
-              className="no-scrollbar min-h-0 min-w-0 overflow-y-auto overflow-x-hidden overscroll-contain"
+              className="no-scrollbar relative min-h-0 min-w-0 overflow-y-auto overflow-x-hidden overscroll-contain"
               style={{
                 maxHeight: `min(${SPACE_MENU_MAX_HEIGHT}, calc(var(--available-height) - 2.75rem))`,
               }}
@@ -665,7 +681,7 @@ function AppSidebarSpaceSwitcher({
                 </span>
               </ComboboxEmpty>
 
-              <ComboboxList className="max-h-none min-w-0 overflow-visible overflow-x-hidden">
+              <ComboboxList className="max-h-none min-w-0 overflow-visible overflow-x-hidden px-1.5 pb-1.5 pt-0">
                 {(space: AppSidebarSpace) => renderSpaceItem(space)}
               </ComboboxList>
 

@@ -30,13 +30,14 @@ test("supported locale catalogs are valid JSON objects", async () => {
 });
 
 test("the localized workspace boots into the workspace fixture", async () => {
-	const [route, fixture, header, headerTabs, sidebar, objectIcons, layout, styles] = await Promise.all([
+	const [route, fixture, header, headerTabs, sidebar, objectIcons, compactMenu, layout, styles] = await Promise.all([
 		readFile(new URL("../src/app/[locale]/page.tsx", import.meta.url), "utf8"),
 		readFile(new URL("../src/components/workspace-content.tsx", import.meta.url), "utf8"),
 		readFile(new URL("../src/components/workspace-controller.tsx", import.meta.url), "utf8"),
 		readFile(new URL("../src/components/app-header-tabs.tsx", import.meta.url), "utf8"),
 		readFile(new URL("../src/components/app-sidebar-primary-actions.tsx", import.meta.url), "utf8"),
 		readFile(new URL("../src/components/object-icons.tsx", import.meta.url), "utf8"),
+		readFile(new URL("../src/components/ui/compact-menu.tsx", import.meta.url), "utf8"),
 		readFile(new URL("../src/app/layout.tsx", import.meta.url), "utf8"),
 		readFile(new URL("../src/app/globals.css", import.meta.url), "utf8"),
 	]);
@@ -68,12 +69,16 @@ test("the localized workspace boots into the workspace fixture", async () => {
 	assert.match(sidebar, /event\.key === "Enter"/);
 	assert.match(sidebar, /event\.key === "Escape"/);
 	assert.match(sidebar, /variant="menu"/);
-	assert.match(sidebar, /box-content h-\[361px\] w-\[22rem\]/);
+	assert.match(sidebar, /compactMenuSurfaceClass/);
+	assert.match(sidebar, /h-\[361px\] w-\[22rem\]/);
+	assert.match(compactMenu, /compactMenuSurfaceClass/);
+	assert.match(compactMenu, /box-content flex w-auto min-w-\[18rem\]/);
 	assert.match(sidebar, /h-72 min-h-0 shrink-0 overflow-y-auto/);
 	assert.match(sidebar, /onSelectObjectType=\{createWorkspaceEntity\}/);
 	assert.match(header, /createdEntitySequenceRef\.current \+= 1/);
 	assert.match(header, /created-\$\{objectTypeId\}-\$\{createdEntitySequenceRef\.current\}/);
 	assert.match(header, /objectType\.count \+ 1/);
+	assert.match(header, /objectTypeLabel: definition\.label/);
 	assert.match(header, /setMainValue\(id\)/);
 	assert.match(fixture, /activeCreatedEntity\?\.objectTypeId === "quote"/);
 	assert.match(fixture, /data-slot="created-object-workspace"/);
@@ -81,7 +86,7 @@ test("the localized workspace boots into the workspace fixture", async () => {
 	assert.match(objectIcons, /objectIconToneBadgeClass/);
 	assert.match(objectIcons, /objectTypeDefinitions/);
 	assert.match(objectIcons, /variant\?: "default" \| "menu" \| "sidebar"/);
-	assert.match(objectIcons, /size-\[22px\] rounded-\[6\.65px\] \[border-width:0\.5px\]/);
+	assert.match(objectIcons, /rounded-\[0\.475em\] border p-1 \[border-width:0\.5px\]/);
 	assert.match(objectIcons, /id: "quote"[\s\S]*?tone: "rose"/);
 	assert.match(objectIcons, /id: "query"[\s\S]*?tone: "green"/);
 	assert.doesNotMatch(layout, /next\/font\/google/);

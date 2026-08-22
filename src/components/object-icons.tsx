@@ -244,7 +244,7 @@ function ObjectIconBadge({
         variant === "sidebar"
           ? "min-h-[1.3em] min-w-[1.3em] rounded-[0.33em]"
           : variant === "menu"
-            ? "size-[22px] rounded-[6.65px] [border-width:0.5px]"
+            ? "rounded-[0.475em] border p-1 [border-width:0.5px]"
             : "size-6 rounded-[7px] border",
         objectIconToneBadgeClass[tone],
         className,

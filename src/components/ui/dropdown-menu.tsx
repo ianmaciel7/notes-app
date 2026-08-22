@@ -54,6 +54,7 @@ function DropdownMenuContent({
           data-slot="dropdown-menu-content"
           className={cn(
             "z-50 max-h-(--available-height) w-(--anchor-width) min-w-32 overflow-x-hidden overflow-y-auto p-1 data-closed:overflow-hidden",
+            "min-w-56 p-1.5",
             floatingSurfaceBaseClass,
             floatingSurfaceClass,
             className
@@ -81,7 +82,7 @@ function DropdownMenuLabel({
       data-slot="dropdown-menu-label"
       data-inset={inset}
       className={cn(
-        "px-1.5 py-1 text-xs font-medium text-muted-foreground data-inset:pl-7",
+        "px-1 py-1 text-xs font-medium text-muted-foreground data-inset:pl-7",
         className
       )}
       {...props}
@@ -141,7 +142,7 @@ function DropdownMenuSubTrigger({
       {...props}
     >
       {children}
-      <ChevronRightIcon className={cn(controlIconClass, "ml-auto")} />
+      <ChevronRightIcon className={cn(controlIconClass, "ml-auto size-3")} />
     </MenuPrimitive.SubmenuTrigger>
   )
 }

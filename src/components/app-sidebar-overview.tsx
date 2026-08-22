@@ -4,7 +4,6 @@ import * as React from "react"
 
 import {
   AppSidebarCheckIcon,
-  AppSidebarCopyIcon,
   AppSidebarDotsIcon,
   AppSidebarObjectsIcon,
   AppSidebarPinIcon,
@@ -28,6 +27,11 @@ import {
 } from "@/components/object-icons"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
+import {
+  CompactMenuAccountPanel,
+  CompactMenuPlanBadge,
+  compactMenuActionButtonClass,
+} from "@/components/ui/compact-menu"
 import {
   Collapsible,
   CollapsibleContent,
@@ -75,6 +79,40 @@ type AppSidebarDragState =
   | { kind: "pinned"; id: string }
   | { kind: "object-type"; id: string }
   | null
+
+const objectTypeMenuIconPaths = {
+  chevronRight:
+    "m181.66 133.66l-80 80a8 8 0 0 1-11.32-11.32L164.69 128L90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32",
+  import:
+    "M205.66 117.66a8 8 0 0 1-11.32 0L136 59.31V216a8 8 0 0 1-16 0V59.31l-58.34 58.35a8 8 0 0 1-11.32-11.32l72-72a8 8 0 0 1 11.32 0l72 72a8 8 0 0 1 0 11.32",
+  pin:
+    "m235.32 81.37l-60.69-60.68a16 16 0 0 0-22.63 0l-53.63 53.8c-10.66-3.34-35-7.37-60.4 13.14a16 16 0 0 0-1.29 23.78L85 159.71l-42.66 42.63a8 8 0 0 0 11.32 11.32L96.29 171l48.29 48.29A16 16 0 0 0 155.9 224h1.13a15.93 15.93 0 0 0 11.64-6.33c19.64-26.1 17.75-47.32 13.19-60L235.33 104a16 16 0 0 0-.01-22.63M224 92.69l-57.27 57.46a8 8 0 0 0-1.49 9.22c9.46 18.93-1.8 38.59-9.34 48.62L48 100.08c12.08-9.74 23.64-12.31 32.48-12.31A40.1 40.1 0 0 1 96.81 91a8 8 0 0 0 9.25-1.51L163.32 32L224 92.68Z",
+  plus:
+    "M224 128a8 8 0 0 1-8 8h-80v80a8 8 0 0 1-16 0v-80H40a8 8 0 0 1 0-16h80V40a8 8 0 0 1 16 0v80h80a8 8 0 0 1 8 8",
+  settings:
+    "M128 80a48 48 0 1 0 48 48a48.05 48.05 0 0 0-48-48m0 80a32 32 0 1 1 32-32a32 32 0 0 1-32 32m88-29.84q.06-2.16 0-4.32l14.92-18.64a8 8 0 0 0 1.48-7.06a107.2 107.2 0 0 0-10.88-26.25a8 8 0 0 0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186 40.54a8 8 0 0 0-3.94-6a107.7 107.7 0 0 0-26.25-10.87a8 8 0 0 0-7.06 1.49L130.16 40h-4.32L107.2 25.11a8 8 0 0 0-7.06-1.48a107.6 107.6 0 0 0-26.25 10.88a8 8 0 0 0-3.93 6l-2.64 23.76q-1.56 1.49-3 3L40.54 70a8 8 0 0 0-6 3.94a107.7 107.7 0 0 0-10.87 26.25a8 8 0 0 0 1.49 7.06L40 125.84v4.32L25.11 148.8a8 8 0 0 0-1.48 7.06a107.2 107.2 0 0 0 10.88 26.25a8 8 0 0 0 6 3.93l23.72 2.64q1.49 1.56 3 3L70 215.46a8 8 0 0 0 3.94 6a107.7 107.7 0 0 0 26.25 10.87a8 8 0 0 0 7.06-1.49L125.84 216q2.16.06 4.32 0l18.64 14.92a8 8 0 0 0 7.06 1.48a107.2 107.2 0 0 0 26.25-10.88a8 8 0 0 0 3.93-6l2.64-23.72q1.56-1.48 3-3l23.78-2.8a8 8 0 0 0 6-3.94a107.7 107.7 0 0 0 10.87-26.25a8 8 0 0 0-1.49-7.06Zm-16.1-6.5a74 74 0 0 1 0 8.68a8 8 0 0 0 1.74 5.48l14.19 17.73a91.6 91.6 0 0 1-6.23 15l-22.6 2.56a8 8 0 0 0-5.1 2.64a74 74 0 0 1-6.14 6.14a8 8 0 0 0-2.64 5.1l-2.51 22.58a91.3 91.3 0 0 1-15 6.23l-17.74-14.19a8 8 0 0 0-5-1.75h-.48a74 74 0 0 1-8.68 0a8 8 0 0 0-5.48 1.74l-17.78 14.2a91.6 91.6 0 0 1-15-6.23L82.89 187a8 8 0 0 0-2.64-5.1a74 74 0 0 1-6.14-6.14a8 8 0 0 0-5.1-2.64l-22.58-2.52a91.3 91.3 0 0 1-6.23-15l14.19-17.74a8 8 0 0 0 1.74-5.48a74 74 0 0 1 0-8.68a8 8 0 0 0-1.74-5.48L40.2 100.45a91.6 91.6 0 0 1 6.23-15L69 82.89a8 8 0 0 0 5.1-2.64a74 74 0 0 1 6.14-6.14A8 8 0 0 0 82.89 69l2.51-22.57a91.3 91.3 0 0 1 15-6.23l17.74 14.19a8 8 0 0 0 5.48 1.74a74 74 0 0 1 8.68 0a8 8 0 0 0 5.48-1.74l17.77-14.19a91.6 91.6 0 0 1 15 6.23L173.11 69a8 8 0 0 0 2.64 5.1a74 74 0 0 1 6.14 6.14a8 8 0 0 0 5.1 2.64l22.58 2.51a91.3 91.3 0 0 1 6.23 15l-14.19 17.74a8 8 0 0 0-1.74 5.53Z",
+} as const
+
+function AppSidebarObjectTypeMenuIcon({
+  name,
+  className,
+}: {
+  name: keyof typeof objectTypeMenuIconPaths
+  className?: string
+}) {
+  return (
+    <span className={cn("flex size-3 items-center justify-center", className)}>
+      <svg
+        viewBox="0 0 256 256"
+        fill="currentColor"
+        aria-hidden="true"
+        className="size-full"
+      >
+        <path d={objectTypeMenuIconPaths[name]} />
+      </svg>
+    </span>
+  )
+}
 
 const allPinnedEntities: AppSidebarPinnedEntity[] = [
   {
@@ -414,11 +452,9 @@ function AppSidebarPinnedRow({
 function AppSidebarObjectTypeMenu({
   objectType,
   onDuplicate,
-  onDelete,
 }: {
   objectType: AppSidebarObjectType
   onDuplicate: () => void
-  onDelete: () => void
 }) {
   return (
     <DropdownMenu>
@@ -437,18 +473,34 @@ function AppSidebarObjectTypeMenu({
         <DropdownMenuItem>
           <AppSidebarSourceIcon name="external" />
           Abrir
+          <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
         </DropdownMenuItem>
-        <DropdownMenuItem>Criar {objectType.label}</DropdownMenuItem>
+        <DropdownMenuItem>
+          <AppSidebarObjectTypeMenuIcon name="plus" />
+          Criar {objectType.label}
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Configurações do tipo</DropdownMenuItem>
         <DropdownMenuItem onClick={onDuplicate}>
-          <AppSidebarCopyIcon />
-          Duplicar
+          <ObjectAtomicNoteIcon className="size-3" />
+          Nova Coleção
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <AppSidebarObjectTypeMenuIcon name="pin" />
+          Fixar na Barra Lateral
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onClick={onDelete}>
-          <AppSidebarSourceIcon name="trash" />
-          Excluir
+        <DropdownMenuItem>
+          <AppSidebarObjectTypeMenuIcon name="settings" />
+          Configurações do Tipo de Objeto
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <AppSidebarObjectTypeMenuIcon name="import" />
+          Importar
+          <span className="ml-auto flex items-center gap-0.5 text-xs text-muted-foreground">
+            <span>Ctrl</span>
+            <span>I</span>
+          </span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -462,7 +514,6 @@ function AppSidebarObjectTypeRow({
   draggable,
   onSelect,
   onDuplicate,
-  onDelete,
   onDragStart,
   onDrop,
 }: {
@@ -472,7 +523,6 @@ function AppSidebarObjectTypeRow({
   draggable: boolean
   onSelect: () => void
   onDuplicate: () => void
-  onDelete: () => void
   onDragStart: () => void
   onDrop: () => void
 }) {
@@ -537,7 +587,6 @@ function AppSidebarObjectTypeRow({
           <AppSidebarObjectTypeMenu
             objectType={objectType}
             onDuplicate={onDuplicate}
-            onDelete={onDelete}
           />
         </div>
       </div>
@@ -884,11 +933,33 @@ function AppSidebarFooter() {
             </Badge>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent side="top" align="start" sideOffset={6} className="w-56">
-            <DropdownMenuItem>Minha conta</DropdownMenuItem>
-            <DropdownMenuItem>Gerenciar plano</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Sair</DropdownMenuItem>
+          <DropdownMenuContent
+            side="top"
+            align="start"
+            sideOffset={6}
+            className="w-auto min-w-0 overflow-visible p-0"
+          >
+            <CompactMenuAccountPanel
+              name="Ian Maciel Carvalho"
+              email="ianmaciel76@gmail.com"
+              badge={
+                <CompactMenuPlanBadge
+                  icon={(props) => (
+                    <AppSidebarSourceIcon name="rocket" {...props} />
+                  )}
+                  label="Pro"
+                />
+              }
+              action={
+              <button
+                type="button"
+                className={compactMenuActionButtonClass}
+              >
+                <AppSidebarSourceIcon name="logout" className="size-[1em]" />
+                <span>Sair</span>
+              </button>
+              }
+            />
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -1116,11 +1187,6 @@ function AppSidebarOverview({
                 draggable={objectSort === "manual"}
                 onSelect={() => setActiveId(objectType.id)}
                 onDuplicate={() => duplicateObjectType(objectType)}
-                onDelete={() =>
-                  setObjectTypes((current) =>
-                    current.filter((item) => item.id !== objectType.id)
-                  )
-                }
                 onDragStart={() => setDrag({ kind: "object-type", id: objectType.id })}
                 onDrop={() => {
                   if (drag?.kind !== "object-type" || objectSort !== "manual") return
