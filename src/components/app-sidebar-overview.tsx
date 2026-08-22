@@ -1,39 +1,27 @@
 "use client"
 
 import * as React from "react"
-import {
-  CheckIcon,
-  CopyIcon,
-  ExternalLinkIcon,
-  GraduationCapIcon,
-  HelpCircleIcon,
-  InboxIcon,
-  LibraryBigIcon,
-  MegaphoneIcon,
-  MoonIcon,
-  PinOffIcon,
-  PlusIcon,
-  RocketIcon,
-  SettingsIcon,
-  Share2Icon,
-  SunIcon,
-  Trash2Icon,
-  UserRoundIcon,
-} from "lucide-react"
 
 import {
-  AppSidebarAtomicNoteIcon,
+  AppSidebarCheckIcon,
+  AppSidebarCopyIcon,
   AppSidebarDotsIcon,
-  AppSidebarObjectsIcon,
-  AppSidebarPageIcon,
-  AppSidebarPinIcon,
+  AppSidebarPinOffIcon,
   AppSidebarPlusIcon,
-  AppSidebarQuoteIcon,
+  AppSidebarSunIcon,
 } from "@/components/app-sidebar-icons"
 import {
   AppSidebarObjectTypeStudio,
   type AppSidebarObjectTypePreset,
 } from "@/components/app-sidebar-object-type-studio"
+import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon"
+import {
+  ObjectAreaIcon,
+  ObjectAtomicNoteIcon,
+  ObjectPageIcon,
+  ObjectQuoteIcon,
+  ObjectTagIcon,
+} from "@/components/object-icons"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
@@ -101,19 +89,19 @@ const allPinnedEntities: AppSidebarPinnedEntity[] = [
   {
     id: "page-1",
     label: "aaaaaaaaaaaaa",
-    icon: AppSidebarPageIcon,
+    icon: ObjectPageIcon,
     tone: "blue",
   },
   {
     id: "page-2",
     label: "Projeto Alpha",
-    icon: AppSidebarPageIcon,
+    icon: ObjectPageIcon,
     tone: "blue",
   },
   {
     id: "page-3",
     label: "Ideias 2026",
-    icon: AppSidebarPageIcon,
+    icon: ObjectPageIcon,
     tone: "blue",
   },
 ]
@@ -122,21 +110,21 @@ const initialObjectTypes: AppSidebarObjectType[] = [
   {
     id: "atomic-note",
     label: "Notas atômicas",
-    icon: AppSidebarAtomicNoteIcon,
+    icon: ObjectAtomicNoteIcon,
     tone: "amber",
     count: 0,
   },
   {
     id: "quote",
     label: "Citações",
-    icon: AppSidebarQuoteIcon,
+    icon: ObjectQuoteIcon,
     tone: "rose",
     count: 0,
   },
   {
     id: "page",
     label: "Páginas",
-    icon: AppSidebarPageIcon,
+    icon: ObjectPageIcon,
     tone: "blue",
     count: 1,
   },
@@ -214,11 +202,11 @@ function AppSidebarSectionMenu({
       <DropdownMenuContent side="right" align="start" sideOffset={8} className="w-56">
         <DropdownMenuItem onClick={() => onValueChange("manual")}>
           Ordenar manualmente
-          {value === "manual" && <CheckIcon className="ml-auto" />}
+          {value === "manual" && <AppSidebarCheckIcon className="ml-auto" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onValueChange("alphabetical")}>
           Ordenar alfabeticamente
-          {value === "alphabetical" && <CheckIcon className="ml-auto" />}
+          {value === "alphabetical" && <AppSidebarCheckIcon className="ml-auto" />}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -342,14 +330,14 @@ function AppSidebarPinnedMenu({
 
       <DropdownMenuContent side="right" align="start" sideOffset={8} className="w-64">
         <DropdownMenuItem>
-          <ExternalLinkIcon />
+          <AppSidebarSourceIcon name="external" />
           Abrir
         </DropdownMenuItem>
         <DropdownMenuItem>Abrir no painel lateral</DropdownMenuItem>
         <DropdownMenuItem>Abrir em nova aba</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onUnpin}>
-          <PinOffIcon />
+          <AppSidebarPinOffIcon />
           Desafixar
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -460,19 +448,19 @@ function AppSidebarObjectTypeMenu({
 
       <DropdownMenuContent side="right" align="start" sideOffset={8} className="w-64">
         <DropdownMenuItem>
-          <ExternalLinkIcon />
+          <AppSidebarSourceIcon name="external" />
           Abrir
         </DropdownMenuItem>
         <DropdownMenuItem>Criar {objectType.label}</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Configurações do tipo</DropdownMenuItem>
         <DropdownMenuItem onClick={onDuplicate}>
-          <CopyIcon />
+          <AppSidebarCopyIcon />
           Duplicar
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={onDelete}>
-          <Trash2Icon />
+          <AppSidebarSourceIcon name="trash" />
           Excluir
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -653,7 +641,7 @@ function AppSidebarSectionAction({ label, onClick }: { label: string; onClick?: 
       className="size-[22px] opacity-0 transition-opacity duration-200 group-hover/app-sidebar-section:opacity-100"
       onClick={onClick}
     >
-      <PlusIcon />
+      <AppSidebarPlusIcon />
     </Button>
   )
 }
@@ -739,7 +727,8 @@ function AppSidebarUtilityRow({
       <Icon className="mr-1.5 size-4 shrink-0" />
       <span className="min-w-0 truncate">{label}</span>
       {external && (
-        <ExternalLinkIcon
+        <AppSidebarSourceIcon
+          name="external"
           className={cn(
             "ml-auto size-3 shrink-0 opacity-0 transition-opacity duration-200 ease-out",
             "group-hover/utility:opacity-100"
@@ -790,28 +779,34 @@ function AppSidebarHelpSection() {
 
   return (
     <AppSidebarSection
-      icon={HelpCircleIcon}
+      icon={(props) => <AppSidebarSourceIcon name="help" {...props} />}
       label="Ajuda e recursos"
       open={open}
       onOpenChange={setOpen}
     >
       <div data-slot="app-sidebar-help-items" className="flex flex-col px-2 pr-0.5">
-        <AppSidebarUtilityRow icon={GraduationCapIcon} label="Primeiros passos" />
         <AppSidebarUtilityRow
-          icon={HelpCircleIcon}
+          icon={(props) => <AppSidebarSourceIcon name="graduation" {...props} />}
+          label="Primeiros passos"
+        />
+        <AppSidebarUtilityRow
+          icon={(props) => <AppSidebarSourceIcon name="help" {...props} />}
           label="Fazer uma pergunta"
           external
           tooltip="Faça perguntas sobre o Capacities"
         />
         <AppSidebarUtilityRow
-          icon={LibraryBigIcon}
+          icon={(props) => <AppSidebarSourceIcon name="documentation" {...props} />}
           label="Documentação"
           external
           tooltip="Saiba mais sobre o Capacities e como você pode usá-lo"
         />
-        <AppSidebarUtilityRow icon={MegaphoneIcon} label="Novidades" />
         <AppSidebarUtilityRow
-          icon={InboxIcon}
+          icon={(props) => <AppSidebarSourceIcon name="news" {...props} />}
+          label="Novidades"
+        />
+        <AppSidebarUtilityRow
+          icon={(props) => <AppSidebarSourceIcon name="feedback" {...props} />}
           label="Feedback"
           external
           tooltip="Compartilhe ideias, feedback ou problemas e vote em recursos"
@@ -868,7 +863,7 @@ function AppSidebarFooter() {
     >
       <div className="flex w-full flex-wrap items-center gap-x-0.5">
         <AppSidebarFooterTooltip label="Configurações">
-          <SettingsIcon className="size-4" strokeWidth={1.75} />
+          <AppSidebarSourceIcon name="settings" className="size-4" />
         </AppSidebarFooterTooltip>
 
         <AppSidebarFooterTooltip
@@ -876,9 +871,9 @@ function AppSidebarFooter() {
           onClick={() => setDark((value) => !value)}
         >
           {dark ? (
-            <SunIcon className="size-4" strokeWidth={1.75} />
+            <AppSidebarSunIcon className="size-4" />
           ) : (
-            <MoonIcon className="size-4" strokeWidth={1.75} />
+            <AppSidebarSourceIcon name="moon" className="size-4" />
           )}
         </AppSidebarFooterTooltip>
 
@@ -892,12 +887,12 @@ function AppSidebarFooter() {
               "active:brightness-[0.97] data-popup-open:bg-sidebar-accent data-popup-open:text-sidebar-accent-foreground"
             )}
           >
-            <UserRoundIcon className="size-4" strokeWidth={1.75} />
+            <AppSidebarSourceIcon name="user" className="size-4" />
             <Badge
               variant="secondary"
               className="max-w-full gap-1 px-[0.49em] py-[0.2em] text-xs font-normal leading-[1.3] opacity-80"
             >
-              <RocketIcon className="size-3" strokeWidth={1.75} />
+              <AppSidebarSourceIcon name="rocket" className="size-3" />
               <span className="truncate">Pro</span>
             </Badge>
           </DropdownMenuTrigger>
@@ -913,7 +908,7 @@ function AppSidebarFooter() {
         <span className="min-w-0 flex-1" />
 
         <AppSidebarFooterTooltip label="Compartilhar">
-          <Share2Icon className="size-4" strokeWidth={1.75} />
+          <AppSidebarSourceIcon name="share" className="size-4" />
         </AppSidebarFooterTooltip>
       </div>
     </footer>
@@ -997,7 +992,7 @@ function AppSidebarOverview({
     <div data-slot="app-sidebar-overview" className="flex min-h-0 flex-1 flex-col">
       <div data-slot="app-sidebar-pinned-region" className="shrink-0">
         <AppSidebarSection
-          icon={AppSidebarPinIcon}
+          icon={ObjectTagIcon}
           label="Fixados"
           count={pinned.length}
           sort={pinnedSort}
@@ -1054,7 +1049,7 @@ function AppSidebarOverview({
       >
         <div className="flex min-h-full w-full flex-col">
           <AppSidebarSection
-            icon={AppSidebarObjectsIcon}
+            icon={ObjectAreaIcon}
             label="Tipos de objeto"
             count={objectTypes.length}
             sort={objectSort}
@@ -1095,7 +1090,7 @@ function AppSidebarOverview({
           {customSections.map((section) => (
             <AppSidebarSection
               key={section.id}
-              icon={AppSidebarObjectsIcon}
+              icon={ObjectAreaIcon}
               label={section.label}
               open={section.open}
               onOpenChange={(open) =>
@@ -1121,7 +1116,7 @@ function AppSidebarOverview({
           <div data-slot="app-sidebar-lower-content" className="mt-auto flex w-full flex-col pb-2">
             <div className="flex flex-col px-2 pr-0.5">
               <AppSidebarUtilityRow
-                icon={Trash2Icon}
+                icon={(props) => <AppSidebarSourceIcon name="trash" {...props} />}
                 label="Lixeira"
                 active={activeId === "trash"}
                 onClick={() => setActiveId("trash")}

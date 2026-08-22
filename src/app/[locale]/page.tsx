@@ -2,8 +2,7 @@ import {
   AppHeaderDemoMain,
   AppHeaderDemoProvider,
   AppHeaderDemoSidePanel,
-} from "@/components/app-header-demo"
-import { AppSidebarPrimaryActionsDemo } from "@/components/app-sidebar-primary-actions"
+} from "@/components/app-header-demo";
 import {
   AppShell,
   AppShellHeader,
@@ -18,7 +17,12 @@ import {
   AppShellSidePanel,
   AppShellSurface,
   AppShellWorkspace,
-} from "@/components/app-shell"
+} from "@/components/app-shell";
+import { AppSidebarPrimaryActionsDemo } from "@/components/app-sidebar-primary-actions";
+import {
+  AtomicNotesWorkspace,
+  ExploreWorkspace,
+} from "@/components/capacities-en-workspace";
 
 export default function HomePage() {
   return (
@@ -33,12 +37,16 @@ export default function HomePage() {
             <AppShellWorkspace>
               <AppShellMain>
                 <AppHeaderDemoMain />
-                <AppShellSurface />
+                <AppShellSurface>
+                  <AtomicNotesWorkspace />
+                </AppShellSurface>
               </AppShellMain>
 
               <AppShellSidePanel>
                 <AppHeaderDemoSidePanel />
-                <AppShellSurface side="side-panel" />
+                <AppShellSurface side="side-panel">
+                  <ExploreWorkspace />
+                </AppShellSurface>
               </AppShellSidePanel>
             </AppShellWorkspace>
           </AppShellPanelGroup>
@@ -53,9 +61,11 @@ export default function HomePage() {
             </AppShellMobileSidebar>
             <AppShellMobileSidePanel />
           </AppShellHeader>
-          <AppShellSurface />
+          <AppShellSurface>
+            <AtomicNotesWorkspace />
+          </AppShellSurface>
         </AppShellMobile>
       </AppShellProvider>
     </AppHeaderDemoProvider>
-  )
+  );
 }

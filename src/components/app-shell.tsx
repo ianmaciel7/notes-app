@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cva } from "class-variance-authority"
-import { PanelLeftIcon, PanelRightIcon } from "lucide-react"
-import { usePanelRef } from "react-resizable-panels"
+import { cva } from "class-variance-authority";
+import * as React from "react";
+import { usePanelRef } from "react-resizable-panels";
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { AppHeaderSidebarSimpleIcon } from "@/components/app-header-icons";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable"
+} from "@/components/ui/resizable";
 import {
   Sheet,
   SheetContent,
@@ -19,15 +19,15 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
-const APP_SHELL_LEFT_DEFAULT = "18rem"
-const APP_SHELL_LEFT_MIN = "14rem"
-const APP_SHELL_LEFT_MAX = "24rem"
-const APP_SHELL_RIGHT_DEFAULT = "45%"
-const APP_SHELL_RIGHT_MIN = "10%"
-const APP_SHELL_RIGHT_MAX = "90%"
+const APP_SHELL_LEFT_DEFAULT = "18rem";
+const APP_SHELL_LEFT_MIN = "14rem";
+const APP_SHELL_LEFT_MAX = "24rem";
+const APP_SHELL_RIGHT_DEFAULT = "45%";
+const APP_SHELL_RIGHT_MIN = "10%";
+const APP_SHELL_RIGHT_MAX = "90%";
 
 const appShellPanelGroupVariants = cva("h-full w-full", {
   variants: {
@@ -40,34 +40,36 @@ const appShellPanelGroupVariants = cva("h-full w-full", {
   defaultVariants: {
     resizing: false,
   },
-})
+});
 
-type AppShellResizeSide = "left" | "right"
+type AppShellResizeSide = "left" | "right";
 
 type AppShellContextValue = {
-  leftCollapsed: boolean
-  rightCollapsed: boolean
-  resizingSide: AppShellResizeSide | null
-  leftPanelRef: ReturnType<typeof usePanelRef>
-  rightPanelRef: ReturnType<typeof usePanelRef>
-  leftPanelElementRef: React.RefObject<HTMLDivElement | null>
-  setLeftCollapsed: React.Dispatch<React.SetStateAction<boolean>>
-  setRightCollapsed: React.Dispatch<React.SetStateAction<boolean>>
-  setResizingSide: React.Dispatch<React.SetStateAction<AppShellResizeSide | null>>
-  toggleLeft: () => void
-  toggleRight: () => void
-}
+  leftCollapsed: boolean;
+  rightCollapsed: boolean;
+  resizingSide: AppShellResizeSide | null;
+  leftPanelRef: ReturnType<typeof usePanelRef>;
+  rightPanelRef: ReturnType<typeof usePanelRef>;
+  leftPanelElementRef: React.RefObject<HTMLDivElement | null>;
+  setLeftCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  setRightCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  setResizingSide: React.Dispatch<
+    React.SetStateAction<AppShellResizeSide | null>
+  >;
+  toggleLeft: () => void;
+  toggleRight: () => void;
+};
 
-const AppShellContext = React.createContext<AppShellContextValue | null>(null)
+const AppShellContext = React.createContext<AppShellContextValue | null>(null);
 
 function useAppShell() {
-  const context = React.useContext(AppShellContext)
+  const context = React.useContext(AppShellContext);
 
   if (!context) {
-    throw new Error("useAppShell must be used within an AppShellProvider.")
+    throw new Error("useAppShell must be used within an AppShellProvider.");
   }
 
-  return context
+  return context;
 }
 
 function AppShellProvider({
@@ -76,77 +78,77 @@ function AppShellProvider({
   style,
   ...props
 }: React.ComponentProps<"div">) {
-  const rootRef = React.useRef<HTMLDivElement>(null)
-  const leftPanelRef = usePanelRef()
-  const rightPanelRef = usePanelRef()
-  const leftPanelElementRef = React.useRef<HTMLDivElement>(null)
-  const [leftCollapsed, setLeftCollapsed] = React.useState(false)
-  const [rightCollapsed, setRightCollapsed] = React.useState(false)
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const leftPanelRef = usePanelRef();
+  const rightPanelRef = usePanelRef();
+  const leftPanelElementRef = React.useRef<HTMLDivElement>(null);
+  const [leftCollapsed, setLeftCollapsed] = React.useState(false);
+  const [rightCollapsed, setRightCollapsed] = React.useState(false);
   const [resizingSide, setResizingSide] =
-    React.useState<AppShellResizeSide | null>(null)
+    React.useState<AppShellResizeSide | null>(null);
 
   const toggleLeft = React.useCallback(() => {
-    const panel = leftPanelRef.current
+    const panel = leftPanelRef.current;
 
-    if (!panel) return
+    if (!panel) return;
 
     if (panel.isCollapsed()) {
-      setLeftCollapsed(false)
-      panel.expand()
-      return
+      setLeftCollapsed(false);
+      panel.expand();
+      return;
     }
 
-    setLeftCollapsed(true)
-    panel.collapse()
-  }, [leftPanelRef])
+    setLeftCollapsed(true);
+    panel.collapse();
+  }, [leftPanelRef]);
 
   const toggleRight = React.useCallback(() => {
-    const panel = rightPanelRef.current
+    const panel = rightPanelRef.current;
 
-    if (!panel) return
+    if (!panel) return;
 
     if (panel.isCollapsed()) {
-      setRightCollapsed(false)
-      panel.expand()
-      return
+      setRightCollapsed(false);
+      panel.expand();
+      return;
     }
 
-    setRightCollapsed(true)
-    panel.collapse()
-  }, [rightPanelRef])
+    setRightCollapsed(true);
+    panel.collapse();
+  }, [rightPanelRef]);
 
   React.useEffect(() => {
-    const root = rootRef.current
-    const panel = leftPanelElementRef.current
+    const root = rootRef.current;
+    const panel = leftPanelElementRef.current;
 
-    if (!root || !panel) return
+    if (!root || !panel) return;
 
     const syncLeftWidth = () => {
       root.style.setProperty(
         "--app-shell-left-width",
-        `${panel.getBoundingClientRect().width}px`
-      )
-    }
+        `${panel.getBoundingClientRect().width}px`,
+      );
+    };
 
-    syncLeftWidth()
+    syncLeftWidth();
 
-    const observer = new ResizeObserver(syncLeftWidth)
-    observer.observe(panel)
+    const observer = new ResizeObserver(syncLeftWidth);
+    observer.observe(panel);
 
-    return () => observer.disconnect()
-  }, [])
+    return () => observer.disconnect();
+  }, []);
 
   React.useEffect(() => {
-    const stopResize = () => setResizingSide(null)
+    const stopResize = () => setResizingSide(null);
 
-    window.addEventListener("pointerup", stopResize)
-    window.addEventListener("pointercancel", stopResize)
+    window.addEventListener("pointerup", stopResize);
+    window.addEventListener("pointercancel", stopResize);
 
     return () => {
-      window.removeEventListener("pointerup", stopResize)
-      window.removeEventListener("pointercancel", stopResize)
-    }
-  }, [])
+      window.removeEventListener("pointerup", stopResize);
+      window.removeEventListener("pointercancel", stopResize);
+    };
+  }, []);
 
   const value = React.useMemo<AppShellContextValue>(
     () => ({
@@ -170,8 +172,8 @@ function AppShellProvider({
       rightPanelRef,
       toggleLeft,
       toggleRight,
-    ]
-  )
+    ],
+  );
 
   return (
     <AppShellContext.Provider value={value}>
@@ -180,7 +182,7 @@ function AppShellProvider({
         data-slot="app-shell-provider"
         className={cn(
           "relative h-svh w-full overflow-hidden bg-sidebar",
-          className
+          className,
         )}
         style={
           {
@@ -193,7 +195,7 @@ function AppShellProvider({
         {children}
       </div>
     </AppShellContext.Provider>
-  )
+  );
 }
 
 function AppShell({ className, ...props }: React.ComponentProps<"div">) {
@@ -203,7 +205,7 @@ function AppShell({ className, ...props }: React.ComponentProps<"div">) {
       className={cn("relative hidden h-full w-full md:block", className)}
       {...props}
     />
-  )
+  );
 }
 
 function AppShellPanelGroup({
@@ -211,9 +213,9 @@ function AppShellPanelGroup({
   resizeSide = "left",
   ...props
 }: React.ComponentProps<typeof ResizablePanelGroup> & {
-  resizeSide?: AppShellResizeSide
+  resizeSide?: AppShellResizeSide;
 }) {
-  const { resizingSide } = useAppShell()
+  const { resizingSide } = useAppShell();
 
   return (
     <ResizablePanelGroup
@@ -222,11 +224,11 @@ function AppShellPanelGroup({
       orientation="horizontal"
       className={cn(
         appShellPanelGroupVariants({ resizing: resizingSide === resizeSide }),
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 function AppShellSidebar({
@@ -235,11 +237,7 @@ function AppShellSidebar({
   onResize,
   ...props
 }: React.ComponentProps<typeof ResizablePanel>) {
-  const {
-    leftPanelRef,
-    leftPanelElementRef,
-    setLeftCollapsed,
-  } = useAppShell()
+  const { leftPanelRef, leftPanelElementRef, setLeftCollapsed } = useAppShell();
 
   return (
     <>
@@ -254,8 +252,8 @@ function AppShellSidebar({
         collapsible
         groupResizeBehavior="preserve-pixel-size"
         onResize={(size, id, previousSize) => {
-          setLeftCollapsed(size.inPixels <= 1)
-          onResize?.(size, id, previousSize)
+          setLeftCollapsed(size.inPixels <= 1);
+          onResize?.(size, id, previousSize);
         }}
         className={cn("h-full overflow-hidden bg-sidebar", className)}
         {...props}
@@ -270,7 +268,7 @@ function AppShellSidebar({
 
       <AppShellResizeHandle side="left" />
     </>
-  )
+  );
 }
 
 function AppShellWorkspace({
@@ -288,7 +286,7 @@ function AppShellWorkspace({
     >
       <AppShellPanelGroup resizeSide="right">{children}</AppShellPanelGroup>
     </ResizablePanel>
-  )
+  );
 }
 
 function AppShellMain({
@@ -305,7 +303,7 @@ function AppShellMain({
         groupResizeBehavior="preserve-relative-size"
         className={cn(
           "flex h-full min-w-0 flex-col overflow-hidden bg-sidebar",
-          className
+          className,
         )}
         {...props}
       >
@@ -319,7 +317,7 @@ function AppShellMain({
 
       <AppShellResizeHandle side="right" />
     </>
-  )
+  );
 }
 
 function AppShellSidePanel({
@@ -328,7 +326,7 @@ function AppShellSidePanel({
   onResize,
   ...props
 }: React.ComponentProps<typeof ResizablePanel>) {
-  const { rightPanelRef, rightCollapsed, setRightCollapsed } = useAppShell()
+  const { rightPanelRef, rightCollapsed, setRightCollapsed } = useAppShell();
 
   return (
     <ResizablePanel
@@ -341,13 +339,13 @@ function AppShellSidePanel({
       collapsible
       groupResizeBehavior="preserve-relative-size"
       onResize={(size, id, previousSize) => {
-        setRightCollapsed(size.inPixels <= 1)
-        onResize?.(size, id, previousSize)
+        setRightCollapsed(size.inPixels <= 1);
+        onResize?.(size, id, previousSize);
       }}
       className={cn(
         "flex h-full min-w-0 flex-col overflow-hidden bg-sidebar transition-opacity duration-300 ease-in-out",
         rightCollapsed && "opacity-0",
-        className
+        className,
       )}
       {...props}
     >
@@ -358,7 +356,7 @@ function AppShellSidePanel({
         {children}
       </aside>
     </ResizablePanel>
-  )
+  );
 }
 
 function AppShellHeader({
@@ -371,20 +369,17 @@ function AppShellHeader({
       className={cn("flex h-[46px] shrink-0 items-center", className)}
       {...props}
     />
-  )
+  );
 }
 
-function AppShellContent({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+function AppShellContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="app-shell-content"
       className={cn("flex min-h-0 flex-1 flex-col", className)}
       {...props}
     />
-  )
+  );
 }
 
 function AppShellSurface({
@@ -392,27 +387,27 @@ function AppShellSurface({
   side = "main",
   ...props
 }: React.ComponentProps<typeof Card> & {
-  side?: "main" | "side-panel"
+  side?: "main" | "side-panel";
 }) {
   return (
     <div
       data-slot="app-shell-surface-wrapper"
       data-side={side}
       className={cn(
-        "min-h-0 flex-1 pb-2.5 pt-2.5",
-        side === "main" ? "pl-2.5 pr-1" : "pl-1 pr-2.5"
+        "min-h-0 flex-1 pb-2.5 pt-0",
+        side === "main" ? "pl-2.5 pr-1" : "pl-1 pr-2.5",
       )}
     >
       <Card
         data-slot="app-shell-surface"
         className={cn(
-          "h-full w-full gap-0 overflow-hidden rounded-xl bg-background py-0 shadow-none",
-          className
+          "h-full w-full gap-0 overflow-hidden rounded-[12px] bg-background py-0 shadow-none",
+          className,
         )}
         {...props}
       />
     </div>
-  )
+  );
 }
 
 function AppShellResizeHandle({
@@ -423,14 +418,10 @@ function AppShellResizeHandle({
   onKeyUp,
   ...props
 }: React.ComponentProps<typeof ResizableHandle> & {
-  side: AppShellResizeSide
+  side: AppShellResizeSide;
 }) {
-  const {
-    leftCollapsed,
-    rightCollapsed,
-    setResizingSide,
-  } = useAppShell()
-  const collapsed = side === "left" ? leftCollapsed : rightCollapsed
+  const { leftCollapsed, rightCollapsed, setResizingSide } = useAppShell();
+  const collapsed = side === "left" ? leftCollapsed : rightCollapsed;
 
   return (
     <ResizableHandle
@@ -440,23 +431,23 @@ function AppShellResizeHandle({
       className={cn(
         "group !w-px !bg-transparent after:!w-3 after:!bg-transparent before:pointer-events-none before:absolute before:inset-y-1 before:left-1/2 before:w-0.5 before:-translate-x-1/2 before:rounded-full before:bg-border before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-60 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0",
         collapsed && "pointer-events-none before:opacity-0",
-        className
+        className,
       )}
       onPointerDown={(event) => {
-        setResizingSide(side)
-        onPointerDown?.(event)
+        setResizingSide(side);
+        onPointerDown?.(event);
       }}
       onKeyDown={(event) => {
-        setResizingSide(side)
-        onKeyDown?.(event)
+        setResizingSide(side);
+        onKeyDown?.(event);
       }}
       onKeyUp={(event) => {
-        setResizingSide(null)
-        onKeyUp?.(event)
+        setResizingSide(null);
+        onKeyUp?.(event);
       }}
       {...props}
     />
-  )
+  );
 }
 
 function AppShellSidebarTrigger({
@@ -464,15 +455,14 @@ function AppShellSidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { leftCollapsed, toggleLeft } = useAppShell()
+  const { leftCollapsed, toggleLeft } = useAppShell();
 
   return (
     <div
       data-slot="app-shell-sidebar-trigger"
       className="absolute top-[9px] z-50"
       style={{
-        left:
-          "max(0.625rem, calc(var(--app-shell-left-width) - 2.125rem))",
+        left: "max(0.625rem, calc(var(--app-shell-left-width) - 2.125rem))",
       }}
     >
       <Button
@@ -485,15 +475,15 @@ function AppShellSidebarTrigger({
           leftCollapsed ? "Expand left sidebar" : "Collapse left sidebar"
         }
         onClick={(event) => {
-          onClick?.(event)
-          if (!event.defaultPrevented) toggleLeft()
+          onClick?.(event);
+          if (!event.defaultPrevented) toggleLeft();
         }}
         {...props}
       >
-        <PanelLeftIcon />
+        <AppHeaderSidebarSimpleIcon />
       </Button>
     </div>
-  )
+  );
 }
 
 function AppShellSidePanelTrigger({
@@ -501,7 +491,7 @@ function AppShellSidePanelTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { rightCollapsed, toggleRight } = useAppShell()
+  const { rightCollapsed, toggleRight } = useAppShell();
 
   return (
     <div
@@ -518,31 +508,28 @@ function AppShellSidePanelTrigger({
           rightCollapsed ? "Expand right panel" : "Collapse right panel"
         }
         onClick={(event) => {
-          onClick?.(event)
-          if (!event.defaultPrevented) toggleRight()
+          onClick?.(event);
+          if (!event.defaultPrevented) toggleRight();
         }}
         {...props}
       >
-        <PanelRightIcon />
+        <AppHeaderSidebarSimpleIcon className="rotate-180" />
       </Button>
     </div>
-  )
+  );
 }
 
-function AppShellMobile({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+function AppShellMobile({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="app-shell-mobile"
       className={cn(
         "relative flex h-full w-full flex-col overflow-hidden bg-sidebar md:hidden",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 function AppShellMobileSidebar({
@@ -563,7 +550,7 @@ function AppShellMobileSidebar({
           />
         }
       >
-        <PanelLeftIcon />
+        <AppHeaderSidebarSimpleIcon />
       </SheetTrigger>
       <SheetContent
         side="left"
@@ -577,7 +564,7 @@ function AppShellMobileSidebar({
         {children}
       </SheetContent>
     </Sheet>
-  )
+  );
 }
 
 function AppShellMobileSidePanel({
@@ -598,7 +585,7 @@ function AppShellMobileSidePanel({
           />
         }
       >
-        <PanelRightIcon />
+        <AppHeaderSidebarSimpleIcon className="rotate-180" />
       </SheetTrigger>
       <SheetContent
         side="right"
@@ -612,7 +599,7 @@ function AppShellMobileSidePanel({
         {children}
       </SheetContent>
     </Sheet>
-  )
+  );
 }
 
 export {
@@ -633,4 +620,4 @@ export {
   AppShellSurface,
   AppShellWorkspace,
   useAppShell,
-}
+};

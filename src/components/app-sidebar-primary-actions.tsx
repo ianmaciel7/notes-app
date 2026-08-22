@@ -1,93 +1,88 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
+import { AppSidebar, type AppSidebarSpace } from "@/components/app-sidebar";
 import {
-  ArchiveIcon,
-  AudioLinesIcon,
-  ArrowDownIcon,
-  ArrowUpIcon,
-  BookOpenIcon,
-  BrainCircuitIcon,
-  BriefcaseBusinessIcon,
-  ChevronRightIcon,
-  Code2Icon,
-  CornerDownLeftIcon,
-  FileIcon,
-  FileImageIcon,
-  FileTextIcon,
-  FileType2Icon,
-  Globe2Icon,
-  ImageIcon,
-  LightbulbIcon,
-  SearchIcon,
-  Table2Icon,
-  CheckCircle2Icon,
-} from "lucide-react"
-
-import { AppSidebarOverview } from "@/components/app-sidebar-overview"
-import {
+  AppSidebarArrowDownIcon,
+  AppSidebarArrowUpIcon,
   AppSidebarCalendarIcon,
+  AppSidebarChevronRightIcon,
+  AppSidebarCornerDownLeftIcon,
   AppSidebarExploreIcon,
   AppSidebarPlusIcon,
   AppSidebarSearchIcon,
-} from "@/components/app-sidebar-icons"
-import { AppSidebarWorkspaceIcon } from "@/components/app-sidebar-source-icon"
+} from "@/components/app-sidebar-icons";
+import { AppSidebarOverview } from "@/components/app-sidebar-overview";
+import { AppSidebarWorkspaceIcon } from "@/components/app-sidebar-source-icon";
 import {
-  AppSidebar,
-  type AppSidebarSpace,
-} from "@/components/app-sidebar"
-import { Button } from "@/components/ui/button"
+  ObjectArchiveIcon,
+  ObjectAudioIcon,
+  ObjectBookIcon,
+  ObjectCodeIcon,
+  ObjectFileIcon,
+  ObjectIdeaIcon,
+  ObjectImageIcon,
+  ObjectKnowledgeIcon,
+  ObjectPageIcon,
+  ObjectPdfIcon,
+  ObjectProjectIcon,
+  ObjectTableIcon,
+  ObjectTaskIcon,
+  ObjectTweetIcon,
+  ObjectWeblinkIcon,
+} from "@/components/object-icons";
+import { Button } from "@/components/ui/button";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card"
-import { Kbd, KbdGroup } from "@/components/ui/kbd"
-import { Input } from "@/components/ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { TooltipProvider } from "@/components/ui/tooltip"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/hover-card";
+import { Input } from "@/components/ui/input";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
-type AppSidebarPrimaryActionId =
-  | "new"
-  | "search"
-  | "explore"
-  | "calendar"
+type AppSidebarPrimaryActionId = "new" | "search" | "explore" | "calendar";
 
 type AppSidebarPrimaryNavigationAction = Exclude<
   AppSidebarPrimaryActionId,
   "new"
->
+>;
 
 type AppSidebarShortcut = {
-  windows: string[]
-  mac: string[]
-}
+  windows: string[];
+  mac: string[];
+};
 
 type AppSidebarPrimaryActionHint = {
-  description: string
-  shortcut?: AppSidebarShortcut
-}
+  description: string;
+  shortcut?: AppSidebarShortcut;
+};
 
 const newContentItems = [
-  { label: "Página", icon: FileTextIcon, tone: "text-blue-500" },
-  { label: "Tabela", icon: Table2Icon, tone: "text-blue-500" },
-  { label: "Tarefa", icon: CheckCircle2Icon, tone: "text-orange-500" },
-  { label: "Imagem", icon: ImageIcon, tone: "text-red-400" },
-  { label: "Weblink", icon: Globe2Icon, tone: "text-blue-500" },
-  { label: "Tweet", icon: FileImageIcon, tone: "text-sky-500" },
-  { label: "PDF", icon: FileType2Icon, tone: "text-red-400" },
-  { label: "Áudio", icon: AudioLinesIcon, tone: "text-red-400" },
-  { label: "Arquivo", icon: FileIcon, tone: "text-red-400" },
-]
+  { label: "Página", icon: ObjectPageIcon, tone: "text-blue-500" },
+  { label: "Tabela", icon: ObjectTableIcon, tone: "text-blue-500" },
+  { label: "Tarefa", icon: ObjectTaskIcon, tone: "text-orange-500" },
+  { label: "Imagem", icon: ObjectImageIcon, tone: "text-red-400" },
+  { label: "Weblink", icon: ObjectWeblinkIcon, tone: "text-blue-500" },
+  { label: "Tweet", icon: ObjectTweetIcon, tone: "text-sky-500" },
+  { label: "PDF", icon: ObjectPdfIcon, tone: "text-red-400" },
+  { label: "Áudio", icon: ObjectAudioIcon, tone: "text-red-400" },
+  { label: "Arquivo", icon: ObjectFileIcon, tone: "text-red-400" },
+];
 
 function NewContentMenu({ action }: { action: AppSidebarPrimaryAction }) {
-  const [query, setQuery] = React.useState("")
-  const Icon = action.icon
+  const [query, setQuery] = React.useState("");
+  const Icon = action.icon;
   const items = newContentItems.filter((item) =>
-    item.label.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())
-  )
+    item.label.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
+  );
 
   return (
     <Popover>
@@ -108,10 +103,10 @@ function NewContentMenu({ action }: { action: AppSidebarPrimaryAction }) {
         side="bottom"
         align="start"
         sideOffset={4}
-        className="w-[22rem] max-w-[calc(100vw-1rem)] gap-2 rounded-xl p-2"
+        className="w-[22rem] max-w-[calc(100vw-1rem)] gap-2 p-2"
       >
         <div className="relative">
-          <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <AppSidebarSearchIcon className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -130,38 +125,58 @@ function NewContentMenu({ action }: { action: AppSidebarPrimaryAction }) {
               variant="ghost"
               className="h-8 w-full justify-start gap-2 px-1.5 font-normal"
             >
-              <span className={cn("flex size-6 items-center justify-center rounded-md bg-muted", tone)}>
+              <span
+                className={cn(
+                  "flex size-6 items-center justify-center rounded-md bg-muted",
+                  tone,
+                )}
+              >
                 <Icon className="size-4" />
               </span>
               <span className="truncate">{label}</span>
-              <ChevronRightIcon className="ml-auto size-4 text-muted-foreground" />
+              <AppSidebarChevronRightIcon className="ml-auto size-4 text-muted-foreground" />
             </Button>
           ))}
         </div>
 
         <div className="flex items-center gap-2 border-t px-1 pt-2 text-[11px] text-muted-foreground">
-          <span><Kbd><ArrowUpIcon /></Kbd><Kbd><ArrowDownIcon /></Kbd> para navegar</span>
-          <span><Kbd>Esc</Kbd> para abortar</span>
-          <span><Kbd><CornerDownLeftIcon /></Kbd> para selecionar</span>
+          <span>
+            <Kbd>
+              <AppSidebarArrowUpIcon />
+            </Kbd>
+            <Kbd>
+              <AppSidebarArrowDownIcon />
+            </Kbd>{" "}
+            para navegar
+          </span>
+          <span>
+            <Kbd>Esc</Kbd> para abortar
+          </span>
+          <span>
+            <Kbd>
+              <AppSidebarCornerDownLeftIcon />
+            </Kbd>{" "}
+            para selecionar
+          </span>
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
 
 type AppSidebarPrimaryAction = {
-  id: AppSidebarPrimaryActionId
-  label: string
-  icon: React.ElementType
-  hints: AppSidebarPrimaryActionHint[]
-}
+  id: AppSidebarPrimaryActionId;
+  label: string;
+  icon: React.ElementType;
+  hints: AppSidebarPrimaryActionHint[];
+};
 
 type AppSidebarPrimaryActionsProps = {
-  activeAction?: AppSidebarPrimaryNavigationAction
-  onAction?: (action: AppSidebarPrimaryActionId) => void
-  actions?: AppSidebarPrimaryAction[]
-  className?: string
-}
+  activeAction?: AppSidebarPrimaryNavigationAction;
+  onAction?: (action: AppSidebarPrimaryActionId) => void;
+  actions?: AppSidebarPrimaryAction[];
+  className?: string;
+};
 
 const defaultActions: AppSidebarPrimaryAction[] = [
   {
@@ -205,7 +220,8 @@ const defaultActions: AppSidebarPrimaryAction[] = [
     icon: AppSidebarExploreIcon,
     hints: [
       {
-        description: "Abrir Explorar. Use o atalho novamente para iniciar um novo chat.",
+        description:
+          "Abrir Explorar. Use o atalho novamente para iniciar um novo chat.",
         shortcut: {
           windows: ["Ctrl", "J"],
           mac: ["⌘", "J"],
@@ -226,7 +242,8 @@ const defaultActions: AppSidebarPrimaryAction[] = [
     icon: AppSidebarCalendarIcon,
     hints: [
       {
-        description: "Ir para o Calendário. Clique duas vezes para ir para hoje.",
+        description:
+          "Ir para o Calendário. Clique duas vezes para ir para hoje.",
         shortcut: {
           windows: ["Ctrl", "Alt", "H"],
           mac: ["⌃", "⌘", "H"],
@@ -234,21 +251,21 @@ const defaultActions: AppSidebarPrimaryAction[] = [
       },
     ],
   },
-]
+];
 
 function useIsMac() {
-  const [isMac, setIsMac] = React.useState(false)
+  const [isMac, setIsMac] = React.useState(false);
 
   React.useEffect(() => {
-    setIsMac(/Mac|iPhone|iPad|iPod/i.test(navigator.platform))
-  }, [])
+    setIsMac(/Mac|iPhone|iPad|iPod/i.test(navigator.platform));
+  }, []);
 
-  return isMac
+  return isMac;
 }
 
 function AppSidebarShortcut({ shortcut }: { shortcut: AppSidebarShortcut }) {
-  const isMac = useIsMac()
-  const keys = isMac ? shortcut.mac : shortcut.windows
+  const isMac = useIsMac();
+  const keys = isMac ? shortcut.mac : shortcut.windows;
 
   return (
     <KbdGroup className="flex-wrap">
@@ -262,16 +279,16 @@ function AppSidebarShortcut({ shortcut }: { shortcut: AppSidebarShortcut }) {
           </span>
         ) : (
           <Kbd key={`${key}-${index}`}>{key}</Kbd>
-        )
+        ),
       )}
     </KbdGroup>
-  )
+  );
 }
 
 function AppSidebarPrimaryActionHintContent({
   hints,
 }: {
-  hints: AppSidebarPrimaryActionHint[]
+  hints: AppSidebarPrimaryActionHint[];
 }) {
   return (
     <div className="flex flex-col gap-3">
@@ -282,7 +299,7 @@ function AppSidebarPrimaryActionHintContent({
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 function AppSidebarPrimaryActionItem({
@@ -290,41 +307,41 @@ function AppSidebarPrimaryActionItem({
   active,
   onAction,
 }: {
-  action: AppSidebarPrimaryAction
-  active: boolean
-  onAction?: (action: AppSidebarPrimaryActionId) => void
+  action: AppSidebarPrimaryAction;
+  active: boolean;
+  onAction?: (action: AppSidebarPrimaryActionId) => void;
 }) {
-  const isMobile = useIsMobile()
-  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
-  const [open, setOpen] = React.useState(false)
-  const Icon = action.icon
+  const isMobile = useIsMobile();
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [open, setOpen] = React.useState(false);
+  const Icon = action.icon;
 
   if (action.id === "new") {
-    return <NewContentMenu action={action} />
+    return <NewContentMenu action={action} />;
   }
 
   function clearTimer() {
-    if (!timerRef.current) return
-    clearTimeout(timerRef.current)
-    timerRef.current = null
+    if (!timerRef.current) return;
+    clearTimeout(timerRef.current);
+    timerRef.current = null;
   }
 
   function scheduleOpen() {
-    if (isMobile) return
+    if (isMobile) return;
 
-    clearTimer()
+    clearTimer();
     timerRef.current = setTimeout(() => {
-      setOpen(true)
-      timerRef.current = null
-    }, 200)
+      setOpen(true);
+      timerRef.current = null;
+    }, 200);
   }
 
   function closeHint() {
-    clearTimer()
-    setOpen(false)
+    clearTimer();
+    setOpen(false);
   }
 
-  React.useEffect(() => () => clearTimer(), [])
+  React.useEffect(() => () => clearTimer(), []);
 
   return (
     <div
@@ -346,12 +363,12 @@ function AppSidebarPrimaryActionItem({
               "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               "[&_svg]:size-4",
               "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
-              "data-[active=true]:brightness-[0.965] data-[active=true]:hover:bg-sidebar-accent"
+              "data-[active=true]:brightness-[0.965] data-[active=true]:hover:bg-sidebar-accent",
             )}
             onPointerDown={closeHint}
             onClick={() => {
-              closeHint()
-              onAction?.(action.id)
+              closeHint();
+              onAction?.(action.id);
             }}
           >
             <Icon data-icon="inline-start" />
@@ -369,7 +386,7 @@ function AppSidebarPrimaryActionItem({
         </HoverCardContent>
       </HoverCard>
     </div>
-  )
+  );
 }
 
 function AppSidebarPrimaryActions({
@@ -393,25 +410,28 @@ function AppSidebarPrimaryActions({
         />
       ))}
     </nav>
-  )
+  );
 }
 
 const demoSpaces: AppSidebarSpace[] = [
-  { id: "studies", name: "Studies", icon: BookOpenIcon },
-  { id: "ideas", name: "Ideas", icon: LightbulbIcon },
+  { id: "studies", name: "Studies", icon: ObjectBookIcon },
+  { id: "ideas", name: "Ideas", icon: ObjectIdeaIcon },
   { id: "labs", name: "zzzzzzzzzz", icon: AppSidebarWorkspaceIcon },
-  { id: "projects", name: "Projects", icon: BriefcaseBusinessIcon },
-  { id: "dev", name: "Dev", icon: Code2Icon },
-  { id: "knowledge", name: "Knowledge", icon: BrainCircuitIcon },
-  { id: "archive", name: "Archive", icon: ArchiveIcon },
-]
+  { id: "projects", name: "Projects", icon: ObjectProjectIcon },
+  { id: "dev", name: "Dev", icon: ObjectCodeIcon },
+  { id: "knowledge", name: "Knowledge", icon: ObjectKnowledgeIcon },
+  { id: "archive", name: "Archive", icon: ObjectArchiveIcon },
+];
 
 function AppSidebarPrimaryActionsDemo() {
-  const [spaces, setSpaces] = React.useState(demoSpaces)
-  const [spaceId, setSpaceId] = React.useState("labs")
-  const [activeAction, setActiveAction] =
-    React.useState<AppSidebarPrimaryNavigationAction | undefined>("calendar")
-  const [activeEntityId, setActiveEntityId] = React.useState<string | null>(null)
+  const [spaces, setSpaces] = React.useState(demoSpaces);
+  const [spaceId, setSpaceId] = React.useState("labs");
+  const [activeAction, setActiveAction] = React.useState<
+    AppSidebarPrimaryNavigationAction | undefined
+  >(undefined);
+  const [activeEntityId, setActiveEntityId] = React.useState<string | null>(
+    "atomic-note",
+  );
 
   return (
     <TooltipProvider delay={200}>
@@ -427,8 +447,8 @@ function AppSidebarPrimaryActionsDemo() {
               activeAction={activeAction}
               onAction={(action) => {
                 if (action !== "new") {
-                  setActiveAction(action)
-                  setActiveEntityId(null)
+                  setActiveAction(action);
+                  setActiveEntityId(null);
                 }
               }}
             />
@@ -437,24 +457,24 @@ function AppSidebarPrimaryActionsDemo() {
           <AppSidebarOverview
             activeId={activeEntityId}
             onActiveIdChange={(id) => {
-              setActiveEntityId(id)
-              if (id !== null) setActiveAction(undefined)
+              setActiveEntityId(id);
+              if (id !== null) setActiveAction(undefined);
             }}
           />
         </div>
       </AppSidebar>
     </TooltipProvider>
-  )
+  );
 }
 
 export {
-  AppSidebarPrimaryActions,
-  AppSidebarPrimaryActionsDemo,
-  defaultActions,
   type AppSidebarPrimaryAction,
   type AppSidebarPrimaryActionHint,
   type AppSidebarPrimaryActionId,
+  AppSidebarPrimaryActions,
+  AppSidebarPrimaryActionsDemo,
   type AppSidebarPrimaryActionsProps,
   type AppSidebarPrimaryNavigationAction,
   type AppSidebarShortcut,
-}
+  defaultActions,
+};

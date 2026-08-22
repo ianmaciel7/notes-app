@@ -5,6 +5,12 @@ import { Command as CommandPrimitive } from "cmdk"
 
 import { cn } from "@/lib/utils"
 import {
+  controlIconClass,
+  floatingListItemClass,
+  floatingListItemSelectedClass,
+  floatingSurfaceBaseClass,
+} from "@/components/ui/shared-styles"
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -25,7 +31,8 @@ function Command({
     <CommandPrimitive
       data-slot="command"
       className={cn(
-        "flex size-full flex-col overflow-hidden rounded-xl! bg-popover p-1 text-popover-foreground",
+        "flex size-full flex-col overflow-hidden p-1",
+        floatingSurfaceBaseClass,
         className
       )}
       {...props}
@@ -82,7 +89,7 @@ function CommandInput({
           {...props}
         />
         <InputGroupAddon>
-          <SearchIcon className="size-4 shrink-0 opacity-50" />
+          <SearchIcon className={cn(controlIconClass, "opacity-50")} />
         </InputGroupAddon>
       </InputGroup>
     </div>
@@ -156,13 +163,21 @@ function CommandItem({
     <CommandPrimitive.Item
       data-slot="command-item"
       className={cn(
-        "group/command-item relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg! data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-muted data-selected:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-foreground",
+        "group/command-item in-data-[slot=dialog-content]:rounded-md",
+        floatingListItemClass,
+        floatingListItemSelectedClass,
+        "gap-2 px-2 py-1.5 data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50",
         className
       )}
       {...props}
     >
       {children}
-      <CheckIcon className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
+      <CheckIcon
+        className={cn(
+          controlIconClass,
+          "ml-auto text-foreground opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100"
+        )}
+      />
     </CommandPrimitive.Item>
   )
 }

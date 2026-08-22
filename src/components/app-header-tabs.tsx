@@ -9,7 +9,6 @@ import {
   AppHeaderPushPinFillIcon,
   AppHeaderPushPinIcon,
 } from "@/components/app-header-icons"
-import { Button } from "@/components/ui/button"
 import {
   HoverCard,
   HoverCardContent,
@@ -19,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 const MAIN_TAB_MAX_WIDTH = 200
-const MAIN_TAB_MIN_WIDTH = 60
+const MAIN_TAB_MIN_WIDTH = 96
 const MAIN_TAB_GAP = 5
 const SIDE_TAB_MAX_WIDTH = 160
 const SIDE_TAB_MIN_WIDTH = 44
@@ -468,8 +467,7 @@ function AppHeaderTabItem({
         side="bottom"
         align="center"
         sideOffset={8}
-        className="w-64 border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-front)]"
-        style={appHeaderTabTheme}
+        className="w-64"
       >
         {tab.preview}
       </HoverCardContent>

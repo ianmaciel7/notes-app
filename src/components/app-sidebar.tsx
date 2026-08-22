@@ -2,22 +2,24 @@
 
 import * as React from "react"
 import { createPortal } from "react-dom"
-import {
-  ArchiveIcon,
-  BookOpenIcon,
-  BrainCircuitIcon,
-  BriefcaseBusinessIcon,
-  ChevronsUpDownIcon,
-  CircleAlertIcon,
-  Code2Icon,
-  FlaskConicalIcon,
-  GripVerticalIcon,
-  LightbulbIcon,
-  PlusIcon,
-  XIcon,
-} from "lucide-react"
 
+import {
+  AppSidebarAlertIcon,
+  AppSidebarChevronsUpDownIcon,
+  AppSidebarFlaskIcon,
+  AppSidebarGripVerticalIcon,
+  AppSidebarPlusIcon,
+  AppSidebarXIcon,
+} from "@/components/app-sidebar-icons"
 import { AppShellContent, AppShellHeader } from "@/components/app-shell"
+import {
+  ObjectArchiveIcon,
+  ObjectBookIcon,
+  ObjectCodeIcon,
+  ObjectIdeaIcon,
+  ObjectKnowledgeIcon,
+  ObjectProjectIcon,
+} from "@/components/object-icons"
 import { Button } from "@/components/ui/button"
 import {
   Combobox,
@@ -437,7 +439,7 @@ function AppSidebarSpaceSwitcher({
               onPointerDown={(event) => event.preventDefault()}
               onClick={clearSearch}
             >
-              <XIcon />
+              <AppSidebarXIcon />
             </InputGroupButton>
           </InputGroupAddon>
         )}
@@ -488,7 +490,7 @@ function AppSidebarSpaceSwitcher({
                 event.stopPropagation()
               }}
             >
-              <GripVerticalIcon />
+              <AppSidebarGripVerticalIcon />
             </span>
           )}
         </span>
@@ -519,7 +521,7 @@ function AppSidebarSpaceSwitcher({
             className="w-full min-w-0 justify-start"
             disabled
           >
-            <PlusIcon data-icon="inline-start" />
+            <AppSidebarPlusIcon data-icon="inline-start" />
             {text.createSpace}
           </Button>
         </div>
@@ -614,7 +616,7 @@ function AppSidebarSpaceSwitcher({
                   />
                   <span className="truncate">{selectedSpace.name}</span>
                 </span>
-                <ChevronsUpDownIcon
+                <AppSidebarChevronsUpDownIcon
                   data-icon="inline-end"
                   className="ml-1 size-[14px] shrink-0 text-muted-foreground"
                 />
@@ -658,7 +660,7 @@ function AppSidebarSpaceSwitcher({
             >
               <ComboboxEmpty>
                 <span className="inline-flex w-full min-w-0 items-center justify-center gap-1.5">
-                  <CircleAlertIcon />
+                  <AppSidebarAlertIcon />
                   <span className="truncate">{text.empty}</span>
                 </span>
               </ComboboxEmpty>
@@ -715,7 +717,7 @@ function AppSidebarSpaceSwitcher({
                 >
                   <ComboboxEmpty>
                     <span className="flex min-h-24 min-w-0 items-center justify-center gap-1.5 p-4 text-sm text-muted-foreground">
-                      <CircleAlertIcon />
+                      <AppSidebarAlertIcon />
                       <span className="truncate">{text.empty}</span>
                     </span>
                   </ComboboxEmpty>
@@ -747,7 +749,7 @@ function AppSidebarSpaceSwitcher({
             }}
           >
             <div className="flex h-full min-w-0 items-center gap-2 px-1.5 text-sm">
-              <GripVerticalIcon className="shrink-0 text-muted-foreground" />
+              <AppSidebarGripVerticalIcon className="shrink-0 text-muted-foreground" />
               <span className="min-w-0 truncate">{dragPreview.space.name}</span>
             </div>
           </div>,
@@ -784,13 +786,13 @@ function AppSidebar({
 }
 
 const demoSpaces: AppSidebarSpace[] = [
-  { id: "studies", name: "Studies", icon: BookOpenIcon },
-  { id: "ideas", name: "Ideas", icon: LightbulbIcon },
-  { id: "labs", name: "Labs", icon: FlaskConicalIcon },
-  { id: "projects", name: "Projects", icon: BriefcaseBusinessIcon },
-  { id: "dev", name: "Dev", icon: Code2Icon },
-  { id: "knowledge", name: "Knowledge", icon: BrainCircuitIcon },
-  { id: "archive", name: "Archive", icon: ArchiveIcon },
+  { id: "studies", name: "Studies", icon: ObjectBookIcon },
+  { id: "ideas", name: "Ideas", icon: ObjectIdeaIcon },
+  { id: "labs", name: "Labs", icon: AppSidebarFlaskIcon },
+  { id: "projects", name: "Projects", icon: ObjectProjectIcon },
+  { id: "dev", name: "Dev", icon: ObjectCodeIcon },
+  { id: "knowledge", name: "Knowledge", icon: ObjectKnowledgeIcon },
+  { id: "archive", name: "Archive", icon: ObjectArchiveIcon },
 ]
 
 function AppSidebarDemo() {

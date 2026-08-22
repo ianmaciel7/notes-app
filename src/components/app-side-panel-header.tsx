@@ -230,7 +230,7 @@ function SideHeaderAction({
       <TooltipContent
         side={placement}
         sideOffset={8}
-        className="rounded-lg border border-[var(--side-header-border-front)] bg-white/95 px-2 py-1.5 text-xs text-[var(--side-header-text-primary)] shadow-md backdrop-blur"
+        className="px-2 py-1.5 text-xs"
       >
         {label}
       </TooltipContent>
@@ -480,14 +480,14 @@ function AppSidePanelHeader({
               side="bottom"
               align="end"
               sideOffset={6}
-              className="w-64 rounded-xl p-1.5"
+              className="w-64 p-1.5"
             >
               {defaultSpecialItems.map((item) => {
                 const Icon = item.icon
                 return (
                   <DropdownMenuItem
                     key={item.id}
-                    className="h-10 gap-3 rounded-lg px-2.5 text-sm"
+                    className="h-10 gap-3 px-2.5 text-sm"
                     onClick={() => onSpecialEntrySelect?.(item.id)}
                   >
                     <Icon className="size-4 text-muted-foreground" />

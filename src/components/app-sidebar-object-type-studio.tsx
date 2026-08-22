@@ -2,34 +2,38 @@
 
 import * as React from "react"
 import {
-  ArchiveIcon,
-  AudioLinesIcon,
-  BookOpenIcon,
-  BookmarkIcon,
-  BoxesIcon,
-  BriefcaseBusinessIcon,
-  Building2Icon,
-  CheckIcon,
-  CircleCheckIcon,
-  FileIcon,
-  FileTextIcon,
-  FilmIcon,
-  GlobeIcon,
-  ImageIcon,
-  LightbulbIcon,
-  MapPinIcon,
-  MessageCircleIcon,
-  PlusIcon,
-  QuoteIcon,
-  SearchIcon,
-  SquareIcon,
-  StickyNoteIcon,
-  Table2Icon,
-  TagIcon,
-  UserIcon,
-  UsersIcon,
-  XIcon,
-} from "lucide-react"
+  AppSidebarCheckIcon,
+  AppSidebarPlusIcon,
+  AppSidebarXIcon,
+} from "@/components/app-sidebar-icons"
+import {
+  ObjectAiChatIcon,
+  ObjectArchiveIcon,
+  ObjectAreaIcon,
+  ObjectAtomicNoteIcon,
+  ObjectAudioIcon,
+  ObjectBookIcon,
+  ObjectDefinitionIcon,
+  ObjectFileIcon,
+  ObjectImageIcon,
+  ObjectIdeaIcon,
+  ObjectMediaIcon,
+  ObjectMeetingIcon,
+  ObjectOrganizationIcon,
+  ObjectPageIcon,
+  ObjectPdfIcon,
+  ObjectPersonIcon,
+  ObjectPlaceIcon,
+  ObjectProjectIcon,
+  ObjectQueryIcon,
+  ObjectQuoteIcon,
+  ObjectTableIcon,
+  ObjectTagIcon,
+  ObjectTaskIcon,
+  ObjectTravelIcon,
+  ObjectTweetIcon,
+  ObjectWeblinkIcon,
+} from "@/components/object-icons"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -84,35 +88,45 @@ const appSidebarObjectTypeToneClasses: Record<
 }
 
 const suggestedObjectTypes: AppSidebarObjectTypePreset[] = [
-  { id: "book", label: "Book", icon: BookOpenIcon, tone: "purple" },
-  { id: "person", label: "Person", icon: UserIcon, tone: "amber" },
-  { id: "area", label: "Area", icon: SquareIcon, tone: "purple" },
-  { id: "meeting", label: "Meeting", icon: UsersIcon, tone: "rose" },
-  { id: "quote", label: "Quote", icon: QuoteIcon, tone: "rose" },
-  { id: "definition", label: "Definition", icon: BookmarkIcon, tone: "purple" },
-  { id: "idea", label: "Idea", icon: LightbulbIcon, tone: "amber" },
-  { id: "place", label: "Place", icon: MapPinIcon, tone: "green" },
-  { id: "project", label: "Project", icon: BoxesIcon, tone: "green" },
-  { id: "organization", label: "Organization", icon: Building2Icon, tone: "rose" },
-  { id: "atomic-note", label: "Atomic note", icon: StickyNoteIcon, tone: "amber" },
-  { id: "media", label: "Media", icon: FilmIcon, tone: "green" },
-  { id: "travel", label: "Travel", icon: BriefcaseBusinessIcon, tone: "purple" },
+  { id: "book", label: "Book", icon: ObjectBookIcon, tone: "purple" },
+  {
+    id: "person",
+    label: "Person",
+    icon: ObjectPersonIcon,
+    tone: "amber",
+  },
+  { id: "area", label: "Area", icon: ObjectAreaIcon, tone: "purple" },
+  {
+    id: "meeting",
+    label: "Meeting",
+    icon: ObjectMeetingIcon,
+    tone: "rose",
+  },
+  { id: "quote", label: "Quote", icon: ObjectQuoteIcon, tone: "rose" },
+  { id: "definition", label: "Definition", icon: ObjectDefinitionIcon, tone: "purple" },
+  { id: "idea", label: "Idea", icon: ObjectIdeaIcon, tone: "amber" },
+  { id: "place", label: "Place", icon: ObjectPlaceIcon, tone: "green" },
+  { id: "project", label: "Project", icon: ObjectProjectIcon, tone: "green" },
+  { id: "organization", label: "Organization", icon: ObjectOrganizationIcon, tone: "rose" },
+  { id: "atomic-note", label: "Atomic note", icon: ObjectAtomicNoteIcon, tone: "amber" },
+  { id: "media", label: "Media", icon: ObjectMediaIcon, tone: "green" },
+  { id: "travel", label: "Travel", icon: ObjectTravelIcon, tone: "purple" },
 ]
 
 const basicObjectTypes: AppSidebarObjectTypePreset[] = [
-  { id: "page", label: "Page", icon: FileTextIcon, tone: "blue" },
-  { id: "tag", label: "Tag", icon: TagIcon, tone: "amber" },
-  { id: "image", label: "Image", icon: ImageIcon, tone: "rose" },
-  { id: "weblink", label: "Weblink", icon: GlobeIcon, tone: "blue" },
-  { id: "pdf", label: "PDF", icon: FileTextIcon, tone: "rose" },
-  { id: "audio", label: "Audio", icon: AudioLinesIcon, tone: "rose" },
-  { id: "file", label: "File", icon: FileIcon, tone: "rose" },
-  { id: "tweet", label: "Tweet", icon: MessageCircleIcon, tone: "blue" },
-  { id: "ai-chat", label: "AI chat", icon: MessageCircleIcon, tone: "purple" },
-  { id: "table", label: "Table", icon: Table2Icon, tone: "blue" },
-  { id: "task", label: "Task", icon: CircleCheckIcon, tone: "amber" },
-  { id: "query", label: "Query", icon: SearchIcon, tone: "green" },
-  { id: "archive", label: "Archive", icon: ArchiveIcon, tone: "gray" },
+  { id: "page", label: "Page", icon: ObjectPageIcon, tone: "blue" },
+  { id: "tag", label: "Tag", icon: ObjectTagIcon, tone: "amber" },
+  { id: "image", label: "Image", icon: ObjectImageIcon, tone: "rose" },
+  { id: "weblink", label: "Weblink", icon: ObjectWeblinkIcon, tone: "blue" },
+  { id: "pdf", label: "PDF", icon: ObjectPdfIcon, tone: "rose" },
+  { id: "audio", label: "Audio", icon: ObjectAudioIcon, tone: "rose" },
+  { id: "file", label: "File", icon: ObjectFileIcon, tone: "rose" },
+  { id: "tweet", label: "Tweet", icon: ObjectTweetIcon, tone: "blue" },
+  { id: "ai-chat", label: "AI chat", icon: ObjectAiChatIcon, tone: "purple" },
+  { id: "table", label: "Table", icon: ObjectTableIcon, tone: "blue" },
+  { id: "task", label: "Task", icon: ObjectTaskIcon, tone: "amber" },
+  { id: "query", label: "Query", icon: ObjectQueryIcon, tone: "green" },
+  { id: "archive", label: "Archive", icon: ObjectArchiveIcon, tone: "gray" },
 ]
 
 function AppSidebarObjectTypeIcon({
@@ -178,7 +192,7 @@ function AppSidebarObjectTypeCard({
           aria-hidden="true"
           className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-foreground text-background"
         >
-          <CheckIcon className="size-3" />
+          <AppSidebarCheckIcon className="size-3" />
         </span>
       )}
     </Item>
@@ -203,7 +217,7 @@ function AppSidebarObjectTypeDetails({
     preset ?? {
       id: "custom",
       label: customName || "Custom object type",
-      icon: BoxesIcon,
+      icon: ObjectAreaIcon,
       tone: "gray",
     }
 
@@ -234,7 +248,7 @@ function AppSidebarObjectTypeDetails({
           aria-label="Close object type details"
           onClick={onClose}
         >
-          <XIcon />
+          <AppSidebarXIcon />
         </Button>
       </div>
 
@@ -332,7 +346,7 @@ function AppSidebarObjectTypeStudio({
     onSelect?.({
       id: `custom-${crypto.randomUUID()}`,
       label: name,
-      icon: BoxesIcon,
+      icon: ObjectAreaIcon,
       tone: "gray",
     })
     setOpen(false)
@@ -354,7 +368,7 @@ function AppSidebarObjectTypeStudio({
                 size="default"
                 className="w-full justify-start px-2 font-normal text-muted-foreground"
               >
-                <PlusIcon data-icon="inline-start" />
+                <AppSidebarPlusIcon data-icon="inline-start" />
                 <span className="min-w-0 truncate">Add object type</span>
               </Button>
             )
@@ -410,7 +424,7 @@ function AppSidebarObjectTypeStudio({
                   >
                     <ItemMedia>
                       <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border bg-background text-muted-foreground">
-                        <PlusIcon className="size-[18px]" />
+                        <AppSidebarPlusIcon className="size-[18px]" />
                       </span>
                     </ItemMedia>
                     <ItemContent className="min-w-0">
