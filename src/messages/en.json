@@ -30,11 +30,31 @@
       "openContext": "Open side panel",
       "openNavigation": "Open navigation"
     },
+    "primaryNavigation": {
+      "calendar": "Calendar",
+      "calendarHint": "Go to Calendar. Double-click to go to today.",
+      "cancel": "to cancel",
+      "explore": "Explore",
+      "exploreHint": "Open Explore. Use the shortcut again to start a new chat.",
+      "exploreSideHint": "Open Explore in the side panel",
+      "extendedSearchHint": "Open extended search",
+      "navigationLabel": "Primary navigation",
+      "navigate": "to navigate",
+      "new": "New",
+      "or": "or",
+      "search": "Search",
+      "searchContentType": "Search content type",
+      "searchHint": "Search",
+      "select": "to select",
+      "typesLabel": "Content types"
+    },
     "actions": {
+      "back": "Back",
       "collapse": "Collapse",
       "collapseEditor": "Collapse editor",
       "customize": "Customize",
       "filter": "Filter",
+      "forward": "Forward",
       "grid": "Grid",
       "importFiles": "Import file(s)",
       "list": "List",
@@ -43,6 +63,8 @@
       "new": "New",
       "newObjectOptions": "New object options",
       "search": "Search",
+      "sidePanelOptions": "Side-panel options",
+      "showSidePanel": "Show side panel",
       "sort": "Sort"
     },
     "sidebarCollections": {
@@ -153,6 +175,7 @@
       "list": "Tab list",
       "new": "New tab",
       "openInSidePanel": "Open in side panel",
+      "openedInSidePanel": "Opened {label} in the side panel",
       "recentlyOpened": "Recently opened",
       "search": "Search tabs",
       "searchContent": "Search content for new tab",

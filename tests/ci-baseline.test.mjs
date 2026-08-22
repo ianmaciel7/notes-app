@@ -44,6 +44,30 @@ test("supported locale catalogs are valid JSON objects", async () => {
   }
 });
 
+test("supported locale catalogs expose the same message keys", async () => {
+  const flattenKeys = (value, prefix = "") =>
+    Object.entries(value).flatMap(([key, child]) => {
+      const path = prefix ? `${prefix}.${key}` : key;
+      return child && typeof child === "object" && !Array.isArray(child)
+        ? flattenKeys(child, path)
+        : [path];
+    });
+  const catalogs = await Promise.all(
+    ["en", "es", "pt-BR"].map(async (locale) =>
+      JSON.parse(
+        await readFile(
+          new URL(`../src/messages/${locale}.json`, import.meta.url),
+          "utf8",
+        ),
+      ),
+    ),
+  );
+  const baseline = flattenKeys(catalogs[0]).sort();
+  for (const catalog of catalogs.slice(1)) {
+    assert.deepEqual(flattenKeys(catalog).sort(), baseline);
+  }
+});
+
 test("sidebar context menus share the canonical appearance contract", async () => {
   const [overview, compactMenu, sharedStyles] = await Promise.all([
     readFile(
@@ -66,7 +90,7 @@ test("sidebar context menus share the canonical appearance contract", async () =
   );
   assert.match(
     compactMenu,
-    /sidebarContextSubmenuContentClass = "w-\[269px\]"/,
+    /sidebarContextSubmenuContentClass = cn\(\s*"w-\[269px\]",\s*workspaceSubmenuStateClass,/,
   );
   assert.match(sharedStyles, /floatingListItemClass =[\s\S]*?h-8 min-h-8/);
   assert.match(sharedStyles, /rounded-\[8px\]/);

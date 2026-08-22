@@ -1,7 +1,19 @@
 type ObjectTypeId =
+  | "book"
+  | "person"
+  | "area"
+  | "meeting"
+  | "definition"
+  | "idea"
+  | "place"
+  | "project"
+  | "organization"
   | "atomic-note"
+  | "media"
+  | "travel"
   | "quote"
   | "page"
+  | "ai-chat"
   | "table"
   | "task"
   | "image"
@@ -31,7 +43,21 @@ type WorkspaceEntityBase = {
 
 type DocumentEntity = WorkspaceEntityBase & {
   kind: "document";
-  objectTypeId: "atomic-note" | "page";
+  objectTypeId:
+    | "book"
+    | "person"
+    | "area"
+    | "meeting"
+    | "definition"
+    | "idea"
+    | "place"
+    | "project"
+    | "organization"
+    | "atomic-note"
+    | "media"
+    | "travel"
+    | "page"
+    | "ai-chat";
   body: string;
   collections: string[];
   tags: string[];
@@ -175,9 +201,21 @@ type WorkspaceObjectAction =
 const WORKSPACE_OBJECT_SCHEMA_VERSION = 1;
 
 const objectTypeIds: ObjectTypeId[] = [
+  "book",
+  "person",
+  "area",
+  "meeting",
+  "definition",
+  "idea",
+  "place",
+  "project",
+  "organization",
   "atomic-note",
+  "media",
+  "travel",
   "quote",
   "page",
+  "ai-chat",
   "table",
   "task",
   "image",
@@ -191,9 +229,21 @@ const objectTypeIds: ObjectTypeId[] = [
 ];
 
 const creationFlowByType: Record<ObjectTypeId, CreationFlow> = {
+  book: "document",
+  person: "document",
+  area: "document",
+  meeting: "document",
+  definition: "document",
+  idea: "document",
+  place: "document",
+  project: "document",
+  organization: "document",
   "atomic-note": "document",
+  media: "document",
+  travel: "document",
   quote: "document",
   page: "document",
+  "ai-chat": "document",
   table: "table",
   task: "task",
   image: "file",

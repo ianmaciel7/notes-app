@@ -21,7 +21,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { workspaceSurfaceMotionClass } from "@/components/ui/shared-styles";
 import { cn } from "@/lib/utils";
+import { getWorkspacePanelPresentation } from "@/lib/workspace-layout";
 
 const APP_SHELL_LEFT_DEFAULT = "14rem";
 const APP_SHELL_LEFT_MIN = "14rem";
@@ -135,13 +137,13 @@ function AppShellProvider({
   }, [compactDesktop, rightPanelRef]);
 
   React.useEffect(() => {
-    const media = window.matchMedia(
-      "(min-width: 768px) and (max-width: 1023px)",
-    );
-    const sync = () => setCompactDesktop(media.matches);
+    const sync = () =>
+      setCompactDesktop(
+        getWorkspacePanelPresentation(window.innerWidth) === "overlay",
+      );
     sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
+    window.addEventListener("resize", sync);
+    return () => window.removeEventListener("resize", sync);
   }, []);
 
   React.useEffect(() => {
@@ -421,7 +423,8 @@ function AppShellSidePanel({
         onResize?.(size, id, previousSize);
       }}
       className={cn(
-        "flex h-full min-w-0 flex-col overflow-hidden bg-sidebar transition-opacity duration-300 ease-in-out motion-reduce:transition-none",
+        "flex h-full min-w-0 flex-col overflow-hidden bg-sidebar",
+        workspaceSurfaceMotionClass,
         rightCollapsed && "opacity-0",
         className,
       )}
@@ -618,8 +621,9 @@ function AppShellMobileSidebar({
   ...props
 }: React.ComponentProps<typeof SheetContent>) {
   const t = useTranslations("workspace.shell");
+  const [open, setOpen] = React.useState(false);
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={
           <Button
@@ -658,8 +662,9 @@ function AppShellMobileSidePanel({
   ...props
 }: React.ComponentProps<typeof SheetContent>) {
   const t = useTranslations("workspace.shell");
+  const [open, setOpen] = React.useState(false);
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={
           <Button

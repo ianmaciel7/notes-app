@@ -64,9 +64,21 @@ type AppSidebarPrimaryActionHint = {
 };
 
 const newContentItems = [
+  { label: "Livro", objectTypeId: "book" },
+  { label: "Pessoa", objectTypeId: "person" },
+  { label: "Área", objectTypeId: "area" },
+  { label: "Reunião", objectTypeId: "meeting" },
   { label: "Nota atômica", objectTypeId: "atomic-note" },
+  { label: "Definição", objectTypeId: "definition" },
+  { label: "Ideia", objectTypeId: "idea" },
+  { label: "Lugar", objectTypeId: "place" },
+  { label: "Projeto", objectTypeId: "project" },
+  { label: "Organização", objectTypeId: "organization" },
+  { label: "Mídia", objectTypeId: "media" },
+  { label: "Viagem", objectTypeId: "travel" },
   { label: "Citação", objectTypeId: "quote" },
   { label: "Página", objectTypeId: "page" },
+  { label: "Chat de IA", objectTypeId: "ai-chat" },
   { label: "Tabela", objectTypeId: "table" },
   { label: "Tarefa", objectTypeId: "task" },
   { label: "Imagem", objectTypeId: "image" },
@@ -222,8 +234,8 @@ function NewContentMenu({
                 setActiveIndex(0);
               }}
               onKeyDown={handleInputKeyDown}
-              placeholder="Buscar"
-              aria-label="Buscar tipo de conteúdo"
+              placeholder={t("primaryNavigation.search")}
+              aria-label={t("primaryNavigation.searchContentType")}
               aria-controls="new-content-menu-listbox"
               aria-activedescendant={
                 items[activeIndex]
@@ -242,7 +254,7 @@ function NewContentMenu({
         <div
           id="new-content-menu-listbox"
           role="listbox"
-          aria-label="Tipos de conteúdo"
+          aria-label={t("primaryNavigation.typesLabel")}
           className="h-72 min-h-0 shrink-0 overflow-y-auto px-1.5"
         >
           {items.map(({ label, objectTypeId }, index) => {
@@ -284,16 +296,16 @@ function NewContentMenu({
 
         <div className="mx-1 flex h-[29px] shrink-0 items-center gap-x-3 border-t border-border px-1 py-1.5 text-xs leading-4 text-muted-foreground">
           <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">↑↓</span> para
-            navegar
+            <span className="font-medium text-muted-foreground">↑↓</span>{" "}
+            {t("primaryNavigation.navigate")}
           </span>
           <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">Esc</span> para
-            abortar
+            <span className="font-medium text-muted-foreground">Esc</span>{" "}
+            {t("primaryNavigation.cancel")}
           </span>
           <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">↵</span> para
-            selecionar
+            <span className="font-medium text-muted-foreground">↵</span>{" "}
+            {t("primaryNavigation.select")}
           </span>
         </div>
       </PopoverContent>
@@ -402,6 +414,7 @@ function useIsMac() {
 }
 
 function AppSidebarShortcut({ shortcut }: { shortcut: AppSidebarShortcut }) {
+  const t = useTranslations("workspace.primaryNavigation");
   const isMac = useIsMac();
   const keys = isMac ? shortcut.mac : shortcut.windows;
   const keyOccurrences = new Map<string, number>();
@@ -416,7 +429,7 @@ function AppSidebarShortcut({ shortcut }: { shortcut: AppSidebarShortcut }) {
       {keyedKeys.map(({ id, value }) =>
         value === "or" ? (
           <span key={id} className="px-0.5 text-xs text-muted-foreground">
-            ou
+            {t("or")}
           </span>
         ) : (
           <Kbd key={id}>{value}</Kbd>
@@ -544,13 +557,39 @@ function AppSidebarPrimaryActions({
   actions = defaultActions,
   className,
 }: AppSidebarPrimaryActionsProps) {
+  const t = useTranslations("workspace.primaryNavigation");
+  const visibleActions =
+    actions === defaultActions
+      ? actions.map((action) => {
+          const labels = {
+            new: t("new"),
+            search: t("search"),
+            explore: t("explore"),
+            calendar: t("calendar"),
+          } satisfies Record<AppSidebarPrimaryActionId, string>;
+          const descriptions: Record<AppSidebarPrimaryActionId, string[]> = {
+            new: [t("new")],
+            search: [t("searchHint"), t("extendedSearchHint")],
+            explore: [t("exploreHint"), t("exploreSideHint")],
+            calendar: [t("calendarHint")],
+          };
+          return {
+            ...action,
+            label: labels[action.id],
+            hints: action.hints.map((hint, index) => ({
+              ...hint,
+              description: descriptions[action.id][index] ?? hint.description,
+            })),
+          };
+        })
+      : actions;
   return (
     <nav
       data-slot="app-sidebar-primary-actions"
-      aria-label="Primary navigation"
+      aria-label={t("navigationLabel")}
       className={cn("flex w-full flex-col", className)}
     >
-      {actions.map((action) => (
+      {visibleActions.map((action) => (
         <AppSidebarPrimaryActionItem
           key={action.id}
           action={action}

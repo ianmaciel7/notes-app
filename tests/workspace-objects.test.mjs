@@ -22,6 +22,23 @@ function reduce(state, ...actions) {
 }
 
 test("creation flows cover every New palette family", () => {
+  for (const id of [
+    "book",
+    "person",
+    "area",
+    "meeting",
+    "definition",
+    "idea",
+    "place",
+    "project",
+    "organization",
+    "media",
+    "travel",
+    "ai-chat",
+  ]) {
+    assert.equal(getCreationFlow(id), "document", id);
+  }
+  assert.equal(getCreationFlow("atomic-note"), "document");
   assert.equal(getCreationFlow("page"), "document");
   assert.equal(getCreationFlow("quote"), "document");
   assert.equal(getCreationFlow("table"), "table");
@@ -35,6 +52,67 @@ test("creation flows cover every New palette family", () => {
   assert.equal(getCreationFlow("audio"), "file");
   assert.equal(getCreationFlow("file"), "file");
   assert.equal(getCreationFlow("unknown"), null);
+});
+
+test("preset object types create persistent document-like entities", () => {
+  const presetIds = [
+    "book",
+    "person",
+    "area",
+    "meeting",
+    "definition",
+    "idea",
+    "place",
+    "project",
+    "organization",
+    "media",
+    "travel",
+    "ai-chat",
+  ];
+
+  const state = reduce(
+    createInitialWorkspaceObjectState(),
+    ...presetIds.map((objectTypeId) => ({ type: "beginCreate", objectTypeId })),
+  );
+
+  assert.equal(state.entities.length, presetIds.length);
+  assert.deepEqual(
+    state.entities.map((entity) => entity.objectTypeId),
+    presetIds,
+  );
+  assert.deepEqual(
+    state.entities.map((entity) => entity.kind),
+    presetIds.map(() => "document"),
+  );
+  assert.deepEqual(countEntitiesByType(state.entities), {
+    area: 1,
+    "ai-chat": 1,
+    book: 1,
+    definition: 1,
+    idea: 1,
+    media: 1,
+    meeting: 1,
+    organization: 1,
+    person: 1,
+    place: 1,
+    project: 1,
+    travel: 1,
+  });
+});
+
+test("reserved and unknown object types cannot mutate entity state", () => {
+  const unsupported = ["custom-example", "archive"];
+
+  for (const objectTypeId of unsupported) {
+    const initial = createInitialWorkspaceObjectState();
+    const next = workspaceObjectReducer(initial, {
+      type: "beginCreate",
+      objectTypeId,
+    });
+    assert.equal(next.entities.length, 0, objectTypeId);
+    assert.equal(next.nextId, initial.nextId, objectTypeId);
+    assert.equal(next.error, "unsupported-object-type", objectTypeId);
+  }
 });
 
 test("immediate creations receive collision-free ids and derived counts", () => {

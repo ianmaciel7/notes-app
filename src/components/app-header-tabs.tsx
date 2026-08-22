@@ -11,7 +11,11 @@ import {
 } from "@/components/app-header-icons"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Input } from "@/components/ui/input"
-import { workspaceTabStateClass } from "@/components/ui/shared-styles"
+import {
+  workspaceSmallActionStateClass,
+  workspaceTabStateClass,
+  workspaceTooltipStateClass,
+} from "@/components/ui/shared-styles"
 import { cn } from "@/lib/utils"
 
 const MAIN_TAB_MAX_WIDTH = 200
@@ -231,7 +235,8 @@ function AppHeaderTabAction({
       title={label}
       className={cn(
         "relative flex h-7 w-[18px] shrink-0 items-center justify-center rounded-lg border border-transparent bg-transparent",
-        "text-xs text-[var(--app-tab-text-subtle)] transition-[opacity] duration-200 ease-out",
+        "text-xs text-[var(--app-tab-text-subtle)]",
+        workspaceSmallActionStateClass,
         "hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)]",
         "active:z-20 active:brightness-[0.97] focus:outline-none",
         className,
@@ -278,16 +283,31 @@ function dataFlag(value: boolean) {
   return value || undefined
 }
 
+function hasReservedTabActions({
+  fitContent,
+  pinnable,
+  closable,
+}: Pick<AppHeaderTabProps, "fitContent" | "pinnable" | "closable">) {
+  return !fitContent && Boolean(pinnable || closable)
+}
+
 function getTabButtonClassName({
   active,
   neutral,
   fitContent,
   dragging,
-}: Pick<AppHeaderTabProps, "active" | "neutral" | "fitContent" | "dragging">) {
+  hasActions,
+}: Pick<AppHeaderTabProps, "active" | "neutral" | "fitContent" | "dragging"> & {
+  hasActions: boolean
+}) {
   return cn(
-    "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] rounded-[8px] border-[0.5px] py-[3px] pl-[6px] pr-[2px] text-[13px] leading-[1.3] outline-none ring-0",
+    "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] border-[0.5px] py-[3px] pl-[6px] pr-[2px] text-[13px] leading-[1.3] outline-none ring-0",
     workspaceTabStateClass,
     fitContent ? "w-auto rounded-[8px]" : "min-w-11 flex-1",
+    !fitContent &&
+      (hasActions
+        ? "rounded-l-[8px] rounded-r-none border-r-0"
+        : "rounded-[8px]"),
     neutral && "border-transparent text-[var(--app-tab-text-primary)]",
     !neutral && active &&
       "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)] font-medium text-[var(--app-tab-text-primary)]",
@@ -344,6 +364,49 @@ function OverlayCloseAction({
     >
       <AppHeaderCloseIcon />
     </AppHeaderTabAction>
+  )
+}
+
+function ReservedTabActions({
+  active,
+  neutral,
+  fitContent,
+  closable,
+  pinnable,
+  pinned,
+  labels,
+  onClose,
+  onTogglePin,
+}: {
+  active: boolean
+  neutral: boolean
+  fitContent: boolean
+  closable: boolean
+  pinnable: boolean
+  pinned: boolean
+  labels: { pin: string; unpin: string; close: string }
+  onClose?: () => void
+  onTogglePin?: () => void
+}) {
+  if (fitContent || (!pinnable && !closable)) return null
+  return (
+    <span
+      data-slot="app-header-tab-actions"
+      className={cn(
+        "flex h-8 shrink-0 items-center rounded-r-[8px] border-[0.5px] border-l-0 pr-[2px] transition-[background-color,border-color,opacity] duration-200 ease-out motion-reduce:transition-none",
+        pinnable && closable ? "w-[38px]" : "w-5",
+        active && !neutral
+          ? "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)]"
+          : "border-transparent bg-[var(--app-tab-bg-back)] group-hover/tab:bg-[var(--app-tab-bg-back-hover)]",
+      )}
+    >
+      {pinnable ? (
+        <OverlayPinAction pinned={pinned} labels={labels} onTogglePin={onTogglePin} />
+      ) : null}
+      {closable ? (
+        <OverlayCloseAction active={active} label={labels.close} onClose={onClose} />
+      ) : null}
+    </span>
   )
 }
 
@@ -433,7 +496,7 @@ function AppHeaderTabItem({
   }, [active, clearPreviewTimer, dragging, tab.preview])
 
   React.useEffect(() => () => clearPreviewTimer(), [clearPreviewTimer])
-  const hasInlineActions = !fitContent && (pinnable || closable)
+  const hasReservedActions = hasReservedTabActions({ fitContent, pinnable, closable })
 
   const tabNode = (
     <div
@@ -467,6 +530,7 @@ function AppHeaderTabItem({
             neutral,
             fitContent,
             dragging,
+            hasActions: hasReservedActions,
           })}
           onClick={(event) => {
             if (event.shiftKey) onShiftOpen?.()
@@ -483,27 +547,6 @@ function AppHeaderTabItem({
           <span className={cn("min-w-0 truncate text-left", fitContent ? undefined : "flex-1")}>
             {tab.label}
           </span>
-          {hasInlineActions && (
-            <span
-              data-slot="app-header-tab-actions"
-              className="ml-auto flex h-full shrink-0 items-center gap-0.5"
-            >
-              {pinnable ? (
-                <OverlayPinAction
-                  pinned={Boolean(tab.pinned)}
-                  labels={labels}
-                  onTogglePin={onTogglePin}
-                />
-              ) : null}
-              {closable ? (
-                <OverlayCloseAction
-                  active={active}
-                  label={labels.close}
-                  onClose={onClose}
-                />
-              ) : null}
-            </span>
-          )}
           <FitContentPinAction
             fitContent={fitContent}
             pinnable={pinnable}
@@ -512,6 +555,17 @@ function AppHeaderTabItem({
             onTogglePin={onTogglePin}
           />
         </div>
+        <ReservedTabActions
+          active={active}
+          neutral={neutral}
+          fitContent={fitContent}
+          closable={closable}
+          pinnable={pinnable}
+          pinned={Boolean(tab.pinned)}
+          labels={labels}
+          onClose={onClose}
+          onTogglePin={onTogglePin}
+        />
 
         {showSeparator && (
           <div className="absolute right-0 top-1/2 h-[18px] w-[0.5px] -translate-y-1/2 rounded-full bg-[var(--app-tab-border-front)] group-hover/tab:opacity-0" />
@@ -525,7 +579,12 @@ function AppHeaderTabItem({
   return (
     <HoverCard open={previewOpen}>
       <HoverCardTrigger render={<div className="min-w-0" />}>{tabNode}</HoverCardTrigger>
-      <HoverCardContent side="bottom" align="center" sideOffset={8} className="w-64">
+      <HoverCardContent
+        side="bottom"
+        align="center"
+        sideOffset={8}
+        className={cn("w-64", workspaceTooltipStateClass)}
+      >
         {tab.preview}
       </HoverCardContent>
     </HoverCard>

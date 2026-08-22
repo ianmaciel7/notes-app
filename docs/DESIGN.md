@@ -15,10 +15,11 @@
   (`oklch(0.9856 0.0016 67)`), while application panels and editor cards use
   `card`. Their shared light border is `oklch(0.9163 0.0017 67.07)`; route
   components must consume these semantic tokens instead of duplicating colors.
-- At desktop acceptance widths, preserve the measured shell hierarchy: a 288px
+- At desktop acceptance widths, preserve the current measured shell hierarchy: a 224px
   sidebar, a 46px top rail, a 10px content gutter, and a white editor card with
   a 12px radius. Treat these values as layout contracts, not route-level magic
-  numbers.
+  numbers. See `docs/references/capacities-workspace-parity.md` for the
+  timestamped viewport and interaction matrix.
 
 - Shared floating UI such as tooltips, hover cards, popovers, menus, selects,
   comboboxes, and command items must use the centralized primitives in

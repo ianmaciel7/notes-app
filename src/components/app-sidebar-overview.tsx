@@ -669,7 +669,10 @@ function AppSidebarObjectTypeRow({
                 key={collection}
                 data-slot="app-sidebar-collection-row"
                 data-active={collectionId === activeId || undefined}
-                className="group/collection-row flex h-[29px] w-full min-w-0 items-center rounded-md pl-[26px] pr-1 text-sm font-normal text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground"
+                className={cn(
+                  "group/collection-row group/interactive flex h-[29px] w-full min-w-0 items-center rounded-md pl-[26px] pr-1 text-sm font-normal text-muted-foreground",
+                  workspaceRowStateClass,
+                )}
               >
                 <button
                   type="button"

@@ -56,6 +56,18 @@ const workspaceTabStateClass =
 const workspaceCompoundControlClass =
   "transition-[background-color,border-color,color,opacity,transform] duration-250 ease-out motion-reduce:transition-none"
 
+const workspaceSmallActionStateClass =
+  "transition-[background-color,color,opacity] duration-150 ease-out motion-reduce:transition-none"
+
+const workspaceSubmenuStateClass =
+  "transition-[background-color,color,opacity,transform] duration-200 ease-out motion-reduce:transition-none motion-reduce:animate-none"
+
+const workspaceTooltipStateClass =
+  "transition-[background-color,color,opacity,transform] duration-150 ease-out motion-reduce:transition-none motion-reduce:animate-none"
+
+const workspaceSurfaceMotionClass =
+  "transition-[width,height,transform,opacity] duration-200 ease-out motion-reduce:transition-none motion-reduce:animate-none"
+
 export {
   controlIconClass,
   controlIconSelectorClass,
@@ -76,5 +88,9 @@ export {
   workspaceCompoundControlClass,
   workspaceRevealActionClass,
   workspaceRowStateClass,
+  workspaceSmallActionStateClass,
+  workspaceSubmenuStateClass,
+  workspaceSurfaceMotionClass,
   workspaceTabStateClass,
+  workspaceTooltipStateClass,
 }

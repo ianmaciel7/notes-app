@@ -926,8 +926,8 @@ function WorkspaceMainHeader() {
   if (focusMode) {
     return (
       <AppFocusModeControls
-        onBack={() => showMessage("Back")}
-        onForward={() => showMessage("Forward")}
+        onBack={() => showMessage(t("actions.back"))}
+        onForward={() => showMessage(t("actions.forward"))}
         onExit={() => setFocusMode(false)}
       />
     );
@@ -953,25 +953,25 @@ function WorkspaceMainHeader() {
 
   return (
     <AppHeader
-      onBack={() => showMessage("Back")}
-      onForward={() => showMessage("Forward")}
+      onBack={() => showMessage(t("actions.back"))}
+      onForward={() => showMessage(t("actions.forward"))}
       onFocus={() => setFocusMode(true)}
       end={
         rightCollapsed ? (
           <div className="flex items-center">
             <AppHeaderAction
-              aria-label="Show side panel"
-              tooltip="Show side panel"
+              aria-label={t("actions.showSidePanel")}
+              tooltip={t("actions.showSidePanel")}
               className="rounded-r-none border-r-0"
               onClick={toggleRight}
             >
               <AppHeaderSidebarSimpleIcon className="size-4 rotate-180" />
             </AppHeaderAction>
             <AppHeaderAction
-              aria-label="Side-panel options"
-              tooltip="Side-panel options"
+              aria-label={t("actions.sidePanelOptions")}
+              tooltip={t("actions.sidePanelOptions")}
               className="h-7 w-4 rounded-l-none px-0 text-[9px]"
-              onClick={() => showMessage("Side-panel options")}
+              onClick={() => showMessage(t("actions.sidePanelOptions"))}
             >
               <AppHeaderCaretDownIcon className="size-2.5" />
             </AppHeaderAction>
@@ -994,7 +994,7 @@ function WorkspaceMainHeader() {
         onShiftOpen={(tab) => {
           openInSidePanel(tab);
           if (rightCollapsed) toggleRight();
-          showMessage(`Opened ${tab.label} in the side panel`);
+          showMessage(t("tabs.openedInSidePanel", { label: tab.label }));
         }}
         onCloseRequest={(tab) => {
           if (!tab.pinned) return true;

@@ -30,11 +30,31 @@
       "openContext": "Abrir panel lateral",
       "openNavigation": "Abrir navegación"
     },
+    "primaryNavigation": {
+      "calendar": "Calendario",
+      "calendarHint": "Ir al Calendario. Haz doble clic para ir a hoy.",
+      "cancel": "para cancelar",
+      "explore": "Explorar",
+      "exploreHint": "Abrir Explorar. Usa el atajo otra vez para iniciar un chat nuevo.",
+      "exploreSideHint": "Abrir Explorar en el panel lateral",
+      "extendedSearchHint": "Abrir búsqueda ampliada",
+      "navigationLabel": "Navegación principal",
+      "navigate": "para navegar",
+      "new": "Nuevo",
+      "or": "o",
+      "search": "Buscar",
+      "searchContentType": "Buscar tipo de contenido",
+      "searchHint": "Buscar",
+      "select": "para seleccionar",
+      "typesLabel": "Tipos de contenido"
+    },
     "actions": {
+      "back": "Atrás",
       "collapse": "Contraer",
       "collapseEditor": "Contraer editor",
       "customize": "Personalizar",
       "filter": "Filtrar",
+      "forward": "Adelante",
       "grid": "Cuadrícula",
       "importFiles": "Importar archivo(s)",
       "list": "Lista",
@@ -43,6 +63,8 @@
       "new": "Nuevo",
       "newObjectOptions": "Opciones de nuevo objeto",
       "search": "Buscar",
+      "sidePanelOptions": "Opciones del panel lateral",
+      "showSidePanel": "Mostrar panel lateral",
       "sort": "Ordenar"
     },
     "sidebarCollections": {
@@ -153,6 +175,7 @@
       "list": "Lista de pestañas",
       "new": "Nueva pestaña",
       "openInSidePanel": "Abrir en el panel lateral",
+      "openedInSidePanel": "{label} abierto en el panel lateral",
       "recentlyOpened": "Abiertos recientemente",
       "search": "Buscar pestañas",
       "searchContent": "Buscar contenido para nueva pestaña",

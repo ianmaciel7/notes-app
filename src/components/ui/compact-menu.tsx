@@ -2,7 +2,11 @@
 
 import type { ElementType, ReactNode } from "react"
 
-import { floatingSurfaceBaseClass } from "@/components/ui/shared-styles"
+import {
+  floatingSurfaceBaseClass,
+  workspaceSmallActionStateClass,
+  workspaceSubmenuStateClass,
+} from "@/components/ui/shared-styles"
 import { cn } from "@/lib/utils"
 
 type CompactMenuIconFrameProps = {
@@ -39,15 +43,20 @@ const compactMenuItemClass =
 
 const sidebarContextMenuContentClass = "w-[269px]"
 
-const sidebarContextSubmenuContentClass = "w-[269px]"
+const sidebarContextSubmenuContentClass = cn(
+  "w-[269px]",
+  workspaceSubmenuStateClass,
+)
 
 const workspaceOverflowMenuContentClass = sidebarContextMenuContentClass
 
 const workspaceOverflowMenuItemClass =
   "h-8 min-h-8 rounded-[8px] px-1 text-sm leading-normal transition-colors duration-200 ease-out motion-reduce:transition-none"
 
-const compactMenuActionButtonClass =
-  "relative flex h-6 w-full shrink-0 cursor-pointer items-center justify-center gap-x-1.5 truncate rounded-lg border border-[#dedbd7] bg-[#f3f1ee] px-3 text-sm font-normal text-[#595550] transition-[opacity] duration-200 ease-out hover:border-[#cbc7c1] hover:bg-[#f3f1ee] hover:text-[#595550] active:brightness-[0.97] focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+const compactMenuActionButtonClass = cn(
+  "relative flex h-6 w-full shrink-0 cursor-pointer items-center justify-center gap-x-1.5 truncate rounded-lg border border-[#dedbd7] bg-[#f3f1ee] px-3 text-sm font-normal text-[#595550] hover:border-[#cbc7c1] hover:bg-[#f3f1ee] hover:text-[#595550] active:brightness-[0.97] focus:outline-none disabled:pointer-events-none disabled:opacity-50",
+  workspaceSmallActionStateClass,
+)
 
 const compactMenuIconShellClass =
   "flex shrink-0 grow-0 flex-row items-center justify-center gap-1 rounded-[0.475em] p-1"
