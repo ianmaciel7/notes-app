@@ -135,7 +135,7 @@ function DropdownMenuSubTrigger({
       className={cn(
         floatingListItemClass,
         floatingListItemFocusClass,
-        "data-inset:pl-7 data-popup-open:bg-accent data-popup-open:text-accent-foreground data-open:bg-accent data-open:text-accent-foreground",
+        "data-inset:pl-7 data-popup-open:bg-[#f3f1ee] data-popup-open:text-[#1f1c19] data-open:bg-[#f3f1ee] data-open:text-[#1f1c19] dark:data-popup-open:bg-accent dark:data-popup-open:text-accent-foreground dark:data-open:bg-accent dark:data-open:text-accent-foreground",
         className
       )}
       {...props}
@@ -182,7 +182,8 @@ function DropdownMenuCheckboxItem({
       data-inset={inset}
       className={cn(
         floatingListItemClass,
-        "pr-8 focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7",
+        floatingListItemFocusClass,
+        "pr-8 data-inset:pl-7",
         className
       )}
       checked={checked}
@@ -224,7 +225,8 @@ function DropdownMenuRadioItem({
       data-inset={inset}
       className={cn(
         floatingListItemClass,
-        "pr-8 focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-7",
+        floatingListItemFocusClass,
+        "pr-8 data-inset:pl-7",
         className
       )}
       {...props}

@@ -16,5 +16,95 @@
       "shadcnDesc": "Convenciones de componentes y tokens de diseño."
     },
     "cta": "Comenzar"
+  },
+  "workspace": {
+      "actions": {
+        "collapse": "Contraer",
+        "collapseEditor": "Contraer editor",
+        "filter": "Filtrar",
+        "grid": "Cuadrícula",
+        "importFiles": "Importar archivo(s)",
+        "list": "Lista",
+        "moreOptions": "Más opciones",
+        "moreViews": "Más vistas",
+        "new": "Nuevo",
+        "newObjectOptions": "Opciones de nuevo objeto",
+        "search": "Buscar",
+        "sort": "Ordenar"
+      },
+      "empty": {
+        "description": "Puedes cambiar esto creando un nuevo objeto.",
+        "title": "No hay nada aquí todavía."
+      },
+      "explore": {
+        "aiChat": "Chat de IA",
+        "backlinks": "Enlaces entrantes",
+        "findMore": "Encontrar más",
+        "graphView": "Vista de grafo",
+        "objectsInside": "Objetos internos",
+        "relatedContent": "Contenido relacionado",
+        "relevantContent": "Contenido relevante",
+        "title": "Explorar"
+      },
+      "fields": {
+        "quoteContent": "Contenido de la cita",
+        "tags": "Etiquetas",
+        "text": "Text",
+        "title": "Título"
+      },
+      "objects": {
+        "collections": "Colecciones",
+        "quote": "Cita"
+      },
+      "openedTab": {
+        "description": "Empieza a escribir o agrega contenido a este objeto."
+      },
+      "objectTypeStudio": {
+        "basicTypes": "Tipos básicos",
+        "createOwn": "Crea el tuyo",
+        "description": "Elige un tipo de objeto sugerido o básico para agregarlo al espacio actual.",
+        "details": {
+          "close": "Cerrar detalles del tipo de objeto",
+          "confirm": "Agregar tipo de objeto",
+          "description": "Configuración del tipo de objeto",
+          "name": "Nombre",
+          "namePlaceholder": "Nombre del tipo de objeto",
+          "preset": "Preset",
+          "review": "Revisa este preset antes de agregarlo al espacio actual."
+        },
+        "objectTypes": {
+          "ai-chat": "Chat de IA",
+          "area": "Área",
+          "atomic-note": "Nota atómica",
+          "audio": "Audio",
+          "book": "Libro",
+          "definition": "Definición",
+          "file": "Archivo",
+          "idea": "Idea",
+          "image": "Imagen",
+          "media": "Medios",
+          "meeting": "Reunión",
+          "organization": "Organización",
+          "page": "Página",
+          "pdf": "PDF",
+          "person": "Persona",
+          "place": "Lugar",
+          "project": "Proyecto",
+          "query": "Query",
+          "quote": "Cita",
+          "table": "Tabla",
+          "tag": "Etiqueta",
+          "task": "Tarea",
+          "travel": "Viaje",
+          "tweet": "Tweet",
+          "weblink": "Weblink"
+        },
+        "title": "Agrega nuevo tipo de objeto",
+        "trigger": "Agregar tipo de objeto"
+      },
+      "views": {
+        "all": "Todo",
+        "overview": "Vista general"
+      }
   }
 }

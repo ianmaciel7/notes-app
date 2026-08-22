@@ -1,8 +1,8 @@
 import {
-  AppHeaderDemoMain,
-  AppHeaderDemoProvider,
-  AppHeaderDemoSidePanel,
-} from "@/components/app-header-demo";
+  WorkspaceMainHeader,
+  WorkspaceProvider,
+  WorkspaceSidePanelHeader,
+} from "@/components/workspace-controller";
 import {
   AppShell,
   AppShellHeader,
@@ -18,32 +18,32 @@ import {
   AppShellSurface,
   AppShellWorkspace,
 } from "@/components/app-shell";
-import { AppSidebarPrimaryActionsDemo } from "@/components/app-sidebar-primary-actions";
+import { WorkspaceSidebar } from "@/components/app-sidebar-primary-actions";
 import {
   AtomicNotesWorkspace,
   ExploreWorkspace,
-} from "@/components/capacities-en-workspace";
+} from "@/components/workspace-content";
 
 export default function HomePage() {
   return (
-    <AppHeaderDemoProvider>
+    <WorkspaceProvider>
       <AppShellProvider>
         <AppShell>
           <AppShellPanelGroup>
             <AppShellSidebar>
-              <AppSidebarPrimaryActionsDemo />
+              <WorkspaceSidebar />
             </AppShellSidebar>
 
             <AppShellWorkspace>
               <AppShellMain>
-                <AppHeaderDemoMain />
+                <WorkspaceMainHeader />
                 <AppShellSurface>
                   <AtomicNotesWorkspace />
                 </AppShellSurface>
               </AppShellMain>
 
               <AppShellSidePanel>
-                <AppHeaderDemoSidePanel />
+                <WorkspaceSidePanelHeader />
                 <AppShellSurface side="side-panel">
                   <ExploreWorkspace />
                 </AppShellSurface>
@@ -57,7 +57,7 @@ export default function HomePage() {
         <AppShellMobile>
           <AppShellHeader className="relative">
             <AppShellMobileSidebar>
-              <AppSidebarPrimaryActionsDemo />
+              <WorkspaceSidebar />
             </AppShellMobileSidebar>
             <AppShellMobileSidePanel />
           </AppShellHeader>
@@ -66,6 +66,6 @@ export default function HomePage() {
           </AppShellSurface>
         </AppShellMobile>
       </AppShellProvider>
-    </AppHeaderDemoProvider>
+    </WorkspaceProvider>
   );
 }

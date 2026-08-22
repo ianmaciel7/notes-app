@@ -94,11 +94,11 @@ type DragPreview = {
 }
 
 const defaultLabels: AppSidebarLabels = {
-  changeSpace: "Change space",
-  search: "Search",
-  clearSearch: "Clear search",
-  empty: "No options found.",
-  createSpace: "Create space",
+  changeSpace: "Alterar espaço",
+  search: "Buscar",
+  clearSearch: "Limpar busca",
+  empty: "Nenhum espaço encontrado.",
+  createSpace: "Criar espaço",
 }
 
 function areOrdersEqual(a: AppSidebarSpace[], b: AppSidebarSpace[]) {
@@ -638,13 +638,13 @@ function AppSidebarSpaceSwitcher({
           <ComboboxContent
             side="right"
             align="start"
-            sideOffset={4}
-            alignOffset={4}
+            sideOffset={8}
+            alignOffset={40}
             initialFocus={searchInputRef}
             finalFocus={false}
             aria-label={text.changeSpace}
             className={cn(
-              "flex w-[18rem] min-w-[18rem] max-w-[calc(100vw-1.75rem)] flex-col overflow-hidden",
+              "mt-1 flex h-[476px] w-[300.5px] min-w-[300.5px] max-w-[calc(100vw-1.75rem)] flex-col overflow-hidden",
               "data-closed:animate-none data-closed:duration-0 data-closed:opacity-0 data-closed:zoom-out-100",
               "*:data-[slot=input-group]:!m-0 *:data-[slot=input-group]:!mx-1.5 *:data-[slot=input-group]:!mt-1.5 *:data-[slot=input-group]:!mb-1.5 *:data-[slot=input-group]:shrink-0",
               "*:data-[slot=input-group]:[&>[data-slot=input-group-addon]:empty]:hidden"
@@ -785,7 +785,7 @@ function AppSidebar({
   )
 }
 
-const demoSpaces: AppSidebarSpace[] = [
+const fixtureSpaces: AppSidebarSpace[] = [
   { id: "studies", name: "Studies", icon: ObjectBookIcon },
   { id: "ideas", name: "Ideas", icon: ObjectIdeaIcon },
   { id: "labs", name: "Labs", icon: AppSidebarFlaskIcon },
@@ -795,8 +795,8 @@ const demoSpaces: AppSidebarSpace[] = [
   { id: "archive", name: "Archive", icon: ObjectArchiveIcon },
 ]
 
-function AppSidebarDemo() {
-  const [spaces, setSpaces] = React.useState(demoSpaces)
+function AppSidebarFixture() {
+  const [spaces, setSpaces] = React.useState(fixtureSpaces)
   const [spaceId, setSpaceId] = React.useState("labs")
 
   return (
@@ -811,7 +811,7 @@ function AppSidebarDemo() {
 
 export {
   AppSidebar,
-  AppSidebarDemo,
+  AppSidebarFixture,
   AppSidebarSpaceSwitcher,
   type AppSidebarLabels,
   type AppSidebarProps,

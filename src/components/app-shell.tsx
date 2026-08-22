@@ -395,13 +395,13 @@ function AppShellSurface({
       data-side={side}
       className={cn(
         "min-h-0 flex-1 pb-2.5 pt-0",
-        side === "main" ? "pl-2.5 pr-1" : "pl-1 pr-2.5",
+        side === "main" ? "px-2.5" : "pl-0 pr-2.5",
       )}
     >
       <Card
         data-slot="app-shell-surface"
         className={cn(
-          "h-full w-full gap-0 overflow-hidden rounded-[12px] bg-background py-0 shadow-none",
+          "h-full w-full gap-0 overflow-hidden rounded-[12px] border border-border bg-card py-0 ring-0 shadow-[0_2px_3px_rgb(0_0_0/0.004),0_4px_9px_rgb(0_0_0/0.01),0_8px_12px_rgb(0_0_0/0.004)]",
           className,
         )}
         {...props}
@@ -429,7 +429,7 @@ function AppShellResizeHandle({
       data-side={side}
       disabled={collapsed}
       className={cn(
-        "group !w-px !bg-transparent after:!w-3 after:!bg-transparent before:pointer-events-none before:absolute before:inset-y-1 before:left-1/2 before:w-0.5 before:-translate-x-1/2 before:rounded-full before:bg-border before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-60 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0",
+        "group !w-0 !bg-transparent after:!w-3 after:!bg-transparent before:pointer-events-none before:absolute before:inset-y-1 before:left-1/2 before:w-0.5 before:-translate-x-1/2 before:rounded-full before:bg-border before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-60 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0",
         collapsed && "pointer-events-none before:opacity-0",
         className,
       )}

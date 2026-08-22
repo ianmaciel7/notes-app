@@ -6,6 +6,8 @@ import {
   AppSidebarCheckIcon,
   AppSidebarCopyIcon,
   AppSidebarDotsIcon,
+  AppSidebarObjectsIcon,
+  AppSidebarPinIcon,
   AppSidebarPinOffIcon,
   AppSidebarPlusIcon,
   AppSidebarSunIcon,
@@ -18,9 +20,11 @@ import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon"
 import {
   ObjectAreaIcon,
   ObjectAtomicNoteIcon,
+  ObjectIconBadge,
   ObjectPageIcon,
   ObjectQuoteIcon,
-  ObjectTagIcon,
+  type ObjectIconProps,
+  type ObjectIconTone,
 } from "@/components/object-icons"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -44,19 +48,19 @@ import { cn } from "@/lib/utils"
 
 type AppSidebarSortMode = "manual" | "alphabetical"
 
-type AppSidebarTone = "blue" | "amber" | "rose" | "green" | "purple"
+type AppSidebarTone = ObjectIconTone
 
 type AppSidebarPinnedEntity = {
   id: string
   label: string
-  icon: React.ElementType
+  icon: React.ElementType<ObjectIconProps>
   tone: AppSidebarTone
 }
 
 type AppSidebarObjectType = {
   id: string
   label: string
-  icon: React.ElementType
+  icon: React.ElementType<ObjectIconProps>
   tone: AppSidebarTone
   count: number
 }
@@ -71,19 +75,6 @@ type AppSidebarDragState =
   | { kind: "pinned"; id: string }
   | { kind: "object-type"; id: string }
   | null
-
-const toneClasses: Record<AppSidebarTone, string> = {
-  blue:
-    "bg-blue-100 text-blue-600 dark:bg-blue-950/50 dark:text-blue-300",
-  amber:
-    "bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300",
-  rose:
-    "bg-rose-100 text-rose-600 dark:bg-rose-950/50 dark:text-rose-300",
-  green:
-    "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300",
-  purple:
-    "bg-violet-100 text-violet-600 dark:bg-violet-950/50 dark:text-violet-300",
-}
 
 const allPinnedEntities: AppSidebarPinnedEntity[] = [
   {
@@ -118,7 +109,7 @@ const initialObjectTypes: AppSidebarObjectType[] = [
     id: "quote",
     label: "Citações",
     icon: ObjectQuoteIcon,
-    tone: "rose",
+    tone: "red",
     count: 0,
   },
   {
@@ -150,7 +141,7 @@ function AppSidebarTypeLabel({
   tone,
   children,
 }: {
-  icon: React.ElementType
+  icon: React.ElementType<ObjectIconProps>
   tone: AppSidebarTone
   children: React.ReactNode
 }) {
@@ -162,16 +153,12 @@ function AppSidebarTypeLabel({
         "rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3]"
       )}
     >
-      <span
-        className={cn(
-          "mr-[0.4em] ml-[-0.1em] inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0",
-          "items-center justify-center rounded-[0.33em]",
-          toneClasses[tone]
-        )}
-      >
-        <span className="inline-flex min-h-[1.3em] min-w-[1.3em] items-center justify-center rounded-[0.33em] p-[0.1em] text-[0.94em]">
-          <Icon className="size-[1em]" />
-        </span>
+      <span className="mr-[0.4em] ml-[-0.1em] inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 items-center justify-center">
+        <ObjectIconBadge
+          icon={Icon}
+          tone={tone}
+          variant="sidebar"
+        />
       </span>
 
       <span className="block min-w-0 truncate text-left text-[1em]">{children}</span>
@@ -225,7 +212,7 @@ function AppSidebarSection({
   sticky = true,
   children,
 }: {
-  icon: React.ElementType
+  icon: React.ElementType<ObjectIconProps>
   label: string
   count?: number
   sort?: AppSidebarSortMode
@@ -251,8 +238,8 @@ function AppSidebarSection({
       >
         <div
           className={cn(
-            "flex h-8 w-full items-center gap-x-1.5 truncate rounded-md px-2 py-1",
-            "text-xs text-muted-foreground transition-colors duration-200 hover:bg-sidebar-accent"
+            "flex h-6 w-full select-none items-center gap-x-1.5 truncate rounded-md px-2 py-1",
+            "text-[12px] text-muted-foreground transition duration-200 ease-out hover:bg-sidebar-accent"
           )}
         >
           <CollapsibleTrigger className="flex min-w-0 flex-1 items-center gap-x-1.5 overflow-hidden text-left outline-none">
@@ -715,7 +702,7 @@ function AppSidebarUtilityRow({
   active,
   onClick,
 }: {
-  icon: React.ElementType
+  icon: React.ElementType<ObjectIconProps>
   label: string
   external?: boolean
   tooltip?: string
@@ -918,11 +905,25 @@ function AppSidebarFooter() {
 type AppSidebarOverviewProps = {
   activeId?: string | null
   onActiveIdChange?: (id: string | null) => void
+  pinnedEntities?: AppSidebarPinnedEntity[]
+  availablePinnedEntities?: AppSidebarPinnedEntity[]
+  objectTypes?: AppSidebarObjectType[]
+  customSections?: AppSidebarCustomSection[]
+  onPinnedEntitiesChange?: React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>
+  onObjectTypesChange?: React.Dispatch<React.SetStateAction<AppSidebarObjectType[]>>
+  onCustomSectionsChange?: React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>
 }
 
 function AppSidebarOverview({
   activeId: controlledActiveId,
   onActiveIdChange,
+  pinnedEntities: controlledPinned,
+  availablePinnedEntities = allPinnedEntities,
+  objectTypes: controlledObjectTypes,
+  customSections: controlledCustomSections,
+  onPinnedEntitiesChange,
+  onObjectTypesChange,
+  onCustomSectionsChange,
 }: AppSidebarOverviewProps = {}) {
   const [internalActiveId, setInternalActiveId] = React.useState<string | null>("page-1")
   const isControlled = controlledActiveId !== undefined
@@ -936,12 +937,55 @@ function AppSidebarOverview({
   const [objectTypesOpen, setObjectTypesOpen] = React.useState(true)
   const [pinnedSort, setPinnedSort] = React.useState<AppSidebarSortMode>("manual")
   const [objectSort, setObjectSort] = React.useState<AppSidebarSortMode>("manual")
-  const [pinned, setPinned] = React.useState<AppSidebarPinnedEntity[]>([
+  const [internalPinned, setInternalPinned] = React.useState<AppSidebarPinnedEntity[]>([
     allPinnedEntities[0]!,
   ])
-  const [objectTypes, setObjectTypes] = React.useState(initialObjectTypes)
-  const [customSections, setCustomSections] = React.useState<AppSidebarCustomSection[]>([])
+  const [internalObjectTypes, setInternalObjectTypes] = React.useState(initialObjectTypes)
+  const [internalCustomSections, setInternalCustomSections] = React.useState<AppSidebarCustomSection[]>([])
   const [drag, setDrag] = React.useState<AppSidebarDragState>(null)
+
+  const pinned = controlledPinned ?? internalPinned
+  const objectTypes = controlledObjectTypes ?? internalObjectTypes
+  const customSections = controlledCustomSections ?? internalCustomSections
+  const setPinned = React.useCallback<React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>>(
+    (next) => {
+      if (controlledPinned !== undefined) {
+        const resolved =
+          typeof next === "function" ? next(controlledPinned) : next
+        onPinnedEntitiesChange?.(resolved)
+        return
+      }
+
+      setInternalPinned(next)
+    },
+    [controlledPinned, onPinnedEntitiesChange]
+  )
+  const setObjectTypes = React.useCallback<React.Dispatch<React.SetStateAction<AppSidebarObjectType[]>>>(
+    (next) => {
+      if (controlledObjectTypes !== undefined) {
+        const resolved =
+          typeof next === "function" ? next(controlledObjectTypes) : next
+        onObjectTypesChange?.(resolved)
+        return
+      }
+
+      setInternalObjectTypes(next)
+    },
+    [controlledObjectTypes, onObjectTypesChange]
+  )
+  const setCustomSections = React.useCallback<React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>>(
+    (next) => {
+      if (controlledCustomSections !== undefined) {
+        const resolved =
+          typeof next === "function" ? next(controlledCustomSections) : next
+        onCustomSectionsChange?.(resolved)
+        return
+      }
+
+      setInternalCustomSections(next)
+    },
+    [controlledCustomSections, onCustomSectionsChange]
+  )
 
   const pinnedIds = React.useMemo(() => new Set(pinned.map((entity) => entity.id)), [pinned])
 
@@ -971,7 +1015,7 @@ function AppSidebarOverview({
           id: preset.id,
           label: preset.label,
           icon: preset.icon,
-          tone: preset.tone === "gray" ? "blue" : preset.tone,
+          tone: preset.tone,
           count: 0,
         },
       ]
@@ -992,7 +1036,7 @@ function AppSidebarOverview({
     <div data-slot="app-sidebar-overview" className="flex min-h-0 flex-1 flex-col">
       <div data-slot="app-sidebar-pinned-region" className="shrink-0">
         <AppSidebarSection
-          icon={ObjectTagIcon}
+          icon={AppSidebarPinIcon}
           label="Fixados"
           count={pinned.length}
           sort={pinnedSort}
@@ -1002,7 +1046,7 @@ function AppSidebarOverview({
           sticky={false}
           action={
             <AppSidebarPinnedPicker
-              entities={allPinnedEntities}
+              entities={availablePinnedEntities}
               selectedIds={pinnedIds}
               onPick={(entity) => setPinned((current) => [...current, entity])}
             />
@@ -1049,7 +1093,7 @@ function AppSidebarOverview({
       >
         <div className="flex min-h-full w-full flex-col">
           <AppSidebarSection
-            icon={ObjectAreaIcon}
+            icon={AppSidebarObjectsIcon}
             label="Tipos de objeto"
             count={objectTypes.length}
             sort={objectSort}

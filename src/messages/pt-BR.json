@@ -16,5 +16,95 @@
       "shadcnDesc": "Convenções de componentes e design tokens."
     },
     "cta": "Começar a construir"
+  },
+  "workspace": {
+      "actions": {
+        "collapse": "Recolher",
+        "collapseEditor": "Recolher editor",
+        "filter": "Filtrar",
+        "grid": "Grade",
+        "importFiles": "Importar arquivo(s)",
+        "list": "Lista",
+        "moreOptions": "Mais opções",
+        "moreViews": "Mais visualizações",
+        "new": "Novo",
+        "newObjectOptions": "Opções de novo objeto",
+        "search": "Buscar",
+        "sort": "Ordenar"
+      },
+      "empty": {
+        "description": "Você pode mudar isso criando um novo objeto.",
+        "title": "Não há nada aqui (por enquanto)."
+      },
+      "explore": {
+        "aiChat": "Chat de IA",
+        "backlinks": "Links de entrada",
+        "findMore": "Encontrar mais",
+        "graphView": "Visualização em grafo",
+        "objectsInside": "Objetos internos",
+        "relatedContent": "Conteúdo relacionado",
+        "relevantContent": "Conteúdo relevante",
+        "title": "Explorar"
+      },
+      "fields": {
+        "quoteContent": "Conteúdo da citação",
+        "tags": "Etiquetas",
+        "text": "Text",
+        "title": "Título"
+      },
+      "objects": {
+        "collections": "Coleções",
+        "quote": "Citação"
+      },
+      "openedTab": {
+        "description": "Comece a escrever ou adicione conteúdo a este objeto."
+      },
+      "objectTypeStudio": {
+        "basicTypes": "Tipos básicos",
+        "createOwn": "Crie o seu próprio",
+        "description": "Escolha um tipo de objeto sugerido ou básico para adicionar ao espaço atual.",
+        "details": {
+          "close": "Fechar detalhes do tipo de objeto",
+          "confirm": "Adicionar tipo de objeto",
+          "description": "Configuração do tipo de objeto",
+          "name": "Nome",
+          "namePlaceholder": "Nome do tipo de objeto",
+          "preset": "Preset",
+          "review": "Revise este preset antes de adicioná-lo ao espaço atual."
+        },
+        "objectTypes": {
+          "ai-chat": "Chat de IA",
+          "area": "Área",
+          "atomic-note": "Nota atômica",
+          "audio": "Áudio",
+          "book": "Livro",
+          "definition": "Definição",
+          "file": "Arquivo",
+          "idea": "Ideia",
+          "image": "Imagem",
+          "media": "Mídia",
+          "meeting": "Reunião",
+          "organization": "Organização",
+          "page": "Página",
+          "pdf": "PDF",
+          "person": "Pessoa",
+          "place": "Lugar",
+          "project": "Projeto",
+          "query": "Query",
+          "quote": "Citação",
+          "table": "Tabela",
+          "tag": "Etiqueta",
+          "task": "Tarefa",
+          "travel": "Viagem",
+          "tweet": "Tweet",
+          "weblink": "Weblink"
+        },
+        "title": "Adicione novo tipo de objeto",
+        "trigger": "Adicionar tipo de objeto"
+      },
+      "views": {
+        "all": "Tudo",
+        "overview": "Visão geral"
+      }
   }
 }

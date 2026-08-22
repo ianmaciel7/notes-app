@@ -16,5 +16,95 @@
       "shadcnDesc": "Component and design token conventions."
     },
     "cta": "Start building"
+  },
+  "workspace": {
+      "actions": {
+        "collapse": "Collapse",
+        "collapseEditor": "Collapse editor",
+        "filter": "Filter",
+        "grid": "Grid",
+        "importFiles": "Import file(s)",
+        "list": "List",
+        "moreOptions": "More options",
+        "moreViews": "More views",
+        "new": "New",
+        "newObjectOptions": "New object options",
+        "search": "Search",
+        "sort": "Sort"
+      },
+      "empty": {
+        "description": "You can change this by creating a new object.",
+        "title": "There is nothing here yet."
+      },
+      "explore": {
+        "aiChat": "AI chat",
+        "backlinks": "Backlinks",
+        "findMore": "Find more",
+        "graphView": "Graph view",
+        "objectsInside": "Objects inside",
+        "relatedContent": "Related content",
+        "relevantContent": "Relevant content",
+        "title": "Explore"
+      },
+      "fields": {
+        "quoteContent": "Quote content",
+        "tags": "Tags",
+        "text": "Text",
+        "title": "Title"
+      },
+      "objects": {
+        "collections": "Collections",
+        "quote": "Quote"
+      },
+      "openedTab": {
+        "description": "Start writing or add content to this object."
+      },
+      "objectTypeStudio": {
+        "basicTypes": "Basic types",
+        "createOwn": "Create your own",
+        "description": "Choose a suggested or basic object type to add to the current space.",
+        "details": {
+          "close": "Close object type details",
+          "confirm": "Add object type",
+          "description": "Object type setup",
+          "name": "Name",
+          "namePlaceholder": "Object type name",
+          "preset": "Preset",
+          "review": "Review this preset before adding it to the current space."
+        },
+        "objectTypes": {
+          "ai-chat": "AI chat",
+          "area": "Area",
+          "atomic-note": "Atomic note",
+          "audio": "Audio",
+          "book": "Book",
+          "definition": "Definition",
+          "file": "File",
+          "idea": "Idea",
+          "image": "Image",
+          "media": "Media",
+          "meeting": "Meeting",
+          "organization": "Organization",
+          "page": "Page",
+          "pdf": "PDF",
+          "person": "Person",
+          "place": "Place",
+          "project": "Project",
+          "query": "Query",
+          "quote": "Quote",
+          "table": "Table",
+          "tag": "Tag",
+          "task": "Task",
+          "travel": "Travel",
+          "tweet": "Tweet",
+          "weblink": "Weblink"
+        },
+        "title": "Add new object type",
+        "trigger": "Add object type"
+      },
+      "views": {
+        "all": "All",
+        "overview": "Overview"
+      }
   }
 }

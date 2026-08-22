@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 const MAIN_TAB_MAX_WIDTH = 200
-const MAIN_TAB_MIN_WIDTH = 96
+const MAIN_TAB_MIN_WIDTH = 64
 const MAIN_TAB_GAP = 5
 const SIDE_TAB_MAX_WIDTH = 160
 const SIDE_TAB_MIN_WIDTH = 44
@@ -27,17 +27,17 @@ const SIDE_TAB_CONTROLS_WIDTH = 28
 const TAB_PREVIEW_DELAY = 200
 
 const appHeaderTabTheme = {
-  "--app-tab-bg-base": "#ffffff",
-  "--app-tab-bg-back": "#f8f7f5",
-  "--app-tab-bg-back-hover": "#eeece9",
-  "--app-tab-bg-front": "#ffffff",
-  "--app-tab-bg-front-hover": "#efeeec",
-  "--app-tab-border-base": "rgba(36, 32, 28, 0.10)",
-  "--app-tab-border-front": "rgba(36, 32, 28, 0.12)",
-  "--app-tab-border-front-strong": "rgba(36, 32, 28, 0.16)",
-  "--app-tab-text-primary": "#282522",
-  "--app-tab-text-secondary": "#595550",
-  "--app-tab-text-subtle": "#837d76",
+  "--app-tab-bg-base": "oklch(1 0.0001 263.28)",
+  "--app-tab-bg-back": "oklch(0.9856 0.0016 67)",
+  "--app-tab-bg-back-hover": "oklch(0.9676 0.0016 67.02)",
+  "--app-tab-bg-front": "oklch(1 0.0001 263.28)",
+  "--app-tab-bg-front-hover": "oklch(0.9856 0.0016 67)",
+  "--app-tab-border-base": "oklch(0.9163 0.0017 67.07)",
+  "--app-tab-border-front": "oklch(0.9163 0.0017 67.07)",
+  "--app-tab-border-front-strong": "oklch(0.8643 0.0017 67.13)",
+  "--app-tab-text-primary": "oklch(0.2191 0.0058 285.84)",
+  "--app-tab-text-secondary": "oklch(0.3887 0.0052 301.05)",
+  "--app-tab-text-subtle": "oklch(0.5725 0.0051 33.89)",
   "--app-tab-text-active": "#5c6fbd",
 } as React.CSSProperties
 
@@ -212,7 +212,8 @@ function AppHeaderTabIcon({ tab }: { tab: AppHeaderTab }) {
       data-slot="app-header-tab-icon"
       className={cn(
         "inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 grow-0 items-center justify-center rounded-[0.33em]",
-        tab.iconClassName ?? "bg-[#ebeae8] text-[#68635e]"
+        tab.iconClassName ??
+          "bg-[oklch(0.9766_0.0016_67.01)] text-[oklch(0.4289_0.0021_324.71)]"
       )}
     >
       <span
@@ -349,7 +350,7 @@ function AppHeaderTabItem({
           aria-selected={active}
           tabIndex={active ? 0 : -1}
           className={cn(
-            "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] rounded-lg border-[0.5px] py-[3px] pl-[6px] pr-px text-[13px] leading-[1.3] outline-none ring-0 transition duration-150 ease-out",
+            "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] rounded-[8px] border-[0.5px] py-[3px] pl-[6px] pr-px text-[13px] leading-[1.3] outline-none ring-0 transition duration-150 ease-out",
             fitContent ? "w-auto" : "w-full",
             neutral && "border-transparent text-[var(--app-tab-text-primary)]",
             !neutral &&

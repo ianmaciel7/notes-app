@@ -9,6 +9,7 @@ import {
   floatingIndicatorClass,
   floatingListItemClass,
   floatingListItemFocusClass,
+  floatingSeparatorClass,
 } from "@/components/ui/shared-styles"
 import {
   DropdownMenu,
@@ -32,7 +33,7 @@ function Menubar({ className, ...props }: MenubarPrimitive.Props) {
     <MenubarPrimitive
       data-slot="menubar"
       className={cn(
-        "flex h-8 items-center gap-0.5 rounded-lg border p-[3px]",
+        "flex h-8 items-center gap-0.5 rounded-[8px] border border-[#dedbd7] bg-white p-[3px] dark:border-border dark:bg-popover",
         className
       )}
       {...props}
@@ -64,7 +65,7 @@ function MenubarTrigger({
     <DropdownMenuTrigger
       data-slot="menubar-trigger"
       className={cn(
-        "flex items-center rounded-sm px-1.5 py-[2px] text-sm font-medium outline-hidden select-none hover:bg-muted aria-expanded:bg-muted",
+        "flex items-center rounded-[6px] px-1.5 py-[2px] text-sm font-medium outline-hidden select-none hover:bg-[#f3f1ee] aria-expanded:bg-[#f3f1ee] dark:hover:bg-muted dark:aria-expanded:bg-muted",
         className
       )}
       {...props}
@@ -206,7 +207,7 @@ function MenubarSeparator({
   return (
     <DropdownMenuSeparator
       data-slot="menubar-separator"
-      className={cn("-mx-1 my-1 h-px bg-border", className)}
+      className={cn(floatingSeparatorClass, className)}
       {...props}
     />
   )

@@ -1,22 +1,31 @@
 const floatingPositionerClass = "isolate z-50"
 
+const overlayClass =
+  "fixed inset-0 isolate z-50 bg-black/45 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
+
 const floatingSurfaceBaseClass =
-  "rounded-md bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-hidden"
+  "rounded-[8px] border border-[#dedbd7] bg-white text-[#1f1c19] shadow-[0_10px_28px_rgb(0_0_0/0.12),0_2px_8px_rgb(0_0_0/0.06)] outline-hidden ring-1 ring-black/5 dark:border-border dark:bg-popover dark:text-popover-foreground dark:ring-white/10"
+
+const dialogSurfaceBaseClass =
+  "rounded-[8px] border border-[#dedbd7] bg-white text-[#1f1c19] shadow-[0_18px_60px_rgb(0_0_0/0.22)] outline-none ring-1 ring-black/10 dark:border-border dark:bg-popover dark:text-popover-foreground dark:ring-white/10"
 
 const floatingSurfaceClass =
   "origin-(--transform-origin) duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
 
+const dialogSurfaceClass =
+  "duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
+
 const floatingListItemClass =
-  "relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+  "relative flex min-h-7 cursor-default items-center gap-2 rounded-[7px] px-2 py-1.5 text-sm leading-none outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
 
 const floatingListItemFocusClass =
-  "focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground"
+  "focus:bg-[#f3f1ee] focus:text-[#1f1c19] not-data-[variant=destructive]:focus:**:text-[#1f1c19] dark:focus:bg-accent dark:focus:text-accent-foreground"
 
 const floatingListItemHighlightedClass =
-  "data-highlighted:bg-accent data-highlighted:text-accent-foreground not-data-[variant=destructive]:data-highlighted:**:text-accent-foreground"
+  "data-highlighted:bg-[#f3f1ee] data-highlighted:text-[#1f1c19] not-data-[variant=destructive]:data-highlighted:**:text-[#1f1c19] dark:data-highlighted:bg-accent dark:data-highlighted:text-accent-foreground"
 
 const floatingListItemSelectedClass =
-  "data-selected:bg-accent data-selected:text-accent-foreground data-selected:*:[svg]:text-accent-foreground"
+  "data-selected:bg-[#ebe8e3] data-selected:text-[#1f1c19] data-selected:*:[svg]:text-[#1f1c19] dark:data-selected:bg-accent dark:data-selected:text-accent-foreground"
 
 const destructiveListItemClass =
   "data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:*:[svg]:text-destructive"
@@ -36,6 +45,8 @@ export {
   controlIconClass,
   controlIconSelectorClass,
   destructiveListItemClass,
+  dialogSurfaceBaseClass,
+  dialogSurfaceClass,
   floatingIndicatorClass,
   floatingListItemClass,
   floatingListItemFocusClass,
@@ -45,4 +56,5 @@ export {
   floatingSeparatorClass,
   floatingSurfaceBaseClass,
   floatingSurfaceClass,
+  overlayClass,
 }

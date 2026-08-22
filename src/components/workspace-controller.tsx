@@ -17,15 +17,33 @@ import {
   type AppHeaderTab,
   AppSpaceHeader,
 } from "@/components/app-header-tabs";
+import { type AppSidebarSpace } from "@/components/app-sidebar";
 import { useAppShell } from "@/components/app-shell";
 import { AppSidebarSearchIcon } from "@/components/app-sidebar-icons";
+import { AppSidebarWorkspaceIcon } from "@/components/app-sidebar-source-icon";
+import {
+  type AppSidebarCustomSection,
+  type AppSidebarObjectType,
+  type AppSidebarPinnedEntity,
+} from "@/components/app-sidebar-overview";
 import {
   ObjectAiChatIcon,
+  ObjectArchiveIcon,
   ObjectAreaIcon,
   ObjectAtomicNoteIcon,
+  ObjectBookIcon,
+  ObjectCodeIcon,
+  ObjectIconBadge,
+  ObjectIdeaIcon,
+  ObjectKnowledgeIcon,
   ObjectPageIcon,
+  ObjectProjectIcon,
   ObjectQueryIcon,
   ObjectQuoteIcon,
+  type ObjectIconProps,
+  type ObjectIconTone,
+  objectIconToneBadgeClass,
+  objectTypeDefinitionById,
 } from "@/components/object-icons";
 import {
   AppSidePanelHeader,
@@ -36,11 +54,39 @@ import { cn } from "@/lib/utils";
 
 const initialMainTabs: AppHeaderTab[] = [
   {
-    id: "atomic-notes",
+    id: "page-1",
+    label: "aaaaaaaaaaaaa",
+    icon: ObjectPageIcon,
+    iconClassName: objectIconToneBadgeClass.blue,
+    preview: <TabPreview eyebrow="Página" title="aaaaaaaaaaaaa" />,
+  },
+  {
+    id: "atomic-note",
     label: "Notas atômicas",
     icon: ObjectAtomicNoteIcon,
-    iconClassName: "bg-[#fff0d6] text-[#b96b0e]",
+    iconClassName: objectIconToneBadgeClass.amber,
     preview: <TabPreview eyebrow="Tipo de objeto" title="Notas atômicas" />,
+  },
+  {
+    id: "quote",
+    label: "Citações",
+    icon: ObjectQuoteIcon,
+    iconClassName: objectIconToneBadgeClass.rose,
+    preview: <TabPreview eyebrow="Tipo de objeto" title="Citações" />,
+  },
+  {
+    id: "page",
+    label: "Páginas",
+    icon: ObjectPageIcon,
+    iconClassName: objectIconToneBadgeClass.blue,
+    preview: <TabPreview eyebrow="Tipo de objeto" title="Páginas" />,
+  },
+  {
+    id: "untitled",
+    label: "Sem título",
+    icon: ObjectQuoteIcon,
+    iconClassName: objectIconToneBadgeClass.rose,
+    preview: <TabPreview eyebrow="Citação" title="Sem título" />,
   },
 ];
 
@@ -49,7 +95,7 @@ const initialSideTabs: AppHeaderTab[] = [
     id: "explore",
     label: "Explorar",
     icon: AppHeaderCompassIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: objectIconToneBadgeClass.gray,
     draggable: false,
   },
 ];
@@ -63,36 +109,83 @@ const specialSideTabs: Record<
   graphView: {
     label: "Visualização em grafo",
     icon: AppHeaderGraphIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: objectIconToneBadgeClass.gray,
   },
   backlinks: {
     label: "Links de entrada",
     icon: ObjectPageIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: objectIconToneBadgeClass.gray,
   },
   objectsInside: {
     label: "Objetos internos",
     icon: ObjectAreaIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: objectIconToneBadgeClass.gray,
   },
   relatedContent: {
     label: "Conteúdo relacionado",
     icon: AppHeaderGraphIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: objectIconToneBadgeClass.gray,
   },
   aiAssistantChat: {
     label: "Chat de IA",
     icon: ObjectAiChatIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: objectIconToneBadgeClass.purple,
   },
   localSpaceQuery: {
     label: "Buscar",
     icon: ObjectQueryIcon,
-    iconClassName: "bg-[#ebeae8] text-[#68635e]",
+    iconClassName: objectIconToneBadgeClass.emerald,
   },
 };
 
-type AppHeaderDemoContextValue = {
+type AppSidebarPrimaryNavigationAction = "search" | "explore" | "calendar";
+
+const initialSpaces: AppSidebarSpace[] = [
+  { id: "studies", name: "Studies", icon: ObjectBookIcon },
+  { id: "ideas", name: "Ideas", icon: ObjectIdeaIcon },
+  { id: "labs", name: "zzzzzzzzzz", icon: AppSidebarWorkspaceIcon },
+  { id: "projects", name: "Projects", icon: ObjectProjectIcon },
+  { id: "dev", name: "Dev", icon: ObjectCodeIcon },
+  { id: "knowledge", name: "Knowledge", icon: ObjectKnowledgeIcon },
+  { id: "archive", name: "Archive", icon: ObjectArchiveIcon },
+];
+
+const availablePinnedEntities: AppSidebarPinnedEntity[] = [
+  {
+    id: "page-1",
+    label: "aaaaaaaaaaaaa",
+    icon: ObjectPageIcon,
+    tone: "blue",
+  },
+];
+
+const initialObjectTypes: AppSidebarObjectType[] = [
+  {
+    id: "atomic-note",
+    label: "Notas atômicas",
+    icon: ObjectAtomicNoteIcon,
+    tone: "amber",
+    count: 0,
+  },
+  {
+    id: "quote",
+    label: "Citações",
+    icon: ObjectQuoteIcon,
+    tone: "rose",
+    count: 1,
+  },
+  {
+    id: "page",
+    label: "Páginas",
+    icon: ObjectPageIcon,
+    tone: "blue",
+    count: 1,
+  },
+];
+
+type WorkspaceContextValue = {
+  spaces: AppSidebarSpace[];
+  spaceId: string;
   mainTabs: AppHeaderTab[];
   mainValue: string;
   sideTabs: AppHeaderTab[];
@@ -100,6 +193,15 @@ type AppHeaderDemoContextValue = {
   focusMode: boolean;
   sideSearchOpen: boolean;
   mainSearchOpen: boolean;
+  activeAction: AppSidebarPrimaryNavigationAction | undefined;
+  activeEntityId: string | null;
+  pinnedEntities: AppSidebarPinnedEntity[];
+  availablePinnedEntities: AppSidebarPinnedEntity[];
+  objectTypes: AppSidebarObjectType[];
+  createdEntities: WorkspaceCreatedEntity[];
+  customSections: AppSidebarCustomSection[];
+  setSpaces: React.Dispatch<React.SetStateAction<AppSidebarSpace[]>>;
+  setSpaceId: React.Dispatch<React.SetStateAction<string>>;
   message: string | null;
   setMainTabs: React.Dispatch<React.SetStateAction<AppHeaderTab[]>>;
   setMainValue: React.Dispatch<React.SetStateAction<string>>;
@@ -108,36 +210,70 @@ type AppHeaderDemoContextValue = {
   setFocusMode: React.Dispatch<React.SetStateAction<boolean>>;
   setSideSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMainSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setActiveAction: React.Dispatch<
+    React.SetStateAction<AppSidebarPrimaryNavigationAction | undefined>
+  >;
+  setActiveEntityId: React.Dispatch<React.SetStateAction<string | null>>;
+  setPinnedEntities: React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>;
+  setObjectTypes: React.Dispatch<React.SetStateAction<AppSidebarObjectType[]>>;
+  setCustomSections: React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>;
   showMessage: (message: string) => void;
+  createWorkspaceEntity: (objectTypeId: string) => void;
+  selectEntity: (id: string) => void;
+  openInSidePanel: (tab: AppHeaderTab) => void;
 };
 
-const AppHeaderDemoContext =
-  React.createContext<AppHeaderDemoContextValue | null>(null);
+type WorkspaceCreatedEntity = {
+  id: string;
+  objectTypeId: string;
+  label: string;
+  icon: React.ElementType<ObjectIconProps>;
+  tone: ObjectIconTone;
+};
 
-function useAppHeaderDemo() {
-  const context = React.useContext(AppHeaderDemoContext);
+const WorkspaceContext =
+  React.createContext<WorkspaceContextValue | null>(null);
+
+function useWorkspace() {
+  const context = React.useContext(WorkspaceContext);
 
   if (!context) {
     throw new Error(
-      "useAppHeaderDemo must be used within AppHeaderDemoProvider.",
+      "useWorkspace must be used within WorkspaceProvider.",
     );
   }
 
   return context;
 }
 
-function AppHeaderDemoProvider({ children }: { children: React.ReactNode }) {
+function WorkspaceProvider({ children }: { children: React.ReactNode }) {
+  const [spaces, setSpaces] = React.useState(initialSpaces);
+  const [spaceId, setSpaceId] = React.useState("labs");
   const [mainTabs, setMainTabs] = React.useState(initialMainTabs);
-  const [mainValue, setMainValue] = React.useState("atomic-notes");
+  const [mainValue, setMainValue] = React.useState("untitled");
   const [sideTabs, setSideTabs] = React.useState(initialSideTabs);
   const [sideValue, setSideValue] = React.useState("explore");
   const [focusMode, setFocusMode] = React.useState(false);
   const [sideSearchOpen, setSideSearchOpen] = React.useState(false);
   const [mainSearchOpen, setMainSearchOpen] = React.useState(false);
+  const [activeAction, setActiveAction] =
+    React.useState<AppSidebarPrimaryNavigationAction | undefined>(undefined);
+  const [activeEntityId, setActiveEntityId] =
+    React.useState<string | null>("quote");
+  const [pinnedEntities, setPinnedEntities] =
+    React.useState<AppSidebarPinnedEntity[]>([availablePinnedEntities[0]!]);
+  const [objectTypes, setObjectTypes] = React.useState(initialObjectTypes);
+  const [createdEntities, setCreatedEntities] = React.useState<
+    WorkspaceCreatedEntity[]
+  >([]);
+  const [customSections, setCustomSections] = React.useState<
+    AppSidebarCustomSection[]
+  >([]);
   const [message, setMessage] = React.useState<string | null>(null);
   const messageTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
+  const createdEntitySequenceRef = React.useRef(0);
 
   const showMessage = React.useCallback((nextMessage: string) => {
     setMessage(nextMessage);
@@ -171,8 +307,87 @@ function AppHeaderDemoProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const value = React.useMemo<AppHeaderDemoContextValue>(
+  const ensureMainTab = React.useCallback((tab: AppHeaderTab) => {
+    setMainTabs((current) =>
+      current.some((item) => item.id === tab.id) ? current : [...current, tab],
+    );
+    setMainValue(tab.id);
+  }, []);
+
+  const openInSidePanel = React.useCallback((tab: AppHeaderTab) => {
+    setSideTabs((current) => {
+      if (current.some((item) => item.id === tab.id)) return current;
+      return [...current, { ...tab, pinned: undefined, draggable: true }];
+    });
+    setSideValue(tab.id);
+  }, []);
+
+  const selectEntity = React.useCallback(
+    (id: string) => {
+      const objectType = objectTypes.find((item) => item.id === id);
+      const pinnedEntity = availablePinnedEntities.find((item) => item.id === id);
+      const entity = objectType ?? pinnedEntity;
+
+      setActiveEntityId(id);
+      setActiveAction(undefined);
+
+      if (!entity) return;
+
+      ensureMainTab({
+        id: entity.id,
+        label: entity.label,
+        icon: entity.icon,
+        iconClassName:
+          objectIconToneBadgeClass[entity.tone],
+        preview: <TabPreview eyebrow="Objeto" title={entity.label} />,
+      });
+    },
+    [ensureMainTab, objectTypes],
+  );
+
+  const createWorkspaceEntity = React.useCallback((objectTypeId: string) => {
+    const definition = objectTypeDefinitionById[objectTypeId];
+    if (!definition) return;
+
+    createdEntitySequenceRef.current += 1;
+    const id = `created-${objectTypeId}-${createdEntitySequenceRef.current}`;
+    const entity: WorkspaceCreatedEntity = {
+      id,
+      objectTypeId,
+      label: "Sem título",
+      icon: definition.icon,
+      tone: definition.tone,
+    };
+
+    setCreatedEntities((current) => [...current, entity]);
+    setObjectTypes((current) =>
+      current.map((objectType) =>
+        objectType.id === objectTypeId
+          ? { ...objectType, count: objectType.count + 1 }
+          : objectType,
+      ),
+    );
+    setMainTabs((current) => [
+      ...current,
+      {
+        id,
+        label: entity.label,
+        icon: entity.icon,
+        iconClassName: objectIconToneBadgeClass[entity.tone],
+        preview: (
+          <TabPreview eyebrow={definition.label} title={entity.label} />
+        ),
+      },
+    ]);
+    setMainValue(id);
+    setActiveEntityId(id);
+    setActiveAction(undefined);
+  }, []);
+
+  const value = React.useMemo<WorkspaceContextValue>(
     () => ({
+      spaces,
+      spaceId,
       mainTabs,
       mainValue,
       sideTabs,
@@ -180,6 +395,15 @@ function AppHeaderDemoProvider({ children }: { children: React.ReactNode }) {
       focusMode,
       sideSearchOpen,
       mainSearchOpen,
+      activeAction,
+      activeEntityId,
+      pinnedEntities,
+      availablePinnedEntities,
+      objectTypes,
+      createdEntities,
+      customSections,
+      setSpaces,
+      setSpaceId,
       message,
       setMainTabs,
       setMainValue,
@@ -188,9 +412,19 @@ function AppHeaderDemoProvider({ children }: { children: React.ReactNode }) {
       setFocusMode,
       setSideSearchOpen,
       setMainSearchOpen,
+      setActiveAction,
+      setActiveEntityId,
+      setPinnedEntities,
+      setObjectTypes,
+      setCustomSections,
       showMessage,
+      createWorkspaceEntity,
+      selectEntity,
+      openInSidePanel,
     }),
     [
+      spaces,
+      spaceId,
       focusMode,
       mainTabs,
       mainValue,
@@ -200,30 +434,39 @@ function AppHeaderDemoProvider({ children }: { children: React.ReactNode }) {
       mainSearchOpen,
       sideTabs,
       sideValue,
+      activeAction,
+      activeEntityId,
+      pinnedEntities,
+      objectTypes,
+      createdEntities,
+      customSections,
+      selectEntity,
+      createWorkspaceEntity,
+      openInSidePanel,
     ],
   );
 
   return (
     <TooltipProvider delay={200}>
-      <AppHeaderDemoContext.Provider value={value}>
+      <WorkspaceContext.Provider value={value}>
         {children}
         {sideSearchOpen && <SidePanelSearchOverlay />}
         {mainSearchOpen && <MainTabSearchOverlay />}
         {message && (
           <div
-            data-slot="app-header-demo-message"
+            data-slot="workspace-message"
             role="status"
             className="pointer-events-none fixed left-1/2 top-14 z-[100] -translate-x-1/2 rounded-lg border bg-popover px-3 py-2 text-xs text-popover-foreground shadow-lg"
           >
             {message}
           </div>
         )}
-      </AppHeaderDemoContext.Provider>
+      </WorkspaceContext.Provider>
     </TooltipProvider>
   );
 }
 
-function AppHeaderDemoMain() {
+function WorkspaceMainHeader() {
   const {
     mainTabs,
     mainValue,
@@ -231,11 +474,10 @@ function AppHeaderDemoMain() {
     setMainTabs,
     setMainValue,
     setFocusMode,
-    setSideTabs,
-    setSideValue,
     setMainSearchOpen,
+    openInSidePanel,
     showMessage,
-  } = useAppHeaderDemo();
+  } = useWorkspace();
   const { rightCollapsed, toggleRight } = useAppShell();
 
   if (focusMode) {
@@ -253,7 +495,7 @@ function AppHeaderDemoMain() {
       id: MAIN_DRAFT_TAB_ID,
       label: "Nova aba",
       icon: ObjectPageIcon,
-      iconClassName: "bg-[#e8f0ff] text-[#3f6fce]",
+      iconClassName: objectIconToneBadgeClass.blue,
       draggable: false,
     };
 
@@ -264,16 +506,6 @@ function AppHeaderDemoMain() {
     );
     setMainValue(MAIN_DRAFT_TAB_ID);
     setMainSearchOpen(true);
-  }
-
-  function openInSidePanel(tab: AppHeaderTab) {
-    setSideTabs((current) => {
-      if (current.some((item) => item.id === tab.id)) return current;
-      return [...current, { ...tab, pinned: undefined, draggable: true }];
-    });
-    setSideValue(tab.id);
-    if (rightCollapsed) toggleRight();
-    showMessage(`Opened ${tab.label} in the side panel`);
   }
 
   return (
@@ -313,7 +545,11 @@ function AppHeaderDemoMain() {
         createLabel="Criar nova aba"
         tabListLabel="Lista de abas"
         searchTabsPlaceholder="Buscar abas"
-        onShiftOpen={openInSidePanel}
+        onShiftOpen={(tab) => {
+          openInSidePanel(tab);
+          if (rightCollapsed) toggleRight();
+          showMessage(`Opened ${tab.label} in the side panel`);
+        }}
         onCloseRequest={(tab) => {
           if (!tab.pinned) return true;
           showMessage("Pinned tabs cannot be closed. Unpin the tab first.");
@@ -330,14 +566,14 @@ function MainTabSearchOverlay() {
     setMainTabs,
     setMainValue,
     setMainSearchOpen,
-  } = useAppHeaderDemo();
+  } = useWorkspace();
   const [query, setQuery] = React.useState("");
 
   const options = [
-    { id: "atomic-notes", label: "Notas atômicas", icon: ObjectAtomicNoteIcon },
+    { id: "atomic-note", label: "Notas atômicas", icon: ObjectAtomicNoteIcon },
     { id: "page-1", label: "aaaaaaaaaaaaa", icon: ObjectPageIcon },
-    { id: "pages", label: "Páginas", icon: ObjectPageIcon },
-    { id: "quotes", label: "Citações", icon: ObjectQuoteIcon },
+    { id: "page", label: "Páginas", icon: ObjectPageIcon },
+    { id: "quote", label: "Citações", icon: ObjectQuoteIcon },
   ];
   const normalized = query.trim().toLocaleLowerCase("pt-BR");
   const filtered = normalized
@@ -349,7 +585,7 @@ function MainTabSearchOverlay() {
   function cancel() {
     const next = mainTabs.filter((tab) => tab.id !== MAIN_DRAFT_TAB_ID);
     setMainTabs(next);
-    setMainValue(next[0]?.id ?? "atomic-notes");
+    setMainValue(next[0]?.id ?? "atomic-note");
     setMainSearchOpen(false);
   }
 
@@ -359,9 +595,9 @@ function MainTabSearchOverlay() {
       label: option.label,
       icon: option.icon,
       iconClassName:
-        option.id === "atomic-notes"
-          ? "bg-[#fff0d6] text-[#b96b0e]"
-          : "bg-[#e8f0ff] text-[#3f6fce]",
+        objectIconToneBadgeClass[
+          objectTypeDefinitionById[option.id]?.tone ?? "blue"
+        ],
     };
     setMainTabs((current) => {
       const withoutDraft = current.filter((tab) => tab.id !== MAIN_DRAFT_TAB_ID);
@@ -412,6 +648,8 @@ function MainTabSearchOverlay() {
           <p className="px-2 pb-1.5 text-xs text-muted-foreground">Recentemente abertos</p>
           {filtered.map((option) => {
             const Icon = option.icon;
+            const tone =
+              objectTypeDefinitionById[option.id]?.tone ?? "blue";
             return (
               <button
                 key={option.id}
@@ -419,9 +657,7 @@ function MainTabSearchOverlay() {
                 className="flex h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-sm hover:bg-muted"
                 onClick={() => select(option)}
               >
-                <span className="flex size-6 items-center justify-center rounded-md bg-muted text-muted-foreground">
-                  <Icon className="size-4" />
-                </span>
+                <ObjectIconBadge icon={Icon} tone={tone} />
                 <span className="truncate">{option.label}</span>
               </button>
             );
@@ -432,7 +668,7 @@ function MainTabSearchOverlay() {
   );
 }
 
-function AppHeaderDemoSidePanel() {
+function WorkspaceSidePanelHeader() {
   const {
     sideTabs,
     sideValue,
@@ -440,7 +676,7 @@ function AppHeaderDemoSidePanel() {
     setSideTabs,
     setSideValue,
     setSideSearchOpen,
-  } = useAppHeaderDemo();
+  } = useWorkspace();
   const { toggleRight } = useAppShell();
 
   if (focusMode) return null;
@@ -509,28 +745,28 @@ function AppHeaderDemoSidePanel() {
 }
 
 function SidePanelSearchOverlay() {
-  const { setSideSearchOpen, setSideTabs, setSideValue } = useAppHeaderDemo();
+  const { setSideSearchOpen, setSideTabs, setSideValue } = useWorkspace();
   const [query, setQuery] = React.useState("");
 
   const recentItems = React.useMemo(
     () => [
       {
-        id: "recent-atomic-notes",
+        id: "recent-atomic-note",
         label: "Notas atômicas",
         icon: ObjectAtomicNoteIcon,
-        iconClassName: "bg-[#fff0d6] text-[#b96b0e]",
+        iconClassName: objectIconToneBadgeClass.amber,
       },
       {
-        id: "recent-pages",
+        id: "recent-page",
         label: "Páginas",
         icon: ObjectPageIcon,
-        iconClassName: "bg-[#e8f0ff] text-[#3f6fce]",
+        iconClassName: objectIconToneBadgeClass.blue,
       },
       {
         id: "recent-citations",
         label: "Citações",
         icon: ObjectQuoteIcon,
-        iconClassName: "bg-[#ffe8ed] text-[#d74b67]",
+        iconClassName: objectIconToneBadgeClass.rose,
       },
     ],
     [],
@@ -678,8 +914,9 @@ function TabPreview({ eyebrow, title }: { eyebrow: string; title: string }) {
 }
 
 export {
-  AppHeaderDemoMain,
-  AppHeaderDemoProvider,
-  AppHeaderDemoSidePanel,
-  useAppHeaderDemo,
+  type WorkspaceCreatedEntity,
+  WorkspaceMainHeader,
+  WorkspaceProvider,
+  WorkspaceSidePanelHeader,
+  useWorkspace,
 };

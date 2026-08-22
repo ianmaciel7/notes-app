@@ -1,38 +1,18 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import {
   AppSidebarCheckIcon,
   AppSidebarPlusIcon,
   AppSidebarXIcon,
 } from "@/components/app-sidebar-icons"
 import {
-  ObjectAiChatIcon,
-  ObjectArchiveIcon,
   ObjectAreaIcon,
-  ObjectAtomicNoteIcon,
-  ObjectAudioIcon,
-  ObjectBookIcon,
-  ObjectDefinitionIcon,
-  ObjectFileIcon,
-  ObjectImageIcon,
-  ObjectIdeaIcon,
-  ObjectMediaIcon,
-  ObjectMeetingIcon,
-  ObjectOrganizationIcon,
-  ObjectPageIcon,
-  ObjectPdfIcon,
-  ObjectPersonIcon,
-  ObjectPlaceIcon,
-  ObjectProjectIcon,
-  ObjectQueryIcon,
-  ObjectQuoteIcon,
-  ObjectTableIcon,
-  ObjectTagIcon,
-  ObjectTaskIcon,
-  ObjectTravelIcon,
-  ObjectTweetIcon,
-  ObjectWeblinkIcon,
+  ObjectIconBadge,
+  objectTypeDefinitions,
+  type ObjectIconProps,
+  type ObjectIconTone,
 } from "@/components/object-icons"
 
 import { Button } from "@/components/ui/button"
@@ -45,22 +25,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 
-type AppSidebarObjectTypeTone =
-  | "blue"
-  | "amber"
-  | "rose"
-  | "green"
-  | "purple"
-  | "gray"
+type AppSidebarObjectTypeTone = ObjectIconTone
 
 type AppSidebarObjectTypePreset = {
   id: string
   label: string
-  icon: React.ElementType
+  icon: React.ElementType<ObjectIconProps>
   tone: AppSidebarObjectTypeTone
 }
 
@@ -70,64 +43,33 @@ type AppSidebarObjectTypeStudioProps = {
   className?: string
 }
 
-const appSidebarObjectTypeToneClasses: Record<
-  AppSidebarObjectTypeTone,
-  string
-> = {
-  blue:
-    "border-blue-200 bg-blue-50 text-blue-600 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-300",
-  amber:
-    "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950/50 dark:text-amber-300",
-  rose:
-    "border-rose-200 bg-rose-50 text-rose-600 dark:border-rose-900 dark:bg-rose-950/50 dark:text-rose-300",
-  green:
-    "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300",
-  purple:
-    "border-violet-200 bg-violet-50 text-violet-600 dark:border-violet-900 dark:bg-violet-950/50 dark:text-violet-300",
-  gray: "border-border bg-muted text-muted-foreground",
-}
+const suggestedObjectTypeIds = new Set([
+  "book",
+  "person",
+  "area",
+  "meeting",
+  "quote",
+  "definition",
+  "idea",
+  "place",
+  "project",
+  "organization",
+  "atomic-note",
+  "media",
+  "travel",
+])
 
-const suggestedObjectTypes: AppSidebarObjectTypePreset[] = [
-  { id: "book", label: "Book", icon: ObjectBookIcon, tone: "purple" },
-  {
-    id: "person",
-    label: "Person",
-    icon: ObjectPersonIcon,
-    tone: "amber",
-  },
-  { id: "area", label: "Area", icon: ObjectAreaIcon, tone: "purple" },
-  {
-    id: "meeting",
-    label: "Meeting",
-    icon: ObjectMeetingIcon,
-    tone: "rose",
-  },
-  { id: "quote", label: "Quote", icon: ObjectQuoteIcon, tone: "rose" },
-  { id: "definition", label: "Definition", icon: ObjectDefinitionIcon, tone: "purple" },
-  { id: "idea", label: "Idea", icon: ObjectIdeaIcon, tone: "amber" },
-  { id: "place", label: "Place", icon: ObjectPlaceIcon, tone: "green" },
-  { id: "project", label: "Project", icon: ObjectProjectIcon, tone: "green" },
-  { id: "organization", label: "Organization", icon: ObjectOrganizationIcon, tone: "rose" },
-  { id: "atomic-note", label: "Atomic note", icon: ObjectAtomicNoteIcon, tone: "amber" },
-  { id: "media", label: "Media", icon: ObjectMediaIcon, tone: "green" },
-  { id: "travel", label: "Travel", icon: ObjectTravelIcon, tone: "purple" },
-]
+const suggestedObjectTypes: AppSidebarObjectTypePreset[] =
+  objectTypeDefinitions.filter((definition) =>
+    suggestedObjectTypeIds.has(definition.id),
+  )
 
-const basicObjectTypes: AppSidebarObjectTypePreset[] = [
-  { id: "page", label: "Page", icon: ObjectPageIcon, tone: "blue" },
-  { id: "tag", label: "Tag", icon: ObjectTagIcon, tone: "amber" },
-  { id: "image", label: "Image", icon: ObjectImageIcon, tone: "rose" },
-  { id: "weblink", label: "Weblink", icon: ObjectWeblinkIcon, tone: "blue" },
-  { id: "pdf", label: "PDF", icon: ObjectPdfIcon, tone: "rose" },
-  { id: "audio", label: "Audio", icon: ObjectAudioIcon, tone: "rose" },
-  { id: "file", label: "File", icon: ObjectFileIcon, tone: "rose" },
-  { id: "tweet", label: "Tweet", icon: ObjectTweetIcon, tone: "blue" },
-  { id: "ai-chat", label: "AI chat", icon: ObjectAiChatIcon, tone: "purple" },
-  { id: "table", label: "Table", icon: ObjectTableIcon, tone: "blue" },
-  { id: "task", label: "Task", icon: ObjectTaskIcon, tone: "amber" },
-  { id: "query", label: "Query", icon: ObjectQueryIcon, tone: "green" },
-  { id: "archive", label: "Archive", icon: ObjectArchiveIcon, tone: "gray" },
-]
+const basicObjectTypes: AppSidebarObjectTypePreset[] =
+  objectTypeDefinitions.filter(
+    (definition) =>
+      !suggestedObjectTypeIds.has(definition.id) &&
+      definition.id !== "archive",
+  )
 
 function AppSidebarObjectTypeIcon({
   preset,
@@ -139,16 +81,12 @@ function AppSidebarObjectTypeIcon({
   const Icon = preset.icon
 
   return (
-    <span
-      data-slot="app-sidebar-object-type-icon"
-      className={cn(
-        "flex size-8 shrink-0 items-center justify-center rounded-lg border",
-        appSidebarObjectTypeToneClasses[preset.tone],
-        className
-      )}
-    >
-      <Icon className="size-[18px]" />
-    </span>
+    <ObjectIconBadge
+      icon={Icon}
+      tone={preset.tone}
+      className={cn("size-8 rounded-[8px]", className)}
+      iconClassName="size-[18px]"
+    />
   )
 }
 
@@ -156,46 +94,69 @@ function AppSidebarObjectTypeCard({
   preset,
   selected,
   onSelect,
+  label,
 }: {
   preset: AppSidebarObjectTypePreset
   selected: boolean
   onSelect: (preset: AppSidebarObjectTypePreset) => void
+  label: string
 }) {
   return (
-    <Item
-      variant="outline"
+    <button
+      type="button"
+      data-slot="app-sidebar-object-type-card"
       data-selected={selected || undefined}
-      render={<button type="button" onClick={() => onSelect(preset)} />}
       className={cn(
-        "min-h-[52px] flex-nowrap gap-3 px-2 py-2.5 text-left",
-        "hover:border-border/80 hover:bg-muted/40",
-        "data-[selected=true]:border-foreground/20 data-[selected=true]:bg-muted/60"
+        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] bg-white px-2.5 text-left",
+        "text-[14px] font-semibold text-[#2f2c29] shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
+        "transition-[background-color,border-color,box-shadow,filter] duration-150",
+        "hover:border-[#cbc7c1] hover:bg-[#faf9f8] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)]",
+        "active:brightness-[0.98] data-[selected=true]:border-[#bdb8b0] data-[selected=true]:bg-[#f7f5f3]"
       )}
+      onClick={() => onSelect(preset)}
     >
-      <ItemMedia>
-        <AppSidebarObjectTypeIcon preset={preset} />
-      </ItemMedia>
-
-      <ItemContent className="min-w-0">
-        <ItemTitle
-          className={cn(
-            "w-full truncate font-semibold",
-            !selected && "text-muted-foreground"
-          )}
-        >
-          {preset.label}
-        </ItemTitle>
-      </ItemContent>
-
+      <AppSidebarObjectTypeIcon preset={preset} />
+      <span className="min-w-0 truncate">{label}</span>
       {selected && (
         <span
           aria-hidden="true"
-          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-foreground text-background"
+          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-[#34302c] text-white"
         >
           <AppSidebarCheckIcon className="size-3" />
         </span>
       )}
-    </Item>
+    </button>
+  )
+}
+
+function AppSidebarCustomObjectTypeCard({
+  selected,
+  onSelect,
+  label,
+}: {
+  selected: boolean
+  onSelect: () => void
+  label: string
+}) {
+  return (
+    <button
+      type="button"
+      data-slot="app-sidebar-object-type-card"
+      data-selected={selected || undefined}
+      className={cn(
+        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] bg-white px-2.5 text-left",
+        "text-[14px] font-semibold text-[#2f2c29] shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
+        "transition-[background-color,border-color,box-shadow,filter] duration-150",
+        "hover:border-[#cbc7c1] hover:bg-[#faf9f8] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)]",
+        "active:brightness-[0.98] data-[selected=true]:border-[#bdb8b0] data-[selected=true]:bg-[#f7f5f3]"
+      )}
+      onClick={onSelect}
+    >
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-[8px] border border-[#cfcac4] bg-white text-[#5f5a55]">
+        <AppSidebarPlusIcon className="size-[18px]" />
+      </span>
+      <span className="min-w-0 truncate">{label}</span>
+    </button>
   )
 }
 
@@ -212,6 +173,7 @@ function AppSidebarObjectTypeDetails({
   onClose: () => void
   onConfirm: () => void
 }) {
+  const t = useTranslations("workspace.objectTypeStudio")
   const isCustom = preset === null
   const displayPreset: AppSidebarObjectTypePreset =
     preset ?? {
@@ -232,12 +194,14 @@ function AppSidebarObjectTypeDetails({
       <div className="flex shrink-0 items-center gap-3 border-b p-4">
         <AppSidebarObjectTypeIcon preset={displayPreset} />
 
-        <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold">
-            {isCustom ? "Create your own" : preset.label}
+            {isCustom
+              ? t("createOwn")
+              : t(`objectTypes.${preset.id}`)}
           </p>
           <p className="truncate text-xs text-muted-foreground">
-            Object type setup
+            {t("details.description")}
           </p>
         </div>
 
@@ -245,7 +209,7 @@ function AppSidebarObjectTypeDetails({
           type="button"
           variant="ghost"
           size="icon-sm"
-          aria-label="Close object type details"
+          aria-label={t("details.close")}
           onClick={onClose}
         >
           <AppSidebarXIcon />
@@ -256,10 +220,10 @@ function AppSidebarObjectTypeDetails({
         <div className="flex flex-col gap-4 p-4">
           {isCustom ? (
             <label className="flex flex-col gap-2 text-sm">
-              <span className="font-medium">Name</span>
+              <span className="font-medium">{t("details.name")}</span>
               <Input
                 value={customName}
-                placeholder="Object type name"
+                placeholder={t("details.namePlaceholder")}
                 autoFocus
                 onChange={(event) => onCustomNameChange(event.target.value)}
               />
@@ -267,15 +231,17 @@ function AppSidebarObjectTypeDetails({
           ) : (
             <>
               <div className="rounded-lg border bg-muted/20 p-3">
-                <p className="text-sm font-medium">{preset.label}</p>
+                <p className="text-sm font-medium">
+                  {t(`objectTypes.${preset.id}`)}
+                </p>
                 <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                  Review this preset before adding it to the current space.
+                  {t("details.review")}
                 </p>
               </div>
 
               <div className="rounded-lg border bg-muted/20 p-3">
                 <p className="text-xs font-medium text-muted-foreground">
-                  Preset
+                  {t("details.preset")}
                 </p>
                 <p className="mt-1 text-sm">{preset.id}</p>
               </div>
@@ -291,7 +257,7 @@ function AppSidebarObjectTypeDetails({
           disabled={isCustom && customName.trim().length === 0}
           onClick={onConfirm}
         >
-          Add object type
+          {t("details.confirm")}
         </Button>
       </div>
     </aside>
@@ -303,6 +269,7 @@ function AppSidebarObjectTypeStudio({
   trigger,
   className,
 }: AppSidebarObjectTypeStudioProps) {
+  const t = useTranslations("workspace.objectTypeStudio")
   const [open, setOpen] = React.useState(false)
   const [selectedPreset, setSelectedPreset] =
     React.useState<AppSidebarObjectTypePreset | null>(null)
@@ -369,7 +336,7 @@ function AppSidebarObjectTypeStudio({
                 className="w-full justify-start px-2 font-normal text-muted-foreground"
               >
                 <AppSidebarPlusIcon data-icon="inline-start" />
-                <span className="min-w-0 truncate">Add object type</span>
+                <span className="min-w-0 truncate">{t("trigger")}</span>
               </Button>
             )
           }
@@ -378,21 +345,20 @@ function AppSidebarObjectTypeStudio({
         <DialogContent
           showCloseButton={false}
           className={cn(
-            "flex h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] max-w-none flex-col gap-0 overflow-hidden p-0",
-            "sm:h-[calc(100dvh-4rem)] sm:w-[calc(100vw-4rem)] sm:max-w-6xl",
-            "lg:h-[calc(100dvh-8rem)] lg:w-[calc(100vw-8rem)]"
+            "flex h-[min(784px,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] flex-col gap-0 overflow-hidden rounded-[8px] bg-white p-0 text-[#1f1c19] sm:w-[min(1152px,calc(100vw-4rem))] sm:max-w-[min(1152px,calc(100vw-4rem))]",
+            "shadow-[0_18px_60px_rgb(0_0_0/0.22)] ring-1 ring-black/10"
           )}
         >
-          <DialogHeader className="shrink-0 gap-1 border-b px-5 py-3.5">
-            <DialogTitle className="text-lg font-semibold">
-              Add new object type
+          <DialogHeader className="flex h-[56px] shrink-0 justify-center gap-0 border-b border-[#e7e2dc] px-5 py-0">
+            <DialogTitle className="text-[18px] font-semibold leading-none tracking-[-0.01em]">
+              {t("title")}
             </DialogTitle>
             <DialogDescription className="sr-only">
-              Choose a suggested or basic preset, review it, and add the object type.
+              {t("description")}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="relative flex min-h-0 flex-1 overflow-hidden bg-muted/20">
+          <div className="relative flex min-h-0 flex-1 overflow-hidden bg-white">
             <ScrollArea
               className={cn(
                 "min-h-0 flex-1",
@@ -401,49 +367,37 @@ function AppSidebarObjectTypeStudio({
                 "[&_[data-slot=scroll-area-thumb]]:rounded-full"
               )}
             >
-              <div className="flex min-h-full flex-col gap-3 px-5 pb-5 pt-2">
-                <div className="grid grid-cols-2 gap-3 py-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              <div className="flex min-h-full flex-col px-5 pb-6 pt-6">
+                <div className="grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                   {suggestedObjectTypes.map((preset) => (
                     <AppSidebarObjectTypeCard
                       key={preset.id}
                       preset={preset}
                       selected={detailsOpen && selectedPreset?.id === preset.id}
                       onSelect={selectPreset}
+                      label={t(`objectTypes.${preset.id}`)}
                     />
                   ))}
 
-                  <Item
-                    variant="outline"
-                    data-selected={detailsOpen && selectedPreset === null || undefined}
-                    render={<button type="button" onClick={selectCustom} />}
-                    className={cn(
-                      "min-h-[52px] flex-nowrap gap-3 px-2 py-2.5 text-left",
-                      "hover:border-border/80 hover:bg-muted/40",
-                      "data-[selected=true]:border-foreground/20 data-[selected=true]:bg-muted/60"
-                    )}
-                  >
-                    <ItemMedia>
-                      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border bg-background text-muted-foreground">
-                        <AppSidebarPlusIcon className="size-[18px]" />
-                      </span>
-                    </ItemMedia>
-                    <ItemContent className="min-w-0">
-                      <ItemTitle className="w-full truncate font-semibold text-muted-foreground">
-                        Create your own
-                      </ItemTitle>
-                    </ItemContent>
-                  </Item>
+                  <AppSidebarCustomObjectTypeCard
+                    selected={detailsOpen && selectedPreset === null}
+                    onSelect={selectCustom}
+                    label={t("createOwn")}
+                  />
                 </div>
 
-                <section className="flex flex-col pb-4">
-                  <h2 className="py-2 text-base font-medium">Basic types</h2>
-                  <div className="grid grid-cols-2 gap-3 py-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                <section className="mt-9 flex flex-col pb-4">
+                  <h2 className="text-[18px] font-medium leading-none tracking-[-0.01em]">
+                    {t("basicTypes")}
+                  </h2>
+                  <div className="mt-7 grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                     {basicObjectTypes.map((preset) => (
                       <AppSidebarObjectTypeCard
                         key={preset.id}
                         preset={preset}
                         selected={detailsOpen && selectedPreset?.id === preset.id}
                         onSelect={selectPreset}
+                        label={t(`objectTypes.${preset.id}`)}
                       />
                     ))}
                   </div>
@@ -470,7 +424,6 @@ function AppSidebarObjectTypeStudio({
 export {
   AppSidebarObjectTypeIcon,
   AppSidebarObjectTypeStudio,
-  appSidebarObjectTypeToneClasses,
   basicObjectTypes,
   suggestedObjectTypes,
   type AppSidebarObjectTypePreset,
