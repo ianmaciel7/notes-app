@@ -36,10 +36,11 @@ When implementing the reference-style workspace, do not treat prototype/demo cod
 
 ### Popup appearance contract
 
-- Treat an existing popup for the same product area as the canonical visual reference. Sidebar context menus must use the shared sidebar context-menu width exported by `src/components/ui/compact-menu.tsx` so object-type and collection menus cannot drift apart.
+- Treat the live reference popup for the same product area as the canonical visual reference. Sidebar context menus must use the shared 269px sidebar context-menu width exported by `src/components/ui/compact-menu.tsx` so object-type and collection menus cannot drift apart.
+- Standard dropdown and select rows use the shared 32px height, 8px radius, secondary icon color, aligned separators, and shortcut treatment from `src/components/ui/shared-styles.ts` and the owning primitive. The 24px compact-menu row is a distinct named variant, not the default popup density.
 - Feature components must not set popup surface width, background, border, radius, shadow, padding, row height, row radius, hover/focus color, separator spacing, icon sizing, or keyboard-shortcut styling with one-off classes. Put a documented semantic variant in `src/components/ui` and reuse it instead.
 - Call sites may control placement through primitive props such as `side`, `align`, and offsets. A visual override is allowed only when current reference evidence proves a distinct pattern and the override is promoted to a named shared variant.
-- When changing a popup, compare it in the browser with the canonical popup from the same area and add a focused source or component test that confirms both consumers use the shared contract.
+- When changing a popup, compare it in the browser with the live canonical popup from the same area at the same viewport and add a focused source or component test that confirms both consumers use the shared contract.
 
 ## Completion check
 

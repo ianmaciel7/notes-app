@@ -16,7 +16,7 @@ const dialogSurfaceClass =
   "duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
 
 const floatingListItemClass =
-  "relative flex min-h-6 cursor-default items-center gap-2 rounded-[7px] px-1 py-0 text-sm leading-normal outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3"
+  "relative flex h-8 min-h-8 cursor-default items-center gap-2 rounded-[8px] px-1 py-0 text-sm leading-normal outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-[#8f8983] [&_svg:not([class*='size-'])]:size-3"
 
 const floatingListItemFocusClass =
   "focus:bg-[#f3f1ee] focus:text-[#1f1c19] not-data-[variant=destructive]:focus:**:text-[#1f1c19] dark:focus:bg-accent dark:focus:text-accent-foreground"
@@ -42,7 +42,7 @@ const controlIconSelectorClass =
 const floatingIndicatorClass =
   "pointer-events-none absolute right-2 flex size-4 items-center justify-center"
 
-const floatingSeparatorClass = "-mx-1 my-1 h-px bg-border"
+const floatingSeparatorClass = "my-1 h-px bg-[#dedbd7] dark:bg-border"
 
 export {
   controlIconClass,

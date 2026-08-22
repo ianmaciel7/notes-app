@@ -27,17 +27,18 @@
   the shared light border, a 12px radius, and the centralized low-opacity,
   multi-layer shadow. Do not replace this reference shadow with a stock
   `shadow-md` utility.
-- Command and searchable creation menus use 32px rows with 14px labels and 8px
-  item radii. A 24px compact row is a deliberate action-menu variant and must
-  remain in the shared compact-menu helper rather than becoming an ad hoc
-  caller override.
+- Dropdowns, selects, command menus, and searchable creation menus use 32px
+  rows with 14px labels, 8px item radii, secondary icons, and content-aligned
+  separators. A 24px compact row is a deliberate named compact-menu variant
+  and must not become the default popup density.
 - Context variants may change menu width, row density, or scrolling behavior;
   they must inherit the shared surface color, border, radius, shadow, focus,
   highlighted, and selected-state contracts unless current reference evidence
   demonstrates a real contextual difference.
-- Sidebar context menus use the semantic width variants exported by
+- Sidebar context menus use the shared 269px width exported by
   `src/components/ui/compact-menu.tsx`. Feature components may choose popup
-  placement, but they must not redefine the surface or row appearance locally.
+  placement, but they must not redefine the surface, row, separator, icon, or
+  shortcut appearance locally.
 - Control icons and menu/list items must use the shared icon and item classes
   instead of redefining SVG sizing, pointer events, radius, hover, or selected
   states in each component.

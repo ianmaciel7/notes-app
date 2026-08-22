@@ -37,9 +37,9 @@ const compactMenuSearchClass =
 const compactMenuItemClass =
   "group/compact-menu-item min-h-0 w-full min-w-0 gap-0 rounded-[7px] px-0 py-0 pr-1 text-sm text-[#282522] data-highlighted:bg-[#f3f1ee] data-highlighted:text-[#282522]"
 
-const sidebarContextMenuContentClass = "w-64"
+const sidebarContextMenuContentClass = "w-[269px]"
 
-const sidebarContextSubmenuContentClass = "w-52"
+const sidebarContextSubmenuContentClass = "w-[269px]"
 
 const compactMenuActionButtonClass =
   "relative flex h-6 w-full shrink-0 cursor-pointer items-center justify-center gap-x-1.5 truncate rounded-lg border border-[#dedbd7] bg-[#f3f1ee] px-3 text-sm font-normal text-[#595550] transition-[opacity] duration-200 ease-out hover:border-[#cbc7c1] hover:bg-[#f3f1ee] hover:text-[#595550] active:brightness-[0.97] focus:outline-none disabled:pointer-events-none disabled:opacity-50"

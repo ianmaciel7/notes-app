@@ -45,7 +45,7 @@ test("supported locale catalogs are valid JSON objects", async () => {
 });
 
 test("sidebar context menus share the canonical appearance contract", async () => {
-  const [overview, compactMenu] = await Promise.all([
+  const [overview, compactMenu, sharedStyles] = await Promise.all([
     readFile(
       new URL("../src/components/app-sidebar-overview.tsx", import.meta.url),
       "utf8",
@@ -54,16 +54,33 @@ test("sidebar context menus share the canonical appearance contract", async () =
       new URL("../src/components/ui/compact-menu.tsx", import.meta.url),
       "utf8",
     ),
+    readFile(
+      new URL("../src/components/ui/shared-styles.ts", import.meta.url),
+      "utf8",
+    ),
   ]);
 
-  assert.match(compactMenu, /sidebarContextMenuContentClass = "w-64"/);
-  assert.match(compactMenu, /sidebarContextSubmenuContentClass = "w-52"/);
+  assert.match(
+    compactMenu,
+    /sidebarContextMenuContentClass = "w-\[269px\]"/,
+  );
+  assert.match(
+    compactMenu,
+    /sidebarContextSubmenuContentClass = "w-\[269px\]"/,
+  );
+  assert.match(sharedStyles, /floatingListItemClass =[\s\S]*?h-8 min-h-8/);
+  assert.match(sharedStyles, /rounded-\[8px\]/);
+  assert.match(sharedStyles, /\[&_svg\]:text-\[#8f8983\]/);
+  assert.match(
+    sharedStyles,
+    /floatingSeparatorClass = "my-1 h-px bg-\[#dedbd7\]/,
+  );
   assert.equal(
     overview.match(/className=\{sidebarContextMenuContentClass\}/g)?.length,
     2,
   );
   assert.match(overview, /className=\{sidebarContextSubmenuContentClass\}/);
-  assert.doesNotMatch(overview, /className="w-\[269px\]"/);
+  assert.equal(overview.match(/<DropdownMenuShortcut>/g)?.length, 2);
 });
 
 test("the localized workspace boots into the workspace fixture", async () => {

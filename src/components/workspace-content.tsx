@@ -219,7 +219,7 @@ type ObjectEditorProps = {
 const editorCardClass =
   "mx-3 mt-6 min-h-[302px] shrink-0 rounded-2xl border border-border bg-card px-10 pt-8";
 const titleFieldClass =
-  "mt-[14px] block h-[36px] w-full resize-none overflow-hidden bg-transparent py-0 text-[28px] font-bold leading-[31px] tracking-[-0.02em] text-foreground outline-none placeholder:text-sidebar-foreground";
+  "mt-[14px] block h-[39px] w-full resize-none overflow-hidden bg-transparent py-0 text-[30px] font-bold leading-[33px] tracking-[-0.025em] text-foreground outline-none placeholder:text-sidebar-foreground";
 const bodyFieldClass =
   "mt-3 min-h-28 w-full max-w-[68ch] resize-none bg-transparent text-[11pt] leading-[1.7] text-foreground outline-none placeholder:text-sidebar-foreground";
 
@@ -640,7 +640,7 @@ function CollectionPropertyEditor({
               collections: collections.filter((item) => item !== collection),
             })
           }
-          className="inline-flex max-w-32 items-center rounded-[0.475em] border border-[oklch(0.91_0.015_235)] bg-[oklch(0.97_0.012_235)] px-[0.49em] py-[0.2em] text-[oklch(0.36_0.04_235)]"
+          className="inline-flex max-w-32 min-w-0 shrink-0 items-center overflow-x-clip whitespace-nowrap rounded-[0.475em] border border-[oklch(0.9856_0.0016_67)] bg-[oklch(0.9856_0.0016_67)] px-[0.49em] py-[0.2em] leading-[1.3] text-[oklch(0.2987_0.0072_285.88)] active:brightness-[0.94]"
         >
           <span className="truncate">{collection}</span>
         </button>

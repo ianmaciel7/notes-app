@@ -47,6 +47,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -528,10 +529,7 @@ function AppSidebarObjectTypeMenu({
         <DropdownMenuItem>
           <AppSidebarObjectTypeMenuIcon name="import" />
           Importar
-          <span className="ml-auto flex items-center gap-0.5 text-xs text-muted-foreground">
-            <span>Ctrl</span>
-            <span>I</span>
-          </span>
+          <DropdownMenuShortcut>Ctrl I</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -1173,7 +1171,7 @@ function AppSidebarCollectionMenu({
         <DropdownMenuItem onClick={action("import")}>
           <AppSidebarObjectTypeMenuIcon name="import" />
           {t("documentMenu.import")}
-          <span className="ml-auto text-xs text-muted-foreground">Ctrl I</span>
+          <DropdownMenuShortcut>Ctrl I</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuSub>
@@ -1225,9 +1223,9 @@ function AppSidebarOverview({
   >({})
   const [pinnedSort, setPinnedSort] = React.useState<AppSidebarSortMode>("manual")
   const [objectSort, setObjectSort] = React.useState<AppSidebarSortMode>("manual")
-  const [internalPinned, setInternalPinned] = React.useState<AppSidebarPinnedEntity[]>([
-    allPinnedEntities[0]!,
-  ])
+  const [internalPinned, setInternalPinned] = React.useState<AppSidebarPinnedEntity[]>(
+    allPinnedEntities.slice(0, 1)
+  )
   const [internalObjectTypes, setInternalObjectTypes] = React.useState(initialObjectTypes)
   const [internalCustomSections, setInternalCustomSections] = React.useState<AppSidebarCustomSection[]>([])
   const [drag, setDrag] = React.useState<AppSidebarDragState>(null)
