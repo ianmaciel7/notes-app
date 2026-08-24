@@ -1,12 +1,14 @@
 ## 0. Evidence and dependency gate
 
-- [ ] 0.1 Complete `add-query-engine-and-search-index` before apply.
-- [ ] 0.2 Re-confirm views/content-types/templates reference sources.
+- [ ] 0.1 Complete the query engine and linking prerequisites before apply.
+- [ ] 0.2 Re-confirm Views, Content Types, Page Layouts, and Templates references.
 
 ## 1. View contracts
 
-- [ ] 1.1 Define ViewDefinition, object representations, visible-property config, grouping/sorting hooks, and shared projection components.
-- [ ] 1.2 Implement list/table/gallery-grid/wall views over QueryDefinition results.
+- [ ] 1.1 Define separate ObjectViewKind and DataViewKind contracts, visible-property config, grouping/sorting hooks, page-layout config, and shared projection components.
+- [ ] 1.2 Migrate simplified `StructurePresentation` away from ambiguous `grid`/calendar-as-generic-view assumptions.
+- [ ] 1.3 Implement list/table/gallery/wall/embed Data Views over QueryDefinition results.
+- [ ] 1.4 Implement inline/link-block/small-card/wide-card/embed/page object representations and integrate contextual graph as a separate surface.
 
 ## 2. Dashboards, templates, conversion
 
@@ -15,7 +17,7 @@
 
 ## 3. Acceptance
 
-- [ ] 3.1 Browser-test live cross-representation updates, view switching/reload, templates, and conversion with incompatible values.
+- [ ] 3.1 Browser-test live cross-representation updates, Data View switching/reload, page layouts, templates, contextual graph handoff, and conversion with incompatible values.
 - [ ] 3.2 Run performance/accessibility/parity checks, `pnpm verify`, build, and strict OpenSpec validation.
 
 ## 4. Completion

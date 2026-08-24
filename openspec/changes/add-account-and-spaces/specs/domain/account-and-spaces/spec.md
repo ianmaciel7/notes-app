@@ -1,29 +1,28 @@
 ## ADDED Requirements
 
 ### Requirement: Hard Space isolation
-Every durable workspace aggregate SHALL belong to one Space and SHALL be inaccessible through another active Space context.
+Every durable and derived workspace record SHALL belong to exactly one Space context and SHALL be inaccessible through another active Space.
 
 #### Scenario: Equal object id exists in two Spaces
 - **WHEN** either Space resolves that id
-- **THEN** the repository SHALL return only the record scoped to the active Space.
+- **THEN** only the record scoped to that Space SHALL be returned.
+
+### Requirement: Isolation covers every knowledge subsystem
+Structures, property definitions/values, tags, collections, Object Select relations, content links/backlinks, blocks, queries/views, search indexes, tasks/dates, assets/media, operations, and sync metadata SHALL be Space-scoped.
+
+#### Scenario: Search/query runs in Space A
+- **WHEN** matching content exists only in Space B
+- **THEN** Space A SHALL return no result or derived relationship from Space B.
+
+#### Scenario: Relation target belongs to another Space
+- **WHEN** a relation/link attempts to target an object in another Space
+- **THEN** the write SHALL be rejected.
 
 ### Requirement: Separate account/session boundary
-The application SHALL represent authentication/session state separately from workspace content.
-
-#### Scenario: Online session expires
-- **WHEN** remote authorization becomes invalid
-- **THEN** future remote operations SHALL require reauthentication without automatically deleting local content.
+Authentication/session state SHALL remain separate from workspace content; remote authorization expiry SHALL not automatically delete local content.
 
 ### Requirement: Guarded Space lifecycle
-Users SHALL be able to create, rename, switch, and explicitly delete Spaces without leaking or silently destroying another Space's data.
-
-#### Scenario: Space deletion is confirmed
-- **WHEN** a Space with content is deleted
-- **THEN** only that Space's scoped data SHALL follow the documented deletion/cache policy.
+Create, rename, switch, and delete operations SHALL not leak or silently destroy another Space's data.
 
 ### Requirement: No implicit collaboration claim
-This change SHALL NOT expose collaborative editing/member-role semantics as completed functionality.
-
-#### Scenario: Space settings open
-- **WHEN** unsupported team capabilities are not implemented
-- **THEN** the UI SHALL not imply that they are available.
+Unsupported team/collaboration semantics SHALL not be presented as implemented functionality.

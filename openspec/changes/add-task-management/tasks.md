@@ -5,16 +5,17 @@
 
 ## 1. Task domain
 
-- [ ] 1.1 Define native task metadata, recurrence rules, TaskOccurrence records, validation, migration, and failing-first edge-case tests.
+- [ ] 1.1 Define native task metadata, distinct scheduled/deadline values, schedule-driven/completion-driven recurrence modes, TaskOccurrence records, validation, migration, and failing-first edge-case tests.
+- [ ] 1.2 Cover DST, month-end, late completion, skip/excuse, and recurrence-mode transitions explicitly.
 
 ## 2. Dashboards and UI
 
 - [ ] 2.1 Add query-backed native sections, list/Kanban views, occurrence log/stat selectors, and capture/editor flows.
-- [ ] 2.2 Keep reminders/custom native Task properties/collections explicitly unsupported unless separately specified.
+- [ ] 2.2 Keep reminders/custom native Task properties/unsupported collections explicitly out of scope unless separately specified.
 
 ## 3. Acceptance
 
-- [ ] 3.1 Browser-test create/edit/complete/recur/skip/drag/reload and cross-projection updates with no duplicate task identities.
+- [ ] 3.1 Browser-test create/edit/complete, both recurrence modes, skip/excuse, drag/reload, occurrence history, and cross-projection updates with no duplicate Task identities.
 - [ ] 3.2 Run `pnpm verify`, date/query/view regressions, Playwright, build, and strict OpenSpec validation.
 
 ## 4. Completion
