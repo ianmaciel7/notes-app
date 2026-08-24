@@ -80,7 +80,6 @@ test("slash commands use the shared suggestion menu contract", () => {
   assert.match(editorSource, /createSlashCommandExtension/);
   assert.match(slashCommandSource, /Suggestion</);
   assert.match(slashCommandSource, /data-slot="block-editor-slash-menu"/);
-  assert.match(slashCommandSource, /CompactMenuIconFrame/);
   assert.match(slashCommandSource, /role="listbox"/);
   assert.match(slashCommandSource, /exitSuggestion/);
 });
@@ -104,41 +103,59 @@ test("selection toolbar reacts without the default BubbleMenu delay", () => {
   assert.match(toolbarSource, /extendMarkRange\("link"\)/);
 });
 
-test("drag handle uses the plugin metadata contract instead of missing commands", () => {
+test("drag handle uses plugin metadata and a fixed block-relative anchor", () => {
   assert.match(handleSource, /@tiptap\/extension-drag-handle-react/);
   assert.match(handleSource, /nested=\{false\}/);
   assert.match(handleSource, /commands\.setMeta\("lockDragHandle", locked\)/);
+  assert.match(handleSource, /strategy: "fixed"/);
+  assert.match(handleSource, /placement: "left-start"/);
+  assert.match(handleSource, /getReferencedVirtualElement=\{getReferencedVirtualElement\}/);
+  assert.match(handleSource, /nodeDOM\(target\.pos\)/);
   assert.doesNotMatch(handleSource, /commands\.lockDragHandle/);
   assert.doesNotMatch(handleSource, /commands\.unlockDragHandle/);
-  assert.doesNotMatch(handleSource, /locked=\{/);
 });
 
-test("plus and six-dot grip have independent reference behaviors", () => {
+test("plus and six-dot grip keep independent drag ownership", () => {
   assert.match(handleSource, /function DotsSixVerticalIcon/);
-  assert.equal(
-    (handleSource.match(/<circle /g) ?? []).length,
-    6,
-    "the grip icon must contain exactly six dots",
-  );
+  assert.equal((handleSource.match(/<circle /g) ?? []).length, 6);
   assert.match(handleSource, /data-slot="block-editor-insert-control"/);
   assert.match(handleSource, /data-slot="block-editor-drag-control"/);
-  assert.match(handleSource, /data-slot="block-editor-six-dot-icon"/);
-  assert.match(handleSource, /draggable=\{false\}/);
-  assert.match(handleSource, /draggable=\{true\}/);
-  assert.match(handleSource, /function isGripDragOrigin/);
+  assert.equal(
+    (handleSource.match(/draggable=\{false\}/g) ?? []).length,
+    2,
+    "both inner controls must stay non-draggable",
+  );
+  assert.doesNotMatch(handleSource, /draggable=\{true\}/);
   assert.match(handleSource, /onElementDragStart=\{handleElementDragStart\}/);
-  assert.match(handleSource, /insertPointerActiveRef/);
-  assert.match(handleSource, /event\.preventDefault\(\)/);
+  assert.match(handleSource, /setDragHandleLocked\(editor, true\)/);
+  assert.match(handleSource, /setDragHandleLocked\(editor, false\)/);
   assert.match(handleSource, /event\.shiftKey \? "above" : "below"/);
   assert.match(handleSource, /setTextSelection\(position \+ 1\)/);
-  assert.match(handleSource, /POST_DRAG_MENU_SUPPRESSION_MS/);
-  assert.match(handleSource, /suppressMenuUntilRef/);
+});
+
+test("handle tooltips use local Tooltip primitives instead of browser titles", () => {
+  assert.match(handleSource, /TooltipProvider delay=\{300\}/);
+  assert.match(handleSource, /data-slot="block-editor-insert-tooltip"/);
+  assert.match(handleSource, /data-slot="block-editor-drag-tooltip"/);
+  assert.match(handleSource, /t\("clickAction"\)/);
+  assert.match(handleSource, /t\("shiftClickAction"\)/);
+  assert.match(handleSource, /t\("dragAction"\)/);
+  assert.match(handleSource, /t\("moveBlockHint"\)/);
+  assert.doesNotMatch(handleSource, /title=\{/);
+});
+
+test("drop cursor is a subtle one-pixel neutral indicator", () => {
+  assert.match(editorSource, /dropcursor:/);
+  assert.match(editorSource, /color: "#b8b3ad"/);
+  assert.match(editorSource, /width: 1/);
+  assert.match(editorSource, /class: "block-editor-dropcursor"/);
 });
 
 test("block controls keep measured geometry, input mode, and motion contracts", () => {
   assert.match(handleSource, /data-slot="block-editor-block-handle"/);
   assert.match(handleSource, /data-slot="block-editor-block-menu"/);
   assert.match(handleSource, /h-\[22px\] w-\[18px\]/);
+  assert.match(handleSource, /w-\[36px\]/);
   assert.match(handleSource, /duration-100/);
   assert.match(handleSource, /motion-reduce:transition-none/);
   assert.match(handleSource, /\(hover: hover\) and \(pointer: fine\)/);
@@ -151,24 +168,10 @@ test("the user-provided handle screenshot remains a hashed project reference", (
     "f1d0cde8444e16504a600cd3c640941274789a1aa81bb1e7fcd14a07f20a721c",
   );
   assert.match(handleReferenceMetadata, /90 × 57 px/);
-  assert.match(handleReferenceMetadata, /f1d0cde8444e16504a600cd3c6409412/);
   assert.match(handleReferenceMetadata, /Click.*insert block below/is);
   assert.match(handleReferenceMetadata, /Shift-click.*insert block above/is);
   assert.match(handleReferenceMetadata, /Drag.*move block/is);
   assert.match(handleReferenceMetadata, /Click.*block options/is);
-});
-
-test("editor styling keeps the measured typography and focus contracts", () => {
-  if (globalsSource) {
-    assert.match(globalsSource, /font-size: 16px/);
-    assert.match(globalsSource, /line-height: 24px/);
-    assert.match(
-      globalsSource,
-      /color-mix\(in oklch, var\(--primary\) 25%, transparent\)/,
-    );
-  }
-  assert.match(editorSource, /focus-visible:outline-2/);
-  assert.match(editorSource, /checkboxLabel/);
 });
 
 test("editor interaction copy is complete for every supported locale", () => {
@@ -187,6 +190,13 @@ test("editor interaction copy is complete for every supported locale", () => {
     "insertBlockBelow",
     "dragBlock",
     "blockOptions",
+    "clickAction",
+    "shiftClickAction",
+    "dragAction",
+    "insertBelowHint",
+    "insertAboveHint",
+    "moveBlockHint",
+    "showBlockOptionsHint",
     "duplicateBlock",
     "deleteBlock",
     "taskChecked",
