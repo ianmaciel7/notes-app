@@ -125,6 +125,10 @@ function BlockEditor({
   const extensions = React.useMemo(
     () => [
       StarterKit.configure({
+        dropcursor: {
+          color: "oklch(0.7161 0.006 30.59 / 0.7)",
+          width: 3,
+        },
         heading: { levels: [1, 2, 3, 4] },
         link: {
           openOnClick: false,
