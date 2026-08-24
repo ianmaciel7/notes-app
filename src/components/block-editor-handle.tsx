@@ -108,6 +108,14 @@ function createTargetVirtualElement(
   };
 }
 
+function isGripDragOrigin(event: DragEvent) {
+  const target = event.target;
+  return (
+    target instanceof Element &&
+    target.closest('[data-slot="block-editor-drag-control"]') !== null
+  );
+}
+
 function suppressParentDragForPointer(
   event: React.PointerEvent<HTMLButtonElement>,
   onRelease: () => void,
@@ -154,7 +162,10 @@ function BlockHandle({
 }) {
   const t = useTranslations("workspace.editor");
   const enabled = useDesktopDragHandle();
+  const menuTriggerId = React.useId();
+  const handleSurfaceRef = React.useRef<HTMLDivElement>(null);
   const targetRef = React.useRef<HandleTarget | null>(null);
+  const dragSourceRef = React.useRef<HandleTarget | null>(null);
   const targetAvailableRef = React.useRef(false);
   const optionsOpenRef = React.useRef(false);
   const insertPointerActiveRef = React.useRef(false);
@@ -162,7 +173,6 @@ function BlockHandle({
   const suppressMenuUntilRef = React.useRef(0);
   const [targetAvailable, setTargetAvailable] = React.useState(false);
   const [optionsOpen, setOptionsOpen] = React.useState(false);
-  const [dragging, setDragging] = React.useState(false);
 
   const handleNodeChange = React.useCallback(
     ({ node, pos }: { node: { nodeSize: number } | null; pos: number }) => {
@@ -178,7 +188,11 @@ function BlockHandle({
   );
 
   const getReferencedVirtualElement = React.useCallback(
-    () => createTargetVirtualElement(editor, targetRef.current),
+    () =>
+      createTargetVirtualElement(
+        editor,
+        dragSourceRef.current ?? targetRef.current,
+      ),
     [editor],
   );
 
@@ -201,31 +215,39 @@ function BlockHandle({
 
   const handleElementDragStart = React.useCallback(
     (event: DragEvent) => {
-      if (insertPointerActiveRef.current) {
+      if (
+        insertPointerActiveRef.current ||
+        optionsOpenRef.current ||
+        !targetRef.current ||
+        !isGripDragOrigin(event)
+      ) {
         event.preventDefault();
         return;
       }
 
+      dragSourceRef.current = targetRef.current;
       dragInProgressRef.current = true;
       suppressMenuUntilRef.current = Number.POSITIVE_INFINITY;
-      setDragHandleLocked(editor, true);
-      setDragging(true);
+      handleSurfaceRef.current?.setAttribute("data-dragging", "true");
       editor.view.dom.style.cursor = "grabbing";
-      if (optionsOpenRef.current) setBlockOptionsOpen(false);
+      if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
     },
-    [editor, setBlockOptionsOpen],
+    [editor],
   );
 
   const handleElementDragEnd = React.useCallback(() => {
     dragInProgressRef.current = false;
+    dragSourceRef.current = null;
     suppressMenuUntilRef.current = Date.now() + POST_DRAG_MENU_SUPPRESSION_MS;
-    setDragging(false);
+    handleSurfaceRef.current?.removeAttribute("data-dragging");
     editor.view.dom.style.removeProperty("cursor");
     setDragHandleLocked(editor, false);
   }, [editor]);
 
   React.useEffect(
     () => () => {
+      dragSourceRef.current = null;
+      handleSurfaceRef.current?.removeAttribute("data-dragging");
       editor.view.dom.style.removeProperty("cursor");
       setDragHandleLocked(editor, false);
     },
@@ -312,12 +334,12 @@ function BlockHandle({
     >
       <TooltipProvider delay={300}>
         <div
+          ref={handleSurfaceRef}
           data-slot="block-editor-block-handle"
           data-menu-open={optionsOpen || undefined}
-          data-dragging={dragging || undefined}
           className={cn(
-            "flex h-[22px] w-[36px] translate-y-px items-center gap-0 text-muted-foreground opacity-50 transition-opacity duration-100 ease-linear hover:opacity-100 motion-reduce:transition-none",
-            (optionsOpen || dragging) && "opacity-100",
+            "relative flex h-[22px] w-[36px] translate-y-px items-center gap-0 text-muted-foreground opacity-50 transition-opacity duration-100 ease-linear hover:opacity-100 data-[dragging=true]:opacity-100 motion-reduce:transition-none",
+            optionsOpen && "opacity-100",
           )}
         >
           <Tooltip>
@@ -367,52 +389,75 @@ function BlockHandle({
             </TooltipContent>
           </Tooltip>
 
-          <DropdownMenu open={optionsOpen} onOpenChange={setBlockOptionsOpen}>
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <DropdownMenuTrigger
-                    render={
-                      <Button
-                        variant="ghost"
-                        aria-label={t("blockOptions")}
-                        data-slot="block-editor-drag-control"
-                        className="h-[22px] w-[18px] min-w-0 cursor-grab rounded px-0 active:cursor-grabbing"
-                        disabled={!targetAvailable}
-                        draggable={false}
-                        onClick={(event) => {
-                          if (
-                            dragInProgressRef.current ||
-                            Date.now() < suppressMenuUntilRef.current
-                          ) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                          }
-                        }}
-                      >
-                        <DotsSixVerticalIcon className="size-3.5" />
-                      </Button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  aria-label={t("blockOptions")}
+                  aria-expanded={optionsOpen}
+                  aria-haspopup="menu"
+                  data-slot="block-editor-drag-control"
+                  className="h-[22px] w-[18px] min-w-0 cursor-grab rounded px-0 active:cursor-grabbing"
+                  disabled={!targetAvailable}
+                  draggable={targetAvailable}
+                  onDragStart={(event) => {
+                    if (!targetAvailable || optionsOpenRef.current) {
+                      event.preventDefault();
+                      return;
                     }
-                  />
-                }
+                    event.dataTransfer.effectAllowed = "move";
+                  }}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    if (
+                      dragInProgressRef.current ||
+                      Date.now() < suppressMenuUntilRef.current
+                    ) {
+                      event.preventDefault();
+                      return;
+                    }
+                    setBlockOptionsOpen(!optionsOpenRef.current);
+                  }}
+                >
+                  <DotsSixVerticalIcon className="size-3.5" />
+                </Button>
+              }
+            />
+            <TooltipContent
+              side="left"
+              sideOffset={8}
+              className="flex-col items-start gap-1.5 px-3 py-2 text-[13px] leading-5"
+              data-slot="block-editor-drag-tooltip"
+            >
+              <BlockHandleTooltip
+                action={t("dragAction")}
+                detail={t("moveBlockHint")}
               />
-              <TooltipContent
-                side="left"
-                sideOffset={8}
-                className="flex-col items-start gap-1.5 px-3 py-2 text-[13px] leading-5"
-                data-slot="block-editor-drag-tooltip"
-              >
-                <BlockHandleTooltip
-                  action={t("dragAction")}
-                  detail={t("moveBlockHint")}
-                />
-                <BlockHandleTooltip
-                  action={t("clickAction")}
-                  detail={t("showBlockOptionsHint")}
-                />
-              </TooltipContent>
-            </Tooltip>
+              <BlockHandleTooltip
+                action={t("clickAction")}
+                detail={t("showBlockOptionsHint")}
+              />
+            </TooltipContent>
+          </Tooltip>
 
+          <DropdownMenu
+            open={optionsOpen}
+            onOpenChange={setBlockOptionsOpen}
+            triggerId={menuTriggerId}
+          >
+            <DropdownMenuTrigger
+              id={menuTriggerId}
+              nativeButton={false}
+              tabIndex={-1}
+              aria-hidden="true"
+              render={
+                <span
+                  data-slot="block-editor-menu-anchor"
+                  className="pointer-events-none absolute right-0 top-0 h-[22px] w-[18px] opacity-0"
+                />
+              }
+            />
             <DropdownMenuContent
               side="left"
               align="start"
@@ -460,4 +505,9 @@ function BlockHandle({
   );
 }
 
-export { BlockHandle, DotsSixVerticalIcon, setDragHandleLocked };
+export {
+  BlockHandle,
+  DotsSixVerticalIcon,
+  isGripDragOrigin,
+  setDragHandleLocked,
+};
