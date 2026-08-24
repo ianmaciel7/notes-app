@@ -13,6 +13,7 @@ import {
   validateStructureRegistry,
   type WorkspaceStructure,
 } from "./workspace-object-types.ts";
+import { reconcileRequiredStructures } from "./workspace-structure-reconciliation.ts";
 
 const WORKSPACE_OBJECT_STORAGE_KEY = "notes-app:workspace-objects:v1";
 
@@ -211,7 +212,10 @@ function parseWorkspaceObjectSnapshot(raw: string): SnapshotParseResult {
     const { previewUrl: _previewUrl, ...persisted } = entity;
     return persisted;
   }) as WorkspaceEntity[];
-  const structures = structureValidation.value;
+  const structures = reconcileRequiredStructures(
+    createInitialStructureRegistry(),
+    structureValidation.value,
+  );
   if (!entitiesReferenceValidStructures(entities, structures)) {
     return { ok: false, reason: "invalid-record" };
   }

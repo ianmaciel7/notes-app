@@ -90,3 +90,43 @@ test("version 2 rejects malformed structured document bodies", () => {
 
   assert.deepEqual(parsed, { ok: false, reason: "invalid-record" });
 });
+
+test("hydration restores missing required object types without resurrecting removed legacy types", () => {
+  const current = createInitialWorkspaceObjectState();
+  const retainedIds = new Set([
+    "page",
+    "table",
+    "weblink",
+    "tweet",
+    "tag",
+    "query",
+    "book",
+  ]);
+  const storedStructures = current.structures.filter((structure) =>
+    retainedIds.has(structure.id),
+  );
+
+  const parsed = parseWorkspaceObjectSnapshot(
+    JSON.stringify({
+      activeEntityId: null,
+      entities: [],
+      nextId: 1,
+      structures: storedStructures,
+      version: WORKSPACE_OBJECT_SCHEMA_VERSION,
+    }),
+  );
+
+  assert.equal(parsed.ok, true);
+  const restoredIds = parsed.state.structures.map((structure) => structure.id);
+  assert.deepEqual(restoredIds.slice(0, 4), [
+    "page",
+    "table",
+    "task",
+    "weblink",
+  ]);
+  assert.ok(restoredIds.includes("task"));
+  assert.ok(restoredIds.includes("image"));
+  assert.ok(restoredIds.includes("archive"));
+  assert.ok(restoredIds.includes("book"));
+  assert.equal(restoredIds.includes("person"), false);
+});
