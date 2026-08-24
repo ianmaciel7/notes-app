@@ -99,10 +99,19 @@ function BlockEditor({
   } = useBufferedDocumentCommit({ value: externalDocument, onCommit: onChange });
 
   const slashLabelsKey = JSON.stringify(labels.slashMenu);
-  const stableSlashLabels = React.useMemo<BlockEditorLabels["slashMenu"]>(
-    () => JSON.parse(slashLabelsKey) as BlockEditorLabels["slashMenu"],
-    [slashLabelsKey],
-  );
+  const stableSlashLabels = React.useMemo<BlockEditorLabels["slashMenu"]>(() => {
+    const parsedLabels = JSON.parse(
+      slashLabelsKey,
+    ) as Partial<BlockEditorLabels["slashMenu"]>;
+
+    return {
+      ...parsedLabels,
+      smallText: parsedLabels.smallText || t("slashMenu.smallText"),
+      alphabeticalList:
+        parsedLabels.alphabeticalList || t("slashMenu.alphabeticalList"),
+      romanList: parsedLabels.romanList || t("slashMenu.romanList"),
+    } as BlockEditorLabels["slashMenu"];
+  }, [slashLabelsKey, t]);
   const handleCreatePageRequest = React.useCallback((title: string) => {
     createPageRequestRef.current?.(title);
   }, []);
