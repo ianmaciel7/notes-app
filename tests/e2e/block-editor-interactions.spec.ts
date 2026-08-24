@@ -1,35 +1,38 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const workspaceStorageKey = "notes-app:workspace-objects:v1";
 
-async function openPageEditor(page: Page) {
+async function openPageEditor(page: Page, body = "") {
   const errors: string[] = [];
   page.on("console", (message) => {
     if (message.type() === "error") errors.push(message.text());
   });
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.addInitScript((storageKey) => {
-    window.localStorage.setItem(
-      storageKey,
-      JSON.stringify({
-        activeEntityId: "editor-interactions-page",
-        entities: [
-          {
-            body: "",
-            collections: [],
-            createdAt: "2026-01-01T00:00:00.000Z",
-            id: "editor-interactions-page",
-            kind: "document",
-            objectTypeId: "page",
-            tags: [],
-            title: "Editor interactions",
-          },
-        ],
-        nextId: 2,
-        version: 1,
-      }),
-    );
-  }, workspaceStorageKey);
+  await page.addInitScript(
+    ({ storageKey, initialBody }) => {
+      window.localStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          activeEntityId: "editor-interactions-page",
+          entities: [
+            {
+              body: initialBody,
+              collections: [],
+              createdAt: "2026-01-01T00:00:00.000Z",
+              id: "editor-interactions-page",
+              kind: "document",
+              objectTypeId: "page",
+              tags: [],
+              title: "Editor interactions",
+            },
+          ],
+          nextId: 2,
+          version: 1,
+        }),
+      );
+    },
+    { storageKey: workspaceStorageKey, initialBody: body },
+  );
   await page.goto("/pt-BR");
   const workspace = page
     .locator(
@@ -40,6 +43,19 @@ async function openPageEditor(page: Page) {
   const editor = workspace.getByRole("textbox", { name: "Text", exact: true });
   await expect(editor).toBeVisible();
   return { editor, errors, workspace };
+}
+
+async function expectParagraphTexts(editor: Locator, expected: string[]) {
+  await expect
+    .poll(() => editor.locator("p").allTextContents())
+    .toEqual(expected);
+}
+
+async function hoverParagraph(editor: Locator, text: string) {
+  const paragraph = editor.locator("p").filter({ hasText: text }).first();
+  await expect(paragraph).toBeVisible();
+  await paragraph.hover();
+  return paragraph;
 }
 
 test.afterEach(async ({ page }) => {
@@ -67,7 +83,9 @@ test("selection toolbar preserves text while applying and removing a link", asyn
 
   const linkPopover = page.locator('[data-slot="block-editor-link-popover"]');
   await expect(linkPopover).toBeVisible();
-  await linkPopover.getByRole("textbox", { name: "URL do link" }).fill("example.com");
+  await linkPopover
+    .getByRole("textbox", { name: "URL do link" })
+    .fill("example.com");
   await linkPopover.getByRole("button", { name: "Aplicar link" }).click();
 
   const link = editor.locator('a[href="https://example.com"]');
@@ -83,42 +101,70 @@ test("selection toolbar preserves text while applying and removing a link", asyn
   expect(errors).toEqual([]);
 });
 
-test("block handle inserts below or above and opens options without runtime errors", async ({
+test("plus and six-dot grip keep their independent Capacities behaviors", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  const { editor, errors } = await openPageEditor(page);
-
-  await editor.click();
-  await editor.pressSequentially("Primeiro bloco");
-  const paragraphs = editor.locator("p");
-  await expect(paragraphs).toHaveCount(1);
-  await paragraphs.first().hover();
+  const { editor, errors } = await openPageEditor(
+    page,
+    ["Alpha", "Beta", "Gamma"].join("\n"),
+  );
+  await expectParagraphTexts(editor, ["Alpha", "Beta", "Gamma"]);
+  await hoverParagraph(editor, "Alpha");
 
   const handle = page.locator('[data-slot="block-editor-block-handle"]');
-  await expect(handle).toBeVisible();
   const insertControl = handle.getByRole("button", {
     name: "Inserir bloco",
     exact: true,
   });
-  const blockOptions = handle.getByRole("button", {
+  const dragControl = handle.getByRole("button", {
     name: "Opções do bloco",
     exact: true,
   });
+  await expect(handle).toBeVisible();
   await expect(insertControl).toBeVisible();
-  await expect(blockOptions).toBeVisible();
+  await expect(dragControl).toBeVisible();
+  await expect(
+    dragControl.locator('[data-slot="block-editor-six-dot-icon"] circle'),
+  ).toHaveCount(6);
+
+  expect(await insertControl.evaluate((node) => node.draggable)).toBe(false);
+  expect(await dragControl.evaluate((node) => node.draggable)).toBe(true);
+  expect(
+    await insertControl.evaluate((node) =>
+      node.dispatchEvent(
+        new DragEvent("dragstart", { bubbles: true, cancelable: true }),
+      ),
+    ),
+  ).toBe(false);
+
+  const insertBox = await insertControl.boundingBox();
+  const dragBox = await dragControl.boundingBox();
+  expect(insertBox).not.toBeNull();
+  expect(dragBox).not.toBeNull();
+  expect(Math.round(insertBox?.width ?? 0)).toBe(18);
+  expect(Math.round(insertBox?.height ?? 0)).toBe(22);
+  expect(Math.round(dragBox?.width ?? 0)).toBe(18);
+  expect(Math.round(dragBox?.height ?? 0)).toBe(22);
+  expect(dragBox?.x ?? 0).toBeGreaterThan(insertBox?.x ?? 0);
 
   await insertControl.click();
-  await expect(paragraphs).toHaveCount(2);
+  await page.keyboard.type("Below");
+  await expectParagraphTexts(editor, ["Alpha", "Below", "Beta", "Gamma"]);
 
-  await paragraphs.first().hover();
-  await expect(insertControl).toBeVisible();
+  await hoverParagraph(editor, "Alpha");
   await insertControl.click({ modifiers: ["Shift"] });
-  await expect(paragraphs).toHaveCount(3);
+  await page.keyboard.type("Above");
+  await expectParagraphTexts(editor, [
+    "Above",
+    "Alpha",
+    "Below",
+    "Beta",
+    "Gamma",
+  ]);
 
-  await paragraphs.first().hover();
-  await expect(blockOptions).toBeVisible();
-  await blockOptions.click();
+  await hoverParagraph(editor, "Alpha");
+  await dragControl.click();
   const blockMenu = page.locator('[data-slot="block-editor-block-menu"]');
   await expect(blockMenu).toBeVisible();
   await expect(
@@ -127,15 +173,38 @@ test("block handle inserts below or above and opens options without runtime erro
   await expect(
     blockMenu.getByRole("menuitem", { name: "Inserir bloco abaixo" }),
   ).toBeVisible();
-  await expect(
-    blockMenu.getByRole("menuitem", { name: "Cabeçalho 4" }),
-  ).toBeVisible();
-  await expect(
-    blockMenu.getByRole("menuitem", { name: "Duplicar bloco" }),
-  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(blockMenu).toBeHidden();
 
-  await blockMenu.getByRole("menuitem", { name: "Cabeçalho 4" }).click();
-  await expect(editor.locator("h4")).toHaveCount(1);
+  await hoverParagraph(editor, "Alpha");
+  const gamma = editor.locator("p").filter({ hasText: "Gamma" }).first();
+  const gammaBox = await gamma.boundingBox();
+  expect(gammaBox).not.toBeNull();
+  await dragControl.dragTo(gamma, {
+    targetPosition: {
+      x: Math.min(12, Math.max(2, (gammaBox?.width ?? 24) / 4)),
+      y: Math.max(2, (gammaBox?.height ?? 24) - 2),
+    },
+  });
+
+  await expect(blockMenu).toBeHidden();
+  await expect.poll(() => editor.locator("p").allTextContents()).not.toEqual([
+    "Above",
+    "Alpha",
+    "Below",
+    "Beta",
+    "Gamma",
+  ]);
+  const reordered = await editor.locator("p").allTextContents();
+  expect([...reordered].sort()).toEqual(
+    ["Above", "Alpha", "Below", "Beta", "Gamma"].sort(),
+  );
+  expect(reordered.indexOf("Alpha")).toBeGreaterThan(reordered.indexOf("Beta"));
+
+  await hoverParagraph(editor, "Alpha");
+  await dragControl.click();
+  await expect(blockMenu).toBeVisible();
+  await page.keyboard.press("Escape");
   expect(errors).toEqual([]);
 
   await page.setViewportSize({ width: 390, height: 844 });

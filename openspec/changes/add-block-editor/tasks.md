@@ -2,6 +2,7 @@
 
 - [x] 1.1 Keep the exact pinned editor dependency set and vendor-neutral public boundary.
 - [x] 1.2 Keep neutral document validation, normalization, conversion, and persistence contracts.
+- [x] 1.3 Preserve the user-supplied block-handle screenshot and archive-backed tooltip evidence under `docs/references`.
 
 ## 2. Workspace document model and persistence
 
@@ -17,8 +18,9 @@
 
 - [x] 4.1 Preserve shared slash-command catalog behavior.
 - [ ] 4.2 Browser-verify the zero-delay selection BubbleMenu/link-editing contract while preserving selection.
-- [ ] 4.3 Browser-verify the reference-aligned plus/grip contract, top-level drag reorder, plugin metadata lock, and touch/mobile fallback.
-- [x] 4.4 Keep neutral data slots and local shared primitives.
+- [x] 4.3 Implement independent plus/six-dot controls, explicit insertion selection, grip-only drag origin, and post-drag click suppression.
+- [ ] 4.4 Browser-verify insertion order, plus non-drag behavior, actual top-level reordering, grip click, no post-drag menu click, and touch/mobile fallback.
+- [x] 4.5 Keep neutral data slots and local shared primitives.
 
 ## 5. Workspace integration, styling, and copy
 
@@ -29,7 +31,7 @@
 
 ## 6. Automated and browser acceptance
 
-- [x] 6.1 Extend contract/keyboard/formatting tests to H4, horizontal rule, missing DragHandle commands, buffered updates, exact plus/grip behavior, and locale completeness.
+- [x] 6.1 Extend contract/keyboard/formatting tests to H4, horizontal rule, missing DragHandle commands, buffered updates, exact plus/grip behavior, reference-image hash, and locale completeness.
 - [ ] 6.2 Execute Markdown shortcut/paste, selection preservation, insertion/reordering, desktop/mobile persistence, accessibility, reference DOM/screenshots, and runtime-error browser suites.
 
 ## 7. Completion and protected publication

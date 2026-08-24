@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
@@ -12,6 +13,8 @@ const [
   requestSource,
   tasksSource,
   globalsSource,
+  handleReferenceImage,
+  handleReferenceMetadata,
 ] = await Promise.all([
   readFile("src/components/block-editor.tsx", "utf8"),
   readFile("src/components/block-editor-selection-toolbar.tsx", "utf8"),
@@ -21,6 +24,10 @@ const [
   readFile("src/i18n/request.ts", "utf8").catch(() => ""),
   readFile("openspec/changes/add-block-editor/tasks.md", "utf8"),
   readFile("src/app/globals.css", "utf8").catch(() => ""),
+  readFile(
+    "docs/references/assets/capacities-block-handle-2026-08-24.png",
+  ),
+  readFile("docs/references/capacities-block-handle.md", "utf8"),
 ]);
 
 const editorLocales = ["en", "es", "pt-BR"];
@@ -106,17 +113,49 @@ test("drag handle uses the plugin metadata contract instead of missing commands"
   assert.doesNotMatch(handleSource, /locked=\{/);
 });
 
-test("block controls follow the measured Capacities interaction contract", () => {
-  assert.match(handleSource, /data-slot="block-editor-block-handle"/);
+test("plus and six-dot grip have independent reference behaviors", () => {
+  assert.match(handleSource, /function DotsSixVerticalIcon/);
+  assert.equal(
+    (handleSource.match(/<circle /g) ?? []).length,
+    6,
+    "the grip icon must contain exactly six dots",
+  );
   assert.match(handleSource, /data-slot="block-editor-insert-control"/);
   assert.match(handleSource, /data-slot="block-editor-drag-control"/);
-  assert.match(handleSource, /data-slot="block-editor-block-menu"/);
+  assert.match(handleSource, /data-slot="block-editor-six-dot-icon"/);
+  assert.match(handleSource, /draggable=\{false\}/);
+  assert.match(handleSource, /draggable=\{true\}/);
+  assert.match(handleSource, /function isGripDragOrigin/);
+  assert.match(handleSource, /onElementDragStart=\{handleElementDragStart\}/);
+  assert.match(handleSource, /insertPointerActiveRef/);
+  assert.match(handleSource, /event\.preventDefault\(\)/);
   assert.match(handleSource, /event\.shiftKey \? "above" : "below"/);
+  assert.match(handleSource, /setTextSelection\(position \+ 1\)/);
+  assert.match(handleSource, /POST_DRAG_MENU_SUPPRESSION_MS/);
+  assert.match(handleSource, /suppressMenuUntilRef/);
+});
+
+test("block controls keep measured geometry, input mode, and motion contracts", () => {
+  assert.match(handleSource, /data-slot="block-editor-block-handle"/);
+  assert.match(handleSource, /data-slot="block-editor-block-menu"/);
   assert.match(handleSource, /h-\[22px\] w-\[18px\]/);
   assert.match(handleSource, /duration-100/);
   assert.match(handleSource, /motion-reduce:transition-none/);
   assert.match(handleSource, /\(hover: hover\) and \(pointer: fine\)/);
   assert.match(handleSource, /min-width: 768px/);
+});
+
+test("the user-provided handle screenshot remains a hashed project reference", () => {
+  assert.equal(
+    createHash("sha256").update(handleReferenceImage).digest("hex"),
+    "f1d0cde8444e16504a600cd3c640941274789a1aa81bb1e7fcd14a07f20a721c",
+  );
+  assert.match(handleReferenceMetadata, /90 × 57 px/);
+  assert.match(handleReferenceMetadata, /f1d0cde8444e16504a600cd3c6409412/);
+  assert.match(handleReferenceMetadata, /Click.*insert block below/is);
+  assert.match(handleReferenceMetadata, /Shift-click.*insert block above/is);
+  assert.match(handleReferenceMetadata, /Drag.*move block/is);
+  assert.match(handleReferenceMetadata, /Click.*block options/is);
 });
 
 test("editor styling keeps the measured typography and focus contracts", () => {

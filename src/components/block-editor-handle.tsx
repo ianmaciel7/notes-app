@@ -6,7 +6,6 @@ import {
   ArrowDownIcon,
   ArrowUpIcon,
   CopyIcon,
-  GripVerticalIcon,
   PlusIcon,
   Trash2Icon,
 } from "lucide-react";
@@ -26,6 +25,27 @@ import { cn } from "@/lib/utils";
 type EditorCommandCatalog = ReturnType<typeof createBlockCommandCatalog>;
 type HandleTarget = { pos: number; nodeSize: number };
 type InsertDirection = "above" | "below";
+
+const POST_DRAG_MENU_SUPPRESSION_MS = 160;
+
+function DotsSixVerticalIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      aria-hidden="true"
+      data-slot="block-editor-six-dot-icon"
+      {...props}
+    >
+      <circle cx="5" cy="3.5" r="1.15" />
+      <circle cx="11" cy="3.5" r="1.15" />
+      <circle cx="5" cy="8" r="1.15" />
+      <circle cx="11" cy="8" r="1.15" />
+      <circle cx="5" cy="12.5" r="1.15" />
+      <circle cx="11" cy="12.5" r="1.15" />
+    </svg>
+  );
+}
 
 function useDesktopDragHandle() {
   const [enabled, setEnabled] = React.useState(false);
@@ -63,6 +83,36 @@ function setDragHandleLocked(editor: Editor, locked: boolean) {
   editor.commands.setMeta("lockDragHandle", locked);
 }
 
+function isGripDragOrigin(event: DragEvent) {
+  const target = event.target;
+  return (
+    target instanceof Element &&
+    target.closest('[data-slot="block-editor-drag-control"]') !== null
+  );
+}
+
+function suppressParentDragForPointer(
+  event: React.PointerEvent<HTMLButtonElement>,
+  onRelease: () => void,
+) {
+  const dragElement = event.currentTarget.closest(".block-editor-drag-handle");
+  const ownerDocument = event.currentTarget.ownerDocument;
+
+  if (dragElement instanceof HTMLElement) dragElement.draggable = false;
+
+  const release = () => {
+    ownerDocument.removeEventListener("pointerup", release, true);
+    ownerDocument.removeEventListener("pointercancel", release, true);
+    if (dragElement instanceof HTMLElement && dragElement.isConnected) {
+      dragElement.draggable = true;
+    }
+    onRelease();
+  };
+
+  ownerDocument.addEventListener("pointerup", release, true);
+  ownerDocument.addEventListener("pointercancel", release, true);
+}
+
 function BlockHandle({
   editor,
   blockCommands,
@@ -75,6 +125,9 @@ function BlockHandle({
   const targetRef = React.useRef<HandleTarget | null>(null);
   const targetAvailableRef = React.useRef(false);
   const optionsOpenRef = React.useRef(false);
+  const insertPointerActiveRef = React.useRef(false);
+  const dragInProgressRef = React.useRef(false);
+  const suppressMenuUntilRef = React.useRef(0);
   const [targetAvailable, setTargetAvailable] = React.useState(false);
   const [optionsOpen, setOptionsOpen] = React.useState(false);
 
@@ -93,13 +146,40 @@ function BlockHandle({
 
   const setBlockOptionsOpen = React.useCallback(
     (open: boolean) => {
-      if (open && !targetRef.current) return;
+      if (
+        open &&
+        (!targetRef.current ||
+          dragInProgressRef.current ||
+          Date.now() < suppressMenuUntilRef.current)
+      ) {
+        return;
+      }
       optionsOpenRef.current = open;
       setOptionsOpen(open);
       setDragHandleLocked(editor, open);
     },
     [editor],
   );
+
+  const handleElementDragStart = React.useCallback(
+    (event: DragEvent) => {
+      if (insertPointerActiveRef.current || !isGripDragOrigin(event)) {
+        event.preventDefault();
+        return;
+      }
+
+      dragInProgressRef.current = true;
+      suppressMenuUntilRef.current = Number.POSITIVE_INFINITY;
+      if (optionsOpenRef.current) setBlockOptionsOpen(false);
+    },
+    [setBlockOptionsOpen],
+  );
+
+  const handleElementDragEnd = React.useCallback(() => {
+    dragInProgressRef.current = false;
+    suppressMenuUntilRef.current = Date.now() + POST_DRAG_MENU_SUPPRESSION_MS;
+    setDragHandleLocked(editor, false);
+  }, [editor]);
 
   React.useEffect(
     () => () => {
@@ -116,7 +196,12 @@ function BlockHandle({
     editor
       .chain()
       .focus()
-      .insertContentAt(position, { type: "paragraph" }, { updateSelection: true })
+      .insertContentAt(
+        position,
+        { type: "paragraph" },
+        { updateSelection: false },
+      )
+      .setTextSelection(position + 1)
       .run();
     if (optionsOpenRef.current) setBlockOptionsOpen(false);
   }
@@ -175,13 +260,15 @@ function BlockHandle({
       editor={editor}
       nested={false}
       onNodeChange={handleNodeChange}
+      onElementDragStart={handleElementDragStart}
+      onElementDragEnd={handleElementDragEnd}
       className="block-editor-drag-handle"
     >
       <div
         data-slot="block-editor-block-handle"
         data-menu-open={optionsOpen || undefined}
         className={cn(
-          "-mr-1 mt-[3px] flex items-center gap-0.5 text-muted-foreground opacity-50 transition-opacity duration-100 ease-linear hover:opacity-100 motion-reduce:transition-none",
+          "-mr-1 mt-[3px] flex items-center gap-0 text-muted-foreground opacity-50 transition-opacity duration-100 ease-linear hover:opacity-100 motion-reduce:transition-none",
           optionsOpen && "opacity-100",
         )}
       >
@@ -197,12 +284,19 @@ function BlockHandle({
             event.preventDefault();
             event.stopPropagation();
           }}
-          onPointerDown={(event) => event.stopPropagation()}
-          onClick={(event) =>
-            insertParagraph(event.shiftKey ? "above" : "below")
-          }
+          onPointerDown={(event) => {
+            insertPointerActiveRef.current = true;
+            suppressParentDragForPointer(event, () => {
+              insertPointerActiveRef.current = false;
+            });
+            event.stopPropagation();
+          }}
+          onClick={(event) => {
+            event.stopPropagation();
+            insertParagraph(event.shiftKey ? "above" : "below");
+          }}
         >
-          <PlusIcon className="size-3.5" />
+          <PlusIcon className="size-3.5 stroke-[1.35]" />
         </Button>
 
         <DropdownMenu open={optionsOpen} onOpenChange={setBlockOptionsOpen}>
@@ -215,8 +309,18 @@ function BlockHandle({
                 data-slot="block-editor-drag-control"
                 className="h-[22px] w-[18px] min-w-0 cursor-grab rounded px-0 active:cursor-grabbing"
                 disabled={!targetAvailable}
+                draggable={true}
+                onClick={(event) => {
+                  if (
+                    dragInProgressRef.current ||
+                    Date.now() < suppressMenuUntilRef.current
+                  ) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                  }
+                }}
               >
-                <GripVerticalIcon className="size-3.5" />
+                <DotsSixVerticalIcon className="size-3.5" />
               </Button>
             }
           />
@@ -266,4 +370,9 @@ function BlockHandle({
   );
 }
 
-export { BlockHandle, setDragHandleLocked };
+export {
+  BlockHandle,
+  DotsSixVerticalIcon,
+  isGripDragOrigin,
+  setDragHandleLocked,
+};

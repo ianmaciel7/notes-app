@@ -35,19 +35,25 @@ Typing the slash trigger in an editable block SHALL open a localized shared comm
 An editable selection SHALL expose supported formatting/link actions immediately and SHALL preserve the command target while focus moves through local menus and link controls.
 
 ### Requirement: Reference-aligned top-level block controls
-Editable top-level blocks SHALL expose separate `18x22px` insertion and grip controls with a `100ms` state transition, while nested list content remains part of its parent drag target.
+Editable top-level blocks SHALL expose separate `18x22px` plus and six-dot controls with a `100ms` state transition, while nested list content remains part of its parent drag target.
 
 #### Scenario: Plus control is clicked
 - **WHEN** the user clicks the plus control normally
-- **THEN** one empty paragraph SHALL be inserted immediately below the targeted top-level block and receive the insertion selection.
+- **THEN** one empty paragraph SHALL be inserted immediately below the targeted top-level block and the text selection SHALL move inside the new paragraph.
 - **WHEN** the user Shift-clicks the plus control
-- **THEN** one empty paragraph SHALL be inserted immediately above the targeted top-level block.
+- **THEN** one empty paragraph SHALL be inserted immediately above the targeted top-level block and the text selection SHALL move inside the new paragraph.
 
-#### Scenario: Grip is used
-- **WHEN** the user drags the grip
+#### Scenario: Plus control receives a drag gesture
+- **WHEN** a drag gesture begins from the plus control or any non-grip part of the positioned handle
+- **THEN** the drag SHALL be cancelled and the document order SHALL remain unchanged.
+
+#### Scenario: Six-dot grip is used
+- **WHEN** the user drags the six-dot grip
 - **THEN** the targeted top-level block SHALL be reorderable without making nested list items independent targets.
-- **WHEN** the user clicks the grip
-- **THEN** a localized block-options menu SHALL open without calling editor commands that are unavailable in the pinned React DragHandle integration.
+- **WHEN** the user clicks the six-dot grip without dragging
+- **THEN** a localized block-options menu SHALL open without calling editor commands unavailable in the pinned React DragHandle integration.
+- **WHEN** a drag completes or is cancelled
+- **THEN** the resulting pointer/click sequence SHALL NOT open the block-options menu until the user performs a new intentional click.
 
 #### Scenario: Touch layout is active
 - **WHEN** hover/fine-pointer desktop input is unavailable
