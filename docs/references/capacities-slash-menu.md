@@ -20,6 +20,16 @@ This document records the user-supplied Capacities slash-command screenshot and 
 
 The screenshot confirms the visible menu surface, ordering, labels, active row treatment, icon style, footer legend, and that `/` can open after existing text followed by whitespace.
 
+### Positioning regression evidence
+
+A later local screenshot captured the Notes App menu incorrectly mounted at the viewport origin instead of beside the slash caret.
+
+- Regression source dimensions: **1906 × 945 px**.
+- Stored regression asset: `docs/references/assets/capacities-slash-menu-position-regression-2026-08-24.webp`.
+- Stored regression WebP SHA-256: `a7e3ab077b0133e55558c43c41a5eca5afd86a3e8b745a1fe1fc6364a2029870`.
+
+Acceptance requires the floating surface to use the current slash/caret geometry as its anchor, remain inside the viewport with a small gutter, and never fall back visibly to `(0,0)` when the suggestion decoration rectangle is temporarily unavailable.
+
 ## Archived source evidence
 
 The canonical project archive confirms these independent first-slice block commands and labels:
@@ -37,6 +47,14 @@ The archived source models hierarchy and list style independently. Notes App kee
 - `/` after whitespace in an existing text block opens the command menu, e.g. `aaa /`.
 - `/` typed directly inside a word does not open the menu, e.g. `aaa/`.
 - The command query begins after `/` and remains keyboard-operable with Arrow Up/Down, Enter, and Escape.
+
+## Position contract
+
+- Prefer the live suggestion decoration rectangle when it contains usable geometry.
+- If that rectangle is unavailable or collapses to viewport origin, fall back to ProseMirror `coordsAtPos(range.to)`.
+- Position the menu in viewport coordinates (`fixed`) next to the slash/caret.
+- Clamp horizontal and vertical placement to an 8 px viewport gutter.
+- Prefer placement below the caret; flip above only when the measured menu cannot fit below.
 
 ## Surface contract
 
