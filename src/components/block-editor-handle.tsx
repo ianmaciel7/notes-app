@@ -1,6 +1,6 @@
 "use client";
 
-import { offset } from "@floating-ui/dom";
+import { offset, type VirtualElement } from "@floating-ui/dom";
 import type { Editor } from "@tiptap/core";
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import {
@@ -36,7 +36,7 @@ type InsertDirection = "above" | "below";
 const POST_DRAG_MENU_SUPPRESSION_MS = 160;
 const HANDLE_POSITION_CONFIG = {
   placement: "left-start" as const,
-  strategy: "absolute" as const,
+  strategy: "fixed" as const,
   middleware: [offset(2)],
 };
 
@@ -93,6 +93,19 @@ function targetSelectionPosition(editor: Editor, target: HandleTarget) {
 function setDragHandleLocked(editor: Editor, locked: boolean) {
   if (editor.isDestroyed) return;
   editor.commands.setMeta("lockDragHandle", locked);
+}
+
+function createTargetVirtualElement(
+  editor: Editor,
+  target: HandleTarget | null,
+): VirtualElement | null {
+  if (!target || editor.isDestroyed) return null;
+  const dom = editor.view.nodeDOM(target.pos);
+  if (!(dom instanceof Element)) return null;
+  return {
+    contextElement: dom,
+    getBoundingClientRect: () => dom.getBoundingClientRect(),
+  };
 }
 
 function suppressParentDragForPointer(
@@ -164,6 +177,11 @@ function BlockHandle({
     [],
   );
 
+  const getReferencedVirtualElement = React.useCallback(
+    () => createTargetVirtualElement(editor, targetRef.current),
+    [editor],
+  );
+
   const setBlockOptionsOpen = React.useCallback(
     (open: boolean) => {
       if (
@@ -191,8 +209,7 @@ function BlockHandle({
       dragInProgressRef.current = true;
       suppressMenuUntilRef.current = Number.POSITIVE_INFINITY;
       setDragging(true);
-      editor.view.dom.ownerDocument.documentElement.dataset.blockEditorDragging =
-        "true";
+      editor.view.dom.style.cursor = "grabbing";
       if (optionsOpenRef.current) setBlockOptionsOpen(false);
     },
     [editor, setBlockOptionsOpen],
@@ -202,13 +219,13 @@ function BlockHandle({
     dragInProgressRef.current = false;
     suppressMenuUntilRef.current = Date.now() + POST_DRAG_MENU_SUPPRESSION_MS;
     setDragging(false);
-    delete editor.view.dom.ownerDocument.documentElement.dataset.blockEditorDragging;
+    editor.view.dom.style.removeProperty("cursor");
     setDragHandleLocked(editor, false);
   }, [editor]);
 
   React.useEffect(
     () => () => {
-      delete editor.view.dom.ownerDocument.documentElement.dataset.blockEditorDragging;
+      editor.view.dom.style.removeProperty("cursor");
       setDragHandleLocked(editor, false);
     },
     [editor],
@@ -286,6 +303,7 @@ function BlockHandle({
       editor={editor}
       nested={false}
       computePositionConfig={HANDLE_POSITION_CONFIG}
+      getReferencedVirtualElement={getReferencedVirtualElement}
       onNodeChange={handleNodeChange}
       onElementDragStart={handleElementDragStart}
       onElementDragEnd={handleElementDragEnd}
