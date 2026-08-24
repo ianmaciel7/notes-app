@@ -112,6 +112,7 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
   await expectParagraphTexts(editor, ["Alpha", "Beta", "Gamma"]);
   const alpha = await hoverParagraph(editor, "Alpha");
 
+  const dragRoot = page.locator(".block-editor-drag-handle");
   const handle = page.locator('[data-slot="block-editor-block-handle"]');
   const insertControl = handle.getByRole("button", {
     name: "Inserir bloco",
@@ -121,15 +122,18 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
     name: "Opções do bloco",
     exact: true,
   });
+  const menuAnchor = handle.locator('[data-slot="block-editor-menu-anchor"]');
   await expect(handle).toBeVisible();
   await expect(insertControl).toBeVisible();
   await expect(dragControl).toBeVisible();
+  await expect(menuAnchor).toHaveCount(1);
   await expect(
     dragControl.locator('[data-slot="block-editor-six-dot-icon"] circle'),
   ).toHaveCount(6);
 
+  expect(await dragRoot.evaluate((node) => node.draggable)).toBe(true);
   expect(await insertControl.evaluate((node) => node.draggable)).toBe(false);
-  expect(await dragControl.evaluate((node) => node.draggable)).toBe(false);
+  expect(await dragControl.evaluate((node) => node.draggable)).toBe(true);
 
   const alphaBox = await alpha.boundingBox();
   const handleBox = await handle.boundingBox();
