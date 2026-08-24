@@ -208,6 +208,7 @@ function BlockHandle({
 
       dragInProgressRef.current = true;
       suppressMenuUntilRef.current = Number.POSITIVE_INFINITY;
+      setDragHandleLocked(editor, true);
       setDragging(true);
       editor.view.dom.style.cursor = "grabbing";
       if (optionsOpenRef.current) setBlockOptionsOpen(false);
