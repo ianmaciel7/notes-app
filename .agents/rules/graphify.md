@@ -1,14 +1,23 @@
-# Graphify Rule
+# Graphify & Graph Engine Navigation
 
 trigger: always_on
 
-Consult the Graphify knowledge graph at `graphify-out/` for codebase and architecture questions.
+All agents and subagents MUST use the Graphify knowledge graph and Graph Engine as the mandatory primary layer for codebase understanding, architecture exploration, dependency mapping, and impact analysis.
 
-## Graphify
+## Mandatory Policy
 
-Use Graphify as the primary codebase navigation and architecture discovery layer.
+1. **Always Consult Graph Engine First**:
+   - Before performing repository exploration, planning changes, or analyzing cross-module dependencies, consult the Graphify knowledge graph at `graphify-out/` and use Graphify tools/commands (`graphify query`, `graphify explain`, `graphify path`).
+   - Read `graphify-out/GRAPH_REPORT.md` when high-level architectural context, god nodes, or community boundaries are needed.
 
-- Before broad repository exploration, prefer `graphify query`, `graphify explain`, or `graphify path`.
-- Use Graphify to narrow candidate files, then read the actual source before changing behavior.
-- Raw repository search remains allowed for exact symbols, missing graph coverage, stale graph evidence, Graphify failures, and source-code verification.
-- Graph maintenance is handled by repository hooks and CI; do not perform unnecessary full rebuilds.
+2. **Impact & Dependency Analysis**:
+   - Trace callers, callees, component relationships, and data flows through the knowledge graph prior to modifying components or server routes.
+   - Use the graph engine to prevent unintended side effects across dependent modules.
+
+3. **Narrowing Candidates & Verification**:
+   - Use Graphify to locate and narrow candidate files and symbols.
+   - Always verify active source files before applying edits.
+   - Fall back to exact code grep or symbol search only for exact string verification, test fixtures, or when inspecting code not yet indexed in the graph.
+
+4. **Maintenance**:
+   - Keep the knowledge graph up-to-date using `pnpm run graphify:build` or `graphify build` when architectural or file relationships change significantly.
