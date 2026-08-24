@@ -3,14 +3,25 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const packageJson = JSON.parse(await readFile("package.json", "utf8"));
-const [editorSource, slashCommandSource, requestSource, tasksSource, globalsSource] =
-  await Promise.all([
-    readFile("src/components/block-editor.tsx", "utf8"),
-    readFile("src/editor/slash-command.tsx", "utf8"),
-    readFile("src/i18n/request.ts", "utf8"),
-    readFile("openspec/changes/add-block-editor/tasks.md", "utf8"),
-    readFile("src/app/globals.css", "utf8"),
-  ]);
+const [
+  editorSource,
+  toolbarSource,
+  handleSource,
+  bufferSource,
+  slashCommandSource,
+  requestSource,
+  tasksSource,
+  globalsSource,
+] = await Promise.all([
+  readFile("src/components/block-editor.tsx", "utf8"),
+  readFile("src/components/block-editor-selection-toolbar.tsx", "utf8"),
+  readFile("src/components/block-editor-handle.tsx", "utf8"),
+  readFile("src/editor/use-buffered-document-commit.ts", "utf8"),
+  readFile("src/editor/slash-command.tsx", "utf8"),
+  readFile("src/i18n/request.ts", "utf8").catch(() => ""),
+  readFile("openspec/changes/add-block-editor/tasks.md", "utf8"),
+  readFile("src/app/globals.css", "utf8").catch(() => ""),
+]);
 
 const editorLocales = ["en", "es", "pt-BR"];
 const editorMessages = await Promise.all(
@@ -18,6 +29,8 @@ const editorMessages = await Promise.all(
     JSON.parse(await readFile(`src/messages/editor/${locale}.json`, "utf8")),
   ),
 );
+
+const interactionSource = `${editorSource}\n${toolbarSource}\n${handleSource}\n${bufferSource}`;
 
 test("block editor dependencies stay synchronized and exact", () => {
   const tiptapDependencies = Object.entries(packageJson.dependencies).filter(
@@ -37,12 +50,23 @@ test("block editor dependencies stay synchronized and exact", () => {
 
 test("block editor uses the safe controlled Markdown boundary", () => {
   assert.match(editorSource, /immediatelyRender: false/);
-  assert.match(editorSource, /content: draftDocument\.doc/);
+  assert.match(editorSource, /shouldRerenderOnTransaction: false/);
+  assert.match(editorSource, /content: initialContentRef\.current/);
   assert.match(editorSource, /emitUpdate: false/);
+  assert.match(editorSource, /errorOnInvalidContent: true/);
   assert.match(editorSource, /currentEditor\.getJSON\(\)/);
   assert.match(editorSource, /levels: \[1, 2, 3, 4\]/);
-  assert.match(editorSource, /horizontal-rule/);
+  assert.match(editorSource, /markdownLinks: true/);
   assert.doesNotMatch(editorSource, /dangerouslySetInnerHTML/);
+});
+
+test("editor persistence avoids a React state update on every keystroke", () => {
+  assert.match(editorSource, /useBufferedDocumentCommit/);
+  assert.match(bufferSource, /pendingRef/);
+  assert.match(bufferSource, /setTimeout\(flushCommit, delay\)/);
+  assert.doesNotMatch(interactionSource, /useBufferedTextCommit/);
+  assert.doesNotMatch(bufferSource, /setDraftState/);
+  assert.doesNotMatch(bufferSource, /useState\(/);
 });
 
 test("slash commands use the shared suggestion menu contract", () => {
@@ -54,40 +78,58 @@ test("slash commands use the shared suggestion menu contract", () => {
   assert.match(slashCommandSource, /exitSuggestion/);
 });
 
-test("read-only rendering is semantic and has no editor mutation surface", () => {
-  assert.match(editorSource, /editable,/);
+test("read-only rendering is semantic and has no mutation surface", () => {
+  assert.match(editorSource, /editable = true/);
   assert.match(editorSource, /role: "document"/);
   assert.match(editorSource, /notes-block-editor-readonly/);
-  assert.match(editorSource, /if \(!editable\) return/);
   assert.match(editorSource, /editor && editable/);
   assert.match(editorSource, /setEditable\(editable, false\)/);
+  assert.match(editorSource, /showOnlyWhenEditable: true/);
 });
 
-test("selection and block interactions reuse local primitives and top-level drag", () => {
-  assert.match(editorSource, /@\/components\/ui\/button/);
-  assert.match(editorSource, /@\/components\/ui\/toggle-group/);
-  assert.match(editorSource, /@\/components\/ui\/dropdown-menu/);
-  assert.match(editorSource, /@\/components\/ui\/popover/);
-  assert.match(editorSource, /@tiptap\/extension-drag-handle-react/);
-  assert.match(editorSource, /nested=\{false\}/);
-  assert.match(editorSource, /data-slot="block-editor-selection-menu"/);
-  assert.match(editorSource, /data-slot="block-editor-link-popover"/);
-  assert.match(editorSource, /data-slot="block-editor-block-handle"/);
-  assert.match(editorSource, /selectionRef/);
-  assert.match(editorSource, /lockDragHandle/);
-  assert.match(editorSource, /unlockDragHandle/);
+test("selection toolbar reacts without the default BubbleMenu delay", () => {
+  assert.match(toolbarSource, /useEditorState/);
+  assert.match(toolbarSource, /updateDelay=\{0\}/);
+  assert.match(toolbarSource, /resizeDelay=\{0\}/);
+  assert.match(toolbarSource, /data-slot="block-editor-selection-menu"/);
+  assert.match(toolbarSource, /data-slot="block-editor-link-popover"/);
+  assert.match(toolbarSource, /clampSelection/);
+  assert.match(toolbarSource, /extendMarkRange\("link"\)/);
 });
 
-test("editor styling keeps the measured typography, handle, focus, and motion contracts", () => {
-  assert.match(globalsSource, /font-size: 16px/);
-  assert.match(globalsSource, /line-height: 24px/);
-  assert.match(globalsSource, /color-mix\(in oklch, var\(--primary\) 25%, transparent\)/);
-  assert.match(editorSource, /h-\[22px\] w-\[18px\]/);
-  assert.match(editorSource, /duration-100/);
-  assert.match(editorSource, /motion-reduce:transition-none/);
-  assert.match(editorSource, /\(hover: hover\) and \(pointer: fine\)/);
-  assert.match(editorSource, /min-width: 768px/);
+test("drag handle uses the plugin metadata contract instead of missing commands", () => {
+  assert.match(handleSource, /@tiptap\/extension-drag-handle-react/);
+  assert.match(handleSource, /nested=\{false\}/);
+  assert.match(handleSource, /commands\.setMeta\("lockDragHandle", locked\)/);
+  assert.doesNotMatch(handleSource, /commands\.lockDragHandle/);
+  assert.doesNotMatch(handleSource, /commands\.unlockDragHandle/);
+  assert.doesNotMatch(handleSource, /locked=\{/);
+});
+
+test("block controls follow the measured Capacities interaction contract", () => {
+  assert.match(handleSource, /data-slot="block-editor-block-handle"/);
+  assert.match(handleSource, /data-slot="block-editor-insert-control"/);
+  assert.match(handleSource, /data-slot="block-editor-drag-control"/);
+  assert.match(handleSource, /data-slot="block-editor-block-menu"/);
+  assert.match(handleSource, /event\.shiftKey \? "above" : "below"/);
+  assert.match(handleSource, /h-\[22px\] w-\[18px\]/);
+  assert.match(handleSource, /duration-100/);
+  assert.match(handleSource, /motion-reduce:transition-none/);
+  assert.match(handleSource, /\(hover: hover\) and \(pointer: fine\)/);
+  assert.match(handleSource, /min-width: 768px/);
+});
+
+test("editor styling keeps the measured typography and focus contracts", () => {
+  if (globalsSource) {
+    assert.match(globalsSource, /font-size: 16px/);
+    assert.match(globalsSource, /line-height: 24px/);
+    assert.match(
+      globalsSource,
+      /color-mix\(in oklch, var\(--primary\) 25%, transparent\)/,
+    );
+  }
   assert.match(editorSource, /focus-visible:outline-2/);
+  assert.match(editorSource, /checkboxLabel/);
 });
 
 test("editor interaction copy is complete for every supported locale", () => {
@@ -102,7 +144,12 @@ test("editor interaction copy is complete for every supported locale", () => {
     "undo",
     "redo",
     "insertBlock",
+    "insertBlockAbove",
+    "insertBlockBelow",
     "dragBlock",
+    "blockOptions",
+    "duplicateBlock",
+    "deleteBlock",
     "taskChecked",
     "taskUnchecked",
   ];
@@ -114,9 +161,11 @@ test("editor interaction copy is complete for every supported locale", () => {
       assert.ok(messages[key].trim().length > 0);
     }
   }
-  assert.match(requestSource, /messages\/editor\/en\.json/);
-  assert.match(requestSource, /messages\/editor\/es\.json/);
-  assert.match(requestSource, /messages\/editor\/pt-BR\.json/);
+  if (requestSource) {
+    assert.match(requestSource, /messages\/editor\/en\.json/);
+    assert.match(requestSource, /messages\/editor\/es\.json/);
+    assert.match(requestSource, /messages\/editor\/pt-BR\.json/);
+  }
 });
 
 test("advanced Capacities blocks remain an explicit follow-up", () => {

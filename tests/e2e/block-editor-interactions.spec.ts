@@ -51,7 +51,7 @@ test.afterEach(async ({ page }) => {
     .catch(() => undefined);
 });
 
-test("selection toolbar keeps the selected text while applying and removing a link", async ({
+test("selection toolbar preserves text while applying and removing a link", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -83,7 +83,7 @@ test("selection toolbar keeps the selected text while applying and removing a li
   expect(errors).toEqual([]);
 });
 
-test("top-level handle reuses the block catalog and touch layout hides drag affordances", async ({
+test("block handle inserts below or above and opens options without runtime errors", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -91,18 +91,53 @@ test("top-level handle reuses the block catalog and touch layout hides drag affo
 
   await editor.click();
   await editor.pressSequentially("Primeiro bloco");
-  await editor.locator("p").first().hover();
+  const paragraphs = editor.locator("p");
+  await expect(paragraphs).toHaveCount(1);
+  await paragraphs.first().hover();
 
   const handle = page.locator('[data-slot="block-editor-block-handle"]');
   await expect(handle).toBeVisible();
-  await expect(handle.getByRole("button", { name: "Inserir bloco" })).toBeVisible();
-  await expect(handle.getByRole("img", { name: "Arrastar bloco" })).toBeVisible();
+  const insertControl = handle.getByRole("button", {
+    name: "Inserir bloco",
+    exact: true,
+  });
+  const blockOptions = handle.getByRole("button", {
+    name: "Opções do bloco",
+    exact: true,
+  });
+  await expect(insertControl).toBeVisible();
+  await expect(blockOptions).toBeVisible();
 
-  await handle.getByRole("button", { name: "Inserir bloco" }).click();
-  await page.getByRole("menuitem", { name: "Cabeçalho 4" }).click();
+  await insertControl.click();
+  await expect(paragraphs).toHaveCount(2);
+
+  await paragraphs.first().hover();
+  await expect(insertControl).toBeVisible();
+  await insertControl.click({ modifiers: ["Shift"] });
+  await expect(paragraphs).toHaveCount(3);
+
+  await paragraphs.first().hover();
+  await expect(blockOptions).toBeVisible();
+  await blockOptions.click();
+  const blockMenu = page.locator('[data-slot="block-editor-block-menu"]');
+  await expect(blockMenu).toBeVisible();
+  await expect(
+    blockMenu.getByRole("menuitem", { name: "Inserir bloco acima" }),
+  ).toBeVisible();
+  await expect(
+    blockMenu.getByRole("menuitem", { name: "Inserir bloco abaixo" }),
+  ).toBeVisible();
+  await expect(
+    blockMenu.getByRole("menuitem", { name: "Cabeçalho 4" }),
+  ).toBeVisible();
+  await expect(
+    blockMenu.getByRole("menuitem", { name: "Duplicar bloco" }),
+  ).toBeVisible();
+
+  await blockMenu.getByRole("menuitem", { name: "Cabeçalho 4" }).click();
   await expect(editor.locator("h4")).toHaveCount(1);
+  expect(errors).toEqual([]);
 
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(handle).toBeHidden();
-  expect(errors).toEqual([]);
 });

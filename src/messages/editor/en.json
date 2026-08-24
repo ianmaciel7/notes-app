@@ -9,7 +9,12 @@
   "undo": "Undo",
   "redo": "Redo",
   "insertBlock": "Insert block",
-  "dragBlock": "Drag block",
+  "insertBlockAbove": "Insert block above",
+  "insertBlockBelow": "Insert block below",
+  "dragBlock": "Drag to move; click for block options",
+  "blockOptions": "Block options",
+  "duplicateBlock": "Duplicate block",
+  "deleteBlock": "Delete block",
   "taskChecked": "Completed task",
   "taskUnchecked": "Open task"
 }

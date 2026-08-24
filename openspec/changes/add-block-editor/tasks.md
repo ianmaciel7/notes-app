@@ -11,12 +11,13 @@
 
 - [x] 3.1 Align supported first-slice commands and Markdown input/import/export with paragraph, headings H1-H4, bold, italic, inline code, link, bullet/ordered/task list, blockquote, code block, horizontal rule, undo/redo, and keyboard behavior.
 - [x] 3.2 Render `editable={false}` as semantic read-only content without mutation callbacks, cursor affordances, menus, or handles.
+- [x] 3.3 Remove per-keystroke React draft state, explicitly disable transaction-wide rerenders, and keep external synchronization non-emitting.
 
 ## 4. Block interaction surfaces
 
 - [x] 4.1 Preserve shared slash-command catalog behavior.
-- [x] 4.2 Complete the selection BubbleMenu/link-editing contract while preserving selection.
-- [x] 4.3 Complete top-level insertion/drag handles with touch/mobile alternatives.
+- [ ] 4.2 Browser-verify the zero-delay selection BubbleMenu/link-editing contract while preserving selection.
+- [ ] 4.3 Browser-verify the reference-aligned plus/grip contract, top-level drag reorder, plugin metadata lock, and touch/mobile fallback.
 - [x] 4.4 Keep neutral data slots and local shared primitives.
 
 ## 5. Workspace integration, styling, and copy
@@ -28,8 +29,8 @@
 
 ## 6. Automated and browser acceptance
 
-- [x] 6.1 Extend contract/keyboard/formatting tests to H4 and horizontal rule where supported.
-- [ ] 6.2 Validate Markdown shortcuts/paste, selection preservation, top-level insertion/reordering, desktop/mobile persistence, accessibility, and reference DOM/screenshots.
+- [x] 6.1 Extend contract/keyboard/formatting tests to H4, horizontal rule, missing DragHandle commands, buffered updates, exact plus/grip behavior, and locale completeness.
+- [ ] 6.2 Execute Markdown shortcut/paste, selection preservation, insertion/reordering, desktop/mobile persistence, accessibility, reference DOM/screenshots, and runtime-error browser suites.
 
 ## 7. Completion and protected publication
 

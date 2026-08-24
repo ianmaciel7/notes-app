@@ -1,62 +1,69 @@
 ## Context
 
-The merged object lifecycle stores Page, Atomic note, and Quote bodies as structured documents behind a narrow client editor boundary. The authenticated reference exposes semantic blocks, block commands, selection tools, top-level insertion/reordering, and read-only rendering. The current public Capacities documentation also documents Heading 4 and a broader advanced-block catalog than this first slice.
+Page, Atomic note, and Quote already persist a Notes App-owned structured document behind a client-only Tiptap boundary. The reference exposes semantic blocks, selection tools, a two-part top-level block handle, insertion/reordering, and read-only rendering. The current public documentation also includes Heading 4 and a broader advanced-block catalog than this first slice.
 
-The implementation must stay inside a narrow client boundary in Next.js/React, keep titles and metadata outside the document, and avoid leaking an editor vendor into the Notes App domain API.
+The project archive is UI/source evidence, not proof of Capacities' private editor or storage implementation. The verified reference handle uses separate `18x22px` plus and grip controls: normal plus click inserts below, Shift-click inserts above, the grip drags, and grip click opens block options.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Own a validated, versioned JSON document contract independent of rendered HTML and Tiptap types.
-- Provide a structured editor for Page, Atomic note, and Quote with the first-slice block/mark set and keyboard workflows.
-- Support headings H1-H4 in the first slice so the supported contract matches the documented heading range already accepted by the current neutral schema.
-- Preserve Markdown as a validated interchange format and Markdown-style input shortcuts without storing Markdown strings as canonical content.
-- Render an accessible semantic document with no mutation affordances when `editable` is false.
+- Keep a validated, versioned document contract independent of rendered HTML and Tiptap types.
+- Support paragraph, H1-H4, first-slice marks/lists/quotes/code/horizontal rule, Markdown interchange, and keyboard behavior.
+- Preserve selection through formatting and link editing.
+- Match the confirmed two-part desktop block-handle interaction while retaining non-drag creation on touch/mobile.
+- Render semantic read-only content without mutation affordances.
+- Keep input responsive by avoiding React state updates and extension reconfiguration on every editor transaction.
 
 **Non-Goals:**
 
-- Advanced Capacities-style blocks such as small text, toggles, highlight blocks, Mermaid/math, editor tables, multi-column/group blocks, media/object embeds, arbitrary nesting, comments, collaboration, or AI. These require a dedicated follow-up change after stable BlockIds/linking prerequisites.
-- Raw Markdown source mode, arbitrary embedded HTML, or storing Markdown instead of the versioned block document.
-- Converting Task, URL, Table notes, titles, tags, collections, or query descriptions into block documents.
+- Small text, toggles, highlights, Mermaid/math, editor tables, multi-column/group blocks, media/object embeds, comments, collaboration, or AI. These remain a separate follow-up after stable BlockIds/linking.
+- Claims about Capacities' private framework, protocol, or persistence format.
 
 ## Decisions
 
-### Vendor-neutral editor boundary
+### Vendor-neutral document and editor boundary
 
-Use the pinned Tiptap packages only behind Notes App-owned editor APIs. Public domain types contain no Tiptap names. JSON remains canonical storage and Markdown remains interchange only.
+Tiptap remains internal. Public editor props use only `BlockEditorDocument`, localized labels, editability, and application callbacks. JSON remains canonical; Markdown is interchange only.
 
-### First-slice supported content
+### Exact first-slice content
 
-Allow doc, paragraph, heading levels 1-4, text, bullet list, ordered list, list item, task list, task item, blockquote, hard break, code block, and horizontal rule. Allow bold, italic, inline code, and validated link marks.
+Allow paragraph, heading levels 1-4, bullet/ordered/task lists, blockquote, code block, horizontal rule, hard break, bold, italic, inline code, and validated links. Unsupported content is rejected rather than silently coerced.
 
-The broader documented Capacities block catalog is intentionally not absorbed into this change because block identity, object/block linking, transclusion, tables/media semantics, and advanced layout nodes have separate dependencies.
+### Responsive controlled updates
 
-### Markdown interchange
+`useEditor` explicitly disables transaction-wide React rerenders. Editor updates are buffered in refs and committed after a short delay, blur, or unmount; no React draft state is updated per keystroke. External documents are compared and applied with `emitUpdate: false` and invalid-content rejection.
 
-Markdown input/import/export covers headings `#` through `####`, paragraphs, supported marks/links, lists, task lists, blockquotes, fenced code, horizontal rule where supported, and hard breaks. Parsed JSON must validate before entering workspace state.
+The BubbleMenu uses `useEditorState` selectors for the small reactive formatting state and disables the default position/update debounce so selection controls appear immediately.
 
-### Controlled update loop and interaction surfaces
+### Drag-handle integration for pinned Tiptap 3.30.2
 
-Internal updates emit validated JSON. External values use non-emitting synchronization only when structurally different. Slash menu, selection toolbar, and top-level handles reuse local primitives and preserve focus/selection. Touch layouts hide drag affordances while retaining command and keyboard alternatives.
+The pinned React DragHandle wrapper registers `DragHandlePlugin` directly; it does not register the base DragHandle extension commands. Therefore `editor.commands.lockDragHandle()` and `unlockDragHandle()` are invalid in this integration. Menu locking uses the same transaction metadata consumed by the official plugin: `editor.commands.setMeta("lockDragHandle", boolean)`.
 
-### Persistence and evidence
+The plus control inserts an empty paragraph below on normal click and above on Shift-click. The grip remains the draggable surface and opens a local block-options menu on click. Nested content is not an independent drag target (`nested={false}`). Touch/coarse-pointer layouts do not mount the drag plugin and retain slash/keyboard creation.
 
-The existing versioned workspace migration remains non-destructive. Reference measurements remain evidence-backed and screenshot-only values remain labeled approximations. The project WACZ/JSONL corpus is UI/source evidence, not proof of private editor/storage implementation.
+### Selection and link preservation
+
+Formatting controls capture the text range before focus moves into local menus/popovers, clamp it against the current document, restore it before commands, and extend an existing link mark when editing/removing a link.
+
+### Evidence and acceptance
+
+Source/contract tests guard the exact dependency versions, missing-command regression, no per-keystroke React draft state, localization, geometry, and scope boundary. Browser acceptance must still prove the interaction sequence, persistence, mobile behavior, focus/reduced motion, no overflow, and a clean console before archive.
 
 ## Risks / Trade-offs
 
-- Schema drift between neutral validation and editor extensions -> one allowlist plus contract tests.
-- Advanced blocks are deferred -> record them explicitly so this first slice is not misreported as complete Capacities block parity.
-- Controlled updates can reset selection -> suppress recursive emission and compare normalized documents.
+- Drag/drop behavior varies by browser -> keep the plugin isolated, top-level-only, and require browser evidence before completion.
+- Popovers can collapse selections -> retain explicit range capture/restore and zero-delay BubbleMenu tests.
+- Buffered persistence can race external updates -> cancel pending local commits before accepting a different external document.
+- Advanced block parity is deferred -> keep the follow-up explicit and never report this slice as complete Capacities block parity.
 
 ## Migration Plan
 
-1. Keep exact dependency/vendor boundaries and validation tests.
-2. Align neutral schema, Markdown conversion, slash catalog, and keyboard tests with H1-H4.
-3. Complete read-only rendering, BubbleMenu/link editing, top-level insertion/drag, localization, accessibility, and reference checks.
-4. Record advanced block types as a separate follow-up before claiming full block parity.
-5. Sync/validate/archive only after the existing acceptance gates pass.
+1. Preserve current document/storage migrations and exact dependency pins.
+2. Replace invalid DragHandle commands with plugin metadata and align plus/grip behavior with reference evidence.
+3. Remove per-keystroke React draft state and make toolbar state narrowly reactive.
+4. Expand localized copy and regression tests.
+5. Run browser, repository, OpenSpec, Graphify, and protected-publication gates before checking acceptance tasks complete.
 
 ## Open Questions
 

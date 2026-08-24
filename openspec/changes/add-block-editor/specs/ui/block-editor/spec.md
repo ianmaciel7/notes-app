@@ -26,29 +26,45 @@ The editor SHALL provide app-owned Markdown conversion for the supported schema 
 - **THEN** H1-H4, paragraphs, supported marks, links, lists, task lists, quotes, fenced code, horizontal rules, and hard breaks SHALL round-trip deterministically where representable.
 
 ### Requirement: Controlled editor synchronization
-The editor SHALL accept a domain document and mutation callback, emit validated JSON for internal edits, and synchronize different external values without recursive change emission.
+The editor SHALL emit validated JSON for internal edits, buffer persistence without a React state update on every keystroke, and synchronize different external values without recursive change emission or selection-reset loops.
 
 ### Requirement: Keyboard-operable slash command menu
 Typing the slash trigger in an editable block SHALL open a localized shared command catalog with filtering, arrow navigation, Enter, Escape, empty state, and focus restoration.
 
 ### Requirement: Selection toolbar preserves selection
-An editable selection SHALL expose supported formatting/link actions without losing the command target before execution.
+An editable selection SHALL expose supported formatting/link actions immediately and SHALL preserve the command target while focus moves through local menus and link controls.
 
-### Requirement: Top-level insertion and reordering
-Editable top-level blocks SHALL expose insertion and reorder affordances while nested list content remains part of its parent block and touch layouts retain non-drag alternatives.
+### Requirement: Reference-aligned top-level block controls
+Editable top-level blocks SHALL expose separate `18x22px` insertion and grip controls with a `100ms` state transition, while nested list content remains part of its parent drag target.
+
+#### Scenario: Plus control is clicked
+- **WHEN** the user clicks the plus control normally
+- **THEN** one empty paragraph SHALL be inserted immediately below the targeted top-level block and receive the insertion selection.
+- **WHEN** the user Shift-clicks the plus control
+- **THEN** one empty paragraph SHALL be inserted immediately above the targeted top-level block.
+
+#### Scenario: Grip is used
+- **WHEN** the user drags the grip
+- **THEN** the targeted top-level block SHALL be reorderable without making nested list items independent targets.
+- **WHEN** the user clicks the grip
+- **THEN** a localized block-options menu SHALL open without calling editor commands that are unavailable in the pinned React DragHandle integration.
+
+#### Scenario: Touch layout is active
+- **WHEN** hover/fine-pointer desktop input is unavailable
+- **THEN** the drag plugin and handle SHALL not mount, while slash and keyboard creation remain available without horizontal overflow.
 
 ### Requirement: Semantic read-only rendering
-When `editable` is false, supported content SHALL render semantically without mutation callbacks, cursor affordances, menus, or handles.
+When `editable` is false, supported content SHALL render semantically without mutation callbacks, cursor affordances, menus, handles, or mutable task checkboxes.
 
 ### Requirement: First-slice scope is explicit
 Completion of this change SHALL NOT be reported as complete parity with the broader documented Capacities block catalog.
 
 #### Scenario: Advanced documented block is requested
-- **WHEN** a block such as small text, toggle, highlight, Mermaid/math, table, multi-column/group, media/object embed, or other advanced layout/content block is outside this slice
-- **THEN** the UI SHALL not silently persist it as a different block type and the capability SHALL remain explicitly deferred to a follow-up change.
+- **WHEN** a block such as small text, toggle, highlight, Mermaid/math, table, multi-column/group, media/object embed, or another advanced block is outside this slice
+- **THEN** the UI SHALL not silently persist it as a different block type and the capability SHALL remain deferred to a follow-up change.
 
 ### Requirement: Localized accessible reference-aligned surface
 All editor copy and interaction semantics SHALL be localized in English, Spanish, and Portuguese (Brazil), expose neutral data slots, preserve visible focus, respect reduced motion, and retain evidence-backed reference typography/measure.
 
 ### Requirement: Block editor acceptance is evidence-backed
-Unit, contract, desktop-browser, mobile-browser, persistence, accessibility, keyboard, menu, localization, and reference-evidence coverage SHALL pass before acceptance.
+Unit, contract, desktop-browser, mobile-browser, persistence, accessibility, keyboard, menu, localization, performance-regression, and reference-evidence coverage SHALL pass before acceptance.

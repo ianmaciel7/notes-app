@@ -1,0 +1,40 @@
+import type { BlockEditorDocument } from "@/editor/document";
+
+type BlockEditorLabels = {
+  bold: string;
+  code: string;
+  italic: string;
+  slashMenu: {
+    empty: string;
+    cancel: string;
+    createPage: string;
+    text: string;
+    page: string;
+    heading1: string;
+    heading2: string;
+    heading3: string;
+    heading4: string;
+    navigate: string;
+    bulletList: string;
+    orderedList: string;
+    taskList: string;
+    select: string;
+    blockquote: string;
+    codeBlock: string;
+    horizontalRule: string;
+    title: string;
+  };
+};
+
+type BlockEditorProps = {
+  value: BlockEditorDocument;
+  onChange?: (document: BlockEditorDocument) => void;
+  onCreatePageRequest?: (title: string) => void;
+  placeholder: string;
+  ariaLabel: string;
+  className?: string;
+  labels: BlockEditorLabels;
+  editable?: boolean;
+};
+
+export type { BlockEditorLabels, BlockEditorProps };

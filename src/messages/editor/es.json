@@ -9,7 +9,12 @@
   "undo": "Deshacer",
   "redo": "Rehacer",
   "insertBlock": "Insertar bloque",
-  "dragBlock": "Arrastrar bloque",
+  "insertBlockAbove": "Insertar bloque arriba",
+  "insertBlockBelow": "Insertar bloque abajo",
+  "dragBlock": "Arrastra para mover; haz clic para ver las opciones",
+  "blockOptions": "Opciones del bloque",
+  "duplicateBlock": "Duplicar bloque",
+  "deleteBlock": "Eliminar bloque",
   "taskChecked": "Tarea completada",
   "taskUnchecked": "Tarea pendiente"
 }
