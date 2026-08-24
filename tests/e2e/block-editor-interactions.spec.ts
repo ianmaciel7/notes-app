@@ -110,7 +110,7 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
     ["Alpha", "Beta", "Gamma"].join("\n"),
   );
   await expectParagraphTexts(editor, ["Alpha", "Beta", "Gamma"]);
-  await hoverParagraph(editor, "Alpha");
+  const alpha = await hoverParagraph(editor, "Alpha");
 
   const handle = page.locator('[data-slot="block-editor-block-handle"]');
   const insertControl = handle.getByRole("button", {
@@ -129,24 +129,41 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
   ).toHaveCount(6);
 
   expect(await insertControl.evaluate((node) => node.draggable)).toBe(false);
-  expect(await dragControl.evaluate((node) => node.draggable)).toBe(true);
-  expect(
-    await insertControl.evaluate((node) =>
-      node.dispatchEvent(
-        new DragEvent("dragstart", { bubbles: true, cancelable: true }),
-      ),
-    ),
-  ).toBe(false);
+  expect(await dragControl.evaluate((node) => node.draggable)).toBe(false);
 
+  const alphaBox = await alpha.boundingBox();
+  const handleBox = await handle.boundingBox();
   const insertBox = await insertControl.boundingBox();
   const dragBox = await dragControl.boundingBox();
+  expect(alphaBox).not.toBeNull();
+  expect(handleBox).not.toBeNull();
   expect(insertBox).not.toBeNull();
   expect(dragBox).not.toBeNull();
   expect(Math.round(insertBox?.width ?? 0)).toBe(18);
   expect(Math.round(insertBox?.height ?? 0)).toBe(22);
   expect(Math.round(dragBox?.width ?? 0)).toBe(18);
   expect(Math.round(dragBox?.height ?? 0)).toBe(22);
+  expect(Math.round(handleBox?.width ?? 0)).toBe(36);
   expect(dragBox?.x ?? 0).toBeGreaterThan(insertBox?.x ?? 0);
+  expect(handleBox?.x ?? 0).toBeLessThan(alphaBox?.x ?? 0);
+  expect((handleBox?.x ?? 0) + (handleBox?.width ?? 0)).toBeLessThanOrEqual(
+    (alphaBox?.x ?? 0) + 4,
+  );
+  expect(Math.abs((handleBox?.y ?? 0) - (alphaBox?.y ?? 0))).toBeLessThan(8);
+
+  await insertControl.hover();
+  const insertTooltip = page.locator(
+    '[data-slot="block-editor-insert-tooltip"]',
+  );
+  await expect(insertTooltip).toBeVisible();
+  await expect(insertTooltip).toContainText("Clique");
+  await expect(insertTooltip).toContainText("Shift-clique");
+
+  await dragControl.hover();
+  const dragTooltip = page.locator('[data-slot="block-editor-drag-tooltip"]');
+  await expect(dragTooltip).toBeVisible();
+  await expect(dragTooltip).toContainText("Arraste");
+  await expect(dragTooltip).toContainText("Clique");
 
   await insertControl.click();
   await page.keyboard.type("Below");
@@ -167,12 +184,6 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
   await dragControl.click();
   const blockMenu = page.locator('[data-slot="block-editor-block-menu"]');
   await expect(blockMenu).toBeVisible();
-  await expect(
-    blockMenu.getByRole("menuitem", { name: "Inserir bloco acima" }),
-  ).toBeVisible();
-  await expect(
-    blockMenu.getByRole("menuitem", { name: "Inserir bloco abaixo" }),
-  ).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(blockMenu).toBeHidden();
 
@@ -201,10 +212,8 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
   );
   expect(reordered.indexOf("Alpha")).toBeGreaterThan(reordered.indexOf("Beta"));
 
-  await hoverParagraph(editor, "Alpha");
-  await dragControl.click();
-  await expect(blockMenu).toBeVisible();
-  await page.keyboard.press("Escape");
+  const dropCursor = page.locator(".block-editor-dropcursor");
+  await expect(dropCursor).toHaveCount(0);
   expect(errors).toEqual([]);
 
   await page.setViewportSize({ width: 390, height: 844 });
