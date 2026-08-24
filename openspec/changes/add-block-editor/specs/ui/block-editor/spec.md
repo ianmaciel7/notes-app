@@ -15,12 +15,22 @@ The editor SHALL support paragraph, small paragraph text, H1-H4, bold, italic, i
 - **THEN** the ordered-list node SHALL preserve the selected style rather than silently converting every ordered list to decimal numbering.
 
 ### Requirement: Keyboard-operable slash command menu
-Typing the slash trigger in an editable text block SHALL open a localized shared command catalog with filtering, arrow navigation, Enter, Escape, empty state, and focus restoration.
+Typing the slash trigger in an editable text block SHALL open a localized shared command catalog with filtering, arrow navigation, Enter, Escape, empty state, focus restoration, and caret-relative positioning.
 
 #### Scenario: Slash is typed after existing text
 - **WHEN** the caret follows ordinary text and whitespace, for example `aaa /`
 - **THEN** the slash menu SHALL open at the slash position.
 - **AND** typing `/` in the middle of a word, for example `aaa/`, SHALL NOT open the menu.
+
+#### Scenario: Slash menu anchor geometry is temporarily unavailable
+- **WHEN** the suggestion decoration rectangle is missing, invalid, or collapses to viewport origin
+- **THEN** the menu SHALL fall back to the editor caret geometry for the current suggestion range.
+- **AND** the visible menu SHALL NOT appear at viewport origin as a fallback state.
+
+#### Scenario: Slash menu approaches a viewport edge
+- **WHEN** the caret is close enough to a viewport edge that the preferred placement would overflow
+- **THEN** the menu SHALL remain within a small viewport gutter.
+- **AND** it SHALL prefer placement below the caret and may flip above only when the measured surface does not fit below.
 
 #### Scenario: Slash menu opens without a query
 - **WHEN** the slash menu opens with an empty query
