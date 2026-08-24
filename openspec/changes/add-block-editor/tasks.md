@@ -4,7 +4,7 @@
 - [x] 1.2 Keep neutral document validation, normalization, conversion, and persistence contracts.
 - [x] 1.3 Preserve the user-supplied block-handle screenshot and archive-backed tooltip evidence under `docs/references`.
 - [x] 1.4 Preserve the user-supplied slash-menu screenshot and archive-backed command labels/order under `docs/references`.
-- [x] 1.5 Preserve the slash-menu viewport-origin regression screenshot and its acceptance contract under `docs/references`.
+- [x] 1.5 Preserve slash-menu and block-handle regression screenshots and their acceptance contracts under `docs/references`.
 
 ## 2. Workspace document model and persistence
 
@@ -24,20 +24,23 @@
 - [x] 4.3 Anchor the slash menu to the current caret with `coordsAtPos` fallback, fixed viewport coordinates, edge clamping, and below/above placement fallback.
 - [ ] 4.4 Browser-verify slash positioning at ordinary, scrolled, and viewport-edge caret positions with no `(0,0)` fallback.
 - [ ] 4.5 Browser-verify the zero-delay selection BubbleMenu/link-editing contract while preserving selection.
-- [x] 4.6 Implement independent plus/six-dot controls, explicit insertion selection, grip-only drag origin, and post-drag click suppression.
-- [ ] 4.7 Browser-verify insertion order, actual top-level reordering, grip click, no post-drag menu click, and touch/mobile fallback.
+- [x] 4.6 Implement independent plus/six-dot controls, explicit insertion selection, root-owned drag, source-handle locking, and post-drag click suppression.
+- [x] 4.7 Position the combined 36px handle immediately left of the hovered block using a fixed block-relative virtual element.
+- [x] 4.8 Replace native `title` tooltips with localized shared Tooltip surfaces for plus and grip actions.
+- [x] 4.9 Configure a subtle one-pixel neutral drop cursor for supported top-level reordering.
+- [ ] 4.10 Browser-verify handle geometry, insertion order, actual top-level reordering, grip click, no post-drag menu click, tooltip copy, and touch/mobile fallback.
 
 ## 5. Workspace integration, styling, and copy
 
 - [x] 5.1 Apply confirmed editor typography/measure/handle/slash-menu contracts.
 - [x] 5.2 Complete editor copy in `en`, `es`, and `pt-BR`.
 - [ ] 5.3 Verify focus, reduced motion, mobile overflow, read-only semantics, and clean console behavior.
-- [x] 5.4 Keep remaining advanced documented blocks as an explicit follow-up.
+- [x] 5.4 Keep remaining advanced documented blocks, including lateral/column/group drop semantics, as explicit follow-ups until the neutral schema supports them.
 
 ## 6. Automated and browser acceptance
 
-- [x] 6.1 Add source-contract coverage for Small text, alphabetical/roman lists, slash-after-text activation, menu order, geometry, caret anchoring, viewport clamping, and reference hashes.
-- [ ] 6.2 Execute Playwright coverage for slash-after-text, caret anchoring, command execution, selection preservation, insertion/reordering, persistence, accessibility, and reference screenshots.
+- [x] 6.1 Add source-contract coverage for Small text, alphabetical/roman lists, slash-after-text activation, menu order, geometry, caret anchoring, viewport clamping, handle geometry, tooltip primitives, drag ownership, and dropcursor styling.
+- [ ] 6.2 Execute Playwright coverage for slash-after-text, caret anchoring, command execution, selection preservation, handle geometry/tooltips, insertion/reordering, persistence, accessibility, and reference screenshots.
 
 ## 7. Completion and protected publication
 
