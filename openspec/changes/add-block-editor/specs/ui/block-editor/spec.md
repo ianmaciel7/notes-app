@@ -43,6 +43,28 @@ An editable selection SHALL expose supported formatting/link actions immediately
 ### Requirement: Reference-aligned top-level block controls
 Editable top-level blocks SHALL expose separate plus and six-dot controls while nested list content remains part of its parent drag target.
 
+#### Scenario: Handle is positioned for a hovered block
+- **WHEN** a top-level editable block is hovered
+- **THEN** the 36px combined handle SHALL be positioned immediately to the left of that block using viewport-consistent geometry.
+- **AND** the handle SHALL NOT jump to the far side of the editor or into the active drop target.
+
+#### Scenario: Six-dot grip starts a drag
+- **WHEN** the user starts dragging from the six-dot grip
+- **THEN** the Tiptap drag-handle root SHALL remain the sole native draggable owner.
+- **AND** the source handle SHALL lock to the source block until drag end.
+- **AND** the editor SHALL expose grabbing feedback while the drag is active.
+
+#### Scenario: Drop target is shown
+- **WHEN** a supported top-level reorder drag moves between blocks
+- **THEN** the drop cursor SHALL be a thin neutral one-pixel indicator rather than a heavy dark rule.
+- **AND** unsupported lateral/column drop semantics SHALL NOT be simulated before the relevant block schema exists.
+
+#### Scenario: Handle tooltip is requested
+- **WHEN** the pointer rests on the plus or six-dot control
+- **THEN** a localized application tooltip SHALL appear using the shared Tooltip primitive rather than a browser-native `title` tooltip.
+- **AND** the plus tooltip SHALL communicate Click-to-insert-below and Shift-click-to-insert-above.
+- **AND** the grip tooltip SHALL communicate Drag-to-move and Click-to-show-options.
+
 ### Requirement: Semantic read-only rendering
 When `editable` is false, supported content SHALL render semantically without mutation callbacks, cursor affordances, menus, handles, or mutable task checkboxes.
 
