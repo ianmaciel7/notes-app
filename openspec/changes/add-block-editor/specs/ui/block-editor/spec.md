@@ -50,9 +50,22 @@ Editable top-level blocks SHALL expose separate plus and six-dot controls while 
 
 #### Scenario: Six-dot grip starts a drag
 - **WHEN** the user starts dragging from the six-dot grip
-- **THEN** the Tiptap drag-handle root SHALL remain the sole native draggable owner.
-- **AND** the source handle SHALL lock to the source block until drag end.
+- **THEN** the visible six-dot control SHALL be the native draggable origin.
+- **AND** Tiptap's DragHandle plugin SHALL remain the document-move controller that selects and reorders the top-level block.
+- **AND** drag start SHALL NOT lock or disable the Tiptap handle before the plugin processes the event.
+- **AND** the source handle SHALL stay anchored to the source block until drag end.
 - **AND** the editor SHALL expose grabbing feedback while the drag is active.
+
+#### Scenario: Grip is clicked without dragging
+- **WHEN** a completed click occurs on the six-dot grip and no drag was detected
+- **THEN** the block-options menu SHALL open from a non-interactive anchor aligned to the grip.
+- **AND** the menu trigger SHALL NOT consume the grip's `mousedown` or prevent the native drag gesture.
+- **AND** a click emitted immediately after drag end SHALL NOT open the menu.
+
+#### Scenario: Plus control is used
+- **WHEN** the user presses or drags from the plus control
+- **THEN** the plus control SHALL remain non-draggable and SHALL NOT start the parent drag operation.
+- **AND** click SHALL insert below while Shift-click SHALL insert above.
 
 #### Scenario: Drop target is shown
 - **WHEN** a supported top-level reorder drag moves between blocks
