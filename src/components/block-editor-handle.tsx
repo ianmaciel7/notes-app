@@ -1,5 +1,6 @@
 "use client";
 
+import { offset } from "@floating-ui/dom";
 import type { Editor } from "@tiptap/core";
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import {
@@ -19,6 +20,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { createBlockCommandCatalog } from "@/editor/block-command-catalog";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +34,11 @@ type HandleTarget = { pos: number; nodeSize: number };
 type InsertDirection = "above" | "below";
 
 const POST_DRAG_MENU_SUPPRESSION_MS = 160;
+const HANDLE_POSITION_CONFIG = {
+  placement: "left-start" as const,
+  strategy: "absolute" as const,
+  middleware: [offset(2)],
+};
 
 function DotsSixVerticalIcon(props: React.ComponentProps<"svg">) {
   return (
@@ -83,14 +95,6 @@ function setDragHandleLocked(editor: Editor, locked: boolean) {
   editor.commands.setMeta("lockDragHandle", locked);
 }
 
-function isGripDragOrigin(event: DragEvent) {
-  const target = event.target;
-  return (
-    target instanceof Element &&
-    target.closest('[data-slot="block-editor-drag-control"]') !== null
-  );
-}
-
 function suppressParentDragForPointer(
   event: React.PointerEvent<HTMLButtonElement>,
   onRelease: () => void,
@@ -113,6 +117,21 @@ function suppressParentDragForPointer(
   ownerDocument.addEventListener("pointercancel", release, true);
 }
 
+function BlockHandleTooltip({
+  action,
+  detail,
+}: {
+  action: string;
+  detail: string;
+}) {
+  return (
+    <div className="flex items-baseline gap-1 whitespace-nowrap">
+      <strong className="font-semibold text-foreground">{action}</strong>
+      <span>{detail}</span>
+    </div>
+  );
+}
+
 function BlockHandle({
   editor,
   blockCommands,
@@ -130,10 +149,11 @@ function BlockHandle({
   const suppressMenuUntilRef = React.useRef(0);
   const [targetAvailable, setTargetAvailable] = React.useState(false);
   const [optionsOpen, setOptionsOpen] = React.useState(false);
+  const [dragging, setDragging] = React.useState(false);
 
   const handleNodeChange = React.useCallback(
     ({ node, pos }: { node: { nodeSize: number } | null; pos: number }) => {
-      if (optionsOpenRef.current) return;
+      if (optionsOpenRef.current || dragInProgressRef.current) return;
       const target = node && pos >= 0 ? { pos, nodeSize: node.nodeSize } : null;
       targetRef.current = target;
       const available = target !== null;
@@ -163,26 +183,32 @@ function BlockHandle({
 
   const handleElementDragStart = React.useCallback(
     (event: DragEvent) => {
-      if (insertPointerActiveRef.current || !isGripDragOrigin(event)) {
+      if (insertPointerActiveRef.current) {
         event.preventDefault();
         return;
       }
 
       dragInProgressRef.current = true;
       suppressMenuUntilRef.current = Number.POSITIVE_INFINITY;
+      setDragging(true);
+      editor.view.dom.ownerDocument.documentElement.dataset.blockEditorDragging =
+        "true";
       if (optionsOpenRef.current) setBlockOptionsOpen(false);
     },
-    [setBlockOptionsOpen],
+    [editor, setBlockOptionsOpen],
   );
 
   const handleElementDragEnd = React.useCallback(() => {
     dragInProgressRef.current = false;
     suppressMenuUntilRef.current = Date.now() + POST_DRAG_MENU_SUPPRESSION_MS;
+    setDragging(false);
+    delete editor.view.dom.ownerDocument.documentElement.dataset.blockEditorDragging;
     setDragHandleLocked(editor, false);
   }, [editor]);
 
   React.useEffect(
     () => () => {
+      delete editor.view.dom.ownerDocument.documentElement.dataset.blockEditorDragging;
       setDragHandleLocked(editor, false);
     },
     [editor],
@@ -259,120 +285,160 @@ function BlockHandle({
     <DragHandle
       editor={editor}
       nested={false}
+      computePositionConfig={HANDLE_POSITION_CONFIG}
       onNodeChange={handleNodeChange}
       onElementDragStart={handleElementDragStart}
       onElementDragEnd={handleElementDragEnd}
       className="block-editor-drag-handle"
     >
-      <div
-        data-slot="block-editor-block-handle"
-        data-menu-open={optionsOpen || undefined}
-        className={cn(
-          "-mr-1 mt-[3px] flex items-center gap-0 text-muted-foreground opacity-50 transition-opacity duration-100 ease-linear hover:opacity-100 motion-reduce:transition-none",
-          optionsOpen && "opacity-100",
-        )}
-      >
-        <Button
-          variant="ghost"
-          aria-label={t("insertBlock")}
-          title={`${t("insertBlockBelow")} · Shift: ${t("insertBlockAbove")}`}
-          data-slot="block-editor-insert-control"
-          className="h-[22px] w-[18px] min-w-0 rounded px-0"
-          disabled={!targetAvailable}
-          draggable={false}
-          onDragStart={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-          }}
-          onPointerDown={(event) => {
-            insertPointerActiveRef.current = true;
-            suppressParentDragForPointer(event, () => {
-              insertPointerActiveRef.current = false;
-            });
-            event.stopPropagation();
-          }}
-          onClick={(event) => {
-            event.stopPropagation();
-            insertParagraph(event.shiftKey ? "above" : "below");
-          }}
+      <TooltipProvider delay={300}>
+        <div
+          data-slot="block-editor-block-handle"
+          data-menu-open={optionsOpen || undefined}
+          data-dragging={dragging || undefined}
+          className={cn(
+            "flex h-[22px] w-[36px] translate-y-px items-center gap-0 text-muted-foreground opacity-50 transition-opacity duration-100 ease-linear hover:opacity-100 motion-reduce:transition-none",
+            (optionsOpen || dragging) && "opacity-100",
+          )}
         >
-          <PlusIcon className="size-3.5 stroke-[1.35]" />
-        </Button>
-
-        <DropdownMenu open={optionsOpen} onOpenChange={setBlockOptionsOpen}>
-          <DropdownMenuTrigger
-            render={
-              <Button
-                variant="ghost"
-                aria-label={t("blockOptions")}
-                title={t("dragBlock")}
-                data-slot="block-editor-drag-control"
-                className="h-[22px] w-[18px] min-w-0 cursor-grab rounded px-0 active:cursor-grabbing"
-                disabled={!targetAvailable}
-                draggable={true}
-                onClick={(event) => {
-                  if (
-                    dragInProgressRef.current ||
-                    Date.now() < suppressMenuUntilRef.current
-                  ) {
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  aria-label={t("insertBlock")}
+                  data-slot="block-editor-insert-control"
+                  className="h-[22px] w-[18px] min-w-0 rounded px-0"
+                  disabled={!targetAvailable}
+                  draggable={false}
+                  onDragStart={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
-                  }
-                }}
+                  }}
+                  onPointerDown={(event) => {
+                    insertPointerActiveRef.current = true;
+                    suppressParentDragForPointer(event, () => {
+                      insertPointerActiveRef.current = false;
+                    });
+                    event.stopPropagation();
+                  }}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    insertParagraph(event.shiftKey ? "above" : "below");
+                  }}
+                >
+                  <PlusIcon className="size-3.5 stroke-[1.35]" />
+                </Button>
+              }
+            />
+            <TooltipContent
+              side="left"
+              sideOffset={8}
+              className="flex-col items-start gap-1.5 px-3 py-2 text-[13px] leading-5"
+              data-slot="block-editor-insert-tooltip"
+            >
+              <BlockHandleTooltip
+                action={t("clickAction")}
+                detail={t("insertBelowHint")}
+              />
+              <BlockHandleTooltip
+                action={t("shiftClickAction")}
+                detail={t("insertAboveHint")}
+              />
+            </TooltipContent>
+          </Tooltip>
+
+          <DropdownMenu open={optionsOpen} onOpenChange={setBlockOptionsOpen}>
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <DropdownMenuTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        aria-label={t("blockOptions")}
+                        data-slot="block-editor-drag-control"
+                        className="h-[22px] w-[18px] min-w-0 cursor-grab rounded px-0 active:cursor-grabbing"
+                        disabled={!targetAvailable}
+                        draggable={false}
+                        onClick={(event) => {
+                          if (
+                            dragInProgressRef.current ||
+                            Date.now() < suppressMenuUntilRef.current
+                          ) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                          }
+                        }}
+                      >
+                        <DotsSixVerticalIcon className="size-3.5" />
+                      </Button>
+                    }
+                  />
+                }
+              />
+              <TooltipContent
+                side="left"
+                sideOffset={8}
+                className="flex-col items-start gap-1.5 px-3 py-2 text-[13px] leading-5"
+                data-slot="block-editor-drag-tooltip"
               >
-                <DotsSixVerticalIcon className="size-3.5" />
-              </Button>
-            }
-          />
-          <DropdownMenuContent
-            side="left"
-            align="start"
-            sideOffset={6}
-            className="min-w-52"
-            data-slot="block-editor-block-menu"
-          >
-            <DropdownMenuItem onClick={() => insertParagraph("above")}>
-              <ArrowUpIcon className="size-4" />
-              {t("insertBlockAbove")}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => insertParagraph("below")}>
-              <ArrowDownIcon className="size-4" />
-              {t("insertBlockBelow")}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {blockCommands
-              .filter((item) => item.id !== "horizontal-rule")
-              .map((item) => {
-                const Icon = item.icon;
-                return (
-                  <DropdownMenuItem
-                    key={item.id}
-                    onClick={() => transformTarget(item.id)}
-                  >
-                    <Icon className="size-4" />
-                    {item.title}
-                  </DropdownMenuItem>
-                );
-              })}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={duplicateTarget}>
-              <CopyIcon className="size-4" />
-              {t("duplicateBlock")}
-            </DropdownMenuItem>
-            <DropdownMenuItem variant="destructive" onClick={deleteTarget}>
-              <Trash2Icon className="size-4" />
-              {t("deleteBlock")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+                <BlockHandleTooltip
+                  action={t("dragAction")}
+                  detail={t("moveBlockHint")}
+                />
+                <BlockHandleTooltip
+                  action={t("clickAction")}
+                  detail={t("showBlockOptionsHint")}
+                />
+              </TooltipContent>
+            </Tooltip>
+
+            <DropdownMenuContent
+              side="left"
+              align="start"
+              sideOffset={6}
+              className="min-w-52"
+              data-slot="block-editor-block-menu"
+            >
+              <DropdownMenuItem onClick={() => insertParagraph("above")}>
+                <ArrowUpIcon className="size-4" />
+                {t("insertBlockAbove")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => insertParagraph("below")}>
+                <ArrowDownIcon className="size-4" />
+                {t("insertBlockBelow")}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {blockCommands
+                .filter((item) => item.id !== "horizontal-rule")
+                .map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <DropdownMenuItem
+                      key={item.id}
+                      onClick={() => transformTarget(item.id)}
+                    >
+                      <Icon className="size-4" />
+                      {item.title}
+                    </DropdownMenuItem>
+                  );
+                })}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={duplicateTarget}>
+                <CopyIcon className="size-4" />
+                {t("duplicateBlock")}
+              </DropdownMenuItem>
+              <DropdownMenuItem variant="destructive" onClick={deleteTarget}>
+                <Trash2Icon className="size-4" />
+                {t("deleteBlock")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </TooltipProvider>
     </DragHandle>
   );
 }
 
-export {
-  BlockHandle,
-  DotsSixVerticalIcon,
-  isGripDragOrigin,
-  setDragHandleLocked,
-};
+export { BlockHandle, DotsSixVerticalIcon, setDragHandleLocked };
