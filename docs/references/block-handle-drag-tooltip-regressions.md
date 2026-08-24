@@ -1,7 +1,7 @@
 ---
 title: Notes App block-handle drag and tooltip regressions
 reference_type: implementation-regression
-source_type: user-supplied-screenshots-plus-capacities-archive
+source_type: user-supplied-screenshots-plus-capacities-archive-and-public-docs
 updated: 2026-08-24
 confidence: confirmed
 ---
@@ -30,15 +30,26 @@ The canonical archived source confirms:
 
 - top-level handle container: immediately to the left of the block (`right-full top-0`), 100 ms opacity transition;
 - plus: independent 18 × 22 px hit target offset left of the grip;
-- grip: independent 18 × 22 px draggable surface with `cursor: grab` and global `grabbing` feedback while dragging;
+- grip: independent 18 × 22 px surface with `draggable="true"`, `cursor: grab`, drag-start/drag/drag-end handlers, and global grabbing feedback while dragging;
 - plus tooltip: **Click** to insert below; **Shift-click** to insert above;
 - grip tooltip: **Drag** to move the block; **Click** to show block options.
 
+Public documentation: `https://docs.capacities.io/reference/blocks`.
+
+The public Capacities Blocks documentation separately confirms that blocks can be rearranged, that the six dots expose block operations, and that drag is used for block and layout reorganization. It does not disclose the private drag implementation, so the archive remains the source for the observed DOM-level draggable contract.
+
+## Notes App failure cause
+
+The previous Notes App implementation wrapped the visible grip directly in a Base UI menu trigger. Base UI opens a menu trigger on `mousedown`; that opened the menu and locked/disabled the Tiptap drag handle before the browser could emit a usable `dragstart`. The visible grip was also marked non-draggable, which contradicted the archived Capacities surface.
+
 ## Acceptance contract
 
-- The grip is positioned flush immediately left of the hovered top-level block; plus sits another 16 px to its left.
-- The inner grip button is not a second native draggable element; the Tiptap DragHandle root remains the sole native draggable owner.
-- Only a pointer gesture that begins on the six-dot grip may allow the root drag to start.
+- The grip is positioned flush immediately left of the hovered top-level block; plus sits another 18 px to its left.
+- The visible six-dot grip is the native draggable origin; Tiptap remains responsible for selecting and moving the document node.
+- The plus control stays non-draggable and temporarily disables the parent drag surface for its pointer gesture.
+- The block-options menu uses a non-interactive anchor at the grip position and opens only after a completed click; its trigger must not consume the grip's `mousedown`.
+- Drag start must not dispatch a lock that makes the Tiptap handle non-draggable before Tiptap processes the event.
+- The source block is retained in a drag-source reference so positioning does not follow the current drop target.
 - The drop cursor is a subtle neutral state indicator, not a heavy black horizontal rule.
 - During a drag the editor uses a grabbing cursor and the source handle does not jump to the current drop target.
 - Native browser `title` tooltips are not used for the two controls; localized Base UI/shadcn tooltips render the evidence-backed multi-line text.
