@@ -109,25 +109,35 @@ test("drag handle uses plugin metadata and a fixed block-relative anchor", () =>
   assert.match(handleSource, /commands\.setMeta\("lockDragHandle", locked\)/);
   assert.match(handleSource, /strategy: "fixed"/);
   assert.match(handleSource, /placement: "left-start"/);
-  assert.match(handleSource, /getReferencedVirtualElement=\{getReferencedVirtualElement\}/);
+  assert.match(
+    handleSource,
+    /getReferencedVirtualElement=\{getReferencedVirtualElement\}/,
+  );
   assert.match(handleSource, /nodeDOM\(target\.pos\)/);
+  assert.match(handleSource, /dragSourceRef\.current \?\? targetRef\.current/);
   assert.doesNotMatch(handleSource, /commands\.lockDragHandle/);
   assert.doesNotMatch(handleSource, /commands\.unlockDragHandle/);
 });
 
-test("plus and six-dot grip keep independent drag ownership", () => {
+test("visible grip owns native drag while the menu uses a detached anchor", () => {
   assert.match(handleSource, /function DotsSixVerticalIcon/);
   assert.equal((handleSource.match(/<circle /g) ?? []).length, 6);
   assert.match(handleSource, /data-slot="block-editor-insert-control"/);
   assert.match(handleSource, /data-slot="block-editor-drag-control"/);
+  assert.match(handleSource, /data-slot="block-editor-menu-anchor"/);
   assert.equal(
     (handleSource.match(/draggable=\{false\}/g) ?? []).length,
-    2,
-    "both inner controls must stay non-draggable",
+    1,
+    "only the plus control must disable native dragging",
   );
-  assert.doesNotMatch(handleSource, /draggable=\{true\}/);
+  assert.match(handleSource, /draggable=\{targetAvailable\}/);
+  assert.match(handleSource, /function isGripDragOrigin/);
   assert.match(handleSource, /onElementDragStart=\{handleElementDragStart\}/);
-  assert.match(handleSource, /setDragHandleLocked\(editor, true\)/);
+  assert.match(handleSource, /triggerId=\{menuTriggerId\}/);
+  assert.match(handleSource, /pointer-events-none absolute right-0 top-0/);
+  assert.match(handleSource, /setBlockOptionsOpen\(!optionsOpenRef\.current\)/);
+  assert.match(handleSource, /event\.dataTransfer\.effectAllowed = "move"/);
+  assert.doesNotMatch(handleSource, /setDragHandleLocked\(editor, true\)/);
   assert.match(handleSource, /setDragHandleLocked\(editor, false\)/);
   assert.match(handleSource, /event\.shiftKey \? "above" : "below"/);
   assert.match(handleSource, /setTextSelection\(position \+ 1\)/);
