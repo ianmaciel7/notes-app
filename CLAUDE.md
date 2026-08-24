@@ -9,6 +9,9 @@
 ## Mandatory Operating Rules
 
 - Write repository-facing documentation and agent-facing guidance in English.
+- Follow `.agents/rules/verification-lifecycle.md`: all agents and subagents must re-read and verify rules before and after every modification.
+- Follow `.agents/rules/graphify.md`: always use the Graphify knowledge graph and Graph Engine as the mandatory primary layer for codebase discovery, architecture navigation, and impact analysis.
+- Follow `.agents/rules/component-deduplication.md`: search, reuse, and extend existing UI components before creating new ones; never duplicate components.
 - Follow OpenSpec for significant behavioral/process changes:
   - Proposal
   - Specs

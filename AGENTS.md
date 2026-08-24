@@ -16,6 +16,9 @@ This repository uses OpenSpec for significant proposals, workflow changes, and d
 - `docs/GRAPHIFY.md`
 
 ## Operational policy
+- Follow `.agents/rules/verification-lifecycle.md`: all agents and subagents must re-read and verify rules before and after every modification.
+- Follow `.agents/rules/graphify.md`: always consult the Graphify knowledge graph and Graph Engine as the mandatory primary layer for codebase understanding, architecture exploration, dependency mapping, and impact analysis.
+- Follow `.agents/rules/component-deduplication.md`: search, reuse, and extend existing UI components before creating new ones; never duplicate components.
 - Use and keep `.agents/rules/*` aligned with contributor and agent workflows, including OpenSpec, English-first, UI, architecture, Git, and Graphify guidance.
 - For reference-style workspace UI, follow `.agents/rules/workspace-ui-parity.md` before editing components, copy, icons, headers, sidebars, tabs, or workspace content.
 - For workspace text entry, follow `.agents/rules/input-performance.md` before changing editors, text fields, search fields, or persistence paths.
