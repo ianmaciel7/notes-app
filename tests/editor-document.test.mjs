@@ -32,6 +32,104 @@ test("validated documents support Capacities-style heading 4 and horizontal line
   assert.match(blockEditorDocumentToMarkdown(document), /^#### Detail/m);
 });
 
+test("normalization removes editor-only link defaults but preserves safe href", () => {
+  const normalized = normalizeBlockEditorDocument({
+    schemaVersion: 1,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "Example",
+              marks: [
+                {
+                  type: "link",
+                  attrs: {
+                    href: "https://example.com",
+                    target: "_blank",
+                    rel: "noopener noreferrer nofollow",
+                    class: null,
+                    title: null,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  });
+
+  assert.deepEqual(normalized, {
+    schemaVersion: 1,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "Example",
+              marks: [
+                {
+                  type: "link",
+                  attrs: { href: "https://example.com" },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  });
+});
+
+test("task-list Markdown stays a task-list document across export and import", () => {
+  const source = "- [ ] Open task\n- [x] Completed task";
+  const document = blockEditorDocumentFromMarkdown(source);
+
+  assert.equal(isBlockEditorDocument(document), true);
+  assert.equal(document.doc.content[0].type, "taskList");
+  assert.equal(document.doc.content[0].content[0].attrs.checked, false);
+  assert.equal(document.doc.content[0].content[1].attrs.checked, true);
+
+  const markdown = blockEditorDocumentToMarkdown(document);
+  assert.match(markdown, /- \[ \] Open task/);
+  assert.match(markdown, /- \[x\] Completed task/i);
+  assert.deepEqual(blockEditorDocumentFromMarkdown(markdown), document);
+});
+
+test("link normalization accepts safe relative links and rejects unsafe protocols", () => {
+  const safe = {
+    schemaVersion: 1,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: "Safe",
+              marks: [{ type: "link", attrs: { href: "../safe" } }],
+            },
+          ],
+        },
+      ],
+    },
+  };
+  const unsafe = structuredClone(safe);
+  unsafe.doc.content[0].content[0].marks[0].attrs.href =
+    "javascript:alert(1)";
+
+  assert.deepEqual(normalizeBlockEditorDocument(safe), safe);
+  assert.equal(normalizeBlockEditorDocument(unsafe), null);
+});
+
 test("empty block documents are valid, normalized, and independent", () => {
   const first = createEmptyBlockEditorDocument();
   const second = createEmptyBlockEditorDocument();

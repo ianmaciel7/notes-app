@@ -1,62 +1,81 @@
 ## Context
 
-The merged object lifecycle stores Page, Atomic note, and Quote bodies as structured documents behind a narrow client editor boundary. The authenticated reference exposes semantic blocks, block commands, selection tools, top-level insertion/reordering, and read-only rendering. The current public Capacities documentation also documents Heading 4 and a broader advanced-block catalog than this first slice.
+Page, Atomic note, and Quote persist a Notes App-owned structured document behind a client-only Tiptap boundary. The authenticated Capacities reference exposes semantic blocks, selection tools, a two-part top-level block handle, insertion/reordering, and a slash command menu that can open after existing text followed by whitespace. The current public documentation and archived source also confirm Heading 4, Small text, multiple ordered-list styles, rearrangeable blocks, and six-dot block controls.
 
-The implementation must stay inside a narrow client boundary in Next.js/React, keep titles and metadata outside the document, and avoid leaking an editor vendor into the Notes App domain API.
+The project archive is UI/source evidence, not proof of Capacities' private editor or storage implementation. The block-handle evidence is preserved in `docs/references/capacities-block-handle.md` and `docs/references/block-handle-drag-tooltip-regressions.md`. The slash-menu evidence is preserved in `docs/references/capacities-slash-menu.md` together with the user-supplied screenshot asset and archive-backed labels.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Own a validated, versioned JSON document contract independent of rendered HTML and Tiptap types.
-- Provide a structured editor for Page, Atomic note, and Quote with the first-slice block/mark set and keyboard workflows.
-- Support headings H1-H4 in the first slice so the supported contract matches the documented heading range already accepted by the current neutral schema.
-- Preserve Markdown as a validated interchange format and Markdown-style input shortcuts without storing Markdown strings as canonical content.
-- Render an accessible semantic document with no mutation affordances when `editable` is false.
+- Keep a validated, versioned document contract independent of rendered HTML and Tiptap types.
+- Support paragraph, Small text, H1-H4, first-slice marks, bullet/numerical/alphabetical/roman/task lists, quotes, code, horizontal rule, Markdown interchange, and keyboard behavior.
+- Open `/` at block start or after whitespace, including `aaa /`, while rejecting a mid-word slash.
+- Match the confirmed leading slash-menu order and visual surface.
+- Preserve selection through formatting and link editing.
+- Match the confirmed two-part desktop block-handle interaction while retaining non-drag creation on touch/mobile.
+- Keep the visible six-dot grip draggable without allowing its click-menu trigger to consume the drag gesture.
+- Render semantic read-only content without mutation affordances.
+- Keep input responsive by avoiding React state updates and extension reconfiguration on every editor transaction.
 
 **Non-Goals:**
 
-- Advanced Capacities-style blocks such as small text, toggles, highlight blocks, Mermaid/math, editor tables, multi-column/group blocks, media/object embeds, arbitrary nesting, comments, collaboration, or AI. These require a dedicated follow-up change after stable BlockIds/linking prerequisites.
-- Raw Markdown source mode, arbitrary embedded HTML, or storing Markdown instead of the versioned block document.
-- Converting Task, URL, Table notes, titles, tags, collections, or query descriptions into block documents.
+- Toggles, highlights, Mermaid/math, editor tables, multi-column/group blocks, media/object embeds, comments, collaboration, or AI. These remain a separate follow-up after stable BlockIds/linking.
+- Lateral column-drop semantics before a matching neutral layout-block schema exists.
+- Claims about Capacities' private framework, protocol, or persistence format.
 
 ## Decisions
 
-### Vendor-neutral editor boundary
+### Vendor-neutral document and editor boundary
 
-Use the pinned Tiptap packages only behind Notes App-owned editor APIs. Public domain types contain no Tiptap names. JSON remains canonical storage and Markdown remains interchange only.
+Tiptap remains internal. Public editor props use only `BlockEditorDocument`, localized labels, editability, and application callbacks. JSON remains canonical; Markdown is interchange only.
 
-### First-slice supported content
+### Small text as paragraph presentation metadata
 
-Allow doc, paragraph, heading levels 1-4, text, bullet list, ordered list, list item, task list, task item, blockquote, hard break, code block, and horizontal rule. Allow bold, italic, inline code, and validated link marks.
+Small text is represented as a paragraph attribute owned by the neutral document (`size: "small"`). A Tiptap global-attribute extension renders it as `data-text-size="small"`. This avoids inventing a second paragraph node type and keeps Small text compatible with the reference's hierarchy-style behavior. Markdown export degrades Small text to an ordinary paragraph because standard Markdown has no equivalent syntax.
 
-The broader documented Capacities block catalog is intentionally not absorbed into this change because block identity, object/block linking, transclusion, tables/media semantics, and advanced layout nodes have separate dependencies.
+### Ordered-list style as typed ordered-list metadata
 
-### Markdown interchange
+The pinned Tiptap ordered-list extension supports an HTML list `type` attribute. Notes App preserves numerical/default, alphabetical (`a`), and roman (`i`) styles in the neutral document validator. Changing one ordered-list style updates the same list rather than toggling it off.
 
-Markdown input/import/export covers headings `#` through `####`, paragraphs, supported marks/links, lists, task lists, blockquotes, fenced code, horizontal rule where supported, and hard breaks. Parsed JSON must validate before entering workspace state.
+### Slash trigger semantics
 
-### Controlled update loop and interaction surfaces
+The previous `startOfLine: true` configuration was too restrictive and explains the reported `aaa /` failure. The Suggestion matcher now uses `startOfLine: false` with whitespace-only prefixes. This admits block-start `/` and whitespace-prefixed `/`, while preventing a slash in the middle of a word from opening the block menu.
 
-Internal updates emit validated JSON. External values use non-emitting synchronization only when structurally different. Slash menu, selection toolbar, and top-level handles reuse local primitives and preserve focus/selection. Touch layouts hide drag affordances while retaining command and keyboard alternatives.
+### Slash-menu visual contract
 
-### Persistence and evidence
+The supplied screenshot confirms a rounded white menu around 440px wide with a neutral border, approximately 40px rows, unboxed neutral icons, an active-row background, title `Criar um bloco`, and a keyboard legend footer. The leading order is Default, Small, H1-H4, Bullet list, Alphabetical list; the archive additionally confirms Numerical and Roman list commands.
 
-The existing versioned workspace migration remains non-destructive. Reference measurements remain evidence-backed and screenshot-only values remain labeled approximations. The project WACZ/JSONL corpus is UI/source evidence, not proof of private editor/storage implementation.
+### Grip drag and context-menu activation are separate gestures
+
+The Capacities archive renders the visible six-dot surface itself with `draggable="true"`; click remains a separate block-options action. Notes App follows that observable contract: the visible grip starts the native drag, while Tiptap's DragHandle plugin remains responsible for selecting and moving the document node.
+
+The Base UI menu trigger opens on `mousedown`. Wrapping the draggable grip directly in that trigger consumed the pointer gesture, locked the Tiptap handle, and prevented `dragstart`. The block menu therefore uses a controlled, non-interactive anchor at the grip position. The visible grip opens the menu only from its completed click handler, after post-drag click suppression has ruled out a drag.
+
+Drag start must not dispatch `lockDragHandle`. The source block is instead preserved in a ref used by `getReferencedVirtualElement`, while `onNodeChange` is ignored for the duration of the drag. This keeps the handle visually anchored without turning the draggable element off before Tiptap processes the drag event.
+
+### Drop feedback
+
+The first slice uses Tiptap's top-level reorder behavior and a one-pixel neutral drop cursor. It does not simulate Capacities' multi-column lateral drops because the current neutral document does not yet support layout blocks.
+
+### Evidence and acceptance
+
+Source/contract tests guard slash trigger semantics, command ordering, small/list-style persistence, localization, geometry, screenshot hashes, draggable ownership, menu-trigger separation, and scope boundaries. Browser acceptance must still prove slash-after-text, command execution, actual block reordering from the visible grip, persistence, mobile behavior, focus/reduced motion, no overflow, and a clean console before archive.
 
 ## Risks / Trade-offs
 
-- Schema drift between neutral validation and editor extensions -> one allowlist plus contract tests.
-- Advanced blocks are deferred -> record them explicitly so this first slice is not misreported as complete Capacities block parity.
-- Controlled updates can reset selection -> suppress recursive emission and compare normalized documents.
+- Small text has no standard Markdown representation -> export it as a normal paragraph and keep richer JSON canonical.
+- Slash matching can become too permissive -> allow only start-of-text or whitespace prefixes, never a mid-word trigger.
+- A menu trigger attached directly to the grip cancels drag -> keep menu anchoring detached from the native draggable surface.
+- Advanced block parity is deferred -> never report this slice as complete Capacities block parity.
 
 ## Migration Plan
 
-1. Keep exact dependency/vendor boundaries and validation tests.
-2. Align neutral schema, Markdown conversion, slash catalog, and keyboard tests with H1-H4.
-3. Complete read-only rendering, BubbleMenu/link editing, top-level insertion/drag, localization, accessibility, and reference checks.
-4. Record advanced block types as a separate follow-up before claiming full block parity.
-5. Sync/validate/archive only after the existing acceptance gates pass.
+1. Preserve current document/storage migrations and exact dependency pins.
+2. Extend neutral validation for Small text and typed ordered-list styles.
+3. Replace the start-of-line-only slash matcher with whitespace-aware activation and align the slash menu to the reference screenshot.
+4. Make the visible six-dot control the native drag origin, detach menu activation from `mousedown`, and keep source positioning through a drag-source virtual anchor.
+5. Run browser, repository, OpenSpec, Graphify, and protected-publication gates before checking acceptance tasks complete.
 
 ## Open Questions
 

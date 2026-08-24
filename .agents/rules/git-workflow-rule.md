@@ -1,4 +1,4 @@
-# Git Workflow
+# Git Workflow Rule
 
 For branches, commits, pushes, pull requests, CI, merges, versioning, tags, and release preparation, follow `CONTRIBUTING.md`.
 

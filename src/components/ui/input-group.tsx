@@ -108,7 +108,6 @@ function InputGroupButton({
 function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
-      data-slot="input-group-text"
       className={cn(
         "flex items-center gap-2 text-sm text-muted-foreground",
         controlIconSelectorClass,

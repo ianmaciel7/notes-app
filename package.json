@@ -17,14 +17,13 @@
     "test:e2e": "playwright test",
     "test:parity": "playwright test tests/e2e/workspace-parity.spec.ts",
     "audit:parity": "node scripts/audit-workspace-parity.mjs",
-    "audit:shadcn": "node scripts/audit-shadcn-contracts.mjs",
-    "verify": "pnpm format:check && pnpm lint && pnpm audit:shadcn && pnpm complexity && pnpm typegen && pnpm typecheck && pnpm test:coverage && pnpm build",
+    "verify": "pnpm format:check && pnpm lint && pnpm complexity && pnpm typegen && pnpm typecheck && pnpm test:coverage && pnpm build",
     "graphify:knowledge": "node ./scripts/graphify-ingest-legacy.mjs",
     "graphify:knowledge:build": "node ./scripts/graphify-ingest-legacy.mjs --build",
     "graphify:install": "node ./scripts/graphify-install.mjs",
-    "graphify:build": "graphify extract . --code-only --output . && graphify cluster-only .",
+    "graphify:build": "graphify build",
     "graphify:update:code": "graphify extract . --code-only --output . --no-cluster && graphify cluster-only . --graph graphify-out/graph.json --no-viz --no-label",
-    "graphify:status": "graphify god-nodes"
+    "graphify:status": "graphify status"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

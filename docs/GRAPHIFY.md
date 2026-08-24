@@ -18,10 +18,9 @@ Graphify is the repository's primary codebase and architecture navigation layer 
 4. Windows + uv cache issues:
    - `UV_CACHE_DIR=%CD%\.uv-cache UV_TOOL_DIR=%CD%\.uv-tools uv tool install graphifyy`
 5. Generate or refresh the knowledge graph as needed using:
-   - `pnpm run graphify:build` (or `graphify extract . --code-only --output . && graphify cluster-only .`)
-   - `pnpm run graphify:status` (or `graphify god-nodes`)
+   - `graphify build`
+   - `graphify status`
 6. Use in sessions:
-   - `graphify god-nodes`
    - `graphify query ...`
    - `graphify explain ...`
    - `graphify path ...`

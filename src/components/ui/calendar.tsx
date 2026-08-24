@@ -166,7 +166,7 @@ function Calendar({
         ),
         WeekNumber: ({ children, ...props }) => {
           return (
-            <td data-slot="calendar-week-number" {...props}>
+            <td {...props}>
               <div className="flex size-(--cell-size) items-center justify-center text-center">
                 {children}
               </div>

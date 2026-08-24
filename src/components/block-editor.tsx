@@ -5,49 +5,32 @@ import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
 import { Markdown } from "@tiptap/markdown";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
+import { useLocale, useTranslations } from "next-intl";
 import * as React from "react";
+import { BlockHandle } from "@/components/block-editor-handle";
+import { SelectionToolbar } from "@/components/block-editor-selection-toolbar";
+import type {
+  BlockEditorLabels,
+  BlockEditorProps,
+} from "@/editor/block-editor-contract";
+import { createBlockCommandCatalog } from "@/editor/block-command-catalog";
+import { ParagraphSizeExtension } from "@/editor/block-editor-extensions";
 import {
   type BlockEditorDocument,
   createEmptyBlockEditorDocument,
+  isSafeBlockEditorHref,
   normalizeBlockEditorDocument,
 } from "@/editor/document";
 import { createSlashCommandExtension } from "@/editor/slash-command";
-import { useBufferedTextCommit } from "@/hooks/use-buffered-text-commit";
+import { useBufferedDocumentCommit } from "@/editor/use-buffered-document-commit";
 import { cn } from "@/lib/utils";
 
-type BlockEditorLabels = {
-  bold: string;
-  code: string;
-  italic: string;
-  slashMenu: {
-    empty: string;
-    cancel: string;
-    createPage: string;
-    text: string;
-    page: string;
-    heading1: string;
-    heading2: string;
-    heading3: string;
-    heading4: string;
-    navigate: string;
-    bulletList: string;
-    orderedList: string;
-    taskList: string;
-    select: string;
-    blockquote: string;
-    codeBlock: string;
-    horizontalRule: string;
-    title: string;
-  };
-};
-
-function serializeBlockEditorDocument(document: BlockEditorDocument) {
+function serializeDocument(document: BlockEditorDocument) {
   return JSON.stringify(document);
 }
 
-function parseBlockEditorDocument(serialized: string) {
+function normalizeSerializedDocument(serialized: string) {
   try {
     return (
       normalizeBlockEditorDocument(JSON.parse(serialized)) ??
@@ -58,7 +41,29 @@ function parseBlockEditorDocument(serialized: string) {
   }
 }
 
-export function BlockEditor({
+function editorAttributes(editable: boolean, ariaLabel: string, locale: string) {
+  return editable
+    ? {
+        "aria-label": ariaLabel,
+        "aria-multiline": "true",
+        class:
+          "notes-block-editor focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring/60",
+        lang: locale,
+        role: "textbox",
+        spellcheck: "true",
+      }
+    : {
+        "aria-label": ariaLabel,
+        "aria-multiline": "false",
+        class:
+          "notes-block-editor notes-block-editor-readonly cursor-default outline-none",
+        lang: locale,
+        role: "document",
+        spellcheck: "false",
+      };
+}
+
+function BlockEditor({
   value,
   onChange,
   onCreatePageRequest,
@@ -66,129 +71,176 @@ export function BlockEditor({
   ariaLabel,
   className,
   labels,
-}: {
-  value: BlockEditorDocument;
-  onChange: (document: BlockEditorDocument) => void;
-  onCreatePageRequest?: (title: string) => void;
-  placeholder: string;
-  ariaLabel: string;
-  className?: string;
-  labels: BlockEditorLabels;
-}) {
-  const { draft, inputProps, setDraft } =
-    useBufferedTextCommit<BlockEditorDocument>({
-      value,
-      onCommit: onChange,
-      format: serializeBlockEditorDocument,
-      parse: parseBlockEditorDocument,
-    });
-  const draftDocument = React.useMemo(
-    () => parseBlockEditorDocument(draft),
-    [draft],
+  editable = true,
+}: BlockEditorProps) {
+  const locale = useLocale();
+  const t = useTranslations("workspace.editor");
+  const taskCheckedLabel = t("taskChecked");
+  const taskUncheckedLabel = t("taskUnchecked");
+  const serializedValue = serializeDocument(value);
+  const externalDocument = React.useMemo(
+    () => normalizeSerializedDocument(serializedValue),
+    [serializedValue],
   );
+  const initialContentRef = React.useRef(externalDocument.doc);
+  const createPageRequestRef = React.useRef(onCreatePageRequest);
+
+  React.useEffect(() => {
+    createPageRequestRef.current = onCreatePageRequest;
+  }, [onCreatePageRequest]);
+
+  const {
+    acceptExternalDocument,
+    cancelPendingCommit,
+    finishComposition,
+    flushCommit,
+    scheduleCommit,
+    startComposition,
+  } = useBufferedDocumentCommit({ value: externalDocument, onCommit: onChange });
+
+  const slashLabelsKey = JSON.stringify(labels.slashMenu);
+  const stableSlashLabels = React.useMemo<BlockEditorLabels["slashMenu"]>(() => {
+    const parsedLabels = JSON.parse(
+      slashLabelsKey,
+    ) as Partial<BlockEditorLabels["slashMenu"]>;
+
+    return {
+      ...parsedLabels,
+      smallText: parsedLabels.smallText || t("slashMenu.smallText"),
+      alphabeticalList:
+        parsedLabels.alphabeticalList || t("slashMenu.alphabeticalList"),
+      romanList: parsedLabels.romanList || t("slashMenu.romanList"),
+    } as BlockEditorLabels["slashMenu"];
+  }, [slashLabelsKey, t]);
+  const handleCreatePageRequest = React.useCallback((title: string) => {
+    createPageRequestRef.current?.(title);
+  }, []);
   const slashCommandExtension = React.useMemo(
     () =>
-      createSlashCommandExtension(labels.slashMenu, {
-        onCreatePageRequest,
+      createSlashCommandExtension(stableSlashLabels, {
+        onCreatePageRequest: handleCreatePageRequest,
       }),
-    [labels.slashMenu, onCreatePageRequest],
+    [handleCreatePageRequest, stableSlashLabels],
   );
-  const editor = useEditor({
-    immediatelyRender: false,
-    extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3, 4] } }),
+  const blockCommands = React.useMemo(
+    () => createBlockCommandCatalog(stableSlashLabels),
+    [stableSlashLabels],
+  );
+  const attributes = React.useMemo(
+    () => editorAttributes(editable, ariaLabel, locale),
+    [ariaLabel, editable, locale],
+  );
+  const editorProps = React.useMemo(() => ({ attributes }), [attributes]);
+  const extensions = React.useMemo(
+    () => [
+      StarterKit.configure({
+        dropcursor: {
+          color: "#b8b3ad",
+          width: 1,
+          class: "block-editor-dropcursor",
+        },
+        heading: { levels: [1, 2, 3, 4] },
+        link: {
+          openOnClick: false,
+          markdownLinks: true,
+          isAllowedUri: isSafeBlockEditorHref,
+        },
+      }),
+      ParagraphSizeExtension,
       TaskList,
-      TaskItem.configure({ nested: true }),
-      Placeholder.configure({ placeholder }),
+      TaskItem.configure({
+        nested: true,
+        a11y: {
+          checkboxLabel: (_node, checked) =>
+            checked ? taskCheckedLabel : taskUncheckedLabel,
+        },
+      }),
+      Placeholder.configure({
+        placeholder,
+        showOnlyWhenEditable: true,
+      }),
       Markdown,
       slashCommandExtension,
     ],
-    content: draftDocument.doc,
-    editorProps: {
-      attributes: {
-        "aria-label": ariaLabel,
-        "aria-multiline": "true",
-        class: "notes-block-editor focus:outline-none",
-        lang: "pt-BR",
-        role: "textbox",
-        spellcheck: "true",
-      },
-    },
+    [placeholder, slashCommandExtension, taskCheckedLabel, taskUncheckedLabel],
+  );
+
+  const editor = useEditor({
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
+    editable,
+    extensions,
+    content: initialContentRef.current,
+    editorProps,
     onUpdate: ({ editor: currentEditor }) => {
-      setDraft(
-        serializeBlockEditorDocument({
-          schemaVersion: 1,
-          doc: currentEditor.getJSON() as BlockEditorDocument["doc"],
-        }),
-      );
+      if (!currentEditor.isEditable) return;
+      scheduleCommit({
+        schemaVersion: 1,
+        doc: currentEditor.getJSON() as BlockEditorDocument["doc"],
+      });
     },
   });
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
+    if (!editor) return;
+    const currentDocument = normalizeBlockEditorDocument({
+      schemaVersion: 1,
+      doc: editor.getJSON(),
+    });
     if (
-      !editor ||
-      editor.isFocused ||
-      JSON.stringify(editor.getJSON()) === JSON.stringify(draftDocument.doc)
+      currentDocument &&
+      serializeDocument(currentDocument) === serializeDocument(externalDocument)
     ) {
+      acceptExternalDocument(externalDocument);
       return;
     }
 
-    editor.commands.setContent(draftDocument.doc, {
+    cancelPendingCommit();
+    acceptExternalDocument(externalDocument);
+    editor.commands.setContent(externalDocument.doc, {
       emitUpdate: false,
+      errorOnInvalidContent: true,
     });
-  }, [draftDocument.doc, editor]);
+  }, [acceptExternalDocument, cancelPendingCommit, editor, externalDocument]);
+
+  React.useEffect(() => {
+    if (!editor) return;
+    if (!editable) flushCommit();
+    editor.setEditable(editable, false);
+    editor.setOptions({ editorProps });
+  }, [editable, editor, editorProps, flushCommit]);
+
+  const interactions =
+    editor && editable ? (
+      <>
+        <SelectionToolbar
+          editor={editor}
+          blockCommands={blockCommands}
+          labels={labels}
+        />
+        <BlockHandle editor={editor} blockCommands={blockCommands} />
+      </>
+    ) : null;
 
   return (
     <div
-      className={cn("editor-prose relative mt-2", className)}
+      className={cn(
+        "editor-prose relative mt-2 min-w-0 max-w-full [&_p[data-text-size=small]]:text-[14px] [&_p[data-text-size=small]]:leading-5",
+        className,
+      )}
       data-slot="block-editor"
+      data-editable={editable}
     >
-      {editor ? (
-        <BubbleMenu editor={editor}>
-          <div
-            className="flex items-center gap-0.5 rounded-lg border border-border bg-popover p-1 shadow-md"
-            data-slot="block-editor-selection-menu"
-          >
-            {(
-              [
-                [
-                  "bold",
-                  labels.bold,
-                  () => editor.chain().focus().toggleBold().run(),
-                ],
-                [
-                  "italic",
-                  labels.italic,
-                  () => editor.chain().focus().toggleItalic().run(),
-                ],
-                [
-                  "code",
-                  labels.code,
-                  () => editor.chain().focus().toggleCode().run(),
-                ],
-              ] as const
-            ).map(([mark, label, command]) => (
-              <button
-                key={mark}
-                type="button"
-                aria-label={label}
-                aria-pressed={editor.isActive(mark)}
-                onClick={command}
-                className="h-7 rounded px-2 text-sm font-medium hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring aria-pressed:bg-accent"
-              >
-                {mark === "bold" ? "B" : mark === "italic" ? "I" : "<>"}
-              </button>
-            ))}
-          </div>
-        </BubbleMenu>
-      ) : null}
+      {interactions}
       <EditorContent
         editor={editor}
-        onBlur={inputProps.onBlur}
-        onCompositionEnd={inputProps.onCompositionEnd}
-        onCompositionStart={inputProps.onCompositionStart}
-        onFocus={inputProps.onFocus}
+        onBlur={editable ? flushCommit : undefined}
+        onCompositionEnd={editable ? finishComposition : undefined}
+        onCompositionStart={editable ? startComposition : undefined}
       />
     </div>
   );
 }
+
+export { BlockEditor };
+export type { BlockEditorLabels, BlockEditorProps };
