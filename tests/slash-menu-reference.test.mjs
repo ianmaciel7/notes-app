@@ -17,6 +17,17 @@ test("slash trigger works at block start and after whitespace", () => {
   assert.doesNotMatch(slashSource, /startOfLine: true/);
 });
 
+test("slash menu stays anchored to the caret instead of viewport origin", () => {
+  assert.match(slashSource, /coordsAtPos\(position\)/);
+  assert.match(slashSource, /resolveSlashMenuAnchor/);
+  assert.match(slashSource, /isUsableAnchorRect/);
+  assert.match(slashSource, /floatingUi: \{ strategy: "fixed" \}/);
+  assert.match(slashSource, /onPosition: \(position\) =>/);
+  assert.match(slashSource, /position: "fixed"/);
+  assert.match(slashSource, /SLASH_MENU_VIEWPORT_GUTTER/);
+  assert.match(slashSource, /SLASH_MENU_CURSOR_GAP/);
+});
+
 test("slash menu keeps the reference-aligned leading command order", () => {
   const ids = ["text", "small-text", "heading-1", "heading-2", "heading-3", "heading-4", "bullet-list", "alphabetical-list", "ordered-list", "roman-list"];
   let cursor = -1;
@@ -48,8 +59,10 @@ test("small text and typed ordered lists persist in the neutral document", () =>
   assert.match(catalogSource, /setOrderedListType\(editor, range, "i"\)/);
 });
 
-test("slash menu reference image is registered", () => {
+test("slash menu reference images are registered", () => {
   assert.match(referenceSource, /619 × 545 px/);
   assert.match(referenceSource, /c16d002a2c7caff2918edbec40ae915f52454ab3a557e2637591a31ddc3dc1de/);
   assert.match(referenceSource, /f2ac5edd1c7ed1b75e39bc9935c73cd1550fe73a2ee489bf0be9d86c84cd0676/);
+  assert.match(referenceSource, /1906 × 945 px/);
+  assert.match(referenceSource, /a7e3ab077b0133e55558c43c41a5eca5afd86a3e8b745a1fe1fc6364a2029870/);
 });
