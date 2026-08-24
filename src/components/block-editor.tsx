@@ -126,8 +126,9 @@ function BlockEditor({
     () => [
       StarterKit.configure({
         dropcursor: {
-          color: "oklch(0.7161 0.006 30.59 / 0.7)",
-          width: 3,
+          color: "#b8b3ad",
+          width: 1,
+          class: "block-editor-dropcursor",
         },
         heading: { levels: [1, 2, 3, 4] },
         link: {
