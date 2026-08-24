@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import * as React from "react";
 
 import {
@@ -18,21 +19,10 @@ import type {
 
 const LOCAL_WORKSPACE_ID = "local-workspace";
 const OBJECT_TYPE_VIEW_CREATOR_ID = "object-type-view-surface";
-
-const dataViewLabels: Readonly<Record<DataViewKind, string>> = {
-  embed: "Embed",
-  gallery: "Galeria",
-  list: "Lista",
-  table: "Tabela",
-  wall: "Mural",
-};
-
-const objectViewLabels: ObjectViewLabels = {
-  emptyView: "Nenhum objeto corresponde a esta visualização.",
-  missingObject: "Este objeto não está mais disponível.",
-  openObject: (title) => `Abrir ${title}`,
-  untitledObject: "Sem título",
-};
+const OBJECT_TYPE_VIEW_KINDS = [
+  "list",
+  "table",
+] as const satisfies readonly DataViewKind[];
 
 function isStructureDataView(
   view: WorkspaceDataView,
@@ -65,43 +55,80 @@ function createStructureQuery(structureId: string): QueryDefinition {
 }
 
 function WorkspaceViewsSurface() {
-  const { createdEntities, mainValue, objectTypes, selectEntity } =
-    useWorkspace();
+  const t = useTranslations("workspace");
+  const {
+    createdEntities,
+    mainValue,
+    objectTypes,
+    selectEntity,
+    structures,
+  } = useWorkspace();
   const {
     createWorkspaceDataView,
     dataViews,
     hydrationStatus,
     switchWorkspaceDataViewKind,
   } = useWorkspaceViews();
+  const activeStructure = structures.find((item) => item.id === mainValue);
   const activeObjectType = objectTypes.find((item) => item.id === mainValue);
-  const activeDataView = activeObjectType
-    ? dataViews.find((view) =>
-        isStructureDataView(view, activeObjectType.id),
-      )
+  const activeDataView = activeStructure
+    ? dataViews.find((view) => isStructureDataView(view, activeStructure.id))
     : undefined;
+  const activeLabel = activeObjectType?.label ?? activeStructure?.pluralName;
+  const objectTypeLabels = React.useMemo(
+    () =>
+      Object.fromEntries([
+        ...structures.map((structure) => [
+          structure.id,
+          structure.singularName,
+        ]),
+        ...objectTypes.map((item) => [item.id, item.label]),
+      ]) as Readonly<Record<string, string>>,
+    [objectTypes, structures],
+  );
+  const objectViewLabels = React.useMemo<ObjectViewLabels>(
+    () => ({
+      emptyView: t("empty.title"),
+      missingObject: t("objectTypeOverview.namedItemViewNotReady"),
+      openObject: (title) => `${t("lifecycle.task.open")}: ${title}`,
+      untitledObject: t("lifecycle.untitled"),
+    }),
+    [t],
+  );
+  const dataViewLabels = React.useMemo(
+    () => ({
+      list: t("actions.list"),
+      table: t("objectTypeStudio.objectTypes.table"),
+    }),
+    [t],
+  );
+  const propertyLabels = React.useMemo(
+    () => ({
+      createdAt: t("lifecycle.query.created"),
+      objectTypeId: t("footer.objectTypes"),
+      title: t("fields.title"),
+    }),
+    [t],
+  );
 
   React.useEffect(() => {
-    if (
-      hydrationStatus === "loading" ||
-      !activeObjectType ||
-      activeDataView
-    ) {
+    if (hydrationStatus === "loading" || !activeStructure || activeDataView) {
       return;
     }
     createWorkspaceDataView({
       creatorId: OBJECT_TYPE_VIEW_CREATOR_ID,
-      name: activeObjectType.label,
-      query: createStructureQuery(activeObjectType.id),
+      name: activeStructure.pluralName,
+      query: createStructureQuery(activeStructure.id),
       workspaceId: LOCAL_WORKSPACE_ID,
     });
   }, [
     activeDataView,
-    activeObjectType,
+    activeStructure,
     createWorkspaceDataView,
     hydrationStatus,
   ]);
 
-  if (!activeObjectType || !activeDataView) {
+  if (!activeStructure || !activeLabel || !activeDataView) {
     return <AtomicNotesWorkspace />;
   }
 
@@ -112,13 +139,14 @@ function WorkspaceViewsSurface() {
     >
       <header className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-3">
         <div className="min-w-0">
-          <p className="text-xs text-muted-foreground">Tipo de objeto</p>
-          <h1 className="truncate text-lg font-semibold">
-            {activeObjectType.label}
-          </h1>
+          <p className="text-xs text-muted-foreground">
+            {t("footer.objectTypes")}
+          </p>
+          <h1 className="truncate text-lg font-semibold">{activeLabel}</h1>
         </div>
         <DataViewLayoutSwitcher
-          ariaLabel="Alterar visualização dos objetos"
+          ariaLabel={t("actions.moreViews")}
+          kinds={OBJECT_TYPE_VIEW_KINDS}
           labels={dataViewLabels}
           value={activeDataView.presentation.kind}
           onValueChange={(kind) =>
@@ -130,7 +158,10 @@ function WorkspaceViewsSurface() {
         <DataViewRenderer
           entities={createdEntities}
           labels={objectViewLabels}
+          objectTypeLabels={objectTypeLabels}
           onOpen={selectEntity}
+          propertyLabels={propertyLabels}
+          structures={structures}
           view={activeDataView}
         />
       </div>

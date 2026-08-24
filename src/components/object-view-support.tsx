@@ -1,0 +1,161 @@
+"use client";
+
+import * as React from "react";
+
+import {
+  objectIconToneTextClass,
+  objectTypeDefinitionById,
+} from "@/components/object-icons";
+import type {
+  ObjectViewProps,
+  ProjectionLabels,
+} from "@/components/object-view-types";
+import { cn } from "@/lib/utils";
+import type { WorkspaceStructure } from "@/lib/workspace-object-types";
+import type { WorkspaceEntity } from "@/lib/workspace-objects";
+import { readWorkspaceEntityProperty } from "@/lib/workspace-object-views";
+
+function structureFor(
+  entity: WorkspaceEntity,
+  structures: readonly WorkspaceStructure[] | undefined,
+): WorkspaceStructure | undefined {
+  return structures?.find((structure) => structure.id === entity.objectTypeId);
+}
+
+function typeLabel(
+  entity: WorkspaceEntity,
+  labels: ProjectionLabels["objectTypeLabels"],
+  structures: readonly WorkspaceStructure[] | undefined,
+): string {
+  return (
+    labels?.[entity.objectTypeId] ??
+    structureFor(entity, structures)?.singularName ??
+    entity.objectTypeId
+  );
+}
+
+function ObjectTypeLabel({
+  entity,
+  labels,
+  structures,
+}: {
+  readonly entity: WorkspaceEntity;
+  readonly labels?: ProjectionLabels["objectTypeLabels"];
+  readonly structures?: readonly WorkspaceStructure[];
+}) {
+  const structure = structureFor(entity, structures);
+  const definition =
+    objectTypeDefinitionById[structure?.iconName ?? entity.objectTypeId] ??
+    objectTypeDefinitionById.page;
+  const Icon = definition.icon;
+  const tone = structure?.tone ?? definition.tone;
+  return (
+    <span className="inline-flex min-w-0 items-center gap-1.5">
+      <Icon
+        aria-hidden
+        className={cn("size-4 shrink-0", objectIconToneTextClass[tone])}
+      />
+      <span className="truncate">{typeLabel(entity, labels, structures)}</span>
+    </span>
+  );
+}
+
+function formatValue(value: unknown): string {
+  if (value == null || value === "") return "—";
+  if (typeof value === "boolean") return value ? "✓" : "—";
+  if (typeof value === "number") return new Intl.NumberFormat().format(value);
+  if (Array.isArray(value)) return value.map(formatValue).join(", ");
+  if (typeof value !== "string") return JSON.stringify(value);
+  const parsed = Date.parse(value);
+  return /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(parsed)
+    ? new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(
+        new Date(parsed),
+      )
+    : value;
+}
+
+function entityValue(
+  entity: WorkspaceEntity,
+  propertyId: string,
+  labels: ProjectionLabels["objectTypeLabels"],
+  structures: readonly WorkspaceStructure[] | undefined,
+): string {
+  return propertyId === "objectTypeId"
+    ? typeLabel(entity, labels, structures)
+    : formatValue(readWorkspaceEntityProperty(entity, propertyId));
+}
+
+function entityDescription(entity: WorkspaceEntity): string {
+  if ("description" in entity && typeof entity.description === "string") {
+    return entity.description;
+  }
+  if (entity.kind === "task" || entity.kind === "url") return entity.body;
+  if (entity.kind === "table") return entity.notes;
+  if (entity.kind === "file") return entity.fileName;
+  return "";
+}
+
+function ObjectProperties({
+  config,
+  entity,
+  objectTypeLabels,
+  propertyLabels,
+  structures,
+}: Pick<
+  ObjectViewProps,
+  "config" | "objectTypeLabels" | "propertyLabels" | "structures"
+> & { readonly entity: WorkspaceEntity }) {
+  const rows = config.visiblePropertyIds
+    .filter((propertyId) => propertyId !== "title")
+    .map((propertyId) => ({
+      id: propertyId,
+      label: propertyLabels?.[propertyId] ?? propertyId,
+      value: entityValue(entity, propertyId, objectTypeLabels, structures),
+    }));
+  if (rows.length === 0) return null;
+  return (
+    <dl className="grid gap-2 text-xs text-muted-foreground">
+      {rows.map((row) => (
+        <div key={row.id} className="flex min-w-0 items-baseline gap-2">
+          <dt className="shrink-0 font-medium">{row.label}</dt>
+          <dd className="truncate">{row.value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function OpenSurface({
+  ariaLabel,
+  children,
+  className,
+  entityId,
+  onOpen,
+}: {
+  readonly ariaLabel: string;
+  readonly children: React.ReactNode;
+  readonly className?: string;
+  readonly entityId: string;
+  readonly onOpen?: (entityId: string) => void;
+}) {
+  if (!onOpen) return <div className={className}>{children}</div>;
+  return (
+    <button
+      type="button"
+      aria-label={ariaLabel}
+      className={cn("text-left", className)}
+      onClick={() => onOpen(entityId)}
+    >
+      {children}
+    </button>
+  );
+}
+
+export {
+  entityDescription,
+  entityValue,
+  ObjectProperties,
+  ObjectTypeLabel,
+  OpenSurface,
+  typeLabel,
+};
