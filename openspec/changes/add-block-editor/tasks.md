@@ -4,6 +4,7 @@
 - [x] 1.2 Keep neutral document validation, normalization, conversion, and persistence contracts.
 - [x] 1.3 Preserve the user-supplied block-handle screenshot and archive-backed tooltip evidence under `docs/references`.
 - [x] 1.4 Preserve the user-supplied slash-menu screenshot and archive-backed command labels/order under `docs/references`.
+- [x] 1.5 Preserve the slash-menu viewport-origin regression screenshot and its acceptance contract under `docs/references`.
 
 ## 2. Workspace document model and persistence
 
@@ -20,9 +21,11 @@
 
 - [x] 4.1 Allow slash-command activation both at block start and after whitespace while rejecting mid-word `/`.
 - [x] 4.2 Align the slash menu's leading command order, row geometry, icon treatment, title, active state, width, and keyboard legend with the authenticated reference.
-- [ ] 4.3 Browser-verify the zero-delay selection BubbleMenu/link-editing contract while preserving selection.
-- [x] 4.4 Implement independent plus/six-dot controls, explicit insertion selection, grip-only drag origin, and post-drag click suppression.
-- [ ] 4.5 Browser-verify insertion order, actual top-level reordering, grip click, no post-drag menu click, and touch/mobile fallback.
+- [x] 4.3 Anchor the slash menu to the current caret with `coordsAtPos` fallback, fixed viewport coordinates, edge clamping, and below/above placement fallback.
+- [ ] 4.4 Browser-verify slash positioning at ordinary, scrolled, and viewport-edge caret positions with no `(0,0)` fallback.
+- [ ] 4.5 Browser-verify the zero-delay selection BubbleMenu/link-editing contract while preserving selection.
+- [x] 4.6 Implement independent plus/six-dot controls, explicit insertion selection, grip-only drag origin, and post-drag click suppression.
+- [ ] 4.7 Browser-verify insertion order, actual top-level reordering, grip click, no post-drag menu click, and touch/mobile fallback.
 
 ## 5. Workspace integration, styling, and copy
 
@@ -33,8 +36,8 @@
 
 ## 6. Automated and browser acceptance
 
-- [x] 6.1 Add source-contract coverage for Small text, alphabetical/roman lists, slash-after-text activation, menu order, geometry, and reference hash.
-- [ ] 6.2 Execute Playwright coverage for slash-after-text, command execution, selection preservation, insertion/reordering, persistence, accessibility, and reference screenshots.
+- [x] 6.1 Add source-contract coverage for Small text, alphabetical/roman lists, slash-after-text activation, menu order, geometry, caret anchoring, viewport clamping, and reference hashes.
+- [ ] 6.2 Execute Playwright coverage for slash-after-text, caret anchoring, command execution, selection preservation, insertion/reordering, persistence, accessibility, and reference screenshots.
 
 ## 7. Completion and protected publication
 
