@@ -1,15 +1,17 @@
 ## Context
 
-Page, Atomic note, and Quote already persist a Notes App-owned structured document behind a client-only Tiptap boundary. The reference exposes semantic blocks, selection tools, a two-part top-level block handle, insertion/reordering, and read-only rendering. The current public documentation also includes Heading 4 and a broader advanced-block catalog than this first slice.
+Page, Atomic note, and Quote persist a Notes App-owned structured document behind a client-only Tiptap boundary. The authenticated Capacities reference exposes semantic blocks, selection tools, a two-part top-level block handle, insertion/reordering, and a slash command menu that can open after existing text followed by whitespace. The current public documentation and archived source also confirm Heading 4, Small text, and multiple ordered-list styles.
 
-The project archive is UI/source evidence, not proof of Capacities' private editor or storage implementation. The reference evidence is preserved in `docs/references/capacities-block-handle.md` and its hashed screenshot asset. The archived source confirms four distinct actions: normal plus click inserts below, Shift-click inserts above, grip drag moves the block, and grip click opens block options.
+The project archive is UI/source evidence, not proof of Capacities' private editor or storage implementation. The block-handle evidence is preserved in `docs/references/capacities-block-handle.md`. The slash-menu evidence is preserved in `docs/references/capacities-slash-menu.md` together with the user-supplied screenshot asset and archive-backed labels.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
 - Keep a validated, versioned document contract independent of rendered HTML and Tiptap types.
-- Support paragraph, H1-H4, first-slice marks/lists/quotes/code/horizontal rule, Markdown interchange, and keyboard behavior.
+- Support paragraph, Small text, H1-H4, first-slice marks, bullet/numerical/alphabetical/roman/task lists, quotes, code, horizontal rule, Markdown interchange, and keyboard behavior.
+- Open `/` at block start or after whitespace, including `aaa /`, while rejecting a mid-word slash.
+- Match the confirmed leading slash-menu order and visual surface.
 - Preserve selection through formatting and link editing.
 - Match the confirmed two-part desktop block-handle interaction while retaining non-drag creation on touch/mobile.
 - Render semantic read-only content without mutation affordances.
@@ -17,7 +19,7 @@ The project archive is UI/source evidence, not proof of Capacities' private edit
 
 **Non-Goals:**
 
-- Small text, toggles, highlights, Mermaid/math, editor tables, multi-column/group blocks, media/object embeds, comments, collaboration, or AI. These remain a separate follow-up after stable BlockIds/linking.
+- Toggles, highlights, Mermaid/math, editor tables, multi-column/group blocks, media/object embeds, comments, collaboration, or AI. These remain a separate follow-up after stable BlockIds/linking.
 - Claims about Capacities' private framework, protocol, or persistence format.
 
 ## Decisions
@@ -26,48 +28,38 @@ The project archive is UI/source evidence, not proof of Capacities' private edit
 
 Tiptap remains internal. Public editor props use only `BlockEditorDocument`, localized labels, editability, and application callbacks. JSON remains canonical; Markdown is interchange only.
 
-### Exact first-slice content
+### Small text as paragraph presentation metadata
 
-Allow paragraph, heading levels 1-4, bullet/ordered/task lists, blockquote, code block, horizontal rule, hard break, bold, italic, inline code, and validated links. Unsupported content is rejected rather than silently coerced.
+Small text is represented as a paragraph attribute owned by the neutral document (`size: "small"`). A Tiptap global-attribute extension renders it as `data-text-size="small"`. This avoids inventing a second paragraph node type and keeps Small text compatible with the reference's hierarchy-style behavior. Markdown export degrades Small text to an ordinary paragraph because standard Markdown has no equivalent syntax.
 
-### Responsive controlled updates
+### Ordered-list style as typed ordered-list metadata
 
-`useEditor` explicitly disables transaction-wide React rerenders. Editor updates are buffered in refs and committed after a short delay, blur, or unmount; no React draft state is updated per keystroke. External documents are compared and applied with `emitUpdate: false` and invalid-content rejection.
+The pinned Tiptap ordered-list extension supports an HTML list `type` attribute. Notes App preserves numerical/default, alphabetical (`a`), and roman (`i`) styles in the neutral document validator. Changing one ordered-list style updates the same list rather than toggling it off.
 
-The BubbleMenu uses `useEditorState` selectors for the small reactive formatting state and disables the default position/update debounce so selection controls appear immediately.
+### Slash trigger semantics
 
-### Drag-handle integration for pinned Tiptap 3.30.2
+The previous `startOfLine: true` configuration was too restrictive and explains the reported `aaa /` failure. The Suggestion matcher now uses `startOfLine: false` with whitespace-only prefixes. This admits block-start `/` and whitespace-prefixed `/`, while preventing a slash in the middle of a word from opening the block menu.
 
-The pinned React DragHandle wrapper registers `DragHandlePlugin` directly; it does not register the base DragHandle extension commands. Therefore `editor.commands.lockDragHandle()` and `unlockDragHandle()` are invalid in this integration. Menu locking uses the same transaction metadata consumed by the official plugin: `editor.commands.setMeta("lockDragHandle", boolean)`.
+### Slash-menu visual contract
 
-The two controls remain inside the plugin-positioned portal but have independent native interaction contracts. The plus is explicitly non-draggable, temporarily disables its draggable ancestor during pointer input, and cancels any non-grip `dragstart`. The six-dot control is the only explicit native drag origin. Normal plus click inserts below; Shift-click inserts above; both place the text selection inside the new paragraph.
-
-Grip click opens the controlled block-options menu. Drag start closes/locks the menu, and drag end starts a short click-suppression window so the browser cannot convert the completed drag into an accidental menu-opening click. Nested content is not an independent drag target (`nested={false}`). Touch/coarse-pointer layouts do not mount the drag plugin and retain slash/keyboard creation.
-
-### Selection and link preservation
-
-Formatting controls capture the text range before focus moves into local menus/popovers, clamp it against the current document, restore it before commands, and extend an existing link mark when editing/removing a link.
+The supplied screenshot confirms a rounded white menu around 440px wide with a neutral border, approximately 40px rows, unboxed neutral icons, an active-row background, title `Criar um bloco`, and a keyboard legend footer. The leading order is Default, Small, H1-H4, Bullet list, Alphabetical list; the archive additionally confirms Numerical and Roman list commands.
 
 ### Evidence and acceptance
 
-Source/contract tests guard the exact dependency versions, missing-command regression, no per-keystroke React draft state, localization, geometry, six-dot visual contract, independent drag origins, screenshot hash, and scope boundary. Browser acceptance must still prove insertion order, actual reordering, no post-drag menu click, persistence, mobile behavior, focus/reduced motion, no overflow, and a clean console before archive.
+Source/contract tests guard slash trigger semantics, command ordering, small/list-style persistence, localization, geometry, screenshot hashes, and scope boundaries. Browser acceptance must still prove slash-after-text, command execution, persistence, mobile behavior, focus/reduced motion, no overflow, and a clean console before archive.
 
 ## Risks / Trade-offs
 
-- Drag/drop behavior varies by browser -> keep the plugin isolated, top-level-only, and require browser evidence before completion.
-- The plugin owns one positioned draggable element -> explicitly gate drag start to the six-dot child and disable the ancestor during plus input.
-- Browsers can emit click after drag -> retain a short post-drag menu-open suppression window.
-- Popovers can collapse selections -> retain explicit range capture/restore and zero-delay BubbleMenu tests.
-- Buffered persistence can race external updates -> cancel pending local commits before accepting a different external document.
-- Advanced block parity is deferred -> keep the follow-up explicit and never report this slice as complete Capacities block parity.
+- Small text has no standard Markdown representation -> export it as a normal paragraph and keep richer JSON canonical.
+- Slash matching can become too permissive -> allow only start-of-text or whitespace prefixes, never a mid-word trigger.
+- Advanced block parity is deferred -> never report this slice as complete Capacities block parity.
 
 ## Migration Plan
 
 1. Preserve current document/storage migrations and exact dependency pins.
-2. Keep DragHandle locking on plugin metadata rather than missing editor commands.
-3. Separate plus and six-dot behavior, preserve the reference screenshot, and add order/drag regression tests.
-4. Keep per-keystroke document updates outside React state and keep toolbar state narrowly reactive.
-5. Run browser, repository, OpenSpec, Graphify, and protected-publication gates before checking acceptance tasks complete.
+2. Extend neutral validation for Small text and typed ordered-list styles.
+3. Replace the start-of-line-only slash matcher with whitespace-aware activation and align the slash menu to the reference screenshot.
+4. Run browser, repository, OpenSpec, Graphify, and protected-publication gates before checking acceptance tasks complete.
 
 ## Open Questions
 

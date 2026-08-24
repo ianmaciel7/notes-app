@@ -9,6 +9,7 @@ type BlockEditorLabels = {
     cancel: string;
     createPage: string;
     text: string;
+    smallText: string;
     page: string;
     heading1: string;
     heading2: string;
@@ -16,7 +17,9 @@ type BlockEditorLabels = {
     heading4: string;
     navigate: string;
     bulletList: string;
+    alphabeticalList: string;
     orderedList: string;
+    romanList: string;
     taskList: string;
     select: string;
     blockquote: string;

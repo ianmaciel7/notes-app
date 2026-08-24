@@ -16,7 +16,7 @@ This document records the user-supplied Capacities slash-command screenshot and 
 - Source dimensions: **619 × 545 px**.
 - Source PNG SHA-256: `c16d002a2c7caff2918edbec40ae915f52454ab3a557e2637591a31ddc3dc1de`.
 - Stored asset: `docs/references/assets/capacities-slash-menu-2026-08-24.webp`.
-- Stored WebP SHA-256: `3bbae76d05f8767550e1a594614e8c42e83ab507657ea46ad59e1838164cd286`.
+- Stored WebP SHA-256: `f2ac5edd1c7ed1b75e39bc9935c73cd1550fe73a2ee489bf0be9d86c84cd0676`.
 
 The screenshot confirms the visible menu surface, ordering, labels, active row treatment, icon style, footer legend, and that `/` can open after existing text followed by whitespace.
 

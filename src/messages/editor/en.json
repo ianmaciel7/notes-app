@@ -16,5 +16,28 @@
   "duplicateBlock": "Duplicate block",
   "deleteBlock": "Delete block",
   "taskChecked": "Completed task",
-  "taskUnchecked": "Open task"
+  "taskUnchecked": "Open task",
+  "slashMenu": {
+    "cancel": "to cancel",
+    "createPage": "Create",
+    "empty": "No editor command matches the search",
+    "text": "Default",
+    "smallText": "Small",
+    "page": "Page",
+    "heading1": "Heading 1",
+    "heading2": "Heading 2",
+    "heading3": "Heading 3",
+    "heading4": "Heading 4",
+    "navigate": "to navigate",
+    "bulletList": "Bullet list",
+    "alphabeticalList": "Alphabetical list",
+    "orderedList": "Numerical list",
+    "romanList": "Roman list",
+    "taskList": "Tasks",
+    "select": "to select",
+    "blockquote": "Quote block",
+    "codeBlock": "Code",
+    "horizontalRule": "Horizontal rule",
+    "title": "Create a block"
+  }
 }

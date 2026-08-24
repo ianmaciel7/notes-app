@@ -58,10 +58,7 @@ function hasCanonicalizableLinkAttrs(value: unknown) {
   if (!hasOnlyKeys(value, ["href", "target", "rel", "class", "title"])) {
     return false;
   }
-  if (
-    typeof value.href !== "string" ||
-    !isSafeBlockEditorHref(value.href)
-  ) {
+  if (typeof value.href !== "string" || !isSafeBlockEditorHref(value.href)) {
     return false;
   }
   return [value.target, value.rel, value.class, value.title].every(
@@ -88,6 +85,23 @@ function canonicalizeKnownEditorDefaults(value: unknown): unknown {
     canonical.attrs = { href: value.attrs.href };
   }
 
+  if (
+    value.type === "paragraph" &&
+    isRecord(value.attrs) &&
+    (value.attrs.size === null || value.attrs.size === undefined)
+  ) {
+    delete canonical.attrs;
+  }
+
+  if (
+    value.type === "orderedList" &&
+    isRecord(value.attrs) &&
+    value.attrs.start === 1 &&
+    (value.attrs.type === null || value.attrs.type === undefined)
+  ) {
+    delete canonical.attrs;
+  }
+
   return canonical;
 }
 
@@ -102,10 +116,7 @@ function isMark(value: unknown): value is BlockEditorMark {
   if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["href"])) {
     return false;
   }
-  return (
-    typeof value.attrs.href === "string" &&
-    isSafeBlockEditorHref(value.attrs.href)
-  );
+  return typeof value.attrs.href === "string" && isSafeBlockEditorHref(value.attrs.href);
 }
 
 function isTextNode(value: Record<string, unknown>) {
@@ -120,34 +131,50 @@ function hasValidContent(value: Record<string, unknown>) {
   return Array.isArray(value.content) && value.content.every(isNode);
 }
 
+function isParagraphNode(value: Record<string, unknown>) {
+  if (value.attrs === undefined) return true;
+  if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["size"])) return false;
+  return value.attrs.size === "small";
+}
+
 function isHeadingNode(value: Record<string, unknown>) {
-  if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["level"])) {
-    return false;
-  }
-  return [1, 2, 3, 4].includes(value.attrs.level as number);
+  return (
+    isRecord(value.attrs) &&
+    hasOnlyKeys(value.attrs, ["level"]) &&
+    [1, 2, 3, 4].includes(value.attrs.level as number)
+  );
 }
 
 function isTaskItemNode(value: Record<string, unknown>) {
-  if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["checked"])) {
-    return false;
-  }
-  return typeof value.attrs.checked === "boolean";
+  return (
+    isRecord(value.attrs) &&
+    hasOnlyKeys(value.attrs, ["checked"]) &&
+    typeof value.attrs.checked === "boolean"
+  );
 }
 
 function isOrderedListNode(value: Record<string, unknown>) {
   if (value.attrs === undefined) return true;
-  if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["start"])) {
+  if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["start", "type"])) {
     return false;
   }
-  return Number.isInteger(value.attrs.start) && (value.attrs.start as number) >= 1;
+  const startIsValid =
+    value.attrs.start === undefined ||
+    (Number.isInteger(value.attrs.start) && (value.attrs.start as number) >= 1);
+  const typeIsValid =
+    value.attrs.type === undefined ||
+    value.attrs.type === null ||
+    ["1", "a", "A", "i", "I"].includes(String(value.attrs.type));
+  return startIsValid && typeIsValid;
 }
 
 function isCodeBlockNode(value: Record<string, unknown>) {
   if (value.attrs === undefined) return true;
-  if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["language"])) {
-    return false;
-  }
-  return value.attrs.language === null || typeof value.attrs.language === "string";
+  return (
+    isRecord(value.attrs) &&
+    hasOnlyKeys(value.attrs, ["language"]) &&
+    (value.attrs.language === null || typeof value.attrs.language === "string")
+  );
 }
 
 function isHorizontalRuleNode(value: Record<string, unknown>) {
@@ -158,6 +185,7 @@ const attributeValidators: Record<
   string,
   (value: Record<string, unknown>) => boolean
 > = {
+  paragraph: isParagraphNode,
   heading: isHeadingNode,
   taskItem: isTaskItemNode,
   orderedList: isOrderedListNode,
@@ -207,9 +235,7 @@ function normalizeBlockEditorDocument(
   value: unknown,
 ): BlockEditorDocument | null {
   const canonicalValue = canonicalizeKnownEditorDefaults(value);
-  if (isEmptyDocumentRoot(canonicalValue)) {
-    return createEmptyBlockEditorDocument();
-  }
+  if (isEmptyDocumentRoot(canonicalValue)) return createEmptyBlockEditorDocument();
   if (!isBlockEditorDocument(canonicalValue)) return null;
   return structuredClone(canonicalValue);
 }
@@ -241,10 +267,7 @@ const markdownManager = new MarkdownManager({
   extensions: [
     StarterKit.configure({
       heading: { levels: [1, 2, 3, 4] },
-      link: {
-        markdownLinks: true,
-        isAllowedUri: isSafeBlockEditorHref,
-      },
+      link: { markdownLinks: true, isAllowedUri: isSafeBlockEditorHref },
     }),
     TaskList,
     TaskItem.configure({ nested: true }),
@@ -253,12 +276,8 @@ const markdownManager = new MarkdownManager({
 
 function blockEditorDocumentFromMarkdown(text: string): BlockEditorDocument {
   const doc = markdownManager.parse(text);
-  const value = {
-    schemaVersion: 1,
-    doc,
-  };
   return (
-    normalizeBlockEditorDocument(value) ??
+    normalizeBlockEditorDocument({ schemaVersion: 1, doc }) ??
     blockEditorDocumentFromPlainText(text)
   );
 }

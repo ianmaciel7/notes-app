@@ -15,6 +15,7 @@ import type {
   BlockEditorProps,
 } from "@/editor/block-editor-contract";
 import { createBlockCommandCatalog } from "@/editor/block-command-catalog";
+import { ParagraphSizeExtension } from "@/editor/block-editor-extensions";
 import {
   type BlockEditorDocument,
   createEmptyBlockEditorDocument,
@@ -83,6 +84,7 @@ function BlockEditor({
   );
   const initialContentRef = React.useRef(externalDocument.doc);
   const createPageRequestRef = React.useRef(onCreatePageRequest);
+
   React.useEffect(() => {
     createPageRequestRef.current = onCreatePageRequest;
   }, [onCreatePageRequest]);
@@ -130,6 +132,7 @@ function BlockEditor({
           isAllowedUri: isSafeBlockEditorHref,
         },
       }),
+      ParagraphSizeExtension,
       TaskList,
       TaskItem.configure({
         nested: true,
@@ -145,12 +148,7 @@ function BlockEditor({
       Markdown,
       slashCommandExtension,
     ],
-    [
-      placeholder,
-      slashCommandExtension,
-      taskCheckedLabel,
-      taskUncheckedLabel,
-    ],
+    [placeholder, slashCommandExtension, taskCheckedLabel, taskUncheckedLabel],
   );
 
   const editor = useEditor({
@@ -189,12 +187,7 @@ function BlockEditor({
       emitUpdate: false,
       errorOnInvalidContent: true,
     });
-  }, [
-    acceptExternalDocument,
-    cancelPendingCommit,
-    editor,
-    externalDocument,
-  ]);
+  }, [acceptExternalDocument, cancelPendingCommit, editor, externalDocument]);
 
   React.useEffect(() => {
     if (!editor) return;
@@ -218,7 +211,7 @@ function BlockEditor({
   return (
     <div
       className={cn(
-        "editor-prose relative mt-2 min-w-0 max-w-full",
+        "editor-prose relative mt-2 min-w-0 max-w-full [&_p[data-text-size=small]]:text-[14px] [&_p[data-text-size=small]]:leading-5",
         className,
       )}
       data-slot="block-editor"

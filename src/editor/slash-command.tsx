@@ -1,6 +1,6 @@
 "use client";
 
-import { type Editor, Extension } from "@tiptap/core";
+import { Extension } from "@tiptap/core";
 import { PluginKey } from "@tiptap/pm/state";
 import {
   exitSuggestion,
@@ -9,12 +9,6 @@ import {
 } from "@tiptap/suggestion";
 import * as React from "react";
 import { createRoot, type Root } from "react-dom/client";
-import {
-  CompactMenuIconFrame,
-  CompactMenuItemText,
-  compactMenuItemClass,
-  compactMenuSurfaceClass,
-} from "@/components/ui/compact-menu";
 import {
   type BlockCommandCatalogItem,
   type BlockCommandCatalogLabels,
@@ -102,15 +96,10 @@ function SlashCommandMenu({
   return (
     <div
       data-slot="block-editor-slash-menu"
-      className={cn(
-        compactMenuSurfaceClass,
-        "box-content w-[22rem] min-w-0 max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-[oklch(0.9163_0.0017_67.07)] p-0 shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
-      )}
+      className="box-border flex w-[27.5rem] max-w-[calc(100vw-1rem)] flex-col overflow-hidden rounded-[14px] border border-[#dedbd7] bg-white text-[#292622] shadow-[0_10px_28px_rgb(47_42_36/0.10),0_2px_8px_rgb(47_42_36/0.06)]"
     >
-      <div className="px-1.5 pb-1 pt-1.5">
-        <div className="mx-1 mb-1 mt-1 flex items-center gap-1 text-xs font-normal text-muted-foreground">
-          <span>{title}</span>
-        </div>
+      <div className="px-3 pb-1 pt-3 text-[14px] font-normal leading-5 text-[#8b857f]">
+        {title}
       </div>
 
       <div
@@ -120,7 +109,7 @@ function SlashCommandMenu({
         aria-activedescendant={
           activeItem ? `block-editor-slash-option-${activeItem.id}` : undefined
         }
-        className="max-h-[min(24rem,80vh)] min-h-0 overflow-y-auto px-1.5 pb-1.5"
+        className="max-h-[21rem] min-h-0 overflow-y-auto px-2 pb-2"
       >
         {items.length > 0 ? (
           items.map((item, index) => {
@@ -149,16 +138,14 @@ function SlashCommandMenu({
                   onSelect(item);
                 }}
                 className={cn(
-                  compactMenuItemClass,
-                  "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] px-1 text-left font-normal outline-none hover:bg-[#f3f1ee] data-[active=true]:bg-[#f3f1ee]",
+                  "flex h-10 w-full items-center gap-3 rounded-[10px] px-2 text-left text-[16px] font-normal leading-5 outline-none transition-colors",
+                  selected ? "bg-[#f3f1ee]" : "hover:bg-[#f7f5f2]",
                 )}
               >
-                <CompactMenuIconFrame variant="ghost">
-                  <Icon />
-                </CompactMenuIconFrame>
-                <CompactMenuItemText>{item.title}</CompactMenuItemText>
+                <Icon className="size-5 shrink-0 text-[#8d8781]" />
+                <span className="min-w-0 flex-1 truncate">{item.title}</span>
                 {item.badge ? (
-                  <span className="ml-2 shrink-0 rounded-[7px] border border-blue-300 bg-blue-50 px-1.5 py-0.5 text-xs leading-4 text-blue-700">
+                  <span className="shrink-0 rounded-md border border-[#d9d5d1] bg-[#fbfaf9] px-1.5 py-0.5 text-xs text-[#77716b]">
                     {item.badge}
                   </span>
                 ) : null}
@@ -166,25 +153,16 @@ function SlashCommandMenu({
             );
           })
         ) : (
-          <div className="px-1 py-3 text-sm text-muted-foreground">
+          <div className="px-2 py-4 text-[14px] text-[#8b857f]">
             {emptyLabel}
           </div>
         )}
       </div>
 
-      <div className="mx-1 flex h-[29px] shrink-0 items-center gap-x-3 border-t border-border px-1 py-1.5 text-xs leading-4 text-muted-foreground">
-        <span className="whitespace-nowrap">
-          <span className="font-medium text-muted-foreground">↑↓</span>{" "}
-          {navigateLabel}
-        </span>
-        <span className="whitespace-nowrap">
-          <span className="font-medium text-muted-foreground">Esc</span>{" "}
-          {cancelLabel}
-        </span>
-        <span className="whitespace-nowrap">
-          <span className="font-medium text-muted-foreground">↵</span>{" "}
-          {selectLabel}
-        </span>
+      <div className="flex h-9 shrink-0 items-center gap-4 border-t border-[#e5e1dd] px-3 text-[13px] leading-4 text-[#383430]">
+        <span className="whitespace-nowrap"><span className="font-medium">↑↓</span> {navigateLabel}</span>
+        <span className="whitespace-nowrap"><span className="font-medium">Esc</span> {cancelLabel}</span>
+        <span className="whitespace-nowrap"><span className="font-medium">↵</span> {selectLabel}</span>
       </div>
     </div>
   );
@@ -242,19 +220,13 @@ function createSlashCommandMenuRenderer(
 }
 
 function normalizeCommandQuery(value: string) {
-  return value
-    .trim()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLocaleLowerCase();
+  return value.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
 }
 
 function commandTermMatches(term: string, query: string) {
   const normalizedTerm = normalizeCommandQuery(term);
   if (normalizedTerm.startsWith(query)) return true;
-  return normalizedTerm
-    .split(/[\s-]+/)
-    .some((token) => token.startsWith(query));
+  return normalizedTerm.split(/[\s-]+/).some((token) => token.startsWith(query));
 }
 
 function filterCommandItems(
@@ -275,31 +247,19 @@ function filterCommandItems(
 
   const title = query.trim();
   if (!title) return filtered;
-  const createPageItem: BlockCommandCatalogItem = {
-    id: `create-page:${title}`,
-    icon: CreatePageIcon,
-    title: `${labels.createPage} '${title}'`,
-    badge: labels.page,
-    searchTerms: [title],
-    execute: (editor, range) => {
-      editor.chain().focus().deleteRange(range).run();
-      options.onCreatePageRequest?.(title);
+  return [
+    {
+      id: `create-page:${title}`,
+      icon: createBlockCommandCatalog(labels)[0].icon,
+      title: `${labels.createPage} '${title}'`,
+      badge: labels.page,
+      searchTerms: [title],
+      execute: (editor, range) => {
+        editor.chain().focus().deleteRange(range).run();
+        options.onCreatePageRequest?.(title);
+      },
     },
-  };
-  return [createPageItem];
-}
-
-function CreatePageIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 256 256"
-      fill="currentColor"
-      aria-hidden="true"
-      {...props}
-    >
-      <path d="M224 128a8 8 0 0 1-8 8h-80v80a8 8 0 0 1-16 0v-80H40a8 8 0 0 1 0-16h80V40a8 8 0 0 1 16 0v80h80a8 8 0 0 1 8 8" />
-    </svg>
-  );
+  ];
 }
 
 function createSlashCommandExtension(
@@ -316,19 +276,13 @@ function createSlashCommandExtension(
           editor: this.editor,
           char: "/",
           pluginKey: slashCommandPluginKey,
-          startOfLine: true,
-          allowedPrefixes: null,
+          startOfLine: false,
+          allowedPrefixes: [" "],
           initialItems: commandItems,
-          items: ({ query }) =>
-            filterCommandItems(commandItems, query, labels, options),
+          items: ({ query }) => filterCommandItems(commandItems, query, labels, options),
           allow: ({ editor, state }) => {
             const { empty, $from } = state.selection;
-            return (
-              editor.isEditable &&
-              empty &&
-              $from.parent.isTextblock &&
-              $from.parent.type.name !== "codeBlock"
-            );
+            return editor.isEditable && empty && $from.parent.isTextblock && $from.parent.type.name !== "codeBlock";
           },
           command: ({ editor, range, props }) => {
             props.execute(editor, range);
@@ -347,9 +301,7 @@ function createSlashCommandExtension(
               unmountFloatingElement = undefined;
               currentUnmount?.();
               currentMenu?.destroy();
-              if (activeSlashMenuCleanup === cleanupMenu) {
-                activeSlashMenuCleanup = undefined;
-              }
+              if (activeSlashMenuCleanup === cleanupMenu) activeSlashMenuCleanup = undefined;
             }
 
             function selectItem(
@@ -362,28 +314,19 @@ function createSlashCommandExtension(
               });
             }
 
-            function updateMenuProps(
-              nextProps: Partial<SlashCommandMenuProps>,
-            ) {
-              menu?.updateProps({
-                activeIndex,
-                items: currentItems,
-                ...nextProps,
-              });
+            function updateMenuProps(nextProps: Partial<SlashCommandMenuProps>) {
+              menu?.updateProps({ activeIndex, items: currentItems, ...nextProps });
             }
 
             return {
               onStart: (props) => {
                 const previousCleanup = activeSlashMenuCleanup;
-                if (previousCleanup && previousCleanup !== cleanupMenu) {
-                  previousCleanup();
-                }
+                if (previousCleanup && previousCleanup !== cleanupMenu) previousCleanup();
                 cleanupMenu();
 
                 activeIndex = 0;
                 currentItems = props.items;
-                const onSelect = (item: BlockCommandCatalogItem) =>
-                  selectItem(item, props.command);
+                const onSelect = (item: BlockCommandCatalogItem) => selectItem(item, props.command);
                 menu = createSlashCommandMenuRenderer({
                   activeIndex,
                   cancelLabel: labels.cancel,
@@ -405,13 +348,8 @@ function createSlashCommandExtension(
               },
               onUpdate: (props) => {
                 currentItems = props.items;
-                activeIndex = Math.min(
-                  activeIndex,
-                  Math.max(currentItems.length - 1, 0),
-                );
-                updateMenuProps({
-                  onSelect: (item) => selectItem(item, props.command),
-                });
+                activeIndex = Math.min(activeIndex, Math.max(currentItems.length - 1, 0));
+                updateMenuProps({ onSelect: (item) => selectItem(item, props.command) });
               },
               onKeyDown: (props: SuggestionKeyDownProps) => {
                 if (props.event.key === "Escape") {
@@ -421,21 +359,12 @@ function createSlashCommandExtension(
                   cleanupMenu();
                   return true;
                 }
-
-                if (
-                  props.event.key === "ArrowDown" ||
-                  props.event.key === "ArrowUp"
-                ) {
+                if (props.event.key === "ArrowDown" || props.event.key === "ArrowUp") {
                   props.event.preventDefault();
-                  activeIndex = getNextIndex(
-                    activeIndex,
-                    currentItems.length,
-                    props.event.key === "ArrowDown" ? 1 : -1,
-                  );
+                  activeIndex = getNextIndex(activeIndex, currentItems.length, props.event.key === "ArrowDown" ? 1 : -1);
                   updateMenuProps({ activeIndex });
                   return true;
                 }
-
                 if (props.event.key === "Enter") {
                   props.event.preventDefault();
                   const item = currentItems[activeIndex];
@@ -444,7 +373,6 @@ function createSlashCommandExtension(
                   command(item);
                   return true;
                 }
-
                 return false;
               },
               onExit: cleanupMenu,

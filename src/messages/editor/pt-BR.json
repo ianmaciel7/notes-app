@@ -16,5 +16,28 @@
   "duplicateBlock": "Duplicar bloco",
   "deleteBlock": "Excluir bloco",
   "taskChecked": "Tarefa concluída",
-  "taskUnchecked": "Tarefa aberta"
+  "taskUnchecked": "Tarefa aberta",
+  "slashMenu": {
+    "cancel": "para abortar",
+    "createPage": "Criar",
+    "empty": "Nenhum comando do editor corresponde à busca",
+    "text": "Padrão",
+    "smallText": "Pequeno",
+    "page": "Página",
+    "heading1": "Cabeçalho 1",
+    "heading2": "Cabeçalho 2",
+    "heading3": "Cabeçalho 3",
+    "heading4": "Cabeçalho 4",
+    "navigate": "para navegar",
+    "bulletList": "Lista de marcadores",
+    "alphabeticalList": "Lista alfabética",
+    "orderedList": "Lista numerada",
+    "romanList": "Lista romana",
+    "taskList": "Tarefas",
+    "select": "para selecionar",
+    "blockquote": "Bloco de citação",
+    "codeBlock": "Código",
+    "horizontalRule": "Linha horizontal",
+    "title": "Criar um bloco"
+  }
 }
