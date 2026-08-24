@@ -1,0 +1,15 @@
+{
+  "selectionToolbar": "Text formatting",
+  "blockType": "Block type",
+  "link": "Link",
+  "linkUrl": "Link URL",
+  "invalidLink": "Enter a valid http, https, mailto, relative, or anchor link.",
+  "applyLink": "Apply link",
+  "removeLink": "Remove link",
+  "undo": "Undo",
+  "redo": "Redo",
+  "insertBlock": "Insert block",
+  "dragBlock": "Drag block",
+  "taskChecked": "Completed task",
+  "taskUnchecked": "Open task"
+}

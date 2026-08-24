@@ -9,26 +9,26 @@
 
 ## 3. Core editor integration
 
-- [ ] 3.1 Align supported first-slice commands and Markdown input/import/export with paragraph, headings H1-H4, bold, italic, inline code, link, bullet/ordered/task list, blockquote, code block, horizontal rule, undo/redo, and keyboard behavior.
-- [ ] 3.2 Render `editable={false}` as semantic read-only content without mutation callbacks, cursor affordances, menus, or handles.
+- [x] 3.1 Align supported first-slice commands and Markdown input/import/export with paragraph, headings H1-H4, bold, italic, inline code, link, bullet/ordered/task list, blockquote, code block, horizontal rule, undo/redo, and keyboard behavior.
+- [x] 3.2 Render `editable={false}` as semantic read-only content without mutation callbacks, cursor affordances, menus, or handles.
 
 ## 4. Block interaction surfaces
 
 - [x] 4.1 Preserve shared slash-command catalog behavior.
-- [ ] 4.2 Complete the selection BubbleMenu/link-editing contract while preserving selection.
-- [ ] 4.3 Complete top-level insertion/drag handles with touch/mobile alternatives.
-- [ ] 4.4 Keep neutral data slots and local shared primitives.
+- [x] 4.2 Complete the selection BubbleMenu/link-editing contract while preserving selection.
+- [x] 4.3 Complete top-level insertion/drag handles with touch/mobile alternatives.
+- [x] 4.4 Keep neutral data slots and local shared primitives.
 
 ## 5. Workspace integration, styling, and copy
 
-- [ ] 5.1 Apply confirmed editor typography/measure/handle contracts and label unverified values as approximations.
-- [ ] 5.2 Complete editor copy, tooltips, ARIA, and empty states in `en`, `es`, and `pt-BR`.
+- [x] 5.1 Apply confirmed editor typography/measure/handle contracts and label unverified values as approximations.
+- [x] 5.2 Complete editor copy, tooltips, ARIA, and empty states in `en`, `es`, and `pt-BR`.
 - [ ] 5.3 Verify focus, reduced motion, mobile overflow, read-only semantics, and clean console behavior.
-- [ ] 5.4 Record advanced documented blocks (small text, toggles, highlights, Mermaid/math, tables, multi-column/group, media/object embeds) as an explicit follow-up; do not mark this slice as complete block parity.
+- [x] 5.4 Record advanced documented blocks (small text, toggles, highlights, Mermaid/math, tables, multi-column/group, media/object embeds) as an explicit follow-up; do not mark this slice as complete block parity.
 
 ## 6. Automated and browser acceptance
 
-- [ ] 6.1 Extend contract/keyboard/formatting tests to H4 and horizontal rule where supported.
+- [x] 6.1 Extend contract/keyboard/formatting tests to H4 and horizontal rule where supported.
 - [ ] 6.2 Validate Markdown shortcuts/paste, selection preservation, top-level insertion/reordering, desktop/mobile persistence, accessibility, and reference DOM/screenshots.
 
 ## 7. Completion and protected publication

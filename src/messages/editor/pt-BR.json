@@ -1,0 +1,15 @@
+{
+  "selectionToolbar": "Formatação de texto",
+  "blockType": "Tipo de bloco",
+  "link": "Link",
+  "linkUrl": "URL do link",
+  "invalidLink": "Informe um link http, https, mailto, relativo ou de âncora válido.",
+  "applyLink": "Aplicar link",
+  "removeLink": "Remover link",
+  "undo": "Desfazer",
+  "redo": "Refazer",
+  "insertBlock": "Inserir bloco",
+  "dragBlock": "Arrastar bloco",
+  "taskChecked": "Tarefa concluída",
+  "taskUnchecked": "Tarefa aberta"
+}
