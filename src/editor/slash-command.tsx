@@ -1,11 +1,12 @@
 "use client";
 
-import { Extension } from "@tiptap/core";
+import { type Editor, Extension } from "@tiptap/core";
 import { PluginKey } from "@tiptap/pm/state";
 import {
   exitSuggestion,
   Suggestion,
   type SuggestionKeyDownProps,
+  type SuggestionPositionData,
 } from "@tiptap/suggestion";
 import * as React from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -17,6 +18,8 @@ import {
 import { cn } from "@/lib/utils";
 
 const slashCommandPluginKey = new PluginKey("block-editor-slash-command");
+const SLASH_MENU_VIEWPORT_GUTTER = 8;
+const SLASH_MENU_CURSOR_GAP = 4;
 let activeSlashMenuCleanup: (() => void) | undefined;
 
 type BlockEditorSlashMenuLabels = {
@@ -51,6 +54,12 @@ type SlashCommandMenuRenderer = {
 };
 
 type RendererState = "active" | "destroy-pending" | "destroyed";
+
+type SlashMenuAnchorState = {
+  editor: Editor;
+  position: number;
+  clientRect?: (() => DOMRect | null) | null;
+};
 
 function getNextIndex(
   currentIndex: number,
@@ -160,9 +169,15 @@ function SlashCommandMenu({
       </div>
 
       <div className="flex h-9 shrink-0 items-center gap-4 border-t border-[#e5e1dd] px-3 text-[13px] leading-4 text-[#383430]">
-        <span className="whitespace-nowrap"><span className="font-medium">↑↓</span> {navigateLabel}</span>
-        <span className="whitespace-nowrap"><span className="font-medium">Esc</span> {cancelLabel}</span>
-        <span className="whitespace-nowrap"><span className="font-medium">↵</span> {selectLabel}</span>
+        <span className="whitespace-nowrap">
+          <span className="font-medium">↑↓</span> {navigateLabel}
+        </span>
+        <span className="whitespace-nowrap">
+          <span className="font-medium">Esc</span> {cancelLabel}
+        </span>
+        <span className="whitespace-nowrap">
+          <span className="font-medium">↵</span> {selectLabel}
+        </span>
       </div>
     </div>
   );
@@ -220,13 +235,19 @@ function createSlashCommandMenuRenderer(
 }
 
 function normalizeCommandQuery(value: string) {
-  return value.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
+  return value
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase();
 }
 
 function commandTermMatches(term: string, query: string) {
   const normalizedTerm = normalizeCommandQuery(term);
   if (normalizedTerm.startsWith(query)) return true;
-  return normalizedTerm.split(/[\s-]+/).some((token) => token.startsWith(query));
+  return normalizedTerm
+    .split(/[\s-]+/)
+    .some((token) => token.startsWith(query));
 }
 
 function filterCommandItems(
@@ -262,6 +283,82 @@ function filterCommandItems(
   ];
 }
 
+function isUsableAnchorRect(rect: DOMRect | null | undefined) {
+  return Boolean(
+    rect &&
+      Number.isFinite(rect.left) &&
+      Number.isFinite(rect.top) &&
+      Number.isFinite(rect.bottom) &&
+      (rect.left !== 0 || rect.top !== 0 || rect.width !== 0 || rect.height !== 0),
+  );
+}
+
+function getCursorRect(editor: Editor, position: number) {
+  try {
+    const coords = editor.view.coordsAtPos(position);
+    return new DOMRect(
+      coords.left,
+      coords.top,
+      Math.max(0, coords.right - coords.left),
+      Math.max(0, coords.bottom - coords.top),
+    );
+  } catch {
+    return null;
+  }
+}
+
+function resolveSlashMenuAnchor(anchor: SlashMenuAnchorState) {
+  const suggestionRect = anchor.clientRect?.();
+  if (isUsableAnchorRect(suggestionRect)) return suggestionRect;
+  return getCursorRect(anchor.editor, anchor.position);
+}
+
+function clamp(value: number, minimum: number, maximum: number) {
+  return Math.min(Math.max(value, minimum), Math.max(minimum, maximum));
+}
+
+function applySlashMenuPosition(
+  element: HTMLElement,
+  position: SuggestionPositionData,
+  anchor: DOMRect | null,
+) {
+  const ownerWindow = element.ownerDocument.defaultView ?? window;
+  const menuRect = element.getBoundingClientRect();
+  const menuWidth = menuRect.width || 440;
+  const menuHeight = menuRect.height;
+  const preferredLeft = anchor?.left ?? position.x;
+  const preferredBelow = anchor ? anchor.bottom + SLASH_MENU_CURSOR_GAP : position.y;
+  const maximumLeft = ownerWindow.innerWidth - menuWidth - SLASH_MENU_VIEWPORT_GUTTER;
+  const left = clamp(preferredLeft, SLASH_MENU_VIEWPORT_GUTTER, maximumLeft);
+
+  let top = preferredBelow;
+  if (
+    anchor &&
+    menuHeight > 0 &&
+    preferredBelow + menuHeight + SLASH_MENU_VIEWPORT_GUTTER > ownerWindow.innerHeight
+  ) {
+    const above = anchor.top - menuHeight - SLASH_MENU_CURSOR_GAP;
+    if (above >= SLASH_MENU_VIEWPORT_GUTTER) top = above;
+  }
+  if (menuHeight > 0) {
+    top = clamp(
+      top,
+      SLASH_MENU_VIEWPORT_GUTTER,
+      ownerWindow.innerHeight - menuHeight - SLASH_MENU_VIEWPORT_GUTTER,
+    );
+  } else {
+    top = Math.max(SLASH_MENU_VIEWPORT_GUTTER, top);
+  }
+
+  Object.assign(element.style, {
+    left: `${Math.round(left)}px`,
+    position: "fixed",
+    top: `${Math.round(top)}px`,
+    width: "max-content",
+    zIndex: "120",
+  });
+}
+
 function createSlashCommandExtension(
   labels: BlockEditorSlashMenuLabels,
   options: SlashCommandOptions = {},
@@ -279,10 +376,17 @@ function createSlashCommandExtension(
           startOfLine: false,
           allowedPrefixes: [" "],
           initialItems: commandItems,
-          items: ({ query }) => filterCommandItems(commandItems, query, labels, options),
+          floatingUi: { strategy: "fixed" },
+          items: ({ query }) =>
+            filterCommandItems(commandItems, query, labels, options),
           allow: ({ editor, state }) => {
             const { empty, $from } = state.selection;
-            return editor.isEditable && empty && $from.parent.isTextblock && $from.parent.type.name !== "codeBlock";
+            return (
+              editor.isEditable &&
+              empty &&
+              $from.parent.isTextblock &&
+              $from.parent.type.name !== "codeBlock"
+            );
           },
           command: ({ editor, range, props }) => {
             props.execute(editor, range);
@@ -293,15 +397,19 @@ function createSlashCommandExtension(
             let unmountFloatingElement: (() => void) | undefined;
             let activeIndex = 0;
             let currentItems: BlockCommandCatalogItem[] = [];
+            let anchorState: SlashMenuAnchorState | undefined;
 
             function cleanupMenu() {
               const currentMenu = menu;
               const currentUnmount = unmountFloatingElement;
               menu = undefined;
               unmountFloatingElement = undefined;
+              anchorState = undefined;
               currentUnmount?.();
               currentMenu?.destroy();
-              if (activeSlashMenuCleanup === cleanupMenu) activeSlashMenuCleanup = undefined;
+              if (activeSlashMenuCleanup === cleanupMenu) {
+                activeSlashMenuCleanup = undefined;
+              }
             }
 
             function selectItem(
@@ -315,18 +423,30 @@ function createSlashCommandExtension(
             }
 
             function updateMenuProps(nextProps: Partial<SlashCommandMenuProps>) {
-              menu?.updateProps({ activeIndex, items: currentItems, ...nextProps });
+              menu?.updateProps({
+                activeIndex,
+                items: currentItems,
+                ...nextProps,
+              });
             }
 
             return {
               onStart: (props) => {
                 const previousCleanup = activeSlashMenuCleanup;
-                if (previousCleanup && previousCleanup !== cleanupMenu) previousCleanup();
+                if (previousCleanup && previousCleanup !== cleanupMenu) {
+                  previousCleanup();
+                }
                 cleanupMenu();
 
                 activeIndex = 0;
                 currentItems = props.items;
-                const onSelect = (item: BlockCommandCatalogItem) => selectItem(item, props.command);
+                anchorState = {
+                  editor: props.editor,
+                  position: props.range.to,
+                  clientRect: props.clientRect,
+                };
+                const onSelect = (item: BlockCommandCatalogItem) =>
+                  selectItem(item, props.command);
                 menu = createSlashCommandMenuRenderer({
                   activeIndex,
                   cancelLabel: labels.cancel,
@@ -343,13 +463,32 @@ function createSlashCommandExtension(
                 });
                 menu.element.style.width = "max-content";
                 menu.element.style.zIndex = "120";
-                unmountFloatingElement = props.mount(menu.element);
+                unmountFloatingElement = props.mount(menu.element, {
+                  onPosition: (position) => {
+                    if (!menu || !anchorState) return;
+                    applySlashMenuPosition(
+                      menu.element,
+                      position,
+                      resolveSlashMenuAnchor(anchorState),
+                    );
+                  },
+                });
                 activeSlashMenuCleanup = cleanupMenu;
               },
               onUpdate: (props) => {
                 currentItems = props.items;
-                activeIndex = Math.min(activeIndex, Math.max(currentItems.length - 1, 0));
-                updateMenuProps({ onSelect: (item) => selectItem(item, props.command) });
+                activeIndex = Math.min(
+                  activeIndex,
+                  Math.max(currentItems.length - 1, 0),
+                );
+                anchorState = {
+                  editor: props.editor,
+                  position: props.range.to,
+                  clientRect: props.clientRect,
+                };
+                updateMenuProps({
+                  onSelect: (item) => selectItem(item, props.command),
+                });
               },
               onKeyDown: (props: SuggestionKeyDownProps) => {
                 if (props.event.key === "Escape") {
@@ -359,9 +498,16 @@ function createSlashCommandExtension(
                   cleanupMenu();
                   return true;
                 }
-                if (props.event.key === "ArrowDown" || props.event.key === "ArrowUp") {
+                if (
+                  props.event.key === "ArrowDown" ||
+                  props.event.key === "ArrowUp"
+                ) {
                   props.event.preventDefault();
-                  activeIndex = getNextIndex(activeIndex, currentItems.length, props.event.key === "ArrowDown" ? 1 : -1);
+                  activeIndex = getNextIndex(
+                    activeIndex,
+                    currentItems.length,
+                    props.event.key === "ArrowDown" ? 1 : -1,
+                  );
                   updateMenuProps({ activeIndex });
                   return true;
                 }
