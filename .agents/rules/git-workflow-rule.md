@@ -2,7 +2,8 @@
 
 For branches, commits, pushes, pull requests, CI, merges, versioning, tags, and release preparation, follow `CONTRIBUTING.md`.
 
-- Never push directly to `main` or `staging`.
+- The normal promotion flow is `working branch -> dev -> stag -> main`.
+- Never push directly to `dev`, `stag`, or `main` unless an explicit higher-priority user instruction for the current task requires direct work on that branch.
 - Do not bypass required CI checks or branch protection unless explicitly requested.
 - Investigate unexpectedly large or unrelated changes before pushing or merging.
 - Use squash merge for pull requests.
