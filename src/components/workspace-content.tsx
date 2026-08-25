@@ -832,14 +832,17 @@ function DocumentObjectEditor({
               createPage: t("editor.slashMenu.createPage"),
               empty: t("editor.slashMenu.empty"),
               text: t("editor.slashMenu.text"),
+              smallText: t("editor.slashMenu.smallText"),
               page: t("editor.slashMenu.page"),
               heading1: t("editor.slashMenu.heading1"),
               heading2: t("editor.slashMenu.heading2"),
               heading3: t("editor.slashMenu.heading3"),
               heading4: t("editor.slashMenu.heading4"),
               navigate: t("editor.slashMenu.navigate"),
+              alphabeticalList: t("editor.slashMenu.alphabeticalList"),
               bulletList: t("editor.slashMenu.bulletList"),
               orderedList: t("editor.slashMenu.orderedList"),
+              romanList: t("editor.slashMenu.romanList"),
               taskList: t("editor.slashMenu.taskList"),
               select: t("editor.slashMenu.select"),
               blockquote: t("editor.slashMenu.blockquote"),
@@ -1913,6 +1916,10 @@ function objectTypeNamedItemTabId(
   return `object-type-item:${kind}:${objectTypeId}:${index}`;
 }
 
+function appSidebarCollectionId(objectTypeId: string, collection: string) {
+  return `collection:${objectTypeId}:${encodeURIComponent(collection)}`;
+}
+
 function parseObjectTypeNamedItemTabId(
   id: string,
 ): ObjectTypeNamedItemTab | null {
@@ -2131,6 +2138,27 @@ function ObjectTypeWorkspace({
         itemIndex === index ? value : item,
       ),
     }));
+    if (kind !== "collection") return;
+    const previousCollection = collections[index];
+    const nextCollection = value.trim();
+    if (!previousCollection || !nextCollection) return;
+    const previousId = appSidebarCollectionId(
+      objectType.id,
+      previousCollection,
+    );
+    const nextId = appSidebarCollectionId(objectType.id, nextCollection);
+    setPinnedEntities((current) =>
+      current.map((item) =>
+        item.id === previousId
+          ? {
+              id: nextId,
+              label: nextCollection,
+              icon: ObjectCollectionIcon,
+              tone: "gray",
+            }
+          : item,
+      ),
+    );
   }
 
   async function importFiles(event: React.ChangeEvent<HTMLInputElement>) {
@@ -3530,14 +3558,17 @@ function CitationWorkspace() {
               createPage: t("editor.slashMenu.createPage"),
               empty: t("editor.slashMenu.empty"),
               text: t("editor.slashMenu.text"),
+              smallText: t("editor.slashMenu.smallText"),
               page: t("editor.slashMenu.page"),
               heading1: t("editor.slashMenu.heading1"),
               heading2: t("editor.slashMenu.heading2"),
               heading3: t("editor.slashMenu.heading3"),
               heading4: t("editor.slashMenu.heading4"),
               navigate: t("editor.slashMenu.navigate"),
+              alphabeticalList: t("editor.slashMenu.alphabeticalList"),
               bulletList: t("editor.slashMenu.bulletList"),
               orderedList: t("editor.slashMenu.orderedList"),
+              romanList: t("editor.slashMenu.romanList"),
               taskList: t("editor.slashMenu.taskList"),
               select: t("editor.slashMenu.select"),
               blockquote: t("editor.slashMenu.blockquote"),
@@ -3647,7 +3678,7 @@ function ExploreWorkspace() {
             className="size-5 rounded"
             iconClassName="size-3.5"
           />
-          <span>aaaaaaaaaaaaa</span>
+          <span>{t("empty.title")}</span>
         </div>
       </div>
     </div>

@@ -230,7 +230,7 @@ function SelectionToolbar({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <ToggleGroup spacing={0} variant="ghost" size="sm">
+        <ToggleGroup spacing={0} variant="default" size="sm">
           <ToggleGroupItem
             aria-label={labels.bold}
             pressed={toolbarState?.isBold ?? false}

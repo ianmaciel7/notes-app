@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 export const metadata: Metadata = {
   title: "Notas atômicas",
   description: "Object-centered knowledge workspace",
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -13,7 +14,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang={routing.defaultLocale}
       className="h-full antialiased"
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+      </body>
     </html>
   );
 }

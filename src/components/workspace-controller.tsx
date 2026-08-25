@@ -37,12 +37,14 @@ import {
   ObjectAreaIcon,
   ObjectAtomicNoteIcon,
   ObjectBookIcon,
+  ObjectCollectionIcon,
   ObjectCodeIcon,
   ObjectIconBadge,
   ObjectIdeaIcon,
   ObjectKnowledgeIcon,
   ObjectPageIcon,
   ObjectProjectIcon,
+  type ObjectIconProps,
   ObjectQueryIcon,
   ObjectQuoteIcon,
   objectIconToneBadgeClass,
@@ -73,6 +75,17 @@ import {
   WORKSPACE_OBJECT_STORAGE_KEY,
 } from "@/lib/workspace-object-storage";
 import {
+  WORKSPACE_SIDEBAR_PINNED_STORAGE_KEY,
+  parseWorkspaceSidebarPinnedState,
+  serializeWorkspaceSidebarPinnedState,
+  type WorkspaceSidebarPinnedItem,
+} from "@/lib/workspace-sidebar-pinned-storage";
+import {
+  WORKSPACE_SIDEBAR_STORAGE_KEY,
+  parseWorkspaceSidebarState,
+  serializeWorkspaceSidebarState,
+} from "@/lib/workspace-sidebar-storage";
+import {
   countEntitiesByType,
   createInitialWorkspaceObjectState,
   getCreationFlow,
@@ -84,13 +97,6 @@ import {
 } from "@/lib/workspace-objects";
 
 const initialMainTabs: AppHeaderTab[] = [
-  {
-    id: "page-1",
-    label: "aaaaaaaaaaaaa",
-    icon: ObjectPageIcon,
-    iconClassName: objectIconToneBadgeClass.blue,
-    preview: <TabPreview eyebrow="Página" title="aaaaaaaaaaaaa" />,
-  },
   {
     id: "atomic-note",
     label: "Notas atômicas",
@@ -169,28 +175,219 @@ const specialSideTabs: Record<
   },
 };
 
+type ParsedCollectionPinnedId = {
+  objectTypeId: string;
+  collection: string;
+};
+
+const WORKSPACE_SIDEBAR_COLLECTION_ID_PREFIX = "collection:";
+
+function parsePinnedCollectionId(
+  value: string,
+): ParsedCollectionPinnedId | null {
+  if (!value.startsWith(WORKSPACE_SIDEBAR_COLLECTION_ID_PREFIX)) return null;
+  const separatorIndex = value.indexOf(
+    ":",
+    WORKSPACE_SIDEBAR_COLLECTION_ID_PREFIX.length,
+  );
+  if (separatorIndex === -1) return null;
+  const objectTypeId = value.slice(
+    WORKSPACE_SIDEBAR_COLLECTION_ID_PREFIX.length,
+    separatorIndex,
+  );
+  const encodedCollection = value.slice(separatorIndex + 1);
+  if (!objectTypeId || !encodedCollection) return null;
+
+  try {
+    const collection = decodeURIComponent(encodedCollection);
+    return collection.trim().length > 0
+      ? { objectTypeId, collection }
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function getPinnedEntityFromId(
+  id: string,
+  untitledLabel: string,
+  workspaceEntities: readonly WorkspaceEntity[],
+  objectTypes: readonly AppSidebarObjectType[],
+  structures: readonly WorkspaceStructure[],
+  objectTypeCollections: Record<string, string[]>,
+): AppSidebarPinnedEntity | null {
+  const entity = workspaceEntities.find((item) => item.id === id);
+  if (entity) {
+    const structure = structures.find((item) => item.id === entity.objectTypeId);
+    if (!structure) return null;
+    const definition = objectTypeDefinitionById[structure.iconName];
+    return {
+      id,
+      label: entity.title.trim() || untitledLabel,
+      icon: definition.icon,
+      tone: structure.tone,
+    };
+  }
+
+  const objectType = objectTypes.find((item) => item.id === id);
+  if (objectType) {
+    return {
+      id,
+      label: objectType.label,
+      icon: objectType.icon,
+      tone: objectType.tone,
+    };
+  }
+
+  const parsedCollection = parsePinnedCollectionId(id);
+  if (!parsedCollection) return null;
+  const collectionType = objectTypes.find(
+    (item) => item.id === parsedCollection.objectTypeId,
+  );
+  if (!collectionType) return null;
+  const collections = objectTypeCollections[parsedCollection.objectTypeId] ?? [];
+  if (!collections.includes(parsedCollection.collection)) return null;
+  return {
+    id,
+    label: parsedCollection.collection,
+    icon: ObjectCollectionIcon,
+    tone: "gray",
+  };
+}
+
+function getPinnedEntityFromIds(
+  ids: readonly string[],
+  untitledLabel: string,
+  workspaceEntities: readonly WorkspaceEntity[],
+  objectTypes: readonly AppSidebarObjectType[],
+  structures: readonly WorkspaceStructure[],
+  objectTypeCollections: Record<string, string[]>,
+): AppSidebarPinnedEntity[] {
+  const items = new Map<string, AppSidebarPinnedEntity>();
+  for (const id of ids) {
+    if (items.has(id)) continue;
+    const entity = getPinnedEntityFromId(
+      id,
+      untitledLabel,
+      workspaceEntities,
+      objectTypes,
+      structures,
+      objectTypeCollections,
+    );
+    if (entity) items.set(id, entity);
+  }
+
+  return Array.from(items.values());
+}
+
+function toWorkspaceSidebarPinSources(
+  pinnedEntities: readonly AppSidebarPinnedEntity[],
+  workspaceEntities: readonly WorkspaceEntity[],
+  objectTypes: readonly AppSidebarObjectType[],
+  structures: readonly WorkspaceStructure[],
+): WorkspaceSidebarPinnedItem[] {
+  return pinnedEntities.map((item) => {
+    const objectType = objectTypes.find((type) => type.id === item.id);
+    if (objectType?.iconName) {
+      return {
+        id: item.id,
+        iconHint: objectType.iconName,
+        toneHint: item.tone,
+      };
+    }
+
+    const entity = workspaceEntities.find((entry) => entry.id === item.id);
+    if (entity) {
+      const structure = structures.find(
+        (structure) => structure.id === entity.objectTypeId,
+      );
+      if (structure) {
+        return {
+          id: item.id,
+          iconHint: structure.iconName,
+          toneHint: item.tone,
+        };
+      }
+    }
+
+    const parsedCollection = parsePinnedCollectionId(item.id);
+    if (parsedCollection) {
+      return {
+        id: item.id,
+        iconHint: `collection:${parsedCollection.objectTypeId}`,
+        toneHint: item.tone,
+      };
+    }
+
+    return {
+      id: item.id,
+      iconHint: undefined,
+      toneHint: item.tone,
+    };
+  });
+}
+
+function arePinnedEntitySetsEquivalent(
+  current: readonly AppSidebarPinnedEntity[],
+  next: readonly AppSidebarPinnedEntity[],
+) {
+  if (current.length !== next.length) return false;
+
+  return current.every(
+    (item, index) =>
+      item.id === next[index]?.id &&
+      item.label === next[index]?.label &&
+      item.tone === next[index]?.tone &&
+      item.icon === next[index]?.icon,
+  );
+}
+
+function pruneSidebarItemsByObjectTypes(
+  current: Record<string, string[]>,
+  objectTypes: readonly AppSidebarObjectType[],
+) {
+  const validObjectTypeIds = new Set(objectTypes.map((item) => item.id));
+  return Object.fromEntries(
+    Object.entries(current).flatMap(([objectTypeId, items]) => {
+      if (!validObjectTypeIds.has(objectTypeId)) return [];
+      const normalizedItems = items
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
+      return normalizedItems.length > 0
+        ? [[objectTypeId, normalizedItems]]
+        : [];
+    }),
+  );
+}
+
+function areStringArrayMapsEquivalent(
+  current: Record<string, string[]>,
+  next: Record<string, string[]>,
+) {
+  const currentEntries = Object.entries(current);
+  const nextEntries = Object.entries(next);
+  if (currentEntries.length !== nextEntries.length) return false;
+  return currentEntries.every(([key, currentItems]) => {
+    const nextItems = next[key];
+    return (
+      nextItems &&
+      currentItems.length === nextItems.length &&
+      currentItems.every((item, index) => item === nextItems[index])
+    );
+  });
+}
+
 type AppSidebarPrimaryNavigationAction = "search" | "explore" | "calendar";
 
 const initialSpaces: AppSidebarSpace[] = [
   { id: "studies", name: "Studies", icon: ObjectBookIcon },
   { id: "ideas", name: "Ideas", icon: ObjectIdeaIcon },
-  { id: "labs", name: "zzzzzzzzzz", icon: AppSidebarWorkspaceIcon },
+  { id: "labs", name: "Labs", icon: AppSidebarWorkspaceIcon },
   { id: "projects", name: "Projects", icon: ObjectProjectIcon },
   { id: "dev", name: "Dev", icon: ObjectCodeIcon },
   { id: "knowledge", name: "Knowledge", icon: ObjectKnowledgeIcon },
   { id: "archive", name: "Archive", icon: ObjectArchiveIcon },
 ];
-
-const availablePinnedEntities: AppSidebarPinnedEntity[] = [
-  {
-    id: "page-1",
-    label: "aaaaaaaaaaaaa",
-    icon: ObjectPageIcon,
-    tone: "blue",
-  },
-];
-
-const initialPinnedEntities = availablePinnedEntities.slice(0, 1);
 
 type WorkspaceContextValue = {
   spaces: AppSidebarSpace[];
@@ -304,7 +501,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   );
   const [pinnedEntities, setPinnedEntities] = React.useState<
     AppSidebarPinnedEntity[]
-  >(initialPinnedEntities);
+  >([]);
   const [workspaceObjects, dispatchWorkspaceObjects] = React.useReducer(
     workspaceObjectReducer,
     undefined,
@@ -329,6 +526,10 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   );
   const hydrationStartedRef = React.useRef(false);
   const [storageReady, setStorageReady] = React.useState(false);
+  const [pinnedStorageReady, setPinnedStorageReady] = React.useState(false);
+  const [sidebarStorageReady, setSidebarStorageReady] = React.useState(false);
+  const pinnedStorageStartedRef = React.useRef(false);
+  const sidebarStorageStartedRef = React.useRef(false);
 
   const createdCounts = React.useMemo(
     () => countEntitiesByType(workspaceObjects.entities),
@@ -354,6 +555,29 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       },
     );
   }, [createdCounts, t, workspaceObjects.structures]);
+
+  const availablePinnedEntities = React.useMemo(
+    () =>
+      getPinnedEntityFromIds(
+        [
+          ...workspaceObjects.entities.map((entity) => entity.id),
+          ...pinnedEntities.map((entity) => entity.id),
+        ],
+        t("lifecycle.untitled"),
+        workspaceObjects.entities,
+        objectTypes,
+        workspaceObjects.structures,
+        objectTypeCollections,
+      ),
+    [
+      pinnedEntities,
+      t,
+      workspaceObjects.entities,
+      objectTypes,
+      objectTypeCollections,
+      workspaceObjects.structures,
+    ],
+  );
 
   const showMessage = React.useCallback((nextMessage: string) => {
     setMessage(nextMessage);
@@ -399,12 +623,174 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   }, [showMessage, t]);
 
   React.useEffect(() => {
+    if (
+      !storageReady ||
+      workspaceObjects.hydrationStatus === "seed" ||
+      sidebarStorageStartedRef.current
+    )
+      return;
+    sidebarStorageStartedRef.current = true;
+
+    try {
+      const raw = window.localStorage.getItem(WORKSPACE_SIDEBAR_STORAGE_KEY);
+      if (raw) {
+        const parsed = parseWorkspaceSidebarState(raw);
+        if (parsed.ok) {
+          setCustomSections(parsed.state.customSections);
+          setObjectTypeCollections(parsed.state.objectTypeCollections);
+          setObjectTypeQueries(parsed.state.objectTypeQueries);
+        } else {
+          showMessage(t("lifecycle.storageRecovered"));
+        }
+      }
+    } catch {
+      showMessage(t("lifecycle.storageRecovered"));
+    }
+    setSidebarStorageReady(true);
+  }, [showMessage, storageReady, t, workspaceObjects.hydrationStatus]);
+
+  React.useEffect(() => {
+    if (
+      !storageReady ||
+      !sidebarStorageReady ||
+      workspaceObjects.hydrationStatus === "seed" ||
+      pinnedStorageStartedRef.current
+    )
+      return;
+    pinnedStorageStartedRef.current = true;
+
+    const untitledLabel = t("lifecycle.untitled");
+    let shouldRecover = false;
+    let nextPinnedEntities: AppSidebarPinnedEntity[] = [];
+    try {
+      const raw = window.localStorage.getItem(
+        WORKSPACE_SIDEBAR_PINNED_STORAGE_KEY,
+      );
+      if (!raw) {
+        setPinnedEntities([]);
+      } else {
+        const parsed = parseWorkspaceSidebarPinnedState(raw);
+        if (!parsed.ok) {
+          shouldRecover = true;
+        } else {
+          nextPinnedEntities = getPinnedEntityFromIds(
+            parsed.state.items.map((item) => item.id),
+            untitledLabel,
+            workspaceObjects.entities,
+            objectTypes,
+            workspaceObjects.structures,
+            objectTypeCollections,
+          );
+          setPinnedEntities(nextPinnedEntities);
+        }
+      }
+    } catch {
+      shouldRecover = true;
+    }
+
+    if (shouldRecover) {
+      showMessage(t("lifecycle.storageRecovered"));
+      setPinnedEntities([]);
+    }
+    setPinnedStorageReady(true);
+  }, [
+    showMessage,
+    objectTypes,
+    objectTypeCollections,
+    sidebarStorageReady,
+    storageReady,
+    workspaceObjects.hydrationStatus,
+    t,
+    workspaceObjects.entities,
+    workspaceObjects.structures,
+  ]);
+
+  const workspacePinnedState = React.useMemo(
+    () =>
+      serializeWorkspaceSidebarPinnedState(
+        toWorkspaceSidebarPinSources(
+          pinnedEntities,
+          workspaceObjects.entities,
+          objectTypes,
+          workspaceObjects.structures,
+        ),
+      ),
+    [
+      objectTypes,
+      pinnedEntities,
+      workspaceObjects.entities,
+      workspaceObjects.structures,
+    ],
+  );
+
+  React.useEffect(() => {
     if (!storageReady) return;
     window.localStorage.setItem(
       WORKSPACE_OBJECT_STORAGE_KEY,
       serializeWorkspaceObjectState(workspaceObjects),
     );
   }, [storageReady, workspaceObjects]);
+
+  React.useEffect(() => {
+    if (!sidebarStorageReady) return;
+    window.localStorage.setItem(
+      WORKSPACE_SIDEBAR_STORAGE_KEY,
+      serializeWorkspaceSidebarState({
+        customSections,
+        objectTypeCollections,
+        objectTypeQueries,
+      }),
+    );
+  }, [
+    customSections,
+    objectTypeCollections,
+    objectTypeQueries,
+    sidebarStorageReady,
+  ]);
+
+  React.useEffect(() => {
+    if (!pinnedStorageReady) return;
+    window.localStorage.setItem(
+      WORKSPACE_SIDEBAR_PINNED_STORAGE_KEY,
+      workspacePinnedState,
+    );
+  }, [pinnedStorageReady, workspacePinnedState]);
+
+  React.useEffect(() => {
+    if (!pinnedStorageReady) return;
+    setPinnedEntities((current) => {
+      const nextPinnedEntities = getPinnedEntityFromIds(
+        current.map((item) => item.id),
+        t("lifecycle.untitled"),
+        workspaceObjects.entities,
+        objectTypes,
+        workspaceObjects.structures,
+        objectTypeCollections,
+      );
+      return arePinnedEntitySetsEquivalent(current, nextPinnedEntities)
+        ? current
+        : nextPinnedEntities;
+    });
+  }, [
+    objectTypes,
+    objectTypeCollections,
+    pinnedStorageReady,
+    t,
+    workspaceObjects.entities,
+    workspaceObjects.structures,
+  ]);
+
+  React.useEffect(() => {
+    if (!sidebarStorageReady) return;
+    setObjectTypeCollections((current) => {
+      const next = pruneSidebarItemsByObjectTypes(current, objectTypes);
+      return areStringArrayMapsEquivalent(current, next) ? current : next;
+    });
+    setObjectTypeQueries((current) => {
+      const next = pruneSidebarItemsByObjectTypes(current, objectTypes);
+      return areStringArrayMapsEquivalent(current, next) ? current : next;
+    });
+  }, [objectTypes, sidebarStorageReady]);
 
   React.useEffect(() => {
     if (!workspaceObjects.error || workspaceObjects.draft) return;
@@ -432,7 +818,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           id: entity.id,
           label,
           icon: definition.icon,
-          iconClassName: objectIconToneBadgeClass[definition.tone],
+          iconClassName: objectIconToneBadgeClass[structure.tone],
           preview: (
             <TabPreview
               eyebrow={
@@ -505,14 +891,14 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       const createdEntity = workspaceObjects.entities.find(
         (item) => item.id === id,
       );
-      const objectType = objectTypes.find((item) => item.id === id);
-      const pinnedEntity = availablePinnedEntities.find(
-        (item) => item.id === id,
+      const entity = getPinnedEntityFromId(
+        id,
+        t("lifecycle.untitled"),
+        workspaceObjects.entities,
+        objectTypes,
+        workspaceObjects.structures,
+        objectTypeCollections,
       );
-      const entity = objectType ?? pinnedEntity;
-
-      setActiveEntityId(id);
-      setActiveAction(undefined);
 
       if (createdEntity) {
         dispatchWorkspaceObjects({ type: "selectEntity", id });
@@ -522,6 +908,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
       if (!entity) return;
 
+      setActiveEntityId(id);
+      setActiveAction(undefined);
+
       ensureMainTab({
         id: entity.id,
         label: entity.label,
@@ -530,7 +919,14 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         preview: <TabPreview eyebrow="Objeto" title={entity.label} />,
       });
     },
-    [ensureMainTab, objectTypes, workspaceObjects.entities],
+    [
+      ensureMainTab,
+      objectTypes,
+      objectTypeCollections,
+      workspaceObjects.entities,
+      workspaceObjects.structures,
+      t,
+    ],
   );
 
   const createWorkspaceEntity = React.useCallback(
@@ -1089,28 +1485,21 @@ function WorkspaceMainHeader() {
 
 function MainTabSearchOverlay() {
   const t = useTranslations("workspace");
-  const { mainTabs, setMainTabs, setMainValue, setMainSearchOpen } =
+  const { mainTabs, objectTypes, setMainTabs, setMainValue, setMainSearchOpen } =
     useWorkspace();
   const [query, setQuery] = React.useState("");
 
-  const options = [
-    {
-      id: "atomic-note",
-      label: t("objectTypeStudio.objectTypes.atomic-note"),
-      icon: ObjectAtomicNoteIcon,
-    },
-    { id: "page-1", label: "aaaaaaaaaaaaa", icon: ObjectPageIcon },
-    {
-      id: "page",
-      label: t("objectTypeStudio.objectTypes.page"),
-      icon: ObjectPageIcon,
-    },
-    {
-      id: "quote",
-      label: t("objectTypeStudio.objectTypes.quote"),
-      icon: ObjectQuoteIcon,
-    },
-  ];
+  const options = React.useMemo(
+    () =>
+      objectTypes.map((option) => ({
+        id: option.id,
+        label: option.label,
+        icon: option.icon,
+        iconClassName: objectIconToneBadgeClass[option.tone],
+        tone: option.tone,
+      })),
+    [objectTypes],
+  );
   const normalized = query.trim().toLocaleLowerCase();
   const filtered = normalized
     ? options.filter((option) =>
@@ -1130,10 +1519,7 @@ function MainTabSearchOverlay() {
       id: option.id,
       label: option.label,
       icon: option.icon,
-      iconClassName:
-        objectIconToneBadgeClass[
-          objectTypeDefinitionById[option.id]?.tone ?? "blue"
-        ],
+      iconClassName: option.iconClassName,
     };
     setMainTabs((current) => {
       const withoutDraft = current.filter(
@@ -1188,7 +1574,6 @@ function MainTabSearchOverlay() {
           </p>
           {filtered.map((option) => {
             const Icon = option.icon;
-            const tone = objectTypeDefinitionById[option.id]?.tone ?? "blue";
             return (
               <Button
                 key={option.id}
@@ -1197,7 +1582,7 @@ function MainTabSearchOverlay() {
                 className="flex h-10 w-full items-center gap-2 rounded-lg px-2 text-left text-sm hover:bg-muted"
                 onClick={() => select(option)}
               >
-                <ObjectIconBadge icon={Icon} tone={tone} />
+                <ObjectIconBadge icon={Icon} tone={option.tone} />
                 <span className="truncate">{option.label}</span>
               </Button>
             );
@@ -1291,7 +1676,14 @@ function WorkspaceSidePanelHeader() {
 
 function SidePanelSearchOverlay() {
   const t = useTranslations("workspace");
-  const { setSideSearchOpen, setSideTabs, setSideValue } = useWorkspace();
+  const {
+    createdEntities,
+    objectTypes,
+    setSideSearchOpen,
+    setSideTabs,
+    setSideValue,
+    structures,
+  } = useWorkspace();
   const [query, setQuery] = React.useState("");
   const searchInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -1299,29 +1691,43 @@ function SidePanelSearchOverlay() {
     searchInputRef.current?.focus({ preventScroll: true });
   }, []);
 
-  const recentItems = React.useMemo(
-    () => [
+  const recentItems = React.useMemo(() => {
+    const items = new Map<
+      string,
       {
-        id: "recent-atomic-note",
-        label: t("objectTypeStudio.objectTypes.atomic-note"),
-        icon: ObjectAtomicNoteIcon,
-        iconClassName: objectIconToneBadgeClass.amber,
-      },
-      {
-        id: "recent-page",
-        label: t("objectTypeStudio.objectTypes.page"),
-        icon: ObjectPageIcon,
-        iconClassName: objectIconToneBadgeClass.blue,
-      },
-      {
-        id: "recent-citations",
-        label: t("objectTypeStudio.objectTypes.quote"),
-        icon: ObjectQuoteIcon,
-        iconClassName: objectIconToneBadgeClass.rose,
-      },
-    ],
-    [t],
-  );
+        id: string;
+        label: string;
+        icon: React.ElementType<ObjectIconProps>;
+        iconClassName: string;
+      }
+    >();
+
+    for (const entity of createdEntities) {
+      const structure = structures.find(
+        (item) => item.id === entity.objectTypeId,
+      );
+      if (!structure) continue;
+      const definition = objectTypeDefinitionById[structure.iconName];
+      items.set(entity.id, {
+        id: entity.id,
+        label: entity.title.trim() || t("lifecycle.untitled"),
+        icon: definition.icon,
+        iconClassName: objectIconToneBadgeClass[structure.tone],
+      });
+    }
+
+    for (const objectType of objectTypes) {
+      if (items.has(objectType.id)) continue;
+      items.set(objectType.id, {
+        id: objectType.id,
+        label: objectType.label,
+        icon: objectType.icon,
+        iconClassName: objectIconToneBadgeClass[objectType.tone],
+      });
+    }
+
+    return Array.from(items.values());
+  }, [createdEntities, objectTypes, structures, t]);
 
   const normalized = query.trim().toLocaleLowerCase();
   const filtered = normalized

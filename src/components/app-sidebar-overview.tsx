@@ -163,27 +163,6 @@ function AppSidebarObjectTypeMenuIcon({
   );
 }
 
-const allPinnedEntities: AppSidebarPinnedEntity[] = [
-  {
-    id: "page-1",
-    label: "aaaaaaaaaaaaa",
-    icon: ObjectPageIcon,
-    tone: "blue",
-  },
-  {
-    id: "page-2",
-    label: "Projeto Alpha",
-    icon: ObjectPageIcon,
-    tone: "blue",
-  },
-  {
-    id: "page-3",
-    label: "Ideias 2026",
-    icon: ObjectPageIcon,
-    tone: "blue",
-  },
-];
-
 function reorderById<T extends { id: string }>(
   items: T[],
   fromId: string,
@@ -1410,7 +1389,7 @@ function AppSidebarOverview({
   activeId: controlledActiveId,
   onActiveIdChange,
   pinnedEntities: controlledPinned,
-  availablePinnedEntities = allPinnedEntities,
+  availablePinnedEntities = [],
   objectTypes = [],
   objectTypeCollections = {},
   customSections: controlledCustomSections,
@@ -1424,7 +1403,7 @@ function AppSidebarOverview({
 }: AppSidebarOverviewProps = {}) {
   const t = useTranslations("workspace");
   const [internalActiveId, setInternalActiveId] = React.useState<string | null>(
-    "page-1",
+    null,
   );
   const isControlled = controlledActiveId !== undefined;
   const activeId = isControlled ? controlledActiveId : internalActiveId;
@@ -1443,7 +1422,7 @@ function AppSidebarOverview({
     React.useState<AppSidebarSortMode>("manual");
   const [internalPinned, setInternalPinned] = React.useState<
     AppSidebarPinnedEntity[]
-  >(allPinnedEntities.slice(0, 1));
+  >([]);
   const [internalCustomSections, setInternalCustomSections] = React.useState<
     AppSidebarCustomSection[]
   >([]);

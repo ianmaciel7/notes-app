@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Offline - Atomic Notes</title>
+    <meta name="theme-color" content="#f8fafc" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #111111;
+        color: #f8fafc;
+      }
+      .container {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 1.5rem;
+      }
+      .card {
+        width: min(32rem, 100%);
+        border: 1px solid #2b2f38;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        background: #0f172a;
+      }
+      .title {
+        margin-bottom: 0.75rem;
+        font-size: 1.5rem;
+      }
+      .description {
+        color: #cbd5e1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <main class="card">
+        <h1 class="title">Você está offline</h1>
+        <p class="description">
+          Esta aplicação já tem os dados em cache para continuar funcionando.
+          Quando a conexão voltar, os recursos pendentes serão atualizados.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>

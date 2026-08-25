@@ -1,6 +1,6 @@
 "use client";
 
-import { type Editor, Extension } from "@tiptap/core";
+import { type Editor, Extension, type Range } from "@tiptap/core";
 import { PluginKey } from "@tiptap/pm/state";
 import {
   exitSuggestion,
@@ -58,7 +58,7 @@ type RendererState = "active" | "destroy-pending" | "destroyed";
 type SlashMenuAnchorState = {
   editor: Editor;
   position: number;
-  clientRect?: (() => DOMRect | null) | null;
+  clientRect?: (() => DOMRect | null | undefined) | null;
 };
 
 function getNextIndex(
@@ -275,7 +275,7 @@ function filterCommandItems(
       title: `${labels.createPage} '${title}'`,
       badge: labels.page,
       searchTerms: [title],
-      execute: (editor, range) => {
+      execute: (editor: Editor, range: Range) => {
         editor.chain().focus().deleteRange(range).run();
         options.onCreatePageRequest?.(title);
       },
@@ -283,7 +283,9 @@ function filterCommandItems(
   ];
 }
 
-function isUsableAnchorRect(rect: DOMRect | null | undefined) {
+function isUsableAnchorRect(
+  rect: DOMRect | null | undefined,
+): rect is DOMRect {
   return Boolean(
     rect &&
       Number.isFinite(rect.left) &&
