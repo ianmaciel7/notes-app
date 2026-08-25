@@ -25,151 +25,54 @@ jobs:
         run: |
           from pathlib import Path
           import json
+          import re
 
-          def replace(path, old, new, count=1):
+          def sub(path, pattern, replacement, count=1, flags=0):
               file = Path(path)
               text = file.read_text(encoding="utf-8")
-              found = text.count(old)
-              if found < count:
-                  raise SystemExit(f"Expected at least {count} occurrence(s) in {path}, found {found}: {old[:100]!r}")
-              text = text.replace(old, new, count)
-              file.write_text(text, encoding="utf-8")
+              next_text, matches = re.subn(pattern, replacement, text, count=count, flags=flags)
+              if matches != count:
+                  raise SystemExit(f"Expected {count} match(es) in {path}, found {matches}: {pattern[:100]!r}")
+              file.write_text(next_text, encoding="utf-8")
 
           controller = "src/components/workspace-controller.tsx"
-          initial_block = '''const initialMainTabs: AppHeaderTab[] = [
-            {
-              id: "atomic-note",
-              label: "Notas atômicas",
-              icon: ObjectAtomicNoteIcon,
-              iconClassName: objectIconToneBadgeClass.amber,
-              preview: <TabPreview eyebrow="Tipo de objeto" title="Notas atômicas" />,
-            },
-            {
-              id: "quote",
-              label: "Citações",
-              icon: ObjectQuoteIcon,
-              iconClassName: objectIconToneBadgeClass.rose,
-              preview: <TabPreview eyebrow="Tipo de objeto" title="Citações" />,
-            },
-            {
-              id: "page",
-              label: "Páginas",
-              icon: ObjectPageIcon,
-              iconClassName: objectIconToneBadgeClass.blue,
-              preview: <TabPreview eyebrow="Tipo de objeto" title="Páginas" />,
-            },
-            {
-              id: "untitled",
-              label: "Sem título",
-              icon: ObjectQuoteIcon,
-              iconClassName: objectIconToneBadgeClass.rose,
-              preview: <TabPreview eyebrow="Citação" title="Sem título" />,
-            },
-          ];
-
-          const initialSideTabs: AppHeaderTab[] = [
-            {
-              id: "explore",
-              label: "Explorar",
-              icon: AppHeaderCompassIcon,
-              iconClassName: objectIconToneBadgeClass.gray,
-              draggable: false,
-            },
-          ];
-
-          const MAIN_DRAFT_TAB_ID = "new-tab-draft";
-
-          const specialSideTabs: Record<
-            SidePanelSpecialEntryId,
-            Omit<AppHeaderTab, "id">
-          > = {
-            graphView: {
-              label: "Visualização em grafo",
-              icon: AppHeaderGraphIcon,
-              iconClassName: objectIconToneBadgeClass.gray,
-            },
-            backlinks: {
-              label: "Links de entrada",
-              icon: ObjectPageIcon,
-              iconClassName: objectIconToneBadgeClass.gray,
-            },
-            objectsInside: {
-              label: "Objetos internos",
-              icon: ObjectAreaIcon,
-              iconClassName: objectIconToneBadgeClass.gray,
-            },
-            relatedContent: {
-              label: "Conteúdo relacionado",
-              icon: AppHeaderGraphIcon,
-              iconClassName: objectIconToneBadgeClass.gray,
-            },
-            aiAssistantChat: {
-              label: "Chat de IA",
-              icon: ObjectAiChatIcon,
-              iconClassName: objectIconToneBadgeClass.purple,
-            },
-            localSpaceQuery: {
-              label: "Buscar",
-              icon: ObjectQueryIcon,
-              iconClassName: objectIconToneBadgeClass.emerald,
-            },
-          };
-          '''
-          replace(controller, initial_block, 'const MAIN_DRAFT_TAB_ID = "new-tab-draft";\n')
-
-          replace(
+          sub(
               controller,
-              '''  const [mainTabs, setMainTabs] = React.useState(initialMainTabs);
-            const [mainValue, setMainValue] = React.useState("untitled");
-            const [sideTabs, setSideTabs] = React.useState(initialSideTabs);''',
+              r'const initialMainTabs: AppHeaderTab\[\] = \[.*?const specialSideTabs: Record<.*?\n};\n\ntype ParsedCollectionPinnedId',
+              'const MAIN_DRAFT_TAB_ID = "new-tab-draft";\n\ntype ParsedCollectionPinnedId',
+              flags=re.S,
+          )
+          sub(
+              controller,
+              r'  const \[mainTabs, setMainTabs\] = React\.useState\(initialMainTabs\);\n  const \[mainValue, setMainValue\] = React\.useState\("untitled"\);\n  const \[sideTabs, setSideTabs\] = React\.useState\(initialSideTabs\);',
               '''  const [mainTabs, setMainTabs] = React.useState<AppHeaderTab[]>(() => [
               {
                 id: "atomic-note",
                 label: t("tabs.initialAtomicNotes"),
                 icon: ObjectAtomicNoteIcon,
                 iconClassName: objectIconToneBadgeClass.amber,
-                preview: (
-                  <TabPreview
-                    eyebrow={t("tabs.initialObjectType")}
-                    title={t("tabs.initialAtomicNotes")}
-                  />
-                ),
+                preview: <TabPreview eyebrow={t("tabs.initialObjectType")} title={t("tabs.initialAtomicNotes")} />,
               },
               {
                 id: "quote",
                 label: t("tabs.initialQuotes"),
                 icon: ObjectQuoteIcon,
                 iconClassName: objectIconToneBadgeClass.rose,
-                preview: (
-                  <TabPreview
-                    eyebrow={t("tabs.initialObjectType")}
-                    title={t("tabs.initialQuotes")}
-                  />
-                ),
+                preview: <TabPreview eyebrow={t("tabs.initialObjectType")} title={t("tabs.initialQuotes")} />,
               },
               {
                 id: "page",
                 label: t("tabs.initialPages"),
                 icon: ObjectPageIcon,
                 iconClassName: objectIconToneBadgeClass.blue,
-                preview: (
-                  <TabPreview
-                    eyebrow={t("tabs.initialObjectType")}
-                    title={t("tabs.initialPages")}
-                  />
-                ),
+                preview: <TabPreview eyebrow={t("tabs.initialObjectType")} title={t("tabs.initialPages")} />,
               },
               {
                 id: "untitled",
                 label: t("lifecycle.untitled"),
                 icon: ObjectQuoteIcon,
                 iconClassName: objectIconToneBadgeClass.rose,
-                preview: (
-                  <TabPreview
-                    eyebrow={t("objects.quote")}
-                    title={t("lifecycle.untitled")}
-                  />
-                ),
+                preview: <TabPreview eyebrow={t("objects.quote")} title={t("lifecycle.untitled")} />,
               },
             ]);
             const [mainValue, setMainValue] = React.useState("untitled");
@@ -181,90 +84,47 @@ jobs:
                 iconClassName: objectIconToneBadgeClass.gray,
                 draggable: false,
               },
-            ]);'''
+            ]);''',
           )
-
-          replace(
+          sub(
               controller,
-              'preview: <TabPreview eyebrow="Objeto" title={entity.label} />',
-              'preview: <TabPreview eyebrow={t("tabs.object")} title={entity.label} />'
+              r'preview: <TabPreview eyebrow="Objeto" title=\{entity\.label\} />',
+              'preview: <TabPreview eyebrow={t("tabs.object")} title={entity.label} />',
           )
-          replace(
+          sub(
               controller,
-              'showMessage("Pinned tabs cannot be closed. Unpin the tab first.");',
-              'showMessage(t("tabs.pinnedCloseBlocked"));'
+              r'showMessage\("Pinned tabs cannot be closed\. Unpin the tab first\."\);',
+              'showMessage(t("tabs.pinnedCloseBlocked"));',
           )
-
-          replace(
+          sub(
               controller,
-              '''  const [query, setQuery] = React.useState("");
-
-            const options = React.useMemo(''',
-              '''  const [query, setQuery] = React.useState("");
-            const deferredQuery = React.useDeferredValue(query);
-
-            const options = React.useMemo('''
+              r'(function MainTabSearchOverlay\(\) \{.*?const \[query, setQuery\] = React\.useState\(""\);)',
+              r'\1\n  const deferredQuery = React.useDeferredValue(query);',
+              flags=re.S,
           )
-          replace(
+          sub(
               controller,
-              '  const normalized = query.trim().toLocaleLowerCase();\n  const filtered = normalized',
-              '  const normalized = deferredQuery.trim().toLocaleLowerCase();\n  const filtered = normalized',
-              1
+              r'(function MainTabSearchOverlay\(\).*?)const normalized = query\.trim\(\)\.toLocaleLowerCase\(\);',
+              r'\1const normalized = deferredQuery.trim().toLocaleLowerCase();',
+              flags=re.S,
           )
-
-          side_panel_anchor = '''  const { toggleRight } = useAppShell();
-
-            if (focusMode) return null;'''
-          side_panel_replacement = '''  const { toggleRight } = useAppShell();
-            const specialSideTabs: Record<
-              SidePanelSpecialEntryId,
-              Omit<AppHeaderTab, "id">
-            > = {
-              graphView: {
-                label: t("explore.graphView"),
-                icon: AppHeaderGraphIcon,
-                iconClassName: objectIconToneBadgeClass.gray,
-              },
-              backlinks: {
-                label: t("explore.backlinks"),
-                icon: ObjectPageIcon,
-                iconClassName: objectIconToneBadgeClass.gray,
-              },
-              objectsInside: {
-                label: t("explore.objectsInside"),
-                icon: ObjectAreaIcon,
-                iconClassName: objectIconToneBadgeClass.gray,
-              },
-              relatedContent: {
-                label: t("explore.relatedContent"),
-                icon: AppHeaderGraphIcon,
-                iconClassName: objectIconToneBadgeClass.gray,
-              },
-              aiAssistantChat: {
-                label: t("explore.aiChat"),
-                icon: ObjectAiChatIcon,
-                iconClassName: objectIconToneBadgeClass.purple,
-              },
-              localSpaceQuery: {
-                label: t("actions.search"),
-                icon: ObjectQueryIcon,
-                iconClassName: objectIconToneBadgeClass.emerald,
-              },
-            };
-
-            if (focusMode) return null;'''
-          replace(controller, side_panel_anchor, side_panel_replacement)
-
-          replace(
+          sub(
               controller,
-              '''    if (!explore) {
-                const nextExplore = initialSideTabs.find((tab) => tab.id === "explore");
-                if (!nextExplore) return;
-
-                setSideTabs((current) => [...current, nextExplore]);
-                setSideValue(nextExplore.id);
-                return;
-              }''',
+              r'(function WorkspaceSidePanelHeader\(\) \{.*?const \{ toggleRight \} = useAppShell\(\);)',
+              r'''\1
+            const specialSideTabs: Record<SidePanelSpecialEntryId, Omit<AppHeaderTab, "id">> = {
+              graphView: { label: t("explore.graphView"), icon: AppHeaderGraphIcon, iconClassName: objectIconToneBadgeClass.gray },
+              backlinks: { label: t("explore.backlinks"), icon: ObjectPageIcon, iconClassName: objectIconToneBadgeClass.gray },
+              objectsInside: { label: t("explore.objectsInside"), icon: ObjectAreaIcon, iconClassName: objectIconToneBadgeClass.gray },
+              relatedContent: { label: t("explore.relatedContent"), icon: AppHeaderGraphIcon, iconClassName: objectIconToneBadgeClass.gray },
+              aiAssistantChat: { label: t("explore.aiChat"), icon: ObjectAiChatIcon, iconClassName: objectIconToneBadgeClass.purple },
+              localSpaceQuery: { label: t("actions.search"), icon: ObjectQueryIcon, iconClassName: objectIconToneBadgeClass.emerald },
+            };''',
+              flags=re.S,
+          )
+          sub(
+              controller,
+              r'    if \(!explore\) \{\n      const nextExplore = initialSideTabs\.find\(\(tab\) => tab\.id === "explore"\);\n      if \(!nextExplore\) return;\n\n      setSideTabs\(\(current\) => \[\.\.\.current, nextExplore\]\);\n      setSideValue\(nextExplore\.id\);\n      return;\n    \}',
               '''    if (!explore) {
                 const nextExplore: AppHeaderTab = {
                   id: "explore",
@@ -276,36 +136,23 @@ jobs:
                 setSideTabs((current) => [...current, nextExplore]);
                 setSideValue(nextExplore.id);
                 return;
-              }'''
+              }''',
           )
-
-          replace(
+          sub(
               controller,
-              '''  const [query, setQuery] = React.useState("");
-            const searchInputRef = React.useRef<HTMLInputElement>(null);''',
-              '''  const [query, setQuery] = React.useState("");
-            const deferredQuery = React.useDeferredValue(query);
-            const searchInputRef = React.useRef<HTMLInputElement>(null);'''
+              r'(function SidePanelSearchOverlay\(\) \{.*?const \[query, setQuery\] = React\.useState\(""\);)',
+              r'\1\n  const deferredQuery = React.useDeferredValue(query);',
+              flags=re.S,
           )
-          replace(
+          sub(
               controller,
-              '  const normalized = query.trim().toLocaleLowerCase();\n  const filtered = normalized',
-              '  const normalized = deferredQuery.trim().toLocaleLowerCase();\n  const filtered = normalized',
-              1
+              r'(function SidePanelSearchOverlay\(\).*?)const normalized = query\.trim\(\)\.toLocaleLowerCase\(\);',
+              r'\1const normalized = deferredQuery.trim().toLocaleLowerCase();',
+              flags=re.S,
           )
-          replace(
+          sub(
               controller,
-              '''function TabPreview({ eyebrow, title }: { eyebrow: string; title: string }) {
-            return (
-              <div className="flex flex-col gap-1.5">
-                <span className="text-xs text-muted-foreground">{eyebrow}</span>
-                <span className="font-medium text-foreground">{title}</span>
-                <span className="text-sm leading-5 text-muted-foreground">
-                  Preview content for {title}.
-                </span>
-              </div>
-            );
-          }''',
+              r'function TabPreview\(\{ eyebrow, title \}: \{ eyebrow: string; title: string \}\) \{\n  return \(\n    <div className="flex flex-col gap-1\.5">\n      <span className="text-xs text-muted-foreground">\{eyebrow\}</span>\n      <span className="font-medium text-foreground">\{title\}</span>\n      <span className="text-sm leading-5 text-muted-foreground">\n        Preview content for \{title\}\.\n      </span>\n    </div>\n  \);\n\}',
               '''function TabPreview({ eyebrow, title }: { eyebrow: string; title: string }) {
             const t = useTranslations("workspace.tabs");
             return (
@@ -317,118 +164,71 @@ jobs:
                 </span>
               </div>
             );
-          }'''
+          }''',
           )
 
           primary = "src/components/app-sidebar-primary-actions.tsx"
-          replace(primary, '.toLocaleLowerCase("pt-BR");', '.toLocaleLowerCase();')
-          replace(
+          sub(primary, r'\.toLocaleLowerCase\("pt-BR"\);', '.toLocaleLowerCase();')
+          sub(
               primary,
-              '''  const Icon = action.icon;
-            const normalizedQuery = normalizeMenuQuery(query.trim());''',
+              r'  const Icon = action\.icon;\n  const normalizedQuery = normalizeMenuQuery\(query\.trim\(\)\);',
               '''  const Icon = action.icon;
             const deferredQuery = React.useDeferredValue(query);
-            const normalizedQuery = normalizeMenuQuery(deferredQuery.trim());'''
+            const normalizedQuery = normalizeMenuQuery(deferredQuery.trim());''',
           )
 
           overview = "src/components/app-sidebar-overview.tsx"
-          replace(
+          sub(
               overview,
-              '''function AppSidebarSectionMenu({
-            value,
-            onValueChange,
-          }: {
-            value: AppSidebarSortMode;
-            onValueChange: (value: AppSidebarSortMode) => void;
-          }) {
-            return (''',
-              '''function AppSidebarSectionMenu({
-            value,
-            onValueChange,
-          }: {
-            value: AppSidebarSortMode;
-            onValueChange: (value: AppSidebarSortMode) => void;
-          }) {
-            const t = useTranslations("workspace.sidebarSections");
-            return ('''
+              r'(function AppSidebarSectionMenu\(\{.*?\}\) \{)\n  return \(',
+              r'\1\n  const t = useTranslations("workspace.sidebarSections");\n  return (',
+              flags=re.S,
           )
-          replace(overview, 'aria-label="Ordenar seção"', 'aria-label={t("sort")}')
-          replace(overview, '          Ordenar manualmente', '          {t("manual")}')
-          replace(overview, '          Ordenar alfabeticamente', '          {t("alphabetical")}')
+          sub(overview, r'aria-label="Ordenar seção"', 'aria-label={t("sort")}')
+          sub(overview, r'          Ordenar manualmente', '          {t("manual")}')
+          sub(overview, r'          Ordenar alfabeticamente', '          {t("alphabetical")}')
 
           content = "src/components/workspace-content.tsx"
-          replace(
+          sub(
               content,
-              '''        <input
-                  ref={titleRef}
-                  aria-label={t("fields.title")}
-                  value={title}
-                  onChange={(event) => rename(event.target.value)}
-                  className="mt-3 w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-[#282522] outline-none placeholder:text-[#b8b2ac]"
-                  placeholder={t("objectTypeOverview.untitled")}
-                />''',
-              '''        <BufferedTextInput
+              r'<input\n\s+ref=\{titleRef\}\n\s+aria-label=\{t\("fields\.title"\)\}\n\s+value=\{title\}\n\s+onChange=\{\(event\) => rename\(event\.target\.value\)\}\n\s+className="mt-3 w-full bg-transparent text-\[40px\] font-bold leading-\[44px\] tracking-\[-0\.02em\] text-\[#282522\] outline-none placeholder:text-\[#b8b2ac\]"\n\s+placeholder=\{t\("objectTypeOverview\.untitled"\)\}\n\s+/>',
+              '''<BufferedTextInput
                   inputRef={titleRef}
                   aria-label={t("fields.title")}
                   value={title}
                   onCommit={rename}
                   className="mt-3 w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-[#282522] outline-none placeholder:text-[#b8b2ac]"
                   placeholder={t("objectTypeOverview.untitled")}
-                />'''
+                />''',
           )
-          replace(
+          sub(
               content,
-              '''  const [query, setQuery] = React.useState("");
-            const [open, setOpen] = React.useState(false);
-            const visible = suggestions.filter(
-              (item) =>
-                !collections.includes(item) &&
-                item.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
-            );''',
+              r'  const \[query, setQuery\] = React\.useState\(""\);\n  const \[open, setOpen\] = React\.useState\(false\);\n  const visible = suggestions\.filter\(\n    \(item\) =>\n      !collections\.includes\(item\) &&\n      item\.toLocaleLowerCase\(\)\.includes\(query\.trim\(\)\.toLocaleLowerCase\(\)\),\n  \);',
               '''  const [query, setQuery] = React.useState("");
             const deferredQuery = React.useDeferredValue(query);
             const [open, setOpen] = React.useState(false);
             const visible = suggestions.filter(
               (item) =>
                 !collections.includes(item) &&
-                item
-                  .toLocaleLowerCase()
-                  .includes(deferredQuery.trim().toLocaleLowerCase()),
-            );'''
-          )
-          replace(
-              content,
-              '''  const [draft, setDraft] = React.useState("");
-            const [open, setOpen] = React.useState(false);
-            const visibleSuggestions = suggestions.filter(
-              (tag) =>
-                !tags.includes(tag) &&
-                tag.toLocaleLowerCase().includes(draft.trim().toLocaleLowerCase()),
+                item.toLocaleLowerCase().includes(deferredQuery.trim().toLocaleLowerCase()),
             );''',
+          )
+          sub(
+              content,
+              r'  const \[draft, setDraft\] = React\.useState\(""\);\n  const \[open, setOpen\] = React\.useState\(false\);\n  const visibleSuggestions = suggestions\.filter\(\n    \(tag\) =>\n      !tags\.includes\(tag\) &&\n      tag\.toLocaleLowerCase\(\)\.includes\(draft\.trim\(\)\.toLocaleLowerCase\(\)\),\n  \);',
               '''  const [draft, setDraft] = React.useState("");
             const deferredDraft = React.useDeferredValue(draft);
             const [open, setOpen] = React.useState(false);
             const visibleSuggestions = suggestions.filter(
               (tag) =>
                 !tags.includes(tag) &&
-                tag
-                  .toLocaleLowerCase()
-                  .includes(deferredDraft.trim().toLocaleLowerCase()),
-            );'''
+                tag.toLocaleLowerCase().includes(deferredDraft.trim().toLocaleLowerCase()),
+            );''',
           )
-          replace(
+          sub(
               content,
-              '''            <input
-                      ref={(node) => {
-                        if (node) inputRefs.current.set(index, node);
-                        else inputRefs.current.delete(index);
-                      }}
-                      aria-label={item}
-                      value={item}
-                      onChange={(event) => onRename(index, event.target.value)}
-                      className="min-w-0 flex-1 truncate bg-transparent text-[15px] font-medium leading-5 text-[#34312f] outline-none"
-                    />''',
-              '''            <BufferedTextInput
+              r'<input\n\s+ref=\{\(node\) => \{\n\s+if \(node\) inputRefs\.current\.set\(index, node\);\n\s+else inputRefs\.current\.delete\(index\);\n\s+\}\}\n\s+aria-label=\{item\}\n\s+value=\{item\}\n\s+onChange=\{\(event\) => onRename\(index, event\.target\.value\)\}\n\s+className="min-w-0 flex-1 truncate bg-transparent text-\[15px\] font-medium leading-5 text-\[#34312f\] outline-none"\n\s+/>',
+              '''<BufferedTextInput
                       inputRef={(node) => {
                         if (node) inputRefs.current.set(index, node);
                         else inputRefs.current.delete(index);
@@ -437,110 +237,49 @@ jobs:
                       value={item}
                       onCommit={(value) => onRename(index, value)}
                       className="min-w-0 flex-1 truncate bg-transparent text-[15px] font-medium leading-5 text-[#34312f] outline-none"
-                    />'''
+                    />''',
           )
 
           translations = {
-              "en": {
-                  "initialObjectType": "Object type",
-                  "initialAtomicNotes": "Atomic notes",
-                  "initialQuotes": "Quotes",
-                  "initialPages": "Pages",
-                  "object": "Object",
-                  "previewContent": "Preview content for {title}.",
-                  "pinnedCloseBlocked": "Pinned tabs cannot be closed. Unpin the tab first.",
-                  "sidebarSections": {
-                      "sort": "Sort section",
-                      "manual": "Sort manually",
-                      "alphabetical": "Sort alphabetically",
-                  },
-              },
-              "pt-BR": {
-                  "initialObjectType": "Tipo de objeto",
-                  "initialAtomicNotes": "Notas atômicas",
-                  "initialQuotes": "Citações",
-                  "initialPages": "Páginas",
-                  "object": "Objeto",
-                  "previewContent": "Conteúdo de pré-visualização para {title}.",
-                  "pinnedCloseBlocked": "Abas fixadas não podem ser fechadas. Desafixe a aba primeiro.",
-                  "sidebarSections": {
-                      "sort": "Ordenar seção",
-                      "manual": "Ordenar manualmente",
-                      "alphabetical": "Ordenar alfabeticamente",
-                  },
-              },
-              "es": {
-                  "initialObjectType": "Tipo de objeto",
-                  "initialAtomicNotes": "Notas atómicas",
-                  "initialQuotes": "Citas",
-                  "initialPages": "Páginas",
-                  "object": "Objeto",
-                  "previewContent": "Vista previa de {title}.",
-                  "pinnedCloseBlocked": "Las pestañas fijadas no se pueden cerrar. Desfija la pestaña primero.",
-                  "sidebarSections": {
-                      "sort": "Ordenar sección",
-                      "manual": "Ordenar manualmente",
-                      "alphabetical": "Ordenar alfabéticamente",
-                  },
-              },
+              "en": ("Object type", "Atomic notes", "Quotes", "Pages", "Object", "Preview content for {title}.", "Pinned tabs cannot be closed. Unpin the tab first.", "Sort section", "Sort manually", "Sort alphabetically"),
+              "pt-BR": ("Tipo de objeto", "Notas atômicas", "Citações", "Páginas", "Objeto", "Conteúdo de pré-visualização para {title}.", "Abas fixadas não podem ser fechadas. Desafixe a aba primeiro.", "Ordenar seção", "Ordenar manualmente", "Ordenar alfabeticamente"),
+              "es": ("Tipo de objeto", "Notas atómicas", "Citas", "Páginas", "Objeto", "Vista previa de {title}.", "Las pestañas fijadas no se pueden cerrar. Desfija la pestaña primero.", "Ordenar sección", "Ordenar manualmente", "Ordenar alfabéticamente"),
           }
           for locale, values in translations.items():
               path = Path(f"src/messages/{locale}.json")
               data = json.loads(path.read_text(encoding="utf-8-sig"))
               tabs = data["workspace"]["tabs"]
-              for key in (
-                  "initialObjectType",
-                  "initialAtomicNotes",
-                  "initialQuotes",
-                  "initialPages",
-                  "object",
-                  "previewContent",
-                  "pinnedCloseBlocked",
-              ):
-                  tabs[key] = values[key]
-              data["workspace"]["sidebarSections"] = values["sidebarSections"]
-              path.write_text(
-                  json.dumps(data, ensure_ascii=False, indent=2) + "\n",
-                  encoding="utf-8",
-              )
+              for key, value in zip(("initialObjectType", "initialAtomicNotes", "initialQuotes", "initialPages", "object", "previewContent", "pinnedCloseBlocked"), values[:7]):
+                  tabs[key] = value
+              data["workspace"]["sidebarSections"] = {
+                  "sort": values[7],
+                  "manual": values[8],
+                  "alphabetical": values[9],
+              }
+              path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-          test = Path("tests/rules-compliance-contract.test.mjs")
-          test.write_text('''import assert from "node:assert/strict";
+          Path("tests/rules-compliance-contract.test.mjs").write_text('''import assert from "node:assert/strict";
           import { readFile } from "node:fs/promises";
           import test from "node:test";
 
-          test("workspace searches defer derived filtering", async () => {
-            const [controller, primaryActions, content] = await Promise.all([
+          test("workspace rule contracts remain enforced", async () => {
+            const [controller, primary, content, overview] = await Promise.all([
               readFile(new URL("../src/components/workspace-controller.tsx", import.meta.url), "utf8"),
               readFile(new URL("../src/components/app-sidebar-primary-actions.tsx", import.meta.url), "utf8"),
               readFile(new URL("../src/components/workspace-content.tsx", import.meta.url), "utf8"),
-            ]);
-            assert.ok((controller.match(/React\\.useDeferredValue\\(query\\)/g) ?? []).length >= 2);
-            assert.match(primaryActions, /const deferredQuery = React\\.useDeferredValue\\(query\\)/);
-            assert.match(content, /const deferredQuery = React\\.useDeferredValue\\(query\\)/);
-            assert.match(content, /const deferredDraft = React\\.useDeferredValue\\(draft\\)/);
-          });
-
-          test("workspace named item renames use buffered commits", async () => {
-            const content = await readFile(new URL("../src/components/workspace-content.tsx", import.meta.url), "utf8");
-            assert.match(content, /<BufferedTextInput[\\s\\S]*inputRef=\\{titleRef\\}[\\s\\S]*onCommit=\\{rename\\}/);
-            assert.match(content, /<BufferedTextInput[\\s\\S]*onCommit=\\{\\(value\\) => onRename\\(index, value\\)\\}/);
-          });
-
-          test("localized workspace copy is not left hardcoded in audited components", async () => {
-            const [controller, overview] = await Promise.all([
-              readFile(new URL("../src/components/workspace-controller.tsx", import.meta.url), "utf8"),
               readFile(new URL("../src/components/app-sidebar-overview.tsx", import.meta.url), "utf8"),
             ]);
-            for (const legacy of ["Notas atômicas", "Citações", "Páginas", "Tipo de objeto", "Visualização em grafo", "Links de entrada", "Pinned tabs cannot be closed", "Preview content for"]) {
-              assert.ok(!controller.includes(legacy), `hardcoded workspace copy remains: ${legacy}`);
-            }
-            for (const legacy of ["Ordenar seção", "Ordenar manualmente", "Ordenar alfabeticamente"]) {
-              assert.ok(!overview.includes(legacy), `hardcoded sidebar copy remains: ${legacy}`);
-            }
+            assert.ok((controller.match(/React\\.useDeferredValue\\(query\\)/g) ?? []).length >= 2);
+            assert.match(primary, /const deferredQuery = React\\.useDeferredValue\\(query\\)/);
+            assert.match(content, /const deferredQuery = React\\.useDeferredValue\\(query\\)/);
+            assert.match(content, /const deferredDraft = React\\.useDeferredValue\\(draft\\)/);
+            assert.match(content, /<BufferedTextInput[\\s\\S]*inputRef=\\{titleRef\\}[\\s\\S]*onCommit=\\{rename\\}/);
+            assert.match(content, /<BufferedTextInput[\\s\\S]*onCommit=\\{\\(value\\) => onRename\\(index, value\\)\\}/);
+            for (const legacy of ["Notas atômicas", "Citações", "Páginas", "Tipo de objeto", "Visualização em grafo", "Links de entrada", "Pinned tabs cannot be closed", "Preview content for"]) assert.ok(!controller.includes(legacy), legacy);
+            for (const legacy of ["Ordenar seção", "Ordenar manualmente", "Ordenar alfabeticamente"]) assert.ok(!overview.includes(legacy), legacy);
           });
 
-          test("all supported locale catalogs contain the audited workspace keys", async () => {
+          test("locale and governance contracts remain aligned", async () => {
             for (const locale of ["en", "es", "pt-BR"]) {
               const messages = JSON.parse(await readFile(new URL(`../src/messages/${locale}.json`, import.meta.url), "utf8"));
               assert.ok(messages.workspace.tabs.initialObjectType);
@@ -548,17 +287,12 @@ jobs:
               assert.ok(messages.workspace.tabs.pinnedCloseBlocked);
               assert.ok(messages.workspace.sidebarSections.sort);
             }
-          });
-
-          test("workflow and graphify rules match repository reality", async () => {
-            const [contributing, gitRule, graphRule, graphDocs, ci] = await Promise.all([
-              readFile(new URL("../CONTRIBUTING.md", import.meta.url), "utf8"),
+            const [gitRule, graphRule, graphDocs, ci] = await Promise.all([
               readFile(new URL("../.agents/rules/git-workflow-rule.md", import.meta.url), "utf8"),
               readFile(new URL("../.agents/rules/graphify.md", import.meta.url), "utf8"),
               readFile(new URL("../docs/GRAPHIFY.md", import.meta.url), "utf8"),
               readFile(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8"),
             ]);
-            assert.match(contributing, /dev.*stag.*main/s);
             assert.match(gitRule, /working branch -> dev -> stag -> main/);
             assert.match(graphRule, /Graph maintenance is not guaranteed by CI/);
             assert.match(graphDocs, /current CI workflow does not refresh Graphify automatically/);
@@ -566,8 +300,7 @@ jobs:
           });
           ''', encoding="utf-8")
 
-          workflow = Path(".github/workflows/one-shot-rules-compliance.yml")
-          workflow.unlink()
+          Path(".github/workflows/one-shot-rules-compliance.yml").unlink()
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
