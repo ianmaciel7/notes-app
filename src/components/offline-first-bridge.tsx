@@ -6,8 +6,38 @@ type OfflineFirstBridgeProps = {
   message: string;
 };
 
+const APP_CACHE_PREFIX = "notes-app-";
+
+async function clearDevelopmentServiceWorkerState() {
+  await Promise.all([
+    navigator.serviceWorker
+      .getRegistrations()
+      .then((registrations) =>
+        Promise.all(
+          registrations.map((registration) => registration.unregister()),
+        ),
+      ),
+    "caches" in window
+      ? caches
+          .keys()
+          .then((cacheNames) =>
+            Promise.all(
+              cacheNames
+                .filter((cacheName) => cacheName.startsWith(APP_CACHE_PREFIX))
+                .map((cacheName) => caches.delete(cacheName)),
+            ),
+          )
+      : Promise.resolve(),
+  ]);
+}
+
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
+
+  if (process.env.NODE_ENV !== "production") {
+    void clearDevelopmentServiceWorkerState();
+    return;
+  }
 
   if (
     window.location.protocol !== "https:" &&
@@ -17,11 +47,13 @@ function registerServiceWorker() {
     return;
   }
 
-  void navigator.serviceWorker.register("/sw.js", {
-    scope: "/",
-  }).catch(() => {
-    // If registration fails, continue running in best-effort mode.
-  });
+  void navigator.serviceWorker
+    .register("/sw.js", {
+      scope: "/",
+    })
+    .catch(() => {
+      // If registration fails, continue running in best-effort mode.
+    });
 }
 
 export function OfflineFirstBridge({ message }: OfflineFirstBridgeProps) {
