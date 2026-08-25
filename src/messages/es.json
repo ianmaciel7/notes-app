@@ -145,6 +145,13 @@
       "useDarkTheme": "Usar tema oscuro",
       "useLightTheme": "Usar tema claro"
     },
+    "sidebar": {
+      "addPinnedContent": "Añadir contenido a Fijados",
+      "emptyCustomSection": "Sin contenido",
+      "noPinnedContent": "Sin contenido fijado",
+      "pinned": "Fijados",
+      "trash": "Papelera"
+    },
     "editor": {
       "bold": "Negrita",
       "code": "Código en línea",
@@ -207,7 +214,25 @@
       "searchContentPlaceholder": "Buscar contenido para abrir en una nueva pestaña",
       "sidePanelMenu": "Abrir menú del panel lateral",
       "sidePanelSearchPlaceholder": "Buscar contenido y acciones, o pegar desde el portapapeles",
-      "yesterday": "Ayer"
+      "yesterday": "Ayer",
+      "initial": {
+        "atomicNotes": "Notas atómicas",
+        "pages": "Páginas",
+        "quotes": "Citas"
+      },
+      "preview": {
+        "contentFor": "Vista previa de contenido para {title}.",
+        "object": "Objeto",
+        "objectType": "Tipo de objeto"
+      },
+      "sideSpecial": {
+        "aiAssistantChat": "Chat de IA",
+        "backlinks": "Enlaces entrantes",
+        "graphView": "Vista de grafo",
+        "localSpaceQuery": "Buscar",
+        "objectsInside": "Objetos internos",
+        "relatedContent": "Contenido relacionado"
+      }
     },
     "openedTab": {
       "description": "Empieza a escribir o agrega contenido a este objeto."

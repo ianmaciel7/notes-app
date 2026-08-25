@@ -97,21 +97,30 @@ function useBufferedDocumentCommit({
     if (pending) scheduleCommit(pending);
   }, [scheduleCommit]);
 
-  React.useEffect(
-    () => () => {
-      clearTimer();
-      const pending = pendingRef.current;
-      pendingRef.current = null;
-      if (!pending) return;
-      const normalized = normalizeBlockEditorDocument(pending);
-      if (!normalized) return;
-      const serialized = serializeDocument(normalized);
-      if (serialized !== externalValueRef.current) {
-        onCommitRef.current?.(normalized);
-      }
-    },
-    [clearTimer],
-  );
+  const flushPendingDocument = React.useCallback(() => {
+    clearTimer();
+    const pending = pendingRef.current;
+    pendingRef.current = null;
+    if (!pending) return;
+    const normalized = normalizeBlockEditorDocument(pending);
+    if (!normalized) return;
+    const serialized = serializeDocument(normalized);
+    if (serialized !== externalValueRef.current) {
+      externalValueRef.current = serialized;
+      onCommitRef.current?.(normalized);
+    }
+  }, [clearTimer]);
+
+  React.useEffect(() => {
+    window.addEventListener("pagehide", flushPendingDocument);
+    window.addEventListener("beforeunload", flushPendingDocument);
+
+    return () => {
+      window.removeEventListener("pagehide", flushPendingDocument);
+      window.removeEventListener("beforeunload", flushPendingDocument);
+      flushPendingDocument();
+    };
+  }, [flushPendingDocument]);
 
   return {
     acceptExternalDocument,

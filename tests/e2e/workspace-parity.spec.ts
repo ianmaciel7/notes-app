@@ -13,8 +13,9 @@ async function openWorkspace(page: Page) {
     if (message.type() === "error") errors.push(message.text());
   });
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.addInitScript(() => window.localStorage.clear());
   await page.goto("/pt-BR");
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
   await page.waitForTimeout(750);
   return errors;
@@ -106,9 +107,7 @@ test("tab midpoint and dedicated actions do not overlap", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
-test("top shell controls share one vertical center", async ({
-  page,
-}) => {
+test("top shell controls share one vertical center", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
   const switcher = page.locator('[data-slot="app-sidebar-space-switcher"]');
@@ -132,6 +131,26 @@ test("top shell controls share one vertical center", async ({
     Math.max(switcherCenter, sidebarTriggerCenter, historyCenter) -
       Math.min(switcherCenter, sidebarTriggerCenter, historyCenter),
   ).toBeLessThanOrEqual(2);
+  expect(errors).toEqual([]);
+});
+
+test("Portuguese workspace chrome does not fall back to English", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  const sidebar = page.locator('[data-slot="app-sidebar"]');
+  await expect(sidebar).toContainText("Novo");
+  await expect(sidebar).toContainText("Buscar");
+  await expect(sidebar).toContainText("Explorar");
+  await expect(sidebar).toContainText("Calendário");
+  await expect(sidebar).toContainText("Fixados");
+  await expect(sidebar).toContainText("Tipos de objeto");
+  await expect(sidebar).not.toContainText("New");
+  await expect(sidebar).not.toContainText("Object types");
+  await expect(
+    page.locator('[data-slot="app-side-panel-header"]'),
+  ).toContainText("Explorar");
   expect(errors).toEqual([]);
 });
 

@@ -125,6 +125,23 @@ function useBufferedTextCommit<TValue>({
     [clearPendingCommit],
   );
 
+  React.useEffect(() => {
+    function flushPendingDraft() {
+      if (draftRef.current === formattedValueRef.current) return;
+      clearPendingCommit();
+      commitRef.current(parseRef.current(draftRef.current));
+      formattedValueRef.current = draftRef.current;
+    }
+
+    window.addEventListener("pagehide", flushPendingDraft);
+    window.addEventListener("beforeunload", flushPendingDraft);
+
+    return () => {
+      window.removeEventListener("pagehide", flushPendingDraft);
+      window.removeEventListener("beforeunload", flushPendingDraft);
+    };
+  }, [clearPendingCommit]);
+
   const inputProps = React.useMemo<BufferedTextInputProps>(
     () => ({
       value: draft,

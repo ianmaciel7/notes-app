@@ -19,10 +19,9 @@ import {
   ObjectAreaIcon,
   ObjectCollectionIcon,
   ObjectIconBadge,
-  ObjectPageIcon,
-  objectIconToneBadgeClass,
   type ObjectIconProps,
   type ObjectIconTone,
+  objectIconToneBadgeClass,
 } from "@/components/object-icons";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -32,6 +31,13 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
+  CompactMenuAccountPanel,
+  CompactMenuPlanBadge,
+  compactMenuActionButtonClass,
+  sidebarContextMenuContentClass,
+  sidebarContextSubmenuContentClass,
+} from "@/components/ui/compact-menu";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -39,13 +45,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  CompactMenuAccountPanel,
-  CompactMenuPlanBadge,
-  compactMenuActionButtonClass,
-  sidebarContextMenuContentClass,
-  sidebarContextSubmenuContentClass,
-} from "@/components/ui/compact-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -75,8 +74,8 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import {
-  OBJECT_ICON_NAMES,
   type CreateStructureInput,
+  OBJECT_ICON_NAMES,
   type ObjectIconName,
   type StructureOwnership,
 } from "@/lib/workspace-object-types";
@@ -840,6 +839,7 @@ function AppSidebarPinnedPicker({
   selectedIds: Set<string>;
   onPick: (entity: AppSidebarPinnedEntity) => void;
 }) {
+  const t = useTranslations("workspace");
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
 
@@ -857,7 +857,7 @@ function AppSidebarPinnedPicker({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        aria-label="Adicionar conteúdo aos Fixados"
+        aria-label={t("sidebar.addPinnedContent")}
         className={cn(
           buttonVariants({ variant: "outline", size: "icon-xs" }),
           "size-[22px] shrink-0 opacity-0 transition-opacity duration-200",
@@ -1492,7 +1492,7 @@ function AppSidebarOverview({
       <div data-slot="app-sidebar-pinned-region" className="shrink-0">
         <AppSidebarSection
           icon={AppSidebarPinIcon}
-          label="Fixados"
+          label={t("sidebar.pinned")}
           count={pinned.length}
           sort={pinnedSort}
           onSortChange={setPinnedSort}
@@ -1509,7 +1509,7 @@ function AppSidebarOverview({
         >
           {visiblePinned.length === 0 ? (
             <p className="h-10 px-5 py-1.5 text-xs italic leading-[18px] text-muted-foreground">
-              Nenhum conteúdo fixado
+              {t("sidebar.noPinnedContent")}
             </p>
           ) : (
             visiblePinned.map((entity) => (
@@ -1616,7 +1616,7 @@ function AppSidebarOverview({
               }
             >
               <p className="h-10 px-5 py-1.5 text-xs italic leading-[18px] text-muted-foreground">
-                Nenhum conteúdo
+                {t("sidebar.emptyCustomSection")}
               </p>
             </AppSidebarSection>
           ))}
@@ -1638,7 +1638,7 @@ function AppSidebarOverview({
                 icon={(props) => (
                   <AppSidebarSourceIcon name="trash" {...props} />
                 )}
-                label="Lixeira"
+                label={t("sidebar.trash")}
                 active={activeId === "trash"}
                 onClick={() => setActiveId("trash")}
               />
@@ -1657,23 +1657,23 @@ function AppSidebarOverview({
 }
 
 export {
-  appSidebarCollectionId,
   AppSidebarAddSection,
+  type AppSidebarCollectionAction,
+  type AppSidebarCustomSection,
   AppSidebarFooter,
   AppSidebarHelpSection,
+  type AppSidebarObjectType,
   AppSidebarObjectTypeRow,
   AppSidebarOverview,
+  type AppSidebarPinnedEntity,
   AppSidebarPinnedPicker,
   AppSidebarPinnedRow,
   AppSidebarSection,
   AppSidebarSectionAction,
   AppSidebarSectionMenu,
-  AppSidebarTypeLabel,
-  AppSidebarUtilityRow,
-  type AppSidebarCustomSection,
-  type AppSidebarCollectionAction,
-  type AppSidebarObjectType,
-  type AppSidebarPinnedEntity,
   type AppSidebarSortMode,
   type AppSidebarTone,
+  AppSidebarTypeLabel,
+  AppSidebarUtilityRow,
+  appSidebarCollectionId,
 };

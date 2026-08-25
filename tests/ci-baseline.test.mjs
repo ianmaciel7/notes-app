@@ -84,10 +84,7 @@ test("sidebar context menus share the canonical appearance contract", async () =
     ),
   ]);
 
-  assert.match(
-    compactMenu,
-    /sidebarContextMenuContentClass = "w-\[269px\]"/,
-  );
+  assert.match(compactMenu, /sidebarContextMenuContentClass = "w-\[269px\]"/);
   assert.match(
     compactMenu,
     /sidebarContextSubmenuContentClass = cn\(\s*"w-\[269px\]",\s*workspaceSubmenuStateClass,/,
@@ -156,17 +153,18 @@ test("the localized workspace boots into the workspace fixture", async () => {
     readFile(new URL("../src/app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.match(route, /AtomicNotesWorkspace/);
+  assert.match(route, /WorkspaceViewsSurface/);
   assert.match(route, /ExploreWorkspace/);
-  assert.match(fixture, /citation-workspace/);
+  assert.doesNotMatch(fixture, /citation-workspace/);
   assert.match(fixture, /useTranslations\("workspace"\)/);
   assert.match(fixture, /empty\.title/);
   assert.match(fixture, /explore\.graphView/);
   assert.match(fixture, /explore\.relevantContent/);
   assert.match(header, /id: "atomic-note"/);
-  assert.match(header, /id: "untitled"/);
-  assert.match(header, /useState\("untitled"\)/);
-  assert.match(header, /const initialSideTabs[\s\S]*?id: "explore"/);
+  assert.doesNotMatch(header, /id: "untitled"/);
+  assert.doesNotMatch(header, /useState\("untitled"\)/);
+  assert.match(header, /useState\("atomic-note"\)/);
+  assert.match(header, /id: "explore"/);
   assert.match(header, /MAIN_DRAFT_TAB_ID = "new-tab-draft"/);
   assert.match(
     header,
@@ -179,7 +177,7 @@ test("the localized workspace boots into the workspace fixture", async () => {
   assert.match(headerTabs, /"ArrowLeft", "ArrowRight", "Home", "End"/);
   assert.match(headerTabs, /getNextTabFocusIndex/);
   assert.match(headerTabs, /\?\.focus\(\)/);
-  assert.match(header, /useState<string \| null>\([\s\S]*?"quote"/);
+  assert.match(header, /useState<string \| null>\([\s\S]*?null/);
   assert.match(sidebar, /function WorkspaceSidebar/);
   assert.match(sidebar, /objectTypes=\{objectTypes\}/);
   assert.match(sidebar, /open=\{open\} onOpenChange=\{handleOpenChange\}/);
@@ -248,7 +246,10 @@ test("the localized workspace boots into the workspace fixture", async () => {
   assert.match(fixture, /aria-checked=\{checked\}/);
   assert.match(fixture, /alignOffset=\{-2\}/);
   assert.match(fixture, /w-\[290px\][\s\S]*?rounded-\[12px\]/);
-  assert.match(fixture, /"noCollection"[\s\S]*?"untagged"[\s\S]*?"noBacklinks"/);
+  assert.match(
+    fixture,
+    /"noCollection"[\s\S]*?"untagged"[\s\S]*?"noBacklinks"/,
+  );
   assert.match(fixture, /section === "recent"\) setView\("all"\)/);
   assert.match(header, /type: "importFile"/);
   assert.match(workspaceObjects, /action\.type === "importFile"/);

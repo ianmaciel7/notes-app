@@ -145,6 +145,13 @@
       "useDarkTheme": "Use dark theme",
       "useLightTheme": "Use light theme"
     },
+    "sidebar": {
+      "addPinnedContent": "Add content to Pinned",
+      "emptyCustomSection": "No content",
+      "noPinnedContent": "No pinned content",
+      "pinned": "Pinned",
+      "trash": "Trash"
+    },
     "editor": {
       "bold": "Bold",
       "code": "Inline code",
@@ -207,7 +214,25 @@
       "searchContentPlaceholder": "Search content to open in a new tab",
       "sidePanelMenu": "Open side-panel menu",
       "sidePanelSearchPlaceholder": "Search content and actions, or paste from clipboard",
-      "yesterday": "Yesterday"
+      "yesterday": "Yesterday",
+      "initial": {
+        "atomicNotes": "Atomic notes",
+        "pages": "Pages",
+        "quotes": "Quotes"
+      },
+      "preview": {
+        "contentFor": "Preview content for {title}.",
+        "object": "Object",
+        "objectType": "Object type"
+      },
+      "sideSpecial": {
+        "aiAssistantChat": "AI chat",
+        "backlinks": "Backlinks",
+        "graphView": "Graph view",
+        "localSpaceQuery": "Search",
+        "objectsInside": "Objects inside",
+        "relatedContent": "Related content"
+      }
     },
     "openedTab": {
       "description": "Start writing or add content to this object."

@@ -63,6 +63,7 @@ type AppSidePanelHeaderProps = React.ComponentProps<"header"> & {
   hideLabel?: string;
   menuLabel?: string;
   closeLabel?: string;
+  specialItemLabels?: Partial<Record<SidePanelSpecialEntryId, string>>;
 };
 
 type SideSpecialItem = {
@@ -243,12 +244,16 @@ function SideHeaderAction({
 }
 
 function SideTabList({
+  closeLabel,
+  listLabel,
   tabs,
   value,
   show,
   onValueChange,
   onClose,
 }: {
+  closeLabel: string;
+  listLabel: string;
   tabs: AppHeaderTab[];
   value: string;
   show: boolean;
@@ -263,7 +268,7 @@ function SideTabList({
         render={
           <button
             type="button"
-            aria-label="Lista de abas laterais"
+            aria-label={listLabel}
             className="flex size-7 items-center justify-center rounded-lg text-[var(--side-header-text-secondary)] hover:bg-[var(--side-header-bg-front-hover)] hover:text-[var(--side-header-text-primary)]"
           >
             <AppHeaderCaretDownIcon className="size-3.5" />
@@ -301,7 +306,7 @@ function SideTabList({
               {tabs.length > 1 && (
                 <button
                   type="button"
-                  aria-label={`Fechar ${tab.label}`}
+                  aria-label={`${closeLabel}: ${tab.label}`}
                   className="flex size-6 items-center justify-center rounded-md opacity-0 group-hover/tab-list:opacity-100 hover:bg-background"
                   onClick={(event) => {
                     event.preventDefault();
@@ -330,9 +335,11 @@ function AppSidePanelHeader({
   onSpecialEntrySelect,
   onCloseRequest,
   createLabel = "Create new side-panel tab",
+  tabListLabel = "Side panel tabs",
   hideLabel = "Hide side panel",
   menuLabel = "Open side-panel menu",
   closeLabel = "Close tab",
+  specialItemLabels,
   className,
   style,
   ...props
@@ -461,6 +468,8 @@ function AppSidePanelHeader({
               className="flex shrink-0 items-center gap-1"
             >
               <SideTabList
+                closeLabel={closeLabel}
+                listLabel={tabListLabel}
                 tabs={tabs}
                 value={value}
                 show={layout.cramped && tabs.length > 1}
@@ -519,7 +528,7 @@ function AppSidePanelHeader({
                     onClick={() => onSpecialEntrySelect?.(item.id)}
                   >
                     <Icon className="size-4 text-muted-foreground" />
-                    <span>{item.label}</span>
+                    <span>{specialItemLabels?.[item.id] ?? item.label}</span>
                   </DropdownMenuItem>
                 );
               })}

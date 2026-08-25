@@ -44,7 +44,6 @@ import {
   ObjectIconBadge,
   ObjectPageIcon,
   ObjectQueryIcon,
-  ObjectQuoteIcon,
   ObjectTagIcon,
   type ObjectTypeDefinition,
   objectIconToneBadgeClass,
@@ -114,10 +113,6 @@ function AtomicNotesWorkspace() {
 
   if (activeAction === "explore") {
     return <ExploreWorkspace />;
-  }
-
-  if (activeTab?.id === "untitled") {
-    return <CitationWorkspace />;
   }
 
   if (activeCreatedEntity) {
@@ -3481,116 +3476,6 @@ function ObjectTypeAllView({
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-function CitationWorkspace() {
-  const t = useTranslations("workspace");
-  const { createWorkspacePage } = useWorkspace();
-  const [body, setBody] = React.useState(() =>
-    blockEditorDocumentFromMarkdown(""),
-  );
-
-  return (
-    <div
-      data-slot="citation-workspace"
-      className="relative flex h-full min-h-0 flex-col text-foreground"
-    >
-      <section className="mx-3 mt-6 h-[302px] shrink-0 rounded-2xl border border-border bg-card px-10 pt-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              className="flex h-7 items-center gap-1.5 rounded-lg border border-[#f1bdc8] bg-[#fff1f4] px-2 text-sm text-[#9f3d54]"
-            >
-              <ObjectQuoteIcon className="size-3.5" />
-              {t("objects.quote")}
-              <AppHeaderCaretDownIcon className="size-3.5" />
-            </button>
-            <button
-              type="button"
-              className="flex h-7 items-center gap-1.5 rounded-lg px-2 text-sm text-foreground hover:bg-sidebar"
-            >
-              <ObjectCollectionIcon className="size-3.5" />
-              {t("objects.collections")}
-            </button>
-          </div>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            aria-label={t("actions.moreOptions")}
-            className="h-7 w-7 border border-border"
-          >
-            <AppSidebarDotsIcon className="size-4" />
-          </Button>
-        </div>
-
-        <EditableTitle
-          label={t("fields.title")}
-          placeholder={t("fields.title")}
-          value=""
-          onValueChange={() => {}}
-          className="mt-1.5 min-h-[41px] leading-[41px]"
-        />
-
-        <label className="mt-1 flex h-7 items-center gap-1.5 text-sm text-sidebar-foreground">
-          <ObjectTagIcon className="size-3.5" />
-          <input
-            aria-label={t("fields.tags")}
-            placeholder={t("fields.tags")}
-            className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-sidebar-foreground"
-          />
-        </label>
-
-        <BlockEditor
-          ariaLabel={t("fields.quoteContent")}
-          placeholder={t("fields.text")}
-          value={body}
-          onChange={setBody}
-          onCreatePageRequest={createWorkspacePage}
-          labels={{
-            bold: t("editor.bold"),
-            italic: t("editor.italic"),
-            code: t("editor.code"),
-            slashMenu: {
-              cancel: t("editor.slashMenu.cancel"),
-              createPage: t("editor.slashMenu.createPage"),
-              empty: t("editor.slashMenu.empty"),
-              text: t("editor.slashMenu.text"),
-              smallText: t("editor.slashMenu.smallText"),
-              page: t("editor.slashMenu.page"),
-              heading1: t("editor.slashMenu.heading1"),
-              heading2: t("editor.slashMenu.heading2"),
-              heading3: t("editor.slashMenu.heading3"),
-              heading4: t("editor.slashMenu.heading4"),
-              navigate: t("editor.slashMenu.navigate"),
-              alphabeticalList: t("editor.slashMenu.alphabeticalList"),
-              bulletList: t("editor.slashMenu.bulletList"),
-              orderedList: t("editor.slashMenu.orderedList"),
-              romanList: t("editor.slashMenu.romanList"),
-              taskList: t("editor.slashMenu.taskList"),
-              select: t("editor.slashMenu.select"),
-              blockquote: t("editor.slashMenu.blockquote"),
-              codeBlock: t("editor.slashMenu.codeBlock"),
-              horizontalRule: t("editor.slashMenu.horizontalRule"),
-              title: t("editor.slashMenu.title"),
-            },
-          }}
-          className="mt-1 min-h-20"
-        />
-      </section>
-
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        aria-label={t("actions.collapseEditor")}
-        className="absolute right-4 top-[410px] bg-card"
-      >
-        <span aria-hidden="true" className="text-xl leading-none">
-          −
-        </span>
-      </Button>
     </div>
   );
 }
