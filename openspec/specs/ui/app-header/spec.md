@@ -1,3 +1,8 @@
+# App Header Specification
+
+## Purpose
+Defines the reusable application header and tab contracts for workspace navigation, side-panel coordination, focus mode, tab interaction states, and responsive containment.
+
 ## Requirements
 
 ### Requirement: Reusable application header
