@@ -1,5 +1,6 @@
 ## 0. Evidence and dependency gate
 
+- [x] 0.0 Restore the missing platform type primitives required by the immutable domain model without changing existing string-id compatibility.
 - [ ] 0.1 Complete or isolate typed-property values before apply.
 - [ ] 0.2 Re-confirm tag/collection/Object Select documentation and project references.
 
