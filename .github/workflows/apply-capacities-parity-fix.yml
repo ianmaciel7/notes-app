@@ -9,8 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  apply-and-verify:
-    if: github.event.head_commit.message == 'chore: run Capacities parity fix'
+  apply:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
