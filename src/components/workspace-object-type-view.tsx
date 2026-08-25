@@ -14,6 +14,13 @@ import { ObjectTypeToolbarIcon } from "@/components/object-type-toolbar-icon";
 import { DataViewRenderer, type ObjectViewLabels } from "@/components/object-views";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  WorkspaceEmptyState,
+  workspaceFieldGroupClass,
+  workspaceOverviewContentClass,
+  workspaceRouteClass,
+  workspaceSectionTitleClass,
+} from "@/components/ui/workspace-surface";
 import { useWorkspace } from "@/components/workspace-controller";
 import { useWorkspaceViews } from "@/components/workspace-views-controller";
 import { cn } from "@/lib/utils";
@@ -98,7 +105,7 @@ function WorkspaceObjectTypeView({ objectType, structure, view }: WorkspaceObjec
     <section
       data-slot="workspace-object-type-view"
       data-structure-id={structure.id}
-      className="relative flex h-full min-h-0 flex-col text-foreground"
+      className={workspaceRouteClass}
     >
       <header className="@container flex flex-wrap items-center justify-between px-3 pt-4">
         <div className="flex min-w-0 items-center gap-[13px]">
@@ -240,7 +247,13 @@ function WorkspaceObjectTypeView({ objectType, structure, view }: WorkspaceObjec
       ) : null}
 
       {mode === "all" && filterOpen ? (
-        <div data-slot="object-type-filter-row" className="mx-5 mt-2 flex h-9 items-center gap-2 rounded-lg border bg-card px-3 text-xs">
+        <div
+          data-slot="object-type-filter-row"
+          className={cn(
+            workspaceFieldGroupClass,
+            "mx-5 mt-2 flex h-9 items-center gap-2 px-3 py-0 text-xs",
+          )}
+        >
           <span>{t("objectTypeOverview.where")}</span>
           <Input
             aria-label={t("objectTypeOverview.searchPlaceholder")}
@@ -257,11 +270,11 @@ function WorkspaceObjectTypeView({ objectType, structure, view }: WorkspaceObjec
         </div>
       ) : null}
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-8 pt-4">
+      <div className={workspaceOverviewContentClass}>
         {mode === "overview" ? (
           <div data-slot="object-type-overview" className="grid gap-6">
             <section>
-              <h2 className="mb-3 text-sm font-medium">{t("objectTypeOverview.recentlyOpened")}</h2>
+              <h2 className={cn(workspaceSectionTitleClass, "mb-3")}>{t("objectTypeOverview.recentlyOpened")}</h2>
               {filtered.length ? (
                 <DataViewRenderer
                   entities={filtered.slice(0, 4)}
@@ -273,7 +286,10 @@ function WorkspaceObjectTypeView({ objectType, structure, view }: WorkspaceObjec
                   view={view}
                 />
               ) : (
-                <p className="py-10 text-center text-sm text-muted-foreground">{t("objectTypeOverview.noRecentDescription")}</p>
+                <WorkspaceEmptyState
+                  compact
+                  title={t("objectTypeOverview.noRecentDescription")}
+                />
               )}
             </section>
           </div>

@@ -10,6 +10,10 @@ import {
   ObjectTypeLabel,
   OpenSurface,
 } from "@/components/object-view-support";
+import {
+  workspaceListRowClass,
+  workspaceListSurfaceClass,
+} from "@/components/ui/workspace-surface";
 import { cn } from "@/lib/utils";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
 
@@ -27,7 +31,7 @@ function DataViewListRow({
   return (
     <OpenSurface
       ariaLabel={props.labels.openObject(title)}
-      className="flex w-full items-start gap-3 rounded-md px-3 py-2 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className={cn(workspaceListRowClass, "items-start gap-3 px-3 py-2")}
       entityId={entity.id}
       onOpen={props.onOpen}
     >
@@ -55,7 +59,7 @@ function DataViewList(props: ProjectedDataViewProps) {
     props.view.presentation.kind === "list" &&
     props.view.presentation.density === "compact";
   return (
-    <ul className="divide-y rounded-md border bg-card">
+    <ul className={cn(workspaceListSurfaceClass, "divide-y divide-border")}>
       {props.entities.map((entity) => (
         <li key={entity.id} className={compact ? "p-1" : "p-2"}>
           <DataViewListRow entity={entity} props={props} />
@@ -70,7 +74,7 @@ function DataViewTable(props: ProjectedDataViewProps) {
   const presentation = props.view.presentation;
   const columns = presentation.columns.filter((column) => column.visible);
   return (
-    <div className="overflow-x-auto rounded-md border">
+    <div className={cn(workspaceListSurfaceClass, "overflow-x-auto p-0")}>
       <table className="w-full min-w-xl border-collapse text-sm">
         <thead className="bg-muted/60 text-left text-xs text-muted-foreground">
           <tr>
@@ -90,7 +94,7 @@ function DataViewTable(props: ProjectedDataViewProps) {
           {props.entities.map((entity) => (
             <tr
               key={entity.id}
-              className="border-b last:border-b-0 hover:bg-muted/40"
+              className="border-b transition-colors duration-150 last:border-b-0 hover:bg-muted/40 motion-reduce:transition-none"
             >
               {columns.map((column, index) => (
                 <td

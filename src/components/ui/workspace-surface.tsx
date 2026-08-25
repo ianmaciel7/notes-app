@@ -43,12 +43,54 @@ const workspaceEmptyStateSurfaceClass =
 const workspaceEmptyStateIconClass =
   "mb-3 flex size-10 items-center justify-center rounded-[10px] border border-border bg-muted text-muted-foreground";
 
+const workspaceContentScopeClass = cn(
+  "h-full min-h-0 w-full",
+  "[&>_*]:h-full [&>_*]:min-h-0 [&>_*]:w-full",
+  "[&_[data-slot=created-object-workspace]]:bg-card",
+  "[&_[data-slot=object-type-named-item-workspace]]:bg-card",
+  "[&_[data-slot=object-type-named-item-workspace]]:text-foreground",
+  "[&_[data-slot=citation-workspace]]:bg-card",
+  "[&_[data-slot=document-object-editor]]:mx-auto",
+  "[&_[data-slot=document-object-editor]]:max-w-[50rem]",
+  "[&_[data-slot=document-object-editor]]:px-5",
+  "sm:[&_[data-slot=document-object-editor]]:px-8",
+  "lg:[&_[data-slot=document-object-editor]]:px-10",
+  "[&_[data-slot=table-object-editor]]:rounded-[12px]",
+  "[&_[data-slot=task-object-editor]]:rounded-[12px]",
+  "[&_[data-slot=url-object-editor]]:rounded-[12px]",
+  "[&_[data-slot=tag-object-editor]]:rounded-[12px]",
+  "[&_[data-slot=query-object-editor]]:rounded-[12px]",
+  "[&_[data-slot=file-object-editor]]:rounded-[12px]",
+  "[&_[data-slot=citation-workspace]>section]:rounded-[12px]",
+  "[&_[data-slot=object-type-named-item-workspace]>div]:mx-auto",
+  "[&_[data-slot=object-type-named-item-workspace]>div]:w-full",
+  "[&_[data-slot=object-type-named-item-workspace]>div]:max-w-[50rem]",
+  "[&_[data-slot=object-type-named-item-workspace]_section]:rounded-[12px]",
+  "[&_[data-slot=object-type-named-item-workspace]_section]:border",
+  "[&_[data-slot=object-type-named-item-workspace]_section]:border-dashed",
+  "[&_[data-slot=object-type-named-item-workspace]_section]:border-border",
+  "[&_[data-slot=object-type-named-card]]:rounded-[12px]",
+  "[&_[data-slot=object-type-named-card]]:border-border",
+  "[&_[data-slot=object-type-named-card]]:bg-card",
+  "[&_[data-slot=object-type-named-card]]:hover:bg-muted/50",
+  "[&_[data-slot=object-type-overview]]:px-5",
+  "[&_[data-slot=object-type-overview]]:pb-8",
+  "[&_[data-slot=object-type-overview]]:pt-4",
+  "[&_[data-slot=object-type-all]]:px-5",
+  "[&_[data-slot=object-type-all]]:pb-8",
+  "[&_[data-slot=object-type-all]]:pt-4",
+  "[&_[data-slot=object-type-filter-row]]:rounded-[12px]",
+  "[&_[data-slot=object-type-filter-row]]:border-border",
+  "[&_[data-slot=object-type-sort-row]]:rounded-[12px]",
+  "[&_[data-slot=object-type-sort-row]]:border-border",
+);
+
 type WorkspaceEmptyStateProps = {
   action?: ReactNode;
   className?: string;
   compact?: boolean;
-  description: ReactNode;
-  icon?: ElementType<{ className?: string }>;
+  description?: ReactNode;
+  icon?: ElementType;
   title: ReactNode;
 };
 
@@ -76,9 +118,11 @@ function WorkspaceEmptyState({
         </span>
       ) : null}
       <p className={workspaceSectionTitleClass}>{title}</p>
-      <p className={cn(workspaceMetaTextClass, "mt-1 max-w-md")}>
-        {description}
-      </p>
+      {description ? (
+        <p className={cn(workspaceMetaTextClass, "mt-1 max-w-md")}>
+          {description}
+        </p>
+      ) : null}
       {action ? <div className="mt-5">{action}</div> : null}
     </div>
   );
@@ -87,6 +131,7 @@ function WorkspaceEmptyState({
 export {
   WorkspaceEmptyState,
   workspaceCardGridClass,
+  workspaceContentScopeClass,
   workspaceEditorSurfaceClass,
   workspaceEmptyStateSurfaceClass,
   workspaceFieldGroupClass,

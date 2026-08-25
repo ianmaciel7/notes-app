@@ -22,7 +22,7 @@
 
 ## 4. Workspace content and localization
 
-- [ ] 4.1 Apply the current surface, typography, spacing, card, listing, editor-wrapper, collection, query, and empty-state contracts across existing workspace routes while retaining local entities and counts.
+- [x] 4.1 Apply the current surface, typography, spacing, card, listing, editor-wrapper, collection, query, and empty-state contracts across existing workspace routes while retaining local entities and counts.
 - [x] 4.2 Extract deterministic transient navigation/panel helpers from the workspace controller where required for testing, without changing public provider APIs, entity bodies, storage keys, or snapshot version.
 - [ ] 4.3 Remove production `demo`/`fixture` APIs touched by this change, move touched user-visible copy to `next-intl`, update every locale catalog, and keep object icons sourced from the central registry.
 - [ ] 4.4 Confirm no implementation hunk changes block-editor document types, body persistence, storage migration, or other areas reserved by `add-block-editor`.

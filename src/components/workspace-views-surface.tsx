@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { AtomicNotesWorkspace } from "@/components/workspace-content";
+import { AtomicNotesWorkspace } from "@/components/workspace-content-surface";
 import { useWorkspace } from "@/components/workspace-controller";
 import {
   canRenderWorkspaceObjectPage,
@@ -60,8 +60,12 @@ function WorkspaceViewsSurface() {
   const { createWorkspaceDataView, dataViews, hydrationStatus } =
     useWorkspaceViews();
   const activeEntity = createdEntities.find((entity) => entity.id === mainValue);
-  const activeStructure = structures.find((structure) => structure.id === mainValue);
-  const activeObjectType = objectTypes.find((objectType) => objectType.id === mainValue);
+  const activeStructure = structures.find(
+    (structure) => structure.id === mainValue,
+  );
+  const activeObjectType = objectTypes.find(
+    (objectType) => objectType.id === mainValue,
+  );
   const activeDataView = activeStructure
     ? dataViews.find((view) => isStructureDataView(view, activeStructure.id))
     : undefined;

@@ -19,7 +19,7 @@ import {
   AppShellWorkspace,
 } from "@/components/app-shell";
 import { WorkspaceSidebar } from "@/components/app-sidebar-primary-actions";
-import { ExploreWorkspace } from "@/components/workspace-content";
+import { ExploreWorkspace } from "@/components/workspace-content-surface";
 import { WorkspaceViewsProvider } from "@/components/workspace-views-controller";
 import { WorkspaceViewsSurface } from "@/components/workspace-views-surface";
 

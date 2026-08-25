@@ -15,6 +15,13 @@ import {
 } from "@/components/object-icons";
 import { Button } from "@/components/ui/button";
 import {
+  workspaceFieldGroupClass,
+  workspaceListRowClass,
+  workspaceListSurfaceClass,
+  workspaceLongformColumnClass,
+  workspaceRouteClass,
+} from "@/components/ui/workspace-surface";
+import {
   CompoundChip,
   CompoundChipDisclosure,
   CompoundChipPrimary,
@@ -241,7 +248,7 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
             <button
               key={item.id}
               type="button"
-              className="group flex min-h-11 items-center gap-2 rounded-lg px-2 text-left hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className={cn(workspaceListRowClass, "min-h-11")}
               onClick={() => selectEntity(item.id)}
             >
               <AppHeaderCaretDownIcon className="size-3 -rotate-90 text-muted-foreground" />
@@ -333,7 +340,7 @@ function TablePage({
       <ObjectPageHeader entity={entity} structure={structure} />
       <BufferedTitle label={t("fields.title")} value={entity.title} onCommit={(title) => update({ title })} />
       <ObjectPageTags entity={entity} update={update} />
-      <div data-slot="workspace-table-grid" className="mt-9 grid w-full max-w-[22.5rem] grid-cols-2 overflow-hidden rounded-lg border bg-background">
+      <div data-slot="workspace-table-grid" className={cn(workspaceListSurfaceClass, "mt-9 grid w-full max-w-[22.5rem] grid-cols-2 p-0")}>
         {cells.map((cell) => (
           <BufferedTableCell
             key={cell.id}
@@ -343,7 +350,7 @@ function TablePage({
           />
         ))}
       </div>
-      <section className="mt-10" aria-labelledby={`${entity.id}-notes-heading`}>
+      <section className={cn(workspaceFieldGroupClass, "mt-10")} aria-labelledby={`${entity.id}-notes-heading`}>
         <h2 id={`${entity.id}-notes-heading`} className="text-base font-semibold">{t("lifecycle.table.notes")}</h2>
         <BufferedNotes ariaLabel={t("lifecycle.table.notes")} value={entity.notes} onCommit={(notes) => update({ notes })} />
       </section>
@@ -363,9 +370,9 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
     <section
       data-slot="workspace-object-page-view"
       data-object-kind={entity.kind}
-      className="relative h-full min-h-0 w-full overflow-y-auto px-6 text-foreground"
+      className={cn(workspaceRouteClass, "w-full overflow-y-auto")}
     >
-      <div className={cn("mx-auto w-full max-w-[50rem] px-10 pb-12 pt-24", collapsed && "hidden")}>
+      <div className={cn(workspaceLongformColumnClass, "lg:pt-24", collapsed && "hidden")}>
         {entity.kind === "table" ? (
           <TablePage entity={entity} structure={structure} update={update} />
         ) : (

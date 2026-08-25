@@ -11,6 +11,12 @@ import {
   ObjectTypeLabel,
   OpenSurface,
 } from "@/components/object-view-support";
+import {
+  workspaceEmptyStateSurfaceClass,
+  workspaceListRowClass,
+  workspaceLongformColumnClass,
+  workspaceNamedCardClass,
+} from "@/components/ui/workspace-surface";
 import { cn } from "@/lib/utils";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
 import {
@@ -51,7 +57,8 @@ function LinkObjectView(props: ReadyObjectViewProps) {
     <OpenSurface
       ariaLabel={labels.openObject(title)}
       className={cn(
-        "flex w-full items-center gap-3 rounded-md border bg-card px-3 py-2 text-card-foreground shadow-xs hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        workspaceListRowClass,
+        "gap-3 border border-transparent bg-card px-3 py-2 text-card-foreground shadow-xs",
         className,
       )}
       entityId={entity.id}
@@ -79,7 +86,8 @@ function PageObjectView(props: ReadyObjectViewProps) {
       data-show-backlinks={config.pageLayout.showBacklinks}
       data-show-table-of-contents={config.pageLayout.showTableOfContents}
       className={cn(
-        "mx-auto grid w-full gap-6 px-10 pb-12 pt-24",
+        workspaceLongformColumnClass,
+        "grid gap-6 lg:pt-24",
         config.pageLayout.contentWidth === "narrow" && "max-w-2xl",
         config.pageLayout.contentWidth === "standard" && "max-w-[50rem]",
         config.pageLayout.contentWidth === "wide" && "max-w-6xl",
@@ -134,7 +142,10 @@ function readEntityMetadata(entity: WorkspaceEntity): readonly string[] {
       ? entity.collections
       : [];
   const tags = "tags" in entity && Array.isArray(entity.tags) ? entity.tags : [];
-  return Array.from(new Set([...collections, ...tags].filter(Boolean))).slice(0, 4);
+  return Array.from(new Set([...collections, ...tags].filter(Boolean))).slice(
+    0,
+    4,
+  );
 }
 
 function CardMetadata({
@@ -147,7 +158,10 @@ function CardMetadata({
   const values = readEntityMetadata(entity);
   if (values.length === 0 && !fallbackLabel) return null;
   return (
-    <span data-slot="object-view-card-metadata" className="mt-2 flex flex-wrap gap-1.5">
+    <span
+      data-slot="object-view-card-metadata"
+      className="mt-2 flex flex-wrap gap-1.5"
+    >
       {values.length > 0 ? (
         values.map((value) => (
           <span
@@ -182,8 +196,10 @@ function CardObjectView(props: ReadyObjectViewProps) {
     <OpenSurface
       ariaLabel={labels.openObject(title)}
       className={cn(
-        "group flex min-h-[25rem] w-full flex-col rounded-xl border bg-card p-3 text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)] transition-[border-color,background-color,box-shadow] duration-150 hover:border-foreground/15 hover:bg-accent/20 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none",
-        wide && "sm:grid sm:min-h-[18rem] sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-5",
+        workspaceNamedCardClass,
+        "min-h-[25rem] w-full p-3 text-card-foreground hover:border-foreground/15 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring",
+        wide &&
+          "sm:grid sm:min-h-[18rem] sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-5",
         config.kind === "embed" && "bg-muted/30 shadow-none",
         className,
       )}
@@ -218,7 +234,8 @@ function ObjectView(props: ObjectViewProps) {
         data-slot="object-view-missing"
         role="status"
         className={cn(
-          "rounded-md border border-dashed p-3 text-sm text-muted-foreground",
+          workspaceEmptyStateSurfaceClass,
+          "min-h-[96px] p-3 text-sm text-muted-foreground",
           props.className,
         )}
       >
