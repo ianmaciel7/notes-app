@@ -106,6 +106,35 @@ test("tab midpoint and dedicated actions do not overlap", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test("top shell controls share one vertical center", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  const switcher = page.locator('[data-slot="app-sidebar-space-switcher"]');
+  const sidebarTrigger = page.locator(
+    '[data-slot="app-shell-sidebar-trigger"] button',
+  );
+  const history = page.locator('[data-slot="app-header-history"]');
+  const switcherBox = await switcher.boundingBox();
+  const sidebarTriggerBox = await sidebarTrigger.boundingBox();
+  const historyBox = await history.boundingBox();
+
+  expect(switcherBox).toBeTruthy();
+  expect(sidebarTriggerBox).toBeTruthy();
+  expect(historyBox).toBeTruthy();
+
+  const switcherCenter = (switcherBox?.y ?? 0) + (switcherBox?.height ?? 0) / 2;
+  const sidebarTriggerCenter =
+    (sidebarTriggerBox?.y ?? 0) + (sidebarTriggerBox?.height ?? 0) / 2;
+  const historyCenter = (historyBox?.y ?? 0) + (historyBox?.height ?? 0) / 2;
+  expect(
+    Math.max(switcherCenter, sidebarTriggerCenter, historyCenter) -
+      Math.min(switcherCenter, sidebarTriggerCenter, historyCenter),
+  ).toBeLessThanOrEqual(2);
+  expect(errors).toEqual([]);
+});
+
 test("compound type chip separates navigation from disclosure", async ({
   page,
 }) => {

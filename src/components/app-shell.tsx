@@ -542,7 +542,7 @@ function AppShellSidebarTrigger({
   return (
     <div
       data-slot="app-shell-sidebar-trigger"
-      className="absolute top-[9px] z-50"
+      className="absolute top-[15px] z-50"
       style={{
         left: "max(0.625rem, calc(var(--app-shell-left-width) - 2.125rem))",
       }}
@@ -579,7 +579,7 @@ function AppShellSidePanelTrigger({
   return (
     <div
       data-slot="app-shell-side-panel-trigger"
-      className="absolute right-[26px] top-[9px] z-50"
+      className="absolute right-[26px] top-[15px] z-50"
     >
       <Button
         type="button"
@@ -628,7 +628,7 @@ function AppShellMobileSidebar({
             type="button"
             variant="ghost"
             size="icon-sm"
-            className="absolute left-2.5 top-[9px]"
+            className="absolute left-2.5 top-[15px]"
             aria-label={t("openNavigation")}
           />
         }
@@ -669,7 +669,7 @@ function AppShellMobileSidePanel({
             type="button"
             variant="ghost"
             size="icon-sm"
-            className="absolute right-[26px] top-[9px]"
+            className="absolute right-[26px] top-[15px]"
             aria-label={t("openContext")}
           />
         }

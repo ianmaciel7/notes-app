@@ -791,7 +791,7 @@ function AppSidebar({
 }: AppSidebarProps) {
   return (
     <div data-slot="app-sidebar" className={cn("flex h-full min-w-0 flex-col", className)}>
-      <AppShellHeader className="px-2 pt-1 pr-0.5 pb-px">
+      <AppShellHeader className="px-2 py-[13px] pr-9">
         <AppSidebarSpaceSwitcher
           spaces={spaces}
           value={value}
