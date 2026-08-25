@@ -1,0 +1,139 @@
+"use client";
+
+import type {
+  DataViewRendererProps,
+  ProjectedDataViewProps,
+} from "@/components/object-view-types";
+import {
+  entityDescription,
+  entityValue,
+  ObjectTypeLabel,
+  OpenSurface,
+} from "@/components/object-view-support";
+import { cn } from "@/lib/utils";
+import type { WorkspaceEntity } from "@/lib/workspace-objects";
+
+function DataViewListRow({
+  entity,
+  props,
+}: {
+  readonly entity: WorkspaceEntity;
+  readonly props: DataViewRendererProps;
+}) {
+  if (props.view.presentation.kind !== "list") return null;
+  const presentation = props.view.presentation;
+  const title = entity.title.trim() || props.labels.untitledObject;
+  const description = entityDescription(entity);
+  return (
+    <OpenSurface
+      ariaLabel={props.labels.openObject(title)}
+      className="flex w-full items-start gap-3 rounded-md px-3 py-2 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      entityId={entity.id}
+      onOpen={props.onOpen}
+    >
+      {presentation.showIcon ? (
+        <ObjectTypeLabel
+          entity={entity}
+          labels={props.objectTypeLabels}
+          structures={props.structures}
+        />
+      ) : null}
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-medium">{title}</span>
+        {presentation.showDescription && description ? (
+          <span className="mt-0.5 line-clamp-2 block text-xs text-muted-foreground">
+            {description}
+          </span>
+        ) : null}
+      </span>
+    </OpenSurface>
+  );
+}
+
+function DataViewList(props: ProjectedDataViewProps) {
+  const compact =
+    props.view.presentation.kind === "list" &&
+    props.view.presentation.density === "compact";
+  return (
+    <ul className="divide-y rounded-md border bg-card">
+      {props.entities.map((entity) => (
+        <li key={entity.id} className={compact ? "p-1" : "p-2"}>
+          <DataViewListRow entity={entity} props={props} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function DataViewTable(props: ProjectedDataViewProps) {
+  if (props.view.presentation.kind !== "table") return null;
+  const presentation = props.view.presentation;
+  const columns = presentation.columns.filter((column) => column.visible);
+  return (
+    <div className="overflow-x-auto rounded-md border">
+      <table className="w-full min-w-xl border-collapse text-sm">
+        <thead className="bg-muted/60 text-left text-xs text-muted-foreground">
+          <tr>
+            {columns.map((column) => (
+              <th
+                key={column.id}
+                scope="col"
+                className="border-b px-3 py-2"
+                style={column.width ? { width: column.width } : undefined}
+              >
+                {props.propertyLabels?.[column.propertyId] ?? column.propertyId}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {props.entities.map((entity) => (
+            <tr
+              key={entity.id}
+              className="border-b last:border-b-0 hover:bg-muted/40"
+            >
+              {columns.map((column, index) => (
+                <td
+                  key={column.id}
+                  className={cn(
+                    "max-w-xs px-3",
+                    presentation.rowDensity === "compact" ? "py-1" : "py-2",
+                  )}
+                >
+                  {index === 0 && props.onOpen ? (
+                    <button
+                      type="button"
+                      className="max-w-full truncate text-left font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      aria-label={props.labels.openObject(
+                        entity.title.trim() || props.labels.untitledObject,
+                      )}
+                      onClick={() => props.onOpen?.(entity.id)}
+                    >
+                      {entityValue(
+                        entity,
+                        column.propertyId,
+                        props.objectTypeLabels,
+                        props.structures,
+                      )}
+                    </button>
+                  ) : (
+                    <span className="block truncate">
+                      {entityValue(
+                        entity,
+                        column.propertyId,
+                        props.objectTypeLabels,
+                        props.structures,
+                      )}
+                    </span>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export { DataViewList, DataViewTable };
