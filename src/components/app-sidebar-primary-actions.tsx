@@ -66,7 +66,7 @@ function normalizeMenuQuery(value: string) {
   return value
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .toLocaleLowerCase("pt-BR");
+    .toLocaleLowerCase();
 }
 
 function NewContentMenu({
@@ -84,7 +84,8 @@ function NewContentMenu({
   const [activeIndex, setActiveIndex] = React.useState(0);
   const optionRefs = React.useRef(new Map<string, HTMLButtonElement>());
   const Icon = action.icon;
-  const normalizedQuery = normalizeMenuQuery(query.trim());
+  const deferredQuery = React.useDeferredValue(query);
+  const normalizedQuery = normalizeMenuQuery(deferredQuery.trim());
   const localizedItems = objectTypes;
   const items = React.useMemo(
     () =>

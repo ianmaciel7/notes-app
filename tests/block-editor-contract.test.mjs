@@ -12,7 +12,7 @@ const [
   slashCommandSource,
   requestSource,
   tasksSource,
-  globalsSource,
+  _globalsSource,
   handleReferenceImage,
   handleReferenceMetadata,
 ] = await Promise.all([
@@ -180,7 +180,7 @@ test("the user-provided handle screenshot remains a hashed project reference", (
   assert.match(handleReferenceMetadata, /90 × 57 px/);
   assert.match(handleReferenceMetadata, /Click.*insert block below/is);
   assert.match(handleReferenceMetadata, /Shift-click.*insert block above/is);
-  assert.match(handleReferenceMetadata, /Drag.*move block/is);
+  assert.match(handleReferenceMetadata, /Drag.*move the block around/is);
   assert.match(handleReferenceMetadata, /Click.*block options/is);
 });
 
@@ -228,8 +228,8 @@ test("editor interaction copy is complete for every supported locale", () => {
 });
 
 test("advanced Capacities blocks remain an explicit follow-up", () => {
-  assert.match(tasksSource, /small text/);
-  assert.match(tasksSource, /Mermaid\/math/);
-  assert.match(tasksSource, /multi-column\/group/);
-  assert.match(tasksSource, /media\/object embeds/);
+  assert.match(tasksSource, /small text/i);
+  assert.match(tasksSource, /lateral\/column\/group drop semantics/i);
+  assert.match(tasksSource, /explicit follow-ups/i);
+  assert.match(tasksSource, /neutral schema/i);
 });

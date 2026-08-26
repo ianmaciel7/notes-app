@@ -207,7 +207,14 @@
       "searchContentPlaceholder": "Buscar contenido para abrir en una nueva pestaña",
       "sidePanelMenu": "Abrir menú del panel lateral",
       "sidePanelSearchPlaceholder": "Buscar contenido y acciones, o pegar desde el portapapeles",
-      "yesterday": "Ayer"
+      "yesterday": "Ayer",
+      "initialObjectType": "Tipo de objeto",
+      "initialAtomicNotes": "Notas atómicas",
+      "initialQuotes": "Citas",
+      "initialPages": "Páginas",
+      "object": "Objeto",
+      "previewContent": "Vista previa de {title}.",
+      "pinnedCloseBlocked": "Las pestañas fijadas no se pueden cerrar. Desfija la pestaña primero."
     },
     "openedTab": {
       "description": "Empieza a escribir o agrega contenido a este objeto."
@@ -406,6 +413,11 @@
     "views": {
       "all": "Todo",
       "overview": "Vista general"
+    },
+    "sidebarSections": {
+      "sort": "Ordenar sección",
+      "manual": "Ordenar manualmente",
+      "alphabetical": "Ordenar alfabéticamente"
     }
   }
 }

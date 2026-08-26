@@ -1,4 +1,4 @@
-import { type ObjectIconTone } from "./workspace-object-types";
+import type { ObjectIconTone } from "./workspace-object-types";
 
 const WORKSPACE_SIDEBAR_PINNED_STORAGE_KEY =
   "notes-app:workspace-sidebar-pinned:v1";

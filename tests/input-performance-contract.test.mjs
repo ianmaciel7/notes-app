@@ -34,8 +34,11 @@ test("workspace editors use buffered commits for text-heavy object fields", asyn
     workspaceContent,
     /onChange=\{\(event\) => update\(\{ (body|notes|description): event\.target\.value \}\)\}/,
   );
-  assert.match(blockEditor, /useBufferedTextCommit<BlockEditorDocument>/);
-  assert.match(blockEditor, /onUpdate:[\s\S]*setDraft\(/);
+  assert.match(blockEditor, /useBufferedDocumentCommit/);
+  assert.match(blockEditor, /onUpdate:[\s\S]*scheduleCommit\(/);
+  assert.match(blockEditor, /onBlur=\{editable \? flushCommit : undefined\}/);
+  assert.match(blockEditor, /onCompositionStart=\{editable \? startComposition : undefined\}/);
+  assert.match(blockEditor, /onCompositionEnd=\{editable \? finishComposition : undefined\}/);
   assert.doesNotMatch(blockEditor, /onUpdate:[\s\S]{0,120}onChange\(/);
 });
 

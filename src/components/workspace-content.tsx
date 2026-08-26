@@ -344,14 +344,14 @@ function ObjectTypeNamedItemWorkspace({
           </span>
         </div>
 
-        <input
-          ref={titleRef}
-          aria-label={t("fields.title")}
-          value={title}
-          onChange={(event) => rename(event.target.value)}
-          className="mt-3 w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-[#282522] outline-none placeholder:text-[#b8b2ac]"
-          placeholder={t("objectTypeOverview.untitled")}
-        />
+        <BufferedTextInput
+        inputRef={titleRef}
+        aria-label={t("fields.title")}
+        value={title}
+        onCommit={rename}
+        className="mt-3 w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-[#282522] outline-none placeholder:text-[#b8b2ac]"
+        placeholder={t("objectTypeOverview.untitled")}
+      />
 
         <section className="mt-10 flex min-h-[220px] flex-col items-center justify-center rounded-2xl text-center">
           <ItemIcon className="mb-3 size-5 text-[#77716b]" />
@@ -952,11 +952,12 @@ function CollectionPropertyEditor({
   const t = useTranslations("workspace");
   const { setObjectTypeCollections } = useWorkspace();
   const [query, setQuery] = React.useState("");
+  const deferredQuery = React.useDeferredValue(query);
   const [open, setOpen] = React.useState(false);
   const visible = suggestions.filter(
     (item) =>
       !collections.includes(item) &&
-      item.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
+      item.toLocaleLowerCase().includes(deferredQuery.trim().toLocaleLowerCase()),
   );
 
   function createCollection() {
@@ -1415,11 +1416,12 @@ function TagPropertyEditor({
 }) {
   const t = useTranslations("workspace");
   const [draft, setDraft] = React.useState("");
+  const deferredDraft = React.useDeferredValue(draft);
   const [open, setOpen] = React.useState(false);
   const visibleSuggestions = suggestions.filter(
     (tag) =>
       !tags.includes(tag) &&
-      tag.toLocaleLowerCase().includes(draft.trim().toLocaleLowerCase()),
+      tag.toLocaleLowerCase().includes(deferredDraft.trim().toLocaleLowerCase()),
   );
 
   function commitDraft() {
@@ -3329,7 +3331,7 @@ function ObjectTypeNamedItems({
   return (
     <div className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2">
       {keyedItems.map(({ item, index, key }) => (
-        <label
+        <div
           key={key}
           data-slot="object-type-named-card"
           data-kind={kind}
@@ -3341,21 +3343,21 @@ function ObjectTypeNamedItems({
             ) : (
               <ObjectQueryIcon className="size-4 shrink-0 text-[#77716b]" />
             )}
-            <input
-              ref={(node) => {
-                if (node) inputRefs.current.set(index, node);
-                else inputRefs.current.delete(index);
-              }}
-              aria-label={item}
-              value={item}
-              onChange={(event) => onRename(index, event.target.value)}
-              className="min-w-0 flex-1 truncate bg-transparent text-[15px] font-medium leading-5 text-[#34312f] outline-none"
-            />
+            <BufferedTextInput
+            inputRef={(node) => {
+              if (node) inputRefs.current.set(index, node);
+              else inputRefs.current.delete(index);
+            }}
+            aria-label={item}
+            value={item}
+            onCommit={(value) => onRename(index, value)}
+            className="min-w-0 flex-1 truncate bg-transparent text-[15px] font-medium leading-5 text-[#34312f] outline-none"
+          />
           </span>
           <span className="mt-1 text-xs leading-4 text-[#77716b]">
             {t("entryCount", { count: itemCounts[index] ?? 0 })}
           </span>
-        </label>
+        </div>
       ))}
     </div>
   );

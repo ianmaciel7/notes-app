@@ -207,7 +207,14 @@
       "searchContentPlaceholder": "Search content to open in a new tab",
       "sidePanelMenu": "Open side-panel menu",
       "sidePanelSearchPlaceholder": "Search content and actions, or paste from clipboard",
-      "yesterday": "Yesterday"
+      "yesterday": "Yesterday",
+      "initialObjectType": "Object type",
+      "initialAtomicNotes": "Atomic notes",
+      "initialQuotes": "Quotes",
+      "initialPages": "Pages",
+      "object": "Object",
+      "previewContent": "Preview content for {title}.",
+      "pinnedCloseBlocked": "Pinned tabs cannot be closed. Unpin the tab first."
     },
     "openedTab": {
       "description": "Start writing or add content to this object."
@@ -406,6 +413,11 @@
     "views": {
       "all": "All",
       "overview": "Overview"
+    },
+    "sidebarSections": {
+      "sort": "Sort section",
+      "manual": "Sort manually",
+      "alphabetical": "Sort alphabetically"
     }
   }
 }

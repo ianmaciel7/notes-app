@@ -118,6 +118,7 @@ function SlashCommandMenu({
         aria-activedescendant={
           activeItem ? `block-editor-slash-option-${activeItem.id}` : undefined
         }
+        tabIndex={0}
         className="max-h-[21rem] min-h-0 overflow-y-auto px-2 pb-2"
       >
         {items.length > 0 ? (

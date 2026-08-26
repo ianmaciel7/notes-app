@@ -207,7 +207,14 @@
       "searchContentPlaceholder": "Buscar conteúdo para abrir em uma nova aba",
       "sidePanelMenu": "Abrir menu do painel lateral",
       "sidePanelSearchPlaceholder": "Buscar por conteúdo e ações, ou colar da área de transferência",
-      "yesterday": "Ontem"
+      "yesterday": "Ontem",
+      "initialObjectType": "Tipo de objeto",
+      "initialAtomicNotes": "Notas atômicas",
+      "initialQuotes": "Citações",
+      "initialPages": "Páginas",
+      "object": "Objeto",
+      "previewContent": "Conteúdo de pré-visualização para {title}.",
+      "pinnedCloseBlocked": "Abas fixadas não podem ser fechadas. Desafixe a aba primeiro."
     },
     "openedTab": {
       "description": "Comece a escrever ou adicione conteúdo a este objeto."
@@ -406,6 +413,11 @@
     "views": {
       "all": "Tudo",
       "overview": "Visão geral"
+    },
+    "sidebarSections": {
+      "sort": "Ordenar seção",
+      "manual": "Ordenar manualmente",
+      "alphabetical": "Ordenar alfabeticamente"
     }
   }
 }

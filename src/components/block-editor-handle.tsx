@@ -26,7 +26,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { createBlockCommandCatalog } from "@/editor/block-command-catalog";
+import type { createBlockCommandCatalog } from "@/editor/block-command-catalog";
 import { cn } from "@/lib/utils";
 
 type EditorCommandCatalog = ReturnType<typeof createBlockCommandCatalog>;

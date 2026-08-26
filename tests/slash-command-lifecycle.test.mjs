@@ -28,8 +28,9 @@ test("slash menu teardown is idempotent and blocks renders after destroy starts"
 test("slash menu uses the managed Suggestion mount lifecycle", () => {
   assert.match(
     source,
-    /unmountFloatingElement = props\.mount\(menu\.element\)/,
+    /unmountFloatingElement = props\.mount\(menu\.element, \{/,
   );
+  assert.match(source, /onPosition: \(position\) =>/);
   assert.match(source, /currentUnmount\?\.\(\)/);
   assert.match(source, /currentMenu\?\.destroy\(\)/);
   assert.match(source, /onExit: cleanupMenu/);

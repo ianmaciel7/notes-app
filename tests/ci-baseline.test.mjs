@@ -107,7 +107,7 @@ test("sidebar context menus share the canonical appearance contract", async () =
   assert.equal(overview.match(/<DropdownMenuShortcut>/g)?.length, 1);
 });
 
-test("the localized workspace boots into the workspace fixture", async () => {
+test("the localized workspace boots into the production workspace composition", async () => {
   const [
     route,
     fixture,
@@ -156,7 +156,8 @@ test("the localized workspace boots into the workspace fixture", async () => {
     readFile(new URL("../src/app/globals.css", import.meta.url), "utf8"),
   ]);
 
-  assert.match(route, /AtomicNotesWorkspace/);
+  assert.match(route, /WorkspaceViewsSurface/);
+  assert.doesNotMatch(route, /AtomicNotesWorkspace/);
   assert.match(route, /ExploreWorkspace/);
   assert.match(fixture, /citation-workspace/);
   assert.match(fixture, /useTranslations\("workspace"\)/);
@@ -166,7 +167,11 @@ test("the localized workspace boots into the workspace fixture", async () => {
   assert.match(header, /id: "atomic-note"/);
   assert.match(header, /id: "untitled"/);
   assert.match(header, /useState\("untitled"\)/);
-  assert.match(header, /const initialSideTabs[\s\S]*?id: "explore"/);
+  assert.match(
+    header,
+    /const \[sideTabs, setSideTabs\] = React\.useState<AppHeaderTab\[\]>\(\(\) => \[[\s\S]*?id: "explore"[\s\S]*?label: t\("primaryNavigation\.explore"\)/,
+  );
+  assert.doesNotMatch(header, /const initialSideTabs/);
   assert.match(header, /MAIN_DRAFT_TAB_ID = "new-tab-draft"/);
   assert.match(
     header,

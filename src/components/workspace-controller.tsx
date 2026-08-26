@@ -96,84 +96,7 @@ import {
   workspaceObjectReducer,
 } from "@/lib/workspace-objects";
 
-const initialMainTabs: AppHeaderTab[] = [
-  {
-    id: "atomic-note",
-    label: "Notas atômicas",
-    icon: ObjectAtomicNoteIcon,
-    iconClassName: objectIconToneBadgeClass.amber,
-    preview: <TabPreview eyebrow="Tipo de objeto" title="Notas atômicas" />,
-  },
-  {
-    id: "quote",
-    label: "Citações",
-    icon: ObjectQuoteIcon,
-    iconClassName: objectIconToneBadgeClass.rose,
-    preview: <TabPreview eyebrow="Tipo de objeto" title="Citações" />,
-  },
-  {
-    id: "page",
-    label: "Páginas",
-    icon: ObjectPageIcon,
-    iconClassName: objectIconToneBadgeClass.blue,
-    preview: <TabPreview eyebrow="Tipo de objeto" title="Páginas" />,
-  },
-  {
-    id: "untitled",
-    label: "Sem título",
-    icon: ObjectQuoteIcon,
-    iconClassName: objectIconToneBadgeClass.rose,
-    preview: <TabPreview eyebrow="Citação" title="Sem título" />,
-  },
-];
-
-const initialSideTabs: AppHeaderTab[] = [
-  {
-    id: "explore",
-    label: "Explorar",
-    icon: AppHeaderCompassIcon,
-    iconClassName: objectIconToneBadgeClass.gray,
-    draggable: false,
-  },
-];
-
 const MAIN_DRAFT_TAB_ID = "new-tab-draft";
-
-const specialSideTabs: Record<
-  SidePanelSpecialEntryId,
-  Omit<AppHeaderTab, "id">
-> = {
-  graphView: {
-    label: "Visualização em grafo",
-    icon: AppHeaderGraphIcon,
-    iconClassName: objectIconToneBadgeClass.gray,
-  },
-  backlinks: {
-    label: "Links de entrada",
-    icon: ObjectPageIcon,
-    iconClassName: objectIconToneBadgeClass.gray,
-  },
-  objectsInside: {
-    label: "Objetos internos",
-    icon: ObjectAreaIcon,
-    iconClassName: objectIconToneBadgeClass.gray,
-  },
-  relatedContent: {
-    label: "Conteúdo relacionado",
-    icon: AppHeaderGraphIcon,
-    iconClassName: objectIconToneBadgeClass.gray,
-  },
-  aiAssistantChat: {
-    label: "Chat de IA",
-    icon: ObjectAiChatIcon,
-    iconClassName: objectIconToneBadgeClass.purple,
-  },
-  localSpaceQuery: {
-    label: "Buscar",
-    icon: ObjectQueryIcon,
-    iconClassName: objectIconToneBadgeClass.emerald,
-  },
-};
 
 type ParsedCollectionPinnedId = {
   objectTypeId: string;
@@ -486,9 +409,46 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const t = useTranslations("workspace");
   const [spaces, setSpaces] = React.useState(initialSpaces);
   const [spaceId, setSpaceId] = React.useState("labs");
-  const [mainTabs, setMainTabs] = React.useState(initialMainTabs);
+  const [mainTabs, setMainTabs] = React.useState<AppHeaderTab[]>(() => [
+    {
+      id: "atomic-note",
+      label: t("tabs.initialAtomicNotes"),
+      icon: ObjectAtomicNoteIcon,
+      iconClassName: objectIconToneBadgeClass.amber,
+      preview: <TabPreview eyebrow={t("tabs.initialObjectType")} title={t("tabs.initialAtomicNotes")} />,
+    },
+    {
+      id: "quote",
+      label: t("tabs.initialQuotes"),
+      icon: ObjectQuoteIcon,
+      iconClassName: objectIconToneBadgeClass.rose,
+      preview: <TabPreview eyebrow={t("tabs.initialObjectType")} title={t("tabs.initialQuotes")} />,
+    },
+    {
+      id: "page",
+      label: t("tabs.initialPages"),
+      icon: ObjectPageIcon,
+      iconClassName: objectIconToneBadgeClass.blue,
+      preview: <TabPreview eyebrow={t("tabs.initialObjectType")} title={t("tabs.initialPages")} />,
+    },
+    {
+      id: "untitled",
+      label: t("lifecycle.untitled"),
+      icon: ObjectQuoteIcon,
+      iconClassName: objectIconToneBadgeClass.rose,
+      preview: <TabPreview eyebrow={t("objects.quote")} title={t("lifecycle.untitled")} />,
+    },
+  ]);
   const [mainValue, setMainValue] = React.useState("untitled");
-  const [sideTabs, setSideTabs] = React.useState(initialSideTabs);
+  const [sideTabs, setSideTabs] = React.useState<AppHeaderTab[]>(() => [
+    {
+      id: "explore",
+      label: t("primaryNavigation.explore"),
+      icon: AppHeaderCompassIcon,
+      iconClassName: objectIconToneBadgeClass.gray,
+      draggable: false,
+    },
+  ]);
   const [sideValue, setSideValue] = React.useState("explore");
   const [focusMode, setFocusMode] = React.useState(false);
   const [sideSearchOpen, setSideSearchOpen] = React.useState(false);
@@ -916,7 +876,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         label: entity.label,
         icon: entity.icon,
         iconClassName: objectIconToneBadgeClass[entity.tone],
-        preview: <TabPreview eyebrow="Objeto" title={entity.label} />,
+        preview: <TabPreview eyebrow={t("tabs.object")} title={entity.label} />,
       });
     },
     [
@@ -1186,6 +1146,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       activeAction,
       activeEntityId,
       pinnedEntities,
+      availablePinnedEntities,
       objectTypes,
       workspaceObjects.structures,
       workspaceObjects.draft,
@@ -1475,7 +1436,7 @@ function WorkspaceMainHeader() {
         }}
         onCloseRequest={(tab) => {
           if (!tab.pinned) return true;
-          showMessage("Pinned tabs cannot be closed. Unpin the tab first.");
+          showMessage(t("tabs.pinnedCloseBlocked"));
           return false;
         }}
       />
@@ -1488,6 +1449,7 @@ function MainTabSearchOverlay() {
   const { mainTabs, objectTypes, setMainTabs, setMainValue, setMainSearchOpen } =
     useWorkspace();
   const [query, setQuery] = React.useState("");
+  const deferredQuery = React.useDeferredValue(query);
 
   const options = React.useMemo(
     () =>
@@ -1500,7 +1462,7 @@ function MainTabSearchOverlay() {
       })),
     [objectTypes],
   );
-  const normalized = query.trim().toLocaleLowerCase();
+  const normalized = deferredQuery.trim().toLocaleLowerCase();
   const filtered = normalized
     ? options.filter((option) =>
         option.label.toLocaleLowerCase().includes(normalized),
@@ -1604,6 +1566,14 @@ function WorkspaceSidePanelHeader() {
     setSideSearchOpen,
   } = useWorkspace();
   const { toggleRight } = useAppShell();
+  const specialSideTabs: Record<SidePanelSpecialEntryId, Omit<AppHeaderTab, "id">> = {
+    graphView: { label: t("explore.graphView"), icon: AppHeaderGraphIcon, iconClassName: objectIconToneBadgeClass.gray },
+    backlinks: { label: t("explore.backlinks"), icon: ObjectPageIcon, iconClassName: objectIconToneBadgeClass.gray },
+    objectsInside: { label: t("explore.objectsInside"), icon: ObjectAreaIcon, iconClassName: objectIconToneBadgeClass.gray },
+    relatedContent: { label: t("explore.relatedContent"), icon: AppHeaderGraphIcon, iconClassName: objectIconToneBadgeClass.gray },
+    aiAssistantChat: { label: t("explore.aiChat"), icon: ObjectAiChatIcon, iconClassName: objectIconToneBadgeClass.purple },
+    localSpaceQuery: { label: t("actions.search"), icon: ObjectQueryIcon, iconClassName: objectIconToneBadgeClass.emerald },
+  };
 
   if (focusMode) return null;
 
@@ -1641,9 +1611,13 @@ function WorkspaceSidePanelHeader() {
     const explore = sideTabs.find((tab) => tab.id === "explore");
 
     if (!explore) {
-      const nextExplore = initialSideTabs.find((tab) => tab.id === "explore");
-      if (!nextExplore) return;
-
+      const nextExplore: AppHeaderTab = {
+        id: "explore",
+        label: t("primaryNavigation.explore"),
+        icon: AppHeaderCompassIcon,
+        iconClassName: objectIconToneBadgeClass.gray,
+        draggable: false,
+      };
       setSideTabs((current) => [...current, nextExplore]);
       setSideValue(nextExplore.id);
       return;
@@ -1685,6 +1659,7 @@ function SidePanelSearchOverlay() {
     structures,
   } = useWorkspace();
   const [query, setQuery] = React.useState("");
+  const deferredQuery = React.useDeferredValue(query);
   const searchInputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -1729,7 +1704,7 @@ function SidePanelSearchOverlay() {
     return Array.from(items.values());
   }, [createdEntities, objectTypes, structures, t]);
 
-  const normalized = query.trim().toLocaleLowerCase();
+  const normalized = deferredQuery.trim().toLocaleLowerCase();
   const filtered = normalized
     ? recentItems.filter((item) =>
         item.label.toLocaleLowerCase().includes(normalized),
@@ -1865,12 +1840,13 @@ function SidePanelSearchOverlay() {
 }
 
 function TabPreview({ eyebrow, title }: { eyebrow: string; title: string }) {
+  const t = useTranslations("workspace.tabs");
   return (
     <div className="flex flex-col gap-1.5">
       <span className="text-xs text-muted-foreground">{eyebrow}</span>
       <span className="font-medium text-foreground">{title}</span>
       <span className="text-sm leading-5 text-muted-foreground">
-        Preview content for {title}.
+        {t("previewContent", { title })}
       </span>
     </div>
   );

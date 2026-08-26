@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { BlockEditorLabels } from "@/editor/block-editor-contract";
-import { createBlockCommandCatalog } from "@/editor/block-command-catalog";
+import type { createBlockCommandCatalog } from "@/editor/block-command-catalog";
 import { isSafeBlockEditorHref } from "@/editor/document";
 
 type SelectionRange = { from: number; to: number };

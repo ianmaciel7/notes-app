@@ -19,7 +19,6 @@ import {
   ObjectAreaIcon,
   ObjectCollectionIcon,
   ObjectIconBadge,
-  ObjectPageIcon,
   objectIconToneBadgeClass,
   type ObjectIconProps,
   type ObjectIconTone,
@@ -217,10 +216,11 @@ function AppSidebarSectionMenu({
   value: AppSidebarSortMode;
   onValueChange: (value: AppSidebarSortMode) => void;
 }) {
+  const t = useTranslations("workspace.sidebarSections");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label="Ordenar seção"
+        aria-label={t("sort")}
         className={cn(
           buttonVariants({ variant: "ghost", size: "icon-xs" }),
           "size-[22px] shrink-0 opacity-0 transition-opacity duration-200",
@@ -237,11 +237,11 @@ function AppSidebarSectionMenu({
         className="w-56"
       >
         <DropdownMenuItem onClick={() => onValueChange("manual")}>
-          Ordenar manualmente
+          {t("manual")}
           {value === "manual" && <AppSidebarCheckIcon className="ml-auto" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onValueChange("alphabetical")}>
-          Ordenar alfabeticamente
+          {t("alphabetical")}
           {value === "alphabetical" && (
             <AppSidebarCheckIcon className="ml-auto" />
           )}
