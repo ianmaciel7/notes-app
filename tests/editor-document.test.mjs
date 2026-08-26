@@ -28,11 +28,13 @@ test("validated documents support Capacities-style heading 4 and horizontal line
   assert.equal(isBlockEditorDocument(document), true);
   assert.equal(document.doc.content[0].type, "heading");
   assert.equal(document.doc.content[0].attrs.level, 4);
+  assert.equal(document.doc.content[0].attrs.id, "block:0");
   assert.equal(document.doc.content[1].type, "horizontalRule");
+  assert.equal(document.doc.content[1].attrs.id, "block:1");
   assert.match(blockEditorDocumentToMarkdown(document), /^#### Detail/m);
 });
 
-test("normalization removes editor-only link defaults but preserves safe href", () => {
+test("normalization removes editor-only link defaults and assigns stable block ids", () => {
   const normalized = normalizeBlockEditorDocument({
     schemaVersion: 1,
     doc: {
@@ -70,6 +72,7 @@ test("normalization removes editor-only link defaults but preserves safe href", 
       content: [
         {
           type: "paragraph",
+          attrs: { id: "block:0" },
           content: [
             {
               type: "text",
@@ -88,14 +91,17 @@ test("normalization removes editor-only link defaults but preserves safe href", 
   });
 });
 
-test("task-list Markdown stays a task-list document across export and import", () => {
+test("task-list Markdown keeps stable ids across export and import", () => {
   const source = "- [ ] Open task\n- [x] Completed task";
   const document = blockEditorDocumentFromMarkdown(source);
 
   assert.equal(isBlockEditorDocument(document), true);
   assert.equal(document.doc.content[0].type, "taskList");
+  assert.equal(document.doc.content[0].attrs.id, "block:0");
   assert.equal(document.doc.content[0].content[0].attrs.checked, false);
+  assert.equal(document.doc.content[0].content[0].attrs.id, "block:0.0");
   assert.equal(document.doc.content[0].content[1].attrs.checked, true);
+  assert.equal(document.doc.content[0].content[1].attrs.id, "block:0.1");
 
   const markdown = blockEditorDocumentToMarkdown(document);
   assert.match(markdown, /- \[ \] Open task/);
@@ -126,8 +132,38 @@ test("link normalization accepts safe relative links and rejects unsafe protocol
   unsafe.doc.content[0].content[0].marks[0].attrs.href =
     "javascript:alert(1)";
 
-  assert.deepEqual(normalizeBlockEditorDocument(safe), safe);
+  assert.deepEqual(normalizeBlockEditorDocument(safe), {
+    ...safe,
+    doc: {
+      ...safe.doc,
+      content: [{ ...safe.doc.content[0], attrs: { id: "block:0" } }],
+    },
+  });
   assert.equal(normalizeBlockEditorDocument(unsafe), null);
+});
+
+test("legacy documents gain deterministic ids and duplicate ids are repaired", () => {
+  const legacy = {
+    schemaVersion: 1,
+    doc: {
+      type: "doc",
+      content: [
+        { type: "paragraph", attrs: { id: "kept" } },
+        { type: "paragraph", attrs: { id: "kept" } },
+        { type: "paragraph" },
+      ],
+    },
+  };
+
+  assert.equal(isBlockEditorDocument(legacy), false);
+  const normalized = normalizeBlockEditorDocument(legacy);
+  assert.ok(normalized);
+  assert.deepEqual(
+    normalized.doc.content.map((node) => node.attrs.id),
+    ["kept", "block:1", "block:2"],
+  );
+  assert.equal(isBlockEditorDocument(normalized), true);
+  assert.deepEqual(normalizeBlockEditorDocument(normalized), normalized);
 });
 
 test("empty block documents are valid, normalized, and independent", () => {
@@ -137,17 +173,24 @@ test("empty block documents are valid, normalized, and independent", () => {
   assert.equal(isBlockEditorDocument(first), true);
   assert.deepEqual(first, {
     schemaVersion: 1,
-    doc: { type: "doc", content: [{ type: "paragraph" }] },
+    doc: {
+      type: "doc",
+      content: [{ type: "paragraph", attrs: { id: "block:0" } }],
+    },
   });
   assert.notEqual(first.doc.content, second.doc.content);
 });
 
-test("plain text conversion preserves line boundaries deterministically", () => {
+test("plain text conversion preserves line boundaries and deterministic ids", () => {
   const source = "First line\n\nThird line";
   const document = blockEditorDocumentFromPlainText(source);
 
   assert.equal(blockEditorDocumentToPlainText(document), source);
   assert.equal(isBlockEditorDocument(document), true);
+  assert.deepEqual(
+    document.doc.content.map((node) => node.attrs.id),
+    ["block:0", "block:1", "block:2"],
+  );
 });
 
 test("normalization rejects unknown nodes and repairs an empty root", () => {
