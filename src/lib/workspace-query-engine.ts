@@ -459,7 +459,11 @@ function validateQueryDefinition(value: unknown) {
   }
   return { ok: true, value: value as QueryDefinition } as const;
 }
-function collectFilterDependencies(group: QueryFilterGroup, properties: Set<string>, variables: Set<string>) {
+function collectFilterDependencies(
+  group: QueryFilterGroup,
+  properties: Set<string>,
+  variables: Set<string>,
+): { needsBacklinks: boolean; needsContentLinks: boolean } {
   let needsBacklinks = false;
   let needsContentLinks = false;
   for (const filter of group.filters) {
