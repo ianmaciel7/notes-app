@@ -6,12 +6,13 @@ Define typed local workspace object creation, editing, synchronization, persiste
 ## Requirements
 
 ### Requirement: Typed workspace object state
-The system SHALL represent every object created from the `Novo` palette as a discriminated workspace entity whose type-specific fields, title, creation timestamp, and stable identifier are owned by the workspace state rather than by an editor component.
+The system SHALL represent every object created from the `Novo` palette as a discriminated workspace entity whose type-specific fields, title, creation timestamp, and stable identifier are owned by workspace state rather than by an editor component; Page and Atomic note `DocumentEntity.body` and `QuoteEntity.body` SHALL use validated `BlockEditorDocument` values while other simple body/note fields remain strings.
 
 #### Scenario: Object is created from the palette
 - **WHEN** a user selects any supported object type from `Novo`
 - **THEN** the system SHALL create or begin the type-appropriate workflow with a collision-free identifier and the selected central icon/tone definition
 - **AND** the resulting object SHALL remain selectable independently of other objects of the same type
+- **AND** Page, Atomic note, and Quote SHALL receive a valid empty block document
 
 #### Scenario: Unsupported definition is requested
 - **WHEN** a creation request references an object type that is not in the central registry
@@ -19,12 +20,12 @@ The system SHALL represent every object created from the `Novo` palette as a dis
 - **AND** it SHALL present a localized error status
 
 ### Requirement: Type-specific creation workflows
-The system SHALL dispatch every supported `Novo`, object-type preset, and custom object into the creation flow observed for its object family, keep the user's local Notes App data as the source of content, and preserve the current Capacities visual and interaction contract for idle, hover, focus-visible, pressed, opened, selected, and post-click states.
+The system SHALL dispatch every supported `Novo`, object-type preset, and custom object into the creation flow observed for its object family instead of rendering one generic editor for all types, keep the user's local Notes App data as the source of content, and preserve the current Capacities visual and interaction contract for idle, hover, focus-visible, pressed, opened, selected, and post-click states.
 
 #### Scenario: Full editor object is created
 - **WHEN** the user selects Atomic note, Quote, or Page
 - **THEN** the system SHALL create and activate an untitled object immediately
-- **AND** SHALL render the appropriate title, body, tags, collections, or quote fields for that type
+- **AND** SHALL render the appropriate title, structured block body, tags, collections, or quote fields for that type
 
 #### Scenario: Page is created and written
 - **WHEN** the user activates `Novo` and selects Page
@@ -157,12 +158,16 @@ The system SHALL dispatch every supported `Novo`, object-type preset, and custom
 - **AND** it SHALL NOT be counted as a missing creatable object in lifecycle parity.
 
 ### Requirement: Editing synchronizes every workspace projection
-The system SHALL keep each object's canonical data synchronized with its active editor, main tab, sidebar counts, object-type index, query results, search surface, and persistence after creation, click navigation, writing, and re-opening.
+The system SHALL keep each object's canonical data synchronized with its active editor, main tab, sidebar counts, object-type index, query results, search surface, and persistence after creation, click navigation, writing, and re-opening without causing controlled-editor update loops or selection loss.
 
 #### Scenario: Title or content is edited
-- **WHEN** the user edits an object's title, body, tags, table cells, task fields, URL notes, or query definition
-- **THEN** the canonical entity SHALL update immediately
+- **WHEN** the user edits an object's title, structured body, simple body, tags, table cells, task fields, URL notes, or query definition
+- **THEN** the canonical entity SHALL update immediately or through the documented short persistence buffer
 - **AND** every visible projection of the changed field SHALL reflect the same value without creating a duplicate object
+
+#### Scenario: Structured body changes externally
+- **WHEN** a Page, Atomic note, or Quote receives a valid external body that differs from its current editor JSON
+- **THEN** the editor SHALL replace content without emitting a recursive update or losing future editability
 
 #### Scenario: Untitled object receives content
 - **WHEN** the first meaningful title remains blank but type-specific content is entered
@@ -238,7 +243,7 @@ The object lifecycle UI SHALL be composed from reusable, neutral app-domain comp
 - **AND** browser tests SHALL exercise at least one consumer of each reusable lifecycle component in idle, hover, focus-visible, click, post-click, Escape, outside-click, and reduced-motion states where applicable.
 
 ### Requirement: Versioned local workspace persistence
-The system SHALL persist canonical object state in a versioned, locale-neutral browser-storage record and SHALL hydrate it only after client mount.
+The system SHALL persist canonical object state in a version 2, locale-neutral browser-storage record, SHALL hydrate it only after client mount, and SHALL validate every structured body before accepting the snapshot.
 
 #### Scenario: First visit has no stored workspace
 - **WHEN** no valid stored record exists
@@ -249,9 +254,22 @@ The system SHALL persist canonical object state in a versioned, locale-neutral b
 - **THEN** the system SHALL restore entities, counts, active selection, and editable values after client mount
 - **AND** SHALL preserve stable identifiers across the reload
 
+#### Scenario: Version 1 workspace is migrated
+- **WHEN** a valid version 1 record contains Page, Atomic note, or Quote text bodies
+- **THEN** the system SHALL split each body on line boundaries into paragraph nodes, preserve empty lines as empty paragraphs, retain stable entity identifiers and simple fields, and hydrate a version 2 state
+
+#### Scenario: Version 2 workspace is restored
+- **WHEN** a valid version 2 record exists and a localized route reloads
+- **THEN** the system SHALL restore entities, counts, active selection, simple editable values, and validated block documents after client mount
+- **AND** SHALL preserve stable identifiers and structured content across the reload
+
 #### Scenario: Stored workspace is invalid or from a future version
-- **WHEN** parsing, validation, or version checks fail
+- **WHEN** parsing, document validation, or version checks fail
 - **THEN** the system SHALL ignore the record, retain the deterministic seed, and expose a non-blocking localized recovery status
+
+#### Scenario: Unknown document content is present
+- **WHEN** a version 2 snapshot contains an unknown block node, mark, or attribute
+- **THEN** the entire invalid record SHALL be rejected rather than silently dropping or preserving the unknown content
 
 ### Requirement: Localized and accessible lifecycle surfaces
 All lifecycle copy and interaction semantics SHALL use the repository i18n layer and existing shadcn/Base UI primitives while preserving central object icons and workspace parity rules.
@@ -272,6 +290,60 @@ The object lifecycle SHALL be verified against observed authenticated reference 
 - **WHEN** implementation is ready for acceptance
 - **THEN** focused tests SHALL cover each creation family, edit synchronization, persistence recovery, validation, and count invariants
 - **AND** rendered browser checks SHALL exercise creation, typing, reload, re-open, keyboard cancellation, and console errors on the local route
+
+#### Scenario: Creation trigger and object option states are exercised
+- **WHEN** the creation flow is verified in the browser
+- **THEN** tests SHALL cover the `Novo` trigger at idle, hover, focus-visible, pressed, open, Escape-closed, and outside-click-closed states
+- **AND** each object option row SHALL expose a stable full-row target, central icon/tone, localized label, no layout shift on hover, and a distinct selected/pressed result when chosen.
+
+#### Scenario: Every instantiated object type has click and write evidence
+- **WHEN** implementation is ready for acceptance
+- **THEN** browser or component tests SHALL instantiate each supported `Novo`, preset, and custom object family at least once
+- **AND** they SHALL click the resulting tab or object projection, write type-appropriate content, assert post-click selected appearance, assert count/projection synchronization, and assert no console implementation errors.
+
+#### Scenario: Central object registry coverage is complete
+- **WHEN** the lifecycle parity coverage is audited against the central object registry
+- **THEN** every creatable registry id SHALL be covered by a named lifecycle scenario: `book`, `person`, `area`, `meeting`, `quote`, `definition`, `idea`, `place`, `project`, `organization`, `atomic-note`, `media`, `travel`, `page`, `tag`, `image`, `weblink`, `pdf`, `audio`, `file`, `tweet`, `ai-chat`, `table`, `task`, and `query`
+- **AND** non-creatable reserved ids such as `archive` SHALL be documented as reserved rather than silently omitted.
+
+#### Scenario: Reference-visible object types remain supported
+- **WHEN** the local workspace is compared to the authenticated reference URL from August 22, 2026
+- **THEN** the visible reference object types `Queries`, `Etiquetas`, `Tweets`, `Default`, `Weblinks`, `Tabelas`, and `Páginas` SHALL each have a corresponding local creation or custom-type contract
+- **AND** differences in object titles, counts, and content SHALL be treated as local-data differences rather than parity failures.
+
+### Requirement: Runtime Structure-backed object creation
+The object lifecycle SHALL derive creatable types, labels, icons, tones, lifecycle behavior, counts, and custom-type projections from the canonical runtime Structure registry.
+
+#### Scenario: Creation palette renders built-in and custom Structures
+- **WHEN** the user opens `Novo`
+- **THEN** the palette SHALL list eligible built-in and runtime custom Structures from canonical state
+- **AND** reserved Structures and suggested presets that have not been instantiated SHALL NOT appear as fixed creatable domain ids.
+
+#### Scenario: Custom Structure object is created and reopened
+- **WHEN** the user creates an object for a runtime custom Structure, writes content, navigates away, and reloads the workspace
+- **THEN** the sidebar, tab, editor, object-type listing, count, and persisted object SHALL resolve the same Structure id and current Structure metadata
+- **AND** creation, selection, editing, and reload SHALL NOT create a duplicate Structure or object.
+
+#### Scenario: Preset is added through the object-type studio
+- **WHEN** the user confirms Book, Person, Meeting, Project, or another suggested preset in the studio
+- **THEN** the studio SHALL create a custom Structure first and then expose that Structure to creation and projections
+- **AND** it SHALL NOT append a visual-only sidebar row or promote the preset id into a built-in registry.
+
+### Requirement: Runtime Structure projection consistency
+All object-type UI projections SHALL consume the same canonical Structure record while object counts remain derived from canonical objects.
+
+#### Scenario: Structure is renamed
+- **WHEN** a runtime custom Structure is renamed
+- **THEN** its sidebar row, studio details, creation option, active tab type label, editor chip, and listing heading SHALL display the new name
+- **AND** existing object records and counts SHALL remain unchanged.
+
+#### Scenario: Structure appearance changes
+- **WHEN** a runtime custom Structure icon or tone changes
+- **THEN** every visible Structure and object projection SHALL use the updated serializable icon/tone mapping
+- **AND** no React component or localized label SHALL be persisted in domain state.
+
+### Requirement: Object creation interaction parity
+Object creation SHALL be accepted only when the local implementation reproduces current-reference interaction states for the creation trigger, object-type option rows, intermediate capture surfaces, committed objects, and post-click selected state.
 
 #### Scenario: Creation trigger and object option states are exercised
 - **WHEN** the creation flow is verified in the browser

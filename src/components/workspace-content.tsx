@@ -83,6 +83,7 @@ import {
 import { floatingSearchListItemClass } from "@/components/ui/shared-styles";
 import { Textarea } from "@/components/ui/textarea";
 import { useWorkspace } from "@/components/workspace-controller";
+import { projectWorkspaceGraph } from "@/lib/workspace-graph";
 import {
   blockEditorDocumentFromMarkdown,
   blockEditorDocumentFromPlainText,
@@ -4047,4 +4048,85 @@ function ExploreWorkspace() {
   );
 }
 
-export { AtomicNotesWorkspace, ExploreWorkspace };
+function GraphWorkspace() {
+  const { activeEntityId, createdEntities } = useWorkspace();
+  const graph = React.useMemo(
+    () => projectWorkspaceGraph(createdEntities, activeEntityId),
+    [activeEntityId, createdEntities],
+  );
+
+  if (graph.nodes.length === 0) return <ExploreWorkspace />;
+
+  const center = graph.nodes[0];
+  const related = graph.nodes.slice(1);
+  const positions = related.map((_, index) => {
+    const angle = (index / Math.max(related.length, 1)) * Math.PI * 2 - Math.PI / 2;
+    return { x: 50 + Math.cos(angle) * 31, y: 50 + Math.sin(angle) * 31 };
+  });
+
+  return (
+    <div
+      data-slot="workspace-graph"
+      className="relative flex h-full min-h-0 flex-col overflow-hidden bg-card text-card-foreground"
+    >
+      <div className="absolute inset-0">
+        <svg
+          aria-hidden="true"
+          className="absolute inset-0 size-full"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+        >
+          {positions.map((position, index) => (
+            <line
+              key={graph.edges[index]?.target}
+              x1="50"
+              y1="50"
+              x2={position.x}
+              y2={position.y}
+              stroke="currentColor"
+              strokeOpacity="0.16"
+              strokeWidth="0.18"
+            />
+          ))}
+        </svg>
+
+        <div className="absolute left-1/2 top-1/2 flex max-w-[140px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
+          <ObjectIconBadge
+            icon={ObjectPageIcon}
+            tone="blue"
+            className="size-9 rounded-xl border border-blue-200 bg-blue-50"
+            iconClassName="size-5"
+          />
+          <span className="max-w-[140px] truncate text-xs text-muted-foreground">
+            {center.title || "Sem título"}
+          </span>
+        </div>
+
+        {related.map((node, index) => (
+          <div
+            key={node.id}
+            className="absolute flex max-w-[120px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center"
+            style={{ left: `${positions[index].x}%`, top: `${positions[index].y}%` }}
+          >
+            <ObjectIconBadge
+              icon={ObjectPageIcon}
+              tone="gray"
+              className="size-8 rounded-xl border border-border bg-card"
+              iconClassName="size-4"
+            />
+            <span className="max-w-[120px] truncate text-xs text-muted-foreground">
+              {node.title || "Sem título"}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="relative mt-auto flex items-center justify-end gap-4 border-t border-border/60 px-4 py-3 text-xs text-muted-foreground">
+        <span>{graph.nodes.length} objetos</span>
+        <span>{graph.edges.length} relações</span>
+      </div>
+    </div>
+  );
+}
+
+export { AtomicNotesWorkspace, ExploreWorkspace, GraphWorkspace };

@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 
 import { expect, type Locator, type Page, test } from "@playwright/test";
+import { createInitialStructureRegistry } from "../../src/lib/workspace-object-types";
 
 const workspaceStorageKey = "notes-app:workspace-objects:v1";
 
@@ -95,6 +96,71 @@ async function getDocumentWorkspace(page: Page, objectType: string) {
   await expect(workspace).toBeVisible();
   return workspace;
 }
+
+test("persisted object references do not crash the block editor", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.addInitScript(({ storageKey, structures }) => {
+    window.localStorage.setItem(
+      storageKey,
+      JSON.stringify({
+        activeEntityId: "invalid-editor-json",
+        entities: [
+          {
+            body: {
+              schemaVersion: 2,
+              doc: {
+                type: "doc",
+                content: [
+                  {
+                    type: "paragraph",
+                    attrs: { id: "block:invalid-editor-json:0" },
+                    content: [
+                      { type: "text", text: "Embedded reference " },
+                      {
+                        type: "objectEmbed",
+                        attrs: { objectId: "missing-object" },
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+            collections: [],
+            createdAt: "2026-01-01T00:00:00.000Z",
+            id: "invalid-editor-json",
+            kind: "document",
+            objectTypeId: "page",
+            propertyValues: {},
+            tags: [],
+            title: "Invalid editor JSON",
+            updatedAt: "2026-01-01T00:00:00.000Z",
+          },
+        ],
+        nextId: 2,
+        structures,
+        version: 5,
+      }),
+    );
+  }, {
+    storageKey: workspaceStorageKey,
+    structures: createInitialStructureRegistry(),
+  });
+
+  await page.goto("/pt-BR");
+  const workspace = await getDocumentWorkspace(page, "page");
+  await expect(
+    workspace.getByRole("textbox", { name: "Text", exact: true }),
+  ).toBeVisible();
+  expect(errors).not.toContainEqual(
+    expect.stringContaining("[tiptap error]: Invalid JSON content"),
+  );
+});
 
 async function openDocumentMenu(page: Page, workspace: Locator) {
   const trigger = workspace.getByRole("button", {

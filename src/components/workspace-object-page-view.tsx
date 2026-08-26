@@ -38,11 +38,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   workspaceFieldGroupClass,
   workspaceListRowClass,
@@ -180,10 +182,14 @@ function BufferedNotes({
 }
 
 function ObjectPageHeader({
+  collectionsControl,
+  customize,
   menu,
   entity,
   structure,
 }: {
+  readonly collectionsControl?: React.ReactNode;
+  readonly customize?: React.ReactNode;
   readonly menu?: React.ReactNode;
   readonly entity: SupportedWorkspaceEntity;
   readonly structure: WorkspaceStructure;
@@ -191,7 +197,6 @@ function ObjectPageHeader({
   const t = useTranslations("workspace");
   const {
     changeWorkspaceEntityType,
-    objectTypeCollections,
     objectTypes,
     selectEntity,
     structures,
@@ -203,7 +208,6 @@ function ObjectPageHeader({
   const objectType = objectTypes.find((item) => item.id === structure.id);
   const objectTypeLabel =
     objectType?.singularLabel ?? objectType?.label ?? structure.singularName;
-  const collections = entityCollections(entity);
   return (
     <div
       data-slot="workspace-object-page-header"
@@ -225,25 +229,9 @@ function ObjectPageHeader({
             structures={structures}
           />
         </CompoundChip>
-        {collections.map((collectionId) => (
-          <span key={collectionId} className={collectionChipClass}>
-            <ObjectCollectionIcon className="mr-1.5 size-3.5 shrink-0" />
-            <span className="truncate">
-              {objectTypeCollections[collectionId]?.name ?? collectionId}
-            </span>
-          </span>
-        ))}
-        {collections.length === 0 ? (
-          <span className="inline-flex items-center gap-1.5 px-1.5 text-sm text-muted-foreground">
-            <ObjectCollectionIcon className="size-3.5" />
-            {t("objects.collections")}
-          </span>
-        ) : null}
+        {collectionsControl}
       </div>
-      <span className="hidden items-center gap-1.5 text-sm text-muted-foreground opacity-0 transition-opacity group-hover/object-page-header:opacity-100 sm:inline-flex">
-        {t("actions.customize")}
-        <AppHeaderCaretDownIcon className="size-3.5" />
-      </span>
+      {customize}
       {menu ?? (
         <Button
           type="button"
@@ -388,10 +376,12 @@ function ObjectPageTypePickerTrigger({
 }
 
 function DocumentMoreMenu({
+  onCustomize,
   onDelete,
   onExport,
   onImport,
 }: {
+  readonly onCustomize: () => void;
   readonly onDelete: () => void;
   readonly onExport: () => void;
   readonly onImport: () => void;
@@ -420,18 +410,12 @@ function DocumentMoreMenu({
           "w-[269px] min-w-[269px] p-1.5",
         )}
       >
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger
-            className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
-          >
-            {t("actions.customize")}
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuItem className={workspaceOverflowMenuItemClass}>
-              {t("documentMenu.customizeHint")}
-            </DropdownMenuItem>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
+        <DropdownMenuItem
+          className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+          onClick={onCustomize}
+        >
+          {t("actions.customize")}
+        </DropdownMenuItem>
         <DropdownMenuItem
           className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
           onClick={onExport}
@@ -532,33 +516,131 @@ function ObjectPageCollections({
 }) {
   const t = useTranslations("workspace");
   const { objectTypeCollections } = useWorkspace();
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
   const collections = entityCollections(entity);
   const choices = Object.values(objectTypeCollections).filter(
     (collection) => collection.structureId === entity.objectTypeId,
   );
+  const visibleChoices = choices.filter((collection) =>
+    collection.name.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
+  );
+  const collectionNames = new Map(
+    choices.map((collection) => [collection.id, collection.name]),
+  );
+  const toggleCollection = (collectionId: string) => {
+    update({
+      collections: collections.includes(collectionId)
+        ? collections.filter((item) => item !== collectionId)
+        : [...collections, collectionId],
+    });
+  };
   return (
-    <label className="mt-3 inline-flex min-w-0 items-center gap-1.5 px-1 text-sm text-muted-foreground">
-      <ObjectCollectionIcon className="size-3.5" />
-      <select
-        aria-label={t("objects.collections")}
-        multiple
-        value={collections}
-        className="min-w-0 bg-transparent outline-none"
-        onChange={(event) =>
-          update({
-            collections: Array.from(event.currentTarget.selectedOptions).map(
-              (option) => option.value,
-            ),
-          })
-        }
+    <div className="inline-flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
+      {collections.map((collectionId) => (
+        <button
+          key={collectionId}
+          type="button"
+          aria-label={`${t("objectTypeOverview.remove")} ${collectionNames.get(collectionId) ?? collectionId}`}
+          onClick={() => toggleCollection(collectionId)}
+          className={collectionChipClass}
+        >
+          <ObjectCollectionIcon className="mr-1.5 size-3.5 shrink-0" />
+          <span className="truncate">{collectionNames.get(collectionId) ?? collectionId}</span>
+        </button>
+      ))}
+      <Popover
+        open={open}
+        onOpenChange={(nextOpen) => {
+          setOpen(nextOpen);
+          if (!nextOpen) setQuery("");
+        }}
       >
-        {choices.map((collection) => (
-          <option key={collection.id} value={collection.id}>
-            {collection.name}
-          </option>
-        ))}
-      </select>
-    </label>
+        <PopoverTrigger
+          render={
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              aria-label={t("objects.collections")}
+              className="h-7 min-w-0 gap-1.5 px-1.5 font-normal text-muted-foreground"
+            >
+              <ObjectCollectionIcon className="size-3.5" />
+              {t("objects.collections")}
+            </Button>
+          }
+        />
+        <PopoverContent align="start" sideOffset={5} className="w-64 p-1.5">
+          <input
+            aria-label={t("actions.search")}
+            placeholder={t("actions.search")}
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            className="mb-1 h-8 w-full rounded-lg bg-muted px-2 text-sm outline-none placeholder:text-muted-foreground"
+          />
+          {visibleChoices.length > 0 ? (
+            visibleChoices.map((collection) => (
+              <button
+                key={collection.id}
+                type="button"
+                aria-pressed={collections.includes(collection.id)}
+                onClick={() => toggleCollection(collection.id)}
+                className="flex h-8 w-full items-center rounded-md px-2 text-left text-sm hover:bg-muted"
+              >
+                <span className="truncate">{collection.name}</span>
+                {collections.includes(collection.id) ? (
+                  <span className="ml-auto text-xs text-muted-foreground">✓</span>
+                ) : null}
+              </button>
+            ))
+          ) : (
+            <p className="px-2 py-2 text-sm text-muted-foreground">
+              {t("documentMenu.noCollections")}
+            </p>
+          )}
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
+function PageCustomizeControl({
+  wideLayout,
+  onWideLayoutChange,
+}: {
+  readonly wideLayout: boolean;
+  readonly onWideLayoutChange: (wideLayout: boolean) => void;
+}) {
+  const t = useTranslations("workspace");
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            aria-label={t("actions.customize")}
+            className="hidden h-7 gap-1.5 px-1.5 text-sm font-normal text-muted-foreground sm:inline-flex"
+          >
+            {t("actions.customize")}
+            <AppHeaderCaretDownIcon className="size-3.5" />
+          </Button>
+        }
+      />
+      <DropdownMenuContent align="end" sideOffset={5} className="w-52 p-1.5">
+        <DropdownMenuItem
+          className={workspaceOverflowMenuItemClass}
+          aria-checked={wideLayout}
+          onClick={() => onWideLayoutChange(!wideLayout)}
+        >
+          <span>{t("documentMenu.wideLayout")}</span>
+          <span className="ml-auto text-xs text-muted-foreground">
+            {wideLayout ? "✓" : ""}
+          </span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -1014,7 +1096,11 @@ function ReferencePanel({
           ...entity.body.doc,
           content: [
             ...entity.body.doc.content,
-            createObjectEmbedNode(targetId),
+            {
+              type: "paragraph",
+              attrs: { id: `${entity.id}-embed-${targetId}` },
+              content: [createObjectEmbedNode(targetId)],
+            },
           ],
         },
       },
@@ -1226,6 +1312,7 @@ function DocumentPage({
 }) {
   const t = useTranslations("workspace");
   const importInputRef = React.useRef<HTMLInputElement>(null);
+  const [customizeOpen, setCustomizeOpen] = React.useState(false);
   const {
     createWorkspacePage,
     deleteWorkspaceEntity,
@@ -1270,21 +1357,44 @@ function DocumentPage({
       <ObjectPageHeader
         entity={entity}
         structure={structure}
+        collectionsControl={<ObjectPageCollections entity={entity} update={update} />}
+        customize={
+          <PageCustomizeControl
+            wideLayout={entity.wideLayout === true}
+            onWideLayoutChange={(wideLayout) => update({ wideLayout })}
+          />
+        }
         menu={
           <DocumentMoreMenu
+            onCustomize={() => setCustomizeOpen(true)}
             onDelete={() => deleteWorkspaceEntity(entity.id)}
             onExport={exportMarkdown}
             onImport={() => importInputRef.current?.click()}
           />
         }
       />
+      <Dialog open={customizeOpen} onOpenChange={setCustomizeOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{t("actions.customize")}</DialogTitle>
+            <DialogDescription>{t("documentMenu.wideLayout")}</DialogDescription>
+          </DialogHeader>
+          <Button
+            type="button"
+            variant={entity.wideLayout === true ? "default" : "outline"}
+            aria-pressed={entity.wideLayout === true}
+            onClick={() => update({ wideLayout: !(entity.wideLayout === true) })}
+          >
+            {t("documentMenu.wideLayout")}
+          </Button>
+        </DialogContent>
+      </Dialog>
       <BufferedTitle
         label={t("fields.title")}
         value={entity.title}
         onCommit={(title) => update({ title })}
       />
       <ObjectPageTags entity={entity} update={update} />
-      <ObjectPageCollections entity={entity} update={update} />
       <WorkspacePropertyGroup
         entity={entity}
         structure={structure}
@@ -1368,14 +1478,17 @@ function TablePage({
   );
   return (
     <>
-      <ObjectPageHeader entity={entity} structure={structure} />
+      <ObjectPageHeader
+        entity={entity}
+        structure={structure}
+        collectionsControl={<ObjectPageCollections entity={entity} update={update} />}
+      />
       <BufferedTitle
         label={t("fields.title")}
         value={entity.title}
         onCommit={(title) => update({ title })}
       />
       <ObjectPageTags entity={entity} update={update} />
-      <ObjectPageCollections entity={entity} update={update} />
       <WorkspacePropertyGroup
         entity={entity}
         structure={structure}
@@ -1433,6 +1546,7 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
   const t = useTranslations("workspace");
   const { structures, updateWorkspaceEntity } = useWorkspace();
   const [collapsed, setCollapsed] = React.useState(false);
+  const wideLayout = "wideLayout" in entity && entity.wideLayout === true;
   const structure = resolveStructure(entity, structures);
   if (!structure) return null;
   const update: EntityUpdate = (patch) =>
@@ -1448,6 +1562,7 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
       <div
         className={cn(
           workspaceLongformColumnClass,
+          wideLayout && "lg:max-w-[72rem]",
           "lg:pt-24",
           collapsed && "hidden",
         )}
@@ -1462,7 +1577,9 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
         type="button"
         variant="ghost"
         size="icon-sm"
-        aria-label={t("actions.collapseEditor")}
+        aria-label={t(
+          collapsed ? "actions.expandEditor" : "actions.collapseEditor",
+        )}
         aria-expanded={!collapsed}
         className="absolute right-3 top-1/2 hidden h-7 w-7 text-lg font-light md:inline-flex"
         onClick={() => setCollapsed((current) => !current)}

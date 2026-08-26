@@ -28,6 +28,12 @@ function DataViewBody(props: ProjectedDataViewProps) {
 
 function DataViewRenderer(props: DataViewRendererProps) {
   const projection = projectDataView(props.view, props.entities);
+  if (
+    projection.items.length === 0 &&
+    props.view.presentation.kind === "table"
+  ) {
+    return <DataViewBody {...props} entities={projection.items} />;
+  }
   if (projection.items.length === 0) {
     return (
       <WorkspaceEmptyState

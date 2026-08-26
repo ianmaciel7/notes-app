@@ -265,6 +265,114 @@ test("tab midpoint and dedicated actions do not overlap", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test("workspace tab header state survives reload", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+
+  await page.goto("/pt-BR");
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.evaluate(() => window.localStorage.clear());
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.waitForTimeout(750);
+
+  const tabList = page.locator('[aria-label="Workspace tabs"]');
+  const quoteWrapper = tabList.locator('[data-tab-id="quote"]');
+  await quoteWrapper.getByRole("tab").click();
+  await expect(quoteWrapper.getByRole("tab")).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await quoteWrapper.hover();
+  await quoteWrapper.getByRole("button", { name: "Pin tab" }).click();
+  await expect(
+    quoteWrapper.getByRole("button", { name: "Unpin tab" }),
+  ).toBeVisible();
+
+  const pageWrapper = tabList.locator('[data-tab-id="page"]');
+  await pageWrapper.hover();
+  await pageWrapper.getByRole("button", { name: "Close tab" }).click();
+
+  await expect
+    .poll(async () =>
+      page.evaluate(() => {
+        const value = window.localStorage.getItem(
+          "notes-app:workspace-tabs:v1",
+        );
+        return value ? JSON.parse(value).main : null;
+      }),
+    )
+    .toMatchObject({
+      value: "quote",
+      tabs: expect.arrayContaining([
+        expect.objectContaining({ id: "quote", pinned: true }),
+      ]),
+    });
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+
+  await expect(
+    tabList.locator('[data-tab-id="quote"] [role="tab"]').filter({
+      visible: true,
+    }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(tabList.locator('[data-tab-id="page"]')).toHaveCount(0);
+  await quoteWrapper.hover();
+  await expect(
+    quoteWrapper.getByRole("button", { name: "Unpin tab" }),
+  ).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("closed entity tabs stay closed after reload", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  await createPageObject(page);
+
+  const [entity] = await persistedEntities(page);
+  expect(entity?.id).toBeTruthy();
+
+  const tabList = page.locator('[aria-label="Workspace tabs"]');
+  const entityWrapper = tabList.locator(`[data-tab-id="${entity.id}"]`);
+  await expect(entityWrapper.getByRole("tab")).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await entityWrapper.hover();
+  await entityWrapper.getByRole("button", { name: "Close tab" }).click();
+  await expect(entityWrapper).toHaveCount(0);
+
+  await expect
+    .poll(async () =>
+      page.evaluate(() => {
+        const value = window.localStorage.getItem(
+          "notes-app:workspace-tabs:v1",
+        );
+        return value ? JSON.parse(value).main.tabs : [];
+      }),
+    )
+    .not.toContainEqual(expect.objectContaining({ id: entity.id }));
+
+  await page.evaluate((closedEntityId) => {
+    const key = "notes-app:workspace-objects:v1";
+    const value = window.localStorage.getItem(key);
+    if (!value) return;
+    const snapshot = JSON.parse(value);
+    snapshot.activeEntityId = closedEntityId;
+    window.localStorage.setItem(key, JSON.stringify(snapshot));
+  }, entity.id);
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect(tabList.locator(`[data-tab-id="${entity.id}"]`)).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test("top shell controls share one vertical center", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
@@ -357,6 +465,178 @@ test("sidebar row and nested menu keep distinct full-row targets", async ({
   await expect(row).toHaveAttribute("data-active", "true");
   await page.keyboard.press("Escape");
   await expect(nested).toBeFocused();
+  expect(errors).toEqual([]);
+});
+
+test("object-type New disclosure opens options without creating an object", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Tabelas" })
+    .getByRole("button")
+    .filter({ hasText: "Tabelas" })
+    .click();
+  await expect(objectTypeWorkspace(page)).toBeVisible();
+
+  expect(await persistedEntities(page)).toHaveLength(0);
+  await objectTypeWorkspace(page)
+    .getByRole("button", { name: "Opções de novo objeto", exact: true })
+    .click();
+
+  await expect(
+    page.locator('[data-slot="dropdown-menu-content"][data-open]'),
+  ).toBeVisible();
+  expect(await persistedEntities(page)).toHaveLength(0);
+  await expect(
+    page
+      .locator('[data-slot="app-sidebar-object-type-row"]')
+      .filter({ hasText: "Tabelas" })
+      .first(),
+  ).not.toContainText("1");
+  expect(errors).toEqual([]);
+});
+
+test("empty Table layout keeps table structure and primary empty actions", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Tabelas" })
+    .getByRole("button")
+    .filter({ hasText: "Tabelas" })
+    .click();
+  const workspace = objectTypeWorkspace(page);
+  await expect(workspace).toBeVisible();
+  await workspace.getByRole("tab", { name: "Visão geral", exact: true }).click();
+  await expect(workspace.locator('[data-slot="object-type-overview"]')).toBeVisible();
+  await expect(workspace).toContainText(
+    "Os objetos que você acessou recentemente aparecerão aqui.",
+  );
+
+  await workspace.getByRole("tab", { name: "Tudo", exact: true }).click();
+  await workspace.getByRole("button", { name: "Tabela", exact: true }).click();
+
+  await expect(workspace.getByRole("table")).toBeVisible();
+  const emptyState = workspace.locator('[data-slot="workspace-empty-state"]');
+  await expect(emptyState).toBeVisible();
+  await expect(
+    emptyState.getByRole("button", { name: "Importar", exact: true }),
+  ).toBeVisible();
+  await expect(
+    emptyState.getByRole("button", { name: "Novo", exact: true }),
+  ).toBeVisible();
+  expect(await persistedEntities(page)).toHaveLength(0);
+  expect(errors).toEqual([]);
+});
+
+test("Page embed action persists a schema-valid paragraph embed", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.addInitScript(() => {
+    if (window.sessionStorage.getItem("embed-test-storage-cleared")) return;
+    window.localStorage.clear();
+    window.sessionStorage.setItem("embed-test-storage-cleared", "true");
+  });
+  await page.goto("/pt-BR");
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.waitForTimeout(750);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Embed target");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Embed source");
+
+  const workspace = createdObjectWorkspace(page);
+  await workspace
+    .locator('[data-slot="workspace-link-picker"]')
+    .getByRole("button", { name: /^Vincular / })
+    .first()
+    .click();
+  await workspace.getByRole("button", { name: "Incorporar", exact: true }).click();
+
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      const source = entities.find(
+        (entity: { title: string }) => entity.title === "Embed source",
+      );
+      const lastNode = source?.body?.doc?.content?.at(-1);
+      return {
+        childType: lastNode?.content?.[0]?.type,
+        linkMarkType:
+          source?.body?.doc?.content
+            ?.flatMap((node: { content?: { marks?: { type: string }[] }[] }) =>
+              node.content ?? [],
+            )
+            .flatMap((node: { marks?: { type: string }[] }) => node.marks ?? [])
+            .find((mark: { type: string }) => mark.type === "objectLink")
+            ?.type,
+        topLevelType: lastNode?.type,
+      };
+    })
+    .toEqual({
+      childType: "objectEmbed",
+      linkMarkType: "objectLink",
+      topLevelType: "paragraph",
+    });
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.waitForTimeout(750);
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .getByRole("button")
+    .filter({ hasText: "Páginas" })
+    .first()
+    .click();
+  await expect(objectTypeWorkspace(page)).toBeVisible();
+  await objectTypeWorkspace(page).getByRole("tab", { name: "Tudo" }).click();
+  await objectTypeWorkspace(page)
+    .getByRole("button", { name: "Abrir: Embed source", exact: true })
+    .click();
+  await expect(createdObjectWorkspace(page)).toBeVisible();
+  await expect(
+    createdObjectWorkspace(page).getByRole("textbox", {
+      name: "Text",
+      exact: true,
+    }),
+  ).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("Page collapse control changes to an accurate expand name", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  const workspace = createdObjectWorkspace(page);
+  await workspace
+    .getByRole("button", { name: "Recolher editor", exact: true })
+    .click();
+
+  await expect(
+    workspace.getByRole("button", { name: "Expandir editor", exact: true }),
+  ).toBeVisible();
+  await expect(
+    workspace.getByRole("button", { name: "Expandir editor", exact: true }),
+  ).toHaveAttribute("aria-expanded", "false");
   expect(errors).toEqual([]);
 });
 

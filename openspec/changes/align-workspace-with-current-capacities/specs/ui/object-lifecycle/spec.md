@@ -10,7 +10,7 @@ The system SHALL dispatch every supported `Novo` palette object into the creatio
 
 #### Scenario: Page is created and written
 - **WHEN** the user activates `Novo` and selects Page
-- **THEN** the system SHALL instantiate an untitled page with a stable id, the central page icon/tone, an active workspace tab, selected sidebar/object-type projections, and a contentEditable title/body surface
+- **THEN** the system SHALL instantiate an untitled page with a stable id, the central page icon/tone, an active workspace tab, selected sidebar/object-type projections, and accessible editable title/body controls
 - **AND WHEN** the user writes a title, body text, tags, or collection metadata
 - **THEN** the title, tab label, sidebar count, object-type list, query results, and persisted entity SHALL update without creating a duplicate object
 - **AND** the active editor SHALL keep Capacities-compatible hover, focus, caret, and post-click appearance.
@@ -175,8 +175,13 @@ The system SHALL keep each object's canonical data synchronized with its active 
 
 #### Scenario: Title or content is edited
 - **WHEN** the user edits an object's title, body, tags, table cells, task fields, URL notes, or query definition
-- **THEN** the canonical entity SHALL update immediately
-- **AND** every visible projection of the changed field SHALL reflect the same value without creating a duplicate object
+- **THEN** the active control SHALL reflect the input immediately and the canonical entity SHALL commit through the repository's bounded input-performance policy
+- **AND** every visible projection of the changed field SHALL reflect the committed value without creating a duplicate object
+- **AND** blur, navigation, unmount, and explicit submit boundaries SHALL flush pending valid edits before the object is no longer editable.
+
+#### Scenario: Structured body changes externally
+- **WHEN** a Page, Atomic note, or Quote receives a valid external body that differs from its current editor JSON
+- **THEN** the editor SHALL replace content without emitting a recursive update or losing future editability
 
 #### Scenario: Untitled object receives content
 - **WHEN** the first meaningful title remains blank but type-specific content is entered

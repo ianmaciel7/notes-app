@@ -238,14 +238,36 @@ function ObjectTypeHeader({
             <AppSidebarPlusIcon className="size-4" />
             {t("actions.new")}
           </Button>
-          <Button
-            type="button"
-            className="h-8 w-[30px] rounded-none bg-transparent px-0 hover:bg-white/10"
-            aria-label={t("objectTypeOverview.newObjectOptions")}
-            onClick={onCreateObject}
-          >
-            <AppHeaderCaretDownIcon className="size-4" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  type="button"
+                  className="h-8 w-[30px] rounded-none bg-transparent px-0 hover:bg-white/10"
+                  aria-label={t("objectTypeOverview.newObjectOptions")}
+                >
+                  <AppHeaderCaretDownIcon className="size-4" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem onClick={onCreateObject}>
+                {t("objectTypeOverview.newCurrentType", {
+                  type: objectType.label,
+                })}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onCreateObject}>
+                {t("objectTypeOverview.newFromTemplate")}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onAddQuery}>
+                {t("objectTypeOverview.newQuery")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onAddCollection}>
+                {t("objectTypeOverview.newCollection")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
@@ -704,7 +726,26 @@ function ObjectTypeTrailingContent({
   readonly view: WorkspaceDataView;
 }) {
   const t = useTranslations("workspace");
-  if (filteredCount === 0 || view.presentation.kind !== "gallery") return null;
+  if (filteredCount === 0) {
+    return (
+      <WorkspaceEmptyState
+        description={t("empty.description")}
+        title={t("empty.title")}
+        action={
+          <div className="flex flex-wrap justify-center gap-2">
+            <Button type="button" variant="outline">
+              {t("objectTypeOverview.import")}
+            </Button>
+            <Button type="button" onClick={onCreateObject}>
+              <AppSidebarPlusIcon className="size-4" />
+              {t("actions.new")}
+            </Button>
+          </div>
+        }
+      />
+    );
+  }
+  if (view.presentation.kind !== "gallery") return null;
   return (
     <button
       type="button"

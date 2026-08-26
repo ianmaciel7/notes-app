@@ -25,7 +25,7 @@ import {
 import { cn } from "@/lib/utils";
 import { getWorkspacePanelPresentation } from "@/lib/workspace-layout";
 
-const APP_SHELL_LEFT_DEFAULT = "14rem";
+const APP_SHELL_LEFT_DEFAULT = "18rem";
 const APP_SHELL_LEFT_MIN = "14rem";
 const APP_SHELL_LEFT_MAX = "24rem";
 const APP_SHELL_RIGHT_DEFAULT = "28.5rem";
@@ -450,7 +450,7 @@ function AppShellHeader({
   return (
     <header
       data-slot="app-shell-header"
-      className={cn("flex h-[58px] shrink-0 items-center", className)}
+      className={cn("flex h-[46px] shrink-0 items-center", className)}
       {...props}
     />
   );
@@ -479,7 +479,7 @@ function AppShellSurface({
       data-side={side}
       className={cn(
         "min-h-0 flex-1 pb-2.5 pt-0",
-        side === "main" ? "pl-0 pr-3" : "pl-0 pr-2.5",
+        side === "main" ? "px-2.5" : "pl-0 pr-2.5",
       )}
     >
       <Card

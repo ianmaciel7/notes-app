@@ -1,4 +1,4 @@
-import { Extension } from "@tiptap/core";
+import { Extension, Mark, Node, mergeAttributes } from "@tiptap/core";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 
 import { createBlockId, isReferenceableBlockType } from "./document.ts";
@@ -119,4 +119,111 @@ const ParagraphSizeExtension = Extension.create({
   },
 });
 
-export { BlockIdExtension, ParagraphSizeExtension };
+const ObjectLinkMark = Mark.create({
+  name: "objectLink",
+
+  addAttributes() {
+    return {
+      objectId: {
+        default: null,
+        parseHTML: (element) => element.getAttribute("data-object-id"),
+        renderHTML: (attributes) =>
+          typeof attributes.objectId === "string"
+            ? { "data-object-id": attributes.objectId }
+            : {},
+      },
+    };
+  },
+
+  parseHTML() {
+    return [{ tag: "span[data-object-id]" }];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      "span",
+      mergeAttributes(HTMLAttributes, { "data-reference-kind": "object" }),
+      0,
+    ];
+  },
+});
+
+const BlockLinkMark = Mark.create({
+  name: "blockLink",
+
+  addAttributes() {
+    return {
+      blockId: {
+        default: null,
+        parseHTML: (element) => element.getAttribute("data-block-reference-id"),
+        renderHTML: (attributes) =>
+          typeof attributes.blockId === "string"
+            ? { "data-block-reference-id": attributes.blockId }
+            : {},
+      },
+      objectId: {
+        default: null,
+        parseHTML: (element) => element.getAttribute("data-object-id"),
+        renderHTML: (attributes) =>
+          typeof attributes.objectId === "string"
+            ? { "data-object-id": attributes.objectId }
+            : {},
+      },
+    };
+  },
+
+  parseHTML() {
+    return [{ tag: "span[data-object-id][data-block-reference-id]" }];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      "span",
+      mergeAttributes(HTMLAttributes, { "data-reference-kind": "block" }),
+      0,
+    ];
+  },
+});
+
+const ObjectEmbedNode = Node.create({
+  name: "objectEmbed",
+  group: "inline",
+  inline: true,
+  atom: true,
+  selectable: true,
+
+  addAttributes() {
+    return {
+      objectId: {
+        default: null,
+        parseHTML: (element) => element.getAttribute("data-object-id"),
+        renderHTML: (attributes) =>
+          typeof attributes.objectId === "string"
+            ? { "data-object-id": attributes.objectId }
+            : {},
+      },
+    };
+  },
+
+  parseHTML() {
+    return [{ tag: "span[data-object-embed][data-object-id]" }];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      "span",
+      mergeAttributes(HTMLAttributes, {
+        "data-object-embed": "",
+        "data-reference-kind": "embed",
+      }),
+    ];
+  },
+});
+
+export {
+  BlockIdExtension,
+  BlockLinkMark,
+  ObjectEmbedNode,
+  ObjectLinkMark,
+  ParagraphSizeExtension,
+};

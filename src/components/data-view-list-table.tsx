@@ -1,15 +1,15 @@
 "use client";
 
-import type {
-  DataViewRendererProps,
-  ProjectedDataViewProps,
-} from "@/components/object-view-types";
 import {
   entityDescription,
   entityValue,
   ObjectTypeLabel,
   OpenSurface,
 } from "@/components/object-view-support";
+import type {
+  DataViewRendererProps,
+  ProjectedDataViewProps,
+} from "@/components/object-view-types";
 import {
   workspaceListRowClass,
   workspaceListSurfaceClass,
@@ -74,68 +74,72 @@ function DataViewTable(props: ProjectedDataViewProps) {
   const presentation = props.view.presentation;
   const columns = presentation.columns.filter((column) => column.visible);
   return (
-    <div className={cn(workspaceListSurfaceClass, "overflow-x-auto p-0")}>
-      <table className="w-full min-w-xl border-collapse text-sm">
-        <thead className="bg-muted/60 text-left text-xs text-muted-foreground">
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column.id}
-                scope="col"
-                className="border-b px-3 py-2"
-                style={column.width ? { width: column.width } : undefined}
-              >
-                {props.propertyLabels?.[column.propertyId] ?? column.propertyId}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {props.entities.map((entity) => (
-            <tr
-              key={entity.id}
-              className="border-b transition-colors duration-150 last:border-b-0 hover:bg-muted/40 motion-reduce:transition-none"
-            >
-              {columns.map((column, index) => (
-                <td
+    <div className="grid gap-4">
+      <div className={cn(workspaceListSurfaceClass, "overflow-x-auto p-0")}>
+        <table className="w-full min-w-xl border-collapse text-sm">
+          <thead className="bg-muted/60 text-left text-xs text-muted-foreground">
+            <tr>
+              {columns.map((column) => (
+                <th
                   key={column.id}
-                  className={cn(
-                    "max-w-xs px-3",
-                    presentation.rowDensity === "compact" ? "py-1" : "py-2",
-                  )}
+                  scope="col"
+                  className="border-b px-3 py-2"
+                  style={column.width ? { width: column.width } : undefined}
                 >
-                  {index === 0 && props.onOpen ? (
-                    <button
-                      type="button"
-                      className="max-w-full truncate text-left font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={props.labels.openObject(
-                        entity.title.trim() || props.labels.untitledObject,
-                      )}
-                      onClick={() => props.onOpen?.(entity.id)}
-                    >
-                      {entityValue(
-                        entity,
-                        column.propertyId,
-                        props.objectTypeLabels,
-                        props.structures,
-                      )}
-                    </button>
-                  ) : (
-                    <span className="block truncate">
-                      {entityValue(
-                        entity,
-                        column.propertyId,
-                        props.objectTypeLabels,
-                        props.structures,
-                      )}
-                    </span>
-                  )}
-                </td>
+                  {props.propertyLabels?.[column.propertyId] ??
+                    column.propertyId}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {props.entities.map((entity) => (
+              <tr
+                key={entity.id}
+                className="border-b transition-colors duration-150 last:border-b-0 hover:bg-muted/40 motion-reduce:transition-none"
+              >
+                {columns.map((column, index) => (
+                  <td
+                    key={column.id}
+                    className={cn(
+                      "max-w-xs px-3",
+                      presentation.rowDensity === "compact" ? "py-1" : "py-2",
+                    )}
+                  >
+                    {index === 0 && props.onOpen ? (
+                      <button
+                        type="button"
+                        className="max-w-full truncate text-left font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        aria-label={props.labels.openObject(
+                          entity.title.trim() || props.labels.untitledObject,
+                        )}
+                        onClick={() => props.onOpen?.(entity.id)}
+                      >
+                        {entityValue(
+                          entity,
+                          column.propertyId,
+                          props.objectTypeLabels,
+                          props.structures,
+                        )}
+                      </button>
+                    ) : (
+                      <span className="block truncate">
+                        {entityValue(
+                          entity,
+                          column.propertyId,
+                          props.objectTypeLabels,
+                          props.structures,
+                        )}
+                      </span>
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {props.trailingContent}
     </div>
   );
 }

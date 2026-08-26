@@ -1,5 +1,13 @@
 ## ADDED Requirements
 
+### Requirement: Current workspace rail geometry
+The main and contextual workspace rails SHALL match the height and bounded placement of the matched authenticated reference state.
+
+#### Scenario: Desktop rails are measured
+- **WHEN** the local workspace and authenticated reference render at the same desktop viewport and panel state
+- **THEN** the main and contextual top rails SHALL measure approximately 46px
+- **AND** rail controls SHALL remain vertically centered without increasing the content offset or overlapping the first content row.
+
 ### Requirement: Reliable main-tab hit targets
 The system SHALL keep tab selection and nested pin/close actions as distinct, non-overlapping interaction targets.
 

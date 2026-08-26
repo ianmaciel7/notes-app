@@ -17,6 +17,9 @@ import type {
 } from "@/editor/block-editor-contract";
 import {
   BlockIdExtension,
+  BlockLinkMark,
+  ObjectEmbedNode,
+  ObjectLinkMark,
   ParagraphSizeExtension,
 } from "@/editor/block-editor-extensions";
 import {
@@ -42,6 +45,37 @@ function normalizeSerializedDocument(serialized: string) {
     );
   } catch {
     return createEmptyBlockEditorDocument();
+  }
+}
+
+function setEditorContentSafely(
+  editor: NonNullable<ReturnType<typeof useEditor>>,
+  document: BlockEditorDocument,
+) {
+  try {
+    editor.schema.nodeFromJSON(document.doc);
+  } catch {
+    const fallback = createEmptyBlockEditorDocument();
+    editor.commands.setContent(fallback.doc, {
+      emitUpdate: false,
+      errorOnInvalidContent: false,
+    });
+    return fallback;
+  }
+
+  try {
+    editor.commands.setContent(document.doc, {
+      emitUpdate: false,
+      errorOnInvalidContent: true,
+    });
+    return document;
+  } catch {
+    const fallback = createEmptyBlockEditorDocument();
+    editor.commands.setContent(fallback.doc, {
+      emitUpdate: false,
+      errorOnInvalidContent: false,
+    });
+    return fallback;
   }
 }
 
@@ -159,6 +193,9 @@ function BlockEditor({
           isAllowedUri: isSafeBlockEditorHref,
         },
       }),
+      ObjectLinkMark,
+      BlockLinkMark,
+      ObjectEmbedNode,
       BlockIdExtension,
       ParagraphSizeExtension,
       TaskList,
@@ -210,11 +247,7 @@ function BlockEditor({
     }
 
     cancelPendingCommit();
-    acceptExternalDocument(externalDocument);
-    editor.commands.setContent(externalDocument.doc, {
-      emitUpdate: false,
-      errorOnInvalidContent: true,
-    });
+    acceptExternalDocument(setEditorContentSafely(editor, externalDocument));
   }, [acceptExternalDocument, cancelPendingCommit, editor, externalDocument]);
 
   React.useEffect(() => {

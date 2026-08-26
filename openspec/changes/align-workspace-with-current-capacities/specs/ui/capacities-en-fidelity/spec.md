@@ -19,7 +19,7 @@ The expanded desktop composition SHALL match the current target's material geome
 
 #### Scenario: Expanded desktop shell
 - **WHEN** a supported locale renders at 1536px, 1280px, 1024px, or 768px
-- **THEN** the sidebar SHALL use the 224px live-reference baseline
+- **THEN** the sidebar SHALL match the timestamped reference width for the same viewport and recorded resize state, including approximately 288px in the audited 1153x912 state
 - **AND** header rails SHALL use 46px height
 - **AND** primary surfaces SHALL use 10px outer or inter-panel spacing, approximately 0.8px semantic borders, and 12px radii
 - **AND** long-form content SHALL use a fluid column capped near 800px with current-reference typography
@@ -91,6 +91,16 @@ The workspace SHALL reproduce compound-control behavior in which the primary act
 - **THEN** a searchable approximately 256px popover SHALL open without navigating
 - **AND** its scale or translate transition SHALL complete in approximately 250ms unless reduced motion is preferred.
 
+#### Scenario: Object-type New disclosure is activated
+- **WHEN** the user activates the separate disclosure segment beside the object-type `Novo` action
+- **THEN** the workspace SHALL open the type-specific creation-options surface
+- **AND** no entity, tab, count, or persisted projection SHALL change until the user selects a creation command.
+
+#### Scenario: Object-type primary New is activated
+- **WHEN** the user activates the primary segment of the object-type `Novo` action
+- **THEN** the default object creation flow for that type SHALL run exactly once
+- **AND** the disclosure surface SHALL NOT open unless that is the documented default flow for the matched reference state.
+
 ### Requirement: Shared compact-menu interaction contract
 Workspace overflow menus SHALL use one shared visual and behavioral contract for menu surfaces, rows, grouping, shortcuts, destructive actions, focus, and nested submenus.
 
@@ -106,6 +116,139 @@ Workspace overflow menus SHALL use one shared visual and behavioral contract for
 - **AND** the parent SHALL retain its highlighted/open state while the user moves into the submenu
 - **AND** destructive items SHALL retain semantic destructive styling.
 
+### Requirement: Functional Page parity
+The Page surface SHALL reproduce the matched reference's editable header, body, metadata, commands, contextual navigation, and post-interaction rendering while preserving valid local documents and buffered input performance.
+
+#### Scenario: Page title, body, tags, and collections are edited
+- **WHEN** the user edits a Page title or body, or adds/removes tags or collections
+- **THEN** the active control SHALL update without keystroke-time persistence work
+- **AND** valid pending changes SHALL flush on the bounded idle interval, blur, navigation, unmount, or explicit submit boundary
+- **AND** the header, tab, projections, and re-opened Page SHALL render the committed values without duplicate metadata controls.
+
+#### Scenario: Page collections control is activated
+- **WHEN** the user activates the visible “Collections” metadata control with pointer or keyboard input
+- **THEN** an accessible collection-selection surface SHALL open without navigating away or mutating the Page merely because it opened
+- **AND** selecting a collection SHALL add it to the Page exactly once and update the header, collection projection, and persisted entity
+- **AND** removing or deselecting a collection SHALL update the same surfaces and persisted entity without leaving a stale chip
+- **AND** the control SHALL expose a distinct accessible name and a perceivable open, selected, and empty state.
+
+#### Scenario: Page overflow control is activated
+- **WHEN** the user activates the visible Page overflow control using pointer or keyboard input
+- **THEN** the owning accessible menu SHALL open with its named commands available
+- **AND** opening the menu SHALL not mutate the Page or silently perform a command
+- **AND** closing it with Escape, outside click, or an unavailable command SHALL leave the Page valid and focused recoverably.
+
+#### Scenario: Page customization is activated
+- **WHEN** the user activates the visible Page customization affordance from the header or overflow menu using pointer or keyboard input
+- **THEN** an accessible customization surface SHALL open
+- **AND** applying a supported option SHALL produce an observable Page presentation change that persists after re-opening
+- **AND** the customization command SHALL perform the named action or expose a truthful unavailable state; it SHALL NOT terminate at an instructional hint alone.
+
+#### Scenario: Page link or embed action completes
+- **WHEN** the user links or embeds another local object in a Page
+- **THEN** the produced document SHALL be accepted by the active editor schema
+- **AND** the Page SHALL remain editable after navigation, reload, and re-opening
+- **AND** the browser console SHALL contain no implementation error.
+
+#### Scenario: Related Page content is rendered
+- **WHEN** the Page displays related content
+- **THEN** membership and count SHALL derive from an explicit relation, backlink, collection, graph, or documented similarity rule
+- **AND** unrelated canonical entities SHALL NOT be presented merely because they occur first in storage order.
+
+#### Scenario: Page editor is collapsed and expanded
+- **WHEN** the user collapses the Page editor
+- **THEN** the full intended editor region SHALL hide, the command SHALL change to an accurate expand name, and focus SHALL remain recoverable
+- **AND WHEN** the user expands it
+- **THEN** content, selection, and pending valid edits SHALL be restored without duplication.
+
+#### Scenario: Active Page is deleted
+- **WHEN** the user confirms deletion of the active Page
+- **THEN** every tab and projection for that entity SHALL be removed
+- **AND** the workspace SHALL select an existing valid fallback or the matching object-type view without leaving a stale deleted-object tab.
+
+### Requirement: Functional object-type and Table parity
+Object-type surfaces, with Table as the first acceptance slice, SHALL render and operate the matched Overview, All, toolbar, empty, import, and destination states through the production-owned route.
+
+#### Scenario: Overview and All are selected
+- **WHEN** the user selects Overview or All
+- **THEN** the selected tab and content SHALL change together
+- **AND** Overview SHALL render recently opened, collections, and queries sections as applicable
+- **AND** All SHALL render the count and search/filter/sort/layout toolbar applicable to the selected type.
+
+#### Scenario: Search, filter, sort, and layout controls are used
+- **WHEN** the user activates search, filter, sort, list, gallery, or table controls
+- **THEN** each command SHALL expose its named criterion or layout and update the visible projection
+- **AND** filter SHALL NOT be a duplicate unlabeled title search
+- **AND** sort direction and criterion SHALL remain perceivable after activation.
+
+#### Scenario: Empty Table state is rendered
+- **WHEN** the selected Table projection has zero matching objects
+- **THEN** the surface SHALL retain the matched reference's centered empty-state illustration, title, explanatory copy, import action, and primary New action
+- **AND** choosing table layout SHALL retain meaningful table structure or a documented empty-table affordance rather than bypassing the layout renderer.
+
+#### Scenario: Object-type import is activated
+- **WHEN** the user activates Import from the active object-type route
+- **THEN** the production-owned view SHALL open the appropriate file chooser
+- **AND** accepted, rejected, and cancelled selections SHALL produce localized outcomes without dispatching to a missing legacy input.
+
+#### Scenario: Object-type surface is collapsed and expanded
+- **WHEN** the user collapses an object-type surface
+- **THEN** the intended toolbar, transient filter/sort controls, and content SHALL hide consistently while preserving state
+- **AND WHEN** the user expands it
+- **THEN** the prior view, criteria, layout, and focus SHALL be restored.
+
+#### Scenario: Object-type command destination opens
+- **WHEN** the user activates type settings, new from template, new collection, or new query
+- **THEN** the named destination or workflow SHALL render functional content
+- **AND** it SHALL NOT silently reuse ordinary creation or terminate at a `view not ready` placeholder.
+
+### Requirement: Contextual panel dispatch
+The contextual panel SHALL render content selected by its tab, menu, or Explore action instead of displaying one static catalog for every route and state.
+
+#### Scenario: Contextual entry is activated
+- **WHEN** the user activates graph, backlinks, objects inside, related content, AI chat, search, or an entity entry
+- **THEN** the panel header and body SHALL both switch to the selected contextual view
+- **AND** the view SHALL receive the active object or object-type context
+- **AND** the same dispatch contract SHALL apply on desktop and mobile overlays.
+
+#### Scenario: Explore actions are route-sensitive
+- **WHEN** Explore renders for an object-type overview, object editor, or another supported route
+- **THEN** it SHALL expose only actions supported by that context, matching the authenticated reference state
+- **AND** every visible action SHALL have a working handler or an explicit unavailable state.
+
+### Requirement: Capacities-compatible workspace routes
+The workspace SHALL use the URL as the default serializable navigation state while preserving local provider and persistence contracts.
+
+#### Scenario: Workspace target is addressable
+- **WHEN** a supported locale workspace is opened
+- **THEN** the route SHALL identify the active space as `/<locale>/<space-id>`
+- **AND WHEN** an object or object type is selected
+- **THEN** the route SHALL identify it as `/<locale>/<space-id>/<target-id>`
+- **AND** reloading that URL SHALL restore the corresponding local selection when the target exists.
+
+#### Scenario: Global section is addressable
+- **WHEN** the user opens Calendar, Search, or Explore
+- **THEN** the route SHALL preserve the workspace path and encode the section as `?section=calendar`, `?section=search`, or `?section=explore`
+- **AND** opening a section SHALL not create or mutate workspace data.
+
+#### Scenario: History navigation restores state
+- **WHEN** the user uses browser back or forward after a route transition
+- **THEN** the workspace selection and contextual body SHALL follow the resulting URL without a full document reload.
+
+### Requirement: Visible command truthfulness
+Every visible interactive control in the accepted Page, Table, object-type, header, sidebar, and contextual surfaces SHALL have a stable accessible name and an observable outcome consistent with that name.
+
+#### Scenario: Command matrix is exercised
+- **WHEN** parity acceptance runs
+- **THEN** the test evidence SHALL inventory each visible command, activate it by pointer and keyboard where applicable, and assert its post-click render state
+- **AND** destructive commands SHALL use isolated disposable fixtures
+- **AND** no command SHALL pass solely because a menu opened, a label changed, a legacy selector matched, or a placeholder rendered.
+
+#### Scenario: Interaction survives re-opening
+- **WHEN** an action changes canonical object or presentation state
+- **THEN** the test SHALL navigate away, reload when persistence is expected, and re-open the affected surface
+- **AND** the resulting state SHALL remain usable with no implementation console errors.
+
 ### Requirement: Evidence-backed parity completion
 The change SHALL be considered complete only after source checks and browser evidence confirm the same required states.
 
@@ -114,6 +257,7 @@ The change SHALL be considered complete only after source checks and browser evi
 - **THEN** real-browser checks SHALL cover default, hover, focus-visible, selected, menu, submenu, post-click, mobile-overlay, and reduced-motion states
 - **AND** computed geometry/style assertions SHALL supplement screenshots
 - **AND** the browser console SHALL contain no implementation errors.
+- **AND** selectors SHALL target the production-owned Page and object-type views without accepting legacy or placeholder fallbacks.
 
 #### Scenario: Final source verification runs
 - **WHEN** implementation tasks are ready to complete

@@ -59,6 +59,7 @@ type DocumentEntity = WorkspaceEntityBase & {
   body: BlockEditorDocument;
   collections: string[];
   tags: string[];
+  wideLayout?: boolean;
   dailyNote?: { readonly date: string; readonly spaceId: string };
   description?: string;
   aliases?: string[];
@@ -71,6 +72,7 @@ type QuoteEntity = WorkspaceEntityBase & {
   body: BlockEditorDocument;
   collections: string[];
   tags: string[];
+  wideLayout?: boolean;
   description?: string;
   aliases?: string[];
   customIcon?: string;

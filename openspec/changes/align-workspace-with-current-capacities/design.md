@@ -1,6 +1,8 @@
 ## Context
 
-The current `dev` workspace uses a 288px default sidebar, a three-column shell that leaves only about 266px for the main surface at 768px, and tabs whose hover actions can cover the primary selection target. The current authenticated Capacities reference instead uses a 224px expanded sidebar, 46px rails, 10px gutters, 12px primary surface radii, compact 150-250ms state transitions, and stateful mobile navigation. The repository already has modular shell/header/sidebar owners, but `WorkspaceProvider` and `workspace-content.tsx` concentrate significant behavior, local hardcodes, and production fixture naming.
+At 1153x912 on August 26, 2026, the authenticated Capacities state used a 288px expanded sidebar, a 46px top rail, a main surface beginning at x=298 after a 10px gutter, and a route-sensitive contextual panel. The matched localhost state used a 224px sidebar, a 58px rail, almost no left gutter, and a wider always-generic Explore panel. At 390x844 both avoided horizontal overflow, but the local surface still missed the reference rail and outer-spacing composition. These measurements supersede the earlier claim that 224px was a universal current-reference baseline; panel width remains resizable and may be persisted, so acceptance must compare matched states.
+
+The behavioral audit found higher-severity gaps than the geometry drift. The object-type New disclosure creates an object, import targets a legacy input, Explore actions are inert, empty Table rendering omits reference actions, Customize is inaccessible or inert, and Page linking can produce editor JSON that crashes on reload because `objectLink` is absent from the active schema. The repository already has modular shell/header/sidebar owners, but current routes still mix production views with legacy or placeholder behavior.
 
 This change overlaps active shell/header/sidebar changes. The untracked `add-block-editor` change separately owns block document types, editor persistence, and a storage version migration, so this change must not edit those contracts.
 
@@ -8,10 +10,11 @@ This change overlaps active shell/header/sidebar changes. The untracked `add-blo
 
 **Goals:**
 
-- Converge all existing workspace routes on the current live-reference geometry and interaction states while preserving local data.
+- Converge all existing workspace routes on matched current-reference geometry and interaction outcomes while preserving local data.
 - Make desktop, cramped, and mobile shell states deterministic and testable.
 - Centralize repeated visual states in shared semantic variants and keep accessible primary/nested targets distinct.
 - Add real-browser regression coverage alongside existing source-level tests.
+- Make Page and Table the first complete vertical acceptance flows, including every visible command and post-interaction render state.
 - Remove production demo/fixture naming and localized hardcodes touched by this change.
 
 **Non-Goals:**
@@ -23,15 +26,15 @@ This change overlaps active shell/header/sidebar changes. The untracked `add-blo
 
 ## Decisions
 
-### Live reference values override historical measurements
+### Matched live states override fixed historical measurements
 
-The authenticated reference measured during this change is authoritative for properties that can be observed today. The 224px sidebar replaces the historical 288px baseline. Existing semantic tokens remain the implementation mechanism; measured OKLCH values document expected computed output rather than encouraging scattered hardcoded colors.
+The authenticated reference measured during this change is authoritative only when viewport, route, selected object/type, panel state, and persisted resize state are recorded together. The August 26 reference measured 288px at 1153x912, while the local default measured 224px. Existing semantic tokens remain the implementation mechanism; timestamped geometry and computed styles document expected output without turning one session's resizable width into a universal constant.
 
-Alternative: retain the 288px repository contract. Rejected because it knowingly diverges from the user-selected current reference.
+Alternative: keep asserting 224px at every desktop checkpoint. Rejected because the matched live state disproves that claim and the panel is resizable/persisted.
 
 ### AppShell remains the only geometry owner
 
-`AppShell` will own the 224px default, fluid main/panel tracks, collapse thresholds, mobile overlay state, and stable triggers. Feature sidebars and content components will not create competing desktop grids or off-canvas implementations. At 768px the shell will collapse auxiliary content before shrinking the main tab/content region below a usable bound. Below 768px, the existing mobile composition remains visible while desktop panels are unmounted or zero-sized; mobile overlay open and closed states are both first-class acceptance states.
+`AppShell` will own the expanded-width default and persistence policy, fluid main/panel tracks, collapse thresholds, mobile overlay state, gutters, rail height, and stable triggers. Feature sidebars and content components will not create competing desktop grids or off-canvas implementations. Acceptance records both the clean/default state and any persisted resize state before comparison. At 768px the shell will collapse auxiliary content before shrinking the main tab/content region below a usable bound. Below 768px, mobile overlay open and closed states are both first-class acceptance states and the primary surface retains the measured outer spacing.
 
 Alternative: use CSS overrides at each route. Rejected because it would duplicate geometry and reproduce the current drift.
 
@@ -40,6 +43,12 @@ Alternative: use CSS overrides at each route. Rejected because it would duplicat
 The provider's external contract, entity model, storage key, and snapshot version remain unchanged. Presentation and transient navigation/panel state may be separated into internal reducers/helpers to enable deterministic tests. Files owned by `add-block-editor` may receive only conflict-free composition changes after coordination; body types and storage code are excluded.
 
 Alternative: combine parity and block-editor refactoring. Rejected because the storage migration and 3,000-line content owner create avoidable merge and validation risk.
+
+### URL is the default workspace navigation state
+
+The local workspace will mirror Capacities' route shape while retaining client-side rendering: `/<locale>/<space-id>` identifies the active workspace, `/<locale>/<space-id>/<target-id>` identifies an object or object type, and supported global sections use `?section=calendar`, `?section=search`, or `?section=explore`. Native history updates keep transitions shallow and preserve the existing provider and localStorage contracts. On initial load and browser back/forward, the URL is authoritative; subsequent in-app selections update the URL without a full reload.
+
+Alternative: keep navigation only in React state and localStorage. Rejected because deep links, reloads, and browser history would not reproduce the selected Capacities state.
 
 ### Shared variants own repeated interactive appearance
 
@@ -58,6 +67,24 @@ Alternative: preserve overlapping absolute actions and rely on users clicking th
 Playwright will cover pointer, keyboard, focus, Escape, click-outside, transitions, overlay states, containment, and computed geometry at fixed viewports. Existing `node:test` coverage remains for reducers, storage invariants, and source contracts. Reference screenshots are runtime evidence and are not committed as vendor-image fixtures; stable local baselines and numeric contracts are used for regression checks.
 
 Alternative: continue regex-only source tests. Rejected because they cannot validate hover, hit targets, focus, post-click state, or responsive geometry.
+
+### Behavior inventory gates visual completion
+
+Each Page, Table, object-type, and contextual-panel surface will maintain an acceptance matrix of visible controls, accessible names, preconditions, click/keyboard outcomes, post-click rendering, persistence/reload behavior, and console results. A control is complete only when it performs its named action, truthfully reports an unavailable state, or is absent. Tests must target the production-owned component and may not pass by falling back to a legacy implementation or accepting a placeholder screen.
+
+Alternative: accept visual similarity plus handler presence. Rejected because the current implementation contains named buttons with no handlers, wrong handlers, and state changes that alter only labels.
+
+### Page and Table are vertical parity slices
+
+Page acceptance covers type navigation/conversion, buffered title/body commits, tags and collections, Customize, valid link/embed documents, derived related content, collapse/expand semantics, deletion/tab reconciliation, localization, and contextual views. Table and object-type acceptance covers Overview/All, primary New versus disclosure, import, search, explicit filter/sort criteria, list/gallery/table layouts, zero-item rendering, collapse, type settings, collection/query destinations, and contextual Explore. Shared primitives may be reused, but route-specific rendering and behavior remain explicit.
+
+Alternative: spread partial behavior across every object family first. Rejected because it leaves no complete user workflow and allowed the current 34/34 checklist to mask basic failures.
+
+### Structured editor actions must preserve schema validity
+
+Link, embed, import, conversion, and external-document actions must emit content accepted by the active editor schema. The browser suite will exercise the action, navigate away, reload, and re-open the object while asserting no implementation error. Ownership conflicts with the active block-editor work are resolved before implementation; the behavioral contract is not weakened to avoid the owning module.
+
+Alternative: test only the mutation callback. Rejected because the observed link action mutated state and then made the entire route unloadable.
 
 ### Object creation parity is a lifecycle contract, not a screenshot target
 

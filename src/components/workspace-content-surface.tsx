@@ -4,9 +4,11 @@ import type { ReactNode } from "react";
 
 import {
   AtomicNotesWorkspace as WorkspaceContent,
+  GraphWorkspace,
   ExploreWorkspace as WorkspaceExplore,
 } from "@/components/workspace-content";
 import { workspaceContentScopeClass } from "@/components/ui/workspace-surface";
+import { useWorkspace } from "@/components/workspace-controller";
 
 type WorkspaceContentSurfaceProps = {
   readonly children: ReactNode;
@@ -32,9 +34,10 @@ function AtomicNotesWorkspace() {
 }
 
 function ExploreWorkspace() {
+  const { sideValue } = useWorkspace();
   return (
     <WorkspaceContentSurface>
-      <WorkspaceExplore />
+      {sideValue === "graphView" ? <GraphWorkspace /> : <WorkspaceExplore />}
     </WorkspaceContentSurface>
   );
 }
