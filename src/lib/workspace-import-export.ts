@@ -404,7 +404,7 @@ function documentWithResolvedLinks(
     };
   });
   return {
-    document: { doc: { content, type: "doc" }, schemaVersion: 1 },
+    document: { doc: { content, type: "doc" }, schemaVersion: 2 },
     missingExternalIds: Array.from(missing),
   };
 }
