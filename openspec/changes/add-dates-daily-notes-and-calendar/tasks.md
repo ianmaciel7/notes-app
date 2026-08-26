@@ -1,18 +1,18 @@
 ## 0. Evidence and dependency gate
 
-- [ ] 0.1 Complete typed-date/query prerequisites and re-confirm Dates/Daily Notes/Calendar references.
+- [x] 0.1 Complete typed-date/query prerequisites and re-confirm Dates/Daily Notes/Calendar references.
 
 ## 1. Date and Daily Note domain
 
-- [ ] 1.1 Define DatePropertyValue, timezone/range helpers, query operators, and DST/all-day/range tests.
-- [ ] 1.2 Add Daily Note canonical identity, uniqueness, create-or-get/append commands, templates, and migration policy.
-- [ ] 1.3 Add date-reference indexes and explicit driving-date-property configuration.
+- [x] 1.1 Define DatePropertyValue, timezone/range helpers, query operators, and DST/all-day/range tests.
+- [x] 1.2 Add Daily Note canonical identity, uniqueness, create-or-get/append commands, templates, and migration policy.
+- [x] 1.3 Add date-reference indexes and explicit driving-date-property configuration.
 
 ## 2. Calendar UI
 
-- [ ] 2.1 Add Month/Week/Three-Day/Day/timeline projections.
-- [ ] 2.2 Make Day aggregate Daily Note, dated objects/tasks, date references, and timeline data.
-- [ ] 2.3 Add date links and keyboard-accessible local creation/rescheduling.
+- [x] 2.1 Add Month/Week/Three-Day/Day/timeline projections.
+- [x] 2.2 Make Day aggregate Daily Note, dated objects/tasks, date references, and timeline data.
+- [x] 2.3 Add date links and keyboard-accessible local creation/rescheduling.
 
 ## 3. Acceptance
 

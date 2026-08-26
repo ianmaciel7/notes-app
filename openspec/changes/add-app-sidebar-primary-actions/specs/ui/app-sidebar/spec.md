@@ -9,6 +9,11 @@ The system SHALL provide a reusable app-sidebar that preserves the existing cont
 - **AND** the sidebar content area SHALL support the primary actions beneath the workspace selector
 - **AND** the app-shell geometry and resize behavior SHALL remain unchanged.
 
+#### Scenario: Sidebar selector is composed into the shell
+- **WHEN** a caller renders the app sidebar inside `AppShellSidebar`
+- **THEN** the selector SHALL render the selected workspace icon, name, and change affordance
+- **AND** it SHALL accept controlled space data, selected value, selection callback, and reorder callback.
+
 ### Requirement: Enabled primary sidebar actions
 The system SHALL provide enabled `New`, `Search`, `Explore`, and `Calendar` primary actions using existing shadcn/Base UI primitives.
 

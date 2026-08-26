@@ -35,7 +35,10 @@ async function openPageEditor(page: Page) {
   await page.goto("/pt-BR");
   const workspace = page
     .locator(
-      '[data-slot="created-object-workspace"][data-object-type="page"]',
+      [
+        '[data-slot="created-object-workspace"][data-object-type="page"]',
+        '[data-slot="workspace-object-page-view"][data-object-kind="document"]',
+      ].join(", "),
     )
     .filter({ visible: true });
   await expect(workspace).toBeVisible();
@@ -66,7 +69,7 @@ test("slash menu can repeatedly mount, exit, and replace the active editor witho
     await editor.press("Backspace");
     await editor.pressSequentially("/");
     await expect(slashMenu).toBeVisible();
-    await editor.press("Escape");
+    await page.keyboard.press("Escape");
     await expect(slashMenu).toBeHidden();
   }
 
@@ -77,11 +80,16 @@ test("slash menu can repeatedly mount, exit, and replace the active editor witho
   await editor.press("Enter");
 
   const createdPage = page
-    .locator('[data-slot="created-object-workspace"][data-object-type="page"]')
+    .locator(
+      [
+        '[data-slot="created-object-workspace"][data-object-type="page"]',
+        '[data-slot="workspace-object-page-view"][data-object-kind="document"]',
+      ].join(", "),
+    )
     .filter({ visible: true });
   await expect(
     createdPage.getByRole("textbox", { name: "Título", exact: true }),
-  ).toHaveText("nova");
+  ).toHaveValue("nova");
 
   await page.waitForTimeout(50);
   expect(errors).toEqual([]);

@@ -1,4 +1,6 @@
 export type StructureId = string;
+export type TagId = string;
+export type CollectionId = string;
 
 export type StructureOwnership = "built-in" | "custom" | "legacy" | "reserved";
 
@@ -63,6 +65,7 @@ export type PropertyValueType =
   | "label"
   | "richText"
   | "url"
+  | "media"
   | "createdAt"
   | "lastUpdatedAt";
 
@@ -72,17 +75,24 @@ export type PropertyLabelOption = {
   readonly color?: string;
 };
 
+export type PropertyDefinitionOwnership = "default" | "normal" | "system";
+
 export type PropertyDefinition = {
   readonly id: string;
   readonly name: string;
+  readonly ownership: PropertyDefinitionOwnership;
   readonly valueType: PropertyValueType;
   readonly writable: boolean;
   readonly multiple: boolean;
+  readonly description?: string;
+  readonly iconName?: ObjectIconName;
+  readonly fixedTargetObjectIds?: readonly string[];
+  readonly inversePropertyDefinitionId?: string;
   readonly options?: readonly PropertyLabelOption[];
   readonly targetStructureIds?: readonly StructureId[];
 };
 
-export type StructurePresentationView = "calendar" | "grid" | "list" | "table";
+export type StructurePresentationView = "gallery" | "list" | "table" | "wall";
 
 export type StructurePresentation = {
   readonly defaultView: StructurePresentationView;
@@ -98,7 +108,7 @@ export type WorkspaceStructure = {
   readonly tone: ObjectIconTone;
   readonly lifecycleKind: StructureLifecycleKind;
   readonly propertyDefinitions: readonly PropertyDefinition[];
-  readonly collectionIds: readonly string[];
+  readonly collectionIds: readonly CollectionId[];
   readonly presentation: StructurePresentation;
 };
 
@@ -124,9 +134,12 @@ export type StructureDomainErrorCode =
   | "invalid-name"
   | "invalid-presentation"
   | "invalid-property-definition"
+  | "invalid-property-value"
   | "invalid-structure"
   | "protected-structure"
+  | "read-only-property"
   | "structure-in-use"
+  | "unknown-property"
   | "unknown-preset"
   | "unknown-structure"
   | "unsafe-schema-mutation";
@@ -237,21 +250,96 @@ const propertyValueTypes = [
   "label",
   "richText",
   "url",
+  "media",
   "createdAt",
   "lastUpdatedAt",
 ] as const satisfies readonly PropertyValueType[];
 
+const propertyDefinitionOwnerships = [
+  "default",
+  "normal",
+  "system",
+] as const satisfies readonly PropertyDefinitionOwnership[];
+
 const presentationViews = [
-  "calendar",
-  "grid",
+  "gallery",
   "list",
   "table",
+  "wall",
 ] as const satisfies readonly StructurePresentationView[];
 
 const defaultPresentation: StructurePresentation = {
   availableViews: ["list"],
   defaultView: "list",
 };
+
+export const DEFAULT_PROPERTY_DEFINITIONS = deepFreeze([
+  {
+    id: "title",
+    multiple: false,
+    name: "Title",
+    ownership: "default",
+    valueType: "title",
+    writable: true,
+  },
+  {
+    id: "aliases",
+    multiple: true,
+    name: "Aliases",
+    ownership: "default",
+    valueType: "text",
+    writable: true,
+  },
+  {
+    id: "description",
+    multiple: false,
+    name: "Description",
+    ownership: "default",
+    valueType: "text",
+    writable: true,
+  },
+  {
+    id: "icon",
+    multiple: false,
+    name: "Icon",
+    ownership: "default",
+    valueType: "media",
+    writable: true,
+  },
+  {
+    id: "cover",
+    multiple: false,
+    name: "Cover",
+    ownership: "default",
+    valueType: "media",
+    writable: true,
+  },
+  {
+    id: "createdAt",
+    multiple: false,
+    name: "Created at",
+    ownership: "system",
+    valueType: "createdAt",
+    writable: false,
+  },
+  {
+    id: "lastUpdatedAt",
+    multiple: false,
+    name: "Last updated at",
+    ownership: "system",
+    valueType: "lastUpdatedAt",
+    writable: false,
+  },
+  {
+    id: "tags",
+    multiple: true,
+    name: "Tags",
+    ownership: "default",
+    targetStructureIds: ["tag"],
+    valueType: "entity",
+    writable: true,
+  },
+] satisfies readonly PropertyDefinition[]);
 
 function deepFreeze<T>(value: T): T {
   if (value && typeof value === "object" && !Object.isFrozen(value)) {
@@ -296,6 +384,20 @@ function clonePropertyDefinition(
 ): PropertyDefinition {
   return {
     ...definition,
+    ...(definition.description !== undefined
+      ? { description: definition.description }
+      : {}),
+    ...(definition.iconName !== undefined
+      ? { iconName: definition.iconName }
+      : {}),
+    ...(definition.fixedTargetObjectIds
+      ? { fixedTargetObjectIds: [...definition.fixedTargetObjectIds] }
+      : {}),
+    ...(definition.inversePropertyDefinitionId !== undefined
+      ? {
+          inversePropertyDefinitionId: definition.inversePropertyDefinitionId,
+        }
+      : {}),
     ...(definition.options
       ? { options: definition.options.map((option) => ({ ...option })) }
       : {}),
@@ -325,6 +427,20 @@ function cloneStructure(structure: WorkspaceStructure): WorkspaceStructure {
   };
 }
 
+function mergeDefaultPropertyDefinitions(
+  propertyDefinitions: readonly PropertyDefinition[] = [],
+): readonly PropertyDefinition[] {
+  const explicitIds = new Set(
+    propertyDefinitions.map((definition) => definition.id),
+  );
+  return [
+    ...DEFAULT_PROPERTY_DEFINITIONS.filter(
+      (definition) => !explicitIds.has(definition.id),
+    ).map(clonePropertyDefinition),
+    ...propertyDefinitions.map(clonePropertyDefinition),
+  ];
+}
+
 function defineStructure(
   id: string,
   singularName: string,
@@ -342,7 +458,9 @@ function defineStructure(
     ownership,
     pluralName,
     presentation: clonePresentation(defaultPresentation),
-    propertyDefinitions: [],
+    propertyDefinitions: DEFAULT_PROPERTY_DEFINITIONS.map(
+      clonePropertyDefinition,
+    ),
     singularName,
     tone,
   });
@@ -461,7 +579,9 @@ function definePreset(
     lifecycleKind,
     pluralName,
     presentation: clonePresentation(defaultPresentation),
-    propertyDefinitions: [],
+    propertyDefinitions: DEFAULT_PROPERTY_DEFINITIONS.map(
+      clonePropertyDefinition,
+    ),
     singularName,
     tone,
   });
@@ -511,18 +631,17 @@ function validatePresentation(
     );
   }
   const { availableViews, defaultView } = value;
+  const normalizedViews = Array.isArray(availableViews)
+    ? availableViews.map(normalizePresentationView)
+    : [];
+  const normalizedDefaultView = normalizePresentationView(defaultView);
   if (
     !Array.isArray(availableViews) ||
     availableViews.length === 0 ||
-    !availableViews.every(
-      (view): view is StructurePresentationView =>
-        typeof view === "string" &&
-        presentationViews.includes(view as StructurePresentationView),
-    ) ||
-    new Set(availableViews).size !== availableViews.length ||
-    typeof defaultView !== "string" ||
-    !presentationViews.includes(defaultView as StructurePresentationView) ||
-    !availableViews.includes(defaultView as StructurePresentationView)
+    normalizedViews.some((view) => view === null) ||
+    new Set(normalizedViews).size !== normalizedViews.length ||
+    normalizedDefaultView === null ||
+    !normalizedViews.includes(normalizedDefaultView)
   ) {
     return failure(
       "invalid-presentation",
@@ -530,9 +649,20 @@ function validatePresentation(
     );
   }
   return ok({
-    availableViews: [...availableViews],
-    defaultView: defaultView as StructurePresentationView,
+    availableViews: normalizedViews as StructurePresentationView[],
+    defaultView: normalizedDefaultView,
   });
+}
+
+function normalizePresentationView(
+  value: unknown,
+): StructurePresentationView | null {
+  if (value === "grid") return "gallery";
+  if (value === "calendar") return "list";
+  return typeof value === "string" &&
+    presentationViews.includes(value as StructurePresentationView)
+    ? (value as StructurePresentationView)
+    : null;
 }
 
 function validateLabelOptions(
@@ -555,108 +685,218 @@ function validateLabelOptions(
   return true;
 }
 
-export function validatePropertyDefinition(
-  value: unknown,
-): DomainResult<PropertyDefinition> {
-  if (!isRecord(value)) {
-    return failure(
-      "invalid-property-definition",
-      "Property definition must be an object.",
-    );
-  }
-  const {
-    id,
-    multiple,
-    name,
-    options,
-    targetStructureIds,
-    valueType,
-    writable,
-  } = value;
-  if (
-    !isNonEmptyString(id) ||
-    !isNonEmptyString(name) ||
-    typeof valueType !== "string" ||
-    !propertyValueTypes.includes(valueType as PropertyValueType) ||
-    typeof writable !== "boolean" ||
-    typeof multiple !== "boolean"
-  ) {
-    return failure(
-      "invalid-property-definition",
-      "Property definitions require an id, name, supported value type, writability, and multiplicity.",
-    );
-  }
-  if (options !== undefined && !validateLabelOptions(options)) {
+type PropertyDefinitionFields = {
+  readonly description: unknown;
+  readonly fixedTargetObjectIds: unknown;
+  readonly iconName: unknown;
+  readonly id: unknown;
+  readonly inversePropertyDefinitionId: unknown;
+  readonly multiple: unknown;
+  readonly name: unknown;
+  readonly normalizedOwnership: unknown;
+  readonly options: unknown;
+  readonly targetStructureIds: unknown;
+  readonly valueType: unknown;
+  readonly writable: unknown;
+};
+
+function readPropertyDefinitionFields(
+  value: Record<string, unknown>,
+): PropertyDefinitionFields {
+  return {
+    description: value.description,
+    fixedTargetObjectIds: value.fixedTargetObjectIds,
+    iconName: value.iconName,
+    id: value.id,
+    inversePropertyDefinitionId: value.inversePropertyDefinitionId,
+    multiple: value.multiple,
+    name: value.name,
+    normalizedOwnership: value.ownership ?? "normal",
+    options: value.options,
+    targetStructureIds: value.targetStructureIds,
+    valueType: value.valueType,
+    writable: value.writable,
+  };
+}
+
+function hasValidPropertyDefinitionCore(
+  fields: PropertyDefinitionFields,
+): boolean {
+  return (
+    isNonEmptyString(fields.id) &&
+    isNonEmptyString(fields.name) &&
+    (fields.description === undefined ||
+      typeof fields.description === "string") &&
+    typeof fields.normalizedOwnership === "string" &&
+    propertyDefinitionOwnerships.includes(
+      fields.normalizedOwnership as PropertyDefinitionOwnership,
+    ) &&
+    typeof fields.valueType === "string" &&
+    propertyValueTypes.includes(fields.valueType as PropertyValueType) &&
+    typeof fields.writable === "boolean" &&
+    typeof fields.multiple === "boolean"
+  );
+}
+
+function hasValidOptionalIcon(iconName: unknown): boolean {
+  return (
+    iconName === undefined ||
+    (typeof iconName === "string" &&
+      OBJECT_ICON_NAMES.includes(iconName as ObjectIconName))
+  );
+}
+
+function validatePropertyCollectionFields(
+  fields: PropertyDefinitionFields,
+): DomainResult<void> {
+  if (fields.options !== undefined && !validateLabelOptions(fields.options)) {
     return failure(
       "invalid-property-definition",
       "Label options must contain unique stable ids and non-empty names.",
     );
   }
   if (
-    targetStructureIds !== undefined &&
-    !hasUniqueNonEmptyStrings(targetStructureIds)
+    fields.targetStructureIds !== undefined &&
+    !hasUniqueNonEmptyStrings(fields.targetStructureIds)
   ) {
     return failure(
       "invalid-property-definition",
       "Property target Structure ids must be unique non-empty strings.",
     );
   }
-  if (options !== undefined && valueType !== "label") {
+  if (
+    fields.fixedTargetObjectIds !== undefined &&
+    !hasUniqueNonEmptyStrings(fields.fixedTargetObjectIds)
+  ) {
+    return failure(
+      "invalid-property-definition",
+      "Property fixed target object ids must be unique non-empty strings.",
+    );
+  }
+  return ok(undefined);
+}
+
+function validatePropertyReferenceFields(
+  fields: PropertyDefinitionFields,
+): DomainResult<void> {
+  if (
+    fields.inversePropertyDefinitionId !== undefined &&
+    !isNonEmptyString(fields.inversePropertyDefinitionId)
+  ) {
+    return failure(
+      "invalid-property-definition",
+      "Inverse property definition id must be a non-empty string.",
+    );
+  }
+  if (fields.options !== undefined && fields.valueType !== "label") {
     return failure(
       "invalid-property-definition",
       "Only label properties may define options.",
     );
   }
-  if (targetStructureIds !== undefined && valueType !== "entity") {
+  if (
+    fields.targetStructureIds !== undefined &&
+    fields.valueType !== "entity"
+  ) {
     return failure(
       "invalid-property-definition",
       "Only entity properties may constrain target Structures.",
     );
   }
-  return ok({
-    id: id.trim(),
-    multiple,
-    name: name.trim(),
+  if (
+    fields.fixedTargetObjectIds !== undefined &&
+    fields.valueType !== "entity"
+  ) {
+    return failure(
+      "invalid-property-definition",
+      "Only entity properties may define fixed target objects.",
+    );
+  }
+  if (
+    fields.inversePropertyDefinitionId !== undefined &&
+    fields.valueType !== "entity"
+  ) {
+    return failure(
+      "invalid-property-definition",
+      "Only entity properties may declare inverse properties.",
+    );
+  }
+  return ok(undefined);
+}
+
+function cloneValidatedPropertyDefinition(
+  fields: PropertyDefinitionFields,
+): PropertyDefinition {
+  const options = fields.options as readonly PropertyLabelOption[] | undefined;
+  const targetStructureIds = fields.targetStructureIds as
+    | readonly string[]
+    | undefined;
+  const fixedTargetObjectIds = fields.fixedTargetObjectIds as
+    | readonly string[]
+    | undefined;
+  return {
+    ...(fields.description !== undefined
+      ? { description: fields.description as string }
+      : {}),
+    ...(fixedTargetObjectIds
+      ? { fixedTargetObjectIds: [...fixedTargetObjectIds] }
+      : {}),
+    ...(fields.iconName !== undefined
+      ? { iconName: fields.iconName as ObjectIconName }
+      : {}),
+    ...(fields.inversePropertyDefinitionId !== undefined
+      ? {
+          inversePropertyDefinitionId: (
+            fields.inversePropertyDefinitionId as string
+          ).trim(),
+        }
+      : {}),
+    id: (fields.id as string).trim(),
+    multiple: fields.multiple as boolean,
+    name: (fields.name as string).trim(),
+    ownership: fields.normalizedOwnership as PropertyDefinitionOwnership,
     ...(options ? { options: options.map((option) => ({ ...option })) } : {}),
     ...(targetStructureIds
       ? { targetStructureIds: [...targetStructureIds] }
       : {}),
-    valueType: valueType as PropertyValueType,
-    writable,
-  });
+    valueType: fields.valueType as PropertyValueType,
+    writable: fields.writable as boolean,
+  };
 }
 
-export function validateWorkspaceStructure(
-  value: unknown,
-): DomainResult<WorkspaceStructure> {
-  if (!isRecord(value))
-    return failure("invalid-structure", "Structure must be an object.");
-  const {
-    collectionIds,
-    iconName,
-    id,
-    lifecycleKind,
-    ownership,
-    pluralName,
-    presentation,
-    propertyDefinitions,
-    singularName,
-    tone,
-  } = value;
-  if (!isNonEmptyString(id))
+function validateStructureNames(
+  id: unknown,
+  singularName: unknown,
+  pluralName: unknown,
+): DomainResult<void> {
+  if (!isNonEmptyString(id)) {
     return failure("invalid-id", "Structure id must not be empty.");
+  }
   if (!isNonEmptyString(singularName) || !isNonEmptyString(pluralName)) {
     return failure(
       "invalid-name",
       "Structure singular and plural names must not be empty.",
     );
   }
-  if (
-    typeof ownership !== "string" ||
-    !(["built-in", "custom", "legacy", "reserved"] as const).includes(
-      ownership as StructureOwnership,
+  return ok(undefined);
+}
+
+function isSupportedOwnership(value: unknown): value is StructureOwnership {
+  return (
+    typeof value === "string" &&
+    (["built-in", "custom", "legacy", "reserved"] as const).includes(
+      value as StructureOwnership,
     )
-  ) {
+  );
+}
+
+function validateStructureKindAndAppearance(
+  ownership: unknown,
+  iconName: unknown,
+  tone: unknown,
+  lifecycleKind: unknown,
+): DomainResult<void> {
+  if (!isSupportedOwnership(ownership)) {
     return failure(
       "invalid-structure",
       "Structure ownership is not supported.",
@@ -683,12 +923,23 @@ export function validateWorkspaceStructure(
       "Structure lifecycle kind is not supported.",
     );
   }
-  if (!hasUniqueNonEmptyStrings(collectionIds)) {
-    return failure(
-      "invalid-structure",
-      "Structure collection ids must be unique non-empty strings.",
-    );
-  }
+  return ok(undefined);
+}
+
+function validateStructureCollectionIds(
+  collectionIds: unknown,
+): DomainResult<readonly string[]> {
+  return hasUniqueNonEmptyStrings(collectionIds)
+    ? ok(collectionIds)
+    : failure(
+        "invalid-structure",
+        "Structure collection ids must be unique non-empty strings.",
+      );
+}
+
+function validateStructurePropertyDefinitions(
+  propertyDefinitions: unknown,
+): DomainResult<readonly PropertyDefinition[]> {
   if (!Array.isArray(propertyDefinitions)) {
     return failure(
       "invalid-property-definition",
@@ -702,24 +953,198 @@ export function validateWorkspaceStructure(
     validatedDefinitions.push(result.value);
   }
   const definitionIds = validatedDefinitions.map((definition) => definition.id);
-  if (new Set(definitionIds).size !== definitionIds.length) {
+  return new Set(definitionIds).size === definitionIds.length
+    ? ok(validatedDefinitions)
+    : failure(
+        "duplicate-property-definition-id",
+        "Property definition ids must be unique within a Structure.",
+      );
+}
+
+function validateRegistryEntries(
+  value: readonly unknown[],
+): DomainResult<readonly WorkspaceStructure[]> {
+  const structures: WorkspaceStructure[] = [];
+  for (const entry of value) {
+    const result = validateWorkspaceStructure(entry);
+    if (!result.ok) return result;
+    structures.push(result.value);
+  }
+  return ok(structures);
+}
+
+function validateUniqueStructureIds(
+  structures: readonly WorkspaceStructure[],
+): DomainResult<void> {
+  const ids = structures.map((structure) => structure.id);
+  return new Set(ids).size === ids.length
+    ? ok(undefined)
+    : failure(
+        "duplicate-id",
+        "Structure ids must be unique within the registry.",
+      );
+}
+
+function findStructureDefinition(
+  structures: readonly WorkspaceStructure[],
+  structureId: string,
+  propertyDefinitionId: string,
+): PropertyDefinition | null {
+  return (
+    structures
+      .find((structure) => structure.id === structureId)
+      ?.propertyDefinitions.find(
+        (definition) => definition.id === propertyDefinitionId,
+      ) ?? null
+  );
+}
+
+function isCompatibleInversePair(
+  structures: readonly WorkspaceStructure[],
+  structureId: string,
+  targetStructureId: string,
+  definition: PropertyDefinition,
+): boolean {
+  const inverse = findStructureDefinition(
+    structures,
+    targetStructureId,
+    definition.inversePropertyDefinitionId ?? "",
+  );
+  return (
+    inverse?.valueType === "entity" &&
+    inverse.targetStructureIds?.includes(structureId) === true &&
+    inverse.inversePropertyDefinitionId === definition.id
+  );
+}
+
+function validateInverseTargets(
+  structures: readonly WorkspaceStructure[],
+  structure: WorkspaceStructure,
+  definition: PropertyDefinition,
+): DomainResult<void> {
+  for (const targetStructureId of definition.targetStructureIds ?? []) {
+    if (
+      !isCompatibleInversePair(
+        structures,
+        structure.id,
+        targetStructureId,
+        definition,
+      )
+    ) {
+      return failure(
+        "invalid-property-definition",
+        "Inverse entity property pairing is incompatible.",
+        {
+          inversePropertyDefinitionId: definition.inversePropertyDefinitionId,
+          propertyDefinitionId: definition.id,
+          structureId: structure.id,
+          targetStructureId,
+        },
+      );
+    }
+  }
+  return ok(undefined);
+}
+
+function validateInverseDefinition(
+  structures: readonly WorkspaceStructure[],
+  structure: WorkspaceStructure,
+  definition: PropertyDefinition,
+): DomainResult<void> {
+  if (!definition.inversePropertyDefinitionId) return ok(undefined);
+  if (definition.valueType !== "entity" || !definition.targetStructureIds?.length) {
     return failure(
-      "duplicate-property-definition-id",
-      "Property definition ids must be unique within a Structure.",
+      "invalid-property-definition",
+      "Inverse entity properties must declare target Structures.",
+      {
+        propertyDefinitionId: definition.id,
+        structureId: structure.id,
+      },
     );
   }
+  return validateInverseTargets(structures, structure, definition);
+}
+
+function validateInversePropertyPairings(
+  structures: readonly WorkspaceStructure[],
+): DomainResult<void> {
+  for (const structure of structures) {
+    for (const definition of structure.propertyDefinitions) {
+      const result = validateInverseDefinition(structures, structure, definition);
+      if (!result.ok) return result;
+    }
+  }
+  return ok(undefined);
+}
+
+export function validatePropertyDefinition(
+  value: unknown,
+): DomainResult<PropertyDefinition> {
+  if (!isRecord(value)) {
+    return failure(
+      "invalid-property-definition",
+      "Property definition must be an object.",
+    );
+  }
+  const fields = readPropertyDefinitionFields(value);
+  if (
+    !hasValidPropertyDefinitionCore(fields) ||
+    !hasValidOptionalIcon(fields.iconName)
+  ) {
+    return failure(
+      "invalid-property-definition",
+      "Property definitions require an id, name, supported value type, writability, and multiplicity.",
+    );
+  }
+  const collectionValidation = validatePropertyCollectionFields(fields);
+  if (!collectionValidation.ok) return collectionValidation;
+  const referenceValidation = validatePropertyReferenceFields(fields);
+  if (!referenceValidation.ok) return referenceValidation;
+  return ok(cloneValidatedPropertyDefinition(fields));
+}
+
+export function validateWorkspaceStructure(
+  value: unknown,
+): DomainResult<WorkspaceStructure> {
+  if (!isRecord(value))
+    return failure("invalid-structure", "Structure must be an object.");
+  const {
+    collectionIds,
+    iconName,
+    id,
+    lifecycleKind,
+    ownership,
+    pluralName,
+    presentation,
+    propertyDefinitions,
+    singularName,
+    tone,
+  } = value;
+  const names = validateStructureNames(id, singularName, pluralName);
+  if (!names.ok) return names;
+  const kindAndAppearance = validateStructureKindAndAppearance(
+    ownership,
+    iconName,
+    tone,
+    lifecycleKind,
+  );
+  if (!kindAndAppearance.ok) return kindAndAppearance;
+  const collections = validateStructureCollectionIds(collectionIds);
+  if (!collections.ok) return collections;
+  const definitions = validateStructurePropertyDefinitions(propertyDefinitions);
+  if (!definitions.ok) return definitions;
   const presentationResult = validatePresentation(presentation);
   if (!presentationResult.ok) return presentationResult;
   return ok({
-    collectionIds: [...collectionIds],
+    collectionIds: [...collections.value],
     iconName: iconName as ObjectIconName,
-    id: id.trim(),
+    id: (id as string).trim(),
     lifecycleKind: lifecycleKind as StructureLifecycleKind,
     ownership: ownership as StructureOwnership,
-    pluralName: pluralName.trim(),
+    pluralName: (pluralName as string).trim(),
     presentation: presentationResult.value,
-    propertyDefinitions: validatedDefinitions,
-    singularName: singularName.trim(),
+    propertyDefinitions: definitions.value,
+    singularName: (singularName as string).trim(),
     tone: tone as ObjectIconTone,
   });
 }
@@ -729,20 +1154,13 @@ export function validateStructureRegistry(
 ): DomainResult<readonly WorkspaceStructure[]> {
   if (!Array.isArray(value))
     return failure("invalid-structure", "Structure registry must be an array.");
-  const structures: WorkspaceStructure[] = [];
-  for (const entry of value) {
-    const result = validateWorkspaceStructure(entry);
-    if (!result.ok) return result;
-    structures.push(result.value);
-  }
-  const ids = structures.map((structure) => structure.id);
-  if (new Set(ids).size !== ids.length) {
-    return failure(
-      "duplicate-id",
-      "Structure ids must be unique within the registry.",
-    );
-  }
-  return ok(structures);
+  const registry = validateRegistryEntries(value);
+  if (!registry.ok) return registry;
+  const uniqueIds = validateUniqueStructureIds(registry.value);
+  if (!uniqueIds.ok) return uniqueIds;
+  const inversePairings = validateInversePropertyPairings(registry.value);
+  if (!inversePairings.ok) return inversePairings;
+  return ok(registry.value);
 }
 
 function findStructureIndex(
@@ -800,8 +1218,8 @@ export function createCustomStructure(
     ownership: "custom",
     pluralName: input.pluralName,
     presentation: clonePresentation(input.presentation ?? defaultPresentation),
-    propertyDefinitions: (input.propertyDefinitions ?? []).map(
-      clonePropertyDefinition,
+    propertyDefinitions: mergeDefaultPropertyDefinitions(
+      input.propertyDefinitions,
     ),
     singularName: input.singularName,
     tone: input.tone,

@@ -20,6 +20,7 @@ import {
   ObjectCollectionIcon,
   ObjectIconBadge,
 } from "@/components/object-icons";
+import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import { Button } from "@/components/ui/button";
 import {
   CompactMenuItemText,
@@ -86,7 +87,10 @@ function NewContentMenu({
   const Icon = action.icon;
   const deferredQuery = React.useDeferredValue(query);
   const normalizedQuery = normalizeMenuQuery(deferredQuery.trim());
-  const localizedItems = objectTypes;
+  const localizedItems = objectTypes.map((item) => ({
+    ...item,
+    label: item.singularLabel ?? item.label,
+  }));
   const items = React.useMemo(
     () =>
       localizedItems.filter((item) =>
@@ -165,6 +169,9 @@ function NewContentMenu({
         render={
           <Button
             id="workspace-new-trigger"
+            data-lifecycle-contract={
+              objectLifecycleContractSlots.ObjectCreationTrigger
+            }
             type="button"
             variant="ghost"
             size="default"
@@ -176,6 +183,7 @@ function NewContentMenu({
         <span className="min-w-0 truncate">{action.label}</span>
       </PopoverTrigger>
       <PopoverContent
+        data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationMenu}
         side="bottom"
         align="start"
         sideOffset={-1}
@@ -226,6 +234,9 @@ function NewContentMenu({
             return (
               <button
                 key={id}
+                data-lifecycle-contract={
+                  objectLifecycleContractSlots.ObjectTypeOptionRow
+                }
                 ref={(node) => {
                   if (node) optionRefs.current.set(id, node);
                   else optionRefs.current.delete(id);
@@ -289,11 +300,11 @@ type AppSidebarPrimaryActionsProps = {
 const defaultActions: AppSidebarPrimaryAction[] = [
   {
     id: "new",
-    label: "Novo",
+    label: "New",
     icon: AppSidebarPlusIcon,
     hints: [
       {
-        description: "Novo",
+        description: "New",
         shortcut: {
           windows: ["Ctrl", "U"],
           mac: ["⌘", "U"],
@@ -303,18 +314,18 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   },
   {
     id: "search",
-    label: "Buscar",
+    label: "Search",
     icon: AppSidebarSearchIcon,
     hints: [
       {
-        description: "Buscar",
+        description: "Search",
         shortcut: {
           windows: ["Ctrl", "P", "or", "Ctrl", "K"],
           mac: ["⌘", "P", "or", "⌘", "K"],
         },
       },
       {
-        description: "Abrir busca estendida",
+        description: "Open extended search",
         shortcut: {
           windows: ["Ctrl", "⇧", "P"],
           mac: ["⌘", "⇧", "P"],
@@ -324,19 +335,18 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   },
   {
     id: "explore",
-    label: "Explorar",
+    label: "Explore",
     icon: AppSidebarExploreIcon,
     hints: [
       {
-        description:
-          "Abrir Explorar. Use o atalho novamente para iniciar um novo chat.",
+        description: "Open Explore. Use the shortcut again to start a new chat.",
         shortcut: {
           windows: ["Ctrl", "J"],
           mac: ["⌘", "J"],
         },
       },
       {
-        description: "Abrir Explorar no painel lateral",
+        description: "Open Explore in the side panel",
         shortcut: {
           windows: ["Ctrl", "⇧", "J"],
           mac: ["⇧", "⌘", "J"],
@@ -346,12 +356,11 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   },
   {
     id: "calendar",
-    label: "Calendário",
+    label: "Calendar",
     icon: AppSidebarCalendarIcon,
     hints: [
       {
-        description:
-          "Ir para o Calendário. Clique duas vezes para ir para hoje.",
+        description: "Go to Calendar. Double-click to go to today.",
         shortcut: {
           windows: ["Ctrl", "Alt", "H"],
           mac: ["⌃", "⌘", "H"],
@@ -490,7 +499,10 @@ function AppSidebarPrimaryActionItem({
               workspaceRowStateClass,
               "[&_svg]:size-4",
             )}
-            onPointerDown={closeHint}
+            onPointerDown={() => {
+              closeHint();
+              if (action.id !== "new") onAction?.(action.id);
+            }}
             onClick={() => {
               closeHint();
               onAction?.(action.id);

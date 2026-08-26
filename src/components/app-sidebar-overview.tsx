@@ -23,6 +23,7 @@ import {
   type ObjectIconProps,
   type ObjectIconTone,
 } from "@/components/object-icons";
+import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -324,6 +325,9 @@ function AppSidebarSection({
           <div className="flex h-4 max-w-max shrink-0 items-center gap-px pb-px">
             {typeof count === "number" && (
               <span
+                data-lifecycle-contract={
+                  objectLifecycleContractSlots.ObjectCountBadge
+                }
                 className={cn(
                   "inline-flex min-w-[1.3em] items-center justify-center rounded-[0.475em]",
                   "border border-transparent px-[0.49em] py-[0.2em] text-[11px] leading-[1.3]",
@@ -449,6 +453,7 @@ function AppSidebarPinnedRow({
           onClick={onSelect}
         >
           <span
+            data-lifecycle-contract={objectLifecycleContractSlots.ObjectCountBadge}
             className={cn(
               "flex w-12 min-w-0 flex-1 items-center gap-x-1.5 truncate",
               active && "font-medium",

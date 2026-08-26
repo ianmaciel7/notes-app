@@ -3,16 +3,24 @@ import {
   isBlockEditorDocument,
 } from "../editor/document.ts";
 import {
-  WORKSPACE_OBJECT_SCHEMA_VERSION,
-  createInitialWorkspaceObjectState,
-  type WorkspaceEntity,
-  type WorkspaceObjectState,
-} from "./workspace-objects.ts";
+  createCollectionId,
+  createTagId,
+} from "./workspace-domain-identities.ts";
 import {
   createInitialStructureRegistry,
   validateStructureRegistry,
   type WorkspaceStructure,
 } from "./workspace-object-types.ts";
+import {
+  createInitialWorkspaceObjectState,
+  WORKSPACE_OBJECT_SCHEMA_VERSION,
+  type WorkspaceEntity,
+  type WorkspaceObjectState,
+} from "./workspace-objects.ts";
+import {
+  createWorkspaceEntityPropertyValues,
+  normalizeWorkspacePropertyValueMap,
+} from "./workspace-property-values.ts";
 import { reconcileRequiredStructures } from "./workspace-structure-reconciliation.ts";
 
 const WORKSPACE_OBJECT_STORAGE_KEY = "notes-app:workspace-objects:v1";
@@ -31,6 +39,11 @@ type SnapshotParseResult =
       reason: "invalid-json" | "invalid-record" | "unsupported-version";
     }
   | { ok: true; state: WorkspaceObjectState };
+type SnapshotParseFailure = Extract<SnapshotParseResult, { ok: false }>;
+type EntityMigrationResult<T> = SnapshotParseFailure | { ok: true; entities: T };
+type SnapshotMigrationResult =
+  | SnapshotParseFailure
+  | { ok: true; value: Record<string, unknown> };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -101,6 +114,39 @@ function isWorkspaceEntity(value: unknown): value is WorkspaceEntity {
   return entityValidators[value.kind as string]?.(value) ?? false;
 }
 
+function migrateLegacyIdentityMemberships(
+  entities: readonly WorkspaceEntity[],
+): WorkspaceEntity[] {
+  const usedTagIds = new Set(
+    entities
+      .filter((entity) => entity.kind === "tag")
+      .map((entity) => entity.id),
+  );
+  const tagIdByName = new Map(
+    entities
+      .filter((entity) => entity.kind === "tag")
+      .map((entity) => [entity.title.trim(), entity.id]),
+  );
+  return entities.map((entity) => {
+    if (
+      (entity.kind === "document" || entity.kind === "quote") &&
+      "tags" in entity &&
+      "collections" in entity
+    ) {
+      return {
+        ...entity,
+        collections: entity.collections.map((collection) =>
+          createCollectionId(entity.objectTypeId, collection),
+        ),
+        tags: entity.tags.map(
+          (tag) => tagIdByName.get(tag.trim()) ?? createTagId(tag, usedTagIds),
+        ),
+      };
+    }
+    return entity;
+  });
+}
+
 const entityKindByLifecycle = {
   document: "document",
   file: "file",
@@ -148,70 +194,164 @@ function serializeWorkspaceObjectState(state: WorkspaceObjectState): string {
   return JSON.stringify(toWorkspaceObjectSnapshot(state));
 }
 
-function parseWorkspaceObjectSnapshot(raw: string): SnapshotParseResult {
-  let value: unknown;
+function parseSnapshotJson(raw: string): SnapshotMigrationResult {
   try {
-    value = JSON.parse(raw);
+    const value: unknown = JSON.parse(raw);
+    return isRecord(value)
+      ? { ok: true, value }
+      : { ok: false, reason: "invalid-record" };
   } catch {
     return { ok: false, reason: "invalid-json" };
   }
-  if (!isRecord(value)) return { ok: false, reason: "invalid-record" };
-  if (value.version === 1) {
-    if (!Array.isArray(value.entities)) {
-      return { ok: false, reason: "invalid-record" };
-    }
-    const migratedEntities: unknown[] = [];
-    for (const entity of value.entities) {
-      if (!isRecord(entity)) return { ok: false, reason: "invalid-record" };
-      if (entity.kind === "document" || entity.kind === "quote") {
-        if (typeof entity.body !== "string") {
-          return { ok: false, reason: "invalid-record" };
-        }
-        migratedEntities.push({
-          ...entity,
-          body: blockEditorDocumentFromPlainText(entity.body),
-        });
-      } else {
-        migratedEntities.push(entity);
+}
+
+function migratePlainTextEntityBodies(
+  entities: readonly unknown[],
+): EntityMigrationResult<unknown[]> {
+  const migratedEntities: unknown[] = [];
+  for (const entity of entities) {
+    if (!isRecord(entity)) return { ok: false, reason: "invalid-record" };
+    if (entity.kind === "document" || entity.kind === "quote") {
+      if (typeof entity.body !== "string") {
+        return { ok: false, reason: "invalid-record" };
       }
+      migratedEntities.push({
+        ...entity,
+        body: blockEditorDocumentFromPlainText(entity.body),
+      });
+    } else {
+      migratedEntities.push(entity);
     }
-    value = {
-      ...value,
-      entities: migratedEntities,
-      version: 2,
-    };
   }
-  if (isRecord(value) && value.version === 2) {
-    value = {
-      ...value,
-      structures: createInitialStructureRegistry(),
-      version: WORKSPACE_OBJECT_SCHEMA_VERSION,
-    };
-  } else if (
-    !isRecord(value) ||
-    value.version !== WORKSPACE_OBJECT_SCHEMA_VERSION
-  ) {
-    return { ok: false, reason: "unsupported-version" };
-  }
-  if (!isRecord(value)) return { ok: false, reason: "invalid-record" };
-  const structureValidation = validateStructureRegistry(value.structures);
-  if (
-    !structureValidation.ok ||
-    !Array.isArray(value.entities) ||
-    !value.entities.every(isWorkspaceEntity) ||
-    typeof value.nextId !== "number" ||
-    !Number.isInteger(value.nextId) ||
-    value.nextId < 1 ||
-    !(value.activeEntityId === null || typeof value.activeEntityId === "string")
-  ) {
+  return { entities: migratedEntities, ok: true };
+}
+
+function migrateVersionOneSnapshot(
+  value: Record<string, unknown>,
+): SnapshotMigrationResult {
+  if (!Array.isArray(value.entities)) {
     return { ok: false, reason: "invalid-record" };
   }
+  const migration = migratePlainTextEntityBodies(value.entities);
+  if (!migration.ok) return migration;
+  return {
+    ok: true,
+    value: {
+      ...value,
+      entities: migration.entities,
+      structures: createInitialStructureRegistry(),
+      version: 3,
+    },
+  };
+}
 
-  const entities = value.entities.map((entity) => {
+function migrateSnapshotVersion(
+  value: Record<string, unknown>,
+): SnapshotMigrationResult {
+  if (value.version === 1) return migrateVersionOneSnapshot(value);
+  if (value.version === 2) {
+    return {
+      ok: true,
+      value: {
+        ...value,
+        structures: createInitialStructureRegistry(),
+        version: 3,
+      },
+    };
+  }
+  if (value.version === 3) {
+    return { ok: true, value: { ...value, version: 4 } };
+  }
+  if (value.version === 4) return migrateVersionFourSnapshot(value);
+  return value.version === WORKSPACE_OBJECT_SCHEMA_VERSION
+    ? { ok: true, value }
+    : { ok: false, reason: "unsupported-version" };
+}
+
+function migrateVersionFourSnapshot(
+  value: Record<string, unknown>,
+): SnapshotMigrationResult {
+  if (!Array.isArray(value.entities)) {
+    return { ok: false, reason: "invalid-record" };
+  }
+  return {
+    ok: true,
+    value: {
+      ...value,
+      entities: migrateLegacyIdentityMemberships(
+        value.entities as WorkspaceEntity[],
+      ),
+      version: WORKSPACE_OBJECT_SCHEMA_VERSION,
+    },
+  };
+}
+
+function validateSnapshotEnvelope(
+  value: Record<string, unknown>,
+  structureValidation: ReturnType<typeof validateStructureRegistry>,
+): boolean {
+  return (
+    structureValidation.ok &&
+    Array.isArray(value.entities) &&
+    value.entities.every(isWorkspaceEntity) &&
+    typeof value.nextId === "number" &&
+    Number.isInteger(value.nextId) &&
+    value.nextId >= 1 &&
+    (value.activeEntityId === null || typeof value.activeEntityId === "string")
+  );
+}
+
+function stripTemporaryFilePreviewUrls(
+  entities: readonly WorkspaceEntity[],
+): WorkspaceEntity[] {
+  return entities.map((entity) => {
     if (entity.kind !== "file") return entity;
     const { previewUrl: _previewUrl, ...persisted } = entity;
     return persisted;
   }) as WorkspaceEntity[];
+}
+
+function hydrateEntityPropertyValues(
+  entities: readonly WorkspaceEntity[],
+  structures: readonly WorkspaceStructure[],
+): EntityMigrationResult<WorkspaceEntity[]> {
+  const structuresById = new Map(
+    structures.map((structure) => [structure.id, structure]),
+  );
+  const hydratedEntities: WorkspaceEntity[] = [];
+  for (const entity of entities) {
+    const structure = structuresById.get(entity.objectTypeId);
+    if (!structure) return { ok: false, reason: "invalid-record" };
+    const candidateValues = isRecord(entity.propertyValues)
+      ? entity.propertyValues
+      : createWorkspaceEntityPropertyValues(entity);
+    const propertyValues = normalizeWorkspacePropertyValueMap(
+      structure,
+      candidateValues,
+    );
+    if (!propertyValues.ok) return { ok: false, reason: "invalid-record" };
+    hydratedEntities.push({
+      ...entity,
+      propertyValues: propertyValues.value,
+    });
+  }
+  return { entities: hydratedEntities, ok: true };
+}
+
+function parseCurrentWorkspaceObjectSnapshot(
+  value: Record<string, unknown>,
+): SnapshotParseResult {
+  const structureValidation = validateStructureRegistry(value.structures);
+  if (
+    !structureValidation.ok ||
+    !validateSnapshotEnvelope(value, structureValidation)
+  ) {
+    return { ok: false, reason: "invalid-record" };
+  }
+
+  const entities = stripTemporaryFilePreviewUrls(
+    value.entities as WorkspaceEntity[],
+  );
   const structures = reconcileRequiredStructures(
     createInitialStructureRegistry(),
     structureValidation.value,
@@ -219,10 +359,12 @@ function parseWorkspaceObjectSnapshot(raw: string): SnapshotParseResult {
   if (!entitiesReferenceValidStructures(entities, structures)) {
     return { ok: false, reason: "invalid-record" };
   }
+  const hydrated = hydrateEntityPropertyValues(entities, structures);
+  if (!hydrated.ok) return hydrated;
   const activeEntityId = entities.some(
     (entity) => entity.id === value.activeEntityId,
   )
-    ? value.activeEntityId
+    ? (value.activeEntityId as string)
     : null;
 
   return {
@@ -230,19 +372,26 @@ function parseWorkspaceObjectSnapshot(raw: string): SnapshotParseResult {
     state: {
       ...createInitialWorkspaceObjectState(),
       activeEntityId,
-      entities,
+      entities: hydrated.entities,
       hydrationStatus: "ready",
-      nextId: value.nextId,
+      nextId: value.nextId as number,
       structures,
     },
   };
 }
 
+function parseWorkspaceObjectSnapshot(raw: string): SnapshotParseResult {
+  const parsed = parseSnapshotJson(raw);
+  if (!parsed.ok) return parsed;
+  const migrated = migrateSnapshotVersion(parsed.value);
+  if (!migrated.ok) return migrated;
+  return parseCurrentWorkspaceObjectSnapshot(migrated.value);
+}
+
+export type { SnapshotParseResult, WorkspaceObjectSnapshot };
 export {
-  WORKSPACE_OBJECT_STORAGE_KEY,
   parseWorkspaceObjectSnapshot,
   serializeWorkspaceObjectState,
   toWorkspaceObjectSnapshot,
+  WORKSPACE_OBJECT_STORAGE_KEY,
 };
-
-export type { SnapshotParseResult, WorkspaceObjectSnapshot };

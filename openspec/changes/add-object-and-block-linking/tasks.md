@@ -1,17 +1,17 @@
 ## 0. Evidence and dependency gate
 
-- [ ] 0.1 Complete/isolate domain identities/relations and stable block identity before apply.
-- [ ] 0.2 Re-confirm linking, block-based linking, backlinks/unlinked-mention/view references.
+- [x] 0.1 Complete/isolate domain identities/relations and stable block identity before apply.
+- [x] 0.2 Re-confirm linking, block-based linking, backlinks/unlinked-mention/view references.
 
 ## 1. Graph domain
 
-- [ ] 1.1 Define object links, block references, reverse indexes, reference counters, Objects Inside selectors, missing-target states, and cycle protection with failing-first tests.
-- [ ] 1.2 Keep property-relation indexes distinct from content-link/backlink indexes.
+- [x] 1.1 Define object links, block references, reverse indexes, reference counters, Objects Inside selectors, missing-target states, and cycle protection with failing-first tests.
+- [x] 1.2 Keep property-relation indexes distinct from content-link/backlink indexes.
 
 ## 2. Editor and UI
 
-- [ ] 2.1 Add object/block link pickers, stable reference nodes, selection-link editing, embeds/transclusion, backlinks/reference counts, Objects Inside, and contextual per-object graph projection.
-- [ ] 2.2 Add unlinked-mention detection/review/conversion without automatic mutation.
+- [x] 2.1 Add object/block link pickers, stable reference nodes, selection-link editing, embeds/transclusion, backlinks/reference counts, Objects Inside, and contextual per-object graph projection.
+- [x] 2.2 Add unlinked-mention detection/review/conversion without automatic mutation.
 
 ## 3. Acceptance
 

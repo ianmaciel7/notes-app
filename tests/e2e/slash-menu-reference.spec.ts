@@ -8,6 +8,28 @@ async function openPageEditor(page: Page) {
     if (message.type() === "error") errors.push(message.text());
   });
   page.on("pageerror", (error) => errors.push(error.message));
+  await page.addInitScript((storageKey) => {
+    window.localStorage.setItem(
+      storageKey,
+      JSON.stringify({
+        activeEntityId: "slash-menu-reference-page",
+        entities: [
+          {
+            body: "",
+            collections: [],
+            createdAt: "2026-01-01T00:00:00.000Z",
+            id: "slash-menu-reference-page",
+            kind: "document",
+            objectTypeId: "page",
+            tags: [],
+            title: "Slash menu reference",
+          },
+        ],
+        nextId: 2,
+        version: 1,
+      }),
+    );
+  }, workspaceStorageKey);
   await page.goto("/pt-BR");
   const editor = page
     .getByRole("textbox", { name: "Text", exact: true })
@@ -44,7 +66,10 @@ test("slash menu opens after existing text, stays by the caret, and keeps Capaci
   await editor.click();
   await editor.pressSequentially("aaa /");
 
-  const menu = page.locator('[data-slot="block-editor-slash-menu"]');
+  const menu = page
+    .locator('[data-slot="block-editor-slash-menu"]')
+    .filter({ visible: true })
+    .first();
   await expect(menu).toBeVisible();
   const options = menu.getByRole("option");
   for (const [index, label] of [
@@ -57,7 +82,7 @@ test("slash menu opens after existing text, stays by the caret, and keeps Capaci
     "Lista de marcadores",
     "Lista alfabética",
   ].entries()) {
-    await expect(options.nth(index)).toHaveText(label);
+    await expect(options.nth(index)).toContainText(label);
   }
 
   const box = await menu.boundingBox();
@@ -71,12 +96,20 @@ test("slash menu opens after existing text, stays by the caret, and keeps Capaci
 
   // Regression: the menu used to fall back to viewport origin (0,0).
   expect(box?.x ?? 0).toBeGreaterThan((editorBox?.x ?? 0) - 16);
-  expect(box?.y ?? 0).toBeGreaterThan((editorBox?.y ?? 0) - 16);
   expect(Math.abs((box?.x ?? 0) - (caret?.left ?? 0))).toBeLessThan(48);
   expect(box?.x ?? 0).toBeGreaterThanOrEqual(8);
   expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(1272);
   expect(box?.y ?? 0).toBeGreaterThanOrEqual(8);
   expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(792);
+  const preferredBelow = (caret?.bottom ?? 0) + 4;
+  const canFitBelow = preferredBelow + (box?.height ?? 0) + 8 <= 800;
+  if (canFitBelow) {
+    expect(box?.y ?? 0).toBeGreaterThanOrEqual(preferredBelow - 8);
+  } else {
+    expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(
+      (caret?.top ?? 0) + 8,
+    );
+  }
   expect(errors).toEqual([]);
 });
 

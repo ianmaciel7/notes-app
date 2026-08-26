@@ -12,6 +12,7 @@ import {
   ObjectIdeaIcon,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
+import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -83,6 +84,7 @@ function AppSidebarObjectTypeIcon({
 
   return (
     <ObjectIconBadge
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectIconTonePreview}
       icon={Icon}
       tone={preset.tone}
       className={cn("size-8 rounded-[8px]", className)}
@@ -106,6 +108,7 @@ function AppSidebarObjectTypeCard({
     <button
       type="button"
       data-slot="app-sidebar-object-type-card"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectTypePresetCard}
       data-selected={selected || undefined}
       className={cn(
         "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] bg-white px-2.5 text-left",
@@ -143,6 +146,7 @@ function AppSidebarCustomObjectTypeCard({
     <button
       type="button"
       data-slot="app-sidebar-object-type-card"
+      data-lifecycle-contract={objectLifecycleContractSlots.CustomObjectTypeForm}
       data-selected={selected || undefined}
       className={cn(
         "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] bg-white px-2.5 text-left",
@@ -190,6 +194,7 @@ function AppSidebarObjectTypeDetails({
   return (
     <aside
       data-slot="app-sidebar-object-type-details"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectTypeDetailsPanel}
       className={cn(
         "pointer-events-auto absolute bottom-0 right-0 top-0 z-20 -mb-1 -mr-1 -mt-1",
         "flex min-h-0 w-full origin-center scale-100 transform flex-col overflow-hidden",

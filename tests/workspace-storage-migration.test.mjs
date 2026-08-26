@@ -4,22 +4,103 @@ import test from "node:test";
 import { blockEditorDocumentToPlainText } from "../src/editor/document.ts";
 import { parseWorkspaceObjectSnapshot } from "../src/lib/workspace-object-storage.ts";
 import {
-  WORKSPACE_OBJECT_SCHEMA_VERSION,
   createInitialWorkspaceObjectState,
+  WORKSPACE_OBJECT_SCHEMA_VERSION,
   workspaceObjectReducer,
 } from "../src/lib/workspace-objects.ts";
 
-test("new document entities use the structured block schema", () => {
+test("new document entities use the structured block schema and typed property map", () => {
   const state = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
     type: "beginCreate",
     objectTypeId: "page",
   });
 
-  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 3);
+  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 5);
   assert.deepEqual(state.entities[0].body, {
     schemaVersion: 1,
     doc: { type: "doc", content: [{ type: "paragraph" }] },
   });
+  assert.deepEqual(state.entities[0].propertyValues.title, {
+    title: { value: "" },
+    type: "title",
+  });
+});
+
+test("version 4 tag and collection display names migrate to stable ids", () => {
+  const parsed = parseWorkspaceObjectSnapshot(
+    JSON.stringify({
+      activeEntityId: "page-1",
+      entities: [
+        {
+          id: "tag-existing",
+          title: "Research",
+          createdAt: "2026-01-01T00:00:00.000Z",
+          objectTypeId: "tag",
+          kind: "tag",
+          propertyValues: {},
+        },
+        {
+          id: "page-1",
+          title: "Imported",
+          createdAt: "2026-01-01T00:00:00.000Z",
+          objectTypeId: "page",
+          kind: "document",
+          body: {
+            schemaVersion: 1,
+            doc: { type: "doc", content: [{ type: "paragraph" }] },
+          },
+          collections: ["Reading"],
+          tags: ["Research", "New Topic"],
+          propertyValues: {},
+        },
+      ],
+      nextId: 2,
+      structures: createInitialWorkspaceObjectState().structures,
+      version: 4,
+    }),
+  );
+
+  assert.equal(parsed.ok, true);
+  assert.deepEqual(parsed.state.entities[1].tags, [
+    "tag-existing",
+    "tag:new-topic",
+  ]);
+  assert.deepEqual(parsed.state.entities[1].collections, [
+    "collection:page:reading",
+  ]);
+});
+
+test("file entities persist canonical media asset metadata without temporary preview URLs", () => {
+  const created = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
+    type: "beginCreate",
+    objectTypeId: "image",
+  });
+  const state = workspaceObjectReducer(created, {
+    type: "commitFile",
+    assetId: "asset-1",
+    contentHash: "hash-1",
+    fileName: "image.png",
+    mimeType: "image/png",
+    previewUrl: "blob:temporary",
+    size: 12,
+    storageState: "stored",
+  });
+
+  const parsed = parseWorkspaceObjectSnapshot(
+    JSON.stringify({
+      activeEntityId: state.activeEntityId,
+      entities: state.entities,
+      nextId: state.nextId,
+      structures: state.structures,
+      version: WORKSPACE_OBJECT_SCHEMA_VERSION,
+    }),
+  );
+
+  assert.equal(parsed.ok, true);
+  assert.equal(parsed.state.entities[0].assetId, "asset-1");
+  assert.equal(parsed.state.entities[0].contentHash, "hash-1");
+  assert.equal(parsed.state.entities[0].previewUrl, undefined);
+  assert.equal(parsed.state.entities[0].storageState, "stored");
 });
 
 test("version 1 document and quote strings migrate to version 2 block bodies", () => {

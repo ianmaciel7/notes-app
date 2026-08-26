@@ -9,6 +9,7 @@ import {
   parseWorkspaceObjectSnapshot,
   serializeWorkspaceObjectState,
 } from "../src/lib/workspace-object-storage.ts";
+import { createCustomStructure } from "../src/lib/workspace-object-types.ts";
 import {
   acceptsFileForType,
   applyQueryDescription,
@@ -212,6 +213,106 @@ test("document menu lifecycle changes type, duplicates, and deletes canonically"
   state = reduce(state, { type: "deleteEntity", id: "created-page-2" });
   assert.deepEqual(countEntitiesByType(state.entities), { page: 1 });
   assert.equal(state.activeEntityId, "created-page-1");
+});
+
+test("linked entity property writes update inverse values once atomically", () => {
+  const author = {
+    id: "author",
+    inversePropertyDefinitionId: "books",
+    multiple: false,
+    name: "Author",
+    ownership: "normal",
+    targetStructureIds: ["person-custom"],
+    valueType: "entity",
+    writable: true,
+  };
+  const books = {
+    id: "books",
+    inversePropertyDefinitionId: "author",
+    multiple: true,
+    name: "Books",
+    ownership: "normal",
+    targetStructureIds: ["book-custom"],
+    valueType: "entity",
+    writable: true,
+  };
+  let registry = createCustomStructure(
+    createInitialWorkspaceObjectState().structures,
+    {
+      iconName: "book",
+      lifecycleKind: "document",
+      pluralName: "Books",
+      propertyDefinitions: [author],
+      singularName: "Book",
+      tone: "purple",
+    },
+    () => "book-custom",
+  ).value;
+  registry = createCustomStructure(
+    registry,
+    {
+      iconName: "person",
+      lifecycleKind: "document",
+      pluralName: "People",
+      propertyDefinitions: [books],
+      singularName: "Person",
+      tone: "orange",
+    },
+    () => "person-custom",
+  ).value;
+
+  let state = { ...createInitialWorkspaceObjectState(), structures: registry };
+  state = reduce(
+    state,
+    { type: "beginCreate", objectTypeId: "book-custom" },
+    { type: "beginCreate", objectTypeId: "person-custom" },
+    {
+      id: "created-book-custom-1",
+      propertyId: "author",
+      type: "setLinkedEntityPropertyValue",
+      value: "created-person-custom-2",
+    },
+  );
+
+  assert.deepEqual(state.entities[0].propertyValues.author, {
+    entity: [{ id: "created-person-custom-2" }],
+    type: "entity",
+  });
+  assert.deepEqual(state.entities[1].propertyValues.books, {
+    entity: [{ id: "created-book-custom-1" }],
+    type: "entity",
+  });
+
+  state = workspaceObjectReducer(state, {
+    id: "created-book-custom-1",
+    propertyId: "author",
+    type: "setLinkedEntityPropertyValue",
+    value: [],
+  });
+  assert.equal("author" in state.entities[0].propertyValues, true);
+  assert.deepEqual(state.entities[0].propertyValues.author.entity, []);
+  assert.deepEqual(state.entities[1].propertyValues.books.entity, []);
+});
+
+test("entity deletion is guarded while reverse references exist", () => {
+  const state = reduce(
+    createInitialWorkspaceObjectState(),
+    { type: "beginCreate", objectTypeId: "page" },
+    { type: "beginCreate", objectTypeId: "tag" },
+    {
+      id: "created-page-1",
+      propertyId: "tags",
+      type: "setPropertyValue",
+      value: "created-tag-2",
+    },
+    { type: "deleteEntity", id: "created-tag-2" },
+  );
+
+  assert.equal(state.error, "referenced-object");
+  assert.equal(
+    state.entities.some((entity) => entity.id === "created-tag-2"),
+    true,
+  );
 });
 
 test("query descriptions produce deterministic filters and local results", () => {
@@ -450,7 +551,7 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
     "query-object-editor",
     "file-object-editor",
   ]) {
-    assert.match(content, new RegExp(`data-slot="${slot}"`));
+    assert.match(content, new RegExp(`(?:data-slot|dataSlot)="${slot}"`));
   }
   for (const catalog of [en, es, pt]) {
     const messages = JSON.parse(catalog);

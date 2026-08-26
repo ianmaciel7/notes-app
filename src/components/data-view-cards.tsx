@@ -1,6 +1,7 @@
 "use client";
 
 import { ObjectView, objectConfig } from "@/components/object-view-renderer";
+import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import type { ProjectedDataViewProps } from "@/components/object-view-types";
 import type { WorkspaceDataView } from "@/lib/workspace-object-views";
 
@@ -44,16 +45,22 @@ function DataViewCards(props: ProjectedDataViewProps) {
       }
     >
       {props.entities.map((entity) => (
-        <ObjectView
-          {...props}
+        <div
           key={entity.id}
+          data-lifecycle-contract={
+            objectLifecycleContractSlots.ObjectProjectionCard
+          }
           className={wall ? "mb-3 break-inside-avoid" : undefined}
-          config={objectConfig(
-            objectViewKind,
-            presentation.visiblePropertyIds,
-          )}
-          entity={entity}
-        />
+        >
+          <ObjectView
+            {...props}
+            config={objectConfig(
+              objectViewKind,
+              presentation.visiblePropertyIds,
+            )}
+            entity={entity}
+          />
+        </div>
       ))}
       {props.trailingContent}
     </div>

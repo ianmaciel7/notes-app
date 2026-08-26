@@ -169,9 +169,16 @@ test("the localized workspace boots into the production workspace composition", 
   assert.match(header, /useState\("untitled"\)/);
   assert.match(
     header,
-    /const \[sideTabs, setSideTabs\] = React\.useState<AppHeaderTab\[\]>\(\(\) => \[[\s\S]*?id: "explore"[\s\S]*?label: t\("primaryNavigation\.explore"\)/,
+    /function createInitialSideTabs\([\s\S]*?id: "explore"[\s\S]*?label: t\("explore\.title"\)/,
   );
-  assert.doesNotMatch(header, /const initialSideTabs/);
+  assert.match(
+    header,
+    /const initialSideTabs = React\.useMemo\(\(\) => createInitialSideTabs\(t\), \[t\]\)/,
+  );
+  assert.match(
+    header,
+    /const \[sideTabs, setSideTabs\] = React\.useState\(\(\) => initialSideTabs\)/,
+  );
   assert.match(header, /MAIN_DRAFT_TAB_ID = "new-tab-draft"/);
   assert.match(
     header,
@@ -256,7 +263,7 @@ test("the localized workspace boots into the production workspace composition", 
   assert.match(fixture, /"noCollection"[\s\S]*?"untagged"[\s\S]*?"noBacklinks"/);
   assert.match(fixture, /section === "recent"\) setView\("all"\)/);
   assert.match(header, /type: "importFile"/);
-  assert.match(workspaceObjects, /action\.type === "importFile"/);
+  assert.match(workspaceObjects, /importFile: importWorkspaceObject/);
   assert.match(objectIcons, /objectIconToneTextClass/);
   assert.match(objectIcons, /objectIconToneBadgeClass/);
   assert.match(objectIcons, /objectTypeDefinitions/);

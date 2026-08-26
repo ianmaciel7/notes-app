@@ -23,7 +23,7 @@
 - [x] 4.2 Align the slash menu's leading command order, row geometry, icon treatment, title, active state, width, and keyboard legend with the authenticated reference.
 - [x] 4.3 Anchor the slash menu to the current caret with `coordsAtPos` fallback, fixed viewport coordinates, edge clamping, and below/above placement fallback.
 - [ ] 4.4 Browser-verify slash positioning at ordinary, scrolled, and viewport-edge caret positions with no `(0,0)` fallback.
-- [ ] 4.5 Browser-verify the zero-delay selection BubbleMenu/link-editing contract while preserving selection.
+- [x] 4.5 Browser-verify the zero-delay selection BubbleMenu/link-editing contract while preserving selection.
 - [x] 4.6 Implement independent plus/six-dot controls and explicit insertion selection.
 - [x] 4.7 Position the combined 36px handle immediately left of the hovered block using a fixed block-relative virtual element.
 - [x] 4.8 Replace native `title` tooltips with localized shared Tooltip surfaces for plus and grip actions.

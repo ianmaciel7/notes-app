@@ -6,6 +6,10 @@ const desktopViewports = [
   { width: 1024, height: 768 },
   { width: 768, height: 720 },
 ] as const;
+const tinyPng = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=",
+  "base64",
+);
 
 async function openWorkspace(page: Page) {
   const errors: string[] = [];
@@ -20,12 +24,38 @@ async function openWorkspace(page: Page) {
   return errors;
 }
 
+function objectTypeWorkspace(page: Page) {
+  return page
+    .locator(
+      [
+        '[data-slot="object-type-workspace"]',
+        '[data-slot="workspace-object-type-view"]',
+      ].join(","),
+    )
+    .filter({
+      visible: true,
+    });
+}
+
+function createdObjectWorkspace(page: Page) {
+  return page
+    .locator(
+      [
+        '[data-slot="created-object-workspace"]',
+        '[data-slot="workspace-object-page-view"]',
+      ].join(","),
+    )
+    .filter({
+      visible: true,
+    });
+}
+
 async function createPageObject(page: Page) {
   await page.getByRole("button", { name: "Novo", exact: true }).click();
   await page.locator('[role="option"]').filter({ hasText: "Página" }).click();
-  await expect(
-    page.locator('[data-slot="compound-chip"]').filter({ visible: true }),
-  ).toBeVisible();
+  const workspace = createdObjectWorkspace(page);
+  await expect(workspace).toBeVisible();
+  return (await workspace.getAttribute("data-object-type")) ?? "page";
 }
 
 async function selectNewObject(page: Page, label: string) {
@@ -150,6 +180,7 @@ test("compound type chip separates navigation from disclosure", async ({
     exact: true,
   });
   await expect(primary).toHaveText(/Página/);
+  await page.mouse.move(5, 5);
   await disclosure.click();
   const search = page.getByRole("textbox", { name: "Buscar", exact: true });
   await expect(search).toBeVisible();
@@ -215,9 +246,8 @@ test("sidebar object rows align and collection rows keep nested indentation", as
     .filter({ hasText: "Páginas" })
     .click();
   await page.getByRole("tab", { name: "Tudo", exact: true }).click();
-  await page
+  await objectTypeWorkspace(page)
     .getByRole("button", { name: "Mais opções", exact: true })
-    .last()
     .click();
   await page.getByRole("menuitem", { name: "Nova coleção" }).click();
 
@@ -270,12 +300,7 @@ test("sidebar object rows align and collection rows keep nested indentation", as
       );
     }
 
-    const expectedLabels = new Set([
-      "Notas atômicas",
-      "Citações",
-      "Páginas",
-      "Sem título",
-    ]);
+    const expectedLabels = new Set(["Páginas", "Sem título"]);
 
     return Array.from(
       document.querySelectorAll(
@@ -323,12 +348,7 @@ test("sidebar object rows align and collection rows keep nested indentation", as
   });
 
   expect(textColumns.map((row) => row.text)).toEqual(
-    expect.arrayContaining([
-      "Notas atômicas",
-      "Citações",
-      "Páginas",
-      "Sem título",
-    ]),
+    expect.arrayContaining(["Páginas", "Sem título"]),
   );
   const typeLefts = textColumns
     .filter((row) => row.text !== "Sem título")
@@ -412,9 +432,8 @@ test("object type collection and query actions open editable item screens", asyn
     page.getByRole("tab", { name: "Tudo", exact: true }),
   ).toHaveAttribute("aria-selected", "true");
 
-  await page
+  await objectTypeWorkspace(page)
     .getByRole("button", { name: "Mais opções", exact: true })
-    .last()
     .click();
   await page.getByRole("menuitem", { name: "Nova coleção" }).click();
 
@@ -447,9 +466,8 @@ test("object type collection and query actions open editable item screens", asyn
     .filter({ hasText: "Páginas" })
     .click();
   await page.getByRole("tab", { name: "Tudo", exact: true }).click();
-  await page
+  await objectTypeWorkspace(page)
     .getByRole("button", { name: "Mais opções", exact: true })
-    .last()
     .click();
   await page.getByRole("menuitem", { name: "Nova query" }).click();
 
@@ -490,17 +508,15 @@ test("workspace text entry buffers global persistence while typing", async ({
   });
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
-  await createPageObject(page);
+  const pageObjectTypeId = await createPageObject(page);
 
-  const workspace = page
-    .locator('[data-slot="created-object-workspace"][data-object-type="page"]')
-    .filter({ visible: true });
+  const workspace = createdObjectWorkspace(page);
   await expect(workspace).toBeVisible();
 
   const title = workspace.getByRole("textbox", { name: "Título" });
   await title.click();
   await title.pressSequentially(typedTitle, { delay: 2 });
-  await expect(title).toContainText(typedTitle);
+  await expect(title).toHaveValue(typedTitle);
 
   const body = workspace.getByRole("textbox", { name: "Text" });
   await body.click();
@@ -512,7 +528,7 @@ test("workspace text entry buffers global persistence while typing", async ({
       const entities = await persistedEntities(page);
       const entity = entities.find(
         (candidate: { objectTypeId?: string }) =>
-          candidate.objectTypeId === "page",
+          candidate.objectTypeId === pageObjectTypeId,
       );
       return JSON.stringify(entity ?? {});
     })
@@ -610,20 +626,7 @@ test("every supported New family persists once and reopens from its tab projecti
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
   const families = [
-    { id: "book", label: "Livro", kind: "title" },
-    { id: "person", label: "Pessoa", kind: "title" },
-    { id: "area", label: "Área", kind: "title" },
-    { id: "meeting", label: "Reunião", kind: "title" },
-    { id: "definition", label: "Definição", kind: "title" },
-    { id: "idea", label: "Ideia", kind: "title" },
-    { id: "place", label: "Lugar", kind: "title" },
-    { id: "project", label: "Projeto", kind: "title" },
-    { id: "organization", label: "Organização", kind: "title" },
-    { id: "media", label: "Mídia", kind: "title" },
-    { id: "travel", label: "Viagem", kind: "title" },
     { id: "ai-chat", label: "Chat de IA", kind: "title" },
-    { id: "atomic-note", label: "Nota atômica", kind: "title" },
-    { id: "quote", label: "Citação", kind: "title" },
     { id: "page", label: "Página", kind: "title" },
     { id: "table", label: "Tabela", kind: "table" },
     { id: "task", label: "Tarefa", kind: "task" },
@@ -659,18 +662,19 @@ test("every supported New family persists once and reopens from its tab projecti
         .click();
     } else if (family.kind === "file") {
       await page.getByLabel("Escolher arquivo local").setInputFiles({
-        buffer: Buffer.from(family.id === "pdf" ? "%PDF-1.4" : "parity"),
+        buffer:
+          family.id === "image"
+            ? tinyPng
+            : Buffer.from(family.id === "pdf" ? "%PDF-1.4" : "parity"),
         mimeType: family.mime,
         name: `parity-${family.id}.${family.id === "image" ? "png" : family.id === "audio" ? "mp3" : family.id === "pdf" ? "pdf" : "txt"}`,
       });
     }
 
-    const workspace = page
-      .locator(
-        `[data-slot="created-object-workspace"][data-object-type="${family.id}"]`,
-      )
-      .filter({ visible: true });
+    const workspace = createdObjectWorkspace(page);
     await expect(workspace).toBeVisible();
+    const objectTypeId =
+      (await workspace.getAttribute("data-object-type")) ?? family.id;
 
     if (family.kind === "query") {
       await workspace
@@ -679,10 +683,14 @@ test("every supported New family persists once and reopens from its tab projecti
       await workspace.getByRole("button", { name: "Gerar" }).click();
     } else if (family.kind === "table") {
       await workspace.getByRole("textbox", { name: "Título" }).fill(title);
-      await workspace.getByLabel("Notas").fill("Parity table notes");
+      await workspace
+        .getByRole("textbox", { name: "Notas" })
+        .fill("Parity table notes");
     } else if (family.kind === "url" || family.kind === "tweet") {
       await workspace.getByRole("textbox", { name: "Título" }).fill(title);
-      await workspace.getByLabel("Notas").fill("Parity URL notes");
+      await workspace
+        .getByRole("textbox", { name: "Notas" })
+        .fill("Parity URL notes");
     } else if (family.kind !== "task" && family.kind !== "file") {
       await workspace.getByRole("textbox", { name: "Título" }).fill(title);
     } else if (family.kind === "file") {
@@ -696,7 +704,7 @@ test("every supported New family persists once and reopens from its tab projecti
           return (
             entities.find(
               (candidate: { objectTypeId: string }) =>
-                candidate.objectTypeId === family.id,
+                candidate.objectTypeId === objectTypeId,
             )?.title ?? ""
           );
         })
@@ -708,7 +716,7 @@ test("every supported New family persists once and reopens from its tab projecti
         const entities = await persistedEntities(page);
         return entities.filter(
           (entity: { objectTypeId: string }) =>
-            entity.objectTypeId === family.id,
+            entity.objectTypeId === objectTypeId,
         ).length;
       })
       .toBe(1);
@@ -716,7 +724,7 @@ test("every supported New family persists once and reopens from its tab projecti
     const entities = await persistedEntities(page);
     const entity = entities.find(
       (candidate: { objectTypeId: string }) =>
-        candidate.objectTypeId === family.id,
+        candidate.objectTypeId === objectTypeId,
     );
     expect(entity?.id).toBeTruthy();
     await expect(

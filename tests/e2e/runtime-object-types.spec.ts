@@ -63,14 +63,44 @@ async function createObject(page: Page, structureLabel: string, title: string) {
     .fill(`Conteúdo de ${title}`);
 }
 
+test("object type studio keeps keyboard focus and dismisses predictably", async ({
+  page,
+}) => {
+  const errors = await openCleanWorkspace(page);
+  const trigger = page.locator(
+    '[data-slot="app-sidebar-object-type-studio"] [data-slot="app-sidebar-section-action"]',
+  );
+
+  await trigger.focus();
+  await expect(trigger).toBeFocused();
+  await page.keyboard.press("Enter");
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await page
+    .locator('[data-slot="app-sidebar-object-type-card"]')
+    .filter({ hasText: "Crie o seu próprio" })
+    .click();
+  await expect(dialog.getByLabel("Nome", { exact: true })).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+
+  await trigger.click();
+  await expect(dialog).toBeVisible();
+  await page.mouse.click(4, 4);
+  await expect(dialog).toBeHidden();
+  expect(errors).toEqual([]);
+});
+
 test("runtime custom Structure creates objects once and survives reload", async ({
   page,
 }) => {
   const errors = await openCleanWorkspace(page);
   await createCustomStructure(page, "Nota de pesquisa", "Notas de pesquisa");
 
-  await createObject(page, "Notas de pesquisa", "Primeira pesquisa");
-  await createObject(page, "Notas de pesquisa", "Segunda pesquisa");
+  await createObject(page, "Nota de pesquisa", "Primeira pesquisa");
+  await createObject(page, "Nota de pesquisa", "Segunda pesquisa");
 
   const beforeReload = await page.evaluate((key) => {
     const snapshot = JSON.parse(window.localStorage.getItem(key) ?? "null");
@@ -126,7 +156,7 @@ test("runtime custom Structure creates objects once and survives reload", async 
   expect(errors).toEqual([]);
 });
 
-test("preset instances are independent and metadata propagates canonically", async ({
+test("preset instances are independent, guarded, and propagate metadata canonically", async ({
   page,
 }) => {
   const errors = await openCleanWorkspace(page);
@@ -194,5 +224,95 @@ test("preset instances are independent and metadata propagates canonically", asy
     iconName: "idea",
     tone: "amber",
   });
+
+  await createObject(page, "Livro de estudo", "Livro guardado");
+  const renamedTargetRow = page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Livros de estudo" });
+  await renamedTargetRow.hover();
+  await renamedTargetRow
+    .getByRole("button", { name: "Ações de Livros de estudo", exact: true })
+    .click();
+  await page.getByText("Excluir tipo de objeto", { exact: true }).click();
+  await expect(
+    page.getByText("Não foi possível alterar o tipo de objeto.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  const afterBlockedDelete = await page.evaluate(
+    ({ key, id }) => {
+      const snapshot = JSON.parse(window.localStorage.getItem(key) ?? "null");
+      return {
+        entityCount: snapshot.entities.filter(
+          (item: { objectTypeId: string }) => item.objectTypeId === id,
+        ).length,
+        structureCount: snapshot.structures.filter(
+          (item: { id: string }) => item.id === id,
+        ).length,
+      };
+    },
+    { key: storageKey, id: presetIds[1] },
+  );
+  expect(afterBlockedDelete).toEqual({ entityCount: 1, structureCount: 1 });
+  expect(errors).toEqual([]);
+});
+
+test("unknown Structure references recover without partial hydration", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.addInitScript((key) => {
+    window.localStorage.setItem(
+      key,
+      JSON.stringify({
+        activeEntityId: "entity-1",
+        entities: [
+          {
+            body: {
+              doc: { content: [{ type: "paragraph" }], type: "doc" },
+              schemaVersion: 1,
+            },
+            collections: [],
+            createdAt: "2026-08-25T00:00:00.000Z",
+            id: "entity-1",
+            kind: "document",
+            objectTypeId: "missing-runtime-structure",
+            tags: [],
+            title: "Fonte preservada",
+          },
+        ],
+        nextId: 2,
+        structures: [],
+        version: 4,
+      }),
+    );
+  }, storageKey);
+  await page.goto("/pt-BR", { waitUntil: "domcontentloaded", timeout: 60_000 });
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect
+    .poll(async () =>
+      page.evaluate((key) => {
+        const snapshot = JSON.parse(window.localStorage.getItem(key) ?? "null");
+        return {
+          entities: snapshot.entities.length,
+          hasInvalidReference: snapshot.entities.some(
+            (item: { objectTypeId: string }) =>
+              item.objectTypeId === "missing-runtime-structure",
+          ),
+          structures: snapshot.structures.filter(
+            (item: { singularName: string }) => item.singularName === "Fonte",
+          ).length,
+        };
+      }, storageKey),
+    )
+    .toEqual({
+      entities: 0,
+      hasInvalidReference: false,
+      structures: 0,
+    });
   expect(errors).toEqual([]);
 });

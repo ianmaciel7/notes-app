@@ -29,8 +29,8 @@
 - [ ] 4.5 Specify and implement per-object creation/click/write contracts for Page, Atomic note, Quote, Table, Task, Weblink, Tweet, Tag, Query, Image, PDF, Audio, File, Book, Person, Area, Meeting, Definition, Idea, Place, Project, Organization, Media, Travel, AI chat, and custom object types while preserving local data.
 - [ ] 4.6 Verify each created object updates the active tab, editor, sidebar/object-type count, search/query/list projections, selected/post-click visuals, and persisted entity exactly once.
 - [x] 4.7 Treat Archive as a reserved/non-creatable registry type unless a separate requirement makes it user-instantiable.
-- [ ] 4.8 Define and consume reusable lifecycle contracts for `ObjectCreationTrigger`, `ObjectCreationMenu`, `ObjectTypeOptionRow`, `ObjectCaptureSurface`, `ObjectEditorShell`, `EditableObjectTitle`, `EditableObjectBody`, `ObjectField`, `ObjectFieldGroup`, `ObjectValidationMessage`, `ObjectAttachmentControl`, `ObjectTab`, `ObjectProjectionRow`, `ObjectProjectionCard`, `ObjectCountBadge`, `ObjectTypePresetCard`, `ObjectTypeDetailsPanel`, `CustomObjectTypeForm`, and `ObjectIconTonePreview`.
-- [ ] 4.9 Remove duplicated lifecycle geometry, typography, icon treatment, focus, hover, pressed, selected, open, post-click, validation, Escape, outside-click, and transition styling from object-specific components touched by this change.
+- [x] 4.8 Define and consume reusable lifecycle contracts for `ObjectCreationTrigger`, `ObjectCreationMenu`, `ObjectTypeOptionRow`, `ObjectCaptureSurface`, `ObjectEditorShell`, `EditableObjectTitle`, `EditableObjectBody`, `ObjectField`, `ObjectFieldGroup`, `ObjectValidationMessage`, `ObjectAttachmentControl`, `ObjectTab`, `ObjectProjectionRow`, `ObjectProjectionCard`, `ObjectCountBadge`, `ObjectTypePresetCard`, `ObjectTypeDetailsPanel`, `CustomObjectTypeForm`, and `ObjectIconTonePreview`.
+- [x] 4.9 Remove duplicated lifecycle geometry, typography, icon treatment, focus, hover, pressed, selected, open, post-click, validation, Escape, outside-click, and transition styling from object-specific components touched by this change.
 
 ## 5. Automated interaction coverage
 

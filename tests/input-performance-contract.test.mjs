@@ -29,7 +29,10 @@ test("workspace editors use buffered commits for text-heavy object fields", asyn
 
   assert.match(workspaceContent, /function BufferedTextInput/);
   assert.match(workspaceContent, /function BufferedAutosizeTextarea/);
-  assert.match(workspaceContent, /function EditableTitle[\s\S]*useBufferedTextCommit/);
+  assert.match(
+    workspaceContent,
+    /function EditableObjectTitle[\s\S]*useBufferedTextCommit/,
+  );
   assert.doesNotMatch(
     workspaceContent,
     /onChange=\{\(event\) => update\(\{ (body|notes|description): event\.target\.value \}\)\}/,

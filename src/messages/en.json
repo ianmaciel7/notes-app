@@ -137,6 +137,19 @@
       "relevantContent": "Relevant content",
       "title": "Explore"
     },
+    "linking": {
+      "convertMention": "Convert",
+      "editTransclusion": "Edit embedded source",
+      "embed": "Embed",
+      "linkObject": "Link {title}",
+      "missingTarget": "Missing target: {id}",
+      "noBacklinks": "No backlinks yet.",
+      "noGraphEdges": "No contextual graph edges yet.",
+      "noObjectsInside": "No objects inside yet.",
+      "references": "{count, plural, one {# reference} other {# references}}",
+      "title": "Links and references",
+      "unlinkedMentions": "Unlinked mentions"
+    },
     "footer": {
       "objectTypes": "Object types",
       "profile": "Personal profile",
@@ -201,6 +214,10 @@
       "new": "New tab",
       "openInSidePanel": "Open in side panel",
       "openedInSidePanel": "Opened {label} in the side panel",
+      "preview": {
+        "object": "Object",
+        "objectType": "Object type"
+      },
       "recentlyOpened": "Recently opened",
       "search": "Search tabs",
       "searchContent": "Search content for new tab",
@@ -272,6 +289,33 @@
         "tweet": "Tweet",
         "weblink": "Weblink"
       },
+      "objectTypePlurals": {
+        "ai-chat": "AI chats",
+        "area": "Areas",
+        "atomic-note": "Atomic notes",
+        "audio": "Audio",
+        "book": "Books",
+        "definition": "Definitions",
+        "file": "Files",
+        "idea": "Ideas",
+        "image": "Images",
+        "media": "Media",
+        "meeting": "Meetings",
+        "organization": "Organizations",
+        "page": "Pages",
+        "pdf": "PDFs",
+        "person": "People",
+        "place": "Places",
+        "project": "Projects",
+        "query": "Queries",
+        "quote": "Quotes",
+        "table": "Tables",
+        "tag": "Tags",
+        "task": "Tasks",
+        "travel": "Travel",
+        "tweet": "Tweets",
+        "weblink": "Weblinks"
+      },
       "title": "Add new object type",
       "trigger": "Add object type",
       "operationFailed": "The object type could not be changed."
@@ -282,6 +326,7 @@
       "errors": {
         "incompatible-file": "Choose a file compatible with this object type.",
         "invalid-url": "Enter a valid URL for this object type.",
+        "media-storage-failed": "The file could not be saved locally. Try a smaller file or free up browser storage.",
         "required-title": "Enter a task title.",
         "unsupported-object-type": "This object type is not supported."
       },
@@ -294,7 +339,10 @@
           "pdf": "Add PDF"
         },
         "description": "The file stays on this device; only its metadata is saved.",
+        "download": "Download",
         "name": "Name",
+        "remove": "Remove",
+        "replace": "Replace",
         "reselect": "Select the local file again to restore its preview.",
         "reselectAction": "Select file again",
         "size": "Size",

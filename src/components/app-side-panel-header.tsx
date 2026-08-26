@@ -165,13 +165,19 @@ function useElementWidth<T extends HTMLElement>() {
   React.useEffect(() => {
     const element = ref.current;
     if (!element) return;
+    let mounted = true;
 
-    const update = () => setWidth(element.getBoundingClientRect().width);
+    const update = () => {
+      if (mounted) setWidth(element.getBoundingClientRect().width);
+    };
     update();
 
     const observer = new ResizeObserver(update);
     observer.observe(element);
-    return () => observer.disconnect();
+    return () => {
+      mounted = false;
+      observer.disconnect();
+    };
   }, []);
 
   return [ref, width] as const;

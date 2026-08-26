@@ -50,6 +50,7 @@ import {
   objectIconToneBadgeClass,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
+import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -62,6 +63,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import {
+  createBrowserMediaStorageAdapter,
+  createMediaUrlRegistry,
+  garbageCollectMediaAssets,
+  readMediaAssetBlob,
+  writeMediaAsset,
+  type MediaStorageAdapter,
+  type MediaUrlRegistry,
+} from "@/lib/workspace-media-storage";
 import {
   selectCreatableStructures,
   type CreateStructureInput,
@@ -96,7 +106,114 @@ import {
   workspaceObjectReducer,
 } from "@/lib/workspace-objects";
 
+function createInitialMainTabs(
+  t: ReturnType<typeof useTranslations<"workspace">>,
+): AppHeaderTab[] {
+  const objectTypeEyebrow = t("tabs.preview.objectType");
+  const atomicNoteLabel = t("objectTypeStudio.objectTypePlurals.atomic-note");
+  const quoteLabel = t("objectTypeStudio.objectTypePlurals.quote");
+  const pageLabel = t("objectTypeStudio.objectTypePlurals.page");
+  return [
+    {
+      id: "atomic-note",
+      label: atomicNoteLabel,
+      icon: ObjectAtomicNoteIcon,
+      iconClassName: objectIconToneBadgeClass.amber,
+      preview: (
+        <TabPreview
+          eyebrow={objectTypeEyebrow}
+          title={atomicNoteLabel}
+        />
+      ),
+    },
+    {
+      id: "quote",
+      label: quoteLabel,
+      icon: ObjectQuoteIcon,
+      iconClassName: objectIconToneBadgeClass.rose,
+      preview: (
+        <TabPreview
+          eyebrow={objectTypeEyebrow}
+          title={quoteLabel}
+        />
+      ),
+    },
+    {
+      id: "page",
+      label: pageLabel,
+      icon: ObjectPageIcon,
+      iconClassName: objectIconToneBadgeClass.blue,
+      preview: (
+        <TabPreview eyebrow={objectTypeEyebrow} title={pageLabel} />
+      ),
+    },
+    {
+      id: "untitled",
+      label: t("lifecycle.untitled"),
+      icon: ObjectQuoteIcon,
+      iconClassName: objectIconToneBadgeClass.rose,
+      preview: (
+        <TabPreview
+          eyebrow={t("objectTypeStudio.objectTypes.quote")}
+          title={t("lifecycle.untitled")}
+        />
+      ),
+    },
+  ];
+}
+
+function createInitialSideTabs(
+  t: ReturnType<typeof useTranslations<"workspace">>,
+): AppHeaderTab[] {
+  return [
+    {
+      id: "explore",
+      label: t("explore.title"),
+      icon: AppHeaderCompassIcon,
+      iconClassName: objectIconToneBadgeClass.gray,
+      draggable: false,
+    },
+  ];
+}
+
 const MAIN_DRAFT_TAB_ID = "new-tab-draft";
+
+function createSpecialSideTabs(
+  t: ReturnType<typeof useTranslations<"workspace">>,
+): Record<SidePanelSpecialEntryId, Omit<AppHeaderTab, "id">> {
+  return {
+    graphView: {
+      label: t("explore.graphView"),
+      icon: AppHeaderGraphIcon,
+      iconClassName: objectIconToneBadgeClass.gray,
+    },
+    backlinks: {
+      label: t("explore.backlinks"),
+      icon: ObjectPageIcon,
+      iconClassName: objectIconToneBadgeClass.gray,
+    },
+    objectsInside: {
+      label: t("explore.objectsInside"),
+      icon: ObjectAreaIcon,
+      iconClassName: objectIconToneBadgeClass.gray,
+    },
+    relatedContent: {
+      label: t("explore.relatedContent"),
+      icon: AppHeaderGraphIcon,
+      iconClassName: objectIconToneBadgeClass.gray,
+    },
+    aiAssistantChat: {
+      label: t("explore.aiChat"),
+      icon: ObjectAiChatIcon,
+      iconClassName: objectIconToneBadgeClass.purple,
+    },
+    localSpaceQuery: {
+      label: t("primaryNavigation.search"),
+      icon: ObjectQueryIcon,
+      iconClassName: objectIconToneBadgeClass.emerald,
+    },
+  };
+}
 
 type ParsedCollectionPinnedId = {
   objectTypeId: string;
@@ -104,6 +221,19 @@ type ParsedCollectionPinnedId = {
 };
 
 const WORKSPACE_SIDEBAR_COLLECTION_ID_PREFIX = "collection:";
+
+let browserMediaStorageAdapter: MediaStorageAdapter | null = null;
+let browserMediaUrlRegistry: MediaUrlRegistry | null = null;
+
+function getMediaStorageAdapter(): MediaStorageAdapter {
+  browserMediaStorageAdapter ??= createBrowserMediaStorageAdapter();
+  return browserMediaStorageAdapter;
+}
+
+function getMediaUrlRegistry(): MediaUrlRegistry {
+  browserMediaUrlRegistry ??= createMediaUrlRegistry();
+  return browserMediaUrlRegistry;
+}
 
 function parsePinnedCollectionId(
   value: string,
@@ -123,9 +253,7 @@ function parsePinnedCollectionId(
 
   try {
     const collection = decodeURIComponent(encodedCollection);
-    return collection.trim().length > 0
-      ? { objectTypeId, collection }
-      : null;
+    return collection.trim().length > 0 ? { objectTypeId, collection } : null;
   } catch {
     return null;
   }
@@ -141,7 +269,9 @@ function getPinnedEntityFromId(
 ): AppSidebarPinnedEntity | null {
   const entity = workspaceEntities.find((item) => item.id === id);
   if (entity) {
-    const structure = structures.find((item) => item.id === entity.objectTypeId);
+    const structure = structures.find(
+      (item) => item.id === entity.objectTypeId,
+    );
     if (!structure) return null;
     const definition = objectTypeDefinitionById[structure.iconName];
     return {
@@ -168,7 +298,8 @@ function getPinnedEntityFromId(
     (item) => item.id === parsedCollection.objectTypeId,
   );
   if (!collectionType) return null;
-  const collections = objectTypeCollections[parsedCollection.objectTypeId] ?? [];
+  const collections =
+    objectTypeCollections[parsedCollection.objectTypeId] ?? [];
   if (!collections.includes(parsedCollection.collection)) return null;
   return {
     id,
@@ -377,12 +508,23 @@ type WorkspaceContextValue = {
     objectTypeId: string,
     objectTypeLabel?: string,
   ) => void;
+  createOrAppendDailyNote: (
+    date: string,
+    appendText?: string,
+    template?: string,
+  ) => void;
   createWorkspacePage: (title: string) => void;
   importWorkspaceFiles: (objectTypeId: string, files: File[]) => Promise<void>;
   cancelWorkspaceDraft: () => void;
   commitWorkspaceFile: (file: File) => void;
   commitWorkspaceTask: (title: string) => void;
   commitWorkspaceUrl: (url: string) => void;
+  setWorkspaceEntityPropertyValue: (
+    id: string,
+    propertyId: string,
+    value: unknown,
+  ) => void;
+  removeWorkspaceEntityPropertyValue: (id: string, propertyId: string) => void;
   updateWorkspaceEntity: (id: string, patch: Record<string, unknown>) => void;
   changeWorkspaceEntityType: (id: string, objectTypeId: "tag" | "task") => void;
   deleteWorkspaceEntity: (id: string) => void;
@@ -407,48 +549,13 @@ function useWorkspace() {
 
 function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const t = useTranslations("workspace");
+  const initialMainTabs = React.useMemo(() => createInitialMainTabs(t), [t]);
+  const initialSideTabs = React.useMemo(() => createInitialSideTabs(t), [t]);
   const [spaces, setSpaces] = React.useState(initialSpaces);
   const [spaceId, setSpaceId] = React.useState("labs");
-  const [mainTabs, setMainTabs] = React.useState<AppHeaderTab[]>(() => [
-    {
-      id: "atomic-note",
-      label: t("tabs.initialAtomicNotes"),
-      icon: ObjectAtomicNoteIcon,
-      iconClassName: objectIconToneBadgeClass.amber,
-      preview: <TabPreview eyebrow={t("tabs.initialObjectType")} title={t("tabs.initialAtomicNotes")} />,
-    },
-    {
-      id: "quote",
-      label: t("tabs.initialQuotes"),
-      icon: ObjectQuoteIcon,
-      iconClassName: objectIconToneBadgeClass.rose,
-      preview: <TabPreview eyebrow={t("tabs.initialObjectType")} title={t("tabs.initialQuotes")} />,
-    },
-    {
-      id: "page",
-      label: t("tabs.initialPages"),
-      icon: ObjectPageIcon,
-      iconClassName: objectIconToneBadgeClass.blue,
-      preview: <TabPreview eyebrow={t("tabs.initialObjectType")} title={t("tabs.initialPages")} />,
-    },
-    {
-      id: "untitled",
-      label: t("lifecycle.untitled"),
-      icon: ObjectQuoteIcon,
-      iconClassName: objectIconToneBadgeClass.rose,
-      preview: <TabPreview eyebrow={t("objects.quote")} title={t("lifecycle.untitled")} />,
-    },
-  ]);
+  const [mainTabs, setMainTabs] = React.useState(() => initialMainTabs);
   const [mainValue, setMainValue] = React.useState("untitled");
-  const [sideTabs, setSideTabs] = React.useState<AppHeaderTab[]>(() => [
-    {
-      id: "explore",
-      label: t("primaryNavigation.explore"),
-      icon: AppHeaderCompassIcon,
-      iconClassName: objectIconToneBadgeClass.gray,
-      draggable: false,
-    },
-  ]);
+  const [sideTabs, setSideTabs] = React.useState(() => initialSideTabs);
   const [sideValue, setSideValue] = React.useState("explore");
   const [focusMode, setFocusMode] = React.useState(false);
   const [sideSearchOpen, setSideSearchOpen] = React.useState(false);
@@ -499,16 +606,20 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     return selectCreatableStructures(workspaceObjects.structures).map(
       (structure) => {
         const definition = objectTypeDefinitionById[structure.iconName];
+        const isRuntimeNamed =
+          structure.ownership === "custom" || structure.ownership === "legacy";
         return {
           id: structure.id,
           iconName: structure.iconName,
           label:
-            structure.ownership === "custom"
+            isRuntimeNamed
               ? structure.pluralName
-              : t(`objectTypeStudio.objectTypes.${structure.id}`),
+              : t(`objectTypeStudio.objectTypePlurals.${structure.id}`),
           icon: definition.icon,
           ownership: structure.ownership,
-          singularLabel: structure.singularName,
+          singularLabel: isRuntimeNamed
+            ? structure.singularName
+            : t(`objectTypeStudio.objectTypes.${structure.id}`),
           tone: structure.tone,
           count: createdCounts[structure.id] ?? 0,
         };
@@ -690,6 +801,40 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       serializeWorkspaceObjectState(workspaceObjects),
     );
   }, [storageReady, workspaceObjects]);
+
+  React.useEffect(() => {
+    if (!storageReady || workspaceObjects.hydrationStatus === "seed") return;
+    let active = true;
+    const adapter = getMediaStorageAdapter();
+    const urls = getMediaUrlRegistry();
+    for (const entity of workspaceObjects.entities) {
+      if (
+        entity.kind !== "file" ||
+        !entity.assetId ||
+        !entity.contentHash ||
+        entity.previewUrl
+      ) {
+        continue;
+      }
+      const assetId = entity.assetId;
+      void readMediaAssetBlob(adapter, {
+        storageKey: `media:${entity.contentHash}`,
+      }).then((result) => {
+        if (!active || !result.ok) return;
+        dispatchWorkspaceObjects({
+          type: "updateEntity",
+          id: entity.id,
+          patch: {
+            previewUrl: urls.create(assetId, result.value),
+            storageState: "stored",
+          },
+        });
+      });
+    }
+    return () => {
+      active = false;
+    };
+  }, [storageReady, workspaceObjects.entities, workspaceObjects.hydrationStatus]);
 
   React.useEffect(() => {
     if (!sidebarStorageReady) return;
@@ -876,7 +1021,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         label: entity.label,
         icon: entity.icon,
         iconClassName: objectIconToneBadgeClass[entity.tone],
-        preview: <TabPreview eyebrow={t("tabs.object")} title={entity.label} />,
+        preview: (
+          <TabPreview eyebrow={t("tabs.preview.object")} title={entity.label} />
+        ),
       });
     },
     [
@@ -897,6 +1044,19 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       }
     },
     [showMessage, t, workspaceObjects.structures],
+  );
+
+  const createOrAppendDailyNote = React.useCallback(
+    (date: string, appendText?: string, template?: string) => {
+      dispatchWorkspaceObjects({
+        type: "createOrAppendDailyNote",
+        appendText,
+        date,
+        spaceId,
+        template,
+      });
+    },
+    [spaceId],
   );
 
   const createWorkspacePage = React.useCallback((title: string) => {
@@ -931,15 +1091,31 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     dispatchWorkspaceObjects({ type: "commitUrl", url });
   }, []);
 
-  const commitWorkspaceFile = React.useCallback((file: File) => {
-    dispatchWorkspaceObjects({
-      type: "commitFile",
-      fileName: file.name,
-      mimeType: file.type,
-      previewUrl: URL.createObjectURL(file),
-      size: file.size,
-    });
-  }, []);
+  const commitWorkspaceFile = React.useCallback(
+    (file: File) => {
+      void writeMediaAsset(
+        getMediaStorageAdapter(),
+        workspaceObjects.draft?.objectTypeId ?? "file",
+        { blob: file, fileName: file.name, mimeType: file.type },
+      ).then((result) => {
+        if (!result.ok) {
+          showMessage(t("lifecycle.errors.media-storage-failed"));
+          return;
+        }
+        dispatchWorkspaceObjects({
+          type: "commitFile",
+          assetId: result.value.id,
+          contentHash: result.value.hash,
+          fileName: file.name,
+          mimeType: file.type,
+          previewUrl: getMediaUrlRegistry().create(result.value.id, file),
+          size: file.size,
+          storageState: result.value.state,
+        });
+      });
+    },
+    [showMessage, t, workspaceObjects.draft?.objectTypeId],
+  );
 
   const importWorkspaceFiles = React.useCallback(
     async (objectTypeId: string, files: File[]) => {
@@ -972,13 +1148,37 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           rejected += 1;
           continue;
         }
+        let asset:
+          | {
+              readonly id: string;
+              readonly hash: string;
+              readonly state: "missing" | "stored";
+            }
+          | undefined;
+        let previewUrl: string | undefined;
+        if (flow === "file") {
+          const writeResult = await writeMediaAsset(
+            getMediaStorageAdapter(),
+            objectTypeId,
+            { blob: file, fileName: file.name, mimeType: file.type },
+          );
+          if (!writeResult.ok) {
+            rejected += 1;
+            continue;
+          }
+          asset = writeResult.value;
+          previewUrl = getMediaUrlRegistry().create(writeResult.value.id, file);
+        }
         dispatchWorkspaceObjects({
           type: "importFile",
+          assetId: asset?.id,
+          contentHash: asset?.hash,
           fileName: file.name,
           mimeType: file.type,
           objectTypeId,
-          previewUrl: flow === "file" ? URL.createObjectURL(file) : undefined,
+          previewUrl,
           size: file.size,
+          storageState: asset?.state,
           text,
         });
         accepted += 1;
@@ -1001,7 +1201,55 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   const updateWorkspaceEntity = React.useCallback(
     (id: string, patch: Record<string, unknown>) => {
+      if (patch.file instanceof File) {
+        const { file, ...rest } = patch;
+        const entity = workspaceObjects.entities.find((item) => item.id === id);
+        void writeMediaAsset(
+          getMediaStorageAdapter(),
+          entity?.objectTypeId ?? "file",
+          { blob: file, fileName: file.name, mimeType: file.type },
+        ).then((result) => {
+          if (!result.ok) {
+            showMessage(t("lifecycle.errors.media-storage-failed"));
+            return;
+          }
+          dispatchWorkspaceObjects({
+            type: "updateEntity",
+            id,
+            patch: {
+              ...rest,
+              assetId: result.value.id,
+              contentHash: result.value.hash,
+              fileName: file.name,
+              mimeType: file.type,
+              previewUrl: getMediaUrlRegistry().create(result.value.id, file),
+              size: file.size,
+              storageState: result.value.state,
+            },
+          });
+        });
+        return;
+      }
       dispatchWorkspaceObjects({ type: "updateEntity", id, patch });
+    },
+    [showMessage, t, workspaceObjects.entities],
+  );
+
+  const setWorkspaceEntityPropertyValue = React.useCallback(
+    (id: string, propertyId: string, value: unknown) => {
+      dispatchWorkspaceObjects({
+        type: "setPropertyValue",
+        id,
+        propertyId,
+        value,
+      });
+    },
+    [],
+  );
+
+  const removeWorkspaceEntityPropertyValue = React.useCallback(
+    (id: string, propertyId: string) => {
+      dispatchWorkspaceObjects({ type: "removePropertyValue", id, propertyId });
     },
     [],
   );
@@ -1013,9 +1261,35 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [],
   );
 
-  const deleteWorkspaceEntity = React.useCallback((id: string) => {
-    dispatchWorkspaceObjects({ type: "deleteEntity", id });
-  }, []);
+  const deleteWorkspaceEntity = React.useCallback(
+    (id: string) => {
+      const entity = workspaceObjects.entities.find((item) => item.id === id);
+      const remainingEntities = workspaceObjects.entities.filter(
+        (item) => item.id !== id,
+      );
+      dispatchWorkspaceObjects({ type: "deleteEntity", id });
+      if (entity?.kind !== "file" || !entity.assetId || !entity.contentHash) return;
+      const references = remainingEntities.flatMap((item) =>
+        item.kind === "file" && item.assetId
+          ? [
+              {
+                assetId: item.assetId,
+                ownerId: item.id,
+                ownerKind: "object" as const,
+              },
+            ]
+          : [],
+      );
+      void garbageCollectMediaAssets(
+        getMediaStorageAdapter(),
+        [{ id: entity.assetId, storageKey: `media:${entity.contentHash}` }],
+        references,
+      ).then((deletedIds) => {
+        for (const deletedId of deletedIds) getMediaUrlRegistry().revoke(deletedId);
+      });
+    },
+    [workspaceObjects.entities],
+  );
 
   const duplicateWorkspaceEntity = React.useCallback((id: string) => {
     dispatchWorkspaceObjects({ type: "duplicateEntity", id });
@@ -1118,12 +1392,15 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       updateWorkspaceStructure,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
+      createOrAppendDailyNote,
       createWorkspacePage,
       importWorkspaceFiles,
       cancelWorkspaceDraft,
       commitWorkspaceFile,
       commitWorkspaceTask,
       commitWorkspaceUrl,
+      setWorkspaceEntityPropertyValue,
+      removeWorkspaceEntityPropertyValue,
       updateWorkspaceEntity,
       changeWorkspaceEntityType,
       deleteWorkspaceEntity,
@@ -1161,12 +1438,15 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       updateWorkspaceStructure,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
+      createOrAppendDailyNote,
       createWorkspacePage,
       importWorkspaceFiles,
       cancelWorkspaceDraft,
       commitWorkspaceFile,
       commitWorkspaceTask,
       commitWorkspaceUrl,
+      setWorkspaceEntityPropertyValue,
+      removeWorkspaceEntityPropertyValue,
       updateWorkspaceEntity,
       changeWorkspaceEntityType,
       deleteWorkspaceEntity,
@@ -1234,6 +1514,9 @@ function WorkspaceDraftError({
     <p
       id="workspace-draft-error"
       role="alert"
+      data-lifecycle-contract={
+        objectLifecycleContractSlots.ObjectValidationMessage
+      }
       className="text-sm text-destructive"
     >
       {t(`lifecycle.errors.${error}`)}
@@ -1285,6 +1568,9 @@ function WorkspaceCreationDialog() {
     >
       <DialogContent
         data-slot="workspace-creation-dialog"
+        data-lifecycle-contract={
+          objectLifecycleContractSlots.ObjectCaptureSurface
+        }
         showCloseButton={false}
         className="gap-3 rounded-xl sm:max-w-md"
       >
@@ -1446,8 +1732,13 @@ function WorkspaceMainHeader() {
 
 function MainTabSearchOverlay() {
   const t = useTranslations("workspace");
-  const { mainTabs, objectTypes, setMainTabs, setMainValue, setMainSearchOpen } =
-    useWorkspace();
+  const {
+    mainTabs,
+    objectTypes,
+    setMainTabs,
+    setMainValue,
+    setMainSearchOpen,
+  } = useWorkspace();
   const [query, setQuery] = React.useState("");
   const deferredQuery = React.useDeferredValue(query);
 
@@ -1557,6 +1848,7 @@ function MainTabSearchOverlay() {
 
 function WorkspaceSidePanelHeader() {
   const t = useTranslations("workspace");
+  const specialSideTabs = React.useMemo(() => createSpecialSideTabs(t), [t]);
   const {
     sideTabs,
     sideValue,
@@ -1566,14 +1858,6 @@ function WorkspaceSidePanelHeader() {
     setSideSearchOpen,
   } = useWorkspace();
   const { toggleRight } = useAppShell();
-  const specialSideTabs: Record<SidePanelSpecialEntryId, Omit<AppHeaderTab, "id">> = {
-    graphView: { label: t("explore.graphView"), icon: AppHeaderGraphIcon, iconClassName: objectIconToneBadgeClass.gray },
-    backlinks: { label: t("explore.backlinks"), icon: ObjectPageIcon, iconClassName: objectIconToneBadgeClass.gray },
-    objectsInside: { label: t("explore.objectsInside"), icon: ObjectAreaIcon, iconClassName: objectIconToneBadgeClass.gray },
-    relatedContent: { label: t("explore.relatedContent"), icon: AppHeaderGraphIcon, iconClassName: objectIconToneBadgeClass.gray },
-    aiAssistantChat: { label: t("explore.aiChat"), icon: ObjectAiChatIcon, iconClassName: objectIconToneBadgeClass.purple },
-    localSpaceQuery: { label: t("actions.search"), icon: ObjectQueryIcon, iconClassName: objectIconToneBadgeClass.emerald },
-  };
 
   if (focusMode) return null;
 

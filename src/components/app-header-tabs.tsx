@@ -16,6 +16,7 @@ import {
   workspaceTabStateClass,
   workspaceTooltipStateClass,
 } from "@/components/ui/shared-styles"
+import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts"
 import { cn } from "@/lib/utils"
 
 const MAIN_TAB_MAX_WIDTH = 200
@@ -118,13 +119,19 @@ function useElementWidth<T extends HTMLElement>() {
   React.useEffect(() => {
     const element = ref.current
     if (!element) return
+    let mounted = true
 
-    const update = () => setWidth(element.getBoundingClientRect().width)
+    const update = () => {
+      if (mounted) setWidth(element.getBoundingClientRect().width)
+    }
     update()
 
     const observer = new ResizeObserver(update)
     observer.observe(element)
-    return () => observer.disconnect()
+    return () => {
+      mounted = false
+      observer.disconnect()
+    }
   }, [])
 
   return [ref, width] as const
@@ -523,6 +530,7 @@ function AppHeaderTabItem({
       <div className={cn("relative flex min-w-0 items-center", fitContent ? undefined : "w-full")}>
         <div
           role="tab"
+          data-lifecycle-contract={objectLifecycleContractSlots.ObjectTab}
           aria-selected={active}
           tabIndex={active ? 0 : -1}
           className={getTabButtonClassName({

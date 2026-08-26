@@ -6,24 +6,31 @@ import {
   normalizeBlockEditorDocument,
 } from "../editor/document.ts";
 import {
+  type CreateStructureInput,
   createCustomStructure,
   createInitialStructureRegistry,
+  type DomainResult,
   deleteStructure,
   instantiateObjectTypePreset,
-  renameStructure,
-  replaceStructureSchema,
-  selectCreatableStructures,
-  selectStructureById,
-  updateStructureAppearance,
-  type CreateStructureInput,
-  type DomainResult,
   type ObjectIconName,
   type ObjectIconTone,
   type PropertyDefinition,
+  renameStructure,
+  replaceStructureSchema,
   type StructureDomainError,
   type StructureId,
+  selectCreatableStructures,
+  selectStructureById,
+  updateStructureAppearance,
+  validateStructureRegistry,
   type WorkspaceStructure,
 } from "./workspace-object-types.ts";
+import {
+  createWorkspaceEntityPropertyValues,
+  removeWorkspaceEntityPropertyValue,
+  setWorkspaceEntityPropertyValue,
+  type WorkspacePropertyValueMap,
+} from "./workspace-property-values.ts";
 
 type ObjectTypeId = StructureId;
 
@@ -42,6 +49,7 @@ type WorkspaceEntityBase = {
   objectTypeId: StructureId;
   title: string;
   createdAt: string;
+  propertyValues: WorkspacePropertyValueMap;
 };
 
 type DocumentEntity = WorkspaceEntityBase & {
@@ -49,6 +57,7 @@ type DocumentEntity = WorkspaceEntityBase & {
   body: BlockEditorDocument;
   collections: string[];
   tags: string[];
+  dailyNote?: { readonly date: string; readonly spaceId: string };
   description?: string;
   aliases?: string[];
   customIcon?: string;
@@ -110,10 +119,13 @@ type QueryEntity = WorkspaceEntityBase & {
 
 type FileEntity = WorkspaceEntityBase & {
   kind: "file";
+  assetId?: string;
+  contentHash?: string;
   fileName: string;
   mimeType: string;
   previewUrl?: string;
   size: number;
+  storageState?: "missing" | "stored";
 };
 
 type WorkspaceEntity =
@@ -134,6 +146,8 @@ type WorkspaceDraft =
 type WorkspaceObjectError =
   | "incompatible-file"
   | "invalid-url"
+  | "media-storage-failed"
+  | "referenced-object"
   | "required-title"
   | "unsupported-object-type";
 
@@ -154,22 +168,35 @@ type WorkspaceObjectAction =
   | { type: "createDocument"; objectTypeId: "page"; title: string }
   | {
       type: "importFile";
+      assetId?: string;
+      contentHash?: string;
       fileName: string;
       mimeType: string;
       objectTypeId: string;
       previewUrl?: string;
       size: number;
+      storageState?: "missing" | "stored";
       text: string;
     }
   | {
       type: "commitFile";
+      assetId?: string;
+      contentHash?: string;
       fileName: string;
       mimeType: string;
       previewUrl?: string;
       size: number;
+      storageState?: "missing" | "stored";
     }
   | { type: "commitTask"; title: string }
   | { type: "commitUrl"; url: string }
+  | {
+      type: "createOrAppendDailyNote";
+      appendText?: string;
+      date: string;
+      spaceId: string;
+      template?: string;
+    }
   | { type: "hydrate"; state: WorkspaceObjectState }
   | { type: "recover" }
   | { type: "selectEntity"; id: string | null }
@@ -196,6 +223,19 @@ type WorkspaceObjectAction =
       propertyDefinitions: readonly PropertyDefinition[];
       unsafePropertyDefinitionIds?: readonly string[];
     }
+  | {
+      type: "setPropertyValue";
+      id: string;
+      propertyId: string;
+      value: unknown;
+    }
+  | {
+      type: "setLinkedEntityPropertyValue";
+      id: string;
+      propertyId: string;
+      value: unknown;
+    }
+  | { type: "removePropertyValue"; id: string; propertyId: string }
   | { type: "deleteStructure"; id: StructureId }
   | {
       type: "updateEntity";
@@ -203,7 +243,12 @@ type WorkspaceObjectAction =
       patch: Record<string, unknown>;
     };
 
-const WORKSPACE_OBJECT_SCHEMA_VERSION = 3;
+type WorkspaceObjectActionReducer<TAction extends WorkspaceObjectAction> = (
+  state: WorkspaceObjectState,
+  action: TAction,
+) => WorkspaceObjectState;
+
+const WORKSPACE_OBJECT_SCHEMA_VERSION = 5;
 
 const initialStructures = createInitialStructureRegistry();
 const objectTypeIds: ObjectTypeId[] = selectCreatableStructures(
@@ -257,6 +302,7 @@ function createEntity(
     createdAt: new Date().toISOString(),
     id,
     objectTypeId,
+    propertyValues: {},
     title: "",
   };
   const flow = getCreationFlow(objectTypeId, state.structures);
@@ -340,7 +386,13 @@ function createEntity(
     ...state,
     activeEntityId: activate ? id : state.activeEntityId,
     draft: null,
-    entities: [...state.entities, entity],
+    entities: [
+      ...state.entities,
+      {
+        ...entity,
+        propertyValues: createWorkspaceEntityPropertyValues(entity),
+      },
+    ],
     error: null,
     nextId: state.nextId + 1,
   };
@@ -455,10 +507,13 @@ function importWorkspaceObject(
   const title = action.fileName.replace(/\.[^.]+$/, "").trim();
   if (flow === "file") {
     return createEntity(state, objectTypeId, {
+      assetId: action.assetId,
+      contentHash: action.contentHash,
       fileName: action.fileName,
       mimeType: action.mimeType,
       previewUrl: action.previewUrl,
       size: action.size,
+      storageState: action.storageState,
       title,
     });
   }
@@ -541,11 +596,63 @@ function commitFileDraft(
     return { ...state, error: "incompatible-file" };
   }
   return createEntity(state, state.draft.objectTypeId, {
+    assetId: action.assetId,
+    contentHash: action.contentHash,
     fileName: action.fileName,
     mimeType: action.mimeType,
     previewUrl: action.previewUrl,
     size: action.size,
+    storageState: action.storageState,
     title: action.fileName.replace(/\.[^.]+$/, ""),
+  });
+}
+
+function appendPlainTextToDocument(
+  document: BlockEditorDocument,
+  text: string,
+): BlockEditorDocument {
+  const append = text.trim();
+  if (!append) return document;
+  const current = blockEditorDocumentToPlainText(document);
+  return blockEditorDocumentFromPlainText(
+    current.trim() ? `${current}\n${append}` : append,
+  );
+}
+
+function reduceCreateOrAppendDailyNote(
+  state: WorkspaceObjectState,
+  action: Extract<WorkspaceObjectAction, { type: "createOrAppendDailyNote" }>,
+): WorkspaceObjectState {
+  const existing = state.entities.find(
+    (entity) =>
+      entity.kind === "document" &&
+      entity.dailyNote?.spaceId === action.spaceId &&
+      entity.dailyNote.date === action.date,
+  );
+  if (existing) {
+    return {
+      ...state,
+      activeEntityId: existing.id,
+      entities: state.entities.map((entity) =>
+        entity.id === existing.id && entity.kind === "document"
+          ? {
+              ...entity,
+              body: appendPlainTextToDocument(
+                entity.body,
+                action.appendText ?? "",
+              ),
+            }
+          : entity,
+      ),
+      error: null,
+    };
+  }
+  return createEntity(state, "page", {
+    body: blockEditorDocumentFromPlainText(
+      action.appendText ?? action.template ?? "",
+    ),
+    dailyNote: { date: action.date, spaceId: action.spaceId },
+    title: action.date,
   });
 }
 
@@ -553,18 +660,6 @@ type EntityMenuAction = Extract<
   WorkspaceObjectAction,
   { type: "changeEntityType" | "deleteEntity" | "duplicateEntity" }
 >;
-
-const entityMenuActionTypes = new Set<EntityMenuAction["type"]>([
-  "changeEntityType",
-  "deleteEntity",
-  "duplicateEntity",
-]);
-
-function isEntityMenuAction(
-  action: WorkspaceObjectAction,
-): action is EntityMenuAction {
-  return entityMenuActionTypes.has(action.type as EntityMenuAction["type"]);
-}
 
 function reduceEntityMenuAction(
   state: WorkspaceObjectState,
@@ -577,6 +672,7 @@ function reduceEntityMenuAction(
       createdAt: source.createdAt,
       id: source.id,
       objectTypeId: action.objectTypeId,
+      propertyValues: source.propertyValues,
       title: source.title,
     };
     const entity: WorkspaceEntity =
@@ -599,7 +695,12 @@ function reduceEntityMenuAction(
       ...state,
       activeEntityId: entity.id,
       entities: state.entities.map((item) =>
-        item.id === action.id ? entity : item,
+        item.id === action.id
+          ? {
+              ...entity,
+              propertyValues: createWorkspaceEntityPropertyValues(entity),
+            }
+          : item,
       ),
       error: null,
     };
@@ -615,15 +716,22 @@ function reduceEntityMenuAction(
       id,
       title: source.title,
     } as WorkspaceEntity;
+    const canonicalDuplicate = {
+      ...duplicate,
+      propertyValues: createWorkspaceEntityPropertyValues(duplicate),
+    };
     return {
       ...state,
       activeEntityId: id,
-      entities: [...state.entities, duplicate],
+      entities: [...state.entities, canonicalDuplicate],
       error: null,
       nextId: state.nextId + 1,
     };
   }
 
+  if (entityHasIncomingReferences(state.entities, action.id)) {
+    return { ...state, error: "referenced-object" };
+  }
   const entities = state.entities.filter((entity) => entity.id !== action.id);
   return {
     ...state,
@@ -697,101 +805,384 @@ function reduceStructureAction(
     : { ...state, structureError: result.error };
 }
 
+function targetStructureIdByEntityId(
+  entities: readonly WorkspaceEntity[],
+): Readonly<Record<string, string>> {
+  return Object.fromEntries(
+    entities.map((entity) => [entity.id, entity.objectTypeId]),
+  );
+}
+
+function readEntityRelationIds(
+  entity: WorkspaceEntity,
+  propertyId: string,
+): readonly string[] {
+  const value = entity.propertyValues[propertyId];
+  return value?.type === "entity" ? value.entity.map((item) => item.id) : [];
+}
+
+function updateEntityRelationIds(
+  entity: WorkspaceEntity,
+  structure: WorkspaceStructure,
+  propertyId: string,
+  ids: readonly string[],
+  context: Readonly<Record<string, string>>,
+): DomainResult<WorkspaceEntity> {
+  return setWorkspaceEntityPropertyValue(entity, structure, propertyId, ids, {
+    targetStructureIdByEntityId: context,
+  });
+}
+
+type LinkedEntitySourceUpdate = {
+  readonly context: Readonly<Record<string, string>>;
+  readonly inversePropertyId?: string;
+  readonly source: WorkspaceEntity;
+  readonly sourceUpdate: WorkspaceEntity;
+};
+
+function findEntityPropertyDefinition(
+  structure: WorkspaceStructure | null | undefined,
+  propertyId: string,
+): PropertyDefinition | undefined {
+  return structure?.propertyDefinitions.find(
+    (definition) => definition.id === propertyId,
+  );
+}
+
+function createLinkedEntitySourceUpdate(
+  state: WorkspaceObjectState,
+  action: Extract<
+    WorkspaceObjectAction,
+    { type: "setLinkedEntityPropertyValue" }
+  >,
+): LinkedEntitySourceUpdate | null {
+  const source = state.entities.find((entity) => entity.id === action.id);
+  if (!source) return null;
+  const sourceStructure = selectStructureById(
+    state.structures,
+    source.objectTypeId,
+  );
+  const sourceDefinition = findEntityPropertyDefinition(
+    sourceStructure,
+    action.propertyId,
+  );
+  if (
+    !sourceStructure ||
+    !sourceDefinition ||
+    sourceDefinition.valueType !== "entity"
+  ) {
+    return null;
+  }
+
+  const context = targetStructureIdByEntityId(state.entities);
+  const sourceUpdate = updateEntityRelationIds(
+    source,
+    sourceStructure,
+    action.propertyId,
+    Array.isArray(action.value) ? action.value : [action.value],
+    context,
+  );
+  return sourceUpdate.ok
+    ? {
+        context,
+        inversePropertyId: sourceDefinition.inversePropertyDefinitionId,
+        source,
+        sourceUpdate: sourceUpdate.value,
+      }
+    : null;
+}
+
+function changedRelationTargetIds(
+  before: WorkspaceEntity,
+  after: WorkspaceEntity,
+  propertyId: string,
+): ReadonlySet<string> {
+  return new Set([
+    ...readEntityRelationIds(before, propertyId),
+    ...readEntityRelationIds(after, propertyId),
+  ]);
+}
+
+function nextInverseRelationIds(
+  current: readonly string[],
+  inverseDefinition: PropertyDefinition,
+  sourceId: string,
+  shouldIncludeSource: boolean,
+): readonly string[] {
+  if (!shouldIncludeSource) return current.filter((id) => id !== sourceId);
+  return inverseDefinition.multiple
+    ? Array.from(new Set([...current, sourceId]))
+    : [sourceId];
+}
+
+function updateInverseRelationTarget(
+  state: WorkspaceObjectState,
+  nextById: Map<string, WorkspaceEntity>,
+  targetId: string,
+  update: LinkedEntitySourceUpdate,
+  action: Extract<
+    WorkspaceObjectAction,
+    { type: "setLinkedEntityPropertyValue" }
+  >,
+): boolean {
+  const target = nextById.get(targetId);
+  const targetStructure = target
+    ? selectStructureById(state.structures, target.objectTypeId)
+    : undefined;
+  const inverseDefinition = findEntityPropertyDefinition(
+    targetStructure,
+    update.inversePropertyId ?? "",
+  );
+  if (!target || !targetStructure || !inverseDefinition) return false;
+  const targetUpdate = updateEntityRelationIds(
+    target,
+    targetStructure,
+    update.inversePropertyId ?? "",
+    nextInverseRelationIds(
+      readEntityRelationIds(target, update.inversePropertyId ?? ""),
+      inverseDefinition,
+      update.source.id,
+      readEntityRelationIds(update.sourceUpdate, action.propertyId).includes(
+        targetId,
+      ),
+    ),
+    update.context,
+  );
+  if (!targetUpdate.ok) return false;
+  nextById.set(targetId, targetUpdate.value);
+  return true;
+}
+
+function applyLinkedEntityInverseUpdates(
+  state: WorkspaceObjectState,
+  action: Extract<
+    WorkspaceObjectAction,
+    { type: "setLinkedEntityPropertyValue" }
+  >,
+  update: LinkedEntitySourceUpdate,
+): Map<string, WorkspaceEntity> | null {
+  const nextById = new Map(
+    state.entities.map((entity) => [
+      entity.id,
+      entity.id === update.source.id ? update.sourceUpdate : entity,
+    ]),
+  );
+  for (const targetId of changedRelationTargetIds(
+    update.source,
+    update.sourceUpdate,
+    action.propertyId,
+  )) {
+    if (!updateInverseRelationTarget(state, nextById, targetId, update, action))
+      return null;
+  }
+  return nextById;
+}
+
+function reduceSetLinkedEntityPropertyValue(
+  state: WorkspaceObjectState,
+  action: Extract<
+    WorkspaceObjectAction,
+    { type: "setLinkedEntityPropertyValue" }
+  >,
+): WorkspaceObjectState {
+  const update = createLinkedEntitySourceUpdate(state, action);
+  if (!update) return state;
+  if (!update.inversePropertyId) {
+    return {
+      ...state,
+      entities: state.entities.map((entity) =>
+        entity.id === update.source.id ? update.sourceUpdate : entity,
+      ),
+      error: null,
+    };
+  }
+
+  const registryValidation = validateStructureRegistry(state.structures);
+  if (!registryValidation.ok) {
+    return { ...state, structureError: registryValidation.error };
+  }
+
+  const nextById = applyLinkedEntityInverseUpdates(state, action, update);
+  if (!nextById) return state;
+
+  return {
+    ...state,
+    entities: state.entities.map((entity) => nextById.get(entity.id) ?? entity),
+    error: null,
+  };
+}
+
+function entityHasIncomingReferences(
+  entities: readonly WorkspaceEntity[],
+  id: string,
+): boolean {
+  return entities.some((entity) => {
+    if (entity.id === id) return false;
+    if ("tags" in entity && entity.tags.includes(id)) return true;
+    if ("collections" in entity && entity.collections.includes(id)) return true;
+    return Object.values(entity.propertyValues).some(
+      (value) =>
+        value.type === "entity" &&
+        value.entity.some((reference) => reference.id === id),
+    );
+  });
+}
+
+function reduceCreateDocument(
+  state: WorkspaceObjectState,
+  action: Extract<WorkspaceObjectAction, { type: "createDocument" }>,
+): WorkspaceObjectState {
+  const title = action.title.trim();
+  return title
+    ? createEntity(state, action.objectTypeId, { title })
+    : { ...state, error: "required-title" };
+}
+
+function normalizeEntityPatch(
+  entity: WorkspaceEntity,
+  patch: Record<string, unknown>,
+): Record<string, unknown> {
+  if (
+    (entity.kind === "document" || entity.kind === "quote") &&
+    Object.hasOwn(patch, "body")
+  ) {
+    const { body: proposedBody, ...rest } = patch;
+    const body = normalizeBlockEditorDocument(proposedBody);
+    return body ? { ...rest, body } : rest;
+  }
+  return patch;
+}
+
+function applyEntityPatch(
+  entity: WorkspaceEntity,
+  patch: Record<string, unknown>,
+): WorkspaceEntity {
+  const updated = {
+    ...entity,
+    ...normalizeEntityPatch(entity, patch),
+    createdAt: entity.createdAt,
+    id: entity.id,
+    kind: entity.kind,
+    objectTypeId: entity.objectTypeId,
+  } as WorkspaceEntity;
+  return {
+    ...updated,
+    propertyValues: {
+      ...updated.propertyValues,
+      ...createWorkspaceEntityPropertyValues(updated),
+    },
+  };
+}
+
+function reduceUpdateEntity(
+  state: WorkspaceObjectState,
+  action: Extract<WorkspaceObjectAction, { type: "updateEntity" }>,
+): WorkspaceObjectState {
+  return {
+    ...state,
+    entities: state.entities.map((entity) =>
+      entity.id === action.id ? applyEntityPatch(entity, action.patch) : entity,
+    ),
+    error: null,
+  };
+}
+
+function reducePropertyValueAction(
+  state: WorkspaceObjectState,
+  action: Extract<
+    WorkspaceObjectAction,
+    { type: "removePropertyValue" | "setPropertyValue" }
+  >,
+): WorkspaceObjectState {
+  const context = targetStructureIdByEntityId(state.entities);
+  return {
+    ...state,
+    entities: state.entities.map((entity) =>
+      entity.id === action.id
+        ? reduceEntityPropertyValue(entity, state, action, context)
+        : entity,
+    ),
+    error: null,
+  };
+}
+
+function reduceEntityPropertyValue(
+  entity: WorkspaceEntity,
+  state: WorkspaceObjectState,
+  action: Extract<
+    WorkspaceObjectAction,
+    { type: "removePropertyValue" | "setPropertyValue" }
+  >,
+  context: Readonly<Record<string, string>>,
+): WorkspaceEntity {
+  const structure = selectStructureById(state.structures, entity.objectTypeId);
+  if (!structure) return entity;
+  const result =
+    action.type === "setPropertyValue"
+      ? setWorkspaceEntityPropertyValue(
+          entity,
+          structure,
+          action.propertyId,
+          action.value,
+          { targetStructureIdByEntityId: context },
+        )
+      : removeWorkspaceEntityPropertyValue(entity, structure, action.propertyId);
+  return result.ok ? result.value : entity;
+}
+
+type WorkspaceObjectActionHandlers = {
+  readonly [K in WorkspaceObjectAction["type"]]: WorkspaceObjectActionReducer<
+    Extract<WorkspaceObjectAction, { type: K }>
+  >;
+};
+
+const workspaceObjectActionHandlers: WorkspaceObjectActionHandlers = {
+  beginCreate: (state, action) =>
+    beginWorkspaceObjectCreation(state, action.objectTypeId),
+  cancelDraft: (state) => ({ ...state, draft: null, error: null }),
+  changeEntityType: reduceEntityMenuAction,
+  commitFile: commitFileDraft,
+  commitTask: (state, action) => commitTaskDraft(state, action.title),
+  commitUrl: (state, action) => commitUrlDraft(state, action.url),
+  createDocument: reduceCreateDocument,
+  createOrAppendDailyNote: reduceCreateOrAppendDailyNote,
+  createStructure: reduceStructureAction,
+  createStructureFromPreset: reduceStructureAction,
+  deleteEntity: reduceEntityMenuAction,
+  deleteStructure: reduceStructureAction,
+  duplicateEntity: reduceEntityMenuAction,
+  hydrate: (_state, action) => ({
+    ...action.state,
+    draft: null,
+    error: null,
+    hydrationStatus: "ready",
+    structureError: null,
+  }),
+  importFile: importWorkspaceObject,
+  recover: (state) => ({ ...state, hydrationStatus: "recovered" }),
+  removePropertyValue: reducePropertyValueAction,
+  renameStructure: reduceStructureAction,
+  replaceStructureSchema: reduceStructureAction,
+  selectEntity: (state, action) => ({
+    ...state,
+    activeEntityId: action.id,
+    error: null,
+  }),
+  setLinkedEntityPropertyValue: reduceSetLinkedEntityPropertyValue,
+  setPropertyValue: reducePropertyValueAction,
+  updateEntity: reduceUpdateEntity,
+  updateStructureAppearance: reduceStructureAction,
+};
+
 function workspaceObjectReducer(
   state: WorkspaceObjectState,
   action: WorkspaceObjectAction,
 ): WorkspaceObjectState {
-  if (
-    action.type === "createStructure" ||
-    action.type === "createStructureFromPreset" ||
-    action.type === "deleteStructure" ||
-    action.type === "renameStructure" ||
-    action.type === "replaceStructureSchema" ||
-    action.type === "updateStructureAppearance"
-  ) {
-    return reduceStructureAction(state, action);
-  }
+  const reducer = workspaceObjectActionHandlers[action.type] as
+    | WorkspaceObjectActionReducer<typeof action>
+    | undefined;
 
-  if (action.type === "beginCreate") {
-    return beginWorkspaceObjectCreation(state, action.objectTypeId);
-  }
-
-  if (action.type === "cancelDraft") {
-    return { ...state, draft: null, error: null };
-  }
-
-  if (action.type === "createDocument") {
-    const title = action.title.trim();
-    if (!title) return { ...state, error: "required-title" };
-    return createEntity(state, action.objectTypeId, { title });
-  }
-
-  if (action.type === "importFile") {
-    return importWorkspaceObject(state, action);
-  }
-
-  if (action.type === "commitTask") {
-    return commitTaskDraft(state, action.title);
-  }
-
-  if (action.type === "commitUrl") {
-    return commitUrlDraft(state, action.url);
-  }
-
-  if (action.type === "commitFile") {
-    return commitFileDraft(state, action);
-  }
-
-  if (action.type === "updateEntity") {
-    return {
-      ...state,
-      entities: state.entities.map((entity) => {
-        if (entity.id !== action.id) return entity;
-        let patch = action.patch;
-        if (
-          (entity.kind === "document" || entity.kind === "quote") &&
-          Object.hasOwn(action.patch, "body")
-        ) {
-          const { body: proposedBody, ...rest } = action.patch;
-          const body = normalizeBlockEditorDocument(proposedBody);
-          patch = body ? { ...rest, body } : rest;
-        }
-        return {
-          ...entity,
-          ...patch,
-          createdAt: entity.createdAt,
-          id: entity.id,
-          kind: entity.kind,
-          objectTypeId: entity.objectTypeId,
-        } as WorkspaceEntity;
-      }),
-      error: null,
-    };
-  }
-
-  if (isEntityMenuAction(action)) {
-    return reduceEntityMenuAction(state, action);
-  }
-
-  if (action.type === "selectEntity") {
-    return { ...state, activeEntityId: action.id, error: null };
-  }
-
-  if (action.type === "hydrate") {
-    return {
-      ...action.state,
-      draft: null,
-      error: null,
-      hydrationStatus: "ready",
-      structureError: null,
-    };
-  }
-
-  if (action.type === "recover") {
-    return { ...state, hydrationStatus: "recovered" };
-  }
-
-  return state;
+  return reducer ? reducer(state, action) : state;
 }
 
 function countEntitiesByType(

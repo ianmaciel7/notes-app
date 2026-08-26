@@ -3,6 +3,7 @@
 import {
   AlignLeftIcon,
   BarChart3Icon,
+  CalendarDaysIcon,
   CheckIcon,
   CopyIcon,
   DownloadIcon,
@@ -21,7 +22,6 @@ import {
   UploadIcon,
   WandSparklesIcon,
 } from "lucide-react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 import {
@@ -50,7 +50,9 @@ import {
   objectIconToneBadgeClass,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
+import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import { ObjectTypeToolbarIcon } from "@/components/object-type-toolbar-icon";
+import { MediaAssetRenderer } from "@/components/object-view-preview";
 import { Button } from "@/components/ui/button";
 import {
   workspaceOverflowMenuContentClass,
@@ -89,6 +91,13 @@ import {
 import { useBufferedTextCommit } from "@/hooks/use-buffered-text-commit";
 import { cn } from "@/lib/utils";
 import {
+  type CalendarProjectionEntry,
+  type CalendarSpan,
+  createDayContext,
+  projectCalendarEntries,
+} from "@/lib/workspace-dates-calendar";
+import { createCollectionId } from "@/lib/workspace-domain-identities";
+import {
   acceptsFileForType,
   applyQueryDescription,
   type FileEntity,
@@ -99,6 +108,16 @@ import {
   type UrlEntity,
   type WorkspaceEntity,
 } from "@/lib/workspace-objects";
+
+function collectionNameFromId(collectionId: string): string {
+  const parts = collectionId.split(":");
+  const slug = parts.at(-1) ?? collectionId;
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toLocaleUpperCase() + part.slice(1))
+    .join(" ");
+}
 
 function AtomicNotesWorkspace() {
   const { mainTabs, mainValue, activeAction, objectTypes, createdEntities } =
@@ -114,6 +133,10 @@ function AtomicNotesWorkspace() {
 
   if (activeAction === "explore") {
     return <ExploreWorkspace />;
+  }
+
+  if (activeAction === "calendar") {
+    return <CalendarWorkspace />;
   }
 
   if (activeTab?.id === "untitled") {
@@ -140,6 +163,207 @@ function AtomicNotesWorkspace() {
   return fallbackObjectType ? (
     <ObjectTypeWorkspace objectType={fallbackObjectType} />
   ) : null;
+}
+
+function todayInputValue() {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
+const calendarSpans = ["month", "week", "three-day", "day"] as const;
+
+function CalendarWorkspace() {
+  const {
+    createOrAppendDailyNote,
+    createdEntities,
+    selectEntity,
+    setWorkspaceEntityPropertyValue,
+    showMessage,
+    spaceId,
+    structures,
+    updateWorkspaceEntity,
+  } = useWorkspace();
+  const [date, setDate] = React.useState(todayInputValue);
+  const [span, setSpan] = React.useState<CalendarSpan>("week");
+  const projection = React.useMemo(
+    () =>
+      projectCalendarEntries(createdEntities, structures, {
+        date,
+        spaceId,
+        span,
+      }),
+    [createdEntities, date, spaceId, span, structures],
+  );
+  const dayContext = React.useMemo(
+    () => createDayContext(createdEntities, structures, { date, spaceId }),
+    [createdEntities, date, spaceId, structures],
+  );
+
+  function openDailyNote() {
+    createOrAppendDailyNote(date, undefined, `# ${date}`);
+  }
+
+  function reschedule(entry: CalendarProjectionEntry, nextDate: string) {
+    if (!nextDate) return;
+    if (entry.kind === "task") {
+      updateWorkspaceEntity(entry.entity.id, { dueDate: nextDate });
+      return;
+    }
+    if (entry.kind === "dated-object" && entry.propertyId) {
+      setWorkspaceEntityPropertyValue(
+        entry.entity.id,
+        entry.propertyId,
+        nextDate,
+      );
+      return;
+    }
+    showMessage("This calendar item is derived from a reference.");
+  }
+
+  return (
+    <div
+      data-slot="calendar-workspace"
+      className="flex h-full min-h-0 flex-col overflow-hidden px-6 py-5 text-foreground"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
+        <div className="flex min-w-0 items-center gap-2">
+          <CalendarDaysIcon className="size-5 text-muted-foreground" />
+          <h1 className="truncate text-lg font-semibold">Calendar</h1>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Input
+            type="date"
+            aria-label="Calendar date"
+            value={date}
+            onChange={(event) =>
+              setDate(event.target.value || todayInputValue())
+            }
+            className="h-8 w-auto"
+          />
+          <div className="flex overflow-hidden rounded-md border border-border">
+            {calendarSpans.map((item) => (
+              <button
+                key={item}
+                type="button"
+                aria-pressed={span === item}
+                onClick={() => setSpan(item)}
+                className={cn(
+                  "h-8 px-3 text-xs font-medium capitalize",
+                  span === item
+                    ? "bg-accent text-accent-foreground"
+                    : "bg-background text-muted-foreground hover:bg-muted",
+                )}
+              >
+                {item.replace("-", " ")}
+              </button>
+            ))}
+          </div>
+          <Button type="button" size="sm" onClick={openDailyNote}>
+            <FilePenLineIcon className="size-4" />
+            Daily note
+          </Button>
+        </div>
+      </div>
+      <div className="grid min-h-0 flex-1 gap-5 overflow-hidden pt-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="min-h-0 overflow-auto">
+          <div
+            className={cn(
+              "grid gap-px overflow-hidden rounded-lg border border-border bg-border",
+              span === "day"
+                ? "grid-cols-1"
+                : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-7",
+            )}
+          >
+            {projection.days.map((day) => (
+              <section
+                key={day.date}
+                className="min-h-32 bg-background p-3"
+                aria-label={`Calendar day ${day.date}`}
+              >
+                <div className="text-xs font-medium text-muted-foreground">
+                  {day.date}
+                </div>
+                <div className="mt-2 space-y-1">
+                  {day.entries.map((entry, index) => (
+                    <CalendarEntryRow
+                      key={`${entry.kind}:${entry.entity.id}:${entry.propertyId ?? index}`}
+                      entry={entry}
+                      onOpen={() => selectEntity(entry.entity.id)}
+                      onReschedule={(nextDate) => reschedule(entry, nextDate)}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+        <aside className="min-h-0 overflow-auto border-l border-border pl-5">
+          <h2 className="text-sm font-semibold">Day</h2>
+          <button
+            type="button"
+            className="mt-2 block text-left text-sm font-medium hover:underline"
+            onClick={() =>
+              dayContext.dailyNote
+                ? selectEntity(dayContext.dailyNote.id)
+                : openDailyNote()
+            }
+          >
+            {dayContext.dailyNote?.title || `Daily note ${date}`}
+          </button>
+          <h3 className="mt-5 text-xs font-semibold uppercase text-muted-foreground">
+            Timeline
+          </h3>
+          <div className="mt-2 space-y-1">
+            {dayContext.timeline.map((entry) => (
+              <CalendarEntryRow
+                key={`timeline:${entry.kind}:${entry.entity.id}:${entry.propertyId ?? entry.date}`}
+                entry={entry}
+                onOpen={() => selectEntity(entry.entity.id)}
+                onReschedule={(nextDate) => reschedule(entry, nextDate)}
+              />
+            ))}
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+function CalendarEntryRow({
+  entry,
+  onOpen,
+  onReschedule,
+}: {
+  readonly entry: CalendarProjectionEntry;
+  readonly onOpen: () => void;
+  readonly onReschedule: (date: string) => void;
+}) {
+  const canReschedule = entry.kind === "task" || entry.kind === "dated-object";
+  return (
+    <div className="group flex min-h-9 items-center gap-2 rounded-md px-2 py-1 text-sm hover:bg-muted">
+      <button
+        type="button"
+        className="min-w-0 flex-1 truncate text-left"
+        onClick={onOpen}
+      >
+        {entry.title || "Untitled"}
+      </button>
+      <span className="shrink-0 rounded-sm bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground">
+        {entry.kind.replace("-", " ")}
+      </span>
+      {canReschedule ? (
+        <Input
+          type="date"
+          aria-label={`Reschedule ${entry.title || "item"}`}
+          value={entry.date}
+          onChange={(event) => onReschedule(event.target.value)}
+          className="h-7 w-32 opacity-80 group-hover:opacity-100"
+        />
+      ) : null}
+    </div>
+  );
 }
 
 function CreatedObjectWorkspace({ entity }: { entity: WorkspaceEntity }) {
@@ -261,13 +485,14 @@ function ObjectTypeNamedItemWorkspace({
       ? (objectTypeCollections[item.objectTypeId] ?? [])
       : (objectTypeQueries[item.objectTypeId] ?? []);
   const title = items[item.index] ?? t("objectTypeOverview.untitled");
+  const collectionId = createCollectionId(item.objectTypeId, title);
   const count =
     item.kind === "collection"
       ? createdEntities.filter(
           (entity) =>
             entity.objectTypeId === item.objectTypeId &&
             "collections" in entity &&
-            entity.collections.includes(title),
+            entity.collections.includes(collectionId),
         ).length
       : 0;
 
@@ -379,6 +604,26 @@ const titleFieldClass =
 const bodyFieldClass =
   "mt-3 min-h-28 w-full resize-none overflow-x-hidden overflow-y-hidden bg-transparent px-0 py-0 text-base leading-6 text-foreground shadow-none outline-none placeholder:text-sidebar-foreground [overflow-wrap:anywhere]";
 
+function ObjectEditorShell({
+  children,
+  className,
+  dataSlot,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  dataSlot: string;
+}) {
+  return (
+    <section
+      className={cn(editorCardClass, className)}
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectEditorShell}
+      data-slot={dataSlot}
+    >
+      {children}
+    </section>
+  );
+}
+
 function useAutosizeTextarea(ref: React.RefObject<HTMLTextAreaElement | null>) {
   React.useLayoutEffect(() => {
     const textarea = ref.current;
@@ -486,7 +731,7 @@ function BufferedAutosizeTextarea({
   return <AutosizeTextarea {...props} {...inputProps} />;
 }
 
-function EditableTitle({
+function EditableObjectTitle({
   label,
   placeholder,
   value,
@@ -520,6 +765,7 @@ function EditableTitle({
       aria-multiline={false}
       tabIndex={0}
       contentEditable="plaintext-only"
+      data-lifecycle-contract={objectLifecycleContractSlots.EditableObjectTitle}
       data-placeholder={placeholder}
       suppressContentEditableWarning
       className={cn(
@@ -550,7 +796,7 @@ function EntityTitleField({
 }) {
   const t = useTranslations("workspace");
   return (
-    <EditableTitle
+    <EditableObjectTitle
       label={t("fields.title")}
       placeholder={t("fields.title")}
       value={title}
@@ -678,6 +924,7 @@ function DocumentObjectEditor({
   return (
     <section
       className="h-full min-h-0 w-full overflow-y-auto px-6"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectEditorShell}
       data-slot="document-object-editor"
     >
       <div
@@ -813,45 +1060,51 @@ function DocumentObjectEditor({
           ).filter(Boolean)}
           update={update}
         />
-        <BlockEditor
-          ariaLabel={
-            entity.kind === "quote"
-              ? t("fields.quoteContent")
-              : t("fields.text")
+        <div
+          data-lifecycle-contract={
+            objectLifecycleContractSlots.EditableObjectBody
           }
-          placeholder={t("fields.text")}
-          value={entity.body}
-          onChange={(body) => update({ body })}
-          onCreatePageRequest={createWorkspacePage}
-          labels={{
-            bold: t("editor.bold"),
-            italic: t("editor.italic"),
-            code: t("editor.code"),
-            slashMenu: {
-              cancel: t("editor.slashMenu.cancel"),
-              createPage: t("editor.slashMenu.createPage"),
-              empty: t("editor.slashMenu.empty"),
-              text: t("editor.slashMenu.text"),
-              smallText: t("editor.slashMenu.smallText"),
-              page: t("editor.slashMenu.page"),
-              heading1: t("editor.slashMenu.heading1"),
-              heading2: t("editor.slashMenu.heading2"),
-              heading3: t("editor.slashMenu.heading3"),
-              heading4: t("editor.slashMenu.heading4"),
-              navigate: t("editor.slashMenu.navigate"),
-              alphabeticalList: t("editor.slashMenu.alphabeticalList"),
-              bulletList: t("editor.slashMenu.bulletList"),
-              orderedList: t("editor.slashMenu.orderedList"),
-              romanList: t("editor.slashMenu.romanList"),
-              taskList: t("editor.slashMenu.taskList"),
-              select: t("editor.slashMenu.select"),
-              blockquote: t("editor.slashMenu.blockquote"),
-              codeBlock: t("editor.slashMenu.codeBlock"),
-              horizontalRule: t("editor.slashMenu.horizontalRule"),
-              title: t("editor.slashMenu.title"),
-            },
-          }}
-        />
+        >
+          <BlockEditor
+            ariaLabel={
+              entity.kind === "quote"
+                ? t("fields.quoteContent")
+                : t("fields.text")
+            }
+            placeholder={t("fields.text")}
+            value={entity.body}
+            onChange={(body) => update({ body })}
+            onCreatePageRequest={createWorkspacePage}
+            labels={{
+              bold: t("editor.bold"),
+              italic: t("editor.italic"),
+              code: t("editor.code"),
+              slashMenu: {
+                cancel: t("editor.slashMenu.cancel"),
+                createPage: t("editor.slashMenu.createPage"),
+                empty: t("editor.slashMenu.empty"),
+                text: t("editor.slashMenu.text"),
+                smallText: t("editor.slashMenu.smallText"),
+                page: t("editor.slashMenu.page"),
+                heading1: t("editor.slashMenu.heading1"),
+                heading2: t("editor.slashMenu.heading2"),
+                heading3: t("editor.slashMenu.heading3"),
+                heading4: t("editor.slashMenu.heading4"),
+                navigate: t("editor.slashMenu.navigate"),
+                alphabeticalList: t("editor.slashMenu.alphabeticalList"),
+                bulletList: t("editor.slashMenu.bulletList"),
+                orderedList: t("editor.slashMenu.orderedList"),
+                romanList: t("editor.slashMenu.romanList"),
+                taskList: t("editor.slashMenu.taskList"),
+                select: t("editor.slashMenu.select"),
+                blockquote: t("editor.slashMenu.blockquote"),
+                codeBlock: t("editor.slashMenu.codeBlock"),
+                horizontalRule: t("editor.slashMenu.horizontalRule"),
+                title: t("editor.slashMenu.title"),
+              },
+            }}
+          />
+        </div>
         <input
           ref={importInputRef}
           type="file"
@@ -954,26 +1207,43 @@ function CollectionPropertyEditor({
   const [query, setQuery] = React.useState("");
   const deferredQuery = React.useDeferredValue(query);
   const [open, setOpen] = React.useState(false);
-  const visible = suggestions.filter(
-    (item) =>
-      !collections.includes(item) &&
-      item.toLocaleLowerCase().includes(deferredQuery.trim().toLocaleLowerCase()),
+  const suggestionRecords = suggestions.map((name) => ({
+    id: createCollectionId(objectTypeId, name),
+    name,
+  }));
+  const visible = suggestions.filter((item) => {
+    const id = createCollectionId(objectTypeId, item);
+    return (
+      !collections.includes(id) &&
+      item.toLocaleLowerCase().includes(deferredQuery.trim().toLocaleLowerCase())
+    );
+  });
+  const collectionNamesById = new Map(
+    suggestionRecords.map((collection) => [collection.id, collection.name]),
   );
 
   function createCollection() {
     const requested = query.trim() || t("documentMenu.untitledCollection");
-    const taken = new Set([...suggestions, ...collections]);
+    const taken = new Set([
+      ...suggestions,
+      ...collections.map(
+        (collection) =>
+          collectionNamesById.get(collection) ??
+          collectionNameFromId(collection),
+      ),
+    ]);
     let collection = requested;
     let suffix = 2;
     while (taken.has(collection)) {
       collection = `${requested} ${suffix}`;
       suffix += 1;
     }
+    const collectionId = createCollectionId(objectTypeId, collection);
     setObjectTypeCollections((current) => ({
       ...current,
       [objectTypeId]: [...(current[objectTypeId] ?? []), collection],
     }));
-    update({ collections: [...collections, collection] });
+    update({ collections: [...collections, collectionId] });
     setQuery("");
     setOpen(false);
   }
@@ -983,7 +1253,10 @@ function CollectionPropertyEditor({
         <button
           key={collection}
           type="button"
-          aria-label={`${t("objectTypeOverview.remove")} ${collection}`}
+          aria-label={`${t("objectTypeOverview.remove")} ${
+            collectionNamesById.get(collection) ??
+            collectionNameFromId(collection)
+          }`}
           onClick={() =>
             update({
               collections: collections.filter((item) => item !== collection),
@@ -991,7 +1264,10 @@ function CollectionPropertyEditor({
           }
           className="inline-flex max-w-24 min-w-0 shrink items-center overflow-x-clip whitespace-nowrap rounded-[0.475em] border border-[oklch(0.9856_0.0016_67)] bg-[oklch(0.9856_0.0016_67)] px-[0.49em] py-[0.2em] leading-[1.3] text-[oklch(0.2987_0.0072_285.88)] active:brightness-[0.94] sm:max-w-32"
         >
-          <span className="truncate">{collection}</span>
+          <span className="truncate">
+            {collectionNamesById.get(collection) ??
+              collectionNameFromId(collection)}
+          </span>
         </button>
       ))}
       <Popover open={open} onOpenChange={setOpen}>
@@ -1042,7 +1318,12 @@ function CollectionPropertyEditor({
                   key={collection}
                   className={floatingSearchListItemClass}
                   onClick={() => {
-                    update({ collections: [...collections, collection] });
+                    update({
+                      collections: [
+                        ...collections,
+                        createCollectionId(objectTypeId, collection),
+                      ],
+                    });
                     setQuery("");
                     setOpen(false);
                   }}
@@ -1544,13 +1825,13 @@ function TableObjectEditor({
 }: ObjectEditorProps & { entity: TableEntity }) {
   const t = useTranslations("workspace");
   return (
-    <section
-      className={cn(editorCardClass, "pb-8")}
-      data-slot="table-object-editor"
-    >
+    <ObjectEditorShell className="pb-8" dataSlot="table-object-editor">
       {header}
       <EntityTitleField title={entity.title} update={update} />
       <BufferedAutosizeTextarea
+        data-lifecycle-contract={
+          objectLifecycleContractSlots.EditableObjectBody
+        }
         aria-label={t("lifecycle.table.notes")}
         placeholder={t("lifecycle.table.notes")}
         value={entity.notes}
@@ -1561,6 +1842,7 @@ function TableObjectEditor({
         {entity.cells.map((cell) => (
           <BufferedTextInput
             key={cell.id}
+            data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
             aria-label={t("lifecycle.table.cell", {
               column: cell.column + 1,
               row: cell.row + 1,
@@ -1577,7 +1859,7 @@ function TableObjectEditor({
           />
         ))}
       </div>
-    </section>
+    </ObjectEditorShell>
   );
 }
 
@@ -1588,10 +1870,13 @@ function TaskObjectEditor({
 }: ObjectEditorProps & { entity: TaskEntity }) {
   const t = useTranslations("workspace");
   return (
-    <section className={editorCardClass} data-slot="task-object-editor">
+    <ObjectEditorShell dataSlot="task-object-editor">
       {header}
       <EntityTitleField title={entity.title} update={update} />
-      <div className="mt-2 flex flex-wrap items-center gap-4 text-sm">
+      <div
+        className="mt-2 flex flex-wrap items-center gap-4 text-sm"
+        data-lifecycle-contract={objectLifecycleContractSlots.ObjectFieldGroup}
+      >
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -1609,13 +1894,16 @@ function TaskObjectEditor({
         />
       </div>
       <BufferedAutosizeTextarea
+        data-lifecycle-contract={
+          objectLifecycleContractSlots.EditableObjectBody
+        }
         aria-label={t("fields.text")}
         placeholder={t("fields.text")}
         value={entity.body}
         onCommit={(body) => update({ body })}
         className={bodyFieldClass}
       />
-    </section>
+    </ObjectEditorShell>
   );
 }
 
@@ -1626,7 +1914,7 @@ function UrlObjectEditor({
 }: ObjectEditorProps & { entity: UrlEntity }) {
   const t = useTranslations("workspace");
   return (
-    <section className={editorCardClass} data-slot="url-object-editor">
+    <ObjectEditorShell dataSlot="url-object-editor">
       {header}
       <a
         href={entity.url}
@@ -1638,13 +1926,16 @@ function UrlObjectEditor({
       </a>
       <EntityTitleField title={entity.title} update={update} />
       <BufferedAutosizeTextarea
+        data-lifecycle-contract={
+          objectLifecycleContractSlots.EditableObjectBody
+        }
         aria-label={t("lifecycle.url.notes")}
         placeholder={t("lifecycle.url.notes")}
         value={entity.body}
         onCommit={(body) => update({ body })}
         className={bodyFieldClass}
       />
-    </section>
+    </ObjectEditorShell>
   );
 }
 
@@ -1659,10 +1950,7 @@ function TagObjectEditor({
 }) {
   const t = useTranslations("workspace");
   return (
-    <section
-      className={cn(editorCardClass, "pb-8")}
-      data-slot="tag-object-editor"
-    >
+    <ObjectEditorShell className="pb-8" dataSlot="tag-object-editor">
       {header}
       <EntityTitleField title={entity.title} update={update} />
       <h2 className="mt-5 text-sm font-medium">{t("lifecycle.tag.matches")}</h2>
@@ -1679,7 +1967,7 @@ function TagObjectEditor({
           {t("lifecycle.tag.empty")}
         </p>
       )}
-    </section>
+    </ObjectEditorShell>
   );
 }
 
@@ -1710,14 +1998,12 @@ function QueryObjectEditor({
   }
 
   return (
-    <section
-      className={cn(editorCardClass, "pb-8")}
-      data-slot="query-object-editor"
-    >
+    <ObjectEditorShell className="pb-8" dataSlot="query-object-editor">
       {header}
       <EntityTitleField title={entity.title} update={update} />
       <form onSubmit={generate} className="mt-2 flex gap-2">
         <Input
+          data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
           value={description}
           onChange={(event) => setDescription(event.target.value)}
           placeholder={t("lifecycle.query.placeholder")}
@@ -1727,6 +2013,7 @@ function QueryObjectEditor({
       </form>
       <div className="mt-3 grid gap-2 sm:grid-cols-3">
         <select
+          data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
           aria-label={t("lifecycle.query.objectType")}
           value={entity.filters.objectTypeId ?? ""}
           onChange={(event) =>
@@ -1747,6 +2034,7 @@ function QueryObjectEditor({
           ))}
         </select>
         <select
+          data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
           aria-label={t("lifecycle.query.created")}
           value={entity.filters.created ?? ""}
           onChange={(event) =>
@@ -1763,6 +2051,7 @@ function QueryObjectEditor({
           <option value="today">{t("lifecycle.query.today")}</option>
         </select>
         <BufferedInput
+          data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
           aria-label={t("fields.tags")}
           placeholder={t("fields.tags")}
           value={entity.filters.tags}
@@ -1793,7 +2082,7 @@ function QueryObjectEditor({
           </li>
         ))}
       </ul>
-    </section>
+    </ObjectEditorShell>
   );
 }
 
@@ -1804,11 +2093,16 @@ function FileObjectEditor({
 }: ObjectEditorProps & { entity: FileEntity }) {
   const t = useTranslations("workspace");
   const [fileError, setFileError] = React.useState(false);
+  const replaceInputRef = React.useRef<HTMLInputElement>(null);
+  const download = React.useCallback(() => {
+    if (!entity.previewUrl) return;
+    const link = document.createElement("a");
+    link.href = entity.previewUrl;
+    link.download = entity.fileName;
+    link.click();
+  }, [entity.fileName, entity.previewUrl]);
   return (
-    <section
-      className={cn(editorCardClass, "pb-8")}
-      data-slot="file-object-editor"
-    >
+    <ObjectEditorShell className="pb-8" dataSlot="file-object-editor">
       {header}
       <EntityTitleField title={entity.title} update={update} />
       <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
@@ -1819,27 +2113,38 @@ function FileObjectEditor({
         <dt className="text-muted-foreground">{t("lifecycle.file.size")}</dt>
         <dd>{entity.size} B</dd>
       </dl>
-      {entity.previewUrl && entity.objectTypeId === "image" ? (
-        <Image
-          src={entity.previewUrl}
-          alt={entity.title || entity.fileName}
-          width={320}
-          height={208}
-          unoptimized
-          className="mt-4 max-h-52 rounded-lg border object-contain"
-        />
-      ) : entity.previewUrl && entity.objectTypeId === "audio" ? (
-        <audio controls src={entity.previewUrl} className="mt-4 w-full">
-          <track kind="captions" />
-        </audio>
-      ) : (
-        <p className="mt-4 text-sm text-muted-foreground">
-          {t("lifecycle.file.reselect")}
-        </p>
-      )}
+      <MediaAssetRenderer
+        className="mt-4"
+        downloadLabel={t("lifecycle.file.download")}
+        entity={entity}
+        onDownload={entity.previewUrl ? download : undefined}
+        onRemove={() =>
+          update({
+            assetId: undefined,
+            contentHash: undefined,
+            previewUrl: undefined,
+            storageState: "missing",
+          })
+        }
+        removeLabel={t("lifecycle.file.remove")}
+      />
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => replaceInputRef.current?.click()}
+        >
+          <UploadIcon className="size-4" />
+          {t("lifecycle.file.replace")}
+        </Button>
+      </div>
       <Input
+        ref={replaceInputRef}
         type="file"
-        className="mt-3"
+        data-lifecycle-contract={
+          objectLifecycleContractSlots.ObjectAttachmentControl
+        }
+        className="sr-only"
         aria-label={t("lifecycle.file.reselectAction")}
         onChange={(event) => {
           const file = event.target.files?.[0];
@@ -1849,12 +2154,8 @@ function FileObjectEditor({
             return;
           }
           setFileError(false);
-          update({
-            fileName: file.name,
-            mimeType: file.type,
-            previewUrl: URL.createObjectURL(file),
-            size: file.size,
-          });
+          update({ file });
+          event.currentTarget.value = "";
         }}
       />
       {fileError && (
@@ -1862,7 +2163,7 @@ function FileObjectEditor({
           {t("lifecycle.errors.incompatible-file")}
         </p>
       )}
-    </section>
+    </ObjectEditorShell>
   );
 }
 
@@ -2213,7 +2514,11 @@ function ObjectTypeWorkspace({
   }
 
   return (
-    <div className="relative flex h-full min-h-0 flex-col text-[#282522]">
+    <div
+      data-slot="object-type-workspace"
+      data-object-type={objectType.id}
+      className="relative flex h-full min-h-0 flex-col text-[#282522]"
+    >
       <input
         id={`object-type-import-${objectType.id}`}
         ref={fileInputRef}
@@ -2996,7 +3301,7 @@ function ObjectTypeOverview({
               {entities.length > 0 ? (
                 <div className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2">
                   {entities.map((entity) => (
-                    <ObjectTypeEntityButton
+                    <ObjectProjectionRow
                       key={entity.id}
                       entity={entity}
                       objectType={objectType}
@@ -3034,14 +3339,17 @@ function ObjectTypeOverview({
               {collections.length > 0 ? (
                 <ObjectTypeNamedItems
                   items={collections}
-                  itemCounts={collections.map(
-                    (collection) =>
-                      entities.filter(
-                        (entity) =>
-                          "collections" in entity &&
-                          entity.collections.includes(collection),
-                      ).length,
-                  )}
+                  itemCounts={collections.map((collection) => {
+                    const collectionId = createCollectionId(
+                      objectType.id,
+                      collection,
+                    );
+                    return entities.filter(
+                      (entity) =>
+                        "collections" in entity &&
+                        entity.collections.includes(collectionId),
+                    ).length;
+                  })}
                   kind="collection"
                   editingIndex={
                     editingItem?.kind === "collection"
@@ -3176,7 +3484,7 @@ function ObjectTypeSpecialSection({
           {matches.length > 0 ? (
             <div className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2">
               {matches.map((entity) => (
-                <ObjectTypeEntityButton
+                <ObjectProjectionRow
                   key={entity.id}
                   entity={entity}
                   objectType={objectType}
@@ -3220,7 +3528,7 @@ function ObjectTypeSpecialView({
       {matches.length > 0 ? (
         <div className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2">
           {matches.map((entity) => (
-            <ObjectTypeEntityButton
+            <ObjectProjectionRow
               key={entity.id}
               entity={entity}
               objectType={objectType}
@@ -3378,7 +3686,7 @@ function ObjectTypeSectionEmpty({
   );
 }
 
-function ObjectTypeEntityButton({
+function ObjectProjectionRow({
   entity,
   objectType,
   onClick,
@@ -3393,6 +3701,7 @@ function ObjectTypeEntityButton({
   return (
     <button
       type="button"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectProjectionRow}
       className="flex min-h-12 items-center gap-2 rounded-lg px-2 text-left hover:bg-[#f5f3f1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       onClick={onClick}
     >
@@ -3444,7 +3753,7 @@ function ObjectTypeAllView({
           )}
         >
           {entities.map((entity) => (
-            <ObjectTypeEntityButton
+            <ObjectProjectionRow
               key={entity.id}
               entity={entity}
               objectType={objectType}
@@ -3528,7 +3837,7 @@ function CitationWorkspace() {
           </Button>
         </div>
 
-        <EditableTitle
+        <EditableObjectTitle
           label={t("fields.title")}
           placeholder={t("fields.title")}
           value=""

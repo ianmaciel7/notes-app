@@ -4,14 +4,14 @@
 
 ## 1. Domain and partitioning
 
-- [ ] 1.1 Define AccountId/UserSession/SpaceId/Space and active-space service.
-- [ ] 1.2 Make entities, Structures, properties, identities, relations/links, blocks, queries/views/search indexes, tasks/dates, media, operations, and sync metadata explicitly Space-scoped.
-- [ ] 1.3 Add negative cross-Space tests for repository reads, search/query, relation/link targets, media lookup, and sync cursors.
-- [ ] 1.4 Migrate the current single workspace transactionally into one default Space.
+- [x] 1.1 Define AccountId/UserSession/SpaceId/Space and active-space service.
+- [x] 1.2 Make entities, Structures, properties, identities, relations/links, blocks, queries/views/search indexes, tasks/dates, media, operations, and sync metadata explicitly Space-scoped.
+- [x] 1.3 Add negative cross-Space tests for repository reads, search/query, relation/link targets, media lookup, and sync cursors.
+- [x] 1.4 Migrate the current single workspace transactionally into one default Space.
 
 ## 2. Session and UI
 
-- [ ] 2.1 Define provider-neutral AuthAdapter/session/secret boundary, expiry, sign-out, and offline-cache policy.
+- [x] 2.1 Define provider-neutral AuthAdapter/session/secret boundary, expiry, sign-out, and offline-cache policy.
 - [ ] 2.2 Add Space switch/create/rename/delete/settings flows and destructive confirmations.
 
 ## 3. Acceptance

@@ -5,6 +5,7 @@ import type {
   WorkspaceStructure,
 } from "./workspace-object-types.ts";
 import type { WorkspaceEntity } from "./workspace-objects.ts";
+import { readWorkspacePropertyValue } from "./workspace-property-values.ts";
 
 export const OBJECT_VIEW_KINDS = [
   "inline",
@@ -330,6 +331,12 @@ export function readWorkspaceEntityProperty(
   propertyId: string,
 ): unknown {
   if (propertyId === "objectTypeId") return entity.objectTypeId;
+  if (
+    entity.propertyValues &&
+    Object.hasOwn(entity.propertyValues, propertyId)
+  ) {
+    return readWorkspacePropertyValue(entity.propertyValues[propertyId]);
+  }
   const record = entity as unknown as Readonly<Record<string, unknown>>;
   return record[propertyId];
 }
@@ -398,7 +405,8 @@ function matchesCreatedAtFilter(
 ): boolean {
   const entityTime = Date.parse(entity.createdAt);
   const filterTime = Date.parse(filter.value);
-  if (!Number.isFinite(entityTime) || !Number.isFinite(filterTime)) return false;
+  if (!Number.isFinite(entityTime) || !Number.isFinite(filterTime))
+    return false;
   if (filter.operator === "before") return entityTime < filterTime;
   if (filter.operator === "after") return entityTime > filterTime;
   return isSameUtcDay(new Date(entityTime), new Date(filterTime));
@@ -408,7 +416,8 @@ function matchesQueryFilter(
   entity: WorkspaceEntity,
   filter: QueryFilter,
 ): boolean {
-  if (filter.field === "structure") return matchesStructureFilter(entity, filter);
+  if (filter.field === "structure")
+    return matchesStructureFilter(entity, filter);
   if (filter.field === "kind") return matchesKindFilter(entity, filter);
   if (filter.field === "tag") return matchesTagFilter(entity, filter);
   if (filter.field === "title") return matchesTitleFilter(entity, filter);
@@ -867,7 +876,9 @@ export function instantiateObjectTemplate(
   idFactory: () => string = () => crypto.randomUUID(),
 ): InstantiatedObjectTemplate {
   return {
-    blocks: template.blocks.map((block) => cloneTemplateBlock(block, idFactory)),
+    blocks: template.blocks.map((block) =>
+      cloneTemplateBlock(block, idFactory),
+    ),
     objectId: idFactory(),
     propertyValues: structuredClone(template.propertyValues),
     structureId: template.structureId,
@@ -900,8 +911,10 @@ export function comparePropertyDefinitions(
   }
   if (
     source.multiple === target.multiple &&
-    ((textualTypes.has(source.valueType) && textualTypes.has(target.valueType)) ||
-      (temporalTypes.has(source.valueType) && temporalTypes.has(target.valueType)))
+    ((textualTypes.has(source.valueType) &&
+      textualTypes.has(target.valueType)) ||
+      (temporalTypes.has(source.valueType) &&
+        temporalTypes.has(target.valueType)))
   ) {
     return "requires-confirmation";
   }

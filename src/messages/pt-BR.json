@@ -137,6 +137,19 @@
       "relevantContent": "Conteúdo relevante",
       "title": "Explorar"
     },
+    "linking": {
+      "convertMention": "Converter",
+      "editTransclusion": "Editar fonte incorporada",
+      "embed": "Incorporar",
+      "linkObject": "Vincular {title}",
+      "missingTarget": "Destino ausente: {id}",
+      "noBacklinks": "Ainda não há links de entrada.",
+      "noGraphEdges": "Ainda não há arestas no grafo contextual.",
+      "noObjectsInside": "Ainda não há objetos internos.",
+      "references": "{count, plural, one {# referência} other {# referências}}",
+      "title": "Links e referências",
+      "unlinkedMentions": "Menções não vinculadas"
+    },
     "footer": {
       "objectTypes": "Tipos de objeto",
       "profile": "Perfil pessoal",
@@ -201,6 +214,10 @@
       "new": "Nova aba",
       "openInSidePanel": "Abrir no painel lateral",
       "openedInSidePanel": "{label} aberto no painel lateral",
+      "preview": {
+        "object": "Objeto",
+        "objectType": "Tipo de objeto"
+      },
       "recentlyOpened": "Recentemente abertos",
       "search": "Buscar abas",
       "searchContent": "Buscar conteúdo para nova aba",
@@ -272,6 +289,33 @@
         "tweet": "Tweet",
         "weblink": "Weblink"
       },
+      "objectTypePlurals": {
+        "ai-chat": "Chats de IA",
+        "area": "Áreas",
+        "atomic-note": "Notas atômicas",
+        "audio": "Áudios",
+        "book": "Livros",
+        "definition": "Definições",
+        "file": "Arquivos",
+        "idea": "Ideias",
+        "image": "Imagens",
+        "media": "Mídias",
+        "meeting": "Reuniões",
+        "organization": "Organizações",
+        "page": "Páginas",
+        "pdf": "PDFs",
+        "person": "Pessoas",
+        "place": "Lugares",
+        "project": "Projetos",
+        "query": "Queries",
+        "quote": "Citações",
+        "table": "Tabelas",
+        "tag": "Etiquetas",
+        "task": "Tarefas",
+        "travel": "Viagens",
+        "tweet": "Tweets",
+        "weblink": "Weblinks"
+      },
       "title": "Adicione novo tipo de objeto",
       "trigger": "Adicionar tipo de objeto",
       "operationFailed": "Não foi possível alterar o tipo de objeto."
@@ -282,6 +326,7 @@
       "errors": {
         "incompatible-file": "Escolha um arquivo compatível com este tipo de objeto.",
         "invalid-url": "Digite uma URL válida para este tipo de objeto.",
+        "media-storage-failed": "Não foi possível salvar o arquivo localmente. Tente um arquivo menor ou libere armazenamento do navegador.",
         "required-title": "Digite o título da tarefa.",
         "unsupported-object-type": "Este tipo de objeto não é compatível."
       },
@@ -294,7 +339,10 @@
           "pdf": "Adicionar PDF"
         },
         "description": "O arquivo permanece neste dispositivo; apenas seus metadados são salvos.",
+        "download": "Baixar",
         "name": "Nome",
+        "remove": "Remover",
+        "replace": "Substituir",
         "reselect": "Selecione o arquivo local novamente para restaurar a prévia.",
         "reselectAction": "Selecionar arquivo novamente",
         "size": "Tamanho",

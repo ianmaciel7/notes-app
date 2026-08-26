@@ -35,12 +35,12 @@
 ## 6. Behavioral acceptance
 
 - [x] 6.1 Add Playwright coverage that creates a custom Structure, creates two objects for it, writes content, selects/reopens projections, reloads, and proves Structure/object ids and counts do not duplicate.
-- [ ] 6.2 Cover preset creation twice, rename and appearance propagation, unknown Structure rejection, guarded deletion, keyboard focus, Escape/outside-click where applicable, and zero console implementation errors.
-- [ ] 6.3 Re-run the six existing shell viewports and interaction checks to prove the Structure integration does not regress the 224px sidebar, 46px rails, 10px gaps, 12px radii, tab/sidebar targets, overlays, reduced motion, or horizontal-overflow contract.
+- [x] 6.2 Cover preset creation twice, rename and appearance propagation, unknown Structure rejection, guarded deletion, keyboard focus, Escape/outside-click where applicable, and zero console implementation errors.
+- [x] 6.3 Re-run the six existing shell viewports and interaction checks to prove the Structure integration does not regress the 224px sidebar, 46px rails, 10px gaps, 12px radii, tab/sidebar targets, overlays, reduced motion, or horizontal-overflow contract.
 
 ## 7. Verification and handoff
 
 - [ ] 7.1 Run focused domain/storage/UI tests, TypeScript, lint/format check without rewriting unrelated files, relevant Playwright projects, production build, and route HTTP checks.
-- [ ] 7.2 Run strict OpenSpec validation and a three-front source/browser/reference review; check off only tasks supported by current evidence.
+- [x] 7.2 Run strict OpenSpec validation and a three-front source/browser/reference review; check off only tasks supported by current evidence.
 - [ ] 7.3 Refresh Graphify only after material source changes and stage only the dedicated Structure/ObjectType change files, excluding pre-existing editor work and temporary artifacts.
 - [ ] 7.4 Record deferred follow-up changes in checklist order: typed property values, block editor completion, tag/collection identity, links/backlinks, conversion, lifecycle components, and queries.

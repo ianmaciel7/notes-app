@@ -3,11 +3,11 @@ import test from "node:test";
 
 import {
   BUILT_IN_STRUCTURES,
-  OBJECT_TYPE_PRESETS,
-  RESERVED_STRUCTURES,
   createCustomStructure,
   deleteStructure,
   instantiateObjectTypePreset,
+  OBJECT_TYPE_PRESETS,
+  RESERVED_STRUCTURES,
   renameStructure,
   replaceStructureSchema,
   validatePropertyDefinition,
@@ -207,6 +207,7 @@ test("property schema validation accepts public definitions and rejects malforme
   const summary = {
     id: "summary",
     name: "Summary",
+    ownership: "normal",
     valueType: "text",
     writable: true,
     multiple: false,
@@ -214,6 +215,7 @@ test("property schema validation accepts public definitions and rejects malforme
   const related = {
     id: "related",
     name: "Related",
+    ownership: "normal",
     valueType: "entity",
     writable: true,
     multiple: true,
@@ -240,7 +242,7 @@ test("property schema validation accepts public definitions and rejects malforme
   );
   const updated = replaced.find((structure) => structure.id === customId);
 
-  assert.deepEqual(updated.propertyDefinitions, [summary, related]);
+  assert.deepEqual(updated.propertyDefinitions.slice(-2), [summary, related]);
   assert.equal(validateWorkspaceStructure(updated).ok, true);
   expectFailure(
     replaceStructureSchema(registry, customId, [summary, summary]),
@@ -253,9 +255,103 @@ test("property schema validation accepts public definitions and rejects malforme
     "unsafe-schema-mutation",
   );
   assert.deepEqual(
-    registry.find((structure) => structure.id === customId).propertyDefinitions,
+    registry
+      .find((structure) => structure.id === customId)
+      .propertyDefinitions.slice(-1),
     [summary],
   );
+});
+
+test("entity inverse properties must point at compatible reciprocal definitions", () => {
+  const author = {
+    id: "author",
+    inversePropertyDefinitionId: "books",
+    multiple: false,
+    name: "Author",
+    ownership: "normal",
+    targetStructureIds: ["person-rel"],
+    valueType: "entity",
+    writable: true,
+  };
+  const books = {
+    id: "books",
+    inversePropertyDefinitionId: "author",
+    multiple: true,
+    name: "Books",
+    ownership: "normal",
+    targetStructureIds: ["book-rel"],
+    valueType: "entity",
+    writable: true,
+  };
+  const bookRegistry = expectSuccess(
+    createCustomStructure(
+      canonicalRegistry,
+      customStructureInput({
+        propertyDefinitions: [author],
+        singularName: "Book",
+        pluralName: "Books",
+      }),
+      () => "book-rel",
+    ),
+  );
+  const registry = expectSuccess(
+    createCustomStructure(
+      bookRegistry,
+      customStructureInput({
+        propertyDefinitions: [books],
+        singularName: "Person",
+        pluralName: "People",
+      }),
+      () => "person-rel",
+    ),
+  );
+
+  assert.equal(validateStructureRegistry(registry).ok, true);
+  assert.equal(
+    validateStructureRegistry([
+      registry.find((structure) => structure.id === "book-rel"),
+      {
+        ...registry.find((structure) => structure.id === "person-rel"),
+        propertyDefinitions: [{ ...books, targetStructureIds: ["project"] }],
+      },
+    ]).ok,
+    false,
+  );
+});
+
+test("Structure presentation normalizes legacy view aliases", () => {
+  const normalized = expectSuccess(
+    validateWorkspaceStructure({
+      ...BUILT_IN_STRUCTURES[0],
+      presentation: {
+        availableViews: ["grid", "table"],
+        defaultView: "grid",
+      },
+    }),
+  );
+
+  assert.deepEqual(normalized.presentation, {
+    availableViews: ["gallery", "table"],
+    defaultView: "gallery",
+  });
+
+  const calendarAlias = expectSuccess(
+    createCustomStructure(
+      canonicalRegistry,
+      customStructureInput({
+        presentation: {
+          availableViews: ["calendar"],
+          defaultView: "calendar",
+        },
+      }),
+      () => "77777777-7777-4777-8777-777777777777",
+    ),
+  );
+
+  assert.deepEqual(calendarAlias.at(-1).presentation, {
+    availableViews: ["list"],
+    defaultView: "list",
+  });
 });
 
 test("registry validation rejects duplicate canonical identities atomically", () => {

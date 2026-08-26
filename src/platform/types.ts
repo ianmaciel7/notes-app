@@ -1,8 +1,10 @@
 export type BlockId = string;
+export type CollectionId = string;
 export type ObjectId = string;
 export type PropertyId = string;
 export type SpaceId = string;
 export type StructureId = string;
+export type TagId = string;
 
 export type IsoDateTime = string;
 

@@ -287,11 +287,17 @@ function filterCommandItems(
 function isUsableAnchorRect(
   rect: DOMRect | null | undefined,
 ): rect is DOMRect {
+  const collapsedAtViewportEdge = Boolean(
+    rect &&
+      rect.left <= SLASH_MENU_VIEWPORT_GUTTER &&
+      rect.width === 0,
+  );
   return Boolean(
     rect &&
       Number.isFinite(rect.left) &&
       Number.isFinite(rect.top) &&
       Number.isFinite(rect.bottom) &&
+      !collapsedAtViewportEdge &&
       (rect.left !== 0 || rect.top !== 0 || rect.width !== 0 || rect.height !== 0),
   );
 }
@@ -310,10 +316,35 @@ function getCursorRect(editor: Editor, position: number) {
   }
 }
 
+function getDomSelectionRect(editor: Editor) {
+  const ownerWindow = editor.view.dom.ownerDocument.defaultView;
+  const selection = ownerWindow?.getSelection();
+  if (!selection || selection.rangeCount === 0) return null;
+  const rect = selection.getRangeAt(0).getBoundingClientRect();
+  return rect;
+}
+
 function resolveSlashMenuAnchor(anchor: SlashMenuAnchorState) {
   const suggestionRect = anchor.clientRect?.();
+  const cursorRect = getCursorRect(anchor.editor, anchor.position);
+  const selectionRect = getDomSelectionRect(anchor.editor);
+  if (
+    suggestionRect &&
+    suggestionRect.left <= SLASH_MENU_VIEWPORT_GUTTER &&
+    isUsableAnchorRect(selectionRect)
+  ) {
+    return selectionRect;
+  }
+  if (
+    suggestionRect &&
+    suggestionRect.left <= SLASH_MENU_VIEWPORT_GUTTER &&
+    isUsableAnchorRect(cursorRect)
+  ) {
+    return cursorRect;
+  }
   if (isUsableAnchorRect(suggestionRect)) return suggestionRect;
-  return getCursorRect(anchor.editor, anchor.position);
+  if (isUsableAnchorRect(selectionRect)) return selectionRect;
+  return cursorRect;
 }
 
 function clamp(value: number, minimum: number, maximum: number) {
@@ -398,6 +429,7 @@ function createSlashCommandExtension(
           render: () => {
             let menu: SlashCommandMenuRenderer | undefined;
             let unmountFloatingElement: (() => void) | undefined;
+            let removeEscapeListener: (() => void) | undefined;
             let activeIndex = 0;
             let currentItems: BlockCommandCatalogItem[] = [];
             let anchorState: SlashMenuAnchorState | undefined;
@@ -405,9 +437,12 @@ function createSlashCommandExtension(
             function cleanupMenu() {
               const currentMenu = menu;
               const currentUnmount = unmountFloatingElement;
+              const currentEscapeListener = removeEscapeListener;
               menu = undefined;
               unmountFloatingElement = undefined;
+              removeEscapeListener = undefined;
               anchorState = undefined;
+              currentEscapeListener?.();
               currentUnmount?.();
               currentMenu?.destroy();
               if (activeSlashMenuCleanup === cleanupMenu) {
@@ -476,6 +511,39 @@ function createSlashCommandExtension(
                     );
                   },
                 });
+                const ownerDocument = menu.element.ownerDocument;
+                const ownerWindow = ownerDocument.defaultView;
+                const onDocumentKeyDown = (event: KeyboardEvent) => {
+                  if (event.key !== "Escape") return;
+                  event.preventDefault();
+                  props.editor.view.focus();
+                  exitSuggestion(props.editor.view, slashCommandPluginKey);
+                  cleanupMenu();
+                };
+                ownerDocument.addEventListener("keydown", onDocumentKeyDown, {
+                  capture: true,
+                });
+                ownerWindow?.addEventListener("keydown", onDocumentKeyDown, {
+                  capture: true,
+                });
+                props.editor.view.dom.addEventListener("keydown", onDocumentKeyDown, {
+                  capture: true,
+                });
+                removeEscapeListener = () => {
+                  ownerDocument.removeEventListener("keydown", onDocumentKeyDown, {
+                    capture: true,
+                  });
+                  ownerWindow?.removeEventListener("keydown", onDocumentKeyDown, {
+                    capture: true,
+                  });
+                  props.editor.view.dom.removeEventListener(
+                    "keydown",
+                    onDocumentKeyDown,
+                    {
+                      capture: true,
+                    },
+                  );
+                };
                 activeSlashMenuCleanup = cleanupMenu;
               },
               onUpdate: (props) => {

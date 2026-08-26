@@ -83,9 +83,13 @@ async function openIsolatedWorkspace(page: Page, objectType: "page" | "quote") {
 }
 
 async function getDocumentWorkspace(page: Page, objectType: string) {
+  const pageViewKind = objectType === "quote" ? "quote" : "document";
   const workspace = page
     .locator(
-      `[data-slot="created-object-workspace"][data-object-type="${objectType}"]`,
+      [
+        `[data-slot="created-object-workspace"][data-object-type="${objectType}"]`,
+        `[data-slot="workspace-object-page-view"][data-object-kind="${pageViewKind}"]`,
+      ].join(", "),
     )
     .filter({ visible: true });
   await expect(workspace).toBeVisible();
@@ -186,7 +190,7 @@ for (const documentCase of documentCases) {
       name: "Título",
       exact: true,
     });
-    await expect(title).toHaveText(documentCase.title);
+    await expect(title).toHaveValue(documentCase.title);
     await expect(editor.locator(documentCase.semanticSelector)).toContainText(
       documentCase.semanticText,
     );
@@ -232,15 +236,11 @@ for (const documentCase of documentCases) {
       .toBe(true);
 
     await page.reload();
-    const restored = page
-      .locator(
-        `[data-slot="created-object-workspace"][data-object-type="${documentCase.objectType}"]`,
-      )
-      .filter({ visible: true });
+    const restored = await getDocumentWorkspace(page, documentCase.objectType);
     await expect(restored).toBeVisible();
     await expect(
       restored.getByRole("textbox", { name: "Título", exact: true }),
-    ).toHaveText(documentCase.title);
+    ).toHaveValue(documentCase.title);
     await expect(
       restored
         .getByRole("textbox", {
@@ -280,7 +280,7 @@ test("slash menu filters commands, supports keyboard selection, and keeps editor
   await expect(slashMenu).toContainText("Tarefas");
   await expect(slashMenu).not.toContainText("Novo Página");
 
-  await editor.press("Escape");
+  await page.keyboard.press("Escape");
   await expect(slashMenu).toBeHidden();
   await editor.press("ControlOrMeta+A");
   await editor.press("Backspace");
@@ -304,7 +304,7 @@ test("slash menu filters commands, supports keyboard selection, and keeps editor
   await expect(slashMenu).toContainText("Criar 'zzz'");
   await expect(slashMenu).toContainText("Página");
 
-  await editor.press("Escape");
+  await page.keyboard.press("Escape");
   await expect(slashMenu).toBeHidden();
   await editor.pressSequentially("a");
   await expect(editor).toContainText("/zzza");
@@ -315,11 +315,9 @@ test("slash menu filters commands, supports keyboard selection, and keeps editor
   await expect(slashMenu).toHaveCount(1);
   await expect(slashMenu).toContainText("Criar 'nova'");
   await editor.press("Enter");
-  const createdPage = page
-    .locator('[data-slot="created-object-workspace"][data-object-type="page"]')
-    .filter({ visible: true });
+  const createdPage = await getDocumentWorkspace(page, "page");
   await expect(
     createdPage.getByRole("textbox", { name: "Título", exact: true }),
-  ).toHaveText("nova");
+  ).toHaveValue("nova");
   expect(errors).toEqual([]);
 });

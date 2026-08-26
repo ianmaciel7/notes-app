@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { blockEditorDocumentToPlainText } from "@/editor/document";
 import { cn } from "@/lib/utils";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
@@ -7,6 +8,15 @@ import type { WorkspaceEntity } from "@/lib/workspace-objects";
 type ObjectViewPreviewProps = {
   readonly className?: string;
   readonly entity: WorkspaceEntity;
+};
+
+type MediaAssetRendererProps = {
+  readonly className?: string;
+  readonly downloadLabel?: string;
+  readonly entity: Extract<WorkspaceEntity, { kind: "file" }>;
+  readonly onDownload?: () => void;
+  readonly onRemove?: () => void;
+  readonly removeLabel?: string;
 };
 
 function previewLines(value: string): readonly string[] {
@@ -24,7 +34,10 @@ function DocumentPreview({ entity }: { readonly entity: WorkspaceEntity }) {
   if (entity.kind !== "document" && entity.kind !== "quote") return null;
   const lines = previewLines(blockEditorDocumentToPlainText(entity.body));
   return (
-    <div data-slot="object-view-document-preview" className="grid w-full gap-5 py-12">
+    <div
+      data-slot="object-view-document-preview"
+      className="grid w-full gap-5 py-12"
+    >
       {lines.map((line) => (
         <p key={line} className="line-clamp-2 text-sm leading-5">
           {line}
@@ -80,7 +93,10 @@ function TaskPreview({ entity }: { readonly entity: WorkspaceEntity }) {
 function UrlPreview({ entity }: { readonly entity: WorkspaceEntity }) {
   if (entity.kind !== "url") return null;
   return (
-    <div data-slot="object-view-url-preview" className="my-auto grid w-full gap-3">
+    <div
+      data-slot="object-view-url-preview"
+      className="my-auto grid w-full gap-3"
+    >
       <p className="truncate text-sm font-medium">{entity.url}</p>
       <p className="line-clamp-5 whitespace-pre-wrap text-sm leading-6 text-muted-foreground">
         {entity.body}
@@ -89,14 +105,138 @@ function UrlPreview({ entity }: { readonly entity: WorkspaceEntity }) {
   );
 }
 
-function FilePreview({ entity }: { readonly entity: WorkspaceEntity }) {
-  if (entity.kind !== "file") return null;
+function MediaAssetPreview({
+  entity,
+  label,
+}: {
+  readonly entity: Extract<WorkspaceEntity, { kind: "file" }>;
+  readonly label: string;
+}) {
+  if (!entity.previewUrl) {
+    return (
+      <p className="rounded-lg border border-dashed px-4 py-6 text-center text-sm text-muted-foreground">
+        Preview will be restored from local media storage when bytes are
+        available.
+      </p>
+    );
+  }
+
+  if (entity.objectTypeId === "image") {
+    return (
+      <Image
+        src={entity.previewUrl}
+        alt={label}
+        width={640}
+        height={360}
+        unoptimized
+        className="max-h-64 w-full rounded-lg border object-contain"
+      />
+    );
+  }
+
+  if (entity.objectTypeId === "audio") {
+    return (
+      <audio controls src={entity.previewUrl} className="w-full">
+        <track kind="captions" />
+      </audio>
+    );
+  }
+
+  if (entity.objectTypeId === "pdf") {
+    return (
+      <object
+        data={entity.previewUrl}
+        type="application/pdf"
+        aria-label={label}
+        className="h-72 w-full rounded-lg border bg-background"
+      >
+        <a className="text-sm underline" href={entity.previewUrl}>
+          Open PDF
+        </a>
+      </object>
+    );
+  }
+
   return (
-    <div data-slot="object-view-file-preview" className="my-auto grid w-full gap-2">
-      <p className="truncate text-sm font-medium">{entity.fileName}</p>
-      <p className="text-xs text-muted-foreground">{entity.mimeType}</p>
+    <a
+      href={entity.previewUrl}
+      download={entity.fileName}
+      className="rounded-lg border border-dashed px-4 py-6 text-center text-sm text-muted-foreground underline-offset-4 hover:underline"
+    >
+      {entity.fileName}
+    </a>
+  );
+}
+
+function MediaAssetActions({
+  downloadLabel,
+  onDownload,
+  onRemove,
+  removeLabel,
+}: Pick<
+  MediaAssetRendererProps,
+  "downloadLabel" | "onDownload" | "onRemove" | "removeLabel"
+>) {
+  if (!onDownload && !onRemove) return null;
+  return (
+    <div className="flex flex-wrap gap-2">
+      {onDownload && (
+        <button
+          type="button"
+          className="h-8 rounded-md border px-3 text-sm hover:bg-muted"
+          onClick={onDownload}
+        >
+          {downloadLabel}
+        </button>
+      )}
+      {onRemove && (
+        <button
+          type="button"
+          className="h-8 rounded-md border px-3 text-sm text-destructive hover:bg-muted"
+          onClick={onRemove}
+        >
+          {removeLabel}
+        </button>
+      )}
     </div>
   );
+}
+
+function MediaAssetRenderer({
+  className,
+  downloadLabel = "Download",
+  entity,
+  onDownload,
+  onRemove,
+  removeLabel = "Remove",
+}: MediaAssetRendererProps) {
+  const label = entity.title || entity.fileName;
+  return (
+    <div
+      data-slot="media-asset-renderer"
+      data-media-kind={entity.objectTypeId}
+      className={cn("my-auto grid w-full gap-3", className)}
+    >
+      <div className="min-w-0">
+        <p className="truncate text-sm font-medium">{entity.fileName}</p>
+        <p className="text-xs text-muted-foreground">
+          {entity.mimeType || "Unknown type"} / {entity.size} B
+        </p>
+      </div>
+      <MediaAssetPreview entity={entity} label={label} />
+      <MediaAssetActions
+        downloadLabel={downloadLabel}
+        onDownload={onDownload}
+        onRemove={onRemove}
+        removeLabel={removeLabel}
+      />
+    </div>
+  );
+}
+
+function FilePreview({ entity }: { readonly entity: WorkspaceEntity }) {
+  if (entity.kind !== "file") return null;
+  return <MediaAssetRenderer entity={entity} />;
 }
 
 function QueryPreview({ entity }: { readonly entity: WorkspaceEntity }) {
@@ -144,5 +284,5 @@ function ObjectViewPreview({ className, entity }: ObjectViewPreviewProps) {
   );
 }
 
-export { ObjectViewPreview };
-export type { ObjectViewPreviewProps };
+export { MediaAssetRenderer, ObjectViewPreview };
+export type { MediaAssetRendererProps, ObjectViewPreviewProps };

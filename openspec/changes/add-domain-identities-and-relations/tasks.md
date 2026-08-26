@@ -1,21 +1,21 @@
 ## 0. Evidence and dependency gate
 
 - [x] 0.0 Restore the missing platform type primitives required by the immutable domain model without changing existing string-id compatibility.
-- [ ] 0.1 Complete or isolate typed-property values before apply.
-- [ ] 0.2 Re-confirm tag/collection/Object Select documentation and project references.
+- [x] 0.1 Complete or isolate typed-property values before apply.
+- [x] 0.2 Re-confirm tag/collection/Object Select documentation and project references.
 
 ## 1. Identity and relation domain
 
-- [ ] 1.1 Add TagId, CollectionId, canonical records, relation helpers, validators, and reverse selectors.
-- [ ] 1.2 Extend Object Select definitions with single/multiple cardinality, target Structures, optional fixed candidate sets, and optional paired inverse-property identity.
-- [ ] 1.3 Add one atomic two-way relation command with recursion/duplication protection.
-- [ ] 1.4 Add failing-first tests for rename, duplicate display names, collection scope, invalid targets/cardinality/fixed-set, inverse compatibility, and guarded deletion.
+- [x] 1.1 Add TagId, CollectionId, canonical records, relation helpers, validators, and reverse selectors.
+- [x] 1.2 Extend Object Select definitions with single/multiple cardinality, target Structures, optional fixed candidate sets, and optional paired inverse-property identity.
+- [x] 1.3 Add one atomic two-way relation command with recursion/duplication protection.
+- [x] 1.4 Add failing-first tests for rename, duplicate display names, collection scope, invalid targets/cardinality/fixed-set, inverse compatibility, and guarded deletion.
 
 ## 2. Migration and UI
 
-- [ ] 2.1 Migrate legacy string tags/collections to ids with deterministic collision handling.
+- [x] 2.1 Migrate legacy string tags/collections to ids with deterministic collision handling.
 - [ ] 2.2 Move pickers, chips, counts, collection views, and relation controls to id-based selectors.
-- [ ] 2.3 Keep derived backlinks visually/conceptually separate from paired relation properties.
+- [x] 2.3 Keep derived backlinks visually/conceptually separate from paired relation properties.
 
 ## 3. Acceptance
 

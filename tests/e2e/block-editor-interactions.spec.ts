@@ -36,7 +36,10 @@ async function openPageEditor(page: Page, body = "") {
   await page.goto("/pt-BR");
   const workspace = page
     .locator(
-      '[data-slot="created-object-workspace"][data-object-type="page"]',
+      [
+        '[data-slot="created-object-workspace"][data-object-type="page"]',
+        '[data-slot="workspace-object-page-view"][data-object-kind="document"]',
+      ].join(", "),
     )
     .filter({ visible: true });
   await expect(workspace).toBeVisible();
@@ -77,7 +80,10 @@ test("selection toolbar preserves text while applying and removing a link", asyn
   await editor.pressSequentially("Texto para link");
   await editor.press("ControlOrMeta+A");
 
-  const toolbar = page.locator('[data-slot="block-editor-selection-menu"]');
+  const toolbar = page
+    .locator('[data-slot="block-editor-selection-menu"]')
+    .filter({ visible: true })
+    .last();
   await expect(toolbar).toBeVisible();
   await toolbar.getByRole("button", { name: "Link", exact: true }).click();
 
@@ -112,8 +118,26 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
   await expectParagraphTexts(editor, ["Alpha", "Beta", "Gamma"]);
   const alpha = await hoverParagraph(editor, "Alpha");
 
-  const dragRoot = page.locator(".block-editor-drag-handle");
-  const handle = page.locator('[data-slot="block-editor-block-handle"]');
+  const alphaBox = await alpha.boundingBox();
+  expect(alphaBox).not.toBeNull();
+
+  const handles = page
+    .locator('[data-slot="block-editor-block-handle"]')
+    .filter({ visible: true });
+  await expect(handles.first()).toBeVisible();
+  const handleIndex = await handles.evaluateAll((nodes, box) => {
+    const targetY = box?.y ?? 0;
+    return nodes.reduce(
+      (best, node, index) => {
+        const rect = node.getBoundingClientRect();
+        const distance = Math.abs(rect.y - targetY);
+        return distance < best.distance ? { distance, index } : best;
+      },
+      { distance: Number.POSITIVE_INFINITY, index: 0 },
+    ).index;
+  }, alphaBox);
+  const dragRoot = page.locator(".block-editor-drag-handle").nth(handleIndex);
+  const handle = handles.nth(handleIndex);
   const insertControl = handle.getByRole("button", {
     name: "Inserir bloco",
     exact: true,
@@ -141,11 +165,9 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
     await dragControl.evaluate((node) => (node as HTMLElement).draggable),
   ).toBe(true);
 
-  const alphaBox = await alpha.boundingBox();
   const handleBox = await handle.boundingBox();
   const insertBox = await insertControl.boundingBox();
   const dragBox = await dragControl.boundingBox();
-  expect(alphaBox).not.toBeNull();
   expect(handleBox).not.toBeNull();
   expect(insertBox).not.toBeNull();
   expect(dragBox).not.toBeNull();

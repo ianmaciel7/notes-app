@@ -6,13 +6,13 @@ import {
   serializeWorkspaceObjectState,
 } from "../src/lib/workspace-object-storage.ts";
 import {
-  WORKSPACE_OBJECT_SCHEMA_VERSION,
   countEntitiesByType,
   createInitialWorkspaceObjectState,
+  WORKSPACE_OBJECT_SCHEMA_VERSION,
   workspaceObjectReducer,
 } from "../src/lib/workspace-objects.ts";
 
-test("version 2 migrates to version 3 without changing entity or block identities", () => {
+test("version 2 migrates to the current version without changing entity or block identities", () => {
   const body = {
     schemaVersion: 1,
     doc: {
@@ -52,7 +52,7 @@ test("version 2 migrates to version 3 without changing entity or block identitie
     }),
   );
 
-  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 3);
+  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 5);
   assert.equal(parsed.ok, true);
   assert.equal(parsed.state.activeEntityId, "legacy-book-7");
   assert.equal(parsed.state.nextId, 41);
@@ -61,6 +61,10 @@ test("version 2 migrates to version 3 without changing entity or block identitie
   assert.equal(parsed.state.entities[0].objectTypeId, "book");
   assert.equal(parsed.state.entities[0].description, "Specialized payload");
   assert.deepEqual(parsed.state.entities[0].body, body);
+  assert.deepEqual(parsed.state.entities[0].propertyValues.description, {
+    text: { value: "Specialized payload" },
+    type: "text",
+  });
   assert.ok(
     parsed.state.structures.some(
       (structure) =>
@@ -116,6 +120,7 @@ test("runtime custom Structures drive creation, metadata, schema, and guarded de
         id: "summary",
         multiple: false,
         name: "Summary",
+        ownership: "normal",
         valueType: "text",
         writable: true,
       },
@@ -136,7 +141,7 @@ test("runtime custom Structures drive creation, metadata, schema, and guarded de
   assert.deepEqual(state.structures, beforeDelete);
 });
 
-test("version 3 round-trips custom Structures and rejects invalid references atomically", () => {
+test("version 4 round-trips custom Structures and rejects invalid references atomically", () => {
   const structureId = "88888888-8888-4888-8888-888888888888";
   let state = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
     type: "createStructureFromPreset",

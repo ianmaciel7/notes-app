@@ -1,15 +1,15 @@
 ## 0. Evidence and dependency gate
 
-- [ ] 0.1 Complete property/identity/block/link/media prerequisites and re-confirm import/export sources.
+- [x] 0.1 Complete property/identity/block/link/media prerequisites and re-confirm import/export sources.
 
 ## 1. Job and security contracts
 
-- [ ] 1.1 Define import/export states, mappings, manifests, checkpoints, errors, and archive/file security limits with malicious-input tests.
+- [x] 1.1 Define import/export states, mappings, manifests, checkpoints, errors, and archive/file security limits with malicious-input tests.
 
 ## 2. Adapters
 
-- [ ] 2.1 Add staged text/Markdown/HTML, CSV mapping, media, folder/archive, external-id remapping, and link-resolution adapters.
-- [ ] 2.2 Add native JSON/workspace export with media integrity manifest plus reduced Markdown/CSV/media exports.
+- [x] 2.1 Add staged text/Markdown/HTML, CSV mapping, media, folder/archive, external-id remapping, and link-resolution adapters.
+- [x] 2.2 Add native JSON/workspace export with media integrity manifest plus reduced Markdown/CSV/media exports.
 
 ## 3. Acceptance
 
