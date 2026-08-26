@@ -88,7 +88,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function isDateOnly(value: unknown): value is string {
   if (typeof value !== "string" || !DATE_ONLY_PATTERN.test(value)) return false;
   const parsed = new Date(`${value}T00:00:00.000Z`);
-  return Number.isFinite(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === value;
+  return (
+    Number.isFinite(parsed.valueOf()) &&
+    parsed.toISOString().slice(0, 10) === value
+  );
 }
 
 function isNullableDateOnly(value: unknown): value is string | null {
@@ -96,7 +99,10 @@ function isNullableDateOnly(value: unknown): value is string | null {
 }
 
 function hasUniqueStrings(values: readonly string[]): boolean {
-  return values.every((value) => value.trim().length > 0) && new Set(values).size === values.length;
+  return (
+    values.every((value) => value.trim().length > 0) &&
+    new Set(values).size === values.length
+  );
 }
 
 function isRecurrenceRule(value: unknown): value is TaskRecurrenceRule {
@@ -122,10 +128,15 @@ function isOccurrence(value: unknown): value is TaskOccurrence {
   );
 }
 
-export function createTaskManagementMetadata(
-  input: CreateTaskManagementMetadataInput = {},
+function defaultTaskStatus(input: CreateTaskManagementMetadataInput): TaskStatus {
+  if (input.status) return input.status;
+  return input.completed ? "completed" : "inbox";
+}
+
+function cloneTaskMetadataInput(
+  input: CreateTaskManagementMetadataInput,
 ): TaskManagementMetadata {
-  const metadata: TaskManagementMetadata = {
+  return {
     completed: input.completed ?? false,
     contextObjectIds: [...(input.contextObjectIds ?? [])],
     deadline: input.deadline ?? null,
@@ -134,40 +145,87 @@ export function createTaskManagementMetadata(
     priority: input.priority ?? "none",
     recurrence: input.recurrence ?? null,
     scheduledDate: input.scheduledDate ?? null,
-    status: input.status ?? (input.completed ? "completed" : "inbox"),
+    status: defaultTaskStatus(input),
     tagIds: [...(input.tagIds ?? [])],
   };
+}
+
+export function createTaskManagementMetadata(
+  input: CreateTaskManagementMetadataInput = {},
+): TaskManagementMetadata {
+  const metadata = cloneTaskMetadataInput(input);
   const validation = validateTaskManagementMetadata(metadata);
   if (!validation.ok) throw new TypeError(validation.error);
   return metadata;
 }
 
-export function validateTaskManagementMetadata(value: unknown): ValidationResult {
-  if (!isRecord(value)) return { error: "Task metadata must be an object.", ok: false };
-  if (!statuses.has(value.status as TaskStatus)) return { error: "Task status is invalid.", ok: false };
-  if (!priorities.has(value.priority as TaskPriority)) return { error: "Task priority is invalid.", ok: false };
-  if (!isNullableDateOnly(value.scheduledDate) || !isNullableDateOnly(value.deadline)) {
-    return { error: "Task dates must use YYYY-MM-DD.", ok: false };
+function validateTaskIdentityFields(value: Record<string, unknown>): string | null {
+  if (!statuses.has(value.status as TaskStatus)) return "Task status is invalid.";
+  if (!priorities.has(value.priority as TaskPriority)) {
+    return "Task priority is invalid.";
   }
-  if (!Array.isArray(value.contextObjectIds) || !hasUniqueStrings(value.contextObjectIds as string[])) {
-    return { error: "Task context ids must be unique non-empty strings.", ok: false };
+  return null;
+}
+
+function validateTaskDates(value: Record<string, unknown>): string | null {
+  if (
+    !isNullableDateOnly(value.scheduledDate) ||
+    !isNullableDateOnly(value.deadline)
+  ) {
+    return "Task dates must use YYYY-MM-DD.";
   }
-  if (!Array.isArray(value.tagIds) || !hasUniqueStrings(value.tagIds as string[])) {
-    return { error: "Task tag ids must be unique non-empty strings.", ok: false };
+  return null;
+}
+
+function validateTaskCollections(value: Record<string, unknown>): string | null {
+  if (
+    !Array.isArray(value.contextObjectIds) ||
+    !hasUniqueStrings(value.contextObjectIds as string[])
+  ) {
+    return "Task context ids must be unique non-empty strings.";
   }
+  if (
+    !Array.isArray(value.tagIds) ||
+    !hasUniqueStrings(value.tagIds as string[])
+  ) {
+    return "Task tag ids must be unique non-empty strings.";
+  }
+  return null;
+}
+
+function validateTaskDetails(value: Record<string, unknown>): string | null {
   if (typeof value.notes !== "string" || typeof value.completed !== "boolean") {
-    return { error: "Task notes or completion state is invalid.", ok: false };
+    return "Task notes or completion state is invalid.";
   }
   if (value.recurrence !== null && !isRecurrenceRule(value.recurrence)) {
-    return { error: "Task recurrence rule is invalid.", ok: false };
+    return "Task recurrence rule is invalid.";
   }
-  if (!Array.isArray(value.occurrences) || !value.occurrences.every(isOccurrence)) {
-    return { error: "Task occurrences are invalid.", ok: false };
+  if (
+    !Array.isArray(value.occurrences) ||
+    !value.occurrences.every(isOccurrence)
+  ) {
+    return "Task occurrences are invalid.";
   }
   if (value.completed !== (value.status === "completed")) {
-    return { error: "Task completion and status must agree.", ok: false };
+    return "Task completion and status must agree.";
   }
-  return { ok: true, value: value as TaskManagementMetadata };
+  return null;
+}
+
+export function validateTaskManagementMetadata(
+  value: unknown,
+): ValidationResult {
+  if (!isRecord(value)) {
+    return { error: "Task metadata must be an object.", ok: false };
+  }
+  const error =
+    validateTaskIdentityFields(value) ??
+    validateTaskDates(value) ??
+    validateTaskCollections(value) ??
+    validateTaskDetails(value);
+  return error
+    ? { error, ok: false }
+    : { ok: true, value: value as TaskManagementMetadata };
 }
 
 function dateAtUtcMidnight(value: string): Date {
@@ -204,13 +262,22 @@ export function nextRecurringTaskDate(
   baseDate: string,
   recurrence: TaskRecurrenceRule,
 ): string {
-  if (!isRecurrenceRule(recurrence)) throw new TypeError("Invalid recurrence rule.");
-  if (recurrence.frequency === "daily") return addDays(baseDate, recurrence.interval);
-  if (recurrence.frequency === "weekly") return addDays(baseDate, recurrence.interval * 7);
+  if (!isRecurrenceRule(recurrence)) {
+    throw new TypeError("Invalid recurrence rule.");
+  }
+  if (recurrence.frequency === "daily") {
+    return addDays(baseDate, recurrence.interval);
+  }
+  if (recurrence.frequency === "weekly") {
+    return addDays(baseDate, recurrence.interval * 7);
+  }
   return addMonthsClamped(baseDate, recurrence.interval);
 }
 
-function occurrenceId(metadata: TaskManagementMetadata, command: TaskOccurrenceCommand): string {
+function occurrenceId(
+  metadata: TaskManagementMetadata,
+  command: TaskOccurrenceCommand,
+): string {
   const sequence = metadata.occurrences.length + 1;
   return `occurrence:${command.actedOnDate}:${sequence}`;
 }
@@ -219,7 +286,9 @@ function recurrenceBaseDate(
   metadata: TaskManagementMetadata,
   command: TaskOccurrenceCommand,
 ): string {
-  if (metadata.recurrence?.mode === "completion-driven") return command.actedOnDate;
+  if (metadata.recurrence?.mode === "completion-driven") {
+    return command.actedOnDate;
+  }
   return metadata.scheduledDate ?? command.actedOnDate;
 }
 
@@ -229,8 +298,13 @@ export function applyTaskOccurrenceAction(
 ): TaskManagementMetadata {
   const validation = validateTaskManagementMetadata(metadata);
   if (!validation.ok) throw new TypeError(validation.error);
-  if (metadata.completed) throw new TypeError("Completed task cannot receive another occurrence action.");
-  if (!isDateOnly(command.actedOnDate) || !Number.isFinite(new Date(command.actedAt).valueOf())) {
+  if (metadata.completed) {
+    throw new TypeError("Completed task cannot receive another occurrence action.");
+  }
+  if (
+    !isDateOnly(command.actedOnDate) ||
+    !Number.isFinite(new Date(command.actedAt).valueOf())
+  ) {
     throw new TypeError("Occurrence action date is invalid.");
   }
 
@@ -277,12 +351,25 @@ function propertyFilter(
   };
 }
 
-function dashboardFilters(kind: TaskDashboardKind, today: string): QueryFilter[] {
-  if (kind === "today") return [propertyFilter("scheduledDate", "equals", today)];
-  if (kind === "scheduled") return [propertyFilter("scheduledDate", "exists")];
-  if (kind === "completed") return [propertyFilter("completed", "equals", true)];
-  if (kind === "open") return [propertyFilter("completed", "equals", false)];
-  if (kind === "context") return [propertyFilter("contextObjectIds", "exists")];
+function dashboardFilters(
+  kind: TaskDashboardKind,
+  today: string,
+): QueryFilter[] {
+  if (kind === "today") {
+    return [propertyFilter("scheduledDate", "equals", today)];
+  }
+  if (kind === "scheduled") {
+    return [propertyFilter("scheduledDate", "exists")];
+  }
+  if (kind === "completed") {
+    return [propertyFilter("completed", "equals", true)];
+  }
+  if (kind === "open") {
+    return [propertyFilter("completed", "equals", false)];
+  }
+  if (kind === "context") {
+    return [propertyFilter("contextObjectIds", "exists")];
+  }
   if (kind === "tags") return [propertyFilter("tagIds", "exists")];
   return [
     propertyFilter("completed", "equals", false),
@@ -295,7 +382,9 @@ export function createTaskDashboardQuery(
   kind: TaskDashboardKind,
   today: string,
 ): QueryDefinition {
-  if (!isDateOnly(today)) throw new TypeError("Task dashboard date must use YYYY-MM-DD.");
+  if (!isDateOnly(today)) {
+    throw new TypeError("Task dashboard date must use YYYY-MM-DD.");
+  }
   return {
     filters: { filters: dashboardFilters(kind, today), operator: "all" },
     resultKind: "object",
