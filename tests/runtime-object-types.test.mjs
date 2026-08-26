@@ -4,12 +4,15 @@ import test from "node:test";
 import {
   BUILT_IN_STRUCTURES,
   createCustomStructure,
+  createInitialStructureRegistry,
+  createLegacyStructureDefinitions,
   deleteStructure,
   instantiateObjectTypePreset,
   OBJECT_TYPE_PRESETS,
   RESERVED_STRUCTURES,
   renameStructure,
   replaceStructureSchema,
+  selectCreatableStructures,
   validatePropertyDefinition,
   validateStructureRegistry,
   validateWorkspaceStructure,
@@ -86,6 +89,43 @@ test("canonical registries keep built-in, reserved, and preset identities separa
       (structure) => structure.ownership === "reserved",
     ),
   );
+});
+
+test("fresh registries keep suggested presets as templates", () => {
+  const registry = createInitialStructureRegistry();
+  const registryIds = registry.map((structure) => structure.id);
+  const creatableIds = selectCreatableStructures(registry).map(
+    (structure) => structure.id,
+  );
+  const presetIds = OBJECT_TYPE_PRESETS.map((preset) => preset.id);
+
+  assert.deepEqual(
+    registryIds,
+    [...BUILT_IN_STRUCTURES, ...RESERVED_STRUCTURES].map(
+      (structure) => structure.id,
+    ),
+  );
+  for (const presetId of presetIds) {
+    assert.equal(registryIds.includes(presetId), false, presetId);
+    assert.equal(creatableIds.includes(presetId), false, presetId);
+  }
+});
+
+test("legacy preset Structures are migration compatibility records, not creatable ids", () => {
+  const registry = expectSuccess(
+    createLegacyStructureDefinitions(["book", "person"]),
+  );
+  const creatableIds = selectCreatableStructures([
+    ...canonicalRegistry,
+    ...registry,
+  ]).map((structure) => structure.id);
+
+  assert.deepEqual(
+    registry.map((structure) => structure.ownership),
+    ["legacy", "legacy"],
+  );
+  assert.equal(creatableIds.includes("book"), false);
+  assert.equal(creatableIds.includes("person"), false);
 });
 
 test("custom Structure ids are open, persistent runtime identities", () => {

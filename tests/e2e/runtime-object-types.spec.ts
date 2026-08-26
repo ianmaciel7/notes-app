@@ -257,7 +257,7 @@ test("preset instances are independent, guarded, and propagate metadata canonica
   expect(errors).toEqual([]);
 });
 
-test("unknown Structure references recover without partial hydration", async ({
+test("unknown Structure references recover without overwriting invalid storage", async ({
   page,
 }) => {
   const errors: string[] = [];
@@ -265,54 +265,46 @@ test("unknown Structure references recover without partial hydration", async ({
     if (message.type() === "error") errors.push(message.text());
   });
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.addInitScript((key) => {
-    window.localStorage.setItem(
-      key,
-      JSON.stringify({
-        activeEntityId: "entity-1",
-        entities: [
-          {
-            body: {
-              doc: { content: [{ type: "paragraph" }], type: "doc" },
-              schemaVersion: 1,
-            },
-            collections: [],
-            createdAt: "2026-08-25T00:00:00.000Z",
-            id: "entity-1",
-            kind: "document",
-            objectTypeId: "missing-runtime-structure",
-            tags: [],
-            title: "Fonte preservada",
-          },
-        ],
-        nextId: 2,
-        structures: [],
-        version: 4,
-      }),
-    );
-  }, storageKey);
+  const invalidSnapshot = JSON.stringify({
+    activeEntityId: "entity-1",
+    entities: [
+      {
+        body: {
+          doc: { content: [{ type: "paragraph" }], type: "doc" },
+          schemaVersion: 1,
+        },
+        collections: [],
+        createdAt: "2026-08-25T00:00:00.000Z",
+        id: "entity-1",
+        kind: "document",
+        objectTypeId: "missing-runtime-structure",
+        tags: [],
+        title: "Fonte preservada",
+      },
+    ],
+    nextId: 2,
+    structures: [],
+    version: 4,
+  });
+  await page.addInitScript(
+    ({ key, value }) => {
+      window.localStorage.setItem(key, value);
+    },
+    { key: storageKey, value: invalidSnapshot },
+  );
   await page.goto("/pt-BR", { waitUntil: "domcontentloaded", timeout: 60_000 });
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect(
+    page.getByText(
+      "Não foi possível restaurar o espaço salvo. O espaço padrão foi mantido.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await page.waitForTimeout(750);
   await expect
     .poll(async () =>
-      page.evaluate((key) => {
-        const snapshot = JSON.parse(window.localStorage.getItem(key) ?? "null");
-        return {
-          entities: snapshot.entities.length,
-          hasInvalidReference: snapshot.entities.some(
-            (item: { objectTypeId: string }) =>
-              item.objectTypeId === "missing-runtime-structure",
-          ),
-          structures: snapshot.structures.filter(
-            (item: { singularName: string }) => item.singularName === "Fonte",
-          ).length,
-        };
-      }, storageKey),
+      page.evaluate((key) => window.localStorage.getItem(key), storageKey),
     )
-    .toEqual({
-      entities: 0,
-      hasInvalidReference: false,
-      structures: 0,
-    });
+    .toBe(invalidSnapshot);
   expect(errors).toEqual([]);
 });

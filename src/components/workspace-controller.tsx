@@ -795,7 +795,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   );
 
   React.useEffect(() => {
-    if (!storageReady) return;
+    if (!storageReady || workspaceObjects.hydrationStatus !== "ready") return;
     window.localStorage.setItem(
       WORKSPACE_OBJECT_STORAGE_KEY,
       serializeWorkspaceObjectState(workspaceObjects),

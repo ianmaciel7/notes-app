@@ -8,6 +8,7 @@ import {
   createTagId,
 } from "./workspace-domain-identities.ts";
 import {
+  createLegacyStructureDefinitions,
   createInitialStructureRegistry,
   validateStructureRegistry,
   type WorkspaceStructure,
@@ -247,6 +248,38 @@ function migratePlainTextEntityBodies(
   return { entities: migratedEntities, ok: true };
 }
 
+function createStructureRegistryForEntityReferences(
+  entities: readonly unknown[],
+): EntityMigrationResult<readonly WorkspaceStructure[]> {
+  const referencedStructureIds: string[] = [];
+  for (const entity of entities) {
+    if (
+      !isRecord(entity) ||
+      typeof entity.objectTypeId !== "string" ||
+      entity.objectTypeId.trim().length === 0
+    ) {
+      return { ok: false, reason: "invalid-record" };
+    }
+    const structureId = entity.objectTypeId.trim();
+    if (!referencedStructureIds.includes(structureId)) {
+      referencedStructureIds.push(structureId);
+    }
+  }
+
+  const base = createInitialStructureRegistry();
+  const baseIds = new Set(base.map((structure) => structure.id));
+  const legacy = createLegacyStructureDefinitions(referencedStructureIds);
+  if (!legacy.ok) return { ok: false, reason: "invalid-record" };
+
+  return {
+    entities: [
+      ...base,
+      ...legacy.value.filter((structure) => !baseIds.has(structure.id)),
+    ],
+    ok: true,
+  };
+}
+
 function migrateVersionOneSnapshot(
   value: Record<string, unknown>,
 ): SnapshotMigrationResult {
@@ -255,12 +288,34 @@ function migrateVersionOneSnapshot(
   }
   const migration = migratePlainTextEntityBodies(value.entities);
   if (!migration.ok) return migration;
+  const structures = createStructureRegistryForEntityReferences(
+    migration.entities,
+  );
+  if (!structures.ok) return structures;
   return {
     ok: true,
     value: {
       ...value,
       entities: migration.entities,
-      structures: createInitialStructureRegistry(),
+      structures: structures.entities,
+      version: 3,
+    },
+  };
+}
+
+function migrateVersionTwoSnapshot(
+  value: Record<string, unknown>,
+): SnapshotMigrationResult {
+  if (!Array.isArray(value.entities)) {
+    return { ok: false, reason: "invalid-record" };
+  }
+  const structures = createStructureRegistryForEntityReferences(value.entities);
+  if (!structures.ok) return structures;
+  return {
+    ok: true,
+    value: {
+      ...value,
+      structures: structures.entities,
       version: 3,
     },
   };
@@ -270,16 +325,7 @@ function migrateSnapshotVersion(
   value: Record<string, unknown>,
 ): SnapshotMigrationResult {
   if (value.version === 1) return migrateVersionOneSnapshot(value);
-  if (value.version === 2) {
-    return {
-      ok: true,
-      value: {
-        ...value,
-        structures: createInitialStructureRegistry(),
-        version: 3,
-      },
-    };
-  }
+  if (value.version === 2) return migrateVersionTwoSnapshot(value);
   if (value.version === 3) {
     return { ok: true, value: { ...value, version: 4 } };
   }
@@ -330,6 +376,20 @@ function stripTemporaryFilePreviewUrls(
     const { previewUrl: _previewUrl, ...persisted } = entity;
     return persisted;
   }) as WorkspaceEntity[];
+}
+
+function pruneUnreferencedLegacyStructures(
+  structures: readonly WorkspaceStructure[],
+  entities: readonly WorkspaceEntity[],
+): readonly WorkspaceStructure[] {
+  const referencedStructureIds = new Set(
+    entities.map((entity) => entity.objectTypeId),
+  );
+  return structures.filter(
+    (structure) =>
+      structure.ownership !== "legacy" ||
+      referencedStructureIds.has(structure.id),
+  );
 }
 
 function hydrateEntityPropertyValues(
@@ -384,7 +444,7 @@ function parseCurrentWorkspaceObjectSnapshot(
   );
   const structures = reconcileRequiredStructures(
     createInitialStructureRegistry(),
-    structureValidation.value,
+    pruneUnreferencedLegacyStructures(structureValidation.value, entities),
   );
   if (!entitiesReferenceValidStructures(entities, structures)) {
     return { ok: false, reason: "invalid-record" };

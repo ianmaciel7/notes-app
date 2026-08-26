@@ -179,7 +179,52 @@ test("version 2 rejects malformed structured document bodies", () => {
   assert.deepEqual(parsed, { ok: false, reason: "invalid-record" });
 });
 
-test("hydration restores missing required object types without resurrecting removed legacy types", () => {
+test("version 2 migration creates legacy preset Structures only for referenced entities", () => {
+  const parsed = parseWorkspaceObjectSnapshot(
+    JSON.stringify({
+      activeEntityId: "book-1",
+      entities: [
+        {
+          id: "book-1",
+          title: "Runtime Systems",
+          createdAt: "2026-01-01T00:00:00.000Z",
+          objectTypeId: "book",
+          kind: "document",
+          body: {
+            schemaVersion: 2,
+            doc: {
+              type: "doc",
+              content: [
+                {
+                  type: "paragraph",
+                  attrs: { id: "block:book-1:0" },
+                },
+              ],
+            },
+          },
+          collections: [],
+          tags: [],
+          propertyValues: {},
+        },
+      ],
+      nextId: 2,
+      version: 2,
+    }),
+  );
+
+  assert.equal(parsed.ok, true);
+  const legacyIds = parsed.state.structures
+    .filter((structure) => structure.ownership === "legacy")
+    .map((structure) => structure.id);
+  assert.deepEqual(legacyIds, ["book"]);
+  assert.equal(
+    parsed.state.structures.some((structure) => structure.id === "person"),
+    false,
+  );
+  assert.equal(parsed.state.entities[0].objectTypeId, "book");
+});
+
+test("hydration restores required object types without preserving unreferenced legacy presets", () => {
   const current = createInitialWorkspaceObjectState();
   const retainedIds = new Set([
     "page",
@@ -215,6 +260,6 @@ test("hydration restores missing required object types without resurrecting remo
   assert.ok(restoredIds.includes("task"));
   assert.ok(restoredIds.includes("image"));
   assert.ok(restoredIds.includes("archive"));
-  assert.ok(restoredIds.includes("book"));
+  assert.equal(restoredIds.includes("book"), false);
   assert.equal(restoredIds.includes("person"), false);
 });

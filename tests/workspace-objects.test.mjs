@@ -9,7 +9,10 @@ import {
   parseWorkspaceObjectSnapshot,
   serializeWorkspaceObjectState,
 } from "../src/lib/workspace-object-storage.ts";
-import { createCustomStructure } from "../src/lib/workspace-object-types.ts";
+import {
+  createCustomStructure,
+  OBJECT_TYPE_PRESETS,
+} from "../src/lib/workspace-object-types.ts";
 import {
   acceptsFileForType,
   applyQueryDescription,
@@ -26,7 +29,7 @@ function reduce(state, ...actions) {
   return actions.reduce(workspaceObjectReducer, state);
 }
 
-test("creation flows cover every New palette family", () => {
+test("creation flows cover built-ins while presets remain templates until instantiated", () => {
   for (const id of [
     "book",
     "person",
@@ -39,13 +42,13 @@ test("creation flows cover every New palette family", () => {
     "organization",
     "media",
     "travel",
-    "ai-chat",
+    "atomic-note",
+    "quote",
   ]) {
-    assert.equal(getCreationFlow(id), "document", id);
+    assert.equal(getCreationFlow(id), null, id);
   }
-  assert.equal(getCreationFlow("atomic-note"), "document");
   assert.equal(getCreationFlow("page"), "document");
-  assert.equal(getCreationFlow("quote"), "quote");
+  assert.equal(getCreationFlow("ai-chat"), "document");
   assert.equal(getCreationFlow("table"), "table");
   assert.equal(getCreationFlow("task"), "task");
   assert.equal(getCreationFlow("weblink"), "url");
@@ -57,51 +60,60 @@ test("creation flows cover every New palette family", () => {
   assert.equal(getCreationFlow("audio"), "file");
   assert.equal(getCreationFlow("file"), "file");
   assert.equal(getCreationFlow("unknown"), null);
+
+  const customBook = reduce(
+    createInitialWorkspaceObjectState(),
+    {
+      id: "book-custom",
+      presetId: "book",
+      type: "createStructureFromPreset",
+    },
+  );
+  assert.equal(
+    getCreationFlow("book-custom", customBook.structures),
+    "document",
+  );
 });
 
-test("preset object types create persistent document-like entities", () => {
-  const presetIds = [
-    "book",
-    "person",
-    "area",
-    "meeting",
-    "definition",
-    "idea",
-    "place",
-    "project",
-    "organization",
-    "media",
-    "travel",
-    "ai-chat",
-  ];
+test("instantiated preset Structures create persistent entities through custom ids", () => {
+  const customIds = OBJECT_TYPE_PRESETS.map((preset) => `${preset.id}-custom`);
 
   const state = reduce(
     createInitialWorkspaceObjectState(),
-    ...presetIds.map((objectTypeId) => ({ type: "beginCreate", objectTypeId })),
+    ...OBJECT_TYPE_PRESETS.map((preset, index) => ({
+      id: customIds[index],
+      presetId: preset.id,
+      type: "createStructureFromPreset",
+    })),
+    ...customIds.map((objectTypeId) => ({ type: "beginCreate", objectTypeId })),
   );
 
-  assert.equal(state.entities.length, presetIds.length);
+  assert.equal(state.entities.length, customIds.length);
   assert.deepEqual(
     state.entities.map((entity) => entity.objectTypeId),
-    presetIds,
+    customIds,
   );
   assert.deepEqual(
     state.entities.map((entity) => entity.kind),
-    presetIds.map(() => "document"),
+    OBJECT_TYPE_PRESETS.map((preset) =>
+      preset.lifecycleKind === "quote" ? "quote" : "document",
+    ),
   );
+  assert.equal(state.draft, null);
   assert.deepEqual(countEntitiesByType(state.entities), {
-    area: 1,
-    "ai-chat": 1,
-    book: 1,
-    definition: 1,
-    idea: 1,
-    media: 1,
-    meeting: 1,
-    organization: 1,
-    person: 1,
-    place: 1,
-    project: 1,
-    travel: 1,
+    "area-custom": 1,
+    "atomic-note-custom": 1,
+    "book-custom": 1,
+    "definition-custom": 1,
+    "idea-custom": 1,
+    "media-custom": 1,
+    "meeting-custom": 1,
+    "organization-custom": 1,
+    "person-custom": 1,
+    "place-custom": 1,
+    "project-custom": 1,
+    "quote-custom": 1,
+    "travel-custom": 1,
   });
 });
 

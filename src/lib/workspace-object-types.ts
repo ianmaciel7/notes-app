@@ -1444,16 +1444,9 @@ export function createLegacyStructureDefinitions(
 }
 
 export function createInitialStructureRegistry(): readonly WorkspaceStructure[] {
-  const legacy = createLegacyStructureDefinitions(
-    OBJECT_TYPE_PRESETS.map((preset) => preset.id),
-  );
-  if (!legacy.ok) {
-    throw new Error(legacy.error.message);
-  }
   return [
     ...BUILT_IN_STRUCTURES.map(cloneStructure),
     ...RESERVED_STRUCTURES.map(cloneStructure),
-    ...legacy.value.map(cloneStructure),
   ];
 }
 
@@ -1482,7 +1475,10 @@ export function selectCustomStructures(
 export function selectCreatableStructures(
   registry: readonly WorkspaceStructure[],
 ): readonly WorkspaceStructure[] {
-  return registry.filter((structure) => structure.ownership !== "reserved");
+  return registry.filter(
+    (structure) =>
+      structure.ownership === "built-in" || structure.ownership === "custom",
+  );
 }
 
 export function selectReservedStructures(
