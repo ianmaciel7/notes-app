@@ -3,6 +3,12 @@ import TaskList from "@tiptap/extension-task-list";
 import { MarkdownManager } from "@tiptap/markdown";
 import StarterKit from "@tiptap/starter-kit";
 
+const BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION = 2 as const;
+const LEGACY_BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION = 1 as const;
+const BLOCK_ID_PREFIX = "block:";
+
+type BlockId = string & { readonly __blockId: unique symbol };
+
 type BlockEditorMark =
   | { type: "bold" | "italic" | "code" }
   | { type: "blockLink"; attrs: { blockId: string; objectId: string } }
@@ -18,7 +24,7 @@ type BlockEditorNode = {
 };
 
 type BlockEditorDocument = {
-  schemaVersion: 1;
+  schemaVersion: typeof BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION;
   doc: {
     type: "doc";
     content: BlockEditorNode[];
@@ -37,6 +43,7 @@ const blockTypes = new Set([
   "codeBlock",
   "horizontalRule",
 ]);
+const referenceableBlockTypes = new Set(blockTypes);
 const inlineTypes = new Set(["text", "hardBreak", "objectEmbed"]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -55,6 +62,26 @@ function isSafeBlockEditorHref(value: string): boolean {
 
 function isStableReferenceId(value: unknown): value is string {
   return typeof value === "string" && /^[A-Za-z0-9_.:-]+$/.test(value);
+}
+
+function createBlockId(): BlockId {
+  return `${BLOCK_ID_PREFIX}${crypto.randomUUID()}` as BlockId;
+}
+
+function sanitizeIdNamespace(namespace: string): string {
+  const safe = namespace.replace(/[^A-Za-z0-9_.:-]+/g, "-").replace(/^-+|-+$/g, "");
+  return safe || "legacy";
+}
+
+function createMigratedBlockId(
+  namespace: string,
+  path: readonly number[],
+): BlockId {
+  return `${BLOCK_ID_PREFIX}${sanitizeIdNamespace(namespace)}:${path.join(".") || "0"}` as BlockId;
+}
+
+function isReferenceableBlockType(type: string): boolean {
+  return referenceableBlockTypes.has(type);
 }
 
 function isOptionalLinkAttribute(value: unknown) {
@@ -90,6 +117,7 @@ function shouldDropParagraphDefaults(value: Record<string, unknown>) {
 function shouldDropOrderedListDefaults(value: Record<string, unknown>) {
   if (value.type !== "orderedList") return false;
   if (!isRecord(value.attrs)) return false;
+  if (value.attrs.id !== undefined) return false;
   if (value.attrs.start !== 1) return false;
   return value.attrs.type === null || value.attrs.type === undefined;
 }
@@ -107,15 +135,57 @@ function canonicalizeKnownEditorDefaults(value: unknown): unknown {
     canonical.attrs = { href: value.attrs.href };
   }
 
-  if (shouldDropParagraphDefaults(value)) {
-    delete canonical.attrs;
-  }
-
-  if (shouldDropOrderedListDefaults(value)) {
-    delete canonical.attrs;
-  }
-
+  if (shouldDropParagraphDefaults(value)) delete canonical.attrs;
+  if (shouldDropOrderedListDefaults(value)) delete canonical.attrs;
   return canonical;
+}
+
+function migrateReferenceableBlockIds(
+  value: unknown,
+  namespace: string,
+): unknown {
+  if (!isRecord(value) || !isRecord(value.doc) || !Array.isArray(value.doc.content)) {
+    return value;
+  }
+
+  const seenIds = new Set<string>();
+  const migrateNode = (node: unknown, path: readonly number[]): unknown => {
+    if (!isRecord(node) || typeof node.type !== "string") return node;
+    const migrated: Record<string, unknown> = { ...node };
+
+    if (isReferenceableBlockType(node.type)) {
+      const attrs = isRecord(node.attrs) ? { ...node.attrs } : {};
+      const currentId = attrs.id;
+      let nextId =
+        isStableReferenceId(currentId) && !seenIds.has(currentId)
+          ? currentId
+          : createMigratedBlockId(namespace, path);
+      let collision = 2;
+      while (seenIds.has(nextId)) {
+        nextId = `${createMigratedBlockId(namespace, path)}-${collision}`;
+        collision += 1;
+      }
+      attrs.id = nextId;
+      seenIds.add(nextId);
+      migrated.attrs = attrs;
+    }
+
+    if (Array.isArray(node.content)) {
+      migrated.content = node.content.map((child, index) =>
+        migrateNode(child, [...path, index]),
+      );
+    }
+    return migrated;
+  };
+
+  return {
+    ...value,
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: {
+      ...value.doc,
+      content: value.doc.content.map((node, index) => migrateNode(node, [index])),
+    },
+  };
 }
 
 function isSimpleMark(value: Record<string, unknown>) {
@@ -179,12 +249,15 @@ function hasValidContent(value: Record<string, unknown>) {
   return Array.isArray(value.content) && value.content.every(isNode);
 }
 
+function hasStableBlockId(attrs: Record<string, unknown>): boolean {
+  return isStableReferenceId(attrs.id);
+}
+
 function isParagraphNode(value: Record<string, unknown>) {
-  if (value.attrs === undefined) return true;
-  if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["id", "size"]))
-    return false;
   return (
-    (value.attrs.id === undefined || isStableReferenceId(value.attrs.id)) &&
+    isRecord(value.attrs) &&
+    hasOnlyKeys(value.attrs, ["id", "size"]) &&
+    hasStableBlockId(value.attrs) &&
     (value.attrs.size === undefined || value.attrs.size === "small")
   );
 }
@@ -194,7 +267,7 @@ function isHeadingNode(value: Record<string, unknown>) {
     isRecord(value.attrs) &&
     hasOnlyKeys(value.attrs, ["id", "level"]) &&
     [1, 2, 3, 4].includes(value.attrs.level as number) &&
-    (value.attrs.id === undefined || isStableReferenceId(value.attrs.id))
+    hasStableBlockId(value.attrs)
   );
 }
 
@@ -203,22 +276,20 @@ function isTaskItemNode(value: Record<string, unknown>) {
     isRecord(value.attrs) &&
     hasOnlyKeys(value.attrs, ["checked", "id"]) &&
     typeof value.attrs.checked === "boolean" &&
-    (value.attrs.id === undefined || isStableReferenceId(value.attrs.id))
+    hasStableBlockId(value.attrs)
   );
 }
 
 function isGenericReferenceableNode(value: Record<string, unknown>) {
-  if (value.attrs === undefined) return true;
   return (
     isRecord(value.attrs) &&
     hasOnlyKeys(value.attrs, ["id"]) &&
-    (value.attrs.id === undefined || isStableReferenceId(value.attrs.id))
+    hasStableBlockId(value.attrs)
   );
 }
 
 function isOrderedListNode(value: Record<string, unknown>) {
-  if (value.attrs === undefined) return true;
-  if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["start", "type"])) {
+  if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["id", "start", "type"])) {
     return false;
   }
   const startIsValid =
@@ -228,20 +299,22 @@ function isOrderedListNode(value: Record<string, unknown>) {
     value.attrs.type === undefined ||
     value.attrs.type === null ||
     ["1", "a", "A", "i", "I"].includes(String(value.attrs.type));
-  return startIsValid && typeIsValid;
+  return hasStableBlockId(value.attrs) && startIsValid && typeIsValid;
 }
 
 function isCodeBlockNode(value: Record<string, unknown>) {
-  if (value.attrs === undefined) return true;
   return (
     isRecord(value.attrs) &&
-    hasOnlyKeys(value.attrs, ["language"]) &&
-    (value.attrs.language === null || typeof value.attrs.language === "string")
+    hasOnlyKeys(value.attrs, ["id", "language"]) &&
+    hasStableBlockId(value.attrs) &&
+    (value.attrs.language === null ||
+      value.attrs.language === undefined ||
+      typeof value.attrs.language === "string")
   );
 }
 
 function isHorizontalRuleNode(value: Record<string, unknown>) {
-  return value.attrs === undefined && value.content === undefined;
+  return value.content === undefined && isGenericReferenceableNode(value);
 }
 
 function isObjectEmbedNode(value: Record<string, unknown>) {
@@ -279,55 +352,84 @@ function isNode(value: unknown): value is BlockEditorNode {
   if (!hasOnlyKeys(value, ["type", "attrs", "content"])) return false;
   if (!hasValidContent(value)) return false;
   const validateAttributes = attributeValidators[value.type];
-  return validateAttributes
-    ? validateAttributes(value)
-    : value.attrs === undefined;
+  return validateAttributes ? validateAttributes(value) : value.attrs === undefined;
+}
+
+function hasUniqueBlockIds(nodes: readonly BlockEditorNode[]): boolean {
+  const seenIds = new Set<string>();
+  const visit = (node: BlockEditorNode): boolean => {
+    if (isReferenceableBlockType(node.type)) {
+      const id = node.attrs?.id;
+      if (!isStableReferenceId(id) || seenIds.has(id)) return false;
+      seenIds.add(id);
+    }
+    return (node.content ?? []).every(visit);
+  };
+  return nodes.every(visit);
 }
 
 function isBlockEditorDocument(value: unknown): value is BlockEditorDocument {
   return (
     isRecord(value) &&
     hasOnlyKeys(value, ["schemaVersion", "doc"]) &&
-    value.schemaVersion === 1 &&
+    value.schemaVersion === BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION &&
     isRecord(value.doc) &&
     hasOnlyKeys(value.doc, ["type", "content"]) &&
     value.doc.type === "doc" &&
     Array.isArray(value.doc.content) &&
     value.doc.content.length > 0 &&
-    value.doc.content.every(isNode)
+    value.doc.content.every(isNode) &&
+    hasUniqueBlockIds(value.doc.content as BlockEditorNode[])
   );
 }
 
 function createEmptyBlockEditorDocument(): BlockEditorDocument {
   return {
-    schemaVersion: 1,
-    doc: { type: "doc", content: [{ type: "paragraph" }] },
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: {
+      type: "doc",
+      content: [{ type: "paragraph", attrs: { id: createBlockId() } }],
+    },
   };
 }
 
 function isEmptyDocumentRoot(value: unknown) {
-  if (!isRecord(value) || value.schemaVersion !== 1) return false;
+  if (!isRecord(value)) return false;
+  if (
+    value.schemaVersion !== BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION &&
+    value.schemaVersion !== LEGACY_BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION
+  ) {
+    return false;
+  }
   if (!isRecord(value.doc) || value.doc.type !== "doc") return false;
   return Array.isArray(value.doc.content) && value.doc.content.length === 0;
 }
 
 function normalizeBlockEditorDocument(
   value: unknown,
+  migrationNamespace = "legacy",
 ): BlockEditorDocument | null {
   const canonicalValue = canonicalizeKnownEditorDefaults(value);
-  if (isEmptyDocumentRoot(canonicalValue))
-    return createEmptyBlockEditorDocument();
-  if (!isBlockEditorDocument(canonicalValue)) return null;
-  return structuredClone(canonicalValue);
+  if (isEmptyDocumentRoot(canonicalValue)) return createEmptyBlockEditorDocument();
+  if (!isRecord(canonicalValue)) return null;
+
+  const candidate =
+    canonicalValue.schemaVersion === LEGACY_BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION ||
+    canonicalValue.schemaVersion === BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION
+      ? migrateReferenceableBlockIds(canonicalValue, migrationNamespace)
+      : canonicalValue;
+  if (!isBlockEditorDocument(candidate)) return null;
+  return structuredClone(candidate);
 }
 
 function blockEditorDocumentFromPlainText(text: string): BlockEditorDocument {
   return {
-    schemaVersion: 1,
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
     doc: {
       type: "doc",
       content: text.split(/\r\n?|\n/).map((line) => ({
         type: "paragraph",
+        attrs: { id: createBlockId() },
         ...(line ? { content: [{ type: "text", text: line }] } : {}),
       })),
     },
@@ -357,24 +459,28 @@ const markdownManager = new MarkdownManager({
 
 function blockEditorDocumentFromMarkdown(text: string): BlockEditorDocument {
   const doc = markdownManager.parse(text);
-  return (
-    normalizeBlockEditorDocument({ schemaVersion: 1, doc }) ??
-    blockEditorDocumentFromPlainText(text)
+  const migrated = normalizeBlockEditorDocument(
+    { schemaVersion: LEGACY_BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION, doc },
+    `import-${crypto.randomUUID()}`,
   );
+  return migrated ?? blockEditorDocumentFromPlainText(text);
 }
 
 function blockEditorDocumentToMarkdown(value: BlockEditorDocument): string {
   return markdownManager.serialize(value.doc).trimEnd();
 }
 
-export type { BlockEditorDocument, BlockEditorMark, BlockEditorNode };
+export type { BlockEditorDocument, BlockEditorMark, BlockEditorNode, BlockId };
 export {
+  BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
   blockEditorDocumentFromMarkdown,
   blockEditorDocumentFromPlainText,
   blockEditorDocumentToMarkdown,
   blockEditorDocumentToPlainText,
+  createBlockId,
   createEmptyBlockEditorDocument,
   isBlockEditorDocument,
+  isReferenceableBlockType,
   isSafeBlockEditorHref,
   normalizeBlockEditorDocument,
 };

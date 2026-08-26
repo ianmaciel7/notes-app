@@ -15,8 +15,12 @@ import type {
   BlockEditorProps,
 } from "@/editor/block-editor-contract";
 import { createBlockCommandCatalog } from "@/editor/block-command-catalog";
-import { ParagraphSizeExtension } from "@/editor/block-editor-extensions";
 import {
+  BlockIdExtension,
+  ParagraphSizeExtension,
+} from "@/editor/block-editor-extensions";
+import {
+  BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
   type BlockEditorDocument,
   createEmptyBlockEditorDocument,
   isSafeBlockEditorHref,
@@ -146,6 +150,7 @@ function BlockEditor({
           isAllowedUri: isSafeBlockEditorHref,
         },
       }),
+      BlockIdExtension,
       ParagraphSizeExtension,
       TaskList,
       TaskItem.configure({
@@ -175,7 +180,7 @@ function BlockEditor({
     onUpdate: ({ editor: currentEditor }) => {
       if (!currentEditor.isEditable) return;
       scheduleCommit({
-        schemaVersion: 1,
+        schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
         doc: currentEditor.getJSON() as BlockEditorDocument["doc"],
       });
     },
@@ -184,7 +189,7 @@ function BlockEditor({
   React.useLayoutEffect(() => {
     if (!editor) return;
     const currentDocument = normalizeBlockEditorDocument({
-      schemaVersion: 1,
+      schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
       doc: editor.getJSON(),
     });
     if (

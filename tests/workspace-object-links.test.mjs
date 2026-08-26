@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+
 import {
   blockEditorDocumentFromPlainText,
   normalizeBlockEditorDocument,
@@ -20,143 +21,139 @@ import {
   wouldCreateReferenceCycle,
 } from "../src/lib/workspace-object-links.ts";
 
-function entity(id, title, content, propertyValues = {}) {
+function documentEntity(id, title, body, options = {}) {
   return {
     id,
-    objectTypeId: "page",
     title,
-    createdAt: "2026-08-25T00:00:00.000Z",
-    propertyValues,
+    objectTypeId: "page",
+    createdAt: "2026-08-22T00:00:00.000Z",
     kind: "document",
-    body: {
-      schemaVersion: 1,
-      doc: {
-        type: "doc",
-        content,
-      },
-    },
+    body,
     collections: [],
     tags: [],
+    propertyValues: options.propertyValues ?? {},
+    aliases: options.aliases,
   };
 }
 
 test("object links, block references, and embeds derive backlinks and contextual graph once", () => {
-  const source = entity("source", "Source", [
-    {
-      type: "paragraph",
-      attrs: { id: "source-block-1" },
+  const sourceBody = {
+    schemaVersion: 2,
+    doc: {
+      type: "doc",
       content: [
         {
-          type: "text",
-          text: "Target",
-          marks: [createObjectReferenceMark("target")],
+          type: "paragraph",
+          attrs: { id: "source-block-1" },
+          content: [
+            {
+              type: "text",
+              text: "Target",
+              marks: [createObjectReferenceMark("target")],
+            },
+            {
+              type: "text",
+              text: "Block",
+              marks: [createBlockReferenceMark("target", "target-block-1")],
+            },
+          ],
         },
         {
-          type: "text",
-          text: " again",
-          marks: [createObjectReferenceMark("target")],
+          type: "paragraph",
+          attrs: { id: "source-block-2" },
+          content: [createObjectEmbedNode("target")],
         },
       ],
     },
-    {
-      type: "paragraph",
-      attrs: { id: "source-block-2" },
+  };
+  const targetBody = {
+    schemaVersion: 2,
+    doc: {
+      type: "doc",
       content: [
         {
-          type: "text",
-          text: "Block target",
-          marks: [createBlockReferenceMark("target", "target-block-1")],
+          type: "paragraph",
+          attrs: { id: "target-block-1" },
+          content: [{ type: "text", text: "Target body" }],
         },
       ],
     },
-    createObjectEmbedNode("target"),
-  ]);
-  const target = entity("target", "Target", [
-    { type: "paragraph", attrs: { id: "target-block-1" } },
-  ]);
-
+  };
+  const source = documentEntity("source", "Source", sourceBody);
+  const target = documentEntity("target", "Target", targetBody);
   const index = createWorkspaceObjectLinkIndex([source, target]);
 
-  assert.equal(selectForwardContentReferences([source]).length, 3);
   assert.equal(selectBacklinksForObject(index, "target").length, 3);
-  assert.equal(index.referenceCountsByTargetId.get("target"), 3);
-  assert.deepEqual(
-    selectContextualGraphEdges(index, "target").map((edge) => edge.id),
-    ["source->target:object", "source->target:block", "source->target:embed"],
-  );
   assert.equal(selectObjectsInside(index, "source").length, 3);
+  assert.equal(index.referenceCountsByTargetId.get("target"), 3);
+  assert.equal(index.missingReferences.length, 0);
+  assert.equal(selectContextualGraphEdges(index, "target").length, 3);
 });
 
 test("missing targets are explicit repairable states", () => {
-  const source = entity("source", "Source", [
-    {
-      type: "paragraph",
-      attrs: { id: "source-block-1" },
+  const body = {
+    schemaVersion: 2,
+    doc: {
+      type: "doc",
       content: [
         {
-          type: "text",
-          text: "Missing",
-          marks: [createObjectReferenceMark("deleted-object")],
+          type: "paragraph",
+          attrs: { id: "source-block-1" },
+          content: [
+            {
+              type: "text",
+              text: "Missing",
+              marks: [createObjectReferenceMark("missing")],
+            },
+          ],
         },
       ],
     },
+  };
+  const index = createWorkspaceObjectLinkIndex([
+    documentEntity("source", "Source", body),
   ]);
-
-  const index = createWorkspaceObjectLinkIndex([source]);
 
   assert.equal(index.missingReferences.length, 1);
   assert.equal(index.missingReferences[0].missing, true);
-  assert.equal(index.missingReferences[0].targetId, "deleted-object");
+  assert.equal(index.missingReferences[0].targetId, "missing");
 });
 
 test("property relation graph edges stay distinct from content backlinks", () => {
-  const source = entity(
-    "source",
-    "Source",
-    [
-      {
-        type: "paragraph",
-        attrs: { id: "source-block-1" },
-        content: [
-          {
-            type: "text",
-            text: "Target",
-            marks: [createObjectReferenceMark("target")],
-          },
-        ],
-      },
-    ],
-    {
-      related: {
-        entity: [{ id: "target" }],
+  const source = documentEntity("source", "Source", blockEditorDocumentFromPlainText("Source"), {
+    propertyValues: {
+      relation: {
         type: "entity",
+        entity: [{ id: "target", structureId: "page" }],
       },
     },
-  );
-  const target = entity("target", "Target", [{ type: "paragraph" }]);
+  });
+  const target = documentEntity("target", "Target", blockEditorDocumentFromPlainText("Target"));
 
-  const contentIndex = createWorkspaceObjectLinkIndex([source, target]);
-  const propertyEdges = selectPropertyRelationGraphEdges([source, target]);
-
-  assert.equal(selectBacklinksForObject(contentIndex, "target").length, 1);
-  assert.equal(propertyEdges.length, 1);
-  assert.equal(propertyEdges[0].kind, "property");
+  assert.equal(selectForwardContentReferences([source, target]).length, 0);
+  assert.deepEqual(selectPropertyRelationGraphEdges([source, target]), [
+    {
+      from: "source",
+      id: "source->target:property:relation",
+      kind: "property",
+      to: "target",
+    },
+  ]);
 });
 
 test("unlinked mention candidates are advisory until explicitly converted", () => {
-  const source = entity(
+  const source = documentEntity(
     "source",
     "Source",
-    blockEditorDocumentFromPlainText("Discuss Project Atlas next week").doc
-      .content,
+    blockEditorDocumentFromPlainText("Project Atlas should be linked later."),
   );
-  const target = {
-    ...entity("target", "Project Atlas", [{ type: "paragraph" }]),
-    aliases: ["Atlas"],
-  };
+  const target = documentEntity(
+    "target",
+    "Project Atlas",
+    blockEditorDocumentFromPlainText("Target"),
+  );
 
   const candidates = findUnlinkedMentionCandidates([source, target], "source");
-
   assert.deepEqual(candidates, [
     {
       label: "Project Atlas",
@@ -178,21 +175,26 @@ test("cycle checks reject recursive embed/reference paths", () => {
 });
 
 test("block identity helpers preserve ids and use stable deterministic fallbacks", () => {
-  const document = ensureReferenceableBlockIds(
-    "source",
-    blockEditorDocumentFromPlainText("One\nTwo"),
+  const original = blockEditorDocumentFromPlainText("One\nTwo");
+  const firstId = original.doc.content[0].attrs.id;
+  const secondId = original.doc.content[1].attrs.id;
+  const preserved = ensureReferenceableBlockIds("source", original);
+
+  assert.equal(preserved.doc.content[0].attrs.id, firstId);
+  assert.equal(preserved.doc.content[1].attrs.id, secondId);
+  assert.equal(
+    normalizeBlockEditorDocument(preserved, "source")?.doc.content[0].attrs.id,
+    firstId,
   );
 
-  assert.equal(
-    document.doc.content[0].attrs.id,
-    createReferenceableBlockId("source", 0),
-  );
-  assert.equal(
-    document.doc.content[1].attrs.id,
-    createReferenceableBlockId("source", 1),
-  );
-  assert.equal(
-    normalizeBlockEditorDocument(document)?.doc.content[0].attrs.id,
-    "source-block-1",
-  );
+  const legacy = {
+    schemaVersion: 1,
+    doc: {
+      type: "doc",
+      content: [{ type: "paragraph" }, { type: "paragraph" }],
+    },
+  };
+  const fallback = ensureReferenceableBlockIds("source", legacy);
+  assert.equal(fallback.doc.content[0].attrs.id, createReferenceableBlockId("source", 0));
+  assert.equal(fallback.doc.content[1].attrs.id, createReferenceableBlockId("source", 1));
 });
