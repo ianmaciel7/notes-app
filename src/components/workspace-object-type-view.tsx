@@ -60,13 +60,21 @@ type WorkspaceObjectTypeViewProps = {
 
 type Mode = "all" | "overview";
 type ObjectTypeNamedItemKind = "collection" | "query";
+type ObjectTypeNamedItemTarget =
+  | {
+      kind: "collection";
+      collectionId: string;
+    }
+  | {
+      kind: "query";
+      objectTypeId: string;
+      index: number;
+    };
 
-function objectTypeNamedItemTabId(
-  kind: ObjectTypeNamedItemKind,
-  objectTypeId: string,
-  index: number,
-) {
-  return `object-type-item:${kind}:${objectTypeId}:${index}`;
+function objectTypeNamedItemTabId(item: ObjectTypeNamedItemTarget) {
+  return item.kind === "collection"
+    ? `object-type-item:collection:${item.collectionId}`
+    : `object-type-item:query:${item.objectTypeId}:${item.index}`;
 }
 
 type ObjectTypeHeaderProps = {
@@ -772,10 +780,14 @@ function WorkspaceObjectTypeView({
 
   function openNamedItem(
     kind: ObjectTypeNamedItemKind,
-    index: number,
+    id: string | number,
     label: string,
   ) {
-    const tabId = objectTypeNamedItemTabId(kind, objectType.id, index);
+    const tabId = objectTypeNamedItemTabId(
+      kind === "collection"
+        ? { kind, collectionId: String(id) }
+        : { kind, objectTypeId: objectType.id, index: Number(id) },
+    );
     const Icon = kind === "collection" ? ObjectCollectionIcon : ObjectQueryIcon;
     const tab = {
       draggable: true,
@@ -811,6 +823,7 @@ function WorkspaceObjectTypeView({
         structureId: objectType.id,
       },
     }));
+    openNamedItem("collection", collectionId, label);
   }
 
   function addQuery() {

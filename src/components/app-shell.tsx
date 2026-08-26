@@ -91,6 +91,7 @@ function AppShellProvider({
   const [leftCollapsed, setLeftCollapsed] = React.useState(false);
   const [rightCollapsed, setRightCollapsed] = React.useState(false);
   const [compactDesktop, setCompactDesktop] = React.useState(false);
+  const [hydrated, setHydrated] = React.useState(false);
   const [rightOverlayOpen, setRightOverlayOpen] = React.useState(false);
   const rightOverlayReturnFocusRef = React.useRef<HTMLElement | null>(null);
   const [resizingSide, setResizingSide] =
@@ -137,6 +138,7 @@ function AppShellProvider({
   }, [compactDesktop, rightPanelRef]);
 
   React.useEffect(() => {
+    setHydrated(true);
     const sync = () =>
       setCompactDesktop(
         getWorkspacePanelPresentation(window.innerWidth) === "overlay",
@@ -228,6 +230,7 @@ function AppShellProvider({
       <div
         ref={rootRef}
         data-slot="app-shell-provider"
+        data-hydrated={hydrated ? "true" : undefined}
         className={cn(
           "relative h-svh w-full overflow-hidden bg-sidebar",
           className,

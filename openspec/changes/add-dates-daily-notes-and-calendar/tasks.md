@@ -16,9 +16,9 @@
 
 ## 3. Acceptance
 
-- [ ] 3.1 Browser-test Daily Note idempotency, timezone reload, all four calendar spans, date references, Day aggregation, create/reschedule, task integration, mobile overflow, and clean console.
-- [ ] 3.2 Run `pnpm verify`, query/view/date regressions, build, and strict OpenSpec validation.
+- [x] 3.1 Browser-test Daily Note idempotency, timezone reload, all four calendar spans, date references, Day aggregation, create/reschedule, task integration, mobile overflow, and clean console.
+- [x] 3.2 Run `pnpm verify`, query/view/date regressions, build, and strict OpenSpec validation.
 
 ## 4. Completion
 
-- [ ] 4.1 Sync canonical specs and archive only after evidence is complete.
+- [x] 4.1 Sync canonical specs and archive only after evidence is complete.

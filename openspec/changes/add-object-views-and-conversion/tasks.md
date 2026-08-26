@@ -17,9 +17,9 @@
 
 ## 3. Acceptance
 
-- [ ] 3.1 Browser-test live cross-representation updates, Data View switching/reload, page layouts, templates, contextual graph handoff, and conversion with incompatible values.
-- [ ] 3.2 Run performance/accessibility/parity checks, `pnpm verify`, build, and strict OpenSpec validation.
+- [x] 3.1 Browser-test live cross-representation updates, Data View switching/reload, page layouts, templates, contextual graph handoff, and conversion with incompatible values.
+- [x] 3.2 Run performance/accessibility/parity checks, `pnpm verify`, build, and strict OpenSpec validation.
 
 ## 4. Completion
 
-- [ ] 4.1 Sync canonical specs and archive only after evidence is complete.
+- [x] 4.1 Sync canonical specs and archive only after evidence is complete.

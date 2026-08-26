@@ -12,7 +12,9 @@ async function openCleanWorkspace(page: Page) {
     window.localStorage.clear();
   });
   await page.goto("/pt-BR", { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page
+    .locator('[data-slot="app-shell-provider"][data-hydrated="true"]')
+    .waitFor();
   return errors;
 }
 
@@ -61,7 +63,9 @@ test("calendar workspace covers spans, daily-note idempotency, reload, mobile ov
   expect(beforeReload).toBe(1);
 
   await page.reload();
-  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page
+    .locator('[data-slot="app-shell-provider"][data-hydrated="true"]')
+    .waitFor();
   calendar = await openCalendar(page);
   await calendar.getByLabel("Calendar date").fill("2026-08-25");
   await expect(

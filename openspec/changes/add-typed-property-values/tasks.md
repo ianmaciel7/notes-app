@@ -23,4 +23,4 @@
 
 ## 4. Completion
 
-- [ ] 4.1 Sync canonical specs and archive only after every requirement has evidence.
+- [x] 4.1 Sync canonical specs and archive only after every requirement has evidence.

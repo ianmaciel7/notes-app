@@ -15,9 +15,9 @@
 
 ## 3. Acceptance
 
-- [ ] 3.1 Browser-test rename survival, block reorder, counters, embeds/editable transclusion, backlinks, Objects Inside, contextual graph, missing targets, mention conversion, keyboard/mobile behavior, and clean console.
-- [ ] 3.2 Run `pnpm verify`, relevant Playwright/parity suites, build, and strict OpenSpec validation.
+- [x] 3.1 Browser-test rename survival, block reorder, counters, embeds/editable transclusion, backlinks, Objects Inside, contextual graph, missing targets, mention conversion, keyboard/mobile behavior, and clean console.
+- [x] 3.2 Run `pnpm verify`, relevant Playwright/parity suites, build, and strict OpenSpec validation.
 
 ## 4. Completion
 
-- [ ] 4.1 Sync canonical specs and archive only after evidence is complete.
+- [x] 4.1 Sync canonical specs and archive only after evidence is complete.

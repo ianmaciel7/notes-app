@@ -597,6 +597,7 @@ function WorkspaceSidebar() {
     setActiveAction,
     activeEntityId,
     setActiveEntityId,
+    setMainValue,
     selectEntity,
     pinnedEntities,
     availablePinnedEntities,
@@ -760,6 +761,7 @@ function WorkspaceSidebar() {
                 if (action !== "new") {
                   setActiveAction(action);
                   setActiveEntityId(null);
+                  setMainValue(`primary-action:${action}`);
                   if (action === "search") setSideSearchOpen(true);
                   if (action === "explore") setSideValue("explore");
                 }

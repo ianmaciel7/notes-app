@@ -48,4 +48,4 @@
 ## 7. Completion and protected publication
 
 - [x] 7.1 Run strict OpenSpec validation, Graphify workflow, `pnpm verify`, `git diff --check`, and staged-file review.
-- [ ] 7.2 Archive/publish only after every evidence-backed criterion passes.
+- [x] 7.2 Archive/publish only after every evidence-backed criterion passes.

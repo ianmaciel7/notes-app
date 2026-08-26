@@ -1001,7 +1001,6 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     if (!workspaceObjects.activeEntityId) return;
     setMainValue(workspaceObjects.activeEntityId);
     setActiveEntityId(workspaceObjects.activeEntityId);
-    setActiveAction(undefined);
   }, [workspaceObjects.activeEntityId]);
 
   React.useEffect(() => {
@@ -1052,6 +1051,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       if (createdEntity) {
         dispatchWorkspaceObjects({ type: "selectEntity", id });
         setMainValue(id);
+        setActiveEntityId(id);
+        setActiveAction(undefined);
         return;
       }
 
@@ -1082,6 +1083,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   const createWorkspaceEntity = React.useCallback(
     (objectTypeId: string, _objectTypeLabel?: string) => {
+      setActiveAction(undefined);
       dispatchWorkspaceObjects({ type: "beginCreate", objectTypeId });
       if (!getCreationFlow(objectTypeId, workspaceObjects.structures)) {
         showMessage(t("lifecycle.errors.unsupported-object-type"));
@@ -1092,6 +1094,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   const createOrAppendDailyNote = React.useCallback(
     (date: string, appendText?: string, template?: string) => {
+      setActiveAction(undefined);
       dispatchWorkspaceObjects({
         type: "createOrAppendDailyNote",
         appendText,
@@ -1535,7 +1538,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           <div
             data-slot="workspace-task-created"
             role="status"
-            className="fixed bottom-4 right-4 z-[130] flex items-center gap-3 rounded-xl border bg-popover px-3 py-2 text-sm text-popover-foreground shadow-lg"
+            className="fixed right-4 bottom-20 z-[130] flex items-center gap-3 rounded-xl border bg-popover px-3 py-2 text-sm text-popover-foreground shadow-lg"
           >
             <span>{t("lifecycle.task.created")}</span>
             <Button

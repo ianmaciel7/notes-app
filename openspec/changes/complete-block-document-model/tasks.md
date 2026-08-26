@@ -16,8 +16,8 @@
 ## 3. Acceptance
 
 - [x] 3.1 Browser-test id stability across edit/reorder/duplicate/reload/mobile/read-only flows.
-- [ ] 3.2 Run editor tests, `pnpm verify`, build, parity regression, and strict OpenSpec validation.
+- [x] 3.2 Run editor tests, `pnpm verify`, build, parity regression, and strict OpenSpec validation.
 
 ## 4. Completion
 
-- [ ] 4.1 Sync canonical specs and archive only after evidence is complete.
+- [x] 4.1 Sync canonical specs and archive only after evidence is complete.

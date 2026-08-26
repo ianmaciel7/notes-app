@@ -121,6 +121,7 @@ import {
 function AtomicNotesWorkspace() {
   const { mainTabs, mainValue, activeAction, objectTypes, createdEntities } =
     useWorkspace();
+  const navigationAction = activeAction ?? primaryActionFromMainValue(mainValue);
   const activeTab = mainTabs.find((tab) => tab.id === mainValue);
   const activeObjectType = objectTypes.find((item) => item.id === mainValue);
   const activeCreatedEntity = createdEntities.find(
@@ -130,11 +131,11 @@ function AtomicNotesWorkspace() {
     ? parseObjectTypeNamedItemTabId(activeTab.id)
     : null;
 
-  if (activeAction === "explore") {
+  if (navigationAction === "explore") {
     return <ExploreWorkspace />;
   }
 
-  if (activeAction === "calendar") {
+  if (navigationAction === "calendar") {
     return <CalendarWorkspace />;
   }
 
@@ -162,6 +163,12 @@ function AtomicNotesWorkspace() {
   return fallbackObjectType ? (
     <ObjectTypeWorkspace objectType={fallbackObjectType} />
   ) : null;
+}
+
+function primaryActionFromMainValue(value: string) {
+  if (value === "primary-action:explore") return "explore";
+  if (value === "primary-action:calendar") return "calendar";
+  return undefined;
 }
 
 function todayInputValue() {
