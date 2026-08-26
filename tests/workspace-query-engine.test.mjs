@@ -5,10 +5,12 @@ import { blockEditorDocumentFromPlainText } from "../src/editor/document.ts";
 import { createWorkspaceObjectLinkIndex } from "../src/lib/workspace-object-links.ts";
 import {
   buildWorkspaceSearchIndex,
+  collectQueryDependencies,
   evaluateQuery,
   queryDefinitionFromLegacy,
   searchWorkspaceIndex,
   updateWorkspaceSearchIndex,
+  validateQueryDefinition,
 } from "../src/lib/workspace-query-engine.ts";
 
 function page(id, title, options = {}) {
@@ -46,12 +48,12 @@ test("typed nested filters, sorts, grouping, and limits evaluate deterministical
     page("a", "Alpha", {
       objectTypeId: "project",
       createdAt: "2026-08-21T00:00:00.000Z",
-      propertyValues: { score: { type: "number", number: 9 } },
+      propertyValues: { score: { type: "number", number: { value: 9 } } },
     }),
     page("b", "Beta", {
       objectTypeId: "project",
       createdAt: "2026-08-22T00:00:00.000Z",
-      propertyValues: { score: { type: "number", number: 4 } },
+      propertyValues: { score: { type: "number", number: { value: 4 } } },
     }),
     page("c", "Gamma", { objectTypeId: "page" }),
   ];
@@ -84,7 +86,7 @@ test("relation, content-link, and backlink filters stay distinct", () => {
   const target = page("target", "Target");
   const linked = page("linked", "Linked", {
     propertyValues: {
-      owner: { type: "entity", entity: [{ id: "target", structureId: "page" }] },
+      owner: { type: "entity", entity: [{ id: "target" }] },
     },
   });
   linked.body.doc.content[0].content = [
@@ -96,7 +98,7 @@ test("relation, content-link, and backlink filters stay distinct", () => {
   ];
   const relationOnly = page("relation-only", "Relation", {
     propertyValues: {
-      owner: { type: "entity", entity: [{ id: "target", structureId: "page" }] },
+      owner: { type: "entity", entity: [{ id: "target" }] },
     },
   });
   const entities = [target, linked, relationOnly];
@@ -125,11 +127,7 @@ test("relation, content-link, and backlink filters stay distinct", () => {
 });
 
 test("host variables resolve context and report an explicit unresolved state", () => {
-  const host = page("host", "Host", {
-    propertyValues: {
-      owner: { type: "entity", entity: [{ id: "target", structureId: "page" }] },
-    },
-  });
+  const host = page("host", "Host");
   const target = page("target", "Target");
   const definition = query({
     variables: { current: { kind: "host-object" } },
@@ -173,15 +171,45 @@ test("object and block search indexes are rebuildable and incrementally replace 
   assert.equal(searchWorkspaceIndex(nextIndex, "Project Nova", "object")[0].entityId, "a");
 });
 
-test("legacy query entities adapt into the canonical declarative definition", () => {
+test("legacy query entities adapt into canonical tags and structure filters", () => {
   const definition = queryDefinitionFromLegacy({
     filters: { tags: ["tag:research"] },
     objectTypeId: "page",
     search: "atlas",
   });
+  const matching = page("match", "Atlas research", { tags: ["tag:research"] });
+  const other = page("other", "Atlas other");
 
   assert.equal(definition.source, "search");
   assert.equal(definition.resultKind, "object");
   assert.equal(definition.filters.filters.length, 3);
   assert.deepEqual(definition.selection, { mode: "all" });
+  assert.deepEqual(evaluateQuery(definition, [matching, other]).items.map((item) => item.id), ["match"]);
+});
+
+test("query validation rejects invalid definitions and dependency collection is explicit", () => {
+  const definition = query({
+    source: "object-type",
+    sourceValue: "project",
+    filters: {
+      operator: "all",
+      filters: [
+        { kind: "relation", propertyId: "owner", operator: "contains", target: { kind: "variable", name: "host" } },
+        { kind: "backlink", operator: "contains", target: "source" },
+      ],
+    },
+    grouping: { propertyId: "status" },
+    sorts: [{ propertyId: "createdAt", direction: "descending" }],
+    variables: { host: { kind: "host-object" } },
+  });
+
+  assert.deepEqual(validateQueryDefinition(definition), { ok: true, value: definition });
+  assert.equal(validateQueryDefinition({ ...definition, limit: 0 }).ok, false);
+  assert.deepEqual(collectQueryDependencies(definition), {
+    needsBacklinks: true,
+    needsContentLinks: false,
+    propertyIds: ["createdAt", "owner", "status"],
+    structureIds: ["project"],
+    variableNames: ["host"],
+  });
 });
