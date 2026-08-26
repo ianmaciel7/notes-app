@@ -28,9 +28,9 @@ import { getWorkspacePanelPresentation } from "@/lib/workspace-layout";
 const APP_SHELL_LEFT_DEFAULT = "18rem";
 const APP_SHELL_LEFT_MIN = "14rem";
 const APP_SHELL_LEFT_MAX = "24rem";
-const APP_SHELL_RIGHT_DEFAULT = "28.5rem";
+const APP_SHELL_RIGHT_DEFAULT = "24rem";
 const APP_SHELL_RIGHT_MIN = "20rem";
-const APP_SHELL_RIGHT_MAX = "28.5rem";
+const APP_SHELL_RIGHT_MAX = "24rem";
 
 const appShellPanelGroupVariants = cva("h-full w-full", {
   variants: {
