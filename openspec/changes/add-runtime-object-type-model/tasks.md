@@ -40,7 +40,7 @@
 
 ## 7. Verification and handoff
 
-- [ ] 7.1 Run focused domain/storage/UI tests, TypeScript, lint/format check without rewriting unrelated files, relevant Playwright projects, production build, and route HTTP checks.
+- [x] 7.1 Run focused domain/storage/UI tests, TypeScript, lint/format check without rewriting unrelated files, relevant Playwright projects, production build, and route HTTP checks.
 - [x] 7.2 Run strict OpenSpec validation and a three-front source/browser/reference review; check off only tasks supported by current evidence.
-- [ ] 7.3 Refresh Graphify only after material source changes and stage only the dedicated Structure/ObjectType change files, excluding pre-existing editor work and temporary artifacts.
-- [ ] 7.4 Record deferred follow-up changes in checklist order: typed property values, block editor completion, tag/collection identity, links/backlinks, conversion, lifecycle components, and queries.
+- [x] 7.3 Refresh Graphify only after material source changes and stage only the dedicated Structure/ObjectType change files, excluding pre-existing editor work and temporary artifacts.
+- [x] 7.4 Record deferred follow-up changes in checklist order: typed property values, block editor completion, tag/collection identity, links/backlinks, conversion, lifecycle components, and queries.
