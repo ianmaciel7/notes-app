@@ -103,6 +103,10 @@ import {
   type WorkspaceCollectionRecord,
 } from "@/lib/workspace-domain-identities";
 import {
+  createWorkspaceObjectLinkIndex,
+  selectBacklinksForObject,
+} from "@/lib/workspace-object-links";
+import {
   acceptsFileForType,
   applyQueryDescription,
   type FileEntity,
@@ -597,6 +601,9 @@ type ObjectEditorProps = {
   header: React.ReactNode;
   update: (patch: Record<string, unknown>) => void;
 };
+type DocumentWorkspaceEntity =
+  | Extract<WorkspaceEntity, { kind: "document" }>
+  | Extract<WorkspaceEntity, { kind: "quote" }>;
 
 const editorCardClass =
   "mx-3 mt-6 min-h-[302px] shrink-0 rounded-2xl border border-border bg-card px-10 pt-8";
@@ -806,6 +813,12 @@ function EntityTitleField({
   );
 }
 
+function isDocumentWorkspaceEntity(
+  entity: WorkspaceEntity | undefined,
+): entity is DocumentWorkspaceEntity {
+  return entity?.kind === "document" || entity?.kind === "quote";
+}
+
 function DocumentObjectEditor({
   definition,
   entity,
@@ -844,6 +857,56 @@ function DocumentObjectEditor({
   const importInputRef = React.useRef<HTMLInputElement>(null);
   const coverInputRef = React.useRef<HTMLInputElement>(null);
   const isPinned = pinnedEntities.some((item) => item.id === entity.id);
+  const editorLabels = React.useMemo(
+    () => ({
+      bold: t("editor.bold"),
+      italic: t("editor.italic"),
+      code: t("editor.code"),
+      slashMenu: {
+        cancel: t("editor.slashMenu.cancel"),
+        createPage: t("editor.slashMenu.createPage"),
+        empty: t("editor.slashMenu.empty"),
+        text: t("editor.slashMenu.text"),
+        smallText: t("editor.slashMenu.smallText"),
+        page: t("editor.slashMenu.page"),
+        heading1: t("editor.slashMenu.heading1"),
+        heading2: t("editor.slashMenu.heading2"),
+        heading3: t("editor.slashMenu.heading3"),
+        heading4: t("editor.slashMenu.heading4"),
+        navigate: t("editor.slashMenu.navigate"),
+        alphabeticalList: t("editor.slashMenu.alphabeticalList"),
+        bulletList: t("editor.slashMenu.bulletList"),
+        orderedList: t("editor.slashMenu.orderedList"),
+        romanList: t("editor.slashMenu.romanList"),
+        taskList: t("editor.slashMenu.taskList"),
+        select: t("editor.slashMenu.select"),
+        blockquote: t("editor.slashMenu.blockquote"),
+        codeBlock: t("editor.slashMenu.codeBlock"),
+        horizontalRule: t("editor.slashMenu.horizontalRule"),
+        title: t("editor.slashMenu.title"),
+      },
+    }),
+    [t],
+  );
+  const linkIndex = React.useMemo(
+    () => createWorkspaceObjectLinkIndex(createdEntities),
+    [createdEntities],
+  );
+  const backlinks = selectBacklinksForObject(linkIndex, entity.id);
+  const backlinkPreviewSources = React.useMemo(
+    () =>
+      backlinks.reduce<DocumentWorkspaceEntity[]>((sources, backlink) => {
+        if (sources.some((source) => source.id === backlink.sourceId)) {
+          return sources;
+        }
+        const source = createdEntities.find(
+          (candidate) => candidate.id === backlink.sourceId,
+        );
+        if (isDocumentWorkspaceEntity(source)) sources.push(source);
+        return sources;
+      }, []),
+    [backlinks, createdEntities],
+  );
 
   const changeType = (objectTypeId: "tag" | "task") =>
     changeWorkspaceEntityType(entity.id, objectTypeId);
@@ -1068,36 +1131,28 @@ function DocumentObjectEditor({
             value={entity.body}
             onChange={(body) => update({ body })}
             onCreatePageRequest={createWorkspacePage}
-            labels={{
-              bold: t("editor.bold"),
-              italic: t("editor.italic"),
-              code: t("editor.code"),
-              slashMenu: {
-                cancel: t("editor.slashMenu.cancel"),
-                createPage: t("editor.slashMenu.createPage"),
-                empty: t("editor.slashMenu.empty"),
-                text: t("editor.slashMenu.text"),
-                smallText: t("editor.slashMenu.smallText"),
-                page: t("editor.slashMenu.page"),
-                heading1: t("editor.slashMenu.heading1"),
-                heading2: t("editor.slashMenu.heading2"),
-                heading3: t("editor.slashMenu.heading3"),
-                heading4: t("editor.slashMenu.heading4"),
-                navigate: t("editor.slashMenu.navigate"),
-                alphabeticalList: t("editor.slashMenu.alphabeticalList"),
-                bulletList: t("editor.slashMenu.bulletList"),
-                orderedList: t("editor.slashMenu.orderedList"),
-                romanList: t("editor.slashMenu.romanList"),
-                taskList: t("editor.slashMenu.taskList"),
-                select: t("editor.slashMenu.select"),
-                blockquote: t("editor.slashMenu.blockquote"),
-                codeBlock: t("editor.slashMenu.codeBlock"),
-                horizontalRule: t("editor.slashMenu.horizontalRule"),
-                title: t("editor.slashMenu.title"),
-              },
-            }}
+            labels={editorLabels}
           />
         </div>
+        {backlinkPreviewSources.map((source) => (
+          <section
+            key={`${source.id}-readonly-backlink`}
+            data-slot="workspace-readonly-backlink-preview"
+            className="mt-10 grid gap-2 border-l pl-3"
+          >
+            <h3 className="truncate text-sm font-medium">
+              {source.title.trim() || t("lifecycle.untitled")}
+            </h3>
+            <BlockEditor
+              ariaLabel={t("fields.text")}
+              placeholder={t("fields.text")}
+              value={source.body}
+              editable={false}
+              className="mt-0 min-h-0"
+              labels={editorLabels}
+            />
+          </section>
+        ))}
         <input
           ref={importInputRef}
           type="file"

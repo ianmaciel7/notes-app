@@ -1,5 +1,4 @@
 import {
-  type BlockEditorDocument,
   type BlockEditorMark,
   type BlockEditorNode,
   blockEditorDocumentToPlainText,
@@ -311,30 +310,6 @@ function createObjectEmbedNode(objectId: string): BlockEditorNode {
   return { type: "objectEmbed", attrs: { objectId } };
 }
 
-function createReferenceableBlockId(objectId: string, index: number) {
-  return `${objectId}-block-${index + 1}`;
-}
-
-function ensureReferenceableBlockIds(
-  objectId: string,
-  document: BlockEditorDocument,
-): BlockEditorDocument {
-  let index = 0;
-  return {
-    ...document,
-    doc: {
-      ...document.doc,
-      content: document.doc.content.map((node) => ({
-        ...node,
-        attrs: {
-          ...(node.attrs ?? {}),
-          id: getBlockId(node) ?? createReferenceableBlockId(objectId, index++),
-        },
-      })),
-    },
-  };
-}
-
 export type {
   UnlinkedMentionCandidate,
   WorkspaceBacklink,
@@ -346,9 +321,7 @@ export {
   createBlockReferenceMark,
   createObjectEmbedNode,
   createObjectReferenceMark,
-  createReferenceableBlockId,
   createWorkspaceObjectLinkIndex,
-  ensureReferenceableBlockIds,
   findUnlinkedMentionCandidates,
   selectBacklinksForObject,
   selectContextualGraphEdges,

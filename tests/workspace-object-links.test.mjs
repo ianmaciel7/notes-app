@@ -9,9 +9,7 @@ import {
   createBlockReferenceMark,
   createObjectEmbedNode,
   createObjectReferenceMark,
-  createReferenceableBlockId,
   createWorkspaceObjectLinkIndex,
-  ensureReferenceableBlockIds,
   findUnlinkedMentionCandidates,
   selectBacklinksForObject,
   selectContextualGraphEdges,
@@ -120,15 +118,24 @@ test("missing targets are explicit repairable states", () => {
 });
 
 test("property relation graph edges stay distinct from content backlinks", () => {
-  const source = documentEntity("source", "Source", blockEditorDocumentFromPlainText("Source"), {
-    propertyValues: {
-      relation: {
-        type: "entity",
-        entity: [{ id: "target", structureId: "page" }],
+  const source = documentEntity(
+    "source",
+    "Source",
+    blockEditorDocumentFromPlainText("Source"),
+    {
+      propertyValues: {
+        relation: {
+          type: "entity",
+          entity: [{ id: "target", structureId: "page" }],
+        },
       },
     },
-  });
-  const target = documentEntity("target", "Target", blockEditorDocumentFromPlainText("Target"));
+  );
+  const target = documentEntity(
+    "target",
+    "Target",
+    blockEditorDocumentFromPlainText("Target"),
+  );
 
   assert.equal(selectForwardContentReferences([source, target]).length, 0);
   assert.deepEqual(selectPropertyRelationGraphEdges([source, target]), [
@@ -174,27 +181,65 @@ test("cycle checks reject recursive embed/reference paths", () => {
   assert.equal(wouldCreateReferenceCycle(references, "c", "d"), false);
 });
 
-test("block identity helpers preserve ids and use stable deterministic fallbacks", () => {
+test("block link indexing consumes centrally normalized recursive block ids", () => {
   const original = blockEditorDocumentFromPlainText("One\nTwo");
   const firstId = original.doc.content[0].attrs.id;
   const secondId = original.doc.content[1].attrs.id;
-  const preserved = ensureReferenceableBlockIds("source", original);
+  const preserved = normalizeBlockEditorDocument(original, "source");
 
-  assert.equal(preserved.doc.content[0].attrs.id, firstId);
-  assert.equal(preserved.doc.content[1].attrs.id, secondId);
-  assert.equal(
-    normalizeBlockEditorDocument(preserved, "source")?.doc.content[0].attrs.id,
-    firstId,
-  );
+  assert.equal(preserved?.doc.content[0].attrs.id, firstId);
+  assert.equal(preserved?.doc.content[1].attrs.id, secondId);
 
   const legacy = {
     schemaVersion: 1,
     doc: {
       type: "doc",
-      content: [{ type: "paragraph" }, { type: "paragraph" }],
+      content: [
+        {
+          type: "bulletList",
+          content: [
+            {
+              type: "listItem",
+              content: [
+                {
+                  type: "paragraph",
+                  content: [
+                    {
+                      type: "text",
+                      text: "Target",
+                      marks: [createObjectReferenceMark("target")],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
   };
-  const fallback = ensureReferenceableBlockIds("source", legacy);
-  assert.equal(fallback.doc.content[0].attrs.id, createReferenceableBlockId("source", 0));
-  assert.equal(fallback.doc.content[1].attrs.id, createReferenceableBlockId("source", 1));
+  const normalized = normalizeBlockEditorDocument(legacy, "source");
+  assert.ok(normalized);
+  const ids = [
+    normalized.doc.content[0].attrs.id,
+    normalized.doc.content[0].content[0].attrs.id,
+    normalized.doc.content[0].content[0].content[0].attrs.id,
+  ];
+  assert.deepEqual(ids, [
+    "block:source:0",
+    "block:source:0.0",
+    "block:source:0.0.0",
+  ]);
+  const index = createWorkspaceObjectLinkIndex([
+    documentEntity("source", "Source", normalized),
+    documentEntity(
+      "target",
+      "Target",
+      blockEditorDocumentFromPlainText("Target"),
+    ),
+  ]);
+  assert.equal(
+    selectObjectsInside(index, "source")[0].blockId,
+    "block:source:0.0.0",
+  );
 });

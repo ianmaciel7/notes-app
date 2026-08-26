@@ -10,12 +10,12 @@
 
 ## 2. Editor invariants
 
-- [ ] 2.1 Preserve ids through edits, undo/redo, conversion, reorder, split/merge, and read-only rendering.
+- [x] 2.1 Preserve ids through edits, undo/redo, conversion, reorder, split/merge, and read-only rendering.
 - [x] 2.2 Allocate fresh ids for insertion, duplication, import, and external paste.
 
 ## 3. Acceptance
 
-- [ ] 3.1 Browser-test id stability across edit/reorder/duplicate/reload/mobile/read-only flows.
+- [x] 3.1 Browser-test id stability across edit/reorder/duplicate/reload/mobile/read-only flows.
 - [ ] 3.2 Run editor tests, `pnpm verify`, build, parity regression, and strict OpenSpec validation.
 
 ## 4. Completion

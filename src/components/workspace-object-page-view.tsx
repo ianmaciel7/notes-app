@@ -858,6 +858,12 @@ function getEntityTitle(entity: WorkspaceEntity | undefined, fallback: string) {
   return entity?.title.trim() || fallback;
 }
 
+function isDocumentWorkspaceEntity(
+  entity: WorkspaceEntity | undefined,
+): entity is DocumentWorkspaceEntity {
+  return entity?.kind === "document" || entity?.kind === "quote";
+}
+
 function ReferenceList({
   emptyLabel,
   items,
@@ -952,6 +958,19 @@ function ReferencePanel({
   const backlinks = selectBacklinksForObject(linkIndex, entity.id);
   const objectsInside = selectObjectsInside(linkIndex, entity.id);
   const graphEdges = selectContextualGraphEdges(linkIndex, entity.id);
+  const backlinkPreviewSources = backlinks.reduce<DocumentWorkspaceEntity[]>(
+    (sources, backlink) => {
+      if (sources.some((source) => source.id === backlink.sourceId)) {
+        return sources;
+      }
+      const source = createdEntities.find(
+        (candidate) => candidate.id === backlink.sourceId,
+      );
+      if (isDocumentWorkspaceEntity(source)) sources.push(source);
+      return sources;
+    },
+    [],
+  );
   const mentionCandidates = findUnlinkedMentionCandidates(
     createdEntities,
     entity.id,
@@ -1083,6 +1102,26 @@ function ReferencePanel({
           title={t("explore.objectsInside")}
         />
       </div>
+
+      {backlinkPreviewSources.map((source) => (
+        <section
+          key={`${source.id}-readonly-backlink`}
+          data-slot="workspace-readonly-backlink-preview"
+          className="grid gap-2 border-l pl-3"
+        >
+          <h3 className="truncate text-sm font-medium">
+            {getEntityTitle(source, t("lifecycle.untitled"))}
+          </h3>
+          <BlockEditor
+            ariaLabel={t("fields.text")}
+            placeholder={t("fields.text")}
+            value={source.body}
+            editable={false}
+            className="mt-0 min-h-0"
+            labels={editorLabels(t)}
+          />
+        </section>
+      ))}
 
       {objectsInside
         .filter((item) => item.kind === "embed" && !item.missing)

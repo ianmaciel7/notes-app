@@ -313,6 +313,112 @@ test("existing block ids survive edits, transforms, reorder, reload, and mobile 
   expect(errors).toEqual([]);
 });
 
+test("read-only backlink previews preserve source block identity without edit controls", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.addInitScript((storageKey) => {
+    window.localStorage.setItem(
+      storageKey,
+      JSON.stringify({
+        activeEntityId: "target-page",
+        entities: [
+          {
+            body: {
+              schemaVersion: 2,
+              doc: {
+                type: "doc",
+                content: [
+                  {
+                    type: "paragraph",
+                    attrs: { id: "block:source-page:0" },
+                    content: [
+                      {
+                        type: "text",
+                        text: "Read-only source mentions target",
+                        marks: [
+                          {
+                            type: "link",
+                            attrs: { href: "object:target-page" },
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+            collections: [],
+            createdAt: "2026-01-01T00:00:00.000Z",
+            id: "source-page",
+            kind: "document",
+            objectTypeId: "page",
+            propertyValues: {},
+            tags: [],
+            title: "Source page",
+          },
+          {
+            body: {
+              schemaVersion: 2,
+              doc: {
+                type: "doc",
+                content: [
+                  {
+                    type: "paragraph",
+                    attrs: { id: "block:target-page:0" },
+                    content: [{ type: "text", text: "Target body" }],
+                  },
+                ],
+              },
+            },
+            collections: [],
+            createdAt: "2026-01-01T00:00:00.000Z",
+            id: "target-page",
+            kind: "document",
+            objectTypeId: "page",
+            propertyValues: {},
+            tags: [],
+            title: "Target page",
+          },
+        ],
+        nextId: 3,
+        version: 2,
+      }),
+    );
+  }, workspaceStorageKey);
+  await page.goto("/pt-BR");
+
+  const preview = page
+    .locator(
+      '[data-testid="app-shell-main"] [data-slot="workspace-readonly-backlink-preview"]',
+    )
+    .filter({ hasText: "Source page" });
+  await expect(preview).toBeVisible();
+  const readonlyEditor = preview.getByRole("document", { name: "Text" });
+  await expect(readonlyEditor).toHaveAttribute("contenteditable", "false");
+  await expect(readonlyEditor).toContainText(
+    "Read-only source mentions target",
+  );
+  await expect(
+    preview.locator('[data-slot="block-editor-block-handle"]'),
+  ).toHaveCount(0);
+  expect(await blockIdForText(readonlyEditor, "Read-only source")).toBe(
+    "block:source-page:0",
+  );
+
+  await readonlyEditor.click();
+  await page.keyboard.type(" edited");
+  await expect(readonlyEditor).not.toContainText("edited");
+  expect(await blockIdForText(readonlyEditor, "Read-only source")).toBe(
+    "block:source-page:0",
+  );
+  expect(errors).toEqual([]);
+});
+
 test("plus and six-dot grip keep their independent Capacities behaviors", async ({
   page,
 }, testInfo) => {
