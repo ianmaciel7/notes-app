@@ -367,7 +367,10 @@ function parseCurrentWorkspaceObjectSnapshot(
   }
   const blockMigration = migrateStructuredEntityBodies(value.entities);
   if (!blockMigration.ok) return blockMigration;
-  const normalizedValue = { ...value, entities: blockMigration.entities };
+  const normalizedValue: Record<string, unknown> = {
+    ...value,
+    entities: blockMigration.entities,
+  };
   const structureValidation = validateStructureRegistry(normalizedValue.structures);
   if (
     !structureValidation.ok ||
