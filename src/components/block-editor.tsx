@@ -10,11 +10,11 @@ import { useLocale, useTranslations } from "next-intl";
 import * as React from "react";
 import { BlockHandle } from "@/components/block-editor-handle";
 import { SelectionToolbar } from "@/components/block-editor-selection-toolbar";
+import { createBlockCommandCatalog } from "@/editor/block-command-catalog";
 import type {
   BlockEditorLabels,
   BlockEditorProps,
 } from "@/editor/block-editor-contract";
-import { createBlockCommandCatalog } from "@/editor/block-command-catalog";
 import {
   BlockIdExtension,
   ParagraphSizeExtension,
@@ -45,13 +45,17 @@ function normalizeSerializedDocument(serialized: string) {
   }
 }
 
-function editorAttributes(editable: boolean, ariaLabel: string, locale: string) {
+function editorAttributes(
+  editable: boolean,
+  ariaLabel: string,
+  locale: string,
+) {
   return editable
     ? {
         "aria-label": ariaLabel,
         "aria-multiline": "true",
         class:
-          "notes-block-editor focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring/60",
+          "notes-block-editor outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring/60 focus-visible:outline-solid",
         lang: locale,
         role: "textbox",
         spellcheck: "true",
@@ -100,13 +104,18 @@ function BlockEditor({
     flushCommit,
     scheduleCommit,
     startComposition,
-  } = useBufferedDocumentCommit({ value: externalDocument, onCommit: onChange });
+  } = useBufferedDocumentCommit({
+    value: externalDocument,
+    onCommit: onChange,
+  });
 
   const slashLabelsKey = JSON.stringify(labels.slashMenu);
-  const stableSlashLabels = React.useMemo<BlockEditorLabels["slashMenu"]>(() => {
-    const parsedLabels = JSON.parse(
-      slashLabelsKey,
-    ) as Partial<BlockEditorLabels["slashMenu"]>;
+  const stableSlashLabels = React.useMemo<
+    BlockEditorLabels["slashMenu"]
+  >(() => {
+    const parsedLabels = JSON.parse(slashLabelsKey) as Partial<
+      BlockEditorLabels["slashMenu"]
+    >;
 
     return {
       ...parsedLabels,
@@ -247,5 +256,5 @@ function BlockEditor({
   );
 }
 
-export { BlockEditor };
 export type { BlockEditorLabels, BlockEditorProps };
+export { BlockEditor };

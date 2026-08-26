@@ -109,7 +109,8 @@ test("selection toolbar preserves text while applying and removing a link", asyn
 
 test("plus and six-dot grip keep their independent Capacities behaviors", async ({
   page,
-}) => {
+}, testInfo) => {
+  testInfo.snapshotSuffix = "";
   await page.setViewportSize({ width: 1280, height: 800 });
   const { editor, errors } = await openPageEditor(
     page,
@@ -182,6 +183,30 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
     (alphaBox?.x ?? 0) + 4,
   );
   expect(Math.abs((handleBox?.y ?? 0) - (alphaBox?.y ?? 0))).toBeLessThan(8);
+  await expect(handle).toHaveScreenshot("block-handle-reference.png", {
+    animations: "disabled",
+    caret: "hide",
+    maxDiffPixelRatio: 0.02,
+  });
+
+  const beta = editor.locator("p").filter({ hasText: "Beta" }).first();
+  await beta.hover();
+  await expect
+    .poll(async () => {
+      const [currentHandleBox, betaBox] = await Promise.all([
+        handle.boundingBox(),
+        beta.boundingBox(),
+      ]);
+      return Math.abs((currentHandleBox?.y ?? 0) - (betaBox?.y ?? 0));
+    })
+    .toBeLessThan(8);
+  await alpha.hover();
+  await expect
+    .poll(async () => {
+      const currentHandleBox = await handle.boundingBox();
+      return Math.abs((currentHandleBox?.y ?? 0) - (alphaBox?.y ?? 0));
+    })
+    .toBeLessThan(8);
 
   await insertControl.hover();
   const insertTooltip = page.locator(
@@ -223,6 +248,23 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
   const gamma = editor.locator("p").filter({ hasText: "Gamma" }).first();
   const gammaBox = await gamma.boundingBox();
   expect(gammaBox).not.toBeNull();
+  await dragControl.evaluate((control) => {
+    control.addEventListener(
+      "dragend",
+      () => {
+        queueMicrotask(() => {
+          control.dispatchEvent(
+            new MouseEvent("click", { bubbles: true, cancelable: true }),
+          );
+          document.documentElement.setAttribute(
+            "data-post-drag-click-emitted",
+            "true",
+          );
+        });
+      },
+      { once: true },
+    );
+  });
   await dragControl.dragTo(gamma, {
     targetPosition: {
       x: Math.min(12, Math.max(2, (gammaBox?.width ?? 24) / 4)),
@@ -230,14 +272,14 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
     },
   });
 
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-post-drag-click-emitted",
+    "true",
+  );
   await expect(blockMenu).toBeHidden();
-  await expect.poll(() => editor.locator("p").allTextContents()).not.toEqual([
-    "Above",
-    "Alpha",
-    "Below",
-    "Beta",
-    "Gamma",
-  ]);
+  await expect
+    .poll(() => editor.locator("p").allTextContents())
+    .not.toEqual(["Above", "Alpha", "Below", "Beta", "Gamma"]);
   const reordered = await editor.locator("p").allTextContents();
   expect([...reordered].sort()).toEqual(
     ["Above", "Alpha", "Below", "Beta", "Gamma"].sort(),
@@ -250,4 +292,65 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
 
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(handle).toBeHidden();
+});
+
+test("rendered editor preserves focus, reduced motion, mobile overflow, and a clean console", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const { editor, errors, workspace } = await openPageEditor(
+    page,
+    `Mobile ${"unbroken".repeat(40)}`,
+  );
+  const editorShell = workspace.locator('[data-slot="block-editor"]');
+
+  await editor.focus();
+  await expect(editor).toBeFocused();
+  expect(
+    await editor.evaluate((element) => element.matches(":focus-visible")),
+  ).toBe(true);
+  const focusStyle = await editor.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      outlineStyle: style.outlineStyle,
+      outlineWidth: style.outlineWidth,
+    };
+  });
+  expect(focusStyle.outlineStyle).not.toBe("none");
+  expect(focusStyle.outlineWidth).toBe("2px");
+
+  const paragraph = editor.locator("p").first();
+  await paragraph.hover();
+  const handle = page
+    .locator('[data-slot="block-editor-block-handle"]')
+    .filter({ visible: true })
+    .first();
+  await expect(handle).toBeVisible();
+  const handleMotion = await handle.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      animationCount: element.getAnimations().length,
+      transitionProperty: style.transitionProperty,
+    };
+  });
+  expect(handleMotion).toEqual({
+    animationCount: 0,
+    transitionProperty: "none",
+  });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(handle).toBeHidden();
+  const overflow = await editorShell.evaluate((element) => ({
+    document:
+      document.documentElement.scrollWidth <=
+      document.documentElement.clientWidth,
+    editor: element.querySelector(".notes-block-editor")
+      ? (element.querySelector(".notes-block-editor")?.scrollWidth ?? 0) <=
+        (element.querySelector(".notes-block-editor")?.clientWidth ?? 0)
+      : false,
+    shell: element.scrollWidth <= element.clientWidth,
+  }));
+  expect(overflow).toEqual({ document: true, editor: true, shell: true });
+  expect(errors).toEqual([]);
 });

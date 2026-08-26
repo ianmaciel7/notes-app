@@ -94,6 +94,21 @@ test("slash menu opens after existing text, stays by the caret, and keeps Capaci
   expect(box).not.toBeNull();
   expect(editorBox).not.toBeNull();
   expect(caret).not.toBeNull();
+  const menuStyle = await menu.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      backgroundColor: style.backgroundColor,
+      borderColor: style.borderColor,
+      borderRadius: style.borderRadius,
+      maxHeight: style.maxHeight,
+    };
+  });
+  expect(menuStyle).toEqual({
+    backgroundColor: "rgb(255, 255, 255)",
+    borderColor: "rgb(222, 219, 215)",
+    borderRadius: "14px",
+    maxHeight: "none",
+  });
   expect(Math.round(box?.width ?? 0)).toBeGreaterThanOrEqual(430);
   expect(Math.round(box?.width ?? 0)).toBeLessThanOrEqual(450);
 
