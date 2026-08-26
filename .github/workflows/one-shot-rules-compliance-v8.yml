@@ -1,0 +1,77 @@
+name: One-shot rules compliance v8
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - .github/workflows/one-shot-rules-compliance-v8.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout dev
+        uses: actions/checkout@v6
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Apply audited compliance changes
+        run: python scripts/apply-rules-compliance.py
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate legacy complexity baseline
+        shell: bash
+        run: |
+          set +e
+          pnpm complexity 2>&1 | tee /tmp/complexity.log
+          status=${PIPESTATUS[0]}
+          set -e
+          test "$status" -ne 0
+          test "$(grep -c 'has cyclomatic complexity' /tmp/complexity.log)" -eq 6
+          grep -q 'workspace-object-type-view.tsx.*WorkspaceObjectTypeView has cyclomatic complexity 14' /tmp/complexity.log
+          grep -q 'editor/document.ts.*canonicalizeKnownEditorDefaults has cyclomatic complexity 15' /tmp/complexity.log
+          grep -q 'workspace-object-storage.ts.*parseWorkspaceObjectSnapshot has cyclomatic complexity 25' /tmp/complexity.log
+          grep -q 'workspace-object-types.ts.*validatePropertyDefinition has cyclomatic complexity 18' /tmp/complexity.log
+          grep -q 'workspace-object-types.ts.*validateWorkspaceStructure has cyclomatic complexity 19' /tmp/complexity.log
+          grep -q 'workspace-objects.ts.*workspaceObjectReducer has cyclomatic complexity 20' /tmp/complexity.log
+
+      - name: Validate repository gates except legacy complexity debt
+        run: pnpm format:check && pnpm lint && pnpm typegen && pnpm typecheck && pnpm test:coverage && pnpm build
+
+      - name: Validate OpenSpec
+        shell: bash
+        run: |
+          if command -v openspec >/dev/null 2>&1; then
+            openspec validate --specs
+          elif pnpm exec openspec --version >/dev/null 2>&1; then
+            pnpm exec openspec validate --specs
+          else
+            echo 'OpenSpec CLI is not available in this runner.' >&2
+            exit 1
+          fi
+
+      - name: Commit validated compliance fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix: enforce workspace rules compliance"
+          git push origin HEAD:dev
