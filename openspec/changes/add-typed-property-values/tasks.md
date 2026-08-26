@@ -18,8 +18,8 @@
 
 ## 3. Acceptance
 
-- [ ] 3.1 Browser-test mixed property families, metadata/default-property protections, reload, conversion rollback, validation, keyboard/mobile focus, locales, and no duplication/data loss.
-- [ ] 3.2 Run `pnpm verify`, relevant Playwright suites, build, `git diff --check`, and strict OpenSpec validation.
+- [x] 3.1 Browser-test mixed property families, metadata/default-property protections, reload, conversion rollback, validation, keyboard/mobile focus, locales, and no duplication/data loss.
+- [x] 3.2 Run `pnpm verify`, relevant Playwright suites, build, `git diff --check`, and strict OpenSpec validation.
 
 ## 4. Completion
 

@@ -375,6 +375,43 @@ function ObjectPageTags({
   );
 }
 
+type DateInputPropertyValue = {
+  readonly allDay: boolean;
+  readonly start: string;
+  readonly timeZone: string;
+};
+
+function isDateInputPropertyValue(
+  value: unknown,
+): value is DateInputPropertyValue {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "allDay" in value &&
+    "start" in value &&
+    "timeZone" in value &&
+    typeof value.start === "string" &&
+    typeof value.timeZone === "string"
+  );
+}
+
+function formatDateInputPropertyValue(value: DateInputPropertyValue): string {
+  if (value.allDay) return `${value.start}T00:00`;
+  const date = new Date(value.start);
+  if (!Number.isFinite(date.valueOf())) return "";
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    day: "2-digit",
+    hour: "2-digit",
+    hourCycle: "h23",
+    minute: "2-digit",
+    month: "2-digit",
+    timeZone: value.timeZone,
+    year: "numeric",
+  }).formatToParts(date);
+  const byType = new Map(parts.map((part) => [part.type, part.value]));
+  return `${byType.get("year")}-${byType.get("month")}-${byType.get("day")}T${byType.get("hour")}:${byType.get("minute")}`;
+}
+
 function propertyInputValue(value: unknown): string {
   if (value == null) return "";
   if (typeof value === "string") return value;
@@ -382,7 +419,35 @@ function propertyInputValue(value: unknown): string {
     return String(value);
   }
   if (Array.isArray(value)) return value.map(propertyInputValue).join(", ");
-  return "";
+  return isDateInputPropertyValue(value)
+    ? formatDateInputPropertyValue(value)
+    : "";
+}
+
+function BufferedWorkspacePropertyInput({
+  inputId,
+  inputType,
+  onCommit,
+  value,
+}: {
+  readonly inputId: string;
+  readonly inputType: string;
+  readonly onCommit: (value: unknown) => void;
+  readonly value: unknown;
+}) {
+  const { inputProps } = useBufferedTextCommit({
+    format: propertyInputValue,
+    onCommit,
+    value,
+  });
+  return (
+    <input
+      {...inputProps}
+      id={inputId}
+      type={inputType}
+      className="min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring"
+    />
+  );
 }
 
 function WorkspacePropertyField({
@@ -394,9 +459,8 @@ function WorkspacePropertyField({
   readonly property: WorkspaceStructure["propertyDefinitions"][number];
   readonly updateProperty: EntityPropertyUpdate;
 }) {
+  const inputId = React.useId();
   const value = readWorkspaceEntityProperty(entity, property.id);
-  const commonClass =
-    "min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring";
   if (property.valueType === "boolean") {
     return (
       <label
@@ -424,19 +488,28 @@ function WorkspacePropertyField({
           : "text";
   return (
     <label
+      htmlFor={inputId}
       data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
       className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
     >
       <span className="truncate text-muted-foreground">{property.name}</span>
-      <input
-        type={inputType}
-        value={propertyInputValue(value)}
-        className={commonClass}
-        onChange={(event) => {
-          const draft = event.target.value;
+      <BufferedWorkspacePropertyInput
+        inputId={inputId}
+        inputType={inputType}
+        value={value}
+        onCommit={(draft) => {
+          const text = String(draft);
           updateProperty(
             property.id,
-            property.valueType === "number" ? Number(draft) : draft,
+            property.valueType === "number"
+              ? Number(text)
+              : property.valueType === "date"
+                ? {
+                    allDay: false,
+                    start: text,
+                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                  }
+                : text,
           );
         }}
       />
