@@ -56,20 +56,12 @@ jobs:
       - name: Validate repository gates except legacy complexity debt
         run: pnpm format:check && pnpm lint && pnpm typegen && pnpm typecheck && pnpm test:coverage && pnpm build
 
-      - name: Validate OpenSpec
-        shell: bash
-        run: |
-          if command -v openspec >/dev/null 2>&1; then
-            openspec validate --specs
-          elif pnpm exec openspec --version >/dev/null 2>&1; then
-            pnpm exec openspec validate --specs
-          else
-            echo 'OpenSpec CLI is not available in this runner.' >&2
-            exit 1
-          fi
+      - name: Validate OpenSpec with official CLI
+        run: pnpm dlx @fission-ai/openspec@latest validate --specs
 
       - name: Commit validated compliance fixes
         run: |
+          git checkout d100329372e7fbe1e3d3295dce67b140f53c8ad4 -- .github/workflows/ci.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
