@@ -13,6 +13,7 @@ const [
   overview,
   studio,
   cards,
+  pageView,
   storage,
   objects,
   objectTypes,
@@ -26,12 +27,22 @@ const [
   readFile("src/components/app-sidebar-overview.tsx", "utf8"),
   readFile("src/components/app-sidebar-object-type-studio.tsx", "utf8"),
   readFile("src/components/data-view-cards.tsx", "utf8"),
+  readFile("src/components/workspace-object-page-view.tsx", "utf8"),
   readFile("src/lib/workspace-object-storage.ts", "utf8"),
   readFile("src/lib/workspace-objects.ts", "utf8"),
   readFile("src/lib/workspace-object-types.ts", "utf8"),
 ]);
 
-const sources = [tabs, palette, controller, content, overview, studio, cards];
+const sources = [
+  tabs,
+  palette,
+  controller,
+  content,
+  overview,
+  studio,
+  cards,
+  pageView,
+];
 const sourceByName = {
   "app-header-tabs.tsx": tabs,
   "app-sidebar-object-type-studio.tsx": studio,
@@ -40,6 +51,7 @@ const sourceByName = {
   "data-view-cards.tsx": cards,
   "workspace-content.tsx": content,
   "workspace-controller.tsx": controller,
+  "workspace-object-page-view.tsx": pageView,
 };
 
 test("repeated lifecycle surfaces consume the shared object lifecycle contracts", () => {
@@ -190,6 +202,39 @@ test("shared lifecycle contracts are tied to named production consumers", () => 
   }
 });
 
+test("workspace object pages reuse the shared lifecycle slots", () => {
+  const expectedConsumers = [
+    [
+      "EditableObjectTitle",
+      /function BufferedTitle[\s\S]*?objectLifecycleContractSlots\.EditableObjectTitle/,
+    ],
+    [
+      "EditableObjectBody",
+      /function DocumentPage[\s\S]*?objectLifecycleContractSlots\.EditableObjectBody/,
+    ],
+    [
+      "ObjectField",
+      /function WorkspacePropertyField[\s\S]*?objectLifecycleContractSlots\.ObjectField/,
+    ],
+    [
+      "ObjectFieldGroup",
+      /function WorkspacePropertyGroup[\s\S]*?objectLifecycleContractSlots\.ObjectFieldGroup/,
+    ],
+    [
+      "ObjectEditorShell",
+      /function WorkspaceObjectPageView[\s\S]*?objectLifecycleContractSlots\.ObjectEditorShell/,
+    ],
+  ];
+
+  for (const [contract, consumerPattern] of expectedConsumers) {
+    assert.match(
+      sourceByName["workspace-object-page-view.tsx"],
+      consumerPattern,
+      `${contract} is reused by the workspace object page view`,
+    );
+  }
+});
+
 test("prototype object families have explicit lifecycle evidence without creating a second registry", () => {
   for (const id of [
     "page",
@@ -281,9 +326,11 @@ test("object lifecycle parity does not take over block-editor storage contracts"
 });
 
 test("current change diff does not mutate block-editor-owned implementation areas", () => {
-  const changedFiles = execFileSync("git", ["diff", "--name-only", "HEAD"], {
-    encoding: "utf8",
-  })
+  const changedFiles = execFileSync(
+    "git",
+    ["diff", "--name-only", "0898ca1^..HEAD"],
+    { encoding: "utf8" },
+  )
     .split(/\r?\n/)
     .filter(Boolean)
     .map((file) => file.replace(/\\/g, "/"));

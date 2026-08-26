@@ -732,25 +732,68 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
     "data-lifecycle-contract",
     "object-creation-trigger",
   );
+  await expect(newButton).toHaveAttribute("aria-expanded", "false");
+  const newButtonIdleBox = await newButton.boundingBox();
+  expect(newButtonIdleBox).toBeTruthy();
   await newButton.hover();
+  expect(await newButton.boundingBox()).toEqual(newButtonIdleBox);
   await newButton.focus();
   await expect(newButton).toBeFocused();
   expect(
     await newButton.evaluate((element) => element.matches(":focus-visible")),
   ).toBe(true);
-  await newButton.press("Enter");
+  await newButton.hover();
+  await page.mouse.down();
+  expect(
+    await newButton.evaluate((element) => element.matches(":active")),
+  ).toBe(true);
+  await page.mouse.up();
 
   const menu = page.locator(
     '[data-lifecycle-contract="object-creation-menu"][data-open]',
   );
+  await expect(menu).toBeVisible();
+  await expect(newButton).toHaveAttribute("aria-expanded", "true");
+  await page.keyboard.press("Escape");
+  await expect(menu).toBeHidden();
+  await expect(newButton).toHaveAttribute("aria-expanded", "false");
+  await expect(newButton).toBeFocused();
+
+  await newButton.click();
+  await expect(menu).toBeVisible();
+  const mainBox = await page.locator("#app-shell-main").boundingBox();
+  expect(mainBox).toBeTruthy();
+  await page.mouse.click(
+    (mainBox?.x ?? 0) + (mainBox?.width ?? 0) - 16,
+    (mainBox?.y ?? 0) + (mainBox?.height ?? 0) - 16,
+  );
+  await expect(menu).toBeHidden();
+  await expect(newButton).toHaveAttribute("aria-expanded", "false");
+
+  await newButton.click();
   await expect(menu).toBeVisible();
   const option = menu
     .locator('[data-lifecycle-contract="object-type-option-row"]')
     .filter({ hasText: "Página" })
     .first();
   await expect(option).toHaveAttribute("role", "option");
+  const optionIdleBox = await option.boundingBox();
+  expect(optionIdleBox).toBeTruthy();
   await option.hover();
-  await option.click();
+  expect(await option.boundingBox()).toEqual(optionIdleBox);
+  await option.focus();
+  await expect(option).toBeFocused();
+  expect(
+    await option.evaluate((element) => element.matches(":focus-visible")),
+  ).toBe(true);
+  await option.hover();
+  await expect(option).toHaveAttribute("data-active", "true");
+  await expect(option).toHaveAttribute("aria-selected", "true");
+  await page.mouse.down();
+  expect(await option.evaluate((element) => element.matches(":active"))).toBe(
+    true,
+  );
+  await page.mouse.up();
 
   await expect(createdObjectWorkspace(page)).toBeVisible();
   await expect(
@@ -765,6 +808,9 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
   await expect(
     page.locator('[data-lifecycle-contract="editable-object-body"]').first(),
   ).toBeVisible();
+  await expect(
+    page.locator('[data-tab-id^="created-page-"] [role="tab"]').first(),
+  ).toHaveAttribute("aria-selected", "true");
 
   await page.getByRole("button", { name: "Novo", exact: true }).click();
   await page.locator('[role="option"]').filter({ hasText: "Tarefa" }).click();
