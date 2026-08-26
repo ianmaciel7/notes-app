@@ -3,6 +3,11 @@
 ### Requirement: Type-specific creation workflows
 The system SHALL dispatch every supported `Novo` palette object into the creation flow observed for its object family, keep the user's local Notes App data as the source of content, and preserve the current Capacities visual and interaction contract for idle, hover, focus-visible, pressed, opened, selected, and post-click states.
 
+#### Scenario: Full editor object is created
+- **WHEN** the user selects Atomic note, Quote, or Page
+- **THEN** the system SHALL create and activate an untitled object immediately
+- **AND** SHALL render the appropriate title, body, tags, collections, or quote fields for that type
+
 #### Scenario: Page is created and written
 - **WHEN** the user activates `Novo` and selects Page
 - **THEN** the system SHALL instantiate an untitled page with a stable id, the central page icon/tone, an active workspace tab, selected sidebar/object-type projections, and a contentEditable title/body surface
@@ -22,6 +27,11 @@ The system SHALL dispatch every supported `Novo` palette object into the creatio
 - **AND WHEN** the user edits quote content or attribution
 - **THEN** the quote editor, tab, object-type index, and persisted entity SHALL remain synchronized.
 
+#### Scenario: Table object is created
+- **WHEN** the user selects Table
+- **THEN** the system SHALL create and activate an untitled table with notes and a deterministic editable starter grid
+- **AND** changes to each cell SHALL remain associated with its row and column
+
 #### Scenario: Table is created and edited
 - **WHEN** the user activates `Novo` and selects Table
 - **THEN** the system SHALL create an untitled table with a deterministic starter grid, central table icon/tone, active tab selection, and updated table count
@@ -35,6 +45,12 @@ The system SHALL dispatch every supported `Novo` palette object into the creatio
 - **THEN** the system SHALL create the task, close the capture surface, update task count/projections, and expose an action to open the created task
 - **AND WHEN** the user presses Escape or submits an empty value
 - **THEN** no task SHALL be created and focus SHALL return to the invoking control.
+
+#### Scenario: URL-derived object is created
+- **WHEN** the user selects Weblink or Tweet
+- **THEN** the system SHALL request a URL before creating the object
+- **AND** SHALL reject empty, malformed, or type-incompatible URLs with a localized inline error
+- **AND** SHALL derive deterministic local display metadata without a network request
 
 #### Scenario: Weblink is created from a URL
 - **WHEN** the user activates `Novo` and selects Weblink
@@ -52,11 +68,22 @@ The system SHALL dispatch every supported `Novo` palette object into the creatio
 - **AND WHEN** the URL is empty, malformed, or incompatible
 - **THEN** the system SHALL keep the creation surface open with a localized inline error and no storage mutation.
 
+#### Scenario: Tag is created
+- **WHEN** the user selects Tag
+- **THEN** the system SHALL create and activate an untitled tag index
+- **AND** editing its title SHALL update the tab and tag index label
+
 #### Scenario: Tag is created and renamed
 - **WHEN** the user activates `Novo` and selects Tag
 - **THEN** the system SHALL create and activate an untitled tag index with central tag icon/tone and updated tag count
 - **AND WHEN** the user writes or renames the tag
 - **THEN** tag labels, tagged-object projections, tabs, and persisted state SHALL synchronize without localizing the stored tag identifier.
+
+#### Scenario: Query is created
+- **WHEN** the user selects Query
+- **THEN** the system SHALL create and activate a query builder with natural-language description and direct filter controls
+- **AND WHEN** a supported description template is applied
+- **THEN** the system SHALL generate deterministic local filters, update the title when still untitled, and display matching local workspace objects
 
 #### Scenario: Query is created and written
 - **WHEN** the user activates `Novo` and selects Query
@@ -145,6 +172,20 @@ The system SHALL dispatch every supported `Novo` palette object into the creatio
 
 ### Requirement: Editing synchronizes every workspace projection
 The system SHALL keep each object's canonical data synchronized with its active editor, main tab, sidebar counts, object-type index, query results, search surface, and persistence after creation, click navigation, writing, and re-opening.
+
+#### Scenario: Title or content is edited
+- **WHEN** the user edits an object's title, body, tags, table cells, task fields, URL notes, or query definition
+- **THEN** the canonical entity SHALL update immediately
+- **AND** every visible projection of the changed field SHALL reflect the same value without creating a duplicate object
+
+#### Scenario: Untitled object receives content
+- **WHEN** the first meaningful title remains blank but type-specific content is entered
+- **THEN** the tab SHALL retain the localized untitled fallback while the content is preserved
+
+#### Scenario: Object type count changes
+- **WHEN** a new object is committed or a stored workspace is hydrated
+- **THEN** the object-type count SHALL equal the number of canonical entities of that type
+- **AND** opening or editing an object SHALL NOT increment the count
 
 #### Scenario: Created object is clicked after creation
 - **WHEN** a newly created object is visible in a tab, sidebar/object-type list, search result, collection, query result, or related-object card

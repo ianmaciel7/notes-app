@@ -7,14 +7,15 @@ import {
   objectIconToneTextClass,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
+import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import type {
   ObjectViewProps,
   ProjectionLabels,
 } from "@/components/object-view-types";
 import { cn } from "@/lib/utils";
 import type { WorkspaceStructure } from "@/lib/workspace-object-types";
-import type { WorkspaceEntity } from "@/lib/workspace-objects";
 import { readWorkspaceEntityProperty } from "@/lib/workspace-object-views";
+import type { WorkspaceEntity } from "@/lib/workspace-objects";
 
 function structureFor(
   entity: WorkspaceEntity,
@@ -130,7 +131,10 @@ function ObjectProperties({
     }));
   if (rows.length === 0) return null;
   return (
-    <dl data-slot="object-properties" className="grid gap-2 text-xs text-muted-foreground">
+    <dl
+      data-slot="object-properties"
+      className="grid gap-2 text-xs text-muted-foreground"
+    >
       {rows.map((row) => (
         <div key={row.id} className="flex min-w-0 items-baseline gap-2">
           <dt className="shrink-0 font-medium">{row.label}</dt>
@@ -158,7 +162,13 @@ function OpenSurface({
 }: OpenSurfaceProps) {
   if (!onOpen) {
     return (
-      <div data-slot="open-surface" className={className}>
+      <div
+        data-slot="open-surface"
+        data-lifecycle-contract={
+          objectLifecycleContractSlots.ObjectProjectionRow
+        }
+        className={className}
+      >
         {children}
       </div>
     );
@@ -167,6 +177,7 @@ function OpenSurface({
     <button
       type="button"
       data-slot="open-surface"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectProjectionRow}
       aria-label={ariaLabel}
       className={cn("text-left", className)}
       onClick={() => onOpen(entityId)}
@@ -176,6 +187,7 @@ function OpenSurface({
   );
 }
 
+export type { ObjectTypeLabelProps, OpenSurfaceProps };
 export {
   entityDescription,
   entityValue,
@@ -184,4 +196,3 @@ export {
   OpenSurface,
   typeLabel,
 };
-export type { ObjectTypeLabelProps, OpenSurfaceProps };

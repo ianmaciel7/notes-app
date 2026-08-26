@@ -25,9 +25,9 @@
 - [x] 4.1 Apply the current surface, typography, spacing, card, listing, editor-wrapper, collection, query, and empty-state contracts across existing workspace routes while retaining local entities and counts.
 - [x] 4.2 Extract deterministic transient navigation/panel helpers from the workspace controller where required for testing, without changing public provider APIs, entity bodies, storage keys, or snapshot version.
 - [x] 4.3 Remove production `demo`/`fixture` APIs touched by this change, move touched user-visible copy to `next-intl`, update every locale catalog, and keep object icons sourced from the central registry.
-- [ ] 4.4 Confirm no implementation hunk changes block-editor document types, body persistence, storage migration, or other areas reserved by `add-block-editor`.
-- [ ] 4.5 Specify and implement per-object creation/click/write contracts for Page, Atomic note, Quote, Table, Task, Weblink, Tweet, Tag, Query, Image, PDF, Audio, File, Book, Person, Area, Meeting, Definition, Idea, Place, Project, Organization, Media, Travel, AI chat, and custom object types while preserving local data.
-- [ ] 4.6 Verify each created object updates the active tab, editor, sidebar/object-type count, search/query/list projections, selected/post-click visuals, and persisted entity exactly once.
+- [x] 4.4 Confirm no implementation hunk changes block-editor document types, body persistence, storage migration, or other areas reserved by `add-block-editor`.
+- [x] 4.5 Specify and implement per-object creation/click/write contracts for Page, Atomic note, Quote, Table, Task, Weblink, Tweet, Tag, Query, Image, PDF, Audio, File, Book, Person, Area, Meeting, Definition, Idea, Place, Project, Organization, Media, Travel, AI chat, and custom object types while preserving local data.
+- [x] 4.6 Verify each created object updates the active tab, editor, sidebar/object-type count, search/query/list projections, selected/post-click visuals, and persisted entity exactly once.
 - [x] 4.7 Treat Archive as a reserved/non-creatable registry type unless a separate requirement makes it user-instantiable.
 - [x] 4.8 Define and consume reusable lifecycle contracts for `ObjectCreationTrigger`, `ObjectCreationMenu`, `ObjectTypeOptionRow`, `ObjectCaptureSurface`, `ObjectEditorShell`, `EditableObjectTitle`, `EditableObjectBody`, `ObjectField`, `ObjectFieldGroup`, `ObjectValidationMessage`, `ObjectAttachmentControl`, `ObjectTab`, `ObjectProjectionRow`, `ObjectProjectionCard`, `ObjectCountBadge`, `ObjectTypePresetCard`, `ObjectTypeDetailsPanel`, `CustomObjectTypeForm`, and `ObjectIconTonePreview`.
 - [x] 4.9 Remove duplicated lifecycle geometry, typography, icon treatment, focus, hover, pressed, selected, open, post-click, validation, Escape, outside-click, and transition styling from object-specific components touched by this change.
@@ -39,9 +39,9 @@
 - [x] 5.3 Cover 1536/1280/1024/768 desktop geometry plus 480/390 overlay-open and overlay-closed states, tab-strip containment, no horizontal overflow, and positive usable content dimensions.
 - [x] 5.4 Cover reduced-motion state completion, keyboard focus visibility, distinct accessible names, and zero browser-console implementation errors.
 - [x] 5.5 Extend fast unit/source tests for extracted reducers/helpers, provider invariants, locale completeness, shared-variant consumption, and unchanged localStorage schema/version.
-- [ ] 5.6 Add focused browser coverage that opens `Novo`, verifies idle/hover/focus/pressed/open/Escape/outside-click states, instantiates each object family, writes type-appropriate content, clicks the resulting projection, and asserts post-click selected state without count duplication.
+- [x] 5.6 Add focused browser coverage that opens `Novo`, verifies idle/hover/focus/pressed/open/Escape/outside-click states, instantiates each object family, writes type-appropriate content, clicks the resulting projection, and asserts post-click selected state without count duplication.
 - [x] 5.7 Add source or browser coverage that audits central registry ids and proves every creatable id has an explicit lifecycle scenario while reserved ids are documented.
-- [ ] 5.8 Add source checks proving repeated lifecycle surfaces consume the reusable contracts, plus browser checks for at least one representative consumer of each contract.
+- [x] 5.8 Add source checks proving repeated lifecycle surfaces consume the reusable contracts, plus browser checks for at least one representative consumer of each contract.
 
 ## 6. Verification and OpenSpec completion
 

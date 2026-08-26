@@ -70,6 +70,109 @@ async function persistedEntities(page: Page) {
   });
 }
 
+async function persistedSnapshot(page: Page) {
+  return page.evaluate(() => {
+    const value = window.localStorage.getItem("notes-app:workspace-objects:v1");
+    return value ? JSON.parse(value) : null;
+  });
+}
+
+async function openObjectTypeStudio(page: Page) {
+  const trigger = page.locator(
+    '[data-slot="app-sidebar-object-type-studio"] [data-slot="app-sidebar-section-action"]',
+  );
+  await trigger.click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+}
+
+async function createStructureFromPreset(page: Page, presetLabel: string) {
+  await openObjectTypeStudio(page);
+  const dialog = page.getByRole("dialog");
+  await dialog
+    .locator('[data-slot="app-sidebar-object-type-card"]')
+    .filter({ hasText: presetLabel })
+    .click();
+  await expect(
+    dialog.locator('[data-lifecycle-contract="object-type-details-panel"]'),
+  ).toBeVisible();
+  await dialog
+    .getByRole("button", { name: "Adicionar tipo de objeto", exact: true })
+    .click();
+  await expect(dialog).toBeHidden();
+}
+
+async function createCustomStructure(
+  page: Page,
+  singularName: string,
+  pluralName: string,
+) {
+  await openObjectTypeStudio(page);
+  const dialog = page.getByRole("dialog");
+  await dialog
+    .locator('[data-slot="app-sidebar-object-type-card"]')
+    .filter({ hasText: "Crie o seu próprio" })
+    .click();
+  await expect(
+    dialog.locator('[data-lifecycle-contract="custom-object-type-form"]'),
+  ).toHaveAttribute("data-selected", "true");
+  await dialog.getByLabel("Nome", { exact: true }).fill(singularName);
+  await dialog.getByLabel("Plural do nome", { exact: true }).fill(pluralName);
+  await dialog
+    .getByRole("button", { name: "Adicionar tipo de objeto", exact: true })
+    .click();
+  await expect(dialog).toBeHidden();
+}
+
+async function writeCreatedObjectTitle(page: Page, title: string) {
+  const workspace = createdObjectWorkspace(page);
+  await expect(workspace).toBeVisible();
+  await workspace.getByRole("textbox", { name: "Título" }).fill(title);
+  await workspace.getByRole("textbox", { name: "Título" }).blur();
+}
+
+async function expectCreatedObjectProjection(
+  page: Page,
+  objectTypeId: string,
+  pluralLabel: string,
+  title: string,
+) {
+  const row = page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: pluralLabel })
+    .first();
+  await expect(row).toContainText("1");
+  await row
+    .getByRole("button")
+    .filter({ hasText: pluralLabel })
+    .first()
+    .click();
+  await page.getByRole("tab", { name: "Tudo", exact: true }).click();
+  const projection = page
+    .locator('[data-lifecycle-contract="object-projection-row"]')
+    .filter({ hasText: title })
+    .first();
+  await expect(projection).toBeVisible();
+  await projection.hover();
+  await projection.focus();
+  await expect(projection).toBeFocused();
+  await projection.click();
+  await expect(
+    page
+      .locator(
+        [
+          `[data-slot="created-object-workspace"][data-object-type="${objectTypeId}"]`,
+          `[data-slot="workspace-object-page-view"][data-object-type="${objectTypeId}"]`,
+        ].join(","),
+      )
+      .first(),
+  ).toBeVisible();
+  await expect(
+    page
+      .locator(`[data-tab-id^="created-${objectTypeId}-"] [role="tab"]`)
+      .first(),
+  ).toHaveAttribute("aria-selected", "true");
+}
+
 for (const viewport of desktopViewports) {
   test(`desktop geometry ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
@@ -136,9 +239,7 @@ test("tab midpoint and dedicated actions do not overlap", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
-test("top shell controls share one vertical center", async ({
-  page,
-}) => {
+test("top shell controls share one vertical center", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
   const switcher = page.locator('[data-slot="app-sidebar-space-switcher"]');
@@ -619,6 +720,125 @@ test("reduced motion keeps state changes immediate", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test("Novo trigger and lifecycle contract consumers expose browser states", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  const newButton = page.getByRole("button", { name: "Novo", exact: true });
+
+  await expect(newButton).toHaveAttribute(
+    "data-lifecycle-contract",
+    "object-creation-trigger",
+  );
+  await newButton.hover();
+  await newButton.focus();
+  await expect(newButton).toBeFocused();
+  expect(
+    await newButton.evaluate((element) => element.matches(":focus-visible")),
+  ).toBe(true);
+  await newButton.press("Enter");
+
+  const menu = page.locator(
+    '[data-lifecycle-contract="object-creation-menu"][data-open]',
+  );
+  await expect(menu).toBeVisible();
+  const option = menu
+    .locator('[data-lifecycle-contract="object-type-option-row"]')
+    .filter({ hasText: "Página" })
+    .first();
+  await expect(option).toHaveAttribute("role", "option");
+  await option.hover();
+  await option.click();
+
+  await expect(createdObjectWorkspace(page)).toBeVisible();
+  await expect(
+    page.locator('[data-lifecycle-contract="object-tab"]').first(),
+  ).toBeVisible();
+  await expect(
+    page.locator('[data-lifecycle-contract="object-editor-shell"]').first(),
+  ).toBeVisible();
+  await expect(
+    page.locator('[data-lifecycle-contract="editable-object-title"]').first(),
+  ).toBeVisible();
+  await expect(
+    page.locator('[data-lifecycle-contract="editable-object-body"]').first(),
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: "Novo", exact: true }).click();
+  await page.locator('[role="option"]').filter({ hasText: "Tarefa" }).click();
+  await expect(
+    page.locator('[data-lifecycle-contract="object-capture-surface"]'),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Adicionar tarefa" }).click();
+  await expect(
+    page.locator('[data-lifecycle-contract="object-validation-message"]'),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(newButton).toBeFocused();
+
+  await selectNewObject(page, "Tabela");
+  await expect(
+    page.locator('[data-lifecycle-contract="object-field"]').first(),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Novo", exact: true }).click();
+  await page.locator('[role="option"]').filter({ hasText: "Áudio" }).click();
+  await page.getByLabel("Escolher arquivo local").setInputFiles({
+    buffer: Buffer.from("audio"),
+    mimeType: "audio/mpeg",
+    name: "contract-audio.mp3",
+  });
+  await expect
+    .poll(() =>
+      page
+        .locator('[data-lifecycle-contract="object-attachment-control"]')
+        .count(),
+    )
+    .toBeGreaterThan(0);
+
+  await openObjectTypeStudio(page);
+  const dialog = page.getByRole("dialog");
+  const preset = dialog
+    .locator('[data-lifecycle-contract="object-type-preset-card"]')
+    .filter({ hasText: "Livro" })
+    .first();
+  await preset.hover();
+  await preset.click();
+  await expect(
+    dialog
+      .locator('[data-lifecycle-contract="object-icon-tone-preview"]')
+      .first(),
+  ).toBeVisible();
+  await expect(
+    dialog.locator('[data-lifecycle-contract="object-type-details-panel"]'),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+
+  await openObjectTypeStudio(page);
+  const customDialog = page.getByRole("dialog");
+  await customDialog
+    .locator('[data-lifecycle-contract="custom-object-type-form"]')
+    .click();
+  await expect(
+    customDialog.locator('[data-lifecycle-contract="custom-object-type-form"]'),
+  ).toHaveAttribute("data-selected", "true");
+  await page.mouse.click(4, 4);
+  await expect(customDialog).toBeHidden();
+
+  await expectCreatedObjectProjection(page, "page", "Páginas", "Sem título");
+  await page.getByRole("button", { name: "Páginas", exact: true }).click();
+  await page.getByRole("button", { name: "Grade", exact: true }).click();
+  await expect(
+    page.locator('[data-lifecycle-contract="object-projection-card"]').first(),
+  ).toBeVisible();
+  await expect(
+    page.locator('[data-lifecycle-contract="object-count-badge"]').first(),
+  ).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test("every supported New family persists once and reopens from its tab projection", async ({
   page,
 }) => {
@@ -626,18 +846,47 @@ test("every supported New family persists once and reopens from its tab projecti
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
   const families = [
-    { id: "ai-chat", label: "Chat de IA", kind: "title" },
-    { id: "page", label: "Página", kind: "title" },
-    { id: "table", label: "Tabela", kind: "table" },
-    { id: "task", label: "Tarefa", kind: "task" },
-    { id: "weblink", label: "Weblink", kind: "url" },
-    { id: "tweet", label: "Tweet", kind: "tweet" },
-    { id: "tag", label: "Etiqueta", kind: "title" },
-    { id: "query", label: "Query", kind: "query" },
-    { id: "image", label: "Imagem", kind: "file", mime: "image/png" },
-    { id: "pdf", label: "PDF", kind: "file", mime: "application/pdf" },
-    { id: "audio", label: "Áudio", kind: "file", mime: "audio/mpeg" },
-    { id: "file", label: "Arquivo", kind: "file", mime: "text/plain" },
+    {
+      id: "ai-chat",
+      label: "Chat de IA",
+      plural: "Chats de IA",
+      kind: "title",
+    },
+    { id: "page", label: "Página", plural: "Páginas", kind: "title" },
+    { id: "table", label: "Tabela", plural: "Tabelas", kind: "table" },
+    { id: "task", label: "Tarefa", plural: "Tarefas", kind: "task" },
+    { id: "weblink", label: "Weblink", plural: "Weblinks", kind: "url" },
+    { id: "tweet", label: "Tweet", plural: "Tweets", kind: "tweet" },
+    { id: "tag", label: "Etiqueta", plural: "Etiquetas", kind: "title" },
+    { id: "query", label: "Query", plural: "Queries", kind: "query" },
+    {
+      id: "image",
+      label: "Imagem",
+      plural: "Imagens",
+      kind: "file",
+      mime: "image/png",
+    },
+    {
+      id: "pdf",
+      label: "PDF",
+      plural: "PDFs",
+      kind: "file",
+      mime: "application/pdf",
+    },
+    {
+      id: "audio",
+      label: "Áudio",
+      plural: "Áudios",
+      kind: "file",
+      mime: "audio/mpeg",
+    },
+    {
+      id: "file",
+      label: "Arquivo",
+      plural: "Arquivos",
+      kind: "file",
+      mime: "text/plain",
+    },
   ] as const;
 
   for (const family of families) {
@@ -693,6 +942,10 @@ test("every supported New family persists once and reopens from its tab projecti
         .fill("Parity URL notes");
     } else if (family.kind !== "task" && family.kind !== "file") {
       await workspace.getByRole("textbox", { name: "Título" }).fill(title);
+      const bodyEditor = workspace.getByRole("textbox", { name: "Text" });
+      if ((await bodyEditor.count()) > 0) {
+        await bodyEditor.first().fill(`Body for ${title}`);
+      }
     } else if (family.kind === "file") {
       await workspace.getByRole("textbox", { name: "Título" }).fill(title);
     }
@@ -729,6 +982,12 @@ test("every supported New family persists once and reopens from its tab projecti
     expect(entity?.id).toBeTruthy();
     await expect(
       page
+        .locator('[data-slot="app-sidebar-object-type-row"]')
+        .filter({ hasText: family.plural })
+        .first(),
+    ).toContainText("1");
+    await expect(
+      page
         .locator(`[data-tab-id="${entity.id}"] [role="tab"]`)
         .filter({ visible: true }),
     ).toHaveAttribute("aria-selected", "true");
@@ -744,5 +1003,148 @@ test("every supported New family persists once and reopens from its tab projecti
     await expect(workspace).toBeVisible();
   }
 
+  expect(errors).toEqual([]);
+});
+
+test("preset and custom object families persist once and reopen from projections", async ({
+  page,
+}) => {
+  test.setTimeout(240_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  const presetFamilies = [
+    {
+      id: "book",
+      presetLabel: "Livro",
+      singularName: "Book",
+      pluralName: "Books",
+    },
+    {
+      id: "person",
+      presetLabel: "Pessoa",
+      singularName: "Person",
+      pluralName: "People",
+    },
+    {
+      id: "area",
+      presetLabel: "Área",
+      singularName: "Area",
+      pluralName: "Areas",
+    },
+    {
+      id: "meeting",
+      presetLabel: "Reunião",
+      singularName: "Meeting",
+      pluralName: "Meetings",
+    },
+    {
+      id: "definition",
+      presetLabel: "Definição",
+      singularName: "Definition",
+      pluralName: "Definitions",
+    },
+    {
+      id: "idea",
+      presetLabel: "Ideia",
+      singularName: "Idea",
+      pluralName: "Ideas",
+    },
+    {
+      id: "place",
+      presetLabel: "Lugar",
+      singularName: "Place",
+      pluralName: "Places",
+    },
+    {
+      id: "project",
+      presetLabel: "Projeto",
+      singularName: "Project",
+      pluralName: "Projects",
+    },
+    {
+      id: "organization",
+      presetLabel: "Organização",
+      singularName: "Organization",
+      pluralName: "Organizations",
+    },
+    {
+      id: "media",
+      presetLabel: "Mídia",
+      singularName: "Media",
+      pluralName: "Media",
+    },
+    {
+      id: "travel",
+      presetLabel: "Viagem",
+      singularName: "Travel",
+      pluralName: "Travel",
+    },
+    {
+      id: "quote",
+      presetLabel: "Citação",
+      singularName: "Quote",
+      pluralName: "Quotes",
+    },
+    {
+      id: "atomic-note",
+      presetLabel: "Nota atômica",
+      singularName: "Atomic note",
+      pluralName: "Atomic notes",
+    },
+  ] as const;
+
+  for (const family of presetFamilies) {
+    await createStructureFromPreset(page, family.presetLabel);
+    const title = `Preset ${family.id}`;
+    await selectNewObject(page, family.singularName);
+    await writeCreatedObjectTitle(page, title);
+
+    const snapshot = await persistedSnapshot(page);
+    const structure = snapshot.structures.find(
+      (candidate: {
+        ownership: string;
+        pluralName: string;
+        singularName: string;
+      }) =>
+        candidate.ownership === "custom" &&
+        candidate.singularName === family.singularName &&
+        candidate.pluralName === family.pluralName,
+    );
+    expect(structure?.id).toBeTruthy();
+    expect(
+      snapshot.entities.filter(
+        (entity: { objectTypeId: string }) =>
+          entity.objectTypeId === structure.id,
+      ),
+    ).toHaveLength(1);
+
+    await expectCreatedObjectProjection(
+      page,
+      structure.id,
+      family.pluralName,
+      title,
+    );
+  }
+
+  await createCustomStructure(page, "Default", "Default");
+  await selectNewObject(page, "Default");
+  await writeCreatedObjectTitle(page, "Custom Default object");
+  const snapshot = await persistedSnapshot(page);
+  const custom = snapshot.structures.find(
+    (candidate: { ownership: string; singularName: string }) =>
+      candidate.ownership === "custom" && candidate.singularName === "Default",
+  );
+  expect(custom?.id).toBeTruthy();
+  expect(
+    snapshot.entities.filter(
+      (entity: { objectTypeId: string }) => entity.objectTypeId === custom.id,
+    ),
+  ).toHaveLength(1);
+  await expectCreatedObjectProjection(
+    page,
+    custom.id,
+    "Default",
+    "Custom Default object",
+  );
   expect(errors).toEqual([]);
 });

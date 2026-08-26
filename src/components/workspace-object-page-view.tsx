@@ -14,6 +14,7 @@ import {
   objectIconToneBadgeClass,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
+import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import { Button } from "@/components/ui/button";
 import {
   workspaceOverflowMenuContentClass,
@@ -114,6 +115,7 @@ function BufferedTitle({
     <input
       {...inputProps}
       data-slot="workspace-object-page-title"
+      data-lifecycle-contract={objectLifecycleContractSlots.EditableObjectTitle}
       aria-label={label}
       placeholder={label}
       className="mt-4 block min-h-[44px] w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-foreground outline-none placeholder:text-muted-foreground/50"
@@ -135,6 +137,7 @@ function BufferedTableCell({
     <input
       {...inputProps}
       data-slot="workspace-table-cell"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
       aria-label={ariaLabel}
       className="min-h-10 min-w-0 border-b border-r bg-transparent px-3 py-2 text-sm outline-none even:border-r-0 focus:bg-muted/30 [&:nth-last-child(-n+2)]:border-b-0"
     />
@@ -155,6 +158,7 @@ function BufferedNotes({
     <textarea
       {...inputProps}
       data-slot="workspace-table-notes"
+      data-lifecycle-contract={objectLifecycleContractSlots.EditableObjectBody}
       aria-label={ariaLabel}
       placeholder={ariaLabel}
       rows={3}
@@ -189,7 +193,9 @@ function ObjectPageHeader({
     >
       <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden">
         <CompoundChip className={objectIconToneBadgeClass[structure.tone]}>
-          <CompoundChipPrimary onClick={() => selectEntity(entity.objectTypeId)}>
+          <CompoundChipPrimary
+            onClick={() => selectEntity(entity.objectTypeId)}
+          >
             <Icon className="mr-1 size-3.5 shrink-0" />
             <span className="truncate">{objectTypeLabel}</span>
           </CompoundChipPrimary>
@@ -393,7 +399,10 @@ function WorkspacePropertyField({
     "min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring";
   if (property.valueType === "boolean") {
     return (
-      <label className="flex min-h-8 items-center justify-between gap-3 rounded-md px-2 text-sm">
+      <label
+        data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
+        className="flex min-h-8 items-center justify-between gap-3 rounded-md px-2 text-sm"
+      >
         <span className="truncate text-muted-foreground">{property.name}</span>
         <input
           type="checkbox"
@@ -414,7 +423,10 @@ function WorkspacePropertyField({
           ? "url"
           : "text";
   return (
-    <label className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm">
+    <label
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
+      className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
+    >
       <span className="truncate text-muted-foreground">{property.name}</span>
       <input
         type={inputType}
@@ -450,7 +462,11 @@ function WorkspacePropertyGroup({
   );
   if (editableProperties.length === 0) return null;
   return (
-    <div data-slot="workspace-property-group" className="mt-5 grid gap-1">
+    <div
+      data-slot="workspace-property-group"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectFieldGroup}
+      className="mt-5 grid gap-1"
+    >
       {editableProperties.map((property) => (
         <WorkspacePropertyField
           key={property.id}
@@ -914,7 +930,12 @@ function DocumentPage({
           setWorkspaceEntityPropertyValue(entity.id, propertyId, value)
         }
       />
-      <div data-slot="workspace-document-page-editor">
+      <div
+        data-slot="workspace-document-page-editor"
+        data-lifecycle-contract={
+          objectLifecycleContractSlots.EditableObjectBody
+        }
+      >
         <BlockEditor
           ariaLabel={
             entity.kind === "quote"
@@ -1056,6 +1077,7 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
   return (
     <section
       data-slot="workspace-object-page-view"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectEditorShell}
       data-object-kind={entity.kind}
       data-object-type={entity.objectTypeId}
       className={cn(workspaceRouteClass, "w-full overflow-y-auto")}
