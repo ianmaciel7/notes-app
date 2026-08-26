@@ -27,6 +27,7 @@ import {
 } from "./workspace-object-types.ts";
 import {
   createWorkspaceEntityPropertyValues,
+  normalizeWorkspacePropertyValueMap,
   removeWorkspaceEntityPropertyValue,
   setWorkspaceEntityPropertyValue,
   type WorkspacePropertyValueMap,
@@ -200,7 +201,12 @@ type WorkspaceObjectAction =
   | { type: "hydrate"; state: WorkspaceObjectState }
   | { type: "recover" }
   | { type: "selectEntity"; id: string | null }
-  | { type: "changeEntityType"; id: string; objectTypeId: "tag" | "task" }
+  | {
+      type: "changeEntityType";
+      id: string;
+      objectTypeId: string;
+      propertyValues?: Readonly<Record<string, unknown>>;
+    }
   | { type: "deleteEntity"; id: string }
   | { type: "duplicateEntity"; id: string }
   | { type: "createStructure"; input: CreateStructureInput; id?: string }
@@ -668,6 +674,14 @@ function reduceEntityMenuAction(
   if (action.type === "changeEntityType") {
     const source = state.entities.find((entity) => entity.id === action.id);
     if (!source) return state;
+    const targetStructure = selectStructureById(
+      state.structures,
+      action.objectTypeId,
+    );
+    const targetFlow = getCreationFlow(action.objectTypeId, state.structures);
+    if (!targetStructure || !targetFlow) {
+      return { ...state, error: "unsupported-object-type" };
+    }
     const base = {
       createdAt: source.createdAt,
       id: source.id,
@@ -675,32 +689,21 @@ function reduceEntityMenuAction(
       propertyValues: source.propertyValues,
       title: source.title,
     };
-    const entity: WorkspaceEntity =
-      action.objectTypeId === "task"
-        ? {
-            ...base,
-            body:
-              "body" in source
-                ? typeof source.body === "string"
-                  ? source.body
-                  : blockEditorDocumentToPlainText(source.body)
-                : "",
-            completed: false,
-            dueDate: null,
-            kind: "task",
-            objectTypeId: "task",
-          }
-        : { ...base, kind: "tag", objectTypeId: "tag" };
+    const entity = convertEntityToFlow(source, base, targetFlow);
+    const propertyValues = normalizeWorkspacePropertyValueMap(targetStructure, {
+      ...createWorkspaceEntityPropertyValues(entity),
+      ...(action.propertyValues ?? {}),
+    });
+    if (!propertyValues.ok) return state;
+    const convertedEntity = touchWorkspaceEntity({
+      ...entity,
+      propertyValues: propertyValues.value,
+    });
     return {
       ...state,
-      activeEntityId: entity.id,
+      activeEntityId: convertedEntity.id,
       entities: state.entities.map((item) =>
-        item.id === action.id
-          ? {
-              ...entity,
-              propertyValues: createWorkspaceEntityPropertyValues(entity),
-            }
-          : item,
+        item.id === action.id ? convertedEntity : item,
       ),
       error: null,
     };
@@ -743,6 +746,93 @@ function reduceEntityMenuAction(
     error: null,
   };
 }
+
+function legacyTextBody(source: WorkspaceEntity): string {
+  if (!("body" in source)) return "";
+  return typeof source.body === "string"
+    ? source.body
+    : blockEditorDocumentToPlainText(source.body);
+}
+
+function convertEntityToFlow(
+  source: WorkspaceEntity,
+  base: WorkspaceEntityBase,
+  flow: CreationFlow,
+): WorkspaceEntity {
+  return entityConversionFactories[flow](source, base);
+}
+
+type EntityConversionFactory = (
+  source: WorkspaceEntity,
+  base: WorkspaceEntityBase,
+) => WorkspaceEntity;
+
+function convertEntityToDocumentLike(
+  source: WorkspaceEntity,
+  base: WorkspaceEntityBase,
+  kind: "document" | "quote",
+): DocumentEntity | QuoteEntity {
+  return {
+    ...base,
+    body:
+      "body" in source && typeof source.body !== "string"
+        ? source.body
+        : blockEditorDocumentFromPlainText(legacyTextBody(source)),
+    collections:
+      "collections" in source && Array.isArray(source.collections)
+        ? source.collections
+        : [],
+    kind,
+    tags: "tags" in source && Array.isArray(source.tags) ? source.tags : [],
+  };
+}
+
+const entityConversionFactories: Record<CreationFlow, EntityConversionFactory> =
+  {
+    document: (source, base) =>
+      convertEntityToDocumentLike(source, base, "document"),
+    file: (source, base) => ({
+      ...base,
+      assetId: source.kind === "file" ? source.assetId : undefined,
+      contentHash: source.kind === "file" ? source.contentHash : undefined,
+      fileName: source.kind === "file" ? source.fileName : "",
+      kind: "file",
+      mimeType: source.kind === "file" ? source.mimeType : "",
+      previewUrl: source.kind === "file" ? source.previewUrl : undefined,
+      size: source.kind === "file" ? source.size : 0,
+      storageState: source.kind === "file" ? source.storageState : undefined,
+    }),
+    query: (_source, base) => ({
+      ...base,
+      description: "",
+      filters: { tags: [] },
+      kind: "query",
+    }),
+    quote: (source, base) => convertEntityToDocumentLike(source, base, "quote"),
+    table: (source, base) => ({
+      ...base,
+      cells:
+        source.kind === "table" && Array.isArray(source.cells)
+          ? source.cells
+          : createTableCells(),
+      kind: "table",
+      notes: source.kind === "table" ? source.notes : legacyTextBody(source),
+    }),
+    tag: (_source, base) => ({ ...base, kind: "tag" }),
+    task: (source, base) => ({
+      ...base,
+      body: legacyTextBody(source),
+      completed: source.kind === "task" ? source.completed : false,
+      dueDate: source.kind === "task" ? source.dueDate : null,
+      kind: "task",
+    }),
+    url: (source, base) => ({
+      ...base,
+      body: source.kind === "url" ? source.body : legacyTextBody(source),
+      kind: "url",
+      url: source.kind === "url" ? source.url : "",
+    }),
+  };
 
 function reduceStructureAction(
   state: WorkspaceObjectState,
@@ -887,7 +977,7 @@ function createLinkedEntitySourceUpdate(
         context,
         inversePropertyId: sourceDefinition.inversePropertyDefinitionId,
         source,
-        sourceUpdate: sourceUpdate.value,
+        sourceUpdate: touchWorkspaceEntity(sourceUpdate.value),
       }
     : null;
 }
@@ -949,7 +1039,7 @@ function updateInverseRelationTarget(
     update.context,
   );
   if (!targetUpdate.ok) return false;
-  nextById.set(targetId, targetUpdate.value);
+  nextById.set(targetId, touchWorkspaceEntity(targetUpdate.value));
   return true;
 }
 

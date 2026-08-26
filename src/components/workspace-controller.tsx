@@ -37,14 +37,14 @@ import {
   ObjectAreaIcon,
   ObjectAtomicNoteIcon,
   ObjectBookIcon,
-  ObjectCollectionIcon,
   ObjectCodeIcon,
+  ObjectCollectionIcon,
   ObjectIconBadge,
+  type ObjectIconProps,
   ObjectIdeaIcon,
   ObjectKnowledgeIcon,
   ObjectPageIcon,
   ObjectProjectIcon,
-  type ObjectIconProps,
   ObjectQueryIcon,
   ObjectQuoteIcon,
   objectIconToneBadgeClass,
@@ -67,34 +67,23 @@ import {
   createBrowserMediaStorageAdapter,
   createMediaUrlRegistry,
   garbageCollectMediaAssets,
-  readMediaAssetBlob,
-  writeMediaAsset,
   type MediaStorageAdapter,
   type MediaUrlRegistry,
+  readMediaAssetBlob,
+  writeMediaAsset,
 } from "@/lib/workspace-media-storage";
-import {
-  selectCreatableStructures,
-  type CreateStructureInput,
-  type ObjectIconName,
-  type ObjectIconTone,
-  type WorkspaceStructure,
-} from "@/lib/workspace-object-types";
 import {
   parseWorkspaceObjectSnapshot,
   serializeWorkspaceObjectState,
   WORKSPACE_OBJECT_STORAGE_KEY,
 } from "@/lib/workspace-object-storage";
 import {
-  WORKSPACE_SIDEBAR_PINNED_STORAGE_KEY,
-  parseWorkspaceSidebarPinnedState,
-  serializeWorkspaceSidebarPinnedState,
-  type WorkspaceSidebarPinnedItem,
-} from "@/lib/workspace-sidebar-pinned-storage";
-import {
-  WORKSPACE_SIDEBAR_STORAGE_KEY,
-  parseWorkspaceSidebarState,
-  serializeWorkspaceSidebarState,
-} from "@/lib/workspace-sidebar-storage";
+  type CreateStructureInput,
+  type ObjectIconName,
+  type ObjectIconTone,
+  selectCreatableStructures,
+  type WorkspaceStructure,
+} from "@/lib/workspace-object-types";
 import {
   countEntitiesByType,
   createInitialWorkspaceObjectState,
@@ -105,6 +94,17 @@ import {
   type WorkspaceObjectError,
   workspaceObjectReducer,
 } from "@/lib/workspace-objects";
+import {
+  parseWorkspaceSidebarPinnedState,
+  serializeWorkspaceSidebarPinnedState,
+  WORKSPACE_SIDEBAR_PINNED_STORAGE_KEY,
+  type WorkspaceSidebarPinnedItem,
+} from "@/lib/workspace-sidebar-pinned-storage";
+import {
+  parseWorkspaceSidebarState,
+  serializeWorkspaceSidebarState,
+  WORKSPACE_SIDEBAR_STORAGE_KEY,
+} from "@/lib/workspace-sidebar-storage";
 
 function createInitialMainTabs(
   t: ReturnType<typeof useTranslations<"workspace">>,
@@ -120,10 +120,7 @@ function createInitialMainTabs(
       icon: ObjectAtomicNoteIcon,
       iconClassName: objectIconToneBadgeClass.amber,
       preview: (
-        <TabPreview
-          eyebrow={objectTypeEyebrow}
-          title={atomicNoteLabel}
-        />
+        <TabPreview eyebrow={objectTypeEyebrow} title={atomicNoteLabel} />
       ),
     },
     {
@@ -131,21 +128,14 @@ function createInitialMainTabs(
       label: quoteLabel,
       icon: ObjectQuoteIcon,
       iconClassName: objectIconToneBadgeClass.rose,
-      preview: (
-        <TabPreview
-          eyebrow={objectTypeEyebrow}
-          title={quoteLabel}
-        />
-      ),
+      preview: <TabPreview eyebrow={objectTypeEyebrow} title={quoteLabel} />,
     },
     {
       id: "page",
       label: pageLabel,
       icon: ObjectPageIcon,
       iconClassName: objectIconToneBadgeClass.blue,
-      preview: (
-        <TabPreview eyebrow={objectTypeEyebrow} title={pageLabel} />
-      ),
+      preview: <TabPreview eyebrow={objectTypeEyebrow} title={pageLabel} />,
     },
     {
       id: "untitled",
@@ -526,7 +516,11 @@ type WorkspaceContextValue = {
   ) => void;
   removeWorkspaceEntityPropertyValue: (id: string, propertyId: string) => void;
   updateWorkspaceEntity: (id: string, patch: Record<string, unknown>) => void;
-  changeWorkspaceEntityType: (id: string, objectTypeId: "tag" | "task") => void;
+  changeWorkspaceEntityType: (
+    id: string,
+    objectTypeId: string,
+    propertyValues?: Readonly<Record<string, unknown>>,
+  ) => void;
   deleteWorkspaceEntity: (id: string) => void;
   duplicateWorkspaceEntity: (id: string) => void;
   selectEntity: (id: string) => void;
@@ -611,10 +605,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         return {
           id: structure.id,
           iconName: structure.iconName,
-          label:
-            isRuntimeNamed
-              ? structure.pluralName
-              : t(`objectTypeStudio.objectTypePlurals.${structure.id}`),
+          label: isRuntimeNamed
+            ? structure.pluralName
+            : t(`objectTypeStudio.objectTypePlurals.${structure.id}`),
           icon: definition.icon,
           ownership: structure.ownership,
           singularLabel: isRuntimeNamed
@@ -834,7 +827,11 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     return () => {
       active = false;
     };
-  }, [storageReady, workspaceObjects.entities, workspaceObjects.hydrationStatus]);
+  }, [
+    storageReady,
+    workspaceObjects.entities,
+    workspaceObjects.hydrationStatus,
+  ]);
 
   React.useEffect(() => {
     if (!sidebarStorageReady) return;
@@ -1255,8 +1252,17 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   );
 
   const changeWorkspaceEntityType = React.useCallback(
-    (id: string, objectTypeId: "tag" | "task") => {
-      dispatchWorkspaceObjects({ type: "changeEntityType", id, objectTypeId });
+    (
+      id: string,
+      objectTypeId: string,
+      propertyValues?: Readonly<Record<string, unknown>>,
+    ) => {
+      dispatchWorkspaceObjects({
+        type: "changeEntityType",
+        id,
+        objectTypeId,
+        propertyValues,
+      });
     },
     [],
   );
@@ -1268,7 +1274,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         (item) => item.id !== id,
       );
       dispatchWorkspaceObjects({ type: "deleteEntity", id });
-      if (entity?.kind !== "file" || !entity.assetId || !entity.contentHash) return;
+      if (entity?.kind !== "file" || !entity.assetId || !entity.contentHash)
+        return;
       const references = remainingEntities.flatMap((item) =>
         item.kind === "file" && item.assetId
           ? [
@@ -1285,7 +1292,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         [{ id: entity.assetId, storageKey: `media:${entity.contentHash}` }],
         references,
       ).then((deletedIds) => {
-        for (const deletedId of deletedIds) getMediaUrlRegistry().revoke(deletedId);
+        for (const deletedId of deletedIds)
+          getMediaUrlRegistry().revoke(deletedId);
       });
     },
     [workspaceObjects.entities],

@@ -398,6 +398,128 @@ test("object type conversion cancellation preserves the original typed entity", 
   expect(errors).toEqual([]);
 });
 
+test("object type conversion commit preserves mapped typed values", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  const errors = await openCleanWorkspace(page);
+  await createCustomStructure(page, "Origem mapeada", "Origens mapeadas");
+  await createCustomStructure(page, "Destino mapeado", "Destinos mapeados");
+  await createObject(page, "Origem mapeada", "Valor confirmado");
+  const seeded = await page.evaluate((key) => {
+    const snapshot = JSON.parse(window.localStorage.getItem(key) ?? "null");
+    const sourceStructure = snapshot.structures.find(
+      (item: { singularName: string }) =>
+        item.singularName === "Origem mapeada",
+    );
+    const targetStructure = snapshot.structures.find(
+      (item: { singularName: string }) =>
+        item.singularName === "Destino mapeado",
+    );
+    const sourceEntity = snapshot.entities.find(
+      (item: { objectTypeId: string; title: string }) =>
+        item.objectTypeId === sourceStructure.id &&
+        item.title === "Valor confirmado",
+    );
+    sourceStructure.propertyDefinitions = [
+      ...sourceStructure.propertyDefinitions,
+      {
+        id: "summary",
+        multiple: false,
+        name: "Summary",
+        ownership: "normal",
+        valueType: "text",
+        writable: true,
+      },
+    ];
+    targetStructure.propertyDefinitions = [
+      ...targetStructure.propertyDefinitions,
+      {
+        id: "notes",
+        multiple: false,
+        name: "Notes",
+        ownership: "normal",
+        valueType: "text",
+        writable: true,
+      },
+    ];
+    sourceEntity.propertyValues.summary = {
+      text: { value: "Mapped in browser" },
+      type: "text",
+    };
+    const raw = JSON.stringify(snapshot);
+    window.localStorage.setItem(key, raw);
+    return {
+      entityId: sourceEntity.id,
+      raw,
+      sourceUpdatedAt:
+        sourceEntity.propertyValues.lastUpdatedAt.lastUpdatedAt.value,
+      targetStructureId: targetStructure.id,
+    };
+  }, storageKey);
+  await page.addInitScript(
+    ({ key, value }) => {
+      if (window.sessionStorage.getItem("conversion-commit-seed-ready")) {
+        return;
+      }
+      window.localStorage.setItem(key, value);
+      window.sessionStorage.setItem("conversion-commit-seed-ready", "true");
+    },
+    { key: storageKey, value: seeded.raw },
+  );
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+
+  await page
+    .getByRole("button", { name: "Alterar tipo de objeto", exact: true })
+    .click();
+  await page.getByLabel("Buscar", { exact: true }).fill("Destino mapeado");
+  await page
+    .getByRole("menuitem", { name: "Destino mapeado", exact: true })
+    .click();
+  const planner = page.locator('[data-slot="object-conversion-planner"]');
+  await expect(planner).toBeVisible();
+  await planner
+    .locator("li")
+    .filter({ hasText: "createdAt" })
+    .getByRole("combobox")
+    .selectOption("__discard__");
+  await planner
+    .locator("li")
+    .filter({ hasText: "lastUpdatedAt" })
+    .getByRole("combobox")
+    .selectOption("__discard__");
+  await planner
+    .locator("li")
+    .filter({ hasText: "summary" })
+    .getByRole("combobox")
+    .selectOption("notes");
+  await planner
+    .getByRole("button", { name: "Mudar Tipo", exact: true })
+    .click();
+  await expect(planner).toBeHidden();
+
+  const converted = await page.evaluate(
+    ({ key, entityId }) => {
+      const snapshot = JSON.parse(window.localStorage.getItem(key) ?? "null");
+      return snapshot.entities.find(
+        (item: { id: string }) => item.id === entityId,
+      );
+    },
+    { key: storageKey, entityId: seeded.entityId },
+  );
+  expect(converted.objectTypeId).toBe(seeded.targetStructureId);
+  expect(converted.propertyValues.notes).toEqual({
+    text: { value: "Mapped in browser" },
+    type: "text",
+  });
+  expect("summary" in converted.propertyValues).toBe(false);
+  expect(converted.propertyValues.lastUpdatedAt.lastUpdatedAt.value).not.toBe(
+    seeded.sourceUpdatedAt,
+  );
+  expect(errors).toEqual([]);
+});
+
 test("runtime custom Structure creates objects once and survives reload", async ({
   page,
 }) => {

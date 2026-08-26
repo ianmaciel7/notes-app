@@ -29,6 +29,10 @@ function reduce(state, ...actions) {
   return actions.reduce(workspaceObjectReducer, state);
 }
 
+function readUpdatedAt(entity) {
+  return entity.propertyValues.lastUpdatedAt.lastUpdatedAt.value;
+}
+
 test("creation flows cover built-ins while presets remain templates until instantiated", () => {
   for (const id of [
     "book",
@@ -61,14 +65,11 @@ test("creation flows cover built-ins while presets remain templates until instan
   assert.equal(getCreationFlow("file"), "file");
   assert.equal(getCreationFlow("unknown"), null);
 
-  const customBook = reduce(
-    createInitialWorkspaceObjectState(),
-    {
-      id: "book-custom",
-      presetId: "book",
-      type: "createStructureFromPreset",
-    },
-  );
+  const customBook = reduce(createInitialWorkspaceObjectState(), {
+    id: "book-custom",
+    presetId: "book",
+    type: "createStructureFromPreset",
+  });
   assert.equal(
     getCreationFlow("book-custom", customBook.structures),
     "document",
@@ -212,6 +213,7 @@ test("document menu lifecycle changes type, duplicates, and deletes canonically"
   assert.equal(state.entities.length, 2);
   assert.equal(state.activeEntityId, "created-page-2");
   assert.equal(state.entities[1].title, "Reference page");
+  const beforeTypeChangeUpdatedAt = readUpdatedAt(state.entities[1]);
 
   state = reduce(state, {
     type: "changeEntityType",
@@ -220,11 +222,84 @@ test("document menu lifecycle changes type, duplicates, and deletes canonically"
   });
   assert.equal(state.entities[1].kind, "task");
   assert.equal(state.entities[1].body, "Preserved body");
+  assert.notEqual(readUpdatedAt(state.entities[1]), beforeTypeChangeUpdatedAt);
   assert.deepEqual(countEntitiesByType(state.entities), { page: 1, task: 1 });
 
   state = reduce(state, { type: "deleteEntity", id: "created-page-2" });
   assert.deepEqual(countEntitiesByType(state.entities), { page: 1 });
   assert.equal(state.activeEntityId, "created-page-1");
+});
+
+test("confirmed type conversion persists resolved property values", () => {
+  const sourceProperty = {
+    id: "summary",
+    multiple: false,
+    name: "Summary",
+    ownership: "normal",
+    valueType: "text",
+    writable: true,
+  };
+  const targetProperty = {
+    id: "notes",
+    multiple: false,
+    name: "Notes",
+    ownership: "normal",
+    valueType: "text",
+    writable: true,
+  };
+  let registry = createCustomStructure(
+    createInitialWorkspaceObjectState().structures,
+    {
+      iconName: "page",
+      lifecycleKind: "document",
+      pluralName: "Sources",
+      propertyDefinitions: [sourceProperty],
+      singularName: "Source",
+      tone: "blue",
+    },
+    () => "source-custom",
+  ).value;
+  registry = createCustomStructure(
+    registry,
+    {
+      iconName: "page",
+      lifecycleKind: "document",
+      pluralName: "Targets",
+      propertyDefinitions: [targetProperty],
+      singularName: "Target",
+      tone: "green",
+    },
+    () => "target-custom",
+  ).value;
+
+  let state = reduce(
+    { ...createInitialWorkspaceObjectState(), structures: registry },
+    { type: "beginCreate", objectTypeId: "source-custom" },
+    {
+      id: "created-source-custom-1",
+      propertyId: "summary",
+      type: "setPropertyValue",
+      value: "Mapped value",
+    },
+  );
+  const beforeTypeChangeUpdatedAt = readUpdatedAt(state.entities[0]);
+  state = reduce(state, {
+    id: "created-source-custom-1",
+    objectTypeId: "target-custom",
+    propertyValues: {
+      notes: state.entities[0].propertyValues.summary,
+    },
+    type: "changeEntityType",
+  });
+
+  assert.equal(state.entities[0].objectTypeId, "target-custom");
+  assert.equal(state.entities[0].kind, "document");
+  assert.deepEqual(state.entities[0].propertyValues.notes, {
+    text: { value: "Mapped value" },
+    type: "text",
+  });
+  assert.equal("summary" in state.entities[0].propertyValues, false);
+  assert.notEqual(readUpdatedAt(state.entities[0]), beforeTypeChangeUpdatedAt);
 });
 
 test("linked entity property writes update inverse values once atomically", () => {
@@ -278,13 +353,15 @@ test("linked entity property writes update inverse values once atomically", () =
     state,
     { type: "beginCreate", objectTypeId: "book-custom" },
     { type: "beginCreate", objectTypeId: "person-custom" },
-    {
-      id: "created-book-custom-1",
-      propertyId: "author",
-      type: "setLinkedEntityPropertyValue",
-      value: "created-person-custom-2",
-    },
   );
+  const beforeLinkSourceUpdatedAt = readUpdatedAt(state.entities[0]);
+  const beforeLinkTargetUpdatedAt = readUpdatedAt(state.entities[1]);
+  state = reduce(state, {
+    id: "created-book-custom-1",
+    propertyId: "author",
+    type: "setLinkedEntityPropertyValue",
+    value: "created-person-custom-2",
+  });
 
   assert.deepEqual(state.entities[0].propertyValues.author, {
     entity: [{ id: "created-person-custom-2" }],
@@ -294,7 +371,11 @@ test("linked entity property writes update inverse values once atomically", () =
     entity: [{ id: "created-book-custom-1" }],
     type: "entity",
   });
+  assert.notEqual(readUpdatedAt(state.entities[0]), beforeLinkSourceUpdatedAt);
+  assert.notEqual(readUpdatedAt(state.entities[1]), beforeLinkTargetUpdatedAt);
 
+  const beforeUnlinkSourceUpdatedAt = readUpdatedAt(state.entities[0]);
+  const beforeUnlinkTargetUpdatedAt = readUpdatedAt(state.entities[1]);
   state = workspaceObjectReducer(state, {
     id: "created-book-custom-1",
     propertyId: "author",
@@ -304,6 +385,14 @@ test("linked entity property writes update inverse values once atomically", () =
   assert.equal("author" in state.entities[0].propertyValues, true);
   assert.deepEqual(state.entities[0].propertyValues.author.entity, []);
   assert.deepEqual(state.entities[1].propertyValues.books.entity, []);
+  assert.notEqual(
+    readUpdatedAt(state.entities[0]),
+    beforeUnlinkSourceUpdatedAt,
+  );
+  assert.notEqual(
+    readUpdatedAt(state.entities[1]),
+    beforeUnlinkTargetUpdatedAt,
+  );
 });
 
 test("entity deletion is guarded while reverse references exist", () => {

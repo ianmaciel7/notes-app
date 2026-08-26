@@ -261,7 +261,8 @@ function ObjectPageTypePickerTrigger({
 }: {
   readonly changeWorkspaceEntityType: (
     id: string,
-    objectTypeId: "tag" | "task",
+    objectTypeId: string,
+    propertyValues?: Readonly<Record<string, unknown>>,
   ) => void;
   readonly entity: SupportedWorkspaceEntity;
   readonly objectTypes: ReturnType<typeof useWorkspace>["objectTypes"];
@@ -273,7 +274,7 @@ function ObjectPageTypePickerTrigger({
   const [pendingConversion, setPendingConversion] = React.useState<{
     readonly initialPlan: ObjectConversionPlan;
     readonly target: WorkspaceStructure;
-    readonly targetObjectTypeId: "tag" | "task";
+    readonly targetObjectTypeId: string;
   } | null>(null);
   const visibleChoices = objectTypes.filter((item) =>
     (item.singularLabel ?? item.label)
@@ -281,7 +282,6 @@ function ObjectPageTypePickerTrigger({
       .includes(query.trim().toLocaleLowerCase()),
   );
   function beginTypeChange(objectTypeId: string) {
-    if (objectTypeId !== "tag" && objectTypeId !== "task") return;
     if (objectTypeId === entity.objectTypeId) return;
     const target = structures.find(
       (structure) => structure.id === objectTypeId,
@@ -364,10 +364,11 @@ function ObjectPageTypePickerTrigger({
               }}
               target={pendingConversion.target}
               onCancel={() => setPendingConversion(null)}
-              onCommit={() => {
+              onCommit={(conversion) => {
                 changeWorkspaceEntityType(
                   entity.id,
                   pendingConversion.targetObjectTypeId,
+                  conversion.propertyValues,
                 );
                 setPendingConversion(null);
               }}

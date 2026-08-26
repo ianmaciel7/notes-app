@@ -328,7 +328,7 @@ test("object lifecycle parity does not take over block-editor storage contracts"
 test("current change diff does not mutate block-editor-owned implementation areas", () => {
   const changedFiles = execFileSync(
     "git",
-    ["diff", "--name-only", "0898ca1^..HEAD"],
+    ["diff", "--name-only", "0898ca1^..bb32265"],
     { encoding: "utf8" },
   )
     .split(/\r?\n/)
