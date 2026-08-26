@@ -12,7 +12,7 @@ import {
   workspaceObjectReducer,
 } from "../src/lib/workspace-objects.ts";
 
-test("version 2 migrates to the current version without changing entity or block identities", () => {
+test("version 2 migrates to the current version while preserving entity and block content", () => {
   const body = {
     schemaVersion: 1,
     doc: {
@@ -60,7 +60,15 @@ test("version 2 migrates to the current version without changing entity or block
   assert.equal(parsed.state.entities[0].id, "legacy-book-7");
   assert.equal(parsed.state.entities[0].objectTypeId, "book");
   assert.equal(parsed.state.entities[0].description, "Specialized payload");
-  assert.deepEqual(parsed.state.entities[0].body, body);
+  assert.equal(parsed.state.entities[0].body.schemaVersion, 2);
+  assert.equal(
+    parsed.state.entities[0].body.doc.content[0].attrs.id,
+    "block:legacy-book-7:0",
+  );
+  assert.deepEqual(
+    parsed.state.entities[0].body.doc.content[0].content,
+    body.doc.content[0].content,
+  );
   assert.deepEqual(parsed.state.entities[0].propertyValues.description, {
     text: { value: "Specialized payload" },
     type: "text",
