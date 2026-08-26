@@ -18,6 +18,9 @@
 /.codex/hooks.json
 /.claude/settings.json
 
+# local implementation worktrees
+/.worktrees/
+
 # next.js
 /.next/
 /out/
