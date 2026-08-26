@@ -69,7 +69,7 @@ function AppHeader({
     <header
       data-slot="app-header"
       className={cn(
-        "flex h-[58px] w-full shrink-0 grow-0 items-center justify-between border-b-0",
+        "flex h-[46px] w-full shrink-0 grow-0 items-center justify-between border-b-0",
         "bg-[var(--app-header-bg-back)] text-[var(--app-header-text-secondary)]",
         className,
       )}

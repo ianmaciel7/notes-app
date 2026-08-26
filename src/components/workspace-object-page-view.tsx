@@ -621,7 +621,7 @@ function PageCustomizeControl({
             variant="ghost"
             size="sm"
             aria-label={t("actions.customize")}
-            className="hidden h-7 gap-1.5 px-1.5 text-sm font-normal text-muted-foreground sm:inline-flex"
+            className="pointer-events-none hidden h-7 gap-1.5 px-1.5 text-sm font-normal text-muted-foreground opacity-0 transition-opacity duration-200 group-hover/object-page-header:pointer-events-auto group-hover/object-page-header:opacity-100 group-focus-within/object-page-header:pointer-events-auto group-focus-within/object-page-header:opacity-100 sm:inline-flex"
           >
             {t("actions.customize")}
             <AppHeaderCaretDownIcon className="size-3.5" />
