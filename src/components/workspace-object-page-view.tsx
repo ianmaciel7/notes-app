@@ -189,8 +189,13 @@ function ObjectPageHeader({
   readonly structure: WorkspaceStructure;
 }) {
   const t = useTranslations("workspace");
-  const { changeWorkspaceEntityType, objectTypes, selectEntity, structures } =
-    useWorkspace();
+  const {
+    changeWorkspaceEntityType,
+    objectTypeCollections,
+    objectTypes,
+    selectEntity,
+    structures,
+  } = useWorkspace();
   const definition =
     objectTypeDefinitionById[structure.iconName] ??
     objectTypeDefinitionById.page;
@@ -220,10 +225,12 @@ function ObjectPageHeader({
             structures={structures}
           />
         </CompoundChip>
-        {collections.map((collection) => (
-          <span key={collection} className={collectionChipClass}>
+        {collections.map((collectionId) => (
+          <span key={collectionId} className={collectionChipClass}>
             <ObjectCollectionIcon className="mr-1.5 size-3.5 shrink-0" />
-            <span className="truncate">{collection}</span>
+            <span className="truncate">
+              {objectTypeCollections[collectionId]?.name ?? collectionId}
+            </span>
           </span>
         ))}
         {collections.length === 0 ? (
@@ -381,9 +388,11 @@ function ObjectPageTypePickerTrigger({
 }
 
 function DocumentMoreMenu({
+  onDelete,
   onExport,
   onImport,
 }: {
+  readonly onDelete: () => void;
   readonly onExport: () => void;
   readonly onImport: () => void;
 }) {
@@ -439,6 +448,13 @@ function DocumentMoreMenu({
           {t("documentMenu.import")}
           <DropdownMenuShortcut>CtrlI</DropdownMenuShortcut>
         </DropdownMenuItem>
+        <DropdownMenuItem
+          variant="destructive"
+          className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+          onClick={onDelete}
+        >
+          {t("documentMenu.deleteObject")}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -452,28 +468,97 @@ function ObjectPageTags({
   readonly update: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
+  const { createdEntities } = useWorkspace();
   const tags = entityTags(entity);
+  const tagNamesById = new Map(
+    createdEntities
+      .filter((item) => item.kind === "tag")
+      .map((item) => [item.id, item.title.trim() || item.id]),
+  );
   return (
     <div
       data-slot="workspace-object-page-tags"
       className="mt-3 flex min-h-7 flex-wrap items-center gap-1.5"
     >
-      {tags.map((tag) => (
+      {tags.map((tagId) => (
         <button
-          key={tag}
+          key={tagId}
           type="button"
           className={tagChipClass}
-          aria-label={`${t("objectTypeOverview.remove")} ${tag}`}
-          onClick={() => update({ tags: tags.filter((item) => item !== tag) })}
+          aria-label={`${t("objectTypeOverview.remove")} ${
+            tagNamesById.get(tagId) ?? tagId
+          }`}
+          onClick={() =>
+            update({ tags: tags.filter((item) => item !== tagId) })
+          }
         >
-          <span className="truncate">{tag}</span>
+          <span className="truncate">{tagNamesById.get(tagId) ?? tagId}</span>
         </button>
       ))}
-      <span className="inline-flex items-center gap-1.5 px-1 text-sm text-muted-foreground">
+      <label className="inline-flex min-w-0 items-center gap-1.5 px-1 text-sm text-muted-foreground">
         <ObjectTagIcon className="size-3.5" />
-        {t("fields.tags")}
-      </span>
+        <select
+          aria-label={t("fields.tags")}
+          multiple
+          value={tags}
+          className="min-w-0 bg-transparent outline-none"
+          onChange={(event) =>
+            update({
+              tags: Array.from(event.currentTarget.selectedOptions).map(
+                (option) => option.value,
+              ),
+            })
+          }
+        >
+          {createdEntities
+            .filter((item) => item.kind === "tag")
+            .map((tag) => (
+              <option key={tag.id} value={tag.id}>
+                {tag.title.trim() || tag.id}
+              </option>
+            ))}
+        </select>
+      </label>
     </div>
+  );
+}
+
+function ObjectPageCollections({
+  entity,
+  update,
+}: {
+  readonly entity: SupportedWorkspaceEntity;
+  readonly update: EntityUpdate;
+}) {
+  const t = useTranslations("workspace");
+  const { objectTypeCollections } = useWorkspace();
+  const collections = entityCollections(entity);
+  const choices = Object.values(objectTypeCollections).filter(
+    (collection) => collection.structureId === entity.objectTypeId,
+  );
+  return (
+    <label className="mt-3 inline-flex min-w-0 items-center gap-1.5 px-1 text-sm text-muted-foreground">
+      <ObjectCollectionIcon className="size-3.5" />
+      <select
+        aria-label={t("objects.collections")}
+        multiple
+        value={collections}
+        className="min-w-0 bg-transparent outline-none"
+        onChange={(event) =>
+          update({
+            collections: Array.from(event.currentTarget.selectedOptions).map(
+              (option) => option.value,
+            ),
+          })
+        }
+      >
+        {choices.map((collection) => (
+          <option key={collection.id} value={collection.id}>
+            {collection.name}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
 
@@ -561,8 +646,63 @@ function WorkspacePropertyField({
   readonly property: WorkspaceStructure["propertyDefinitions"][number];
   readonly updateProperty: EntityPropertyUpdate;
 }) {
+  const { createdEntities, setLinkedEntityPropertyValue } = useWorkspace();
   const inputId = React.useId();
   const value = readWorkspaceEntityProperty(entity, property.id);
+  if (property.valueType === "entity") {
+    const relation = entity.propertyValues[property.id];
+    const selectedIds =
+      relation?.type === "entity"
+        ? relation.entity.map((target) => target.id)
+        : [];
+    const candidates = createdEntities.filter((candidate) => {
+      if (candidate.id === entity.id) return false;
+      if (
+        property.targetStructureIds?.length &&
+        !property.targetStructureIds.includes(candidate.objectTypeId)
+      ) {
+        return false;
+      }
+      return (
+        !property.fixedTargetObjectIds?.length ||
+        property.fixedTargetObjectIds.includes(candidate.id)
+      );
+    });
+    return (
+      <label
+        htmlFor={inputId}
+        data-slot="workspace-entity-property"
+        data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
+        className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
+      >
+        <span className="truncate text-muted-foreground">{property.name}</span>
+        <select
+          id={inputId}
+          aria-label={property.name}
+          multiple={property.multiple}
+          value={property.multiple ? selectedIds : (selectedIds[0] ?? "")}
+          className="min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring"
+          onChange={(event) => {
+            const targetIds = Array.from(
+              event.currentTarget.selectedOptions,
+            ).map((option) => option.value);
+            setLinkedEntityPropertyValue(
+              entity.id,
+              property.id,
+              property.multiple ? targetIds : (targetIds[0] ?? []),
+            );
+          }}
+        >
+          {!property.multiple && <option value="" />}
+          {candidates.map((candidate) => (
+            <option key={candidate.id} value={candidate.id}>
+              {candidate.title.trim() || candidate.id}
+            </option>
+          ))}
+        </select>
+      </label>
+    );
+  }
   if (property.valueType === "boolean") {
     return (
       <label
@@ -633,7 +773,9 @@ function WorkspacePropertyGroup({
       property.writable &&
       property.ownership !== "system" &&
       !["title", "tags"].includes(property.id) &&
-      ["text", "number", "boolean", "date", "url"].includes(property.valueType),
+      ["text", "number", "boolean", "date", "url", "entity"].includes(
+        property.valueType,
+      ),
   );
   if (editableProperties.length === 0) return null;
   return (
@@ -1045,8 +1187,12 @@ function DocumentPage({
 }) {
   const t = useTranslations("workspace");
   const importInputRef = React.useRef<HTMLInputElement>(null);
-  const { createWorkspacePage, setWorkspaceEntityPropertyValue, showMessage } =
-    useWorkspace();
+  const {
+    createWorkspacePage,
+    deleteWorkspaceEntity,
+    setWorkspaceEntityPropertyValue,
+    showMessage,
+  } = useWorkspace();
 
   function exportMarkdown() {
     const source = `# ${entity.title}\n\n${blockEditorDocumentToMarkdown(entity.body)}`;
@@ -1087,6 +1233,7 @@ function DocumentPage({
         structure={structure}
         menu={
           <DocumentMoreMenu
+            onDelete={() => deleteWorkspaceEntity(entity.id)}
             onExport={exportMarkdown}
             onImport={() => importInputRef.current?.click()}
           />
@@ -1098,6 +1245,7 @@ function DocumentPage({
         onCommit={(title) => update({ title })}
       />
       <ObjectPageTags entity={entity} update={update} />
+      <ObjectPageCollections entity={entity} update={update} />
       <WorkspacePropertyGroup
         entity={entity}
         structure={structure}
@@ -1188,6 +1336,7 @@ function TablePage({
         onCommit={(title) => update({ title })}
       />
       <ObjectPageTags entity={entity} update={update} />
+      <ObjectPageCollections entity={entity} update={update} />
       <WorkspacePropertyGroup
         entity={entity}
         structure={structure}

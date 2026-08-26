@@ -8,6 +8,10 @@ import {
   WORKSPACE_OBJECT_SCHEMA_VERSION,
   workspaceObjectReducer,
 } from "../src/lib/workspace-objects.ts";
+import {
+  parseWorkspaceSidebarState,
+  serializeWorkspaceSidebarState,
+} from "../src/lib/workspace-sidebar-storage.ts";
 
 test("new document entities use block schema v2 and typed property map", () => {
   const state = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
@@ -23,6 +27,48 @@ test("new document entities use block schema v2 and typed property map", () => {
   assert.deepEqual(state.entities[0].propertyValues.title, {
     title: { value: "" },
     type: "title",
+  });
+});
+
+test("sidebar collection records retain their ids when display names change", () => {
+  const migrated = parseWorkspaceSidebarState(
+    JSON.stringify({
+      customSections: [],
+      objectTypeCollections: { page: ["Reading list"] },
+      objectTypeQueries: {},
+      version: 1,
+    }),
+  );
+
+  assert.equal(migrated.ok, true);
+  assert.deepEqual(migrated.state.collectionRecords, {
+    "collection:page:reading-list": {
+      id: "collection:page:reading-list",
+      name: "Reading list",
+      structureId: "page",
+    },
+  });
+
+  const restored = parseWorkspaceSidebarState(
+    serializeWorkspaceSidebarState({
+      ...migrated.state,
+      collectionRecords: {
+        "collection:page:reading-list": {
+          id: "collection:page:reading-list",
+          name: "Reference shelf",
+          structureId: "page",
+        },
+      },
+    }),
+  );
+
+  assert.equal(restored.ok, true);
+  assert.deepEqual(restored.state.collectionRecords, {
+    "collection:page:reading-list": {
+      id: "collection:page:reading-list",
+      name: "Reference shelf",
+      structureId: "page",
+    },
   });
 });
 

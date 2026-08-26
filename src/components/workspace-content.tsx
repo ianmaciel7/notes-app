@@ -96,7 +96,12 @@ import {
   createDayContext,
   projectCalendarEntries,
 } from "@/lib/workspace-dates-calendar";
-import { createCollectionId } from "@/lib/workspace-domain-identities";
+import {
+  createCollectionId,
+  createTagId,
+  selectWorkspaceCollectionRecordsForStructure,
+  type WorkspaceCollectionRecord,
+} from "@/lib/workspace-domain-identities";
 import {
   acceptsFileForType,
   applyQueryDescription,
@@ -108,16 +113,6 @@ import {
   type UrlEntity,
   type WorkspaceEntity,
 } from "@/lib/workspace-objects";
-
-function collectionNameFromId(collectionId: string): string {
-  const parts = collectionId.split(":");
-  const slug = parts.at(-1) ?? collectionId;
-  return slug
-    .split("-")
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toLocaleUpperCase() + part.slice(1))
-    .join(" ");
-}
 
 function AtomicNotesWorkspace() {
   const { mainTabs, mainValue, activeAction, objectTypes, createdEntities } =
@@ -417,7 +412,7 @@ function CreatedObjectWorkspace({ entity }: { entity: WorkspaceEntity }) {
         item.id !== entity.id &&
         "tags" in item &&
         entity.title.trim() &&
-        item.tags.includes(entity.title.trim()),
+        item.tags.includes(entity.id),
     );
     content = (
       <TagObjectEditor
@@ -480,19 +475,23 @@ function ObjectTypeNamedItemWorkspace({
   } = useWorkspace();
   const titleRef = React.useRef<HTMLInputElement>(null);
   const objectType = objectTypes.find((type) => type.id === item.objectTypeId);
-  const items =
+  const collection =
     item.kind === "collection"
-      ? (objectTypeCollections[item.objectTypeId] ?? [])
-      : (objectTypeQueries[item.objectTypeId] ?? []);
-  const title = items[item.index] ?? t("objectTypeOverview.untitled");
-  const collectionId = createCollectionId(item.objectTypeId, title);
+      ? objectTypeCollections[item.collectionId]
+      : undefined;
+  const title =
+    collection?.name ??
+    (item.kind === "query"
+      ? objectTypeQueries[item.objectTypeId]?.[item.index]
+      : undefined) ??
+    t("objectTypeOverview.untitled");
   const count =
-    item.kind === "collection"
+    item.kind === "collection" && collection
       ? createdEntities.filter(
           (entity) =>
             entity.objectTypeId === item.objectTypeId &&
             "collections" in entity &&
-            entity.collections.includes(collectionId),
+            entity.collections.includes(collection.id),
         ).length
       : 0;
 
@@ -505,24 +504,26 @@ function ObjectTypeNamedItemWorkspace({
 
   const ItemIcon =
     item.kind === "collection" ? ObjectCollectionIcon : ObjectQueryIcon;
-  const tabId = objectTypeNamedItemTabId(
-    item.kind,
-    item.objectTypeId,
-    item.index,
-  );
+  const tabId = objectTypeNamedItemTabId(item);
 
   function rename(value: string) {
-    const setter =
-      item.kind === "collection"
-        ? setObjectTypeCollections
-        : setObjectTypeQueries;
-    setter((current) => ({
-      ...current,
-      [item.objectTypeId]: (current[item.objectTypeId] ?? []).map(
-        (currentItem, currentIndex) =>
-          currentIndex === item.index ? value : currentItem,
-      ),
-    }));
+    if (item.kind === "collection" && collection) {
+      setObjectTypeCollections((current) => ({
+        ...current,
+        [collection.id]: {
+          ...collection,
+          name: value.trim() || collection.name,
+        },
+      }));
+    } else if (item.kind === "query") {
+      setObjectTypeQueries((current) => ({
+        ...current,
+        [item.objectTypeId]: (current[item.objectTypeId] ?? []).map(
+          (currentItem, currentIndex) =>
+            currentIndex === item.index ? value : currentItem,
+        ),
+      }));
+    }
     setMainTabs((current) =>
       current.map((tab) =>
         tab.id === tabId
@@ -570,13 +571,13 @@ function ObjectTypeNamedItemWorkspace({
         </div>
 
         <BufferedTextInput
-        inputRef={titleRef}
-        aria-label={t("fields.title")}
-        value={title}
-        onCommit={rename}
-        className="mt-3 w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-[#282522] outline-none placeholder:text-[#b8b2ac]"
-        placeholder={t("objectTypeOverview.untitled")}
-      />
+          inputRef={titleRef}
+          aria-label={t("fields.title")}
+          value={title}
+          onCommit={rename}
+          className="mt-3 w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-[#282522] outline-none placeholder:text-[#b8b2ac]"
+          placeholder={t("objectTypeOverview.untitled")}
+        />
 
         <section className="mt-10 flex min-h-[220px] flex-col items-center justify-center rounded-2xl text-center">
           <ItemIcon className="mb-3 size-5 text-[#77716b]" />
@@ -975,13 +976,9 @@ function DocumentObjectEditor({
             <CollectionPropertyEditor
               collections={entity.collections}
               objectTypeId={entity.objectTypeId}
-              suggestions={Array.from(
-                new Set([
-                  ...(objectTypeCollections[entity.objectTypeId] ?? []),
-                  ...createdEntities.flatMap((item) =>
-                    "collections" in item ? item.collections : [],
-                  ),
-                ]),
+              suggestions={selectWorkspaceCollectionRecordsForStructure(
+                objectTypeCollections,
+                entity.objectTypeId,
               )}
               update={update}
             />
@@ -1048,16 +1045,12 @@ function DocumentObjectEditor({
         )}
         <TagPropertyEditor
           tags={entity.tags}
-          suggestions={Array.from(
-            new Set([
-              ...createdEntities
-                .filter((item) => item.kind === "tag")
-                .map((item) => item.title),
-              ...createdEntities.flatMap((item) =>
-                "tags" in item ? item.tags : [],
-              ),
-            ]),
-          ).filter(Boolean)}
+          suggestions={createdEntities
+            .filter((item) => item.kind === "tag")
+            .map((item) => ({
+              id: item.id,
+              name: item.title.trim() || item.id,
+            }))}
           update={update}
         />
         <div
@@ -1199,38 +1192,31 @@ function CollectionPropertyEditor({
 }: {
   collections: string[];
   objectTypeId: string;
-  suggestions: string[];
+  suggestions: readonly WorkspaceCollectionRecord[];
   update: ObjectEditorProps["update"];
 }) {
   const t = useTranslations("workspace");
-  const { setObjectTypeCollections } = useWorkspace();
+  const { objectTypeCollections, setObjectTypeCollections } = useWorkspace();
   const [query, setQuery] = React.useState("");
   const deferredQuery = React.useDeferredValue(query);
   const [open, setOpen] = React.useState(false);
-  const suggestionRecords = suggestions.map((name) => ({
-    id: createCollectionId(objectTypeId, name),
-    name,
-  }));
   const visible = suggestions.filter((item) => {
-    const id = createCollectionId(objectTypeId, item);
     return (
-      !collections.includes(id) &&
-      item.toLocaleLowerCase().includes(deferredQuery.trim().toLocaleLowerCase())
+      !collections.includes(item.id) &&
+      item.name
+        .toLocaleLowerCase()
+        .includes(deferredQuery.trim().toLocaleLowerCase())
     );
   });
   const collectionNamesById = new Map(
-    suggestionRecords.map((collection) => [collection.id, collection.name]),
+    suggestions.map((collection) => [collection.id, collection.name]),
   );
 
   function createCollection() {
     const requested = query.trim() || t("documentMenu.untitledCollection");
     const taken = new Set([
-      ...suggestions,
-      ...collections.map(
-        (collection) =>
-          collectionNamesById.get(collection) ??
-          collectionNameFromId(collection),
-      ),
+      ...suggestions.map((collection) => collection.name),
+      ...collections.map((collection) => collectionNamesById.get(collection)),
     ]);
     let collection = requested;
     let suffix = 2;
@@ -1238,10 +1224,18 @@ function CollectionPropertyEditor({
       collection = `${requested} ${suffix}`;
       suffix += 1;
     }
-    const collectionId = createCollectionId(objectTypeId, collection);
+    const collectionId = createCollectionId(
+      objectTypeId,
+      collection,
+      new Set(Object.keys(objectTypeCollections)),
+    );
     setObjectTypeCollections((current) => ({
       ...current,
-      [objectTypeId]: [...(current[objectTypeId] ?? []), collection],
+      [collectionId]: {
+        id: collectionId,
+        name: collection,
+        structureId: objectTypeId,
+      },
     }));
     update({ collections: [...collections, collectionId] });
     setQuery("");
@@ -1254,8 +1248,7 @@ function CollectionPropertyEditor({
           key={collection}
           type="button"
           aria-label={`${t("objectTypeOverview.remove")} ${
-            collectionNamesById.get(collection) ??
-            collectionNameFromId(collection)
+            collectionNamesById.get(collection) ?? collection
           }`}
           onClick={() =>
             update({
@@ -1265,8 +1258,7 @@ function CollectionPropertyEditor({
           className="inline-flex max-w-24 min-w-0 shrink items-center overflow-x-clip whitespace-nowrap rounded-[0.475em] border border-[oklch(0.9856_0.0016_67)] bg-[oklch(0.9856_0.0016_67)] px-[0.49em] py-[0.2em] leading-[1.3] text-[oklch(0.2987_0.0072_285.88)] active:brightness-[0.94] sm:max-w-32"
         >
           <span className="truncate">
-            {collectionNamesById.get(collection) ??
-              collectionNameFromId(collection)}
+            {collectionNamesById.get(collection) ?? collection}
           </span>
         </button>
       ))}
@@ -1315,21 +1307,18 @@ function CollectionPropertyEditor({
             ? visible.map((collection) => (
                 <button
                   type="button"
-                  key={collection}
+                  key={collection.id}
                   className={floatingSearchListItemClass}
                   onClick={() => {
                     update({
-                      collections: [
-                        ...collections,
-                        createCollectionId(objectTypeId, collection),
-                      ],
+                      collections: [...collections, collection.id],
                     });
                     setQuery("");
                     setOpen(false);
                   }}
                 >
                   <ObjectCollectionIcon className="size-4" />
-                  <span className="truncate">{collection}</span>
+                  <span className="truncate">{collection.name}</span>
                 </button>
               ))
             : null}
@@ -1692,7 +1681,7 @@ function TagPropertyEditor({
   update,
 }: {
   tags: string[];
-  suggestions: string[];
+  suggestions: readonly { id: string; name: string }[];
   update: ObjectEditorProps["update"];
 }) {
   const t = useTranslations("workspace");
@@ -1701,15 +1690,20 @@ function TagPropertyEditor({
   const [open, setOpen] = React.useState(false);
   const visibleSuggestions = suggestions.filter(
     (tag) =>
-      !tags.includes(tag) &&
-      tag.toLocaleLowerCase().includes(deferredDraft.trim().toLocaleLowerCase()),
+      !tags.includes(tag.id) &&
+      tag.name
+        .toLocaleLowerCase()
+        .includes(deferredDraft.trim().toLocaleLowerCase()),
   );
+  const tagNamesById = new Map(suggestions.map((tag) => [tag.id, tag.name]));
 
   function commitDraft() {
     const nextTags = draft
       .split(",")
       .map((tag) => tag.trim())
-      .filter((tag) => tag && !tags.includes(tag));
+      .filter(Boolean)
+      .map((tag) => createTagId(tag, new Set(tags)))
+      .filter((tag) => !tags.includes(tag));
     if (nextTags.length) update({ tags: [...tags, ...nextTags] });
     setDraft("");
     setOpen(false);
@@ -1721,12 +1715,14 @@ function TagPropertyEditor({
         <button
           key={tag}
           type="button"
-          aria-label={`${t("objectTypeOverview.remove")} ${tag}`}
+          aria-label={`${t("objectTypeOverview.remove")} ${
+            tagNamesById.get(tag) ?? tag
+          }`}
           className="inline-flex max-w-full min-w-0 shrink-0 items-center overflow-x-clip whitespace-nowrap rounded-[0.475em] border border-[oklch(0.9563_0.0444_203.48)] bg-[oklch(0.9563_0.0444_203.48)] px-[0.49em] py-[0.2em] leading-[1.3] text-[oklch(0.3622_0.0423_219.72)] active:brightness-[0.94]"
           onClick={() => update({ tags: tags.filter((item) => item !== tag) })}
         >
           <span className="block min-w-0 truncate text-left text-[1em]">
-            {tag}
+            {tagNamesById.get(tag) ?? tag}
           </span>
         </button>
       ))}
@@ -1768,22 +1764,23 @@ function TagPropertyEditor({
           {visibleSuggestions.map((tag) => (
             <button
               type="button"
-              key={tag}
+              key={tag.id}
               className={floatingSearchListItemClass}
               onClick={() => {
-                update({ tags: [...tags, tag] });
+                update({ tags: [...tags, tag.id] });
                 setDraft("");
                 setOpen(false);
               }}
             >
               <ObjectTagIcon className="size-4" />
-              <span className="truncate">{tag}</span>
+              <span className="truncate">{tag.name}</span>
             </button>
           ))}
           {draft.trim() &&
             !suggestions.some(
               (tag) =>
-                tag.toLocaleLowerCase() === draft.trim().toLocaleLowerCase(),
+                tag.name.toLocaleLowerCase() ===
+                draft.trim().toLocaleLowerCase(),
             ) && (
               <button
                 type="button"
@@ -2204,35 +2201,42 @@ type OptionalOverviewSection = Exclude<
 >;
 
 type ObjectTypeView = "overview" | "all" | OptionalOverviewSection;
-type ObjectTypeNamedItemKind = "collection" | "query";
-type ObjectTypeNamedItemTab = {
-  kind: ObjectTypeNamedItemKind;
-  objectTypeId: string;
-  index: number;
-};
+type ObjectTypeNamedItemTab =
+  | {
+      kind: "collection";
+      objectTypeId: string;
+      collectionId: string;
+    }
+  | { kind: "query"; objectTypeId: string; index: number };
 
-function objectTypeNamedItemTabId(
-  kind: ObjectTypeNamedItemKind,
-  objectTypeId: string,
-  index: number,
-) {
-  return `object-type-item:${kind}:${objectTypeId}:${index}`;
-}
-
-function appSidebarCollectionId(objectTypeId: string, collection: string) {
-  return `collection:${objectTypeId}:${encodeURIComponent(collection)}`;
+function objectTypeNamedItemTabId(item: ObjectTypeNamedItemTab) {
+  return item.kind === "collection"
+    ? `object-type-item:collection:${item.collectionId}`
+    : `object-type-item:query:${item.objectTypeId}:${item.index}`;
 }
 
 function parseObjectTypeNamedItemTabId(
   id: string,
 ): ObjectTypeNamedItemTab | null {
-  const match = /^object-type-item:(collection|query):([^:]+):(\d+)$/.exec(id);
-  if (!match) return null;
-  return {
-    kind: match[1] as ObjectTypeNamedItemKind,
-    objectTypeId: match[2],
-    index: Number(match[3]),
-  };
+  const collectionMatch = /^object-type-item:collection:(.+)$/.exec(id);
+  if (collectionMatch) {
+    const parts = collectionMatch[1].split(":");
+    return parts.length >= 3
+      ? {
+          kind: "collection",
+          collectionId: collectionMatch[1],
+          objectTypeId: parts[1],
+        }
+      : null;
+  }
+  const queryMatch = /^object-type-item:query:([^:]+):(\d+)$/.exec(id);
+  return queryMatch
+    ? {
+        kind: "query",
+        objectTypeId: queryMatch[1],
+        index: Number(queryMatch[2]),
+      }
+    : null;
 }
 
 function ObjectTypeWorkspace({
@@ -2291,7 +2295,10 @@ function ObjectTypeWorkspace({
     kind: "collection" | "query";
     index: number;
   } | null>(null);
-  const collections = collectionsByType[objectType.id] ?? [];
+  const collections = selectWorkspaceCollectionRecordsForStructure(
+    collectionsByType,
+    objectType.id,
+  );
   const queries = queriesByType[objectType.id] ?? [];
   React.useEffect(() => {
     if (searchOpen) searchInputRef.current?.focus();
@@ -2330,13 +2337,10 @@ function ObjectTypeWorkspace({
     createWorkspaceEntity(objectType.id, objectType.label);
   }
 
-  function openNamedItem(
-    kind: ObjectTypeNamedItemKind,
-    index: number,
-    label: string,
-  ) {
-    const tabId = objectTypeNamedItemTabId(kind, objectType.id, index);
-    const Icon = kind === "collection" ? ObjectCollectionIcon : ObjectQueryIcon;
+  function openNamedItem(item: ObjectTypeNamedItemTab, label: string) {
+    const tabId = objectTypeNamedItemTabId(item);
+    const Icon =
+      item.kind === "collection" ? ObjectCollectionIcon : ObjectQueryIcon;
     const tab: AppHeaderTab = {
       id: tabId,
       label,
@@ -2358,13 +2362,24 @@ function ObjectTypeWorkspace({
 
   function addCollection() {
     const nextCollection = t("objectTypeOverview.untitled");
-    const nextIndex = collections.length;
+    const collectionId = createCollectionId(
+      objectType.id,
+      nextCollection,
+      new Set(Object.keys(collectionsByType)),
+    );
     setCollectionsByType((current) => ({
       ...current,
-      [objectType.id]: [...(current[objectType.id] ?? []), nextCollection],
+      [collectionId]: {
+        id: collectionId,
+        name: nextCollection,
+        structureId: objectType.id,
+      },
     }));
     setEditingItem(null);
-    openNamedItem("collection", nextIndex, nextCollection);
+    openNamedItem(
+      { kind: "collection", collectionId, objectTypeId: objectType.id },
+      nextCollection,
+    );
     showMessage(t("objectTypeOverview.collectionCreated"));
   }
 
@@ -2376,7 +2391,10 @@ function ObjectTypeWorkspace({
       [objectType.id]: [...(current[objectType.id] ?? []), nextQuery],
     }));
     setEditingItem(null);
-    openNamedItem("query", nextIndex, nextQuery);
+    openNamedItem(
+      { kind: "query", index: nextIndex, objectTypeId: objectType.id },
+      nextQuery,
+    );
     showMessage(t("objectTypeOverview.queryCreated"));
   }
 
@@ -2433,35 +2451,22 @@ function ObjectTypeWorkspace({
     index: number,
     value: string,
   ) {
-    const setter =
-      kind === "collection" ? setCollectionsByType : setQueriesByType;
-    setter((current) => ({
+    if (kind === "collection") {
+      const collection = collections[index];
+      const nextName = value.trim();
+      if (!collection || !nextName) return;
+      setCollectionsByType((current) => ({
+        ...current,
+        [collection.id]: { ...collection, name: nextName },
+      }));
+      return;
+    }
+    setQueriesByType((current) => ({
       ...current,
       [objectType.id]: (current[objectType.id] ?? []).map((item, itemIndex) =>
         itemIndex === index ? value : item,
       ),
     }));
-    if (kind !== "collection") return;
-    const previousCollection = collections[index];
-    const nextCollection = value.trim();
-    if (!previousCollection || !nextCollection) return;
-    const previousId = appSidebarCollectionId(
-      objectType.id,
-      previousCollection,
-    );
-    const nextId = appSidebarCollectionId(objectType.id, nextCollection);
-    setPinnedEntities((current) =>
-      current.map((item) =>
-        item.id === previousId
-          ? {
-              id: nextId,
-              label: nextCollection,
-              icon: ObjectCollectionIcon,
-              tone: "gray",
-            }
-          : item,
-      ),
-    );
   }
 
   async function importFiles(event: React.ChangeEvent<HTMLInputElement>) {
@@ -3255,7 +3260,7 @@ function ObjectTypeOverview({
   onToggleSection,
   onToggleRecent,
 }: {
-  collections: string[];
+  collections: readonly WorkspaceCollectionRecord[];
   objectType: AppSidebarObjectType;
   entities: WorkspaceEntity[];
   queries: string[];
@@ -3338,16 +3343,12 @@ function ObjectTypeOverview({
             <div className="flex min-h-[134px] items-center justify-center py-4">
               {collections.length > 0 ? (
                 <ObjectTypeNamedItems
-                  items={collections}
+                  items={collections.map((collection) => collection.name)}
                   itemCounts={collections.map((collection) => {
-                    const collectionId = createCollectionId(
-                      objectType.id,
-                      collection,
-                    );
                     return entities.filter(
                       (entity) =>
                         "collections" in entity &&
-                        entity.collections.includes(collectionId),
+                        entity.collections.includes(collection.id),
                     ).length;
                   })}
                   kind="collection"
@@ -3652,15 +3653,15 @@ function ObjectTypeNamedItems({
               <ObjectQueryIcon className="size-4 shrink-0 text-[#77716b]" />
             )}
             <BufferedTextInput
-            inputRef={(node) => {
-              if (node) inputRefs.current.set(index, node);
-              else inputRefs.current.delete(index);
-            }}
-            aria-label={item}
-            value={item}
-            onCommit={(value) => onRename(index, value)}
-            className="min-w-0 flex-1 truncate bg-transparent text-[15px] font-medium leading-5 text-[#34312f] outline-none"
-          />
+              inputRef={(node) => {
+                if (node) inputRefs.current.set(index, node);
+                else inputRefs.current.delete(index);
+              }}
+              aria-label={item}
+              value={item}
+              onCommit={(value) => onRename(index, value)}
+              className="min-w-0 flex-1 truncate bg-transparent text-[15px] font-medium leading-5 text-[#34312f] outline-none"
+            />
           </span>
           <span className="mt-1 text-xs leading-4 text-[#77716b]">
             {t("entryCount", { count: itemCounts[index] ?? 0 })}

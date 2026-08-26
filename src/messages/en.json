@@ -327,6 +327,7 @@
         "incompatible-file": "Choose a file compatible with this object type.",
         "invalid-url": "Enter a valid URL for this object type.",
         "media-storage-failed": "The file could not be saved locally. Try a smaller file or free up browser storage.",
+        "referenced-object": "This object cannot be deleted while relations point to it.",
         "required-title": "Enter a task title.",
         "unsupported-object-type": "This object type is not supported."
       },

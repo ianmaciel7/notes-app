@@ -39,10 +39,11 @@ import {
 import { useWorkspace } from "@/components/workspace-controller";
 import { useWorkspaceViews } from "@/components/workspace-views-controller";
 import { cn } from "@/lib/utils";
+import { createCollectionId } from "@/lib/workspace-domain-identities";
 import type { WorkspaceStructure } from "@/lib/workspace-object-types";
 import {
-  executeQueryDefinition,
   type DataViewKind,
+  executeQueryDefinition,
   type WorkspaceDataView,
 } from "@/lib/workspace-object-views";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
@@ -656,12 +657,19 @@ function WorkspaceObjectTypeView({
 
   function addCollection() {
     const label = t("objectTypeOverview.untitled");
-    const index = objectTypeCollections[objectType.id]?.length ?? 0;
+    const collectionId = createCollectionId(
+      objectType.id,
+      label,
+      new Set(Object.keys(objectTypeCollections)),
+    );
     setObjectTypeCollections((current) => ({
       ...current,
-      [objectType.id]: [...(current[objectType.id] ?? []), label],
+      [collectionId]: {
+        id: collectionId,
+        name: label,
+        structureId: objectType.id,
+      },
     }));
-    openNamedItem("collection", index, label);
   }
 
   function addQuery() {
@@ -753,5 +761,5 @@ function WorkspaceObjectTypeView({
   );
 }
 
-export { WorkspaceObjectTypeView };
 export type { WorkspaceObjectTypeViewProps };
+export { WorkspaceObjectTypeView };

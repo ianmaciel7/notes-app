@@ -186,6 +186,15 @@ function selectCollectionsForStructure(
   );
 }
 
+function selectWorkspaceCollectionRecordsForStructure(
+  records: Readonly<Record<string, WorkspaceCollectionRecord>>,
+  structureId: StructureId,
+): readonly WorkspaceCollectionRecord[] {
+  return Object.values(records).filter(
+    (record) => record.structureId === structureId,
+  );
+}
+
 export type {
   WorkspaceCollectionRecord,
   WorkspaceReverseProjections,
@@ -198,5 +207,6 @@ export {
   migrateLegacyTagNames,
   selectCollectionsForStructure,
   selectTagRecordsFromEntities,
+  selectWorkspaceCollectionRecordsForStructure,
   selectWorkspaceReverseProjections,
 };

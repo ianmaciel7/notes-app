@@ -19,9 +19,9 @@ import {
   ObjectAreaIcon,
   ObjectCollectionIcon,
   ObjectIconBadge,
-  objectIconToneBadgeClass,
   type ObjectIconProps,
   type ObjectIconTone,
+  objectIconToneBadgeClass,
 } from "@/components/object-icons";
 import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +32,13 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
+  CompactMenuAccountPanel,
+  CompactMenuPlanBadge,
+  compactMenuActionButtonClass,
+  sidebarContextMenuContentClass,
+  sidebarContextSubmenuContentClass,
+} from "@/components/ui/compact-menu";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -39,13 +46,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  CompactMenuAccountPanel,
-  CompactMenuPlanBadge,
-  compactMenuActionButtonClass,
-  sidebarContextMenuContentClass,
-  sidebarContextSubmenuContentClass,
-} from "@/components/ui/compact-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -74,9 +74,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
 import {
-  OBJECT_ICON_NAMES,
   type CreateStructureInput,
+  OBJECT_ICON_NAMES,
   type ObjectIconName,
   type StructureOwnership,
 } from "@/lib/workspace-object-types";
@@ -122,10 +123,6 @@ type AppSidebarCollectionAction =
   | "import"
   | "duplicate"
   | "delete";
-
-function appSidebarCollectionId(objectTypeId: string, collection: string) {
-  return `collection:${objectTypeId}:${encodeURIComponent(collection)}`;
-}
 
 const objectTypeMenuIconPaths = {
   chevronRight:
@@ -453,7 +450,9 @@ function AppSidebarPinnedRow({
           onClick={onSelect}
         >
           <span
-            data-lifecycle-contract={objectLifecycleContractSlots.ObjectCountBadge}
+            data-lifecycle-contract={
+              objectLifecycleContractSlots.ObjectCountBadge
+            }
             className={cn(
               "flex w-12 min-w-0 flex-1 items-center gap-x-1.5 truncate",
               active && "font-medium",
@@ -673,7 +672,7 @@ function AppSidebarObjectTypeRow({
   onDelete,
 }: {
   objectType: AppSidebarObjectType;
-  collections: string[];
+  collections: readonly WorkspaceCollectionRecord[];
   collectionsOpen: boolean;
   active: boolean;
   activeId: string | null;
@@ -682,7 +681,7 @@ function AppSidebarObjectTypeRow({
   onCollectionAction: (
     action: AppSidebarCollectionAction,
     objectType: AppSidebarObjectType,
-    collection: string,
+    collection: WorkspaceCollectionRecord,
   ) => void;
   onUpdate?: (
     id: string,
@@ -791,13 +790,10 @@ function AppSidebarObjectTypeRow({
       {hasCollections && collectionsOpen && (
         <div data-slot="app-sidebar-object-type-collections">
           {collections.map((collection) => {
-            const collectionId = appSidebarCollectionId(
-              objectType.id,
-              collection,
-            );
+            const collectionId = collection.id;
             return (
               <div
-                key={collection}
+                key={collection.id}
                 data-slot="app-sidebar-collection-row"
                 data-active={collectionId === activeId || undefined}
                 className={cn(
@@ -820,7 +816,7 @@ function AppSidebarObjectTypeRow({
                       variant="sidebar"
                     />
                   </span>
-                  <span className="min-w-0 truncate">{collection}</span>
+                  <span className="min-w-0 truncate">{collection.name}</span>
                 </button>
                 <AppSidebarCollectionMenu
                   collection={collection}
@@ -1261,7 +1257,7 @@ type AppSidebarOverviewProps = {
   pinnedEntities?: AppSidebarPinnedEntity[];
   availablePinnedEntities?: AppSidebarPinnedEntity[];
   objectTypes?: AppSidebarObjectType[];
-  objectTypeCollections?: Record<string, string[]>;
+  objectTypeCollections?: Record<string, WorkspaceCollectionRecord>;
   customSections?: AppSidebarCustomSection[];
   onCreateObjectTypeFromPreset?: (presetId: string) => void;
   onCreateObjectType?: (input: CreateStructureInput) => void;
@@ -1278,7 +1274,7 @@ type AppSidebarOverviewProps = {
   onCollectionAction?: (
     action: AppSidebarCollectionAction,
     objectType: AppSidebarObjectType,
-    collection: string,
+    collection: WorkspaceCollectionRecord,
   ) => void;
   onPinnedEntitiesChange?: React.Dispatch<
     React.SetStateAction<AppSidebarPinnedEntity[]>
@@ -1293,23 +1289,23 @@ function AppSidebarCollectionMenu({
   objectType,
   onAction,
 }: {
-  collection: string;
+  collection: WorkspaceCollectionRecord;
   objectType: AppSidebarObjectType;
   onAction: (
     action: AppSidebarCollectionAction,
     objectType: AppSidebarObjectType,
-    collection: string,
+    collection: WorkspaceCollectionRecord,
   ) => void;
 }) {
   const t = useTranslations("workspace");
-  const objectTypeName = t(`objectTypeStudio.objectTypes.${objectType.id}`);
+  const objectTypeName = objectType.singularLabel ?? objectType.label;
   const action = (name: AppSidebarCollectionAction) => () =>
     onAction(name, objectType, collection);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        aria-label={`${t("actions.moreOptions")}: ${collection}`}
+        aria-label={`${t("actions.moreOptions")}: ${collection.name}`}
         className={cn(
           buttonVariants({ variant: "ghost", size: "icon-xs" }),
           "size-[22px] shrink-0 opacity-0 transition-opacity duration-150",
@@ -1581,7 +1577,9 @@ function AppSidebarOverview({
               <AppSidebarObjectTypeRow
                 key={objectType.id}
                 objectType={objectType}
-                collections={objectTypeCollections[objectType.id] ?? []}
+                collections={Object.values(objectTypeCollections).filter(
+                  (collection) => collection.structureId === objectType.id,
+                )}
                 collectionsOpen={
                   objectTypeCollectionsOpen[objectType.id] ?? true
                 }
@@ -1596,7 +1594,7 @@ function AppSidebarOverview({
                 }
                 onCollectionAction={(action, type, collection) => {
                   if (action === "open") {
-                    setActiveId(appSidebarCollectionId(type.id, collection));
+                    setActiveId(collection.id);
                   }
                   onCollectionAction?.(action, type, collection);
                 }}
@@ -1662,23 +1660,22 @@ function AppSidebarOverview({
 }
 
 export {
-  appSidebarCollectionId,
   AppSidebarAddSection,
+  type AppSidebarCollectionAction,
+  type AppSidebarCustomSection,
   AppSidebarFooter,
   AppSidebarHelpSection,
+  type AppSidebarObjectType,
   AppSidebarObjectTypeRow,
   AppSidebarOverview,
+  type AppSidebarPinnedEntity,
   AppSidebarPinnedPicker,
   AppSidebarPinnedRow,
   AppSidebarSection,
   AppSidebarSectionAction,
   AppSidebarSectionMenu,
-  AppSidebarTypeLabel,
-  AppSidebarUtilityRow,
-  type AppSidebarCustomSection,
-  type AppSidebarCollectionAction,
-  type AppSidebarObjectType,
-  type AppSidebarPinnedEntity,
   type AppSidebarSortMode,
   type AppSidebarTone,
+  AppSidebarTypeLabel,
+  AppSidebarUtilityRow,
 };

@@ -1,5 +1,11 @@
 const WORKSPACE_SIDEBAR_STORAGE_KEY = "notes-app:workspace-sidebar:v1";
-const WORKSPACE_SIDEBAR_SCHEMA_VERSION = 1;
+
+import {
+  migrateLegacyCollectionsByStructure,
+  type WorkspaceCollectionRecord,
+} from "./workspace-domain-identities.ts";
+
+const WORKSPACE_SIDEBAR_SCHEMA_VERSION = 2;
 
 type WorkspaceSidebarCustomSection = {
   id: string;
@@ -8,8 +14,8 @@ type WorkspaceSidebarCustomSection = {
 };
 
 type WorkspaceSidebarState = {
+  collectionRecords: Record<string, WorkspaceCollectionRecord>;
   customSections: WorkspaceSidebarCustomSection[];
-  objectTypeCollections: Record<string, string[]>;
   objectTypeQueries: Record<string, string[]>;
 };
 
@@ -37,6 +43,32 @@ function toStringArrayMap(value: unknown): Record<string, string[]> {
       });
       return normalizedItems.length > 0 ? [[key, normalizedItems]] : [];
     }),
+  );
+}
+
+function toCollectionRecordMap(
+  value: unknown,
+): Record<string, WorkspaceCollectionRecord> {
+  if (!isRecord(value)) return {};
+  return Object.fromEntries(
+    Object.entries(value).flatMap(([id, record]) => {
+      if (!isRecord(record)) return [];
+      const name = typeof record.name === "string" ? record.name.trim() : "";
+      const structureId =
+        typeof record.structureId === "string" ? record.structureId.trim() : "";
+      if (!id.trim() || record.id !== id || !name || !structureId) return [];
+      return [[id, { id, name, structureId }]];
+    }),
+  );
+}
+
+function collectionRecordsFromLegacy(
+  value: unknown,
+): Record<string, WorkspaceCollectionRecord> {
+  return Object.fromEntries(
+    migrateLegacyCollectionsByStructure(toStringArrayMap(value)).map(
+      (record) => [record.id, record],
+    ),
   );
 }
 
@@ -73,35 +105,50 @@ function parseWorkspaceSidebarState(
     return { ok: false, reason: "invalid-json" };
   }
 
-  if (!isRecord(value) || value.version !== WORKSPACE_SIDEBAR_SCHEMA_VERSION) {
+  if (!isRecord(value)) {
+    return { ok: false, reason: "invalid-record" };
+  }
+
+  if (value.version === 1) {
+    return {
+      ok: true,
+      state: {
+        collectionRecords: collectionRecordsFromLegacy(
+          value.objectTypeCollections,
+        ),
+        customSections: toCustomSections(value.customSections),
+        objectTypeQueries: toStringArrayMap(value.objectTypeQueries),
+      },
+    };
+  }
+
+  if (value.version !== WORKSPACE_SIDEBAR_SCHEMA_VERSION) {
     return { ok: false, reason: "invalid-record" };
   }
 
   return {
     ok: true,
     state: {
+      collectionRecords: toCollectionRecordMap(value.collectionRecords),
       customSections: toCustomSections(value.customSections),
-      objectTypeCollections: toStringArrayMap(value.objectTypeCollections),
       objectTypeQueries: toStringArrayMap(value.objectTypeQueries),
     },
   };
 }
 
-function serializeWorkspaceSidebarState(
-  state: WorkspaceSidebarState,
-): string {
+function serializeWorkspaceSidebarState(state: WorkspaceSidebarState): string {
   return JSON.stringify({
     version: WORKSPACE_SIDEBAR_SCHEMA_VERSION,
+    collectionRecords: toCollectionRecordMap(state.collectionRecords),
     customSections: toCustomSections(state.customSections),
-    objectTypeCollections: toStringArrayMap(state.objectTypeCollections),
     objectTypeQueries: toStringArrayMap(state.objectTypeQueries),
   } satisfies WorkspaceSidebarSnapshot);
 }
 
 export {
-  WORKSPACE_SIDEBAR_STORAGE_KEY,
   parseWorkspaceSidebarState,
   serializeWorkspaceSidebarState,
+  WORKSPACE_SIDEBAR_STORAGE_KEY,
   type WorkspaceSidebarSnapshotParseResult,
   type WorkspaceSidebarState,
 };

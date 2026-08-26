@@ -327,6 +327,7 @@
         "incompatible-file": "Elige un archivo compatible con este tipo de objeto.",
         "invalid-url": "Introduce una URL válida para este tipo de objeto.",
         "media-storage-failed": "No se pudo guardar el archivo localmente. Prueba con un archivo más pequeño o libera almacenamiento del navegador.",
+        "referenced-object": "Este objeto no se puede eliminar mientras haya relaciones que apunten a él.",
         "required-title": "Introduce el título de la tarea.",
         "unsupported-object-type": "Este tipo de objeto no es compatible."
       },

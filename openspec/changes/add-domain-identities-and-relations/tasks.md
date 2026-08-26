@@ -14,13 +14,13 @@
 ## 2. Migration and UI
 
 - [x] 2.1 Migrate legacy string tags/collections to ids with deterministic collision handling.
-- [ ] 2.2 Move pickers, chips, counts, collection views, and relation controls to id-based selectors.
+- [x] 2.2 Move pickers, chips, counts, collection views, and relation controls to id-based selectors.
 - [x] 2.3 Keep derived backlinks visually/conceptually separate from paired relation properties.
 
 ## 3. Acceptance
 
-- [ ] 3.1 Browser-test rename, memberships, single/multiple/fixed-set selection, two-way add/remove, reload, and deletion guardrails.
-- [ ] 3.2 Run `pnpm verify`, relevant Playwright/parity suites, build, and strict OpenSpec validation.
+- [x] 3.1 Browser-test rename, memberships, single/multiple/fixed-set selection, two-way add/remove, reload, and deletion guardrails.
+- [x] 3.2 Run `pnpm verify`, relevant Playwright/parity suites, build, and strict OpenSpec validation.
 
 ## 4. Completion
 

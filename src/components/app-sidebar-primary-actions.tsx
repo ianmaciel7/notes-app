@@ -14,7 +14,6 @@ import {
   type AppSidebarCollectionAction,
   type AppSidebarObjectType,
   AppSidebarOverview,
-  appSidebarCollectionId,
 } from "@/components/app-sidebar-overview";
 import {
   ObjectCollectionIcon,
@@ -45,6 +44,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useWorkspace } from "@/components/workspace-controller";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import {
+  createCollectionId,
+  type WorkspaceCollectionRecord,
+} from "@/lib/workspace-domain-identities";
 
 type AppSidebarPrimaryActionId = "new" | "search" | "explore" | "calendar";
 
@@ -183,7 +186,9 @@ function NewContentMenu({
         <span className="min-w-0 truncate">{action.label}</span>
       </PopoverTrigger>
       <PopoverContent
-        data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationMenu}
+        data-lifecycle-contract={
+          objectLifecycleContractSlots.ObjectCreationMenu
+        }
         side="bottom"
         align="start"
         sideOffset={-1}
@@ -339,7 +344,8 @@ const defaultActions: AppSidebarPrimaryAction[] = [
     icon: AppSidebarExploreIcon,
     hints: [
       {
-        description: "Open Explore. Use the shortcut again to start a new chat.",
+        description:
+          "Open Explore. Use the shortcut again to start a new chat.",
         shortcut: {
           windows: ["Ctrl", "J"],
           mac: ["⌘", "J"],
@@ -616,16 +622,8 @@ function WorkspaceSidebar() {
   const visibleObjectTypeCollections = React.useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(objectTypeCollections).map(
-          ([objectTypeId, collections]) => [
-            objectTypeId,
-            collections.filter(
-              (collection) =>
-                !hiddenCollectionIds.has(
-                  appSidebarCollectionId(objectTypeId, collection),
-                ),
-            ),
-          ],
+        Object.entries(objectTypeCollections).filter(
+          ([collectionId]) => !hiddenCollectionIds.has(collectionId),
         ),
       ),
     [hiddenCollectionIds, objectTypeCollections],
@@ -634,9 +632,9 @@ function WorkspaceSidebar() {
   function handleCollectionAction(
     action: AppSidebarCollectionAction,
     objectType: AppSidebarObjectType,
-    collection: string,
+    collection: WorkspaceCollectionRecord,
   ) {
-    const collectionId = appSidebarCollectionId(objectType.id, collection);
+    const collectionId = collection.id;
 
     if (action === "open") {
       selectEntity(objectType.id);
@@ -660,7 +658,7 @@ function WorkspaceSidebar() {
               ...current,
               {
                 id: collectionId,
-                label: collection,
+                label: collection.name,
                 icon: ObjectCollectionIcon,
                 tone: "gray",
               },
@@ -684,7 +682,7 @@ function WorkspaceSidebar() {
     }
 
     if (action === "share") {
-      void navigator.clipboard?.writeText(collection);
+      void navigator.clipboard?.writeText(collection.name);
       showMessage(t("documentMenu.shareHint"));
       return;
     }
@@ -699,23 +697,32 @@ function WorkspaceSidebar() {
 
     if (action === "duplicate") {
       setObjectTypeCollections((current) => {
-        const existing = current[objectType.id] ?? [];
+        const existing = Object.values(current).filter(
+          (item) => item.structureId === objectType.id,
+        );
         let suffix = 1;
-        let copy = `${collection} copy`;
-        while (existing.includes(copy)) {
+        let copy = `${collection.name} copy`;
+        while (existing.some((item) => item.name === copy)) {
           suffix += 1;
-          copy = `${collection} copy ${suffix}`;
+          copy = `${collection.name} copy ${suffix}`;
         }
-        return { ...current, [objectType.id]: [...existing, copy] };
+        const id = createCollectionId(
+          objectType.id,
+          copy,
+          new Set(Object.keys(current)),
+        );
+        return {
+          ...current,
+          [id]: { id, name: copy, structureId: objectType.id },
+        };
       });
       showMessage(t("objectTypeOverview.collectionCreated"));
       return;
     }
 
     setObjectTypeCollections((current) => ({
-      ...current,
-      [objectType.id]: (current[objectType.id] ?? []).filter(
-        (item) => item !== collection,
+      ...Object.fromEntries(
+        Object.entries(current).filter(([id]) => id !== collectionId),
       ),
     }));
     setPinnedEntities((current) =>

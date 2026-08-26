@@ -63,6 +63,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
 import {
   createBrowserMediaStorageAdapter,
   createMediaUrlRegistry,
@@ -210,6 +211,8 @@ type ParsedCollectionPinnedId = {
   collection: string;
 };
 
+type WorkspaceCollectionRecords = Record<string, WorkspaceCollectionRecord>;
+
 const WORKSPACE_SIDEBAR_COLLECTION_ID_PREFIX = "collection:";
 
 let browserMediaStorageAdapter: MediaStorageAdapter | null = null;
@@ -255,7 +258,7 @@ function getPinnedEntityFromId(
   workspaceEntities: readonly WorkspaceEntity[],
   objectTypes: readonly AppSidebarObjectType[],
   structures: readonly WorkspaceStructure[],
-  objectTypeCollections: Record<string, string[]>,
+  collectionRecords: WorkspaceCollectionRecords,
 ): AppSidebarPinnedEntity | null {
   const entity = workspaceEntities.find((item) => item.id === id);
   if (entity) {
@@ -282,18 +285,27 @@ function getPinnedEntityFromId(
     };
   }
 
+  const collection = collectionRecords[id];
+  if (collection) {
+    return {
+      id,
+      label: collection.name,
+      icon: ObjectCollectionIcon,
+      tone: "gray",
+    };
+  }
+
   const parsedCollection = parsePinnedCollectionId(id);
   if (!parsedCollection) return null;
-  const collectionType = objectTypes.find(
-    (item) => item.id === parsedCollection.objectTypeId,
+  const legacyCollection = Object.values(collectionRecords).find(
+    (record) =>
+      record.structureId === parsedCollection.objectTypeId &&
+      record.name === parsedCollection.collection,
   );
-  if (!collectionType) return null;
-  const collections =
-    objectTypeCollections[parsedCollection.objectTypeId] ?? [];
-  if (!collections.includes(parsedCollection.collection)) return null;
+  if (!legacyCollection) return null;
   return {
-    id,
-    label: parsedCollection.collection,
+    id: legacyCollection.id,
+    label: legacyCollection.name,
     icon: ObjectCollectionIcon,
     tone: "gray",
   };
@@ -305,7 +317,7 @@ function getPinnedEntityFromIds(
   workspaceEntities: readonly WorkspaceEntity[],
   objectTypes: readonly AppSidebarObjectType[],
   structures: readonly WorkspaceStructure[],
-  objectTypeCollections: Record<string, string[]>,
+  collectionRecords: WorkspaceCollectionRecords,
 ): AppSidebarPinnedEntity[] {
   const items = new Map<string, AppSidebarPinnedEntity>();
   for (const id of ids) {
@@ -316,7 +328,7 @@ function getPinnedEntityFromIds(
       workspaceEntities,
       objectTypes,
       structures,
-      objectTypeCollections,
+      collectionRecords,
     );
     if (entity) items.set(id, entity);
   }
@@ -386,6 +398,18 @@ function arePinnedEntitySetsEquivalent(
   );
 }
 
+function pruneCollectionRecordsByObjectTypes(
+  current: WorkspaceCollectionRecords,
+  objectTypes: readonly AppSidebarObjectType[],
+) {
+  const validObjectTypeIds = new Set(objectTypes.map((item) => item.id));
+  return Object.fromEntries(
+    Object.entries(current).filter(([, collection]) =>
+      validObjectTypeIds.has(collection.structureId),
+    ),
+  );
+}
+
 function pruneSidebarItemsByObjectTypes(
   current: Record<string, string[]>,
   objectTypes: readonly AppSidebarObjectType[],
@@ -401,6 +425,25 @@ function pruneSidebarItemsByObjectTypes(
         ? [[objectTypeId, normalizedItems]]
         : [];
     }),
+  );
+}
+
+function areCollectionRecordMapsEquivalent(
+  current: WorkspaceCollectionRecords,
+  next: WorkspaceCollectionRecords,
+) {
+  const currentEntries = Object.entries(current);
+  const nextEntries = Object.entries(next);
+  return (
+    currentEntries.length === nextEntries.length &&
+    currentEntries.every(([id, record]) => {
+      const nextRecord = next[id];
+      return (
+        nextRecord?.id === record.id &&
+        nextRecord.name === record.name &&
+        nextRecord.structureId === record.structureId
+      );
+    })
   );
 }
 
@@ -453,7 +496,7 @@ type WorkspaceContextValue = {
   workspaceDraft: WorkspaceDraft | null;
   workspaceError: WorkspaceObjectError | null;
   customSections: AppSidebarCustomSection[];
-  objectTypeCollections: Record<string, string[]>;
+  objectTypeCollections: WorkspaceCollectionRecords;
   objectTypeQueries: Record<string, string[]>;
   setSpaces: React.Dispatch<React.SetStateAction<AppSidebarSpace[]>>;
   setSpaceId: React.Dispatch<React.SetStateAction<string>>;
@@ -476,7 +519,7 @@ type WorkspaceContextValue = {
     React.SetStateAction<AppSidebarCustomSection[]>
   >;
   setObjectTypeCollections: React.Dispatch<
-    React.SetStateAction<Record<string, string[]>>
+    React.SetStateAction<WorkspaceCollectionRecords>
   >;
   setObjectTypeQueries: React.Dispatch<
     React.SetStateAction<Record<string, string[]>>
@@ -510,6 +553,11 @@ type WorkspaceContextValue = {
   commitWorkspaceTask: (title: string) => void;
   commitWorkspaceUrl: (url: string) => void;
   setWorkspaceEntityPropertyValue: (
+    id: string,
+    propertyId: string,
+    value: unknown,
+  ) => void;
+  setLinkedEntityPropertyValue: (
     id: string,
     propertyId: string,
     value: unknown,
@@ -571,9 +619,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [customSections, setCustomSections] = React.useState<
     AppSidebarCustomSection[]
   >([]);
-  const [objectTypeCollections, setObjectTypeCollections] = React.useState<
-    Record<string, string[]>
-  >({});
+  const [objectTypeCollections, setObjectTypeCollections] =
+    React.useState<WorkspaceCollectionRecords>({});
   const [objectTypeQueries, setObjectTypeQueries] = React.useState<
     Record<string, string[]>
   >({});
@@ -701,7 +748,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         const parsed = parseWorkspaceSidebarState(raw);
         if (parsed.ok) {
           setCustomSections(parsed.state.customSections);
-          setObjectTypeCollections(parsed.state.objectTypeCollections);
+          setObjectTypeCollections(parsed.state.collectionRecords);
           setObjectTypeQueries(parsed.state.objectTypeQueries);
         } else {
           showMessage(t("lifecycle.storageRecovered"));
@@ -838,8 +885,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     window.localStorage.setItem(
       WORKSPACE_SIDEBAR_STORAGE_KEY,
       serializeWorkspaceSidebarState({
+        collectionRecords: objectTypeCollections,
         customSections,
-        objectTypeCollections,
         objectTypeQueries,
       }),
     );
@@ -885,8 +932,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     if (!sidebarStorageReady) return;
     setObjectTypeCollections((current) => {
-      const next = pruneSidebarItemsByObjectTypes(current, objectTypes);
-      return areStringArrayMapsEquivalent(current, next) ? current : next;
+      const next = pruneCollectionRecordsByObjectTypes(current, objectTypes);
+      return areCollectionRecordMapsEquivalent(current, next) ? current : next;
     });
     setObjectTypeQueries((current) => {
       const next = pruneSidebarItemsByObjectTypes(current, objectTypes);
@@ -1244,6 +1291,18 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [],
   );
 
+  const setLinkedEntityPropertyValue = React.useCallback(
+    (id: string, propertyId: string, value: unknown) => {
+      dispatchWorkspaceObjects({
+        type: "setLinkedEntityPropertyValue",
+        id,
+        propertyId,
+        value,
+      });
+    },
+    [],
+  );
+
   const removeWorkspaceEntityPropertyValue = React.useCallback(
     (id: string, propertyId: string) => {
       dispatchWorkspaceObjects({ type: "removePropertyValue", id, propertyId });
@@ -1408,6 +1467,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       commitWorkspaceTask,
       commitWorkspaceUrl,
       setWorkspaceEntityPropertyValue,
+      setLinkedEntityPropertyValue,
       removeWorkspaceEntityPropertyValue,
       updateWorkspaceEntity,
       changeWorkspaceEntityType,
@@ -1454,6 +1514,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       commitWorkspaceTask,
       commitWorkspaceUrl,
       setWorkspaceEntityPropertyValue,
+      setLinkedEntityPropertyValue,
       removeWorkspaceEntityPropertyValue,
       updateWorkspaceEntity,
       changeWorkspaceEntityType,

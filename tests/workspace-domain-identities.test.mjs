@@ -6,6 +6,7 @@ import {
   createTagId,
   migrateLegacyCollectionsByStructure,
   migrateLegacyTagNames,
+  selectWorkspaceCollectionRecordsForStructure,
   selectWorkspaceReverseProjections,
 } from "../src/lib/workspace-domain-identities.ts";
 
@@ -53,6 +54,26 @@ test("legacy names migrate to deterministic collision-safe records", () => {
       "collection:book:reading-1kf8ao",
       "collection:person:reading",
     ],
+  );
+});
+
+test("collection records are selected by their owning structure without recreating ids", () => {
+  const collections = {
+    "collection:book:reading": {
+      id: "collection:book:reading",
+      name: "Reading",
+      structureId: "book",
+    },
+    "collection:page:reading": {
+      id: "collection:page:reading",
+      name: "Reading",
+      structureId: "page",
+    },
+  };
+
+  assert.deepEqual(
+    selectWorkspaceCollectionRecordsForStructure(collections, "page"),
+    [collections["collection:page:reading"]],
   );
 });
 
