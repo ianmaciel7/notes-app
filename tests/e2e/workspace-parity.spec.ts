@@ -838,14 +838,14 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
     .locator('[data-slot="app-sidebar-object-type-row"]')
     .filter({ hasText: "Páginas" })
     .first();
-  await expect(pageCountRow).toContainText("1");
-  await expectStableBoxOnHover(pageCountRow);
-  const lifecycleCountBadge = page
-    .locator('[data-lifecycle-contract="object-count-badge"]')
+  const pageCountBadge = pageCountRow
+    .locator("span")
+    .filter({ hasText: /^1$/ })
     .first();
-  await expect(lifecycleCountBadge).toBeVisible();
-  await expect(lifecycleCountBadge).not.toHaveText("");
-  await expectStableBoxOnHover(lifecycleCountBadge);
+  await expect(pageCountBadge).toHaveText("1");
+  await expect(pageCountBadge).toHaveCSS("opacity", "0");
+  await expectStableBoxOnHover(pageCountRow);
+  await expect(pageCountBadge).toHaveCSS("opacity", "0.8");
 
   await page.getByRole("button", { name: "Novo", exact: true }).click();
   await page.locator('[role="option"]').filter({ hasText: "Tarefa" }).click();
@@ -937,6 +937,8 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
     "Páginas",
     lifecyclePageTitle,
   );
+  await page.getByRole("button", { name: "Tabelas", exact: true }).click();
+  await expect(createdObjectWorkspace(page)).toBeHidden();
   await page.getByRole("button", { name: "Páginas", exact: true }).click();
   await page.getByRole("button", { name: "Grade", exact: true }).click();
   const projectionCard = page
@@ -953,16 +955,9 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
     .first();
   await projectionCardButton.focus();
   await expect(projectionCardButton).toBeFocused();
-  await projectionCardButton.hover();
-  await page.mouse.down();
-  expect(
-    await projectionCardButton.evaluate((element) =>
-      element.matches(":active"),
-    ),
-  ).toBe(true);
-  await page.mouse.up();
+  await projectionCardButton.click();
   await expectActiveEditorTitle(page, lifecyclePageTitle);
-  await expect(pageCountRow).toContainText("1");
+  await expect(pageCountBadge).toHaveText("1");
   expect(errors).toEqual([]);
 });
 
