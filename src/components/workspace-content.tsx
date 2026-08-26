@@ -2293,7 +2293,7 @@ function ObjectTypeWorkspace({
   });
   const [editingItem, setEditingItem] = React.useState<{
     kind: "collection" | "query";
-    index: number;
+    id: string;
   } | null>(null);
   const collections = selectWorkspaceCollectionRecordsForStructure(
     collectionsByType,
@@ -2448,11 +2448,11 @@ function ObjectTypeWorkspace({
 
   function renameNamedItem(
     kind: "collection" | "query",
-    index: number,
+    id: string,
     value: string,
   ) {
     if (kind === "collection") {
-      const collection = collections[index];
+      const collection = collectionsByType[id];
       const nextName = value.trim();
       if (!collection || !nextName) return;
       setCollectionsByType((current) => ({
@@ -2461,6 +2461,7 @@ function ObjectTypeWorkspace({
       }));
       return;
     }
+    const index = Number(id);
     setQueriesByType((current) => ({
       ...current,
       [objectType.id]: (current[objectType.id] ?? []).map((item, itemIndex) =>
@@ -3266,13 +3267,13 @@ function ObjectTypeOverview({
   queries: string[];
   visibleSections: Record<OverviewSection, boolean>;
   collapsedSections: Record<OverviewSection, boolean>;
-  editingItem: { kind: "collection" | "query"; index: number } | null;
+  editingItem: { kind: "collection" | "query"; id: string } | null;
   onAddCollection: () => void;
   onAddQuery: () => void;
   onOpenEntity: (entityId: string) => void;
   onRenameItem: (
     kind: "collection" | "query",
-    index: number,
+    id: string,
     value: string,
   ) => void;
   onToggleSection: (section: OverviewSection) => void;
@@ -3343,22 +3344,21 @@ function ObjectTypeOverview({
             <div className="flex min-h-[134px] items-center justify-center py-4">
               {collections.length > 0 ? (
                 <ObjectTypeNamedItems
-                  items={collections.map((collection) => collection.name)}
-                  itemCounts={collections.map((collection) => {
-                    return entities.filter(
+                  items={collections.map((collection) => ({
+                    count: entities.filter(
                       (entity) =>
                         "collections" in entity &&
                         entity.collections.includes(collection.id),
-                    ).length;
-                  })}
+                    ).length,
+                    id: collection.id,
+                    label: collection.name,
+                  }))}
                   kind="collection"
                   editingIndex={
-                    editingItem?.kind === "collection"
-                      ? editingItem.index
-                      : null
+                    editingItem?.kind === "collection" ? editingItem.id : null
                   }
-                  onRename={(index, value) =>
-                    onRenameItem("collection", index, value)
+                  onRename={(id, value) =>
+                    onRenameItem("collection", id, value)
                   }
                 />
               ) : (
@@ -3390,15 +3390,16 @@ function ObjectTypeOverview({
             <div className="flex min-h-[134px] items-center justify-center py-4">
               {queries.length > 0 ? (
                 <ObjectTypeNamedItems
-                  items={queries}
-                  itemCounts={queries.map(() => 0)}
+                  items={queries.map((query, index) => ({
+                    count: 0,
+                    id: String(index),
+                    label: query,
+                  }))}
                   kind="query"
                   editingIndex={
-                    editingItem?.kind === "query" ? editingItem.index : null
+                    editingItem?.kind === "query" ? editingItem.id : null
                   }
-                  onRename={(index, value) =>
-                    onRenameItem("query", index, value)
-                  }
+                  onRename={(id, value) => onRenameItem("query", id, value)}
                 />
               ) : (
                 <ObjectTypeSectionEmpty
@@ -3606,44 +3607,31 @@ function ObjectTypeSectionHeader({
 
 function ObjectTypeNamedItems({
   items,
-  itemCounts,
   kind,
   editingIndex,
   onRename,
 }: {
-  items: string[];
-  itemCounts: number[];
+  items: readonly { count: number; id: string; label: string }[];
   kind: "collection" | "query";
-  editingIndex: number | null;
-  onRename: (index: number, value: string) => void;
+  editingIndex: string | null;
+  onRename: (id: string, value: string) => void;
 }) {
   const t = useTranslations("workspace.objectTypeOverview");
-  const inputRefs = React.useRef(new Map<number, HTMLInputElement>());
+  const inputRefs = React.useRef(new Map<string, HTMLInputElement>());
   React.useEffect(() => {
     if (editingIndex === null) return;
     inputRefs.current.get(editingIndex)?.focus();
     inputRefs.current.get(editingIndex)?.select();
   }, [editingIndex]);
-  const keyedItems = React.useMemo(() => {
-    const seen = new Map<string, number>();
-    return items.map((item, index) => {
-      const occurrence = (seen.get(item) ?? 0) + 1;
-      seen.set(item, occurrence);
-      return {
-        item,
-        index,
-        key: `${kind}-${item}-${occurrence}`,
-      };
-    });
-  }, [items, kind]);
 
   return (
     <div className="grid w-full grid-cols-1 gap-1 sm:grid-cols-2">
-      {keyedItems.map(({ item, index, key }) => (
+      {items.map((item) => (
         <div
-          key={key}
+          key={`${kind}-${item.id}`}
           data-slot="object-type-named-card"
           data-kind={kind}
+          data-item-id={item.id}
           className="group/object-type-named-card flex min-h-[68px] cursor-text flex-col justify-center rounded-xl border border-[#e4e0dc] bg-card px-3 py-2 text-left shadow-[0_1px_2px_rgb(0_0_0/0.02)] transition-colors duration-150 hover:bg-[#faf9f8] focus-within:border-[#cfc8c1] focus-within:bg-[#faf9f8] focus-within:ring-2 focus-within:ring-ring/20"
         >
           <span className="flex min-w-0 items-center gap-2">
@@ -3654,17 +3642,17 @@ function ObjectTypeNamedItems({
             )}
             <BufferedTextInput
               inputRef={(node) => {
-                if (node) inputRefs.current.set(index, node);
-                else inputRefs.current.delete(index);
+                if (node) inputRefs.current.set(item.id, node);
+                else inputRefs.current.delete(item.id);
               }}
-              aria-label={item}
-              value={item}
-              onCommit={(value) => onRename(index, value)}
+              aria-label={item.label}
+              value={item.label}
+              onCommit={(value) => onRename(item.id, value)}
               className="min-w-0 flex-1 truncate bg-transparent text-[15px] font-medium leading-5 text-[#34312f] outline-none"
             />
           </span>
           <span className="mt-1 text-xs leading-4 text-[#77716b]">
-            {t("entryCount", { count: itemCounts[index] ?? 0 })}
+            {t("entryCount", { count: item.count })}
           </span>
         </div>
       ))}

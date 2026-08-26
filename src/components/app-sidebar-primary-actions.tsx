@@ -602,6 +602,7 @@ function WorkspaceSidebar() {
     availablePinnedEntities,
     objectTypes,
     objectTypeCollections,
+    createdEntities,
     customSections,
     setPinnedEntities,
     createWorkspaceStructureFromPreset,
@@ -717,6 +718,16 @@ function WorkspaceSidebar() {
         };
       });
       showMessage(t("objectTypeOverview.collectionCreated"));
+      return;
+    }
+
+    if (
+      createdEntities.some(
+        (entity) =>
+          "collections" in entity && entity.collections.includes(collectionId),
+      )
+    ) {
+      showMessage(t("lifecycle.errors.referenced-object"));
       return;
     }
 

@@ -39,7 +39,11 @@ import {
 import { useWorkspace } from "@/components/workspace-controller";
 import { useWorkspaceViews } from "@/components/workspace-views-controller";
 import { cn } from "@/lib/utils";
-import { createCollectionId } from "@/lib/workspace-domain-identities";
+import {
+  createCollectionId,
+  selectWorkspaceCollectionRecordsForStructure,
+  type WorkspaceCollectionRecord,
+} from "@/lib/workspace-domain-identities";
 import type { WorkspaceStructure } from "@/lib/workspace-object-types";
 import {
   type DataViewKind,
@@ -426,6 +430,7 @@ function ObjectTypeFilterRow({
 }
 
 type ObjectTypeContentProps = {
+  readonly collections: readonly WorkspaceCollectionRecord[];
   readonly createdEntities: readonly WorkspaceEntity[];
   readonly filtered: readonly WorkspaceEntity[];
   readonly labels: ObjectViewLabels;
@@ -433,12 +438,16 @@ type ObjectTypeContentProps = {
   readonly objectTypeLabels: Readonly<Record<string, string>>;
   readonly onCreateObject: () => void;
   readonly onOpen: (id: string) => void;
+  readonly onRenameCollection: (id: string, value: string) => void;
+  readonly onRenameQuery: (index: number, value: string) => void;
   readonly propertyLabels: Readonly<Record<string, string>>;
+  readonly queries: readonly string[];
   readonly structures: readonly WorkspaceStructure[];
   readonly view: WorkspaceDataView;
 };
 
 function ObjectTypeContent({
+  collections,
   createdEntities,
   filtered,
   labels,
@@ -446,18 +455,25 @@ function ObjectTypeContent({
   objectTypeLabels,
   onCreateObject,
   onOpen,
+  onRenameCollection,
+  onRenameQuery,
   propertyLabels,
+  queries,
   structures,
   view,
 }: ObjectTypeContentProps) {
   if (mode === "overview") {
     return (
       <ObjectTypeOverviewContent
+        collections={collections}
         filtered={filtered}
         labels={labels}
         objectTypeLabels={objectTypeLabels}
         onOpen={onOpen}
+        onRenameCollection={onRenameCollection}
+        onRenameQuery={onRenameQuery}
         propertyLabels={propertyLabels}
+        queries={queries}
         structures={structures}
         view={view}
       />
@@ -480,11 +496,15 @@ function ObjectTypeContent({
 }
 
 function ObjectTypeOverviewContent({
+  collections,
   filtered,
   labels,
   objectTypeLabels,
   onOpen,
+  onRenameCollection,
+  onRenameQuery,
   propertyLabels,
+  queries,
   structures,
   view,
 }: Omit<
@@ -515,7 +535,120 @@ function ObjectTypeOverviewContent({
           />
         )}
       </section>
+      <section>
+        <h2 className={cn(workspaceSectionTitleClass, "mb-3")}>
+          {t("objectTypeOverview.collections")}
+        </h2>
+        {collections.length ? (
+          <ObjectTypeNamedItems
+            items={collections.map((collection) => ({
+              count: filtered.filter(
+                (entity) =>
+                  "collections" in entity &&
+                  entity.collections.includes(collection.id),
+              ).length,
+              id: collection.id,
+              label: collection.name,
+            }))}
+            kind="collection"
+            onRename={onRenameCollection}
+          />
+        ) : (
+          <WorkspaceEmptyState
+            compact
+            title={t("objectTypeOverview.noCollectionsDescription")}
+          />
+        )}
+      </section>
+      <section>
+        <h2 className={cn(workspaceSectionTitleClass, "mb-3")}>
+          {t("objectTypeOverview.queries")}
+        </h2>
+        {queries.length ? (
+          <ObjectTypeNamedItems
+            items={queries.map((query, index) => ({
+              count: 0,
+              id: String(index),
+              label: query,
+            }))}
+            kind="query"
+            onRename={(id, value) => onRenameQuery(Number(id), value)}
+          />
+        ) : (
+          <WorkspaceEmptyState
+            compact
+            title={t("objectTypeOverview.noQueriesDescription")}
+          />
+        )}
+      </section>
     </div>
+  );
+}
+
+function ObjectTypeNamedItems({
+  items,
+  kind,
+  onRename,
+}: {
+  readonly items: readonly { count: number; id: string; label: string }[];
+  readonly kind: ObjectTypeNamedItemKind;
+  readonly onRename: (id: string, value: string) => void;
+}) {
+  const t = useTranslations("workspace");
+  return (
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      {items.map((item) => (
+        <div
+          key={`${kind}-${item.id}`}
+          data-slot="object-type-named-card"
+          data-kind={kind}
+          data-item-id={item.id}
+          className="flex min-h-16 flex-col justify-center rounded-lg border bg-card px-3 py-2"
+        >
+          <span className="flex min-w-0 items-center gap-2">
+            {kind === "collection" ? (
+              <ObjectCollectionIcon className="size-4 shrink-0 text-muted-foreground" />
+            ) : (
+              <ObjectQueryIcon className="size-4 shrink-0 text-muted-foreground" />
+            )}
+            <ObjectTypeNamedItemInput
+              item={item}
+              onRename={(value) => onRename(item.id, value)}
+            />
+          </span>
+          <span className="mt-1 text-xs text-muted-foreground">
+            {t("objectTypeOverview.entryCount", { count: item.count })}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ObjectTypeNamedItemInput({
+  item,
+  onRename,
+}: {
+  readonly item: { id: string; label: string };
+  readonly onRename: (value: string) => void;
+}) {
+  const [value, setValue] = React.useState(item.label);
+  React.useEffect(() => {
+    setValue(item.label);
+  }, [item.label]);
+
+  return (
+    <Input
+      aria-label={item.label}
+      value={value}
+      className="h-7 min-w-0 flex-1 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
+      onBlur={() => onRename(value)}
+      onChange={(event) => setValue(event.currentTarget.value)}
+      onKeyDown={(event) => {
+        if (event.key !== "Enter") return;
+        event.currentTarget.blur();
+      }}
+    />
   );
 }
 
@@ -529,7 +662,10 @@ function ObjectTypeAllContent({
   propertyLabels,
   structures,
   view,
-}: Omit<ObjectTypeContentProps, "mode">) {
+}: Omit<
+  ObjectTypeContentProps,
+  "collections" | "mode" | "onRenameCollection" | "onRenameQuery" | "queries"
+>) {
   return (
     <DataViewRenderer
       entities={createdEntities}
@@ -599,6 +735,11 @@ function WorkspaceObjectTypeView({
   const [collapsed, setCollapsed] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [filterOpen, setFilterOpen] = React.useState(false);
+  const collections = selectWorkspaceCollectionRecordsForStructure(
+    objectTypeCollections,
+    objectType.id,
+  );
+  const queries = objectTypeQueries[objectType.id] ?? [];
   const filtered = executeQueryDefinition(createdEntities, view.query);
   const labels = React.useMemo<ObjectViewLabels>(
     () => ({
@@ -674,7 +815,7 @@ function WorkspaceObjectTypeView({
 
   function addQuery() {
     const label = t("objectTypeOverview.untitled");
-    const index = objectTypeQueries[objectType.id]?.length ?? 0;
+    const index = queries.length;
     setObjectTypeQueries((current) => ({
       ...current,
       [objectType.id]: [...(current[objectType.id] ?? []), label],
@@ -696,6 +837,26 @@ function WorkspaceObjectTypeView({
           : [{ direction: "ascending", field: "title" }],
       },
     });
+  }
+
+  function renameCollection(id: string, value: string) {
+    const name = value.trim();
+    if (!name) return;
+    setObjectTypeCollections((current) => {
+      const collection = current[id];
+      return collection
+        ? { ...current, [id]: { ...collection, name } }
+        : current;
+    });
+  }
+
+  function renameQuery(index: number, value: string) {
+    setObjectTypeQueries((current) => ({
+      ...current,
+      [objectType.id]: (current[objectType.id] ?? []).map((item, itemIndex) =>
+        itemIndex === index ? value : item,
+      ),
+    }));
   }
 
   function setSearch(value: string) {
@@ -745,6 +906,7 @@ function WorkspaceObjectTypeView({
 
       <div className={workspaceOverviewContentClass}>
         <ObjectTypeContent
+          collections={collections}
           createdEntities={createdEntities}
           filtered={filtered}
           labels={labels}
@@ -752,7 +914,10 @@ function WorkspaceObjectTypeView({
           objectTypeLabels={objectTypeLabels}
           onCreateObject={createObject}
           onOpen={selectEntity}
+          onRenameCollection={renameCollection}
+          onRenameQuery={renameQuery}
           propertyLabels={propertyLabels}
+          queries={queries}
           structures={structures}
           view={view}
         />

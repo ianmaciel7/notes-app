@@ -1005,6 +1005,45 @@ function nextInverseRelationIds(
     : [sourceId];
 }
 
+function unlinkDisplacedSingleInverseOwners(
+  state: WorkspaceObjectState,
+  nextById: Map<string, WorkspaceEntity>,
+  targetId: string,
+  target: WorkspaceEntity,
+  update: LinkedEntitySourceUpdate,
+  action: Extract<
+    WorkspaceObjectAction,
+    { type: "setLinkedEntityPropertyValue" }
+  >,
+): boolean {
+  for (const displacedSourceId of readEntityRelationIds(
+    target,
+    update.inversePropertyId ?? "",
+  )) {
+    if (displacedSourceId === update.source.id) continue;
+    const displacedSource = nextById.get(displacedSourceId);
+    const displacedSourceStructure = displacedSource
+      ? selectStructureById(state.structures, displacedSource.objectTypeId)
+      : undefined;
+    if (!displacedSource || !displacedSourceStructure) return false;
+    const displacedUpdate = updateEntityRelationIds(
+      displacedSource,
+      displacedSourceStructure,
+      action.propertyId,
+      readEntityRelationIds(displacedSource, action.propertyId).filter(
+        (id) => id !== targetId,
+      ),
+      update.context,
+    );
+    if (!displacedUpdate.ok) return false;
+    nextById.set(
+      displacedSourceId,
+      touchWorkspaceEntity(displacedUpdate.value),
+    );
+  }
+  return true;
+}
+
 function updateInverseRelationTarget(
   state: WorkspaceObjectState,
   nextById: Map<string, WorkspaceEntity>,
@@ -1024,6 +1063,22 @@ function updateInverseRelationTarget(
     update.inversePropertyId ?? "",
   );
   if (!target || !targetStructure || !inverseDefinition) return false;
+  const shouldIncludeSource = readEntityRelationIds(
+    update.sourceUpdate,
+    action.propertyId,
+  ).includes(targetId);
+  const canClaimSingleInverse =
+    !shouldIncludeSource ||
+    inverseDefinition.multiple ||
+    unlinkDisplacedSingleInverseOwners(
+      state,
+      nextById,
+      targetId,
+      target,
+      update,
+      action,
+    );
+  if (!canClaimSingleInverse) return false;
   const targetUpdate = updateEntityRelationIds(
     target,
     targetStructure,
@@ -1032,9 +1087,7 @@ function updateInverseRelationTarget(
       readEntityRelationIds(target, update.inversePropertyId ?? ""),
       inverseDefinition,
       update.source.id,
-      readEntityRelationIds(update.sourceUpdate, action.propertyId).includes(
-        targetId,
-      ),
+      shouldIncludeSource,
     ),
     update.context,
   );

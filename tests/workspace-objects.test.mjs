@@ -395,6 +395,82 @@ test("linked entity property writes update inverse values once atomically", () =
   );
 });
 
+test("linked entity reassignment unlinks displaced single inverse owners", () => {
+  const members = {
+    id: "members",
+    inversePropertyDefinitionId: "membership",
+    multiple: true,
+    name: "Members",
+    ownership: "normal",
+    targetStructureIds: ["person-custom"],
+    valueType: "entity",
+    writable: true,
+  };
+  const membership = {
+    id: "membership",
+    inversePropertyDefinitionId: "members",
+    multiple: false,
+    name: "Membership",
+    ownership: "normal",
+    targetStructureIds: ["club-custom"],
+    valueType: "entity",
+    writable: true,
+  };
+  let registry = createCustomStructure(
+    createInitialWorkspaceObjectState().structures,
+    {
+      iconName: "project",
+      lifecycleKind: "document",
+      pluralName: "Clubs",
+      propertyDefinitions: [members],
+      singularName: "Club",
+      tone: "blue",
+    },
+    () => "club-custom",
+  ).value;
+  registry = createCustomStructure(
+    registry,
+    {
+      iconName: "person",
+      lifecycleKind: "document",
+      pluralName: "People",
+      propertyDefinitions: [membership],
+      singularName: "Person",
+      tone: "orange",
+    },
+    () => "person-custom",
+  ).value;
+
+  let state = { ...createInitialWorkspaceObjectState(), structures: registry };
+  state = reduce(
+    state,
+    { type: "beginCreate", objectTypeId: "club-custom" },
+    { type: "beginCreate", objectTypeId: "club-custom" },
+    { type: "beginCreate", objectTypeId: "person-custom" },
+    {
+      id: "created-club-custom-1",
+      propertyId: "members",
+      type: "setLinkedEntityPropertyValue",
+      value: ["created-person-custom-3"],
+    },
+    {
+      id: "created-club-custom-2",
+      propertyId: "members",
+      type: "setLinkedEntityPropertyValue",
+      value: ["created-person-custom-3"],
+    },
+  );
+
+  const [firstClub, secondClub, person] = state.entities;
+  assert.deepEqual(firstClub.propertyValues.members.entity, []);
+  assert.deepEqual(secondClub.propertyValues.members.entity, [
+    { id: "created-person-custom-3" },
+  ]);
+  assert.deepEqual(person.propertyValues.membership.entity, [
+    { id: "created-club-custom-2" },
+  ]);
+});
+
 test("entity deletion is guarded while reverse references exist", () => {
   const state = reduce(
     createInitialWorkspaceObjectState(),
