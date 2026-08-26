@@ -7,6 +7,7 @@ import * as React from "react";
 import { AppHeaderCaretDownIcon } from "@/components/app-header-icons";
 import { AppSidebarDotsIcon } from "@/components/app-sidebar-icons";
 import { BlockEditor } from "@/components/block-editor";
+import { ObjectConversionPlanner } from "@/components/object-conversion-planner";
 import {
   ObjectCollectionIcon,
   ObjectIconBadge,
@@ -25,6 +26,13 @@ import {
   CompoundChipDisclosure,
   CompoundChipPrimary,
 } from "@/components/ui/compound-chip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -61,7 +69,11 @@ import {
   selectPropertyRelationGraphEdges,
 } from "@/lib/workspace-object-links";
 import type { WorkspaceStructure } from "@/lib/workspace-object-types";
-import { readWorkspaceEntityProperty } from "@/lib/workspace-object-views";
+import {
+  createObjectConversionPlan,
+  type ObjectConversionPlan,
+  readWorkspaceEntityProperty,
+} from "@/lib/workspace-object-views";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
 
 type DocumentWorkspaceEntity =
@@ -177,7 +189,8 @@ function ObjectPageHeader({
   readonly structure: WorkspaceStructure;
 }) {
   const t = useTranslations("workspace");
-  const { objectTypes, selectEntity } = useWorkspace();
+  const { changeWorkspaceEntityType, objectTypes, selectEntity, structures } =
+    useWorkspace();
   const definition =
     objectTypeDefinitionById[structure.iconName] ??
     objectTypeDefinitionById.page;
@@ -199,7 +212,13 @@ function ObjectPageHeader({
             <Icon className="mr-1 size-3.5 shrink-0" />
             <span className="truncate">{objectTypeLabel}</span>
           </CompoundChipPrimary>
-          <ObjectPageTypePickerTrigger objectTypes={objectTypes} />
+          <ObjectPageTypePickerTrigger
+            changeWorkspaceEntityType={changeWorkspaceEntityType}
+            entity={entity}
+            objectTypes={objectTypes}
+            sourceStructure={structure}
+            structures={structures}
+          />
         </CompoundChip>
         {collections.map((collection) => (
           <span key={collection} className={collectionChipClass}>
@@ -234,47 +253,129 @@ function ObjectPageHeader({
 }
 
 function ObjectPageTypePickerTrigger({
+  changeWorkspaceEntityType,
+  entity,
   objectTypes,
+  sourceStructure,
+  structures,
 }: {
+  readonly changeWorkspaceEntityType: (
+    id: string,
+    objectTypeId: "tag" | "task",
+  ) => void;
+  readonly entity: SupportedWorkspaceEntity;
   readonly objectTypes: ReturnType<typeof useWorkspace>["objectTypes"];
+  readonly sourceStructure: WorkspaceStructure;
+  readonly structures: readonly WorkspaceStructure[];
 }) {
   const t = useTranslations("workspace");
   const [query, setQuery] = React.useState("");
+  const [pendingConversion, setPendingConversion] = React.useState<{
+    readonly initialPlan: ObjectConversionPlan;
+    readonly target: WorkspaceStructure;
+    readonly targetObjectTypeId: "tag" | "task";
+  } | null>(null);
   const visibleChoices = objectTypes.filter((item) =>
     (item.singularLabel ?? item.label)
       .toLocaleLowerCase()
       .includes(query.trim().toLocaleLowerCase()),
   );
+  function beginTypeChange(objectTypeId: string) {
+    if (objectTypeId !== "tag" && objectTypeId !== "task") return;
+    if (objectTypeId === entity.objectTypeId) return;
+    const target = structures.find(
+      (structure) => structure.id === objectTypeId,
+    );
+    if (!target) return;
+    setPendingConversion({
+      initialPlan: createObjectConversionPlan(
+        sourceStructure,
+        target,
+        entity.propertyValues,
+      ),
+      target,
+      targetObjectTypeId: objectTypeId,
+    });
+  }
   return (
-    <DropdownMenu onOpenChange={(open) => !open && setQuery("")}>
-      <DropdownMenuTrigger
-        render={
-          <CompoundChipDisclosure aria-label={t("lifecycle.changeObjectType")}>
-            <AppHeaderCaretDownIcon className="size-3.5" />
-          </CompoundChipDisclosure>
-        }
-      />
-      <DropdownMenuContent
-        side="right"
-        align="start"
-        sideOffset={6}
-        className="w-[253px] min-w-[253px] p-1.5"
-      >
-        <input
-          aria-label={t("actions.search")}
-          placeholder={t("actions.search")}
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          className="mb-1 h-8 w-full rounded-lg bg-muted px-2 text-sm outline-none placeholder:text-muted-foreground"
+    <>
+      <DropdownMenu onOpenChange={(open) => !open && setQuery("")}>
+        <DropdownMenuTrigger
+          render={
+            <CompoundChipDisclosure
+              aria-label={t("lifecycle.changeObjectType")}
+            >
+              <AppHeaderCaretDownIcon className="size-3.5" />
+            </CompoundChipDisclosure>
+          }
         />
-        {visibleChoices.map((item) => (
-          <DropdownMenuItem key={item.id} className="h-8 gap-2 px-1.5">
-            <ObjectIconBadge icon={item.icon} tone={item.tone} variant="menu" />
-            <span>{item.singularLabel ?? item.label}</span>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <DropdownMenuContent
+          side="right"
+          align="start"
+          sideOffset={6}
+          className="w-[253px] min-w-[253px] p-1.5"
+        >
+          <input
+            aria-label={t("actions.search")}
+            placeholder={t("actions.search")}
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            className="mb-1 h-8 w-full rounded-lg bg-muted px-2 text-sm outline-none placeholder:text-muted-foreground"
+          />
+          {visibleChoices.map((item) => (
+            <DropdownMenuItem
+              key={item.id}
+              className="h-8 gap-2 px-1.5"
+              onClick={() => beginTypeChange(item.id)}
+            >
+              <ObjectIconBadge
+                icon={item.icon}
+                tone={item.tone}
+                variant="menu"
+              />
+              <span>{item.singularLabel ?? item.label}</span>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <Dialog
+        open={Boolean(pendingConversion)}
+        onOpenChange={(open) => !open && setPendingConversion(null)}
+      >
+        {pendingConversion ? (
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>{t("documentMenu.changeType")}</DialogTitle>
+              <DialogDescription>
+                Property conversion requires explicit resolution before the
+                object type changes.
+              </DialogDescription>
+            </DialogHeader>
+            <ObjectConversionPlanner
+              initialPlan={pendingConversion.initialPlan}
+              labels={{
+                cancel: t("lifecycle.cancel"),
+                commit: t("documentMenu.changeType"),
+                discardValue: "Discard value",
+                incompatible: "Incompatible",
+                mapTo: "Map to",
+                requiresConfirmation: "Requires confirmation",
+                unresolved: "Unresolved",
+              }}
+              target={pendingConversion.target}
+              onCancel={() => setPendingConversion(null)}
+              onCommit={() => {
+                changeWorkspaceEntityType(
+                  entity.id,
+                  pendingConversion.targetObjectTypeId,
+                );
+                setPendingConversion(null);
+              }}
+            />
+          </DialogContent>
+        ) : null}
+      </Dialog>
+    </>
   );
 }
 

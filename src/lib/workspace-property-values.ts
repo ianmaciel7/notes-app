@@ -419,10 +419,19 @@ export function removeWorkspaceEntityPropertyValue(
 export function createWorkspaceEntityPropertyValues(
   entity: WorkspaceEntity,
 ): WorkspacePropertyValueMap {
+  const existingLastUpdatedAt = entity.propertyValues?.lastUpdatedAt;
+  const lastUpdatedAt =
+    existingLastUpdatedAt?.type === "lastUpdatedAt"
+      ? existingLastUpdatedAt.lastUpdatedAt.value
+      : entity.createdAt;
   return Object.fromEntries([
     [
       "createdAt",
       { createdAt: { value: entity.createdAt }, type: "createdAt" },
+    ],
+    [
+      "lastUpdatedAt",
+      { lastUpdatedAt: { value: lastUpdatedAt }, type: "lastUpdatedAt" },
     ],
     ["title", { title: { value: entity.title }, type: "title" }],
     ...entityPropertyValueProjectors.flatMap((projector) => {

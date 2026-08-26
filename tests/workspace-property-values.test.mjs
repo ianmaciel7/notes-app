@@ -168,6 +168,10 @@ test("pure property commands set, remove, and protect system values atomically",
     { type: "beginCreate", objectTypeId: "research" },
   );
   const entity = state.entities[0];
+  assert.deepEqual(entity.propertyValues.lastUpdatedAt, {
+    lastUpdatedAt: { value: entity.createdAt },
+    type: "lastUpdatedAt",
+  });
   const edited = expectSuccess(
     setWorkspaceEntityPropertyValue(entity, structure, "summary", "Evidence"),
   );
@@ -195,6 +199,10 @@ test("pure property commands set, remove, and protect system values atomically",
     text: { value: "Stored" },
     type: "text",
   });
+  assert.notEqual(
+    state.entities[0].propertyValues.lastUpdatedAt.lastUpdatedAt.value,
+    entity.createdAt,
+  );
   state = workspaceObjectReducer(state, {
     id: entity.id,
     propertyId: "summary",

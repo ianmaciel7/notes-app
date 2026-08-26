@@ -1065,13 +1065,13 @@ function applyEntityPatch(
     kind: entity.kind,
     objectTypeId: entity.objectTypeId,
   } as WorkspaceEntity;
-  return {
+  return touchWorkspaceEntity({
     ...updated,
     propertyValues: {
       ...updated.propertyValues,
       ...createWorkspaceEntityPropertyValues(updated),
     },
-  };
+  });
 }
 
 function reduceUpdateEntity(
@@ -1126,8 +1126,42 @@ function reduceEntityPropertyValue(
           action.value,
           { targetStructureIdByEntityId: context },
         )
-      : removeWorkspaceEntityPropertyValue(entity, structure, action.propertyId);
-  return result.ok ? result.value : entity;
+      : removeWorkspaceEntityPropertyValue(
+          entity,
+          structure,
+          action.propertyId,
+        );
+  return result.ok ? touchWorkspaceEntity(result.value) : entity;
+}
+
+function readLastUpdatedAt(entity: WorkspaceEntity): string {
+  const value = entity.propertyValues.lastUpdatedAt;
+  return value?.type === "lastUpdatedAt"
+    ? value.lastUpdatedAt.value
+    : entity.createdAt;
+}
+
+function nextLastUpdatedAt(entity: WorkspaceEntity): string {
+  const currentTime = Date.parse(readLastUpdatedAt(entity));
+  const nowTime = Date.now();
+  const nextTime =
+    Number.isFinite(currentTime) && nowTime <= currentTime
+      ? currentTime + 1
+      : nowTime;
+  return new Date(nextTime).toISOString();
+}
+
+function touchWorkspaceEntity(entity: WorkspaceEntity): WorkspaceEntity {
+  return {
+    ...entity,
+    propertyValues: {
+      ...entity.propertyValues,
+      lastUpdatedAt: {
+        lastUpdatedAt: { value: nextLastUpdatedAt(entity) },
+        type: "lastUpdatedAt",
+      },
+    },
+  };
 }
 
 type WorkspaceObjectActionHandlers = {

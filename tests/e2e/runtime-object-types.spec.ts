@@ -351,6 +351,53 @@ test("invalid typed values recover atomically without overwriting the source sna
   expect(errors).toEqual([]);
 });
 
+test("object type conversion cancellation preserves the original typed entity", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  const errors = await openCleanWorkspace(page);
+  await createCustomStructure(page, "Plano conversível", "Planos conversíveis");
+  await createObject(page, "Plano conversível", "Objeto preservado");
+  const seeded = await seedTypedProperties(
+    page,
+    "Plano conversível",
+    "Objeto preservado",
+  );
+
+  const beforeConversion = await page.evaluate(
+    ({ key, entityId }) => {
+      const snapshot = JSON.parse(window.localStorage.getItem(key) ?? "null");
+      return snapshot.entities.find(
+        (item: { id: string }) => item.id === entityId,
+      );
+    },
+    { key: storageKey, entityId: seeded.entityId },
+  );
+
+  await page
+    .getByRole("button", { name: "Alterar tipo de objeto", exact: true })
+    .click();
+  await page.getByLabel("Buscar", { exact: true }).fill("Tarefa");
+  await page.getByRole("menuitem", { name: "Tarefa", exact: true }).click();
+  const planner = page.locator('[data-slot="object-conversion-planner"]');
+  await expect(planner).toBeVisible();
+  await expect(planner.getByText("createdAt", { exact: true })).toBeVisible();
+  await planner.getByRole("button", { name: "Cancelar", exact: true }).click();
+  await expect(planner).toBeHidden();
+
+  const afterCancel = await page.evaluate(
+    ({ key, entityId }) => {
+      const snapshot = JSON.parse(window.localStorage.getItem(key) ?? "null");
+      return snapshot.entities.find(
+        (item: { id: string }) => item.id === entityId,
+      );
+    },
+    { key: storageKey, entityId: seeded.entityId },
+  );
+  expect(afterCancel).toEqual(beforeConversion);
+  expect(errors).toEqual([]);
+});
+
 test("runtime custom Structure creates objects once and survives reload", async ({
   page,
 }) => {

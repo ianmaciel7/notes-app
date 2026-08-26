@@ -8,8 +8,8 @@ import {
   createTagId,
 } from "./workspace-domain-identities.ts";
 import {
-  createLegacyStructureDefinitions,
   createInitialStructureRegistry,
+  createLegacyStructureDefinitions,
   validateStructureRegistry,
   type WorkspaceStructure,
 } from "./workspace-object-types.ts";
@@ -42,7 +42,9 @@ type SnapshotParseResult =
     }
   | { ok: true; state: WorkspaceObjectState };
 type SnapshotParseFailure = Extract<SnapshotParseResult, { ok: false }>;
-type EntityMigrationResult<T> = SnapshotParseFailure | { ok: true; entities: T };
+type EntityMigrationResult<T> =
+  | SnapshotParseFailure
+  | { ok: true; entities: T };
 type SnapshotMigrationResult =
   | SnapshotParseFailure
   | { ok: true; value: Record<string, unknown> };
@@ -403,9 +405,10 @@ function hydrateEntityPropertyValues(
   for (const entity of entities) {
     const structure = structuresById.get(entity.objectTypeId);
     if (!structure) return { ok: false, reason: "invalid-record" };
-    const candidateValues = isRecord(entity.propertyValues)
-      ? entity.propertyValues
-      : createWorkspaceEntityPropertyValues(entity);
+    const candidateValues = {
+      ...createWorkspaceEntityPropertyValues(entity),
+      ...(isRecord(entity.propertyValues) ? entity.propertyValues : {}),
+    };
     const propertyValues = normalizeWorkspacePropertyValueMap(
       structure,
       candidateValues,
@@ -431,7 +434,9 @@ function parseCurrentWorkspaceObjectSnapshot(
     ...value,
     entities: blockMigration.entities,
   };
-  const structureValidation = validateStructureRegistry(normalizedValue.structures);
+  const structureValidation = validateStructureRegistry(
+    normalizedValue.structures,
+  );
   if (
     !structureValidation.ok ||
     !validateSnapshotEnvelope(normalizedValue, structureValidation)

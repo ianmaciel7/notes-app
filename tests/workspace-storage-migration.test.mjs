@@ -69,6 +69,18 @@ test("version 4 identities and legacy block bodies migrate atomically", () => {
     "collection:page:reading",
   ]);
   assert.equal(parsed.state.entities[1].body.schemaVersion, 2);
+  assert.deepEqual(parsed.state.entities[1].propertyValues.title, {
+    title: { value: "Imported" },
+    type: "title",
+  });
+  assert.deepEqual(parsed.state.entities[1].propertyValues.createdAt, {
+    createdAt: { value: "2026-01-01T00:00:00.000Z" },
+    type: "createdAt",
+  });
+  assert.deepEqual(parsed.state.entities[1].propertyValues.lastUpdatedAt, {
+    lastUpdatedAt: { value: "2026-01-01T00:00:00.000Z" },
+    type: "lastUpdatedAt",
+  });
   assert.equal(
     parsed.state.entities[1].body.doc.content[0].attrs.id,
     "block:page-1:0",
