@@ -1,6 +1,7 @@
 import {
   blockEditorDocumentFromPlainText,
   isBlockEditorDocument,
+  normalizeBlockEditorDocument,
 } from "../editor/document.ts";
 import {
   createCollectionId,
@@ -145,6 +146,26 @@ function migrateLegacyIdentityMemberships(
     }
     return entity;
   });
+}
+
+function migrateStructuredEntityBodies(
+  entities: readonly unknown[],
+): EntityMigrationResult<unknown[]> {
+  const migratedEntities: unknown[] = [];
+  for (const entity of entities) {
+    if (!isRecord(entity)) return { ok: false, reason: "invalid-record" };
+    if (entity.kind !== "document" && entity.kind !== "quote") {
+      migratedEntities.push(entity);
+      continue;
+    }
+    if (typeof entity.id !== "string") {
+      return { ok: false, reason: "invalid-record" };
+    }
+    const body = normalizeBlockEditorDocument(entity.body, entity.id);
+    if (!body) return { ok: false, reason: "invalid-record" };
+    migratedEntities.push({ ...entity, body });
+  }
+  return { entities: migratedEntities, ok: true };
 }
 
 const entityKindByLifecycle = {
@@ -341,16 +362,22 @@ function hydrateEntityPropertyValues(
 function parseCurrentWorkspaceObjectSnapshot(
   value: Record<string, unknown>,
 ): SnapshotParseResult {
-  const structureValidation = validateStructureRegistry(value.structures);
+  if (!Array.isArray(value.entities)) {
+    return { ok: false, reason: "invalid-record" };
+  }
+  const blockMigration = migrateStructuredEntityBodies(value.entities);
+  if (!blockMigration.ok) return blockMigration;
+  const normalizedValue = { ...value, entities: blockMigration.entities };
+  const structureValidation = validateStructureRegistry(normalizedValue.structures);
   if (
     !structureValidation.ok ||
-    !validateSnapshotEnvelope(value, structureValidation)
+    !validateSnapshotEnvelope(normalizedValue, structureValidation)
   ) {
     return { ok: false, reason: "invalid-record" };
   }
 
   const entities = stripTemporaryFilePreviewUrls(
-    value.entities as WorkspaceEntity[],
+    normalizedValue.entities as WorkspaceEntity[],
   );
   const structures = reconcileRequiredStructures(
     createInitialStructureRegistry(),
@@ -362,9 +389,9 @@ function parseCurrentWorkspaceObjectSnapshot(
   const hydrated = hydrateEntityPropertyValues(entities, structures);
   if (!hydrated.ok) return hydrated;
   const activeEntityId = entities.some(
-    (entity) => entity.id === value.activeEntityId,
+    (entity) => entity.id === normalizedValue.activeEntityId,
   )
-    ? (value.activeEntityId as string)
+    ? (normalizedValue.activeEntityId as string)
     : null;
 
   return {
@@ -374,7 +401,7 @@ function parseCurrentWorkspaceObjectSnapshot(
       activeEntityId,
       entities: hydrated.entities,
       hydrationStatus: "ready",
-      nextId: value.nextId as number,
+      nextId: normalizedValue.nextId as number,
       structures,
     },
   };
