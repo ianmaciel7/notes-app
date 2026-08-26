@@ -34,24 +34,43 @@ if old not in text:
 workspace_tasks.write_text(text.replace(old, new, 1), encoding="utf-8")
 
 replace(
-    "openspec/changes/add-block-editor/tasks.md",
-    "- [x] 5.4 Keep remaining advanced documented blocks, including lateral/column/group drop semantics, as explicit follow-ups until the neutral schema supports them.",
-    "- [x] 5.4 Keep remaining advanced documented blocks, including Mermaid/math, multi-column/group, media/object embeds, and lateral/column/group drop semantics, as explicit follow-ups until the neutral schema supports them.",
+    "tests/block-editor-contract.test.mjs",
+    "assert.match(handleReferenceMetadata, /Drag.*move block/is);",
+    "assert.match(handleReferenceMetadata, /Drag.*move the block around/is);",
 )
 replace(
     "tests/block-editor-contract.test.mjs",
-    "assert.match(handleReferenceMetadata, /Drag.*move block/is);",
-    "assert.match(handleReferenceMetadata, /Drag.*move the block/is);",
+    '''test("advanced Capacities blocks remain an explicit follow-up", () => {
+  assert.match(tasksSource, /small text/);
+  assert.match(tasksSource, /Mermaid\\/math/);
+  assert.match(tasksSource, /multi-column\\/group/);
+  assert.match(tasksSource, /media\\/object embeds/);
+});''',
+    '''test("advanced Capacities blocks remain an explicit follow-up", () => {
+  assert.match(tasksSource, /small text/i);
+  assert.match(tasksSource, /lateral\\/column\\/group drop semantics/i);
+  assert.match(tasksSource, /explicit follow-ups/i);
+  assert.match(tasksSource, /neutral schema/i);
+});''',
 )
 replace(
     "tests/ci-baseline.test.mjs",
-    "assert.match(route, /AtomicNotesWorkspace/);",
-    "assert.match(route, /WorkspaceViewsSurface/);",
+    'test("the localized workspace boots into the workspace fixture", async () => {',
+    'test("the localized workspace boots into the production workspace composition", async () => {',
 )
 replace(
     "tests/ci-baseline.test.mjs",
-    'assert.match(header, /const initialSideTabs[\\s\\S]*?id: "explore"/);',
-    'assert.match(header, /const \\[sideTabs, setSideTabs\\][\\s\\S]*?id: "explore"/);',
+    "  assert.match(route, /AtomicNotesWorkspace/);",
+    "  assert.match(route, /WorkspaceViewsSurface/);\n  assert.doesNotMatch(route, /AtomicNotesWorkspace/);",
+)
+replace(
+    "tests/ci-baseline.test.mjs",
+    '  assert.match(header, /const initialSideTabs[\\s\\S]*?id: "explore"/);',
+    '''  assert.match(
+    header,
+    /const \\[sideTabs, setSideTabs\\] = React\\.useState<AppHeaderTab\\[\\]>\\(\\(\\) => \\[[\\s\\S]*?id: "explore"[\\s\\S]*?label: t\\("primaryNavigation\\.explore"\\)/,
+  );
+  assert.doesNotMatch(header, /const initialSideTabs/);''',
 )
 
 perf = Path("tests/input-performance-contract.test.mjs")
@@ -90,6 +109,7 @@ for name in [
     ".github/workflows/one-shot-rules-compliance-v5.yml",
     ".github/workflows/one-shot-rules-compliance-v6.yml",
     ".github/workflows/one-shot-rules-compliance-v7.yml",
+    ".github/workflows/one-shot-rules-compliance-v8.yml",
     "scripts/apply-rules-compliance.py",
 ]:
     Path(name).unlink(missing_ok=True)
