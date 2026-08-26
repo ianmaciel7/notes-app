@@ -1563,7 +1563,7 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
         className={cn(
           workspaceLongformColumnClass,
           wideLayout && "lg:max-w-[72rem]",
-          "lg:pt-24",
+          "lg:pt-8",
           collapsed && "hidden",
         )}
       >
