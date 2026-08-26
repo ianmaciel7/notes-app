@@ -9,24 +9,24 @@ import {
   workspaceObjectReducer,
 } from "../src/lib/workspace-objects.ts";
 
-test("new document entities use the structured block schema and typed property map", () => {
+test("new document entities use block schema v2 and typed property map", () => {
   const state = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
     type: "beginCreate",
     objectTypeId: "page",
   });
 
   assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 5);
-  assert.deepEqual(state.entities[0].body, {
-    schemaVersion: 1,
-    doc: { type: "doc", content: [{ type: "paragraph" }] },
-  });
+  assert.equal(state.entities[0].body.schemaVersion, 2);
+  assert.equal(state.entities[0].body.doc.type, "doc");
+  assert.equal(state.entities[0].body.doc.content[0].type, "paragraph");
+  assert.match(state.entities[0].body.doc.content[0].attrs.id, /^block:/);
   assert.deepEqual(state.entities[0].propertyValues.title, {
     title: { value: "" },
     type: "title",
   });
 });
 
-test("version 4 tag and collection display names migrate to stable ids", () => {
+test("version 4 identities and legacy block bodies migrate atomically", () => {
   const parsed = parseWorkspaceObjectSnapshot(
     JSON.stringify({
       activeEntityId: "page-1",
@@ -68,6 +68,11 @@ test("version 4 tag and collection display names migrate to stable ids", () => {
   assert.deepEqual(parsed.state.entities[1].collections, [
     "collection:page:reading",
   ]);
+  assert.equal(parsed.state.entities[1].body.schemaVersion, 2);
+  assert.equal(
+    parsed.state.entities[1].body.doc.content[0].attrs.id,
+    "block:page-1:0",
+  );
 });
 
 test("file entities persist canonical media asset metadata without temporary preview URLs", () => {
@@ -103,7 +108,7 @@ test("file entities persist canonical media asset metadata without temporary pre
   assert.equal(parsed.state.entities[0].storageState, "stored");
 });
 
-test("version 1 document and quote strings migrate to version 2 block bodies", () => {
+test("version 1 document and quote strings migrate to current block bodies", () => {
   const parsed = parseWorkspaceObjectSnapshot(
     JSON.stringify({
       activeEntityId: "page-1",
@@ -135,6 +140,8 @@ test("version 1 document and quote strings migrate to version 2 block bodies", (
   );
 
   assert.equal(parsed.ok, true);
+  assert.equal(parsed.state.entities[0].body.schemaVersion, 2);
+  assert.equal(parsed.state.entities[1].body.schemaVersion, 2);
   assert.equal(
     blockEditorDocumentToPlainText(parsed.state.entities[0].body),
     "First\n\nThird",
