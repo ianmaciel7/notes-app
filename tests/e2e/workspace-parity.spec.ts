@@ -1,4 +1,4 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const desktopViewports = [
   { width: 1536, height: 912 },
@@ -75,6 +75,13 @@ async function persistedSnapshot(page: Page) {
     const value = window.localStorage.getItem("notes-app:workspace-objects:v1");
     return value ? JSON.parse(value) : null;
   });
+}
+
+async function expectStableBoxOnHover(target: Locator) {
+  const idleBox = await target.boundingBox();
+  expect(idleBox).toBeTruthy();
+  await target.hover();
+  expect(await target.boundingBox()).toEqual(idleBox);
 }
 
 async function openObjectTypeStudio(page: Page) {
@@ -171,6 +178,25 @@ async function expectCreatedObjectProjection(
       .locator(`[data-tab-id^="created-${objectTypeId}-"] [role="tab"]`)
       .first(),
   ).toHaveAttribute("aria-selected", "true");
+  await expectActiveEditorTitle(page, title);
+}
+
+async function expectActiveEditorTitle(page: Page, title: string) {
+  await expect(createdObjectWorkspace(page)).toBeVisible();
+  const titleControl = createdObjectWorkspace(page).getByRole("textbox", {
+    name: "Título",
+  });
+  await expect(titleControl).toBeVisible();
+  await expect
+    .poll(() =>
+      titleControl.evaluate((element) =>
+        element instanceof HTMLInputElement ||
+        element instanceof HTMLTextAreaElement
+          ? element.value
+          : (element.textContent ?? "").trim(),
+      ),
+    )
+    .toBe(title);
 }
 
 for (const viewport of desktopViewports) {
@@ -723,6 +749,7 @@ test("reduced motion keeps state changes immediate", async ({ page }) => {
 test("Novo trigger and lifecycle contract consumers expose browser states", async ({
   page,
 }) => {
+  test.setTimeout(90_000);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
@@ -733,10 +760,7 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
     "object-creation-trigger",
   );
   await expect(newButton).toHaveAttribute("aria-expanded", "false");
-  const newButtonIdleBox = await newButton.boundingBox();
-  expect(newButtonIdleBox).toBeTruthy();
-  await newButton.hover();
-  expect(await newButton.boundingBox()).toEqual(newButtonIdleBox);
+  await expectStableBoxOnHover(newButton);
   await newButton.focus();
   await expect(newButton).toBeFocused();
   expect(
@@ -777,10 +801,7 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
     .filter({ hasText: "Página" })
     .first();
   await expect(option).toHaveAttribute("role", "option");
-  const optionIdleBox = await option.boundingBox();
-  expect(optionIdleBox).toBeTruthy();
-  await option.hover();
-  expect(await option.boundingBox()).toEqual(optionIdleBox);
+  await expectStableBoxOnHover(option);
   await option.focus();
   await expect(option).toBeFocused();
   expect(
@@ -811,6 +832,20 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
   await expect(
     page.locator('[data-tab-id^="created-page-"] [role="tab"]').first(),
   ).toHaveAttribute("aria-selected", "true");
+  const lifecyclePageTitle = "Lifecycle page card";
+  await writeCreatedObjectTitle(page, lifecyclePageTitle);
+  const pageCountRow = page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .first();
+  await expect(pageCountRow).toContainText("1");
+  await expectStableBoxOnHover(pageCountRow);
+  const lifecycleCountBadge = page
+    .locator('[data-lifecycle-contract="object-count-badge"]')
+    .first();
+  await expect(lifecycleCountBadge).toBeVisible();
+  await expect(lifecycleCountBadge).not.toHaveText("");
+  await expectStableBoxOnHover(lifecycleCountBadge);
 
   await page.getByRole("button", { name: "Novo", exact: true }).click();
   await page.locator('[role="option"]').filter({ hasText: "Tarefa" }).click();
@@ -823,6 +858,29 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
   ).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(newButton).toBeFocused();
+
+  await selectNewObject(page, "Tarefa");
+  await page.getByPlaceholder("Título da tarefa").fill("Lifecycle field task");
+  await page.getByRole("button", { name: "Adicionar tarefa" }).click();
+  await page.getByRole("button", { name: "Abrir", exact: true }).click();
+  const fieldGroup = page
+    .locator('[data-lifecycle-contract="object-field-group"]')
+    .filter({ visible: true });
+  await expect(fieldGroup).toBeVisible();
+  const completed = fieldGroup.getByLabel("Concluída");
+  await completed.focus();
+  await expect(completed).toBeFocused();
+  await completed.check();
+  await fieldGroup.getByLabel("Data de vencimento").fill("2026-08-26");
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      const task = entities.find(
+        (entity: { objectTypeId: string }) => entity.objectTypeId === "task",
+      );
+      return task ? [task.completed, task.dueDate] : null;
+    })
+    .toEqual([true, "2026-08-26"]);
 
   await selectNewObject(page, "Tabela");
   await expect(
@@ -873,15 +931,38 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
   await page.mouse.click(4, 4);
   await expect(customDialog).toBeHidden();
 
-  await expectCreatedObjectProjection(page, "page", "Páginas", "Sem título");
+  await expectCreatedObjectProjection(
+    page,
+    "page",
+    "Páginas",
+    lifecyclePageTitle,
+  );
   await page.getByRole("button", { name: "Páginas", exact: true }).click();
   await page.getByRole("button", { name: "Grade", exact: true }).click();
-  await expect(
-    page.locator('[data-lifecycle-contract="object-projection-card"]').first(),
-  ).toBeVisible();
-  await expect(
-    page.locator('[data-lifecycle-contract="object-count-badge"]').first(),
-  ).toBeVisible();
+  const projectionCard = page
+    .locator('[data-lifecycle-contract="object-projection-card"]')
+    .filter({ hasText: lifecyclePageTitle })
+    .first();
+  await expect(projectionCard).toBeVisible();
+  await expectStableBoxOnHover(projectionCard);
+  const projectionCardButton = projectionCard
+    .getByRole("button", {
+      name: `Abrir: ${lifecyclePageTitle}`,
+      exact: true,
+    })
+    .first();
+  await projectionCardButton.focus();
+  await expect(projectionCardButton).toBeFocused();
+  await projectionCardButton.hover();
+  await page.mouse.down();
+  expect(
+    await projectionCardButton.evaluate((element) =>
+      element.matches(":active"),
+    ),
+  ).toBe(true);
+  await page.mouse.up();
+  await expectActiveEditorTitle(page, lifecyclePageTitle);
+  await expect(pageCountRow).toContainText("1");
   expect(errors).toEqual([]);
 });
 
@@ -976,11 +1057,58 @@ test("every supported New family persists once and reopens from its tab projecti
         .getByLabel("Descrição da Query")
         .fill("páginas criadas hoje");
       await workspace.getByRole("button", { name: "Gerar" }).click();
+      await expectActiveEditorTitle(page, "páginas criadas hoje");
+      await expect(workspace).toContainText("1 resultado");
+      await expect(workspace).toContainText("Parity page");
+      await expect
+        .poll(async () => {
+          const entities = await persistedEntities(page);
+          const query = entities.find(
+            (candidate: { objectTypeId: string }) =>
+              candidate.objectTypeId === "query",
+          );
+          return query
+            ? {
+                created: query.filters.created,
+                description: query.description,
+                objectTypeId: query.filters.objectTypeId,
+                title: query.title,
+              }
+            : null;
+        })
+        .toEqual({
+          created: "today",
+          description: "páginas criadas hoje",
+          objectTypeId: "page",
+          title: "páginas criadas hoje",
+        });
     } else if (family.kind === "table") {
       await workspace.getByRole("textbox", { name: "Título" }).fill(title);
       await workspace
         .getByRole("textbox", { name: "Notas" })
         .fill("Parity table notes");
+      await workspace.getByLabel("Linha 1, coluna 1").fill("R1C1");
+      await workspace.getByLabel("Linha 2, coluna 2").fill("R2C2");
+      await workspace.getByLabel("Linha 2, coluna 2").blur();
+      await expect
+        .poll(async () => {
+          const entities = await persistedEntities(page);
+          const table = entities.find(
+            (candidate: { objectTypeId: string }) =>
+              candidate.objectTypeId === objectTypeId,
+          );
+          return table?.cells
+            .filter((cell: { value: string }) => cell.value)
+            .map((cell: { column: number; row: number; value: string }) => ({
+              column: cell.column,
+              row: cell.row,
+              value: cell.value,
+            }));
+        })
+        .toEqual([
+          { column: 0, row: 0, value: "R1C1" },
+          { column: 1, row: 1, value: "R2C2" },
+        ]);
     } else if (family.kind === "url" || family.kind === "tweet") {
       await workspace.getByRole("textbox", { name: "Título" }).fill(title);
       await workspace
@@ -1047,6 +1175,21 @@ test("every supported New family persists once and reopens from its tab projecti
       .getByRole("button", { name: entity.title || "Sem título", exact: true })
       .click();
     await expect(workspace).toBeVisible();
+    if (family.kind === "query") {
+      await expectActiveEditorTitle(page, "páginas criadas hoje");
+      await expect(createdObjectWorkspace(page)).toContainText("1 resultado");
+      await expect(createdObjectWorkspace(page)).toContainText("Parity page");
+    } else if (family.kind === "table") {
+      await expectActiveEditorTitle(page, title);
+      await expect(
+        createdObjectWorkspace(page).getByLabel("Linha 1, coluna 1"),
+      ).toHaveValue("R1C1");
+      await expect(
+        createdObjectWorkspace(page).getByLabel("Linha 2, coluna 2"),
+      ).toHaveValue("R2C2");
+    } else {
+      await expectActiveEditorTitle(page, entity.title || "Sem título");
+    }
   }
 
   expect(errors).toEqual([]);
