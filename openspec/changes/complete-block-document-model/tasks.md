@@ -1,17 +1,17 @@
 ## 0. Evidence and dependency gate
 
-- [ ] 0.1 Finish/stabilize `add-block-editor` before apply.
-- [ ] 0.2 Re-confirm project reference files and Blocks/Markdown documentation.
+- [x] 0.1 Finish/stabilize `add-block-editor` before apply.
+- [x] 0.2 Re-confirm project reference files and Blocks/Markdown documentation.
 
 ## 1. Schema and migration
 
-- [ ] 1.1 Define BlockId, referenceable node classes, schema versioning, validation, and id generation with failing-first tests.
-- [ ] 1.2 Migrate existing documents and reject/normalize duplicate ids deterministically.
+- [x] 1.1 Define BlockId, referenceable node classes, schema versioning, validation, and id generation with failing-first tests.
+- [x] 1.2 Migrate existing documents and reject/normalize duplicate ids deterministically.
 
 ## 2. Editor invariants
 
 - [ ] 2.1 Preserve ids through edits, undo/redo, conversion, reorder, split/merge, and read-only rendering.
-- [ ] 2.2 Allocate fresh ids for insertion, duplication, import, and external paste.
+- [x] 2.2 Allocate fresh ids for insertion, duplication, import, and external paste.
 
 ## 3. Acceptance
 

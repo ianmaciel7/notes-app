@@ -68,6 +68,37 @@ function createBlockId(): BlockId {
   return `${BLOCK_ID_PREFIX}${crypto.randomUUID()}` as BlockId;
 }
 
+function copyBlockEditorNodeWithFreshIds(
+  node: BlockEditorNode,
+): BlockEditorNode {
+  return {
+    ...node,
+    ...(isReferenceableBlockType(node.type)
+      ? { attrs: { ...node.attrs, id: createBlockId() } }
+      : node.attrs
+        ? { attrs: { ...node.attrs } }
+        : {}),
+    ...(node.content
+      ? {
+          content: node.content.map(copyBlockEditorNodeWithFreshIds),
+        }
+      : {}),
+    ...(node.marks ? { marks: structuredClone(node.marks) } : {}),
+  };
+}
+
+function copyBlockEditorDocumentWithFreshIds(
+  document: BlockEditorDocument,
+): BlockEditorDocument {
+  return {
+    ...document,
+    doc: {
+      ...document.doc,
+      content: document.doc.content.map(copyBlockEditorNodeWithFreshIds),
+    },
+  };
+}
+
 function sanitizeIdNamespace(namespace: string): string {
   const safe = namespace
     .replace(/[^A-Za-z0-9_.:-]+/g, "-")
@@ -494,6 +525,8 @@ export {
   blockEditorDocumentFromPlainText,
   blockEditorDocumentToMarkdown,
   blockEditorDocumentToPlainText,
+  copyBlockEditorDocumentWithFreshIds,
+  copyBlockEditorNodeWithFreshIds,
   createBlockId,
   createEmptyBlockEditorDocument,
   isBlockEditorDocument,

@@ -2,6 +2,7 @@ import {
   type BlockEditorDocument,
   blockEditorDocumentFromPlainText,
   blockEditorDocumentToPlainText,
+  copyBlockEditorDocumentWithFreshIds,
   createEmptyBlockEditorDocument,
   normalizeBlockEditorDocument,
 } from "../editor/document.ts";
@@ -667,6 +668,33 @@ type EntityMenuAction = Extract<
   { type: "changeEntityType" | "deleteEntity" | "duplicateEntity" }
 >;
 
+function duplicateWorkspaceEntity(
+  state: WorkspaceObjectState,
+  source: WorkspaceEntity,
+): WorkspaceObjectState {
+  const id = `created-${source.objectTypeId}-${state.nextId}`;
+  const duplicate = {
+    ...structuredClone(source),
+    createdAt: new Date().toISOString(),
+    id,
+    title: source.title,
+  } as WorkspaceEntity;
+  if (duplicate.kind === "document" || duplicate.kind === "quote") {
+    duplicate.body = copyBlockEditorDocumentWithFreshIds(duplicate.body);
+  }
+  const canonicalDuplicate = {
+    ...duplicate,
+    propertyValues: createWorkspaceEntityPropertyValues(duplicate),
+  };
+  return {
+    ...state,
+    activeEntityId: id,
+    entities: [...state.entities, canonicalDuplicate],
+    error: null,
+    nextId: state.nextId + 1,
+  };
+}
+
 function reduceEntityMenuAction(
   state: WorkspaceObjectState,
   action: EntityMenuAction,
@@ -712,24 +740,7 @@ function reduceEntityMenuAction(
   if (action.type === "duplicateEntity") {
     const source = state.entities.find((entity) => entity.id === action.id);
     if (!source) return state;
-    const id = `created-${source.objectTypeId}-${state.nextId}`;
-    const duplicate = {
-      ...structuredClone(source),
-      createdAt: new Date().toISOString(),
-      id,
-      title: source.title,
-    } as WorkspaceEntity;
-    const canonicalDuplicate = {
-      ...duplicate,
-      propertyValues: createWorkspaceEntityPropertyValues(duplicate),
-    };
-    return {
-      ...state,
-      activeEntityId: id,
-      entities: [...state.entities, canonicalDuplicate],
-      error: null,
-      nextId: state.nextId + 1,
-    };
+    return duplicateWorkspaceEntity(state, source);
   }
 
   if (entityHasIncomingReferences(state.entities, action.id)) {

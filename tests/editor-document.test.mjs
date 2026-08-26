@@ -7,6 +7,7 @@ import {
   blockEditorDocumentFromPlainText,
   blockEditorDocumentToMarkdown,
   blockEditorDocumentToPlainText,
+  copyBlockEditorDocumentWithFreshIds,
   createEmptyBlockEditorDocument,
   isBlockEditorDocument,
   normalizeBlockEditorDocument,
@@ -247,6 +248,50 @@ test("plain text conversion preserves line boundaries and allocates fresh ids", 
   assert.equal(isBlockEditorDocument(first), true);
   assert.equal(new Set(collectBlockIds(first)).size, 3);
   assert.notDeepEqual(collectBlockIds(first), collectBlockIds(second));
+});
+
+test("copied documents remap every nested referenceable block id without changing content", () => {
+  const source = {
+    schemaVersion: 2,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "bulletList",
+          attrs: { id: "source-list" },
+          content: [
+            {
+              type: "listItem",
+              attrs: { id: "source-item" },
+              content: [
+                {
+                  type: "paragraph",
+                  attrs: { id: "source-paragraph" },
+                  content: [{ type: "text", text: "Nested content" }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+  const copied = copyBlockEditorDocumentWithFreshIds(source);
+
+  assert.equal(isBlockEditorDocument(copied), true);
+  assert.deepEqual(blockEditorDocumentToPlainText(copied), "Nested content");
+  assert.equal(new Set(collectBlockIds(copied)).size, 3);
+  assert.deepEqual(collectBlockIds(source), [
+    "source-list",
+    "source-item",
+    "source-paragraph",
+  ]);
+  assert.ok(
+    collectBlockIds(copied).every(
+      (id) => !collectBlockIds(source).includes(id),
+    ),
+  );
 });
 
 test("normalization rejects unknown nodes and repairs an empty root", () => {

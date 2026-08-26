@@ -16,6 +16,14 @@ const referenceableBlockTypes = [
   "horizontalRule",
 ] as const;
 
+function withoutPastedBlockIds(html: string) {
+  const pastedDocument = new DOMParser().parseFromString(html, "text/html");
+  for (const node of pastedDocument.querySelectorAll("[data-block-id]")) {
+    node.removeAttribute("data-block-id");
+  }
+  return pastedDocument.body.innerHTML;
+}
+
 const BlockIdExtension = Extension.create({
   name: "blockIdentity",
 
@@ -38,9 +46,18 @@ const BlockIdExtension = Extension.create({
   },
 
   addProseMirrorPlugins() {
+    const editor = this.editor;
     return [
       new Plugin({
         key: new PluginKey("blockIdentity"),
+        props: {
+          handlePaste: (_view, event) => {
+            const html = event.clipboardData?.getData("text/html");
+            if (!html) return false;
+            editor.commands.insertContent(withoutPastedBlockIds(html));
+            return true;
+          },
+        },
         appendTransaction: (transactions, _oldState, newState) => {
           if (!transactions.some((transaction) => transaction.docChanged)) {
             return null;
@@ -90,11 +107,11 @@ const ParagraphSizeExtension = Extension.create({
           size: {
             default: null,
             parseHTML: (element) =>
-              element.getAttribute("data-text-size") === "small" ? "small" : null,
+              element.getAttribute("data-text-size") === "small"
+                ? "small"
+                : null,
             renderHTML: (attributes) =>
-              attributes.size === "small"
-                ? { "data-text-size": "small" }
-                : {},
+              attributes.size === "small" ? { "data-text-size": "small" } : {},
           },
         },
       },

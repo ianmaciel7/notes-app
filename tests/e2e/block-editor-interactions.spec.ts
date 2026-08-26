@@ -10,6 +10,8 @@ async function openPageEditor(page: Page, body = "") {
   page.on("pageerror", (error) => errors.push(error.message));
   await page.addInitScript(
     ({ storageKey, initialBody }) => {
+      const fixtureMarker = `${storageKey}:editor-interactions-fixture`;
+      if (window.sessionStorage.getItem(fixtureMarker) === initialBody) return;
       window.localStorage.setItem(
         storageKey,
         JSON.stringify({
@@ -30,6 +32,7 @@ async function openPageEditor(page: Page, body = "") {
           version: 1,
         }),
       );
+      window.sessionStorage.setItem(fixtureMarker, initialBody);
     },
     { storageKey: workspaceStorageKey, initialBody: body },
   );
@@ -59,6 +62,45 @@ async function hoverParagraph(editor: Locator, text: string) {
   await expect(paragraph).toBeVisible();
   await paragraph.hover();
   return paragraph;
+}
+
+async function blockIds(editor: Locator) {
+  return editor
+    .locator("[data-block-id]")
+    .evaluateAll((nodes) =>
+      nodes.map((node) => node.getAttribute("data-block-id")),
+    );
+}
+
+async function blockIdForText(editor: Locator, text: string) {
+  const block = editor
+    .locator("[data-block-id]")
+    .filter({ hasText: text })
+    .first();
+  await expect(block).toBeVisible();
+  return block.getAttribute("data-block-id");
+}
+
+async function visibleBlockHandleForParagraph(page: Page, paragraph: Locator) {
+  const paragraphBox = await paragraph.boundingBox();
+  expect(paragraphBox).not.toBeNull();
+  const handles = page
+    .locator('[data-slot="block-editor-block-handle"]')
+    .filter({ visible: true });
+  await expect(handles.first()).toBeVisible();
+  const index = await handles.evaluateAll((nodes, box) => {
+    const targetY = box?.y ?? 0;
+    return nodes.reduce(
+      (best, node, currentIndex) => {
+        const distance = Math.abs(node.getBoundingClientRect().y - targetY);
+        return distance < best.distance
+          ? { distance, index: currentIndex }
+          : best;
+      },
+      { distance: Number.POSITIVE_INFINITY, index: 0 },
+    ).index;
+  }, paragraphBox);
+  return handles.nth(index);
 }
 
 test.afterEach(async ({ page }) => {
@@ -104,6 +146,170 @@ test("selection toolbar preserves text while applying and removing a link", asyn
   await expect(linkPopover).toBeVisible();
   await linkPopover.getByRole("button", { name: "Remover link" }).click();
   await expect(editor.locator("a")).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test("external paste allocates fresh ids even when pasted ids do not collide", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const { editor, errors } = await openPageEditor(page, "Source");
+  const before = await blockIds(editor);
+
+  await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.evaluate(async () => {
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        "text/html": new Blob(
+          [
+            '<h2 data-block-id="external-heading-id">External heading</h2><p data-block-id="external-paste-id">External paragraph</p>',
+          ],
+          { type: "text/html" },
+        ),
+        "text/plain": new Blob(["External heading\n\nExternal paragraph"], {
+          type: "text/plain",
+        }),
+      }),
+    ]);
+  });
+
+  await editor.locator("p").first().click();
+  await editor.press("End");
+  await editor.press("ControlOrMeta+V");
+
+  await expect(
+    editor.locator("p").filter({ hasText: "External paragraph" }),
+  ).toBeVisible();
+  const after = await blockIds(editor);
+  expect(after).toHaveLength(3);
+  expect(new Set(after).size).toBe(3);
+  expect(after).toContain(before[0]);
+  expect(after).not.toContain("external-paste-id");
+  expect(errors).toEqual([]);
+});
+
+test("existing block ids survive edits, transforms, reorder, reload, and mobile layout", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const { editor, errors } = await openPageEditor(
+    page,
+    ["Alpha", "Beta", "Gamma"].join("\n"),
+  );
+  const initialAlphaId = await blockIdForText(editor, "Alpha");
+  const initialBetaId = await blockIdForText(editor, "Beta");
+  const initialGammaId = await blockIdForText(editor, "Gamma");
+
+  await editor.click();
+  await editor.press("ControlOrMeta+Home");
+  await editor.press("End");
+  await editor.pressSequentially(" edited");
+  expect(await blockIdForText(editor, "Alpha edited")).toBe(initialAlphaId);
+  await page.keyboard.press("ControlOrMeta+Z");
+  expect(await blockIdForText(editor, "Alpha")).toBe(initialAlphaId);
+  await page.keyboard.press("ControlOrMeta+Shift+Z");
+  expect(await blockIdForText(editor, "Alpha edited")).toBe(initialAlphaId);
+
+  const beta = editor.locator("p").filter({ hasText: "Beta" }).first();
+  await beta.hover();
+  const betaHandle = await visibleBlockHandleForParagraph(page, beta);
+  await betaHandle.getByRole("button", { name: "Opções do bloco" }).click();
+  const blockMenu = page.locator('[data-slot="block-editor-block-menu"]');
+  await expect(blockMenu).toBeVisible();
+  await blockMenu.getByRole("menuitem", { name: "Cabeçalho 2" }).click();
+  const betaHeading = editor.locator("h2").filter({ hasText: "Beta" }).first();
+  await expect(betaHeading).toBeVisible();
+  expect(await blockIdForText(editor, "Beta")).toBe(initialBetaId);
+  await betaHeading.hover();
+  const duplicateHandle = await visibleBlockHandleForParagraph(
+    page,
+    betaHeading,
+  );
+  await duplicateHandle
+    .getByRole("button", { name: "Opções do bloco" })
+    .click();
+  await blockMenu.getByRole("menuitem", { name: "Duplicar bloco" }).click();
+  const betaIds = await editor
+    .locator("h2")
+    .evaluateAll((nodes) =>
+      nodes.map((node) => node.getAttribute("data-block-id")),
+    );
+  expect(betaIds).toHaveLength(2);
+  expect(new Set(betaIds).size).toBe(2);
+  expect(betaIds).toContain(initialBetaId);
+
+  await editor.click();
+  await editor.press("ControlOrMeta+End");
+  await editor.press("End");
+  await page.keyboard.press("Enter");
+  await page.keyboard.type("Split");
+  const splitId = await blockIdForText(editor, "Split");
+  expect(splitId).not.toBe(initialGammaId);
+  await editor.press("ControlOrMeta+End");
+  await editor.press("End");
+  await editor.press("Home");
+  await editor.press("Backspace");
+  expect(await blockIdForText(editor, "GammaSplit")).toBe(initialGammaId);
+
+  const alphaEdited = editor
+    .locator("p")
+    .filter({ hasText: "Alpha edited" })
+    .first();
+  await alphaEdited.hover();
+  const alphaHandle = await visibleBlockHandleForParagraph(page, alphaEdited);
+  const alphaGrip = alphaHandle.getByRole("button", {
+    name: "Opções do bloco",
+  });
+  const gammaMerged = editor
+    .locator("p")
+    .filter({ hasText: "GammaSplit" })
+    .first();
+  const gammaBox = await gammaMerged.boundingBox();
+  expect(gammaBox).not.toBeNull();
+  await alphaGrip.dragTo(gammaMerged, {
+    targetPosition: {
+      x: 8,
+      y: Math.max(2, (gammaBox?.height ?? 24) - 2),
+    },
+  });
+  await expect
+    .poll(() => editor.locator("p").allTextContents())
+    .toEqual(["Alpha edited", "GammaSplit"]);
+  expect(await blockIdForText(editor, "Alpha edited")).toBe(initialAlphaId);
+  expect(await blockIdForText(editor, "GammaSplit")).toBe(initialGammaId);
+
+  await editor.blur();
+  await expect
+    .poll(() =>
+      page.evaluate((storageKey) => {
+        const snapshot = window.localStorage.getItem(storageKey);
+        return snapshot?.includes("Alpha edited") ?? false;
+      }, workspaceStorageKey),
+    )
+    .toBe(true);
+  await page.reload();
+  const restoredEditor = page.getByRole("textbox", {
+    name: "Text",
+    exact: true,
+  });
+  await expect(restoredEditor).toBeVisible();
+  expect(await blockIdForText(restoredEditor, "Alpha edited")).toBe(
+    initialAlphaId,
+  );
+  expect(await blockIdForText(restoredEditor, "Beta")).toBe(initialBetaId);
+  expect(await blockIdForText(restoredEditor, "GammaSplit")).toBe(
+    initialGammaId,
+  );
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(
+    page
+      .locator('[data-slot="block-editor-block-handle"]')
+      .filter({ visible: true }),
+  ).toHaveCount(0);
+  expect(await blockIdForText(restoredEditor, "Alpha edited")).toBe(
+    initialAlphaId,
+  );
   expect(errors).toEqual([]);
 });
 

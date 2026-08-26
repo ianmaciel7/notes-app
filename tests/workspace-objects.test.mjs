@@ -33,6 +33,16 @@ function readUpdatedAt(entity) {
   return entity.propertyValues.lastUpdatedAt.lastUpdatedAt.value;
 }
 
+function collectBlockIds(document) {
+  const ids = [];
+  const visit = (node) => {
+    if (node.attrs?.id) ids.push(node.attrs.id);
+    for (const child of node.content ?? []) visit(child);
+  };
+  for (const node of document.doc.content) visit(node);
+  return ids;
+}
+
 test("creation flows cover built-ins while presets remain templates until instantiated", () => {
   for (const id of [
     "book",
@@ -213,6 +223,10 @@ test("document menu lifecycle changes type, duplicates, and deletes canonically"
   assert.equal(state.entities.length, 2);
   assert.equal(state.activeEntityId, "created-page-2");
   assert.equal(state.entities[1].title, "Reference page");
+  assert.notDeepEqual(
+    collectBlockIds(state.entities[1].body),
+    collectBlockIds(state.entities[0].body),
+  );
   const beforeTypeChangeUpdatedAt = readUpdatedAt(state.entities[1]);
 
   state = reduce(state, {

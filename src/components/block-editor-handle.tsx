@@ -27,6 +27,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import type { createBlockCommandCatalog } from "@/editor/block-command-catalog";
+import { copyBlockEditorNodeWithFreshIds } from "@/editor/document";
 import { cn } from "@/lib/utils";
 
 type EditorCommandCatalog = ReturnType<typeof createBlockCommandCatalog>;
@@ -417,9 +418,11 @@ function BlockHandle({
     editor
       .chain()
       .focus()
-      .insertContentAt(target.pos + target.nodeSize, node.toJSON(), {
-        updateSelection: true,
-      })
+      .insertContentAt(
+        target.pos + target.nodeSize,
+        copyBlockEditorNodeWithFreshIds(node.toJSON()),
+        { updateSelection: true },
+      )
       .run();
     setBlockOptionsOpen(false);
   }
