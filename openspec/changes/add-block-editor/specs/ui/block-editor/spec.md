@@ -3,6 +3,10 @@
 ### Requirement: Vendor-neutral block document contract
 The system SHALL expose a Notes App-owned versioned `BlockEditorDocument` with a validated root and supported nodes, marks, and attributes; public editor APIs MUST NOT expose Tiptap types or names.
 
+#### Scenario: Structured content crosses the public editor boundary
+- **WHEN** editor content is loaded, changed, normalized, or persisted
+- **THEN** the public boundary SHALL use a validated `BlockEditorDocument` without exposing Tiptap types or names.
+
 ### Requirement: Supported first-slice document content
 The editor SHALL support paragraph, small paragraph text, H1-H4, bold, italic, inline code, link, bullet list, numerical list, alphabetical list, roman list, task list, blockquote, code block, horizontal rule, undo/redo, and native keyboard behavior supplied by configured extensions.
 
@@ -39,6 +43,10 @@ Typing the slash trigger in an editable text block SHALL open a localized shared
 
 ### Requirement: Selection toolbar preserves selection
 An editable selection SHALL expose supported formatting/link actions immediately and SHALL preserve the command target while focus moves through local menus and link controls.
+
+#### Scenario: User opens a selection action
+- **WHEN** the user selects editable text and opens a formatting or link control
+- **THEN** the selection toolbar SHALL appear without delay and preserve the selected command target while focus moves through the local control.
 
 ### Requirement: Reference-aligned top-level block controls
 Editable top-level blocks SHALL expose separate plus and six-dot controls while nested list content remains part of its parent drag target.
@@ -81,11 +89,27 @@ Editable top-level blocks SHALL expose separate plus and six-dot controls while 
 ### Requirement: Semantic read-only rendering
 When `editable` is false, supported content SHALL render semantically without mutation callbacks, cursor affordances, menus, handles, or mutable task checkboxes.
 
+#### Scenario: Editor renders in read-only mode
+- **WHEN** supported content is rendered with `editable` set to false
+- **THEN** the content SHALL retain its semantic structure without mutation callbacks, cursor affordances, menus, handles, or mutable task checkboxes.
+
 ### Requirement: First-slice scope is explicit
 Completion of this change SHALL NOT be reported as complete parity with the broader documented Capacities block catalog.
+
+#### Scenario: Acceptance scope is reported
+- **WHEN** this change is reviewed for completion
+- **THEN** only the implemented first-slice block catalog SHALL be reported as supported and advanced documented blocks SHALL remain explicit follow-ups.
 
 ### Requirement: Localized accessible reference-aligned surface
 All editor copy and interaction semantics SHALL be localized in English, Spanish, and Portuguese (Brazil), expose neutral data slots, preserve visible focus, respect reduced motion, and retain evidence-backed reference typography/measure.
 
+#### Scenario: User operates the editor in a supported locale
+- **WHEN** the editor is rendered in English, Spanish, or Portuguese (Brazil)
+- **THEN** its copy SHALL come from the matching locale catalog, focus SHALL remain visible, reduced-motion preferences SHALL be respected, and reference-aligned typography and measure SHALL be preserved.
+
 ### Requirement: Block editor acceptance is evidence-backed
 Unit, contract, desktop-browser, mobile-browser, persistence, accessibility, keyboard, menu, localization, performance-regression, and reference-evidence coverage SHALL pass before acceptance.
+
+#### Scenario: Change is submitted for acceptance
+- **WHEN** implementation is ready for acceptance
+- **THEN** unit, contract, desktop-browser, mobile-browser, persistence, accessibility, keyboard, menu, localization, performance-regression, and reference-evidence checks SHALL pass before the change is closed.

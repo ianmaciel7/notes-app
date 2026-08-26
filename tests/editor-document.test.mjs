@@ -28,7 +28,10 @@ test("supported Markdown converts to validated JSON and semantic round-trips", (
   const document = blockEditorDocumentFromMarkdown(source);
   assert.equal(isBlockEditorDocument(document), true);
   assert.equal(document.schemaVersion, BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION);
-  assert.equal(new Set(collectBlockIds(document)).size, collectBlockIds(document).length);
+  assert.equal(
+    new Set(collectBlockIds(document)).size,
+    collectBlockIds(document).length,
+  );
 
   const markdown = blockEditorDocumentToMarkdown(document);
   assert.match(markdown, /^## Heading/m);
@@ -111,6 +114,36 @@ test("legacy normalization removes editor-only link defaults and migrates stable
   });
 });
 
+test("normalization strips null paragraph defaults without dropping stable ids", () => {
+  const normalized = normalizeBlockEditorDocument({
+    schemaVersion: 2,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          attrs: { id: "block:typed-paragraph", size: null },
+          content: [{ type: "text", text: "Persisted text" }],
+        },
+      ],
+    },
+  });
+
+  assert.deepEqual(normalized, {
+    schemaVersion: 2,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          attrs: { id: "block:typed-paragraph" },
+          content: [{ type: "text", text: "Persisted text" }],
+        },
+      ],
+    },
+  });
+});
+
 test("task-list Markdown allocates unique ids and preserves task semantics", () => {
   const source = "- [ ] Open task\n- [x] Completed task";
   const document = blockEditorDocumentFromMarkdown(source);
@@ -126,7 +159,10 @@ test("task-list Markdown allocates unique ids and preserves task semantics", () 
   assert.match(markdown, /- \[ \] Open task/);
   assert.match(markdown, /- \[x\] Completed task/i);
   const roundTrip = blockEditorDocumentFromMarkdown(markdown);
-  assert.equal(blockEditorDocumentToPlainText(roundTrip), blockEditorDocumentToPlainText(document));
+  assert.equal(
+    blockEditorDocumentToPlainText(roundTrip),
+    blockEditorDocumentToPlainText(document),
+  );
   assert.notDeepEqual(collectBlockIds(roundTrip), ids);
 });
 
@@ -150,8 +186,7 @@ test("link normalization accepts safe relative links and rejects unsafe protocol
     },
   };
   const unsafe = structuredClone(safe);
-  unsafe.doc.content[0].content[0].marks[0].attrs.href =
-    "javascript:alert(1)";
+  unsafe.doc.content[0].content[0].marks[0].attrs.href = "javascript:alert(1)";
 
   const normalized = normalizeBlockEditorDocument(safe, "safe-object");
   assert.equal(normalized?.doc.content[0].attrs.id, "block:safe-object:0");
@@ -179,7 +214,10 @@ test("legacy documents migrate deterministically and duplicate ids are repaired"
     ["kept", "block:source:1", "block:source:2"],
   );
   assert.equal(isBlockEditorDocument(normalized), true);
-  assert.deepEqual(normalizeBlockEditorDocument(normalized, "source"), normalized);
+  assert.deepEqual(
+    normalizeBlockEditorDocument(normalized, "source"),
+    normalized,
+  );
   assert.deepEqual(
     normalizeBlockEditorDocument(legacy, "source"),
     normalizeBlockEditorDocument(legacy, "source"),
@@ -194,7 +232,10 @@ test("new empty documents receive independent globally unique block ids", () => 
   assert.equal(first.schemaVersion, 2);
   assert.equal(first.doc.content[0].type, "paragraph");
   assert.match(first.doc.content[0].attrs.id, /^block:/);
-  assert.notEqual(first.doc.content[0].attrs.id, second.doc.content[0].attrs.id);
+  assert.notEqual(
+    first.doc.content[0].attrs.id,
+    second.doc.content[0].attrs.id,
+  );
 });
 
 test("plain text conversion preserves line boundaries and allocates fresh ids", () => {

@@ -69,7 +69,9 @@ function createBlockId(): BlockId {
 }
 
 function sanitizeIdNamespace(namespace: string): string {
-  const safe = namespace.replace(/[^A-Za-z0-9_.:-]+/g, "-").replace(/^-+|-+$/g, "");
+  const safe = namespace
+    .replace(/[^A-Za-z0-9_.:-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
   return safe || "legacy";
 }
 
@@ -107,10 +109,9 @@ function isCanonicalizableLink(value: Record<string, unknown>) {
   return hasCanonicalizableLinkAttrs(value.attrs);
 }
 
-function shouldDropParagraphDefaults(value: Record<string, unknown>) {
+function shouldDropParagraphSizeDefault(value: Record<string, unknown>) {
   if (value.type !== "paragraph") return false;
   if (!isRecord(value.attrs)) return false;
-  if (value.attrs.id !== undefined) return false;
   return value.attrs.size === null || value.attrs.size === undefined;
 }
 
@@ -135,7 +136,10 @@ function canonicalizeKnownEditorDefaults(value: unknown): unknown {
     canonical.attrs = { href: value.attrs.href };
   }
 
-  if (shouldDropParagraphDefaults(value)) delete canonical.attrs;
+  if (shouldDropParagraphSizeDefault(value) && isRecord(canonical.attrs)) {
+    delete canonical.attrs.size;
+    if (Object.keys(canonical.attrs).length === 0) delete canonical.attrs;
+  }
   if (shouldDropOrderedListDefaults(value)) delete canonical.attrs;
   return canonical;
 }
@@ -144,7 +148,11 @@ function migrateReferenceableBlockIds(
   value: unknown,
   namespace: string,
 ): unknown {
-  if (!isRecord(value) || !isRecord(value.doc) || !Array.isArray(value.doc.content)) {
+  if (
+    !isRecord(value) ||
+    !isRecord(value.doc) ||
+    !Array.isArray(value.doc.content)
+  ) {
     return value;
   }
 
@@ -183,7 +191,9 @@ function migrateReferenceableBlockIds(
     schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
     doc: {
       ...value.doc,
-      content: value.doc.content.map((node, index) => migrateNode(node, [index])),
+      content: value.doc.content.map((node, index) =>
+        migrateNode(node, [index]),
+      ),
     },
   };
 }
@@ -289,7 +299,10 @@ function isGenericReferenceableNode(value: Record<string, unknown>) {
 }
 
 function isOrderedListNode(value: Record<string, unknown>) {
-  if (!isRecord(value.attrs) || !hasOnlyKeys(value.attrs, ["id", "start", "type"])) {
+  if (
+    !isRecord(value.attrs) ||
+    !hasOnlyKeys(value.attrs, ["id", "start", "type"])
+  ) {
     return false;
   }
   const startIsValid =
@@ -352,7 +365,9 @@ function isNode(value: unknown): value is BlockEditorNode {
   if (!hasOnlyKeys(value, ["type", "attrs", "content"])) return false;
   if (!hasValidContent(value)) return false;
   const validateAttributes = attributeValidators[value.type];
-  return validateAttributes ? validateAttributes(value) : value.attrs === undefined;
+  return validateAttributes
+    ? validateAttributes(value)
+    : value.attrs === undefined;
 }
 
 function hasUniqueBlockIds(nodes: readonly BlockEditorNode[]): boolean {
@@ -410,11 +425,13 @@ function normalizeBlockEditorDocument(
   migrationNamespace = "legacy",
 ): BlockEditorDocument | null {
   const canonicalValue = canonicalizeKnownEditorDefaults(value);
-  if (isEmptyDocumentRoot(canonicalValue)) return createEmptyBlockEditorDocument();
+  if (isEmptyDocumentRoot(canonicalValue))
+    return createEmptyBlockEditorDocument();
   if (!isRecord(canonicalValue)) return null;
 
   const candidate =
-    canonicalValue.schemaVersion === LEGACY_BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION ||
+    canonicalValue.schemaVersion ===
+      LEGACY_BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION ||
     canonicalValue.schemaVersion === BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION
       ? migrateReferenceableBlockIds(canonicalValue, migrationNamespace)
       : canonicalValue;

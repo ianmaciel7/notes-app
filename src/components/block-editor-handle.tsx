@@ -1,6 +1,6 @@
 "use client";
 
-import { offset, type VirtualElement } from "@floating-ui/dom";
+import { computePosition, offset, type VirtualElement } from "@floating-ui/dom";
 import type { Editor } from "@tiptap/core";
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import {
@@ -108,6 +108,30 @@ function createTargetVirtualElement(
   };
 }
 
+function findTopLevelTargetForDom(
+  editor: Editor,
+  blockElement: Element,
+): HandleTarget | null {
+  let target: HandleTarget | null = null;
+  editor.state.doc.forEach((node, offset) => {
+    if (target) return;
+    if (editor.view.nodeDOM(offset) === blockElement) {
+      target = { pos: offset, nodeSize: node.nodeSize };
+    }
+  });
+  if (target) return target;
+
+  const domPosition = editor.view.posAtDOM(blockElement, 0);
+  for (const pos of [domPosition, domPosition - 1]) {
+    if (pos < 0) continue;
+    const node = editor.state.doc.nodeAt(pos);
+    if (!node) continue;
+    const dom = editor.view.nodeDOM(pos);
+    if (dom === blockElement) return { pos, nodeSize: node.nodeSize };
+  }
+  return target;
+}
+
 function isGripDragOrigin(event: DragEvent) {
   const target = event.target;
   return (
@@ -171,8 +195,40 @@ function BlockHandle({
   const insertPointerActiveRef = React.useRef(false);
   const dragInProgressRef = React.useRef(false);
   const suppressMenuUntilRef = React.useRef(0);
+  const positionRequestRef = React.useRef(0);
   const [targetAvailable, setTargetAvailable] = React.useState(false);
   const [optionsOpen, setOptionsOpen] = React.useState(false);
+
+  const positionHandleForTarget = React.useCallback(
+    (target: HandleTarget | null) => {
+      const handleSurface = handleSurfaceRef.current;
+      const virtualElement = createTargetVirtualElement(editor, target);
+      if (!(handleSurface instanceof HTMLElement) || !virtualElement) return;
+
+      const request = ++positionRequestRef.current;
+      // Override stale startup calculations after the hovered block and portal are laid out.
+      requestAnimationFrame(() => {
+        void computePosition(
+          virtualElement,
+          handleSurface,
+          HANDLE_POSITION_CONFIG,
+        ).then((position) => {
+          if (
+            request !== positionRequestRef.current ||
+            !handleSurface.isConnected
+          ) {
+            return;
+          }
+          Object.assign(handleSurface.style, {
+            left: `${position.x}px`,
+            position: position.strategy,
+            top: `${position.y}px`,
+          });
+        });
+      });
+    },
+    [editor],
+  );
 
   const handleNodeChange = React.useCallback(
     ({ node, pos }: { node: { nodeSize: number } | null; pos: number }) => {
@@ -180,12 +236,49 @@ function BlockHandle({
       const target = node && pos >= 0 ? { pos, nodeSize: node.nodeSize } : null;
       targetRef.current = target;
       const available = target !== null;
-      if (targetAvailableRef.current === available) return;
-      targetAvailableRef.current = available;
-      setTargetAvailable(available);
+      if (targetAvailableRef.current !== available) {
+        targetAvailableRef.current = available;
+        setTargetAvailable(available);
+      }
+
+      positionHandleForTarget(target);
     },
-    [],
+    [positionHandleForTarget],
   );
+
+  React.useLayoutEffect(() => {
+    if (targetAvailable) positionHandleForTarget(targetRef.current);
+  }, [positionHandleForTarget, targetAvailable]);
+
+  React.useEffect(() => {
+    if (!enabled) return;
+    const editorElement = editor.view.dom;
+    const syncTargetFromPointer = (event: PointerEvent) => {
+      if (optionsOpenRef.current || dragInProgressRef.current) return;
+      let element = event.target instanceof Element ? event.target : null;
+      while (element && element.parentElement !== editorElement) {
+        element = element.parentElement;
+      }
+      if (!element) return;
+
+      const target = findTopLevelTargetForDom(editor, element);
+      if (!target) return;
+      targetRef.current = target;
+      if (!targetAvailableRef.current) {
+        targetAvailableRef.current = true;
+        setTargetAvailable(true);
+      }
+      positionHandleForTarget(target);
+    };
+
+    editorElement.addEventListener("pointermove", syncTargetFromPointer, true);
+    return () =>
+      editorElement.removeEventListener(
+        "pointermove",
+        syncTargetFromPointer,
+        true,
+      );
+  }, [editor, enabled, positionHandleForTarget]);
 
   const getReferencedVirtualElement = React.useCallback(
     () =>
@@ -254,6 +347,31 @@ function BlockHandle({
     [editor],
   );
 
+  React.useEffect(() => {
+    const editorElement = editor.view.dom;
+    const preserveHandleForModifierClick = (event: KeyboardEvent) => {
+      if (
+        targetRef.current &&
+        ["Alt", "Control", "Meta", "Shift"].includes(event.key)
+      ) {
+        event.stopImmediatePropagation();
+      }
+    };
+
+    // Tiptap hides the handle on keydown; modifier-only keys must not cancel Shift-click.
+    editorElement.addEventListener(
+      "keydown",
+      preserveHandleForModifierClick,
+      true,
+    );
+    return () =>
+      editorElement.removeEventListener(
+        "keydown",
+        preserveHandleForModifierClick,
+        true,
+      );
+  }, [editor]);
+
   function insertParagraph(direction: InsertDirection) {
     const target = targetRef.current;
     if (!target) return;
@@ -281,9 +399,7 @@ function BlockHandle({
     const chain = editor.chain().focus().setTextSelection(position);
     if (id === "text") chain.setParagraph().run();
     else if (id.startsWith("heading-")) {
-      chain
-        .setHeading({ level: Number(id.slice(-1)) as 1 | 2 | 3 | 4 })
-        .run();
+      chain.setHeading({ level: Number(id.slice(-1)) as 1 | 2 | 3 | 4 }).run();
     } else if (id === "bullet-list") chain.toggleBulletList().run();
     else if (id === "ordered-list") chain.toggleOrderedList().run();
     else if (id === "task-list") chain.toggleTaskList().run();
@@ -330,7 +446,7 @@ function BlockHandle({
       onNodeChange={handleNodeChange}
       onElementDragStart={handleElementDragStart}
       onElementDragEnd={handleElementDragEnd}
-      className="block-editor-drag-handle"
+      className="block-editor-drag-handle z-20"
     >
       <TooltipProvider delay={300}>
         <div
@@ -342,7 +458,7 @@ function BlockHandle({
             optionsOpen && "opacity-100",
           )}
         >
-          <Tooltip>
+          <Tooltip disableHoverablePopup>
             <TooltipTrigger
               render={
                 <Button
@@ -375,7 +491,7 @@ function BlockHandle({
             <TooltipContent
               side="left"
               sideOffset={8}
-              className="flex-col items-start gap-1.5 px-3 py-2 text-[13px] leading-5"
+              className="pointer-events-none flex-col items-start gap-1.5 px-3 py-2 text-[13px] leading-5"
               data-slot="block-editor-insert-tooltip"
             >
               <BlockHandleTooltip
@@ -389,7 +505,7 @@ function BlockHandle({
             </TooltipContent>
           </Tooltip>
 
-          <Tooltip>
+          <Tooltip disableHoverablePopup>
             <TooltipTrigger
               render={
                 <Button
@@ -427,7 +543,7 @@ function BlockHandle({
             <TooltipContent
               side="left"
               sideOffset={8}
-              className="flex-col items-start gap-1.5 px-3 py-2 text-[13px] leading-5"
+              className="pointer-events-none flex-col items-start gap-1.5 px-3 py-2 text-[13px] leading-5"
               data-slot="block-editor-drag-tooltip"
             >
               <BlockHandleTooltip
