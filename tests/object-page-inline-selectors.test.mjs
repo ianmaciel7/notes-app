@@ -51,3 +51,18 @@ test("page header keeps the measured desktop action sizes visible", async () => 
   assert.match(source, /"h-\[26px\] w-\[26px\] rounded-lg border border-border"/);
   assert.doesNotMatch(source, /pointer-events-none hidden h-7/);
 });
+
+test("page header uses the reference collection, customize, and overflow icons", async () => {
+  const [pageSource, iconSource] = await Promise.all([
+    readFile(
+      new URL("../src/components/workspace-object-page-view.tsx", import.meta.url),
+      "utf8",
+    ),
+    readFile(new URL("../src/components/object-icons.tsx", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(pageSource, /ObjectCollectionIcon/);
+  assert.match(pageSource, /AppHeaderCaretDownIcon className="size-3\.5"/);
+  assert.match(pageSource, /AppSidebarDotsIcon className="size-4"/);
+  assert.match(iconSource, /const ObjectCollectionIcon = ObjectAtomicNoteIcon/);
+});

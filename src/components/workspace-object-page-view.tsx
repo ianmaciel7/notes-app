@@ -5,8 +5,11 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 
-import { AppHeaderCaretDownIcon } from "@/components/app-header-icons";
-import { AppSidebarDotsIcon } from "@/components/app-sidebar-icons";
+import {
+  AppHeaderCaretDownIcon,
+  AppHeaderDotsIcon,
+  AppHeaderSparkleIcon,
+} from "@/components/app-header-icons";
 import { BlockEditor } from "@/components/block-editor";
 import { ObjectConversionPlanner } from "@/components/object-conversion-planner";
 import {
@@ -241,7 +244,7 @@ function ObjectPageHeader({
           aria-label={t("actions.moreOptions")}
           className="h-[26px] w-[26px] rounded-lg border border-border"
         >
-          <AppSidebarDotsIcon className="size-4" />
+          <AppHeaderDotsIcon className="size-3.5" />
         </Button>
       )}
     </div>
@@ -422,7 +425,7 @@ function DocumentMoreMenu({
           "h-[26px] w-[26px] rounded-lg border border-border",
         )}
       >
-        <AppSidebarDotsIcon className="size-4" />
+        <AppHeaderDotsIcon className="size-3.5" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
@@ -957,6 +960,7 @@ function PageCustomizeControl({
             aria-label={t("actions.customize")}
             className="h-[26px] gap-1.5 px-2 pr-1 text-sm font-normal text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
           >
+            <AppHeaderSparkleIcon className="size-3.5" />
             {t("actions.customize")}
             <AppHeaderCaretDownIcon className="size-3.5" />
           </Button>

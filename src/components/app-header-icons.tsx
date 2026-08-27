@@ -54,6 +54,28 @@ function AppHeaderCaretDownIcon(props: AppHeaderIconProps) {
   )
 }
 
+function AppHeaderDotsIcon(props: AppHeaderIconProps) {
+  return (
+    <AppHeaderPhosphorIcon {...props}>
+      <path
+        fill="currentColor"
+        d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"
+      />
+    </AppHeaderPhosphorIcon>
+  )
+}
+
+function AppHeaderSparkleIcon(props: AppHeaderIconProps) {
+  return (
+    <AppHeaderPhosphorIcon {...props}>
+      <path
+        fill="currentColor"
+        d="m194.82 151.43l-55.09 20.3l-20.3 55.09a7.92 7.92 0 0 1-14.86 0l-20.3-55.09l-55.09-20.3a7.92 7.92 0 0 1 0-14.86l55.09-20.3l20.3-55.09a7.92 7.92 0 0 1 14.86 0l20.3 55.09l55.09 20.3a7.92 7.92 0 0 1 0 14.86"
+      />
+    </AppHeaderPhosphorIcon>
+  )
+}
+
 function AppHeaderPlusIcon(props: AppHeaderIconProps) {
   return (
     <AppHeaderPhosphorIcon {...props}>
@@ -194,6 +216,7 @@ export {
   AppHeaderCircleDashedIcon,
   AppHeaderCloseIcon,
   AppHeaderCompassIcon,
+  AppHeaderDotsIcon,
   AppHeaderFileIcon,
   AppHeaderFolderIcon,
   AppHeaderGraphIcon,
@@ -202,5 +225,6 @@ export {
   AppHeaderPushPinFillIcon,
   AppHeaderPushPinIcon,
   AppHeaderSidebarSimpleIcon,
+  AppHeaderSparkleIcon,
   type AppHeaderIconProps,
 }

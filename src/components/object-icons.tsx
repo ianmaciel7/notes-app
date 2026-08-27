@@ -153,7 +153,7 @@ const ObjectQueryIcon = createObjectIcon("query");
 const ObjectArchiveIcon = createObjectIcon("archive");
 const ObjectCodeIcon = createObjectIcon("code");
 const ObjectKnowledgeIcon = createObjectIcon("knowledge");
-const ObjectCollectionIcon = ObjectTableIcon;
+const ObjectCollectionIcon = ObjectAtomicNoteIcon;
 
 const objectTypeDefinitions: ObjectTypeDefinition[] = [
   { id: "book", label: "Book", icon: ObjectBookIcon, tone: "purple" },
