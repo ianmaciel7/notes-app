@@ -553,25 +553,28 @@ function ObjectPageTags({
         }}
       >
         <PopoverTrigger
-          nativeButton={false}
           render={
-            <label className="inline-flex min-w-0 items-center gap-1.5 rounded-md px-1 text-sm text-muted-foreground hover:bg-muted/70">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              aria-label={t("fields.tags")}
+              data-slot="object-page-tags-trigger"
+              className="h-7 min-w-0 gap-1.5 px-1.5 font-normal text-muted-foreground transition-[background-color,color,opacity] duration-150 ease-out"
+            >
               <ObjectTagIcon className="size-3.5" />
-              <input
-                aria-label={t("fields.tags")}
-                placeholder={t("fields.tags")}
-                value={query}
-                onFocus={() => setOpen(true)}
-                onChange={(event) => {
-                  setQuery(event.target.value);
-                  setOpen(true);
-                }}
-                className="w-[62px] min-w-0 bg-transparent leading-[1.3] outline-none placeholder:text-muted-foreground"
-              />
-            </label>
+              <span className="truncate">{t("fields.tags")}</span>
+            </Button>
           }
         />
-        <PopoverContent align="start" sideOffset={5} className="w-64 p-1.5">
+        <PopoverContent
+          align="start"
+          sideOffset={5}
+          className={cn(
+            workspaceOverflowMenuContentClass,
+            "w-[269px] min-w-[269px] p-1.5",
+          )}
+        >
           <input
             aria-label={t("actions.search")}
             placeholder={t("actions.search")}
@@ -589,7 +592,10 @@ function ObjectPageTags({
                   setQuery("");
                   setOpen(false);
                 }}
-                className="flex h-8 w-full items-center rounded-md px-2 text-left text-sm hover:bg-muted"
+                className={cn(
+                  workspaceOverflowMenuItemClass,
+                  "w-full gap-2 px-2 text-left",
+                )}
               >
                 <span className="truncate">{tag.title.trim() || tag.id}</span>
               </button>

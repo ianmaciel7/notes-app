@@ -857,6 +857,10 @@ test("object page header controls keep fluid click and keyboard states", async (
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
   await createPageObject(page);
+  await page.mouse.move(1100, 700);
+  await expect(
+    page.locator('[data-slot="hover-card-portal"] [data-open]'),
+  ).toHaveCount(0);
 
   const workspace = createdObjectWorkspace(page);
   const header = workspace.locator(
@@ -868,6 +872,10 @@ test("object page header controls keep fluid click and keyboard states", async (
   });
   const more = header.getByRole("button", {
     name: "Mais opções",
+    exact: true,
+  });
+  const tags = workspace.getByRole("button", {
+    name: "Etiquetas",
     exact: true,
   });
   const disclosure = header.getByRole("button", {
@@ -890,6 +898,17 @@ test("object page header controls keep fluid click and keyboard states", async (
   await page.keyboard.press("Escape");
   await expect(collectionPopover).toBeHidden();
   await expect(collections).toBeFocused();
+
+  await expectStableBoxOnHover(tags);
+  await tags.click();
+  const tagsPopover = page.locator('[data-slot="popover-content"][data-open]');
+  await expect(tagsPopover).toBeVisible();
+  await expect(
+    tagsPopover.getByText("Nenhuma etiqueta encontrada", { exact: true }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(tagsPopover).toBeHidden();
+  await expect(tags).toBeFocused();
 
   await more.click();
   const menu = page.locator('[data-slot="dropdown-menu-content"][data-open]');
