@@ -113,6 +113,21 @@ const basicObjectTypes: readonly WorkspaceStructure[] = basicObjectTypeOrder
   .filter((structure): structure is WorkspaceStructure => Boolean(structure));
 
 type ObjectTypeCardAppearance = Pick<ObjectTypePreset, "iconName" | "tone">;
+type ObjectTypeSelection = ObjectTypePreset | WorkspaceStructure;
+
+const previewPropertyIds: Record<string, readonly string[]> = {
+  book: [
+    "title",
+    "description",
+    "tags",
+    "notes",
+    "cover",
+    "author",
+    "rating",
+    "recommendedBy",
+    "medium",
+  ],
+};
 
 function AppSidebarObjectTypeIcon({
   preset,
@@ -218,30 +233,44 @@ function AppSidebarCustomObjectTypeCard({
 function AppSidebarBasicObjectTypeCard({
   structure,
   label,
+  selected,
+  onSelect,
 }: {
   structure: WorkspaceStructure;
   label: string;
+  selected: boolean;
+  onSelect: (structure: WorkspaceStructure) => void;
 }) {
   return (
     <button
       type="button"
       data-slot="app-sidebar-object-type-card"
       data-card-family="basic"
+      data-selected={selected || undefined}
       className={cn(
         "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] bg-white px-2.5 text-left",
         "text-[14px] font-semibold text-[#2f2c29] shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
         "transition-[background-color,border-color,box-shadow,filter] duration-150",
-        "hover:border-[#cbc7c1] hover:bg-[#faf9f8] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)] active:brightness-[0.98]",
+        "hover:border-[#cbc7c1] hover:bg-[#faf9f8] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)] active:brightness-[0.98] data-[selected=true]:border-[#bdb8b0] data-[selected=true]:bg-[#f7f5f3]",
       )}
+      onClick={() => onSelect(structure)}
     >
       <AppSidebarObjectTypeIcon preset={structure} />
       <span className="min-w-0 truncate">{label}</span>
+      {selected && (
+        <span
+          aria-hidden="true"
+          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-[#34302c] text-white"
+        >
+          <AppSidebarCheckIcon className="size-3" />
+        </span>
+      )}
     </button>
   );
 }
 
 function AppSidebarObjectTypeDetails({
-  preset,
+  selection,
   customName,
   pluralName,
   onCustomNameChange,
@@ -249,7 +278,7 @@ function AppSidebarObjectTypeDetails({
   onClose,
   onConfirm,
 }: {
-  preset: ObjectTypePreset | null;
+  selection: ObjectTypeSelection | null;
   customName: string;
   pluralName: string;
   onCustomNameChange: (value: string) => void;
@@ -258,13 +287,16 @@ function AppSidebarObjectTypeDetails({
   onConfirm: () => void;
 }) {
   const t = useTranslations("workspace.objectTypeStudio");
-  const isCustom = preset === null;
+  const isCustom = selection === null;
   const customNameInputId = React.useId();
   const pluralNameInputId = React.useId();
-  const displayPreset: Pick<ObjectTypePreset, "iconName" | "tone"> = preset ?? {
+  const displayPreset: ObjectTypeCardAppearance = selection ?? {
     iconName: "area",
     tone: "gray",
   };
+  const propertyIds = selection
+    ? (previewPropertyIds[selection.id] ?? ["title", "description", "tags"])
+    : [];
 
   return (
     <aside
@@ -405,16 +437,20 @@ function AppSidebarObjectTypeDetails({
                   </div>
                 </div>
               </>
-            ) : (
+            ) : selection ? (
               <>
                 <div className="flex shrink-0 items-center gap-3 border-b pb-4">
                   <AppSidebarObjectTypeIcon preset={displayPreset} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold">
-                      {t(`objectTypes.${preset.id}`)}
+                      {t(`objectTypes.${selection.id}`)}
                     </p>
-                    <p className="truncate text-xs text-muted-foreground">
-                      {t("details.description")}
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {selection.id === "book"
+                        ? t("details.bookDescription")
+                        : t("details.previewDescription", {
+                            type: t(`objectTypes.${selection.id}`),
+                          })}
                     </p>
                   </div>
                   <Button
@@ -427,23 +463,35 @@ function AppSidebarObjectTypeDetails({
                     ×
                   </Button>
                 </div>
-                <div className="rounded-lg border bg-muted/20 p-3">
-                  <p className="text-sm font-medium">
-                    {t(`objectTypes.${preset.id}`)}
+                <div className="mt-4">
+                  <p className="mb-2 text-xs font-medium text-foreground">
+                    {t("details.properties")}
                   </p>
-                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                    {t("details.review")}
-                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {propertyIds.map((propertyId) => (
+                      <span
+                        key={propertyId}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 py-1 text-xs text-foreground"
+                      >
+                        <ObjectTypeDetailsIcon
+                          name={propertyId === "description" ? "info" : "edit"}
+                          className="text-muted-foreground"
+                        />
+                        {t(`details.propertyNames.${propertyId}`)}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="rounded-lg border bg-muted/20 p-3">
-                  <p className="text-xs font-medium text-muted-foreground">
-                    {t("details.preset")}
-                  </p>
-                  <p className="mt-1 text-sm">{preset.id}</p>
+                <div className="mt-5 flex gap-2 rounded-lg bg-muted/50 px-3 py-2 text-sm text-foreground">
+                  <ObjectTypeDetailsIcon
+                    name="info"
+                    className="mt-0.5 shrink-0 text-muted-foreground"
+                  />
+                  <span>{t("details.previewHint")}</span>
                 </div>
               </>
-            )}
+            ) : null}
           </div>
         </ScrollArea>
       </div>
@@ -473,14 +521,14 @@ function AppSidebarObjectTypeStudio({
 }: AppSidebarObjectTypeStudioProps) {
   const t = useTranslations("workspace.objectTypeStudio");
   const [open, setOpen] = React.useState(false);
-  const [selectedPreset, setSelectedPreset] =
-    React.useState<ObjectTypePreset | null>(null);
+  const [selectedObjectType, setSelectedObjectType] =
+    React.useState<ObjectTypeSelection | null>(null);
   const [detailsOpen, setDetailsOpen] = React.useState(false);
   const [customName, setCustomName] = React.useState("");
   const [pluralName, setPluralName] = React.useState("");
 
   function resetSelection() {
-    setSelectedPreset(null);
+    setSelectedObjectType(null);
     setDetailsOpen(false);
     setCustomName("");
     setPluralName("");
@@ -492,22 +540,22 @@ function AppSidebarObjectTypeStudio({
   }
 
   function selectPreset(preset: ObjectTypePreset) {
-    setSelectedPreset(preset);
+    setSelectedObjectType(preset);
     setCustomName("");
     setPluralName("");
     setDetailsOpen(true);
   }
 
   function selectCustom() {
-    setSelectedPreset(null);
+    setSelectedObjectType(null);
     setCustomName("");
     setPluralName("");
     setDetailsOpen(true);
   }
 
   function confirmSelection() {
-    if (selectedPreset) {
-      onCreateFromPreset?.(selectedPreset.id);
+    if (selectedObjectType) {
+      onCreateFromPreset?.(selectedObjectType.id);
       setOpen(false);
       resetSelection();
       return;
@@ -525,6 +573,13 @@ function AppSidebarObjectTypeStudio({
     });
     setOpen(false);
     resetSelection();
+  }
+
+  function selectBasic(structure: WorkspaceStructure) {
+    setSelectedObjectType(structure);
+    setCustomName("");
+    setPluralName("");
+    setDetailsOpen(true);
   }
 
   return (
@@ -601,14 +656,16 @@ function AppSidebarObjectTypeStudio({
                     <AppSidebarObjectTypeCard
                       key={preset.id}
                       preset={preset}
-                      selected={detailsOpen && selectedPreset?.id === preset.id}
+                      selected={
+                        detailsOpen && selectedObjectType?.id === preset.id
+                      }
                       onSelect={selectPreset}
                       label={t(`objectTypes.${preset.id}`)}
                     />
                   ))}
 
                   <AppSidebarCustomObjectTypeCard
-                    selected={detailsOpen && selectedPreset === null}
+                    selected={detailsOpen && selectedObjectType === null}
                     onSelect={selectCustom}
                     label={t("createOwn")}
                   />
@@ -622,6 +679,10 @@ function AppSidebarObjectTypeStudio({
                     <AppSidebarBasicObjectTypeCard
                       key={structure.id}
                       structure={structure}
+                      selected={
+                        detailsOpen && selectedObjectType?.id === structure.id
+                      }
+                      onSelect={selectBasic}
                       label={t(`objectTypes.${structure.id}`)}
                     />
                   ))}
@@ -631,7 +692,7 @@ function AppSidebarObjectTypeStudio({
 
             {detailsOpen && (
               <AppSidebarObjectTypeDetails
-                preset={selectedPreset}
+                selection={selectedObjectType}
                 customName={customName}
                 pluralName={pluralName}
                 onCustomNameChange={setCustomName}

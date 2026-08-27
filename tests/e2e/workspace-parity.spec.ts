@@ -389,6 +389,40 @@ test("object type studio matches Capacities suggested and basic type layout", as
     ],
   );
 
+  await dialog.getByRole("button", { name: "Livro" }).click();
+  const details = dialog.locator(
+    '[data-slot="app-sidebar-object-type-details"]',
+  );
+  await expect(details).toBeVisible();
+  await expect(
+    details.getByText(
+      "Aprenda com os livros que você lê e conecte-os ao conhecimento existente.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await expect(
+    details.getByText("Propriedades", { exact: true }),
+  ).toBeVisible();
+  for (const property of [
+    "Título",
+    "Descrição",
+    "Etiquetas",
+    "Notas",
+    "Imagem de capa",
+    "Autor",
+    "Avaliação",
+    "Recomendado por",
+    "Meio",
+  ]) {
+    await expect(details.getByText(property, { exact: true })).toBeVisible();
+  }
+
+  await dialog.getByRole("button", { name: "Página" }).click();
+  await expect(details).toBeVisible();
+  await expect(
+    details.getByText("Página", { exact: true }).first(),
+  ).toBeVisible();
+
   expect(errors).toEqual([]);
 });
 
