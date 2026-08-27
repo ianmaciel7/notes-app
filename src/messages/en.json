@@ -283,6 +283,11 @@
       "createOwn": "Create your own",
       "actionsLabel": "Actions for {type}",
       "description": "Choose a suggested or basic object type to add to the current space.",
+      "intro": {
+        "title": "Do I need a new object type?",
+        "body": "Not always. A new type is most useful when you have a distinct kind of note that needs its own details, like Books versus People. If you only want to group things, like friends and colleagues, tags, collections, or a simple category within a type you already have are usually enough. You can always split later.",
+        "learnMore": "Learn more"
+      },
       "details": {
         "close": "Close object type details",
         "confirm": "Add object type",

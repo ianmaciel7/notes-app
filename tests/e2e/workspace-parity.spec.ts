@@ -97,6 +97,22 @@ async function openObjectTypeStudio(page: Page) {
   await expect(page.getByRole("dialog")).toBeVisible();
 }
 
+async function expectObjectTypeCardLabels(
+  cards: Locator,
+  labels: readonly string[],
+) {
+  await expect(cards).toHaveCount(labels.length);
+  await expect
+    .poll(async () =>
+      Promise.all(
+        labels.map(async (_label, index) =>
+          (await cards.nth(index).textContent())?.trim(),
+        ),
+      ),
+    )
+    .toEqual(labels);
+}
+
 async function createStructureFromPreset(page: Page, presetLabel: string) {
   await openObjectTypeStudio(page);
   const dialog = page.getByRole("dialog");
@@ -307,6 +323,72 @@ test("tab midpoint and dedicated actions do not overlap", async ({ page }) => {
         : true,
     ).toBe(true);
   }
+  expect(errors).toEqual([]);
+});
+
+test("object type studio matches Capacities suggested and basic type layout", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1329, height: 912 });
+  const errors = await openWorkspace(page);
+
+  await openObjectTypeStudio(page);
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toHaveAccessibleName("Adicione novo tipo de objeto");
+  await expect(
+    dialog.getByText("Preciso de um novo tipo de objeto?", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    dialog.getByText(
+      "Nem sempre. Um novo tipo é mais útil quando você tem um tipo distinto de nota que precisa de seus próprios detalhes",
+    ),
+  ).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "Saiba mais" })).toBeVisible();
+
+  await expectObjectTypeCardLabels(
+    dialog.locator(
+      '[data-slot="app-sidebar-object-type-card"][data-card-family="suggested"]',
+    ),
+    [
+      "Livro",
+      "Pessoa",
+      "Área",
+      "Reunião",
+      "Citação",
+      "Definição",
+      "Ideia",
+      "Lugar",
+      "Projeto",
+      "Organização",
+      "Nota atômica",
+      "Mídia",
+      "Viagem",
+      "Crie o seu próprio",
+    ],
+  );
+  await expect(
+    dialog.getByText("Tipos básicos", { exact: true }),
+  ).toBeVisible();
+  await expectObjectTypeCardLabels(
+    dialog.locator(
+      '[data-slot="app-sidebar-object-type-card"][data-card-family="basic"]',
+    ),
+    [
+      "Página",
+      "Etiqueta",
+      "Imagem",
+      "Weblink",
+      "PDF",
+      "Áudio",
+      "Arquivo",
+      "Tweet",
+      "Chat de IA",
+      "Tabela",
+      "Tarefa",
+      "Query",
+    ],
+  );
+
   expect(errors).toEqual([]);
 });
 

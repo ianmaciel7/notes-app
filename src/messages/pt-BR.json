@@ -283,6 +283,11 @@
       "createOwn": "Crie o seu próprio",
       "actionsLabel": "Ações de {type}",
       "description": "Escolha um tipo de objeto sugerido ou básico para adicionar ao espaço atual.",
+      "intro": {
+        "title": "Preciso de um novo tipo de objeto?",
+        "body": "Nem sempre. Um novo tipo é mais útil quando você tem um tipo distinto de nota que precisa de seus próprios detalhes — como Livros versus Pessoas. Se você só quer agrupar coisas, como amigos e colegas, etiquetas, coleções ou uma categoria simples em um tipo que você já tem geralmente são suficientes. Você sempre pode dividir depois.",
+        "learnMore": "Saiba mais"
+      },
       "details": {
         "close": "Fechar detalhes do tipo de objeto",
         "confirm": "Adicionar tipo de objeto",

@@ -143,7 +143,10 @@ async function createCustomStructure(
 }
 
 async function createObject(page: Page, structureLabel: string, title: string) {
-  await page.getByRole("button", { name: "Novo", exact: true }).click();
+  await page
+    .locator("#app-shell-sidebar")
+    .getByRole("button", { name: "Novo", exact: true })
+    .click();
   await page
     .locator('[role="option"]')
     .filter({ hasText: structureLabel })

@@ -27,9 +27,11 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import {
+  BUILT_IN_STRUCTURES,
   type CreateStructureInput,
   OBJECT_TYPE_PRESETS,
   type ObjectTypePreset,
+  type WorkspaceStructure,
 } from "@/lib/workspace-object-types";
 
 type AppSidebarObjectTypeStudioProps = {
@@ -70,13 +72,53 @@ function ObjectTypeDetailsIcon({
   );
 }
 
-const suggestedObjectTypes: readonly ObjectTypePreset[] = OBJECT_TYPE_PRESETS;
+const suggestedObjectTypeOrder = [
+  "book",
+  "person",
+  "area",
+  "meeting",
+  "quote",
+  "definition",
+  "idea",
+  "place",
+  "project",
+  "organization",
+  "atomic-note",
+  "media",
+  "travel",
+] as const;
+
+const basicObjectTypeOrder = [
+  "page",
+  "tag",
+  "image",
+  "weblink",
+  "pdf",
+  "audio",
+  "file",
+  "tweet",
+  "ai-chat",
+  "table",
+  "task",
+  "query",
+] as const;
+
+const suggestedObjectTypes: readonly ObjectTypePreset[] =
+  suggestedObjectTypeOrder
+    .map((id) => OBJECT_TYPE_PRESETS.find((preset) => preset.id === id))
+    .filter((preset): preset is ObjectTypePreset => Boolean(preset));
+
+const basicObjectTypes: readonly WorkspaceStructure[] = basicObjectTypeOrder
+  .map((id) => BUILT_IN_STRUCTURES.find((structure) => structure.id === id))
+  .filter((structure): structure is WorkspaceStructure => Boolean(structure));
+
+type ObjectTypeCardAppearance = Pick<ObjectTypePreset, "iconName" | "tone">;
 
 function AppSidebarObjectTypeIcon({
   preset,
   className,
 }: {
-  preset: Pick<ObjectTypePreset, "iconName" | "tone">;
+  preset: ObjectTypeCardAppearance;
   className?: string;
 }) {
   const Icon =
@@ -84,7 +126,9 @@ function AppSidebarObjectTypeIcon({
 
   return (
     <ObjectIconBadge
-      data-lifecycle-contract={objectLifecycleContractSlots.ObjectIconTonePreview}
+      data-lifecycle-contract={
+        objectLifecycleContractSlots.ObjectIconTonePreview
+      }
       icon={Icon}
       tone={preset.tone}
       className={cn("size-8 rounded-[8px]", className)}
@@ -108,7 +152,10 @@ function AppSidebarObjectTypeCard({
     <button
       type="button"
       data-slot="app-sidebar-object-type-card"
-      data-lifecycle-contract={objectLifecycleContractSlots.ObjectTypePresetCard}
+      data-card-family="suggested"
+      data-lifecycle-contract={
+        objectLifecycleContractSlots.ObjectTypePresetCard
+      }
       data-selected={selected || undefined}
       className={cn(
         "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] bg-white px-2.5 text-left",
@@ -146,7 +193,10 @@ function AppSidebarCustomObjectTypeCard({
     <button
       type="button"
       data-slot="app-sidebar-object-type-card"
-      data-lifecycle-contract={objectLifecycleContractSlots.CustomObjectTypeForm}
+      data-card-family="suggested"
+      data-lifecycle-contract={
+        objectLifecycleContractSlots.CustomObjectTypeForm
+      }
       data-selected={selected || undefined}
       className={cn(
         "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] bg-white px-2.5 text-left",
@@ -160,6 +210,31 @@ function AppSidebarCustomObjectTypeCard({
       <span className="flex size-8 shrink-0 items-center justify-center rounded-[8px] border border-[#cfcac4] bg-white text-[#5f5a55]">
         <AppSidebarPlusIcon className="size-[18px]" />
       </span>
+      <span className="min-w-0 truncate">{label}</span>
+    </button>
+  );
+}
+
+function AppSidebarBasicObjectTypeCard({
+  structure,
+  label,
+}: {
+  structure: WorkspaceStructure;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      data-slot="app-sidebar-object-type-card"
+      data-card-family="basic"
+      className={cn(
+        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] bg-white px-2.5 text-left",
+        "text-[14px] font-semibold text-[#2f2c29] shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
+        "transition-[background-color,border-color,box-shadow,filter] duration-150",
+        "hover:border-[#cbc7c1] hover:bg-[#faf9f8] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)] active:brightness-[0.98]",
+      )}
+    >
+      <AppSidebarObjectTypeIcon preset={structure} />
       <span className="min-w-0 truncate">{label}</span>
     </button>
   );
@@ -194,7 +269,9 @@ function AppSidebarObjectTypeDetails({
   return (
     <aside
       data-slot="app-sidebar-object-type-details"
-      data-lifecycle-contract={objectLifecycleContractSlots.ObjectTypeDetailsPanel}
+      data-lifecycle-contract={
+        objectLifecycleContractSlots.ObjectTypeDetailsPanel
+      }
       className={cn(
         "pointer-events-auto absolute bottom-0 right-0 top-0 z-20 -mb-1 -mr-1 -mt-1",
         "flex min-h-0 w-full origin-center scale-100 transform flex-col overflow-hidden",
@@ -498,6 +575,27 @@ function AppSidebarObjectTypeStudio({
               )}
             >
               <div className="flex min-h-full flex-col px-5 pb-6 pt-6">
+                <section
+                  aria-label={t("intro.title")}
+                  className="mb-7 flex w-full max-w-[647px] gap-3 rounded-[8px] bg-[#e6f7ef] px-3 py-2.5 text-[#064e3b]"
+                >
+                  <ObjectIdeaIcon className="mt-0.5 size-4 shrink-0 text-[#36b77b]" />
+                  <div className="min-w-0 text-[14px] leading-[1.45]">
+                    <h2 className="font-semibold">{t("intro.title")}</h2>
+                    <p className="mt-2 font-normal">
+                      {t("intro.body")}{" "}
+                      <a
+                        href="https://docs.capacities.io/reference/object-types"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-medium text-[#2563eb] underline underline-offset-2"
+                      >
+                        {t("intro.learnMore")}
+                      </a>
+                    </p>
+                  </div>
+                </section>
+
                 <div className="grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                   {suggestedObjectTypes.map((preset) => (
                     <AppSidebarObjectTypeCard
@@ -514,6 +612,19 @@ function AppSidebarObjectTypeStudio({
                     onSelect={selectCustom}
                     label={t("createOwn")}
                   />
+                </div>
+
+                <h2 className="mt-9 text-[16px] font-semibold leading-none text-[#1f1c19]">
+                  {t("basicTypes")}
+                </h2>
+                <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                  {basicObjectTypes.map((structure) => (
+                    <AppSidebarBasicObjectTypeCard
+                      key={structure.id}
+                      structure={structure}
+                      label={t(`objectTypes.${structure.id}`)}
+                    />
+                  ))}
                 </div>
               </div>
             </ScrollArea>
