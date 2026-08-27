@@ -63,6 +63,7 @@ type AppSidePanelHeaderProps = React.ComponentProps<"header"> & {
   hideLabel?: string;
   menuLabel?: string;
   closeLabel?: string;
+  specialItems?: SideSpecialItem[];
 };
 
 type SideSpecialItem = {
@@ -146,16 +147,12 @@ function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 const defaultSpecialItems: SideSpecialItem[] = [
-  { id: "graphView", label: "Visualização em grafo", icon: AppHeaderGraphIcon },
-  { id: "backlinks", label: "Links de entrada", icon: LinkIcon },
-  { id: "objectsInside", label: "Objetos internos", icon: CubeIcon },
-  {
-    id: "relatedContent",
-    label: "Conteúdo relacionado",
-    icon: RelatedContentIcon,
-  },
-  { id: "aiAssistantChat", label: "Chat de IA", icon: ChatIcon },
-  { id: "localSpaceQuery", label: "Buscar", icon: SearchIcon },
+  { id: "graphView", label: "Graph view", icon: AppHeaderGraphIcon },
+  { id: "backlinks", label: "Backlinks", icon: LinkIcon },
+  { id: "objectsInside", label: "Objects inside", icon: CubeIcon },
+  { id: "relatedContent", label: "Related content", icon: RelatedContentIcon },
+  { id: "aiAssistantChat", label: "AI chat", icon: ChatIcon },
+  { id: "localSpaceQuery", label: "Search", icon: SearchIcon },
 ];
 
 function useElementWidth<T extends HTMLElement>() {
@@ -252,12 +249,16 @@ function SideTabList({
   tabs,
   value,
   show,
+  label,
+  closeLabel,
   onValueChange,
   onClose,
 }: {
   tabs: AppHeaderTab[];
   value: string;
   show: boolean;
+  label: string;
+  closeLabel: string;
   onValueChange: (value: string) => void;
   onClose: (tab: AppHeaderTab) => void;
 }) {
@@ -269,7 +270,7 @@ function SideTabList({
         render={
           <button
             type="button"
-            aria-label="Lista de abas laterais"
+            aria-label={label}
             className="flex size-7 items-center justify-center rounded-lg text-[var(--side-header-text-secondary)] hover:bg-[var(--side-header-bg-front-hover)] hover:text-[var(--side-header-text-primary)]"
           >
             <AppHeaderCaretDownIcon className="size-3.5" />
@@ -307,7 +308,7 @@ function SideTabList({
               {tabs.length > 1 && (
                 <button
                   type="button"
-                  aria-label={`Fechar ${tab.label}`}
+                  aria-label={`${closeLabel}: ${tab.label}`}
                   className="flex size-6 items-center justify-center rounded-md opacity-0 group-hover/tab-list:opacity-100 hover:bg-background"
                   onClick={(event) => {
                     event.preventDefault();
@@ -339,6 +340,8 @@ function AppSidePanelHeader({
   hideLabel = "Hide side panel",
   menuLabel = "Open side-panel menu",
   closeLabel = "Close tab",
+  tabListLabel = "Side panel tabs",
+  specialItems = defaultSpecialItems,
   className,
   style,
   ...props
@@ -402,7 +405,7 @@ function AppSidePanelHeader({
             <div
               ref={tabsRef}
               role="tablist"
-              aria-label="Side panel tabs"
+              aria-label={tabListLabel}
               className="flex w-full min-w-0 items-center overflow-hidden"
               style={{ gap: SIDE_TAB_GAP }}
             >
@@ -470,6 +473,8 @@ function AppSidePanelHeader({
                 tabs={tabs}
                 value={value}
                 show={layout.cramped && tabs.length > 1}
+                label={tabListLabel}
+                closeLabel={closeLabel}
                 onValueChange={onValueChange}
                 onClose={closeTab}
               />
@@ -516,7 +521,7 @@ function AppSidePanelHeader({
               sideOffset={6}
               className="w-64 p-1.5"
             >
-              {defaultSpecialItems.map((item) => {
+              {specialItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <DropdownMenuItem

@@ -132,6 +132,12 @@ The Page surface SHALL reproduce the matched reference's editable header, body, 
 - **AND** removing or deselecting a collection SHALL update the same surfaces and persisted entity without leaving a stale chip
 - **AND** the control SHALL expose a distinct accessible name and a perceivable open, selected, and empty state.
 
+#### Scenario: Page metadata selector is searched inline
+- **WHEN** the user focuses or types in the visible Tags or Collections metadata control
+- **THEN** that control SHALL remain the focused inline text input and its selector SHALL open below it without rendering a second search field
+- **AND** the selector SHALL use the reference-sized compact result surface, render only applicable choices and named actions, and avoid a generic empty-state dialog
+- **AND** Escape or outside interaction SHALL close the selector and restore focus without mutating the Page.
+
 #### Scenario: Page overflow control is activated
 - **WHEN** the user activates the visible Page overflow control using pointer or keyboard input
 - **THEN** the owning accessible menu SHALL open with its named commands available

@@ -31,6 +31,7 @@ import {
   AppHeaderGraphIcon,
 } from "@/components/app-header-icons";
 import type { AppHeaderTab } from "@/components/app-header-tabs";
+import type { SidePanelSpecialEntryId } from "@/components/app-side-panel-header";
 import {
   AppSidebarDotsIcon,
   AppSidebarPlusIcon,
@@ -44,6 +45,7 @@ import {
   ObjectAreaIcon,
   ObjectCollectionIcon,
   ObjectIconBadge,
+  type ObjectIconProps,
   ObjectPageIcon,
   ObjectQueryIcon,
   ObjectTagIcon,
@@ -511,6 +513,7 @@ function ObjectTypeNamedItemWorkspace({
     objectTypes,
     objectTypeCollections,
     objectTypeQueries,
+    selectEntity,
     setMainTabs,
     setObjectTypeCollections,
     setObjectTypeQueries,
@@ -527,15 +530,20 @@ function ObjectTypeNamedItemWorkspace({
       ? objectTypeQueries[item.objectTypeId]?.[item.index]
       : undefined) ??
     t("objectTypeOverview.untitled");
-  const count =
-    item.kind === "collection" && collection
-      ? createdEntities.filter(
-          (entity) =>
-            entity.objectTypeId === item.objectTypeId &&
-            "collections" in entity &&
-            entity.collections.includes(collection.id),
-        ).length
-      : 0;
+  const matchingEntities = React.useMemo(
+    () =>
+      createdEntities.filter((entity) => {
+        if (entity.objectTypeId !== item.objectTypeId) return false;
+        if (item.kind === "query") return true;
+        return (
+          !!collection &&
+          "collections" in entity &&
+          entity.collections.includes(collection.id)
+        );
+      }),
+    [collection, createdEntities, item.kind, item.objectTypeId],
+  );
+  const count = matchingEntities.length;
 
   React.useEffect(() => {
     titleRef.current?.focus();
@@ -621,14 +629,43 @@ function ObjectTypeNamedItemWorkspace({
           placeholder={t("objectTypeOverview.untitled")}
         />
 
-        <section className="mt-10 flex min-h-[220px] flex-col items-center justify-center rounded-2xl text-center">
-          <ItemIcon className="mb-3 size-5 text-[#77716b]" />
-          <p className="text-sm font-medium text-[#34312f]">
-            {t("objectTypeOverview.namedItemViewNotReady")}
-          </p>
-          <p className="mt-1 max-w-md text-[13px] leading-5 text-[#77716b]">
-            {t("objectTypeOverview.namedItemViewNotReadyDescription")}
-          </p>
+        <section
+          data-slot="object-type-named-item-results"
+          className="mt-10 min-h-[220px]"
+          aria-label={t(
+            `objectTypeOverview.${item.kind === "collection" ? "collectionResults" : "queryResults"}`,
+          )}
+        >
+          <div className="mb-3 flex items-center justify-between text-sm text-[#77716b]">
+            <span>
+              {t(
+                `objectTypeOverview.${item.kind === "collection" ? "collectionResults" : "queryResults"}`,
+              )}
+            </span>
+            <span>{t("objectTypeOverview.entryCount", { count })}</span>
+          </div>
+          {matchingEntities.length > 0 ? (
+            <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+              {matchingEntities.map((entity) => (
+                <ObjectProjectionRow
+                  key={entity.id}
+                  entity={entity}
+                  objectType={objectType}
+                  onClick={() => selectEntity(entity.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex min-h-[190px] flex-col items-center justify-center rounded-2xl text-center">
+              <ItemIcon className="mb-3 size-5 text-[#77716b]" />
+              <p className="text-sm font-medium text-[#34312f]">
+                {t("objectTypeOverview.noMatchingObjects")}
+              </p>
+              <p className="mt-1 max-w-md text-[13px] leading-5 text-[#77716b]">
+                {t("objectTypeOverview.noMatchingObjectsDescription")}
+              </p>
+            </div>
+          )}
         </section>
       </div>
     </div>
@@ -2397,7 +2434,11 @@ function ObjectTypeWorkspace({
   const [toolbarCollapsed, setToolbarCollapsed] = React.useState(false);
   const [filterOpen, setFilterOpen] = React.useState(false);
   const [sortOpen, setSortOpen] = React.useState(false);
+  const [groupOpen, setGroupOpen] = React.useState(false);
   const [sortMode, setSortMode] = React.useState<"recent" | "title">("recent");
+  const [groupMode, setGroupMode] = React.useState<"none" | "createdAt">(
+    "none",
+  );
   const [layout, setLayout] = React.useState<"list" | "grid">("list");
   const [settingsOpen, setSettingsOpen] = React.useState(false);
   const [filterMode, setFilterMode] = React.useState<"all" | "untitled">("all");
@@ -2430,16 +2471,17 @@ function ObjectTypeWorkspace({
     if (searchOpen) searchInputRef.current?.focus();
   }, [searchOpen]);
   React.useEffect(() => {
-    if (!filterOpen && !sortOpen) return;
+    if (!filterOpen && !sortOpen && !groupOpen) return;
     function closeTransientRows(event: KeyboardEvent) {
       if (event.key !== "Escape") return;
       event.preventDefault();
       setFilterOpen(false);
       setSortOpen(false);
+      setGroupOpen(false);
     }
     window.addEventListener("keydown", closeTransientRows);
     return () => window.removeEventListener("keydown", closeTransientRows);
-  }, [filterOpen, sortOpen]);
+  }, [filterOpen, groupOpen, sortOpen]);
   const deferredSearchQuery = React.useDeferredValue(searchQuery);
   const recentEntities = React.useMemo(
     () =>
@@ -2873,15 +2915,23 @@ function ObjectTypeWorkspace({
             <ObjectTypeAllActions
               count={visibleEntities.length}
               filterOpen={filterOpen}
+              groupOpen={groupOpen}
               layout={layout}
               sortOpen={sortOpen}
               onFilter={() => {
+                setGroupOpen(false);
                 setSortOpen(false);
                 setFilterOpen((current) => !current);
+              }}
+              onGroup={() => {
+                setFilterOpen(false);
+                setSortOpen(false);
+                setGroupOpen((current) => !current);
               }}
               onLayout={setLayout}
               onSort={() => {
                 setFilterOpen(false);
+                setGroupOpen(false);
                 setSortOpen((current) => !current);
               }}
             />,
@@ -2939,6 +2989,44 @@ function ObjectTypeWorkspace({
               `objectTypeOverview.${sortMode === "recent" ? "recentSort" : "titleSort"}`,
             )}
           </button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="ml-auto h-7"
+            onClick={() => setSortOpen(false)}
+          >
+            {t("objectTypeOverview.remove")}
+          </Button>
+        </div>,
+      )}
+      {optionalNode(
+        both(view === "all", groupOpen),
+        <div
+          data-slot="object-type-group-row"
+          className="mx-5 mt-2 flex h-9 items-center gap-2 rounded-lg border bg-card px-3 text-xs"
+        >
+          <span>{t("objectTypeOverview.groupBy")}</span>
+          <button
+            type="button"
+            className="rounded-md bg-muted px-2 py-1"
+            onClick={() =>
+              setGroupMode((current) =>
+                current === "none" ? "createdAt" : "none",
+              )
+            }
+          >
+            {t(
+              `objectTypeOverview.${groupMode === "none" ? "noGrouping" : "createdDateGroup"}`,
+            )}
+          </button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="ml-auto h-7"
+            onClick={() => setGroupOpen(false)}
+          >
+            {t("objectTypeOverview.remove")}
+          </Button>
         </div>,
       )}
 
@@ -2971,6 +3059,7 @@ function ObjectTypeWorkspace({
           <ObjectTypeAllView
             objectType={objectType}
             entities={visibleEntities}
+            groupMode={groupMode}
             layout={layout}
             onOpenEntity={openEntity}
             onCreate={createObject}
@@ -3308,17 +3397,21 @@ function ObjectTypeNewMenu({
 function ObjectTypeAllActions({
   count,
   filterOpen,
+  groupOpen,
   layout,
   sortOpen,
   onFilter,
+  onGroup,
   onLayout,
   onSort,
 }: {
   count: number;
   filterOpen: boolean;
+  groupOpen: boolean;
   layout: "list" | "grid";
   sortOpen: boolean;
   onFilter: () => void;
+  onGroup: () => void;
   onLayout: (layout: "list" | "grid") => void;
   onSort: () => void;
 }) {
@@ -3347,6 +3440,15 @@ function ObjectTypeAllActions({
         onClick={onSort}
       >
         <ObjectTypeToolbarIcon name="sort" className="size-3.5" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        aria-label={t("objectTypeOverview.group")}
+        aria-pressed={groupOpen}
+        onClick={onGroup}
+      >
+        <ObjectTypeToolbarIcon name="group" className="size-3.5" />
       </Button>
       <Button
         variant="ghost"
@@ -3854,9 +3956,67 @@ function ObjectProjectionRow({
   );
 }
 
+function ObjectProjectionCard({
+  entity,
+  objectType,
+  onClick,
+}: {
+  entity: WorkspaceEntity;
+  objectType: AppSidebarObjectType;
+  onClick: () => void;
+}) {
+  const t = useTranslations("workspace.objectTypeOverview");
+  const Icon = objectType.icon;
+  const title = entity.title || t("untitled");
+
+  return (
+    <button
+      type="button"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectProjectionCard}
+      className="flex min-h-[132px] flex-col items-start rounded-xl border border-[#e4e0dc] bg-card p-3 text-left shadow-[0_1px_2px_rgb(0_0_0/0.02)] transition-colors duration-150 hover:bg-[#faf9f8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none"
+      aria-label={t("openObject", { title })}
+      onClick={onClick}
+    >
+      <ObjectIconBadge icon={Icon} tone={objectType.tone} />
+      <span className="mt-auto min-w-0">
+        <span className="block truncate text-sm font-medium">{title}</span>
+        <span className="mt-1 block truncate text-xs text-[#938d87]">
+          {objectType.label}
+        </span>
+      </span>
+    </button>
+  );
+}
+
+function groupObjectTypeEntities(
+  entities: readonly WorkspaceEntity[],
+  mode: "none" | "createdAt",
+) {
+  if (mode === "none") return [{ id: "all", label: "", entities }];
+  const formatter = new Intl.DateTimeFormat(undefined, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  const groups = new Map<string, WorkspaceEntity[]>();
+  for (const entity of entities) {
+    const timestamp = Date.parse(entity.createdAt);
+    const label = Number.isFinite(timestamp)
+      ? formatter.format(new Date(timestamp))
+      : entity.createdAt;
+    groups.set(label, [...(groups.get(label) ?? []), entity]);
+  }
+  return Array.from(groups, ([label, groupEntities]) => ({
+    id: label,
+    label,
+    entities: groupEntities,
+  }));
+}
+
 function ObjectTypeAllView({
   objectType,
   entities,
+  groupMode,
   layout,
   onOpenEntity,
   onCreate,
@@ -3864,6 +4024,7 @@ function ObjectTypeAllView({
 }: {
   objectType: AppSidebarObjectType;
   entities: WorkspaceEntity[];
+  groupMode: "none" | "createdAt";
   layout: "list" | "grid";
   onOpenEntity: (entityId: string) => void;
   onCreate: () => void;
@@ -3878,23 +4039,44 @@ function ObjectTypeAllView({
       role="tabpanel"
       aria-labelledby={`object-type-${objectType.id}-all-tab`}
       data-slot="object-type-all"
+      data-grouped={groupMode !== "none"}
+      data-layout={layout}
       className="min-h-0 flex-1 overflow-y-auto px-5 pb-8 pt-4"
     >
       {entities.length > 0 ? (
-        <div
-          data-layout={layout}
-          className={cn(
-            "grid grid-cols-1 gap-1",
-            layout === "grid" && "sm:grid-cols-2",
-          )}
-        >
-          {entities.map((entity) => (
-            <ObjectProjectionRow
-              key={entity.id}
-              entity={entity}
-              objectType={objectType}
-              onClick={() => onOpenEntity(entity.id)}
-            />
+        <div>
+          {groupObjectTypeEntities(entities, groupMode).map((group) => (
+            <section key={group.id} className="mb-5 last:mb-0">
+              {group.label ? (
+                <h2 className="mb-2 px-1 text-xs font-medium text-[#77716b]">
+                  {group.label}
+                </h2>
+              ) : null}
+              <div
+                className={cn(
+                  "grid grid-cols-1 gap-1",
+                  layout === "grid" && "gap-3 sm:grid-cols-2",
+                )}
+              >
+                {group.entities.map((entity) =>
+                  layout === "grid" ? (
+                    <ObjectProjectionCard
+                      key={entity.id}
+                      entity={entity}
+                      objectType={objectType}
+                      onClick={() => onOpenEntity(entity.id)}
+                    />
+                  ) : (
+                    <ObjectProjectionRow
+                      key={entity.id}
+                      entity={entity}
+                      objectType={objectType}
+                      onClick={() => onOpenEntity(entity.id)}
+                    />
+                  ),
+                )}
+              </div>
+            </section>
           ))}
         </div>
       ) : (
@@ -3960,6 +4142,27 @@ function OpenedTabWorkspace({ label }: { label: string }) {
   );
 }
 
+type ContextualPanelEntryId = SidePanelSpecialEntryId | "explore";
+
+function normalizeContextualPanelEntry(value: string): ContextualPanelEntryId {
+  if (value.startsWith("aiAssistantChat_")) return "aiAssistantChat";
+  if (
+    value === "graphView" ||
+    value === "backlinks" ||
+    value === "objectsInside" ||
+    value === "relatedContent" ||
+    value === "aiAssistantChat" ||
+    value === "localSpaceQuery"
+  ) {
+    return value;
+  }
+  return "explore";
+}
+
+function contextualPanelTabId(id: SidePanelSpecialEntryId) {
+  return id === "aiAssistantChat" ? `aiAssistantChat_${Date.now()}` : id;
+}
+
 function ExploreWorkspace() {
   const t = useTranslations("workspace");
   const {
@@ -3967,147 +4170,67 @@ function ExploreWorkspace() {
     createdEntities,
     objectTypes,
     openInSidePanel,
-    selectEntity,
     setSideSearchOpen,
-    sideValue,
   } = useWorkspace();
+  const activeEntity = createdEntities.find(
+    (entity) => entity.id === activeEntityId,
+  );
+  const activeObjectType = objectTypes.find((item) => item.id === activeEntityId);
+  const supportsObjectRelations = Boolean(activeEntity);
   const actions = [
     {
       id: "graphView",
       label: t("explore.graphView"),
       icon: AppHeaderGraphIcon,
+      supported: true,
     },
-    { id: "backlinks", label: t("explore.backlinks"), icon: ObjectPageIcon },
+    {
+      id: "backlinks",
+      label: t("explore.backlinks"),
+      icon: ObjectPageIcon,
+      supported: supportsObjectRelations,
+    },
     {
       id: "objectsInside",
       label: t("explore.objectsInside"),
       icon: ObjectAreaIcon,
+      supported: supportsObjectRelations,
     },
     {
       id: "relatedContent",
       label: t("explore.relatedContent"),
       icon: ObjectCollectionIcon,
+      supported: supportsObjectRelations,
     },
     {
       id: "aiAssistantChat",
       label: t("explore.aiChat"),
       icon: ObjectAiChatIcon,
+      supported: true,
     },
     {
       id: "localSpaceQuery",
       label: t("actions.search"),
       icon: AppSidebarSearchIcon,
+      supported: true,
     },
-  ];
+  ] satisfies Array<{
+    id: SidePanelSpecialEntryId;
+    label: string;
+    icon: React.ElementType;
+    supported: boolean;
+  }>;
 
   function openExploreAction(id: (typeof actions)[number]["id"]) {
-    if (id === "localSpaceQuery") {
-      setSideSearchOpen(true);
-      return;
-    }
+    const action = actions.find((item) => item.id === id);
+    if (!action?.supported) return;
     openInSidePanel({
-      id: id === "aiAssistantChat" ? `aiAssistantChat_${Date.now()}` : id,
-      label: actions.find((action) => action.id === id)?.label ?? id,
-      icon:
-        actions.find((action) => action.id === id)?.icon ?? AppHeaderGraphIcon,
+      id: contextualPanelTabId(id),
+      label: action.label,
+      icon: action.icon,
       iconClassName: objectIconToneBadgeClass.gray,
       draggable: true,
     });
-  }
-
-  const contextualSideValues = new Set([
-    "backlinks",
-    "objectsInside",
-    "relatedContent",
-    "aiAssistantChat",
-    "localSpaceQuery",
-  ]);
-
-  if (contextualSideValues.has(sideValue)) {
-    const activeEntity = createdEntities.find(
-      (entity) => entity.id === activeEntityId,
-    );
-    const linkIndex = createWorkspaceObjectLinkIndex(createdEntities);
-    const backlinks = activeEntityId
-      ? selectBacklinksForObject(linkIndex, activeEntityId)
-      : [];
-    const objectsInside = activeEntityId
-      ? selectObjectsInside(linkIndex, activeEntityId)
-      : [];
-    const relatedIds = Array.from(
-      new Set([
-        ...backlinks.map((item) => item.sourceId),
-        ...objectsInside.map((item) => item.targetId),
-      ]),
-    );
-    const items =
-      sideValue === "backlinks"
-        ? backlinks.map((item) => item.sourceId)
-        : sideValue === "objectsInside"
-          ? objectsInside.map((item) => item.targetId)
-          : relatedIds;
-    const title =
-      actions.find((action) => action.id === sideValue)?.label ??
-      t("explore.title");
-    const itemEntities = items
-      .map((id) => createdEntities.find((entity) => entity.id === id))
-      .filter((entity): entity is WorkspaceEntity => Boolean(entity));
-
-    return (
-      <div className="flex h-full min-h-0 items-start justify-center overflow-auto px-8 py-10 text-sidebar-foreground">
-        <div className="w-full max-w-[36rem]">
-          <h2 className="text-base font-semibold text-foreground">{title}</h2>
-          {activeEntity ? (
-            <p className="mt-1 text-xs text-muted-foreground">
-              {activeEntity.title || t("lifecycle.untitled")}
-            </p>
-          ) : null}
-          {sideValue === "aiAssistantChat" ? (
-            <div className="mt-6 rounded-lg border border-border bg-card p-4 text-sm text-muted-foreground">
-              {t("documentMenu.aiUnavailable")}
-            </div>
-          ) : itemEntities.length > 0 ? (
-            <div className="mt-5 grid gap-1">
-              {itemEntities.map((entity) => {
-                const objectType = objectTypes.find(
-                  (item) => item.id === entity.objectTypeId,
-                );
-                const definition = objectTypeDefinitionById[entity.kind];
-                return (
-                  <button
-                    key={entity.id}
-                    type="button"
-                    className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-left hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    onClick={() => selectEntity(entity.id)}
-                  >
-                    <ObjectIconBadge
-                      icon={objectType?.icon ?? definition.icon}
-                      tone={objectType?.tone ?? definition.tone}
-                    />
-                    <span className="min-w-0 truncate text-sm text-foreground">
-                      {entity.title || t("lifecycle.untitled")}
-                    </span>
-                    <span className="ml-auto text-xs text-muted-foreground">
-                      {objectTypes.find(
-                        (item) => item.id === entity.objectTypeId,
-                      )?.label ?? entity.kind}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="mt-6 rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-              {sideValue === "backlinks"
-                ? t("linking.noBacklinks")
-                : sideValue === "objectsInside"
-                  ? t("linking.noObjectsInside")
-                  : t("empty.title")}
-            </p>
-          )}
-        </div>
-      </div>
-    );
   }
 
   return (
@@ -4124,13 +4247,27 @@ function ExploreWorkspace() {
                 key={action.label}
                 type="button"
                 aria-label={action.label}
+                aria-disabled={!action.supported}
                 onClick={() => openExploreAction(action.id)}
-                className="flex h-[112px] min-w-0 flex-col justify-between rounded-[8px] border border-border bg-card p-4 text-left transition-colors duration-150 hover:bg-accent motion-reduce:transition-none"
+                className={cn(
+                  "flex h-[112px] min-w-0 flex-col justify-between rounded-[8px] border border-border bg-card p-4 text-left transition-colors duration-150 hover:bg-accent motion-reduce:transition-none",
+                  !action.supported &&
+                    "cursor-not-allowed opacity-55 hover:bg-card",
+                )}
               >
                 <Icon className="size-5 shrink-0 text-foreground" />
                 <span className="truncate text-xs text-muted-foreground">
                   {action.label}
                 </span>
+                {!action.supported ? (
+                  <span className="sr-only">
+                    {activeObjectType
+                      ? t("explore.unavailableForObjectType", {
+                          type: activeObjectType.label,
+                        })
+                      : t("explore.unavailableWithoutObject")}
+                  </span>
+                ) : null}
               </button>
             );
           })}
@@ -4159,6 +4296,255 @@ function ExploreWorkspace() {
         </div>
       </div>
     </div>
+  );
+}
+
+function ContextualPanelWorkspace() {
+  const { createdEntities, objectTypes, sideValue } = useWorkspace();
+  const entry = normalizeContextualPanelEntry(sideValue);
+  const sideEntity = createdEntities.find((entity) => entity.id === sideValue);
+  if (sideEntity) return <CreatedObjectWorkspace entity={sideEntity} />;
+
+  const sideObjectType = objectTypes.find((item) => item.id === sideValue);
+  if (sideObjectType) return <ObjectTypeWorkspace objectType={sideObjectType} />;
+
+  if (entry === "graphView") return <GraphWorkspace />;
+  if (entry === "backlinks" || entry === "objectsInside" || entry === "relatedContent") {
+    return <ContextualRelationsWorkspace entry={entry} />;
+  }
+  if (entry === "aiAssistantChat") return <ContextualUnavailableWorkspace entry={entry} />;
+  if (entry === "localSpaceQuery") return <ContextualSearchWorkspace />;
+  return <ExploreWorkspace />;
+}
+
+function ContextualUnavailableWorkspace({
+  entry,
+}: {
+  entry: SidePanelSpecialEntryId;
+}) {
+  const t = useTranslations("workspace");
+  const title =
+    entry === "aiAssistantChat" ? t("explore.aiChat") : t("explore.title");
+  return (
+    <div
+      data-slot="contextual-panel-body"
+      data-contextual-entry={entry}
+      className="flex h-full min-h-0 items-start justify-center overflow-auto px-8 py-10 text-sidebar-foreground"
+    >
+      <div className="w-full max-w-[36rem]">
+        <h2 className="text-base font-semibold text-foreground">{title}</h2>
+        <div className="mt-6 rounded-lg border border-border bg-card p-4 text-sm text-muted-foreground">
+          {t("documentMenu.aiUnavailable")}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ContextualSearchWorkspace() {
+  const t = useTranslations("workspace");
+  const { createdEntities, objectTypes, selectEntity } = useWorkspace();
+  const [query, setQuery] = React.useState("");
+  const deferredQuery = React.useDeferredValue(query);
+  const normalized = deferredQuery.trim().toLocaleLowerCase();
+  const rows = createdEntities
+    .map((entity) => {
+      const objectType = objectTypes.find(
+        (item) => item.id === entity.objectTypeId,
+      );
+      const definition = objectTypeDefinitionById[entity.kind];
+      return {
+        entity,
+        label: entity.title.trim() || t("lifecycle.untitled"),
+        objectType,
+        icon: objectType?.icon ?? definition.icon,
+        tone: objectType?.tone ?? definition.tone,
+      };
+    })
+    .filter((item) =>
+      normalized
+        ? `${item.label} ${item.objectType?.label ?? item.entity.kind}`
+            .toLocaleLowerCase()
+            .includes(normalized)
+        : true,
+    );
+
+  return (
+    <div
+      data-slot="contextual-panel-body"
+      data-contextual-entry="localSpaceQuery"
+      className="flex h-full min-h-0 items-start justify-center overflow-auto px-8 py-10 text-sidebar-foreground"
+    >
+      <div className="w-full max-w-[36rem]">
+        <h2 className="text-base font-semibold text-foreground">
+          {t("primaryNavigation.search")}
+        </h2>
+        <Input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={t("explore.searchPlaceholder")}
+          aria-label={t("explore.searchPlaceholder")}
+          className="mt-4 h-9"
+        />
+        <div className="mt-5 grid gap-1">
+          {rows.length > 0 ? (
+            rows.map(({ entity, icon, label, objectType, tone }) => (
+              <ContextualEntityRow
+                key={entity.id}
+                entity={entity}
+                icon={icon}
+                label={label}
+                objectTypeLabel={objectType?.label ?? entity.kind}
+                tone={tone}
+                onOpen={() => selectEntity(entity.id)}
+              />
+            ))
+          ) : (
+            <p className="rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+              {t("explore.noSearchResults")}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ContextualRelationsWorkspace({
+  entry,
+}: {
+  entry: "backlinks" | "objectsInside" | "relatedContent";
+}) {
+  const t = useTranslations("workspace");
+  const {
+    activeEntityId,
+    createdEntities,
+    objectTypes,
+    selectEntity,
+  } = useWorkspace();
+  const activeEntity = createdEntities.find(
+    (entity) => entity.id === activeEntityId,
+  );
+  const linkIndex = createWorkspaceObjectLinkIndex(createdEntities);
+  const backlinks = activeEntityId
+    ? selectBacklinksForObject(linkIndex, activeEntityId)
+    : [];
+  const objectsInside = activeEntityId
+    ? selectObjectsInside(linkIndex, activeEntityId)
+    : [];
+  const relatedIds = Array.from(
+    new Set([
+      ...backlinks.map((item) => item.sourceId),
+      ...objectsInside.map((item) => item.targetId),
+    ]),
+  );
+  const ids =
+    entry === "backlinks"
+      ? backlinks.map((item) => item.sourceId)
+      : entry === "objectsInside"
+        ? objectsInside.map((item) => item.targetId)
+        : relatedIds;
+  const rows = ids
+    .map((id) => createdEntities.find((entity) => entity.id === id))
+    .filter((entity): entity is WorkspaceEntity => Boolean(entity))
+    .map((entity) => {
+      const objectType = objectTypes.find(
+        (item) => item.id === entity.objectTypeId,
+      );
+      const definition = objectTypeDefinitionById[entity.kind];
+      return {
+        entity,
+        label: entity.title.trim() || t("lifecycle.untitled"),
+        objectType,
+        icon: objectType?.icon ?? definition.icon,
+        tone: objectType?.tone ?? definition.tone,
+      };
+    });
+  const title =
+    entry === "backlinks"
+      ? t("explore.backlinks")
+      : entry === "objectsInside"
+        ? t("explore.objectsInside")
+        : t("explore.relatedContent");
+  const empty =
+    entry === "backlinks"
+      ? t("linking.noBacklinks")
+      : entry === "objectsInside"
+        ? t("linking.noObjectsInside")
+        : t("linking.noRelatedContent");
+
+  return (
+    <div
+      data-slot="contextual-panel-body"
+      data-contextual-entry={entry}
+      className="flex h-full min-h-0 items-start justify-center overflow-auto px-8 py-10 text-sidebar-foreground"
+    >
+      <div className="w-full max-w-[36rem]">
+        <h2 className="text-base font-semibold text-foreground">{title}</h2>
+        {activeEntity ? (
+          <p className="mt-1 text-xs text-muted-foreground">
+            {activeEntity.title || t("lifecycle.untitled")}
+          </p>
+        ) : (
+          <p className="mt-1 text-xs text-muted-foreground">
+            {t("explore.unavailableWithoutObject")}
+          </p>
+        )}
+        {rows.length > 0 ? (
+          <div className="mt-5 grid gap-1">
+            {rows.map(({ entity, icon, label, objectType, tone }) => (
+              <ContextualEntityRow
+                key={entity.id}
+                entity={entity}
+                icon={icon}
+                label={label}
+                objectTypeLabel={objectType?.label ?? entity.kind}
+                tone={tone}
+                onOpen={() => selectEntity(entity.id)}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="mt-6 rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+            {empty}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ContextualEntityRow({
+  entity,
+  icon: Icon,
+  label,
+  objectTypeLabel,
+  tone,
+  onOpen,
+}: {
+  entity: WorkspaceEntity;
+  icon: React.ElementType<ObjectIconProps>;
+  label: string;
+  objectTypeLabel: string;
+  tone: keyof typeof objectIconToneBadgeClass;
+  onOpen: () => void;
+}) {
+  const t = useTranslations("workspace");
+  return (
+    <button
+      type="button"
+      aria-label={t("explore.openEntity", { title: label })}
+      data-slot="contextual-panel-entity-row"
+      data-entity-id={entity.id}
+      className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-left hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      onClick={onOpen}
+    >
+      <ObjectIconBadge icon={Icon} tone={tone} />
+      <span className="min-w-0 truncate text-sm text-foreground">{label}</span>
+      <span className="ml-auto text-xs text-muted-foreground">
+        {objectTypeLabel}
+      </span>
+    </button>
   );
 }
 
@@ -4242,19 +4628,21 @@ function GraphWorkspace() {
       className="relative flex h-full min-h-0 flex-col overflow-hidden bg-card text-card-foreground"
     >
       <div className="absolute inset-0 bottom-11 overflow-hidden">
-        {center ? (
-          <div
-            data-slot="workspace-graph-canvas"
-            data-dragging={dragging || undefined}
-            className="absolute inset-0 origin-center cursor-grab touch-none select-none transition-transform duration-200 ease-out active:cursor-grabbing data-[dragging=true]:transition-none motion-reduce:transition-none"
-            style={{
-              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-            }}
-            onPointerDown={startGraphDrag}
-            onPointerMove={moveGraph}
-            onPointerUp={stopGraphDrag}
-            onPointerCancel={stopGraphDrag}
-          >
+        <div
+          data-slot="workspace-graph-canvas"
+          data-dragging={dragging || undefined}
+          data-graph-empty={center ? undefined : "true"}
+          className="absolute inset-0 origin-center cursor-grab touch-none select-none transition-transform duration-200 ease-out active:cursor-grabbing data-[dragging=true]:transition-none motion-reduce:transition-none"
+          style={{
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          }}
+          onPointerDown={startGraphDrag}
+          onPointerMove={moveGraph}
+          onPointerUp={stopGraphDrag}
+          onPointerCancel={stopGraphDrag}
+        >
+          {center ? (
+            <>
             <svg
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 size-full"
@@ -4274,7 +4662,11 @@ function GraphWorkspace() {
                 />
               ))}
             </svg>
-            <div className="absolute left-1/2 top-1/2 flex max-w-[140px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
+            <div
+              data-slot="workspace-graph-node"
+              data-node-kind="active"
+              className="absolute left-1/2 top-1/2 flex max-w-[140px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center"
+            >
               <ObjectIconBadge
                 icon={ObjectPageIcon}
                 tone="blue"
@@ -4289,6 +4681,8 @@ function GraphWorkspace() {
             {related.map((node, index) => (
               <div
                 key={node.id}
+                data-slot="workspace-graph-node"
+                data-node-kind="related"
                 className="absolute flex max-w-[120px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center"
                 style={{
                   left: `${positions[index].x}%`,
@@ -4306,8 +4700,16 @@ function GraphWorkspace() {
                 </span>
               </div>
             ))}
-          </div>
-        ) : null}
+            </>
+          ) : (
+            <div
+              data-slot="workspace-graph-empty-state"
+              className="absolute inset-0 flex items-center justify-center px-8 text-center text-sm text-muted-foreground"
+            >
+              {t("graph.emptyObjectType")}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="relative mt-auto flex h-14 items-center justify-between px-3 text-xs text-muted-foreground">
@@ -4428,4 +4830,9 @@ function GraphWorkspace() {
   );
 }
 
-export { AtomicNotesWorkspace, ExploreWorkspace, GraphWorkspace };
+export {
+  AtomicNotesWorkspace,
+  ContextualPanelWorkspace,
+  ExploreWorkspace,
+  GraphWorkspace,
+};

@@ -195,6 +195,15 @@ The object-type listing SHALL connect its visible `New` and `Import file(s)` aff
 ### Requirement: Evidence-backed parity completion
 The change SHALL be considered complete only after source checks and browser evidence confirm the same required states.
 
+### Requirement: Inline Page metadata selection
+Page tags and collections SHALL use their visible metadata label as the selector's text-entry control rather than opening a separate generic search dialog.
+
+#### Scenario: Page metadata selector is searched inline
+- **WHEN** the user focuses or types in the visible Tags or Collections metadata control
+- **THEN** that control SHALL remain the focused inline text input and its selector SHALL open below it without rendering a second search field
+- **AND** the selector SHALL use a compact result surface, render only applicable choices and named actions, and avoid a generic empty-state dialog
+- **AND** Escape or outside interaction SHALL close the selector and restore focus without mutating the Page.
+
 #### Scenario: Per-iteration rubric
 - **WHEN** a visual evaluation iteration completes
 - **THEN** each required dimension SHALL record `PASS` or `FAIL`, supporting evidence, the remaining mismatch, and the owning file before the next root-cause fix is selected.

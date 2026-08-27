@@ -1852,7 +1852,47 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       const remainingEntities = workspaceObjects.entities.filter(
         (item) => item.id !== id,
       );
+      const fallbackEntity = remainingEntities.at(-1);
+      const fallbackType =
+        entity &&
+        getPinnedEntityFromId(
+          entity.objectTypeId,
+          t("lifecycle.untitled"),
+          remainingEntities,
+          objectTypes,
+          workspaceObjects.structures,
+          objectTypeCollections,
+        );
+      const fallbackTab = fallbackEntity
+        ? resolveWorkspaceEntityTab({
+            id: fallbackEntity.id,
+            objectTypes,
+            structures: workspaceObjects.structures,
+            t,
+            workspaceEntities: remainingEntities,
+          })
+        : fallbackType
+          ? {
+              id: fallbackType.id,
+              label: fallbackType.label,
+              icon: fallbackType.icon,
+              iconClassName: objectIconToneBadgeClass[fallbackType.tone],
+              preview: (
+                <TabPreview
+                  eyebrow={t("tabs.preview.object")}
+                  title={fallbackType.label}
+                />
+              ),
+            }
+          : null;
       dispatchWorkspaceObjects({ type: "deleteEntity", id });
+      setMainTabs((current) => current.filter((tab) => tab.id !== id));
+      setSideTabs((current) => current.filter((tab) => tab.id !== id));
+      if (mainValue === id && fallbackTab) {
+        ensureMainTab(fallbackTab);
+        setActiveEntityId(fallbackEntity?.id ?? fallbackTab.id);
+        setActiveAction(undefined);
+      }
       if (entity?.kind !== "file" || !entity.assetId || !entity.contentHash)
         return;
       const references = remainingEntities.flatMap((item) =>
@@ -1875,7 +1915,15 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           getMediaUrlRegistry().revoke(deletedId);
       });
     },
-    [workspaceObjects.entities],
+    [
+      ensureMainTab,
+      mainValue,
+      objectTypes,
+      objectTypeCollections,
+      t,
+      workspaceObjects.entities,
+      workspaceObjects.structures,
+    ],
   );
 
   const duplicateWorkspaceEntity = React.useCallback((id: string) => {
@@ -2440,6 +2488,27 @@ function MainTabSearchOverlay() {
 function WorkspaceSidePanelHeader() {
   const t = useTranslations("workspace");
   const specialSideTabs = React.useMemo(() => createSpecialSideTabs(t), [t]);
+  const specialItems = React.useMemo(
+    () =>
+      (
+        [
+          "graphView",
+          "backlinks",
+          "objectsInside",
+          "relatedContent",
+          "aiAssistantChat",
+          "localSpaceQuery",
+        ] as const
+      ).map((id) => ({
+        id,
+        label:
+          id === "localSpaceQuery"
+            ? t("primaryNavigation.search")
+            : specialSideTabs[id].label,
+        icon: specialSideTabs[id].icon ?? AppHeaderGraphIcon,
+      })),
+    [specialSideTabs, t],
+  );
   const {
     sideTabs,
     sideValue,
@@ -2453,11 +2522,6 @@ function WorkspaceSidePanelHeader() {
   if (focusMode) return null;
 
   function openSpecialEntry(entryId: SidePanelSpecialEntryId) {
-    if (entryId === "localSpaceQuery") {
-      setSideSearchOpen(true);
-      return;
-    }
-
     const existing = sideTabs.find((tab) => {
       if (entryId === "aiAssistantChat")
         return tab.id.startsWith("aiAssistantChat_");
@@ -2518,7 +2582,9 @@ function WorkspaceSidePanelHeader() {
       createLabel={t("tabs.createSidePanel")}
       hideLabel={t("tabs.hideSidePanel")}
       menuLabel={t("tabs.sidePanelMenu")}
+      tabListLabel={t("tabs.sidePanelTabs")}
       closeLabel={t("tabs.close")}
+      specialItems={specialItems}
     />
   );
 }

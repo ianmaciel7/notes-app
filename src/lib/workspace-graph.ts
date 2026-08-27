@@ -29,22 +29,6 @@ export type WorkspaceGraph = {
 
 type LinkEdge = { from: string; to: string };
 
-function relatedIds(value: unknown): string[] {
-  if (!value || typeof value !== "object") return [];
-  if (Array.isArray(value)) return value.flatMap(relatedIds);
-
-  const record = value as Record<string, unknown>;
-  if (record.type === "entity" && Array.isArray(record.entity)) {
-    return record.entity.flatMap((item) => {
-      if (!item || typeof item !== "object") return [];
-      const id = (item as Record<string, unknown>).id;
-      return typeof id === "string" && id.trim() ? [id] : [];
-    });
-  }
-
-  return Object.values(record).flatMap(relatedIds);
-}
-
 export function projectWorkspaceGraph(
   entities: readonly WorkspaceGraphEntity[],
   activeId: string | null,

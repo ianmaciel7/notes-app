@@ -1,6 +1,6 @@
 "use client";
 
-import { DownloadIcon, UploadIcon } from "lucide-react";
+import { CheckIcon, DownloadIcon, UploadIcon } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import * as React from "react";
@@ -390,6 +390,8 @@ function DocumentMoreMenu({
   onTypeSettings,
   onUseTemplate,
   onCopy,
+  onToggleWideLayout,
+  wideLayout,
 }: {
   readonly onCustomize: () => void;
   readonly onChangeType: () => void;
@@ -405,6 +407,8 @@ function DocumentMoreMenu({
   readonly onTypeSettings: () => void;
   readonly onUseTemplate: () => void;
   readonly onCopy: () => void;
+  readonly onToggleWideLayout?: () => void;
+  readonly wideLayout?: boolean;
 }) {
   const t = useTranslations("workspace");
   return (
@@ -434,12 +438,22 @@ function DocumentMoreMenu({
             {t("actions.customize")}
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
-            <DropdownMenuItem
-              className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
-              onClick={onCustomize}
-            >
-              {t("documentMenu.customizeHint")}
-            </DropdownMenuItem>
+            {onToggleWideLayout ? (
+              <DropdownMenuItem
+                className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+                onClick={onToggleWideLayout}
+              >
+                {t("documentMenu.wideLayout")}
+                {wideLayout ? <CheckIcon className="ml-auto size-4" /> : null}
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem
+                className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+                onClick={onCustomize}
+              >
+                {t("documentMenu.customizeHint")}
+              </DropdownMenuItem>
+            )}
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         {[
@@ -508,9 +522,11 @@ function ObjectPageTags({
   readonly update: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
-  const { createdEntities } = useWorkspace();
+  const { createWorkspaceEntity, createdEntities, selectEntity } =
+    useWorkspace();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
+  const deferredQuery = React.useDeferredValue(query);
   const tags = entityTags(entity);
   const tagNamesById = new Map(
     createdEntities
@@ -523,7 +539,7 @@ function ObjectPageTags({
       !tags.includes(item.id) &&
       (item.title.trim() || item.id)
         .toLocaleLowerCase()
-        .includes(query.trim().toLocaleLowerCase()),
+        .includes(deferredQuery.trim().toLocaleLowerCase()),
   );
   return (
     <div
@@ -553,18 +569,23 @@ function ObjectPageTags({
         }}
       >
         <PopoverTrigger
+          nativeButton={false}
           render={
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              aria-label={t("fields.tags")}
-              data-slot="object-page-tags-trigger"
-              className="h-7 min-w-0 gap-1.5 px-1.5 font-normal text-muted-foreground transition-[background-color,color,opacity] duration-150 ease-out"
-            >
+            <label className="inline-flex min-w-0 items-center whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3] hover:bg-muted/70">
               <ObjectTagIcon className="size-3.5" />
-              <span className="truncate">{t("fields.tags")}</span>
-            </Button>
+              <input
+                data-slot="object-page-tags-input"
+                aria-label={t("fields.tags")}
+                placeholder={t("fields.tags")}
+                value={query}
+                onFocus={() => setOpen(true)}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setOpen(true);
+                }}
+                className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] outline-none focus:cursor-text [field-sizing:content] placeholder:text-muted-foreground"
+              />
+            </label>
           }
         />
         <PopoverContent
@@ -572,16 +593,9 @@ function ObjectPageTags({
           sideOffset={5}
           className={cn(
             workspaceOverflowMenuContentClass,
-            "w-[269px] min-w-[269px] p-1.5",
+            "w-[257px] min-w-[257px] gap-0 p-1.5",
           )}
         >
-          <input
-            aria-label={t("actions.search")}
-            placeholder={t("actions.search")}
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            className="mb-1 h-8 w-full rounded-lg bg-muted px-2 text-sm outline-none placeholder:text-muted-foreground"
-          />
           {availableTags.length > 0 ? (
             availableTags.map((tag) => (
               <button
@@ -600,11 +614,37 @@ function ObjectPageTags({
                 <span className="truncate">{tag.title.trim() || tag.id}</span>
               </button>
             ))
-          ) : (
-            <p className="px-2 py-2 text-sm text-muted-foreground">
-              {t("documentMenu.noTags")}
-            </p>
-          )}
+          ) : null}
+          {!query.trim() ? (
+            <button
+              type="button"
+              className={cn(
+                workspaceOverflowMenuItemClass,
+                "w-full gap-2 px-2 text-left",
+              )}
+              onClick={() => {
+                setQuery("");
+                setOpen(false);
+                createWorkspaceEntity("tag");
+              }}
+            >
+              {t("documentMenu.newTagEmpty")}
+            </button>
+          ) : null}
+          <button
+            type="button"
+            className={cn(
+              workspaceOverflowMenuItemClass,
+              "w-full gap-2 px-2 text-left",
+            )}
+            onClick={() => {
+              setQuery("");
+              setOpen(false);
+              selectEntity("tag");
+            }}
+          >
+            {t("documentMenu.searchAllTags")}
+          </button>
         </PopoverContent>
       </Popover>
     </div>
@@ -622,6 +662,7 @@ function ObjectPageCollections({
   const { objectTypeCollections } = useWorkspace();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
+  const deferredQuery = React.useDeferredValue(query);
   const collections = entityCollections(entity);
   const choices = Object.values(objectTypeCollections).filter(
     (collection) => collection.structureId === entity.objectTypeId,
@@ -629,7 +670,7 @@ function ObjectPageCollections({
   const visibleChoices = choices.filter((collection) =>
     collection.name
       .toLocaleLowerCase()
-      .includes(query.trim().toLocaleLowerCase()),
+      .includes(deferredQuery.trim().toLocaleLowerCase()),
   );
   const collectionNames = new Map(
     choices.map((collection) => [collection.id, collection.name]),
@@ -665,18 +706,23 @@ function ObjectPageCollections({
         }}
       >
         <PopoverTrigger
+          nativeButton={false}
           render={
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              aria-label={t("objects.collections")}
-              data-slot="object-page-collections-trigger"
-              className="h-7 min-w-0 gap-1.5 px-1.5 font-normal text-muted-foreground transition-[background-color,color,opacity] duration-150 ease-out"
-            >
+            <label className="inline-flex min-w-0 items-center whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3] hover:bg-muted/70">
               <ObjectCollectionIcon className="size-3.5" />
-              {t("objects.collections")}
-            </Button>
+              <input
+                data-slot="object-page-collections-input"
+                aria-label={t("objects.collections")}
+                placeholder={t("objects.collections")}
+                value={query}
+                onFocus={() => setOpen(true)}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setOpen(true);
+                }}
+                className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] outline-none focus:cursor-text [field-sizing:content] placeholder:text-muted-foreground"
+              />
+            </label>
           }
         />
         <PopoverContent
@@ -684,16 +730,9 @@ function ObjectPageCollections({
           sideOffset={5}
           className={cn(
             workspaceOverflowMenuContentClass,
-            "w-[269px] min-w-[269px] p-1.5",
+            "w-[257px] min-w-[257px] gap-0 p-1.5",
           )}
         >
-          <input
-            aria-label={t("actions.search")}
-            placeholder={t("actions.search")}
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            className="mb-1 h-8 w-full rounded-lg bg-muted px-2 text-sm outline-none placeholder:text-muted-foreground"
-          />
           {visibleChoices.length > 0 ? (
             visibleChoices.map((collection) => (
               <button
@@ -714,11 +753,7 @@ function ObjectPageCollections({
                 ) : null}
               </button>
             ))
-          ) : (
-            <p className="px-2 py-2 text-sm text-muted-foreground">
-              {t("documentMenu.noCollections")}
-            </p>
-          )}
+          ) : null}
         </PopoverContent>
       </Popover>
     </div>
@@ -745,6 +780,7 @@ function PageCustomizeControl({
   const generatedDescription =
     bodyText.replace(/\s+/g, " ").trim().slice(0, 180) || entity.title.trim();
   const generatedAliases = entity.title.trim() ? [entity.title.trim()] : [];
+  const wideLayout = entity.wideLayout === true;
   const actions = [
     {
       label: t("documentMenu.generateTitle"),
@@ -780,6 +816,11 @@ function PageCustomizeControl({
             : generatedDescription,
         }),
     },
+    {
+      label: t("documentMenu.wideLayout"),
+      pressed: wideLayout,
+      run: () => onUpdate({ wideLayout: !wideLayout }),
+    },
   ];
   return (
     <DropdownMenu>
@@ -798,6 +839,7 @@ function PageCustomizeControl({
         }
       />
       <DropdownMenuContent
+        aria-label={t("actions.customize")}
         align="center"
         sideOffset={5}
         className="w-[277px] rounded-[12px] p-1.5 ring-0 shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)]"
@@ -806,9 +848,11 @@ function PageCustomizeControl({
           <DropdownMenuItem
             key={action.label}
             className={workspaceOverflowMenuItemClass}
+            aria-pressed={action.pressed}
             onClick={action.run}
           >
             {action.label}
+            {action.pressed ? <CheckIcon className="ml-auto size-4" /> : null}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
@@ -1070,9 +1114,46 @@ function WorkspacePropertyGroup({
 function RelatedContent({ entityId }: { readonly entityId: string }) {
   const t = useTranslations("workspace");
   const { createdEntities, objectTypes, selectEntity } = useWorkspace();
-  const related = createdEntities
-    .filter((item) => item.id !== entityId)
-    .slice(0, 3);
+  const entity = createdEntities.find((item) => item.id === entityId);
+  const linkIndex = React.useMemo(
+    () => createWorkspaceObjectLinkIndex(createdEntities),
+    [createdEntities],
+  );
+  const backlinks = entity
+    ? selectBacklinksForObject(linkIndex, entity.id).map(
+        (item) => item.sourceId,
+      )
+    : [];
+  const objectsInside = entity
+    ? selectObjectsInside(linkIndex, entity.id).map((item) => item.targetId)
+    : [];
+  const propertyEdges = React.useMemo(
+    () => selectPropertyRelationGraphEdges(createdEntities),
+    [createdEntities],
+  );
+  const propertyRelations = propertyEdges.flatMap((edge) => {
+    if (edge.from === entityId) return [edge.to];
+    if (edge.to === entityId) return [edge.from];
+    return [];
+  });
+  const sharedCollections =
+    entity && "collections" in entity
+      ? createdEntities.flatMap((item) => {
+          if (item.id === entity.id || !("collections" in item)) return [];
+          return item.collections.some((collection) =>
+            entity.collections.includes(collection),
+          )
+            ? [item.id]
+            : [];
+        })
+      : [];
+  const relatedIds = new Set([
+    ...backlinks,
+    ...objectsInside,
+    ...propertyRelations,
+    ...sharedCollections,
+  ]);
+  const related = createdEntities.filter((item) => relatedIds.has(item.id));
   if (related.length === 0) return null;
   return (
     <section
@@ -1606,6 +1687,9 @@ function DocumentPage({
                 .filter(Boolean).length;
               showMessage(t("documentMenu.stats", { words }));
             }}
+            onToggleWideLayout={() =>
+              update({ wideLayout: !(entity.wideLayout === true) })
+            }
             onTypeSettings={() => selectEntity(entity.objectTypeId)}
             onUseTemplate={() => duplicateWorkspaceEntity(entity.id)}
             onCopy={() => {
@@ -1614,6 +1698,7 @@ function DocumentPage({
                 .catch(() => undefined);
               showMessage(t("documentMenu.copied"));
             }}
+            wideLayout={entity.wideLayout === true}
           />
         }
       />
@@ -1727,6 +1812,7 @@ function DocumentPage({
           }}
         />
       </div>
+      <RelatedContent entityId={entity.id} />
       <input
         ref={importInputRef}
         type="file"
@@ -1913,6 +1999,8 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
       className={cn(workspaceRouteClass, "w-full overflow-y-auto")}
     >
       <div
+        data-slot="workspace-object-page-column"
+        data-wide-layout={wideLayout || undefined}
         className={cn(
           workspaceLongformColumnClass,
           wideLayout && "lg:max-w-[72rem]",

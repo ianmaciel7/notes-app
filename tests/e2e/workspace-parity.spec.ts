@@ -3,6 +3,7 @@ import { expect, type Locator, type Page, test } from "@playwright/test";
 const desktopViewports = [
   { width: 1536, height: 912 },
   { width: 1280, height: 800 },
+  { width: 1153, height: 912 },
   { width: 1024, height: 768 },
   { width: 768, height: 720 },
 ] as const;
@@ -164,6 +165,34 @@ async function writeCreatedObjectTitle(page: Page, title: string) {
   await workspace.getByRole("textbox", { name: "Título" }).blur();
 }
 
+async function createPageCollection(page: Page, name: string) {
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .getByRole("button")
+    .filter({ hasText: "Páginas" })
+    .click();
+  const workspace = objectTypeWorkspace(page).first();
+  await workspace.getByRole("tab", { name: "Tudo", exact: true }).click();
+  await workspace
+    .getByRole("button", { name: "Mais opções", exact: true })
+    .click();
+  await page.getByRole("menuitem", { name: "Nova coleção" }).click();
+  const collectionScreen = page
+    .locator(
+      '[data-slot="object-type-named-item-workspace"][data-kind="collection"]',
+    )
+    .filter({ visible: true });
+  await expect(collectionScreen).toBeVisible();
+  const collectionInput = collectionScreen.getByRole("textbox", {
+    name: "Título",
+    exact: true,
+  });
+  await collectionInput.fill(name);
+  await collectionInput.blur();
+  return name;
+}
+
 async function expectCreatedObjectProjection(
   page: Page,
   objectTypeId: string,
@@ -272,14 +301,30 @@ for (const viewport of desktopViewports) {
     const errors = await openWorkspace(page);
     const sidebar = page.locator("#app-shell-sidebar");
     const main = page.locator("#app-shell-main");
+    const mainHeader = page
+      .locator('[data-slot="app-shell-header"]')
+      .filter({ visible: true })
+      .first();
+    const mainSurface = page
+      .locator('[data-slot="app-shell-surface-wrapper"][data-side="main"]')
+      .filter({ visible: true })
+      .locator('[data-slot="app-shell-surface"]')
+      .first();
 
     await expect(sidebar).toBeVisible();
     await expect
       .poll(async () => (await sidebar.boundingBox())?.width)
       .toBeCloseTo(288, 0);
     await expect
+      .poll(async () => (await mainHeader.boundingBox())?.height)
+      .toBeCloseTo(46, 0);
+    await expect
       .poll(async () => (await main.boundingBox())?.width ?? 0)
       .toBeGreaterThan(0);
+    const surfaceBox = await mainSurface.boundingBox();
+    expect(surfaceBox?.x ?? 0).toBeGreaterThanOrEqual(298);
+    expect(surfaceBox?.x ?? 0).toBeLessThanOrEqual(299);
+    await expect(mainSurface).toHaveCSS("border-radius", "12px");
     await expect
       .poll(() =>
         page.evaluate(
@@ -475,8 +520,8 @@ test("graph controls preserve hover geometry and support reversible click and dr
   const sidePanelBox = await page
     .locator('[data-slot="app-shell-side-panel"]')
     .boundingBox();
-  expect(sidePanelBox?.width).toBeGreaterThanOrEqual(460.5);
-  expect(sidePanelBox?.width).toBeLessThanOrEqual(463);
+  expect(sidePanelBox?.width).toBeGreaterThanOrEqual(373.5);
+  expect(sidePanelBox?.width).toBeLessThanOrEqual(375);
 
   const controlNames = [
     "Mostrar menos",
@@ -547,6 +592,138 @@ test("graph controls preserve hover geometry and support reversible click and dr
     "style",
     /translate\(0px, 0px\) scale\(1\)/,
   );
+  expect(errors).toEqual([]);
+});
+
+test("contextual panel entries and Explore actions dispatch route-specific bodies", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.setViewportSize({ width: 1294, height: 912 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Context target");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Context source");
+
+  const sourceWorkspace = createdObjectWorkspace(page);
+  await sourceWorkspace
+    .locator('[data-slot="workspace-link-picker"]')
+    .getByRole("button", { name: /^Vincular / })
+    .first()
+    .click();
+  await sourceWorkspace
+    .getByRole("button", { name: "Incorporar", exact: true })
+    .click();
+
+  async function openContextEntry(name: string) {
+    await page
+      .getByRole("button", { name: "Abrir menu do painel lateral" })
+      .click();
+    await page.getByRole("menuitem", { name, exact: true }).click();
+  }
+
+  await openContextEntry("Objetos internos");
+  const sidePanel = page.locator('[data-slot="app-shell-side-panel"]');
+  await expect(
+    sidePanel.locator(
+      '[data-slot="contextual-panel-body"][data-contextual-entry="objectsInside"]',
+    ),
+  ).toBeVisible();
+  await expect(sidePanel).toContainText("Context target");
+
+  await openContextEntry("Conteúdo relacionado");
+  await expect(
+    sidePanel.locator(
+      '[data-slot="contextual-panel-body"][data-contextual-entry="relatedContent"]',
+    ),
+  ).toBeVisible();
+  await expect(sidePanel).toContainText("Context target");
+
+  await page.getByRole("tab", { name: "Context target" }).click();
+  await openContextEntry("Links de entrada");
+  await expect(
+    sidePanel.locator(
+      '[data-slot="contextual-panel-body"][data-contextual-entry="backlinks"]',
+    ),
+  ).toBeVisible();
+  await expect(sidePanel).toContainText("Context source");
+
+  await page.getByRole("button", { name: "Explorar", exact: true }).click();
+  await sidePanel.getByRole("button", { name: "Chat de IA" }).click();
+  await expect(
+    sidePanel.locator(
+      '[data-slot="contextual-panel-body"][data-contextual-entry="aiAssistantChat"]',
+    ),
+  ).toBeVisible();
+  await expect(sidePanel).toContainText(
+    "O preenchimento por IA ainda não está disponível localmente.",
+  );
+
+  await openContextEntry("Buscar");
+  await expect(
+    sidePanel.locator(
+      '[data-slot="contextual-panel-body"][data-contextual-entry="localSpaceQuery"]',
+    ),
+  ).toBeVisible();
+  await sidePanel
+    .getByRole("textbox", { name: "Buscar conteúdo local" })
+    .fill("Context source");
+  await expect(
+    sidePanel.getByRole("button", { name: "Abrir Context source" }),
+  ).toBeVisible();
+
+  await page
+    .getByRole("button", { name: "Nova aba lateral", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Nova aba lateral", exact: true })
+    .click();
+  const overlay = page.locator('[data-slot="side-panel-search-overlay"]');
+  await expect(overlay).toBeVisible();
+  await overlay
+    .getByRole("button")
+    .filter({ hasText: "Context target" })
+    .first()
+    .click();
+  await expect(
+    sidePanel.locator(
+      '[data-slot="created-object-workspace"][data-object-type="page"]',
+    ),
+  ).toBeVisible();
+  await expect(sidePanel).toContainText("Context target");
+
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Tabelas" })
+    .getByRole("button")
+    .filter({ hasText: "Tabelas" })
+    .click();
+  await openContextEntry("Visualização em grafo");
+  const graph = sidePanel.locator('[data-slot="workspace-graph"]');
+  await expect(graph).toBeVisible();
+  await expect(
+    graph.locator('[data-slot="workspace-graph-canvas"]'),
+  ).toHaveAttribute("data-graph-empty", "true");
+  await expect(
+    graph.locator('[data-slot="workspace-graph-empty-state"]'),
+  ).toContainText("Selecione um objeto");
+  for (const name of [
+    "Mostrar menos",
+    "Mostrar mais",
+    "Configurações do grafo",
+    "Centralizar grafo",
+    "Diminuir zoom",
+    "Aumentar zoom",
+  ]) {
+    await expect(graph.getByRole("button", { name })).toBeVisible();
+  }
+
+  await page.setViewportSize({ width: 480, height: 844 });
+  await page.getByRole("button", { name: "Abrir painel lateral" }).click();
+  const mobilePanel = page.locator('[data-slot="app-shell-side-panel"]');
+  await expect(mobilePanel.locator('[data-slot="workspace-graph"]')).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -857,6 +1034,7 @@ test("object page header controls keep fluid click and keyboard states", async (
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
   await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Header control page");
   await page.mouse.move(1100, 700);
   await expect(
     page.locator('[data-slot="hover-card-portal"] [data-open]'),
@@ -866,20 +1044,16 @@ test("object page header controls keep fluid click and keyboard states", async (
   const header = workspace.locator(
     '[data-slot="workspace-object-page-header"]',
   );
-  const collections = header.getByRole("button", {
+  const customize = header.getByRole("button", {
+    name: "Personalizar",
+    exact: true,
+  });
+  const collections = header.getByRole("textbox", {
     name: "Coleções",
     exact: true,
   });
-  const more = header.getByRole("button", {
-    name: "Mais opções",
-    exact: true,
-  });
-  const tags = workspace.getByRole("button", {
+  const tags = workspace.getByRole("textbox", {
     name: "Etiquetas",
-    exact: true,
-  });
-  const disclosure = header.getByRole("button", {
-    name: "Alterar tipo de objeto",
     exact: true,
   });
 
@@ -891,43 +1065,165 @@ test("object page header controls keep fluid click and keyboard states", async (
   await expect(collectionPopover).toBeVisible();
   await expect
     .poll(async () => (await collectionPopover.boundingBox())?.width ?? 0)
-    .toBeCloseTo(269, 0);
+    .toBeCloseTo(257, 0);
   await expect(
     collectionPopover.getByText("Nenhuma coleção encontrada", { exact: true }),
-  ).toBeVisible();
+  ).toHaveCount(0);
+  await expect(collectionPopover.getByRole("textbox")).toHaveCount(0);
+  await collections.fill("no matching collection");
+  await expect(collections).toHaveValue("no matching collection");
+  await expect(collectionPopover.getByRole("button")).toHaveCount(0);
   await page.keyboard.press("Escape");
   await expect(collectionPopover).toBeHidden();
   await expect(collections).toBeFocused();
+  await expect(collections).toHaveValue("");
 
   await expectStableBoxOnHover(tags);
   await tags.click();
   const tagsPopover = page.locator('[data-slot="popover-content"][data-open]');
   await expect(tagsPopover).toBeVisible();
   await expect(
-    tagsPopover.getByText("Nenhuma etiqueta encontrada", { exact: true }),
+    tagsPopover.getByText("Novo Etiqueta", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    tagsPopover.getByText("Procurar todos(as) Etiquetas", { exact: true }),
+  ).toBeVisible();
+  await expect(tagsPopover.getByRole("textbox")).toHaveCount(0);
+  await tags.fill("no matching tag");
+  await expect(tags).toHaveValue("no matching tag");
+  await expect(
+    tagsPopover.getByText("Novo Etiqueta", { exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    tagsPopover.getByText("Procurar todos(as) Etiquetas", { exact: true }),
   ).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(tagsPopover).toBeHidden();
   await expect(tags).toBeFocused();
+  await expect(tags).toHaveValue("");
 
-  await more.click();
-  const menu = page.locator('[data-slot="dropdown-menu-content"][data-open]');
+  await header.hover();
+  await customize.focus();
+  await expect(customize).toBeFocused();
+  await page.keyboard.press("Enter");
+  let menu = page.getByRole("menu", { name: "Personalizar" });
   await expect(menu).toBeVisible();
-  await menu.getByRole("menuitem", { name: "Personalizar" }).hover();
+  await menu.getByRole("menuitem", { name: "Layout Amplo" }).click();
   await expect(
-    page.getByText("Use o botão Personalizar no cabeçalho."),
-  ).toBeVisible();
-  await page.keyboard.press("Escape");
+    workspace.locator('[data-slot="workspace-object-page-column"]'),
+  ).toHaveAttribute("data-wide-layout", "true");
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect(
+    createdObjectWorkspace(page).locator(
+      '[data-slot="workspace-object-page-column"]',
+    ),
+  ).toHaveAttribute("data-wide-layout", "true");
+
+  const reloadedHeader = createdObjectWorkspace(page).locator(
+    '[data-slot="workspace-object-page-header"]',
+  );
+  const reloadedMore = reloadedHeader.getByRole("button", {
+    name: "Mais opções",
+    exact: true,
+  });
+  await reloadedMore.click();
+  menu = page.locator('[data-slot="dropdown-menu-content"][data-open]');
+  await expect(menu).toBeVisible();
+  await menu.getByText("Personalizar", { exact: true }).hover();
+  await menu.getByRole("menuitem", { name: "Layout Amplo" }).click();
+  await expect(
+    createdObjectWorkspace(page).locator(
+      '[data-slot="workspace-object-page-column"]',
+    ),
+  ).not.toHaveAttribute("data-wide-layout", "true");
   await page.keyboard.press("Escape");
   await expect(menu).toBeHidden();
-  await expect(more).toBeFocused();
+  await expect(reloadedMore).toBeFocused();
 
-  await disclosure.click();
+  const reloadedDisclosure = reloadedHeader.getByRole("button", {
+    name: "Alterar tipo de objeto",
+    exact: true,
+  });
+  await reloadedDisclosure.click();
   await expect(
     page.getByRole("textbox", { name: "Buscar", exact: true }),
   ).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(disclosure).toBeFocused();
+  await expect(reloadedDisclosure).toBeFocused();
+  expect(errors).toEqual([]);
+});
+
+test("Page collections synchronize header chips, object-type collection rows, and reload persistence", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Collection membership page");
+  await createPageCollection(page, "Research collection");
+  await page.getByRole("tab", { name: "Collection membership page" }).click();
+
+  const collections = createdObjectWorkspace(page).getByRole("textbox", {
+    name: "Coleções",
+    exact: true,
+  });
+  await collections.focus();
+  const popover = page.locator('[data-slot="popover-content"][data-open]');
+  await expect(popover).toBeVisible();
+  await popover.getByRole("button", { name: "Research collection" }).click();
+  await expect(
+    createdObjectWorkspace(page).getByRole("button", {
+      name: "Remover Research collection",
+    }),
+  ).toBeVisible();
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      return entities.find(
+        (candidate: { title: string }) =>
+          candidate.title === "Collection membership page",
+      )?.collections;
+    })
+    .toHaveLength(1);
+
+  await page
+    .locator('[data-slot="app-sidebar-collection-row"]')
+    .filter({ hasText: "Research collection" })
+    .getByRole("button")
+    .first()
+    .click();
+  await expect(objectTypeWorkspace(page)).toContainText(
+    "Collection membership page",
+  );
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.getByRole("tab", { name: "Collection membership page" }).click();
+  await expect(
+    createdObjectWorkspace(page).getByRole("button", {
+      name: "Remover Research collection",
+    }),
+  ).toBeVisible();
+
+  await createdObjectWorkspace(page)
+    .getByRole("button", { name: "Remover Research collection" })
+    .click();
+  await expect(
+    createdObjectWorkspace(page).getByRole("button", {
+      name: "Remover Research collection",
+    }),
+  ).toHaveCount(0);
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      return entities.find(
+        (candidate: { title: string }) =>
+          candidate.title === "Collection membership page",
+      )?.collections;
+    })
+    .toEqual([]);
   expect(errors).toEqual([]);
 });
 
@@ -1037,6 +1333,179 @@ test("empty Table layout keeps table structure and primary empty actions", async
   expect(errors).toEqual([]);
 });
 
+test("production object-type Import handles accepted rejected and cancelled selections", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "PDFs" })
+    .getByRole("button")
+    .filter({ hasText: "PDFs" })
+    .click();
+  const workspace = page.locator('[data-slot="workspace-object-type-view"]');
+  await expect(workspace).toBeVisible();
+  await expect(workspace).toHaveAttribute("data-structure-id", "pdf");
+
+  const importButton = workspace.getByRole("button", {
+    name: "Importar",
+    exact: true,
+  });
+  const cancelledChooserPromise = page.waitForEvent("filechooser");
+  await importButton.click();
+  const cancelledChooser = await cancelledChooserPromise;
+  expect(
+    await cancelledChooser.element().evaluate((input) =>
+      input instanceof Element
+        ? Boolean(input.closest('[data-slot="workspace-object-type-view"]'))
+        : false,
+    ),
+  ).toBe(true);
+  await cancelledChooser.setFiles([]);
+  await expect(page.locator('[data-slot="workspace-message"]')).toHaveText(
+    "Importação cancelada.",
+  );
+  expect(await persistedEntities(page)).toHaveLength(0);
+
+  const rejectedChooserPromise = page.waitForEvent("filechooser");
+  await importButton.click();
+  const rejectedChooser = await rejectedChooserPromise;
+  await rejectedChooser.setFiles({
+    buffer: Buffer.from("not a pdf"),
+    mimeType: "text/plain",
+    name: "wrong.txt",
+  });
+  await expect(page.locator('[data-slot="workspace-message"]')).toHaveText(
+    "Nenhum arquivo compatível foi importado.",
+  );
+  expect(await persistedEntities(page)).toHaveLength(0);
+
+  const acceptedChooserPromise = page.waitForEvent("filechooser");
+  await importButton.click();
+  const acceptedChooser = await acceptedChooserPromise;
+  await acceptedChooser.setFiles({
+    buffer: Buffer.from("%PDF-1.4"),
+    mimeType: "application/pdf",
+    name: "accepted.pdf",
+  });
+  await expect(page.locator('[data-slot="workspace-message"]')).toHaveText(
+    "1 objeto importado.",
+  );
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      return entities.map(
+        (entity: {
+          fileName?: string;
+          objectTypeId: string;
+          title: string;
+        }) => ({
+          fileName: entity.fileName,
+          objectTypeId: entity.objectTypeId,
+          title: entity.title,
+        }),
+      );
+    })
+    .toEqual([
+      {
+        fileName: "accepted.pdf",
+        objectTypeId: "pdf",
+        title: "accepted",
+      },
+    ]);
+  expect(errors).toEqual([]);
+});
+
+test("Atomic note object-type commands render named outcomes", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await selectNewObject(page, "Nota atômica");
+  await writeCreatedObjectTitle(page, "Atomic alpha");
+  await selectNewObject(page, "Nota atômica");
+  await writeCreatedObjectTitle(page, "Atomic beta");
+  expect(await persistedEntities(page)).toHaveLength(2);
+
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Notas atômicas" })
+    .getByRole("button")
+    .filter({ hasText: "Notas atômicas" })
+    .click();
+  const workspace = objectTypeWorkspace(page);
+  await expect(workspace).toBeVisible();
+
+  await workspace
+    .getByRole("tab", { name: "Visão geral", exact: true })
+    .click();
+  await expect(
+    workspace.locator('[data-slot="object-type-overview"]'),
+  ).toBeVisible();
+  await expect(workspace).toContainText("Recentemente aberto");
+  await expect(workspace).toContainText("Coleções");
+  await expect(workspace).toContainText("Queries");
+
+  await workspace.getByRole("button", { name: "Buscar", exact: true }).click();
+  const search = workspace.getByPlaceholder("Buscar título…");
+  await expect(search).toBeVisible();
+  await search.fill("alpha");
+  await page.keyboard.press("Escape");
+  await expect(search).toBeHidden();
+  expect(await persistedEntities(page)).toHaveLength(2);
+
+  await workspace.getByRole("tab", { name: "Tudo", exact: true }).click();
+  await workspace.getByRole("button", { name: "Filtrar", exact: true }).click();
+  const filterRow = workspace.locator('[data-slot="object-type-filter-row"]');
+  await expect(filterRow).toBeVisible();
+  await expect(filterRow).toContainText("onde");
+  await filterRow.getByRole("button", { name: "Todos os objetos" }).click();
+  await expect(workspace.locator('[data-slot="object-type-all"]')).toContainText(
+    "Nenhum objeto correspondente",
+  );
+  await filterRow.getByRole("button", { name: "Sem título" }).click();
+  await page.keyboard.press("Escape");
+  await expect(filterRow).toBeHidden();
+
+  await workspace.getByRole("button", { name: "Ordenar", exact: true }).click();
+  const sortRow = workspace.locator('[data-slot="object-type-sort-row"]');
+  await expect(sortRow).toBeVisible();
+  await expect(sortRow).toContainText("Classificar por");
+  await sortRow.getByRole("button", { name: "Criados recentemente" }).click();
+  await page.keyboard.press("Escape");
+  await expect(sortRow).toBeHidden();
+
+  await workspace.getByRole("button", { name: "Agrupar", exact: true }).click();
+  const groupRow = workspace.locator('[data-slot="object-type-group-row"]');
+  await expect(groupRow).toBeVisible();
+  await expect(groupRow).toContainText("Agrupar por");
+  await groupRow.getByRole("button", { name: "Sem agrupamento" }).click();
+  await expect(
+    workspace.locator('[data-slot="object-type-all"][data-grouped="true"]'),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(groupRow).toBeHidden();
+
+  await workspace.getByRole("button", { name: "Lista", exact: true }).click();
+  await expect(
+    workspace.locator('[data-lifecycle-contract="object-projection-row"]'),
+  ).toHaveCount(2);
+  await workspace.getByRole("button", { name: "Grade", exact: true }).click();
+  await expect(
+    workspace.locator('[data-lifecycle-contract="object-projection-card"]'),
+  ).toHaveCount(2);
+  await expect(workspace.locator('[data-slot="object-type-all"]')).toHaveAttribute(
+    "data-layout",
+    "grid",
+  );
+  expect(await persistedEntities(page)).toHaveLength(2);
+  expect(errors).toEqual([]);
+});
+
 test("Page embed action persists a schema-valid paragraph embed", async ({
   page,
 }) => {
@@ -1134,11 +1603,99 @@ test("Page collapse control changes to an accurate expand name", async ({
     .click();
 
   await expect(
+    workspace.locator('[data-slot="workspace-object-page-column"]'),
+  ).toBeHidden();
+  await expect(
     workspace.getByRole("button", { name: "Expandir editor", exact: true }),
   ).toBeVisible();
   await expect(
     workspace.getByRole("button", { name: "Expandir editor", exact: true }),
   ).toHaveAttribute("aria-expanded", "false");
+  await expect(
+    workspace.getByRole("button", { name: "Expandir editor", exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(workspace.getByRole("textbox", { name: "Título" })).toBeVisible();
+  await expect(
+    workspace.getByRole("button", { name: "Recolher editor", exact: true }),
+  ).toBeFocused();
+  expect(errors).toEqual([]);
+});
+
+test("Page related content only renders explicit collection or link relations", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Unrelated source page");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Unrelated active page");
+  await expect(
+    createdObjectWorkspace(page).locator(
+      '[data-slot="workspace-object-related-content"]',
+    ),
+  ).toHaveCount(0);
+
+  await createPageCollection(page, "Related collection");
+  await page.getByRole("tab", { name: "Unrelated source page" }).click();
+  await createdObjectWorkspace(page)
+    .getByRole("textbox", { name: "Coleções", exact: true })
+    .focus();
+  await page
+    .locator('[data-slot="popover-content"][data-open]')
+    .getByRole("button", { name: "Related collection" })
+    .click();
+  await page.getByRole("tab", { name: "Unrelated active page" }).click();
+  await createdObjectWorkspace(page)
+    .getByRole("textbox", { name: "Coleções", exact: true })
+    .focus();
+  await page
+    .locator('[data-slot="popover-content"][data-open]')
+    .getByRole("button", { name: "Related collection" })
+    .click();
+
+  const related = createdObjectWorkspace(page).locator(
+    '[data-slot="workspace-object-related-content"]',
+  );
+  await expect(related).toBeVisible();
+  await expect(related).toContainText("Unrelated source page");
+  expect(errors).toEqual([]);
+});
+
+test("deleting the active Page removes stale tabs and selects a valid fallback", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Fallback page");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Delete me page");
+
+  await createdObjectWorkspace(page)
+    .getByRole("button", { name: "Mais opções", exact: true })
+    .click();
+  await page.getByRole("menuitem", { name: "Excluir Objeto" }).click();
+
+  await expect(
+    page.locator('[aria-label="Workspace tabs"] [role="tab"]').filter({
+      hasText: "Delete me page",
+    }),
+  ).toHaveCount(0);
+  await expect(
+    page.locator('[data-tab-id="created-page-2"] [role="tab"]'),
+  ).toHaveCount(0);
+  await expect(createdObjectWorkspace(page)).toBeVisible();
+  await expectActiveEditorTitle(page, "Fallback page");
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      return entities.map((entity: { title: string }) => entity.title);
+    })
+    .toEqual(["Fallback page"]);
   expect(errors).toEqual([]);
 });
 
@@ -1354,7 +1911,8 @@ test("object type collection and query actions open editable item screens", asyn
   await expect(collectionScreen).toBeVisible();
   await expect(collectionScreen).toContainText("Páginas");
   await expect(collectionScreen).toContainText("0 entradas");
-  await expect(collectionScreen).toContainText("A visão ainda não está pronta");
+  await expect(collectionScreen).toContainText("Objetos da coleção");
+  await expect(collectionScreen).toContainText("Nenhum objeto correspondente");
   const collectionInput = collectionScreen.getByRole("textbox", {
     name: "Título",
     exact: true,
@@ -1388,6 +1946,8 @@ test("object type collection and query actions open editable item screens", asyn
   await expect(queryScreen).toBeVisible();
   await expect(queryScreen).toContainText("Páginas");
   await expect(queryScreen).toContainText("0 entradas");
+  await expect(queryScreen).toContainText("Resultados da query");
+  await expect(queryScreen).toContainText("Nenhum objeto correspondente");
   const queryInput = queryScreen.getByRole("textbox", {
     name: "Título",
     exact: true,
@@ -1463,8 +2023,16 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     const errors = await openWorkspace(page);
     const mobile = page.locator('[data-slot="app-shell-mobile"]');
+    const mainSurface = mobile
+      .locator('[data-slot="app-shell-surface-wrapper"][data-side="main"]')
+      .locator('[data-slot="app-shell-surface"]')
+      .first();
     await expect(mobile).toBeVisible();
     expect((await mobile.boundingBox())?.width ?? 0).toBeGreaterThan(0);
+    const closedSurfaceBox = await mainSurface.boundingBox();
+    expect(closedSurfaceBox?.x ?? 0).toBeCloseTo(10, 0);
+    expect(closedSurfaceBox?.width ?? 0).toBeCloseTo(viewport.width - 20, 0);
+    expect(closedSurfaceBox?.height ?? 0).toBeGreaterThan(0);
     expect(
       await page.evaluate(
         () =>
@@ -1473,22 +2041,35 @@ for (const viewport of [
       ),
     ).toBe(true);
 
-    const navTrigger = page.getByRole("button", { name: "Abrir navegação" });
+    const navTrigger = mobile.locator('button[aria-label="Abrir navegação"]');
+    await expect(navTrigger).toHaveAttribute("aria-expanded", "false");
     await navTrigger.click();
-    await expect(page.getByRole("dialog", { name: "Navegação" })).toBeVisible();
+    const navigationDialog = page.getByRole("dialog", { name: "Navegação" });
+    await expect(navigationDialog).toBeVisible();
+    const navigationBox = await navigationDialog.boundingBox();
+    expect(navigationBox?.width ?? 0).toBeLessThanOrEqual(viewport.width - 40);
+    expect(navigationBox?.height ?? 0).toBeGreaterThan(0);
     await page.keyboard.press("Escape");
-    await expect(page.getByRole("dialog", { name: "Navegação" })).toBeHidden();
+    await expect(navigationDialog).toBeHidden();
+    await expect(navTrigger).toHaveAttribute("aria-expanded", "false");
     await expect(navTrigger).toBeFocused();
+    expect(await mainSurface.boundingBox()).toEqual(closedSurfaceBox);
 
-    const contextTrigger = page.getByRole("button", {
-      name: "Abrir painel lateral",
-    });
+    const contextTrigger = mobile.locator(
+      'button[aria-label="Abrir painel lateral"]',
+    );
+    await expect(contextTrigger).toHaveAttribute("aria-expanded", "false");
     await contextTrigger.click();
-    await expect(
-      page.getByRole("dialog", { name: "Painel lateral" }),
-    ).toBeVisible();
+    const contextDialog = page.getByRole("dialog", { name: "Painel lateral" });
+    await expect(contextDialog).toBeVisible();
+    const contextBox = await contextDialog.boundingBox();
+    expect(contextBox?.width ?? 0).toBeLessThanOrEqual(viewport.width - 40);
+    expect(contextBox?.height ?? 0).toBeGreaterThan(0);
     await page.keyboard.press("Escape");
+    await expect(contextDialog).toBeHidden();
+    await expect(contextTrigger).toHaveAttribute("aria-expanded", "false");
     await expect(contextTrigger).toBeFocused();
+    expect(await mainSurface.boundingBox()).toEqual(closedSurfaceBox);
     expect(errors).toEqual([]);
   });
 }

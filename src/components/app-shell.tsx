@@ -22,14 +22,25 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { getWorkspacePanelPresentation } from "@/lib/workspace-layout";
+import {
+  getWorkspacePanelPresentation,
+  WORKSPACE_CONTEXT_PANEL_DEFAULT_WIDTH_PX,
+  WORKSPACE_CONTEXT_PANEL_MAX_WIDTH_PX,
+  WORKSPACE_CONTEXT_PANEL_MIN_WIDTH_PX,
+  WORKSPACE_RAIL_HEIGHT_PX,
+  WORKSPACE_SIDEBAR_DEFAULT_WIDTH_PX,
+  WORKSPACE_SIDEBAR_MAX_WIDTH_PX,
+  WORKSPACE_SIDEBAR_MIN_WIDTH_PX,
+  WORKSPACE_SURFACE_GUTTER_PX,
+  WORKSPACE_SURFACE_RADIUS_PX,
+} from "@/lib/workspace-layout";
 
-const APP_SHELL_LEFT_DEFAULT = "18rem";
-const APP_SHELL_LEFT_MIN = "14rem";
-const APP_SHELL_LEFT_MAX = "24rem";
-const APP_SHELL_RIGHT_DEFAULT = "29.25rem";
-const APP_SHELL_RIGHT_MIN = "20rem";
-const APP_SHELL_RIGHT_MAX = "40rem";
+const APP_SHELL_LEFT_DEFAULT = `${WORKSPACE_SIDEBAR_DEFAULT_WIDTH_PX}px`;
+const APP_SHELL_LEFT_MIN = `${WORKSPACE_SIDEBAR_MIN_WIDTH_PX}px`;
+const APP_SHELL_LEFT_MAX = `${WORKSPACE_SIDEBAR_MAX_WIDTH_PX}px`;
+const APP_SHELL_RIGHT_DEFAULT = `${WORKSPACE_CONTEXT_PANEL_DEFAULT_WIDTH_PX}px`;
+const APP_SHELL_RIGHT_MIN = `${WORKSPACE_CONTEXT_PANEL_MIN_WIDTH_PX}px`;
+const APP_SHELL_RIGHT_MAX = `${WORKSPACE_CONTEXT_PANEL_MAX_WIDTH_PX}px`;
 
 const appShellPanelGroupVariants = cva("h-full w-full", {
   variants: {
@@ -49,13 +60,17 @@ type AppShellContextValue = {
   leftCollapsed: boolean;
   rightCollapsed: boolean;
   compactDesktop: boolean;
+  leftOverlayOpen: boolean;
   rightOverlayOpen: boolean;
   resizingSide: AppShellResizeSide | null;
   leftPanelRef: ReturnType<typeof usePanelRef>;
   rightPanelRef: ReturnType<typeof usePanelRef>;
   leftPanelElementRef: React.RefObject<HTMLDivElement | null>;
+  leftOverlayReturnFocusRef: React.RefObject<HTMLElement | null>;
+  rightOverlayReturnFocusRef: React.RefObject<HTMLElement | null>;
   setLeftCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
   setRightCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  setLeftOverlayOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setRightOverlayOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setResizingSide: React.Dispatch<
     React.SetStateAction<AppShellResizeSide | null>
@@ -89,8 +104,11 @@ function AppShellProvider({
   const [leftCollapsed, setLeftCollapsed] = React.useState(false);
   const [rightCollapsed, setRightCollapsed] = React.useState(false);
   const [compactDesktop, setCompactDesktop] = React.useState(false);
+  const [mobileShell, setMobileShell] = React.useState(false);
   const [hydrated, setHydrated] = React.useState(false);
+  const [leftOverlayOpen, setLeftOverlayOpen] = React.useState(false);
   const [rightOverlayOpen, setRightOverlayOpen] = React.useState(false);
+  const leftOverlayReturnFocusRef = React.useRef<HTMLElement | null>(null);
   const rightOverlayReturnFocusRef = React.useRef<HTMLElement | null>(null);
   const [resizingSide, setResizingSide] =
     React.useState<AppShellResizeSide | null>(null);
@@ -137,19 +155,34 @@ function AppShellProvider({
 
   React.useEffect(() => {
     setHydrated(true);
-    const sync = () =>
-      setCompactDesktop(
-        getWorkspacePanelPresentation(window.innerWidth) === "overlay",
-      );
+    const sync = () => {
+      const presentation = getWorkspacePanelPresentation(window.innerWidth);
+      setCompactDesktop(presentation === "overlay");
+      setMobileShell(presentation === "mobile");
+    };
     sync();
     window.addEventListener("resize", sync);
     return () => window.removeEventListener("resize", sync);
   }, []);
 
   React.useEffect(() => {
-    if (compactDesktop) return;
+    if (mobileShell) return;
+    setLeftOverlayOpen(false);
+  }, [mobileShell]);
+
+  React.useEffect(() => {
+    if (compactDesktop || mobileShell) return;
     setRightOverlayOpen(false);
-  }, [compactDesktop]);
+  }, [compactDesktop, mobileShell]);
+
+  const previousLeftOverlayOpen = React.useRef(false);
+  React.useEffect(() => {
+    if (previousLeftOverlayOpen.current && !leftOverlayOpen) {
+      leftOverlayReturnFocusRef.current?.focus({ preventScroll: true });
+      leftOverlayReturnFocusRef.current = null;
+    }
+    previousLeftOverlayOpen.current = leftOverlayOpen;
+  }, [leftOverlayOpen]);
 
   const previousRightOverlayOpen = React.useRef(false);
   React.useEffect(() => {
@@ -198,13 +231,17 @@ function AppShellProvider({
       leftCollapsed,
       rightCollapsed: compactDesktop ? !rightOverlayOpen : rightCollapsed,
       compactDesktop,
+      leftOverlayOpen,
       rightOverlayOpen,
       resizingSide,
       leftPanelRef,
       rightPanelRef,
       leftPanelElementRef,
+      leftOverlayReturnFocusRef,
+      rightOverlayReturnFocusRef,
       setLeftCollapsed,
       setRightCollapsed,
+      setLeftOverlayOpen,
       setRightOverlayOpen,
       setResizingSide,
       toggleLeft,
@@ -214,6 +251,7 @@ function AppShellProvider({
       leftCollapsed,
       rightCollapsed,
       compactDesktop,
+      leftOverlayOpen,
       rightOverlayOpen,
       resizingSide,
       leftPanelRef,
@@ -443,12 +481,19 @@ function AppShellSidePanel({
 
 function AppShellHeader({
   className,
+  style,
   ...props
 }: React.ComponentProps<"header">) {
   return (
     <header
       data-slot="app-shell-header"
       className={cn("flex h-[46px] shrink-0 items-center", className)}
+      style={
+        {
+          "--app-shell-rail-height": `${WORKSPACE_RAIL_HEIGHT_PX}px`,
+          ...style,
+        } as React.CSSProperties
+      }
       {...props}
     />
   );
@@ -479,6 +524,12 @@ function AppShellSurface({
         "min-h-0 flex-1 pb-2.5 pt-0",
         side === "main" ? "px-2.5" : "pl-0 pr-2.5",
       )}
+      style={
+        {
+          "--app-shell-surface-gutter": `${WORKSPACE_SURFACE_GUTTER_PX}px`,
+          "--app-shell-surface-radius": `${WORKSPACE_SURFACE_RADIUS_PX}px`,
+        } as React.CSSProperties
+      }
     >
       <Card
         data-slot="app-shell-surface"
@@ -620,18 +671,24 @@ function AppShellMobileSidebar({
   ...props
 }: React.ComponentProps<typeof SheetContent>) {
   const t = useTranslations("workspace.shell");
-  const [open, setOpen] = React.useState(false);
+  const {
+    leftOverlayOpen,
+    setLeftOverlayOpen,
+    leftOverlayReturnFocusRef,
+  } = useAppShell();
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={leftOverlayOpen} onOpenChange={setLeftOverlayOpen}>
       <Button
         type="button"
         variant="ghost"
         size="icon-sm"
         className="absolute left-2.5 top-[15px]"
+        aria-expanded={leftOverlayOpen}
         aria-label={t("openNavigation")}
         onClick={(event) => {
           event.preventDefault();
-          setOpen(true);
+          leftOverlayReturnFocusRef.current = event.currentTarget;
+          setLeftOverlayOpen(true);
         }}
       >
         <AppHeaderSidebarSimpleIcon />
@@ -640,7 +697,7 @@ function AppShellMobileSidebar({
         side="left"
         overlayClassName="motion-reduce:transition-none"
         className={cn(
-          "w-3/4 bg-sidebar p-0 motion-reduce:transition-none",
+          "w-[min(24rem,calc(100vw-2.5rem))] max-w-none bg-sidebar p-0 motion-reduce:transition-none",
           className,
         )}
         {...props}
@@ -661,18 +718,24 @@ function AppShellMobileSidePanel({
   ...props
 }: React.ComponentProps<typeof SheetContent>) {
   const t = useTranslations("workspace.shell");
-  const [open, setOpen] = React.useState(false);
+  const {
+    rightOverlayOpen,
+    setRightOverlayOpen,
+    rightOverlayReturnFocusRef,
+  } = useAppShell();
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={rightOverlayOpen} onOpenChange={setRightOverlayOpen}>
       <Button
         type="button"
         variant="ghost"
         size="icon-sm"
         className="absolute right-[26px] top-[15px]"
+        aria-expanded={rightOverlayOpen}
         aria-label={t("openContext")}
         onClick={(event) => {
           event.preventDefault();
-          setOpen(true);
+          rightOverlayReturnFocusRef.current = event.currentTarget;
+          setRightOverlayOpen(true);
         }}
       >
         <AppHeaderSidebarSimpleIcon className="rotate-180" />
@@ -681,7 +744,7 @@ function AppShellMobileSidePanel({
         side="right"
         overlayClassName="motion-reduce:transition-none"
         className={cn(
-          "w-3/4 bg-sidebar p-2.5 motion-reduce:transition-none",
+          "w-[min(24rem,calc(100vw-2.5rem))] max-w-none bg-sidebar p-2.5 motion-reduce:transition-none",
           className,
         )}
         {...props}

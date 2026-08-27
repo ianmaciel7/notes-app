@@ -463,6 +463,7 @@ type ObjectTypeContentProps = {
   readonly collections: readonly WorkspaceCollectionRecord[];
   readonly createdEntities: readonly WorkspaceEntity[];
   readonly filtered: readonly WorkspaceEntity[];
+  readonly importInputId: string;
   readonly labels: ObjectViewLabels;
   readonly mode: Mode;
   readonly objectTypeLabels: Readonly<Record<string, string>>;
@@ -480,6 +481,7 @@ function ObjectTypeContent({
   collections,
   createdEntities,
   filtered,
+  importInputId,
   labels,
   mode,
   objectTypeLabels,
@@ -514,6 +516,7 @@ function ObjectTypeContent({
     <ObjectTypeAllContent
       createdEntities={createdEntities}
       filtered={filtered}
+      importInputId={importInputId}
       labels={labels}
       objectTypeLabels={objectTypeLabels}
       onCreateObject={onCreateObject}
@@ -539,7 +542,7 @@ function ObjectTypeOverviewContent({
   view,
 }: Omit<
   ObjectTypeContentProps,
-  "createdEntities" | "mode" | "onCreateObject"
+  "createdEntities" | "importInputId" | "mode" | "onCreateObject"
 >) {
   const t = useTranslations("workspace");
   return (
@@ -685,6 +688,7 @@ function ObjectTypeNamedItemInput({
 function ObjectTypeAllContent({
   createdEntities,
   filtered,
+  importInputId,
   labels,
   objectTypeLabels,
   onCreateObject,
@@ -707,6 +711,7 @@ function ObjectTypeAllContent({
       trailingContent={
         <ObjectTypeTrailingContent
           filteredCount={filtered.length}
+          importInputId={importInputId}
           onCreateObject={onCreateObject}
           view={view}
         />
@@ -718,10 +723,12 @@ function ObjectTypeAllContent({
 
 function ObjectTypeTrailingContent({
   filteredCount,
+  importInputId,
   onCreateObject,
   view,
 }: {
   readonly filteredCount: number;
+  readonly importInputId: string;
   readonly onCreateObject: () => void;
   readonly view: WorkspaceDataView;
 }) {
@@ -733,7 +740,11 @@ function ObjectTypeTrailingContent({
         title={t("empty.title")}
         action={
           <div className="flex flex-wrap justify-center gap-2">
-            <Button type="button" variant="outline">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => document.getElementById(importInputId)?.click()}
+            >
               {t("objectTypeOverview.import")}
             </Button>
             <Button type="button" onClick={onCreateObject}>
@@ -758,6 +769,13 @@ function ObjectTypeTrailingContent({
   );
 }
 
+function getObjectTypeImportAccept(objectTypeId: string) {
+  if (objectTypeId === "image") return "image/*";
+  if (objectTypeId === "audio") return "audio/*";
+  if (objectTypeId === "pdf") return "application/pdf,.pdf";
+  return undefined;
+}
+
 function WorkspaceObjectTypeView({
   objectType,
   structure,
@@ -767,6 +785,7 @@ function WorkspaceObjectTypeView({
   const {
     createWorkspaceEntity,
     createdEntities,
+    importWorkspaceFiles,
     objectTypeCollections,
     objectTypeQueries,
     selectEntity,
@@ -776,6 +795,7 @@ function WorkspaceObjectTypeView({
     setMainValue,
     setObjectTypeCollections,
     setObjectTypeQueries,
+    showMessage,
     structures,
   } = useWorkspace();
   const { switchWorkspaceDataViewKind, updateWorkspaceDataView } =
@@ -784,6 +804,7 @@ function WorkspaceObjectTypeView({
   const [collapsed, setCollapsed] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [filterOpen, setFilterOpen] = React.useState(false);
+  const importInputId = React.useId();
   const collections = selectWorkspaceCollectionRecordsForStructure(
     objectTypeCollections,
     objectType.id,
@@ -919,12 +940,33 @@ function WorkspaceObjectTypeView({
     });
   }
 
+  async function importFiles(event: React.ChangeEvent<HTMLInputElement>) {
+    const input = event.currentTarget;
+    const files = Array.from(input.files ?? []);
+    if (files.length === 0) {
+      showMessage(t("objectTypeOverview.importCancelled"));
+      input.value = "";
+      return;
+    }
+    await importWorkspaceFiles(objectType.id, files);
+    input.value = "";
+  }
+
   return (
     <section
       data-slot="workspace-object-type-view"
       data-structure-id={structure.id}
       className={workspaceRouteClass}
     >
+      <Input
+        id={importInputId}
+        type="file"
+        multiple
+        accept={getObjectTypeImportAccept(objectType.id)}
+        aria-label={t("actions.importFiles")}
+        className="sr-only"
+        onChange={importFiles}
+      />
       <ObjectTypeHeader
         collapsed={collapsed}
         objectType={objectType}
@@ -963,6 +1005,7 @@ function WorkspaceObjectTypeView({
           collections={collections}
           createdEntities={createdEntities}
           filtered={filtered}
+          importInputId={importInputId}
           labels={labels}
           mode={mode}
           objectTypeLabels={objectTypeLabels}
