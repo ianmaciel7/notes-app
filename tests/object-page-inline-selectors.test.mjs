@@ -41,6 +41,16 @@ test("applied page tags navigate to their tag object instead of removing metadat
   assert.doesNotMatch(source, /update\(\{ tags: tags\.filter\(\(item\) => item !== tagId\) \}\)/);
 });
 
+test("applied page tags use the reference green chip palette", async () => {
+  const source = await readFile(
+    new URL("../src/components/workspace-object-page-view.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(source, /bg-\[oklch\(0\.9669_0\.0659_122\.38\)\]/);
+  assert.match(source, /text-\[oklch\(0\.3653_0\.0648_128\.67\)\]/);
+});
+
 test("metadata selectors avoid creating collections from inline search text", async () => {
   const source = await readFile(
     new URL("../src/components/workspace-object-page-view.tsx", import.meta.url),
@@ -48,6 +58,7 @@ test("metadata selectors avoid creating collections from inline search text", as
   );
 
   assert.match(source, /documentMenu\.newTagEmpty/);
+  assert.match(source, /documentMenu\.newTag", \{ tag: deferredQuery\.trim\(\) \}/);
   assert.doesNotMatch(source, /documentMenu\.newCollectionNamed/);
   assert.doesNotMatch(source, /createCollectionId/);
 });

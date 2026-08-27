@@ -100,7 +100,7 @@ type EntityUpdate = (patch: Record<string, unknown>) => void;
 type EntityPropertyUpdate = (propertyId: string, value: unknown) => void;
 
 const tagChipClass =
-  "inline-flex max-w-full items-center rounded-[0.475em] border border-[oklch(0.9563_0.0444_203.48)] bg-[oklch(0.9563_0.0444_203.48)] px-[0.49em] py-[0.2em] text-sm leading-[1.3] text-[oklch(0.3622_0.0423_219.72)]";
+  "inline-flex max-w-full items-center rounded-[0.475em] border border-[oklch(0.9669_0.0659_122.38)] bg-[oklch(0.9669_0.0659_122.38)] px-[0.49em] py-[0.2em] text-sm leading-[1.3] text-[oklch(0.3653_0.0648_128.67)]";
 const collectionChipClass =
   "inline-flex max-w-full items-center rounded-[0.475em] border border-border bg-muted/50 px-[0.49em] py-[0.2em] text-sm leading-[1.3] text-foreground";
 
@@ -526,7 +526,7 @@ function ObjectPageTags({
   readonly update: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
-  const { createWorkspaceTag, createdEntities } = useWorkspace();
+  const { createWorkspaceTag, createdEntities, selectEntity } = useWorkspace();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [tagPickerOpen, setTagPickerOpen] = React.useState(false);
@@ -588,12 +588,8 @@ function ObjectPageTags({
           key={tagId}
           type="button"
           className={tagChipClass}
-          aria-label={`${t("objectTypeOverview.remove")} ${
-            tagNamesById.get(tagId) ?? tagId
-          }`}
-          onClick={() =>
-            update({ tags: tags.filter((item) => item !== tagId) })
-          }
+          aria-label={tagNamesById.get(tagId) ?? tagId}
+          onClick={() => selectEntity(tagId)}
         >
           <span className="truncate">{tagNamesById.get(tagId) ?? tagId}</span>
         </button>
@@ -630,6 +626,7 @@ function ObjectPageTags({
                 }}
                 className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] outline-none focus:cursor-text [field-sizing:content] placeholder:text-muted-foreground"
               />
+              <AppHeaderSparkleIcon className="ml-1 size-3 text-violet-500" />
             </label>
           }
         />
@@ -641,41 +638,23 @@ function ObjectPageTags({
             "w-[257px] min-w-[257px] gap-0 p-1.5",
           )}
         >
-          {availableTags.length > 0 ? (
-            availableTags.map((tag) => (
-              <button
-                key={tag.id}
-                type="button"
-                onClick={() => {
-                  update({ tags: [...tags, tag.id] });
-                  setQuery("");
-                  setOpen(false);
-                }}
-                className={cn(
-                  workspaceOverflowMenuItemClass,
-                  "w-full gap-2 px-2 text-left",
-                )}
-              >
-                <span className="truncate">{tag.title.trim() || tag.id}</span>
-              </button>
-            ))
-          ) : null}
-          {!query.trim() ? (
-            <button
-              type="button"
-              className={cn(
-                workspaceOverflowMenuItemClass,
-                "w-full gap-2 px-2 text-left",
-              )}
-              onClick={() => {
-                const tagId = createWorkspaceTag("");
-                update({ tags: [...tags, tagId] });
-                setOpen(false);
-              }}
-            >
-              {t("documentMenu.newTagEmpty")}
-            </button>
-          ) : null}
+          <button
+            type="button"
+            className={cn(
+              workspaceOverflowMenuItemClass,
+              "w-full gap-2 px-2 text-left",
+            )}
+            onClick={() => {
+              const tagId = createWorkspaceTag(deferredQuery.trim());
+              update({ tags: [...tags, tagId] });
+              setQuery("");
+              setOpen(false);
+            }}
+          >
+            {deferredQuery.trim()
+              ? t("documentMenu.newTag", { tag: deferredQuery.trim() })
+              : t("documentMenu.newTagEmpty")}
+          </button>
           <button
             type="button"
             className={cn(
@@ -691,6 +670,30 @@ function ObjectPageTags({
           >
             {t("documentMenu.searchAllTags")}
           </button>
+          {availableTags.length > 0 ? (
+            <>
+              <div aria-hidden className="my-1 border-t border-border" />
+              {availableTags.map((tag) => (
+                <button
+                  key={tag.id}
+                  type="button"
+                  onClick={() => {
+                    update({ tags: [...tags, tag.id] });
+                    setQuery("");
+                    setOpen(false);
+                  }}
+                  className={cn(
+                    workspaceOverflowMenuItemClass,
+                    "w-full gap-2 px-2 text-left",
+                  )}
+                >
+                  <span className="truncate">
+                    {tag.title.trim() || tag.id}
+                  </span>
+                </button>
+              ))}
+            </>
+          ) : null}
         </PopoverContent>
       </Popover>
       <Dialog

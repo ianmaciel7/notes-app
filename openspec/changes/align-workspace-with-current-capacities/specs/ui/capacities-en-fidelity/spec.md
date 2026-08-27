@@ -138,6 +138,26 @@ The Page surface SHALL reproduce the matched reference's editable header, body, 
 - **AND** the selector SHALL use the reference-sized compact result surface, render only applicable choices and named actions, and avoid a generic empty-state dialog
 - **AND** Escape or outside interaction SHALL close the selector and restore focus without mutating the Page.
 
+#### Scenario: Page Tag selector creates or searches an inline query
+- **WHEN** the user types a tag name that has no applicable match in the visible Tags input
+- **THEN** the compact selector SHALL offer `New ‘{query}’` and `Search all Tags` using the same reference-sized surface
+- **AND WHEN** the user activates `New ‘{query}’`
+- **THEN** the Page SHALL receive the created tag exactly once, the inline query SHALL clear, and the route SHALL remain on the Page
+- **AND WHEN** the user activates `Search all Tags`
+- **THEN** the full tag picker SHALL open with the query preserved and without route navigation.
+
+#### Scenario: Applied Page Tag is hovered or activated
+- **WHEN** a user hovers an applied Page tag
+- **THEN** it SHALL retain the reference tag-chip color, compact geometry, and pointer affordance without shifting neighboring metadata
+- **AND WHEN** the user activates the tag label
+- **THEN** the corresponding Tag object SHALL open without removing the tag from the Page
+- **AND** removing a tag, if supported, SHALL use a distinct explicit control.
+
+#### Scenario: Page header metadata and command icons are rendered
+- **WHEN** Collections, Customize, and the Page overflow control render in the Page header
+- **THEN** Collections SHALL use the reference collection glyph, Customize SHALL combine the reference sparkle and disclosure glyphs, and overflow SHALL use the reference ellipsis glyph
+- **AND** each glyph SHALL use the observed 14px visual size and preserve the owning control's accessible name, hover, focus, and open behavior.
+
 #### Scenario: Page overflow control is activated
 - **WHEN** the user activates the visible Page overflow control using pointer or keyboard input
 - **THEN** the owning accessible menu SHALL open with its named commands available

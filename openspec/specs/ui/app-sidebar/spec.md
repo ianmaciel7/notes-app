@@ -146,12 +146,13 @@ The system SHALL keep the footer fixed below the overview scroll region.
 - **THEN** it SHALL use an outline gear appearance rather than a filled glyph.
 
 ### Requirement: AppShell retains layout ownership
-The system SHALL use the existing AppShell for width, resize, collapse, trigger positioning, and mobile shell behavior, with the current live-reference expanded width as its default.
+The system SHALL use the existing AppShell for width, resize persistence, collapse, trigger positioning, gutters, and mobile shell behavior, and SHALL compare width only against a matched current-reference state.
 
 #### Scenario: Desktop sidebar is rendered, resized, or collapsed
 - **WHEN** the viewport is at least 768px wide
-- **THEN** AppShell's expanded sidebar SHALL default to `14rem` (224px)
-- **AND** the sidebar MAY remain resizable up to the existing `24rem` maximum without changing the 224px acceptance baseline
+- **THEN** AppShell's clean default and any persisted resized width SHALL be distinguishable in test setup
+- **AND** the matched August 26, 2026 reference state at 1153x912 SHALL measure approximately 288px while the current 224px localhost default SHALL be treated as a parity gap
+- **AND** the sidebar MAY remain resizable up to the existing `24rem` maximum
 - **AND** the resizable rail, collapse transition, and trigger SHALL remain authoritative
 - **AND** app-sidebar SHALL NOT create a second ResizablePanel, SidebarProvider, or offcanvas implementation.
 
@@ -188,12 +189,12 @@ The system SHALL make the complete visible sidebar row the primary activation ta
 - **THEN** only that nested action SHALL run and the row SHALL NOT navigate accidentally.
 
 ### Requirement: Current-reference sidebar geometry
-The expanded sidebar SHALL match the current authenticated reference instead of the historical 288px baseline.
+The expanded sidebar SHALL match the timestamped authenticated reference observation for the same viewport and panel state.
 
 #### Scenario: Expanded sidebar is measured
-- **WHEN** the workspace renders at 1536px, 1280px, 1024px, or 768px with navigation expanded
-- **THEN** the sidebar SHALL measure 224px
-- **AND** the adjacent workspace surface SHALL begin after the 224px sidebar plus a 10px gutter
+- **WHEN** the workspace renders with navigation expanded and the same persisted resize state recorded by the reference capture
+- **THEN** the sidebar width SHALL match the reference measurement within 1px
+- **AND** the audited 1153x912 reference state SHALL measure approximately 288px with the adjacent workspace surface beginning at approximately x=298 after the 10px gutter
 - **AND** the page SHALL satisfy `scrollWidth === clientWidth`.
 
 ### Requirement: Composable app-sidebar overview
