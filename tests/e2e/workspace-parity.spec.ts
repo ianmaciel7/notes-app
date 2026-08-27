@@ -1450,10 +1450,15 @@ test("Page Collections and overflow controls keep Page metadata synchronized", a
     .filter({ hasText: "Overflow collection" })
     .getByRole("button", { name: "Overflow collection", exact: true })
     .click({ noWaitAfter: true });
-  await expect(objectTypeWorkspace(page)).toContainText(
-    "Overflow collections page",
-  );
-  await page.getByRole("tab", { name: "Overflow collections page" }).click();
+  const collectionWorkspace = page
+    .locator('main[data-slot="app-shell-main"]')
+    .filter({ hasText: "Overflow collection" });
+  const collectionPage = collectionWorkspace.getByRole("button", {
+    name: /^Overflow collections page/,
+  });
+  await expect(collectionPage).toBeVisible();
+  await collectionPage.click();
+  await expect(workspace).toBeVisible();
 
   await customize.click();
   const customizeMenu = page.getByRole("menu", { name: "Personalizar" });
