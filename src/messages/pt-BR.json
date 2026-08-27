@@ -30,6 +30,23 @@
       "openContext": "Abrir painel lateral",
       "openNavigation": "Abrir navegação"
     },
+    "spaces": {
+      "changeSpace": "Alterar espaço",
+      "clearSearch": "Limpar busca",
+      "createSpace": "Criar espaço",
+      "createSpaceSubmit": "Criar",
+      "deleteSpace": "Excluir espaço",
+      "deleteSpaceConfirmation": "Digite {name} para confirmar",
+      "deleteSpaceDescription": "Isso remove o espaço local deste dispositivo. Os outros espaços são mantidos.",
+      "deleteSpaceError": "Digite o nome exato do espaço.",
+      "empty": "Nenhum espaço encontrado.",
+      "name": "Nome do espaço",
+      "renameSpace": "Renomear espaço",
+      "save": "Salvar alterações",
+      "search": "Buscar espaços",
+      "settings": "Configurações do espaço",
+      "settingsDescription": "Renomeie este espaço sem afetar conteúdo de outro espaço."
+    },
     "primaryNavigation": {
       "calendar": "Calendário",
       "calendarHint": "Ir para o Calendário. Clique duas vezes para ir para hoje.",
@@ -203,6 +220,9 @@
       "unlinkedMentions": "Menções não vinculadas"
     },
     "footer": {
+      "accountEmail": "Este dispositivo",
+      "accountName": "Espaço de trabalho local",
+      "plan": "Pro",
       "objectTypes": "Tipos de objeto",
       "profile": "Perfil pessoal",
       "settings": "Configurações",
@@ -490,8 +510,6 @@
       "newCollection": "Nova coleção",
       "newCurrentType": "Novo {type}",
       "newFromTemplate": "Novo a partir do modelo",
-      "namedItemViewNotReady": "A visão ainda não está pronta",
-      "namedItemViewNotReadyDescription": "Esta exibição requer que todo o conteúdo seja carregado no seu dispositivo. Será atualizada assim que estiver pronta.",
       "newObject": "Novo objeto",
       "newObjectOptions": "Opções de novo objeto",
       "newQuery": "Nova query",
@@ -542,7 +560,20 @@
       "queryResults": "Resultados da query",
       "openObject": "Abrir {title}"
     },
+    "objectConversion": {
+      "description": "A conversão de propriedades exige uma resolução explícita antes de alterar o tipo de objeto.",
+      "discardValue": "Descartar valor",
+      "incompatible": "Incompatível",
+      "mapTo": "Mapear para",
+      "requiresConfirmation": "Requer confirmação",
+      "unresolved": "Não resolvido"
+    },
     "sidebarPinned": {
+      "addContent": "Adicionar conteúdo",
+      "addContentToPinned": "Adicionar conteúdo aos Fixados",
+      "noAvailableContent": "Nenhum conteúdo disponível",
+      "noPinnedContent": "Nenhum conteúdo fixado",
+      "title": "Fixados",
       "open": "Abrir",
       "openInSidePanel": "Abrir no painel lateral",
       "openInNewTab": "Abrir em nova aba"
@@ -552,9 +583,27 @@
       "overview": "Visão geral"
     },
     "sidebarSections": {
+      "add": "Adicionar seção",
       "sort": "Ordenar seção",
       "manual": "Ordenar manualmente",
-      "alphabetical": "Ordenar alfabeticamente"
+      "alphabetical": "Ordenar alfabeticamente",
+      "create": "Criar",
+      "namePlaceholder": "Nome da seção",
+      "noContent": "Nenhum conteúdo"
+    },
+    "sidebarHelp": {
+      "askQuestion": "Fazer uma pergunta",
+      "askQuestionTooltip": "Faça perguntas sobre o espaço de trabalho",
+      "documentation": "Documentação",
+      "documentationTooltip": "Saiba como usar o espaço de trabalho",
+      "feedback": "Feedback",
+      "feedbackTooltip": "Compartilhe ideias, feedback ou problemas",
+      "getStarted": "Primeiros passos",
+      "title": "Ajuda e recursos",
+      "whatsNew": "Novidades"
+    },
+    "sidebarUtilities": {
+      "trash": "Lixeira"
     }
   }
 }

@@ -90,11 +90,20 @@ import {
   createInitialWorkspaceObjectState,
   getCreationFlow,
   getWorkspaceImportError,
+  isWorkspaceEntityDeletionAccepted,
   type WorkspaceDraft,
   type WorkspaceEntity,
   type WorkspaceObjectError,
+  type WorkspaceObjectState,
   workspaceObjectReducer,
 } from "@/lib/workspace-objects";
+import {
+  contextualPanelRouteState,
+  parseWorkspaceRoute,
+  type WorkspaceSection,
+  workspaceRouteId,
+  workspaceRoutePath,
+} from "@/lib/workspace-routing";
 import {
   parseWorkspaceSidebarPinnedState,
   serializeWorkspaceSidebarPinnedState,
@@ -106,14 +115,9 @@ import {
   serializeWorkspaceSidebarState,
   WORKSPACE_SIDEBAR_STORAGE_KEY,
 } from "@/lib/workspace-sidebar-storage";
-import {
-  parseWorkspaceRoute,
-  workspaceRoutePath,
-  workspaceRouteId,
-  type WorkspaceSection,
-} from "@/lib/workspace-routing";
 
 const WORKSPACE_TAB_STORAGE_KEY = "notes-app:workspace-tabs:v1";
+const WORKSPACE_SPACES_STORAGE_KEY = "notes-app:workspace-spaces:v1";
 
 type SerializedWorkspaceTab = {
   id: string;
@@ -131,8 +135,87 @@ type WorkspaceTabState = {
   side: WorkspaceTabGroupState;
 };
 
+type WorkspaceSpacesStorageState = {
+  activeSpaceId: string;
+  spaces: { id: string; name: string }[];
+};
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function workspaceObjectsStorageKeyForSpace(spaceId: string) {
+  return `${WORKSPACE_OBJECT_STORAGE_KEY}:${workspaceRouteId(spaceId)}`;
+}
+
+function createSpaceId(name: string, existingIds: Iterable<string>) {
+  const used = new Set(existingIds);
+  const base =
+    workspaceRouteId(name)
+      .replace(/[^a-z0-9-]/g, "")
+      .replace(/^-+|-+$/g, "") || "space";
+  let id = base;
+  let suffix = 2;
+  while (used.has(id)) {
+    id = `${base}-${suffix}`;
+    suffix += 1;
+  }
+  return id;
+}
+
+function parseWorkspaceSpacesStorage(
+  raw: string,
+): WorkspaceSpacesStorageState | null {
+  try {
+    const value: unknown = JSON.parse(raw);
+    if (!isRecord(value) || value.version !== 1) return null;
+    const spaces = Array.isArray(value.spaces)
+      ? value.spaces.flatMap((space) => {
+          if (
+            !isRecord(space) ||
+            typeof space.id !== "string" ||
+            typeof space.name !== "string"
+          ) {
+            return [];
+          }
+          const id = space.id.trim();
+          const name = space.name.trim();
+          return id && name ? [{ id, name }] : [];
+        })
+      : [];
+    const activeSpaceId =
+      typeof value.activeSpaceId === "string" &&
+      spaces.some((space) => space.id === value.activeSpaceId)
+        ? value.activeSpaceId
+        : (spaces[0]?.id ?? "labs");
+    return spaces.length > 0 ? { activeSpaceId, spaces } : null;
+  } catch {
+    return null;
+  }
+}
+
+function serializeWorkspaceSpacesStorage({
+  activeSpaceId,
+  spaces,
+}: WorkspaceSpacesStorageState) {
+  return JSON.stringify({
+    activeSpaceId,
+    spaces,
+    version: 1,
+  });
+}
+
+function toSidebarSpaces(
+  storedSpaces: readonly { id: string; name: string }[],
+): AppSidebarSpace[] {
+  const iconById = new Map(
+    initialSpaces.map((space) => [space.id, space.icon]),
+  );
+  return storedSpaces.map((space) => ({
+    id: space.id,
+    name: space.name,
+    icon: iconById.get(space.id) ?? AppSidebarWorkspaceIcon,
+  }));
 }
 
 function parseSerializedWorkspaceTab(
@@ -815,7 +898,10 @@ type WorkspaceContextValue = {
   objectTypeCollections: WorkspaceCollectionRecords;
   objectTypeQueries: Record<string, string[]>;
   setSpaces: React.Dispatch<React.SetStateAction<AppSidebarSpace[]>>;
-  setSpaceId: React.Dispatch<React.SetStateAction<string>>;
+  createSpace: (name: string) => void;
+  deleteSpace: (id: string, confirmation: string) => boolean;
+  renameSpace: (id: string, name: string) => void;
+  switchSpace: (id: string) => void;
   message: string | null;
   setMainTabs: React.Dispatch<React.SetStateAction<AppHeaderTab[]>>;
   setMainValue: React.Dispatch<React.SetStateAction<string>>;
@@ -915,6 +1001,12 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const specialSideTabs = React.useMemo(() => createSpecialSideTabs(t), [t]);
   const [spaces, setSpaces] = React.useState(initialSpaces);
   const [spaceId, setSpaceId] = React.useState("labs");
+  const {
+    compactDesktop,
+    rightPanelRef,
+    setRightCollapsed,
+    setRightOverlayOpen,
+  } = useAppShell();
   const [mainTabs, setMainTabs] = React.useState<AppHeaderTab[]>([]);
   const [mainValue, setMainValue] = React.useState("");
   const [sideTabs, setSideTabs] = React.useState(() => initialSideTabs);
@@ -936,6 +1028,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     undefined,
     createInitialWorkspaceObjectState,
   );
+  const workspaceObjectsBySpaceRef = React.useRef<
+    Record<string, WorkspaceObjectState>
+  >({});
   const [customSections, setCustomSections] = React.useState<
     AppSidebarCustomSection[]
   >([]);
@@ -962,6 +1057,10 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const tabStorageStartedRef = React.useRef(false);
   const routeInitializedRef = React.useRef(false);
   const lastRouteRef = React.useRef<string | null>(null);
+
+  React.useEffect(() => {
+    workspaceObjectsBySpaceRef.current[spaceId] = workspaceObjects;
+  }, [spaceId, workspaceObjects]);
 
   const createdCounts = React.useMemo(
     () => countEntitiesByType(workspaceObjects.entities),
@@ -1031,19 +1130,159 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  const resetWorkspaceNavigation = React.useCallback(() => {
+    setMainTabs(initialMainTabs);
+    setMainValue(initialMainTabs[0]?.id ?? "");
+    setSideTabs(initialSideTabs);
+    setSideValue(initialSideTabs[0]?.id ?? "explore");
+    setActiveAction(undefined);
+    setActiveEntityId(initialMainTabs[0]?.id ?? null);
+    setSideSearchOpen(false);
+    setMainSearchOpen(false);
+  }, [initialMainTabs, initialSideTabs]);
+
+  const loadWorkspaceObjectsForSpace = React.useCallback(
+    (nextSpaceId: string) => {
+      const cached = workspaceObjectsBySpaceRef.current[nextSpaceId];
+      if (cached) return cached;
+      const raw = window.localStorage.getItem(
+        workspaceObjectsStorageKeyForSpace(nextSpaceId),
+      );
+      const parsed = raw ? parseWorkspaceObjectSnapshot(raw) : null;
+      const state = parsed?.ok
+        ? parsed.state
+        : createInitialWorkspaceObjectState();
+      workspaceObjectsBySpaceRef.current[nextSpaceId] = state;
+      return state;
+    },
+    [],
+  );
+
+  const persistWorkspaceObjectsForSpace = React.useCallback(
+    (nextSpaceId: string, state: WorkspaceObjectState) => {
+      if (!storageReady || state.hydrationStatus !== "ready") return;
+      window.localStorage.setItem(
+        workspaceObjectsStorageKeyForSpace(nextSpaceId),
+        serializeWorkspaceObjectState(state),
+      );
+    },
+    [storageReady],
+  );
+
+  const switchSpace = React.useCallback(
+    (nextSpaceId: string) => {
+      if (nextSpaceId === spaceId) return;
+      const exists = spaces.some((space) => space.id === nextSpaceId);
+      if (!exists) return;
+      workspaceObjectsBySpaceRef.current[spaceId] = workspaceObjects;
+      persistWorkspaceObjectsForSpace(spaceId, workspaceObjects);
+      const nextState = loadWorkspaceObjectsForSpace(nextSpaceId);
+      dispatchWorkspaceObjects({ type: "hydrate", state: nextState });
+      setSpaceId(nextSpaceId);
+      resetWorkspaceNavigation();
+    },
+    [
+      loadWorkspaceObjectsForSpace,
+      persistWorkspaceObjectsForSpace,
+      resetWorkspaceNavigation,
+      spaceId,
+      spaces,
+      workspaceObjects,
+    ],
+  );
+
+  const createSpace = React.useCallback(
+    (name: string) => {
+      const trimmedName = name.trim();
+      if (!trimmedName) return;
+      const id = createSpaceId(
+        trimmedName,
+        spaces.map((space) => space.id),
+      );
+      const nextSpace = {
+        icon: AppSidebarWorkspaceIcon,
+        id,
+        name: trimmedName,
+      };
+      const nextState = createInitialWorkspaceObjectState();
+      workspaceObjectsBySpaceRef.current[spaceId] = workspaceObjects;
+      workspaceObjectsBySpaceRef.current[id] = nextState;
+      persistWorkspaceObjectsForSpace(spaceId, workspaceObjects);
+      setSpaces((current) => [...current, nextSpace]);
+      dispatchWorkspaceObjects({ type: "hydrate", state: nextState });
+      setSpaceId(id);
+      resetWorkspaceNavigation();
+    },
+    [
+      persistWorkspaceObjectsForSpace,
+      resetWorkspaceNavigation,
+      spaceId,
+      spaces,
+      workspaceObjects,
+    ],
+  );
+
+  const renameSpace = React.useCallback((id: string, name: string) => {
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
+    setSpaces((current) =>
+      current.map((space) =>
+        space.id === id ? { ...space, name: trimmedName } : space,
+      ),
+    );
+  }, []);
+
+  const deleteSpace = React.useCallback(
+    (id: string, confirmation: string) => {
+      const space = spaces.find((item) => item.id === id);
+      if (!space || spaces.length <= 1 || confirmation !== space.name) {
+        return false;
+      }
+      const nextSpaces = spaces.filter((item) => item.id !== id);
+      const fallbackSpace =
+        nextSpaces.find((item) => item.id === "labs") ?? nextSpaces[0];
+      if (!fallbackSpace) return false;
+      delete workspaceObjectsBySpaceRef.current[id];
+      window.localStorage.removeItem(workspaceObjectsStorageKeyForSpace(id));
+      const nextState = loadWorkspaceObjectsForSpace(fallbackSpace.id);
+      setSpaces(nextSpaces);
+      dispatchWorkspaceObjects({ type: "hydrate", state: nextState });
+      setSpaceId(fallbackSpace.id);
+      resetWorkspaceNavigation();
+      return true;
+    },
+    [loadWorkspaceObjectsForSpace, resetWorkspaceNavigation, spaces],
+  );
+
   React.useEffect(() => {
     if (hydrationStartedRef.current) return;
     hydrationStartedRef.current = true;
     try {
-      const raw = window.localStorage.getItem(WORKSPACE_OBJECT_STORAGE_KEY);
+      const rawSpaces = window.localStorage.getItem(
+        WORKSPACE_SPACES_STORAGE_KEY,
+      );
+      const parsedSpaces = rawSpaces
+        ? parseWorkspaceSpacesStorage(rawSpaces)
+        : null;
+      const nextSpaces = parsedSpaces
+        ? toSidebarSpaces(parsedSpaces.spaces)
+        : initialSpaces;
+      const nextSpaceId = parsedSpaces?.activeSpaceId ?? "labs";
+      setSpaces(nextSpaces);
+      setSpaceId(nextSpaceId);
+
+      const raw =
+        window.localStorage.getItem(
+          workspaceObjectsStorageKeyForSpace(nextSpaceId),
+        ) ?? window.localStorage.getItem(WORKSPACE_OBJECT_STORAGE_KEY);
       if (!raw) {
-        dispatchWorkspaceObjects({
-          type: "hydrate",
-          state: createInitialWorkspaceObjectState(),
-        });
+        const initialState = createInitialWorkspaceObjectState();
+        workspaceObjectsBySpaceRef.current[nextSpaceId] = initialState;
+        dispatchWorkspaceObjects({ type: "hydrate", state: initialState });
       } else {
         const parsed = parseWorkspaceObjectSnapshot(raw);
         if (parsed.ok) {
+          workspaceObjectsBySpaceRef.current[nextSpaceId] = parsed.state;
           dispatchWorkspaceObjects({ type: "hydrate", state: parsed.state });
         } else {
           dispatchWorkspaceObjects({ type: "recover" });
@@ -1160,11 +1399,20 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (!storageReady || workspaceObjects.hydrationStatus !== "ready") return;
+    const serialized = serializeWorkspaceObjectState(workspaceObjects);
+    window.localStorage.setItem(WORKSPACE_OBJECT_STORAGE_KEY, serialized);
     window.localStorage.setItem(
-      WORKSPACE_OBJECT_STORAGE_KEY,
-      serializeWorkspaceObjectState(workspaceObjects),
+      workspaceObjectsStorageKeyForSpace(spaceId),
+      serialized,
     );
-  }, [storageReady, workspaceObjects]);
+    window.localStorage.setItem(
+      WORKSPACE_SPACES_STORAGE_KEY,
+      serializeWorkspaceSpacesStorage({
+        activeSpaceId: spaceId,
+        spaces: spaces.map(({ id, name }) => ({ id, name })),
+      }),
+    );
+  }, [spaceId, spaces, storageReady, workspaceObjects]);
 
   React.useEffect(() => {
     if (!storageReady || workspaceObjects.hydrationStatus === "seed") return;
@@ -1442,6 +1690,41 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     setMainValue(tab.id);
   }, []);
 
+  React.useEffect(() => {
+    const activeEntity = workspaceObjects.entities.find(
+      (entity) => entity.id === workspaceObjects.activeEntityId,
+    );
+    if (!activeEntity) return;
+    const structure = workspaceObjects.structures.find(
+      (item) => item.id === activeEntity.objectTypeId,
+    );
+    if (!structure) return;
+    const definition = objectTypeDefinitionById[structure.iconName];
+    const label = activeEntity.title.trim() || t("lifecycle.untitled");
+    ensureMainTab({
+      id: activeEntity.id,
+      label,
+      icon: definition.icon,
+      iconClassName: objectIconToneBadgeClass[structure.tone],
+      preview: (
+        <TabPreview
+          eyebrow={
+            structure.ownership === "custom"
+              ? structure.singularName
+              : t(`objectTypeStudio.objectTypes.${activeEntity.objectTypeId}`)
+          }
+          title={label}
+        />
+      ),
+    });
+  }, [
+    ensureMainTab,
+    t,
+    workspaceObjects.activeEntityId,
+    workspaceObjects.entities,
+    workspaceObjects.structures,
+  ]);
+
   const openInSidePanel = React.useCallback((tab: AppHeaderTab) => {
     setSideTabs((current) => {
       if (current.some((item) => item.id === tab.id)) return current;
@@ -1449,6 +1732,44 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     });
     setSideValue(tab.id);
   }, []);
+
+  const applyContextualPanelRoute = React.useCallback(
+    (route: ReturnType<typeof parseWorkspaceRoute>) => {
+      const contextualPanel = contextualPanelRouteState(route);
+      const sideEntry =
+        contextualPanel.entry === "explore"
+          ? null
+          : specialSideTabs[contextualPanel.entry];
+
+      if (sideEntry) {
+        openInSidePanel({
+          id: contextualPanel.entry,
+          ...sideEntry,
+        });
+      } else {
+        setSideValue("explore");
+      }
+
+      if (compactDesktop) {
+        if (!contextualPanel.visible) setRightOverlayOpen(false);
+        return;
+      }
+
+      const panel = rightPanelRef.current;
+      setRightCollapsed(!contextualPanel.visible);
+      if (!panel) return;
+      if (contextualPanel.visible && panel.isCollapsed()) panel.expand();
+      if (!contextualPanel.visible && !panel.isCollapsed()) panel.collapse();
+    },
+    [
+      compactDesktop,
+      openInSidePanel,
+      rightPanelRef,
+      setRightCollapsed,
+      setRightOverlayOpen,
+      specialSideTabs,
+    ],
+  );
 
   const selectEntity = React.useCallback(
     (id: string) => {
@@ -1539,7 +1860,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           workspaceRouteId(space.id) === route.spaceId,
       );
       if (routeSpace && routeSpace.id !== spaceId) {
-        setSpaceId(routeSpace.id);
+        switchSpace(routeSpace.id);
       }
 
       if (
@@ -1550,8 +1871,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         setActiveEntityId(null);
         setActiveAction(route.section);
         setMainValue(`primary-action:${route.section}`);
-        setSideValue("explore");
-        if (route.section === "search") setSideSearchOpen(true);
+        applyContextualPanelRoute(route);
         return;
       }
 
@@ -1561,19 +1881,22 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
             entity.id === route.targetId ||
             workspaceRouteId(entity.id) === route.targetId,
         );
-        selectEntity(routeEntity?.id ?? route.targetId);
-        openInSidePanel({
-          id: "graphView",
-          ...specialSideTabs.graphView,
-        });
+        const routeObjectType = objectTypes.find(
+          (objectType) =>
+            objectType.id === route.targetId ||
+            workspaceRouteId(objectType.id) === route.targetId,
+        );
+        selectEntity(routeEntity?.id ?? routeObjectType?.id ?? route.targetId);
       }
+      applyContextualPanelRoute(route);
     },
     [
-      openInSidePanel,
+      applyContextualPanelRoute,
+      objectTypes,
       selectEntity,
       spaceId,
       spaces,
-      specialSideTabs,
+      switchSpace,
       workspaceObjects.entities,
     ],
   );
@@ -1593,10 +1916,15 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       locale,
       spaceId,
     );
+    const routeKey = `${window.location.pathname}${window.location.search}`;
+    if (lastRouteRef.current === routeKey) return;
+    lastRouteRef.current = routeKey;
     applyWorkspaceRoute(route);
     routeInitializedRef.current = true;
 
     const handlePopState = () => {
+      const nextRouteKey = `${window.location.pathname}${window.location.search}`;
+      lastRouteRef.current = nextRouteKey;
       applyWorkspaceRoute(
         parseWorkspaceRoute(
           window.location.pathname,
@@ -1783,37 +2111,12 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           rejected += 1;
           continue;
         }
-        let asset:
-          | {
-              readonly id: string;
-              readonly hash: string;
-              readonly state: "missing" | "stored";
-            }
-          | undefined;
-        let previewUrl: string | undefined;
-        if (flow === "file") {
-          const writeResult = await writeMediaAsset(
-            getMediaStorageAdapter(),
-            objectTypeId,
-            { blob: file, fileName: file.name, mimeType: file.type },
-          );
-          if (!writeResult.ok) {
-            rejected += 1;
-            continue;
-          }
-          asset = writeResult.value;
-          previewUrl = getMediaUrlRegistry().create(writeResult.value.id, file);
-        }
         dispatchWorkspaceObjects({
           type: "importFile",
-          assetId: asset?.id,
-          contentHash: asset?.hash,
           fileName: file.name,
           mimeType: file.type,
           objectTypeId,
-          previewUrl,
           size: file.size,
-          storageState: asset?.state,
           text,
         });
         accepted += 1;
@@ -1920,50 +2223,30 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const deleteWorkspaceEntity = React.useCallback(
     (id: string) => {
       const entity = workspaceObjects.entities.find((item) => item.id === id);
+      if (!isWorkspaceEntityDeletionAccepted(workspaceObjects, id)) {
+        dispatchWorkspaceObjects({ type: "deleteEntity", id });
+        return;
+      }
       const remainingEntities = workspaceObjects.entities.filter(
         (item) => item.id !== id,
       );
       const fallbackEntity = remainingEntities.at(-1);
-      const fallbackType =
-        entity &&
-        getPinnedEntityFromId(
-          entity.objectTypeId,
-          t("lifecycle.untitled"),
-          remainingEntities,
-          objectTypes,
-          workspaceObjects.structures,
-          objectTypeCollections,
-        );
-      const fallbackTab = fallbackEntity
-        ? resolveWorkspaceEntityTab({
-            id: fallbackEntity.id,
-            objectTypes,
-            structures: workspaceObjects.structures,
-            t,
-            workspaceEntities: remainingEntities,
-          })
-        : fallbackType
-          ? {
-              id: fallbackType.id,
-              label: fallbackType.label,
-              icon: fallbackType.icon,
-              iconClassName: objectIconToneBadgeClass[fallbackType.tone],
-              preview: (
-                <TabPreview
-                  eyebrow={t("tabs.preview.object")}
-                  title={fallbackType.label}
-                />
-              ),
-            }
-          : null;
+      const fallbackTab = resolveWorkspaceEntityTab({
+        id: fallbackEntity?.id ?? entity?.objectTypeId ?? "",
+        objectTypes,
+        structures: workspaceObjects.structures,
+        t,
+        workspaceEntities: remainingEntities,
+      });
       dispatchWorkspaceObjects({ type: "deleteEntity", id });
       setMainTabs((current) => current.filter((tab) => tab.id !== id));
       setSideTabs((current) => current.filter((tab) => tab.id !== id));
-      if (mainValue === id && fallbackTab) {
+      if (fallbackTab) {
         ensureMainTab(fallbackTab);
-        setActiveEntityId(fallbackEntity?.id ?? fallbackTab.id);
-        setActiveAction(undefined);
       }
+      if (mainValue === id) setMainValue(fallbackTab?.id ?? "");
+      setActiveEntityId(fallbackEntity?.id ?? fallbackTab?.id ?? null);
+      setActiveAction(undefined);
       if (entity?.kind !== "file" || !entity.assetId || !entity.contentHash)
         return;
       const references = remainingEntities.flatMap((item) =>
@@ -1990,8 +2273,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       ensureMainTab,
       mainValue,
       objectTypes,
-      objectTypeCollections,
       t,
+      workspaceObjects,
       workspaceObjects.entities,
       workspaceObjects.structures,
     ],
@@ -2077,7 +2360,10 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       objectTypeCollections,
       objectTypeQueries,
       setSpaces,
-      setSpaceId,
+      createSpace,
+      deleteSpace,
+      renameSpace,
+      switchSpace,
       message,
       setMainTabs,
       setMainValue,
@@ -2141,6 +2427,10 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       customSections,
       objectTypeCollections,
       objectTypeQueries,
+      createSpace,
+      deleteSpace,
+      renameSpace,
+      switchSpace,
       selectEntity,
       createWorkspaceStructure,
       createWorkspaceStructureFromPreset,

@@ -16,6 +16,7 @@ import {
   selectForwardContentReferences,
   selectObjectsInside,
   selectPropertyRelationGraphEdges,
+  selectRelatedEntities,
   wouldCreateReferenceCycle,
 } from "../src/lib/workspace-object-links.ts";
 
@@ -82,7 +83,10 @@ test("object links, block references, and embeds derive backlinks and contextual
   const index = createWorkspaceObjectLinkIndex([source, target]);
 
   assert.equal(selectBacklinksForObject(index, "target").length, 3);
-  assert.equal(selectObjectsInside(index, "source").length, 3);
+  assert.deepEqual(
+    selectObjectsInside(index, "source").map((reference) => reference.targetId),
+    ["target"],
+  );
   assert.equal(index.referenceCountsByTargetId.get("target"), 3);
   assert.equal(index.missingReferences.length, 0);
   assert.equal(selectContextualGraphEdges(index, "target").length, 3);
@@ -146,6 +150,75 @@ test("property relation graph edges stay distinct from content backlinks", () =>
       to: "target",
     },
   ]);
+});
+
+test("related Page content is derived from documented explicit relation rules", () => {
+  const source = documentEntity(
+    "source",
+    "Source",
+    {
+      schemaVersion: 2,
+      doc: {
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [
+              {
+                type: "text",
+                text: "Target",
+                marks: [createObjectReferenceMark("target")],
+              },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      propertyValues: {
+        relation: {
+          type: "entity",
+          entity: [{ id: "property", structureId: "page" }],
+        },
+      },
+    },
+  );
+  const target = documentEntity(
+    "target",
+    "Target",
+    blockEditorDocumentFromPlainText("Target"),
+  );
+  const property = documentEntity(
+    "property",
+    "Property",
+    blockEditorDocumentFromPlainText("Property"),
+  );
+  const collection = {
+    ...documentEntity(
+      "collection",
+      "Collection",
+      blockEditorDocumentFromPlainText("Collection"),
+    ),
+    collections: ["shared"],
+  };
+  const sourceWithCollection = { ...source, collections: ["shared"] };
+  const unrelated = documentEntity(
+    "unrelated",
+    "Unrelated",
+    blockEditorDocumentFromPlainText("Unrelated"),
+  );
+
+  assert.deepEqual(
+    selectRelatedEntities(
+      [sourceWithCollection, target, property, collection, unrelated],
+      "source",
+    ).map(({ entity, rules }) => ({ id: entity.id, rules })),
+    [
+      { id: "target", rules: ["content-reference"] },
+      { id: "property", rules: ["property-relation"] },
+      { id: "collection", rules: ["shared-collection"] },
+    ],
+  );
 });
 
 test("unlinked mention candidates are advisory until explicitly converted", () => {

@@ -30,6 +30,23 @@
       "openContext": "Open side panel",
       "openNavigation": "Open navigation"
     },
+    "spaces": {
+      "changeSpace": "Change space",
+      "clearSearch": "Clear search",
+      "createSpace": "Create space",
+      "createSpaceSubmit": "Create",
+      "deleteSpace": "Delete space",
+      "deleteSpaceConfirmation": "Type {name} to confirm",
+      "deleteSpaceDescription": "This removes the local Space from this device. Other Spaces are kept.",
+      "deleteSpaceError": "Type the exact Space name.",
+      "empty": "No spaces found.",
+      "name": "Space name",
+      "renameSpace": "Rename space",
+      "save": "Save changes",
+      "search": "Search spaces",
+      "settings": "Space settings",
+      "settingsDescription": "Rename this Space without affecting content in another Space."
+    },
     "primaryNavigation": {
       "calendar": "Calendar",
       "calendarHint": "Go to Calendar. Double-click to go to today.",
@@ -203,6 +220,9 @@
       "unlinkedMentions": "Unlinked mentions"
     },
     "footer": {
+      "accountEmail": "This device",
+      "accountName": "Local workspace",
+      "plan": "Pro",
       "objectTypes": "Object types",
       "profile": "Personal profile",
       "settings": "Settings",
@@ -490,8 +510,6 @@
       "newCollection": "New collection",
       "newCurrentType": "New {type}",
       "newFromTemplate": "New from template",
-      "namedItemViewNotReady": "The view is not ready yet",
-      "namedItemViewNotReadyDescription": "This view requires all content to be loaded on your device. It will update as soon as it is ready.",
       "newObject": "New object",
       "newObjectOptions": "New object options",
       "newQuery": "New query",
@@ -542,7 +560,20 @@
       "queryResults": "Query results",
       "openObject": "Open {title}"
     },
+    "objectConversion": {
+      "description": "Property conversion requires explicit resolution before the object type changes.",
+      "discardValue": "Discard value",
+      "incompatible": "Incompatible",
+      "mapTo": "Map to",
+      "requiresConfirmation": "Requires confirmation",
+      "unresolved": "Unresolved"
+    },
     "sidebarPinned": {
+      "addContent": "Add content",
+      "addContentToPinned": "Add content to Pinned",
+      "noAvailableContent": "No content available",
+      "noPinnedContent": "No pinned content",
+      "title": "Pinned",
       "open": "Open",
       "openInSidePanel": "Open in side panel",
       "openInNewTab": "Open in new tab"
@@ -552,9 +583,27 @@
       "overview": "Overview"
     },
     "sidebarSections": {
+      "add": "Add section",
       "sort": "Sort section",
       "manual": "Sort manually",
-      "alphabetical": "Sort alphabetically"
+      "alphabetical": "Sort alphabetically",
+      "create": "Create",
+      "namePlaceholder": "Section name",
+      "noContent": "No content"
+    },
+    "sidebarHelp": {
+      "askQuestion": "Ask a question",
+      "askQuestionTooltip": "Ask questions about your workspace",
+      "documentation": "Documentation",
+      "documentationTooltip": "Learn how to use your workspace",
+      "feedback": "Feedback",
+      "feedbackTooltip": "Share ideas, feedback, or issues",
+      "getStarted": "Get started",
+      "title": "Help and resources",
+      "whatsNew": "What's new"
+    },
+    "sidebarUtilities": {
+      "trash": "Trash"
     }
   }
 }

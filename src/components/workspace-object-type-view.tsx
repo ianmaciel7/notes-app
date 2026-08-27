@@ -32,6 +32,7 @@ import { Input } from "@/components/ui/input";
 import {
   WorkspaceEmptyState,
   workspaceFieldGroupClass,
+  workspaceNamedCardClass,
   workspaceOverviewContentClass,
   workspaceRouteClass,
   workspaceSectionTitleClass,
@@ -463,11 +464,11 @@ type ObjectTypeContentProps = {
   readonly collections: readonly WorkspaceCollectionRecord[];
   readonly createdEntities: readonly WorkspaceEntity[];
   readonly filtered: readonly WorkspaceEntity[];
-  readonly importInputId: string;
   readonly labels: ObjectViewLabels;
   readonly mode: Mode;
   readonly objectTypeLabels: Readonly<Record<string, string>>;
   readonly onCreateObject: () => void;
+  readonly onImport: () => void;
   readonly onOpen: (id: string) => void;
   readonly onRenameCollection: (id: string, value: string) => void;
   readonly onRenameQuery: (index: number, value: string) => void;
@@ -481,11 +482,11 @@ function ObjectTypeContent({
   collections,
   createdEntities,
   filtered,
-  importInputId,
   labels,
   mode,
   objectTypeLabels,
   onCreateObject,
+  onImport,
   onOpen,
   onRenameCollection,
   onRenameQuery,
@@ -516,10 +517,10 @@ function ObjectTypeContent({
     <ObjectTypeAllContent
       createdEntities={createdEntities}
       filtered={filtered}
-      importInputId={importInputId}
       labels={labels}
       objectTypeLabels={objectTypeLabels}
       onCreateObject={onCreateObject}
+      onImport={onImport}
       onOpen={onOpen}
       propertyLabels={propertyLabels}
       structures={structures}
@@ -542,7 +543,7 @@ function ObjectTypeOverviewContent({
   view,
 }: Omit<
   ObjectTypeContentProps,
-  "createdEntities" | "importInputId" | "mode" | "onCreateObject"
+  "createdEntities" | "mode" | "onCreateObject" | "onImport"
 >) {
   const t = useTranslations("workspace");
   return (
@@ -636,7 +637,7 @@ function ObjectTypeNamedItems({
           data-slot="object-type-named-card"
           data-kind={kind}
           data-item-id={item.id}
-          className="flex min-h-16 flex-col justify-center rounded-lg border bg-card px-3 py-2"
+          className={workspaceNamedCardClass}
         >
           <span className="flex min-w-0 items-center gap-2">
             {kind === "collection" ? (
@@ -688,10 +689,10 @@ function ObjectTypeNamedItemInput({
 function ObjectTypeAllContent({
   createdEntities,
   filtered,
-  importInputId,
   labels,
   objectTypeLabels,
   onCreateObject,
+  onImport,
   onOpen,
   propertyLabels,
   structures,
@@ -700,6 +701,17 @@ function ObjectTypeAllContent({
   ObjectTypeContentProps,
   "collections" | "mode" | "onRenameCollection" | "onRenameQuery" | "queries"
 >) {
+  const trailingContent = (
+    <ObjectTypeTrailingContent
+      filteredCount={filtered.length}
+      onCreateObject={onCreateObject}
+      onImport={onImport}
+      view={view}
+    />
+  );
+  if (filtered.length === 0 && view.presentation.kind !== "table") {
+    return trailingContent;
+  }
   return (
     <DataViewRenderer
       entities={createdEntities}
@@ -708,14 +720,7 @@ function ObjectTypeAllContent({
       onOpen={onOpen}
       propertyLabels={propertyLabels}
       structures={structures}
-      trailingContent={
-        <ObjectTypeTrailingContent
-          filteredCount={filtered.length}
-          importInputId={importInputId}
-          onCreateObject={onCreateObject}
-          view={view}
-        />
-      }
+      trailingContent={trailingContent}
       view={view}
     />
   );
@@ -723,13 +728,13 @@ function ObjectTypeAllContent({
 
 function ObjectTypeTrailingContent({
   filteredCount,
-  importInputId,
   onCreateObject,
+  onImport,
   view,
 }: {
   readonly filteredCount: number;
-  readonly importInputId: string;
   readonly onCreateObject: () => void;
+  readonly onImport: () => void;
   readonly view: WorkspaceDataView;
 }) {
   const t = useTranslations("workspace");
@@ -743,7 +748,7 @@ function ObjectTypeTrailingContent({
             <Button
               type="button"
               variant="outline"
-              onClick={() => document.getElementById(importInputId)?.click()}
+              onClick={onImport}
             >
               {t("objectTypeOverview.import")}
             </Button>
@@ -804,7 +809,7 @@ function WorkspaceObjectTypeView({
   const [collapsed, setCollapsed] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [filterOpen, setFilterOpen] = React.useState(false);
-  const importInputId = React.useId();
+  const importInputRef = React.useRef<HTMLInputElement>(null);
   const collections = selectWorkspaceCollectionRecordsForStructure(
     objectTypeCollections,
     objectType.id,
@@ -814,7 +819,7 @@ function WorkspaceObjectTypeView({
   const labels = React.useMemo<ObjectViewLabels>(
     () => ({
       emptyView: t("empty.title"),
-      missingObject: t("objectTypeOverview.namedItemViewNotReady"),
+      missingObject: t("empty.title"),
       openObject: (title) => `${t("lifecycle.task.open")}: ${title}`,
       untitledObject: t("lifecycle.untitled"),
     }),
@@ -952,6 +957,10 @@ function WorkspaceObjectTypeView({
     input.value = "";
   }
 
+  function openImportPicker() {
+    importInputRef.current?.click();
+  }
+
   return (
     <section
       data-slot="workspace-object-type-view"
@@ -959,7 +968,7 @@ function WorkspaceObjectTypeView({
       className={workspaceRouteClass}
     >
       <Input
-        id={importInputId}
+        ref={importInputRef}
         type="file"
         multiple
         accept={getObjectTypeImportAccept(objectType.id)}
@@ -1005,11 +1014,11 @@ function WorkspaceObjectTypeView({
           collections={collections}
           createdEntities={createdEntities}
           filtered={filtered}
-          importInputId={importInputId}
           labels={labels}
           mode={mode}
           objectTypeLabels={objectTypeLabels}
           onCreateObject={createObject}
+          onImport={openImportPicker}
           onOpen={selectEntity}
           onRenameCollection={renameCollection}
           onRenameQuery={renameQuery}

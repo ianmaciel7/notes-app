@@ -30,6 +30,23 @@
       "openContext": "Abrir panel lateral",
       "openNavigation": "Abrir navegación"
     },
+    "spaces": {
+      "changeSpace": "Cambiar espacio",
+      "clearSearch": "Limpiar búsqueda",
+      "createSpace": "Crear espacio",
+      "createSpaceSubmit": "Crear",
+      "deleteSpace": "Eliminar espacio",
+      "deleteSpaceConfirmation": "Escribe {name} para confirmar",
+      "deleteSpaceDescription": "Esto elimina el espacio local de este dispositivo. Los demás espacios se conservan.",
+      "deleteSpaceError": "Escribe el nombre exacto del espacio.",
+      "empty": "No se encontraron espacios.",
+      "name": "Nombre del espacio",
+      "renameSpace": "Renombrar espacio",
+      "save": "Guardar cambios",
+      "search": "Buscar espacios",
+      "settings": "Configuración del espacio",
+      "settingsDescription": "Renombra este espacio sin afectar contenido de otro espacio."
+    },
     "primaryNavigation": {
       "calendar": "Calendario",
       "calendarHint": "Ir al Calendario. Haz doble clic para ir a hoy.",
@@ -203,6 +220,9 @@
       "unlinkedMentions": "Menciones no vinculadas"
     },
     "footer": {
+      "accountEmail": "Este dispositivo",
+      "accountName": "Espacio de trabajo local",
+      "plan": "Pro",
       "objectTypes": "Tipos de objeto",
       "profile": "Perfil personal",
       "settings": "Configuración",
@@ -490,8 +510,6 @@
       "newCollection": "Nueva colección",
       "newCurrentType": "Nuevo {type}",
       "newFromTemplate": "Nuevo desde plantilla",
-      "namedItemViewNotReady": "La vista aún no está lista",
-      "namedItemViewNotReadyDescription": "Esta vista requiere que todo el contenido se cargue en tu dispositivo. Se actualizará en cuanto esté lista.",
       "newObject": "Nuevo objeto",
       "newObjectOptions": "Opciones de nuevo objeto",
       "newQuery": "Nueva query",
@@ -542,7 +560,20 @@
       "queryResults": "Resultados de la query",
       "openObject": "Abrir {title}"
     },
+    "objectConversion": {
+      "description": "La conversión de propiedades requiere una resolución explícita antes de cambiar el tipo de objeto.",
+      "discardValue": "Descartar valor",
+      "incompatible": "Incompatible",
+      "mapTo": "Asignar a",
+      "requiresConfirmation": "Requiere confirmación",
+      "unresolved": "Sin resolver"
+    },
     "sidebarPinned": {
+      "addContent": "Agregar contenido",
+      "addContentToPinned": "Agregar contenido a Fijados",
+      "noAvailableContent": "No hay contenido disponible",
+      "noPinnedContent": "No hay contenido fijado",
+      "title": "Fijados",
       "open": "Abrir",
       "openInSidePanel": "Abrir en el panel lateral",
       "openInNewTab": "Abrir en una nueva pestaña"
@@ -552,9 +583,27 @@
       "overview": "Vista general"
     },
     "sidebarSections": {
+      "add": "Agregar sección",
       "sort": "Ordenar sección",
       "manual": "Ordenar manualmente",
-      "alphabetical": "Ordenar alfabéticamente"
+      "alphabetical": "Ordenar alfabéticamente",
+      "create": "Crear",
+      "namePlaceholder": "Nombre de la sección",
+      "noContent": "Sin contenido"
+    },
+    "sidebarHelp": {
+      "askQuestion": "Hacer una pregunta",
+      "askQuestionTooltip": "Haz preguntas sobre tu espacio de trabajo",
+      "documentation": "Documentación",
+      "documentationTooltip": "Aprende a usar tu espacio de trabajo",
+      "feedback": "Comentarios",
+      "feedbackTooltip": "Comparte ideas, comentarios o problemas",
+      "getStarted": "Primeros pasos",
+      "title": "Ayuda y recursos",
+      "whatsNew": "Novedades"
+    },
+    "sidebarUtilities": {
+      "trash": "Papelera"
     }
   }
 }

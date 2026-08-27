@@ -33,4 +33,4 @@
 
 - [x] 5.1 Integrate the app-sidebar component into the existing `AppShellSidebar` composition on the locale starter page without changing the app-shell contract.
 - [x] 5.2 Sync the completed delta into the canonical `openspec/specs/ui/app-sidebar/spec.md` capability.
-- [ ] 5.3 Verify the resulting code with the repository `pnpm verify` workflow in a development checkout and resolve formatting, lint, typecheck, test, or build errors.
+- [x] 5.3 Verify the resulting code with the repository `pnpm verify` workflow in a development checkout and resolve formatting, lint, typecheck, test, or build errors.

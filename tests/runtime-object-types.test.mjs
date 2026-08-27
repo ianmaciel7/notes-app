@@ -357,6 +357,21 @@ test("entity inverse properties must point at compatible reciprocal definitions"
     ]).ok,
     false,
   );
+  assert.equal(
+    validateStructureRegistry([
+      {
+        ...registry.find((structure) => structure.id === "book-rel"),
+        propertyDefinitions: [
+          {
+            ...author,
+            fixedTargetObjectIds: ["person-1"],
+          },
+        ],
+      },
+      registry.find((structure) => structure.id === "person-rel"),
+    ]).ok,
+    false,
+  );
 });
 
 test("Structure presentation normalizes legacy view aliases", () => {

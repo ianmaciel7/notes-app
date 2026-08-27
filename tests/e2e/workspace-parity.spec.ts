@@ -7,6 +7,13 @@ const desktopViewports = [
   { width: 1024, height: 768 },
   { width: 768, height: 720 },
 ] as const;
+const recordedSidebarWidths = {
+  // The August 26 matched reference measured a persisted 288px sidebar at
+  // 1153x912. Its separate clean-local capture was 224px; do not conflate it
+  // with the current production default exercised by these browser tests.
+  referencePersisted: 288,
+  historicalCleanLocal: 224,
+} as const;
 const tinyPng = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=",
   "base64",
@@ -32,13 +39,7 @@ async function openWorkspace(page: Page) {
 
 function objectTypeWorkspace(page: Page) {
   return page
-    .locator(
-      [
-        '[data-slot="object-type-workspace"]',
-        '[data-slot="object-type-named-item-workspace"]',
-        '[data-slot="workspace-object-type-view"]',
-      ].join(","),
-    )
+    .locator('[data-slot="workspace-object-type-view"]')
     .filter({
       visible: true,
     });
@@ -46,12 +47,7 @@ function objectTypeWorkspace(page: Page) {
 
 function createdObjectWorkspace(page: Page) {
   return page
-    .locator(
-      [
-        '[data-slot="created-object-workspace"]',
-        '[data-slot="workspace-object-page-view"]',
-      ].join(","),
-    )
+    .locator('[data-slot="workspace-object-page-view"]')
     .filter({
       visible: true,
     });
@@ -95,6 +91,47 @@ async function expectStableBoxOnHover(target: Locator) {
   expect(idleBox).toBeTruthy();
   await target.hover();
   expect(await target.boundingBox()).toEqual(idleBox);
+}
+
+async function expectContainedUsableSurface(
+  page: Page,
+  surface: Locator,
+  viewport: { width: number; height: number },
+) {
+  await expect
+    .poll(async () => {
+      const box = await surface.boundingBox();
+      return Boolean(
+        box &&
+          box.width > 0 &&
+          box.height > 0 &&
+          box.x >= 0 &&
+          box.y >= 0 &&
+          box.x + box.width <= viewport.width &&
+          box.y + box.height <= viewport.height,
+      );
+    })
+    .toBe(true);
+
+  const box = await surface.boundingBox();
+  expect(box).toBeTruthy();
+  expect(box?.width ?? 0).toBeGreaterThan(0);
+  expect(box?.height ?? 0).toBeGreaterThan(0);
+  expect(box?.x ?? -1).toBeGreaterThanOrEqual(0);
+  expect(box?.y ?? -1).toBeGreaterThanOrEqual(0);
+  expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(viewport.width);
+  expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(
+    viewport.height,
+  );
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          document.documentElement.scrollWidth ===
+          document.documentElement.clientWidth,
+      ),
+    )
+    .toBe(true);
 }
 
 async function openObjectTypeStudio(page: Page) {
@@ -223,10 +260,7 @@ async function expectCreatedObjectProjection(
   await expect(
     page
       .locator(
-        [
-          `[data-slot="created-object-workspace"][data-object-type="${objectTypeId}"]`,
-          `[data-slot="workspace-object-page-view"][data-object-type="${objectTypeId}"]`,
-        ].join(","),
+        `[data-slot="workspace-object-page-view"][data-object-type="${objectTypeId}"]`,
       )
       .first(),
   ).toBeVisible();
@@ -297,7 +331,9 @@ async function installMainTabFlashObserver(page: Page, targetLabel: string) {
 }
 
 for (const viewport of desktopViewports) {
-  test(`desktop geometry ${viewport.width}px`, async ({ page }) => {
+  test(`desktop geometry ${viewport.width}px keeps the recorded shell state contained`, async ({
+    page,
+  }) => {
     await page.setViewportSize(viewport);
     const errors = await openWorkspace(page);
     const sidebar = page.locator("#app-shell-sidebar");
@@ -315,7 +351,7 @@ for (const viewport of desktopViewports) {
     await expect(sidebar).toBeVisible();
     await expect
       .poll(async () => (await sidebar.boundingBox())?.width)
-      .toBeCloseTo(288, 0);
+      .toBeCloseTo(recordedSidebarWidths.referencePersisted, 0);
     await expect
       .poll(async () => (await mainHeader.boundingBox())?.height)
       .toBeCloseTo(46, 0);
@@ -323,21 +359,35 @@ for (const viewport of desktopViewports) {
       .poll(async () => (await main.boundingBox())?.width ?? 0)
       .toBeGreaterThan(0);
     const surfaceBox = await mainSurface.boundingBox();
-    expect(surfaceBox?.x ?? 0).toBeGreaterThanOrEqual(298);
-    expect(surfaceBox?.x ?? 0).toBeLessThanOrEqual(299);
+    const sidebarBox = await sidebar.boundingBox();
+    expect(surfaceBox?.x ?? 0).toBeCloseTo(
+      (sidebarBox?.x ?? 0) + (sidebarBox?.width ?? 0) + 10,
+      0,
+    );
     await expect(mainSurface).toHaveCSS("border-radius", "12px");
-    await expect
-      .poll(() =>
-        page.evaluate(
-          () =>
-            document.documentElement.scrollWidth ===
-            document.documentElement.clientWidth,
-        ),
-      )
-      .toBe(true);
+    await expectContainedUsableSurface(page, mainSurface, viewport);
     expect(errors).toEqual([]);
   });
 }
+
+test("1153px records the persisted-reference width separately from the historical clean-local baseline", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1153, height: 912 });
+  const errors = await openWorkspace(page);
+  const sidebar = page.locator("#app-shell-sidebar");
+
+  // The current shell intentionally defaults to the reference width. Keep the
+  // older 224px clean-local observation visible as a baseline, not an expected
+  // current-reference geometry value.
+  expect(recordedSidebarWidths.historicalCleanLocal).toBe(224);
+  expect(recordedSidebarWidths.referencePersisted).toBe(288);
+  await expect(sidebar).toBeVisible();
+  await expect
+    .poll(async () => (await sidebar.boundingBox())?.width)
+    .toBeCloseTo(recordedSidebarWidths.referencePersisted, 0);
+  expect(errors).toEqual([]);
+});
 
 test("tab midpoint and dedicated actions do not overlap", async ({ page }) => {
   await page.setViewportSize({ width: 768, height: 720 });
@@ -355,7 +405,12 @@ test("tab midpoint and dedicated actions do not overlap", async ({ page }) => {
   expect(targetBox?.width ?? 0).toBeGreaterThanOrEqual(44);
   expect(targetBox?.height ?? 0).toBeGreaterThanOrEqual(32);
 
-  await target.click({ position: { x: 22, y: 16 } });
+  await target.click({
+    position: {
+      x: (targetBox?.width ?? 0) / 2,
+      y: (targetBox?.height ?? 0) / 2,
+    },
+  });
   await expect(page.locator(`[data-tab-id="${targetId}"]`)).toHaveAttribute(
     "data-tab-active",
     "true",
@@ -724,7 +779,28 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
   await page.setViewportSize({ width: 480, height: 844 });
   await page.getByRole("button", { name: "Abrir painel lateral" }).click();
   const mobilePanel = page.locator('[data-slot="app-shell-side-panel"]');
-  await expect(mobilePanel.locator('[data-slot="workspace-graph"]')).toBeVisible();
+  await expect(
+    mobilePanel.locator('[data-slot="workspace-graph"]'),
+  ).toBeVisible();
+
+  for (const [name, entry] of [
+    ["Links de entrada", "backlinks"],
+    ["Objetos internos", "objectsInside"],
+    ["Conteúdo relacionado", "relatedContent"],
+    ["Chat de IA", "aiAssistantChat"],
+    ["Buscar", "localSpaceQuery"],
+    ["Visualização em grafo", "graphView"],
+  ] as const) {
+    await mobilePanel
+      .getByRole("button", { name: "Abrir menu do painel lateral" })
+      .click();
+    await page.getByRole("menuitem", { name, exact: true }).click();
+    await expect(
+      mobilePanel.locator(
+        `[data-slot="contextual-panel-body"][data-contextual-entry="${entry}"]`,
+      ),
+    ).toBeVisible();
+  }
   expect(errors).toEqual([]);
 });
 
@@ -748,13 +824,14 @@ test("Page Customize exposes every reference action and persists property outcom
     "Preencher Aliases",
     "Adicionar Imagem de Capa",
     "Preencher Todas as Propriedades",
+    "Layout Amplo",
   ] as const;
 
   async function openCustomize() {
     await header.hover();
     await customize.click();
     const menu = page.getByRole("menu", { name: "Personalizar" });
-    await expect(menu.getByRole("menuitem")).toHaveCount(7);
+    await expect(menu.getByRole("menuitem")).toHaveCount(actionNames.length);
     return menu;
   }
 
@@ -1174,6 +1251,46 @@ test("object page header controls keep fluid click and keyboard states", async (
   expect(errors).toEqual([]);
 });
 
+test("Page Customize respects reduced motion and keeps truthful keyboard controls", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  await createPageObject(page);
+
+  const header = createdObjectWorkspace(page).locator(
+    '[data-slot="workspace-object-page-header"]',
+  );
+  const customize = header.getByRole("button", {
+    name: "Personalizar",
+    exact: true,
+  });
+  const more = header.getByRole("button", {
+    name: "Mais opções",
+    exact: true,
+  });
+
+  await expect(customize).toHaveCount(1);
+  await expect(more).toHaveCount(1);
+  await expect(customize).not.toHaveAccessibleName("Mais opções");
+  await expect
+    .poll(() =>
+      customize.evaluate(
+        (element) => getComputedStyle(element).transitionProperty,
+      ),
+    )
+    .toBe("none");
+
+  await customize.focus();
+  await expect(customize).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("menu", { name: "Personalizar" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(customize).toBeFocused();
+  expect(errors).toEqual([]);
+});
+
 test("Page collections synchronize header chips, object-type collection rows, and reload persistence", async ({
   page,
 }) => {
@@ -1246,6 +1363,152 @@ test("Page collections synchronize header chips, object-type collection rows, an
   expect(errors).toEqual([]);
 });
 
+test("Page Collections and overflow controls keep Page metadata synchronized", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Overflow collections page");
+  await createPageCollection(page, "Overflow collection");
+  await page.getByRole("tab", { name: "Overflow collections page" }).click();
+
+  const workspace = createdObjectWorkspace(page);
+  const header = workspace.locator(
+    '[data-slot="workspace-object-page-header"]',
+  );
+  const collections = header.getByRole("textbox", {
+    name: "Coleções",
+    exact: true,
+  });
+  const more = header.getByRole("button", {
+    name: "Mais opções",
+    exact: true,
+  });
+  const customize = header.getByRole("button", {
+    name: "Personalizar",
+    exact: true,
+  });
+  const pageEntity = (await persistedEntities(page)).find(
+    (candidate: { title: string }) =>
+      candidate.title === "Overflow collections page",
+  );
+
+  await expect(collections).toHaveCount(1);
+  await expect(more).toHaveCount(1);
+  await expect(collections).not.toHaveAccessibleName("Mais opções");
+  await expect(more).not.toHaveAccessibleName("Coleções");
+
+  await collections.click();
+  const popover = page.locator('[data-slot="popover-content"][data-open]');
+  await expect(popover).toBeVisible();
+  expect(
+    (await persistedEntities(page)).find(
+      (candidate: { id: string }) => candidate.id === pageEntity?.id,
+    )?.collections,
+  ).toEqual([]);
+  await collections.focus();
+  await expect(collections).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(popover).toBeHidden();
+  await expect(collections).toBeFocused();
+
+  await more.click();
+  const menu = page.getByRole("menu");
+  await expect(menu).toBeVisible();
+  expect(
+    (await persistedEntities(page)).find(
+      (candidate: { id: string }) => candidate.id === pageEntity?.id,
+    )?.collections,
+  ).toEqual([]);
+  await page.keyboard.press("Escape");
+  await expect(menu).toBeHidden();
+  await expect(more).toBeFocused();
+
+  await more.click();
+  await menu.getByRole("menuitem", { name: "Editar coleções" }).click();
+
+  await expect(collections).toBeFocused();
+  await expect(popover).toBeVisible();
+  await popover
+    .getByRole("button", { name: "Overflow collection", exact: true })
+    .focus();
+  await page.keyboard.press("Enter");
+  await expect(
+    workspace.getByRole("button", { name: "Remover Overflow collection" }),
+  ).toBeVisible();
+  await expect
+    .poll(async () =>
+      (await persistedEntities(page)).find(
+        (candidate: { id: string }) => candidate.id === pageEntity?.id,
+      )?.collections,
+    )
+    .toHaveLength(1);
+  await page
+    .locator('[data-slot="app-sidebar-collection-row"]')
+    .filter({ hasText: "Overflow collection" })
+    .getByRole("button", { name: "Overflow collection", exact: true })
+    .click({ noWaitAfter: true });
+  await expect(objectTypeWorkspace(page)).toContainText(
+    "Overflow collections page",
+  );
+  await page.getByRole("tab", { name: "Overflow collections page" }).click();
+
+  await customize.click();
+  const customizeMenu = page.getByRole("menu", { name: "Personalizar" });
+  await expect(customizeMenu).toBeVisible();
+  await customizeMenu
+    .getByRole("menuitem", { name: "Layout Amplo" })
+    .click({ noWaitAfter: true });
+  await expect(
+    workspace.locator('[data-slot="workspace-object-page-column"]'),
+  ).toHaveAttribute("data-wide-layout", "true");
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  const reloadedWorkspace = createdObjectWorkspace(page);
+  const reloadedHeader = reloadedWorkspace.locator(
+    '[data-slot="workspace-object-page-header"]',
+  );
+  const reloadedCollections = reloadedHeader.getByRole("textbox", {
+    name: "Coleções",
+    exact: true,
+  });
+  await expect(
+    reloadedWorkspace.getByRole("button", {
+      name: "Remover Overflow collection",
+    }),
+  ).toBeVisible();
+  await expect(
+    reloadedWorkspace.locator('[data-slot="workspace-object-page-column"]'),
+  ).toHaveAttribute("data-wide-layout", "true");
+
+  await reloadedWorkspace
+    .getByRole("button", { name: "Remover Overflow collection" })
+    .click();
+  await expect(
+    reloadedWorkspace.getByRole("button", {
+      name: "Remover Overflow collection",
+    }),
+  ).toHaveCount(0);
+  await expect
+    .poll(async () =>
+      (await persistedEntities(page)).find(
+        (candidate: { id: string }) => candidate.id === pageEntity?.id,
+      )?.collections,
+    )
+    .toEqual([]);
+
+  await reloadedCollections.focus();
+  await expect(reloadedCollections).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(popover).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(reloadedCollections).toBeFocused();
+  expect(errors).toEqual([]);
+});
+
 test("sidebar row and nested menu keep distinct full-row targets", async ({
   page,
 }) => {
@@ -1295,13 +1558,15 @@ test("object-type New disclosure opens options without creating an object", asyn
   await expect(objectTypeWorkspace(page)).toBeVisible();
 
   expect(await persistedEntities(page)).toHaveLength(0);
-  await objectTypeWorkspace(page)
-    .getByRole("button", { name: "Opções de novo objeto", exact: true })
-    .click();
+  const workspace = objectTypeWorkspace(page);
+  const disclosure = workspace.getByRole("button", {
+    name: "Opções de novo objeto",
+    exact: true,
+  });
+  await disclosure.click();
 
-  await expect(
-    page.locator('[data-slot="dropdown-menu-content"][data-open]'),
-  ).toBeVisible();
+  const menu = page.locator('[data-slot="dropdown-menu-content"][data-open]');
+  await expect(menu).toBeVisible();
   expect(await persistedEntities(page)).toHaveLength(0);
   await expect(
     page
@@ -1309,6 +1574,18 @@ test("object-type New disclosure opens options without creating an object", asyn
       .filter({ hasText: "Tabelas" })
       .first(),
   ).not.toContainText("1");
+
+  await page.keyboard.press("Escape");
+  await expect(menu).toBeHidden();
+  await expect(disclosure).toBeFocused();
+
+  await workspace.getByRole("button", { name: "Novo", exact: true }).click();
+  await expect.poll(() => persistedEntities(page)).toHaveLength(1);
+  await expect(
+    page.locator(
+      '[aria-label="Workspace tabs"] [role="tab"][aria-selected="true"]',
+    ),
+  ).toHaveCount(1);
   expect(errors).toEqual([]);
 });
 
@@ -1368,15 +1645,38 @@ test("production object-type Import handles accepted rejected and cancelled sele
   await expect(workspace).toBeVisible();
   await expect(workspace).toHaveAttribute("data-structure-id", "pdf");
 
-  const importInput = page.getByLabel("Importar arquivo(s)", { exact: true });
+  const importButton = workspace.getByRole("button", {
+    name: "Importar",
+    exact: true,
+  });
+  const importInput = workspace.getByLabel("Importar arquivo(s)", {
+    exact: true,
+  });
+  await expect(importButton).toBeVisible();
   await expect(importInput).toHaveAttribute("accept", "application/pdf,.pdf");
-  await importInput.setInputFiles([]);
+
+  async function chooseImportFiles(
+    files:
+      | []
+      | {
+          buffer: Buffer;
+          mimeType: string;
+          name: string;
+        },
+  ) {
+    const fileChooserPromise = page.waitForEvent("filechooser");
+    await importButton.click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles(files);
+  }
+
+  await chooseImportFiles([]);
   await expect(page.locator('[data-slot="workspace-message"]')).toHaveText(
     "Importação cancelada.",
   );
   expect(await persistedEntities(page)).toHaveLength(0);
 
-  await importInput.setInputFiles({
+  await chooseImportFiles({
     buffer: Buffer.from("not a pdf"),
     mimeType: "text/plain",
     name: "wrong.txt",
@@ -1386,7 +1686,7 @@ test("production object-type Import handles accepted rejected and cancelled sele
   );
   expect(await persistedEntities(page)).toHaveLength(0);
 
-  await importInput.setInputFiles({
+  await chooseImportFiles({
     buffer: Buffer.from("%PDF-1.4"),
     mimeType: "application/pdf",
     name: "accepted.pdf",
@@ -1465,9 +1765,9 @@ test("Atomic note object-type commands render named outcomes", async ({
   await expect(filterRow).toBeVisible();
   await expect(filterRow).toContainText("onde");
   await filterRow.getByRole("button", { name: "Todos os objetos" }).click();
-  await expect(workspace.locator('[data-slot="object-type-all"]')).toContainText(
-    "Nenhum objeto correspondente",
-  );
+  await expect(
+    workspace.locator('[data-slot="object-type-all"]'),
+  ).toContainText("Nenhum objeto correspondente");
   await filterRow.getByRole("button", { name: "Sem título" }).click();
   await page.keyboard.press("Escape");
   await expect(filterRow).toBeHidden();
@@ -1499,10 +1799,9 @@ test("Atomic note object-type commands render named outcomes", async ({
   await expect(
     workspace.locator('[data-lifecycle-contract="object-projection-card"]'),
   ).toHaveCount(2);
-  await expect(workspace.locator('[data-slot="object-type-all"]')).toHaveAttribute(
-    "data-layout",
-    "grid",
-  );
+  await expect(
+    workspace.locator('[data-slot="object-type-all"]'),
+  ).toHaveAttribute("data-layout", "grid");
   expect(await persistedEntities(page)).toHaveLength(2);
   expect(errors).toEqual([]);
 });
@@ -1616,7 +1915,9 @@ test("Page collapse control changes to an accurate expand name", async ({
     workspace.getByRole("button", { name: "Expandir editor", exact: true }),
   ).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(workspace.getByRole("textbox", { name: "Título" })).toBeVisible();
+  await expect(
+    workspace.getByRole("textbox", { name: "Título" }),
+  ).toBeVisible();
   await expect(
     workspace.getByRole("button", { name: "Recolher editor", exact: true }),
   ).toBeFocused();
@@ -2016,6 +2317,32 @@ test("workspace text entry buffers global persistence while typing", async ({
   expect(errors).toEqual([]);
 });
 
+test("navigating away flushes a buffered title without duplicating its Page", async ({
+  page,
+}) => {
+  const title = "Flush on navigation";
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  await createPageObject(page);
+
+  const workspace = createdObjectWorkspace(page);
+  await workspace.getByRole("textbox", { name: "Título" }).fill(title);
+  await page.getByRole("button", { name: "Tabelas", exact: true }).click();
+
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      return entities.filter(
+        (entity: { objectTypeId: string; title: string }) =>
+          entity.objectTypeId === "page" && entity.title === title,
+      ).length;
+    })
+    .toBe(1);
+  await page.getByRole("tab", { name: title, exact: true }).click();
+  await expectActiveEditorTitle(page, title);
+  expect(errors).toEqual([]);
+});
+
 for (const viewport of [
   { width: 480, height: 844 },
   { width: 390, height: 844 },
@@ -2034,13 +2361,7 @@ for (const viewport of [
     expect(closedSurfaceBox?.x ?? 0).toBeCloseTo(10, 0);
     expect(closedSurfaceBox?.width ?? 0).toBeCloseTo(viewport.width - 20, 0);
     expect(closedSurfaceBox?.height ?? 0).toBeGreaterThan(0);
-    expect(
-      await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth ===
-          document.documentElement.clientWidth,
-      ),
-    ).toBe(true);
+    await expectContainedUsableSurface(page, mainSurface, viewport);
 
     const navTrigger = mobile.locator('button[aria-label="Abrir navegação"]');
     await expect(navTrigger).toHaveAttribute("aria-expanded", "false");
@@ -2050,7 +2371,18 @@ for (const viewport of [
     const navigationBox = await navigationDialog.boundingBox();
     expect(navigationBox?.width ?? 0).toBeLessThanOrEqual(viewport.width - 40);
     expect(navigationBox?.height ?? 0).toBeGreaterThan(0);
+    await expectContainedUsableSurface(page, navigationDialog, viewport);
     await page.keyboard.press("Escape");
+    await expect(navigationDialog).toBeHidden();
+    await expect(navTrigger).toHaveAttribute("aria-expanded", "false");
+    await expect(navTrigger).toBeFocused();
+    expect(await mainSurface.boundingBox()).toEqual(closedSurfaceBox);
+
+    await navTrigger.click();
+    await expect(navigationDialog).toBeVisible();
+    await page.locator('[data-slot="sheet-overlay"]').click({
+      position: { x: viewport.width - 1, y: viewport.height - 1 },
+    });
     await expect(navigationDialog).toBeHidden();
     await expect(navTrigger).toHaveAttribute("aria-expanded", "false");
     await expect(navTrigger).toBeFocused();
@@ -2066,7 +2398,18 @@ for (const viewport of [
     const contextBox = await contextDialog.boundingBox();
     expect(contextBox?.width ?? 0).toBeLessThanOrEqual(viewport.width - 40);
     expect(contextBox?.height ?? 0).toBeGreaterThan(0);
+    await expectContainedUsableSurface(page, contextDialog, viewport);
     await page.keyboard.press("Escape");
+    await expect(contextDialog).toBeHidden();
+    await expect(contextTrigger).toHaveAttribute("aria-expanded", "false");
+    await expect(contextTrigger).toBeFocused();
+    expect(await mainSurface.boundingBox()).toEqual(closedSurfaceBox);
+
+    await contextTrigger.click();
+    await expect(contextDialog).toBeVisible();
+    await page.locator('[data-slot="sheet-overlay"]').click({
+      position: { x: 1, y: viewport.height - 1 },
+    });
     await expect(contextDialog).toBeHidden();
     await expect(contextTrigger).toHaveAttribute("aria-expanded", "false");
     await expect(contextTrigger).toBeFocused();
@@ -2554,6 +2897,166 @@ test("every supported New family persists once and reopens from its tab projecti
   expect(errors).toEqual([]);
 });
 
+test("Novo Page and Table flows keep split actions, writes, and counts durable", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  const sidebar = page.locator('[data-slot="app-shell-sidebar"]');
+  const pageRow = sidebar
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .first();
+
+  await pageRow.getByRole("button", { name: "Páginas", exact: true }).click();
+  const pageTypeWorkspace = page
+    .locator(
+      '[data-slot="workspace-object-type-view"][data-structure-id="page"]',
+    )
+    .filter({ visible: true });
+  await expect(pageTypeWorkspace).toBeVisible();
+
+  const pageEntitiesBefore = await persistedEntities(page);
+  const pageHeader = pageTypeWorkspace.locator("header");
+  const pageDisclosure = pageHeader.getByRole("button", {
+    name: "Opções de novo objeto",
+    exact: true,
+  });
+  await pageDisclosure.click();
+  const pageOptions = page.locator(
+    '[data-slot="dropdown-menu-content"][data-open]',
+  );
+  await expect(pageOptions).toBeVisible();
+  expect(await persistedEntities(page)).toHaveLength(pageEntitiesBefore.length);
+  await page.keyboard.press("Escape");
+  await expect(pageOptions).toBeHidden();
+  await expect(pageDisclosure).toBeFocused();
+
+  await pageHeader.getByRole("button", { name: "Novo", exact: true }).click();
+  const pageWorkspace = page
+    .locator(
+      '[data-slot="workspace-object-page-view"][data-object-type="page"]',
+    )
+    .filter({ visible: true });
+  await expect(pageWorkspace).toBeVisible();
+  const pageTitle = "Task 5.6 persisted Page";
+  const pageBody = "Task 5.6 persisted Page body";
+  await pageWorkspace.getByRole("textbox", { name: "Título" }).fill(pageTitle);
+  await pageWorkspace.getByRole("textbox", { name: "Text" }).fill(pageBody);
+  await pageWorkspace.getByRole("textbox", { name: "Título" }).blur();
+
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      return entities.filter(
+        (entity: { objectTypeId: string }) => entity.objectTypeId === "page",
+      ).length;
+    })
+    .toBe(1);
+  const pageEntity = (await persistedEntities(page)).find(
+    (entity: { objectTypeId: string }) => entity.objectTypeId === "page",
+  );
+  expect(pageEntity?.id).toBeTruthy();
+  await expect(pageRow).toContainText("1");
+  await expect(
+    page.locator(`[data-tab-id="${pageEntity?.id}"] [role="tab"]`),
+  ).toHaveAttribute("aria-selected", "true");
+
+  const tableRow = sidebar
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Tabelas" })
+    .first();
+  await tableRow.getByRole("button", { name: "Tabelas", exact: true }).click();
+  const tableTypeWorkspace = page
+    .locator(
+      '[data-slot="workspace-object-type-view"][data-structure-id="table"]',
+    )
+    .filter({ visible: true });
+  await expect(tableTypeWorkspace).toBeVisible();
+  const tableHeader = tableTypeWorkspace.locator("header");
+  const tableDisclosure = tableHeader.getByRole("button", {
+    name: "Opções de novo objeto",
+    exact: true,
+  });
+  await tableDisclosure.click();
+  const tableOptions = page.locator(
+    '[data-slot="dropdown-menu-content"][data-open]',
+  );
+  await expect(tableOptions).toBeVisible();
+  expect(
+    (await persistedEntities(page)).filter(
+      (entity: { objectTypeId: string }) => entity.objectTypeId === "table",
+    ),
+  ).toHaveLength(0);
+  await page.keyboard.press("Escape");
+  await expect(tableOptions).toBeHidden();
+  await expect(tableDisclosure).toBeFocused();
+
+  await tableHeader.getByRole("button", { name: "Novo", exact: true }).click();
+  const tableWorkspace = page
+    .locator(
+      '[data-slot="workspace-object-page-view"][data-object-type="table"]',
+    )
+    .filter({ visible: true });
+  await expect(tableWorkspace).toBeVisible();
+  const tableTitle = "Task 5.6 persisted Table";
+  await tableWorkspace
+    .getByRole("textbox", { name: "Título" })
+    .fill(tableTitle);
+  await tableWorkspace.getByLabel("Linha 1, coluna 1").fill("Page/Table");
+  await tableWorkspace.getByLabel("Linha 1, coluna 1").blur();
+
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      return entities.filter(
+        (entity: { objectTypeId: string }) => entity.objectTypeId === "table",
+      ).length;
+    })
+    .toBe(1);
+  const tableEntity = (await persistedEntities(page)).find(
+    (entity: { objectTypeId: string }) => entity.objectTypeId === "table",
+  );
+  expect(tableEntity?.id).toBeTruthy();
+  await expect(tableRow).toContainText("1");
+
+  await page.locator(`[data-tab-id="${pageEntity?.id}"] [role="tab"]`).click();
+  await expect(
+    page.locator(`[data-tab-id="${pageEntity?.id}"] [role="tab"]`),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(
+    pageWorkspace.getByRole("textbox", { name: "Título" }),
+  ).toHaveValue(pageTitle);
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  const reloadedPageWorkspace = page
+    .locator(
+      '[data-slot="workspace-object-page-view"][data-object-type="page"]',
+    )
+    .filter({ visible: true });
+  await expect(
+    reloadedPageWorkspace.getByRole("textbox", { name: "Título" }),
+  ).toHaveValue(pageTitle);
+  await expect(
+    reloadedPageWorkspace.getByText(pageBody, { exact: true }),
+  ).toBeVisible();
+  await page.locator(`[data-tab-id="${tableEntity?.id}"] [role="tab"]`).click();
+  await expect(
+    page
+      .locator(
+        '[data-slot="workspace-object-page-view"][data-object-type="table"]',
+      )
+      .filter({ visible: true })
+      .getByLabel("Linha 1, coluna 1"),
+  ).toHaveValue("Page/Table");
+  await expect(pageRow).toContainText("1");
+  await expect(tableRow).toContainText("1");
+  expect(await persistedSnapshot(page)).toMatchObject({ version: 1 });
+  expect(errors).toEqual([]);
+});
+
 test("preset and custom object families persist once and reopen from projections", async ({
   page,
 }) => {
@@ -2694,5 +3197,87 @@ test("preset and custom object families persist once and reopen from projections
     "Default",
     "Custom Default object",
   );
+  expect(errors).toEqual([]);
+});
+
+test("Space lifecycle UI isolates content and guards destructive deletion", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await page.getByRole("button", { name: "Alterar espaço" }).click();
+  await page.getByRole("button", { name: "Criar espaço" }).click();
+  const createDialog = page.getByRole("dialog", { name: "Criar espaço" });
+  await expect(createDialog).toBeVisible();
+  await createDialog.getByLabel("Nome do espaço").fill("Prototype Lab");
+  await createDialog.getByRole("button", { name: "Criar" }).click();
+  await expect(createDialog).toBeHidden();
+  await expect(
+    page.getByRole("button", { name: "Alterar espaço" }),
+  ).toContainText("Prototype Lab");
+
+  await selectNewObject(page, "Página");
+  await writeCreatedObjectTitle(page, "Prototype-only page");
+  await expect(
+    page.locator('[data-slot="app-sidebar-object-type-row"]').filter({
+      hasText: "Páginas",
+    }),
+  ).toContainText("1");
+
+  await page.getByRole("button", { name: "Alterar espaço" }).click();
+  await page.getByRole("option", { name: /Labs/ }).click();
+  await expect(
+    page.getByRole("button", { name: "Alterar espaço" }),
+  ).toContainText("Labs");
+  await expect(
+    page.locator('[data-slot="app-sidebar-object-type-row"]').filter({
+      hasText: "Páginas",
+    }),
+  ).not.toContainText("1");
+
+  await page.getByRole("button", { name: "Alterar espaço" }).click();
+  await page.getByRole("option", { name: /Prototype Lab/ }).click();
+  await expect(
+    page.locator('[data-slot="app-sidebar-object-type-row"]').filter({
+      hasText: "Páginas",
+    }),
+  ).toContainText("1");
+
+  await page.getByRole("button", { name: "Alterar espaço" }).click();
+  await page.getByRole("button", { name: "Configurações do espaço" }).click();
+  const settingsDialog = page.getByRole("dialog", {
+    name: "Configurações do espaço",
+  });
+  await expect(settingsDialog).toBeVisible();
+  await settingsDialog.getByLabel("Nome do espaço").fill("Prototype Renamed");
+  await settingsDialog
+    .getByRole("button", { name: "Salvar alterações" })
+    .click();
+  await expect(settingsDialog).toBeHidden();
+  await expect(
+    page.getByRole("button", { name: "Alterar espaço" }),
+  ).toContainText("Prototype Renamed");
+
+  await page.getByRole("button", { name: "Alterar espaço" }).click();
+  await page.getByRole("button", { name: "Excluir espaço" }).click();
+  const deleteDialog = page.getByRole("dialog", { name: "Excluir espaço" });
+  await expect(deleteDialog).toBeVisible();
+  await deleteDialog
+    .getByLabel("Digite Prototype Renamed para confirmar")
+    .fill("Wrong");
+  await deleteDialog.getByRole("button", { name: "Excluir espaço" }).click();
+  await expect(deleteDialog).toContainText("Digite o nome exato do espaço.");
+  await deleteDialog
+    .getByLabel("Digite Prototype Renamed para confirmar")
+    .fill("Prototype Renamed");
+  await deleteDialog.getByRole("button", { name: "Excluir espaço" }).click();
+  await expect(deleteDialog).toBeHidden();
+  await expect(
+    page.getByRole("button", { name: "Alterar espaço" }),
+  ).toContainText("Labs");
+  await expect(page.getByText("Prototype-only page")).toBeHidden();
+
   expect(errors).toEqual([]);
 });

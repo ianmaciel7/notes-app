@@ -12,7 +12,7 @@
 ## 2. Session and UI
 
 - [x] 2.1 Define provider-neutral AuthAdapter/session/secret boundary, expiry, sign-out, and offline-cache policy.
-- [ ] 2.2 Add Space switch/create/rename/delete/settings flows and destructive confirmations.
+- [x] 2.2 Add Space switch/create/rename/delete/settings flows and destructive confirmations.
 
 ## 3. Acceptance
 

@@ -2,6 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  blockEditorDocumentFromPlainText,
+} from "../src/editor/document.ts";
+import {
   createCustomStructure,
   validatePropertyDefinition,
 } from "../src/lib/workspace-object-types.ts";
@@ -11,6 +14,7 @@ import {
 } from "../src/lib/workspace-objects.ts";
 import {
   normalizeWorkspacePropertyValue,
+  removeWorkspaceEntityPropertyValue,
   setWorkspaceEntityPropertyValue,
 } from "../src/lib/workspace-property-values.ts";
 
@@ -79,6 +83,36 @@ test("property definitions round-trip ownership, metadata, labels, and target co
 });
 
 test("typed values normalize supported families and reject arbitrary JSON", () => {
+  const labelDefinition = {
+    id: "status",
+    multiple: true,
+    name: "Status",
+    options: [
+      { id: "draft", name: "Draft", color: "gray" },
+      { id: "done", name: "Done", color: "green" },
+    ],
+    ownership: "normal",
+    valueType: "label",
+    writable: true,
+  };
+  const richTextDefinition = {
+    id: "notes",
+    multiple: false,
+    name: "Notes",
+    ownership: "normal",
+    valueType: "richText",
+    writable: true,
+  };
+  const mediaDefinition = {
+    id: "cover",
+    multiple: false,
+    name: "Cover",
+    ownership: "normal",
+    valueType: "media",
+    writable: true,
+  };
+  const richText = blockEditorDocumentFromPlainText("Long note");
+
   assert.deepEqual(
     expectSuccess(
       normalizeWorkspacePropertyValue(summaryDefinition, "  Notes  "),
@@ -100,6 +134,24 @@ test("typed values normalize supported families and reject arbitrary JSON", () =
       ),
     ),
     { number: { value: 5 }, type: "number" },
+  );
+  assert.deepEqual(
+    expectSuccess(
+      normalizeWorkspacePropertyValue(labelDefinition, ["draft", "done"]),
+    ),
+    { label: [{ id: "draft" }, { id: "done" }], type: "label" },
+  );
+  assert.deepEqual(
+    expectSuccess(normalizeWorkspacePropertyValue(richTextDefinition, richText)),
+    { richText, type: "richText" },
+  );
+  assert.deepEqual(
+    expectSuccess(normalizeWorkspacePropertyValue(mediaDefinition, "asset-1")),
+    { media: { id: "asset-1" }, type: "media" },
+  );
+  expectFailure(
+    normalizeWorkspacePropertyValue(labelDefinition, ["draft", "unknown"]),
+    "invalid-property-value",
   );
   expectFailure(
     normalizeWorkspacePropertyValue(summaryDefinition, { unsafe: true }),
@@ -186,6 +238,10 @@ test("pure property commands set, remove, and protect system values atomically",
       "createdAt",
       "2026-08-25T00:00:00.000Z",
     ),
+    "read-only-property",
+  );
+  expectFailure(
+    removeWorkspaceEntityPropertyValue(entity, structure, "createdAt"),
     "read-only-property",
   );
 

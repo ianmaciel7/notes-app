@@ -12,6 +12,16 @@ export type WorkspaceRouteState = {
   section: WorkspaceSection | null;
 };
 
+export type ContextualPanelRouteEntry =
+  | "explore"
+  | "graphView"
+  | "localSpaceQuery";
+
+export type ContextualPanelRouteState = {
+  entry: ContextualPanelRouteEntry;
+  visible: boolean;
+};
+
 function hashRouteValue(value: string) {
   let hash = 2166136261;
   for (const character of value) {
@@ -79,4 +89,18 @@ export function parseWorkspaceRoute(
     : null;
 
   return { spaceId, targetId, section };
+}
+
+/**
+ * Maps the serializable workspace route to the contextual panel's default
+ * presentation. More granular panel tabs remain transient workspace state.
+ */
+export function contextualPanelRouteState({
+  section,
+  targetId,
+}: WorkspaceRouteState): ContextualPanelRouteState {
+  if (targetId) return { entry: "graphView", visible: true };
+  if (section === "search") return { entry: "localSpaceQuery", visible: true };
+  if (section === "explore") return { entry: "explore", visible: true };
+  return { entry: "explore", visible: false };
 }

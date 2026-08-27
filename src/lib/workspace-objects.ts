@@ -578,7 +578,7 @@ function commitTaskDraft(
   if (state.draft?.kind !== "task") return state;
   const title = titleValue.trim();
   if (!title) return { ...state, error: "required-title" };
-  return createEntity(state, "task", { title }, false);
+  return createEntity(state, state.draft.objectTypeId, { title }, false);
 }
 
 function commitUrlDraft(
@@ -1361,11 +1361,14 @@ const workspaceObjectActionHandlers: WorkspaceObjectActionHandlers = {
   removePropertyValue: reducePropertyValueAction,
   renameStructure: reduceStructureAction,
   replaceStructureSchema: reduceStructureAction,
-  selectEntity: (state, action) => ({
-    ...state,
-    activeEntityId: action.id,
-    error: null,
-  }),
+  selectEntity: (state, action) =>
+    state.activeEntityId === action.id && state.error === null
+      ? state
+      : {
+          ...state,
+          activeEntityId: action.id,
+          error: null,
+        },
   setLinkedEntityPropertyValue: reduceSetLinkedEntityPropertyValue,
   setPropertyValue: reducePropertyValueAction,
   updateEntity: reduceUpdateEntity,
@@ -1381,6 +1384,17 @@ function workspaceObjectReducer(
     | undefined;
 
   return reducer ? reducer(state, action) : state;
+}
+
+function isWorkspaceEntityDeletionAccepted(
+  state: WorkspaceObjectState,
+  id: string,
+): boolean {
+  if (!state.entities.some((entity) => entity.id === id)) return false;
+  return !workspaceObjectReducer(state, {
+    type: "deleteEntity",
+    id,
+  }).entities.some((entity) => entity.id === id);
 }
 
 function countEntitiesByType(
@@ -1482,6 +1496,7 @@ export {
   deriveUrlMetadata,
   getCreationFlow,
   getWorkspaceImportError,
+  isWorkspaceEntityDeletionAccepted,
   isObjectTypeId,
   objectTypeIds,
   selectQueryResults,

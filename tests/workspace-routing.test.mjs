@@ -1,11 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {
+import * as workspaceRouting from "../src/lib/workspace-routing.ts";
+
+const {
   parseWorkspaceRoute,
   workspaceRouteId,
   workspaceRoutePath,
-} from "../src/lib/workspace-routing.ts";
+} = workspaceRouting;
 
 test("creates stable UUID-shaped public identifiers", () => {
   const id = workspaceRouteId("created-page-1");
@@ -57,5 +59,50 @@ test("falls back to the local workspace for the locale root", () => {
       targetId: null,
       section: "calendar",
     },
+  );
+});
+
+test("derives contextual panel visibility and body from workspace route state", () => {
+  assert.equal(typeof workspaceRouting.contextualPanelRouteState, "function");
+  const { contextualPanelRouteState } = workspaceRouting;
+  assert.deepEqual(
+    contextualPanelRouteState({
+      spaceId: "workspace-uuid",
+      targetId: "object-uuid",
+      section: null,
+    }),
+    { entry: "graphView", visible: true },
+  );
+  assert.deepEqual(
+    contextualPanelRouteState({
+      spaceId: "workspace-uuid",
+      targetId: null,
+      section: "search",
+    }),
+    { entry: "localSpaceQuery", visible: true },
+  );
+  assert.deepEqual(
+    contextualPanelRouteState({
+      spaceId: "workspace-uuid",
+      targetId: null,
+      section: "explore",
+    }),
+    { entry: "explore", visible: true },
+  );
+  assert.deepEqual(
+    contextualPanelRouteState({
+      spaceId: "workspace-uuid",
+      targetId: null,
+      section: "calendar",
+    }),
+    { entry: "explore", visible: false },
+  );
+  assert.deepEqual(
+    contextualPanelRouteState({
+      spaceId: "workspace-uuid",
+      targetId: null,
+      section: null,
+    }),
+    { entry: "explore", visible: false },
   );
 });

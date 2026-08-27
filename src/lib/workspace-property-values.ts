@@ -1,4 +1,7 @@
-import type { BlockEditorDocument } from "../editor/document.ts";
+import {
+  type BlockEditorDocument,
+  normalizeBlockEditorDocument,
+} from "../editor/document.ts";
 import {
   type DatePropertyValue,
   normalizeDatePropertyValue,
@@ -254,13 +257,15 @@ const propertyValueNormalizers: Readonly<
           "invalid-property-value",
           "Number property value must be finite.",
         ),
-  richText: (_definition, rawValue) =>
-    isRecord(rawValue) && rawValue.schemaVersion === 1
-      ? ok({ richText: rawValue as BlockEditorDocument, type: "richText" })
+  richText: (_definition, rawValue) => {
+    const richText = normalizeBlockEditorDocument(rawValue, "property");
+    return richText
+      ? ok({ richText, type: "richText" })
       : failure(
           "invalid-property-value",
           "Rich text property value must be a block editor document.",
-        ),
+        );
+  },
   text: (definition, rawValue) => {
     if (definition.multiple) {
       const values = normalizeStringArray(rawValue);

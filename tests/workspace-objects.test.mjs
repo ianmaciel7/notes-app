@@ -21,6 +21,7 @@ import {
   deriveUrlMetadata,
   getCreationFlow,
   getWorkspaceImportError,
+  isWorkspaceEntityDeletionAccepted,
   selectQueryResults,
   workspaceObjectReducer,
 } from "../src/lib/workspace-objects.ts";
@@ -143,6 +144,19 @@ test("reserved and unknown object types cannot mutate entity state", () => {
   }
 });
 
+test("reselecting the active entity preserves the state reference", () => {
+  const selected = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
+    id: "page",
+    type: "selectEntity",
+  });
+  const reselected = workspaceObjectReducer(selected, {
+    id: "page",
+    type: "selectEntity",
+  });
+
+  assert.strictEqual(reselected, selected);
+});
+
 test("immediate creations receive collision-free ids and derived counts", () => {
   const state = reduce(
     createInitialWorkspaceObjectState(),
@@ -183,6 +197,39 @@ test("drafted flows do not create entities until a valid commit", () => {
   assert.equal(committed.entities[0].title, "Write tests");
   assert.equal(committed.draft, null);
   assert.equal(committed.activeEntityId, null);
+});
+
+test("task drafts preserve runtime custom Structure ids on commit", () => {
+  const initial = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
+    id: "custom-task",
+    input: {
+      iconName: "task",
+      lifecycleKind: "task",
+      pluralName: "Custom Tasks",
+      singularName: "Custom Task",
+      tone: "cyan",
+    },
+    type: "createStructure",
+  });
+  assert.equal(initial.error, null);
+  const taskDraft = workspaceObjectReducer(initial, {
+    type: "beginCreate",
+    objectTypeId: "custom-task",
+  });
+
+  assert.equal(taskDraft.draft?.kind, "task");
+  assert.equal(taskDraft.draft?.objectTypeId, "custom-task");
+
+  const committed = workspaceObjectReducer(taskDraft, {
+    type: "commitTask",
+    title: "Write custom task test",
+  });
+
+  assert.equal(committed.entities.length, 1);
+  assert.equal(committed.entities[0].objectTypeId, "custom-task");
+  assert.deepEqual(countEntitiesByType(committed.entities), {
+    "custom-task": 1,
+  });
 });
 
 test("canonical edits update one entity without inflating counts", () => {
@@ -506,6 +553,29 @@ test("entity deletion is guarded while reverse references exist", () => {
   );
 });
 
+test("deletion cleanup runs only after canonical deletion accepts the entity", () => {
+  const protectedState = reduce(
+    createInitialWorkspaceObjectState(),
+    { type: "beginCreate", objectTypeId: "page" },
+    { type: "beginCreate", objectTypeId: "tag" },
+    {
+      id: "created-page-1",
+      propertyId: "tags",
+      type: "setPropertyValue",
+      value: "created-tag-2",
+    },
+  );
+
+  assert.equal(
+    isWorkspaceEntityDeletionAccepted(protectedState, "created-tag-2"),
+    false,
+  );
+  assert.equal(
+    isWorkspaceEntityDeletionAccepted(protectedState, "created-page-1"),
+    true,
+  );
+});
+
 test("query descriptions produce deterministic filters and local results", () => {
   let state = createInitialWorkspaceObjectState();
   state = reduce(
@@ -656,7 +726,7 @@ test("hydration restores canonical data without restoring transient drafts", () 
 });
 
 test("workspace UI exposes every lifecycle family with localized accessible surfaces", async () => {
-  const [controller, content, toolbarIcons, primaryActions, en, es, pt] =
+  const [controller, content, objectTypeView, toolbarIcons, primaryActions, en, es, pt] =
     await Promise.all([
       readFile(
         new URL("../src/components/workspace-controller.tsx", import.meta.url),
@@ -664,6 +734,13 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
       ),
       readFile(
         new URL("../src/components/workspace-content.tsx", import.meta.url),
+        "utf8",
+      ),
+      readFile(
+        new URL(
+          "../src/components/workspace-object-type-view.tsx",
+          import.meta.url,
+        ),
         "utf8",
       ),
       readFile(
@@ -692,6 +769,11 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
   assert.match(controller, /type="file"/);
   assert.match(controller, /type: "importFile"/);
   assert.match(controller, /objectTypeOverview\.importComplete/);
+  const importHandler = controller.match(
+    /const importWorkspaceFiles[\s\S]*?\n  \);\n\n  const updateWorkspaceEntity/,
+  )?.[0];
+  assert.ok(importHandler);
+  assert.doesNotMatch(importHandler, /writeMediaAsset/);
   assert.match(content, /multiple/);
   assert.match(content, /input\.value = ""/);
   assert.match(content, /onClick=\{createObject\}/);
@@ -714,6 +796,9 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
   assert.match(content, /group\/object-type-section/);
   assert.match(content, /group-hover\/object-type-section:opacity-100/);
   assert.match(content, /\[@media\(hover:hover\)\]:opacity-0/);
+  assert.match(objectTypeView, /const importInputRef = React\.useRef<HTMLInputElement>/);
+  assert.match(objectTypeView, /onImport=\{openImportPicker\}/);
+  assert.doesNotMatch(objectTypeView, /document\.getElementById\(importInputId\)/);
   for (const iconName of [
     "overview",
     "all",
@@ -768,7 +853,12 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
       typeof messages.workspace.objectTypeOverview.unpinFromSidebar,
       "string",
     );
+    assert.equal(
+      "namedItemViewNotReady" in messages.workspace.objectTypeOverview,
+      false,
+    );
   }
+  assert.doesNotMatch(objectTypeView, /namedItemViewNotReady/);
 });
 
 test("document property pickers preserve the shared Capacities popup contract", async () => {

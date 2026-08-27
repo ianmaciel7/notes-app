@@ -43,6 +43,17 @@ type UnlinkedMentionCandidate = {
   targetId: string;
 };
 
+type WorkspaceRelatedEntityRule =
+  | "backlink"
+  | "content-reference"
+  | "property-relation"
+  | "shared-collection";
+
+type WorkspaceRelatedEntity = {
+  entity: WorkspaceEntity;
+  rules: readonly WorkspaceRelatedEntityRule[];
+};
+
 function isDocumentLikeEntity(
   entity: WorkspaceEntity,
 ): entity is Extract<WorkspaceEntity, { kind: "document" | "quote" }> {
@@ -201,7 +212,14 @@ function selectObjectsInside(
   index: WorkspaceObjectLinkIndex,
   sourceId: string,
 ): WorkspaceBacklink[] {
-  return index.forwardBySourceId.get(sourceId) ?? [];
+  const references = index.forwardBySourceId.get(sourceId) ?? [];
+  const uniqueReferences = new Map<string, WorkspaceBacklink>();
+  for (const reference of references) {
+    if (!uniqueReferences.has(reference.targetId)) {
+      uniqueReferences.set(reference.targetId, reference);
+    }
+  }
+  return Array.from(uniqueReferences.values());
 }
 
 function selectContextualGraphEdges(
@@ -228,6 +246,55 @@ function selectPropertyRelationGraphEdges(
     }
   }
   return Array.from(edges.values());
+}
+
+function collectionIds(entity: WorkspaceEntity): readonly string[] {
+  return "collections" in entity && Array.isArray(entity.collections)
+    ? entity.collections
+    : [];
+}
+
+function selectRelatedEntities(
+  entities: readonly WorkspaceEntity[],
+  objectId: string,
+): WorkspaceRelatedEntity[] {
+  const source = entities.find((entity) => entity.id === objectId);
+  if (!source) return [];
+
+  const rulesByEntityId = new Map<string, Set<WorkspaceRelatedEntityRule>>();
+  const add = (id: string, rule: WorkspaceRelatedEntityRule) => {
+    if (id === objectId || !entities.some((entity) => entity.id === id)) return;
+    const rules =
+      rulesByEntityId.get(id) ?? new Set<WorkspaceRelatedEntityRule>();
+    rules.add(rule);
+    rulesByEntityId.set(id, rules);
+  };
+  const index = createWorkspaceObjectLinkIndex(entities);
+
+  for (const backlink of selectBacklinksForObject(index, objectId)) {
+    add(backlink.sourceId, "backlink");
+  }
+  for (const reference of selectObjectsInside(index, objectId)) {
+    add(reference.targetId, "content-reference");
+  }
+  for (const edge of selectPropertyRelationGraphEdges(entities)) {
+    if (edge.from === objectId) add(edge.to, "property-relation");
+    if (edge.to === objectId) add(edge.from, "property-relation");
+  }
+
+  const sourceCollections = new Set(collectionIds(source));
+  if (sourceCollections.size > 0) {
+    for (const entity of entities) {
+      if (collectionIds(entity).some((id) => sourceCollections.has(id))) {
+        add(entity.id, "shared-collection");
+      }
+    }
+  }
+
+  return entities.flatMap((entity) => {
+    const rules = rulesByEntityId.get(entity.id);
+    return rules ? [{ entity, rules: Array.from(rules) }] : [];
+  });
 }
 
 function normalizeMentionText(value: string) {
@@ -316,6 +383,8 @@ export type {
   WorkspaceGraphEdge,
   WorkspaceObjectLinkIndex,
   WorkspaceObjectReference,
+  WorkspaceRelatedEntity,
+  WorkspaceRelatedEntityRule,
 };
 export {
   createBlockReferenceMark,
@@ -328,5 +397,6 @@ export {
   selectForwardContentReferences,
   selectObjectsInside,
   selectPropertyRelationGraphEdges,
+  selectRelatedEntities,
   wouldCreateReferenceCycle,
 };

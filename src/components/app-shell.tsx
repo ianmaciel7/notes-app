@@ -20,6 +20,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import {
@@ -178,8 +179,11 @@ function AppShellProvider({
   const previousLeftOverlayOpen = React.useRef(false);
   React.useEffect(() => {
     if (previousLeftOverlayOpen.current && !leftOverlayOpen) {
-      leftOverlayReturnFocusRef.current?.focus({ preventScroll: true });
-      leftOverlayReturnFocusRef.current = null;
+      const restoreFocusTimer = window.setTimeout(() => {
+        leftOverlayReturnFocusRef.current?.focus({ preventScroll: true });
+        leftOverlayReturnFocusRef.current = null;
+      }, 220);
+      return () => window.clearTimeout(restoreFocusTimer);
     }
     previousLeftOverlayOpen.current = leftOverlayOpen;
   }, [leftOverlayOpen]);
@@ -187,8 +191,11 @@ function AppShellProvider({
   const previousRightOverlayOpen = React.useRef(false);
   React.useEffect(() => {
     if (previousRightOverlayOpen.current && !rightOverlayOpen) {
-      rightOverlayReturnFocusRef.current?.focus({ preventScroll: true });
-      rightOverlayReturnFocusRef.current = null;
+      const restoreFocusTimer = window.setTimeout(() => {
+        rightOverlayReturnFocusRef.current?.focus({ preventScroll: true });
+        rightOverlayReturnFocusRef.current = null;
+      }, 220);
+      return () => window.clearTimeout(restoreFocusTimer);
     }
     previousRightOverlayOpen.current = rightOverlayOpen;
   }, [rightOverlayOpen]);
@@ -671,28 +678,27 @@ function AppShellMobileSidebar({
   ...props
 }: React.ComponentProps<typeof SheetContent>) {
   const t = useTranslations("workspace.shell");
-  const {
-    leftOverlayOpen,
-    setLeftOverlayOpen,
-    leftOverlayReturnFocusRef,
-  } = useAppShell();
+  const { leftOverlayOpen, setLeftOverlayOpen, leftOverlayReturnFocusRef } =
+    useAppShell();
   return (
     <Sheet open={leftOverlayOpen} onOpenChange={setLeftOverlayOpen}>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        className="absolute left-2.5 top-[15px]"
-        aria-expanded={leftOverlayOpen}
-        aria-label={t("openNavigation")}
+      <SheetTrigger
+        render={
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            className="absolute left-2.5 top-[15px]"
+            aria-expanded={leftOverlayOpen}
+            aria-label={t("openNavigation")}
+          />
+        }
         onClick={(event) => {
-          event.preventDefault();
           leftOverlayReturnFocusRef.current = event.currentTarget;
-          setLeftOverlayOpen(true);
         }}
       >
         <AppHeaderSidebarSimpleIcon />
-      </Button>
+      </SheetTrigger>
       <SheetContent
         side="left"
         overlayClassName="motion-reduce:transition-none"
@@ -718,28 +724,27 @@ function AppShellMobileSidePanel({
   ...props
 }: React.ComponentProps<typeof SheetContent>) {
   const t = useTranslations("workspace.shell");
-  const {
-    rightOverlayOpen,
-    setRightOverlayOpen,
-    rightOverlayReturnFocusRef,
-  } = useAppShell();
+  const { rightOverlayOpen, setRightOverlayOpen, rightOverlayReturnFocusRef } =
+    useAppShell();
   return (
     <Sheet open={rightOverlayOpen} onOpenChange={setRightOverlayOpen}>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        className="absolute right-[26px] top-[15px]"
-        aria-expanded={rightOverlayOpen}
-        aria-label={t("openContext")}
+      <SheetTrigger
+        render={
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            className="absolute right-[26px] top-[15px]"
+            aria-expanded={rightOverlayOpen}
+            aria-label={t("openContext")}
+          />
+        }
         onClick={(event) => {
-          event.preventDefault();
           rightOverlayReturnFocusRef.current = event.currentTarget;
-          setRightOverlayOpen(true);
         }}
       >
         <AppHeaderSidebarSimpleIcon className="rotate-180" />
-      </Button>
+      </SheetTrigger>
       <SheetContent
         side="right"
         overlayClassName="motion-reduce:transition-none"

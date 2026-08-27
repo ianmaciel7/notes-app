@@ -21,8 +21,20 @@ Structures, property definitions/values, tags, collections, Object Select relati
 ### Requirement: Separate account/session boundary
 Authentication/session state SHALL remain separate from workspace content; remote authorization expiry SHALL not automatically delete local content.
 
+#### Scenario: Session expires with cached local content
+- **WHEN** the active session becomes expired
+- **THEN** previously loaded local Space content SHALL remain available according to the offline cache policy.
+
 ### Requirement: Guarded Space lifecycle
 Create, rename, switch, and delete operations SHALL not leak or silently destroy another Space's data.
 
+#### Scenario: Space deletion requires exact confirmation
+- **WHEN** a user attempts to delete a Space without typing the exact Space name
+- **THEN** the Space SHALL remain available and its records SHALL remain intact.
+
 ### Requirement: No implicit collaboration claim
 Unsupported team/collaboration semantics SHALL not be presented as implemented functionality.
+
+#### Scenario: Space settings are shown
+- **WHEN** the Space lifecycle UI presents settings or account scope
+- **THEN** it SHALL describe the Space as local/personal unless collaboration is implemented by another change.

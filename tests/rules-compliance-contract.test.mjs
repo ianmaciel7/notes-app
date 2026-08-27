@@ -97,3 +97,38 @@ test("locale and governance contracts remain aligned", async () => {
   );
   assert.doesNotMatch(ci, /graphify:(?:build|update|status)/);
 });
+
+test("Page and sidebar production copy is localized for every supported locale", async () => {
+  const [pageView, overview] = await Promise.all([
+    readFile(
+      new URL("../src/components/workspace-object-page-view.tsx", import.meta.url),
+      "utf8",
+    ),
+    readFile(
+      new URL("../src/components/app-sidebar-overview.tsx", import.meta.url),
+      "utf8",
+    ),
+  ]);
+
+  for (const locale of ["en", "es", "pt-BR"]) {
+    const messages = JSON.parse(
+      await readFile(
+        new URL(`../src/messages/${locale}.json`, import.meta.url),
+        "utf8",
+      ),
+    );
+    assert.equal(typeof messages.workspace.objectConversion.description, "string");
+    assert.equal(typeof messages.workspace.objectConversion.discardValue, "string");
+    assert.equal(typeof messages.workspace.sidebarPinned.addContent, "string");
+    assert.equal(typeof messages.workspace.sidebarSections.add, "string");
+  }
+
+  for (const literal of [
+    "Property conversion requires explicit resolution",
+    "Discard value",
+    "Adicionar conteúdo aos Fixados",
+    "Adicionar seção",
+  ]) {
+    assert.ok(!pageView.includes(literal) && !overview.includes(literal), literal);
+  }
+});

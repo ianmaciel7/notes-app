@@ -64,16 +64,44 @@ The system SHALL dispatch the thirteen `Novo` palette entries into the creation 
 - **AND** SHALL reject empty, malformed, or type-incompatible URLs with a localized inline error
 - **AND** SHALL derive deterministic local display metadata without a network request
 
+#### Scenario: Weblink is created from a URL
+- **WHEN** the user activates `Novo` and selects Weblink
+- **THEN** the system SHALL request a URL before creating the object
+- **AND WHEN** the user submits a valid URL
+- **THEN** the system SHALL create a local weblink object with deterministic metadata, central weblink icon/tone, active selection, and updated count without performing a network fetch
+- **AND WHEN** the URL is empty or malformed
+- **THEN** the surface SHALL show a localized inline error and SHALL NOT change counts, tabs, or stored entities.
+
+#### Scenario: Tweet is created from a URL
+- **WHEN** the user activates `Novo` and selects Tweet
+- **THEN** the system SHALL request a tweet-compatible URL before creating the object
+- **AND WHEN** the user submits a compatible URL
+- **THEN** the system SHALL create a local tweet object with deterministic display metadata, central tweet icon/tone, active selection, and updated count without copying data from Capacities
+- **AND WHEN** the URL is empty, malformed, or incompatible
+- **THEN** the system SHALL keep the creation surface open with a localized inline error and no storage mutation.
+
 #### Scenario: Tag is created
 - **WHEN** the user selects Tag
 - **THEN** the system SHALL create and activate an untitled tag index
 - **AND** editing its title SHALL update the tab and tag index label
+
+#### Scenario: Tag is created and renamed
+- **WHEN** the user activates `Novo` and selects Tag
+- **THEN** the system SHALL create and activate an untitled tag index with central tag icon/tone and updated tag count
+- **AND WHEN** the user writes or renames the tag
+- **THEN** tag labels, tagged-object projections, tabs, and persisted state SHALL synchronize without localizing the stored tag identifier.
 
 #### Scenario: Query is created
 - **WHEN** the user selects Query
 - **THEN** the system SHALL create and activate a query builder with natural-language description and direct filter controls
 - **AND WHEN** a supported description template is applied
 - **THEN** the system SHALL generate deterministic local filters, update the title when still untitled, and display matching local workspace objects
+
+#### Scenario: Query is created and written
+- **WHEN** the user activates `Novo` and selects Query
+- **THEN** the system SHALL create and activate a query builder with central query icon/tone, updated query count, natural-language description, and direct filter controls
+- **AND WHEN** the user writes a supported description or edits filters
+- **THEN** the query title, local filters, matching local object list, tab label, and persisted entity SHALL update deterministically.
 
 #### Scenario: File-backed object is created
 - **WHEN** the user selects Image, PDF, Audio, or File

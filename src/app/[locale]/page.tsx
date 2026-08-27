@@ -26,8 +26,8 @@ import { WorkspaceViewsSurface } from "@/components/workspace-views-surface";
 export default function HomePage() {
   return (
     <WorkspaceViewsProvider>
-      <WorkspaceProvider>
-        <AppShellProvider>
+      <AppShellProvider>
+        <WorkspaceProvider>
           <AppShell>
             <AppShellPanelGroup>
               <AppShellSidebar>
@@ -70,8 +70,8 @@ export default function HomePage() {
               <WorkspaceViewsSurface />
             </AppShellSurface>
           </AppShellMobile>
-        </AppShellProvider>
-      </WorkspaceProvider>
+        </WorkspaceProvider>
+      </AppShellProvider>
     </WorkspaceViewsProvider>
   );
 }

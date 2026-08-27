@@ -857,6 +857,7 @@ function AppSidebarPinnedPicker({
   selectedIds: Set<string>;
   onPick: (entity: AppSidebarPinnedEntity) => void;
 }) {
+  const t = useTranslations("workspace");
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
 
@@ -874,7 +875,7 @@ function AppSidebarPinnedPicker({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        aria-label="Adicionar conteúdo aos Fixados"
+        aria-label={t("sidebarPinned.addContentToPinned")}
         className={cn(
           buttonVariants({ variant: "outline", size: "icon-xs" }),
           "size-[22px] shrink-0 opacity-0 transition-opacity duration-200",
@@ -894,7 +895,7 @@ function AppSidebarPinnedPicker({
           autoFocus
           value={query}
           className="h-8"
-          placeholder="Adicionar conteúdo"
+          placeholder={t("sidebarPinned.addContent")}
           onChange={(event) => setQuery(event.target.value)}
         />
 
@@ -919,7 +920,7 @@ function AppSidebarPinnedPicker({
 
           {results.length === 0 && (
             <p className="px-2 py-4 text-center text-xs text-muted-foreground">
-              Nenhum conteúdo disponível
+              {t("sidebarPinned.noAvailableContent")}
             </p>
           )}
         </div>
@@ -955,6 +956,7 @@ function AppSidebarAddSection({
 }: {
   onCreate: (section: AppSidebarCustomSection) => void;
 }) {
+  const t = useTranslations("workspace");
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
 
@@ -983,7 +985,7 @@ function AppSidebarAddSection({
           )}
         >
           <AppSidebarPlusIcon />
-          <span className="min-w-0 truncate">Adicionar seção</span>
+          <span className="min-w-0 truncate">{t("sidebarSections.add")}</span>
         </PopoverTrigger>
 
         <PopoverContent
@@ -996,7 +998,7 @@ function AppSidebarAddSection({
             autoFocus
             value={name}
             className="h-8"
-            placeholder="Nome da seção"
+            placeholder={t("sidebarSections.namePlaceholder")}
             onChange={(event) => setName(event.target.value)}
             onKeyDown={(event) => {
               if (event.key !== "Enter") return;
@@ -1011,7 +1013,7 @@ function AppSidebarAddSection({
             disabled={!name.trim()}
             onClick={create}
           >
-            Criar
+            {t("sidebarSections.create")}
           </Button>
         </PopoverContent>
       </Popover>
@@ -1096,12 +1098,13 @@ function AppSidebarUtilityRow({
 }
 
 function AppSidebarHelpSection() {
+  const t = useTranslations("workspace");
   const [open, setOpen] = React.useState(true);
 
   return (
     <AppSidebarSection
       icon={(props) => <AppSidebarSourceIcon name="help" {...props} />}
-      label="Ajuda e recursos"
+      label={t("sidebarHelp.title")}
       open={open}
       onOpenChange={setOpen}
     >
@@ -1113,31 +1116,31 @@ function AppSidebarHelpSection() {
           icon={(props) => (
             <AppSidebarSourceIcon name="graduation" {...props} />
           )}
-          label="Primeiros passos"
+          label={t("sidebarHelp.getStarted")}
         />
         <AppSidebarUtilityRow
           icon={(props) => <AppSidebarSourceIcon name="help" {...props} />}
-          label="Fazer uma pergunta"
+          label={t("sidebarHelp.askQuestion")}
           external
-          tooltip="Faça perguntas sobre o Capacities"
+          tooltip={t("sidebarHelp.askQuestionTooltip")}
         />
         <AppSidebarUtilityRow
           icon={(props) => (
             <AppSidebarSourceIcon name="documentation" {...props} />
           )}
-          label="Documentação"
+          label={t("sidebarHelp.documentation")}
           external
-          tooltip="Saiba mais sobre o Capacities e como você pode usá-lo"
+          tooltip={t("sidebarHelp.documentationTooltip")}
         />
         <AppSidebarUtilityRow
           icon={(props) => <AppSidebarSourceIcon name="news" {...props} />}
-          label="Novidades"
+          label={t("sidebarHelp.whatsNew")}
         />
         <AppSidebarUtilityRow
           icon={(props) => <AppSidebarSourceIcon name="feedback" {...props} />}
-          label="Feedback"
+          label={t("sidebarHelp.feedback")}
           external
-          tooltip="Compartilhe ideias, feedback ou problemas e vote em recursos"
+          tooltip={t("sidebarHelp.feedbackTooltip")}
         />
       </div>
     </AppSidebarSection>
@@ -1222,7 +1225,7 @@ function AppSidebarFooter() {
               className="max-w-full gap-1 px-[0.49em] py-[0.2em] text-xs font-normal leading-[1.3] opacity-80"
             >
               <AppSidebarSourceIcon name="rocket" className="size-3" />
-              <span className="truncate">Pro</span>
+              <span className="truncate">{t("footer.plan")}</span>
             </Badge>
           </DropdownMenuTrigger>
 
@@ -1233,14 +1236,14 @@ function AppSidebarFooter() {
             className="w-auto min-w-0 overflow-visible p-0"
           >
             <CompactMenuAccountPanel
-              name="Ian Maciel Carvalho"
-              email="ianmaciel76@gmail.com"
+              name={t("footer.accountName")}
+              email={t("footer.accountEmail")}
               badge={
                 <CompactMenuPlanBadge
                   icon={(props) => (
                     <AppSidebarSourceIcon name="rocket" {...props} />
                   )}
-                  label="Pro"
+                  label={t("footer.plan")}
                 />
               }
               action={
@@ -1511,7 +1514,7 @@ function AppSidebarOverview({
       <div data-slot="app-sidebar-pinned-region" className="shrink-0">
         <AppSidebarSection
           icon={AppSidebarPinIcon}
-          label="Fixados"
+          label={t("sidebarPinned.title")}
           count={pinned.length}
           sort={pinnedSort}
           onSortChange={setPinnedSort}
@@ -1528,7 +1531,7 @@ function AppSidebarOverview({
         >
           {visiblePinned.length === 0 ? (
             <p className="h-10 px-5 py-1.5 text-xs italic leading-[18px] text-muted-foreground">
-              Nenhum conteúdo fixado
+              {t("sidebarPinned.noPinnedContent")}
             </p>
           ) : (
             visiblePinned.map((entity) => (
@@ -1640,7 +1643,7 @@ function AppSidebarOverview({
               }
             >
               <p className="h-10 px-5 py-1.5 text-xs italic leading-[18px] text-muted-foreground">
-                Nenhum conteúdo
+                {t("sidebarSections.noContent")}
               </p>
             </AppSidebarSection>
           ))}
@@ -1662,7 +1665,7 @@ function AppSidebarOverview({
                 icon={(props) => (
                   <AppSidebarSourceIcon name="trash" {...props} />
                 )}
-                label="Lixeira"
+                label={t("sidebarUtilities.trash")}
                 active={activeId === "trash"}
                 onClick={() => setActiveId("trash")}
               />

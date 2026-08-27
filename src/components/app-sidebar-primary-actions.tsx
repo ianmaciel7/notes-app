@@ -593,7 +593,10 @@ function WorkspaceSidebar() {
     spaces,
     setSpaces,
     spaceId,
-    setSpaceId,
+    createSpace,
+    deleteSpace,
+    renameSpace,
+    switchSpace,
     activeAction,
     setActiveAction,
     activeEntityId,
@@ -703,7 +706,9 @@ function WorkspaceSidebar() {
     }
 
     if (action === "share") {
-      void navigator.clipboard?.writeText(collection.name).catch(() => undefined);
+      void navigator.clipboard
+        ?.writeText(collection.name)
+        .catch(() => undefined);
       showMessage(t("documentMenu.shareHint"));
       return;
     }
@@ -767,8 +772,31 @@ function WorkspaceSidebar() {
       <AppSidebar
         spaces={spaces}
         value={spaceId}
-        onValueChange={setSpaceId}
+        onValueChange={switchSpace}
         onReorder={setSpaces}
+        onCreateSpace={createSpace}
+        onDeleteSpace={deleteSpace}
+        onRenameSpace={renameSpace}
+        labels={{
+          changeSpace: t("spaces.changeSpace"),
+          clearSearch: t("spaces.clearSearch"),
+          createSpace: t("spaces.createSpace"),
+          createSpaceSubmit: t("spaces.createSpaceSubmit"),
+          createSpaceTitle: t("spaces.createSpace"),
+          deleteSpace: t("spaces.deleteSpace"),
+          deleteSpaceConfirmation: t("spaces.deleteSpaceConfirmation", {
+            name: "{name}",
+          }),
+          deleteSpaceDescription: t("spaces.deleteSpaceDescription"),
+          deleteSpaceError: t("spaces.deleteSpaceError"),
+          empty: t("spaces.empty"),
+          nameSpace: t("spaces.name"),
+          renameSpace: t("spaces.renameSpace"),
+          saveSpace: t("spaces.save"),
+          search: t("spaces.search"),
+          spaceSettings: t("spaces.settings"),
+          spaceSettingsDescription: t("spaces.settingsDescription"),
+        }}
       >
         <div className="flex h-full min-h-0 flex-col">
           <div className="my-px mt-0 shrink-0 px-2 pr-1 pb-1.5">
@@ -776,15 +804,15 @@ function WorkspaceSidebar() {
               activeAction={activeAction}
               objectTypes={objectTypes}
               onSelectObjectType={createWorkspaceEntity}
-            onAction={(action) => {
-              setSideSearchOpen(action === "search");
-              if (action !== "new") {
-                setActiveAction(action);
-                setActiveEntityId(null);
-                setMainValue(`primary-action:${action}`);
-                if (action === "explore") setSideValue("explore");
-              }
-            }}
+              onAction={(action) => {
+                setSideSearchOpen(action === "search");
+                if (action !== "new") {
+                  setActiveAction(action);
+                  setActiveEntityId(null);
+                  setMainValue(`primary-action:${action}`);
+                  if (action === "explore") setSideValue("explore");
+                }
+              }}
             />
           </div>
 

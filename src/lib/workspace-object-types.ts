@@ -1010,6 +1010,12 @@ function isCompatibleInversePair(
     targetStructureId,
     definition.inversePropertyDefinitionId ?? "",
   );
+  if (
+    definition.fixedTargetObjectIds?.length ||
+    inverse?.fixedTargetObjectIds?.length
+  ) {
+    return false;
+  }
   return (
     inverse?.valueType === "entity" &&
     inverse.targetStructureIds?.includes(structureId) === true &&

@@ -77,6 +77,7 @@ import {
   selectContextualGraphEdges,
   selectObjectsInside,
   selectPropertyRelationGraphEdges,
+  selectRelatedEntities,
 } from "@/lib/workspace-object-links";
 import type { WorkspaceStructure } from "@/lib/workspace-object-types";
 import {
@@ -346,8 +347,7 @@ function ObjectPageTypePickerTrigger({
             <DialogHeader>
               <DialogTitle>{t("documentMenu.changeType")}</DialogTitle>
               <DialogDescription>
-                Property conversion requires explicit resolution before the
-                object type changes.
+                {t("objectConversion.description")}
               </DialogDescription>
             </DialogHeader>
             <ObjectConversionPlanner
@@ -355,11 +355,11 @@ function ObjectPageTypePickerTrigger({
               labels={{
                 cancel: t("lifecycle.cancel"),
                 commit: t("documentMenu.changeType"),
-                discardValue: "Discard value",
-                incompatible: "Incompatible",
-                mapTo: "Map to",
-                requiresConfirmation: "Requires confirmation",
-                unresolved: "Unresolved",
+                discardValue: t("objectConversion.discardValue"),
+                incompatible: t("objectConversion.incompatible"),
+                mapTo: t("objectConversion.mapTo"),
+                requiresConfirmation: t("objectConversion.requiresConfirmation"),
+                unresolved: t("objectConversion.unresolved"),
               }}
               target={pendingConversion.target}
               onCancel={() => setPendingConversion(null)}
@@ -774,14 +774,17 @@ function ObjectPageTags({
 }
 
 function ObjectPageCollections({
+  activationRequest = 0,
   entity,
   update,
 }: {
+  readonly activationRequest?: number;
   readonly entity: SupportedWorkspaceEntity;
   readonly update: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
   const { objectTypeCollections } = useWorkspace();
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const deferredQuery = React.useDeferredValue(query);
@@ -804,6 +807,12 @@ function ObjectPageCollections({
         : [...collections, collectionId],
     });
   };
+  React.useEffect(() => {
+    if (activationRequest === 0) return;
+    setOpen(true);
+    const focusTimer = window.setTimeout(() => inputRef.current?.focus());
+    return () => window.clearTimeout(focusTimer);
+  }, [activationRequest]);
   return (
     <div className="inline-flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
       {collections.map((collectionId) => (
@@ -833,6 +842,7 @@ function ObjectPageCollections({
             <label className="inline-flex min-w-0 items-center whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3] hover:bg-muted/70">
               <ObjectCollectionIcon className="size-3.5" />
               <input
+                ref={inputRef}
                 data-slot="object-page-collections-input"
                 aria-label={t("objects.collections")}
                 placeholder={t("objects.collections")}
@@ -961,7 +971,7 @@ function PageCustomizeControl({
             variant="ghost"
             size="sm"
             aria-label={t("actions.customize")}
-            className="h-[26px] gap-1.5 px-2 pr-1 text-sm font-normal text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
+            className="h-[26px] gap-1.5 px-2 pr-1 text-sm font-normal text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none"
           >
             <AppHeaderSparkleIcon className="size-3.5" />
             {t("actions.customize")}
@@ -1149,6 +1159,44 @@ function WorkspacePropertyField({
       </label>
     );
   }
+  if (property.valueType === "label") {
+    const label = entity.propertyValues[property.id];
+    const selectedIds =
+      label?.type === "label" ? label.label.map((option) => option.id) : [];
+    return (
+      <label
+        htmlFor={inputId}
+        data-slot="workspace-label-property"
+        data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
+        className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
+      >
+        <span className="truncate text-muted-foreground">{property.name}</span>
+        <select
+          id={inputId}
+          aria-label={property.name}
+          multiple={property.multiple}
+          value={property.multiple ? selectedIds : (selectedIds[0] ?? "")}
+          className="min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring"
+          onChange={(event) => {
+            const optionIds = Array.from(
+              event.currentTarget.selectedOptions,
+            ).map((option) => option.value);
+            updateProperty(
+              property.id,
+              property.multiple ? optionIds : (optionIds[0] ?? ""),
+            );
+          }}
+        >
+          {!property.multiple && <option value="" />}
+          {(property.options ?? []).map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.name}
+            </option>
+          ))}
+        </select>
+      </label>
+    );
+  }
   const inputType =
     property.valueType === "number"
       ? "number"
@@ -1180,6 +1228,8 @@ function WorkspacePropertyField({
                     start: text,
                     timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                   }
+                : property.valueType === "richText"
+                  ? blockEditorDocumentFromPlainText(text)
                 : text,
           );
         }}
@@ -1210,9 +1260,17 @@ function WorkspacePropertyGroup({
         property.writable &&
         property.ownership !== "system" &&
         !["title", "tags"].includes(property.id) &&
-        ["text", "number", "boolean", "date", "url", "entity"].includes(
-          property.valueType,
-        ) &&
+        [
+          "text",
+          "number",
+          "boolean",
+          "date",
+          "url",
+          "entity",
+          "label",
+          "richText",
+          "media",
+        ].includes(property.valueType) &&
         !(
           ["aliases", "description"].includes(property.id) &&
           !explicitlyAdded &&
@@ -1245,46 +1303,10 @@ function WorkspacePropertyGroup({
 function RelatedContent({ entityId }: { readonly entityId: string }) {
   const t = useTranslations("workspace");
   const { createdEntities, objectTypes, selectEntity } = useWorkspace();
-  const entity = createdEntities.find((item) => item.id === entityId);
-  const linkIndex = React.useMemo(
-    () => createWorkspaceObjectLinkIndex(createdEntities),
-    [createdEntities],
+  const related = React.useMemo(
+    () => selectRelatedEntities(createdEntities, entityId),
+    [createdEntities, entityId],
   );
-  const backlinks = entity
-    ? selectBacklinksForObject(linkIndex, entity.id).map(
-        (item) => item.sourceId,
-      )
-    : [];
-  const objectsInside = entity
-    ? selectObjectsInside(linkIndex, entity.id).map((item) => item.targetId)
-    : [];
-  const propertyEdges = React.useMemo(
-    () => selectPropertyRelationGraphEdges(createdEntities),
-    [createdEntities],
-  );
-  const propertyRelations = propertyEdges.flatMap((edge) => {
-    if (edge.from === entityId) return [edge.to];
-    if (edge.to === entityId) return [edge.from];
-    return [];
-  });
-  const sharedCollections =
-    entity && "collections" in entity
-      ? createdEntities.flatMap((item) => {
-          if (item.id === entity.id || !("collections" in item)) return [];
-          return item.collections.some((collection) =>
-            entity.collections.includes(collection),
-          )
-            ? [item.id]
-            : [];
-        })
-      : [];
-  const relatedIds = new Set([
-    ...backlinks,
-    ...objectsInside,
-    ...propertyRelations,
-    ...sharedCollections,
-  ]);
-  const related = createdEntities.filter((item) => relatedIds.has(item.id));
   if (related.length === 0) return null;
   return (
     <section
@@ -1302,7 +1324,7 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
         </span>
       </h2>
       <div className="grid gap-1">
-        {related.map((item) => {
+        {related.map(({ entity: item }) => {
           const objectType = objectTypes.find(
             (candidate) => candidate.id === item.objectTypeId,
           );
@@ -1715,6 +1737,8 @@ function DocumentPage({
   const t = useTranslations("workspace");
   const importInputRef = React.useRef<HTMLInputElement>(null);
   const coverInputRef = React.useRef<HTMLInputElement>(null);
+  const [collectionsActivationRequest, setCollectionsActivationRequest] =
+    React.useState(0);
   const [customizeOpen, setCustomizeOpen] = React.useState(false);
   const {
     createWorkspacePage,
@@ -1765,7 +1789,11 @@ function DocumentPage({
         entity={entity}
         structure={structure}
         collectionsControl={
-          <ObjectPageCollections entity={entity} update={update} />
+          <ObjectPageCollections
+            activationRequest={collectionsActivationRequest}
+            entity={entity}
+            update={update}
+          />
         }
         customize={
           <PageCustomizeControl
@@ -1781,7 +1809,7 @@ function DocumentPage({
             onDelete={() => deleteWorkspaceEntity(entity.id)}
             onDuplicate={() => duplicateWorkspaceEntity(entity.id)}
             onEditCollections={() =>
-              showMessage(t("documentMenu.collectionsHint"))
+              setCollectionsActivationRequest((current) => current + 1)
             }
             onExport={exportMarkdown}
             onImport={() => importInputRef.current?.click()}
@@ -2116,6 +2144,8 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
   const t = useTranslations("workspace");
   const { structures, updateWorkspaceEntity } = useWorkspace();
   const [collapsed, setCollapsed] = React.useState(false);
+  const collapseControlRef = React.useRef<HTMLButtonElement>(null);
+  const editorRegionId = `${entity.id}-editor-region`;
   const wideLayout = "wideLayout" in entity && entity.wideLayout === true;
   const structure = resolveStructure(entity, structures);
   if (!structure) return null;
@@ -2130,6 +2160,7 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
       className={cn(workspaceRouteClass, "w-full overflow-y-auto")}
     >
       <div
+        id={editorRegionId}
         data-slot="workspace-object-page-column"
         data-wide-layout={wideLayout || undefined}
         className={cn(
@@ -2152,9 +2183,14 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
         aria-label={t(
           collapsed ? "actions.expandEditor" : "actions.collapseEditor",
         )}
+        aria-controls={editorRegionId}
         aria-expanded={!collapsed}
         className="absolute right-3 top-1/2 hidden h-7 w-7 text-lg font-light md:inline-flex"
-        onClick={() => setCollapsed((current) => !current)}
+        onClick={() => {
+          setCollapsed((current) => !current);
+          requestAnimationFrame(() => collapseControlRef.current?.focus());
+        }}
+        ref={collapseControlRef}
       >
         <span aria-hidden>{collapsed ? "+" : "−"}</span>
       </Button>
