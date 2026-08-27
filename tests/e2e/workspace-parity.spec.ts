@@ -204,6 +204,46 @@ async function expectActiveEditorTitle(page: Page, title: string) {
     .toBe(title);
 }
 
+async function installMainTabFlashObserver(page: Page, targetLabel: string) {
+  await page.addInitScript((label) => {
+    const seedLabels = new Set(["Atomic notes", "Quotes", "Pages"]);
+    const global = window as typeof window & {
+      __workspaceTabFlash?: string[][];
+    };
+    global.__workspaceTabFlash = [];
+
+    function inspectTabs() {
+      const tabList = document.querySelector('[aria-label="Workspace tabs"]');
+      if (!tabList) return;
+      const labels = Array.from(tabList.querySelectorAll('[role="tab"]'))
+        .map((tab) => tab.textContent?.trim() ?? "")
+        .filter(Boolean);
+      const showsSeedTabs = labels.some((item) => seedLabels.has(item));
+      const showsTargetTab = labels.includes(label);
+      if (showsSeedTabs && !showsTargetTab) {
+        global.__workspaceTabFlash?.push(labels);
+      }
+    }
+
+    function startObserver() {
+      const root = document.documentElement;
+      if (!root) {
+        requestAnimationFrame(startObserver);
+        return;
+      }
+      const observer = new MutationObserver(inspectTabs);
+      observer.observe(root, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+      });
+      requestAnimationFrame(inspectTabs);
+    }
+
+    startObserver();
+  }, targetLabel);
+}
+
 for (const viewport of desktopViewports) {
   test(`desktop geometry ${viewport.width}px`, async ({ page }) => {
     await page.setViewportSize(viewport);
@@ -555,6 +595,57 @@ test("closed entity tabs stay closed after reload", async ({ page }) => {
   await page.reload();
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
   await expect(tabList.locator(`[data-tab-id="${entity.id}"]`)).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test("direct object routes do not flash seed main tabs before route selection", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.addInitScript(() => {
+    const clearKey = "notes-app:e2e-route-flash-cleared";
+    if (window.sessionStorage.getItem(clearKey) === "true") return;
+    window.localStorage.clear();
+    window.sessionStorage.setItem(clearKey, "true");
+  });
+
+  await page.goto("/en");
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.locator("#workspace-new-trigger").click();
+  await page.locator('[role="option"]').filter({ hasText: "Page" }).click();
+  const title = "Deep Linked Page";
+  await createdObjectWorkspace(page)
+    .getByRole("textbox", { name: "Title" })
+    .fill(title);
+  await createdObjectWorkspace(page)
+    .getByRole("textbox", { name: "Title" })
+    .blur();
+  await expect
+    .poll(() =>
+      page.evaluate(() => window.location.pathname.split("/").filter(Boolean)),
+    )
+    .toHaveLength(3);
+  const directUrl = page.url();
+
+  await installMainTabFlashObserver(page, title);
+  await page.goto(directUrl);
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect(
+    page
+      .locator('[aria-label="Workspace tabs"] [role="tab"]')
+      .filter({ hasText: title }),
+  ).toBeVisible();
+  const flashes = await page.evaluate(
+    () =>
+      (window as typeof window & { __workspaceTabFlash?: string[][] })
+        .__workspaceTabFlash ?? [],
+  );
+  expect(flashes).toEqual([]);
   expect(errors).toEqual([]);
 });
 

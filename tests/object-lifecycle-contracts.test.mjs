@@ -316,6 +316,34 @@ test("workspace seed tab and side-panel copy is localized", () => {
   );
 });
 
+test("untitled labels are entity fallbacks, not seed navigation state", () => {
+  assert.doesNotMatch(
+    controller,
+    /id: "untitled"/,
+    "main tabs must not seed a fake untitled object",
+  );
+  assert.doesNotMatch(
+    controller,
+    /setMainValue\("untitled"\)/,
+    "main selection must target a real object type or entity",
+  );
+  assert.doesNotMatch(
+    content,
+    /activeTab\?\.id === "untitled"[\s\S]*?<CitationWorkspace/,
+    "workspace content must not render an object editor without an entity",
+  );
+  assert.doesNotMatch(
+    content,
+    /function CitationWorkspace/,
+    "prototype citation editors must not remain as alternate object state",
+  );
+  assert.match(
+    objects,
+    /activeEntityId: activate \? id : state\.activeEntityId/,
+    "new untitled objects are created through the canonical entity reducer",
+  );
+});
+
 test("object lifecycle parity does not take over block-editor storage contracts", () => {
   assert.match(storage, /WORKSPACE_OBJECT_STORAGE_KEY/);
   assert.match(objects, /WORKSPACE_OBJECT_SCHEMA_VERSION = \d+/);

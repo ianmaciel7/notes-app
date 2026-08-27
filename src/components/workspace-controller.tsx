@@ -252,18 +252,6 @@ function createInitialMainTabs(
       iconClassName: objectIconToneBadgeClass.blue,
       preview: <TabPreview eyebrow={objectTypeEyebrow} title={pageLabel} />,
     },
-    {
-      id: "untitled",
-      label: t("lifecycle.untitled"),
-      icon: ObjectQuoteIcon,
-      iconClassName: objectIconToneBadgeClass.rose,
-      preview: (
-        <TabPreview
-          eyebrow={t("objectTypeStudio.objectTypes.quote")}
-          title={t("lifecycle.untitled")}
-        />
-      ),
-    },
   ];
 }
 
@@ -846,8 +834,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const specialSideTabs = React.useMemo(() => createSpecialSideTabs(t), [t]);
   const [spaces, setSpaces] = React.useState(initialSpaces);
   const [spaceId, setSpaceId] = React.useState("labs");
-  const [mainTabs, setMainTabs] = React.useState(() => initialMainTabs);
-  const [mainValue, setMainValue] = React.useState("untitled");
+  const [mainTabs, setMainTabs] = React.useState<AppHeaderTab[]>([]);
+  const [mainValue, setMainValue] = React.useState("");
   const [sideTabs, setSideTabs] = React.useState(() => initialSideTabs);
   const [sideValue, setSideValue] = React.useState("explore");
   const [focusMode, setFocusMode] = React.useState(false);
@@ -857,7 +845,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     AppSidebarPrimaryNavigationAction | undefined
   >(undefined);
   const [activeEntityId, setActiveEntityId] = React.useState<string | null>(
-    "quote",
+    null,
   );
   const [pinnedEntities, setPinnedEntities] = React.useState<
     AppSidebarPinnedEntity[]
@@ -1173,6 +1161,17 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       const raw = window.localStorage.getItem(WORKSPACE_TAB_STORAGE_KEY);
       const parsed = raw ? parseWorkspaceTabState(raw) : null;
       if (!parsed) {
+        const route = parseWorkspaceRoute(
+          window.location.pathname,
+          window.location.search,
+          locale,
+          spaceId,
+        );
+        if (!route.targetId && !route.section) {
+          setMainTabs(initialMainTabs);
+          setMainValue(initialMainTabs[0]?.id ?? "");
+          setActiveEntityId(initialMainTabs[0]?.id ?? null);
+        }
         setTabStorageReady(true);
         return;
       }
@@ -1214,7 +1213,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         );
         if (
           workspaceObjects.activeEntityId &&
-          !nextMainTabs.some((tab) => tab.id === workspaceObjects.activeEntityId)
+          !nextMainTabs.some(
+            (tab) => tab.id === workspaceObjects.activeEntityId,
+          )
         ) {
           dispatchWorkspaceObjects({ type: "selectEntity", id: null });
         }
@@ -1235,9 +1236,11 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   }, [
     initialMainTabs,
     initialSideTabs,
+    locale,
     objectTypes,
     showMessage,
     specialSideTabs,
+    spaceId,
     storageReady,
     t,
     workspaceObjects.activeEntityId,
@@ -1343,7 +1346,6 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   }, [
     t,
     tabStorageReady,
-    workspaceObjects.activeEntityId,
     workspaceObjects.entities,
     workspaceObjects.structures,
   ]);
@@ -1417,7 +1419,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
                 eyebrow={
                   structure.ownership === "custom"
                     ? structure.singularName
-                    : t(`objectTypeStudio.objectTypes.${createdEntity.objectTypeId}`)
+                    : t(
+                        `objectTypeStudio.objectTypes.${createdEntity.objectTypeId}`,
+                      )
                 }
                 title={label}
               />
@@ -1459,9 +1463,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       mainTabs,
       objectTypes,
       objectTypeCollections,
-      ensureMainTab,
       workspaceObjects.entities,
-      workspaceObjects.structures,
       workspaceObjects.structures,
       t,
     ],
@@ -1471,13 +1473,18 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     (route: ReturnType<typeof parseWorkspaceRoute>) => {
       const routeSpace = spaces.find(
         (space) =>
-          space.id === route.spaceId || workspaceRouteId(space.id) === route.spaceId,
+          space.id === route.spaceId ||
+          workspaceRouteId(space.id) === route.spaceId,
       );
       if (routeSpace && routeSpace.id !== spaceId) {
         setSpaceId(routeSpace.id);
       }
 
-      if (route.section === "calendar" || route.section === "search" || route.section === "explore") {
+      if (
+        route.section === "calendar" ||
+        route.section === "search" ||
+        route.section === "explore"
+      ) {
         setActiveEntityId(null);
         setActiveAction(route.section);
         setMainValue(`primary-action:${route.section}`);
@@ -1557,9 +1564,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       activeAction === "explore"
         ? activeAction
         : null;
-    const targetId = section || !activeEntityId
-      ? null
-      : workspaceRouteId(activeEntityId);
+    const targetId =
+      section || !activeEntityId ? null : workspaceRouteId(activeEntityId);
     const nextPath = workspaceRoutePath({
       locale,
       spaceId: workspaceRouteId(spaceId),
