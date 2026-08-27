@@ -56,7 +56,10 @@ function createdObjectWorkspace(page: Page) {
 }
 
 async function createPageObject(page: Page) {
-  await page.getByRole("button", { name: "Novo", exact: true }).click();
+  await page
+    .locator('[data-testid="app-shell-sidebar"]')
+    .getByRole("button", { name: "Novo", exact: true })
+    .click();
   await page.locator('[role="option"]').filter({ hasText: "Página" }).click();
   const workspace = createdObjectWorkspace(page);
   await expect(workspace).toBeVisible();
@@ -64,7 +67,10 @@ async function createPageObject(page: Page) {
 }
 
 async function selectNewObject(page: Page, label: string) {
-  await page.getByRole("button", { name: "Novo", exact: true }).click();
+  await page
+    .locator('[data-testid="app-shell-sidebar"]')
+    .getByRole("button", { name: "Novo", exact: true })
+    .click();
   await page.locator('[role="option"]').filter({ hasText: label }).click();
 }
 
@@ -124,7 +130,7 @@ async function createStructureFromPreset(page: Page, presetLabel: string) {
     dialog.locator('[data-lifecycle-contract="object-type-details-panel"]'),
   ).toBeVisible();
   await dialog
-    .getByRole("button", { name: "Adicionar tipo de objeto", exact: true })
+    .getByRole("button", { name: "Criar tipo de objeto", exact: true })
     .click();
   await expect(dialog).toBeHidden();
 }
@@ -146,7 +152,7 @@ async function createCustomStructure(
   await dialog.getByLabel("Nome", { exact: true }).fill(singularName);
   await dialog.getByLabel("Plural do nome", { exact: true }).fill(pluralName);
   await dialog
-    .getByRole("button", { name: "Adicionar tipo de objeto", exact: true })
+    .getByRole("button", { name: "Criar tipo de objeto", exact: true })
     .click();
   await expect(dialog).toBeHidden();
 }
@@ -842,6 +848,64 @@ test("compound type chip separates navigation from disclosure", async ({
   await expect(
     page.getByRole("button", { name: "Páginas", exact: true }).locator(".."),
   ).toHaveAttribute("data-active", "true");
+  expect(errors).toEqual([]);
+});
+
+test("object page header controls keep fluid click and keyboard states", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+  await createPageObject(page);
+
+  const workspace = createdObjectWorkspace(page);
+  const header = workspace.locator(
+    '[data-slot="workspace-object-page-header"]',
+  );
+  const collections = header.getByRole("button", {
+    name: "Coleções",
+    exact: true,
+  });
+  const more = header.getByRole("button", {
+    name: "Mais opções",
+    exact: true,
+  });
+  const disclosure = header.getByRole("button", {
+    name: "Alterar tipo de objeto",
+    exact: true,
+  });
+
+  await expectStableBoxOnHover(collections);
+  await collections.click();
+  const collectionPopover = page.locator(
+    '[data-slot="popover-content"][data-open]',
+  );
+  await expect(collectionPopover).toBeVisible();
+  await expect(
+    collectionPopover.getByText("Nenhuma coleção encontrada", { exact: true }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(collectionPopover).toBeHidden();
+  await expect(collections).toBeFocused();
+
+  await more.click();
+  const menu = page.locator('[data-slot="dropdown-menu-content"][data-open]');
+  await expect(menu).toBeVisible();
+  await menu.getByRole("menuitem", { name: "Personalizar" }).hover();
+  await expect(
+    page.getByText("Use o botão Personalizar no cabeçalho."),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await page.keyboard.press("Escape");
+  await expect(menu).toBeHidden();
+  await expect(more).toBeFocused();
+
+  await disclosure.click();
+  await expect(
+    page.getByRole("textbox", { name: "Buscar", exact: true }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(disclosure).toBeFocused();
   expect(errors).toEqual([]);
 });
 
