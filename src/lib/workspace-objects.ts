@@ -168,6 +168,7 @@ type WorkspaceObjectState = {
 
 type WorkspaceObjectAction =
   | { type: "beginCreate"; objectTypeId: string }
+  | { type: "createTag"; id: string; title: string }
   | { type: "cancelDraft" }
   | { type: "createDocument"; objectTypeId: "page"; title: string }
   | {
@@ -1329,6 +1330,13 @@ type WorkspaceObjectActionHandlers = {
 const workspaceObjectActionHandlers: WorkspaceObjectActionHandlers = {
   beginCreate: (state, action) =>
     beginWorkspaceObjectCreation(state, action.objectTypeId),
+  createTag: (state, action) =>
+    createEntity(
+      state,
+      "tag",
+      { id: action.id, title: action.title },
+      false,
+    ),
   cancelDraft: (state) => ({ ...state, draft: null, error: null }),
   changeEntityType: reduceEntityMenuAction,
   commitFile: commitFileDraft,

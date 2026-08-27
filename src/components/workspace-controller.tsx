@@ -442,6 +442,86 @@ function uniqueTabs(tabs: readonly AppHeaderTab[]) {
   });
 }
 
+function selectStoredTabValue(
+  tabs: readonly AppHeaderTab[],
+  storedValue: string | null,
+) {
+  if (storedValue && tabs.some((tab) => tab.id === storedValue)) {
+    return storedValue;
+  }
+  return tabs[0]?.id ?? "";
+}
+
+function shouldClearActiveEntity(
+  activeEntityId: string | null,
+  tabs: readonly AppHeaderTab[],
+) {
+  return Boolean(
+    activeEntityId && !tabs.some((tab) => tab.id === activeEntityId),
+  );
+}
+
+function resolveRestoredWorkspaceTabs({
+  initialMainTabs,
+  initialSideTabs,
+  objectTypes,
+  parsed,
+  specialSideTabs,
+  structures,
+  t,
+  workspaceEntities,
+}: {
+  initialMainTabs: readonly AppHeaderTab[];
+  initialSideTabs: readonly AppHeaderTab[];
+  objectTypes: readonly AppSidebarObjectType[];
+  parsed: WorkspaceTabState;
+  specialSideTabs: Record<SidePanelSpecialEntryId, Omit<AppHeaderTab, "id">>;
+  structures: readonly WorkspaceStructure[];
+  t: ReturnType<typeof useTranslations<"workspace">>;
+  workspaceEntities: readonly WorkspaceEntity[];
+}) {
+  const mainTabs = uniqueTabs(
+    parsed.main.tabs.flatMap((stored) => {
+      const tab = resolveMainTab({
+        initialMainTabs,
+        objectTypes,
+        stored,
+        structures,
+        t,
+        workspaceEntities,
+      });
+      return tab ? [tab] : [];
+    }),
+  );
+  const sideTabs = uniqueTabs(
+    parsed.side.tabs.flatMap((stored) => {
+      const tab = resolveSideTab({
+        initialSideTabs,
+        objectTypes,
+        specialSideTabs,
+        stored,
+        structures,
+        t,
+        workspaceEntities,
+      });
+      return tab ? [tab] : [];
+    }),
+  );
+  return { mainTabs, sideTabs };
+}
+
+function shouldStartTabStorageRestore({
+  hydrationStatus,
+  storageReady,
+  tabStorageStarted,
+}: {
+  hydrationStatus: string;
+  storageReady: boolean;
+  tabStorageStarted: boolean;
+}) {
+  return storageReady && hydrationStatus === "ready" && !tabStorageStarted;
+}
+
 type ParsedCollectionPinnedId = {
   objectTypeId: string;
   collection: string;
@@ -777,6 +857,7 @@ type WorkspaceContextValue = {
     objectTypeId: string,
     objectTypeLabel?: string,
   ) => void;
+  createWorkspaceTag: (title: string) => string;
   createWorkspaceEntityFromPreset: (presetId: string) => void;
   createOrAppendDailyNote: (
     date: string,
@@ -1150,9 +1231,11 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (
-      !storageReady ||
-      workspaceObjects.hydrationStatus !== "ready" ||
-      tabStorageStartedRef.current
+      !shouldStartTabStorageRestore({
+        hydrationStatus: workspaceObjects.hydrationStatus,
+        storageReady,
+        tabStorageStarted: tabStorageStartedRef.current,
+      })
     )
       return;
     tabStorageStartedRef.current = true;
@@ -1176,56 +1259,35 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const nextMainTabs = uniqueTabs(
-        parsed.main.tabs.flatMap((stored) => {
-          const tab = resolveMainTab({
-            initialMainTabs,
-            objectTypes,
-            stored,
-            structures: workspaceObjects.structures,
-            t,
-            workspaceEntities: workspaceObjects.entities,
-          });
-          return tab ? [tab] : [];
-        }),
-      );
-      const nextSideTabs = uniqueTabs(
-        parsed.side.tabs.flatMap((stored) => {
-          const tab = resolveSideTab({
-            initialSideTabs,
-            objectTypes,
-            specialSideTabs,
-            stored,
-            structures: workspaceObjects.structures,
-            t,
-            workspaceEntities: workspaceObjects.entities,
-          });
-          return tab ? [tab] : [];
-        }),
-      );
+      const restoredTabs = resolveRestoredWorkspaceTabs({
+        initialMainTabs,
+        initialSideTabs,
+        objectTypes,
+        parsed,
+        specialSideTabs,
+        structures: workspaceObjects.structures,
+        t,
+        workspaceEntities: workspaceObjects.entities,
+      });
 
-      if (nextMainTabs.length > 0) {
-        setMainTabs(nextMainTabs);
+      if (restoredTabs.mainTabs.length > 0) {
+        setMainTabs(restoredTabs.mainTabs);
         setMainValue(
-          nextMainTabs.some((tab) => tab.id === parsed.main.value)
-            ? (parsed.main.value as string)
-            : nextMainTabs[0].id,
+          selectStoredTabValue(restoredTabs.mainTabs, parsed.main.value),
         );
         if (
-          workspaceObjects.activeEntityId &&
-          !nextMainTabs.some(
-            (tab) => tab.id === workspaceObjects.activeEntityId,
+          shouldClearActiveEntity(
+            workspaceObjects.activeEntityId,
+            restoredTabs.mainTabs,
           )
         ) {
           dispatchWorkspaceObjects({ type: "selectEntity", id: null });
         }
       }
-      if (nextSideTabs.length > 0) {
-        setSideTabs(nextSideTabs);
+      if (restoredTabs.sideTabs.length > 0) {
+        setSideTabs(restoredTabs.sideTabs);
         setSideValue(
-          nextSideTabs.some((tab) => tab.id === parsed.side.value)
-            ? (parsed.side.value as string)
-            : nextSideTabs[0].id,
+          selectStoredTabValue(restoredTabs.sideTabs, parsed.side.value),
         );
       }
     } catch {
@@ -1239,8 +1301,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     locale,
     objectTypes,
     showMessage,
-    specialSideTabs,
     spaceId,
+    specialSideTabs,
     storageReady,
     t,
     workspaceObjects.activeEntityId,
@@ -1593,6 +1655,15 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       }
     },
     [showMessage, t, workspaceObjects.structures],
+  );
+
+  const createWorkspaceTag = React.useCallback(
+    (title: string) => {
+      const id = `created-tag-${workspaceObjects.nextId}`;
+      dispatchWorkspaceObjects({ type: "createTag", id, title: title.trim() });
+      return id;
+    },
+    [workspaceObjects.nextId],
   );
 
   const createWorkspaceEntityFromPreset = React.useCallback(
@@ -2027,6 +2098,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       updateWorkspaceStructure,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
+      createWorkspaceTag,
       createWorkspaceEntityFromPreset,
       createOrAppendDailyNote,
       createWorkspacePage,
@@ -2075,6 +2147,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       updateWorkspaceStructure,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
+      createWorkspaceTag,
       createWorkspaceEntityFromPreset,
       createOrAppendDailyNote,
       createWorkspacePage,

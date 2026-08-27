@@ -598,6 +598,7 @@ function WorkspaceSidebar() {
     setActiveAction,
     activeEntityId,
     setActiveEntityId,
+    setMainTabs,
     setMainValue,
     selectEntity,
     pinnedEntities,
@@ -641,8 +642,24 @@ function WorkspaceSidebar() {
     const collectionId = collection.id;
 
     if (action === "open") {
-      selectEntity(objectType.id);
-      setActiveEntityId(collectionId);
+      const tabId = `object-type-item:collection:${collectionId}`;
+      setMainTabs((current) =>
+        current.some((item) => item.id === tabId)
+          ? current
+          : [
+              ...current,
+              {
+                id: tabId,
+                label: collection.name,
+                icon: ObjectCollectionIcon,
+                iconClassName: objectIconToneBadgeClass.gray,
+                draggable: true,
+              },
+            ],
+      );
+      setActiveAction(undefined);
+      setMainValue(tabId);
+      setActiveEntityId(tabId);
       return;
     }
 

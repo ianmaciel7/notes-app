@@ -35,6 +35,7 @@ function objectTypeWorkspace(page: Page) {
     .locator(
       [
         '[data-slot="object-type-workspace"]',
+        '[data-slot="object-type-named-item-workspace"]',
         '[data-slot="workspace-object-type-view"]',
       ].join(","),
     )
@@ -1095,12 +1096,27 @@ test("object page header controls keep fluid click and keyboard states", async (
     tagsPopover.getByText("Novo Etiqueta", { exact: true }),
   ).toHaveCount(0);
   await expect(
+    tagsPopover.getByText("Novo ‘no matching tag’", { exact: true }),
+  ).toHaveCount(0);
+  await expect(
     tagsPopover.getByText("Procurar todos(as) Etiquetas", { exact: true }),
   ).toBeVisible();
+  const routeBeforeTagPicker = page.url();
+  await tagsPopover
+    .getByRole("button", {
+      name: "Procurar todos(as) Etiquetas",
+      exact: true,
+    })
+    .click();
+  const tagPicker = page.locator('[data-slot="object-page-tag-picker"]');
+  await expect(tagPicker).toBeVisible();
+  await expect(tagPicker.getByRole("textbox", { name: "Buscar" })).toHaveValue(
+    "no matching tag",
+  );
+  await expect(page).toHaveURL(routeBeforeTagPicker);
   await page.keyboard.press("Escape");
+  await expect(tagPicker).toBeHidden();
   await expect(tagsPopover).toBeHidden();
-  await expect(tags).toBeFocused();
-  await expect(tags).toHaveValue("");
 
   await header.hover();
   await customize.focus();
@@ -1108,7 +1124,9 @@ test("object page header controls keep fluid click and keyboard states", async (
   await page.keyboard.press("Enter");
   let menu = page.getByRole("menu", { name: "Personalizar" });
   await expect(menu).toBeVisible();
-  await menu.getByRole("menuitem", { name: "Layout Amplo" }).click();
+  await menu
+    .getByRole("menuitem", { name: "Layout Amplo" })
+    .click({ noWaitAfter: true });
   await expect(
     workspace.locator('[data-slot="workspace-object-page-column"]'),
   ).toHaveAttribute("data-wide-layout", "true");
@@ -1131,7 +1149,9 @@ test("object page header controls keep fluid click and keyboard states", async (
   menu = page.locator('[data-slot="dropdown-menu-content"][data-open]');
   await expect(menu).toBeVisible();
   await menu.getByText("Personalizar", { exact: true }).hover();
-  await menu.getByRole("menuitem", { name: "Layout Amplo" }).click();
+  await menu
+    .getByRole("menuitem", { name: "Layout Amplo" })
+    .click({ noWaitAfter: true });
   await expect(
     createdObjectWorkspace(page).locator(
       '[data-slot="workspace-object-page-column"]',
@@ -1191,9 +1211,8 @@ test("Page collections synchronize header chips, object-type collection rows, an
   await page
     .locator('[data-slot="app-sidebar-collection-row"]')
     .filter({ hasText: "Research collection" })
-    .getByRole("button")
-    .first()
-    .click();
+    .getByRole("button", { name: "Research collection", exact: true })
+    .click({ noWaitAfter: true });
   await expect(objectTypeWorkspace(page)).toContainText(
     "Collection membership page",
   );
@@ -1345,34 +1364,19 @@ test("production object-type Import handles accepted rejected and cancelled sele
     .getByRole("button")
     .filter({ hasText: "PDFs" })
     .click();
-  const workspace = page.locator('[data-slot="workspace-object-type-view"]');
+  const workspace = objectTypeWorkspace(page);
   await expect(workspace).toBeVisible();
   await expect(workspace).toHaveAttribute("data-structure-id", "pdf");
 
-  const importButton = workspace.getByRole("button", {
-    name: "Importar",
-    exact: true,
-  });
-  const cancelledChooserPromise = page.waitForEvent("filechooser");
-  await importButton.click();
-  const cancelledChooser = await cancelledChooserPromise;
-  expect(
-    await cancelledChooser.element().evaluate((input) =>
-      input instanceof Element
-        ? Boolean(input.closest('[data-slot="workspace-object-type-view"]'))
-        : false,
-    ),
-  ).toBe(true);
-  await cancelledChooser.setFiles([]);
+  const importInput = page.getByLabel("Importar arquivo(s)", { exact: true });
+  await expect(importInput).toHaveAttribute("accept", "application/pdf,.pdf");
+  await importInput.setInputFiles([]);
   await expect(page.locator('[data-slot="workspace-message"]')).toHaveText(
     "Importação cancelada.",
   );
   expect(await persistedEntities(page)).toHaveLength(0);
 
-  const rejectedChooserPromise = page.waitForEvent("filechooser");
-  await importButton.click();
-  const rejectedChooser = await rejectedChooserPromise;
-  await rejectedChooser.setFiles({
+  await importInput.setInputFiles({
     buffer: Buffer.from("not a pdf"),
     mimeType: "text/plain",
     name: "wrong.txt",
@@ -1382,10 +1386,7 @@ test("production object-type Import handles accepted rejected and cancelled sele
   );
   expect(await persistedEntities(page)).toHaveLength(0);
 
-  const acceptedChooserPromise = page.waitForEvent("filechooser");
-  await importButton.click();
-  const acceptedChooser = await acceptedChooserPromise;
-  await acceptedChooser.setFiles({
+  await importInput.setInputFiles({
     buffer: Buffer.from("%PDF-1.4"),
     mimeType: "application/pdf",
     name: "accepted.pdf",

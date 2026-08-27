@@ -38,6 +38,7 @@ import {
   AppSidebarSearchIcon,
 } from "@/components/app-sidebar-icons";
 import type { AppSidebarObjectType } from "@/components/app-sidebar-overview";
+import type { AppSidebarPrimaryNavigationAction } from "@/components/app-sidebar-primary-actions";
 import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon";
 import { BlockEditor } from "@/components/block-editor";
 import {
@@ -131,30 +132,49 @@ function AtomicNotesWorkspace() {
     activeAction ?? primaryActionFromMainValue(mainValue);
   const activeTab = mainTabs.find((tab) => tab.id === mainValue);
   const activeObjectType = objectTypes.find((item) => item.id === mainValue);
-  const activePresetObjectType: AppSidebarObjectType | undefined =
-    !activeObjectType && mainValue === "atomic-note"
-      ? {
-          id: "atomic-note",
-          label:
-            activeTab?.label ??
-            t("objectTypeStudio.objectTypePlurals.atomic-note"),
-          singularLabel: t("objectTypeStudio.objectTypes.atomic-note"),
-          icon: objectTypeDefinitionById["atomic-note"].icon,
-          iconName: "atomic-note",
-          ownership: "legacy",
-          tone: objectTypeDefinitionById["atomic-note"].tone,
-          count: createdEntities.filter(
-            (entity) => entity.objectTypeId === "atomic-note",
-          ).length,
-        }
-      : undefined;
-  const activeCreatedEntity = createdEntities.find(
-    (entity) => entity.id === mainValue,
-  );
-  const activeNamedItem = activeTab
-    ? parseObjectTypeNamedItemTabId(activeTab.id)
-    : null;
 
+  return renderAtomicNotesWorkspace({
+    activeCreatedEntity: createdEntities.find(
+      (entity) => entity.id === mainValue,
+    ),
+    activeNamedItem: parseActiveNamedItem(activeTab),
+    navigationAction,
+    objectTypes,
+    renderedObjectType:
+      activeObjectType ??
+      createActivePresetObjectType({
+        activeObjectType,
+        activeTabLabel: activeTab?.label,
+        createdEntities,
+        mainValue,
+        t,
+      }),
+    usesAtomicNotePreset: !activeObjectType && mainValue === "atomic-note",
+    visibleTab: activeTab,
+  });
+}
+
+function parseActiveNamedItem(activeTab: AppHeaderTab | undefined) {
+  return activeTab ? parseObjectTypeNamedItemTabId(activeTab.id) : null;
+}
+
+function renderAtomicNotesWorkspace({
+  activeCreatedEntity,
+  activeNamedItem,
+  navigationAction,
+  objectTypes,
+  renderedObjectType,
+  usesAtomicNotePreset,
+  visibleTab,
+}: {
+  activeCreatedEntity: WorkspaceEntity | undefined;
+  activeNamedItem: ReturnType<typeof parseObjectTypeNamedItemTabId>;
+  navigationAction: AppSidebarPrimaryNavigationAction | undefined;
+  objectTypes: readonly AppSidebarObjectType[];
+  renderedObjectType: AppSidebarObjectType | undefined;
+  usesAtomicNotePreset: boolean;
+  visibleTab: AppHeaderTab | undefined;
+}) {
   if (navigationAction === "explore") {
     return <ExploreWorkspace />;
   }
@@ -167,12 +187,11 @@ function AtomicNotesWorkspace() {
     return <CreatedObjectWorkspace entity={activeCreatedEntity} />;
   }
 
-  const renderedObjectType = activeObjectType ?? activePresetObjectType;
   if (renderedObjectType) {
     return (
       <ObjectTypeWorkspace
         objectType={renderedObjectType}
-        presetId={activePresetObjectType ? "atomic-note" : undefined}
+        presetId={usesAtomicNotePreset ? "atomic-note" : undefined}
       />
     );
   }
@@ -181,14 +200,43 @@ function AtomicNotesWorkspace() {
     return <ObjectTypeNamedItemWorkspace item={activeNamedItem} />;
   }
 
-  if (activeTab && activeTab.id !== "new-tab-draft") {
-    return <OpenedTabWorkspace label={activeTab.label} />;
+  if (visibleTab && visibleTab.id !== "new-tab-draft") {
+    return <OpenedTabWorkspace label={visibleTab.label} />;
   }
 
   const fallbackObjectType = objectTypes[0];
   return fallbackObjectType ? (
     <ObjectTypeWorkspace objectType={fallbackObjectType} />
   ) : null;
+}
+
+function createActivePresetObjectType({
+  activeObjectType,
+  activeTabLabel,
+  createdEntities,
+  mainValue,
+  t,
+}: {
+  activeObjectType: AppSidebarObjectType | undefined;
+  activeTabLabel: string | undefined;
+  createdEntities: readonly WorkspaceEntity[];
+  mainValue: string;
+  t: ReturnType<typeof useTranslations<"workspace">>;
+}): AppSidebarObjectType | undefined {
+  if (activeObjectType || mainValue !== "atomic-note") return undefined;
+  return {
+    id: "atomic-note",
+    label:
+      activeTabLabel ?? t("objectTypeStudio.objectTypePlurals.atomic-note"),
+    singularLabel: t("objectTypeStudio.objectTypes.atomic-note"),
+    icon: objectTypeDefinitionById["atomic-note"].icon,
+    iconName: "atomic-note",
+    ownership: "legacy",
+    tone: objectTypeDefinitionById["atomic-note"].tone,
+    count: createdEntities.filter(
+      (entity) => entity.objectTypeId === "atomic-note",
+    ).length,
+  };
 }
 
 function primaryActionFromMainValue(value: string) {
@@ -2656,6 +2704,11 @@ function ObjectTypeWorkspace({
   async function importFiles(event: React.ChangeEvent<HTMLInputElement>) {
     const input = event.currentTarget;
     const files = Array.from(input.files ?? []);
+    if (files.length === 0) {
+      showMessage(t("objectTypeOverview.importCancelled"));
+      input.value = "";
+      return;
+    }
     if (files.length > 0) {
       await importWorkspaceFiles(objectType.id, files);
     }
@@ -3972,7 +4025,9 @@ function ObjectProjectionCard({
   return (
     <button
       type="button"
-      data-lifecycle-contract={objectLifecycleContractSlots.ObjectProjectionCard}
+      data-lifecycle-contract={
+        objectLifecycleContractSlots.ObjectProjectionCard
+      }
       className="flex min-h-[132px] flex-col items-start rounded-xl border border-[#e4e0dc] bg-card p-3 text-left shadow-[0_1px_2px_rgb(0_0_0/0.02)] transition-colors duration-150 hover:bg-[#faf9f8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none"
       aria-label={t("openObject", { title })}
       onClick={onClick}
@@ -4175,7 +4230,9 @@ function ExploreWorkspace() {
   const activeEntity = createdEntities.find(
     (entity) => entity.id === activeEntityId,
   );
-  const activeObjectType = objectTypes.find((item) => item.id === activeEntityId);
+  const activeObjectType = objectTypes.find(
+    (item) => item.id === activeEntityId,
+  );
   const supportsObjectRelations = Boolean(activeEntity);
   const actions = [
     {
@@ -4306,13 +4363,19 @@ function ContextualPanelWorkspace() {
   if (sideEntity) return <CreatedObjectWorkspace entity={sideEntity} />;
 
   const sideObjectType = objectTypes.find((item) => item.id === sideValue);
-  if (sideObjectType) return <ObjectTypeWorkspace objectType={sideObjectType} />;
+  if (sideObjectType)
+    return <ObjectTypeWorkspace objectType={sideObjectType} />;
 
   if (entry === "graphView") return <GraphWorkspace />;
-  if (entry === "backlinks" || entry === "objectsInside" || entry === "relatedContent") {
+  if (
+    entry === "backlinks" ||
+    entry === "objectsInside" ||
+    entry === "relatedContent"
+  ) {
     return <ContextualRelationsWorkspace entry={entry} />;
   }
-  if (entry === "aiAssistantChat") return <ContextualUnavailableWorkspace entry={entry} />;
+  if (entry === "aiAssistantChat")
+    return <ContextualUnavailableWorkspace entry={entry} />;
   if (entry === "localSpaceQuery") return <ContextualSearchWorkspace />;
   return <ExploreWorkspace />;
 }
@@ -4416,12 +4479,8 @@ function ContextualRelationsWorkspace({
   entry: "backlinks" | "objectsInside" | "relatedContent";
 }) {
   const t = useTranslations("workspace");
-  const {
-    activeEntityId,
-    createdEntities,
-    objectTypes,
-    selectEntity,
-  } = useWorkspace();
+  const { activeEntityId, createdEntities, objectTypes, selectEntity } =
+    useWorkspace();
   const activeEntity = createdEntities.find(
     (entity) => entity.id === activeEntityId,
   );
@@ -4643,63 +4702,63 @@ function GraphWorkspace() {
         >
           {center ? (
             <>
-            <svg
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 size-full"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-            >
-              {positions.map((position, index) => (
-                <line
-                  key={graph.edges[index]?.target}
-                  x1="50"
-                  y1="50"
-                  x2={position.x}
-                  y2={position.y}
-                  stroke="currentColor"
-                  strokeOpacity="0.16"
-                  strokeWidth="0.18"
-                />
-              ))}
-            </svg>
-            <div
-              data-slot="workspace-graph-node"
-              data-node-kind="active"
-              className="absolute left-1/2 top-1/2 flex max-w-[140px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center"
-            >
-              <ObjectIconBadge
-                icon={ObjectPageIcon}
-                tone="blue"
-                className="size-9 rounded-xl border border-blue-200 bg-blue-50"
-                iconClassName="size-5"
-              />
-              <span className="max-w-[140px] truncate text-xs text-muted-foreground">
-                {center.title || t("lifecycle.untitled")}
-              </span>
-            </div>
-
-            {related.map((node, index) => (
+              <svg
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 size-full"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+              >
+                {positions.map((position, index) => (
+                  <line
+                    key={graph.edges[index]?.target}
+                    x1="50"
+                    y1="50"
+                    x2={position.x}
+                    y2={position.y}
+                    stroke="currentColor"
+                    strokeOpacity="0.16"
+                    strokeWidth="0.18"
+                  />
+                ))}
+              </svg>
               <div
-                key={node.id}
                 data-slot="workspace-graph-node"
-                data-node-kind="related"
-                className="absolute flex max-w-[120px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center"
-                style={{
-                  left: `${positions[index].x}%`,
-                  top: `${positions[index].y}%`,
-                }}
+                data-node-kind="active"
+                className="absolute left-1/2 top-1/2 flex max-w-[140px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center"
               >
                 <ObjectIconBadge
                   icon={ObjectPageIcon}
-                  tone="gray"
-                  className="size-8 rounded-xl border border-border bg-card"
-                  iconClassName="size-4"
+                  tone="blue"
+                  className="size-9 rounded-xl border border-blue-200 bg-blue-50"
+                  iconClassName="size-5"
                 />
-                <span className="max-w-[120px] truncate text-xs text-muted-foreground">
-                  {node.title || t("lifecycle.untitled")}
+                <span className="max-w-[140px] truncate text-xs text-muted-foreground">
+                  {center.title || t("lifecycle.untitled")}
                 </span>
               </div>
-            ))}
+
+              {related.map((node, index) => (
+                <div
+                  key={node.id}
+                  data-slot="workspace-graph-node"
+                  data-node-kind="related"
+                  className="absolute flex max-w-[120px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center"
+                  style={{
+                    left: `${positions[index].x}%`,
+                    top: `${positions[index].y}%`,
+                  }}
+                >
+                  <ObjectIconBadge
+                    icon={ObjectPageIcon}
+                    tone="gray"
+                    className="size-8 rounded-xl border border-border bg-card"
+                    iconClassName="size-4"
+                  />
+                  <span className="max-w-[120px] truncate text-xs text-muted-foreground">
+                    {node.title || t("lifecycle.untitled")}
+                  </span>
+                </div>
+              ))}
             </>
           ) : (
             <div

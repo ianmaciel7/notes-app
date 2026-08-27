@@ -31,6 +31,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -238,7 +239,7 @@ function ObjectPageHeader({
           variant="ghost"
           size="icon-sm"
           aria-label={t("actions.moreOptions")}
-          className="h-[30px] w-[30px] rounded-lg border border-border"
+          className="h-[26px] w-[26px] rounded-lg border border-border"
         >
           <AppSidebarDotsIcon className="size-4" />
         </Button>
@@ -418,7 +419,7 @@ function DocumentMoreMenu({
         aria-label={t("actions.moreOptions")}
         className={cn(
           buttonVariants({ variant: "ghost", size: "icon-sm" }),
-          "h-[30px] w-[30px] rounded-lg border border-border",
+          "h-[26px] w-[26px] rounded-lg border border-border",
         )}
       >
         <AppSidebarDotsIcon className="size-4" />
@@ -522,11 +523,16 @@ function ObjectPageTags({
   readonly update: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
-  const { createWorkspaceEntity, createdEntities, selectEntity } =
-    useWorkspace();
+  const { createWorkspaceTag, createdEntities } = useWorkspace();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
+  const [tagPickerOpen, setTagPickerOpen] = React.useState(false);
+  const [tagPickerQuery, setTagPickerQuery] = React.useState("");
+  const [pendingTagIds, setPendingTagIds] = React.useState<readonly string[]>(
+    [],
+  );
   const deferredQuery = React.useDeferredValue(query);
+  const deferredPickerQuery = React.useDeferredValue(tagPickerQuery);
   const tags = entityTags(entity);
   const tagNamesById = new Map(
     createdEntities
@@ -541,6 +547,34 @@ function ObjectPageTags({
         .toLocaleLowerCase()
         .includes(deferredQuery.trim().toLocaleLowerCase()),
   );
+  const pickerTags = createdEntities.filter(
+    (item) =>
+      item.kind === "tag" &&
+      (item.title.trim() || item.id)
+        .toLocaleLowerCase()
+        .includes(deferredPickerQuery.trim().toLocaleLowerCase()),
+  );
+  const closeTagPicker = () => {
+    setTagPickerOpen(false);
+    setTagPickerQuery("");
+    setPendingTagIds([]);
+  };
+  const togglePendingTag = (tagId: string) => {
+    setPendingTagIds((current) =>
+      current.includes(tagId)
+        ? current.filter((item) => item !== tagId)
+        : [...current, tagId],
+    );
+  };
+  const createTagFromPicker = () => {
+    const name = tagPickerQuery.trim();
+    if (!name) return;
+    const tagId = createWorkspaceTag(name);
+    setPendingTagIds((current) =>
+      current.includes(tagId) ? current : [...current, tagId],
+    );
+    setTagPickerQuery("");
+  };
   return (
     <div
       data-slot="workspace-object-page-tags"
@@ -578,6 +612,14 @@ function ObjectPageTags({
                 aria-label={t("fields.tags")}
                 placeholder={t("fields.tags")}
                 value={query}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOpen(true);
+                }}
+                onPointerDown={(event) => {
+                  event.stopPropagation();
+                  setOpen(true);
+                }}
                 onFocus={() => setOpen(true)}
                 onChange={(event) => {
                   setQuery(event.target.value);
@@ -623,9 +665,9 @@ function ObjectPageTags({
                 "w-full gap-2 px-2 text-left",
               )}
               onClick={() => {
-                setQuery("");
+                const tagId = createWorkspaceTag("");
+                update({ tags: [...tags, tagId] });
                 setOpen(false);
-                createWorkspaceEntity("tag");
               }}
             >
               {t("documentMenu.newTagEmpty")}
@@ -638,15 +680,89 @@ function ObjectPageTags({
               "w-full gap-2 px-2 text-left",
             )}
             onClick={() => {
-              setQuery("");
               setOpen(false);
-              selectEntity("tag");
+              setTagPickerQuery(query);
+              setPendingTagIds(tags);
+              setTagPickerOpen(true);
             }}
           >
             {t("documentMenu.searchAllTags")}
           </button>
         </PopoverContent>
       </Popover>
+      <Dialog
+        open={tagPickerOpen}
+        onOpenChange={(nextOpen) => {
+          if (!nextOpen) closeTagPicker();
+        }}
+      >
+        <DialogContent
+          data-slot="object-page-tag-picker"
+          showCloseButton={false}
+          className="h-[min(48rem,calc(100vh-4rem))] max-w-[calc(100vw-2rem)] p-5 sm:w-[64rem] sm:max-w-[64rem]"
+        >
+          <DialogHeader>
+            <DialogTitle>{t("documentMenu.addTag")}</DialogTitle>
+          </DialogHeader>
+          <div className="flex min-h-0 flex-1 flex-col gap-3">
+            <div className="flex gap-2">
+              <input
+                aria-label={t("actions.search")}
+                placeholder={t("actions.search")}
+                value={tagPickerQuery}
+                onChange={(event) => setTagPickerQuery(event.target.value)}
+                className="h-8 w-56 rounded-lg border border-border bg-transparent px-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+              />
+              <Button
+                type="button"
+                size="sm"
+                disabled={!tagPickerQuery.trim()}
+                onClick={createTagFromPicker}
+              >
+                {t("actions.create")}
+              </Button>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              {pickerTags.map((tag) => {
+                const selected = pendingTagIds.includes(tag.id);
+                return (
+                  <button
+                    key={tag.id}
+                    type="button"
+                    aria-pressed={selected}
+                    className={cn(
+                      workspaceOverflowMenuItemClass,
+                      "flex w-full gap-2 px-2 text-left",
+                      selected && "bg-muted",
+                    )}
+                    onClick={() => togglePendingTag(tag.id)}
+                  >
+                    <ObjectTagIcon className="size-3.5 shrink-0" />
+                    <span className="truncate">
+                      {tag.title.trim() || tag.id}
+                    </span>
+                    {selected ? <CheckIcon className="ml-auto size-4" /> : null}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <DialogFooter className="-mx-5 -mb-5 sm:justify-between">
+            <Button type="button" variant="outline" onClick={closeTagPicker}>
+              {t("lifecycle.cancel")}
+            </Button>
+            <Button
+              type="button"
+              onClick={() => {
+                update({ tags: pendingTagIds });
+                closeTagPicker();
+              }}
+            >
+              {t("actions.confirm")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -715,6 +831,14 @@ function ObjectPageCollections({
                 aria-label={t("objects.collections")}
                 placeholder={t("objects.collections")}
                 value={query}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOpen(true);
+                }}
+                onPointerDown={(event) => {
+                  event.stopPropagation();
+                  setOpen(true);
+                }}
                 onFocus={() => setOpen(true)}
                 onChange={(event) => {
                   setQuery(event.target.value);
@@ -831,7 +955,7 @@ function PageCustomizeControl({
             variant="ghost"
             size="sm"
             aria-label={t("actions.customize")}
-            className="pointer-events-none hidden h-7 gap-1.5 px-1.5 text-sm font-normal text-muted-foreground opacity-0 transition-opacity duration-200 group-hover/object-page-header:pointer-events-auto group-hover/object-page-header:opacity-100 group-focus-within/object-page-header:pointer-events-auto group-focus-within/object-page-header:opacity-100 sm:inline-flex"
+            className="h-[26px] gap-1.5 px-2 pr-1 text-sm font-normal text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
           >
             {t("actions.customize")}
             <AppHeaderCaretDownIcon className="size-3.5" />

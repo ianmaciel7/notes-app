@@ -14,7 +14,7 @@ test("object page uses inline inputs for tag and collection selection", async ()
   assert.doesNotMatch(source, /data-slot="object-page-collections-trigger"/);
 });
 
-test("tag selector closes before its navigation and creation actions", async () => {
+test("tag selector escalates search-all to the modal picker instead of navigating", async () => {
   const source = await readFile(
     new URL("../src/components/workspace-object-page-view.tsx", import.meta.url),
     "utf8",
@@ -22,20 +22,32 @@ test("tag selector closes before its navigation and creation actions", async () 
 
   assert.match(
     source,
-    /onClick=\{\(\) => \{\s*setQuery\(""\);\s*setOpen\(false\);\s*createWorkspaceEntity\("tag"\);\s*\}\}/,
+    /data-slot="object-page-tag-picker"/,
   );
   assert.match(
     source,
-    /onClick=\{\(\) => \{\s*setQuery\(""\);\s*setOpen\(false\);\s*selectEntity\("tag"\);\s*\}\}/,
+    /setTagPickerOpen\(true\)/,
   );
+  assert.doesNotMatch(source, /selectEntity\("tag"\)/);
 });
 
-test("collection selector only filters existing collections", async () => {
+test("metadata selectors avoid creating collections from inline search text", async () => {
   const source = await readFile(
     new URL("../src/components/workspace-object-page-view.tsx", import.meta.url),
     "utf8",
   );
 
-  assert.doesNotMatch(source, /createAndSelectCollection/);
-  assert.doesNotMatch(source, /newCollectionNamed/);
+  assert.match(source, /documentMenu\.newTagEmpty/);
+  assert.doesNotMatch(source, /documentMenu\.newCollectionNamed/);
+  assert.doesNotMatch(source, /createCollectionId/);
+});
+
+test("page header keeps the measured desktop action sizes visible", async () => {
+  const source = await readFile(
+    new URL("../src/components/workspace-object-page-view.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(source, /"h-\[26px\] w-\[26px\] rounded-lg border border-border"/);
+  assert.doesNotMatch(source, /pointer-events-none hidden h-7/);
 });

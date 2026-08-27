@@ -192,9 +192,6 @@ The object-type listing SHALL connect its visible `New` and `Import file(s)` aff
 - **WHEN** a user pins the active type or chooses New object from the split menu
 - **THEN** the active type SHALL be added to or removed from the provider-owned pinned list, or the existing sidebar New palette SHALL open, respectively.
 
-### Requirement: Evidence-backed parity completion
-The change SHALL be considered complete only after source checks and browser evidence confirm the same required states.
-
 ### Requirement: Inline Page metadata selection
 Page tags and collections SHALL use their visible metadata label as the selector's text-entry control rather than opening a separate generic search dialog.
 
@@ -203,6 +200,9 @@ Page tags and collections SHALL use their visible metadata label as the selector
 - **THEN** that control SHALL remain the focused inline text input and its selector SHALL open below it without rendering a second search field
 - **AND** the selector SHALL use a compact result surface, render only applicable choices and named actions, and avoid a generic empty-state dialog
 - **AND** Escape or outside interaction SHALL close the selector and restore focus without mutating the Page.
+
+### Requirement: Evidence-backed parity completion
+The change SHALL be considered complete only after source checks and browser evidence confirm the same required states.
 
 #### Scenario: Per-iteration rubric
 - **WHEN** a visual evaluation iteration completes

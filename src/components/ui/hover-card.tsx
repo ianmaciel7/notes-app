@@ -38,7 +38,7 @@ function HoverCardContent({
         alignOffset={alignOffset}
         side={side}
         sideOffset={sideOffset}
-        className={floatingPositionerClass}
+        className={cn(floatingPositionerClass, "pointer-events-none")}
       >
         <PreviewCardPrimitive.Popup
           data-slot="hover-card-content"
