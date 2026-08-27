@@ -881,6 +881,9 @@ test("object page header controls keep fluid click and keyboard states", async (
     '[data-slot="popover-content"][data-open]',
   );
   await expect(collectionPopover).toBeVisible();
+  await expect
+    .poll(async () => (await collectionPopover.boundingBox())?.width ?? 0)
+    .toBeCloseTo(269, 0);
   await expect(
     collectionPopover.getByText("Nenhuma coleção encontrada", { exact: true }),
   ).toBeVisible();

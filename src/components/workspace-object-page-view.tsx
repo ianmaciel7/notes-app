@@ -665,14 +665,22 @@ function ObjectPageCollections({
               variant="ghost"
               size="sm"
               aria-label={t("objects.collections")}
-              className="h-7 min-w-0 gap-1.5 px-1.5 font-normal text-muted-foreground"
+              data-slot="object-page-collections-trigger"
+              className="h-7 min-w-0 gap-1.5 px-1.5 font-normal text-muted-foreground transition-[background-color,color,opacity] duration-150 ease-out"
             >
               <ObjectCollectionIcon className="size-3.5" />
               {t("objects.collections")}
             </Button>
           }
         />
-        <PopoverContent align="start" sideOffset={5} className="w-64 p-1.5">
+        <PopoverContent
+          align="start"
+          sideOffset={5}
+          className={cn(
+            workspaceOverflowMenuContentClass,
+            "w-[269px] min-w-[269px] p-1.5",
+          )}
+        >
           <input
             aria-label={t("actions.search")}
             placeholder={t("actions.search")}
@@ -687,7 +695,10 @@ function ObjectPageCollections({
                 type="button"
                 aria-pressed={collections.includes(collection.id)}
                 onClick={() => toggleCollection(collection.id)}
-                className="flex h-8 w-full items-center rounded-md px-2 text-left text-sm hover:bg-muted"
+                className={cn(
+                  workspaceOverflowMenuItemClass,
+                  "w-full gap-2 px-2 text-left",
+                )}
               >
                 <span className="truncate">{collection.name}</span>
                 {collections.includes(collection.id) ? (
