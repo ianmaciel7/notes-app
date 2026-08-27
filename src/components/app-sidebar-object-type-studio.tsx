@@ -307,13 +307,13 @@ function AppSidebarObjectTypeDetails({
       className={cn(
         "pointer-events-auto absolute bottom-0 right-0 top-0 z-20 -mb-1 -mr-1 -mt-1",
         "flex min-h-0 w-full origin-center scale-100 transform flex-col overflow-hidden",
-        "border border-border bg-background shadow-xl transition duration-150 ease-out",
+        "border border-[#d9dce3] bg-[#f8f9fb] shadow-xl transition duration-150 ease-out",
         "sm:w-[28rem] sm:rounded-lg",
       )}
     >
       <div className="relative min-h-0 grow">
         <ScrollArea className="h-full">
-          <div className="flex min-h-full flex-col px-5 py-4 pb-8">
+          <div className="flex min-h-full flex-col px-[18px] py-5 pb-8">
             {isCustom ? (
               <>
                 <div className="flex flex-col gap-y-1.5">
@@ -345,7 +345,7 @@ function AppSidebarObjectTypeDetails({
                     <div className="flex select-none items-baseline pb-1.5 text-xs text-muted-foreground">
                       <span>{t("details.icon")}</span>
                     </div>
-                    <div className="relative flex size-6 shrink-0 items-center justify-center rounded-lg border text-lg leading-none text-[oklch(0.4289_0.0021_324.71)] [border-color:oklch(0.8643_0.0017_67.13)] [border-width:0.5px] [background-color:oklch(0.9766_0.0016_67.01)]">
+                    <div className="relative flex size-8 shrink-0 items-center justify-center rounded-lg border text-lg leading-none text-[oklch(0.4289_0.0021_324.71)] [border-color:oklch(0.8643_0.0017_67.13)] [border-width:0.5px] [background-color:oklch(0.9766_0.0016_67.01)]">
                       <button
                         type="button"
                         className="relative flex h-full w-full shrink-0 grow-0 cursor-pointer appearance-none items-center justify-center rounded-[0.445rem] bg-transparent text-[18px] leading-none hover:brightness-95 focus:outline-none"
@@ -365,7 +365,7 @@ function AppSidebarObjectTypeDetails({
                     >
                       {t("details.name")}
                     </label>
-                    <div className="flex h-6 w-full min-w-44 flex-row items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2 text-sm text-foreground hover:border-muted-foreground/40">
+                    <div className="flex h-8 w-full min-w-44 flex-row items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2 text-sm text-foreground hover:border-muted-foreground/40">
                       <Input
                         id={customNameInputId}
                         value={customName}
@@ -386,11 +386,11 @@ function AppSidebarObjectTypeDetails({
                     <div className="flex select-none items-baseline pb-1.5 text-xs text-muted-foreground">
                       <span>{t("details.color")}</span>
                     </div>
-                    <div className="relative flex size-6 shrink-0 items-center justify-center rounded-lg">
+                    <div className="relative flex size-8 shrink-0 items-center justify-center rounded-lg">
                       <button
                         type="button"
                         className={cn(
-                          "relative flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-lg",
+                          "relative flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg",
                           "border border-border bg-muted text-base text-muted-foreground",
                           "transition duration-200 ease-out hover:border-muted-foreground/40 active:brightness-[0.97] focus:outline-none",
                         )}
@@ -409,7 +409,7 @@ function AppSidebarObjectTypeDetails({
                     >
                       {t("details.pluralName")}
                     </label>
-                    <div className="flex h-6 w-full min-w-44 flex-row items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2 text-sm text-foreground hover:border-muted-foreground/40">
+                    <div className="flex h-8 w-full min-w-44 flex-row items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2 text-sm text-foreground hover:border-muted-foreground/40">
                       <Input
                         id={pluralNameInputId}
                         value={pluralName}
@@ -425,7 +425,7 @@ function AppSidebarObjectTypeDetails({
                 </div>
 
                 <div className="mt-4 flex w-full grow flex-col">
-                  <div className="mt-3 flex w-full rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                  <div className="mt-3 flex w-full rounded-lg bg-[#e8f1ff] px-3 py-2 text-sm text-[#2556a8]">
                     <div className="w-6 shrink-0 grow-0">
                       <div className="-mt-0.5 -mb-1 -ml-1.5 flex size-6 shrink-0 grow-0 items-center justify-center rounded-lg leading-none text-blue-600 dark:text-blue-300">
                         <ObjectTypeDetailsIcon name="info" />
