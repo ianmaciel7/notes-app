@@ -17,7 +17,12 @@ async function openWorkspace(page: Page) {
     if (message.type() === "error") errors.push(message.text());
   });
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.addInitScript(() => window.localStorage.clear());
+  await page.addInitScript(() => {
+    const clearKey = "notes-app:e2e-cleared";
+    if (window.sessionStorage.getItem(clearKey) === "true") return;
+    window.localStorage.clear();
+    window.sessionStorage.setItem(clearKey, "true");
+  });
   await page.goto("/pt-BR");
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
   await page.waitForTimeout(750);
@@ -209,7 +214,7 @@ for (const viewport of desktopViewports) {
     await expect(sidebar).toBeVisible();
     await expect
       .poll(async () => (await sidebar.boundingBox())?.width)
-      .toBeCloseTo(224, 0);
+      .toBeCloseTo(288, 0);
     await expect
       .poll(async () => (await main.boundingBox())?.width ?? 0)
       .toBeGreaterThan(0);
@@ -262,6 +267,186 @@ test("tab midpoint and dedicated actions do not overlap", async ({ page }) => {
         : true,
     ).toBe(true);
   }
+  expect(errors).toEqual([]);
+});
+
+test("graph controls preserve hover geometry and support reversible click and drag states", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 1294, height: 912 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Graph first");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Graph second");
+
+  await page
+    .getByRole("button", { name: "Abrir menu do painel lateral" })
+    .click();
+  await page.getByRole("menuitem", { name: "Visualização em grafo" }).click();
+
+  const graph = page.locator('[data-slot="workspace-graph"]');
+  const canvas = graph.locator('[data-slot="workspace-graph-canvas"]');
+  await expect(canvas).toBeVisible();
+
+  const sidePanelBox = await page
+    .locator('[data-slot="app-shell-side-panel"]')
+    .boundingBox();
+  expect(sidePanelBox?.width).toBeGreaterThanOrEqual(460.5);
+  expect(sidePanelBox?.width).toBeLessThanOrEqual(463);
+
+  const controlNames = [
+    "Mostrar menos",
+    "Mostrar mais",
+    "Configurações do grafo",
+    "Centralizar grafo",
+    "Diminuir zoom",
+    "Aumentar zoom",
+  ] as const;
+  for (const name of controlNames) {
+    const control = graph.getByRole("button", { name });
+    const idleBackground = await control.evaluate(
+      (element) => getComputedStyle(element).backgroundColor,
+    );
+    await expectStableBoxOnHover(control);
+    expect(
+      await control.evaluate(
+        (element) => getComputedStyle(element).backgroundColor,
+      ),
+    ).not.toBe(idleBackground);
+  }
+
+  const expandedNodeCount = await canvas.locator(":scope > div").count();
+  await graph.getByRole("button", { name: "Mostrar menos" }).click();
+  await expect(canvas.locator(":scope > div")).toHaveCount(1);
+  await graph.getByRole("button", { name: "Mostrar mais" }).click();
+  await expect(canvas.locator(":scope > div")).toHaveCount(expandedNodeCount);
+
+  await graph.getByRole("button", { name: "Configurações do grafo" }).click();
+  const settings = page.getByRole("dialog");
+  await page.waitForTimeout(150);
+  const settingsBox = await settings.boundingBox();
+  expect(settingsBox?.width).toBeGreaterThanOrEqual(287);
+  expect(settingsBox?.width).toBeLessThanOrEqual(289);
+  await expect(settings.getByRole("checkbox")).toHaveCount(4);
+  for (const checkbox of await settings.getByRole("checkbox").all()) {
+    await checkbox.check();
+    await expect(checkbox).toBeChecked();
+    await checkbox.uncheck();
+    await expect(checkbox).not.toBeChecked();
+  }
+  await page.keyboard.press("Escape");
+  await expect(settings).toBeHidden();
+
+  await graph.getByRole("button", { name: "Diminuir zoom" }).click();
+  await expect(canvas).toHaveCSS(
+    "transform",
+    /matrix\(0\.66666[0-9]*, 0, 0, 0\.66666[0-9]*, 0, 0\)/,
+  );
+  await graph.getByRole("button", { name: "Aumentar zoom" }).click();
+
+  const canvasBox = await canvas.boundingBox();
+  expect(canvasBox).toBeTruthy();
+  if (!canvasBox) return;
+  const startX = canvasBox.x + canvasBox.width / 2;
+  const startY = canvasBox.y + canvasBox.height / 2;
+  await page.mouse.move(startX, startY);
+  await page.mouse.down();
+  await page.mouse.move(startX + 42, startY + 28, { steps: 4 });
+  await page.mouse.up();
+  await expect(canvas).toHaveAttribute(
+    "style",
+    /translate\(42px, 28px\) scale\(1\)/,
+  );
+
+  await graph.getByRole("button", { name: "Centralizar grafo" }).click();
+  await expect(canvas).toHaveAttribute(
+    "style",
+    /translate\(0px, 0px\) scale\(1\)/,
+  );
+  expect(errors).toEqual([]);
+});
+
+test("Page Customize exposes every reference action and persists property outcomes", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 1294, height: 912 });
+  const errors = await openWorkspace(page);
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Customizable page");
+
+  const main = page.locator('main[data-slot="app-shell-main"]');
+  const header = main.locator('[data-slot="workspace-object-page-header"]');
+  const customize = main.getByRole("button", { name: "Personalizar" });
+  const actionNames = [
+    "Gerar Título",
+    "Adicionar Descrição",
+    "Preencher Descrição",
+    "Adicionar Aliases",
+    "Preencher Aliases",
+    "Adicionar Imagem de Capa",
+    "Preencher Todas as Propriedades",
+  ] as const;
+
+  async function openCustomize() {
+    await header.hover();
+    await customize.click();
+    const menu = page.getByRole("menu", { name: "Personalizar" });
+    await expect(menu.getByRole("menuitem")).toHaveCount(7);
+    return menu;
+  }
+
+  let menu = await openCustomize();
+  await page.waitForTimeout(150);
+  const menuBox = await menu.boundingBox();
+  expect(menuBox?.width).toBeGreaterThanOrEqual(276);
+  expect(menuBox?.width).toBeLessThanOrEqual(278);
+  for (const name of actionNames) {
+    await expect(menu.getByRole("menuitem", { name })).toBeVisible();
+  }
+  await page.keyboard.press("Escape");
+
+  for (const name of actionNames.filter(
+    (name) => name !== "Adicionar Imagem de Capa",
+  )) {
+    menu = await openCustomize();
+    await menu.getByRole("menuitem", { name }).click();
+  }
+
+  const fileChooserPromise = page.waitForEvent("filechooser");
+  menu = await openCustomize();
+  await menu
+    .getByRole("menuitem", { name: "Adicionar Imagem de Capa" })
+    .click();
+  const fileChooser = await fileChooserPromise;
+  await fileChooser.setFiles([]);
+
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      return entities.find(
+        (candidate: { title: string }) =>
+          candidate.title === "Customizable page",
+      );
+    })
+    .toMatchObject({
+      aliases: ["Customizable page"],
+      description: "Customizable page",
+    });
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  expect(
+    (await persistedEntities(page)).find(
+      (candidate: { title: string }) => candidate.title === "Customizable page",
+    ),
+  ).toMatchObject({
+    aliases: ["Customizable page"],
+    description: "Customizable page",
+  });
   expect(errors).toEqual([]);
 });
 
@@ -514,8 +699,12 @@ test("empty Table layout keeps table structure and primary empty actions", async
     .click();
   const workspace = objectTypeWorkspace(page);
   await expect(workspace).toBeVisible();
-  await workspace.getByRole("tab", { name: "Visão geral", exact: true }).click();
-  await expect(workspace.locator('[data-slot="object-type-overview"]')).toBeVisible();
+  await workspace
+    .getByRole("tab", { name: "Visão geral", exact: true })
+    .click();
+  await expect(
+    workspace.locator('[data-slot="object-type-overview"]'),
+  ).toBeVisible();
   await expect(workspace).toContainText(
     "Os objetos que você acessou recentemente aparecerão aqui.",
   );
@@ -566,7 +755,9 @@ test("Page embed action persists a schema-valid paragraph embed", async ({
     .getByRole("button", { name: /^Vincular / })
     .first()
     .click();
-  await workspace.getByRole("button", { name: "Incorporar", exact: true }).click();
+  await workspace
+    .getByRole("button", { name: "Incorporar", exact: true })
+    .click();
 
   await expect
     .poll(async () => {
@@ -577,14 +768,13 @@ test("Page embed action persists a schema-valid paragraph embed", async ({
       const lastNode = source?.body?.doc?.content?.at(-1);
       return {
         childType: lastNode?.content?.[0]?.type,
-        linkMarkType:
-          source?.body?.doc?.content
-            ?.flatMap((node: { content?: { marks?: { type: string }[] }[] }) =>
+        linkMarkType: source?.body?.doc?.content
+          ?.flatMap(
+            (node: { content?: { marks?: { type: string }[] }[] }) =>
               node.content ?? [],
-            )
-            .flatMap((node: { marks?: { type: string }[] }) => node.marks ?? [])
-            .find((mark: { type: string }) => mark.type === "objectLink")
-            ?.type,
+          )
+          .flatMap((node: { marks?: { type: string }[] }) => node.marks ?? [])
+          .find((mark: { type: string }) => mark.type === "objectLink")?.type,
         topLevelType: lastNode?.type,
       };
     })

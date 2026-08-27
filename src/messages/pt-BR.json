@@ -97,6 +97,7 @@
       "fillAliases": "Preencher Aliases",
       "fillDescription": "Preencher Descrição",
       "fillProperties": "Preencher Todas as Propriedades",
+      "generateTitle": "Gerar Título",
       "findPage": "Encontrar na Página",
       "iconReady": "O seletor de ícone será aberto aqui.",
       "import": "Importar",
@@ -107,8 +108,11 @@
       "newCollectionNamed": "Novo ‘{collection}’",
       "untitledCollection": "Sem título",
       "noCollections": "Nenhuma coleção encontrada",
+      "noTags": "Nenhuma etiqueta encontrada",
       "pinSidebar": "Fixar na Barra Lateral",
       "pinned": "Fixado na barra lateral.",
+      "shared": "Link do objeto copiado.",
+      "stats": "{words} palavras",
       "present": "Apresentar",
       "presentHint": "Modo de apresentação preparado.",
       "searchAllTags": "Procurar todos(as) Etiquetas",
@@ -137,6 +141,43 @@
       "relatedContent": "Conteúdo relacionado",
       "relevantContent": "Conteúdo relevante",
       "title": "Explorar"
+    },
+    "graph": {
+      "completedTasks": "Mostrar tarefas concluídas",
+      "dates": "Ocultar datas",
+      "excludeObjectTypes": "Excluir tipos de objeto",
+      "fit": "Centralizar grafo",
+      "highLinkObjects": "Ocultar objetos com muitos links",
+      "settings": "Configurações do grafo",
+      "showLess": "Mostrar menos",
+      "showMore": "Mostrar mais",
+      "simplified": "Mostrar gráfico simplificado",
+      "zoomIn": "Aumentar zoom",
+      "zoomOut": "Diminuir zoom"
+    },
+    "calendar": {
+      "date": "Data do calendário",
+      "day": "Dia do calendário {date}",
+      "dayTitle": "Dia",
+      "dailyNote": "Nota diária",
+      "dailyNoteForDate": "Nota diária {date}",
+      "derivedItem": "Este item do calendário é derivado de uma referência.",
+      "entryKinds": {
+        "daily-note": "nota diária",
+        "date-reference": "referência de data",
+        "dated-object": "objeto datado",
+        "task": "tarefa"
+      },
+      "item": "item",
+      "reschedule": "Reagendar {title}",
+      "spans": {
+        "month": "mês",
+        "week": "semana",
+        "three-day": "três dias",
+        "day": "dia"
+      },
+      "timeline": "Linha do tempo",
+      "title": "Calendário"
     },
     "linking": {
       "convertMention": "Converter",
@@ -343,7 +384,9 @@
         "description": "O arquivo permanece neste dispositivo; apenas seus metadados são salvos.",
         "download": "Baixar",
         "name": "Nome",
+        "open": "Abrir PDF",
         "remove": "Remover",
+        "previewUnavailable": "A prévia será restaurada do armazenamento local quando os dados estiverem disponíveis.",
         "replace": "Substituir",
         "reselect": "Selecione o arquivo local novamente para restaurar a prévia.",
         "reselectAction": "Selecionar arquivo novamente",
@@ -459,6 +502,11 @@
       "noBacklinks": "Sem backlinks",
       "noMatchingObjects": "Nenhum objeto correspondente",
       "noMatchingObjectsDescription": "Os objetos que corresponderem a esta visão aparecerão aqui."
+    },
+    "sidebarPinned": {
+      "open": "Abrir",
+      "openInSidePanel": "Abrir no painel lateral",
+      "openInNewTab": "Abrir em nova aba"
     },
     "views": {
       "all": "Tudo",

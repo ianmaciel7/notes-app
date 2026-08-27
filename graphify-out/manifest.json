@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "src/components/app-shell.tsx": {
-    "mtime": 1787779771.067305,
-    "ast_hash": "06c04e1618450ee9d73caebdfe3cd817",
+    "mtime": 1787782000.700025,
+    "ast_hash": "cfe4ae0c706140e6ee8bb086c8d58d74",
     "semantic_hash": ""
   },
   "src/components/app-sidebar-object-type-studio.tsx": {
@@ -1815,8 +1815,8 @@
     "semantic_hash": ""
   },
   "src/components/workspace-object-page-view.tsx": {
-    "mtime": 1787781819.6716733,
-    "ast_hash": "8957c6a5bbd3d9a76fb4d9b61fc1d22f",
+    "mtime": 1787782490.0954375,
+    "ast_hash": "e302b8d7d1e3190d471036fef4094ae6",
     "semantic_hash": ""
   },
   "src/components/workspace-object-type-view.tsx": {

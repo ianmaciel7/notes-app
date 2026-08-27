@@ -358,10 +358,15 @@ function AppSidebarSection({
 function AppSidebarPinnedMenu({
   entity,
   onUnpin,
+  onOpen,
+  onOpenInSidePanel,
 }: {
   entity: AppSidebarPinnedEntity;
   onUnpin: () => void;
+  onOpen: () => void;
+  onOpenInSidePanel: () => void;
 }) {
+  const t = useTranslations("workspace");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -381,12 +386,16 @@ function AppSidebarPinnedMenu({
         sideOffset={8}
         className="w-64"
       >
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={onOpen}>
           <AppSidebarSourceIcon name="external" />
-          Abrir
+          {t("sidebarPinned.open")}
         </DropdownMenuItem>
-        <DropdownMenuItem>Abrir no painel lateral</DropdownMenuItem>
-        <DropdownMenuItem>Abrir em nova aba</DropdownMenuItem>
+        <DropdownMenuItem onClick={onOpenInSidePanel}>
+          {t("sidebarPinned.openInSidePanel")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onOpen}>
+          {t("sidebarPinned.openInNewTab")}
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onUnpin}>
           <AppSidebarPinOffIcon />
@@ -404,6 +413,7 @@ function AppSidebarPinnedRow({
   draggable,
   onSelect,
   onUnpin,
+  onOpenInSidePanel,
   onDragStart,
   onDrop,
 }: {
@@ -413,6 +423,7 @@ function AppSidebarPinnedRow({
   draggable: boolean;
   onSelect: () => void;
   onUnpin: () => void;
+  onOpenInSidePanel: () => void;
   onDragStart: () => void;
   onDrop: () => void;
 }) {
@@ -471,7 +482,12 @@ function AppSidebarPinnedRow({
           )}
         >
           <span className="ml-auto" />
-          <AppSidebarPinnedMenu entity={entity} onUnpin={onUnpin} />
+          <AppSidebarPinnedMenu
+            entity={entity}
+            onUnpin={onUnpin}
+            onOpen={onSelect}
+            onOpenInSidePanel={onOpenInSidePanel}
+          />
         </div>
       </div>
     </div>
@@ -1279,6 +1295,7 @@ type AppSidebarOverviewProps = {
   onPinnedEntitiesChange?: React.Dispatch<
     React.SetStateAction<AppSidebarPinnedEntity[]>
   >;
+  onOpenPinnedInSidePanel?: (entity: AppSidebarPinnedEntity) => void;
   onCustomSectionsChange?: React.Dispatch<
     React.SetStateAction<AppSidebarCustomSection[]>
   >;
@@ -1399,6 +1416,7 @@ function AppSidebarOverview({
   onUpdateObjectType,
   onDeleteObjectType,
   onPinnedEntitiesChange,
+  onOpenPinnedInSidePanel,
   onCustomSectionsChange,
   onCollectionAction,
 }: AppSidebarOverviewProps = {}) {
@@ -1521,6 +1539,9 @@ function AppSidebarOverview({
                 dragging={drag?.kind === "pinned" && drag.id === entity.id}
                 draggable={pinnedSort === "manual"}
                 onSelect={() => setActiveId(entity.id)}
+                onOpenInSidePanel={() =>
+                  onOpenPinnedInSidePanel?.(entity) ?? setActiveId(entity.id)
+                }
                 onUnpin={() =>
                   setPinned((current) =>
                     current.filter((item) => item.id !== entity.id),

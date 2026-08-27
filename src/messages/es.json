@@ -97,6 +97,7 @@
       "fillAliases": "Completar alias",
       "fillDescription": "Completar descripción",
       "fillProperties": "Completar todas las propiedades",
+      "generateTitle": "Generar título",
       "findPage": "Buscar en la página",
       "iconReady": "El selector de iconos se abrirá aquí.",
       "import": "Importar",
@@ -107,8 +108,11 @@
       "newCollectionNamed": "Nueva ‘{collection}’",
       "untitledCollection": "Sin título",
       "noCollections": "No se encontraron colecciones",
+      "noTags": "No se encontraron etiquetas",
       "pinSidebar": "Fijar en la barra lateral",
       "pinned": "Fijado en la barra lateral.",
+      "shared": "Enlace del objeto copiado.",
+      "stats": "{words} palabras",
       "present": "Presentar",
       "presentHint": "El modo presentación está listo.",
       "searchAllTags": "Buscar todas las etiquetas",
@@ -137,6 +141,43 @@
       "relatedContent": "Contenido relacionado",
       "relevantContent": "Contenido relevante",
       "title": "Explorar"
+    },
+    "graph": {
+      "completedTasks": "Mostrar tareas completadas",
+      "dates": "Ocultar fechas",
+      "excludeObjectTypes": "Excluir tipos de objeto",
+      "fit": "Centrar grafo",
+      "highLinkObjects": "Ocultar objetos con muchos enlaces",
+      "settings": "Configuración del grafo",
+      "showLess": "Mostrar menos",
+      "showMore": "Mostrar más",
+      "simplified": "Mostrar grafo simplificado",
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar"
+    },
+    "calendar": {
+      "date": "Fecha del calendario",
+      "day": "Día del calendario {date}",
+      "dayTitle": "Día",
+      "dailyNote": "Nota diaria",
+      "dailyNoteForDate": "Nota diaria {date}",
+      "derivedItem": "Este elemento del calendario se deriva de una referencia.",
+      "entryKinds": {
+        "daily-note": "nota diaria",
+        "date-reference": "referencia de fecha",
+        "dated-object": "objeto fechado",
+        "task": "tarea"
+      },
+      "item": "elemento",
+      "reschedule": "Reprogramar {title}",
+      "spans": {
+        "month": "mes",
+        "week": "semana",
+        "three-day": "tres días",
+        "day": "día"
+      },
+      "timeline": "Línea de tiempo",
+      "title": "Calendario"
     },
     "linking": {
       "convertMention": "Convertir",
@@ -343,7 +384,9 @@
         "description": "El archivo permanece en este dispositivo; solo se guardan sus metadatos.",
         "download": "Descargar",
         "name": "Nombre",
+        "open": "Abrir PDF",
         "remove": "Quitar",
+        "previewUnavailable": "La vista previa se restaurará desde el almacenamiento local cuando los datos estén disponibles.",
         "replace": "Reemplazar",
         "reselect": "Selecciona de nuevo el archivo local para restaurar la vista previa.",
         "reselectAction": "Seleccionar archivo de nuevo",
@@ -459,6 +502,11 @@
       "noBacklinks": "Sin backlinks",
       "noMatchingObjects": "No hay objetos coincidentes",
       "noMatchingObjectsDescription": "Los objetos que coincidan con esta vista aparecerán aquí."
+    },
+    "sidebarPinned": {
+      "open": "Abrir",
+      "openInSidePanel": "Abrir en el panel lateral",
+      "openInNewTab": "Abrir en una nueva pestaña"
     },
     "views": {
       "all": "Todo",

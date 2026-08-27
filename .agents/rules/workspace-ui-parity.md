@@ -52,6 +52,21 @@ When implementing the reference-style workspace, do not treat prototype/demo cod
 - Call sites may control placement through primitive props such as `side`, `align`, and offsets. A visual override is allowed only when current reference evidence proves a distinct pattern and the override is promoted to a named shared variant.
 - When changing a popup, compare it in the browser with the live canonical popup from the same area at the same viewport and add a focused source or component test that confirms both consumers use the shared contract.
 
+## Interaction parity protocol
+
+Treat every visible affordance as an interaction state machine, not as a screenshot. For each matching reference/local affordance, build an action matrix from the states that the control actually exposes:
+
+- Baseline: record DOM structure, accessible role/name, bounding rectangle, computed typography/colors/borders, enabled/disabled state, focusability, console errors, and relevant data/count/route state before interaction.
+- Pointer hover: move onto the whole primary target and each nested target; record reveal/opacity, background, border, icon, cursor, tooltip, submenu, geometry stability, and transition duration. Move away and confirm the state returns correctly.
+- Focus and keyboard: reach the control with Tab/Shift+Tab, record the focus ring and focus target, then exercise Enter, Space, arrows, Escape, and typeahead/search when supported. Verify the accessible name and focus recovery.
+- Click: click the primary target, nested action, disclosure arrow, and each visible option separately. Record navigation, selection, mutation, menu/dialog/popover opening, counts, active tab, and contextual-panel changes.
+- Open state: inspect popup/overlay DOM, role, placement, width/height, padding, row heights, initial focus, available options, empty/loading/error state, outside-click behavior, and Escape close behavior.
+- Post-click: after every accepted action, re-check the visible label/icon/selected or pressed state, route/tab, entity/content/count projection, related panel, and persisted data. Do not accept a click merely because an event fired.
+- Persistence and recovery: reload or reopen when persistence is promised; verify the result survives exactly once. Exercise cancel, unavailable/disabled, empty, invalid, rejected, and failed states when exposed, and verify no partial mutation.
+- Motion and stability: capture before/during/after transition states where motion exists, and repeat with reduced motion if supported. Check that hover/focus/click does not shift neighboring targets or create overflow.
+
+Compare the same state sequence at the same viewport in the live reference and localhost. Separate semantic data differences from UI differences; never delete or rewrite local entities just to make a screenshot match. Report `action -> expected reference state -> observed local state -> parity verdict -> evidence`, and identify untested states explicitly.
+
 ## Completion check
 
 Before finishing a workspace UI change, verify:

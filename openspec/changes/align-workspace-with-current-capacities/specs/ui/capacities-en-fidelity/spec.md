@@ -175,6 +175,14 @@ Object-type surfaces, with Table as the first acceptance slice, SHALL render and
 - **AND** Overview SHALL render recently opened, collections, and queries sections as applicable
 - **AND** All SHALL render the count and search/filter/sort/layout toolbar applicable to the selected type.
 
+#### Scenario: Atomic note type overview commands are exercised
+- **WHEN** the Atomic note type overview is opened from its workspace tab
+- **THEN** it SHALL render the type header, separate primary and disclosure New targets, Overview and All tabs, collapse and overflow controls, and the route-appropriate graph panel
+- **AND WHEN** search, filter, sort, grouping, or layout is activated
+- **THEN** the named input, criterion row, grouping row, or layout menu SHALL appear and produce its corresponding projection state
+- **AND** Escape SHALL close transient search, filter, sort, creation, overflow, and layout surfaces without creating an object or changing persisted counts
+- **AND** list and gallery selections SHALL produce visibly distinct projections while retaining the same local objects.
+
 #### Scenario: Search, filter, sort, and layout controls are used
 - **WHEN** the user activates search, filter, sort, list, gallery, or table controls
 - **THEN** each command SHALL expose its named criterion or layout and update the visible projection
@@ -210,6 +218,17 @@ The contextual panel SHALL render content selected by its tab, menu, or Explore 
 - **THEN** the panel header and body SHALL both switch to the selected contextual view
 - **AND** the view SHALL receive the active object or object-type context
 - **AND** the same dispatch contract SHALL apply on desktop and mobile overlays.
+
+#### Scenario: Contextual graph controls are exercised
+- **WHEN** the graph view is active for an object
+- **THEN** the active object SHALL render as the centered node and related local objects SHALL render only when the expanded relation state permits them
+- **AND** Show less SHALL hide related nodes without changing canonical relations
+- **AND** Show more SHALL restore the available related nodes
+- **AND** graph settings SHALL expose completed-task, high-link-object, date, and simplified-graph toggles whose checked states are reversible and do not mutate workspace objects
+- **AND** center, zoom out, and zoom in SHALL update the rendered canvas while preserving the active object and relation data
+- **AND** pointer dragging SHALL pan the rendered canvas without mutating object or relation data, and center SHALL restore its neutral translation
+- **AND WHEN** the graph view is active for an object-type overview with no active object node
+- **THEN** the canvas SHALL remain empty while the graph controls remain reachable and functional.
 
 #### Scenario: Explore actions are route-sensitive
 - **WHEN** Explore renders for an object-type overview, object editor, or another supported route

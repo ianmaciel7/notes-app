@@ -1,6 +1,7 @@
 "use client";
 
 import { DownloadIcon, UploadIcon } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 
@@ -16,7 +17,7 @@ import {
   objectTypeDefinitionById,
 } from "@/components/object-icons";
 import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   workspaceOverflowMenuContentClass,
   workspaceOverflowMenuItemClass,
@@ -38,6 +39,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -132,7 +136,7 @@ function BufferedTitle({
       data-lifecycle-contract={objectLifecycleContractSlots.EditableObjectTitle}
       aria-label={label}
       placeholder={label}
-      className="mt-4 block min-h-[44px] w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-foreground outline-none placeholder:text-muted-foreground/50"
+      className="mt-4 block min-h-[39px] w-full bg-transparent text-[30px] font-bold leading-[33px] tracking-[-0.02em] text-foreground outline-none placeholder:text-muted-foreground/50"
     />
   );
 }
@@ -195,12 +199,8 @@ function ObjectPageHeader({
   readonly structure: WorkspaceStructure;
 }) {
   const t = useTranslations("workspace");
-  const {
-    changeWorkspaceEntityType,
-    objectTypes,
-    selectEntity,
-    structures,
-  } = useWorkspace();
+  const { changeWorkspaceEntityType, objectTypes, selectEntity, structures } =
+    useWorkspace();
   const definition =
     objectTypeDefinitionById[structure.iconName] ??
     objectTypeDefinitionById.page;
@@ -376,32 +376,49 @@ function ObjectPageTypePickerTrigger({
 }
 
 function DocumentMoreMenu({
+  onChangeType,
   onCustomize,
   onDelete,
+  onDuplicate,
+  onEditCollections,
   onExport,
   onImport,
+  onPin,
+  onPresent,
+  onShare,
+  onStats,
+  onTypeSettings,
+  onUseTemplate,
+  onCopy,
 }: {
   readonly onCustomize: () => void;
+  readonly onChangeType: () => void;
   readonly onDelete: () => void;
+  readonly onDuplicate: () => void;
+  readonly onEditCollections: () => void;
   readonly onExport: () => void;
   readonly onImport: () => void;
+  readonly onPin: () => void;
+  readonly onPresent: () => void;
+  readonly onShare: () => void;
+  readonly onStats: () => void;
+  readonly onTypeSettings: () => void;
+  readonly onUseTemplate: () => void;
+  readonly onCopy: () => void;
 }) {
   const t = useTranslations("workspace");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            aria-label={t("actions.moreOptions")}
-            className="h-[30px] w-[30px] rounded-lg border border-border"
-          >
-            <AppSidebarDotsIcon className="size-4" />
-          </Button>
-        }
-      />
+        type="button"
+        aria-label={t("actions.moreOptions")}
+        className={cn(
+          buttonVariants({ variant: "ghost", size: "icon-sm" }),
+          "h-[30px] w-[30px] rounded-lg border border-border",
+        )}
+      >
+        <AppSidebarDotsIcon className="size-4" />
+      </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
         sideOffset={5}
@@ -410,12 +427,38 @@ function DocumentMoreMenu({
           "w-[269px] min-w-[269px] p-1.5",
         )}
       >
-        <DropdownMenuItem
-          className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
-          onClick={onCustomize}
-        >
-          {t("actions.customize")}
-        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger
+            className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+          >
+            {t("actions.customize")}
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuItem
+              className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+              onClick={onCustomize}
+            >
+              {t("documentMenu.customizeHint")}
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        {[
+          ["useTemplate", onUseTemplate],
+          ["editCollections", onEditCollections],
+          ["pinSidebar", onPin],
+          ["changeType", onChangeType],
+          ["typeSettings", onTypeSettings],
+          ["share", onShare],
+          ["present", onPresent],
+        ].map(([key, handler]) => (
+          <DropdownMenuItem
+            key={key as string}
+            className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+            onClick={handler as () => void}
+          >
+            {t(`documentMenu.${key as string}`)}
+          </DropdownMenuItem>
+        ))}
         <DropdownMenuItem
           className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
           onClick={onExport}
@@ -432,6 +475,19 @@ function DocumentMoreMenu({
           {t("documentMenu.import")}
           <DropdownMenuShortcut>CtrlI</DropdownMenuShortcut>
         </DropdownMenuItem>
+        {[
+          ["textStats", onStats],
+          ["copy", onCopy],
+          ["duplicate", onDuplicate],
+        ].map(([key, handler]) => (
+          <DropdownMenuItem
+            key={key as string}
+            className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+            onClick={handler as () => void}
+          >
+            {t(`documentMenu.${key as string}`)}
+          </DropdownMenuItem>
+        ))}
         <DropdownMenuItem
           variant="destructive"
           className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
@@ -453,16 +509,26 @@ function ObjectPageTags({
 }) {
   const t = useTranslations("workspace");
   const { createdEntities } = useWorkspace();
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
   const tags = entityTags(entity);
   const tagNamesById = new Map(
     createdEntities
       .filter((item) => item.kind === "tag")
       .map((item) => [item.id, item.title.trim() || item.id]),
   );
+  const availableTags = createdEntities.filter(
+    (item) =>
+      item.kind === "tag" &&
+      !tags.includes(item.id) &&
+      (item.title.trim() || item.id)
+        .toLocaleLowerCase()
+        .includes(query.trim().toLocaleLowerCase()),
+  );
   return (
     <div
       data-slot="workspace-object-page-tags"
-      className="mt-3 flex min-h-7 flex-wrap items-center gap-1.5"
+      className="mt-2 flex min-h-5 flex-wrap items-center gap-1.5"
     >
       {tags.map((tagId) => (
         <button
@@ -479,30 +545,62 @@ function ObjectPageTags({
           <span className="truncate">{tagNamesById.get(tagId) ?? tagId}</span>
         </button>
       ))}
-      <label className="inline-flex min-w-0 items-center gap-1.5 px-1 text-sm text-muted-foreground">
-        <ObjectTagIcon className="size-3.5" />
-        <select
-          aria-label={t("fields.tags")}
-          multiple
-          value={tags}
-          className="min-w-0 bg-transparent outline-none"
-          onChange={(event) =>
-            update({
-              tags: Array.from(event.currentTarget.selectedOptions).map(
-                (option) => option.value,
-              ),
-            })
+      <Popover
+        open={open}
+        onOpenChange={(nextOpen) => {
+          setOpen(nextOpen);
+          if (!nextOpen) setQuery("");
+        }}
+      >
+        <PopoverTrigger
+          nativeButton={false}
+          render={
+            <label className="inline-flex min-w-0 items-center gap-1.5 rounded-md px-1 text-sm text-muted-foreground hover:bg-muted/70">
+              <ObjectTagIcon className="size-3.5" />
+              <input
+                aria-label={t("fields.tags")}
+                placeholder={t("fields.tags")}
+                value={query}
+                onFocus={() => setOpen(true)}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setOpen(true);
+                }}
+                className="w-[62px] min-w-0 bg-transparent leading-[1.3] outline-none placeholder:text-muted-foreground"
+              />
+            </label>
           }
-        >
-          {createdEntities
-            .filter((item) => item.kind === "tag")
-            .map((tag) => (
-              <option key={tag.id} value={tag.id}>
-                {tag.title.trim() || tag.id}
-              </option>
-            ))}
-        </select>
-      </label>
+        />
+        <PopoverContent align="start" sideOffset={5} className="w-64 p-1.5">
+          <input
+            aria-label={t("actions.search")}
+            placeholder={t("actions.search")}
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            className="mb-1 h-8 w-full rounded-lg bg-muted px-2 text-sm outline-none placeholder:text-muted-foreground"
+          />
+          {availableTags.length > 0 ? (
+            availableTags.map((tag) => (
+              <button
+                key={tag.id}
+                type="button"
+                onClick={() => {
+                  update({ tags: [...tags, tag.id] });
+                  setQuery("");
+                  setOpen(false);
+                }}
+                className="flex h-8 w-full items-center rounded-md px-2 text-left text-sm hover:bg-muted"
+              >
+                <span className="truncate">{tag.title.trim() || tag.id}</span>
+              </button>
+            ))
+          ) : (
+            <p className="px-2 py-2 text-sm text-muted-foreground">
+              {t("documentMenu.noTags")}
+            </p>
+          )}
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }
@@ -523,7 +621,9 @@ function ObjectPageCollections({
     (collection) => collection.structureId === entity.objectTypeId,
   );
   const visibleChoices = choices.filter((collection) =>
-    collection.name.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()),
+    collection.name
+      .toLocaleLowerCase()
+      .includes(query.trim().toLocaleLowerCase()),
   );
   const collectionNames = new Map(
     choices.map((collection) => [collection.id, collection.name]),
@@ -546,7 +646,9 @@ function ObjectPageCollections({
           className={collectionChipClass}
         >
           <ObjectCollectionIcon className="mr-1.5 size-3.5 shrink-0" />
-          <span className="truncate">{collectionNames.get(collectionId) ?? collectionId}</span>
+          <span className="truncate">
+            {collectionNames.get(collectionId) ?? collectionId}
+          </span>
         </button>
       ))}
       <Popover
@@ -589,7 +691,9 @@ function ObjectPageCollections({
               >
                 <span className="truncate">{collection.name}</span>
                 {collections.includes(collection.id) ? (
-                  <span className="ml-auto text-xs text-muted-foreground">✓</span>
+                  <span className="ml-auto text-xs text-muted-foreground">
+                    ✓
+                  </span>
                 ) : null}
               </button>
             ))
@@ -605,13 +709,61 @@ function ObjectPageCollections({
 }
 
 function PageCustomizeControl({
-  wideLayout,
-  onWideLayoutChange,
+  entity,
+  onAddCover,
+  onUpdate,
 }: {
-  readonly wideLayout: boolean;
-  readonly onWideLayoutChange: (wideLayout: boolean) => void;
+  readonly entity: DocumentWorkspaceEntity;
+  readonly onAddCover: () => void;
+  readonly onUpdate: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
+  const bodyText = blockEditorDocumentToMarkdown(entity.body).trim();
+  const generatedTitle =
+    bodyText
+      .split(/\r?\n/)
+      .find((line) => line.trim())
+      ?.trim()
+      .slice(0, 80) ?? entity.title.trim();
+  const generatedDescription =
+    bodyText.replace(/\s+/g, " ").trim().slice(0, 180) || entity.title.trim();
+  const generatedAliases = entity.title.trim() ? [entity.title.trim()] : [];
+  const actions = [
+    {
+      label: t("documentMenu.generateTitle"),
+      run: () => generatedTitle && onUpdate({ title: generatedTitle }),
+    },
+    {
+      label: t("documentMenu.addDescription"),
+      run: () => onUpdate({ description: entity.description ?? "" }),
+    },
+    {
+      label: t("documentMenu.fillDescription"),
+      run: () => onUpdate({ description: generatedDescription }),
+    },
+    {
+      label: t("documentMenu.addAliases"),
+      run: () => onUpdate({ aliases: entity.aliases ?? [] }),
+    },
+    {
+      label: t("documentMenu.fillAliases"),
+      run: () => onUpdate({ aliases: generatedAliases }),
+    },
+    { label: t("documentMenu.addCover"), run: onAddCover },
+    {
+      label: t("documentMenu.fillProperties"),
+      run: () =>
+        onUpdate({
+          ...(entity.title.trim() || !generatedTitle
+            ? {}
+            : { title: generatedTitle }),
+          aliases: entity.aliases?.length ? entity.aliases : generatedAliases,
+          description: entity.description?.trim()
+            ? entity.description
+            : generatedDescription,
+        }),
+    },
+  ];
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -628,17 +780,20 @@ function PageCustomizeControl({
           </Button>
         }
       />
-      <DropdownMenuContent align="end" sideOffset={5} className="w-52 p-1.5">
-        <DropdownMenuItem
-          className={workspaceOverflowMenuItemClass}
-          aria-checked={wideLayout}
-          onClick={() => onWideLayoutChange(!wideLayout)}
-        >
-          <span>{t("documentMenu.wideLayout")}</span>
-          <span className="ml-auto text-xs text-muted-foreground">
-            {wideLayout ? "✓" : ""}
-          </span>
-        </DropdownMenuItem>
+      <DropdownMenuContent
+        align="center"
+        sideOffset={5}
+        className="w-[277px] rounded-[12px] p-1.5 ring-0 shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)]"
+      >
+        {actions.map((action) => (
+          <DropdownMenuItem
+            key={action.label}
+            className={workspaceOverflowMenuItemClass}
+            onClick={action.run}
+          >
+            {action.label}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -851,13 +1006,30 @@ function WorkspacePropertyGroup({
   readonly updateProperty: EntityPropertyUpdate;
 }) {
   const editableProperties = structure.propertyDefinitions.filter(
-    (property) =>
-      property.writable &&
-      property.ownership !== "system" &&
-      !["title", "tags"].includes(property.id) &&
-      ["text", "number", "boolean", "date", "url", "entity"].includes(
-        property.valueType,
-      ),
+    (property) => {
+      const explicitlyAdded =
+        (property.id === "aliases" &&
+          "aliases" in entity &&
+          entity.aliases !== undefined) ||
+        (property.id === "description" &&
+          "description" in entity &&
+          entity.description !== undefined);
+      return (
+        property.writable &&
+        property.ownership !== "system" &&
+        !["title", "tags"].includes(property.id) &&
+        ["text", "number", "boolean", "date", "url", "entity"].includes(
+          property.valueType,
+        ) &&
+        !(
+          ["aliases", "description"].includes(property.id) &&
+          !explicitlyAdded &&
+          !propertyInputValue(
+            readWorkspaceEntityProperty(entity, property.id),
+          ).trim()
+        )
+      );
+    },
   );
   if (editableProperties.length === 0) return null;
   return (
@@ -1019,6 +1191,7 @@ function editorLabels(t: ReturnType<typeof useTranslations<"workspace">>) {
   };
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: reserved for the contextual panel, not the Page body
 function ReferencePanel({
   entity,
   update,
@@ -1312,10 +1485,15 @@ function DocumentPage({
 }) {
   const t = useTranslations("workspace");
   const importInputRef = React.useRef<HTMLInputElement>(null);
+  const coverInputRef = React.useRef<HTMLInputElement>(null);
   const [customizeOpen, setCustomizeOpen] = React.useState(false);
   const {
     createWorkspacePage,
     deleteWorkspaceEntity,
+    duplicateWorkspaceEntity,
+    setFocusMode,
+    setPinnedEntities,
+    selectEntity,
     setWorkspaceEntityPropertyValue,
     showMessage,
   } = useWorkspace();
@@ -1357,33 +1535,116 @@ function DocumentPage({
       <ObjectPageHeader
         entity={entity}
         structure={structure}
-        collectionsControl={<ObjectPageCollections entity={entity} update={update} />}
+        collectionsControl={
+          <ObjectPageCollections entity={entity} update={update} />
+        }
         customize={
           <PageCustomizeControl
-            wideLayout={entity.wideLayout === true}
-            onWideLayoutChange={(wideLayout) => update({ wideLayout })}
+            entity={entity}
+            onAddCover={() => coverInputRef.current?.click()}
+            onUpdate={update}
           />
         }
         menu={
           <DocumentMoreMenu
+            onChangeType={() => showMessage(t("documentMenu.changeType"))}
             onCustomize={() => setCustomizeOpen(true)}
             onDelete={() => deleteWorkspaceEntity(entity.id)}
+            onDuplicate={() => duplicateWorkspaceEntity(entity.id)}
+            onEditCollections={() =>
+              showMessage(t("documentMenu.collectionsHint"))
+            }
             onExport={exportMarkdown}
             onImport={() => importInputRef.current?.click()}
+            onPin={() => {
+              const Icon =
+                objectTypeDefinitionById[structure.iconName]?.icon ??
+                objectTypeDefinitionById.page.icon;
+              setPinnedEntities((current) =>
+                current.some((item) => item.id === entity.id)
+                  ? current
+                  : [
+                      ...current,
+                      {
+                        id: entity.id,
+                        label: entity.title || t("objectTypeStudio.untitled"),
+                        icon: Icon,
+                        tone: structure.tone,
+                      },
+                    ],
+              );
+              showMessage(t("documentMenu.pinned"));
+            }}
+            onPresent={() => setFocusMode(true)}
+            onShare={() => {
+              void navigator.clipboard
+                ?.writeText(window.location.href)
+                .catch(() => undefined);
+              showMessage(t("documentMenu.shared"));
+            }}
+            onStats={() => {
+              const words = blockEditorDocumentToMarkdown(entity.body)
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean).length;
+              showMessage(t("documentMenu.stats", { words }));
+            }}
+            onTypeSettings={() => selectEntity(entity.objectTypeId)}
+            onUseTemplate={() => duplicateWorkspaceEntity(entity.id)}
+            onCopy={() => {
+              void navigator.clipboard
+                ?.writeText(blockEditorDocumentToMarkdown(entity.body))
+                .catch(() => undefined);
+              showMessage(t("documentMenu.copied"));
+            }}
           />
         }
       />
+      <input
+        ref={coverInputRef}
+        type="file"
+        accept="image/*"
+        aria-label={t("documentMenu.addCover")}
+        className="hidden"
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.addEventListener("load", () => {
+            if (typeof reader.result === "string") {
+              update({ coverImage: reader.result });
+            }
+          });
+          reader.readAsDataURL(file);
+          event.target.value = "";
+        }}
+      />
+      {entity.coverImage ? (
+        <Image
+          src={entity.coverImage}
+          alt=""
+          width={768}
+          height={160}
+          unoptimized
+          data-slot="workspace-object-cover"
+          className="mt-3 h-40 w-full rounded-xl object-cover"
+        />
+      ) : null}
       <Dialog open={customizeOpen} onOpenChange={setCustomizeOpen}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
             <DialogTitle>{t("actions.customize")}</DialogTitle>
-            <DialogDescription>{t("documentMenu.wideLayout")}</DialogDescription>
+            <DialogDescription>
+              {t("documentMenu.wideLayout")}
+            </DialogDescription>
           </DialogHeader>
           <Button
             type="button"
             variant={entity.wideLayout === true ? "default" : "outline"}
             aria-pressed={entity.wideLayout === true}
-            onClick={() => update({ wideLayout: !(entity.wideLayout === true) })}
+            onClick={() =>
+              update({ wideLayout: !(entity.wideLayout === true) })
+            }
           >
             {t("documentMenu.wideLayout")}
           </Button>
@@ -1418,7 +1679,7 @@ function DocumentPage({
           value={entity.body}
           onChange={(body) => update({ body })}
           onCreatePageRequest={createWorkspacePage}
-          className="mt-24 min-h-48"
+          className="mt-4 min-h-48"
           labels={{
             bold: t("editor.bold"),
             italic: t("editor.italic"),
@@ -1456,8 +1717,6 @@ function DocumentPage({
         className="hidden"
         onChange={(event) => void importMarkdown(event.target.files?.[0])}
       />
-      <ReferencePanel entity={entity} update={update} />
-      <RelatedContent entityId={entity.id} />
     </>
   );
 }
@@ -1472,7 +1731,15 @@ function TablePage({
   readonly update: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
-  const { setWorkspaceEntityPropertyValue } = useWorkspace();
+  const {
+    deleteWorkspaceEntity,
+    duplicateWorkspaceEntity,
+    selectEntity,
+    setFocusMode,
+    setPinnedEntities,
+    setWorkspaceEntityPropertyValue,
+    showMessage,
+  } = useWorkspace();
   const cells = [...entity.cells].sort(
     (left, right) => left.row - right.row || left.column - right.column,
   );
@@ -1481,7 +1748,76 @@ function TablePage({
       <ObjectPageHeader
         entity={entity}
         structure={structure}
-        collectionsControl={<ObjectPageCollections entity={entity} update={update} />}
+        collectionsControl={
+          <ObjectPageCollections entity={entity} update={update} />
+        }
+        menu={
+          <DocumentMoreMenu
+            onChangeType={() => showMessage(t("documentMenu.changeType"))}
+            onCustomize={() => showMessage(t("documentMenu.customizeHint"))}
+            onDelete={() => deleteWorkspaceEntity(entity.id)}
+            onDuplicate={() => duplicateWorkspaceEntity(entity.id)}
+            onEditCollections={() =>
+              showMessage(t("documentMenu.collectionsHint"))
+            }
+            onExport={() => {
+              const source = entity.cells
+                .map(
+                  (cell) => `${cell.row + 1},${cell.column + 1},${cell.value}`,
+                )
+                .join("\n");
+              const url = URL.createObjectURL(
+                new Blob([source], { type: "text/csv" }),
+              );
+              const anchor = document.createElement("a");
+              anchor.href = url;
+              anchor.download = `${entity.title || "table"}.csv`;
+              anchor.click();
+              URL.revokeObjectURL(url);
+              showMessage(t("documentMenu.exported"));
+            }}
+            onImport={() => showMessage(t("documentMenu.imported"))}
+            onPin={() => {
+              const Icon =
+                objectTypeDefinitionById[structure.iconName]?.icon ??
+                objectTypeDefinitionById.table.icon;
+              setPinnedEntities((current) =>
+                current.some((item) => item.id === entity.id)
+                  ? current
+                  : [
+                      ...current,
+                      {
+                        id: entity.id,
+                        label: entity.title || t("objectTypeStudio.untitled"),
+                        icon: Icon,
+                        tone: structure.tone,
+                      },
+                    ],
+              );
+              showMessage(t("documentMenu.pinned"));
+            }}
+            onPresent={() => setFocusMode(true)}
+            onShare={() => {
+              void navigator.clipboard
+                ?.writeText(window.location.href)
+                .catch(() => undefined);
+              showMessage(t("documentMenu.shared"));
+            }}
+            onStats={() =>
+              showMessage(
+                t("documentMenu.stats", { words: entity.cells.length }),
+              )
+            }
+            onTypeSettings={() => selectEntity(entity.objectTypeId)}
+            onUseTemplate={() => duplicateWorkspaceEntity(entity.id)}
+            onCopy={() => {
+              void navigator.clipboard
+                ?.writeText(entity.cells.map((cell) => cell.value).join("\t"))
+                .catch(() => undefined);
+              showMessage(t("documentMenu.copied"));
+            }}
+          />
+        }
       />
       <BufferedTitle
         label={t("fields.title")}

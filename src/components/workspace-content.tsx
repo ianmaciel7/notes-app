@@ -21,6 +21,8 @@ import {
   Trash2Icon,
   UploadIcon,
   WandSparklesIcon,
+  ZoomInIcon,
+  ZoomOutIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import * as React from "react";
@@ -53,7 +55,7 @@ import {
 import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import { ObjectTypeToolbarIcon } from "@/components/object-type-toolbar-icon";
 import { MediaAssetRenderer } from "@/components/object-view-preview";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   workspaceOverflowMenuContentClass,
   workspaceOverflowMenuItemClass,
@@ -83,7 +85,6 @@ import {
 import { floatingSearchListItemClass } from "@/components/ui/shared-styles";
 import { Textarea } from "@/components/ui/textarea";
 import { useWorkspace } from "@/components/workspace-controller";
-import { projectWorkspaceGraph } from "@/lib/workspace-graph";
 import {
   blockEditorDocumentFromMarkdown,
   blockEditorDocumentFromPlainText,
@@ -103,9 +104,11 @@ import {
   selectWorkspaceCollectionRecordsForStructure,
   type WorkspaceCollectionRecord,
 } from "@/lib/workspace-domain-identities";
+import { projectWorkspaceGraph } from "@/lib/workspace-graph";
 import {
   createWorkspaceObjectLinkIndex,
   selectBacklinksForObject,
+  selectObjectsInside,
 } from "@/lib/workspace-object-links";
 import {
   acceptsFileForType,
@@ -120,11 +123,30 @@ import {
 } from "@/lib/workspace-objects";
 
 function AtomicNotesWorkspace() {
+  const t = useTranslations("workspace");
   const { mainTabs, mainValue, activeAction, objectTypes, createdEntities } =
     useWorkspace();
-  const navigationAction = activeAction ?? primaryActionFromMainValue(mainValue);
+  const navigationAction =
+    activeAction ?? primaryActionFromMainValue(mainValue);
   const activeTab = mainTabs.find((tab) => tab.id === mainValue);
   const activeObjectType = objectTypes.find((item) => item.id === mainValue);
+  const activePresetObjectType: AppSidebarObjectType | undefined =
+    !activeObjectType && mainValue === "atomic-note"
+      ? {
+          id: "atomic-note",
+          label:
+            activeTab?.label ??
+            t("objectTypeStudio.objectTypePlurals.atomic-note"),
+          singularLabel: t("objectTypeStudio.objectTypes.atomic-note"),
+          icon: objectTypeDefinitionById["atomic-note"].icon,
+          iconName: "atomic-note",
+          ownership: "legacy",
+          tone: objectTypeDefinitionById["atomic-note"].tone,
+          count: createdEntities.filter(
+            (entity) => entity.objectTypeId === "atomic-note",
+          ).length,
+        }
+      : undefined;
   const activeCreatedEntity = createdEntities.find(
     (entity) => entity.id === mainValue,
   );
@@ -148,8 +170,14 @@ function AtomicNotesWorkspace() {
     return <CreatedObjectWorkspace entity={activeCreatedEntity} />;
   }
 
-  if (activeObjectType) {
-    return <ObjectTypeWorkspace objectType={activeObjectType} />;
+  const renderedObjectType = activeObjectType ?? activePresetObjectType;
+  if (renderedObjectType) {
+    return (
+      <ObjectTypeWorkspace
+        objectType={renderedObjectType}
+        presetId={activePresetObjectType ? "atomic-note" : undefined}
+      />
+    );
   }
 
   if (activeNamedItem) {
@@ -182,6 +210,7 @@ function todayInputValue() {
 const calendarSpans = ["month", "week", "three-day", "day"] as const;
 
 function CalendarWorkspace() {
+  const t = useTranslations("workspace");
   const {
     createOrAppendDailyNote,
     createdEntities,
@@ -226,7 +255,7 @@ function CalendarWorkspace() {
       );
       return;
     }
-    showMessage("This calendar item is derived from a reference.");
+    showMessage(t("calendar.derivedItem"));
   }
 
   return (
@@ -237,12 +266,14 @@ function CalendarWorkspace() {
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
         <div className="flex min-w-0 items-center gap-2">
           <CalendarDaysIcon className="size-5 text-muted-foreground" />
-          <h1 className="truncate text-lg font-semibold">Calendar</h1>
+          <h1 className="truncate text-lg font-semibold">
+            {t("calendar.title")}
+          </h1>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Input
             type="date"
-            aria-label="Calendar date"
+            aria-label={t("calendar.date")}
             value={date}
             onChange={(event) =>
               setDate(event.target.value || todayInputValue())
@@ -263,13 +294,13 @@ function CalendarWorkspace() {
                     : "bg-background text-muted-foreground hover:bg-muted",
                 )}
               >
-                {item.replace("-", " ")}
+                {t(`calendar.spans.${item}`)}
               </button>
             ))}
           </div>
           <Button type="button" size="sm" onClick={openDailyNote}>
             <FilePenLineIcon className="size-4" />
-            Daily note
+            {t("calendar.dailyNote")}
           </Button>
         </div>
       </div>
@@ -287,7 +318,7 @@ function CalendarWorkspace() {
               <section
                 key={day.date}
                 className="min-h-32 bg-background p-3"
-                aria-label={`Calendar day ${day.date}`}
+                aria-label={t("calendar.day", { date: day.date })}
               >
                 <div className="text-xs font-medium text-muted-foreground">
                   {day.date}
@@ -307,7 +338,7 @@ function CalendarWorkspace() {
           </div>
         </div>
         <aside className="min-h-0 overflow-auto border-l border-border pl-5">
-          <h2 className="text-sm font-semibold">Day</h2>
+          <h2 className="text-sm font-semibold">{t("calendar.dayTitle")}</h2>
           <button
             type="button"
             className="mt-2 block text-left text-sm font-medium hover:underline"
@@ -317,10 +348,11 @@ function CalendarWorkspace() {
                 : openDailyNote()
             }
           >
-            {dayContext.dailyNote?.title || `Daily note ${date}`}
+            {dayContext.dailyNote?.title ||
+              t("calendar.dailyNoteForDate", { date })}
           </button>
           <h3 className="mt-5 text-xs font-semibold uppercase text-muted-foreground">
-            Timeline
+            {t("calendar.timeline")}
           </h3>
           <div className="mt-2 space-y-1">
             {dayContext.timeline.map((entry) => (
@@ -347,6 +379,7 @@ function CalendarEntryRow({
   readonly onOpen: () => void;
   readonly onReschedule: (date: string) => void;
 }) {
+  const t = useTranslations("workspace");
   const canReschedule = entry.kind === "task" || entry.kind === "dated-object";
   return (
     <div className="group flex min-h-9 items-center gap-2 rounded-md px-2 py-1 text-sm hover:bg-muted">
@@ -358,12 +391,14 @@ function CalendarEntryRow({
         {entry.title || "Untitled"}
       </button>
       <span className="shrink-0 rounded-sm bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground">
-        {entry.kind.replace("-", " ")}
+        {t(`calendar.entryKinds.${entry.kind}`)}
       </span>
       {canReschedule ? (
         <Input
           type="date"
-          aria-label={`Reschedule ${entry.title || "item"}`}
+          aria-label={t("calendar.reschedule", {
+            title: entry.title || t("calendar.item"),
+          })}
           value={entry.date}
           onChange={(event) => onReschedule(event.target.value)}
           className="h-7 w-32 opacity-80 group-hover:opacity-100"
@@ -851,6 +886,7 @@ function DocumentObjectEditor({
     objectTypeCollections,
     pinnedEntities,
     selectEntity,
+    setFocusMode,
     setPinnedEntities,
     showMessage,
   } = useWorkspace();
@@ -1069,13 +1105,41 @@ function DocumentObjectEditor({
           <DocumentMoreMenu
             isPinned={isPinned}
             onChangeType={changeType}
+            onCustomize={() => {
+              setWideLayout((current) => !current);
+              showMessage(t("documentMenu.customizeHint"));
+            }}
             onDelete={() => deleteWorkspaceEntity(entity.id)}
             onDuplicate={() => duplicateWorkspaceEntity(entity.id)}
+            onEditCollections={() =>
+              showMessage(t("documentMenu.collectionsHint"))
+            }
             onExport={exportMarkdown}
             onFind={() => setFindOpen(true)}
             onImport={() => importInputRef.current?.click()}
             onPin={togglePin}
-            onShowMessage={(key) => showMessage(t(key))}
+            onPresent={() => setFocusMode(true)}
+            onShare={() => {
+              void navigator.clipboard
+                ?.writeText(window.location.href)
+                .catch(() => undefined);
+              showMessage(t("documentMenu.shared"));
+            }}
+            onStats={() => {
+              const words = blockEditorDocumentToMarkdown(entity.body)
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean).length;
+              showMessage(t("documentMenu.stats", { words }));
+            }}
+            onTypeSettings={() => selectEntity(entity.objectTypeId)}
+            onUseTemplate={() => duplicateWorkspaceEntity(entity.id)}
+            onCopy={() => {
+              void navigator.clipboard
+                ?.writeText(blockEditorDocumentToMarkdown(entity.body))
+                .catch(() => undefined);
+              showMessage(t("documentMenu.copied"));
+            }}
           />
         </div>
         <EntityTitleField title={entity.title} update={update} />
@@ -1416,17 +1480,13 @@ function CustomizeDocumentMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={
-          <button
-            type="button"
-            className="pointer-events-none flex h-[26px] max-w-full min-w-0 items-center gap-1.5 rounded-[0.475em] border border-transparent bg-transparent px-2 pr-1 text-sm text-sidebar-foreground opacity-0 transition-opacity duration-200 hover:bg-muted/70 group-hover/page-view-header:pointer-events-auto group-hover/page-view-header:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100"
-          >
-            <Settings2Icon className="size-3.5 shrink-0" />
-            <span className="truncate">{t("actions.customize")}</span>
-            <AppHeaderCaretDownIcon className="size-3.5 shrink-0" />
-          </button>
-        }
-      />
+        type="button"
+        className="pointer-events-none flex h-[26px] max-w-full min-w-0 items-center gap-1.5 rounded-[0.475em] border border-transparent bg-transparent px-2 pr-1 text-sm text-sidebar-foreground opacity-0 transition-opacity duration-200 hover:bg-muted/70 group-hover/page-view-header:pointer-events-auto group-hover/page-view-header:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100"
+      >
+        <Settings2Icon className="size-3.5 shrink-0" />
+        <span className="truncate">{t("actions.customize")}</span>
+        <AppHeaderCaretDownIcon className="size-3.5 shrink-0" />
+      </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
         sideOffset={5}
@@ -1545,40 +1605,51 @@ function TypeChangeSubmenu({
 function DocumentMoreMenu({
   isPinned,
   onChangeType,
+  onCustomize,
   onDelete,
   onDuplicate,
+  onEditCollections,
   onExport,
   onFind,
   onImport,
   onPin,
-  onShowMessage,
+  onPresent,
+  onShare,
+  onStats,
+  onTypeSettings,
+  onUseTemplate,
+  onCopy,
 }: {
   isPinned: boolean;
   onChangeType: (id: "tag" | "task") => void;
+  onCustomize: () => void;
   onDelete: () => void;
   onDuplicate: () => void;
+  onEditCollections: () => void;
   onExport: () => void;
   onFind: () => void;
   onImport: () => void;
   onPin: () => void;
-  onShowMessage: (key: string) => void;
+  onPresent: () => void;
+  onShare: () => void;
+  onStats: () => void;
+  onTypeSettings: () => void;
+  onUseTemplate: () => void;
+  onCopy: () => void;
 }) {
   const t = useTranslations("workspace");
-  const action = (key: string) => () => onShowMessage(key);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            aria-label={t("actions.moreOptions")}
-            className="h-[26px] w-[26px] shrink-0 rounded-[0.475em] border border-border"
-          >
-            <AppSidebarDotsIcon className="size-4" />
-          </Button>
-        }
-      />
+        type="button"
+        aria-label={t("actions.moreOptions")}
+        className={cn(
+          buttonVariants({ variant: "ghost", size: "icon-sm" }),
+          "h-[26px] w-[26px] shrink-0 rounded-[0.475em] border border-border",
+        )}
+      >
+        <AppSidebarDotsIcon className="size-4" />
+      </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
         sideOffset={5}
@@ -1597,7 +1668,7 @@ function DocumentMoreMenu({
           <DropdownMenuSubContent className="w-[220px]">
             <DropdownMenuItem
               className={documentMenuItemClass}
-              onClick={action("documentMenu.customizeHint")}
+              onClick={onCustomize}
             >
               {t("documentMenu.customizeHint")}
             </DropdownMenuItem>
@@ -1612,7 +1683,7 @@ function DocumentMoreMenu({
           <DropdownMenuSubContent>
             <DropdownMenuItem
               className={documentMenuItemClass}
-              onClick={action("documentMenu.templateApplied")}
+              onClick={onUseTemplate}
             >
               {t("documentMenu.defaultTemplate")}
             </DropdownMenuItem>
@@ -1620,7 +1691,7 @@ function DocumentMoreMenu({
         </DropdownMenuSub>
         <DropdownMenuItem
           className={documentMenuItemClass}
-          onClick={action("documentMenu.collectionsHint")}
+          onClick={onEditCollections}
         >
           <ObjectCollectionIcon className="size-4" />
           {t("documentMenu.editCollections")}
@@ -1636,23 +1707,17 @@ function DocumentMoreMenu({
         <TypeChangeSubmenu onSelect={onChangeType} />
         <DropdownMenuItem
           className={documentMenuItemClass}
-          onClick={action("documentMenu.typeSettingsHint")}
+          onClick={onTypeSettings}
         >
           <Settings2Icon className="size-4" />
           {t("documentMenu.typeSettings")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className={documentMenuItemClass}
-          onClick={action("documentMenu.shareHint")}
-        >
+        <DropdownMenuItem className={documentMenuItemClass} onClick={onShare}>
           <Share2Icon className="size-4" />
           {t("documentMenu.share")}
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className={documentMenuItemClass}
-          onClick={action("documentMenu.presentHint")}
-        >
+        <DropdownMenuItem className={documentMenuItemClass} onClick={onPresent}>
           <PresentationIcon className="size-4" />
           {t("documentMenu.present")}
           <DropdownMenuShortcut>CtrlAltP</DropdownMenuShortcut>
@@ -1676,7 +1741,7 @@ function DocumentMoreMenu({
           <DropdownMenuSubContent>
             <DropdownMenuItem
               className={documentMenuItemClass}
-              onClick={action("documentMenu.statsHint")}
+              onClick={onStats}
             >
               {t("documentMenu.statsHint")}
             </DropdownMenuItem>
@@ -1691,7 +1756,7 @@ function DocumentMoreMenu({
           <DropdownMenuSubContent>
             <DropdownMenuItem
               className={documentMenuItemClass}
-              onClick={action("documentMenu.copied")}
+              onClick={onCopy}
             >
               <CopyIcon className="size-4" />
               {t("documentMenu.copyText")}
@@ -2304,13 +2369,16 @@ function parseObjectTypeNamedItemTabId(
 
 function ObjectTypeWorkspace({
   objectType,
+  presetId,
 }: {
   objectType: AppSidebarObjectType;
+  presetId?: string;
 }) {
   const t = useTranslations("workspace");
   const Icon = objectType.icon;
   const {
     createWorkspaceEntity,
+    createWorkspaceEntityFromPreset,
     createdEntities,
     importWorkspaceFiles,
     objectTypeCollections: collectionsByType,
@@ -2366,6 +2434,17 @@ function ObjectTypeWorkspace({
   React.useEffect(() => {
     if (searchOpen) searchInputRef.current?.focus();
   }, [searchOpen]);
+  React.useEffect(() => {
+    if (!filterOpen && !sortOpen) return;
+    function closeTransientRows(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      setFilterOpen(false);
+      setSortOpen(false);
+    }
+    window.addEventListener("keydown", closeTransientRows);
+    return () => window.removeEventListener("keydown", closeTransientRows);
+  }, [filterOpen, sortOpen]);
   const deferredSearchQuery = React.useDeferredValue(searchQuery);
   const recentEntities = React.useMemo(
     () =>
@@ -2397,6 +2476,10 @@ function ObjectTypeWorkspace({
   }
 
   function createObject() {
+    if (presetId) {
+      createWorkspaceEntityFromPreset(presetId);
+      return;
+    }
     createWorkspaceEntity(objectType.id, objectType.label);
   }
 
@@ -2797,9 +2880,15 @@ function ObjectTypeWorkspace({
               filterOpen={filterOpen}
               layout={layout}
               sortOpen={sortOpen}
-              onFilter={() => setFilterOpen((current) => !current)}
+              onFilter={() => {
+                setSortOpen(false);
+                setFilterOpen((current) => !current);
+              }}
               onLayout={setLayout}
-              onSort={() => setSortOpen((current) => !current)}
+              onSort={() => {
+                setFilterOpen(false);
+                setSortOpen((current) => !current);
+              }}
             />,
           )}
         </div>,
@@ -3988,17 +4077,153 @@ function OpenedTabWorkspace({ label }: { label: string }) {
 
 function ExploreWorkspace() {
   const t = useTranslations("workspace");
+  const {
+    activeEntityId,
+    createdEntities,
+    objectTypes,
+    openInSidePanel,
+    selectEntity,
+    setSideSearchOpen,
+    sideValue,
+  } = useWorkspace();
   const actions = [
     {
+      id: "graphView",
       label: t("explore.graphView"),
       icon: AppHeaderGraphIcon,
     },
-    { label: t("explore.backlinks"), icon: ObjectPageIcon },
-    { label: t("explore.objectsInside"), icon: ObjectAreaIcon },
-    { label: t("explore.relatedContent"), icon: ObjectCollectionIcon },
-    { label: t("explore.aiChat"), icon: ObjectAiChatIcon },
-    { label: t("actions.search"), icon: AppSidebarSearchIcon },
+    { id: "backlinks", label: t("explore.backlinks"), icon: ObjectPageIcon },
+    {
+      id: "objectsInside",
+      label: t("explore.objectsInside"),
+      icon: ObjectAreaIcon,
+    },
+    {
+      id: "relatedContent",
+      label: t("explore.relatedContent"),
+      icon: ObjectCollectionIcon,
+    },
+    {
+      id: "aiAssistantChat",
+      label: t("explore.aiChat"),
+      icon: ObjectAiChatIcon,
+    },
+    {
+      id: "localSpaceQuery",
+      label: t("actions.search"),
+      icon: AppSidebarSearchIcon,
+    },
   ];
+
+  function openExploreAction(id: (typeof actions)[number]["id"]) {
+    if (id === "localSpaceQuery") {
+      setSideSearchOpen(true);
+      return;
+    }
+    openInSidePanel({
+      id: id === "aiAssistantChat" ? `aiAssistantChat_${Date.now()}` : id,
+      label: actions.find((action) => action.id === id)?.label ?? id,
+      icon:
+        actions.find((action) => action.id === id)?.icon ?? AppHeaderGraphIcon,
+      iconClassName: objectIconToneBadgeClass.gray,
+      draggable: true,
+    });
+  }
+
+  const contextualSideValues = new Set([
+    "backlinks",
+    "objectsInside",
+    "relatedContent",
+    "aiAssistantChat",
+    "localSpaceQuery",
+  ]);
+
+  if (contextualSideValues.has(sideValue)) {
+    const activeEntity = createdEntities.find(
+      (entity) => entity.id === activeEntityId,
+    );
+    const linkIndex = createWorkspaceObjectLinkIndex(createdEntities);
+    const backlinks = activeEntityId
+      ? selectBacklinksForObject(linkIndex, activeEntityId)
+      : [];
+    const objectsInside = activeEntityId
+      ? selectObjectsInside(linkIndex, activeEntityId)
+      : [];
+    const relatedIds = Array.from(
+      new Set([
+        ...backlinks.map((item) => item.sourceId),
+        ...objectsInside.map((item) => item.targetId),
+      ]),
+    );
+    const items =
+      sideValue === "backlinks"
+        ? backlinks.map((item) => item.sourceId)
+        : sideValue === "objectsInside"
+          ? objectsInside.map((item) => item.targetId)
+          : relatedIds;
+    const title =
+      actions.find((action) => action.id === sideValue)?.label ??
+      t("explore.title");
+    const itemEntities = items
+      .map((id) => createdEntities.find((entity) => entity.id === id))
+      .filter((entity): entity is WorkspaceEntity => Boolean(entity));
+
+    return (
+      <div className="flex h-full min-h-0 items-start justify-center overflow-auto px-8 py-10 text-sidebar-foreground">
+        <div className="w-full max-w-[36rem]">
+          <h2 className="text-base font-semibold text-foreground">{title}</h2>
+          {activeEntity ? (
+            <p className="mt-1 text-xs text-muted-foreground">
+              {activeEntity.title || t("lifecycle.untitled")}
+            </p>
+          ) : null}
+          {sideValue === "aiAssistantChat" ? (
+            <div className="mt-6 rounded-lg border border-border bg-card p-4 text-sm text-muted-foreground">
+              {t("documentMenu.aiUnavailable")}
+            </div>
+          ) : itemEntities.length > 0 ? (
+            <div className="mt-5 grid gap-1">
+              {itemEntities.map((entity) => {
+                const objectType = objectTypes.find(
+                  (item) => item.id === entity.objectTypeId,
+                );
+                const definition = objectTypeDefinitionById[entity.kind];
+                return (
+                  <button
+                    key={entity.id}
+                    type="button"
+                    className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-left hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    onClick={() => selectEntity(entity.id)}
+                  >
+                    <ObjectIconBadge
+                      icon={objectType?.icon ?? definition.icon}
+                      tone={objectType?.tone ?? definition.tone}
+                    />
+                    <span className="min-w-0 truncate text-sm text-foreground">
+                      {entity.title || t("lifecycle.untitled")}
+                    </span>
+                    <span className="ml-auto text-xs text-muted-foreground">
+                      {objectTypes.find(
+                        (item) => item.id === entity.objectTypeId,
+                      )?.label ?? entity.kind}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="mt-6 rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+              {sideValue === "backlinks"
+                ? t("linking.noBacklinks")
+                : sideValue === "objectsInside"
+                  ? t("linking.noObjectsInside")
+                  : t("empty.title")}
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full min-h-0 items-center justify-center px-8 text-sidebar-foreground">
@@ -4013,6 +4238,8 @@ function ExploreWorkspace() {
               <button
                 key={action.label}
                 type="button"
+                aria-label={action.label}
+                onClick={() => openExploreAction(action.id)}
                 className="flex h-[112px] min-w-0 flex-col justify-between rounded-[8px] border border-border bg-card p-4 text-left transition-colors duration-150 hover:bg-accent motion-reduce:transition-none"
               >
                 <Icon className="size-5 shrink-0 text-foreground" />
@@ -4028,6 +4255,8 @@ function ExploreWorkspace() {
           <span>{t("explore.relevantContent")}</span>
           <button
             type="button"
+            aria-label={t("explore.findMore")}
+            onClick={() => setSideSearchOpen(true)}
             className="flex items-center gap-1.5 text-[#5f5a55]"
           >
             <AppSidebarSearchIcon className="size-3.5" />
@@ -4049,81 +4278,266 @@ function ExploreWorkspace() {
 }
 
 function GraphWorkspace() {
+  const t = useTranslations("workspace");
   const { activeEntityId, createdEntities } = useWorkspace();
+  const [showRelated, setShowRelated] = React.useState(true);
+  const [zoom, setZoom] = React.useState(1);
+  const [pan, setPan] = React.useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = React.useState(false);
+  const dragStateRef = React.useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    originX: number;
+    originY: number;
+  } | null>(null);
+  const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const [graphOptions, setGraphOptions] = React.useState({
+    completedTasks: false,
+    highLinkObjects: false,
+    dates: false,
+    simplified: false,
+  });
   const graph = React.useMemo(
     () => projectWorkspaceGraph(createdEntities, activeEntityId),
     [activeEntityId, createdEntities],
   );
-
-  if (graph.nodes.length === 0) return <ExploreWorkspace />;
-
   const center = graph.nodes[0];
-  const related = graph.nodes.slice(1);
+  const related = showRelated ? graph.nodes.slice(1) : [];
   const positions = related.map((_, index) => {
-    const angle = (index / Math.max(related.length, 1)) * Math.PI * 2 - Math.PI / 2;
+    const angle =
+      (index / Math.max(related.length, 1)) * Math.PI * 2 - Math.PI / 2;
     return { x: 50 + Math.cos(angle) * 31, y: 50 + Math.sin(angle) * 31 };
   });
+
+  function toggleGraphOption(option: keyof typeof graphOptions) {
+    setGraphOptions((current) => ({
+      ...current,
+      [option]: !current[option],
+    }));
+  }
+
+  function startGraphDrag(event: React.PointerEvent<HTMLDivElement>) {
+    if (event.button !== 0) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragStateRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: pan.x,
+      originY: pan.y,
+    };
+    setDragging(true);
+  }
+
+  function moveGraph(event: React.PointerEvent<HTMLDivElement>) {
+    const dragState = dragStateRef.current;
+    if (!dragState || dragState.pointerId !== event.pointerId) return;
+    setPan({
+      x: dragState.originX + event.clientX - dragState.startX,
+      y: dragState.originY + event.clientY - dragState.startY,
+    });
+  }
+
+  function stopGraphDrag(event: React.PointerEvent<HTMLDivElement>) {
+    if (dragStateRef.current?.pointerId !== event.pointerId) return;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    dragStateRef.current = null;
+    setDragging(false);
+  }
+
+  const graphButtonClass =
+    "inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-[8px] border border-transparent px-2 text-xs text-sidebar-foreground transition-opacity duration-200 ease-out hover:bg-muted hover:text-sidebar-foreground active:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none";
 
   return (
     <div
       data-slot="workspace-graph"
       className="relative flex h-full min-h-0 flex-col overflow-hidden bg-card text-card-foreground"
     >
-      <div className="absolute inset-0">
-        <svg
-          aria-hidden="true"
-          className="absolute inset-0 size-full"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-        >
-          {positions.map((position, index) => (
-            <line
-              key={graph.edges[index]?.target}
-              x1="50"
-              y1="50"
-              x2={position.x}
-              y2={position.y}
-              stroke="currentColor"
-              strokeOpacity="0.16"
-              strokeWidth="0.18"
-            />
-          ))}
-        </svg>
-
-        <div className="absolute left-1/2 top-1/2 flex max-w-[140px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
-          <ObjectIconBadge
-            icon={ObjectPageIcon}
-            tone="blue"
-            className="size-9 rounded-xl border border-blue-200 bg-blue-50"
-            iconClassName="size-5"
-          />
-          <span className="max-w-[140px] truncate text-xs text-muted-foreground">
-            {center.title || "Sem título"}
-          </span>
-        </div>
-
-        {related.map((node, index) => (
+      <div className="absolute inset-0 bottom-11 overflow-hidden">
+        {center ? (
           <div
-            key={node.id}
-            className="absolute flex max-w-[120px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center"
-            style={{ left: `${positions[index].x}%`, top: `${positions[index].y}%` }}
+            data-slot="workspace-graph-canvas"
+            data-dragging={dragging || undefined}
+            className="absolute inset-0 origin-center cursor-grab touch-none select-none transition-transform duration-200 ease-out active:cursor-grabbing data-[dragging=true]:transition-none motion-reduce:transition-none"
+            style={{
+              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+            }}
+            onPointerDown={startGraphDrag}
+            onPointerMove={moveGraph}
+            onPointerUp={stopGraphDrag}
+            onPointerCancel={stopGraphDrag}
           >
-            <ObjectIconBadge
-              icon={ObjectPageIcon}
-              tone="gray"
-              className="size-8 rounded-xl border border-border bg-card"
-              iconClassName="size-4"
-            />
-            <span className="max-w-[120px] truncate text-xs text-muted-foreground">
-              {node.title || "Sem título"}
-            </span>
+            <svg
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 size-full"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              {positions.map((position, index) => (
+                <line
+                  key={graph.edges[index]?.target}
+                  x1="50"
+                  y1="50"
+                  x2={position.x}
+                  y2={position.y}
+                  stroke="currentColor"
+                  strokeOpacity="0.16"
+                  strokeWidth="0.18"
+                />
+              ))}
+            </svg>
+            <div className="absolute left-1/2 top-1/2 flex max-w-[140px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center">
+              <ObjectIconBadge
+                icon={ObjectPageIcon}
+                tone="blue"
+                className="size-9 rounded-xl border border-blue-200 bg-blue-50"
+                iconClassName="size-5"
+              />
+              <span className="max-w-[140px] truncate text-xs text-muted-foreground">
+                {center.title || t("lifecycle.untitled")}
+              </span>
+            </div>
+
+            {related.map((node, index) => (
+              <div
+                key={node.id}
+                className="absolute flex max-w-[120px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 text-center"
+                style={{
+                  left: `${positions[index].x}%`,
+                  top: `${positions[index].y}%`,
+                }}
+              >
+                <ObjectIconBadge
+                  icon={ObjectPageIcon}
+                  tone="gray"
+                  className="size-8 rounded-xl border border-border bg-card"
+                  iconClassName="size-4"
+                />
+                <span className="max-w-[120px] truncate text-xs text-muted-foreground">
+                  {node.title || t("lifecycle.untitled")}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
+        ) : null}
       </div>
 
-      <div className="relative mt-auto flex items-center justify-end gap-4 border-t border-border/60 px-4 py-3 text-xs text-muted-foreground">
-        <span>{graph.nodes.length} objetos</span>
-        <span>{graph.edges.length} relações</span>
+      <div className="relative mt-auto flex h-14 items-center justify-between px-3 text-xs text-muted-foreground">
+        <div className="ml-[9px] flex items-center rounded-lg bg-card">
+          <button
+            type="button"
+            aria-label={t("graph.showLess")}
+            className={cn(
+              graphButtonClass,
+              "w-[129px] rounded-l-[8px] rounded-r-none px-3",
+            )}
+            onClick={() => setShowRelated(false)}
+          >
+            <AppHeaderGraphIcon className="size-3.5" />
+            {t("graph.showLess")}
+          </button>
+          <button
+            type="button"
+            aria-label={t("graph.showMore")}
+            className={cn(
+              graphButtonClass,
+              "-ml-px w-[118px] rounded-l-none rounded-r-[8px] px-3",
+            )}
+            onClick={() => setShowRelated(true)}
+          >
+            <SparklesIcon className="size-3.5" />
+            {t("graph.showMore")}
+          </button>
+        </div>
+
+        <div className="flex items-center">
+          <Popover open={settingsOpen} onOpenChange={setSettingsOpen}>
+            <PopoverTrigger
+              render={
+                <button
+                  type="button"
+                  aria-label={t("graph.settings")}
+                  className={cn(graphButtonClass, "mr-0.5 w-8 px-0")}
+                >
+                  <Settings2Icon className="size-4" />
+                </button>
+              }
+            />
+            <PopoverContent
+              side="top"
+              align="end"
+              sideOffset={4}
+              className="w-72 rounded-[12px] border-border p-[6px] ring-0 shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)]"
+            >
+              <p className="px-2 py-1 text-xs font-medium text-muted-foreground">
+                {t("graph.excludeObjectTypes")}
+              </p>
+              {(
+                [
+                  ["completedTasks", "graph.completedTasks"],
+                  ["highLinkObjects", "graph.highLinkObjects"],
+                  ["dates", "graph.dates"],
+                  ["simplified", "graph.simplified"],
+                ] as const
+              ).map(([option, label]) => (
+                <label
+                  key={option}
+                  className="flex min-h-8 cursor-pointer items-center justify-between gap-3 rounded-lg px-2 text-xs hover:bg-muted"
+                >
+                  <span>{t(label)}</span>
+                  <input
+                    type="checkbox"
+                    checked={graphOptions[option]}
+                    onChange={() => toggleGraphOption(option)}
+                    className="relative size-[19px] shrink-0 appearance-none rounded-[7px] border border-input bg-transparent transition-colors checked:border-primary checked:bg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none checked:after:absolute checked:after:left-[5px] checked:after:top-[1px] checked:after:h-[10px] checked:after:w-[6px] checked:after:rotate-45 checked:after:border-b-2 checked:after:border-r-2 checked:after:border-primary-foreground checked:after:content-['']"
+                  />
+                </label>
+              ))}
+            </PopoverContent>
+          </Popover>
+          <div className="flex items-center">
+            <button
+              type="button"
+              aria-label={t("graph.fit")}
+              className={cn(
+                graphButtonClass,
+                "w-8 rounded-l-[8px] rounded-r-none px-0",
+              )}
+              onClick={() => {
+                setZoom(1);
+                setPan({ x: 0, y: 0 });
+              }}
+            >
+              <Maximize2Icon className="size-4" />
+            </button>
+            <button
+              type="button"
+              aria-label={t("graph.zoomOut")}
+              className={cn(graphButtonClass, "-ml-px w-8 rounded-none px-0")}
+              onClick={() =>
+                setZoom((current) => Math.max(2 / 3, current - 1 / 3))
+              }
+            >
+              <ZoomOutIcon className="size-4" />
+            </button>
+            <button
+              type="button"
+              aria-label={t("graph.zoomIn")}
+              className={cn(
+                graphButtonClass,
+                "-ml-px w-8 rounded-l-none rounded-r-[8px] px-0",
+              )}
+              onClick={() =>
+                setZoom((current) => Math.min(5 / 3, current + 1 / 3))
+              }
+            >
+              <ZoomInIcon className="size-4" />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

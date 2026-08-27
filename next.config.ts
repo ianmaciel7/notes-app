@@ -2,7 +2,9 @@ import createNextIntlPlugin from "next-intl/plugin";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Keep the development status indicator from covering the mobile navigation trigger.
+  // Compile and runtime errors are still surfaced by Next.js.
+  devIndicators: false,
 };
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");

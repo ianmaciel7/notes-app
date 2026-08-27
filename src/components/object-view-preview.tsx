@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { blockEditorDocumentToPlainText } from "@/editor/document";
 import { cn } from "@/lib/utils";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
@@ -16,6 +17,8 @@ type MediaAssetRendererProps = {
   readonly entity: Extract<WorkspaceEntity, { kind: "file" }>;
   readonly onDownload?: () => void;
   readonly onRemove?: () => void;
+  readonly openLabel?: string;
+  readonly previewUnavailableLabel?: string;
   readonly removeLabel?: string;
 };
 
@@ -108,15 +111,18 @@ function UrlPreview({ entity }: { readonly entity: WorkspaceEntity }) {
 function MediaAssetPreview({
   entity,
   label,
+  openLabel,
+  previewUnavailableLabel,
 }: {
   readonly entity: Extract<WorkspaceEntity, { kind: "file" }>;
   readonly label: string;
+  readonly openLabel: string;
+  readonly previewUnavailableLabel: string;
 }) {
   if (!entity.previewUrl) {
     return (
       <p className="rounded-lg border border-dashed px-4 py-6 text-center text-sm text-muted-foreground">
-        Preview will be restored from local media storage when bytes are
-        available.
+        {previewUnavailableLabel}
       </p>
     );
   }
@@ -151,7 +157,7 @@ function MediaAssetPreview({
         className="h-72 w-full rounded-lg border bg-background"
       >
         <a className="text-sm underline" href={entity.previewUrl}>
-          Open PDF
+          {openLabel}
         </a>
       </object>
     );
@@ -204,12 +210,15 @@ function MediaAssetActions({
 
 function MediaAssetRenderer({
   className,
-  downloadLabel = "Download",
+  downloadLabel,
   entity,
   onDownload,
   onRemove,
-  removeLabel = "Remove",
+  openLabel,
+  previewUnavailableLabel,
+  removeLabel,
 }: MediaAssetRendererProps) {
+  const t = useTranslations("workspace");
   const label = entity.title || entity.fileName;
   return (
     <div
@@ -220,15 +229,22 @@ function MediaAssetRenderer({
       <div className="min-w-0">
         <p className="truncate text-sm font-medium">{entity.fileName}</p>
         <p className="text-xs text-muted-foreground">
-          {entity.mimeType || "Unknown type"} / {entity.size} B
+          {entity.mimeType || t("lifecycle.file.unknownType")} / {entity.size} B
         </p>
       </div>
-      <MediaAssetPreview entity={entity} label={label} />
+      <MediaAssetPreview
+        entity={entity}
+        label={label}
+        openLabel={openLabel ?? t("lifecycle.file.open")}
+        previewUnavailableLabel={
+          previewUnavailableLabel ?? t("lifecycle.file.previewUnavailable")
+        }
+      />
       <MediaAssetActions
-        downloadLabel={downloadLabel}
+        downloadLabel={downloadLabel ?? t("lifecycle.file.download")}
         onDownload={onDownload}
         onRemove={onRemove}
-        removeLabel={removeLabel}
+        removeLabel={removeLabel ?? t("lifecycle.file.remove")}
       />
     </div>
   );

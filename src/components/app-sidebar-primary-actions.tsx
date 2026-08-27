@@ -18,6 +18,7 @@ import {
 import {
   ObjectCollectionIcon,
   ObjectIconBadge,
+  objectIconToneBadgeClass,
 } from "@/components/object-icons";
 import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import { Button } from "@/components/ui/button";
@@ -614,6 +615,7 @@ function WorkspaceSidebar() {
     setCustomSections,
     setSideSearchOpen,
     setSideValue,
+    openInSidePanel,
     createWorkspaceEntity,
     showMessage,
   } = useWorkspace();
@@ -684,7 +686,7 @@ function WorkspaceSidebar() {
     }
 
     if (action === "share") {
-      void navigator.clipboard?.writeText(collection.name);
+      void navigator.clipboard?.writeText(collection.name).catch(() => undefined);
       showMessage(t("documentMenu.shareHint"));
       return;
     }
@@ -757,22 +759,25 @@ function WorkspaceSidebar() {
               activeAction={activeAction}
               objectTypes={objectTypes}
               onSelectObjectType={createWorkspaceEntity}
-              onAction={(action) => {
-                if (action !== "new") {
-                  setActiveAction(action);
-                  setActiveEntityId(null);
-                  setMainValue(`primary-action:${action}`);
-                  if (action === "search") setSideSearchOpen(true);
-                  if (action === "explore") setSideValue("explore");
-                }
-              }}
+            onAction={(action) => {
+              setSideSearchOpen(action === "search");
+              if (action !== "new") {
+                setActiveAction(action);
+                setActiveEntityId(null);
+                setMainValue(`primary-action:${action}`);
+                if (action === "explore") setSideValue("explore");
+              }
+            }}
             />
           </div>
 
           <AppSidebarOverview
             activeId={activeEntityId}
             onActiveIdChange={(id) => {
-              if (id !== null) selectEntity(id);
+              if (id !== null) {
+                setSideSearchOpen(false);
+                selectEntity(id);
+              }
             }}
             pinnedEntities={pinnedEntities}
             availablePinnedEntities={availablePinnedEntities}
@@ -784,6 +789,15 @@ function WorkspaceSidebar() {
             onUpdateObjectType={updateWorkspaceStructure}
             onDeleteObjectType={deleteWorkspaceStructure}
             onPinnedEntitiesChange={setPinnedEntities}
+            onOpenPinnedInSidePanel={(entity) => {
+              openInSidePanel({
+                id: entity.id,
+                label: entity.label,
+                icon: entity.icon,
+                iconClassName: objectIconToneBadgeClass[entity.tone],
+                draggable: true,
+              });
+            }}
             onCustomSectionsChange={setCustomSections}
             onCollectionAction={handleCollectionAction}
           />

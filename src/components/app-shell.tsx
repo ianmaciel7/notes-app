@@ -20,7 +20,6 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { getWorkspacePanelPresentation } from "@/lib/workspace-layout";
@@ -28,16 +27,15 @@ import { getWorkspacePanelPresentation } from "@/lib/workspace-layout";
 const APP_SHELL_LEFT_DEFAULT = "18rem";
 const APP_SHELL_LEFT_MIN = "14rem";
 const APP_SHELL_LEFT_MAX = "24rem";
-const APP_SHELL_RIGHT_DEFAULT = "24rem";
+const APP_SHELL_RIGHT_DEFAULT = "29.25rem";
 const APP_SHELL_RIGHT_MIN = "20rem";
-const APP_SHELL_RIGHT_MAX = "24rem";
+const APP_SHELL_RIGHT_MAX = "40rem";
 
 const appShellPanelGroupVariants = cva("h-full w-full", {
   variants: {
     resizing: {
-      true: "[&>[data-panel]]:transition-none",
-      false:
-        "[&>[data-panel]]:transition-[flex-grow] [&>[data-panel]]:duration-300 [&>[data-panel]]:ease-in-out motion-reduce:[&>[data-panel]]:transition-none",
+      true: "",
+      false: "",
     },
   },
   defaultVariants: {
@@ -625,19 +623,19 @@ function AppShellMobileSidebar({
   const [open, setOpen] = React.useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger
-        render={
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            className="absolute left-2.5 top-[15px]"
-            aria-label={t("openNavigation")}
-          />
-        }
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-sm"
+        className="absolute left-2.5 top-[15px]"
+        aria-label={t("openNavigation")}
+        onClick={(event) => {
+          event.preventDefault();
+          setOpen(true);
+        }}
       >
         <AppHeaderSidebarSimpleIcon />
-      </SheetTrigger>
+      </Button>
       <SheetContent
         side="left"
         overlayClassName="motion-reduce:transition-none"
@@ -666,19 +664,19 @@ function AppShellMobileSidePanel({
   const [open, setOpen] = React.useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger
-        render={
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            className="absolute right-[26px] top-[15px]"
-            aria-label={t("openContext")}
-          />
-        }
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-sm"
+        className="absolute right-[26px] top-[15px]"
+        aria-label={t("openContext")}
+        onClick={(event) => {
+          event.preventDefault();
+          setOpen(true);
+        }}
       >
         <AppHeaderSidebarSimpleIcon className="rotate-180" />
-      </SheetTrigger>
+      </Button>
       <SheetContent
         side="right"
         overlayClassName="motion-reduce:transition-none"

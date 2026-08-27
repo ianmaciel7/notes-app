@@ -789,6 +789,7 @@ type WorkspaceContextValue = {
     objectTypeId: string,
     objectTypeLabel?: string,
   ) => void;
+  createWorkspaceEntityFromPreset: (presetId: string) => void;
   createOrAppendDailyNote: (
     date: string,
     appendText?: string,
@@ -1333,14 +1334,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
             />
           ),
         };
-        if (
-          existingIndex === -1 &&
-          entity.id !== workspaceObjects.activeEntityId
-        ) {
-          continue;
+        if (existingIndex >= 0) {
+          next[existingIndex] = { ...next[existingIndex], ...tab };
         }
-        if (existingIndex === -1) next.push(tab);
-        else next[existingIndex] = { ...next[existingIndex], ...tab };
       }
       return next;
     });
@@ -1405,6 +1401,29 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       );
 
       if (createdEntity) {
+        const structure = workspaceObjects.structures.find(
+          (item) => item.id === createdEntity.objectTypeId,
+        );
+        if (structure) {
+          const definition = objectTypeDefinitionById[structure.iconName];
+          const label = createdEntity.title.trim() || t("lifecycle.untitled");
+          ensureMainTab({
+            id: createdEntity.id,
+            label,
+            icon: definition.icon,
+            iconClassName: objectIconToneBadgeClass[structure.tone],
+            preview: (
+              <TabPreview
+                eyebrow={
+                  structure.ownership === "custom"
+                    ? structure.singularName
+                    : t(`objectTypeStudio.objectTypes.${createdEntity.objectTypeId}`)
+                }
+                title={label}
+              />
+            ),
+          });
+        }
         dispatchWorkspaceObjects({ type: "selectEntity", id });
         setMainValue(id);
         setActiveEntityId(id);
@@ -1412,7 +1431,14 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      if (!entity) return;
+      if (!entity) {
+        if (mainTabs.some((tab) => tab.id === id)) {
+          dispatchWorkspaceObjects({ type: "selectEntity", id: null });
+          setActiveEntityId(id);
+          setActiveAction(undefined);
+        }
+        return;
+      }
 
       dispatchWorkspaceObjects({ type: "selectEntity", id: null });
       setActiveEntityId(id);
@@ -1430,9 +1456,12 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     },
     [
       ensureMainTab,
+      mainTabs,
       objectTypes,
       objectTypeCollections,
+      ensureMainTab,
       workspaceObjects.entities,
+      workspaceObjects.structures,
       workspaceObjects.structures,
       t,
     ],
@@ -1558,6 +1587,20 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       }
     },
     [showMessage, t, workspaceObjects.structures],
+  );
+
+  const createWorkspaceEntityFromPreset = React.useCallback(
+    (presetId: string) => {
+      const objectTypeId = crypto.randomUUID();
+      setActiveAction(undefined);
+      dispatchWorkspaceObjects({
+        type: "createStructureFromPreset",
+        id: objectTypeId,
+        presetId,
+      });
+      dispatchWorkspaceObjects({ type: "beginCreate", objectTypeId });
+    },
+    [],
   );
 
   const createOrAppendDailyNote = React.useCallback(
@@ -1930,6 +1973,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       updateWorkspaceStructure,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
+      createWorkspaceEntityFromPreset,
       createOrAppendDailyNote,
       createWorkspacePage,
       importWorkspaceFiles,
@@ -1977,6 +2021,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       updateWorkspaceStructure,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
+      createWorkspaceEntityFromPreset,
       createOrAppendDailyNote,
       createWorkspacePage,
       importWorkspaceFiles,
@@ -2489,6 +2534,17 @@ function SidePanelSearchOverlay() {
   React.useEffect(() => {
     searchInputRef.current?.focus({ preventScroll: true });
   }, []);
+
+  React.useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      setSideSearchOpen(false);
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [setSideSearchOpen]);
 
   const recentItems = React.useMemo(() => {
     const items = new Map<

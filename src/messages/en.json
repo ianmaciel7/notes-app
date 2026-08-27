@@ -97,6 +97,7 @@
       "fillAliases": "Fill aliases",
       "fillDescription": "Fill description",
       "fillProperties": "Fill all properties",
+      "generateTitle": "Generate title",
       "findPage": "Find in page",
       "iconReady": "The icon picker will open here.",
       "import": "Import",
@@ -107,8 +108,11 @@
       "newCollectionNamed": "New ‘{collection}’",
       "untitledCollection": "Untitled",
       "noCollections": "No collections found",
+      "noTags": "No tags found",
       "pinSidebar": "Pin to sidebar",
       "pinned": "Pinned to the sidebar.",
+      "shared": "Object link copied.",
+      "stats": "{words} words",
       "present": "Present",
       "presentHint": "Presentation mode is ready.",
       "searchAllTags": "Search all tags",
@@ -137,6 +141,43 @@
       "relatedContent": "Related content",
       "relevantContent": "Relevant content",
       "title": "Explore"
+    },
+    "graph": {
+      "completedTasks": "Show completed tasks",
+      "dates": "Hide dates",
+      "excludeObjectTypes": "Exclude object types",
+      "fit": "Center graph",
+      "highLinkObjects": "Hide objects with many links",
+      "settings": "Graph settings",
+      "showLess": "Show less",
+      "showMore": "Show more",
+      "simplified": "Show simplified graph",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out"
+    },
+    "calendar": {
+      "date": "Calendar date",
+      "day": "Calendar day {date}",
+      "dayTitle": "Day",
+      "dailyNote": "Daily note",
+      "dailyNoteForDate": "Daily note {date}",
+      "derivedItem": "This calendar item is derived from a reference.",
+      "entryKinds": {
+        "daily-note": "daily note",
+        "date-reference": "date reference",
+        "dated-object": "dated object",
+        "task": "task"
+      },
+      "item": "item",
+      "reschedule": "Reschedule {title}",
+      "spans": {
+        "month": "month",
+        "week": "week",
+        "three-day": "three days",
+        "day": "day"
+      },
+      "timeline": "Timeline",
+      "title": "Calendar"
     },
     "linking": {
       "convertMention": "Convert",
@@ -343,7 +384,9 @@
         "description": "The file stays on this device; only its metadata is saved.",
         "download": "Download",
         "name": "Name",
+        "open": "Open PDF",
         "remove": "Remove",
+        "previewUnavailable": "The preview will be restored from local media storage when the data is available.",
         "replace": "Replace",
         "reselect": "Select the local file again to restore its preview.",
         "reselectAction": "Select file again",
@@ -459,6 +502,11 @@
       "noBacklinks": "No backlinks",
       "noMatchingObjects": "No matching objects",
       "noMatchingObjectsDescription": "Objects matching this view will appear here."
+    },
+    "sidebarPinned": {
+      "open": "Open",
+      "openInSidePanel": "Open in side panel",
+      "openInNewTab": "Open in new tab"
     },
     "views": {
       "all": "All",
