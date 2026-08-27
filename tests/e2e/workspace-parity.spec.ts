@@ -416,6 +416,9 @@ test("object type studio matches Capacities suggested and basic type layout", as
   ]) {
     await expect(details.getByText(property, { exact: true })).toBeVisible();
   }
+  await expect(
+    details.getByRole("button", { name: "Criar tipo de objeto" }),
+  ).toBeVisible();
 
   await dialog.getByRole("button", { name: "Página" }).click();
   await expect(details).toBeVisible();

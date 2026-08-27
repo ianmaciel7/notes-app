@@ -496,17 +496,15 @@ function AppSidebarObjectTypeDetails({
         </ScrollArea>
       </div>
 
-      <div className="sticky bottom-0 flex w-full shrink-0 justify-center bg-background px-4 py-4 shadow-md">
+      <div className="sticky bottom-0 flex w-full shrink-0 justify-center bg-[#f8f9fb] px-4 py-4">
         <Button
           type="button"
-          className="h-6 w-full justify-center rounded-lg px-3 text-sm"
+          className="h-8 w-full justify-center rounded-lg bg-[#45464f] px-3 text-sm font-medium text-white shadow-none hover:bg-[#35363e]"
           disabled={isCustom && customName.trim().length === 0}
           onClick={onConfirm}
         >
-          <span className="mr-1">
-            {isCustom ? t("trigger") : t("details.confirm")}
-          </span>
-          {isCustom && <ObjectTypeDetailsIcon name="arrowRight" />}
+          <span className="mr-2">{t("details.confirm")}</span>
+          <ObjectTypeDetailsIcon name="arrowRight" />
         </Button>
       </div>
     </aside>

@@ -290,7 +290,7 @@
       },
       "details": {
         "close": "Close object type details",
-        "confirm": "Add object type",
+        "confirm": "Create object type",
         "description": "Object type setup",
         "previewDescription": "Learn how {type} objects can organize your knowledge.",
         "bookDescription": "Learn from the books you read and connect them to your existing knowledge.",

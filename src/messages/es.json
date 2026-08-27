@@ -290,7 +290,7 @@
       },
       "details": {
         "close": "Cerrar detalles del tipo de objeto",
-        "confirm": "Agregar tipo de objeto",
+        "confirm": "Crear tipo de objeto",
         "description": "Configuración del tipo de objeto",
         "previewDescription": "Descubre cómo los objetos de tipo {type} pueden organizar tu conocimiento.",
         "bookDescription": "Aprende de los libros que lees y conéctalos con el conocimiento que ya tienes.",
