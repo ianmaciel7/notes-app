@@ -157,11 +157,13 @@ function AppSidebarObjectTypeCard({
   selected,
   onSelect,
   label,
+  buttonRef,
 }: {
   preset: ObjectTypePreset;
   selected: boolean;
   onSelect: (preset: ObjectTypePreset) => void;
   label: string;
+  buttonRef?: React.Ref<HTMLButtonElement>;
 }) {
   return (
     <button
@@ -172,6 +174,7 @@ function AppSidebarObjectTypeCard({
         objectLifecycleContractSlots.ObjectTypePresetCard
       }
       data-selected={selected || undefined}
+      ref={buttonRef}
       className={cn(
         "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] bg-white px-2.5 text-left",
         "text-[14px] font-semibold text-[#2f2c29] shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
@@ -370,6 +373,7 @@ function AppSidebarObjectTypeDetails({
                         id={customNameInputId}
                         value={customName}
                         placeholder={t("details.namePlaceholder")}
+                        aria-label={t("details.name")}
                         autoFocus
                         autoComplete="off"
                         onChange={(event) =>
@@ -414,6 +418,7 @@ function AppSidebarObjectTypeDetails({
                         id={pluralNameInputId}
                         value={pluralName}
                         placeholder={t("details.pluralNamePlaceholder")}
+                        aria-label={t("details.pluralName")}
                         autoComplete="off"
                         onChange={(event) =>
                           onPluralNameChange(event.target.value)
@@ -524,6 +529,15 @@ function AppSidebarObjectTypeStudio({
   const [detailsOpen, setDetailsOpen] = React.useState(false);
   const [customName, setCustomName] = React.useState("");
   const [pluralName, setPluralName] = React.useState("");
+  const firstPresetRef = React.useRef<HTMLButtonElement>(null);
+
+  React.useEffect(() => {
+    if (!open || detailsOpen) return;
+    const focusTimer = window.setTimeout(() => {
+      firstPresetRef.current?.focus();
+    }, 0);
+    return () => window.clearTimeout(focusTimer);
+  }, [open, detailsOpen]);
 
   function resetSelection() {
     setSelectedObjectType(null);
@@ -627,7 +641,12 @@ function AppSidebarObjectTypeStudio({
                 "[&_[data-slot=scroll-area-thumb]]:rounded-full",
               )}
             >
-              <div className="flex min-h-full flex-col px-5 pb-6 pt-6">
+              <div
+                className={cn(
+                  "flex min-h-full flex-col px-5 pb-6 pt-6",
+                  detailsOpen && "pr-[calc(28rem+1.25rem)]",
+                )}
+              >
                 <section
                   aria-label={t("intro.title")}
                   className="mb-7 flex w-full max-w-[647px] gap-3 rounded-[8px] bg-[#e6f7ef] px-3 py-2.5 text-[#064e3b]"
@@ -649,7 +668,12 @@ function AppSidebarObjectTypeStudio({
                   </div>
                 </section>
 
-                <div className="grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                <div
+                  className={cn(
+                    "grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 md:grid-cols-4",
+                    detailsOpen ? "lg:grid-cols-3" : "lg:grid-cols-5",
+                  )}
+                >
                   {suggestedObjectTypes.map((preset) => (
                     <AppSidebarObjectTypeCard
                       key={preset.id}
@@ -659,6 +683,9 @@ function AppSidebarObjectTypeStudio({
                       }
                       onSelect={selectPreset}
                       label={t(`objectTypes.${preset.id}`)}
+                      buttonRef={
+                        preset.id === "book" ? firstPresetRef : undefined
+                      }
                     />
                   ))}
 
@@ -672,7 +699,12 @@ function AppSidebarObjectTypeStudio({
                 <h2 className="mt-9 text-[16px] font-semibold leading-none text-[#1f1c19]">
                   {t("basicTypes")}
                 </h2>
-                <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                <div
+                  className={cn(
+                    "mt-6 grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 md:grid-cols-4",
+                    detailsOpen ? "lg:grid-cols-3" : "lg:grid-cols-5",
+                  )}
+                >
                   {basicObjectTypes.map((structure) => (
                     <AppSidebarBasicObjectTypeCard
                       key={structure.id}

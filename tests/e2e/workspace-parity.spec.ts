@@ -344,6 +344,7 @@ test("object type studio matches Capacities suggested and basic type layout", as
     ),
   ).toBeVisible();
   await expect(dialog.getByRole("link", { name: "Saiba mais" })).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Livro" })).toBeFocused();
 
   await expectObjectTypeCardLabels(
     dialog.locator(
@@ -418,6 +419,21 @@ test("object type studio matches Capacities suggested and basic type layout", as
   }
   await expect(
     details.getByRole("button", { name: "Criar tipo de objeto" }),
+  ).toBeVisible();
+
+  for (const objectType of ["Reunião", "Citação", "Projeto", "Organização"]) {
+    await dialog.getByRole("button", { name: objectType }).click();
+    await expect(
+      details.getByText(objectType, { exact: true }).first(),
+    ).toBeVisible();
+  }
+
+  await dialog.getByRole("button", { name: "Crie o seu próprio" }).click();
+  await expect(
+    details.getByRole("textbox", { name: "Nome", exact: true }),
+  ).toBeVisible();
+  await expect(
+    details.getByRole("textbox", { name: "Plural do nome" }),
   ).toBeVisible();
 
   await dialog.getByRole("button", { name: "Página" }).click();
