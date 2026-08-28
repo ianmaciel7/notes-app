@@ -3221,6 +3221,15 @@ test("every supported New family persists once and reopens from its tab projecti
         mimeType: family.mime,
         name: `parity-${family.id}.${family.id === "image" ? "png" : family.id === "audio" ? "mp3" : family.id === "pdf" ? "pdf" : "txt"}`,
       });
+      await expect
+        .poll(async () => {
+          const entities = await persistedEntities(page);
+          return entities.some(
+            (entity: { objectTypeId: string }) =>
+              entity.objectTypeId === family.id,
+          );
+        }, { timeout: 20_000 })
+        .toBe(true);
     }
 
     const specializedWorkspaceIds = [
@@ -3234,7 +3243,9 @@ test("every supported New family persists once and reopens from its tab projecti
       ? "created-object-workspace"
       : "workspace-object-page-view";
     const workspace = page
-      .locator(`[data-slot="${workspaceSlot}"]`)
+      .locator(
+        `[data-slot="${workspaceSlot}"][data-object-type="${family.id}"]`,
+      )
       .filter({ visible: true });
     await expect(workspace).toBeVisible();
     const objectTypeId =

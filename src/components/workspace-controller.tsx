@@ -61,6 +61,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -392,6 +398,29 @@ function createSpecialSideTabs(
       iconClassName: objectIconToneBadgeClass.emerald,
     },
   };
+}
+
+function createSpecialSideItems(
+  t: ReturnType<typeof useTranslations<"workspace">>,
+  specialSideTabs: Record<SidePanelSpecialEntryId, Omit<AppHeaderTab, "id">>,
+) {
+  return (
+    [
+      "graphView",
+      "backlinks",
+      "objectsInside",
+      "relatedContent",
+      "aiAssistantChat",
+      "localSpaceQuery",
+    ] as const
+  ).map((id) => ({
+    id,
+    label:
+      id === "localSpaceQuery"
+        ? t("primaryNavigation.search")
+        : specialSideTabs[id].label,
+    icon: specialSideTabs[id].icon ?? AppHeaderGraphIcon,
+  }));
 }
 
 function resolveWorkspaceEntityTab({
@@ -2615,6 +2644,11 @@ function WorkspaceCreationDialog() {
     });
   }
 
+  function commitSelectedFile(event: React.FormEvent<HTMLInputElement>) {
+    const file = event.currentTarget.files?.[0];
+    if (file) commitWorkspaceFile(file);
+  }
+
   return (
     <Dialog
       open
@@ -2637,14 +2671,18 @@ function WorkspaceCreationDialog() {
           </DialogHeader>
 
           {workspaceDraft.kind === "file" ? (
-            <Input
+            <input
               type="file"
+              data-slot="input"
               accept={accept}
               aria-label={t("lifecycle.file.choose")}
-              onChange={(event) => {
-                const file = event.target.files?.[0];
-                if (file) commitWorkspaceFile(file);
-              }}
+              className={cn(
+                "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none",
+                "file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
+                "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm",
+              )}
+              onChange={commitSelectedFile}
+              onInput={commitSelectedFile}
             />
           ) : (
             <Input
@@ -2689,6 +2727,11 @@ function WorkspaceCreationDialog() {
 
 function WorkspaceMainHeader() {
   const t = useTranslations("workspace");
+  const specialSideTabs = React.useMemo(() => createSpecialSideTabs(t), [t]);
+  const specialItems = React.useMemo(
+    () => createSpecialSideItems(t, specialSideTabs),
+    [specialSideTabs, t],
+  );
   const {
     mainTabs,
     mainValue,
@@ -2731,6 +2774,18 @@ function WorkspaceMainHeader() {
     setMainSearchOpen(true);
   }
 
+  function openSpecialEntry(entryId: SidePanelSpecialEntryId) {
+    const descriptor = specialSideTabs[entryId];
+    const id =
+      entryId === "aiAssistantChat" ? `aiAssistantChat_${Date.now()}` : entryId;
+    openInSidePanel({
+      id,
+      ...descriptor,
+      draggable: true,
+    });
+    if (rightCollapsed) toggleRight();
+  }
+
   return (
     <AppHeader
       onBack={() => showMessage(t("actions.back"))}
@@ -2747,14 +2802,33 @@ function WorkspaceMainHeader() {
             >
               <AppHeaderSidebarSimpleIcon className="size-4 rotate-180" />
             </AppHeaderAction>
-            <AppHeaderAction
-              aria-label={t("actions.sidePanelOptions")}
-              tooltip={t("actions.sidePanelOptions")}
-              className="h-7 w-4 rounded-l-none px-0 text-[9px]"
-              onClick={() => showMessage(t("actions.sidePanelOptions"))}
-            >
-              <AppHeaderCaretDownIcon className="size-2.5" />
-            </AppHeaderAction>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <AppHeaderAction
+                    aria-label={t("tabs.sidePanelMenu")}
+                    tooltip={t("tabs.sidePanelMenu")}
+                    className="h-7 w-4 rounded-l-none px-0 text-[9px]"
+                  >
+                    <AppHeaderCaretDownIcon className="size-2.5" />
+                  </AppHeaderAction>
+                }
+              />
+              <DropdownMenuContent side="bottom" align="end" className="w-64 p-1.5">
+                {specialItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <DropdownMenuItem
+                      key={item.id}
+                      onClick={() => openSpecialEntry(item.id)}
+                    >
+                      <Icon className="size-4" />
+                      {item.label}
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         ) : null
       }
@@ -2906,24 +2980,7 @@ function WorkspaceSidePanelHeader() {
   const t = useTranslations("workspace");
   const specialSideTabs = React.useMemo(() => createSpecialSideTabs(t), [t]);
   const specialItems = React.useMemo(
-    () =>
-      (
-        [
-          "graphView",
-          "backlinks",
-          "objectsInside",
-          "relatedContent",
-          "aiAssistantChat",
-          "localSpaceQuery",
-        ] as const
-      ).map((id) => ({
-        id,
-        label:
-          id === "localSpaceQuery"
-            ? t("primaryNavigation.search")
-            : specialSideTabs[id].label,
-        icon: specialSideTabs[id].icon ?? AppHeaderGraphIcon,
-      })),
+    () => createSpecialSideItems(t, specialSideTabs),
     [specialSideTabs, t],
   );
   const {
