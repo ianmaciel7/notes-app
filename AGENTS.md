@@ -17,6 +17,7 @@ This repository uses OpenSpec for significant proposals, workflow changes, and d
 
 ## Operational policy
 - Use and keep `.agents/rules/*` aligned with contributor and agent workflows, including OpenSpec, English-first, UI, architecture, Git, and Graphify guidance.
+- Prefer browser or internet-capable inspection when available for URLs, current facts, external pages, reference UI parity, or live product behavior; follow `.agents/rules/browser-first.md`.
 - For reference-style workspace UI, follow `.agents/rules/workspace-ui-parity.md` before editing components, copy, icons, headers, sidebars, tabs, or workspace content.
 - Before recapturing Capacities or another external UI, reuse matching sanitized evidence from `docs/references/` and `artifacts/reference-evidence/`; follow `docs/references/reference-evidence-workflow.md` for image, HTML/DOM, CSS, and JavaScript evidence bundles.
 - For workspace text entry, follow `.agents/rules/input-performance.md` before changing editors, text fields, search fields, or persistence paths.

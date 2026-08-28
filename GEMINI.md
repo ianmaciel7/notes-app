@@ -11,6 +11,7 @@
 - Use English for repository-facing and agent-facing guidance.
 - Follow OpenSpec in `.agents/rules/openspec-first.md` for significant proposals, architecture/process changes, and documentation updates.
 - Keep repository documentation synchronized (`CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`, `CLAUDE.md`, `.agents/rules/*`) whenever process rules change.
+- Prefer browser or internet-capable inspection when available for URLs, current facts, external pages, reference UI parity, or live product behavior; follow `.agents/rules/browser-first.md`.
 - For Capacities or external-site UI comparisons, search reusable evidence before recapture and follow `docs/references/reference-evidence-workflow.md` for sanitized image, HTML/DOM, CSS, and JavaScript artifacts.
 
 ## Decision Priority
@@ -24,6 +25,7 @@
 
 - `.agents/rules/openspec-first.md`
 - `.agents/rules/english-first.md`
+- `.agents/rules/browser-first.md`
 - `.agents/rules/shadcn-first.md`
 - `.agents/rules/nextjs-server-architecture.md`
 - `.agents/rules/git-workflow-rule.md`
