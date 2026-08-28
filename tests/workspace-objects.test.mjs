@@ -770,7 +770,7 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
   assert.match(controller, /type: "importFile"/);
   assert.match(controller, /objectTypeOverview\.importComplete/);
   const importHandler = controller.match(
-    /const importWorkspaceFiles[\s\S]*?\n {2}\);\n\n {2}const updateWorkspaceEntity/,
+    /const importWorkspaceFiles = React\.useCallback\([\s\S]*?\n {2}\);/,
   )?.[0];
   assert.ok(importHandler);
   assert.match(importHandler, /writeMediaAsset/);
@@ -778,6 +778,7 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
   assert.match(content, /input\.value = ""/);
   assert.match(content, /onClick=\{createObject\}/);
   assert.match(content, /onClick=\{onImport\}/);
+  assert.match(content, /primary-action:tasks/);
   assert.match(content, /function ObjectTypeOptionsMenu/);
   assert.match(content, /function ObjectTypeNewMenu/);
   assert.match(content, /object-type-filter-row/);
@@ -818,6 +819,8 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
   assert.match(content, /<AppSidebarSourceIcon\s+name="settings"/);
   assert.match(content, /\[&>svg\]:size-3/);
   assert.match(primaryActions, /workspace:open-new-palette/);
+  assert.match(primaryActions, /id: "tasks"/);
+  assert.match(primaryActions, /t\("tasksHint"\)/);
   for (const slot of [
     "document-object-editor",
     "table-object-editor",
@@ -853,6 +856,8 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
       typeof messages.workspace.objectTypeOverview.unpinFromSidebar,
       "string",
     );
+    assert.equal(typeof messages.workspace.primaryNavigation.tasks, "string");
+    assert.equal(typeof messages.workspace.primaryNavigation.tasksHint, "string");
     assert.equal(
       "namedItemViewNotReady" in messages.workspace.objectTypeOverview,
       false,

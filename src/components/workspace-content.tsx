@@ -183,6 +183,13 @@ function renderAtomicNotesWorkspace({
     return <CalendarWorkspace />;
   }
 
+  if (navigationAction === "tasks") {
+    const taskObjectType = objectTypes.find((item) => item.id === "task");
+    return taskObjectType ? (
+      <ObjectTypeWorkspace objectType={taskObjectType} />
+    ) : null;
+  }
+
   if (activeCreatedEntity) {
     return <CreatedObjectWorkspace entity={activeCreatedEntity} />;
   }
@@ -242,6 +249,7 @@ function createActivePresetObjectType({
 function primaryActionFromMainValue(value: string) {
   if (value === "primary-action:explore") return "explore";
   if (value === "primary-action:calendar") return "calendar";
+  if (value === "primary-action:tasks") return "tasks";
   return undefined;
 }
 
