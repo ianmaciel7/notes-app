@@ -177,6 +177,25 @@ function moveSpace(
   return next;
 }
 
+function resolveSelectedSpace(
+  displayedSpaces: AppSidebarSpace[],
+  spaces: AppSidebarSpace[],
+  value: string,
+) {
+  return (
+    displayedSpaces.find((space) => space.id === value) ??
+    spaces.find((space) => space.id === value) ??
+    displayedSpaces[0]
+  );
+}
+
+function hasActiveSpaceSort(
+  draggingId: string | null,
+  session: DragSession | null,
+) {
+  return draggingId !== null || session?.activated === true;
+}
+
 function AppSidebarSpaceSwitcher({
   spaces,
   value,
@@ -222,10 +241,7 @@ function AppSidebarSpaceSwitcher({
   onReorderRef.current = onReorder;
 
   const displayedSpaces = draftSpaces ?? spaces;
-  const selectedSpace =
-    displayedSpaces.find((space) => space.id === value) ??
-    spaces.find((space) => space.id === value) ??
-    displayedSpaces[0];
+  const selectedSpace = resolveSelectedSpace(displayedSpaces, spaces, value);
 
   const filteredSpaces = React.useMemo(() => {
     const search = query.trim().toLocaleLowerCase();
@@ -236,8 +252,7 @@ function AppSidebarSpaceSwitcher({
     );
   }, [displayedSpaces, query]);
 
-  const isSorting =
-    draggingId !== null || dragSessionRef.current?.activated === true;
+  const isSorting = hasActiveSpaceSort(draggingId, dragSessionRef.current);
 
   function clearHintTimer() {
     if (!hintTimerRef.current) return;

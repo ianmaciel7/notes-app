@@ -20,16 +20,16 @@ The system SHALL represent every object created from the `Novo` palette as a dis
 - **AND** it SHALL present a localized error status
 
 ### Requirement: Type-specific creation workflows
-The system SHALL dispatch every supported `Novo` palette object into the creation flow observed for its object family, keep the user's local Notes App data as the source of content, and preserve the current Capacities visual and interaction contract for idle, hover, focus-visible, pressed, opened, selected, and post-click states.
+The system SHALL dispatch the thirteen `Novo` palette entries into the creation flow observed for their object family instead of rendering one generic editor for all types.
 
 #### Scenario: Full editor object is created
 - **WHEN** the user selects Atomic note, Quote, or Page
 - **THEN** the system SHALL create and activate an untitled object immediately
-- **AND** SHALL render the appropriate title, body, tags, collections, or quote fields for that type
+- **AND** SHALL render the appropriate title, structured block body, tags, collections, or quote fields for that type
 
 #### Scenario: Page is created and written
 - **WHEN** the user activates `Novo` and selects Page
-- **THEN** the system SHALL instantiate an untitled page with a stable id, the central page icon/tone, an active workspace tab, selected sidebar/object-type projections, and accessible editable title/body controls
+- **THEN** the system SHALL instantiate an untitled page with a stable id, the central page icon/tone, an active workspace tab, selected sidebar/object-type projections, and a contentEditable title/body surface
 - **AND WHEN** the user writes a title, body text, tags, or collection metadata
 - **THEN** the title, tab label, sidebar count, object-type list, query results, and persisted entity SHALL update without creating a duplicate object
 - **AND** the active editor SHALL keep Capacities-compatible hover, focus, caret, and post-click appearance.
@@ -58,12 +58,10 @@ The system SHALL dispatch every supported `Novo` palette object into the creatio
 - **THEN** the edited values SHALL stay associated with the correct row and column, and the grid SHALL preserve focus-visible and selected-cell appearance after each edit.
 
 #### Scenario: Task is quick-captured
-- **WHEN** the user activates `Novo` and selects Task
+- **WHEN** the user selects Task
 - **THEN** the system SHALL open a localized quick-capture surface without replacing the currently active object
 - **AND WHEN** the user submits a non-empty title
-- **THEN** the system SHALL create the task, close the capture surface, update task count/projections, and expose an action to open the created task
-- **AND WHEN** the user presses Escape or submits an empty value
-- **THEN** no task SHALL be created and focus SHALL return to the invoking control.
+- **THEN** the system SHALL create the task, close the capture surface, update task state, and offer an action to open the created task
 
 #### Scenario: URL-derived object is created
 - **WHEN** the user selects Weblink or Tweet
@@ -112,11 +110,9 @@ The system SHALL dispatch every supported `Novo` palette object into the creatio
 
 #### Scenario: File-backed object is created
 - **WHEN** the user selects Image, PDF, Audio, or File
-- **THEN** the system SHALL open a local file chooser with an accept contract appropriate to the selected object type
-- **AND WHEN** a compatible file is selected
-- **THEN** the system SHALL create an object with local metadata, an ephemeral preview reference, central icon/tone, active selection, and updated count without uploading or persisting file bytes
-- **AND WHEN** selection is cancelled or incompatible
-- **THEN** no object SHALL be created and a localized non-destructive status SHALL be shown when applicable.
+- **THEN** the system SHALL open a local file chooser with an appropriate accept contract
+- **AND** SHALL create an object only after a compatible file is selected
+- **AND** SHALL store local metadata and an ephemeral preview reference without uploading or persisting the file bytes
 
 #### Scenario: Custom object type is instantiated
 - **WHEN** the user creates or selects a custom object type such as the current reference's `Default` type
@@ -190,13 +186,12 @@ The system SHALL dispatch every supported `Novo` palette object into the creatio
 - **AND** it SHALL NOT be counted as a missing creatable object in lifecycle parity.
 
 ### Requirement: Editing synchronizes every workspace projection
-The system SHALL keep each object's canonical data synchronized with its active editor, main tab, sidebar counts, object-type index, query results, search surface, and persistence after creation, click navigation, writing, and re-opening.
+The system SHALL keep an object's canonical data synchronized with its active editor, main tab, sidebar counts, object-type index, and query results without causing controlled-editor update loops or selection loss.
 
 #### Scenario: Title or content is edited
-- **WHEN** the user edits an object's title, body, tags, table cells, task fields, URL notes, or query definition
-- **THEN** the active control SHALL reflect the input immediately and the canonical entity SHALL commit through the repository's bounded input-performance policy
+- **WHEN** the user edits an object's title, structured body, simple body, tags, table cells, task fields, URL notes, or query definition
+- **THEN** the canonical entity SHALL update immediately or through the documented short persistence buffer
 - **AND** every visible projection of the changed field SHALL reflect the same value without creating a duplicate object
-- **AND** blur, navigation, unmount, and explicit submit boundaries SHALL flush pending valid edits before the object is no longer editable.
 
 #### Scenario: Structured body changes externally
 - **WHEN** a Page, Atomic note, or Quote receives a valid external body that differs from its current editor JSON

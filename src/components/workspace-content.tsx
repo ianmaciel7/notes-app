@@ -549,6 +549,41 @@ function CreatedObjectWorkspace({ entity }: { entity: WorkspaceEntity }) {
   );
 }
 
+function resolveNamedItemTitle({
+  collectionName,
+  item,
+  queries,
+  t,
+}: {
+  collectionName: string | undefined;
+  item: ObjectTypeNamedItemTab;
+  queries: readonly string[] | undefined;
+  t: ReturnType<typeof useTranslations<"workspace">>;
+}) {
+  if (item.kind === "settings") return t("objectTypeOverview.typeSettings");
+  if (item.kind === "template") return t("objectTypeOverview.newFromTemplate");
+  if (item.kind === "collection") {
+    return collectionName ?? t("objectTypeOverview.untitled");
+  }
+  if (item.kind === "query") {
+    return queries?.[item.index] ?? t("objectTypeOverview.untitled");
+  }
+  return t("objectTypeOverview.untitled");
+}
+
+function resolveNamedItemIcon(
+  item: ObjectTypeNamedItemTab,
+  objectTypeIcon: React.ElementType<ObjectIconProps>,
+) {
+  if (item.kind === "collection") return ObjectCollectionIcon;
+  if (item.kind === "query") return ObjectQueryIcon;
+  return objectTypeIcon;
+}
+
+function namedItemResultsTranslationKey(item: ObjectTypeNamedItemTab) {
+  return item.kind === "collection" ? "collectionResults" : "queryResults";
+}
+
 function ObjectTypeNamedItemWorkspace({
   item,
 }: {
@@ -572,17 +607,18 @@ function ObjectTypeNamedItemWorkspace({
     item.kind === "collection"
       ? objectTypeCollections[item.collectionId]
       : undefined;
-  const title =
-    collection?.name ??
-    (item.kind === "query"
-      ? objectTypeQueries[item.objectTypeId]?.[item.index]
-      : undefined) ??
-    t("objectTypeOverview.untitled");
+  const title = resolveNamedItemTitle({
+    collectionName: collection?.name,
+    item,
+    queries: objectTypeQueries[item.objectTypeId],
+    t,
+  });
   const matchingEntities = React.useMemo(
     () =>
       createdEntities.filter((entity) => {
         if (entity.objectTypeId !== item.objectTypeId) return false;
         if (item.kind === "query") return true;
+        if (item.kind !== "collection") return false;
         return (
           !!collection &&
           "collections" in entity &&
@@ -600,9 +636,11 @@ function ObjectTypeNamedItemWorkspace({
 
   if (!objectType) return null;
 
-  const ItemIcon =
-    item.kind === "collection" ? ObjectCollectionIcon : ObjectQueryIcon;
+  const ItemIcon = resolveNamedItemIcon(item, objectType.icon);
   const tabId = objectTypeNamedItemTabId(item);
+  const resultsLabel = t(
+    `objectTypeOverview.${namedItemResultsTranslationKey(item)}`,
+  );
 
   function rename(value: string) {
     if (item.kind === "collection" && collection) {
@@ -668,55 +706,115 @@ function ObjectTypeNamedItemWorkspace({
           </span>
         </div>
 
-        <BufferedTextInput
-          inputRef={titleRef}
-          aria-label={t("fields.title")}
-          value={title}
-          onCommit={rename}
-          className="mt-3 w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-[#282522] outline-none placeholder:text-[#b8b2ac]"
-          placeholder={t("objectTypeOverview.untitled")}
-        />
+        {item.kind === "settings" || item.kind === "template" ? (
+          <ObjectTypeDestinationWorkspace
+            item={item}
+            objectType={objectType}
+            title={title}
+          />
+        ) : (
+          <>
+            <BufferedTextInput
+              inputRef={titleRef}
+              aria-label={t("fields.title")}
+              value={title}
+              onCommit={rename}
+              className="mt-3 w-full bg-transparent text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-[#282522] outline-none placeholder:text-[#b8b2ac]"
+              placeholder={t("objectTypeOverview.untitled")}
+            />
 
-        <section
-          data-slot="object-type-named-item-results"
-          className="mt-10 min-h-[220px]"
-          aria-label={t(
-            `objectTypeOverview.${item.kind === "collection" ? "collectionResults" : "queryResults"}`,
-          )}
-        >
-          <div className="mb-3 flex items-center justify-between text-sm text-[#77716b]">
-            <span>
-              {t(
-                `objectTypeOverview.${item.kind === "collection" ? "collectionResults" : "queryResults"}`,
+            <section
+              data-slot="object-type-named-item-results"
+              className="mt-10 min-h-[220px]"
+              aria-label={resultsLabel}
+            >
+              <div className="mb-3 flex items-center justify-between text-sm text-[#77716b]">
+                <span>{resultsLabel}</span>
+                <span>{t("objectTypeOverview.entryCount", { count })}</span>
+              </div>
+              {matchingEntities.length > 0 ? (
+                <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                  {matchingEntities.map((entity) => (
+                    <ObjectProjectionRow
+                      key={entity.id}
+                      entity={entity}
+                      objectType={objectType}
+                      onClick={() => selectEntity(entity.id)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex min-h-[190px] flex-col items-center justify-center rounded-2xl text-center">
+                  <ItemIcon className="mb-3 size-5 text-[#77716b]" />
+                  <p className="text-sm font-medium text-[#34312f]">
+                    {t("objectTypeOverview.noMatchingObjects")}
+                  </p>
+                  <p className="mt-1 max-w-md text-[13px] leading-5 text-[#77716b]">
+                    {t("objectTypeOverview.noMatchingObjectsDescription")}
+                  </p>
+                </div>
               )}
-            </span>
-            <span>{t("objectTypeOverview.entryCount", { count })}</span>
-          </div>
-          {matchingEntities.length > 0 ? (
-            <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
-              {matchingEntities.map((entity) => (
-                <ObjectProjectionRow
-                  key={entity.id}
-                  entity={entity}
-                  objectType={objectType}
-                  onClick={() => selectEntity(entity.id)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="flex min-h-[190px] flex-col items-center justify-center rounded-2xl text-center">
-              <ItemIcon className="mb-3 size-5 text-[#77716b]" />
-              <p className="text-sm font-medium text-[#34312f]">
-                {t("objectTypeOverview.noMatchingObjects")}
-              </p>
-              <p className="mt-1 max-w-md text-[13px] leading-5 text-[#77716b]">
-                {t("objectTypeOverview.noMatchingObjectsDescription")}
-              </p>
-            </div>
-          )}
-        </section>
+            </section>
+          </>
+        )}
       </div>
     </div>
+  );
+}
+
+function ObjectTypeDestinationWorkspace({
+  item,
+  objectType,
+  title,
+}: {
+  item: Extract<ObjectTypeNamedItemTab, { kind: "settings" | "template" }>;
+  objectType: AppSidebarObjectType;
+  title: string;
+}) {
+  const t = useTranslations("workspace");
+  const { createWorkspaceEntity } = useWorkspace();
+  return (
+    <section
+      data-slot="object-type-command-destination"
+      data-kind={item.kind}
+      className="mt-8 grid gap-3"
+      aria-label={title}
+    >
+      <h1 className="text-[40px] font-bold leading-[44px] tracking-[-0.02em] text-[#282522]">
+        {title}
+      </h1>
+      <div className="rounded-xl border border-border bg-card p-4 text-sm text-[#77716b]">
+        {item.kind === "settings"
+          ? t("objectTypeOverview.settingsDescription")
+          : t("objectTypeOverview.templateCreated")}
+      </div>
+      {item.kind === "settings" ? (
+        <div className="grid gap-2 rounded-xl border border-border bg-card p-3 text-sm">
+          {[
+            t("objectTypeOverview.allObjects"),
+            t("objectTypeOverview.visibleSections"),
+            t("objectTypeOverview.hiddenSections"),
+          ].map((label) => (
+            <label
+              key={label}
+              className="flex min-h-8 items-center justify-between rounded-lg px-2 hover:bg-muted"
+            >
+              <span>{label}</span>
+              <input type="checkbox" defaultChecked />
+            </label>
+          ))}
+        </div>
+      ) : (
+        <Button
+          type="button"
+          className="w-fit"
+          onClick={() => createWorkspaceEntity(objectType.id, objectType.label)}
+        >
+          <AppSidebarPlusIcon className="size-4" />
+          {t("objectTypeOverview.newCurrentType", { type: objectType.label })}
+        </Button>
+      )}
+    </section>
   );
 }
 
@@ -2415,12 +2513,17 @@ type ObjectTypeNamedItemTab =
       objectTypeId: string;
       collectionId: string;
     }
-  | { kind: "query"; objectTypeId: string; index: number };
+  | { kind: "query"; objectTypeId: string; index: number }
+  | { kind: "settings" | "template"; objectTypeId: string };
 
 function objectTypeNamedItemTabId(item: ObjectTypeNamedItemTab) {
-  return item.kind === "collection"
-    ? `object-type-item:collection:${item.collectionId}`
-    : `object-type-item:query:${item.objectTypeId}:${item.index}`;
+  if (item.kind === "collection") {
+    return `object-type-item:collection:${item.collectionId}`;
+  }
+  if (item.kind === "query") {
+    return `object-type-item:query:${item.objectTypeId}:${item.index}`;
+  }
+  return `object-type-item:${item.kind}:${item.objectTypeId}`;
 }
 
 function parseObjectTypeNamedItemTabId(
@@ -2438,11 +2541,20 @@ function parseObjectTypeNamedItemTabId(
       : null;
   }
   const queryMatch = /^object-type-item:query:([^:]+):(\d+)$/.exec(id);
-  return queryMatch
+  if (queryMatch) {
+    return {
+      kind: "query",
+      objectTypeId: queryMatch[1],
+      index: Number(queryMatch[2]),
+    };
+  }
+  const destinationMatch = /^object-type-item:(settings|template):([^:]+)$/.exec(
+    id,
+  );
+  return destinationMatch
     ? {
-        kind: "query",
-        objectTypeId: queryMatch[1],
-        index: Number(queryMatch[2]),
+        kind: destinationMatch[1] as "settings" | "template",
+        objectTypeId: destinationMatch[2],
       }
     : null;
 }
@@ -4497,12 +4609,13 @@ function ContextualRelationsWorkspace({
       ...objectsInside.map((item) => item.targetId),
     ]),
   );
-  const ids =
+  const rawIds =
     entry === "backlinks"
       ? backlinks.map((item) => item.sourceId)
       : entry === "objectsInside"
         ? objectsInside.map((item) => item.targetId)
         : relatedIds;
+  const ids = Array.from(new Set(rawIds));
   const rows = ids
     .map((id) => createdEntities.find((entity) => entity.id === id))
     .filter((entity): entity is WorkspaceEntity => Boolean(entity))
@@ -4686,12 +4799,12 @@ function GraphWorkspace() {
       data-slot="workspace-graph"
       className="relative flex h-full min-h-0 flex-col overflow-hidden bg-card text-card-foreground"
     >
-      <div className="absolute inset-0 bottom-11 overflow-hidden">
+      <div className="relative min-h-[18rem] flex-1 overflow-hidden">
         <div
           data-slot="workspace-graph-canvas"
           data-dragging={dragging || undefined}
           data-graph-empty={center ? undefined : "true"}
-          className="absolute inset-0 origin-center cursor-grab touch-none select-none transition-transform duration-200 ease-out active:cursor-grabbing data-[dragging=true]:transition-none motion-reduce:transition-none"
+          className="relative h-full min-h-[18rem] origin-center cursor-grab touch-none select-none transition-transform duration-200 ease-out active:cursor-grabbing data-[dragging=true]:transition-none motion-reduce:transition-none"
           style={{
             transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
           }}

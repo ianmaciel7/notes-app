@@ -256,3 +256,11 @@ The system SHALL keep the main tab strip usable when auxiliary panels or narrow 
 - **AND** the active tab SHALL remain in the visible window
 - **AND** hidden tabs SHALL remain available through the tab-list control
 - **AND** auxiliary panels SHALL collapse or move to an overlay before the main workspace becomes unusably narrow.
+
+### Requirement: Current workspace rail geometry
+The main and contextual workspace rails SHALL match the height and bounded placement of the matched authenticated reference state.
+
+#### Scenario: Desktop rails are measured
+- **WHEN** the local workspace and authenticated reference render at the same desktop viewport and panel state
+- **THEN** the main and contextual top rails SHALL measure approximately 46px
+- **AND** rail controls SHALL remain vertically centered without increasing the content offset or overlapping the first content row.

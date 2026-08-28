@@ -72,6 +72,19 @@ type SideSpecialItem = {
   icon: React.ElementType;
 };
 
+function getTabRenderItems(tabs: AppHeaderTab[]) {
+  const seen = new Map<string, number>();
+  return tabs.map((tab) => {
+    const occurrence = seen.get(tab.id) ?? 0;
+    seen.set(tab.id, occurrence + 1);
+    return {
+      tab,
+      renderKey:
+        occurrence === 0 ? tab.id : `${tab.id}:duplicate-${occurrence}`,
+    };
+  });
+}
+
 function PhosphorIcon({
   children,
   ...props
@@ -283,11 +296,11 @@ function SideTabList({
         sideOffset={6}
         className="w-60"
       >
-        {tabs.map((tab) => {
+        {getTabRenderItems(tabs).map(({ tab, renderKey }) => {
           const Icon = tab.icon;
           return (
             <DropdownMenuItem
-              key={tab.id}
+              key={renderKey}
               className={cn(
                 "group/tab-list h-9 gap-2",
                 tab.id === value && "bg-accent",
@@ -393,7 +406,7 @@ function AppSidePanelHeader({
     <header
       data-slot="app-side-panel-header"
       className={cn(
-        "flex h-[58px] w-full shrink-0 items-center justify-between bg-[var(--side-header-bg-back)] px-1",
+        "relative z-30 flex h-[58px] w-full shrink-0 items-center justify-between bg-[var(--side-header-bg-back)] px-1",
         className,
       )}
       style={{ ...sideHeaderTheme, ...style }}
@@ -409,8 +422,8 @@ function AppSidePanelHeader({
               className="flex w-full min-w-0 items-center overflow-hidden"
               style={{ gap: SIDE_TAB_GAP }}
             >
-              {tabs.map((tab) => (
-                <React.Fragment key={tab.id}>
+              {getTabRenderItems(tabs).map(({ tab, renderKey }) => (
+                <React.Fragment key={renderKey}>
                   {/* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual tab wrapper */}
                   <div
                     role="presentation"
@@ -492,7 +505,7 @@ function AppSidePanelHeader({
 
       <div
         data-slot="app-side-panel-shell-controls"
-        className="ml-1 flex shrink-0 items-center gap-x-1"
+        className="relative z-40 ml-1 flex shrink-0 items-center gap-x-1"
       >
         <div className="flex items-center">
           <SideHeaderAction
@@ -509,7 +522,7 @@ function AppSidePanelHeader({
                 <button
                   type="button"
                   aria-label={menuLabel}
-                  className="relative -ml-px flex h-7 w-4 shrink-0 items-center justify-center rounded-l-none rounded-r-lg border border-transparent bg-transparent text-[9px] text-[var(--side-header-text-secondary)] hover:bg-[var(--side-header-bg-front-hover)] hover:text-[var(--side-header-text-primary)] active:z-20 active:brightness-[0.97] focus:outline-none"
+                  className="relative flex h-7 w-4 shrink-0 items-center justify-center rounded-l-none rounded-r-lg border border-transparent bg-transparent text-[9px] text-[var(--side-header-text-secondary)] hover:bg-[var(--side-header-bg-front-hover)] hover:text-[var(--side-header-text-primary)] active:z-20 active:brightness-[0.97] focus:outline-none"
                 >
                   <AppHeaderCaretDownIcon className="size-2.5" />
                 </button>

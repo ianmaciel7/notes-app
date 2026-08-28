@@ -2880,7 +2880,7 @@ function WorkspaceSidePanelHeader() {
     setSideValue,
     setSideSearchOpen,
   } = useWorkspace();
-  const { toggleRight } = useAppShell();
+  const { rightCollapsed, toggleRight } = useAppShell();
 
   if (focusMode) return null;
 
@@ -2893,6 +2893,7 @@ function WorkspaceSidePanelHeader() {
 
     if (existing) {
       setSideValue(existing.id);
+      if (rightCollapsed) toggleRight();
       return;
     }
 
@@ -2907,6 +2908,7 @@ function WorkspaceSidePanelHeader() {
 
     setSideTabs((current) => [...current, next]);
     setSideValue(id);
+    if (rightCollapsed) toggleRight();
   }
 
   function createSideTab() {

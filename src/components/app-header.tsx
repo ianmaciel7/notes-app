@@ -69,7 +69,7 @@ function AppHeader({
     <header
       data-slot="app-header"
       className={cn(
-        "flex h-[46px] w-full shrink-0 grow-0 items-center justify-between border-b-0",
+        "pointer-events-none flex h-[46px] w-full shrink-0 grow-0 items-center justify-between border-b-0",
         "bg-[var(--app-header-bg-back)] text-[var(--app-header-text-secondary)]",
         className,
       )}
@@ -78,7 +78,7 @@ function AppHeader({
     >
       <div
         data-slot="app-header-start"
-        className="flex h-full shrink-0 items-center gap-x-2 pl-2.5"
+        className="pointer-events-auto flex h-full shrink-0 items-center gap-x-2 pl-2.5"
       >
         <AppHeaderHistory
           backDisabled={backDisabled}
@@ -92,16 +92,16 @@ function AppHeader({
 
       <div
         data-slot="app-header-content"
-        className="flex min-w-0 flex-1 items-center"
+        className="pointer-events-auto flex min-w-0 flex-1 items-center"
       >
         {children}
       </div>
 
       <div
         data-slot="app-header-end"
-        className="flex max-w-max shrink-0 items-center justify-end pr-2.5 text-xs text-[var(--app-header-text-secondary)]"
+        className="pointer-events-none flex max-w-max shrink-0 items-center justify-end pr-2.5 text-xs text-[var(--app-header-text-secondary)]"
       >
-        <div className="flex items-center gap-1 px-1">
+        <div className="pointer-events-auto flex items-center gap-1 px-1">
           <AppHeaderAction
             aria-label={focusLabel}
             tooltip={focusLabel}

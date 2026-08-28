@@ -469,7 +469,7 @@ function AppShellSidePanel({
         onResize?.(size, id, previousSize);
       }}
       className={cn(
-        "flex h-full min-w-0 flex-col overflow-hidden bg-sidebar",
+        "relative z-10 flex h-full min-w-0 flex-col overflow-hidden bg-sidebar",
         workspaceSurfaceMotionClass,
         rightCollapsed && "opacity-0",
         className,
@@ -529,7 +529,7 @@ function AppShellSurface({
       data-side={side}
       className={cn(
         "min-h-0 flex-1 pb-2.5 pt-0",
-        side === "main" ? "px-2.5" : "pl-0 pr-2.5",
+        side === "main" ? "relative z-0 px-2.5" : "relative z-20 pl-0 pr-2.5",
       )}
       style={
         {
@@ -601,7 +601,7 @@ function AppShellSidebarTrigger({
   return (
     <div
       data-slot="app-shell-sidebar-trigger"
-      className="absolute top-[15px] z-50"
+      className="absolute top-[9px] z-50"
       style={{
         left: "max(0.625rem, calc(var(--app-shell-left-width) - 2.125rem))",
       }}

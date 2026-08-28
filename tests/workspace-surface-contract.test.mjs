@@ -12,6 +12,7 @@ const [
   listTableSource,
   objectViewSource,
   workspaceParitySource,
+  commandMatrixSource,
 ] = await Promise.all([
   readFile("src/components/ui/workspace-surface.tsx", "utf8"),
   readFile("src/components/workspace-content-surface.tsx", "utf8"),
@@ -22,6 +23,7 @@ const [
   readFile("src/components/data-view-list-table.tsx", "utf8"),
   readFile("src/components/object-view-renderer.tsx", "utf8"),
   readFile("tests/e2e/workspace-parity.spec.ts", "utf8"),
+  readFile("docs/references/capacities-workspace-parity.md", "utf8"),
 ]);
 
 test("workspace routes consume the shared surface contracts", () => {
@@ -92,4 +94,29 @@ test("workspace parity targets production-owned views without legacy fallbacks",
     createdObjectHelper,
     /\[data-slot="object-type-workspace"\]|\[data-slot="object-type-named-item-workspace"\]|\[data-slot="created-object-workspace"\]/,
   );
+});
+
+test("production command matrix stays aligned with current browser evidence", () => {
+  assert.match(
+    workspaceParitySource,
+    /test\("production object-type commands render named outcomes"/,
+  );
+  assert.match(
+    workspaceParitySource,
+    /test\("Page Collections and overflow controls keep Page metadata synchronized"/,
+  );
+  assert.match(
+    workspaceParitySource,
+    /test\("contextual panel entries and Explore actions dispatch route-specific bodies"/,
+  );
+  assert.match(
+    workspaceParitySource,
+    /test\("Novo Page and Table flows keep split actions, writes, and counts durable"/,
+  );
+  assert.match(commandMatrixSource, /production object-type commands render named outcomes/);
+  assert.match(
+    commandMatrixSource,
+    /Page Collections and overflow controls keep Page metadata synchronized/,
+  );
+  assert.doesNotMatch(commandMatrixSource, /Atomic note object-type commands/);
 });

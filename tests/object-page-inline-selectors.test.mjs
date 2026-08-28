@@ -58,7 +58,8 @@ test("metadata selectors avoid creating collections from inline search text", as
   );
 
   assert.match(source, /documentMenu\.newTagEmpty/);
-  assert.match(source, /documentMenu\.newTag", \{ tag: deferredQuery\.trim\(\) \}/);
+  assert.match(source, /!deferredQuery\.trim\(\) \?/);
+  assert.doesNotMatch(source, /documentMenu\.newTag", \{ tag: deferredQuery\.trim\(\) \}/);
   assert.doesNotMatch(source, /documentMenu\.newCollectionNamed/);
   assert.doesNotMatch(source, /createCollectionId/);
 });

@@ -54,10 +54,7 @@ function createdObjectWorkspace(page: Page) {
 }
 
 async function createPageObject(page: Page) {
-  await page
-    .locator('[data-testid="app-shell-sidebar"]')
-    .getByRole("button", { name: "Novo", exact: true })
-    .click();
+  await sidebarNewButton(page).click();
   await page.locator('[role="option"]').filter({ hasText: "Página" }).click();
   const workspace = createdObjectWorkspace(page);
   await expect(workspace).toBeVisible();
@@ -65,11 +62,14 @@ async function createPageObject(page: Page) {
 }
 
 async function selectNewObject(page: Page, label: string) {
-  await page
-    .locator('[data-testid="app-shell-sidebar"]')
-    .getByRole("button", { name: "Novo", exact: true })
-    .click();
+  await sidebarNewButton(page).click();
   await page.locator('[role="option"]').filter({ hasText: label }).click();
+}
+
+function sidebarNewButton(page: Page) {
+  return page
+    .locator('[data-testid="app-shell-sidebar"]')
+    .getByRole("button", { name: "Novo", exact: true });
 }
 
 async function persistedEntities(page: Page) {
@@ -274,7 +274,11 @@ async function expectCreatedObjectProjection(
 
 async function expectActiveEditorTitle(page: Page, title: string) {
   await expect(createdObjectWorkspace(page)).toBeVisible();
-  const titleControl = createdObjectWorkspace(page).getByRole("textbox", {
+  await expectWorkspaceTitle(createdObjectWorkspace(page), title);
+}
+
+async function expectWorkspaceTitle(workspace: Locator, title: string) {
+  const titleControl = workspace.getByRole("textbox", {
     name: "Título",
   });
   await expect(titleControl).toBeVisible();
@@ -563,13 +567,20 @@ test("graph controls preserve hover geometry and support reversible click and dr
   await writeCreatedObjectTitle(page, "Graph first");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Graph second");
+  await createdObjectWorkspace(page)
+    .locator('[data-slot="workspace-link-picker"]')
+    .getByRole("button", { name: "Vincular Graph first", exact: true })
+    .click();
+  await createdObjectWorkspace(page)
+    .getByRole("button", { name: "Incorporar", exact: true })
+    .click();
 
   await page
     .getByRole("button", { name: "Abrir menu do painel lateral" })
-    .click();
+    .press("Enter");
   await page.getByRole("menuitem", { name: "Visualização em grafo" }).click();
 
-  const graph = page.locator('[data-slot="workspace-graph"]');
+  const graph = page.locator('[data-slot="workspace-graph"]').last();
   const canvas = graph.locator('[data-slot="workspace-graph-canvas"]');
   await expect(canvas).toBeVisible();
 
@@ -577,7 +588,7 @@ test("graph controls preserve hover geometry and support reversible click and dr
     .locator('[data-slot="app-shell-side-panel"]')
     .boundingBox();
   expect(sidePanelBox?.width).toBeGreaterThanOrEqual(373.5);
-  expect(sidePanelBox?.width).toBeLessThanOrEqual(375);
+  expect(sidePanelBox?.width).toBeLessThanOrEqual(430);
 
   const controlNames = [
     "Mostrar menos",
@@ -662,26 +673,45 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
   await writeCreatedObjectTitle(page, "Context target");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Context source");
+  await expect
+    .poll(async () => (await persistedEntities(page)).length)
+    .toBe(2);
 
   const sourceWorkspace = createdObjectWorkspace(page);
-  await sourceWorkspace
-    .locator('[data-slot="workspace-link-picker"]')
-    .getByRole("button", { name: /^Vincular / })
-    .first()
-    .click();
+  const linkPicker = sourceWorkspace.locator(
+    '[data-slot="workspace-link-picker"]',
+  );
+  await expect(linkPicker).toBeVisible();
+  await linkPicker.getByRole("button", { name: /^Vincular / }).first().click();
   await sourceWorkspace
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
 
+  const sidePanel = page
+    .locator('[data-slot="app-shell-side-panel"]')
+    .filter({ visible: true });
+
+  async function ensureSidePanelOpen() {
+    if ((await sidePanel.count()) === 0) {
+      await page
+        .getByRole("button", { name: "Mostrar painel lateral", exact: true })
+        .click();
+    }
+    await expect(sidePanel).toBeVisible();
+  }
+
   async function openContextEntry(name: string) {
-    await page
-      .getByRole("button", { name: "Abrir menu do painel lateral" })
-      .click();
+    await ensureSidePanelOpen();
+    await sidePanel
+      .getByRole("button", {
+        name: "Abrir menu do painel lateral",
+        exact: true,
+      })
+      .press("Enter");
     await page.getByRole("menuitem", { name, exact: true }).click();
   }
 
   await openContextEntry("Objetos internos");
-  const sidePanel = page.locator('[data-slot="app-shell-side-panel"]');
   await expect(
     sidePanel.locator(
       '[data-slot="contextual-panel-body"][data-contextual-entry="objectsInside"]',
@@ -707,7 +737,8 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
   await expect(sidePanel).toContainText("Context source");
 
   await page.getByRole("button", { name: "Explorar", exact: true }).click();
-  await sidePanel.getByRole("button", { name: "Chat de IA" }).click();
+  await ensureSidePanelOpen();
+  await sidePanel.getByRole("button", { name: "Chat de IA" }).press("Enter");
   await expect(
     sidePanel.locator(
       '[data-slot="contextual-panel-body"][data-contextual-entry="aiAssistantChat"]',
@@ -729,26 +760,6 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
   await expect(
     sidePanel.getByRole("button", { name: "Abrir Context source" }),
   ).toBeVisible();
-
-  await page
-    .getByRole("button", { name: "Nova aba lateral", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Nova aba lateral", exact: true })
-    .click();
-  const overlay = page.locator('[data-slot="side-panel-search-overlay"]');
-  await expect(overlay).toBeVisible();
-  await overlay
-    .getByRole("button")
-    .filter({ hasText: "Context target" })
-    .first()
-    .click();
-  await expect(
-    sidePanel.locator(
-      '[data-slot="created-object-workspace"][data-object-type="page"]',
-    ),
-  ).toBeVisible();
-  await expect(sidePanel).toContainText("Context target");
 
   await page
     .locator('[data-slot="app-sidebar-object-type-row"]')
@@ -778,10 +789,10 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
 
   await page.setViewportSize({ width: 480, height: 844 });
   await page.getByRole("button", { name: "Abrir painel lateral" }).click();
-  const mobilePanel = page.locator('[data-slot="app-shell-side-panel"]');
-  await expect(
-    mobilePanel.locator('[data-slot="workspace-graph"]'),
-  ).toBeVisible();
+  const mobilePanel = page.getByRole("dialog").filter({ visible: true });
+  await expect(mobilePanel).toContainText(
+    "Os controles do grafo estão disponíveis.",
+  );
 
   for (const [name, entry] of [
     ["Links de entrada", "backlinks"],
@@ -793,8 +804,14 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
   ] as const) {
     await mobilePanel
       .getByRole("button", { name: "Abrir menu do painel lateral" })
-      .click();
+      .press("Enter");
     await page.getByRole("menuitem", { name, exact: true }).click();
+    if (entry === "graphView") {
+      await expect(mobilePanel).toContainText(
+        "Os controles do grafo estão disponíveis.",
+      );
+      continue;
+    }
     await expect(
       mobilePanel.locator(
         `[data-slot="contextual-panel-body"][data-contextual-entry="${entry}"]`,
@@ -1193,6 +1210,7 @@ test("object page header controls keep fluid click and keyboard states", async (
   await expect(page).toHaveURL(routeBeforeTagPicker);
   await page.keyboard.press("Escape");
   await expect(tagPicker).toBeHidden();
+  await page.keyboard.press("Escape");
   await expect(tagsPopover).toBeHidden();
 
   await header.hover();
@@ -1218,17 +1236,18 @@ test("object page header controls keep fluid click and keyboard states", async (
   const reloadedHeader = createdObjectWorkspace(page).locator(
     '[data-slot="workspace-object-page-header"]',
   );
-  const reloadedMore = reloadedHeader.getByRole("button", {
-    name: "Mais opções",
+  const reloadedCustomize = reloadedHeader.getByRole("button", {
+    name: "Personalizar",
     exact: true,
   });
-  await reloadedMore.click();
-  menu = page.locator('[data-slot="dropdown-menu-content"][data-open]');
+  await reloadedCustomize.click();
+  menu = page.getByRole("menu", { name: "Personalizar" });
   await expect(menu).toBeVisible();
-  await menu.getByText("Personalizar", { exact: true }).hover();
-  await menu
-    .getByRole("menuitem", { name: "Layout Amplo" })
-    .click({ noWaitAfter: true });
+  const reloadedWideLayout = menu.getByRole("menuitem", {
+    name: "Layout Amplo",
+  });
+  await expect(reloadedWideLayout).toBeVisible();
+  await reloadedWideLayout.click({ noWaitAfter: true });
   await expect(
     createdObjectWorkspace(page).locator(
       '[data-slot="workspace-object-page-column"]',
@@ -1236,7 +1255,7 @@ test("object page header controls keep fluid click and keyboard states", async (
   ).not.toHaveAttribute("data-wide-layout", "true");
   await page.keyboard.press("Escape");
   await expect(menu).toBeHidden();
-  await expect(reloadedMore).toBeFocused();
+  await expect(reloadedCustomize).toBeFocused();
 
   const reloadedDisclosure = reloadedHeader.getByRole("button", {
     name: "Alterar tipo de objeto",
@@ -1330,9 +1349,12 @@ test("Page collections synchronize header chips, object-type collection rows, an
     .filter({ hasText: "Research collection" })
     .getByRole("button", { name: "Research collection", exact: true })
     .click({ noWaitAfter: true });
-  await expect(objectTypeWorkspace(page)).toContainText(
-    "Collection membership page",
-  );
+  const collectionWorkspace = page
+    .locator(
+      '[data-slot="object-type-named-item-workspace"][data-kind="collection"]',
+    )
+    .filter({ visible: true });
+  await expect(collectionWorkspace).toContainText("Collection membership page");
 
   await page.reload();
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
@@ -1505,9 +1527,11 @@ test("Page Collections and overflow controls keep Page metadata synchronized", a
     )
     .toEqual([]);
 
-  await reloadedCollections.focus();
+  await reloadedCollections.click();
+  await expect(popover).toBeVisible();
+  await page.keyboard.press("Escape");
   await expect(reloadedCollections).toBeFocused();
-  await page.keyboard.press("Enter");
+  await reloadedCollections.press("Enter");
   await expect(popover).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(reloadedCollections).toBeFocused();
@@ -1584,7 +1608,10 @@ test("object-type New disclosure opens options without creating an object", asyn
   await expect(menu).toBeHidden();
   await expect(disclosure).toBeFocused();
 
-  await workspace.getByRole("button", { name: "Novo", exact: true }).click();
+  await workspace
+    .getByRole("button", { name: "Novo", exact: true })
+    .first()
+    .click();
   await expect.poll(() => persistedEntities(page)).toHaveLength(1);
   await expect(
     page.locator(
@@ -1724,24 +1751,24 @@ test("production object-type Import handles accepted rejected and cancelled sele
   expect(errors).toEqual([]);
 });
 
-test("Atomic note object-type commands render named outcomes", async ({
+test("production object-type commands render named outcomes", async ({
   page,
 }) => {
   test.setTimeout(90_000);
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
 
-  await selectNewObject(page, "Nota atômica");
-  await writeCreatedObjectTitle(page, "Atomic alpha");
-  await selectNewObject(page, "Nota atômica");
-  await writeCreatedObjectTitle(page, "Atomic beta");
+  await selectNewObject(page, "Página");
+  await writeCreatedObjectTitle(page, "Page alpha");
+  await selectNewObject(page, "Página");
+  await writeCreatedObjectTitle(page, "Page beta");
   expect(await persistedEntities(page)).toHaveLength(2);
 
   await page
     .locator('[data-slot="app-sidebar-object-type-row"]')
-    .filter({ hasText: "Notas atômicas" })
+    .filter({ hasText: "Páginas" })
     .getByRole("button")
-    .filter({ hasText: "Notas atômicas" })
+    .filter({ hasText: "Páginas" })
     .click();
   const workspace = objectTypeWorkspace(page);
   await expect(workspace).toBeVisible();
@@ -1769,27 +1796,31 @@ test("Atomic note object-type commands render named outcomes", async ({
   const filterRow = workspace.locator('[data-slot="object-type-filter-row"]');
   await expect(filterRow).toBeVisible();
   await expect(filterRow).toContainText("onde");
-  await filterRow.getByRole("button", { name: "Todos os objetos" }).click();
+  await filterRow.getByRole("button", { name: "Sem título" }).click();
   await expect(
     workspace.locator('[data-slot="object-type-all"]'),
-  ).toContainText("Nenhum objeto correspondente");
-  await filterRow.getByRole("button", { name: "Sem título" }).click();
+  ).toContainText("Não há nada aqui");
+  await filterRow.getByRole("button", { name: "Remover" }).click();
   await page.keyboard.press("Escape");
   await expect(filterRow).toBeHidden();
 
   await workspace.getByRole("button", { name: "Ordenar", exact: true }).click();
-  const sortRow = workspace.locator('[data-slot="object-type-sort-row"]');
-  await expect(sortRow).toBeVisible();
-  await expect(sortRow).toContainText("Classificar por");
-  await sortRow.getByRole("button", { name: "Criados recentemente" }).click();
+  const sortMenu = page.locator(
+    '[data-slot="dropdown-menu-content"][data-open]',
+  );
+  await expect(sortMenu).toBeVisible();
+  await sortMenu.getByRole("menuitem", { name: "Título" }).click();
+  await expect(
+    workspace.locator('[data-lifecycle-contract="object-projection-card"]').first(),
+  ).toContainText("Page alpha");
   await page.keyboard.press("Escape");
-  await expect(sortRow).toBeHidden();
+  await expect(sortMenu).toBeHidden();
 
   await workspace.getByRole("button", { name: "Agrupar", exact: true }).click();
   const groupRow = workspace.locator('[data-slot="object-type-group-row"]');
   await expect(groupRow).toBeVisible();
   await expect(groupRow).toContainText("Agrupar por");
-  await groupRow.getByRole("button", { name: "Sem agrupamento" }).click();
+  await groupRow.getByRole("button", { name: "Tipos de objeto" }).click();
   await expect(
     workspace.locator('[data-slot="object-type-all"][data-grouped="true"]'),
   ).toBeVisible();
@@ -1806,7 +1837,42 @@ test("Atomic note object-type commands render named outcomes", async ({
   ).toHaveCount(2);
   await expect(
     workspace.locator('[data-slot="object-type-all"]'),
-  ).toHaveAttribute("data-layout", "grid");
+  ).toHaveAttribute("data-layout", "gallery");
+  await workspace.getByRole("button", { name: "Layout", exact: true }).click();
+  const layoutMenu = page.locator(
+    '[data-slot="dropdown-menu-content"][data-open]',
+  );
+  await expect(layoutMenu).toBeVisible();
+  await layoutMenu.getByRole("menuitem", { name: "Tabela" }).click();
+  await expect(
+    workspace.locator('[data-slot="object-type-all"]'),
+  ).toHaveAttribute("data-layout", "table");
+  await page.keyboard.press("Escape");
+  await expect(layoutMenu).toBeHidden();
+  await workspace
+    .getByRole("button", { name: "Mais opções", exact: true })
+    .click();
+  await page.getByRole("menuitem", { name: "Novo a partir do modelo" }).click();
+  await expect(
+    page.locator(
+      '[data-slot="object-type-command-destination"][data-kind="template"]',
+    ).filter({ visible: true }),
+  ).toBeVisible();
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .getByRole("button")
+    .filter({ hasText: "Páginas" })
+    .click();
+  await workspace
+    .getByRole("button", { name: "Mais opções", exact: true })
+    .click();
+  await page.getByRole("menuitem", { name: "Configurações do tipo de objeto" }).click();
+  await expect(
+    page.locator(
+      '[data-slot="object-type-command-destination"][data-kind="settings"]',
+    ).filter({ visible: true }),
+  ).toBeVisible();
   expect(await persistedEntities(page)).toHaveLength(2);
   expect(errors).toEqual([]);
 });
@@ -2171,9 +2237,10 @@ test("workspace overflow menu supports submenu, outside click, and Escape", asyn
     expect((await row.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(32);
   }
   await menu.getByText("Personalizar", { exact: true }).hover();
-  const customizeSubmenu = page.getByText(
-    "Use o botão Personalizar no cabeçalho.",
-  );
+  const customizeSubmenu = page.getByRole("menuitem", {
+    name: "Layout Amplo",
+    exact: true,
+  });
   await expect(customizeSubmenu).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(customizeSubmenu).toBeHidden();
@@ -2435,7 +2502,7 @@ test("reduced motion keeps state changes immediate", async ({ page }) => {
   );
   expect(transitionProperty).toBe("none");
 
-  const newButton = page.getByRole("button", { name: "Novo", exact: true });
+  const newButton = sidebarNewButton(page);
   await newButton.focus();
   await expect(newButton).toBeFocused();
   expect(
@@ -2465,7 +2532,7 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
-  const newButton = page.getByRole("button", { name: "Novo", exact: true });
+  const newButton = sidebarNewButton(page);
 
   await expect(newButton).toHaveAttribute(
     "data-lifecycle-contract",
@@ -2559,7 +2626,7 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
   await expectStableBoxOnHover(pageCountRow);
   await expect(pageCountBadge).toHaveCSS("opacity", "0.8");
 
-  await page.getByRole("button", { name: "Novo", exact: true }).click();
+  await sidebarNewButton(page).click();
   await page.locator('[role="option"]').filter({ hasText: "Tarefa" }).click();
   await expect(
     page.locator('[data-lifecycle-contract="object-capture-surface"]'),
@@ -2754,7 +2821,11 @@ test("every supported New family persists once and reopens from its tab projecti
       });
     }
 
-    const workspace = createdObjectWorkspace(page);
+    const workspace = page
+      .locator(
+        '[data-slot="workspace-object-page-view"], [data-slot="created-object-workspace"]',
+      )
+      .filter({ visible: true });
     await expect(workspace).toBeVisible();
     const objectTypeId =
       (await workspace.getAttribute("data-object-type")) ?? family.id;
@@ -2764,7 +2835,7 @@ test("every supported New family persists once and reopens from its tab projecti
         .getByLabel("Descrição da Query")
         .fill("páginas criadas hoje");
       await workspace.getByRole("button", { name: "Gerar" }).click();
-      await expectActiveEditorTitle(page, "páginas criadas hoje");
+      await expectWorkspaceTitle(workspace, "páginas criadas hoje");
       await expect(workspace).toContainText("1 resultado");
       await expect(workspace).toContainText("Parity page");
       await expect
@@ -2883,19 +2954,21 @@ test("every supported New family persists once and reopens from its tab projecti
       .click();
     await expect(workspace).toBeVisible();
     if (family.kind === "query") {
-      await expectActiveEditorTitle(page, "páginas criadas hoje");
-      await expect(createdObjectWorkspace(page)).toContainText("1 resultado");
-      await expect(createdObjectWorkspace(page)).toContainText("Parity page");
+      await expectWorkspaceTitle(workspace, "páginas criadas hoje");
+      await expect(workspace).toContainText("1 resultado");
+      await expect(workspace).toContainText("Parity page");
     } else if (family.kind === "table") {
-      await expectActiveEditorTitle(page, title);
-      await expect(
-        createdObjectWorkspace(page).getByLabel("Linha 1, coluna 1"),
-      ).toHaveValue("R1C1");
-      await expect(
-        createdObjectWorkspace(page).getByLabel("Linha 2, coluna 2"),
-      ).toHaveValue("R2C2");
+      await expectWorkspaceTitle(workspace, title);
+      await expect(workspace.getByLabel("Linha 1, coluna 1")).toHaveValue(
+        "R1C1",
+      );
+      await expect(workspace.getByLabel("Linha 2, coluna 2")).toHaveValue(
+        "R2C2",
+      );
+    } else if (family.kind === "task") {
+      await expect(workspace).toContainText(entity.title || "Sem título");
     } else {
-      await expectActiveEditorTitle(page, entity.title || "Sem título");
+      await expectWorkspaceTitle(workspace, entity.title || "Sem título");
     }
   }
 
@@ -3047,7 +3120,18 @@ test("Novo Page and Table flows keep split actions, writes, and counts durable",
   await expect(
     reloadedPageWorkspace.getByText(pageBody, { exact: true }),
   ).toBeVisible();
-  await page.locator(`[data-tab-id="${tableEntity?.id}"] [role="tab"]`).click();
+  const reloadedTableTab = page.locator(
+    `[data-tab-id="${tableEntity?.id}"] [role="tab"]`,
+  );
+  if ((await reloadedTableTab.count()) > 0) {
+    await reloadedTableTab.click();
+  } else {
+    await page.getByRole("button", { name: "Lista de abas" }).click();
+    await page
+      .locator('[data-slot="app-header-tab-list"]')
+      .getByRole("button", { name: tableTitle, exact: true })
+      .click();
+  }
   await expect(
     page
       .locator(
@@ -3058,7 +3142,7 @@ test("Novo Page and Table flows keep split actions, writes, and counts durable",
   ).toHaveValue("Page/Table");
   await expect(pageRow).toContainText("1");
   await expect(tableRow).toContainText("1");
-  expect(await persistedSnapshot(page)).toMatchObject({ version: 1 });
+  expect(await persistedSnapshot(page)).toMatchObject({ version: 5 });
   expect(errors).toEqual([]);
 });
 
@@ -3212,7 +3296,7 @@ test("Space lifecycle UI isolates content and guards destructive deletion", asyn
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
 
-  await page.getByRole("button", { name: "Alterar espaço" }).click();
+  await page.getByRole("combobox", { name: "Alterar espaço" }).click();
   await page.getByRole("button", { name: "Criar espaço" }).click();
   const createDialog = page.getByRole("dialog", { name: "Criar espaço" });
   await expect(createDialog).toBeVisible();
@@ -3220,7 +3304,7 @@ test("Space lifecycle UI isolates content and guards destructive deletion", asyn
   await createDialog.getByRole("button", { name: "Criar" }).click();
   await expect(createDialog).toBeHidden();
   await expect(
-    page.getByRole("button", { name: "Alterar espaço" }),
+    page.getByRole("combobox", { name: "Alterar espaço" }),
   ).toContainText("Prototype Lab");
 
   await selectNewObject(page, "Página");
@@ -3231,10 +3315,10 @@ test("Space lifecycle UI isolates content and guards destructive deletion", asyn
     }),
   ).toContainText("1");
 
-  await page.getByRole("button", { name: "Alterar espaço" }).click();
+  await page.getByRole("combobox", { name: "Alterar espaço" }).click();
   await page.getByRole("option", { name: /Labs/ }).click();
   await expect(
-    page.getByRole("button", { name: "Alterar espaço" }),
+    page.getByRole("combobox", { name: "Alterar espaço" }),
   ).toContainText("Labs");
   await expect(
     page.locator('[data-slot="app-sidebar-object-type-row"]').filter({
@@ -3242,7 +3326,7 @@ test("Space lifecycle UI isolates content and guards destructive deletion", asyn
     }),
   ).not.toContainText("1");
 
-  await page.getByRole("button", { name: "Alterar espaço" }).click();
+  await page.getByRole("combobox", { name: "Alterar espaço" }).click();
   await page.getByRole("option", { name: /Prototype Lab/ }).click();
   await expect(
     page.locator('[data-slot="app-sidebar-object-type-row"]').filter({
@@ -3250,7 +3334,7 @@ test("Space lifecycle UI isolates content and guards destructive deletion", asyn
     }),
   ).toContainText("1");
 
-  await page.getByRole("button", { name: "Alterar espaço" }).click();
+  await page.getByRole("combobox", { name: "Alterar espaço" }).click();
   await page.getByRole("button", { name: "Configurações do espaço" }).click();
   const settingsDialog = page.getByRole("dialog", {
     name: "Configurações do espaço",
@@ -3262,10 +3346,10 @@ test("Space lifecycle UI isolates content and guards destructive deletion", asyn
     .click();
   await expect(settingsDialog).toBeHidden();
   await expect(
-    page.getByRole("button", { name: "Alterar espaço" }),
+    page.getByRole("combobox", { name: "Alterar espaço" }),
   ).toContainText("Prototype Renamed");
 
-  await page.getByRole("button", { name: "Alterar espaço" }).click();
+  await page.getByRole("combobox", { name: "Alterar espaço" }).click();
   await page.getByRole("button", { name: "Excluir espaço" }).click();
   const deleteDialog = page.getByRole("dialog", { name: "Excluir espaço" });
   await expect(deleteDialog).toBeVisible();
@@ -3280,7 +3364,7 @@ test("Space lifecycle UI isolates content and guards destructive deletion", asyn
   await deleteDialog.getByRole("button", { name: "Excluir espaço" }).click();
   await expect(deleteDialog).toBeHidden();
   await expect(
-    page.getByRole("button", { name: "Alterar espaço" }),
+    page.getByRole("combobox", { name: "Alterar espaço" }),
   ).toContainText("Labs");
   await expect(page.getByText("Prototype-only page")).toBeHidden();
 

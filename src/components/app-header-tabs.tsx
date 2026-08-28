@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   AppHeaderCaretDownIcon,
@@ -8,25 +8,29 @@ import {
   AppHeaderPlusIcon,
   AppHeaderPushPinFillIcon,
   AppHeaderPushPinIcon,
-} from "@/components/app-header-icons"
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
-import { Input } from "@/components/ui/input"
+} from "@/components/app-header-icons";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { Input } from "@/components/ui/input";
 import {
   workspaceSmallActionStateClass,
   workspaceTabStateClass,
   workspaceTooltipStateClass,
-} from "@/components/ui/shared-styles"
-import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/shared-styles";
+import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
+import { cn } from "@/lib/utils";
 
-const MAIN_TAB_MAX_WIDTH = 200
-const MAIN_TAB_MIN_WIDTH = 82
-const MAIN_TAB_GAP = 5
-const SIDE_TAB_MAX_WIDTH = 160
-const SIDE_TAB_MIN_WIDTH = 44
-const SIDE_TAB_GAP = 4
-const SIDE_TAB_CONTROLS_WIDTH = 28
-const TAB_PREVIEW_DELAY = 200
+const MAIN_TAB_MAX_WIDTH = 200;
+const MAIN_TAB_MIN_WIDTH = 82;
+const MAIN_TAB_GAP = 5;
+const SIDE_TAB_MAX_WIDTH = 160;
+const SIDE_TAB_MIN_WIDTH = 44;
+const SIDE_TAB_GAP = 4;
+const SIDE_TAB_CONTROLS_WIDTH = 28;
+const TAB_PREVIEW_DELAY = 200;
 
 const appHeaderTabTheme = {
   "--app-tab-bg-base": "oklch(1 0.0001 263.28)",
@@ -41,176 +45,194 @@ const appHeaderTabTheme = {
   "--app-tab-text-secondary": "oklch(0.3887 0.0052 301.05)",
   "--app-tab-text-subtle": "oklch(0.5725 0.0051 33.89)",
   "--app-tab-text-active": "#5c6fbd",
-} as React.CSSProperties
+} as React.CSSProperties;
 
-type DropPosition = "before" | "after"
+type DropPosition = "before" | "after";
 
 type HeaderTabLayout = {
-  tabWidth: number
-  cramped: boolean
-  maxVisible: number
-}
+  tabWidth: number;
+  cramped: boolean;
+  maxVisible: number;
+};
 
 export type AppHeaderTab = {
-  id: string
-  label: string
-  icon?: React.ElementType
-  iconClassName?: string
-  pinned?: boolean
-  draggable?: boolean
-  preview?: React.ReactNode
-}
+  id: string;
+  label: string;
+  icon?: React.ElementType;
+  iconClassName?: string;
+  pinned?: boolean;
+  draggable?: boolean;
+  preview?: React.ReactNode;
+};
 
 export type AppHeaderTabActionLabels = {
-  pin: string
-  unpin: string
-  close: string
-}
+  pin: string;
+  unpin: string;
+  close: string;
+};
 
 export type AppHeaderTabProps = React.ComponentProps<"div"> & {
-  tab: AppHeaderTab
-  active?: boolean
-  neutral?: boolean
-  fitContent?: boolean
-  closable?: boolean
-  pinnable?: boolean
-  dragging?: boolean
-  showSeparator?: boolean
-  actionLabels?: Partial<AppHeaderTabActionLabels>
-  onOpen?: () => void
-  onShiftOpen?: () => void
-  onClose?: () => void
-  onTogglePin?: () => void
-}
+  tab: AppHeaderTab;
+  active?: boolean;
+  neutral?: boolean;
+  fitContent?: boolean;
+  closable?: boolean;
+  pinnable?: boolean;
+  dragging?: boolean;
+  showSeparator?: boolean;
+  actionLabels?: Partial<AppHeaderTabActionLabels>;
+  onOpen?: () => void;
+  onShiftOpen?: () => void;
+  onClose?: () => void;
+  onTogglePin?: () => void;
+};
 
 export type AppSpaceHeaderProps = React.ComponentProps<"div"> & {
-  tabs: AppHeaderTab[]
-  value: string
-  onValueChange: (value: string) => void
-  onTabsChange: (tabs: AppHeaderTab[]) => void
-  onCreate?: () => void
-  onShiftOpen?: (tab: AppHeaderTab) => void
-  onCloseRequest?: (tab: AppHeaderTab) => boolean | undefined
-  createLabel?: string
-  tabListLabel?: string
-  searchTabsPlaceholder?: string
-  actionLabels?: Partial<AppHeaderTabActionLabels>
-}
+  tabs: AppHeaderTab[];
+  value: string;
+  onValueChange: (value: string) => void;
+  onTabsChange: (tabs: AppHeaderTab[]) => void;
+  onCreate?: () => void;
+  onShiftOpen?: (tab: AppHeaderTab) => void;
+  onCloseRequest?: (tab: AppHeaderTab) => boolean | undefined;
+  createLabel?: string;
+  tabListLabel?: string;
+  searchTabsPlaceholder?: string;
+  actionLabels?: Partial<AppHeaderTabActionLabels>;
+};
 
 export type AppSidePanelHeaderProps = React.ComponentProps<"header"> & {
-  tabs: AppHeaderTab[]
-  value: string
-  onValueChange: (value: string) => void
-  onTabsChange: (tabs: AppHeaderTab[]) => void
-  onCreate?: () => void
-  onCloseRequest?: (tab: AppHeaderTab) => boolean | undefined
-  onMenu?: () => void
-  createLabel?: string
-  tabListLabel?: string
-  menuLabel?: string
-  searchTabsPlaceholder?: string
-  closeLabel?: string
-}
+  tabs: AppHeaderTab[];
+  value: string;
+  onValueChange: (value: string) => void;
+  onTabsChange: (tabs: AppHeaderTab[]) => void;
+  onCreate?: () => void;
+  onCloseRequest?: (tab: AppHeaderTab) => boolean | undefined;
+  onMenu?: () => void;
+  createLabel?: string;
+  tabListLabel?: string;
+  menuLabel?: string;
+  searchTabsPlaceholder?: string;
+  closeLabel?: string;
+};
 
 function useElementWidth<T extends HTMLElement>() {
-  const ref = React.useRef<T>(null)
-  const [width, setWidth] = React.useState(0)
+  const ref = React.useRef<T>(null);
+  const [width, setWidth] = React.useState(0);
 
   React.useEffect(() => {
-    const element = ref.current
-    if (!element) return
-    let mounted = true
+    const element = ref.current;
+    if (!element) return;
+    let mounted = true;
 
     const update = () => {
-      if (mounted) setWidth(element.getBoundingClientRect().width)
-    }
-    update()
+      if (mounted) setWidth(element.getBoundingClientRect().width);
+    };
+    update();
 
-    const observer = new ResizeObserver(update)
-    observer.observe(element)
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
     return () => {
-      mounted = false
-      observer.disconnect()
-    }
-  }, [])
+      mounted = false;
+      observer.disconnect();
+    };
+  }, []);
 
-  return [ref, width] as const
+  return [ref, width] as const;
 }
 
-function moveTab(tabs: AppHeaderTab[], sourceId: string, targetId: string, position: DropPosition) {
-  if (sourceId === targetId) return tabs
+function moveTab(
+  tabs: AppHeaderTab[],
+  sourceId: string,
+  targetId: string,
+  position: DropPosition,
+) {
+  if (sourceId === targetId) return tabs;
 
-  const sourceIndex = tabs.findIndex((tab) => tab.id === sourceId)
-  if (sourceIndex === -1) return tabs
+  const sourceIndex = tabs.findIndex((tab) => tab.id === sourceId);
+  if (sourceIndex === -1) return tabs;
 
-  const next = [...tabs]
-  const [moving] = next.splice(sourceIndex, 1)
-  if (!moving) return tabs
+  const next = [...tabs];
+  const [moving] = next.splice(sourceIndex, 1);
+  if (!moving) return tabs;
 
-  const targetIndex = next.findIndex((tab) => tab.id === targetId)
-  if (targetIndex === -1) return tabs
+  const targetIndex = next.findIndex((tab) => tab.id === targetId);
+  if (targetIndex === -1) return tabs;
 
-  next.splice(targetIndex + (position === "after" ? 1 : 0), 0, moving)
-  return next
+  next.splice(targetIndex + (position === "after" ? 1 : 0), 0, moving);
+  return next;
 }
 
 function getMainLayout(width: number, count: number): HeaderTabLayout {
   if (!count || width <= 0) {
-    return { tabWidth: MAIN_TAB_MAX_WIDTH, cramped: false, maxVisible: count }
+    return { tabWidth: MAIN_TAB_MAX_WIDTH, cramped: false, maxVisible: count };
   }
 
-  const gaps = Math.max(0, count - 1) * MAIN_TAB_GAP
-  const reservedControls = 28 + MAIN_TAB_GAP
-  const initialAvailable = width - reservedControls - gaps
+  const gaps = Math.max(0, count - 1) * MAIN_TAB_GAP;
+  const reservedControls = 28 + MAIN_TAB_GAP;
+  const initialAvailable = width - reservedControls - gaps;
   const initialWidth =
     initialAvailable <= 0
       ? 1
-      : Math.max(1, Math.floor(Math.min(MAIN_TAB_MAX_WIDTH, initialAvailable / count)))
-  const cramped = initialWidth < MAIN_TAB_MAX_WIDTH - 1
-  const available = cramped ? width - gaps : initialAvailable
+      : Math.max(
+          1,
+          Math.floor(Math.min(MAIN_TAB_MAX_WIDTH, initialAvailable / count)),
+        );
+  const cramped = initialWidth < MAIN_TAB_MAX_WIDTH - 1;
+  const available = cramped ? width - gaps : initialAvailable;
   const tabWidth =
-    available <= 0 ? 1 : Math.max(1, Math.floor(Math.min(MAIN_TAB_MAX_WIDTH, available / count)))
+    available <= 0
+      ? 1
+      : Math.max(
+          1,
+          Math.floor(Math.min(MAIN_TAB_MAX_WIDTH, available / count)),
+        );
 
   if (tabWidth >= MAIN_TAB_MIN_WIDTH) {
-    return { tabWidth, cramped, maxVisible: count }
+    return { tabWidth, cramped, maxVisible: count };
   }
 
   const maxVisible = Math.max(
     1,
     Math.floor((width + MAIN_TAB_GAP) / (MAIN_TAB_MIN_WIDTH + MAIN_TAB_GAP)),
-  )
+  );
 
   return {
     tabWidth: MAIN_TAB_MIN_WIDTH,
     cramped: true,
     maxVisible: Math.min(maxVisible, count),
-  }
+  };
 }
 
-function getVisibleRange(tabs: AppHeaderTab[], value: string, maxVisible: number) {
-  const count = tabs.length
-  if (!count || maxVisible >= count) return { start: 0, end: count }
+function getVisibleRange(
+  tabs: AppHeaderTab[],
+  value: string,
+  maxVisible: number,
+) {
+  const count = tabs.length;
+  if (!count || maxVisible >= count) return { start: 0, end: count };
 
   const activeIndex = Math.max(
     0,
     tabs.findIndex((tab) => tab.id === value),
-  )
-  let start = activeIndex >= maxVisible ? activeIndex - maxVisible + 1 : 0
-  start = Math.min(start, Math.max(0, count - maxVisible))
+  );
+  let start = activeIndex >= maxVisible ? activeIndex - maxVisible + 1 : 0;
+  start = Math.min(start, Math.max(0, count - maxVisible));
 
-  return { start, end: start + maxVisible }
+  return { start, end: start + maxVisible };
 }
 
 function AppHeaderTabIcon({ tab }: { tab: AppHeaderTab }) {
-  const Icon = tab.icon
-  if (!Icon) return null
+  const Icon = tab.icon;
+  if (!Icon) return null;
 
   return (
     <span
       data-slot="app-header-tab-icon"
       className={cn(
         "inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 grow-0 items-center justify-center rounded-[0.33em]",
-        tab.iconClassName ?? "bg-[oklch(0.9766_0.0016_67.01)] text-[oklch(0.4289_0.0021_324.71)]",
+        tab.iconClassName ??
+          "bg-[oklch(0.9766_0.0016_67.01)] text-[oklch(0.4289_0.0021_324.71)]",
       )}
     >
       <span
@@ -220,7 +242,7 @@ function AppHeaderTabIcon({ tab }: { tab: AppHeaderTab }) {
         <Icon className="size-[1em]" />
       </span>
     </span>
-  )
+  );
 }
 
 function AppHeaderTabAction({
@@ -229,10 +251,10 @@ function AppHeaderTabAction({
   children,
   onClick,
 }: {
-  label: string
-  className?: string
-  children: React.ReactNode
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  label: string;
+  className?: string;
+  children: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }) {
   return (
     <button
@@ -254,40 +276,60 @@ function AppHeaderTabAction({
         {children}
       </span>
     </button>
-  )
+  );
 }
 
-const tabNavigationKeys = new Set(["ArrowLeft", "ArrowRight", "Home", "End"])
+const tabNavigationKeys = new Set(["ArrowLeft", "ArrowRight", "Home", "End"]);
 
-function getNextTabFocusIndex(key: string, currentIndex: number, count: number) {
-  if (key === "Home") return 0
-  if (key === "End") return count - 1
-  const direction = key === "ArrowRight" ? 1 : -1
-  return (currentIndex + direction + count) % count
+function getNextTabFocusIndex(
+  key: string,
+  currentIndex: number,
+  count: number,
+) {
+  if (key === "Home") return 0;
+  if (key === "End") return count - 1;
+  const direction = key === "ArrowRight" ? 1 : -1;
+  return (currentIndex + direction + count) % count;
 }
 
-function handleTabKeyDown(event: React.KeyboardEvent<HTMLElement>, onOpen?: () => void) {
+function handleTabKeyDown(
+  event: React.KeyboardEvent<HTMLElement>,
+  onOpen?: () => void,
+) {
   if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault()
-    onOpen?.()
-    return
+    event.preventDefault();
+    onOpen?.();
+    return;
   }
 
-  if (!tabNavigationKeys.has(event.key)) return
-  const tabList = event.currentTarget.closest('[role="tablist"]')
-  if (!tabList) return
-  const tabs = Array.from(tabList.querySelectorAll<HTMLElement>('[role="tab"]')).filter(
-    (candidate) => candidate.getClientRects().length > 0,
-  )
-  const currentIndex = tabs.indexOf(event.currentTarget)
-  if (currentIndex < 0 || tabs.length < 2) return
+  if (!tabNavigationKeys.has(event.key)) return;
+  const tabList = event.currentTarget.closest('[role="tablist"]');
+  if (!tabList) return;
+  const tabs = Array.from(
+    tabList.querySelectorAll<HTMLElement>('[role="tab"]'),
+  ).filter((candidate) => candidate.getClientRects().length > 0);
+  const currentIndex = tabs.indexOf(event.currentTarget);
+  if (currentIndex < 0 || tabs.length < 2) return;
 
-  event.preventDefault()
-  tabs[getNextTabFocusIndex(event.key, currentIndex, tabs.length)]?.focus()
+  event.preventDefault();
+  tabs[getNextTabFocusIndex(event.key, currentIndex, tabs.length)]?.focus();
 }
 
 function dataFlag(value: boolean) {
-  return value || undefined
+  return value || undefined;
+}
+
+function getTabRenderItems(tabs: AppHeaderTab[]) {
+  const seen = new Map<string, number>();
+  return tabs.map((tab) => {
+    const occurrence = seen.get(tab.id) ?? 0;
+    seen.set(tab.id, occurrence + 1);
+    return {
+      tab,
+      renderKey:
+        occurrence === 0 ? tab.id : `${tab.id}:duplicate-${occurrence}`,
+    };
+  });
 }
 
 function hasReservedTabActions({
@@ -295,7 +337,7 @@ function hasReservedTabActions({
   pinnable,
   closable,
 }: Pick<AppHeaderTabProps, "fitContent" | "pinnable" | "closable">) {
-  return !fitContent && Boolean(pinnable || closable)
+  return !fitContent && Boolean(pinnable || closable);
 }
 
 function getTabButtonClassName({
@@ -305,7 +347,7 @@ function getTabButtonClassName({
   dragging,
   hasActions,
 }: Pick<AppHeaderTabProps, "active" | "neutral" | "fitContent" | "dragging"> & {
-  hasActions: boolean
+  hasActions: boolean;
 }) {
   return cn(
     "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] border-[0.5px] py-[3px] pl-[6px] pr-[2px] text-[13px] leading-[1.3] outline-none ring-0",
@@ -316,12 +358,14 @@ function getTabButtonClassName({
         ? "rounded-l-[8px] rounded-r-none border-r-0"
         : "rounded-[8px]"),
     neutral && "border-transparent text-[var(--app-tab-text-primary)]",
-    !neutral && active &&
+    !neutral &&
+      active &&
       "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)] font-medium text-[var(--app-tab-text-primary)]",
-    !neutral && !active &&
+    !neutral &&
+      !active &&
       "border-transparent text-[var(--app-tab-text-subtle)] hover:bg-[var(--app-tab-bg-back-hover)] hover:text-[var(--app-tab-text-secondary)]",
     dragging && "cursor-grabbing opacity-40",
-  )
+  );
 }
 
 function OverlayPinAction({
@@ -329,24 +373,28 @@ function OverlayPinAction({
   labels,
   onTogglePin,
 }: {
-  pinned: boolean
-  labels: { pin: string; unpin: string }
-  onTogglePin?: () => void
+  pinned: boolean;
+  labels: { pin: string; unpin: string };
+  onTogglePin?: () => void;
 }) {
-  if (!onTogglePin) return null
+  if (!onTogglePin) return null;
   return (
     <AppHeaderTabAction
       label={pinned ? labels.unpin : labels.pin}
-      className={pinned ? "visible" : "invisible group-hover/tab:visible group-focus-within/tab:visible"}
+      className={
+        pinned
+          ? "visible"
+          : "invisible group-hover/tab:visible group-focus-within/tab:visible"
+      }
       onClick={(event) => {
-        event.preventDefault()
-        event.stopPropagation()
-        onTogglePin()
+        event.preventDefault();
+        event.stopPropagation();
+        onTogglePin();
       }}
     >
       {pinned ? <AppHeaderPushPinFillIcon /> : <AppHeaderPushPinIcon />}
     </AppHeaderTabAction>
-  )
+  );
 }
 
 function OverlayCloseAction({
@@ -354,24 +402,28 @@ function OverlayCloseAction({
   label,
   onClose,
 }: {
-  active: boolean
-  label: string
-  onClose?: () => void
+  active: boolean;
+  label: string;
+  onClose?: () => void;
 }) {
-  if (!onClose) return null
+  if (!onClose) return null;
   return (
     <AppHeaderTabAction
       label={label}
-      className={active ? "visible" : "invisible group-hover/tab:visible group-focus-within/tab:visible"}
+      className={
+        active
+          ? "visible"
+          : "invisible group-hover/tab:visible group-focus-within/tab:visible"
+      }
       onClick={(event) => {
-        event.preventDefault()
-        event.stopPropagation()
-        onClose()
+        event.preventDefault();
+        event.stopPropagation();
+        onClose();
       }}
     >
       <AppHeaderCloseIcon />
     </AppHeaderTabAction>
-  )
+  );
 }
 
 function ReservedTabActions({
@@ -385,17 +437,17 @@ function ReservedTabActions({
   onClose,
   onTogglePin,
 }: {
-  active: boolean
-  neutral: boolean
-  fitContent: boolean
-  closable: boolean
-  pinnable: boolean
-  pinned: boolean
-  labels: { pin: string; unpin: string; close: string }
-  onClose?: () => void
-  onTogglePin?: () => void
+  active: boolean;
+  neutral: boolean;
+  fitContent: boolean;
+  closable: boolean;
+  pinnable: boolean;
+  pinned: boolean;
+  labels: { pin: string; unpin: string; close: string };
+  onClose?: () => void;
+  onTogglePin?: () => void;
 }) {
-  if (fitContent || (!pinnable && !closable)) return null
+  if (fitContent || (!pinnable && !closable)) return null;
   return (
     <span
       data-slot="app-header-tab-actions"
@@ -408,13 +460,21 @@ function ReservedTabActions({
       )}
     >
       {pinnable ? (
-        <OverlayPinAction pinned={pinned} labels={labels} onTogglePin={onTogglePin} />
+        <OverlayPinAction
+          pinned={pinned}
+          labels={labels}
+          onTogglePin={onTogglePin}
+        />
       ) : null}
       {closable ? (
-        <OverlayCloseAction active={active} label={labels.close} onClose={onClose} />
+        <OverlayCloseAction
+          active={active}
+          label={labels.close}
+          onClose={onClose}
+        />
       ) : null}
     </span>
-  )
+  );
 }
 
 function FitContentPinAction({
@@ -424,13 +484,13 @@ function FitContentPinAction({
   labels,
   onTogglePin,
 }: {
-  fitContent: boolean
-  pinnable: boolean
-  pinned: boolean
-  labels: { pin: string; unpin: string }
-  onTogglePin?: () => void
+  fitContent: boolean;
+  pinnable: boolean;
+  pinned: boolean;
+  labels: { pin: string; unpin: string };
+  onTogglePin?: () => void;
 }) {
-  if (!fitContent || !pinnable || !onTogglePin) return null
+  if (!fitContent || !pinnable || !onTogglePin) return null;
   return (
     <div className="flex h-full shrink-0 items-center pr-[2px]">
       <AppHeaderTabAction
@@ -442,15 +502,15 @@ function FitContentPinAction({
             : "pointer-events-none opacity-0 group-hover/tab:pointer-events-auto group-hover/tab:opacity-100",
         )}
         onClick={(event) => {
-          event.preventDefault()
-          event.stopPropagation()
-          onTogglePin()
+          event.preventDefault();
+          event.stopPropagation();
+          onTogglePin();
         }}
       >
         {pinned ? <AppHeaderPushPinFillIcon /> : <AppHeaderPushPinIcon />}
       </AppHeaderTabAction>
     </div>
-  )
+  );
 }
 
 function AppHeaderTabItem({
@@ -478,32 +538,38 @@ function AppHeaderTabItem({
     unpin: "Unpin tab",
     close: "Close tab",
     ...actionLabels,
-  }
+  };
 
-  const [previewOpen, setPreviewOpen] = React.useState(false)
-  const previewTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+  const previewTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
   const clearPreviewTimer = React.useCallback(() => {
-    if (previewTimerRef.current) clearTimeout(previewTimerRef.current)
-    previewTimerRef.current = null
-  }, [])
+    if (previewTimerRef.current) clearTimeout(previewTimerRef.current);
+    previewTimerRef.current = null;
+  }, []);
 
   const closePreview = React.useCallback(() => {
-    clearPreviewTimer()
-    setPreviewOpen(false)
-  }, [clearPreviewTimer])
+    clearPreviewTimer();
+    setPreviewOpen(false);
+  }, [clearPreviewTimer]);
 
   const schedulePreview = React.useCallback(() => {
-    if (!tab.preview || active || dragging) return
-    clearPreviewTimer()
+    if (!tab.preview || active || dragging) return;
+    clearPreviewTimer();
     previewTimerRef.current = setTimeout(() => {
-      previewTimerRef.current = null
-      setPreviewOpen(true)
-    }, TAB_PREVIEW_DELAY)
-  }, [active, clearPreviewTimer, dragging, tab.preview])
+      previewTimerRef.current = null;
+      setPreviewOpen(true);
+    }, TAB_PREVIEW_DELAY);
+  }, [active, clearPreviewTimer, dragging, tab.preview]);
 
-  React.useEffect(() => () => clearPreviewTimer(), [clearPreviewTimer])
-  const hasReservedActions = hasReservedTabActions({ fitContent, pinnable, closable })
+  React.useEffect(() => () => clearPreviewTimer(), [clearPreviewTimer]);
+  const hasReservedActions = hasReservedTabActions({
+    fitContent,
+    pinnable,
+    closable,
+  });
 
   const tabNode = (
     <div
@@ -518,16 +584,21 @@ function AppHeaderTabItem({
       )}
       style={{ ...appHeaderTabTheme, ...style }}
       onPointerEnter={(event) => {
-        schedulePreview()
-        onPointerEnter?.(event)
+        schedulePreview();
+        onPointerEnter?.(event);
       }}
       onPointerLeave={(event) => {
-        closePreview()
-        onPointerLeave?.(event)
+        closePreview();
+        onPointerLeave?.(event);
       }}
       {...props}
     >
-      <div className={cn("relative flex min-w-0 items-center", fitContent ? undefined : "w-full")}>
+      <div
+        className={cn(
+          "relative flex min-w-0 items-center",
+          fitContent ? undefined : "w-full",
+        )}
+      >
         <div
           role="tab"
           data-lifecycle-contract={objectLifecycleContractSlots.ObjectTab}
@@ -541,18 +612,23 @@ function AppHeaderTabItem({
             hasActions: hasReservedActions,
           })}
           onClick={(event) => {
-            if (event.shiftKey) onShiftOpen?.()
-            else onOpen?.()
+            if (event.shiftKey) onShiftOpen?.();
+            else onOpen?.();
           }}
           onKeyDown={(event) => handleTabKeyDown(event, onOpen)}
           onDoubleClick={(event) => {
-            event.preventDefault()
-            event.stopPropagation()
-            if (closable) onClose?.()
+            event.preventDefault();
+            event.stopPropagation();
+            if (closable) onClose?.();
           }}
         >
           <AppHeaderTabIcon tab={tab} />
-          <span className={cn("min-w-0 truncate text-left", fitContent ? undefined : "flex-1")}>
+          <span
+            className={cn(
+              "min-w-0 truncate text-left",
+              fitContent ? undefined : "flex-1",
+            )}
+          >
             {tab.label}
           </span>
           <FitContentPinAction
@@ -580,13 +656,15 @@ function AppHeaderTabItem({
         )}
       </div>
     </div>
-  )
+  );
 
-  if (!tab.preview || active || dragging) return tabNode
+  if (!tab.preview || active || dragging) return tabNode;
 
   return (
     <HoverCard open={previewOpen}>
-      <HoverCardTrigger render={<div className="min-w-0" />}>{tabNode}</HoverCardTrigger>
+      <HoverCardTrigger render={<div className="min-w-0" />}>
+        {tabNode}
+      </HoverCardTrigger>
       <HoverCardContent
         side="bottom"
         align="center"
@@ -596,7 +674,7 @@ function AppHeaderTabItem({
         {tab.preview}
       </HoverCardContent>
     </HoverCard>
-  )
+  );
 }
 
 function AppHeaderTabList({
@@ -608,27 +686,35 @@ function AppHeaderTabList({
   onValueChange,
   onClose,
 }: {
-  tabs: AppHeaderTab[]
-  value: string
-  visible: boolean
-  label: string
-  searchPlaceholder: string
-  onValueChange: (value: string) => void
-  onClose: (tab: AppHeaderTab) => void
+  tabs: AppHeaderTab[];
+  value: string;
+  visible: boolean;
+  label: string;
+  searchPlaceholder: string;
+  onValueChange: (value: string) => void;
+  onClose: (tab: AppHeaderTab) => void;
 }) {
-  const [open, setOpen] = React.useState(false)
-  const [query, setQuery] = React.useState("")
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
 
-  if (!visible) return null
+  if (!visible) return null;
 
-  const normalized = query.trim().toLocaleLowerCase()
+  const normalized = query.trim().toLocaleLowerCase();
   const filteredTabs = normalized
     ? tabs.filter((tab) => tab.label.toLocaleLowerCase().includes(normalized))
-    : tabs
+    : tabs;
+  const filteredTabItems = getTabRenderItems(filteredTabs);
 
   return (
-    <div data-slot="app-header-tab-list" className="relative shrink-0" style={appHeaderTabTheme}>
-      <HeaderControlButton label={label} onClick={() => setOpen((current) => !current)}>
+    <div
+      data-slot="app-header-tab-list"
+      className="relative shrink-0"
+      style={appHeaderTabTheme}
+    >
+      <HeaderControlButton
+        label={label}
+        onClick={() => setOpen((current) => !current)}
+      >
         <AppHeaderCaretDownIcon className="size-4" />
       </HeaderControlButton>
 
@@ -641,9 +727,9 @@ function AppHeaderTabList({
             className="mb-2 h-8"
           />
           <div className="max-h-64 overflow-y-auto">
-            {filteredTabs.map((tab) => (
+            {filteredTabItems.map(({ tab, renderKey }) => (
               <div
-                key={tab.id}
+                key={renderKey}
                 className={cn(
                   "group/list flex h-9 items-center gap-1 rounded-md px-1",
                   "hover:bg-[var(--app-tab-bg-back-hover)]",
@@ -654,8 +740,8 @@ function AppHeaderTabList({
                   type="button"
                   className="flex min-w-0 flex-1 items-center gap-2 px-1 text-left text-sm"
                   onClick={() => {
-                    onValueChange(tab.id)
-                    setOpen(false)
+                    onValueChange(tab.id);
+                    setOpen(false);
                   }}
                 >
                   <AppHeaderTabIcon tab={tab} />
@@ -680,7 +766,7 @@ function AppHeaderTabList({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function HeaderControlButton({
@@ -689,10 +775,10 @@ function HeaderControlButton({
   className,
   onClick,
 }: {
-  label: string
-  children: React.ReactNode
-  className?: string
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
+  label: string;
+  children: React.ReactNode;
+  className?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }) {
   return (
     <button
@@ -712,7 +798,7 @@ function HeaderControlButton({
         {children}
       </span>
     </button>
-  )
+  );
 }
 
 function AppSpaceHeader({
@@ -731,39 +817,45 @@ function AppSpaceHeader({
   style,
   ...props
 }: AppSpaceHeaderProps) {
-  const [containerRef, width] = useElementWidth<HTMLDivElement>()
-  const [draggingId, setDraggingId] = React.useState<string | null>(null)
+  const [containerRef, width] = useElementWidth<HTMLDivElement>();
+  const [draggingId, setDraggingId] = React.useState<string | null>(null);
   const [dropTarget, setDropTarget] = React.useState<{
-    id: string
-    position: DropPosition
-  } | null>(null)
+    id: string;
+    position: DropPosition;
+  } | null>(null);
 
-  const layout = React.useMemo(() => getMainLayout(width, tabs.length), [tabs.length, width])
+  const layout = React.useMemo(
+    () => getMainLayout(width, tabs.length),
+    [tabs.length, width],
+  );
   const range = React.useMemo(
     () => getVisibleRange(tabs, value, layout.maxVisible),
     [layout.maxVisible, tabs, value],
-  )
-  const visibleTabs = tabs.slice(range.start, range.end)
-  const hasHiddenTabs = layout.maxVisible > 0 && layout.maxVisible < tabs.length
-  const showTabList = (layout.cramped || hasHiddenTabs) && tabs.length > 1
+  );
+  const visibleTabs = getTabRenderItems(tabs).slice(range.start, range.end);
+  const hasHiddenTabs =
+    layout.maxVisible > 0 && layout.maxVisible < tabs.length;
+  const showTabList = (layout.cramped || hasHiddenTabs) && tabs.length > 1;
 
   function togglePin(tab: AppHeaderTab) {
     onTabsChange(
-      tabs.map((item) => (item.id === tab.id ? { ...item, pinned: !item.pinned } : item)),
-    )
+      tabs.map((item) =>
+        item.id === tab.id ? { ...item, pinned: !item.pinned } : item,
+      ),
+    );
   }
 
   function closeTab(tab: AppHeaderTab) {
-    if (tabs.length <= 1) return
-    if (onCloseRequest?.(tab) === false) return
+    if (tabs.length <= 1) return;
+    if (onCloseRequest?.(tab) === false) return;
 
-    const index = tabs.findIndex((item) => item.id === tab.id)
-    const next = tabs.filter((item) => item.id !== tab.id)
-    onTabsChange(next)
+    const index = tabs.findIndex((item) => item.id === tab.id);
+    const next = tabs.filter((item) => item.id !== tab.id);
+    onTabsChange(next);
 
     if (value === tab.id) {
-      const fallback = next[index] ?? next[index - 1] ?? next[0]
-      if (fallback) onValueChange(fallback.id)
+      const fallback = next[index] ?? next[index - 1] ?? next[0];
+      if (fallback) onValueChange(fallback.id);
     }
   }
 
@@ -788,15 +880,18 @@ function AppSpaceHeader({
           className="flex w-full min-w-0 items-center"
           style={{ gap: MAIN_TAB_GAP }}
         >
-          {visibleTabs.map((tab, localIndex) => {
-            const active = tab.id === value
-            const before = dropTarget?.id === tab.id && dropTarget.position === "before"
-            const after = dropTarget?.id === tab.id && dropTarget.position === "after"
-            const absoluteIndex = range.start + localIndex
-
+          {visibleTabs.map(({ tab, renderKey }, localIndex) => {
+            const active = tab.id === value;
+            const before =
+              dropTarget?.id === tab.id && dropTarget.position === "before";
+            const after =
+              dropTarget?.id === tab.id && dropTarget.position === "after";
+            const absoluteIndex = range.start + localIndex;
             return (
-              <React.Fragment key={tab.id}>
-                {before && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />}
+              <React.Fragment key={renderKey}>
+                {before && (
+                  <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />
+                )}
                 {/* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual tab wrapper */}
                 <div
                   role="presentation"
@@ -808,43 +903,52 @@ function AppSpaceHeader({
                     "relative min-w-0 transition-[width] duration-150 ease-out motion-reduce:transition-none",
                     tabs.length > 1 && "shrink-0",
                   )}
-                  style={tabs.length === 1 ? { maxWidth: 500 } : { width: layout.tabWidth }}
+                  style={
+                    tabs.length === 1
+                      ? { maxWidth: 500 }
+                      : { width: layout.tabWidth }
+                  }
                   onDragStart={(event) => {
                     if (tab.draggable === false) {
-                      event.preventDefault()
-                      return
+                      event.preventDefault();
+                      return;
                     }
-                    event.dataTransfer.effectAllowed = "move"
-                    event.dataTransfer.setData("text/plain", tab.id)
-                    setDraggingId(tab.id)
+                    event.dataTransfer.effectAllowed = "move";
+                    event.dataTransfer.setData("text/plain", tab.id);
+                    setDraggingId(tab.id);
                   }}
                   onDragOver={(event) => {
-                    event.preventDefault()
-                    const rect = event.currentTarget.getBoundingClientRect()
+                    event.preventDefault();
+                    const rect = event.currentTarget.getBoundingClientRect();
                     setDropTarget({
                       id: tab.id,
-                      position: event.clientX < rect.left + rect.width / 2 ? "before" : "after",
-                    })
+                      position:
+                        event.clientX < rect.left + rect.width / 2
+                          ? "before"
+                          : "after",
+                    });
                   }}
                   onDrop={(event) => {
-                    event.preventDefault()
-                    const sourceId = event.dataTransfer.getData("text/plain")
+                    event.preventDefault();
+                    const sourceId = event.dataTransfer.getData("text/plain");
                     if (sourceId && sourceId !== tab.id) {
                       onTabsChange(
                         moveTab(
                           tabs,
                           sourceId,
                           tab.id,
-                          dropTarget?.id === tab.id ? dropTarget.position : "after",
+                          dropTarget?.id === tab.id
+                            ? dropTarget.position
+                            : "after",
                         ),
-                      )
+                      );
                     }
-                    setDraggingId(null)
-                    setDropTarget(null)
+                    setDraggingId(null);
+                    setDropTarget(null);
                   }}
                   onDragEnd={() => {
-                    setDraggingId(null)
-                    setDropTarget(null)
+                    setDraggingId(null);
+                    setDropTarget(null);
                   }}
                 >
                   <AppHeaderTabItem
@@ -863,9 +967,11 @@ function AppSpaceHeader({
                     onTogglePin={() => togglePin(tab)}
                   />
                 </div>
-                {after && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />}
+                {after && (
+                  <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />
+                )}
               </React.Fragment>
-            )
+            );
           })}
 
           {!layout.cramped && (
@@ -876,7 +982,10 @@ function AppSpaceHeader({
         </div>
       </div>
 
-      <div data-slot="app-space-header-controls" className="flex shrink-0 items-center gap-1">
+      <div
+        data-slot="app-space-header-controls"
+        className="flex shrink-0 items-center gap-1"
+      >
         <AppHeaderTabList
           tabs={tabs}
           value={value}
@@ -894,7 +1003,7 @@ function AppSpaceHeader({
         )}
       </div>
     </div>
-  )
+  );
 }
 
 function AppSidePanelHeader({
@@ -914,8 +1023,8 @@ function AppSidePanelHeader({
   style,
   ...props
 }: AppSidePanelHeaderProps) {
-  const [tabsRef, width] = useElementWidth<HTMLDivElement>()
-  const [draggingId, setDraggingId] = React.useState<string | null>(null)
+  const [tabsRef, width] = useElementWidth<HTMLDivElement>();
+  const [draggingId, setDraggingId] = React.useState<string | null>(null);
 
   const layout = React.useMemo<HeaderTabLayout>(() => {
     if (!tabs.length || width <= 0) {
@@ -923,33 +1032,41 @@ function AppSidePanelHeader({
         tabWidth: SIDE_TAB_MAX_WIDTH,
         cramped: false,
         maxVisible: tabs.length,
-      }
+      };
     }
 
-    const gaps = Math.max(0, tabs.length - 1) * SIDE_TAB_GAP
-    const available = width - gaps
-    const rawWidth = Math.max(1, Math.floor(Math.min(SIDE_TAB_MAX_WIDTH, available / tabs.length)))
-    const cramped = rawWidth < SIDE_TAB_MIN_WIDTH
-    const crampedAvailable = Math.max(1, width - SIDE_TAB_CONTROLS_WIDTH - gaps)
+    const gaps = Math.max(0, tabs.length - 1) * SIDE_TAB_GAP;
+    const available = width - gaps;
+    const rawWidth = Math.max(
+      1,
+      Math.floor(Math.min(SIDE_TAB_MAX_WIDTH, available / tabs.length)),
+    );
+    const cramped = rawWidth < SIDE_TAB_MIN_WIDTH;
+    const crampedAvailable = Math.max(
+      1,
+      width - SIDE_TAB_CONTROLS_WIDTH - gaps,
+    );
 
     return {
-      tabWidth: cramped ? Math.max(1, Math.floor(crampedAvailable / tabs.length)) : rawWidth,
+      tabWidth: cramped
+        ? Math.max(1, Math.floor(crampedAvailable / tabs.length))
+        : rawWidth,
       cramped,
       maxVisible: tabs.length,
-    }
-  }, [tabs.length, width])
+    };
+  }, [tabs.length, width]);
 
   function closeTab(tab: AppHeaderTab) {
-    if (tabs.length <= 1) return
-    if (onCloseRequest?.(tab) === false) return
+    if (tabs.length <= 1) return;
+    if (onCloseRequest?.(tab) === false) return;
 
-    const index = tabs.findIndex((item) => item.id === tab.id)
-    const next = tabs.filter((item) => item.id !== tab.id)
-    onTabsChange(next)
+    const index = tabs.findIndex((item) => item.id === tab.id);
+    const next = tabs.filter((item) => item.id !== tab.id);
+    onTabsChange(next);
 
     if (value === tab.id) {
-      const fallback = next[index] ?? next[index - 1] ?? next[0]
-      if (fallback) onValueChange(fallback.id)
+      const fallback = next[index] ?? next[index - 1] ?? next[0];
+      if (fallback) onValueChange(fallback.id);
     }
   }
 
@@ -975,52 +1092,55 @@ function AppSidePanelHeader({
               className="flex min-w-0 items-center"
               style={{ gap: SIDE_TAB_GAP }}
             >
-              {tabs.map((tab) => (
-                <React.Fragment key={tab.id}>
+              {getTabRenderItems(tabs).map(({ tab, renderKey }) => (
+                <React.Fragment key={renderKey}>
                   {/* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual tab wrapper */}
                   <div
-                  role="presentation"
-                  draggable={tab.draggable !== false}
-                  data-slot="app-side-panel-tab-wrapper"
-                  data-sidepanel-tab-active={tab.id === value || undefined}
-                  className="relative min-w-0 shrink-0 outline-none ring-0 transition-[width] duration-150 ease-out motion-reduce:transition-none"
-                  style={{ width: layout.tabWidth }}
-                  onDragStart={(event) => {
-                    if (tab.draggable === false) {
-                      event.preventDefault()
-                      return
-                    }
-                    event.dataTransfer.effectAllowed = "move"
-                    event.dataTransfer.setData("text/plain", tab.id)
-                    setDraggingId(tab.id)
-                  }}
-                  onDragOver={(event) => event.preventDefault()}
-                  onDrop={(event) => {
-                    event.preventDefault()
-                    const sourceId = event.dataTransfer.getData("text/plain")
-                    if (sourceId && sourceId !== tab.id) {
-                      onTabsChange(moveTab(tabs, sourceId, tab.id, "before"))
-                    }
-                    setDraggingId(null)
-                  }}
-                  onDragEnd={() => setDraggingId(null)}
-                >
-                  <AppHeaderTabItem
-                    tab={tab}
-                    active={tab.id === value}
-                    closable
-                    dragging={draggingId === tab.id}
-                    actionLabels={{ close: closeLabel }}
-                    onOpen={() => onValueChange(tab.id)}
-                    onClose={() => closeTab(tab)}
-                  />
+                    role="presentation"
+                    draggable={tab.draggable !== false}
+                    data-slot="app-side-panel-tab-wrapper"
+                    data-sidepanel-tab-active={tab.id === value || undefined}
+                    className="relative min-w-0 shrink-0 outline-none ring-0 transition-[width] duration-150 ease-out motion-reduce:transition-none"
+                    style={{ width: layout.tabWidth }}
+                    onDragStart={(event) => {
+                      if (tab.draggable === false) {
+                        event.preventDefault();
+                        return;
+                      }
+                      event.dataTransfer.effectAllowed = "move";
+                      event.dataTransfer.setData("text/plain", tab.id);
+                      setDraggingId(tab.id);
+                    }}
+                    onDragOver={(event) => event.preventDefault()}
+                    onDrop={(event) => {
+                      event.preventDefault();
+                      const sourceId = event.dataTransfer.getData("text/plain");
+                      if (sourceId && sourceId !== tab.id) {
+                        onTabsChange(moveTab(tabs, sourceId, tab.id, "before"));
+                      }
+                      setDraggingId(null);
+                    }}
+                    onDragEnd={() => setDraggingId(null)}
+                  >
+                    <AppHeaderTabItem
+                      tab={tab}
+                      active={tab.id === value}
+                      closable
+                      dragging={draggingId === tab.id}
+                      actionLabels={{ close: closeLabel }}
+                      onOpen={() => onValueChange(tab.id)}
+                      onClose={() => closeTab(tab)}
+                    />
                   </div>
                 </React.Fragment>
               ))}
             </div>
           </div>
 
-          <div data-slot="app-side-panel-tab-controls" className="flex shrink-0 items-center gap-1">
+          <div
+            data-slot="app-side-panel-tab-controls"
+            className="flex shrink-0 items-center gap-1"
+          >
             <AppHeaderTabList
               tabs={tabs}
               value={value}
@@ -1053,7 +1173,7 @@ function AppSidePanelHeader({
         </button>
       </div>
     </header>
-  )
+  );
 }
 
 export {
@@ -1066,4 +1186,4 @@ export {
   SIDE_TAB_GAP,
   SIDE_TAB_MAX_WIDTH,
   SIDE_TAB_MIN_WIDTH,
-}
+};

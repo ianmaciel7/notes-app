@@ -49,6 +49,8 @@ import type { WorkspaceStructure } from "@/lib/workspace-object-types";
 import {
   type DataViewKind,
   executeQueryDefinition,
+  type QueryFilter,
+  type QuerySort,
   type WorkspaceDataView,
 } from "@/lib/workspace-object-views";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
@@ -61,6 +63,7 @@ type WorkspaceObjectTypeViewProps = {
 
 type Mode = "all" | "overview";
 type ObjectTypeNamedItemKind = "collection" | "query";
+type ObjectTypeDestinationKind = ObjectTypeNamedItemKind | "settings" | "template";
 type ObjectTypeNamedItemTarget =
   | {
       kind: "collection";
@@ -70,12 +73,20 @@ type ObjectTypeNamedItemTarget =
       kind: "query";
       objectTypeId: string;
       index: number;
+    }
+  | {
+      kind: Exclude<ObjectTypeDestinationKind, ObjectTypeNamedItemKind>;
+      objectTypeId: string;
     };
 
 function objectTypeNamedItemTabId(item: ObjectTypeNamedItemTarget) {
-  return item.kind === "collection"
-    ? `object-type-item:collection:${item.collectionId}`
-    : `object-type-item:query:${item.objectTypeId}:${item.index}`;
+  if (item.kind === "collection") {
+    return `object-type-item:collection:${item.collectionId}`;
+  }
+  if (item.kind === "query") {
+    return `object-type-item:query:${item.objectTypeId}:${item.index}`;
+  }
+  return `object-type-item:${item.kind}:${item.objectTypeId}`;
 }
 
 type ObjectTypeHeaderProps = {
@@ -83,7 +94,9 @@ type ObjectTypeHeaderProps = {
   readonly objectType: AppSidebarObjectType;
   readonly onAddCollection: () => void;
   readonly onAddQuery: () => void;
+  readonly onCreateFromTemplate: () => void;
   readonly onCreateObject: () => void;
+  readonly onOpenSettings: () => void;
   readonly onSearch: (value: string) => void;
   readonly onSearchOpenChange: (value: boolean) => void;
   readonly onToggleCollapsed: () => void;
@@ -107,7 +120,7 @@ function ObjectTypeHeaderSearch({
         autoFocus
         aria-label={t("objectTypeOverview.searchPlaceholder")}
         placeholder={t("objectTypeOverview.searchPlaceholder")}
-        defaultValue={searchValue ?? ""}
+        value={searchValue ?? ""}
         className="h-7 w-44 border-0 bg-transparent px-2 shadow-none focus-visible:ring-0"
         onChange={(event) => onSearch(event.target.value)}
         onKeyDown={(event) => {
@@ -137,10 +150,14 @@ function ObjectTypeHeaderSearch({
 function ObjectTypeMoreMenu({
   onAddCollection,
   onAddQuery,
-  onCreateObject,
+  onCreateFromTemplate,
+  onOpenSettings,
 }: Pick<
   ObjectTypeHeaderProps,
-  "onAddCollection" | "onAddQuery" | "onCreateObject"
+  | "onAddCollection"
+  | "onAddQuery"
+  | "onCreateFromTemplate"
+  | "onOpenSettings"
 >) {
   const t = useTranslations("workspace");
   return (
@@ -159,7 +176,7 @@ function ObjectTypeMoreMenu({
         }
       />
       <DropdownMenuContent align="end" className="w-64">
-        <DropdownMenuItem onClick={onCreateObject}>
+        <DropdownMenuItem onClick={onCreateFromTemplate}>
           {t("objectTypeOverview.newFromTemplate")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onAddQuery}>
@@ -169,7 +186,7 @@ function ObjectTypeMoreMenu({
           {t("objectTypeOverview.newCollection")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={onOpenSettings}>
           {t("objectTypeOverview.typeSettings")}
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -182,7 +199,9 @@ function ObjectTypeHeader({
   objectType,
   onAddCollection,
   onAddQuery,
+  onCreateFromTemplate,
   onCreateObject,
+  onOpenSettings,
   onSearch,
   onSearchOpenChange,
   onToggleCollapsed,
@@ -227,7 +246,8 @@ function ObjectTypeHeader({
           <ObjectTypeMoreMenu
             onAddCollection={onAddCollection}
             onAddQuery={onAddQuery}
-            onCreateObject={onCreateObject}
+            onCreateFromTemplate={onCreateFromTemplate}
+            onOpenSettings={onOpenSettings}
           />
         </div>
         <div className="flex h-8 overflow-hidden rounded-lg bg-primary text-primary-foreground shadow-sm">
@@ -257,7 +277,7 @@ function ObjectTypeHeader({
                   type: objectType.label,
                 })}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={onCreateObject}>
+              <DropdownMenuItem onClick={onCreateFromTemplate}>
                 {t("objectTypeOverview.newFromTemplate")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -278,22 +298,28 @@ function ObjectTypeHeader({
 type ObjectTypeToolbarProps = {
   readonly count: number;
   readonly filterOpen: boolean;
+  readonly groupOpen: boolean;
   readonly mode: Mode;
   readonly onFilterOpenChange: (value: boolean) => void;
+  readonly onGroupOpenChange: (value: boolean) => void;
+  readonly onGroupingChange: (propertyId: string | undefined) => void;
   readonly onLayoutChange: (kind: DataViewKind) => void;
   readonly onModeChange: (mode: Mode) => void;
-  readonly onToggleSort: () => void;
+  readonly onSortChange: (sort: QuerySort) => void;
   readonly view: WorkspaceDataView;
 };
 
 function ObjectTypeToolbar({
   count,
   filterOpen,
+  groupOpen,
   mode,
   onFilterOpenChange,
+  onGroupOpenChange,
+  onGroupingChange,
   onLayoutChange,
   onModeChange,
-  onToggleSort,
+  onSortChange,
   view,
 }: ObjectTypeToolbarProps) {
   const t = useTranslations("workspace");
@@ -334,10 +360,13 @@ function ObjectTypeToolbar({
       <ObjectTypeAllControls
         count={count}
         filterOpen={filterOpen}
+        groupOpen={groupOpen}
         mode={mode}
         onFilterOpenChange={onFilterOpenChange}
+        onGroupOpenChange={onGroupOpenChange}
+        onGroupingChange={onGroupingChange}
         onLayoutChange={onLayoutChange}
-        onToggleSort={onToggleSort}
+        onSortChange={onSortChange}
         view={view}
       />
     </div>
@@ -347,13 +376,17 @@ function ObjectTypeToolbar({
 function ObjectTypeAllControls({
   count,
   filterOpen,
+  groupOpen,
   mode,
   onFilterOpenChange,
+  onGroupOpenChange,
   onLayoutChange,
-  onToggleSort,
+  onSortChange,
   view,
 }: Omit<ObjectTypeToolbarProps, "onModeChange">) {
   const t = useTranslations("workspace");
+  const currentSort = view.query.sorts[0];
+  const currentGrouping = view.presentation.groupBy?.propertyId ?? "none";
   if (mode !== "all") return null;
   return (
     <div className="flex items-center gap-1">
@@ -371,15 +404,85 @@ function ObjectTypeAllControls({
       >
         <ObjectTypeToolbarIcon name="filter" className="size-3.5" />
       </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              aria-label={t("actions.sort")}
+            >
+              <ObjectTypeToolbarIcon name="sort" className="size-3.5" />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuItem
+            aria-checked={currentSort?.field === "createdAt"}
+            onClick={() =>
+              onSortChange({ direction: "descending", field: "createdAt" })
+            }
+          >
+            <ObjectTypeToolbarIcon name="recent" className="size-3.5" />
+            {t("objectTypeOverview.recentSort")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            aria-checked={currentSort?.field === "title"}
+            onClick={() => onSortChange({ direction: "ascending", field: "title" })}
+          >
+            <ObjectTypeToolbarIcon name="sort" className="size-3.5" />
+            {t("objectTypeOverview.titleSort")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <Button
         type="button"
         variant="ghost"
         size="icon-sm"
-        aria-label={t("actions.sort")}
-        onClick={onToggleSort}
+        aria-label={t("objectTypeOverview.group")}
+        aria-pressed={groupOpen || currentGrouping !== "none"}
+        onClick={() => onGroupOpenChange(!groupOpen)}
       >
-        <ObjectTypeToolbarIcon name="sort" className="size-3.5" />
+        <ObjectTypeToolbarIcon name="group" className="size-3.5" />
       </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              aria-label={t("objectTypeOverview.layout")}
+            >
+              <ObjectTypeToolbarIcon name="caret" className="size-3" />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="end" className="w-52">
+          <DropdownMenuItem
+            aria-checked={view.presentation.kind === "list"}
+            onClick={() => onLayoutChange("list")}
+          >
+            <ObjectTypeToolbarIcon name="list" className="size-3.5" />
+            {t("actions.list")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            aria-checked={view.presentation.kind === "gallery"}
+            onClick={() => onLayoutChange("gallery")}
+          >
+            <ObjectTypeToolbarIcon name="grid" className="size-3.5" />
+            {t("actions.grid")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            aria-checked={view.presentation.kind === "table"}
+            onClick={() => onLayoutChange("table")}
+          >
+            <ObjectTypeToolbarIcon name="caret" className="size-3" />
+            {t("objectTypeStudio.objectTypes.table")}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <Button
         type="button"
         variant="ghost"
@@ -410,52 +513,131 @@ function ObjectTypeAllControls({
       >
         <ObjectTypeToolbarIcon name="caret" className="size-3" />
       </Button>
+      <span className="sr-only" aria-live="polite">
+        {currentGrouping === "objectTypeId"
+          ? t("objectTypeOverview.groupedByType")
+          : t("objectTypeOverview.noGrouping")}
+      </span>
     </div>
   );
 }
 
 type ObjectTypeFilterRowProps = {
   readonly filterOpen: boolean;
+  readonly filterActive: boolean;
+  readonly groupOpen: boolean;
   readonly mode: Mode;
+  readonly onFilterActiveChange: (value: boolean) => void;
   readonly onFilterOpenChange: (value: boolean) => void;
-  readonly onSearch: (value: string) => void;
+  readonly onGroupOpenChange: (value: boolean) => void;
+  readonly onGroupingChange: (propertyId: string | undefined) => void;
+  readonly view: WorkspaceDataView;
 };
 
-function ObjectTypeFilterRow({
+function ObjectTypeCriteriaRows({
+  filterActive,
   filterOpen,
+  groupOpen,
   mode,
+  onFilterActiveChange,
   onFilterOpenChange,
-  onSearch,
+  onGroupOpenChange,
+  onGroupingChange,
+  view,
 }: ObjectTypeFilterRowProps) {
   const t = useTranslations("workspace");
-  if (mode !== "all" || !filterOpen) return null;
-  return (
-    <div
-      data-slot="object-type-filter-row"
-      className={cn(
-        workspaceFieldGroupClass,
-        "mx-5 mt-2 flex h-9 items-center gap-2 px-3 py-0 text-xs",
-      )}
-    >
-      <span>{t("objectTypeOverview.where")}</span>
-      <Input
-        aria-label={t("objectTypeOverview.searchPlaceholder")}
-        placeholder={t("objectTypeOverview.searchPlaceholder")}
-        className="h-7 max-w-52"
-        onChange={(event) => onSearch(event.target.value)}
-      />
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        className="ml-auto h-7"
-        onClick={() => {
+  if (mode !== "all") return null;
+  const rows: React.ReactNode[] = [];
+  if (filterOpen) {
+    rows.push(
+      <fieldset
+        key="filter"
+        data-slot="object-type-filter-row"
+        data-active={filterActive || undefined}
+        aria-label={t("objectTypeOverview.filter")}
+        className={cn(
+          workspaceFieldGroupClass,
+          "mx-5 mt-2 flex min-h-9 flex-wrap items-center gap-2 px-3 py-1 text-xs",
+        )}
+        onKeyDown={(event) => {
+          if (event.key !== "Escape") return;
           onFilterOpenChange(false);
-          onSearch("");
         }}
       >
-        {t("objectTypeOverview.remove")}
-      </Button>
+        <ObjectTypeToolbarIcon name="filter" className="size-3.5" />
+        <span>{t("objectTypeOverview.where")}</span>
+        <Button
+          type="button"
+          variant={filterActive ? "secondary" : "ghost"}
+          size="sm"
+          className="h-7"
+          aria-pressed={filterActive}
+          onClick={() => onFilterActiveChange(true)}
+        >
+          {t("objectTypeOverview.untitledOnly")}
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="ml-auto h-7"
+          onClick={() => {
+            onFilterActiveChange(false);
+            onFilterOpenChange(false);
+          }}
+        >
+          {t("objectTypeOverview.remove")}
+        </Button>
+      </fieldset>,
+    );
+  }
+  if (groupOpen) {
+    rows.push(
+      <fieldset
+        key="group"
+        data-slot="object-type-group-row"
+        data-active={view.presentation.groupBy ? true : undefined}
+        aria-label={t("objectTypeOverview.group")}
+        className={cn(
+          workspaceFieldGroupClass,
+          "mx-5 mt-2 flex min-h-9 flex-wrap items-center gap-2 px-3 py-1 text-xs",
+        )}
+        onKeyDown={(event) => {
+          if (event.key !== "Escape") return;
+          onGroupOpenChange(false);
+        }}
+      >
+        <ObjectTypeToolbarIcon name="group" className="size-3.5" />
+        <span>{t("objectTypeOverview.groupBy")}</span>
+        <Button
+          type="button"
+          variant={view.presentation.groupBy ? "secondary" : "ghost"}
+          size="sm"
+          className="h-7"
+          aria-pressed={view.presentation.groupBy?.propertyId === "objectTypeId"}
+          onClick={() => onGroupingChange("objectTypeId")}
+        >
+          {t("footer.objectTypes")}
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="ml-auto h-7"
+          onClick={() => {
+            onGroupingChange(undefined);
+            onGroupOpenChange(false);
+          }}
+        >
+          {t("objectTypeOverview.noGrouping")}
+        </Button>
+      </fieldset>,
+    );
+  }
+  if (rows.length === 0) return null;
+  return (
+    <div data-slot="object-type-criteria-rows" className="grid gap-1">
+      {rows}
     </div>
   );
 }
@@ -659,6 +841,26 @@ function ObjectTypeNamedItems({
   );
 }
 
+function hasUntitledFilter(filters: readonly QueryFilter[]) {
+  return filters.some(
+    (filter) =>
+      filter.field === "title" &&
+      filter.operator === "equals" &&
+      filter.value === "",
+  );
+}
+
+function withoutUntitledFilter(filters: readonly QueryFilter[]) {
+  return filters.filter(
+    (filter) =>
+      !(
+        filter.field === "title" &&
+        filter.operator === "equals" &&
+        filter.value === ""
+      ),
+  );
+}
+
 function ObjectTypeNamedItemInput({
   item,
   onRename,
@@ -709,20 +911,29 @@ function ObjectTypeAllContent({
       view={view}
     />
   );
-  if (filtered.length === 0 && view.presentation.kind !== "table") {
-    return trailingContent;
-  }
+  const content =
+    filtered.length === 0 && view.presentation.kind !== "table" ? (
+      trailingContent
+    ) : (
+      <DataViewRenderer
+        entities={createdEntities}
+        labels={labels}
+        objectTypeLabels={objectTypeLabels}
+        onOpen={onOpen}
+        propertyLabels={propertyLabels}
+        structures={structures}
+        trailingContent={trailingContent}
+        view={view}
+      />
+    );
   return (
-    <DataViewRenderer
-      entities={createdEntities}
-      labels={labels}
-      objectTypeLabels={objectTypeLabels}
-      onOpen={onOpen}
-      propertyLabels={propertyLabels}
-      structures={structures}
-      trailingContent={trailingContent}
-      view={view}
-    />
+    <div
+      data-slot="object-type-all"
+      data-grouped={view.presentation.groupBy ? "true" : undefined}
+      data-layout={view.presentation.kind}
+    >
+      {content}
+    </div>
   );
 }
 
@@ -809,6 +1020,7 @@ function WorkspaceObjectTypeView({
   const [collapsed, setCollapsed] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [filterOpen, setFilterOpen] = React.useState(false);
+  const [groupOpen, setGroupOpen] = React.useState(false);
   const importInputRef = React.useRef<HTMLInputElement>(null);
   const collections = selectWorkspaceCollectionRecordsForStructure(
     objectTypeCollections,
@@ -846,16 +1058,23 @@ function WorkspaceObjectTypeView({
   }
 
   function openNamedItem(
-    kind: ObjectTypeNamedItemKind,
+    kind: ObjectTypeDestinationKind,
     id: string | number,
     label: string,
   ) {
     const tabId = objectTypeNamedItemTabId(
       kind === "collection"
         ? { kind, collectionId: String(id) }
-        : { kind, objectTypeId: objectType.id, index: Number(id) },
+        : kind === "query"
+          ? { kind, objectTypeId: objectType.id, index: Number(id) }
+          : { kind, objectTypeId: objectType.id },
     );
-    const Icon = kind === "collection" ? ObjectCollectionIcon : ObjectQueryIcon;
+    const Icon =
+      kind === "collection"
+        ? ObjectCollectionIcon
+        : kind === "query"
+          ? ObjectQueryIcon
+          : objectType.icon;
     const tab = {
       draggable: true,
       icon: Icon,
@@ -903,18 +1122,58 @@ function WorkspaceObjectTypeView({
     openNamedItem("query", index, label);
   }
 
+  function createFromTemplate() {
+    openNamedItem(
+      "template",
+      objectType.id,
+      t("objectTypeOverview.newFromTemplate"),
+    );
+  }
+
+  function openSettings() {
+    openNamedItem(
+      "settings",
+      objectType.id,
+      t("objectTypeOverview.typeSettings"),
+    );
+  }
+
   function setLayout(kind: DataViewKind) {
     switchWorkspaceDataViewKind(view.id, kind);
   }
 
-  function toggleSort() {
-    const titleSort = view.query.sorts[0]?.field === "title";
+  function setSort(sort: QuerySort) {
     updateWorkspaceDataView(view.id, {
       query: {
         ...view.query,
-        sorts: titleSort
-          ? [{ direction: "descending", field: "createdAt" }]
-          : [{ direction: "ascending", field: "title" }],
+        sorts: [sort],
+      },
+    });
+  }
+
+  function setUntitledFilter(active: boolean) {
+    const filters = withoutUntitledFilter(view.query.filters);
+    updateWorkspaceDataView(view.id, {
+      query: {
+        ...view.query,
+        filters: active
+          ? [...filters, { field: "title", operator: "equals", value: "" }]
+          : filters,
+      },
+    });
+  }
+
+  function setGrouping(propertyId: string | undefined) {
+    updateWorkspaceDataView(view.id, {
+      presentation: {
+        ...view.presentation,
+        groupBy: propertyId
+          ? {
+              direction: "ascending",
+              emptyLabel: t("objectTypeOverview.noGrouping"),
+              propertyId,
+            }
+          : undefined,
       },
     });
   }
@@ -981,7 +1240,9 @@ function WorkspaceObjectTypeView({
         objectType={objectType}
         onAddCollection={addCollection}
         onAddQuery={addQuery}
+        onCreateFromTemplate={createFromTemplate}
         onCreateObject={createObject}
+        onOpenSettings={openSettings}
         onSearch={setSearch}
         onSearchOpenChange={setSearchOpen}
         onToggleCollapsed={() => setCollapsed((current) => !current)}
@@ -993,20 +1254,28 @@ function WorkspaceObjectTypeView({
         <ObjectTypeToolbar
           count={filtered.length}
           filterOpen={filterOpen}
+          groupOpen={groupOpen}
           mode={mode}
           onFilterOpenChange={setFilterOpen}
+          onGroupOpenChange={setGroupOpen}
+          onGroupingChange={setGrouping}
           onLayoutChange={setLayout}
           onModeChange={setMode}
-          onToggleSort={toggleSort}
+          onSortChange={setSort}
           view={view}
         />
       )}
 
-      <ObjectTypeFilterRow
+      <ObjectTypeCriteriaRows
+        filterActive={hasUntitledFilter(view.query.filters)}
         filterOpen={filterOpen}
+        groupOpen={groupOpen}
         mode={mode}
+        onFilterActiveChange={setUntitledFilter}
         onFilterOpenChange={setFilterOpen}
-        onSearch={setSearch}
+        onGroupOpenChange={setGroupOpen}
+        onGroupingChange={setGrouping}
+        view={view}
       />
 
       <div className={workspaceOverviewContentClass}>

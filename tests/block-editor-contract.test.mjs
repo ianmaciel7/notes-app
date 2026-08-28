@@ -1,7 +1,27 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import test from "node:test";
+
+async function readOpenSpecChangeArtifact(changeName, artifactPath) {
+  const activePath = `openspec/changes/${changeName}/${artifactPath}`;
+  const activeArtifact = await readFile(activePath, "utf8").catch(() => null);
+  if (activeArtifact !== null) return activeArtifact;
+
+  const archiveEntries = await readdir("openspec/changes/archive", {
+    withFileTypes: true,
+  }).catch(() => []);
+  const archivedChange = archiveEntries
+    .filter((entry) => entry.isDirectory() && entry.name.endsWith(changeName))
+    .map((entry) => entry.name)
+    .sort()
+    .at(-1);
+  if (!archivedChange) return "";
+  return readFile(
+    `openspec/changes/archive/${archivedChange}/${artifactPath}`,
+    "utf8",
+  );
+}
 
 const packageJson = JSON.parse(await readFile("package.json", "utf8"));
 const [
@@ -22,11 +42,9 @@ const [
   readFile("src/editor/use-buffered-document-commit.ts", "utf8"),
   readFile("src/editor/slash-command.tsx", "utf8"),
   readFile("src/i18n/request.ts", "utf8").catch(() => ""),
-  readFile("openspec/changes/add-block-editor/tasks.md", "utf8"),
+  readOpenSpecChangeArtifact("add-block-editor", "tasks.md"),
   readFile("src/app/globals.css", "utf8").catch(() => ""),
-  readFile(
-    "docs/references/assets/capacities-block-handle-2026-08-24.png",
-  ),
+  readFile("docs/references/assets/capacities-block-handle-2026-08-24.png"),
   readFile("docs/references/capacities-block-handle.md", "utf8"),
 ]);
 

@@ -770,7 +770,7 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
   assert.match(controller, /type: "importFile"/);
   assert.match(controller, /objectTypeOverview\.importComplete/);
   const importHandler = controller.match(
-    /const importWorkspaceFiles[\s\S]*?\n  \);\n\n  const updateWorkspaceEntity/,
+    /const importWorkspaceFiles[\s\S]*?\n {2}\);\n\n {2}const updateWorkspaceEntity/,
   )?.[0];
   assert.ok(importHandler);
   assert.doesNotMatch(importHandler, /writeMediaAsset/);

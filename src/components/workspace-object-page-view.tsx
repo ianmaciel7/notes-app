@@ -558,6 +558,7 @@ function ObjectPageTags({
         .includes(deferredPickerQuery.trim().toLocaleLowerCase()),
   );
   const closeTagPicker = () => {
+    setOpen(false);
     setTagPickerOpen(false);
     setTagPickerQuery("");
     setPendingTagIds([]);
@@ -619,7 +620,12 @@ function ObjectPageTags({
                   event.stopPropagation();
                   setOpen(true);
                 }}
-                onFocus={() => setOpen(true)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === "ArrowDown") {
+                    event.preventDefault();
+                    setOpen(true);
+                  }
+                }}
                 onChange={(event) => {
                   setQuery(event.target.value);
                   setOpen(true);
@@ -638,6 +644,23 @@ function ObjectPageTags({
             "w-[257px] min-w-[257px] gap-0 p-1.5",
           )}
         >
+          {!deferredQuery.trim() ? (
+            <button
+              type="button"
+              className={cn(
+                workspaceOverflowMenuItemClass,
+                "w-full gap-2 px-2 text-left",
+              )}
+              onClick={() => {
+                const tagId = createWorkspaceTag("");
+                update({ tags: [...tags, tagId] });
+                setQuery("");
+                setOpen(false);
+              }}
+            >
+              {t("documentMenu.newTagEmpty")}
+            </button>
+          ) : null}
           <button
             type="button"
             className={cn(
@@ -645,27 +668,11 @@ function ObjectPageTags({
               "w-full gap-2 px-2 text-left",
             )}
             onClick={() => {
-              const tagId = createWorkspaceTag(deferredQuery.trim());
-              update({ tags: [...tags, tagId] });
-              setQuery("");
+              const nextQuery = query;
               setOpen(false);
-            }}
-          >
-            {deferredQuery.trim()
-              ? t("documentMenu.newTag", { tag: deferredQuery.trim() })
-              : t("documentMenu.newTagEmpty")}
-          </button>
-          <button
-            type="button"
-            className={cn(
-              workspaceOverflowMenuItemClass,
-              "w-full gap-2 px-2 text-left",
-            )}
-            onClick={() => {
-              setOpen(false);
-              setTagPickerQuery(query);
+              setTagPickerQuery(nextQuery);
               setPendingTagIds(tags);
-              setTagPickerOpen(true);
+              window.setTimeout(() => setTagPickerOpen(true));
             }}
           >
             {t("documentMenu.searchAllTags")}
@@ -856,6 +863,12 @@ function ObjectPageCollections({
                   setOpen(true);
                 }}
                 onFocus={() => setOpen(true)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === "ArrowDown") {
+                    event.preventDefault();
+                    setOpen(true);
+                  }
+                }}
                 onChange={(event) => {
                   setQuery(event.target.value);
                   setOpen(true);
@@ -867,6 +880,8 @@ function ObjectPageCollections({
         />
         <PopoverContent
           align="start"
+          initialFocus={false}
+          finalFocus={inputRef}
           sideOffset={5}
           className={cn(
             workspaceOverflowMenuContentClass,
@@ -1076,6 +1091,215 @@ function BufferedWorkspacePropertyInput({
   );
 }
 
+function relationCandidateEntities(
+  entity: SupportedWorkspaceEntity,
+  property: WorkspaceStructure["propertyDefinitions"][number],
+  createdEntities: readonly WorkspaceEntity[],
+) {
+  return createdEntities.filter((candidate): candidate is SupportedWorkspaceEntity => {
+    if (!canRenderWorkspaceObjectPage(candidate)) return false;
+    if (candidate.id === entity.id) return false;
+    if (
+      property.targetStructureIds?.length &&
+      !property.targetStructureIds.includes(candidate.objectTypeId)
+    ) {
+      return false;
+    }
+    return (
+      !property.fixedTargetObjectIds?.length ||
+      property.fixedTargetObjectIds.includes(candidate.id)
+    );
+  });
+}
+
+function WorkspaceEntityPropertyField({
+  candidates,
+  entity,
+  inputId,
+  property,
+  setLinkedEntityPropertyValue,
+}: {
+  readonly candidates: readonly SupportedWorkspaceEntity[];
+  readonly entity: SupportedWorkspaceEntity;
+  readonly inputId: string;
+  readonly property: WorkspaceStructure["propertyDefinitions"][number];
+  readonly setLinkedEntityPropertyValue: (
+    entityId: string,
+    propertyId: string,
+    targetIds: string | readonly string[],
+  ) => void;
+}) {
+  const relation = entity.propertyValues[property.id];
+  const selectedIds =
+    relation?.type === "entity" ? relation.entity.map((target) => target.id) : [];
+  return (
+    <label
+      htmlFor={inputId}
+      data-slot="workspace-entity-property"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
+      className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
+    >
+      <span className="truncate text-muted-foreground">{property.name}</span>
+      <select
+        id={inputId}
+        aria-label={property.name}
+        multiple={property.multiple}
+        value={property.multiple ? selectedIds : (selectedIds[0] ?? "")}
+        className="min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring"
+        onChange={(event) => {
+          const targetIds = Array.from(
+            event.currentTarget.selectedOptions,
+          ).map((option) => option.value);
+          setLinkedEntityPropertyValue(
+            entity.id,
+            property.id,
+            property.multiple ? targetIds : (targetIds[0] ?? []),
+          );
+        }}
+      >
+        {!property.multiple && <option value="" />}
+        {candidates.map((candidate) => (
+          <option key={candidate.id} value={candidate.id}>
+            {candidate.title.trim() || candidate.id}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function WorkspaceBooleanPropertyField({
+  property,
+  updateProperty,
+  value,
+}: {
+  readonly property: WorkspaceStructure["propertyDefinitions"][number];
+  readonly updateProperty: EntityPropertyUpdate;
+  readonly value: unknown;
+}) {
+  return (
+    <label
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
+      className="flex min-h-8 items-center justify-between gap-3 rounded-md px-2 text-sm"
+    >
+      <span className="truncate text-muted-foreground">{property.name}</span>
+      <input
+        type="checkbox"
+        checked={Boolean(value)}
+        onChange={(event) => updateProperty(property.id, event.target.checked)}
+      />
+    </label>
+  );
+}
+
+function WorkspaceLabelPropertyField({
+  entity,
+  inputId,
+  property,
+  updateProperty,
+}: {
+  readonly entity: SupportedWorkspaceEntity;
+  readonly inputId: string;
+  readonly property: WorkspaceStructure["propertyDefinitions"][number];
+  readonly updateProperty: EntityPropertyUpdate;
+}) {
+  const label = entity.propertyValues[property.id];
+  const selectedIds =
+    label?.type === "label" ? label.label.map((option) => option.id) : [];
+  return (
+    <label
+      htmlFor={inputId}
+      data-slot="workspace-label-property"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
+      className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
+    >
+      <span className="truncate text-muted-foreground">{property.name}</span>
+      <select
+        id={inputId}
+        aria-label={property.name}
+        multiple={property.multiple}
+        value={property.multiple ? selectedIds : (selectedIds[0] ?? "")}
+        className="min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring"
+        onChange={(event) => {
+          const optionIds = Array.from(
+            event.currentTarget.selectedOptions,
+          ).map((option) => option.value);
+          updateProperty(
+            property.id,
+            property.multiple ? optionIds : (optionIds[0] ?? ""),
+          );
+        }}
+      >
+        {!property.multiple && <option value="" />}
+        {(property.options ?? []).map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.name}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function workspacePropertyInputType(
+  valueType: WorkspaceStructure["propertyDefinitions"][number]["valueType"],
+) {
+  if (valueType === "number") return "number";
+  if (valueType === "date") return "datetime-local";
+  if (valueType === "url") return "url";
+  return "text";
+}
+
+function coerceWorkspacePropertyDraft(
+  valueType: WorkspaceStructure["propertyDefinitions"][number]["valueType"],
+  draft: unknown,
+) {
+  const text = String(draft);
+  if (valueType === "number") return Number(text);
+  if (valueType === "date") {
+    return {
+      allDay: false,
+      start: text,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    };
+  }
+  if (valueType === "richText") return blockEditorDocumentFromPlainText(text);
+  return text;
+}
+
+function WorkspaceScalarPropertyField({
+  inputId,
+  property,
+  updateProperty,
+  value,
+}: {
+  readonly inputId: string;
+  readonly property: WorkspaceStructure["propertyDefinitions"][number];
+  readonly updateProperty: EntityPropertyUpdate;
+  readonly value: unknown;
+}) {
+  return (
+    <label
+      htmlFor={inputId}
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
+      className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
+    >
+      <span className="truncate text-muted-foreground">{property.name}</span>
+      <BufferedWorkspacePropertyInput
+        inputId={inputId}
+        inputType={workspacePropertyInputType(property.valueType)}
+        value={value}
+        onCommit={(draft) =>
+          updateProperty(
+            property.id,
+            coerceWorkspacePropertyDraft(property.valueType, draft),
+          )
+        }
+      />
+    </label>
+  );
+}
+
 function WorkspacePropertyField({
   entity,
   property,
@@ -1089,152 +1313,42 @@ function WorkspacePropertyField({
   const inputId = React.useId();
   const value = readWorkspaceEntityProperty(entity, property.id);
   if (property.valueType === "entity") {
-    const relation = entity.propertyValues[property.id];
-    const selectedIds =
-      relation?.type === "entity"
-        ? relation.entity.map((target) => target.id)
-        : [];
-    const candidates = createdEntities.filter((candidate) => {
-      if (candidate.id === entity.id) return false;
-      if (
-        property.targetStructureIds?.length &&
-        !property.targetStructureIds.includes(candidate.objectTypeId)
-      ) {
-        return false;
-      }
-      return (
-        !property.fixedTargetObjectIds?.length ||
-        property.fixedTargetObjectIds.includes(candidate.id)
-      );
-    });
     return (
-      <label
-        htmlFor={inputId}
-        data-slot="workspace-entity-property"
-        data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
-        className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
-      >
-        <span className="truncate text-muted-foreground">{property.name}</span>
-        <select
-          id={inputId}
-          aria-label={property.name}
-          multiple={property.multiple}
-          value={property.multiple ? selectedIds : (selectedIds[0] ?? "")}
-          className="min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring"
-          onChange={(event) => {
-            const targetIds = Array.from(
-              event.currentTarget.selectedOptions,
-            ).map((option) => option.value);
-            setLinkedEntityPropertyValue(
-              entity.id,
-              property.id,
-              property.multiple ? targetIds : (targetIds[0] ?? []),
-            );
-          }}
-        >
-          {!property.multiple && <option value="" />}
-          {candidates.map((candidate) => (
-            <option key={candidate.id} value={candidate.id}>
-              {candidate.title.trim() || candidate.id}
-            </option>
-          ))}
-        </select>
-      </label>
+      <WorkspaceEntityPropertyField
+        candidates={relationCandidateEntities(entity, property, createdEntities)}
+        entity={entity}
+        inputId={inputId}
+        property={property}
+        setLinkedEntityPropertyValue={setLinkedEntityPropertyValue}
+      />
     );
   }
   if (property.valueType === "boolean") {
     return (
-      <label
-        data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
-        className="flex min-h-8 items-center justify-between gap-3 rounded-md px-2 text-sm"
-      >
-        <span className="truncate text-muted-foreground">{property.name}</span>
-        <input
-          type="checkbox"
-          checked={Boolean(value)}
-          onChange={(event) =>
-            updateProperty(property.id, event.target.checked)
-          }
-        />
-      </label>
+      <WorkspaceBooleanPropertyField
+        property={property}
+        updateProperty={updateProperty}
+        value={value}
+      />
     );
   }
   if (property.valueType === "label") {
-    const label = entity.propertyValues[property.id];
-    const selectedIds =
-      label?.type === "label" ? label.label.map((option) => option.id) : [];
     return (
-      <label
-        htmlFor={inputId}
-        data-slot="workspace-label-property"
-        data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
-        className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
-      >
-        <span className="truncate text-muted-foreground">{property.name}</span>
-        <select
-          id={inputId}
-          aria-label={property.name}
-          multiple={property.multiple}
-          value={property.multiple ? selectedIds : (selectedIds[0] ?? "")}
-          className="min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring"
-          onChange={(event) => {
-            const optionIds = Array.from(
-              event.currentTarget.selectedOptions,
-            ).map((option) => option.value);
-            updateProperty(
-              property.id,
-              property.multiple ? optionIds : (optionIds[0] ?? ""),
-            );
-          }}
-        >
-          {!property.multiple && <option value="" />}
-          {(property.options ?? []).map((option) => (
-            <option key={option.id} value={option.id}>
-              {option.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <WorkspaceLabelPropertyField
+        entity={entity}
+        inputId={inputId}
+        property={property}
+        updateProperty={updateProperty}
+      />
     );
   }
-  const inputType =
-    property.valueType === "number"
-      ? "number"
-      : property.valueType === "date"
-        ? "datetime-local"
-        : property.valueType === "url"
-          ? "url"
-          : "text";
   return (
-    <label
-      htmlFor={inputId}
-      data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
-      className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
-    >
-      <span className="truncate text-muted-foreground">{property.name}</span>
-      <BufferedWorkspacePropertyInput
-        inputId={inputId}
-        inputType={inputType}
-        value={value}
-        onCommit={(draft) => {
-          const text = String(draft);
-          updateProperty(
-            property.id,
-            property.valueType === "number"
-              ? Number(text)
-              : property.valueType === "date"
-                ? {
-                    allDay: false,
-                    start: text,
-                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                  }
-                : property.valueType === "richText"
-                  ? blockEditorDocumentFromPlainText(text)
-                : text,
-          );
-        }}
-      />
-    </label>
+    <WorkspaceScalarPropertyField
+      inputId={inputId}
+      property={property}
+      updateProperty={updateProperty}
+      value={value}
+    />
   );
 }
 
@@ -1442,7 +1556,6 @@ function editorLabels(t: ReturnType<typeof useTranslations<"workspace">>) {
   };
 }
 
-// biome-ignore lint/correctness/noUnusedVariables: reserved for the contextual panel, not the Page body
 function ReferencePanel({
   entity,
   update,
@@ -1971,6 +2084,7 @@ function DocumentPage({
           }}
         />
       </div>
+      <ReferencePanel entity={entity} update={update} />
       <RelatedContent entityId={entity.id} />
       <input
         ref={importInputRef}
