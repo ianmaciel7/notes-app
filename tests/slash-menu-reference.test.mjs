@@ -2,13 +2,22 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [slashSource, catalogSource, contractSource, extensionsSource, documentSource, referenceSource] = await Promise.all([
+const [
+  slashSource,
+  catalogSource,
+  contractSource,
+  extensionsSource,
+  documentSource,
+  referenceSource,
+  sharedSuggestionSource,
+] = await Promise.all([
   readFile("src/editor/slash-command.tsx", "utf8"),
   readFile("src/editor/block-command-catalog.tsx", "utf8"),
   readFile("src/editor/block-editor-contract.ts", "utf8"),
   readFile("src/editor/block-editor-extensions.ts", "utf8"),
   readFile("src/editor/document.ts", "utf8"),
   readFile("docs/references/capacities-slash-menu.md", "utf8"),
+  readFile("src/editor/shared-suggestion-controller.ts", "utf8"),
 ]);
 
 test("slash trigger works at block start and after whitespace", () => {
@@ -25,7 +34,7 @@ test("slash menu stays anchored to the caret instead of viewport origin", () => 
   assert.match(slashSource, /onPosition: \(position\) =>/);
   assert.match(slashSource, /position: "fixed"/);
   assert.match(slashSource, /SLASH_MENU_VIEWPORT_GUTTER/);
-  assert.match(slashSource, /SLASH_MENU_CURSOR_GAP/);
+  assert.match(sharedSuggestionSource, /SUGGESTION_MENU_CURSOR_GAP/);
 });
 
 test("slash menu keeps the reference-aligned leading command order", () => {

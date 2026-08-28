@@ -7,6 +7,7 @@ import {
   buildWorkspaceSearchIndex,
   collectQueryDependencies,
   evaluateQuery,
+  parseWorkspaceSearchQuery,
   queryDefinitionFromLegacy,
   searchWorkspaceIndex,
   updateWorkspaceSearchIndex,
@@ -169,6 +170,93 @@ test("object and block search indexes are rebuildable and incrementally replace 
   const nextIndex = updateWorkspaceSearchIndex(index, updated);
   assert.equal(searchWorkspaceIndex(nextIndex, "Project Atlas", "object").length, 0);
   assert.equal(searchWorkspaceIndex(nextIndex, "Project Nova", "object")[0].entityId, "a");
+});
+
+test("palette search parses intent, ranks deterministically, deduplicates aliases, and projects block context", () => {
+  const exact = page("a", "Project Alpha", {
+    aliases: ["Alpha", "Projeto Alfa"],
+    body: "Later notes",
+    createdAt: "2026-08-23T00:00:00.000Z",
+  });
+  const leadingAlias = page("b", "Notes", {
+    aliases: ["Project Alpha archive"],
+    body: "Body",
+    createdAt: "2026-08-22T00:00:00.000Z",
+  });
+  const strong = page("c", "Alpha project planning", {
+    body: "Body",
+    createdAt: "2026-08-21T00:00:00.000Z",
+  });
+  const partial = page("d", "Roadmap", {
+    body: "The Project Alpha milestone appears later",
+    createdAt: "2026-08-20T00:00:00.000Z",
+  });
+  const approximate = page("e", "Project Alfa", {
+    body: "Approximate spelling",
+    createdAt: "2026-08-19T00:00:00.000Z",
+  });
+  const tie = page("f", "Project Alpha", {
+    aliases: ["Alpha"],
+    body: "Tie",
+    createdAt: "2026-08-23T00:00:00.000Z",
+  });
+  const index = buildWorkspaceSearchIndex([
+    partial,
+    approximate,
+    leadingAlias,
+    tie,
+    strong,
+    exact,
+  ]);
+
+  assert.deepEqual(parseWorkspaceSearchQuery("  Café ALPHA  "), {
+    mode: "plain",
+    normalized: "cafe alpha",
+    raw: "Café ALPHA",
+    terms: ["cafe", "alpha"],
+  });
+  assert.deepEqual(parseWorkspaceSearchQuery("^Project Alpha"), {
+    mode: "leading",
+    normalized: "project alpha",
+    raw: "^Project Alpha",
+    terms: ["project", "alpha"],
+  });
+  assert.deepEqual(parseWorkspaceSearchQuery('"Project Alpha"'), {
+    mode: "exact-phrase",
+    normalized: "project alpha",
+    raw: '"Project Alpha"',
+    terms: ["project alpha"],
+  });
+
+  assert.deepEqual(
+    searchWorkspaceIndex(index, '"Project Alpha"', "object").map(
+      (result) => result.entityId,
+    ),
+    ["a", "f", "b", "c", "d"],
+  );
+  assert.deepEqual(
+    searchWorkspaceIndex(index, "^Project Alpha", "object")
+      .slice(0, 3)
+      .map((result) => result.entityId),
+    ["a", "f", "b"],
+  );
+  assert.deepEqual(
+    searchWorkspaceIndex(index, "Projeto Alfa", "object").map(
+      (result) => result.entityId,
+    ),
+    ["a", "e"],
+  );
+
+  const blockResults = searchWorkspaceIndex(index, "milestone", "block");
+  assert.equal(blockResults.length, 1);
+  assert.deepEqual(blockResults[0], {
+    blockId: partial.body.doc.content[0].attrs.id,
+    entityId: "d",
+    kind: "block",
+    ownerTitle: "Roadmap",
+    score: blockResults[0].score,
+    text: "The Project Alpha milestone appears later",
+  });
 });
 
 test("legacy query entities adapt into canonical tags and structure filters", () => {

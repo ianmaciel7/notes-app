@@ -1679,8 +1679,13 @@ function ReferencePanel({
   readonly update: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
-  const { createdEntities, objectTypes, selectEntity, updateWorkspaceEntity } =
-    useWorkspace();
+  const {
+    createdEntities,
+    objectTypes,
+    selectEntity,
+    structures,
+    updateWorkspaceEntity,
+  } = useWorkspace();
   const linkIndex = React.useMemo(
     () => createWorkspaceObjectLinkIndex(createdEntities),
     [createdEntities],
@@ -1961,6 +1966,8 @@ function ReferencePanel({
                 onChange={(body) => updateWorkspaceEntity(target.id, { body })}
                 className="mt-0 min-h-20"
                 labels={editorLabels(t)}
+                referenceEntities={createdEntities}
+                referenceStructures={structures}
               />
             </section>
           );
@@ -2005,6 +2012,7 @@ function DocumentPage({
     React.useState(0);
   const [customizeOpen, setCustomizeOpen] = React.useState(false);
   const {
+    createdEntities,
     createWorkspacePage,
     deleteWorkspaceEntity,
     duplicateWorkspaceEntity,
@@ -2013,6 +2021,7 @@ function DocumentPage({
     selectEntity,
     setWorkspaceEntityPropertyValue,
     showMessage,
+    structures,
   } = useWorkspace();
 
   function exportMarkdown() {
@@ -2204,6 +2213,8 @@ function DocumentPage({
           value={entity.body}
           onChange={(body) => update({ body })}
           onCreatePageRequest={createWorkspacePage}
+          referenceEntities={createdEntities}
+          referenceStructures={structures}
           className="mt-4 min-h-48"
           labels={{
             bold: t("editor.bold"),

@@ -15,11 +15,16 @@ import {
   type BlockCommandCatalogLabels,
   createBlockCommandCatalog,
 } from "@/editor/block-command-catalog";
+import {
+  computeSuggestionMenuPosition,
+  getNextSuggestionIndex,
+  isUsableSuggestionAnchorRect,
+  SUGGESTION_MENU_VIEWPORT_GUTTER,
+} from "@/editor/shared-suggestion-controller";
 import { cn } from "@/lib/utils";
 
 const slashCommandPluginKey = new PluginKey("block-editor-slash-command");
-const SLASH_MENU_VIEWPORT_GUTTER = 8;
-const SLASH_MENU_CURSOR_GAP = 4;
+const SLASH_MENU_VIEWPORT_GUTTER = SUGGESTION_MENU_VIEWPORT_GUTTER;
 let activeSlashMenuCleanup: (() => void) | undefined;
 
 type BlockEditorSlashMenuLabels = {
@@ -60,16 +65,6 @@ type SlashMenuAnchorState = {
   position: number;
   clientRect?: (() => DOMRect | null | undefined) | null;
 };
-
-function getNextIndex(
-  currentIndex: number,
-  itemCount: number,
-  direction: 1 | -1,
-) {
-  if (itemCount <= 0) return -1;
-  if (currentIndex < 0) return direction > 0 ? 0 : itemCount - 1;
-  return (currentIndex + direction + itemCount) % itemCount;
-}
 
 function SlashCommandMenu({
   activeIndex,
@@ -287,19 +282,7 @@ function filterCommandItems(
 function isUsableAnchorRect(
   rect: DOMRect | null | undefined,
 ): rect is DOMRect {
-  const collapsedAtViewportEdge = Boolean(
-    rect &&
-      rect.left <= SLASH_MENU_VIEWPORT_GUTTER &&
-      rect.width === 0,
-  );
-  return Boolean(
-    rect &&
-      Number.isFinite(rect.left) &&
-      Number.isFinite(rect.top) &&
-      Number.isFinite(rect.bottom) &&
-      !collapsedAtViewportEdge &&
-      (rect.left !== 0 || rect.top !== 0 || rect.width !== 0 || rect.height !== 0),
-  );
+  return isUsableSuggestionAnchorRect(rect);
 }
 
 function getCursorRect(editor: Editor, position: number) {
@@ -347,10 +330,6 @@ function resolveSlashMenuAnchor(anchor: SlashMenuAnchorState) {
   return cursorRect;
 }
 
-function clamp(value: number, minimum: number, maximum: number) {
-  return Math.min(Math.max(value, minimum), Math.max(minimum, maximum));
-}
-
 function applySlashMenuPosition(
   element: HTMLElement,
   position: SuggestionPositionData,
@@ -358,36 +337,23 @@ function applySlashMenuPosition(
 ) {
   const ownerWindow = element.ownerDocument.defaultView ?? window;
   const menuRect = element.getBoundingClientRect();
-  const menuWidth = menuRect.width || 440;
-  const menuHeight = menuRect.height;
-  const preferredLeft = anchor?.left ?? position.x;
-  const preferredBelow = anchor ? anchor.bottom + SLASH_MENU_CURSOR_GAP : position.y;
-  const maximumLeft = ownerWindow.innerWidth - menuWidth - SLASH_MENU_VIEWPORT_GUTTER;
-  const left = clamp(preferredLeft, SLASH_MENU_VIEWPORT_GUTTER, maximumLeft);
-
-  let top = preferredBelow;
-  if (
-    anchor &&
-    menuHeight > 0 &&
-    preferredBelow + menuHeight + SLASH_MENU_VIEWPORT_GUTTER > ownerWindow.innerHeight
-  ) {
-    const above = anchor.top - menuHeight - SLASH_MENU_CURSOR_GAP;
-    if (above >= SLASH_MENU_VIEWPORT_GUTTER) top = above;
-  }
-  if (menuHeight > 0) {
-    top = clamp(
-      top,
-      SLASH_MENU_VIEWPORT_GUTTER,
-      ownerWindow.innerHeight - menuHeight - SLASH_MENU_VIEWPORT_GUTTER,
-    );
-  } else {
-    top = Math.max(SLASH_MENU_VIEWPORT_GUTTER, top);
-  }
+  const { left, top } = computeSuggestionMenuPosition({
+    anchor,
+    fallbackPosition: position,
+    menu: {
+      height: menuRect.height,
+      width: menuRect.width,
+    },
+    viewport: {
+      height: ownerWindow.innerHeight,
+      width: ownerWindow.innerWidth,
+    },
+  });
 
   Object.assign(element.style, {
-    left: `${Math.round(left)}px`,
+    left: `${left}px`,
     position: "fixed",
-    top: `${Math.round(top)}px`,
+    top: `${top}px`,
     width: "max-content",
     zIndex: "120",
   });
@@ -574,7 +540,7 @@ function createSlashCommandExtension(
                   props.event.key === "ArrowUp"
                 ) {
                   props.event.preventDefault();
-                  activeIndex = getNextIndex(
+                  activeIndex = getNextSuggestionIndex(
                     activeIndex,
                     currentItems.length,
                     props.event.key === "ArrowDown" ? 1 : -1,

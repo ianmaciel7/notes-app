@@ -117,15 +117,34 @@ type SearchIndexObjectEntry = {
 type SearchIndexBlockEntry = {
   readonly blockId: string;
   readonly entityId: string;
+  readonly ownerTitle: string;
   readonly text: string;
 };
 type WorkspaceSearchIndex = {
   readonly blocks: readonly SearchIndexBlockEntry[];
   readonly objects: readonly SearchIndexObjectEntry[];
 };
+type WorkspaceSearchQueryIntent = {
+  readonly mode: "exact-phrase" | "leading" | "plain";
+  readonly normalized: string;
+  readonly raw: string;
+  readonly terms: readonly string[];
+};
 type WorkspaceSearchResult =
-  | { readonly blockId: string; readonly entityId: string; readonly kind: "block"; readonly score: number; readonly text: string }
-  | { readonly entityId: string; readonly kind: "object"; readonly score: number; readonly title: string };
+  | {
+      readonly blockId: string;
+      readonly entityId: string;
+      readonly kind: "block";
+      readonly ownerTitle: string;
+      readonly score: number;
+      readonly text: string;
+    }
+  | {
+      readonly entityId: string;
+      readonly kind: "object";
+      readonly score: number;
+      readonly title: string;
+    };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -135,6 +154,22 @@ function isNonEmptyString(value: unknown): value is string {
 }
 function normalizeSearchText(value: string): string {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().trim();
+}
+function splitSearchTerms(value: string): readonly string[] {
+  return normalizeSearchText(value).split(/\s+/).filter(Boolean);
+}
+function parseWorkspaceSearchQuery(query: string): WorkspaceSearchQueryIntent {
+  const raw = query.trim();
+  if (raw.startsWith("^")) {
+    const normalized = normalizeSearchText(raw.slice(1));
+    return { mode: "leading", normalized, raw, terms: splitSearchTerms(normalized) };
+  }
+  if (raw.length >= 2 && raw.startsWith('"') && raw.endsWith('"')) {
+    const normalized = normalizeSearchText(raw.slice(1, -1));
+    return { mode: "exact-phrase", normalized, raw, terms: normalized ? [normalized] : [] };
+  }
+  const normalized = normalizeSearchText(raw);
+  return { mode: "plain", normalized, raw, terms: splitSearchTerms(raw) };
 }
 function isVariableReference(value: QueryValue | undefined): value is QueryVariableReference {
   return isRecord(value) && value.kind === "variable" && isNonEmptyString(value.name);
@@ -348,12 +383,17 @@ function textFromNode(node: BlockEditorNode): string {
   if (node.type === "hardBreak") return "\n";
   return (node.content ?? []).map(textFromNode).join("");
 }
-function collectBlockEntries(entityId: string, nodes: readonly BlockEditorNode[], output: SearchIndexBlockEntry[]): void {
+function collectBlockEntries(
+  entityId: string,
+  ownerTitle: string,
+  nodes: readonly BlockEditorNode[],
+  output: SearchIndexBlockEntry[],
+): void {
   for (const node of nodes) {
     const blockId = typeof node.attrs?.id === "string" ? node.attrs.id : null;
     const text = blockId ? textFromNode(node).trim() : "";
-    if (blockId && text) output.push({ blockId, entityId, text });
-    if (node.content) collectBlockEntries(entityId, node.content, output);
+    if (blockId && text) output.push({ blockId, entityId, ownerTitle, text });
+    if (node.content) collectBlockEntries(entityId, ownerTitle, node.content, output);
   }
 }
 function searchablePropertyText(entity: WorkspaceEntity): string {
@@ -369,38 +409,146 @@ function buildWorkspaceSearchIndex(entities: readonly WorkspaceEntity[]): Worksp
   const blocks: SearchIndexBlockEntry[] = [];
   const objects = entities.map((entity): SearchIndexObjectEntry => {
     const aliases = "aliases" in entity && Array.isArray(entity.aliases) ? entity.aliases : [];
-    if (entity.kind === "document" || entity.kind === "quote") collectBlockEntries(entity.id, entity.body.doc.content, blocks);
+    const blockText: string[] = [];
+    if (entity.kind === "document" || entity.kind === "quote") {
+      collectBlockEntries(entity.id, entity.title, entity.body.doc.content, blocks);
+      blockText.push(textFromNode(entity.body.doc));
+    }
     return {
       aliases,
       entityId: entity.id,
-      searchableText: [entity.title, ...aliases, searchablePropertyText(entity)].join(" "),
+      searchableText: [entity.title, ...aliases, searchablePropertyText(entity), ...blockText].join(" "),
       title: entity.title,
     };
   });
   return { blocks, objects };
 }
-function scoreSearchText(text: string, query: string): number {
+function tokenDistance(left: string, right: string): number {
+  if (left === right) return 0;
+  if (!left || !right) return Math.max(left.length, right.length);
+  const previous = Array.from({ length: right.length + 1 }, (_value, index) => index);
+  for (let leftIndex = 1; leftIndex <= left.length; leftIndex += 1) {
+    let lastDiagonal = previous[0];
+    previous[0] = leftIndex;
+    for (let rightIndex = 1; rightIndex <= right.length; rightIndex += 1) {
+      const before = previous[rightIndex];
+      previous[rightIndex] = Math.min(
+        previous[rightIndex] + 1,
+        previous[rightIndex - 1] + 1,
+        lastDiagonal + (left[leftIndex - 1] === right[rightIndex - 1] ? 0 : 1),
+      );
+      lastDiagonal = before;
+    }
+  }
+  return previous[right.length] ?? 0;
+}
+function termMatchesApproximately(valueTerms: readonly string[], term: string) {
+  return valueTerms.some(
+    (candidate) =>
+      candidate.length >= 4 &&
+      term.length >= 4 &&
+      tokenDistance(candidate, term) <= 2,
+  );
+}
+
+function everyQueryTermMatches(
+  valueTerms: readonly string[],
+  queryTerms: readonly string[],
+) {
+  return queryTerms.every((term) => valueTerms.includes(term));
+}
+
+function partiallyMatchesPlainQuery(
+  valueTerms: readonly string[],
+  queryTerms: readonly string[],
+) {
+  return (
+    queryTerms.length > 0 &&
+    queryTerms.some((term) => valueTerms.includes(term)) &&
+    queryTerms.every(
+      (term) =>
+        valueTerms.includes(term) || termMatchesApproximately(valueTerms, term),
+    )
+  );
+}
+
+function scoreDirectFieldMatch(
+  value: string,
+  query: WorkspaceSearchQueryIntent,
+  base: number,
+) {
+  if (value === query.normalized) return base + 500;
+  if (value.startsWith(query.normalized)) return base + 400;
+  if (query.mode !== "leading" && value.includes(query.normalized)) {
+    return base + 220;
+  }
+  return 0;
+}
+
+function scoreTermFieldMatch(
+  valueTerms: readonly string[],
+  queryTerms: readonly string[],
+  query: WorkspaceSearchQueryIntent,
+  base: number,
+) {
+  if (queryTerms.length === 0) return 0;
+  if (everyQueryTermMatches(valueTerms, queryTerms)) return base + 180;
+  if (queryTerms.length === 1 && valueTerms.includes(queryTerms[0] ?? "")) {
+    return base + 80;
+  }
+  return query.mode === "plain" &&
+    partiallyMatchesPlainQuery(valueTerms, queryTerms)
+    ? base + 20
+    : 0;
+}
+
+function fieldScore(
+  text: string,
+  query: WorkspaceSearchQueryIntent,
+  base: number,
+): number {
   const value = normalizeSearchText(text);
-  const needle = normalizeSearchText(query);
-  if (!needle || !value.includes(needle)) return 0;
-  if (value === needle) return 100;
-  return value.startsWith(needle) ? 75 : 50;
+  if (!query.normalized || !value) return 0;
+  const directScore = scoreDirectFieldMatch(value, query, base);
+  if (directScore > 0 || query.mode === "leading") return directScore;
+  const valueTerms = splitSearchTerms(value);
+  const queryTerms =
+    query.mode === "exact-phrase" ? splitSearchTerms(query.normalized) : query.terms;
+  return scoreTermFieldMatch(valueTerms, queryTerms, query, base);
+}
+function scoreObjectSearchEntry(item: SearchIndexObjectEntry, query: WorkspaceSearchQueryIntent): number {
+  return Math.max(
+    fieldScore(item.title, query, 500),
+    ...item.aliases.map((alias) => fieldScore(alias, query, 420)),
+    fieldScore(item.searchableText, query, 100),
+  );
+}
+function scoreBlockSearchEntry(item: SearchIndexBlockEntry, query: WorkspaceSearchQueryIntent): number {
+  return fieldScore(item.text, query, 100);
 }
 function searchWorkspaceIndex(index: WorkspaceSearchIndex, query: string, resultKind: "all" | QueryResultKind = "all"): WorkspaceSearchResult[] {
+  const intent = parseWorkspaceSearchQuery(query);
   const results: WorkspaceSearchResult[] = [];
   if (resultKind !== "block") {
     for (const item of index.objects) {
-      const score = scoreSearchText(item.searchableText, query);
+      const score = scoreObjectSearchEntry(item, intent);
       if (score) results.push({ entityId: item.entityId, kind: "object", score, title: item.title });
     }
   }
   if (resultKind !== "object") {
     for (const item of index.blocks) {
-      const score = scoreSearchText(item.text, query);
+      const score = scoreBlockSearchEntry(item, intent);
       if (score) results.push({ ...item, kind: "block", score });
     }
   }
-  return results.sort((left, right) => right.score - left.score || left.entityId.localeCompare(right.entityId));
+  return results.sort((left, right) => {
+    if (right.score !== left.score) return right.score - left.score;
+    if (left.entityId !== right.entityId) return left.entityId.localeCompare(right.entityId);
+    if (left.kind === "block" && right.kind === "block") {
+      return left.blockId.localeCompare(right.blockId);
+    }
+    return left.kind.localeCompare(right.kind);
+  });
 }
 function updateWorkspaceSearchIndex(index: WorkspaceSearchIndex, entity: WorkspaceEntity): WorkspaceSearchIndex {
   const rebuilt = buildWorkspaceSearchIndex([entity]);
@@ -517,12 +665,14 @@ export type {
   QuerySourceKind,
   QueryVariableDefinition,
   WorkspaceSearchIndex,
+  WorkspaceSearchQueryIntent,
   WorkspaceSearchResult,
 };
 export {
   buildWorkspaceSearchIndex,
   collectQueryDependencies,
   evaluateQuery,
+  parseWorkspaceSearchQuery,
   queryDefinitionFromLegacy,
   searchWorkspaceIndex,
   updateWorkspaceSearchIndex,

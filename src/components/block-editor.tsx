@@ -29,6 +29,7 @@ import {
   isSafeBlockEditorHref,
   normalizeBlockEditorDocument,
 } from "@/editor/document";
+import { createReferenceSuggestionExtensions } from "@/editor/reference-suggestions";
 import { createSlashCommandExtension } from "@/editor/slash-command";
 import { useBufferedDocumentCommit } from "@/editor/use-buffered-document-commit";
 import { cn } from "@/lib/utils";
@@ -114,6 +115,8 @@ function BlockEditor({
   className,
   labels,
   editable = true,
+  referenceEntities = [],
+  referenceStructures = [],
 }: BlockEditorProps) {
   const locale = useLocale();
   const t = useTranslations("workspace.editor");
@@ -126,10 +129,16 @@ function BlockEditor({
   );
   const initialContentRef = React.useRef(externalDocument.doc);
   const createPageRequestRef = React.useRef(onCreatePageRequest);
+  const referenceEntitiesRef = React.useRef(referenceEntities);
+  const referenceStructuresRef = React.useRef(referenceStructures);
 
   React.useEffect(() => {
     createPageRequestRef.current = onCreatePageRequest;
   }, [onCreatePageRequest]);
+  React.useEffect(() => {
+    referenceEntitiesRef.current = referenceEntities;
+    referenceStructuresRef.current = referenceStructures;
+  }, [referenceEntities, referenceStructures]);
 
   const {
     acceptExternalDocument,
@@ -168,6 +177,16 @@ function BlockEditor({
         onCreatePageRequest: handleCreatePageRequest,
       }),
     [handleCreatePageRequest, stableSlashLabels],
+  );
+  const referenceSuggestionExtensions = React.useMemo(
+    () =>
+      createReferenceSuggestionExtensions({
+        entities: referenceEntities,
+        getEntities: () => referenceEntitiesRef.current,
+        getStructures: () => referenceStructuresRef.current,
+        structures: referenceStructures,
+      }),
+    [referenceEntities, referenceStructures],
   );
   const blockCommands = React.useMemo(
     () => createBlockCommandCatalog(stableSlashLabels),
@@ -212,8 +231,15 @@ function BlockEditor({
       }),
       Markdown,
       slashCommandExtension,
+      ...referenceSuggestionExtensions,
     ],
-    [placeholder, slashCommandExtension, taskCheckedLabel, taskUncheckedLabel],
+    [
+      placeholder,
+      referenceSuggestionExtensions,
+      slashCommandExtension,
+      taskCheckedLabel,
+      taskUncheckedLabel,
+    ],
   );
 
   const editor = useEditor({

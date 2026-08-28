@@ -611,6 +611,7 @@ function WorkspaceSidebar() {
     createdEntities,
     customSections,
     setPinnedEntities,
+    setCommandPaletteOpen,
     createWorkspaceStructureFromPreset,
     createWorkspaceStructure,
     updateWorkspaceStructure,
@@ -767,6 +768,11 @@ function WorkspaceSidebar() {
     setActiveEntityId(objectType.id);
   }
 
+  function openCommandPaletteFromSidebar() {
+    setSideSearchOpen(false);
+    window.setTimeout(() => setCommandPaletteOpen(true), 0);
+  }
+
   return (
     <TooltipProvider delay={200}>
       <AppSidebar
@@ -805,7 +811,12 @@ function WorkspaceSidebar() {
               objectTypes={objectTypes}
               onSelectObjectType={createWorkspaceEntity}
               onAction={(action) => {
-                setSideSearchOpen(action === "search");
+                if (action === "search") {
+                  openCommandPaletteFromSidebar();
+                  return;
+                }
+                setCommandPaletteOpen(false);
+                setSideSearchOpen(false);
                 if (action !== "new") {
                   setActiveAction(action);
                   setActiveEntityId(null);

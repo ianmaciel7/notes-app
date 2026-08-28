@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "capacities-keyboard-command-system",
+    "origin": "https://app.capacities.io",
+    "kind": "authenticated-product-reused-evidence"
+  },
+  "capturedAt": "2026-08-28T00:00:00-03:00",
+  "viewport": {
+    "width": 1294,
+    "height": 912,
+    "devicePixelRatio": 1
+  },
+  "surface": "workspace command palette and editor suggestions",
+  "semanticState": "OpenSpec initial implementation matrix before live browser acceptance",
+  "persistedState": "No authenticated reference data or local storage values persisted",
+  "interactions": [
+    "idle",
+    "hover-or-exit",
+    "focus",
+    "ArrowUp",
+    "ArrowDown",
+    "Enter",
+    "Escape",
+    "outside-dismissal",
+    "post-action",
+    "persistence",
+    "unavailable",
+    "IME",
+    "reduced-motion",
+    "responsive",
+    "console"
+  ],
+  "artifacts": [
+    {
+      "path": "action-matrix.md",
+      "type": "action-matrix",
+      "description": "Safe reused-evidence matrix for palette and editor-trigger states"
+    },
+    {
+      "path": "limitations.md",
+      "type": "limitations",
+      "description": "Explicit records for states that require post-implementation browser checks"
+    }
+  ],
+  "provenance": {
+    "reused": [
+      "docs/references/capacities-slash-menu.md",
+      "docs/references/capacities-workspace-parity.md",
+      "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/",
+      "artifacts/reference-evidence/capacities-object-page/2026-08-28-mentions-utilities/",
+      "artifacts/capacities-reference/visual-contract-2026-08-22.json"
+    ],
+    "recaptureReason": "Live palette and new editor reference triggers require implementation-specific browser acceptance and are not recaptured during the initial evidence gate."
+  },
+  "confidence": "partial",
+  "redactions": [
+    "No cookies, tokens, credentials, storage values, private content, raw authenticated HTML, or complete third-party bundles stored."
+  ],
+  "freshness": "Mixed: workspace and object-page reusable evidence from 2026-08-28; slash menu from 2026-08-24; legacy palette metrics from 2026-08-22.",
+  "limitations": [
+    "Global palette keyboard shortcuts are not confirmed by this bundle.",
+    "Object and block trigger reference behavior is not confirmed by this bundle.",
+    "Browser acceptance must refresh or extend this bundle after implementation."
+  ]
+}
+

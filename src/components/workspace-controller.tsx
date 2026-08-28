@@ -62,6 +62,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -70,6 +81,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import {
+  createWorkspaceCommandRuntime,
+  projectWorkspaceCommands,
+  routeWorkspaceShortcut,
+} from "@/lib/workspace-command-registry";
 import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
 import { createBrowserWorkspaceDatabaseRepository } from "@/lib/workspace-database";
 import {
@@ -113,6 +129,11 @@ import {
   workspaceRouteId,
   workspaceRoutePath,
 } from "@/lib/workspace-routing";
+import {
+  buildWorkspaceSearchIndex,
+  searchWorkspaceIndex,
+} from "@/lib/workspace-query-engine";
+import { formatShortcutChord, type ShortcutPlatform } from "@/lib/workspace-shortcuts";
 import {
   parseWorkspaceSidebarPinnedState,
   serializeWorkspaceSidebarPinnedState,
@@ -917,6 +938,7 @@ type WorkspaceContextValue = {
   focusMode: boolean;
   sideSearchOpen: boolean;
   mainSearchOpen: boolean;
+  commandPaletteOpen: boolean;
   activeAction: AppSidebarPrimaryNavigationAction | undefined;
   activeEntityId: string | null;
   pinnedEntities: AppSidebarPinnedEntity[];
@@ -942,6 +964,7 @@ type WorkspaceContextValue = {
   setFocusMode: React.Dispatch<React.SetStateAction<boolean>>;
   setSideSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMainSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setCommandPaletteOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveAction: React.Dispatch<
     React.SetStateAction<AppSidebarPrimaryNavigationAction | undefined>
   >;
@@ -1046,6 +1069,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [focusMode, setFocusMode] = React.useState(false);
   const [sideSearchOpen, setSideSearchOpen] = React.useState(false);
   const [mainSearchOpen, setMainSearchOpen] = React.useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = React.useState(false);
   const [activeAction, setActiveAction] = React.useState<
     AppSidebarPrimaryNavigationAction | undefined
   >(undefined);
@@ -1722,20 +1746,42 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   }, [tabStorageReady, workspaceObjects.activeEntityId]);
 
   React.useEffect(() => {
+    const platform: ShortcutPlatform =
+      navigator.platform.toLocaleLowerCase().includes("mac") ? "mac" : "windows";
+    const runtime = createWorkspaceCommandRuntime({
+      locale,
+      t,
+      actions: {
+        openPalette: () => setCommandPaletteOpen(true),
+      },
+      state: {},
+    });
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (
-        (event.ctrlKey || event.metaKey) &&
-        event.shiftKey &&
-        event.key.toLocaleLowerCase() === "m"
-      ) {
-        event.preventDefault();
-        setFocusMode((current) => !current);
-      }
+      const routed = routeWorkspaceShortcut({
+        runtime,
+        platform,
+        event,
+        claims: [
+          {
+            id: "workspace.focusMode",
+            priority: "global",
+            shortcuts: ["Mod+Shift+M"],
+            run: () => setFocusMode((current) => !current),
+          },
+          {
+            id: "workspace.openPalette",
+            priority: "global",
+            shortcuts: ["Mod+K", "Mod+P"],
+            commandId: "workspace.openPalette",
+          },
+        ],
+      });
+      if (routed.accepted) return;
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+    window.addEventListener("keydown", handleKeyDown, { capture: true });
+    return () => window.removeEventListener("keydown", handleKeyDown, { capture: true });
+  }, [locale, t]);
 
   const ensureMainTab = React.useCallback((tab: AppHeaderTab) => {
     setMainTabs((current) =>
@@ -2430,6 +2476,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       focusMode,
       sideSearchOpen,
       mainSearchOpen,
+      commandPaletteOpen,
       activeAction,
       activeEntityId,
       pinnedEntities,
@@ -2455,6 +2502,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setFocusMode,
       setSideSearchOpen,
       setMainSearchOpen,
+      setCommandPaletteOpen,
       setActiveAction,
       setActiveEntityId,
       setPinnedEntities,
@@ -2496,6 +2544,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       showMessage,
       sideSearchOpen,
       mainSearchOpen,
+      commandPaletteOpen,
       sideTabs,
       sideValue,
       activeAction,
@@ -2546,6 +2595,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         {children}
         {sideSearchOpen && <SidePanelSearchOverlay />}
         {mainSearchOpen && <MainTabSearchOverlay />}
+        <WorkspaceCommandPalette />
         {workspaceObjects.draft && <WorkspaceCreationDialog />}
         {createdTaskId && (
           <div
@@ -2586,6 +2636,194 @@ function getDraftAccept(draft: WorkspaceDraft): string | undefined {
   if (draft.objectTypeId === "pdf") return "application/pdf,.pdf";
   if (draft.objectTypeId === "audio") return "audio/*";
   return undefined;
+}
+
+function WorkspaceCommandPalette() {
+  const t = useTranslations("workspace");
+  const {
+    commandPaletteOpen,
+    createWorkspaceEntity,
+    createdEntities,
+    selectEntity,
+    setActiveAction,
+    setActiveEntityId,
+    setCommandPaletteOpen,
+    setMainValue,
+    setSideSearchOpen,
+    structures,
+  } = useWorkspace();
+  const [query, setQuery] = React.useState("");
+  const deferredQuery = React.useDeferredValue(query);
+  const restoreFocusRef = React.useRef<HTMLElement | null>(null);
+  const platform: ShortcutPlatform =
+    typeof navigator !== "undefined" &&
+    navigator.platform.toLocaleLowerCase().includes("mac")
+      ? "mac"
+      : "windows";
+
+  const runtime = React.useMemo(
+    () =>
+      createWorkspaceCommandRuntime({
+        locale: "workspace",
+        t,
+        actions: {
+          openPalette: () => setCommandPaletteOpen(true),
+          focusSidebarSearch: () => {
+            setSideSearchOpen(true);
+          },
+          navigateHome: () => {
+            setActiveAction(undefined);
+            selectEntity("page");
+          },
+          openExplore: () => {
+            setActiveAction("explore");
+            setActiveEntityId(null);
+            setMainValue("primary-action:explore");
+          },
+          createObject: createWorkspaceEntity,
+        },
+        state: {
+          structures: selectCreatableStructures(structures).map((structure) => ({
+            enabled: true,
+            id: structure.id,
+            label: structure.singularName,
+          })),
+        },
+      }),
+    [
+      createWorkspaceEntity,
+      selectEntity,
+      setActiveAction,
+      setActiveEntityId,
+      setCommandPaletteOpen,
+      setMainValue,
+      setSideSearchOpen,
+      structures,
+      t,
+    ],
+  );
+  const commands = React.useMemo(
+    () =>
+      projectWorkspaceCommands(runtime).filter(
+        (command) => command.id !== "workspace.openPalette",
+      ),
+    [runtime],
+  );
+  const searchIndex = React.useMemo(
+    () => buildWorkspaceSearchIndex(createdEntities),
+    [createdEntities],
+  );
+  const searchResults = React.useMemo(
+    () =>
+      deferredQuery.trim()
+        ? searchWorkspaceIndex(searchIndex, deferredQuery, "all").slice(0, 8)
+        : [],
+    [deferredQuery, searchIndex],
+  );
+
+  function handleOpenChange(open: boolean) {
+    if (open) {
+      restoreFocusRef.current = document.activeElement as HTMLElement | null;
+      setCommandPaletteOpen(true);
+      return;
+    }
+    setCommandPaletteOpen(false);
+    setQuery("");
+    window.requestAnimationFrame(() => {
+      if (restoreFocusRef.current?.isConnected) {
+        restoreFocusRef.current.focus({ preventScroll: true });
+      }
+      restoreFocusRef.current = null;
+    });
+  }
+
+  function runCommand(command: (typeof commands)[number]) {
+    command.execute();
+    handleOpenChange(false);
+  }
+
+  function openSearchResult(result: (typeof searchResults)[number]) {
+    selectEntity(result.entityId);
+    handleOpenChange(false);
+  }
+
+  return (
+    <CommandDialog
+      open={commandPaletteOpen}
+      onOpenChange={handleOpenChange}
+      title={t("commands.palette.title")}
+      description={t("commands.palette.description")}
+      className="w-[min(42rem,calc(100vw-2rem))] rounded-xl border-border bg-popover text-popover-foreground shadow-2xl"
+    >
+      <Command data-slot="workspace-command-palette">
+        <CommandInput
+          value={query}
+          onValueChange={setQuery}
+          placeholder={t("commands.palette.placeholder")}
+        />
+        <CommandList className="max-h-[min(28rem,calc(100vh-12rem))]">
+          <CommandEmpty>{t("commands.palette.empty")}</CommandEmpty>
+          <CommandGroup heading={t("commands.groups.commands")}>
+            {commands.map((command) => (
+              <CommandItem
+                key={command.id}
+                value={`${command.label} ${command.aliases.join(" ")}`}
+                onSelect={() => runCommand(command)}
+              >
+                <span className="min-w-0 flex-1 truncate">{command.label}</span>
+                {command.shortcuts[0] ? (
+                  <CommandShortcut>
+                    {formatShortcutChord(command.shortcuts[0], platform)}
+                  </CommandShortcut>
+                ) : null}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          {searchResults.length > 0 ? <CommandSeparator /> : null}
+          {searchResults.length > 0 ? (
+            <CommandGroup heading={t("commands.groups.results")}>
+              {searchResults.map((result) => {
+                const structure = structures.find(
+                  (item) => item.id === createdEntities.find(
+                    (entity) => entity.id === result.entityId,
+                  )?.objectTypeId,
+                );
+                const definition = structure
+                  ? objectTypeDefinitionById[structure.iconName]
+                  : objectTypeDefinitionById.page;
+                const label =
+                  result.kind === "object"
+                    ? result.title
+                    : result.text;
+                const detail =
+                  result.kind === "object"
+                    ? structure?.singularName
+                    : result.ownerTitle;
+                return (
+                  <CommandItem
+                    key={`${result.kind}:${result.entityId}:${result.kind === "block" ? result.blockId : "object"}`}
+                    value={`${label} ${detail ?? ""}`}
+                    onSelect={() => openSearchResult(result)}
+                  >
+                    <ObjectIconBadge
+                      icon={definition.icon}
+                      tone={structure?.tone ?? "blue"}
+                    />
+                    <span className="min-w-0 flex-1 truncate">{label}</span>
+                    {detail ? (
+                      <span className="ml-auto max-w-32 truncate text-xs text-muted-foreground">
+                        {detail}
+                      </span>
+                    ) : null}
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          ) : null}
+        </CommandList>
+      </Command>
+    </CommandDialog>
+  );
 }
 
 function WorkspaceDraftError({

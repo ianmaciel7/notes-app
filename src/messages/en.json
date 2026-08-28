@@ -87,6 +87,48 @@
       "showSidePanel": "Show side panel",
       "sort": "Sort"
     },
+    "commands": {
+      "createObject": {
+        "description": "Create a new {label}.",
+        "label": "New {label}"
+      },
+      "groups": {
+        "commands": "Commands",
+        "results": "Results"
+      },
+      "navigateHome": {
+        "description": "Open the main workspace view.",
+        "label": "Go home"
+      },
+      "navigateToday": {
+        "description": "Open today's daily note.",
+        "label": "Open today"
+      },
+      "openExplore": {
+        "description": "Open Explore in the main workspace.",
+        "label": "Open Explore"
+      },
+      "openPalette": {
+        "alias": "command palette",
+        "description": "Search commands and local content.",
+        "label": "Open command palette"
+      },
+      "palette": {
+        "description": "Search for a command, object, or block.",
+        "empty": "No matching commands or content",
+        "placeholder": "Search commands and content",
+        "title": "Command palette"
+      },
+      "search": {
+        "alias": "find",
+        "description": "Search local workspace content.",
+        "label": "Search workspace"
+      },
+      "toggleSidebar": {
+        "description": "Show or hide the left sidebar.",
+        "label": "Toggle left sidebar"
+      }
+    },
     "sidebarCollections": {
       "createObject": "Create {type}",
       "deleteCollection": "Delete collection",

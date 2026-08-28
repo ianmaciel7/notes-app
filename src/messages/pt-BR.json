@@ -87,6 +87,48 @@
       "showSidePanel": "Mostrar painel lateral",
       "sort": "Ordenar"
     },
+    "commands": {
+      "createObject": {
+        "description": "Criar novo {label}.",
+        "label": "Novo {label}"
+      },
+      "groups": {
+        "commands": "Comandos",
+        "results": "Resultados"
+      },
+      "navigateHome": {
+        "description": "Abrir a visão principal da workspace.",
+        "label": "Ir para início"
+      },
+      "navigateToday": {
+        "description": "Abrir a nota diária de hoje.",
+        "label": "Abrir hoje"
+      },
+      "openExplore": {
+        "description": "Abrir Explorar na workspace principal.",
+        "label": "Abrir Explorar"
+      },
+      "openPalette": {
+        "alias": "paleta de comandos",
+        "description": "Buscar comandos e conteúdo local.",
+        "label": "Abrir paleta de comandos"
+      },
+      "palette": {
+        "description": "Busque um comando, objeto ou bloco.",
+        "empty": "Nenhum comando ou conteúdo encontrado",
+        "placeholder": "Buscar comandos e conteúdo",
+        "title": "Paleta de comandos"
+      },
+      "search": {
+        "alias": "encontrar",
+        "description": "Buscar conteúdo local da workspace.",
+        "label": "Buscar na workspace"
+      },
+      "toggleSidebar": {
+        "description": "Mostrar ou ocultar a barra lateral esquerda.",
+        "label": "Alternar barra lateral esquerda"
+      }
+    },
     "sidebarCollections": {
       "createObject": "Criar {type}",
       "deleteCollection": "Excluir coleção",

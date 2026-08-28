@@ -87,6 +87,48 @@
       "showSidePanel": "Mostrar panel lateral",
       "sort": "Ordenar"
     },
+    "commands": {
+      "createObject": {
+        "description": "Crear nuevo {label}.",
+        "label": "Nuevo {label}"
+      },
+      "groups": {
+        "commands": "Comandos",
+        "results": "Resultados"
+      },
+      "navigateHome": {
+        "description": "Abrir la vista principal del espacio.",
+        "label": "Ir al inicio"
+      },
+      "navigateToday": {
+        "description": "Abrir la nota diaria de hoy.",
+        "label": "Abrir hoy"
+      },
+      "openExplore": {
+        "description": "Abrir Explorar en el espacio principal.",
+        "label": "Abrir Explorar"
+      },
+      "openPalette": {
+        "alias": "paleta de comandos",
+        "description": "Buscar comandos y contenido local.",
+        "label": "Abrir paleta de comandos"
+      },
+      "palette": {
+        "description": "Busca un comando, objeto o bloque.",
+        "empty": "No hay comandos ni contenido coincidente",
+        "placeholder": "Buscar comandos y contenido",
+        "title": "Paleta de comandos"
+      },
+      "search": {
+        "alias": "encontrar",
+        "description": "Buscar contenido local del espacio.",
+        "label": "Buscar en el espacio"
+      },
+      "toggleSidebar": {
+        "description": "Mostrar u ocultar la barra lateral izquierda.",
+        "label": "Alternar barra lateral izquierda"
+      }
+    },
     "sidebarCollections": {
       "createObject": "Crear {type}",
       "deleteCollection": "Eliminar colección",

@@ -1,4 +1,6 @@
 import type { BlockEditorDocument } from "@/editor/document";
+import type { WorkspaceStructure } from "@/lib/workspace-object-types";
+import type { WorkspaceEntity } from "@/lib/workspace-objects";
 
 type BlockEditorLabels = {
   bold: string;
@@ -33,6 +35,8 @@ type BlockEditorProps = {
   value: BlockEditorDocument;
   onChange?: (document: BlockEditorDocument) => void;
   onCreatePageRequest?: (title: string) => void;
+  referenceEntities?: readonly WorkspaceEntity[];
+  referenceStructures?: readonly WorkspaceStructure[];
   placeholder: string;
   ariaLabel: string;
   className?: string;
