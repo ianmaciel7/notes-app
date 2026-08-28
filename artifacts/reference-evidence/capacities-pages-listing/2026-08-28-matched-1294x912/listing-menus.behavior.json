@@ -1,0 +1,27 @@
+{
+  "capturedAt": "2026-08-28",
+  "viewport": "1294x912",
+  "reference": {
+    "filter": ["onde", "+ Filtro", "+ Grupo de filtros"],
+    "sort": ["+ Classificar"],
+    "group": ["+ Agrupar por"],
+    "layouts": ["Lista", "Mural", "Kanban", "Galeria", "Tabela", "Incorporar"],
+    "overflow": ["Novo a Partir do Modelo", "Nova Query", "Nova Coleção", "Fixar na Barra Lateral", "Configurações do Tipo de Objeto", "Exportar", "Importar"],
+    "newDisclosure": ["Novo Página", "Importar arquivo(s)"]
+  },
+  "localhost": {
+    "filter": ["Filtro"],
+    "sort": ["Criados recentemente", "Título"],
+    "group": ["Tipos de objeto", "Sem agrupamento"],
+    "layouts": ["Lista", "Grade", "Tabela"],
+    "overflow": ["Novo a partir do modelo", "Nova query", "Nova coleção", "Configurações do tipo de objeto"],
+    "newDisclosure": ["Novo Páginas", "Novo a partir do modelo", "Nova query", "Nova coleção"]
+  },
+  "closeBehavior": {
+    "filter": "Escape leaves both builders open; activating the trigger again closes them",
+    "sort": "Escape closes both surfaces",
+    "group": "Escape leaves both surfaces open; activating the trigger again closes them",
+    "overflow": "Escape and outside click close both without changing entity counts",
+    "newDisclosure": "inspected without invoking a mutating command"
+  }
+}

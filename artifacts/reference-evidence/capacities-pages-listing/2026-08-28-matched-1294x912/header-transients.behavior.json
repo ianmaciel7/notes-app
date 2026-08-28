@@ -1,0 +1,31 @@
+{
+  "capturedAt": "2026-08-28",
+  "viewport": "1294x912",
+  "focusMode": {
+    "reference": "Normal sidebar, tab strip, and graph-panel chrome are suppressed; Pages remains with a Focus surface and a 20-minute session action; Ctrl+Shift+M restores the prior shell",
+    "localhost": "A Leave focus mode button replaces the tab strip, but the expanded sidebar and graph body remain visible; leaving restores the prior header",
+    "verdict": "Reversible in both, composition mismatch"
+  },
+  "tabList": {
+    "reference": "Focused Buscar abas field and current tab entries",
+    "localhost": "Buscar abas plus distinct tab and Close targets",
+    "close": "The trigger closed each list without selecting or closing a tab",
+    "verdict": "Behavior pass; tab names and counts are workspace data and are not compared"
+  },
+  "selectedTabTargets": {
+    "reference": "The selected Pages tab is 115x32; a persistent 18x28 close target starts at x=812 and an 18x28 pin target appears at x=794 on hover. The generic targets have no accessible names in the captured DOM",
+    "localhost": "The selected tab presentation is 82x32 and is explicitly segmented into a 44x32 named tab, 18x28 Pin tab button, and 18x28 Close tab button",
+    "verification": "Focused local midpoint-isolation coverage passes; pinning or closing the authenticated reference tab was not invoked because it changes persisted workspace-tab state",
+    "verdict": "Local target isolation is stronger; local nested labels remain English in pt-BR and reference semantics are unnamed"
+  },
+  "createTab": {
+    "reference": "Opens the global destination chooser with search, recent destinations, and Abrir em nova aba mode; Escape cancels",
+    "localhost": "No chooser appeared; activation selected the first existing workspace tab",
+    "verdict": "Functional mismatch"
+  },
+  "synchronizationStatus": {
+    "reference": "Header status action opens Settings directly at Offline & Sincronização and closes back to Pages",
+    "localhost": "No equivalent synchronization-status action was present in the inspected header",
+    "verdict": "Missing local capability"
+  }
+}

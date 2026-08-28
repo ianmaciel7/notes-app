@@ -1,0 +1,51 @@
+{
+  "capturedAt": "2026-08-28",
+  "viewport": "1294x912",
+  "scope": "Safe, non-mutating sidebar section controls and add-object-type pre-commit surface",
+  "disclosures": {
+    "pinned": {
+      "reference": "Visible pinned-item instances changed from 2 to 1 on collapse and returned to 2 on reopen",
+      "localhost": "The empty-state text changed from visible to hidden with aria-expanded=false and returned on reopen",
+      "verdict": "Reversible behavior pass; content intentionally differs"
+    },
+    "objectTypes": {
+      "reference": "The Queries row changed from visible to hidden and returned on reopen",
+      "localhost": "The Tabelas row changed from visible to hidden with aria-expanded=false and returned on reopen",
+      "verdict": "Reversible behavior pass"
+    }
+  },
+  "sectionActions": {
+    "referenceHoverRects": [
+      {"x": 213, "y": 287.5, "width": 22, "height": 22, "opacity": 1},
+      {"x": 236, "y": 287.5, "width": 22, "height": 22, "opacity": 1}
+    ],
+    "localhostHoverRects": [
+      {"x": 223, "y": 255.5, "width": 22, "height": 22, "opacity": 0.7},
+      {"x": 246, "y": 255.5, "width": 22, "height": 22, "opacity": 1}
+    ],
+    "localhostIdle": "Hidden section actions retain 22x22 geometry, opacity=0, and pointer-events=auto",
+    "verdict": "Geometry and opacity mismatch; localhost has invisible pointer-active targets"
+  },
+  "sortMenu": {
+    "referenceItems": ["Ordenar manualmente", "Ordenar alfabeticamente"],
+    "localhostItems": ["Ordenar manualmente", "Ordenar alfabeticamente"],
+    "localhostSemantics": "Named menu with distinct menuitems",
+    "verdict": "Content and behavior pass"
+  },
+  "addPinnedContent": {
+    "reference": "Focused Buscar surface lists objects and collections as selectable results",
+    "localhost": "Named dialog with focused Adicionar conteúdo field and selectable local entities",
+    "close": "Escape closes both surfaces without pinning an item",
+    "verdict": "Search-and-cancel behavior pass; localhost semantics are stronger"
+  },
+  "addObjectType": {
+    "title": "Adicione novo tipo de objeto",
+    "sharedSuggestedTypes": ["Livro", "Pessoa", "Área", "Reunião", "Citação", "Definição", "Ideia", "Lugar", "Projeto", "Organização", "Nota atômica", "Mídia", "Viagem", "Crie o seu próprio"],
+    "sharedBasicTypes": ["Página", "Etiqueta", "Imagem", "Weblink", "PDF", "Áudio", "Arquivo", "Tweet", "Chat de IA", "Tabela", "Tarefa", "Query"],
+    "referenceDocumentationPath": "/tutorials/when-to-create-new-object-type",
+    "localhostDocumentationPath": "/reference/object-types",
+    "localhostSemantics": "Named dialog with equivalent pre-commit copy and choices",
+    "mutation": "No type was selected or created",
+    "verdict": "Pre-commit content pass; documentation target mismatch"
+  }
+}

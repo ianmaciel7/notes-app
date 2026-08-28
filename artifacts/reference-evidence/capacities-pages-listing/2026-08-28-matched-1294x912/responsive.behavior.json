@@ -1,0 +1,41 @@
+{
+  "capturedAt": "2026-08-28",
+  "breakpoints": {
+    "1536x900": {
+      "documentContainment": "pass in both",
+      "localhost": {"sidebarWidth": 288, "mainWidth": 760.28125, "contextWidth": 487.71875}
+    },
+    "1280x900": {
+      "documentContainment": "pass in both",
+      "localhost": {"sidebarWidth": 288, "mainWidth": 570.40625, "contextWidth": 421.59375}
+    },
+    "1024x800": {
+      "documentContainment": "scrollWidth equals clientWidth in both",
+      "localhost": {"sidebarWidth": 288, "mainWidth": 382.5625, "contextWidth": 353.4375, "offscreenControl": {"name": "Aumentar zoom", "rect": [1034.5625, 745, 32, 32]}},
+      "verdict": "localhost child-control containment failure"
+    },
+    "768x900": {
+      "reference": {"navigationClosedX": -280, "headingX": 65},
+      "localhost": {"sidebarWidth": 288, "mainX": 288, "mainWidth": 480, "contextPanel": "hidden"},
+      "verdict": "breakpoint composition mismatch"
+    },
+    "480x844": {
+      "reference": {"headingX": 65, "horizontalOverflow": false},
+      "localhost": {"mobileBanner": true, "headingX": 65, "horizontalOverflow": false, "horizontalOffscreenControls": []},
+      "verdict": "closed-state containment pass"
+    },
+    "390x844": {
+      "reference": {"headingX": 65, "lastCompactControlRight": 366.859375, "horizontalOverflow": false},
+      "localhost": {"headingX": 65, "horizontalOverflow": false, "offscreenControls": [{"name": "Grade", "rect": [393.890625, 113, 28, 28]}, {"name": "Tabela", "rect": [425.890625, 113, 28, 28]}]},
+      "verdict": "localhost visible-usability failure despite passing document width"
+    }
+  },
+  "mobileNavigation390": {
+    "reference": {"rect": [0, 0, 288, 844], "primary": ["Novo", "Buscar", "Explorar", "Calendário", "Tarefas"], "close": "header trigger"},
+    "localhost": {"rect": [0, 0, 292.5, 844], "role": "dialog", "name": "Navegação", "primary": ["Novo", "Buscar", "Explorar", "Calendário"], "close": "Close button, Escape, or overlay in focused tests"}
+  },
+  "mobileContext390": {
+    "reference": "No equivalent direct closed-state panel trigger was confirmed in the captured header; the visually similar control opened global Search",
+    "localhost": {"rect": [97.5, 0, 292.5, 844], "role": "dialog", "name": "Painel lateral"}
+  }
+}

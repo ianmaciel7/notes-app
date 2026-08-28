@@ -1,0 +1,5 @@
+{
+  "reference": {"errors": 0, "warnings": 28, "summary": "One recruiting diagnostic warning and repeated query-loading diagnostics; message bodies redacted"},
+  "localhost": {"errors": 0, "warnings": 0},
+  "capturedAt": "2026-08-28T14:55:06.403Z"
+}

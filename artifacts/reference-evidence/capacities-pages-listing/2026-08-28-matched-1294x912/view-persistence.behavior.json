@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-08-28",
+  "viewport": "1294x912",
+  "listingCollapse": {
+    "reference": "Hides and restores the view/action row",
+    "localhost": "Hides and restores the view/action row; collapsed trigger retains the accessible name Recolher"
+  },
+  "viewTabs": {
+    "reference": {"states": ["Visão geral", "Tudo"], "radiusPx": 12, "widthsPx": [109.89, 74.8]},
+    "localhost": {"states": ["Visão geral", "Tudo"], "radiusPx": 10, "widthsPx": [118.625, 80.875], "ariaSelected": true}
+  },
+  "layoutSwitch": {
+    "reference": "Lista then Galeria restored",
+    "localhost": "Lista then Grade restored; aria-pressed updated"
+  },
+  "tableSwitch": {
+    "referenceColumns": ["Título", "Aliases", "Etiquetas", "Imagem de capa", "Ícone", "Descrição", "Conteúdo", "Última atualização", "Criado em", "Coleções"],
+    "localhostColumns": ["Título", "Tipos de objeto", "Filtro de data de criação"],
+    "restore": "Reference returned to Galeria and localhost returned to Grade without entity mutation"
+  },
+  "reload": {
+    "reference": "Pages / Tudo / grid and open Graph panel retained",
+    "localhost": "Pages / Tudo / grid and open Graph panel retained"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "capturedAt": "2026-08-28",
+  "viewport": "1294x912",
+  "profile": {
+    "reference": ["authenticated account identity (redacted)", "Pro", "Sair"],
+    "localhost": ["Espaço de trabalho local", "Este dispositivo", "Pro", "Sair"],
+    "close": "Closed from the profile trigger without selecting sign out"
+  },
+  "theme": {
+    "reference": {
+      "light": "oklch(0.9856 0.0016 67)",
+      "dark": "oklch(0.1605 0.0063 285.63)",
+      "restored": "oklch(0.9856 0.0016 67)"
+    },
+    "localhost": {
+      "light": "lab(98.3295 0.20659 0.562978)",
+      "dark": "lab(2.75381 0 0)",
+      "restored": "lab(98.3295 0.20659 0.562978)"
+    },
+    "verdict": "Reversible behavior passes in both; color notation differs by browser computation"
+  },
+  "redactions": ["Authenticated display name and email are omitted"]
+}

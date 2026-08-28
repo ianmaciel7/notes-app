@@ -1,0 +1,13 @@
+{
+  "capturedAt": "2026-08-28",
+  "viewport": "1294x912",
+  "localhostCollection": {
+    "name": "parity-collection",
+    "commands": ["Abrir", "Criar Página", "Novo a partir do modelo", "Fixar na Barra Lateral", "Desafixar do tipo de objeto", "Configurações do Tipo de Objeto", "Compartilhar", "Importar", "Copiar", "Excluir coleção"],
+    "beforeUrl": "http://localhost:3000/pt-BR/4d0215ae-79d6-46bd-840f-8144ec5a84fb/ae6199a9-89ce-47be-8b94-76a35b1821e0",
+    "openAndClosedUrlUnchanged": true,
+    "pagesHeadingRemainedVisible": true,
+    "close": "Activating the nested trigger again closed the menu"
+  },
+  "reference": "Current nested-menu command details are reused from the canonical 2026-08-26 workspace parity contract; no new authenticated mutation was invoked"
+}

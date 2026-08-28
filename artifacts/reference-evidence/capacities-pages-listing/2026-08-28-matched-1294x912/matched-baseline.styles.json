@@ -1,0 +1,31 @@
+{
+  "viewport": {"width": 1294, "height": 912},
+  "shell": {
+    "reference": {
+      "sidebarWidth": 288,
+      "mainSurface": {"x": 298, "y": 46, "width": 624.46875, "height": 856, "radius": 12},
+      "contextSurface": {"x": 932.46875, "y": 46, "width": 351.53125, "height": 856, "radius": 12}
+    },
+    "localhost": {
+      "sidebarWidth": 288,
+      "mainSurface": {"x": 298, "y": 46, "width": 564.390625, "height": 856, "radius": 12},
+      "contextSurface": {"x": 872.390625, "y": 58, "width": 411.609375, "height": 844, "radius": 12}
+    },
+    "verdict": "visual and persisted-layout mismatch: local contextual panel is 60.078125px wider and begins 12px lower"
+  },
+  "searchHover": {
+    "reference": {
+      "rect": [702.90625, 63, 32, 32],
+      "background": "oklch(0.9856 0.0016 67)",
+      "border": "1px solid transparent",
+      "transitionDuration": "0.2s"
+    },
+    "localhost": {
+      "rect": [644.390625, 63, 32, 32],
+      "background": "lab(96.2415 0.20647 0.563073)",
+      "border": "1px solid transparent",
+      "transitionDuration": "0.15s"
+    },
+    "verdict": "geometry matches; transition timing differs by 50ms; color spaces require normalized comparison"
+  }
+}

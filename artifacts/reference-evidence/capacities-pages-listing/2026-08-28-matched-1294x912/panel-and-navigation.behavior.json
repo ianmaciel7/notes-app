@@ -1,0 +1,32 @@
+{
+  "capturedAt": "2026-08-28",
+  "viewport": "1294x912",
+  "contextPanel": {
+    "hiddenMainSurface": {
+      "reference": [298, 46, 986, 856],
+      "localhost": [298, 46, 986, 856]
+    },
+    "reopen": "Both restore the previous panel; localhost remains wider and 12px lower than the reference",
+    "secondaryTab": "Explore was added and closed in both; Graph remained and became active again",
+    "resize": {
+      "reference": "The 2px pointer-active divider moved from x=927.46875 to x=966.5 and was restored to x=927.828125 (0.359375px from the initial subpixel position)",
+      "localhost": "The zero-width semantic separator still accepted drag through its hit area; panel width changed 421.609375px -> 401.609375px -> 421.609375px",
+      "verdict": "Reversible resize passes in both; reference has a 2px DOM hit target while localhost relies on a zero-width element/pseudo hit area"
+    }
+  },
+  "sidePanelMenu": {
+    "referenceWhenGraphActive": ["Chat de IA", "Buscar"],
+    "localhostWhenGraphActive": ["Graph", "Backlinks", "Objects inside", "Related content", "AI chat", "Search"]
+  },
+  "sidebar": {
+    "collapseReopen": "Pass in both; expanded width returns to 288px",
+    "referencePrimary": ["Novo", "Buscar", "Explorar", "Calendário", "Tarefas"],
+    "localhostPrimary": ["Novo", "Buscar", "Explorar", "Calendário"],
+    "missingLocalPrimary": "Tarefas"
+  },
+  "spaceSwitcher": {
+    "referenceRect": [151, 44, 302.46875, 478],
+    "localhostRect": [106, 43, 290, 363],
+    "closeBehavior": "Escape closes both without selecting a different space"
+  }
+}

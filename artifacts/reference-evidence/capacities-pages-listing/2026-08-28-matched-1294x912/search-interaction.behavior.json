@@ -1,0 +1,18 @@
+{
+  "action": "listing search hover -> activate -> Escape",
+  "reference": {
+    "hoverRect": [702.90625, 63, 32, 32],
+    "openInput": {"placeholder": "Buscar título...", "focused": true, "rect": [556.0625, 64, 166, 30]},
+    "escape": "closed and restored the icon control"
+  },
+  "localhost": {
+    "hoverRect": [644.390625, 63, 32, 32],
+    "openInput": {"accessibleName": "Buscar título…", "placeholder": "Buscar título…", "focused": true, "rect": [500.390625, 65, 176, 28]},
+    "escape": "closed and restored the named button"
+  },
+  "verdict": {
+    "behavior": "pass",
+    "accessibility": "localhost exposes a named button and named input; the reference trigger is a focusable generic element without a captured accessible name",
+    "visual": "input width differs by 10px and height by 2px; ellipsis glyph differs"
+  }
+}

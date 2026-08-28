@@ -1,0 +1,50 @@
+{
+  "capturedAt": "2026-08-28",
+  "commands": [
+    {
+      "command": "node_modules/.bin/playwright.cmd test tests/e2e/workspace-parity.spec.ts --grep 'reduced motion|keyboard|focus'",
+      "result": "3 passed",
+      "coverage": ["object page header keyboard states", "Page Customize under reduced motion", "tab and global New immediate reduced-motion states"]
+    },
+    {
+      "command": "node_modules/.bin/playwright.cmd test tests/e2e/workspace-parity.spec.ts --grep 'tab midpoint|compound type chip|sidebar row and nested menu|object-type New disclosure|Page collapse control|workspace overflow menu|Novo trigger and lifecycle contract'",
+      "result": "7 passed",
+      "coverage": ["tab midpoint isolation", "compound type disclosure", "nested sidebar menu isolation", "object-type New disclosure", "Page editor collapse naming", "overflow Escape and outside click", "New lifecycle keyboard states"]
+    },
+    {
+      "command": "node_modules/.bin/playwright.cmd test tests/e2e/workspace-parity.spec.ts --grep 'mobile overlays'",
+      "result": "2 passed",
+      "coverage": ["480px navigation and contextual dialogs", "390px navigation and contextual dialogs", "Escape", "outside click", "focus return", "surface containment"]
+    },
+    {
+      "command": "node_modules/.bin/playwright.cmd test tests/e2e/workspace-parity.spec.ts --grep 'graph controls preserve|contextual panel entries'",
+      "result": "2 passed",
+      "coverage": ["graph hover geometry", "reversible graph settings and zoom controls", "drag state", "contextual destination dispatch", "empty graph state"]
+    },
+    {
+      "command": "node_modules/.bin/playwright.cmd test tests/e2e/workspace-parity.spec.ts",
+      "result": "43 passed, 4 failed",
+      "coverage": ["full workspace parity suite"],
+      "notes": [
+        "Related-collection and sidebar nested-collection cases passed when rerun individually.",
+        "The Page/Table durability case passed when rerun individually.",
+        "The all-New-families case remained reproducibly blocked at image creation while concurrent source edits triggered Fast Refresh; the selected file stayed in the dialog without a committed image workspace or visible error.",
+        "No localhost failure screenshot was copied into this reference-evidence bundle."
+      ]
+    },
+    {
+      "command": "node_modules/.bin/playwright.cmd test tests/e2e/workspace-parity.spec.ts --grep 'durable media import reloads previews reuses duplicate blobs and garbage collects|mobile media quota failure stays recoverable without canonical asset'",
+      "result": "2 passed",
+      "coverage": ["media import persistence", "duplicate-blob reuse", "garbage collection", "quota recovery"]
+    },
+    {
+      "command": "openspec validate audit-workspace-component-parity --strict",
+      "result": "valid"
+    }
+  ],
+  "limitations": [
+    "The authenticated in-app browser did not expose media emulation for the reference",
+    "Synthetic Tab keypress did not advance focus in the in-app browser control surface, so reference sequential Tab order is not claimed",
+    "The full localhost suite was run while unrelated workspace files were being edited concurrently; Fast Refresh events and changing test line numbers make the four-failure aggregate unsuitable as a clean regression baseline."
+  ]
+}

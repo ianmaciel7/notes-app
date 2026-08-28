@@ -1,0 +1,23 @@
+{
+  "capturedAt": "2026-08-28",
+  "viewport": "1294x912",
+  "globalSearch": {
+    "reference": "Focused global search includes recent objects, all actions, creation actions, spaces, help destinations, and keyboard guidance",
+    "localhost": "Focused dialog includes recent objects, object types, and a smaller action subset",
+    "close": "Escape closed both overlays",
+    "stateAfterClose": {
+      "reference": "Pages listing remained the return surface",
+      "localhost": "URL retained ?section=search and the underlying Pages surface observed Overview/List instead of the recorded Tudo/grid baseline; selecting Páginas and Grade restored the audit state"
+    }
+  },
+  "globalNew": {
+    "reference": "Searchable scroll surface exposes the full current-space object-type set",
+    "localhost": "Searchable dialog exposes 13 local object types",
+    "close": "Escape closed both without creating an entity"
+  },
+  "cardNavigation": {
+    "reference": "Opening the first visible Page produced an editor; Back returned to RootPage and Pages, Forward reopened the same editor, and Back restored Pages again",
+    "localhost": "Opening the first visible Page selected its object tab; Back and Forward both reported enabled but neither changed the object route or restored Pages, so the sidebar Páginas action was required",
+    "mutation": "No entity fields or counts were changed"
+  }
+}

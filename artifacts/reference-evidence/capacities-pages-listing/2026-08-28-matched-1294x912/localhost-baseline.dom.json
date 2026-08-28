@@ -1,0 +1,34 @@
+{
+  "surface": "Pages listing",
+  "selectedWorkspaceTab": "Páginas",
+  "selectedView": "Tudo",
+  "pressedLayout": "Grade",
+  "count": 2,
+  "visibleHeaderControls": [
+    "Buscar",
+    "Recolher",
+    "Mais opções",
+    "Novo",
+    "Opções de novo objeto",
+    "Visão geral",
+    "Tudo",
+    "Filtrar",
+    "Ordenar",
+    "Agrupar",
+    "Layout",
+    "Lista",
+    "Grade",
+    "Tabela"
+  ],
+  "visiblePanelControls": [
+    "Visualização em grafo",
+    "Nova aba lateral",
+    "Ocultar painel lateral",
+    "Abrir menu do painel lateral"
+  ],
+  "notes": [
+    "The requested route initially restored a different selected workspace tab and object surface",
+    "Selecting the existing Pages surface synchronized the route without deleting or mutating entities",
+    "No localhost image is persisted in this bundle"
+  ]
+}

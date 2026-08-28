@@ -1,0 +1,20 @@
+{
+  "surface": "Pages listing",
+  "selectedView": "Tudo",
+  "layout": "grid",
+  "count": 5,
+  "visibleHeaderControls": [
+    {"name": "type icon", "role": "button", "rect": [314, 66, 26, 26]},
+    {"name": "Páginas", "role": "heading", "level": 1, "rect": [353, 69, 77.65625, 20]},
+    {"name": "search", "role": "generic focusable", "rect": [702.90625, 63, 32, 32]},
+    {"name": "collapse", "role": "generic focusable", "rect": [734.90625, 63, 32, 32]},
+    {"name": "overflow", "role": "generic focusable", "rect": [766.90625, 63, 32, 32]},
+    {"name": "Novo", "role": "button", "rect": [807, 63, 102, 32]},
+    {"name": "Visão geral", "role": "generic focusable"},
+    {"name": "Tudo", "role": "generic focusable"}
+  ],
+  "semanticLimitations": [
+    "Several Capacities controls are focusable generic elements without accessible names or ARIA button/tab roles in the captured DOM",
+    "Visible labels and geometry are correlated with the reference image crops instead of inferred from source code"
+  ]
+}

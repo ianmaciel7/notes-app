@@ -1,0 +1,45 @@
+{
+  "capturedAt": "2026-08-28",
+  "viewport": "1294x912",
+  "helpSection": {
+    "referenceEntries": ["Primeiros passos", "Fazer uma pergunta", "Documentação", "Novidades", "Feedback"],
+    "localhostEntries": ["Primeiros passos", "Fazer uma pergunta", "Documentação", "Novidades", "Feedback"],
+    "referenceDocumentationSemantics": "External link to https://docs.capacities.io",
+    "localhostDocumentationSemantics": "Button without link semantics",
+    "collapse": "Both sections hide their owned entries and restore them on the second activation; localhost reports aria-expanded=false while collapsed",
+    "verdict": "Content and reversible behavior pass; documentation semantics mismatch"
+  },
+  "settings": {
+    "reference": "The footer control opens the full Settings surface on Tipos de Objetos, including General, current-space, resource, and integration families",
+    "localhost": "The named Configurações button only enters an active visual state; no dialog, settings surface, route change, or settings content appears",
+    "close": "Reference close control restores Pages; local trigger deactivates; routes remain unchanged",
+    "verdict": "Local settings control has no functional destination"
+  },
+  "footerTrailingControl": {
+    "reference": "Opens a searchable Shortcuts surface; Escape closes it and restores Pages",
+    "localhost": "Named Compartilhar control only enters an active visual state; no dialog or share surface appears",
+    "verdict": "Command identity and functional-surface mismatch"
+  },
+  "sidebarUtilities": {
+    "addSection": {
+      "reference": "Inline pre-commit surface with explanation, icon control, named textbox, and visually disabled Create action",
+      "localhost": "Named dialog with the same textbox and a semantically disabled Create action, but without the reference explanation or icon control",
+      "semanticDifference": "Reference Create reports enabled despite its visually disabled empty-input state; localhost reports disabled",
+      "close": "Escape closes both without creating a section"
+    },
+    "trash": {
+      "reference": "Searchable overlay with an Empty trash command and deleted-object results",
+      "localhost": "Named Trash trigger only becomes active; no search, overlay, Empty trash command, or result surface appears",
+      "close": "Escape closes the reference overlay; toggling the local trigger removes its active state; no deletion was invoked",
+      "verdict": "Local trash destination has no functional surface"
+    }
+  },
+  "galleryCard": {
+    "referenceHoverAction": {"x": 572.234375, "y": 164, "width": 22, "height": 22, "idleOpacity": 0, "hoverOpacity": 1, "idlePointerEvents": "auto", "tabIndex": 0},
+    "referenceMenu": ["Selecionar Múltiplos", "Abrir", "Editar Coleções", "Fixar na Barra Lateral", "Mudar Tipo", "Configurações do Tipo de Objeto", "Compartilhar", "Apresentar", "Exportar", "Copiar", "Duplicar", "Excluir Objeto"],
+    "localhost": "The 344x400 card is a single named open button and exposes no nested hover action or card command menu",
+    "close": "Escape closes the reference menu without selecting a command or changing the route",
+    "verdict": "Local card action capability missing; reference hidden trigger remains pointer-active while visually hidden"
+  },
+  "mutations": "No share, duplicate, delete, export, type change, collection edit, or other command was selected"
+}

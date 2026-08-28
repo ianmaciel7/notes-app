@@ -1,0 +1,20 @@
+{
+  "capturedAt": "2026-08-28",
+  "viewport": "1294x912",
+  "explore": {
+    "reference": {"route": "?section=explore", "surface": ["starter prompts", "Ask-anything composer", "Auto model control", "dictation", "graph unavailable state"]},
+    "localhost": {"route": "?section=explore", "surface": ["Graph", "Backlinks disabled", "Objects inside disabled", "Related content disabled", "AI chat", "Search", "Relevant content"], "duplication": "same tile surface appears in main and contextual panel"},
+    "verdict": "route pass, content contract mismatch"
+  },
+  "calendar": {
+    "reference": {"route": "?section=calendar", "presentation": "Day", "surface": ["Today", "active date", "type filters", "Daily Note", "Tasks", "Created Today"]},
+    "localhostInitial": {"route": "?section=calendar", "presentation": "Week"},
+    "localhostAlignedDay": {"surface": ["active date", "Daily Note", "Timeline"], "missing": ["reference type filters", "Tasks section", "Created Today section"]},
+    "verdict": "persisted presentation differed; aligned Day view remains incomplete"
+  },
+  "tasks": {
+    "reference": {"route": "RootTask", "views": ["Inbox", "Today", "Scheduled", "Status", "Context", "Tags", "Open", "Due", "Recurring", "Completed", "All"], "emptyStateActions": ["Import file(s)", "New"]},
+    "localhost": "No primary Tasks destination; Tasks is present only as an object-type row",
+    "verdict": "missing local primary destination"
+  }
+}

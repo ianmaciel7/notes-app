@@ -2,13 +2,13 @@
 title: Current Capacities workspace parity contract
 reference_type: authenticated-product
 source_type: live-browser-measurement
-updated: 2026-08-26
+updated: 2026-08-28
 confidence: confirmed
 ---
 
 # Current Capacities workspace parity contract
 
-This document is the canonical, timestamped visual and interaction contract for the Notes App workspace. The authenticated Capacities UI measured on 2026-08-26 is authoritative when it conflicts with older repository measurements. Notes App keeps its own local objects, counts, labels, and content.
+This document is the canonical, timestamped visual and interaction contract for the Notes App workspace. For the Pages listing and its surrounding shell, the authenticated Capacities bundle captured on 2026-08-28 is authoritative when it conflicts with the earlier 2026-08-26 measurements. The older capture remains useful historical evidence for clean-default versus persisted-width comparisons. Notes App keeps its own local objects, counts, labels, and content.
 
 ## Evidence rules
 
@@ -18,17 +18,30 @@ This document is the canonical, timestamped visual and interaction contract for 
 - Raw authenticated screenshots are runtime evidence only and are not committed. A minimal sanitized image may be persisted only inside a reusable bundle that follows `docs/references/reference-evidence-workflow.md` and records its redactions and state in the manifest.
 - A screenshot alone is not completion evidence; computed styles, geometry, DOM state, console state, and behavior must agree.
 
+## Reusable Pages-listing bundle (2026-08-28)
+
+The current component-by-component audit is persisted under `artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/`. Its `manifest.json` correlates the authenticated Capacities Pages listing with the localhost Pages surface at the `1294x912` baseline plus `1536x900`, `1280x900`, `1024x800`, `768x900`, `480x844`, and `390x844` checkpoints. It records the semantic-selection correction required before comparison and links sanitized Capacities-only image crops with localhost DOM, geometry, behavior, focus, persistence, responsive, and console evidence. The bundle is intentionally incremental until every safe visible affordance has an action-matrix row; localhost screenshots are never persisted.
+
+The August 28 responsive pass confirms that both products contain the document at every recorded width, but document containment alone is insufficient. At 1024px the localhost graph zoom control begins beyond the viewport, at 768px the localhost retains the expanded 288px desktop navigation after the reference has moved it off-canvas, and at 390px the localhost Grade and Table controls are clipped beyond x=390. The mobile navigation opens in both environments, with a 288px reference surface versus a 292.5px local dialog; the local primary group still omits Tasks.
+
+The same pass now records the complete safe sidebar utility and card pre-commit surfaces. Help disclosure content aligns, but local Documentation lacks link semantics. Reference Settings, Shortcuts, and Trash open functional surfaces; their local counterparts only enter an active visual state and expose no destination. The reference Gallery card reveals a 22px action with twelve object commands, while the local card remains a single open target. Reference Back/Forward cycles Pages → Page → Pages → Page; both enabled local controls are no-ops on the opened Page route. No create, share, export, duplicate, delete, pin, or restore command was committed during these checks.
+
+## Reusable object-page bundle (2026-08-28)
+
+The focused object-page evidence is stored under `artifacts/reference-evidence/capacities-object-page/2026-08-28-mentions-utilities/`. It records the object header, an expanded one-item Mentions section, source-row anatomy, and the separately exercised edge-triggered Structure/Statistics utility. The persisted image is a sanitized Capacities-only crop; localhost evidence is structural and behavioral only, never an image. The manifest redacts authenticated route identifiers and records the route fingerprint, interaction matrix, limitations, and reversible text-entry check.
+
 ## Matched-state geometry matrix
 
-The August 26 evidence is valid only for the recorded matched state: viewport `1153x912`, expanded navigation, the same route/selection and contextual-panel state, and the observed persisted resize state. A sidebar width is not a universal desktop constant.
+The current Pages comparison is valid only for the recorded August 28 matched state: viewport `1294x912`, expanded 288px navigation in both environments, Pages / Tudo / Gallery-grid selection, and an expanded Graph panel. A sidebar or panel width is not a universal desktop constant.
 
 | Observation | Authenticated reference | Matched localhost | State and verdict |
 | --- | --- | --- | --- |
-| Expanded desktop sidebar | 288px | 224px | The reference's recorded resize state is 288px; the localhost clean default is a 64px parity gap. |
-| Header rail | 46px | 58px | The local rail is 12px taller in the matched capture. |
-| Main surface start | approximately x=298 | almost flush with the sidebar | Reference uses a 10px gutter after the 288px sidebar. |
-| Contextual panel | Route-sensitive | Wider, always-generic Explore panel | Panel content and width must be compared only for the same route/state. |
-| Horizontal overflow at 390x844 | None | None | Both captures contained the page; surface/rail composition still differed. |
+| Expanded desktop sidebar | 288px | 288px | Persisted width aligned for the current capture. |
+| Header/context rail top | 46px | 58px | The local contextual surface begins 12px lower. |
+| Main surface | x=298, width≈624.47px | x≈298, width≈564.39px | Shared start/gutter; local main is compressed by the wider contextual panel. |
+| Contextual panel | width≈351.53px | width≈411.61px | Local panel is approximately 60px wider in the matched state. |
+| Hidden contextual panel | main width=986px | main width=986px | Hidden-state shell aligns; local hidden descendants and focus disposition still fail. |
+| Horizontal overflow at 390x844 | None | None | Document containment passes, but local Grade/Table controls are clipped beyond x=390. |
 
 | Stable visual contract | Recorded value |
 | --- | --- |
@@ -45,7 +58,8 @@ The August 26 evidence is valid only for the recorded matched state: viewport `1
 
 - **Clean local default**: no saved panel-resize state is applied. In the August 26 localhost capture, this was 224px.
 - **Persisted resize state**: a previously saved panel width is active. The August 26 authenticated reference captured a 288px expanded sidebar in this state.
-- Tests and audits must record which state they use before comparing geometry. They must neither treat 288px as every clean default nor treat 224px as the current-reference baseline.
+- **Current matched state**: the August 28 audit explicitly aligned both expanded sidebars at 288px before measuring the main and contextual panels.
+- Tests and audits must record which state they use before comparing geometry. They must neither treat 288px as every clean default nor reuse the historical 224px local clean default as the current matched baseline.
 
 ## Interaction state matrix
 
@@ -65,7 +79,8 @@ Shared overflow surfaces use approximately 268-269px width, 12px radius, 6px pad
 | --- | --- |
 | 1536px | Record clean or persisted resize state before comparison; retain a 46px rail, fluid main surface, and contextual panel only when requested by state |
 | 1280px | Record resize state; no page overflow and bounded auxiliary panel |
-| 1153x912 | Matched August 26 evidence: 288px reference persisted resize state versus 224px localhost clean default; reference rail 46px, local rail 58px |
+| 1294x912 | Current matched Pages baseline: both sidebars 288px; reference main/context widths≈624.47/351.53px, local≈564.39/411.61px; reference top rail 46px, local contextual top 58px |
+| 1153x912 | Historical August 26 evidence: 288px reference persisted resize state versus 224px localhost clean default |
 | 1024px | Record resize state; main surface and tab strip remain usable before auxiliary content expands |
 | 768px | Record resize state; tabs stay contained and hidden tabs use the list control; `scrollWidth === clientWidth` |
 | 480px | Navigation closed: main surface keeps about 10px outer spacing. Navigation open: bounded Sheet/overlay above the main surface |
@@ -75,10 +90,13 @@ At every checkpoint, the page must satisfy `scrollWidth === clientWidth`, the vi
 
 ## Local baseline differences to correct
 
-- The August 26 matched localhost clean default was 224px while the reference's recorded persisted width was 288px.
-- At 768px, three columns can compress the main area to about 266px and leave only about 86px for the tab list.
-- Current hover actions can cover 36px of a 64px tab, including its geometric midpoint; the safe selection region is therefore too small.
-- The 390px route already renders a separate mobile surface; the desktop shell being zero-sized at that breakpoint is expected, but the mobile open and closed states still require explicit verification.
+- The current local contextual panel is approximately 60px wider and starts 12px lower than the matched reference, compressing the main Pages surface.
+- At 1024px, the graph zoom control extends beyond the visible viewport; at 768px the desktop sidebar remains expanded after the reference has moved navigation off-canvas.
+- At 390px, Grade and Table remain focusable beyond the viewport despite document-level overflow metrics passing.
+- Local primary navigation omits Tasks, and its Explore, Calendar, and task destinations do not implement the reference route-specific contracts.
+- Local Settings, Share, and Trash footer actions change trigger styling without opening a functional surface; the reference trailing footer action is Shortcuts, not Share.
+- Local Gallery cards omit the reference contextual action menu, and local Back/Forward controls remain enabled while acting as no-ops after card navigation.
+- Hidden sidebar and card actions must not retain unexplained pointer-active regions. The audit found this issue locally for section actions and in the reference card trigger; the implementation contract requires the safer inert-hidden behavior.
 
 ## Ownership boundary
 
