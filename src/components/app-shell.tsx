@@ -471,14 +471,21 @@ function AppShellSidePanel({
       className={cn(
         "relative z-10 flex h-full min-w-0 flex-col overflow-hidden bg-sidebar",
         workspaceSurfaceMotionClass,
-        rightCollapsed && "opacity-0",
+        rightCollapsed
+          ? "pointer-events-none opacity-0"
+          : "pointer-events-auto opacity-100",
         className,
       )}
       {...props}
     >
       <aside
         data-slot="app-shell-side-panel"
-        className="flex h-full min-w-0 flex-col"
+        data-collapsed={rightCollapsed || undefined}
+        aria-hidden={rightCollapsed}
+        className={cn(
+          "flex h-full min-w-0 flex-col",
+          rightCollapsed && "invisible",
+        )}
       >
         {children}
       </aside>
