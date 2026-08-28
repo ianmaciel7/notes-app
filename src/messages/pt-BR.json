@@ -63,6 +63,8 @@
       "searchContentType": "Buscar tipo de conteúdo",
       "searchHint": "Buscar",
       "select": "para selecionar",
+      "tasks": "Tarefas",
+      "tasksHint": "Ir para Tarefas.",
       "typesLabel": "Tipos de conteúdo"
     },
     "actions": {

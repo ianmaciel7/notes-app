@@ -483,36 +483,38 @@ function ObjectTypeAllControls({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        aria-label={t("actions.list")}
-        aria-pressed={view.presentation.kind === "list"}
-        onClick={() => onLayoutChange("list")}
-      >
-        <ObjectTypeToolbarIcon name="list" className="size-3.5" />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        aria-label={t("actions.grid")}
-        aria-pressed={view.presentation.kind === "gallery"}
-        onClick={() => onLayoutChange("gallery")}
-      >
-        <ObjectTypeToolbarIcon name="grid" className="size-3.5" />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        aria-label={t("objectTypeStudio.objectTypes.table")}
-        aria-pressed={view.presentation.kind === "table"}
-        onClick={() => onLayoutChange("table")}
-      >
-        <ObjectTypeToolbarIcon name="caret" className="size-3" />
-      </Button>
+      <div className="hidden items-center gap-1 min-[520px]:flex">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          aria-label={t("actions.list")}
+          aria-pressed={view.presentation.kind === "list"}
+          onClick={() => onLayoutChange("list")}
+        >
+          <ObjectTypeToolbarIcon name="list" className="size-3.5" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          aria-label={t("actions.grid")}
+          aria-pressed={view.presentation.kind === "gallery"}
+          onClick={() => onLayoutChange("gallery")}
+        >
+          <ObjectTypeToolbarIcon name="grid" className="size-3.5" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          aria-label={t("objectTypeStudio.objectTypes.table")}
+          aria-pressed={view.presentation.kind === "table"}
+          onClick={() => onLayoutChange("table")}
+        >
+          <ObjectTypeToolbarIcon name="caret" className="size-3" />
+        </Button>
+      </div>
       <span className="sr-only" aria-live="polite">
         {currentGrouping === "objectTypeId"
           ? t("objectTypeOverview.groupedByType")

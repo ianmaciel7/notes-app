@@ -73,10 +73,10 @@ test("surface alignment does not mutate entity or storage contracts", () => {
 
 test("workspace parity targets production-owned views without legacy fallbacks", () => {
   const objectTypeHelper = workspaceParitySource.match(
-    /function objectTypeWorkspace[\s\S]*?\n}\n\nfunction createdObjectWorkspace/,
+    /function objectTypeWorkspace[\s\S]*?(?=\nfunction createdObjectWorkspace)/,
   )?.[0];
   const createdObjectHelper = workspaceParitySource.match(
-    /function createdObjectWorkspace[\s\S]*?\n}\n\nasync function createPageObject/,
+    /function createdObjectWorkspace[\s\S]*?(?=\nasync function createPageObject)/,
   )?.[0];
 
   assert.ok(objectTypeHelper);

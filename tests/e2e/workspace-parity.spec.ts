@@ -7,7 +7,6 @@ const desktopViewports = [
   { width: 1280, height: 800 },
   { width: 1153, height: 912 },
   { width: 1024, height: 768 },
-  { width: 768, height: 720 },
 ] as const;
 const recordedSidebarWidths = {
   // The August 26 matched reference measured a persisted 288px sidebar at
@@ -18,6 +17,10 @@ const recordedSidebarWidths = {
 } as const;
 const tinyPng = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=",
+  "base64",
+);
+const tinyWav = Buffer.from(
+  "UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=",
   "base64",
 );
 
@@ -65,7 +68,10 @@ async function createPageObject(page: Page) {
 
 async function selectNewObject(page: Page, label: string) {
   await sidebarNewButton(page).click();
-  await page.locator('[role="option"]').filter({ hasText: label }).click();
+  await page
+    .locator('[data-slot="popover-content"][data-open]')
+    .getByRole("option", { name: label, exact: true })
+    .click();
 }
 
 function sidebarNewButton(page: Page) {
@@ -460,7 +466,7 @@ test("1153px records the persisted-reference width separately from the historica
 });
 
 test("tab midpoint and dedicated actions do not overlap", async ({ page }) => {
-  await page.setViewportSize({ width: 768, height: 720 });
+  await page.setViewportSize({ width: 1024, height: 720 });
   const errors = await openWorkspace(page);
   const target = page
     .locator(
@@ -2818,6 +2824,7 @@ test("navigating away flushes a buffered title without duplicating its Page", as
 });
 
 for (const viewport of [
+  { width: 768, height: 844 },
   { width: 480, height: 844 },
   { width: 390, height: 844 },
 ] as const) {
@@ -2846,7 +2853,7 @@ for (const viewport of [
     expect(navigationBox?.width ?? 0).toBeLessThanOrEqual(viewport.width - 40);
     expect(navigationBox?.height ?? 0).toBeGreaterThan(0);
     await expectContainedUsableSurface(page, navigationDialog, viewport);
-    await page.keyboard.press("Escape");
+    await navigationDialog.press("Escape");
     await expect(navigationDialog).toBeHidden();
     await expect(navTrigger).toHaveAttribute("aria-expanded", "false");
     await expect(navTrigger).toBeFocused();
@@ -2873,7 +2880,7 @@ for (const viewport of [
     expect(contextBox?.width ?? 0).toBeLessThanOrEqual(viewport.width - 40);
     expect(contextBox?.height ?? 0).toBeGreaterThan(0);
     await expectContainedUsableSurface(page, contextDialog, viewport);
-    await page.keyboard.press("Escape");
+    await contextDialog.press("Escape");
     await expect(contextDialog).toBeHidden();
     await expect(contextTrigger).toHaveAttribute("aria-expanded", "false");
     await expect(contextTrigger).toBeFocused();
@@ -3181,7 +3188,7 @@ test("every supported New family persists once and reopens from its tab projecti
       label: "Áudio",
       plural: "Áudios",
       kind: "file",
-      mime: "audio/mpeg",
+      mime: "audio/wav",
     },
     {
       id: "file",
@@ -3213,13 +3220,17 @@ test("every supported New family persists once and reopens from its tab projecti
         .getByRole("button", { name: "Adicionar", exact: true })
         .click();
     } else if (family.kind === "file") {
-      await page.getByLabel("Escolher arquivo local").setInputFiles({
+      const dialog = page.getByRole("dialog").filter({ hasText: "Adicionar" });
+      await expect(dialog).toBeVisible();
+      await dialog.getByLabel("Escolher arquivo local").setInputFiles({
         buffer:
           family.id === "image"
             ? tinyPng
-            : Buffer.from(family.id === "pdf" ? "%PDF-1.4" : "parity"),
+            : family.id === "audio"
+              ? tinyWav
+              : Buffer.from(family.id === "pdf" ? "%PDF-1.4" : "parity"),
         mimeType: family.mime,
-        name: `parity-${family.id}.${family.id === "image" ? "png" : family.id === "audio" ? "mp3" : family.id === "pdf" ? "pdf" : "txt"}`,
+        name: `parity-${family.id}.${family.id === "image" ? "png" : family.id === "audio" ? "wav" : family.id === "pdf" ? "pdf" : "txt"}`,
       });
       await expect
         .poll(async () => {

@@ -296,7 +296,10 @@ function AppShell({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="app-shell"
-      className={cn("relative hidden h-full w-full md:block", className)}
+      className={cn(
+        "relative hidden h-full w-full min-[769px]:block",
+        className,
+      )}
       {...props}
     />
   );
@@ -671,7 +674,7 @@ function AppShellMobile({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="app-shell-mobile"
       className={cn(
-        "relative flex h-full w-full flex-col overflow-hidden bg-sidebar md:hidden",
+        "relative flex h-full w-full flex-col overflow-hidden bg-sidebar min-[769px]:hidden",
         className,
       )}
       {...props}
@@ -710,7 +713,7 @@ function AppShellMobileSidebar({
         side="left"
         overlayClassName="motion-reduce:transition-none"
         className={cn(
-          "w-[min(24rem,calc(100vw-2.5rem))] max-w-none bg-sidebar p-0 motion-reduce:transition-none",
+          "w-[288px] max-w-[calc(100vw-2.5rem)] bg-sidebar p-0 motion-reduce:transition-none",
           className,
         )}
         {...props}

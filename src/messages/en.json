@@ -63,6 +63,8 @@
       "searchContentType": "Search content type",
       "searchHint": "Search",
       "select": "to select",
+      "tasks": "Tasks",
+      "tasksHint": "Go to Tasks.",
       "typesLabel": "Content types"
     },
     "actions": {

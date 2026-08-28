@@ -895,7 +895,11 @@ function areStringArrayMapsEquivalent(
   });
 }
 
-type AppSidebarPrimaryNavigationAction = "search" | "explore" | "calendar";
+type AppSidebarPrimaryNavigationAction =
+  | "search"
+  | "explore"
+  | "calendar"
+  | "tasks";
 
 const initialSpaces: AppSidebarSpace[] = [
   { id: "studies", name: "Studies", icon: ObjectBookIcon },

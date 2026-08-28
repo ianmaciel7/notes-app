@@ -9,6 +9,7 @@ import {
   AppSidebarExploreIcon,
   AppSidebarPlusIcon,
   AppSidebarSearchIcon,
+  AppSidebarTaskIcon,
 } from "@/components/app-sidebar-icons";
 import {
   type AppSidebarCollectionAction,
@@ -50,7 +51,12 @@ import {
   type WorkspaceCollectionRecord,
 } from "@/lib/workspace-domain-identities";
 
-type AppSidebarPrimaryActionId = "new" | "search" | "explore" | "calendar";
+type AppSidebarPrimaryActionId =
+  | "new"
+  | "search"
+  | "explore"
+  | "calendar"
+  | "tasks";
 
 type AppSidebarPrimaryNavigationAction = Exclude<
   AppSidebarPrimaryActionId,
@@ -375,6 +381,20 @@ const defaultActions: AppSidebarPrimaryAction[] = [
       },
     ],
   },
+  {
+    id: "tasks",
+    label: "Tasks",
+    icon: AppSidebarTaskIcon,
+    hints: [
+      {
+        description: "Go to Tasks.",
+        shortcut: {
+          windows: ["Ctrl", "Alt", "T"],
+          mac: ["⌃", "⌘", "T"],
+        },
+      },
+    ],
+  },
 ];
 
 function useIsMac() {
@@ -550,12 +570,14 @@ function AppSidebarPrimaryActions({
             search: t("search"),
             explore: t("explore"),
             calendar: t("calendar"),
+            tasks: t("tasks"),
           } satisfies Record<AppSidebarPrimaryActionId, string>;
           const descriptions: Record<AppSidebarPrimaryActionId, string[]> = {
             new: [t("new")],
             search: [t("searchHint"), t("extendedSearchHint")],
             explore: [t("exploreHint"), t("exploreSideHint")],
             calendar: [t("calendarHint")],
+            tasks: [t("tasksHint")],
           };
           return {
             ...action,

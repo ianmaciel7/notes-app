@@ -406,7 +406,7 @@ function AppSidePanelHeader({
     <header
       data-slot="app-side-panel-header"
       className={cn(
-        "relative z-30 flex h-[58px] w-full shrink-0 items-center justify-between bg-[var(--side-header-bg-back)] px-1",
+        "relative z-30 flex h-[46px] w-full shrink-0 items-center justify-between bg-[var(--side-header-bg-back)] px-1",
         className,
       )}
       style={{ ...sideHeaderTheme, ...style }}
