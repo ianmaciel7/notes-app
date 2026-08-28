@@ -64,6 +64,7 @@ import { Input } from "@/components/ui/input";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
+import { createBrowserWorkspaceDatabaseRepository } from "@/lib/workspace-database";
 import {
   createBrowserMediaStorageAdapter,
   createMediaUrlRegistry,
@@ -1031,6 +1032,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const workspaceObjectsBySpaceRef = React.useRef<
     Record<string, WorkspaceObjectState>
   >({});
+  const workspaceDatabaseRef = React.useRef<ReturnType<
+    typeof createBrowserWorkspaceDatabaseRepository
+  > | null>(null);
   const [customSections, setCustomSections] = React.useState<
     AppSidebarCustomSection[]
   >([]);
@@ -1061,6 +1065,11 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     workspaceObjectsBySpaceRef.current[spaceId] = workspaceObjects;
   }, [spaceId, workspaceObjects]);
+
+  const getWorkspaceDatabase = React.useCallback(() => {
+    workspaceDatabaseRef.current ??= createBrowserWorkspaceDatabaseRepository();
+    return workspaceDatabaseRef.current;
+  }, []);
 
   const createdCounts = React.useMemo(
     () => countEntitiesByType(workspaceObjects.entities),
@@ -1284,6 +1293,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         if (parsed.ok) {
           workspaceObjectsBySpaceRef.current[nextSpaceId] = parsed.state;
           dispatchWorkspaceObjects({ type: "hydrate", state: parsed.state });
+          void getWorkspaceDatabase().migrateLegacySnapshot(raw);
         } else {
           dispatchWorkspaceObjects({ type: "recover" });
           showMessage(t("lifecycle.storageRecovered"));
@@ -1294,7 +1304,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       showMessage(t("lifecycle.storageRecovered"));
     }
     setStorageReady(true);
-  }, [showMessage, t]);
+  }, [getWorkspaceDatabase, showMessage, t]);
 
   React.useEffect(() => {
     if (
@@ -1412,7 +1422,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         spaces: spaces.map(({ id, name }) => ({ id, name })),
       }),
     );
-  }, [spaceId, spaces, storageReady, workspaceObjects]);
+    void getWorkspaceDatabase().persistChangedSnapshot(workspaceObjects);
+  }, [getWorkspaceDatabase, spaceId, spaces, storageReady, workspaceObjects]);
 
   React.useEffect(() => {
     if (!storageReady || workspaceObjects.hydrationStatus === "seed") return;

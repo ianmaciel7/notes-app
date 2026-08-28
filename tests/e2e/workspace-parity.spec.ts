@@ -86,6 +86,33 @@ async function persistedSnapshot(page: Page) {
   });
 }
 
+async function persistedWorkspaceDatabaseRecords(page: Page) {
+  return page.evaluate(async () => {
+    const request = window.indexedDB.open("notes-app-workspace-records", 1);
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve(request.result);
+      request.onupgradeneeded = () => {
+        request.transaction?.abort();
+        reject(new Error("Workspace database was not initialized."));
+      };
+    });
+    try {
+      const store = database
+        .transaction("records", "readonly")
+        .objectStore("records");
+      const records = await new Promise<unknown[]>((resolve, reject) => {
+        const recordsRequest = store.getAll();
+        recordsRequest.onerror = () => reject(recordsRequest.error);
+        recordsRequest.onsuccess = () => resolve(recordsRequest.result);
+      });
+      return records;
+    } finally {
+      database.close();
+    }
+  });
+}
+
 async function expectStableBoxOnHover(target: Locator) {
   const idleBox = await target.boundingBox();
   expect(idleBox).toBeTruthy();
@@ -3143,6 +3170,110 @@ test("Novo Page and Table flows keep split actions, writes, and counts durable",
   await expect(pageRow).toContainText("1");
   await expect(tableRow).toContainText("1");
   expect(await persistedSnapshot(page)).toMatchObject({ version: 5 });
+  expect(errors).toEqual([]);
+});
+
+test("workspace database persists object edits as indexed records", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  const workspace = createdObjectWorkspace(page);
+  const title = "Indexed workspace record";
+  await workspace.getByRole("textbox", { name: "Título" }).fill(title);
+  await workspace.getByRole("textbox", { name: "Text" }).fill("Indexed body");
+  await workspace.getByRole("textbox", { name: "Título" }).blur();
+
+  const entity = (await persistedEntities(page)).find(
+    (item: { title?: string }) => item.title === title,
+  );
+  expect(entity?.id).toBeTruthy();
+  await expect
+    .poll(async () => {
+      const records = await persistedWorkspaceDatabaseRecords(page);
+      return records.some(
+        (record) =>
+          typeof record === "object" &&
+          record !== null &&
+          "key" in record &&
+          record.key === `object:${entity.id}`,
+      );
+    })
+    .toBe(true);
+
+  const records = await persistedWorkspaceDatabaseRecords(page);
+  const objectRecord = records.find(
+    (record) =>
+      typeof record === "object" &&
+      record !== null &&
+      "key" in record &&
+      record.key === `object:${entity.id}`,
+  ) as { revision?: number; value?: { title?: string } } | undefined;
+  expect(objectRecord?.revision).toBeGreaterThan(0);
+  expect(objectRecord?.value?.title).toBe(title);
+  expect(errors).toEqual([]);
+});
+
+test("workspace database migrates legacy local snapshots and reloads", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.addInitScript(() => {
+    window.localStorage.clear();
+    window.localStorage.setItem(
+      "notes-app:workspace-objects:v1",
+      JSON.stringify({
+        activeEntityId: "legacy-page-1",
+        entities: [
+          {
+            body: "Legacy body",
+            collections: [],
+            createdAt: "2026-01-01T00:00:00.000Z",
+            id: "legacy-page-1",
+            kind: "document",
+            objectTypeId: "page",
+            tags: [],
+            title: "Legacy migrated page",
+          },
+        ],
+        nextId: 2,
+        version: 1,
+      }),
+    );
+  });
+
+  await page.goto("/pt-BR");
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect(
+    page.getByRole("textbox", { name: "Título" }),
+  ).toHaveValue("Legacy migrated page");
+  await expect
+    .poll(async () => {
+      const records = await persistedWorkspaceDatabaseRecords(page);
+      return records.filter(
+        (record) =>
+          typeof record === "object" &&
+          record !== null &&
+          "key" in record &&
+          record.key === "object:legacy-page-1",
+      ).length;
+    })
+    .toBe(1);
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect(
+    page.getByRole("textbox", { name: "Título" }),
+  ).toHaveValue("Legacy migrated page");
   expect(errors).toEqual([]);
 });
 

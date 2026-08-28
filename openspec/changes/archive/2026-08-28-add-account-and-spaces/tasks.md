@@ -1,6 +1,6 @@
 ## 0. Evidence and dependency gate
 
-- [ ] 0.1 Complete the workspace database before apply and re-confirm Spaces/account/auth references.
+- [x] 0.1 Complete the workspace database before apply and re-confirm Spaces/account/auth references.
 
 ## 1. Domain and partitioning
 
@@ -16,9 +16,9 @@
 
 ## 3. Acceptance
 
-- [ ] 3.1 Browser-test multi-Space isolation, switching, duplicate ids, cross-Space search/relation rejection, sign-out/offline cache, and delete guardrails.
-- [ ] 3.2 Run `pnpm verify`, repository/index regressions, build, and strict OpenSpec validation.
+- [x] 3.1 Browser-test multi-Space isolation, switching, duplicate ids, cross-Space search/relation rejection, sign-out/offline cache, and delete guardrails.
+- [x] 3.2 Run `pnpm verify`, repository/index regressions, build, and strict OpenSpec validation.
 
 ## 4. Completion
 
-- [ ] 4.1 Sync canonical specs and archive only after evidence is complete.
+- [x] 4.1 Sync canonical specs and archive only after evidence is complete.

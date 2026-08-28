@@ -1,4 +1,10 @@
-## ADDED Requirements
+# workspace-database Specification
+
+## Purpose
+
+Workspace database provides transactional, normalized local persistence for workspace records so large workspaces, migrations, integrity repair, and future sync metadata do not depend on whole-snapshot rewrites.
+
+## Requirements
 
 ### Requirement: Transactional workspace repository
 Canonical workspace records SHALL persist through a transactional repository with stable ids and indexed lookups.
