@@ -23,6 +23,7 @@ import {
   AppSidePanelHeader,
   type SidePanelSpecialEntryId,
 } from "@/components/app-side-panel-header";
+import { notifyWorkspaceSyncDiagnostics } from "@/components/offline-first-bridge";
 import type { AppSidebarSpace } from "@/components/app-sidebar";
 import { AppSidebarSearchIcon } from "@/components/app-sidebar-icons";
 import type {
@@ -1423,7 +1424,19 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         spaces: spaces.map(({ id, name }) => ({ id, name })),
       }),
     );
-    void getWorkspaceDatabase().persistChangedSnapshot(workspaceObjects);
+    void getWorkspaceDatabase()
+      .persistChangedSnapshot(workspaceObjects, undefined, { spaceId })
+      .then((result) => {
+        if (navigator.onLine || result.writtenKeys.length === 0) return;
+        notifyWorkspaceSyncDiagnostics({
+          conflictCount: 0,
+          mediaUnavailableCount: workspaceObjects.entities.filter(
+            (entity) => entity.kind === "file" && entity.storageState !== "stored",
+          ).length,
+          pendingCount: result.writtenKeys.length,
+          status: "offline-pending",
+        });
+      });
   }, [getWorkspaceDatabase, spaceId, spaces, storageReady, workspaceObjects]);
 
   React.useEffect(() => {

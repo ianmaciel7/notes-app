@@ -66,6 +66,11 @@ type WorkspaceRepositoryCommitResult = {
   readonly writtenKeys: readonly WorkspaceDatabaseRecordKey[];
 };
 
+type WorkspaceRepositorySyncOptions = {
+  readonly operationKind?: "aggregate-upsert" | "aggregate-delete";
+  readonly spaceId: string;
+};
+
 type WorkspaceDatabaseMigrationResult =
   | {
       readonly ok: false;
@@ -318,7 +323,11 @@ function createWorkspaceDatabaseRepository(adapter: WorkspaceDatabaseAdapter) {
 
   async function commitSnapshot(
     state: WorkspaceObjectState,
-    options: { readonly changedOnly: boolean; readonly now?: () => Date } = {
+    options: {
+      readonly changedOnly: boolean;
+      readonly now?: () => Date;
+      readonly sync?: WorkspaceRepositorySyncOptions;
+    } = {
       changedOnly: false,
     },
   ): Promise<WorkspaceRepositoryCommitResult> {
@@ -334,6 +343,11 @@ function createWorkspaceDatabaseRepository(adapter: WorkspaceDatabaseAdapter) {
         transaction.put(record);
       }
       for (const key of deleted) transaction.delete(key);
+      if (options.sync) {
+        for (const key of [...changed, ...deleted]) {
+          transaction.put(createOperationRecord(key, options.sync, updatedAt));
+        }
+      }
       transaction.setMetadata(METADATA_KEY, nextMetadata);
     });
     return { metadata: nextMetadata, writtenKeys: changed };
@@ -364,16 +378,55 @@ function createWorkspaceDatabaseRepository(adapter: WorkspaceDatabaseAdapter) {
         return { ok: false, reason: "interrupted" };
       }
     },
-    persistChangedSnapshot(state: WorkspaceObjectState, now?: () => Date) {
-      return commitSnapshot(state, { changedOnly: true, now });
+    persistChangedSnapshot(
+      state: WorkspaceObjectState,
+      now?: () => Date,
+      sync?: WorkspaceRepositorySyncOptions,
+    ) {
+      return commitSnapshot(state, { changedOnly: true, now, sync });
     },
-    replaceSnapshot(state: WorkspaceObjectState, now?: () => Date) {
-      return commitSnapshot(state, { changedOnly: false, now });
+    replaceSnapshot(
+      state: WorkspaceObjectState,
+      now?: () => Date,
+      sync?: WorkspaceRepositorySyncOptions,
+    ) {
+      return commitSnapshot(state, { changedOnly: false, now, sync });
     },
     async rebuildIndexes() {
       const snapshot = snapshotFromRecords(await adapter.list());
       if (!snapshot) return [];
       return auditWorkspaceRecords(snapshot);
+    },
+  };
+}
+
+function createOperationRecord(
+  aggregateKey: WorkspaceDatabaseRecordKey,
+  options: WorkspaceRepositorySyncOptions,
+  updatedAt: string,
+): WorkspaceDatabaseRecord {
+  const kind = options.operationKind ?? "aggregate-upsert";
+  const id = [
+    "op",
+    encodeURIComponent(options.spaceId),
+    encodeURIComponent(aggregateKey),
+    updatedAt,
+    kind,
+  ].join(":");
+  return {
+    aggregateId: aggregateKey,
+    id,
+    kind: "operation",
+    revision: 1,
+    updatedAt,
+    value: {
+      aggregateKey,
+      createdAt: updatedAt,
+      id,
+      idempotencyKey: id,
+      kind,
+      spaceId: options.spaceId,
+      status: "pending",
     },
   };
 }
@@ -480,4 +533,5 @@ export type {
   WorkspaceDatabaseRecordKind,
   WorkspaceDatabaseTransaction,
   WorkspaceRepositoryCommitResult,
+  WorkspaceRepositorySyncOptions,
 };
