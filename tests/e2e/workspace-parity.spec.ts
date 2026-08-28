@@ -1,3 +1,5 @@
+import { writeFileSync } from "node:fs";
+
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const desktopViewports = [
@@ -83,6 +85,31 @@ async function persistedSnapshot(page: Page) {
   return page.evaluate(() => {
     const value = window.localStorage.getItem("notes-app:workspace-objects:v1");
     return value ? JSON.parse(value) : null;
+  });
+}
+
+async function persistedMediaBlobKeys(page: Page) {
+  return page.evaluate(async () => {
+    const request = window.indexedDB.open("notes-app-media-assets", 1);
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => resolve(request.result);
+      request.onupgradeneeded = () => {
+        request.result.createObjectStore("blobs");
+      };
+    });
+    try {
+      if (!database.objectStoreNames.contains("blobs")) return [];
+      const store = database.transaction("blobs", "readonly").objectStore("blobs");
+      const keys = await new Promise<IDBValidKey[]>((resolve, reject) => {
+        const keysRequest = store.getAllKeys();
+        keysRequest.onerror = () => reject(keysRequest.error);
+        keysRequest.onsuccess = () => resolve(keysRequest.result);
+      });
+      return keys.map(String);
+    } finally {
+      database.close();
+    }
   });
 }
 
@@ -1778,6 +1805,148 @@ test("production object-type Import handles accepted rejected and cancelled sele
   expect(errors).toEqual([]);
 });
 
+test("durable media import reloads previews reuses duplicate blobs and garbage collects", async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "PDFs" })
+    .getByRole("button")
+    .filter({ hasText: "PDFs" })
+    .click();
+  const workspace = objectTypeWorkspace(page);
+  await expect(workspace).toBeVisible();
+  const fileChooserPromise = page.waitForEvent("filechooser");
+  await workspace.getByRole("button", { name: "Importar", exact: true }).click();
+  const fileChooser = await fileChooserPromise;
+  await fileChooser.setFiles({
+    buffer: Buffer.from("%PDF-1.4\n% durable-media"),
+    mimeType: "application/pdf",
+    name: "durable-media.pdf",
+  });
+  await expect(page.locator('[data-slot="workspace-message"]')).toHaveText(
+    "1 objeto importado.",
+  );
+
+  await expectActiveEditorTitle(page, "durable-media");
+  await expect(
+    createdObjectWorkspace(page).locator('[data-slot="media-asset-renderer"]'),
+  ).toBeVisible();
+  const imported = (await persistedEntities(page)).find(
+    (entity: {
+      assetId?: string;
+      contentHash?: string;
+      objectTypeId: string;
+      storageState?: string;
+      title: string;
+    }) => entity.objectTypeId === "pdf" && entity.title === "durable-media",
+  );
+  expect(imported?.assetId).toBeTruthy();
+  expect(imported?.contentHash).toBe(imported?.assetId);
+  expect(imported?.storageState).toBe("stored");
+  await expect.poll(() => persistedMediaBlobKeys(page)).toEqual([
+    `media:${imported?.contentHash}`,
+  ]);
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "PDFs" })
+    .getByRole("button")
+    .filter({ hasText: "PDFs" })
+    .click();
+  await page.getByRole("tab", { name: "Tudo", exact: true }).click();
+  await page
+    .locator('[data-lifecycle-contract="object-projection-row"]')
+    .filter({ hasText: "durable-media" })
+    .first()
+    .click();
+  const reloadedEntity = (await persistedEntities(page)).find(
+    (entity: { objectTypeId: string; previewUrl?: string; title: string }) =>
+      entity.objectTypeId === "pdf" && entity.title === "durable-media",
+  );
+  expect(reloadedEntity?.assetId).toBe(imported?.assetId);
+  await expect(
+    createdObjectWorkspace(page).locator('[data-media-kind="pdf"]'),
+  ).toBeVisible();
+
+  await createdObjectWorkspace(page)
+    .getByRole("button", { name: "Mais opções", exact: true })
+    .click();
+  await page.getByRole("menuitem", { name: "Duplicar" }).click();
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      return entities
+        .filter(
+          (entity: { objectTypeId: string; title: string }) =>
+            entity.objectTypeId === "pdf" && entity.title === "durable-media",
+        )
+        .map((entity: { assetId?: string }) => entity.assetId);
+    })
+    .toEqual([imported?.assetId, imported?.assetId]);
+  await expect.poll(() => persistedMediaBlobKeys(page)).toEqual([
+    `media:${imported?.contentHash}`,
+  ]);
+  await createdObjectWorkspace(page)
+    .getByRole("button", { name: "Mais opções", exact: true })
+    .click();
+  await page.getByRole("menuitem", { name: "Excluir Objeto" }).click();
+  await expect.poll(() => persistedMediaBlobKeys(page)).toEqual([
+    `media:${imported?.contentHash}`,
+  ]);
+  const remaining = (await persistedEntities(page)).find(
+    (entity: { id: string; objectTypeId: string; title: string }) =>
+      entity.objectTypeId === "pdf" && entity.title === "durable-media",
+  );
+  await page.locator(`[data-tab-id="${remaining?.id}"] [role="tab"]`).click();
+  await createdObjectWorkspace(page)
+    .getByRole("button", { name: "Mais opções", exact: true })
+    .click();
+  await page.getByRole("menuitem", { name: "Excluir Objeto" }).click();
+  await expect.poll(() => persistedMediaBlobKeys(page)).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test("mobile media quota failure stays recoverable without canonical asset", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 390, height: 844 });
+  const errors = await openWorkspace(page);
+
+  await page.getByRole("button", { name: "Abrir navegação", exact: true }).click();
+  await page
+    .getByRole("dialog", { name: "Navegação" })
+    .getByRole("button", { name: "Novo", exact: true })
+    .click();
+  await page.locator('[role="option"]').filter({ hasText: "Arquivo" }).click();
+  const oversizedFile = testInfo.outputPath("too-large.bin");
+  writeFileSync(oversizedFile, Buffer.alloc(50 * 1024 * 1024 + 1));
+  await page.getByLabel("Escolher arquivo local").setInputFiles(oversizedFile);
+
+  await expect(page.locator('[data-slot="workspace-message"]')).toHaveText(
+    "Não foi possível salvar o arquivo localmente. Tente um arquivo menor ou libere armazenamento do navegador.",
+  );
+  expect(await persistedEntities(page)).toHaveLength(0);
+  expect(await persistedMediaBlobKeys(page)).toEqual([]);
+  await page.getByLabel("Escolher arquivo local").setInputFiles({
+    buffer: Buffer.from("mobile recovery"),
+    mimeType: "text/plain",
+    name: "mobile-recovery.txt",
+  });
+  await expect(
+    createdObjectWorkspace(page).locator('[data-slot="media-asset-renderer"]'),
+  ).toBeVisible();
+  expect(await persistedEntities(page)).toHaveLength(1);
+  expect(errors).toEqual([]);
+});
+
 test("production object-type commands render named outcomes", async ({
   page,
 }) => {
@@ -2849,9 +3018,7 @@ test("every supported New family persists once and reopens from its tab projecti
     }
 
     const workspace = page
-      .locator(
-        '[data-slot="workspace-object-page-view"], [data-slot="created-object-workspace"]',
-      )
+      .locator('[data-slot="workspace-object-page-view"]')
       .filter({ visible: true });
     await expect(workspace).toBeVisible();
     const objectTypeId =

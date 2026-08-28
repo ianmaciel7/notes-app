@@ -67,6 +67,17 @@ Treat every visible affordance as an interaction state machine, not as a screens
 
 Compare the same state sequence at the same viewport in the live reference and localhost. Separate semantic data differences from UI differences; never delete or rewrite local entities just to make a screenshot match. Report `action -> expected reference state -> observed local state -> parity verdict -> evidence`, and identify untested states explicitly.
 
+## Reusable reference evidence protocol
+
+Before opening or recapturing Capacities or another external site, search `docs/references/`, `artifacts/reference-evidence/`, and the legacy `artifacts/capacities-reference/` corpus. Reuse an existing capture when its source, capture time, viewport, route or surface, semantic state, persisted layout state, and interaction state cover the comparison. Do not repeat the same browser operations merely to rediscover recorded values.
+
+- Store new reusable bundles under `artifacts/reference-evidence/<source-id>/<capture-id>/` and link them from a source-specific summary in `docs/references/`.
+- Include a `manifest.json` with provenance, timestamp, viewport, route/surface, semantic and persisted state, interactions, artifact inventory, confidence, redactions, freshness notes, and known limitations.
+- Preserve the smallest useful correlated evidence for each state: image capture, sanitized HTML or DOM, computed CSS/style and geometry data, and JavaScript interaction observations or minimal reproduction scripts. A screenshot alone is not sufficient when inspectable state can be recorded.
+- Refresh only missing, stale, or conflicting states. Preserve prior capture identities, record the refresh reason, and let newer confirmed live evidence win on conflict.
+- Never persist cookies, tokens, credentials, private storage values, unrelated personal content, complete authenticated exports, or complete third-party application bundles. Redact or omit sensitive material and record any resulting evidence limitation.
+- Follow `docs/references/reference-evidence-workflow.md` for bundle layout and the manifest contract.
+
 ## Completion check
 
 Before finishing a workspace UI change, verify:
@@ -79,4 +90,5 @@ Before finishing a workspace UI change, verify:
 - repeated reference-style classes were extracted to a shared component/helper instead of copied into multiple feature components;
 - Tooltip, HoverCard, DropdownMenu, Popover, Combobox, Dialog, compact menus, account panels, and object labels use the matching shared primitive or helper;
 - popup consumers do not own one-off surface or row appearance classes, and related sidebar context menus use the same exported width contract;
+- existing reference evidence was searched before live recapture, and any new or refreshed image, HTML/DOM, CSS, or JavaScript evidence follows the reusable bundle and sanitization contract;
 - a browser or DOM inspection of the reference UI backs any claimed visual parity change.

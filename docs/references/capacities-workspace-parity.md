@@ -15,7 +15,7 @@ This document is the canonical, timestamped visual and interaction contract for 
 - **CONFIRMED** values were measured from the current authenticated reference and a same-session localhost inspection.
 - **INFERRED** behavior is recorded only when a safe read-only interaction could not expose every state.
 - **UNKNOWN** behavior must not be invented or used to close an OpenSpec task.
-- Authenticated reference screenshots are runtime evidence only and are not committed to the repository.
+- Raw authenticated screenshots are runtime evidence only and are not committed. A minimal sanitized image may be persisted only inside a reusable bundle that follows `docs/references/reference-evidence-workflow.md` and records its redactions and state in the manifest.
 - A screenshot alone is not completion evidence; computed styles, geometry, DOM state, console state, and behavior must agree.
 
 ## Matched-state geometry matrix

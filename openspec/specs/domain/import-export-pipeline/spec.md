@@ -1,4 +1,10 @@
-## ADDED Requirements
+# Import Export Pipeline Specification
+
+## Purpose
+
+Import/export pipeline defines safe staged ingestion and portable workspace export so users can move notes, relations, and media without silent data loss.
+
+## Requirements
 
 ### Requirement: Staged import jobs
 Imports SHALL parse and validate source material into a previewable plan before committing canonical workspace mutations.

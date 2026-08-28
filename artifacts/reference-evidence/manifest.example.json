@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "capacities",
+    "url": "https://example.invalid/reference-surface",
+    "productSurface": "workspace-sidebar"
+  },
+  "capturedAt": "2026-08-28T12:00:00Z",
+  "viewport": {
+    "width": 1153,
+    "height": 912,
+    "deviceScaleFactor": 1
+  },
+  "surface": {
+    "route": "redacted-authenticated-route",
+    "component": "sidebar-row"
+  },
+  "semanticState": "representative content with private labels redacted",
+  "persistedState": {
+    "sidebar": "expanded",
+    "sidebarWidth": 288
+  },
+  "interactions": ["idle", "hover", "focus", "open", "post-click"],
+  "artifacts": [
+    {
+      "stateId": "sidebar-idle",
+      "kind": "image",
+      "path": "sidebar-idle.png"
+    },
+    {
+      "stateId": "sidebar-idle",
+      "kind": "dom",
+      "path": "sidebar-idle.dom.html"
+    },
+    {
+      "stateId": "sidebar-idle",
+      "kind": "computed-css",
+      "path": "sidebar-idle.styles.json"
+    },
+    {
+      "stateId": "sidebar-open",
+      "kind": "javascript-observation",
+      "path": "sidebar-open.behavior.json"
+    }
+  ],
+  "provenance": "authenticated live browser, read-only inspection",
+  "confidence": "confirmed",
+  "redactions": ["account identifiers", "private object labels", "route identifiers"],
+  "freshness": "valid for the recorded viewport and persisted layout state",
+  "limitations": ["does not cover mobile navigation"],
+  "refreshReason": null
+}

@@ -19,6 +19,7 @@ import {
   objectIconToneBadgeClass,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
+import { MediaAssetRenderer } from "@/components/object-view-preview";
 import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -85,13 +86,17 @@ import {
   type ObjectConversionPlan,
   readWorkspaceEntityProperty,
 } from "@/lib/workspace-object-views";
-import type { WorkspaceEntity } from "@/lib/workspace-objects";
+import { acceptsFileForType, type WorkspaceEntity } from "@/lib/workspace-objects";
 
 type DocumentWorkspaceEntity =
   | Extract<WorkspaceEntity, { kind: "document" }>
   | Extract<WorkspaceEntity, { kind: "quote" }>;
 type TableWorkspaceEntity = Extract<WorkspaceEntity, { kind: "table" }>;
-type SupportedWorkspaceEntity = DocumentWorkspaceEntity | TableWorkspaceEntity;
+type FileWorkspaceEntity = Extract<WorkspaceEntity, { kind: "file" }>;
+type SupportedWorkspaceEntity =
+  | DocumentWorkspaceEntity
+  | FileWorkspaceEntity
+  | TableWorkspaceEntity;
 
 type WorkspaceObjectPageViewProps = {
   readonly entity: SupportedWorkspaceEntity;
@@ -2254,6 +2259,157 @@ function TablePage({
   );
 }
 
+function FilePage({
+  entity,
+  structure,
+  update,
+}: {
+  readonly entity: FileWorkspaceEntity;
+  readonly structure: WorkspaceStructure;
+  readonly update: EntityUpdate;
+}) {
+  const t = useTranslations("workspace");
+  const {
+    deleteWorkspaceEntity,
+    duplicateWorkspaceEntity,
+    selectEntity,
+    setFocusMode,
+    setPinnedEntities,
+    showMessage,
+  } = useWorkspace();
+  const [fileError, setFileError] = React.useState(false);
+  const replaceInputRef = React.useRef<HTMLInputElement>(null);
+  const download = React.useCallback(() => {
+    if (!entity.previewUrl) return;
+    const link = document.createElement("a");
+    link.href = entity.previewUrl;
+    link.download = entity.fileName;
+    link.click();
+  }, [entity.fileName, entity.previewUrl]);
+
+  return (
+    <>
+      <ObjectPageHeader
+        entity={entity}
+        structure={structure}
+        menu={
+          <DocumentMoreMenu
+            onChangeType={() => showMessage(t("documentMenu.changeType"))}
+            onCustomize={() => showMessage(t("documentMenu.customizeHint"))}
+            onDelete={() => deleteWorkspaceEntity(entity.id)}
+            onDuplicate={() => duplicateWorkspaceEntity(entity.id)}
+            onEditCollections={() =>
+              showMessage(t("documentMenu.collectionsHint"))
+            }
+            onExport={download}
+            onImport={() => replaceInputRef.current?.click()}
+            onPin={() => {
+              const Icon =
+                objectTypeDefinitionById[structure.iconName]?.icon ??
+                objectTypeDefinitionById.file.icon;
+              setPinnedEntities((current) =>
+                current.some((item) => item.id === entity.id)
+                  ? current
+                  : [
+                      ...current,
+                      {
+                        id: entity.id,
+                        label: entity.title || t("objectTypeStudio.untitled"),
+                        icon: Icon,
+                        tone: structure.tone,
+                      },
+                    ],
+              );
+              showMessage(t("documentMenu.pinned"));
+            }}
+            onPresent={() => setFocusMode(true)}
+            onShare={() => {
+              void navigator.clipboard
+                ?.writeText(window.location.href)
+                .catch(() => undefined);
+              showMessage(t("documentMenu.shared"));
+            }}
+            onStats={() =>
+              showMessage(t("documentMenu.stats", { words: entity.size }))
+            }
+            onTypeSettings={() => selectEntity(entity.objectTypeId)}
+            onUseTemplate={() => duplicateWorkspaceEntity(entity.id)}
+            onCopy={() => {
+              void navigator.clipboard
+                ?.writeText(entity.fileName)
+                .catch(() => undefined);
+              showMessage(t("documentMenu.copied"));
+            }}
+          />
+        }
+      />
+      <BufferedTitle
+        label={t("fields.title")}
+        value={entity.title}
+        onCommit={(title) => update({ title })}
+      />
+      <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+        <dt className="text-muted-foreground">{t("lifecycle.file.name")}</dt>
+        <dd>{entity.fileName}</dd>
+        <dt className="text-muted-foreground">{t("lifecycle.file.type")}</dt>
+        <dd>{entity.mimeType || t("lifecycle.file.unknownType")}</dd>
+        <dt className="text-muted-foreground">{t("lifecycle.file.size")}</dt>
+        <dd>{entity.size} B</dd>
+      </dl>
+      <MediaAssetRenderer
+        className="mt-4"
+        downloadLabel={t("lifecycle.file.download")}
+        entity={entity}
+        onDownload={entity.previewUrl ? download : undefined}
+        onRemove={() =>
+          update({
+            assetId: undefined,
+            contentHash: undefined,
+            previewUrl: undefined,
+            storageState: "missing",
+          })
+        }
+        removeLabel={t("lifecycle.file.remove")}
+      />
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => replaceInputRef.current?.click()}
+        >
+          <UploadIcon className="size-4" />
+          {t("lifecycle.file.replace")}
+        </Button>
+      </div>
+      <input
+        ref={replaceInputRef}
+        type="file"
+        data-lifecycle-contract={
+          objectLifecycleContractSlots.ObjectAttachmentControl
+        }
+        className="sr-only"
+        aria-label={t("lifecycle.file.reselectAction")}
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          if (!file) return;
+          if (!acceptsFileForType(entity.objectTypeId, file.type, file.name)) {
+            setFileError(true);
+            return;
+          }
+          setFileError(false);
+          update({ file });
+          event.currentTarget.value = "";
+        }}
+      />
+      {fileError && (
+        <p role="alert" className="mt-2 text-sm text-destructive">
+          {t("lifecycle.errors.incompatible-file")}
+        </p>
+      )}
+    </>
+  );
+}
+
 function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
   const t = useTranslations("workspace");
   const { structures, updateWorkspaceEntity } = useWorkspace();
@@ -2284,7 +2440,9 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
           collapsed && "hidden",
         )}
       >
-        {entity.kind === "table" ? (
+        {entity.kind === "file" ? (
+          <FilePage entity={entity} structure={structure} update={update} />
+        ) : entity.kind === "table" ? (
           <TablePage entity={entity} structure={structure} update={update} />
         ) : (
           <DocumentPage entity={entity} structure={structure} update={update} />
@@ -2317,6 +2475,7 @@ function canRenderWorkspaceObjectPage(
 ): entity is SupportedWorkspaceEntity {
   return (
     entity?.kind === "document" ||
+    entity?.kind === "file" ||
     entity?.kind === "quote" ||
     entity?.kind === "table"
   );

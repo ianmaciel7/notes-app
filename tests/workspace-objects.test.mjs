@@ -773,7 +773,7 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
     /const importWorkspaceFiles[\s\S]*?\n {2}\);\n\n {2}const updateWorkspaceEntity/,
   )?.[0];
   assert.ok(importHandler);
-  assert.doesNotMatch(importHandler, /writeMediaAsset/);
+  assert.match(importHandler, /writeMediaAsset/);
   assert.match(content, /multiple/);
   assert.match(content, /input\.value = ""/);
   assert.match(content, /onClick=\{createObject\}/);

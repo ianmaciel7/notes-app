@@ -455,7 +455,13 @@ function CalendarEntryRow({
 
 function CreatedObjectWorkspace({ entity }: { entity: WorkspaceEntity }) {
   const t = useTranslations("workspace");
-  const { createdEntities, structures, updateWorkspaceEntity } = useWorkspace();
+  const {
+    createdEntities,
+    deleteWorkspaceEntity,
+    duplicateWorkspaceEntity,
+    structures,
+    updateWorkspaceEntity,
+  } = useWorkspace();
   const structure = structures.find((item) => item.id === entity.objectTypeId);
   if (!structure) return null;
   const definition = objectTypeDefinitionById[structure.iconName];
@@ -471,14 +477,44 @@ function CreatedObjectWorkspace({ entity }: { entity: WorkspaceEntity }) {
         <ObjectIconBadge icon={Icon} tone={definition.tone} variant="menu" />
         <span>{objectTypeLabel}</span>
       </div>
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        aria-label={t("actions.moreOptions")}
-        className="h-7 w-7 border border-border"
-      >
-        <AppSidebarDotsIcon className="size-4" />
-      </Button>
+      {entity.kind === "file" ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            type="button"
+            aria-label={t("actions.moreOptions")}
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon-sm" }),
+              "h-7 w-7 border border-border",
+            )}
+          >
+            <AppSidebarDotsIcon className="size-4" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-44">
+            <DropdownMenuItem
+              onClick={() => duplicateWorkspaceEntity(entity.id)}
+            >
+              <CopyIcon className="size-4" />
+              {t("documentMenu.duplicate")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() => deleteWorkspaceEntity(entity.id)}
+            >
+              <Trash2Icon className="size-4" />
+              {t("documentMenu.deleteObject")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label={t("actions.moreOptions")}
+          className="h-7 w-7 border border-border"
+        >
+          <AppSidebarDotsIcon className="size-4" />
+        </Button>
+      )}
     </div>
   );
 

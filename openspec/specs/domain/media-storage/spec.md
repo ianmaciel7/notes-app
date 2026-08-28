@@ -1,4 +1,9 @@
-## ADDED Requirements
+# domain/media-storage Specification
+
+## Purpose
+TBD - created by archiving change add-media-storage. Update Purpose after archive.
+
+## Requirements
 
 ### Requirement: Durable media assets
 Media objects SHALL reference stable MediaAsset records whose binary content survives application reload independently from temporary browser URLs.

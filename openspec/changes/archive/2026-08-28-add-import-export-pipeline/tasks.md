@@ -13,9 +13,9 @@
 
 ## 3. Acceptance
 
-- [ ] 3.1 Test native round trips, ambiguity, partial failures/resume, unresolved links, large jobs, and malicious archives plus browser wizard accessibility/mobile behavior.
-- [ ] 3.2 Run `pnpm verify`, focused security tests, build, and strict OpenSpec validation.
+- [x] 3.1 Test native round trips, ambiguity, partial failures/resume, unresolved links, large jobs, and malicious archives plus browser wizard accessibility/mobile behavior.
+- [x] 3.2 Run `pnpm verify`, focused security tests, build, and strict OpenSpec validation.
 
 ## 4. Completion
 
-- [ ] 4.1 Sync canonical specs and archive only after evidence is complete.
+- [x] 4.1 Sync canonical specs and archive only after evidence is complete.

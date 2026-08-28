@@ -87,6 +87,7 @@ import {
   type WorkspaceStructure,
 } from "@/lib/workspace-object-types";
 import {
+  acceptsFileForType,
   countEntitiesByType,
   createInitialWorkspaceObjectState,
   getCreationFlow,
@@ -2120,6 +2121,35 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         );
         if (importError) {
           rejected += 1;
+          continue;
+        }
+        if (flow === "file") {
+          if (!acceptsFileForType(objectTypeId, file.type, file.name)) {
+            rejected += 1;
+            continue;
+          }
+          const result = await writeMediaAsset(
+            getMediaStorageAdapter(),
+            objectTypeId,
+            { blob: file, fileName: file.name, mimeType: file.type },
+          );
+          if (!result.ok) {
+            rejected += 1;
+            continue;
+          }
+          dispatchWorkspaceObjects({
+            type: "importFile",
+            assetId: result.value.id,
+            contentHash: result.value.hash,
+            fileName: file.name,
+            mimeType: file.type,
+            objectTypeId,
+            previewUrl: getMediaUrlRegistry().create(result.value.id, file),
+            size: file.size,
+            storageState: result.value.state,
+            text,
+          });
+          accepted += 1;
           continue;
         }
         dispatchWorkspaceObjects({

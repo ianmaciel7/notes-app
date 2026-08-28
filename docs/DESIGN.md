@@ -23,6 +23,10 @@
   state evidence, not one universal desktop width. See
   `docs/references/capacities-workspace-parity.md` for the viewport and
   interaction matrix.
+- Before repeating a Capacities or external-site capture, search the reusable
+  corpus and follow `docs/references/reference-evidence-workflow.md`. Persist
+  only sanitized, state-correlated image, HTML/DOM, computed CSS, and minimal
+  JavaScript behavior evidence.
 
 - Shared floating UI such as tooltips, hover cards, popovers, menus, selects,
   comboboxes, and command items must use the centralized primitives in

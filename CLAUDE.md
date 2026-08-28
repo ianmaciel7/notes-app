@@ -15,6 +15,7 @@
   - Design
   - Tasks
 - Keep practical documentation synchronized (`CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`, `CLAUDE.md`, `.agents/rules/*`) whenever process rules change.
+- For Capacities or external-site UI comparisons, search reusable evidence before recapture and follow `docs/references/reference-evidence-workflow.md` for sanitized image, HTML/DOM, CSS, and JavaScript artifacts.
 
 ## Priority for Decisions
 
