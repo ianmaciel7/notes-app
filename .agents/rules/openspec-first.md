@@ -22,6 +22,11 @@ For any requested repository change (feature, fix, refactor, behavior change, ar
 6. Archive when complete
    - Use `openspec-archive-change` once implementation and validation are complete.
 
+## Artifact path resilience
+- Tests and tooling may inspect OpenSpec artifacts, but they must not assume a completed change still lives under `openspec/changes/<change>`.
+- When reading change artifacts by name, resolve the active path first, then fall back to the newest matching archive path under `openspec/changes/archive/*-<change>`.
+- Do not keep duplicate active artifacts just to satisfy tests after archiving; fix the lookup instead.
+
 ## OpenSpec skill trigger matrix
 - `openspec-propose`
   - Use when there is no active change for the request.

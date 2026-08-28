@@ -1,0 +1,5 @@
+- [x] 1.1 Update `.agents/rules/openspec-first.md` with the active-or-archived artifact lookup requirement.
+- [x] 1.2 Add governance test coverage that enforces the rule text.
+- [x] 2.1 Validate the OpenSpec change and canonical specs.
+- [x] 2.2 Run `pnpm verify`.
+- [x] 3.1 Sync/archive the completed OpenSpec change, then commit and push.

@@ -80,17 +80,24 @@ test("locale and governance contracts remain aligned", async () => {
     assert.ok(messages.workspace.tabs.pinnedCloseBlocked);
     assert.ok(messages.workspace.sidebarSections.sort);
   }
-  const [gitRule, graphRule, graphDocs, ci] = await Promise.all([
+  const [gitRule, graphRule, openspecRule, graphDocs, ci] = await Promise.all([
     readFile(
       new URL("../.agents/rules/git-workflow-rule.md", import.meta.url),
       "utf8",
     ),
     readFile(new URL("../.agents/rules/graphify.md", import.meta.url), "utf8"),
+    readFile(
+      new URL("../.agents/rules/openspec-first.md", import.meta.url),
+      "utf8",
+    ),
     readFile(new URL("../docs/GRAPHIFY.md", import.meta.url), "utf8"),
     readFile(new URL("../.github/workflows/ci.yml", import.meta.url), "utf8"),
   ]);
   assert.match(gitRule, /working branch -> dev -> stag -> main/);
   assert.match(graphRule, /Graph maintenance is not guaranteed by CI/);
+  assert.match(openspecRule, /openspec\/changes\/<change>/);
+  assert.match(openspecRule, /openspec\/changes\/archive\/\*-<change>/);
+  assert.match(openspecRule, /fix the lookup instead/);
   assert.match(
     graphDocs,
     /current CI workflow does not refresh Graphify automatically/,
