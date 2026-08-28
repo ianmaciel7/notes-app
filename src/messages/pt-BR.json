@@ -206,18 +206,37 @@
       "title": "Calendário"
     },
     "linking": {
+      "addRelationship": "Adicionar relação",
       "convertMention": "Converter",
+      "convertMentionFrom": "Converter menção de {title}",
       "editTransclusion": "Editar fonte incorporada",
       "embed": "Incorporar",
       "linkObject": "Vincular {title}",
       "missingTarget": "Destino ausente: {id}",
+      "mentionOptions": "Opções de menção de {title}",
+      "mentionsHelp": "Menções são ocorrências de texto ainda não vinculadas a esta página.",
       "noBacklinks": "Ainda não há links de entrada.",
       "noGraphEdges": "Ainda não há arestas no grafo contextual.",
       "noObjectsInside": "Ainda não há objetos internos.",
       "noRelatedContent": "Ainda não há conteúdo relacionado.",
+      "openMentionSource": "Abrir fonte",
       "references": "{count, plural, one {# referência} other {# referências}}",
       "title": "Links e referências",
       "unlinkedMentions": "Menções não vinculadas"
+    },
+    "editorUtilities": {
+      "characters": "Caracteres",
+      "created": "Criado",
+      "emptyOutline": "Nenhum título nesta página.",
+      "open": "Abrir ferramentas do editor",
+      "outline": "Estrutura",
+      "paragraphs": "Parágrafos",
+      "pin": "Fixar ferramentas do editor",
+      "sentences": "Frases",
+      "statistics": "Estatísticas",
+      "title": "Ferramentas do editor",
+      "unpin": "Desafixar ferramentas do editor",
+      "words": "Palavras"
     },
     "footer": {
       "accountEmail": "Este dispositivo",

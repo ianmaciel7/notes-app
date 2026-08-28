@@ -257,6 +257,18 @@ async function writeCreatedObjectTitle(page: Page, title: string) {
   await workspace.getByRole("textbox", { name: "Título" }).blur();
 }
 
+async function openLinkPicker(page: Page) {
+  const workspace = createdObjectWorkspace(page);
+  await workspace
+    .getByRole("button", { name: "Adicionar relação", exact: true })
+    .click();
+  const picker = page
+    .locator('[data-slot="workspace-link-picker"]')
+    .filter({ visible: true });
+  await expect(picker).toBeVisible();
+  return picker;
+}
+
 async function createPageCollection(page: Page, name: string) {
   await page
     .locator('[data-slot="app-sidebar-object-type-row"]')
@@ -621,11 +633,11 @@ test("graph controls preserve hover geometry and support reversible click and dr
   await writeCreatedObjectTitle(page, "Graph first");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Graph second");
-  await createdObjectWorkspace(page)
-    .locator('[data-slot="workspace-link-picker"]')
+  const graphLinkPicker = await openLinkPicker(page);
+  await graphLinkPicker
     .getByRole("button", { name: "Vincular Graph first", exact: true })
     .click();
-  await createdObjectWorkspace(page)
+  await graphLinkPicker
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
 
@@ -731,13 +743,9 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
     .poll(async () => (await persistedEntities(page)).length)
     .toBe(2);
 
-  const sourceWorkspace = createdObjectWorkspace(page);
-  const linkPicker = sourceWorkspace.locator(
-    '[data-slot="workspace-link-picker"]',
-  );
-  await expect(linkPicker).toBeVisible();
+  const linkPicker = await openLinkPicker(page);
   await linkPicker.getByRole("button", { name: /^Vincular / }).first().click();
-  await sourceWorkspace
+  await linkPicker
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
 
@@ -2097,13 +2105,12 @@ test("Page embed action persists a schema-valid paragraph embed", async ({
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Embed source");
 
-  const workspace = createdObjectWorkspace(page);
-  await workspace
-    .locator('[data-slot="workspace-link-picker"]')
+  const linkPicker = await openLinkPicker(page);
+  await linkPicker
     .getByRole("button", { name: /^Vincular / })
     .first()
     .click();
-  await workspace
+  await linkPicker
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
 
@@ -2157,7 +2164,7 @@ test("Page embed action persists a schema-valid paragraph embed", async ({
   expect(errors).toEqual([]);
 });
 
-test("Page collapse control changes to an accurate expand name", async ({
+test("Page edge control opens editor utilities without hiding content", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -2166,28 +2173,227 @@ test("Page collapse control changes to an accurate expand name", async ({
   await createPageObject(page);
   const workspace = createdObjectWorkspace(page);
   await workspace
-    .getByRole("button", { name: "Recolher editor", exact: true })
+    .getByRole("button", {
+      name: "Abrir ferramentas do editor",
+      exact: true,
+    })
     .click();
 
   await expect(
     workspace.locator('[data-slot="workspace-object-page-column"]'),
-  ).toBeHidden();
+  ).toBeVisible();
+  const utilities = page.getByRole("dialog", {
+    name: "Ferramentas do editor",
+    exact: true,
+  });
+  await expect(utilities).toBeVisible();
   await expect(
-    workspace.getByRole("button", { name: "Expandir editor", exact: true }),
+    page.getByRole("tab", { name: "Estrutura", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(
+    page.getByText("Nenhum título nesta página.", { exact: true }),
+  ).toBeVisible();
+  await page.getByRole("tab", { name: "Estatísticas", exact: true }).click();
+  await expect(page.getByText("Palavras", { exact: true })).toBeVisible();
+  await utilities
+    .getByRole("button", { name: "Fixar ferramentas do editor", exact: true })
+    .click();
+  await workspace.getByRole("textbox", { name: "Título" }).click();
+  await expect(utilities).toBeVisible();
+  await utilities
+    .getByRole("button", {
+      name: "Desafixar ferramentas do editor",
+      exact: true,
+    })
+    .click();
+  await page.keyboard.press("Escape");
+  await expect(
+    workspace.getByRole("button", {
+      name: "Abrir ferramentas do editor",
+      exact: true,
+    }),
+  ).toBeFocused();
+  expect(errors).toEqual([]);
+});
+
+test("Page editor utility remains contained on a narrow viewport", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1280, height: 844 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  const trigger = createdObjectWorkspace(page).getByRole("button", {
+    name: "Abrir ferramentas do editor",
+    exact: true,
+  });
+  await trigger.focus();
+  await trigger.press("Enter");
+
+  const utilities = page.getByRole("dialog", {
+    name: "Ferramentas do editor",
+    exact: true,
+  });
+  await expectContainedUsableSurface(
+    page,
+    utilities,
+    { width: 390, height: 844 },
+  );
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+  ).toBeLessThanOrEqual(390);
+  expect(errors).toEqual([]);
+});
+
+test("Page editor utility outline navigates to a canonical heading block", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  const workspace = createdObjectWorkspace(page);
+  const editor = workspace.getByRole("textbox", { name: "Text" });
+  await editor.click();
+  await editor.pressSequentially("/h");
+  await expect(
+    page.locator('[data-slot="block-editor-slash-menu"]'),
+  ).toBeVisible();
+  await editor.press("ArrowDown");
+  await editor.press("Enter");
+  await editor.pressSequentially("Outline heading");
+  const heading = editor.locator("h2", { hasText: "Outline heading" });
+  await expect(heading).toBeVisible();
+
+  await workspace
+    .getByRole("button", {
+      name: "Abrir ferramentas do editor",
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole("dialog", { name: "Ferramentas do editor", exact: true })
+    .getByRole("button", { name: "Outline heading", exact: true })
+    .click();
+  await expect(heading).toBeInViewport();
+  expect(errors).toEqual([]);
+});
+
+test("Page mention conversion links the exact source occurrence", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Mention target");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Mention source");
+  const sourceWorkspace = createdObjectWorkspace(page);
+  await sourceWorkspace
+    .getByRole("textbox", { name: "Text" })
+    .fill("Before Mention target after.");
+
+  await page.getByRole("tab", { name: "Mention target" }).click();
+  const mentions = createdObjectWorkspace(page).locator(
+    '[data-slot="workspace-unlinked-mentions"]',
+  );
+  await expect(mentions).toContainText("Mention source");
+  await expect(mentions).toContainText("Before Mention target after.");
+  await expect(mentions.getByText("Página", { exact: true })).toBeVisible();
+  const mentionsHeading = mentions.locator(":scope > summary");
+  await mentionsHeading.click();
+  await expect(mentions).toContainText("1");
+  await expect(mentions.getByText("Mention source", { exact: true })).toBeHidden();
+  await mentionsHeading.click();
+  await mentions
+    .locator('[data-slot="workspace-mention-disclosure"]')
+    .click();
+  await expect(
+    mentions.getByRole("button", { name: "Abrir fonte", exact: true }),
   ).toBeVisible();
   await expect(
-    workspace.getByRole("button", { name: "Expandir editor", exact: true }),
-  ).toHaveAttribute("aria-expanded", "false");
+    mentions.getByRole("button", {
+      name: "Opções de menção de Mention source",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await mentions
+    .getByRole("button", {
+      name: "Converter menção de Mention source",
+      exact: true,
+    })
+    .click();
+
+  await expect(mentions).toHaveCount(0);
   await expect(
-    workspace.getByRole("button", { name: "Expandir editor", exact: true }),
-  ).toBeFocused();
-  await page.keyboard.press("Enter");
-  await expect(
-    workspace.getByRole("textbox", { name: "Título" }),
+    createdObjectWorkspace(page).getByText("Links de entrada", { exact: true }),
   ).toBeVisible();
   await expect(
-    workspace.getByRole("button", { name: "Recolher editor", exact: true }),
-  ).toBeFocused();
+    createdObjectWorkspace(page).locator('[data-slot="workspace-reference-count"]'),
+  ).toContainText("1 referência");
+  await expect
+    .poll(async () => {
+      const source = (await persistedEntities(page)).find(
+        (entity: { title: string }) => entity.title === "Mention source",
+      );
+      return source?.body?.doc?.content
+        ?.flatMap((node: { content?: { marks?: { type: string }[] }[] }) =>
+          node.content ?? [],
+        )
+        .flatMap((node: { marks?: { type: string }[] }) => node.marks ?? [])
+        .filter((mark: { type: string }) => mark.type === "objectLink").length;
+    })
+    .toBe(1);
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect(
+    createdObjectWorkspace(page).getByText("Links de entrada", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    createdObjectWorkspace(page).locator(
+      '[data-slot="workspace-unlinked-mentions"]',
+    ),
+  ).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test("Page renders backlinks before distinct unlinked mentions", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Order target");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Mention-only source");
+  await createdObjectWorkspace(page)
+    .getByRole("textbox", { name: "Text" })
+    .fill("Order target remains plain text.");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Linked source");
+  const picker = await openLinkPicker(page);
+  await picker
+    .getByRole("button", { name: "Vincular Order target", exact: true })
+    .click();
+
+  await page.getByRole("tab", { name: "Order target" }).click();
+  const workspace = createdObjectWorkspace(page);
+  const backlinks = workspace.getByText("Links de entrada", { exact: true });
+  const mentions = workspace.locator(
+    '[data-slot="workspace-unlinked-mentions"]',
+  );
+  await expect(backlinks).toBeVisible();
+  await expect(mentions).toContainText("Mention-only source");
+  await expect(mentions).not.toContainText("Linked source");
+  const backlinksBox = await backlinks.boundingBox();
+  const mentionsBox = await mentions.boundingBox();
+  expect(backlinksBox).toBeTruthy();
+  expect(mentionsBox).toBeTruthy();
+  expect(backlinksBox?.y).toBeLessThan(mentionsBox?.y ?? 0);
   expect(errors).toEqual([]);
 });
 

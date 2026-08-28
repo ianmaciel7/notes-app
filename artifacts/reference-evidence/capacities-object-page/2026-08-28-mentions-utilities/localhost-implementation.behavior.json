@@ -1,0 +1,33 @@
+{
+  "stateId": "localhost-implementation",
+  "capturedAt": "2026-08-28T13:46:30.3530556-03:00",
+  "imagesPersisted": false,
+  "owners": [
+    "src/components/workspace-object-page-view.tsx",
+    "src/lib/workspace-object-links.ts",
+    "src/lib/editor-utilities.ts"
+  ],
+  "verifiedBehavior": {
+    "mentionDirection": "focused target scanned across eligible source documents",
+    "candidateIdentity": "source object, block id, exact range, excerpt and target id",
+    "conversion": "selected source range only; surrounding prose preserved",
+    "relationshipOrder": ["backlinks", "mentions", "objects inside"],
+    "genericAuthoring": "closed explicit Add relationship popover",
+    "mainGraphProjection": "omitted; graph remains context-owned",
+    "edgeControl": "opens editor utilities without hiding the object page",
+    "utilityTabs": ["Structure", "Statistics"],
+    "narrowViewport": "panel contained at 390x844 without horizontal document overflow"
+  },
+  "verification": {
+    "unitSuite": "218 passed",
+    "focusedDomainAndUtility": "20 passed",
+    "focusedBrowserMatrix": "10 passed: graph, contextual panel, embed, utility, narrow viewport, outline navigation, mention conversion, relationship ordering, related content and input buffering",
+    "typecheck": "passed",
+    "lint": "passed for changed owners after warning cleanup",
+    "console": "no implementation errors in focused browser cases"
+  },
+  "limitations": [
+    "No localhost screenshot is stored by design.",
+    "The full cross-browser and every-viewport suite is outside this focused evidence record."
+  ]
+}

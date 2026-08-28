@@ -206,18 +206,37 @@
       "title": "Calendar"
     },
     "linking": {
+      "addRelationship": "Add relationship",
       "convertMention": "Convert",
+      "convertMentionFrom": "Convert mention from {title}",
       "editTransclusion": "Edit embedded source",
       "embed": "Embed",
       "linkObject": "Link {title}",
       "missingTarget": "Missing target: {id}",
+      "mentionOptions": "Mention options for {title}",
+      "mentionsHelp": "Mentions are text occurrences that are not linked to this page yet.",
       "noBacklinks": "No backlinks yet.",
       "noGraphEdges": "No contextual graph edges yet.",
       "noObjectsInside": "No objects inside yet.",
       "noRelatedContent": "No related content yet.",
+      "openMentionSource": "Open source",
       "references": "{count, plural, one {# reference} other {# references}}",
       "title": "Links and references",
       "unlinkedMentions": "Unlinked mentions"
+    },
+    "editorUtilities": {
+      "characters": "Characters",
+      "created": "Created",
+      "emptyOutline": "No headings on this page.",
+      "open": "Open editor utilities",
+      "outline": "Outline",
+      "paragraphs": "Paragraphs",
+      "pin": "Pin editor utilities",
+      "sentences": "Sentences",
+      "statistics": "Statistics",
+      "title": "Editor utilities",
+      "unpin": "Unpin editor utilities",
+      "words": "Words"
     },
     "footer": {
       "accountEmail": "This device",

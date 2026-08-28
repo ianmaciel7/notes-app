@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "capacities",
+    "url": "https://app.capacities.io/[space]/[object]",
+    "routeFingerprintSha256": "fb3afc9f2f1cad9b513be79710ff8cc86bf075fef5a50ce363c0002e60887f8d",
+    "productSurface": "object-page"
+  },
+  "capturedAt": "2026-08-28T13:46:30.3530556-03:00",
+  "viewport": {
+    "width": 531,
+    "height": 867,
+    "deviceScaleFactor": 1,
+    "scope": "sanitized reference crop"
+  },
+  "surface": {
+    "route": "redacted-authenticated-object-route",
+    "component": "object-header-mentions-and-editor-utilities"
+  },
+  "semanticState": "generic page title and source label; Mentions expanded with one unlinked occurrence; editor utility panel separately exercised",
+  "persistedState": {
+    "mentions": "expanded",
+    "editorUtilityPanel": "unpinned after verification",
+    "contextualPanel": "not visible in the sanitized crop"
+  },
+  "interactions": [
+    "object-type disclosure",
+    "collections menu",
+    "customize menu",
+    "object overflow menu",
+    "reversible editor text entry",
+    "mentions collapse and expand",
+    "mention source overflow",
+    "editor utility open",
+    "Structure and Statistics tabs",
+    "pin and unpin",
+    "outside dismissal"
+  ],
+  "artifacts": [
+    {
+      "stateId": "mentions-idle-expanded",
+      "kind": "image",
+      "path": "reference-mentions-idle.svg"
+    },
+    {
+      "stateId": "object-page-structure",
+      "kind": "dom",
+      "path": "reference-object-page.dom.json"
+    },
+    {
+      "stateId": "mentions-and-editor-utilities",
+      "kind": "javascript-observation",
+      "path": "interactions.behavior.json"
+    },
+    {
+      "stateId": "localhost-implementation",
+      "kind": "javascript-observation",
+      "path": "localhost-implementation.behavior.json"
+    },
+    {
+      "stateId": "all-safe-actions",
+      "kind": "action-matrix",
+      "path": "action-matrix.md"
+    }
+  ],
+  "provenance": "authenticated live browser read-only inspection plus a user-supplied sanitized Capacities-only crop",
+  "confidence": "confirmed",
+  "redactions": [
+    "workspace identifier",
+    "object identifier",
+    "account identity",
+    "browser chrome",
+    "unrelated authenticated content"
+  ],
+  "freshness": "valid for the recorded object-page state on 2026-08-28",
+  "limitations": [
+    "the crop records content geometry only and does not establish the full browser viewport",
+    "the Structure and Statistics states are behavior records without a persisted screenshot",
+    "no destructive, share, export, delete, or remote mutation command was committed",
+    "localhost screenshots are intentionally absent"
+  ],
+  "refreshReason": "Object-page Mentions and the edge-triggered Structure/Statistics utility were not covered by the Pages-listing bundle."
+}

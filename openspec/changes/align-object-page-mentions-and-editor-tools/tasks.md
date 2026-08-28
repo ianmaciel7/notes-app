@@ -1,0 +1,33 @@
+## 1. Lock the Evidence and Failing Contracts
+
+- [x] 1.1 Create a reusable sanitized Capacities-only evidence bundle for the object header, Mentions states, and Structure/Statistics utility states; record the matched route, viewport, contextual-panel state, DOM/accessibility, geometry, behavior, console limitations, redactions, and action matrix in its manifest, update the source reference index, and verify the repository evidence checks pass without persisting localhost screenshots or authenticated secrets.
+- [x] 1.2 Replace the inverse unlinked-mention unit fixture with failing-first target-oriented fixtures covering title and alias matches, case/diacritic normalization, word boundaries, multiple source objects and occurrences, exact source block/range identity, duplicates, self/unsupported exclusions, existing backlinks, property relations, rename refresh, offline derivation, and explicit conversion; verify the new tests fail for the current source-to-target direction before implementation.
+- [x] 1.3 Add failing-first component/browser fixtures for the reference object-page composition, including backlinks-before-Mentions ordering, truthful counts, source title/type/excerpt, section collapse, separate open/overflow/convert actions, absence of the generic entity suggestion panel, editor visibility, utility tabs, pinning, outside/Escape close, focus recovery, constrained layout, reduced motion, and clean console; verify failures identify the current generic panel and full-editor collapse behavior.
+
+## 2. Correct the Unlinked-Mention Projection
+
+- [x] 2.1 Refactor unlinked-mention discovery around the focused target identity and scan eligible source documents for normalized title/alias occurrences with stable source block/range identity and bounded excerpts; verify the direction, normalization, deduplication, and negative inverse fixtures pass.
+- [x] 2.2 Exclude exact occurrences already represented by canonical source-to-target references while keeping backlinks, property relations, embeds, and separate unlinked ranges distinct; verify exclusion and multiple-occurrence tests pass without duplicate counts or graph edges.
+- [x] 2.3 Implement explicit conversion of the selected source occurrence into one stable canonical reference while preserving surrounding prose and refreshing Mentions, backlinks, counts, and contextual graph exactly once; verify conversion, rename, reorder, reload, and missing/stale-range tests pass.
+- [x] 2.4 Keep mention derivation local and outside the keystroke-critical persistence path by reusing canonical indexes or bounded memoization at accepted document boundaries; verify offline tests pass and the existing input-performance regression threshold does not worsen.
+
+## 3. Align Object-Page Relationship Review
+
+- [x] 3.1 Separate passive relationship projections from explicit link/embed authoring so the main object page renders applicable backlinks and Mentions instead of an always-expanded list of every linkable entity, graph edge, transclusion, and unrelated candidate; verify an empty object has no fabricated relationship rows and authoring commands remain available through their explicit owners.
+- [x] 3.2 Build the localized Mentions section with heading, derived count, help affordance, keyboard/pointer collapse, session recovery, and source rows containing title, type identity, read-only matched excerpt, disclosure, open, overflow, and explicit conversion targets; verify primary and nested actions do not trigger each other or mutate prose merely by opening.
+- [x] 3.3 Render backlinks before Mentions, move a converted occurrence between sections without duplication, and preserve separate property-relation and related-content ownership; verify counts, ordering, contextual graph, navigation, and post-conversion focus in component and browser tests.
+- [x] 3.4 Align source-row hover, focus-visible, compact geometry, icon registry usage, semantic tokens, popup variants, and localized English/Spanish/Portuguese (Brazil) copy while retaining stronger accessible roles/names than the reference DOM; verify accessibility, keyboard, localization, reduced-motion, and source-guard checks pass.
+
+## 4. Replace Full-Editor Collapse with Editor Utilities
+
+- [x] 4.1 Add pure selectors for a stable heading outline and local word, sentence, paragraph, and character statistics over the accepted block document plus canonical created/updated timestamps; verify heading hierarchy, empty outline, punctuation, Unicode, empty document, and timestamp unit tests pass.
+- [x] 4.2 Implement the shared compact Structure/Statistics utility panel with accessible tabs, selected state, pin/unpin, outside-click and Escape dismissal, focus recovery, and no entity mutation; verify the panel remains open only when pinned and the editor stays visible and editable in every transition.
+- [x] 4.3 Reassign the reference edge minus trigger from full-object collapse to the utility panel, remove the contradicted collapse/expand contract and tests, and keep any future full-editor collapse behind a separately named and evidenced control; verify the object header, properties, body, relationships, selection, and pending valid edits never disappear when the utility trigger is used.
+- [x] 4.4 Add outline navigation and live accepted-document statistic refresh without keystroke-time persistence work, then align desktop placement and narrow overlay/compact containment; verify block focus/scroll, buffered typing and undo, no horizontal overflow, contextual-panel coexistence, and mobile keyboard operation.
+
+## 5. Verify, Document, and Hand Off
+
+- [x] 5.1 Run focused domain, component, editor, localization, accessibility, keyboard, offline, persistence, input-performance, and source-contract tests for every changed owner; verify all pass and record unrelated dirty-worktree or baseline failures separately.
+- [x] 5.2 Run the desktop, constrained-width, mobile, reduced-motion, reload/reopen, and console-clean browser matrix against deterministic local fixtures; verify every reference action has a passing result or an explicit evidence-backed limitation.
+- [x] 5.3 Inspect every saved Capacities crop, refresh the bundle's structured localhost DOM/geometry/behavior evidence after implementation, update `docs/references/capacities-workspace-parity.md`, and verify no localhost image, secret, unrelated authenticated content, placeholder, or stale verdict is committed.
+- [x] 5.4 Run `openspec validate align-object-page-mentions-and-editor-tools --strict` plus the repository documentation and evidence validation commands; verify proposal, three delta specs, design, tasks, baseline, manifest, and source index remain coherent before apply completion is reported.

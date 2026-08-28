@@ -1,7 +1,7 @@
-import {
-  type BlockEditorMark,
-  type BlockEditorNode,
-  blockEditorDocumentToPlainText,
+import type {
+  BlockEditorDocument,
+  BlockEditorMark,
+  BlockEditorNode,
 } from "../editor/document.ts";
 import type { WorkspaceEntity } from "./workspace-objects.ts";
 
@@ -38,8 +38,11 @@ type WorkspaceObjectLinkIndex = {
 
 type UnlinkedMentionCandidate = {
   blockId?: string;
+  end: number;
+  excerpt: string;
   label: string;
   sourceId: string;
+  start: number;
   targetId: string;
 };
 
@@ -304,35 +307,183 @@ function normalizeMentionText(value: string) {
     .toLocaleLowerCase();
 }
 
+function mentionNodeText(node: BlockEditorNode): string {
+  if (node.type === "text") return node.text ?? "";
+  return (node.content ?? []).map(mentionNodeText).join("");
+}
+
+const mentionWordCharacter = /[\p{L}\p{N}_]/u;
+
+function findMentionStart(text: string, label: string, fromIndex = 0): number {
+  let start = text.indexOf(label, fromIndex);
+  while (start >= 0) {
+    const end = start + label.length;
+    const startsWithWord = mentionWordCharacter.test(label[0] ?? "");
+    const endsWithWord = mentionWordCharacter.test(label.at(-1) ?? "");
+    const beforeIsWord = mentionWordCharacter.test(text[start - 1] ?? "");
+    const afterIsWord = mentionWordCharacter.test(text[end] ?? "");
+    if ((!startsWithWord || !beforeIsWord) && (!endsWithWord || !afterIsWord)) {
+      return start;
+    }
+    start = text.indexOf(label, start + Math.max(label.length, 1));
+  }
+  return -1;
+}
+
+type MentionRange = { end: number; start: number };
+
+function collectLinkedMentionRanges(
+  node: BlockEditorNode,
+  targetId: string,
+  offset: { value: number },
+  ranges: MentionRange[],
+) {
+  if (node.type === "text") {
+    const start = offset.value;
+    const end = start + (node.text?.length ?? 0);
+    const linksToTarget = (node.marks ?? []).some(
+      (mark) => referenceFromMark("", undefined, mark)?.targetId === targetId,
+    );
+    if (linksToTarget) ranges.push({ end, start });
+    offset.value = end;
+    return;
+  }
+  for (const child of node.content ?? []) {
+    collectLinkedMentionRanges(child, targetId, offset, ranges);
+  }
+}
+
 function findUnlinkedMentionCandidates(
   entities: readonly WorkspaceEntity[],
-  sourceId: string,
+  targetId: string,
 ): UnlinkedMentionCandidate[] {
-  const source = entities.find((entity) => entity.id === sourceId);
-  if (!source || !isDocumentLikeEntity(source)) return [];
-  const forwardTargets = new Set(
-    selectForwardContentReferences([source]).map(
-      (reference) => reference.targetId,
-    ),
-  );
-  const plainText = normalizeMentionText(
-    blockEditorDocumentToPlainText(source.body),
-  );
+  const target = entities.find((entity) => entity.id === targetId);
+  if (!target) return [];
+  const labels = [
+    target.title,
+    ...("aliases" in target ? (target.aliases ?? []) : []),
+  ]
+    .map((label) => label.trim())
+    .filter(Boolean);
+  if (labels.length === 0) return [];
   const candidates: UnlinkedMentionCandidate[] = [];
-  for (const target of entities) {
-    if (target.id === sourceId || forwardTargets.has(target.id)) continue;
-    const labels = [
-      target.title,
-      ...("aliases" in target ? (target.aliases ?? []) : []),
-    ]
-      .map((label) => label.trim())
-      .filter(Boolean);
-    const label = labels.find((item) =>
-      plainText.includes(normalizeMentionText(item)),
-    );
-    if (label) candidates.push({ label, sourceId, targetId: target.id });
+  const seenRanges = new Set<string>();
+  for (const source of entities) {
+    if (source.id === targetId || !isDocumentLikeEntity(source)) continue;
+    for (const block of source.body.doc.content) {
+      const excerpt = mentionNodeText(block);
+      const normalizedExcerpt = normalizeMentionText(excerpt);
+      const linkedRanges: MentionRange[] = [];
+      collectLinkedMentionRanges(
+        block,
+        targetId,
+        { value: 0 },
+        linkedRanges,
+      );
+      for (const candidateLabel of labels) {
+        const normalizedLabel = normalizeMentionText(candidateLabel);
+        let candidateStart = findMentionStart(normalizedExcerpt, normalizedLabel);
+        while (candidateStart >= 0) {
+          const candidateEnd = candidateStart + normalizedLabel.length;
+          const overlapsLinkedRange = linkedRanges.some(
+            (range) => candidateStart < range.end && candidateEnd > range.start,
+          );
+          const rangeKey = `${source.id}\u001f${getBlockId(block) ?? ""}\u001f${candidateStart}\u001f${candidateEnd}`;
+          if (!overlapsLinkedRange && !seenRanges.has(rangeKey)) {
+            seenRanges.add(rangeKey);
+            candidates.push({
+              blockId: getBlockId(block),
+              end: candidateEnd,
+              excerpt,
+              label: candidateLabel,
+              sourceId: source.id,
+              start: candidateStart,
+              targetId,
+            });
+          }
+          candidateStart = findMentionStart(
+            normalizedExcerpt,
+            normalizedLabel,
+            candidateEnd,
+          );
+        }
+      }
+    }
   }
   return candidates;
+}
+
+function convertMentionNode(
+  node: BlockEditorNode,
+  candidate: UnlinkedMentionCandidate,
+  offset: { value: number },
+): BlockEditorNode[] {
+  if (node.type === "text") {
+    const text = node.text ?? "";
+    const nodeStart = offset.value;
+    const nodeEnd = nodeStart + text.length;
+    offset.value = nodeEnd;
+    const matchStart = Math.max(candidate.start, nodeStart);
+    const matchEnd = Math.min(candidate.end, nodeEnd);
+    if (matchStart >= matchEnd) return [node];
+    const localStart = matchStart - nodeStart;
+    const localEnd = matchEnd - nodeStart;
+    const parts: BlockEditorNode[] = [];
+    if (localStart > 0) {
+      parts.push({ ...node, text: text.slice(0, localStart) });
+    }
+    parts.push({
+      ...node,
+      marks: [
+        ...(node.marks ?? []),
+        createObjectReferenceMark(candidate.targetId),
+      ],
+      text: text.slice(localStart, localEnd),
+    });
+    if (localEnd < text.length) {
+      parts.push({ ...node, text: text.slice(localEnd) });
+    }
+    return parts;
+  }
+  if (!node.content) return [node];
+  return [
+    {
+      ...node,
+      content: node.content.flatMap((child) =>
+        convertMentionNode(child, candidate, offset),
+      ),
+    },
+  ];
+}
+
+function convertUnlinkedMentionCandidate(
+  document: BlockEditorDocument,
+  candidate: UnlinkedMentionCandidate | undefined,
+): BlockEditorDocument | null {
+  if (!candidate?.blockId) return null;
+  const blockIndex = document.doc.content.findIndex(
+    (block) => getBlockId(block) === candidate.blockId,
+  );
+  if (blockIndex < 0) return null;
+  const block = document.doc.content[blockIndex];
+  const text = mentionNodeText(block);
+  const selected = text.slice(candidate.start, candidate.end);
+  if (
+    text !== candidate.excerpt ||
+    normalizeMentionText(selected) !== normalizeMentionText(candidate.label)
+  ) {
+    return null;
+  }
+  const converted = convertMentionNode(block, candidate, { value: 0 })[0];
+  return {
+    ...document,
+    doc: {
+      ...document.doc,
+      content: document.doc.content.map((item, index) =>
+        index === blockIndex ? converted : item,
+      ),
+    },
+  };
 }
 
 function wouldCreateReferenceCycle(
@@ -387,6 +538,7 @@ export type {
   WorkspaceRelatedEntityRule,
 };
 export {
+  convertUnlinkedMentionCandidate,
   createBlockReferenceMark,
   createObjectEmbedNode,
   createObjectReferenceMark,

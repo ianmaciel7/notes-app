@@ -1,0 +1,37 @@
+{
+  "stateId": "mentions-and-editor-utilities",
+  "source": "Capacities",
+  "console": {
+    "implementationErrorsObserved": false,
+    "limitations": "Authenticated application background requests were not persisted."
+  },
+  "mentions": {
+    "headingActivatesCollapse": true,
+    "collapsedStateRecoverable": true,
+    "sourceDisclosureSeparateFromOpen": true,
+    "sourceOverflowSeparateFromOpen": true,
+    "openingControlsMutatesProse": false
+  },
+  "editorUtilities": {
+    "triggerGlyph": "minus",
+    "hidesObjectPage": false,
+    "tabs": ["Estrutura", "Estatísticas"],
+    "defaultTab": "Estrutura",
+    "pinControlPresent": true,
+    "unpinnedOutsideClickCloses": true,
+    "statisticsFields": [
+      "words",
+      "sentences",
+      "paragraphs",
+      "characters",
+      "created",
+      "updated"
+    ]
+  },
+  "reversibleMutationCheck": {
+    "marker": "parity-audit",
+    "typed": true,
+    "fullyRemoved": true,
+    "persistedInEvidence": false
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "stateId": "object-page-structure",
+  "sanitized": true,
+  "crop": { "width": 531, "height": 867 },
+  "header": [
+    { "control": "object type", "label": "Página", "hasDisclosure": true },
+    { "control": "collections", "label": "Coleções" },
+    { "control": "customize", "label": "Personalizar", "hasDisclosure": true },
+    { "control": "overflow", "label": "more options" }
+  ],
+  "content": {
+    "title": "aaa",
+    "propertyLabel": "Etiquetas",
+    "bodyText": "Text"
+  },
+  "mentions": {
+    "heading": "Menções",
+    "count": 1,
+    "expanded": true,
+    "sourceTitle": "-digitacao-abcdefghijklmnopqrstuvwxyz",
+    "excerpt": "aaa /",
+    "typeLabel": "Página",
+    "separateTargets": ["disclosure", "open source", "overflow"]
+  },
+  "geometry": {
+    "measurement": "sanitized raster crop",
+    "width": 531,
+    "height": 867,
+    "notes": "No localhost geometry is stored in this Capacities-only image bundle."
+  }
+}
