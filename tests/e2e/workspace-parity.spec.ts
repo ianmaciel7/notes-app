@@ -3017,8 +3017,18 @@ test("every supported New family persists once and reopens from its tab projecti
       });
     }
 
+    const specializedWorkspaceIds = [
+      "task",
+      "weblink",
+      "tweet",
+      "tag",
+      "query",
+    ] as readonly string[];
+    const workspaceSlot = specializedWorkspaceIds.includes(family.id)
+      ? "created-object-workspace"
+      : "workspace-object-page-view";
     const workspace = page
-      .locator('[data-slot="workspace-object-page-view"]')
+      .locator(`[data-slot="${workspaceSlot}"]`)
       .filter({ visible: true });
     await expect(workspace).toBeVisible();
     const objectTypeId =

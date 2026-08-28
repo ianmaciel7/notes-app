@@ -1,0 +1,48 @@
+[0828/084004.267:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/084004.268:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/084149.615:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/084149.617:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/085430.141:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/085430.143:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/091156.412:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/091156.413:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/091816.653:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/091816.654:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/091817.339:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/091817.339:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/092312.994:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/092312.996:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/092341.824:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/092341.826:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/092342.948:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/092342.949:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/093037.126:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/093037.126:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/093321.292:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/093321.294:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/094210.299:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/094210.301:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/094211.093:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/094211.094:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/094339.378:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/094339.379:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/094636.425:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/094636.427:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/094657.958:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/094657.960:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/094658.814:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/094658.814:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/112729.991:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/112729.992:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/113017.764:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113017.766:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113503.301:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113503.304:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113503.946:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113503.946:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113832.521:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113832.522:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113856.879:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113856.880:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113857.713:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/113857.714:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
