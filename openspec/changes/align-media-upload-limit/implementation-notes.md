@@ -3,50 +3,90 @@
 ## Baseline
 
 - Repository: `ianmaciel7/notes-app`
-- Base branch: `dev`
-- Base commit: `3161872c0b4056f60021f900bbca42215dcc8cb1`
+- Target branch: `dev`
+- Baseline commit: `3161872c0b4056f60021f900bbca42215dcc8cb1`
+- Test-first commit: `71bfbc8c71a302605ee20e3781774c0a5418b1f2`
+- Implementation commit: `eb042dc0fb2cff6ef65170a147425b60942966a3`
 - Selected change: `align-media-upload-limit`
+- Reference policy: accept files up to and including 100,000,000 bytes; reject 100,000,001 bytes before hashing or durable storage.
 
-## Implementation
+## Implemented Domain Behavior
 
-- Added `MAX_MEDIA_FILE_BYTES = 100_000_000` as the single decimal product-policy limit.
-- Kept `DEFAULT_MAX_MEDIA_BYTES` as a backward-compatible alias to the product-policy constant, not a second numeric source.
-- Added `resolveMediaFileSizeLimit()` so an injected lower operational limit wins while a higher value cannot raise the product policy.
-- Added the distinct `file-size-limit-exceeded` error code and structured `actualBytes`, `limitBytes`, and `limitSource` metadata.
-- Kept browser `QuotaExceededError` mapped to `quota-exceeded`, distinct from file-size policy failures.
-- Moved size rejection before hashing and durable adapter writes.
-- Preserved read behavior: existing assets are read by storage key without reapplying the current ingestion limit.
-- Confirmed the three implemented workspace media ingestion call sites use `writeMediaAsset`; a source-contract test protects this shared owner and rejects reintroduction of the old 50 MiB constant in the controller.
+- Added the canonical `MAX_MEDIA_FILE_BYTES = 100_000_000` product policy.
+- Retained `DEFAULT_MAX_MEDIA_BYTES` as a compatibility alias to the canonical constant, without a second numeric limit.
+- Added `resolveMediaFileSizeLimit()` so an operational limit can lower, but never raise, the product maximum.
+- Added the distinct `file-size-limit-exceeded` error code with `actualBytes`, `limitBytes`, and `limitSource` metadata.
+- Kept browser storage exhaustion under the existing `quota-exceeded` code.
+- Enforced file-size rejection before hashing or durable writes.
+- Kept media reads independent from the current ingestion limit, so existing assets above the former 50 MiB default remain readable.
+- Confirmed the current draft commit, bulk import, and existing-entity update paths use `writeMediaAsset()` and therefore share the same policy.
+- Monthly upload and total-storage plan quotas remain out of scope because Notes App has no corresponding subscription/quota capability.
 
 ## TDD Evidence
 
-Red command:
+The boundary and error-semantics tests were executed against the original implementation first.
 
 ```text
 node --experimental-strip-types --test tests/workspace-media-storage.test.mjs
+tests: 9
+passed: 6
+failed: 3
 ```
 
-Against the pre-change source, the new boundary suite produced three expected failures:
+The red failures demonstrated the missing behavior:
 
-1. the default constant was `52,428,800`, not `100,000,000`;
-2. a 100,000,001-byte file returned `quota-exceeded` instead of a file-policy error;
-3. a lower operational limit also returned `quota-exceeded` instead of an operational-limit error.
+- the exported default was 52,428,800 bytes instead of 100,000,000 bytes;
+- a 100,000,001-byte file returned `quota-exceeded` instead of a file-policy error;
+- lower operational and product-policy limits were not represented separately.
 
-Green command after implementation:
+After implementation, the focused suite was rerun:
 
 ```text
 node --experimental-strip-types --test tests/workspace-media-storage.test.mjs
+tests: 12
+passed: 12
+failed: 0
 ```
 
-Result before publication: `12` tests passed, `0` failed.
+Focused strict TypeScript verification also passed:
 
-## Scope Boundary
+```text
+tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --lib ES2022,DOM src/lib/workspace-media-storage.ts
+exit: 0
+```
 
-- Monthly upload allowance and total account storage remain out of scope because Notes App does not yet expose an equivalent subscription/quota capability.
-- No binary format, media identity, or existing stored asset was migrated.
-- Current UI consumers retain their localized generic storage failure copy; the domain result now carries enough typed data for a later UI to show exact product-policy or lower operational-limit details without parsing English text.
+## Published GitHub Actions Result
 
-## Remaining Acceptance
+GitHub Actions workflow `CI`, run `33325730099`, executed for implementation commit `eb042dc0fb2cff6ef65170a147425b60942966a3`.
 
-- GitHub Actions must run the repository `pnpm verify` pipeline for the published commit.
-- The OpenSpec CLI is not installed in the execution environment used for this implementation, so strict OpenSpec validation remains required before archive.
+Completed stages before the blocker:
+
+```text
+format:check: passed
+Biome check/lint: passed, 143 files checked, no fixes applied
+```
+
+The workflow then failed at the repository complexity gate because of two findings already present outside this change:
+
+```text
+src/components/workspace-object-page-view.tsx:2570
+WorkspaceObjectPageView complexity 13; configured maximum 12
+
+src/lib/workspace-object-links.ts:356
+findUnlinkedMentionCandidates complexity 14; configured maximum 12
+```
+
+Because the complexity command exited nonzero, that CI run did not reach type generation, repository-wide typecheck, coverage tests, or production build. This change therefore does not claim repository-wide verification success.
+
+## Environment Boundary
+
+A full local checkout could not be created in this execution environment because outbound DNS resolution for `github.com` failed. The focused fixture used the exact `dev` versions of the changed media module, its test file, and the current workspace-controller ingestion call sites.
+
+The OpenSpec CLI was not available in this execution environment, so strict OpenSpec validation was not claimed.
+
+## Remaining Acceptance Work
+
+- Verify or implement direct creation, file-picker, drag/drop, clipboard, import, retry, and resume ingestion surfaces beyond the three current `writeMediaAsset()` call sites, or record unsupported surfaces explicitly as not applicable.
+- Map the typed media error to localized UI copy so product-policy and lower operational-limit failures are reported truthfully instead of using the generic media-storage message.
+- Clear or formally baseline the unrelated complexity gate, then run the remaining repository CI stages.
+- Run `openspec validate align-media-upload-limit --strict` before archiving the change.

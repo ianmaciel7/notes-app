@@ -1,6 +1,6 @@
 # Capacities parity OpenSpec roadmap
 
-Planning snapshot: 2026-08-30. Repository baseline: `dev` at `e2b7d4fb01d46026df9459134d37e1095559bd6c`.
+Planning snapshot: 2026-08-30. Repository baseline: `dev` at `eb042dc0fb2cff6ef65170a147425b60942966a3`.
 
 This roadmap is a clean-room Notes App plan grounded in current official Capacities documentation, sanitized authenticated evidence, the project WACZ/JSONL reference corpus, and current local code/specs. It describes observable behavior and does not claim access to Capacities' private implementation.
 
@@ -52,6 +52,10 @@ These entries describe completed first slices, not full Capacities parity.
 ### P0 `reconcile-keyboard-command-system-acceptance`
 
 Reconcile the archived keyboard-command task status, `241/243` test record, blocked repository verification, stale evidence manifest/limitations, and obsolete change references before the delivery is treated as fully accepted.
+
+### P1 `align-media-upload-limit` — core domain implementation published; change remains active
+
+Commit `eb042dc0fb2cff6ef65170a147425b60942966a3` introduced one decimal 100,000,000-byte product limit, lower operational-limit support, distinct file-policy versus browser-quota errors, pre-hash rejection, compatibility for existing reads, and focused TDD coverage. The active OpenSpec remains unarchived because localized UI reporting, remaining ingestion-surface evidence, strict OpenSpec validation, and the repository-wide CI stages are still open. GitHub Actions run `33325730099` passed formatting and Biome checks, then stopped at unrelated pre-existing complexity findings before typecheck, coverage, and build.
 
 ## Active work to finish before broad parity claims
 
@@ -120,12 +124,6 @@ Add raw/display separation and number, percent, currency, and progress presentat
 ### P3 `add-table-formulas`
 
 Depends on `add-table-block-editor` and `add-number-formatting`. Add a bounded formula language, stable references, dependencies, errors, recalculation, and the documented initial function catalog.
-
-## Media
-
-### P1 `align-media-upload-limit`
-
-Replace the current 50 MiB default with an explicit 100,000,000-byte product policy shared by all ingestion paths. Monthly and total plan quotas remain out of scope until a separate account/quota capability exists.
 
 ## Existing P10 platform changes
 
