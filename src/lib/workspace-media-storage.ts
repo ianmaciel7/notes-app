@@ -27,14 +27,20 @@ type MediaWriteProgress = {
   readonly total: number;
 };
 
+type MediaSizeLimitSource = "operational-limit" | "product-policy";
+
 type MediaStorageErrorCode =
   | "aborted"
+  | "file-size-limit-exceeded"
   | "invalid-media-type"
   | "missing-blob"
   | "quota-exceeded";
 
 type MediaStorageError = {
+  readonly actualBytes?: number;
   readonly code: MediaStorageErrorCode;
+  readonly limitBytes?: number;
+  readonly limitSource?: MediaSizeLimitSource;
   readonly message: string;
 };
 
@@ -77,7 +83,8 @@ type MediaUrlRegistry = {
 const MEDIA_BLOB_DB_NAME = "notes-app-media-assets";
 const MEDIA_BLOB_STORE = "blobs";
 const MEDIA_STORAGE_KEY_PREFIX = "media:";
-const DEFAULT_MAX_MEDIA_BYTES = 50 * 1024 * 1024;
+const MAX_MEDIA_FILE_BYTES = 100_000_000;
+const DEFAULT_MAX_MEDIA_BYTES = MAX_MEDIA_FILE_BYTES;
 
 function ok<T>(value: T): MediaStorageResult<T> {
   return { ok: true, value };
@@ -86,8 +93,52 @@ function ok<T>(value: T): MediaStorageResult<T> {
 function failure(
   code: MediaStorageErrorCode,
   message: string,
+  details: Pick<
+    MediaStorageError,
+    "actualBytes" | "limitBytes" | "limitSource"
+  > = {},
 ): MediaStorageResult<never> {
-  return { error: { code, message }, ok: false };
+  return { error: { code, message, ...details }, ok: false };
+}
+
+type MediaFileSizeLimit = {
+  readonly maxBytes: number;
+  readonly source: MediaSizeLimitSource;
+};
+
+function resolveMediaFileSizeLimit(
+  operationalMaxBytes?: number,
+): MediaFileSizeLimit {
+  if (
+    operationalMaxBytes !== undefined &&
+    (!Number.isSafeInteger(operationalMaxBytes) || operationalMaxBytes <= 0)
+  ) {
+    throw new TypeError(
+      "Media maxBytes must be a positive safe integer when provided.",
+    );
+  }
+  if (
+    operationalMaxBytes !== undefined &&
+    operationalMaxBytes < MAX_MEDIA_FILE_BYTES
+  ) {
+    return { maxBytes: operationalMaxBytes, source: "operational-limit" };
+  }
+  return { maxBytes: MAX_MEDIA_FILE_BYTES, source: "product-policy" };
+}
+
+function fileSizeLimitFailure(
+  policy: MediaFileSizeLimit,
+  actualBytes: number,
+): MediaStorageResult<never> {
+  const message =
+    policy.source === "operational-limit"
+      ? `File exceeds the configured Notes App media limit of ${policy.maxBytes} bytes.`
+      : "File exceeds the 100 MB product limit.";
+  return failure("file-size-limit-exceeded", message, {
+    actualBytes,
+    limitBytes: policy.maxBytes,
+    limitSource: policy.source,
+  });
 }
 
 function classifyMediaFamily(
@@ -131,9 +182,9 @@ async function writeMediaAsset(
   if (!classifyMediaFamily(objectTypeId, input.mimeType)) {
     return failure("invalid-media-type", "File type is not compatible with this media object.");
   }
-  const maxBytes = options.maxBytes ?? DEFAULT_MAX_MEDIA_BYTES;
-  if (input.blob.size > maxBytes) {
-    return failure("quota-exceeded", "File exceeds the local media storage limit.");
+  const sizePolicy = resolveMediaFileSizeLimit(options.maxBytes);
+  if (input.blob.size > sizePolicy.maxBytes) {
+    return fileSizeLimitFailure(sizePolicy, input.blob.size);
   }
   if (options.signal?.aborted) {
     return failure("aborted", "Media write was cancelled.");
@@ -294,12 +345,14 @@ function createBrowserMediaStorageAdapter(): MediaStorageAdapter {
 
 export {
   DEFAULT_MAX_MEDIA_BYTES,
+  MAX_MEDIA_FILE_BYTES,
   createBrowserMediaStorageAdapter,
   createMediaUrlRegistry,
   createMemoryMediaStorageAdapter,
   garbageCollectMediaAssets,
   hashBlob,
   readMediaAssetBlob,
+  resolveMediaFileSizeLimit,
   writeMediaAsset,
 };
 
@@ -309,6 +362,8 @@ export type {
   MediaAssetId,
   MediaAssetReference,
   MediaAssetState,
+  MediaFileSizeLimit,
+  MediaSizeLimitSource,
   MediaStorageAdapter,
   MediaStorageError,
   MediaStorageResult,
