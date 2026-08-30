@@ -1,32 +1,41 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Tech stack: Next.js 16, React 19, TypeScript, Tailwind CSS v4, shadcn/Base UI, next-intl, Tiptap, IndexedDB, Node test runner, and Playwright.
+  Product model: local-first object-based notes application with runtime Structures, typed properties, stable block/object identity, Spaces, queries, views, media, tasks, calendar, import/export, and incremental sync.
+  Parity method: clean-room comparison against current official Capacities documentation and sanitized project reference evidence. Observable behavior may be reproduced; private implementation details remain UNKNOWN.
+  Canonical reference files: capacities-urls.txt.txt, reference-urls.json, capacities-wacz-completeness-audit(1).json, capacities-wacz-complete-source(1).jsonl, my-archiving-session (1)(1).wacz, and my-archiving-session(2).wacz.
+  Naming: change IDs, branches, files, and stable command/capability identifiers use lowercase kebab-case unless an existing public API requires otherwise.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+rules:
+  proposal:
+    - State why the change is required by current repository evidence, current official documentation, or an intentional Notes App decision.
+    - List new and modified capabilities explicitly.
+    - Include dependencies, migration impact, and non-goals when the scope could overlap another active change.
+    - Never claim private Capacities algorithms, protocols, prompts, storage schemas, or implementation details without independent public evidence.
+  design:
+    - Separate source-derived behavior, local behavior, inference, intentional divergence, and UNKNOWN details.
+    - Reuse canonical domain/application owners instead of creating parallel stores, indexes, object registries, event buses, or mutation paths.
+    - Cover data model, lifecycle, errors, migration/rollback, offline/sync, security/privacy, accessibility, localization, performance, and testing when relevant.
+    - Preserve archived OpenSpec changes as immutable history; corrections use a new follow-up change.
+  specs:
+    - Use observable SHALL requirements and concrete WHEN/THEN scenarios.
+    - Define exact boundary behavior for limits, dates, identity, idempotency, unavailable states, and destructive actions.
+    - Do not encode a documentation example as a private implementation requirement.
+  tasks:
+    - Use unchecked checkbox tasks grouped by domain, UI, migration, evidence, and verification.
+    - Require failing tests before implementation and exact verification commands before archive.
+    - Include strict OpenSpec validation and staged diff review.
+    - Do not mark repository-wide verification complete while any command is failed or blocked unless a test-specific approved baseline exception is linked.
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+operations:
+  apply:
+    guidance:
+      - Confirm the intended branch and current HEAD before editing.
+      - Re-read the relevant official documentation and project reference files before implementation.
+      - Keep input handling synchronous and persistence outside per-keystroke hot paths.
+      - Record unrelated baseline failures separately; do not silently mark them passed.
+  archive:
+    guidance:
+      - Archive only after tasks, implementation notes, executable results, evidence manifests, and canonical specs agree.
+      - Update openspec/CAPACITIES_PARITY_ROADMAP.md in the same delivery when status or dependencies change.
