@@ -1,3 +1,6 @@
+import type { NumberPresentation } from "./workspace-object-types.ts";
+import { formatNumberForExport } from "./workspace-property-values.ts";
+
 type FormulaErrorCode =
   | "cycle"
   | "domain"
@@ -84,10 +87,6 @@ type FormulaCellAddress = {
   readonly columnId: string;
   readonly rowId: string;
 };
-
-type NumberPresentation =
-  | { readonly fixedDecimals?: number; readonly type: "number" }
-  | { readonly fixedDecimals?: number; readonly type: "percent" };
 
 type FormulaValue = {
   readonly ast: FormulaDocument;
@@ -1343,19 +1342,6 @@ function applyFormulaTableOperation(
   return { cells, columns, rows };
 }
 
-function formatNumber(
-  value: number,
-  presentation?: NumberPresentation,
-): string {
-  if (presentation?.type === "percent") {
-    const decimals = presentation.fixedDecimals ?? 0;
-    return `${(value * 100).toFixed(decimals)}%`;
-  }
-  if (presentation?.fixedDecimals !== undefined)
-    return value.toFixed(presentation.fixedDecimals);
-  return String(value);
-}
-
 function exportFormulaCell(
   cell: FormulaTableCell,
   mode: FormulaExportMode,
@@ -1365,9 +1351,21 @@ function exportFormulaCell(
   if (mode === "markdown-source")
     return `\`${cell.source.replace(/`/g, "\\`")}\``;
   if (cell.result.type === "number")
-    return formatNumber(cell.result.value, cell.presentation);
+    return formatNumberForExport(
+      cell.result.value,
+      cell.presentation,
+      "display",
+      "en-US",
+    );
   if (cell.result.type === "error") return errorDisplay(cell.result.code);
   return "";
+}
+
+function formatNumber(
+  value: number,
+  presentation?: NumberPresentation,
+): string {
+  return formatNumberForExport(value, presentation, "display", "en-US");
 }
 
 function describeFormulaExportMode(
@@ -1421,8 +1419,11 @@ export {
   createFormulaTable,
   createFormulaValue,
   describeFormulaExportMode,
+  errorDisplay,
   evaluateFormulaTable,
   exportFormulaCell,
+  formatNumber,
+  isFormulaCell,
   parseFormulaSource,
   resolveFormulaReferences,
   tokenizeFormulaSource,

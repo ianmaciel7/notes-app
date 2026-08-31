@@ -16,7 +16,10 @@ import { cn } from "@/lib/utils";
 import type { WorkspaceStructure } from "@/lib/workspace-object-types";
 import { readWorkspaceEntityProperty } from "@/lib/workspace-object-views";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
-import { formatNumberValue } from "@/lib/workspace-property-values";
+import {
+  type FormattedNumberValue,
+  formatNumberValue,
+} from "@/lib/workspace-property-values";
 
 function structureFor(
   entity: WorkspaceEntity,
@@ -87,18 +90,86 @@ function propertyDefinitionFor(
   );
 }
 
+const numberProgressColorClass = {
+  blue: "bg-blue-500",
+  gray: "bg-muted-foreground",
+  green: "bg-emerald-500",
+  orange: "bg-orange-500",
+  purple: "bg-violet-500",
+  red: "bg-red-500",
+} as const;
+
+function NumberValueDisplay({
+  className,
+  formatted,
+  variant = "inline",
+}: {
+  readonly className?: string;
+  readonly formatted: FormattedNumberValue;
+  readonly variant?: "inline" | "field";
+}) {
+  if (formatted.progress) {
+    return (
+      <span
+        data-slot="number-value-display"
+        data-number-presentation="progress"
+        data-invalid-config={formatted.diagnostics.length > 0 || undefined}
+        className={cn(
+          "inline-flex min-w-0 items-center gap-2",
+          variant === "field" && "w-full",
+          className,
+        )}
+      >
+        <span
+          role="progressbar"
+          aria-label={formatted.text}
+          aria-valuemin={0}
+          aria-valuemax={formatted.progress.max}
+          aria-valuenow={formatted.progress.value}
+          aria-valuetext={formatted.progress.text}
+          className="h-1.5 min-w-12 flex-1 overflow-hidden rounded-full bg-muted"
+        >
+          <span
+            aria-hidden="true"
+            className={cn(
+              "block h-full rounded-full",
+              numberProgressColorClass[formatted.progress.color],
+            )}
+            style={{ width: `${formatted.progress.percent}%` }}
+          />
+        </span>
+        <span className="shrink-0 tabular-nums">{formatted.text}</span>
+      </span>
+    );
+  }
+  return (
+    <span
+      data-slot="number-value-display"
+      data-number-presentation={formatted.presentation.type}
+      data-invalid-config={formatted.diagnostics.length > 0 || undefined}
+      className={cn("tabular-nums", className)}
+    >
+      {formatted.text}
+    </span>
+  );
+}
+
 function formatValue(
   value: unknown,
   structure: WorkspaceStructure | undefined,
   propertyId: string,
-): string {
+): React.ReactNode {
   if (value == null || value === "") return "—";
   if (typeof value === "boolean") return value ? "✓" : "—";
   if (typeof value === "number") {
-    return formatNumberValue(
-      value,
-      propertyDefinitionFor(structure, propertyId)?.numberPresentation,
-    ).text;
+    return (
+      <NumberValueDisplay
+        formatted={formatNumberValue(
+          value,
+          propertyDefinitionFor(structure, propertyId)?.numberPresentation,
+        )}
+      />
+    );
   }
   if (Array.isArray(value)) {
     return value
@@ -119,11 +190,15 @@ function entityValue(
   propertyId: string,
   labels: ProjectionLabels["objectTypeLabels"],
   structures: readonly WorkspaceStructure[] | undefined,
-): string {
+): React.ReactNode {
   const structure = structureFor(entity, structures);
   return propertyId === "objectTypeId"
     ? typeLabel(entity, labels, structures)
-    : formatValue(readWorkspaceEntityProperty(entity, propertyId), structure, propertyId);
+    : formatValue(
+        readWorkspaceEntityProperty(entity, propertyId),
+        structure,
+        propertyId,
+      );
 }
 
 function entityDescription(entity: WorkspaceEntity): string {
@@ -215,6 +290,7 @@ export type { ObjectTypeLabelProps, OpenSurfaceProps };
 export {
   entityDescription,
   entityValue,
+  NumberValueDisplay,
   ObjectProperties,
   ObjectTypeLabel,
   OpenSurface,

@@ -47,6 +47,18 @@ const [
   readFile("docs/references/assets/capacities-block-handle-2026-08-24.png"),
   readFile("docs/references/capacities-block-handle.md", "utf8"),
 ]);
+const tableBlockNodeViewSource = await readFile(
+  "src/editor/table-block-node-view.tsx",
+  "utf8",
+);
+const tableBlockDomainSource = await readFile(
+  "src/editor/table-block.ts",
+  "utf8",
+);
+const editorExtensionsSource = await readFile(
+  "src/editor/block-editor-extensions.ts",
+  "utf8",
+);
 
 const editorLocales = ["en", "es", "pt-BR"];
 const editorMessages = await Promise.all(
@@ -104,8 +116,80 @@ test("advanced block commands live in the shared catalog", async () => {
     assert.match(catalogSource, new RegExp(`id: "${id}"`));
   }
   assert.match(editorSource, /HighlightBlockNode/);
+  assert.match(editorSource, /InlineMathMark/);
   assert.match(editorSource, /ColumnLayoutNode/);
   assert.match(handleSource, /command\.execute\(editor/);
+});
+
+test("advanced text source and object variants expose safe accessible render contracts", () => {
+  assert.match(editorSource, /InlineMathMark/);
+  assert.match(editorSource, /CodeBlockActionSurface/);
+  assert.match(
+    editorSource,
+    /navigator\.clipboard\?\.writeText\(codeBlock\.source\)/,
+  );
+  assert.match(editorSource, /downloadTextFile\(filename, codeBlock\.source\)/);
+  assert.match(editorSource, /data-slot="code-block-copy"/);
+  assert.match(editorSource, /data-slot="code-block-download"/);
+  assert.match(interactionSource, /editable \? \(/);
+  assert.match(interactionSource, /role: "document"/);
+  assert.match(interactionSource, /editor && editable/);
+  assert.match(interactionSource, /setEditable\(editable, false\)/);
+});
+
+test("advanced layout and object controls remain in shared block primitives", async () => {
+  const [catalogSource, extensionSource, globalsSource] = await Promise.all([
+    readFile("src/editor/block-command-catalog.tsx", "utf8"),
+    readFile("src/editor/block-editor-extensions.ts", "utf8"),
+    readFile("src/app/globals.css", "utf8"),
+  ]);
+  assert.match(catalogSource, /id: "columns"/);
+  assert.match(catalogSource, /id: "group"/);
+  assert.match(catalogSource, /id: "object-inline"/);
+  assert.match(catalogSource, /id: "object-embed"/);
+  assert.match(extensionSource, /data-column-count/);
+  assert.match(extensionSource, /data-slot": "math-block-error"/);
+  assert.match(extensionSource, /data-slot": "object-block-fallback"/);
+  assert.match(globalsSource, /data-layout-width="wide"/);
+  assert.match(globalsSource, /data-group-appearance="callout"/);
+  assert.match(globalsSource, /data-object-view="transclusion"/);
+  assert.match(globalsSource, /data-media-display="audio"/);
+});
+
+test("table block editor owns bounded keyboard and pointer interaction", () => {
+  assert.match(
+    editorExtensionsSource,
+    /ReactNodeViewRenderer\(TableBlockNodeView,\s*\{/,
+  );
+  assert.match(editorExtensionsSource, /stopEvent:/);
+  assert.match(editorExtensionsSource, /data-slot="table-block-editor"/);
+  assert.match(tableBlockNodeViewSource, /data-slot="table-block-editor"/);
+  assert.match(tableBlockNodeViewSource, /role="toolbar"/);
+  assert.match(tableBlockNodeViewSource, /contentEditable=\{editable\}/);
+  assert.match(tableBlockNodeViewSource, /onKeyDown/);
+  assert.match(tableBlockNodeViewSource, /event\.key\.startsWith\("Arrow"\)/);
+  assert.match(tableBlockNodeViewSource, /event\.shiftKey/);
+  assert.match(
+    tableBlockNodeViewSource,
+    /requestAnimationFrame\(\(\) => focusCell/,
+  );
+  assert.match(tableBlockNodeViewSource, /type: "insert-row"/);
+  assert.match(tableBlockNodeViewSource, /type: "insert-column"/);
+  assert.match(tableBlockNodeViewSource, /type: "delete-row"/);
+  assert.match(tableBlockNodeViewSource, /type: "delete-column"/);
+  assert.match(tableBlockNodeViewSource, /type: "toggle-header"/);
+  assert.match(tableBlockNodeViewSource, /type: "sort-rows"/);
+  assert.match(tableBlockNodeViewSource, /type: "style-cells"/);
+  assert.match(tableBlockNodeViewSource, /type: "align-cells"/);
+});
+
+test("table block cells reuse canonical object-link cell content", () => {
+  assert.match(tableBlockNodeViewSource, /createObjectLinkCellContent/);
+  assert.match(
+    tableBlockDomainSource,
+    /marks: \[\{ attrs: \{ objectId \}, type: "objectLink" \}\]/,
+  );
+  assert.match(tableBlockNodeViewSource, /createTextCellContent/);
 });
 
 test("editor persistence avoids a React state update on every keystroke", () => {

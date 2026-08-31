@@ -2474,10 +2474,128 @@ test("deleting the active Page removes stale tabs and selects a valid fallback",
   await expectActiveEditorTitle(page, "Fallback page");
   await expect
     .poll(async () => {
-      const entities = await persistedEntities(page);
-      return entities.map((entity: { title: string }) => entity.title);
+      const snapshot = await persistedSnapshot(page);
+      return {
+        titles: snapshot.entities.map((entity: { title: string }) => entity.title),
+        trashed: snapshot.trashRecords.map(
+          (record: { entityId: string }) => record.entityId,
+        ),
+      };
     })
-    .toEqual(["Fallback page"]);
+    .toEqual({
+      titles: ["Fallback page", "Delete me page"],
+      trashed: ["created-page-2"],
+    });
+  expect(errors).toEqual([]);
+});
+
+test("Trash route restores purges and empties recoverable objects accessibly", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Keeper page");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Restore me page");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Purge me page");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Empty me page");
+
+  for (const title of ["Empty me page", "Purge me page", "Restore me page"]) {
+    await page.getByRole("tab", { name: title, exact: true }).click();
+    await createdObjectWorkspace(page)
+      .getByRole("button", { name: "Mais opções", exact: true })
+      .click();
+    await page.getByRole("menuitem", { name: "Excluir Objeto" }).click();
+  }
+
+  await page.getByRole("button", { name: "Lixeira", exact: true }).focus();
+  await page.keyboard.press("Enter");
+  const trashView = page
+    .locator('main[data-slot="app-shell-main"]')
+    .locator('[data-slot="workspace-trash-view"]');
+  await expect(trashView).toBeVisible();
+  await expect(trashView.getByPlaceholder("Buscar na lixeira")).toBeVisible();
+  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(3);
+  await expect(trashView).toContainText("remove em");
+  await page.keyboard.press("Escape");
+  await expect(page.locator('[data-slot="app-sidebar-trash-surface"]')).toBeHidden();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(
+    trashView.locator('button:has-text("Esvaziar lixeira")'),
+  ).toBeVisible();
+  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(3);
+  await expect
+    .poll(() =>
+      trashView.evaluate((element) => element.scrollWidth <= element.clientWidth),
+    )
+    .toBe(true);
+  await page.setViewportSize({ width: 1280, height: 800 });
+
+  await trashView.getByPlaceholder("Buscar na lixeira").fill("Restore");
+  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(1);
+  await trashView.getByRole("button", { name: "Restaurar", exact: true }).click();
+  await expectActiveEditorTitle(page, "Restore me page");
+
+  await page.getByRole("button", { name: "Lixeira", exact: true }).click();
+  await trashView.getByPlaceholder("Buscar na lixeira").fill("");
+  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(2);
+
+  const purgeRow = trashView
+    .locator('[data-slot="workspace-trash-item"]')
+    .filter({ hasText: "Purge me page" });
+  await purgeRow
+    .getByRole("button", { name: "Excluir para sempre", exact: true })
+    .click();
+  const purgeDialog = page.getByRole("dialog", {
+    name: "Excluir para sempre?",
+  });
+  await expect(purgeDialog).toContainText("Esta ação é irreversível.");
+  await purgeDialog
+    .getByRole("button", { name: "Excluir permanentemente", exact: true })
+    .click();
+  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(1);
+
+  await trashView
+    .getByRole("button", { name: "Esvaziar lixeira", exact: true })
+    .click();
+  const emptyDialog = page.getByRole("dialog", { name: "Esvaziar lixeira?" });
+  await expect(emptyDialog).toContainText("Esta ação é irreversível.");
+  await emptyDialog
+    .getByRole("button", { name: "Excluir permanentemente", exact: true })
+    .click();
+  await expect(trashView).toContainText("A Lixeira está vazia.");
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        document.activeElement?.closest('[data-slot="workspace-trash-view"]')
+          ?.getAttribute("data-slot"),
+      ),
+    )
+    .toBe("workspace-trash-view");
+  await expect
+    .poll(async () => {
+      const snapshot = await persistedSnapshot(page);
+      return {
+        activeTitles: snapshot.entities.map(
+          (entity: { title: string }) => entity.title,
+        ),
+        tombstones: snapshot.tombstones.map(
+          (record: { entityId: string }) => record.entityId,
+        ),
+        trashRecords: snapshot.trashRecords.length,
+      };
+    })
+    .toEqual({
+      activeTitles: ["Keeper page", "Restore me page"],
+      tombstones: ["created-page-3", "created-page-4"],
+      trashRecords: 0,
+    });
   expect(errors).toEqual([]);
 });
 
@@ -3515,8 +3633,13 @@ test("Novo Page and Table flows keep split actions, writes, and counts durable",
   await tableWorkspace
     .getByRole("textbox", { name: "Título" })
     .fill(tableTitle);
-  await tableWorkspace.getByLabel("Linha 1, coluna 1").fill("Page/Table");
+  await tableWorkspace.getByLabel("Linha 1, coluna 1").fill("2");
   await tableWorkspace.getByLabel("Linha 1, coluna 1").blur();
+  await tableWorkspace.getByLabel("Linha 1, coluna 2").fill("=A1*2");
+  await tableWorkspace.getByLabel("Linha 1, coluna 2").blur();
+  await expect(
+    tableWorkspace.locator('[data-slot="workspace-table-formula-result"]'),
+  ).toContainText("4");
 
   await expect
     .poll(async () => {
@@ -3530,6 +3653,13 @@ test("Novo Page and Table flows keep split actions, writes, and counts durable",
     (entity: { objectTypeId: string }) => entity.objectTypeId === "table",
   );
   expect(tableEntity?.id).toBeTruthy();
+  expect(tableEntity?.cells[1].value).toMatchObject({
+    calculationRevision: "default",
+    dependencies: [{ columnId: "column-1", rowId: "row-1" }],
+    result: { type: "number", value: 4 },
+    source: "=A1*2",
+    type: "formula",
+  });
   await expect(tableRow).toContainText("1");
 
   await page.locator(`[data-tab-id="${pageEntity?.id}"] [role="tab"]`).click();
@@ -3572,7 +3702,23 @@ test("Novo Page and Table flows keep split actions, writes, and counts durable",
       )
       .filter({ visible: true })
       .getByLabel("Linha 1, coluna 1"),
-  ).toHaveValue("Page/Table");
+  ).toHaveValue("2");
+  await expect(
+    page
+      .locator(
+        '[data-slot="workspace-object-page-view"][data-object-type="table"]',
+      )
+      .filter({ visible: true })
+      .getByLabel("Linha 1, coluna 2"),
+  ).toHaveValue("=A1*2");
+  await expect(
+    page
+      .locator(
+        '[data-slot="workspace-object-page-view"][data-object-type="table"]',
+      )
+      .filter({ visible: true })
+      .locator('[data-slot="workspace-table-formula-result"]'),
+  ).toContainText("4");
   await expect(pageRow).toContainText("1");
   await expect(tableRow).toContainText("1");
   expect(await persistedSnapshot(page)).toMatchObject({ version: 5 });

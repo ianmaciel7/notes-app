@@ -1,5 +1,6 @@
 import { Extension, Mark, mergeAttributes, Node } from "@tiptap/core";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
+import { ReactNodeViewRenderer } from "@tiptap/react";
 
 import { createBlockId, isReferenceableBlockType } from "./document.ts";
 import {
@@ -7,6 +8,7 @@ import {
   TABLE_BLOCK_TYPE,
   tableBlockToPlainText,
 } from "./table-block.ts";
+import { TableBlockNodeView } from "./table-block-node-view.tsx";
 
 const referenceableBlockTypes = [
   "paragraph",
@@ -206,6 +208,38 @@ const AdvancedCodeBlockAttributes = Extension.create({
   },
 });
 
+const InlineMathMark = Mark.create({
+  name: "inlineMath",
+
+  addAttributes() {
+    return {
+      source: stringAttribute("source", "data-tex-source", ""),
+      sourceStatus: stringAttribute(
+        "sourceStatus",
+        "data-source-status",
+        "valid",
+      ),
+    };
+  },
+
+  parseHTML() {
+    return [{ tag: "span[data-inline-math]" }];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    const source = HTMLAttributes["data-tex-source"] ?? "";
+    return [
+      "span",
+      mergeAttributes(HTMLAttributes, {
+        "aria-label": `Inline math: ${source}`,
+        "data-inline-math": "",
+        role: "math",
+      }),
+      0,
+    ];
+  },
+});
+
 const HighlightBlockNode = Node.create({
   name: "highlightBlock",
   group: "block",
@@ -265,6 +299,8 @@ const MathBlockNode = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
+    const source = HTMLAttributes["data-tex-source"] ?? "";
+    const sourceStatus = HTMLAttributes["data-source-status"] ?? "valid";
     return [
       "div",
       mergeAttributes(HTMLAttributes, {
@@ -272,7 +308,20 @@ const MathBlockNode = Node.create({
         "data-math-block": "",
         role: "math",
       }),
-      ["code", {}, HTMLAttributes["data-tex-source"] ?? ""],
+      ["code", { "data-slot": "math-block-source" }, source],
+      ...(sourceStatus === "invalid"
+        ? [
+            [
+              "span",
+              {
+                "aria-live": "polite",
+                "data-slot": "math-block-error",
+                contenteditable: "false",
+              },
+              "Invalid TeX source",
+            ],
+          ]
+        : []),
     ];
   },
 });
@@ -324,6 +373,17 @@ const ColumnLayoutNode = Node.create({
       id: blockIdAttribute(),
       layoutMode: stringAttribute("layoutMode", "data-layout-mode", "columns"),
       width: stringAttribute("width", "data-layout-width", "content"),
+      columnCount: {
+        default: null,
+        parseHTML: (element) => {
+          const value = Number(element.getAttribute("data-column-count"));
+          return Number.isInteger(value) && value >= 2 ? value : null;
+        },
+        renderHTML: (attributes) =>
+          typeof attributes.columnCount === "number"
+            ? { "data-column-count": String(attributes.columnCount) }
+            : {},
+      },
     };
   },
 
@@ -332,10 +392,12 @@ const ColumnLayoutNode = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
+    const columnCount = String(HTMLAttributes["data-column-count"] ?? "");
     return [
       "section",
       mergeAttributes(HTMLAttributes, {
         "data-column-layout": "",
+        ...(columnCount ? { style: `--column-count: ${columnCount}` } : {}),
         "aria-label": "Column layout",
       }),
       0,
@@ -399,14 +461,36 @@ const ObjectBlockNode = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
+    const viewKind = String(HTMLAttributes["data-object-view"] ?? "small-card");
+    const state = String(HTMLAttributes["data-object-state"] ?? "available");
     const title = HTMLAttributes["data-object-title"];
+    const editable =
+      viewKind === "transclusion" && state === "available" ? "true" : "false";
     return [
       "article",
       mergeAttributes(HTMLAttributes, {
+        "aria-label": `Object block: ${title ?? "Untitled object"}`,
+        contenteditable: editable,
         "data-object-block": "",
         "data-reference-kind": "object-block",
       }),
-      ["span", { "data-object-block-title": "" }, title ?? "Untitled object"],
+      [
+        "span",
+        { "data-slot": "object-block-title", "data-object-block-title": "" },
+        title ?? "Untitled object",
+      ],
+      ...(state === "available"
+        ? []
+        : [
+            [
+              "span",
+              {
+                "data-slot": "object-block-fallback",
+                contenteditable: "false",
+              },
+              state,
+            ],
+          ]),
     ];
   },
 });
@@ -513,6 +597,14 @@ const TableBlockNode = Node.create({
       }),
       ["table", ["tbody", ...rows]],
     ];
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(TableBlockNodeView, {
+      stopEvent: ({ event }) =>
+        event.target instanceof HTMLElement &&
+        Boolean(event.target.closest('[data-slot="table-block-editor"]')),
+    });
   },
 });
 
@@ -625,6 +717,7 @@ export {
   ColumnNode,
   GroupBlockNode,
   HighlightBlockNode,
+  InlineMathMark,
   MathBlockNode,
   ObjectBlockNode,
   ObjectEmbedNode,

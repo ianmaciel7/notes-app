@@ -19,6 +19,7 @@ import {
   createInitialWorkspaceObjectState,
   workspaceObjectReducer,
 } from "../src/lib/workspace-objects.ts";
+import { createFormulaValue } from "../src/lib/workspace-table-formulas.ts";
 
 function expectOk(result) {
   assert.equal(result.ok, true, result.ok ? undefined : result.error.message);
@@ -214,6 +215,53 @@ test("native workspace export restores supported canonical records into an empty
   assert.equal(restored.structures.length, state.structures.length);
 });
 
+test("native workspace export preserves table formula metadata", () => {
+  const formula = {
+    ...createFormulaValue("=A1*2"),
+    calculationRevision: "snapshot-1",
+    dependencies: [{ columnId: "column-1", rowId: "row-1" }],
+    result: { type: "number", value: 4 },
+  };
+  const state = {
+    ...createInitialWorkspaceObjectState(),
+    activeEntityId: "table-1",
+    entities: [
+      {
+        cells: [
+          { column: 0, id: "r0c0", row: 0, value: "2" },
+          { column: 1, id: "r0c1", row: 0, value: formula },
+        ],
+        createdAt: "2026-08-31T00:00:00.000Z",
+        id: "table-1",
+        kind: "table",
+        notes: "",
+        objectTypeId: "table",
+        propertyValues: {},
+        title: "Formula table",
+      },
+    ],
+    nextId: 2,
+  };
+
+  const exported = createNativeWorkspaceExport(
+    state,
+    [],
+    () => new Date("2026-08-31T00:00:00.000Z"),
+  );
+  const restored = expectOk(parseNativeWorkspaceExport(exported));
+  const table = restored.entities[0];
+  const restoredFormula = table.cells[1].value;
+
+  assert.equal(restoredFormula.type, "formula");
+  assert.equal(restoredFormula.source, "=A1*2");
+  assert.equal(restoredFormula.ast.version, 1);
+  assert.deepEqual(restoredFormula.dependencies, [
+    { columnId: "column-1", rowId: "row-1" },
+  ]);
+  assert.deepEqual(restoredFormula.result, { type: "number", value: 4 });
+  assert.equal(restoredFormula.calculationRevision, "snapshot-1");
+});
+
 test("reduced markdown csv and media exports declare non-lossless semantics", () => {
   const state = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
     objectTypeId: "page",
@@ -239,6 +287,69 @@ test("reduced markdown csv and media exports declare non-lossless semantics", ()
   assert.match(bundle.mediaManifest.content, /asset-1/);
   assert.ok(bundle.csv.lossiness[0].includes("flattens"));
   assert.ok(bundle.markdown[0].lossiness[0].includes("readable"));
+});
+
+test("exports keep native numbers raw and make csv markdown display modes explicit", () => {
+  const initial = createInitialWorkspaceObjectState();
+  const metric = {
+    id: "metric",
+    multiple: false,
+    name: "Metric",
+    numberPresentation: { fixedDecimals: 0, type: "percent" },
+    ownership: "normal",
+    valueType: "number",
+    writable: true,
+  };
+  const pageStructure = initial.structures.find(
+    (structure) => structure.id === "page",
+  );
+  assert.ok(pageStructure);
+  const state = {
+    ...initial,
+    entities: [
+      {
+        body: blockEditorDocumentFromPlainText("Measured"),
+        collections: [],
+        createdAt: "2026-08-25T00:00:00.000Z",
+        id: "page-1",
+        kind: "document",
+        objectTypeId: "page",
+        propertyValues: {
+          createdAt: {
+            createdAt: { value: "2026-08-25T00:00:00.000Z" },
+            type: "createdAt",
+          },
+          metric: { number: { value: 0.25 }, type: "number" },
+          title: { title: { value: "Metric page" }, type: "title" },
+        },
+        tags: [],
+        title: "Metric page",
+      },
+    ],
+    structures: initial.structures.map((structure) =>
+      structure.id === "page"
+        ? {
+            ...structure,
+            propertyDefinitions: [...pageStructure.propertyDefinitions, metric],
+          }
+        : structure,
+    ),
+  };
+
+  const rawBundle = createWorkspaceExportBundle(state);
+  const displayBundle = createWorkspaceExportBundle(state, [], undefined, {
+    csvNumberMode: "display",
+    locale: "en-US",
+  });
+
+  assert.match(rawBundle.csv.content, /metric/);
+  assert.match(rawBundle.csv.content, /0.25/);
+  assert.match(displayBundle.csv.content, /25%/);
+  assert.match(rawBundle.markdown[0].content, /metric: 25%/);
+  assert.equal(
+    rawBundle.native.snapshot.entities[0].propertyValues.metric.number.value,
+    0.25,
+  );
 });
 
 test("markdown export records advanced block lossiness", () => {

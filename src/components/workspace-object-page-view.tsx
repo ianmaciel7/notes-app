@@ -9,7 +9,7 @@ import {
   UploadIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import * as React from "react";
 
 import {
@@ -26,8 +26,9 @@ import {
   objectIconToneBadgeClass,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
-import { MediaAssetRenderer } from "@/components/object-view-preview";
 import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
+import { MediaAssetRenderer } from "@/components/object-view-preview";
+import { NumberValueDisplay } from "@/components/object-view-support";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   workspaceOverflowMenuContentClass,
@@ -62,12 +63,7 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   workspaceFieldGroupClass,
   workspaceListRowClass,
@@ -85,31 +81,56 @@ import { useBufferedTextCommit } from "@/hooks/use-buffered-text-commit";
 import { selectEditorUtilities } from "@/lib/editor-utilities";
 import { cn } from "@/lib/utils";
 import {
+  convertUnlinkedMentionCandidate,
   createObjectEmbedNode,
   createObjectReferenceMark,
   createWorkspaceObjectLinkIndex,
-  convertUnlinkedMentionCandidate,
   findUnlinkedMentionCandidates,
   selectBacklinksForObject,
   selectObjectsInside,
 } from "@/lib/workspace-object-links";
-import type { WorkspaceStructure } from "@/lib/workspace-object-types";
+import type {
+  NumberPresentation,
+  NumberPresentationColor,
+  WorkspaceStructure,
+} from "@/lib/workspace-object-types";
 import {
   createObjectConversionPlan,
   type ObjectConversionPlan,
   readWorkspaceEntityProperty,
 } from "@/lib/workspace-object-views";
 import {
+  acceptsFileForType,
+  type WorkspaceEntity,
+} from "@/lib/workspace-objects";
+import {
+  formatNumberValue,
+  parseNumberInput,
+} from "@/lib/workspace-property-values";
+import {
   RELATED_CONTENT_PANEL_LIMIT,
-  selectRelatedContent,
   type RelatedContentState,
+  selectRelatedContent,
 } from "@/lib/workspace-related-content";
-import { acceptsFileForType, type WorkspaceEntity } from "@/lib/workspace-objects";
+import {
+  createFormulaTable,
+  createFormulaValue,
+  errorDisplay,
+  evaluateFormulaTable,
+  exportFormulaCell,
+  type FormulaErrorCode,
+  type FormulaTable,
+  type FormulaTableCell,
+  type FormulaValue,
+  formatNumber,
+  isFormulaCell,
+} from "@/lib/workspace-table-formulas";
 
 type DocumentWorkspaceEntity =
   | Extract<WorkspaceEntity, { kind: "document" }>
   | Extract<WorkspaceEntity, { kind: "quote" }>;
 type TableWorkspaceEntity = Extract<WorkspaceEntity, { kind: "table" }>;
+type TableWorkspaceCell = TableWorkspaceEntity["cells"][number];
 type FileWorkspaceEntity = Extract<WorkspaceEntity, { kind: "file" }>;
 type SupportedWorkspaceEntity =
   | DocumentWorkspaceEntity
@@ -171,22 +192,110 @@ function BufferedTitle({
 
 function BufferedTableCell({
   ariaLabel,
+  displayValue,
+  errorDescription,
+  formulaMode,
   onCommit,
+  references,
+  suggestions,
   value,
 }: {
   readonly ariaLabel: string;
+  readonly displayValue: string | null;
+  readonly errorDescription: string | null;
+  readonly formulaMode: boolean;
   readonly onCommit: (value: string) => void;
-  readonly value: string;
+  readonly references: readonly string[];
+  readonly suggestions: readonly string[];
+  readonly value: FormulaValue | string;
 }) {
-  const { inputProps } = useBufferedTextCommit({ value, onCommit });
+  const formatValue = React.useCallback(
+    (cellValue: FormulaValue | string) =>
+      isFormulaCell(cellValue) ? cellValue.source : cellValue,
+    [],
+  );
+  const formattedValue = formatValue(value);
+  const { commitNow, inputProps, setDraft } = useBufferedTextCommit({
+    value: formattedValue,
+    onCommit,
+  });
+  const [focused, setFocused] = React.useState(false);
+  const describedBy = `${React.useId()}-formula`;
+  const showFormulaAssist =
+    focused && (formulaMode || inputProps.value.trimStart().startsWith("="));
   return (
-    <input
-      {...inputProps}
-      data-slot="workspace-table-cell"
-      data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
-      aria-label={ariaLabel}
-      className="min-h-10 min-w-0 border-b border-r bg-transparent px-3 py-2 text-sm outline-none even:border-r-0 focus:bg-muted/30 [&:nth-last-child(-n+2)]:border-b-0"
-    />
+    <div
+      data-slot="workspace-table-cell-shell"
+      data-formula-mode={formulaMode}
+      className="min-h-20 min-w-0 border-b border-r px-3 py-2 even:border-r-0 [&:nth-last-child(-n+2)]:border-b-0"
+    >
+      <input
+        {...inputProps}
+        data-slot="workspace-table-cell"
+        data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
+        aria-describedby={formulaMode ? describedBy : undefined}
+        aria-label={ariaLabel}
+        className="min-h-6 w-full min-w-0 bg-transparent text-sm outline-none focus:bg-muted/30"
+        onBlur={() => {
+          inputProps.onBlur();
+          setFocused(false);
+        }}
+        onFocus={() => {
+          inputProps.onFocus();
+          setFocused(true);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            commitNow();
+            event.currentTarget.blur();
+          }
+          if (event.key === "Escape") {
+            event.preventDefault();
+            setDraft(formattedValue);
+            event.currentTarget.blur();
+          }
+        }}
+      />
+      {displayValue ? (
+        <div
+          id={describedBy}
+          data-slot="workspace-table-formula-result"
+          className={cn(
+            "mt-1 truncate text-xs",
+            errorDescription ? "text-destructive" : "text-muted-foreground",
+          )}
+        >
+          {displayValue}
+          {errorDescription ? ` - ${errorDescription}` : ""}
+        </div>
+      ) : null}
+      {references.length > 0 ? (
+        <div
+          data-slot="workspace-table-formula-references"
+          className="mt-1 flex flex-wrap gap-1"
+        >
+          {references.map((reference) => (
+            <span
+              key={reference}
+              className="rounded border border-primary/30 bg-primary/10 px-1.5 py-0.5 text-[11px] text-primary"
+            >
+              {reference}
+            </span>
+          ))}
+        </div>
+      ) : null}
+      {showFormulaAssist ? (
+        <div
+          data-slot="workspace-table-formula-suggestions"
+          className="mt-2 grid gap-1 text-[11px] text-muted-foreground"
+        >
+          {suggestions.map((suggestion) => (
+            <div key={suggestion}>{suggestion}</div>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -381,7 +490,9 @@ function ObjectPageTypePickerTrigger({
                 discardValue: t("objectConversion.discardValue"),
                 incompatible: t("objectConversion.incompatible"),
                 mapTo: t("objectConversion.mapTo"),
-                requiresConfirmation: t("objectConversion.requiresConfirmation"),
+                requiresConfirmation: t(
+                  "objectConversion.requiresConfirmation",
+                ),
                 unresolved: t("objectConversion.unresolved"),
               }}
               target={pendingConversion.target}
@@ -717,9 +828,7 @@ function ObjectPageTags({
                     "w-full gap-2 px-2 text-left",
                   )}
                 >
-                  <span className="truncate">
-                    {tag.title.trim() || tag.id}
-                  </span>
+                  <span className="truncate">{tag.title.trim() || tag.id}</span>
                 </button>
               ))}
             </>
@@ -911,27 +1020,27 @@ function ObjectPageCollections({
             "w-[257px] min-w-[257px] gap-0 p-1.5",
           )}
         >
-          {visibleChoices.length > 0 ? (
-            visibleChoices.map((collection) => (
-              <button
-                key={collection.id}
-                type="button"
-                aria-pressed={collections.includes(collection.id)}
-                onClick={() => toggleCollection(collection.id)}
-                className={cn(
-                  workspaceOverflowMenuItemClass,
-                  "w-full gap-2 px-2 text-left",
-                )}
-              >
-                <span className="truncate">{collection.name}</span>
-                {collections.includes(collection.id) ? (
-                  <span className="ml-auto text-xs text-muted-foreground">
-                    ✓
-                  </span>
-                ) : null}
-              </button>
-            ))
-          ) : null}
+          {visibleChoices.length > 0
+            ? visibleChoices.map((collection) => (
+                <button
+                  key={collection.id}
+                  type="button"
+                  aria-pressed={collections.includes(collection.id)}
+                  onClick={() => toggleCollection(collection.id)}
+                  className={cn(
+                    workspaceOverflowMenuItemClass,
+                    "w-full gap-2 px-2 text-left",
+                  )}
+                >
+                  <span className="truncate">{collection.name}</span>
+                  {collections.includes(collection.id) ? (
+                    <span className="ml-auto text-xs text-muted-foreground">
+                      ✓
+                    </span>
+                  ) : null}
+                </button>
+              ))
+            : null}
         </PopoverContent>
       </Popover>
     </div>
@@ -1119,20 +1228,22 @@ function relationCandidateEntities(
   property: WorkspaceStructure["propertyDefinitions"][number],
   createdEntities: readonly WorkspaceEntity[],
 ) {
-  return createdEntities.filter((candidate): candidate is SupportedWorkspaceEntity => {
-    if (!canRenderWorkspaceObjectPage(candidate)) return false;
-    if (candidate.id === entity.id) return false;
-    if (
-      property.targetStructureIds?.length &&
-      !property.targetStructureIds.includes(candidate.objectTypeId)
-    ) {
-      return false;
-    }
-    return (
-      !property.fixedTargetObjectIds?.length ||
-      property.fixedTargetObjectIds.includes(candidate.id)
-    );
-  });
+  return createdEntities.filter(
+    (candidate): candidate is SupportedWorkspaceEntity => {
+      if (!canRenderWorkspaceObjectPage(candidate)) return false;
+      if (candidate.id === entity.id) return false;
+      if (
+        property.targetStructureIds?.length &&
+        !property.targetStructureIds.includes(candidate.objectTypeId)
+      ) {
+        return false;
+      }
+      return (
+        !property.fixedTargetObjectIds?.length ||
+        property.fixedTargetObjectIds.includes(candidate.id)
+      );
+    },
+  );
 }
 
 function WorkspaceEntityPropertyField({
@@ -1154,7 +1265,9 @@ function WorkspaceEntityPropertyField({
 }) {
   const relation = entity.propertyValues[property.id];
   const selectedIds =
-    relation?.type === "entity" ? relation.entity.map((target) => target.id) : [];
+    relation?.type === "entity"
+      ? relation.entity.map((target) => target.id)
+      : [];
   return (
     <label
       htmlFor={inputId}
@@ -1170,9 +1283,9 @@ function WorkspaceEntityPropertyField({
         value={property.multiple ? selectedIds : (selectedIds[0] ?? "")}
         className="min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring"
         onChange={(event) => {
-          const targetIds = Array.from(
-            event.currentTarget.selectedOptions,
-          ).map((option) => option.value);
+          const targetIds = Array.from(event.currentTarget.selectedOptions).map(
+            (option) => option.value,
+          );
           setLinkedEntityPropertyValue(
             entity.id,
             property.id,
@@ -1244,9 +1357,9 @@ function WorkspaceLabelPropertyField({
         value={property.multiple ? selectedIds : (selectedIds[0] ?? "")}
         className="min-h-8 w-full min-w-0 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm text-foreground outline-none hover:border-border focus:border-ring"
         onChange={(event) => {
-          const optionIds = Array.from(
-            event.currentTarget.selectedOptions,
-          ).map((option) => option.value);
+          const optionIds = Array.from(event.currentTarget.selectedOptions).map(
+            (option) => option.value,
+          );
           updateProperty(
             property.id,
             property.multiple ? optionIds : (optionIds[0] ?? ""),
@@ -1290,6 +1403,235 @@ function coerceWorkspacePropertyDraft(
   return text;
 }
 
+const numberFormatOptions = [
+  "number",
+  "percent",
+  "currency",
+  "progress",
+] as const;
+const numberProgressColorOptions = [
+  "blue",
+  "gray",
+  "green",
+  "orange",
+  "purple",
+  "red",
+] as const satisfies readonly NumberPresentationColor[];
+
+function numberPresentationWithType(
+  current: NumberPresentation | undefined,
+  type: NumberPresentation["type"],
+): NumberPresentation {
+  const fixedDecimals = current?.fixedDecimals;
+  if (type === "currency") {
+    return {
+      currency: current?.type === "currency" ? current.currency : "USD",
+      ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
+      type,
+    };
+  }
+  if (type === "progress") {
+    return {
+      color: current?.type === "progress" ? current.color : "blue",
+      ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
+      steps: current?.type === "progress" ? current.steps : 100,
+      type,
+    };
+  }
+  return {
+    ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
+    type,
+  };
+}
+
+function numberPresentationWithDecimals(
+  current: NumberPresentation | undefined,
+  rawValue: string,
+): NumberPresentation {
+  const decimals = rawValue === "" ? undefined : Number(rawValue);
+  const base = numberPresentationWithType(current, current?.type ?? "number");
+  return decimals === undefined
+    ? (Object.fromEntries(
+        Object.entries(base).filter(([key]) => key !== "fixedDecimals"),
+      ) as NumberPresentation)
+    : { ...base, fixedDecimals: decimals };
+}
+
+function NumberPresentationSettings({
+  property,
+  structureId,
+}: {
+  readonly property: WorkspaceStructure["propertyDefinitions"][number];
+  readonly structureId: string;
+}) {
+  const { updateWorkspacePropertyNumberPresentation } = useWorkspace();
+  const presentation = property.numberPresentation ?? { type: "number" };
+  const updatePresentation = (next: NumberPresentation) =>
+    updateWorkspacePropertyNumberPresentation(structureId, property.id, next);
+  return (
+    <Popover>
+      <PopoverTrigger
+        type="button"
+        aria-label={`${property.name} number format`}
+        className="inline-flex h-7 shrink-0 items-center gap-1 rounded-md border border-border px-2 text-xs text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {presentation.type}
+        <AppHeaderCaretDownIcon className="size-3" />
+      </PopoverTrigger>
+      <PopoverContent align="end" sideOffset={6} className="w-64 gap-3 p-3">
+        <PopoverTitle className="text-sm">{property.name}</PopoverTitle>
+        <label className="grid gap-1 text-xs text-muted-foreground">
+          Format
+          <select
+            value={presentation.type}
+            className="h-8 rounded-md border border-border bg-background px-2 text-sm text-foreground"
+            onChange={(event) =>
+              updatePresentation(
+                numberPresentationWithType(
+                  presentation,
+                  event.currentTarget.value as NumberPresentation["type"],
+                ),
+              )
+            }
+          >
+            {numberFormatOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="grid gap-1 text-xs text-muted-foreground">
+          Decimals
+          <input
+            type="number"
+            min={0}
+            max={6}
+            value={presentation.fixedDecimals ?? ""}
+            placeholder="auto"
+            className="h-8 rounded-md border border-border bg-background px-2 text-sm text-foreground"
+            onChange={(event) =>
+              updatePresentation(
+                numberPresentationWithDecimals(
+                  presentation,
+                  event.currentTarget.value,
+                ),
+              )
+            }
+          />
+        </label>
+        {presentation.type === "currency" ? (
+          <label className="grid gap-1 text-xs text-muted-foreground">
+            Currency
+            <input
+              value={presentation.currency}
+              maxLength={3}
+              className="h-8 rounded-md border border-border bg-background px-2 text-sm uppercase text-foreground"
+              onChange={(event) =>
+                updatePresentation({
+                  ...presentation,
+                  currency: event.currentTarget.value.toUpperCase(),
+                })
+              }
+            />
+          </label>
+        ) : null}
+        {presentation.type === "progress" ? (
+          <div className="grid grid-cols-2 gap-2">
+            <label className="grid gap-1 text-xs text-muted-foreground">
+              Steps
+              <input
+                type="number"
+                min={1}
+                max={1000}
+                value={presentation.steps}
+                className="h-8 rounded-md border border-border bg-background px-2 text-sm text-foreground"
+                onChange={(event) =>
+                  updatePresentation({
+                    ...presentation,
+                    steps: Number(event.currentTarget.value),
+                  })
+                }
+              />
+            </label>
+            <label className="grid gap-1 text-xs text-muted-foreground">
+              Color
+              <select
+                value={presentation.color}
+                className="h-8 rounded-md border border-border bg-background px-2 text-sm text-foreground"
+                onChange={(event) =>
+                  updatePresentation({
+                    ...presentation,
+                    color: event.currentTarget.value as NumberPresentationColor,
+                  })
+                }
+              >
+                {numberProgressColorOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        ) : null}
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+function WorkspaceNumberPropertyField({
+  inputId,
+  property,
+  structureId,
+  updateProperty,
+  value,
+}: {
+  readonly inputId: string;
+  readonly property: WorkspaceStructure["propertyDefinitions"][number];
+  readonly structureId: string;
+  readonly updateProperty: EntityPropertyUpdate;
+  readonly value: unknown;
+}) {
+  const locale = useLocale();
+  const numericValue = typeof value === "number" ? value : null;
+  const formatted =
+    numericValue === null
+      ? null
+      : formatNumberValue(numericValue, property.numberPresentation, locale);
+  return (
+    <label
+      htmlFor={inputId}
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectField}
+      className="grid min-h-8 grid-cols-[8rem_minmax(0,1fr)] items-center gap-3 text-sm"
+    >
+      <span className="truncate text-muted-foreground">{property.name}</span>
+      <span className="flex min-w-0 items-center gap-2">
+        <BufferedWorkspacePropertyInput
+          inputId={inputId}
+          inputType="text"
+          value={numericValue ?? ""}
+          onCommit={(draft) => {
+            const parsed = parseNumberInput(String(draft), locale);
+            if (parsed.ok) updateProperty(property.id, parsed.value);
+          }}
+        />
+        {formatted ? (
+          <NumberValueDisplay
+            className="max-w-36 shrink-0 text-xs text-muted-foreground"
+            formatted={formatted}
+            variant="field"
+          />
+        ) : null}
+        <NumberPresentationSettings
+          property={property}
+          structureId={structureId}
+        />
+      </span>
+    </label>
+  );
+}
+
 function WorkspaceScalarPropertyField({
   inputId,
   property,
@@ -1326,10 +1668,12 @@ function WorkspaceScalarPropertyField({
 function WorkspacePropertyField({
   entity,
   property,
+  structureId,
   updateProperty,
 }: {
   readonly entity: SupportedWorkspaceEntity;
   readonly property: WorkspaceStructure["propertyDefinitions"][number];
+  readonly structureId: string;
   readonly updateProperty: EntityPropertyUpdate;
 }) {
   const { createdEntities, setLinkedEntityPropertyValue } = useWorkspace();
@@ -1338,7 +1682,11 @@ function WorkspacePropertyField({
   if (property.valueType === "entity") {
     return (
       <WorkspaceEntityPropertyField
-        candidates={relationCandidateEntities(entity, property, createdEntities)}
+        candidates={relationCandidateEntities(
+          entity,
+          property,
+          createdEntities,
+        )}
         entity={entity}
         inputId={inputId}
         property={property}
@@ -1350,6 +1698,17 @@ function WorkspacePropertyField({
     return (
       <WorkspaceBooleanPropertyField
         property={property}
+        updateProperty={updateProperty}
+        value={value}
+      />
+    );
+  }
+  if (property.valueType === "number") {
+    return (
+      <WorkspaceNumberPropertyField
+        inputId={inputId}
+        property={property}
+        structureId={structureId}
         updateProperty={updateProperty}
         value={value}
       />
@@ -1430,6 +1789,7 @@ function WorkspacePropertyGroup({
           key={property.id}
           entity={entity}
           property={property}
+          structureId={structure.id}
           updateProperty={updateProperty}
         />
       ))}
@@ -1477,8 +1837,13 @@ function RelatedContentStateMessage({
 
 function RelatedContent({ entityId }: { readonly entityId: string }) {
   const t = useTranslations("workspace");
-  const { createdEntities, objectTypes, openInSidePanel, selectEntity, spaceId } =
-    useWorkspace();
+  const {
+    createdEntities,
+    objectTypes,
+    openInSidePanel,
+    selectEntity,
+    spaceId,
+  } = useWorkspace();
   const source = createdEntities.find((item) => item.id === entityId);
   const state = React.useMemo(
     () =>
@@ -1515,7 +1880,10 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
       className="mt-12 border-t pt-8"
       aria-labelledby={`${entityId}-related-heading`}
     >
-      <h2 id={`${entityId}-related-heading`} className="text-base font-semibold">
+      <h2
+        id={`${entityId}-related-heading`}
+        className="text-base font-semibold"
+      >
         {t("explore.relatedContent")}
       </h2>
       {state.kind === "ready" ? (
@@ -1721,9 +2089,7 @@ function MentionSourceRow({
         </Button>
       </div>
       {expanded ? (
-        <p className="border-t pt-1 text-xs text-muted-foreground">
-          {excerpt}
-        </p>
+        <p className="border-t pt-1 text-xs text-muted-foreground">{excerpt}</p>
       ) : null}
     </div>
   );
@@ -1886,10 +2252,7 @@ function ReferencePanel({
             const source = createdEntities.find(
               (item) => item.id === candidate.sourceId,
             );
-            const sourceTitle = getEntityTitle(
-              source,
-              t("lifecycle.untitled"),
-            );
+            const sourceTitle = getEntityTitle(source, t("lifecycle.untitled"));
             const sourceType = objectTypes.find(
               (type) => type.id === source?.objectTypeId,
             );
@@ -1967,10 +2330,7 @@ function ReferencePanel({
                   >
                     <span className="truncate">
                       {t("linking.linkObject", {
-                        title: getEntityTitle(
-                          target,
-                          t("lifecycle.untitled"),
-                        ),
+                        title: getEntityTitle(target, t("lifecycle.untitled")),
                       })}
                     </span>
                   </Button>
@@ -2376,6 +2736,108 @@ function DocumentPage({
   );
 }
 
+const formulaSuggestionLabels = [
+  "SUM(range)",
+  "AVG(range)",
+  "ROUND(value, decimals)",
+  "MIN(range)",
+  "MAX(range)",
+  "RAND()",
+] as const;
+
+function tableAxisIds(length: number, prefix: "column" | "row") {
+  return Array.from({ length }, (_, index) => `${prefix}-${index + 1}`);
+}
+
+function tableCellFormulaKey(cell: TableWorkspaceCell) {
+  return `row-${cell.row + 1}:column-${cell.column + 1}`;
+}
+
+function tableEntityToFormulaTable(entity: TableWorkspaceEntity): FormulaTable {
+  const maxRow = Math.max(0, ...entity.cells.map((cell) => cell.row + 1));
+  const maxColumn = Math.max(0, ...entity.cells.map((cell) => cell.column + 1));
+  return createFormulaTable({
+    cells: Object.fromEntries(
+      entity.cells.map((cell) => [tableCellFormulaKey(cell), cell.value]),
+    ),
+    columns: tableAxisIds(maxColumn, "column"),
+    rows: tableAxisIds(maxRow, "row"),
+  });
+}
+
+function formulaCellInputValue(value: FormulaValue | string) {
+  return isFormulaCell(value) ? value.source : value;
+}
+
+function evaluatedTableCellValue(
+  table: FormulaTable,
+  cell: TableWorkspaceCell,
+): FormulaTableCell {
+  return table.cells[tableCellFormulaKey(cell)] ?? cell.value;
+}
+
+function formulaResultDisplay(value: FormulaTableCell): string | null {
+  if (!isFormulaCell(value)) return null;
+  if (value.result.type === "number") {
+    return formatNumber(value.result.value, value.presentation);
+  }
+  if (value.result.type === "error") return errorDisplay(value.result.code);
+  return "";
+}
+
+function formulaErrorCode(value: FormulaTableCell): FormulaErrorCode | null {
+  return isFormulaCell(value) && value.result.type === "error"
+    ? value.result.code
+    : null;
+}
+
+function formulaReferenceLabels(
+  value: FormulaTableCell,
+  table: FormulaTable,
+): readonly string[] {
+  if (!isFormulaCell(value)) return [];
+  return value.dependencies.map((dependency) => {
+    const row = table.rows.indexOf(dependency.rowId);
+    const column = table.columns.indexOf(dependency.columnId);
+    if (row < 0 || column < 0) return "#REF!";
+    let index = column + 1;
+    let label = "";
+    while (index > 0) {
+      const remainder = (index - 1) % 26;
+      label = String.fromCharCode(65 + remainder) + label;
+      index = Math.floor((index - 1) / 26);
+    }
+    return `${label}${row + 1}`;
+  });
+}
+
+function commitFormulaTableCell(
+  entity: TableWorkspaceEntity,
+  cellId: string,
+  rawValue: string,
+): TableWorkspaceEntity["cells"] {
+  const nextCells = entity.cells.map((cell) =>
+    cell.id === cellId
+      ? {
+          ...cell,
+          value: rawValue.trimStart().startsWith("=")
+            ? createFormulaValue(rawValue)
+            : rawValue,
+        }
+      : cell,
+  );
+  const evaluated = evaluateFormulaTable(
+    tableEntityToFormulaTable({ ...entity, cells: nextCells }),
+  );
+  return nextCells.map((cell) => {
+    const value = evaluated.cells[tableCellFormulaKey(cell)] ?? cell.value;
+    return {
+      ...cell,
+      value: typeof value === "number" ? String(value) : value,
+    };
+  });
+}
+
 function TablePage({
   entity,
   structure,
@@ -2398,6 +2860,17 @@ function TablePage({
   const cells = [...entity.cells].sort(
     (left, right) => left.row - right.row || left.column - right.column,
   );
+  const evaluatedTable = React.useMemo(
+    () => evaluateFormulaTable(tableEntityToFormulaTable(entity)),
+    [entity],
+  );
+  const localizedFormulaError = React.useCallback(
+    (value: FormulaTableCell) => {
+      const code = formulaErrorCode(value);
+      return code ? t(`lifecycle.table.formulaErrors.${code}`) : null;
+    },
+    [t],
+  );
   return (
     <>
       <ObjectPageHeader
@@ -2418,7 +2891,11 @@ function TablePage({
             onExport={() => {
               const source = entity.cells
                 .map(
-                  (cell) => `${cell.row + 1},${cell.column + 1},${cell.value}`,
+                  (cell) =>
+                    `${cell.row + 1},${cell.column + 1},${exportFormulaCell(
+                      evaluatedTableCellValue(evaluatedTable, cell),
+                      "csv-result",
+                    )}`,
                 )
                 .join("\n");
               const url = URL.createObjectURL(
@@ -2467,7 +2944,16 @@ function TablePage({
             onUseTemplate={() => duplicateWorkspaceEntity(entity.id)}
             onCopy={() => {
               void navigator.clipboard
-                ?.writeText(entity.cells.map((cell) => cell.value).join("\t"))
+                ?.writeText(
+                  entity.cells
+                    .map((cell) =>
+                      exportFormulaCell(
+                        evaluatedTableCellValue(evaluatedTable, cell),
+                        "csv-result",
+                      ),
+                    )
+                    .join("\t"),
+                )
                 .catch(() => undefined);
               showMessage(t("documentMenu.copied"));
             }}
@@ -2501,12 +2987,22 @@ function TablePage({
               column: cell.column + 1,
               row: cell.row + 1,
             })}
-            value={cell.value}
+            displayValue={formulaResultDisplay(
+              evaluatedTableCellValue(evaluatedTable, cell),
+            )}
+            errorDescription={localizedFormulaError(
+              evaluatedTableCellValue(evaluatedTable, cell),
+            )}
+            formulaMode={isFormulaCell(cell.value)}
+            references={formulaReferenceLabels(
+              evaluatedTableCellValue(evaluatedTable, cell),
+              evaluatedTable,
+            )}
+            suggestions={formulaSuggestionLabels}
+            value={formulaCellInputValue(cell.value)}
             onCommit={(value) =>
               update({
-                cells: entity.cells.map((item) =>
-                  item.id === cell.id ? { ...item, value } : item,
-                ),
+                cells: commitFormulaTableCell(entity, cell.id, String(value)),
               })
             }
           />

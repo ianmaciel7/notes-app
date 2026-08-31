@@ -61,6 +61,26 @@ function isStringArray(value: unknown): value is string[] {
   );
 }
 
+function isFormulaCellValue(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  return (
+    value.type === "formula" &&
+    typeof value.source === "string" &&
+    isRecord(value.ast) &&
+    value.ast.version === 1 &&
+    Array.isArray(value.dependencies) &&
+    value.dependencies.every(
+      (dependency) =>
+        isRecord(dependency) &&
+        typeof dependency.columnId === "string" &&
+        typeof dependency.rowId === "string",
+    ) &&
+    typeof value.calculationRevision === "string" &&
+    isRecord(value.result) &&
+    typeof value.result.type === "string"
+  );
+}
+
 function hasEntityBase(value: Record<string, unknown>): boolean {
   return (
     typeof value.id === "string" &&
@@ -78,7 +98,7 @@ function isTableCell(value: unknown): boolean {
     typeof value.id === "string" &&
     typeof value.column === "number" &&
     typeof value.row === "number" &&
-    typeof value.value === "string"
+    (typeof value.value === "string" || isFormulaCellValue(value.value))
   );
 }
 

@@ -646,6 +646,16 @@
       "storageRecovered": "Não foi possível restaurar o espaço salvo. O espaço padrão foi mantido.",
       "table": {
         "cell": "Linha {row}, coluna {column}",
+        "formulaErrors": {
+          "cycle": "Ciclo de fórmula detectado.",
+          "domain": "A fórmula não consegue avaliar este valor.",
+          "limit": "Limite da fórmula atingido.",
+          "numeric": "A fórmula produziu um número inválido.",
+          "ref": "Uma referência da fórmula está ausente.",
+          "syntax": "A sintaxe da fórmula é inválida.",
+          "unknown-name": "O nome da fórmula não é compatível.",
+          "value": "A dependência da fórmula não é numérica."
+        },
         "notes": "Notas"
       },
       "tag": {
@@ -749,10 +759,16 @@
       "templateCreated": "Criado a partir do modelo local padrão.",
       "addView": "Adicionar visualização",
       "allObjects": "Todos os objetos",
+      "cardProperties": "Propriedades do cartão",
+      "columnWidth": "Largura",
       "untitledOnly": "Sem título",
       "visibleSections": "Seções visíveis",
       "hiddenSections": "Seções ocultas",
+      "missingColumn": "Propriedade ausente",
+      "moveColumnLeft": "Mover coluna {label} para a esquerda",
+      "moveColumnRight": "Mover coluna {label} para a direita",
       "noHiddenSections": "Nenhuma seção oculta",
+      "wrapColumn": "Quebrar",
       "closeSettings": "Fechar configurações",
       "overviewOnly": "Somente visão geral",
       "noCollection": "Não em nenhuma coleção",

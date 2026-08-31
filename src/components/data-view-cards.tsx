@@ -54,6 +54,13 @@ function DataViewCards(props: ProjectedDataViewProps) {
         >
           <ObjectView
             {...props}
+            cardSurface={
+              wall
+                ? "wall"
+                : presentation.kind === "gallery"
+                  ? "gallery"
+                  : undefined
+            }
             config={objectConfig(
               objectViewKind,
               presentation.visiblePropertyIds,

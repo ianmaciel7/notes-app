@@ -1,5 +1,6 @@
 import type { Editor, Range } from "@tiptap/core";
 import type { ComponentType, SVGProps } from "react";
+import { createBlockId } from "./document.ts";
 import { createTableBlockNode } from "./table-block.ts";
 
 type BlockCommandIconProps = SVGProps<SVGSVGElement>;
@@ -111,6 +112,87 @@ function runWithDeletedTrigger(
   command: (chain: ReturnType<Editor["chain"]>) => ReturnType<Editor["chain"]>,
 ) {
   command(editor.chain().focus().deleteRange(range)).run();
+}
+
+function selectedTopLevelBlocks(editor: Editor, range: Range) {
+  const blocks: {
+    from: number;
+    node: Record<string, unknown>;
+    to: number;
+  }[] = [];
+  editor.state.doc.forEach((node, offset) => {
+    const from = offset;
+    const to = offset + node.nodeSize;
+    if (to <= range.from || from >= range.to) return;
+    blocks.push({ from, node: node.toJSON(), to });
+  });
+  return blocks;
+}
+
+function replaceTopLevelSelection(
+  editor: Editor,
+  range: Range,
+  content: Record<string, unknown> | Record<string, unknown>[],
+) {
+  const blocks = selectedTopLevelBlocks(editor, range);
+  if (blocks.length === 0) return false;
+  editor
+    .chain()
+    .focus()
+    .deleteRange({ from: blocks[0].from, to: blocks.at(-1)?.to ?? range.to })
+    .insertContentAt(blocks[0].from, content, { updateSelection: true })
+    .run();
+  return true;
+}
+
+function groupSelectedBlocks(editor: Editor, range: Range) {
+  const blocks = selectedTopLevelBlocks(editor, range);
+  if (blocks.length === 1 && blocks[0].node.type === "groupBlock") {
+    const content = Array.isArray(blocks[0].node.content)
+      ? blocks[0].node.content
+      : [{ type: "paragraph", attrs: { id: createBlockId() } }];
+    return replaceTopLevelSelection(editor, range, content);
+  }
+  if (blocks.length > 0) {
+    return replaceTopLevelSelection(editor, range, {
+      type: "groupBlock",
+      attrs: { appearance: "card", id: createBlockId(), width: "content" },
+      content: blocks.map((block) => block.node),
+    });
+  }
+  return false;
+}
+
+function columnizeSelectedBlocks(editor: Editor, range: Range) {
+  const blocks = selectedTopLevelBlocks(editor, range);
+  if (blocks.length === 0) return false;
+  const columnCount = 2;
+  const columns = Array.from({ length: columnCount }, (_, index) => {
+    const content = blocks
+      .slice(
+        Math.ceil((blocks.length * index) / columnCount),
+        Math.ceil((blocks.length * (index + 1)) / columnCount),
+      )
+      .map((block) => block.node);
+    return {
+      type: "column",
+      attrs: { id: createBlockId(), width: 1 / columnCount },
+      content:
+        content.length > 0
+          ? content
+          : [{ type: "paragraph", attrs: { id: createBlockId() } }],
+    };
+  });
+  return replaceTopLevelSelection(editor, range, {
+    type: "columnLayout",
+    attrs: {
+      columnCount,
+      id: createBlockId(),
+      layoutMode: "columns",
+      width: "content",
+    },
+    content: columns,
+  });
 }
 
 function setOrderedListType(
@@ -350,14 +432,15 @@ function createBlockCommandCatalog(
       icon: ColumnsIcon,
       title: labels.columns,
       searchTerms: ["columns", "grid", "colunas", "grade"],
-      execute: (editor, range) =>
+      execute: (editor, range) => {
+        if (columnizeSelectedBlocks(editor, range)) return;
         editor
           .chain()
           .focus()
           .deleteRange(range)
           .insertContent({
             type: "columnLayout",
-            attrs: { layoutMode: "columns", width: "content" },
+            attrs: { columnCount: 2, layoutMode: "columns", width: "content" },
             content: [
               {
                 type: "column",
@@ -371,14 +454,16 @@ function createBlockCommandCatalog(
               },
             ],
           })
-          .run(),
+          .run();
+      },
     },
     {
       id: "group",
       icon: GroupIcon,
       title: labels.group,
       searchTerms: ["group", "container", "grupo"],
-      execute: (editor, range) =>
+      execute: (editor, range) => {
+        if (groupSelectedBlocks(editor, range)) return;
         editor
           .chain()
           .focus()
@@ -388,7 +473,8 @@ function createBlockCommandCatalog(
             attrs: { appearance: "card", width: "content" },
             content: [{ type: "paragraph" }],
           })
-          .run(),
+          .run();
+      },
     },
     {
       id: "object-inline",

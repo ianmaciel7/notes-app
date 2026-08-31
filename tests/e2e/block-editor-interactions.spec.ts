@@ -1,42 +1,79 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
+import { createInitialStructureRegistry } from "../../src/lib/workspace-object-types";
 
 const workspaceStorageKey = "notes-app:workspace-objects:v1";
+const labsWorkspaceStorageKey =
+  "notes-app:workspace-objects:v1:4d0215ae-79d6-46bd-840f-8144ec5a84fb";
+const workspaceSpacesStorageKey = "notes-app:workspace-spaces:v1";
+const workspaceTabsStorageKey = "notes-app:workspace-tabs:v1";
 
-async function openPageEditor(page: Page, body = "") {
+async function openPageEditor(page: Page, body: unknown = "") {
   const errors: string[] = [];
   page.on("console", (message) => {
     if (message.type() === "error") errors.push(message.text());
   });
   page.on("pageerror", (error) => errors.push(error.message));
   await page.addInitScript(
-    ({ storageKey, initialBody }) => {
+    ({
+      initialBody,
+      labsStorageKey,
+      spacesStorageKey,
+      storageKey,
+      structures,
+      tabsStorageKey,
+    }: {
+      initialBody: unknown;
+      labsStorageKey: string;
+      spacesStorageKey: string;
+      storageKey: string;
+      structures: unknown;
+      tabsStorageKey: string;
+    }) => {
       const fixtureMarker = `${storageKey}:editor-interactions-fixture`;
-      if (window.sessionStorage.getItem(fixtureMarker) === initialBody) return;
+      const marker = JSON.stringify(initialBody);
+      if (window.sessionStorage.getItem(fixtureMarker) === marker) return;
+      const isStructuredBody =
+        typeof initialBody === "object" && initialBody !== null;
+      const snapshot = JSON.stringify({
+        activeEntityId: "editor-interactions-page",
+        entities: [
+          {
+            body: initialBody,
+            collections: [],
+            createdAt: "2026-01-01T00:00:00.000Z",
+            id: "editor-interactions-page",
+            kind: "document",
+            objectTypeId: "page",
+            tags: [],
+            title: "Editor interactions",
+          },
+        ],
+        nextId: 2,
+        ...(isStructuredBody ? { structures } : {}),
+        version: isStructuredBody ? 5 : 1,
+      });
+      window.localStorage.removeItem(tabsStorageKey);
       window.localStorage.setItem(
-        storageKey,
+        spacesStorageKey,
         JSON.stringify({
-          activeEntityId: "editor-interactions-page",
-          entities: [
-            {
-              body: initialBody,
-              collections: [],
-              createdAt: "2026-01-01T00:00:00.000Z",
-              id: "editor-interactions-page",
-              kind: "document",
-              objectTypeId: "page",
-              tags: [],
-              title: "Editor interactions",
-            },
-          ],
-          nextId: 2,
-          version: 1,
+          activeSpaceId: "labs",
+          spaces: [{ id: "labs", name: "Labs" }],
         }),
       );
-      window.sessionStorage.setItem(fixtureMarker, initialBody);
+      window.localStorage.setItem(storageKey, snapshot);
+      window.localStorage.setItem(labsStorageKey, snapshot);
+      window.sessionStorage.setItem(fixtureMarker, marker);
     },
-    { storageKey: workspaceStorageKey, initialBody: body },
+    {
+      initialBody: body,
+      labsStorageKey: labsWorkspaceStorageKey,
+      spacesStorageKey: workspaceSpacesStorageKey,
+      storageKey: workspaceStorageKey,
+      structures: createInitialStructureRegistry(),
+      tabsStorageKey: workspaceTabsStorageKey,
+    },
   );
-  await page.goto("/pt-BR");
+  await page.goto("/pt-BR", { waitUntil: "domcontentloaded" });
   const workspace = page
     .locator(
       [
@@ -105,10 +142,18 @@ async function visibleBlockHandleForParagraph(page: Page, paragraph: Locator) {
 
 test.afterEach(async ({ page }) => {
   await page
-    .evaluate((storageKey) => {
+    .evaluate(({ labsStorageKey, spacesStorageKey, storageKey, tabsStorageKey }) => {
       window.localStorage.removeItem(storageKey);
+      window.localStorage.removeItem(labsStorageKey);
+      window.localStorage.removeItem(spacesStorageKey);
+      window.localStorage.removeItem(tabsStorageKey);
       window.sessionStorage.clear();
-    }, workspaceStorageKey)
+    }, {
+      labsStorageKey: labsWorkspaceStorageKey,
+      spacesStorageKey: workspaceSpacesStorageKey,
+      storageKey: workspaceStorageKey,
+      tabsStorageKey: workspaceTabsStorageKey,
+    })
     .catch(() => undefined);
 });
 
@@ -604,6 +649,66 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
 
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(handle).toBeHidden();
+});
+
+test("table block cells support keyboard selection, controls, persistence, and mobile containment", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const { editor, errors, workspace } = await openPageEditor(page);
+  await editor.click();
+  await editor.pressSequentially("/tabela");
+  const slashMenu = page.locator('[data-slot="block-editor-slash-menu"]');
+  await expect(slashMenu).toBeVisible();
+  await slashMenu.getByRole("option", { name: /Tabela/ }).click();
+  const table = editor.locator('[data-slot="table-block-editor"]');
+  const firstCell = table.locator(".table-block-cell").nth(0);
+  const secondCell = table.locator(".table-block-cell").nth(1);
+
+  await expect(table).toBeVisible();
+  await firstCell.fill("Linked page");
+  await firstCell.press("Enter");
+  await expect(firstCell).toContainText("Linked page");
+
+  await firstCell.focus();
+  await firstCell.press("Shift+ArrowRight");
+  await expect(secondCell).toBeFocused();
+  await table.getByRole("button", { name: "Highlight cells" }).click();
+  await expect(firstCell).toHaveAttribute("data-background", "highlight");
+  await expect(secondCell).toHaveAttribute("data-background", "highlight");
+
+  await table.getByRole("button", { name: "+ Row" }).click();
+  await expect(table.locator("tr")).toHaveCount(4);
+  await table.getByRole("button", { name: "Sort" }).click();
+  await expect(table.locator('[data-table-block-view]')).toBeVisible();
+
+  await editor.blur();
+  await expect
+    .poll(() =>
+      page.evaluate((storageKey) => {
+        const snapshot =
+          window.localStorage.getItem(storageKey) ??
+          window.localStorage.getItem(`${storageKey}:4d0215ae-79d6-46bd-840f-8144ec5a84fb`);
+        return snapshot?.includes("Linked page") ?? false;
+      }, workspaceStorageKey),
+    )
+    .toBe(true);
+
+  await page.reload();
+  const restored = page.locator('[data-slot="table-block-editor"]');
+  await expect(restored).toContainText("Linked page");
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const overflow = await workspace
+    .locator('[data-slot="block-editor"]')
+    .evaluate((element) => ({
+      document:
+        document.documentElement.scrollWidth <=
+        document.documentElement.clientWidth,
+      shell: element.scrollWidth <= element.clientWidth,
+    }));
+  expect(overflow).toEqual({ document: true, shell: true });
+  expect(errors).toEqual([]);
 });
 
 test("rendered editor preserves focus, reduced motion, mobile overflow, and a clean console", async ({

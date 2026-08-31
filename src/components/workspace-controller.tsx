@@ -108,8 +108,11 @@ import {
 } from "@/lib/workspace-object-storage";
 import {
   type CreateStructureInput,
+  type NumberPresentation,
   type ObjectIconName,
   type ObjectIconTone,
+  type PropertyDefinition,
+  type StructurePresentation,
   selectCreatableStructures,
   type WorkspaceStructure,
 } from "@/lib/workspace-object-types";
@@ -960,7 +963,8 @@ type AppSidebarPrimaryNavigationAction =
   | "search"
   | "explore"
   | "calendar"
-  | "tasks";
+  | "tasks"
+  | "trash";
 
 const initialSpaces: AppSidebarSpace[] = [
   { id: "studies", name: "Studies", icon: ObjectBookIcon },
@@ -1043,6 +1047,15 @@ type WorkspaceContextValue = {
       iconName: ObjectIconName;
       tone: ObjectIconTone;
     },
+  ) => void;
+  updateWorkspacePropertyNumberPresentation: (
+    structureId: string,
+    propertyId: string,
+    presentation: NumberPresentation,
+  ) => void;
+  updateWorkspaceStructurePresentation: (
+    id: string,
+    presentation: StructurePresentation,
   ) => void;
   deleteWorkspaceStructure: (id: string) => void;
   createWorkspaceEntity: (
@@ -1927,6 +1940,14 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   const selectEntity = React.useCallback(
     (id: string) => {
+      if (id === "trash") {
+        dispatchWorkspaceObjects({ type: "selectEntity", id: null });
+        setActiveEntityId(null);
+        setActiveAction("trash");
+        setMainValue("primary-action:trash");
+        return;
+      }
+
       const createdEntity = workspaceObjects.entities.find(
         (item) => item.id === id,
       );
@@ -2020,7 +2041,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       if (
         route.section === "calendar" ||
         route.section === "search" ||
-        route.section === "explore"
+        route.section === "explore" ||
+        route.section === "trash"
       ) {
         setActiveEntityId(null);
         setActiveAction(route.section);
@@ -2105,7 +2127,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     const section: WorkspaceSection | null =
       activeAction === "calendar" ||
       activeAction === "search" ||
-      activeAction === "explore"
+      activeAction === "explore" ||
+      activeAction === "trash"
         ? activeAction
         : null;
     const targetId =
@@ -2769,6 +2792,42 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [],
   );
 
+  const updateWorkspaceStructurePresentation = React.useCallback(
+    (id: string, presentation: StructurePresentation) => {
+      dispatchWorkspaceObjects({
+        type: "updateStructurePresentation",
+        id,
+        presentation,
+      });
+    },
+    [],
+  );
+
+  const updateWorkspacePropertyNumberPresentation = React.useCallback(
+    (
+      structureId: string,
+      propertyId: string,
+      presentation: NumberPresentation,
+    ) => {
+      const structure = workspaceObjects.structures.find(
+        (candidate) => candidate.id === structureId,
+      );
+      if (!structure) return;
+      const propertyDefinitions = structure.propertyDefinitions.map(
+        (definition): PropertyDefinition =>
+          definition.id === propertyId && definition.valueType === "number"
+            ? { ...definition, numberPresentation: presentation }
+            : definition,
+      );
+      dispatchWorkspaceObjects({
+        type: "replaceStructureSchema",
+        id: structureId,
+        propertyDefinitions,
+      });
+    },
+    [workspaceObjects.structures],
+  );
+
   const deleteWorkspaceStructure = React.useCallback((id: string) => {
     dispatchWorkspaceObjects({ type: "deleteStructure", id });
   }, []);
@@ -2828,6 +2887,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       createWorkspaceStructure,
       createWorkspaceStructureFromPreset,
       updateWorkspaceStructure,
+      updateWorkspacePropertyNumberPresentation,
+      updateWorkspaceStructurePresentation,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
       createWorkspaceObjectReference,
@@ -2891,6 +2952,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       createWorkspaceStructure,
       createWorkspaceStructureFromPreset,
       updateWorkspaceStructure,
+      updateWorkspacePropertyNumberPresentation,
+      updateWorkspaceStructurePresentation,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
       createWorkspaceObjectReference,

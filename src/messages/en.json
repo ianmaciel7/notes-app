@@ -646,6 +646,16 @@
       "storageRecovered": "The saved workspace could not be restored. The default workspace was kept.",
       "table": {
         "cell": "Row {row}, column {column}",
+        "formulaErrors": {
+          "cycle": "Formula cycle detected.",
+          "domain": "Formula cannot evaluate this value.",
+          "limit": "Formula limit reached.",
+          "numeric": "Formula produced an invalid number.",
+          "ref": "Formula reference is missing.",
+          "syntax": "Formula syntax is invalid.",
+          "unknown-name": "Formula name is not supported.",
+          "value": "Formula dependency is not numeric."
+        },
         "notes": "Notes"
       },
       "tag": {
@@ -749,10 +759,16 @@
       "templateCreated": "Created from the default local template.",
       "addView": "Add view",
       "allObjects": "All objects",
+      "cardProperties": "Card properties",
+      "columnWidth": "Width",
       "untitledOnly": "Untitled",
       "visibleSections": "Visible sections",
       "hiddenSections": "Hidden sections",
+      "missingColumn": "Missing property",
+      "moveColumnLeft": "Move {label} column left",
+      "moveColumnRight": "Move {label} column right",
       "noHiddenSections": "No hidden sections",
+      "wrapColumn": "Wrap",
       "closeSettings": "Close settings",
       "overviewOnly": "Overview only",
       "noCollection": "Not in any collection",

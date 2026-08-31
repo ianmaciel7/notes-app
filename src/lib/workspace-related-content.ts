@@ -6,6 +6,7 @@ import {
   selectPropertyRelationGraphEdges,
 } from "./workspace-object-links.ts";
 import type { WorkspaceEntity } from "./workspace-objects.ts";
+import { exportFormulaCell } from "./workspace-table-formulas.ts";
 
 const NOTES_APP_RELATED_CONTENT_PROVIDER_ID =
   "notes-app-local-related-content";
@@ -198,7 +199,10 @@ function textForEntity(entity: WorkspaceEntity): string {
   if ("description" in entity && entity.description) values.push(entity.description);
   if (isDocumentLike(entity)) values.push(blockEditorDocumentToPlainText(entity.body));
   if (entity.kind === "table") {
-    values.push(entity.notes, ...entity.cells.map((cell) => cell.value));
+    values.push(
+      entity.notes,
+      ...entity.cells.map((cell) => exportFormulaCell(cell.value, "csv-result")),
+    );
   }
   for (const value of Object.values(entity.propertyValues)) {
     if (value.type === "text") {

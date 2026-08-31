@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import type { WorkspaceStructure } from "@/lib/workspace-object-types";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
 import type {
+  CardPropertySurface,
   DataViewKind,
   ObjectViewConfig,
   ObjectViewKind,
@@ -10,10 +11,15 @@ import type {
 } from "@/lib/workspace-object-views";
 
 export type ObjectViewLabels = {
+  readonly columnWidth: string;
   readonly emptyView: string;
   readonly missingObject: string;
+  readonly missingColumn: string;
+  readonly moveColumnLeft: (label: string) => string;
+  readonly moveColumnRight: (label: string) => string;
   readonly openObject: (title: string) => string;
   readonly untitledObject: string;
+  readonly wrapColumn: string;
 };
 
 export type ProjectionLabels = {
@@ -22,11 +28,21 @@ export type ProjectionLabels = {
 };
 
 export type ObjectViewProps = ProjectionLabels & {
+  readonly cardSurface?: CardPropertySurface;
   readonly className?: string;
   readonly config: ObjectViewConfig;
   readonly entity?: WorkspaceEntity | null;
   readonly labels: ObjectViewLabels;
   readonly onOpen?: (entityId: string) => void;
+  readonly onPropertyCommit?: (
+    entityId: string,
+    propertyId: string,
+    value: unknown,
+  ) => void;
+  readonly onViewUpdate?: (
+    view: WorkspaceDataView,
+    update: Partial<Pick<WorkspaceDataView, "presentation" | "query">>,
+  ) => void;
   readonly structures?: readonly WorkspaceStructure[];
 };
 
@@ -39,7 +55,17 @@ export type DataViewRendererProps = ProjectionLabels & {
   readonly entities: readonly WorkspaceEntity[];
   readonly labels: ObjectViewLabels;
   readonly onOpen?: (entityId: string) => void;
+  readonly onPropertyCommit?: (
+    entityId: string,
+    propertyId: string,
+    value: unknown,
+  ) => void;
+  readonly onViewUpdate?: (
+    view: WorkspaceDataView,
+    update: Partial<Pick<WorkspaceDataView, "presentation" | "query">>,
+  ) => void;
   readonly structures?: readonly WorkspaceStructure[];
+  readonly structure?: WorkspaceStructure;
   readonly trailingContent?: ReactNode;
   readonly view: WorkspaceDataView;
 };

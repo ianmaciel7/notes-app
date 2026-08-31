@@ -13,13 +13,13 @@
 ## 3. Small Cards
 
 - [x] 3.1 Add tests for ordered visible properties and reuse across small card, gallery, wall, and embed.
-- [ ] 3.2 Implement configuration UI and property-type-aware direct editing.
+- [x] 3.2 Implement configuration UI and property-type-aware direct editing.
 - [x] 3.3 Verify gallery empty-value and wall compact-value behavior.
 
 ## 4. Table Views
 
 - [x] 4.1 Add tests for column visibility, wrapping, order, width, missing properties, and persistence.
-- [ ] 4.2 Implement shared table-view customization and responsive controls.
+- [x] 4.2 Implement shared table-view customization and responsive controls.
 
 ## 5. Acceptance
 

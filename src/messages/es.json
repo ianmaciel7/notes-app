@@ -646,6 +646,16 @@
       "storageRecovered": "No se pudo restaurar el espacio guardado. Se mantuvo el espacio predeterminado.",
       "table": {
         "cell": "Fila {row}, columna {column}",
+        "formulaErrors": {
+          "cycle": "Se detectó un ciclo en la fórmula.",
+          "domain": "La fórmula no puede evaluar este valor.",
+          "limit": "Se alcanzó el límite de la fórmula.",
+          "numeric": "La fórmula produjo un número inválido.",
+          "ref": "Falta una referencia de la fórmula.",
+          "syntax": "La sintaxis de la fórmula no es válida.",
+          "unknown-name": "El nombre de fórmula no está admitido.",
+          "value": "La dependencia de la fórmula no es numérica."
+        },
         "notes": "Notas"
       },
       "tag": {
@@ -749,10 +759,16 @@
       "templateCreated": "Creado desde la plantilla local predeterminada.",
       "addView": "Añadir vista",
       "allObjects": "Todos los objetos",
+      "cardProperties": "Propiedades de tarjeta",
+      "columnWidth": "Ancho",
       "untitledOnly": "Sin título",
       "visibleSections": "Secciones visibles",
       "hiddenSections": "Secciones ocultas",
+      "missingColumn": "Propiedad ausente",
+      "moveColumnLeft": "Mover la columna {label} a la izquierda",
+      "moveColumnRight": "Mover la columna {label} a la derecha",
       "noHiddenSections": "No hay secciones ocultas",
+      "wrapColumn": "Ajustar",
       "closeSettings": "Cerrar configuración",
       "overviewOnly": "Solo vista general",
       "noCollection": "Sin colección",

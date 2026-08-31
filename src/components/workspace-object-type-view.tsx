@@ -51,6 +51,7 @@ import {
   executeQueryDefinition,
   type QueryFilter,
   type QuerySort,
+  setStructureSmallCardPropertyIds,
   type WorkspaceDataView,
 } from "@/lib/workspace-object-views";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
@@ -63,7 +64,10 @@ type WorkspaceObjectTypeViewProps = {
 
 type Mode = "all" | "overview";
 type ObjectTypeNamedItemKind = "collection" | "query";
-type ObjectTypeDestinationKind = ObjectTypeNamedItemKind | "settings" | "template";
+type ObjectTypeDestinationKind =
+  | ObjectTypeNamedItemKind
+  | "settings"
+  | "template";
 type ObjectTypeNamedItemTarget =
   | {
       kind: "collection";
@@ -154,10 +158,7 @@ function ObjectTypeMoreMenu({
   onOpenSettings,
 }: Pick<
   ObjectTypeHeaderProps,
-  | "onAddCollection"
-  | "onAddQuery"
-  | "onCreateFromTemplate"
-  | "onOpenSettings"
+  "onAddCollection" | "onAddQuery" | "onCreateFromTemplate" | "onOpenSettings"
 >) {
   const t = useTranslations("workspace");
   return (
@@ -429,7 +430,9 @@ function ObjectTypeAllControls({
           </DropdownMenuItem>
           <DropdownMenuItem
             aria-checked={currentSort?.field === "title"}
-            onClick={() => onSortChange({ direction: "ascending", field: "title" })}
+            onClick={() =>
+              onSortChange({ direction: "ascending", field: "title" })
+            }
           >
             <ObjectTypeToolbarIcon name="sort" className="size-3.5" />
             {t("objectTypeOverview.titleSort")}
@@ -616,7 +619,9 @@ function ObjectTypeCriteriaRows({
           variant={view.presentation.groupBy ? "secondary" : "ghost"}
           size="sm"
           className="h-7"
-          aria-pressed={view.presentation.groupBy?.propertyId === "objectTypeId"}
+          aria-pressed={
+            view.presentation.groupBy?.propertyId === "objectTypeId"
+          }
           onClick={() => onGroupingChange("objectTypeId")}
         >
           {t("footer.objectTypes")}
@@ -644,6 +649,80 @@ function ObjectTypeCriteriaRows({
   );
 }
 
+function ObjectTypePresentationRows({
+  mode,
+  onSmallCardPropertyChange,
+  structure,
+  view,
+}: {
+  readonly mode: Mode;
+  readonly onSmallCardPropertyChange: (
+    propertyId: string,
+    visible: boolean,
+  ) => void;
+  readonly structure: WorkspaceStructure;
+  readonly view: WorkspaceDataView;
+}) {
+  const t = useTranslations("workspace");
+  if (
+    mode !== "all" ||
+    (view.presentation.kind !== "gallery" &&
+      view.presentation.kind !== "wall" &&
+      view.presentation.kind !== "embed")
+  ) {
+    return null;
+  }
+  const configured = structure.presentation.smallCardVisiblePropertyIds ?? [
+    "title",
+    "objectTypeId",
+    "createdAt",
+  ];
+  const availableProperties = [
+    { id: "objectTypeId", name: t("footer.objectTypes") },
+    ...structure.propertyDefinitions.map((property) => ({
+      id: property.id,
+      name: property.name,
+    })),
+  ];
+  return (
+    <fieldset
+      data-slot="small-card-property-settings"
+      aria-label={t("objectTypeOverview.cardProperties")}
+      className={cn(
+        workspaceFieldGroupClass,
+        "mx-5 mt-2 grid gap-2 px-3 py-2 text-xs",
+      )}
+    >
+      <legend className="sr-only">
+        {t("objectTypeOverview.cardProperties")}
+      </legend>
+      <span className="font-medium text-foreground">
+        {t("objectTypeOverview.cardProperties")}
+      </span>
+      <div className="flex flex-wrap gap-2">
+        {availableProperties.map((property) => (
+          <label
+            key={property.id}
+            className="flex h-7 items-center gap-2 rounded-md bg-muted/50 px-2"
+          >
+            <input
+              type="checkbox"
+              checked={configured.includes(property.id)}
+              onChange={(event) =>
+                onSmallCardPropertyChange(
+                  property.id,
+                  event.currentTarget.checked,
+                )
+              }
+            />
+            <span>{property.name}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
 type ObjectTypeContentProps = {
   readonly collections: readonly WorkspaceCollectionRecord[];
   readonly createdEntities: readonly WorkspaceEntity[];
@@ -654,10 +733,20 @@ type ObjectTypeContentProps = {
   readonly onCreateObject: () => void;
   readonly onImport: () => void;
   readonly onOpen: (id: string) => void;
+  readonly onPropertyCommit: (
+    entityId: string,
+    propertyId: string,
+    value: unknown,
+  ) => void;
   readonly onRenameCollection: (id: string, value: string) => void;
   readonly onRenameQuery: (index: number, value: string) => void;
+  readonly onViewUpdate: (
+    view: WorkspaceDataView,
+    update: Partial<Pick<WorkspaceDataView, "presentation" | "query">>,
+  ) => void;
   readonly propertyLabels: Readonly<Record<string, string>>;
   readonly queries: readonly string[];
+  readonly structure: WorkspaceStructure;
   readonly structures: readonly WorkspaceStructure[];
   readonly view: WorkspaceDataView;
 };
@@ -672,10 +761,13 @@ function ObjectTypeContent({
   onCreateObject,
   onImport,
   onOpen,
+  onPropertyCommit,
   onRenameCollection,
   onRenameQuery,
+  onViewUpdate,
   propertyLabels,
   queries,
+  structure,
   structures,
   view,
 }: ObjectTypeContentProps) {
@@ -687,10 +779,13 @@ function ObjectTypeContent({
         labels={labels}
         objectTypeLabels={objectTypeLabels}
         onOpen={onOpen}
+        onPropertyCommit={onPropertyCommit}
         onRenameCollection={onRenameCollection}
         onRenameQuery={onRenameQuery}
+        onViewUpdate={onViewUpdate}
         propertyLabels={propertyLabels}
         queries={queries}
+        structure={structure}
         structures={structures}
         view={view}
       />
@@ -706,7 +801,10 @@ function ObjectTypeContent({
       onCreateObject={onCreateObject}
       onImport={onImport}
       onOpen={onOpen}
+      onPropertyCommit={onPropertyCommit}
+      onViewUpdate={onViewUpdate}
       propertyLabels={propertyLabels}
+      structure={structure}
       structures={structures}
       view={view}
     />
@@ -719,10 +817,13 @@ function ObjectTypeOverviewContent({
   labels,
   objectTypeLabels,
   onOpen,
+  onPropertyCommit,
   onRenameCollection,
   onRenameQuery,
+  onViewUpdate,
   propertyLabels,
   queries,
+  structure,
   structures,
   view,
 }: Omit<
@@ -742,7 +843,10 @@ function ObjectTypeOverviewContent({
             labels={labels}
             objectTypeLabels={objectTypeLabels}
             onOpen={onOpen}
+            onPropertyCommit={onPropertyCommit}
+            onViewUpdate={onViewUpdate}
             propertyLabels={propertyLabels}
+            structure={structure}
             structures={structures}
             view={view}
           />
@@ -898,7 +1002,10 @@ function ObjectTypeAllContent({
   onCreateObject,
   onImport,
   onOpen,
+  onPropertyCommit,
+  onViewUpdate,
   propertyLabels,
+  structure,
   structures,
   view,
 }: Omit<
@@ -922,7 +1029,10 @@ function ObjectTypeAllContent({
         labels={labels}
         objectTypeLabels={objectTypeLabels}
         onOpen={onOpen}
+        onPropertyCommit={onPropertyCommit}
+        onViewUpdate={onViewUpdate}
         propertyLabels={propertyLabels}
+        structure={structure}
         structures={structures}
         trailingContent={trailingContent}
         view={view}
@@ -958,11 +1068,7 @@ function ObjectTypeTrailingContent({
         title={t("empty.title")}
         action={
           <div className="flex flex-wrap justify-center gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onImport}
-            >
+            <Button type="button" variant="outline" onClick={onImport}>
               {t("objectTypeOverview.import")}
             </Button>
             <Button type="button" onClick={onCreateObject}>
@@ -1011,10 +1117,12 @@ function WorkspaceObjectTypeView({
     setActiveEntityId,
     setMainTabs,
     setMainValue,
+    setWorkspaceEntityPropertyValue,
     setObjectTypeCollections,
     setObjectTypeQueries,
     showMessage,
     structures,
+    updateWorkspaceStructurePresentation,
   } = useWorkspace();
   const { switchWorkspaceDataViewKind, updateWorkspaceDataView } =
     useWorkspaceViews();
@@ -1032,10 +1140,17 @@ function WorkspaceObjectTypeView({
   const filtered = executeQueryDefinition(createdEntities, view.query);
   const labels = React.useMemo<ObjectViewLabels>(
     () => ({
+      columnWidth: t("objectTypeOverview.columnWidth"),
       emptyView: t("empty.title"),
       missingObject: t("empty.title"),
+      missingColumn: t("objectTypeOverview.missingColumn"),
+      moveColumnLeft: (label) =>
+        t("objectTypeOverview.moveColumnLeft", { label }),
+      moveColumnRight: (label) =>
+        t("objectTypeOverview.moveColumnRight", { label }),
       openObject: (title) => `${t("lifecycle.task.open")}: ${title}`,
       untitledObject: t("lifecycle.untitled"),
+      wrapColumn: t("objectTypeOverview.wrapColumn"),
     }),
     [t],
   );
@@ -1180,6 +1295,26 @@ function WorkspaceObjectTypeView({
     });
   }
 
+  function setSmallCardProperty(propertyId: string, visible: boolean) {
+    const current = structure.presentation.smallCardVisiblePropertyIds ?? [
+      "title",
+      "objectTypeId",
+      "createdAt",
+    ];
+    const next = visible
+      ? [...current, propertyId]
+      : current.filter((id) => id !== propertyId);
+    const result = setStructureSmallCardPropertyIds(structure, next);
+    if (!result.ok) {
+      showMessage(result.error.message);
+      return;
+    }
+    updateWorkspaceStructurePresentation(
+      structure.id,
+      result.value.presentation,
+    );
+  }
+
   function renameCollection(id: string, value: string) {
     const name = value.trim();
     if (!name) return;
@@ -1280,6 +1415,13 @@ function WorkspaceObjectTypeView({
         view={view}
       />
 
+      <ObjectTypePresentationRows
+        mode={mode}
+        onSmallCardPropertyChange={setSmallCardProperty}
+        structure={structure}
+        view={view}
+      />
+
       <div className={workspaceOverviewContentClass}>
         <ObjectTypeContent
           collections={collections}
@@ -1291,10 +1433,15 @@ function WorkspaceObjectTypeView({
           onCreateObject={createObject}
           onImport={openImportPicker}
           onOpen={selectEntity}
+          onPropertyCommit={setWorkspaceEntityPropertyValue}
+          onViewUpdate={(currentView, update) =>
+            updateWorkspaceDataView(currentView.id, update)
+          }
           onRenameCollection={renameCollection}
           onRenameQuery={renameQuery}
           propertyLabels={propertyLabels}
           queries={queries}
+          structure={structure}
           structures={structures}
           view={view}
         />

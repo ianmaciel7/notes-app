@@ -8,11 +8,15 @@ import {
   blockEditorDocumentToMarkdown,
   blockEditorDocumentToPlainText,
   copyBlockEditorDocumentWithFreshIds,
+  createColumnLayoutFromTopLevelBlocks,
   createEmptyBlockEditorDocument,
   documentHasAdvancedMarkdownLossiness,
+  groupTopLevelBlocks,
   isAdvancedBlockType,
   isBlockEditorDocument,
   normalizeBlockEditorDocument,
+  ungroupTopLevelGroupBlock,
+  updateAdvancedBlockLayoutAttributes,
 } from "../src/editor/document.ts";
 
 function collectBlockIds(document) {
@@ -476,4 +480,168 @@ test("advanced Markdown export declares reduced layout and transclusion semantic
   assert.match(markdown, /lossiness: column layout/);
   assert.match(markdown, /lossiness: object transclusion view/);
   assert.match(markdown, /\[Projected\]\(object:page-2\)/);
+});
+
+test("toggle emoji and inline math interfaces persist in the neutral document", () => {
+  const document = {
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          attrs: {
+            emoji: "!",
+            id: "toggle-emoji",
+            toggleCollapsed: false,
+          },
+          content: [
+            { type: "text", text: "Result " },
+            {
+              type: "text",
+              text: "x",
+              marks: [
+                {
+                  type: "inlineMath",
+                  attrs: { source: "x^2", sourceStatus: "valid" },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+  assert.equal(isBlockEditorDocument(document), true);
+  assert.match(blockEditorDocumentToMarkdown(document), /<!-- toggle -->/);
+  assert.match(blockEditorDocumentToMarkdown(document), /\$x\^2\$/);
+
+  const invalid = structuredClone(document);
+  invalid.doc.content[0].content[1].marks[0].attrs.source = "<x>";
+  assert.equal(isBlockEditorDocument(invalid), false);
+});
+
+test("Mermaid and TeX source blocks keep editable source and safe error states", () => {
+  const document = {
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "codeBlock",
+          attrs: {
+            id: "mermaid-1",
+            language: "mermaid",
+            renderMode: "mermaid",
+            sourceStatus: "invalid",
+          },
+          content: [{ type: "text", text: "graph TD; A-->" }],
+        },
+        {
+          type: "mathBlock",
+          attrs: {
+            displayMode: "block",
+            id: "math-invalid",
+            source: "\\frac{",
+            sourceStatus: "invalid",
+          },
+        },
+      ],
+    },
+  };
+
+  assert.equal(isBlockEditorDocument(document), true);
+  const markdown = blockEditorDocumentToMarkdown(document);
+  assert.match(markdown, /```mermaid/);
+  assert.match(markdown, /graph TD; A-->/);
+  assert.match(markdown, /\$\$\n\\frac\{\n\$\$/);
+});
+
+test("group and column transactions preserve child ids and accessible order", () => {
+  const document = blockEditorDocumentFromPlainText("Alpha\nBeta\nGamma");
+  const [alpha, beta, gamma] = document.doc.content.map(
+    (node) => node.attrs.id,
+  );
+
+  const grouped = groupTopLevelBlocks(document, [alpha, beta], {
+    appearance: "callout",
+    id: "group-transaction",
+    width: "wide",
+  });
+  assert.equal(isBlockEditorDocument(grouped), true);
+  assert.deepEqual(
+    grouped.doc.content[0].content.map((node) => node.attrs.id),
+    [alpha, beta],
+  );
+  assert.equal(grouped.doc.content[1].attrs.id, gamma);
+
+  const ungrouped = ungroupTopLevelGroupBlock(grouped, "group-transaction");
+  assert.deepEqual(
+    ungrouped.doc.content.map((node) => node.attrs.id),
+    [alpha, beta, gamma],
+  );
+
+  const columned = createColumnLayoutFromTopLevelBlocks(document, [
+    alpha,
+    beta,
+    gamma,
+  ]);
+  assert.equal(columned.doc.content[0].type, "columnLayout");
+  assert.deepEqual(
+    columned.doc.content[0].content.flatMap((column) =>
+      column.content.map((node) => node.attrs.id),
+    ),
+    [alpha, beta, gamma],
+  );
+  assert.equal(isBlockEditorDocument(columned), true);
+});
+
+test("advanced width appearance and object block variants update through one contract", () => {
+  const document = {
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "groupBlock",
+          attrs: { appearance: "card", id: "group-controls", width: "content" },
+          content: [{ type: "paragraph", attrs: { id: "group-child" } }],
+        },
+        {
+          type: "objectBlock",
+          attrs: {
+            id: "object-controls",
+            state: "offline",
+            targetId: "media-1",
+            title: "Audio note",
+            viewKind: "small-card",
+          },
+        },
+      ],
+    },
+  };
+
+  const withGroupControls = updateAdvancedBlockLayoutAttributes(
+    document,
+    "group-controls",
+    { appearance: "plain", width: "full" },
+  );
+  assert.equal(withGroupControls.doc.content[0].attrs.appearance, "plain");
+  assert.equal(withGroupControls.doc.content[0].attrs.width, "full");
+
+  const withObjectControls = updateAdvancedBlockLayoutAttributes(
+    withGroupControls,
+    "object-controls",
+    { mediaDisplay: "audio", viewKind: "transclusion" },
+  );
+  assert.deepEqual(withObjectControls.doc.content[1].attrs, {
+    id: "object-controls",
+    mediaDisplay: "audio",
+    state: "offline",
+    targetId: "media-1",
+    title: "Audio note",
+    viewKind: "transclusion",
+  });
+  assert.equal(isBlockEditorDocument(withObjectControls), true);
 });

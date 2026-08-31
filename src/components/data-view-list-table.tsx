@@ -15,7 +15,147 @@ import {
   workspaceListSurfaceClass,
 } from "@/components/ui/workspace-surface";
 import { cn } from "@/lib/utils";
+import {
+  projectTableViewColumns,
+  reorderTableViewColumns,
+  setTableViewColumnVisibility,
+  setTableViewColumnWidth,
+  setTableViewColumnWrapping,
+  type WorkspaceDataView,
+} from "@/lib/workspace-object-views";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
+
+function commitTableUpdate(
+  props: ProjectedDataViewProps,
+  result: { readonly ok: true; readonly value: WorkspaceDataView } | { readonly ok: false },
+) {
+  if (!result.ok) return;
+  props.onViewUpdate?.(props.view, { presentation: result.value.presentation });
+}
+
+function moveTableColumn(
+  props: ProjectedDataViewProps,
+  columnId: string,
+  delta: -1 | 1,
+) {
+  if (props.view.presentation.kind !== "table") return;
+  const ids = props.view.presentation.columns.map((column) => column.id);
+  const index = ids.indexOf(columnId);
+  const target = index + delta;
+  if (index === -1 || target < 0 || target >= ids.length) return;
+  const next = [...ids];
+  const [column] = next.splice(index, 1);
+  next.splice(target, 0, column);
+  commitTableUpdate(props, reorderTableViewColumns(props.view, next));
+}
+
+function DataViewTableControls(props: ProjectedDataViewProps) {
+  if (props.view.presentation.kind !== "table" || !props.structure) {
+    return null;
+  }
+  const projected = projectTableViewColumns(props.view, props.structure);
+  const columns = projected.ok
+    ? projected.value
+    : props.view.presentation.columns.map((column) => ({
+        ...column,
+        missing: false,
+      }));
+  return (
+    <div
+      data-slot="table-view-customization"
+      className="grid gap-2 rounded-lg border bg-card p-2 text-xs text-muted-foreground sm:grid-cols-2 lg:grid-cols-3"
+    >
+      {columns.map((column, index) => (
+        <div
+          key={column.id}
+          data-missing={column.missing || undefined}
+          className="grid gap-2 rounded-md border border-transparent bg-muted/30 p-2"
+        >
+          <label className="flex min-w-0 items-center gap-2">
+            <input
+              type="checkbox"
+              checked={column.visible}
+              onChange={(event) =>
+                commitTableUpdate(
+                  props,
+                  setTableViewColumnVisibility(
+                    props.view,
+                    column.id,
+                    event.currentTarget.checked,
+                  ),
+                )
+              }
+            />
+            <span className="truncate text-foreground">
+              {props.propertyLabels?.[column.propertyId] ?? column.label}
+            </span>
+          </label>
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <label className="flex min-w-0 items-center gap-1">
+              <span>{props.labels.wrapColumn}</span>
+              <input
+                type="checkbox"
+                checked={column.wrap ?? false}
+                onChange={(event) =>
+                  commitTableUpdate(
+                    props,
+                    setTableViewColumnWrapping(
+                      props.view,
+                      column.id,
+                      event.currentTarget.checked,
+                    ),
+                  )
+                }
+              />
+            </label>
+            <label className="flex min-w-0 items-center gap-1">
+              <span>{props.labels.columnWidth}</span>
+              <input
+                type="number"
+                min={96}
+                step={8}
+                value={column.width ?? ""}
+                placeholder="auto"
+                className="h-7 w-20 rounded-md border bg-background px-2 text-foreground"
+                onChange={(event) => {
+                  const width = Number(event.currentTarget.value);
+                  if (!Number.isFinite(width) || width <= 0) return;
+                  commitTableUpdate(
+                    props,
+                    setTableViewColumnWidth(props.view, column.id, width),
+                  );
+                }}
+              />
+            </label>
+            <button
+              type="button"
+              className="rounded-md px-1.5 py-1 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-40"
+              disabled={index === 0}
+              aria-label={props.labels.moveColumnLeft(column.label)}
+              onClick={() => moveTableColumn(props, column.id, -1)}
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              className="rounded-md px-1.5 py-1 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-40"
+              disabled={index === columns.length - 1}
+              aria-label={props.labels.moveColumnRight(column.label)}
+              onClick={() => moveTableColumn(props, column.id, 1)}
+            >
+              →
+            </button>
+          </div>
+          {column.missing ? (
+            <span className="text-[11px] text-destructive">
+              {props.labels.missingColumn}
+            </span>
+          ) : null}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function DataViewListRow({
   entity,
@@ -75,6 +215,7 @@ function DataViewTable(props: ProjectedDataViewProps) {
   const columns = presentation.columns.filter((column) => column.visible);
   return (
     <div className="grid gap-4">
+      <DataViewTableControls {...props} />
       <div className={cn(workspaceListSurfaceClass, "overflow-x-auto p-0")}>
         <table className="w-full min-w-xl border-collapse text-sm">
           <thead className="bg-muted/60 text-left text-xs text-muted-foreground">

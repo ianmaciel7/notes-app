@@ -1,6 +1,7 @@
 type PersistedStructureRecord = {
   readonly id: string;
   readonly ownership: string;
+  readonly propertyDefinitions?: readonly { readonly id: string }[];
 };
 
 function isRequiredStructure(structure: PersistedStructureRecord): boolean {
@@ -14,7 +15,32 @@ function reconcileRequiredStructures<T extends PersistedStructureRecord>(
   currentRegistry: readonly T[],
   storedRegistry: readonly T[],
 ): readonly T[] {
-  const requiredStructures = currentRegistry.filter(isRequiredStructure);
+  const storedById = new Map(
+    storedRegistry.map((structure) => [structure.id, structure]),
+  );
+  const requiredStructures = currentRegistry
+    .filter(isRequiredStructure)
+    .map((structure) => {
+      const stored = storedById.get(structure.id);
+      if (!structure.propertyDefinitions || !stored?.propertyDefinitions) {
+        return structure;
+      }
+      const currentIds = new Set(
+        structure.propertyDefinitions.map((definition) => definition.id),
+      );
+      const storedOnlyDefinitions = stored.propertyDefinitions.filter(
+        (definition) => !currentIds.has(definition.id),
+      );
+      return storedOnlyDefinitions.length === 0
+        ? structure
+        : ({
+            ...structure,
+            propertyDefinitions: [
+              ...structure.propertyDefinitions,
+              ...storedOnlyDefinitions,
+            ],
+          } as T);
+    });
   const requiredIds = new Set(
     requiredStructures.map((structure) => structure.id),
   );

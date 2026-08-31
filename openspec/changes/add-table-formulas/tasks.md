@@ -18,8 +18,8 @@
 
 ## 4. UI, Persistence, and Export
 
-- [ ] 4.1 Add formula entry, suggestions, reference highlights, error explanations, keyboard behavior, and accessibility.
-- [ ] 4.2 Persist source/AST/dependencies/result revision in native snapshots.
+- [x] 4.1 Add formula entry, suggestions, reference highlights, error explanations, keyboard behavior, and accessibility.
+- [x] 4.2 Persist source/AST/dependencies/result revision in native snapshots.
 - [x] 4.3 Define CSV and Markdown source/result export modes and lossiness.
 
 ## 5. Acceptance

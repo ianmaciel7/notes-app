@@ -181,6 +181,21 @@ function createTextCellContent(text: string): readonly TableBlockCellContent[] {
   return text ? [{ text, type: "text" }] : [];
 }
 
+function createObjectLinkCellContent(
+  text: string,
+  objectId: string,
+): readonly TableBlockCellContent[] {
+  return text
+    ? [
+        {
+          marks: [{ attrs: { objectId }, type: "objectLink" }],
+          text,
+          type: "text",
+        },
+      ]
+    : [];
+}
+
 function createTableBlockModel(
   options: { readonly columnCount?: number; readonly rowCount?: number } = {},
 ): TableBlockModel {
@@ -914,10 +929,13 @@ export type {
 };
 export {
   applyTableBlockCommand,
+  cellDisplayText,
   cellKey,
+  createObjectLinkCellContent,
   createTableBlockConversion,
   createTableBlockModel,
   createTableBlockNode,
+  createTextCellContent,
   DEFAULT_TABLE_COLUMNS,
   DEFAULT_TABLE_ROWS,
   exportTableBlockToCsv,

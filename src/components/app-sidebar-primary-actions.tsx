@@ -67,10 +67,9 @@ type AppSidebarPrimaryActionId =
   | "calendar"
   | "tasks";
 
-type AppSidebarPrimaryNavigationAction = Exclude<
-  AppSidebarPrimaryActionId,
-  "new"
->;
+type AppSidebarPrimaryNavigationAction =
+  | Exclude<AppSidebarPrimaryActionId, "new">
+  | "trash";
 
 type AppSidebarShortcut = string;
 
