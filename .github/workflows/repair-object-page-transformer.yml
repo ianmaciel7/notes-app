@@ -22,7 +22,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Repair ambiguous document menu marker and push
+      - name: Repair ambiguous pin marker and push
         shell: bash
         run: |
           set -euo pipefail
@@ -32,55 +32,44 @@ jobs:
           path = Path('.github/scripts/apply-object-page-parity.py')
           text = path.read_text(encoding='utf-8')
 
-          source_old = (
-              "'''          <DocumentMoreMenu\n"
-              '            onChangeType={() => showMessage(t("documentMenu.changeType"))}\n'
-              "'''"
+          old_pin_prefix = (
+              "    old_pin = '''              setPinnedEntities((current) =>\n"
           )
-          source_new = (
-              "'''        menu={\n"
-              "          <DocumentMoreMenu\n"
-              '            onChangeType={() => showMessage(t("documentMenu.changeType"))}\n'
-              "            onCustomize={() => setCustomizeOpen(true)}\n"
-              "'''"
+          contextual_old_pin_prefix = (
+              "    old_pin = '''            onFindInPage={() => setFindInPageOpen(true)}\n"
+              "            onImport={() => importInputRef.current?.click()}\n"
+              "            onPin={() => {\n"
+              "              const Icon =\n"
+              "                objectTypeDefinitionById[structure.iconName]?.icon ??\n"
+              "                objectTypeDefinitionById.page.icon;\n"
+              "              setPinnedEntities((current) =>\n"
           )
-          replacement_old = (
-              "'''          <DocumentMoreMenu\n"
-              "            isPinned={isPinned}\n"
-              "            onChangeType={() =>\n"
-              "              setTypeActivationRequest((current) => current + 1)\n"
-              "            }\n"
-              "'''"
-          )
-          replacement_new = (
-              "'''        menu={\n"
-              "          <DocumentMoreMenu\n"
-              "            isPinned={isPinned}\n"
-              "            onChangeType={() =>\n"
-              "              setTypeActivationRequest((current) => current + 1)\n"
-              "            }\n"
-              "            onCustomize={() => setCustomizeOpen(true)}\n"
-              "'''"
+          new_pin_prefix = "    new_pin = '''              if (isPinned) {\n"
+          contextual_new_pin_prefix = (
+              "    new_pin = '''            onFindInPage={() => setFindInPageOpen(true)}\n"
+              "            onImport={() => importInputRef.current?.click()}\n"
+              "            onPin={() => {\n"
+              "              const Icon =\n"
+              "                objectTypeDefinitionById[structure.iconName]?.icon ??\n"
+              "                objectTypeDefinitionById.page.icon;\n"
+              "              if (isPinned) {\n"
           )
 
-          if source_old in text and replacement_old in text:
-              if text.count(source_old) != 1:
-                  raise SystemExit(
-                      f'Expected one source menu marker, found {text.count(source_old)}'
-                  )
-              if text.count(replacement_old) != 1:
-                  raise SystemExit(
-                      f'Expected one replacement menu marker, found {text.count(replacement_old)}'
-                  )
-              text = text.replace(source_old, source_new, 1)
-              text = text.replace(replacement_old, replacement_new, 1)
+          if old_pin_prefix in text and new_pin_prefix in text:
+              if text.count(old_pin_prefix) != 1 or text.count(new_pin_prefix) != 1:
+                  raise SystemExit('Pin assignment markers are not unique.')
+              text = text.replace(old_pin_prefix, contextual_old_pin_prefix, 1)
+              text = text.replace(new_pin_prefix, contextual_new_pin_prefix, 1)
               path.write_text(text, encoding='utf-8')
-          elif source_new in text and replacement_new in text:
-              print('Document menu marker is already repaired.')
+          elif (
+              contextual_old_pin_prefix in text
+              and contextual_new_pin_prefix in text
+          ):
+              print('Pin marker is already repaired.')
           else:
               raise SystemExit(
-                  'Document menu marker was not found; source=' 
-                  f'{text.count(source_old)}, replacement={text.count(replacement_old)}'
+                  'Pin marker was not found; old=' 
+                  f'{text.count(old_pin_prefix)}, new={text.count(new_pin_prefix)}'
               )
           PY
 
@@ -92,5 +81,5 @@ jobs:
           git config user.name 'Ian Maciel'
           git config user.email 'ianmaciel76@gmail.com'
           git add .github/scripts/apply-object-page-parity.py
-          git commit -m 'fix: disambiguate document menu transformer marker'
+          git commit -m 'fix: disambiguate page pin transformer marker'
           git push origin HEAD:codex/align-object-page-complete-parity
