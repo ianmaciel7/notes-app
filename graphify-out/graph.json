@@ -62239,7 +62239,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L509",
+      "source_location": "L529",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -87558,7 +87558,7 @@
       "context": "export",
       "confidence": "EXTRACTED",
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L529",
+      "source_location": "L549",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor",
@@ -162459,5 +162459,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "866deac132dce8e10e5c4439f2161a0522107c18"
+  "built_at_commit": "407764e153c40e5294c04e31015d7463dc901a1f"
 }

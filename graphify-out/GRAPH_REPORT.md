@@ -1,7 +1,7 @@
 # Graph Report - notes-app  (2026-08-31)
 
 ## Corpus Check
-- 689 files · ~534,831 words
+- 689 files · ~534,882 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `866deac1`
+- Built from commit: `407764e1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1592,7 +1592,7 @@ Nodes (4): Checkout, Commands, Object Page Editor Trigger Evidence Attempt - 202
 ## Work-memory lessons
 
 **Preferred sources** — corroborated by past sessions; start here.
-- `shared-styles.ts` (2× useful, score=1.633414055)
+- `shared-styles.ts` (2× useful, score=1.633389876)
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

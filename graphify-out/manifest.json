@@ -1445,8 +1445,8 @@
     "semantic_hash": ""
   },
   "src/components/block-editor.tsx": {
-    "mtime": 1788174966.3588524,
-    "ast_hash": "0b0161c920ee87cd135305185f30edf0",
+    "mtime": 1788175092.6042626,
+    "ast_hash": "6033fc06ea00b0adebdfba71c922e699",
     "semantic_hash": ""
   },
   "src/editor/document.ts": {

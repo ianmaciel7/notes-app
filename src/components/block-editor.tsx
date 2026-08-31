@@ -504,6 +504,13 @@ function BlockEditor({
     flushCommit();
   }, [editable, editor, flushCommit, onChange]);
 
+  React.useEffect(() => {
+    if (!editor || !editable) return;
+    editor.view.dom.addEventListener("focusout", flushCurrentDocument);
+    return () =>
+      editor.view.dom.removeEventListener("focusout", flushCurrentDocument);
+  }, [editable, editor, flushCurrentDocument]);
+
   const interactions =
     editor && editable ? (
       <>
