@@ -135,9 +135,14 @@ function createRecord(
   value: unknown,
   previous: WorkspaceDatabaseRecord | undefined,
   updatedAt: string,
+  indexes: Pick<
+    WorkspaceDatabaseRecord,
+    "entityId" | "purgeAfter" | "spaceId"
+  > = {},
 ): WorkspaceDatabaseRecord {
   return {
     aggregateId: id,
+    ...indexes,
     id,
     kind,
     revision: (previous?.revision ?? 0) + 1,
@@ -171,6 +176,30 @@ function createWorkspaceRecords(
         updatedAt,
       ),
     ),
+    ...state.trashRecords.map((record) =>
+      createRecord(
+        "trash",
+        record.entityId,
+        record,
+        previousByKey.get(recordKey("trash", record.entityId)),
+        updatedAt,
+        {
+          entityId: record.entityId,
+          purgeAfter: record.purgeAfter,
+          spaceId: record.spaceId,
+        },
+      ),
+    ),
+    ...state.tombstones.map((tombstone) =>
+      createRecord(
+        "tombstone",
+        tombstone.entityId,
+        tombstone,
+        previousByKey.get(recordKey("tombstone", tombstone.entityId)),
+        updatedAt,
+        { entityId: tombstone.entityId, spaceId: tombstone.spaceId },
+      ),
+    ),
     createRecord("setting", "workspace", {
       activeEntityId: state.activeEntityId,
       nextId: state.nextId,
@@ -184,6 +213,8 @@ function toRepositorySnapshot(state: WorkspaceObjectState): WorkspaceRepositoryS
     entities: state.entities,
     nextId: state.nextId,
     structures: state.structures,
+    tombstones: state.tombstones,
+    trashRecords: state.trashRecords,
   };
 }
 
@@ -206,6 +237,12 @@ function snapshotFromRecords(
     structures: records
       .filter((record) => record.kind === "structure")
       .map((record) => cloneValue(record.value) as WorkspaceStructure),
+    tombstones: records
+      .filter((record) => record.kind === "tombstone")
+      .map((record) => cloneValue(record.value) as TrashTombstone),
+    trashRecords: records
+      .filter((record) => record.kind === "trash")
+      .map((record) => cloneValue(record.value) as TrashRecord),
   };
 }
 
@@ -215,6 +252,8 @@ function serializeRepositorySnapshot(snapshot: WorkspaceRepositorySnapshot): str
     entities: snapshot.entities,
     nextId: snapshot.nextId,
     structures: snapshot.structures,
+    tombstones: snapshot.tombstones,
+    trashRecords: snapshot.trashRecords,
     version: WORKSPACE_OBJECT_SCHEMA_VERSION,
   });
 }
@@ -456,8 +495,11 @@ function openWorkspaceDatabase(): Promise<IDBDatabase> {
         const store = db.createObjectStore(WORKSPACE_DATABASE_RECORD_STORE, {
           keyPath: "key",
         });
-        store.createIndex("kind", "kind");
-        store.createIndex("aggregateId", "aggregateId");
+        ensureWorkspaceRecordIndexes(store);
+      } else {
+        ensureWorkspaceRecordIndexes(
+          request.transaction!.objectStore(WORKSPACE_DATABASE_RECORD_STORE),
+        );
       }
       if (!db.objectStoreNames.contains(WORKSPACE_DATABASE_METADATA_STORE)) {
         db.createObjectStore(WORKSPACE_DATABASE_METADATA_STORE);
@@ -466,6 +508,21 @@ function openWorkspaceDatabase(): Promise<IDBDatabase> {
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
   });
+}
+
+function ensureWorkspaceRecordIndexes(store: IDBObjectStore): void {
+  const indexes = [
+    ["aggregateId", "aggregateId"],
+    ["entityId", "entityId"],
+    ["kind", "kind"],
+    ["purgeAfter", "purgeAfter"],
+    ["spaceId", "spaceId"],
+  ] as const;
+  for (const [name, keyPath] of indexes) {
+    if (!store.indexNames.contains(name)) {
+      store.createIndex(name, keyPath);
+    }
+  }
 }
 
 function createBrowserWorkspaceDatabaseAdapter(): WorkspaceDatabaseAdapter {
