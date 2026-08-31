@@ -1220,8 +1220,8 @@
     "semantic_hash": ""
   },
   "src/messages/pt-BR.json": {
-    "mtime": 1788170337.2470486,
-    "ast_hash": "70bea87cd7628eba8b3a256a9d822f10",
+    "mtime": 1788170520.028131,
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/components/object-icons.tsx": {
@@ -1425,8 +1425,8 @@
     "semantic_hash": ""
   },
   "tests/e2e/workspace-parity.spec.ts": {
-    "mtime": 1788170464.7976165,
-    "ast_hash": "7de6ee4c5ba191b9510f8f0247b61a29",
+    "mtime": 1788170518.74592,
+    "ast_hash": "c524482cde3bddfe2148c8211a8bba23",
     "semantic_hash": ""
   },
   "src/lib/workspace-layout.ts": {
@@ -2075,8 +2075,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-task-management.test.mjs": {
-    "mtime": 1788170507.1689444,
-    "ast_hash": "1697d1f41da955921c03e5fd4b6bf94c",
+    "mtime": 1788170522.5845802,
+    "ast_hash": "fb73d020fbef94499cb1fc0f5f57fa96",
     "semantic_hash": ""
   },
   ".superpowers/sdd/2026-08-25-prototyping-priorities/change-01-add-block-editor-report.md": {
