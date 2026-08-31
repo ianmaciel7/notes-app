@@ -4,7 +4,11 @@ import type {
   StructureId,
   WorkspaceStructure,
 } from "./workspace-object-types.ts";
-import type { WorkspaceEntity } from "./workspace-objects.ts";
+import {
+  selectActiveEntities,
+  type WorkspaceEntity,
+  type WorkspaceObjectState,
+} from "./workspace-objects.ts";
 import { readWorkspacePropertyValue } from "./workspace-property-values.ts";
 
 export const OBJECT_VIEW_KINDS = [
@@ -338,7 +342,9 @@ export type DashboardBuiltInProjection = {
 
 export type DashboardBuiltInProjectionInput = {
   readonly collectionRecords?: readonly DashboardSourceRecord[];
-  readonly entities: readonly WorkspaceEntity[];
+  readonly entities:
+    | Pick<WorkspaceObjectState, "entities" | "trashRecords">
+    | readonly WorkspaceEntity[];
   readonly relationSourcesByTargetId?: ReadonlyMap<string, readonly string[]>;
   readonly structureId: StructureId;
 };
@@ -1045,10 +1051,14 @@ export function setDashboardSectionVisibility(
 }
 
 function dashboardEntitiesForStructure(
-  entities: readonly WorkspaceEntity[],
+  entities:
+    | Pick<WorkspaceObjectState, "entities" | "trashRecords">
+    | readonly WorkspaceEntity[],
   structureId: StructureId,
 ): WorkspaceEntity[] {
-  return entities.filter((entity) => entity.objectTypeId === structureId);
+  return selectActiveEntities(entities).filter(
+    (entity) => entity.objectTypeId === structureId,
+  );
 }
 
 function hasEntityCollectionMembership(entity: WorkspaceEntity): boolean {
@@ -1135,7 +1145,10 @@ export function projectTaskDashboardSection(
       title,
     };
   }
-  return provider.project(input);
+  return provider.project({
+    ...input,
+    entities: selectActiveEntities(input.entities),
+  });
 }
 
 function defaultSmallCardPropertyIds(
@@ -1408,11 +1421,13 @@ export function switchDataViewKind(
 }
 
 export function executeQueryDefinition(
-  entities: readonly WorkspaceEntity[],
+  entities:
+    | Pick<WorkspaceObjectState, "entities" | "trashRecords">
+    | readonly WorkspaceEntity[],
   query: QueryDefinition,
 ): WorkspaceEntity[] {
   const search = normalizeText(query.search?.trim() ?? "");
-  const filtered = entities.filter((entity) => {
+  const filtered = selectActiveEntities(entities).filter((entity) => {
     if (!query.filters.every((filter) => matchesQueryFilter(entity, filter))) {
       return false;
     }
@@ -1446,11 +1461,15 @@ export function executeQueryDefinition(
 }
 
 export function resolveObjectView(
-  entities: readonly WorkspaceEntity[],
+  entities:
+    | Pick<WorkspaceObjectState, "entities" | "trashRecords">
+    | readonly WorkspaceEntity[],
   entityId: string,
   config: ObjectViewConfig,
 ): ObjectViewProjection {
-  const entity = entities.find((candidate) => candidate.id === entityId);
+  const entity = selectActiveEntities(entities).find(
+    (candidate) => candidate.id === entityId,
+  );
   return entity
     ? { config, entity, status: "ready" }
     : { config, entityId, status: "missing" };
@@ -1485,7 +1504,9 @@ function groupProjectionItems(
 
 export function projectDataView(
   view: WorkspaceDataView,
-  entities: readonly WorkspaceEntity[],
+  entities:
+    | Pick<WorkspaceObjectState, "entities" | "trashRecords">
+    | readonly WorkspaceEntity[],
 ): DataViewProjection {
   const items = executeQueryDefinition(entities, view.query);
   return {

@@ -1630,8 +1630,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-dates-calendar.ts": {
-    "mtime": 1787702817.2071161,
-    "ast_hash": "d4c1126a1dac254490186d26232bb532",
+    "mtime": 1788170888.5397954,
+    "ast_hash": "b917863e808352cdcb5f4f48c2ecec49",
     "semantic_hash": ""
   },
   "src/lib/workspace-domain-identities.ts": {
@@ -1660,8 +1660,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-object-views.ts": {
-    "mtime": 1788169757.551443,
-    "ast_hash": "549f0cd428d4301fbfa21955aa56bf23",
+    "mtime": 1788170871.3714252,
+    "ast_hash": "3079fff4030815a187db63558b909c7d",
     "semantic_hash": ""
   },
   "src/lib/workspace-property-values.ts": {
@@ -3815,8 +3815,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/align-task-management-with-current-capacities/tasks.md": {
-    "mtime": 1788170682.1097915,
-    "ast_hash": "0c3b72599c8e669853277659e43bddd1",
+    "mtime": 1788170859.438973,
+    "ast_hash": "a18d972b1bdab5870c5296bc931812a0",
     "semantic_hash": ""
   },
   "openspec/changes/archive/2026-08-28-add-keyboard-command-system/.openspec.yaml": {
@@ -4015,8 +4015,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-task-management.ts": {
-    "mtime": 1788170576.9935744,
-    "ast_hash": "93cd7de2215cedb12fa96e42ac78089c",
+    "mtime": 1788170843.2015598,
+    "ast_hash": "f73def0a2c52b18af643b09762242156",
     "semantic_hash": ""
   }
 }

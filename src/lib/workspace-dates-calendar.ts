@@ -1,6 +1,10 @@
 import { blockEditorDocumentToPlainText } from "../editor/document.ts";
 import type { WorkspaceStructure } from "./workspace-object-types.ts";
-import type { WorkspaceEntity } from "./workspace-objects.ts";
+import {
+  selectActiveEntities,
+  type WorkspaceEntity,
+  type WorkspaceObjectState,
+} from "./workspace-objects.ts";
 import type { WorkspacePropertyValue } from "./workspace-property-values.ts";
 
 export type DatePropertyValue = {
@@ -61,6 +65,10 @@ type DateRange = {
   readonly end: string;
   readonly start: string;
 };
+
+type WorkspaceEntitySource =
+  | Pick<WorkspaceObjectState, "entities" | "trashRecords">
+  | readonly WorkspaceEntity[];
 
 const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const DATE_REFERENCE_PATTERN = /(?:\[\[|#|date:)(\d{4}-\d{2}-\d{2})(?:\]\])?/g;
@@ -234,11 +242,15 @@ export function isDailyNote(
 }
 
 export function findDailyNote(
-  entities: readonly WorkspaceEntity[],
+  entities: WorkspaceEntitySource,
   spaceId: string,
   date: string,
 ): WorkspaceEntity | null {
-  return entities.find((entity) => isDailyNote(entity, spaceId, date)) ?? null;
+  return (
+    selectActiveEntities(entities).find((entity) =>
+      isDailyNote(entity, spaceId, date),
+    ) ?? null
+  );
 }
 
 function readDateValue(
@@ -291,10 +303,10 @@ function plainTextForEntity(entity: WorkspaceEntity): string {
 }
 
 export function createDateReferenceIndex(
-  entities: readonly WorkspaceEntity[],
+  entities: WorkspaceEntitySource,
 ): DateReferenceIndex {
   const byDate = new Map<string, DateReference[]>();
-  for (const entity of entities) {
+  for (const entity of selectActiveEntities(entities)) {
     for (const match of plainTextForEntity(entity).matchAll(
       DATE_REFERENCE_PATTERN,
     )) {
@@ -345,7 +357,7 @@ function entryIntersectsRange(
 }
 
 export function projectCalendarEntries(
-  entities: readonly WorkspaceEntity[],
+  entities: WorkspaceEntitySource,
   structures: readonly WorkspaceStructure[],
   options: {
     readonly date: string;
@@ -355,19 +367,20 @@ export function projectCalendarEntries(
     readonly timeZone?: string;
   },
 ): CalendarProjection {
+  const activeEntities = selectActiveEntities(entities);
   const range = projectionRange(options.span, options.date);
-  const references = createDateReferenceIndex(entities);
+  const references = createDateReferenceIndex(activeEntities);
   const structuresById = new Map(
     structures.map((structure) => [structure.id, structure]),
   );
   const entries = [
-    ...entities.flatMap((entity) =>
+    ...activeEntities.flatMap((entity) =>
       projectionEntriesForEntity(entity, structuresById, {
         drivingDateProperties: options.drivingDateProperties ?? {},
         spaceId: options.spaceId,
       }),
     ),
-    ...dateReferenceProjectionEntries(entities, references, range),
+    ...dateReferenceProjectionEntries(activeEntities, references, range),
   ];
   const visibleEntries = entries.filter((entry) =>
     entryIntersectsRange(entry, range),
@@ -491,7 +504,7 @@ function projectCalendarDay(
 }
 
 export function createDayContext(
-  entities: readonly WorkspaceEntity[],
+  entities: WorkspaceEntitySource,
   structures: readonly WorkspaceStructure[],
   options: {
     readonly date: string;
@@ -500,16 +513,17 @@ export function createDayContext(
     readonly timeZone?: string;
   },
 ): DayContext {
+  const activeEntities = selectActiveEntities(entities);
   const projection = projectCalendarEntries(entities, structures, {
     ...options,
     span: "day",
   });
   const day = projection.days[0];
   const references =
-    createDateReferenceIndex(entities).byDate.get(options.date) ?? [];
+    createDateReferenceIndex(activeEntities).byDate.get(options.date) ?? [];
   return {
     ...day,
-    dailyNote: findDailyNote(entities, options.spaceId, options.date),
+    dailyNote: findDailyNote(activeEntities, options.spaceId, options.date),
     references,
     timeline: [...day.entries].sort((left, right) =>
       left.title.localeCompare(right.title, undefined, {
