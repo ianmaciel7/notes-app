@@ -5,6 +5,8 @@ import {
 } from "./workspace-object-storage.ts";
 import type { WorkspaceStructure } from "./workspace-object-types.ts";
 import type {
+  TrashRecord,
+  TrashTombstone,
   WorkspaceEntity,
   WorkspaceObjectState,
 } from "./workspace-objects.ts";
@@ -18,13 +20,18 @@ type WorkspaceDatabaseRecordKind =
   | "operation"
   | "query-view"
   | "setting"
-  | "structure";
+  | "structure"
+  | "tombstone"
+  | "trash";
 
 type WorkspaceDatabaseRecord = {
   readonly aggregateId: string;
+  readonly entityId?: string;
   readonly id: string;
   readonly kind: WorkspaceDatabaseRecordKind;
+  readonly purgeAfter?: string;
   readonly revision: number;
+  readonly spaceId?: string;
   readonly updatedAt: string;
   readonly value: unknown;
 };
@@ -87,6 +94,8 @@ type WorkspaceRepositorySnapshot = {
   readonly entities: readonly WorkspaceEntity[];
   readonly nextId: number;
   readonly structures: readonly WorkspaceStructure[];
+  readonly tombstones: readonly TrashTombstone[];
+  readonly trashRecords: readonly TrashRecord[];
 };
 
 type WorkspaceDatabaseRecordKey =
@@ -95,7 +104,7 @@ type WorkspaceDatabaseRecordKey =
 const WORKSPACE_DATABASE_NAME = "notes-app-workspace-records";
 const WORKSPACE_DATABASE_RECORD_STORE = "records";
 const WORKSPACE_DATABASE_METADATA_STORE = "metadata";
-const WORKSPACE_DATABASE_VERSION = 1;
+const WORKSPACE_DATABASE_VERSION = 2;
 const METADATA_KEY = "workspace";
 const MIGRATION_AUTHORITATIVE_KEY = "migration:authoritative";
 const MIGRATION_CHECKSUM_KEY = "migration:checksum";
