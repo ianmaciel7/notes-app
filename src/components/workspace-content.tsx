@@ -113,6 +113,10 @@ import {
   selectObjectsInside,
 } from "@/lib/workspace-object-links";
 import {
+  RELATED_CONTENT_PANEL_LIMIT,
+  selectRelatedContent,
+} from "@/lib/workspace-related-content";
+import {
   acceptsFileForType,
   applyQueryDescription,
   type FileEntity,
@@ -4639,13 +4643,25 @@ function ContextualSearchWorkspace() {
   );
 }
 
+function workspaceContentEntityRevision(entity: WorkspaceEntity): string {
+  const lastUpdatedAt = entity.propertyValues.lastUpdatedAt;
+  return [
+    entity.id,
+    entity.title,
+    entity.createdAt,
+    lastUpdatedAt?.type === "lastUpdatedAt"
+      ? lastUpdatedAt.lastUpdatedAt.value
+      : "",
+  ].join(":");
+}
+
 function ContextualRelationsWorkspace({
   entry,
 }: {
   entry: "backlinks" | "objectsInside" | "relatedContent";
 }) {
   const t = useTranslations("workspace");
-  const { activeEntityId, createdEntities, objectTypes, selectEntity } =
+  const { activeEntityId, createdEntities, objectTypes, selectEntity, spaceId } =
     useWorkspace();
   const activeEntity = createdEntities.find(
     (entity) => entity.id === activeEntityId,
@@ -4657,18 +4673,30 @@ function ContextualRelationsWorkspace({
   const objectsInside = activeEntityId
     ? selectObjectsInside(linkIndex, activeEntityId)
     : [];
-  const relatedIds = Array.from(
-    new Set([
-      ...backlinks.map((item) => item.sourceId),
-      ...objectsInside.map((item) => item.targetId),
-    ]),
-  );
+  const sourceRevision = activeEntity
+    ? workspaceContentEntityRevision(activeEntity)
+    : "missing";
+  const relatedState = activeEntityId
+    ? selectRelatedContent({
+        entities: createdEntities,
+        generatedAt: "local",
+        indexRevision: createdEntities
+          .map(workspaceContentEntityRevision)
+          .join("|"),
+        limit: RELATED_CONTENT_PANEL_LIMIT,
+        sourceId: activeEntityId,
+        sourceRevision,
+        spaceId,
+      })
+    : null;
   const rawIds =
     entry === "backlinks"
       ? backlinks.map((item) => item.sourceId)
       : entry === "objectsInside"
         ? objectsInside.map((item) => item.targetId)
-        : relatedIds;
+        : relatedState?.kind === "ready"
+          ? relatedState.results.map((item) => item.targetId)
+          : [];
   const ids = Array.from(new Set(rawIds));
   const rows = ids
     .map((id) => createdEntities.find((entity) => entity.id === id))
@@ -4703,6 +4731,11 @@ function ContextualRelationsWorkspace({
     <div
       data-slot="contextual-panel-body"
       data-contextual-entry={entry}
+      data-result-revision={
+        entry === "relatedContent" && relatedState && "revision" in relatedState
+          ? relatedState.revision
+          : undefined
+      }
       className="flex h-full min-h-0 items-start justify-center overflow-auto px-8 py-10 text-sidebar-foreground"
     >
       <div className="w-full max-w-[36rem]">

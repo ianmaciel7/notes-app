@@ -92,7 +92,6 @@ import {
   findUnlinkedMentionCandidates,
   selectBacklinksForObject,
   selectObjectsInside,
-  selectRelatedEntities,
 } from "@/lib/workspace-object-links";
 import type { WorkspaceStructure } from "@/lib/workspace-object-types";
 import {
@@ -100,6 +99,11 @@ import {
   type ObjectConversionPlan,
   readWorkspaceEntityProperty,
 } from "@/lib/workspace-object-views";
+import {
+  RELATED_CONTENT_PANEL_LIMIT,
+  selectRelatedContent,
+  type RelatedContentState,
+} from "@/lib/workspace-related-content";
 import { acceptsFileForType, type WorkspaceEntity } from "@/lib/workspace-objects";
 
 type DocumentWorkspaceEntity =
@@ -1433,61 +1437,146 @@ function WorkspacePropertyGroup({
   );
 }
 
+function workspaceEntityRevision(entity: WorkspaceEntity): string {
+  const lastUpdatedAt = entity.propertyValues.lastUpdatedAt;
+  return [
+    entity.id,
+    entity.title,
+    entity.createdAt,
+    lastUpdatedAt?.type === "lastUpdatedAt"
+      ? lastUpdatedAt.lastUpdatedAt.value
+      : "",
+  ].join(":");
+}
+
+function RelatedContentStateMessage({
+  state,
+}: {
+  readonly state: Exclude<RelatedContentState, { kind: "ready" }>;
+}) {
+  const t = useTranslations("workspace");
+  const label =
+    state.kind === "empty"
+      ? t("linking.noRelatedContent")
+      : state.kind === "error"
+        ? t("linking.relatedContentError")
+        : state.reason === "unsupported-source"
+          ? t("linking.relatedContentUnsupported")
+          : t("linking.relatedContentUnavailable");
+  return (
+    <p
+      data-slot="workspace-object-related-content-state"
+      data-state={state.kind}
+      className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground"
+      role={state.kind === "error" ? "alert" : "status"}
+    >
+      {label}
+    </p>
+  );
+}
+
 function RelatedContent({ entityId }: { readonly entityId: string }) {
   const t = useTranslations("workspace");
-  const { createdEntities, objectTypes, selectEntity } = useWorkspace();
-  const related = React.useMemo(
-    () => selectRelatedEntities(createdEntities, entityId),
-    [createdEntities, entityId],
+  const { createdEntities, objectTypes, openInSidePanel, selectEntity, spaceId } =
+    useWorkspace();
+  const source = createdEntities.find((item) => item.id === entityId);
+  const state = React.useMemo(
+    () =>
+      selectRelatedContent({
+        entities: createdEntities,
+        generatedAt: "local",
+        indexRevision: createdEntities.map(workspaceEntityRevision).join("|"),
+        limit: RELATED_CONTENT_PANEL_LIMIT,
+        sourceId: entityId,
+        sourceRevision: source ? workspaceEntityRevision(source) : "missing",
+        spaceId,
+      }),
+    [createdEntities, entityId, source, spaceId],
   );
-  if (related.length === 0) return null;
+  if (state.kind === "unavailable" && state.reason === "unsupported-source") {
+    return null;
+  }
+  const related = state.kind === "ready" ? state.results.slice(0, 5) : [];
+  const hasContinuation =
+    state.kind === "ready" && state.results.length > related.length;
+  const openContinuation = () =>
+    openInSidePanel({
+      id: "relatedContent",
+      label: t("explore.relatedContent"),
+      icon: ObjectCollectionIcon,
+      iconClassName: objectIconToneBadgeClass.gray,
+      draggable: true,
+    });
   return (
     <section
       data-slot="workspace-object-related-content"
-      className="mt-24 border-t pt-8"
+      data-state={state.kind}
+      data-result-revision={"revision" in state ? state.revision : undefined}
+      className="mt-12 border-t pt-8"
       aria-labelledby={`${entityId}-related-heading`}
     >
-      <h2
-        id={`${entityId}-related-heading`}
-        className="mb-4 inline-flex items-center gap-2 text-base font-semibold"
-      >
+      <h2 id={`${entityId}-related-heading`} className="text-base font-semibold">
         {t("explore.relatedContent")}
-        <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-          {related.length}
-        </span>
       </h2>
-      <div className="grid gap-1">
-        {related.map(({ entity: item }) => {
-          const objectType = objectTypes.find(
-            (candidate) => candidate.id === item.objectTypeId,
-          );
-          const Icon = objectType?.icon ?? objectTypeDefinitionById.page.icon;
-          return (
-            <button
-              key={item.id}
-              type="button"
-              className={cn(workspaceListRowClass, "min-h-11")}
-              onClick={() => selectEntity(item.id)}
-            >
-              <AppHeaderCaretDownIcon className="size-3 -rotate-90 text-muted-foreground" />
-              <ObjectIconBadge
-                icon={Icon}
-                tone={objectType?.tone ?? "blue"}
-                className="size-5 rounded-md"
-                iconClassName="size-3.5"
-              />
-              <span className="min-w-0 flex-1 truncate text-sm font-medium">
-                {item.title || t("lifecycle.untitled")}
-              </span>
-              {objectType ? (
-                <span className="hidden rounded-md border px-2 py-1 text-xs text-muted-foreground group-hover:inline-flex">
-                  {objectType.singularLabel ?? objectType.label}
+      {state.kind === "ready" ? (
+        <p className="mt-1 text-xs text-muted-foreground">
+          {state.partial
+            ? t("linking.relatedContentPartial")
+            : state.stale
+              ? t("linking.relatedContentStale")
+              : t("linking.relatedContentProvider")}
+        </p>
+      ) : null}
+      <div className="mt-4 grid gap-1">
+        {state.kind === "ready" ? (
+          related.map((result) => {
+            const item = createdEntities.find(
+              (candidate) => candidate.id === result.targetId,
+            );
+            if (!item) return null;
+            const objectType = objectTypes.find(
+              (candidate) => candidate.id === item.objectTypeId,
+            );
+            const Icon = objectType?.icon ?? objectTypeDefinitionById.page.icon;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={cn(workspaceListRowClass, "min-h-11")}
+                onClick={() => selectEntity(item.id)}
+              >
+                <AppHeaderCaretDownIcon className="size-3 -rotate-90 text-muted-foreground" />
+                <ObjectIconBadge
+                  icon={Icon}
+                  tone={objectType?.tone ?? "blue"}
+                  className="size-5 rounded-md"
+                  iconClassName="size-3.5"
+                />
+                <span className="min-w-0 flex-1 truncate text-sm font-medium">
+                  {item.title || t("lifecycle.untitled")}
                 </span>
-              ) : null}
-            </button>
-          );
-        })}
+                <span className="rounded-md border px-2 py-1 text-xs text-muted-foreground">
+                  {result.score.toFixed(2)}
+                </span>
+              </button>
+            );
+          })
+        ) : (
+          <RelatedContentStateMessage state={state} />
+        )}
       </div>
+      {hasContinuation ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="mt-3"
+          data-slot="workspace-object-related-content-more"
+          onClick={openContinuation}
+        >
+          {t("explore.findMore")}
+        </Button>
+      ) : null}
     </section>
   );
 }

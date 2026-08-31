@@ -111,16 +111,27 @@ test("archive and file security rejects traversal executables and excessive jobs
 
 test("import per-file limit uses the shared media size policy", () => {
   assert.equal(defaultImportExportSecurityLimits.maxFileBytes, 100_000_000);
-  assert.equal(defaultImportExportSecurityLimits.maxFileBytes, DEFAULT_MAX_MEDIA_BYTES);
+  assert.equal(
+    defaultImportExportSecurityLimits.maxFileBytes,
+    DEFAULT_MAX_MEDIA_BYTES,
+  );
 
   const accepted = createImportJob({
-    sources: [{ bytes: 100_000_000, path: "media/at-limit.png", mimeType: "image/png" }],
+    sources: [
+      { bytes: 100_000_000, path: "media/at-limit.png", mimeType: "image/png" },
+    ],
   });
   assert.equal(accepted.state, "previewed");
   assert.equal(accepted.media.length, 1);
 
   const rejected = createImportJob({
-    sources: [{ bytes: 100_000_001, path: "media/over-limit.png", mimeType: "image/png" }],
+    sources: [
+      {
+        bytes: 100_000_001,
+        path: "media/over-limit.png",
+        mimeType: "image/png",
+      },
+    ],
   });
   assert.equal(rejected.state, "blocked");
   assert.equal(rejected.errors[0].code, "job-limit-exceeded");

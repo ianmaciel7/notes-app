@@ -392,15 +392,13 @@ function findUnlinkedMentionCandidates(
       const excerpt = mentionNodeText(block);
       const normalizedExcerpt = normalizeMentionText(excerpt);
       const linkedRanges: MentionRange[] = [];
-      collectLinkedMentionRanges(
-        block,
-        targetId,
-        { value: 0 },
-        linkedRanges,
-      );
+      collectLinkedMentionRanges(block, targetId, { value: 0 }, linkedRanges);
       for (const candidateLabel of labels) {
         const normalizedLabel = normalizeMentionText(candidateLabel);
-        let candidateStart = findMentionStart(normalizedExcerpt, normalizedLabel);
+        let candidateStart = findMentionStart(
+          normalizedExcerpt,
+          normalizedLabel,
+        );
         while (candidateStart >= 0) {
           const candidateEnd = candidateStart + normalizedLabel.length;
           const overlapsLinkedRange = linkedRanges.some(

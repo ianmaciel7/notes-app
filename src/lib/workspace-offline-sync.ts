@@ -36,11 +36,7 @@ type WorkspaceOperationKind =
   | "media-download"
   | "media-upload";
 
-type WorkspaceOperationStatus =
-  | "acked"
-  | "failed"
-  | "in-flight"
-  | "pending";
+type WorkspaceOperationStatus = "acked" | "failed" | "in-flight" | "pending";
 
 type WorkspaceOperation = {
   readonly aggregateKey: WorkspaceDatabaseRecordKey;
@@ -205,14 +201,16 @@ const offlineCapabilityMatrix: readonly OfflineCapability[] = [
     label: "Media bytes",
     localDataRequired: true,
     offlineState: "degraded-offline",
-    unavailableMessage: "Remote media bytes must be downloaded before offline use.",
+    unavailableMessage:
+      "Remote media bytes must be downloaded before offline use.",
   },
   {
     id: "import-export",
     label: "Import and export",
     localDataRequired: true,
     offlineState: "degraded-offline",
-    unavailableMessage: "Remote sources and destinations require network access.",
+    unavailableMessage:
+      "Remote sources and destinations require network access.",
   },
   {
     id: "ai-assistant",
@@ -285,7 +283,12 @@ function createWorkspaceOperation(input: {
     baseRevision,
     createdAt: input.createdAt,
     id: operationId(input.spaceId, input.aggregateKey, baseRevision, kind),
-    idempotencyKey: operationId(input.spaceId, input.aggregateKey, baseRevision, kind),
+    idempotencyKey: operationId(
+      input.spaceId,
+      input.aggregateKey,
+      baseRevision,
+      kind,
+    ),
     kind,
     lastError: null,
     payload: input.payload,
@@ -299,8 +302,15 @@ function enqueueWorkspaceOperations(
   state: WorkspaceSyncState,
   operations: readonly WorkspaceOperation[],
 ): WorkspaceSyncState {
-  const known = new Set(state.outbox.map((operation) => operation.idempotencyKey));
-  const next = operations.filter((operation) => !known.has(operation.idempotencyKey));
+  const known = new Set(
+    state.outbox.map((operation) => operation.idempotencyKey),
+  );
+  const next: WorkspaceOperation[] = [];
+  for (const operation of operations) {
+    if (known.has(operation.idempotencyKey)) continue;
+    known.add(operation.idempotencyKey);
+    next.push(operation);
+  }
   return { ...state, outbox: [...state.outbox, ...next] };
 }
 
@@ -342,7 +352,8 @@ function markOperationFailure(
 }
 
 function operationReady(operation: WorkspaceOperation, now: Date): boolean {
-  if (operation.status === "acked" || operation.status === "in-flight") return false;
+  if (operation.status === "acked" || operation.status === "in-flight")
+    return false;
   if (!operation.retry.nextAttemptAt) return true;
   return Date.parse(operation.retry.nextAttemptAt) <= now.getTime();
 }
@@ -353,10 +364,15 @@ async function pushWorkspaceOperations(
   now: () => Date = () => new Date(),
 ): Promise<SyncPushResult> {
   const timestamp = now();
-  const ready = state.outbox.filter((operation) => operationReady(operation, timestamp));
-  if (ready.length === 0) return { acceptedOperationIds: [], outbox: state.outbox };
+  const ready = state.outbox.filter((operation) =>
+    operationReady(operation, timestamp),
+  );
+  if (ready.length === 0)
+    return { acceptedOperationIds: [], outbox: state.outbox };
   try {
-    await server.push(ready.map((operation) => ({ ...operation, status: "in-flight" })));
+    await server.push(
+      ready.map((operation) => ({ ...operation, status: "in-flight" })),
+    );
   } catch (error) {
     return {
       acceptedOperationIds: [],
@@ -430,9 +446,14 @@ function applyRemoteChanges(
   const applied = new Set(state.appliedRemoteChangeIds);
   for (const change of changes) {
     if (applied.has(change.id)) continue;
-    const local = records.find((record) => record.aggregateKey === change.aggregateKey);
+    const local = records.find(
+      (record) => record.aggregateKey === change.aggregateKey,
+    );
     if (changeConflicts(local, change)) {
-      conflicts = upsertConflict(conflicts, createConflict(change, local?.value, now));
+      conflicts = upsertConflict(
+        conflicts,
+        createConflict(change, local?.value, now),
+      );
       applied.add(change.id);
       continue;
     }
@@ -477,7 +498,9 @@ function applyRecordChange(
   change: WorkspaceRemoteChange,
 ): readonly WorkspaceSyncRecord[] {
   if (change.deleted) {
-    return records.filter((record) => record.aggregateKey !== change.aggregateKey);
+    return records.filter(
+      (record) => record.aggregateKey !== change.aggregateKey,
+    );
   }
   const next = {
     aggregateKey: change.aggregateKey,
@@ -497,7 +520,9 @@ function applyTombstoneChange(
   change: WorkspaceRemoteChange,
 ): readonly WorkspaceTombstone[] {
   if (!change.deleted) {
-    return tombstones.filter((item) => item.aggregateKey !== change.aggregateKey);
+    return tombstones.filter(
+      (item) => item.aggregateKey !== change.aggregateKey,
+    );
   }
   const tombstone = {
     aggregateKey: change.aggregateKey,
@@ -525,7 +550,8 @@ function upsertCursor(
 ): readonly WorkspaceSyncCursor[] {
   return [
     ...cursors.filter(
-      (item) => !(item.spaceId === cursor.spaceId && item.scope === cursor.scope),
+      (item) =>
+        !(item.spaceId === cursor.spaceId && item.scope === cursor.scope),
     ),
     cursor,
   ];
@@ -545,7 +571,8 @@ function resolveWorkspaceConflict(
 ): WorkspaceSyncState {
   const conflict = state.conflicts.find((item) => item.id === conflictId);
   if (!conflict) return state;
-  const value = choice === "local" ? conflict.localCandidate : conflict.remoteCandidate;
+  const value =
+    choice === "local" ? conflict.localCandidate : conflict.remoteCandidate;
   return {
     ...state,
     conflicts: state.conflicts.map((item) =>
@@ -553,7 +580,9 @@ function resolveWorkspaceConflict(
     ),
     records:
       value === null
-        ? state.records.filter((record) => record.aggregateKey !== conflict.aggregateKey)
+        ? state.records.filter(
+            (record) => record.aggregateKey !== conflict.aggregateKey,
+          )
         : applyRecordChange(state.records, {
             aggregateKey: conflict.aggregateKey,
             baseRevision: 0,
@@ -561,7 +590,8 @@ function resolveWorkspaceConflict(
             id: `resolved:${conflictId}`,
             operationId: conflictId,
             payload: value,
-            remoteRevision: readLocalRevision(state.records, conflict.aggregateKey) + 1,
+            remoteRevision:
+              readLocalRevision(state.records, conflict.aggregateKey) + 1,
             sequence: 0,
             spaceId: conflict.spaceId,
             updatedAt: conflict.detectedAt,
@@ -573,7 +603,10 @@ function readLocalRevision(
   records: readonly WorkspaceSyncRecord[],
   aggregateKey: WorkspaceDatabaseRecordKey,
 ): number {
-  return records.find((record) => record.aggregateKey === aggregateKey)?.revision ?? 0;
+  return (
+    records.find((record) => record.aggregateKey === aggregateKey)?.revision ??
+    0
+  );
 }
 
 function setMediaSyncState(
@@ -584,7 +617,8 @@ function setMediaSyncState(
     ...state,
     media: [
       ...state.media.filter(
-        (item) => !(item.spaceId === media.spaceId && item.assetId === media.assetId),
+        (item) =>
+          !(item.spaceId === media.spaceId && item.assetId === media.assetId),
       ),
       media,
     ],
@@ -599,7 +633,8 @@ function evaluateOfflineCapability(
   },
 ): { readonly allowed: boolean; readonly message: string | null } {
   const capability = offlineCapabilityMatrix.find((item) => item.id === id);
-  if (!capability) return { allowed: false, message: "Unknown offline capability." };
+  if (!capability)
+    return { allowed: false, message: "Unknown offline capability." };
   if (options.online) return { allowed: true, message: null };
   if (capability.offlineState === "online-required") {
     return { allowed: false, message: capability.unavailableMessage };
@@ -607,24 +642,39 @@ function evaluateOfflineCapability(
   if (capability.localDataRequired && !options.hasLocalData) {
     return {
       allowed: false,
-      message: capability.unavailableMessage ?? "Local data is required before offline use.",
+      message:
+        capability.unavailableMessage ??
+        "Local data is required before offline use.",
     };
   }
   return { allowed: true, message: capability.unavailableMessage };
 }
 
 function createSyncDiagnostics(state: WorkspaceSyncState, online: boolean) {
-  const pending = state.outbox.filter((operation) => operation.status !== "acked");
+  const pending = state.outbox.filter(
+    (operation) => operation.status !== "acked",
+  );
   const failed = pending.filter((operation) => operation.status === "failed");
-  const conflictCount = state.conflicts.filter((conflict) => conflict.status === "open").length;
-  const status = diagnosticStatus(online, pending.length, failed.length, conflictCount);
+  const conflictCount = state.conflicts.filter(
+    (conflict) => conflict.status === "open",
+  ).length;
+  const status = diagnosticStatus(
+    online,
+    pending.length,
+    failed.length,
+    conflictCount,
+  );
   return {
     conflictCount,
     mediaUnavailableCount: state.media.filter(
-      (media) => media.status === "missing" || media.status === "unavailable-offline",
+      (media) =>
+        media.status === "missing" || media.status === "unavailable-offline",
     ).length,
     pendingCount: pending.length,
-    retryAt: failed.map((operation) => operation.retry.nextAttemptAt).filter(Boolean)[0] ?? null,
+    retryAt:
+      failed
+        .map((operation) => operation.retry.nextAttemptAt)
+        .filter(Boolean)[0] ?? null,
     status,
   };
 }
@@ -658,7 +708,9 @@ function createMemoryWorkspaceSyncServer(
       );
       return {
         changes: next,
-        cursor: String(Math.max(after, ...next.map((change) => change.sequence), 0)),
+        cursor: String(
+          Math.max(after, ...next.map((change) => change.sequence), 0),
+        ),
       };
     },
     async push(operations) {

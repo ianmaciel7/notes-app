@@ -1257,7 +1257,9 @@ function selectActiveEntities(
 }
 
 function selectTrashedEntities(state: WorkspaceObjectState): WorkspaceEntity[] {
-  const trashedIds = new Set(state.trashRecords.map((record) => record.entityId));
+  const trashedIds = new Set(
+    state.trashRecords.map((record) => record.entityId),
+  );
   return state.entities.filter((entity) => trashedIds.has(entity.id));
 }
 
@@ -1286,7 +1288,9 @@ function reduceTrashEntity(
     spaceId: action.spaceId ?? DEFAULT_TRASH_SPACE_ID,
     trashedAt,
   };
-  const remainingActive = activeEntities.filter((item) => item.id !== action.id);
+  const remainingActive = activeEntities.filter(
+    (item) => item.id !== action.id,
+  );
   return {
     ...state,
     activeEntityId:
@@ -1312,7 +1316,9 @@ function reduceRestoreEntity(
     ...state,
     activeEntityId: action.id,
     error: null,
-    trashRecords: state.trashRecords.filter((item) => item.entityId !== action.id),
+    trashRecords: state.trashRecords.filter(
+      (item) => item.entityId !== action.id,
+    ),
   };
 }
 
@@ -1323,7 +1329,9 @@ function reducePurgeEntities(
 ): WorkspaceObjectState {
   if (records.length === 0) return state;
   const purgeIds = new Set(records.map((record) => record.entityId));
-  const knownTombstones = new Set(state.tombstones.map((item) => item.entityId));
+  const knownTombstones = new Set(
+    state.tombstones.map((item) => item.entityId),
+  );
   const tombstones = [
     ...state.tombstones,
     ...records
@@ -1339,7 +1347,8 @@ function reducePurgeEntities(
     ...state,
     activeEntityId:
       state.activeEntityId && purgeIds.has(state.activeEntityId)
-        ? (selectActiveEntities(entities, state.trashRecords).at(-1)?.id ?? null)
+        ? (selectActiveEntities(entities, state.trashRecords).at(-1)?.id ??
+          null)
         : state.activeEntityId,
     entities,
     error: null,
@@ -1356,7 +1365,11 @@ function reducePurgeEntity(
 ): WorkspaceObjectState {
   const record = state.trashRecords.find((item) => item.entityId === action.id);
   return record
-    ? reducePurgeEntities(state, [record], action.purgedAt ?? new Date().toISOString())
+    ? reducePurgeEntities(
+        state,
+        [record],
+        action.purgedAt ?? new Date().toISOString(),
+      )
     : state;
 }
 
@@ -1401,7 +1414,10 @@ function reduceCreateDocument(
 
 function reduceCreateEditorObjectReference(
   state: WorkspaceObjectState,
-  action: Extract<WorkspaceObjectAction, { type: "createEditorObjectReference" }>,
+  action: Extract<
+    WorkspaceObjectAction,
+    { type: "createEditorObjectReference" }
+  >,
 ): WorkspaceObjectState {
   const title = action.title.trim();
   if (!title) return { ...state, error: "required-title" };
@@ -1553,12 +1569,7 @@ const workspaceObjectActionHandlers: WorkspaceObjectActionHandlers = {
   beginCreate: (state, action) =>
     beginWorkspaceObjectCreation(state, action.objectTypeId),
   createTag: (state, action) =>
-    createEntity(
-      state,
-      "tag",
-      { id: action.id, title: action.title },
-      false,
-    ),
+    createEntity(state, "tag", { id: action.id, title: action.title }, false),
   cancelDraft: (state) => ({ ...state, draft: null, error: null }),
   changeEntityType: reduceEntityMenuAction,
   commitFile: commitFileDraft,

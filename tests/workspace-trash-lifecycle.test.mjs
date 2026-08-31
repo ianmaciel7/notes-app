@@ -110,7 +110,9 @@ test("invalid restore and permanent purge are explicit idempotent commands", () 
   });
   const missingStructure = {
     ...trashed,
-    structures: trashed.structures.filter((structure) => structure.id !== "page"),
+    structures: trashed.structures.filter(
+      (structure) => structure.id !== "page",
+    ),
   };
   const failedRestore = workspaceObjectReducer(missingStructure, {
     id: "created-page-2",
@@ -265,7 +267,10 @@ test("normal projections exclude trashed entities and keep recoverable missing r
     evaluateQuery(query, active).items.map((entity) => entity.id),
     ["created-page-1"],
   );
-  assert.deepEqual(active.map((entity) => entity.id), ["created-page-1"]);
+  assert.deepEqual(
+    active.map((entity) => entity.id),
+    ["created-page-1"],
+  );
   assert.deepEqual(
     selectTrashedEntities(linked).map((entity) => entity.id),
     ["created-page-2"],

@@ -845,15 +845,18 @@ export function validateNumberPresentation(
   if (options.allowText && (value.type === "none" || value.type === "text")) {
     return ok({ type: value.type });
   }
-  if (
-    (value.type === "number" || value.type === "percent") &&
-    hasValidFixedDecimals(value.fixedDecimals)
-  ) {
+  if (value.type === "number" && hasValidFixedDecimals(value.fixedDecimals)) {
+    const fixedDecimals = value.fixedDecimals as number | undefined;
     return ok({
-      ...(value.fixedDecimals === undefined
-        ? {}
-        : { fixedDecimals: value.fixedDecimals }),
-      type: value.type,
+      ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
+      type: "number",
+    });
+  }
+  if (value.type === "percent" && hasValidFixedDecimals(value.fixedDecimals)) {
+    const fixedDecimals = value.fixedDecimals as number | undefined;
+    return ok({
+      ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
+      type: "percent",
     });
   }
   if (
@@ -861,11 +864,10 @@ export function validateNumberPresentation(
     isSupportedCurrencyCode(value.currency) &&
     hasValidFixedDecimals(value.fixedDecimals)
   ) {
+    const fixedDecimals = value.fixedDecimals as number | undefined;
     return ok({
       currency: value.currency,
-      ...(value.fixedDecimals === undefined
-        ? {}
-        : { fixedDecimals: value.fixedDecimals }),
+      ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
       type: "currency",
     });
   }
@@ -875,12 +877,11 @@ export function validateNumberPresentation(
     isNumberPresentationColor(value.color) &&
     hasValidFixedDecimals(value.fixedDecimals)
   ) {
+    const fixedDecimals = value.fixedDecimals as number | undefined;
     return ok({
       color: value.color,
-      ...(value.fixedDecimals === undefined
-        ? {}
-        : { fixedDecimals: value.fixedDecimals }),
-      steps: value.steps,
+      ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
+      steps: value.steps as number,
       type: "progress",
     });
   }

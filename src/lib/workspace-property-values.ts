@@ -140,7 +140,8 @@ function normalizeNumberPresentationForDisplay(
   readonly diagnostics: readonly string[];
   readonly presentation: NumberPresentation;
 } {
-  if (!presentation) return { diagnostics: [], presentation: { type: "number" } };
+  if (!presentation)
+    return { diagnostics: [], presentation: { type: "number" } };
   const validation = validateNumberPresentation(presentation, {
     allowText: true,
   });
@@ -198,7 +199,9 @@ export function formatNumberValue(
       text: "",
     };
   }
-  const fixedDigits = fixedFractionDigits(normalized.presentation.fixedDecimals);
+  const fixedDigits = fixedFractionDigits(
+    normalized.presentation.fixedDecimals,
+  );
   switch (normalized.presentation.type) {
     case "currency":
       return {

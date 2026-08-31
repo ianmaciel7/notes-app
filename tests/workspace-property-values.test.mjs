@@ -6,6 +6,7 @@ import {
 } from "../src/editor/document.ts";
 import {
   createCustomStructure,
+  validateNumberPresentation,
   validatePropertyDefinition,
 } from "../src/lib/workspace-object-types.ts";
 import {
@@ -168,6 +169,10 @@ test("number property definitions validate presentation metadata and default mig
     }),
     "invalid-property-definition",
   );
+  assert.deepEqual(
+    expectSuccess(validateNumberPresentation({ type: "text" }, { allowText: true })),
+    { type: "text" },
+  );
 });
 
 test("number formatting separates raw numeric values from displayed presentation", () => {
@@ -202,6 +207,20 @@ test("number formatting separates raw numeric values from displayed presentation
     value: 1234.5,
   });
   expectFailure(parseNumberInput("not numeric", "en-US"), "invalid-property-value");
+  expectFailure(
+    normalizeWorkspacePropertyValue(
+      {
+        id: "rating",
+        multiple: false,
+        name: "Rating",
+        ownership: "normal",
+        valueType: "number",
+        writable: true,
+      },
+      Number.NaN,
+    ),
+    "invalid-property-value",
+  );
   assert.equal(
     formatNumberForExport(
       1,

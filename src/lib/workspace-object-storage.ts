@@ -447,6 +447,8 @@ function parseCurrentWorkspaceObjectSnapshot(
   const normalizedValue: Record<string, unknown> = {
     ...value,
     entities: blockMigration.entities,
+    tombstones: Array.isArray(value.tombstones) ? value.tombstones : [],
+    trashRecords: Array.isArray(value.trashRecords) ? value.trashRecords : [],
   };
   const structureValidation = validateStructureRegistry(
     normalizedValue.structures,
@@ -485,8 +487,10 @@ function parseCurrentWorkspaceObjectSnapshot(
       hydrationStatus: "ready",
       nextId: normalizedValue.nextId as number,
       structures,
-      tombstones: normalizedValue.tombstones as WorkspaceObjectState["tombstones"],
-      trashRecords: normalizedValue.trashRecords as WorkspaceObjectState["trashRecords"],
+      tombstones:
+        normalizedValue.tombstones as WorkspaceObjectState["tombstones"],
+      trashRecords:
+        normalizedValue.trashRecords as WorkspaceObjectState["trashRecords"],
     },
   };
 }

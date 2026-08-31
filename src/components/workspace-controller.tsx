@@ -24,6 +24,7 @@ import {
   type SidePanelSpecialEntryId,
 } from "@/components/app-side-panel-header";
 import { notifyWorkspaceSyncDiagnostics } from "@/components/offline-first-bridge";
+import { blockEditorDocumentToPlainText } from "@/editor/document";
 import type { AppSidebarSpace } from "@/components/app-sidebar";
 import { AppSidebarSearchIcon } from "@/components/app-sidebar-icons";
 import type {
@@ -2816,6 +2817,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         {sideSearchOpen && <SidePanelSearchOverlay />}
         {mainSearchOpen && <MainTabSearchOverlay />}
         <WorkspaceCommandPalette />
+        <WorkspaceExtendedSearchDialog />
+        <WorkspaceFindInPageDialog />
+        <WorkspaceShortcutBrowser />
         {workspaceObjects.draft && <WorkspaceCreationDialog />}
         {createdTaskId && (
           <div

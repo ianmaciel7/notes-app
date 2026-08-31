@@ -315,7 +315,10 @@ test("document menu lifecycle changes type, duplicates, and deletes canonically"
   state = reduce(state, { type: "deleteEntity", id: "created-page-2" });
   assert.deepEqual(countEntitiesByType(state), { page: 1 });
   assert.equal(state.activeEntityId, "created-page-1");
-  assert.equal(state.entities.some((entity) => entity.id === "created-page-2"), true);
+  assert.equal(
+    state.entities.some((entity) => entity.id === "created-page-2"),
+    true,
+  );
   assert.equal(state.trashRecords[0].entityId, "created-page-2");
 });
 
@@ -755,41 +758,49 @@ test("hydration restores canonical data without restoring transient drafts", () 
 });
 
 test("workspace UI exposes every lifecycle family with localized accessible surfaces", async () => {
-  const [controller, content, objectTypeView, toolbarIcons, primaryActions, en, es, pt] =
-    await Promise.all([
-      readFile(
-        new URL("../src/components/workspace-controller.tsx", import.meta.url),
-        "utf8",
+  const [
+    controller,
+    content,
+    objectTypeView,
+    toolbarIcons,
+    primaryActions,
+    en,
+    es,
+    pt,
+  ] = await Promise.all([
+    readFile(
+      new URL("../src/components/workspace-controller.tsx", import.meta.url),
+      "utf8",
+    ),
+    readFile(
+      new URL("../src/components/workspace-content.tsx", import.meta.url),
+      "utf8",
+    ),
+    readFile(
+      new URL(
+        "../src/components/workspace-object-type-view.tsx",
+        import.meta.url,
       ),
-      readFile(
-        new URL("../src/components/workspace-content.tsx", import.meta.url),
-        "utf8",
+      "utf8",
+    ),
+    readFile(
+      new URL(
+        "../src/components/object-type-toolbar-icon.tsx",
+        import.meta.url,
       ),
-      readFile(
-        new URL(
-          "../src/components/workspace-object-type-view.tsx",
-          import.meta.url,
-        ),
-        "utf8",
+      "utf8",
+    ),
+    readFile(
+      new URL(
+        "../src/components/app-sidebar-primary-actions.tsx",
+        import.meta.url,
       ),
-      readFile(
-        new URL(
-          "../src/components/object-type-toolbar-icon.tsx",
-          import.meta.url,
-        ),
-        "utf8",
-      ),
-      readFile(
-        new URL(
-          "../src/components/app-sidebar-primary-actions.tsx",
-          import.meta.url,
-        ),
-        "utf8",
-      ),
-      readFile(new URL("../src/messages/en.json", import.meta.url), "utf8"),
-      readFile(new URL("../src/messages/es.json", import.meta.url), "utf8"),
-      readFile(new URL("../src/messages/pt-BR.json", import.meta.url), "utf8"),
-    ]);
+      "utf8",
+    ),
+    readFile(new URL("../src/messages/en.json", import.meta.url), "utf8"),
+    readFile(new URL("../src/messages/es.json", import.meta.url), "utf8"),
+    readFile(new URL("../src/messages/pt-BR.json", import.meta.url), "utf8"),
+  ]);
 
   assert.match(controller, /workspaceObjectReducer/);
   assert.match(controller, /parseWorkspaceObjectSnapshot/);
@@ -826,9 +837,15 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
   assert.match(content, /group\/object-type-section/);
   assert.match(content, /group-hover\/object-type-section:opacity-100/);
   assert.match(content, /\[@media\(hover:hover\)\]:opacity-0/);
-  assert.match(objectTypeView, /const importInputRef = React\.useRef<HTMLInputElement>/);
+  assert.match(
+    objectTypeView,
+    /const importInputRef = React\.useRef<HTMLInputElement>/,
+  );
   assert.match(objectTypeView, /onImport=\{openImportPicker\}/);
-  assert.doesNotMatch(objectTypeView, /document\.getElementById\(importInputId\)/);
+  assert.doesNotMatch(
+    objectTypeView,
+    /document\.getElementById\(importInputId\)/,
+  );
   for (const iconName of [
     "overview",
     "all",
@@ -886,7 +903,10 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
       "string",
     );
     assert.equal(typeof messages.workspace.primaryNavigation.tasks, "string");
-    assert.equal(typeof messages.workspace.primaryNavigation.tasksHint, "string");
+    assert.equal(
+      typeof messages.workspace.primaryNavigation.tasksHint,
+      "string",
+    );
     assert.equal(
       "namedItemViewNotReady" in messages.workspace.objectTypeOverview,
       false,
