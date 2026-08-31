@@ -1210,18 +1210,18 @@
     "semantic_hash": ""
   },
   "src/messages/en.json": {
-    "mtime": 1788171380.0876696,
-    "ast_hash": "",
+    "mtime": 1788173526.7916772,
+    "ast_hash": "b137a8134a90244944dd8674a0460187",
     "semantic_hash": ""
   },
   "src/messages/es.json": {
-    "mtime": 1788171383.7638905,
-    "ast_hash": "",
+    "mtime": 1788173532.491489,
+    "ast_hash": "0559007bdadc2d3b3901aab5c420c15b",
     "semantic_hash": ""
   },
   "src/messages/pt-BR.json": {
-    "mtime": 1788171382.2767692,
-    "ast_hash": "",
+    "mtime": 1788173538.4932108,
+    "ast_hash": "0fcb7a8508f636c0053b4d4cd9b9fd85",
     "semantic_hash": ""
   },
   "src/components/object-icons.tsx": {
@@ -1425,8 +1425,8 @@
     "semantic_hash": ""
   },
   "tests/e2e/workspace-parity.spec.ts": {
-    "mtime": 1788174337.8461833,
-    "ast_hash": "3118c86f1e67aae48b1e638c02020b02",
+    "mtime": 1788174756.3656816,
+    "ast_hash": "4f4869b316baaf413ff9291d6378f9ba",
     "semantic_hash": ""
   },
   "src/lib/workspace-layout.ts": {
@@ -1445,8 +1445,8 @@
     "semantic_hash": ""
   },
   "src/components/block-editor.tsx": {
-    "mtime": 1788174456.1744318,
-    "ast_hash": "3fb93b75ea362557d0bb0e7f748968fa",
+    "mtime": 1788174721.3205144,
+    "ast_hash": "5c5e126f5a53fa78febd612b47196354",
     "semantic_hash": ""
   },
   "src/editor/document.ts": {
@@ -3705,8 +3705,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/add-table-formulas/tasks.md": {
-    "mtime": 1788173995.0988379,
-    "ast_hash": "63ce28783843cb5a3b67660a3f6ca229",
+    "mtime": 1788174708.3376415,
+    "ast_hash": "259cc8356b75e0d681b3ccc333a96bc1",
     "semantic_hash": ""
   },
   "openspec/changes/add-trash-lifecycle/.openspec.yaml": {
@@ -3735,8 +3735,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/add-trash-lifecycle/tasks.md": {
-    "mtime": 1788171056.960442,
-    "ast_hash": "e7dffdb8658917aa0c823bc7b088cde9",
+    "mtime": 1788174532.9544437,
+    "ast_hash": "6d8ee16e433c9e9401a475bdb27403c8",
     "semantic_hash": ""
   },
   "openspec/changes/align-media-upload-limit/.openspec.yaml": {
@@ -3950,8 +3950,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/reconcile-keyboard-command-system-acceptance/tasks.md": {
-    "mtime": 1788170409.907251,
-    "ast_hash": "e35cfc1707723c6e2b2cc5119b6923bf",
+    "mtime": 1788174708.3401957,
+    "ast_hash": "972c4d43a649333bebc6ff7b62aa2e29",
     "semantic_hash": ""
   },
   "openspec/changes/refresh-capacities-parity-baseline/.openspec.yaml": {
@@ -3985,8 +3985,8 @@
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/manifest.json": {
-    "mtime": 1788170349.853031,
-    "ast_hash": "5572da925d4e5bf68c9ca4611aa4b5aa",
+    "mtime": 1788174663.7036827,
+    "ast_hash": "d77198c0cbaa6ad25b16e22c2c80bd30",
     "semantic_hash": ""
   },
   "tests/keyboard-command-evidence-contract.test.mjs": {
@@ -4000,18 +4000,18 @@
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/acceptance-matrix.md": {
-    "mtime": 1788170353.2081509,
-    "ast_hash": "9359ea4c2a08b8ec2719faa2766b1c39",
+    "mtime": 1788174753.8365211,
+    "ast_hash": "793eb7a25d3998b1bbedf4d7e7e799eb",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/limitations.md": {
-    "mtime": 1788170355.5703948,
-    "ast_hash": "2fedf3b3bb0da17c260c1aadcdc9a74f",
+    "mtime": 1788174735.1285233,
+    "ast_hash": "3c3b6eb233ceb4fd65b30e7d33da0991",
     "semantic_hash": ""
   },
   "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md": {
-    "mtime": 1788170358.521422,
-    "ast_hash": "f7d655121a4243c7140b9b84192acce8",
+    "mtime": 1788174730.6607192,
+    "ast_hash": "99dc244c5a35ad6177986350fc279b04",
     "semantic_hash": ""
   },
   "src/lib/workspace-task-management.ts": {
@@ -4025,8 +4025,8 @@
     "semantic_hash": ""
   },
   "src/editor/table-block-node-view.tsx": {
-    "mtime": 1788174430.8452723,
-    "ast_hash": "853e2918082a954d19ed9d1c79f5c0a9",
+    "mtime": 1788174542.663239,
+    "ast_hash": "7ec642f3248b753d6c14ad5cf662c2fb",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-object-page/2026-08-31-action-matrix/action-matrix.md": {

@@ -23,7 +23,7 @@
       "command": "node --test tests/workspace-objects.test.mjs",
       "local_status": "passed",
       "reference_status": "not applicable",
-      "outcome": "23/23 tests passed; the archived failing importHandler expectation did not reproduce in the clean historical worktree."
+      "outcome": "24/24 tests passed on current dev; the archived failing importHandler expectation did not reproduce."
     },
     {
       "name": "tests/workspace-surface-contract.test.mjs",
@@ -34,59 +34,59 @@
     },
     {
       "name": "format",
-      "command": "pnpm.cmd format:check",
-      "local_status": "failed",
+      "command": "pnpm.CMD format:check",
+      "local_status": "passed",
       "reference_status": "not applicable",
-      "outcome": "Biome reported CRLF formatting drift in package.json and biome.json."
+      "outcome": "Biome checked package.json and biome.json with no fixes applied; CRLF formatting drift did not reproduce."
     },
     {
       "name": "lint",
-      "command": "pnpm.cmd lint",
+      "command": "pnpm.CMD lint",
       "local_status": "passed",
       "reference_status": "not applicable",
       "outcome": "Biome lint completed successfully over src, scripts, and tests."
     },
     {
       "name": "typecheck",
-      "command": "pnpm.cmd typecheck",
+      "command": "pnpm.CMD typecheck",
       "local_status": "passed",
       "reference_status": "not applicable",
       "outcome": "TypeScript completed with no reported errors."
     },
     {
       "name": "complexity",
-      "command": "pnpm.cmd complexity",
-      "local_status": "failed",
+      "command": "pnpm.CMD complexity",
+      "local_status": "passed",
       "reference_status": "not applicable",
-      "outcome": "WorkspaceObjectPageView complexity 13 exceeded max 12; findUnlinkedMentionCandidates complexity 14 exceeded max 12."
+      "outcome": "Cyclomatic complexity check passed with max allowed per function 12."
     },
     {
       "name": "locale",
-      "command": "pnpm.cmd typegen",
-      "local_status": "blocked",
-      "reference_status": "not applicable",
-      "outcome": "Blocked by EPERM writing .next/types/routes.d.ts in the historical visualization worktree."
-    },
-    {
-      "name": "test",
-      "command": "pnpm.cmd test",
+      "command": "pnpm.CMD typegen",
       "local_status": "passed",
       "reference_status": "not applicable",
-      "outcome": "243/243 tests passed with non-fatal MODULE_TYPELESS_PACKAGE_JSON warnings."
+      "outcome": "Next route types generated successfully in the current workspace."
+    },
+    {
+      "name": "test:coverage",
+      "command": "pnpm.CMD test:coverage",
+      "local_status": "passed",
+      "reference_status": "not applicable",
+      "outcome": "323/323 tests passed with coverage above configured thresholds and non-fatal MODULE_TYPELESS_PACKAGE_JSON warnings."
     },
     {
       "name": "build",
-      "command": "pnpm.cmd build",
-      "local_status": "blocked",
+      "command": "pnpm.CMD build",
+      "local_status": "passed",
       "reference_status": "not applicable",
-      "outcome": "Blocked before command start by the execution helper ACL in the side-conversation environment."
+      "outcome": "Next production build completed successfully after a transient concurrent-build lock cleared."
     },
     {
       "name": "verify",
-      "command": "pnpm.cmd verify",
-      "local_status": "failed",
+      "command": "pnpm.CMD verify",
+      "local_status": "passed",
       "reference_status": "not applicable",
-      "outcome": "Stopped at format:check because package.json and biome.json have CRLF formatting drift."
+      "outcome": "Full repository verification pipeline passed end-to-end."
     }
   ],
   "editorTriggerStates": [
@@ -158,7 +158,7 @@
   "limitations": [
     "This corrective bundle does not confirm matched Capacities parity for new command surfaces.",
     "A fresh clean dev worktree could not be created in this side conversation because git ref creation was blocked by filesystem permissions.",
-    "Build and typegen were blocked by environment ACL/EPERM conditions in the historical worktree.",
-    "Repository acceptance remains incomplete until format drift and complexity findings are resolved or formally re-baselined."
+    "Earlier build verification was transiently blocked by a concurrent Next build lock; the final isolated build and final aggregate verify both passed.",
+    "A pre-existing staged src/components/block-editor.tsx diff touching editor persistence/focus semantics remains for the archive/commit boundary to confirm."
   ]
 }

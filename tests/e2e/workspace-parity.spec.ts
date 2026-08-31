@@ -3734,6 +3734,85 @@ test("Novo Page and Table flows keep split actions, writes, and counts durable",
   expect(errors).toEqual([]);
 });
 
+test("Table formula entry persists source result and metadata", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors = await openWorkspace(page);
+
+  await selectNewObject(page, "Tabela");
+  const workspace = page
+    .locator(
+      '[data-slot="workspace-object-page-view"][data-object-type="table"]',
+    )
+    .filter({ visible: true });
+  await expect(workspace).toBeVisible();
+
+  const title = "Formula persistence table";
+  await workspace.getByRole("textbox", { name: "Título" }).fill(title);
+  await workspace.getByLabel("Linha 1, coluna 1").fill("2");
+  await workspace.getByLabel("Linha 1, coluna 1").blur();
+  await workspace.getByLabel("Linha 1, coluna 2").fill("=");
+  await expect(
+    workspace.locator('[data-slot="workspace-table-formula-suggestions"]'),
+  ).toBeVisible();
+  await workspace.getByLabel("Linha 1, coluna 2").fill("=A1*2");
+  await workspace.getByLabel("Linha 1, coluna 2").blur();
+
+  await expect(
+    workspace.locator('[data-slot="workspace-table-formula-result"]'),
+  ).toContainText("4");
+  await expect(
+    workspace.locator('[data-slot="workspace-table-formula-references"]'),
+  ).toContainText("A1");
+
+  await expect
+    .poll(async () => {
+      const entities = await persistedEntities(page);
+      return entities.find(
+        (entity: { objectTypeId: string; title?: string }) =>
+          entity.objectTypeId === "table" && entity.title === title,
+      )?.cells?.[1]?.value;
+    })
+    .toMatchObject({
+      calculationRevision: "default",
+      dependencies: [{ columnId: "column-1", rowId: "row-1" }],
+      result: { type: "number", value: 4 },
+      source: "=A1*2",
+      type: "formula",
+    });
+
+  const tableEntity = (await persistedEntities(page)).find(
+    (entity: { objectTypeId: string; title?: string }) =>
+      entity.objectTypeId === "table" && entity.title === title,
+  );
+  expect(tableEntity?.id).toBeTruthy();
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  const reloadedWorkspace = page
+    .locator(
+      '[data-slot="workspace-object-page-view"][data-object-type="table"]',
+    )
+    .filter({ visible: true });
+  await expect(reloadedWorkspace).toBeVisible();
+  await expect(
+    reloadedWorkspace.getByRole("textbox", { name: "Título" }),
+  ).toHaveValue(title);
+  await expect(reloadedWorkspace.getByLabel("Linha 1, coluna 1")).toHaveValue(
+    "2",
+  );
+  await expect(reloadedWorkspace.getByLabel("Linha 1, coluna 2")).toHaveValue(
+    "=A1*2",
+  );
+  await expect(
+    reloadedWorkspace.locator('[data-slot="workspace-table-formula-result"]'),
+  ).toContainText("4");
+
+  expect(errors).toEqual([]);
+});
+
 test("workspace database persists object edits as indexed records", async ({
   page,
 }) => {

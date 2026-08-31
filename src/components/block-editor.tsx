@@ -434,8 +434,10 @@ function BlockEditor({
       });
     };
     editor.on("update", handleEditorUpdate);
+    editor.view.dom.addEventListener("input", handleEditorUpdate);
     return () => {
       editor.off("update", handleEditorUpdate);
+      editor.view.dom.removeEventListener("input", handleEditorUpdate);
     };
   }, [editable, editor, scheduleCommit]);
 
