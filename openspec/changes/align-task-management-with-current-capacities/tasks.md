@@ -16,7 +16,7 @@
 - [x] 3.2 Implement scheduled-date and completion-date recurrence without changing task identity.
 - [x] 3.3 Implement deadline-offset advancement and clamping.
 - [x] 3.4 Implement advance-one and catch-up actions plus complete, skip, and excuse occurrence records.
-- [ ] 3.5 Implement streak, best streak, completion count/rate, heatmap projection, and recurring-query filters.
+- [x] 3.5 Implement streak, best streak, completion count/rate, heatmap projection, and recurring-query filters.
 
 ## 4. UI and Acceptance
 

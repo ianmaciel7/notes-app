@@ -2075,8 +2075,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-task-management.test.mjs": {
-    "mtime": 1788170622.1007307,
-    "ast_hash": "8dadfce27acdc75acc616052c31aab82",
+    "mtime": 1788170824.376745,
+    "ast_hash": "8a941f118842c27d48d1e13767bebddd",
     "semantic_hash": ""
   },
   ".superpowers/sdd/2026-08-25-prototyping-priorities/change-01-add-block-editor-report.md": {
@@ -2385,8 +2385,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-database.ts": {
-    "mtime": 1788170747.0310326,
-    "ast_hash": "9de11af1b3c11a9cc2af2c6ff2fe3cf1",
+    "mtime": 1788170791.6923933,
+    "ast_hash": "1cef8352893d181801d2f951ea5e3e64",
     "semantic_hash": ""
   },
   "src/lib/workspace-offline-sync.ts": {
@@ -2410,8 +2410,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-database.test.mjs": {
-    "mtime": 1788170766.3616476,
-    "ast_hash": "74eb99585f8d2b29ebdd55d7949e1c15",
+    "mtime": 1788170806.4690423,
+    "ast_hash": "92dad3682f3033d45868eaab2add01ad",
     "semantic_hash": ""
   },
   "tests/workspace-offline-sync.test.mjs": {

@@ -29,6 +29,7 @@ export type TaskDashboardKind =
   | "scheduled"
   | "tags"
   | "today";
+export type RecurringTaskQueryKind = "all" | "completed" | "open";
 
 export type TaskStatusDefinition = {
   readonly color: string;
@@ -1003,6 +1004,31 @@ export function createTaskDashboardQuery(
       { direction: "descending", propertyId: "priority" },
       { direction: "ascending", propertyId: "deadline" },
       { direction: "ascending", propertyId: "scheduledDate" },
+    ],
+    source: "object-type",
+    sourceValue: "task",
+    variables: {},
+    version: 1,
+  };
+}
+
+export function createRecurringTaskQuery(
+  kind: RecurringTaskQueryKind,
+): QueryDefinition {
+  const filters: QueryFilter[] = [propertyFilter("recurrence", "exists")];
+  if (kind === "open") {
+    filters.push(propertyFilter("completed", "equals", false));
+  } else if (kind === "completed") {
+    filters.push(propertyFilter("completed", "equals", true));
+  }
+  return {
+    filters: { filters, operator: "all" },
+    resultKind: "object",
+    selection: { mode: "all" },
+    sorts: [
+      { direction: "ascending", propertyId: "completed" },
+      { direction: "ascending", propertyId: "scheduledDate" },
+      { direction: "ascending", propertyId: "deadline" },
     ],
     source: "object-type",
     sourceValue: "task",

@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   applyTaskOccurrenceAction,
   createDefaultTaskStatusRegistry,
+  createRecurringTaskQuery,
   createTaskDashboardQuery,
   createTaskManagementMetadata,
   migrateLegacyTaskManagementMetadata,
@@ -473,6 +474,40 @@ test("recurrence actions advance deadlines, support catch-up, and derive statist
   assert.equal(stats.bestStreak, 1);
   assert.equal(stats.heatmap["2026-08-25"], "complete");
   assert.equal(stats.heatmap["2026-08-31"], "excuse");
+});
+
+test("recurring task query filters project recurring open and completed tasks", () => {
+  const open = createRecurringTaskQuery("open");
+  const completed = createRecurringTaskQuery("completed");
+
+  assert.equal(open.source, "object-type");
+  assert.equal(open.sourceValue, "task");
+  assert.ok(
+    open.filters.filters.some(
+      (filter) =>
+        filter.kind === "property" &&
+        filter.propertyId === "recurrence" &&
+        filter.operator === "exists",
+    ),
+  );
+  assert.ok(
+    open.filters.filters.some(
+      (filter) =>
+        filter.kind === "property" &&
+        filter.propertyId === "completed" &&
+        filter.operator === "equals" &&
+        filter.value === false,
+    ),
+  );
+  assert.ok(
+    completed.filters.filters.some(
+      (filter) =>
+        filter.kind === "property" &&
+        filter.propertyId === "completed" &&
+        filter.operator === "equals" &&
+        filter.value === true,
+    ),
+  );
 });
 
 test("invalid dates, recurrence intervals, and duplicate ids are rejected", () => {
