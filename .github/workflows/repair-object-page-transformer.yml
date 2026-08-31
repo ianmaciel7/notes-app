@@ -31,20 +31,16 @@ jobs:
 
           path = Path('.github/scripts/apply-object-page-parity.py')
           text = path.read_text(encoding='utf-8')
-          old = '''    replace_once(
-              path,
-              "      onBlur={editable ? flushCurrentDocument : undefined}\\n",
-              "      onBlur={editable ? handleEditorBlur : undefined}\\n",
+          old = (
+              '        "      onBlur={editable ? flushCurrentDocument : undefined}\\n",\n'
+              '        "      onBlur={editable ? handleEditorBlur : undefined}\\n",'
           )
-          '''
-          new = '''    replace_once(
-              path,
-              "      data-editable={editable}\\n"
-              "      onBlur={editable ? flushCurrentDocument : undefined}\\n",
-              "      data-editable={editable}\\n"
-              "      onBlur={editable ? handleEditorBlur : undefined}\\n",
+          new = (
+              '        "      data-editable={editable}\\n"\n'
+              '        "      onBlur={editable ? flushCurrentDocument : undefined}\\n",\n'
+              '        "      data-editable={editable}\\n"\n'
+              '        "      onBlur={editable ? handleEditorBlur : undefined}\\n",'
           )
-          '''
           if old in text:
               if text.count(old) != 1:
                   raise SystemExit(f'Expected one ambiguous marker, found {text.count(old)}')
