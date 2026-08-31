@@ -906,14 +906,18 @@ function PageCustomizeControl({
     )
     replace_once(
         path,
-        '''          <DocumentMoreMenu
+        '''        menu={
+          <DocumentMoreMenu
             onChangeType={() => showMessage(t("documentMenu.changeType"))}
+            onCustomize={() => setCustomizeOpen(true)}
 ''',
-        '''          <DocumentMoreMenu
+        '''        menu={
+          <DocumentMoreMenu
             isPinned={isPinned}
             onChangeType={() =>
               setTypeActivationRequest((current) => current + 1)
             }
+            onCustomize={() => setCustomizeOpen(true)}
 ''',
     )
     replace_once(
