@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "capacities-and-localhost",
+    "url": "https://app.capacities.io/[space]/[object] and http://localhost:3000/pt-BR/[space]/[object]",
+    "productSurface": "object-page"
+  },
+  "capturedAt": "2026-08-31T07:05:00-03:00",
+  "viewport": {
+    "width": 1294,
+    "height": 912,
+    "deviceScaleFactor": 1
+  },
+  "surface": {
+    "route": "redacted-authenticated-object-route and local object-page route",
+    "component": "workspace-object-page-view",
+    "semanticSelection": "central Page object surface from header through editor utility"
+  },
+  "semanticState": "correlated action matrix derived from existing sanitized reference object-page evidence, current local object-page baseline, and current 2026-08-31 Capacities reference docs",
+  "persistedState": {
+    "reference": "reused 2026-08-28 object-page Mentions and editor-utility bundle; no new authenticated mutations",
+    "localhost": "reused 2026-08-31 local baseline with expanded 288px sidebar and hidden contextual panel",
+    "checkout": "dev at HEAD fb5cf66 for this matrix creation"
+  },
+  "interactions": [
+    "idle",
+    "hover/exit inventory",
+    "focus inventory",
+    "keyboard inventory",
+    "click/open inventory",
+    "Escape/outside-close inventory",
+    "post-action/persistence inventory",
+    "unavailable/prohibited inventory",
+    "responsive/console inventory"
+  ],
+  "artifacts": [
+    {
+      "stateId": "object-page-action-matrix",
+      "kind": "action-matrix",
+      "path": "action-matrix.md"
+    }
+  ],
+  "provenance": "read-only synthesis from existing sanitized reference evidence, current local baseline, OpenSpec design/proposal/specs/tasks, and project reference docs",
+  "confidence": "confirmed-for-inventory; not a parity-pass claim",
+  "redactions": [
+    "authenticated route identifiers",
+    "workspace identifiers",
+    "object identifiers",
+    "private object content",
+    "account identity"
+  ],
+  "freshness": "valid for the checked repository state and the referenced 2026-08-28 and 2026-08-31 evidence only",
+  "limitations": [
+    "does not add a new authenticated browser capture",
+    "does not exercise reference mutations",
+    "marks missing interaction states explicitly as not tested",
+    "keeps unrelated pt-BR console missing-message failures separate from object-page parity",
+    "does not satisfy implementation or final parity verification tasks"
+  ],
+  "refreshReason": "Task 1.2 required a complete safe reference/local action matrix before implementation work on object-page composition and interactions."
+}

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "localhost",
+    "url": "http://localhost:3000/pt-BR",
+    "productSurface": "object-page-editor-triggers"
+  },
+  "capturedAt": "2026-08-31T07:20:00-03:00",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "surface": {
+    "route": "local seeded object-page editor fixtures",
+    "component": "block-editor and reference-suggestion adapters",
+    "semanticSelection": "local Page object editor with seeded block/reference fixture data"
+  },
+  "semanticState": "local source/unit tests passed for @ alias lookup and canonical marks; local browser tests failed for plus, grip, slash, and some editor fixture flows",
+  "persistedState": {
+    "reference": "no new authenticated Capacities capture",
+    "localhost": "Playwright ephemeral contexts and repository source tests",
+    "checkout": "dev at HEAD 9698c84"
+  },
+  "interactions": [
+    "source/unit @ lookup",
+    "source/unit alias dedupe",
+    "source/unit trigger-range replacement",
+    "browser plus/grip attempt",
+    "browser slash-menu attempt",
+    "browser reduced-motion/mobile containment partial pass"
+  ],
+  "artifacts": [
+    {
+      "stateId": "local-editor-trigger-test-run",
+      "kind": "test-run-summary",
+      "path": "local-test-run.md"
+    }
+  ],
+  "provenance": "local repository tests and local Playwright run using node and node_modules/.bin/playwright.cmd",
+  "confidence": "confirmed-local-blocker",
+  "redactions": [
+    "ephemeral object ids",
+    "full trace archives",
+    "failure screenshots",
+    "complete console stacks"
+  ],
+  "freshness": "valid for the checked repository state and the local test run on 2026-08-31",
+  "limitations": [
+    "does not include a passing browser capture for task 1.3",
+    "does not include new authenticated Capacities @ menu evidence",
+    "does not claim parity completion",
+    "Playwright failure artifacts remain in .temp/playwright-results and are not promoted into this reusable bundle"
+  ],
+  "refreshReason": "Task 1.3 required editor trigger evidence; the local browser run exposed blocking failures before the task could be completed."
+}

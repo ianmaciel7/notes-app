@@ -1,6 +1,10 @@
 import { expect, type Page, test } from "@playwright/test";
 
 const workspaceStorageKey = "notes-app:workspace-objects:v1";
+const labsWorkspaceStorageKey =
+  "notes-app:workspace-objects:v1:4d0215ae-79d6-46bd-840f-8144ec5a84fb";
+const workspaceSpacesStorageKey = "notes-app:workspace-spaces:v1";
+const workspaceTabsStorageKey = "notes-app:workspace-tabs:v1";
 
 async function openPageEditor(page: Page, body = "") {
   const errors: string[] = [];
@@ -9,10 +13,20 @@ async function openPageEditor(page: Page, body = "") {
   });
   page.on("pageerror", (error) => errors.push(error.message));
   await page.addInitScript(
-    ({ initialBody, storageKey }) => {
-      window.localStorage.setItem(
-        storageKey,
-        JSON.stringify({
+    ({
+      initialBody,
+      labsStorageKey,
+      spacesStorageKey,
+      storageKey,
+      tabsStorageKey,
+    }: {
+      initialBody: string;
+      labsStorageKey: string;
+      spacesStorageKey: string;
+      storageKey: string;
+      tabsStorageKey: string;
+    }) => {
+      const snapshot = JSON.stringify({
           activeEntityId: "slash-menu-reference-page",
           entities: [
             {
@@ -28,10 +42,25 @@ async function openPageEditor(page: Page, body = "") {
           ],
           nextId: 2,
           version: 1,
+        });
+      window.localStorage.removeItem(tabsStorageKey);
+      window.localStorage.setItem(
+        spacesStorageKey,
+        JSON.stringify({
+          activeSpaceId: "labs",
+          spaces: [{ id: "labs", name: "Labs" }],
         }),
       );
+      window.localStorage.setItem(storageKey, snapshot);
+      window.localStorage.setItem(labsStorageKey, snapshot);
     },
-    { initialBody: body, storageKey: workspaceStorageKey },
+    {
+      initialBody: body,
+      labsStorageKey: labsWorkspaceStorageKey,
+      spacesStorageKey: workspaceSpacesStorageKey,
+      storageKey: workspaceStorageKey,
+      tabsStorageKey: workspaceTabsStorageKey,
+    },
   );
   await page.goto("/pt-BR");
   const editor = page
@@ -57,7 +86,20 @@ async function currentCaretRect(page: Page) {
 
 test.afterEach(async ({ page }) => {
   await page
-    .evaluate((key) => window.localStorage.removeItem(key), workspaceStorageKey)
+    .evaluate(
+      ({ labsStorageKey, spacesStorageKey, storageKey, tabsStorageKey }) => {
+        window.localStorage.removeItem(storageKey);
+        window.localStorage.removeItem(labsStorageKey);
+        window.localStorage.removeItem(spacesStorageKey);
+        window.localStorage.removeItem(tabsStorageKey);
+      },
+      {
+        labsStorageKey: labsWorkspaceStorageKey,
+        spacesStorageKey: workspaceSpacesStorageKey,
+        storageKey: workspaceStorageKey,
+        tabsStorageKey: workspaceTabsStorageKey,
+      },
+    )
     .catch(() => undefined);
 });
 

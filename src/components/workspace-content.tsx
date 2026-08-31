@@ -13,6 +13,7 @@ import {
   Maximize2Icon,
   PinIcon,
   PresentationIcon,
+  RotateCcwIcon,
   SearchIcon,
   Settings2Icon,
   Share2Icon,
@@ -67,6 +68,14 @@ import {
   CompoundChipDisclosure,
   CompoundChipPrimary,
 } from "@/components/ui/compound-chip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -129,6 +138,7 @@ import {
   type RelatedContentState,
   selectRelatedContent,
 } from "@/lib/workspace-related-content";
+import { isFormulaCell } from "@/lib/workspace-table-formulas";
 import {
   createDefaultTaskStatusRegistry,
   createTaskManagementMetadata,
@@ -139,8 +149,14 @@ import {
 
 function AtomicNotesWorkspace() {
   const t = useTranslations("workspace");
-  const { mainTabs, mainValue, activeAction, objectTypes, createdEntities } =
-    useWorkspace();
+  const {
+    mainTabs,
+    mainValue,
+    activeAction,
+    objectTypes,
+    createdEntities,
+    trashItems,
+  } = useWorkspace();
   const navigationAction =
     activeAction ?? primaryActionFromMainValue(mainValue);
   const activeTab = mainTabs.find((tab) => tab.id === mainValue);
@@ -164,6 +180,7 @@ function AtomicNotesWorkspace() {
       }),
     usesAtomicNotePreset: !activeObjectType && mainValue === "atomic-note",
     visibleTab: activeTab,
+    trashItems,
   });
 }
 
@@ -177,6 +194,7 @@ function renderAtomicNotesWorkspace({
   navigationAction,
   objectTypes,
   renderedObjectType,
+  trashItems,
   usesAtomicNotePreset,
   visibleTab,
 }: {
@@ -185,23 +203,16 @@ function renderAtomicNotesWorkspace({
   navigationAction: AppSidebarPrimaryNavigationAction | undefined;
   objectTypes: readonly AppSidebarObjectType[];
   renderedObjectType: AppSidebarObjectType | undefined;
+  trashItems: ReturnType<typeof useWorkspace>["trashItems"];
   usesAtomicNotePreset: boolean;
   visibleTab: AppHeaderTab | undefined;
 }) {
-  if (navigationAction === "explore") {
-    return <ExploreWorkspace />;
-  }
-
-  if (navigationAction === "calendar") {
-    return <CalendarWorkspace />;
-  }
-
-  if (navigationAction === "tasks") {
-    const taskObjectType = objectTypes.find((item) => item.id === "task");
-    return taskObjectType ? (
-      <ObjectTypeWorkspace objectType={taskObjectType} />
-    ) : null;
-  }
+  const navigationWorkspace = renderPrimaryNavigationWorkspace({
+    navigationAction,
+    objectTypes,
+    trashItems,
+  });
+  if (navigationWorkspace) return navigationWorkspace;
 
   if (activeCreatedEntity) {
     return <CreatedObjectWorkspace entity={activeCreatedEntity} />;
@@ -228,6 +239,29 @@ function renderAtomicNotesWorkspace({
   return fallbackObjectType ? (
     <ObjectTypeWorkspace objectType={fallbackObjectType} />
   ) : null;
+}
+
+function renderPrimaryNavigationWorkspace({
+  navigationAction,
+  objectTypes,
+  trashItems,
+}: {
+  navigationAction: AppSidebarPrimaryNavigationAction | undefined;
+  objectTypes: readonly AppSidebarObjectType[];
+  trashItems: ReturnType<typeof useWorkspace>["trashItems"];
+}) {
+  if (navigationAction === "explore") return <ExploreWorkspace />;
+  if (navigationAction === "calendar") return <CalendarWorkspace />;
+  if (navigationAction === "tasks") {
+    const taskObjectType = objectTypes.find((item) => item.id === "task");
+    return taskObjectType ? (
+      <ObjectTypeWorkspace objectType={taskObjectType} />
+    ) : null;
+  }
+  if (navigationAction === "trash") {
+    return <TrashWorkspace items={trashItems} />;
+  }
+  return null;
 }
 
 function createActivePresetObjectType({
@@ -263,6 +297,7 @@ function primaryActionFromMainValue(value: string) {
   if (value === "primary-action:explore") return "explore";
   if (value === "primary-action:calendar") return "calendar";
   if (value === "primary-action:tasks") return "tasks";
+  if (value === "primary-action:trash") return "trash";
   return undefined;
 }
 
@@ -433,6 +468,217 @@ function CalendarWorkspace() {
         </aside>
       </div>
     </div>
+  );
+}
+
+function TrashWorkspace({
+  items,
+}: {
+  items: ReturnType<typeof useWorkspace>["trashItems"];
+}) {
+  const t = useTranslations("workspace");
+  const { emptyTrash, purgeTrashItem, restoreTrashItem } = useWorkspace();
+  const [query, setQuery] = React.useState("");
+  const [confirmation, setConfirmation] = React.useState<
+    { kind: "empty" } | { id: string; kind: "purge"; label: string } | null
+  >(null);
+  const headingRef = React.useRef<HTMLHeadingElement>(null);
+  const rowRefs = React.useRef(new Map<string, HTMLButtonElement>());
+  const dateFormatter = React.useMemo(
+    () => new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }),
+    [],
+  );
+  const visibleItems = React.useMemo(() => {
+    const normalized = query.trim().toLocaleLowerCase();
+    return normalized
+      ? items.filter((item) =>
+          [item.label, item.typeLabel]
+            .join(" ")
+            .toLocaleLowerCase()
+            .includes(normalized),
+        )
+      : items;
+  }, [items, query]);
+
+  function formatDate(value: string) {
+    const date = new Date(value);
+    return Number.isFinite(date.valueOf())
+      ? dateFormatter.format(date)
+      : value.slice(0, 10);
+  }
+
+  function focusAfterRemoval(removedId?: string) {
+    window.requestAnimationFrame(() => {
+      const nextItem = visibleItems.find((item) => item.id !== removedId);
+      const target = nextItem ? rowRefs.current.get(nextItem.id) : null;
+      (target ?? headingRef.current)?.focus({ preventScroll: true });
+    });
+  }
+
+  function confirmAction() {
+    if (confirmation?.kind === "empty") {
+      emptyTrash();
+      setConfirmation(null);
+      focusAfterRemoval();
+      return;
+    }
+    if (!confirmation) return;
+    purgeTrashItem(confirmation.id);
+    setConfirmation(null);
+    focusAfterRemoval(confirmation.id);
+  }
+
+  return (
+    <section
+      data-slot="workspace-trash-view"
+      className="flex h-full min-h-0 flex-col overflow-hidden px-6 py-5 text-foreground"
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border pb-4">
+        <div className="min-w-0">
+          <h1
+            ref={headingRef}
+            tabIndex={-1}
+            className="flex items-center gap-2 text-lg font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Trash2Icon className="size-5 text-muted-foreground" />
+            <span>{t("sidebarUtilities.trash")}</span>
+          </h1>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+            {t("sidebarUtilities.trashDescription")}
+          </p>
+        </div>
+        <Button
+          type="button"
+          variant="destructive"
+          size="sm"
+          disabled={items.length === 0}
+          onClick={() => setConfirmation({ kind: "empty" })}
+        >
+          <Trash2Icon className="size-4" />
+          {t("sidebarUtilities.emptyTrash")}
+        </Button>
+      </div>
+
+      <div className="flex min-h-0 flex-1 flex-col pt-4">
+        <div className="relative max-w-xl">
+          <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t("sidebarUtilities.searchTrash")}
+            aria-label={t("sidebarUtilities.searchTrash")}
+            className="h-9 pl-8"
+          />
+        </div>
+
+        <div
+          data-slot="workspace-trash-list"
+          aria-live="polite"
+          className="mt-4 min-h-0 flex-1 overflow-auto rounded-lg border border-border bg-card"
+        >
+          {visibleItems.length === 0 ? (
+            <p className="flex min-h-40 items-center justify-center px-6 text-center text-sm text-muted-foreground">
+              {items.length === 0
+                ? t("sidebarUtilities.trashEmpty")
+                : t("sidebarUtilities.trashNoResults")}
+            </p>
+          ) : (
+            <div className="divide-y divide-border">
+              {visibleItems.map((item) => (
+                <article
+                  key={item.id}
+                  data-slot="workspace-trash-item"
+                  className="flex min-h-16 flex-wrap items-center gap-3 px-4 py-3"
+                >
+                  <button
+                    type="button"
+                    ref={(node) => {
+                      if (node) rowRefs.current.set(item.id, node);
+                      else rowRefs.current.delete(item.id);
+                    }}
+                    className="min-w-0 flex-1 rounded-md text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    onClick={() => restoreTrashItem(item.id)}
+                  >
+                    <span className="block truncate text-sm font-medium">
+                      {item.label}
+                    </span>
+                    <span className="block truncate text-xs text-muted-foreground">
+                      {t("sidebarUtilities.trashItemMeta", {
+                        purgeDate: formatDate(item.purgeAfter),
+                        trashedDate: formatDate(item.trashedAt),
+                        type: item.typeLabel,
+                      })}
+                    </span>
+                  </button>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => restoreTrashItem(item.id)}
+                    >
+                      <RotateCcwIcon className="size-4" />
+                      {t("sidebarUtilities.restoreTrashItem")}
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="destructive"
+                      onClick={() =>
+                        setConfirmation({
+                          id: item.id,
+                          kind: "purge",
+                          label: item.label,
+                        })
+                      }
+                    >
+                      <Trash2Icon className="size-4" />
+                      {t("sidebarUtilities.deleteForever")}
+                    </Button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <Dialog
+        open={confirmation !== null}
+        onOpenChange={(open) => {
+          if (!open) setConfirmation(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {confirmation?.kind === "empty"
+                ? t("sidebarUtilities.emptyTrashConfirmTitle")
+                : t("sidebarUtilities.deleteForeverConfirmTitle")}
+            </DialogTitle>
+            <DialogDescription>
+              {confirmation?.kind === "empty"
+                ? t("sidebarUtilities.emptyTrashConfirmDescription")
+                : t("sidebarUtilities.deleteForeverConfirmDescription", {
+                    title: confirmation?.label ?? "",
+                  })}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setConfirmation(null)}
+            >
+              {t("sidebarUtilities.cancel")}
+            </Button>
+            <Button type="button" variant="destructive" onClick={confirmAction}>
+              {t("sidebarUtilities.confirmIrreversible")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </section>
   );
 }
 
@@ -2217,7 +2463,7 @@ function TableObjectEditor({
               column: cell.column + 1,
               row: cell.row + 1,
             })}
-            value={cell.value}
+            value={isFormulaCell(cell.value) ? cell.value.source : cell.value}
             onCommit={(value) =>
               update({
                 cells: entity.cells.map((item) =>

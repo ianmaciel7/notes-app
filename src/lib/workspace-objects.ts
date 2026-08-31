@@ -20,9 +20,11 @@ import {
   replaceStructureSchema,
   type StructureDomainError,
   type StructureId,
+  type StructurePresentation,
   selectCreatableStructures,
   selectStructureById,
   updateStructureAppearance,
+  updateStructurePresentation,
   validateStructureRegistry,
   type WorkspaceStructure,
 } from "./workspace-object-types.ts";
@@ -33,6 +35,7 @@ import {
   setWorkspaceEntityPropertyValue,
   type WorkspacePropertyValueMap,
 } from "./workspace-property-values.ts";
+import type { FormulaValue } from "./workspace-table-formulas.ts";
 import type { TaskManagementMetadata } from "./workspace-task-management.ts";
 
 type ObjectTypeId = StructureId;
@@ -84,7 +87,7 @@ type TableCell = {
   id: string;
   column: number;
   row: number;
-  value: string;
+  value: FormulaValue | string;
 };
 
 type TableEntity = WorkspaceEntityBase & {
@@ -265,6 +268,11 @@ type WorkspaceObjectAction =
       id: StructureId;
       iconName?: ObjectIconName;
       tone?: ObjectIconTone;
+    }
+  | {
+      type: "updateStructurePresentation";
+      id: StructureId;
+      presentation: StructurePresentation;
     }
   | {
       type: "replaceStructureSchema";
@@ -889,7 +897,8 @@ function reduceStructureAction(
         | "deleteStructure"
         | "renameStructure"
         | "replaceStructureSchema"
-        | "updateStructureAppearance";
+        | "updateStructureAppearance"
+        | "updateStructurePresentation";
     }
   >,
 ): WorkspaceObjectState {
@@ -917,6 +926,10 @@ function reduceStructureAction(
     result = updateStructureAppearance(state.structures, action.id, {
       iconName: action.iconName,
       tone: action.tone,
+    });
+  } else if (action.type === "updateStructurePresentation") {
+    result = updateStructurePresentation(state.structures, action.id, {
+      presentation: action.presentation,
     });
   } else if (action.type === "replaceStructureSchema") {
     result = replaceStructureSchema(
@@ -1594,6 +1607,7 @@ const workspaceObjectActionHandlers: WorkspaceObjectActionHandlers = {
   setPropertyValue: reducePropertyValueAction,
   updateEntity: reduceUpdateEntity,
   updateStructureAppearance: reduceStructureAction,
+  updateStructurePresentation: reduceStructureAction,
 };
 
 function workspaceObjectReducer(

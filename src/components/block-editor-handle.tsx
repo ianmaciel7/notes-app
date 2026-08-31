@@ -221,9 +221,9 @@ function BlockHandle({
             return;
           }
           Object.assign(handleSurface.style, {
-            left: `${position.x}px`,
+            left: `${Math.round(position.x)}px`,
             position: position.strategy,
-            top: `${position.y}px`,
+            top: `${Math.round(position.y)}px`,
           });
         });
       });
@@ -465,7 +465,7 @@ function BlockHandle({
           data-slot="block-editor-block-handle"
           data-menu-open={optionsOpen || undefined}
           className={cn(
-            "relative flex h-[22px] w-[36px] translate-y-px items-center gap-0 text-muted-foreground opacity-50 transition-opacity duration-100 ease-linear hover:opacity-100 data-[dragging=true]:opacity-100 motion-reduce:transition-none",
+            "relative flex h-[22px] w-[36px] items-center gap-0 overflow-hidden text-muted-foreground opacity-50 transition-opacity duration-100 ease-linear hover:opacity-100 data-[dragging=true]:opacity-100 motion-reduce:transition-none",
             optionsOpen && "opacity-100",
           )}
         >

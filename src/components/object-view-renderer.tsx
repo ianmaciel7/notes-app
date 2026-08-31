@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { ObjectViewPreview } from "@/components/object-view-preview";
 import type {
   ObjectViewProps,
@@ -7,6 +8,7 @@ import type {
 } from "@/components/object-view-types";
 import {
   entityDescription,
+  entityValue,
   ObjectProperties,
   ObjectTypeLabel,
   OpenSurface,
@@ -21,9 +23,11 @@ import { cn } from "@/lib/utils";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
 import {
   createDefaultObjectViewConfig,
+  projectObjectCardProperties,
   type ObjectViewConfig,
   type ObjectViewKind,
 } from "@/lib/workspace-object-views";
+import type { WorkspaceStructure } from "@/lib/workspace-object-types";
 
 function InlineObjectView(props: ReadyObjectViewProps) {
   const { className, entity, labels, objectTypeLabels, onOpen, structures } =
@@ -180,6 +184,205 @@ function CardMetadata({
   );
 }
 
+function cardStructureFor(
+  entity: WorkspaceEntity,
+  structures: readonly WorkspaceStructure[] | undefined,
+): WorkspaceStructure | undefined {
+  return structures?.find((structure) => structure.id === entity.objectTypeId);
+}
+
+function cardPropertyInputValue(value: unknown): string {
+  if (value == null) return "";
+  if (typeof value === "string") return value;
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+  if (Array.isArray(value)) {
+    const first = value[0];
+    return typeof first === "string"
+      ? first
+      : first && typeof first === "object" && "id" in first
+        ? String(first.id)
+        : "";
+  }
+  if (typeof value === "object" && "start" in value) {
+    return String(value.start).slice(0, 16);
+  }
+  return "";
+}
+
+function cardLabelSelectedIds(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) =>
+    item && typeof item === "object" && "id" in item ? [String(item.id)] : [],
+  );
+}
+
+function CardPropertyEditor({
+  entity,
+  propertyId,
+  structure,
+  value,
+  onCommit,
+}: {
+  readonly entity: WorkspaceEntity;
+  readonly propertyId: string;
+  readonly structure: WorkspaceStructure;
+  readonly value: unknown;
+  readonly onCommit: (propertyId: string, value: unknown) => void;
+}) {
+  const definition = structure.propertyDefinitions.find(
+    (property) => property.id === propertyId,
+  );
+  const inputId = React.useId();
+  const [draft, setDraft] = React.useState(cardPropertyInputValue(value));
+
+  React.useEffect(() => {
+    setDraft(cardPropertyInputValue(value));
+  }, [value]);
+
+  if (!definition) return null;
+  if (definition.valueType === "boolean") {
+    return (
+      <input
+        aria-label={definition.name}
+        checked={Boolean(value)}
+        className="size-4"
+        type="checkbox"
+        onChange={(event) => onCommit(propertyId, event.currentTarget.checked)}
+      />
+    );
+  }
+  if (definition.valueType === "label") {
+    const selectedIds = cardLabelSelectedIds(value);
+    return (
+      <select
+        id={inputId}
+        aria-label={definition.name}
+        multiple={definition.multiple}
+        value={definition.multiple ? selectedIds : (selectedIds[0] ?? "")}
+        className="min-h-7 min-w-0 rounded-md border border-transparent bg-transparent px-1 text-xs text-foreground outline-none hover:border-border focus:border-ring"
+        onChange={(event) => {
+          const optionIds = Array.from(
+            event.currentTarget.selectedOptions,
+          ).map((option) => option.value);
+          onCommit(
+            propertyId,
+            definition.multiple ? optionIds : (optionIds[0] ?? ""),
+          );
+        }}
+      >
+        {!definition.multiple && <option value="" />}
+        {(definition.options ?? []).map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.name}
+          </option>
+        ))}
+      </select>
+    );
+  }
+  if (
+    definition.valueType !== "title" &&
+    definition.valueType !== "url" &&
+    definition.valueType !== "date"
+  ) {
+    return (
+      <span className="truncate text-xs">
+        {entityValue(entity, propertyId, undefined, [structure])}
+      </span>
+    );
+  }
+  return (
+    <input
+      id={inputId}
+      aria-label={definition.name}
+      type={definition.valueType === "date" ? "datetime-local" : "text"}
+      value={draft}
+      className="min-h-7 min-w-0 rounded-md border border-transparent bg-transparent px-1 text-xs text-foreground outline-none hover:border-border focus:border-ring"
+      onBlur={() =>
+        onCommit(
+          propertyId,
+          definition.valueType === "date"
+            ? {
+                allDay: false,
+                start: draft,
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+              }
+            : draft,
+        )
+      }
+      onChange={(event) => setDraft(event.currentTarget.value)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") event.currentTarget.blur();
+      }}
+    />
+  );
+}
+
+function CardConfiguredProperties(props: ReadyObjectViewProps) {
+  const structure = cardStructureFor(props.entity, props.structures);
+  if (!structure) return null;
+  const surface = props.cardSurface ?? (props.config.kind === "embed" ? "embed" : "small-card");
+  return (
+    <CardConfiguredPropertyRows
+      {...props}
+      structure={structure}
+      surface={surface}
+    />
+  );
+}
+
+function CardConfiguredPropertyRows({
+  entity,
+  objectTypeLabels,
+  onPropertyCommit,
+  structures,
+  structure,
+  surface,
+}: ReadyObjectViewProps & {
+  readonly structure: WorkspaceStructure;
+  readonly surface: "embed" | "gallery" | "small-card" | "wall";
+}) {
+  const properties = projectObjectCardProperties(entity, structure, surface);
+  if (properties.length === 0) return null;
+  return (
+    <dl data-slot="object-view-card-properties" className="mt-3 grid gap-1.5">
+      {properties.map((property) => (
+        <div
+          key={property.propertyId}
+          data-direct-edit={property.directEdit || undefined}
+          data-empty={property.empty || undefined}
+          className="grid min-h-7 grid-cols-[5rem_minmax(0,1fr)] items-center gap-2 text-xs"
+        >
+          <dt className="truncate text-muted-foreground">{property.label}</dt>
+          <dd className="min-w-0">
+            {property.directEdit && onPropertyCommit ? (
+              <CardPropertyEditor
+                entity={entity}
+                propertyId={property.propertyId}
+                structure={structure}
+                value={property.value}
+                onCommit={(propertyId, value) =>
+                  onPropertyCommit(entity.id, propertyId, value)
+                }
+              />
+            ) : (
+              <span className="block truncate">
+                {entityValue(
+                  entity,
+                  property.propertyId,
+                  objectTypeLabels,
+                  structures,
+                )}
+              </span>
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 function CardObjectView(props: ReadyObjectViewProps) {
   const {
     className,
@@ -192,20 +395,8 @@ function CardObjectView(props: ReadyObjectViewProps) {
   } = props;
   const title = entity.title.trim() || labels.untitledObject;
   const wide = config.kind === "wide-card";
-  return (
-    <OpenSurface
-      ariaLabel={labels.openObject(title)}
-      className={cn(
-        workspaceNamedCardClass,
-        "min-h-[25rem] w-full p-3 text-card-foreground hover:border-foreground/15 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring",
-        wide &&
-          "sm:grid sm:min-h-[18rem] sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-5",
-        config.kind === "embed" && "bg-muted/30 shadow-none",
-        className,
-      )}
-      entityId={entity.id}
-      onOpen={onOpen}
-    >
+  const content = (
+    <>
       <span className="flex min-w-0 flex-col">
         <ObjectTypeLabel
           entity={entity}
@@ -222,7 +413,51 @@ function CardObjectView(props: ReadyObjectViewProps) {
         entity={entity}
         className={cn("mt-4 flex-1", wide && "sm:mt-0")}
       />
+      <CardConfiguredProperties {...props} />
       <CardMetadata entity={entity} fallbackLabel={props.propertyLabels?.tags} />
+    </>
+  );
+  if (props.onPropertyCommit) {
+    return (
+      <article
+        data-slot="object-view-card"
+        className={cn(
+          workspaceNamedCardClass,
+          "min-h-[25rem] w-full p-3 text-card-foreground hover:border-foreground/15 hover:shadow-sm focus-within:ring-2 focus-within:ring-ring",
+          wide &&
+            "sm:grid sm:min-h-[18rem] sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-5",
+          config.kind === "embed" && "bg-muted/30 shadow-none",
+          className,
+        )}
+      >
+        {content}
+        {onOpen ? (
+          <button
+            type="button"
+            className="mt-3 text-xs font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            onClick={() => onOpen(entity.id)}
+          >
+            {labels.openObject(title)}
+          </button>
+        ) : null}
+      </article>
+    );
+  }
+  return (
+    <OpenSurface
+      ariaLabel={labels.openObject(title)}
+      className={cn(
+        workspaceNamedCardClass,
+        "min-h-[25rem] w-full p-3 text-card-foreground hover:border-foreground/15 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring",
+        wide &&
+          "sm:grid sm:min-h-[18rem] sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-5",
+        config.kind === "embed" && "bg-muted/30 shadow-none",
+        className,
+      )}
+      entityId={entity.id}
+      onOpen={onOpen}
+    >
+      {content}
     </OpenSurface>
   );
 }

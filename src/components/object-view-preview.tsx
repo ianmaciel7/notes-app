@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { blockEditorDocumentToPlainText } from "@/editor/document";
 import { cn } from "@/lib/utils";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
+import { exportFormulaCell } from "@/lib/workspace-table-formulas";
 
 type ObjectViewPreviewProps = {
   readonly className?: string;
@@ -65,7 +66,7 @@ function TablePreview({ entity }: { readonly entity: WorkspaceEntity }) {
           key={cell.id}
           className="min-h-9 truncate border-b border-r px-3 py-2 even:border-r-0 [&:nth-last-child(-n+2)]:border-b-0"
         >
-          {cell.value || "\u00a0"}
+          {exportFormulaCell(cell.value, "csv-result") || "\u00a0"}
         </span>
       ))}
     </div>

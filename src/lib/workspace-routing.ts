@@ -2,6 +2,7 @@ export const WORKSPACE_SECTION_VALUES = [
   "calendar",
   "search",
   "explore",
+  "trash",
 ] as const;
 
 export type WorkspaceSection = (typeof WORKSPACE_SECTION_VALUES)[number];

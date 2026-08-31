@@ -264,6 +264,30 @@ test("formula cells persist source metadata and export explicit result or source
   assert.equal(exportFormulaCell(formula, "csv-source"), "=A1");
   assert.equal(exportFormulaCell(formula, "markdown-result"), "25%");
   assert.equal(exportFormulaCell(formula, "markdown-source"), "`=A1`");
+  assert.equal(
+    exportFormulaCell(
+      {
+        ...formula,
+        presentation: {
+          currency: "USD",
+          fixedDecimals: 2,
+          type: "currency",
+        },
+      },
+      "csv-result",
+    ),
+    "$0.25",
+  );
+  assert.equal(
+    exportFormulaCell(
+      {
+        ...formula,
+        presentation: { color: "green", steps: 1, type: "progress" },
+      },
+      "markdown-result",
+    ),
+    "0.25 / 1",
+  );
   assert.deepEqual(describeFormulaExportMode("csv-result"), {
     lossiness: [
       "CSV result export preserves displayed formula results and error tokens, but omits editable formula source and dependency metadata.",

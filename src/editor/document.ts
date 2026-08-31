@@ -20,6 +20,10 @@ type BlockId = string & { readonly __blockId: unique symbol };
 type BlockEditorMark =
   | { type: "bold" | "italic" | "code" }
   | { type: "blockLink"; attrs: { blockId: string; objectId: string } }
+  | {
+      type: "inlineMath";
+      attrs: { source: string; sourceStatus?: "valid" | "invalid" };
+    }
   | { type: "link"; attrs: { href: string } }
   | { type: "objectLink"; attrs: { objectId: string } };
 
@@ -430,13 +434,27 @@ function isHrefLinkMark(value: Record<string, unknown>) {
   );
 }
 
+function isInlineMathMark(value: Record<string, unknown>) {
+  return (
+    value.type === "inlineMath" &&
+    hasOnlyKeys(value, ["type", "attrs"]) &&
+    isRecord(value.attrs) &&
+    hasOnlyKeys(value.attrs, ["source", "sourceStatus"]) &&
+    isSafeSourceText(value.attrs.source) &&
+    (value.attrs.sourceStatus === undefined ||
+      value.attrs.sourceStatus === "valid" ||
+      value.attrs.sourceStatus === "invalid")
+  );
+}
+
 function isMark(value: unknown): value is BlockEditorMark {
   if (!isRecord(value) || typeof value.type !== "string") return false;
   return (
     isSimpleMark(value) ||
     isObjectLinkMark(value) ||
     isBlockLinkMark(value) ||
-    isHrefLinkMark(value)
+    isHrefLinkMark(value) ||
+    isInlineMathMark(value)
   );
 }
 
@@ -610,14 +628,22 @@ function isColumnNode(value: Record<string, unknown>) {
   );
 }
 
+function isColumnCount(value: unknown) {
+  return (
+    value === undefined ||
+    (Number.isInteger(value) && (value as number) >= 2 && (value as number) <= 4)
+  );
+}
+
 function isColumnLayoutNode(value: Record<string, unknown>, depth: number) {
   return (
     isRecord(value.attrs) &&
-    hasOnlyKeys(value.attrs, ["id", "layoutMode", "width"]) &&
+    hasOnlyKeys(value.attrs, ["id", "layoutMode", "width", "columnCount"]) &&
     hasStableBlockId(value.attrs) &&
     (value.attrs.layoutMode === "columns" ||
       value.attrs.layoutMode === "grid") &&
     isBlockWidth(value.attrs.width) &&
+    isColumnCount(value.attrs.columnCount) &&
     Array.isArray(value.content) &&
     value.content.length >= 2 &&
     value.content.every(
@@ -736,7 +762,7 @@ function isBlockEditorDocument(value: unknown): value is BlockEditorDocument {
     value.doc.type === "doc" &&
     Array.isArray(value.doc.content) &&
     value.doc.content.length > 0 &&
-    value.doc.content.every(isNode) &&
+    value.doc.content.every((node) => isNode(node)) &&
     hasUniqueBlockIds(value.doc.content as BlockEditorNode[])
   );
 }
@@ -848,6 +874,189 @@ function blockEditorDocumentToPlainText(value: BlockEditorDocument): string {
   return value.doc.content.map(nodeToPlainText).join("\n");
 }
 
+function isTopLevelSelectionEligible(
+  document: BlockEditorDocument,
+  blockIds: readonly string[],
+) {
+  const selected = new Set(blockIds);
+  return (
+    selected.size > 0 &&
+    document.doc.content.every(
+      (node) =>
+        typeof node.attrs?.id !== "string" || !selected.has(node.attrs.id),
+    ) === false
+  );
+}
+
+function groupTopLevelBlocks(
+  document: BlockEditorDocument,
+  blockIds: readonly string[],
+  options: {
+    appearance?: "plain" | "card" | "callout";
+    id?: string;
+    width?: "content" | "wide" | "full";
+  } = {},
+): BlockEditorDocument | null {
+  if (!isTopLevelSelectionEligible(document, blockIds)) return null;
+  const selected = new Set(blockIds);
+  const selectedIndexes = document.doc.content
+    .map((node, index) =>
+      typeof node.attrs?.id === "string" && selected.has(node.attrs.id)
+        ? index
+        : -1,
+    )
+    .filter((index) => index >= 0);
+  if (selectedIndexes.length !== selected.size) return null;
+  const first = selectedIndexes[0];
+  const last = selectedIndexes.at(-1) ?? first;
+  if (last - first + 1 !== selectedIndexes.length) return null;
+
+  const grouped = document.doc.content
+    .slice(first, last + 1)
+    .map((node) => structuredClone(node));
+  const content = [
+    ...document.doc.content
+      .slice(0, first)
+      .map((node) => structuredClone(node)),
+    {
+      type: "groupBlock",
+      attrs: {
+        appearance: options.appearance ?? "card",
+        id: options.id ?? createBlockId(),
+        width: options.width ?? "content",
+      },
+      content: grouped,
+    },
+    ...document.doc.content
+      .slice(last + 1)
+      .map((node) => structuredClone(node)),
+  ];
+
+  const candidate = {
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: { type: "doc" as const, content },
+  };
+  return isBlockEditorDocument(candidate) ? candidate : null;
+}
+
+function ungroupTopLevelGroupBlock(
+  document: BlockEditorDocument,
+  groupId: string,
+): BlockEditorDocument | null {
+  const content = document.doc.content.flatMap((node) =>
+    node.type === "groupBlock" && node.attrs?.id === groupId
+      ? structuredClone(node.content ?? [])
+      : [structuredClone(node)],
+  );
+  const candidate = {
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: { type: "doc" as const, content },
+  };
+  return isBlockEditorDocument(candidate) ? candidate : null;
+}
+
+function createColumnLayoutFromTopLevelBlocks(
+  document: BlockEditorDocument,
+  blockIds: readonly string[],
+  options: {
+    columnCount?: number;
+    id?: string;
+    layoutMode?: "columns" | "grid";
+    width?: "content" | "wide" | "full";
+  } = {},
+): BlockEditorDocument | null {
+  if (!isTopLevelSelectionEligible(document, blockIds)) return null;
+  const columnCount = Math.max(2, Math.min(options.columnCount ?? 2, 4));
+  const selected = new Set(blockIds);
+  const selectedNodes = document.doc.content.filter(
+    (node) => typeof node.attrs?.id === "string" && selected.has(node.attrs.id),
+  );
+  if (selectedNodes.length === 0) return null;
+
+  const columns = Array.from({ length: columnCount }, (_, index) => ({
+    type: "column",
+    attrs: { id: createBlockId(), width: 1 / columnCount },
+    content: selectedNodes
+      .slice(
+        Math.ceil((selectedNodes.length * index) / columnCount),
+        Math.ceil((selectedNodes.length * (index + 1)) / columnCount),
+      )
+      .map((node) => structuredClone(node)),
+  })).map((column) =>
+    column.content.length > 0
+      ? column
+      : {
+          ...column,
+          content: [{ type: "paragraph", attrs: { id: createBlockId() } }],
+        },
+  );
+  const layout: BlockEditorNode = {
+    type: "columnLayout",
+    attrs: {
+      id: options.id ?? createBlockId(),
+      layoutMode: options.layoutMode ?? "columns",
+      width: options.width ?? "content",
+    },
+    content: columns,
+  };
+  const content: BlockEditorNode[] = [];
+  let inserted = false;
+  for (const node of document.doc.content) {
+    if (typeof node.attrs?.id === "string" && selected.has(node.attrs.id)) {
+      if (!inserted) {
+        content.push(layout);
+        inserted = true;
+      }
+      continue;
+    }
+    content.push(structuredClone(node));
+  }
+  const candidate = {
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: { type: "doc" as const, content },
+  };
+  return isBlockEditorDocument(candidate) ? candidate : null;
+}
+
+function updateAdvancedBlockLayoutAttributes(
+  document: BlockEditorDocument,
+  blockId: string,
+  attrs: {
+    appearance?: "plain" | "card" | "callout";
+    mediaDisplay?: "preview" | "thumbnail" | "audio" | "attachment" | null;
+    viewKind?: "inline" | "small-card" | "wide-card" | "embed" | "transclusion";
+    width?: "content" | "wide" | "full";
+  },
+): BlockEditorDocument | null {
+  const visit = (node: BlockEditorNode): BlockEditorNode => {
+    const next = structuredClone(node);
+    if (next.attrs?.id === blockId) {
+      if (
+        (next.type === "groupBlock" || next.type === "columnLayout") &&
+        attrs.width
+      ) {
+        next.attrs.width = attrs.width;
+      }
+      if (next.type === "groupBlock" && attrs.appearance) {
+        next.attrs.appearance = attrs.appearance;
+      }
+      if (next.type === "objectBlock") {
+        if (attrs.viewKind) next.attrs.viewKind = attrs.viewKind;
+        if (attrs.mediaDisplay !== undefined) {
+          next.attrs.mediaDisplay = attrs.mediaDisplay;
+        }
+      }
+    }
+    if (next.content) next.content = next.content.map(visit);
+    return next;
+  };
+  const candidate = {
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: { type: "doc" as const, content: document.doc.content.map(visit) },
+  };
+  return isBlockEditorDocument(candidate) ? candidate : null;
+}
+
 function documentHasAdvancedMarkdownLossiness(
   document: BlockEditorDocument,
 ): boolean {
@@ -856,7 +1065,10 @@ function documentHasAdvancedMarkdownLossiness(
     if (
       node.type === TABLE_BLOCK_TYPE ||
       advancedBlockTypes.has(node.type) ||
-      node.attrs?.renderMode === "mermaid"
+      node.attrs?.renderMode === "mermaid" ||
+      typeof node.attrs?.emoji === "string" ||
+      typeof node.attrs?.toggleCollapsed === "boolean" ||
+      node.marks?.some((mark) => mark.type === "inlineMath")
     ) {
       hasLossiness = true;
       return;
@@ -868,7 +1080,12 @@ function documentHasAdvancedMarkdownLossiness(
 }
 
 function textContentMarkdown(node: BlockEditorNode): string {
-  if (node.type === "text") return node.text ?? "";
+  if (node.type === "text") {
+    const inlineMath = node.marks?.find((mark) => mark.type === "inlineMath");
+    if (inlineMath?.type === "inlineMath")
+      return `$${inlineMath.attrs.source}$`;
+    return node.text ?? "";
+  }
   if (node.type === "hardBreak") return "  \n";
   return (node.content ?? []).map(textContentMarkdown).join("");
 }
@@ -1036,11 +1253,15 @@ export {
   copyBlockEditorDocumentWithFreshIds,
   copyBlockEditorNodeWithFreshIds,
   createBlockId,
+  createColumnLayoutFromTopLevelBlocks,
   createEmptyBlockEditorDocument,
   documentHasAdvancedMarkdownLossiness,
+  groupTopLevelBlocks,
   isAdvancedBlockType,
   isBlockEditorDocument,
   isReferenceableBlockType,
   isSafeBlockEditorHref,
   normalizeBlockEditorDocument,
+  ungroupTopLevelGroupBlock,
+  updateAdvancedBlockLayoutAttributes,
 };

@@ -6,6 +6,7 @@ import {
   blockEditorDocumentToPlainText,
 } from "../src/editor/document.ts";
 import { parseWorkspaceObjectSnapshot } from "../src/lib/workspace-object-storage.ts";
+import { createCustomStructure } from "../src/lib/workspace-object-types.ts";
 import {
   createInitialWorkspaceObjectState,
   WORKSPACE_OBJECT_SCHEMA_VERSION,
@@ -335,4 +336,75 @@ test("hydration restores required object types without preserving unreferenced l
   assert.ok(restoredIds.includes("archive"));
   assert.equal(restoredIds.includes("book"), false);
   assert.equal(restoredIds.includes("person"), false);
+});
+
+test("hydration preserves existing raw number values and presentation metadata", () => {
+  const current = createInitialWorkspaceObjectState();
+  const metric = {
+    id: "metric",
+    multiple: false,
+    name: "Metric",
+    numberPresentation: { fixedDecimals: 0, type: "percent" },
+    ownership: "normal",
+    valueType: "number",
+    writable: true,
+  };
+  const structures = createCustomStructure(
+    current.structures,
+    {
+      iconName: "page",
+      lifecycleKind: "document",
+      pluralName: "Metrics",
+      propertyDefinitions: [metric],
+      singularName: "Metric",
+      tone: "blue",
+    },
+    () => "metric",
+  );
+  assert.equal(structures.ok, true);
+
+  const parsed = parseWorkspaceObjectSnapshot(
+    JSON.stringify({
+      activeEntityId: "page-1",
+      entities: [
+        {
+          body: {
+            doc: {
+              content: [{ attrs: { id: "block:page-1:0" }, type: "paragraph" }],
+              type: "doc",
+            },
+            schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+          },
+          collections: [],
+          createdAt: "2026-01-01T00:00:00.000Z",
+          id: "page-1",
+          kind: "document",
+          objectTypeId: "metric",
+          propertyValues: {
+            metric: { number: { value: 0.25 }, type: "number" },
+          },
+          tags: [],
+          title: "Metric page",
+        },
+      ],
+      nextId: 2,
+      structures: structures.value,
+      tombstones: [],
+      trashRecords: [],
+      version: WORKSPACE_OBJECT_SCHEMA_VERSION,
+    }),
+  );
+
+  assert.equal(parsed.ok, true);
+  assert.equal(
+    parsed.state.entities[0].propertyValues.metric.number.value,
+    0.25,
+  );
+  assert.deepEqual(
+    parsed.state.structures
+      .find((structure) => structure.id === "metric")
+      ?.propertyDefinitions.find((definition) => definition.id === "metric")
+      ?.numberPresentation,
+    { fixedDecimals: 0, type: "percent" },
+  );
 });

@@ -18,10 +18,10 @@
 
 ## 4. UI
 
-- [ ] 4.1 Add the Trash route/list, individual restore/delete, Empty Trash, retention copy, confirmations, loading, empty, error, and unavailable states.
-- [ ] 4.2 Verify keyboard, focus recovery, accessibility, responsive behavior, localization, and reduced motion.
+- [x] 4.1 Add the Trash route/list, individual restore/delete, Empty Trash, retention copy, confirmations, loading, empty, error, and unavailable states.
+- [x] 4.2 Verify keyboard, focus recovery, accessibility, responsive behavior, localization, and reduced motion.
 
 ## 5. Acceptance
 
-- [ ] 5.1 Run domain, database, sync, media, projection, browser, migration, and retention-boundary tests.
+- [x] 5.1 Run domain, database, sync, media, projection, browser, migration, and retention-boundary tests.
 - [ ] 5.2 Run repository verification and `openspec validate add-trash-lifecycle --strict`.

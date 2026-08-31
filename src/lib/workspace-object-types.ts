@@ -206,6 +206,10 @@ type StructureAppearanceUpdate = {
   readonly tone?: ObjectIconTone;
 };
 
+type StructurePresentationUpdate = {
+  readonly presentation: StructurePresentation;
+};
+
 type DeleteStructureDependencies = {
   readonly instanceCount?: number;
   readonly dependentCollectionIds?: readonly string[];
@@ -1580,6 +1584,23 @@ export function updateStructureAppearance(
       ...editable.value,
       iconName,
       tone,
+    }),
+  );
+}
+
+export function updateStructurePresentation(
+  registry: readonly WorkspaceStructure[],
+  id: StructureId,
+  update: StructurePresentationUpdate,
+): DomainResult<readonly WorkspaceStructure[]> {
+  const indexResult = findStructureIndex(registry, id);
+  if (!indexResult.ok) return indexResult;
+  const presentation = validatePresentation(update.presentation);
+  if (!presentation.ok) return presentation;
+  return ok(
+    replaceAt(registry, indexResult.value, {
+      ...registry[indexResult.value],
+      presentation: presentation.value,
     }),
   );
 }

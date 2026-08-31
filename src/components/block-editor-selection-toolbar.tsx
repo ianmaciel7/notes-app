@@ -28,8 +28,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import type { BlockEditorLabels } from "@/editor/block-editor-contract";
 import type { createBlockCommandCatalog } from "@/editor/block-command-catalog";
+import type { BlockEditorLabels } from "@/editor/block-editor-contract";
 import { isSafeBlockEditorHref } from "@/editor/document";
 
 type SelectionRange = { from: number; to: number };
@@ -116,14 +116,20 @@ function SelectionToolbar({
     const chain = restoreSelection();
     if (id === "text") chain.setParagraph().run();
     else if (id.startsWith("heading-")) {
-      chain
-        .setHeading({ level: Number(id.slice(-1)) as 1 | 2 | 3 | 4 })
-        .run();
+      chain.setHeading({ level: Number(id.slice(-1)) as 1 | 2 | 3 | 4 }).run();
     } else if (id === "bullet-list") chain.toggleBulletList().run();
     else if (id === "ordered-list") chain.toggleOrderedList().run();
     else if (id === "task-list") chain.toggleTaskList().run();
     else if (id === "blockquote") chain.toggleBlockquote().run();
     else if (id === "code-block") chain.toggleCodeBlock().run();
+    else {
+      const command = blockCommands.find((item) => item.id === id);
+      if (!command) return;
+      command.execute(
+        editor,
+        clampSelection(editor, selectionRef.current ?? editor.state.selection),
+      );
+    }
     setBlockMenuOpen(false);
   }
 

@@ -66,7 +66,12 @@ test("typed nested filters, sorts, grouping, and limits evaluate deterministical
         {
           operator: "any",
           filters: [
-            { kind: "property", propertyId: "score", operator: "greater-than", value: 8 },
+            {
+              kind: "property",
+              propertyId: "score",
+              operator: "greater-than",
+              value: 8,
+            },
             { kind: "text", operator: "equals", value: "Beta" },
           ],
         },
@@ -79,8 +84,56 @@ test("typed nested filters, sorts, grouping, and limits evaluate deterministical
 
   const result = evaluateQuery(definition, entities);
   assert.equal(result.status, "ready");
-  assert.deepEqual(result.items.map((item) => item.id), ["b"]);
-  assert.deepEqual(result.groups.get("project").map((item) => item.id), ["b"]);
+  assert.deepEqual(
+    result.items.map((item) => item.id),
+    ["b"],
+  );
+  assert.deepEqual(
+    result.groups.get("project").map((item) => item.id),
+    ["b"],
+  );
+});
+
+test("number presentation never changes query filtering sorting or grouping", () => {
+  const entities = [
+    page("raw-one", "Displayed 100%", {
+      objectTypeId: "metric",
+      propertyValues: {
+        score: { type: "number", number: { value: 1 } },
+      },
+    }),
+    page("raw-quarter", "Displayed 25%", {
+      objectTypeId: "metric",
+      propertyValues: {
+        score: { type: "number", number: { value: 0.25 } },
+      },
+    }),
+  ];
+  const result = evaluateQuery(
+    query({
+      filters: {
+        operator: "all",
+        filters: [
+          {
+            kind: "property",
+            operator: "greater-than",
+            propertyId: "score",
+            value: 0.5,
+          },
+        ],
+      },
+      grouping: { propertyId: "score" },
+      sorts: [{ direction: "ascending", propertyId: "score" }],
+    }),
+    entities,
+  );
+
+  assert.equal(result.status, "ready");
+  assert.deepEqual(
+    result.items.map((item) => item.id),
+    ["raw-one"],
+  );
+  assert.deepEqual([...result.groups.keys()], ["1"]);
 });
 
 test("relation, content-link, and backlink filters stay distinct", () => {
@@ -106,25 +159,58 @@ test("relation, content-link, and backlink filters stay distinct", () => {
   const linkIndex = createWorkspaceObjectLinkIndex(entities);
 
   const relation = evaluateQuery(
-    query({ filters: { operator: "all", filters: [{ kind: "relation", propertyId: "owner", operator: "contains", target: "target" }] } }),
+    query({
+      filters: {
+        operator: "all",
+        filters: [
+          {
+            kind: "relation",
+            propertyId: "owner",
+            operator: "contains",
+            target: "target",
+          },
+        ],
+      },
+    }),
     entities,
     { linkIndex },
   );
-  assert.deepEqual(relation.items.map((item) => item.id).sort(), ["linked", "relation-only"]);
+  assert.deepEqual(relation.items.map((item) => item.id).sort(), [
+    "linked",
+    "relation-only",
+  ]);
 
   const content = evaluateQuery(
-    query({ filters: { operator: "all", filters: [{ kind: "content-link", operator: "contains", target: "target" }] } }),
+    query({
+      filters: {
+        operator: "all",
+        filters: [
+          { kind: "content-link", operator: "contains", target: "target" },
+        ],
+      },
+    }),
     entities,
     { linkIndex },
   );
-  assert.deepEqual(content.items.map((item) => item.id), ["linked"]);
+  assert.deepEqual(
+    content.items.map((item) => item.id),
+    ["linked"],
+  );
 
   const backlink = evaluateQuery(
-    query({ filters: { operator: "all", filters: [{ kind: "backlink", operator: "contains", target: "linked" }] } }),
+    query({
+      filters: {
+        operator: "all",
+        filters: [{ kind: "backlink", operator: "contains", target: "linked" }],
+      },
+    }),
     entities,
     { linkIndex },
   );
-  assert.deepEqual(backlink.items.map((item) => item.id), ["target"]);
+  assert.deepEqual(
+    backlink.items.map((item) => item.id),
+    ["target"],
+  );
 });
 
 test("host variables resolve context and report an explicit unresolved state", () => {
@@ -134,7 +220,14 @@ test("host variables resolve context and report an explicit unresolved state", (
     variables: { current: { kind: "host-object" } },
     filters: {
       operator: "all",
-      filters: [{ kind: "property", propertyId: "id", operator: "equals", value: { kind: "variable", name: "current" } }],
+      filters: [
+        {
+          kind: "property",
+          propertyId: "id",
+          operator: "equals",
+          value: { kind: "variable", name: "current" },
+        },
+      ],
     },
   });
 
@@ -142,34 +235,66 @@ test("host variables resolve context and report an explicit unresolved state", (
     missingVariables: ["current"],
     status: "unresolved",
   });
-  const resolved = evaluateQuery(definition, [host, target], { hostObjectId: "host" });
+  const resolved = evaluateQuery(definition, [host, target], {
+    hostObjectId: "host",
+  });
   assert.equal(resolved.status, "ready");
-  assert.deepEqual(resolved.items.map((item) => item.id), ["host"]);
+  assert.deepEqual(
+    resolved.items.map((item) => item.id),
+    ["host"],
+  );
 });
 
 test("seeded random selection is stable and independent of incidental input order", () => {
-  const entities = [page("a", "A"), page("b", "B"), page("c", "C"), page("d", "D")];
-  const definition = query({ selection: { mode: "random", count: 2, seed: "daily" } });
+  const entities = [
+    page("a", "A"),
+    page("b", "B"),
+    page("c", "C"),
+    page("d", "D"),
+  ];
+  const definition = query({
+    selection: { mode: "random", count: 2, seed: "daily" },
+  });
   const first = evaluateQuery(definition, entities);
   const second = evaluateQuery(definition, [...entities].reverse());
   assert.equal(first.status, "ready");
   assert.equal(second.status, "ready");
-  assert.deepEqual(first.items.map((item) => item.id), second.items.map((item) => item.id));
+  assert.deepEqual(
+    first.items.map((item) => item.id),
+    second.items.map((item) => item.id),
+  );
 });
 
 test("object and block search indexes are rebuildable and incrementally replace one entity", () => {
-  const alpha = page("a", "Project Atlas", { aliases: ["Atlas"], body: "Milestone launch" });
+  const alpha = page("a", "Project Atlas", {
+    aliases: ["Atlas"],
+    body: "Milestone launch",
+  });
   const beta = page("b", "Meeting", { body: "Discuss Atlas risks" });
   const index = buildWorkspaceSearchIndex([alpha, beta]);
 
   const results = searchWorkspaceIndex(index, "atlas");
-  assert.ok(results.some((result) => result.kind === "object" && result.entityId === "a"));
-  assert.ok(results.some((result) => result.kind === "block" && result.entityId === "b"));
+  assert.ok(
+    results.some(
+      (result) => result.kind === "object" && result.entityId === "a",
+    ),
+  );
+  assert.ok(
+    results.some(
+      (result) => result.kind === "block" && result.entityId === "b",
+    ),
+  );
 
   const updated = page("a", "Project Nova", { body: "Nova launch" });
   const nextIndex = updateWorkspaceSearchIndex(index, updated);
-  assert.equal(searchWorkspaceIndex(nextIndex, "Project Atlas", "object").length, 0);
-  assert.equal(searchWorkspaceIndex(nextIndex, "Project Nova", "object")[0].entityId, "a");
+  assert.equal(
+    searchWorkspaceIndex(nextIndex, "Project Atlas", "object").length,
+    0,
+  );
+  assert.equal(
+    searchWorkspaceIndex(nextIndex, "Project Nova", "object")[0].entityId,
+    "a",
+  );
 });
 
 test("palette search parses intent, ranks deterministically, deduplicates aliases, and projects block context", () => {
@@ -272,7 +397,10 @@ test("legacy query entities adapt into canonical tags and structure filters", ()
   assert.equal(definition.resultKind, "object");
   assert.equal(definition.filters.filters.length, 3);
   assert.deepEqual(definition.selection, { mode: "all" });
-  assert.deepEqual(evaluateQuery(definition, [matching, other]).items.map((item) => item.id), ["match"]);
+  assert.deepEqual(
+    evaluateQuery(definition, [matching, other]).items.map((item) => item.id),
+    ["match"],
+  );
 });
 
 test("query validation rejects invalid definitions and dependency collection is explicit", () => {
@@ -282,7 +410,12 @@ test("query validation rejects invalid definitions and dependency collection is 
     filters: {
       operator: "all",
       filters: [
-        { kind: "relation", propertyId: "owner", operator: "contains", target: { kind: "variable", name: "host" } },
+        {
+          kind: "relation",
+          propertyId: "owner",
+          operator: "contains",
+          target: { kind: "variable", name: "host" },
+        },
         { kind: "backlink", operator: "contains", target: "source" },
       ],
     },
@@ -291,7 +424,10 @@ test("query validation rejects invalid definitions and dependency collection is 
     variables: { host: { kind: "host-object" } },
   });
 
-  assert.deepEqual(validateQueryDefinition(definition), { ok: true, value: definition });
+  assert.deepEqual(validateQueryDefinition(definition), {
+    ok: true,
+    value: definition,
+  });
   assert.equal(validateQueryDefinition({ ...definition, limit: 0 }).ok, false);
   assert.deepEqual(collectQueryDependencies(definition), {
     needsBacklinks: true,

@@ -24,7 +24,12 @@ import {
   type WorkspaceEntity,
   type WorkspaceObjectState,
 } from "./workspace-objects.ts";
-import type { WorkspacePropertyValueMap } from "./workspace-property-values.ts";
+import {
+  formatNumberForExport,
+  readWorkspacePropertyValue,
+  type WorkspacePropertyValue,
+  type WorkspacePropertyValueMap,
+} from "./workspace-property-values.ts";
 
 type ImportExportStage = "parse" | "validate" | "map" | "preview" | "commit";
 
@@ -150,6 +155,12 @@ type WorkspaceExportBundle = {
   readonly markdown: readonly ReducedExportFile[];
   readonly mediaManifest: ReducedExportFile;
   readonly native: NativeWorkspaceExport;
+};
+
+type WorkspaceExportOptions = {
+  readonly csvNumberMode?: "display" | "raw";
+  readonly locale?: string;
+  readonly markdownNumberMode?: "display" | "raw";
 };
 
 type ImportJobOptions = {
@@ -842,7 +853,63 @@ function parseNativeWorkspaceExport(value: unknown):
       };
 }
 
-function reducedMarkdownForEntity(entity: WorkspaceEntity): ReducedExportFile {
+function structureForEntity(
+  entity: WorkspaceEntity,
+  structures: readonly WorkspaceStructure[],
+): WorkspaceStructure | undefined {
+  return structures.find((structure) => structure.id === entity.objectTypeId);
+}
+
+function formatExportPropertyValue(
+  value: WorkspacePropertyValue | undefined,
+  definition: WorkspaceStructure["propertyDefinitions"][number] | undefined,
+  mode: "display" | "raw",
+  locale: string | undefined,
+): string {
+  if (!value) return "";
+  if (value.type === "number") {
+    return formatNumberForExport(
+      value.number.value,
+      definition?.numberPresentation,
+      mode,
+      locale,
+    );
+  }
+  const readable = readWorkspacePropertyValue(value);
+  if (Array.isArray(readable)) {
+    return readable
+      .map((item) => (typeof item === "string" ? item : JSON.stringify(item)))
+      .join("; ");
+  }
+  if (readable == null) return "";
+  return typeof readable === "string" ? readable : String(readable);
+}
+
+function exportablePropertyDefinitions(
+  structures: readonly WorkspaceStructure[],
+): readonly WorkspaceStructure["propertyDefinitions"][number][] {
+  const definitions = new Map<
+    string,
+    WorkspaceStructure["propertyDefinitions"][number]
+  >();
+  for (const structure of structures) {
+    for (const definition of structure.propertyDefinitions) {
+      if (["title", "createdAt", "lastUpdatedAt"].includes(definition.id)) {
+        continue;
+      }
+      definitions.set(definition.id, definition);
+    }
+  }
+  return [...definitions.values()].sort((left, right) =>
+    left.id.localeCompare(right.id),
+  );
+}
+
+function reducedMarkdownForEntity(
+  entity: WorkspaceEntity,
+  structures: readonly WorkspaceStructure[],
+  options: WorkspaceExportOptions,
+): ReducedExportFile {
   const documentBody =
     entity.kind === "document" || entity.kind === "quote" ? entity.body : null;
   const body = documentBody
@@ -850,11 +917,28 @@ function reducedMarkdownForEntity(entity: WorkspaceEntity): ReducedExportFile {
     : "body" in entity && typeof entity.body === "string"
       ? entity.body
       : "";
+  const structure = structureForEntity(entity, structures);
+  const propertyMetadata =
+    structure?.propertyDefinitions
+      .filter(
+        (definition) =>
+          !["title", "createdAt", "lastUpdatedAt"].includes(definition.id),
+      )
+      .flatMap((definition) => {
+        const value = formatExportPropertyValue(
+          entity.propertyValues[definition.id],
+          definition,
+          options.markdownNumberMode ?? "display",
+          options.locale,
+        );
+        return value ? [`${definition.id}: ${value}`] : [];
+      }) ?? [];
   const metadata = [
     "---",
     `id: ${entity.id}`,
     `type: ${entity.objectTypeId}`,
     `createdAt: ${entity.createdAt}`,
+    ...propertyMetadata,
     "---",
     "",
   ].join("\n");
@@ -881,12 +965,23 @@ function createWorkspaceExportBundle(
   state: WorkspaceObjectState,
   mediaAssets: readonly MediaAsset[] = [],
   now: () => Date = () => new Date(),
+  options: WorkspaceExportOptions = {},
 ): WorkspaceExportBundle {
   const native = createNativeWorkspaceExport(state, mediaAssets, now);
   const activeEntities = selectActiveEntities(state);
-  const markdown = activeEntities.map(reducedMarkdownForEntity);
+  const markdown = activeEntities.map((entity) =>
+    reducedMarkdownForEntity(entity, state.structures, options),
+  );
+  const propertyDefinitions = exportablePropertyDefinitions(state.structures);
   const csvRows = [
-    ["id", "type", "title", "createdAt", "text"],
+    [
+      "id",
+      "type",
+      "title",
+      "createdAt",
+      "text",
+      ...propertyDefinitions.map((definition) => definition.id),
+    ],
     ...activeEntities.map((entity) => [
       entity.id,
       entity.objectTypeId,
@@ -895,6 +990,14 @@ function createWorkspaceExportBundle(
       entity.kind === "document" || entity.kind === "quote"
         ? blockEditorDocumentToPlainText(entity.body)
         : "",
+      ...propertyDefinitions.map((definition) =>
+        formatExportPropertyValue(
+          entity.propertyValues[definition.id],
+          definition,
+          options.csvNumberMode ?? "raw",
+          options.locale,
+        ),
+      ),
     ]),
   ];
   return {
@@ -943,6 +1046,7 @@ export type {
   NativeWorkspaceExport,
   ReducedExportFile,
   WorkspaceExportBundle,
+  WorkspaceExportOptions,
 };
 export {
   commitImportJob,
