@@ -3500,8 +3500,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-command-palette-contract.test.mjs": {
-    "mtime": 1788168743.1902308,
-    "ast_hash": "7baed5c303b93c7c41ccb6caa8d4bbb1",
+    "mtime": 1788170610.764955,
+    "ast_hash": "576761bbca92a18ec0b5a84089eea098",
     "semantic_hash": ""
   },
   "tests/workspace-command-performance.test.mjs": {
@@ -3650,8 +3650,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/add-related-content/tasks.md": {
-    "mtime": 1788170197.0939066,
-    "ast_hash": "705239e6149f4b32be97c369b79ac709",
+    "mtime": 1788170596.2504334,
+    "ast_hash": "9bebf7ac37b963635b1336cd8d5225ef",
     "semantic_hash": ""
   },
   "openspec/changes/add-table-block-editor/.openspec.yaml": {

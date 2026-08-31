@@ -21,15 +21,25 @@ const [
 test("workspace command palette is mounted once at the workspace boundary", () => {
   assert.match(controllerSource, /function WorkspaceCommandPalette\(\)/);
   assert.match(controllerSource, /<WorkspaceCommandPalette \/>/);
+  assert.match(controllerSource, /<WorkspaceExtendedSearchDialog \/>/);
+  assert.match(controllerSource, /<WorkspaceFindInPageDialog \/>/);
+  assert.match(controllerSource, /<WorkspaceShortcutBrowser \/>/);
   assert.match(controllerSource, /CommandDialog/);
   assert.match(controllerSource, /data-slot="workspace-command-palette"/);
+  assert.match(controllerSource, /data-slot="workspace-extended-search"/);
+  assert.match(controllerSource, /data-slot="workspace-find-in-page"/);
+  assert.match(controllerSource, /data-slot="workspace-shortcut-browser"/);
   assert.match(controllerSource, /React\.useDeferredValue\(query\)/);
 });
 
-test("global palette shortcuts route through the central workspace router", () => {
+test("global shortcuts route through the central workspace router and registry", () => {
   assert.match(controllerSource, /routeWorkspaceShortcut\(\{/);
-  assert.match(controllerSource, /shortcuts: \["Mod\+K", "Mod\+P"\]/);
+  assert.match(controllerSource, /projectWorkspaceCommands\(runtime\)/);
+  assert.match(controllerSource, /command\.shortcuts/);
+  assert.doesNotMatch(controllerSource, /shortcuts: \["Mod\+K", "Mod\+P"\]/);
   assert.match(commandRegistrySource, /shortcuts: \["Mod\+K", "Mod\+P"\]/);
+  assert.match(commandRegistrySource, /shortcuts: \["Mod\+Shift\+P"\]/);
+  assert.match(commandRegistrySource, /shortcuts: \["Mod\+Shift\+B"\]/);
   assert.doesNotMatch(
     controllerSource,
     /event\.key\.toLocaleLowerCase\(\) === "k"/,
@@ -52,7 +62,12 @@ test("command palette strings are localized in every workspace catalog", () => {
     assert.equal(typeof messages.workspace.commands.palette.title, "string");
     assert.equal(typeof messages.workspace.commands.palette.placeholder, "string");
     assert.equal(typeof messages.workspace.commands.openPalette.label, "string");
+    assert.equal(typeof messages.workspace.commands.openExtendedSearch.label, "string");
+    assert.equal(typeof messages.workspace.commands.openFindInPage.label, "string");
+    assert.equal(typeof messages.workspace.commands.openShortcuts.label, "string");
     assert.equal(typeof messages.workspace.commands.createObject.label, "string");
+    assert.equal(typeof messages.workspace.commands.shortcuts.title, "string");
+    assert.equal(typeof messages.workspace.commands.findInPage.title, "string");
     assert.equal(typeof messages.workspace.commands.groups.results, "string");
   }
 });

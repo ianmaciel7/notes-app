@@ -393,6 +393,15 @@ test("recurrence rules cover weekdays, ordinal monthly, yearly, leap years, and 
     nextRecurringTaskDate("2026-08-31", {
       interval: 1,
       mode: "scheduled-date",
+      monthly: { kind: "ordinal-weekday", ordinal: 2, weekday: 2 },
+      unit: "month",
+    }),
+    "2026-09-08",
+  );
+  assert.equal(
+    nextRecurringTaskDate("2026-08-31", {
+      interval: 1,
+      mode: "scheduled-date",
       monthly: { kind: "last-weekday", weekday: 1 },
       unit: "month",
     }),
@@ -406,6 +415,15 @@ test("recurrence rules cover weekdays, ordinal monthly, yearly, leap years, and 
       yearly: { day: 29, month: 2 },
     }),
     "2029-02-28",
+  );
+  assert.equal(
+    nextRecurringTaskDate("2026-08-31", {
+      interval: 1,
+      mode: "scheduled-date",
+      unit: "year",
+      yearly: { kind: "ordinal-weekday", month: 9, ordinal: 1, weekday: 1 },
+    }),
+    "2027-09-06",
   );
   assert.equal(
     nextRecurringTaskDate("2026-08-31", {
@@ -438,11 +456,18 @@ test("recurrence actions advance deadlines, support catch-up, and derive statist
     actedAt: "2026-08-31T12:00:00.000Z",
     actedOnDate: "2026-08-31",
   });
+  const advancedOne = applyTaskOccurrenceAction(task, {
+    action: "advance-one",
+    actedAt: "2026-08-11T12:00:00.000Z",
+    actedOnDate: "2026-08-11",
+  });
   const stats = taskRecurrenceStatistics(excused, "2026-09-01");
 
   assert.equal(advanced.scheduledDate, "2026-08-31");
   assert.equal(advanced.deadline, "2026-09-02");
   assert.equal(advanced.occurrences[0].catchUp, "next-future");
+  assert.equal(advancedOne.scheduledDate, "2026-08-17");
+  assert.equal(advancedOne.occurrences[0].action, "advance-one");
   assert.equal(stats.totalCompletions, 1);
   assert.equal(stats.currentStreak, 1);
   assert.equal(stats.bestStreak, 1);

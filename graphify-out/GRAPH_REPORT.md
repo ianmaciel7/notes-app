@@ -1,7 +1,7 @@
 # Graph Report - notes-app  (2026-08-31)
 
 ## Corpus Check
-- 684 files · ~519,397 words
+- 684 files · ~519,466 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8e9ce9aa`
+- Built from commit: `2d258fba`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -349,8 +349,8 @@
 3. `useWorkspace()` - 42 edges
 4. `isRecord()` - 30 edges
 5. `blockEditorDocumentFromPlainText()` - 29 edges
-6. `Button()` - 27 edges
-7. `ok()` - 27 edges
+6. `ok()` - 27 edges
+7. `Button()` - 27 edges
 8. `Requirement: Type-specific creation workflows` - 26 edges
 9. `failure()` - 25 edges
 10. `buttonVariants` - 25 edges
@@ -1505,27 +1505,27 @@ Cohesion: 0.50
 Nodes (4): Requirement: Runtime Structure-backed object creation, Scenario: Creation palette renders built-in and custom Structures, Scenario: Custom Structure object is created and reopened, Scenario: Preset is added through the object-type studio
 
 ## Knowledge Gaps
-- **2127 isolated node(s):** `desktopViewports`, `recordedSidebarWidths`, `tinyPng`, `tinyWav`, `NativeSelectProps` (+2122 more)
+- **2127 isolated node(s):** `1. Provider and Validation`, `2. Local Ranking`, `3. UI`, `4. Acceptance`, `SerializedWorkspaceTab` (+2122 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **44 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Work-memory lessons
 
 **Preferred sources** — corroborated by past sessions; start here.
-- `shared-styles.ts` (2× useful, score=1.635354805)
+- `shared-styles.ts` (2× useful, score=1.635327901)
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `cn` to `utils.ts`, `workspace-content.tsx`, `app-shell.tsx`, `app-sidebar-primary-actions.tsx`, `workspace-object-type-view.tsx`, `app-sidebar-overview.tsx`, `app-header-tabs.tsx`, `drawer.tsx`, `chart.tsx`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `workspace-controller.tsx`, `workspace-command-registry.ts`, `attachment.tsx`, `executeQueryDefinition`, `useBufferedTextCommit`, `toggle-group.tsx`, `buttonVariants`, `object-view-preview.tsx`, `navigation-menu.tsx`, `quick-action-suggestions.tsx`, `toast.tsx`, `select.tsx`, `pagination.tsx`, `sidebar.tsx`, `useWorkspace`, `carousel.tsx`, `alert.tsx`, `empty.tsx`, `marker.tsx`, `object-view-support.tsx`, `native-select.tsx`, `app-side-panel-header.tsx`, `bubble.tsx`, `block-editor.tsx`, `slash-command.tsx`, `field.tsx`?**
-  _High betweenness centrality (0.063) - this node is a cross-community bridge._
+  _High betweenness centrality (0.075) - this node is a cross-community bridge._
 - **Why does `WorkspaceEntity` connect `WorkspaceEntity` to `workspace-import-export.ts`, `workspace-related-content.ts`, `workspace-content.tsx`, `workspace-object-type-view.tsx`, `workspace-object-links.ts`, `workspace-domain-identities.ts`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `workspace-controller.tsx`, `workspace-object-views.ts`, `workspace-account-spaces.ts`, `object-view-preview.tsx`, `quick-action-suggestions.tsx`, `workspace-property-values.ts`, `quick-action-suggestion-contracts.ts`, `workspace-objects.ts`, `object-view-support.tsx`, `workspace-object-storage.ts`, `block-editor.tsx`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
-- **Why does `WorkspaceStructure` connect `block-editor.tsx` to `workspace-import-export.ts`, `quick-action-suggestions.tsx`, `workspace-property-values.ts`, `workspace-object-views.ts`, `workspace-object-type-view.tsx`, `workspace-object-storage.ts`, `quick-action-suggestion-contracts.ts`, `workspace-domain-identities.ts`, `workspace-object-types.ts`, `workspace-objects.ts`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `object-view-support.tsx`, `workspace-controller.tsx`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+- **Why does `writeMediaAsset()` connect `workspace-media-storage.ts` to `workspace-media-storage.test.mjs`, `workspace-controller.tsx`?**
+  _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `WorkspaceProvider()` (e.g. with `AppSidebarWorkspaceIcon()` and `createInitialWorkspaceObjectState()`) actually correct?**
   _`WorkspaceProvider()` has 3 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `desktopViewports`, `recordedSidebarWidths`, `tinyPng` to the rest of the system?**
+- **What connects `1. Provider and Validation`, `2. Local Ranking`, `3. UI` to the rest of the system?**
   _2127 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `cn` be split into smaller, more focused modules?**
   _Cohesion score 0.03005339435545385 - nodes in this community are weakly interconnected._
