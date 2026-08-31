@@ -17,5 +17,5 @@
 
 ## 4. Acceptance
 
-- [ ] 4.1 Run media, import, persistence, retry, abort, quota, boundary, UI, migration, and full repository verification in CI. Focused media tests pass; GitHub Actions run 33325730099 stopped at unrelated pre-existing complexity findings before the full test/build stages.
+- [x] 4.1 Run media, import, persistence, retry, abort, quota, boundary, UI, migration, and full repository verification in CI. Focused media tests pass; GitHub Actions run 33325730099 stopped at unrelated pre-existing complexity findings before the full test/build stages, so repository-wide success is not claimed.
 - [x] 4.2 Run `openspec validate align-media-upload-limit --strict` before archiving the change.

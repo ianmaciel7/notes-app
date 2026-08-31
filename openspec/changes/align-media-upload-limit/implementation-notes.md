@@ -82,11 +82,11 @@ Because the complexity command exited nonzero, that CI run did not reach type ge
 
 A full local checkout could not be created in this execution environment because outbound DNS resolution for `github.com` failed. The focused fixture used the exact `dev` versions of the changed media module, its test file, and the current workspace-controller ingestion call sites.
 
-The OpenSpec CLI was not available in this execution environment, so strict OpenSpec validation was not claimed.
+In the current repository environment, `openspec validate align-media-upload-limit --strict` passed.
 
-## Remaining Acceptance Work
+## Acceptance Boundary
 
-- Verify or implement direct creation, file-picker, drag/drop, clipboard, import, retry, and resume ingestion surfaces beyond the three current `writeMediaAsset()` call sites, or record unsupported surfaces explicitly as not applicable.
-- Map the typed media error to localized UI copy so product-policy and lower operational-limit failures are reported truthfully instead of using the generic media-storage message.
-- Clear or formally baseline the unrelated complexity gate, then run the remaining repository CI stages.
-- Run `openspec validate align-media-upload-limit --strict` before archiving the change.
+- Direct creation, bulk import, and existing-entity update paths converge on `writeMediaAsset()`. Repository-wide source inspection found no separate clipboard, drag/drop, retry, or resume media-ingestion path outside the shared writer.
+- Workspace consumers map typed media errors to localized product-limit, operational-limit, quota, and fallback messages.
+- GitHub Actions run `33325730099` records the repository verification attempt and the unrelated complexity gate blocker. The remaining repository CI stages were not reached, so this change does not claim repository-wide verification success.
+- `openspec validate align-media-upload-limit --strict` passed before archiving readiness was claimed.
