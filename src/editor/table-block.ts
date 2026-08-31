@@ -279,23 +279,18 @@ function normalizeCellStyle(value: unknown): TableBlockCellStyle | undefined {
   return Object.keys(style).length > 0 ? style : undefined;
 }
 
-function normalizeTableBlock(value: unknown): TableBlockModel | null {
-  if (!isRecord(value) || value.version !== TABLE_BLOCK_MODEL_VERSION) {
-    return null;
-  }
-  if (!hasStableTableId(value.id)) return null;
-  if (!Array.isArray(value.rows) || !Array.isArray(value.columns)) return null;
-  if (
-    value.rows.length < MIN_TABLE_ROWS ||
-    value.rows.length > MAX_TABLE_ROWS ||
-    value.columns.length < MIN_TABLE_COLUMNS ||
-    value.columns.length > MAX_TABLE_COLUMNS
-  ) {
-    return null;
-  }
+function hasValidTableBlockShape(value: Record<string, unknown>): boolean {
+  if (!Array.isArray(value.rows)) return false;
+  if (!Array.isArray(value.columns)) return false;
+  if (value.rows.length < MIN_TABLE_ROWS) return false;
+  if (value.rows.length > MAX_TABLE_ROWS) return false;
+  if (value.columns.length < MIN_TABLE_COLUMNS) return false;
+  return value.columns.length <= MAX_TABLE_COLUMNS;
+}
 
+function normalizeRows(value: readonly unknown[]): TableBlockRow[] | null {
   const rows: TableBlockRow[] = [];
-  for (const row of value.rows) {
+  for (const row of value) {
     if (!isRecord(row) || !hasStableTableId(row.id)) return null;
     const height = normalizeDimension(row.height);
     rows.push({
@@ -303,8 +298,14 @@ function normalizeTableBlock(value: unknown): TableBlockModel | null {
       ...(height ? { height } : {}),
     });
   }
+  return rows;
+}
+
+function normalizeColumns(
+  value: readonly unknown[],
+): TableBlockColumn[] | null {
   const columns: TableBlockColumn[] = [];
-  for (const column of value.columns) {
+  for (const column of value) {
     if (!isRecord(column) || !hasStableTableId(column.id)) return null;
     const width = normalizeDimension(column.width);
     columns.push({
@@ -312,42 +313,68 @@ function normalizeTableBlock(value: unknown): TableBlockModel | null {
       ...(width ? { width } : {}),
     });
   }
-  if (
-    new Set(rows.map((row) => row.id)).size !== rows.length ||
-    new Set(columns.map((column) => column.id)).size !== columns.length
-  ) {
-    return null;
-  }
+  return columns;
+}
 
+function hasUniqueTableIds(items: readonly { readonly id: string }[]): boolean {
+  return new Set(items.map((item) => item.id)).size === items.length;
+}
+
+function normalizeCell(
+  rawCell: unknown,
+  rowIds: ReadonlySet<TableBlockRowId>,
+  columnIds: ReadonlySet<TableBlockColumnId>,
+): TableBlockCell | null {
+  if (!isRecord(rawCell)) return null;
+  if (!hasStableTableId(rawCell.id)) return null;
+  if (!hasStableTableId(rawCell.rowId)) return null;
+  if (!hasStableTableId(rawCell.columnId)) return null;
+  const rowId = rawCell.rowId as TableBlockRowId;
+  const columnId = rawCell.columnId as TableBlockColumnId;
+  if (!rowIds.has(rowId)) return null;
+  if (!columnIds.has(columnId)) return null;
+  if (!Array.isArray(rawCell.content)) return null;
+  if (!rawCell.content.every(isTableBlockCellContent)) return null;
+  const style = normalizeCellStyle(rawCell.style);
+  return {
+    columnId,
+    content: structuredClone(rawCell.content),
+    id: rawCell.id as TableBlockCellId,
+    rowId,
+    ...(style ? { style } : {}),
+  };
+}
+
+function normalizeCells(
+  value: unknown,
+  rows: readonly TableBlockRow[],
+  columns: readonly TableBlockColumn[],
+): Record<string, TableBlockCell> | null {
   const rowIds = new Set(rows.map((row) => row.id));
   const columnIds = new Set(columns.map((column) => column.id));
-  const rawCells = isRecord(value.cells) ? value.cells : {};
+  const rawCells = isRecord(value) ? value : {};
   const cells: Record<string, TableBlockCell> = {};
   for (const rawCell of Object.values(rawCells)) {
-    if (!isRecord(rawCell)) return null;
-    if (
-      !hasStableTableId(rawCell.id) ||
-      !hasStableTableId(rawCell.rowId) ||
-      !hasStableTableId(rawCell.columnId) ||
-      !rowIds.has(rawCell.rowId as TableBlockRowId) ||
-      !columnIds.has(rawCell.columnId as TableBlockColumnId) ||
-      !Array.isArray(rawCell.content) ||
-      !rawCell.content.every(isTableBlockCellContent)
-    ) {
-      return null;
-    }
-    const normalizedCell: TableBlockCell = {
-      columnId: rawCell.columnId as TableBlockColumnId,
-      content: structuredClone(rawCell.content),
-      id: rawCell.id as TableBlockCellId,
-      rowId: rawCell.rowId as TableBlockRowId,
-      ...(normalizeCellStyle(rawCell.style)
-        ? { style: normalizeCellStyle(rawCell.style) }
-        : {}),
-    };
+    const normalizedCell = normalizeCell(rawCell, rowIds, columnIds);
+    if (!normalizedCell) return null;
     cells[cellKey(normalizedCell.rowId, normalizedCell.columnId)] =
       normalizedCell;
   }
+  return cells;
+}
+
+function normalizeTableBlock(value: unknown): TableBlockModel | null {
+  if (!isRecord(value) || value.version !== TABLE_BLOCK_MODEL_VERSION) {
+    return null;
+  }
+  if (!hasStableTableId(value.id)) return null;
+  if (!hasValidTableBlockShape(value)) return null;
+  const rows = normalizeRows(value.rows as readonly unknown[]);
+  const columns = normalizeColumns(value.columns as readonly unknown[]);
+  if (!rows || !columns) return null;
+  if (!hasUniqueTableIds(rows) || !hasUniqueTableIds(columns)) return null;
+  const cells = normalizeCells(value.cells, rows, columns);
+  if (!cells) return null;
 
   return withMissingCells({
     cells,
@@ -431,207 +458,289 @@ function reduceTableBlockCommand(
   table: TableBlockModel,
   command: TableBlockCommand,
 ): TableBlockResult<TableBlockModel> {
-  if (command.type === "update-cell") {
-    const cell = getCellById(table, command.cellId);
-    if (!cell || !command.content.every(isTableBlockCellContent)) {
-      return { error: "invalid-cell-update", ok: false };
-    }
-    return {
-      ok: true,
-      value: replaceCells(table, (item) =>
-        item.id === cell.id ? { ...item, content: command.content } : item,
+  const handler = tableBlockCommandHandlers[command.type] as (
+    model: TableBlockModel,
+    action: TableBlockCommand,
+  ) => TableBlockResult<TableBlockModel>;
+  return handler(table, command);
+}
+
+type TableBlockCommandHandler<T extends TableBlockCommand["type"]> = (
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: T }>,
+) => TableBlockResult<TableBlockModel>;
+
+const tableBlockCommandHandlers = {
+  "align-cells": styleTableCells,
+  "clear-cells": clearTableCells,
+  "delete-column": deleteTableColumn,
+  "delete-row": deleteTableRow,
+  "insert-column": insertTableColumn,
+  "insert-row": insertTableRow,
+  "move-column": moveTableColumn,
+  "move-row": moveTableRow,
+  "resize-column": resizeTableColumn,
+  "resize-row": resizeTableRow,
+  "sort-rows": sortTableRows,
+  "style-cells": styleTableCells,
+  "toggle-header": toggleTableHeader,
+  "update-cell": updateTableCell,
+} satisfies {
+  [T in TableBlockCommand["type"]]: TableBlockCommandHandler<T>;
+};
+
+function updateTableCell(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "update-cell" }>,
+): TableBlockResult<TableBlockModel> {
+  const cell = getCellById(table, command.cellId);
+  if (!cell || !command.content.every(isTableBlockCellContent)) {
+    return { error: "invalid-cell-update", ok: false };
+  }
+  return {
+    ok: true,
+    value: replaceCells(table, (item) =>
+      item.id === cell.id ? { ...item, content: command.content } : item,
+    ),
+  };
+}
+
+function clearTableCells(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "clear-cells" }>,
+): TableBlockResult<TableBlockModel> {
+  const ids = new Set(command.cellIds);
+  return {
+    ok: true,
+    value: replaceCells(table, (cell) =>
+      ids.has(cell.id) ? { ...cell, content: [] } : cell,
+    ),
+  };
+}
+
+function styleTableCells(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "align-cells" | "style-cells" }>,
+): TableBlockResult<TableBlockModel> {
+  const ids = new Set(command.cellIds);
+  const style =
+    command.type === "align-cells" ? { align: command.align } : command.style;
+  return {
+    ok: true,
+    value: replaceCells(table, (cell) =>
+      ids.has(cell.id) ? { ...cell, style: { ...cell.style, ...style } } : cell,
+    ),
+  };
+}
+
+function insertionIndex<T extends { readonly id: string }>(
+  items: readonly T[],
+  options: { readonly afterId?: string; readonly id?: string },
+): number {
+  if (options.afterId) {
+    return items.findIndex((item) => item.id === options.afterId) + 1;
+  }
+  if (options.id) return items.findIndex((item) => item.id === options.id);
+  return items.length;
+}
+
+function insertTableRow(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "insert-row" }>,
+): TableBlockResult<TableBlockModel> {
+  if (table.rows.length >= MAX_TABLE_ROWS) {
+    return { error: "row-limit-exceeded", ok: false };
+  }
+  const index = insertionIndex(table.rows, {
+    afterId: command.afterRowId,
+    id: command.rowId,
+  });
+  if (index < 0) return { error: "missing-row", ok: false };
+  const rows = table.rows.toSpliced(index, 0, { id: createRowId() });
+  return { ok: true, value: withMissingCells({ ...table, rows }) };
+}
+
+function deleteTableRow(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "delete-row" }>,
+): TableBlockResult<TableBlockModel> {
+  if (table.rows.length <= MIN_TABLE_ROWS) {
+    return { error: "minimum-row-count", ok: false };
+  }
+  if (!table.rows.some((row) => row.id === command.rowId)) {
+    return { error: "missing-row", ok: false };
+  }
+  return {
+    ok: true,
+    value: withMissingCells({
+      ...table,
+      cells: Object.fromEntries(
+        Object.entries(table.cells).filter(
+          ([, cell]) => cell.rowId !== command.rowId,
+        ),
       ),
-    };
+      rows: table.rows.filter((row) => row.id !== command.rowId),
+    }),
+  };
+}
+
+function moveTableRow(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "move-row" }>,
+): TableBlockResult<TableBlockModel> {
+  const index = table.rows.findIndex((row) => row.id === command.rowId);
+  if (index < 0) return { error: "invalid-row-order", ok: false };
+  if (command.toIndex < 0 || command.toIndex >= table.rows.length) {
+    return { error: "invalid-row-order", ok: false };
   }
-  if (command.type === "clear-cells") {
-    const ids = new Set(command.cellIds);
-    return {
-      ok: true,
-      value: replaceCells(table, (cell) =>
-        ids.has(cell.id) ? { ...cell, content: [] } : cell,
+  const rows = table.rows.toSpliced(index, 1);
+  return {
+    ok: true,
+    value: {
+      ...table,
+      rows: rows.toSpliced(command.toIndex, 0, table.rows[index]),
+    },
+  };
+}
+
+function resizeTableRow(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "resize-row" }>,
+): TableBlockResult<TableBlockModel> {
+  return {
+    ok: true,
+    value: {
+      ...table,
+      rows: table.rows.map((row) =>
+        row.id === command.rowId
+          ? { ...row, height: normalizeDimension(command.height) }
+          : row,
       ),
-    };
+    },
+  };
+}
+
+function insertTableColumn(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "insert-column" }>,
+): TableBlockResult<TableBlockModel> {
+  if (table.columns.length >= MAX_TABLE_COLUMNS) {
+    return { error: "column-limit-exceeded", ok: false };
   }
-  if (command.type === "style-cells" || command.type === "align-cells") {
-    const ids = new Set(command.cellIds);
-    const style =
-      command.type === "align-cells" ? { align: command.align } : command.style;
-    return {
-      ok: true,
-      value: replaceCells(table, (cell) =>
-        ids.has(cell.id)
-          ? { ...cell, style: { ...cell.style, ...style } }
-          : cell,
+  const index = insertionIndex(table.columns, {
+    afterId: command.afterColumnId,
+    id: command.columnId,
+  });
+  if (index < 0) return { error: "missing-column", ok: false };
+  const columns = table.columns.toSpliced(index, 0, { id: createColumnId() });
+  return { ok: true, value: withMissingCells({ ...table, columns }) };
+}
+
+function deleteTableColumn(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "delete-column" }>,
+): TableBlockResult<TableBlockModel> {
+  if (table.columns.length <= MIN_TABLE_COLUMNS) {
+    return { error: "minimum-column-count", ok: false };
+  }
+  if (!table.columns.some((column) => column.id === command.columnId)) {
+    return { error: "missing-column", ok: false };
+  }
+  return {
+    ok: true,
+    value: withMissingCells({
+      ...table,
+      cells: Object.fromEntries(
+        Object.entries(table.cells).filter(
+          ([, cell]) => cell.columnId !== command.columnId,
+        ),
       ),
-    };
+      columns: table.columns.filter((column) => column.id !== command.columnId),
+    }),
+  };
+}
+
+function moveTableColumn(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "move-column" }>,
+): TableBlockResult<TableBlockModel> {
+  const index = table.columns.findIndex(
+    (column) => column.id === command.columnId,
+  );
+  if (index < 0) return { error: "invalid-column-order", ok: false };
+  if (command.toIndex < 0 || command.toIndex >= table.columns.length) {
+    return { error: "invalid-column-order", ok: false };
   }
-  if (command.type === "insert-row") {
-    if (table.rows.length >= MAX_TABLE_ROWS) {
-      return { error: "row-limit-exceeded", ok: false };
-    }
-    const index = command.afterRowId
-      ? table.rows.findIndex((row) => row.id === command.afterRowId) + 1
-      : command.rowId
-        ? table.rows.findIndex((row) => row.id === command.rowId)
-        : table.rows.length;
-    if (index < 0) return { error: "missing-row", ok: false };
-    const rows = table.rows.toSpliced(index, 0, { id: createRowId() });
-    return { ok: true, value: withMissingCells({ ...table, rows }) };
+  const columns = table.columns.toSpliced(index, 1);
+  return {
+    ok: true,
+    value: {
+      ...table,
+      columns: columns.toSpliced(command.toIndex, 0, table.columns[index]),
+    },
+  };
+}
+
+function resizeTableColumn(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "resize-column" }>,
+): TableBlockResult<TableBlockModel> {
+  return {
+    ok: true,
+    value: {
+      ...table,
+      columns: table.columns.map((column) =>
+        column.id === command.columnId
+          ? { ...column, width: normalizeDimension(command.width) }
+          : column,
+      ),
+    },
+  };
+}
+
+function toggleTableHeader(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "toggle-header" }>,
+): TableBlockResult<TableBlockModel> {
+  const header =
+    command.target === "column"
+      ? { columnHeader: command.enabled }
+      : { rowHeader: command.enabled };
+  return { ok: true, value: { ...table, ...header } };
+}
+
+function cellTextForSort(
+  table: TableBlockModel,
+  rowId: TableBlockRowId,
+  columnId: string,
+) {
+  return (
+    table.cells[cellKey(rowId, columnId)]?.content
+      .map((item) => (item.type === "text" ? item.text : "\n"))
+      .join("") ?? ""
+  );
+}
+
+function sortTableRows(
+  table: TableBlockModel,
+  command: Extract<TableBlockCommand, { type: "sort-rows" }>,
+): TableBlockResult<TableBlockModel> {
+  if (!table.columns.some((column) => column.id === command.columnId)) {
+    return { error: "missing-column", ok: false };
   }
-  if (command.type === "delete-row") {
-    if (table.rows.length <= MIN_TABLE_ROWS) {
-      return { error: "minimum-row-count", ok: false };
-    }
-    if (!table.rows.some((row) => row.id === command.rowId)) {
-      return { error: "missing-row", ok: false };
-    }
-    return {
-      ok: true,
-      value: withMissingCells({
-        ...table,
-        cells: Object.fromEntries(
-          Object.entries(table.cells).filter(
-            ([, cell]) => cell.rowId !== command.rowId,
-          ),
-        ),
-        rows: table.rows.filter((row) => row.id !== command.rowId),
-      }),
-    };
-  }
-  if (command.type === "move-row") {
-    const index = table.rows.findIndex((row) => row.id === command.rowId);
-    if (
-      index < 0 ||
-      command.toIndex < 0 ||
-      command.toIndex >= table.rows.length
-    ) {
-      return { error: "invalid-row-order", ok: false };
-    }
-    const rows = table.rows.toSpliced(index, 1);
-    return {
-      ok: true,
-      value: {
-        ...table,
-        rows: rows.toSpliced(command.toIndex, 0, table.rows[index]),
-      },
-    };
-  }
-  if (command.type === "resize-row") {
-    return {
-      ok: true,
-      value: {
-        ...table,
-        rows: table.rows.map((row) =>
-          row.id === command.rowId
-            ? { ...row, height: normalizeDimension(command.height) }
-            : row,
-        ),
-      },
-    };
-  }
-  if (command.type === "insert-column") {
-    if (table.columns.length >= MAX_TABLE_COLUMNS) {
-      return { error: "column-limit-exceeded", ok: false };
-    }
-    const index = command.afterColumnId
-      ? table.columns.findIndex(
-          (column) => column.id === command.afterColumnId,
-        ) + 1
-      : command.columnId
-        ? table.columns.findIndex((column) => column.id === command.columnId)
-        : table.columns.length;
-    if (index < 0) return { error: "missing-column", ok: false };
-    const columns = table.columns.toSpliced(index, 0, { id: createColumnId() });
-    return { ok: true, value: withMissingCells({ ...table, columns }) };
-  }
-  if (command.type === "delete-column") {
-    if (table.columns.length <= MIN_TABLE_COLUMNS) {
-      return { error: "minimum-column-count", ok: false };
-    }
-    if (!table.columns.some((column) => column.id === command.columnId)) {
-      return { error: "missing-column", ok: false };
-    }
-    return {
-      ok: true,
-      value: withMissingCells({
-        ...table,
-        cells: Object.fromEntries(
-          Object.entries(table.cells).filter(
-            ([, cell]) => cell.columnId !== command.columnId,
-          ),
-        ),
-        columns: table.columns.filter(
-          (column) => column.id !== command.columnId,
-        ),
-      }),
-    };
-  }
-  if (command.type === "move-column") {
-    const index = table.columns.findIndex(
-      (column) => column.id === command.columnId,
+  const rows = [...table.rows].sort((left, right) => {
+    const order = cellTextForSort(
+      table,
+      left.id,
+      command.columnId,
+    ).localeCompare(
+      cellTextForSort(table, right.id, command.columnId),
+      undefined,
+      { numeric: true, sensitivity: "base" },
     );
-    if (
-      index < 0 ||
-      command.toIndex < 0 ||
-      command.toIndex >= table.columns.length
-    ) {
-      return { error: "invalid-column-order", ok: false };
-    }
-    const columns = table.columns.toSpliced(index, 1);
-    return {
-      ok: true,
-      value: {
-        ...table,
-        columns: columns.toSpliced(command.toIndex, 0, table.columns[index]),
-      },
-    };
-  }
-  if (command.type === "resize-column") {
-    return {
-      ok: true,
-      value: {
-        ...table,
-        columns: table.columns.map((column) =>
-          column.id === command.columnId
-            ? { ...column, width: normalizeDimension(command.width) }
-            : column,
-        ),
-      },
-    };
-  }
-  if (command.type === "toggle-header") {
-    return {
-      ok: true,
-      value: {
-        ...table,
-        ...(command.target === "column"
-          ? { columnHeader: command.enabled }
-          : { rowHeader: command.enabled }),
-      },
-    };
-  }
-  if (command.type === "sort-rows") {
-    if (!table.columns.some((column) => column.id === command.columnId)) {
-      return { error: "missing-column", ok: false };
-    }
-    const rows = [...table.rows].sort((left, right) => {
-      const leftText =
-        table.cells[cellKey(left.id, command.columnId)]?.content
-          .map((item) => (item.type === "text" ? item.text : "\n"))
-          .join("") ?? "";
-      const rightText =
-        table.cells[cellKey(right.id, command.columnId)]?.content
-          .map((item) => (item.type === "text" ? item.text : "\n"))
-          .join("") ?? "";
-      const order = leftText.localeCompare(rightText, undefined, {
-        numeric: true,
-        sensitivity: "base",
-      });
-      return command.direction === "ascending" ? order : -order;
-    });
-    return { ok: true, value: { ...table, rows } };
-  }
-  return { error: "unknown-command", ok: false };
+    return command.direction === "ascending" ? order : -order;
+  });
+  return { ok: true, value: { ...table, rows } };
 }
 
 function parseMarkdownTable(text: string): TableBlockResult<TableBlockModel> {

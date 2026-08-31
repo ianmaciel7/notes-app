@@ -787,19 +787,7 @@ function reduceEntityMenuAction(
     return duplicateWorkspaceEntity(state, source);
   }
 
-  if (entityHasIncomingReferences(state.entities, action.id)) {
-    return { ...state, error: "referenced-object" };
-  }
-  const entities = state.entities.filter((entity) => entity.id !== action.id);
-  return {
-    ...state,
-    activeEntityId:
-      state.activeEntityId === action.id
-        ? (entities.at(-1)?.id ?? null)
-        : state.activeEntityId,
-    entities,
-    error: null,
-  };
+  return state;
 }
 
 function legacyTextBody(source: WorkspaceEntity): string {
@@ -1211,22 +1199,6 @@ function reduceSetLinkedEntityPropertyValue(
   };
 }
 
-function entityHasIncomingReferences(
-  entities: readonly WorkspaceEntity[],
-  id: string,
-): boolean {
-  return entities.some((entity) => {
-    if (entity.id === id) return false;
-    if ("tags" in entity && entity.tags.includes(id)) return true;
-    if ("collections" in entity && entity.collections.includes(id)) return true;
-    return Object.values(entity.propertyValues).some(
-      (value) =>
-        value.type === "entity" &&
-        value.entity.some((reference) => reference.id === id),
-    );
-  });
-}
-
 const DEFAULT_TRASH_SPACE_ID = "local";
 const TRASH_RETENTION_DAYS = 30;
 
@@ -1243,16 +1215,24 @@ function isEntityTrashed(
   return state.trashRecords.some((record) => record.entityId === id);
 }
 
+function isWorkspaceEntityArray(
+  value:
+    | Pick<WorkspaceObjectState, "entities" | "trashRecords">
+    | readonly WorkspaceEntity[],
+): value is readonly WorkspaceEntity[] {
+  return Array.isArray(value);
+}
+
 function selectActiveEntities(
   stateOrEntities:
     | Pick<WorkspaceObjectState, "entities" | "trashRecords">
     | readonly WorkspaceEntity[],
   trashRecords: readonly TrashRecord[] = [],
 ): WorkspaceEntity[] {
-  const entities = Array.isArray(stateOrEntities)
+  const entities = isWorkspaceEntityArray(stateOrEntities)
     ? stateOrEntities
     : stateOrEntities.entities;
-  const records = Array.isArray(stateOrEntities)
+  const records = isWorkspaceEntityArray(stateOrEntities)
     ? trashRecords
     : stateOrEntities.trashRecords;
   const trashedIds = new Set(records.map((record) => record.entityId));

@@ -808,19 +808,39 @@ function blockEditorDocumentFromPlainText(text: string): BlockEditorDocument {
   };
 }
 
+function inlineNodePlainText(node: BlockEditorNode): string | null {
+  switch (node.type) {
+    case "text":
+      return node.text ?? "";
+    case "hardBreak":
+      return "\n";
+    default:
+      return null;
+  }
+}
+
+function blockNodePlainText(node: BlockEditorNode): string | null {
+  switch (node.type) {
+    case TABLE_BLOCK_TYPE:
+      return isTableBlockNode(node)
+        ? tableBlockToPlainText(node.attrs.table)
+        : "";
+    case "mathBlock":
+      return String(node.attrs?.source ?? "");
+    case "objectBlock":
+      return String(node.attrs?.title ?? node.attrs?.targetId ?? "");
+    case "unsupportedBlock":
+      return `[Unsupported block: ${String(node.attrs?.originalType ?? "unknown")}]`;
+    default:
+      return null;
+  }
+}
+
 function nodeToPlainText(node: BlockEditorNode): string {
-  if (node.type === TABLE_BLOCK_TYPE && isTableBlockNode(node)) {
-    return tableBlockToPlainText(node.attrs.table);
-  }
-  if (node.type === "text") return node.text ?? "";
-  if (node.type === "hardBreak") return "\n";
-  if (node.type === "mathBlock") return String(node.attrs?.source ?? "");
-  if (node.type === "objectBlock") {
-    return String(node.attrs?.title ?? node.attrs?.targetId ?? "");
-  }
-  if (node.type === "unsupportedBlock") {
-    return `[Unsupported block: ${String(node.attrs?.originalType ?? "unknown")}]`;
-  }
+  const inlineText = inlineNodePlainText(node);
+  if (inlineText !== null) return inlineText;
+  const blockText = blockNodePlainText(node);
+  if (blockText !== null) return blockText;
   return (node.content ?? []).map(nodeToPlainText).join("");
 }
 
@@ -858,25 +878,8 @@ function fencedBlock(language: string, source: string): string {
   return `${fence}${language}\n${source}\n${fence}`;
 }
 
-function advancedNodeToMarkdown(node: BlockEditorNode): string {
-  const content = (node.content ?? []).map(advancedNodeToMarkdown);
+function listNodeToMarkdown(node: BlockEditorNode, content: string[]) {
   switch (node.type) {
-    case TABLE_BLOCK_TYPE:
-      return isTableBlockNode(node)
-        ? tableBlockToMarkdown(node.attrs.table)
-        : "";
-    case "paragraph": {
-      const prefix = node.attrs?.emoji ? `${node.attrs.emoji} ` : "";
-      const marker =
-        typeof node.attrs?.toggleCollapsed === "boolean"
-          ? "<!-- toggle -->\n"
-          : "";
-      return `${marker}${prefix}${textContentMarkdown(node)}`.trimEnd();
-    }
-    case "heading":
-      return `${"#".repeat(Number(node.attrs?.level ?? 1))} ${textContentMarkdown(node)}`;
-    case "blockquote":
-      return content.join("\n\n").replace(/^/gm, "> ");
     case "bulletList":
       return content.join("\n");
     case "orderedList":
@@ -891,6 +894,42 @@ function advancedNodeToMarkdown(node: BlockEditorNode): string {
       return content.join("\n");
     case "taskItem":
       return `- [${node.attrs?.checked ? "x" : " "}] ${content.join("\n")}`;
+    default:
+      return null;
+  }
+}
+
+function layoutNodeToMarkdown(node: BlockEditorNode, content: string[]) {
+  switch (node.type) {
+    case "column":
+      return content.join("\n\n");
+    case "columnLayout":
+      return [
+        "<!-- lossiness: column layout exported in accessible reading order -->",
+        ...content,
+      ].join("\n\n");
+    case "groupBlock":
+      return [
+        "<!-- lossiness: group block appearance exported as plain content -->",
+        ...content,
+      ].join("\n\n");
+    default:
+      return null;
+  }
+}
+
+function objectBlockToMarkdown(node: BlockEditorNode) {
+  return `<!-- lossiness: object ${String(node.attrs?.viewKind)} view exported as link -->\n[${String(
+    node.attrs?.title ?? node.attrs?.targetId,
+  )}](object:${String(node.attrs?.targetId)})`;
+}
+
+function mediaBlockToMarkdown(node: BlockEditorNode) {
+  switch (node.type) {
+    case TABLE_BLOCK_TYPE:
+      return isTableBlockNode(node)
+        ? tableBlockToMarkdown(node.attrs.table)
+        : "";
     case "codeBlock":
       return fencedBlock(
         node.attrs?.renderMode === "mermaid"
@@ -908,29 +947,56 @@ function advancedNodeToMarkdown(node: BlockEditorNode): string {
       return node.attrs?.displayMode === "inline"
         ? `$${String(node.attrs.source)}$`
         : `$$\n${String(node.attrs?.source ?? "")}\n$$`;
-    case "column":
-      return content.join("\n\n");
-    case "columnLayout":
-      return [
-        "<!-- lossiness: column layout exported in accessible reading order -->",
-        ...content,
-      ].join("\n\n");
-    case "groupBlock":
-      return [
-        "<!-- lossiness: group block appearance exported as plain content -->",
-        ...content,
-      ].join("\n\n");
+    default:
+      return null;
+  }
+}
+
+function leafBlockToMarkdown(node: BlockEditorNode) {
+  switch (node.type) {
     case "objectBlock":
-      return `<!-- lossiness: object ${String(node.attrs?.viewKind)} view exported as link -->\n[${String(
-        node.attrs?.title ?? node.attrs?.targetId,
-      )}](object:${String(node.attrs?.targetId)})`;
+      return objectBlockToMarkdown(node);
     case "unsupportedBlock":
       return `<!-- unsupported block preserved: ${String(node.attrs?.originalType)} -->`;
     case "horizontalRule":
       return "---";
     default:
-      return textContentMarkdown(node);
+      return null;
   }
+}
+
+function textBlockToMarkdown(node: BlockEditorNode) {
+  switch (node.type) {
+    case "paragraph": {
+      const prefix = node.attrs?.emoji ? `${node.attrs.emoji} ` : "";
+      const marker =
+        typeof node.attrs?.toggleCollapsed === "boolean"
+          ? "<!-- toggle -->\n"
+          : "";
+      return `${marker}${prefix}${textContentMarkdown(node)}`.trimEnd();
+    }
+    case "heading":
+      return `${"#".repeat(Number(node.attrs?.level ?? 1))} ${textContentMarkdown(node)}`;
+    case "blockquote":
+      return (node.content ?? [])
+        .map(advancedNodeToMarkdown)
+        .join("\n\n")
+        .replace(/^/gm, "> ");
+    default:
+      return null;
+  }
+}
+
+function advancedNodeToMarkdown(node: BlockEditorNode): string {
+  const content = (node.content ?? []).map(advancedNodeToMarkdown);
+  return (
+    mediaBlockToMarkdown(node) ??
+    leafBlockToMarkdown(node) ??
+    textBlockToMarkdown(node) ??
+    listNodeToMarkdown(node, content) ??
+    layoutNodeToMarkdown(node, content) ??
+    content.join("\n\n")
+  );
 }
 
 const markdownManager = new MarkdownManager({

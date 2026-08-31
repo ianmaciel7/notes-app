@@ -2684,8 +2684,133 @@ function FilePage({
   );
 }
 
-function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
+function WorkspaceObjectPageContent({
+  entity,
+  structure,
+  update,
+}: {
+  readonly entity: SupportedWorkspaceEntity;
+  readonly structure: WorkspaceStructure;
+  readonly update: EntityUpdate;
+}) {
+  if (entity.kind === "file") {
+    return <FilePage entity={entity} structure={structure} update={update} />;
+  }
+  if (entity.kind === "table") {
+    return <TablePage entity={entity} structure={structure} update={update} />;
+  }
+  return <DocumentPage entity={entity} structure={structure} update={update} />;
+}
+
+function EditorUtilitiesPopover({
+  createdAt,
+  onOpenChange,
+  onPinToggle,
+  open,
+  outline,
+  pinned,
+  statistics,
+}: {
+  readonly createdAt: string;
+  readonly onOpenChange: (open: boolean) => void;
+  readonly onPinToggle: () => void;
+  readonly open: boolean;
+  readonly outline: ReturnType<typeof selectEditorUtilities>["outline"];
+  readonly pinned: boolean;
+  readonly statistics: ReturnType<typeof selectEditorUtilities>["statistics"];
+}) {
   const t = useTranslations("workspace");
+  return (
+    <Popover open={open} onOpenChange={onOpenChange}>
+      <PopoverTrigger
+        aria-label={t("editorUtilities.open")}
+        className={cn(
+          buttonVariants({ variant: "ghost", size: "icon-sm" }),
+          "absolute right-3 top-1/2 inline-flex h-7 w-7 text-lg font-light",
+        )}
+      >
+        <span aria-hidden>−</span>
+      </PopoverTrigger>
+      <PopoverContent
+        align="end"
+        side="left"
+        sideOffset={8}
+        className="w-[min(22rem,calc(100vw-2rem))] gap-3 p-3"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <PopoverTitle>{t("editorUtilities.title")}</PopoverTitle>
+          <Button
+            type="button"
+            variant={pinned ? "secondary" : "ghost"}
+            size="icon-sm"
+            aria-label={t(
+              pinned ? "editorUtilities.unpin" : "editorUtilities.pin",
+            )}
+            aria-pressed={pinned}
+            onClick={onPinToggle}
+          >
+            <PinIcon className="size-4" />
+          </Button>
+        </div>
+        <Tabs defaultValue="outline">
+          <TabsList variant="line" className="w-full justify-start">
+            <TabsTrigger value="outline">
+              {t("editorUtilities.outline")}
+            </TabsTrigger>
+            <TabsTrigger value="statistics">
+              {t("editorUtilities.statistics")}
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="outline" className="pt-2">
+            {outline.length > 0 ? (
+              <ol className="grid gap-1">
+                {outline.map((item) => (
+                  <li
+                    key={item.id}
+                    style={{ paddingInlineStart: `${(item.level - 1) * 12}px` }}
+                  >
+                    <button
+                      type="button"
+                      className="w-full truncate rounded-sm px-1 py-0.5 text-left text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      onClick={() => {
+                        const block = document.querySelector<HTMLElement>(
+                          `[data-block-id="${CSS.escape(item.id)}"]`,
+                        );
+                        block?.scrollIntoView({ block: "center" });
+                      }}
+                    >
+                      {item.title}
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                {t("editorUtilities.emptyOutline")}
+              </p>
+            )}
+          </TabsContent>
+          <TabsContent value="statistics" className="pt-2">
+            <dl className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-2 text-sm">
+              <dt>{t("editorUtilities.words")}</dt>
+              <dd>{statistics.words}</dd>
+              <dt>{t("editorUtilities.sentences")}</dt>
+              <dd>{statistics.sentences}</dd>
+              <dt>{t("editorUtilities.paragraphs")}</dt>
+              <dd>{statistics.paragraphs}</dd>
+              <dt>{t("editorUtilities.characters")}</dt>
+              <dd>{statistics.characters}</dd>
+              <dt>{t("editorUtilities.created")}</dt>
+              <dd>{new Date(createdAt).toLocaleDateString()}</dd>
+            </dl>
+          </TabsContent>
+        </Tabs>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
   const { structures, updateWorkspaceEntity } = useWorkspace();
   const [utilitiesOpen, setUtilitiesOpen] = React.useState(false);
   const [utilitiesPinned, setUtilitiesPinned] = React.useState(false);
@@ -2726,107 +2851,23 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
           "lg:pt-8",
         )}
       >
-        {entity.kind === "file" ? (
-          <FilePage entity={entity} structure={structure} update={update} />
-        ) : entity.kind === "table" ? (
-          <TablePage entity={entity} structure={structure} update={update} />
-        ) : (
-          <DocumentPage entity={entity} structure={structure} update={update} />
-        )}
+        <WorkspaceObjectPageContent
+          entity={entity}
+          structure={structure}
+          update={update}
+        />
       </div>
-      <Popover
-        open={utilitiesOpen}
+      <EditorUtilitiesPopover
+        createdAt={entity.createdAt}
         onOpenChange={(open) => {
           if (open || !utilitiesPinned) setUtilitiesOpen(open);
         }}
-      >
-        <PopoverTrigger
-          aria-label={t("editorUtilities.open")}
-          className={cn(
-            buttonVariants({ variant: "ghost", size: "icon-sm" }),
-            "absolute right-3 top-1/2 inline-flex h-7 w-7 text-lg font-light",
-          )}
-        >
-          <span aria-hidden>−</span>
-        </PopoverTrigger>
-        <PopoverContent
-          align="end"
-          side="left"
-          sideOffset={8}
-          className="w-[min(22rem,calc(100vw-2rem))] gap-3 p-3"
-        >
-          <div className="flex items-center justify-between gap-3">
-            <PopoverTitle>{t("editorUtilities.title")}</PopoverTitle>
-            <Button
-              type="button"
-              variant={utilitiesPinned ? "secondary" : "ghost"}
-              size="icon-sm"
-              aria-label={t(
-                utilitiesPinned
-                  ? "editorUtilities.unpin"
-                  : "editorUtilities.pin",
-              )}
-              aria-pressed={utilitiesPinned}
-              onClick={() => setUtilitiesPinned((current) => !current)}
-            >
-              <PinIcon className="size-4" />
-            </Button>
-          </div>
-          <Tabs defaultValue="outline">
-            <TabsList variant="line" className="w-full justify-start">
-              <TabsTrigger value="outline">
-                {t("editorUtilities.outline")}
-              </TabsTrigger>
-              <TabsTrigger value="statistics">
-                {t("editorUtilities.statistics")}
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="outline" className="pt-2">
-              {outline.length > 0 ? (
-                <ol className="grid gap-1">
-                  {outline.map((item) => (
-                    <li
-                      key={item.id}
-                      style={{ paddingInlineStart: `${(item.level - 1) * 12}px` }}
-                    >
-                      <button
-                        type="button"
-                        className="w-full truncate rounded-sm px-1 py-0.5 text-left text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                        onClick={() => {
-                          const block = document.querySelector<HTMLElement>(
-                            `[data-block-id="${CSS.escape(item.id)}"]`,
-                          );
-                          block?.scrollIntoView({ block: "center" });
-                        }}
-                      >
-                        {item.title}
-                      </button>
-                    </li>
-                  ))}
-                </ol>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  {t("editorUtilities.emptyOutline")}
-                </p>
-              )}
-            </TabsContent>
-            <TabsContent value="statistics" className="pt-2">
-              <dl className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-2 text-sm">
-                <dt>{t("editorUtilities.words")}</dt>
-                <dd>{statistics.words}</dd>
-                <dt>{t("editorUtilities.sentences")}</dt>
-                <dd>{statistics.sentences}</dd>
-                <dt>{t("editorUtilities.paragraphs")}</dt>
-                <dd>{statistics.paragraphs}</dd>
-                <dt>{t("editorUtilities.characters")}</dt>
-                <dd>{statistics.characters}</dd>
-                <dt>{t("editorUtilities.created")}</dt>
-                <dd>{new Date(entity.createdAt).toLocaleDateString()}</dd>
-              </dl>
-            </TabsContent>
-          </Tabs>
-        </PopoverContent>
-      </Popover>
+        onPinToggle={() => setUtilitiesPinned((current) => !current)}
+        open={utilitiesOpen}
+        outline={outline}
+        pinned={utilitiesPinned}
+        statistics={statistics}
+      />
     </section>
   );
 }

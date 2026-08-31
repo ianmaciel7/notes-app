@@ -18,4 +18,4 @@
 ## 4. Acceptance
 
 - [x] 4.1 Verify privacy boundaries, no automatic content mutation, accessibility, keyboard, responsive, reduced-motion, and console behavior.
-- [ ] 4.2 Run repository verification and `openspec validate add-related-content --strict`.
+- [x] 4.2 Run repository verification and `openspec validate add-related-content --strict`.

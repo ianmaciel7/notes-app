@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { blockEditorDocumentToPlainText } from "../src/editor/document.ts";
+import {
+  BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+  blockEditorDocumentToPlainText,
+} from "../src/editor/document.ts";
 import { parseWorkspaceObjectSnapshot } from "../src/lib/workspace-object-storage.ts";
 import {
   createInitialWorkspaceObjectState,
@@ -13,14 +16,17 @@ import {
   serializeWorkspaceSidebarState,
 } from "../src/lib/workspace-sidebar-storage.ts";
 
-test("new document entities use block schema v2 and typed property map", () => {
+test("new document entities use current block schema and typed property map", () => {
   const state = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
     type: "beginCreate",
     objectTypeId: "page",
   });
 
   assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 6);
-  assert.equal(state.entities[0].body.schemaVersion, 2);
+  assert.equal(
+    state.entities[0].body.schemaVersion,
+    BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+  );
   assert.equal(state.entities[0].body.doc.type, "doc");
   assert.equal(state.entities[0].body.doc.content[0].type, "paragraph");
   assert.match(state.entities[0].body.doc.content[0].attrs.id, /^block:/);
@@ -114,7 +120,10 @@ test("version 4 identities and legacy block bodies migrate atomically", () => {
   assert.deepEqual(parsed.state.entities[1].collections, [
     "collection:page:reading",
   ]);
-  assert.equal(parsed.state.entities[1].body.schemaVersion, 2);
+  assert.equal(
+    parsed.state.entities[1].body.schemaVersion,
+    BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+  );
   assert.deepEqual(parsed.state.entities[1].propertyValues.title, {
     title: { value: "Imported" },
     type: "title",
@@ -198,8 +207,14 @@ test("version 1 document and quote strings migrate to current block bodies", () 
   );
 
   assert.equal(parsed.ok, true);
-  assert.equal(parsed.state.entities[0].body.schemaVersion, 2);
-  assert.equal(parsed.state.entities[1].body.schemaVersion, 2);
+  assert.equal(
+    parsed.state.entities[0].body.schemaVersion,
+    BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+  );
+  assert.equal(
+    parsed.state.entities[1].body.schemaVersion,
+    BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+  );
   assert.equal(
     blockEditorDocumentToPlainText(parsed.state.entities[0].body),
     "First\n\nThird",

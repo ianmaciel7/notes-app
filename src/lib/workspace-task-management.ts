@@ -419,30 +419,30 @@ function validOrdinal(value: unknown): value is number {
   return Number.isInteger(value) && Number(value) >= 1 && Number(value) <= 5;
 }
 
+function isRecurrenceEnd(value: unknown): boolean {
+  if (value === undefined) return true;
+  if (!isRecord(value)) return false;
+  if (value.kind === "never") return true;
+  return value.kind === "on-date" && isDateOnly(value.date);
+}
+
+function hasValidWeekdays(value: Record<string, unknown>): boolean {
+  if (value.weekdays === undefined) return true;
+  return Array.isArray(value.weekdays) && value.weekdays.every(validWeekday);
+}
+
+function isValidRecurrenceInterval(value: unknown): boolean {
+  return Number.isInteger(value) && Number(value) > 0;
+}
+
 function isRecurrenceRule(value: unknown): value is TaskRecurrenceRule {
   if (!isRecord(value)) return false;
   const mode = normalizeMode(value.mode as LegacyTaskRecurrenceMode);
   const unit = normalizeUnit(value as TaskRecurrenceRule);
   if (!["scheduled-date", "completion-date"].includes(mode)) return false;
   if (!["day", "week", "month", "year"].includes(unit)) return false;
-  if (!Number.isInteger(value.interval) || Number(value.interval) <= 0) {
-    return false;
-  }
-  if (
-    value.weekdays !== undefined &&
-    (!Array.isArray(value.weekdays) || !value.weekdays.every(validWeekday))
-  ) {
-    return false;
-  }
-  if (value.end !== undefined) {
-    if (!isRecord(value.end)) return false;
-    if (value.end.kind === "on-date" && !isDateOnly(value.end.date)) {
-      return false;
-    }
-    if (value.end.kind !== "never" && value.end.kind !== "on-date")
-      return false;
-  }
-  return true;
+  if (!isValidRecurrenceInterval(value.interval)) return false;
+  return hasValidWeekdays(value) && isRecurrenceEnd(value.end);
 }
 
 function isOccurrence(value: unknown): value is TaskOccurrence {
@@ -711,6 +711,69 @@ function advanceToFuture(
   return next;
 }
 
+function applyNonRecurringOccurrence(
+  metadata: TaskManagementMetadata,
+  command: TaskOccurrenceCommand,
+  occurrences: TaskOccurrence[],
+): TaskManagementMetadata {
+  return {
+    ...metadata,
+    completed: command.action === "complete",
+    completedAt:
+      command.action === "complete"
+        ? new Date(command.actedAt).toISOString()
+        : metadata.completedAt,
+    occurrences,
+  };
+}
+
+function nextOccurrenceDate(
+  metadata: TaskManagementMetadata & { recurrence: TaskRecurrenceRule },
+  command: TaskOccurrenceCommand,
+): string | null {
+  const baseDate = recurrenceBaseDate(metadata, command);
+  return command.catchUp === "next-future"
+    ? advanceToFuture(baseDate, command.actedOnDate, metadata.recurrence)
+    : nextRecurringTaskDate(baseDate, metadata.recurrence);
+}
+
+function recurringDeadlineOffset(
+  metadata: TaskManagementMetadata,
+): number | null {
+  if (!metadata.deadline || !metadata.scheduledDate) return null;
+  return Math.max(0, dayDelta(metadata.deadline, metadata.scheduledDate));
+}
+
+function assertValidOccurrenceCommand(command: TaskOccurrenceCommand) {
+  if (!["advance-one", "complete", "skip", "excuse"].includes(command.action)) {
+    throw new TypeError("Occurrence action date is invalid.");
+  }
+  if (!isDateOnly(command.actedOnDate) || !isInstant(command.actedAt)) {
+    throw new TypeError("Occurrence action date is invalid.");
+  }
+}
+
+function applyRecurringOccurrence(
+  metadata: TaskManagementMetadata & { recurrence: TaskRecurrenceRule },
+  command: TaskOccurrenceCommand,
+  occurrences: TaskOccurrence[],
+): TaskManagementMetadata {
+  const nextDate = nextOccurrenceDate(metadata, command);
+  const deadlineOffset = recurringDeadlineOffset(metadata);
+  return {
+    ...metadata,
+    completed: nextDate === null,
+    completedAt:
+      nextDate === null ? new Date(command.actedAt).toISOString() : null,
+    deadline:
+      nextDate && deadlineOffset !== null
+        ? addDays(nextDate, deadlineOffset)
+        : metadata.deadline,
+    occurrences,
+    scheduledDate: nextDate,
+  };
+}
+
 export function applyTaskOccurrenceAction(
   metadata: TaskManagementMetadata,
   command: TaskOccurrenceCommand,
@@ -722,13 +785,7 @@ export function applyTaskOccurrenceAction(
       "Completed task cannot receive another occurrence action.",
     );
   }
-  if (
-    !["advance-one", "complete", "skip", "excuse"].includes(command.action) ||
-    !isDateOnly(command.actedOnDate) ||
-    !isInstant(command.actedAt)
-  ) {
-    throw new TypeError("Occurrence action date is invalid.");
-  }
+  assertValidOccurrenceCommand(command);
 
   const occurrence: TaskOccurrence = {
     action: command.action,
@@ -743,39 +800,14 @@ export function applyTaskOccurrenceAction(
   const occurrences = [...metadata.occurrences, occurrence];
 
   if (!metadata.recurrence) {
-    return {
-      ...metadata,
-      completed: command.action === "complete",
-      completedAt:
-        command.action === "complete"
-          ? new Date(command.actedAt).toISOString()
-          : metadata.completedAt,
-      occurrences,
-    };
+    return applyNonRecurringOccurrence(metadata, command, occurrences);
   }
 
-  const baseDate = recurrenceBaseDate(metadata, command);
-  const nextDate =
-    command.catchUp === "next-future"
-      ? advanceToFuture(baseDate, command.actedOnDate, metadata.recurrence)
-      : nextRecurringTaskDate(baseDate, metadata.recurrence);
-  const deadlineOffset =
-    metadata.deadline && metadata.scheduledDate
-      ? Math.max(0, dayDelta(metadata.deadline, metadata.scheduledDate))
-      : null;
-
-  return {
-    ...metadata,
-    completed: nextDate === null,
-    completedAt:
-      nextDate === null ? new Date(command.actedAt).toISOString() : null,
-    deadline:
-      nextDate && deadlineOffset !== null
-        ? addDays(nextDate, deadlineOffset)
-        : metadata.deadline,
+  return applyRecurringOccurrence(
+    metadata as TaskManagementMetadata & { recurrence: TaskRecurrenceRule },
+    command,
     occurrences,
-    scheduledDate: nextDate,
-  };
+  );
 }
 
 function metadataForEntity(
@@ -848,19 +880,50 @@ function matchesDashboard(
   if (entity.kind !== "task") return false;
   const task = metadataForEntity(entity, registry);
   const completed = isCompleted(task, registry);
-  if (kind === "all") return true;
-  if (kind === "completed") return completed;
-  if (kind === "open") return !completed;
-  if (kind === "context") return task.contextObjectIds.length > 0;
-  if (kind === "tags") return task.tagIds.length > 0;
-  if (kind === "scheduled") return !!task.scheduledDate && !completed;
-  if (kind === "today") {
-    return (
-      !completed &&
-      (task.scheduledDate === today ||
-        (!!task.deadline && compareDateOnly(task.deadline, today) <= 0))
-    );
+  switch (kind) {
+    case "all":
+      return true;
+    case "completed":
+      return completed;
+    case "open":
+      return !completed;
+    case "context":
+      return task.contextObjectIds.length > 0;
+    case "tags":
+      return task.tagIds.length > 0;
+    case "scheduled":
+      return isDashboardScheduledTask(task, completed);
+    case "today":
+      return isDashboardTodayTask(task, completed, today);
+    case "inbox":
+      return isDashboardInboxTask(task, completed);
   }
+}
+
+function isDashboardScheduledTask(
+  task: TaskManagementMetadata,
+  completed: boolean,
+): boolean {
+  return Boolean(task.scheduledDate) && !completed;
+}
+
+function isDashboardTodayTask(
+  task: TaskManagementMetadata,
+  completed: boolean,
+  today: string,
+): boolean {
+  if (completed) return false;
+  if (task.scheduledDate === today) return true;
+  return (
+    Boolean(task.deadline) &&
+    compareDateOnly(task.deadline as string, today) <= 0
+  );
+}
+
+function isDashboardInboxTask(
+  task: TaskManagementMetadata,
+  completed: boolean,
+): boolean {
   return (
     !completed &&
     !task.scheduledDate &&

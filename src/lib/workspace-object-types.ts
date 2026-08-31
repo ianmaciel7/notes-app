@@ -821,7 +821,6 @@ export function cloneNumberPresentation(
         steps: presentation.steps,
         type: "progress",
       };
-    case "number":
     default:
       return {
         ...(presentation.fixedDecimals === undefined
@@ -837,58 +836,107 @@ export function validateNumberPresentation(
   options: { readonly allowText?: boolean } = {},
 ): DomainResult<TableCellNumberPresentation> {
   if (!isRecord(value) || typeof value.type !== "string") {
-    return failure(
-      "invalid-property-definition",
+    return invalidNumberPresentation(
       "Number presentation must be an object with a supported type.",
     );
   }
-  if (options.allowText && (value.type === "none" || value.type === "text")) {
-    return ok({ type: value.type });
+  if (options.allowText) {
+    const textPresentation = validateTextNumberPresentation(value.type);
+    if (textPresentation) return textPresentation;
   }
-  if (value.type === "number" && hasValidFixedDecimals(value.fixedDecimals)) {
-    const fixedDecimals = value.fixedDecimals as number | undefined;
-    return ok({
-      ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
-      type: "number",
-    });
+  switch (value.type) {
+    case "currency":
+      return validateCurrencyPresentation(value);
+    case "number":
+    case "percent":
+      return validateDecimalPresentation(value, value.type);
+    case "progress":
+      return validateProgressPresentation(value);
+    default:
+      return invalidNumberPresentation(
+        "Number presentation contains unsupported formatting settings.",
+      );
   }
-  if (value.type === "percent" && hasValidFixedDecimals(value.fixedDecimals)) {
-    const fixedDecimals = value.fixedDecimals as number | undefined;
-    return ok({
-      ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
-      type: "percent",
-    });
+}
+
+function invalidNumberPresentation(message: string) {
+  return failure("invalid-property-definition", message);
+}
+
+function fixedDecimalsFrom(value: Record<string, unknown>) {
+  return value.fixedDecimals as number | undefined;
+}
+
+function validateTextNumberPresentation(
+  type: string,
+): DomainResult<TableCellNumberPresentation> | null {
+  if (type === "none") return ok({ type: "none" });
+  if (type === "text") return ok({ type: "text" });
+  return null;
+}
+
+function validateDecimalPresentation(
+  value: Record<string, unknown>,
+  type: "number" | "percent",
+): DomainResult<TableCellNumberPresentation> {
+  if (!hasValidFixedDecimals(value.fixedDecimals)) {
+    return invalidNumberPresentation(
+      "Number presentation contains unsupported formatting settings.",
+    );
   }
-  if (
-    value.type === "currency" &&
-    isSupportedCurrencyCode(value.currency) &&
-    hasValidFixedDecimals(value.fixedDecimals)
-  ) {
-    const fixedDecimals = value.fixedDecimals as number | undefined;
-    return ok({
-      currency: value.currency,
-      ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
-      type: "currency",
-    });
+  const fixedDecimals = fixedDecimalsFrom(value);
+  return ok({
+    ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
+    type,
+  });
+}
+
+function validateCurrencyPresentation(
+  value: Record<string, unknown>,
+): DomainResult<TableCellNumberPresentation> {
+  if (!isSupportedCurrencyCode(value.currency)) {
+    return invalidNumberPresentation(
+      "Number presentation contains unsupported formatting settings.",
+    );
   }
-  if (
-    value.type === "progress" &&
-    isIntegerInRange(value.steps, 1, 1000) &&
-    isNumberPresentationColor(value.color) &&
-    hasValidFixedDecimals(value.fixedDecimals)
-  ) {
-    const fixedDecimals = value.fixedDecimals as number | undefined;
-    return ok({
-      color: value.color,
-      ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
-      steps: value.steps as number,
-      type: "progress",
-    });
+  if (!hasValidFixedDecimals(value.fixedDecimals)) {
+    return invalidNumberPresentation(
+      "Number presentation contains unsupported formatting settings.",
+    );
   }
-  return failure(
-    "invalid-property-definition",
-    "Number presentation contains unsupported formatting settings.",
-  );
+  const fixedDecimals = fixedDecimalsFrom(value);
+  return ok({
+    currency: value.currency,
+    ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
+    type: "currency",
+  });
+}
+
+function validateProgressPresentation(
+  value: Record<string, unknown>,
+): DomainResult<TableCellNumberPresentation> {
+  if (!isIntegerInRange(value.steps, 1, 1000)) {
+    return invalidNumberPresentation(
+      "Number presentation contains unsupported formatting settings.",
+    );
+  }
+  if (!isNumberPresentationColor(value.color)) {
+    return invalidNumberPresentation(
+      "Number presentation contains unsupported formatting settings.",
+    );
+  }
+  if (!hasValidFixedDecimals(value.fixedDecimals)) {
+    return invalidNumberPresentation(
+      "Number presentation contains unsupported formatting settings.",
+    );
+  }
+  const fixedDecimals = fixedDecimalsFrom(value);
+  return ok({
+    color: value.color,
+    ...(fixedDecimals === undefined ? {} : { fixedDecimals }),
+    steps: value.steps as number,
+    type: "progress",
+  });
 }
 
 type PropertyDefinitionFields = {
@@ -1035,7 +1083,10 @@ function validatePropertyReferenceFields(
 function validatePropertyNumberPresentation(
   fields: PropertyDefinitionFields,
 ): DomainResult<NumberPresentation> {
-  if (fields.numberPresentation !== undefined && fields.valueType !== "number") {
+  if (
+    fields.numberPresentation !== undefined &&
+    fields.valueType !== "number"
+  ) {
     return failure(
       "invalid-property-definition",
       "Only number properties may define number presentation settings.",
@@ -1088,7 +1139,9 @@ function cloneValidatedPropertyDefinition(
     multiple: fields.multiple as boolean,
     name: (fields.name as string).trim(),
     ...(numberPresentation.ok && fields.valueType === "number"
-      ? { numberPresentation: cloneNumberPresentation(numberPresentation.value) }
+      ? {
+          numberPresentation: cloneNumberPresentation(numberPresentation.value),
+        }
       : {}),
     ownership: fields.normalizedOwnership as PropertyDefinitionOwnership,
     ...(options ? { options: options.map((option) => ({ ...option })) } : {}),
@@ -1294,7 +1347,10 @@ function validateInverseDefinition(
   definition: PropertyDefinition,
 ): DomainResult<void> {
   if (!definition.inversePropertyDefinitionId) return ok(undefined);
-  if (definition.valueType !== "entity" || !definition.targetStructureIds?.length) {
+  if (
+    definition.valueType !== "entity" ||
+    !definition.targetStructureIds?.length
+  ) {
     return failure(
       "invalid-property-definition",
       "Inverse entity properties must declare target Structures.",
@@ -1312,7 +1368,11 @@ function validateInversePropertyPairings(
 ): DomainResult<void> {
   for (const structure of structures) {
     for (const definition of structure.propertyDefinitions) {
-      const result = validateInverseDefinition(structures, structure, definition);
+      const result = validateInverseDefinition(
+        structures,
+        structure,
+        definition,
+      );
       if (!result.ok) return result;
     }
   }

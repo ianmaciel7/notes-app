@@ -810,10 +810,24 @@
       "whatsNew": "What's new"
     },
     "sidebarUtilities": {
+      "cancel": "Cancel",
+      "confirmIrreversible": "Delete permanently",
+      "deleteForever": "Delete forever",
+      "deleteForeverConfirmDescription": "\"{title}\" will be permanently deleted. This action is irreversible.",
+      "deleteForeverConfirmTitle": "Delete forever?",
+      "deleteForeverToast": "Item permanently deleted.",
       "emptyTrash": "Empty trash",
+      "emptyTrashConfirmDescription": "All items in Trash will be permanently deleted. This action is irreversible.",
+      "emptyTrashConfirmTitle": "Empty trash?",
+      "emptyTrashToast": "Trash emptied.",
+      "restoreToast": "Item restored.",
+      "restoreTrashItem": "Restore",
       "searchTrash": "Search trash",
       "trash": "Trash",
-      "trashDescription": "Deleted local objects appear here before permanent removal."
+      "trashDescription": "Deleted local objects appear here before permanent removal.",
+      "trashEmpty": "Trash is empty.",
+      "trashItemMeta": "{type} · deleted {trashedDate} · purges {purgeDate}",
+      "trashNoResults": "No deleted items match this search."
     }
   }
 }

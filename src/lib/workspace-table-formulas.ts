@@ -281,95 +281,16 @@ function tokenizeFormulaSource(source: string): readonly FormulaToken[] {
   const tokens: FormulaToken[] = [];
   let index = 0;
   while (index < source.length) {
-    const char = source[index];
-    if (/\s/.test(char)) {
+    const token = readFormulaToken(source, index);
+    if (!token) {
       index += 1;
       continue;
     }
     if (tokens.length >= defaultLimits.maxTokens) {
       return [...tokens, { end: index, source: "", start: index, type: "eof" }];
     }
-    if (char === "=")
-      tokens.push({
-        end: index + 1,
-        source: char,
-        start: index,
-        type: "equals",
-      });
-    else if (char === "(")
-      tokens.push({
-        end: index + 1,
-        source: char,
-        start: index,
-        type: "leftParen",
-      });
-    else if (char === ")")
-      tokens.push({
-        end: index + 1,
-        source: char,
-        start: index,
-        type: "rightParen",
-      });
-    else if (char === ",")
-      tokens.push({
-        end: index + 1,
-        source: char,
-        start: index,
-        type: "comma",
-      });
-    else if (char === ":")
-      tokens.push({
-        end: index + 1,
-        source: char,
-        start: index,
-        type: "colon",
-      });
-    else if ("+-*/^".includes(char)) {
-      tokens.push({
-        end: index + 1,
-        source: char,
-        start: index,
-        type: "operator",
-      });
-    } else if (/\d|\./.test(char)) {
-      const match = /^\d+(?:\.\d+)?|^\.\d+/.exec(source.slice(index));
-      if (!match) {
-        tokens.push({
-          end: index + 1,
-          source: char,
-          start: index,
-          type: "identifier",
-        });
-      } else {
-        tokens.push({
-          end: index + match[0].length,
-          source: match[0],
-          start: index,
-          type: "number",
-        });
-        index += match[0].length;
-        continue;
-      }
-    } else if (/[A-Za-z]/.test(char)) {
-      const match = /^[A-Za-z]+[0-9]*/.exec(source.slice(index));
-      const value = match?.[0] ?? char;
-      tokens.push({
-        end: index + value.length,
-        source: value,
-        start: index,
-        type: /^[A-Za-z]+[1-9][0-9]*$/.test(value) ? "cell" : "identifier",
-      });
-      index += value.length;
-      continue;
-    } else {
-      tokens.push({
-        end: index + 1,
-        source: char,
-        start: index,
-        type: "identifier",
-      });
-    }
-    index += 1;
+    tokens.push(token.value);
+    index = token.nextIndex;
   }
   tokens.push({
     end: source.length,
@@ -378,6 +299,68 @@ function tokenizeFormulaSource(source: string): readonly FormulaToken[] {
     type: "eof",
   });
   return tokens;
+}
+
+function readFormulaToken(
+  source: string,
+  index: number,
+): { readonly nextIndex: number; readonly value: FormulaToken } | null {
+  const char = source[index];
+  if (/\s/.test(char)) return null;
+  const simpleType = simpleFormulaTokenType(char);
+  if (simpleType) return formulaToken(simpleType, char, index, index + 1);
+  if ("+-*/^".includes(char))
+    return formulaToken("operator", char, index, index + 1);
+  if (/\d|\./.test(char)) return readNumericFormulaToken(source, index);
+  if (/[A-Za-z]/.test(char)) return readIdentifierFormulaToken(source, index);
+  return formulaToken("identifier", char, index, index + 1);
+}
+
+function formulaToken(
+  type: FormulaTokenType,
+  source: string,
+  start: number,
+  nextIndex: number,
+) {
+  return { nextIndex, value: { end: nextIndex, source, start, type } };
+}
+
+function simpleFormulaTokenType(char: string): FormulaTokenType | null {
+  return (
+    (
+      {
+        "(": "leftParen",
+        ")": "rightParen",
+        ",": "comma",
+        ":": "colon",
+        "=": "equals",
+      } as const
+    )[char] ?? null
+  );
+}
+
+function readNumericFormulaToken(
+  source: string,
+  index: number,
+): { readonly nextIndex: number; readonly value: FormulaToken } {
+  const match = /^\d+(?:\.\d+)?|^\.\d+/.exec(source.slice(index));
+  if (!match)
+    return formulaToken("identifier", source[index], index, index + 1);
+  return formulaToken("number", match[0], index, index + match[0].length);
+}
+
+function readIdentifierFormulaToken(
+  source: string,
+  index: number,
+): { readonly nextIndex: number; readonly value: FormulaToken } {
+  const match = /^[A-Za-z]+[0-9]*/.exec(source.slice(index));
+  const value = match?.[0] ?? source[index];
+  return formulaToken(
+    /^[A-Za-z]+[1-9][0-9]*$/.test(value) ? "cell" : "identifier",
+    value,
+    index,
+    index + value.length,
+  );
 }
 
 class Parser {
@@ -422,58 +405,75 @@ class Parser {
 
   private prefix(): FormulaResult<FormulaAst> {
     const token = this.peek();
-    if (
-      token.type === "operator" &&
-      (token.source === "+" || token.source === "-")
-    ) {
-      this.advance();
-      const value = this.expression(4);
-      return value.ok
-        ? ok({
-            operator: token.source as "+" | "-",
-            type: "unary",
-            value: value.value,
-          })
-        : value;
-    }
-    if (token.type === "number") {
-      this.advance();
-      const value = Number(token.source);
-      return Number.isFinite(value)
-        ? ok({ type: "number", value })
-        : failure("numeric", "Number literal is invalid.");
-    }
-    if (token.type === "cell") {
-      this.advance();
-      const cell = parseCellSource(token.source);
-      const ast: FormulaAst = { type: "cell", ...cell };
-      if (!this.match("colon")) return ok(ast);
-      this.advance();
-      const to = this.peek();
-      if (to.type !== "cell")
-        return failure("syntax", "Range must end with a cell reference.");
-      this.advance();
-      return ok({
-        from: ast,
-        to: { type: "cell", ...parseCellSource(to.source) },
-        type: "range",
-      });
-    }
+    const unary = this.unaryPrefix(token);
+    if (unary) return unary;
+    const number = this.numberPrefix(token);
+    if (number) return number;
+    const cell = this.cellPrefix(token);
+    if (cell) return cell;
     if (token.type === "identifier") return this.identifier();
-    if (this.match("leftParen")) {
-      this.advance();
-      this.nesting += 1;
-      if (this.nesting > defaultLimits.maxNesting)
-        return failure("limit", "Formula is nested too deeply.");
-      const value = this.expression(0);
-      this.nesting -= 1;
-      if (!value.ok) return value;
-      if (!this.match("rightParen"))
-        return failure("syntax", "Formula is missing a closing parenthesis.");
-      this.advance();
-      return value;
+    return this.groupedPrefix();
+  }
+
+  private unaryPrefix(token: FormulaToken): FormulaResult<FormulaAst> | null {
+    if (token.type !== "operator") return null;
+    if (token.source !== "+" && token.source !== "-") return null;
+    this.advance();
+    const value = this.expression(4);
+    return value.ok
+      ? ok({
+          operator: token.source as "+" | "-",
+          type: "unary",
+          value: value.value,
+        })
+      : value;
+  }
+
+  private numberPrefix(token: FormulaToken): FormulaResult<FormulaAst> | null {
+    if (token.type !== "number") return null;
+    this.advance();
+    const value = Number(token.source);
+    return Number.isFinite(value)
+      ? ok({ type: "number", value })
+      : failure("numeric", "Number literal is invalid.");
+  }
+
+  private cellPrefix(token: FormulaToken): FormulaResult<FormulaAst> | null {
+    if (token.type !== "cell") return null;
+    this.advance();
+    const ast: FormulaAst = { type: "cell", ...parseCellSource(token.source) };
+    if (!this.match("colon")) return ok(ast);
+    return this.rangePrefix(ast);
+  }
+
+  private rangePrefix(from: FormulaAst): FormulaResult<FormulaAst> {
+    this.advance();
+    const to = this.peek();
+    if (to.type !== "cell")
+      return failure("syntax", "Range must end with a cell reference.");
+    this.advance();
+    return ok({
+      from,
+      to: { type: "cell", ...parseCellSource(to.source) },
+      type: "range",
+    });
+  }
+
+  private groupedPrefix(): FormulaResult<FormulaAst> {
+    if (!this.match("leftParen")) {
+      return failure("syntax", "Formula contains an unexpected token.");
     }
-    return failure("syntax", "Formula contains an unexpected token.");
+    this.advance();
+    this.nesting += 1;
+    if (this.nesting > defaultLimits.maxNesting)
+      return failure("limit", "Formula is nested too deeply.");
+    const value = this.expression(0);
+    this.nesting -= 1;
+    if (!value.ok) return value;
+    if (!this.match("rightParen"))
+      return failure("syntax", "Formula is missing a closing parenthesis.");
+    this.advance();
+    return value;
   }
 
   private identifier(): FormulaResult<FormulaAst> {
@@ -568,31 +568,40 @@ function serializeAst(
   parent?: FormulaAst,
   side: "left" | "right" = "left",
 ): string {
-  let serialized: string;
-  if (ast.type === "number")
-    serialized = Number.isInteger(ast.value)
-      ? String(ast.value)
-      : String(ast.value);
-  else if (ast.type === "constant") serialized = ast.name;
-  else if (ast.type === "cell")
-    serialized = `${ast.columnLabel}${ast.rowNumber}`;
-  else if (ast.type === "cell-ref") {
-    serialized =
-      ast.deleted || !ast.rowId || !ast.columnId
-        ? "#REF!"
-        : a1For({ columnId: ast.columnId, rowId: ast.rowId }, table);
-  } else if (ast.type === "range") {
-    serialized = `${serializeAst(ast.from, table)}:${serializeAst(ast.to, table)}`;
-  } else if (ast.type === "function") {
-    serialized = `${ast.name}(${ast.args.map((arg) => serializeAst(arg, table)).join(",")})`;
-  } else if (ast.type === "unary") {
-    serialized = `${ast.operator}${serializeAst(ast.value, table, ast)}`;
-  } else {
-    serialized = `${serializeAst(ast.left, table, ast, "left")}${ast.operator}${serializeAst(ast.right, table, ast, "right")}`;
-  }
+  const serialized = serializeAstNode(ast, table);
   return parent && needsParens(parent, ast, side)
     ? `(${serialized})`
     : serialized;
+}
+
+function serializeAstNode(ast: FormulaAst, table?: FormulaTable): string {
+  switch (ast.type) {
+    case "binary":
+      return `${serializeAst(ast.left, table, ast, "left")}${ast.operator}${serializeAst(ast.right, table, ast, "right")}`;
+    case "cell":
+      return `${ast.columnLabel}${ast.rowNumber}`;
+    case "cell-ref":
+      return serializeCellRefAst(ast, table);
+    case "constant":
+      return ast.name;
+    case "function":
+      return `${ast.name}(${ast.args.map((arg) => serializeAst(arg, table)).join(",")})`;
+    case "number":
+      return String(ast.value);
+    case "range":
+      return `${serializeAst(ast.from, table)}:${serializeAst(ast.to, table)}`;
+    case "unary":
+      return `${ast.operator}${serializeAst(ast.value, table, ast)}`;
+  }
+}
+
+function serializeCellRefAst(
+  ast: Extract<FormulaAst, { type: "cell-ref" }>,
+  table?: FormulaTable,
+): string {
+  return ast.deleted || !ast.rowId || !ast.columnId
+    ? "#REF!"
+    : a1For({ columnId: ast.columnId, rowId: ast.rowId }, table);
 }
 
 function canonicalizeFormulaSource(
@@ -664,44 +673,77 @@ function resolveAstReferences(
   ast: FormulaAst,
   table: FormulaTable,
 ): FormulaResult<FormulaAst> {
-  if (ast.type === "cell") {
-    const address = resolveAddress(ast, table);
-    return address.ok
-      ? ok({
-          columnId: address.value.columnId,
-          rowId: address.value.rowId,
-          type: "cell-ref",
-        })
-      : address;
+  switch (ast.type) {
+    case "binary":
+      return resolveBinaryAst(ast, table);
+    case "cell":
+      return resolveCellAst(ast, table);
+    case "function":
+      return resolveFunctionAst(ast, table);
+    case "range":
+      return resolveRangeAst(ast, table);
+    case "unary":
+      return resolveUnaryAst(ast, table);
+    default:
+      return ok(ast);
   }
-  if (ast.type === "range") {
-    const from = resolveAstReferences(ast.from, table);
-    if (!from.ok) return from;
-    const to = resolveAstReferences(ast.to, table);
-    return to.ok ? ok({ from: from.value, to: to.value, type: "range" }) : to;
+}
+
+function resolveCellAst(
+  ast: Extract<FormulaAst, { type: "cell" }>,
+  table: FormulaTable,
+): FormulaResult<FormulaAst> {
+  const address = resolveAddress(ast, table);
+  return address.ok
+    ? ok({
+        columnId: address.value.columnId,
+        rowId: address.value.rowId,
+        type: "cell-ref",
+      })
+    : address;
+}
+
+function resolveRangeAst(
+  ast: Extract<FormulaAst, { type: "range" }>,
+  table: FormulaTable,
+): FormulaResult<FormulaAst> {
+  const from = resolveAstReferences(ast.from, table);
+  if (!from.ok) return from;
+  const to = resolveAstReferences(ast.to, table);
+  return to.ok ? ok({ from: from.value, to: to.value, type: "range" }) : to;
+}
+
+function resolveBinaryAst(
+  ast: Extract<FormulaAst, { type: "binary" }>,
+  table: FormulaTable,
+): FormulaResult<FormulaAst> {
+  const left = resolveAstReferences(ast.left, table);
+  if (!left.ok) return left;
+  const right = resolveAstReferences(ast.right, table);
+  return right.ok
+    ? ok({ ...ast, left: left.value, right: right.value })
+    : right;
+}
+
+function resolveUnaryAst(
+  ast: Extract<FormulaAst, { type: "unary" }>,
+  table: FormulaTable,
+): FormulaResult<FormulaAst> {
+  const value = resolveAstReferences(ast.value, table);
+  return value.ok ? ok({ ...ast, value: value.value }) : value;
+}
+
+function resolveFunctionAst(
+  ast: Extract<FormulaAst, { type: "function" }>,
+  table: FormulaTable,
+): FormulaResult<FormulaAst> {
+  const args: FormulaAst[] = [];
+  for (const arg of ast.args) {
+    const resolved = resolveAstReferences(arg, table);
+    if (!resolved.ok) return resolved;
+    args.push(resolved.value);
   }
-  if (ast.type === "binary") {
-    const left = resolveAstReferences(ast.left, table);
-    if (!left.ok) return left;
-    const right = resolveAstReferences(ast.right, table);
-    return right.ok
-      ? ok({ ...ast, left: left.value, right: right.value })
-      : right;
-  }
-  if (ast.type === "unary") {
-    const value = resolveAstReferences(ast.value, table);
-    return value.ok ? ok({ ...ast, value: value.value }) : value;
-  }
-  if (ast.type === "function") {
-    const args: FormulaAst[] = [];
-    for (const arg of ast.args) {
-      const resolved = resolveAstReferences(arg, table);
-      if (!resolved.ok) return resolved;
-      args.push(resolved.value);
-    }
-    return ok({ ...ast, args });
-  }
-  return ok(ast);
+  return ok({ ...ast, args });
 }
 
 function collectDependencies(
@@ -711,34 +753,25 @@ function collectDependencies(
 ): FormulaResult<readonly FormulaCellAddress[]> {
   const dependencies = new Map<string, FormulaCellAddress>();
   const visit = (node: FormulaAst): FormulaResult<void> => {
-    if (node.type === "cell-ref") {
-      if (!node.rowId || !node.columnId || node.deleted)
-        return failure("ref", "Formula references a deleted cell.");
-      dependencies.set(cellKey(node.rowId, node.columnId), {
-        columnId: node.columnId,
-        rowId: node.rowId,
-      });
-    } else if (node.type === "range") {
-      const from = resolveAddress(node.from, table);
-      if (!from.ok) return from;
-      const to = resolveAddress(node.to, table);
-      if (!to.ok) return to;
-      const cells = expandRange(from.value, to.value, table, maxRangeCells);
-      if (!cells.ok) return cells;
-      for (const cell of cells.value)
-        dependencies.set(cellKey(cell.rowId, cell.columnId), cell);
-    } else if (node.type === "binary") {
-      const left = visit(node.left);
-      if (!left.ok) return left;
-      return visit(node.right);
-    } else if (node.type === "unary") return visit(node.value);
-    else if (node.type === "function") {
-      for (const arg of node.args) {
-        const result = visit(arg);
-        if (!result.ok) return result;
-      }
+    switch (node.type) {
+      case "binary":
+        return visitBinaryDependencies(node, visit);
+      case "cell-ref":
+        return collectCellDependency(node, dependencies);
+      case "function":
+        return visitFunctionDependencies(node, visit);
+      case "range":
+        return collectRangeDependencies(
+          node,
+          table,
+          maxRangeCells,
+          dependencies,
+        );
+      case "unary":
+        return visit(node.value);
+      default:
+        return ok(undefined);
     }
-    return ok(undefined);
   };
   const result = visit(ast);
   if (!result.ok) return result;
@@ -746,6 +779,57 @@ function collectDependencies(
     return failure("limit", "Formula has too many dependencies.");
   }
   return ok(Array.from(dependencies.values()));
+}
+
+function collectCellDependency(
+  node: Extract<FormulaAst, { type: "cell-ref" }>,
+  dependencies: Map<string, FormulaCellAddress>,
+): FormulaResult<void> {
+  if (!node.rowId || !node.columnId || node.deleted) {
+    return failure("ref", "Formula references a deleted cell.");
+  }
+  dependencies.set(cellKey(node.rowId, node.columnId), {
+    columnId: node.columnId,
+    rowId: node.rowId,
+  });
+  return ok(undefined);
+}
+
+function collectRangeDependencies(
+  node: Extract<FormulaAst, { type: "range" }>,
+  table: FormulaTable,
+  maxRangeCells: number,
+  dependencies: Map<string, FormulaCellAddress>,
+): FormulaResult<void> {
+  const from = resolveAddress(node.from, table);
+  if (!from.ok) return from;
+  const to = resolveAddress(node.to, table);
+  if (!to.ok) return to;
+  const cells = expandRange(from.value, to.value, table, maxRangeCells);
+  if (!cells.ok) return cells;
+  for (const cell of cells.value) {
+    dependencies.set(cellKey(cell.rowId, cell.columnId), cell);
+  }
+  return ok(undefined);
+}
+
+function visitBinaryDependencies(
+  node: Extract<FormulaAst, { type: "binary" }>,
+  visit: (node: FormulaAst) => FormulaResult<void>,
+): FormulaResult<void> {
+  const left = visit(node.left);
+  return left.ok ? visit(node.right) : left;
+}
+
+function visitFunctionDependencies(
+  node: Extract<FormulaAst, { type: "function" }>,
+  visit: (node: FormulaAst) => FormulaResult<void>,
+): FormulaResult<void> {
+  for (const arg of node.args) {
+    const result = visit(arg);
+    if (!result.ok) return result;
+  }
+  return ok(undefined);
 }
 
 function resolveFormulaReferences(
@@ -886,46 +970,92 @@ function evaluateAst(
     readonly rand?: EvaluationContext["rand"];
   },
 ): FormulaEvaluationResult {
-  if (ast.type === "number") return numericResult(ast.value);
-  if (ast.type === "constant") return numericResult(constants[ast.name]);
-  if (ast.type === "cell-ref") {
-    if (!ast.rowId || !ast.columnId || ast.deleted)
-      return errorResult("ref", "Formula references a deleted cell.");
-    return evaluateCell(cellKey(ast.rowId, ast.columnId));
+  switch (ast.type) {
+    case "binary":
+      return evaluateBinaryAst(ast, table, evaluateCell, context);
+    case "cell":
+      return evaluateCellAst(ast, table, evaluateCell);
+    case "cell-ref":
+      return evaluateCellRefAst(ast, evaluateCell);
+    case "constant":
+      return numericResult(constants[ast.name]);
+    case "function":
+      return evaluateFunction(ast, table, evaluateCell, context);
+    case "number":
+      return numericResult(ast.value);
+    case "range":
+      return errorResult("value", "A range must be used inside a function.");
+    case "unary":
+      return evaluateUnaryAst(ast, table, evaluateCell, context);
   }
-  if (ast.type === "cell") {
-    const address = resolveAddress(ast, table);
-    return address.ok
-      ? evaluateCell(cellKey(address.value.rowId, address.value.columnId))
-      : errorResult(address.error.code, address.error.message);
+}
+
+function evaluateCellRefAst(
+  ast: Extract<FormulaAst, { type: "cell-ref" }>,
+  evaluateCell: (id: string) => FormulaEvaluationResult,
+): FormulaEvaluationResult {
+  if (!ast.rowId || !ast.columnId || ast.deleted) {
+    return errorResult("ref", "Formula references a deleted cell.");
   }
-  if (ast.type === "range")
-    return errorResult("value", "A range must be used inside a function.");
-  if (ast.type === "unary") {
-    const value = evaluateAst(ast.value, table, evaluateCell, context);
-    return value.type === "number"
-      ? numericResult(ast.operator === "-" ? -value.value : value.value)
-      : value;
+  return evaluateCell(cellKey(ast.rowId, ast.columnId));
+}
+
+function evaluateCellAst(
+  ast: Extract<FormulaAst, { type: "cell" }>,
+  table: FormulaTable,
+  evaluateCell: (id: string) => FormulaEvaluationResult,
+): FormulaEvaluationResult {
+  const address = resolveAddress(ast, table);
+  return address.ok
+    ? evaluateCell(cellKey(address.value.rowId, address.value.columnId))
+    : errorResult(address.error.code, address.error.message);
+}
+
+function evaluateUnaryAst(
+  ast: Extract<FormulaAst, { type: "unary" }>,
+  table: FormulaTable,
+  evaluateCell: (id: string) => FormulaEvaluationResult,
+  context: {
+    readonly calculationRevision: string;
+    readonly cellId: string;
+    readonly rand?: EvaluationContext["rand"];
+  },
+): FormulaEvaluationResult {
+  const value = evaluateAst(ast.value, table, evaluateCell, context);
+  return value.type === "number"
+    ? numericResult(ast.operator === "-" ? -value.value : value.value)
+    : value;
+}
+
+function evaluateBinaryAst(
+  ast: Extract<FormulaAst, { type: "binary" }>,
+  table: FormulaTable,
+  evaluateCell: (id: string) => FormulaEvaluationResult,
+  context: {
+    readonly calculationRevision: string;
+    readonly cellId: string;
+    readonly rand?: EvaluationContext["rand"];
+  },
+): FormulaEvaluationResult {
+  const left = evaluateAst(ast.left, table, evaluateCell, context);
+  if (left.type === "error") return left;
+  const right = evaluateAst(ast.right, table, evaluateCell, context);
+  if (right.type === "error") return right;
+  if (left.type !== "number" || right.type !== "number") {
+    return errorResult("value", "Formula operands must be numeric.");
   }
-  if (ast.type === "binary") {
-    const left = evaluateAst(ast.left, table, evaluateCell, context);
-    if (left.type === "error") return left;
-    const right = evaluateAst(ast.right, table, evaluateCell, context);
-    if (right.type === "error") return right;
-    if (left.type !== "number" || right.type !== "number")
-      return errorResult("value", "Formula operands must be numeric.");
-    if (ast.operator === "/" && right.value === 0)
-      return errorResult("numeric", "Formula divides by zero.");
-    const values = {
+  if (ast.operator === "/" && right.value === 0) {
+    return errorResult("numeric", "Formula divides by zero.");
+  }
+  return numericResult(
+    {
       "*": left.value * right.value,
       "+": left.value + right.value,
       "-": left.value - right.value,
       "/": left.value / right.value,
       "^": left.value ** right.value,
-    };
-    return numericResult(values[ast.operator]);
-  }
-  return evaluateFunction(ast, table, evaluateCell, context);
+    }[ast.operator],
+  );
 }
 
 function valuesForArg(
@@ -968,13 +1098,7 @@ function evaluateFunction(
   },
 ): FormulaEvaluationResult {
   if (ast.name === "RAND") {
-    return numericResult(
-      context.rand?.({
-        calculationRevision: context.calculationRevision,
-        cellId: context.cellId,
-      }) ??
-        deterministicRand(`${context.calculationRevision}:${context.cellId}`),
-    );
+    return evaluateRandFunction(context);
   }
   const values: number[] = [];
   for (const arg of ast.args) {
@@ -982,63 +1106,88 @@ function evaluateFunction(
     if ("type" in resolved) return resolved;
     values.push(...resolved);
   }
-  if (
-    ["AVG", "MAX", "MEDIAN", "MIN"].includes(ast.name) &&
-    values.length === 0
-  ) {
+  if (requiresNumericValues(ast.name) && values.length === 0) {
     return errorResult(
       "value",
       `${ast.name} requires at least one numeric value.`,
     );
   }
+  return evaluateNumericFunction(ast.name, values);
+}
+
+function evaluateRandFunction(context: {
+  readonly calculationRevision: string;
+  readonly cellId: string;
+  readonly rand?: EvaluationContext["rand"];
+}): FormulaEvaluationResult {
+  return numericResult(
+    context.rand?.({
+      calculationRevision: context.calculationRevision,
+      cellId: context.cellId,
+    }) ?? deterministicRand(`${context.calculationRevision}:${context.cellId}`),
+  );
+}
+
+function requiresNumericValues(name: FormulaFunctionName): boolean {
+  return (
+    name === "AVG" || name === "MAX" || name === "MEDIAN" || name === "MIN"
+  );
+}
+
+function evaluateNumericFunction(
+  name: FormulaFunctionName,
+  values: readonly number[],
+): FormulaEvaluationResult {
+  const evaluator = numericFunctionEvaluators[name];
+  return evaluator
+    ? evaluator(values)
+    : errorResult("value", `${name} cannot evaluate this value.`);
+}
+
+const numericFunctionEvaluators: Partial<
+  Record<
+    FormulaFunctionName,
+    (values: readonly number[]) => FormulaEvaluationResult
+  >
+> = {
+  ABS: (values) => unaryFunction(values, Math.abs, "ABS"),
+  AVG: (values) =>
+    numericResult(
+      values.reduce((total, value) => total + value, 0) / values.length,
+    ),
+  CEIL: (values) => unaryFunction(values, Math.ceil, "CEIL"),
+  COUNT: (values) => numericResult(values.length),
+  FLOOR: (values) => unaryFunction(values, Math.floor, "FLOOR"),
+  LOG: (values) =>
+    unaryFunction(
+      values,
+      (value) => (value > 0 ? Math.log(value) : Number.NaN),
+      "LOG",
+      "domain",
+    ),
+  MAX: (values) => numericResult(Math.max(...values)),
+  MEDIAN: (values) => numericResult(median(values)),
+  MIN: (values) => numericResult(Math.min(...values)),
+  PRODUCT: (values) =>
+    numericResult(values.reduce((total, value) => total * value, 1)),
+  ROUND: (values) => roundFunction(values),
+  SIGN: (values) => unaryFunction(values, Math.sign, "SIGN"),
+  SQRT: (values) =>
+    unaryFunction(
+      values,
+      (value) => (value >= 0 ? Math.sqrt(value) : Number.NaN),
+      "SQRT",
+      "domain",
+    ),
+  SUM: (values) =>
+    numericResult(values.reduce((total, value) => total + value, 0)),
+};
+
+function median(values: readonly number[]): number {
   const sorted = [...values].sort((left, right) => left - right);
-  const product = values.reduce((total, value) => total * value, 1);
-  switch (ast.name) {
-    case "ABS":
-      return unaryFunction(values, Math.abs, ast.name);
-    case "AVG":
-      return numericResult(
-        values.reduce((total, value) => total + value, 0) / values.length,
-      );
-    case "CEIL":
-      return unaryFunction(values, Math.ceil, ast.name);
-    case "COUNT":
-      return numericResult(values.length);
-    case "FLOOR":
-      return unaryFunction(values, Math.floor, ast.name);
-    case "LOG":
-      return unaryFunction(
-        values,
-        (value) => (value > 0 ? Math.log(value) : Number.NaN),
-        ast.name,
-        "domain",
-      );
-    case "MAX":
-      return numericResult(Math.max(...values));
-    case "MEDIAN":
-      return numericResult(
-        sorted.length % 2
-          ? sorted[(sorted.length - 1) / 2]
-          : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2,
-      );
-    case "MIN":
-      return numericResult(Math.min(...values));
-    case "PRODUCT":
-      return numericResult(product);
-    case "ROUND":
-      return roundFunction(values);
-    case "SIGN":
-      return unaryFunction(values, Math.sign, ast.name);
-    case "SQRT":
-      return unaryFunction(
-        values,
-        (value) => (value >= 0 ? Math.sqrt(value) : Number.NaN),
-        ast.name,
-        "domain",
-      );
-    case "SUM":
-      return numericResult(values.reduce((total, value) => total + value, 0));
-  }
+  return sorted.length % 2
+    ? sorted[(sorted.length - 1) / 2]
+    : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
 }
 
 function unaryFunction(

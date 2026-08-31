@@ -389,44 +389,111 @@ function findUnlinkedMentionCandidates(
   for (const source of entities) {
     if (source.id === targetId || !isDocumentLikeEntity(source)) continue;
     for (const block of source.body.doc.content) {
-      const excerpt = mentionNodeText(block);
-      const normalizedExcerpt = normalizeMentionText(excerpt);
-      const linkedRanges: MentionRange[] = [];
-      collectLinkedMentionRanges(block, targetId, { value: 0 }, linkedRanges);
-      for (const candidateLabel of labels) {
-        const normalizedLabel = normalizeMentionText(candidateLabel);
-        let candidateStart = findMentionStart(
-          normalizedExcerpt,
-          normalizedLabel,
-        );
-        while (candidateStart >= 0) {
-          const candidateEnd = candidateStart + normalizedLabel.length;
-          const overlapsLinkedRange = linkedRanges.some(
-            (range) => candidateStart < range.end && candidateEnd > range.start,
-          );
-          const rangeKey = `${source.id}\u001f${getBlockId(block) ?? ""}\u001f${candidateStart}\u001f${candidateEnd}`;
-          if (!overlapsLinkedRange && !seenRanges.has(rangeKey)) {
-            seenRanges.add(rangeKey);
-            candidates.push({
-              blockId: getBlockId(block),
-              end: candidateEnd,
-              excerpt,
-              label: candidateLabel,
-              sourceId: source.id,
-              start: candidateStart,
-              targetId,
-            });
-          }
-          candidateStart = findMentionStart(
-            normalizedExcerpt,
-            normalizedLabel,
-            candidateEnd,
-          );
-        }
-      }
+      candidates.push(
+        ...findBlockUnlinkedMentionCandidates({
+          block,
+          labels,
+          seenRanges,
+          sourceId: source.id,
+          targetId,
+        }),
+      );
     }
   }
   return candidates;
+}
+
+function findBlockUnlinkedMentionCandidates({
+  block,
+  labels,
+  seenRanges,
+  sourceId,
+  targetId,
+}: {
+  readonly block: BlockEditorNode;
+  readonly labels: readonly string[];
+  readonly seenRanges: Set<string>;
+  readonly sourceId: string;
+  readonly targetId: string;
+}): UnlinkedMentionCandidate[] {
+  const excerpt = mentionNodeText(block);
+  const normalizedExcerpt = normalizeMentionText(excerpt);
+  const linkedRanges: MentionRange[] = [];
+  const candidates: UnlinkedMentionCandidate[] = [];
+  collectLinkedMentionRanges(block, targetId, { value: 0 }, linkedRanges);
+  for (const candidateLabel of labels) {
+    candidates.push(
+      ...findLabelUnlinkedMentionCandidates({
+        block,
+        candidateLabel,
+        excerpt,
+        linkedRanges,
+        normalizedExcerpt,
+        seenRanges,
+        sourceId,
+        targetId,
+      }),
+    );
+  }
+  return candidates;
+}
+
+function findLabelUnlinkedMentionCandidates({
+  block,
+  candidateLabel,
+  excerpt,
+  linkedRanges,
+  normalizedExcerpt,
+  seenRanges,
+  sourceId,
+  targetId,
+}: {
+  readonly block: BlockEditorNode;
+  readonly candidateLabel: string;
+  readonly excerpt: string;
+  readonly linkedRanges: readonly MentionRange[];
+  readonly normalizedExcerpt: string;
+  readonly seenRanges: Set<string>;
+  readonly sourceId: string;
+  readonly targetId: string;
+}): UnlinkedMentionCandidate[] {
+  const normalizedLabel = normalizeMentionText(candidateLabel);
+  const blockId = getBlockId(block);
+  const candidates: UnlinkedMentionCandidate[] = [];
+  let candidateStart = findMentionStart(normalizedExcerpt, normalizedLabel);
+  while (candidateStart >= 0) {
+    const candidateEnd = candidateStart + normalizedLabel.length;
+    const rangeKey = `${sourceId}\u001f${blockId ?? ""}\u001f${candidateStart}\u001f${candidateEnd}`;
+    if (
+      !mentionOverlapsLinkedRange(candidateStart, candidateEnd, linkedRanges) &&
+      !seenRanges.has(rangeKey)
+    ) {
+      seenRanges.add(rangeKey);
+      candidates.push({
+        blockId,
+        end: candidateEnd,
+        excerpt,
+        label: candidateLabel,
+        sourceId,
+        start: candidateStart,
+        targetId,
+      });
+    }
+    candidateStart = findMentionStart(
+      normalizedExcerpt,
+      normalizedLabel,
+      candidateEnd,
+    );
+  }
+  return candidates;
+}
+
+function mentionOverlapsLinkedRange(
+  start: number,
+  end: number,
+  ranges: readonly MentionRange[],
+): boolean {
+  return ranges.some((range) => start < range.end && end > range.start);
 }
 
 function convertMentionNode(

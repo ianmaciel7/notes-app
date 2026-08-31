@@ -23,14 +23,13 @@ import {
   AppSidePanelHeader,
   type SidePanelSpecialEntryId,
 } from "@/components/app-side-panel-header";
-import { notifyWorkspaceSyncDiagnostics } from "@/components/offline-first-bridge";
-import { blockEditorDocumentToPlainText } from "@/editor/document";
 import type { AppSidebarSpace } from "@/components/app-sidebar";
 import { AppSidebarSearchIcon } from "@/components/app-sidebar-icons";
 import type {
   AppSidebarCustomSection,
   AppSidebarObjectType,
   AppSidebarPinnedEntity,
+  AppSidebarTrashItem,
 } from "@/components/app-sidebar-overview";
 import { AppSidebarWorkspaceIcon } from "@/components/app-sidebar-source-icon";
 import {
@@ -53,15 +52,8 @@ import {
   objectTypeDefinitionById,
 } from "@/components/object-icons";
 import { objectLifecycleContractSlots } from "@/components/object-lifecycle-contracts";
+import { notifyWorkspaceSyncDiagnostics } from "@/components/offline-first-bridge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   Command,
   CommandDialog,
@@ -74,6 +66,14 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -81,6 +81,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { blockEditorDocumentToPlainText } from "@/editor/document";
 import { cn } from "@/lib/utils";
 import {
   createWorkspaceCommandRuntime,
@@ -88,8 +89,8 @@ import {
   projectWorkspaceShortcutCatalog,
   routeWorkspaceShortcut,
 } from "@/lib/workspace-command-registry";
-import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
 import { createBrowserWorkspaceDatabaseRepository } from "@/lib/workspace-database";
+import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
 import {
   createBrowserMediaStorageAdapter,
   createMediaUrlRegistry,
@@ -119,12 +120,18 @@ import {
   getCreationFlow,
   getWorkspaceImportError,
   isWorkspaceEntityDeletionAccepted,
+  selectTrashedEntities,
+  selectTrashRecords,
   type WorkspaceDraft,
   type WorkspaceEntity,
   type WorkspaceObjectError,
   type WorkspaceObjectState,
   workspaceObjectReducer,
 } from "@/lib/workspace-objects";
+import {
+  buildWorkspaceSearchIndex,
+  searchWorkspaceIndex,
+} from "@/lib/workspace-query-engine";
 import {
   contextualPanelRouteState,
   parseWorkspaceRoute,
@@ -133,10 +140,9 @@ import {
   workspaceRoutePath,
 } from "@/lib/workspace-routing";
 import {
-  buildWorkspaceSearchIndex,
-  searchWorkspaceIndex,
-} from "@/lib/workspace-query-engine";
-import { formatShortcutChord, type ShortcutPlatform } from "@/lib/workspace-shortcuts";
+  formatShortcutChord,
+  type ShortcutPlatform,
+} from "@/lib/workspace-shortcuts";
 import {
   parseWorkspaceSidebarPinnedState,
   serializeWorkspaceSidebarPinnedState,
@@ -987,6 +993,7 @@ type WorkspaceContextValue = {
   objectTypes: AppSidebarObjectType[];
   structures: readonly WorkspaceStructure[];
   createdEntities: WorkspaceEntity[];
+  trashItems: AppSidebarTrashItem[];
   workspaceDraft: WorkspaceDraft | null;
   workspaceError: WorkspaceObjectError | null;
   customSections: AppSidebarCustomSection[];
@@ -1080,7 +1087,10 @@ type WorkspaceContextValue = {
     propertyValues?: Readonly<Record<string, unknown>>,
   ) => void;
   deleteWorkspaceEntity: (id: string) => void;
+  emptyTrash: () => void;
   duplicateWorkspaceEntity: (id: string) => void;
+  purgeTrashItem: (id: string) => void;
+  restoreTrashItem: (id: string) => void;
   selectEntity: (id: string) => void;
   openInSidePanel: (tab: AppHeaderTab) => void;
 };
@@ -1209,6 +1219,31 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       },
     );
   }, [createdCounts, t, workspaceObjects.structures]);
+
+  const trashItems = React.useMemo<AppSidebarTrashItem[]>(() => {
+    const trashedById = new Map(
+      selectTrashedEntities(workspaceObjects).map((entity) => [
+        entity.id,
+        entity,
+      ]),
+    );
+    return selectTrashRecords(workspaceObjects).flatMap((record) => {
+      const entity = trashedById.get(record.entityId);
+      if (!entity) return [];
+      const typeLabel =
+        objectTypes.find((type) => type.id === entity.objectTypeId)
+          ?.singularLabel ?? entity.objectTypeId;
+      return [
+        {
+          id: entity.id,
+          label: entity.title.trim() || t("lifecycle.untitled"),
+          purgeAfter: record.purgeAfter,
+          trashedAt: record.trashedAt,
+          typeLabel,
+        },
+      ];
+    });
+  }, [objectTypes, t, workspaceObjects]);
 
   const availablePinnedEntities = React.useMemo(
     () =>
@@ -1540,7 +1575,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         notifyWorkspaceSyncDiagnostics({
           conflictCount: 0,
           mediaUnavailableCount: workspaceObjects.entities.filter(
-            (entity) => entity.kind === "file" && entity.storageState !== "stored",
+            (entity) =>
+              entity.kind === "file" && entity.storageState !== "stored",
           ).length,
           pendingCount: result.writtenKeys.length,
           status: "offline-pending",
@@ -2222,15 +2258,19 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   React.useEffect(() => {
-    const platform: ShortcutPlatform =
-      navigator.platform.toLocaleLowerCase().includes("mac") ? "mac" : "windows";
+    const platform: ShortcutPlatform = navigator.platform
+      .toLocaleLowerCase()
+      .includes("mac")
+      ? "mac"
+      : "windows";
     const structures = selectCreatableStructures(workspaceObjects.structures);
     const runtime = createWorkspaceCommandRuntime({
       locale,
       t,
       actions: {
         openPalette: () => setCommandPaletteOpen(true),
-        openNewContent: () => createWorkspaceEntity("page", t("objectTypeStudio.objectTypes.page")),
+        openNewContent: () =>
+          createWorkspaceEntity("page", t("objectTypeStudio.objectTypes.page")),
         openExtendedSearch: () => setExtendedSearchOpen(true),
         openFindInPage: () => setFindInPageOpen(true),
         openShortcuts: () => setShortcutBrowserOpen(true),
@@ -2395,14 +2435,13 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       let accepted = 0;
       let rejected = 0;
       let firstMediaError: MediaStorageError | null = null;
-      for (const file of files) {
+      const importFile = async (file: File) => {
         let text = "";
         if (flow !== "file") {
           try {
             text = await file.text();
           } catch {
-            rejected += 1;
-            continue;
+            return { accepted: false };
           }
         }
         const importError = getWorkspaceImportError(
@@ -2413,13 +2452,11 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           workspaceObjects.structures,
         );
         if (importError) {
-          rejected += 1;
-          continue;
+          return { accepted: false };
         }
         if (flow === "file") {
           if (!acceptsFileForType(objectTypeId, file.type, file.name)) {
-            rejected += 1;
-            continue;
+            return { accepted: false };
           }
           const result = await writeMediaAsset(
             getMediaStorageAdapter(),
@@ -2427,9 +2464,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
             { blob: file, fileName: file.name, mimeType: file.type },
           );
           if (!result.ok) {
-            firstMediaError ??= result.error;
-            rejected += 1;
-            continue;
+            return { accepted: false, error: result.error };
           }
           dispatchWorkspaceObjects({
             type: "importFile",
@@ -2443,8 +2478,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
             storageState: result.value.state,
             text,
           });
-          accepted += 1;
-          continue;
+          return { accepted: true };
         }
         dispatchWorkspaceObjects({
           type: "importFile",
@@ -2454,7 +2488,16 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           size: file.size,
           text,
         });
-        accepted += 1;
+        return { accepted: true };
+      };
+      for (const file of files) {
+        const result = await importFile(file);
+        if (result.accepted) {
+          accepted += 1;
+        } else {
+          rejected += 1;
+          firstMediaError ??= result.error ?? null;
+        }
       }
 
       if (accepted > 0 && rejected > 0) {
@@ -2621,6 +2664,63 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     dispatchWorkspaceObjects({ type: "duplicateEntity", id });
   }, []);
 
+  const restoreTrashItem = React.useCallback(
+    (id: string) => {
+      dispatchWorkspaceObjects({ type: "restoreEntity", id });
+      selectEntity(id);
+      showMessage(t("sidebarUtilities.restoreToast"));
+    },
+    [selectEntity, showMessage, t],
+  );
+
+  const purgeTrashItem = React.useCallback(
+    (id: string) => {
+      dispatchWorkspaceObjects({
+        type: "purgeEntity",
+        id,
+        purgedAt: new Date().toISOString(),
+      });
+      setMainTabs((current) => current.filter((tab) => tab.id !== id));
+      setSideTabs((current) => current.filter((tab) => tab.id !== id));
+      setPinnedEntities((current) =>
+        current.filter((entity) => entity.id !== id),
+      );
+      if (mainValue === id) setMainValue("");
+      if (sideValue === id) setSideValue("");
+      if (activeEntityId === id) setActiveEntityId(null);
+      showMessage(t("sidebarUtilities.deleteForeverToast"));
+    },
+    [activeEntityId, mainValue, showMessage, sideValue, t],
+  );
+
+  const emptyTrash = React.useCallback(() => {
+    const ids = trashItems.map((item) => item.id);
+    dispatchWorkspaceObjects({
+      type: "emptyTrash",
+      spaceId,
+      purgedAt: new Date().toISOString(),
+    });
+    setMainTabs((current) => current.filter((tab) => !ids.includes(tab.id)));
+    setSideTabs((current) => current.filter((tab) => !ids.includes(tab.id)));
+    setPinnedEntities((current) =>
+      current.filter((entity) => !ids.includes(entity.id)),
+    );
+    if (ids.includes(mainValue)) setMainValue("");
+    if (ids.includes(sideValue)) setSideValue("");
+    if (activeEntityId && ids.includes(activeEntityId)) {
+      setActiveEntityId(null);
+    }
+    showMessage(t("sidebarUtilities.emptyTrashToast"));
+  }, [
+    activeEntityId,
+    mainValue,
+    showMessage,
+    sideValue,
+    spaceId,
+    t,
+    trashItems,
+  ]);
+
   const createWorkspaceStructure = React.useCallback(
     (input: CreateStructureInput) => {
       const id = crypto.randomUUID();
@@ -2695,6 +2795,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       objectTypes,
       structures: workspaceObjects.structures,
       createdEntities: workspaceObjects.entities,
+      trashItems,
       workspaceDraft: workspaceObjects.draft,
       workspaceError: workspaceObjects.error,
       customSections,
@@ -2746,7 +2847,10 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       updateWorkspaceEntity,
       changeWorkspaceEntityType,
       deleteWorkspaceEntity,
+      emptyTrash,
       duplicateWorkspaceEntity,
+      purgeTrashItem,
+      restoreTrashItem,
       selectEntity,
       openInSidePanel,
     }),
@@ -2771,6 +2875,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       pinnedEntities,
       availablePinnedEntities,
       objectTypes,
+      trashItems,
       workspaceObjects.structures,
       workspaceObjects.draft,
       workspaceObjects.entities,
@@ -2805,7 +2910,10 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       updateWorkspaceEntity,
       changeWorkspaceEntityType,
       deleteWorkspaceEntity,
+      emptyTrash,
       duplicateWorkspaceEntity,
+      purgeTrashItem,
+      restoreTrashItem,
       openInSidePanel,
     ],
   );
@@ -2936,7 +3044,10 @@ function WorkspaceCommandPalette() {
         actions: {
           openPalette: () => setCommandPaletteOpen(true),
           openNewContent: () =>
-            createWorkspaceEntity("page", t("objectTypeStudio.objectTypes.page")),
+            createWorkspaceEntity(
+              "page",
+              t("objectTypeStudio.objectTypes.page"),
+            ),
           openExtendedSearch: () => setExtendedSearchOpen(true),
           openFindInPage: () => setFindInPageOpen(true),
           openShortcuts: () => setShortcutBrowserOpen(true),
@@ -2962,7 +3073,10 @@ function WorkspaceCommandPalette() {
           toggleTheme: () => document.documentElement.classList.toggle("dark"),
           closeCurrentTab: closeTab,
           createTask: () =>
-            createWorkspaceEntity("task", t("objectTypeStudio.objectTypes.task")),
+            createWorkspaceEntity(
+              "task",
+              t("objectTypeStudio.objectTypes.task"),
+            ),
           setCalendarView: (view) =>
             showMessage(
               t(
@@ -2994,7 +3108,9 @@ function WorkspaceCommandPalette() {
           canToggleTabsBar: false,
           canCloseCurrentTab:
             mainTabs.length > 1 &&
-            Boolean(mainTabs.find((tab) => tab.id === mainValue && !tab.pinned)),
+            Boolean(
+              mainTabs.find((tab) => tab.id === mainValue && !tab.pinned),
+            ),
           canCreateTask: creatableStructures.some(
             (structure) => structure.id === "task",
           ),
@@ -3113,17 +3229,17 @@ function WorkspaceCommandPalette() {
             <CommandGroup heading={t("commands.groups.results")}>
               {searchResults.map((result) => {
                 const structure = structures.find(
-                  (item) => item.id === createdEntities.find(
-                    (entity) => entity.id === result.entityId,
-                  )?.objectTypeId,
+                  (item) =>
+                    item.id ===
+                    createdEntities.find(
+                      (entity) => entity.id === result.entityId,
+                    )?.objectTypeId,
                 );
                 const definition = structure
                   ? objectTypeDefinitionById[structure.iconName]
                   : objectTypeDefinitionById.page;
                 const label =
-                  result.kind === "object"
-                    ? result.title
-                    : result.text;
+                  result.kind === "object" ? result.title : result.text;
                 const detail =
                   result.kind === "object"
                     ? structure?.singularName
@@ -3257,12 +3373,8 @@ function WorkspaceExtendedSearchDialog() {
 
 function WorkspaceFindInPageDialog() {
   const t = useTranslations("workspace");
-  const {
-    activeEntityId,
-    createdEntities,
-    findInPageOpen,
-    setFindInPageOpen,
-  } = useWorkspace();
+  const { activeEntityId, createdEntities, findInPageOpen, setFindInPageOpen } =
+    useWorkspace();
   const [query, setQuery] = React.useState("");
   const activeEntity = React.useMemo(
     () => createdEntities.find((entity) => entity.id === activeEntityId),
@@ -3300,7 +3412,11 @@ function WorkspaceFindInPageDialog() {
         />
         <CommandList className="max-h-[min(22rem,calc(100vh-12rem))]">
           <CommandEmpty>{t("commands.findInPage.empty")}</CommandEmpty>
-          <CommandGroup heading={activeEntity?.title ?? t("commands.findInPage.currentPage")}>
+          <CommandGroup
+            heading={
+              activeEntity?.title ?? t("commands.findInPage.currentPage")
+            }
+          >
             {matches.map((match) => (
               <CommandItem key={match.id} value={match.text}>
                 <span className="min-w-0 flex-1 truncate">{match.text}</span>
@@ -3363,13 +3479,17 @@ function WorkspaceShortcutBrowser() {
           canOpenSettings: true,
           canToggleTheme: true,
           canCloseCurrentTab: true,
-          canCreateTask: structures.some((structure) => structure.id === "task"),
+          canCreateTask: structures.some(
+            (structure) => structure.id === "task",
+          ),
           calendarActive: activeAction === "calendar",
-          structures: selectCreatableStructures(structures).map((structure) => ({
-            enabled: true,
-            id: structure.id,
-            label: structure.singularName,
-          })),
+          structures: selectCreatableStructures(structures).map(
+            (structure) => ({
+              enabled: true,
+              id: structure.id,
+              label: structure.singularName,
+            }),
+          ),
         },
       }),
     [activeAction, createdEntities.length, structures, t],
@@ -3379,7 +3499,14 @@ function WorkspaceShortcutBrowser() {
     [runtime],
   );
   const normalizedQuery = query.trim().toLocaleLowerCase();
-  const groups = ["general", "navigation", "workspace", "page", "calendar", "creation"] as const;
+  const groups = [
+    "general",
+    "navigation",
+    "workspace",
+    "page",
+    "calendar",
+    "creation",
+  ] as const;
 
   function handleOpenChange(open: boolean) {
     setShortcutBrowserOpen(open);
@@ -3417,10 +3544,14 @@ function WorkspaceShortcutBrowser() {
               <CommandGroup key={group} heading={t(`commands.groups.${group}`)}>
                 {entries.map((entry) => (
                   <CommandItem key={entry.id} value={entry.label}>
-                    <span className="min-w-0 flex-1 truncate">{entry.label}</span>
+                    <span className="min-w-0 flex-1 truncate">
+                      {entry.label}
+                    </span>
                     <CommandShortcut>
                       {entry.shortcuts
-                        .map((shortcut) => formatShortcutChord(shortcut, platform))
+                        .map((shortcut) =>
+                          formatShortcutChord(shortcut, platform),
+                        )
                         .join(" / ")}
                     </CommandShortcut>
                   </CommandItem>
@@ -3660,7 +3791,11 @@ function WorkspaceMainHeader() {
                   </AppHeaderAction>
                 }
               />
-              <DropdownMenuContent side="bottom" align="end" className="w-64 p-1.5">
+              <DropdownMenuContent
+                side="bottom"
+                align="end"
+                className="w-64 p-1.5"
+              >
                 {specialItems.map((item) => {
                   const Icon = item.icon;
                   return (

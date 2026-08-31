@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION } from "../src/editor/document.ts";
 import {
   parseWorkspaceObjectSnapshot,
   serializeWorkspaceObjectState,
@@ -52,7 +53,7 @@ test("version 2 migrates to the current version while preserving entity and bloc
     }),
   );
 
-  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 5);
+  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 6);
   assert.equal(parsed.ok, true);
   assert.equal(parsed.state.activeEntityId, "legacy-book-7");
   assert.equal(parsed.state.nextId, 41);
@@ -60,7 +61,10 @@ test("version 2 migrates to the current version while preserving entity and bloc
   assert.equal(parsed.state.entities[0].id, "legacy-book-7");
   assert.equal(parsed.state.entities[0].objectTypeId, "book");
   assert.equal(parsed.state.entities[0].description, "Specialized payload");
-  assert.equal(parsed.state.entities[0].body.schemaVersion, 2);
+  assert.equal(
+    parsed.state.entities[0].body.schemaVersion,
+    BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+  );
   assert.equal(
     parsed.state.entities[0].body.doc.content[0].attrs.id,
     "block:legacy-book-7:0",

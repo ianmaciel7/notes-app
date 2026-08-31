@@ -96,6 +96,14 @@ type AppSidebarPinnedEntity = {
   tone: AppSidebarTone;
 };
 
+type AppSidebarTrashItem = {
+  id: string;
+  label: string;
+  purgeAfter: string;
+  trashedAt: string;
+  typeLabel: string;
+};
+
 type AppSidebarObjectType = {
   id: string;
   label: string;
@@ -1378,66 +1386,245 @@ function AppSidebarFooter() {
 
 function AppSidebarTrashRow({
   active,
+  items = [],
+  onEmptyTrash,
   onOpenChange,
+  onPurgeTrashItem,
+  onRestoreTrashItem,
 }: {
   active: boolean;
+  items?: readonly AppSidebarTrashItem[];
+  onEmptyTrash?: () => void;
   onOpenChange: (open: boolean) => void;
+  onPurgeTrashItem?: (id: string) => void;
+  onRestoreTrashItem?: (id: string) => void;
 }) {
   const t = useTranslations("workspace");
   const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const [confirmation, setConfirmation] = React.useState<
+    { kind: "empty" } | { id: string; kind: "purge"; label: string } | null
+  >(null);
+  const headingRef = React.useRef<HTMLHeadingElement>(null);
+  const itemRefs = React.useRef(new Map<string, HTMLButtonElement>());
+  const dateFormatter = React.useMemo(
+    () => new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }),
+    [],
+  );
+  const visibleItems = React.useMemo(() => {
+    const normalized = query.trim().toLocaleLowerCase();
+    return normalized
+      ? items.filter((item) =>
+          [item.label, item.typeLabel]
+            .join(" ")
+            .toLocaleLowerCase()
+            .includes(normalized),
+        )
+      : items;
+  }, [items, query]);
+
+  function focusAfterMutation(removedId?: string) {
+    window.requestAnimationFrame(() => {
+      const nextItem = visibleItems.find((item) => item.id !== removedId);
+      const target = nextItem ? itemRefs.current.get(nextItem.id) : null;
+      (target ?? headingRef.current)?.focus();
+    });
+  }
+
+  function formatDate(value: string) {
+    const date = new Date(value);
+    return Number.isFinite(date.valueOf())
+      ? dateFormatter.format(date)
+      : value.slice(0, 10);
+  }
+
+  function restoreItem(id: string) {
+    onRestoreTrashItem?.(id);
+    focusAfterMutation(id);
+  }
+
+  function purgeItem(id: string) {
+    onPurgeTrashItem?.(id);
+    setConfirmation(null);
+    focusAfterMutation(id);
+  }
+
+  function emptyTrash() {
+    onEmptyTrash?.();
+    setConfirmation(null);
+    focusAfterMutation();
+  }
 
   return (
-    <Popover
-      open={open}
-      onOpenChange={(value) => {
-        setOpen(value);
-        if (value) onOpenChange(true);
-      }}
-    >
-      <PopoverTrigger
-        data-slot="app-sidebar-utility-row"
-        className={cn(
-          utilityRowClass,
-          active &&
-            "bg-sidebar-accent text-sidebar-accent-foreground brightness-[0.965]",
-        )}
+    <>
+      <Popover
+        open={open}
+        onOpenChange={(value) => {
+          setOpen(value);
+          if (value) onOpenChange(true);
+        }}
       >
-        <span className="flex w-full min-w-0 items-center">
-          <AppSidebarSourceIcon name="trash" className="mr-1.5 size-4" />
-          <span className="min-w-0 truncate">
-            {t("sidebarUtilities.trash")}
-          </span>
-        </span>
-      </PopoverTrigger>
-
-      <PopoverContent
-        data-slot="app-sidebar-trash-surface"
-        side="right"
-        align="start"
-        sideOffset={8}
-        className="w-72 gap-2 p-2"
-      >
-        <PopoverHeader>
-          <PopoverTitle>{t("sidebarUtilities.trash")}</PopoverTitle>
-          <PopoverDescription>
-            {t("sidebarUtilities.trashDescription")}
-          </PopoverDescription>
-        </PopoverHeader>
-        <Input
-          className="h-8"
-          placeholder={t("sidebarUtilities.searchTrash")}
-        />
-        <Button
-          type="button"
-          variant="destructive"
-          size="sm"
-          disabled
-          className="w-full"
+        <PopoverTrigger
+          data-slot="app-sidebar-utility-row"
+          className={cn(
+            utilityRowClass,
+            active &&
+              "bg-sidebar-accent text-sidebar-accent-foreground brightness-[0.965]",
+          )}
         >
-          {t("sidebarUtilities.emptyTrash")}
-        </Button>
-      </PopoverContent>
-    </Popover>
+          <span className="flex w-full min-w-0 items-center">
+            <AppSidebarSourceIcon name="trash" className="mr-1.5 size-4" />
+            <span className="min-w-0 truncate">
+              {t("sidebarUtilities.trash")}
+            </span>
+          </span>
+        </PopoverTrigger>
+
+        <PopoverContent
+          data-slot="app-sidebar-trash-surface"
+          side="right"
+          align="start"
+          sideOffset={8}
+          className="w-80 gap-2 p-2"
+        >
+          <PopoverHeader>
+            <PopoverTitle ref={headingRef} tabIndex={-1}>
+              {t("sidebarUtilities.trash")}
+            </PopoverTitle>
+            <PopoverDescription>
+              {t("sidebarUtilities.trashDescription")}
+            </PopoverDescription>
+          </PopoverHeader>
+          <Input
+            className="h-8"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t("sidebarUtilities.searchTrash")}
+          />
+          <div
+            data-slot="app-sidebar-trash-list"
+            className="max-h-72 overflow-y-auto rounded-md border bg-background"
+          >
+            {visibleItems.length === 0 ? (
+              <p className="px-3 py-4 text-center text-xs text-muted-foreground">
+                {items.length === 0
+                  ? t("sidebarUtilities.trashEmpty")
+                  : t("sidebarUtilities.trashNoResults")}
+              </p>
+            ) : (
+              visibleItems.map((item) => (
+                <article
+                  key={item.id}
+                  data-slot="app-sidebar-trash-item"
+                  className="border-b p-2 last:border-b-0"
+                >
+                  <button
+                    type="button"
+                    ref={(node) => {
+                      if (node) itemRefs.current.set(item.id, node);
+                      else itemRefs.current.delete(item.id);
+                    }}
+                    className="block w-full rounded-sm text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    onClick={() => restoreItem(item.id)}
+                  >
+                    <span className="block truncate text-sm font-medium">
+                      {item.label}
+                    </span>
+                    <span className="block truncate text-xs text-muted-foreground">
+                      {t("sidebarUtilities.trashItemMeta", {
+                        purgeDate: formatDate(item.purgeAfter),
+                        trashedDate: formatDate(item.trashedAt),
+                        type: item.typeLabel,
+                      })}
+                    </span>
+                  </button>
+                  <div className="mt-2 flex items-center gap-2">
+                    <Button
+                      type="button"
+                      size="xs"
+                      variant="secondary"
+                      onClick={() => restoreItem(item.id)}
+                    >
+                      {t("sidebarUtilities.restoreTrashItem")}
+                    </Button>
+                    <Button
+                      type="button"
+                      size="xs"
+                      variant="destructive"
+                      onClick={() =>
+                        setConfirmation({
+                          id: item.id,
+                          kind: "purge",
+                          label: item.label,
+                        })
+                      }
+                    >
+                      {t("sidebarUtilities.deleteForever")}
+                    </Button>
+                  </div>
+                </article>
+              ))
+            )}
+          </div>
+          <Button
+            type="button"
+            variant="destructive"
+            size="sm"
+            disabled={items.length === 0}
+            className="w-full"
+            onClick={() => setConfirmation({ kind: "empty" })}
+          >
+            {t("sidebarUtilities.emptyTrash")}
+          </Button>
+        </PopoverContent>
+      </Popover>
+
+      <Dialog
+        open={confirmation !== null}
+        onOpenChange={(value) => {
+          if (!value) setConfirmation(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {confirmation?.kind === "empty"
+                ? t("sidebarUtilities.emptyTrashConfirmTitle")
+                : t("sidebarUtilities.deleteForeverConfirmTitle")}
+            </DialogTitle>
+            <DialogDescription>
+              {confirmation?.kind === "empty"
+                ? t("sidebarUtilities.emptyTrashConfirmDescription")
+                : t("sidebarUtilities.deleteForeverConfirmDescription", {
+                    title: confirmation?.label ?? "",
+                  })}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setConfirmation(null)}
+            >
+              {t("sidebarUtilities.cancel")}
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => {
+                if (confirmation?.kind === "empty") {
+                  emptyTrash();
+                } else if (confirmation) {
+                  purgeItem(confirmation.id);
+                }
+              }}
+            >
+              {t("sidebarUtilities.confirmIrreversible")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
@@ -1473,6 +1660,10 @@ type AppSidebarOverviewProps = {
   onCustomSectionsChange?: React.Dispatch<
     React.SetStateAction<AppSidebarCustomSection[]>
   >;
+  trashItems?: readonly AppSidebarTrashItem[];
+  onEmptyTrash?: () => void;
+  onPurgeTrashItem?: (id: string) => void;
+  onRestoreTrashItem?: (id: string) => void;
 };
 
 function AppSidebarCollectionMenu({
@@ -1593,6 +1784,10 @@ function AppSidebarOverview({
   onOpenPinnedInSidePanel,
   onCustomSectionsChange,
   onCollectionAction,
+  onEmptyTrash,
+  onPurgeTrashItem,
+  onRestoreTrashItem,
+  trashItems = [],
 }: AppSidebarOverviewProps = {}) {
   const t = useTranslations("workspace");
   const [internalActiveId, setInternalActiveId] = React.useState<string | null>(
@@ -1834,7 +2029,11 @@ function AppSidebarOverview({
             <div className="flex flex-col px-2 pr-0.5">
               <AppSidebarTrashRow
                 active={activeId === "trash"}
+                items={trashItems}
+                onEmptyTrash={onEmptyTrash}
                 onOpenChange={() => setActiveId("trash")}
+                onPurgeTrashItem={onPurgeTrashItem}
+                onRestoreTrashItem={onRestoreTrashItem}
               />
             </div>
 
@@ -1856,7 +2055,6 @@ export {
   type AppSidebarCustomSection,
   AppSidebarFooter,
   AppSidebarHelpSection,
-  AppSidebarTrashRow,
   type AppSidebarObjectType,
   AppSidebarObjectTypeRow,
   AppSidebarOverview,
@@ -1868,6 +2066,8 @@ export {
   AppSidebarSectionMenu,
   type AppSidebarSortMode,
   type AppSidebarTone,
+  type AppSidebarTrashItem,
+  AppSidebarTrashRow,
   AppSidebarTypeLabel,
   AppSidebarUtilityRow,
 };

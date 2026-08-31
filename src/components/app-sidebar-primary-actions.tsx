@@ -55,7 +55,10 @@ import {
   createCollectionId,
   type WorkspaceCollectionRecord,
 } from "@/lib/workspace-domain-identities";
-import { formatShortcutChord, type ShortcutPlatform } from "@/lib/workspace-shortcuts";
+import {
+  formatShortcutChord,
+  type ShortcutPlatform,
+} from "@/lib/workspace-shortcuts";
 
 type AppSidebarPrimaryActionId =
   | "new"
@@ -415,7 +418,13 @@ function useSidebarPrimaryCommandHints() {
     [t],
   );
   const commands = React.useMemo(
-    () => new Map(projectWorkspaceCommands(runtime).map((command) => [command.id, command])),
+    () =>
+      new Map(
+        projectWorkspaceCommands(runtime).map((command) => [
+          command.id,
+          command,
+        ]),
+      ),
     [runtime],
   );
 
@@ -648,6 +657,10 @@ function WorkspaceSidebar() {
     openInSidePanel,
     createWorkspaceEntity,
     showMessage,
+    trashItems,
+    emptyTrash,
+    purgeTrashItem,
+    restoreTrashItem,
   } = useWorkspace();
   const [hiddenCollectionIds, setHiddenCollectionIds] = React.useState<
     Set<string>
@@ -865,10 +878,14 @@ function WorkspaceSidebar() {
             objectTypes={objectTypes}
             objectTypeCollections={visibleObjectTypeCollections}
             customSections={customSections}
+            trashItems={trashItems}
             onCreateObjectTypeFromPreset={createWorkspaceStructureFromPreset}
             onCreateObjectType={createWorkspaceStructure}
             onUpdateObjectType={updateWorkspaceStructure}
             onDeleteObjectType={deleteWorkspaceStructure}
+            onEmptyTrash={emptyTrash}
+            onPurgeTrashItem={purgeTrashItem}
+            onRestoreTrashItem={restoreTrashItem}
             onPinnedEntitiesChange={setPinnedEntities}
             onOpenPinnedInSidePanel={(entity) => {
               openInSidePanel({

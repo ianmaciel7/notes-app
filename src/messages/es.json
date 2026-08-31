@@ -810,10 +810,24 @@
       "whatsNew": "Novedades"
     },
     "sidebarUtilities": {
+      "cancel": "Cancelar",
+      "confirmIrreversible": "Eliminar permanentemente",
+      "deleteForever": "Eliminar para siempre",
+      "deleteForeverConfirmDescription": "\"{title}\" se eliminará permanentemente. Esta acción es irreversible.",
+      "deleteForeverConfirmTitle": "¿Eliminar para siempre?",
+      "deleteForeverToast": "Elemento eliminado permanentemente.",
       "emptyTrash": "Vaciar papelera",
+      "emptyTrashConfirmDescription": "Todos los elementos de la Papelera se eliminarán permanentemente. Esta acción es irreversible.",
+      "emptyTrashConfirmTitle": "¿Vaciar papelera?",
+      "emptyTrashToast": "Papelera vaciada.",
+      "restoreToast": "Elemento restaurado.",
+      "restoreTrashItem": "Restaurar",
       "searchTrash": "Buscar en la papelera",
       "trash": "Papelera",
-      "trashDescription": "Los objetos locales eliminados aparecen aquí antes de su eliminación permanente."
+      "trashDescription": "Los objetos locales eliminados aparecen aquí antes de su eliminación permanente.",
+      "trashEmpty": "La Papelera está vacía.",
+      "trashItemMeta": "{type} · eliminado el {trashedDate} · se purga el {purgeDate}",
+      "trashNoResults": "Ningún elemento eliminado coincide con esta búsqueda."
     }
   }
 }

@@ -810,10 +810,24 @@
       "whatsNew": "Novidades"
     },
     "sidebarUtilities": {
+      "cancel": "Cancelar",
+      "confirmIrreversible": "Excluir permanentemente",
+      "deleteForever": "Excluir para sempre",
+      "deleteForeverConfirmDescription": "\"{title}\" será excluído permanentemente. Esta ação é irreversível.",
+      "deleteForeverConfirmTitle": "Excluir para sempre?",
+      "deleteForeverToast": "Item excluído permanentemente.",
       "emptyTrash": "Esvaziar lixeira",
+      "emptyTrashConfirmDescription": "Todos os itens da Lixeira serão excluídos permanentemente. Esta ação é irreversível.",
+      "emptyTrashConfirmTitle": "Esvaziar lixeira?",
+      "emptyTrashToast": "Lixeira esvaziada.",
+      "restoreToast": "Item restaurado.",
+      "restoreTrashItem": "Restaurar",
       "searchTrash": "Buscar na lixeira",
       "trash": "Lixeira",
-      "trashDescription": "Objetos locais excluídos aparecem aqui antes da remoção permanente."
+      "trashDescription": "Objetos locais excluídos aparecem aqui antes da remoção permanente.",
+      "trashEmpty": "A Lixeira está vazia.",
+      "trashItemMeta": "{type} · excluído em {trashedDate} · remove em {purgeDate}",
+      "trashNoResults": "Nenhum item excluído corresponde à busca."
     }
   }
 }

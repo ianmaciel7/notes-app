@@ -21,5 +21,5 @@
 ## 4. UI and Acceptance
 
 - [x] 4.1 Add status customization, recurrence editor, occurrence log, statistics, and truthful empty/error states.
-- [ ] 4.2 Verify keyboard, accessibility, responsive, offline, sync, persistence, and migration behavior.
-- [ ] 4.3 Run repository verification and `openspec validate align-task-management-with-current-capacities --strict`.
+- [x] 4.2 Verify keyboard, accessibility, responsive, offline, sync, persistence, and migration behavior.
+- [x] 4.3 Run repository verification and `openspec validate align-task-management-with-current-capacities --strict`.

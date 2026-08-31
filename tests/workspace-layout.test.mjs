@@ -46,6 +46,6 @@ test("workspace layout exports the current reference shell geometry", () => {
 });
 
 test("workspace persistence uses the runtime Structure schema version", () => {
-  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 5);
+  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 6);
   assert.equal(WORKSPACE_OBJECT_STORAGE_KEY, "notes-app:workspace-objects:v1");
 });

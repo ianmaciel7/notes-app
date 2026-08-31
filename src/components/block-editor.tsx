@@ -180,23 +180,27 @@ function BlockEditor({
     const parsedLabels = JSON.parse(slashLabelsKey) as Partial<
       BlockEditorLabels["slashMenu"]
     >;
+    const fallbackLabels = {
+      alphabeticalList: t("slashMenu.alphabeticalList"),
+      columns: t("slashMenu.columns"),
+      emojiText: t("slashMenu.emojiText"),
+      group: t("slashMenu.group"),
+      highlight: t("slashMenu.highlight"),
+      math: t("slashMenu.math"),
+      mermaid: t("slashMenu.mermaid"),
+      objectEmbed: t("slashMenu.objectEmbed"),
+      objectInline: t("slashMenu.objectInline"),
+      romanList: t("slashMenu.romanList"),
+      smallText: t("slashMenu.smallText"),
+      tableBlock: t("slashMenu.tableBlock"),
+      toggle: t("slashMenu.toggle"),
+    } satisfies Partial<BlockEditorLabels["slashMenu"]>;
 
     return {
-      ...parsedLabels,
-      smallText: parsedLabels.smallText || t("slashMenu.smallText"),
-      alphabeticalList:
-        parsedLabels.alphabeticalList || t("slashMenu.alphabeticalList"),
-      romanList: parsedLabels.romanList || t("slashMenu.romanList"),
-      tableBlock: parsedLabels.tableBlock || t("slashMenu.tableBlock"),
-      columns: parsedLabels.columns || t("slashMenu.columns"),
-      emojiText: parsedLabels.emojiText || t("slashMenu.emojiText"),
-      group: parsedLabels.group || t("slashMenu.group"),
-      highlight: parsedLabels.highlight || t("slashMenu.highlight"),
-      math: parsedLabels.math || t("slashMenu.math"),
-      mermaid: parsedLabels.mermaid || t("slashMenu.mermaid"),
-      objectEmbed: parsedLabels.objectEmbed || t("slashMenu.objectEmbed"),
-      objectInline: parsedLabels.objectInline || t("slashMenu.objectInline"),
-      toggle: parsedLabels.toggle || t("slashMenu.toggle"),
+      ...fallbackLabels,
+      ...Object.fromEntries(
+        Object.entries(parsedLabels).filter(([, label]) => Boolean(label)),
+      ),
     } as BlockEditorLabels["slashMenu"];
   }, [slashLabelsKey, t]);
   const handleCreatePageRequest = React.useCallback((title: string) => {
