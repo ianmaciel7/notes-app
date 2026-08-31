@@ -1255,8 +1255,8 @@
     "semantic_hash": ""
   },
   "src/components/workspace-controller.tsx": {
-    "mtime": 1788170395.5331886,
-    "ast_hash": "8631cda8779011f2b1f7b309b7cc937d",
+    "mtime": 1788170428.1352732,
+    "ast_hash": "687087ce1fccb11434a72235eb0e4645",
     "semantic_hash": ""
   },
   ".agents/rules/workspace-ui-parity.md": {
@@ -1300,8 +1300,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-objects.ts": {
-    "mtime": 1788170290.8828917,
-    "ast_hash": "90827e206ef6a9428d64e675952b9296",
+    "mtime": 1788170442.8742075,
+    "ast_hash": "0ce62376741668a6b8562be335bfc9d2",
     "semantic_hash": ""
   },
   "tests/workspace-objects.test.mjs": {
@@ -1665,8 +1665,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-property-values.ts": {
-    "mtime": 1788170290.8698845,
-    "ast_hash": "fb46c2e3ebcd25745c896561a2a55d7a",
+    "mtime": 1788170442.8208263,
+    "ast_hash": "1c895c9b9d66fd67da5a34796a188d64",
     "semantic_hash": ""
   },
   "src/lib/workspace-sidebar-pinned-storage.ts": {
@@ -2390,8 +2390,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-offline-sync.ts": {
-    "mtime": 1788170290.866881,
-    "ast_hash": "80f2bdf5c62232953ca6e001ba272886",
+    "mtime": 1788170442.8002408,
+    "ast_hash": "7bc8ec721241e92082560d3aa088b3d1",
     "semantic_hash": ""
   },
   "tests/e2e/workspace-localization.spec.ts": {
@@ -3455,8 +3455,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-related-content.ts": {
-    "mtime": 1788170387.8070037,
-    "ast_hash": "b02a27f10fde62d644e2343a71114ec3",
+    "mtime": 1788170415.9233332,
+    "ast_hash": "4e33dd7326509b61164ef82f5ceb7a14",
     "semantic_hash": ""
   },
   "src/lib/workspace-shortcuts.ts": {
@@ -3525,8 +3525,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-trash-lifecycle.test.mjs": {
-    "mtime": 1788170290.8616643,
-    "ast_hash": "0dabc90ccaf18ec88df9c3b2e680e7b1",
+    "mtime": 1788170442.7822452,
+    "ast_hash": "f4306cbc995bc2f5762106630e592fb0",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-28-initial-matrix/action-matrix.md": {

@@ -90,13 +90,74 @@
       "sort": "Sort"
     },
     "commands": {
+      "calendar": {
+        "day": {
+          "description": "Switch the calendar to day view.",
+          "label": "Calendar: day"
+        },
+        "month": {
+          "description": "Switch the calendar to month view.",
+          "label": "Calendar: month"
+        },
+        "next": {
+          "description": "Move the calendar forward.",
+          "label": "Calendar: next"
+        },
+        "previous": {
+          "description": "Move the calendar back.",
+          "label": "Calendar: previous"
+        },
+        "threeDay": {
+          "description": "Switch the calendar to 3-day view.",
+          "label": "Calendar: 3 days"
+        },
+        "week": {
+          "description": "Switch the calendar to week view.",
+          "label": "Calendar: week"
+        }
+      },
+      "closeCurrentTab": {
+        "description": "Close the active tab when it is not pinned.",
+        "label": "Close current tab"
+      },
       "createObject": {
         "description": "Create a new {label}.",
         "label": "New {label}"
       },
+      "createTask": {
+        "description": "Create a new task.",
+        "label": "New task"
+      },
+      "extendedSearch": {
+        "description": "Search local content with more room for results.",
+        "empty": "No matching local content",
+        "placeholder": "Search all local content",
+        "title": "Extended search"
+      },
+      "findInPage": {
+        "currentPage": "Current page",
+        "description": "Find text inside the active object.",
+        "empty": "No matches in the active object",
+        "placeholder": "Find in current page",
+        "title": "Find in page"
+      },
       "groups": {
+        "calendar": "Calendar",
         "commands": "Commands",
+        "creation": "Creation",
+        "general": "General",
+        "navigation": "Navigation",
+        "page": "Page",
+        "workspace": "Workspace",
         "results": "Results"
+      },
+      "navigateBack": {
+        "description": "Navigate back in the workspace.",
+        "label": "Go back"
+      },
+      "navigateForward": {
+        "description": "Navigate forward in the workspace.",
+        "label": "Go forward"
       },
       "navigateHome": {
         "description": "Open the main workspace view.",
@@ -110,10 +171,34 @@
         "description": "Open Explore in the main workspace.",
         "label": "Open Explore"
       },
+      "openExtendedSearch": {
+        "alias": "extended search",
+        "description": "Open the extended workspace search.",
+        "label": "Open extended search"
+      },
+      "openFindInPage": {
+        "alias": "find page",
+        "description": "Find text in the active page.",
+        "label": "Find in page"
+      },
+      "openNewContent": {
+        "alias": "new content",
+        "description": "Start creating a new page.",
+        "label": "New content"
+      },
       "openPalette": {
         "alias": "command palette",
         "description": "Search commands and local content.",
         "label": "Open command palette"
+      },
+      "openSettings": {
+        "description": "Open workspace settings.",
+        "label": "Open settings"
+      },
+      "openShortcuts": {
+        "alias": "keyboard shortcuts",
+        "description": "Open the searchable shortcuts browser.",
+        "label": "Open shortcuts"
       },
       "palette": {
         "description": "Search for a command, object, or block.",
@@ -126,9 +211,31 @@
         "description": "Search local workspace content.",
         "label": "Search workspace"
       },
+      "shortcuts": {
+        "description": "Browse commands and their currently available shortcuts.",
+        "empty": "No matching shortcuts",
+        "placeholder": "Search shortcuts",
+        "title": "Keyboard shortcuts"
+      },
+      "toggleFocusMode": {
+        "description": "Enter or leave focus mode.",
+        "label": "Toggle focus mode"
+      },
       "toggleSidebar": {
         "description": "Show or hide the left sidebar.",
         "label": "Toggle left sidebar"
+      },
+      "toggleSidePanel": {
+        "description": "Show or hide the contextual side panel.",
+        "label": "Toggle side panel"
+      },
+      "toggleTabsBar": {
+        "description": "Show or hide the tabs bar when that surface is available.",
+        "label": "Toggle tabs bar"
+      },
+      "toggleTheme": {
+        "description": "Switch between light and dark appearance.",
+        "label": "Toggle dark mode"
       }
     },
     "sidebarCollections": {

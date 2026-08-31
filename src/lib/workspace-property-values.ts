@@ -7,13 +7,13 @@ import {
   normalizeDatePropertyValue,
 } from "./workspace-dates-calendar.ts";
 import {
-  validateNumberPresentation,
   type DomainResult,
   type NumberPresentation,
   type PropertyDefinition,
   type PropertyValueType,
   type StructureDomainError,
   type TableCellNumberPresentation,
+  validateNumberPresentation,
   type WorkspaceStructure,
 } from "./workspace-object-types.ts";
 import type { WorkspaceEntity } from "./workspace-objects.ts";

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { blockEditorDocumentFromPlainText } from "../src/editor/document.ts";
+import { garbageCollectMediaAssets } from "../src/lib/workspace-media-storage.ts";
 import { createWorkspaceObjectLinkIndex } from "../src/lib/workspace-object-links.ts";
 import {
   parseWorkspaceObjectSnapshot,
@@ -10,15 +11,10 @@ import {
 import {
   createInitialWorkspaceObjectState,
   selectActiveEntities,
-  selectTrashRecords,
   selectTrashedEntities,
+  selectTrashRecords,
   workspaceObjectReducer,
 } from "../src/lib/workspace-objects.ts";
-import {
-  buildWorkspaceSearchIndex,
-  evaluateQuery,
-} from "../src/lib/workspace-query-engine.ts";
-import { garbageCollectMediaAssets } from "../src/lib/workspace-media-storage.ts";
 import {
   createEmptyWorkspaceSyncState,
   createMemoryWorkspaceSyncServer,
@@ -26,6 +22,10 @@ import {
   enqueueWorkspaceOperations,
   pushWorkspaceOperations,
 } from "../src/lib/workspace-offline-sync.ts";
+import {
+  buildWorkspaceSearchIndex,
+  evaluateQuery,
+} from "../src/lib/workspace-query-engine.ts";
 
 function reduce(state, ...actions) {
   return actions.reduce(workspaceObjectReducer, state);

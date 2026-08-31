@@ -753,22 +753,6 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : "Sync operation failed.";
 }
 
-export {
-  applyRemoteChanges,
-  createEmptyWorkspaceSyncState,
-  createMemoryWorkspaceSyncServer,
-  createSyncDiagnostics,
-  createWorkspaceOperation,
-  enqueueWorkspaceOperations,
-  evaluateOfflineCapability,
-  offlineCapabilityMatrix,
-  pullWorkspaceChanges,
-  pushWorkspaceOperations,
-  resolveWorkspaceConflict,
-  setMediaSyncState,
-  synchronizeWorkspace,
-};
-
 export type {
   MediaSyncStatus,
   OfflineCapability,
@@ -789,4 +773,19 @@ export type {
   WorkspaceSyncServer,
   WorkspaceSyncState,
   WorkspaceTombstone,
+};
+export {
+  applyRemoteChanges,
+  createEmptyWorkspaceSyncState,
+  createMemoryWorkspaceSyncServer,
+  createSyncDiagnostics,
+  createWorkspaceOperation,
+  enqueueWorkspaceOperations,
+  evaluateOfflineCapability,
+  offlineCapabilityMatrix,
+  pullWorkspaceChanges,
+  pushWorkspaceOperations,
+  resolveWorkspaceConflict,
+  setMediaSyncState,
+  synchronizeWorkspace,
 };

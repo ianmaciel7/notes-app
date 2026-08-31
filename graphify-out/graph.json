@@ -1233,10 +1233,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentcache",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentcache",
-      "id": "src_lib_workspace_related_content_relatedcontentcache"
+      "norm_label": "relatedcontentcache"
     },
     {
       "label": "RelatedContentCacheEntry",
@@ -1246,10 +1246,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentcacheentry",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentcacheentry",
-      "id": "src_lib_workspace_related_content_relatedcontentcacheentry"
+      "norm_label": "relatedcontentcacheentry"
     },
     {
       "label": "RelatedContentCacheKeyInput",
@@ -1259,10 +1259,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentcachekeyinput",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentcachekeyinput",
-      "id": "src_lib_workspace_related_content_relatedcontentcachekeyinput"
+      "norm_label": "relatedcontentcachekeyinput"
     },
     {
       "label": "RelatedContentMutation",
@@ -1272,10 +1272,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentmutation",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentmutation",
-      "id": "src_lib_workspace_related_content_relatedcontentmutation"
+      "norm_label": "relatedcontentmutation"
     },
     {
       "label": "RelatedContentProvider",
@@ -1285,10 +1285,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentprovider",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentprovider",
-      "id": "src_lib_workspace_related_content_relatedcontentprovider"
+      "norm_label": "relatedcontentprovider"
     },
     {
       "label": "RelatedContentProviderInput",
@@ -1298,10 +1298,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentproviderinput",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentproviderinput",
-      "id": "src_lib_workspace_related_content_relatedcontentproviderinput"
+      "norm_label": "relatedcontentproviderinput"
     },
     {
       "label": "RelatedContentProviderResult",
@@ -1311,10 +1311,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentproviderresult",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentproviderresult",
-      "id": "src_lib_workspace_related_content_relatedcontentproviderresult"
+      "norm_label": "relatedcontentproviderresult"
     },
     {
       "label": "RelatedContentReason",
@@ -1324,10 +1324,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentreason",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentreason",
-      "id": "src_lib_workspace_related_content_relatedcontentreason"
+      "norm_label": "relatedcontentreason"
     },
     {
       "label": "RelatedContentResult",
@@ -1337,10 +1337,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentresult",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentresult",
-      "id": "src_lib_workspace_related_content_relatedcontentresult"
+      "norm_label": "relatedcontentresult"
     },
     {
       "label": "RelatedContentState",
@@ -1350,10 +1350,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentstate",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentstate",
-      "id": "src_lib_workspace_related_content_relatedcontentstate"
+      "norm_label": "relatedcontentstate"
     },
     {
       "label": "WorkspaceCollectionRecord",
@@ -3690,10 +3690,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_appsidebarprimarynavigationaction",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "appsidebarprimarynavigationaction",
-      "id": "src_components_workspace_controller_appsidebarprimarynavigationaction"
+      "norm_label": "appsidebarprimarynavigationaction"
     },
     {
       "label": "ParsedCollectionPinnedId",
@@ -3703,10 +3703,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_parsedcollectionpinnedid",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "parsedcollectionpinnedid",
-      "id": "src_components_workspace_controller_parsedcollectionpinnedid"
+      "norm_label": "parsedcollectionpinnedid"
     },
     {
       "label": "SerializedWorkspaceTab",
@@ -3716,10 +3716,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_serializedworkspacetab",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "serializedworkspacetab",
-      "id": "src_components_workspace_controller_serializedworkspacetab"
+      "norm_label": "serializedworkspacetab"
     },
     {
       "label": "WorkspaceCollectionRecords",
@@ -3729,10 +3729,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacecollectionrecords",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspacecollectionrecords",
-      "id": "src_components_workspace_controller_workspacecollectionrecords"
+      "norm_label": "workspacecollectionrecords"
     },
     {
       "label": "WorkspaceContextValue",
@@ -3742,10 +3742,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacecontextvalue",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspacecontextvalue",
-      "id": "src_components_workspace_controller_workspacecontextvalue"
+      "norm_label": "workspacecontextvalue"
     },
     {
       "label": "WorkspaceSpacesStorageState",
@@ -3755,10 +3755,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacespacesstoragestate",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspacespacesstoragestate",
-      "id": "src_components_workspace_controller_workspacespacesstoragestate"
+      "norm_label": "workspacespacesstoragestate"
     },
     {
       "label": "WorkspaceTabGroupState",
@@ -3768,10 +3768,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacetabgroupstate",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspacetabgroupstate",
-      "id": "src_components_workspace_controller_workspacetabgroupstate"
+      "norm_label": "workspacetabgroupstate"
     },
     {
       "label": "WorkspaceTabState",
@@ -3781,10 +3781,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacetabstate",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspacetabstate",
-      "id": "src_components_workspace_controller_workspacetabstate"
+      "norm_label": "workspacetabstate"
     },
     {
       "label": "ObjectIconTone",
@@ -9020,10 +9020,10 @@
       "source_location": "L684",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_getmediastorageadapter",
       "community": 125,
       "community_name": "workspace-media-storage.ts",
-      "norm_label": "getmediastorageadapter()",
-      "id": "src_components_workspace_controller_getmediastorageadapter"
+      "norm_label": "getmediastorageadapter()"
     },
     {
       "label": "getMediaUrlRegistry()",
@@ -9032,10 +9032,10 @@
       "source_location": "L689",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_getmediaurlregistry",
       "community": 125,
       "community_name": "workspace-media-storage.ts",
-      "norm_label": "getmediaurlregistry()",
-      "id": "src_components_workspace_controller_getmediaurlregistry"
+      "norm_label": "getmediaurlregistry()"
     },
     {
       "label": "classifyMediaFamily()",
@@ -9653,25 +9653,25 @@
       "label": "entityCollections()",
       "file_type": "code",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L224",
+      "source_location": "L228",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_entitycollections",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "entitycollections()",
-      "id": "src_lib_workspace_related_content_entitycollections"
+      "norm_label": "entitycollections()"
     },
     {
       "label": "entityTags()",
       "file_type": "code",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L228",
+      "source_location": "L232",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_entitytags",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "entitytags()",
-      "id": "src_lib_workspace_related_content_entitytags"
+      "norm_label": "entitytags()"
     },
     {
       "label": "isDocumentLike()",
@@ -9680,10 +9680,10 @@
       "source_location": "L152",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_isdocumentlike",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "isdocumentlike()",
-      "id": "src_lib_workspace_related_content_isdocumentlike"
+      "norm_label": "isdocumentlike()"
     },
     {
       "label": "isRelatedContentEligible()",
@@ -9692,10 +9692,10 @@
       "source_location": "L158",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_isrelatedcontenteligible",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "isrelatedcontenteligible()",
-      "id": "src_lib_workspace_related_content_isrelatedcontenteligible"
+      "norm_label": "isrelatedcontenteligible()"
     },
     {
       "label": "isSameSpace()",
@@ -9704,10 +9704,10 @@
       "source_location": "L181",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_issamespace",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "issamespace()",
-      "id": "src_lib_workspace_related_content_issamespace"
+      "norm_label": "issamespace()"
     },
     {
       "label": "isTrashedEntity()",
@@ -9716,22 +9716,22 @@
       "source_location": "L168",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_istrashedentity",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "istrashedentity()",
-      "id": "src_lib_workspace_related_content_istrashedentity"
+      "norm_label": "istrashedentity()"
     },
     {
       "label": "lexicalScore()",
       "file_type": "code",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L232",
+      "source_location": "L236",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_lexicalscore",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "lexicalscore()",
-      "id": "src_lib_workspace_related_content_lexicalscore"
+      "norm_label": "lexicalscore()"
     },
     {
       "label": "normalizeText()",
@@ -9740,10 +9740,10 @@
       "source_location": "L186",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_normalizetext",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "normalizetext()",
-      "id": "src_lib_workspace_related_content_normalizetext"
+      "norm_label": "normalizetext()"
     },
     {
       "label": "readEntitySpaceId()",
@@ -9752,34 +9752,34 @@
       "source_location": "L162",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_readentityspaceid",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "readentityspaceid()",
-      "id": "src_lib_workspace_related_content_readentityspaceid"
+      "norm_label": "readentityspaceid()"
     },
     {
       "label": "readUpdatedAt()",
       "file_type": "code",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L243",
+      "source_location": "L247",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_readupdatedat",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "readupdatedat()",
-      "id": "src_lib_workspace_related_content_readupdatedat"
+      "norm_label": "readupdatedat()"
     },
     {
       "label": "recencyScore()",
       "file_type": "code",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L250",
+      "source_location": "L254",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_recencyscore",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "recencyscore()",
-      "id": "src_lib_workspace_related_content_recencyscore"
+      "norm_label": "recencyscore()"
     },
     {
       "label": ".get()",
@@ -9788,10 +9788,10 @@
       "source_location": "L131",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentcache_get",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": ".get()",
-      "id": "src_lib_workspace_related_content_relatedcontentcache_get"
+      "norm_label": ".get()"
     },
     {
       "label": ".invalidate()",
@@ -9800,10 +9800,10 @@
       "source_location": "L139",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentcache_invalidate",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": ".invalidate()",
-      "id": "src_lib_workspace_related_content_relatedcontentcache_invalidate"
+      "norm_label": ".invalidate()"
     },
     {
       "label": ".set()",
@@ -9812,10 +9812,10 @@
       "source_location": "L135",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentcache_set",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": ".set()",
-      "id": "src_lib_workspace_related_content_relatedcontentcache_set"
+      "norm_label": ".set()"
     },
     {
       "label": "relatedContentCacheKey()",
@@ -9824,34 +9824,34 @@
       "source_location": "L116",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_relatedcontentcachekey",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "relatedcontentcachekey()",
-      "id": "src_lib_workspace_related_content_relatedcontentcachekey"
+      "norm_label": "relatedcontentcachekey()"
     },
     {
       "label": "selectRelatedContent()",
       "file_type": "code",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L389",
+      "source_location": "L393",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_selectrelatedcontent",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "selectrelatedcontent()",
-      "id": "src_lib_workspace_related_content_selectrelatedcontent"
+      "norm_label": "selectrelatedcontent()"
     },
     {
       "label": "sharedCount()",
       "file_type": "code",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L215",
+      "source_location": "L219",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_sharedcount",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "sharedcount()",
-      "id": "src_lib_workspace_related_content_sharedcount"
+      "norm_label": "sharedcount()"
     },
     {
       "label": "textForEntity()",
@@ -9860,22 +9860,22 @@
       "source_location": "L195",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_textforentity",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "textforentity()",
-      "id": "src_lib_workspace_related_content_textforentity"
+      "norm_label": "textforentity()"
     },
     {
       "label": "validateRelatedContentResults()",
       "file_type": "code",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L258",
+      "source_location": "L262",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_validaterelatedcontentresults",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "validaterelatedcontentresults()",
-      "id": "src_lib_workspace_related_content_validaterelatedcontentresults"
+      "norm_label": "validaterelatedcontentresults()"
     },
     {
       "label": "baseInput()",
@@ -11132,22 +11132,22 @@
       "source_location": "L2865",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacecommandpalette",
       "community": 178,
       "community_name": "workspace-command-registry.ts",
-      "norm_label": "workspacecommandpalette()",
-      "id": "src_components_workspace_controller_workspacecommandpalette"
+      "norm_label": "workspacecommandpalette()"
     },
     {
       "label": "WorkspaceShortcutBrowser()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3218",
+      "source_location": "L3313",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspaceshortcutbrowser",
       "community": 178,
       "community_name": "workspace-command-registry.ts",
-      "norm_label": "workspaceshortcutbrowser()",
-      "id": "src_components_workspace_controller_workspaceshortcutbrowser"
+      "norm_label": "workspaceshortcutbrowser()"
     },
     {
       "label": "catalogGroupForCommand()",
@@ -13508,10 +13508,10 @@
       "source_location": "L382",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_createinitialsidetabs",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "createinitialsidetabs()",
-      "id": "src_components_workspace_controller_createinitialsidetabs"
+      "norm_label": "createinitialsidetabs()"
     },
     {
       "label": "createSpecialSideItems()",
@@ -13520,10 +13520,10 @@
       "source_location": "L435",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_createspecialsideitems",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "createspecialsideitems()",
-      "id": "src_components_workspace_controller_createspecialsideitems"
+      "norm_label": "createspecialsideitems()"
     },
     {
       "label": "createSpecialSideTabs()",
@@ -13532,46 +13532,46 @@
       "source_location": "L398",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_createspecialsidetabs",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "createspecialsidetabs()",
-      "id": "src_components_workspace_controller_createspecialsidetabs"
+      "norm_label": "createspecialsidetabs()"
     },
     {
       "label": "entityTextForFind()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3064",
+      "source_location": "L3159",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_entitytextforfind",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "entitytextforfind()",
-      "id": "src_components_workspace_controller_entitytextforfind"
+      "norm_label": "entitytextforfind()"
     },
     {
       "label": "MainTabSearchOverlay()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3611",
+      "source_location": "L3706",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_maintabsearchoverlay",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "maintabsearchoverlay()",
-      "id": "src_components_workspace_controller_maintabsearchoverlay"
+      "norm_label": "maintabsearchoverlay()"
     },
     {
       "label": "SidePanelSearchOverlay()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3816",
+      "source_location": "L3911",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_sidepanelsearchoverlay",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "sidepanelsearchoverlay()",
-      "id": "src_components_workspace_controller_sidepanelsearchoverlay"
+      "norm_label": "sidepanelsearchoverlay()"
     },
     {
       "label": "useWorkspace()",
@@ -13580,58 +13580,58 @@
       "source_location": "L1092",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_useworkspace",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "useworkspace()",
-      "id": "src_components_workspace_controller_useworkspace"
+      "norm_label": "useworkspace()"
     },
     {
       "label": "WorkspaceExtendedSearchDialog()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3074",
+      "source_location": "L3169",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspaceextendedsearchdialog",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "workspaceextendedsearchdialog()",
-      "id": "src_components_workspace_controller_workspaceextendedsearchdialog"
+      "norm_label": "workspaceextendedsearchdialog()"
     },
     {
       "label": "WorkspaceFindInPageDialog()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3160",
+      "source_location": "L3255",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacefindinpagedialog",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "workspacefindinpagedialog()",
-      "id": "src_components_workspace_controller_workspacefindinpagedialog"
+      "norm_label": "workspacefindinpagedialog()"
     },
     {
       "label": "WorkspaceMainHeader()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3476",
+      "source_location": "L3571",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacemainheader",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "workspacemainheader()",
-      "id": "src_components_workspace_controller_workspacemainheader"
+      "norm_label": "workspacemainheader()"
     },
     {
       "label": "WorkspaceSidePanelHeader()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3727",
+      "source_location": "L3822",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacesidepanelheader",
       "community": 203,
       "community_name": "useWorkspace",
-      "norm_label": "workspacesidepanelheader()",
-      "id": "src_components_workspace_controller_workspacesidepanelheader"
+      "norm_label": "workspacesidepanelheader()"
     },
     {
       "label": "ObjectPageHeader()",
@@ -18896,10 +18896,10 @@
       "source_location": "L917",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_arecollectionrecordmapsequivalent",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "arecollectionrecordmapsequivalent()",
-      "id": "src_components_workspace_controller_arecollectionrecordmapsequivalent"
+      "norm_label": "arecollectionrecordmapsequivalent()"
     },
     {
       "label": "arePinnedEntitySetsEquivalent()",
@@ -18908,10 +18908,10 @@
       "source_location": "L872",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_arepinnedentitysetsequivalent",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "arepinnedentitysetsequivalent()",
-      "id": "src_components_workspace_controller_arepinnedentitysetsequivalent"
+      "norm_label": "arepinnedentitysetsequivalent()"
     },
     {
       "label": "areStringArrayMapsEquivalent()",
@@ -18920,10 +18920,10 @@
       "source_location": "L936",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_arestringarraymapsequivalent",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "arestringarraymapsequivalent()",
-      "id": "src_components_workspace_controller_arestringarraymapsequivalent"
+      "norm_label": "arestringarraymapsequivalent()"
     },
     {
       "label": "createInitialMainTabs()",
@@ -18932,10 +18932,10 @@
       "source_location": "L348",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_createinitialmaintabs",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "createinitialmaintabs()",
-      "id": "src_components_workspace_controller_createinitialmaintabs"
+      "norm_label": "createinitialmaintabs()"
     },
     {
       "label": "createSpaceId()",
@@ -18944,10 +18944,10 @@
       "source_location": "L184",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_createspaceid",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "createspaceid()",
-      "id": "src_components_workspace_controller_createspaceid"
+      "norm_label": "createspaceid()"
     },
     {
       "label": "formatByteLimit()",
@@ -18956,10 +18956,10 @@
       "source_location": "L694",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_formatbytelimit",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "formatbytelimit()",
-      "id": "src_components_workspace_controller_formatbytelimit"
+      "norm_label": "formatbytelimit()"
     },
     {
       "label": "getDraftAccept()",
@@ -18968,10 +18968,10 @@
       "source_location": "L2858",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_getdraftaccept",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "getdraftaccept()",
-      "id": "src_components_workspace_controller_getdraftaccept"
+      "norm_label": "getdraftaccept()"
     },
     {
       "label": "getPinnedEntityFromId()",
@@ -18980,10 +18980,10 @@
       "source_location": "L741",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_getpinnedentityfromid",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "getpinnedentityfromid()",
-      "id": "src_components_workspace_controller_getpinnedentityfromid"
+      "norm_label": "getpinnedentityfromid()"
     },
     {
       "label": "getPinnedEntityFromIds()",
@@ -18992,10 +18992,10 @@
       "source_location": "L800",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_getpinnedentityfromids",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "getpinnedentityfromids()",
-      "id": "src_components_workspace_controller_getpinnedentityfromids"
+      "norm_label": "getpinnedentityfromids()"
     },
     {
       "label": "isRecord()",
@@ -19004,10 +19004,10 @@
       "source_location": "L176",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_isrecord",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "isrecord()",
-      "id": "src_components_workspace_controller_isrecord"
+      "norm_label": "isrecord()"
     },
     {
       "label": "mediaStorageErrorMessage()",
@@ -19016,10 +19016,10 @@
       "source_location": "L698",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_mediastorageerrormessage",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "mediastorageerrormessage()",
-      "id": "src_components_workspace_controller_mediastorageerrormessage"
+      "norm_label": "mediastorageerrormessage()"
     },
     {
       "label": "normalizeWorkspaceTagTitle()",
@@ -19028,10 +19028,10 @@
       "source_location": "L199",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_normalizeworkspacetagtitle",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "normalizeworkspacetagtitle()",
-      "id": "src_components_workspace_controller_normalizeworkspacetagtitle"
+      "norm_label": "normalizeworkspacetagtitle()"
     },
     {
       "label": "parsePinnedCollectionId()",
@@ -19040,10 +19040,10 @@
       "source_location": "L717",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_parsepinnedcollectionid",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "parsepinnedcollectionid()",
-      "id": "src_components_workspace_controller_parsepinnedcollectionid"
+      "norm_label": "parsepinnedcollectionid()"
     },
     {
       "label": "parseSerializedWorkspaceTab()",
@@ -19052,10 +19052,10 @@
       "source_location": "L262",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_parseserializedworkspacetab",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "parseserializedworkspacetab()",
-      "id": "src_components_workspace_controller_parseserializedworkspacetab"
+      "norm_label": "parseserializedworkspacetab()"
     },
     {
       "label": "parseWorkspaceSpacesStorage()",
@@ -19064,10 +19064,10 @@
       "source_location": "L207",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_parseworkspacespacesstorage",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "parseworkspacespacesstorage()",
-      "id": "src_components_workspace_controller_parseworkspacespacesstorage"
+      "norm_label": "parseworkspacespacesstorage()"
     },
     {
       "label": "parseWorkspaceTabGroupState()",
@@ -19076,10 +19076,10 @@
       "source_location": "L276",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_parseworkspacetabgroupstate",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "parseworkspacetabgroupstate()",
-      "id": "src_components_workspace_controller_parseworkspacetabgroupstate"
+      "norm_label": "parseworkspacetabgroupstate()"
     },
     {
       "label": "parseWorkspaceTabState()",
@@ -19088,10 +19088,10 @@
       "source_location": "L290",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_parseworkspacetabstate",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "parseworkspacetabstate()",
-      "id": "src_components_workspace_controller_parseworkspacetabstate"
+      "norm_label": "parseworkspacetabstate()"
     },
     {
       "label": "pruneCollectionRecordsByObjectTypes()",
@@ -19100,10 +19100,10 @@
       "source_location": "L887",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_prunecollectionrecordsbyobjecttypes",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "prunecollectionrecordsbyobjecttypes()",
-      "id": "src_components_workspace_controller_prunecollectionrecordsbyobjecttypes"
+      "norm_label": "prunecollectionrecordsbyobjecttypes()"
     },
     {
       "label": "pruneSidebarItemsByObjectTypes()",
@@ -19112,10 +19112,10 @@
       "source_location": "L899",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_prunesidebaritemsbyobjecttypes",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "prunesidebaritemsbyobjecttypes()",
-      "id": "src_components_workspace_controller_prunesidebaritemsbyobjecttypes"
+      "norm_label": "prunesidebaritemsbyobjecttypes()"
     },
     {
       "label": "resolveMainTab()",
@@ -19124,10 +19124,10 @@
       "source_location": "L513",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_resolvemaintab",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "resolvemaintab()",
-      "id": "src_components_workspace_controller_resolvemaintab"
+      "norm_label": "resolvemaintab()"
     },
     {
       "label": "resolveRestoredWorkspaceTabs()",
@@ -19136,10 +19136,10 @@
       "source_location": "L611",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_resolverestoredworkspacetabs",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "resolverestoredworkspacetabs()",
-      "id": "src_components_workspace_controller_resolverestoredworkspacetabs"
+      "norm_label": "resolverestoredworkspacetabs()"
     },
     {
       "label": "resolveSideTab()",
@@ -19148,10 +19148,10 @@
       "source_location": "L540",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_resolvesidetab",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "resolvesidetab()",
-      "id": "src_components_workspace_controller_resolvesidetab"
+      "norm_label": "resolvesidetab()"
     },
     {
       "label": "resolveWorkspaceEntityTab()",
@@ -19160,10 +19160,10 @@
       "source_location": "L458",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_resolveworkspaceentitytab",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "resolveworkspaceentitytab()",
-      "id": "src_components_workspace_controller_resolveworkspaceentitytab"
+      "norm_label": "resolveworkspaceentitytab()"
     },
     {
       "label": "selectStoredTabValue()",
@@ -19172,10 +19172,10 @@
       "source_location": "L592",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_selectstoredtabvalue",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "selectstoredtabvalue()",
-      "id": "src_components_workspace_controller_selectstoredtabvalue"
+      "norm_label": "selectstoredtabvalue()"
     },
     {
       "label": "serializeWorkspaceSpacesStorage()",
@@ -19184,10 +19184,10 @@
       "source_location": "L238",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_serializeworkspacespacesstorage",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "serializeworkspacespacesstorage()",
-      "id": "src_components_workspace_controller_serializeworkspacespacesstorage"
+      "norm_label": "serializeworkspacespacesstorage()"
     },
     {
       "label": "serializeWorkspaceTab()",
@@ -19196,10 +19196,10 @@
       "source_location": "L303",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_serializeworkspacetab",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "serializeworkspacetab()",
-      "id": "src_components_workspace_controller_serializeworkspacetab"
+      "norm_label": "serializeworkspacetab()"
     },
     {
       "label": "serializeWorkspaceTabState()",
@@ -19208,10 +19208,10 @@
       "source_location": "L311",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_serializeworkspacetabstate",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "serializeworkspacetabstate()",
-      "id": "src_components_workspace_controller_serializeworkspacetabstate"
+      "norm_label": "serializeworkspacetabstate()"
     },
     {
       "label": "shouldClearActiveEntity()",
@@ -19220,10 +19220,10 @@
       "source_location": "L602",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_shouldclearactiveentity",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "shouldclearactiveentity()",
-      "id": "src_components_workspace_controller_shouldclearactiveentity"
+      "norm_label": "shouldclearactiveentity()"
     },
     {
       "label": "shouldStartTabStorageRestore()",
@@ -19232,22 +19232,22 @@
       "source_location": "L660",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_shouldstarttabstoragerestore",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "shouldstarttabstoragerestore()",
-      "id": "src_components_workspace_controller_shouldstarttabstoragerestore"
+      "norm_label": "shouldstarttabstoragerestore()"
     },
     {
       "label": "TabPreview()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L4018",
+      "source_location": "L4113",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_tabpreview",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "tabpreview()",
-      "id": "src_components_workspace_controller_tabpreview"
+      "norm_label": "tabpreview()"
     },
     {
       "label": "toSidebarSpaces()",
@@ -19256,10 +19256,10 @@
       "source_location": "L249",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_tosidebarspaces",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "tosidebarspaces()",
-      "id": "src_components_workspace_controller_tosidebarspaces"
+      "norm_label": "tosidebarspaces()"
     },
     {
       "label": "toWorkspaceSidebarPinSources()",
@@ -19268,10 +19268,10 @@
       "source_location": "L825",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_toworkspacesidebarpinsources",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "toworkspacesidebarpinsources()",
-      "id": "src_components_workspace_controller_toworkspacesidebarpinsources"
+      "norm_label": "toworkspacesidebarpinsources()"
     },
     {
       "label": "uniqueTabs()",
@@ -19280,10 +19280,10 @@
       "source_location": "L583",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_uniquetabs",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "uniquetabs()",
-      "id": "src_components_workspace_controller_uniquetabs"
+      "norm_label": "uniquetabs()"
     },
     {
       "label": "withStoredTabFlags()",
@@ -19292,34 +19292,34 @@
       "source_location": "L337",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_withstoredtabflags",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "withstoredtabflags()",
-      "id": "src_components_workspace_controller_withstoredtabflags"
+      "norm_label": "withstoredtabflags()"
     },
     {
       "label": "WorkspaceCreationDialog()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3360",
+      "source_location": "L3455",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacecreationdialog",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspacecreationdialog()",
-      "id": "src_components_workspace_controller_workspacecreationdialog"
+      "norm_label": "workspacecreationdialog()"
     },
     {
       "label": "WorkspaceDraftError()",
       "file_type": "code",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3339",
+      "source_location": "L3434",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacedrafterror",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspacedrafterror()",
-      "id": "src_components_workspace_controller_workspacedrafterror"
+      "norm_label": "workspacedrafterror()"
     },
     {
       "label": "workspaceObjectsStorageKeyForSpace()",
@@ -19328,10 +19328,10 @@
       "source_location": "L180",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspaceobjectsstoragekeyforspace",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspaceobjectsstoragekeyforspace()",
-      "id": "src_components_workspace_controller_workspaceobjectsstoragekeyforspace"
+      "norm_label": "workspaceobjectsstoragekeyforspace()"
     },
     {
       "label": "WorkspaceProvider()",
@@ -19340,10 +19340,10 @@
       "source_location": "L1102",
       "_callable": true,
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspaceprovider",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspaceprovider()",
-      "id": "src_components_workspace_controller_workspaceprovider"
+      "norm_label": "workspaceprovider()"
     },
     {
       "label": "decodeSegment()",
@@ -27482,21 +27482,21 @@
       "source_file": "src/lib/workspace-related-content.ts",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "workspace-related-content.ts",
-      "id": "src_lib_workspace_related_content"
+      "norm_label": "workspace-related-content.ts"
     },
     {
       "label": "notesAppLocalRelatedContentProvider",
       "file_type": "code",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L285",
+      "source_location": "L289",
       "_origin": "ast",
+      "id": "src_lib_workspace_related_content_notesapplocalrelatedcontentprovider",
       "community": 130,
       "community_name": "workspace-related-content.ts",
-      "norm_label": "notesapplocalrelatedcontentprovider",
-      "id": "src_lib_workspace_related_content_notesapplocalrelatedcontentprovider"
+      "norm_label": "notesapplocalrelatedcontentprovider"
     },
     {
       "label": "workspace-related-content.test.mjs",
@@ -40858,10 +40858,10 @@
       "source_file": "src/components/workspace-controller.tsx",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "src_components_workspace_controller",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspace-controller.tsx",
-      "id": "src_components_workspace_controller"
+      "norm_label": "workspace-controller.tsx"
     },
     {
       "label": "initialSpaces",
@@ -40869,10 +40869,10 @@
       "source_file": "src/components/workspace-controller.tsx",
       "source_location": "L959",
       "_origin": "ast",
+      "id": "src_components_workspace_controller_initialspaces",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "initialspaces",
-      "id": "src_components_workspace_controller_initialspaces"
+      "norm_label": "initialspaces"
     },
     {
       "label": "WorkspaceContext",
@@ -40880,10 +40880,10 @@
       "source_file": "src/components/workspace-controller.tsx",
       "source_location": "L1088",
       "_origin": "ast",
+      "id": "src_components_workspace_controller_workspacecontext",
       "community": 31,
       "community_name": "workspace-controller.tsx",
-      "norm_label": "workspacecontext",
-      "id": "src_components_workspace_controller_workspacecontext"
+      "norm_label": "workspacecontext"
     },
     {
       "label": "workspace-routing.ts",
@@ -41991,10 +41991,10 @@
       "source_file": "docs/references/capacities-keyboard-command-system.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_references_capacities_keyboard_command_system",
       "community": 323,
       "community_name": "Capacities keyboard command system reference",
-      "norm_label": "capacities-keyboard-command-system.md"
+      "norm_label": "capacities-keyboard-command-system.md",
+      "id": "docs_references_capacities_keyboard_command_system"
     },
     {
       "label": "Capacities keyboard command system reference",
@@ -42002,10 +42002,10 @@
       "source_file": "docs/references/capacities-keyboard-command-system.md",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "docs_references_capacities_keyboard_command_system_capacities_keyboard_command_system_reference",
       "community": 323,
       "community_name": "Capacities keyboard command system reference",
-      "norm_label": "capacities keyboard command system reference"
+      "norm_label": "capacities keyboard command system reference",
+      "id": "docs_references_capacities_keyboard_command_system_capacities_keyboard_command_system_reference"
     },
     {
       "label": "Coverage summary",
@@ -42013,10 +42013,10 @@
       "source_file": "docs/references/capacities-keyboard-command-system.md",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "docs_references_capacities_keyboard_command_system_coverage_summary",
       "community": 323,
       "community_name": "Capacities keyboard command system reference",
-      "norm_label": "coverage summary"
+      "norm_label": "coverage summary",
+      "id": "docs_references_capacities_keyboard_command_system_coverage_summary"
     },
     {
       "label": "Evidence bundles",
@@ -42024,10 +42024,10 @@
       "source_file": "docs/references/capacities-keyboard-command-system.md",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "docs_references_capacities_keyboard_command_system_evidence_bundles",
       "community": 323,
       "community_name": "Capacities keyboard command system reference",
-      "norm_label": "evidence bundles"
+      "norm_label": "evidence bundles",
+      "id": "docs_references_capacities_keyboard_command_system_evidence_bundles"
     },
     {
       "label": "Reused sources",
@@ -42035,10 +42035,10 @@
       "source_file": "docs/references/capacities-keyboard-command-system.md",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "docs_references_capacities_keyboard_command_system_reused_sources",
       "community": 323,
       "community_name": "Capacities keyboard command system reference",
-      "norm_label": "reused sources"
+      "norm_label": "reused sources",
+      "id": "docs_references_capacities_keyboard_command_system_reused_sources"
     },
     {
       "label": "reconcile-keyboard-command-system-acceptance/tasks.md",
@@ -42134,10 +42134,10 @@
       "source_file": "tests/keyboard-command-evidence-contract.test.mjs",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tests_keyboard_command_evidence_contract_test",
       "community": 328,
       "community_name": "keyboard-command-evidence-contract.test.mjs",
-      "norm_label": "keyboard-command-evidence-contract.test.mjs"
+      "norm_label": "keyboard-command-evidence-contract.test.mjs",
+      "id": "tests_keyboard_command_evidence_contract_test"
     },
     {
       "label": "manifest",
@@ -42145,10 +42145,10 @@
       "source_file": "tests/keyboard-command-evidence-contract.test.mjs",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "tests_keyboard_command_evidence_contract_test_manifest",
       "community": 328,
       "community_name": "keyboard-command-evidence-contract.test.mjs",
-      "norm_label": "manifest"
+      "norm_label": "manifest",
+      "id": "tests_keyboard_command_evidence_contract_test_manifest"
     },
     {
       "label": "block-editor-interactions.spec.ts",
@@ -61415,7 +61415,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3066",
+      "source_location": "L3161",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_entitytextforfind",
@@ -61453,9 +61453,9 @@
       "source_location": "L784",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_getpinnedentityfromid",
-      "target": "src_components_workspace_controller_parsepinnedcollectionid"
+      "target": "src_components_workspace_controller_parsepinnedcollectionid",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61465,21 +61465,21 @@
       "source_location": "L811",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_getpinnedentityfromids",
-      "target": "src_components_workspace_controller_getpinnedentityfromid"
+      "target": "src_components_workspace_controller_getpinnedentityfromid",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3619",
+      "source_location": "L3714",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_maintabsearchoverlay",
-      "target": "src_components_workspace_controller_useworkspace"
+      "target": "src_components_workspace_controller_useworkspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61489,9 +61489,9 @@
       "source_location": "L706",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_mediastorageerrormessage",
-      "target": "src_components_workspace_controller_formatbytelimit"
+      "target": "src_components_workspace_controller_formatbytelimit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61501,9 +61501,9 @@
       "source_location": "L265",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_parseserializedworkspacetab",
-      "target": "src_components_workspace_controller_isrecord"
+      "target": "src_components_workspace_controller_isrecord",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61513,9 +61513,9 @@
       "source_location": "L212",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_parseworkspacespacesstorage",
-      "target": "src_components_workspace_controller_isrecord"
+      "target": "src_components_workspace_controller_isrecord",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61525,9 +61525,9 @@
       "source_location": "L277",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_parseworkspacetabgroupstate",
-      "target": "src_components_workspace_controller_isrecord"
+      "target": "src_components_workspace_controller_isrecord",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61537,9 +61537,9 @@
       "source_location": "L280",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_parseworkspacetabgroupstate",
-      "target": "src_components_workspace_controller_parseserializedworkspacetab"
+      "target": "src_components_workspace_controller_parseserializedworkspacetab",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61549,9 +61549,9 @@
       "source_location": "L293",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_parseworkspacetabstate",
-      "target": "src_components_workspace_controller_isrecord"
+      "target": "src_components_workspace_controller_isrecord",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61561,9 +61561,9 @@
       "source_location": "L295",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_parseworkspacetabstate",
-      "target": "src_components_workspace_controller_parseworkspacetabgroupstate"
+      "target": "src_components_workspace_controller_parseworkspacetabgroupstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61573,9 +61573,9 @@
       "source_location": "L529",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_resolvemaintab",
-      "target": "src_components_workspace_controller_withstoredtabflags"
+      "target": "src_components_workspace_controller_withstoredtabflags",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61585,9 +61585,9 @@
       "source_location": "L530",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_resolvemaintab",
-      "target": "src_components_workspace_controller_resolveworkspaceentitytab"
+      "target": "src_components_workspace_controller_resolveworkspaceentitytab",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61597,9 +61597,9 @@
       "source_location": "L630",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_resolverestoredworkspacetabs",
-      "target": "src_components_workspace_controller_uniquetabs"
+      "target": "src_components_workspace_controller_uniquetabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61609,9 +61609,9 @@
       "source_location": "L632",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_resolverestoredworkspacetabs",
-      "target": "src_components_workspace_controller_resolvemaintab"
+      "target": "src_components_workspace_controller_resolvemaintab",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61621,9 +61621,9 @@
       "source_location": "L645",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_resolverestoredworkspacetabs",
-      "target": "src_components_workspace_controller_resolvesidetab"
+      "target": "src_components_workspace_controller_resolvesidetab",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61633,9 +61633,9 @@
       "source_location": "L558",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_resolvesidetab",
-      "target": "src_components_workspace_controller_withstoredtabflags"
+      "target": "src_components_workspace_controller_withstoredtabflags",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61645,21 +61645,21 @@
       "source_location": "L573",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_resolvesidetab",
-      "target": "src_components_workspace_controller_resolveworkspaceentitytab"
+      "target": "src_components_workspace_controller_resolveworkspaceentitytab",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3825",
+      "source_location": "L3920",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_sidepanelsearchoverlay",
-      "target": "src_components_workspace_controller_useworkspace"
+      "target": "src_components_workspace_controller_useworkspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61667,7 +61667,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3956",
+      "source_location": "L4051",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_sidepanelsearchoverlay",
@@ -61681,33 +61681,21 @@
       "source_location": "L855",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_toworkspacesidebarpinsources",
-      "target": "src_components_workspace_controller_parsepinnedcollectionid"
+      "target": "src_components_workspace_controller_parsepinnedcollectionid",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L2881",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "src_components_workspace_controller_workspacecommandpalette",
-      "target": "src_components_workspace_controller_useworkspace"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L2893",
+      "source_location": "L2889",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_workspacecommandpalette",
-      "target": "src_lib_workspace_command_registry_createworkspacecommandruntime"
+      "target": "src_components_workspace_controller_useworkspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61715,7 +61703,19 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L2918",
+      "source_location": "L2890",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_workspace_controller_workspacecommandpalette",
+      "target": "src_components_app_shell_useappshell"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/workspace-controller.tsx",
+      "source_location": "L2900",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_workspacecommandpalette",
@@ -61727,7 +61727,19 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L2942",
+      "source_location": "L2933",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_workspace_controller_workspacecommandpalette",
+      "target": "src_lib_workspace_command_registry_createworkspacecommandruntime"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/workspace-controller.tsx",
+      "source_location": "L3037",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_workspacecommandpalette",
@@ -61738,24 +61750,24 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3369",
+      "source_location": "L3464",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspacecreationdialog",
-      "target": "src_components_workspace_controller_useworkspace"
+      "target": "src_components_workspace_controller_useworkspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3376",
+      "source_location": "L3471",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspacecreationdialog",
-      "target": "src_components_workspace_controller_getdraftaccept"
+      "target": "src_components_workspace_controller_getdraftaccept",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61763,7 +61775,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3427",
+      "source_location": "L3522",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_workspacecreationdialog",
@@ -61774,72 +61786,72 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3082",
+      "source_location": "L3177",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceextendedsearchdialog",
-      "target": "src_components_workspace_controller_useworkspace"
+      "target": "src_components_workspace_controller_useworkspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3167",
+      "source_location": "L3262",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspacefindinpagedialog",
-      "target": "src_components_workspace_controller_useworkspace"
+      "target": "src_components_workspace_controller_useworkspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3175",
+      "source_location": "L3270",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspacefindinpagedialog",
-      "target": "src_components_workspace_controller_entitytextforfind"
+      "target": "src_components_workspace_controller_entitytextforfind",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3478",
+      "source_location": "L3573",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspacemainheader",
-      "target": "src_components_workspace_controller_createspecialsidetabs"
+      "target": "src_components_workspace_controller_createspecialsidetabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3480",
+      "source_location": "L3575",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspacemainheader",
-      "target": "src_components_workspace_controller_createspecialsideitems"
+      "target": "src_components_workspace_controller_createspecialsideitems",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3494",
+      "source_location": "L3589",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspacemainheader",
-      "target": "src_components_workspace_controller_useworkspace"
+      "target": "src_components_workspace_controller_useworkspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61847,7 +61859,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3495",
+      "source_location": "L3590",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_workspacemainheader",
@@ -61873,9 +61885,9 @@
       "source_location": "L1105",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_createinitialmaintabs"
+      "target": "src_components_workspace_controller_createinitialmaintabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61885,9 +61897,9 @@
       "source_location": "L1106",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_createinitialsidetabs"
+      "target": "src_components_workspace_controller_createinitialsidetabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61897,9 +61909,9 @@
       "source_location": "L1107",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_createspecialsidetabs"
+      "target": "src_components_workspace_controller_createspecialsidetabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61945,9 +61957,9 @@
       "source_location": "L1215",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_getpinnedentityfromids"
+      "target": "src_components_workspace_controller_getpinnedentityfromids",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61957,9 +61969,9 @@
       "source_location": "L1269",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_workspaceobjectsstoragekeyforspace"
+      "target": "src_components_workspace_controller_workspaceobjectsstoragekeyforspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -61993,9 +62005,9 @@
       "source_location": "L1318",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_createspaceid"
+      "target": "src_components_workspace_controller_createspaceid",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62005,9 +62017,9 @@
       "source_location": "L1385",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_parseworkspacespacesstorage"
+      "target": "src_components_workspace_controller_parseworkspacespacesstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62017,9 +62029,9 @@
       "source_location": "L1388",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_tosidebarspaces"
+      "target": "src_components_workspace_controller_tosidebarspaces",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62029,9 +62041,9 @@
       "source_location": "L1506",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_toworkspacesidebarpinsources"
+      "target": "src_components_workspace_controller_toworkspacesidebarpinsources",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62041,9 +62053,9 @@
       "source_location": "L1531",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_serializeworkspacespacesstorage"
+      "target": "src_components_workspace_controller_serializeworkspacespacesstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62053,9 +62065,9 @@
       "source_location": "L1554",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_getmediastorageadapter"
+      "target": "src_components_workspace_controller_getmediastorageadapter",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62065,9 +62077,9 @@
       "source_location": "L1555",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_getmediaurlregistry"
+      "target": "src_components_workspace_controller_getmediaurlregistry",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62089,9 +62101,9 @@
       "source_location": "L1616",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_shouldstarttabstoragerestore"
+      "target": "src_components_workspace_controller_shouldstarttabstoragerestore",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62101,9 +62113,9 @@
       "source_location": "L1627",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_parseworkspacetabstate"
+      "target": "src_components_workspace_controller_parseworkspacetabstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62125,9 +62137,9 @@
       "source_location": "L1644",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_resolverestoredworkspacetabs"
+      "target": "src_components_workspace_controller_resolverestoredworkspacetabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62137,9 +62149,9 @@
       "source_location": "L1658",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_selectstoredtabvalue"
+      "target": "src_components_workspace_controller_selectstoredtabvalue",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62149,9 +62161,9 @@
       "source_location": "L1661",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_shouldclearactiveentity"
+      "target": "src_components_workspace_controller_shouldclearactiveentity",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62161,9 +62173,9 @@
       "source_location": "L1700",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_serializeworkspacetabstate"
+      "target": "src_components_workspace_controller_serializeworkspacetabstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62173,9 +62185,9 @@
       "source_location": "L1720",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_arepinnedentitysetsequivalent"
+      "target": "src_components_workspace_controller_arepinnedentitysetsequivalent",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62185,9 +62197,9 @@
       "source_location": "L1736",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_prunecollectionrecordsbyobjecttypes"
+      "target": "src_components_workspace_controller_prunecollectionrecordsbyobjecttypes",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62197,9 +62209,9 @@
       "source_location": "L1737",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_arecollectionrecordmapsequivalent"
+      "target": "src_components_workspace_controller_arecollectionrecordmapsequivalent",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62209,9 +62221,9 @@
       "source_location": "L1740",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_prunesidebaritemsbyobjecttypes"
+      "target": "src_components_workspace_controller_prunesidebaritemsbyobjecttypes",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62221,9 +62233,9 @@
       "source_location": "L1741",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_arestringarraymapsequivalent"
+      "target": "src_components_workspace_controller_arestringarraymapsequivalent",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62233,9 +62245,9 @@
       "source_location": "L1897",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_getpinnedentityfromid"
+      "target": "src_components_workspace_controller_getpinnedentityfromid",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62281,9 +62293,9 @@
       "source_location": "L2139",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_normalizeworkspacetagtitle"
+      "target": "src_components_workspace_controller_normalizeworkspacetagtitle",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62341,9 +62353,9 @@
       "source_location": "L2369",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_mediastorageerrormessage"
+      "target": "src_components_workspace_controller_mediastorageerrormessage",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62389,9 +62401,9 @@
       "source_location": "L2571",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceprovider",
-      "target": "src_components_workspace_controller_resolveworkspaceentitytab"
+      "target": "src_components_workspace_controller_resolveworkspaceentitytab",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62410,12 +62422,12 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3226",
+      "source_location": "L3321",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspaceshortcutbrowser",
-      "target": "src_components_workspace_controller_useworkspace"
+      "target": "src_components_workspace_controller_useworkspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62423,7 +62435,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3235",
+      "source_location": "L3330",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_workspaceshortcutbrowser",
@@ -62435,7 +62447,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3270",
+      "source_location": "L3365",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_workspaceshortcutbrowser",
@@ -62447,7 +62459,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3280",
+      "source_location": "L3375",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_workspaceshortcutbrowser",
@@ -62458,36 +62470,36 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3729",
+      "source_location": "L3824",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspacesidepanelheader",
-      "target": "src_components_workspace_controller_createspecialsidetabs"
+      "target": "src_components_workspace_controller_createspecialsidetabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3731",
+      "source_location": "L3826",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspacesidepanelheader",
-      "target": "src_components_workspace_controller_createspecialsideitems"
+      "target": "src_components_workspace_controller_createspecialsideitems",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3741",
+      "source_location": "L3836",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller_workspacesidepanelheader",
-      "target": "src_components_workspace_controller_useworkspace"
+      "target": "src_components_workspace_controller_useworkspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -62495,7 +62507,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3742",
+      "source_location": "L3837",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_workspacesidepanelheader",
@@ -73765,9 +73777,9 @@
       "source_location": "L159",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_isrelatedcontenteligible",
-      "target": "src_lib_workspace_related_content_isdocumentlike"
+      "target": "src_lib_workspace_related_content_isdocumentlike",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -73777,115 +73789,103 @@
       "source_location": "L182",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_issamespace",
-      "target": "src_lib_workspace_related_content_readentityspaceid"
+      "target": "src_lib_workspace_related_content_readentityspaceid",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L233",
+      "source_location": "L237",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_lexicalscore",
-      "target": "src_lib_workspace_related_content_normalizetext"
+      "target": "src_lib_workspace_related_content_normalizetext",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L233",
+      "source_location": "L237",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_lexicalscore",
-      "target": "src_lib_workspace_related_content_textforentity"
+      "target": "src_lib_workspace_related_content_textforentity",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L163",
+      "source_location": "L255",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "src_lib_workspace_related_content_readentityspaceid",
-      "target": "src_lib_workspace_related_content_isdocumentlike"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L251",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_recencyscore",
-      "target": "src_lib_workspace_related_content_readupdatedat"
+      "target": "src_lib_workspace_related_content_readupdatedat",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L402",
+      "source_location": "L406",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_selectrelatedcontent",
-      "target": "src_lib_workspace_related_content_isrelatedcontenteligible"
+      "target": "src_lib_workspace_related_content_isrelatedcontenteligible",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L413",
+      "source_location": "L417",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_selectrelatedcontent",
-      "target": "src_lib_workspace_related_content_istrashedentity"
+      "target": "src_lib_workspace_related_content_istrashedentity",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L414",
+      "source_location": "L418",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_selectrelatedcontent",
-      "target": "src_lib_workspace_related_content_issamespace"
+      "target": "src_lib_workspace_related_content_issamespace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L425",
+      "source_location": "L429",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_selectrelatedcontent",
-      "target": "src_lib_workspace_related_content_validaterelatedcontentresults"
+      "target": "src_lib_workspace_related_content_validaterelatedcontentresults",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/lib/workspace-related-content.ts",
       "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_textforentity",
       "target": "src_editor_document_blockeditordocumenttoplaintext"
     },
@@ -73897,45 +73897,45 @@
       "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_textforentity",
-      "target": "src_lib_workspace_related_content_isdocumentlike"
+      "target": "src_lib_workspace_related_content_isdocumentlike",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L269",
+      "source_location": "L273",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_validaterelatedcontentresults",
-      "target": "src_lib_workspace_related_content_relatedcontentcache_get"
+      "target": "src_lib_workspace_related_content_relatedcontentcache_get",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L270",
+      "source_location": "L274",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_validaterelatedcontentresults",
-      "target": "src_lib_workspace_related_content_issamespace"
+      "target": "src_lib_workspace_related_content_issamespace",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L270",
+      "source_location": "L274",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_validaterelatedcontentresults",
-      "target": "src_lib_workspace_related_content_istrashedentity"
+      "target": "src_lib_workspace_related_content_istrashedentity",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -81961,9 +81961,9 @@
       "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_object_storage_parseworkspaceobjectsnapshot"
+      "target": "src_lib_workspace_object_storage_parseworkspaceobjectsnapshot",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -81973,9 +81973,9 @@
       "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_object_storage_serializeworkspaceobjectstate"
+      "target": "src_lib_workspace_object_storage_serializeworkspaceobjectstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -81985,9 +81985,9 @@
       "source_location": "L108",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_object_types_createstructureinput"
+      "target": "src_lib_workspace_object_types_createstructureinput",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -81997,9 +81997,9 @@
       "source_location": "L108",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_object_types_objecticonname"
+      "target": "src_lib_workspace_object_types_objecticonname",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82009,9 +82009,9 @@
       "source_location": "L108",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_object_types_objecticontone"
+      "target": "src_lib_workspace_object_types_objecticontone",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82021,9 +82021,9 @@
       "source_location": "L108",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_object_types_selectcreatablestructures"
+      "target": "src_lib_workspace_object_types_selectcreatablestructures",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82033,9 +82033,9 @@
       "source_location": "L108",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_object_types_workspacestructure"
+      "target": "src_lib_workspace_object_types_workspacestructure",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82045,9 +82045,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_icons_appheadercaretdownicon"
+      "target": "src_components_app_header_icons_appheadercaretdownicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82057,9 +82057,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_icons_appheadercompassicon"
+      "target": "src_components_app_header_icons_appheadercompassicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82069,9 +82069,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_icons_appheadergraphicon"
+      "target": "src_components_app_header_icons_appheadergraphicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82081,9 +82081,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_icons_appheadersidebarsimpleicon"
+      "target": "src_components_app_header_icons_appheadersidebarsimpleicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82093,9 +82093,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_acceptsfilefortype"
+      "target": "src_lib_workspace_objects_acceptsfilefortype",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82105,9 +82105,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_countentitiesbytype"
+      "target": "src_lib_workspace_objects_countentitiesbytype",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82117,9 +82117,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_createinitialworkspaceobjectstate"
+      "target": "src_lib_workspace_objects_createinitialworkspaceobjectstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82129,9 +82129,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_getcreationflow"
+      "target": "src_lib_workspace_objects_getcreationflow",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82141,9 +82141,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_getworkspaceimporterror"
+      "target": "src_lib_workspace_objects_getworkspaceimporterror",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82153,9 +82153,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_isworkspaceentitydeletionaccepted"
+      "target": "src_lib_workspace_objects_isworkspaceentitydeletionaccepted",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82165,9 +82165,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_workspacedraft"
+      "target": "src_lib_workspace_objects_workspacedraft",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82177,9 +82177,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_workspaceentity"
+      "target": "src_lib_workspace_objects_workspaceentity",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82189,9 +82189,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_workspaceobjecterror"
+      "target": "src_lib_workspace_objects_workspaceobjecterror",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82201,9 +82201,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_workspaceobjectreducer"
+      "target": "src_lib_workspace_objects_workspaceobjectreducer",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82213,9 +82213,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects_workspaceobjectstate"
+      "target": "src_lib_workspace_objects_workspaceobjectstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82225,9 +82225,9 @@
       "source_location": "L128",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_routing_parseworkspaceroute"
+      "target": "src_lib_workspace_routing_parseworkspaceroute",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82237,9 +82237,9 @@
       "source_location": "L128",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_routing_workspacerouteid"
+      "target": "src_lib_workspace_routing_workspacerouteid",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82249,9 +82249,9 @@
       "source_location": "L128",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_routing_workspaceroutepath"
+      "target": "src_lib_workspace_routing_workspaceroutepath",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82261,9 +82261,9 @@
       "source_location": "L128",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_routing_workspacesection"
+      "target": "src_lib_workspace_routing_workspacesection",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82273,9 +82273,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_tabs_appheadertab"
+      "target": "src_components_app_header_tabs_appheadertab",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82285,9 +82285,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_tabs_appspaceheader"
+      "target": "src_components_app_header_tabs_appspaceheader",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82297,9 +82297,9 @@
       "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_shell_useappshell"
+      "target": "src_components_app_shell_useappshell",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82309,9 +82309,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_side_panel_header_appsidepanelheader"
+      "target": "src_components_app_side_panel_header_appsidepanelheader",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82321,9 +82321,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_side_panel_header_sidepanelspecialentryid"
+      "target": "src_components_app_side_panel_header_sidepanelspecialentryid",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82333,9 +82333,9 @@
       "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_editor_document_blockeditordocumenttoplaintext"
+      "target": "src_editor_document_blockeditordocumenttoplaintext",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82345,9 +82345,9 @@
       "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_sidebar_appsidebarspace"
+      "target": "src_components_app_sidebar_appsidebarspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82357,9 +82357,9 @@
       "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_sidebar_icons_appsidebarsearchicon"
+      "target": "src_components_app_sidebar_icons_appsidebarsearchicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82369,9 +82369,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_sidebar_overview_appsidebarcustomsection"
+      "target": "src_components_app_sidebar_overview_appsidebarcustomsection",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82381,9 +82381,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_sidebar_overview_appsidebarobjecttype"
+      "target": "src_components_app_sidebar_overview_appsidebarobjecttype",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82393,9 +82393,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_sidebar_overview_appsidebarpinnedentity"
+      "target": "src_components_app_sidebar_overview_appsidebarpinnedentity",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82405,9 +82405,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectaichaticon"
+      "target": "src_components_object_icons_objectaichaticon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82417,9 +82417,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectarchiveicon"
+      "target": "src_components_object_icons_objectarchiveicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82429,9 +82429,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectareaicon"
+      "target": "src_components_object_icons_objectareaicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82441,9 +82441,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectatomicnoteicon"
+      "target": "src_components_object_icons_objectatomicnoteicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82453,9 +82453,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectbookicon"
+      "target": "src_components_object_icons_objectbookicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82465,9 +82465,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectcodeicon"
+      "target": "src_components_object_icons_objectcodeicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82477,9 +82477,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objecticonbadge"
+      "target": "src_components_object_icons_objecticonbadge",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82489,9 +82489,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objecticonprops"
+      "target": "src_components_object_icons_objecticonprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82501,9 +82501,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objecticontonebadgeclass"
+      "target": "src_components_object_icons_objecticontonebadgeclass",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82513,9 +82513,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectideaicon"
+      "target": "src_components_object_icons_objectideaicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82525,9 +82525,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectknowledgeicon"
+      "target": "src_components_object_icons_objectknowledgeicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82537,9 +82537,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectpageicon"
+      "target": "src_components_object_icons_objectpageicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82549,9 +82549,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectprojecticon"
+      "target": "src_components_object_icons_objectprojecticon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82561,9 +82561,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectqueryicon"
+      "target": "src_components_object_icons_objectqueryicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82573,9 +82573,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objectquoteicon"
+      "target": "src_components_object_icons_objectquoteicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82585,9 +82585,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons_objecttypedefinitionbyid"
+      "target": "src_components_object_icons_objecttypedefinitionbyid",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82597,9 +82597,9 @@
       "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_lifecycle_contracts_objectlifecyclecontractslots"
+      "target": "src_components_object_lifecycle_contracts_objectlifecyclecontractslots",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82609,9 +82609,9 @@
       "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_button_button"
+      "target": "src_components_ui_button_button",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82621,9 +82621,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dialog_dialog"
+      "target": "src_components_ui_dialog_dialog",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82633,9 +82633,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dialog_dialogcontent"
+      "target": "src_components_ui_dialog_dialogcontent",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82645,9 +82645,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dialog_dialogdescription"
+      "target": "src_components_ui_dialog_dialogdescription",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82657,9 +82657,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dialog_dialogfooter"
+      "target": "src_components_ui_dialog_dialogfooter",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82669,9 +82669,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dialog_dialogheader"
+      "target": "src_components_ui_dialog_dialogheader",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82681,9 +82681,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dialog_dialogtitle"
+      "target": "src_components_ui_dialog_dialogtitle",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82693,9 +82693,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_appfocusmodecontrols"
+      "target": "src_components_app_header_appfocusmodecontrols",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82705,9 +82705,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_appheader"
+      "target": "src_components_app_header_appheader",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82717,9 +82717,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_appheaderaction"
+      "target": "src_components_app_header_appheaderaction",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82729,9 +82729,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_command_command"
+      "target": "src_components_ui_command_command",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82741,9 +82741,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_command_commanddialog"
+      "target": "src_components_ui_command_commanddialog",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82753,9 +82753,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_command_commandempty"
+      "target": "src_components_ui_command_commandempty",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82765,9 +82765,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_command_commandgroup"
+      "target": "src_components_ui_command_commandgroup",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82777,9 +82777,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_command_commandinput"
+      "target": "src_components_ui_command_commandinput",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82789,9 +82789,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_command_commanditem"
+      "target": "src_components_ui_command_commanditem",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82801,9 +82801,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_command_commandlist"
+      "target": "src_components_ui_command_commandlist",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82813,9 +82813,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_command_commandseparator"
+      "target": "src_components_ui_command_commandseparator",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82825,9 +82825,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_command_commandshortcut"
+      "target": "src_components_ui_command_commandshortcut",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82837,9 +82837,9 @@
       "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dropdown_menu_dropdownmenu"
+      "target": "src_components_ui_dropdown_menu_dropdownmenu",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82849,9 +82849,9 @@
       "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dropdown_menu_dropdownmenucontent"
+      "target": "src_components_ui_dropdown_menu_dropdownmenucontent",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82861,9 +82861,9 @@
       "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dropdown_menu_dropdownmenuitem"
+      "target": "src_components_ui_dropdown_menu_dropdownmenuitem",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82873,9 +82873,9 @@
       "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dropdown_menu_dropdownmenutrigger"
+      "target": "src_components_ui_dropdown_menu_dropdownmenutrigger",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82885,9 +82885,9 @@
       "source_location": "L82",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_input_input"
+      "target": "src_components_ui_input_input",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82897,9 +82897,9 @@
       "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_tooltip_tooltipprovider"
+      "target": "src_components_ui_tooltip_tooltipprovider",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82909,9 +82909,9 @@
       "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_utils_cn"
+      "target": "src_lib_utils_cn",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82921,9 +82921,9 @@
       "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_command_registry_createworkspacecommandruntime"
+      "target": "src_lib_workspace_command_registry_createworkspacecommandruntime",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82933,9 +82933,9 @@
       "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_command_registry_projectworkspacecommands"
+      "target": "src_lib_workspace_command_registry_projectworkspacecommands",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82945,9 +82945,9 @@
       "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_command_registry_projectworkspaceshortcutcatalog"
+      "target": "src_lib_workspace_command_registry_projectworkspaceshortcutcatalog",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82957,9 +82957,9 @@
       "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_command_registry_routeworkspaceshortcut"
+      "target": "src_lib_workspace_command_registry_routeworkspaceshortcut",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82969,9 +82969,9 @@
       "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_domain_identities_workspacecollectionrecord"
+      "target": "src_lib_workspace_domain_identities_workspacecollectionrecord",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82981,9 +82981,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_media_storage_createbrowsermediastorageadapter"
+      "target": "src_lib_workspace_media_storage_createbrowsermediastorageadapter",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -82993,9 +82993,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_media_storage_createmediaurlregistry"
+      "target": "src_lib_workspace_media_storage_createmediaurlregistry",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -83005,9 +83005,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_media_storage_garbagecollectmediaassets"
+      "target": "src_lib_workspace_media_storage_garbagecollectmediaassets",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -83017,9 +83017,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_media_storage_mediastorageadapter"
+      "target": "src_lib_workspace_media_storage_mediastorageadapter",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -83029,9 +83029,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_media_storage_mediastorageerror"
+      "target": "src_lib_workspace_media_storage_mediastorageerror",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -83041,9 +83041,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_media_storage_mediaurlregistry"
+      "target": "src_lib_workspace_media_storage_mediaurlregistry",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -83053,9 +83053,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_media_storage_readmediaassetblob"
+      "target": "src_lib_workspace_media_storage_readmediaassetblob",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -83065,9 +83065,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_media_storage_writemediaasset"
+      "target": "src_lib_workspace_media_storage_writemediaasset",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -85789,9 +85789,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_editor_document_blockeditordocumenttoplaintext"
+      "target": "src_editor_document_blockeditordocumenttoplaintext",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -85801,9 +85801,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_object_links_createworkspaceobjectlinkindex"
+      "target": "src_lib_workspace_object_links_createworkspaceobjectlinkindex",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -85813,9 +85813,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_object_links_selectbacklinksforobject"
+      "target": "src_lib_workspace_object_links_selectbacklinksforobject",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -85825,9 +85825,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_object_links_selectobjectsinside"
+      "target": "src_lib_workspace_object_links_selectobjectsinside",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -85837,9 +85837,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_object_links_selectpropertyrelationgraphedges"
+      "target": "src_lib_workspace_object_links_selectpropertyrelationgraphedges",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -85849,9 +85849,9 @@
       "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_objects_workspaceentity"
+      "target": "src_lib_workspace_objects_workspaceentity",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -91801,9 +91801,9 @@
       "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_object_storage"
+      "target": "src_lib_workspace_object_storage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91813,9 +91813,9 @@
       "source_location": "L108",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_object_types"
+      "target": "src_lib_workspace_object_types",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91825,9 +91825,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_icons"
+      "target": "src_components_app_header_icons",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91837,9 +91837,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_objects"
+      "target": "src_lib_workspace_objects",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91849,9 +91849,9 @@
       "source_location": "L128",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_routing"
+      "target": "src_lib_workspace_routing",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91861,9 +91861,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header_tabs"
+      "target": "src_components_app_header_tabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91873,9 +91873,9 @@
       "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_shell"
+      "target": "src_components_app_shell",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91885,9 +91885,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_side_panel_header"
+      "target": "src_components_app_side_panel_header",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91897,9 +91897,9 @@
       "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_editor_document"
+      "target": "src_editor_document",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91909,9 +91909,9 @@
       "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_sidebar"
+      "target": "src_components_app_sidebar",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91921,9 +91921,9 @@
       "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_sidebar_icons"
+      "target": "src_components_app_sidebar_icons",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91933,9 +91933,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_sidebar_overview"
+      "target": "src_components_app_sidebar_overview",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91945,9 +91945,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_sidebar_source_icon"
+      "target": "src_components_app_sidebar_source_icon",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91957,9 +91957,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_icons"
+      "target": "src_components_object_icons",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91969,9 +91969,9 @@
       "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_object_lifecycle_contracts"
+      "target": "src_components_object_lifecycle_contracts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91981,9 +91981,9 @@
       "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_button"
+      "target": "src_components_ui_button",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -91993,9 +91993,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dialog"
+      "target": "src_components_ui_dialog",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -92005,9 +92005,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_app_header"
+      "target": "src_components_app_header",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -92017,9 +92017,9 @@
       "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_command"
+      "target": "src_components_ui_command",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -92029,9 +92029,9 @@
       "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_dropdown_menu"
+      "target": "src_components_ui_dropdown_menu",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -92041,9 +92041,9 @@
       "source_location": "L82",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_input"
+      "target": "src_components_ui_input",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -92053,9 +92053,9 @@
       "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_ui_tooltip"
+      "target": "src_components_ui_tooltip",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -92065,9 +92065,9 @@
       "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_utils"
+      "target": "src_lib_utils",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -92077,9 +92077,9 @@
       "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_command_registry"
+      "target": "src_lib_workspace_command_registry",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -92089,9 +92089,9 @@
       "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_domain_identities"
+      "target": "src_lib_workspace_domain_identities",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -92101,9 +92101,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_lib_workspace_media_storage"
+      "target": "src_lib_workspace_media_storage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -93181,9 +93181,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_editor_document"
+      "target": "src_editor_document",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -93193,9 +93193,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_object_links"
+      "target": "src_lib_workspace_object_links",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -93205,9 +93205,9 @@
       "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_objects"
+      "target": "src_lib_workspace_objects",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -103648,9 +103648,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "docs_references_capacities_keyboard_command_system",
-      "target": "docs_references_capacities_keyboard_command_system_capacities_keyboard_command_system_reference",
-      "confidence_score": 1.0
+      "target": "docs_references_capacities_keyboard_command_system_capacities_keyboard_command_system_reference"
     },
     {
       "relation": "contains",
@@ -103659,9 +103659,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "docs_references_capacities_keyboard_command_system_capacities_keyboard_command_system_reference",
-      "target": "docs_references_capacities_keyboard_command_system_evidence_bundles",
-      "confidence_score": 1.0
+      "target": "docs_references_capacities_keyboard_command_system_evidence_bundles"
     },
     {
       "relation": "contains",
@@ -103670,9 +103670,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "docs_references_capacities_keyboard_command_system_capacities_keyboard_command_system_reference",
-      "target": "docs_references_capacities_keyboard_command_system_reused_sources",
-      "confidence_score": 1.0
+      "target": "docs_references_capacities_keyboard_command_system_reused_sources"
     },
     {
       "relation": "contains",
@@ -103681,9 +103681,9 @@
       "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "docs_references_capacities_keyboard_command_system_capacities_keyboard_command_system_reference",
-      "target": "docs_references_capacities_keyboard_command_system_coverage_summary",
-      "confidence_score": 1.0
+      "target": "docs_references_capacities_keyboard_command_system_coverage_summary"
     },
     {
       "relation": "contains",
@@ -125197,9 +125197,9 @@
       "source_location": "L1088",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacecontext"
+      "target": "src_components_workspace_controller_workspacecontext",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125208,9 +125208,9 @@
       "source_location": "L1092",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_useworkspace"
+      "target": "src_components_workspace_controller_useworkspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125219,9 +125219,9 @@
       "source_location": "L1102",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspaceprovider"
+      "target": "src_components_workspace_controller_workspaceprovider",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125230,9 +125230,9 @@
       "source_location": "L155",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_serializedworkspacetab"
+      "target": "src_components_workspace_controller_serializedworkspacetab",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125241,9 +125241,9 @@
       "source_location": "L161",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacetabgroupstate"
+      "target": "src_components_workspace_controller_workspacetabgroupstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125252,9 +125252,9 @@
       "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacetabstate"
+      "target": "src_components_workspace_controller_workspacetabstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125263,9 +125263,9 @@
       "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacespacesstoragestate"
+      "target": "src_components_workspace_controller_workspacespacesstoragestate",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125274,9 +125274,9 @@
       "source_location": "L176",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_isrecord"
+      "target": "src_components_workspace_controller_isrecord",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125285,9 +125285,9 @@
       "source_location": "L180",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspaceobjectsstoragekeyforspace"
+      "target": "src_components_workspace_controller_workspaceobjectsstoragekeyforspace",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125296,9 +125296,9 @@
       "source_location": "L184",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_createspaceid"
+      "target": "src_components_workspace_controller_createspaceid",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125307,9 +125307,9 @@
       "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_normalizeworkspacetagtitle"
+      "target": "src_components_workspace_controller_normalizeworkspacetagtitle",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125318,9 +125318,9 @@
       "source_location": "L207",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_parseworkspacespacesstorage"
+      "target": "src_components_workspace_controller_parseworkspacespacesstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125329,9 +125329,9 @@
       "source_location": "L238",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_serializeworkspacespacesstorage"
+      "target": "src_components_workspace_controller_serializeworkspacespacesstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125340,9 +125340,9 @@
       "source_location": "L249",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_tosidebarspaces"
+      "target": "src_components_workspace_controller_tosidebarspaces",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125351,9 +125351,9 @@
       "source_location": "L262",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_parseserializedworkspacetab"
+      "target": "src_components_workspace_controller_parseserializedworkspacetab",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125362,9 +125362,9 @@
       "source_location": "L276",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_parseworkspacetabgroupstate"
+      "target": "src_components_workspace_controller_parseworkspacetabgroupstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125373,9 +125373,9 @@
       "source_location": "L2858",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_getdraftaccept"
+      "target": "src_components_workspace_controller_getdraftaccept",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125384,9 +125384,9 @@
       "source_location": "L2865",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacecommandpalette"
+      "target": "src_components_workspace_controller_workspacecommandpalette",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125395,9 +125395,9 @@
       "source_location": "L290",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_parseworkspacetabstate"
+      "target": "src_components_workspace_controller_parseworkspacetabstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125406,31 +125406,9 @@
       "source_location": "L303",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_serializeworkspacetab"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3064",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_entitytextforfind"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3074",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspaceextendedsearchdialog"
+      "target": "src_components_workspace_controller_serializeworkspacetab",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125439,53 +125417,53 @@
       "source_location": "L311",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_serializeworkspacetabstate"
+      "target": "src_components_workspace_controller_serializeworkspacetabstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3160",
+      "source_location": "L3159",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacefindinpagedialog"
+      "target": "src_components_workspace_controller_entitytextforfind",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3218",
+      "source_location": "L3169",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspaceshortcutbrowser"
+      "target": "src_components_workspace_controller_workspaceextendedsearchdialog",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3339",
+      "source_location": "L3255",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacedrafterror"
+      "target": "src_components_workspace_controller_workspacefindinpagedialog",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3360",
+      "source_location": "L3313",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacecreationdialog"
+      "target": "src_components_workspace_controller_workspaceshortcutbrowser",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125494,20 +125472,31 @@
       "source_location": "L337",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_withstoredtabflags"
+      "target": "src_components_workspace_controller_withstoredtabflags",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3476",
+      "source_location": "L3434",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacemainheader"
+      "target": "src_components_workspace_controller_workspacedrafterror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/workspace-controller.tsx",
+      "source_location": "L3455",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_workspace_controller",
+      "target": "src_components_workspace_controller_workspacecreationdialog",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125516,42 +125505,31 @@
       "source_location": "L348",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_createinitialmaintabs"
+      "target": "src_components_workspace_controller_createinitialmaintabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3611",
+      "source_location": "L3571",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_maintabsearchoverlay"
+      "target": "src_components_workspace_controller_workspacemainheader",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3727",
+      "source_location": "L3706",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacesidepanelheader"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3816",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_sidepanelsearchoverlay"
+      "target": "src_components_workspace_controller_maintabsearchoverlay",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125560,9 +125538,31 @@
       "source_location": "L382",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_createinitialsidetabs"
+      "target": "src_components_workspace_controller_createinitialsidetabs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/workspace-controller.tsx",
+      "source_location": "L3822",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_workspace_controller",
+      "target": "src_components_workspace_controller_workspacesidepanelheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/workspace-controller.tsx",
+      "source_location": "L3911",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_workspace_controller",
+      "target": "src_components_workspace_controller_sidepanelsearchoverlay",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125571,20 +125571,20 @@
       "source_location": "L398",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_createspecialsidetabs"
+      "target": "src_components_workspace_controller_createspecialsidetabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L4018",
+      "source_location": "L4113",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_tabpreview"
+      "target": "src_components_workspace_controller_tabpreview",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125593,9 +125593,9 @@
       "source_location": "L435",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_createspecialsideitems"
+      "target": "src_components_workspace_controller_createspecialsideitems",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125604,9 +125604,9 @@
       "source_location": "L458",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_resolveworkspaceentitytab"
+      "target": "src_components_workspace_controller_resolveworkspaceentitytab",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125615,9 +125615,9 @@
       "source_location": "L513",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_resolvemaintab"
+      "target": "src_components_workspace_controller_resolvemaintab",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125626,9 +125626,9 @@
       "source_location": "L540",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_resolvesidetab"
+      "target": "src_components_workspace_controller_resolvesidetab",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125637,9 +125637,9 @@
       "source_location": "L583",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_uniquetabs"
+      "target": "src_components_workspace_controller_uniquetabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125648,9 +125648,9 @@
       "source_location": "L592",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_selectstoredtabvalue"
+      "target": "src_components_workspace_controller_selectstoredtabvalue",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125659,9 +125659,9 @@
       "source_location": "L602",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_shouldclearactiveentity"
+      "target": "src_components_workspace_controller_shouldclearactiveentity",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125670,9 +125670,9 @@
       "source_location": "L611",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_resolverestoredworkspacetabs"
+      "target": "src_components_workspace_controller_resolverestoredworkspacetabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125681,9 +125681,9 @@
       "source_location": "L660",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_shouldstarttabstoragerestore"
+      "target": "src_components_workspace_controller_shouldstarttabstoragerestore",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125692,9 +125692,9 @@
       "source_location": "L672",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_parsedcollectionpinnedid"
+      "target": "src_components_workspace_controller_parsedcollectionpinnedid",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125703,9 +125703,9 @@
       "source_location": "L677",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacecollectionrecords"
+      "target": "src_components_workspace_controller_workspacecollectionrecords",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125714,9 +125714,9 @@
       "source_location": "L684",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_getmediastorageadapter"
+      "target": "src_components_workspace_controller_getmediastorageadapter",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125725,9 +125725,9 @@
       "source_location": "L689",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_getmediaurlregistry"
+      "target": "src_components_workspace_controller_getmediaurlregistry",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125736,9 +125736,9 @@
       "source_location": "L694",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_formatbytelimit"
+      "target": "src_components_workspace_controller_formatbytelimit",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125747,9 +125747,9 @@
       "source_location": "L698",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_mediastorageerrormessage"
+      "target": "src_components_workspace_controller_mediastorageerrormessage",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125758,9 +125758,9 @@
       "source_location": "L717",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_parsepinnedcollectionid"
+      "target": "src_components_workspace_controller_parsepinnedcollectionid",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125769,9 +125769,9 @@
       "source_location": "L741",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_getpinnedentityfromid"
+      "target": "src_components_workspace_controller_getpinnedentityfromid",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125780,9 +125780,9 @@
       "source_location": "L800",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_getpinnedentityfromids"
+      "target": "src_components_workspace_controller_getpinnedentityfromids",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125791,9 +125791,9 @@
       "source_location": "L825",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_toworkspacesidebarpinsources"
+      "target": "src_components_workspace_controller_toworkspacesidebarpinsources",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125802,9 +125802,9 @@
       "source_location": "L872",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_arepinnedentitysetsequivalent"
+      "target": "src_components_workspace_controller_arepinnedentitysetsequivalent",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125813,9 +125813,9 @@
       "source_location": "L887",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_prunecollectionrecordsbyobjecttypes"
+      "target": "src_components_workspace_controller_prunecollectionrecordsbyobjecttypes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125824,9 +125824,9 @@
       "source_location": "L899",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_prunesidebaritemsbyobjecttypes"
+      "target": "src_components_workspace_controller_prunesidebaritemsbyobjecttypes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125835,9 +125835,9 @@
       "source_location": "L917",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_arecollectionrecordmapsequivalent"
+      "target": "src_components_workspace_controller_arecollectionrecordmapsequivalent",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125846,9 +125846,9 @@
       "source_location": "L936",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_arestringarraymapsequivalent"
+      "target": "src_components_workspace_controller_arestringarraymapsequivalent",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125857,9 +125857,9 @@
       "source_location": "L953",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_appsidebarprimarynavigationaction"
+      "target": "src_components_workspace_controller_appsidebarprimarynavigationaction",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125868,9 +125868,9 @@
       "source_location": "L959",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_initialspaces"
+      "target": "src_components_workspace_controller_initialspaces",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -125879,9 +125879,9 @@
       "source_location": "L969",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_components_workspace_controller",
-      "target": "src_components_workspace_controller_workspacecontextvalue"
+      "target": "src_components_workspace_controller_workspacecontextvalue",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137000,9 +137000,9 @@
       "source_location": "L106",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentmutation"
+      "target": "src_lib_workspace_related_content_relatedcontentmutation",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137011,9 +137011,9 @@
       "source_location": "L111",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentcacheentry"
+      "target": "src_lib_workspace_related_content_relatedcontentcacheentry",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137022,9 +137022,9 @@
       "source_location": "L116",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentcachekey"
+      "target": "src_lib_workspace_related_content_relatedcontentcachekey",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137033,9 +137033,9 @@
       "source_location": "L128",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentcache"
+      "target": "src_lib_workspace_related_content_relatedcontentcache",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137044,9 +137044,9 @@
       "source_location": "L152",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_isdocumentlike"
+      "target": "src_lib_workspace_related_content_isdocumentlike",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137055,9 +137055,9 @@
       "source_location": "L158",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_isrelatedcontenteligible"
+      "target": "src_lib_workspace_related_content_isrelatedcontenteligible",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137066,9 +137066,9 @@
       "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentreason"
+      "target": "src_lib_workspace_related_content_relatedcontentreason",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137077,9 +137077,9 @@
       "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_readentityspaceid"
+      "target": "src_lib_workspace_related_content_readentityspaceid",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137088,9 +137088,9 @@
       "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_istrashedentity"
+      "target": "src_lib_workspace_related_content_istrashedentity",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137099,9 +137099,9 @@
       "source_location": "L181",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_issamespace"
+      "target": "src_lib_workspace_related_content_issamespace",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137110,9 +137110,9 @@
       "source_location": "L186",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_normalizetext"
+      "target": "src_lib_workspace_related_content_normalizetext",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137121,31 +137121,20 @@
       "source_location": "L195",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_textforentity"
+      "target": "src_lib_workspace_related_content_textforentity",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L215",
+      "source_location": "L219",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_sharedcount"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L224",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_entitycollections"
+      "target": "src_lib_workspace_related_content_sharedcount",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137154,9 +137143,9 @@
       "source_location": "L228",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_entitytags"
+      "target": "src_lib_workspace_related_content_entitycollections",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137165,20 +137154,31 @@
       "source_location": "L232",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_lexicalscore"
+      "target": "src_lib_workspace_related_content_entitytags",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L243",
+      "source_location": "L236",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_readupdatedat"
+      "target": "src_lib_workspace_related_content_lexicalscore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/workspace-related-content.ts",
+      "source_location": "L247",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_lib_workspace_related_content",
+      "target": "src_lib_workspace_related_content_readupdatedat",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137187,42 +137187,42 @@
       "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentproviderinput"
+      "target": "src_lib_workspace_related_content_relatedcontentproviderinput",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L250",
+      "source_location": "L254",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_recencyscore"
+      "target": "src_lib_workspace_related_content_recencyscore",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L258",
+      "source_location": "L262",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_validaterelatedcontentresults"
+      "target": "src_lib_workspace_related_content_validaterelatedcontentresults",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L285",
+      "source_location": "L289",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_notesapplocalrelatedcontentprovider"
+      "target": "src_lib_workspace_related_content_notesapplocalrelatedcontentprovider",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137231,20 +137231,20 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentproviderresult"
+      "target": "src_lib_workspace_related_content_relatedcontentproviderresult",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/workspace-related-content.ts",
-      "source_location": "L389",
+      "source_location": "L393",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_selectrelatedcontent"
+      "target": "src_lib_workspace_related_content_selectrelatedcontent",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137253,9 +137253,9 @@
       "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentresult"
+      "target": "src_lib_workspace_related_content_relatedcontentresult",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137264,9 +137264,9 @@
       "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentprovider"
+      "target": "src_lib_workspace_related_content_relatedcontentprovider",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137275,9 +137275,9 @@
       "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentstate"
+      "target": "src_lib_workspace_related_content_relatedcontentstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -137286,9 +137286,9 @@
       "source_location": "L98",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content",
-      "target": "src_lib_workspace_related_content_relatedcontentcachekeyinput"
+      "target": "src_lib_workspace_related_content_relatedcontentcachekeyinput",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -138870,9 +138870,9 @@
       "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "tests_keyboard_command_evidence_contract_test",
-      "target": "tests_keyboard_command_evidence_contract_test_manifest",
-      "confidence_score": 1.0
+      "target": "tests_keyboard_command_evidence_contract_test_manifest"
     },
     {
       "relation": "contains",
@@ -139563,9 +139563,9 @@
       "source_location": "L131",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_relatedcontentcache",
-      "target": "src_lib_workspace_related_content_relatedcontentcache_get"
+      "target": "src_lib_workspace_related_content_relatedcontentcache_get",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -139574,9 +139574,9 @@
       "source_location": "L135",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_relatedcontentcache",
-      "target": "src_lib_workspace_related_content_relatedcontentcache_set"
+      "target": "src_lib_workspace_related_content_relatedcontentcache_set",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -139585,9 +139585,9 @@
       "source_location": "L139",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "src_lib_workspace_related_content_relatedcontentcache",
-      "target": "src_lib_workspace_related_content_relatedcontentcache_invalidate"
+      "target": "src_lib_workspace_related_content_relatedcontentcache_invalidate",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -140368,9 +140368,9 @@
       "source_location": "L327",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 0.5,
       "source": "src_components_workspace_controller_serializeworkspacetabstate",
-      "target": "src_components_workspace_controller_serializeworkspacetab"
+      "target": "src_components_workspace_controller_serializeworkspacetab",
+      "confidence_score": 0.5
     },
     {
       "relation": "indirect_call",
@@ -141422,7 +141422,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "src/components/workspace-controller.tsx",
-      "source_location": "L3780",
+      "source_location": "L3875",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_workspace_controller_workspacesidepanelheader",
@@ -141442,5 +141442,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8ef5cfdd5400fb41ba27cf0740c7b7096d4369d8"
+  "built_at_commit": "ffa841c4b41971dd0aef2656efc39ddf33eb477b"
 }
