@@ -264,6 +264,12 @@
       "noObjectsInside": "No objects inside yet.",
       "noRelatedContent": "No related content yet.",
       "openMentionSource": "Open source",
+      "relatedContentError": "Related content is unavailable right now.",
+      "relatedContentPartial": "Showing local related content with partial provider results.",
+      "relatedContentProvider": "Ranked locally by Notes App.",
+      "relatedContentStale": "Showing the last available related content.",
+      "relatedContentUnavailable": "Related content needs more local context.",
+      "relatedContentUnsupported": "Related content is not available for this object type.",
       "references": "{count, plural, one {# reference} other {# references}}",
       "title": "Links and references",
       "unlinkedMentions": "Unlinked mentions"

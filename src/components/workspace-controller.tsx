@@ -2872,7 +2872,10 @@ function WorkspaceCommandPalette() {
     setActiveAction,
     setActiveEntityId,
     setCommandPaletteOpen,
+    setExtendedSearchOpen,
+    setFindInPageOpen,
     setMainValue,
+    setShortcutBrowserOpen,
     setSideSearchOpen,
     structures,
   } = useWorkspace();
@@ -2892,6 +2895,11 @@ function WorkspaceCommandPalette() {
         t,
         actions: {
           openPalette: () => setCommandPaletteOpen(true),
+          openNewContent: () =>
+            createWorkspaceEntity("page", t("objectTypeStudio.objectTypes.page")),
+          openExtendedSearch: () => setExtendedSearchOpen(true),
+          openFindInPage: () => setFindInPageOpen(true),
+          openShortcuts: () => setShortcutBrowserOpen(true),
           focusSidebarSearch: () => {
             setSideSearchOpen(true);
           },
@@ -2920,7 +2928,10 @@ function WorkspaceCommandPalette() {
       setActiveAction,
       setActiveEntityId,
       setCommandPaletteOpen,
+      setExtendedSearchOpen,
+      setFindInPageOpen,
       setMainValue,
+      setShortcutBrowserOpen,
       setSideSearchOpen,
       structures,
       t,
@@ -3044,6 +3055,281 @@ function WorkspaceCommandPalette() {
               })}
             </CommandGroup>
           ) : null}
+        </CommandList>
+      </Command>
+    </CommandDialog>
+  );
+}
+
+function entityTextForFind(entity: WorkspaceEntity): string {
+  if (entity.kind === "document" || entity.kind === "quote") {
+    return blockEditorDocumentToPlainText(entity.body);
+  }
+  if (entity.kind === "task" || entity.kind === "url") return entity.body;
+  if (entity.kind === "table") return entity.notes;
+  if (entity.kind === "query") return entity.description;
+  return "";
+}
+
+function WorkspaceExtendedSearchDialog() {
+  const t = useTranslations("workspace");
+  const {
+    createdEntities,
+    extendedSearchOpen,
+    selectEntity,
+    setExtendedSearchOpen,
+    structures,
+  } = useWorkspace();
+  const [query, setQuery] = React.useState("");
+  const deferredQuery = React.useDeferredValue(query);
+  const searchIndex = React.useMemo(
+    () => buildWorkspaceSearchIndex(createdEntities),
+    [createdEntities],
+  );
+  const searchResults = React.useMemo(
+    () =>
+      deferredQuery.trim()
+        ? searchWorkspaceIndex(searchIndex, deferredQuery, "all").slice(0, 24)
+        : [],
+    [deferredQuery, searchIndex],
+  );
+
+  function handleOpenChange(open: boolean) {
+    setExtendedSearchOpen(open);
+    if (!open) setQuery("");
+  }
+
+  return (
+    <CommandDialog
+      open={extendedSearchOpen}
+      onOpenChange={handleOpenChange}
+      title={t("commands.extendedSearch.title")}
+      description={t("commands.extendedSearch.description")}
+      className="w-[min(48rem,calc(100vw-2rem))] rounded-xl border-border bg-popover text-popover-foreground shadow-2xl"
+    >
+      <Command data-slot="workspace-extended-search">
+        <CommandInput
+          value={query}
+          onValueChange={setQuery}
+          placeholder={t("commands.extendedSearch.placeholder")}
+        />
+        <CommandList className="max-h-[min(32rem,calc(100vh-12rem))]">
+          <CommandEmpty>{t("commands.extendedSearch.empty")}</CommandEmpty>
+          <CommandGroup heading={t("commands.groups.results")}>
+            {searchResults.map((result) => {
+              const entity = createdEntities.find(
+                (item) => item.id === result.entityId,
+              );
+              const structure = structures.find(
+                (item) => item.id === entity?.objectTypeId,
+              );
+              const definition = structure
+                ? objectTypeDefinitionById[structure.iconName]
+                : objectTypeDefinitionById.page;
+              return (
+                <CommandItem
+                  key={`${result.kind}:${result.entityId}:${result.kind === "block" ? result.blockId : "object"}`}
+                  value={`${result.title} ${result.kind === "block" ? result.text : ""}`}
+                  onSelect={() => {
+                    selectEntity(result.entityId);
+                    handleOpenChange(false);
+                  }}
+                >
+                  <ObjectIconBadge
+                    icon={definition.icon}
+                    tone={structure?.tone ?? "blue"}
+                  />
+                  <span className="min-w-0 flex-1 truncate">
+                    {result.kind === "object" ? result.title : result.text}
+                  </span>
+                  <span className="ml-auto max-w-40 truncate text-xs text-muted-foreground">
+                    {result.kind === "object"
+                      ? structure?.singularName
+                      : result.ownerTitle}
+                  </span>
+                </CommandItem>
+              );
+            })}
+          </CommandGroup>
+        </CommandList>
+      </Command>
+    </CommandDialog>
+  );
+}
+
+function WorkspaceFindInPageDialog() {
+  const t = useTranslations("workspace");
+  const {
+    activeEntityId,
+    createdEntities,
+    findInPageOpen,
+    setFindInPageOpen,
+  } = useWorkspace();
+  const [query, setQuery] = React.useState("");
+  const activeEntity = React.useMemo(
+    () => createdEntities.find((entity) => entity.id === activeEntityId),
+    [activeEntityId, createdEntities],
+  );
+  const matches = React.useMemo(() => {
+    if (!activeEntity || !query.trim()) return [];
+    return entityTextForFind(activeEntity)
+      .split("\n")
+      .map((text, index) => ({ id: `${activeEntity.id}:${index}`, text }))
+      .filter((line) =>
+        line.text.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+      )
+      .slice(0, 12);
+  }, [activeEntity, query]);
+
+  function handleOpenChange(open: boolean) {
+    setFindInPageOpen(open);
+    if (!open) setQuery("");
+  }
+
+  return (
+    <CommandDialog
+      open={findInPageOpen}
+      onOpenChange={handleOpenChange}
+      title={t("commands.findInPage.title")}
+      description={t("commands.findInPage.description")}
+      className="w-[min(38rem,calc(100vw-2rem))] rounded-xl border-border bg-popover text-popover-foreground shadow-2xl"
+    >
+      <Command data-slot="workspace-find-in-page">
+        <CommandInput
+          value={query}
+          onValueChange={setQuery}
+          placeholder={t("commands.findInPage.placeholder")}
+        />
+        <CommandList className="max-h-[min(22rem,calc(100vh-12rem))]">
+          <CommandEmpty>{t("commands.findInPage.empty")}</CommandEmpty>
+          <CommandGroup heading={activeEntity?.title ?? t("commands.findInPage.currentPage")}>
+            {matches.map((match) => (
+              <CommandItem key={match.id} value={match.text}>
+                <span className="min-w-0 flex-1 truncate">{match.text}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </Command>
+    </CommandDialog>
+  );
+}
+
+function WorkspaceShortcutBrowser() {
+  const t = useTranslations("workspace");
+  const {
+    activeAction,
+    createdEntities,
+    shortcutBrowserOpen,
+    setShortcutBrowserOpen,
+    structures,
+  } = useWorkspace();
+  const [query, setQuery] = React.useState("");
+  const platform: ShortcutPlatform =
+    typeof navigator !== "undefined" &&
+    navigator.platform.toLocaleLowerCase().includes("mac")
+      ? "mac"
+      : "windows";
+  const runtime = React.useMemo(
+    () =>
+      createWorkspaceCommandRuntime({
+        locale: "workspace",
+        t,
+        actions: {
+          openPalette: () => undefined,
+          openNewContent: () => undefined,
+          openExtendedSearch: () => undefined,
+          openFindInPage: () => undefined,
+          openShortcuts: () => undefined,
+          focusSidebarSearch: () => undefined,
+          openSettings: () => undefined,
+          navigateHome: () => undefined,
+          navigateBack: () => undefined,
+          navigateForward: () => undefined,
+          navigateToday: () => undefined,
+          openExplore: () => undefined,
+          toggleSidebar: () => undefined,
+          toggleSidePanel: () => undefined,
+          toggleFocusMode: () => undefined,
+          toggleTheme: () => undefined,
+          closeCurrentTab: () => undefined,
+          createTask: () => undefined,
+          setCalendarView: () => undefined,
+          moveCalendar: () => undefined,
+          createObject: () => undefined,
+        },
+        state: {
+          canNavigateToday: true,
+          canUseExtendedSearch: true,
+          canFindInPage: createdEntities.length > 0,
+          canOpenSettings: true,
+          canToggleTheme: true,
+          canCloseCurrentTab: true,
+          canCreateTask: structures.some((structure) => structure.id === "task"),
+          calendarActive: activeAction === "calendar",
+          structures: selectCreatableStructures(structures).map((structure) => ({
+            enabled: true,
+            id: structure.id,
+            label: structure.singularName,
+          })),
+        },
+      }),
+    [activeAction, createdEntities.length, structures, t],
+  );
+  const catalog = React.useMemo(
+    () => projectWorkspaceShortcutCatalog(runtime),
+    [runtime],
+  );
+  const normalizedQuery = query.trim().toLocaleLowerCase();
+  const groups = ["general", "navigation", "workspace", "page", "calendar", "creation"] as const;
+
+  function handleOpenChange(open: boolean) {
+    setShortcutBrowserOpen(open);
+    if (!open) setQuery("");
+  }
+
+  return (
+    <CommandDialog
+      open={shortcutBrowserOpen}
+      onOpenChange={handleOpenChange}
+      title={t("commands.shortcuts.title")}
+      description={t("commands.shortcuts.description")}
+      className="w-[min(44rem,calc(100vw-2rem))] rounded-xl border-border bg-popover text-popover-foreground shadow-2xl"
+    >
+      <Command data-slot="workspace-shortcut-browser">
+        <CommandInput
+          value={query}
+          onValueChange={setQuery}
+          placeholder={t("commands.shortcuts.placeholder")}
+        />
+        <CommandList className="max-h-[min(30rem,calc(100vh-12rem))]">
+          <CommandEmpty>{t("commands.shortcuts.empty")}</CommandEmpty>
+          {groups.map((group) => {
+            const entries = catalog.filter(
+              (entry) =>
+                entry.group === group &&
+                entry.shortcuts.length > 0 &&
+                (!normalizedQuery ||
+                  `${entry.label} ${entry.description} ${entry.shortcuts.join(" ")}`
+                    .toLocaleLowerCase()
+                    .includes(normalizedQuery)),
+            );
+            if (entries.length === 0) return null;
+            return (
+              <CommandGroup key={group} heading={t(`commands.groups.${group}`)}>
+                {entries.map((entry) => (
+                  <CommandItem key={entry.id} value={entry.label}>
+                    <span className="min-w-0 flex-1 truncate">{entry.label}</span>
+                    <CommandShortcut>
+                      {entry.shortcuts
+                        .map((shortcut) => formatShortcutChord(shortcut, platform))
+                        .join(" / ")}
+                    </CommandShortcut>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            );
+          })}
         </CommandList>
       </Command>
     </CommandDialog>

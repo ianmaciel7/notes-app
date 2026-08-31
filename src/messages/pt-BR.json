@@ -264,6 +264,12 @@
       "noObjectsInside": "Ainda não há objetos internos.",
       "noRelatedContent": "Ainda não há conteúdo relacionado.",
       "openMentionSource": "Abrir fonte",
+      "relatedContentError": "O conteúdo relacionado está indisponível no momento.",
+      "relatedContentPartial": "Mostrando conteúdo relacionado local com resultados parciais do provedor.",
+      "relatedContentProvider": "Ranqueado localmente pelo Notes App.",
+      "relatedContentStale": "Mostrando o último conteúdo relacionado disponível.",
+      "relatedContentUnavailable": "O conteúdo relacionado precisa de mais contexto local.",
+      "relatedContentUnsupported": "O conteúdo relacionado não está disponível para este tipo de objeto.",
       "references": "{count, plural, one {# referência} other {# referências}}",
       "title": "Links e referências",
       "unlinkedMentions": "Menções não vinculadas"

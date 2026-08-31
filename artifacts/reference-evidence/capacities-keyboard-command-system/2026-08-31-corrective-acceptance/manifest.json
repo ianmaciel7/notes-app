@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 2,
+  "source": {
+    "id": "capacities-keyboard-command-system-corrective-acceptance",
+    "origin": "local-corrective-evidence",
+    "kind": "post-implementation-acceptance-reconciliation"
+  },
+  "capturedAt": "2026-08-31T00:00:00-03:00",
+  "surface": "workspace command palette and editor suggestions",
+  "semanticState": "Corrective acceptance record for reconcile-keyboard-command-system-acceptance",
+  "worktrees": [
+    {
+      "path": "C:/Users/ianma/.codex/visualizations/2026/08/28/01a049b4-b8be-70c2-9105-acbe61da778f/notes-app-keyboard-command-system",
+      "branch": "codex/add-keyboard-command-system",
+      "head": "e2b7d4f",
+      "status": "clean",
+      "reason": "Used after sandbox blocked creation of a fresh clean dev worktree for this side-conversation pass."
+    }
+  ],
+  "commands": [
+    {
+      "name": "tests/workspace-objects.test.mjs",
+      "command": "node --test tests/workspace-objects.test.mjs",
+      "local_status": "passed",
+      "reference_status": "not applicable",
+      "outcome": "23/23 tests passed; the archived failing importHandler expectation did not reproduce in the clean historical worktree."
+    },
+    {
+      "name": "tests/workspace-surface-contract.test.mjs",
+      "command": "node --test tests/workspace-surface-contract.test.mjs",
+      "local_status": "passed",
+      "reference_status": "not applicable",
+      "outcome": "4/4 tests passed; the archived failing objectTypeHelper expectation did not reproduce in the clean historical worktree."
+    },
+    {
+      "name": "format",
+      "command": "pnpm.cmd format:check",
+      "local_status": "failed",
+      "reference_status": "not applicable",
+      "outcome": "Biome reported CRLF formatting drift in package.json and biome.json."
+    },
+    {
+      "name": "lint",
+      "command": "pnpm.cmd lint",
+      "local_status": "passed",
+      "reference_status": "not applicable",
+      "outcome": "Biome lint completed successfully over src, scripts, and tests."
+    },
+    {
+      "name": "typecheck",
+      "command": "pnpm.cmd typecheck",
+      "local_status": "passed",
+      "reference_status": "not applicable",
+      "outcome": "TypeScript completed with no reported errors."
+    },
+    {
+      "name": "complexity",
+      "command": "pnpm.cmd complexity",
+      "local_status": "failed",
+      "reference_status": "not applicable",
+      "outcome": "WorkspaceObjectPageView complexity 13 exceeded max 12; findUnlinkedMentionCandidates complexity 14 exceeded max 12."
+    },
+    {
+      "name": "locale",
+      "command": "pnpm.cmd typegen",
+      "local_status": "blocked",
+      "reference_status": "not applicable",
+      "outcome": "Blocked by EPERM writing .next/types/routes.d.ts in the historical visualization worktree."
+    },
+    {
+      "name": "test",
+      "command": "pnpm.cmd test",
+      "local_status": "passed",
+      "reference_status": "not applicable",
+      "outcome": "243/243 tests passed with non-fatal MODULE_TYPELESS_PACKAGE_JSON warnings."
+    },
+    {
+      "name": "build",
+      "command": "pnpm.cmd build",
+      "local_status": "blocked",
+      "reference_status": "not applicable",
+      "outcome": "Blocked before command start by the execution helper ACL in the side-conversation environment."
+    },
+    {
+      "name": "verify",
+      "command": "pnpm.cmd verify",
+      "local_status": "failed",
+      "reference_status": "not applicable",
+      "outcome": "Stopped at format:check because package.json and biome.json have CRLF formatting drift."
+    }
+  ],
+  "editorTriggerStates": [
+    {
+      "surface": "global palette",
+      "action": "Mod+K",
+      "local_status": "passed",
+      "reference_status": "unknown",
+      "outcome": "Archived implementation notes record localhost browser acceptance for Ctrl+K opening the shared palette. Matched authenticated Capacities comparison remains absent."
+    },
+    {
+      "surface": "global palette",
+      "action": "Mod+P",
+      "local_status": "passed",
+      "reference_status": "unknown",
+      "outcome": "Unit/router contract covers Mod+P equivalence through workspace.openPalette. Browser delivery of Ctrl+P was limited by in-app browser shortcut translation."
+    },
+    {
+      "surface": "global palette",
+      "action": "hover tone and row state",
+      "local_status": "passed",
+      "reference_status": "unknown",
+      "outcome": "Pointer and keyboard row-state contracts passed locally; exact Capacities hover tone remains a visual limitation."
+    },
+    {
+      "surface": "editor trigger",
+      "action": "IME composition",
+      "local_status": "passed",
+      "reference_status": "mutation-prohibited",
+      "outcome": "Unit contracts cover composition guards; authenticated reference mutation was not attempted."
+    },
+    {
+      "surface": "editor trigger",
+      "action": "reduced motion",
+      "local_status": "passed",
+      "reference_status": "unknown",
+      "outcome": "Source and unit contracts cover reduced-motion-safe state transitions. Matched reference motion comparison remains absent."
+    },
+    {
+      "surface": "editor trigger",
+      "action": "responsive containment",
+      "local_status": "passed",
+      "reference_status": "unknown",
+      "outcome": "Viewport clamp and no origin-flash contracts are covered locally. Matched reference containment comparison remains absent."
+    },
+    {
+      "surface": "editor trigger",
+      "action": "@, [[, and (( suggestions",
+      "local_status": "passed",
+      "reference_status": "unknown",
+      "outcome": "Archived implementation notes record localhost browser acceptance for object and block reference suggestions. Matched authenticated Capacities comparison remains absent."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "acceptance-matrix.md",
+      "type": "action-matrix",
+      "description": "Corrective local/reference acceptance matrix."
+    },
+    {
+      "path": "limitations.md",
+      "type": "limitations",
+      "description": "Truthful limitations for browser delivery, reference parity, and blocked verification gates."
+    }
+  ],
+  "redactions": [
+    "No cookies, tokens, credentials, storage values, private content, raw authenticated HTML, or complete third-party bundles stored."
+  ],
+  "limitations": [
+    "This corrective bundle does not confirm matched Capacities parity for new command surfaces.",
+    "A fresh clean dev worktree could not be created in this side conversation because git ref creation was blocked by filesystem permissions.",
+    "Build and typegen were blocked by environment ACL/EPERM conditions in the historical worktree.",
+    "Repository acceptance remains incomplete until format drift and complexity findings are resolved or formally re-baselined."
+  ]
+}

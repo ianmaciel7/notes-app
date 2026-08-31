@@ -228,11 +228,17 @@ test("current workspace media ingestion paths share writeMediaAsset", () => {
     new URL("../src/lib/workspace-media-storage.ts", import.meta.url),
     "utf8",
   );
+  const importExport = readFileSync(
+    new URL("../src/lib/workspace-import-export.ts", import.meta.url),
+    "utf8",
+  );
 
   assert.match(controller, /const commitWorkspaceFile[\s\S]*?writeMediaAsset\(/);
   assert.match(controller, /const importWorkspaceFiles[\s\S]*?writeMediaAsset\(/);
   assert.match(controller, /const updateWorkspaceEntity[\s\S]*?writeMediaAsset\(/);
   assert.equal((controller.match(/writeMediaAsset\(/g) ?? []).length, 3);
+  assert.match(importExport, /maxFileBytes: DEFAULT_MAX_MEDIA_BYTES/);
+  assert.doesNotMatch(importExport, /maxFileBytes:\s*50\s*\*\s*1024\s*\*\s*1024/);
   assert.equal((mediaStorage.match(/const MAX_MEDIA_FILE_BYTES/g) ?? []).length, 1);
   assert.doesNotMatch(controller, /50\s*\*\s*1024\s*\*\s*1024/);
 });
