@@ -491,6 +491,19 @@ function BlockEditor({
       );
   }, [editable, editor, scheduleCommit]);
 
+  const flushCurrentDocument = React.useCallback(() => {
+    if (!editor || !editable) {
+      flushCommit();
+      return;
+    }
+    const document = normalizeBlockEditorDocument({
+      schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+      doc: editor.getJSON(),
+    });
+    if (document) onChange?.(document);
+    flushCommit();
+  }, [editable, editor, flushCommit, onChange]);
+
   const interactions =
     editor && editable ? (
       <>
@@ -512,13 +525,13 @@ function BlockEditor({
       )}
       data-slot="block-editor"
       data-editable={editable}
-      onBlur={editable ? flushCommit : undefined}
+      onBlur={editable ? flushCurrentDocument : undefined}
     >
       {interactions}
       {editor && editable ? <CodeBlockActionSurface editor={editor} /> : null}
       <EditorContent
         editor={editor}
-        onBlur={editable ? flushCommit : undefined}
+        onBlur={editable ? flushCurrentDocument : undefined}
         onCompositionEnd={editable ? finishComposition : undefined}
         onCompositionStart={editable ? startComposition : undefined}
       />
