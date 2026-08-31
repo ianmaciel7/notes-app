@@ -1,0 +1,55 @@
+name: Codex object page parity runner
+
+on:
+  pull_request_target:
+    branches:
+      - dev
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - labeled
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: codex-object-page-parity-runner
+  cancel-in-progress: false
+
+jobs:
+  expose-script:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'codex/align-object-page-complete-parity'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out implementation branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/align-object-page-complete-parity
+          fetch-depth: 0
+          token: ${{ github.token }}
+
+      - name: Expose readable apply script once
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -f .github/scripts/apply-object-page-parity.py; then
+            echo "Readable apply script is already present."
+            exit 0
+          fi
+          cat .github/scripts/apply-object-page-parity.py.gz.b64.* \
+            | base64 --decode \
+            | gzip --decompress \
+            > .github/scripts/apply-object-page-parity.py
+          echo "6b4cd585cef239f1a6534298ba4e935ed8076498b706239fd804e32a533390b6  .github/scripts/apply-object-page-parity.py" \
+            | sha256sum --check --strict
+          python -m py_compile .github/scripts/apply-object-page-parity.py
+          git config user.name "Ian Maciel"
+          git config user.email "ianmaciel76@gmail.com"
+          git add -f .github/scripts/apply-object-page-parity.py
+          git commit -m "chore: expose parity apply script [script-exposed]"
+          git push origin HEAD:codex/align-object-page-complete-parity
