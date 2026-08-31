@@ -22,7 +22,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Repair ambiguous transformer markers and push
+      - name: Repair ambiguous document menu marker and push
         shell: bash
         run: |
           set -euo pipefail
@@ -32,98 +32,56 @@ jobs:
           path = Path('.github/scripts/apply-object-page-parity.py')
           text = path.read_text(encoding='utf-8')
 
-          blur_old = (
-              '        "      onBlur={editable ? flushCurrentDocument : undefined}\\n",\n'
-              '        "      onBlur={editable ? handleEditorBlur : undefined}\\n",'
+          source_old = (
+              "'''          <DocumentMoreMenu\n"
+              '            onChangeType={() => showMessage(t("documentMenu.changeType"))}\n'
+              "'''"
           )
-          blur_new = (
-              '        "      data-editable={editable}\\n"\n'
-              '        "      onBlur={editable ? flushCurrentDocument : undefined}\\n",\n'
-              '        "      data-editable={editable}\\n"\n'
-              '        "      onBlur={editable ? handleEditorBlur : undefined}\\n",'
+          source_new = (
+              "'''        menu={\n"
+              "          <DocumentMoreMenu\n"
+              '            onChangeType={() => showMessage(t("documentMenu.changeType"))}\n'
+              "            onCustomize={() => setCustomizeOpen(true)}\n"
+              "'''"
           )
-          if blur_old in text:
-              if text.count(blur_old) != 1:
-                  raise SystemExit(f'Expected one ambiguous blur marker, found {text.count(blur_old)}')
-              text = text.replace(blur_old, blur_new, 1)
-          elif blur_new not in text:
-              raise SystemExit('Neither the old nor repaired blur marker was found.')
+          replacement_old = (
+              "'''          <DocumentMoreMenu\n"
+              "            isPinned={isPinned}\n"
+              "            onChangeType={() =>\n"
+              "              setTypeActivationRequest((current) => current + 1)\n"
+              "            }\n"
+              "'''"
+          )
+          replacement_new = (
+              "'''        menu={\n"
+              "          <DocumentMoreMenu\n"
+              "            isPinned={isPinned}\n"
+              "            onChangeType={() =>\n"
+              "              setTypeActivationRequest((current) => current + 1)\n"
+              "            }\n"
+              "            onCustomize={() => setCustomizeOpen(true)}\n"
+              "'''"
+          )
 
-          header_target_old = """'''        entity={entity}
-                  structure={structure}
-                  collectionsControl={'''"""
-          header_target_new = """'''      <ObjectPageHeader
-                  entity={entity}
-                  structure={structure}
-                  collectionsControl={
-                    <ObjectPageCollections
-                      activationRequest={collectionsActivationRequest}'''"""
-          header_replacement_old = """'''        entity={entity}
-                  structure={structure}
-                  typeActivationRequest={typeActivationRequest}
-                  collectionsControl={'''"""
-          header_replacement_new = """'''      <ObjectPageHeader
-                  entity={entity}
-                  structure={structure}
-                  typeActivationRequest={typeActivationRequest}
-                  collectionsControl={
-                    <ObjectPageCollections
-                      activationRequest={collectionsActivationRequest}'''"""
-
-          if header_target_old in text and header_replacement_old in text:
-              if text.count(header_target_old) != 1:
+          if source_old in text and replacement_old in text:
+              if text.count(source_old) != 1:
                   raise SystemExit(
-                      f'Expected one source header marker, found {text.count(header_target_old)}'
+                      f'Expected one source menu marker, found {text.count(source_old)}'
                   )
-              if text.count(header_replacement_old) != 1:
+              if text.count(replacement_old) != 1:
                   raise SystemExit(
-                      f'Expected one replacement header marker, found {text.count(header_replacement_old)}'
+                      f'Expected one replacement menu marker, found {text.count(replacement_old)}'
                   )
-              text = text.replace(header_target_old, header_target_new, 1)
-              text = text.replace(header_replacement_old, header_replacement_new, 1)
-          elif not (
-              header_target_new in text and header_replacement_new in text
-          ):
-              raise SystemExit('Neither the old nor repaired object-header markers were found.')
-
-          menu_target_old = """'''          <DocumentMoreMenu
-                  onChangeType={() => showMessage(t(\"documentMenu.changeType\"))}
-          '''"""
-          menu_target_new = """'''        menu={
-                  <DocumentMoreMenu
-                    onChangeType={() => showMessage(t(\"documentMenu.changeType\"))}
-                    onCustomize={() => setCustomizeOpen(true)}
-          '''"""
-          menu_replacement_old = """'''          <DocumentMoreMenu
-                  isPinned={isPinned}
-                  onChangeType={() =>
-                    setTypeActivationRequest((current) => current + 1)
-                  }
-          '''"""
-          menu_replacement_new = """'''        menu={
-                  <DocumentMoreMenu
-                    isPinned={isPinned}
-                    onChangeType={() =>
-                      setTypeActivationRequest((current) => current + 1)
-                    }
-                    onCustomize={() => setCustomizeOpen(true)}
-          '''"""
-
-          if menu_target_old in text and menu_replacement_old in text:
-              if text.count(menu_target_old) != 1:
-                  raise SystemExit(
-                      f'Expected one source menu marker, found {text.count(menu_target_old)}'
-                  )
-              if text.count(menu_replacement_old) != 1:
-                  raise SystemExit(
-                      f'Expected one replacement menu marker, found {text.count(menu_replacement_old)}'
-                  )
-              text = text.replace(menu_target_old, menu_target_new, 1)
-              text = text.replace(menu_replacement_old, menu_replacement_new, 1)
-          elif not (menu_target_new in text and menu_replacement_new in text):
-              raise SystemExit('Neither the old nor repaired document-menu markers were found.')
-
-          path.write_text(text, encoding='utf-8')
+              text = text.replace(source_old, source_new, 1)
+              text = text.replace(replacement_old, replacement_new, 1)
+              path.write_text(text, encoding='utf-8')
+          elif source_new in text and replacement_new in text:
+              print('Document menu marker is already repaired.')
+          else:
+              raise SystemExit(
+                  'Document menu marker was not found; source=' 
+                  f'{text.count(source_old)}, replacement={text.count(replacement_old)}'
+              )
           PY
 
           python -m py_compile .github/scripts/apply-object-page-parity.py
