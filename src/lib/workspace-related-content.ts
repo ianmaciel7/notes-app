@@ -286,6 +286,68 @@ function validateRelatedContentResults(
   return { ...result, results };
 }
 
+type RelatedContentSignalContext = {
+  readonly backlinks: ReadonlySet<string>;
+  readonly directLinks: ReadonlySet<string>;
+  readonly newestTime: number;
+  readonly providerId: string;
+  readonly providerVersion: string;
+  readonly relationIds: ReadonlySet<string>;
+  readonly source: WorkspaceEntity;
+};
+
+function scoreRelatedContentCandidate(
+  context: RelatedContentSignalContext,
+  candidate: WorkspaceEntity,
+): RelatedContentResult | null {
+  const reasons: RelatedContentReason[] = [];
+  let score = 0;
+  const lexical = lexicalScore(context.source, candidate);
+  const weightedSignals: readonly [
+    boolean,
+    RelatedContentReason,
+    number,
+  ][] = [
+    [lexical > 0, "lexical", lexical * 3],
+    [context.directLinks.has(candidate.id), "direct-link", 5],
+    [context.backlinks.has(candidate.id), "backlink", 4],
+    [context.relationIds.has(candidate.id), "property-relation", 3],
+    [
+      sharedCount(entityTags(context.source), entityTags(candidate)) > 0,
+      "shared-tag",
+      sharedCount(entityTags(context.source), entityTags(candidate)) * 1.5,
+    ],
+    [
+      sharedCount(entityCollections(context.source), entityCollections(candidate)) >
+        0,
+      "shared-collection",
+      sharedCount(
+        entityCollections(context.source),
+        entityCollections(candidate),
+      ),
+    ],
+  ];
+  for (const [matched, reason, weight] of weightedSignals) {
+    if (!matched) continue;
+    reasons.push(reason);
+    score += weight;
+  }
+  const recent = score > 0 ? recencyScore(candidate, context.newestTime) * 0.01 : 0;
+  if (recent > 0) {
+    reasons.push("recency");
+    score += recent;
+  }
+  return score > 0
+    ? {
+        providerId: context.providerId,
+        providerVersion: context.providerVersion,
+        reasons,
+        score,
+        targetId: candidate.id,
+      }
+    : null;
+}
+
 const notesAppLocalRelatedContentProvider: RelatedContentProvider = {
   id: NOTES_APP_RELATED_CONTENT_PROVIDER_ID,
   version: NOTES_APP_RELATED_CONTENT_PROVIDER_VERSION,
@@ -322,57 +384,20 @@ const notesAppLocalRelatedContentProvider: RelatedContentProvider = {
       ...input.entities.map((entity) => Date.parse(readUpdatedAt(entity)) || 0),
       0,
     );
+    const context = {
+      backlinks,
+      directLinks,
+      newestTime,
+      providerId: this.id,
+      providerVersion: this.version,
+      relationIds,
+      source,
+    };
     const scored = input.entities.flatMap((candidate) => {
       if (candidateIdSet && !candidateIdSet.has(candidate.id)) return [];
       if (candidate.id === source.id) return [];
-      const reasons: RelatedContentReason[] = [];
-      let score = 0;
-      const lexical = lexicalScore(source, candidate);
-      if (lexical > 0) {
-        reasons.push("lexical");
-        score += lexical * 3;
-      }
-      if (directLinks.has(candidate.id)) {
-        reasons.push("direct-link");
-        score += 5;
-      }
-      if (backlinks.has(candidate.id)) {
-        reasons.push("backlink");
-        score += 4;
-      }
-      if (relationIds.has(candidate.id)) {
-        reasons.push("property-relation");
-        score += 3;
-      }
-      const tagMatches = sharedCount(entityTags(source), entityTags(candidate));
-      if (tagMatches > 0) {
-        reasons.push("shared-tag");
-        score += tagMatches * 1.5;
-      }
-      const collectionMatches = sharedCount(
-        entityCollections(source),
-        entityCollections(candidate),
-      );
-      if (collectionMatches > 0) {
-        reasons.push("shared-collection");
-        score += collectionMatches;
-      }
-      const recent = score > 0 ? recencyScore(candidate, newestTime) * 0.01 : 0;
-      if (recent > 0) {
-        reasons.push("recency");
-        score += recent;
-      }
-      return score > 0
-        ? [
-            {
-              providerId: this.id,
-              providerVersion: this.version,
-              reasons,
-              score,
-              targetId: candidate.id,
-            },
-          ]
-        : [];
+      const result = scoreRelatedContentCandidate(context, candidate);
+      return result ? [result] : [];
     });
     scored.sort(
       (left, right) =>

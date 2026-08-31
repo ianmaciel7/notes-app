@@ -1305,8 +1305,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-objects.test.mjs": {
-    "mtime": 1788170290.8708835,
-    "ast_hash": "e584fd4e3190026c7d138eb2eed87e74",
+    "mtime": 1788170934.810183,
+    "ast_hash": "746484e34a9f4461a9189b8b03512222",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20260822_164605_existem_componentes_pasta_ui_ou_algum_n_estao_segu.md": {
@@ -1640,8 +1640,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-import-export.ts": {
-    "mtime": 1788170045.77786,
-    "ast_hash": "a74d87aa29fd2483f73a4e4782da0944",
+    "mtime": 1788170934.0744238,
+    "ast_hash": "4fac57f0960ef73f04998671e85ade03",
     "semantic_hash": ""
   },
   "src/lib/workspace-media-storage.ts": {
@@ -2060,8 +2060,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-query-engine.ts": {
-    "mtime": 1788168743.1794596,
-    "ast_hash": "3a726c6481eccfcb3723b5acc1c0156d",
+    "mtime": 1788170911.310096,
+    "ast_hash": "a2a38316c38b83ab86974e458a06c62e",
     "semantic_hash": ""
   },
   "tests/e2e/domain-identities-and-relations.spec.ts": {
@@ -2110,8 +2110,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-graph.ts": {
-    "mtime": 1787942832.0287216,
-    "ast_hash": "a53876e4d569ce695c8b58307233b3e6",
+    "mtime": 1788170923.8298976,
+    "ast_hash": "05d9e0ac1e77025561de526d807f0db6",
     "semantic_hash": ""
   },
   "src/lib/workspace-routing.ts": {

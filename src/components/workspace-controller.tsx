@@ -3026,7 +3026,6 @@ function WorkspaceCommandPalette() {
       setShortcutBrowserOpen,
       setSideSearchOpen,
       showMessage,
-      structures,
       t,
       toggleLeft,
       toggleRight,

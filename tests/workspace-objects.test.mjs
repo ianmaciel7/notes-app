@@ -819,6 +819,12 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
   assert.match(content, /onClick=\{createObject\}/);
   assert.match(content, /onClick=\{onImport\}/);
   assert.match(content, /primary-action:tasks/);
+  assert.match(content, /data-slot="task-status-customization"/);
+  assert.match(content, /data-slot="task-recurrence-editor"/);
+  assert.match(content, /data-slot="task-occurrence-log"/);
+  assert.match(content, /data-slot="task-statistics"/);
+  assert.match(content, /lifecycle\.task\.emptyOccurrences/);
+  assert.match(content, /lifecycle\.task\.recurrenceInvalid/);
   assert.match(content, /function ObjectTypeOptionsMenu/);
   assert.match(content, /function ObjectTypeNewMenu/);
   assert.match(content, /object-type-filter-row/);
@@ -907,6 +913,17 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
       typeof messages.workspace.primaryNavigation.tasksHint,
       "string",
     );
+    assert.equal(typeof messages.workspace.lifecycle.task.status, "string");
+    assert.equal(typeof messages.workspace.lifecycle.task.recurrence, "string");
+    assert.equal(
+      typeof messages.workspace.lifecycle.task.emptyOccurrences,
+      "string",
+    );
+    assert.equal(
+      typeof messages.workspace.lifecycle.task.recurrenceInvalid,
+      "string",
+    );
+    assert.equal(typeof messages.workspace.lifecycle.task.statistics, "string");
     assert.equal(
       "namedItemViewNotReady" in messages.workspace.objectTypeOverview,
       false,

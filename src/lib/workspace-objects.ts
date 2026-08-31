@@ -33,6 +33,7 @@ import {
   setWorkspaceEntityPropertyValue,
   type WorkspacePropertyValueMap,
 } from "./workspace-property-values.ts";
+import type { TaskManagementMetadata } from "./workspace-task-management.ts";
 
 type ObjectTypeId = StructureId;
 
@@ -97,6 +98,7 @@ type TaskEntity = WorkspaceEntityBase & {
   body: string;
   completed: boolean;
   dueDate: string | null;
+  task?: TaskManagementMetadata;
 };
 
 type UrlEntity = WorkspaceEntityBase & {
@@ -878,6 +880,7 @@ const entityConversionFactories: Record<CreationFlow, EntityConversionFactory> =
       completed: source.kind === "task" ? source.completed : false,
       dueDate: source.kind === "task" ? source.dueDate : null,
       kind: "task",
+      task: source.kind === "task" ? source.task : undefined,
     }),
     url: (source, base) => ({
       ...base,

@@ -2,11 +2,11 @@
 
 - [x] 1.1 Add failing tests for active/trashed/purged transitions, idempotency, retention dates, invalid commands, and snapshot migration.
 - [x] 1.2 Implement Trash records and Space-scoped repository commands.
-- [ ] 1.3 Add database indexes and resumable bounded automatic cleanup.
+- [x] 1.3 Add database indexes and resumable bounded automatic cleanup.
 
 ## 2. Projection Integration
 
-- [ ] 2.1 Add failing tests proving trashed entities are excluded from search, queries, graph, backlinks, dashboards, calendar, tasks, and integrations.
+- [x] 2.1 Add failing tests proving trashed entities are excluded from search, queries, graph, backlinks, dashboards, calendar, tasks, and integrations.
 - [x] 2.2 Implement shared active-entity selectors instead of scattered deletion checks.
 - [x] 2.3 Preserve recoverable missing-reference states until restore or purge.
 

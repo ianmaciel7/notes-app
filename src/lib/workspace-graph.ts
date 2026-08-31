@@ -3,7 +3,11 @@ import {
   selectContextualGraphEdges,
   selectPropertyRelationGraphEdges,
 } from "./workspace-object-links.ts";
-import type { WorkspaceEntity } from "./workspace-objects.ts";
+import {
+  selectActiveEntities,
+  type WorkspaceEntity,
+  type WorkspaceObjectState,
+} from "./workspace-objects.ts";
 
 export type WorkspaceGraphEntity = {
   readonly id: string;
@@ -28,25 +32,33 @@ export type WorkspaceGraph = {
 };
 
 type LinkEdge = { from: string; to: string };
+type WorkspaceGraphEntitySource =
+  | Pick<WorkspaceObjectState, "entities" | "trashRecords">
+  | readonly WorkspaceGraphEntity[];
 
 export function projectWorkspaceGraph(
-  entities: readonly WorkspaceGraphEntity[],
+  entities: WorkspaceGraphEntitySource,
   activeId: string | null,
 ): WorkspaceGraph {
   if (!activeId) return { nodes: [], edges: [] };
-  const byId = new Map(entities.map((entity) => [entity.id, entity]));
+  const activeEntities = selectActiveEntities(
+    entities as
+      | Pick<WorkspaceObjectState, "entities" | "trashRecords">
+      | readonly WorkspaceEntity[],
+  );
+  const byId = new Map(activeEntities.map((entity) => [entity.id, entity]));
   const active = byId.get(activeId);
   if (!active) return { nodes: [], edges: [] };
 
   const linkIndex = createWorkspaceObjectLinkIndex(
-    entities as readonly WorkspaceEntity[],
+    activeEntities as readonly WorkspaceEntity[],
   );
   const contentEdges: LinkEdge[] = selectContextualGraphEdges(
     linkIndex,
     activeId,
   ).map((edge) => ({ from: edge.from, to: edge.to }));
   const propertyEdges: LinkEdge[] = selectPropertyRelationGraphEdges(
-    entities as readonly WorkspaceEntity[],
+    activeEntities as readonly WorkspaceEntity[],
   ).map((edge) => ({ from: edge.from, to: edge.to }));
   const contextualEdges = [...contentEdges, ...propertyEdges].filter(
     (edge) => edge.from === activeId || edge.to === activeId,
@@ -62,13 +74,11 @@ export function projectWorkspaceGraph(
     ).values(),
   );
   const relatedIds = new Set(
-    edges.map((edge) =>
-      edge.source === activeId ? edge.target : edge.source,
-    ),
+    edges.map((edge) => (edge.source === activeId ? edge.target : edge.source)),
   );
   const nodeIds = [
     activeId,
-    ...entities
+    ...activeEntities
       .filter((entity) => entity.id !== activeId && relatedIds.has(entity.id))
       .map((entity) => entity.id),
   ];

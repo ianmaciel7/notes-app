@@ -101,7 +101,11 @@ const entityValidators: Record<
   task: (value) =>
     typeof value.body === "string" &&
     typeof value.completed === "boolean" &&
-    (value.dueDate === null || typeof value.dueDate === "string"),
+    (value.dueDate === null || typeof value.dueDate === "string") &&
+    (value.task === undefined ||
+      (isRecord(value.task) &&
+        typeof value.task.completed === "boolean" &&
+        Array.isArray(value.task.occurrences))),
   url: (value) =>
     typeof value.body === "string" && typeof value.url === "string",
   tag: (value) => value.objectTypeId === "tag",

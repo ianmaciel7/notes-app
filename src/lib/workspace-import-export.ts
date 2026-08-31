@@ -20,6 +20,7 @@ import {
 import type { WorkspaceStructure } from "./workspace-object-types.ts";
 import {
   createInitialWorkspaceObjectState,
+  selectActiveEntities,
   type WorkspaceEntity,
   type WorkspaceObjectState,
 } from "./workspace-objects.ts";
@@ -882,10 +883,11 @@ function createWorkspaceExportBundle(
   now: () => Date = () => new Date(),
 ): WorkspaceExportBundle {
   const native = createNativeWorkspaceExport(state, mediaAssets, now);
-  const markdown = state.entities.map(reducedMarkdownForEntity);
+  const activeEntities = selectActiveEntities(state);
+  const markdown = activeEntities.map(reducedMarkdownForEntity);
   const csvRows = [
     ["id", "type", "title", "createdAt", "text"],
-    ...state.entities.map((entity) => [
+    ...activeEntities.map((entity) => [
       entity.id,
       entity.objectTypeId,
       entity.title,

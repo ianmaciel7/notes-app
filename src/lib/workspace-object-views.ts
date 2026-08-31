@@ -988,7 +988,9 @@ export function reorderDashboardSections(
   sectionIds: readonly string[],
   nowFactory: () => string = () => new Date().toISOString(),
 ): ViewDomainResult<StructureDashboard> {
-  if (sectionIds.some((sectionId) => sectionId.startsWith("sidebar-section:"))) {
+  if (
+    sectionIds.some((sectionId) => sectionId.startsWith("sidebar-section:"))
+  ) {
     return failure(
       "unknown-dashboard-section",
       "Sidebar section ids cannot be used by dashboard commands.",
@@ -1004,13 +1006,15 @@ export function reorderDashboardSections(
       "Dashboard reorder must include each dashboard section exactly once.",
     );
   }
-  const byId = new Map(dashboard.sections.map((section) => [section.id, section]));
+  const byId = new Map(
+    dashboard.sections.map((section) => [section.id, section]),
+  );
   return success({
     ...dashboard,
-    sections: sectionIds.map((sectionId, order) => ({
-      ...byId.get(sectionId)!,
-      order,
-    })),
+    sections: sectionIds.flatMap((sectionId, order) => {
+      const section = byId.get(sectionId);
+      return section ? [{ ...section, order }] : [];
+    }),
     updatedAt: nowFactory(),
   });
 }
@@ -1067,13 +1071,6 @@ function hasEntityCollectionMembership(entity: WorkspaceEntity): boolean {
 
 function hasEntityTags(entity: WorkspaceEntity): boolean {
   return "tags" in entity && entity.tags.length > 0;
-}
-
-function byCreatedAtDescending(
-  left: WorkspaceEntity,
-  right: WorkspaceEntity,
-): number {
-  return Date.parse(right.createdAt) - Date.parse(left.createdAt);
 }
 
 export function projectDashboardBuiltInSection(
@@ -1158,7 +1155,8 @@ function defaultSmallCardPropertyIds(
     structure.propertyDefinitions.map((definition) => definition.id),
   );
   return ["title", "objectTypeId", "createdAt"].filter(
-    (propertyId) => propertyId === "objectTypeId" || propertyIds.has(propertyId),
+    (propertyId) =>
+      propertyId === "objectTypeId" || propertyIds.has(propertyId),
   );
 }
 
@@ -1306,7 +1304,10 @@ export function setTableViewColumnVisibility(
   const presentation = requireTablePresentation(view);
   if (!presentation.ok) return presentation;
   if (!presentation.value.columns.some((column) => column.id === columnId)) {
-    return failure("invalid-data-view", `Table column "${columnId}" is missing.`);
+    return failure(
+      "invalid-data-view",
+      `Table column "${columnId}" is missing.`,
+    );
   }
   return success(
     replaceTablePresentation(
@@ -1334,7 +1335,10 @@ export function setTableViewColumnWidth(
     return failure("invalid-data-view", "Table column width must be positive.");
   }
   if (!presentation.value.columns.some((column) => column.id === columnId)) {
-    return failure("invalid-data-view", `Table column "${columnId}" is missing.`);
+    return failure(
+      "invalid-data-view",
+      `Table column "${columnId}" is missing.`,
+    );
   }
   return success(
     replaceTablePresentation(
@@ -1359,7 +1363,10 @@ export function setTableViewColumnWrapping(
   const presentation = requireTablePresentation(view);
   if (!presentation.ok) return presentation;
   if (!presentation.value.columns.some((column) => column.id === columnId)) {
-    return failure("invalid-data-view", `Table column "${columnId}" is missing.`);
+    return failure(
+      "invalid-data-view",
+      `Table column "${columnId}" is missing.`,
+    );
   }
   return success(
     replaceTablePresentation(
@@ -1400,7 +1407,10 @@ export function reorderTableViewColumns(
       view,
       {
         ...presentation.value,
-        columns: columnIds.map((columnId) => byId.get(columnId)!),
+        columns: columnIds.flatMap((columnId) => {
+          const column = byId.get(columnId);
+          return column ? [column] : [];
+        }),
       },
       nowFactory,
     ),
@@ -1716,7 +1726,9 @@ export function createInitialWorkspaceViewState(): WorkspaceViewState {
   return { dashboards: [], dataViews: [], templates: [], version: 1 };
 }
 
-function isDashboardSection(value: unknown): value is StructureDashboardSection {
+function isDashboardSection(
+  value: unknown,
+): value is StructureDashboardSection {
   if (!value || typeof value !== "object") return false;
   const section = value as Partial<StructureDashboardSection>;
   return (
@@ -1769,7 +1781,8 @@ function migrateLegacyDashboardSection(
       diagnostic: {
         ...diagnosticBase,
         code: "legacy-section-migrated",
-        message: "Legacy recent dashboard section migrated to a built-in source.",
+        message:
+          "Legacy recent dashboard section migrated to a built-in source.",
       },
       section: {
         id: dashboardSectionId(source),
@@ -1789,7 +1802,8 @@ function migrateLegacyDashboardSection(
       diagnostic: {
         ...diagnosticBase,
         code: "legacy-section-migrated",
-        message: "Legacy data-view dashboard section migrated to a query source.",
+        message:
+          "Legacy data-view dashboard section migrated to a query source.",
       },
       section: {
         id: dashboardSectionId(source),
@@ -1904,8 +1918,7 @@ function hasValidSnapshotRecords(snapshot: WorkspaceViewState): boolean {
   return (
     snapshot.dashboards.every(
       (dashboard) => migrateLegacyStructureDashboard(dashboard).ok,
-    ) &&
-    snapshot.templates.every(isTemplate)
+    ) && snapshot.templates.every(isTemplate)
   );
 }
 

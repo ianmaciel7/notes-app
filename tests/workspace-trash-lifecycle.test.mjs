@@ -2,12 +2,24 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { blockEditorDocumentFromPlainText } from "../src/editor/document.ts";
+import {
+  createDateReferenceIndex,
+  projectCalendarEntries,
+} from "../src/lib/workspace-dates-calendar.ts";
+import { projectWorkspaceGraph } from "../src/lib/workspace-graph.ts";
+import { createWorkspaceExportBundle } from "../src/lib/workspace-import-export.ts";
 import { garbageCollectMediaAssets } from "../src/lib/workspace-media-storage.ts";
 import { createWorkspaceObjectLinkIndex } from "../src/lib/workspace-object-links.ts";
 import {
   parseWorkspaceObjectSnapshot,
   serializeWorkspaceObjectState,
 } from "../src/lib/workspace-object-storage.ts";
+import {
+  executeQueryDefinition,
+  projectDashboardBuiltInSection,
+  projectDataView,
+  projectTaskDashboardSection,
+} from "../src/lib/workspace-object-views.ts";
 import {
   createInitialWorkspaceObjectState,
   selectActiveEntities,
@@ -247,8 +259,7 @@ test("normal projections exclude trashed entities and keep recoverable missing r
     },
     type: "updateEntity",
   });
-  const active = selectActiveEntities(linked);
-  const searchIndex = buildWorkspaceSearchIndex(active);
+  const searchIndex = buildWorkspaceSearchIndex(linked);
   const query = {
     filters: { filters: [], operator: "all" },
     resultKind: "object",
@@ -264,11 +275,11 @@ test("normal projections exclude trashed entities and keep recoverable missing r
     ["created-page-1"],
   );
   assert.deepEqual(
-    evaluateQuery(query, active).items.map((entity) => entity.id),
+    evaluateQuery(query, linked).items.map((entity) => entity.id),
     ["created-page-1"],
   );
   assert.deepEqual(
-    active.map((entity) => entity.id),
+    selectActiveEntities(linked).map((entity) => entity.id),
     ["created-page-1"],
   );
   assert.deepEqual(
@@ -283,6 +294,113 @@ test("normal projections exclude trashed entities and keep recoverable missing r
   assert.deepEqual(linkIndex.missingTargets, [
     { reason: "trashed", targetId: "created-page-2" },
   ]);
+
+  const graph = projectWorkspaceGraph(linked, "created-page-1");
+  assert.deepEqual(
+    graph.nodes.map((node) => node.id),
+    ["created-page-1"],
+  );
+  assert.deepEqual(graph.edges, []);
+});
+
+test("dashboard calendar tasks and exports isolate trashed entities", () => {
+  const state = reduce(
+    createTwoPageState(),
+    {
+      id: "created-page-2",
+      patch: {
+        body: blockEditorDocumentFromPlainText("See [[2026-08-25]]"),
+        collections: [],
+        tags: [],
+      },
+      type: "updateEntity",
+    },
+    { type: "beginCreate", objectTypeId: "task" },
+    { title: "Trashed task", type: "commitTask" },
+    {
+      id: "created-task-3",
+      patch: { dueDate: "2026-08-25" },
+      type: "updateEntity",
+    },
+    {
+      id: "created-page-2",
+      spaceId: "space-a",
+      trashedAt: "2026-08-31T12:00:00.000Z",
+      type: "deleteEntity",
+    },
+    {
+      id: "created-task-3",
+      spaceId: "space-a",
+      trashedAt: "2026-08-31T12:00:00.000Z",
+      type: "deleteEntity",
+    },
+  );
+  const dataView = {
+    createdAt: "2026-08-31T00:00:00.000Z",
+    creatorId: "user",
+    id: "view:pages",
+    name: "Pages",
+    presentation: {
+      density: "comfortable",
+      kind: "list",
+      showDescription: true,
+      showIcon: true,
+      visiblePropertyIds: ["title"],
+    },
+    query: {
+      filters: [],
+      sorts: [{ direction: "ascending", field: "title" }],
+      version: 1,
+    },
+    updatedAt: "2026-08-31T00:00:00.000Z",
+    workspaceId: "space-a",
+  };
+
+  assert.deepEqual(
+    executeQueryDefinition(state, dataView.query).map((entity) => entity.id),
+    ["created-page-1"],
+  );
+  assert.deepEqual(
+    projectDataView(dataView, state).items.map((entity) => entity.id),
+    ["created-page-1"],
+  );
+  assert.deepEqual(
+    projectDashboardBuiltInSection("not-in-collection", {
+      entities: state,
+      structureId: "page",
+    }).items.map((entity) => entity.id),
+    ["created-page-1"],
+  );
+  assert.deepEqual(
+    projectTaskDashboardSection(
+      "task-dashboard:today",
+      "Today",
+      { entities: state, structureId: "task" },
+      {
+        project: (input) => ({
+          id: "task-dashboard:today",
+          items: input.entities.filter((entity) => entity.kind === "task"),
+          supported: true,
+          title: "Today",
+        }),
+      },
+    ).items,
+    [],
+  );
+  assert.equal(createDateReferenceIndex(state).byDate.has("2026-08-25"), false);
+  assert.deepEqual(
+    projectCalendarEntries(state, state.structures, {
+      date: "2026-08-25",
+      spaceId: "space-a",
+      span: "day",
+    }).entries,
+    [],
+  );
+
+  const bundle = createWorkspaceExportBundle(state);
+  assert.equal(bundle.markdown.length, 1);
+  assert.doesNotMatch(bundle.csv.content, /created-page-2|created-task-3/);
+  assert.equal(bundle.native.snapshot.entities.length, 3);
 });
 
 test("media garbage collection waits until purge removes the recoverable owner", async () => {

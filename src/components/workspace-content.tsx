@@ -111,11 +111,8 @@ import {
   createWorkspaceObjectLinkIndex,
   selectBacklinksForObject,
   selectObjectsInside,
+  type WorkspaceBacklink,
 } from "@/lib/workspace-object-links";
-import {
-  RELATED_CONTENT_PANEL_LIMIT,
-  selectRelatedContent,
-} from "@/lib/workspace-related-content";
 import {
   acceptsFileForType,
   applyQueryDescription,
@@ -127,6 +124,18 @@ import {
   type UrlEntity,
   type WorkspaceEntity,
 } from "@/lib/workspace-objects";
+import {
+  RELATED_CONTENT_PANEL_LIMIT,
+  type RelatedContentState,
+  selectRelatedContent,
+} from "@/lib/workspace-related-content";
+import {
+  createDefaultTaskStatusRegistry,
+  createTaskManagementMetadata,
+  type TaskManagementMetadata,
+  taskRecurrenceStatistics,
+  validateTaskManagementMetadata,
+} from "@/lib/workspace-task-management";
 
 function AtomicNotesWorkspace() {
   const t = useTranslations("workspace");
@@ -2230,6 +2239,40 @@ function TaskObjectEditor({
   update,
 }: ObjectEditorProps & { entity: TaskEntity }) {
   const t = useTranslations("workspace");
+  const { spaceId } = useWorkspace();
+  const statusRegistry = React.useMemo(
+    () => createDefaultTaskStatusRegistry(spaceId),
+    [spaceId],
+  );
+  const task = React.useMemo(
+    () =>
+      entity.task ??
+      createTaskManagementMetadata({
+        completed: entity.completed,
+        deadline: entity.dueDate,
+        scheduledDate: entity.dueDate,
+        statusRegistry,
+      }),
+    [entity.completed, entity.dueDate, entity.task, statusRegistry],
+  );
+  const validation = validateTaskManagementMetadata(task, statusRegistry);
+  const statistics = taskRecurrenceStatistics(task, todayInputValue());
+  const statusValue = task.statusId ?? "";
+  const recurrenceValue = task.recurrence?.unit ?? "none";
+
+  function updateTaskMetadata(patch: Partial<TaskManagementMetadata>) {
+    const nextTask = createTaskManagementMetadata({
+      ...task,
+      ...patch,
+      statusRegistry,
+    });
+    update({
+      completed: nextTask.completed,
+      dueDate: nextTask.deadline,
+      task: nextTask,
+    });
+  }
+
   return (
     <ObjectEditorShell dataSlot="task-object-editor">
       {header}
@@ -2241,18 +2284,155 @@ function TaskObjectEditor({
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
-            checked={entity.completed}
-            onChange={(event) => update({ completed: event.target.checked })}
+            checked={task.completed}
+            onChange={(event) =>
+              updateTaskMetadata({ completed: event.target.checked })
+            }
           />
           {t("lifecycle.task.completed")}
         </label>
         <Input
           type="date"
           aria-label={t("lifecycle.task.dueDate")}
-          value={entity.dueDate ?? ""}
-          onChange={(event) => update({ dueDate: event.target.value || null })}
+          value={task.deadline ?? ""}
+          onChange={(event) =>
+            updateTaskMetadata({ deadline: event.target.value || null })
+          }
           className="h-8 w-auto"
         />
+      </div>
+      <div className="mt-4 grid gap-3 rounded-lg border border-border bg-muted/20 p-3 text-sm">
+        <div
+          data-slot="task-status-customization"
+          className="grid gap-2 sm:grid-cols-2"
+        >
+          <label className="grid gap-1">
+            <span className="text-xs font-medium text-muted-foreground">
+              {t("lifecycle.task.status")}
+            </span>
+            <select
+              aria-label={t("lifecycle.task.status")}
+              value={statusValue}
+              onChange={(event) =>
+                updateTaskMetadata({ statusId: event.target.value || null })
+              }
+              className="h-8 rounded-md border border-input bg-background px-2 text-sm"
+            >
+              <option value="">{t("lifecycle.task.noStatus")}</option>
+              {statusRegistry.definitions.map((status) => (
+                <option key={status.id} value={status.id}>
+                  {status.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="rounded-md border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">
+            {t("lifecycle.task.statusCustomization")}
+          </div>
+        </div>
+        <div
+          data-slot="task-recurrence-editor"
+          className="grid gap-2 sm:grid-cols-2"
+        >
+          <label className="grid gap-1">
+            <span className="text-xs font-medium text-muted-foreground">
+              {t("lifecycle.task.recurrence")}
+            </span>
+            <select
+              aria-label={t("lifecycle.task.recurrence")}
+              value={recurrenceValue}
+              onChange={(event) =>
+                updateTaskMetadata({
+                  recurrence:
+                    event.target.value === "none"
+                      ? null
+                      : {
+                          interval: 1,
+                          mode: "scheduled-date",
+                          unit: event.target.value as
+                            | "day"
+                            | "month"
+                            | "week"
+                            | "year",
+                        },
+                })
+              }
+              className="h-8 rounded-md border border-input bg-background px-2 text-sm"
+            >
+              <option value="none">{t("lifecycle.task.recurrenceNone")}</option>
+              <option value="day">{t("lifecycle.task.recurrenceDay")}</option>
+              <option value="week">{t("lifecycle.task.recurrenceWeek")}</option>
+              <option value="month">
+                {t("lifecycle.task.recurrenceMonth")}
+              </option>
+              <option value="year">{t("lifecycle.task.recurrenceYear")}</option>
+            </select>
+          </label>
+          {validation.ok ? (
+            <p className="self-end text-xs text-muted-foreground">
+              {t("lifecycle.task.recurrenceReady")}
+            </p>
+          ) : (
+            <p role="alert" className="self-end text-xs text-destructive">
+              {t("lifecycle.task.recurrenceInvalid")}
+            </p>
+          )}
+        </div>
+        <div data-slot="task-occurrence-log">
+          <h3 className="text-xs font-medium text-muted-foreground">
+            {t("lifecycle.task.occurrenceLog")}
+          </h3>
+          {task.occurrences.length > 0 ? (
+            <ul className="mt-2 grid gap-1">
+              {task.occurrences.map((occurrence) => (
+                <li
+                  key={occurrence.id}
+                  className="flex items-center justify-between rounded-md bg-background px-2 py-1 text-xs"
+                >
+                  <span>{occurrence.action}</span>
+                  <span className="text-muted-foreground">
+                    {occurrence.actedOnDate}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-2 rounded-md border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">
+              {t("lifecycle.task.emptyOccurrences")}
+            </p>
+          )}
+        </div>
+        <dl
+          data-slot="task-statistics"
+          className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-4"
+        >
+          <div>
+            <dt className="text-muted-foreground">
+              {t("lifecycle.task.statistics")}
+            </dt>
+            <dd className="font-medium">{statistics.totalCompletions}</dd>
+          </div>
+          <div>
+            <dt className="text-muted-foreground">
+              {t("lifecycle.task.currentStreak")}
+            </dt>
+            <dd className="font-medium">{statistics.currentStreak}</dd>
+          </div>
+          <div>
+            <dt className="text-muted-foreground">
+              {t("lifecycle.task.bestStreak")}
+            </dt>
+            <dd className="font-medium">{statistics.bestStreak}</dd>
+          </div>
+          <div>
+            <dt className="text-muted-foreground">
+              {t("lifecycle.task.completionRate")}
+            </dt>
+            <dd className="font-medium">
+              {Math.round(statistics.completionRate * 100)}%
+            </dd>
+          </div>
+        </dl>
       </div>
       <BufferedAutosizeTextarea
         data-lifecycle-contract={
@@ -2606,9 +2786,8 @@ function parseObjectTypeNamedItemTabId(
       index: Number(queryMatch[2]),
     };
   }
-  const destinationMatch = /^object-type-item:(settings|template):([^:]+)$/.exec(
-    id,
-  );
+  const destinationMatch =
+    /^object-type-item:(settings|template):([^:]+)$/.exec(id);
   return destinationMatch
     ? {
         kind: destinationMatch[1] as "settings" | "template",
@@ -4655,14 +4834,55 @@ function workspaceContentEntityRevision(entity: WorkspaceEntity): string {
   ].join(":");
 }
 
+type ContextualRelationsEntry =
+  | "backlinks"
+  | "objectsInside"
+  | "relatedContent";
+
+function contextualRelationIds({
+  backlinks,
+  entry,
+  objectsInside,
+  relatedState,
+}: {
+  readonly backlinks: readonly WorkspaceBacklink[];
+  readonly entry: ContextualRelationsEntry;
+  readonly objectsInside: readonly WorkspaceBacklink[];
+  readonly relatedState: RelatedContentState | null;
+}): readonly string[] {
+  if (entry === "backlinks") return backlinks.map((item) => item.sourceId);
+  if (entry === "objectsInside") {
+    return objectsInside.map((item) => item.targetId);
+  }
+  return relatedState?.kind === "ready"
+    ? relatedState.results.map((item) => item.targetId)
+    : [];
+}
+
+function contextualRelationRevision(
+  entry: ContextualRelationsEntry,
+  relatedState: RelatedContentState | null,
+): string | undefined {
+  return entry === "relatedContent" &&
+    relatedState &&
+    "revision" in relatedState
+    ? relatedState.revision
+    : undefined;
+}
+
 function ContextualRelationsWorkspace({
   entry,
 }: {
-  entry: "backlinks" | "objectsInside" | "relatedContent";
+  entry: ContextualRelationsEntry;
 }) {
   const t = useTranslations("workspace");
-  const { activeEntityId, createdEntities, objectTypes, selectEntity, spaceId } =
-    useWorkspace();
+  const {
+    activeEntityId,
+    createdEntities,
+    objectTypes,
+    selectEntity,
+    spaceId,
+  } = useWorkspace();
   const activeEntity = createdEntities.find(
     (entity) => entity.id === activeEntityId,
   );
@@ -4689,14 +4909,12 @@ function ContextualRelationsWorkspace({
         spaceId,
       })
     : null;
-  const rawIds =
-    entry === "backlinks"
-      ? backlinks.map((item) => item.sourceId)
-      : entry === "objectsInside"
-        ? objectsInside.map((item) => item.targetId)
-        : relatedState?.kind === "ready"
-          ? relatedState.results.map((item) => item.targetId)
-          : [];
+  const rawIds = contextualRelationIds({
+    backlinks,
+    entry,
+    objectsInside,
+    relatedState,
+  });
   const ids = Array.from(new Set(rawIds));
   const rows = ids
     .map((id) => createdEntities.find((entity) => entity.id === id))
@@ -4731,11 +4949,7 @@ function ContextualRelationsWorkspace({
     <div
       data-slot="contextual-panel-body"
       data-contextual-entry={entry}
-      data-result-revision={
-        entry === "relatedContent" && relatedState && "revision" in relatedState
-          ? relatedState.revision
-          : undefined
-      }
+      data-result-revision={contextualRelationRevision(entry, relatedState)}
       className="flex h-full min-h-0 items-start justify-center overflow-auto px-8 py-10 text-sidebar-foreground"
     >
       <div className="w-full max-w-[36rem]">
