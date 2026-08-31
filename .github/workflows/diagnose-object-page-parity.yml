@@ -1,0 +1,54 @@
+name: Diagnose object page parity transformer
+
+on:
+  push:
+    branches:
+      - codex/align-object-page-complete-parity
+
+permissions:
+  contents: write
+
+concurrency:
+  group: diagnose-object-page-parity
+  cancel-in-progress: true
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out delivery branch
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Run transformer against current dev and publish exact diagnostic
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp .github/scripts/apply-object-page-parity.py /tmp/apply-object-page-parity.py
+          git fetch --no-tags origin dev
+          git reset --hard origin/dev
+          git clean -fd
+          mkdir -p .temp/scripts
+          cp /tmp/apply-object-page-parity.py .temp/scripts/apply-object-page-parity.py
+
+          set +e
+          python .temp/scripts/apply-object-page-parity.py implementation > /tmp/object-page-parity-apply.log 2>&1
+          status=$?
+          set -e
+
+          mkdir -p .github/diagnostics
+          {
+            printf 'base_sha=%s\n' "$(git rev-parse HEAD)"
+            printf 'exit_status=%s\n\n' "$status"
+            cat /tmp/object-page-parity-apply.log
+          } > .github/diagnostics/object-page-parity-apply.txt
+
+          git config user.name 'Ian Maciel'
+          git config user.email 'ianmaciel76@gmail.com'
+          git add .github/diagnostics/object-page-parity-apply.txt
+          git commit -m 'chore: capture object page parity transformer diagnostic'
+          git push --force origin HEAD:codex/object-page-parity-diagnostic
+
+          cat .github/diagnostics/object-page-parity-apply.txt

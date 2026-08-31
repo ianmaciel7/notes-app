@@ -1,0 +1,373 @@
+name: Complete object page parity
+
+on:
+  push:
+    branches:
+      - codex/align-object-page-complete-parity
+
+permissions:
+  contents: write
+
+concurrency:
+  group: complete-object-page-parity
+  cancel-in-progress: false
+
+jobs:
+  apply-and-verify:
+    if: "${{ !contains(github.event.head_commit.message, '[parity-complete]') }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Check out delivery branch
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Preserve transformer and reset to current dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp .github/scripts/apply-object-page-parity.py /tmp/apply-object-page-parity.py
+          python -m py_compile /tmp/apply-object-page-parity.py
+
+          delivery_head="$(git rev-parse HEAD)"
+          git fetch --no-tags origin dev
+          base_sha="$(git rev-parse origin/dev)"
+          printf 'DELIVERY_HEAD=%s\n' "$delivery_head" >> "$GITHUB_ENV"
+          printf 'BASE_SHA=%s\n' "$base_sha" >> "$GITHUB_ENV"
+
+          git reset --hard origin/dev
+          git clean -fd
+          mkdir -p .temp/scripts
+          cp /tmp/apply-object-page-parity.py .temp/scripts/apply-object-page-parity.py
+          python -m py_compile .temp/scripts/apply-object-page-parity.py
+          test "$(git rev-parse HEAD)" = "$base_sha"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium and OpenSpec CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          pnpm exec playwright install --with-deps chromium
+          npm install --global @fission-ai/openspec@latest
+          openspec --version
+
+      - name: Prove the missing contract is red
+        shell: bash
+        run: |
+          set -euo pipefail
+          python .temp/scripts/apply-object-page-parity.py tests
+          set +e
+          node --test tests/object-page-complete-parity-contract.test.mjs > /tmp/object-page-red.log 2>&1
+          status=$?
+          set -e
+          cat /tmp/object-page-red.log
+          if [ "$status" -eq 0 ]; then
+            echo 'The new regression contract unexpectedly passed before implementation.' >&2
+            exit 1
+          fi
+          printf 'Red phase failed as expected with status %s.\n' "$status"
+
+      - name: Apply the production implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python .temp/scripts/apply-object-page-parity.py implementation
+
+          python - <<'PY'
+          from __future__ import annotations
+
+          import json
+          import os
+          from pathlib import Path
+          from textwrap import dedent
+
+          base_sha = os.environ["BASE_SHA"]
+          evidence_dir = Path(
+              "artifacts/reference-evidence/capacities-object-page/"
+              "2026-08-31-complete-parity"
+          )
+          evidence_dir.mkdir(parents=True, exist_ok=True)
+
+          notes_path = Path(
+              "openspec/changes/align-object-page-complete-parity/"
+              "implementation-notes.md"
+          )
+          notes = notes_path.read_text(encoding="utf-8")
+          notes = notes.replace(
+              "ec75e6e572940ed33b6783028e8be9e9493225a5",
+              base_sha,
+          )
+          notes_path.write_text(notes, encoding="utf-8")
+
+          manifest_path = evidence_dir / "manifest.json"
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          manifest["baseCommit"] = base_sha
+          manifest["referenceAudit"] = {
+              "status": "not_bit_for_bit_complete",
+              "officialDocumentationUrls": 196,
+              "warcRecords": 826,
+              "responseRecords": 405,
+              "uniqueResponseResources": 309,
+              "missingResponsePayloadSha256": 0,
+              "deduplicatedResponseRecords": 96,
+              "resourcePayloadsMissing": 4,
+              "requestBodiesExcluded": 60,
+          }
+          manifest["referenceSources"] = [
+              {
+                  "kind": "official-documentation",
+                  "path": "capacities-urls.txt.txt",
+                  "bytes": 10944,
+                  "sha256": "2e496f8dd55937cb7a02672cde00e52be18f245a807be98d35292a2bba5bec9f",
+                  "scope": "196 non-empty unique URLs under docs.capacities.io",
+              },
+              {
+                  "kind": "sanitized-archive-evidence",
+                  "path": "capacities-wacz-complete-source(1).jsonl",
+                  "bytes": 37567513,
+                  "sha256": "15259e1a30234c6cba1c90faaed375255f10db31b18422c17cf14e4c8dd814e5",
+                  "scope": "826 WARC records and 309 deduplicated response resources",
+              },
+              {
+                  "kind": "sanitized-archive-audit",
+                  "path": "capacities-wacz-completeness-audit(1).json",
+                  "bytes": 4162,
+                  "sha256": "61958c76acdc459d8edb48899c0edac319f14bb69d46cacc659774a682002198",
+                  "scope": "405 response payloads recoverable with zero missing response payload SHA-256 values; archive is not bit-for-bit complete",
+              },
+              {
+                  "kind": "archive",
+                  "path": "my-archiving-session (1)(1).wacz",
+                  "bytes": 10194529,
+                  "sha256": "9aca7366e3898686bf27c20c89d03e93b830f985ea94d338031335cf63a8eb4c",
+                  "scope": "625 WARC records including 305 responses",
+              },
+              {
+                  "kind": "archive",
+                  "path": "my-archiving-session(2).wacz",
+                  "bytes": 6653708,
+                  "sha256": "5845c77d0d57f2909ca70f70a40939996a7da1d5cdca0fb4d0bda98b0d1644fe",
+                  "scope": "201 WARC records including 100 responses",
+              },
+              {
+                  "kind": "sanitized-reference-index",
+                  "path": "reference-urls.json",
+                  "bytes": 126155,
+                  "sha256": "5583e8b23cd883354e476e2038e558a72050245f6060a581e19d4e2d3b27fb80",
+                  "scope": "older URL mapping retained as a secondary index, not treated as complete",
+              },
+              {
+                  "kind": "authenticated-observation",
+                  "path": "artifacts/reference-evidence/capacities-object-page/2026-08-28-mentions-utilities",
+                  "scope": "sanitized relationship and editor-utility states already stored in the repository",
+              },
+              {
+                  "kind": "authenticated-observation",
+                  "path": "artifacts/reference-evidence/capacities-object-page/2026-08-31-action-matrix",
+                  "scope": "safe object-page action inventory and explicit not-tested boundaries",
+              },
+          ]
+          manifest["limitations"] = [
+              "The supplied archive audit explicitly reports not_bit_for_bit_complete.",
+              "Four image/png WARC resource payloads are represented by metadata and hashes but their bytes are absent from the JSONL.",
+              "Sixty request bodies, two warcinfo payload bodies, and direct revisit resolution are not included in the JSONL.",
+              "Private headers are intentionally redacted and the original ZIP/WARC byte structure is not reconstructable from the JSONL alone.",
+              "No new authenticated third-party mutation was performed for this delivery.",
+              "No localhost screenshot is committed; local browser evidence is assertion-based.",
+              "Private ranking, storage, and protocol behavior remains UNKNOWN.",
+          ]
+          manifest_path.write_text(
+              json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
+              encoding="utf-8",
+          )
+
+          provenance = f"""# Reference-source provenance
+
+          This delivery was checked against the user-provided Capacities reference files before implementation. These files are external source inputs and are identified here by immutable SHA-256 values rather than copied into the repository.
+
+          | Source | Bytes | SHA-256 | Supported scope |
+          |---|---:|---|---|
+          | `capacities-urls.txt.txt` | 10,944 | `2e496f8dd55937cb7a02672cde00e52be18f245a807be98d35292a2bba5bec9f` | 196 unique official documentation URLs |
+          | `capacities-wacz-complete-source(1).jsonl` | 37,567,513 | `15259e1a30234c6cba1c90faaed375255f10db31b18422c17cf14e4c8dd814e5` | Logical WARC/source corpus: 826 records, 405 responses, 309 unique response resources |
+          | `capacities-wacz-completeness-audit(1).json` | 4,162 | `61958c76acdc459d8edb48899c0edac319f14bb69d46cacc659774a682002198` | Completeness and fidelity audit; zero missing response-payload SHA-256 values |
+          | `my-archiving-session (1)(1).wacz` | 10,194,529 | `9aca7366e3898686bf27c20c89d03e93b830f985ea94d338031335cf63a8eb4c` | First archive: 625 WARC records, 305 responses |
+          | `my-archiving-session(2).wacz` | 6,653,708 | `5845c77d0d57f2909ca70f70a40939996a7da1d5cdca0fb4d0bda98b0d1644fe` | Second archive: 201 WARC records, 100 responses |
+          | `reference-urls.json` | 126,155 | `5583e8b23cd883354e476e2038e558a72050245f6060a581e19d4e2d3b27fb80` | Secondary, older URL mapping only |
+
+          ## Fidelity boundary
+
+          The audit status is **`not_bit_for_bit_complete`**. It confirms all 405 response payloads are recoverable through 309 deduplicated response-resource objects and no response payload SHA-256 is missing. It also records omitted image resource bytes, excluded request bodies, omitted warcinfo payload text, unresolved revisit links, redacted private headers, and loss of original ZIP/WARC byte structure. Therefore the corpus is treated as strong UI/source reverse-engineering evidence, not as an exact reconstructable archive.
+
+          ## Delivery base
+
+          The implementation was applied to `dev` commit `{base_sha}`. Existing dated repository evidence was reused without rewriting immutable captures. No authenticated reference mutation was performed merely to manufacture acceptance evidence.
+          """
+          evidence_dir.joinpath("reference-provenance.md").write_text(
+              dedent(provenance).strip() + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+          mapfile -t format_files < <(
+            {
+              git diff --name-only
+              git ls-files --others --exclude-standard
+            } | grep -E '\\.(ts|tsx|js|mjs|json)$' | sort -u
+          )
+          if [ "${#format_files[@]}" -gt 0 ]; then
+            pnpm exec biome format --write "${format_files[@]}"
+          fi
+
+      - name: Run focused domain and source contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test \
+            tests/object-page-complete-parity-contract.test.mjs \
+            tests/input-performance-contract.test.mjs \
+            tests/object-lifecycle-contracts.test.mjs \
+            tests/object-page-inline-selectors.test.mjs \
+            tests/editor-reference-suggestions.test.mjs \
+            tests/editor-shared-suggestion-controller.test.mjs \
+            tests/editor-trigger-arbitration.test.mjs \
+            tests/editor-utilities.test.mjs \
+            tests/workspace-object-links.test.mjs \
+            tests/workspace-related-content.test.mjs \
+            tests/workspace-related-content-ui.test.mjs
+
+      - name: Run complete repository verification
+        run: pnpm verify
+
+      - name: Run complete browser suite
+        run: pnpm test:e2e
+
+      - name: Validate OpenSpec strictly
+        shell: bash
+        run: |
+          set -euo pipefail
+          openspec validate align-object-page-complete-parity --strict
+          openspec validate --specs
+
+      - name: Record passing verification evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from __future__ import annotations
+
+          import json
+          import os
+          from pathlib import Path
+
+          evidence_dir = Path(
+              "artifacts/reference-evidence/capacities-object-page/"
+              "2026-08-31-complete-parity"
+          )
+          manifest_path = evidence_dir / "manifest.json"
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          commands = [
+              {
+                  "command": "node --test tests/object-page-complete-parity-contract.test.mjs",
+                  "phase": "red",
+                  "status": "expected-failure-observed",
+              },
+              {
+                  "command": "focused object-page, editor, lifecycle, linking, and related-content node:test contracts",
+                  "status": "passed",
+              },
+              {"command": "pnpm verify", "status": "passed"},
+              {"command": "pnpm test:e2e", "status": "passed"},
+              {
+                  "command": "openspec validate align-object-page-complete-parity --strict",
+                  "status": "passed",
+              },
+              {"command": "openspec validate --specs", "status": "passed"},
+              {"command": "git diff --check", "status": "pending-final-gate"},
+          ]
+          verification = {
+              "change": "align-object-page-complete-parity",
+              "baseCommit": os.environ["BASE_SHA"],
+              "workflowRunId": os.environ.get("GITHUB_RUN_ID"),
+              "workflowRunAttempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
+              "status": "passed-before-commit",
+              "localhostScreenshotsPersisted": False,
+              "authenticatedReferenceMutationPerformed": False,
+              "commands": commands,
+          }
+          evidence_dir.joinpath("verification.json").write_text(
+              json.dumps(verification, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          manifest["verification"] = verification
+          manifest_path.write_text(
+              json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+          test "$(grep -cE '^- \[x\]' openspec/changes/align-object-page-complete-parity/tasks.md)" -eq 28
+          test "$(grep -cE '^- \[ \]' openspec/changes/align-object-page-complete-parity/tasks.md)" -eq 0
+          openspec validate align-object-page-complete-parity --strict
+          openspec validate --specs
+
+      - name: Remove temporary delivery machinery
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .temp
+          rm -f \
+            .github/workflows/codex-object-page-parity-runner.yml \
+            .github/object-page-parity-trigger.txt \
+            .github/topic.txt
+
+      - name: Commit and push to dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          if git diff --name-only --diff-filter=ACMR | grep -E '\.(png|jpe?g|webp)$'; then
+            echo 'Unexpected image change detected.' >&2
+            exit 1
+          fi
+
+          git config user.name 'Ian Maciel'
+          git config user.email 'ianmaciel76@gmail.com'
+          git add -A
+          git diff --cached --check
+          test "$(git diff --cached --name-only | wc -l)" -gt 0
+          git commit -m 'feat: complete object page parity [parity-complete]'
+
+          final_sha="$(git rev-parse HEAD)"
+          git push origin HEAD:dev
+          git push \
+            --force-with-lease="refs/heads/codex/align-object-page-complete-parity:${DELIVERY_HEAD}" \
+            origin HEAD:codex/align-object-page-complete-parity
+          printf 'FINAL_SHA=%s\n' "$final_sha" >> "$GITHUB_ENV"
+          printf 'Committed and pushed %s to dev.\n' "$final_sha"
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: object-page-parity-diagnostics
+          if-no-files-found: ignore
+          include-hidden-files: true
+          path: |
+            /tmp/object-page-red.log
+            .temp/playwright-results
+            artifacts/reference-evidence/capacities-object-page/2026-08-31-complete-parity

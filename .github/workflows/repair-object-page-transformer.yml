@@ -1,0 +1,85 @@
+name: Repair object page parity transformer
+
+on:
+  push:
+    branches:
+      - codex/align-object-page-complete-parity
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repair-object-page-parity-transformer
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out delivery branch
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Repair ambiguous pin marker and push
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('.github/scripts/apply-object-page-parity.py')
+          text = path.read_text(encoding='utf-8')
+
+          old_pin_prefix = (
+              "    old_pin = '''              setPinnedEntities((current) =>\n"
+          )
+          contextual_old_pin_prefix = (
+              "    old_pin = '''            onFindInPage={() => setFindInPageOpen(true)}\n"
+              "            onImport={() => importInputRef.current?.click()}\n"
+              "            onPin={() => {\n"
+              "              const Icon =\n"
+              "                objectTypeDefinitionById[structure.iconName]?.icon ??\n"
+              "                objectTypeDefinitionById.page.icon;\n"
+              "              setPinnedEntities((current) =>\n"
+          )
+          new_pin_prefix = "    new_pin = '''              if (isPinned) {\n"
+          contextual_new_pin_prefix = (
+              "    new_pin = '''            onFindInPage={() => setFindInPageOpen(true)}\n"
+              "            onImport={() => importInputRef.current?.click()}\n"
+              "            onPin={() => {\n"
+              "              const Icon =\n"
+              "                objectTypeDefinitionById[structure.iconName]?.icon ??\n"
+              "                objectTypeDefinitionById.page.icon;\n"
+              "              if (isPinned) {\n"
+          )
+
+          if old_pin_prefix in text and new_pin_prefix in text:
+              if text.count(old_pin_prefix) != 1 or text.count(new_pin_prefix) != 1:
+                  raise SystemExit('Pin assignment markers are not unique.')
+              text = text.replace(old_pin_prefix, contextual_old_pin_prefix, 1)
+              text = text.replace(new_pin_prefix, contextual_new_pin_prefix, 1)
+              path.write_text(text, encoding='utf-8')
+          elif (
+              contextual_old_pin_prefix in text
+              and contextual_new_pin_prefix in text
+          ):
+              print('Pin marker is already repaired.')
+          else:
+              raise SystemExit(
+                  'Pin marker was not found; old=' 
+                  f'{text.count(old_pin_prefix)}, new={text.count(new_pin_prefix)}'
+              )
+          PY
+
+          python -m py_compile .github/scripts/apply-object-page-parity.py
+          if git diff --quiet -- .github/scripts/apply-object-page-parity.py; then
+            exit 0
+          fi
+
+          git config user.name 'Ian Maciel'
+          git config user.email 'ianmaciel76@gmail.com'
+          git add .github/scripts/apply-object-page-parity.py
+          git commit -m 'fix: disambiguate page pin transformer marker'
+          git push origin HEAD:codex/align-object-page-complete-parity
