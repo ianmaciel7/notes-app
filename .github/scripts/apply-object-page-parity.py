@@ -932,7 +932,13 @@ function PageCustomizeControl({
             onPin={() => {
 ''',
     )
-    old_pin = '''              setPinnedEntities((current) =>
+    old_pin = '''            onFindInPage={() => setFindInPageOpen(true)}
+            onImport={() => importInputRef.current?.click()}
+            onPin={() => {
+              const Icon =
+                objectTypeDefinitionById[structure.iconName]?.icon ??
+                objectTypeDefinitionById.page.icon;
+              setPinnedEntities((current) =>
                 current.some((item) => item.id === entity.id)
                   ? current
                   : [
@@ -947,7 +953,13 @@ function PageCustomizeControl({
               );
               showMessage(t("documentMenu.pinned"));
 '''
-    new_pin = '''              if (isPinned) {
+    new_pin = '''            onFindInPage={() => setFindInPageOpen(true)}
+            onImport={() => importInputRef.current?.click()}
+            onPin={() => {
+              const Icon =
+                objectTypeDefinitionById[structure.iconName]?.icon ??
+                objectTypeDefinitionById.page.icon;
+              if (isPinned) {
                 setPinnedEntities((current) =>
                   current.filter((item) => item.id !== entity.id),
                 );
