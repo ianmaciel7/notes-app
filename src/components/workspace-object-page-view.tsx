@@ -87,7 +87,6 @@ import {
   createWorkspaceObjectLinkIndex,
   findUnlinkedMentionCandidates,
   selectBacklinksForObject,
-  selectObjectsInside,
 } from "@/lib/workspace-object-links";
 import type {
   NumberPresentation,
@@ -515,6 +514,7 @@ function ObjectPageTypePickerTrigger({
 
 function DocumentMoreMenu({
   onChangeType,
+  onAddRelationship,
   onCustomize,
   onDelete,
   onDuplicate,
@@ -532,6 +532,7 @@ function DocumentMoreMenu({
   wideLayout,
 }: {
   readonly onCustomize: () => void;
+  readonly onAddRelationship?: () => void;
   readonly onChangeType: () => void;
   readonly onDelete: () => void;
   readonly onDuplicate: () => void;
@@ -597,6 +598,9 @@ function DocumentMoreMenu({
         {[
           ["useTemplate", onUseTemplate],
           ["editCollections", onEditCollections],
+          ...(onAddRelationship
+            ? ([["addRelationship", onAddRelationship]] as const)
+            : []),
           ["pinSidebar", onPin],
           ["changeType", onChangeType],
           ["typeSettings", onTypeSettings],
@@ -608,7 +612,9 @@ function DocumentMoreMenu({
             className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
             onClick={handler as () => void}
           >
-            {t(`documentMenu.${key as string}`)}
+            {key === "addRelationship"
+              ? t("linking.addRelationship")
+              : t(`documentMenu.${key as string}`)}
           </DropdownMenuItem>
         ))}
         <DropdownMenuItem
@@ -1877,15 +1883,39 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
       data-slot="workspace-object-related-content"
       data-state={state.kind}
       data-result-revision={"revision" in state ? state.revision : undefined}
-      className="mt-12 border-t pt-8"
+      className="mt-8 border-t pt-6"
       aria-labelledby={`${entityId}-related-heading`}
     >
-      <h2
-        id={`${entityId}-related-heading`}
-        className="text-base font-semibold"
-      >
-        {t("explore.relatedContent")}
-      </h2>
+      <div className="group/related-section relative flex min-h-8 items-center gap-2 pr-10">
+        <h2
+          id={`${entityId}-related-heading`}
+          className="inline-flex items-center gap-2 text-base font-semibold"
+        >
+          {t("explore.relatedContent")}
+          {state.kind === "ready" ? (
+            <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+              {related.length}
+            </span>
+          ) : null}
+        </h2>
+        {related.length > 0 ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            aria-label={t("explore.openEntity", {
+              title:
+                createdEntities.find(
+                  (candidate) => candidate.id === related[0]?.targetId,
+                )?.title || t("lifecycle.untitled"),
+            })}
+            className="pointer-events-none absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover/related-section:pointer-events-auto group-hover/related-section:opacity-100 group-focus-within/related-section:pointer-events-auto group-focus-within/related-section:opacity-100 motion-reduce:transition-none"
+            onClick={() => selectEntity(related[0]?.targetId || "")}
+          >
+            <ExternalLinkIcon className="size-3.5" />
+          </Button>
+        ) : null}
+      </div>
       {state.kind === "ready" ? (
         <p className="mt-1 text-xs text-muted-foreground">
           {state.partial
@@ -1910,7 +1940,10 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
               <button
                 key={item.id}
                 type="button"
-                className={cn(workspaceListRowClass, "min-h-11")}
+                className={cn(
+                  workspaceListRowClass,
+                  "group/related-row min-h-11",
+                )}
                 onClick={() => selectEntity(item.id)}
               >
                 <AppHeaderCaretDownIcon className="size-3 -rotate-90 text-muted-foreground" />
@@ -1923,6 +1956,11 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
                 <span className="min-w-0 flex-1 truncate text-sm font-medium">
                   {item.title || t("lifecycle.untitled")}
                 </span>
+                {objectType ? (
+                  <span className="inline-flex rounded-md border px-2 py-1 text-xs text-muted-foreground opacity-0 transition-opacity duration-200 group-hover/related-row:opacity-100 group-focus-visible/related-row:opacity-100 motion-reduce:transition-none">
+                    {objectType.singularLabel ?? objectType.label}
+                  </span>
+                ) : null}
                 <span className="rounded-md border px-2 py-1 text-xs text-muted-foreground">
                   {result.score.toFixed(2)}
                 </span>
@@ -1960,10 +1998,12 @@ function isDocumentWorkspaceEntity(
 }
 
 function ReferenceList({
+  count,
   emptyLabel,
   items,
   title,
 }: {
+  readonly count?: React.ReactNode;
   readonly emptyLabel: string;
   readonly items: readonly {
     id: string;
@@ -1975,25 +2015,48 @@ function ReferenceList({
 }) {
   return (
     <section className="grid gap-2">
-      <h3 className="text-sm font-medium">{title}</h3>
+      <h3 className="inline-flex min-h-8 items-center gap-2 text-sm font-medium">
+        <span>{title}</span>
+        {count}
+      </h3>
       {items.length === 0 ? (
         <p className="text-sm text-muted-foreground">{emptyLabel}</p>
       ) : (
         <div className="grid gap-1">
           {items.map((item) => (
-            <button
+            <div
               key={item.id}
-              type="button"
-              className={cn(workspaceListRowClass, "min-h-10")}
-              onClick={item.onClick}
+              className={cn(
+                workspaceListRowClass,
+                "group/reference-row relative min-h-10 pr-10",
+              )}
             >
-              <span className="min-w-0 flex-1 truncate text-left text-sm">
-                {item.label}
-              </span>
-              <span className="rounded-md border px-2 py-0.5 text-xs text-muted-foreground">
-                {item.meta}
-              </span>
-            </button>
+              <button
+                type="button"
+                data-slot="workspace-backlink-row"
+                className="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-md text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                onClick={item.onClick}
+              >
+                <span className="min-w-0 truncate text-sm">{item.label}</span>
+                <span className="rounded-md border px-2 py-0.5 text-xs text-muted-foreground">
+                  {item.meta}
+                </span>
+              </button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                aria-label={item.label}
+                className="pointer-events-none absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover/reference-row:pointer-events-auto group-hover/reference-row:opacity-100 group-focus-within/reference-row:pointer-events-auto group-focus-within/reference-row:opacity-100 motion-reduce:transition-none"
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  item.onClick?.();
+                }}
+              >
+                <ExternalLinkIcon className="size-3.5" />
+              </Button>
+            </div>
           ))}
         </div>
       )}
@@ -2032,7 +2095,7 @@ function MentionSourceRow({
         type="button"
         data-slot="workspace-mention-disclosure"
         aria-expanded={expanded}
-        className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 pr-1 text-left"
+        className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 pr-20 text-left"
         onClick={() => setExpanded((current) => !current)}
       >
         <AppHeaderCaretDownIcon
@@ -2053,13 +2116,17 @@ function MentionSourceRow({
           {sourceTypeLabel}
         </span>
       </button>
-      <div className="pointer-events-none absolute right-1 top-1 flex items-center gap-0.5 rounded-md bg-background/95 opacity-0 shadow-sm transition-opacity group-hover/mention:pointer-events-auto group-hover/mention:opacity-100 group-focus-within/mention:pointer-events-auto group-focus-within/mention:opacity-100 motion-reduce:transition-none">
+      <div className="pointer-events-none absolute right-1 top-1 flex h-7 w-[76px] items-center gap-0.5 rounded-md bg-background/95 opacity-0 shadow-sm transition-opacity group-hover/mention:pointer-events-auto group-hover/mention:opacity-100 group-focus-within/mention:pointer-events-auto group-focus-within/mention:opacity-100 motion-reduce:transition-none">
         <Button
           type="button"
           variant="ghost"
           size="icon-sm"
           aria-label={openLabel}
-          onClick={onOpen}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onOpen();
+          }}
         >
           <ExternalLinkIcon className="size-3.5" />
         </Button>
@@ -2067,6 +2134,8 @@ function MentionSourceRow({
           <DropdownMenuTrigger
             type="button"
             aria-label={optionsLabel}
+            onClick={(event) => event.stopPropagation()}
+            onPointerDown={(event) => event.stopPropagation()}
             className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
           >
             <AppHeaderDotsIcon className="size-4" />
@@ -2083,7 +2152,11 @@ function MentionSourceRow({
           variant="ghost"
           size="icon-sm"
           aria-label={convertLabel}
-          onClick={onConvert}
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onConvert();
+          }}
         >
           <LinkIcon className="size-3.5" />
         </Button>
@@ -2095,60 +2168,16 @@ function MentionSourceRow({
   );
 }
 
-function editorLabels(t: ReturnType<typeof useTranslations<"workspace">>) {
-  return {
-    bold: t("editor.bold"),
-    italic: t("editor.italic"),
-    code: t("editor.code"),
-    slashMenu: {
-      cancel: t("editor.slashMenu.cancel"),
-      createPage: t("editor.slashMenu.createPage"),
-      empty: t("editor.slashMenu.empty"),
-      text: t("editor.slashMenu.text"),
-      smallText: t("editor.slashMenu.smallText"),
-      page: t("editor.slashMenu.page"),
-      heading1: t("editor.slashMenu.heading1"),
-      heading2: t("editor.slashMenu.heading2"),
-      heading3: t("editor.slashMenu.heading3"),
-      heading4: t("editor.slashMenu.heading4"),
-      navigate: t("editor.slashMenu.navigate"),
-      bulletList: t("editor.slashMenu.bulletList"),
-      alphabeticalList: t("editor.slashMenu.alphabeticalList"),
-      orderedList: t("editor.slashMenu.orderedList"),
-      romanList: t("editor.slashMenu.romanList"),
-      taskList: t("editor.slashMenu.taskList"),
-      tableBlock: t("editor.slashMenu.tableBlock"),
-      select: t("editor.slashMenu.select"),
-      blockquote: t("editor.slashMenu.blockquote"),
-      codeBlock: t("editor.slashMenu.codeBlock"),
-      columns: t("editor.slashMenu.columns"),
-      emojiText: t("editor.slashMenu.emojiText"),
-      group: t("editor.slashMenu.group"),
-      highlight: t("editor.slashMenu.highlight"),
-      horizontalRule: t("editor.slashMenu.horizontalRule"),
-      math: t("editor.slashMenu.math"),
-      mermaid: t("editor.slashMenu.mermaid"),
-      objectEmbed: t("editor.slashMenu.objectEmbed"),
-      objectInline: t("editor.slashMenu.objectInline"),
-      title: t("editor.slashMenu.title"),
-      toggle: t("editor.slashMenu.toggle"),
-    },
-  };
-}
-
 function ReferencePanel({
   entity,
-  update,
 }: {
   readonly entity: DocumentWorkspaceEntity;
-  readonly update: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
   const {
     createdEntities,
     objectTypes,
     selectEntity,
-    structures,
     updateWorkspaceEntity,
   } = useWorkspace();
   const linkIndex = React.useMemo(
@@ -2156,73 +2185,10 @@ function ReferencePanel({
     [createdEntities],
   );
   const backlinks = selectBacklinksForObject(linkIndex, entity.id);
-  const objectsInside = selectObjectsInside(linkIndex, entity.id);
-  const backlinkPreviewSources = backlinks.reduce<DocumentWorkspaceEntity[]>(
-    (sources, backlink) => {
-      if (sources.some((source) => source.id === backlink.sourceId)) {
-        return sources;
-      }
-      const source = createdEntities.find(
-        (candidate) => candidate.id === backlink.sourceId,
-      );
-      if (isDocumentWorkspaceEntity(source)) sources.push(source);
-      return sources;
-    },
-    [],
-  );
   const mentionCandidates = findUnlinkedMentionCandidates(
     createdEntities,
     entity.id,
   );
-  const linkableEntities = createdEntities.filter(
-    (item) => item.id !== entity.id,
-  );
-
-  function appendReference(targetId: string) {
-    const target = createdEntities.find((item) => item.id === targetId);
-    if (!target) return;
-    update({
-      body: {
-        ...entity.body,
-        doc: {
-          ...entity.body.doc,
-          content: [
-            ...entity.body.doc.content,
-            {
-              type: "paragraph",
-              attrs: { id: `${entity.id}-link-${targetId}` },
-              content: [
-                {
-                  type: "text",
-                  text: getEntityTitle(target, targetId),
-                  marks: [createObjectReferenceMark(targetId)],
-                },
-              ],
-            },
-          ],
-        },
-      },
-    });
-  }
-
-  function appendEmbed(targetId: string) {
-    update({
-      body: {
-        ...entity.body,
-        doc: {
-          ...entity.body.doc,
-          content: [
-            ...entity.body.doc.content,
-            {
-              type: "paragraph",
-              attrs: { id: `${entity.id}-embed-${targetId}` },
-              content: [createObjectEmbedNode(targetId)],
-            },
-          ],
-        },
-      },
-    });
-  }
 
   function convertMention(candidate: (typeof mentionCandidates)[number]) {
     const source = createdEntities.find(
@@ -2241,8 +2207,11 @@ function ReferencePanel({
         data-slot="workspace-unlinked-mentions"
         aria-describedby={`${entity.id}-mentions-help`}
       >
-        <summary className="cursor-pointer text-sm font-medium">
-          {t("linking.unlinkedMentions")} {mentionCandidates.length}
+        <summary className="inline-flex min-h-8 cursor-pointer items-center gap-2 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
+          <span>{t("linking.unlinkedMentions")}</span>
+          <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+            {mentionCandidates.length}
+          </span>
         </summary>
         <p id={`${entity.id}-mentions-help`} className="sr-only">
           {t("linking.mentionsHelp")}
@@ -2282,76 +2251,28 @@ function ReferencePanel({
       </details>
     ) : null;
 
+  if (backlinks.length === 0 && mentionCandidates.length === 0) return null;
+
   return (
     <section
       data-slot="workspace-object-linking"
-      className="mt-16 grid gap-6 border-t pt-8"
+      className="mt-8 grid gap-4 border-t pt-6"
       aria-labelledby={`${entity.id}-linking-heading`}
     >
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2
-          id={`${entity.id}-linking-heading`}
-          className="text-base font-semibold"
-        >
-          {t("linking.title")}
-        </h2>
-        <span
-          data-slot="workspace-reference-count"
-          className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
-        >
-          {t("linking.references", { count: backlinks.length })}
-        </span>
-      </div>
-
-      {linkableEntities.length > 0 ? (
-        <Popover>
-          <PopoverTrigger
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-          >
-            {t("linking.addRelationship")}
-          </PopoverTrigger>
-          <PopoverContent align="start" className="w-80">
-            <PopoverTitle>{t("linking.addRelationship")}</PopoverTitle>
-            <div
-              className="grid max-h-72 gap-1 overflow-y-auto"
-              data-slot="workspace-link-picker"
-            >
-              {linkableEntities.slice(0, 6).map((target) => (
-                <div
-                  key={target.id}
-                  className="grid grid-cols-[minmax(0,1fr)_auto] rounded-lg border"
-                >
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="min-w-0 justify-start rounded-r-none"
-                    onClick={() => appendReference(target.id)}
-                  >
-                    <span className="truncate">
-                      {t("linking.linkObject", {
-                        title: getEntityTitle(target, t("lifecycle.untitled")),
-                      })}
-                    </span>
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="rounded-l-none border-l"
-                    onClick={() => appendEmbed(target.id)}
-                  >
-                    {t("linking.embed")}
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
-      ) : null}
+      <h2 id={`${entity.id}-linking-heading`} className="sr-only">
+        {t("linking.title")}
+      </h2>
 
       {backlinks.length > 0 ? (
         <ReferenceList
+          count={
+            <span
+              data-slot="workspace-reference-count"
+              className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+            >
+              {t("linking.references", { count: backlinks.length })}
+            </span>
+          }
           emptyLabel={t("linking.noBacklinks")}
           items={backlinks.map((item) => ({
             id: `${item.sourceId}-${item.kind}-${item.blockId ?? "object"}`,
@@ -2365,92 +2286,7 @@ function ReferencePanel({
         />
       ) : null}
 
-      {backlinkPreviewSources.map((source) => (
-        <section
-          key={`${source.id}-readonly-backlink`}
-          data-slot="workspace-readonly-backlink-preview"
-          className="grid gap-2 border-l pl-3"
-        >
-          <h3 className="truncate text-sm font-medium">
-            {getEntityTitle(source, t("lifecycle.untitled"))}
-          </h3>
-          <BlockEditor
-            ariaLabel={t("fields.text")}
-            placeholder={t("fields.text")}
-            value={source.body}
-            editable={false}
-            className="mt-0 min-h-0"
-            labels={editorLabels(t)}
-          />
-        </section>
-      ))}
-
       {mentionsSection}
-
-      {objectsInside
-        .filter((item) => item.kind === "embed" && !item.missing)
-        .map((item) => {
-          const target = createdEntities.find(
-            (candidate) => candidate.id === item.targetId,
-          );
-          if (
-            !target ||
-            (target.kind !== "document" && target.kind !== "quote")
-          ) {
-            return null;
-          }
-          const objectType = objectTypes.find(
-            (candidate) => candidate.id === target.objectTypeId,
-          );
-          return (
-            <section
-              key={`${item.targetId}-embed`}
-              data-slot="workspace-object-transclusion"
-              className="rounded-lg border bg-muted/20 p-3"
-            >
-              <div className="mb-2 flex items-center justify-between gap-3">
-                <h3 className="truncate text-sm font-medium">
-                  {getEntityTitle(target, t("lifecycle.untitled"))}
-                </h3>
-                {objectType ? (
-                  <span className="text-xs text-muted-foreground">
-                    {objectType.singularLabel ?? objectType.label}
-                  </span>
-                ) : null}
-              </div>
-              <BlockEditor
-                ariaLabel={t("linking.editTransclusion")}
-                placeholder={t("fields.text")}
-                value={target.body}
-                onChange={(body) => updateWorkspaceEntity(target.id, { body })}
-                className="mt-0 min-h-20"
-                labels={editorLabels(t)}
-                referenceEntities={createdEntities}
-                referenceStructures={structures}
-              />
-            </section>
-          );
-        })}
-
-      {objectsInside.length > 0 ? (
-        <ReferenceList
-          emptyLabel={t("linking.noObjectsInside")}
-          items={objectsInside.map((item) => {
-            const target = createdEntities.find(
-              (candidate) => candidate.id === item.targetId,
-            );
-            return {
-              id: `${item.targetId}-${item.kind}-${item.targetBlockId ?? "object"}`,
-              label: item.missing
-                ? t("linking.missingTarget", { id: item.targetId })
-                : getEntityTitle(target, item.targetId),
-              meta: item.kind,
-              onClick: target ? () => selectEntity(target.id) : undefined,
-            };
-          })}
-          title={t("explore.objectsInside")}
-        />
-      ) : null}
     </section>
   );
 }
@@ -2470,6 +2306,7 @@ function DocumentPage({
   const [collectionsActivationRequest, setCollectionsActivationRequest] =
     React.useState(0);
   const [customizeOpen, setCustomizeOpen] = React.useState(false);
+  const [relationshipOpen, setRelationshipOpen] = React.useState(false);
   const {
     createdEntities,
     createOrReuseWorkspaceTag,
@@ -2485,6 +2322,57 @@ function DocumentPage({
     structures,
   } = useWorkspace();
   const tags = entityTags(entity);
+  const linkableEntities = createdEntities.filter(
+    (item) => item.id !== entity.id,
+  );
+
+  function appendReference(targetId: string) {
+    const target = createdEntities.find((item) => item.id === targetId);
+    if (!target) return;
+    update({
+      body: {
+        ...entity.body,
+        doc: {
+          ...entity.body.doc,
+          content: [
+            ...entity.body.doc.content,
+            {
+              type: "paragraph",
+              attrs: { id: `${entity.id}-link-${targetId}` },
+              content: [
+                {
+                  type: "text",
+                  text: getEntityTitle(target, targetId),
+                  marks: [createObjectReferenceMark(targetId)],
+                },
+              ],
+            },
+          ],
+        },
+      },
+    });
+    setRelationshipOpen(false);
+  }
+
+  function appendEmbed(targetId: string) {
+    update({
+      body: {
+        ...entity.body,
+        doc: {
+          ...entity.body.doc,
+          content: [
+            ...entity.body.doc.content,
+            {
+              type: "paragraph",
+              attrs: { id: `${entity.id}-embed-${targetId}` },
+              content: [createObjectEmbedNode(targetId)],
+            },
+          ],
+        },
+      },
+    });
+    setRelationshipOpen(false);
+  }
 
   function exportMarkdown() {
     const source = `# ${entity.title}\n\n${blockEditorDocumentToMarkdown(entity.body)}`;
@@ -2539,6 +2427,7 @@ function DocumentPage({
         }
         menu={
           <DocumentMoreMenu
+            onAddRelationship={() => setRelationshipOpen(true)}
             onChangeType={() => showMessage(t("documentMenu.changeType"))}
             onCustomize={() => setCustomizeOpen(true)}
             onDelete={() => deleteWorkspaceEntity(entity.id)}
@@ -2646,6 +2535,48 @@ function DocumentPage({
           </Button>
         </DialogContent>
       </Dialog>
+      <Dialog open={relationshipOpen} onOpenChange={setRelationshipOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t("linking.addRelationship")}</DialogTitle>
+            <DialogDescription>{t("linking.mentionsHelp")}</DialogDescription>
+          </DialogHeader>
+          <div
+            className="grid max-h-72 gap-1 overflow-y-auto"
+            data-slot="workspace-link-picker"
+          >
+            {linkableEntities.slice(0, 6).map((target) => (
+              <div
+                key={target.id}
+                className="grid grid-cols-[minmax(0,1fr)_auto] rounded-lg border"
+              >
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="min-w-0 justify-start rounded-r-none"
+                  onClick={() => appendReference(target.id)}
+                >
+                  <span className="truncate">
+                    {t("linking.linkObject", {
+                      title: getEntityTitle(target, t("lifecycle.untitled")),
+                    })}
+                  </span>
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="rounded-l-none border-l"
+                  onClick={() => appendEmbed(target.id)}
+                >
+                  {t("linking.embed")}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
       <BufferedTitle
         label={t("fields.title")}
         value={entity.title}
@@ -2682,7 +2613,7 @@ function DocumentPage({
           }}
           referenceEntities={createdEntities}
           referenceStructures={structures}
-          className="mt-4 min-h-48"
+          className="mt-0"
           labels={{
             bold: t("editor.bold"),
             italic: t("editor.italic"),
@@ -2723,7 +2654,7 @@ function DocumentPage({
           }}
         />
       </div>
-      <ReferencePanel entity={entity} update={update} />
+      <ReferencePanel entity={entity} />
       <RelatedContent entityId={entity.id} />
       <input
         ref={importInputRef}

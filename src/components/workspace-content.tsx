@@ -5339,7 +5339,7 @@ function GraphWorkspace() {
   }
 
   const graphButtonClass =
-    "inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-[8px] border border-transparent px-2 text-xs text-sidebar-foreground transition-opacity duration-200 ease-out hover:bg-muted hover:text-sidebar-foreground active:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none";
+    "inline-flex h-8 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[8px] border border-transparent px-2 text-xs text-sidebar-foreground transition-opacity duration-200 ease-out hover:bg-muted hover:text-sidebar-foreground active:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none";
 
   return (
     <div
@@ -5438,7 +5438,7 @@ function GraphWorkspace() {
             aria-label={t("graph.showLess")}
             className={cn(
               graphButtonClass,
-              "w-[129px] rounded-l-[8px] rounded-r-none px-3",
+              "w-[96px] rounded-l-[8px] rounded-r-none px-2",
             )}
             onClick={() => setShowRelated(false)}
           >
@@ -5450,7 +5450,7 @@ function GraphWorkspace() {
             aria-label={t("graph.showMore")}
             className={cn(
               graphButtonClass,
-              "-ml-px w-[118px] rounded-l-none rounded-r-[8px] px-3",
+              "-ml-px w-[96px] rounded-l-none rounded-r-[8px] px-2",
             )}
             onClick={() => setShowRelated(true)}
           >

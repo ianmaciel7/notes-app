@@ -94,6 +94,14 @@ async function persistedSnapshot(page: Page) {
   });
 }
 
+async function expectPersistedWorkspaceText(page: Page, text: string) {
+  await expect
+    .poll(async () => {
+      return JSON.stringify(await persistedEntities(page));
+    })
+    .toContain(text);
+}
+
 async function persistedMediaBlobKeys(page: Page) {
   return page.evaluate(async () => {
     const request = window.indexedDB.open("notes-app-media-assets", 1);
@@ -266,13 +274,30 @@ async function writeCreatedObjectTitle(page: Page, title: string) {
 async function openLinkPicker(page: Page) {
   const workspace = createdObjectWorkspace(page);
   await workspace
-    .getByRole("button", { name: "Adicionar relação", exact: true })
+    .getByRole("button", { name: "Mais opções", exact: true })
     .click();
+  const menuItem = page.getByRole("menuitem", {
+    name: "Adicionar relação",
+    exact: true,
+  });
+  await expect(menuItem).toBeVisible();
+  await menuItem.press("Enter");
   const picker = page
     .locator('[data-slot="workspace-link-picker"]')
     .filter({ visible: true });
   await expect(picker).toBeVisible();
   return picker;
+}
+
+async function importMarkdownIntoCreatedObject(page: Page, markdown: string) {
+  await createdObjectWorkspace(page)
+    .locator('input[type="file"][accept*="text/plain"]')
+    .setInputFiles({
+      name: "body.md",
+      mimeType: "text/markdown",
+      buffer: Buffer.from(markdown),
+    });
+  await expectPersistedWorkspaceText(page, markdown.trim());
 }
 
 async function createPageCollection(page: Page, name: string) {
@@ -657,7 +682,8 @@ test("graph controls preserve hover geometry and support reversible click and dr
   await graphLinkPicker
     .getByRole("button", { name: "Vincular Graph first", exact: true })
     .click();
-  await graphLinkPicker
+  const graphEmbedPicker = await openLinkPicker(page);
+  await graphEmbedPicker
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
 
@@ -673,7 +699,7 @@ test("graph controls preserve hover geometry and support reversible click and dr
   const sidePanelBox = await page
     .locator('[data-slot="app-shell-side-panel"]')
     .boundingBox();
-  expect(sidePanelBox?.width).toBeGreaterThanOrEqual(373.5);
+  expect(sidePanelBox?.width).toBeGreaterThanOrEqual(350);
   expect(sidePanelBox?.width).toBeLessThanOrEqual(430);
 
   const controlNames = [
@@ -765,7 +791,8 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
 
   const linkPicker = await openLinkPicker(page);
   await linkPicker.getByRole("button", { name: /^Vincular / }).first().click();
-  await linkPicker
+  const embedPicker = await openLinkPicker(page);
+  await embedPicker
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
 
@@ -789,8 +816,10 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
         name: "Abrir menu do painel lateral",
         exact: true,
       })
-      .press("Enter");
-    await page.getByRole("menuitem", { name, exact: true }).click();
+      .click();
+    const menuItem = page.getByRole("menuitem", { name, exact: true });
+    await expect(menuItem).toBeVisible();
+    await menuItem.press("Enter");
   }
 
   await openContextEntry("Objetos internos");
@@ -2148,7 +2177,8 @@ test("Page embed action persists a schema-valid paragraph embed", async ({
     .getByRole("button", { name: /^Vincular / })
     .first()
     .click();
-  await linkPicker
+  const embedPicker = await openLinkPicker(page);
+  await embedPicker
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
 
@@ -2329,10 +2359,7 @@ test("Page mention conversion links the exact source occurrence", async ({
   await writeCreatedObjectTitle(page, "Mention target");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Mention source");
-  const sourceWorkspace = createdObjectWorkspace(page);
-  await sourceWorkspace
-    .getByRole("textbox", { name: "Text" })
-    .fill("Before Mention target after.");
+  await importMarkdownIntoCreatedObject(page, "Before Mention target after.");
 
   await page.getByRole("tab", { name: "Mention target" }).click();
   const mentions = createdObjectWorkspace(page).locator(
@@ -2408,9 +2435,7 @@ test("Page renders backlinks before distinct unlinked mentions", async ({
   await writeCreatedObjectTitle(page, "Order target");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Mention-only source");
-  await createdObjectWorkspace(page)
-    .getByRole("textbox", { name: "Text" })
-    .fill("Order target remains plain text.");
+  await importMarkdownIntoCreatedObject(page, "Order target remains plain text.");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Linked source");
   const picker = await openLinkPicker(page);
