@@ -57,11 +57,62 @@ test("workspace database persists only changed aggregates on common edits", asyn
     id: initial.entities[0].id,
     patch: { body: blockEditorDocumentFromPlainText("Only this changed") },
   });
-  const result = await repository.persistChangedSnapshot(next, () =>
-    new Date("2026-01-02"),
+  const result = await repository.persistChangedSnapshot(
+    next,
+    () => new Date("2026-01-02"),
   );
 
   assert.deepEqual(result.writtenKeys, [`object:${initial.entities[0].id}`]);
+});
+
+test("workspace database persists indexed trash records and purge tombstones", async () => {
+  const adapter = createMemoryWorkspaceDatabaseAdapter();
+  const repository = createWorkspaceDatabaseRepository(adapter);
+  const initial = createStateWithPage("Disposable");
+  await repository.replaceSnapshot(initial, () => new Date("2026-01-01"));
+
+  const trashed = workspaceObjectReducer(initial, {
+    id: initial.entities[0].id,
+    spaceId: "space-a",
+    trashedAt: "2026-08-01T00:00:00.000Z",
+    type: "deleteEntity",
+  });
+  const trashCommit = await repository.persistChangedSnapshot(
+    trashed,
+    () => new Date("2026-08-01T00:00:01.000Z"),
+  );
+  const trashRecords = await adapter.list("trash");
+  const loadedTrash = await repository.loadSnapshot();
+
+  assert.deepEqual(trashCommit.writtenKeys, [
+    "setting:workspace",
+    `trash:${initial.entities[0].id}`,
+  ]);
+  assert.equal(trashRecords[0].entityId, initial.entities[0].id);
+  assert.equal(trashRecords[0].spaceId, "space-a");
+  assert.equal(trashRecords[0].purgeAfter, "2026-08-31T00:00:00.000Z");
+  assert.equal(loadedTrash?.trashRecords[0].entityId, initial.entities[0].id);
+
+  const purged = workspaceObjectReducer(trashed, {
+    id: initial.entities[0].id,
+    purgedAt: "2026-08-31T00:00:00.000Z",
+    type: "purgeEntity",
+  });
+  await repository.persistChangedSnapshot(
+    purged,
+    () => new Date("2026-08-31T00:00:01.000Z"),
+  );
+  const loadedPurge = await repository.loadSnapshot();
+
+  assert.deepEqual(await adapter.list("trash"), []);
+  assert.equal(loadedPurge?.entities.length, 0);
+  assert.deepEqual(loadedPurge?.tombstones, [
+    {
+      entityId: initial.entities[0].id,
+      purgedAt: "2026-08-31T00:00:00.000Z",
+      spaceId: "space-a",
+    },
+  ]);
 });
 
 test("workspace database migrates legacy snapshots idempotently", async () => {

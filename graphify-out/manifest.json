@@ -2385,8 +2385,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-database.ts": {
-    "mtime": 1787942832.0272124,
-    "ast_hash": "8c79fdbb61da568e8837a968fabeafd6",
+    "mtime": 1788170747.0310326,
+    "ast_hash": "9de11af1b3c11a9cc2af2c6ff2fe3cf1",
     "semantic_hash": ""
   },
   "src/lib/workspace-offline-sync.ts": {
@@ -2410,8 +2410,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-database.test.mjs": {
-    "mtime": 1787942832.0578866,
-    "ast_hash": "cd7c23259125a22bc361c4f79e25b53e",
+    "mtime": 1788170766.3616476,
+    "ast_hash": "74eb99585f8d2b29ebdd55d7949e1c15",
     "semantic_hash": ""
   },
   "tests/workspace-offline-sync.test.mjs": {
@@ -3810,8 +3810,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/align-task-management-with-current-capacities/specs/domain/task-management/spec.md": {
-    "mtime": 1788168743.1369731,
-    "ast_hash": "3cb046e2313beab39f9871dd41083013",
+    "mtime": 1788170712.9886017,
+    "ast_hash": "5cb0a6467f63ab1162ee653f99f6a1d4",
     "semantic_hash": ""
   },
   "openspec/changes/align-task-management-with-current-capacities/tasks.md": {

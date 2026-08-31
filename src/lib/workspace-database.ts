@@ -98,8 +98,7 @@ type WorkspaceRepositorySnapshot = {
   readonly trashRecords: readonly TrashRecord[];
 };
 
-type WorkspaceDatabaseRecordKey =
-  `${WorkspaceDatabaseRecordKind}:${string}`;
+type WorkspaceDatabaseRecordKey = `${WorkspaceDatabaseRecordKind}:${string}`;
 
 const WORKSPACE_DATABASE_NAME = "notes-app-workspace-records";
 const WORKSPACE_DATABASE_RECORD_STORE = "records";
@@ -156,7 +155,9 @@ function createWorkspaceRecords(
   previous: readonly WorkspaceDatabaseRecord[],
   updatedAt: string,
 ): readonly WorkspaceDatabaseRecord[] {
-  const previousByKey = new Map(previous.map((record) => [recordKey(record.kind, record.id), record]));
+  const previousByKey = new Map(
+    previous.map((record) => [recordKey(record.kind, record.id), record]),
+  );
   return [
     ...state.structures.map((structure) =>
       createRecord(
@@ -200,14 +201,22 @@ function createWorkspaceRecords(
         { entityId: tombstone.entityId, spaceId: tombstone.spaceId },
       ),
     ),
-    createRecord("setting", "workspace", {
-      activeEntityId: state.activeEntityId,
-      nextId: state.nextId,
-    }, previousByKey.get(recordKey("setting", "workspace")), updatedAt),
+    createRecord(
+      "setting",
+      "workspace",
+      {
+        activeEntityId: state.activeEntityId,
+        nextId: state.nextId,
+      },
+      previousByKey.get(recordKey("setting", "workspace")),
+      updatedAt,
+    ),
   ];
 }
 
-function toRepositorySnapshot(state: WorkspaceObjectState): WorkspaceRepositorySnapshot {
+function toRepositorySnapshot(
+  state: WorkspaceObjectState,
+): WorkspaceRepositorySnapshot {
   return {
     activeEntityId: state.activeEntityId,
     entities: state.entities,
@@ -225,8 +234,12 @@ function recordValue<T>(record: WorkspaceDatabaseRecord | undefined): T | null {
 function snapshotFromRecords(
   records: readonly WorkspaceDatabaseRecord[],
 ): WorkspaceRepositorySnapshot | null {
-  const settings = records.find((record) => record.kind === "setting" && record.id === "workspace");
-  const value = recordValue<{ activeEntityId: string | null; nextId: number }>(settings);
+  const settings = records.find(
+    (record) => record.kind === "setting" && record.id === "workspace",
+  );
+  const value = recordValue<{ activeEntityId: string | null; nextId: number }>(
+    settings,
+  );
   if (!value || typeof value.nextId !== "number") return null;
   return {
     activeEntityId: value.activeEntityId,
@@ -246,7 +259,9 @@ function snapshotFromRecords(
   };
 }
 
-function serializeRepositorySnapshot(snapshot: WorkspaceRepositorySnapshot): string {
+function serializeRepositorySnapshot(
+  snapshot: WorkspaceRepositorySnapshot,
+): string {
   return JSON.stringify({
     activeEntityId: snapshot.activeEntityId,
     entities: snapshot.entities,
@@ -269,7 +284,11 @@ function changedRecordKeys(
     ]),
   );
   return next
-    .filter((record) => previousValues.get(recordKey(record.kind, record.id)) !== JSON.stringify(record.value))
+    .filter(
+      (record) =>
+        previousValues.get(recordKey(record.kind, record.id)) !==
+        JSON.stringify(record.value),
+    )
     .map((record) => recordKey(record.kind, record.id));
 }
 
@@ -277,7 +296,9 @@ function deletedRecordKeys(
   previous: readonly WorkspaceDatabaseRecord[],
   next: readonly WorkspaceDatabaseRecord[],
 ): readonly WorkspaceDatabaseRecordKey[] {
-  const nextKeys = new Set(next.map((record) => recordKey(record.kind, record.id)));
+  const nextKeys = new Set(
+    next.map((record) => recordKey(record.kind, record.id)),
+  );
   return previous
     .filter((record) => !nextKeys.has(recordKey(record.kind, record.id)))
     .map((record) => recordKey(record.kind, record.id));
@@ -298,7 +319,9 @@ function createMetadata(
 function auditWorkspaceRecords(
   snapshot: WorkspaceRepositorySnapshot,
 ): readonly WorkspaceDatabaseIntegrityIssue[] {
-  const structureIds = new Set(snapshot.structures.map((structure) => structure.id));
+  const structureIds = new Set(
+    snapshot.structures.map((structure) => structure.id),
+  );
   const entityIds = new Set(snapshot.entities.map((entity) => entity.id));
   const issues: WorkspaceDatabaseIntegrityIssue[] = [];
   if (snapshot.activeEntityId && !entityIds.has(snapshot.activeEntityId)) {
@@ -312,11 +335,16 @@ function auditWorkspaceRecords(
   return issues;
 }
 
-function createMemoryWorkspaceDatabaseAdapter(options: {
-  readonly failOnCommitNumber?: number;
-  readonly failNextCommit?: boolean;
-} = {}): WorkspaceDatabaseAdapter {
-  const records = new Map<WorkspaceDatabaseRecordKey, WorkspaceDatabaseRecord>();
+function createMemoryWorkspaceDatabaseAdapter(
+  options: {
+    readonly failOnCommitNumber?: number;
+    readonly failNextCommit?: boolean;
+  } = {},
+): WorkspaceDatabaseAdapter {
+  const records = new Map<
+    WorkspaceDatabaseRecordKey,
+    WorkspaceDatabaseRecord
+  >();
   const metadata = new Map<string, unknown>();
   let failNextCommit = options.failNextCommit ?? false;
   let commitCount = 0;
@@ -337,7 +365,10 @@ function createMemoryWorkspaceDatabaseAdapter(options: {
           nextRecords.delete(key);
         },
         put(record) {
-          nextRecords.set(recordKey(record.kind, record.id), cloneValue(record));
+          nextRecords.set(
+            recordKey(record.kind, record.id),
+            cloneValue(record),
+          );
         },
         setMetadata(key, value) {
           nextMetadata.set(key, cloneValue(value));
@@ -381,10 +412,19 @@ function createWorkspaceDatabaseRepository(adapter: WorkspaceDatabaseAdapter) {
   ): Promise<WorkspaceRepositoryCommitResult> {
     const previous = await adapter.list();
     const updatedAt = (options.now ?? (() => new Date()))().toISOString();
-    const next = createWorkspaceRecords(toRepositorySnapshot(state), previous, updatedAt);
-    const changed = options.changedOnly ? changedRecordKeys(previous, next) : next.map((record) => recordKey(record.kind, record.id));
+    const next = createWorkspaceRecords(
+      toRepositorySnapshot(state),
+      previous,
+      updatedAt,
+    );
+    const changed = options.changedOnly
+      ? changedRecordKeys(previous, next)
+      : next.map((record) => recordKey(record.kind, record.id));
     const deleted = deletedRecordKeys(previous, next);
-    const nextMetadata = createMetadata(previous.length + changed.length + deleted.length + 1, updatedAt);
+    const nextMetadata = createMetadata(
+      previous.length + changed.length + deleted.length + 1,
+      updatedAt,
+    );
     await adapter.transact((transaction) => {
       for (const record of next) {
         if (!changed.includes(recordKey(record.kind, record.id))) continue;
@@ -407,14 +447,20 @@ function createWorkspaceDatabaseRepository(adapter: WorkspaceDatabaseAdapter) {
       return snapshot ? auditWorkspaceRecords(snapshot) : [];
     },
     loadSnapshot,
-    async migrateLegacySnapshot(raw: string): Promise<WorkspaceDatabaseMigrationResult> {
+    async migrateLegacySnapshot(
+      raw: string,
+    ): Promise<WorkspaceDatabaseMigrationResult> {
       const parsed = parseWorkspaceObjectSnapshot(raw);
       if (!parsed.ok) return { ok: false, reason: "invalid-snapshot" };
       const checksum = simpleWorkspaceChecksum(raw);
       try {
         const result = await commitSnapshot(parsed.state);
         const reloaded = await loadSnapshot();
-        if (!reloaded || serializeWorkspaceObjectState(reloaded) !== serializeWorkspaceObjectState(parsed.state)) {
+        if (
+          !reloaded ||
+          serializeWorkspaceObjectState(reloaded) !==
+            serializeWorkspaceObjectState(parsed.state)
+        ) {
           return { ok: false, reason: "interrupted" };
         }
         await adapter.transact((transaction) => {
@@ -488,7 +534,10 @@ function requestResult<T = unknown>(request: IDBRequest<T>): Promise<T> {
 
 function openWorkspaceDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(WORKSPACE_DATABASE_NAME, WORKSPACE_DATABASE_VERSION);
+    const request = indexedDB.open(
+      WORKSPACE_DATABASE_NAME,
+      WORKSPACE_DATABASE_VERSION,
+    );
     request.onupgradeneeded = () => {
       const db = request.result;
       if (!db.objectStoreNames.contains(WORKSPACE_DATABASE_RECORD_STORE)) {
@@ -497,8 +546,12 @@ function openWorkspaceDatabase(): Promise<IDBDatabase> {
         });
         ensureWorkspaceRecordIndexes(store);
       } else {
+        const transaction = request.transaction;
+        if (!transaction) {
+          throw new Error("Workspace database upgrade transaction is missing.");
+        }
         ensureWorkspaceRecordIndexes(
-          request.transaction!.objectStore(WORKSPACE_DATABASE_RECORD_STORE),
+          transaction.objectStore(WORKSPACE_DATABASE_RECORD_STORE),
         );
       }
       if (!db.objectStoreNames.contains(WORKSPACE_DATABASE_METADATA_STORE)) {
@@ -534,10 +587,14 @@ function createBrowserWorkspaceDatabaseAdapter(): WorkspaceDatabaseAdapter {
   return {
     async list(kind) {
       const db = await database();
-      const store = db.transaction(WORKSPACE_DATABASE_RECORD_STORE, "readonly").objectStore(WORKSPACE_DATABASE_RECORD_STORE);
+      const store = db
+        .transaction(WORKSPACE_DATABASE_RECORD_STORE, "readonly")
+        .objectStore(WORKSPACE_DATABASE_RECORD_STORE);
       const request = kind ? store.index("kind").getAll(kind) : store.getAll();
       return (await requestResult(request)).map((record) => {
-        const { key: _key, ...value } = record as WorkspaceDatabaseRecord & { key: string };
+        const { key: _key, ...value } = record as WorkspaceDatabaseRecord & {
+          key: string;
+        };
         return value;
       });
     },
@@ -578,16 +635,10 @@ function createBrowserWorkspaceDatabaseAdapter(): WorkspaceDatabaseAdapter {
 }
 
 function createBrowserWorkspaceDatabaseRepository() {
-  return createWorkspaceDatabaseRepository(createBrowserWorkspaceDatabaseAdapter());
+  return createWorkspaceDatabaseRepository(
+    createBrowserWorkspaceDatabaseAdapter(),
+  );
 }
-
-export {
-  createBrowserWorkspaceDatabaseAdapter,
-  createBrowserWorkspaceDatabaseRepository,
-  createMemoryWorkspaceDatabaseAdapter,
-  createWorkspaceDatabaseRepository,
-  recordKey,
-};
 
 export type {
   WorkspaceDatabaseAdapter,
@@ -600,4 +651,11 @@ export type {
   WorkspaceDatabaseTransaction,
   WorkspaceRepositoryCommitResult,
   WorkspaceRepositorySyncOptions,
+};
+export {
+  createBrowserWorkspaceDatabaseAdapter,
+  createBrowserWorkspaceDatabaseRepository,
+  createMemoryWorkspaceDatabaseAdapter,
+  createWorkspaceDatabaseRepository,
+  recordKey,
 };
