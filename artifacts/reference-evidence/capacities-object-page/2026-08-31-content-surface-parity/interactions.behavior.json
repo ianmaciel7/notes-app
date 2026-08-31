@@ -1,0 +1,21 @@
+{
+  "objectHeader": {
+    "customize": "reserved geometry; opacity 0 and pointer-events none at rest; opacity 1 on header hover or focus-within",
+    "overflow": "visible at rest and independently operable"
+  },
+  "title": {
+    "referenceOwner": "textarea",
+    "localContract": "buffered autosizing textarea with 30px font and 33px line-height"
+  },
+  "metadata": {
+    "tags": "negative group inset with reference secondary text color; picker opens without creating values on hover/filter/cancel",
+    "collections": "same secondary tone as reference metadata controls"
+  },
+  "sections": {
+    "relatedContent": "heading, count, collapse, row hover actions, inline row title, type chip, open, and overflow remain independent",
+    "mentions": "source row disclosure, preview, open, overflow, and explicit conversion remain independent"
+  },
+  "scroll": {
+    "shortContent": "main scroll container keeps stable scrollbar gutter and 54-70px trailing range"
+  }
+}

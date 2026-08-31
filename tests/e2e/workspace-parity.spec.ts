@@ -43,19 +43,15 @@ async function openWorkspace(page: Page) {
 }
 
 function objectTypeWorkspace(page: Page) {
-  return page
-    .locator('[data-slot="workspace-object-type-view"]')
-    .filter({
-      visible: true,
-    });
+  return page.locator('[data-slot="workspace-object-type-view"]').filter({
+    visible: true,
+  });
 }
 
 function createdObjectWorkspace(page: Page) {
-  return page
-    .locator('[data-slot="workspace-object-page-view"]')
-    .filter({
-      visible: true,
-    });
+  return page.locator('[data-slot="workspace-object-page-view"]').filter({
+    visible: true,
+  });
 }
 
 async function createPageObject(page: Page) {
@@ -114,7 +110,9 @@ async function persistedMediaBlobKeys(page: Page) {
     });
     try {
       if (!database.objectStoreNames.contains("blobs")) return [];
-      const store = database.transaction("blobs", "readonly").objectStore("blobs");
+      const store = database
+        .transaction("blobs", "readonly")
+        .objectStore("blobs");
       const keys = await new Promise<IDBValidKey[]>((resolve, reject) => {
         const keysRequest = store.getAllKeys();
         keysRequest.onerror = () => reject(keysRequest.error);
@@ -699,8 +697,8 @@ test("graph controls preserve hover geometry and support reversible click and dr
   const sidePanelBox = await page
     .locator('[data-slot="app-shell-side-panel"]')
     .boundingBox();
-  expect(sidePanelBox?.width).toBeGreaterThanOrEqual(350);
-  expect(sidePanelBox?.width).toBeLessThanOrEqual(430);
+  expect(sidePanelBox?.width).toBeGreaterThanOrEqual(352);
+  expect(sidePanelBox?.width).toBeLessThanOrEqual(364);
 
   const controlNames = [
     "Mostrar menos",
@@ -785,12 +783,13 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
   await writeCreatedObjectTitle(page, "Context target");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Context source");
-  await expect
-    .poll(async () => (await persistedEntities(page)).length)
-    .toBe(2);
+  await expect.poll(async () => (await persistedEntities(page)).length).toBe(2);
 
   const linkPicker = await openLinkPicker(page);
-  await linkPicker.getByRole("button", { name: /^Vincular / }).first().click();
+  await linkPicker
+    .getByRole("button", { name: /^Vincular / })
+    .first()
+    .click();
   const embedPicker = await openLinkPicker(page);
   await embedPicker
     .getByRole("button", { name: "Incorporar", exact: true })
@@ -929,6 +928,132 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
       ),
     ).toBeVisible();
   }
+  expect(errors).toEqual([]);
+});
+
+test("object page content surface preserves the Capacities 1059px split and title owner", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.setViewportSize({ width: 1059, height: 912 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Parity target");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Related one");
+  const picker = await openLinkPicker(page);
+  await picker
+    .getByRole("button", { name: "Vincular Parity target", exact: true })
+    .click();
+  await page.getByRole("tab", { name: "Parity target" }).click();
+
+  const workspace = createdObjectWorkspace(page);
+  const sidePanel = page.locator('[data-slot="app-shell-side-panel"]');
+  if (!(await sidePanel.isVisible())) {
+    await page
+      .getByRole("button", { name: "Mostrar painel lateral", exact: true })
+      .click();
+  }
+  const surface = page
+    .locator('[data-slot="app-shell-main"]')
+    .locator('[data-slot="app-shell-surface"]')
+    .first();
+  const sidePanelSurface = page
+    .locator('[data-slot="app-shell-side-panel"]')
+    .locator('[data-slot="app-shell-surface"]')
+    .first();
+  const title = workspace.locator('[data-slot="workspace-object-page-title"]');
+  const tags = workspace.getByRole("textbox", {
+    name: "Etiquetas",
+    exact: true,
+  });
+  const relatedHeading = workspace
+    .locator('[data-slot="workspace-object-related-content"] h2')
+    .first();
+
+  await expect(surface).toBeVisible();
+  await expect(sidePanelSurface).toBeVisible();
+  await expect(title).toHaveJSProperty("tagName", "TEXTAREA");
+  await expect(title).toHaveCSS("font-size", "30px");
+  await expect(title).toHaveCSS("line-height", "33px");
+  await expect(tags).toHaveCSS("color", "oklch(0.3887 0.0052 301.05)");
+
+  const geometry = await page.evaluate(() => {
+    const rectFor = (selector: string) => {
+      const element = document.querySelector(selector);
+      if (!element) return null;
+      const rect = element.getBoundingClientRect();
+      return {
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height,
+      };
+    };
+    const titleElement = document.querySelector(
+      '[data-slot="workspace-object-page-title"]',
+    );
+    const tagsGroupElement = document.querySelector(
+      '[data-slot="workspace-object-page-tags"]',
+    );
+    const tagsElement = document.querySelector('[aria-label="Etiquetas"]');
+    const scrollElement = document.querySelector(
+      '[data-slot="workspace-object-page-view"]',
+    );
+    const sideSurface = document
+      .querySelector('[data-slot="app-shell-side-panel"]')
+      ?.querySelector('[data-slot="app-shell-surface"]');
+    const titleRect = titleElement?.getBoundingClientRect();
+    const tagsRect = tagsElement?.getBoundingClientRect();
+    const tagsGroupRect = tagsGroupElement?.getBoundingClientRect();
+    const columnRect = document
+      .querySelector('[data-slot="workspace-object-page-column"]')
+      ?.getBoundingClientRect();
+    const sideRect = sideSurface?.getBoundingClientRect();
+    return {
+      mainSurface: rectFor(
+        '[data-slot="app-shell-main"] [data-slot="app-shell-surface"]',
+      ),
+      sideSurface: sideRect
+        ? {
+            width: sideRect.width,
+          }
+        : null,
+      columnWidth: columnRect?.width ?? null,
+      titleWidth: titleRect?.width ?? null,
+      tagsInputOffset:
+        tagsRect && columnRect
+          ? Math.round((tagsRect.x - columnRect.x) * 100) / 100
+          : null,
+      tagsGroupOffset:
+        tagsGroupRect && titleRect
+          ? Math.round((tagsGroupRect.x - titleRect.x) * 100) / 100
+          : null,
+      trailingScroll:
+        scrollElement instanceof HTMLElement
+          ? scrollElement.scrollHeight - scrollElement.clientHeight
+          : null,
+    };
+  });
+
+  expect(geometry.mainSurface?.width ?? 0).toBeGreaterThanOrEqual(470);
+  expect(geometry.mainSurface?.width ?? 0).toBeLessThanOrEqual(478);
+  expect(geometry.sideSurface?.width ?? 0).toBeGreaterThanOrEqual(260);
+  expect(geometry.sideSurface?.width ?? 0).toBeLessThanOrEqual(286);
+  expect(geometry.columnWidth ?? 0).toBeGreaterThanOrEqual(458);
+  expect(geometry.columnWidth ?? 0).toBeLessThanOrEqual(466);
+  expect(geometry.titleWidth ?? 0).toBeGreaterThanOrEqual(386);
+  expect(geometry.titleWidth ?? 0).toBeLessThanOrEqual(394);
+  expect(geometry.tagsInputOffset).toBeGreaterThanOrEqual(58);
+  expect(geometry.tagsInputOffset).toBeLessThanOrEqual(64);
+  expect(geometry.tagsGroupOffset).toBeGreaterThanOrEqual(-8);
+  expect(geometry.tagsGroupOffset).toBeLessThanOrEqual(-4);
+  expect(geometry.trailingScroll).toBeGreaterThanOrEqual(54);
+  expect(geometry.trailingScroll).toBeLessThanOrEqual(70);
+
+  const headingBox = await relatedHeading.boundingBox();
+  expect(headingBox?.width ?? 0).toBeGreaterThan(170);
   expect(errors).toEqual([]);
 });
 
@@ -1572,10 +1697,11 @@ test("Page Collections and overflow controls keep Page metadata synchronized", a
     workspace.getByRole("button", { name: "Remover Overflow collection" }),
   ).toBeVisible();
   await expect
-    .poll(async () =>
-      (await persistedEntities(page)).find(
-        (candidate: { id: string }) => candidate.id === pageEntity?.id,
-      )?.collections,
+    .poll(
+      async () =>
+        (await persistedEntities(page)).find(
+          (candidate: { id: string }) => candidate.id === pageEntity?.id,
+        )?.collections,
     )
     .toHaveLength(1);
   await page
@@ -1631,10 +1757,11 @@ test("Page Collections and overflow controls keep Page metadata synchronized", a
     }),
   ).toHaveCount(0);
   await expect
-    .poll(async () =>
-      (await persistedEntities(page)).find(
-        (candidate: { id: string }) => candidate.id === pageEntity?.id,
-      )?.collections,
+    .poll(
+      async () =>
+        (await persistedEntities(page)).find(
+          (candidate: { id: string }) => candidate.id === pageEntity?.id,
+        )?.collections,
     )
     .toEqual([]);
 
@@ -1878,7 +2005,9 @@ test("durable media import reloads previews reuses duplicate blobs and garbage c
   const workspace = objectTypeWorkspace(page);
   await expect(workspace).toBeVisible();
   const fileChooserPromise = page.waitForEvent("filechooser");
-  await workspace.getByRole("button", { name: "Importar", exact: true }).click();
+  await workspace
+    .getByRole("button", { name: "Importar", exact: true })
+    .click();
   const fileChooser = await fileChooserPromise;
   await fileChooser.setFiles({
     buffer: Buffer.from("%PDF-1.4\n% durable-media"),
@@ -1905,9 +2034,9 @@ test("durable media import reloads previews reuses duplicate blobs and garbage c
   expect(imported?.assetId).toBeTruthy();
   expect(imported?.contentHash).toBe(imported?.assetId);
   expect(imported?.storageState).toBe("stored");
-  await expect.poll(() => persistedMediaBlobKeys(page)).toEqual([
-    `media:${imported?.contentHash}`,
-  ]);
+  await expect
+    .poll(() => persistedMediaBlobKeys(page))
+    .toEqual([`media:${imported?.contentHash}`]);
 
   await page.reload();
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
@@ -1947,16 +2076,16 @@ test("durable media import reloads previews reuses duplicate blobs and garbage c
         .map((entity: { assetId?: string }) => entity.assetId);
     })
     .toEqual([imported?.assetId, imported?.assetId]);
-  await expect.poll(() => persistedMediaBlobKeys(page)).toEqual([
-    `media:${imported?.contentHash}`,
-  ]);
+  await expect
+    .poll(() => persistedMediaBlobKeys(page))
+    .toEqual([`media:${imported?.contentHash}`]);
   await createdObjectWorkspace(page)
     .getByRole("button", { name: "Mais opções", exact: true })
     .click();
   await page.getByRole("menuitem", { name: "Excluir Objeto" }).click();
-  await expect.poll(() => persistedMediaBlobKeys(page)).toEqual([
-    `media:${imported?.contentHash}`,
-  ]);
+  await expect
+    .poll(() => persistedMediaBlobKeys(page))
+    .toEqual([`media:${imported?.contentHash}`]);
   const remaining = (await persistedEntities(page)).find(
     (entity: { id: string; objectTypeId: string; title: string }) =>
       entity.objectTypeId === "pdf" && entity.title === "durable-media",
@@ -1977,7 +2106,9 @@ test("mobile media quota failure stays recoverable without canonical asset", asy
   await page.setViewportSize({ width: 390, height: 844 });
   const errors = await openWorkspace(page);
 
-  await page.getByRole("button", { name: "Abrir navegação", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Abrir navegação", exact: true })
+    .click();
   await page
     .getByRole("dialog", { name: "Navegação" })
     .getByRole("button", { name: "Novo", exact: true })
@@ -2064,7 +2195,9 @@ test("production object-type commands render named outcomes", async ({
   await expect(sortMenu).toBeVisible();
   await sortMenu.getByRole("menuitem", { name: "Título" }).click();
   await expect(
-    workspace.locator('[data-lifecycle-contract="object-projection-card"]').first(),
+    workspace
+      .locator('[data-lifecycle-contract="object-projection-card"]')
+      .first(),
   ).toContainText("Page alpha");
   await page.keyboard.press("Escape");
   await expect(sortMenu).toBeHidden();
@@ -2125,9 +2258,11 @@ test("production object-type commands render named outcomes", async ({
     .click();
   await page.getByRole("menuitem", { name: "Novo a partir do modelo" }).click();
   await expect(
-    page.locator(
-      '[data-slot="object-type-command-destination"][data-kind="template"]',
-    ).filter({ visible: true }),
+    page
+      .locator(
+        '[data-slot="object-type-command-destination"][data-kind="template"]',
+      )
+      .filter({ visible: true }),
   ).toBeVisible();
   await page
     .locator('[data-slot="app-sidebar-object-type-row"]')
@@ -2138,11 +2273,15 @@ test("production object-type commands render named outcomes", async ({
   await workspace
     .getByRole("button", { name: "Mais opções", exact: true })
     .click();
-  await page.getByRole("menuitem", { name: "Configurações do tipo de objeto" }).click();
+  await page
+    .getByRole("menuitem", { name: "Configurações do tipo de objeto" })
+    .click();
   await expect(
-    page.locator(
-      '[data-slot="object-type-command-destination"][data-kind="settings"]',
-    ).filter({ visible: true }),
+    page
+      .locator(
+        '[data-slot="object-type-command-destination"][data-kind="settings"]',
+      )
+      .filter({ visible: true }),
   ).toBeVisible();
   expect(await persistedEntities(page)).toHaveLength(2);
   expect(errors).toEqual([]);
@@ -2304,11 +2443,10 @@ test("Page editor utility remains contained on a narrow viewport", async ({
     name: "Ferramentas do editor",
     exact: true,
   });
-  await expectContainedUsableSurface(
-    page,
-    utilities,
-    { width: 390, height: 844 },
-  );
+  await expectContainedUsableSurface(page, utilities, {
+    width: 390,
+    height: 844,
+  });
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),
   ).toBeLessThanOrEqual(390);
@@ -2371,11 +2509,11 @@ test("Page mention conversion links the exact source occurrence", async ({
   const mentionsHeading = mentions.locator(":scope > summary");
   await mentionsHeading.click();
   await expect(mentions).toContainText("1");
-  await expect(mentions.getByText("Mention source", { exact: true })).toBeHidden();
+  await expect(
+    mentions.getByText("Mention source", { exact: true }),
+  ).toBeHidden();
   await mentionsHeading.click();
-  await mentions
-    .locator('[data-slot="workspace-mention-disclosure"]')
-    .click();
+  await mentions.locator('[data-slot="workspace-mention-disclosure"]').click();
   await expect(
     mentions.getByRole("button", { name: "Abrir fonte", exact: true }),
   ).toBeVisible();
@@ -2397,7 +2535,9 @@ test("Page mention conversion links the exact source occurrence", async ({
     createdObjectWorkspace(page).getByText("Links de entrada", { exact: true }),
   ).toBeVisible();
   await expect(
-    createdObjectWorkspace(page).locator('[data-slot="workspace-reference-count"]'),
+    createdObjectWorkspace(page).locator(
+      '[data-slot="workspace-reference-count"]',
+    ),
   ).toContainText("1 referência");
   await expect
     .poll(async () => {
@@ -2405,8 +2545,9 @@ test("Page mention conversion links the exact source occurrence", async ({
         (entity: { title: string }) => entity.title === "Mention source",
       );
       return source?.body?.doc?.content
-        ?.flatMap((node: { content?: { marks?: { type: string }[] }[] }) =>
-          node.content ?? [],
+        ?.flatMap(
+          (node: { content?: { marks?: { type: string }[] }[] }) =>
+            node.content ?? [],
         )
         .flatMap((node: { marks?: { type: string }[] }) => node.marks ?? [])
         .filter((mark: { type: string }) => mark.type === "objectLink").length;
@@ -2435,7 +2576,10 @@ test("Page renders backlinks before distinct unlinked mentions", async ({
   await writeCreatedObjectTitle(page, "Order target");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Mention-only source");
-  await importMarkdownIntoCreatedObject(page, "Order target remains plain text.");
+  await importMarkdownIntoCreatedObject(
+    page,
+    "Order target remains plain text.",
+  );
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Linked source");
   const picker = await openLinkPicker(page);
@@ -2533,7 +2677,9 @@ test("deleting the active Page removes stale tabs and selects a valid fallback",
     .poll(async () => {
       const snapshot = await persistedSnapshot(page);
       return {
-        titles: snapshot.entities.map((entity: { title: string }) => entity.title),
+        titles: snapshot.entities.map(
+          (entity: { title: string }) => entity.title,
+        ),
         trashed: snapshot.trashRecords.map(
           (record: { entityId: string }) => record.entityId,
         ),
@@ -2579,18 +2725,26 @@ test("Trash route restores purges and empties recoverable objects accessibly", a
     .first();
   await expect(trashView).toBeVisible();
   await expect(trashView.getByPlaceholder("Buscar na lixeira")).toBeVisible();
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(3);
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(3);
   await expect(trashView).toContainText("remove em");
   await page.keyboard.press("Escape");
-  await expect(page.locator('[data-slot="app-sidebar-trash-surface"]')).toBeHidden();
+  await expect(
+    page.locator('[data-slot="app-sidebar-trash-surface"]'),
+  ).toBeHidden();
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(
     trashView.locator('button:has-text("Esvaziar lixeira")'),
   ).toBeVisible();
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(3);
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(3);
   await expect
     .poll(() =>
-      trashView.evaluate((element) => element.scrollWidth <= element.clientWidth),
+      trashView.evaluate(
+        (element) => element.scrollWidth <= element.clientWidth,
+      ),
     )
     .toBe(true);
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -2599,16 +2753,24 @@ test("Trash route restores purges and empties recoverable objects accessibly", a
     .locator('[data-slot="workspace-trash-view"]')
     .filter({ visible: true })
     .first();
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(3);
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(3);
 
   await trashView.getByPlaceholder("Buscar na lixeira").fill("Restore");
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(1);
-  await trashView.getByRole("button", { name: "Restaurar", exact: true }).click();
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(1);
+  await trashView
+    .getByRole("button", { name: "Restaurar", exact: true })
+    .click();
   await expectActiveEditorTitle(page, "Restore me page");
 
   await page.getByRole("button", { name: "Lixeira", exact: true }).click();
   await trashView.getByPlaceholder("Buscar na lixeira").fill("");
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(2);
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(2);
 
   const purgeRow = trashView
     .locator('[data-slot="workspace-trash-item"]')
@@ -2623,7 +2785,9 @@ test("Trash route restores purges and empties recoverable objects accessibly", a
   await purgeDialog
     .getByRole("button", { name: "Excluir permanentemente", exact: true })
     .click();
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(1);
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(1);
 
   await trashView
     .getByRole("button", { name: "Esvaziar lixeira", exact: true })
@@ -2637,7 +2801,8 @@ test("Trash route restores purges and empties recoverable objects accessibly", a
   await expect
     .poll(() =>
       page.evaluate(() =>
-        document.activeElement?.closest('[data-slot="workspace-trash-view"]')
+        document.activeElement
+          ?.closest('[data-slot="workspace-trash-view"]')
           ?.getAttribute("data-slot"),
       ),
     )
@@ -3442,13 +3607,16 @@ test("every supported New family persists once and reopens from its tab projecti
         name: `parity-${family.id}.${family.id === "image" ? "png" : family.id === "audio" ? "wav" : family.id === "pdf" ? "pdf" : "txt"}`,
       });
       await expect
-        .poll(async () => {
-          const entities = await persistedEntities(page);
-          return entities.some(
-            (entity: { objectTypeId: string }) =>
-              entity.objectTypeId === family.id,
-          );
-        }, { timeout: 20_000 })
+        .poll(
+          async () => {
+            const entities = await persistedEntities(page);
+            return entities.some(
+              (entity: { objectTypeId: string }) =>
+                entity.objectTypeId === family.id,
+            );
+          },
+          { timeout: 20_000 },
+        )
         .toBe(true);
     }
 
@@ -3976,9 +4144,9 @@ test("workspace database migrates legacy local snapshots and reloads", async ({
 
   await page.goto("/pt-BR");
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
-  await expect(
-    page.getByRole("textbox", { name: "Título" }),
-  ).toHaveValue("Legacy migrated page");
+  await expect(page.getByRole("textbox", { name: "Título" })).toHaveValue(
+    "Legacy migrated page",
+  );
   await expect
     .poll(async () => {
       const records = await persistedWorkspaceDatabaseRecords(page);
@@ -3994,9 +4162,9 @@ test("workspace database migrates legacy local snapshots and reloads", async ({
 
   await page.reload();
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
-  await expect(
-    page.getByRole("textbox", { name: "Título" }),
-  ).toHaveValue("Legacy migrated page");
+  await expect(page.getByRole("textbox", { name: "Título" })).toHaveValue(
+    "Legacy migrated page",
+  );
   expect(errors).toEqual([]);
 });
 

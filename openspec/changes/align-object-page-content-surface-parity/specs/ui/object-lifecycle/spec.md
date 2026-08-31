@@ -31,6 +31,11 @@ Title, Tags, Collections, and configured Page properties SHALL remain inline, lo
 - **THEN** every header, sidebar, collection, and Page projection SHALL reflect the same canonical value
 - **AND** the accepted result SHALL survive reopening when persistence is promised.
 
+#### Scenario: Object title is edited inline
+- **WHEN** the user edits the Page title
+- **THEN** the title SHALL remain a buffered autosizing textarea with the reference 30/33px typography and no resize handle
+- **AND** committing the value SHALL update the canonical entity title exactly once without changing neighboring header or metadata geometry.
+
 ### Requirement: Object-page review rows expose truthful nested actions
 Each Related content or Mention row SHALL separate disclosure, editable or navigable label behavior, type identity, open, overflow, preview, and explicit conversion actions according to the reference row kind while retaining accessible names and focus recovery.
 

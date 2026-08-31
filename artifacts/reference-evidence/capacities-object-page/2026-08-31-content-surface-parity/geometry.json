@@ -1,0 +1,57 @@
+{
+  "reference": {
+    "viewport": { "width": 1059, "height": 912 },
+    "mainCard": { "x": 298, "y": 46, "width": 474.203125, "height": 856 },
+    "mainScroll": { "clientWidth": 462, "clientHeight": 854, "scrollHeight": 914 },
+    "contextPanel": { "width": 277, "contentWidth": 264.797 },
+    "contentInset": { "left": 40, "right": 32, "top": 36 },
+    "contentX": 339,
+    "contentWidth": 390.203125,
+    "title": {
+      "owner": "textarea",
+      "x": 339,
+      "y": 123,
+      "width": 390.203125,
+      "height": 39,
+      "fontSize": 30,
+      "lineHeight": 33,
+      "fontWeight": 700
+    },
+    "metadata": {
+      "secondaryColor": "oklch(0.3887 0.0052 301.05)",
+      "tagsInputOffsetFromContentX": 22.171875,
+      "tagsGroupOffsetFromContentX": -6
+    }
+  },
+  "localhostContract": {
+    "viewport": { "width": 1059, "height": 912 },
+    "workspaceSplit": {
+      "contextPanelDefault": "35.5%",
+      "contextPanelMinWidth": 240,
+      "resizeBehavior": "preserve-relative-size"
+    },
+    "mainSurfaceWidthRange": "470-478",
+    "contextSurfaceWidthRange": "260-286",
+    "contentColumnWidthRange": "458-466",
+    "contentWidthRange": "386-394",
+    "title": {
+      "owner": "textarea",
+      "fontSize": 30,
+      "lineHeight": 33,
+      "fontWeight": 700
+    },
+    "metadata": {
+      "secondaryColor": "oklch(0.3887 0.0052 301.05)",
+      "tagsInputOffsetFromScrollColumn": "58-64",
+      "tagsGroupOffsetFromContentX": "-8 to -4"
+    },
+    "scroll": {
+      "trailingScrollRange": "54-70",
+      "scrollbarGutter": "stable"
+    }
+  },
+  "invariants": {
+    "horizontalComparison": "content inset, row internal offsets, title owner, and main/context shell split now match the measured reference tolerance",
+    "unsafeReferenceTransitions": "delete, duplicate, share, export, and authenticated remote mutation not exercised"
+  }
+}

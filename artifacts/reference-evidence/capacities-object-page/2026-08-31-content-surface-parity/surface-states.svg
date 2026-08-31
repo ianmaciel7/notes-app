@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="474" height="856" viewBox="0 0 474 856" role="img" aria-labelledby="title desc">
+  <title id="title">Sanitized object page content surface reconstruction</title>
+  <desc id="desc">Measured, redacted geometry for the Capacities-style Page header, title, tags, body, Related content, and Mentions surface.</desc>
+  <rect x="0.5" y="0.5" width="473" height="855" rx="12" fill="#fff" stroke="#e7e5e4"/>
+  <g transform="translate(40 36)" fill="none" stroke="#d8d5d0">
+    <rect x="0" y="0" width="86" height="26" rx="7" fill="#eaf2ff" stroke="#8bbcff"/>
+    <rect x="118" y="4" width="88" height="18" rx="4"/>
+    <rect x="366" y="0" width="26" height="26" rx="8"/>
+    <rect x="0" y="40" width="390" height="39" rx="3"/>
+    <rect x="-6" y="88" width="108" height="20" rx="6"/>
+    <rect x="0" y="128" width="390" height="33" rx="4"/>
+    <rect x="0" y="218" width="156" height="20" rx="4"/>
+    <rect x="-4" y="254" width="398" height="37" rx="6"/>
+    <rect x="-4" y="299" width="398" height="37" rx="6"/>
+    <rect x="-4" y="344" width="398" height="37" rx="6"/>
+    <rect x="0" y="423" width="88" height="20" rx="4"/>
+    <rect x="-4" y="459" width="398" height="74" rx="6"/>
+  </g>
+</svg>

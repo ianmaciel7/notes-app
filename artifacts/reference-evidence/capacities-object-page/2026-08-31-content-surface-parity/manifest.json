@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "capacities",
+    "url": "https://app.capacities.io/[space]/[object]",
+    "routeFingerprintSha256": "fb3afc9f2f1cad9b513be79710ff8cc86bf075fef5a50ce363c0002e60887f8d",
+    "productSurface": "object-page-content-surface"
+  },
+  "capturedAt": "2026-08-31T12:00:00-03:00",
+  "viewport": {
+    "matchedUserEvidence": { "width": 1329, "height": 912, "deviceScaleFactor": 1 },
+    "liveReferenceInspection": { "width": 1059, "height": 912, "deviceScaleFactor": 1 },
+    "localhostInspection": { "width": 1059, "height": 912, "deviceScaleFactor": 1 }
+  },
+  "surface": {
+    "route": "redacted-authenticated-object-route",
+    "component": "object-header-metadata-editor-related-content-and-mentions"
+  },
+  "semanticState": "Page with empty optional metadata, one short body placeholder, three explicit related Pages, one unlinked mention, and graph panel visible",
+  "persistedState": {
+    "relatedContent": "expanded",
+    "mentions": "expanded",
+    "graphPanel": "visible",
+    "customize": "closed",
+    "rowMenus": "closed"
+  },
+  "interactions": [
+    "object-header idle and hover",
+    "section-heading idle and hover",
+    "related-row idle and hover",
+    "related and mention disclosure",
+    "related title inline edit",
+    "row overflow open and Escape recovery",
+    "mention conversion on disposable localhost data"
+  ],
+  "artifacts": [
+    { "stateId": "surface-state-summary", "kind": "sanitized-visual-reconstruction", "path": "surface-states.svg" },
+    { "stateId": "reference-local-geometry", "kind": "computed-style-and-geometry", "path": "geometry.json" },
+    { "stateId": "safe-and-unsafe-actions", "kind": "action-matrix", "path": "action-matrix.md" },
+    { "stateId": "interaction-observations", "kind": "javascript-observation", "path": "interactions.behavior.json" }
+  ],
+  "provenance": "user-supplied matched-viewport screenshots plus authenticated live read-only DOM, computed-style, accessibility, and reversible hover inspection; localhost behavior exercised with disposable data and remeasured after the 35.5% contextual-panel split correction",
+  "confidence": "confirmed for recorded states",
+  "redactions": [
+    "workspace and object identifiers",
+    "account identity",
+    "unrelated authenticated content",
+    "cookies, tokens, storage, and request data",
+    "user-specific titles in the visual reconstruction"
+  ],
+  "freshness": "valid for the recorded Capacities object-page state on 2026-08-31",
+  "limitations": [
+    "live reference hover geometry and final localhost convergence were inspected at 1059x912 because the authenticated tab retained that viewport",
+    "the supplied 1329x912 screenshot establishes the wider full-viewport baseline",
+    "the SVG is a sanitized measured reconstruction, not a pixel export of authenticated content",
+    "no destructive, share, export, duplicate, delete, or authenticated remote mutation command was exercised"
+  ],
+  "refreshReason": "The earlier bundle did not cover the full writing surface, three Related content rows, empty optional properties, inline row titles, target-specific hover ownership, or the remaining shell split mismatch."
+}

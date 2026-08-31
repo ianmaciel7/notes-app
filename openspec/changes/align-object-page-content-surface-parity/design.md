@@ -20,7 +20,7 @@ The repository already owns canonical Structures, entity relations, related-cont
 
 - Copying authenticated Capacities content, identifiers, inaccessible generic-element semantics, or weak accessible names.
 - Removing canonical links, embeds, Objects inside, backlinks, graph edges, or their explicit authoring/contextual destinations.
-- Reworking the workspace shell, sidebar, graph panel, object-type listing, or unrelated side-panel behavior.
+- Reworking the workspace shell beyond the measured main/context split needed for the selected object-page surface, or changing the sidebar, graph panel, object-type listing, or unrelated side-panel behavior.
 - Introducing a new relation schema, storage migration, remote service, or dependency.
 - Exercising destructive, share, export, or authenticated mutation commands against the user's Capacities data merely to prove their labels.
 
@@ -50,6 +50,12 @@ Related content and Mentions headings own independent collapsed state, and every
 
 Alternative considered: one shared expanded flag or click-anywhere row target. Rejected because the live reference exposes independent section and nested row targets and because a shared flag would collapse unrelated content.
 
+### Match the object surface inside the reference workspace split
+
+The authenticated 1059x912 capture shows the main Page card at about 474px and the contextual panel at about 277px after the 288px sidebar and gutters are applied. The local route used a fixed contextual panel, compressing the main card and forcing the Related content heading and row actions into a different layout. The shell will therefore use a 35.5% default contextual panel with a lower 240px minimum and relative resize preservation, while keeping the overlay breakpoint and left sidebar contract unchanged.
+
+The object Page will also reserve the reference trailing scroll range inside the main scroll container so the selected content surface keeps the same scrollbar gutter and bottom rhythm even when the visible content is short. The Page title uses the reference-like single-row textarea owner rather than an input so geometry, font metrics, selection behavior, and autosizing remain aligned with the reference title field.
+
 ### Let editor content determine vertical size
 
 The Page editor will use an intrinsic short-content and measured empty-state minimum instead of the current large fixed minimum. Block handle gutters remain outside the text measure. Buffered commit boundaries, undo, block ids, slash commands, and editor utilities do not change; relationship projection recomputation occurs from accepted document state rather than inside the keystroke path.
@@ -78,6 +84,7 @@ Alternative considered: treat the supplied screenshots as sufficient. Rejected b
 - [Current dirty files overlap the broad parity test] → Preserve existing edits, add focused cases without rewriting unrelated assertions, and report any conflict before touching an overlapping hunk.
 - [Reference DOM sometimes lacks strong semantics] → Match visible geometry and behavior while retaining buttons, links, regions, accessible names, focus rings, and reduced-motion behavior.
 - [Pixel measurements can become brittle across browser rendering] → Centralize confirmed constants, assert bounded geometry and no-shift invariants, and supplement numeric checks with semantic/behavior evidence.
+- [Responsive shell constants affect other workspace surfaces] → Constrain the change to the contextual panel default/minimum and preserve the existing overlay/mobile breakpoint, resize handles, and panel collapse behavior.
 
 ## Migration Plan
 
@@ -86,7 +93,8 @@ Alternative considered: treat the supplied screenshots as sufficient. Rejected b
 3. Introduce shared object-page header, review-section, and review-row presentation variants without changing canonical relation data.
 4. Recompose `DocumentPage`, remove the generic main-flow projection, and reduce editor sizing from fixed to content-aware behavior.
 5. Align nested menus, help/reveal actions, focus recovery, reduced motion, localization, responsive containment, persistence, and input performance.
-6. Run up to five measured browser convergence iterations, updating the planning artifacts only when evidence changes the accepted design rather than hiding a mismatch in code.
-7. Run focused and repository verification, strict OpenSpec validation, inspect the final diff against the unrelated dirty baseline, and update the evidence summary.
+6. Correct the responsive main/context split, title textarea owner, secondary text token, tag inset, and trailing scroll reserve when measured evidence proves the component alone cannot match the selected surface.
+7. Run up to five measured browser convergence iterations, updating the planning artifacts only when evidence changes the accepted design rather than hiding a mismatch in code.
+8. Run focused and repository verification, strict OpenSpec validation, inspect the final diff against the unrelated dirty baseline, and update the evidence summary.
 
 Rollback is a normal revert of the isolated Page composition, shared-style, locale, and test changes. No data rollback is required because this design introduces no persistence migration and leaves canonical relations unchanged.

@@ -57,3 +57,16 @@ Object-page parity SHALL be evaluated against a reusable, sanitized action matri
 - **WHEN** a destructive, sharing, exporting, authenticated mutation, or otherwise unavailable reference transition cannot be safely exercised
 - **THEN** the matrix SHALL mark that transition untested with the reason
 - **AND** SHALL not infer a passing verdict from its label or menu presence.
+
+### Requirement: Reference workspace split preserves object-page geometry
+The desktop workspace SHALL size the object Page and contextual panel with the same responsive proportion as the matched Capacities reference so the Page header, title, metadata, body, Related content, and Mentions do not reflow from a locally oversized contextual panel.
+
+#### Scenario: Object Page is opened at the 1059px matched viewport
+- **WHEN** the workspace is opened at 1059x912 with the sidebar and contextual panel visible
+- **THEN** the main object-page card SHALL be about 474px wide, the contextual panel SHALL be about 277px wide, and the object content column SHALL remain about 390px wide within normal rendering tolerance
+- **AND** the Related content heading SHALL remain on one line with row actions in the reference positions.
+
+#### Scenario: Object Page has short content
+- **WHEN** the selected Page content is shorter than the available viewport
+- **THEN** the main scroll container SHALL still preserve the reference scrollbar gutter and trailing scroll range
+- **AND** the title field SHALL be a buffered single-row textarea with the reference font metrics rather than a generic input.

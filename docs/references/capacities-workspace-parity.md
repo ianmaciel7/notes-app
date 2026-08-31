@@ -2,7 +2,7 @@
 title: Current Capacities workspace parity contract
 reference_type: authenticated-product
 source_type: live-browser-measurement
-updated: 2026-08-28
+updated: 2026-08-31
 confidence: confirmed
 ---
 
@@ -29,6 +29,12 @@ The same pass now records the complete safe sidebar utility and card pre-commit 
 ## Reusable object-page bundle (2026-08-28)
 
 The focused object-page evidence is stored under `artifacts/reference-evidence/capacities-object-page/2026-08-28-mentions-utilities/`. It records the object header, an expanded one-item Mentions section, source-row anatomy, and the separately exercised edge-triggered Structure/Statistics utility. The persisted image is a sanitized Capacities-only crop; localhost evidence is structural and behavioral only, never an image. The manifest redacts authenticated route identifiers and records the route fingerprint, interaction matrix, limitations, and reversible text-entry check.
+
+## Reusable full object-page content-surface bundle (2026-08-31)
+
+The current full-surface refresh is stored under `artifacts/reference-evidence/capacities-object-page/2026-08-31-content-surface-parity/`. It extends the earlier Mentions bundle with the complete writing flow from the 26px object header through title, Tags, the intrinsic Page body, Related content rows, and one Mention source. It records empty optional-property omission, buffered inline row titles, tone-aware type chips, target-specific header/heading/row hover ownership, independent disclosure, overflow focus recovery, and explicit mention conversion. The action matrix keeps unsafe authenticated delete, duplicate, share, export, and remote mutation transitions marked untested. Its SVG is a sanitized measured reconstruction; raw authenticated screenshots, account data, and route identifiers are not persisted.
+
+The August 31 follow-up audit at 1059x912 identified the remaining object-page appearance mismatch as a shell split issue rather than a row-composition issue: the fixed local contextual panel compressed the main Page card while Capacities preserved a roughly 474px main card and 277px contextual panel. The accepted local contract now uses a 35.5% contextual-panel default, 240px minimum, relative resize preservation, a textarea-backed 30/33px title field, stable scrollbar gutter, 54-70px trailing scroll range, and the reference secondary text color for metadata controls.
 
 ## Matched-state geometry matrix
 

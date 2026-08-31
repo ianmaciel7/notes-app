@@ -69,6 +69,7 @@ import {
   workspaceListRowClass,
   workspaceListSurfaceClass,
   workspaceLongformColumnClass,
+  workspaceReferenceSecondaryTextClass,
   workspaceRouteClass,
 } from "@/components/ui/workspace-surface";
 import { useWorkspace } from "@/components/workspace-controller";
@@ -177,14 +178,23 @@ function BufferedTitle({
   readonly value: string;
 }) {
   const { inputProps } = useBufferedTextCommit({ value, onCommit });
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+  React.useLayoutEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    textarea.style.height = "0px";
+    textarea.style.height = `${Math.max(39, textarea.scrollHeight)}px`;
+  });
   return (
-    <input
+    <textarea
       {...inputProps}
+      ref={textareaRef}
       data-slot="workspace-object-page-title"
       data-lifecycle-contract={objectLifecycleContractSlots.EditableObjectTitle}
       aria-label={label}
       placeholder={label}
-      className="mt-4 block min-h-[39px] w-full bg-transparent text-[30px] font-bold leading-[33px] tracking-[-0.02em] text-foreground outline-none placeholder:text-muted-foreground/50"
+      rows={1}
+      className="mt-3.5 block min-h-[39px] w-full resize-none overflow-hidden bg-transparent pb-1 text-[30px] font-bold leading-[33px] tracking-normal text-foreground outline-none placeholder:text-muted-foreground/50"
     />
   );
 }
@@ -722,7 +732,10 @@ function ObjectPageTags({
   return (
     <div
       data-slot="workspace-object-page-tags"
-      className="mt-2 flex min-h-5 flex-wrap items-center gap-1.5"
+      className={cn(
+        workspaceReferenceSecondaryTextClass,
+        "-ml-1.5 mt-1.5 flex min-h-5 flex-wrap items-center gap-1.5",
+      )}
     >
       {tags.map((tagId) => (
         <button
@@ -770,7 +783,7 @@ function ObjectPageTags({
                   setQuery(event.target.value);
                   setOpen(true);
                 }}
-                className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] outline-none focus:cursor-text [field-sizing:content] placeholder:text-muted-foreground"
+                className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] text-current outline-none focus:cursor-text [field-sizing:content] placeholder:text-current"
               />
               <AppHeaderSparkleIcon className="ml-1 size-3 text-violet-500" />
             </label>
@@ -959,7 +972,12 @@ function ObjectPageCollections({
     return () => window.clearTimeout(focusTimer);
   }, [activationRequest]);
   return (
-    <div className="inline-flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
+    <div
+      className={cn(
+        workspaceReferenceSecondaryTextClass,
+        "inline-flex min-w-0 items-center gap-1.5 text-sm",
+      )}
+    >
       {collections.map((collectionId) => (
         <button
           key={collectionId}
@@ -1011,7 +1029,7 @@ function ObjectPageCollections({
                   setQuery(event.target.value);
                   setOpen(true);
                 }}
-                className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] outline-none focus:cursor-text [field-sizing:content] placeholder:text-muted-foreground"
+                className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] text-current outline-none focus:cursor-text [field-sizing:content] placeholder:text-current"
               />
             </label>
           }
@@ -1124,7 +1142,10 @@ function PageCustomizeControl({
             variant="ghost"
             size="sm"
             aria-label={t("actions.customize")}
-            className="h-[26px] gap-1.5 px-2 pr-1 text-sm font-normal text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none"
+            className={cn(
+              workspaceReferenceSecondaryTextClass,
+              "h-[26px] gap-1.5 px-2 pr-1 text-sm font-normal opacity-0 transition-[background-color,color,opacity] duration-200 group-hover/object-page-header:opacity-100 group-focus-within/object-page-header:opacity-100 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none",
+            )}
           >
             <AppHeaderSparkleIcon className="size-3.5" />
             {t("actions.customize")}
@@ -2174,12 +2195,8 @@ function ReferencePanel({
   readonly entity: DocumentWorkspaceEntity;
 }) {
   const t = useTranslations("workspace");
-  const {
-    createdEntities,
-    objectTypes,
-    selectEntity,
-    updateWorkspaceEntity,
-  } = useWorkspace();
+  const { createdEntities, objectTypes, selectEntity, updateWorkspaceEntity } =
+    useWorkspace();
   const linkIndex = React.useMemo(
     () => createWorkspaceObjectLinkIndex(createdEntities),
     [createdEntities],
@@ -3267,7 +3284,10 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
       data-lifecycle-contract={objectLifecycleContractSlots.ObjectEditorShell}
       data-object-kind={entity.kind}
       data-object-type={entity.objectTypeId}
-      className={cn(workspaceRouteClass, "w-full overflow-y-auto")}
+      className={cn(
+        workspaceRouteClass,
+        "w-full overflow-y-auto [scrollbar-gutter:stable]",
+      )}
     >
       <div
         data-slot="workspace-object-page-column"
@@ -3275,7 +3295,7 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
         className={cn(
           workspaceLongformColumnClass,
           wideLayout && "lg:max-w-[72rem]",
-          "lg:pt-8",
+          "min-h-[calc(100%+3.75rem)] lg:pt-9",
         )}
       >
         <WorkspaceObjectPageContent

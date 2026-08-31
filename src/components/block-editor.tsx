@@ -420,7 +420,8 @@ function BlockEditor({
       if (!transaction.docChanged) return;
       scheduleEditorCommit(currentEditor);
     },
-    onUpdate: ({ editor: currentEditor }) => scheduleEditorCommit(currentEditor),
+    onUpdate: ({ editor: currentEditor }) =>
+      scheduleEditorCommit(currentEditor),
   });
 
   React.useLayoutEffect(() => {
@@ -539,7 +540,7 @@ function BlockEditor({
       {editor && editable ? <CodeBlockActionSurface editor={editor} /> : null}
       <EditorContent
         editor={editor}
-        onBlur={editable ? flushCurrentDocument : undefined}
+        onBlur={editable ? flushCommit : undefined}
         onCompositionEnd={editable ? finishComposition : undefined}
         onCompositionStart={editable ? startComposition : undefined}
       />

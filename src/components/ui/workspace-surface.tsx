@@ -22,6 +22,9 @@ const workspaceSectionTitleClass =
 const workspaceMetaTextClass =
   "text-[13px] leading-5 text-muted-foreground";
 
+const workspaceReferenceSecondaryTextClass =
+  "text-[oklch(0.3887_0.0052_301.05)]";
+
 const workspaceCardGridClass =
   "grid w-full grid-cols-1 gap-2 sm:grid-cols-2";
 
@@ -139,6 +142,7 @@ export {
   workspaceMetaTextClass,
   workspaceNamedCardClass,
   workspaceOverviewContentClass,
+  workspaceReferenceSecondaryTextClass,
   workspaceRouteClass,
   workspaceScrollAreaClass,
   workspaceSectionTitleClass,

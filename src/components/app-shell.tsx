@@ -25,7 +25,7 @@ import {
 import { cn } from "@/lib/utils";
 import {
   getWorkspacePanelPresentation,
-  WORKSPACE_CONTEXT_PANEL_DEFAULT_WIDTH_PX,
+  WORKSPACE_CONTEXT_PANEL_DEFAULT_SIZE_PERCENT,
   WORKSPACE_CONTEXT_PANEL_MAX_WIDTH_PX,
   WORKSPACE_CONTEXT_PANEL_MIN_WIDTH_PX,
   WORKSPACE_RAIL_HEIGHT_PX,
@@ -39,7 +39,7 @@ import {
 const APP_SHELL_LEFT_DEFAULT = `${WORKSPACE_SIDEBAR_DEFAULT_WIDTH_PX}px`;
 const APP_SHELL_LEFT_MIN = `${WORKSPACE_SIDEBAR_MIN_WIDTH_PX}px`;
 const APP_SHELL_LEFT_MAX = `${WORKSPACE_SIDEBAR_MAX_WIDTH_PX}px`;
-const APP_SHELL_RIGHT_DEFAULT = `${WORKSPACE_CONTEXT_PANEL_DEFAULT_WIDTH_PX}px`;
+const APP_SHELL_RIGHT_DEFAULT = `${WORKSPACE_CONTEXT_PANEL_DEFAULT_SIZE_PERCENT}%`;
 const APP_SHELL_RIGHT_MIN = `${WORKSPACE_CONTEXT_PANEL_MIN_WIDTH_PX}px`;
 const APP_SHELL_RIGHT_MAX = `${WORKSPACE_CONTEXT_PANEL_MAX_WIDTH_PX}px`;
 
@@ -492,7 +492,7 @@ function AppShellSidePanel({
       maxSize={APP_SHELL_RIGHT_MAX}
       collapsedSize="0%"
       collapsible
-      groupResizeBehavior="preserve-pixel-size"
+      groupResizeBehavior="preserve-relative-size"
       onResize={(size, id, previousSize) => {
         setRightCollapsed(size.inPixels <= 1);
         onResize?.(size, id, previousSize);
