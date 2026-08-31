@@ -47,8 +47,12 @@ test("task metadata keeps scheduled date and deadline independent", () => {
 
 test("task statuses are space-scoped and completion semantics are derived", () => {
   const registry = createDefaultTaskStatusRegistry("labs");
-  const done = registry.definitions.find((status) => status.completion === "complete");
-  const nextUp = registry.definitions.find((status) => status.id === "labs:task-status:next-up");
+  const done = registry.definitions.find(
+    (status) => status.completion === "complete",
+  );
+  const nextUp = registry.definitions.find(
+    (status) => status.id === "labs:task-status:next-up",
+  );
   const metadata = createTaskManagementMetadata({
     statusId: done.id,
     statusRegistry: registry,
@@ -60,7 +64,10 @@ test("task statuses are space-scoped and completion semantics are derived", () =
   assert.equal(metadata.statusId, done.id);
   assert.equal(validateTaskManagementMetadata(metadata, registry).ok, true);
   assert.equal(
-    validateTaskManagementMetadata({ ...metadata, statusId: "other:done" }, registry).ok,
+    validateTaskManagementMetadata(
+      { ...metadata, statusId: "other:done" },
+      registry,
+    ).ok,
     false,
   );
 });
@@ -157,7 +164,10 @@ test("skip and excuse append auditable occurrences without duplicating task iden
   });
 
   assert.equal(excused.occurrences.length, 2);
-  assert.deepEqual(excused.occurrences.map((item) => item.action), ["skip", "excuse"]);
+  assert.deepEqual(
+    excused.occurrences.map((item) => item.action),
+    ["skip", "excuse"],
+  );
   assert.equal(excused.completed, false);
 });
 
@@ -192,11 +202,17 @@ test("task dashboards are expressed as shared query definitions", () => {
       (filter) =>
         "filters" in filter &&
         filter.filters.some(
-          (item) => item.kind === "property" && item.propertyId === "scheduledDate",
+          (item) =>
+            item.kind === "property" && item.propertyId === "scheduledDate",
         ),
     ),
   );
-  assert.ok(completed.filters.filters.some((filter) => filter.kind === "property" && filter.propertyId === "completed"));
+  assert.ok(
+    completed.filters.filters.some(
+      (filter) =>
+        filter.kind === "property" && filter.propertyId === "completed",
+    ),
+  );
 });
 
 test("task dashboard membership derives inbox, today, scheduled, context, tags, open, completed, and all", () => {
@@ -213,36 +229,154 @@ test("task dashboard membership derives inbox, today, scheduled, context, tags, 
     task: metadata,
   });
   const entities = [
-    makeTask("1", "Inbox", createTaskManagementMetadata({ statusId: null, statusRegistry: registry })),
-    makeTask("2", "Scheduled", createTaskManagementMetadata({ scheduledDate: "2026-08-26", statusId: null, statusRegistry: registry })),
-    makeTask("3", "Due", createTaskManagementMetadata({ deadline: "2026-08-25", priority: "high", statusId: null, statusRegistry: registry })),
-    makeTask("4", "Context", createTaskManagementMetadata({ contextObjectIds: ["ctx"], statusId: null, statusRegistry: registry })),
-    makeTask("5", "Tagged", createTaskManagementMetadata({ statusId: null, tagIds: ["tag"], statusRegistry: registry })),
-    makeTask("6", "Done", createTaskManagementMetadata({ statusId: "labs:task-status:done", statusRegistry: registry })),
+    makeTask(
+      "1",
+      "Inbox",
+      createTaskManagementMetadata({
+        statusId: null,
+        statusRegistry: registry,
+      }),
+    ),
+    makeTask(
+      "2",
+      "Scheduled",
+      createTaskManagementMetadata({
+        scheduledDate: "2026-08-26",
+        statusId: null,
+        statusRegistry: registry,
+      }),
+    ),
+    makeTask(
+      "3",
+      "Due",
+      createTaskManagementMetadata({
+        deadline: "2026-08-25",
+        priority: "high",
+        statusId: null,
+        statusRegistry: registry,
+      }),
+    ),
+    makeTask(
+      "4",
+      "Context",
+      createTaskManagementMetadata({
+        contextObjectIds: ["ctx"],
+        statusId: null,
+        statusRegistry: registry,
+      }),
+    ),
+    makeTask(
+      "5",
+      "Tagged",
+      createTaskManagementMetadata({
+        statusId: null,
+        tagIds: ["tag"],
+        statusRegistry: registry,
+      }),
+    ),
+    makeTask(
+      "6",
+      "Done",
+      createTaskManagementMetadata({
+        statusId: "labs:task-status:done",
+        statusRegistry: registry,
+      }),
+    ),
   ];
 
-  assert.deepEqual(projectTaskDashboardEntities("inbox", entities, registry, "2026-08-25").map((task) => task.id), ["1", "4", "5"]);
-  assert.deepEqual(projectTaskDashboardEntities("today", entities, registry, "2026-08-25").map((task) => task.id), ["3"]);
-  assert.deepEqual(projectTaskDashboardEntities("scheduled", entities, registry, "2026-08-25").map((task) => task.id), ["2"]);
-  assert.deepEqual(projectTaskDashboardEntities("context", entities, registry, "2026-08-25").map((task) => task.id), ["4"]);
-  assert.deepEqual(projectTaskDashboardEntities("tags", entities, registry, "2026-08-25").map((task) => task.id), ["5"]);
-  assert.deepEqual(projectTaskDashboardEntities("completed", entities, registry, "2026-08-25").map((task) => task.id), ["6"]);
-  assert.deepEqual(projectTaskDashboardEntities("all", entities, registry, "2026-08-25").map((task) => task.id), ["3", "2", "1", "4", "5", "6"]);
+  assert.deepEqual(
+    projectTaskDashboardEntities("inbox", entities, registry, "2026-08-25").map(
+      (task) => task.id,
+    ),
+    ["1", "4", "5"],
+  );
+  assert.deepEqual(
+    projectTaskDashboardEntities("today", entities, registry, "2026-08-25").map(
+      (task) => task.id,
+    ),
+    ["3"],
+  );
+  assert.deepEqual(
+    projectTaskDashboardEntities(
+      "scheduled",
+      entities,
+      registry,
+      "2026-08-25",
+    ).map((task) => task.id),
+    ["2"],
+  );
+  assert.deepEqual(
+    projectTaskDashboardEntities(
+      "context",
+      entities,
+      registry,
+      "2026-08-25",
+    ).map((task) => task.id),
+    ["4"],
+  );
+  assert.deepEqual(
+    projectTaskDashboardEntities("tags", entities, registry, "2026-08-25").map(
+      (task) => task.id,
+    ),
+    ["5"],
+  );
+  assert.deepEqual(
+    projectTaskDashboardEntities(
+      "completed",
+      entities,
+      registry,
+      "2026-08-25",
+    ).map((task) => task.id),
+    ["6"],
+  );
+  assert.deepEqual(
+    projectTaskDashboardEntities("all", entities, registry, "2026-08-25").map(
+      (task) => task.id,
+    ),
+    ["3", "2", "1", "4", "5", "6"],
+  );
 });
 
 test("calendar today includes overdue scheduled, in-progress, and completed-today tasks separately", () => {
   const registry = createDefaultTaskStatusRegistry("labs");
   const tasks = [
-    { id: "overdue", kind: "task", title: "Overdue", task: createTaskManagementMetadata({ scheduledDate: "2026-08-24", statusId: null, statusRegistry: registry }) },
-    { id: "in-progress", kind: "task", title: "Doing", task: createTaskManagementMetadata({ statusId: "labs:task-status:in-progress", statusRegistry: registry }) },
-    { id: "completed-today", kind: "task", title: "Done", task: createTaskManagementMetadata({ completedAt: "2026-08-25T12:00:00.000Z", statusId: "labs:task-status:done", statusRegistry: registry }) },
+    {
+      id: "overdue",
+      kind: "task",
+      title: "Overdue",
+      task: createTaskManagementMetadata({
+        scheduledDate: "2026-08-24",
+        statusId: null,
+        statusRegistry: registry,
+      }),
+    },
+    {
+      id: "in-progress",
+      kind: "task",
+      title: "Doing",
+      task: createTaskManagementMetadata({
+        statusId: "labs:task-status:in-progress",
+        statusRegistry: registry,
+      }),
+    },
+    {
+      id: "completed-today",
+      kind: "task",
+      title: "Done",
+      task: createTaskManagementMetadata({
+        completedAt: "2026-08-25T12:00:00.000Z",
+        statusId: "labs:task-status:done",
+        statusRegistry: registry,
+      }),
+    },
   ];
 
-  assert.deepEqual(projectCalendarTodayTasks(tasks, registry, "2026-08-25").map((task) => task.id), [
-    "overdue",
-    "in-progress",
-    "completed-today",
-  ]);
+  assert.deepEqual(
+    projectCalendarTodayTasks(tasks, registry, "2026-08-25").map(
+      (task) => task.id,
+    ),
+    ["overdue", "in-progress", "completed-today"],
+  );
 });
 
 test("recurrence rules cover weekdays, ordinal monthly, yearly, leap years, and end dates", () => {
@@ -317,7 +451,10 @@ test("recurrence actions advance deadlines, support catch-up, and derive statist
 });
 
 test("invalid dates, recurrence intervals, and duplicate ids are rejected", () => {
-  assert.equal(validateTaskManagementMetadata({ scheduledDate: "not-a-date" }).ok, false);
+  assert.equal(
+    validateTaskManagementMetadata({ scheduledDate: "not-a-date" }).ok,
+    false,
+  );
   assert.equal(
     validateTaskManagementMetadata({
       scheduledDate: "2026-08-25",

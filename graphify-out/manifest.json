@@ -1221,7 +1221,7 @@
   },
   "src/messages/pt-BR.json": {
     "mtime": 1788170520.028131,
-    "ast_hash": "",
+    "ast_hash": "c3cce2aa78766d87e4c7775bd6928b85",
     "semantic_hash": ""
   },
   "src/components/object-icons.tsx": {
@@ -1255,8 +1255,8 @@
     "semantic_hash": ""
   },
   "src/components/workspace-controller.tsx": {
-    "mtime": 1788170428.1352732,
-    "ast_hash": "687087ce1fccb11434a72235eb0e4645",
+    "mtime": 1788170567.106871,
+    "ast_hash": "d035c0e6feb86c2160997fb1461f6aa6",
     "semantic_hash": ""
   },
   ".agents/rules/workspace-ui-parity.md": {
@@ -1425,8 +1425,8 @@
     "semantic_hash": ""
   },
   "tests/e2e/workspace-parity.spec.ts": {
-    "mtime": 1788170518.74592,
-    "ast_hash": "c524482cde3bddfe2148c8211a8bba23",
+    "mtime": 1788170557.341459,
+    "ast_hash": "11560ff827707bf428677de0e851676b",
     "semantic_hash": ""
   },
   "src/lib/workspace-layout.ts": {
@@ -2075,8 +2075,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-task-management.test.mjs": {
-    "mtime": 1788170522.5845802,
-    "ast_hash": "fb73d020fbef94499cb1fc0f5f57fa96",
+    "mtime": 1788170576.9835744,
+    "ast_hash": "f0310c3b91ff89879175eced794334fd",
     "semantic_hash": ""
   },
   ".superpowers/sdd/2026-08-25-prototyping-priorities/change-01-add-block-editor-report.md": {
@@ -4015,8 +4015,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-task-management.ts": {
-    "mtime": 1788170477.1799283,
-    "ast_hash": "b939b10d09ecca04d5b180c3d373169d",
+    "mtime": 1788170576.9935744,
+    "ast_hash": "93cd7de2215cedb12fa96e42ac78089c",
     "semantic_hash": ""
   }
 }

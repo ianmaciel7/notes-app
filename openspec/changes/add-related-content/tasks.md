@@ -11,9 +11,9 @@
 
 ## 3. UI
 
-- [ ] 3.1 Add inline top-five results below eligible notes with loading, empty, unavailable, stale, partial, and error states.
-- [ ] 3.2 Add side-panel continuation using the same result revision.
-- [ ] 3.3 Keep Backlinks, Objects Inside, property relations, and shared collections as separately named structural sections.
+- [x] 3.1 Add inline top-five results below eligible notes with loading, empty, unavailable, stale, partial, and error states.
+- [x] 3.2 Add side-panel continuation using the same result revision.
+- [x] 3.3 Keep Backlinks, Objects Inside, property relations, and shared collections as separately named structural sections.
 
 ## 4. Acceptance
 

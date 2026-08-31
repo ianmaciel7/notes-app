@@ -2303,7 +2303,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
             ? [
                 {
                   id: command.id,
-                  priority: command.category === "calendar" ? "contextual" : "global",
+                  priority: command.category === "calendar" ? "page" : "global",
                   shortcuts: command.shortcuts,
                   commandId: command.id,
                 },
@@ -3224,7 +3224,11 @@ function WorkspaceExtendedSearchDialog() {
               return (
                 <CommandItem
                   key={`${result.kind}:${result.entityId}:${result.kind === "block" ? result.blockId : "object"}`}
-                  value={`${result.title} ${result.kind === "block" ? result.text : ""}`}
+                  value={
+                    result.kind === "object"
+                      ? result.title
+                      : `${result.ownerTitle} ${result.text}`
+                  }
                   onSelect={() => {
                     selectEntity(result.entityId);
                     handleOpenChange(false);

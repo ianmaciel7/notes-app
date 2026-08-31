@@ -1,4 +1,8 @@
-import type { QueryDefinition, QueryFilter } from "./workspace-query-engine.ts";
+import type {
+  QueryDefinition,
+  QueryFilter,
+  QueryFilterGroup,
+} from "./workspace-query-engine.ts";
 
 export type TaskCompletionSemantics = "incomplete" | "complete";
 export type TaskPriority = "none" | "low" | "medium" | "high";
@@ -10,7 +14,11 @@ export type LegacyTaskRecurrenceMode =
   | "completion-driven";
 export type TaskRecurrenceUnit = "day" | "week" | "month" | "year";
 export type LegacyTaskRecurrenceFrequency = "daily" | "weekly" | "monthly";
-export type TaskOccurrenceAction = "advance-one" | "complete" | "excuse" | "skip";
+export type TaskOccurrenceAction =
+  | "advance-one"
+  | "complete"
+  | "excuse"
+  | "skip";
 export type TaskCatchUpMode = "next" | "next-future";
 export type TaskDashboardKind =
   | "all"
@@ -155,7 +163,9 @@ function assertDateOnly(value: string): void {
 }
 
 function isInstant(value: unknown): value is string {
-  return typeof value === "string" && Number.isFinite(new Date(value).valueOf());
+  return (
+    typeof value === "string" && Number.isFinite(new Date(value).valueOf())
+  );
 }
 
 function hasUniqueStrings(values: readonly string[]): boolean {
@@ -165,7 +175,9 @@ function hasUniqueStrings(values: readonly string[]): boolean {
   );
 }
 
-function normalizePriority(value: LegacyTaskPriority | undefined): TaskPriority {
+function normalizePriority(
+  value: LegacyTaskPriority | undefined,
+): TaskPriority {
   return value === "urgent" ? "high" : (value ?? "none");
 }
 
@@ -224,9 +236,12 @@ function statusById(
   return registry.definitions.find((status) => status.id === statusId) ?? null;
 }
 
-function defaultStatusId(input: CreateTaskManagementMetadataInput): string | null {
+function defaultStatusId(
+  input: CreateTaskManagementMetadataInput,
+): string | null {
   if ("statusId" in input) return input.statusId ?? null;
-  const registry = input.statusRegistry ?? createDefaultTaskStatusRegistry("default");
+  const registry =
+    input.statusRegistry ?? createDefaultTaskStatusRegistry("default");
   if (input.status) {
     if (input.status === "inbox") return null;
     const suffix =
@@ -235,8 +250,10 @@ function defaultStatusId(input: CreateTaskManagementMetadataInput): string | nul
         : input.status === "open"
           ? "not-started"
           : "in-progress";
-    return registry.definitions.find((status) => status.id.endsWith(`:${suffix}`))
-      ?.id ?? null;
+    return (
+      registry.definitions.find((status) => status.id.endsWith(`:${suffix}`))
+        ?.id ?? null
+    );
   }
   if (input.completed) {
     return (
@@ -375,7 +392,9 @@ function validateTaskDates(value: Record<string, unknown>): string | null {
   return null;
 }
 
-function validateTaskCollections(value: Record<string, unknown>): string | null {
+function validateTaskCollections(
+  value: Record<string, unknown>,
+): string | null {
   if (
     !Array.isArray(value.contextObjectIds) ||
     !hasUniqueStrings(value.contextObjectIds as string[])
@@ -419,7 +438,8 @@ function isRecurrenceRule(value: unknown): value is TaskRecurrenceRule {
     if (value.end.kind === "on-date" && !isDateOnly(value.end.date)) {
       return false;
     }
-    if (value.end.kind !== "never" && value.end.kind !== "on-date") return false;
+    if (value.end.kind !== "never" && value.end.kind !== "on-date")
+      return false;
   }
   return true;
 }
@@ -427,7 +447,9 @@ function isRecurrenceRule(value: unknown): value is TaskRecurrenceRule {
 function isOccurrence(value: unknown): value is TaskOccurrence {
   return (
     isRecord(value) &&
-    ["advance-one", "complete", "skip", "excuse"].includes(String(value.action)) &&
+    ["advance-one", "complete", "skip", "excuse"].includes(
+      String(value.action),
+    ) &&
     isInstant(value.actedAt) &&
     isDateOnly(value.actedOnDate) &&
     typeof value.id === "string" &&
@@ -564,11 +586,13 @@ function nextWeeklyDate(
   interval: number,
   weekdays: readonly number[] | undefined,
 ): string {
-  if (!weekdays || weekdays.length === 0) return addDays(baseDate, interval * 7);
+  if (!weekdays || weekdays.length === 0)
+    return addDays(baseDate, interval * 7);
   const sorted = [...new Set(weekdays)].sort((left, right) => left - right);
   const currentWeekday = dateAtUtcMidnight(baseDate).getUTCDay();
   const sameWeek = sorted.find((weekday) => weekday > currentWeekday);
-  if (sameWeek !== undefined) return addDays(baseDate, sameWeek - currentWeekday);
+  if (sameWeek !== undefined)
+    return addDays(baseDate, sameWeek - currentWeekday);
   return addDays(baseDate, interval * 7 - currentWeekday + sorted[0]);
 }
 
@@ -590,7 +614,10 @@ function nextMonthlyDate(baseDate: string, rule: TaskRecurrenceRule): string {
       rule.monthly.weekday,
     );
   }
-  if (!validOrdinal(rule.monthly.ordinal) || !validWeekday(rule.monthly.weekday)) {
+  if (
+    !validOrdinal(rule.monthly.ordinal) ||
+    !validWeekday(rule.monthly.weekday)
+  ) {
     throw new TypeError("Invalid recurrence rule.");
   }
   return ordinalWeekdayOfMonth(
@@ -690,7 +717,9 @@ export function applyTaskOccurrenceAction(
   const validation = validateTaskManagementMetadata(metadata);
   if (!validation.ok) throw new TypeError(validation.error);
   if (metadata.completed) {
-    throw new TypeError("Completed task cannot receive another occurrence action.");
+    throw new TypeError(
+      "Completed task cannot receive another occurrence action.",
+    );
   }
   if (
     !["advance-one", "complete", "skip", "excuse"].includes(command.action) ||
@@ -737,7 +766,8 @@ export function applyTaskOccurrenceAction(
   return {
     ...metadata,
     completed: nextDate === null,
-    completedAt: nextDate === null ? new Date(command.actedAt).toISOString() : null,
+    completedAt:
+      nextDate === null ? new Date(command.actedAt).toISOString() : null,
     deadline:
       nextDate && deadlineOffset !== null
         ? addDays(nextDate, deadlineOffset)
@@ -921,7 +951,10 @@ function propertyFilter(
   };
 }
 
-function dashboardFilters(kind: TaskDashboardKind, today: string): QueryFilter[] {
+function dashboardFilters(
+  kind: TaskDashboardKind,
+  today: string,
+): (QueryFilter | QueryFilterGroup)[] {
   if (kind === "all") return [];
   if (kind === "today") {
     return [
@@ -932,7 +965,7 @@ function dashboardFilters(kind: TaskDashboardKind, today: string): QueryFilter[]
           propertyFilter("deadline", "before", today),
         ],
         operator: "any",
-      } as QueryFilter,
+      },
     ];
   }
   if (kind === "scheduled") {
