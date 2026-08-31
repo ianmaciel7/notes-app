@@ -2410,18 +2410,18 @@ test("Page related content ranks explicit collection signals without replacing s
   const errors = await openWorkspace(page);
 
   await createPageObject(page);
-  await writeCreatedObjectTitle(page, "Orchid source page");
+  await writeCreatedObjectTitle(page, "Orchid ledger");
   await createPageObject(page);
-  await writeCreatedObjectTitle(page, "Granite active page");
+  await writeCreatedObjectTitle(page, "Granite atlas");
   const initialRelated = createdObjectWorkspace(page).locator(
     '[data-slot="workspace-object-related-content"]',
   );
   await expect(initialRelated).toBeVisible();
   await expect(initialRelated).toHaveAttribute("data-state", "empty");
-  await expect(initialRelated).not.toContainText("Orchid source page");
+  await expect(initialRelated).not.toContainText("Orchid ledger");
 
   await createPageCollection(page, "Related collection");
-  await page.getByRole("tab", { name: "Orchid source page" }).click();
+  await page.getByRole("tab", { name: "Orchid ledger" }).click();
   await createdObjectWorkspace(page)
     .getByRole("textbox", { name: "Coleções", exact: true })
     .focus();
@@ -2429,7 +2429,7 @@ test("Page related content ranks explicit collection signals without replacing s
     .locator('[data-slot="popover-content"][data-open]')
     .getByRole("button", { name: "Related collection" })
     .click();
-  await page.getByRole("tab", { name: "Granite active page" }).click();
+  await page.getByRole("tab", { name: "Granite atlas" }).click();
   await createdObjectWorkspace(page)
     .getByRole("textbox", { name: "Coleções", exact: true })
     .focus();
@@ -2442,7 +2442,7 @@ test("Page related content ranks explicit collection signals without replacing s
     '[data-slot="workspace-object-related-content"]',
   );
   await expect(related).toBeVisible();
-  await expect(related).toContainText("Orchid source page");
+  await expect(related).toContainText("Orchid ledger");
   expect(errors).toEqual([]);
 });
 
