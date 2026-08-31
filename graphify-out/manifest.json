@@ -2075,8 +2075,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-task-management.test.mjs": {
-    "mtime": 1788170576.9835744,
-    "ast_hash": "f0310c3b91ff89879175eced794334fd",
+    "mtime": 1788170622.1007307,
+    "ast_hash": "8dadfce27acdc75acc616052c31aab82",
     "semantic_hash": ""
   },
   ".superpowers/sdd/2026-08-25-prototyping-priorities/change-01-add-block-editor-report.md": {
