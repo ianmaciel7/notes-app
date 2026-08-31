@@ -1,7 +1,7 @@
 # Graph Report - notes-app  (2026-08-31)
 
 ## Corpus Check
-- 689 files · ~534,312 words
+- 689 files · ~534,327 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c4d26b3e`
+- Built from commit: `ba4ae0ad`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1607,17 +1607,17 @@ Nodes (4): Checkout, Commands, Object Page Editor Trigger Evidence Attempt - 202
 ## Work-memory lessons
 
 **Preferred sources** — corroborated by past sessions; start here.
-- `shared-styles.ts` (2× useful, score=1.633652571)
+- `shared-styles.ts` (2× useful, score=1.633568738)
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `cn` to `app-shell.tsx`, `workspace-content.tsx`, `app-sidebar-overview.tsx`, `workspace-object-type-view.tsx`, `app-sidebar.tsx`, `app-header-tabs.tsx`, `drawer.tsx`, `chart.tsx`, `workspace-object-page-view.tsx`, `app-sidebar-primary-actions.tsx`, `utils.ts`, `workspace-controller.tsx`, `toast.tsx`, `sidebar.tsx`, `useWorkspace`, `object-view-preview.tsx`, `blockEditorDocumentFromPlainText`, `quick-action-suggestions.tsx`, `app-side-panel-header.tsx`, `data-view-list-table.tsx`, `shared-styles.ts`, `carousel.tsx`, `field.tsx`, `app-header.tsx`, `block-editor-handle.tsx`, `menubar.tsx`, `bubble.tsx`, `useBufferedTextCommit`, `TablePage`, `app-sidebar-source-icon.tsx`, `block-editor.tsx`, `slash-command.tsx`, `object-view-renderer.tsx`?**
-  _High betweenness centrality (0.088) - this node is a cross-community bridge._
+  _High betweenness centrality (0.099) - this node is a cross-community bridge._
 - **Why does `WorkspaceEntity` connect `block-editor.tsx` to `workspace-import-export.ts`, `workspace-related-content.ts`, `workspace-content.tsx`, `workspace-database.ts`, `workspace-object-type-view.tsx`, `workspace-object-links.ts`, `workspace-domain-identities.ts`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `workspace-controller.tsx`, `workspace-object-views.ts`, `workspace-account-spaces.ts`, `object-view-preview.tsx`, `quick-action-suggestions.tsx`, `workspace-property-values.ts`, `workspace-query-engine.ts`, `data-view-list-table.tsx`, `WorkspaceStructure`, `workspace-objects.ts`, `workspace-graph.ts`, `workspace-object-storage.ts`, `object-view-renderer.tsx`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **Why does `createWorkspaceObjectLinkIndex()` connect `workspace-object-links.ts` to `blockEditorDocumentFromPlainText`, `workspace-related-content.ts`, `workspace-content.tsx`, `workspace-graph.ts`, `workspace-account-spaces.ts`, `workspace-query-engine.test.mjs`, `workspace-object-page-view.tsx`, `workspace-trash-lifecycle.test.mjs`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+- **Why does `cellKey()` connect `table-block.ts` to `advancedNodeToMarkdown`, `block-editor.tsx`?**
+  _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `WorkspaceProvider()` (e.g. with `AppSidebarWorkspaceIcon()` and `workspaceObjectReducer()`) actually correct?**
   _`WorkspaceProvider()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Scope And Evidence`, `State Legend`, `Matrix` to the rest of the system?**

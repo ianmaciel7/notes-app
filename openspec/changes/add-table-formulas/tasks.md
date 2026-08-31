@@ -24,5 +24,5 @@
 
 ## 5. Acceptance
 
-- [ ] 5.1 Run parser, evaluator, table-operation, persistence, export, UI, security-limit, deterministic, and performance tests.
-- [ ] 5.2 Run repository verification and `openspec validate add-table-formulas --strict`.
+- [x] 5.1 Run parser, evaluator, table-operation, persistence, export, UI, security-limit, deterministic, and performance tests.
+- [x] 5.2 Run repository verification and `openspec validate add-table-formulas --strict`.

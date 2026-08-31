@@ -5,5 +5,6 @@
 - Exact Capacities hover tone matching remains unconfirmed; local tests cover row activation and layout stability.
 - IME behavior is covered locally, while authenticated reference mutation was not attempted.
 - Reduced-motion and responsive-containment behavior are locally covered by source/unit contracts, not by a matched authenticated reference pass.
-- Repository verification is not green: format and complexity checks fail, typegen/build were blocked by environment constraints, and `pnpm.cmd verify` stops at formatting.
+- Repository verification is green on the final current-workspace pass: `pnpm.CMD verify` completed format, lint, complexity, typegen, typecheck, coverage, and build.
+- A pre-existing staged `src/components/block-editor.tsx` diff touching editor persistence/focus semantics remains outside this evidence bundle's parity claim and should be confirmed before archive/commit.
 

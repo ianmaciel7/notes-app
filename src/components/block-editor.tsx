@@ -427,6 +427,20 @@ function BlockEditor({
 
   React.useEffect(() => {
     if (!editor || !editable) return;
+    const handleEditorUpdate = () => {
+      scheduleCommit({
+        schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+        doc: editor.getJSON() as BlockEditorDocument["doc"],
+      });
+    };
+    editor.on("update", handleEditorUpdate);
+    return () => {
+      editor.off("update", handleEditorUpdate);
+    };
+  }, [editable, editor, scheduleCommit]);
+
+  React.useEffect(() => {
+    if (!editor || !editable) return;
     const handleTableBlockChange = () => {
       scheduleCommit({
         schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,

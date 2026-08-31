@@ -39,10 +39,26 @@ No stale alias was corrected in archived history, because the archived change re
 
 Corrective evidence was appended at `artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/`. The evidence separates `local_status` from `reference_status`. Local acceptance for the command palette and editor triggers remains distinct from matched Capacities parity.
 
-Remaining blockers before archive:
+## 2026-08-31 Side-Conversation Verification Pass
 
-- Resolve CRLF formatting drift without broad formatting churn.
-- Resolve or formally re-baseline the two complexity findings.
-- Run typegen/build in an environment that can write `.next`.
-- Run the full verification pipeline after focused gates pass.
+- Current checkout: branch `dev`, head `fb5cf66` at session start.
+- Current `dev` reproduction: `node --test tests/workspace-objects.test.mjs` passed, 24/24 tests.
+- Current `dev` reproduction: `node --test tests/workspace-surface-contract.test.mjs` passed, 4/4 tests.
+- `pnpm.CMD format:check`, `pnpm.CMD lint`, `pnpm.CMD complexity`, `pnpm.CMD typegen`, and `pnpm.CMD typecheck` passed.
+- Focused command/editor/query suite passed, 40/40 tests.
+- `pnpm.CMD test:coverage` passed, 323/323 tests, global coverage above configured thresholds.
+- `pnpm.CMD build` passed.
+- `pnpm.CMD verify` passed end-to-end after an earlier retry was blocked by a transient concurrent Next build lock.
+- `openspec.cmd validate reconcile-keyboard-command-system-acceptance --strict` passed.
+- `openspec.cmd validate --specs --strict` passed, 26/26 specs.
+
+Diff review:
+
+- Staged diff currently contains `src/components/block-editor.tsx`, touching editor persistence/focus semantics. This was observed as pre-existing/parallel staged work in this side conversation and was not unstaged.
+- Unstaged working-tree diff after this pass is limited to `src/components/block-editor.tsx`, `src/editor/table-block-node-view.tsx`, and generated `graphify-out/*`.
+- No staged or unstaged diff was observed in command registry, search/query engine routing, workspace routing, or storage persistence files for this corrective change.
+
+Remaining blocker before archive:
+
+- Confirm whether the pre-existing staged `src/components/block-editor.tsx` change should remain staged for the archive/commit boundary.
 

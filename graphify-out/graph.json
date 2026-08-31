@@ -16077,7 +16077,7 @@
       "label": "nextCell()",
       "file_type": "code",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L54",
+      "source_location": "L58",
       "_callable": true,
       "_origin": "ast",
       "id": "src_editor_table_block_node_view_nextcell",
@@ -16101,7 +16101,7 @@
       "label": "styleButtonLabel()",
       "file_type": "code",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L81",
+      "source_location": "L84",
       "_callable": true,
       "_origin": "ast",
       "id": "src_editor_table_block_node_view_stylebuttonlabel",
@@ -16113,7 +16113,7 @@
       "label": "TableBlockNodeView()",
       "file_type": "code",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L87",
+      "source_location": "L90",
       "_callable": true,
       "_origin": "ast",
       "id": "src_editor_table_block_node_view_tableblocknodeview",
@@ -36446,10 +36446,10 @@
       "source_file": "openspec/changes/add-trash-lifecycle/tasks.md",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "openspec_changes_add_trash_lifecycle_tasks",
       "community": 19,
       "community_name": "add-trash-lifecycle/tasks.md",
-      "norm_label": "add-trash-lifecycle/tasks.md",
-      "id": "openspec_changes_add_trash_lifecycle_tasks"
+      "norm_label": "add-trash-lifecycle/tasks.md"
     },
     {
       "label": "1. Domain and Storage",
@@ -36457,10 +36457,10 @@
       "source_file": "openspec/changes/add-trash-lifecycle/tasks.md",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "openspec_changes_add_trash_lifecycle_tasks_1_domain_and_storage",
       "community": 19,
       "community_name": "add-trash-lifecycle/tasks.md",
-      "norm_label": "1. domain and storage",
-      "id": "openspec_changes_add_trash_lifecycle_tasks_1_domain_and_storage"
+      "norm_label": "1. domain and storage"
     },
     {
       "label": "2. Projection Integration",
@@ -36468,10 +36468,10 @@
       "source_file": "openspec/changes/add-trash-lifecycle/tasks.md",
       "source_location": "L7",
       "_origin": "ast",
+      "id": "openspec_changes_add_trash_lifecycle_tasks_2_projection_integration",
       "community": 19,
       "community_name": "add-trash-lifecycle/tasks.md",
-      "norm_label": "2. projection integration",
-      "id": "openspec_changes_add_trash_lifecycle_tasks_2_projection_integration"
+      "norm_label": "2. projection integration"
     },
     {
       "label": "3. Media and Sync",
@@ -36479,10 +36479,10 @@
       "source_file": "openspec/changes/add-trash-lifecycle/tasks.md",
       "source_location": "L13",
       "_origin": "ast",
+      "id": "openspec_changes_add_trash_lifecycle_tasks_3_media_and_sync",
       "community": 19,
       "community_name": "add-trash-lifecycle/tasks.md",
-      "norm_label": "3. media and sync",
-      "id": "openspec_changes_add_trash_lifecycle_tasks_3_media_and_sync"
+      "norm_label": "3. media and sync"
     },
     {
       "label": "4. UI",
@@ -36490,10 +36490,10 @@
       "source_file": "openspec/changes/add-trash-lifecycle/tasks.md",
       "source_location": "L19",
       "_origin": "ast",
+      "id": "openspec_changes_add_trash_lifecycle_tasks_4_ui",
       "community": 19,
       "community_name": "add-trash-lifecycle/tasks.md",
-      "norm_label": "4. ui",
-      "id": "openspec_changes_add_trash_lifecycle_tasks_4_ui"
+      "norm_label": "4. ui"
     },
     {
       "label": "5. Acceptance",
@@ -36501,10 +36501,10 @@
       "source_file": "openspec/changes/add-trash-lifecycle/tasks.md",
       "source_location": "L24",
       "_origin": "ast",
+      "id": "openspec_changes_add_trash_lifecycle_tasks_5_acceptance",
       "community": 19,
       "community_name": "add-trash-lifecycle/tasks.md",
-      "norm_label": "5. acceptance",
-      "id": "openspec_changes_add_trash_lifecycle_tasks_5_acceptance"
+      "norm_label": "5. acceptance"
     },
     {
       "label": "2026-08-22-implement-object-lifecycle/design.md",
@@ -62228,7 +62228,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L461",
+      "source_location": "L462",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -73531,7 +73531,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L72",
+      "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_nextcell",
@@ -73543,7 +73543,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L49",
+      "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_selectedcellids",
@@ -73555,7 +73555,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L117",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_tableblocknodeview",
@@ -73567,7 +73567,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L135",
+      "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_tableblocknodeview",
@@ -73579,7 +73579,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L232",
+      "source_location": "L245",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_tableblocknodeview",
@@ -73591,7 +73591,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L278",
+      "source_location": "L295",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_tableblocknodeview",
@@ -73603,7 +73603,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L315",
+      "source_location": "L337",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_tableblocknodeview",
@@ -73615,7 +73615,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L316",
+      "source_location": "L341",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_tableblocknodeview",
@@ -73627,7 +73627,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L347",
+      "source_location": "L372",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_tableblocknodeview",
@@ -73639,7 +73639,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L360",
+      "source_location": "L385",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_tableblocknodeview",
@@ -73651,7 +73651,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L88",
+      "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view_tableblocknodeview",
@@ -87547,7 +87547,7 @@
       "context": "export",
       "confidence": "EXTRACTED",
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L481",
+      "source_location": "L482",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor",
@@ -121833,9 +121833,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_add_trash_lifecycle_tasks",
-      "target": "openspec_changes_add_trash_lifecycle_tasks_1_domain_and_storage"
+      "target": "openspec_changes_add_trash_lifecycle_tasks_1_domain_and_storage",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -121844,9 +121844,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_add_trash_lifecycle_tasks",
-      "target": "openspec_changes_add_trash_lifecycle_tasks_3_media_and_sync"
+      "target": "openspec_changes_add_trash_lifecycle_tasks_3_media_and_sync",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -121855,9 +121855,9 @@
       "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_add_trash_lifecycle_tasks",
-      "target": "openspec_changes_add_trash_lifecycle_tasks_4_ui"
+      "target": "openspec_changes_add_trash_lifecycle_tasks_4_ui",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -121866,9 +121866,9 @@
       "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_add_trash_lifecycle_tasks",
-      "target": "openspec_changes_add_trash_lifecycle_tasks_5_acceptance"
+      "target": "openspec_changes_add_trash_lifecycle_tasks_5_acceptance",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -121877,9 +121877,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_add_trash_lifecycle_tasks",
-      "target": "openspec_changes_add_trash_lifecycle_tasks_2_projection_integration"
+      "target": "openspec_changes_add_trash_lifecycle_tasks_2_projection_integration",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -146921,7 +146921,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L54",
+      "source_location": "L58",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view",
@@ -146932,7 +146932,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L81",
+      "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view",
@@ -146943,7 +146943,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/editor/table-block-node-view.tsx",
-      "source_location": "L87",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_editor_table_block_node_view",
@@ -162437,5 +162437,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c4d26b3e96dc71282d3af0f5ebf7bd7c8dfa8c13"
+  "built_at_commit": "ba4ae0ad6fb62bac8a56e91f24b1b556c7843f54"
 }
