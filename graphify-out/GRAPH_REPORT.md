@@ -1,7 +1,7 @@
 # Graph Report - notes-app  (2026-08-31)
 
 ## Corpus Check
-- 689 files · ~534,787 words
+- 689 files · ~534,808 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `196ba10a`
+- Built from commit: `3d402cb3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1585,22 +1585,27 @@ Cohesion: 0.40
 Nodes (4): Checkout, Commands, Object Page Editor Trigger Evidence Attempt - 2026-08-31, Verdict
 
 ## Knowledge Gaps
-- **2277 isolated node(s):** `ImportCheckpoint`, `ImportExportError`, `ImportExportErrorCode`, `ImportExportSecurityLimits`, `ImportExportStage` (+2272 more)
+- **2277 isolated node(s):** `2026-08-31 Corrective Pass`, `Recorded Failure Reproduction`, `Verification Outcomes`, `Change Reference Check`, `Acceptance Boundary` (+2272 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **43 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+
+## Work-memory lessons
+
+**Preferred sources** — corroborated by past sessions; start here.
+- `shared-styles.ts` (2× useful, score=1.633431922)
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `cn` to `app-shell.tsx`, `workspace-content.tsx`, `app-sidebar-overview.tsx`, `workspace-object-type-view.tsx`, `app-sidebar.tsx`, `app-header-tabs.tsx`, `drawer.tsx`, `chart.tsx`, `workspace-object-page-view.tsx`, `app-sidebar-primary-actions.tsx`, `utils.ts`, `workspace-controller.tsx`, `sidebar.tsx`, `useWorkspace`, `object-view-preview.tsx`, `blockEditorDocumentFromPlainText`, `quick-action-suggestions.tsx`, `attachment.tsx`, `data-view-list-table.tsx`, `WorkspaceProvider`, `button.tsx`, `item.tsx`, `TablePage`, `app-side-panel-header.tsx`, `bubble.tsx`, `useBufferedTextCommit`, `object-type-toolbar-icon.tsx`, `block-editor.tsx`, `slash-command.tsx`, `object-view-renderer.tsx`?**
-  _High betweenness centrality (0.073) - this node is a cross-community bridge._
-- **Why does `blockEditorDocumentFromPlainText()` connect `blockEditorDocumentFromPlainText` to `workspace-import-export.ts`, `workspace-property-values.ts`, `workspace-related-content.ts`, `workspace-content.tsx`, `workspace-object-storage.ts`, `workspace-account-spaces.ts`, `workspace-object-links.ts`, `workspace-objects.ts`, `workspace-query-engine.test.mjs`, `block-editor.tsx`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.test.mjs`, `workspace-trash-lifecycle.test.mjs`, `document.ts`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+  _High betweenness centrality (0.093) - this node is a cross-community bridge._
 - **Why does `WorkspaceEntity` connect `WorkspaceEntity` to `workspace-import-export.ts`, `workspace-related-content.ts`, `workspace-content.tsx`, `workspace-database.ts`, `workspace-object-type-view.tsx`, `workspace-object-links.ts`, `workspace-domain-identities.ts`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `workspace-controller.tsx`, `workspace-object-views.ts`, `workspace-account-spaces.ts`, `object-view-preview.tsx`, `quick-action-suggestions.tsx`, `workspace-property-values.ts`, `workspace-query-engine.ts`, `data-view-list-table.tsx`, `workspace-objects.ts`, `workspace-graph.ts`, `workspace-object-storage.ts`, `block-editor.tsx`, `object-view-renderer.tsx`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
+- **Why does `useWorkspace()` connect `useWorkspace` to `blockEditorDocumentFromPlainText`, `normalizeSearchText`, `AtomicNotesWorkspace`, `workspace-task-management.test.mjs`, `TablePage`, `workspace-content.tsx`, `app-sidebar-overview.tsx`, `workspace-object-type-view.tsx`, `workspace-object-links.ts`, `workspace-domain-identities.ts`, `workspace-objects.ts`, `workspace-command-registry.ts`, `workspace-object-page-view.tsx`, `app-sidebar-primary-actions.tsx`, `workspace-controller.tsx`?**
+  _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `WorkspaceProvider()` (e.g. with `AppSidebarWorkspaceIcon()` and `workspaceObjectReducer()`) actually correct?**
   _`WorkspaceProvider()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `ImportCheckpoint`, `ImportExportError`, `ImportExportErrorCode` to the rest of the system?**
+- **What connects `2026-08-31 Corrective Pass`, `Recorded Failure Reproduction`, `Verification Outcomes` to the rest of the system?**
   _2277 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `cn` be split into smaller, more focused modules?**
   _Cohesion score 0.025035427491733587 - nodes in this community are weakly interconnected._

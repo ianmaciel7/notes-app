@@ -46687,10 +46687,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "reconcile-keyboard-command-system-acceptance/implementation-notes.md",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes"
+      "norm_label": "reconcile-keyboard-command-system-acceptance/implementation-notes.md"
     },
     {
       "label": "2026-08-31 Corrective Pass",
@@ -46698,10 +46698,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L3",
       "_origin": "ast",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_corrective_pass",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "2026-08-31 corrective pass",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_corrective_pass"
+      "norm_label": "2026-08-31 corrective pass"
     },
     {
       "label": "2026-08-31 Side-Conversation Verification Pass",
@@ -46709,10 +46709,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L42",
       "_origin": "ast",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_side_conversation_verification_pass",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "2026-08-31 side-conversation verification pass",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_side_conversation_verification_pass"
+      "norm_label": "2026-08-31 side-conversation verification pass"
     },
     {
       "label": "Acceptance Boundary",
@@ -46720,10 +46720,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L38",
       "_origin": "ast",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_acceptance_boundary",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "acceptance boundary",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_acceptance_boundary"
+      "norm_label": "acceptance boundary"
     },
     {
       "label": "Change Reference Check",
@@ -46731,10 +46731,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L26",
       "_origin": "ast",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_change_reference_check",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "change reference check",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_change_reference_check"
+      "norm_label": "change reference check"
     },
     {
       "label": "Implementation Notes",
@@ -46742,10 +46742,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "implementation notes",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes"
+      "norm_label": "implementation notes"
     },
     {
       "label": "Recorded Failure Reproduction",
@@ -46753,10 +46753,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L10",
       "_origin": "ast",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_recorded_failure_reproduction",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "recorded failure reproduction",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_recorded_failure_reproduction"
+      "norm_label": "recorded failure reproduction"
     },
     {
       "label": "Verification Outcomes",
@@ -46764,10 +46764,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L15",
       "_origin": "ast",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_verification_outcomes",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "verification outcomes",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_verification_outcomes"
+      "norm_label": "verification outcomes"
     },
     {
       "label": "acceptance-matrix.md",
@@ -62167,7 +62167,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L290",
+      "source_location": "L300",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -62179,7 +62179,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L307",
+      "source_location": "L317",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -62191,7 +62191,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L322",
+      "source_location": "L332",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -62202,7 +62202,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L326",
+      "source_location": "L336",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -62215,7 +62215,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L419",
+      "source_location": "L427",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -62226,7 +62226,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L432",
+      "source_location": "L440",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -62239,7 +62239,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L492",
+      "source_location": "L500",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -126123,9 +126123,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes"
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -126134,9 +126134,9 @@
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_recorded_failure_reproduction"
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_recorded_failure_reproduction",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -126145,9 +126145,9 @@
       "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_verification_outcomes"
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_verification_outcomes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -126156,9 +126156,9 @@
       "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_change_reference_check"
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_change_reference_check",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -126167,9 +126167,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_corrective_pass"
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_corrective_pass",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -126178,9 +126178,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_acceptance_boundary"
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_acceptance_boundary",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -126189,9 +126189,9 @@
       "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_side_conversation_verification_pass"
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_side_conversation_verification_pass",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -162343,7 +162343,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L356",
+      "source_location": "L366",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -162459,5 +162459,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "196ba10ad7143bbc1759e2581fd97a6fe696c078"
+  "built_at_commit": "3d402cb3b307e2648b41770637266f34cd690262"
 }

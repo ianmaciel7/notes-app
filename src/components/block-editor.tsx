@@ -455,10 +455,19 @@ function BlockEditor({
         doc: editor.getJSON() as BlockEditorDocument["doc"],
       });
     };
+    const handleEditorTransaction = ({
+      transaction,
+    }: {
+      transaction: { docChanged: boolean };
+    }) => {
+      if (transaction.docChanged) handleEditorUpdate();
+    };
     editor.on("update", handleEditorUpdate);
+    editor.on("transaction", handleEditorTransaction);
     editor.view.dom.addEventListener("input", handleEditorUpdate);
     return () => {
       editor.off("update", handleEditorUpdate);
+      editor.off("transaction", handleEditorTransaction);
       editor.view.dom.removeEventListener("input", handleEditorUpdate);
     };
   }, [editable, editor, scheduleCommit]);

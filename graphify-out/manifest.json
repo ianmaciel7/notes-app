@@ -1445,8 +1445,8 @@
     "semantic_hash": ""
   },
   "src/components/block-editor.tsx": {
-    "mtime": 1788174922.8660548,
-    "ast_hash": "94e60f646b6fa18a9fac6ff8b48018fe",
+    "mtime": 1788174966.3588524,
+    "ast_hash": "0b0161c920ee87cd135305185f30edf0",
     "semantic_hash": ""
   },
   "src/editor/document.ts": {
@@ -4010,8 +4010,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md": {
-    "mtime": 1788174909.599663,
-    "ast_hash": "e382efc92ae13580d6577297cec3976b",
+    "mtime": 1788174936.731699,
+    "ast_hash": "01fc7edc63f5745649f6407853d03d19",
     "semantic_hash": ""
   },
   "src/lib/workspace-task-management.ts": {
