@@ -246,7 +246,6 @@ export function formatNumberValue(
         text,
       };
     }
-    case "number":
     default:
       return {
         diagnostics,

@@ -1,20 +1,20 @@
 ## 1. Domain and Storage
 
-- [ ] 1.1 Add failing tests for active/trashed/purged transitions, idempotency, retention dates, invalid commands, and snapshot migration.
-- [ ] 1.2 Implement Trash records and Space-scoped repository commands.
+- [x] 1.1 Add failing tests for active/trashed/purged transitions, idempotency, retention dates, invalid commands, and snapshot migration.
+- [x] 1.2 Implement Trash records and Space-scoped repository commands.
 - [ ] 1.3 Add database indexes and resumable bounded automatic cleanup.
 
 ## 2. Projection Integration
 
 - [ ] 2.1 Add failing tests proving trashed entities are excluded from search, queries, graph, backlinks, dashboards, calendar, tasks, and integrations.
-- [ ] 2.2 Implement shared active-entity selectors instead of scattered deletion checks.
-- [ ] 2.3 Preserve recoverable missing-reference states until restore or purge.
+- [x] 2.2 Implement shared active-entity selectors instead of scattered deletion checks.
+- [x] 2.3 Preserve recoverable missing-reference states until restore or purge.
 
 ## 3. Media and Sync
 
-- [ ] 3.1 Add tests proving media bytes remain while a trashed owner is recoverable.
-- [ ] 3.2 Create permanent tombstones and enable garbage collection only on purge.
-- [ ] 3.3 Verify offline trash/restore/purge commands synchronize idempotently.
+- [x] 3.1 Add tests proving media bytes remain while a trashed owner is recoverable.
+- [x] 3.2 Create permanent tombstones and enable garbage collection only on purge.
+- [x] 3.3 Verify offline trash/restore/purge commands synchronize idempotently.
 
 ## 4. UI
 

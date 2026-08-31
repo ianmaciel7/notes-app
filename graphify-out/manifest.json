@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "src/messages/en.json": {
-    "mtime": 1788170332.023005,
-    "ast_hash": "062ce9d1718172e0dea740b1e67c6606",
+    "mtime": 1788170458.8338134,
+    "ast_hash": "eb92fc8e50a516a45dc48b04e3a848e7",
     "semantic_hash": ""
   },
   "src/messages/es.json": {
@@ -1425,8 +1425,8 @@
     "semantic_hash": ""
   },
   "tests/e2e/workspace-parity.spec.ts": {
-    "mtime": 1788170143.9011407,
-    "ast_hash": "861b8e344ec2dea938bb26dccd7da12e",
+    "mtime": 1788170464.7976165,
+    "ast_hash": "7de6ee4c5ba191b9510f8f0247b61a29",
     "semantic_hash": ""
   },
   "src/lib/workspace-layout.ts": {
@@ -1665,8 +1665,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-property-values.ts": {
-    "mtime": 1788170442.8208263,
-    "ast_hash": "1c895c9b9d66fd67da5a34796a188d64",
+    "mtime": 1788170465.419547,
+    "ast_hash": "394c43d0420ff444ac576eacc2ee651c",
     "semantic_hash": ""
   },
   "src/lib/workspace-sidebar-pinned-storage.ts": {
@@ -3735,8 +3735,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/add-trash-lifecycle/tasks.md": {
-    "mtime": 1788168743.128955,
-    "ast_hash": "744013d133ace69f8c987822d0d64e01",
+    "mtime": 1788170467.9528975,
+    "ast_hash": "675ecf7c90a621e62154d6ce17c569c5",
     "semantic_hash": ""
   },
   "openspec/changes/align-media-upload-limit/.openspec.yaml": {

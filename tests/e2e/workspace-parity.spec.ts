@@ -2403,16 +2403,16 @@ test("Page renders backlinks before distinct unlinked mentions", async ({
   expect(errors).toEqual([]);
 });
 
-test("Page related content only renders explicit collection or link relations", async ({
+test("Page related content ranks explicit collection signals without replacing structural sections", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   const errors = await openWorkspace(page);
 
   await createPageObject(page);
-  await writeCreatedObjectTitle(page, "Unrelated source page");
+  await writeCreatedObjectTitle(page, "Orchid source page");
   await createPageObject(page);
-  await writeCreatedObjectTitle(page, "Unrelated active page");
+  await writeCreatedObjectTitle(page, "Granite active page");
   await expect(
     createdObjectWorkspace(page).locator(
       '[data-slot="workspace-object-related-content"]',
@@ -2420,7 +2420,7 @@ test("Page related content only renders explicit collection or link relations", 
   ).toHaveCount(0);
 
   await createPageCollection(page, "Related collection");
-  await page.getByRole("tab", { name: "Unrelated source page" }).click();
+  await page.getByRole("tab", { name: "Orchid source page" }).click();
   await createdObjectWorkspace(page)
     .getByRole("textbox", { name: "Coleções", exact: true })
     .focus();
@@ -2428,7 +2428,7 @@ test("Page related content only renders explicit collection or link relations", 
     .locator('[data-slot="popover-content"][data-open]')
     .getByRole("button", { name: "Related collection" })
     .click();
-  await page.getByRole("tab", { name: "Unrelated active page" }).click();
+  await page.getByRole("tab", { name: "Granite active page" }).click();
   await createdObjectWorkspace(page)
     .getByRole("textbox", { name: "Coleções", exact: true })
     .focus();
@@ -2441,7 +2441,7 @@ test("Page related content only renders explicit collection or link relations", 
     '[data-slot="workspace-object-related-content"]',
   );
   await expect(related).toBeVisible();
-  await expect(related).toContainText("Unrelated source page");
+  await expect(related).toContainText("Orchid source page");
   expect(errors).toEqual([]);
 });
 
