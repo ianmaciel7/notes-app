@@ -2257,17 +2257,17 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           createWorkspaceEntity("task", t("objectTypeStudio.objectTypes.task")),
         setCalendarView: (view) => {
           const keyByView = {
-            day: "commands.calendarDay.label",
-            month: "commands.calendarMonth.label",
-            "three-day": "commands.calendarThreeDay.label",
-            week: "commands.calendarWeek.label",
+            day: "commands.calendar.day.label",
+            month: "commands.calendar.month.label",
+            "three-day": "commands.calendar.threeDay.label",
+            week: "commands.calendar.week.label",
           } as const;
           showMessage(t(keyByView[view]));
         },
         moveCalendar: (direction) => {
           const keyByDirection = {
-            next: "commands.calendarNext.label",
-            previous: "commands.calendarPrevious.label",
+            next: "commands.calendar.next.label",
+            previous: "commands.calendar.previous.label",
           } as const;
           showMessage(t(keyByDirection[direction]));
         },
@@ -2967,10 +2967,10 @@ function WorkspaceCommandPalette() {
             showMessage(
               t(
                 {
-                  day: "commands.calendarDay.label",
-                  month: "commands.calendarMonth.label",
-                  "three-day": "commands.calendarThreeDay.label",
-                  week: "commands.calendarWeek.label",
+                  day: "commands.calendar.day.label",
+                  month: "commands.calendar.month.label",
+                  "three-day": "commands.calendar.threeDay.label",
+                  week: "commands.calendar.week.label",
                 }[view],
               ),
             ),
@@ -2978,8 +2978,8 @@ function WorkspaceCommandPalette() {
             showMessage(
               t(
                 {
-                  next: "commands.calendarNext.label",
-                  previous: "commands.calendarPrevious.label",
+                  next: "commands.calendar.next.label",
+                  previous: "commands.calendar.previous.label",
                 }[direction],
               ),
             ),
