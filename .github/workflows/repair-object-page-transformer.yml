@@ -22,7 +22,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Repair ambiguous blur marker and push
+      - name: Repair ambiguous transformer markers and push
         shell: bash
         run: |
           set -euo pipefail
@@ -31,24 +31,62 @@ jobs:
 
           path = Path('.github/scripts/apply-object-page-parity.py')
           text = path.read_text(encoding='utf-8')
-          old = (
+
+          blur_old = (
               '        "      onBlur={editable ? flushCurrentDocument : undefined}\\n",\n'
               '        "      onBlur={editable ? handleEditorBlur : undefined}\\n",'
           )
-          new = (
+          blur_new = (
               '        "      data-editable={editable}\\n"\n'
               '        "      onBlur={editable ? flushCurrentDocument : undefined}\\n",\n'
               '        "      data-editable={editable}\\n"\n'
               '        "      onBlur={editable ? handleEditorBlur : undefined}\\n",'
           )
-          if old in text:
-              if text.count(old) != 1:
-                  raise SystemExit(f'Expected one ambiguous marker, found {text.count(old)}')
-              path.write_text(text.replace(old, new, 1), encoding='utf-8')
-          elif new in text:
-              print('Transformer marker is already repaired.')
-          else:
+          if blur_old in text:
+              if text.count(blur_old) != 1:
+                  raise SystemExit(f'Expected one ambiguous blur marker, found {text.count(blur_old)}')
+              text = text.replace(blur_old, blur_new, 1)
+          elif blur_new not in text:
               raise SystemExit('Neither the old nor repaired blur marker was found.')
+
+          header_target_old = """'''        entity={entity}
+                  structure={structure}
+                  collectionsControl={'''"""
+          header_target_new = """'''      <ObjectPageHeader
+                  entity={entity}
+                  structure={structure}
+                  collectionsControl={
+                    <ObjectPageCollections
+                      activationRequest={collectionsActivationRequest}'''"""
+          header_replacement_old = """'''        entity={entity}
+                  structure={structure}
+                  typeActivationRequest={typeActivationRequest}
+                  collectionsControl={'''"""
+          header_replacement_new = """'''      <ObjectPageHeader
+                  entity={entity}
+                  structure={structure}
+                  typeActivationRequest={typeActivationRequest}
+                  collectionsControl={
+                    <ObjectPageCollections
+                      activationRequest={collectionsActivationRequest}'''"""
+
+          if header_target_old in text and header_replacement_old in text:
+              if text.count(header_target_old) != 1:
+                  raise SystemExit(
+                      f'Expected one source header marker, found {text.count(header_target_old)}'
+                  )
+              if text.count(header_replacement_old) != 1:
+                  raise SystemExit(
+                      f'Expected one replacement header marker, found {text.count(header_replacement_old)}'
+                  )
+              text = text.replace(header_target_old, header_target_new, 1)
+              text = text.replace(header_replacement_old, header_replacement_new, 1)
+          elif not (
+              header_target_new in text and header_replacement_new in text
+          ):
+              raise SystemExit('Neither the old nor repaired object-header markers were found.')
+
+          path.write_text(text, encoding='utf-8')
           PY
 
           python -m py_compile .github/scripts/apply-object-page-parity.py
@@ -59,5 +97,5 @@ jobs:
           git config user.name 'Ian Maciel'
           git config user.email 'ianmaciel76@gmail.com'
           git add .github/scripts/apply-object-page-parity.py
-          git commit -m 'fix: disambiguate object page parity transformer marker'
+          git commit -m 'fix: disambiguate object page header transformer marker'
           git push origin HEAD:codex/align-object-page-complete-parity
