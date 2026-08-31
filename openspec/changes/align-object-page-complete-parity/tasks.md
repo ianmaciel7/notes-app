@@ -1,3 +1,9 @@
+# Current Delivery Status
+
+> **Updated on 2026-08-31: 2/28 tasks complete; 26/28 tasks pending.**
+>
+> PR #48 was merged into `dev` as commit `35c3baee184d2c38cebc44607f357bb6f1186d97`, but its changed files were limited to temporary transformer, diagnostic, trigger, and GitHub Actions files under `.github/`. It did not deliver the production object-page implementation or update this checklist. The focused contract run failed before complete repository, browser, and strict OpenSpec verification, so the remaining tasks stay open.
+
 ## 1. Establish the Matched Evidence Baseline
 
 - [x] 1.1 Inspect branch, worktree, active dev server, selected routes, viewport, semantic Page state, sidebar state, and contextual-panel state before implementation; verify the comparison record identifies the exact checkout and `scrollWidth === clientWidth` baseline without touching unrelated dirty files.
