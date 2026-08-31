@@ -331,7 +331,9 @@ def patch_block_editor() -> None:
     )
     replace_once(
         path,
+        "      data-editable={editable}\n"
         "      onBlur={editable ? flushCurrentDocument : undefined}\n",
+        "      data-editable={editable}\n"
         "      onBlur={editable ? handleEditorBlur : undefined}\n",
     )
     replace_once(
