@@ -80,13 +80,13 @@
     "semantic_hash": ""
   },
   "src/components/app-sidebar-overview.tsx": {
-    "mtime": 1788169645.1843941,
-    "ast_hash": "6aace7b1c748ca493ae8567d9dec0686",
+    "mtime": 1788171400.9570744,
+    "ast_hash": "82063450ea544f173c97d402f7dde328",
     "semantic_hash": ""
   },
   "src/components/app-sidebar-primary-actions.tsx": {
-    "mtime": 1788169960.4707193,
-    "ast_hash": "365500ef0c007eaf7f055319d6351897",
+    "mtime": 1788171400.87525,
+    "ast_hash": "2fecaeaeef6fb30d43df0d0f76a533c1",
     "semantic_hash": ""
   },
   "src/components/app-sidebar.tsx": {
@@ -1255,8 +1255,8 @@
     "semantic_hash": ""
   },
   "src/components/workspace-controller.tsx": {
-    "mtime": 1788171015.1971855,
-    "ast_hash": "07b9b625d1eff61bc2e269157a1d56e8",
+    "mtime": 1788172063.6997552,
+    "ast_hash": "98ce267fc3ef988ccbc5b2e6fec7af20",
     "semantic_hash": ""
   },
   ".agents/rules/workspace-ui-parity.md": {
@@ -1300,8 +1300,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-objects.ts": {
-    "mtime": 1788170977.562697,
-    "ast_hash": "0968dbae15c660e869c69676da319301",
+    "mtime": 1788171476.3047814,
+    "ast_hash": "5e7620bb7446f6fedd324826d58c075e",
     "semantic_hash": ""
   },
   "tests/workspace-objects.test.mjs": {
@@ -1435,8 +1435,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-layout.test.mjs": {
-    "mtime": 1787944275.6714802,
-    "ast_hash": "627c81e8d43a40b83225205506da2c57",
+    "mtime": 1788172170.0279217,
+    "ast_hash": "e0bf27f7971002964af865837b542df0",
     "semantic_hash": ""
   },
   "tests/object-registry-contract.test.mjs": {
@@ -1445,13 +1445,13 @@
     "semantic_hash": ""
   },
   "src/components/block-editor.tsx": {
-    "mtime": 1788169917.227127,
-    "ast_hash": "12735e5333a151ce0e401ebce183ad7d",
+    "mtime": 1788171544.9028728,
+    "ast_hash": "9cf0b0d467968217526c52bf78f42a5a",
     "semantic_hash": ""
   },
   "src/editor/document.ts": {
-    "mtime": 1788169917.2871094,
-    "ast_hash": "537f6dc7a3b95be7b26e7ed9c25f95d8",
+    "mtime": 1788172067.1045716,
+    "ast_hash": "8ba39cf287ea439b0da5e9e21dde6078",
     "semantic_hash": ""
   },
   "src/hooks/use-buffered-text-commit.ts": {
@@ -1480,8 +1480,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-storage-migration.test.mjs": {
-    "mtime": 1788170290.860664,
-    "ast_hash": "7fb8577fb09fe8778a6bf8915241dc2b",
+    "mtime": 1788171422.887568,
+    "ast_hash": "18c18e6b352f8c9590321748fd239409",
     "semantic_hash": ""
   },
   ".agents/rules/input-performance.md": {
@@ -1590,8 +1590,8 @@
     "semantic_hash": ""
   },
   "src/components/workspace-object-page-view.tsx": {
-    "mtime": 1788170263.999355,
-    "ast_hash": "c25cdbc7304453041f9247debe8f0f36",
+    "mtime": 1788171519.0140648,
+    "ast_hash": "58e22d8504ba6e0f732e45c1262e7f4b",
     "semantic_hash": ""
   },
   "src/components/workspace-object-type-view.tsx": {
@@ -1650,13 +1650,13 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-object-links.ts": {
-    "mtime": 1788170290.866881,
-    "ast_hash": "450351f13061e1793d0012af94e5f654",
+    "mtime": 1788171740.8677943,
+    "ast_hash": "891876a507951c78891c439867855ba4",
     "semantic_hash": ""
   },
   "src/lib/workspace-object-types.ts": {
-    "mtime": 1788171150.4399593,
-    "ast_hash": "cd0be2b855695ba6de1e80b0f1c9fd63",
+    "mtime": 1788172070.3401558,
+    "ast_hash": "90e47e90a3bccc8a00549a96aedf4fc5",
     "semantic_hash": ""
   },
   "src/lib/workspace-object-views.ts": {
@@ -1805,8 +1805,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-structure-migration.test.mjs": {
-    "mtime": 1787774604.4461238,
-    "ast_hash": "ab7510f28c34281ac8972441cb0735d7",
+    "mtime": 1788172195.9897711,
+    "ast_hash": "61a3c4c18b0e26aecfefef7255dbc48c",
     "semantic_hash": ""
   },
   "tests/workspace-structure-reconciliation.test.mjs": {
@@ -3445,8 +3445,8 @@
     "semantic_hash": ""
   },
   "src/editor/table-block.ts": {
-    "mtime": 1788169963.1308553,
-    "ast_hash": "403402c092dfbc8fa473146b164152f7",
+    "mtime": 1788172033.5656435,
+    "ast_hash": "13229fbc36e96578d7aac4701f9e926a",
     "semantic_hash": ""
   },
   "src/lib/workspace-command-registry.ts": {
@@ -3465,8 +3465,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-table-formulas.ts": {
-    "mtime": 1788169765.3709495,
-    "ast_hash": "ca25dee75841779893dc432c92045d7c",
+    "mtime": 1788172116.0916982,
+    "ast_hash": "3125caf9e78ffa07f400388113f88409",
     "semantic_hash": ""
   },
   "tests/editor-quick-action-suggestions.test.mjs": {
@@ -3650,8 +3650,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/add-related-content/tasks.md": {
-    "mtime": 1788170703.9533775,
-    "ast_hash": "637c75a4ee53859ac3142175290e9d22",
+    "mtime": 1788172333.0270302,
+    "ast_hash": "b3494a77f3a0c4fb93fb07e1b513a1db",
     "semantic_hash": ""
   },
   "openspec/changes/add-table-block-editor/.openspec.yaml": {
@@ -3815,8 +3815,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/align-task-management-with-current-capacities/tasks.md": {
-    "mtime": 1788171095.1453943,
-    "ast_hash": "f238cc90d5fa17fb9c3f917eac0ddf36",
+    "mtime": 1788172291.5682082,
+    "ast_hash": "7eafd6ebbb604a2ba53e41fded611050",
     "semantic_hash": ""
   },
   "openspec/changes/archive/2026-08-28-add-keyboard-command-system/.openspec.yaml": {
@@ -4015,8 +4015,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-task-management.ts": {
-    "mtime": 1788170843.2015598,
-    "ast_hash": "f73def0a2c52b18af643b09762242156",
+    "mtime": 1788171853.4737804,
+    "ast_hash": "a60a04316423d06b190ac2eabdcb7c7f",
     "semantic_hash": ""
   }
 }
