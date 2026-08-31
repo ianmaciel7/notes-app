@@ -1,4 +1,4 @@
-name: Apply object page complete parity
+name: Expose object page parity apply script
 
 on:
   push:
@@ -9,34 +9,21 @@ permissions:
   contents: write
 
 concurrency:
-  group: apply-object-page-complete-parity
+  group: expose-object-page-parity-script
   cancel-in-progress: false
 
 jobs:
-  apply:
-    if: "${{ !contains(github.event.head_commit.message, '[parity-applied]') }}"
+  expose:
+    if: "${{ !contains(github.event.head_commit.message, '[script-exposed]') }}"
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 10
     steps:
-      - name: Check out the isolated apply branch
+      - name: Check out branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Node.js 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Activate pnpm 11.20.0
-        run: |
-          corepack enable
-          corepack prepare pnpm@11.20.0 --activate
-
-      - name: Install repository dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Reconstruct the temporary apply script
+      - name: Reconstruct and verify script
         run: |
           cat .github/scripts/apply-object-page-parity.py.gz.b64.* \
             | base64 --decode \
@@ -46,83 +33,10 @@ jobs:
             | sha256sum --check --strict
           python -m py_compile .github/scripts/apply-object-page-parity.py
 
-      - name: Add failing-first parity contracts
-        run: python .github/scripts/apply-object-page-parity.py tests
-
-      - name: Prove the new contracts are red before implementation
-        shell: bash
-        run: |
-          set +e
-          node --test \
-            tests/object-page-complete-parity-contract.test.mjs \
-            tests/input-performance-contract.test.mjs
-          status=$?
-          set -e
-          if [ "$status" -eq 0 ]; then
-            echo "Expected at least one new parity contract to fail before implementation."
-            exit 1
-          fi
-          echo "Failing-first parity contracts reproduced as expected."
-
-      - name: Apply the production, evidence, and OpenSpec changes
-        run: python .github/scripts/apply-object-page-parity.py implementation
-
-      - name: Format changed source and test files
-        run: |
-          pnpm exec biome format --write \
-            src/components/block-editor.tsx \
-            src/components/workspace-object-page-view.tsx \
-            tests/input-performance-contract.test.mjs \
-            tests/object-lifecycle-contracts.test.mjs \
-            tests/object-page-complete-parity-contract.test.mjs \
-            tests/e2e/workspace-parity.spec.ts
-
-      - name: Run focused parity contracts
-        run: |
-          node --test \
-            tests/object-page-complete-parity-contract.test.mjs \
-            tests/input-performance-contract.test.mjs \
-            tests/object-lifecycle-contracts.test.mjs \
-            tests/object-page-inline-selectors.test.mjs \
-            tests/editor-reference-suggestions.test.mjs \
-            tests/editor-shared-suggestion-controller.test.mjs \
-            tests/editor-trigger-arbitration.test.mjs \
-            tests/editor-utilities.test.mjs \
-            tests/workspace-related-content.test.mjs \
-            tests/workspace-object-links.test.mjs
-
-      - name: Run full repository verification
-        run: pnpm verify
-
-      - name: Install OpenSpec CLI and validate strictly
-        run: |
-          npm install -g @fission-ai/openspec@1.6.0
-          openspec validate align-object-page-complete-parity --strict
-          openspec validate --specs
-
-      - name: Install Chromium and run the production parity browser suite
-        run: |
-          pnpm exec playwright install --with-deps chromium
-          pnpm test:parity
-
-      - name: Review the resulting diff
-        run: |
-          git diff --check
-          git status --short
-          git diff --stat
-          test "$(grep -c -- '- \[ \]' openspec/changes/align-object-page-complete-parity/tasks.md || true)" -eq 0
-          test "$(grep -c -- '- \[x\]' openspec/changes/align-object-page-complete-parity/tasks.md)" -eq 28
-
-      - name: Remove temporary apply automation
-        run: |
-          rm .github/workflows/apply-object-page-parity.yml
-          rm .github/scripts/apply-object-page-parity.py
-          rm .github/scripts/apply-object-page-parity.py.gz.b64.*
-
-      - name: Commit and push the verified implementation
+      - name: Commit readable script
         run: |
           git config user.name "Ian Maciel"
           git config user.email "ianmaciel76@gmail.com"
-          git add -A
-          git commit -m "feat: complete object page parity [parity-applied]"
+          git add -f .github/scripts/apply-object-page-parity.py
+          git commit -m "chore: expose parity apply script [script-exposed]"
           git push origin HEAD:codex/align-object-page-complete-parity
