@@ -2,6 +2,7 @@
 
 import type * as React from "react";
 
+import { AppSidebarDotsIcon } from "@/components/app-sidebar-icons";
 import {
   objectIconToneBadgeClass,
   objectIconToneTextClass,
@@ -12,6 +13,13 @@ import type {
   ObjectViewProps,
   ProjectionLabels,
 } from "@/components/object-view-types";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import type { WorkspaceStructure } from "@/lib/workspace-object-types";
 import { readWorkspaceEntityProperty } from "@/lib/workspace-object-views";
@@ -244,6 +252,47 @@ function ObjectProperties({
   );
 }
 
+function ObjectProjectionActions({
+  className,
+  labels,
+  title,
+}: {
+  readonly className?: string;
+  readonly labels: ObjectViewProps["labels"];
+  readonly title: string;
+}) {
+  const actions = labels.objectActions;
+  if (!actions) return null;
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <button
+            type="button"
+            aria-label={actions.moreOptions(title)}
+            data-slot="object-projection-actions-trigger"
+            className={cn(
+              "inline-flex size-[22px] items-center justify-center rounded-md text-muted-foreground opacity-0 transition-opacity duration-150 hover:bg-muted hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover/object-projection:opacity-100 group-focus-within/object-projection:opacity-100 data-popup-open:opacity-100 motion-reduce:transition-none",
+              className,
+            )}
+          >
+            <AppSidebarDotsIcon aria-hidden className="size-3.5" />
+          </button>
+        }
+      />
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuItem>{actions.pinSidebar}</DropdownMenuItem>
+        <DropdownMenuItem>{actions.export}</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>{actions.duplicate}</DropdownMenuItem>
+        <DropdownMenuItem variant="destructive">
+          {actions.deleteObject}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 type OpenSurfaceProps = {
   readonly ariaLabel: string;
   readonly children: React.ReactNode;
@@ -292,6 +341,7 @@ export {
   entityValue,
   NumberValueDisplay,
   ObjectProperties,
+  ObjectProjectionActions,
   ObjectTypeLabel,
   OpenSurface,
   typeLabel,

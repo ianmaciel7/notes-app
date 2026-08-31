@@ -241,6 +241,8 @@
     "sidebarCollections": {
       "createObject": "Criar {type}",
       "deleteCollection": "Excluir coleção",
+      "hideCollections": "Ocultar coleções de {type}",
+      "showCollections": "Mostrar coleções de {type}",
       "unpinFromType": "Desafixar do tipo de objeto"
     },
     "documentMenu": {
@@ -398,6 +400,7 @@
     "footer": {
       "accountEmail": "Este dispositivo",
       "accountName": "Espaço de trabalho local",
+      "copyLink": "Copiar link",
       "copyWorkspaceLink": "Copiar link do espaço",
       "currentSpace": "Espaço atual",
       "general": "Geral",
@@ -409,6 +412,7 @@
       "settings": "Configurações",
       "settingsDescription": "Revise destinos locais da workspace, do espaço, de recursos e integrações.",
       "settingsTitle": "Configurações",
+      "shareDescription": "Compartilhe um link para a superfície atual quando a publicação estiver disponível.",
       "shareWorkspace": "Compartilhar espaço",
       "signOut": "Sair",
       "useDarkTheme": "Usar tema escuro",
@@ -464,12 +468,15 @@
       "close": "Fechar aba",
       "create": "Criar nova aba",
       "createSidePanel": "Nova aba lateral",
+      "enterFocusMode": "Entrar no modo de foco",
       "hideSidePanel": "Ocultar painel lateral",
       "keyboardHelp": "↑↓ para navegar　 Esc para abortar　 ↵ para selecionar　 ⌘↵ / Ctrl↵ em nova aba　 ⇧↵ no painel lateral",
       "list": "Lista de abas",
+      "leaveFocusMode": "Sair do modo de foco",
       "new": "Nova aba",
       "openInSidePanel": "Abrir no painel lateral",
       "openedInSidePanel": "{label} aberto no painel lateral",
+      "pin": "Fixar aba",
       "preview": {
         "object": "Objeto",
         "objectType": "Tipo de objeto"
@@ -481,6 +488,7 @@
       "sidePanelMenu": "Abrir menu do painel lateral",
       "sidePanelTabs": "Abas do painel lateral",
       "sidePanelSearchPlaceholder": "Buscar por conteúdo e ações, ou colar da área de transferência",
+      "unpin": "Desafixar aba",
       "yesterday": "Ontem",
       "initialObjectType": "Tipo de objeto",
       "initialAtomicNotes": "Notas atômicas",
@@ -707,6 +715,7 @@
       "collections": "Coleções",
       "collectionCreated": "Coleção criada.",
       "entryCount": "{count, plural, =0 {# entradas} one {# entrada} other {# entradas}}",
+      "embed": "Incorporar",
       "localActionComplete": "Ação aplicada localmente.",
       "layout": "Layout",
       "expandSection": "Expandir recentemente aberto",
@@ -723,6 +732,7 @@
       "importPartial": "{accepted} importados; {rejected} arquivos incompatíveis ignorados.",
       "importRejected": "Nenhum arquivo compatível foi importado.",
       "moreOptions": "Mais opções",
+      "moreOptionsFor": "Mais opções de {title}",
       "newCollection": "Nova coleção",
       "newCurrentType": "Novo {type}",
       "newFromTemplate": "Novo a partir do modelo",
@@ -751,6 +761,7 @@
       "useSidebarNew": "Use Novo na barra lateral para escolher outro tipo de objeto.",
       "viewLabel": "Visualizações do tipo de objeto",
       "viewSettings": "Configurações da visão geral",
+      "wall": "Mural",
       "where": "onde",
       "pinToSidebar": "Fixar na barra lateral",
       "unpinFromSidebar": "Desafixar da barra lateral",
@@ -811,6 +822,7 @@
       "alphabetical": "Ordenar alfabeticamente",
       "create": "Criar",
       "description": "Crie uma seção personalizada na barra lateral depois de nomeá-la.",
+      "iconLabel": "Ícone da seção",
       "namePlaceholder": "Nome da seção",
       "noContent": "Nenhum conteúdo"
     },
@@ -819,6 +831,7 @@
       "askQuestionTooltip": "Faça perguntas sobre o espaço de trabalho",
       "documentation": "Documentação",
       "documentationTooltip": "Saiba como usar o espaço de trabalho",
+      "documentationUrl": "https://docs.capacities.io/",
       "feedback": "Feedback",
       "feedbackTooltip": "Compartilhe ideias, feedback ou problemas",
       "getStarted": "Primeiros passos",

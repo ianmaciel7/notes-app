@@ -3,6 +3,7 @@
 import {
   entityDescription,
   entityValue,
+  ObjectProjectionActions,
   ObjectTypeLabel,
   OpenSurface,
 } from "@/components/object-view-support";
@@ -169,28 +170,38 @@ function DataViewListRow({
   const title = entity.title.trim() || props.labels.untitledObject;
   const description = entityDescription(entity);
   return (
-    <OpenSurface
-      ariaLabel={props.labels.openObject(title)}
-      className={cn(workspaceListRowClass, "items-start gap-3 px-3 py-2")}
-      entityId={entity.id}
-      onOpen={props.onOpen}
-    >
-      {presentation.showIcon ? (
-        <ObjectTypeLabel
-          entity={entity}
-          labels={props.objectTypeLabels}
-          structures={props.structures}
-        />
-      ) : null}
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-medium">{title}</span>
-        {presentation.showDescription && description ? (
-          <span className="mt-0.5 line-clamp-2 block text-xs text-muted-foreground">
-            {description}
-          </span>
+    <div className="group/object-projection relative">
+      <OpenSurface
+        ariaLabel={props.labels.openObject(title)}
+        className={cn(
+          workspaceListRowClass,
+          "items-start gap-3 px-3 py-2 pr-9",
+        )}
+        entityId={entity.id}
+        onOpen={props.onOpen}
+      >
+        {presentation.showIcon ? (
+          <ObjectTypeLabel
+            entity={entity}
+            labels={props.objectTypeLabels}
+            structures={props.structures}
+          />
         ) : null}
-      </span>
-    </OpenSurface>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-sm font-medium">{title}</span>
+          {presentation.showDescription && description ? (
+            <span className="mt-0.5 line-clamp-2 block text-xs text-muted-foreground">
+              {description}
+            </span>
+          ) : null}
+        </span>
+      </OpenSurface>
+      <ObjectProjectionActions
+        labels={props.labels}
+        title={title}
+        className="absolute top-1/2 right-2 -translate-y-1/2"
+      />
+    </div>
   );
 }
 

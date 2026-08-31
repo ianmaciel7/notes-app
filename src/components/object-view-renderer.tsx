@@ -9,6 +9,7 @@ import type {
 import {
   entityDescription,
   entityValue,
+  ObjectProjectionActions,
   ObjectProperties,
   ObjectTypeLabel,
   OpenSurface,
@@ -397,7 +398,7 @@ function CardObjectView(props: ReadyObjectViewProps) {
   const wide = config.kind === "wide-card";
   const content = (
     <>
-      <span className="flex min-w-0 flex-col">
+      <span className="flex min-w-0 flex-col pr-7">
         <ObjectTypeLabel
           entity={entity}
           labels={objectTypeLabels}
@@ -413,52 +414,66 @@ function CardObjectView(props: ReadyObjectViewProps) {
         entity={entity}
         className={cn("mt-4 flex-1", wide && "sm:mt-0")}
       />
+      <CardMetadata
+        entity={entity}
+        fallbackLabel={props.propertyLabels?.tags}
+      />
       <CardConfiguredProperties {...props} />
-      <CardMetadata entity={entity} fallbackLabel={props.propertyLabels?.tags} />
     </>
+  );
+  const actions = (
+    <ObjectProjectionActions
+      labels={labels}
+      title={title}
+      className="absolute top-3 right-3"
+    />
   );
   if (props.onPropertyCommit) {
     return (
-      <article
-        data-slot="object-view-card"
-        className={cn(
-          workspaceNamedCardClass,
-          "min-h-[25rem] w-full p-3 text-card-foreground hover:border-foreground/15 hover:shadow-sm focus-within:ring-2 focus-within:ring-ring",
-          wide &&
-            "sm:grid sm:min-h-[18rem] sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-5",
-          config.kind === "embed" && "bg-muted/30 shadow-none",
-          className,
-        )}
-      >
-        {content}
-        {onOpen ? (
-          <button
-            type="button"
-            className="mt-3 text-xs font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            onClick={() => onOpen(entity.id)}
-          >
-            {labels.openObject(title)}
-          </button>
-        ) : null}
-      </article>
+      <div className={cn("group/object-projection relative", className)}>
+        <article
+          data-slot="object-view-card"
+          className={cn(
+            workspaceNamedCardClass,
+            "min-h-[25rem] w-full p-3 text-card-foreground hover:border-foreground/15 hover:shadow-sm focus-within:ring-2 focus-within:ring-ring",
+            wide &&
+              "sm:grid sm:min-h-[18rem] sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-5",
+            config.kind === "embed" && "bg-muted/30 shadow-none",
+          )}
+        >
+          {content}
+          {onOpen ? (
+            <button
+              type="button"
+              className="mt-3 text-xs font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              onClick={() => onOpen(entity.id)}
+            >
+              {labels.openObject(title)}
+            </button>
+          ) : null}
+        </article>
+        {actions}
+      </div>
     );
   }
   return (
-    <OpenSurface
-      ariaLabel={labels.openObject(title)}
-      className={cn(
-        workspaceNamedCardClass,
-        "min-h-[25rem] w-full p-3 text-card-foreground hover:border-foreground/15 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring",
-        wide &&
-          "sm:grid sm:min-h-[18rem] sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-5",
-        config.kind === "embed" && "bg-muted/30 shadow-none",
-        className,
-      )}
-      entityId={entity.id}
-      onOpen={onOpen}
-    >
-      {content}
-    </OpenSurface>
+    <div className={cn("group/object-projection relative", className)}>
+      <OpenSurface
+        ariaLabel={labels.openObject(title)}
+        className={cn(
+          workspaceNamedCardClass,
+          "min-h-[25rem] w-full p-3 text-card-foreground hover:border-foreground/15 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring",
+          wide &&
+            "sm:grid sm:min-h-[18rem] sm:grid-cols-[minmax(0,1fr)_16rem] sm:gap-5",
+          config.kind === "embed" && "bg-muted/30 shadow-none",
+        )}
+        entityId={entity.id}
+        onOpen={onOpen}
+      >
+        {content}
+      </OpenSurface>
+      {actions}
+    </div>
   );
 }
 

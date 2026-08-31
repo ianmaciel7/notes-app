@@ -50,6 +50,9 @@ const workspaceRowStateClass =
 const workspaceRevealActionClass =
   "pointer-events-none invisible opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/interactive:pointer-events-auto group-hover/interactive:visible group-hover/interactive:opacity-100 group-focus-within/interactive:pointer-events-auto group-focus-within/interactive:visible group-focus-within/interactive:opacity-100"
 
+const workspaceSectionRevealActionClass =
+  "pointer-events-none opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/app-sidebar-section:pointer-events-auto group-hover/app-sidebar-section:opacity-100 group-focus-within/app-sidebar-section:pointer-events-auto group-focus-within/app-sidebar-section:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100"
+
 const workspaceTabStateClass =
   "transition-[background-color,border-color,color,opacity] duration-150 ease-out motion-reduce:transition-none"
 
@@ -88,6 +91,7 @@ export {
   workspaceCompoundControlClass,
   workspaceRevealActionClass,
   workspaceRowStateClass,
+  workspaceSectionRevealActionClass,
   workspaceSmallActionStateClass,
   workspaceSubmenuStateClass,
   workspaceSurfaceMotionClass,

@@ -70,6 +70,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   workspaceRevealActionClass,
   workspaceRowStateClass,
+  workspaceSectionRevealActionClass,
 } from "@/components/ui/shared-styles";
 import {
   Tooltip,
@@ -88,6 +89,12 @@ import {
 type AppSidebarSortMode = "manual" | "alphabetical";
 
 type AppSidebarTone = ObjectIconTone;
+
+const AppSidebarSectionRevealContext = React.createContext(false);
+
+function useAppSidebarSectionReveal() {
+  return React.useContext(AppSidebarSectionRevealContext);
+}
 
 type AppSidebarPinnedEntity = {
   id: string;
@@ -226,14 +233,19 @@ function AppSidebarSectionMenu({
   onValueChange: (value: AppSidebarSortMode) => void;
 }) {
   const t = useTranslations("workspace.sidebarSections");
+  const revealed = useAppSidebarSectionReveal();
+  const [open, setOpen] = React.useState(false);
+  const interactive = revealed || open;
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         aria-label={t("sort")}
+        tabIndex={interactive ? 0 : -1}
         className={cn(
           buttonVariants({ variant: "ghost", size: "icon-xs" }),
-          "size-[22px] shrink-0 opacity-0 transition-opacity duration-200",
-          "group-hover/app-sidebar-section:opacity-70 hover:!opacity-100 data-popup-open:opacity-100",
+          "size-[22px] shrink-0",
+          workspaceSectionRevealActionClass,
         )}
       >
         <AppSidebarDotsIcon />
@@ -283,16 +295,28 @@ function AppSidebarSection({
   sticky?: boolean;
   children?: React.ReactNode;
 }) {
+  const [actionsRevealed, setActionsRevealed] = React.useState(false);
+
   return (
     <Collapsible
       open={open}
       onOpenChange={onOpenChange}
       data-slot="app-sidebar-section"
-      className="flex shrink-0 flex-col"
+      onPointerEnter={() => setActionsRevealed(true)}
+      onPointerLeave={() => setActionsRevealed(false)}
+      onFocusCapture={() => setActionsRevealed(true)}
+      onBlurCapture={(event) => {
+        const nextTarget =
+          event.relatedTarget instanceof Node ? event.relatedTarget : null;
+        if (!event.currentTarget.contains(nextTarget)) {
+          setActionsRevealed(false);
+        }
+      }}
+      className="group/app-sidebar-section flex shrink-0 flex-col"
     >
       <div
         className={cn(
-          "group/app-sidebar-section mt-0 mr-2 ml-px bg-sidebar px-2 pr-1",
+          "mt-0 mr-2 ml-px bg-sidebar px-2 pr-1",
           sticky && "sticky top-0 z-[5]",
         )}
       >
@@ -330,32 +354,34 @@ function AppSidebarSection({
             <span className="min-w-0 flex-1" />
           </CollapsibleTrigger>
 
-          <div className="flex h-4 max-w-max shrink-0 items-center gap-px pb-px">
-            {typeof count === "number" && (
-              <span
-                data-lifecycle-contract={
-                  objectLifecycleContractSlots.ObjectCountBadge
-                }
-                className={cn(
-                  "inline-flex min-w-[1.3em] items-center justify-center rounded-[0.475em]",
-                  "border border-transparent px-[0.49em] py-[0.2em] text-[11px] leading-[1.3]",
-                  "text-muted-foreground opacity-0 transition-opacity duration-200",
-                  "group-hover/app-sidebar-section:opacity-80",
-                )}
-              >
-                {count}
-              </span>
-            )}
+          <AppSidebarSectionRevealContext.Provider value={actionsRevealed}>
+            <div className="flex h-4 max-w-max shrink-0 items-center gap-px pb-px">
+              {typeof count === "number" && (
+                <span
+                  data-lifecycle-contract={
+                    objectLifecycleContractSlots.ObjectCountBadge
+                  }
+                  className={cn(
+                    "inline-flex min-w-[1.3em] items-center justify-center rounded-[0.475em]",
+                    "border border-transparent px-[0.49em] py-[0.2em] text-[11px] leading-[1.3]",
+                    "text-muted-foreground opacity-0 transition-opacity duration-200",
+                    "group-hover/app-sidebar-section:opacity-80",
+                  )}
+                >
+                  {count}
+                </span>
+              )}
 
-            {sort && onSortChange && (
-              <AppSidebarSectionMenu
-                value={sort}
-                onValueChange={onSortChange}
-              />
-            )}
+              {sort && onSortChange && (
+                <AppSidebarSectionMenu
+                  value={sort}
+                  onValueChange={onSortChange}
+                />
+              )}
 
-            {action}
-          </div>
+              {action}
+            </div>
+          </AppSidebarSectionRevealContext.Provider>
         </div>
       </div>
 
@@ -721,6 +747,7 @@ function AppSidebarObjectTypeRow({
   ) => void;
   onDelete?: (id: string) => void;
 }) {
+  const t = useTranslations("workspace.sidebarCollections");
   const hasCollections = collections.length > 0;
 
   return (
@@ -737,7 +764,12 @@ function AppSidebarObjectTypeRow({
         {hasCollections && (
           <button
             type="button"
-            aria-label={objectType.label}
+            aria-label={t(
+              collectionsOpen ? "hideCollections" : "showCollections",
+              {
+                type: objectType.label,
+              },
+            )}
             aria-expanded={collectionsOpen}
             className={cn(
               "relative ml-[5px] inline-flex size-[21px] shrink-0 items-center justify-center rounded-md bg-transparent text-muted-foreground",
@@ -871,6 +903,8 @@ function AppSidebarPinnedPicker({
   const t = useTranslations("workspace");
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
+  const revealed = useAppSidebarSectionReveal();
+  const interactive = revealed || open;
 
   const results = React.useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase("pt-BR");
@@ -887,10 +921,11 @@ function AppSidebarPinnedPicker({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         aria-label={t("sidebarPinned.addContentToPinned")}
+        tabIndex={interactive ? 0 : -1}
         className={cn(
           buttonVariants({ variant: "outline", size: "icon-xs" }),
-          "size-[22px] shrink-0 opacity-0 transition-opacity duration-200",
-          "group-hover/app-sidebar-section:opacity-100 data-popup-open:opacity-100",
+          "size-[22px] shrink-0",
+          workspaceSectionRevealActionClass,
         )}
       >
         <AppSidebarPlusIcon />
@@ -947,6 +982,8 @@ function AppSidebarSectionAction({
   label: string;
   onClick?: () => void;
 }) {
+  const revealed = useAppSidebarSectionReveal();
+
   return (
     <Button
       data-slot="app-sidebar-section-action"
@@ -954,7 +991,8 @@ function AppSidebarSectionAction({
       variant="outline"
       size="icon-xs"
       aria-label={label}
-      className="size-[22px] opacity-0 transition-opacity duration-200 group-hover/app-sidebar-section:opacity-100"
+      tabIndex={revealed ? 0 : -1}
+      className={cn("size-[22px]", workspaceSectionRevealActionClass)}
       onClick={onClick}
     >
       <AppSidebarPlusIcon />
@@ -987,6 +1025,7 @@ function AppSidebarAddSection({
     >
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger
+          aria-label={t("sidebarSections.add")}
           className={cn(
             buttonVariants({ variant: "ghost", size: "default" }),
             "pointer-events-none h-8 w-full justify-start gap-x-1.5 px-2 font-normal text-muted-foreground",
@@ -1000,6 +1039,7 @@ function AppSidebarAddSection({
         </PopoverTrigger>
 
         <PopoverContent
+          aria-label={t("sidebarSections.add")}
           side="right"
           align="start"
           sideOffset={8}
@@ -1011,6 +1051,10 @@ function AppSidebarAddSection({
               {t("sidebarSections.description")}
             </PopoverDescription>
           </PopoverHeader>
+          <div className="flex items-center gap-2 rounded-md border border-border p-2 text-sm text-muted-foreground">
+            <AppSidebarPlusIcon className="size-4" />
+            <span>{t("sidebarSections.iconLabel")}</span>
+          </div>
           <Input
             autoFocus
             value={name}
@@ -1088,6 +1132,7 @@ function AppSidebarUtilityRow({
         title={tooltip}
         className={cn(
           utilityRowClass,
+          "no-underline",
           active &&
             "bg-sidebar-accent text-sidebar-accent-foreground brightness-[0.965]",
         )}
@@ -1168,8 +1213,8 @@ function AppSidebarHelpSection() {
             <AppSidebarSourceIcon name="documentation" {...props} />
           )}
           label={t("sidebarHelp.documentation")}
-          href="https://docs.capacities.io/"
           external
+          href={t("sidebarHelp.documentationUrl")}
           tooltip={t("sidebarHelp.documentationTooltip")}
         />
         <AppSidebarUtilityRow
@@ -1220,6 +1265,37 @@ function AppSidebarFooterTooltip({
   );
 }
 
+function AppSidebarFooterPopover({
+  label,
+  children,
+  content,
+}: {
+  label: string;
+  children: React.ReactNode;
+  content: React.ReactNode;
+}) {
+  return (
+    <Popover>
+      <PopoverTrigger
+        data-slot="app-sidebar-footer-action"
+        aria-label={label}
+        className={footerIconClass}
+      >
+        {children}
+      </PopoverTrigger>
+      <PopoverContent
+        aria-label={label}
+        side="top"
+        align="start"
+        sideOffset={7}
+        className="w-64"
+      >
+        {content}
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 function AppSidebarFooter() {
   const t = useTranslations("workspace");
   const [dark, setDark] = React.useState(false);
@@ -1235,53 +1311,38 @@ function AppSidebarFooter() {
       className="flex shrink-0 flex-col gap-y-px px-2.5 py-1.5 pr-1 text-xs"
     >
       <div className="flex w-full flex-wrap items-center gap-x-0.5">
-        <Popover>
-          <Tooltip>
-            <TooltipTrigger
-              data-slot="app-sidebar-footer-action"
-              aria-label={t("footer.settings")}
-              className={footerIconClass}
-              render={<PopoverTrigger />}
-            >
-              <AppSidebarSourceIcon name="settings" className="size-4" />
-            </TooltipTrigger>
-            <TooltipContent side="top" sideOffset={7}>
-              {t("footer.settings")}
-            </TooltipContent>
-          </Tooltip>
-
-          <PopoverContent
-            data-slot="app-sidebar-settings-surface"
-            side="top"
-            align="start"
-            sideOffset={6}
-            className="w-72 gap-2 p-2"
-          >
-            <PopoverHeader>
-              <PopoverTitle>{t("footer.settingsTitle")}</PopoverTitle>
-              <PopoverDescription>
-                {t("footer.settingsDescription")}
-              </PopoverDescription>
-            </PopoverHeader>
-            <div className="grid gap-1">
-              {[
-                t("footer.general"),
-                t("footer.currentSpace"),
-                t("footer.resources"),
-                t("footer.integrations"),
-              ].map((item) => (
-                <Button
-                  key={item}
-                  type="button"
-                  variant="ghost"
-                  className="h-8 justify-start px-2 font-normal"
-                >
-                  {item}
-                </Button>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
+        <AppSidebarFooterPopover
+          label={t("footer.settings")}
+          content={
+            <>
+              <PopoverHeader>
+                <PopoverTitle>{t("footer.settingsTitle")}</PopoverTitle>
+                <PopoverDescription>
+                  {t("footer.settingsDescription")}
+                </PopoverDescription>
+              </PopoverHeader>
+              <div className="grid gap-1">
+                {[
+                  t("footer.general"),
+                  t("footer.currentSpace"),
+                  t("footer.resources"),
+                  t("footer.integrations"),
+                ].map((label) => (
+                  <Button
+                    key={label}
+                    type="button"
+                    variant="ghost"
+                    className="h-8 justify-start px-2 font-normal"
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
+            </>
+          }
+        >
+          <AppSidebarSourceIcon name="settings" className="size-4" />
+        </AppSidebarFooterPopover>
 
         <AppSidebarFooterTooltip
           label={dark ? t("footer.useLightTheme") : t("footer.useDarkTheme")}
@@ -1347,38 +1408,29 @@ function AppSidebarFooter() {
 
         <span className="min-w-0 flex-1" />
 
-        <DropdownMenu>
-          <Tooltip>
-            <TooltipTrigger
-              data-slot="app-sidebar-footer-action"
-              aria-label={t("documentMenu.share")}
-              className={footerIconClass}
-              render={<DropdownMenuTrigger />}
-            >
-              <AppSidebarSourceIcon name="share" className="size-4" />
-            </TooltipTrigger>
-            <TooltipContent side="top" sideOffset={7}>
-              {t("documentMenu.share")}
-            </TooltipContent>
-          </Tooltip>
-
-          <DropdownMenuContent side="top" align="end" sideOffset={6}>
-            <DropdownMenuItem>
-              <AppSidebarSourceIcon name="share" />
-              {t("footer.shareWorkspace")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                void navigator.clipboard
-                  ?.writeText(window.location.href)
-                  .catch(() => undefined)
-              }
-            >
-              <AppSidebarCopyIcon />
-              {t("footer.copyWorkspaceLink")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <AppSidebarFooterPopover
+          label={t("documentMenu.share")}
+          content={
+            <>
+              <PopoverHeader>
+                <PopoverTitle>{t("documentMenu.share")}</PopoverTitle>
+                <PopoverDescription>
+                  {t("footer.shareDescription")}
+                </PopoverDescription>
+              </PopoverHeader>
+              <Button type="button" variant="ghost" className="justify-start">
+                <AppSidebarSourceIcon name="share" className="size-4" />
+                {t("footer.shareWorkspace")}
+              </Button>
+              <Button type="button" variant="outline" className="justify-start">
+                <AppSidebarSourceIcon name="share" className="size-4" />
+                {t("footer.copyWorkspaceLink")}
+              </Button>
+            </>
+          }
+        >
+          <AppSidebarSourceIcon name="share" className="size-4" />
+        </AppSidebarFooterPopover>
       </div>
     </footer>
   );

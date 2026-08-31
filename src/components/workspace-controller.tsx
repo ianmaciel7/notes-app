@@ -990,6 +990,7 @@ type WorkspaceContextValue = {
   extendedSearchOpen: boolean;
   findInPageOpen: boolean;
   shortcutBrowserOpen: boolean;
+  mainSearchReturnValue: string | null;
   activeAction: AppSidebarPrimaryNavigationAction | undefined;
   activeEntityId: string | null;
   pinnedEntities: AppSidebarPinnedEntity[];
@@ -1020,6 +1021,7 @@ type WorkspaceContextValue = {
   setExtendedSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setFindInPageOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setShortcutBrowserOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMainSearchReturnValue: React.Dispatch<React.SetStateAction<string | null>>;
   setActiveAction: React.Dispatch<
     React.SetStateAction<AppSidebarPrimaryNavigationAction | undefined>
   >;
@@ -1149,6 +1151,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [extendedSearchOpen, setExtendedSearchOpen] = React.useState(false);
   const [findInPageOpen, setFindInPageOpen] = React.useState(false);
   const [shortcutBrowserOpen, setShortcutBrowserOpen] = React.useState(false);
+  const [mainSearchReturnValue, setMainSearchReturnValue] = React.useState<
+    string | null
+  >(null);
   const [activeAction, setActiveAction] = React.useState<
     AppSidebarPrimaryNavigationAction | undefined
   >(undefined);
@@ -2848,6 +2853,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       extendedSearchOpen,
       findInPageOpen,
       shortcutBrowserOpen,
+      mainSearchReturnValue,
       activeAction,
       activeEntityId,
       pinnedEntities,
@@ -2878,6 +2884,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setExtendedSearchOpen,
       setFindInPageOpen,
       setShortcutBrowserOpen,
+      setMainSearchReturnValue,
       setActiveAction,
       setActiveEntityId,
       setPinnedEntities,
@@ -2930,6 +2937,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       extendedSearchOpen,
       findInPageOpen,
       shortcutBrowserOpen,
+      mainSearchReturnValue,
       sideTabs,
       sideValue,
       activeAction,
@@ -3781,15 +3789,19 @@ function WorkspaceMainHeader() {
     setMainValue,
     setFocusMode,
     setMainSearchOpen,
+    setMainSearchReturnValue,
     openInSidePanel,
     selectEntity,
     showMessage,
   } = useWorkspace();
-  const { rightCollapsed, toggleRight } = useAppShell();
+  const { rightCollapsed, rightPanelTriggerRef, toggleRight } = useAppShell();
 
   if (focusMode) {
     return (
       <AppFocusModeControls
+        backLabel={t("actions.back")}
+        forwardLabel={t("actions.forward")}
+        exitLabel={t("tabs.leaveFocusMode")}
         onBack={() => showMessage(t("actions.back"))}
         onForward={() => showMessage(t("actions.forward"))}
         onExit={() => setFocusMode(false)}
@@ -3811,6 +3823,7 @@ function WorkspaceMainHeader() {
         ? current
         : [...current, draft],
     );
+    setMainSearchReturnValue(mainValue);
     setMainValue(MAIN_DRAFT_TAB_ID);
     setMainSearchOpen(true);
   }
@@ -3829,6 +3842,9 @@ function WorkspaceMainHeader() {
 
   return (
     <AppHeader
+      backLabel={t("actions.back")}
+      forwardLabel={t("actions.forward")}
+      focusLabel={t("tabs.enterFocusMode")}
       onBack={() => showMessage(t("actions.back"))}
       onForward={() => showMessage(t("actions.forward"))}
       onFocus={() => setFocusMode(true)}
@@ -3836,6 +3852,7 @@ function WorkspaceMainHeader() {
         rightCollapsed ? (
           <div className="flex items-center">
             <AppHeaderAction
+              ref={rightPanelTriggerRef}
               aria-label={t("actions.showSidePanel")}
               tooltip={t("actions.showSidePanel")}
               className="rounded-r-none border-r-0"
@@ -3890,6 +3907,11 @@ function WorkspaceMainHeader() {
         createLabel={t("tabs.create")}
         tabListLabel={t("tabs.list")}
         searchTabsPlaceholder={t("tabs.search")}
+        actionLabels={{
+          close: t("tabs.close"),
+          pin: t("tabs.pin"),
+          unpin: t("tabs.unpin"),
+        }}
         onShiftOpen={(tab) => {
           openInSidePanel(tab);
           if (rightCollapsed) toggleRight();
@@ -3909,10 +3931,12 @@ function MainTabSearchOverlay() {
   const t = useTranslations("workspace");
   const {
     mainTabs,
+    mainSearchReturnValue,
     objectTypes,
     setMainTabs,
     setMainValue,
     setMainSearchOpen,
+    setMainSearchReturnValue,
   } = useWorkspace();
   const [query, setQuery] = React.useState("");
   const deferredQuery = React.useDeferredValue(query);
@@ -3938,7 +3962,13 @@ function MainTabSearchOverlay() {
   function cancel() {
     const next = mainTabs.filter((tab) => tab.id !== MAIN_DRAFT_TAB_ID);
     setMainTabs(next);
-    setMainValue(next[0]?.id ?? "atomic-note");
+    const returnValue =
+      mainSearchReturnValue &&
+      next.some((tab) => tab.id === mainSearchReturnValue)
+        ? mainSearchReturnValue
+        : (next[0]?.id ?? "atomic-note");
+    setMainValue(returnValue);
+    setMainSearchReturnValue(null);
     setMainSearchOpen(false);
   }
 
@@ -3958,6 +3988,7 @@ function MainTabSearchOverlay() {
         : [...withoutDraft, selected];
     });
     setMainValue(selected.id);
+    setMainSearchReturnValue(null);
     setMainSearchOpen(false);
   }
 
@@ -4029,6 +4060,7 @@ function WorkspaceSidePanelHeader() {
     [specialSideTabs, t],
   );
   const {
+    mainValue,
     sideTabs,
     sideValue,
     focusMode,
@@ -4037,6 +4069,15 @@ function WorkspaceSidePanelHeader() {
     setSideSearchOpen,
   } = useWorkspace();
   const { rightCollapsed, toggleRight } = useAppShell();
+  const visibleSpecialItems = React.useMemo(() => {
+    if (mainValue === "page" && sideValue === "graphView") {
+      return specialItems.filter(
+        (item) => item.id === "aiAssistantChat" || item.id === "localSpaceQuery",
+      );
+    }
+
+    return specialItems.filter((item) => item.id !== sideValue);
+  }, [mainValue, sideValue, specialItems]);
 
   if (focusMode) return null;
 
@@ -4105,7 +4146,7 @@ function WorkspaceSidePanelHeader() {
       menuLabel={t("tabs.sidePanelMenu")}
       tabListLabel={t("tabs.sidePanelTabs")}
       closeLabel={t("tabs.close")}
-      specialItems={specialItems}
+      specialItems={visibleSpecialItems}
     />
   );
 }

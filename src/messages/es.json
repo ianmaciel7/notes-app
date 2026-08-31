@@ -241,6 +241,8 @@
     "sidebarCollections": {
       "createObject": "Crear {type}",
       "deleteCollection": "Eliminar colección",
+      "hideCollections": "Ocultar colecciones de {type}",
+      "showCollections": "Mostrar colecciones de {type}",
       "unpinFromType": "Desanclar del tipo de objeto"
     },
     "documentMenu": {
@@ -398,6 +400,7 @@
     "footer": {
       "accountEmail": "Este dispositivo",
       "accountName": "Espacio de trabajo local",
+      "copyLink": "Copiar enlace",
       "copyWorkspaceLink": "Copiar enlace del espacio",
       "currentSpace": "Espacio actual",
       "general": "General",
@@ -409,6 +412,7 @@
       "settings": "Configuración",
       "settingsDescription": "Revisa destinos locales del espacio, recursos e integraciones.",
       "settingsTitle": "Configuración",
+      "shareDescription": "Comparte un enlace a la superficie actual cuando la publicación esté disponible.",
       "shareWorkspace": "Compartir espacio",
       "signOut": "Cerrar sesión",
       "useDarkTheme": "Usar tema oscuro",
@@ -464,12 +468,15 @@
       "close": "Cerrar pestaña",
       "create": "Crear nueva pestaña",
       "createSidePanel": "Nueva pestaña lateral",
+      "enterFocusMode": "Entrar en modo de enfoque",
       "hideSidePanel": "Ocultar panel lateral",
       "keyboardHelp": "↑↓ para navegar　 Esc para cancelar　 ↵ para seleccionar　 ⌘↵ / Ctrl↵ en una nueva pestaña　 ⇧↵ en el panel lateral",
       "list": "Lista de pestañas",
+      "leaveFocusMode": "Salir del modo de enfoque",
       "new": "Nueva pestaña",
       "openInSidePanel": "Abrir en el panel lateral",
       "openedInSidePanel": "{label} abierto en el panel lateral",
+      "pin": "Fijar pestaña",
       "preview": {
         "object": "Objeto",
         "objectType": "Tipo de objeto"
@@ -481,6 +488,7 @@
       "sidePanelMenu": "Abrir menú del panel lateral",
       "sidePanelTabs": "Pestañas del panel lateral",
       "sidePanelSearchPlaceholder": "Buscar contenido y acciones, o pegar desde el portapapeles",
+      "unpin": "Desfijar pestaña",
       "yesterday": "Ayer",
       "initialObjectType": "Tipo de objeto",
       "initialAtomicNotes": "Notas atómicas",
@@ -707,6 +715,7 @@
       "collections": "Colecciones",
       "collectionCreated": "Colección creada.",
       "entryCount": "{count, plural, =0 {# entradas} one {# entrada} other {# entradas}}",
+      "embed": "Incrustar",
       "localActionComplete": "Acción aplicada localmente.",
       "layout": "Diseño",
       "expandSection": "Expandir abiertos recientemente",
@@ -723,6 +732,7 @@
       "importPartial": "Se importaron {accepted}; se omitieron {rejected} archivos incompatibles.",
       "importRejected": "No se importaron archivos compatibles.",
       "moreOptions": "Más opciones",
+      "moreOptionsFor": "Más opciones de {title}",
       "newCollection": "Nueva colección",
       "newCurrentType": "Nuevo {type}",
       "newFromTemplate": "Nuevo desde plantilla",
@@ -751,6 +761,7 @@
       "useSidebarNew": "Usa Nuevo en la barra lateral para elegir otro tipo de objeto.",
       "viewLabel": "Vistas del tipo de objeto",
       "viewSettings": "Configuración de vista general",
+      "wall": "Muro",
       "where": "donde",
       "pinToSidebar": "Fijar en la barra lateral",
       "unpinFromSidebar": "Desfijar de la barra lateral",
@@ -811,6 +822,7 @@
       "alphabetical": "Ordenar alfabéticamente",
       "create": "Crear",
       "description": "Crea una sección personalizada en la barra lateral después de nombrarla.",
+      "iconLabel": "Icono de la sección",
       "namePlaceholder": "Nombre de la sección",
       "noContent": "Sin contenido"
     },
@@ -819,6 +831,7 @@
       "askQuestionTooltip": "Haz preguntas sobre tu espacio de trabajo",
       "documentation": "Documentación",
       "documentationTooltip": "Aprende a usar tu espacio de trabajo",
+      "documentationUrl": "https://docs.capacities.io/",
       "feedback": "Comentarios",
       "feedbackTooltip": "Comparte ideas, comentarios o problemas",
       "getStarted": "Primeros pasos",

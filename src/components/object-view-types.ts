@@ -17,6 +17,13 @@ export type ObjectViewLabels = {
   readonly missingColumn: string;
   readonly moveColumnLeft: (label: string) => string;
   readonly moveColumnRight: (label: string) => string;
+  readonly objectActions?: {
+    readonly deleteObject: string;
+    readonly duplicate: string;
+    readonly export: string;
+    readonly moreOptions: (title: string) => string;
+    readonly pinSidebar: string;
+  };
   readonly openObject: (title: string) => string;
   readonly untitledObject: string;
   readonly wrapColumn: string;

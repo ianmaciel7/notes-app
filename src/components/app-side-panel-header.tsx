@@ -24,6 +24,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { WORKSPACE_RAIL_HEIGHT_PX } from "@/lib/workspace-layout";
 
 const SIDE_TAB_MAX_WIDTH = 160;
 const SIDE_TAB_MIN_WIDTH = 44;
@@ -409,7 +410,11 @@ function AppSidePanelHeader({
         "relative z-30 flex h-[46px] w-full shrink-0 items-center justify-between bg-[var(--side-header-bg-back)] px-1",
         className,
       )}
-      style={{ ...sideHeaderTheme, ...style }}
+      style={{
+        height: WORKSPACE_RAIL_HEIGHT_PX,
+        ...sideHeaderTheme,
+        ...style,
+      }}
       {...props}
     >
       <div className="flex min-w-0 grow flex-col items-center justify-center gap-1">

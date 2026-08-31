@@ -1,5 +1,46 @@
 {
   "capturedAt": "2026-08-28",
+  "localhostImplementationRecaptures": [
+    {
+      "capturedAt": "2026-08-31",
+      "refreshReason": "Post-implementation verification for audit-workspace-component-parity listing, sidebar, header, contextual panel, tab, and projection-card interactions.",
+      "referenceRecapture": "Not recaptured; the existing Capacities bundle still covers the compared semantic states and was not contradicted by the implementation checks.",
+      "localhostScreenshotsPersisted": false,
+      "commands": [
+        {
+          "command": "npx playwright test tests/e2e/workspace-parity.spec.ts -g \"(sidebar object row nested targets|sidebar help and footer utilities|selecting the existing Pages tab|workspace create-tab chooser cancels|workspace focus mode uses localized|workspace tab header state survives reload|closed entity tabs stay closed|tab midpoint|side-panel menu omits|contextual panel hide restores focus|contextual panel surface starts|contextual panel entries|production object-type commands render named outcomes|object-type New disclosure opens options|Novo trigger and lifecycle contract consumers expose browser states|empty Table layout keeps table structure|Novo Page and Table flows keep split actions)\"",
+          "result": "17 passed",
+          "coverage": [
+            "sidebar nested targets and footer utilities",
+            "workspace tab selection, pin/close isolation, create-tab cancel, and focus mode",
+            "contextual panel hide/menu/focus recovery",
+            "object-type search/collapse/menu/filter/sort/group/layout/list/gallery/table/wall/embed controls",
+            "empty table state, split New, durable writes, projection-card menu inspection, and card navigation"
+          ]
+        },
+        {
+          "command": "npx biome lint src/components/object-view-types.ts src/components/object-view-support.tsx src/components/object-view-renderer.tsx src/components/data-view-list-table.tsx src/components/workspace-object-type-view.tsx src/components/workspace-controller.tsx src/components/app-sidebar-overview.tsx src/components/ui/shared-styles.ts tests/e2e/workspace-parity.spec.ts",
+          "result": "passed"
+        },
+        {
+          "command": "node --test tests/rules-compliance-contract.test.mjs tests/workspace-surface-contract.test.mjs",
+          "result": "7 passed"
+        },
+        {
+          "command": "npx tsc --noEmit",
+          "result": "passed"
+        },
+        {
+          "command": "git diff --check",
+          "result": "passed"
+        },
+        {
+          "command": "openspec validate audit-workspace-component-parity --strict",
+          "result": "valid"
+        }
+      ]
+    }
+  ],
   "commands": [
     {
       "command": "node_modules/.bin/playwright.cmd test tests/e2e/workspace-parity.spec.ts --grep 'reduced motion|keyboard|focus'",

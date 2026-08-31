@@ -478,11 +478,25 @@ function ObjectTypeAllControls({
             {t("actions.grid")}
           </DropdownMenuItem>
           <DropdownMenuItem
+            aria-checked={view.presentation.kind === "wall"}
+            onClick={() => onLayoutChange("wall")}
+          >
+            <ObjectTypeToolbarIcon name="grid" className="size-3.5" />
+            {t("objectTypeOverview.wall")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
             aria-checked={view.presentation.kind === "table"}
             onClick={() => onLayoutChange("table")}
           >
             <ObjectTypeToolbarIcon name="caret" className="size-3" />
             {t("objectTypeStudio.objectTypes.table")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            aria-checked={view.presentation.kind === "embed"}
+            onClick={() => onLayoutChange("embed")}
+          >
+            <ObjectTypeToolbarIcon name="all" className="size-3.5" />
+            {t("objectTypeOverview.embed")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -1148,6 +1162,14 @@ function WorkspaceObjectTypeView({
         t("objectTypeOverview.moveColumnLeft", { label }),
       moveColumnRight: (label) =>
         t("objectTypeOverview.moveColumnRight", { label }),
+      objectActions: {
+        deleteObject: t("documentMenu.deleteObject"),
+        duplicate: t("documentMenu.duplicate"),
+        export: t("documentMenu.export"),
+        moreOptions: (title) =>
+          t("objectTypeOverview.moreOptionsFor", { title }),
+        pinSidebar: t("documentMenu.pinSidebar"),
+      },
       openObject: (title) => `${t("lifecycle.task.open")}: ${title}`,
       untitledObject: t("lifecycle.untitled"),
       wrapColumn: t("objectTypeOverview.wrapColumn"),
@@ -1403,49 +1425,53 @@ function WorkspaceObjectTypeView({
         />
       )}
 
-      <ObjectTypeCriteriaRows
-        filterActive={hasUntitledFilter(view.query.filters)}
-        filterOpen={filterOpen}
-        groupOpen={groupOpen}
-        mode={mode}
-        onFilterActiveChange={setUntitledFilter}
-        onFilterOpenChange={setFilterOpen}
-        onGroupOpenChange={setGroupOpen}
-        onGroupingChange={setGrouping}
-        view={view}
-      />
+      {!collapsed && (
+        <>
+          <ObjectTypeCriteriaRows
+            filterActive={hasUntitledFilter(view.query.filters)}
+            filterOpen={filterOpen}
+            groupOpen={groupOpen}
+            mode={mode}
+            onFilterActiveChange={setUntitledFilter}
+            onFilterOpenChange={setFilterOpen}
+            onGroupOpenChange={setGroupOpen}
+            onGroupingChange={setGrouping}
+            view={view}
+          />
 
       <ObjectTypePresentationRows
-        mode={mode}
-        onSmallCardPropertyChange={setSmallCardProperty}
-        structure={structure}
-        view={view}
-      />
+            mode={mode}
+            onSmallCardPropertyChange={setSmallCardProperty}
+            structure={structure}
+            view={view}
+          />
 
-      <div className={workspaceOverviewContentClass}>
-        <ObjectTypeContent
-          collections={collections}
-          createdEntities={createdEntities}
-          filtered={filtered}
-          labels={labels}
-          mode={mode}
-          objectTypeLabels={objectTypeLabels}
-          onCreateObject={createObject}
-          onImport={openImportPicker}
-          onOpen={selectEntity}
-          onPropertyCommit={setWorkspaceEntityPropertyValue}
-          onViewUpdate={(currentView, update) =>
-            updateWorkspaceDataView(currentView.id, update)
-          }
-          onRenameCollection={renameCollection}
-          onRenameQuery={renameQuery}
-          propertyLabels={propertyLabels}
-          queries={queries}
-          structure={structure}
-          structures={structures}
-          view={view}
-        />
-      </div>
+          <div className={workspaceOverviewContentClass}>
+            <ObjectTypeContent
+              collections={collections}
+              createdEntities={createdEntities}
+              filtered={filtered}
+              labels={labels}
+              mode={mode}
+              objectTypeLabels={objectTypeLabels}
+              onCreateObject={createObject}
+              onImport={openImportPicker}
+              onOpen={selectEntity}
+              onPropertyCommit={setWorkspaceEntityPropertyValue}
+              onRenameCollection={renameCollection}
+              onRenameQuery={renameQuery}
+              onViewUpdate={(currentView, update) =>
+                updateWorkspaceDataView(currentView.id, update)
+              }
+              propertyLabels={propertyLabels}
+              queries={queries}
+              structure={structure}
+              structures={structures}
+              view={view}
+            />
+          </div>
+        </>
+      )}
     </section>
   );
 }

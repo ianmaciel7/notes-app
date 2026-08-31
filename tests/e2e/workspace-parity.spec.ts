@@ -321,14 +321,28 @@ async function expectCreatedObjectProjection(
     .click();
   await page.getByRole("tab", { name: "Tudo", exact: true }).click();
   const projection = page
-    .locator('[data-lifecycle-contract="object-projection-row"]')
+    .locator(
+      '[data-lifecycle-contract="object-projection-row"], [data-lifecycle-contract="object-projection-card"]',
+    )
     .filter({ hasText: title })
     .first();
   await expect(projection).toBeVisible();
   await projection.hover();
-  await projection.focus();
-  await expect(projection).toBeFocused();
-  await projection.click();
+  const openProjection = projection
+    .getByRole("button", {
+      name: `Abrir: ${title}`,
+      exact: true,
+    })
+    .first();
+  if ((await openProjection.count()) > 0) {
+    await openProjection.focus();
+    await expect(openProjection).toBeFocused();
+    await openProjection.click();
+  } else {
+    await projection.focus();
+    await expect(projection).toBeFocused();
+    await projection.click();
+  }
   await expect(
     page
       .locator(
@@ -994,14 +1008,14 @@ test("workspace tab header state survives reload", async ({ page }) => {
     "true",
   );
   await quoteWrapper.hover();
-  await quoteWrapper.getByRole("button", { name: "Pin tab" }).click();
+  await quoteWrapper.getByRole("button", { name: "Fixar aba" }).click();
   await expect(
-    quoteWrapper.getByRole("button", { name: "Unpin tab" }),
+    quoteWrapper.getByRole("button", { name: "Desafixar aba" }),
   ).toBeVisible();
 
   const pageWrapper = tabList.locator('[data-tab-id="page"]');
   await pageWrapper.hover();
-  await pageWrapper.getByRole("button", { name: "Close tab" }).click();
+  await pageWrapper.getByRole("button", { name: "Fechar aba" }).click();
 
   await expect
     .poll(async () =>
@@ -1030,7 +1044,7 @@ test("workspace tab header state survives reload", async ({ page }) => {
   await expect(tabList.locator('[data-tab-id="page"]')).toHaveCount(0);
   await quoteWrapper.hover();
   await expect(
-    quoteWrapper.getByRole("button", { name: "Unpin tab" }),
+    quoteWrapper.getByRole("button", { name: "Desafixar aba" }),
   ).toBeVisible();
   expect(errors).toEqual([]);
 });
@@ -1050,7 +1064,7 @@ test("closed entity tabs stay closed after reload", async ({ page }) => {
     "true",
   );
   await entityWrapper.hover();
-  await entityWrapper.getByRole("button", { name: "Close tab" }).click();
+  await entityWrapper.getByRole("button", { name: "Fechar aba" }).click();
   await expect(entityWrapper).toHaveCount(0);
 
   await expect
@@ -2053,6 +2067,24 @@ test("production object-type commands render named outcomes", async ({
     '[data-slot="dropdown-menu-content"][data-open]',
   );
   await expect(layoutMenu).toBeVisible();
+  for (const name of ["Lista", "Grade", "Mural", "Tabela", "Incorporar"]) {
+    await expect(
+      layoutMenu.getByRole("menuitem", { name, exact: true }),
+    ).toBeVisible();
+  }
+  await layoutMenu.getByRole("menuitem", { name: "Mural" }).click();
+  await expect(
+    workspace.locator('[data-slot="object-type-all"]'),
+  ).toHaveAttribute("data-layout", "wall");
+  await workspace.getByRole("button", { name: "Layout", exact: true }).click();
+  await page
+    .locator('[data-slot="dropdown-menu-content"][data-open]')
+    .getByRole("menuitem", { name: "Incorporar" })
+    .click();
+  await expect(
+    workspace.locator('[data-slot="object-type-all"]'),
+  ).toHaveAttribute("data-layout", "embed");
+  await workspace.getByRole("button", { name: "Layout", exact: true }).click();
   await layoutMenu.getByRole("menuitem", { name: "Tabela" }).click();
   await expect(
     workspace.locator('[data-slot="object-type-all"]'),
@@ -3261,6 +3293,32 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
     .first();
   await expect(projectionCard).toBeVisible();
   await expectStableBoxOnHover(projectionCard);
+  const projectionCardMenuButton = projectionCard.getByRole("button", {
+    name: `Mais opções de ${lifecyclePageTitle}`,
+    exact: true,
+  });
+  await projectionCardMenuButton.focus();
+  await expect(projectionCardMenuButton).toBeFocused();
+  const projectionCountBeforeMenu = (await persistedEntities(page)).length;
+  await projectionCardMenuButton.click();
+  const projectionCardMenu = page.locator(
+    '[data-slot="dropdown-menu-content"][data-open]',
+  );
+  await expect(projectionCardMenu).toBeVisible();
+  for (const name of [
+    "Fixar na Barra Lateral",
+    "Exportar",
+    "Duplicar",
+    "Excluir Objeto",
+  ]) {
+    await expect(
+      projectionCardMenu.getByRole("menuitem", { name, exact: true }),
+    ).toBeVisible();
+  }
+  expect(await persistedEntities(page)).toHaveLength(projectionCountBeforeMenu);
+  await page.keyboard.press("Escape");
+  await expect(projectionCardMenu).toBeHidden();
+  await expect(projectionCardMenuButton).toBeFocused();
   const projectionCardButton = projectionCard
     .getByRole("button", {
       name: `Abrir: ${lifecyclePageTitle}`,

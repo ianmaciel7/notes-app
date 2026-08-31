@@ -69,6 +69,7 @@ type AppShellContextValue = {
   leftPanelElementRef: React.RefObject<HTMLDivElement | null>;
   leftOverlayReturnFocusRef: React.RefObject<HTMLElement | null>;
   rightOverlayReturnFocusRef: React.RefObject<HTMLElement | null>;
+  rightPanelTriggerRef: React.RefObject<HTMLButtonElement | null>;
   setLeftCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
   setRightCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
   setLeftOverlayOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -111,6 +112,8 @@ function AppShellProvider({
   const [rightOverlayOpen, setRightOverlayOpen] = React.useState(false);
   const leftOverlayReturnFocusRef = React.useRef<HTMLElement | null>(null);
   const rightOverlayReturnFocusRef = React.useRef<HTMLElement | null>(null);
+  const rightPanelTriggerRef = React.useRef<HTMLButtonElement | null>(null);
+  const autoCollapsedLeftPanelRef = React.useRef(false);
   const [resizingSide, setResizingSide] =
     React.useState<AppShellResizeSide | null>(null);
 
@@ -152,6 +155,9 @@ function AppShellProvider({
 
     setRightCollapsed(true);
     panel.collapse();
+    window.setTimeout(() => {
+      rightPanelTriggerRef.current?.focus({ preventScroll: true });
+    }, 0);
   }, [compactDesktop, rightPanelRef]);
 
   React.useEffect(() => {
@@ -170,6 +176,26 @@ function AppShellProvider({
     if (mobileShell) return;
     setLeftOverlayOpen(false);
   }, [mobileShell]);
+
+  React.useEffect(() => {
+    const panel = leftPanelRef.current;
+    if (!panel) return;
+
+    if (compactDesktop || mobileShell) {
+      if (!panel.isCollapsed()) {
+        autoCollapsedLeftPanelRef.current = true;
+        setLeftCollapsed(true);
+        panel.collapse();
+      }
+      return;
+    }
+
+    if (autoCollapsedLeftPanelRef.current && panel.isCollapsed()) {
+      autoCollapsedLeftPanelRef.current = false;
+      setLeftCollapsed(false);
+      panel.expand();
+    }
+  }, [compactDesktop, leftPanelRef, mobileShell]);
 
   React.useEffect(() => {
     if (compactDesktop || mobileShell) return;
@@ -246,6 +272,7 @@ function AppShellProvider({
       leftPanelElementRef,
       leftOverlayReturnFocusRef,
       rightOverlayReturnFocusRef,
+      rightPanelTriggerRef,
       setLeftCollapsed,
       setRightCollapsed,
       setLeftOverlayOpen,
@@ -397,7 +424,6 @@ function AppShellMain({
     <>
       <ResizablePanel
         id="app-shell-main"
-        defaultSize="55%"
         minSize="10%"
         groupResizeBehavior="preserve-relative-size"
         className={cn(
@@ -642,7 +668,7 @@ function AppShellSidePanelTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { rightCollapsed, toggleRight } = useAppShell();
+  const { rightCollapsed, rightPanelTriggerRef, toggleRight } = useAppShell();
   const t = useTranslations("workspace.shell");
 
   return (
@@ -651,6 +677,7 @@ function AppShellSidePanelTrigger({
       className="absolute right-[26px] top-[15px] z-50"
     >
       <Button
+        ref={rightPanelTriggerRef}
         type="button"
         variant="ghost"
         size="icon-sm"
