@@ -326,7 +326,21 @@ function BlockEditor({
     () => editorAttributes(editable, ariaLabel, locale),
     [ariaLabel, editable, locale],
   );
-  const editorProps = React.useMemo(() => ({ attributes }), [attributes]);
+  const editorProps = React.useMemo(
+    () => ({
+      attributes,
+      handleDOMEvents: {
+        input: (view) => {
+          scheduleCommit({
+            schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+            doc: view.state.doc.toJSON() as BlockEditorDocument["doc"],
+          });
+          return false;
+        },
+      },
+    }),
+    [attributes, scheduleCommit],
+  );
   const extensions = React.useMemo(
     () => [
       StarterKit.configure({
