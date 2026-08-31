@@ -878,13 +878,19 @@ function PageCustomizeControl({
     )
     replace_once(
         path,
-        '''        entity={entity}
+        '''      <ObjectPageHeader
+        entity={entity}
         structure={structure}
-        collectionsControl={''',
-        '''        entity={entity}
+        collectionsControl={
+          <ObjectPageCollections
+            activationRequest={collectionsActivationRequest}''',
+        '''      <ObjectPageHeader
+        entity={entity}
         structure={structure}
         typeActivationRequest={typeActivationRequest}
-        collectionsControl={''',
+        collectionsControl={
+          <ObjectPageCollections
+            activationRequest={collectionsActivationRequest}''',
     )
     replace_once(
         path,
