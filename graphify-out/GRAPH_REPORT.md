@@ -1,7 +1,7 @@
 # Graph Report - notes-app  (2026-08-31)
 
 ## Corpus Check
-- 683 files · ~515,318 words
+- 684 files · ~518,643 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ffa841c4`
+- Built from commit: `57efbd4a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -354,12 +354,12 @@
   tests/workspace-dates-calendar.test.mjs → src/lib/workspace-objects.ts
 - `reduce()` --indirect_call--> `workspaceObjectReducer()`  [INFERRED]
   tests/workspace-objects.test.mjs → src/lib/workspace-objects.ts
-- `linkedSourceBody()` --calls--> `createObjectReferenceMark()`  [EXTRACTED]
-  tests/workspace-related-content.test.mjs → src/lib/workspace-object-links.ts
-- `documentEntity()` --calls--> `blockEditorDocumentFromPlainText()`  [EXTRACTED]
-  tests/workspace-related-content.test.mjs → src/editor/document.ts
-- `page()` --calls--> `blockEditorDocumentFromPlainText()`  [EXTRACTED]
-  tests/workspace-account-spaces.test.mjs → src/editor/document.ts
+- `repositoryWithEntities()` --calls--> `createInitialWorkspaceObjectState()`  [EXTRACTED]
+  tests/workspace-account-spaces.test.mjs → src/lib/workspace-objects.ts
+- `twoSpaceState()` --calls--> `createInitialWorkspaceObjectState()`  [EXTRACTED]
+  tests/workspace-account-spaces.test.mjs → src/lib/workspace-objects.ts
+- `reduce()` --indirect_call--> `workspaceObjectReducer()`  [INFERRED]
+  tests/workspace-trash-lifecycle.test.mjs → src/lib/workspace-objects.ts
 
 ## Import Cycles
 - None detected.
@@ -1479,27 +1479,27 @@ Cohesion: 0.50
 Nodes (4): Requirement: Runtime Structure-backed object creation, Scenario: Creation palette renders built-in and custom Structures, Scenario: Custom Structure object is created and reopened, Scenario: Preset is added through the object-type studio
 
 ## Knowledge Gaps
-- **2097 isolated node(s):** `1. Reproduce and Classify the Current State`, `2. Reconcile Evidence`, `3. Close Verification Gaps`, `4. Handoff`, `SerializedWorkspaceTab` (+2092 more)
+- **2097 isolated node(s):** `ObjectTypeId`, `CreationFlow`, `WorkspaceEntityBase`, `DocumentEntity`, `QuoteEntity` (+2092 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **43 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Work-memory lessons
 
 **Preferred sources** — corroborated by past sessions; start here.
-- `shared-styles.ts` (2× useful, score=1.635407458)
+- `shared-styles.ts` (2× useful, score=1.635381864)
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `cn` to `app-header-icons.tsx`, `field.tsx`, `workspace-content.tsx`, `app-shell.tsx`, `app-sidebar-primary-actions.tsx`, `workspace-object-type-view.tsx`, `app-sidebar.tsx`, `menubar.tsx`, `toggle-group.tsx`, `app-header-tabs.tsx`, `drawer.tsx`, `carousel.tsx`, `chart.tsx`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `block-editor-handle.tsx`, `workspace-controller.tsx`, `attachment.tsx`, `executeQueryDefinition`, `useBufferedTextCommit`, `WorkspaceEntity`, `workspace-content-surface.tsx`, `quick-action-suggestions.tsx`, `utils.ts`, `marker.tsx`, `app-side-panel-header.tsx`, `useWorkspace`, `shared-styles.ts`, `object-view-preview.tsx`, `sidebar.tsx`, `object-view-support.tsx`, `app-sidebar-overview.tsx`, `bubble.tsx`, `workspace-object-links.ts`, `block-editor.tsx`, `slash-command.tsx`, `app-sidebar-source-icon.tsx`?**
-  _High betweenness centrality (0.086) - this node is a cross-community bridge._
+  _High betweenness centrality (0.084) - this node is a cross-community bridge._
 - **Why does `WorkspaceEntity` connect `WorkspaceEntity` to `workspace-import-export.ts`, `workspace-related-content.ts`, `workspace-content.tsx`, `workspace-object-type-view.tsx`, `workspace-domain-identities.ts`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `workspace-controller.tsx`, `workspace-object-views.ts`, `workspace-account-spaces.ts`, `quick-action-suggestions.tsx`, `workspace-property-values.ts`, `quick-action-suggestion-contracts.ts`, `object-view-preview.tsx`, `workspace-objects.ts`, `object-view-support.tsx`, `workspace-object-links.ts`, `workspace-object-storage.ts`, `block-editor.tsx`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Why does `WorkspaceStructure` connect `block-editor.tsx` to `workspace-import-export.ts`, `quick-action-suggestions.tsx`, `workspace-property-values.ts`, `workspace-object-views.ts`, `workspace-object-type-view.tsx`, `workspace-object-storage.ts`, `quick-action-suggestion-contracts.ts`, `workspace-domain-identities.ts`, `workspace-object-types.ts`, `workspace-objects.ts`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `object-view-support.tsx`, `workspace-controller.tsx`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
+  _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `WorkspaceProvider()` (e.g. with `AppSidebarWorkspaceIcon()` and `createInitialWorkspaceObjectState()`) actually correct?**
   _`WorkspaceProvider()` has 3 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `1. Reproduce and Classify the Current State`, `2. Reconcile Evidence`, `3. Close Verification Gaps` to the rest of the system?**
+- **What connects `ObjectTypeId`, `CreationFlow`, `WorkspaceEntityBase` to the rest of the system?**
   _2097 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `cn` be split into smaller, more focused modules?**
   _Cohesion score 0.03138815207780725 - nodes in this community are weakly interconnected._

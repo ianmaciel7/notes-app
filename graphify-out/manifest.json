@@ -1211,12 +1211,12 @@
   },
   "src/messages/en.json": {
     "mtime": 1788170458.8338134,
-    "ast_hash": "eb92fc8e50a516a45dc48b04e3a848e7",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/messages/es.json": {
-    "mtime": 1788170334.3317344,
-    "ast_hash": "a36d59a4cd55cfa98152d11173c2e8f8",
+    "mtime": 1788170490.8969884,
+    "ast_hash": "029488861dcb08eaa97a37f5f5a6b9ce",
     "semantic_hash": ""
   },
   "src/messages/pt-BR.json": {
@@ -4012,6 +4012,11 @@
   "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md": {
     "mtime": 1788170358.521422,
     "ast_hash": "f7d655121a4243c7140b9b84192acce8",
+    "semantic_hash": ""
+  },
+  "src/lib/workspace-task-management.ts": {
+    "mtime": 1788170477.1799283,
+    "ast_hash": "b939b10d09ecca04d5b180c3d373169d",
     "semantic_hash": ""
   }
 }
