@@ -1,8 +1,8 @@
 ## 1. Domain Model
 
-- [ ] 1.1 Add failing tests for number/percent/currency/progress/table-text configurations, bounds, invalid currency, and non-finite values.
-- [ ] 1.2 Implement `NumberPresentation`, validation, cloning, serialization, and migration defaults.
-- [ ] 1.3 Implement raw-value versus display-value formatting/parsing services.
+- [x] 1.1 Add failing tests for number/percent/currency/progress/table-text configurations, bounds, invalid currency, and non-finite values.
+- [x] 1.2 Implement `NumberPresentation`, validation, cloning, serialization, and migration defaults.
+- [x] 1.3 Implement raw-value versus display-value formatting/parsing services.
 
 ## 2. UI Integration
 
