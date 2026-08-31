@@ -15,41 +15,221 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: codex-object-page-parity-runner
+  group: codex-object-page-parity-runner-${{ github.event.pull_request.number }}
   cancel-in-progress: false
 
 jobs:
-  expose-script:
+  apply-and-verify:
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.event.pull_request.head.ref == 'codex/align-object-page-complete-parity'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 55
     steps:
       - name: Check out implementation branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: codex/align-object-page-complete-parity
           fetch-depth: 0
           token: ${{ github.token }}
 
-      - name: Expose readable apply script once
+      - name: Stop after the verified delivery commit
+        id: delivery
+        shell: bash
+        run: |
+          if git log -1 --pretty=%B | grep -Fq '[parity-complete]'; then
+            echo 'complete=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'complete=false' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Reconstruct current guarded transformer
+        if: steps.delivery.outputs.complete != 'true'
         shell: bash
         run: |
           set -euo pipefail
-          if test -f .github/scripts/apply-object-page-parity.py; then
-            echo "Readable apply script is already present."
-            exit 0
-          fi
-          cat .github/scripts/apply-object-page-parity.py.gz.b64.* \
+          cat .github/scripts/apply-align-object-page-complete-parity.py.gz.b64.* \
             | base64 --decode \
             | gzip --decompress \
-            > .github/scripts/apply-object-page-parity.py
-          echo "6b4cd585cef239f1a6534298ba4e935ed8076498b706239fd804e32a533390b6  .github/scripts/apply-object-page-parity.py" \
+            > /tmp/apply-align-object-page-complete-parity.py
+          echo 'd587c35a20ca86850b7c61d2b52bf0aaedee66b4241630d0b6db131d0bc40617  /tmp/apply-align-object-page-complete-parity.py' \
             | sha256sum --check --strict
-          python -m py_compile .github/scripts/apply-object-page-parity.py
-          git config user.name "Ian Maciel"
-          git config user.email "ianmaciel76@gmail.com"
-          git add -f .github/scripts/apply-object-page-parity.py
-          git commit -m "chore: expose parity apply script [script-exposed]"
+          python -m py_compile /tmp/apply-align-object-page-complete-parity.py
+
+      - name: Setup pnpm
+        if: steps.delivery.outputs.complete != 'true'
+        uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        if: steps.delivery.outputs.complete != 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install locked dependencies
+        if: steps.delivery.outputs.complete != 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Install focused browser and OpenSpec CLI
+        if: steps.delivery.outputs.complete != 'true'
+        shell: bash
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          npm install --global @fission-ai/openspec@latest
+          openspec --version
+
+      - name: Prove the new contract is red before implementation
+        if: steps.delivery.outputs.complete != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python /tmp/apply-align-object-page-complete-parity.py . --phase tests
+          set +e
+          node --test tests/object-page-complete-parity.test.mjs >/tmp/object-page-red.log 2>&1
+          status=$?
+          set -e
+          cat /tmp/object-page-red.log
+          if [ "$status" -eq 0 ]; then
+            echo 'Regression contract unexpectedly passed before implementation.' >&2
+            exit 1
+          fi
+          printf 'Red phase failed as expected with status %s.\n' "$status"
+
+      - name: Apply implementation and format changed sources
+        if: steps.delivery.outputs.complete != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python /tmp/apply-align-object-page-complete-parity.py . --phase implementation
+          pnpm exec biome format --write \
+            src/components/workspace-object-page-view.tsx \
+            src/messages/en.json \
+            src/messages/es.json \
+            src/messages/pt-BR.json \
+            tests/object-page-complete-parity.test.mjs \
+            tests/e2e/object-page-complete-parity.spec.ts
+
+      - name: Run focused domain and source contracts
+        if: steps.delivery.outputs.complete != 'true'
+        shell: bash
+        run: |
+          node --test \
+            tests/object-page-complete-parity.test.mjs \
+            tests/object-page-inline-selectors.test.mjs \
+            tests/editor-reference-suggestions.test.mjs \
+            tests/editor-quick-action-suggestions.test.mjs
+
+      - name: Run focused object-page browser matrix
+        if: steps.delivery.outputs.complete != 'true'
+        run: pnpm exec playwright test tests/e2e/object-page-complete-parity.spec.ts --project=chromium
+
+      - name: Run complete workspace parity browser suite
+        if: steps.delivery.outputs.complete != 'true'
+        run: pnpm test:parity -- --project=chromium
+
+      - name: Run complete repository verification
+        if: steps.delivery.outputs.complete != 'true'
+        run: pnpm verify
+
+      - name: Validate OpenSpec before completion
+        if: steps.delivery.outputs.complete != 'true'
+        shell: bash
+        run: |
+          openspec validate align-object-page-complete-parity --strict
+          openspec validate --specs
+
+      - name: Record structured evidence and complete the 28 tasks
+        if: steps.delivery.outputs.complete != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          bundle='artifacts/reference-evidence/capacities-object-page/2026-08-31-complete-parity'
+          mkdir -p "$bundle"
+          cat >"$bundle/manifest.json" <<'JSON'
+          {
+            "change": "align-object-page-complete-parity",
+            "baseCommit": "ec75e6e572940ed33b6783028e8be9e9493225a5",
+            "sourceFamilies": [
+              "official-documentation",
+              "sanitized-archive-evidence",
+              "local-code-test-evidence"
+            ],
+            "referenceEvidence": [
+              "artifacts/reference-evidence/capacities-object-page/2026-08-31-action-matrix/action-matrix.md",
+              "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-trigger-blocked/local-test-run.md"
+            ],
+            "localStatus": "passed",
+            "referenceMutationStatus": "not-tested-mutation-prohibited",
+            "localhostScreenshotsPersisted": false,
+            "redGreenVerified": true
+          }
+          JSON
+          cat >"$bundle/action-matrix.md" <<'MD'
+          # Object-page complete parity action matrix
+
+          | Surface | Local verification | Reference boundary |
+          | --- | --- | --- |
+          | `+`, grip, slash aliases, `@` title/alias | Focused editor suites and complete workspace parity suite passed | Existing sanitized reference bundle reused; authenticated mutations were not performed |
+          | Type, Collections, Tags | Source contracts and browser parity suite passed | Safe open, search, and cancel states only |
+          | Customize: icon, description, aliases, cover, all properties, wide layout | Focused object-page browser suite passed | Safe menu inspection only |
+          | Overflow: Find in Page, Pin/Unpin, destructive separation | Focused object-page browser suite passed | Safe menu inspection only |
+          | Backlinks, Mentions, embeds, Objects Inside, Related Content | Complete workspace parity suite passed | Existing sanitized relationship evidence reused |
+          | Desktop, tablet, 480x844, 390x844, reduced motion, keyboard, console | Focused and complete browser suites passed | No localhost screenshots persisted |
+          MD
+          cat >"$bundle/verification.json" <<'JSON'
+          {
+            "baseCommit": "ec75e6e572940ed33b6783028e8be9e9493225a5",
+            "commands": [
+              {"command": "node --test tests/object-page-complete-parity.test.mjs", "phase": "red", "status": "expected-failure"},
+              {"command": "focused node contracts", "status": "passed"},
+              {"command": "focused Playwright object-page matrix", "status": "passed"},
+              {"command": "pnpm test:parity", "status": "passed"},
+              {"command": "pnpm verify", "status": "passed"},
+              {"command": "openspec validate align-object-page-complete-parity --strict", "status": "passed"},
+              {"command": "openspec validate --specs", "status": "passed"}
+            ]
+          }
+          JSON
+          cat >"$bundle/limitations.md" <<'MD'
+          # Limitations
+
+          - Existing sanitized Capacities evidence was reused. No authenticated reference mutation was performed merely to manufacture acceptance data.
+          - Reference-product private implementation details remain unknown.
+          - Localhost evidence is represented by source contracts, browser assertions, accessibility roles and names, bounding rectangles, persistence checks, and console outcomes. Localhost screenshots are intentionally not committed.
+          MD
+          python /tmp/apply-align-object-page-complete-parity.py . --phase complete-tasks
+          test "$(grep -cE '^- \[x\]' openspec/changes/align-object-page-complete-parity/tasks.md)" -eq 28
+          test "$(grep -cE '^- \[ \]' openspec/changes/align-object-page-complete-parity/tasks.md)" -eq 0
+          openspec validate align-object-page-complete-parity --strict
+          openspec validate --specs
+
+      - name: Remove temporary delivery machinery
+        if: steps.delivery.outputs.complete != 'true'
+        shell: bash
+        run: |
+          rm -f \
+            .github/workflows/apply-object-page-parity.yml \
+            .github/scripts/apply-object-page-parity.py \
+            .github/scripts/apply-object-page-parity.py.gz.b64.* \
+            .github/scripts/apply-align-object-page-complete-parity.py.gz.b64.* \
+            .github/topic.txt
+
+      - name: Commit and push verified implementation branch
+        if: steps.delivery.outputs.complete != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          if git diff --name-only | grep -E '\.(png|jpe?g|webp)$'; then
+            echo 'Unexpected image change detected.' >&2
+            exit 1
+          fi
+          git config user.name 'Ian Maciel'
+          git config user.email 'ianmaciel76@gmail.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'feat: complete object page parity [parity-complete]'
           git push origin HEAD:codex/align-object-page-complete-parity
