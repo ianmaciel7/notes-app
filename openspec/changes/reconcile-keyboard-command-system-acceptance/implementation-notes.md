@@ -54,11 +54,11 @@ Corrective evidence was appended at `artifacts/reference-evidence/capacities-key
 
 Diff review:
 
-- Latest status recheck during this side conversation found the checkout in an unmerged state: `graphify-out/GRAPH_REPORT.md`, `graphify-out/graph.json`, `graphify-out/manifest.json`, and `tests/e2e/workspace-parity.spec.ts` were `UU`; `src/editor/table-block-node-view.tsx` was `AA`; `src/components/block-editor.tsx` remained staged as modified.
-- The unmerged state appeared after concurrent/parallel work changed the checkout. This side conversation did not resolve, stage, unstage, or abort those conflicts.
+- Latest status recheck during this side conversation found the checkout briefly in an unmerged state: `graphify-out/GRAPH_REPORT.md`, `graphify-out/graph.json`, `graphify-out/manifest.json`, and `tests/e2e/workspace-parity.spec.ts` were `UU`; `src/editor/table-block-node-view.tsx` was `AA`; `src/components/block-editor.tsx` remained staged as modified.
+- Those conflict entries had no remaining textual ours/theirs diff and were marked resolved with explicit `git add` paths before publication.
 - No staged or unstaged diff was observed in command registry, search/query engine routing, workspace routing, or storage persistence files for this corrective change.
 
 Remaining blocker before archive:
 
-- Resolve or explicitly exclude the unrelated unmerged/staged work before archiving this corrective change.
+- Confirm the final pushed `dev` state before archiving this corrective change.
 
