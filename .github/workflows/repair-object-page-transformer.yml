@@ -86,6 +86,43 @@ jobs:
           ):
               raise SystemExit('Neither the old nor repaired object-header markers were found.')
 
+          menu_target_old = """'''          <DocumentMoreMenu
+                  onChangeType={() => showMessage(t(\"documentMenu.changeType\"))}
+          '''"""
+          menu_target_new = """'''        menu={
+                  <DocumentMoreMenu
+                    onChangeType={() => showMessage(t(\"documentMenu.changeType\"))}
+                    onCustomize={() => setCustomizeOpen(true)}
+          '''"""
+          menu_replacement_old = """'''          <DocumentMoreMenu
+                  isPinned={isPinned}
+                  onChangeType={() =>
+                    setTypeActivationRequest((current) => current + 1)
+                  }
+          '''"""
+          menu_replacement_new = """'''        menu={
+                  <DocumentMoreMenu
+                    isPinned={isPinned}
+                    onChangeType={() =>
+                      setTypeActivationRequest((current) => current + 1)
+                    }
+                    onCustomize={() => setCustomizeOpen(true)}
+          '''"""
+
+          if menu_target_old in text and menu_replacement_old in text:
+              if text.count(menu_target_old) != 1:
+                  raise SystemExit(
+                      f'Expected one source menu marker, found {text.count(menu_target_old)}'
+                  )
+              if text.count(menu_replacement_old) != 1:
+                  raise SystemExit(
+                      f'Expected one replacement menu marker, found {text.count(menu_replacement_old)}'
+                  )
+              text = text.replace(menu_target_old, menu_target_new, 1)
+              text = text.replace(menu_replacement_old, menu_replacement_new, 1)
+          elif not (menu_target_new in text and menu_replacement_new in text):
+              raise SystemExit('Neither the old nor repaired document-menu markers were found.')
+
           path.write_text(text, encoding='utf-8')
           PY
 
@@ -97,5 +134,5 @@ jobs:
           git config user.name 'Ian Maciel'
           git config user.email 'ianmaciel76@gmail.com'
           git add .github/scripts/apply-object-page-parity.py
-          git commit -m 'fix: disambiguate object page header transformer marker'
+          git commit -m 'fix: disambiguate document menu transformer marker'
           git push origin HEAD:codex/align-object-page-complete-parity
