@@ -54,11 +54,11 @@ Corrective evidence was appended at `artifacts/reference-evidence/capacities-key
 
 Diff review:
 
-- Staged diff currently contains `src/components/block-editor.tsx`, touching editor persistence/focus semantics. This was observed as pre-existing/parallel staged work in this side conversation and was not unstaged.
-- Unstaged working-tree diff after this pass is limited to `src/components/block-editor.tsx`, `src/editor/table-block-node-view.tsx`, and generated `graphify-out/*`.
+- Latest status recheck during this side conversation found the checkout in an unmerged state: `graphify-out/GRAPH_REPORT.md`, `graphify-out/graph.json`, `graphify-out/manifest.json`, and `tests/e2e/workspace-parity.spec.ts` were `UU`; `src/editor/table-block-node-view.tsx` was `AA`; `src/components/block-editor.tsx` remained staged as modified.
+- The unmerged state appeared after concurrent/parallel work changed the checkout. This side conversation did not resolve, stage, unstage, or abort those conflicts.
 - No staged or unstaged diff was observed in command registry, search/query engine routing, workspace routing, or storage persistence files for this corrective change.
 
 Remaining blocker before archive:
 
-- Confirm whether the pre-existing staged `src/components/block-editor.tsx` change should remain staged for the archive/commit boundary.
+- Resolve or explicitly exclude the unrelated unmerged/staged work before archiving this corrective change.
 

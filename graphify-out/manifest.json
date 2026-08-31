@@ -1425,8 +1425,8 @@
     "semantic_hash": ""
   },
   "tests/e2e/workspace-parity.spec.ts": {
-    "mtime": 1788174756.3656816,
-    "ast_hash": "4f4869b316baaf413ff9291d6378f9ba",
+    "mtime": 1788174879.9688196,
+    "ast_hash": "87c1ad526c96b78a0885c4ccc333e15e",
     "semantic_hash": ""
   },
   "src/lib/workspace-layout.ts": {
@@ -1445,8 +1445,8 @@
     "semantic_hash": ""
   },
   "src/components/block-editor.tsx": {
-    "mtime": 1788174721.3205144,
-    "ast_hash": "5c5e126f5a53fa78febd612b47196354",
+    "mtime": 1788174922.8660548,
+    "ast_hash": "94e60f646b6fa18a9fac6ff8b48018fe",
     "semantic_hash": ""
   },
   "src/editor/document.ts": {
@@ -3985,8 +3985,8 @@
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/manifest.json": {
-    "mtime": 1788174663.7036827,
-    "ast_hash": "d77198c0cbaa6ad25b16e22c2c80bd30",
+    "mtime": 1788174777.7759285,
+    "ast_hash": "8c555e515be630b519580630190b436f",
     "semantic_hash": ""
   },
   "tests/keyboard-command-evidence-contract.test.mjs": {
@@ -4010,8 +4010,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md": {
-    "mtime": 1788174730.6607192,
-    "ast_hash": "99dc244c5a35ad6177986350fc279b04",
+    "mtime": 1788174909.599663,
+    "ast_hash": "e382efc92ae13580d6577297cec3976b",
     "semantic_hash": ""
   },
   "src/lib/workspace-task-management.ts": {
@@ -4025,8 +4025,8 @@
     "semantic_hash": ""
   },
   "src/editor/table-block-node-view.tsx": {
-    "mtime": 1788174542.663239,
-    "ast_hash": "7ec642f3248b753d6c14ad5cf662c2fb",
+    "mtime": 1788174879.9664676,
+    "ast_hash": "7cb85e464f9a0c43c7d78c132e0a7a6d",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-object-page/2026-08-31-action-matrix/action-matrix.md": {

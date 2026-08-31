@@ -251,6 +251,16 @@ function BlockEditor({
     value: externalDocument,
     onCommit: onChange,
   });
+  const scheduleEditorCommit = React.useCallback(
+    (currentEditor: NonNullable<ReturnType<typeof useEditor>>) => {
+      if (!currentEditor.isEditable) return;
+      scheduleCommit({
+        schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+        doc: currentEditor.getJSON() as BlockEditorDocument["doc"],
+      });
+    },
+    [scheduleCommit],
+  );
 
   const slashLabelsKey = JSON.stringify(labels.slashMenu);
   const stableSlashLabels = React.useMemo<
@@ -405,13 +415,11 @@ function BlockEditor({
     extensions,
     content: initialContentRef.current,
     editorProps,
-    onUpdate: ({ editor: currentEditor }) => {
-      if (!currentEditor.isEditable) return;
-      scheduleCommit({
-        schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
-        doc: currentEditor.getJSON() as BlockEditorDocument["doc"],
-      });
+    onTransaction: ({ editor: currentEditor, transaction }) => {
+      if (!transaction.docChanged) return;
+      scheduleEditorCommit(currentEditor);
     },
+    onUpdate: ({ editor: currentEditor }) => scheduleEditorCommit(currentEditor),
   });
 
   React.useLayoutEffect(() => {

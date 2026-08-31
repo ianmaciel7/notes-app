@@ -40571,10 +40571,10 @@
       "source_file": "openspec/changes/add-table-formulas/tasks.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "openspec_changes_add_table_formulas_tasks",
       "community": 222,
       "community_name": "add-table-formulas/tasks.md",
-      "norm_label": "add-table-formulas/tasks.md"
+      "norm_label": "add-table-formulas/tasks.md",
+      "id": "openspec_changes_add_table_formulas_tasks"
     },
     {
       "label": "1. Language and AST",
@@ -40582,10 +40582,10 @@
       "source_file": "openspec/changes/add-table-formulas/tasks.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "openspec_changes_add_table_formulas_tasks_1_language_and_ast",
       "community": 222,
       "community_name": "add-table-formulas/tasks.md",
-      "norm_label": "1. language and ast"
+      "norm_label": "1. language and ast",
+      "id": "openspec_changes_add_table_formulas_tasks_1_language_and_ast"
     },
     {
       "label": "2. Evaluation",
@@ -40593,10 +40593,10 @@
       "source_file": "openspec/changes/add-table-formulas/tasks.md",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "openspec_changes_add_table_formulas_tasks_2_evaluation",
       "community": 222,
       "community_name": "add-table-formulas/tasks.md",
-      "norm_label": "2. evaluation"
+      "norm_label": "2. evaluation",
+      "id": "openspec_changes_add_table_formulas_tasks_2_evaluation"
     },
     {
       "label": "3. Structural Integration",
@@ -40604,10 +40604,10 @@
       "source_file": "openspec/changes/add-table-formulas/tasks.md",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "openspec_changes_add_table_formulas_tasks_3_structural_integration",
       "community": 222,
       "community_name": "add-table-formulas/tasks.md",
-      "norm_label": "3. structural integration"
+      "norm_label": "3. structural integration",
+      "id": "openspec_changes_add_table_formulas_tasks_3_structural_integration"
     },
     {
       "label": "4. UI, Persistence, and Export",
@@ -40615,10 +40615,10 @@
       "source_file": "openspec/changes/add-table-formulas/tasks.md",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "openspec_changes_add_table_formulas_tasks_4_ui_persistence_and_export",
       "community": 222,
       "community_name": "add-table-formulas/tasks.md",
-      "norm_label": "4. ui, persistence, and export"
+      "norm_label": "4. ui, persistence, and export",
+      "id": "openspec_changes_add_table_formulas_tasks_4_ui_persistence_and_export"
     },
     {
       "label": "5. Acceptance",
@@ -40626,10 +40626,10 @@
       "source_file": "openspec/changes/add-table-formulas/tasks.md",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "openspec_changes_add_table_formulas_tasks_5_acceptance",
       "community": 222,
       "community_name": "add-table-formulas/tasks.md",
-      "norm_label": "5. acceptance"
+      "norm_label": "5. acceptance",
+      "id": "openspec_changes_add_table_formulas_tasks_5_acceptance"
     },
     {
       "label": "vcs",
@@ -46687,10 +46687,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "reconcile-keyboard-command-system-acceptance/implementation-notes.md"
+      "norm_label": "reconcile-keyboard-command-system-acceptance/implementation-notes.md",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes"
     },
     {
       "label": "2026-08-31 Corrective Pass",
@@ -46698,10 +46698,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_corrective_pass",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "2026-08-31 corrective pass"
+      "norm_label": "2026-08-31 corrective pass",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_corrective_pass"
     },
     {
       "label": "2026-08-31 Side-Conversation Verification Pass",
@@ -46709,10 +46709,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_side_conversation_verification_pass",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "2026-08-31 side-conversation verification pass"
+      "norm_label": "2026-08-31 side-conversation verification pass",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_side_conversation_verification_pass"
     },
     {
       "label": "Acceptance Boundary",
@@ -46720,10 +46720,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_acceptance_boundary",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "acceptance boundary"
+      "norm_label": "acceptance boundary",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_acceptance_boundary"
     },
     {
       "label": "Change Reference Check",
@@ -46731,10 +46731,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_change_reference_check",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "change reference check"
+      "norm_label": "change reference check",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_change_reference_check"
     },
     {
       "label": "Implementation Notes",
@@ -46742,10 +46742,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "implementation notes"
+      "norm_label": "implementation notes",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes"
     },
     {
       "label": "Recorded Failure Reproduction",
@@ -46753,10 +46753,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_recorded_failure_reproduction",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "recorded failure reproduction"
+      "norm_label": "recorded failure reproduction",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_recorded_failure_reproduction"
     },
     {
       "label": "Verification Outcomes",
@@ -46764,10 +46764,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_verification_outcomes",
       "community": 312,
       "community_name": "Implementation Notes",
-      "norm_label": "verification outcomes"
+      "norm_label": "verification outcomes",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_verification_outcomes"
     },
     {
       "label": "acceptance-matrix.md",
@@ -47402,10 +47402,10 @@
       "source_file": "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/limitations.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "artifacts_reference_evidence_capacities_keyboard_command_system_2026_08_31_corrective_acceptance_limitations",
       "community": 317,
       "community_name": "limitations.md",
-      "norm_label": "limitations.md"
+      "norm_label": "limitations.md",
+      "id": "artifacts_reference_evidence_capacities_keyboard_command_system_2026_08_31_corrective_acceptance_limitations"
     },
     {
       "label": "Limitations",
@@ -47413,10 +47413,10 @@
       "source_file": "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/limitations.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "artifacts_reference_evidence_capacities_keyboard_command_system_2026_08_31_corrective_acceptance_limitations_limitations",
       "community": 317,
       "community_name": "limitations.md",
-      "norm_label": "limitations"
+      "norm_label": "limitations",
+      "id": "artifacts_reference_evidence_capacities_keyboard_command_system_2026_08_31_corrective_acceptance_limitations_limitations"
     },
     {
       "label": "workspace-related-content-ui.test.mjs",
@@ -47743,10 +47743,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/tasks.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks",
       "community": 324,
       "community_name": "reconcile-keyboard-command-system-acceptance/tasks.md",
-      "norm_label": "reconcile-keyboard-command-system-acceptance/tasks.md"
+      "norm_label": "reconcile-keyboard-command-system-acceptance/tasks.md",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks"
     },
     {
       "label": "1. Reproduce and Classify the Current State",
@@ -47754,10 +47754,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/tasks.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_1_reproduce_and_classify_the_current_state",
       "community": 324,
       "community_name": "reconcile-keyboard-command-system-acceptance/tasks.md",
-      "norm_label": "1. reproduce and classify the current state"
+      "norm_label": "1. reproduce and classify the current state",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_1_reproduce_and_classify_the_current_state"
     },
     {
       "label": "2. Reconcile Evidence",
@@ -47765,10 +47765,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/tasks.md",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_2_reconcile_evidence",
       "community": 324,
       "community_name": "reconcile-keyboard-command-system-acceptance/tasks.md",
-      "norm_label": "2. reconcile evidence"
+      "norm_label": "2. reconcile evidence",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_2_reconcile_evidence"
     },
     {
       "label": "3. Close Verification Gaps",
@@ -47776,10 +47776,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/tasks.md",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_3_close_verification_gaps",
       "community": 324,
       "community_name": "reconcile-keyboard-command-system-acceptance/tasks.md",
-      "norm_label": "3. close verification gaps"
+      "norm_label": "3. close verification gaps",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_3_close_verification_gaps"
     },
     {
       "label": "4. Handoff",
@@ -47787,10 +47787,10 @@
       "source_file": "openspec/changes/reconcile-keyboard-command-system-acceptance/tasks.md",
       "source_location": "L21",
       "_origin": "ast",
-      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_4_handoff",
       "community": 324,
       "community_name": "reconcile-keyboard-command-system-acceptance/tasks.md",
-      "norm_label": "4. handoff"
+      "norm_label": "4. handoff",
+      "id": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_4_handoff"
     },
     {
       "label": "runtime-object-types.spec.ts",
@@ -62215,7 +62215,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L405",
+      "source_location": "L419",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -62226,7 +62226,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L418",
+      "source_location": "L432",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -62239,7 +62239,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L476",
+      "source_location": "L492",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -87558,7 +87558,7 @@
       "context": "export",
       "confidence": "EXTRACTED",
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L496",
+      "source_location": "L520",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor",
@@ -117620,9 +117620,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "artifacts_reference_evidence_capacities_keyboard_command_system_2026_08_31_corrective_acceptance_limitations",
-      "target": "artifacts_reference_evidence_capacities_keyboard_command_system_2026_08_31_corrective_acceptance_limitations_limitations",
-      "confidence_score": 1.0
+      "target": "artifacts_reference_evidence_capacities_keyboard_command_system_2026_08_31_corrective_acceptance_limitations_limitations"
     },
     {
       "relation": "contains",
@@ -121789,9 +121789,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_add_table_formulas_tasks",
-      "target": "openspec_changes_add_table_formulas_tasks_1_language_and_ast",
-      "confidence_score": 1.0
+      "target": "openspec_changes_add_table_formulas_tasks_1_language_and_ast"
     },
     {
       "relation": "contains",
@@ -121800,9 +121800,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_add_table_formulas_tasks",
-      "target": "openspec_changes_add_table_formulas_tasks_3_structural_integration",
-      "confidence_score": 1.0
+      "target": "openspec_changes_add_table_formulas_tasks_3_structural_integration"
     },
     {
       "relation": "contains",
@@ -121811,9 +121811,9 @@
       "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_add_table_formulas_tasks",
-      "target": "openspec_changes_add_table_formulas_tasks_4_ui_persistence_and_export",
-      "confidence_score": 1.0
+      "target": "openspec_changes_add_table_formulas_tasks_4_ui_persistence_and_export"
     },
     {
       "relation": "contains",
@@ -121822,9 +121822,9 @@
       "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_add_table_formulas_tasks",
-      "target": "openspec_changes_add_table_formulas_tasks_5_acceptance",
-      "confidence_score": 1.0
+      "target": "openspec_changes_add_table_formulas_tasks_5_acceptance"
     },
     {
       "relation": "contains",
@@ -121833,9 +121833,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_add_table_formulas_tasks",
-      "target": "openspec_changes_add_table_formulas_tasks_2_evaluation",
-      "confidence_score": 1.0
+      "target": "openspec_changes_add_table_formulas_tasks_2_evaluation"
     },
     {
       "relation": "contains",
@@ -126123,9 +126123,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes"
     },
     {
       "relation": "contains",
@@ -126134,9 +126134,9 @@
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_recorded_failure_reproduction",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_recorded_failure_reproduction"
     },
     {
       "relation": "contains",
@@ -126145,9 +126145,9 @@
       "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_verification_outcomes",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_verification_outcomes"
     },
     {
       "relation": "contains",
@@ -126156,9 +126156,9 @@
       "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_change_reference_check",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_change_reference_check"
     },
     {
       "relation": "contains",
@@ -126167,9 +126167,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_corrective_pass",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_corrective_pass"
     },
     {
       "relation": "contains",
@@ -126178,9 +126178,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_acceptance_boundary",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_acceptance_boundary"
     },
     {
       "relation": "contains",
@@ -126189,9 +126189,9 @@
       "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_implementation_notes",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_side_conversation_verification_pass",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_implementation_notes_2026_08_31_side_conversation_verification_pass"
     },
     {
       "relation": "contains",
@@ -126200,9 +126200,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_1_reproduce_and_classify_the_current_state",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_1_reproduce_and_classify_the_current_state"
     },
     {
       "relation": "contains",
@@ -126211,9 +126211,9 @@
       "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_3_close_verification_gaps",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_3_close_verification_gaps"
     },
     {
       "relation": "contains",
@@ -126222,9 +126222,9 @@
       "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_4_handoff",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_4_handoff"
     },
     {
       "relation": "contains",
@@ -126233,9 +126233,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks",
-      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_2_reconcile_evidence",
-      "confidence_score": 1.0
+      "target": "openspec_changes_reconcile_keyboard_command_system_acceptance_tasks_2_reconcile_evidence"
     },
     {
       "relation": "contains",
@@ -162343,7 +162343,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "src/components/block-editor.tsx",
-      "source_location": "L342",
+      "source_location": "L356",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_block_editor_blockeditor",
@@ -162459,5 +162459,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a2835b7ec320d8384b4f127ec37f3f67d173c2b6"
+  "built_at_commit": "196ba10ad7143bbc1759e2581fd97a6fe696c078"
 }
