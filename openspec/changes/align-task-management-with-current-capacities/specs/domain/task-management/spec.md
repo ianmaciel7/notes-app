@@ -9,6 +9,10 @@ The built-in Task SHALL support optional Space-scoped status identity, priority 
 - **THEN** it SHALL migrate deterministically to the current status registry and priority model
 - **AND** task identity, dates, links, notes, and occurrence history SHALL remain stable.
 
+#### Scenario: Task metadata is written
+- **WHEN** a Task receives status identity, priority, scheduled date, deadline, context links, tags, notes, completion timestamp, recurrence, or occurrence history values
+- **THEN** each value SHALL validate against the native Task metadata contract before it is persisted.
+
 ### Requirement: Query-backed task dashboards
 
 Inbox, Today, Scheduled, Context, Tags, Open, Completed, All, and user-saved task views SHALL derive from shared query/view infrastructure. Inbox SHALL contain incomplete tasks without scheduled date, deadline, or assigned status. Today SHALL contain tasks scheduled today plus tasks with overdue or due-today deadlines.
@@ -17,6 +21,10 @@ Inbox, Today, Scheduled, Context, Tags, Open, Completed, All, and user-saved tas
 - **WHEN** the task dashboard date is today
 - **THEN** it SHALL include scheduled-today tasks and overdue/due-today deadline tasks
 - **AND** it SHALL not be implemented as only `scheduledDate == today`.
+
+#### Scenario: Task dashboard is opened
+- **WHEN** a native task dashboard is displayed
+- **THEN** its membership SHALL derive from shared query/view definitions rather than a separate task-only store.
 
 #### Scenario: Calendar Today is opened
 - **WHEN** the calendar projects today's tasks

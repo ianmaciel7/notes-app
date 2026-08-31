@@ -3650,8 +3650,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/add-related-content/tasks.md": {
-    "mtime": 1788170596.2504334,
-    "ast_hash": "9bebf7ac37b963635b1336cd8d5225ef",
+    "mtime": 1788170703.9533775,
+    "ast_hash": "637c75a4ee53859ac3142175290e9d22",
     "semantic_hash": ""
   },
   "openspec/changes/add-table-block-editor/.openspec.yaml": {
@@ -3815,8 +3815,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/align-task-management-with-current-capacities/tasks.md": {
-    "mtime": 1788168743.1379533,
-    "ast_hash": "971d5a4f0f1047c7d415c6573f03c36c",
+    "mtime": 1788170682.1097915,
+    "ast_hash": "0c3b72599c8e669853277659e43bddd1",
     "semantic_hash": ""
   },
   "openspec/changes/archive/2026-08-28-add-keyboard-command-system/.openspec.yaml": {
