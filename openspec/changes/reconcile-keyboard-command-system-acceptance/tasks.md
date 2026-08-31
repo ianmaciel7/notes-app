@@ -1,15 +1,15 @@
 ## 1. Reproduce and Classify the Current State
 
-- [ ] 1.1 Reproduce the two failures recorded in the archived implementation notes from a clean `dev` checkout and record whether each still exists.
-- [ ] 1.2 Run formatting, typecheck, lint, build, locale, complexity, and repository verification commands and record exact outcomes without collapsing blocked and failed states.
-- [ ] 1.3 Confirm every change name referenced by the archived proposal, design, tasks, implementation notes, evidence, and current roadmap exists or replace the stale reference in current corrective documentation.
+- [x] 1.1 Reproduce the two failures recorded in the archived implementation notes from a clean `dev` checkout and record whether each still exists.
+- [x] 1.2 Run formatting, typecheck, lint, build, locale, complexity, and repository verification commands and record exact outcomes without collapsing blocked and failed states.
+- [x] 1.3 Confirm every change name referenced by the archived proposal, design, tasks, implementation notes, evidence, and current roadmap exists or replace the stale reference in current corrective documentation.
 
 ## 2. Reconcile Evidence
 
-- [ ] 2.1 Create a post-implementation evidence manifest with separate `local_status` and `reference_status` fields for every command and editor-trigger state.
-- [ ] 2.2 Update the current keyboard-command reference index to link both the immutable archived bundle and the corrective bundle.
-- [ ] 2.3 Record `Mod+P` browser delivery, hover-tone matching, IME, reduced motion, responsive containment, and authenticated-reference limitations truthfully.
-- [ ] 2.4 Add source guards that reject “confirmed parity” when only localhost evidence is present.
+- [x] 2.1 Create a post-implementation evidence manifest with separate `local_status` and `reference_status` fields for every command and editor-trigger state.
+- [x] 2.2 Update the current keyboard-command reference index to link both the immutable archived bundle and the corrective bundle.
+- [x] 2.3 Record `Mod+P` browser delivery, hover-tone matching, IME, reduced motion, responsive containment, and authenticated-reference limitations truthfully.
+- [x] 2.4 Add source guards that reject “confirmed parity” when only localhost evidence is present.
 
 ## 3. Close Verification Gaps
 
