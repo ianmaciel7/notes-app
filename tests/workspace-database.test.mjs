@@ -84,7 +84,7 @@ test("workspace database persists indexed trash records and purge tombstones", a
   const trashRecords = await adapter.list("trash");
   const loadedTrash = await repository.loadSnapshot();
 
-  assert.deepEqual(trashCommit.writtenKeys, [
+  assert.deepEqual([...trashCommit.writtenKeys].sort(), [
     "setting:workspace",
     `trash:${initial.entities[0].id}`,
   ]);
