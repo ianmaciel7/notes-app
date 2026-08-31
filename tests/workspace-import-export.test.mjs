@@ -10,9 +10,11 @@ import {
   createImportJob,
   createNativeWorkspaceExport,
   createWorkspaceExportBundle,
+  defaultImportExportSecurityLimits,
   emptyWorkspaceForImport,
   parseNativeWorkspaceExport,
 } from "../src/lib/workspace-import-export.ts";
+import { DEFAULT_MAX_MEDIA_BYTES } from "../src/lib/workspace-media-storage.ts";
 import {
   createInitialWorkspaceObjectState,
   workspaceObjectReducer,
@@ -105,6 +107,23 @@ test("archive and file security rejects traversal executables and excessive jobs
     "../escape.md",
     "tools/run.ps1",
   ]);
+});
+
+test("import per-file limit uses the shared media size policy", () => {
+  assert.equal(defaultImportExportSecurityLimits.maxFileBytes, 100_000_000);
+  assert.equal(defaultImportExportSecurityLimits.maxFileBytes, DEFAULT_MAX_MEDIA_BYTES);
+
+  const accepted = createImportJob({
+    sources: [{ bytes: 100_000_000, path: "media/at-limit.png", mimeType: "image/png" }],
+  });
+  assert.equal(accepted.state, "previewed");
+  assert.equal(accepted.media.length, 1);
+
+  const rejected = createImportJob({
+    sources: [{ bytes: 100_000_001, path: "media/over-limit.png", mimeType: "image/png" }],
+  });
+  assert.equal(rejected.state, "blocked");
+  assert.equal(rejected.errors[0].code, "job-limit-exceeded");
 });
 
 test("checkpoints allow large jobs to resume after partial failures", () => {
@@ -209,4 +228,41 @@ test("reduced markdown csv and media exports declare non-lossless semantics", ()
   assert.match(bundle.mediaManifest.content, /asset-1/);
   assert.ok(bundle.csv.lossiness[0].includes("flattens"));
   assert.ok(bundle.markdown[0].lossiness[0].includes("readable"));
+});
+
+test("markdown export records advanced block lossiness", () => {
+  let state = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
+    objectTypeId: "page",
+    title: "Advanced",
+    type: "createDocument",
+  });
+  state = workspaceObjectReducer(state, {
+    id: state.entities[0].id,
+    patch: {
+      body: {
+        schemaVersion: 3,
+        doc: {
+          type: "doc",
+          content: [
+            {
+              type: "groupBlock",
+              attrs: { appearance: "card", id: "group-export" },
+              content: [
+                {
+                  type: "paragraph",
+                  attrs: { id: "group-export-child" },
+                  content: [{ type: "text", text: "Grouped" }],
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
+    type: "updateEntity",
+  });
+
+  const bundle = createWorkspaceExportBundle(state);
+  assert.match(bundle.markdown[0].content, /lossiness: group block/);
+  assert.equal(bundle.markdown[0].lossiness.length, 2);
 });

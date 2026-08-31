@@ -406,6 +406,14 @@ function BlockHandle({
     else if (id === "task-list") chain.toggleTaskList().run();
     else if (id === "blockquote") chain.toggleBlockquote().run();
     else if (id === "code-block") chain.toggleCodeBlock().run();
+    else {
+      const command = blockCommands.find((item) => item.id === id);
+      if (!command) return;
+      command.execute(editor, {
+        from: target.pos,
+        to: target.pos + target.nodeSize,
+      });
+    }
     setBlockOptionsOpen(false);
   }
 

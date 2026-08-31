@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import type { WorkspaceStructure } from "@/lib/workspace-object-types";
 import { readWorkspaceEntityProperty } from "@/lib/workspace-object-views";
 import type { WorkspaceEntity } from "@/lib/workspace-objects";
+import { formatNumberValue } from "@/lib/workspace-property-values";
 
 function structureFor(
   entity: WorkspaceEntity,
@@ -77,11 +78,33 @@ function ObjectTypeLabel({
   );
 }
 
-function formatValue(value: unknown): string {
+function propertyDefinitionFor(
+  structure: WorkspaceStructure | undefined,
+  propertyId: string,
+) {
+  return structure?.propertyDefinitions.find(
+    (definition) => definition.id === propertyId,
+  );
+}
+
+function formatValue(
+  value: unknown,
+  structure: WorkspaceStructure | undefined,
+  propertyId: string,
+): string {
   if (value == null || value === "") return "—";
   if (typeof value === "boolean") return value ? "✓" : "—";
-  if (typeof value === "number") return new Intl.NumberFormat().format(value);
-  if (Array.isArray(value)) return value.map(formatValue).join(", ");
+  if (typeof value === "number") {
+    return formatNumberValue(
+      value,
+      propertyDefinitionFor(structure, propertyId)?.numberPresentation,
+    ).text;
+  }
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => formatValue(item, structure, propertyId))
+      .join(", ");
+  }
   if (typeof value !== "string") return JSON.stringify(value);
   const parsed = Date.parse(value);
   return /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(parsed)
@@ -97,9 +120,10 @@ function entityValue(
   labels: ProjectionLabels["objectTypeLabels"],
   structures: readonly WorkspaceStructure[] | undefined,
 ): string {
+  const structure = structureFor(entity, structures);
   return propertyId === "objectTypeId"
     ? typeLabel(entity, labels, structures)
-    : formatValue(readWorkspaceEntityProperty(entity, propertyId));
+    : formatValue(readWorkspaceEntityProperty(entity, propertyId), structure, propertyId);
 }
 
 function entityDescription(entity: WorkspaceEntity): string {

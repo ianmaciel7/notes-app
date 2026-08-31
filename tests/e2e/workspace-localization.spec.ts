@@ -5,24 +5,47 @@ const workspaceStorageKey = "notes-app:workspace-objects:v1";
 const localeCases = [
   {
     addSection: "Add section",
+    addSectionDescription: "Create a custom sidebar section after naming it.",
     addSectionPlaceholder: "Section name",
+    copyWorkspaceLink: "Copy workspace link",
+    documentation: "Documentation",
     help: "Help and resources",
     locale: "en",
     pinned: "Pinned",
+    searchTrash: "Search trash",
+    settings: "Settings",
+    share: "Share",
+    trash: "Trash",
   },
   {
     addSection: "Agregar sección",
+    addSectionDescription:
+      "Crea una sección personalizada en la barra lateral después de nombrarla.",
     addSectionPlaceholder: "Nombre de la sección",
+    copyWorkspaceLink: "Copiar enlace del espacio",
+    documentation: "Documentación",
     help: "Ayuda y recursos",
     locale: "es",
     pinned: "Fijados",
+    searchTrash: "Buscar en la papelera",
+    settings: "Configuración",
+    share: "Compartir",
+    trash: "Papelera",
   },
   {
     addSection: "Adicionar seção",
+    addSectionDescription:
+      "Crie uma seção personalizada na barra lateral depois de nomeá-la.",
     addSectionPlaceholder: "Nome da seção",
+    copyWorkspaceLink: "Copiar link do espaço",
+    documentation: "Documentação",
     help: "Ajuda e recursos",
     locale: "pt-BR",
     pinned: "Fixados",
+    searchTrash: "Buscar na lixeira",
+    settings: "Configurações",
+    share: "Compartilhar",
+    trash: "Lixeira",
   },
 ] as const;
 
@@ -48,6 +71,44 @@ for (const localeCase of localeCases) {
     await addSection.click({ force: true });
     await expect(
       page.getByPlaceholder(localeCase.addSectionPlaceholder, { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(localeCase.addSectionDescription, { exact: true }),
+    ).toBeVisible();
+    await page.keyboard.press("Escape");
+
+    await expect(
+      page.getByRole("link", {
+        name: localeCase.documentation,
+        exact: true,
+      }),
+    ).toHaveAttribute("href", "https://docs.capacities.io/");
+
+    const footer = page.locator('[data-slot="app-sidebar-footer"]');
+    await footer
+      .getByRole("button", { name: localeCase.settings, exact: true })
+      .click();
+    await expect(
+      page.locator('[data-slot="app-sidebar-settings-surface"]'),
+    ).toBeVisible();
+    await page.keyboard.press("Escape");
+
+    await footer
+      .getByRole("button", { name: localeCase.share, exact: true })
+      .click();
+    await expect(
+      page.getByRole("menuitem", {
+        name: localeCase.copyWorkspaceLink,
+        exact: true,
+      }),
+    ).toBeVisible();
+    await page.keyboard.press("Escape");
+
+    await page
+      .getByRole("button", { name: localeCase.trash, exact: true })
+      .click();
+    await expect(
+      page.getByPlaceholder(localeCase.searchTrash, { exact: true }),
     ).toBeVisible();
   });
 }

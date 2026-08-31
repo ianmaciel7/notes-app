@@ -16,11 +16,20 @@ import type {
   BlockEditorProps,
 } from "@/editor/block-editor-contract";
 import {
+  AdvancedCodeBlockAttributes,
   BlockIdExtension,
   BlockLinkMark,
+  ColumnLayoutNode,
+  ColumnNode,
+  GroupBlockNode,
+  HighlightBlockNode,
+  MathBlockNode,
+  ObjectBlockNode,
   ObjectEmbedNode,
   ObjectLinkMark,
   ParagraphSizeExtension,
+  TableBlockNode,
+  UnsupportedBlockNode,
 } from "@/editor/block-editor-extensions";
 import {
   BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
@@ -29,6 +38,7 @@ import {
   isSafeBlockEditorHref,
   normalizeBlockEditorDocument,
 } from "@/editor/document";
+import { createQuickActionSuggestionExtensions } from "@/editor/quick-action-suggestions";
 import { createReferenceSuggestionExtensions } from "@/editor/reference-suggestions";
 import { createSlashCommandExtension } from "@/editor/slash-command";
 import { useBufferedDocumentCommit } from "@/editor/use-buffered-document-commit";
@@ -110,6 +120,9 @@ function BlockEditor({
   value,
   onChange,
   onCreatePageRequest,
+  onCreateObjectReference,
+  onCreateOrReuseTag,
+  onTagReference,
   placeholder,
   ariaLabel,
   className,
@@ -129,12 +142,20 @@ function BlockEditor({
   );
   const initialContentRef = React.useRef(externalDocument.doc);
   const createPageRequestRef = React.useRef(onCreatePageRequest);
+  const createObjectReferenceRef = React.useRef(onCreateObjectReference);
+  const createOrReuseTagRef = React.useRef(onCreateOrReuseTag);
+  const tagReferenceRef = React.useRef(onTagReference);
   const referenceEntitiesRef = React.useRef(referenceEntities);
   const referenceStructuresRef = React.useRef(referenceStructures);
 
   React.useEffect(() => {
     createPageRequestRef.current = onCreatePageRequest;
   }, [onCreatePageRequest]);
+  React.useEffect(() => {
+    createObjectReferenceRef.current = onCreateObjectReference;
+    createOrReuseTagRef.current = onCreateOrReuseTag;
+    tagReferenceRef.current = onTagReference;
+  }, [onCreateObjectReference, onCreateOrReuseTag, onTagReference]);
   React.useEffect(() => {
     referenceEntitiesRef.current = referenceEntities;
     referenceStructuresRef.current = referenceStructures;
@@ -166,6 +187,16 @@ function BlockEditor({
       alphabeticalList:
         parsedLabels.alphabeticalList || t("slashMenu.alphabeticalList"),
       romanList: parsedLabels.romanList || t("slashMenu.romanList"),
+      tableBlock: parsedLabels.tableBlock || t("slashMenu.tableBlock"),
+      columns: parsedLabels.columns || t("slashMenu.columns"),
+      emojiText: parsedLabels.emojiText || t("slashMenu.emojiText"),
+      group: parsedLabels.group || t("slashMenu.group"),
+      highlight: parsedLabels.highlight || t("slashMenu.highlight"),
+      math: parsedLabels.math || t("slashMenu.math"),
+      mermaid: parsedLabels.mermaid || t("slashMenu.mermaid"),
+      objectEmbed: parsedLabels.objectEmbed || t("slashMenu.objectEmbed"),
+      objectInline: parsedLabels.objectInline || t("slashMenu.objectInline"),
+      toggle: parsedLabels.toggle || t("slashMenu.toggle"),
     } as BlockEditorLabels["slashMenu"];
   }, [slashLabelsKey, t]);
   const handleCreatePageRequest = React.useCallback((title: string) => {
@@ -187,6 +218,22 @@ function BlockEditor({
         structures: referenceStructures,
       }),
     [referenceEntities, referenceStructures],
+  );
+  const quickActionSuggestionExtensions = React.useMemo(
+    () =>
+      createQuickActionSuggestionExtensions({
+        blockLabels: stableSlashLabels,
+        createTagLabel: "Create tag",
+        getEntities: () => referenceEntitiesRef.current,
+        getStructures: () => referenceStructuresRef.current,
+        onCreateObjectReference: (objectTypeId, title) =>
+          createObjectReferenceRef.current?.(objectTypeId, title) ?? null,
+        onCreateOrReuseTag: (label) =>
+          createOrReuseTagRef.current?.(label) ?? null,
+        onTagReference: (tagId) => tagReferenceRef.current?.(tagId),
+        tagTitle: "Tags",
+      }),
+    [stableSlashLabels],
   );
   const blockCommands = React.useMemo(
     () => createBlockCommandCatalog(stableSlashLabels),
@@ -215,8 +262,17 @@ function BlockEditor({
       ObjectLinkMark,
       BlockLinkMark,
       ObjectEmbedNode,
+      HighlightBlockNode,
+      MathBlockNode,
+      ColumnNode,
+      ColumnLayoutNode,
+      GroupBlockNode,
+      ObjectBlockNode,
+      TableBlockNode,
+      UnsupportedBlockNode,
       BlockIdExtension,
       ParagraphSizeExtension,
+      AdvancedCodeBlockAttributes,
       TaskList,
       TaskItem.configure({
         nested: true,
@@ -231,10 +287,12 @@ function BlockEditor({
       }),
       Markdown,
       slashCommandExtension,
+      ...quickActionSuggestionExtensions,
       ...referenceSuggestionExtensions,
     ],
     [
       placeholder,
+      quickActionSuggestionExtensions,
       referenceSuggestionExtensions,
       slashCommandExtension,
       taskCheckedLabel,

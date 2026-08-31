@@ -18,6 +18,8 @@ test("suggestion trigger definitions keep one owner per Capacities-style token",
       ["[[", "object-reference", 40],
       ["((", "block-reference", 40],
       ["/", "slash-command", 20],
+      ["+", "plus-quick-action", 20],
+      ["#", "tag-reference", 20],
       ["@", "object-reference", 20],
     ],
   );
@@ -48,8 +50,23 @@ test("trigger arbitration resolves valid text boundaries and overlapping tokens"
     range: { from: 6, to: 13 },
     token: "((",
   });
+  assert.deepEqual(resolveSuggestionTrigger({ textBeforeCursor: "Add +page" }), {
+    owner: "plus-quick-action",
+    query: "page",
+    range: { from: 4, to: 9 },
+    token: "+",
+  });
+  assert.deepEqual(resolveSuggestionTrigger({ textBeforeCursor: "Tag #Curio" }), {
+    owner: "tag-reference",
+    query: "Curio",
+    range: { from: 4, to: 10 },
+    token: "#",
+  });
   assert.equal(resolveSuggestionTrigger({ textBeforeCursor: "Already [[@" }), null);
   assert.equal(resolveSuggestionTrigger({ textBeforeCursor: "email@domain" }), null);
+  assert.equal(resolveSuggestionTrigger({ textBeforeCursor: "word+page" }), null);
+  assert.equal(resolveSuggestionTrigger({ textBeforeCursor: "https://x.test/#tag" }), null);
+  assert.equal(resolveSuggestionTrigger({ textBeforeCursor: "# " }), null);
 });
 
 test("trigger arbitration blocks unsupported nodes, marks, selections, and IME composition", () => {

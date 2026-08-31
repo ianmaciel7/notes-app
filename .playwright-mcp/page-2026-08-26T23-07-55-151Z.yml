@@ -1,0 +1,19 @@
+- generic [ref=f7e1]:
+  - generic [ref=f7e2]:
+    - text: Título
+    - generic [ref=f7e3]:
+      - banner [ref=f7e4]:
+        - button "Abrir navegação" [ref=f7e5]
+        - button "Abrir painel lateral" [ref=f7e6]
+      - generic [ref=f7e10]:
+        - generic [ref=f7e11]:
+          - generic [ref=f7e12]:
+            - generic [ref=f7e13]:
+              - button "Citação" [ref=f7e14]
+              - button "Coleções" [ref=f7e19]
+            - button "Mais opções" [ref=f7e22]
+          - textbox "Título" [ref=f7e23]
+          - textbox "Etiquetas" [ref=f7e27]
+        - button "Recolher editor" [ref=f7e29]:
+          - generic [ref=f7e30]: −
+  - button "Open Next.js Dev Tools" [ref=f7e36] [cursor=pointer]

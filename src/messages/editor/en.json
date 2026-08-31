@@ -41,10 +41,20 @@
     "orderedList": "Numerical list",
     "romanList": "Roman list",
     "taskList": "Tasks",
+    "tableBlock": "Table",
     "select": "to select",
     "blockquote": "Quote block",
     "codeBlock": "Code",
+    "columns": "Columns",
+    "emojiText": "Emoji text",
+    "group": "Group",
+    "highlight": "Highlight",
     "horizontalRule": "Horizontal rule",
+    "math": "Math",
+    "mermaid": "Mermaid diagram",
+    "objectEmbed": "Object embed",
+    "objectInline": "Inline object",
+    "toggle": "Toggle",
     "title": "Create a block"
   }
 }

@@ -1,12 +1,17 @@
 import {
+  BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
   type BlockEditorDocument,
   type BlockEditorNode,
   blockEditorDocumentFromMarkdown,
   blockEditorDocumentFromPlainText,
   blockEditorDocumentToMarkdown,
   blockEditorDocumentToPlainText,
+  documentHasAdvancedMarkdownLossiness,
 } from "../editor/document.ts";
-import type { MediaAsset } from "./workspace-media-storage.ts";
+import {
+  DEFAULT_MAX_MEDIA_BYTES,
+  type MediaAsset,
+} from "./workspace-media-storage.ts";
 import {
   parseWorkspaceObjectSnapshot,
   toWorkspaceObjectSnapshot,
@@ -180,7 +185,7 @@ const defaultImportExportSecurityLimits: ImportExportSecurityLimits = {
     ".vbs",
   ],
   maxArchiveDepth: 8,
-  maxFileBytes: 50 * 1024 * 1024,
+  maxFileBytes: DEFAULT_MAX_MEDIA_BYTES,
   maxFiles: 1000,
   maxJobBytes: 250 * 1024 * 1024,
 };
@@ -404,7 +409,10 @@ function documentWithResolvedLinks(
     };
   });
   return {
-    document: { doc: { content, type: "doc" }, schemaVersion: 2 },
+    document: {
+      doc: { content, type: "doc" },
+      schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    },
     missingExternalIds: Array.from(missing),
   };
 }
@@ -834,12 +842,13 @@ function parseNativeWorkspaceExport(value: unknown):
 }
 
 function reducedMarkdownForEntity(entity: WorkspaceEntity): ReducedExportFile {
-  const body =
-    entity.kind === "document" || entity.kind === "quote"
-      ? blockEditorDocumentToMarkdown(entity.body)
-      : "body" in entity && typeof entity.body === "string"
-        ? entity.body
-        : "";
+  const documentBody =
+    entity.kind === "document" || entity.kind === "quote" ? entity.body : null;
+  const body = documentBody
+    ? blockEditorDocumentToMarkdown(documentBody)
+    : "body" in entity && typeof entity.body === "string"
+      ? entity.body
+      : "";
   const metadata = [
     "---",
     `id: ${entity.id}`,
@@ -852,6 +861,11 @@ function reducedMarkdownForEntity(entity: WorkspaceEntity): ReducedExportFile {
     content: `${metadata}# ${entity.title}\n\n${body}`.trimEnd(),
     lossiness: [
       "Markdown export is readable but does not preserve all workspace views, typed value semantics, or media bytes.",
+      ...(documentBody && documentHasAdvancedMarkdownLossiness(documentBody)
+        ? [
+            "Advanced block layouts, groups, interactive embeds, and transclusions are exported in a reduced readable form.",
+          ]
+        : []),
     ],
     mimeType: "text/markdown",
     path: `${entity.id}.md`,

@@ -22,6 +22,15 @@ For any requested repository change (feature, fix, refactor, behavior change, ar
 6. Archive when complete
    - Use `openspec-archive-change` once implementation and validation are complete.
 
+## Capacities parity source confirmation
+- Before proposing or applying any Capacities parity change, re-check the dated baseline in `docs/references/capacities-reference-baseline-2026-08-31.md`.
+- Confirm the relevant official documentation pages or machine-readable indexes for the affected product area before implementation.
+- Reuse matching sanitized reference bundles under `docs/references/`, `artifacts/reference-evidence/`, or `artifacts/capacities-reference/` before recapturing external UI.
+- Label every parity claim as `official-documentation`, `authenticated-observation`, `sanitized-archive-evidence`, `local-code-test-evidence`, `inference`, or `unknown`.
+- Treat private Capacities algorithms, storage contracts, request bodies, exact private headers, and unsigned archive reconstruction as `unknown` unless independently documented.
+- Do not copy cookies, authorization headers, signed URLs, raw authenticated HTML, private object content, account identifiers, or complete third-party bundles into repository artifacts.
+- If current official indexes cannot be fetched in the working environment, record the blocked fetch as a limitation and do not present stale cached content as freshly confirmed.
+
 ## Artifact path resilience
 - Tests and tooling may inspect OpenSpec artifacts, but they must not assume a completed change still lives under `openspec/changes/<change>`.
 - When reading change artifacts by name, resolve the active path first, then fall back to the newest matching archive path under `openspec/changes/archive/*-<change>`.

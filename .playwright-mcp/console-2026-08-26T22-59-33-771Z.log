@@ -1,0 +1,49 @@
+[   -4709ms] [WARNING] If you are interested in working with us, feel free to text us: team@capacities.io @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[   -4701ms] [INFO] Capacities v1.68.2; none none; Windows v10; Chrome v152.0.0.0 (WebKit v537.36); Desktop (Browser); 26/08/2026, 19:59:29 @ https://app.capacities.io/useDiagnostics59846.js:0
+[   -2819ms] [WARNING] loading all queries @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[   -2818ms] [WARNING] loading all queries @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[   -2818ms] [WARNING] loading all queries @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[   -2818ms] [WARNING] loading all queries @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[   -2818ms] [WARNING] loading all queries @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[   -2817ms] [WARNING] loading all queries @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[   -3450ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[   -3396ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[   -3379ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[   -3335ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[   -3329ms] [ERROR] 4 spaces not part of user loading! @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:534
+[   -2897ms] [WARNING] no lastUpdated and not space init. needs fixing immediately. @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:367
+[   -2445ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[   -2206ms] [WARNING] loadContext: no backlink index found, should not happen! vdaskjnvdjkn @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:361
+[   -2196ms] [WARNING] loadContext: no backlink index found, should not happen! vdaskjnvdjkn @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:361
+[   -1937ms] [WARNING] loadContext: no backlink index found, should not happen! vdaskjnvdjkn @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:361
+[   -1559ms] [WARNING] loadContext: no backlink index found, should not happen! vdaskjnvdjkn @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:361
+[   -1559ms] [WARNING] loadContext: no backlink index found, should not happen! vdaskjnvdjkn @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:361
+[     204ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[    7885ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[   10190ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[  202574ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[  205196ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[  217342ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[  220201ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[  426195ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[  485964ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[  846542ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[  905764ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 1096159ms] [WARNING] [worker-sql] slow query (2307ms): select * from "kvs" where "key" = ? @ https://app.capacities.io/assets/worker-sql-BO_gT8t6.js:551
+[ 1101227ms] [WARNING] [worker-sql] slow query (2559ms): select * from "kvs" where "key" = ? @ https://app.capacities.io/assets/worker-sql-BO_gT8t6.js:551
+[ 1506184ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 1565792ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 1926143ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 1985698ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 2346231ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 2405855ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 2510747ms] [WARNING] [worker-sql] slow query (2439ms): select * from "kvs" where "key" = ? @ https://app.capacities.io/assets/worker-sql-BO_gT8t6.js:551
+[ 2510760ms] [WARNING] [worker-sql] slow query (2486ms): select * from "kvs" where "key" = ? @ https://app.capacities.io/assets/worker-sql-BO_gT8t6.js:551
+[ 2766134ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 2825716ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 3023132ms] [WARNING] [worker-sql] slow query (2871ms): select * from "kvs" where "key" = ? @ https://app.capacities.io/assets/worker-sql-BO_gT8t6.js:551
+[ 3023162ms] [WARNING] [worker-sql] slow query (2936ms): select * from "kvs" where "key" = ? @ https://app.capacities.io/assets/worker-sql-BO_gT8t6.js:551
+[ 3186145ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 3245693ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 3606174ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[ 3665826ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199

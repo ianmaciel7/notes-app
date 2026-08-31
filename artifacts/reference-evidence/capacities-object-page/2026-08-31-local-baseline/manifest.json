@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "localhost",
+    "url": "http://localhost:3000/pt-BR",
+    "route": "http://localhost:3000/pt-BR/4d0215ae-79d6-46bd-840f-8144ec5a84fb/df5fb424-5e86-44ef-8f9b-3c0ecf3f0bb9",
+    "productSurface": "object-page"
+  },
+  "capturedAt": "2026-08-31T00:00:00-03:00",
+  "viewport": {
+    "width": 1294,
+    "height": 912,
+    "deviceScaleFactor": 1
+  },
+  "surface": {
+    "component": "workspace-object-page-view",
+    "semanticSelection": "isolated local Page object created through Novo -> Pagina",
+    "selectedRoute": "/pt-BR/4d0215ae-79d6-46bd-840f-8144ec5a84fb/df5fb424-5e86-44ef-8f9b-3c0ecf3f0bb9"
+  },
+  "semanticState": {
+    "activeTitle": "Object page parity baseline",
+    "objectTypeId": "page",
+    "entityCount": 1,
+    "structureCount": 13
+  },
+  "persistedState": {
+    "sidebar": "expanded desktop sidebar at 288px",
+    "contextualPanel": "hidden/collapsed; side-panel rect width is 0 at x=1294",
+    "storageScope": "ephemeral Playwright browser context; user browser profile not mutated"
+  },
+  "interactions": [
+    "HTTP availability",
+    "headless route load without seeded state",
+    "isolated local Page creation",
+    "object-page baseline geometry",
+    "document containment",
+    "console collection"
+  ],
+  "artifacts": [
+    {
+      "stateId": "local-object-page-baseline",
+      "kind": "summary",
+      "path": "local-baseline.md"
+    }
+  ],
+  "provenance": "localhost Playwright read-only measurement plus isolated local fixture creation against the running dev server",
+  "confidence": "confirmed-localhost-only",
+  "redactions": [
+    "ephemeral generated object id",
+    "full console stack traces"
+  ],
+  "freshness": "valid for branch dev at HEAD e051c16 on 2026-08-31 with localhost:3000 owned by PID 12184",
+  "limitations": [
+    "the in-app browser did not expose a claimable user tab, so the user's existing localStorage-backed object route was not inspected",
+    "a new headless browser without seeded state redirected the supplied object URL to the workspace root",
+    "this bundle does not replace authenticated Capacities reference evidence",
+    "localhost emitted missing-message console errors that must be tracked as a baseline failure before clean parity can be claimed",
+    "the Windows process command line for PID 12184 could not be read due access restrictions"
+  ],
+  "refreshReason": "Task 1.1 required a current checkout, server, route, viewport, semantic Page state, sidebar state, contextual-panel state, and scroll containment baseline before implementation."
+}

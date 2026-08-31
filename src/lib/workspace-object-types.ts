@@ -77,6 +77,40 @@ export type PropertyLabelOption = {
 
 export type PropertyDefinitionOwnership = "default" | "normal" | "system";
 
+export type NumberPresentationColor =
+  | "blue"
+  | "gray"
+  | "green"
+  | "orange"
+  | "purple"
+  | "red";
+
+export type NumberPresentation =
+  | {
+      readonly type: "number";
+      readonly fixedDecimals?: number;
+    }
+  | {
+      readonly type: "percent";
+      readonly fixedDecimals?: number;
+    }
+  | {
+      readonly type: "currency";
+      readonly currency: string;
+      readonly fixedDecimals?: number;
+    }
+  | {
+      readonly type: "progress";
+      readonly color: NumberPresentationColor;
+      readonly fixedDecimals?: number;
+      readonly steps: number;
+    };
+
+export type TableCellNumberPresentation =
+  | NumberPresentation
+  | { readonly type: "none" }
+  | { readonly type: "text" };
+
 export type PropertyDefinition = {
   readonly id: string;
   readonly name: string;
@@ -88,6 +122,7 @@ export type PropertyDefinition = {
   readonly iconName?: ObjectIconName;
   readonly fixedTargetObjectIds?: readonly string[];
   readonly inversePropertyDefinitionId?: string;
+  readonly numberPresentation?: NumberPresentation;
   readonly options?: readonly PropertyLabelOption[];
   readonly targetStructureIds?: readonly StructureId[];
 };
@@ -97,6 +132,7 @@ export type StructurePresentationView = "gallery" | "list" | "table" | "wall";
 export type StructurePresentation = {
   readonly defaultView: StructurePresentationView;
   readonly availableViews: readonly StructurePresentationView[];
+  readonly smallCardVisiblePropertyIds?: readonly string[];
 };
 
 export type WorkspaceStructure = {
@@ -261,6 +297,15 @@ const propertyDefinitionOwnerships = [
   "system",
 ] as const satisfies readonly PropertyDefinitionOwnership[];
 
+const numberPresentationColors = [
+  "blue",
+  "gray",
+  "green",
+  "orange",
+  "purple",
+  "red",
+] as const satisfies readonly NumberPresentationColor[];
+
 const presentationViews = [
   "gallery",
   "list",
@@ -398,6 +443,13 @@ function clonePropertyDefinition(
           inversePropertyDefinitionId: definition.inversePropertyDefinitionId,
         }
       : {}),
+    ...(definition.valueType === "number"
+      ? {
+          numberPresentation: cloneNumberPresentation(
+            definition.numberPresentation,
+          ),
+        }
+      : {}),
     ...(definition.options
       ? { options: definition.options.map((option) => ({ ...option })) }
       : {}),
@@ -413,6 +465,13 @@ function clonePresentation(
   return {
     availableViews: [...presentation.availableViews],
     defaultView: presentation.defaultView,
+    ...(presentation.smallCardVisiblePropertyIds
+      ? {
+          smallCardVisiblePropertyIds: [
+            ...presentation.smallCardVisiblePropertyIds,
+          ],
+        }
+      : {}),
   };
 }
 
@@ -630,18 +689,22 @@ function validatePresentation(
       "Structure presentation must be an object.",
     );
   }
-  const { availableViews, defaultView } = value;
+  const { availableViews, defaultView, smallCardVisiblePropertyIds } = value;
   const normalizedViews = Array.isArray(availableViews)
     ? availableViews.map(normalizePresentationView)
     : [];
   const normalizedDefaultView = normalizePresentationView(defaultView);
+  const validSmallCardProperties =
+    smallCardVisiblePropertyIds === undefined ||
+    hasUniqueNonEmptyStrings(smallCardVisiblePropertyIds);
   if (
     !Array.isArray(availableViews) ||
     availableViews.length === 0 ||
     normalizedViews.some((view) => view === null) ||
     new Set(normalizedViews).size !== normalizedViews.length ||
     normalizedDefaultView === null ||
-    !normalizedViews.includes(normalizedDefaultView)
+    !normalizedViews.includes(normalizedDefaultView) ||
+    !validSmallCardProperties
   ) {
     return failure(
       "invalid-presentation",
@@ -651,6 +714,13 @@ function validatePresentation(
   return ok({
     availableViews: normalizedViews as StructurePresentationView[],
     defaultView: normalizedDefaultView,
+    ...(smallCardVisiblePropertyIds === undefined
+      ? {}
+      : {
+          smallCardVisiblePropertyIds: [
+            ...(smallCardVisiblePropertyIds as readonly string[]),
+          ],
+        }),
   });
 }
 
@@ -685,6 +755,141 @@ function validateLabelOptions(
   return true;
 }
 
+const DEFAULT_NUMBER_PRESENTATION: NumberPresentation = { type: "number" };
+
+function isIntegerInRange(value: unknown, min: number, max: number): boolean {
+  return (
+    typeof value === "number" &&
+    Number.isInteger(value) &&
+    value >= min &&
+    value <= max
+  );
+}
+
+function hasValidFixedDecimals(value: unknown): boolean {
+  return value === undefined || isIntegerInRange(value, 0, 6);
+}
+
+function isSupportedCurrencyCode(value: unknown): value is string {
+  if (typeof value !== "string" || !/^[A-Z]{3}$/.test(value)) return false;
+  try {
+    new Intl.NumberFormat("en-US", {
+      currency: value,
+      style: "currency",
+    }).format(1);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function isNumberPresentationColor(
+  value: unknown,
+): value is NumberPresentationColor {
+  return (
+    typeof value === "string" &&
+    numberPresentationColors.includes(value as NumberPresentationColor)
+  );
+}
+
+export function cloneNumberPresentation(
+  presentation: NumberPresentation | undefined,
+): NumberPresentation {
+  if (!presentation) return { ...DEFAULT_NUMBER_PRESENTATION };
+  switch (presentation.type) {
+    case "currency":
+      return {
+        currency: presentation.currency,
+        ...(presentation.fixedDecimals === undefined
+          ? {}
+          : { fixedDecimals: presentation.fixedDecimals }),
+        type: "currency",
+      };
+    case "percent":
+      return {
+        ...(presentation.fixedDecimals === undefined
+          ? {}
+          : { fixedDecimals: presentation.fixedDecimals }),
+        type: "percent",
+      };
+    case "progress":
+      return {
+        color: presentation.color,
+        ...(presentation.fixedDecimals === undefined
+          ? {}
+          : { fixedDecimals: presentation.fixedDecimals }),
+        steps: presentation.steps,
+        type: "progress",
+      };
+    case "number":
+    default:
+      return {
+        ...(presentation.fixedDecimals === undefined
+          ? {}
+          : { fixedDecimals: presentation.fixedDecimals }),
+        type: "number",
+      };
+  }
+}
+
+export function validateNumberPresentation(
+  value: unknown,
+  options: { readonly allowText?: boolean } = {},
+): DomainResult<TableCellNumberPresentation> {
+  if (!isRecord(value) || typeof value.type !== "string") {
+    return failure(
+      "invalid-property-definition",
+      "Number presentation must be an object with a supported type.",
+    );
+  }
+  if (options.allowText && (value.type === "none" || value.type === "text")) {
+    return ok({ type: value.type });
+  }
+  if (
+    (value.type === "number" || value.type === "percent") &&
+    hasValidFixedDecimals(value.fixedDecimals)
+  ) {
+    return ok({
+      ...(value.fixedDecimals === undefined
+        ? {}
+        : { fixedDecimals: value.fixedDecimals }),
+      type: value.type,
+    });
+  }
+  if (
+    value.type === "currency" &&
+    isSupportedCurrencyCode(value.currency) &&
+    hasValidFixedDecimals(value.fixedDecimals)
+  ) {
+    return ok({
+      currency: value.currency,
+      ...(value.fixedDecimals === undefined
+        ? {}
+        : { fixedDecimals: value.fixedDecimals }),
+      type: "currency",
+    });
+  }
+  if (
+    value.type === "progress" &&
+    isIntegerInRange(value.steps, 1, 1000) &&
+    isNumberPresentationColor(value.color) &&
+    hasValidFixedDecimals(value.fixedDecimals)
+  ) {
+    return ok({
+      color: value.color,
+      ...(value.fixedDecimals === undefined
+        ? {}
+        : { fixedDecimals: value.fixedDecimals }),
+      steps: value.steps,
+      type: "progress",
+    });
+  }
+  return failure(
+    "invalid-property-definition",
+    "Number presentation contains unsupported formatting settings.",
+  );
+}
+
 type PropertyDefinitionFields = {
   readonly description: unknown;
   readonly fixedTargetObjectIds: unknown;
@@ -694,6 +899,7 @@ type PropertyDefinitionFields = {
   readonly multiple: unknown;
   readonly name: unknown;
   readonly normalizedOwnership: unknown;
+  readonly numberPresentation: unknown;
   readonly options: unknown;
   readonly targetStructureIds: unknown;
   readonly valueType: unknown;
@@ -712,6 +918,7 @@ function readPropertyDefinitionFields(
     multiple: value.multiple,
     name: value.name,
     normalizedOwnership: value.ownership ?? "normal",
+    numberPresentation: value.numberPresentation,
     options: value.options,
     targetStructureIds: value.targetStructureIds,
     valueType: value.valueType,
@@ -824,6 +1031,30 @@ function validatePropertyReferenceFields(
   return ok(undefined);
 }
 
+function validatePropertyNumberPresentation(
+  fields: PropertyDefinitionFields,
+): DomainResult<NumberPresentation> {
+  if (fields.numberPresentation !== undefined && fields.valueType !== "number") {
+    return failure(
+      "invalid-property-definition",
+      "Only number properties may define number presentation settings.",
+    );
+  }
+  if (fields.valueType !== "number") return ok(DEFAULT_NUMBER_PRESENTATION);
+  if (fields.numberPresentation === undefined) {
+    return ok(DEFAULT_NUMBER_PRESENTATION);
+  }
+  const validation = validateNumberPresentation(fields.numberPresentation);
+  if (!validation.ok) return validation;
+  if (validation.value.type === "none" || validation.value.type === "text") {
+    return failure(
+      "invalid-property-definition",
+      "Text number presentation is only allowed for table cells.",
+    );
+  }
+  return ok(validation.value);
+}
+
 function cloneValidatedPropertyDefinition(
   fields: PropertyDefinitionFields,
 ): PropertyDefinition {
@@ -834,6 +1065,7 @@ function cloneValidatedPropertyDefinition(
   const fixedTargetObjectIds = fields.fixedTargetObjectIds as
     | readonly string[]
     | undefined;
+  const numberPresentation = validatePropertyNumberPresentation(fields);
   return {
     ...(fields.description !== undefined
       ? { description: fields.description as string }
@@ -854,6 +1086,9 @@ function cloneValidatedPropertyDefinition(
     id: (fields.id as string).trim(),
     multiple: fields.multiple as boolean,
     name: (fields.name as string).trim(),
+    ...(numberPresentation.ok && fields.valueType === "number"
+      ? { numberPresentation: cloneNumberPresentation(numberPresentation.value) }
+      : {}),
     ownership: fields.normalizedOwnership as PropertyDefinitionOwnership,
     ...(options ? { options: options.map((option) => ({ ...option })) } : {}),
     ...(targetStructureIds
@@ -1106,6 +1341,8 @@ export function validatePropertyDefinition(
   if (!collectionValidation.ok) return collectionValidation;
   const referenceValidation = validatePropertyReferenceFields(fields);
   if (!referenceValidation.ok) return referenceValidation;
+  const numberPresentation = validatePropertyNumberPresentation(fields);
+  if (!numberPresentation.ok) return numberPresentation;
   return ok(cloneValidatedPropertyDefinition(fields));
 }
 

@@ -84,6 +84,7 @@ import { cn } from "@/lib/utils";
 import {
   createWorkspaceCommandRuntime,
   projectWorkspaceCommands,
+  projectWorkspaceShortcutCatalog,
   routeWorkspaceShortcut,
 } from "@/lib/workspace-command-registry";
 import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
@@ -93,6 +94,7 @@ import {
   createMediaUrlRegistry,
   garbageCollectMediaAssets,
   type MediaStorageAdapter,
+  type MediaStorageError,
   type MediaUrlRegistry,
   readMediaAssetBlob,
   writeMediaAsset,
@@ -191,6 +193,14 @@ function createSpaceId(name: string, existingIds: Iterable<string>) {
     suffix += 1;
   }
   return id;
+}
+
+function normalizeWorkspaceTagTitle(value: string) {
+  return value
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase();
 }
 
 function parseWorkspaceSpacesStorage(
@@ -680,6 +690,29 @@ function getMediaUrlRegistry(): MediaUrlRegistry {
   return browserMediaUrlRegistry;
 }
 
+function formatByteLimit(bytes: number, locale: string): string {
+  return new Intl.NumberFormat(locale).format(bytes);
+}
+
+function mediaStorageErrorMessage(
+  error: MediaStorageError,
+  t: ReturnType<typeof useTranslations<"workspace">>,
+  locale: string,
+): string {
+  if (error.code === "file-size-limit-exceeded") {
+    if (error.limitSource === "operational-limit" && error.limitBytes) {
+      return t("lifecycle.errors.media-operational-limit-exceeded", {
+        limit: formatByteLimit(error.limitBytes, locale),
+      });
+    }
+    return t("lifecycle.errors.media-file-too-large");
+  }
+  if (error.code === "quota-exceeded") {
+    return t("lifecycle.errors.media-quota-exceeded");
+  }
+  return t("lifecycle.errors.media-storage-failed");
+}
+
 function parsePinnedCollectionId(
   value: string,
 ): ParsedCollectionPinnedId | null {
@@ -943,6 +976,9 @@ type WorkspaceContextValue = {
   sideSearchOpen: boolean;
   mainSearchOpen: boolean;
   commandPaletteOpen: boolean;
+  extendedSearchOpen: boolean;
+  findInPageOpen: boolean;
+  shortcutBrowserOpen: boolean;
   activeAction: AppSidebarPrimaryNavigationAction | undefined;
   activeEntityId: string | null;
   pinnedEntities: AppSidebarPinnedEntity[];
@@ -969,6 +1005,9 @@ type WorkspaceContextValue = {
   setSideSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMainSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCommandPaletteOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setExtendedSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setFindInPageOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setShortcutBrowserOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveAction: React.Dispatch<
     React.SetStateAction<AppSidebarPrimaryNavigationAction | undefined>
   >;
@@ -1002,7 +1041,14 @@ type WorkspaceContextValue = {
     objectTypeId: string,
     objectTypeLabel?: string,
   ) => void;
+  createWorkspaceObjectReference: (
+    objectTypeId: string,
+    title: string,
+  ) => { readonly id: string; readonly label: string } | null;
   createWorkspaceTag: (title: string) => string;
+  createOrReuseWorkspaceTag: (
+    title: string,
+  ) => { readonly id: string; readonly label: string } | null;
   createWorkspaceEntityFromPreset: (presetId: string) => void;
   createOrAppendDailyNote: (
     date: string,
@@ -1065,6 +1111,8 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     rightPanelRef,
     setRightCollapsed,
     setRightOverlayOpen,
+    toggleLeft,
+    toggleRight,
   } = useAppShell();
   const [mainTabs, setMainTabs] = React.useState<AppHeaderTab[]>([]);
   const [mainValue, setMainValue] = React.useState("");
@@ -1074,6 +1122,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [sideSearchOpen, setSideSearchOpen] = React.useState(false);
   const [mainSearchOpen, setMainSearchOpen] = React.useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = React.useState(false);
+  const [extendedSearchOpen, setExtendedSearchOpen] = React.useState(false);
+  const [findInPageOpen, setFindInPageOpen] = React.useState(false);
+  const [shortcutBrowserOpen, setShortcutBrowserOpen] = React.useState(false);
   const [activeAction, setActiveAction] = React.useState<
     AppSidebarPrimaryNavigationAction | undefined
   >(undefined);
@@ -1749,44 +1800,6 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     setActiveEntityId(workspaceObjects.activeEntityId);
   }, [tabStorageReady, workspaceObjects.activeEntityId]);
 
-  React.useEffect(() => {
-    const platform: ShortcutPlatform =
-      navigator.platform.toLocaleLowerCase().includes("mac") ? "mac" : "windows";
-    const runtime = createWorkspaceCommandRuntime({
-      locale,
-      t,
-      actions: {
-        openPalette: () => setCommandPaletteOpen(true),
-      },
-      state: {},
-    });
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const routed = routeWorkspaceShortcut({
-        runtime,
-        platform,
-        event,
-        claims: [
-          {
-            id: "workspace.focusMode",
-            priority: "global",
-            shortcuts: ["Mod+Shift+M"],
-            run: () => setFocusMode((current) => !current),
-          },
-          {
-            id: "workspace.openPalette",
-            priority: "global",
-            shortcuts: ["Mod+K", "Mod+P"],
-            commandId: "workspace.openPalette",
-          },
-        ],
-      });
-      if (routed.accepted) return;
-    };
-
-    window.addEventListener("keydown", handleKeyDown, { capture: true });
-    return () => window.removeEventListener("keydown", handleKeyDown, { capture: true });
-  }, [locale, t]);
-
   const ensureMainTab = React.useCallback((tab: AppHeaderTab) => {
     setMainTabs((current) =>
       current.some((item) => item.id === tab.id) ? current : [...current, tab],
@@ -2089,6 +2102,26 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [showMessage, t, workspaceObjects.structures],
   );
 
+  const createWorkspaceObjectReference = React.useCallback(
+    (objectTypeId: string, title: string) => {
+      const label = title.trim();
+      const flow = getCreationFlow(objectTypeId, workspaceObjects.structures);
+      if (!label || !flow || flow === "file" || flow === "url") {
+        showMessage(t("lifecycle.errors.unsupported-object-type"));
+        return null;
+      }
+      const id = `created-${objectTypeId}-${workspaceObjects.nextId}`;
+      dispatchWorkspaceObjects({
+        type: "createEditorObjectReference",
+        id,
+        objectTypeId,
+        title: label,
+      });
+      return { id, label };
+    },
+    [showMessage, t, workspaceObjects.nextId, workspaceObjects.structures],
+  );
+
   const createWorkspaceTag = React.useCallback(
     (title: string) => {
       const id = `created-tag-${workspaceObjects.nextId}`;
@@ -2096,6 +2129,26 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       return id;
     },
     [workspaceObjects.nextId],
+  );
+
+  const createOrReuseWorkspaceTag = React.useCallback(
+    (title: string) => {
+      const label = title.trim();
+      if (!label) return null;
+      const normalized = normalizeWorkspaceTagTitle(label);
+      const existing = workspaceObjects.entities.find(
+        (entity) =>
+          entity.kind === "tag" &&
+          normalizeWorkspaceTagTitle(entity.title || entity.id) === normalized,
+      );
+      if (existing) {
+        return { id: existing.id, label: existing.title.trim() || existing.id };
+      }
+      const id = `created-tag-${workspaceObjects.nextId}`;
+      dispatchWorkspaceObjects({ type: "createTag", id, title: label });
+      return { id, label };
+    },
+    [workspaceObjects.entities, workspaceObjects.nextId],
   );
 
   const createWorkspaceEntityFromPreset = React.useCallback(
@@ -2134,6 +2187,152 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const openTodayFromCommand = React.useCallback(() => {
+    const formatter = new Intl.DateTimeFormat("en-CA", {
+      day: "2-digit",
+      month: "2-digit",
+      timeZone: "America/Sao_Paulo",
+      year: "numeric",
+    });
+    createOrAppendDailyNote(formatter.format(new Date()));
+  }, [createOrAppendDailyNote]);
+
+  const closeCurrentMainTab = React.useCallback(() => {
+    setMainTabs((current) => {
+      if (current.length <= 1) return current;
+      const index = Math.max(
+        current.findIndex((tab) => tab.id === mainValue),
+        0,
+      );
+      const activeTab = current[index];
+      if (!activeTab || activeTab.pinned) {
+        showMessage(t("tabs.pinnedCloseBlocked"));
+        return current;
+      }
+      const next = current.filter((tab) => tab.id !== activeTab.id);
+      const fallback = next[index] ?? next[index - 1] ?? next[0];
+      if (fallback) setMainValue(fallback.id);
+      return next;
+    });
+  }, [mainValue, showMessage, t]);
+
+  const toggleWorkspaceTheme = React.useCallback(() => {
+    document.documentElement.classList.toggle("dark");
+  }, []);
+
+  React.useEffect(() => {
+    const platform: ShortcutPlatform =
+      navigator.platform.toLocaleLowerCase().includes("mac") ? "mac" : "windows";
+    const structures = selectCreatableStructures(workspaceObjects.structures);
+    const runtime = createWorkspaceCommandRuntime({
+      locale,
+      t,
+      actions: {
+        openPalette: () => setCommandPaletteOpen(true),
+        openNewContent: () => createWorkspaceEntity("page", t("objectTypeStudio.objectTypes.page")),
+        openExtendedSearch: () => setExtendedSearchOpen(true),
+        openFindInPage: () => setFindInPageOpen(true),
+        openShortcuts: () => setShortcutBrowserOpen(true),
+        focusSidebarSearch: () => setSideSearchOpen(true),
+        openSettings: () => showMessage(t("footer.settings")),
+        navigateHome: () => {
+          setActiveAction(undefined);
+          selectEntity("page");
+        },
+        navigateBack: () => showMessage(t("actions.back")),
+        navigateForward: () => showMessage(t("actions.forward")),
+        navigateToday: openTodayFromCommand,
+        openExplore: () => {
+          setActiveAction("explore");
+          setActiveEntityId(null);
+          setMainValue("primary-action:explore");
+        },
+        toggleSidebar: toggleLeft,
+        toggleSidePanel: toggleRight,
+        toggleFocusMode: () => setFocusMode((current) => !current),
+        toggleTheme: toggleWorkspaceTheme,
+        closeCurrentTab: closeCurrentMainTab,
+        createTask: () =>
+          createWorkspaceEntity("task", t("objectTypeStudio.objectTypes.task")),
+        setCalendarView: (view) => {
+          const keyByView = {
+            day: "commands.calendarDay.label",
+            month: "commands.calendarMonth.label",
+            "three-day": "commands.calendarThreeDay.label",
+            week: "commands.calendarWeek.label",
+          } as const;
+          showMessage(t(keyByView[view]));
+        },
+        moveCalendar: (direction) => {
+          const keyByDirection = {
+            next: "commands.calendarNext.label",
+            previous: "commands.calendarPrevious.label",
+          } as const;
+          showMessage(t(keyByDirection[direction]));
+        },
+        createObject: createWorkspaceEntity,
+      },
+      state: {
+        canNavigateToday: true,
+        canUseExtendedSearch: true,
+        canFindInPage: Boolean(activeEntityId),
+        canOpenSettings: true,
+        canToggleTheme: true,
+        canToggleTabsBar: false,
+        canCloseCurrentTab:
+          mainTabs.length > 1 &&
+          Boolean(mainTabs.find((tab) => tab.id === mainValue && !tab.pinned)),
+        canCreateTask: structures.some((structure) => structure.id === "task"),
+        calendarActive: activeAction === "calendar",
+        structures: structures.map((structure) => ({
+          enabled: true,
+          id: structure.id,
+          label: structure.singularName,
+        })),
+      },
+    });
+    const commands = projectWorkspaceCommands(runtime);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      routeWorkspaceShortcut({
+        runtime,
+        platform,
+        event,
+        claims: commands.flatMap((command) =>
+          command.shortcuts.length > 0
+            ? [
+                {
+                  id: command.id,
+                  priority: command.category === "calendar" ? "contextual" : "global",
+                  shortcuts: command.shortcuts,
+                  commandId: command.id,
+                },
+              ]
+            : [],
+        ),
+      });
+    };
+
+    window.addEventListener("keydown", handleKeyDown, { capture: true });
+    return () =>
+      window.removeEventListener("keydown", handleKeyDown, { capture: true });
+  }, [
+    activeAction,
+    activeEntityId,
+    closeCurrentMainTab,
+    createWorkspaceEntity,
+    locale,
+    mainTabs,
+    mainValue,
+    openTodayFromCommand,
+    selectEntity,
+    showMessage,
+    t,
+    toggleLeft,
+    toggleRight,
+    toggleWorkspaceTheme,
+    workspaceObjects.structures,
+  ]);
+
   const cancelWorkspaceDraft = React.useCallback(() => {
     dispatchWorkspaceObjects({ type: "cancelDraft" });
   }, []);
@@ -2166,7 +2365,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         { blob: file, fileName: file.name, mimeType: file.type },
       ).then((result) => {
         if (!result.ok) {
-          showMessage(t("lifecycle.errors.media-storage-failed"));
+          showMessage(mediaStorageErrorMessage(result.error, t, locale));
           return;
         }
         dispatchWorkspaceObjects({
@@ -2181,7 +2380,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         });
       });
     },
-    [showMessage, t, workspaceObjects.draft?.objectTypeId],
+    [locale, showMessage, t, workspaceObjects.draft?.objectTypeId],
   );
 
   const importWorkspaceFiles = React.useCallback(
@@ -2194,6 +2393,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
       let accepted = 0;
       let rejected = 0;
+      let firstMediaError: MediaStorageError | null = null;
       for (const file of files) {
         let text = "";
         if (flow !== "file") {
@@ -2226,6 +2426,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
             { blob: file, fileName: file.name, mimeType: file.type },
           );
           if (!result.ok) {
+            firstMediaError ??= result.error;
             rejected += 1;
             continue;
           }
@@ -2263,11 +2464,13 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         showMessage(
           t("objectTypeOverview.importComplete", { count: accepted }),
         );
+      } else if (firstMediaError) {
+        showMessage(mediaStorageErrorMessage(firstMediaError, t, locale));
       } else {
         showMessage(t("objectTypeOverview.importRejected"));
       }
     },
-    [showMessage, t, workspaceObjects.structures],
+    [locale, showMessage, t, workspaceObjects.structures],
   );
 
   const updateWorkspaceEntity = React.useCallback(
@@ -2281,7 +2484,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           { blob: file, fileName: file.name, mimeType: file.type },
         ).then((result) => {
           if (!result.ok) {
-            showMessage(t("lifecycle.errors.media-storage-failed"));
+            showMessage(mediaStorageErrorMessage(result.error, t, locale));
             return;
           }
           dispatchWorkspaceObjects({
@@ -2303,7 +2506,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       }
       dispatchWorkspaceObjects({ type: "updateEntity", id, patch });
     },
-    [showMessage, t, workspaceObjects.entities],
+    [locale, showMessage, t, workspaceObjects.entities],
   );
 
   const setWorkspaceEntityPropertyValue = React.useCallback(
@@ -2481,6 +2684,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       sideSearchOpen,
       mainSearchOpen,
       commandPaletteOpen,
+      extendedSearchOpen,
+      findInPageOpen,
+      shortcutBrowserOpen,
       activeAction,
       activeEntityId,
       pinnedEntities,
@@ -2507,6 +2713,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setSideSearchOpen,
       setMainSearchOpen,
       setCommandPaletteOpen,
+      setExtendedSearchOpen,
+      setFindInPageOpen,
+      setShortcutBrowserOpen,
       setActiveAction,
       setActiveEntityId,
       setPinnedEntities,
@@ -2519,7 +2728,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       updateWorkspaceStructure,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
+      createWorkspaceObjectReference,
       createWorkspaceTag,
+      createOrReuseWorkspaceTag,
       createWorkspaceEntityFromPreset,
       createOrAppendDailyNote,
       createWorkspacePage,
@@ -2549,6 +2760,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       sideSearchOpen,
       mainSearchOpen,
       commandPaletteOpen,
+      extendedSearchOpen,
+      findInPageOpen,
+      shortcutBrowserOpen,
       sideTabs,
       sideValue,
       activeAction,
@@ -2573,7 +2787,9 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       updateWorkspaceStructure,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
+      createWorkspaceObjectReference,
       createWorkspaceTag,
+      createOrReuseWorkspaceTag,
       createWorkspaceEntityFromPreset,
       createOrAppendDailyNote,
       createWorkspacePage,

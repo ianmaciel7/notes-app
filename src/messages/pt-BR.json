@@ -285,10 +285,18 @@
     "footer": {
       "accountEmail": "Este dispositivo",
       "accountName": "Espaço de trabalho local",
+      "copyWorkspaceLink": "Copiar link do espaço",
+      "currentSpace": "Espaço atual",
+      "general": "Geral",
+      "integrations": "Integrações",
       "plan": "Pro",
       "objectTypes": "Tipos de objeto",
       "profile": "Perfil pessoal",
+      "resources": "Recursos",
       "settings": "Configurações",
+      "settingsDescription": "Revise destinos locais da workspace, do espaço, de recursos e integrações.",
+      "settingsTitle": "Configurações",
+      "shareWorkspace": "Compartilhar espaço",
       "signOut": "Sair",
       "useDarkTheme": "Usar tema escuro",
       "useLightTheme": "Usar tema claro"
@@ -482,6 +490,9 @@
       "errors": {
         "incompatible-file": "Escolha um arquivo compatível com este tipo de objeto.",
         "invalid-url": "Digite uma URL válida para este tipo de objeto.",
+        "media-file-too-large": "Escolha um arquivo de até 100 MB.",
+        "media-operational-limit-exceeded": "Escolha um arquivo dentro deste limite do Notes App: {limit} bytes.",
+        "media-quota-exceeded": "O armazenamento do navegador está cheio. Libere espaço e tente novamente.",
         "media-storage-failed": "Não foi possível salvar o arquivo localmente. Tente um arquivo menor ou libere armazenamento do navegador.",
         "referenced-object": "Este objeto não pode ser excluído enquanto houver relações que apontam para ele.",
         "required-title": "Digite o título da tarefa.",
@@ -653,6 +664,7 @@
       "manual": "Ordenar manualmente",
       "alphabetical": "Ordenar alfabeticamente",
       "create": "Criar",
+      "description": "Crie uma seção personalizada na barra lateral depois de nomeá-la.",
       "namePlaceholder": "Nome da seção",
       "noContent": "Nenhum conteúdo"
     },
@@ -668,7 +680,10 @@
       "whatsNew": "Novidades"
     },
     "sidebarUtilities": {
-      "trash": "Lixeira"
+      "emptyTrash": "Esvaziar lixeira",
+      "searchTrash": "Buscar na lixeira",
+      "trash": "Lixeira",
+      "trashDescription": "Objetos locais excluídos aparecem aqui antes da remoção permanente."
     }
   }
 }

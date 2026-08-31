@@ -6,12 +6,15 @@ import {
   type DatePropertyValue,
   normalizeDatePropertyValue,
 } from "./workspace-dates-calendar.ts";
-import type {
-  DomainResult,
-  PropertyDefinition,
-  PropertyValueType,
-  StructureDomainError,
-  WorkspaceStructure,
+import {
+  validateNumberPresentation,
+  type DomainResult,
+  type NumberPresentation,
+  type PropertyDefinition,
+  type PropertyValueType,
+  type StructureDomainError,
+  type TableCellNumberPresentation,
+  type WorkspaceStructure,
 } from "./workspace-object-types.ts";
 import type { WorkspaceEntity } from "./workspace-objects.ts";
 
@@ -79,6 +82,27 @@ type DefaultPropertyAdapter = (
   value: WorkspacePropertyValue,
 ) => WorkspaceEntity;
 
+type NumberExportMode = "display" | "raw";
+
+type FormattedNumberProgress = {
+  readonly color: Extract<
+    NumberPresentation,
+    { readonly type: "progress" }
+  >["color"];
+  readonly max: number;
+  readonly percent: number;
+  readonly text: string;
+  readonly value: number;
+};
+
+export type FormattedNumberValue = {
+  readonly diagnostics: readonly string[];
+  readonly presentation: NumberPresentation;
+  readonly progress?: FormattedNumberProgress;
+  readonly rawValue: number;
+  readonly text: string;
+};
+
 function ok<T>(value: T): DomainResult<T> {
   return { ok: true, value };
 }
@@ -97,6 +121,175 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isIsoDate(value: string): boolean {
   return Number.isFinite(Date.parse(value));
+}
+
+function fixedFractionDigits(
+  fixedDecimals: number | undefined,
+): Intl.NumberFormatOptions {
+  return fixedDecimals === undefined
+    ? {}
+    : {
+        maximumFractionDigits: fixedDecimals,
+        minimumFractionDigits: fixedDecimals,
+      };
+}
+
+function normalizeNumberPresentationForDisplay(
+  presentation: NumberPresentation | TableCellNumberPresentation | undefined,
+): {
+  readonly diagnostics: readonly string[];
+  readonly presentation: NumberPresentation;
+} {
+  if (!presentation) return { diagnostics: [], presentation: { type: "number" } };
+  const validation = validateNumberPresentation(presentation, {
+    allowText: true,
+  });
+  if (!validation.ok) {
+    return {
+      diagnostics: [validation.error.code],
+      presentation: { type: "number" },
+    };
+  }
+  if (validation.value.type === "none" || validation.value.type === "text") {
+    return { diagnostics: [], presentation: { type: "number" } };
+  }
+  return { diagnostics: [], presentation: validation.value };
+}
+
+function formatFiniteNumber(
+  value: number,
+  locale: string | undefined,
+  options: Intl.NumberFormatOptions,
+): string {
+  try {
+    return new Intl.NumberFormat(locale, options).format(value);
+  } catch {
+    return String(value);
+  }
+}
+
+function localeSeparators(locale: string | undefined): {
+  readonly decimal: string;
+  readonly group: string;
+} {
+  const parts = new Intl.NumberFormat(locale).formatToParts(12345.6);
+  return {
+    decimal: parts.find((part) => part.type === "decimal")?.value ?? ".",
+    group: parts.find((part) => part.type === "group")?.value ?? ",",
+  };
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+export function formatNumberValue(
+  rawValue: number,
+  presentation?: NumberPresentation | TableCellNumberPresentation,
+  locale?: string,
+): FormattedNumberValue {
+  const normalized = normalizeNumberPresentationForDisplay(presentation);
+  const diagnostics = [...normalized.diagnostics];
+  if (!Number.isFinite(rawValue)) {
+    return {
+      diagnostics: [...diagnostics, "invalid-property-value"],
+      presentation: normalized.presentation,
+      rawValue,
+      text: "",
+    };
+  }
+  const fixedDigits = fixedFractionDigits(normalized.presentation.fixedDecimals);
+  switch (normalized.presentation.type) {
+    case "currency":
+      return {
+        diagnostics,
+        presentation: normalized.presentation,
+        rawValue,
+        text: formatFiniteNumber(rawValue, locale, {
+          ...fixedDigits,
+          currency: normalized.presentation.currency,
+          style: "currency",
+        }),
+      };
+    case "percent":
+      return {
+        diagnostics,
+        presentation: normalized.presentation,
+        rawValue,
+        text: formatFiniteNumber(rawValue, locale, {
+          ...fixedDigits,
+          style: "percent",
+        }),
+      };
+    case "progress": {
+      const max = normalized.presentation.steps;
+      const value = Math.min(Math.max(rawValue, 0), max);
+      const text = `${formatFiniteNumber(value, locale, fixedDigits)} / ${formatFiniteNumber(
+        max,
+        locale,
+        fixedDigits,
+      )}`;
+      return {
+        diagnostics,
+        presentation: normalized.presentation,
+        progress: {
+          color: normalized.presentation.color,
+          max,
+          percent: (value / max) * 100,
+          text,
+          value,
+        },
+        rawValue,
+        text,
+      };
+    }
+    case "number":
+    default:
+      return {
+        diagnostics,
+        presentation: normalized.presentation,
+        rawValue,
+        text: formatFiniteNumber(rawValue, locale, fixedDigits),
+      };
+  }
+}
+
+export function formatNumberForExport(
+  rawValue: number,
+  presentation: NumberPresentation | TableCellNumberPresentation | undefined,
+  mode: NumberExportMode,
+  locale?: string,
+): string {
+  return mode === "raw"
+    ? String(rawValue)
+    : formatNumberValue(rawValue, presentation, locale).text;
+}
+
+export function parseNumberInput(
+  value: string,
+  locale?: string,
+): DomainResult<number> {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return failure("invalid-property-value", "Number input must not be empty.");
+  }
+  const { decimal, group } = localeSeparators(locale);
+  const withoutSpaces = trimmed.replace(/\s+/g, "");
+  const withoutDecorations = withoutSpaces.replace(/[^\d+\-.,]/g, "");
+  const withoutGroups = group
+    ? withoutDecorations.replace(new RegExp(escapeRegExp(group), "g"), "")
+    : withoutDecorations;
+  const normalized =
+    decimal === "."
+      ? withoutGroups
+      : withoutGroups.replace(new RegExp(escapeRegExp(decimal), "g"), ".");
+  if (!/^[+-]?(?:\d+|\d*\.\d+)$/.test(normalized)) {
+    return failure("invalid-property-value", "Number input must be numeric.");
+  }
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed)
+    ? ok(parsed)
+    : failure("invalid-property-value", "Number input must be finite.");
 }
 
 function normalizeString(value: unknown): DomainResult<string> {

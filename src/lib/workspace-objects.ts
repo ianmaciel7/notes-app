@@ -153,7 +153,25 @@ type WorkspaceObjectError =
   | "media-storage-failed"
   | "referenced-object"
   | "required-title"
+  | "restore-target-invalid"
   | "unsupported-object-type";
+
+type TrashRecord = {
+  actorId: string | null;
+  entityId: string;
+  originalActiveEntityId: string | null;
+  purgeAfter: string;
+  schemaVersion: 1;
+  source: "retention" | "system" | "user";
+  spaceId: string;
+  trashedAt: string;
+};
+
+type TrashTombstone = {
+  entityId: string;
+  purgedAt: string;
+  spaceId: string;
+};
 
 type WorkspaceObjectState = {
   activeEntityId: string | null;
@@ -164,6 +182,8 @@ type WorkspaceObjectState = {
   nextId: number;
   structureError: StructureDomainError | null;
   structures: readonly WorkspaceStructure[];
+  tombstones: TrashTombstone[];
+  trashRecords: TrashRecord[];
 };
 
 type WorkspaceObjectAction =
@@ -171,6 +191,12 @@ type WorkspaceObjectAction =
   | { type: "createTag"; id: string; title: string }
   | { type: "cancelDraft" }
   | { type: "createDocument"; objectTypeId: "page"; title: string }
+  | {
+      type: "createEditorObjectReference";
+      id: string;
+      objectTypeId: string;
+      title: string;
+    }
   | {
       type: "importFile";
       assetId?: string;
@@ -211,8 +237,19 @@ type WorkspaceObjectAction =
       objectTypeId: string;
       propertyValues?: Readonly<Record<string, unknown>>;
     }
-  | { type: "deleteEntity"; id: string }
+  | {
+      type: "deleteEntity";
+      actorId?: string | null;
+      id: string;
+      source?: "retention" | "system" | "user";
+      spaceId?: string;
+      trashedAt?: string;
+    }
   | { type: "duplicateEntity"; id: string }
+  | { type: "restoreEntity"; id: string }
+  | { type: "purgeEntity"; id: string; purgedAt?: string }
+  | { type: "emptyTrash"; purgedAt?: string; spaceId?: string }
+  | { type: "cleanupTrash"; limit?: number; now?: string; spaceId?: string }
   | { type: "createStructure"; input: CreateStructureInput; id?: string }
   | { type: "createStructureFromPreset"; presetId: string; id?: string }
   | {
@@ -258,7 +295,7 @@ type WorkspaceObjectActionReducer<TAction extends WorkspaceObjectAction> = (
   action: TAction,
 ) => WorkspaceObjectState;
 
-const WORKSPACE_OBJECT_SCHEMA_VERSION = 5;
+const WORKSPACE_OBJECT_SCHEMA_VERSION = 6;
 
 const initialStructures = createInitialStructureRegistry();
 const objectTypeIds: ObjectTypeId[] = selectCreatableStructures(
@@ -289,6 +326,8 @@ function createInitialWorkspaceObjectState(): WorkspaceObjectState {
     nextId: 1,
     structureError: null,
     structures: createInitialStructureRegistry(),
+    tombstones: [],
+    trashRecords: [],
   };
 }
 
@@ -668,7 +707,7 @@ function reduceCreateOrAppendDailyNote(
 
 type EntityMenuAction = Extract<
   WorkspaceObjectAction,
-  { type: "changeEntityType" | "deleteEntity" | "duplicateEntity" }
+  { type: "changeEntityType" | "duplicateEntity" }
 >;
 
 function duplicateWorkspaceEntity(
@@ -1185,6 +1224,171 @@ function entityHasIncomingReferences(
   });
 }
 
+const DEFAULT_TRASH_SPACE_ID = "local";
+const TRASH_RETENTION_DAYS = 30;
+
+function addUtcCalendarDays(value: string, days: number): string {
+  const date = new Date(value);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString();
+}
+
+function isEntityTrashed(
+  state: Pick<WorkspaceObjectState, "trashRecords">,
+  id: string,
+): boolean {
+  return state.trashRecords.some((record) => record.entityId === id);
+}
+
+function selectActiveEntities(
+  stateOrEntities:
+    | Pick<WorkspaceObjectState, "entities" | "trashRecords">
+    | readonly WorkspaceEntity[],
+  trashRecords: readonly TrashRecord[] = [],
+): WorkspaceEntity[] {
+  const entities = Array.isArray(stateOrEntities)
+    ? stateOrEntities
+    : stateOrEntities.entities;
+  const records = Array.isArray(stateOrEntities)
+    ? trashRecords
+    : stateOrEntities.trashRecords;
+  const trashedIds = new Set(records.map((record) => record.entityId));
+  return entities.filter((entity) => !trashedIds.has(entity.id));
+}
+
+function selectTrashedEntities(state: WorkspaceObjectState): WorkspaceEntity[] {
+  const trashedIds = new Set(state.trashRecords.map((record) => record.entityId));
+  return state.entities.filter((entity) => trashedIds.has(entity.id));
+}
+
+function selectTrashRecords(state: WorkspaceObjectState): TrashRecord[] {
+  return [...state.trashRecords].sort((left, right) =>
+    left.trashedAt.localeCompare(right.trashedAt),
+  );
+}
+
+function reduceTrashEntity(
+  state: WorkspaceObjectState,
+  action: Extract<WorkspaceObjectAction, { type: "deleteEntity" }>,
+): WorkspaceObjectState {
+  const entity = state.entities.find((item) => item.id === action.id);
+  if (!entity) return state;
+  if (isEntityTrashed(state, action.id)) return state;
+  const activeEntities = selectActiveEntities(state);
+  const trashedAt = action.trashedAt ?? new Date().toISOString();
+  const record: TrashRecord = {
+    actorId: action.actorId ?? null,
+    entityId: action.id,
+    originalActiveEntityId: state.activeEntityId,
+    purgeAfter: addUtcCalendarDays(trashedAt, TRASH_RETENTION_DAYS),
+    schemaVersion: 1,
+    source: action.source ?? "user",
+    spaceId: action.spaceId ?? DEFAULT_TRASH_SPACE_ID,
+    trashedAt,
+  };
+  const remainingActive = activeEntities.filter((item) => item.id !== action.id);
+  return {
+    ...state,
+    activeEntityId:
+      state.activeEntityId === action.id
+        ? (remainingActive.at(-1)?.id ?? null)
+        : state.activeEntityId,
+    error: null,
+    trashRecords: [...state.trashRecords, record],
+  };
+}
+
+function reduceRestoreEntity(
+  state: WorkspaceObjectState,
+  action: Extract<WorkspaceObjectAction, { type: "restoreEntity" }>,
+): WorkspaceObjectState {
+  const record = state.trashRecords.find((item) => item.entityId === action.id);
+  if (!record) return state;
+  const entity = state.entities.find((item) => item.id === action.id);
+  if (!entity || !selectStructureById(state.structures, entity.objectTypeId)) {
+    return { ...state, error: "restore-target-invalid" };
+  }
+  return {
+    ...state,
+    activeEntityId: action.id,
+    error: null,
+    trashRecords: state.trashRecords.filter((item) => item.entityId !== action.id),
+  };
+}
+
+function reducePurgeEntities(
+  state: WorkspaceObjectState,
+  records: readonly TrashRecord[],
+  purgedAt: string,
+): WorkspaceObjectState {
+  if (records.length === 0) return state;
+  const purgeIds = new Set(records.map((record) => record.entityId));
+  const knownTombstones = new Set(state.tombstones.map((item) => item.entityId));
+  const tombstones = [
+    ...state.tombstones,
+    ...records
+      .filter((record) => !knownTombstones.has(record.entityId))
+      .map((record) => ({
+        entityId: record.entityId,
+        purgedAt,
+        spaceId: record.spaceId,
+      })),
+  ];
+  const entities = state.entities.filter((entity) => !purgeIds.has(entity.id));
+  return {
+    ...state,
+    activeEntityId:
+      state.activeEntityId && purgeIds.has(state.activeEntityId)
+        ? (selectActiveEntities(entities, state.trashRecords).at(-1)?.id ?? null)
+        : state.activeEntityId,
+    entities,
+    error: null,
+    tombstones,
+    trashRecords: state.trashRecords.filter(
+      (record) => !purgeIds.has(record.entityId),
+    ),
+  };
+}
+
+function reducePurgeEntity(
+  state: WorkspaceObjectState,
+  action: Extract<WorkspaceObjectAction, { type: "purgeEntity" }>,
+): WorkspaceObjectState {
+  const record = state.trashRecords.find((item) => item.entityId === action.id);
+  return record
+    ? reducePurgeEntities(state, [record], action.purgedAt ?? new Date().toISOString())
+    : state;
+}
+
+function reduceEmptyTrash(
+  state: WorkspaceObjectState,
+  action: Extract<WorkspaceObjectAction, { type: "emptyTrash" }>,
+): WorkspaceObjectState {
+  const records = action.spaceId
+    ? state.trashRecords.filter((record) => record.spaceId === action.spaceId)
+    : state.trashRecords;
+  return reducePurgeEntities(
+    state,
+    records,
+    action.purgedAt ?? new Date().toISOString(),
+  );
+}
+
+function reduceCleanupTrash(
+  state: WorkspaceObjectState,
+  action: Extract<WorkspaceObjectAction, { type: "cleanupTrash" }>,
+): WorkspaceObjectState {
+  const now = action.now ?? new Date().toISOString();
+  const eligible = state.trashRecords
+    .filter(
+      (record) =>
+        (!action.spaceId || record.spaceId === action.spaceId) &&
+        Date.parse(record.purgeAfter) <= Date.parse(now),
+    )
+    .slice(0, action.limit ?? 100);
+  return reducePurgeEntities(state, eligible, now);
+}
+
 function reduceCreateDocument(
   state: WorkspaceObjectState,
   action: Extract<WorkspaceObjectAction, { type: "createDocument" }>,
@@ -1193,6 +1397,24 @@ function reduceCreateDocument(
   return title
     ? createEntity(state, action.objectTypeId, { title })
     : { ...state, error: "required-title" };
+}
+
+function reduceCreateEditorObjectReference(
+  state: WorkspaceObjectState,
+  action: Extract<WorkspaceObjectAction, { type: "createEditorObjectReference" }>,
+): WorkspaceObjectState {
+  const title = action.title.trim();
+  if (!title) return { ...state, error: "required-title" };
+  const flow = getCreationFlow(action.objectTypeId, state.structures);
+  if (!flow || flow === "file" || flow === "url") {
+    return { ...state, error: "unsupported-object-type" };
+  }
+  return createEntity(
+    state,
+    action.objectTypeId,
+    { id: action.id, title },
+    false,
+  );
 }
 
 function normalizeEntityPatch(
@@ -1343,12 +1565,15 @@ const workspaceObjectActionHandlers: WorkspaceObjectActionHandlers = {
   commitTask: (state, action) => commitTaskDraft(state, action.title),
   commitUrl: (state, action) => commitUrlDraft(state, action.url),
   createDocument: reduceCreateDocument,
+  createEditorObjectReference: reduceCreateEditorObjectReference,
   createOrAppendDailyNote: reduceCreateOrAppendDailyNote,
   createStructure: reduceStructureAction,
   createStructureFromPreset: reduceStructureAction,
-  deleteEntity: reduceEntityMenuAction,
+  cleanupTrash: reduceCleanupTrash,
+  deleteEntity: reduceTrashEntity,
   deleteStructure: reduceStructureAction,
   duplicateEntity: reduceEntityMenuAction,
+  emptyTrash: reduceEmptyTrash,
   hydrate: (_state, action) => ({
     ...action.state,
     draft: null,
@@ -1361,6 +1586,8 @@ const workspaceObjectActionHandlers: WorkspaceObjectActionHandlers = {
   removePropertyValue: reducePropertyValueAction,
   renameStructure: reduceStructureAction,
   replaceStructureSchema: reduceStructureAction,
+  purgeEntity: reducePurgeEntity,
+  restoreEntity: reduceRestoreEntity,
   selectEntity: (state, action) =>
     state.activeEntityId === action.id && state.error === null
       ? state
@@ -1390,16 +1617,24 @@ function isWorkspaceEntityDeletionAccepted(
   state: WorkspaceObjectState,
   id: string,
 ): boolean {
-  if (!state.entities.some((entity) => entity.id === id)) return false;
-  return !workspaceObjectReducer(state, {
-    type: "deleteEntity",
+  if (!selectActiveEntities(state).some((entity) => entity.id === id)) {
+    return false;
+  }
+  return isEntityTrashed(
+    workspaceObjectReducer(state, {
+      type: "deleteEntity",
+      id,
+    }),
     id,
-  }).entities.some((entity) => entity.id === id);
+  );
 }
 
 function countEntitiesByType(
-  entities: WorkspaceEntity[],
+  entitiesOrState: WorkspaceEntity[] | WorkspaceObjectState,
 ): Partial<Record<ObjectTypeId, number>> {
+  const entities = Array.isArray(entitiesOrState)
+    ? entitiesOrState
+    : selectActiveEntities(entitiesOrState);
   return entities.reduce<Partial<Record<ObjectTypeId, number>>>(
     (counts, entity) => {
       counts[entity.objectTypeId] = (counts[entity.objectTypeId] ?? 0) + 1;
@@ -1407,6 +1642,47 @@ function countEntitiesByType(
     },
     {},
   );
+}
+
+function selectQueryResults(
+  entitiesOrState: WorkspaceEntity[] | WorkspaceObjectState,
+  query: QueryEntity,
+): WorkspaceEntity[] {
+  const entities = Array.isArray(entitiesOrState)
+    ? entitiesOrState
+    : selectActiveEntities(entitiesOrState);
+  return entities.filter((entity) => {
+    if (entity.id === query.id) return false;
+    if (
+      query.filters.objectTypeId &&
+      entity.objectTypeId !== query.filters.objectTypeId
+    ) {
+      return false;
+    }
+    if (query.filters.created === "today" && !isToday(entity.createdAt)) {
+      return false;
+    }
+    if (query.filters.tags.length > 0) {
+      if (!("tags" in entity)) return false;
+      if (!query.filters.tags.every((tag) => entity.tags.includes(tag)))
+        return false;
+    }
+    return true;
+  });
+}
+
+function isWorkspaceEntityPurgeAccepted(
+  state: WorkspaceObjectState,
+  id: string,
+): boolean {
+  const purged = workspaceObjectReducer(state, {
+    type: "deleteEntity",
+    id,
+  });
+  return !workspaceObjectReducer(purged, {
+    type: "purgeEntity",
+    id,
+  }).entities.some((entity) => entity.id === id);
 }
 
 function applyQueryDescription(
@@ -1447,30 +1723,6 @@ function isToday(value: string): boolean {
   );
 }
 
-function selectQueryResults(
-  entities: WorkspaceEntity[],
-  query: QueryEntity,
-): WorkspaceEntity[] {
-  return entities.filter((entity) => {
-    if (entity.id === query.id) return false;
-    if (
-      query.filters.objectTypeId &&
-      entity.objectTypeId !== query.filters.objectTypeId
-    ) {
-      return false;
-    }
-    if (query.filters.created === "today" && !isToday(entity.createdAt)) {
-      return false;
-    }
-    if (query.filters.tags.length > 0) {
-      if (!("tags" in entity)) return false;
-      if (!query.filters.tags.every((tag) => entity.tags.includes(tag)))
-        return false;
-    }
-    return true;
-  });
-}
-
 export type {
   BlockEditorDocument,
   CreationFlow,
@@ -1481,6 +1733,8 @@ export type {
   TableCell,
   TableEntity,
   TaskEntity,
+  TrashRecord,
+  TrashTombstone,
   UrlEntity,
   WorkspaceDraft,
   WorkspaceEntity,
@@ -1497,9 +1751,13 @@ export {
   getCreationFlow,
   getWorkspaceImportError,
   isWorkspaceEntityDeletionAccepted,
+  isWorkspaceEntityPurgeAccepted,
   isObjectTypeId,
   objectTypeIds,
+  selectActiveEntities,
   selectQueryResults,
+  selectTrashRecords,
+  selectTrashedEntities,
   WORKSPACE_OBJECT_SCHEMA_VERSION,
   workspaceObjectReducer,
 };

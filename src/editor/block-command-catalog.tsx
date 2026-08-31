@@ -1,14 +1,17 @@
 import type { Editor, Range } from "@tiptap/core";
 import type { ComponentType, SVGProps } from "react";
+import { createTableBlockNode } from "./table-block.ts";
 
 type BlockCommandIconProps = SVGProps<SVGSVGElement>;
 type BlockCommandIcon = ComponentType<BlockCommandIconProps>;
 
 type BlockCommandCatalogLabels = {
+  empty: string;
   text: string;
   smallText: string;
   createPage: string;
   page: string;
+  title: string;
   heading1: string;
   heading2: string;
   heading3: string;
@@ -18,9 +21,19 @@ type BlockCommandCatalogLabels = {
   orderedList: string;
   romanList: string;
   taskList: string;
+  tableBlock: string;
   blockquote: string;
   codeBlock: string;
+  columns: string;
+  emojiText: string;
+  group: string;
+  highlight: string;
   horizontalRule: string;
+  math: string;
+  mermaid: string;
+  objectEmbed: string;
+  objectInline: string;
+  toggle: string;
 };
 
 type BlockCommandCatalogItem = {
@@ -63,9 +76,18 @@ const AlphabeticalListIcon = createGlyphIcon("a)", 10.5);
 const NumericalListIcon = createGlyphIcon("1.", 11);
 const RomanListIcon = createGlyphIcon("i)", 11);
 const TaskListIcon = createGlyphIcon("☑", 13);
+const TableBlockIcon = createGlyphIcon("▦", 13);
 const BlockquoteIcon = createGlyphIcon("❞", 14);
 const CodeBlockIcon = createGlyphIcon("<>", 9);
+const ColumnsIcon = createGlyphIcon("▥", 14);
+const EmojiTextIcon = createGlyphIcon("☺", 13);
+const GroupIcon = createGlyphIcon("□", 14);
+const HighlightIcon = createGlyphIcon("≡", 14);
 const HorizontalRuleIcon = createGlyphIcon("—", 15);
+const MathIcon = createGlyphIcon("Σ", 14);
+const MermaidIcon = createGlyphIcon("◇", 14);
+const ObjectBlockIcon = createGlyphIcon("@", 14);
+const ToggleIcon = createGlyphIcon("▸", 13);
 
 function BulletListIcon(props: BlockCommandIconProps) {
   return (
@@ -112,7 +134,14 @@ function createBlockCommandCatalog(
       id: "text",
       icon: TextBlockIcon,
       title: labels.text,
-      searchTerms: ["default", "padrao", "padrão", "text", "texto", "paragraph"],
+      searchTerms: [
+        "default",
+        "padrao",
+        "padrão",
+        "text",
+        "texto",
+        "paragraph",
+      ],
       execute: (editor, range) =>
         runWithDeletedTrigger(editor, range, (chain) =>
           chain.setParagraph().updateAttributes("paragraph", { size: null }),
@@ -174,7 +203,9 @@ function createBlockCommandCatalog(
       title: labels.bulletList,
       searchTerms: ["bullet", "bulleted list", "lista", "lista de marcadores"],
       execute: (editor, range) =>
-        runWithDeletedTrigger(editor, range, (chain) => chain.toggleBulletList()),
+        runWithDeletedTrigger(editor, range, (chain) =>
+          chain.toggleBulletList(),
+        ),
     },
     {
       id: "alphabetical-list",
@@ -187,7 +218,13 @@ function createBlockCommandCatalog(
       id: "ordered-list",
       icon: NumericalListIcon,
       title: labels.orderedList,
-      searchTerms: ["numbered", "numerical", "numerada", "numerica", "numérica"],
+      searchTerms: [
+        "numbered",
+        "numerical",
+        "numerada",
+        "numerica",
+        "numérica",
+      ],
       execute: (editor, range) => setOrderedListType(editor, range, null),
     },
     {
@@ -206,12 +243,24 @@ function createBlockCommandCatalog(
         runWithDeletedTrigger(editor, range, (chain) => chain.toggleTaskList()),
     },
     {
+      id: "table-block",
+      icon: TableBlockIcon,
+      title: labels.tableBlock,
+      searchTerms: ["table", "tabela", "grid", "spreadsheet"],
+      execute: (editor, range) =>
+        runWithDeletedTrigger(editor, range, (chain) =>
+          chain.insertContent(createTableBlockNode()),
+        ),
+    },
+    {
       id: "blockquote",
       icon: BlockquoteIcon,
       title: labels.blockquote,
       searchTerms: ["quote", "blockquote", "citation", "citacao", "citação"],
       execute: (editor, range) =>
-        runWithDeletedTrigger(editor, range, (chain) => chain.toggleBlockquote()),
+        runWithDeletedTrigger(editor, range, (chain) =>
+          chain.toggleBlockquote(),
+        ),
     },
     {
       id: "code-block",
@@ -219,7 +268,168 @@ function createBlockCommandCatalog(
       title: labels.codeBlock,
       searchTerms: ["code", "codigo", "código"],
       execute: (editor, range) =>
-        runWithDeletedTrigger(editor, range, (chain) => chain.toggleCodeBlock()),
+        runWithDeletedTrigger(editor, range, (chain) =>
+          chain.toggleCodeBlock(),
+        ),
+    },
+    {
+      id: "mermaid",
+      icon: MermaidIcon,
+      title: labels.mermaid,
+      searchTerms: ["mermaid", "diagram", "diagrama", "flowchart"],
+      execute: (editor, range) =>
+        runWithDeletedTrigger(editor, range, (chain) =>
+          chain.toggleCodeBlock().updateAttributes("codeBlock", {
+            language: "mermaid",
+            renderMode: "mermaid",
+            sourceStatus: "valid",
+          }),
+        ),
+    },
+    {
+      id: "toggle",
+      icon: ToggleIcon,
+      title: labels.toggle,
+      searchTerms: ["toggle", "collapsible", "alternar", "recolhivel"],
+      execute: (editor, range) =>
+        runWithDeletedTrigger(editor, range, (chain) =>
+          chain.setParagraph().updateAttributes("paragraph", {
+            toggleCollapsed: false,
+          }),
+        ),
+    },
+    {
+      id: "emoji-text",
+      icon: EmojiTextIcon,
+      title: labels.emojiText,
+      searchTerms: ["emoji", "icon", "icone", "ícone"],
+      execute: (editor, range) =>
+        runWithDeletedTrigger(editor, range, (chain) =>
+          chain.setParagraph().updateAttributes("paragraph", { emoji: "✨" }),
+        ),
+    },
+    {
+      id: "highlight",
+      icon: HighlightIcon,
+      title: labels.highlight,
+      searchTerms: ["highlight", "quote", "destaque", "marcacao", "marcação"],
+      execute: (editor, range) =>
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .insertContent({
+            type: "highlightBlock",
+            attrs: { color: "yellow" },
+            content: [{ type: "text", text: "Highlight" }],
+          })
+          .run(),
+    },
+    {
+      id: "math",
+      icon: MathIcon,
+      title: labels.math,
+      searchTerms: ["math", "tex", "latex", "formula", "matematica"],
+      execute: (editor, range) =>
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .insertContent({
+            type: "mathBlock",
+            attrs: {
+              displayMode: "block",
+              source: "E = mc^2",
+              sourceStatus: "valid",
+            },
+          })
+          .run(),
+    },
+    {
+      id: "columns",
+      icon: ColumnsIcon,
+      title: labels.columns,
+      searchTerms: ["columns", "grid", "colunas", "grade"],
+      execute: (editor, range) =>
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .insertContent({
+            type: "columnLayout",
+            attrs: { layoutMode: "columns", width: "content" },
+            content: [
+              {
+                type: "column",
+                attrs: { width: 0.5 },
+                content: [{ type: "paragraph" }],
+              },
+              {
+                type: "column",
+                attrs: { width: 0.5 },
+                content: [{ type: "paragraph" }],
+              },
+            ],
+          })
+          .run(),
+    },
+    {
+      id: "group",
+      icon: GroupIcon,
+      title: labels.group,
+      searchTerms: ["group", "container", "grupo"],
+      execute: (editor, range) =>
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .insertContent({
+            type: "groupBlock",
+            attrs: { appearance: "card", width: "content" },
+            content: [{ type: "paragraph" }],
+          })
+          .run(),
+    },
+    {
+      id: "object-inline",
+      icon: ObjectBlockIcon,
+      title: labels.objectInline,
+      searchTerms: ["object", "inline", "objeto"],
+      execute: (editor, range) =>
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .insertContent({
+            type: "objectBlock",
+            attrs: {
+              targetId: "object:pending",
+              title: "Object",
+              viewKind: "inline",
+            },
+          })
+          .run(),
+    },
+    {
+      id: "object-embed",
+      icon: ObjectBlockIcon,
+      title: labels.objectEmbed,
+      searchTerms: ["embed", "transclusion", "object card", "objeto"],
+      execute: (editor, range) =>
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .insertContent({
+            type: "objectBlock",
+            attrs: {
+              state: "read-only",
+              targetId: "object:pending",
+              title: "Object",
+              viewKind: "embed",
+            },
+          })
+          .run(),
     },
     {
       id: "horizontal-rule",
@@ -227,7 +437,9 @@ function createBlockCommandCatalog(
       title: labels.horizontalRule,
       searchTerms: ["divider", "rule", "separator", "linha", "separador"],
       execute: (editor, range) =>
-        runWithDeletedTrigger(editor, range, (chain) => chain.setHorizontalRule()),
+        runWithDeletedTrigger(editor, range, (chain) =>
+          chain.setHorizontalRule(),
+        ),
     },
   ];
 }

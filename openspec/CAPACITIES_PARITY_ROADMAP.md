@@ -1,6 +1,6 @@
 # Capacities parity OpenSpec roadmap
 
-Planning snapshot: 2026-08-30. Repository baseline: `dev` at `eb042dc0fb2cff6ef65170a147425b60942966a3`.
+Planning snapshot: 2026-08-31. Repository baseline: `dev` at `e051c166fb85da5e72f50caede3621626487a956`.
 
 This roadmap is a clean-room Notes App plan grounded in current official Capacities documentation, sanitized authenticated evidence, the project WACZ/JSONL reference corpus, and current local code/specs. It describes observable behavior and does not claim access to Capacities' private implementation.
 
@@ -8,6 +8,8 @@ This roadmap is a clean-room Notes App plan grounded in current official Capacit
 
 Canonical project reference files:
 
+- `docs/references/capacities-reference-baseline-2026-08-31.md` — canonical dated source inventory, provenance labels, and sanitization contract for current parity work.
+- `docs/references/capacities-functional-gap-audit-2026-08-31.md` — dated functional gap audit and priority matrix for the current `dev` baseline.
 - `capacities-urls.txt.txt` — current 196-page documentation inventory captured for this audit.
 - `reference-urls.json` — older dated inventory with 154 Capacities URLs; retained for provenance, not current completeness.
 - `capacities-wacz-completeness-audit(1).json`
@@ -63,9 +65,9 @@ Commit `eb042dc0fb2cff6ef65170a147425b60942966a3` introduced one decimal 100,000
 
 Complete the remaining help/footer, Space switcher, theme/profile/share, and left-sidebar collapse task, then rerun the full evidence and verification gate.
 
-### P0 `align-object-page-mentions-and-editor-tools`
+### P0 `align-object-page-mentions-and-editor-tools` — tasks complete; archive/reconciliation pending
 
-Complete source-oriented unlinked mentions, relationship section composition, and the Structure/Statistics utility panel. The implemented `@`, `[[`, and `((` triggers are foundations, not substitutes for this change.
+The active change reports complete tasks for source-oriented unlinked mentions, relationship section composition, and the Structure/Statistics utility panel. Keep it visible until it is archived or reconciled with `align-object-page-complete-parity`. The implemented `@`, `[[`, and `((` triggers are foundations, not substitutes for broader object-page parity.
 
 ### P0 `configure-ci-cd`
 
@@ -75,7 +77,7 @@ Finish the repository delivery pipeline required to make verification status vis
 
 ### P0 `refresh-capacities-parity-baseline`
 
-Create the current source inventory, provenance model, functional-gap matrix, and roadmap consistency checks. This change precedes implementation of new parity gaps.
+Create the current source inventory, provenance model, functional-gap matrix, and roadmap consistency checks. This change precedes implementation of new parity gaps and owns `docs/references/capacities-reference-baseline-2026-08-31.md`, `docs/references/capacities-functional-gap-audit-2026-08-31.md`, and `scripts/check-capacities-reference-baseline.mjs`.
 
 ## Keyboard and editor
 
@@ -147,8 +149,8 @@ These remain active planned changes and must reuse the completed canonical domai
 Before implementation, every change must:
 
 1. confirm its current `dev` base and active/archived predecessor state;
-2. re-check the relevant official documentation pages and project reference files;
-3. label source-derived, local, inferred, and unknown behavior separately;
+2. re-check the relevant official documentation pages and project reference files, starting from `docs/references/capacities-reference-baseline-2026-08-31.md`;
+3. label behavior as `official-documentation`, `authenticated-observation`, `sanitized-archive-evidence`, `local-code-test-evidence`, `inference`, or `unknown`;
 4. define migration, rollback, offline/sync, security, accessibility, localization, and performance boundaries;
 5. use failing tests before behavior changes;
 6. pass focused tests, full repository verification, strict OpenSpec validation, and staged diff review;

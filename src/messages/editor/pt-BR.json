@@ -41,10 +41,20 @@
     "orderedList": "Lista numerada",
     "romanList": "Lista romana",
     "taskList": "Tarefas",
+    "tableBlock": "Tabela",
     "select": "para selecionar",
     "blockquote": "Bloco de citação",
     "codeBlock": "Código",
+    "columns": "Colunas",
+    "emojiText": "Texto com emoji",
+    "group": "Grupo",
+    "highlight": "Destaque",
     "horizontalRule": "Linha horizontal",
+    "math": "Matemática",
+    "mermaid": "Diagrama Mermaid",
+    "objectEmbed": "Objeto incorporado",
+    "objectInline": "Objeto em linha",
+    "toggle": "Alternável",
     "title": "Criar um bloco"
   }
 }

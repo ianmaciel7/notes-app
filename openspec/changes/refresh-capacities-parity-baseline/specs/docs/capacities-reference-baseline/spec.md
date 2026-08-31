@@ -20,7 +20,7 @@ Parity documentation SHALL classify supporting material as official documentatio
 
 ### Requirement: Archive completeness is represented truthfully
 
-The deduplicated JSONL corpus MAY be used as complete captured response-payload evidence only within the published completeness-audit limits.
+The deduplicated JSONL corpus SHALL be used as complete captured response-payload evidence only within the published completeness-audit limits.
 
 #### Scenario: A contributor needs request bodies or exact archive reconstruction
 - **WHEN** parity work depends on request bodies, selected resource payloads, private headers, revisit resolution, or original WACZ bytes

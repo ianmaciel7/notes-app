@@ -172,6 +172,32 @@ test("immediate creations receive collision-free ids and derived counts", () => 
   assert.deepEqual(countEntitiesByType(state.entities), { page: 1, query: 2 });
 });
 
+test("editor quick object references create one inactive canonical entity", () => {
+  const state = workspaceObjectReducer(createInitialWorkspaceObjectState(), {
+    type: "createEditorObjectReference",
+    id: "created-page-inline",
+    objectTypeId: "page",
+    title: "Inline Page",
+  });
+
+  assert.equal(state.entities.length, 1);
+  assert.equal(state.entities[0].id, "created-page-inline");
+  assert.equal(state.entities[0].objectTypeId, "page");
+  assert.equal(state.entities[0].title, "Inline Page");
+  assert.equal(state.activeEntityId, null);
+  assert.equal(state.nextId, 2);
+  assert.equal(state.error, null);
+
+  const rejected = workspaceObjectReducer(state, {
+    type: "createEditorObjectReference",
+    id: "created-weblink-inline",
+    objectTypeId: "weblink",
+    title: "Deferred Weblink",
+  });
+  assert.equal(rejected.entities.length, 1);
+  assert.equal(rejected.error, "unsupported-object-type");
+});
+
 test("drafted flows do not create entities until a valid commit", () => {
   const initial = createInitialWorkspaceObjectState();
   const taskDraft = workspaceObjectReducer(initial, {
@@ -287,8 +313,10 @@ test("document menu lifecycle changes type, duplicates, and deletes canonically"
   assert.deepEqual(countEntitiesByType(state.entities), { page: 1, task: 1 });
 
   state = reduce(state, { type: "deleteEntity", id: "created-page-2" });
-  assert.deepEqual(countEntitiesByType(state.entities), { page: 1 });
+  assert.deepEqual(countEntitiesByType(state), { page: 1 });
   assert.equal(state.activeEntityId, "created-page-1");
+  assert.equal(state.entities.some((entity) => entity.id === "created-page-2"), true);
+  assert.equal(state.trashRecords[0].entityId, "created-page-2");
 });
 
 test("confirmed type conversion persists resolved property values", () => {
@@ -532,7 +560,7 @@ test("linked entity reassignment unlinks displaced single inverse owners", () =>
   ]);
 });
 
-test("entity deletion is guarded while reverse references exist", () => {
+test("entity deletion moves referenced targets to recoverable Trash", () => {
   const state = reduce(
     createInitialWorkspaceObjectState(),
     { type: "beginCreate", objectTypeId: "page" },
@@ -546,11 +574,12 @@ test("entity deletion is guarded while reverse references exist", () => {
     { type: "deleteEntity", id: "created-tag-2" },
   );
 
-  assert.equal(state.error, "referenced-object");
+  assert.equal(state.error, null);
   assert.equal(
     state.entities.some((entity) => entity.id === "created-tag-2"),
     true,
   );
+  assert.equal(state.trashRecords[0].entityId, "created-tag-2");
 });
 
 test("deletion cleanup runs only after canonical deletion accepts the entity", () => {
@@ -568,7 +597,7 @@ test("deletion cleanup runs only after canonical deletion accepts the entity", (
 
   assert.equal(
     isWorkspaceEntityDeletionAccepted(protectedState, "created-tag-2"),
-    false,
+    true,
   );
   assert.equal(
     isWorkspaceEntityDeletionAccepted(protectedState, "created-page-1"),

@@ -32,6 +32,8 @@ type WorkspaceObjectSnapshot = {
   entities: WorkspaceEntity[];
   nextId: number;
   structures: readonly WorkspaceStructure[];
+  tombstones: WorkspaceObjectState["tombstones"];
+  trashRecords: WorkspaceObjectState["trashRecords"];
   version: typeof WORKSPACE_OBJECT_SCHEMA_VERSION;
 };
 
@@ -210,6 +212,8 @@ function toWorkspaceObjectSnapshot(
     }) as WorkspaceEntity[],
     nextId: state.nextId,
     structures: structuredClone(state.structures),
+    tombstones: structuredClone(state.tombstones),
+    trashRecords: structuredClone(state.trashRecords),
     version: WORKSPACE_OBJECT_SCHEMA_VERSION,
   };
 }
@@ -332,6 +336,12 @@ function migrateSnapshotVersion(
     return { ok: true, value: { ...value, version: 4 } };
   }
   if (value.version === 4) return migrateVersionFourSnapshot(value);
+  if (value.version === 5) {
+    return {
+      ok: true,
+      value: { ...value, tombstones: [], trashRecords: [], version: 6 },
+    };
+  }
   return value.version === WORKSPACE_OBJECT_SCHEMA_VERSION
     ? { ok: true, value }
     : { ok: false, reason: "unsupported-version" };
@@ -350,6 +360,8 @@ function migrateVersionFourSnapshot(
       entities: migrateLegacyIdentityMemberships(
         value.entities as WorkspaceEntity[],
       ),
+      tombstones: [],
+      trashRecords: [],
       version: WORKSPACE_OBJECT_SCHEMA_VERSION,
     },
   };
@@ -363,6 +375,8 @@ function validateSnapshotEnvelope(
     structureValidation.ok &&
     Array.isArray(value.entities) &&
     value.entities.every(isWorkspaceEntity) &&
+    Array.isArray(value.trashRecords) &&
+    Array.isArray(value.tombstones) &&
     typeof value.nextId === "number" &&
     Number.isInteger(value.nextId) &&
     value.nextId >= 1 &&
@@ -471,6 +485,8 @@ function parseCurrentWorkspaceObjectSnapshot(
       hydrationStatus: "ready",
       nextId: normalizedValue.nextId as number,
       structures,
+      tombstones: normalizedValue.tombstones as WorkspaceObjectState["tombstones"],
+      trashRecords: normalizedValue.trashRecords as WorkspaceObjectState["trashRecords"],
     },
   };
 }
@@ -478,7 +494,13 @@ function parseCurrentWorkspaceObjectSnapshot(
 function parseWorkspaceObjectSnapshot(raw: string): SnapshotParseResult {
   const parsed = parseSnapshotJson(raw);
   if (!parsed.ok) return parsed;
-  const migrated = migrateSnapshotVersion(parsed.value);
+  let migrated = migrateSnapshotVersion(parsed.value);
+  while (
+    migrated.ok &&
+    migrated.value.version !== WORKSPACE_OBJECT_SCHEMA_VERSION
+  ) {
+    migrated = migrateSnapshotVersion(migrated.value);
+  }
   if (!migrated.ok) return migrated;
   return parseCurrentWorkspaceObjectSnapshot(migrated.value);
 }

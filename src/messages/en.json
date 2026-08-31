@@ -285,10 +285,18 @@
     "footer": {
       "accountEmail": "This device",
       "accountName": "Local workspace",
+      "copyWorkspaceLink": "Copy workspace link",
+      "currentSpace": "Current Space",
+      "general": "General",
+      "integrations": "Integrations",
       "plan": "Pro",
       "objectTypes": "Object types",
       "profile": "Personal profile",
+      "resources": "Resources",
       "settings": "Settings",
+      "settingsDescription": "Review local workspace, Space, resource, and integration destinations.",
+      "settingsTitle": "Settings",
+      "shareWorkspace": "Share workspace",
       "signOut": "Sign out",
       "useDarkTheme": "Use dark theme",
       "useLightTheme": "Use light theme"
@@ -482,6 +490,9 @@
       "errors": {
         "incompatible-file": "Choose a file compatible with this object type.",
         "invalid-url": "Enter a valid URL for this object type.",
+        "media-file-too-large": "Choose a file up to 100 MB.",
+        "media-operational-limit-exceeded": "Choose a file within this Notes App limit: {limit} bytes.",
+        "media-quota-exceeded": "Browser storage is full. Free up space and try again.",
         "media-storage-failed": "The file could not be saved locally. Try a smaller file or free up browser storage.",
         "referenced-object": "This object cannot be deleted while relations point to it.",
         "required-title": "Enter a task title.",
@@ -653,6 +664,7 @@
       "manual": "Sort manually",
       "alphabetical": "Sort alphabetically",
       "create": "Create",
+      "description": "Create a custom sidebar section after naming it.",
       "namePlaceholder": "Section name",
       "noContent": "No content"
     },
@@ -668,7 +680,10 @@
       "whatsNew": "What's new"
     },
     "sidebarUtilities": {
-      "trash": "Trash"
+      "emptyTrash": "Empty trash",
+      "searchTrash": "Search trash",
+      "trash": "Trash",
+      "trashDescription": "Deleted local objects appear here before permanent removal."
     }
   }
 }

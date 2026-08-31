@@ -3,13 +3,15 @@ export const SUGGESTION_MENU_CURSOR_GAP = 4;
 
 export type SuggestionTriggerOwner =
   | "slash-command"
+  | "plus-quick-action"
+  | "tag-reference"
   | "object-reference"
   | "block-reference";
 
 export type SuggestionTriggerDefinition = {
   readonly owner: SuggestionTriggerOwner;
   readonly priority: number;
-  readonly token: "/" | "@" | "[[" | "((";
+  readonly token: "/" | "+" | "#" | "@" | "[[" | "((";
 };
 
 export type ResolvedSuggestionTrigger = {
@@ -23,6 +25,8 @@ export const SUGGESTION_TRIGGER_DEFINITIONS: SuggestionTriggerDefinition[] = [
   { token: "[[", owner: "object-reference", priority: 40 },
   { token: "((", owner: "block-reference", priority: 40 },
   { token: "/", owner: "slash-command", priority: 20 },
+  { token: "+", owner: "plus-quick-action", priority: 20 },
+  { token: "#", owner: "tag-reference", priority: 20 },
   { token: "@", owner: "object-reference", priority: 20 },
 ];
 
@@ -66,7 +70,7 @@ function hasValidTriggerBoundary(
 }
 
 function hasTriggerLeakage(query: string) {
-  return /[/@[\]()]/.test(query);
+  return /[/+#@[\]()]/.test(query);
 }
 
 export function resolveSuggestionTrigger({

@@ -47,9 +47,15 @@ import { useWorkspace } from "@/components/workspace-controller";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import {
+  createWorkspaceCommandRuntime,
+  projectWorkspaceCommands,
+  type WorkspaceCommandId,
+} from "@/lib/workspace-command-registry";
+import {
   createCollectionId,
   type WorkspaceCollectionRecord,
 } from "@/lib/workspace-domain-identities";
+import { formatShortcutChord, type ShortcutPlatform } from "@/lib/workspace-shortcuts";
 
 type AppSidebarPrimaryActionId =
   | "new"
@@ -63,14 +69,11 @@ type AppSidebarPrimaryNavigationAction = Exclude<
   "new"
 >;
 
-type AppSidebarShortcut = {
-  windows: string[];
-  mac: string[];
-};
+type AppSidebarShortcut = string;
 
 type AppSidebarPrimaryActionHint = {
   description: string;
-  shortcut?: AppSidebarShortcut;
+  shortcut?: string;
 };
 
 function normalizeMenuQuery(value: string) {
@@ -297,6 +300,7 @@ type AppSidebarPrimaryAction = {
   id: AppSidebarPrimaryActionId;
   label: string;
   icon: React.ElementType;
+  commandIds: readonly WorkspaceCommandId[];
   hints: AppSidebarPrimaryActionHint[];
 };
 
@@ -314,86 +318,36 @@ const defaultActions: AppSidebarPrimaryAction[] = [
     id: "new",
     label: "New",
     icon: AppSidebarPlusIcon,
-    hints: [
-      {
-        description: "New",
-        shortcut: {
-          windows: ["Ctrl", "U"],
-          mac: ["⌘", "U"],
-        },
-      },
-    ],
+    commandIds: ["workspace.openNewContent"],
+    hints: [],
   },
   {
     id: "search",
     label: "Search",
     icon: AppSidebarSearchIcon,
-    hints: [
-      {
-        description: "Search",
-        shortcut: {
-          windows: ["Ctrl", "P", "or", "Ctrl", "K"],
-          mac: ["⌘", "P", "or", "⌘", "K"],
-        },
-      },
-      {
-        description: "Open extended search",
-        shortcut: {
-          windows: ["Ctrl", "⇧", "P"],
-          mac: ["⌘", "⇧", "P"],
-        },
-      },
-    ],
+    commandIds: ["workspace.openPalette", "workspace.openExtendedSearch"],
+    hints: [],
   },
   {
     id: "explore",
     label: "Explore",
     icon: AppSidebarExploreIcon,
-    hints: [
-      {
-        description:
-          "Open Explore. Use the shortcut again to start a new chat.",
-        shortcut: {
-          windows: ["Ctrl", "J"],
-          mac: ["⌘", "J"],
-        },
-      },
-      {
-        description: "Open Explore in the side panel",
-        shortcut: {
-          windows: ["Ctrl", "⇧", "J"],
-          mac: ["⇧", "⌘", "J"],
-        },
-      },
-    ],
+    commandIds: ["workspace.openExplore"],
+    hints: [],
   },
   {
     id: "calendar",
     label: "Calendar",
     icon: AppSidebarCalendarIcon,
-    hints: [
-      {
-        description: "Go to Calendar. Double-click to go to today.",
-        shortcut: {
-          windows: ["Ctrl", "Alt", "H"],
-          mac: ["⌃", "⌘", "H"],
-        },
-      },
-    ],
+    commandIds: ["workspace.navigateToday"],
+    hints: [],
   },
   {
     id: "tasks",
     label: "Tasks",
     icon: AppSidebarTaskIcon,
-    hints: [
-      {
-        description: "Go to Tasks.",
-        shortcut: {
-          windows: ["Ctrl", "Alt", "T"],
-          mac: ["⌃", "⌘", "T"],
-        },
-      },
-    ],
+    commandIds: ["workspace.createTask"],
+    hints: [],
   },
 ];
 
@@ -407,10 +361,14 @@ function useIsMac() {
   return isMac;
 }
 
-function AppSidebarShortcut({ shortcut }: { shortcut: AppSidebarShortcut }) {
+function useShortcutPlatform(): ShortcutPlatform {
+  return useIsMac() ? "mac" : "windows";
+}
+
+function AppSidebarShortcut({ shortcut }: { shortcut: string }) {
   const t = useTranslations("workspace.primaryNavigation");
-  const isMac = useIsMac();
-  const keys = isMac ? shortcut.mac : shortcut.windows;
+  const platform = useShortcutPlatform();
+  const keys = shortcut.split(/\s+or\s+/i);
   const keyOccurrences = new Map<string, number>();
   const keyedKeys = keys.map((key) => {
     const occurrence = (keyOccurrences.get(key) ?? 0) + 1;
@@ -426,10 +384,54 @@ function AppSidebarShortcut({ shortcut }: { shortcut: AppSidebarShortcut }) {
             {t("or")}
           </span>
         ) : (
-          <Kbd key={id}>{value}</Kbd>
+          <Kbd key={id}>{formatShortcutChord(value, platform)}</Kbd>
         ),
       )}
     </KbdGroup>
+  );
+}
+
+function useSidebarPrimaryCommandHints() {
+  const t = useTranslations("workspace");
+  const runtime = React.useMemo(
+    () =>
+      createWorkspaceCommandRuntime({
+        locale: "workspace",
+        t,
+        actions: {
+          openPalette: () => undefined,
+          openNewContent: () => undefined,
+          openExtendedSearch: () => undefined,
+          openExplore: () => undefined,
+          navigateToday: () => undefined,
+          createTask: () => undefined,
+        },
+        state: {
+          canCreateTask: true,
+          canNavigateToday: true,
+          canUseExtendedSearch: true,
+        },
+      }),
+    [t],
+  );
+  const commands = React.useMemo(
+    () => new Map(projectWorkspaceCommands(runtime).map((command) => [command.id, command])),
+    [runtime],
+  );
+
+  return React.useCallback(
+    (commandIds: readonly WorkspaceCommandId[]) =>
+      commandIds.flatMap((id) => {
+        const command = commands.get(id);
+        if (!command) return [];
+        return [
+          {
+            description: command.description,
+            shortcut: command.shortcuts.join(" or ") || undefined,
+          },
+        ];
+      }),
+    [commands],
   );
 }
 
@@ -562,6 +564,7 @@ function AppSidebarPrimaryActions({
   className,
 }: AppSidebarPrimaryActionsProps) {
   const t = useTranslations("workspace.primaryNavigation");
+  const commandHints = useSidebarPrimaryCommandHints();
   const visibleActions =
     actions === defaultActions
       ? actions.map((action) => {
@@ -582,7 +585,7 @@ function AppSidebarPrimaryActions({
           return {
             ...action,
             label: labels[action.id],
-            hints: action.hints.map((hint, index) => ({
+            hints: commandHints(action.commandIds).map((hint, index) => ({
               ...hint,
               description: descriptions[action.id][index] ?? hint.description,
             })),

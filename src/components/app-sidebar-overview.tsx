@@ -61,6 +61,9 @@ import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -994,6 +997,12 @@ function AppSidebarAddSection({
           sideOffset={8}
           className="w-72 gap-2 p-2"
         >
+          <PopoverHeader>
+            <PopoverTitle>{t("sidebarSections.add")}</PopoverTitle>
+            <PopoverDescription>
+              {t("sidebarSections.description")}
+            </PopoverDescription>
+          </PopoverHeader>
           <Input
             autoFocus
             value={name}
@@ -1032,6 +1041,7 @@ function AppSidebarUtilityRow({
   icon: Icon,
   label,
   external,
+  href,
   tooltip,
   active,
   onClick,
@@ -1039,6 +1049,7 @@ function AppSidebarUtilityRow({
   icon: React.ElementType<ObjectIconProps>;
   label: string;
   external?: boolean;
+  href?: string;
   tooltip?: string;
   active?: boolean;
   onClick?: () => void;
@@ -1058,6 +1069,26 @@ function AppSidebarUtilityRow({
       )}
     </span>
   );
+
+  if (href) {
+    return (
+      <a
+        data-slot="app-sidebar-utility-row"
+        href={href}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noreferrer" : undefined}
+        title={tooltip}
+        className={cn(
+          utilityRowClass,
+          active &&
+            "bg-sidebar-accent text-sidebar-accent-foreground brightness-[0.965]",
+        )}
+        onClick={onClick}
+      >
+        {row}
+      </a>
+    );
+  }
 
   if (tooltip) {
     return (
@@ -1129,6 +1160,7 @@ function AppSidebarHelpSection() {
             <AppSidebarSourceIcon name="documentation" {...props} />
           )}
           label={t("sidebarHelp.documentation")}
+          href="https://docs.capacities.io/"
           external
           tooltip={t("sidebarHelp.documentationTooltip")}
         />
@@ -1139,6 +1171,7 @@ function AppSidebarHelpSection() {
         <AppSidebarUtilityRow
           icon={(props) => <AppSidebarSourceIcon name="feedback" {...props} />}
           label={t("sidebarHelp.feedback")}
+          href="https://capacities.io/feedback"
           external
           tooltip={t("sidebarHelp.feedbackTooltip")}
         />
@@ -1194,9 +1227,53 @@ function AppSidebarFooter() {
       className="flex shrink-0 flex-col gap-y-px px-2.5 py-1.5 pr-1 text-xs"
     >
       <div className="flex w-full flex-wrap items-center gap-x-0.5">
-        <AppSidebarFooterTooltip label={t("footer.settings")}>
-          <AppSidebarSourceIcon name="settings" className="size-4" />
-        </AppSidebarFooterTooltip>
+        <Popover>
+          <Tooltip>
+            <TooltipTrigger
+              data-slot="app-sidebar-footer-action"
+              aria-label={t("footer.settings")}
+              className={footerIconClass}
+              render={<PopoverTrigger />}
+            >
+              <AppSidebarSourceIcon name="settings" className="size-4" />
+            </TooltipTrigger>
+            <TooltipContent side="top" sideOffset={7}>
+              {t("footer.settings")}
+            </TooltipContent>
+          </Tooltip>
+
+          <PopoverContent
+            data-slot="app-sidebar-settings-surface"
+            side="top"
+            align="start"
+            sideOffset={6}
+            className="w-72 gap-2 p-2"
+          >
+            <PopoverHeader>
+              <PopoverTitle>{t("footer.settingsTitle")}</PopoverTitle>
+              <PopoverDescription>
+                {t("footer.settingsDescription")}
+              </PopoverDescription>
+            </PopoverHeader>
+            <div className="grid gap-1">
+              {[
+                t("footer.general"),
+                t("footer.currentSpace"),
+                t("footer.resources"),
+                t("footer.integrations"),
+              ].map((item) => (
+                <Button
+                  key={item}
+                  type="button"
+                  variant="ghost"
+                  className="h-8 justify-start px-2 font-normal"
+                >
+                  {item}
+                </Button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
 
         <AppSidebarFooterTooltip
           label={dark ? t("footer.useLightTheme") : t("footer.useDarkTheme")}
@@ -1262,11 +1339,105 @@ function AppSidebarFooter() {
 
         <span className="min-w-0 flex-1" />
 
-        <AppSidebarFooterTooltip label={t("documentMenu.share")}>
-          <AppSidebarSourceIcon name="share" className="size-4" />
-        </AppSidebarFooterTooltip>
+        <DropdownMenu>
+          <Tooltip>
+            <TooltipTrigger
+              data-slot="app-sidebar-footer-action"
+              aria-label={t("documentMenu.share")}
+              className={footerIconClass}
+              render={<DropdownMenuTrigger />}
+            >
+              <AppSidebarSourceIcon name="share" className="size-4" />
+            </TooltipTrigger>
+            <TooltipContent side="top" sideOffset={7}>
+              {t("documentMenu.share")}
+            </TooltipContent>
+          </Tooltip>
+
+          <DropdownMenuContent side="top" align="end" sideOffset={6}>
+            <DropdownMenuItem>
+              <AppSidebarSourceIcon name="share" />
+              {t("footer.shareWorkspace")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                void navigator.clipboard
+                  ?.writeText(window.location.href)
+                  .catch(() => undefined)
+              }
+            >
+              <AppSidebarCopyIcon />
+              {t("footer.copyWorkspaceLink")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </footer>
+  );
+}
+
+function AppSidebarTrashRow({
+  active,
+  onOpenChange,
+}: {
+  active: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const t = useTranslations("workspace");
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <Popover
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+        if (value) onOpenChange(true);
+      }}
+    >
+      <PopoverTrigger
+        data-slot="app-sidebar-utility-row"
+        className={cn(
+          utilityRowClass,
+          active &&
+            "bg-sidebar-accent text-sidebar-accent-foreground brightness-[0.965]",
+        )}
+      >
+        <span className="flex w-full min-w-0 items-center">
+          <AppSidebarSourceIcon name="trash" className="mr-1.5 size-4" />
+          <span className="min-w-0 truncate">
+            {t("sidebarUtilities.trash")}
+          </span>
+        </span>
+      </PopoverTrigger>
+
+      <PopoverContent
+        data-slot="app-sidebar-trash-surface"
+        side="right"
+        align="start"
+        sideOffset={8}
+        className="w-72 gap-2 p-2"
+      >
+        <PopoverHeader>
+          <PopoverTitle>{t("sidebarUtilities.trash")}</PopoverTitle>
+          <PopoverDescription>
+            {t("sidebarUtilities.trashDescription")}
+          </PopoverDescription>
+        </PopoverHeader>
+        <Input
+          className="h-8"
+          placeholder={t("sidebarUtilities.searchTrash")}
+        />
+        <Button
+          type="button"
+          variant="destructive"
+          size="sm"
+          disabled
+          className="w-full"
+        >
+          {t("sidebarUtilities.emptyTrash")}
+        </Button>
+      </PopoverContent>
+    </Popover>
   );
 }
 
@@ -1661,13 +1832,9 @@ function AppSidebarOverview({
             className="mt-auto flex w-full flex-col pb-2"
           >
             <div className="flex flex-col px-2 pr-0.5">
-              <AppSidebarUtilityRow
-                icon={(props) => (
-                  <AppSidebarSourceIcon name="trash" {...props} />
-                )}
-                label={t("sidebarUtilities.trash")}
+              <AppSidebarTrashRow
                 active={activeId === "trash"}
-                onClick={() => setActiveId("trash")}
+                onOpenChange={() => setActiveId("trash")}
               />
             </div>
 
@@ -1689,6 +1856,7 @@ export {
   type AppSidebarCustomSection,
   AppSidebarFooter,
   AppSidebarHelpSection,
+  AppSidebarTrashRow,
   type AppSidebarObjectType,
   AppSidebarObjectTypeRow,
   AppSidebarOverview,

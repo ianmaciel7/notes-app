@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createDashboardSection,
   DATA_VIEW_KINDS,
   OBJECT_VIEW_KINDS,
   canCommitObjectConversion,
@@ -9,16 +10,32 @@ import {
   createDataView,
   createDefaultDataViewPresentation,
   createDefaultObjectViewConfig,
+  createDefaultStructureDashboard,
   createDefaultQueryDefinition,
   createInitialWorkspaceViewState,
   createObjectConversionPlan,
   executeQueryDefinition,
   instantiateObjectTemplate,
+  migrateLegacyStructureDashboard,
   parseWorkspaceViewState,
+  projectDashboardBuiltInSection,
+  projectTaskDashboardSection,
+  projectObjectCardProperties,
+  projectTableViewColumns,
   projectDataView,
+  removeDashboardSection,
+  reorderTableViewColumns,
+  reorderDashboardSections,
   resolveConversionField,
+  resolveDashboardSectionTitles,
   resolveObjectView,
+  resolveStructureSmallCardPropertyIds,
   serializeWorkspaceViewState,
+  setDashboardSectionVisibility,
+  setStructureSmallCardPropertyIds,
+  setTableViewColumnVisibility,
+  setTableViewColumnWidth,
+  setTableViewColumnWrapping,
   switchDataViewKind,
 } from "../src/lib/workspace-object-views.ts";
 
@@ -51,6 +68,58 @@ const entities = [
 function expectSuccess(result) {
   assert.equal(result.ok, true, result.ok ? undefined : result.error.message);
   return result.value;
+}
+
+function pageStructure(overrides = {}) {
+  return {
+    id: "page",
+    ownership: "built-in",
+    singularName: "Page",
+    pluralName: "Pages",
+    iconName: "page",
+    tone: "sky",
+    lifecycleKind: "document",
+    collectionIds: [],
+    presentation: {
+      availableViews: ["list", "gallery", "wall", "table"],
+      defaultView: "list",
+    },
+    propertyDefinitions: [
+      {
+        id: "title",
+        multiple: false,
+        name: "Title",
+        ownership: "default",
+        valueType: "title",
+        writable: true,
+      },
+      {
+        id: "description",
+        multiple: false,
+        name: "Description",
+        ownership: "default",
+        valueType: "text",
+        writable: true,
+      },
+      {
+        id: "status",
+        multiple: false,
+        name: "Status",
+        ownership: "normal",
+        valueType: "label",
+        writable: true,
+      },
+      {
+        id: "createdAt",
+        multiple: false,
+        name: "Created",
+        ownership: "system",
+        valueType: "createdAt",
+        writable: false,
+      },
+    ],
+    ...overrides,
+  };
 }
 
 test("object and data view taxonomies stay distinct and never persist grid", () => {
@@ -181,6 +250,431 @@ test("Data View projection groups without copying or mutating object state", () 
   assert.strictEqual(projection.groups[0].items[0], entities[1]);
 });
 
+test("dashboard commands reject sidebar section ids and keep All immutable", () => {
+  const dashboard = {
+    structureId: "page",
+    updatedAt: "2026-01-10T10:00:00.000Z",
+    sections: [
+      createDashboardSection({ kind: "all" }, 0),
+      createDashboardSection(
+        { kind: "built-in", builtInId: "recently-opened" },
+        1,
+      ),
+    ],
+  };
+
+  const wrongCommandTarget = removeDashboardSection(
+    dashboard,
+    "sidebar-section:personal",
+  );
+  const removeAll = removeDashboardSection(dashboard, "dashboard-section:all");
+  const hideAll = setDashboardSectionVisibility(
+    dashboard,
+    "dashboard-section:all",
+    false,
+  );
+
+  assert.equal(wrongCommandTarget.ok, false);
+  assert.equal(wrongCommandTarget.error.code, "unknown-dashboard-section");
+  assert.equal(removeAll.ok, false);
+  assert.equal(removeAll.error.code, "immutable-dashboard-section");
+  assert.equal(hideAll.ok, false);
+  assert.equal(hideAll.error.code, "immutable-dashboard-section");
+});
+
+test("dashboard sections use stable source identities and rename through sources", () => {
+  const dashboard = {
+    structureId: "page",
+    updatedAt: "2026-01-10T10:00:00.000Z",
+    sections: [
+      createDashboardSection({ kind: "all" }, 0),
+      createDashboardSection(
+        { kind: "collection", collectionId: "collection:page:ideas" },
+        1,
+        {
+          collections: [
+            { id: "collection:page:ideas", title: "Ideas" },
+          ],
+        },
+      ),
+      createDashboardSection(
+        { kind: "query", queryId: "query:page:empty" },
+        2,
+        {
+          queries: [{ id: "query:page:empty", title: "Without title" }],
+        },
+      ),
+    ],
+  };
+
+  const renamed = resolveDashboardSectionTitles(
+    dashboard,
+    {
+      collections: [{ id: "collection:page:ideas", title: "Research" }],
+      queries: [{ id: "query:page:empty", title: "Needs title" }],
+    },
+    () => "2026-01-10T11:00:00.000Z",
+  );
+
+  assert.deepEqual(
+    renamed.sections.map((section) => section.title),
+    ["All", "Research", "Needs title"],
+  );
+  assert.deepEqual(
+    renamed.sections.map((section) => section.source),
+    dashboard.sections.map((section) => section.source),
+  );
+});
+
+test("removing and reordering dashboard sections changes presentation only", () => {
+  const dashboard = {
+    structureId: "page",
+    updatedAt: "2026-01-10T10:00:00.000Z",
+    sections: [
+      createDashboardSection({ kind: "all" }, 0),
+      createDashboardSection(
+        { kind: "collection", collectionId: "collection:page:ideas" },
+        1,
+      ),
+      createDashboardSection({ kind: "query", queryId: "query:page:empty" }, 2),
+    ],
+  };
+
+  const hidden = expectSuccess(
+    setDashboardSectionVisibility(
+      dashboard,
+      "dashboard-section:collection:collection:page:ideas",
+      false,
+    ),
+  );
+  const reordered = expectSuccess(
+    reorderDashboardSections(
+      hidden,
+      [
+        "dashboard-section:all",
+        "dashboard-section:query:query:page:empty",
+        "dashboard-section:collection:collection:page:ideas",
+      ],
+      () => "2026-01-10T11:00:00.000Z",
+    ),
+  );
+  const removed = expectSuccess(
+    removeDashboardSection(
+      reordered,
+      "dashboard-section:collection:collection:page:ideas",
+      () => "2026-01-10T12:00:00.000Z",
+    ),
+  );
+
+  assert.deepEqual(
+    hidden.sections.map((section) => [section.id, section.visible]),
+    [
+      ["dashboard-section:all", true],
+      ["dashboard-section:collection:collection:page:ideas", false],
+      ["dashboard-section:query:query:page:empty", true],
+    ],
+  );
+  assert.deepEqual(
+    reordered.sections.map((section) => [section.id, section.order]),
+    [
+      ["dashboard-section:all", 0],
+      ["dashboard-section:query:query:page:empty", 1],
+      ["dashboard-section:collection:collection:page:ideas", 2],
+    ],
+  );
+  assert.deepEqual(
+    removed.sections.map((section) => section.id),
+    ["dashboard-section:all", "dashboard-section:query:query:page:empty"],
+  );
+});
+
+test("legacy dashboard sections migrate with diagnostics", () => {
+  const migrated = expectSuccess(
+    migrateLegacyStructureDashboard({
+      structureId: "page",
+      updatedAt: "2026-01-10T10:00:00.000Z",
+      sections: [
+        {
+          id: "recent",
+          kind: "recent",
+          limit: 4,
+          title: "Recently opened",
+        },
+        {
+          dataViewId: "query:page:custom",
+          id: "custom-query",
+          kind: "data-view",
+          title: "Custom query",
+        },
+        {
+          id: "template-shortcuts",
+          kind: "template-shortcuts",
+          title: "Templates",
+        },
+      ],
+    }),
+  );
+
+  assert.deepEqual(
+    migrated.dashboard.sections.map((section) => [
+      section.id,
+      section.source.kind,
+      section.visible,
+    ]),
+    [
+      ["dashboard-section:built-in:recently-opened", "built-in", true],
+      ["dashboard-section:query:query:page:custom", "query", true],
+      ["dashboard-section:unknown:template-shortcuts", "built-in", false],
+    ],
+  );
+  assert.deepEqual(
+    migrated.diagnostics.map((diagnostic) => diagnostic.code),
+    [
+      "legacy-section-migrated",
+      "legacy-section-migrated",
+      "unknown-section-hidden",
+    ],
+  );
+});
+
+test("built-in dashboard projections use canonical local data only", () => {
+  const relationSourcesByTargetId = new Map([["page-1", ["page-2"]]]);
+  const pageEntities = [
+    { ...entities[0], collections: ["collection:page:work"] },
+    { ...entities[1], collections: [] },
+    entities[2],
+  ];
+
+  const untagged = projectDashboardBuiltInSection("untagged", {
+    entities: pageEntities,
+    relationSourcesByTargetId,
+    structureId: "page",
+  });
+  const withoutCollection = projectDashboardBuiltInSection(
+    "not-in-collection",
+    {
+      entities: pageEntities,
+      relationSourcesByTargetId,
+      structureId: "page",
+    },
+  );
+  const noBacklinks = projectDashboardBuiltInSection("no-backlinks", {
+    entities: pageEntities,
+    relationSourcesByTargetId,
+    structureId: "page",
+  });
+  const recentlyOpened = projectDashboardBuiltInSection("recently-opened", {
+    entities: pageEntities,
+    relationSourcesByTargetId,
+    structureId: "page",
+  });
+  const collections = projectDashboardBuiltInSection("collections", {
+    collectionRecords: [{ id: "collection:page:work", title: "Work" }],
+    entities: pageEntities,
+    relationSourcesByTargetId,
+    structureId: "page",
+  });
+
+  assert.deepEqual(untagged.items.map((entity) => entity.id), []);
+  assert.deepEqual(
+    withoutCollection.items.map((entity) => entity.id),
+    ["page-2"],
+  );
+  assert.deepEqual(noBacklinks.items.map((entity) => entity.id), ["page-2"]);
+  assert.equal(recentlyOpened.supported, false);
+  assert.match(recentlyOpened.reason, /opened-at/);
+  assert.equal(collections.supported, true);
+});
+
+test("task dashboard sections are projected only through a supplied provider", () => {
+  const missingProvider = projectTaskDashboardSection(
+    "task-dashboard:today",
+    "Today",
+    { entities, structureId: "task" },
+    undefined,
+  );
+  const provided = projectTaskDashboardSection(
+    "task-dashboard:today",
+    "Today",
+    { entities, structureId: "task" },
+    {
+      project: (input) => ({
+        id: "task-dashboard:today",
+        items: input.entities.filter((entity) => entity.kind === "task"),
+        supported: true,
+        title: "Today",
+      }),
+    },
+  );
+
+  assert.equal(missingProvider.supported, false);
+  assert.match(missingProvider.reason, /provider/);
+  assert.deepEqual(provided.items.map((entity) => entity.id), ["task-1"]);
+});
+
+test("small-card property order is stored on Structure presentation and reused", () => {
+  const structure = pageStructure();
+  const configured = expectSuccess(
+    setStructureSmallCardPropertyIds(structure, [
+      "title",
+      "status",
+      "description",
+      "objectTypeId",
+    ]),
+  );
+
+  assert.deepEqual(resolveStructureSmallCardPropertyIds(structure), [
+    "title",
+    "objectTypeId",
+    "createdAt",
+  ]);
+  assert.deepEqual(resolveStructureSmallCardPropertyIds(configured), [
+    "title",
+    "status",
+    "description",
+    "objectTypeId",
+  ]);
+  assert.equal(
+    setStructureSmallCardPropertyIds(configured, ["title", "title"]).ok,
+    false,
+  );
+  assert.equal(
+    setStructureSmallCardPropertyIds(configured, ["missing"]).ok,
+    false,
+  );
+});
+
+test("gallery preserves empty configured card slots while wall stays compact", () => {
+  const structure = expectSuccess(
+    setStructureSmallCardPropertyIds(pageStructure(), [
+      "title",
+      "description",
+      "status",
+    ]),
+  );
+  const entity = {
+    ...entities[0],
+    propertyValues: {
+      description: { text: { value: "" }, type: "text" },
+      status: { label: [{ id: "status:draft", name: "Draft" }], type: "label" },
+    },
+  };
+  const gallery = projectObjectCardProperties(entity, structure, "gallery");
+  const wall = projectObjectCardProperties(entity, structure, "wall");
+
+  assert.deepEqual(
+    gallery.map((property) => [
+      property.propertyId,
+      property.empty,
+      property.directEdit,
+    ]),
+    [
+      ["title", false, true],
+      ["description", true, false],
+      ["status", false, true],
+    ],
+  );
+  assert.deepEqual(
+    wall.map((property) => property.propertyId),
+    ["title", "status"],
+  );
+});
+
+test("table view column presentation persists independently from object values", () => {
+  const view = {
+    createdAt: "2026-01-10T10:00:00.000Z",
+    creatorId: "user-1",
+    id: "view-1",
+    name: "Pages table",
+    presentation: {
+      columns: [
+        {
+          id: "title",
+          label: "Title",
+          propertyId: "title",
+          visible: true,
+          width: 240,
+        },
+        {
+          id: "status",
+          label: "Status",
+          propertyId: "status",
+          visible: true,
+        },
+        {
+          id: "legacy",
+          label: "Legacy",
+          propertyId: "legacy",
+          visible: true,
+        },
+      ],
+      kind: "table",
+      rowDensity: "comfortable",
+      visiblePropertyIds: ["title", "status"],
+    },
+    query: createDefaultQueryDefinition(),
+    updatedAt: "2026-01-10T10:00:00.000Z",
+    workspaceId: "workspace-1",
+  };
+
+  const hidden = expectSuccess(
+    setTableViewColumnVisibility(view, "legacy", false),
+  );
+  const wrapped = expectSuccess(
+    setTableViewColumnWrapping(hidden, "title", true),
+  );
+  const resized = expectSuccess(setTableViewColumnWidth(wrapped, "title", 320));
+  const reordered = expectSuccess(
+    reorderTableViewColumns(resized, ["status", "title", "legacy"]),
+  );
+  const projected = expectSuccess(
+    projectTableViewColumns(reordered, pageStructure()),
+  );
+  const parsed = expectSuccess(
+    parseWorkspaceViewState(
+      serializeWorkspaceViewState({
+        dashboards: [],
+        dataViews: [reordered],
+        templates: [],
+        version: 1,
+      }),
+    ),
+  );
+
+  assert.deepEqual(
+    projected.map((column) => [
+      column.id,
+      column.visible,
+      column.wrap ?? false,
+      column.width ?? null,
+      column.missing,
+    ]),
+    [
+      ["status", true, false, null, false],
+      ["title", true, true, 320, false],
+      ["legacy", false, false, null, true],
+    ],
+  );
+  assert.deepEqual(entities.map((entity) => entity.id), [
+    "page-1",
+    "page-2",
+    "task-1",
+  ]);
+  assert.deepEqual(
+    parsed.dataViews[0].presentation.columns.map((column) => [
+      column.id,
+      column.visible,
+      column.wrap ?? false,
+      column.width ?? null,
+    ]),
+    [
+      ["status", true, false, null],
+      ["title", true, true, 320],
+      ["legacy", false, false, null],
+    ],
+  );
+});
+
 test("template instantiation creates fresh object and nested block ids", () => {
   const ids = ["block-a", "block-b", "object-a"];
   const template = {
@@ -285,4 +779,48 @@ test("view state round-trips with ownership and presentation only", () => {
 
   assert.deepEqual(parsed, state);
   assert.equal(parseWorkspaceViewState('{"version":1}').ok, false);
+});
+
+test("view state parser upgrades legacy dashboard records on load", () => {
+  const parsed = expectSuccess(
+    parseWorkspaceViewState(
+      JSON.stringify({
+        dashboards: [
+          {
+            structureId: "page",
+            updatedAt: "2026-01-10T10:00:00.000Z",
+            sections: [
+              {
+                id: "recent",
+                kind: "recent",
+                title: "Recently opened",
+              },
+            ],
+          },
+        ],
+        dataViews: [],
+        templates: [],
+        version: 1,
+      }),
+    ),
+  );
+  const next = createDefaultStructureDashboard(
+    "page",
+    () => "2026-01-10T10:00:00.000Z",
+  );
+
+  assert.deepEqual(parsed.dashboards[0].sections[0], {
+    id: "dashboard-section:built-in:recently-opened",
+    order: 0,
+    source: { builtInId: "recently-opened", kind: "built-in" },
+    title: "Recently opened",
+    visible: true,
+  });
+  assert.deepEqual(next.sections[0], {
+    id: "dashboard-section:all",
+    order: 0,
+    source: { kind: "all" },
+    title: "All",
+    visible: true,
+  });
 });

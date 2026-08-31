@@ -1,0 +1,45 @@
+## 1. Establish the Matched Evidence Baseline
+
+- [x] 1.1 Inspect branch, worktree, active dev server, selected routes, viewport, semantic Page state, sidebar state, and contextual-panel state before implementation; verify the comparison record identifies the exact checkout and `scrollWidth === clientWidth` baseline without touching unrelated dirty files.
+- [ ] 1.2 Complete the safe reference/local action matrix for header type, Collections, Customize, overflow, title, Tags, optional properties, editor, relationships, related content, and editor utilities; verify every visible affordance records idle, hover/exit, focus, keyboard, click, open/close, post-action, persistence, unavailable, reduced-motion, responsive, and console states or an explicit `not tested` verdict.
+- [ ] 1.3 Capture the missing `+`, grip, slash-label/alias, and `@` title/alias states at matched viewports; verify caret geometry, menu contents/order, roles/names, rectangles, computed styles, transitions, selection, cancellation, focus recovery, and mutation boundaries are recorded without leaving authenticated reference mutations.
+- [ ] 1.4 Create or extend the correlated object-page bundle and reference index with sanitized minimal artifacts; verify its manifest, action matrix, DOM/style/behavior files, redactions, limitations, refresh reason, and visually inspected Capacities-only crops satisfy the reference-evidence contract.
+
+## 2. Implement Canonical Editor Suggestions and Block Controls
+
+- [ ] 2.1 Add focused failing domain tests for normalized `@` title/alias lookup, same-target deduplication, eligibility, stable identity, exact trigger-range replacement, rename safety, backlink updates, and atomic rejection; verify the tests fail for the missing contract before implementation.
+- [ ] 2.2 Extract or extend one shared caret-anchored suggestion controller for slash and `@` flows; verify unit/component tests cover decoration geometry, document-position fallback, 8px viewport clamping, flip behavior, keyboard selection, Escape/outside dismissal, reduced motion, and no visible `(0,0)` fallback.
+- [ ] 2.3 Implement the `@` object-reference catalog and canonical commit transaction using runtime Structure identity and object icons; verify title and alias queries return one row per eligible object and selection updates the document, backlinks, graph projection, focus, and persistence exactly once.
+- [ ] 2.4 Align slash command labels, supported aliases, ordering, filtering, empty state, pointer/keyboard selection, and cancellation through the shared catalog; verify existing command behavior and the stored caret-position regression tests pass in every supported locale.
+- [ ] 2.5 Align the per-block plus and grip visual/interaction states without changing canonical block IDs; verify click, Shift-click, grip options, drag threshold, drop target, cancel, pointer exit, focus exit, touch/coarse-pointer exclusion, and delayed-click suppression pass focused editor tests.
+
+## 3. Align the Header and Optional Properties
+
+- [ ] 3.1 Add focused browser/source tests for the complete header and optional-property matrix before changing production composition; verify current mismatches for command catalogs, dummy Icon/Cover fields, Find in Page, state-dependent Pin/Unpin, focus recovery, and geometry are reproducible.
+- [ ] 3.2 Align the Page type chip and searchable selector with eligible runtime Structures and guarded canonical type changes; verify text/disclosure target isolation, search, pointer/keyboard selection, cancellation, error handling, and persisted type projections.
+- [ ] 3.3 Align Collections and Tags as inline focused selectors using shared compact popup behavior; verify no duplicate search field, existing choices, New/Search all actions, selected-chip hover/navigation/removal isolation, Escape/outside close, and exactly-once persistence.
+- [ ] 3.4 Make Customize commands conditional on canonical Page state and match the recorded Icon, Description, Aliases, Cover, all-properties, and wide-layout families; verify each supported add/fill/toggle action changes the rendered Page and survives re-opening while unavailable actions are truthful.
+- [ ] 3.5 Align the Page overflow command families, ordering, separators, shortcuts, nested/open state, Find in Page behavior, Pin/Unpin truthfulness, and destructive treatment through the shared compact-menu contract; verify opening/closing never mutates the Page and each safe command has a post-action assertion.
+- [ ] 3.6 Remove unconditional optional-property placeholders and render configured/populated Structure-backed rows in canonical order with buffered commits; verify absent fields create no hidden focus stops or vertical gaps and added/edited/removed values synchronize every projection.
+
+## 4. Align Editor, Relationships, and Related Content Composition
+
+- [ ] 4.1 Align the Page editor width, vertical rhythm, title/metadata spacing, block content spacing, hover affordances, and edge utility placement to the matched measured reference using semantic tokens and shared variants; verify rectangle/style comparisons pass without one-off global primitive overrides.
+- [ ] 4.2 Replace the always-expanded generic relationship authoring region with conditional reference-aligned backlinks, Mentions, embedded objects, Objects Inside, and related-content sections; verify headings, counts, ordering, disclosure, row hover/focus actions, navigation, and empty-state omission derive from canonical selectors.
+- [ ] 4.3 Preserve explicit local link/embed/relation authoring behind a named transient action; verify open and cancel are non-mutating, link/embed commits are schema-valid and exactly once, and the reading surface does not regain a permanent empty builder.
+- [ ] 4.4 Make related-content membership use explicit relation, backlink, collection, graph, or documented similarity rules rather than storage order; verify unrelated entities are excluded and counts/rows update after canonical relation changes.
+- [ ] 4.5 Re-run the completed Mentions and Structure/Statistics utility contracts after composition changes; verify mention direction, conversion, collapse/expand, utility tabs, pin/unpin, outside/Escape dismissal, statistics, narrow containment, and editor visibility do not regress.
+
+## 5. Accessibility, Localization, and Responsive Convergence
+
+- [ ] 5.1 Route every new visible label, placeholder, menu row, tooltip, empty/error state, and accessible name through all supported locale catalogs; verify locale-key parity and English-first source checks pass.
+- [ ] 5.2 Reuse the central object icon registry and named shared popup/menu/suggestion variants for every adjusted control; verify source guards reject one-off object icons, duplicated surface styles, product-prefixed components, and fixed runtime object-type registries.
+- [ ] 5.3 Exercise the complete object-page matrix at the recorded desktop, cramped, tablet, `480x844`, and `390x844` checkpoints with normal and reduced motion; verify positive main-surface dimensions, bounded overlays, reachable controls, no clipped focus targets, and `scrollWidth === clientWidth`.
+- [ ] 5.4 Verify Tab/Shift+Tab order, focus-visible styling, Enter/Space/arrows/typeahead/Escape behavior, focus restoration, disabled/unavailable semantics, and screen-reader names across every changed control; record any reference semantic weakness without copying it locally.
+
+## 6. Verification and Evidence Handoff
+
+- [ ] 6.1 Run the focused domain, editor, relationship, property, source-contract, and component suites after each implementation group; verify all changed contracts pass and unrelated baseline failures are reported separately.
+- [ ] 6.2 Run typecheck, lint, the repository verification command, and the focused browser parity suite against the actual production route; verify no implementation console errors, hydration errors, duplicate persistence, or test-only fallback surfaces remain.
+- [ ] 6.3 Refresh only evidence states changed by implementation and update the action matrix verdicts; verify prior capture identities remain intact, localhost screenshots are not persisted, and every claimed passing row links to measurable evidence.
+- [ ] 6.4 Run `openspec validate align-object-page-complete-parity --strict` and synchronize stable design/testing/reference documentation where behavior changed; verify proposal, four delta specs, design, tasks, evidence index, and practical docs remain coherent before requesting review.

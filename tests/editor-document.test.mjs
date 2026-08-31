@@ -9,6 +9,8 @@ import {
   blockEditorDocumentToPlainText,
   copyBlockEditorDocumentWithFreshIds,
   createEmptyBlockEditorDocument,
+  documentHasAdvancedMarkdownLossiness,
+  isAdvancedBlockType,
   isBlockEditorDocument,
   normalizeBlockEditorDocument,
 } from "../src/editor/document.ts";
@@ -90,7 +92,7 @@ test("legacy normalization removes editor-only link defaults and migrates stable
   );
 
   assert.deepEqual(normalized, {
-    schemaVersion: 2,
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
     doc: {
       type: "doc",
       content: [
@@ -131,7 +133,7 @@ test("normalization strips null paragraph defaults without dropping stable ids",
   });
 
   assert.deepEqual(normalized, {
-    schemaVersion: 2,
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
     doc: {
       type: "doc",
       content: [
@@ -230,7 +232,7 @@ test("new empty documents receive independent globally unique block ids", () => 
   const second = createEmptyBlockEditorDocument();
 
   assert.equal(isBlockEditorDocument(first), true);
-  assert.equal(first.schemaVersion, 2);
+  assert.equal(first.schemaVersion, BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION);
   assert.equal(first.doc.content[0].type, "paragraph");
   assert.match(first.doc.content[0].attrs.id, /^block:/);
   assert.notEqual(
@@ -252,7 +254,7 @@ test("plain text conversion preserves line boundaries and allocates fresh ids", 
 
 test("copied documents remap every nested referenceable block id without changing content", () => {
   const source = {
-    schemaVersion: 2,
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
     doc: {
       type: "doc",
       content: [
@@ -307,7 +309,171 @@ test("normalization rejects unknown nodes and repairs an empty root", () => {
     doc: { type: "doc", content: [] },
   });
   assert.ok(repaired);
-  assert.equal(repaired.schemaVersion, 2);
+  assert.equal(repaired.schemaVersion, BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION);
   assert.equal(repaired.doc.content[0].type, "paragraph");
   assert.match(repaired.doc.content[0].attrs.id, /^block:/);
+});
+
+test("version 2 documents migrate to schema 3 while preserving stable block ids", () => {
+  const normalized = normalizeBlockEditorDocument(
+    {
+      schemaVersion: 2,
+      doc: {
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            attrs: { id: "stable-paragraph" },
+            content: [{ type: "text", text: "v2 body" }],
+          },
+        ],
+      },
+    },
+    "v2-object",
+  );
+
+  assert.equal(normalized?.schemaVersion, BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION);
+  assert.equal(normalized?.doc.content[0].attrs.id, "stable-paragraph");
+  assert.equal(blockEditorDocumentToPlainText(normalized), "v2 body");
+});
+
+test("advanced block schema validates attributes depth and stable ids", () => {
+  const document = {
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "highlightBlock",
+          attrs: {
+            color: "yellow",
+            id: "highlight-1",
+            sourceLabel: "Reference",
+          },
+          content: [{ type: "text", text: "Quoted text" }],
+        },
+        {
+          type: "mathBlock",
+          attrs: {
+            displayMode: "block",
+            id: "math-1",
+            source: "E = mc^2",
+            sourceStatus: "valid",
+          },
+        },
+        {
+          type: "columnLayout",
+          attrs: { id: "layout-1", layoutMode: "columns", width: "content" },
+          content: [
+            {
+              type: "column",
+              attrs: { id: "column-a", width: 0.5 },
+              content: [{ type: "paragraph", attrs: { id: "paragraph-a" } }],
+            },
+            {
+              type: "column",
+              attrs: { id: "column-b", width: 0.5 },
+              content: [{ type: "paragraph", attrs: { id: "paragraph-b" } }],
+            },
+          ],
+        },
+        {
+          type: "groupBlock",
+          attrs: { appearance: "card", id: "group-1", width: "wide" },
+          content: [{ type: "paragraph", attrs: { id: "group-child" } }],
+        },
+        {
+          type: "objectBlock",
+          attrs: {
+            id: "object-block-1",
+            state: "read-only",
+            targetId: "page-1",
+            title: "Linked page",
+            viewKind: "embed",
+          },
+        },
+      ],
+    },
+  };
+
+  assert.equal(isBlockEditorDocument(document), true);
+  assert.equal(isAdvancedBlockType("groupBlock"), true);
+  const ids = collectBlockIds(document);
+  assert.equal(new Set(ids).size, ids.length);
+
+  const invalid = structuredClone(document);
+  invalid.doc.content[1].attrs.source = "<script>alert(1)</script>";
+  assert.equal(isBlockEditorDocument(invalid), false);
+});
+
+test("future advanced nodes normalize to safe unsupported blocks", () => {
+  const normalized = normalizeBlockEditorDocument(
+    {
+      schemaVersion: 99,
+      doc: {
+        type: "doc",
+        content: [
+          {
+            type: "futureWidget",
+            attrs: { vendor: "unknown" },
+          },
+        ],
+      },
+    },
+    "future",
+  );
+
+  assert.equal(normalized?.schemaVersion, BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION);
+  assert.equal(normalized?.doc.content[0].type, "unsupportedBlock");
+  assert.equal(normalized?.doc.content[0].attrs.originalType, "futureWidget");
+  assert.equal(isBlockEditorDocument(normalized), true);
+});
+
+test("advanced Markdown export declares reduced layout and transclusion semantics", () => {
+  const document = {
+    schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "columnLayout",
+          attrs: { id: "layout-export", layoutMode: "columns" },
+          content: [
+            {
+              type: "column",
+              attrs: { id: "column-export-a" },
+              content: [
+                {
+                  type: "paragraph",
+                  attrs: { id: "paragraph-export-a" },
+                  content: [{ type: "text", text: "First" }],
+                },
+              ],
+            },
+            {
+              type: "column",
+              attrs: { id: "column-export-b" },
+              content: [
+                {
+                  type: "objectBlock",
+                  attrs: {
+                    id: "object-export",
+                    targetId: "page-2",
+                    title: "Projected",
+                    viewKind: "transclusion",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+  assert.equal(documentHasAdvancedMarkdownLossiness(document), true);
+  const markdown = blockEditorDocumentToMarkdown(document);
+  assert.match(markdown, /lossiness: column layout/);
+  assert.match(markdown, /lossiness: object transclusion view/);
+  assert.match(markdown, /\[Projected\]\(object:page-2\)/);
 });

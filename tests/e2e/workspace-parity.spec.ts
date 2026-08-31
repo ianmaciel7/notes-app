@@ -1941,11 +1941,11 @@ test("mobile media quota failure stays recoverable without canonical asset", asy
     .click();
   await page.locator('[role="option"]').filter({ hasText: "Arquivo" }).click();
   const oversizedFile = testInfo.outputPath("too-large.bin");
-  writeFileSync(oversizedFile, Buffer.alloc(50 * 1024 * 1024 + 1));
+  writeFileSync(oversizedFile, Buffer.alloc(100_000_001));
   await page.getByLabel("Escolher arquivo local").setInputFiles(oversizedFile);
 
   await expect(page.locator('[data-slot="workspace-message"]')).toHaveText(
-    "Não foi possível salvar o arquivo localmente. Tente um arquivo menor ou libere armazenamento do navegador.",
+    "Escolha um arquivo de até 100 MB.",
   );
   expect(await persistedEntities(page)).toHaveLength(0);
   expect(await persistedMediaBlobKeys(page)).toEqual([]);

@@ -83,7 +83,10 @@ function DataViewTable(props: ProjectedDataViewProps) {
                 <th
                   key={column.id}
                   scope="col"
-                  className="border-b px-3 py-2"
+                  className={cn(
+                    "border-b px-3 py-2",
+                    column.wrap ? "whitespace-normal" : "whitespace-nowrap",
+                  )}
                   style={column.width ? { width: column.width } : undefined}
                 >
                   {props.propertyLabels?.[column.propertyId] ??
@@ -103,6 +106,7 @@ function DataViewTable(props: ProjectedDataViewProps) {
                     key={column.id}
                     className={cn(
                       "max-w-xs px-3",
+                      column.wrap ? "whitespace-normal" : "whitespace-nowrap",
                       presentation.rowDensity === "compact" ? "py-1" : "py-2",
                     )}
                   >
@@ -123,7 +127,7 @@ function DataViewTable(props: ProjectedDataViewProps) {
                         )}
                       </button>
                     ) : (
-                      <span className="block truncate">
+                      <span className={cn("block", !column.wrap && "truncate")}>
                         {entityValue(
                           entity,
                           column.propertyId,

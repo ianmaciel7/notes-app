@@ -1,0 +1,108 @@
+[     496ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  203834ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  204056ms] [LOG] [Fast Refresh] done in 319ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  552454ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  552692ms] [LOG] [Fast Refresh] done in 347ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  579814ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  580028ms] [LOG] [Fast Refresh] done in 280ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  617889ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  623949ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[  624005ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[  624009ms] [LOG] [Fast Refresh] done in 8692ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  624016ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  624028ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[  624059ms] [LOG] [Fast Refresh] done in 12ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  624062ms] [LOG] [Fast Refresh] done in 12ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  625713ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  685162ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698596ms] [LOG] [Fast Refresh] done in 20727ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698811ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698824ms] [LOG] [Fast Refresh] done in 1ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698824ms] [LOG] [Fast Refresh] done in 1ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698828ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698845ms] [LOG] [Fast Refresh] done in 0ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698845ms] [LOG] [Fast Refresh] done in 0ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698845ms] [LOG] [Fast Refresh] done in 0ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698849ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698857ms] [LOG] [Fast Refresh] done in 0ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  698858ms] [LOG] [Fast Refresh] done in 0ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  766776ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  767763ms] [LOG] [Fast Refresh] done in 923ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  767772ms] [LOG] [Fast Refresh] done in 923ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  826338ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  833089ms] [LOG] [Fast Refresh] done in 10403ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  868518ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  870087ms] [LOG] [Fast Refresh] done in 1219ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  903059ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  904104ms] [LOG] [Fast Refresh] done in 1210ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  932072ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  935303ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  935304ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  935305ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  935307ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  935308ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  938891ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939068ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939068ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939069ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939080ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939222ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939382ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939498ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939581ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939706ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939809ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  939969ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  940116ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  949144ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  949278ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  949344ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  949405ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  949470ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  949527ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  949588ms] [LOG] [Fast Refresh] done in 4025ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1161061ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1161324ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[ 1161359ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1161634ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1161636ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1161638ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1161752ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1161947ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1162184ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1162400ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1162525ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1162802ms] [LOG] [Fast Refresh] done in 394ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1163555ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1209069ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1209375ms] [LOG] [Fast Refresh] done in 768ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1259060ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[ 1260140ms] [LOG] [Fast Refresh] done in 646ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776

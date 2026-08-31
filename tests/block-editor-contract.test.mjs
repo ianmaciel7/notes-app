@@ -85,6 +85,29 @@ test("block editor uses the safe controlled Markdown boundary", () => {
   assert.doesNotMatch(editorSource, /dangerouslySetInnerHTML/);
 });
 
+test("advanced block commands live in the shared catalog", async () => {
+  const catalogSource = await readFile(
+    "src/editor/block-command-catalog.tsx",
+    "utf8",
+  );
+  for (const id of [
+    "toggle",
+    "emoji-text",
+    "highlight",
+    "mermaid",
+    "math",
+    "columns",
+    "group",
+    "object-inline",
+    "object-embed",
+  ]) {
+    assert.match(catalogSource, new RegExp(`id: "${id}"`));
+  }
+  assert.match(editorSource, /HighlightBlockNode/);
+  assert.match(editorSource, /ColumnLayoutNode/);
+  assert.match(handleSource, /command\.execute\(editor/);
+});
+
 test("editor persistence avoids a React state update on every keystroke", () => {
   assert.match(editorSource, /useBufferedDocumentCommit/);
   assert.match(bufferSource, /pendingRef/);

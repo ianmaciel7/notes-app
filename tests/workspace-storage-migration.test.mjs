@@ -19,7 +19,7 @@ test("new document entities use block schema v2 and typed property map", () => {
     objectTypeId: "page",
   });
 
-  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 5);
+  assert.equal(WORKSPACE_OBJECT_SCHEMA_VERSION, 6);
   assert.equal(state.entities[0].body.schemaVersion, 2);
   assert.equal(state.entities[0].body.doc.type, "doc");
   assert.equal(state.entities[0].body.doc.content[0].type, "paragraph");

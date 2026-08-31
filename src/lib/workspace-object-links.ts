@@ -3,7 +3,7 @@ import type {
   BlockEditorMark,
   BlockEditorNode,
 } from "../editor/document.ts";
-import type { WorkspaceEntity } from "./workspace-objects.ts";
+import type { TrashRecord, WorkspaceEntity } from "./workspace-objects.ts";
 
 type WorkspaceObjectReferenceKind = "block" | "embed" | "object";
 
@@ -32,6 +32,10 @@ type WorkspaceObjectLinkIndex = {
   backlinksByTargetId: Map<string, WorkspaceBacklink[]>;
   forwardBySourceId: Map<string, WorkspaceBacklink[]>;
   graphEdges: WorkspaceGraphEdge[];
+  missingTargets: readonly {
+    readonly reason: "missing" | "trashed";
+    readonly targetId: string;
+  }[];
   missingReferences: WorkspaceBacklink[];
   referenceCountsByTargetId: Map<string, number>;
 };
@@ -158,19 +162,26 @@ function selectForwardContentReferences(
 
 function createWorkspaceObjectLinkIndex(
   entities: readonly WorkspaceEntity[],
+  trashRecords: readonly TrashRecord[] = [],
 ): WorkspaceObjectLinkIndex {
   const entitiesById = new Map(entities.map((entity) => [entity.id, entity]));
+  const trashedIds = new Set(trashRecords.map((record) => record.entityId));
   const backlinksByTargetId = new Map<string, WorkspaceBacklink[]>();
   const forwardBySourceId = new Map<string, WorkspaceBacklink[]>();
   const graphEdges = new Map<string, WorkspaceGraphEdge>();
+  const missingTargets = new Map<
+    string,
+    { readonly reason: "missing" | "trashed"; readonly targetId: string }
+  >();
   const missingReferences: WorkspaceBacklink[] = [];
 
   for (const reference of selectForwardContentReferences(entities)) {
     const source = entitiesById.get(reference.sourceId);
     const target = entitiesById.get(reference.targetId);
+    const missing = !target || trashedIds.has(reference.targetId);
     const backlink: WorkspaceBacklink = {
       ...reference,
-      missing: !target,
+      missing,
       sourceTitle: source?.title ?? reference.sourceId,
       targetTitle: target?.title,
     };
@@ -180,7 +191,13 @@ function createWorkspaceObjectLinkIndex(
     const sourceLinks = forwardBySourceId.get(reference.sourceId) ?? [];
     sourceLinks.push(backlink);
     forwardBySourceId.set(reference.sourceId, sourceLinks);
-    if (!target) missingReferences.push(backlink);
+    if (missing) {
+      missingReferences.push(backlink);
+      missingTargets.set(reference.targetId, {
+        reason: trashedIds.has(reference.targetId) ? "trashed" : "missing",
+        targetId: reference.targetId,
+      });
+    }
     const edgeId = `${reference.sourceId}->${reference.targetId}:${reference.kind}`;
     graphEdges.set(edgeId, {
       from: reference.sourceId,
@@ -194,6 +211,7 @@ function createWorkspaceObjectLinkIndex(
     backlinksByTargetId,
     forwardBySourceId,
     graphEdges: Array.from(graphEdges.values()),
+    missingTargets: Array.from(missingTargets.values()),
     missingReferences,
     referenceCountsByTargetId: new Map(
       Array.from(backlinksByTargetId, ([targetId, backlinks]) => [

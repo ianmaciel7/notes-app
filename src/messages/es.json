@@ -285,10 +285,18 @@
     "footer": {
       "accountEmail": "Este dispositivo",
       "accountName": "Espacio de trabajo local",
+      "copyWorkspaceLink": "Copiar enlace del espacio",
+      "currentSpace": "Espacio actual",
+      "general": "General",
+      "integrations": "Integraciones",
       "plan": "Pro",
       "objectTypes": "Tipos de objeto",
       "profile": "Perfil personal",
+      "resources": "Recursos",
       "settings": "Configuración",
+      "settingsDescription": "Revisa destinos locales del espacio, recursos e integraciones.",
+      "settingsTitle": "Configuración",
+      "shareWorkspace": "Compartir espacio",
       "signOut": "Cerrar sesión",
       "useDarkTheme": "Usar tema oscuro",
       "useLightTheme": "Usar tema claro"
@@ -482,6 +490,9 @@
       "errors": {
         "incompatible-file": "Elige un archivo compatible con este tipo de objeto.",
         "invalid-url": "Introduce una URL válida para este tipo de objeto.",
+        "media-file-too-large": "Elige un archivo de hasta 100 MB.",
+        "media-operational-limit-exceeded": "Elige un archivo dentro de este límite de Notes App: {limit} bytes.",
+        "media-quota-exceeded": "El almacenamiento del navegador está lleno. Libera espacio e inténtalo de nuevo.",
         "media-storage-failed": "No se pudo guardar el archivo localmente. Prueba con un archivo más pequeño o libera almacenamiento del navegador.",
         "referenced-object": "Este objeto no se puede eliminar mientras haya relaciones que apunten a él.",
         "required-title": "Introduce el título de la tarea.",
@@ -653,6 +664,7 @@
       "manual": "Ordenar manualmente",
       "alphabetical": "Ordenar alfabéticamente",
       "create": "Crear",
+      "description": "Crea una sección personalizada en la barra lateral después de nombrarla.",
       "namePlaceholder": "Nombre de la sección",
       "noContent": "Sin contenido"
     },
@@ -668,7 +680,10 @@
       "whatsNew": "Novedades"
     },
     "sidebarUtilities": {
-      "trash": "Papelera"
+      "emptyTrash": "Vaciar papelera",
+      "searchTrash": "Buscar en la papelera",
+      "trash": "Papelera",
+      "trashDescription": "Los objetos locales eliminados aparecen aquí antes de su eliminación permanente."
     }
   }
 }

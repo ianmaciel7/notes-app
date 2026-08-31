@@ -1,13 +1,13 @@
 ## 1. Provider and Validation
 
-- [ ] 1.1 Add failing tests for provider input/output, stable ordering, finite scores, duplicate/self/missing/trashed/cross-Space rejection, and bounded results.
-- [ ] 1.2 Implement the provider interface, validation layer, and typed unavailable/error states.
+- [x] 1.1 Add failing tests for provider input/output, stable ordering, finite scores, duplicate/self/missing/trashed/cross-Space rejection, and bounded results.
+- [x] 1.2 Implement the provider interface, validation layer, and typed unavailable/error states.
 
 ## 2. Local Ranking
 
-- [ ] 2.1 Build deterministic fixtures for lexical, link, relation, tag, collection, and recency signals.
-- [ ] 2.2 Implement a versioned Notes App local ranker without calling it the Capacities algorithm.
-- [ ] 2.3 Add cache keys, targeted invalidation, offline behavior, and representative performance tests.
+- [x] 2.1 Build deterministic fixtures for lexical, link, relation, tag, collection, and recency signals.
+- [x] 2.2 Implement a versioned Notes App local ranker without calling it the Capacities algorithm.
+- [x] 2.3 Add cache keys, targeted invalidation, offline behavior, and representative performance tests.
 
 ## 3. UI
 

@@ -13,7 +13,10 @@ import {
   workspaceObjectReducer,
 } from "../src/lib/workspace-objects.ts";
 import {
+  formatNumberForExport,
+  formatNumberValue,
   normalizeWorkspacePropertyValue,
+  parseNumberInput,
   removeWorkspaceEntityPropertyValue,
   setWorkspaceEntityPropertyValue,
 } from "../src/lib/workspace-property-values.ts";
@@ -79,6 +82,143 @@ test("property definitions round-trip ownership, metadata, labels, and target co
   expectFailure(
     validatePropertyDefinition({ ...summaryDefinition, ownership: "private" }),
     "invalid-property-definition",
+  );
+});
+
+test("number property definitions validate presentation metadata and default migration", () => {
+  assert.deepEqual(
+    expectSuccess(
+      validatePropertyDefinition({
+        id: "rating",
+        multiple: false,
+        name: "Rating",
+        ownership: "normal",
+        valueType: "number",
+        writable: true,
+      }),
+    ),
+    {
+      id: "rating",
+      multiple: false,
+      name: "Rating",
+      numberPresentation: { type: "number" },
+      ownership: "normal",
+      valueType: "number",
+      writable: true,
+    },
+  );
+  assert.deepEqual(
+    expectSuccess(
+      validatePropertyDefinition({
+        id: "budget",
+        multiple: false,
+        name: "Budget",
+        numberPresentation: {
+          currency: "USD",
+          fixedDecimals: 2,
+          type: "currency",
+        },
+        ownership: "normal",
+        valueType: "number",
+        writable: true,
+      }),
+    ).numberPresentation,
+    { currency: "USD", fixedDecimals: 2, type: "currency" },
+  );
+  expectFailure(
+    validatePropertyDefinition({
+      id: "budget",
+      multiple: false,
+      name: "Budget",
+      numberPresentation: { currency: "usd", type: "currency" },
+      ownership: "normal",
+      valueType: "number",
+      writable: true,
+    }),
+    "invalid-property-definition",
+  );
+  expectFailure(
+    validatePropertyDefinition({
+      id: "progress",
+      multiple: false,
+      name: "Progress",
+      numberPresentation: { color: "green", steps: 0, type: "progress" },
+      ownership: "normal",
+      valueType: "number",
+      writable: true,
+    }),
+    "invalid-property-definition",
+  );
+  expectFailure(
+    validatePropertyDefinition({
+      ...summaryDefinition,
+      numberPresentation: { type: "number" },
+    }),
+    "invalid-property-definition",
+  );
+  expectFailure(
+    validatePropertyDefinition({
+      id: "table-text",
+      multiple: false,
+      name: "Table text",
+      numberPresentation: { type: "text" },
+      ownership: "normal",
+      valueType: "number",
+      writable: true,
+    }),
+    "invalid-property-definition",
+  );
+});
+
+test("number formatting separates raw numeric values from displayed presentation", () => {
+  assert.equal(
+    formatNumberValue(1, { fixedDecimals: 1, type: "percent" }, "en-US").text,
+    "100.0%",
+  );
+  assert.equal(
+    formatNumberValue(
+      1234.5,
+      { currency: "USD", fixedDecimals: 2, type: "currency" },
+      "en-US",
+    ).text,
+    "$1,234.50",
+  );
+  assert.deepEqual(
+    formatNumberValue(
+      12,
+      { color: "green", steps: 10, type: "progress" },
+      "en-US",
+    ).progress,
+    {
+      color: "green",
+      max: 10,
+      percent: 100,
+      text: "10 / 10",
+      value: 10,
+    },
+  );
+  assert.deepEqual(parseNumberInput("1.234,5", "pt-BR"), {
+    ok: true,
+    value: 1234.5,
+  });
+  expectFailure(parseNumberInput("not numeric", "en-US"), "invalid-property-value");
+  assert.equal(
+    formatNumberForExport(
+      1,
+      { fixedDecimals: 0, type: "percent" },
+      "raw",
+      "en-US",
+    ),
+    "1",
+  );
+  assert.equal(
+    formatNumberForExport(
+      1,
+      { fixedDecimals: 0, type: "percent" },
+      "display",
+      "en-US",
+    ),
+    "100%",
   );
 });
 

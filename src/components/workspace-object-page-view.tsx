@@ -1662,11 +1662,21 @@ function editorLabels(t: ReturnType<typeof useTranslations<"workspace">>) {
       orderedList: t("editor.slashMenu.orderedList"),
       romanList: t("editor.slashMenu.romanList"),
       taskList: t("editor.slashMenu.taskList"),
+      tableBlock: t("editor.slashMenu.tableBlock"),
       select: t("editor.slashMenu.select"),
       blockquote: t("editor.slashMenu.blockquote"),
       codeBlock: t("editor.slashMenu.codeBlock"),
+      columns: t("editor.slashMenu.columns"),
+      emojiText: t("editor.slashMenu.emojiText"),
+      group: t("editor.slashMenu.group"),
+      highlight: t("editor.slashMenu.highlight"),
       horizontalRule: t("editor.slashMenu.horizontalRule"),
+      math: t("editor.slashMenu.math"),
+      mermaid: t("editor.slashMenu.mermaid"),
+      objectEmbed: t("editor.slashMenu.objectEmbed"),
+      objectInline: t("editor.slashMenu.objectInline"),
       title: t("editor.slashMenu.title"),
+      toggle: t("editor.slashMenu.toggle"),
     },
   };
 }
@@ -2013,6 +2023,8 @@ function DocumentPage({
   const [customizeOpen, setCustomizeOpen] = React.useState(false);
   const {
     createdEntities,
+    createOrReuseWorkspaceTag,
+    createWorkspaceObjectReference,
     createWorkspacePage,
     deleteWorkspaceEntity,
     duplicateWorkspaceEntity,
@@ -2023,6 +2035,7 @@ function DocumentPage({
     showMessage,
     structures,
   } = useWorkspace();
+  const tags = entityTags(entity);
 
   function exportMarkdown() {
     const source = `# ${entity.title}\n\n${blockEditorDocumentToMarkdown(entity.body)}`;
@@ -2212,7 +2225,12 @@ function DocumentPage({
           placeholder={t("fields.text")}
           value={entity.body}
           onChange={(body) => update({ body })}
+          onCreateObjectReference={createWorkspaceObjectReference}
+          onCreateOrReuseTag={createOrReuseWorkspaceTag}
           onCreatePageRequest={createWorkspacePage}
+          onTagReference={(tagId) => {
+            if (!tags.includes(tagId)) update({ tags: [...tags, tagId] });
+          }}
           referenceEntities={createdEntities}
           referenceStructures={structures}
           className="mt-4 min-h-48"
@@ -2237,11 +2255,21 @@ function DocumentPage({
               orderedList: t("editor.slashMenu.orderedList"),
               romanList: t("editor.slashMenu.romanList"),
               taskList: t("editor.slashMenu.taskList"),
+              tableBlock: t("editor.slashMenu.tableBlock"),
               select: t("editor.slashMenu.select"),
               blockquote: t("editor.slashMenu.blockquote"),
               codeBlock: t("editor.slashMenu.codeBlock"),
+              columns: t("editor.slashMenu.columns"),
+              emojiText: t("editor.slashMenu.emojiText"),
+              group: t("editor.slashMenu.group"),
+              highlight: t("editor.slashMenu.highlight"),
               horizontalRule: t("editor.slashMenu.horizontalRule"),
+              math: t("editor.slashMenu.math"),
+              mermaid: t("editor.slashMenu.mermaid"),
+              objectEmbed: t("editor.slashMenu.objectEmbed"),
+              objectInline: t("editor.slashMenu.objectInline"),
               title: t("editor.slashMenu.title"),
+              toggle: t("editor.slashMenu.toggle"),
             },
           }}
         />

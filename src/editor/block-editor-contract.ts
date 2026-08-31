@@ -23,11 +23,21 @@ type BlockEditorLabels = {
     orderedList: string;
     romanList: string;
     taskList: string;
+    tableBlock: string;
     select: string;
     blockquote: string;
     codeBlock: string;
+    columns: string;
+    emojiText: string;
+    group: string;
+    highlight: string;
     horizontalRule: string;
+    math: string;
+    mermaid: string;
+    objectEmbed: string;
+    objectInline: string;
     title: string;
+    toggle: string;
   };
 };
 
@@ -35,6 +45,14 @@ type BlockEditorProps = {
   value: BlockEditorDocument;
   onChange?: (document: BlockEditorDocument) => void;
   onCreatePageRequest?: (title: string) => void;
+  onCreateObjectReference?: (
+    objectTypeId: string,
+    title: string,
+  ) => { readonly id: string; readonly label: string } | null;
+  onCreateOrReuseTag?: (
+    label: string,
+  ) => { readonly id: string; readonly label: string } | null;
+  onTagReference?: (tagId: string) => void;
   referenceEntities?: readonly WorkspaceEntity[];
   referenceStructures?: readonly WorkspaceStructure[];
   placeholder: string;

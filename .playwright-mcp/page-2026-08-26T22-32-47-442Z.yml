@@ -1,0 +1,117 @@
+- generic [ref=f2e1]:
+  - generic [ref=f2e2]:
+    - generic [ref=f2e3]:
+      - generic [ref=f2e4]:
+        - complementary [ref=f2e7]:
+          - generic [ref=f2e8]:
+            - generic [ref=f2e9]:
+              - combobox "Change space" [ref=f2e12]:
+                - generic [ref=f2e13]: Labs
+              - textbox [ref=f2e15]: Labs
+            - generic [ref=f2e17]:
+              - navigation "Navegação principal" [ref=f2e19]:
+                - button "Novo" [ref=f2e20]
+                - button "Buscar" [ref=f2e24]
+                - button "Explorar" [ref=f2e28]
+                - button "Calendário" [ref=f2e32]
+              - generic [ref=f2e34]:
+                - generic [ref=f2e36]:
+                  - generic [ref=f2e38]:
+                    - button "Fixados" [expanded] [ref=f2e39]
+                    - generic [ref=f2e47]:
+                      - generic [ref=f2e48]: "0"
+                      - button "Ordenar seção" [ref=f2e49]
+                      - button "Adicionar conteúdo aos Fixados" [ref=f2e50]
+                  - paragraph [ref=f2e52]: Nenhum conteúdo fixado
+                - generic [ref=f2e54]:
+                  - generic [ref=f2e55]:
+                    - generic [ref=f2e57]:
+                      - button "Tipos de objeto" [expanded] [ref=f2e58]
+                      - generic [ref=f2e66]:
+                        - generic [ref=f2e67]: "12"
+                        - button "Ordenar seção" [ref=f2e68]
+                        - button "Adicionar tipo de objeto" [ref=f2e70]
+                    - generic [ref=f2e71]:
+                      - button "Páginas" [ref=f2e74]
+                      - button "Tabelas" [ref=f2e84]
+                      - button "Tarefas" [ref=f2e94]
+                      - button "Weblinks" [ref=f2e104]
+                      - button "Imagens" [ref=f2e114]
+                      - button "PDFs" [ref=f2e124]
+                      - button "Áudios" [ref=f2e134]
+                      - button "Arquivos" [ref=f2e144]
+                      - button "Tweets" [ref=f2e154]
+                      - button "Chats de IA" [ref=f2e164]
+                      - button "Etiquetas" [ref=f2e174]
+                      - button "Queries" [ref=f2e184]
+                  - generic [ref=f2e192]:
+                    - button "Adicionar seção"
+                  - generic [ref=f2e194]:
+                    - button "Lixeira" [ref=f2e196]
+                    - generic [ref=f2e200]:
+                      - button "Ajuda e recursos" [expanded] [ref=f2e203]
+                      - generic [ref=f2e212]:
+                        - button "Primeiros passos" [ref=f2e213]
+                        - button "Fazer uma pergunta" [ref=f2e216]
+                        - button "Documentação" [ref=f2e219]
+                        - button "Novidades" [ref=f2e222]
+                        - button "Feedback" [ref=f2e225]
+                - generic [ref=f2e229]:
+                  - button "Configurações" [ref=f2e230]
+                  - button "Usar tema escuro" [ref=f2e231]
+                  - button "Perfil pessoal" [ref=f2e232]:
+                    - generic [ref=f2e233]: Pro
+                  - button "Compartilhar" [ref=f2e235]
+        - separator
+        - generic [ref=f2e238]:
+          - main [ref=f2e241]:
+            - generic [ref=f2e242]:
+              - generic [ref=f2e244]:
+                - button "Back" [ref=f2e245]
+                - button "Forward" [ref=f2e246]
+              - tablist "Workspace tabs" [ref=f2e250]:
+                - tab "Notas atômicas" [ref=f2e254] [cursor=pointer]
+                - tab "Citações" [ref=f2e264] [cursor=pointer]
+                - tab "Páginas" [ref=f2e274] [cursor=pointer]
+                - generic [ref=f2e282]:
+                  - tab "Sem título" [selected] [ref=f2e283] [cursor=pointer]
+                  - button "Close tab" [ref=f2e290]
+                - button "Criar nova aba" [ref=f2e294]
+              - button "Enter focus mode" [ref=f2e300]
+            - generic [ref=f2e304]:
+              - generic [ref=f2e305]:
+                - generic [ref=f2e306]:
+                  - generic [ref=f2e307]:
+                    - button "Citação" [ref=f2e308]
+                    - button "Coleções" [ref=f2e313]
+                  - button "Mais opções" [ref=f2e316]
+                - textbox "Título" [ref=f2e317]
+                - textbox "Etiquetas" [ref=f2e321]
+              - button "Recolher editor" [ref=f2e323]:
+                - generic [ref=f2e324]: −
+          - separator
+          - complementary [ref=f2e327]:
+            - generic [ref=f2e328]:
+              - generic [ref=f2e330]:
+                - tablist "Side panel tabs" [ref=f2e332]:
+                  - tab "Explorar" [selected] [ref=f2e335] [cursor=pointer]
+                - button "Nova aba lateral" [ref=f2e342]
+              - generic [ref=f2e347]:
+                - button "Ocultar painel lateral" [ref=f2e348]
+                - button "Abrir menu do painel lateral" [ref=f2e352]
+            - generic [ref=f2e359]:
+              - heading "Explorar" [level=2] [ref=f2e360]
+              - generic [ref=f2e361]:
+                - button "Visualização em grafo" [ref=f2e362]
+                - button "Links de entrada" [ref=f2e366]
+                - button "Objetos internos" [ref=f2e370]
+                - button "Conteúdo relacionado" [ref=f2e374]
+                - button "Chat de IA" [ref=f2e378]
+                - button "Buscar" [ref=f2e382]
+              - generic [ref=f2e386]:
+                - generic [ref=f2e387]: Conteúdo relevante
+                - button "Encontrar mais" [ref=f2e388]
+              - generic [ref=f2e391]: Não há nada aqui (por enquanto).
+      - button "Recolher barra lateral esquerda" [expanded] [ref=f2e397]
+    - text: Título
+  - button "Open Next.js Dev Tools" [ref=f2e403] [cursor=pointer]

@@ -1,0 +1,7 @@
+[   -1252ms] [WARNING] If you are interested in working with us, feel free to text us: team@capacities.io @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[   -1244ms] [INFO] Capacities v1.68.2; none none; Windows v10; Chrome v152.0.0.0 (WebKit v537.36); Desktop (Browser); 26/08/2026, 19:59:29 @ https://app.capacities.io/useDiagnostics59846.js:0
+[       7ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[      61ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[      78ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[     122ms] [WARNING] No space provided to getStatusSet @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:199
+[     128ms] [ERROR] 4 spaces not part of user loading! @ https://app.capacities.io/assets/worker-casual-B5cYOZGo.js:534

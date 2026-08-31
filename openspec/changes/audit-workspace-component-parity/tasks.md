@@ -16,7 +16,7 @@
 
 - [x] 3.1 Keep primary rows, disclosures, nested collection rows, counts, sort/add controls, and overflow actions as distinct named targets; verify pointer and keyboard activation affect only the intended state.
 - [x] 3.2 Align idle, hover, focus-visible, expanded, collapsed, selected, and contextual-action reveal geometry without row-label or neighboring-target shift; verify focused component and browser coverage passes.
-- [ ] 3.3 Align help/footer controls, space switcher, theme/profile/share surfaces, and left-sidebar collapse behavior with shared primitives and localization; verify every visible label exists in all supported locale catalogs.
+- [x] 3.3 Align help/footer controls, space switcher, theme/profile/share surfaces, and left-sidebar collapse behavior with shared primitives and localization; verify every visible label exists in all supported locale catalogs.
 
 ## 4. Align Workspace Headers
 

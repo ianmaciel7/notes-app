@@ -61,15 +61,38 @@ test("workspace commands project localized metadata, availability, and stable or
       values?.label ? `${key}:${values.label}` : `translated:${key}`,
     actions: {
       openPalette: () => calls.push("palette"),
+      openNewContent: () => calls.push("new"),
+      openExtendedSearch: () => calls.push("extended-search"),
+      openFindInPage: () => calls.push("find-page"),
+      openShortcuts: () => calls.push("shortcuts"),
       focusSidebarSearch: () => calls.push("search"),
+      openSettings: () => calls.push("settings"),
       navigateHome: () => calls.push("home"),
       navigateToday: () => calls.push("today"),
+      navigateBack: () => calls.push("back"),
+      navigateForward: () => calls.push("forward"),
       openExplore: () => calls.push("explore"),
       toggleSidebar: () => calls.push("sidebar"),
+      toggleSidePanel: () => calls.push("side-panel"),
+      toggleFocusMode: () => calls.push("focus"),
+      toggleTheme: () => calls.push("theme"),
+      toggleTabsBar: () => calls.push("tabs"),
+      closeCurrentTab: () => calls.push("close-tab"),
+      createTask: () => calls.push("task"),
+      setCalendarView: (view) => calls.push(`calendar:${view}`),
+      moveCalendar: (direction) => calls.push(`calendar:${direction}`),
       createObject: (structureId) => calls.push(`create:${structureId}`),
     },
     state: {
       canNavigateToday: false,
+      canUseExtendedSearch: true,
+      canFindInPage: true,
+      canOpenSettings: true,
+      canToggleTheme: true,
+      canToggleTabsBar: false,
+      canCloseCurrentTab: true,
+      canCreateTask: true,
+      calendarActive: false,
       structures: [
         { id: "page", label: "Page", enabled: true },
         { id: "table", label: "Table", enabled: true },
@@ -83,15 +106,45 @@ test("workspace commands project localized metadata, availability, and stable or
     commands.map((command) => command.id),
     [
       "workspace.openPalette",
+      "workspace.openNewContent",
+      "workspace.openExtendedSearch",
+      "workspace.openFindInPage",
+      "workspace.openShortcuts",
       "workspace.search",
+      "workspace.openSettings",
       "workspace.navigateHome",
+      "workspace.navigateBack",
+      "workspace.navigateForward",
       "workspace.openExplore",
       "workspace.toggleSidebar",
+      "workspace.toggleSidePanel",
+      "workspace.toggleFocusMode",
+      "workspace.toggleTheme",
+      "workspace.closeCurrentTab",
+      "workspace.createTask",
       "workspace.createObject.page",
       "workspace.createObject.table",
     ],
   );
   assert.equal(commands[0].shortcuts[0], "Mod+K");
+  assert.equal(
+    commands.find((command) => command.id === "workspace.openExtendedSearch")
+      ?.shortcuts[0],
+    "Mod+Shift+P",
+  );
+  assert.equal(
+    commands.find((command) => command.id === "workspace.openFindInPage")
+      ?.shortcuts[0],
+    "Mod+F",
+  );
+  assert.equal(
+    commands.some((command) => command.id === "workspace.toggleTabsBar"),
+    false,
+  );
+  assert.equal(
+    commands.some((command) => command.id === "workspace.calendar.month"),
+    false,
+  );
   assert.equal(commands[0].label, "translated:commands.openPalette.label");
   assert.equal(
     commands.find((command) => command.id === "workspace.createObject.page")
@@ -100,9 +153,79 @@ test("workspace commands project localized metadata, availability, and stable or
   );
 
   assert.equal(runWorkspaceCommand(runtime, "workspace.openPalette"), true);
+  assert.equal(runWorkspaceCommand(runtime, "workspace.openNewContent"), true);
+  assert.equal(runWorkspaceCommand(runtime, "workspace.openExtendedSearch"), true);
+  assert.equal(runWorkspaceCommand(runtime, "workspace.openFindInPage"), true);
+  assert.equal(runWorkspaceCommand(runtime, "workspace.toggleTheme"), true);
   assert.equal(runWorkspaceCommand(runtime, "workspace.createObject.table"), true);
   assert.equal(runWorkspaceCommand(runtime, "workspace.navigateToday"), false);
-  assert.deepEqual(calls, ["palette", "create:table"]);
+  assert.equal(runWorkspaceCommand(runtime, "workspace.calendar.month"), false);
+  assert.deepEqual(calls, [
+    "palette",
+    "new",
+    "extended-search",
+    "find-page",
+    "theme",
+    "create:table",
+  ]);
+});
+
+test("workspace command metadata has unique IDs and deterministic shortcut ownership", () => {
+  const runtime = createWorkspaceCommandRuntime({
+    locale: "en",
+    t: (key) => key,
+    actions: {
+      openPalette: () => {},
+      openNewContent: () => {},
+      openExtendedSearch: () => {},
+      openFindInPage: () => {},
+      openShortcuts: () => {},
+      focusSidebarSearch: () => {},
+      openSettings: () => {},
+      navigateHome: () => {},
+      navigateToday: () => {},
+      navigateBack: () => {},
+      navigateForward: () => {},
+      openExplore: () => {},
+      toggleSidebar: () => {},
+      toggleSidePanel: () => {},
+      toggleFocusMode: () => {},
+      toggleTheme: () => {},
+      closeCurrentTab: () => {},
+      createTask: () => {},
+      setCalendarView: () => {},
+      moveCalendar: () => {},
+    },
+    state: {
+      calendarActive: true,
+      canCloseCurrentTab: true,
+      canCreateTask: true,
+      canFindInPage: true,
+      canNavigateToday: true,
+      canOpenSettings: true,
+      canToggleTheme: true,
+      canUseExtendedSearch: true,
+    },
+  });
+  const commands = projectWorkspaceCommands(runtime);
+  const ids = commands.map((command) => command.id);
+  assert.equal(new Set(ids).size, ids.length);
+
+  const shortcutOwners = new Map();
+  for (const command of commands) {
+    for (const shortcut of command.shortcuts) {
+      const owner = shortcutOwners.get(shortcut);
+      if (owner) {
+        assert.match(shortcut, /^Arrow/);
+      }
+      shortcutOwners.set(shortcut, command.id);
+    }
+  }
+
+  assert.equal(shortcutOwners.get("Mod+Shift+P"), "workspace.openExtendedSearch");
+  assert.equal(shortcutOwners.get("Mod+U"), "workspace.openNewContent");
+  assert.equal(shortcutOwners.get("Mod+F"), "workspace.openFindInPage");
+  assert.equal(shortcutOwners.get("Mod+Shift+B"), "workspace.openShortcuts");
 });
 
 test("shortcut router prioritizes contexts and prevents default only after acceptance", () => {
@@ -243,4 +366,53 @@ test("shortcut router prioritizes contexts and prevents default only after accep
   });
   assert.deepEqual(accepted, ["modal", "editor-link"]);
   assert.equal(prevented, 2);
+});
+
+test("shortcut router keeps calendar letters out of editable and global contexts", () => {
+  const accepted = [];
+  const runtime = createWorkspaceCommandRuntime({
+    locale: "en",
+    t: (key) => key,
+    actions: {
+      setCalendarView: (view) => accepted.push(view),
+    },
+    state: {
+      calendarActive: true,
+    },
+  });
+
+  assert.deepEqual(
+    routeWorkspaceShortcut({
+      runtime,
+      platform: "windows",
+      event: { key: "m", target: { editable: true } },
+      claims: [
+        {
+          id: "calendar-month",
+          priority: "specialized",
+          shortcuts: ["M"],
+          commandId: "workspace.calendar.month",
+        },
+      ],
+    }),
+    { accepted: false, chord: "M", reason: "editable-target" },
+  );
+
+  assert.deepEqual(
+    routeWorkspaceShortcut({
+      runtime,
+      platform: "windows",
+      event: { key: "m" },
+      claims: [
+        {
+          id: "calendar-month",
+          priority: "specialized",
+          shortcuts: ["M"],
+          commandId: "workspace.calendar.month",
+        },
+      ],
+    }),
+    { accepted: true, chord: "M", claimId: "calendar-month" },
+  );
+  assert.deepEqual(accepted, ["month"]);
 });

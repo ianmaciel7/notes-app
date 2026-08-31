@@ -1,0 +1,16 @@
+[      21ms] [LOG] [Fast Refresh] done in 772ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[     531ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[     992ms] [LOG] [Fast Refresh] done in 847ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[    2498ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  190895ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  190962ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:0
+[  190983ms] [LOG] [Fast Refresh] done in 452ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  190984ms] [LOG] [Fast Refresh] done in 452ms @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776
+[  194483ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1-li_next_dist_0it2jl7._.js:776

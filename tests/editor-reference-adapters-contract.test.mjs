@@ -13,6 +13,9 @@ const [editorSource, contractSource, pageSource, referenceSource] =
 test("BlockEditor exposes optional workspace reference data without requiring it", () => {
   assert.match(contractSource, /referenceEntities\?: readonly WorkspaceEntity\[\]/);
   assert.match(contractSource, /referenceStructures\?: readonly WorkspaceStructure\[\]/);
+  assert.match(contractSource, /onCreateObjectReference\?:/);
+  assert.match(contractSource, /onCreateOrReuseTag\?:/);
+  assert.match(contractSource, /onTagReference\?:/);
   assert.match(editorSource, /referenceEntities = \[\]/);
   assert.match(editorSource, /referenceStructures = \[\]/);
 });
@@ -34,5 +37,10 @@ test("workspace page passes committed entities and structures into editable edit
   assert.match(pageSource, /referenceEntities=\{createdEntities\}/);
   assert.match(pageSource, /referenceStructures=\{structures\}/);
   assert.match(editorSource, /createReferenceSuggestionExtensions\(\{/);
+  assert.match(editorSource, /createQuickActionSuggestionExtensions\(\{/);
   assert.match(editorSource, /\.\.\.referenceSuggestionExtensions/);
+  assert.match(editorSource, /\.\.\.quickActionSuggestionExtensions/);
+  assert.match(pageSource, /onCreateObjectReference=\{createWorkspaceObjectReference\}/);
+  assert.match(pageSource, /onCreateOrReuseTag=\{createOrReuseWorkspaceTag\}/);
+  assert.match(pageSource, /onTagReference=\{\(tagId\) => \{/);
 });
