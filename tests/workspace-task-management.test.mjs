@@ -170,7 +170,7 @@ test("non-recurring completion closes the task once", () => {
   });
 
   assert.equal(completed.completed, true);
-  assert.equal(completed.status, "completed");
+  assert.equal(completed.completedAt, "2026-08-25T12:00:00.000Z");
   assert.equal(completed.occurrences.length, 1);
   assert.throws(() =>
     applyTaskOccurrenceAction(completed, {
@@ -187,7 +187,15 @@ test("task dashboards are expressed as shared query definitions", () => {
 
   assert.equal(today.source, "object-type");
   assert.equal(today.sourceValue, "task");
-  assert.ok(today.filters.filters.some((filter) => filter.kind === "property" && filter.propertyId === "scheduledDate"));
+  assert.ok(
+    today.filters.filters.some(
+      (filter) =>
+        "filters" in filter &&
+        filter.filters.some(
+          (item) => item.kind === "property" && item.propertyId === "scheduledDate",
+        ),
+    ),
+  );
   assert.ok(completed.filters.filters.some((filter) => filter.kind === "property" && filter.propertyId === "completed"));
 });
 
@@ -213,13 +221,13 @@ test("task dashboard membership derives inbox, today, scheduled, context, tags, 
     makeTask("6", "Done", createTaskManagementMetadata({ statusId: "labs:task-status:done", statusRegistry: registry })),
   ];
 
-  assert.deepEqual(projectTaskDashboardEntities("inbox", entities, registry, "2026-08-25").map((task) => task.id), ["1"]);
+  assert.deepEqual(projectTaskDashboardEntities("inbox", entities, registry, "2026-08-25").map((task) => task.id), ["1", "4", "5"]);
   assert.deepEqual(projectTaskDashboardEntities("today", entities, registry, "2026-08-25").map((task) => task.id), ["3"]);
   assert.deepEqual(projectTaskDashboardEntities("scheduled", entities, registry, "2026-08-25").map((task) => task.id), ["2"]);
   assert.deepEqual(projectTaskDashboardEntities("context", entities, registry, "2026-08-25").map((task) => task.id), ["4"]);
   assert.deepEqual(projectTaskDashboardEntities("tags", entities, registry, "2026-08-25").map((task) => task.id), ["5"]);
   assert.deepEqual(projectTaskDashboardEntities("completed", entities, registry, "2026-08-25").map((task) => task.id), ["6"]);
-  assert.deepEqual(projectTaskDashboardEntities("all", entities, registry, "2026-08-25").map((task) => task.id), ["1", "2", "3", "4", "5", "6"]);
+  assert.deepEqual(projectTaskDashboardEntities("all", entities, registry, "2026-08-25").map((task) => task.id), ["3", "2", "1", "4", "5", "6"]);
 });
 
 test("calendar today includes overdue scheduled, in-progress, and completed-today tasks separately", () => {

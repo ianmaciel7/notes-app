@@ -2413,11 +2413,12 @@ test("Page related content ranks explicit collection signals without replacing s
   await writeCreatedObjectTitle(page, "Orchid source page");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Granite active page");
-  await expect(
-    createdObjectWorkspace(page).locator(
-      '[data-slot="workspace-object-related-content"]',
-    ),
-  ).toHaveCount(0);
+  const initialRelated = createdObjectWorkspace(page).locator(
+    '[data-slot="workspace-object-related-content"]',
+  );
+  await expect(initialRelated).toBeVisible();
+  await expect(initialRelated).toHaveAttribute("data-state", "empty");
+  await expect(initialRelated).not.toContainText("Orchid source page");
 
   await createPageCollection(page, "Related collection");
   await page.getByRole("tab", { name: "Orchid source page" }).click();

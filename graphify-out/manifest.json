@@ -1211,7 +1211,7 @@
   },
   "src/messages/en.json": {
     "mtime": 1788170458.8338134,
-    "ast_hash": "",
+    "ast_hash": "eb92fc8e50a516a45dc48b04e3a848e7",
     "semantic_hash": ""
   },
   "src/messages/es.json": {
@@ -2075,8 +2075,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-task-management.test.mjs": {
-    "mtime": 1788170074.8945146,
-    "ast_hash": "002988483857055fc70e9de3f029bd8b",
+    "mtime": 1788170507.1689444,
+    "ast_hash": "1697d1f41da955921c03e5fd4b6bf94c",
     "semantic_hash": ""
   },
   ".superpowers/sdd/2026-08-25-prototyping-priorities/change-01-add-block-editor-report.md": {

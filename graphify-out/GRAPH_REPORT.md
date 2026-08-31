@@ -1,16 +1,16 @@
 # Graph Report - notes-app  (2026-08-31)
 
 ## Corpus Check
-- 684 files · ~518,643 words
+- 684 files · ~519,013 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4672 nodes · 7655 edges · 348 communities (305 shown, 43 thin omitted)
+- 4678 nodes · 7660 edges · 345 communities (300 shown, 45 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 91 edges (avg confidence: 0.56)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `57efbd4a`
+- Built from commit: `6f97bed5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -18,7 +18,7 @@
 - cn
 - workspace-import-export.ts
 - scan.py
-- app-header-icons.tsx
+- app-sidebar-object-type-studio.tsx
 - field.tsx
 - workspace-table-formulas.ts
 - Requirement: Type-specific creation workflows
@@ -29,12 +29,12 @@
 - components.json
 - workspace-object-type-view.tsx
 - app-sidebar.tsx
-- menubar.tsx
-- toggle-group.tsx
+- selectStructureById
+- Reporters
 - Requirement: Reusable object lifecycle components
 - compilerOptions
 - drawer.tsx
-- carousel.tsx
+- add-trash-lifecycle/tasks.md
 - Tier A - Official platform sources
 - check-complexity.mjs
 - block-command-catalog.tsx
@@ -194,7 +194,7 @@
 - workspace-trash-lifecycle.test.mjs
 - quick-action-suggestions.tsx
 - 2026-08-22-refine-capacities-en-fidelity/tasks.md
-- utils.ts
+- button.tsx
 - check-capacities-reference-baseline.mjs
 - shared-suggestion-controller.ts
 - app-side-panel-header.tsx
@@ -204,7 +204,7 @@
 - useWorkspace
 - ADDED Requirements
 - ADDED Requirements
-- shared-styles.ts
+- utils.ts
 - quick-action-suggestion-contracts.ts
 - object-view-preview.tsx
 - Capacities functional gap audit - 2026-08-31
@@ -302,23 +302,20 @@
 - @tiptap/react
 - tw-animate-css
 - block-editor-contract.test.mjs
-- createEntity
-- useBufferedTextCommit
-- WorkspaceEntity
+- projectObjectCardProperties
+- use-buffered-text-commit.ts
+- object-type-toolbar-icon.tsx
 - @tiptap/extension-bubble-menu
 - Implementation Notes
-- validateQueryDefinition
+- workspace-layout.ts
 - acceptance-matrix.md
 - Requirements
 - Requirements
 - limitations.md
 - workspace-content-surface.tsx
-- validatePropertyDefinition
 - validateDataView
-- runtime-object-types.test.mjs
 - Capacities keyboard command system reference
 - reconcile-keyboard-command-system-acceptance/tasks.md
-- marker.tsx
 - validateNumberPresentation
 - runtime-object-types.spec.ts
 - keyboard-command-evidence-contract.test.mjs
@@ -330,7 +327,7 @@
 - Requirements
 - Requirements
 - Requirements
-- blockEditorDocumentFromPlainText
+- normalizeBlockEditorDocument
 - Requirements
 - object-view-support.tsx
 - Requirements
@@ -354,33 +351,33 @@
   tests/workspace-dates-calendar.test.mjs → src/lib/workspace-objects.ts
 - `reduce()` --indirect_call--> `workspaceObjectReducer()`  [INFERRED]
   tests/workspace-objects.test.mjs → src/lib/workspace-objects.ts
-- `repositoryWithEntities()` --calls--> `createInitialWorkspaceObjectState()`  [EXTRACTED]
-  tests/workspace-account-spaces.test.mjs → src/lib/workspace-objects.ts
-- `twoSpaceState()` --calls--> `createInitialWorkspaceObjectState()`  [EXTRACTED]
-  tests/workspace-account-spaces.test.mjs → src/lib/workspace-objects.ts
-- `reduce()` --indirect_call--> `workspaceObjectReducer()`  [INFERRED]
-  tests/workspace-trash-lifecycle.test.mjs → src/lib/workspace-objects.ts
+- `linkedSourceBody()` --calls--> `createObjectReferenceMark()`  [EXTRACTED]
+  tests/workspace-related-content.test.mjs → src/lib/workspace-object-links.ts
+- `documentEntity()` --calls--> `blockEditorDocumentFromPlainText()`  [EXTRACTED]
+  tests/workspace-related-content.test.mjs → src/editor/document.ts
+- `page()` --calls--> `blockEditorDocumentFromPlainText()`  [EXTRACTED]
+  tests/workspace-account-spaces.test.mjs → src/editor/document.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (348 total, 43 thin omitted)
+## Communities (345 total, 45 thin omitted)
 
 ### Community 0 - "cn"
 Cohesion: 0.03
-Nodes (98): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), Alert(), AlertAction(), AlertDescription(), AlertTitle() (+90 more)
+Nodes (107): Accordion(), AccordionContent(), AccordionItem(), AccordionTrigger(), Alert(), AlertAction(), AlertDescription(), AlertTitle() (+99 more)
 
 ### Community 1 - "workspace-import-export.ts"
-Cohesion: 0.07
-Nodes (53): commitImportJob(), createImportIdMap(), createImportJob(), createInitialImportErrors(), createNativeWorkspaceExport(), createWorkspaceExportBundle(), csvEscape(), defaultImportExportSecurityLimits (+45 more)
+Cohesion: 0.06
+Nodes (54): commitImportJob(), createImportIdMap(), createImportJob(), createInitialImportErrors(), createNativeWorkspaceExport(), createWorkspaceExportBundle(), csvEscape(), defaultImportExportSecurityLimits (+46 more)
 
 ### Community 2 - "scan.py"
 Cohesion: 0.09
 Nodes (40): collect_code_metrics(), detect_ci_cd_pipelines(), detect_containers(), detect_monorepo(), detect_performance_markers(), detect_security_configs(), find_entry_points(), find_env_templates() (+32 more)
 
-### Community 3 - "app-header-icons.tsx"
-Cohesion: 0.10
-Nodes (17): AppFocusModeControls(), AppFocusModeControlsProps, AppHeader(), AppHeaderAction(), AppHeaderHistory(), AppHeaderProps, appHeaderTheme, AppHeaderCaretDownIcon() (+9 more)
+### Community 3 - "app-sidebar-object-type-studio.tsx"
+Cohesion: 0.07
+Nodes (34): AppSidebarCheckIcon, AppSidebarPlusIcon(), AppSidebarCustomObjectTypeCard(), AppSidebarObjectTypeCard(), AppSidebarObjectTypeDetails(), AppSidebarObjectTypeIcon(), AppSidebarObjectTypeStudio(), AppSidebarObjectTypeStudioProps (+26 more)
 
 ### Community 4 - "field.tsx"
 Cohesion: 0.07
@@ -396,11 +393,11 @@ Nodes (26): Requirement: Type-specific creation workflows, Scenario: AI chat pre
 
 ### Community 7 - "workspace-content.tsx"
 Cohesion: 0.04
-Nodes (37): AutosizeTextarea(), AutosizeTextareaProps, both(), BufferedAutosizeTextareaProps, BufferedInputProps, BufferedTextInputProps, calendarSpans, chooseNode() (+29 more)
+Nodes (43): AtomicNotesWorkspace(), AutosizeTextarea(), AutosizeTextareaProps, both(), BufferedAutosizeTextareaProps, BufferedInputProps, BufferedTextInputProps, calendarSpans (+35 more)
 
 ### Community 8 - "app-shell.tsx"
 Cohesion: 0.09
-Nodes (33): AppShell(), AppShellContext, AppShellContextValue, AppShellHeader(), AppShellMain(), AppShellMobile(), AppShellMobileSidebar(), AppShellMobileSidePanel() (+25 more)
+Nodes (31): AppShell(), AppShellContext, AppShellContextValue, AppShellHeader(), AppShellMain(), AppShellMobile(), AppShellMobileSidebar(), AppShellMobileSidePanel() (+23 more)
 
 ### Community 9 - "graphify-ingest-legacy.mjs"
 Cohesion: 0.13
@@ -408,7 +405,7 @@ Nodes (23): allowedCodeExt, allowedDocExt, allowedSpecialFiles, BUILD_AFTER_SYNC
 
 ### Community 10 - "app-sidebar-primary-actions.tsx"
 Cohesion: 0.04
-Nodes (51): AppSidebarArchiveIcon, AppSidebarArrowDownIcon, AppSidebarArrowUpIcon, AppSidebarAudioIcon, AppSidebarBookIcon, AppSidebarCalendarIcon(), AppSidebarChevronRightIcon, AppSidebarCodeIcon (+43 more)
+Nodes (48): AppSidebar(), AppSidebarArchiveIcon, AppSidebarArrowDownIcon, AppSidebarArrowUpIcon, AppSidebarAudioIcon, AppSidebarBookIcon, AppSidebarCalendarIcon(), AppSidebarChevronRightIcon (+40 more)
 
 ### Community 11 - "components.json"
 Cohesion: 0.09
@@ -416,19 +413,19 @@ Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent 
 
 ### Community 12 - "workspace-object-type-view.tsx"
 Cohesion: 0.06
-Nodes (29): ObjectQueryIcon, ObjectTypeToolbarIcon(), ObjectTypeToolbarIconName, objectTypeToolbarIconPaths, ObjectTypeToolbarIconProps, workspaceContentScopeClass, WorkspaceEmptyState(), WorkspaceEmptyStateProps (+21 more)
+Nodes (27): AppSidebarObjectType, ObjectQueryIcon, workspaceContentScopeClass, WorkspaceEmptyState(), WorkspaceEmptyStateProps, getObjectTypeImportAccept(), hasUntitledFilter(), Mode (+19 more)
 
 ### Community 13 - "app-sidebar.tsx"
-Cohesion: 0.06
-Nodes (39): AppShellContent(), AppSidebar(), AppSidebarLabels, AppSidebarProps, AppSidebarSpace, AppSidebarSpaceSwitcher(), areOrdersEqual(), defaultLabels (+31 more)
+Cohesion: 0.05
+Nodes (48): AppShellContent(), AppSidebarLabels, AppSidebarProps, AppSidebarSpace, AppSidebarSpaceSwitcher(), areOrdersEqual(), defaultLabels, DragPreview (+40 more)
 
-### Community 14 - "menubar.tsx"
-Cohesion: 0.09
-Nodes (23): DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuGroup(), DropdownMenuLabel(), DropdownMenuPortal(), DropdownMenuRadioGroup(), DropdownMenuRadioItem(), DropdownMenuShortcut() (+15 more)
+### Community 14 - "selectStructureById"
+Cohesion: 0.18
+Nodes (18): selectStructureById(), applyLinkedEntityInverseUpdates(), changedRelationTargetIds(), createLinkedEntitySourceUpdate(), findEntityPropertyDefinition(), nextInverseRelationIds(), nextLastUpdatedAt(), readEntityRelationIds() (+10 more)
 
-### Community 15 - "toggle-group.tsx"
-Cohesion: 0.43
-Nodes (5): ToggleGroup(), ToggleGroupContext, ToggleGroupItem(), Toggle(), toggleVariants
+### Community 15 - "Reporters"
+Cohesion: 0.22
+Nodes (8): Blob & Merge (CI/sharding), Built-in Reporters, Default Selection, HTML Report (v5 paths), JUnit Templating, Key Points, Output Files, Reporters
 
 ### Community 16 - "Requirement: Reusable object lifecycle components"
 Cohesion: 0.18
@@ -442,9 +439,9 @@ Nodes (29): dom, dom.iterable, esnext, **/*.mts, .next/dev/types/**/*.ts, next-e
 Cohesion: 0.14
 Nodes (10): DrawerContent(), DrawerContext, DrawerContextProps, DrawerDescription(), DrawerFooter(), DrawerHeader(), DrawerOverlay(), DrawerSwipeHandle() (+2 more)
 
-### Community 19 - "carousel.tsx"
-Cohesion: 0.19
-Nodes (13): Carousel(), CarouselApi, CarouselContent(), CarouselContext, CarouselContextProps, CarouselItem(), CarouselNext(), CarouselOptions (+5 more)
+### Community 19 - "add-trash-lifecycle/tasks.md"
+Cohesion: 0.33
+Nodes (5): 1. Domain and Storage, 2. Projection Integration, 3. Media and Sync, 4. UI, 5. Acceptance
 
 ### Community 20 - "Tier A - Official platform sources"
 Cohesion: 0.08
@@ -464,7 +461,7 @@ Nodes (11): ChartConfig, ChartContainer(), ChartContext, ChartContextProps, Char
 
 ### Community 24 - "table-block.ts"
 Cohesion: 0.08
-Nodes (49): nodeToPlainText(), applyTableBlockCommand(), cellDisplayText(), cellKey(), createCellId(), createColumnId(), createRowId(), createTableBlockConversion() (+41 more)
+Nodes (50): nodeToPlainText(), applyTableBlockCommand(), cellDisplayText(), cellKey(), createCellId(), createColumnId(), createRowId(), createTableBlockConversion() (+42 more)
 
 ### Community 25 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -492,7 +489,7 @@ Nodes (20): Async Tests, Basic Test, Benchmarks (v5), Concurrent Tests, Custom T
 
 ### Community 31 - "workspace-controller.tsx"
 Cohesion: 0.06
-Nodes (58): AppSidebarWorkspaceIcon(), AppSidebarPrimaryNavigationAction, areCollectionRecordMapsEquivalent(), arePinnedEntitySetsEquivalent(), areStringArrayMapsEquivalent(), createInitialMainTabs(), createSpaceId(), formatByteLimit() (+50 more)
+Nodes (65): AppHeaderCompassIcon(), AppHeaderGraphIcon(), AppSidebarWorkspaceIcon(), AppSidebarPrimaryNavigationAction, areCollectionRecordMapsEquivalent(), arePinnedEntitySetsEquivalent(), areStringArrayMapsEquivalent(), createInitialMainTabs() (+57 more)
 
 ### Community 32 - "Mocking"
 Cohesion: 0.10
@@ -520,7 +517,7 @@ Nodes (29): @base-ui/react, class-variance-authority, clsx, cmdk, date-fns, luci
 
 ### Community 38 - "workspace-object-views.ts"
 Cohesion: 0.04
-Nodes (53): CardPropertySurface, CommittedObjectConversion, ConversionFieldPlan, ConversionResolution, CreateDataViewInput, DASHBOARD_BUILT_IN_SECTION_IDS, DashboardBuiltInProjection, DashboardBuiltInProjectionInput (+45 more)
+Nodes (53): CardPropertySurface, cloneTemplateBlock(), CommittedObjectConversion, ConversionFieldPlan, ConversionResolution, CreateDataViewInput, DASHBOARD_BUILT_IN_SECTION_IDS, DashboardBuiltInProjection (+45 more)
 
 ### Community 39 - "Describe API"
 Cohesion: 0.11
@@ -543,8 +540,8 @@ Cohesion: 0.04
 Nodes (45): artifacts, capturedAt, confidence, freshness, interactions, limitations, persistedState, contextualPanel (+37 more)
 
 ### Community 44 - "vitest/SKILL.md"
-Cohesion: 0.11
-Nodes (11): Blob & Merge (CI/sharding), Built-in Reporters, Default Selection, HTML Report (v5 paths), JUnit Templating, Key Points, Output Files, Reporters (+3 more)
+Cohesion: 0.20
+Nodes (3): Advanced, Core, Features
 
 ### Community 45 - "Type Testing"
 Cohesion: 0.12
@@ -559,8 +556,8 @@ Cohesion: 0.12
 Nodes (16): By File Path, By Test Name, Changed Files, CLI Filtering, Combining Filters, Environment-based Filtering, Focus Tests (.only), Include/Exclude Patterns (+8 more)
 
 ### Community 48 - "workspace-object-types.ts"
-Cohesion: 0.07
-Nodes (38): createStructureRegistryForEntityReferences(), cloneNumberPresentation(), clonePresentation(), clonePropertyDefinition(), cloneStructure(), createInitialStructureRegistry(), createLegacyStructureDefinition(), createLegacyStructureDefinitions() (+30 more)
+Cohesion: 0.06
+Nodes (43): BUILT_IN_STRUCTURES, cloneNumberPresentation(), clonePresentation(), clonePropertyDefinition(), cloneStructure(), createCustomStructure(), createLegacyStructureDefinition(), deepFreeze() (+35 more)
 
 ### Community 49 - "extract-capacities-wacz-visual-contract.mjs"
 Cohesion: 0.10
@@ -631,8 +628,8 @@ Cohesion: 0.14
 Nodes (13): Requirement: Cramped tab-strip containment, Requirement: Existing app-shell integration, Requirement: Main create action, Requirement: Main tab drag reorder, Requirement: Main tab list, Requirement: Reusable application header, Requirements, Scenario: Create action is activated (+5 more)
 
 ### Community 66 - "workspace-property-values.ts"
-Cohesion: 0.08
-Nodes (41): DomainResult, NumberPresentation, PropertyDefinition, PropertyValueType, StructureDomainError, TableCellNumberPresentation, DefaultPropertyAdapter, defaultPropertyAdapters (+33 more)
+Cohesion: 0.09
+Nodes (41): DomainResult, NumberPresentation, PropertyDefinition, PropertyValueType, StructureDomainError, TableCellNumberPresentation, applyDefaultPropertyAdapter(), DefaultPropertyAdapter (+33 more)
 
 ### Community 67 - "Acquire Codebase Knowledge"
 Cohesion: 0.17
@@ -691,8 +688,8 @@ Cohesion: 0.20
 Nodes (10): Built-in Context, Composing & Hooks, Custom Fixtures — Builder Pattern (4.1+, recommended), Fixture Options, Fixture Scopes (3.2+), Injected Fixtures (per-project values), Key Points, Object Syntax (Playwright-compatible) (+2 more)
 
 ### Community 81 - "workspace-objects.ts"
-Cohesion: 0.06
-Nodes (62): selectStructureById(), addUtcCalendarDays(), appendPlainTextToDocument(), applyEntityPatch(), applyLinkedEntityInverseUpdates(), changedRelationTargetIds(), convertEntityToFlow(), createLinkedEntitySourceUpdate() (+54 more)
+Cohesion: 0.05
+Nodes (63): QueryObjectEditor(), entityTextForFind(), WorkspaceFindInPageDialog(), blockEditorDocumentFromPlainText(), blockEditorDocumentToPlainText(), addUtcCalendarDays(), appendPlainTextToDocument(), applyEntityPatch() (+55 more)
 
 ### Community 82 - "Requirements"
 Cohesion: 0.20
@@ -719,8 +716,8 @@ Cohesion: 0.22
 Nodes (9): Basic Setup, Common Options, Conditional Configuration, Configuration, Key Points, Merging Configs, Projects (Monorepos), Using with Existing Vite Config (+1 more)
 
 ### Community 88 - "sidebar.tsx"
-Cohesion: 0.07
-Nodes (32): AppSidebarPrimaryActionItem(), Input(), Sidebar(), SidebarContent(), SidebarContext, SidebarContextProps, SidebarFooter(), SidebarGroup() (+24 more)
+Cohesion: 0.05
+Nodes (45): AppFocusModeControls(), AppFocusModeControlsProps, AppHeader(), AppHeaderAction(), AppHeaderHistory(), AppHeaderProps, appHeaderTheme, AppHeaderCaretLeftIcon() (+37 more)
 
 ### Community 89 - "2026-08-18-codify-practical-documentation-workflow/design.md"
 Cohesion: 0.22
@@ -807,8 +804,8 @@ Cohesion: 0.29
 Nodes (6): Capabilities, Impact, Modified Capabilities, New Capabilities, What Changes, Why
 
 ### Community 110 - "workspace-object-links.ts"
-Cohesion: 0.09
-Nodes (43): ContextualRelationsWorkspace(), DocumentObjectEditor(), isDocumentWorkspaceEntity(), workspaceContentEntityRevision(), editorLabels(), getEntityTitle(), ReferencePanel(), BlockEditorMark (+35 more)
+Cohesion: 0.07
+Nodes (50): ContextualRelationsWorkspace(), workspaceContentEntityRevision(), editorLabels(), getEntityTitle(), ReferencePanel(), BlockEditorMark, BlockEditorNode, createLinkIndexForSpace() (+42 more)
 
 ### Community 111 - "workspace-offline-sync.ts"
 Cohesion: 0.06
@@ -860,7 +857,7 @@ Nodes (5): Handoff Note, Review / Execution, Scope, Summary, Usage
 
 ### Community 124 - "document.ts"
 Cohesion: 0.09
-Nodes (61): advancedBlockTypes, attributeValidators, BlockId, blockTypes, canonicalizeKnownEditorDefaults(), createMigratedBlockId(), createUnsupportedBlock(), hasCanonicalizableLinkAttrs() (+53 more)
+Nodes (60): advancedBlockTypes, attributeValidators, BlockId, blockTypes, canonicalizeKnownEditorDefaults(), createMigratedBlockId(), createUnsupportedBlock(), hasCanonicalizableLinkAttrs() (+52 more)
 
 ### Community 125 - "workspace-media-storage.ts"
 Cohesion: 0.08
@@ -939,12 +936,12 @@ Cohesion: 0.50
 Nodes (3): 1. Governance Documentation, 2. Validation and Sync, 3. Completion
 
 ### Community 144 - "workspace-domain-identities.ts"
-Cohesion: 0.15
-Nodes (21): WorkspaceSidebar(), CollectionPropertyEditor(), TagPropertyEditor(), appendMembership(), createCollectionId(), createTagId(), deterministicSuffix(), migrateLegacyCollectionsByStructure() (+13 more)
+Cohesion: 0.18
+Nodes (18): TagPropertyEditor(), appendMembership(), createCollectionId(), createTagId(), deterministicSuffix(), migrateLegacyCollectionsByStructure(), migrateLegacyTagNames(), normalizeIdentityName() (+10 more)
 
 ### Community 145 - "app-header-tabs.tsx"
-Cohesion: 0.10
-Nodes (26): AppHeaderTabAction(), AppHeaderTabActionLabels, AppHeaderTabIcon(), AppHeaderTabItem(), AppHeaderTabList(), AppHeaderTabProps, appHeaderTabTheme, AppSidePanelHeader() (+18 more)
+Cohesion: 0.08
+Nodes (30): AppHeaderTabAction(), AppHeaderTabActionLabels, AppHeaderTabIcon(), AppHeaderTabItem(), AppHeaderTabList(), AppHeaderTabProps, appHeaderTabTheme, AppSidePanelHeader() (+22 more)
 
 ### Community 151 - "Shadcn First"
 Cohesion: 0.33
@@ -960,7 +957,7 @@ Nodes (29): Active work to finish before broad parity claims, Apply rule, Capaci
 
 ### Community 174 - "workspace-account-spaces.ts"
 Cohesion: 0.08
-Nodes (53): AccountId, ActiveSpaceState, assertSameSpaceTarget(), AuthAdapter, AuthSecretHandle, createDefaultSpace(), createEmptySpaceRepository(), createInitialActiveSpaceState() (+45 more)
+Nodes (51): AccountId, ActiveSpaceState, assertSameSpaceTarget(), AuthAdapter, AuthSecretHandle, createDefaultSpace(), createEmptySpaceRepository(), createInitialActiveSpaceState() (+43 more)
 
 ### Community 175 - "biome.json"
 Cohesion: 0.15
@@ -975,8 +972,8 @@ Cohesion: 0.09
 Nodes (30): WorkspaceCommandPalette(), WorkspaceShortcutBrowser(), catalogGroupForCommand(), claimAcceptsChord(), createWorkspaceCommandRuntime(), localizeAliases(), normalizeEventKeyForShortcut(), projectWorkspaceCommands() (+22 more)
 
 ### Community 181 - "executeQueryDefinition"
-Cohesion: 0.13
-Nodes (18): DataViewRenderer(), ObjectPageTypePickerTrigger(), comparePropertyDefinitions(), compareUnknownValues(), createObjectConversionPlan(), executeQueryDefinition(), findSuggestedTarget(), groupProjectionItems() (+10 more)
+Cohesion: 0.11
+Nodes (22): DataViewRenderer(), ObjectPageTypePickerTrigger(), executeQueryInSpace(), comparePropertyDefinitions(), compareUnknownValues(), createObjectConversionPlan(), executeQueryDefinition(), findSuggestedTarget() (+14 more)
 
 ### Community 182 - "Requirements"
 Cohesion: 0.15
@@ -999,8 +996,8 @@ Cohesion: 0.12
 Nodes (15): Bound contextual sizing without replacing resize infrastructure, Context, Decisions, Goals / Non-Goals, Keep route acceptance state outside the primitives, Migration Plan, Model collection, query, and settings commands as local state transitions, Open Questions (+7 more)
 
 ### Community 188 - "object-views-and-conversion.test.mjs"
-Cohesion: 0.09
-Nodes (24): canCommitObjectConversion(), cloneTemplateBlock(), createDashboardSection(), createDataView(), createDefaultDataViewPresentation(), createDefaultObjectViewConfig(), createDefaultPresentation(), createDefaultQueryDefinition() (+16 more)
+Cohesion: 0.12
+Nodes (18): canCommitObjectConversion(), createDashboardSection(), createDataView(), createDefaultDataViewPresentation(), createDefaultObjectViewConfig(), createDefaultPresentation(), createDefaultQueryDefinition(), createDefaultStructureDashboard() (+10 more)
 
 ### Community 189 - "Workspace UI Parity"
 Cohesion: 0.20
@@ -1019,8 +1016,8 @@ Cohesion: 0.11
 Nodes (18): ADDED Requirements, Purpose, Requirement: Commands have one canonical definition and execution path, Requirement: Palette accessibility and platform labels are coherent, Requirement: Palette input remains responsive, Requirement: Shortcut dispatch is contextual and centralized, Requirement: The global palette combines current commands and indexed results, Scenario: Command is unavailable (+10 more)
 
 ### Community 193 - "workspace-trash-lifecycle.test.mjs"
-Cohesion: 0.12
-Nodes (16): blockEditorDocumentToPlainText(), serializeWorkspaceObjectState(), convertEntityToDocumentLike(), countEntitiesByType(), createInitialWorkspaceObjectState(), isWorkspaceEntityPurgeAccepted(), legacyTextBody(), selectTrashedEntities() (+8 more)
+Cohesion: 0.14
+Nodes (14): parseWorkspaceObjectSnapshot(), serializeWorkspaceObjectState(), countEntitiesByType(), createInitialWorkspaceObjectState(), isWorkspaceEntityPurgeAccepted(), selectTrashedEntities(), selectTrashRecords(), workspaceObjectReducer() (+6 more)
 
 ### Community 194 - "quick-action-suggestions.tsx"
 Cohesion: 0.15
@@ -1030,9 +1027,9 @@ Nodes (15): QuickActionSuggestionItem, TagSuggestionItem, applySuggestionMenuPos
 Cohesion: 0.22
 Nodes (8): 1. Evidence and Baseline, 2. Acceptance Composition, 3. Evidence-Backed Component Refinement, 4. Visual Fidelity Loop, 5. Final Verification and Spec Completion, 6. Shared Object-Type Listings, 7. Functional Object-Type Actions, 8. Exhaustive Object-Type Control Parity
 
-### Community 196 - "utils.ts"
+### Community 196 - "button.tsx"
 Cohesion: 0.05
-Nodes (32): AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader(), AlertDialogMedia(), AlertDialogOverlay() (+24 more)
+Nodes (35): Button(), Calendar(), CalendarDayButton(), Carousel(), CarouselApi, CarouselContent(), CarouselContext, CarouselContextProps (+27 more)
 
 ### Community 197 - "check-capacities-reference-baseline.mjs"
 Cohesion: 0.13
@@ -1043,8 +1040,8 @@ Cohesion: 0.17
 Nodes (15): canOpenSuggestionTrigger(), clamp(), computeSuggestionMenuPosition(), deleteSuggestionTriggerRange(), hasTriggerLeakage(), hasValidTriggerBoundary(), ResolvedSuggestionTrigger, resolveSuggestionTrigger() (+7 more)
 
 ### Community 199 - "app-side-panel-header.tsx"
-Cohesion: 0.13
-Nodes (12): AppHeaderTab, AppSidePanelHeader(), AppSidePanelHeaderProps, defaultSpecialItems, getTabRenderItems(), moveTab(), SideHeaderAction(), sideHeaderTheme (+4 more)
+Cohesion: 0.08
+Nodes (18): AppHeaderCaretDownIcon(), AppHeaderIconProps, AppHeaderPlusIcon(), AppHeaderPushPinFillIcon(), AppHeaderPushPinIcon(), AppHeaderSidebarSimpleIcon(), AppHeaderTab, AppSidePanelHeader() (+10 more)
 
 ### Community 200 - "add-keyboard-command-system/design.md"
 Cohesion: 0.14
@@ -1059,8 +1056,8 @@ Cohesion: 0.29
 Nodes (7): next, react, linter, domains, enabled, rules, recommended
 
 ### Community 203 - "useWorkspace"
-Cohesion: 0.11
-Nodes (21): AppHeaderCompassIcon(), AppHeaderGraphIcon(), ContextualSearchWorkspace(), CreatedObjectWorkspace(), ObjectTypeDestinationWorkspace(), QueryObjectEditor(), createInitialSideTabs(), createSpecialSideItems() (+13 more)
+Cohesion: 0.13
+Nodes (20): WorkspaceSidebar(), CollectionPropertyEditor(), ContextualSearchWorkspace(), CreatedObjectWorkspace(), DocumentObjectEditor(), isDocumentWorkspaceEntity(), ObjectTypeDestinationWorkspace(), MainTabSearchOverlay() (+12 more)
 
 ### Community 204 - "ADDED Requirements"
 Cohesion: 0.17
@@ -1070,17 +1067,17 @@ Nodes (11): ADDED Requirements, Requirement: Block suggestions resolve stable bl
 Cohesion: 0.17
 Nodes (11): ADDED Requirements, Requirement: Editor suggestions share one interaction state machine, Requirement: Slash command behavior remains canonical, Requirement: Trigger parsing is contextual and composition-safe, Scenario: A supported trigger opens at the caret, Scenario: Caret geometry is temporarily unavailable, Scenario: Multiple aliases identify one slash command, Scenario: Reference triggers are added (+3 more)
 
-### Community 206 - "shared-styles.ts"
-Cohesion: 0.09
-Nodes (13): ContextMenuCheckboxItem(), ContextMenuContent(), ContextMenuItem(), ContextMenuLabel(), ContextMenuRadioItem(), ContextMenuSeparator(), ContextMenuShortcut(), ContextMenuSubTrigger() (+5 more)
+### Community 206 - "utils.ts"
+Cohesion: 0.06
+Nodes (23): AspectRatio(), Checkbox(), ContextMenuCheckboxItem(), ContextMenuContent(), ContextMenuItem(), ContextMenuLabel(), ContextMenuRadioItem(), ContextMenuSeparator() (+15 more)
 
 ### Community 207 - "quick-action-suggestion-contracts.ts"
 Cohesion: 0.35
 Nodes (9): createPlusSuggestionItems(), createTagSuggestionItems(), isInstantEditorCreatableStructure(), normalizeSuggestionQuery(), QuickActionBlockCommandItem, suggestionTermMatches(), validTagLabel(), createQuickActionSuggestionExtensions() (+1 more)
 
 ### Community 208 - "object-view-preview.tsx"
-Cohesion: 0.14
-Nodes (7): DocumentPreview(), MediaAssetRenderer(), MediaAssetRendererProps, ObjectViewPreview(), ObjectViewPreviewProps, previewLines(), TaskPreview()
+Cohesion: 0.13
+Nodes (8): DocumentPreview(), MediaAssetRenderer(), MediaAssetRendererProps, ObjectViewPreview(), ObjectViewPreviewProps, previewLines(), TaskPreview(), WorkspaceEntity
 
 ### Community 209 - "Capacities functional gap audit - 2026-08-31"
 Cohesion: 0.18
@@ -1159,8 +1156,8 @@ Cohesion: 0.33
 Nodes (5): 1. Schema and Migration, 2. Text, Highlight, Code, and Math, 3. Layout and Group Blocks, 4. Object Blocks, 5. Acceptance
 
 ### Community 228 - "app-sidebar-overview.tsx"
-Cohesion: 0.03
-Nodes (89): AppSidebarCheckIcon, AppSidebarPlusIcon(), AppSidebarCustomObjectTypeCard(), AppSidebarObjectTypeCard(), AppSidebarObjectTypeDetails(), AppSidebarObjectTypeIcon(), AppSidebarObjectTypeStudio(), AppSidebarObjectTypeStudioProps (+81 more)
+Cohesion: 0.04
+Nodes (69): AppSidebarAddSection(), AppSidebarCollectionMenu(), AppSidebarCustomSection, AppSidebarDragState, AppSidebarFooter(), AppSidebarObjectTypeMenu(), AppSidebarObjectTypeMenuIcon(), AppSidebarObjectTypeRow() (+61 more)
 
 ### Community 229 - "devDependencies"
 Cohesion: 0.12
@@ -1195,8 +1192,8 @@ Cohesion: 0.40
 Nodes (4): Atomic Notes listing control matrix, Measured desktop geometry, Observed state transitions, Reference cleanup
 
 ### Community 238 - "workspace-object-storage.ts"
-Cohesion: 0.12
-Nodes (28): entitiesReferenceValidStructures(), entityKindByLifecycle, EntityMigrationResult, entityValidators, hasEntityBase(), hydrateEntityPropertyValues(), isRecord(), isTableCell() (+20 more)
+Cohesion: 0.13
+Nodes (27): createStructureRegistryForEntityReferences(), entitiesReferenceValidStructures(), entityKindByLifecycle, EntityMigrationResult, entityValidators, hasEntityBase(), hydrateEntityPropertyValues(), isRecord() (+19 more)
 
 ### Community 239 - "Requirement: Side-panel tab header"
 Cohesion: 0.29
@@ -1223,8 +1220,8 @@ Cohesion: 0.22
 Nodes (20): commitObjectConversion(), deleteDataView(), failure(), hasValidSnapshotCollections(), parseSnapshotInput(), parseWorkspaceViewState(), projectTableViewColumns(), removeDashboardSection() (+12 more)
 
 ### Community 246 - "block-editor.tsx"
-Cohesion: 0.10
-Nodes (32): BlockEditor(), editorAttributes(), normalizeSerializedDocument(), serializeDocument(), setEditorContentSafely(), BlockEditorLabels, BlockEditorProps, AdvancedCodeBlockAttributes (+24 more)
+Cohesion: 0.11
+Nodes (26): BlockEditor(), editorAttributes(), serializeDocument(), setEditorContentSafely(), BlockEditorLabels, BlockEditorProps, AdvancedCodeBlockAttributes, BlockIdExtension (+18 more)
 
 ### Community 247 - "isNonEmptyString"
 Cohesion: 0.18
@@ -1243,8 +1240,8 @@ Cohesion: 0.40
 Nodes (4): 1. Build the Canonical Inventory, 2. Reconcile Repository State, 3. Refresh Planning, 4. Verify
 
 ### Community 251 - "ok"
-Cohesion: 0.25
-Nodes (24): createCustomStructure(), deleteStructure(), ensureEditable(), failure(), findStructureIndex(), instantiateObjectTypePreset(), ok(), renameStructure() (+16 more)
+Cohesion: 0.18
+Nodes (32): cloneValidatedPropertyDefinition(), deleteStructure(), ensureEditable(), failure(), findStructureIndex(), hasUniqueNonEmptyStrings(), hasValidPropertyDefinitionCore(), isNonEmptyString() (+24 more)
 
 ### Community 252 - "app-sidebar-source-icon.tsx"
 Cohesion: 0.33
@@ -1343,16 +1340,16 @@ Cohesion: 0.67
 Nodes (3): Requirement: Shared reusable workspace components, Scenario: Shared component drift is tested, Scenario: Shared lifecycle and interaction components are consumed
 
 ### Community 279 - "workspace-object-page-view.tsx"
-Cohesion: 0.07
-Nodes (39): CompoundChip(), CompoundChipDisclosure(), CompoundChipPrimary(), Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger() (+31 more)
+Cohesion: 0.06
+Nodes (44): CompoundChip(), CompoundChipDisclosure(), CompoundChipPrimary(), Tabs(), TabsContent(), TabsList(), tabsListVariants, TabsTrigger() (+36 more)
 
 ### Community 284 - "align-media-upload-limit/tasks.md"
 Cohesion: 0.40
 Nodes (4): 1. Policy Contract, 2. Flow Integration, 3. Migration and UI, 4. Acceptance
 
 ### Community 285 - "block-editor-handle.tsx"
-Cohesion: 0.13
-Nodes (18): BlockHandle(), createTargetVirtualElement(), EditorCommandCatalog, findTopLevelTargetForDom(), HANDLE_POSITION_CONFIG, HandleTarget, InsertDirection, isGripDragOrigin() (+10 more)
+Cohesion: 0.18
+Nodes (14): BlockHandle(), createTargetVirtualElement(), EditorCommandCatalog, findTopLevelTargetForDom(), HANDLE_POSITION_CONFIG, HandleTarget, InsertDirection, isGripDragOrigin() (+6 more)
 
 ### Community 288 - "block-editor.spec.ts"
 Cohesion: 0.38
@@ -1366,25 +1363,17 @@ Nodes (3): Input Performance Rule, Required Practices, Review Checklist
 Cohesion: 0.10
 Nodes (19): artifacts, capturedAt, commands, editorTriggerStates, limitations, redactions, schemaVersion, semanticState (+11 more)
 
-### Community 307 - "createEntity"
-Cohesion: 0.21
-Nodes (15): FilePage(), acceptsFileForType(), beginWorkspaceObjectCreation(), commitFileDraft(), commitTaskDraft(), commitUrlDraft(), createEntity(), createTableCells() (+7 more)
+### Community 307 - "projectObjectCardProperties"
+Cohesion: 0.33
+Nodes (6): defaultSmallCardPropertyIds(), findPropertyDefinition(), isDirectCardEditSupported(), isEmptyCardPropertyValue(), projectObjectCardProperties(), resolveStructureSmallCardPropertyIds()
 
-### Community 309 - "useBufferedTextCommit"
-Cohesion: 0.15
-Nodes (10): BufferedAutosizeTextarea(), BufferedInput(), BufferedTextInput(), EditableObjectTitle(), BufferedNotes(), BufferedTableCell(), BufferedTitle(), BufferedTextCommitOptions (+2 more)
-
-### Community 310 - "WorkspaceEntity"
-Cohesion: 0.20
-Nodes (9): GraphWorkspace(), LinkEdge, projectWorkspaceGraph(), WorkspaceGraph, WorkspaceGraphEdge, WorkspaceGraphEntity, WorkspaceGraphNode, selectContextualGraphEdges() (+1 more)
+### Community 310 - "object-type-toolbar-icon.tsx"
+Cohesion: 0.40
+Nodes (4): ObjectTypeToolbarIcon(), ObjectTypeToolbarIconName, objectTypeToolbarIconPaths, ObjectTypeToolbarIconProps
 
 ### Community 312 - "Implementation Notes"
 Cohesion: 0.29
 Nodes (6): 2026-08-31 Corrective Pass, Acceptance Boundary, Change Reference Check, Implementation Notes, Recorded Failure Reproduction, Verification Outcomes
-
-### Community 313 - "validateQueryDefinition"
-Cohesion: 0.50
-Nodes (4): hasValidQueryCollections(), hasValidQueryOptions(), isQuerySort(), validateQueryDefinition()
 
 ### Community 315 - "Requirements"
 Cohesion: 0.06
@@ -1395,20 +1384,12 @@ Cohesion: 0.08
 Nodes (23): Purpose, Requirement: Backward-compatible Structure persistence, Requirement: Canonical runtime Structure registry, Requirement: Guarded Structure lifecycle, Requirement: Objects reference Structures by identity, Requirement: Presets create custom Structures, Requirement: Structure-owned property definitions, Requirements (+15 more)
 
 ### Community 319 - "workspace-content-surface.tsx"
-Cohesion: 0.14
-Nodes (11): AppSidebarSearchIcon(), AtomicNotesWorkspace(), contextualPanelTabId(), createActivePresetObjectType(), ExploreWorkspace(), parseActiveNamedItem(), parseObjectTypeNamedItemTabId(), primaryActionFromMainValue() (+3 more)
-
-### Community 320 - "validatePropertyDefinition"
-Cohesion: 0.24
-Nodes (12): cloneValidatedPropertyDefinition(), hasUniqueNonEmptyStrings(), hasValidOptionalIcon(), hasValidPropertyDefinitionCore(), isNonEmptyString(), isRecord(), readPropertyDefinitionFields(), validateLabelOptions() (+4 more)
+Cohesion: 0.22
+Nodes (6): AppSidebarSearchIcon(), contextualPanelTabId(), ExploreWorkspace(), GraphWorkspace(), ExploreWorkspace(), WorkspaceContentSurfaceProps
 
 ### Community 321 - "validateDataView"
-Cohesion: 0.20
-Nodes (11): hasUniqueValues(), hasValidDataViewIdentity(), hasValidEmbeddedPresentation(), hasValidPresentationBase(), hasValidTablePresentation(), isDataViewKind(), isObjectViewKind(), isValidDataViewColumn() (+3 more)
-
-### Community 322 - "runtime-object-types.test.mjs"
-Cohesion: 0.25
-Nodes (4): BUILT_IN_STRUCTURES, OBJECT_TYPE_PRESETS, RESERVED_STRUCTURES, canonicalRegistry
+Cohesion: 0.14
+Nodes (15): hasUniqueValues(), hasValidDataViewIdentity(), hasValidEmbeddedPresentation(), hasValidPresentationBase(), hasValidQueryCollections(), hasValidQueryOptions(), hasValidTablePresentation(), isDataViewKind() (+7 more)
 
 ### Community 323 - "Capacities keyboard command system reference"
 Cohesion: 0.40
@@ -1417,10 +1398,6 @@ Nodes (4): Capacities keyboard command system reference, Coverage summary, Evide
 ### Community 324 - "reconcile-keyboard-command-system-acceptance/tasks.md"
 Cohesion: 0.40
 Nodes (4): 1. Reproduce and Classify the Current State, 2. Reconcile Evidence, 3. Close Verification Gaps, 4. Handoff
-
-### Community 325 - "marker.tsx"
-Cohesion: 0.50
-Nodes (4): Marker(), MarkerContent(), MarkerIcon(), markerVariants
 
 ### Community 326 - "validateNumberPresentation"
 Cohesion: 0.50
@@ -1454,17 +1431,17 @@ Nodes (16): Purpose, Requirement: Accessible task view mutations, Requirement: N
 Cohesion: 0.12
 Nodes (16): Purpose, Requirement: Backward-compatible migration, Requirement: Canonical typed property values, Requirement: Default and normal properties remain distinct, Requirement: Runtime custom Structures use the same value model, Requirement: Safe property conversion, Requirement: Supported property families have explicit values, Requirements (+8 more)
 
-### Community 345 - "blockEditorDocumentFromPlainText"
-Cohesion: 0.18
-Nodes (13): DocumentPage(), PageCustomizeControl(), advancedNodeToMarkdown(), BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION, blockEditorDocumentFromMarkdown(), blockEditorDocumentFromPlainText(), blockEditorDocumentToMarkdown(), copyBlockEditorDocumentWithFreshIds() (+5 more)
+### Community 345 - "normalizeBlockEditorDocument"
+Cohesion: 0.16
+Nodes (15): normalizeSerializedDocument(), PageCustomizeControl(), advancedNodeToMarkdown(), BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION, blockEditorDocumentFromMarkdown(), blockEditorDocumentToMarkdown(), createEmptyBlockEditorDocument(), documentHasAdvancedMarkdownLossiness() (+7 more)
 
 ### Community 347 - "Requirements"
 Cohesion: 0.12
 Nodes (15): dates-daily-notes-and-calendar Specification, Purpose, Requirement: Canonical date semantics, Requirement: Date navigation and creation, Requirement: Day context aggregates date knowledge, Requirement: Driving date property is explicit, Requirement: Explicit calendar projections, Requirement: One Daily Note per Space/date (+7 more)
 
 ### Community 348 - "object-view-support.tsx"
-Cohesion: 0.14
-Nodes (20): DataViewCards(), dataViewCardsClass(), DataViewList(), DataViewListRow(), DataViewTable(), objectIconToneBadgeClass, objectIconToneTextClass, objectTypeDefinitionById (+12 more)
+Cohesion: 0.13
+Nodes (22): DataViewCards(), dataViewCardsClass(), DataViewList(), DataViewListRow(), DataViewTable(), objectIconToneBadgeClass, objectIconToneTextClass, objectTypeDefinitionById (+14 more)
 
 ### Community 352 - "Requirements"
 Cohesion: 0.20
@@ -1479,29 +1456,29 @@ Cohesion: 0.50
 Nodes (4): Requirement: Runtime Structure-backed object creation, Scenario: Creation palette renders built-in and custom Structures, Scenario: Custom Structure object is created and reopened, Scenario: Preset is added through the object-type studio
 
 ## Knowledge Gaps
-- **2097 isolated node(s):** `ObjectTypeId`, `CreationFlow`, `WorkspaceEntityBase`, `DocumentEntity`, `QuoteEntity` (+2092 more)
+- **2102 isolated node(s):** `1. Domain and Storage`, `2. Projection Integration`, `3. Media and Sync`, `4. UI`, `5. Acceptance` (+2097 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **43 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **45 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Work-memory lessons
 
 **Preferred sources** — corroborated by past sessions; start here.
-- `shared-styles.ts` (2× useful, score=1.635381864)
+- `shared-styles.ts` (2× useful, score=1.635371473)
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `cn` to `app-header-icons.tsx`, `field.tsx`, `workspace-content.tsx`, `app-shell.tsx`, `app-sidebar-primary-actions.tsx`, `workspace-object-type-view.tsx`, `app-sidebar.tsx`, `menubar.tsx`, `toggle-group.tsx`, `app-header-tabs.tsx`, `drawer.tsx`, `carousel.tsx`, `chart.tsx`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `block-editor-handle.tsx`, `workspace-controller.tsx`, `attachment.tsx`, `executeQueryDefinition`, `useBufferedTextCommit`, `WorkspaceEntity`, `workspace-content-surface.tsx`, `quick-action-suggestions.tsx`, `utils.ts`, `marker.tsx`, `app-side-panel-header.tsx`, `useWorkspace`, `shared-styles.ts`, `object-view-preview.tsx`, `sidebar.tsx`, `object-view-support.tsx`, `app-sidebar-overview.tsx`, `bubble.tsx`, `workspace-object-links.ts`, `block-editor.tsx`, `slash-command.tsx`, `app-sidebar-source-icon.tsx`?**
-  _High betweenness centrality (0.084) - this node is a cross-community bridge._
-- **Why does `WorkspaceEntity` connect `WorkspaceEntity` to `workspace-import-export.ts`, `workspace-related-content.ts`, `workspace-content.tsx`, `workspace-object-type-view.tsx`, `workspace-domain-identities.ts`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `workspace-controller.tsx`, `workspace-object-views.ts`, `workspace-account-spaces.ts`, `quick-action-suggestions.tsx`, `workspace-property-values.ts`, `quick-action-suggestion-contracts.ts`, `object-view-preview.tsx`, `workspace-objects.ts`, `object-view-support.tsx`, `workspace-object-links.ts`, `workspace-object-storage.ts`, `block-editor.tsx`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+- **Why does `cn()` connect `cn` to `app-sidebar-object-type-studio.tsx`, `field.tsx`, `workspace-content.tsx`, `app-shell.tsx`, `app-sidebar-primary-actions.tsx`, `workspace-object-type-view.tsx`, `app-sidebar.tsx`, `app-header-tabs.tsx`, `drawer.tsx`, `chart.tsx`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `block-editor-handle.tsx`, `workspace-controller.tsx`, `attachment.tsx`, `executeQueryDefinition`, `object-type-toolbar-icon.tsx`, `workspace-content-surface.tsx`, `quick-action-suggestions.tsx`, `button.tsx`, `app-side-panel-header.tsx`, `useWorkspace`, `utils.ts`, `object-view-preview.tsx`, `sidebar.tsx`, `object-view-support.tsx`, `app-sidebar-overview.tsx`, `bubble.tsx`, `block-editor.tsx`, `slash-command.tsx`, `app-sidebar-source-icon.tsx`?**
+  _High betweenness centrality (0.087) - this node is a cross-community bridge._
+- **Why does `WorkspaceEntity` connect `object-view-preview.tsx` to `workspace-import-export.ts`, `quick-action-suggestions.tsx`, `workspace-property-values.ts`, `workspace-related-content.ts`, `workspace-object-views.ts`, `workspace-content.tsx`, `workspace-object-type-view.tsx`, `workspace-account-spaces.ts`, `quick-action-suggestion-contracts.ts`, `workspace-domain-identities.ts`, `workspace-object-links.ts`, `workspace-object-storage.ts`, `workspace-objects.ts`, `block-editor.tsx`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `object-view-support.tsx`, `workspace-controller.tsx`?**
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **Why does `WorkspaceStructure` connect `block-editor.tsx` to `workspace-import-export.ts`, `quick-action-suggestions.tsx`, `workspace-property-values.ts`, `workspace-object-views.ts`, `workspace-object-type-view.tsx`, `workspace-object-storage.ts`, `quick-action-suggestion-contracts.ts`, `workspace-domain-identities.ts`, `workspace-object-types.ts`, `workspace-objects.ts`, `workspace-object-page-view.tsx`, `workspace-dates-calendar.ts`, `object-view-support.tsx`, `workspace-controller.tsx`?**
   _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `WorkspaceProvider()` (e.g. with `AppSidebarWorkspaceIcon()` and `createInitialWorkspaceObjectState()`) actually correct?**
   _`WorkspaceProvider()` has 3 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `ObjectTypeId`, `CreationFlow`, `WorkspaceEntityBase` to the rest of the system?**
-  _2097 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `1. Domain and Storage`, `2. Projection Integration`, `3. Media and Sync` to the rest of the system?**
+  _2102 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `cn` be split into smaller, more focused modules?**
-  _Cohesion score 0.03138815207780725 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.028871391076115485 - nodes in this community are weakly interconnected._
 - **Should `workspace-import-export.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.06623376623376623 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06453634085213032 - nodes in this community are weakly interconnected._

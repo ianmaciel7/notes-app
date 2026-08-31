@@ -90,13 +90,74 @@
       "sort": "Ordenar"
     },
     "commands": {
+      "calendar": {
+        "day": {
+          "description": "Alternar o calendário para a visão de dia.",
+          "label": "Calendário: dia"
+        },
+        "month": {
+          "description": "Alternar o calendário para a visão mensal.",
+          "label": "Calendário: mês"
+        },
+        "next": {
+          "description": "Avançar o calendário.",
+          "label": "Calendário: próximo"
+        },
+        "previous": {
+          "description": "Voltar o calendário.",
+          "label": "Calendário: anterior"
+        },
+        "threeDay": {
+          "description": "Alternar o calendário para a visão de 3 dias.",
+          "label": "Calendário: 3 dias"
+        },
+        "week": {
+          "description": "Alternar o calendário para a visão semanal.",
+          "label": "Calendário: semana"
+        }
+      },
+      "closeCurrentTab": {
+        "description": "Fechar a aba ativa quando ela não estiver fixada.",
+        "label": "Fechar aba atual"
+      },
       "createObject": {
         "description": "Criar novo {label}.",
         "label": "Novo {label}"
       },
+      "createTask": {
+        "description": "Criar uma nova tarefa.",
+        "label": "Nova tarefa"
+      },
+      "extendedSearch": {
+        "description": "Buscar conteúdo local com mais espaço para resultados.",
+        "empty": "Nenhum conteúdo local encontrado",
+        "placeholder": "Buscar todo o conteúdo local",
+        "title": "Busca estendida"
+      },
+      "findInPage": {
+        "currentPage": "Página atual",
+        "description": "Encontrar texto dentro do objeto ativo.",
+        "empty": "Nenhuma ocorrência no objeto ativo",
+        "placeholder": "Encontrar na página atual",
+        "title": "Encontrar na página"
+      },
       "groups": {
+        "calendar": "Calendário",
         "commands": "Comandos",
+        "creation": "Criação",
+        "general": "Geral",
+        "navigation": "Navegação",
+        "page": "Página",
+        "workspace": "Workspace",
         "results": "Resultados"
+      },
+      "navigateBack": {
+        "description": "Navegar para trás na workspace.",
+        "label": "Voltar"
+      },
+      "navigateForward": {
+        "description": "Navegar para frente na workspace.",
+        "label": "Avançar"
       },
       "navigateHome": {
         "description": "Abrir a visão principal da workspace.",
@@ -110,10 +171,34 @@
         "description": "Abrir Explorar na workspace principal.",
         "label": "Abrir Explorar"
       },
+      "openExtendedSearch": {
+        "alias": "busca estendida",
+        "description": "Abrir a busca estendida da workspace.",
+        "label": "Abrir busca estendida"
+      },
+      "openFindInPage": {
+        "alias": "encontrar página",
+        "description": "Encontrar texto na página ativa.",
+        "label": "Encontrar na página"
+      },
+      "openNewContent": {
+        "alias": "novo conteúdo",
+        "description": "Começar a criar uma nova página.",
+        "label": "Novo conteúdo"
+      },
       "openPalette": {
         "alias": "paleta de comandos",
         "description": "Buscar comandos e conteúdo local.",
         "label": "Abrir paleta de comandos"
+      },
+      "openSettings": {
+        "description": "Abrir as configurações da workspace.",
+        "label": "Abrir configurações"
+      },
+      "openShortcuts": {
+        "alias": "atalhos de teclado",
+        "description": "Abrir o navegador pesquisável de atalhos.",
+        "label": "Abrir atalhos"
       },
       "palette": {
         "description": "Busque um comando, objeto ou bloco.",
@@ -126,9 +211,31 @@
         "description": "Buscar conteúdo local da workspace.",
         "label": "Buscar na workspace"
       },
+      "shortcuts": {
+        "description": "Navegue pelos comandos e seus atalhos disponíveis.",
+        "empty": "Nenhum atalho encontrado",
+        "placeholder": "Buscar atalhos",
+        "title": "Atalhos de teclado"
+      },
+      "toggleFocusMode": {
+        "description": "Entrar ou sair do modo foco.",
+        "label": "Alternar modo foco"
+      },
       "toggleSidebar": {
         "description": "Mostrar ou ocultar a barra lateral esquerda.",
         "label": "Alternar barra lateral esquerda"
+      },
+      "toggleSidePanel": {
+        "description": "Mostrar ou ocultar o painel lateral contextual.",
+        "label": "Alternar painel lateral"
+      },
+      "toggleTabsBar": {
+        "description": "Mostrar ou ocultar a barra de abas quando estiver disponível.",
+        "label": "Alternar barra de abas"
+      },
+      "toggleTheme": {
+        "description": "Alternar entre aparência clara e escura.",
+        "label": "Alternar modo escuro"
       }
     },
     "sidebarCollections": {
