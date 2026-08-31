@@ -160,7 +160,7 @@ function isRelatedContentEligible(entity: WorkspaceEntity): boolean {
 }
 
 function readEntitySpaceId(entity: WorkspaceEntity): string | undefined {
-  if (isDocumentLike(entity)) return entity.dailyNote?.spaceId;
+  if (entity.kind === "document") return entity.dailyNote?.spaceId;
   const record = entity as WorkspaceEntity & { readonly spaceId?: string };
   return record.spaceId;
 }
@@ -203,7 +203,11 @@ function textForEntity(entity: WorkspaceEntity): string {
   for (const value of Object.values(entity.propertyValues)) {
     if (value.type === "text") {
       const text = value.text.value;
-      values.push(Array.isArray(text) ? text.join(" ") : text);
+      if (typeof text === "string") {
+        values.push(text);
+      } else {
+        values.push(text.join(" "));
+      }
     }
     if (value.type === "richText") {
       values.push(blockEditorDocumentToPlainText(value.richText));

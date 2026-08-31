@@ -1255,8 +1255,8 @@
     "semantic_hash": ""
   },
   "src/components/workspace-controller.tsx": {
-    "mtime": 1788170358.4927227,
-    "ast_hash": "29b048b9262d0269886375134bfa25f7",
+    "mtime": 1788170395.5331886,
+    "ast_hash": "8631cda8779011f2b1f7b309b7cc937d",
     "semantic_hash": ""
   },
   ".agents/rules/workspace-ui-parity.md": {
@@ -3455,8 +3455,8 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-related-content.ts": {
-    "mtime": 1788170214.588302,
-    "ast_hash": "37157f89cbbfed6c9a88613b35f14bb2",
+    "mtime": 1788170387.8070037,
+    "ast_hash": "b02a27f10fde62d644e2343a71114ec3",
     "semantic_hash": ""
   },
   "src/lib/workspace-shortcuts.ts": {
@@ -3555,8 +3555,8 @@
     "semantic_hash": ""
   },
   "docs/references/capacities-keyboard-command-system.md": {
-    "mtime": 1788168743.1069534,
-    "ast_hash": "030457e1bdba581896247e649ca0e126",
+    "mtime": 1788170366.7041101,
+    "ast_hash": "152f356b92157f09e744ab348e7a95c5",
     "semantic_hash": ""
   },
   "docs/references/capacities-reference-baseline-2026-08-31.md": {
@@ -3950,8 +3950,8 @@
     "semantic_hash": ""
   },
   "openspec/changes/reconcile-keyboard-command-system-acceptance/tasks.md": {
-    "mtime": 1788168743.1569555,
-    "ast_hash": "7138171887978e3cbb2f047404b4ef33",
+    "mtime": 1788170409.907251,
+    "ast_hash": "e35cfc1707723c6e2b2cc5119b6923bf",
     "semantic_hash": ""
   },
   "openspec/changes/refresh-capacities-parity-baseline/.openspec.yaml": {
@@ -3982,6 +3982,36 @@
   "openspec/specs/ui/keyboard-command-system/spec.md": {
     "mtime": 1788168743.1659546,
     "ast_hash": "5cb1c4fce4526b2f9393a92fb24b307d",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/manifest.json": {
+    "mtime": 1788170349.853031,
+    "ast_hash": "5572da925d4e5bf68c9ca4611aa4b5aa",
+    "semantic_hash": ""
+  },
+  "tests/keyboard-command-evidence-contract.test.mjs": {
+    "mtime": 1788170362.8453486,
+    "ast_hash": "090997da202e6d5e09f75c59122f19e4",
+    "semantic_hash": ""
+  },
+  "tests/workspace-related-content-ui.test.mjs": {
+    "mtime": 1788170353.033469,
+    "ast_hash": "3b496cc1a721b38e46ea56d733467b6a",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/acceptance-matrix.md": {
+    "mtime": 1788170353.2081509,
+    "ast_hash": "9359ea4c2a08b8ec2719faa2766b1c39",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/limitations.md": {
+    "mtime": 1788170355.5703948,
+    "ast_hash": "2fedf3b3bb0da17c260c1aadcdc9a74f",
+    "semantic_hash": ""
+  },
+  "openspec/changes/reconcile-keyboard-command-system-acceptance/implementation-notes.md": {
+    "mtime": 1788170358.521422,
+    "ast_hash": "f7d655121a4243c7140b9b84192acce8",
     "semantic_hash": ""
   }
 }

@@ -2865,20 +2865,29 @@ function getDraftAccept(draft: WorkspaceDraft): string | undefined {
 function WorkspaceCommandPalette() {
   const t = useTranslations("workspace");
   const {
+    activeAction,
+    activeEntityId,
     commandPaletteOpen,
+    createOrAppendDailyNote,
     createWorkspaceEntity,
     createdEntities,
+    mainTabs,
+    mainValue,
     selectEntity,
     setActiveAction,
     setActiveEntityId,
     setCommandPaletteOpen,
     setExtendedSearchOpen,
     setFindInPageOpen,
+    setFocusMode,
+    setMainTabs,
     setMainValue,
     setShortcutBrowserOpen,
     setSideSearchOpen,
+    showMessage,
     structures,
   } = useWorkspace();
+  const { toggleLeft, toggleRight } = useAppShell();
   const [query, setQuery] = React.useState("");
   const deferredQuery = React.useDeferredValue(query);
   const restoreFocusRef = React.useRef<HTMLElement | null>(null);
@@ -2887,6 +2896,37 @@ function WorkspaceCommandPalette() {
     navigator.platform.toLocaleLowerCase().includes("mac")
       ? "mac"
       : "windows";
+  const creatableStructures = React.useMemo(
+    () => selectCreatableStructures(structures),
+    [structures],
+  );
+  const openToday = React.useCallback(() => {
+    const formatter = new Intl.DateTimeFormat("en-CA", {
+      day: "2-digit",
+      month: "2-digit",
+      timeZone: "America/Sao_Paulo",
+      year: "numeric",
+    });
+    createOrAppendDailyNote(formatter.format(new Date()));
+  }, [createOrAppendDailyNote]);
+  const closeTab = React.useCallback(() => {
+    setMainTabs((current) => {
+      if (current.length <= 1) return current;
+      const index = Math.max(
+        current.findIndex((tab) => tab.id === mainValue),
+        0,
+      );
+      const activeTab = current[index];
+      if (!activeTab || activeTab.pinned) {
+        showMessage(t("tabs.pinnedCloseBlocked"));
+        return current;
+      }
+      const next = current.filter((tab) => tab.id !== activeTab.id);
+      const fallback = next[index] ?? next[index - 1] ?? next[0];
+      if (fallback) setMainValue(fallback.id);
+      return next;
+    });
+  }, [mainValue, setMainTabs, setMainValue, showMessage, t]);
 
   const runtime = React.useMemo(
     () =>
@@ -2903,19 +2943,63 @@ function WorkspaceCommandPalette() {
           focusSidebarSearch: () => {
             setSideSearchOpen(true);
           },
+          openSettings: () => showMessage(t("footer.settings")),
           navigateHome: () => {
             setActiveAction(undefined);
             selectEntity("page");
           },
+          navigateBack: () => showMessage(t("actions.back")),
+          navigateForward: () => showMessage(t("actions.forward")),
+          navigateToday: openToday,
           openExplore: () => {
             setActiveAction("explore");
             setActiveEntityId(null);
             setMainValue("primary-action:explore");
           },
+          toggleSidebar: toggleLeft,
+          toggleSidePanel: toggleRight,
+          toggleFocusMode: () => setFocusMode((current) => !current),
+          toggleTheme: () => document.documentElement.classList.toggle("dark"),
+          closeCurrentTab: closeTab,
+          createTask: () =>
+            createWorkspaceEntity("task", t("objectTypeStudio.objectTypes.task")),
+          setCalendarView: (view) =>
+            showMessage(
+              t(
+                {
+                  day: "commands.calendarDay.label",
+                  month: "commands.calendarMonth.label",
+                  "three-day": "commands.calendarThreeDay.label",
+                  week: "commands.calendarWeek.label",
+                }[view],
+              ),
+            ),
+          moveCalendar: (direction) =>
+            showMessage(
+              t(
+                {
+                  next: "commands.calendarNext.label",
+                  previous: "commands.calendarPrevious.label",
+                }[direction],
+              ),
+            ),
           createObject: createWorkspaceEntity,
         },
         state: {
-          structures: selectCreatableStructures(structures).map((structure) => ({
+          canNavigateToday: true,
+          canUseExtendedSearch: true,
+          canFindInPage: Boolean(activeEntityId),
+          canOpenSettings: true,
+          canToggleTheme: true,
+          canToggleTabsBar: false,
+          canCloseCurrentTab:
+            mainTabs.length > 1 &&
+            Boolean(mainTabs.find((tab) => tab.id === mainValue && !tab.pinned)),
+          canCreateTask: creatableStructures.some(
+            (structure) => structure.id === "task",
+          ),
+          calendarActive: activeAction === "calendar",
+          structures: creatableStructures.map((structure) => ({
             enabled: true,
             id: structure.id,
             label: structure.singularName,
@@ -2923,18 +3007,29 @@ function WorkspaceCommandPalette() {
         },
       }),
     [
+      activeAction,
+      activeEntityId,
+      closeTab,
       createWorkspaceEntity,
+      creatableStructures,
+      mainTabs,
+      mainValue,
+      openToday,
       selectEntity,
       setActiveAction,
       setActiveEntityId,
       setCommandPaletteOpen,
       setExtendedSearchOpen,
       setFindInPageOpen,
+      setFocusMode,
       setMainValue,
       setShortcutBrowserOpen,
       setSideSearchOpen,
+      showMessage,
       structures,
       t,
+      toggleLeft,
+      toggleRight,
     ],
   );
   const commands = React.useMemo(

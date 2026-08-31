@@ -16,7 +16,7 @@
 - [ ] 3.1 Fix or formally re-baseline each reproducible repository test failure with a dedicated regression test and linked owner.
 - [ ] 3.2 Resolve CRLF/format-check drift without broad unrelated formatting churn.
 - [ ] 3.3 Run focused command/editor/query tests followed by the full repository verification pipeline.
-- [ ] 3.4 Run `openspec validate reconcile-keyboard-command-system-acceptance --strict` and canonical spec validation.
+- [x] 3.4 Run `openspec validate reconcile-keyboard-command-system-acceptance --strict` and canonical spec validation.
 
 ## 4. Handoff
 
