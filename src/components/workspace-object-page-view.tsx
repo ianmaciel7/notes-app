@@ -750,8 +750,10 @@ function ObjectPageTags({
 }) {
   const t = useTranslations("workspace");
   const { createWorkspaceTag, createdEntities, selectEntity } = useWorkspace();
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
+  const [activeIndex, setActiveIndex] = React.useState(0);
   const [tagPickerOpen, setTagPickerOpen] = React.useState(false);
   const [tagPickerQuery, setTagPickerQuery] = React.useState("");
   const [pendingTagIds, setPendingTagIds] = React.useState<readonly string[]>(
@@ -780,6 +782,7 @@ function ObjectPageTags({
         .toLocaleLowerCase()
         .includes(deferredPickerQuery.trim().toLocaleLowerCase()),
   );
+  const optionCount = availableTags.length + 2;
   const closeTagPicker = () => {
     setOpen(false);
     setTagPickerOpen(false);
@@ -802,6 +805,34 @@ function ObjectPageTags({
     );
     setTagPickerQuery("");
   };
+  const openTagPicker = () => {
+    const nextQuery = query;
+    setOpen(false);
+    setTagPickerQuery(nextQuery);
+    setPendingTagIds(tags);
+    window.setTimeout(() => setTagPickerOpen(true));
+  };
+  const createAndSelectTag = () => {
+    const tagId = createWorkspaceTag(query.trim());
+    update({ tags: [...tags, tagId] });
+    setQuery("");
+    setActiveIndex(0);
+  };
+  const activateTagOption = (index: number) => {
+    if (index === 0) {
+      createAndSelectTag();
+      return;
+    }
+    if (index === 1) {
+      openTagPicker();
+      return;
+    }
+    const tag = availableTags[index - 2];
+    if (!tag) return;
+    update({ tags: [...tags, tag.id] });
+    setQuery("");
+    setActiveIndex(0);
+  };
   return (
     <div
       data-slot="workspace-object-page-tags"
@@ -811,11 +842,14 @@ function ObjectPageTags({
         <span
           key={tagId}
           data-slot="workspace-object-page-tag-chip"
-          className={cn(tagChipClass, "group/tag-chip gap-1")}
+          className={cn(
+            tagChipClass,
+            "group/tag-chip gap-0 overflow-hidden p-0",
+          )}
         >
           <button
             type="button"
-            className="min-w-0 truncate outline-none focus-visible:underline"
+            className="min-w-0 truncate py-[0.2em] pl-[0.49em] pr-1 outline-none focus-visible:underline"
             aria-label={tagNamesById.get(tagId) ?? tagId}
             onClick={() => selectEntity(tagId)}
           >
@@ -827,12 +861,12 @@ function ObjectPageTags({
             aria-label={t("actions.removeTag", {
               tag: tagNamesById.get(tagId) ?? tagId,
             })}
-            className="pointer-events-none flex size-5 shrink-0 items-center justify-center rounded-md opacity-0 outline-none transition-opacity duration-200 ease-out group-hover/tag-chip:pointer-events-auto group-hover/tag-chip:opacity-100 group-focus-within/tag-chip:pointer-events-auto group-focus-within/tag-chip:opacity-100 focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none"
+            className="pointer-events-none flex w-[31.56px] shrink-0 items-center justify-center opacity-0 outline-none transition-opacity duration-200 ease-out hover:bg-muted group-hover/tag-chip:pointer-events-auto group-hover/tag-chip:opacity-100 group-focus-within/tag-chip:pointer-events-auto group-focus-within/tag-chip:opacity-100 focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none"
             onClick={() => {
               update({ tags: tags.filter((item) => item !== tagId) });
             }}
           >
-            <span aria-hidden>×</span>
+            <XIcon aria-hidden="true" className="size-[12.6px]" />
           </button>
         </span>
       ))}
@@ -840,6 +874,7 @@ function ObjectPageTags({
         open={open}
         onOpenChange={(nextOpen) => {
           setOpen(nextOpen);
+          setActiveIndex(0);
           if (!nextOpen) setQuery("");
         }}
       >
@@ -848,14 +883,26 @@ function ObjectPageTags({
           render={
             <label
               data-slot="workspace-object-page-tags-empty-selector"
-              className="inline-flex min-w-0 items-center whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3] hover:bg-muted/70"
+              className="group/tag-selector inline-flex min-w-0 items-center whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3]"
             >
               <ObjectTagIcon className="size-3.5" />
               <input
+                ref={inputRef}
                 data-slot="object-page-tags-input"
                 aria-label={t("fields.tags")}
                 placeholder={t("fields.tags")}
                 value={query}
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded={open}
+                aria-controls="object-page-tags-options"
+                aria-activedescendant={
+                  open
+                    ? activeIndex < 2
+                      ? `object-page-tag-action-${activeIndex}`
+                      : `object-page-tag-${availableTags[activeIndex - 2]?.id}`
+                    : undefined
+                }
                 onClick={(event) => {
                   event.stopPropagation();
                   setOpen(true);
@@ -865,16 +912,38 @@ function ObjectPageTags({
                   setOpen(true);
                 }}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === "ArrowDown") {
+                  if (event.key === "Escape" && open) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setOpen(false);
+                    inputRef.current?.blur();
+                  } else if (event.key === "ArrowDown") {
                     event.preventDefault();
                     setOpen(true);
+                    setActiveIndex((current) =>
+                      Math.min(current + 1, optionCount - 1),
+                    );
+                  } else if (event.key === "ArrowUp") {
+                    event.preventDefault();
+                    setOpen(true);
+                    setActiveIndex((current) => Math.max(current - 1, 0));
+                  } else if (event.key === "Enter") {
+                    event.preventDefault();
+                    if (open) activateTagOption(activeIndex);
+                    else setOpen(true);
                   }
                 }}
                 onChange={(event) => {
                   setQuery(event.target.value);
+                  setActiveIndex(0);
                   setOpen(true);
                 }}
                 className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] outline-none focus:cursor-text [field-sizing:content] placeholder:text-muted-foreground"
+              />
+              <SparklesIcon
+                aria-hidden="true"
+                data-slot="workspace-object-page-tags-sparkle"
+                className="ml-1 size-3.5 shrink-0 text-violet-500 opacity-0 transition-opacity duration-200 ease-out group-hover/tag-selector:opacity-100 group-focus-within/tag-selector:opacity-100 motion-reduce:transition-none"
               />
             </label>
           }
@@ -882,69 +951,75 @@ function ObjectPageTags({
         <PopoverContent
           data-slot="workspace-object-page-tags-menu"
           align="start"
+          initialFocus={false}
+          finalFocus={false}
           sideOffset={5}
           className={cn(
             workspaceOverflowMenuContentClass,
-            "w-[257px] min-w-[257px] gap-0 p-1.5",
+            "w-[257.6px] min-w-[257.6px] gap-0 p-1.5",
           )}
         >
-          {!deferredQuery.trim() ? (
+          <div id="object-page-tags-options" className="grid">
             <button
+              id="object-page-tag-action-0"
               type="button"
+              data-active={activeIndex === 0}
               className={cn(
                 workspaceOverflowMenuItemClass,
-                "w-full gap-2 px-2 text-left",
+                "flex w-full gap-2 px-1 text-left data-[active=true]:bg-accent",
               )}
-              onClick={() => {
-                const tagId = createWorkspaceTag("");
-                update({ tags: [...tags, tagId] });
-                setQuery("");
-                setOpen(false);
-              }}
+              onPointerMove={() => setActiveIndex(0)}
+              onClick={createAndSelectTag}
             >
-              <ObjectTagIcon className="size-4 shrink-0 text-muted-foreground" />
-              {t("documentMenu.newTagEmpty")}
+              <ObjectTagIcon className="size-3.5 shrink-0 text-muted-foreground" />
+              {query.trim()
+                ? t("documentMenu.newTag", { tag: query.trim() })
+                : t("documentMenu.newTagEmpty")}
             </button>
-          ) : null}
-          <button
-            type="button"
-            className={cn(
-              workspaceOverflowMenuItemClass,
-              "w-full gap-2 px-2 text-left",
-            )}
-            onClick={() => {
-              const nextQuery = query;
-              setOpen(false);
-              setTagPickerQuery(nextQuery);
-              setPendingTagIds(tags);
-              window.setTimeout(() => setTagPickerOpen(true));
-            }}
-          >
-            <SearchIcon className="size-4 shrink-0 text-muted-foreground" />
-            {t("documentMenu.searchAllTags")}
-          </button>
-          {availableTags.length > 0 ? (
-            <>
-              <div aria-hidden className="my-1 border-t border-border" />
-              {availableTags.map((tag) => (
-                <button
-                  key={tag.id}
-                  type="button"
-                  onClick={() => {
-                    update({ tags: [...tags, tag.id] });
-                    setQuery("");
-                    setOpen(false);
-                  }}
-                  className={cn(
-                    workspaceOverflowMenuItemClass,
-                    "w-full gap-2 px-2 text-left",
-                  )}
-                >
-                  <span className="truncate">{tag.title.trim() || tag.id}</span>
-                </button>
-              ))}
-            </>
-          ) : null}
+            <button
+              id="object-page-tag-action-1"
+              type="button"
+              data-active={activeIndex === 1}
+              className={cn(
+                workspaceOverflowMenuItemClass,
+                "flex w-full gap-2 px-1 text-left data-[active=true]:bg-accent",
+              )}
+              onPointerMove={() => setActiveIndex(1)}
+              onClick={openTagPicker}
+            >
+              <SearchIcon className="size-3.5 shrink-0 text-muted-foreground" />
+              {t("documentMenu.searchAllTags")}
+            </button>
+            {availableTags.length > 0 ? (
+              <div className="mt-[8.8px] grid">
+                {availableTags.map((tag) => (
+                  <button
+                    key={tag.id}
+                    id={`object-page-tag-${tag.id}`}
+                    type="button"
+                    data-active={activeIndex === availableTags.indexOf(tag) + 2}
+                    onPointerMove={() =>
+                      setActiveIndex(availableTags.indexOf(tag) + 2)
+                    }
+                    onClick={() => {
+                      update({ tags: [...tags, tag.id] });
+                      setQuery("");
+                      setActiveIndex(0);
+                    }}
+                    className={cn(
+                      workspaceOverflowMenuItemClass,
+                      "flex w-full gap-2 px-1 text-left data-[active=true]:bg-accent",
+                    )}
+                  >
+                    <ObjectTagIcon className="size-3.5 shrink-0 text-muted-foreground" />
+                    <span className="truncate">
+                      {tag.title.trim() || tag.id}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </PopoverContent>
       </Popover>
       <Dialog
