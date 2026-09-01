@@ -5,6 +5,7 @@
 - [ ] Run `pnpm verify` before opening a pull request.
 - [ ] Follow OpenSpec for behavioral or procedural changes: proposal, specs, design, and tasks.
 - [ ] Reuse matching external-reference evidence before recapture; store sanitized image, HTML/DOM, CSS, and JavaScript evidence according to `docs/references/reference-evidence-workflow.md`.
+- [ ] For UI parity, compare semantic controls separately from visible form chrome, measure scrollbar-reserved content geometry, preserve differing semantic data, and retain existing regression-test contracts.
 - [ ] Keep repository-facing docs and code in English.
 - [ ] Keep pull requests focused and describe the change clearly.
 

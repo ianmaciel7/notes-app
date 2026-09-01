@@ -2,7 +2,7 @@
 title: Current Capacities workspace parity contract
 reference_type: authenticated-product
 source_type: live-browser-measurement
-updated: 2026-08-31
+updated: 2026-09-01
 confidence: confirmed
 ---
 
@@ -43,6 +43,10 @@ The user-requested state sequence is registered under `artifacts/reference-evide
 ## Object-page editor control addendum (2026-08-31)
 
 The follow-up editor-state bundle is stored under `artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/`. It records full-viewport photographs plus DOM, geometry, computed-style, focus, and behavior observations for block-handle idle/hover, grip click/Escape, the corrected flush handle edge, and strict header-only Customize hover. The matched local browser suite now passes the five formerly blocked plus/grip/slash rows. The action matrix keeps the authenticated `@` title/alias surface explicitly `not tested`, because opening it requires editing remote content; executable local tests cover normalized title/alias lookup, identity deduplication, Structure eligibility, exact replacement, rename-safe backlinks, and atomic rejection without treating that as live-reference proof.
+
+## Objects inside location correction (2026-09-01)
+
+The read-only comparison is stored under `artifacts/reference-evidence/capacities-object-page/2026-09-01-objects-inside-side-panel/`. Current Capacities documentation identifies `Objects inside` as a dedicated contextual side-panel section. The live main object page did not expose that heading, while localhost duplicated one embedded object beneath the editor under a main-page `Objects inside` list. The corrected contract keeps the embedded object content in the page, removes only the duplicate main-page list, and preserves the existing contextual-panel destination. Paired `1319x912` captures and the sanitized DOM/CSS/behavior record confirm the transparent one-row title textarea, 10px scrollbar reserve, exact 800px content-column alignment, and 8px related-content radii. Paired `604x910` collapsed and expanded captures additionally confirm the responsive 40/32/36px content padding, always-inline related-title textarea, transparent row hover, and full-width 43px editable-body preview without a duplicate title. The follow-up main-body captures confirm 17/28px text with a 20px adjacent-block gap and 48px vertical step; an isolated two-relation capture confirms the 45px collapsed-row rhythm. The reference and local screenshots intentionally retain different object data rather than mutating user content for a cosmetic match.
 
 ## Matched-state geometry matrix
 

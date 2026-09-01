@@ -29,16 +29,16 @@
 
 @layer components {
   .notes-block-editor {
-    min-height: 24px;
+    min-height: 28px;
     color: var(--foreground);
     font-family: Inter, var(--font-sans), sans-serif;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 17px;
+    line-height: 28px;
     white-space: pre-wrap;
   }
 
   .notes-block-editor > * + * {
-    margin-top: 0.5rem;
+    margin-top: 1.25rem;
   }
   .notes-block-editor h1 {
     font-size: 1.8em;

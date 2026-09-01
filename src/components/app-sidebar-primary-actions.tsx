@@ -653,6 +653,7 @@ function WorkspaceSidebar() {
     setCustomSections,
     setSideSearchOpen,
     setSideValue,
+    setShortcutBrowserOpen,
     openInSidePanel,
     createWorkspaceEntity,
     showMessage,
@@ -897,6 +898,7 @@ function WorkspaceSidebar() {
             }}
             onCustomSectionsChange={setCustomSections}
             onCollectionAction={handleCollectionAction}
+            onOpenShortcuts={() => setShortcutBrowserOpen(true)}
           />
         </div>
       </AppSidebar>

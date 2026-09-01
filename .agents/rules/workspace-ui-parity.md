@@ -67,6 +67,13 @@ Treat every visible affordance as an interaction state machine, not as a screens
 
 Compare the same state sequence at the same viewport in the live reference and localhost. Separate semantic data differences from UI differences; never delete or rewrite local entities just to make a screenshot match. Report `action -> expected reference state -> observed local state -> parity verdict -> evidence`, and identify untested states explicitly.
 
+### Semantic element versus visible appearance
+
+- Record DOM semantics and visible chrome as separate facts. A transparent `textarea`, input, or contenteditable title can look like plain text and must not be described as a visible form box merely because of its tag.
+- When the user says an element is absent or looks different, re-inspect the exact named surface and distinguish tag/role, perceptible styling, and semantic content state before editing.
+- Compare the effective content box as well as the outer viewport. Scrollbar gutter and scrollbar width are geometry inputs; do not compensate for an unmeasured gutter with arbitrary margins.
+- When reference and local objects contain different titles, embeds, counts, or relationships, preserve those data differences and compare the shared shell separately.
+
 ## Reusable reference evidence protocol
 
 Before opening or recapturing Capacities or another external site, search `docs/references/`, `artifacts/reference-evidence/`, and the legacy `artifacts/capacities-reference/` corpus. Reuse an existing capture when its source, capture time, viewport, route or surface, semantic state, persisted layout state, and interaction state cover the comparison. Do not repeat the same browser operations merely to rediscover recorded values.
@@ -92,3 +99,6 @@ Before finishing a workspace UI change, verify:
 - popup consumers do not own one-off surface or row appearance classes, and related sidebar context menus use the same exported width contract;
 - existing reference evidence was searched before live recapture, and any new or refreshed image, HTML/DOM, CSS, or JavaScript evidence follows the reusable bundle and sanitization contract;
 - a browser or DOM inspection of the reference UI backs any claimed visual parity change.
+- semantic HTML and visible form appearance were recorded separately for editable controls;
+- the effective content box and scrollbar reservation were measured when centered geometry matters;
+- new regression coverage was added without removing or repurposing an unrelated existing test contract.

@@ -1,0 +1,36 @@
+{
+  "referenceMainPage": {
+    "visibleRelationshipSections": ["related content", "mentions"],
+    "objectsInsideHeadingPresent": false,
+    "titleControl": {
+      "tag": "TEXTAREA",
+      "rows": 1,
+      "appearance": "transparent editable title; no visible form box"
+    },
+    "relatedContent": {
+      "rowTitle": "transparent editable one-row textarea",
+      "collapsedHeight": 33,
+      "expandedHeightAt604": 76,
+      "expandedBodyHeightAt604": 43,
+      "expandedBodyContentEditable": true,
+      "duplicateTitleInsideExpandedBody": false,
+      "outerRowHoverSurface": "transparent"
+    },
+    "inspection": "read-only DOM, computed-style, geometry, and reversible disclosure inspection"
+  },
+  "documentedLocationContract": {
+    "surface": "contextual side panel",
+    "source": "https://docs.capacities.io/reference/navigation",
+    "summary": "Objects inside is a dedicated side-panel section used to browse linked or contained objects."
+  },
+  "localhostBefore": {
+    "embeddedObjectEditorPresent": true,
+    "mainPageObjectsInsideHeadingPresent": true,
+    "classification": "duplicate main-page projection"
+  },
+  "localhostExpected": {
+    "embeddedObjectEditorPresent": true,
+    "mainPageObjectsInsideHeadingPresent": false,
+    "contextualObjectsInsideEntryRetained": true
+  }
+}

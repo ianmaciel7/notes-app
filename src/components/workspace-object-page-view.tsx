@@ -203,13 +203,15 @@ function BufferedTitle({
 }) {
   const { inputProps } = useBufferedTextCommit({ value, onCommit });
   return (
-    <input
+    <textarea
       {...inputProps}
+      rows={1}
+      spellCheck={false}
       data-slot="workspace-object-page-title"
       data-lifecycle-contract={objectLifecycleContractSlots.EditableObjectTitle}
       aria-label={label}
       placeholder={label}
-      className="mt-[14px] block min-h-[39px] w-full bg-transparent text-[30px] font-bold leading-[33px] tracking-[-0.02em] text-foreground outline-none placeholder:text-muted-foreground/50"
+      className="mt-[14px] block h-[39px] w-full resize-none overflow-y-auto bg-transparent pb-1 text-[30px] font-bold leading-[33px] tracking-[-0.02em] text-foreground outline-none placeholder:text-muted-foreground/50"
     />
   );
 }
@@ -641,8 +643,9 @@ function DocumentMoreMenu({
         <AppHeaderDotsIcon className="size-3.5" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        align="end"
-        sideOffset={5}
+        side="left"
+        align="start"
+        sideOffset={4}
         className={cn(
           workspaceOverflowMenuContentClass,
           "w-[269px] min-w-[269px] p-1.5",
@@ -687,19 +690,24 @@ function DocumentMoreMenu({
         </DropdownMenuSub>
         <DropdownMenuSeparator />
         {primaryItems.map(({ key, handler, Icon }) => (
-          <DropdownMenuItem
-            key={key}
-            className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
-            onClick={handler}
-          >
-            <Icon aria-hidden="true" className="size-4" />
-            {t(`documentMenu.${key}`)}
-            {key === "pinSidebar" || key === "unpinSidebar" ? (
-              <DropdownMenuShortcut>Ctrl⇧*</DropdownMenuShortcut>
+          <React.Fragment key={key}>
+            <DropdownMenuItem
+              className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+              onClick={handler}
+            >
+              <Icon aria-hidden="true" className="size-4" />
+              {t(`documentMenu.${key}`)}
+              {key === "pinSidebar" || key === "unpinSidebar" ? (
+                <DropdownMenuShortcut>Ctrl⇧*</DropdownMenuShortcut>
+              ) : null}
+            </DropdownMenuItem>
+            {key === "pinSidebar" ||
+            key === "unpinSidebar" ||
+            key === "typeSettings" ? (
+              <DropdownMenuSeparator />
             ) : null}
-          </DropdownMenuItem>
+          </React.Fragment>
         ))}
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
           onClick={onExport}
@@ -718,16 +726,17 @@ function DocumentMoreMenu({
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {secondaryItems.map(({ key, handler, Icon }) => (
-          <DropdownMenuItem
-            key={key}
-            className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
-            onClick={handler}
-          >
-            <Icon aria-hidden="true" className="size-4" />
-            {t(`documentMenu.${key}`)}
-          </DropdownMenuItem>
+          <React.Fragment key={key}>
+            <DropdownMenuItem
+              className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+              onClick={handler}
+            >
+              <Icon aria-hidden="true" className="size-4" />
+              {t(`documentMenu.${key}`)}
+            </DropdownMenuItem>
+            {key === "textStats" ? <DropdownMenuSeparator /> : null}
+          </React.Fragment>
         ))}
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
@@ -2597,7 +2606,7 @@ function RelatedContentStateMessage({
   );
 }
 
-function RelatedContentInlineTitle({
+function RelatedContentTitle({
   label,
   onCommit,
   value,
@@ -2611,13 +2620,14 @@ function RelatedContentInlineTitle({
     onCommit,
   });
   return (
-    <input
+    <textarea
       {...inputProps}
-      type="text"
+      rows={1}
+      spellCheck={false}
       data-slot="workspace-object-related-content-title-input"
       aria-label={label}
       placeholder={label}
-      className="mb-1 h-7 w-full rounded-md bg-transparent px-1 text-[15px] font-medium leading-[19px] outline-none transition-colors duration-100 placeholder:text-muted-foreground/50 hover:bg-muted focus:bg-background focus:ring-2 focus:ring-ring/30 motion-reduce:transition-none"
+      className="block h-[26px] min-w-0 flex-1 resize-none overflow-y-auto bg-transparent p-0 text-base font-medium leading-6 outline-none placeholder:text-muted-foreground/50"
       onKeyDown={(event) => {
         if (event.key === "Enter") {
           event.preventDefault();
@@ -2679,7 +2689,7 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
       data-slot="workspace-object-related-content"
       data-state={state.kind}
       data-result-revision={"revision" in state ? state.revision : undefined}
-      className="mt-16"
+      className="group/related-content relative mt-16"
       aria-labelledby={`${entityId}-related-heading`}
     >
       <div
@@ -2688,7 +2698,7 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
       >
         <h2
           id={`${entityId}-related-heading`}
-          className="-ml-1.5 flex items-center rounded-lg px-1.5 py-0.5 text-sm font-medium hover:bg-muted"
+          className="-ml-1.5 flex items-center rounded-[8px] px-1.5 py-0.5 text-sm font-medium hover:bg-muted"
         >
           {t("explore.relatedContent")}
           <span
@@ -2703,15 +2713,17 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
             type="button"
             variant="ghost"
             size="sm"
-            className="pointer-events-none ml-auto h-7 w-[109.859px] px-2 text-xs text-muted-foreground opacity-0 transition-opacity duration-200 ease-out group-hover/related-heading:pointer-events-auto group-hover/related-heading:opacity-100 focus-visible:pointer-events-auto focus-visible:opacity-100 motion-reduce:transition-none"
+            aria-label={t("explore.showMore")}
+            className="pointer-events-none absolute right-0 top-2.5 h-7 w-7 px-1.5 text-xs text-muted-foreground opacity-0 transition-opacity duration-200 ease-out group-hover/related-content:pointer-events-auto group-hover/related-content:opacity-100 focus-visible:pointer-events-auto focus-visible:opacity-100 lg:static lg:ml-auto lg:w-[109.859px] lg:px-2 motion-reduce:transition-none"
             data-slot="workspace-object-related-content-more"
             onClick={openContinuation}
           >
-            {t("explore.showMore")}
+            <Settings2Icon className="size-3.5 lg:hidden" />
+            <span className="hidden lg:inline">{t("explore.showMore")}</span>
           </Button>
         ) : null}
       </div>
-      <div className="mt-1 grid gap-1">
+      <div className="mt-1 grid gap-3">
         {state.kind === "ready" ? (
           related.map((result) => {
             const item = createdEntities.find(
@@ -2727,7 +2739,7 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
               <div
                 key={item.id}
                 data-slot="workspace-object-related-content-row"
-                className="group/related-row w-full rounded-lg bg-transparent px-1 transition-colors duration-100 ease-out hover:bg-muted focus-within:bg-muted motion-reduce:transition-none"
+                className="group/related-row w-full rounded-[8px] bg-transparent"
               >
                 <div className="flex h-[33px] items-center">
                   <button
@@ -2737,7 +2749,7 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
                     aria-label={t("explore.openEntity", {
                       title: item.title || t("lifecycle.untitled"),
                     })}
-                    className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-lg outline-none hover:bg-background focus-visible:ring-2 focus-visible:ring-ring/30"
+                    className="flex h-6 w-7 shrink-0 items-center justify-center rounded-[8px] outline-none hover:bg-background focus-visible:ring-2 focus-visible:ring-ring/30"
                     onClick={() =>
                       setExpandedRelatedIds((current) => {
                         const next = new Set(current);
@@ -2754,14 +2766,13 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
                       )}
                     />
                   </button>
-                  <button
-                    type="button"
-                    data-slot="workspace-object-related-content-navigation"
-                    className="min-w-0 flex-1 truncate text-left text-[15px] font-medium leading-[19px] outline-none focus-visible:underline"
-                    onClick={() => selectEntity(item.id)}
-                  >
-                    {item.title || t("lifecycle.untitled")}
-                  </button>
+                  <RelatedContentTitle
+                    label={t("fields.title")}
+                    value={item.title}
+                    onCommit={(title) =>
+                      updateWorkspaceEntity(item.id, { title })
+                    }
+                  />
                   <div className="pointer-events-none ml-1 flex shrink-0 items-center gap-1 opacity-20 transition-opacity duration-300 linear group-hover/related-row:pointer-events-auto group-hover/related-row:opacity-100 group-focus-within/related-row:pointer-events-auto group-focus-within/related-row:opacity-100 motion-reduce:transition-none">
                     <Button
                       type="button"
@@ -2825,8 +2836,13 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <span className="mr-1 inline-flex h-[22px] items-center gap-1 rounded-md border border-primary/35 bg-primary/5 px-1.5 text-xs text-primary">
-                    <Icon className="size-3" />
+                  <span
+                    className={cn(
+                      "inline-flex h-[20.672px] items-center gap-[3.575px] rounded-[5.225px] border px-[5.39px] py-[2.2px] text-[11px] leading-[14.3px]",
+                      objectIconToneBadgeClass[objectType?.tone ?? "blue"],
+                    )}
+                  >
+                    <Icon className="-ml-[1.1px] size-[13.4px]" />
                     {objectType?.singularLabel ??
                       objectType?.label ??
                       t("objectTypeStudio.untitled")}
@@ -2835,29 +2851,28 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
                 {expanded ? (
                   <div
                     data-slot="workspace-object-related-content-preview"
-                    className="ml-7 min-h-16 border-l border-border px-3 pb-3 pt-1"
+                    className="relative flex w-full flex-col items-center"
                   >
-                    <RelatedContentInlineTitle
-                      label={t("fields.title")}
-                      value={item.title}
-                      onCommit={(title) =>
-                        updateWorkspaceEntity(item.id, { title })
-                      }
-                    />
                     {isDocumentWorkspaceEntity(item) ? (
                       <BlockEditor
                         ariaLabel={t("fields.text")}
                         placeholder={t("fields.text")}
                         value={item.body}
-                        editable={false}
-                        className="mt-0 min-h-0"
+                        onChange={(body) =>
+                          updateWorkspaceEntity(item.id, { body })
+                        }
+                        className="box-border mt-0 min-h-[43px] w-full px-7 py-[7.5px] text-[17px] leading-7 [&_.notes-block-editor]:text-[17px] [&_.notes-block-editor]:leading-7 [&_.notes-block-editor_p]:text-[17px] [&_.notes-block-editor_p]:leading-7"
                         labels={editorLabels(t)}
                       />
                     ) : (
-                      <p className="text-sm text-muted-foreground">
+                      <p className="min-h-[43px] w-full px-7 py-[9.5px] text-base leading-6 text-muted-foreground">
                         {objectType?.singularLabel ?? objectType?.label}
                       </p>
                     )}
+                    <span
+                      aria-hidden
+                      className="absolute inset-y-0 left-2.5 w-0.5 rounded-full bg-border"
+                    />
                   </div>
                 ) : null}
               </div>
@@ -3252,26 +3267,6 @@ function ReferencePanel({
             </section>
           );
         })}
-
-      {objectsInside.length > 0 ? (
-        <ReferenceList
-          emptyLabel={t("linking.noObjectsInside")}
-          items={objectsInside.map((item) => {
-            const target = createdEntities.find(
-              (candidate) => candidate.id === item.targetId,
-            );
-            return {
-              id: `${item.targetId}-${item.kind}-${item.targetBlockId ?? "object"}`,
-              label: item.missing
-                ? t("linking.missingTarget", { id: item.targetId })
-                : getEntityTitle(target, item.targetId),
-              meta: item.kind,
-              onClick: target ? () => selectEntity(target.id) : undefined,
-            };
-          })}
-          title={t("explore.objectsInside")}
-        />
-      ) : null}
     </section>
   );
 }
@@ -4208,7 +4203,10 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
       data-lifecycle-contract={objectLifecycleContractSlots.ObjectEditorShell}
       data-object-kind={entity.kind}
       data-object-type={entity.objectTypeId}
-      className={cn(workspaceRouteClass, "w-full overflow-y-auto")}
+      className={cn(
+        workspaceRouteClass,
+        "w-full overflow-y-auto [scrollbar-gutter:stable] [scrollbar-width:thin]",
+      )}
     >
       <div
         data-slot="workspace-object-page-column"

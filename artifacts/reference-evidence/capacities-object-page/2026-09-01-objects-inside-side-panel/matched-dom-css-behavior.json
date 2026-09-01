@@ -1,0 +1,216 @@
+{
+  "viewport": { "width": 1319, "height": 912 },
+  "html": {
+    "referenceTitle": {
+      "tag": "TEXTAREA",
+      "rows": 1,
+      "visuallyBoxed": false
+    },
+    "localhostTitle": {
+      "tag": "TEXTAREA",
+      "rows": 1,
+      "visuallyBoxed": false
+    },
+    "referenceRelatedTitle": {
+      "tag": "TEXTAREA",
+      "rows": 1,
+      "alwaysInline": true
+    },
+    "localhostRelatedTitle": {
+      "tag": "TEXTAREA",
+      "rows": 1,
+      "alwaysInline": true
+    },
+    "referenceMainObjectsInsideHeadingPresent": false,
+    "localhostMainObjectsInsideHeadingPresent": false,
+    "localhostEmbeddedEditorPresent": true
+  },
+  "css": {
+    "referenceScrollSurface": {
+      "x": 299,
+      "width": 1009,
+      "scrollbarReserve": 10
+    },
+    "localhostScrollSurface": {
+      "x": 299,
+      "width": 1009,
+      "scrollbarReserve": 10,
+      "scrollbarGutter": "stable",
+      "scrollbarWidth": "thin"
+    },
+    "referenceContentColumn": { "x": 398.5, "width": 800 },
+    "localhostContentColumn": { "x": 398.5, "width": 800 },
+    "referenceTitle": {
+      "x": 438.5,
+      "y": 187,
+      "width": 728,
+      "height": 39,
+      "fontSize": 30,
+      "lineHeight": 33,
+      "fontWeight": 700,
+      "paddingBottom": 4,
+      "background": "transparent",
+      "resize": "none"
+    },
+    "localhostTitle": {
+      "x": 438.5,
+      "y": 187,
+      "width": 728,
+      "height": 39,
+      "fontSize": 30,
+      "lineHeight": 33,
+      "fontWeight": 700,
+      "paddingBottom": 4,
+      "background": "transparent",
+      "resize": "none"
+    },
+    "referenceRelatedHeading": {
+      "height": 24,
+      "fontSize": 14,
+      "lineHeight": 20,
+      "fontWeight": 500,
+      "borderRadius": 8
+    },
+    "localhostRelatedHeading": {
+      "height": 24,
+      "fontSize": 14,
+      "lineHeight": 20,
+      "fontWeight": 500,
+      "borderRadius": 8
+    },
+      "referenceRelatedRow": {
+      "x": 438.5,
+      "width": 728,
+      "height": 33,
+      "borderRadius": 8,
+      "disclosureWidth": 28,
+      "titleX": 466.5,
+      "titleFontSize": 16,
+      "titleLineHeight": 24,
+        "titleFontWeight": 500,
+        "verticalStepWithMultipleRows": 45
+    },
+      "localhostRelatedRow": {
+      "x": 438.5,
+      "width": 728,
+      "height": 33,
+      "borderRadius": 8,
+      "disclosureWidth": 28,
+      "titleX": 466.5,
+      "titleFontSize": 16,
+      "titleLineHeight": 24,
+        "titleFontWeight": 500,
+        "verticalStepWithMultipleRows": 45
+    },
+    "responsive604": {
+      "referenceContentColumn": {
+        "x": 11,
+        "width": 572,
+        "padding": "36px 32px 0px 40px"
+      },
+      "localhostContentColumn": {
+        "x": 11,
+        "width": 572,
+        "padding": "36px 32px 48px 40px"
+      },
+      "referenceTitle": { "x": 51, "y": 123.125, "width": 500, "height": 39 },
+      "localhostTitle": { "x": 51, "y": 123, "width": 500, "height": 39 },
+      "referenceShowMore": {
+        "trigger": "section hover",
+        "width": 28,
+        "height": 28,
+        "rightInset": 0,
+        "icon": "SlidersHorizontal",
+        "iconSize": 14
+      },
+      "localhostShowMore": {
+        "trigger": "section hover",
+        "width": 28,
+        "height": 28,
+        "rightInset": 0,
+        "icon": "SlidersHorizontal",
+        "iconSize": 14,
+        "observedOpacity": 1
+      },
+      "referenceMainBody": {
+        "fontSize": 17,
+        "lineHeight": 28,
+        "adjacentBlockGap": 20,
+        "verticalBlockStep": 48,
+        "editingModel": "separate contenteditable text blocks"
+      },
+      "localhostMainBody": {
+        "fontSize": 17,
+        "lineHeight": 28,
+        "adjacentBlockGap": 20,
+        "verticalBlockStep": 48,
+        "editingModel": "ProseMirror root with block children"
+      },
+      "referenceRelatedTypeBadge": {
+        "height": 20.7,
+        "fontSize": 11,
+        "lineHeight": 14.3,
+        "borderRadius": 5.225,
+        "rightEdgeFlushWithRow": true,
+        "usesObjectTypeTone": true
+      },
+      "localhostRelatedTypeBadge": {
+        "height": 20.7,
+        "fontSize": 11,
+        "lineHeight": 14.3,
+        "borderRadius": 5.225,
+        "rightEdgeFlushWithRow": true,
+        "usesObjectTypeTone": true
+      },
+      "referenceExpandedRelatedRow": {
+        "width": 500,
+        "height": 76,
+        "previewHeight": 43,
+        "previewInset": 0,
+        "guideInset": 10,
+        "guideWidth": 2,
+        "bodyInlineInset": 28,
+        "bodyFontSize": 17,
+        "bodyLineHeight": 28,
+        "bodyContentEditable": true,
+        "duplicateTitleInPreview": false
+      },
+      "localhostExpandedRelatedRow": {
+        "width": 500,
+        "height": 76,
+        "previewHeight": 43,
+        "previewInset": 0,
+        "guideInset": 10,
+        "guideWidth": 2,
+        "bodyInlineInset": 28,
+        "bodyFontSize": 17,
+        "bodyLineHeight": 28,
+        "bodyContentEditable": true,
+        "duplicateTitleInPreview": false
+      }
+    }
+  },
+  "behavior": {
+    "referenceDisclosure": {
+      "collapsedContainerHeight": 33,
+      "expandedContainerHeight": 68,
+      "arrowRotates": true,
+      "restoredToCollapsed": true
+    },
+    "localhostDisclosure": {
+      "collapsedRowHeight": 33,
+      "expandedContainerHeightAt604": 76,
+      "expandedPreviewHeightAt604": 43,
+      "expandsEditableBodyOnly": true,
+      "rowBackgroundRemainsTransparentOnDisclosureHover": true,
+      "restoredToCollapsed": true
+    }
+  },
+  "semanticDifferences": [
+    "The authenticated reference and localhost objects contain different titles and relationship data.",
+    "The localhost fixture contains one embedded object; the inspected reference object did not.",
+    "Semantic content was not mutated merely to make the screenshots look identical.",
+    "The reference exposes separate contenteditable blocks while localhost uses one ProseMirror editing root; the visible typography, rhythm, and editing outcome are matched without copying vendor implementation code."
+  ],
+  "privacy": "Sanitized DOM contracts, computed styles, geometry, and observed interactions only; no vendor JavaScript, credentials, storage, or private identifiers were copied."
+}

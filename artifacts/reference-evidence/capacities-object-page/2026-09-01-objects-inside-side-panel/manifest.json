@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-01T08:44:56-03:00",
+  "surface": "object page, Related content, and contextual Objects inside projection",
+  "viewport": { "width": 1319, "height": 912 },
+  "sources": [
+    {
+      "name": "Capacities",
+      "route": "authenticated object page (workspace and object identifiers redacted)"
+    },
+    {
+      "name": "Capacities Documentation",
+      "route": "https://docs.capacities.io/reference/navigation"
+    },
+    {
+      "name": "localhost",
+      "route": "/en/:spaceId/:objectId (identifiers redacted)"
+    }
+  ],
+  "refreshReason": "The user reported a duplicate Objects inside section on the local main object page that was absent from the current Capacities page.",
+  "semanticState": "Read-only Capacities object page plus a local page containing one embedded object.",
+  "persistedState": "Existing authenticated reference state and existing local workspace state; no reference data was mutated.",
+  "interactions": [
+    "idle",
+    "read-only DOM inspection",
+    "related-row disclosure expand and restore",
+    "related-section hover and compact Show more action"
+  ],
+  "artifacts": {
+    "images": [
+      "reference-main-1319x912.png",
+      "localhost-main-1319x912.png",
+      "reference-related-collapsed-604x910.png",
+      "localhost-related-collapsed-604x910.png",
+      "reference-related-expanded-604x910.png",
+      "localhost-related-expanded-604x910.png",
+      "reference-main-body-604x910.png",
+      "localhost-main-body-604x910.png",
+      "localhost-related-two-rows-604x910.png"
+    ],
+    "structured": [
+      "reference-readonly-observation.json",
+      "matched-dom-css-behavior.json",
+      "action-matrix.md"
+    ]
+  },
+  "provenance": "Live in-app browser DOM, computed-style, geometry, reversible interaction, and screenshot inspection; official Capacities documentation; and focused localhost Playwright verification.",
+  "confidence": "confirmed",
+  "redactions": [
+    "Authenticated workspace and object identifiers are omitted.",
+    "Object titles and unrelated account content are omitted.",
+    "No cookies, storage values, credentials, network payloads, or vendor source are stored."
+  ],
+  "freshness": "Current on 2026-09-01; refresh if Capacities changes the documented Objects inside location or Related content composition.",
+  "limitations": [
+    "The live authenticated reference object did not contain an embedded object.",
+    "The location contract is confirmed by current official documentation; the embedded local state is verified independently.",
+    "Reference and localhost screenshots preserve their different semantic content instead of mutating user data for a cosmetic match."
+  ]
+}

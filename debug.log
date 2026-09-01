@@ -48,3 +48,33 @@
 [0828/113857.714:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
 [0831/080131.586:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
 [0831/080131.587:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0828/150041.498:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0828/150041.500:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/151441.118:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/151441.120:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/151809.583:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/151809.585:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/151849.413:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/151849.413:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/152159.169:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/152159.172:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/152303.301:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/152303.302:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/152604.824:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/152604.826:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/152637.920:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/152637.921:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/153104.485:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/153104.487:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/153213.012:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/153213.013:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/154742.093:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/154742.095:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/154914.109:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/154914.110:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/155152.084:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/155152.086:WARNING:media\filters\ffmpeg_demuxer.cc:1249] PipelineStatus::DEMUXER_ERROR_COULD_NOT_OPEN
+[0831/163519.189:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/163519.190:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/164202.018:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.
+[0831/164202.019:ERROR:gpu\command_buffer\service\shared_image\shared_image_manager.cc:395] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.

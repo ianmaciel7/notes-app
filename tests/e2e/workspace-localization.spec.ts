@@ -7,14 +7,13 @@ const localeCases = [
     addSection: "Add section",
     addSectionDescription: "Create a custom sidebar section after naming it.",
     addSectionPlaceholder: "Section name",
-    copyWorkspaceLink: "Copy workspace link",
     documentation: "Documentation",
     help: "Help and resources",
     locale: "en",
     pinned: "Pinned",
     searchTrash: "Search trash",
     settings: "Settings",
-    share: "Share",
+    shortcuts: "Open shortcuts",
     trash: "Trash",
   },
   {
@@ -22,14 +21,13 @@ const localeCases = [
     addSectionDescription:
       "Crea una sección personalizada en la barra lateral después de nombrarla.",
     addSectionPlaceholder: "Nombre de la sección",
-    copyWorkspaceLink: "Copiar enlace del espacio",
     documentation: "Documentación",
     help: "Ayuda y recursos",
     locale: "es",
     pinned: "Fijados",
     searchTrash: "Buscar en la papelera",
     settings: "Configuración",
-    share: "Compartir",
+    shortcuts: "Abrir atajos",
     trash: "Papelera",
   },
   {
@@ -37,14 +35,13 @@ const localeCases = [
     addSectionDescription:
       "Crie uma seção personalizada na barra lateral depois de nomeá-la.",
     addSectionPlaceholder: "Nome da seção",
-    copyWorkspaceLink: "Copiar link do espaço",
     documentation: "Documentação",
     help: "Ajuda e recursos",
     locale: "pt-BR",
     pinned: "Fixados",
     searchTrash: "Buscar na lixeira",
     settings: "Configurações",
-    share: "Compartilhar",
+    shortcuts: "Abrir atalhos",
     trash: "Lixeira",
   },
 ] as const;
@@ -94,13 +91,10 @@ for (const localeCase of localeCases) {
     await page.keyboard.press("Escape");
 
     await footer
-      .getByRole("button", { name: localeCase.share, exact: true })
+      .getByRole("button", { name: localeCase.shortcuts, exact: true })
       .click();
     await expect(
-      page.getByRole("menuitem", {
-        name: localeCase.copyWorkspaceLink,
-        exact: true,
-      }),
+      page.locator('[data-slot="workspace-shortcut-browser"]'),
     ).toBeVisible();
     await page.keyboard.press("Escape");
 

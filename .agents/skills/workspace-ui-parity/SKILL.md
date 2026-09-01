@@ -1,6 +1,6 @@
 ---
 name: workspace-ui-parity
-description: Audit and implement reference-style workspace UI parity by reusing or capturing traceable DOM, CSS, image, JavaScript, accessibility, and interaction evidence for each visible control.
+description: Use when a workspace UI must be compared with a live reference, especially when screenshots, DOM semantics, computed styles, interaction states, or user-reported visual differences may conflict.
 metadata:
   short-description: Compare workspace UI and interaction states
 ---
@@ -23,6 +23,7 @@ Do not treat an old bundle as current merely because it exists. Record why a liv
 ## Required comparison loop
 
 1. Capture a matched baseline for the reference and localhost: viewport, route/state, semantic content, DOM roles/names, rectangles, computed styles, scroll/overflow, and console state.
+   Record the effective content viewport as well as the outer viewport. Scrollbar gutters and reserved scrollbar width can move centered content even when both windows report the same size.
 2. Inventory every visible affordance in the scoped surface: primary buttons, nested buttons, tabs, fields, chips, disclosure arrows, overflow controls, menus, dialogs, links, and contextual-panel entries.
 3. For each affordance, execute only the states it supports, in this order when applicable:
 
@@ -40,12 +41,21 @@ Do not treat an old bundle as current merely because it exists. Record why a liv
 4. After every accepted action, assert the resulting UI and data state. Check labels, icons, focus recovery, active route/tab, counts, entity/content projections, contextual panels, persistence, and console errors. An event handler firing is not evidence of success.
 5. Repeat the same sequence against the reference and localhost at the same viewport. Record differences in a matrix rather than relying on memory or screenshots.
 
+When user feedback conflicts with the current interpretation, inspect the named surface again before editing. Resolve these three questions separately:
+
+- What semantic element exists in the DOM?
+- What visual chrome is actually perceptible?
+- Is the user pointing at the same object/state/content in both products?
+
+For example, a transparent one-row `textarea` may be the correct editable-title semantic contract while looking like plain text. Do not add or remove a visible field based only on the tag name.
+
 ## Evidence to collect
 
 For each state, collect the smallest useful evidence:
 
 - DOM/accessibility: semantic element, role, accessible name, `aria-expanded`, `aria-pressed`, `aria-selected`, disabled state, and focus target;
 - visual: `getBoundingClientRect`, computed font/color/background/border/radius/shadow/opacity/pointer-events, transition, and neighboring geometry;
+- form appearance: background, border, padding, resize handle, overflow, rows, and focus styling, so semantic text controls are not mistaken for visible input boxes;
 - behavior: before/after route, active tab, visible text/icon, counts, selected entity, panel body, and persistence after reload/reopen;
 - runtime: browser console errors and relevant network/request failures;
 - visual capture: screenshot only after the measurable state and interaction result have been recorded.
@@ -64,10 +74,13 @@ Include an explicit `not tested` row for states that cannot be exercised because
 
 Align semantic data state before judging layout. Preserve local entities and counts unless the requested change is itself a data migration. If the reference and local content differ, state that limitation and compare the shared shell/control behavior separately.
 
+Treat scrollbar reservation as part of the matched geometry. Compare both the scroll surface and its content box before compensating with margins or offsets.
+
 ## Implementation constraints
 
 - Follow `.agents/rules/workspace-ui-parity.md` and reuse shared primitives, semantic tokens, the icon registry, and localization.
 - Keep hover, focus, pressed, open, post-click, reduced-motion, and close behavior explicit and testable.
 - Add focused source or browser coverage for every changed interaction contract. Do not mark parity complete when only the initial render or a screenshot was checked.
+- Add new regression coverage without deleting, renaming, or repurposing an existing test contract. If fixture setup must differ, keep the original test and add a separate focused case unless the requested behavior intentionally replaces the old contract.
 - Report untested transitions and known baseline failures instead of converting them into false parity claims.
 - Reuse repository evidence before repeating external browser operations, and keep new bundles discoverable through `docs/references/reference-evidence-workflow.md`.

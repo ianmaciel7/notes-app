@@ -8,7 +8,7 @@ const workspaceRouteClass =
 const workspaceScrollAreaClass = "min-h-0 flex-1 overflow-y-auto";
 
 const workspaceLongformColumnClass =
-  "mx-auto w-full max-w-[50rem] px-5 pb-12 pt-8 sm:px-8 lg:pl-10 lg:pr-8";
+  "mx-auto w-full max-w-[50rem] pb-12 pl-10 pr-8 pt-9";
 
 const workspaceEditorSurfaceClass =
   "mx-3 mt-6 min-h-[302px] shrink-0 rounded-[12px] border border-border bg-card px-6 pb-8 pt-7 shadow-[0_1px_2px_rgb(0_0_0/0.02)] sm:px-10";

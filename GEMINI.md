@@ -13,6 +13,7 @@
 - Keep repository documentation synchronized (`CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`, `CLAUDE.md`, `.agents/rules/*`) whenever process rules change.
 - Prefer browser or internet-capable inspection when available for URLs, current facts, external pages, reference UI parity, or live product behavior; follow `.agents/rules/browser-first.md`.
 - For Capacities or external-site UI comparisons, search reusable evidence before recapture and follow `docs/references/reference-evidence-workflow.md` for sanitized image, HTML/DOM, CSS, and JavaScript artifacts.
+- For editable-control parity, record semantic DOM and visible appearance separately; include scrollbar-reserved content geometry and preserve existing test contracts when adding focused regressions.
 
 ## Decision Priority
 

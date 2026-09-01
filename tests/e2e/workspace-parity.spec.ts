@@ -2879,6 +2879,422 @@ test("Page embed action persists a schema-valid paragraph embed", async ({
   expect(errors).toEqual([]);
 });
 
+test("embedded objects stay in page content without a duplicate Objects inside section", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.addInitScript(() => {
+    if (window.sessionStorage.getItem("embed-test-storage-cleared")) return;
+    window.localStorage.clear();
+    window.sessionStorage.setItem("embed-test-storage-cleared", "true");
+  });
+  await page.goto("/pt-BR");
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.waitForTimeout(750);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Embed target");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Embed source");
+
+  const snapshot = await persistedSnapshot(page);
+  const target = snapshot?.entities.find(
+    (entity: { title: string }) => entity.title === "Embed target",
+  );
+  const source = snapshot?.entities.find(
+    (entity: { title: string }) => entity.title === "Embed source",
+  );
+  if (!snapshot || !target || !source) {
+    throw new Error("Embed fixture entities are missing.");
+  }
+  source.body.doc.content.push({
+    type: "paragraph",
+    attrs: { id: "embed-parity-regression" },
+    content: [{ type: "objectEmbed", attrs: { objectId: target.id } }],
+  });
+  await page.addInitScript((fixture) => {
+    const serialized = JSON.stringify(fixture);
+    const baseKey = "notes-app:workspace-objects:v1";
+    window.localStorage.setItem(baseKey, serialized);
+    for (const key of Object.keys(window.localStorage)) {
+      if (key.startsWith(`${baseKey}:`)) {
+        window.localStorage.setItem(key, serialized);
+      }
+    }
+  }, snapshot);
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.waitForTimeout(750);
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .getByRole("button")
+    .filter({ hasText: "Páginas" })
+    .first()
+    .click();
+  await expect(objectTypeWorkspace(page)).toBeVisible();
+  await objectTypeWorkspace(page).getByRole("tab", { name: "Tudo" }).click();
+  await objectTypeWorkspace(page)
+    .getByRole("button", { name: "Abrir: Embed source", exact: true })
+    .click();
+  await expect(createdObjectWorkspace(page)).toBeVisible();
+  await expect(
+    createdObjectWorkspace(page).locator(
+      '[data-slot="workspace-object-page-title"]',
+    ),
+  ).toHaveJSProperty("tagName", "TEXTAREA");
+  await expect(createdObjectWorkspace(page)).toHaveCSS(
+    "scrollbar-gutter",
+    "stable",
+  );
+  await expect(createdObjectWorkspace(page)).toHaveCSS(
+    "scrollbar-width",
+    "thin",
+  );
+  await expect(
+    createdObjectWorkspace(page).getByRole("textbox", {
+      name: "Text",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    createdObjectWorkspace(page).getByRole("textbox", {
+      name: "Editar fonte incorporada",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    createdObjectWorkspace(page).getByRole("heading", {
+      name: "Objetos internos",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test("related rows keep the editable title inline and expand only the editable body", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.addInitScript(() => {
+    if (window.sessionStorage.getItem("related-row-test-storage-cleared")) {
+      return;
+    }
+    window.localStorage.clear();
+    window.sessionStorage.setItem("related-row-test-storage-cleared", "true");
+  });
+  await page.goto("/pt-BR");
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.waitForTimeout(750);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Related target");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Related source");
+
+  const snapshot = await persistedSnapshot(page);
+  const target = snapshot?.entities.find(
+    (entity: { title: string }) => entity.title === "Related target",
+  );
+  const source = snapshot?.entities.find(
+    (entity: { title: string }) => entity.title === "Related source",
+  );
+  if (!snapshot || !target || !source) {
+    throw new Error("Related row fixture entities are missing.");
+  }
+  source.body.doc.content.push({
+    type: "paragraph",
+    attrs: { id: "related-row-parity-regression" },
+    content: [{ type: "objectEmbed", attrs: { objectId: target.id } }],
+  });
+  await page.addInitScript((fixture) => {
+    const serialized = JSON.stringify(fixture);
+    const baseKey = "notes-app:workspace-objects:v1";
+    window.localStorage.setItem(baseKey, serialized);
+    for (const key of Object.keys(window.localStorage)) {
+      if (key.startsWith(`${baseKey}:`)) {
+        window.localStorage.setItem(key, serialized);
+      }
+    }
+  }, snapshot);
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.waitForTimeout(750);
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .getByRole("button")
+    .filter({ hasText: "Páginas" })
+    .first()
+    .click();
+  await expect(objectTypeWorkspace(page)).toBeVisible();
+  await objectTypeWorkspace(page).getByRole("tab", { name: "Tudo" }).click();
+  await objectTypeWorkspace(page)
+    .getByRole("button", { name: "Abrir: Related source", exact: true })
+    .click();
+
+  const workspace = createdObjectWorkspace(page);
+  await page.setViewportSize({ width: 604, height: 910 });
+  const contentColumn = workspace.locator(
+    '[data-slot="workspace-object-page-column"]',
+  );
+  await expect(contentColumn).toHaveCSS("padding-left", "40px");
+  await expect(contentColumn).toHaveCSS("padding-right", "32px");
+  await expect(contentColumn).toHaveCSS("padding-top", "36px");
+  await expect(
+    workspace.getByRole("heading", {
+      name: /Conteúdo relacionado/,
+    }),
+  ).toHaveCSS("border-radius", "8px");
+  let relatedRow = workspace
+    .locator('[data-slot="workspace-object-related-content-row"]')
+    .first();
+  await expect(relatedRow).toHaveCSS("border-radius", "8px");
+  await expect(
+    relatedRow.locator(
+      '[data-slot="workspace-object-related-content-disclosure"]',
+    ),
+  ).toHaveCSS("width", "28px");
+  await relatedRow
+    .locator('[data-slot="workspace-object-related-content-disclosure"]')
+    .hover();
+  await expect(relatedRow).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  const showMore = workspace.locator(
+    '[data-slot="workspace-object-related-content-more"]',
+  );
+  await expect(showMore).toHaveCSS("opacity", "1");
+  await expect(showMore).toHaveCSS("width", "28px");
+  const typeBadge = relatedRow.locator(":scope > div > span").last();
+  await expect(typeBadge).toHaveCSS("font-size", "11px");
+  await expect(typeBadge).toHaveCSS("line-height", "14.3px");
+  await expect(typeBadge).toHaveCSS("border-radius", "5.225px");
+  const collapsedRowBox = await relatedRow.boundingBox();
+  const typeBadgeBox = await typeBadge.boundingBox();
+  expect(collapsedRowBox).toBeTruthy();
+  expect(typeBadgeBox).toBeTruthy();
+  expect(typeBadgeBox?.height).toBeCloseTo(20.7, 1);
+  expect((typeBadgeBox?.x ?? 0) + (typeBadgeBox?.width ?? 0)).toBeCloseTo(
+    (collapsedRowBox?.x ?? 0) + (collapsedRowBox?.width ?? 0),
+    1,
+  );
+  const inlineTitle = relatedRow.locator(
+    '[data-slot="workspace-object-related-content-title-input"]',
+  );
+  await expect(inlineTitle).toBeVisible();
+  await expect(inlineTitle).toHaveJSProperty("tagName", "TEXTAREA");
+  await expect(inlineTitle).toHaveAttribute("rows", "1");
+  await expect(inlineTitle).toHaveCSS("font-size", "16px");
+  await expect(inlineTitle).toHaveCSS("line-height", "24px");
+  await expect(
+    relatedRow.locator(
+      '[data-slot="workspace-object-related-content-navigation"]',
+    ),
+  ).toHaveCount(0);
+
+  await inlineTitle.fill("Renamed related target");
+  await inlineTitle.blur();
+  await expect
+    .poll(async () => {
+      const persisted = await persistedSnapshot(page);
+      return persisted?.entities.find(
+        (entity: { id: string }) => entity.id === target.id,
+      )?.title;
+    })
+    .toBe("Renamed related target");
+
+  relatedRow = workspace
+    .locator('[data-slot="workspace-object-related-content-row"]')
+    .first();
+  await relatedRow
+    .locator('[data-slot="workspace-object-related-content-disclosure"]')
+    .click();
+  const preview = relatedRow.locator(
+    '[data-slot="workspace-object-related-content-preview"]',
+  );
+  await expect(preview).toBeVisible();
+  await expect(
+    preview.locator(
+      '[data-slot="workspace-object-related-content-title-input"]',
+    ),
+  ).toHaveCount(0);
+  await expect(preview).toHaveCSS("margin-left", "0px");
+  await expect(preview).toHaveCSS("min-height", "0px");
+  await expect(preview).toHaveCSS("padding", "0px");
+  const rowBox = await relatedRow.boundingBox();
+  const previewBox = await preview.boundingBox();
+  expect(rowBox).toBeTruthy();
+  expect(previewBox).toBeTruthy();
+  expect(previewBox?.x).toBeCloseTo(rowBox?.x ?? 0, 1);
+  expect(previewBox?.width).toBeCloseTo(rowBox?.width ?? 0, 1);
+
+  const bodyEditor = preview.locator('[contenteditable="true"]').first();
+  await expect(bodyEditor).toBeVisible();
+  await bodyEditor.fill("Related body edit");
+  await bodyEditor.blur();
+  await expect
+    .poll(async () => {
+      const persisted = await persistedSnapshot(page);
+      const persistedTarget = persisted?.entities.find(
+        (entity: { id: string }) => entity.id === target.id,
+      );
+      return JSON.stringify(persistedTarget?.body).includes(
+        "Related body edit",
+      );
+    })
+    .toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test("object page body uses the measured reading typography and block rhythm", async ({
+  page,
+}) => {
+  const errors = await openWorkspace(page);
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Reading typography");
+  await page.setViewportSize({ width: 604, height: 910 });
+
+  const body = createdObjectWorkspace(page)
+    .locator('[data-slot="workspace-document-page-editor"]')
+    .locator(".notes-block-editor");
+  await expect(body).toBeVisible();
+  await body.fill("First block");
+  await body.press("End");
+  await body.press("Enter");
+  await body.pressSequentially("Second block");
+
+  await expect(body).toHaveCSS("font-size", "17px");
+  await expect(body).toHaveCSS("line-height", "28px");
+  const blocks = body.locator(":scope > *");
+  await expect(blocks).toHaveCount(2);
+  await expect(blocks.nth(1)).toHaveCSS("margin-top", "20px");
+  const firstBox = await blocks.first().boundingBox();
+  const secondBox = await blocks.nth(1).boundingBox();
+  expect(firstBox).toBeTruthy();
+  expect(secondBox).toBeTruthy();
+  expect(secondBox?.y).toBeCloseTo((firstBox?.y ?? 0) + 48, 1);
+  expect(errors).toEqual([]);
+});
+
+test("compact object pages retain the measured content padding", async ({
+  page,
+}) => {
+  const errors = await openWorkspace(page);
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Compact geometry");
+  await page.setViewportSize({ width: 495, height: 638 });
+
+  const workspace = createdObjectWorkspace(page);
+  const column = workspace.locator(
+    '[data-slot="workspace-object-page-column"]',
+  );
+  await expect(column).toHaveCSS("padding-left", "40px");
+  await expect(column).toHaveCSS("padding-right", "32px");
+  await expect(column).toHaveCSS("padding-top", "36px");
+  const columnBox = await column.boundingBox();
+  const titleBox = await workspace
+    .locator('[data-slot="workspace-object-page-title"]')
+    .boundingBox();
+  expect(columnBox).toBeTruthy();
+  expect(titleBox).toBeTruthy();
+  expect(titleBox?.x).toBeCloseTo((columnBox?.x ?? 0) + 40, 1);
+  expect(titleBox?.width).toBeCloseTo(391, 1);
+  expect(errors).toEqual([]);
+});
+
+test("related rows use the measured 45px vertical rhythm", async ({ page }) => {
+  test.setTimeout(60_000);
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Rhythm target one");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Rhythm target two");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Rhythm source");
+
+  const snapshot = await persistedSnapshot(page);
+  const firstTarget = snapshot?.entities.find(
+    (entity: { title: string }) => entity.title === "Rhythm target one",
+  );
+  const secondTarget = snapshot?.entities.find(
+    (entity: { title: string }) => entity.title === "Rhythm target two",
+  );
+  const source = snapshot?.entities.find(
+    (entity: { title: string }) => entity.title === "Rhythm source",
+  );
+  if (!snapshot || !firstTarget || !secondTarget || !source) {
+    throw new Error("Related rhythm fixture entities are missing.");
+  }
+  source.body.doc.content.push(
+    {
+      type: "paragraph",
+      attrs: { id: "related-rhythm-one" },
+      content: [{ type: "objectEmbed", attrs: { objectId: firstTarget.id } }],
+    },
+    {
+      type: "paragraph",
+      attrs: { id: "related-rhythm-two" },
+      content: [{ type: "objectEmbed", attrs: { objectId: secondTarget.id } }],
+    },
+  );
+  await page.addInitScript((fixture) => {
+    const serialized = JSON.stringify(fixture);
+    const baseKey = "notes-app:workspace-objects:v1";
+    window.localStorage.setItem(baseKey, serialized);
+    for (const key of Object.keys(window.localStorage)) {
+      if (key.startsWith(`${baseKey}:`)) {
+        window.localStorage.setItem(key, serialized);
+      }
+    }
+  }, snapshot);
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await page.waitForTimeout(750);
+  await page
+    .locator('[data-slot="app-sidebar-object-type-row"]')
+    .filter({ hasText: "Páginas" })
+    .getByRole("button")
+    .filter({ hasText: "Páginas" })
+    .first()
+    .click();
+  await expect(objectTypeWorkspace(page)).toBeVisible();
+  await objectTypeWorkspace(page).getByRole("tab", { name: "Tudo" }).click();
+  await objectTypeWorkspace(page)
+    .getByRole("button", { name: "Abrir: Rhythm source", exact: true })
+    .click();
+  await page.setViewportSize({ width: 604, height: 910 });
+
+  const rows = createdObjectWorkspace(page).locator(
+    '[data-slot="workspace-object-related-content-row"]',
+  );
+  await expect(rows).toHaveCount(2);
+  const firstBox = await rows.first().boundingBox();
+  const secondBox = await rows.nth(1).boundingBox();
+  expect(firstBox).toBeTruthy();
+  expect(secondBox).toBeTruthy();
+  expect(firstBox?.height).toBeCloseTo(33, 1);
+  expect(secondBox?.y).toBeCloseTo((firstBox?.y ?? 0) + 45, 1);
+  await page.screenshot({
+    path: "artifacts/reference-evidence/capacities-object-page/2026-09-01-objects-inside-side-panel/localhost-related-two-rows-604x910.png",
+  });
+  expect(errors).toEqual([]);
+});
+
 test("Page edge control opens editor utilities without hiding content", async ({
   page,
 }) => {
@@ -3568,6 +3984,45 @@ test("sidebar object rows align and collection rows keep nested indentation", as
   const nestedOffset = (collectionColumn ?? typeColumn) - typeColumn;
   expect(nestedOffset).toBeGreaterThanOrEqual(16);
   expect(nestedOffset).toBeLessThanOrEqual(20);
+  expect(errors).toEqual([]);
+});
+
+test("compact workspace overflow menu opens left with the measured grouping", async ({
+  page,
+}) => {
+  const errors = await openWorkspace(page);
+  await createPageObject(page);
+  await page.setViewportSize({ width: 495, height: 638 });
+  const trigger = page.getByRole("button", {
+    name: "Mais opções",
+    exact: true,
+  });
+  await trigger.click();
+  const menu = page
+    .locator('[data-slot="dropdown-menu-content"][data-open]')
+    .first();
+  await expect(menu).toBeVisible();
+
+  const triggerBox = await trigger.boundingBox();
+  const menuBox = await menu.boundingBox();
+  expect(triggerBox).toBeTruthy();
+  expect(menuBox).toBeTruthy();
+  expect(menuBox?.width).toBeCloseTo(269, 0);
+  expect(menuBox?.height).toBeCloseTo(539, 0);
+  expect(menuBox?.y).toBeCloseTo(triggerBox?.y ?? 0, 0);
+  expect((menuBox?.x ?? 0) + (menuBox?.width ?? 0)).toBeCloseTo(
+    (triggerBox?.x ?? 0) - 4,
+    0,
+  );
+  await expect(
+    menu.locator('[data-slot="dropdown-menu-separator"]'),
+  ).toHaveCount(5);
+  await page.screenshot({
+    path: "artifacts/reference-evidence/capacities-object-page/2026-09-01-objects-inside-side-panel/localhost-header-overflow-open-495x638.png",
+  });
+  await page.keyboard.press("Escape");
+  await expect(menu).toBeHidden();
+  await expect(trigger).toBeFocused();
   expect(errors).toEqual([]);
 });
 

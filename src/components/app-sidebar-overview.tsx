@@ -1296,7 +1296,11 @@ function AppSidebarFooterPopover({
   );
 }
 
-function AppSidebarFooter() {
+function AppSidebarFooter({
+  onOpenShortcuts,
+}: {
+  onOpenShortcuts?: () => void;
+}) {
   const t = useTranslations("workspace");
   const [dark, setDark] = React.useState(false);
 
@@ -1408,29 +1412,12 @@ function AppSidebarFooter() {
 
         <span className="min-w-0 flex-1" />
 
-        <AppSidebarFooterPopover
-          label={t("documentMenu.share")}
-          content={
-            <>
-              <PopoverHeader>
-                <PopoverTitle>{t("documentMenu.share")}</PopoverTitle>
-                <PopoverDescription>
-                  {t("footer.shareDescription")}
-                </PopoverDescription>
-              </PopoverHeader>
-              <Button type="button" variant="ghost" className="justify-start">
-                <AppSidebarSourceIcon name="share" className="size-4" />
-                {t("footer.shareWorkspace")}
-              </Button>
-              <Button type="button" variant="outline" className="justify-start">
-                <AppSidebarSourceIcon name="share" className="size-4" />
-                {t("footer.copyWorkspaceLink")}
-              </Button>
-            </>
-          }
+        <AppSidebarFooterTooltip
+          label={t("commands.openShortcuts.label")}
+          onClick={() => onOpenShortcuts?.()}
         >
           <AppSidebarSourceIcon name="share" className="size-4" />
-        </AppSidebarFooterPopover>
+        </AppSidebarFooterTooltip>
       </div>
     </footer>
   );
@@ -1716,6 +1703,7 @@ type AppSidebarOverviewProps = {
   onEmptyTrash?: () => void;
   onPurgeTrashItem?: (id: string) => void;
   onRestoreTrashItem?: (id: string) => void;
+  onOpenShortcuts?: () => void;
 };
 
 function AppSidebarCollectionMenu({
@@ -1839,6 +1827,7 @@ function AppSidebarOverview({
   onEmptyTrash,
   onPurgeTrashItem,
   onRestoreTrashItem,
+  onOpenShortcuts,
   trashItems = [],
 }: AppSidebarOverviewProps = {}) {
   const t = useTranslations("workspace");
@@ -2096,7 +2085,7 @@ function AppSidebarOverview({
         </div>
       </ScrollArea>
 
-      <AppSidebarFooter />
+      <AppSidebarFooter onOpenShortcuts={onOpenShortcuts} />
     </div>
   );
 }

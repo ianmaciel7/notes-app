@@ -199,7 +199,9 @@ async function importMarkdown(
 
   await expect(menu).toBeHidden();
   await expect(trigger).toHaveAttribute("aria-expanded", "false");
-  await expect(page.getByRole("status")).toContainText(/importad[oa]/i);
+  await expect(
+    page.locator('[data-slot="workspace-message"][role="status"]'),
+  ).toContainText(/importad[oa]/i);
 }
 
 async function exportMarkdown(page: Page, workspace: Locator) {
@@ -210,7 +212,9 @@ async function exportMarkdown(page: Page, workspace: Locator) {
 
   await expect(menu).toBeHidden();
   await expect(trigger).toHaveAttribute("aria-expanded", "false");
-  await expect(page.getByRole("status")).toContainText(/exportad[oa]/i);
+  await expect(
+    page.locator('[data-slot="workspace-message"][role="status"]'),
+  ).toContainText(/exportad[oa]/i);
   expect(download.suggestedFilename()).toMatch(/\.md$/i);
 
   const path = await download.path();
@@ -243,8 +247,8 @@ for (const documentCase of documentCases) {
     await expect(editorShell).toBeVisible();
     await expect(editor).toHaveAttribute("contenteditable", "true");
     await expect(editor).toHaveAttribute("aria-multiline", "true");
-    await expect(editor).toHaveCSS("font-size", "16px");
-    await expect(editor).toHaveCSS("line-height", "24px");
+    await expect(editor).toHaveCSS("font-size", "17px");
+    await expect(editor).toHaveCSS("line-height", "28px");
 
     await importMarkdown(
       page,
