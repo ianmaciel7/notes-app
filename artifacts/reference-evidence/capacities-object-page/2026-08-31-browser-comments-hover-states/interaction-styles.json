@@ -1,0 +1,59 @@
+{
+  "reference": {
+    "customize": {
+      "idle": { "opacity": 0, "pointerEvents": "none", "height": 26 },
+      "hover": { "opacity": 1, "pointerEvents": "auto", "height": 26 },
+      "transition": "opacity 0.3s linear",
+      "iconPath": "M205.67 189.66...215 180.28Z"
+    },
+    "showMore": {
+      "idle": { "opacity": 0, "pointerEvents": "auto", "width": 109.859375, "height": 28 },
+      "hover": { "opacity": 1 },
+      "transition": "opacity 0.2s cubic-bezier(0, 0, 0.2, 1)",
+      "click": "opens Related content in the side panel"
+    },
+    "relatedRow": {
+      "collapsed": { "width": 728, "height": 33 },
+      "hoverBackground": "oklch(0.9856 0.0016 67)",
+      "click": "the independent caret rotates and expands the embedded preview"
+    },
+    "collections": {
+      "width": 120.03125,
+      "height": 25.78125,
+      "disclosure": "opacity 0 until the label group is hovered",
+      "click": "focuses and opens the inline collection selector"
+    },
+    "measuredPalette": {
+      "violet": {
+        "text": "oklch(0.5047 0.2017 295.51)",
+        "background": "oklch(0.9564 0.0229 293.96)",
+        "border": "oklch(0.8112 0.1014 293.55)"
+      },
+      "teal": {
+        "text": "oklch(0.4954 0.0774 186.74)",
+        "background": "oklch(0.9678 0.0321 182.40)",
+        "border": "oklch(0.8549 0.1251 181.11)"
+      }
+    }
+  },
+  "localhostAfterImplementation": {
+    "customize": {
+      "idle": { "opacity": 0, "pointerEvents": "none", "width": 135.875, "height": 26 },
+      "hover": { "opacity": 1, "pointerEvents": "auto" },
+      "transition": "opacity 0.2s cubic-bezier(0, 0, 0.2, 1)"
+    },
+    "showMore": {
+      "idle": { "opacity": 0, "pointerEvents": "auto", "width": 92.953125, "height": 28 },
+      "hover": { "opacity": 1 },
+      "transition": "opacity 0.2s cubic-bezier(0, 0, 0.2, 1)",
+      "click": "selects Related content in the existing side panel"
+    },
+    "relatedDisclosure": {
+      "width": 28,
+      "height": 24,
+      "before": "false",
+      "after": "true"
+    },
+    "collections": { "width": 98.109375, "height": 25.796875 }
+  }
+}

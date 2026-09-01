@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1787703147.9288435,
-    "ast_hash": "49d2baebe47c9352bcf390e6b43ff5fd",
+    "mtime": 1788259810.5010228,
+    "ast_hash": "d66eed2fed5460b41a8c6afbb916ed85",
     "semantic_hash": ""
   },
   "postcss.config.mjs": {
@@ -435,8 +435,8 @@
     "semantic_hash": "2475a2038f696d58a4659a5c89a49d76"
   },
   "src/components/app-header-icons.tsx": {
-    "mtime": 1787942831.869622,
-    "ast_hash": "981d38fe9f093596a864f697728e2832",
+    "mtime": 1788215260.256236,
+    "ast_hash": "d19cf7b68f9f626edce226e50fa31d47",
     "semantic_hash": ""
   },
   "src/components/app-header-tabs.tsx": {
@@ -935,8 +935,8 @@
     "semantic_hash": ""
   },
   "docs/DESIGN.md": {
-    "mtime": 1787942831.4374025,
-    "ast_hash": "54406e1cc46d0096ab249b98a262fc44",
+    "mtime": 1788260906.715966,
+    "ast_hash": "64cb418ba829406e5d5b8d12bcf148e6",
     "semantic_hash": ""
   },
   "docs/GRAPHIFY.md": {
@@ -1181,52 +1181,52 @@
   },
   ".agents/mcp-servers.json": {
     "mtime": 1787133566.4818826,
-    "ast_hash": "a9db9f3db7697d190e2a28e3eb36a6a7",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   ".github/rulesets/dev.json": {
     "mtime": 1787133566.5405724,
-    "ast_hash": "d4ca8b95acabfffb3960badc31d7aea5",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   ".github/rulesets/main.json": {
     "mtime": 1787133566.5405724,
-    "ast_hash": "6e0a6e44b4b0a279ed852a9a6b73442a",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   ".github/rulesets/stag.json": {
     "mtime": 1787133566.5415726,
-    "ast_hash": "e9f511393b613fd1a4b4749c2e7c0f1e",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   ".vscode/launch.json": {
     "mtime": 1787273796.5484054,
-    "ast_hash": "6facd311ce81b3ccf67a6559b4654847",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "skills-lock.json": {
     "mtime": 1787133566.6074927,
-    "ast_hash": "6efa8baf08c3e8edc685f14b040bbf8e",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/messages/en.json": {
     "mtime": 1788173526.7916772,
-    "ast_hash": "b137a8134a90244944dd8674a0460187",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/messages/es.json": {
     "mtime": 1788173532.491489,
-    "ast_hash": "0559007bdadc2d3b3901aab5c420c15b",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/messages/pt-BR.json": {
     "mtime": 1788173538.4932108,
-    "ast_hash": "0fcb7a8508f636c0053b4d4cd9b9fd85",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/components/object-icons.tsx": {
-    "mtime": 1787942831.94834,
-    "ast_hash": "60a7ccc8ed77066db789efa8db0cd739",
+    "mtime": 1788260834.375712,
+    "ast_hash": "55f780b1c0b726a377403d0740492ec4",
     "semantic_hash": ""
   },
   "src/components/ui/shared-styles.ts": {
@@ -1236,12 +1236,12 @@
   },
   "artifacts/capacities-reference/capacities-wacz-visual-contract.json": {
     "mtime": 1787409002.4228969,
-    "ast_hash": "7499f2d92a1f17e046ec889ca529f17c",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/capacities-reference/visual-contract-2026-08-22.json": {
     "mtime": 1787406745.5739937,
-    "ast_hash": "9bf10a0691078f9234423de495efe83e",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "scripts/extract-capacities-wacz-visual-contract.mjs": {
@@ -1255,8 +1255,8 @@
     "semantic_hash": ""
   },
   "src/components/workspace-controller.tsx": {
-    "mtime": 1788174421.0009444,
-    "ast_hash": "1a06c4fb9bbb9611b1db8e5f08265491",
+    "mtime": 1788257842.3703961,
+    "ast_hash": "81f1650ed145f811ddf483c9dc3f2a23",
     "semantic_hash": ""
   },
   ".agents/rules/workspace-ui-parity.md": {
@@ -1305,8 +1305,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-objects.test.mjs": {
-    "mtime": 1788170934.810183,
-    "ast_hash": "746484e34a9f4461a9189b8b03512222",
+    "mtime": 1788261034.5484018,
+    "ast_hash": "272164e324d2eea51764f65582940bb3",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20260822_164605_existem_componentes_pasta_ui_ou_algum_n_estao_segu.md": {
@@ -1330,8 +1330,8 @@
     "semantic_hash": ""
   },
   "src/components/object-type-toolbar-icon.tsx": {
-    "mtime": 1787942831.9573739,
-    "ast_hash": "7447bd2eaa2ea22c4511674e48de20fc",
+    "mtime": 1788260261.3180704,
+    "ast_hash": "32661fff86559e0cee3307d19e192ec5",
     "semantic_hash": ""
   },
   "openspec/changes/archive/2026-08-22-implement-object-lifecycle/.openspec.yaml": {
@@ -1420,13 +1420,13 @@
     "semantic_hash": ""
   },
   "docs/references/capacities-workspace-parity.md": {
-    "mtime": 1787942831.4389098,
-    "ast_hash": "305c4265dd7c8a3d8746a9204a6474fa",
+    "mtime": 1788216659.0836546,
+    "ast_hash": "6c30646768fc9152128cc9aa51f67702",
     "semantic_hash": ""
   },
   "tests/e2e/workspace-parity.spec.ts": {
-    "mtime": 1788174879.9688196,
-    "ast_hash": "87c1ad526c96b78a0885c4ccc333e15e",
+    "mtime": 1788260824.3895624,
+    "ast_hash": "e8794018824c8fb23bd132244161355f",
     "semantic_hash": ""
   },
   "src/lib/workspace-layout.ts": {
@@ -1445,13 +1445,13 @@
     "semantic_hash": ""
   },
   "src/components/block-editor.tsx": {
-    "mtime": 1788175092.6042626,
-    "ast_hash": "6033fc06ea00b0adebdfba71c922e699",
+    "mtime": 1788260834.399817,
+    "ast_hash": "76d67f9e221a0e5658de707f5a22e2dc",
     "semantic_hash": ""
   },
   "src/editor/document.ts": {
-    "mtime": 1788173738.9419746,
-    "ast_hash": "a410ab29b0da539401687d3858b927b8",
+    "mtime": 1788259665.1474223,
+    "ast_hash": "efb38378aeb7fdeba98d114fea48a10c",
     "semantic_hash": ""
   },
   "src/hooks/use-buffered-text-commit.ts": {
@@ -1460,8 +1460,8 @@
     "semantic_hash": ""
   },
   "tests/block-editor-contract.test.mjs": {
-    "mtime": 1788174079.6675727,
-    "ast_hash": "51973dae09d0bfdd277cceef61fab36b",
+    "mtime": 1788260638.557592,
+    "ast_hash": "3bdf4680a3fad150b19fe45a0af618d6",
     "semantic_hash": ""
   },
   "tests/e2e/block-editor.spec.ts": {
@@ -1470,13 +1470,13 @@
     "semantic_hash": ""
   },
   "tests/editor-document.test.mjs": {
-    "mtime": 1788173659.2925856,
-    "ast_hash": "d361d36f0d5c671cdd7903db16ad9393",
+    "mtime": 1788219839.1992743,
+    "ast_hash": "285a2a9151cb10e761364073db6172b3",
     "semantic_hash": ""
   },
   "tests/input-performance-contract.test.mjs": {
-    "mtime": 1787703295.8817594,
-    "ast_hash": "709393c9b2b5306da1dcc6f5bbed428a",
+    "mtime": 1788259340.899355,
+    "ast_hash": "cbad5a28b6499bbba6f47dad67d3aca1",
     "semantic_hash": ""
   },
   "tests/workspace-storage-migration.test.mjs": {
@@ -1490,8 +1490,8 @@
     "semantic_hash": ""
   },
   "src/editor/slash-command.tsx": {
-    "mtime": 1788168743.1759546,
-    "ast_hash": "f40c577fda033241914aa2083d525782",
+    "mtime": 1788217005.970199,
+    "ast_hash": "f4e134072a2b05739114d893978ad284",
     "semantic_hash": ""
   },
   "src/editor/block-command-catalog.tsx": {
@@ -1505,13 +1505,13 @@
     "semantic_hash": ""
   },
   "src/components/block-editor-handle.tsx": {
-    "mtime": 1788174377.9798489,
-    "ast_hash": "8f172d969bf0da816825181b6347d778",
+    "mtime": 1788260834.3988159,
+    "ast_hash": "0497c7f469fb8b86d357404e4a3bc7ae",
     "semantic_hash": ""
   },
   "src/components/block-editor-selection-toolbar.tsx": {
-    "mtime": 1788173698.1041398,
-    "ast_hash": "52dedc5c4fecc78365427e4308415e0b",
+    "mtime": 1788260834.381233,
+    "ast_hash": "a61ed936509b06934e6ecdaae1848eb1",
     "semantic_hash": ""
   },
   "src/components/data-view-cards.tsx": {
@@ -1590,8 +1590,8 @@
     "semantic_hash": ""
   },
   "src/components/workspace-object-page-view.tsx": {
-    "mtime": 1788173905.6287084,
-    "ast_hash": "265c1073655f8c015efd7058ec63228e",
+    "mtime": 1788260932.570851,
+    "ast_hash": "081804c12cebdc2ab83c5681bb41213b",
     "semantic_hash": ""
   },
   "src/components/workspace-object-type-view.tsx": {
@@ -1650,13 +1650,13 @@
     "semantic_hash": ""
   },
   "src/lib/workspace-object-links.ts": {
-    "mtime": 1788171740.8677943,
+    "mtime": 1788258480.3705919,
     "ast_hash": "891876a507951c78891c439867855ba4",
     "semantic_hash": ""
   },
   "src/lib/workspace-object-types.ts": {
-    "mtime": 1788173025.1646557,
-    "ast_hash": "03aecd7cdeb3aa09bf097f1745325df6",
+    "mtime": 1788258316.6830332,
+    "ast_hash": "2ecbe49a452e88f8cfc7b8027639c48b",
     "semantic_hash": ""
   },
   "src/lib/workspace-object-views.ts": {
@@ -1686,17 +1686,17 @@
   },
   "src/messages/editor/en.json": {
     "mtime": 1788169917.186127,
-    "ast_hash": "932ad1dc7aaf7b6b443256479d9b1366",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/messages/editor/es.json": {
     "mtime": 1788169917.186127,
-    "ast_hash": "033aa2ef3ddac7442e37d80c55459eb2",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/messages/editor/pt-BR.json": {
     "mtime": 1788169917.1881263,
-    "ast_hash": "d6f19a180e76dfa4b6b01bd8d1c53714",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/platform/model.ts": {
@@ -1710,8 +1710,8 @@
     "semantic_hash": ""
   },
   "tests/e2e/block-editor-interactions.spec.ts": {
-    "mtime": 1788174224.0098627,
-    "ast_hash": "2b35ae2a9814da30f50e3cab2834ceed",
+    "mtime": 1788258611.1418576,
+    "ast_hash": "1dc375c723d199789ab80084fc5a8c1d",
     "semantic_hash": ""
   },
   "tests/e2e/dates-calendar.spec.ts": {
@@ -1755,8 +1755,8 @@
     "semantic_hash": ""
   },
   "tests/runtime-object-types.test.mjs": {
-    "mtime": 1787942832.0573802,
-    "ast_hash": "172ea98545a2e148604d7eb22c83cdd4",
+    "mtime": 1788258264.3549495,
+    "ast_hash": "2aaa8f41dc4860aa96ea6f0328f4b13d",
     "semantic_hash": ""
   },
   "tests/slash-command-lifecycle.test.mjs": {
@@ -1765,8 +1765,8 @@
     "semantic_hash": ""
   },
   "tests/slash-menu-reference.test.mjs": {
-    "mtime": 1788168743.1892219,
-    "ast_hash": "b85a4f49a6952b93a821c59b74956afa",
+    "mtime": 1788216896.910096,
+    "ast_hash": "f0d9437e08b200c2022226cf86b843e7",
     "semantic_hash": ""
   },
   "tests/workspace-account-spaces.test.mjs": {
@@ -1795,8 +1795,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-object-links.test.mjs": {
-    "mtime": 1787942832.060461,
-    "ast_hash": "6fe454f3a3d71bcdc89e2c24fb1f1c22",
+    "mtime": 1788258484.1553469,
+    "ast_hash": "f951f7bf74f9a568d391227389436650",
     "semantic_hash": ""
   },
   "tests/workspace-property-values.test.mjs": {
@@ -2261,12 +2261,12 @@
   },
   "artifacts/reference-evidence/capacities-object-page/2026-08-28-mentions-utilities/interactions.behavior.json": {
     "mtime": 1787942831.4003332,
-    "ast_hash": "14c800ce261695302e58ebae0bbe0577",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-object-page/2026-08-28-mentions-utilities/localhost-implementation.behavior.json": {
     "mtime": 1787942831.4003332,
-    "ast_hash": "1e946143815c963a0f82fb453f87019b",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-object-page/2026-08-28-mentions-utilities/manifest.json": {
@@ -2276,42 +2276,42 @@
   },
   "artifacts/reference-evidence/capacities-object-page/2026-08-28-mentions-utilities/reference-object-page.dom.json": {
     "mtime": 1787942831.4028478,
-    "ast_hash": "fb6dd45fbfcf73f102057036f1a6f6c2",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/footer-controls.behavior.json": {
     "mtime": 1787942831.4043562,
-    "ast_hash": "e9c7ba315fafca52ff004c6918f3de8f",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/footer-help-and-card.behavior.json": {
     "mtime": 1787942831.4055142,
-    "ast_hash": "9dc52940d79378c0e0ae3d57563d7a3a",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/global-and-card.behavior.json": {
     "mtime": 1787942831.4067395,
-    "ast_hash": "76d107e5578ca0234ffe892d49fd2232",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/header-transients.behavior.json": {
     "mtime": 1787942831.4067395,
-    "ast_hash": "249321f55bf8127e26f411c53e3f5e30",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/keyboard-focus.behavior.json": {
     "mtime": 1787942831.4082496,
-    "ast_hash": "cf16233336a4f8e20495dfd7f9cc0b8a",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/listing-menus.behavior.json": {
     "mtime": 1787942831.4082496,
-    "ast_hash": "857bef66949aa32180ce3d8cea892ce6",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/localhost-baseline.dom.json": {
     "mtime": 1787942831.4092646,
-    "ast_hash": "748baacca3cd90dea1092e4c41727667",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/manifest.json": {
@@ -2321,62 +2321,62 @@
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/matched-baseline.styles.json": {
     "mtime": 1787942831.410257,
-    "ast_hash": "0adad9c04a8b91c90027d0065a096b1b",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/panel-and-navigation.behavior.json": {
     "mtime": 1787942831.410257,
-    "ast_hash": "bf2a6a629fd032ca186c1917ccc4ee76",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/primary-destinations.behavior.json": {
     "mtime": 1787942831.4112563,
-    "ast_hash": "466cf2cd2684161259e95e0dd609852c",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/reference-baseline.dom.json": {
     "mtime": 1787942831.412257,
-    "ast_hash": "5b125327b7382ca1de2a9f962c2087fe",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/responsive.behavior.json": {
     "mtime": 1787942831.4318924,
-    "ast_hash": "b49b6a2880c7b03ce234fc714de9e187",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/runtime.json": {
     "mtime": 1787942831.4318924,
-    "ast_hash": "30f7a60580a7325a861302a708197a46",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/search-interaction.behavior.json": {
     "mtime": 1787942831.4333968,
-    "ast_hash": "a93108cb36c6a27167d24f7e86b805d1",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/sidebar-nested.behavior.json": {
     "mtime": 1787942831.4344008,
-    "ast_hash": "9f152dce493b94fa2e1995b3361d949d",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/sidebar-sections.behavior.json": {
     "mtime": 1787942831.4344008,
-    "ast_hash": "d96a4beeddbcd2004f60f1c8895dc0b4",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/verification.json": {
     "mtime": 1787942831.4354024,
-    "ast_hash": "faa4299641532b8c9680c4acf7accddf",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/view-persistence.behavior.json": {
     "mtime": 1787942831.4354024,
-    "ast_hash": "7928aaabde34bf96c5b790513dcb308f",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/manifest.example.json": {
     "mtime": 1787942831.4364016,
-    "ast_hash": "27211536d8d66ee05d9451e69128c9c9",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "src/lib/editor-utilities.ts": {
@@ -2405,8 +2405,8 @@
     "semantic_hash": ""
   },
   "tests/object-page-inline-selectors.test.mjs": {
-    "mtime": 1787942832.0523689,
-    "ast_hash": "a82161b6f6929442e5e72681ced034da",
+    "mtime": 1788260821.5912807,
+    "ast_hash": "8d07bf4474be26005de3cb49c5cda009",
     "semantic_hash": ""
   },
   "tests/workspace-database.test.mjs": {
@@ -2500,13 +2500,13 @@
     "semantic_hash": ""
   },
   "openspec/changes/align-object-page-complete-parity/design.md": {
-    "mtime": 1787943473.3363209,
-    "ast_hash": "167c0d90ad441a4e9bd72b3de9220338",
+    "mtime": 1788260913.4802456,
+    "ast_hash": "a05b0b225e0b5a14d86635493624dc80",
     "semantic_hash": ""
   },
   "openspec/changes/align-object-page-complete-parity/proposal.md": {
-    "mtime": 1787943334.6003468,
-    "ast_hash": "bdd16c064e7bf6256e891983853a0ecf",
+    "mtime": 1788258785.1566238,
+    "ast_hash": "6e15d7eb65710e27e4d528e637605126",
     "semantic_hash": ""
   },
   "openspec/changes/align-object-page-complete-parity/specs/developer-workflows/reference-evidence/spec.md": {
@@ -2525,13 +2525,13 @@
     "semantic_hash": ""
   },
   "openspec/changes/align-object-page-complete-parity/specs/ui/capacities-en-fidelity/spec.md": {
-    "mtime": 1788170241.1944973,
-    "ast_hash": "247ce3ba43dcc941b0f357252af2ebdc",
+    "mtime": 1788260910.3911402,
+    "ast_hash": "fb14ed52fa2914615aaea8ecdb83eec2",
     "semantic_hash": ""
   },
   "openspec/changes/align-object-page-complete-parity/tasks.md": {
-    "mtime": 1788172943.4134512,
-    "ast_hash": "1b328c4d2e8f6e051f57c23350ba928d",
+    "mtime": 1788260917.1428485,
+    "ast_hash": "516bfce9ba78708c307ca2868b1cdeba",
     "semantic_hash": ""
   },
   "openspec/changes/align-object-page-mentions-and-editor-tools/.openspec.yaml": {
@@ -3435,13 +3435,13 @@
     "semantic_hash": ""
   },
   "src/editor/reference-suggestions.ts": {
-    "mtime": 1788168743.173958,
-    "ast_hash": "db506073b1835d6a8f8eec917ee59810",
+    "mtime": 1788220600.1185105,
+    "ast_hash": "10257540d711feccdbbce7c1df86277b",
     "semantic_hash": ""
   },
   "src/editor/shared-suggestion-controller.ts": {
-    "mtime": 1788169244.2792766,
-    "ast_hash": "5333b68ed9c35e08e68eca3fdbbd42aa",
+    "mtime": 1788216968.8805704,
+    "ast_hash": "fb305db77b913e1a71dc7807d6c3a358",
     "semantic_hash": ""
   },
   "src/editor/table-block.ts": {
@@ -3475,18 +3475,18 @@
     "semantic_hash": ""
   },
   "tests/editor-reference-adapters-contract.test.mjs": {
-    "mtime": 1788169673.6694493,
-    "ast_hash": "64e7b306621adea80f307e532bb61bcc",
+    "mtime": 1788218537.3464878,
+    "ast_hash": "b569cd751b4bcf8b403694bef21f6bb5",
     "semantic_hash": ""
   },
   "tests/editor-reference-suggestions.test.mjs": {
-    "mtime": 1788168743.1859877,
-    "ast_hash": "a7d047a519c0a05df9c1499ebf25dc40",
+    "mtime": 1788219519.6694305,
+    "ast_hash": "723bdc4a81e3c7e57387646b2dfcde51",
     "semantic_hash": ""
   },
   "tests/editor-shared-suggestion-controller.test.mjs": {
-    "mtime": 1788168743.1869879,
-    "ast_hash": "918d7df2e252e6e770edd135628c401e",
+    "mtime": 1788216967.236798,
+    "ast_hash": "9e158b55cd4bce7e24ce1dc76e05efee",
     "semantic_hash": ""
   },
   "tests/editor-trigger-arbitration.test.mjs": {
@@ -3995,8 +3995,8 @@
     "semantic_hash": ""
   },
   "tests/workspace-related-content-ui.test.mjs": {
-    "mtime": 1788170353.033469,
-    "ast_hash": "3b496cc1a721b38e46ea56d733467b6a",
+    "mtime": 1788256968.6201198,
+    "ast_hash": "8211ce53f639d6fdf65f48bea2047572",
     "semantic_hash": ""
   },
   "artifacts/reference-evidence/capacities-keyboard-command-system/2026-08-31-corrective-acceptance/acceptance-matrix.md": {
@@ -4042,6 +4042,361 @@
   "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-trigger-blocked/local-test-run.md": {
     "mtime": 1788173440.6121197,
     "ast_hash": "e23bfa1768afddd3ce1efe630970c775",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/manifest.json": {
+    "mtime": 1788219776.1013057,
+    "ast_hash": "1b9c8efdbe3946539701d4786ec313a8",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/manifest.json": {
+    "mtime": 1788217449.9023843,
+    "ast_hash": "5e503cf9204c97dae70dbc6758ba0c10",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-09-01-custom-object-empty-property-menu/manifest.json": {
+    "mtime": 1788260778.8139317,
+    "ast_hash": "2d2efcf757248ef4c770e442a4b47ca1",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/action-matrix.md": {
+    "mtime": 1788220285.517123,
+    "ast_hash": "7ad66e6a5fc1b1cb3fe0acc1f5f2c4d0",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/action-matrix.md": {
+    "mtime": 1788217446.218447,
+    "ast_hash": "36a330c9247a79359b51a797e74d805d",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-09-01-custom-object-empty-property-menu/action-matrix.md": {
+    "mtime": 1788260919.8685417,
+    "ast_hash": "8de33ca82fb6706de8868d21c19ce221",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/local-overflow-menu-icons.png": {
+    "mtime": 1788259565.066243,
+    "ast_hash": "92cc50b263f7b9a6b8b0f67e6750a099",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/local-related-inline-title.png": {
+    "mtime": 1788220261.9380138,
+    "ast_hash": "94886f07713b934037c89d07be32eb15",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/local-related-row-hover.png": {
+    "mtime": 1788220261.9370127,
+    "ast_hash": "e36c042d1de2b71f687ee298956dab01",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-collections-clicked.png": {
+    "mtime": 1788215642.636966,
+    "ast_hash": "ba604aca0299b00b96c22459e9564c57",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-collections-hover-exit.png": {
+    "mtime": 1788215641.6271093,
+    "ast_hash": "945962a1a5fb8671609597c3c049e18e",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-collections-hover.png": {
+    "mtime": 1788215641.9819856,
+    "ast_hash": "d9105c25531946919906b278b7fdf3a4",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-collections-idle.png": {
+    "mtime": 1788215641.6271093,
+    "ast_hash": "945962a1a5fb8671609597c3c049e18e",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-header-hover-exit.png": {
+    "mtime": 1788215568.104426,
+    "ast_hash": "49cc4c5027dbf1b6c3abe05caf9ea1c2",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-header-hover.png": {
+    "mtime": 1788215568.5082052,
+    "ast_hash": "346a9b01aaa8963410349dac6320b397",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-header-idle.png": {
+    "mtime": 1788215568.104426,
+    "ast_hash": "49cc4c5027dbf1b6c3abe05caf9ea1c2",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-personalize-open.png": {
+    "mtime": 1788215569.1801078,
+    "ast_hash": "7bfac663e82a9f1ae26e30178aaa1699",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-related-hover-exit.png": {
+    "mtime": 1788215622.1862793,
+    "ast_hash": "e5da4519cbab597d536aa46b7fd14dca",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-related-hover.png": {
+    "mtime": 1788215622.5888793,
+    "ast_hash": "82d1191684d21d08d676b97b0e313ddb",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-related-idle.png": {
+    "mtime": 1788215622.1862793,
+    "ast_hash": "e5da4519cbab597d536aa46b7fd14dca",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-related-item-clicked.png": {
+    "mtime": 1788215623.5857468,
+    "ast_hash": "90af53b2bc66bea5e7f3f6e697214883",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-related-item-hover.png": {
+    "mtime": 1788215622.9340363,
+    "ast_hash": "43a5a3d06113df59d0efe47736a17360",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-related-show-more-clicked.png": {
+    "mtime": 1788215631.4894724,
+    "ast_hash": "b3ca32214ea61c9b830aecbe0ac83a96",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/localhost-type-picker-open.png": {
+    "mtime": 1788215840.8830042,
+    "ast_hash": "9cf134ef5dac4cfb0a2f144ea6b64769",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-collection-hover-current-full.png": {
+    "mtime": 1788219538.2468865,
+    "ast_hash": "99deca5426e293e27cb269ddd79e8413",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-collections-clicked.png": {
+    "mtime": 1788214918.2442558,
+    "ast_hash": "508283b7a4cc49462d011d11025aed66",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-collections-hover-exit.png": {
+    "mtime": 1788214917.006706,
+    "ast_hash": "ae8da1414278ab21922c04b3f61a832a",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-collections-hover.png": {
+    "mtime": 1788214917.408819,
+    "ast_hash": "084968f8e59952f85993d35606f66db1",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-collections-idle.png": {
+    "mtime": 1788214917.006706,
+    "ast_hash": "ae8da1414278ab21922c04b3f61a832a",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-current-idle-full.png": {
+    "mtime": 1788219649.80664,
+    "ast_hash": "50fe5961ff4ff763de16249e009618dd",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-header-hover-exit.png": {
+    "mtime": 1788214514.7855213,
+    "ast_hash": "a4c862121ab6eb48baf7e8a68e2f75a4",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-header-hover.png": {
+    "mtime": 1788214533.7504015,
+    "ast_hash": "a4c862121ab6eb48baf7e8a68e2f75a4",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-header-idle.png": {
+    "mtime": 1788214514.7855213,
+    "ast_hash": "a4c862121ab6eb48baf7e8a68e2f75a4",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-idle.png": {
+    "mtime": 1788214057.510768,
+    "ast_hash": "bad79968718b97072a8cbe842cf684a1",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-inline-title-focus-current-full.png": {
+    "mtime": 1788219594.4883187,
+    "ast_hash": "cda8cba239e7915ba473dc3754b30696",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-personalize-open-full.png": {
+    "mtime": 1788214583.5939639,
+    "ast_hash": "81ef84f373570047a937458ca884ca5e",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-personalize-open.png": {
+    "mtime": 1788214534.389495,
+    "ast_hash": "b0f76b2d86b8011207f288a655d09924",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-header-hover-current-full.png": {
+    "mtime": 1788219544.0792437,
+    "ast_hash": "2286249d17b9d0ade306c0e8ec2fbd79",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-header-hover-exit.png": {
+    "mtime": 1788214826.88702,
+    "ast_hash": "41e73234dce4d06c5dc890fc7a7fc737",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-header-hover.png": {
+    "mtime": 1788214827.4006355,
+    "ast_hash": "1cdf4c3bb03f819e3e596f025fdfcbb2",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-header-idle.png": {
+    "mtime": 1788214826.88702,
+    "ast_hash": "41e73234dce4d06c5dc890fc7a7fc737",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-idle-full.png": {
+    "mtime": 1788214600.2191877,
+    "ast_hash": "41e73234dce4d06c5dc890fc7a7fc737",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-item-1-clicked.png": {
+    "mtime": 1788214767.4225724,
+    "ast_hash": "2bef821238026ddaa17b3b852cb5c900",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-item-1-hover.png": {
+    "mtime": 1788214766.6980584,
+    "ast_hash": "4a2f70ecc4faffb5f405ad220a79f209",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-item-2-clicked.png": {
+    "mtime": 1788214769.1209595,
+    "ast_hash": "b8e369a7244794d8a27f77af8c9d34a5",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-item-2-hover.png": {
+    "mtime": 1788214768.3947275,
+    "ast_hash": "970102b5be220d3dae528f75b7a791b7",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-item-3-clicked.png": {
+    "mtime": 1788214770.8388848,
+    "ast_hash": "785def52f98143ca704639ca291f3bf1",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-item-3-hover.png": {
+    "mtime": 1788214770.1052508,
+    "ast_hash": "93d98f3887b80c8544cb8e82f8b27056",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-row-expanded-current-full.png": {
+    "mtime": 1788219581.7975807,
+    "ast_hash": "c4b5a2f802d99c8a751bd4b2c4559ce6",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-row-hover-current-full.png": {
+    "mtime": 1788219549.8314712,
+    "ast_hash": "5b5a60a2d5814d2160e8f35373fcb057",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-show-more-clicked.png": {
+    "mtime": 1788214828.4017346,
+    "ast_hash": "5180352bbc9db0c7bc3889c3073fbc7c",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-related-side-panel-current-full.png": {
+    "mtime": 1788219606.7326484,
+    "ast_hash": "c35ccc772e8a4f99ef80211200159a8c",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-tag-hover-current-full.png": {
+    "mtime": 1788219529.1153579,
+    "ast_hash": "2723cf9f091d16244002b73541d4513e",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/reference-type-picker-open.png": {
+    "mtime": 1788215034.8617194,
+    "ast_hash": "c03b6c9f4a16d79c31c3a2ca92c0dcc9",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-block-handle-hover.png": {
+    "mtime": 1788216144.007539,
+    "ast_hash": "9fcbca36d1b57a330457432ce8f1049f",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-block-handle-idle.png": {
+    "mtime": 1788216144.5883486,
+    "ast_hash": "512822e429543bf12d7ff63a8e40242c",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-collections-hover.png": {
+    "mtime": 1788217468.574131,
+    "ast_hash": "bda4b8169fd860d6c897bec447beedca",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-collections-open.png": {
+    "mtime": 1788217469.1329741,
+    "ast_hash": "eb43a8c9d78be897260421752fb12897",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-customize-header-hover-after-fix.png": {
+    "mtime": 1788216270.9160452,
+    "ast_hash": "8ca58140a429b9dd20de048d4f2cbdaf",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-customize-idle-after-hover-fix.png": {
+    "mtime": 1788216270.524252,
+    "ast_hash": "e5f20f29d0a5212a93c4d4dc6346b0ea",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-grip-click-menu.png": {
+    "mtime": 1788216260.3043187,
+    "ast_hash": "23843fe44e0be1c0ad731512038d6db7",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-object-reference-menu.png": {
+    "mtime": 1788220033.8605044,
+    "ast_hash": "e0f716853ccb27cdb2d5b3a697bec96e",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-related-expanded.png": {
+    "mtime": 1788217346.3179092,
+    "ast_hash": "974ea27aa9a87cba74e666584e8b420c",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-related-idle.png": {
+    "mtime": 1788217338.4199448,
+    "ast_hash": "9881dc5189c9332cc24ea5e2ec0c819c",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-related-options-open.png": {
+    "mtime": 1788217347.2858653,
+    "ast_hash": "bd8ece7691ec09761147f3a52e18714f",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-related-row-hover.png": {
+    "mtime": 1788217338.7471335,
+    "ast_hash": "03597981f6c49c4cdf0751f3e50df046",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-related-side-panel-click.png": {
+    "mtime": 1788217354.4355557,
+    "ast_hash": "753de64dacb7030cec9e23a87f81eba0",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/reference-block-handle-hover.png": {
+    "mtime": 1788216143.9076226,
+    "ast_hash": "6bf2da336856544199e84e598d9de525",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/reference-block-handle-idle.png": {
+    "mtime": 1788216144.5227752,
+    "ast_hash": "a38eb15b155c9e02c5e5d7cb8c51cd88",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/reference-grip-click-menu.png": {
+    "mtime": 1788216245.8767169,
+    "ast_hash": "0cf57f92f2bc22fbeb00132574fcc220",
+    "semantic_hash": ""
+  },
+  "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/reference-plus-hover-tooltip.png": {
+    "mtime": 1788216245.1437695,
+    "ast_hash": "0a6926101aa8cb65f06bb741a1634092",
     "semantic_hash": ""
   }
 }

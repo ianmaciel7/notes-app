@@ -1,5 +1,7 @@
 "use client";
 
+import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
+import { DownloadSimpleIcon as DownloadIcon } from "@phosphor-icons/react/dist/csr/DownloadSimple";
 import Placeholder from "@tiptap/extension-placeholder";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
@@ -7,7 +9,6 @@ import { Markdown } from "@tiptap/markdown";
 import type { EditorView } from "@tiptap/pm/view";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { CopyIcon, DownloadIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import * as React from "react";
 import { BlockHandle } from "@/components/block-editor-handle";
@@ -102,8 +103,7 @@ function editorAttributes(
     ? {
         "aria-label": ariaLabel,
         "aria-multiline": "true",
-        class:
-          "notes-block-editor outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring/60 focus-visible:outline-solid",
+        class: "notes-block-editor outline-none",
         lang: locale,
         role: "textbox",
         spellcheck: "true",
@@ -262,7 +262,18 @@ function BlockEditor({
     },
     [scheduleCommit],
   );
-
+  const commitReferenceSelectionRef = React.useRef<
+    (currentEditor: NonNullable<ReturnType<typeof useEditor>>) => void
+  >(() => undefined);
+  commitReferenceSelectionRef.current = (currentEditor) => {
+    const document = normalizeBlockEditorDocument({
+      schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+      doc: currentEditor.getJSON(),
+    });
+    if (!document) return;
+    cancelPendingCommit();
+    onChange?.(document);
+  };
   const slashLabelsKey = JSON.stringify(labels.slashMenu);
   const stableSlashLabels = React.useMemo<
     BlockEditorLabels["slashMenu"]
@@ -309,6 +320,8 @@ function BlockEditor({
         entities: referenceEntities,
         getEntities: () => referenceEntitiesRef.current,
         getStructures: () => referenceStructuresRef.current,
+        onSelectionCommit: (currentEditor) =>
+          commitReferenceSelectionRef.current(currentEditor),
         structures: referenceStructures,
       }),
     [referenceEntities, referenceStructures],

@@ -18,8 +18,11 @@ import {
 import {
   computeSuggestionMenuPosition,
   getNextSuggestionIndex,
-  isUsableSuggestionAnchorRect,
+  installSuggestionOutsideDismissal,
+  resolveSuggestionAnchorRect,
+  SUGGESTION_MENU_MOTION_CLASS,
   SUGGESTION_MENU_VIEWPORT_GUTTER,
+  type SuggestionRect,
 } from "@/editor/shared-suggestion-controller";
 import { cn } from "@/lib/utils";
 
@@ -100,7 +103,10 @@ function SlashCommandMenu({
   return (
     <div
       data-slot="block-editor-slash-menu"
-      className="box-border flex w-[27.5rem] max-w-[calc(100vw-1rem)] flex-col overflow-hidden rounded-[14px] border border-[#dedbd7] bg-white text-[#292622] shadow-[0_10px_28px_rgb(47_42_36/0.10),0_2px_8px_rgb(47_42_36/0.06)]"
+      className={cn(
+        "box-border flex w-[27.5rem] max-w-[calc(100vw-1rem)] flex-col overflow-hidden rounded-[14px] border border-[#dedbd7] bg-white text-[#292622] shadow-[0_10px_28px_rgb(47_42_36/0.10),0_2px_8px_rgb(47_42_36/0.06)]",
+        SUGGESTION_MENU_MOTION_CLASS,
+      )}
     >
       <div className="px-3 pb-1 pt-3 text-[14px] font-normal leading-5 text-[#8b857f]">
         {title}
@@ -279,12 +285,6 @@ function filterCommandItems(
   ];
 }
 
-function isUsableAnchorRect(
-  rect: DOMRect | null | undefined,
-): rect is DOMRect {
-  return isUsableSuggestionAnchorRect(rect);
-}
-
 function getCursorRect(editor: Editor, position: number) {
   try {
     const coords = editor.view.coordsAtPos(position);
@@ -311,29 +311,21 @@ function resolveSlashMenuAnchor(anchor: SlashMenuAnchorState) {
   const suggestionRect = anchor.clientRect?.();
   const cursorRect = getCursorRect(anchor.editor, anchor.position);
   const selectionRect = getDomSelectionRect(anchor.editor);
-  if (
-    suggestionRect &&
-    suggestionRect.left <= SLASH_MENU_VIEWPORT_GUTTER &&
-    isUsableAnchorRect(selectionRect)
-  ) {
-    return selectionRect;
-  }
-  if (
-    suggestionRect &&
-    suggestionRect.left <= SLASH_MENU_VIEWPORT_GUTTER &&
-    isUsableAnchorRect(cursorRect)
-  ) {
-    return cursorRect;
-  }
-  if (isUsableAnchorRect(suggestionRect)) return suggestionRect;
-  if (isUsableAnchorRect(selectionRect)) return selectionRect;
-  return cursorRect;
+  return resolveSuggestionAnchorRect({
+    decorationRect:
+      suggestionRect?.left !== undefined &&
+      suggestionRect.left <= SLASH_MENU_VIEWPORT_GUTTER
+        ? null
+        : suggestionRect,
+    documentPositionRect: cursorRect,
+    selectionRect,
+  });
 }
 
 function applySlashMenuPosition(
   element: HTMLElement,
   position: SuggestionPositionData,
-  anchor: DOMRect | null,
+  anchor: SuggestionRect | null,
 ) {
   const ownerWindow = element.ownerDocument.defaultView ?? window;
   const menuRect = element.getBoundingClientRect();
@@ -396,6 +388,7 @@ function createSlashCommandExtension(
             let menu: SlashCommandMenuRenderer | undefined;
             let unmountFloatingElement: (() => void) | undefined;
             let removeEscapeListener: (() => void) | undefined;
+            let removeOutsideDismissal: (() => void) | undefined;
             let activeIndex = 0;
             let currentItems: BlockCommandCatalogItem[] = [];
             let anchorState: SlashMenuAnchorState | undefined;
@@ -404,10 +397,13 @@ function createSlashCommandExtension(
               const currentMenu = menu;
               const currentUnmount = unmountFloatingElement;
               const currentEscapeListener = removeEscapeListener;
+              const currentOutsideDismissal = removeOutsideDismissal;
               menu = undefined;
               unmountFloatingElement = undefined;
               removeEscapeListener = undefined;
+              removeOutsideDismissal = undefined;
               anchorState = undefined;
+              currentOutsideDismissal?.();
               currentEscapeListener?.();
               currentUnmount?.();
               currentMenu?.destroy();
@@ -479,6 +475,15 @@ function createSlashCommandExtension(
                 });
                 const ownerDocument = menu.element.ownerDocument;
                 const ownerWindow = ownerDocument.defaultView;
+                removeOutsideDismissal = installSuggestionOutsideDismissal({
+                  menuContainsTarget: (target) =>
+                    Boolean(target && menu?.element.contains(target as Node)),
+                  onDismiss: () => {
+                    exitSuggestion(props.editor.view, slashCommandPluginKey);
+                    cleanupMenu();
+                  },
+                  ownerDocument,
+                });
                 const onDocumentKeyDown = (event: KeyboardEvent) => {
                   if (event.key !== "Escape") return;
                   event.preventDefault();

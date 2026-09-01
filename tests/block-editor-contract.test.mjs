@@ -245,8 +245,13 @@ test("drag handle uses plugin metadata and a fixed block-relative anchor", () =>
 });
 
 test("visible grip owns native drag while the menu uses a detached anchor", () => {
+  assert.match(
+    handleSource,
+    /@phosphor-icons\/react\/dist\/csr\/DotsSixVertical/,
+  );
   assert.match(handleSource, /function DotsSixVerticalIcon/);
-  assert.equal((handleSource.match(/<circle /g) ?? []).length, 6);
+  assert.match(handleSource, /<PhosphorDotsSixVerticalIcon/);
+  assert.match(handleSource, /data-slot="block-editor-six-dot-icon"/);
   assert.match(handleSource, /data-slot="block-editor-insert-control"/);
   assert.match(handleSource, /data-slot="block-editor-drag-control"/);
   assert.match(handleSource, /data-slot="block-editor-menu-anchor"/);
@@ -286,9 +291,18 @@ test("drop cursor is a subtle one-pixel neutral indicator", () => {
   assert.match(editorSource, /class: "block-editor-dropcursor"/);
 });
 
+test("editor focus keeps the reading surface borderless", () => {
+  assert.match(editorSource, /class:\s*"notes-block-editor outline-none"/);
+  assert.doesNotMatch(
+    editorSource,
+    /notes-block-editor[^"\n]*focus-visible:outline/,
+  );
+});
+
 test("block controls keep measured geometry, input mode, and motion contracts", () => {
   assert.match(handleSource, /data-slot="block-editor-block-handle"/);
   assert.match(handleSource, /data-slot="block-editor-block-menu"/);
+  assert.match(handleSource, /middleware: \[offset\(0\)\]/);
   assert.match(handleSource, /h-\[22px\] w-\[18px\]/);
   assert.match(handleSource, /w-\[36px\]/);
   assert.match(handleSource, /duration-100/);

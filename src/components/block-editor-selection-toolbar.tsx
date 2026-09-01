@@ -1,17 +1,15 @@
 "use client";
 
+import { ArrowUUpLeftIcon as Undo2Icon } from "@phosphor-icons/react/dist/csr/ArrowUUpLeft";
+import { ArrowUUpRightIcon as Redo2Icon } from "@phosphor-icons/react/dist/csr/ArrowUUpRight";
+import { CaretDownIcon as ChevronDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
+import { CodeIcon as Code2Icon } from "@phosphor-icons/react/dist/csr/Code";
+import { LinkIcon } from "@phosphor-icons/react/dist/csr/Link";
+import { TextBIcon as BoldIcon } from "@phosphor-icons/react/dist/csr/TextB";
+import { TextItalicIcon as ItalicIcon } from "@phosphor-icons/react/dist/csr/TextItalic";
 import type { Editor } from "@tiptap/core";
 import { useEditorState } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import {
-  BoldIcon,
-  ChevronDownIcon,
-  Code2Icon,
-  ItalicIcon,
-  LinkIcon,
-  Redo2Icon,
-  Undo2Icon,
-} from "lucide-react";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 import { Button } from "@/components/ui/button";

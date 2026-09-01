@@ -29,7 +29,7 @@ test("slash trigger works at block start and after whitespace", () => {
 test("slash menu stays anchored to the caret instead of viewport origin", () => {
   assert.match(slashSource, /coordsAtPos\(position\)/);
   assert.match(slashSource, /resolveSlashMenuAnchor/);
-  assert.match(slashSource, /isUsableAnchorRect/);
+  assert.match(slashSource, /resolveSuggestionAnchorRect/);
   assert.match(slashSource, /floatingUi: \{ strategy: "fixed" \}/);
   assert.match(slashSource, /onPosition: \(position\) =>/);
   assert.match(slashSource, /position: "fixed"/);

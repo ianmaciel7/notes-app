@@ -12,7 +12,10 @@ test("buffered text hook keeps commits off the immediate keystroke path", async 
   assert.match(source, /onBlur:\s*\(\) => \{/);
   assert.match(source, /onCompositionStart/);
   assert.match(source, /onCompositionEnd/);
-  assert.match(source, /commitRef\.current\(parseRef\.current\(draftRef\.current\)\)/);
+  assert.match(
+    source,
+    /commitRef\.current\(parseRef\.current\(draftRef\.current\)\)/,
+  );
 });
 
 test("workspace editors use buffered commits for text-heavy object fields", async () => {
@@ -39,9 +42,22 @@ test("workspace editors use buffered commits for text-heavy object fields", asyn
   );
   assert.match(blockEditor, /useBufferedDocumentCommit/);
   assert.match(blockEditor, /onUpdate:[\s\S]*scheduleCommit\(/);
-  assert.match(blockEditor, /onBlur=\{editable \? flushCommit : undefined\}/);
-  assert.match(blockEditor, /onCompositionStart=\{editable \? startComposition : undefined\}/);
-  assert.match(blockEditor, /onCompositionEnd=\{editable \? finishComposition : undefined\}/);
+  assert.match(
+    blockEditor,
+    /const flushCurrentDocument = React\.useCallback\(\(\) => \{[\s\S]*flushCommit\(\)/,
+  );
+  assert.match(
+    blockEditor,
+    /onBlur=\{editable \? flushCurrentDocument : undefined\}/,
+  );
+  assert.match(
+    blockEditor,
+    /onCompositionStart=\{editable \? startComposition : undefined\}/,
+  );
+  assert.match(
+    blockEditor,
+    /onCompositionEnd=\{editable \? finishComposition : undefined\}/,
+  );
   assert.doesNotMatch(blockEditor, /onUpdate:[\s\S]{0,120}onChange\(/);
 });
 
@@ -55,7 +71,10 @@ test("input performance rule is linked from the agent entrypoint", async () => {
   ]);
 
   assert.match(agents, /\.agents\/rules\/input-performance\.md/);
-  assert.match(rule, /Do not dispatch workspace-wide object\/context updates on every keystroke/);
+  assert.match(
+    rule,
+    /Do not dispatch workspace-wide object\/context updates on every keystroke/,
+  );
   assert.match(rule, /Do not write to `localStorage` from the keystroke path/);
   assert.match(rule, /useDeferredValue/);
 });

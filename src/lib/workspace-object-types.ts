@@ -1806,6 +1806,18 @@ export function selectCreatableStructures(
   );
 }
 
+export function selectObjectTypeConversionTargets(
+  registry: readonly WorkspaceStructure[],
+  sourceStructureId: StructureId,
+): readonly WorkspaceStructure[] {
+  return selectCreatableStructures(registry).filter(
+    (structure) =>
+      structure.id !== sourceStructureId &&
+      structure.lifecycleKind !== "table" &&
+      structure.lifecycleKind !== "query",
+  );
+}
+
 export function selectReservedStructures(
   registry: readonly WorkspaceStructure[],
 ): readonly WorkspaceStructure[] {

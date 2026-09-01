@@ -129,7 +129,12 @@ test("normalization strips null paragraph defaults without dropping stable ids",
       content: [
         {
           type: "paragraph",
-          attrs: { id: "block:typed-paragraph", size: null },
+          attrs: {
+            emoji: null,
+            id: "block:typed-paragraph",
+            size: null,
+            toggleCollapsed: null,
+          },
           content: [{ type: "text", text: "Persisted text" }],
         },
       ],
