@@ -159,11 +159,8 @@ test("metadata selectors keep tag creation explicit and expose collection creati
   );
 
   assert.match(source, /documentMenu\.newTagEmpty/);
-  assert.match(source, /!deferredQuery\.trim\(\) \?/);
-  assert.doesNotMatch(
-    source,
-    /documentMenu\.newTag", \{ tag: deferredQuery\.trim\(\) \}/,
-  );
+  assert.match(source, /documentMenu\.newTag", \{ tag: query\.trim\(\) \}/);
+  assert.match(source, /createAndSelectTag/);
   assert.match(source, /documentMenu\.newCollectionNamed/);
   assert.match(source, /createCollectionId/);
   assert.match(source, /data-slot="workspace-object-page-collections-create"/);
