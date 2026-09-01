@@ -90,6 +90,14 @@ async function persistedSnapshot(page: Page) {
   });
 }
 
+async function expectPersistedWorkspaceText(page: Page, text: string) {
+  await expect
+    .poll(async () => {
+      return JSON.stringify(await persistedEntities(page));
+    })
+    .toContain(text);
+}
+
 async function persistedSidebarSnapshot(page: Page) {
   return page.evaluate(() => {
     const value = window.localStorage.getItem("notes-app:workspace-sidebar:v1");
@@ -271,13 +279,30 @@ async function writeCreatedObjectTitle(page: Page, title: string) {
 async function openLinkPicker(page: Page) {
   const workspace = createdObjectWorkspace(page);
   await workspace
-    .getByRole("button", { name: "Adicionar relação", exact: true })
+    .getByRole("button", { name: "Mais opções", exact: true })
     .click();
+  const menuItem = page.getByRole("menuitem", {
+    name: "Adicionar relação",
+    exact: true,
+  });
+  await expect(menuItem).toBeVisible();
+  await menuItem.press("Enter");
   const picker = page
     .locator('[data-slot="workspace-link-picker"]')
     .filter({ visible: true });
   await expect(picker).toBeVisible();
   return picker;
+}
+
+async function importMarkdownIntoCreatedObject(page: Page, markdown: string) {
+  await createdObjectWorkspace(page)
+    .locator('input[type="file"][accept*="text/plain"]')
+    .setInputFiles({
+      name: "body.md",
+      mimeType: "text/markdown",
+      buffer: Buffer.from(markdown),
+    });
+  await expectPersistedWorkspaceText(page, markdown.trim());
 }
 
 async function createPageCollection(page: Page, name: string) {
@@ -326,14 +351,28 @@ async function expectCreatedObjectProjection(
     .click();
   await page.getByRole("tab", { name: "Tudo", exact: true }).click();
   const projection = page
-    .locator('[data-lifecycle-contract="object-projection-row"]')
+    .locator(
+      '[data-lifecycle-contract="object-projection-row"], [data-lifecycle-contract="object-projection-card"]',
+    )
     .filter({ hasText: title })
     .first();
   await expect(projection).toBeVisible();
   await projection.hover();
-  await projection.focus();
-  await expect(projection).toBeFocused();
-  await projection.click();
+  const openProjection = projection
+    .getByRole("button", {
+      name: `Abrir: ${title}`,
+      exact: true,
+    })
+    .first();
+  if ((await openProjection.count()) > 0) {
+    await openProjection.focus();
+    await expect(openProjection).toBeFocused();
+    await openProjection.click();
+  } else {
+    await projection.focus();
+    await expect(projection).toBeFocused();
+    await projection.click();
+  }
   await expect(
     page
       .locator(
@@ -648,7 +687,8 @@ test("graph controls preserve hover geometry and support reversible click and dr
   await graphLinkPicker
     .getByRole("button", { name: "Vincular Graph first", exact: true })
     .click();
-  await graphLinkPicker
+  const graphEmbedPicker = await openLinkPicker(page);
+  await graphEmbedPicker
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
 
@@ -664,8 +704,8 @@ test("graph controls preserve hover geometry and support reversible click and dr
   const sidePanelBox = await page
     .locator('[data-slot="app-shell-side-panel"]')
     .boundingBox();
-  expect(sidePanelBox?.width).toBeGreaterThanOrEqual(373.5);
-  expect(sidePanelBox?.width).toBeLessThanOrEqual(430);
+  expect(sidePanelBox?.width).toBeGreaterThanOrEqual(352);
+  expect(sidePanelBox?.width).toBeLessThanOrEqual(364);
 
   const controlNames = [
     "Mostrar menos",
@@ -758,6 +798,11 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
     .first()
     .click();
   await linkPicker
+    .getByRole("button", { name: /^Vincular / })
+    .first()
+    .click();
+  const embedPicker = await openLinkPicker(page);
+  await embedPicker
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
 
@@ -781,8 +826,10 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
         name: "Abrir menu do painel lateral",
         exact: true,
       })
-      .press("Enter");
-    await page.getByRole("menuitem", { name, exact: true }).click();
+      .click();
+    const menuItem = page.getByRole("menuitem", { name, exact: true });
+    await expect(menuItem).toBeVisible();
+    await menuItem.press("Enter");
   }
 
   await openContextEntry("Objetos internos");
@@ -892,6 +939,132 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
       ),
     ).toBeVisible();
   }
+  expect(errors).toEqual([]);
+});
+
+test("object page content surface preserves the Capacities 1059px split and title owner", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.setViewportSize({ width: 1059, height: 912 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Parity target");
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Related one");
+  const picker = await openLinkPicker(page);
+  await picker
+    .getByRole("button", { name: "Vincular Parity target", exact: true })
+    .click();
+  await page.getByRole("tab", { name: "Parity target" }).click();
+
+  const workspace = createdObjectWorkspace(page);
+  const sidePanel = page.locator('[data-slot="app-shell-side-panel"]');
+  if (!(await sidePanel.isVisible())) {
+    await page
+      .getByRole("button", { name: "Mostrar painel lateral", exact: true })
+      .click();
+  }
+  const surface = page
+    .locator('[data-slot="app-shell-main"]')
+    .locator('[data-slot="app-shell-surface"]')
+    .first();
+  const sidePanelSurface = page
+    .locator('[data-slot="app-shell-side-panel"]')
+    .locator('[data-slot="app-shell-surface"]')
+    .first();
+  const title = workspace.locator('[data-slot="workspace-object-page-title"]');
+  const tags = workspace.getByRole("textbox", {
+    name: "Etiquetas",
+    exact: true,
+  });
+  const relatedHeading = workspace
+    .locator('[data-slot="workspace-object-related-content"] h2')
+    .first();
+
+  await expect(surface).toBeVisible();
+  await expect(sidePanelSurface).toBeVisible();
+  await expect(title).toHaveJSProperty("tagName", "TEXTAREA");
+  await expect(title).toHaveCSS("font-size", "30px");
+  await expect(title).toHaveCSS("line-height", "33px");
+  await expect(tags).toHaveCSS("color", "oklch(0.3887 0.0052 301.05)");
+
+  const geometry = await page.evaluate(() => {
+    const rectFor = (selector: string) => {
+      const element = document.querySelector(selector);
+      if (!element) return null;
+      const rect = element.getBoundingClientRect();
+      return {
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height,
+      };
+    };
+    const titleElement = document.querySelector(
+      '[data-slot="workspace-object-page-title"]',
+    );
+    const tagsGroupElement = document.querySelector(
+      '[data-slot="workspace-object-page-tags"]',
+    );
+    const tagsElement = document.querySelector('[aria-label="Etiquetas"]');
+    const scrollElement = document.querySelector(
+      '[data-slot="workspace-object-page-view"]',
+    );
+    const sideSurface = document
+      .querySelector('[data-slot="app-shell-side-panel"]')
+      ?.querySelector('[data-slot="app-shell-surface"]');
+    const titleRect = titleElement?.getBoundingClientRect();
+    const tagsRect = tagsElement?.getBoundingClientRect();
+    const tagsGroupRect = tagsGroupElement?.getBoundingClientRect();
+    const columnRect = document
+      .querySelector('[data-slot="workspace-object-page-column"]')
+      ?.getBoundingClientRect();
+    const sideRect = sideSurface?.getBoundingClientRect();
+    return {
+      mainSurface: rectFor(
+        '[data-slot="app-shell-main"] [data-slot="app-shell-surface"]',
+      ),
+      sideSurface: sideRect
+        ? {
+            width: sideRect.width,
+          }
+        : null,
+      columnWidth: columnRect?.width ?? null,
+      titleWidth: titleRect?.width ?? null,
+      tagsInputOffset:
+        tagsRect && columnRect
+          ? Math.round((tagsRect.x - columnRect.x) * 100) / 100
+          : null,
+      tagsGroupOffset:
+        tagsGroupRect && titleRect
+          ? Math.round((tagsGroupRect.x - titleRect.x) * 100) / 100
+          : null,
+      trailingScroll:
+        scrollElement instanceof HTMLElement
+          ? scrollElement.scrollHeight - scrollElement.clientHeight
+          : null,
+    };
+  });
+
+  expect(geometry.mainSurface?.width ?? 0).toBeGreaterThanOrEqual(470);
+  expect(geometry.mainSurface?.width ?? 0).toBeLessThanOrEqual(478);
+  expect(geometry.sideSurface?.width ?? 0).toBeGreaterThanOrEqual(260);
+  expect(geometry.sideSurface?.width ?? 0).toBeLessThanOrEqual(286);
+  expect(geometry.columnWidth ?? 0).toBeGreaterThanOrEqual(458);
+  expect(geometry.columnWidth ?? 0).toBeLessThanOrEqual(466);
+  expect(geometry.titleWidth ?? 0).toBeGreaterThanOrEqual(386);
+  expect(geometry.titleWidth ?? 0).toBeLessThanOrEqual(394);
+  expect(geometry.tagsInputOffset).toBeGreaterThanOrEqual(58);
+  expect(geometry.tagsInputOffset).toBeLessThanOrEqual(64);
+  expect(geometry.tagsGroupOffset).toBeGreaterThanOrEqual(-8);
+  expect(geometry.tagsGroupOffset).toBeLessThanOrEqual(-4);
+  expect(geometry.trailingScroll).toBeGreaterThanOrEqual(54);
+  expect(geometry.trailingScroll).toBeLessThanOrEqual(70);
+
+  const headingBox = await relatedHeading.boundingBox();
+  expect(headingBox?.width ?? 0).toBeGreaterThan(170);
   expect(errors).toEqual([]);
 });
 
@@ -1488,14 +1661,14 @@ test("workspace tab header state survives reload", async ({ page }) => {
     "true",
   );
   await quoteWrapper.hover();
-  await quoteWrapper.getByRole("button", { name: "Pin tab" }).click();
+  await quoteWrapper.getByRole("button", { name: "Fixar aba" }).click();
   await expect(
-    quoteWrapper.getByRole("button", { name: "Unpin tab" }),
+    quoteWrapper.getByRole("button", { name: "Desafixar aba" }),
   ).toBeVisible();
 
   const pageWrapper = tabList.locator('[data-tab-id="page"]');
   await pageWrapper.hover();
-  await pageWrapper.getByRole("button", { name: "Close tab" }).click();
+  await pageWrapper.getByRole("button", { name: "Fechar aba" }).click();
 
   await expect
     .poll(async () =>
@@ -1524,7 +1697,7 @@ test("workspace tab header state survives reload", async ({ page }) => {
   await expect(tabList.locator('[data-tab-id="page"]')).toHaveCount(0);
   await quoteWrapper.hover();
   await expect(
-    quoteWrapper.getByRole("button", { name: "Unpin tab" }),
+    quoteWrapper.getByRole("button", { name: "Desafixar aba" }),
   ).toBeVisible();
   expect(errors).toEqual([]);
 });
@@ -1544,7 +1717,7 @@ test("closed entity tabs stay closed after reload", async ({ page }) => {
     "true",
   );
   await entityWrapper.hover();
-  await entityWrapper.getByRole("button", { name: "Close tab" }).click();
+  await entityWrapper.getByRole("button", { name: "Fechar aba" }).click();
   await expect(entityWrapper).toHaveCount(0);
 
   await expect
@@ -2564,6 +2737,24 @@ test("production object-type commands render named outcomes", async ({
     '[data-slot="dropdown-menu-content"][data-open]',
   );
   await expect(layoutMenu).toBeVisible();
+  for (const name of ["Lista", "Grade", "Mural", "Tabela", "Incorporar"]) {
+    await expect(
+      layoutMenu.getByRole("menuitem", { name, exact: true }),
+    ).toBeVisible();
+  }
+  await layoutMenu.getByRole("menuitem", { name: "Mural" }).click();
+  await expect(
+    workspace.locator('[data-slot="object-type-all"]'),
+  ).toHaveAttribute("data-layout", "wall");
+  await workspace.getByRole("button", { name: "Layout", exact: true }).click();
+  await page
+    .locator('[data-slot="dropdown-menu-content"][data-open]')
+    .getByRole("menuitem", { name: "Incorporar" })
+    .click();
+  await expect(
+    workspace.locator('[data-slot="object-type-all"]'),
+  ).toHaveAttribute("data-layout", "embed");
+  await workspace.getByRole("button", { name: "Layout", exact: true }).click();
   await layoutMenu.getByRole("menuitem", { name: "Tabela" }).click();
   await expect(
     workspace.locator('[data-slot="object-type-all"]'),
@@ -2633,7 +2824,8 @@ test("Page embed action persists a schema-valid paragraph embed", async ({
     .getByRole("button", { name: /^Vincular / })
     .first()
     .click();
-  await linkPicker
+  const embedPicker = await openLinkPicker(page);
+  await embedPicker
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
 
@@ -2910,10 +3102,7 @@ test("Page mention conversion links the exact source occurrence", async ({
   await writeCreatedObjectTitle(page, "Mention target");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Mention source");
-  const sourceWorkspace = createdObjectWorkspace(page);
-  await sourceWorkspace
-    .getByRole("textbox", { name: "Text" })
-    .fill("Before Mention target after.");
+  await importMarkdownIntoCreatedObject(page, "Before Mention target after.");
 
   await page.getByRole("tab", { name: "Mention target" }).click();
   const mentions = createdObjectWorkspace(page).locator(
@@ -2992,9 +3181,10 @@ test("Page renders backlinks before distinct unlinked mentions", async ({
   await writeCreatedObjectTitle(page, "Order target");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Mention-only source");
-  await createdObjectWorkspace(page)
-    .getByRole("textbox", { name: "Text" })
-    .fill("Order target remains plain text.");
+  await importMarkdownIntoCreatedObject(
+    page,
+    "Order target remains plain text.",
+  );
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Linked source");
   const picker = await openLinkPicker(page);
@@ -3934,6 +4124,32 @@ test("Novo trigger and lifecycle contract consumers expose browser states", asyn
     .first();
   await expect(projectionCard).toBeVisible();
   await expectStableBoxOnHover(projectionCard);
+  const projectionCardMenuButton = projectionCard.getByRole("button", {
+    name: `Mais opções de ${lifecyclePageTitle}`,
+    exact: true,
+  });
+  await projectionCardMenuButton.focus();
+  await expect(projectionCardMenuButton).toBeFocused();
+  const projectionCountBeforeMenu = (await persistedEntities(page)).length;
+  await projectionCardMenuButton.click();
+  const projectionCardMenu = page.locator(
+    '[data-slot="dropdown-menu-content"][data-open]',
+  );
+  await expect(projectionCardMenu).toBeVisible();
+  for (const name of [
+    "Fixar na Barra Lateral",
+    "Exportar",
+    "Duplicar",
+    "Excluir Objeto",
+  ]) {
+    await expect(
+      projectionCardMenu.getByRole("menuitem", { name, exact: true }),
+    ).toBeVisible();
+  }
+  expect(await persistedEntities(page)).toHaveLength(projectionCountBeforeMenu);
+  await page.keyboard.press("Escape");
+  await expect(projectionCardMenu).toBeHidden();
+  await expect(projectionCardMenuButton).toBeFocused();
   const projectionCardButton = projectionCard
     .getByRole("button", {
       name: `Abrir: ${lifecyclePageTitle}`,
