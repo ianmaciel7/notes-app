@@ -6,33 +6,45 @@ import {
   type SuggestionKeyDownProps,
   type SuggestionPositionData,
 } from "@tiptap/suggestion";
-import type { BlockEditorMark } from "./document.ts";
+import { createElement } from "react";
+import { createRoot, type Root } from "react-dom/client";
 import {
   createBlockReferenceMark,
   createObjectReferenceMark,
 } from "../lib/workspace-object-links.ts";
+import type {
+  ObjectIconName,
+  ObjectIconTone,
+  WorkspaceStructure,
+} from "../lib/workspace-object-types.ts";
 import type { WorkspaceEntity } from "../lib/workspace-objects.ts";
-import type { WorkspaceStructure } from "../lib/workspace-object-types.ts";
 import {
   buildWorkspaceSearchIndex,
   searchWorkspaceIndex,
   type WorkspaceSearchIndex,
 } from "../lib/workspace-query-engine.ts";
+import type { BlockEditorMark } from "./document.ts";
 import {
   canOpenSuggestionTrigger,
   computeSuggestionMenuPosition,
   deleteSuggestionTriggerRange,
   getNextSuggestionIndex,
+  installSuggestionOutsideDismissal,
   isUsableSuggestionAnchorRect,
+  resolveSuggestionAnchorRect,
+  SUGGESTION_MENU_MOTION_CLASS,
+  type SuggestionRect,
 } from "./shared-suggestion-controller.ts";
 
 type ObjectReferenceTrigger = "@" | "[[";
 
 type ObjectReferenceSuggestionItem = {
   readonly context: string;
+  readonly iconName: ObjectIconName;
   readonly id: string;
   readonly label: string;
   readonly objectId: string;
+  readonly tone: ObjectIconTone;
 };
 
 type BlockReferenceSuggestionItem = {
@@ -68,6 +80,7 @@ type ReferenceSuggestionOptions = {
   readonly entities: readonly WorkspaceEntity[];
   readonly getEntities?: () => readonly WorkspaceEntity[];
   readonly getStructures?: () => readonly WorkspaceStructure[];
+  readonly onSelectionCommit?: (editor: Editor) => void;
   readonly structures: readonly WorkspaceStructure[];
 };
 
@@ -106,21 +119,50 @@ type ReferenceSuggestionRenderUpdateProps = {
 };
 
 let activeReferenceMenuCleanup: (() => void) | undefined;
+const referenceIconRoots = new WeakMap<HTMLElement, Root>();
+
+function cleanupReferenceSuggestionIcons(element: HTMLElement) {
+  for (const host of element.querySelectorAll<HTMLElement>(
+    '[data-slot="block-editor-reference-icon"]',
+  )) {
+    referenceIconRoots.get(host)?.unmount();
+    referenceIconRoots.delete(host);
+  }
+}
+
+async function renderObjectReferenceIcon(
+  host: HTMLElement,
+  item: ObjectReferenceSuggestionItem,
+) {
+  const { ObjectIconBadge, objectTypeDefinitionById } = await import(
+    "../components/object-icons"
+  );
+  if (!host.isConnected) return;
+  const definition = objectTypeDefinitionById[item.iconName];
+  if (!definition) return;
+  const root = createRoot(host);
+  referenceIconRoots.set(host, root);
+  root.render(
+    createElement(ObjectIconBadge, {
+      "aria-hidden": true,
+      icon: definition.icon,
+      tone: item.tone,
+      variant: "menu",
+    }),
+  );
+}
 
 function entityById(entities: readonly WorkspaceEntity[]) {
   return new Map(entities.map((entity) => [entity.id, entity]));
 }
 
-function structureById(structures: readonly Pick<WorkspaceStructure, "id" | "singularName">[]) {
+function structureById(
+  structures: readonly Pick<
+    WorkspaceStructure,
+    "iconName" | "id" | "singularName" | "tone"
+  >[],
+) {
   return new Map(structures.map((structure) => [structure.id, structure]));
-}
-
-function fallbackStructureLabel(entity: WorkspaceEntity) {
-  return entity.objectTypeId
-    .split("-")
-    .filter(Boolean)
-    .map((token) => `${token[0]?.toLocaleUpperCase() ?? ""}${token.slice(1)}`)
-    .join(" ");
 }
 
 function createObjectReferenceSuggestionItems({
@@ -132,7 +174,10 @@ function createObjectReferenceSuggestionItems({
   readonly entities: readonly WorkspaceEntity[];
   readonly index: WorkspaceSearchIndex;
   readonly query: string;
-  readonly structures: readonly Pick<WorkspaceStructure, "id" | "singularName">[];
+  readonly structures: readonly Pick<
+    WorkspaceStructure,
+    "iconName" | "id" | "singularName" | "tone"
+  >[];
   readonly trigger: ObjectReferenceTrigger;
 }): ObjectReferenceSuggestionItem[] {
   const entitiesById = entityById(entities);
@@ -143,15 +188,17 @@ function createObjectReferenceSuggestionItems({
     if (seen.has(result.entityId)) return [];
     const entity = entitiesById.get(result.entityId);
     if (!entity) return [];
+    const structure = structuresById.get(entity.objectTypeId);
+    if (!structure) return [];
     seen.add(result.entityId);
     return [
       {
-        context:
-          structuresById.get(entity.objectTypeId)?.singularName ??
-          fallbackStructureLabel(entity),
+        context: structure.singularName,
+        iconName: structure.iconName,
         id: `object:${entity.id}`,
         label: entity.title,
         objectId: entity.id,
+        tone: structure.tone,
       },
     ];
   });
@@ -186,7 +233,25 @@ function createReferenceReplacement({
   readonly range: { readonly from: number; readonly to: number };
   readonly target: ReferenceReplacementTarget;
   readonly text: string;
-}): { readonly mark: BlockEditorMark; readonly text: string } {
+}): { readonly mark: BlockEditorMark; readonly text: string } | null {
+  const triggerText = text.slice(range.from, range.to);
+  const validTrigger =
+    target.kind === "object"
+      ? triggerText.startsWith("@") || triggerText.startsWith("[[")
+      : triggerText.startsWith("((");
+  const validIdentity =
+    target.objectId.trim().length > 0 &&
+    (target.kind === "object" || target.blockId.trim().length > 0);
+  if (
+    !label.trim() ||
+    range.from < 0 ||
+    range.to > text.length ||
+    range.from >= range.to ||
+    !validTrigger ||
+    !validIdentity
+  ) {
+    return null;
+  }
   return {
     mark:
       target.kind === "object"
@@ -220,8 +285,9 @@ function insertReferenceSuggestion(
   range: Range,
   item: ReferenceSuggestionItem,
 ) {
+  let committed: boolean;
   if (item.kind === "object") {
-    return editor
+    committed = editor
       .chain()
       .focus()
       .deleteRange(range)
@@ -229,22 +295,25 @@ function insertReferenceSuggestion(
       .insertContent(item.label)
       .unsetMark("objectLink")
       .run();
+  } else {
+    committed = editor
+      .chain()
+      .focus()
+      .deleteRange(range)
+      .setMark("blockLink", { blockId: item.blockId, objectId: item.objectId })
+      .insertContent(item.label)
+      .unsetMark("blockLink")
+      .run();
   }
 
-  return editor
-    .chain()
-    .focus()
-    .deleteRange(range)
-    .setMark("blockLink", { blockId: item.blockId, objectId: item.objectId })
-    .insertContent(item.label)
-    .unsetMark("blockLink")
-    .run();
+  return committed;
 }
 
 function renderReferenceSuggestionMenu(
   element: HTMLElement,
   props: ReferenceSuggestionMenuProps,
 ) {
+  cleanupReferenceSuggestionIcons(element);
   element.replaceChildren();
   element.dataset.slot = "block-editor-reference-menu";
   element.setAttribute("role", "listbox");
@@ -260,6 +329,7 @@ function renderReferenceSuggestionMenu(
     "0 10px 28px rgb(47 42 36 / 0.10), 0 2px 8px rgb(47 42 36 / 0.06)";
   element.style.padding = "0.5rem";
   element.style.color = "#292622";
+  element.classList.add(...SUGGESTION_MENU_MOTION_CLASS.split(" "));
 
   for (const [index, item] of props.items.entries()) {
     const selected = index === props.activeIndex;
@@ -286,6 +356,17 @@ function renderReferenceSuggestionMenu(
       event.preventDefault();
       props.onSelect(item);
     });
+
+    if (item.kind === "object") {
+      const icon = element.ownerDocument.createElement("span");
+      icon.dataset.slot = "block-editor-reference-icon";
+      icon.dataset.iconName = item.iconName;
+      icon.dataset.iconTone = item.tone;
+      icon.style.display = "inline-flex";
+      icon.style.flexShrink = "0";
+      button.append(icon);
+      void renderObjectReferenceIcon(icon, item);
+    }
 
     const label = element.ownerDocument.createElement("span");
     label.textContent = item.label;
@@ -323,7 +404,10 @@ function createReferenceSuggestionMenuRenderer(
     get props() {
       return currentProps;
     },
-    destroy: () => element.remove(),
+    destroy: () => {
+      cleanupReferenceSuggestionIcons(element);
+      element.remove();
+    },
     updateProps: (nextProps) => {
       currentProps = { ...currentProps, ...nextProps };
       renderReferenceSuggestionMenu(element, currentProps);
@@ -334,7 +418,7 @@ function createReferenceSuggestionMenuRenderer(
 function applyReferenceSuggestionMenuPosition(
   element: HTMLElement,
   position: SuggestionPositionData,
-  rect: DOMRect | null | undefined,
+  rect: SuggestionRect | null | undefined,
 ) {
   const ownerWindow = element.ownerDocument.defaultView ?? window;
   const menuRect = element.getBoundingClientRect();
@@ -378,12 +462,14 @@ function getReferenceSelectionRect(editor: Editor) {
   return selection.getRangeAt(0).getBoundingClientRect();
 }
 
-function resolveReferenceMenuAnchor(props: ReferenceSuggestionRenderStartProps) {
-  const suggestionRect = props.clientRect?.();
-  if (isUsableSuggestionAnchorRect(suggestionRect)) return suggestionRect;
-  const selectionRect = getReferenceSelectionRect(props.editor);
-  if (isUsableSuggestionAnchorRect(selectionRect)) return selectionRect;
-  return getReferenceCursorRect(props.editor, props.range.to);
+function resolveReferenceMenuAnchor(
+  props: ReferenceSuggestionRenderStartProps,
+) {
+  return resolveSuggestionAnchorRect({
+    decorationRect: props.clientRect?.(),
+    documentPositionRect: getReferenceCursorRect(props.editor, props.range.to),
+    selectionRect: getReferenceSelectionRect(props.editor),
+  });
 }
 
 function createReferenceSuggestionRender(title: string, pluginKey: PluginKey) {
@@ -391,6 +477,7 @@ function createReferenceSuggestionRender(title: string, pluginKey: PluginKey) {
     let menu: ReferenceSuggestionMenuRenderer | undefined;
     let cleanupMount: (() => void) | undefined;
     let cleanupKeydown: (() => void) | undefined;
+    let cleanupOutsideDismissal: (() => void) | undefined;
     let activeIndex = 0;
     let currentItems: ReferenceSuggestionItem[] = [];
 
@@ -398,9 +485,12 @@ function createReferenceSuggestionRender(title: string, pluginKey: PluginKey) {
       const currentMenu = menu;
       const currentCleanup = cleanupMount;
       const currentKeydownCleanup = cleanupKeydown;
+      const currentOutsideDismissal = cleanupOutsideDismissal;
       menu = undefined;
       cleanupMount = undefined;
       cleanupKeydown = undefined;
+      cleanupOutsideDismissal = undefined;
+      currentOutsideDismissal?.();
       currentKeydownCleanup?.();
       currentCleanup?.();
       currentMenu?.destroy();
@@ -431,6 +521,7 @@ function createReferenceSuggestionRender(title: string, pluginKey: PluginKey) {
           activeIndex,
           items: currentItems,
           onHighlight: (index) => {
+            if (index === activeIndex) return;
             activeIndex = index;
             updateMenuProps({ activeIndex });
           },
@@ -449,6 +540,15 @@ function createReferenceSuggestionRender(title: string, pluginKey: PluginKey) {
         });
         const ownerDocument = props.editor.view.dom.ownerDocument;
         const ownerWindow = ownerDocument.defaultView;
+        cleanupOutsideDismissal = installSuggestionOutsideDismissal({
+          menuContainsTarget: (target) =>
+            Boolean(target && menu?.element.contains(target as Node)),
+          onDismiss: () => {
+            exitSuggestion(props.editor.view, pluginKey);
+            cleanupMenu();
+          },
+          ownerDocument,
+        });
         const onReferenceKeyDown = (event: KeyboardEvent) => {
           if (!menu) return;
           if (event.key === "Escape") {
@@ -501,7 +601,10 @@ function createReferenceSuggestionRender(title: string, pluginKey: PluginKey) {
       },
       onUpdate: (props: ReferenceSuggestionRenderUpdateProps) => {
         currentItems = props.items;
-        activeIndex = Math.min(activeIndex, Math.max(currentItems.length - 1, 0));
+        activeIndex = Math.min(
+          activeIndex,
+          Math.max(currentItems.length - 1, 0),
+        );
         updateMenuProps({ onSelect: props.command });
       },
       onKeyDown: (props: SuggestionKeyDownProps) => {
@@ -539,6 +642,7 @@ function createReferenceSuggestionExtensions({
   entities,
   getEntities,
   getStructures,
+  onSelectionCommit,
   structures,
 }: ReferenceSuggestionOptions) {
   const readEntities = () => getEntities?.() ?? entities;
@@ -580,13 +684,16 @@ function createReferenceSuggestionExtensions({
             editor: this.editor,
             char: "@",
             pluginKey,
+            allowSpaces: true,
             allowedPrefixes: [" "],
             startOfLine: false,
             items: ({ query }) => objectItems(query),
             allow: canOpenReferenceSuggestion,
             render: createReferenceSuggestionRender("References", pluginKey),
             command: ({ editor, range, props }) => {
-              insertReferenceSuggestion(editor, range, props);
+              if (insertReferenceSuggestion(editor, range, props)) {
+                onSelectionCommit?.(editor);
+              }
               exitSuggestion(editor.view, pluginKey);
             },
           }),
@@ -602,13 +709,16 @@ function createReferenceSuggestionExtensions({
             editor: this.editor,
             char: "[[",
             pluginKey,
+            allowSpaces: true,
             allowedPrefixes: [" "],
             startOfLine: false,
             items: ({ query }) => objectItems(query),
             allow: canOpenReferenceSuggestion,
             render: createReferenceSuggestionRender("References", pluginKey),
             command: ({ editor, range, props }) => {
-              insertReferenceSuggestion(editor, range, props);
+              if (insertReferenceSuggestion(editor, range, props)) {
+                onSelectionCommit?.(editor);
+              }
               exitSuggestion(editor.view, pluginKey);
             },
           }),
@@ -628,9 +738,14 @@ function createReferenceSuggestionExtensions({
             startOfLine: false,
             items: ({ query }) => blockItems(query),
             allow: canOpenReferenceSuggestion,
-            render: createReferenceSuggestionRender("Block references", pluginKey),
+            render: createReferenceSuggestionRender(
+              "Block references",
+              pluginKey,
+            ),
             command: ({ editor, range, props }) => {
-              insertReferenceSuggestion(editor, range, props);
+              if (insertReferenceSuggestion(editor, range, props)) {
+                onSelectionCommit?.(editor);
+              }
               exitSuggestion(editor.view, pluginKey);
             },
           }),
@@ -644,13 +759,14 @@ export type {
   BlockReferenceSuggestionItem,
   ObjectReferenceSuggestionItem,
   ObjectReferenceTrigger,
+  ReferenceReplacementTarget,
   ReferenceSuggestionItem,
   ReferenceSuggestionOptions,
-  ReferenceReplacementTarget,
 };
 export {
   createBlockReferenceSuggestionItems,
   createObjectReferenceSuggestionItems,
-  createReferenceSuggestionExtensions,
   createReferenceReplacement,
+  createReferenceSuggestionExtensions,
+  insertReferenceSuggestion,
 };

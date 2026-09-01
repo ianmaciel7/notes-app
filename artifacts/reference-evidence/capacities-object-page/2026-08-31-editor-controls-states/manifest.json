@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "capacities-and-localhost",
+    "referenceUrl": "https://app.capacities.io/eb0a4d1e-0567-4348-8ecf-587c417725f4/63723ff6-a2a0-43f6-bd7e-2a632e736e04",
+    "localUrl": "http://localhost:3000/pt-BR/4d0215ae-79d6-46bd-840f-8144ec5a84fb/df5fb424-5e86-44ef-8f9b-3c0ecf3f0bb9",
+    "productSurface": "object-page-editor-controls"
+  },
+  "capturedAt": "2026-08-31T20:03:32.3153276-03:00",
+  "viewport": {
+    "width": 1282,
+    "height": 912,
+    "deviceScaleFactor": 1
+  },
+  "surface": {
+    "component": "object-page editor controls, Collections, Customize, and related-content interactions",
+    "semanticSelection": "reference block aaa /, local block created-tabl-2, and matched related-content rows"
+  },
+  "semanticState": {
+    "reference": "authenticated Page with one populated block and empty following blocks",
+    "localhost": "local Page with three paragraphs and an open graph side panel"
+  },
+  "persistedState": {
+    "reference": "no content mutation; grip menu open/close only",
+    "localhost": "existing user object remained unchanged; browser trigger acceptance used isolated Playwright fixtures",
+    "checkout": "dev@ec75e6e572940ed33b6783028e8be9e9493225a5"
+  },
+  "interactions": [
+    "reference block idle and hover",
+    "reference grip click and Escape close",
+    "local block idle and hover",
+    "local grip click and Escape focus recovery",
+    "local Customize idle and header hover after strict-hover fix",
+    "isolated local plus and Shift-plus insertion",
+    "isolated local slash open, invalid boundary, scroll reposition, and viewport flip",
+    "reference related-row and Collections hover geometry",
+    "local related-row idle, hover, disclosure, main navigation, side-panel navigation, options menu, and focus recovery",
+    "local related-content Show more idle and hover reveal",
+    "local Collections hover, open, and Escape cancellation"
+  ],
+  "artifacts": [
+    { "stateId": "reference-block-handle-idle", "kind": "screenshot", "path": "reference-block-handle-idle.png" },
+    { "stateId": "reference-block-handle-hover", "kind": "screenshot", "path": "reference-block-handle-hover.png" },
+    { "stateId": "reference-grip-click-menu", "kind": "screenshot", "path": "reference-grip-click-menu.png" },
+    { "stateId": "reference-plus-hover-tooltip", "kind": "screenshot", "path": "reference-plus-hover-tooltip.png" },
+    { "stateId": "local-block-handle-idle", "kind": "screenshot", "path": "local-block-handle-idle.png" },
+    { "stateId": "local-block-handle-hover", "kind": "screenshot", "path": "local-block-handle-hover.png" },
+    { "stateId": "local-grip-click-menu", "kind": "screenshot", "path": "local-grip-click-menu.png" },
+    { "stateId": "local-customize-idle-after-hover-fix", "kind": "screenshot", "path": "local-customize-idle-after-hover-fix.png" },
+    { "stateId": "local-customize-header-hover-after-fix", "kind": "screenshot", "path": "local-customize-header-hover-after-fix.png" },
+    { "stateId": "local-related-idle", "kind": "screenshot", "path": "local-related-idle.png" },
+    { "stateId": "local-related-row-hover", "kind": "screenshot", "path": "local-related-row-hover.png" },
+    { "stateId": "local-related-expanded", "kind": "screenshot", "path": "local-related-expanded.png" },
+    { "stateId": "local-related-options-open", "kind": "screenshot", "path": "local-related-options-open.png" },
+    { "stateId": "local-related-side-panel-click", "kind": "screenshot", "path": "local-related-side-panel-click.png" },
+    { "stateId": "local-collections-hover", "kind": "screenshot", "path": "local-collections-hover.png" },
+    { "stateId": "local-collections-open", "kind": "screenshot", "path": "local-collections-open.png" },
+    { "stateId": "editor-control-action-matrix", "kind": "dom-style-behavior", "path": "action-matrix.md" }
+  ],
+  "provenance": "current in-app browser DOM, computed-style, geometry and interaction probes plus isolated local Playwright acceptance",
+  "confidence": "confirmed for recorded rows",
+  "redactions": [
+    "cookies and storage",
+    "authentication material",
+    "complete third-party DOM and source",
+    "unrelated page content"
+  ],
+  "freshness": "current live reference and localhost capture on 2026-08-31",
+  "limitations": [
+    "the authenticated reference @ menu was not opened because typing would mutate remote content",
+    "the in-app browser did not retain contenteditable focus for local slash/@ typing, so isolated Playwright fixtures prove those local flows",
+    "the reference plus tooltip was not exposed as an inspectable role; archived tooltip strings remain the behavior source",
+    "reference and localhost block text differ, so vertical coordinates are recorded but not compared as semantic parity"
+  ],
+  "refreshReason": "The earlier task-1.3 attempt was blocked and the user requested complete hover/click photographic evidence."
+}

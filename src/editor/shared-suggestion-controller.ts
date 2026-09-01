@@ -1,5 +1,7 @@
 export const SUGGESTION_MENU_VIEWPORT_GUTTER = 8;
 export const SUGGESTION_MENU_CURSOR_GAP = 4;
+export const SUGGESTION_MENU_MOTION_CLASS =
+  "transition-[opacity,transform] duration-100 motion-reduce:transition-none";
 
 export type SuggestionTriggerOwner =
   | "slash-command"
@@ -139,6 +141,46 @@ export function isUsableSuggestionAnchorRect(
         rect.width !== 0 ||
         (rect.height ?? 0) !== 0),
   );
+}
+
+export function installSuggestionOutsideDismissal({
+  menuContainsTarget,
+  onDismiss,
+  ownerDocument,
+}: {
+  readonly menuContainsTarget: (target: EventTarget | null) => boolean;
+  readonly onDismiss: () => void;
+  readonly ownerDocument: Pick<
+    Document,
+    "addEventListener" | "removeEventListener"
+  >;
+}) {
+  const onPointerDown = ((event: PointerEvent) => {
+    if (menuContainsTarget(event.target)) return;
+    onDismiss();
+  }) as EventListener;
+  const options = { capture: true } as const;
+  ownerDocument.addEventListener("pointerdown", onPointerDown, options);
+  return () => {
+    ownerDocument.removeEventListener("pointerdown", onPointerDown, options);
+  };
+}
+
+export function resolveSuggestionAnchorRect({
+  decorationRect,
+  documentPositionRect,
+  selectionRect,
+}: {
+  readonly decorationRect: SuggestionRect | null | undefined;
+  readonly documentPositionRect: SuggestionRect | null | undefined;
+  readonly selectionRect: SuggestionRect | null | undefined;
+}) {
+  if (isUsableSuggestionAnchorRect(decorationRect)) return decorationRect;
+  if (isUsableSuggestionAnchorRect(selectionRect)) return selectionRect;
+  if (isUsableSuggestionAnchorRect(documentPositionRect)) {
+    return documentPositionRect;
+  }
+  return null;
 }
 
 function clamp(value: number, minimum: number, maximum: number) {

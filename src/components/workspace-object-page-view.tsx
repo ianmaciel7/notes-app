@@ -1,21 +1,42 @@
 "use client";
 
-import {
-  CheckIcon,
-  DownloadIcon,
-  ExternalLinkIcon,
-  LinkIcon,
-  PinIcon,
-  UploadIcon,
-} from "lucide-react";
+import { ArrowSquareOutIcon as ExternalLinkIcon } from "@phosphor-icons/react/dist/csr/ArrowSquareOut";
+import { ArrowsOutSimpleIcon as ExpandIcon } from "@phosphor-icons/react/dist/csr/ArrowsOutSimple";
+import { CalendarDotsIcon as CalendarClockIcon } from "@phosphor-icons/react/dist/csr/CalendarDots";
+import { ChartBarIcon as BarChart3Icon } from "@phosphor-icons/react/dist/csr/ChartBar";
+import { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
+import { CheckSquareIcon } from "@phosphor-icons/react/dist/csr/CheckSquare";
+import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
+import { CursorClickIcon as MousePointer2Icon } from "@phosphor-icons/react/dist/csr/CursorClick";
+import { DownloadSimpleIcon as DownloadIcon } from "@phosphor-icons/react/dist/csr/DownloadSimple";
+import { FileTextIcon as FilePenLineIcon } from "@phosphor-icons/react/dist/csr/FileText";
+import { ImageSquareIcon as ImageIcon } from "@phosphor-icons/react/dist/csr/ImageSquare";
+import { LinkIcon } from "@phosphor-icons/react/dist/csr/Link";
+import { ListBulletsIcon as ListIcon } from "@phosphor-icons/react/dist/csr/ListBullets";
+import { ListNumbersIcon as ListChecksIcon } from "@phosphor-icons/react/dist/csr/ListNumbers";
+import { MagicWandIcon as WandSparklesIcon } from "@phosphor-icons/react/dist/csr/MagicWand";
+import { MagnifyingGlassIcon as SearchIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
+import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
+import { PresentationChartIcon as PresentationIcon } from "@phosphor-icons/react/dist/csr/PresentationChart";
+import { PushPinIcon as PinIcon } from "@phosphor-icons/react/dist/csr/PushPin";
+import { ShapesIcon } from "@phosphor-icons/react/dist/csr/Shapes";
+import { ShareNetworkIcon as Share2Icon } from "@phosphor-icons/react/dist/csr/ShareNetwork";
+import { SlidersHorizontalIcon as Settings2Icon } from "@phosphor-icons/react/dist/csr/SlidersHorizontal";
+import { SmileyIcon as SmileIcon } from "@phosphor-icons/react/dist/csr/Smiley";
+import { SparkleIcon as SparklesIcon } from "@phosphor-icons/react/dist/csr/Sparkle";
+import { TextAlignLeftIcon as AlignLeftIcon } from "@phosphor-icons/react/dist/csr/TextAlignLeft";
+import { TextTIcon as TypeIcon } from "@phosphor-icons/react/dist/csr/TextT";
+import { TrashIcon as Trash2Icon } from "@phosphor-icons/react/dist/csr/Trash";
+import { UploadSimpleIcon as UploadIcon } from "@phosphor-icons/react/dist/csr/UploadSimple";
+import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import * as React from "react";
 
 import {
   AppHeaderCaretDownIcon,
+  AppHeaderCustomizeIcon,
   AppHeaderDotsIcon,
-  AppHeaderSparkleIcon,
 } from "@/components/app-header-icons";
 import { BlockEditor } from "@/components/block-editor";
 import { ObjectConversionPlanner } from "@/components/object-conversion-planner";
@@ -51,6 +72,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
@@ -69,7 +91,6 @@ import {
   workspaceListRowClass,
   workspaceListSurfaceClass,
   workspaceLongformColumnClass,
-  workspaceReferenceSecondaryTextClass,
   workspaceRouteClass,
 } from "@/components/ui/workspace-surface";
 import { useWorkspace } from "@/components/workspace-controller";
@@ -81,19 +102,22 @@ import {
 import { useBufferedTextCommit } from "@/hooks/use-buffered-text-commit";
 import { selectEditorUtilities } from "@/lib/editor-utilities";
 import { cn } from "@/lib/utils";
+import { createCollectionId } from "@/lib/workspace-domain-identities";
 import {
   convertUnlinkedMentionCandidate,
-  createObjectEmbedNode,
-  createObjectReferenceMark,
   createWorkspaceObjectLinkIndex,
   findUnlinkedMentionCandidates,
   selectBacklinksForObject,
+  selectObjectsInside,
 } from "@/lib/workspace-object-links";
 import type {
   NumberPresentation,
   NumberPresentationColor,
+  PropertyDefinition,
+  PropertyValueType,
   WorkspaceStructure,
 } from "@/lib/workspace-object-types";
+import { selectObjectTypeConversionTargets } from "@/lib/workspace-object-types";
 import {
   createObjectConversionPlan,
   type ObjectConversionPlan,
@@ -178,23 +202,14 @@ function BufferedTitle({
   readonly value: string;
 }) {
   const { inputProps } = useBufferedTextCommit({ value, onCommit });
-  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-  React.useLayoutEffect(() => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-    textarea.style.height = "0px";
-    textarea.style.height = `${Math.max(39, textarea.scrollHeight)}px`;
-  });
   return (
-    <textarea
+    <input
       {...inputProps}
-      ref={textareaRef}
       data-slot="workspace-object-page-title"
       data-lifecycle-contract={objectLifecycleContractSlots.EditableObjectTitle}
       aria-label={label}
       placeholder={label}
-      rows={1}
-      className="mt-3.5 block min-h-[39px] w-full resize-none overflow-hidden bg-transparent pb-1 text-[30px] font-bold leading-[33px] tracking-normal text-foreground outline-none placeholder:text-muted-foreground/50"
+      className="mt-[14px] block min-h-[39px] w-full bg-transparent text-[30px] font-bold leading-[33px] tracking-[-0.02em] text-foreground outline-none placeholder:text-muted-foreground/50"
     />
   );
 }
@@ -417,7 +432,15 @@ function ObjectPageTypePickerTrigger({
     readonly target: WorkspaceStructure;
     readonly targetObjectTypeId: string;
   } | null>(null);
-  const visibleChoices = objectTypes.filter((item) =>
+  const objectTypesById = new Map(objectTypes.map((item) => [item.id, item]));
+  const eligibleChoices = selectObjectTypeConversionTargets(
+    structures,
+    sourceStructure.id,
+  ).flatMap((structure) => {
+    const item = objectTypesById.get(structure.id);
+    return item ? [item] : [];
+  });
+  const visibleChoices = eligibleChoices.filter((item) =>
     (item.singularLabel ?? item.label)
       .toLocaleLowerCase()
       .includes(query.trim().toLocaleLowerCase()),
@@ -477,6 +500,15 @@ function ObjectPageTypePickerTrigger({
               <span>{item.singularLabel ?? item.label}</span>
             </DropdownMenuItem>
           ))}
+          {visibleChoices.length === 0 ? (
+            <p
+              role="status"
+              data-slot="object-page-type-picker-empty"
+              className="px-2 py-3 text-center text-sm text-muted-foreground"
+            >
+              {t("documentMenu.noMatchingObjectTypes")}
+            </p>
+          ) : null}
         </DropdownMenuContent>
       </DropdownMenu>
       <Dialog
@@ -524,12 +556,12 @@ function ObjectPageTypePickerTrigger({
 
 function DocumentMoreMenu({
   onChangeType,
-  onAddRelationship,
   onCustomize,
   onDelete,
   onDuplicate,
   onEditCollections,
   onExport,
+  onFind,
   onImport,
   onPin,
   onPresent,
@@ -539,15 +571,17 @@ function DocumentMoreMenu({
   onUseTemplate,
   onCopy,
   onToggleWideLayout,
+  isPinned,
   wideLayout,
 }: {
+  readonly isPinned: boolean;
   readonly onCustomize: () => void;
-  readonly onAddRelationship?: () => void;
   readonly onChangeType: () => void;
   readonly onDelete: () => void;
   readonly onDuplicate: () => void;
-  readonly onEditCollections: () => void;
+  readonly onEditCollections?: () => void;
   readonly onExport: () => void;
+  readonly onFind?: () => void;
   readonly onImport: () => void;
   readonly onPin: () => void;
   readonly onPresent: () => void;
@@ -560,6 +594,40 @@ function DocumentMoreMenu({
   readonly wideLayout?: boolean;
 }) {
   const t = useTranslations("workspace");
+  const primaryItems: readonly {
+    readonly handler: () => void;
+    readonly Icon: React.ElementType;
+    readonly key: string;
+  }[] = [
+    { key: "useTemplate", handler: onUseTemplate, Icon: FilePenLineIcon },
+    ...(onEditCollections
+      ? [
+          {
+            key: "editCollections",
+            handler: onEditCollections,
+            Icon: ObjectCollectionIcon,
+          },
+        ]
+      : []),
+    {
+      key: isPinned ? "unpinSidebar" : "pinSidebar",
+      handler: onPin,
+      Icon: PinIcon,
+    },
+    { key: "changeType", handler: onChangeType, Icon: ShapesIcon },
+    { key: "typeSettings", handler: onTypeSettings, Icon: Settings2Icon },
+    { key: "share", handler: onShare, Icon: Share2Icon },
+    { key: "present", handler: onPresent, Icon: PresentationIcon },
+  ];
+  const secondaryItems: readonly {
+    readonly handler: () => void;
+    readonly Icon: React.ElementType;
+    readonly key: string;
+  }[] = [
+    { key: "textStats", handler: onStats, Icon: BarChart3Icon },
+    { key: "copy", handler: onCopy, Icon: CopyIcon },
+    { key: "duplicate", handler: onDuplicate, Icon: CopyIcon },
+  ];
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -580,10 +648,21 @@ function DocumentMoreMenu({
           "w-[269px] min-w-[269px] p-1.5",
         )}
       >
+        {onFind ? (
+          <DropdownMenuItem
+            className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+            onClick={onFind}
+          >
+            <SearchIcon aria-hidden="true" className="size-4" />
+            {t("documentMenu.findPage")}
+            <DropdownMenuShortcut>CtrlF</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        ) : null}
         <DropdownMenuSub>
           <DropdownMenuSubTrigger
             className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
           >
+            <Settings2Icon aria-hidden="true" className="size-4" />
             {t("actions.customize")}
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
@@ -600,38 +679,32 @@ function DocumentMoreMenu({
                 className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
                 onClick={onCustomize}
               >
+                <Settings2Icon aria-hidden="true" className="size-4" />
                 {t("documentMenu.customizeHint")}
               </DropdownMenuItem>
             )}
           </DropdownMenuSubContent>
         </DropdownMenuSub>
-        {[
-          ["useTemplate", onUseTemplate],
-          ["editCollections", onEditCollections],
-          ...(onAddRelationship
-            ? ([["addRelationship", onAddRelationship]] as const)
-            : []),
-          ["pinSidebar", onPin],
-          ["changeType", onChangeType],
-          ["typeSettings", onTypeSettings],
-          ["share", onShare],
-          ["present", onPresent],
-        ].map(([key, handler]) => (
+        <DropdownMenuSeparator />
+        {primaryItems.map(({ key, handler, Icon }) => (
           <DropdownMenuItem
-            key={key as string}
+            key={key}
             className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
-            onClick={handler as () => void}
+            onClick={handler}
           >
-            {key === "addRelationship"
-              ? t("linking.addRelationship")
-              : t(`documentMenu.${key as string}`)}
+            <Icon aria-hidden="true" className="size-4" />
+            {t(`documentMenu.${key}`)}
+            {key === "pinSidebar" || key === "unpinSidebar" ? (
+              <DropdownMenuShortcut>Ctrl⇧*</DropdownMenuShortcut>
+            ) : null}
           </DropdownMenuItem>
         ))}
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
           onClick={onExport}
         >
-          <DownloadIcon className="size-4" />
+          <DownloadIcon aria-hidden="true" className="size-4" />
           {t("documentMenu.export")}
           <DropdownMenuShortcut>CtrlE</DropdownMenuShortcut>
         </DropdownMenuItem>
@@ -639,28 +712,28 @@ function DocumentMoreMenu({
           className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
           onClick={onImport}
         >
-          <UploadIcon className="size-4" />
+          <UploadIcon aria-hidden="true" className="size-4" />
           {t("documentMenu.import")}
           <DropdownMenuShortcut>CtrlI</DropdownMenuShortcut>
         </DropdownMenuItem>
-        {[
-          ["textStats", onStats],
-          ["copy", onCopy],
-          ["duplicate", onDuplicate],
-        ].map(([key, handler]) => (
+        <DropdownMenuSeparator />
+        {secondaryItems.map(({ key, handler, Icon }) => (
           <DropdownMenuItem
-            key={key as string}
+            key={key}
             className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
-            onClick={handler as () => void}
+            onClick={handler}
           >
-            {t(`documentMenu.${key as string}`)}
+            <Icon aria-hidden="true" className="size-4" />
+            {t(`documentMenu.${key}`)}
           </DropdownMenuItem>
         ))}
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
           onClick={onDelete}
         >
+          <Trash2Icon aria-hidden="true" className="size-4" />
           {t("documentMenu.deleteObject")}
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -677,8 +750,10 @@ function ObjectPageTags({
 }) {
   const t = useTranslations("workspace");
   const { createWorkspaceTag, createdEntities, selectEntity } = useWorkspace();
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
+  const [activeIndex, setActiveIndex] = React.useState(0);
   const [tagPickerOpen, setTagPickerOpen] = React.useState(false);
   const [tagPickerQuery, setTagPickerQuery] = React.useState("");
   const [pendingTagIds, setPendingTagIds] = React.useState<readonly string[]>(
@@ -707,6 +782,7 @@ function ObjectPageTags({
         .toLocaleLowerCase()
         .includes(deferredPickerQuery.trim().toLocaleLowerCase()),
   );
+  const optionCount = availableTags.length + 2;
   const closeTagPicker = () => {
     setOpen(false);
     setTagPickerOpen(false);
@@ -729,42 +805,104 @@ function ObjectPageTags({
     );
     setTagPickerQuery("");
   };
+  const openTagPicker = () => {
+    const nextQuery = query;
+    setOpen(false);
+    setTagPickerQuery(nextQuery);
+    setPendingTagIds(tags);
+    window.setTimeout(() => setTagPickerOpen(true));
+  };
+  const createAndSelectTag = () => {
+    const tagId = createWorkspaceTag(query.trim());
+    update({ tags: [...tags, tagId] });
+    setQuery("");
+    setActiveIndex(0);
+  };
+  const activateTagOption = (index: number) => {
+    if (index === 0) {
+      createAndSelectTag();
+      return;
+    }
+    if (index === 1) {
+      openTagPicker();
+      return;
+    }
+    const tag = availableTags[index - 2];
+    if (!tag) return;
+    update({ tags: [...tags, tag.id] });
+    setQuery("");
+    setActiveIndex(0);
+  };
   return (
     <div
       data-slot="workspace-object-page-tags"
-      className={cn(
-        workspaceReferenceSecondaryTextClass,
-        "-ml-1.5 mt-1.5 flex min-h-5 flex-wrap items-center gap-1.5",
-      )}
+      className="mt-[6px] flex min-h-5 flex-wrap items-center gap-1.5"
     >
       {tags.map((tagId) => (
-        <button
+        <span
           key={tagId}
-          type="button"
-          className={tagChipClass}
-          aria-label={tagNamesById.get(tagId) ?? tagId}
-          onClick={() => selectEntity(tagId)}
+          data-slot="workspace-object-page-tag-chip"
+          className={cn(
+            tagChipClass,
+            "group/tag-chip gap-0 overflow-hidden p-0",
+          )}
         >
-          <span className="truncate">{tagNamesById.get(tagId) ?? tagId}</span>
-        </button>
+          <button
+            type="button"
+            className="min-w-0 truncate py-[0.2em] pl-[0.49em] pr-1 outline-none focus-visible:underline"
+            aria-label={tagNamesById.get(tagId) ?? tagId}
+            onClick={() => selectEntity(tagId)}
+          >
+            {tagNamesById.get(tagId) ?? tagId}
+          </button>
+          <button
+            type="button"
+            data-slot="workspace-object-page-tag-remove"
+            aria-label={t("actions.removeTag", {
+              tag: tagNamesById.get(tagId) ?? tagId,
+            })}
+            className="pointer-events-none flex w-[31.56px] shrink-0 items-center justify-center opacity-0 outline-none transition-opacity duration-200 ease-out hover:bg-muted group-hover/tag-chip:pointer-events-auto group-hover/tag-chip:opacity-100 group-focus-within/tag-chip:pointer-events-auto group-focus-within/tag-chip:opacity-100 focus-visible:ring-2 focus-visible:ring-ring/40 motion-reduce:transition-none"
+            onClick={() => {
+              update({ tags: tags.filter((item) => item !== tagId) });
+            }}
+          >
+            <XIcon aria-hidden="true" className="size-[12.6px]" />
+          </button>
+        </span>
       ))}
       <Popover
         open={open}
         onOpenChange={(nextOpen) => {
           setOpen(nextOpen);
+          setActiveIndex(0);
           if (!nextOpen) setQuery("");
         }}
       >
         <PopoverTrigger
           nativeButton={false}
           render={
-            <label className="inline-flex min-w-0 items-center whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3] hover:bg-muted/70">
+            <label
+              data-slot="workspace-object-page-tags-empty-selector"
+              className="group/tag-selector inline-flex min-w-0 items-center whitespace-nowrap rounded-[0.475em] border border-transparent px-[0.49em] py-[0.2em] leading-[1.3]"
+            >
               <ObjectTagIcon className="size-3.5" />
               <input
+                ref={inputRef}
                 data-slot="object-page-tags-input"
                 aria-label={t("fields.tags")}
                 placeholder={t("fields.tags")}
                 value={query}
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded={open}
+                aria-controls="object-page-tags-options"
+                aria-activedescendant={
+                  open
+                    ? activeIndex < 2
+                      ? `object-page-tag-action-${activeIndex}`
+                      : `object-page-tag-${availableTags[activeIndex - 2]?.id}`
+                    : undefined
+                }
                 onClick={(event) => {
                   event.stopPropagation();
                   setOpen(true);
@@ -774,84 +912,114 @@ function ObjectPageTags({
                   setOpen(true);
                 }}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === "ArrowDown") {
+                  if (event.key === "Escape" && open) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setOpen(false);
+                    inputRef.current?.blur();
+                  } else if (event.key === "ArrowDown") {
                     event.preventDefault();
                     setOpen(true);
+                    setActiveIndex((current) =>
+                      Math.min(current + 1, optionCount - 1),
+                    );
+                  } else if (event.key === "ArrowUp") {
+                    event.preventDefault();
+                    setOpen(true);
+                    setActiveIndex((current) => Math.max(current - 1, 0));
+                  } else if (event.key === "Enter") {
+                    event.preventDefault();
+                    if (open) activateTagOption(activeIndex);
+                    else setOpen(true);
                   }
                 }}
                 onChange={(event) => {
                   setQuery(event.target.value);
+                  setActiveIndex(0);
                   setOpen(true);
                 }}
-                className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] text-current outline-none focus:cursor-text [field-sizing:content] placeholder:text-current"
+                className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] outline-none focus:cursor-text [field-sizing:content] placeholder:text-muted-foreground"
               />
-              <AppHeaderSparkleIcon className="ml-1 size-3 text-violet-500" />
+              <SparklesIcon
+                aria-hidden="true"
+                data-slot="workspace-object-page-tags-sparkle"
+                className="ml-1 size-3.5 shrink-0 text-violet-500 opacity-0 transition-opacity duration-200 ease-out group-hover/tag-selector:opacity-100 group-focus-within/tag-selector:opacity-100 motion-reduce:transition-none"
+              />
             </label>
           }
         />
         <PopoverContent
+          data-slot="workspace-object-page-tags-menu"
           align="start"
+          initialFocus={false}
+          finalFocus={false}
           sideOffset={5}
           className={cn(
             workspaceOverflowMenuContentClass,
-            "w-[257px] min-w-[257px] gap-0 p-1.5",
+            "w-[257.6px] min-w-[257.6px] gap-0 p-1.5",
           )}
         >
-          {!deferredQuery.trim() ? (
+          <div id="object-page-tags-options" className="grid">
             <button
+              id="object-page-tag-action-0"
               type="button"
+              data-active={activeIndex === 0}
               className={cn(
                 workspaceOverflowMenuItemClass,
-                "w-full gap-2 px-2 text-left",
+                "flex w-full gap-2 px-1 text-left data-[active=true]:bg-accent",
               )}
-              onClick={() => {
-                const tagId = createWorkspaceTag("");
-                update({ tags: [...tags, tagId] });
-                setQuery("");
-                setOpen(false);
-              }}
+              onPointerMove={() => setActiveIndex(0)}
+              onClick={createAndSelectTag}
             >
-              {t("documentMenu.newTagEmpty")}
+              <ObjectTagIcon className="size-3.5 shrink-0 text-muted-foreground" />
+              {query.trim()
+                ? t("documentMenu.newTag", { tag: query.trim() })
+                : t("documentMenu.newTagEmpty")}
             </button>
-          ) : null}
-          <button
-            type="button"
-            className={cn(
-              workspaceOverflowMenuItemClass,
-              "w-full gap-2 px-2 text-left",
-            )}
-            onClick={() => {
-              const nextQuery = query;
-              setOpen(false);
-              setTagPickerQuery(nextQuery);
-              setPendingTagIds(tags);
-              window.setTimeout(() => setTagPickerOpen(true));
-            }}
-          >
-            {t("documentMenu.searchAllTags")}
-          </button>
-          {availableTags.length > 0 ? (
-            <>
-              <div aria-hidden className="my-1 border-t border-border" />
-              {availableTags.map((tag) => (
-                <button
-                  key={tag.id}
-                  type="button"
-                  onClick={() => {
-                    update({ tags: [...tags, tag.id] });
-                    setQuery("");
-                    setOpen(false);
-                  }}
-                  className={cn(
-                    workspaceOverflowMenuItemClass,
-                    "w-full gap-2 px-2 text-left",
-                  )}
-                >
-                  <span className="truncate">{tag.title.trim() || tag.id}</span>
-                </button>
-              ))}
-            </>
-          ) : null}
+            <button
+              id="object-page-tag-action-1"
+              type="button"
+              data-active={activeIndex === 1}
+              className={cn(
+                workspaceOverflowMenuItemClass,
+                "flex w-full gap-2 px-1 text-left data-[active=true]:bg-accent",
+              )}
+              onPointerMove={() => setActiveIndex(1)}
+              onClick={openTagPicker}
+            >
+              <SearchIcon className="size-3.5 shrink-0 text-muted-foreground" />
+              {t("documentMenu.searchAllTags")}
+            </button>
+            {availableTags.length > 0 ? (
+              <div className="mt-[8.8px] grid">
+                {availableTags.map((tag) => (
+                  <button
+                    key={tag.id}
+                    id={`object-page-tag-${tag.id}`}
+                    type="button"
+                    data-active={activeIndex === availableTags.indexOf(tag) + 2}
+                    onPointerMove={() =>
+                      setActiveIndex(availableTags.indexOf(tag) + 2)
+                    }
+                    onClick={() => {
+                      update({ tags: [...tags, tag.id] });
+                      setQuery("");
+                      setActiveIndex(0);
+                    }}
+                    className={cn(
+                      workspaceOverflowMenuItemClass,
+                      "flex w-full gap-2 px-1 text-left data-[active=true]:bg-accent",
+                    )}
+                  >
+                    <ObjectTagIcon className="size-3.5 shrink-0 text-muted-foreground" />
+                    <span className="truncate">
+                      {tag.title.trim() || tag.id}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </PopoverContent>
       </Popover>
       <Dialog
@@ -941,20 +1109,26 @@ function ObjectPageCollections({
   readonly update: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
-  const { objectTypeCollections } = useWorkspace();
+  const { objectTypeCollections, setObjectTypeCollections } = useWorkspace();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
+  const [activeIndex, setActiveIndex] = React.useState(0);
   const deferredQuery = React.useDeferredValue(query);
   const collections = entityCollections(entity);
   const choices = Object.values(objectTypeCollections).filter(
     (collection) => collection.structureId === entity.objectTypeId,
   );
-  const visibleChoices = choices.filter((collection) =>
+  const availableChoices = choices.filter(
+    (collection) => !collections.includes(collection.id),
+  );
+  const visibleChoices = availableChoices.filter((collection) =>
     collection.name
       .toLocaleLowerCase()
       .includes(deferredQuery.trim().toLocaleLowerCase()),
   );
+  const showCreate = visibleChoices.length === 0;
+  const optionCount = Math.max(visibleChoices.length, 1);
   const collectionNames = new Map(
     choices.map((collection) => [collection.id, collection.name]),
   );
@@ -965,6 +1139,42 @@ function ObjectPageCollections({
         : [...collections, collectionId],
     });
   };
+  const createCollection = () => {
+    const requested = query.trim() || t("documentMenu.untitledCollection");
+    const taken = new Set(choices.map((collection) => collection.name));
+    let name = requested;
+    let suffix = 2;
+    while (taken.has(name)) {
+      name = `${requested} ${suffix}`;
+      suffix += 1;
+    }
+    const id = createCollectionId(
+      entity.objectTypeId,
+      name,
+      new Set(Object.keys(objectTypeCollections)),
+    );
+    setObjectTypeCollections((current) => ({
+      ...current,
+      [id]: { id, name, structureId: entity.objectTypeId },
+    }));
+    update({ collections: [...collections, id] });
+    setQuery("");
+    setOpen(false);
+  };
+  const activateOption = (index: number) => {
+    if (showCreate) {
+      createCollection();
+      return;
+    }
+    const collection = visibleChoices[index];
+    if (collection) {
+      toggleCollection(collection.id);
+      setActiveIndex(0);
+    }
+  };
+  React.useEffect(() => {
+    setActiveIndex((current) => Math.min(current, optionCount - 1));
+  }, [optionCount]);
   React.useEffect(() => {
     if (activationRequest === 0) return;
     setOpen(true);
@@ -972,30 +1182,38 @@ function ObjectPageCollections({
     return () => window.clearTimeout(focusTimer);
   }, [activationRequest]);
   return (
-    <div
-      className={cn(
-        workspaceReferenceSecondaryTextClass,
-        "inline-flex min-w-0 items-center gap-1.5 text-sm",
-      )}
-    >
+    <div className="inline-flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
       {collections.map((collectionId) => (
-        <button
+        <div
           key={collectionId}
-          type="button"
-          aria-label={`${t("objectTypeOverview.remove")} ${collectionNames.get(collectionId) ?? collectionId}`}
-          onClick={() => toggleCollection(collectionId)}
-          className={collectionChipClass}
+          data-slot="workspace-object-page-collection-chip"
+          className={cn(
+            collectionChipClass,
+            "group/collection-chip items-stretch overflow-hidden p-0",
+          )}
         >
-          <ObjectCollectionIcon className="mr-1.5 size-3.5 shrink-0" />
-          <span className="truncate">
-            {collectionNames.get(collectionId) ?? collectionId}
+          <span className="inline-flex min-w-0 items-center py-[0.2em] pl-[0.49em] pr-1">
+            <ObjectCollectionIcon className="mr-1.5 size-3.5 shrink-0" />
+            <span className="truncate">
+              {collectionNames.get(collectionId) ?? collectionId}
+            </span>
           </span>
-        </button>
+          <button
+            type="button"
+            data-slot="workspace-object-page-collection-remove"
+            aria-label={`${t("objectTypeOverview.remove")} ${collectionNames.get(collectionId) ?? collectionId}`}
+            onClick={() => toggleCollection(collectionId)}
+            className="inline-flex w-[31.56px] items-center justify-center opacity-0 transition-opacity duration-200 ease-out hover:bg-muted group-hover/collection-chip:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none"
+          >
+            <XIcon aria-hidden="true" className="size-[12.6px]" />
+          </button>
+        </div>
       ))}
       <Popover
         open={open}
         onOpenChange={(nextOpen) => {
           setOpen(nextOpen);
+          setActiveIndex(0);
           if (!nextOpen) setQuery("");
         }}
       >
@@ -1010,6 +1228,17 @@ function ObjectPageCollections({
                 aria-label={t("objects.collections")}
                 placeholder={t("objects.collections")}
                 value={query}
+                role="combobox"
+                aria-autocomplete="list"
+                aria-activedescendant={
+                  open
+                    ? showCreate
+                      ? "object-page-collection-create"
+                      : `object-page-collection-${visibleChoices[activeIndex]?.id}`
+                    : undefined
+                }
+                aria-controls="object-page-collections-options"
+                aria-expanded={open}
                 onClick={(event) => {
                   event.stopPropagation();
                   setOpen(true);
@@ -1020,16 +1249,33 @@ function ObjectPageCollections({
                 }}
                 onFocus={() => setOpen(true)}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === "ArrowDown") {
+                  if (event.key === "Escape" && open) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setOpen(false);
+                    inputRef.current?.blur();
+                  } else if (event.key === "ArrowDown") {
                     event.preventDefault();
                     setOpen(true);
+                    setActiveIndex((current) =>
+                      Math.min(current + 1, optionCount - 1),
+                    );
+                  } else if (event.key === "ArrowUp") {
+                    event.preventDefault();
+                    setOpen(true);
+                    setActiveIndex((current) => Math.max(current - 1, 0));
+                  } else if (event.key === "Enter") {
+                    event.preventDefault();
+                    if (open) activateOption(activeIndex);
+                    else setOpen(true);
                   }
                 }}
                 onChange={(event) => {
                   setQuery(event.target.value);
+                  setActiveIndex(0);
                   setOpen(true);
                 }}
-                className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] text-current outline-none focus:cursor-text [field-sizing:content] placeholder:text-current"
+                className="ml-1.5 min-w-[3.9rem] max-w-48 cursor-pointer bg-transparent leading-[18.2px] outline-none focus:cursor-text [field-sizing:content] placeholder:text-muted-foreground"
               />
             </label>
           }
@@ -1037,34 +1283,61 @@ function ObjectPageCollections({
         <PopoverContent
           align="start"
           initialFocus={false}
-          finalFocus={inputRef}
+          finalFocus={false}
           sideOffset={5}
           className={cn(
             workspaceOverflowMenuContentClass,
-            "w-[257px] min-w-[257px] gap-0 p-1.5",
+            "w-[257.6px] min-w-[257.6px] gap-0 p-1.5",
           )}
         >
-          {visibleChoices.length > 0
-            ? visibleChoices.map((collection) => (
+          <div id="object-page-collections-options" className="grid">
+            {showCreate ? (
+              <button
+                id="object-page-collection-create"
+                type="button"
+                data-active={activeIndex === 0}
+                data-slot="workspace-object-page-collections-create"
+                className={cn(
+                  workspaceOverflowMenuItemClass,
+                  "w-full gap-2 px-1 text-left data-[active=true]:bg-accent",
+                )}
+                onPointerMove={() => setActiveIndex(0)}
+                onClick={createCollection}
+              >
+                <PlusIcon
+                  aria-hidden="true"
+                  className="size-3.5 shrink-0"
+                  weight="regular"
+                />
+                {query.trim()
+                  ? t("documentMenu.newCollectionNamed", {
+                      collection: query.trim(),
+                    })
+                  : t("documentMenu.newCollection")}
+              </button>
+            ) : (
+              visibleChoices.map((collection, index) => (
                 <button
                   key={collection.id}
+                  id={`object-page-collection-${collection.id}`}
                   type="button"
-                  aria-pressed={collections.includes(collection.id)}
-                  onClick={() => toggleCollection(collection.id)}
+                  data-active={activeIndex === index}
+                  onClick={() => {
+                    toggleCollection(collection.id);
+                    setActiveIndex(0);
+                  }}
+                  onPointerMove={() => setActiveIndex(index)}
                   className={cn(
                     workspaceOverflowMenuItemClass,
-                    "w-full gap-2 px-2 text-left",
+                    "w-full gap-2 px-1 text-left data-[active=true]:bg-accent",
                   )}
                 >
+                  <ObjectCollectionIcon className="size-3.5 shrink-0" />
                   <span className="truncate">{collection.name}</span>
-                  {collections.includes(collection.id) ? (
-                    <span className="ml-auto text-xs text-muted-foreground">
-                      ✓
-                    </span>
-                  ) : null}
                 </button>
               ))
-            : null}
+            )}
+          </div>
         </PopoverContent>
       </Popover>
     </div>
@@ -1073,11 +1346,15 @@ function ObjectPageCollections({
 
 function PageCustomizeControl({
   entity,
+  isCustomStructure,
   onAddCover,
+  onIcon,
   onUpdate,
 }: {
   readonly entity: DocumentWorkspaceEntity;
+  readonly isCustomStructure: boolean;
   readonly onAddCover: () => void;
+  readonly onIcon: (icon: string) => void;
   readonly onUpdate: EntityUpdate;
 }) {
   const t = useTranslations("workspace");
@@ -1092,29 +1369,30 @@ function PageCustomizeControl({
     bodyText.replace(/\s+/g, " ").trim().slice(0, 180) || entity.title.trim();
   const generatedAliases = entity.title.trim() ? [entity.title.trim()] : [];
   const wideLayout = entity.wideLayout === true;
-  const actions = [
+  const fullActions = [
     {
-      label: t("documentMenu.generateTitle"),
-      run: () => generatedTitle && onUpdate({ title: generatedTitle }),
-    },
-    {
+      Icon: AlignLeftIcon,
       label: t("documentMenu.addDescription"),
       run: () => onUpdate({ description: entity.description ?? "" }),
     },
     {
+      Icon: SparklesIcon,
       label: t("documentMenu.fillDescription"),
       run: () => onUpdate({ description: generatedDescription }),
     },
     {
+      Icon: CopyIcon,
       label: t("documentMenu.addAliases"),
       run: () => onUpdate({ aliases: entity.aliases ?? [] }),
     },
     {
+      Icon: WandSparklesIcon,
       label: t("documentMenu.fillAliases"),
       run: () => onUpdate({ aliases: generatedAliases }),
     },
-    { label: t("documentMenu.addCover"), run: onAddCover },
+    { Icon: ImageIcon, label: t("documentMenu.addCover"), run: onAddCover },
     {
+      Icon: SparklesIcon,
       label: t("documentMenu.fillProperties"),
       run: () =>
         onUpdate({
@@ -1128,11 +1406,40 @@ function PageCustomizeControl({
         }),
     },
     {
+      Icon: ExpandIcon,
       label: t("documentMenu.wideLayout"),
       pressed: wideLayout,
       run: () => onUpdate({ wideLayout: !wideLayout }),
     },
   ];
+  const customActions = [
+    {
+      Icon: WandSparklesIcon,
+      label: t("documentMenu.generateTitle"),
+      run: () => onUpdate({ title: generatedTitle }),
+    },
+    {
+      Icon: SparklesIcon,
+      label: t("documentMenu.fillProperties"),
+      run: () =>
+        onUpdate({
+          ...(entity.title.trim() || !generatedTitle
+            ? {}
+            : { title: generatedTitle }),
+          aliases: entity.aliases?.length ? entity.aliases : generatedAliases,
+          description: entity.description?.trim()
+            ? entity.description
+            : generatedDescription,
+        }),
+    },
+    {
+      Icon: ExpandIcon,
+      label: t("documentMenu.wideLayout"),
+      pressed: wideLayout,
+      run: () => onUpdate({ wideLayout: !wideLayout }),
+    },
+  ];
+  const actions = isCustomStructure ? customActions : fullActions;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -1142,12 +1449,9 @@ function PageCustomizeControl({
             variant="ghost"
             size="sm"
             aria-label={t("actions.customize")}
-            className={cn(
-              workspaceReferenceSecondaryTextClass,
-              "h-[26px] gap-1.5 px-2 pr-1 text-sm font-normal opacity-0 transition-[background-color,color,opacity] duration-200 group-hover/object-page-header:opacity-100 group-focus-within/object-page-header:opacity-100 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none",
-            )}
+            className="pointer-events-none h-[26px] gap-1.5 px-2 pr-1 text-sm font-normal text-muted-foreground opacity-0 transition-opacity duration-300 ease-linear hover:bg-muted hover:text-foreground group-hover/object-page-header:pointer-events-auto group-hover/object-page-header:opacity-50 data-popup-open:pointer-events-auto data-popup-open:opacity-100 focus-visible:pointer-events-auto focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-ring/50 [@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100 motion-reduce:transition-none"
           >
-            <AppHeaderSparkleIcon className="size-3.5" />
+            <AppHeaderCustomizeIcon className="size-3.5" />
             {t("actions.customize")}
             <AppHeaderCaretDownIcon className="size-3.5" />
           </Button>
@@ -1159,13 +1463,35 @@ function PageCustomizeControl({
         sideOffset={5}
         className="w-[277px] rounded-[12px] p-1.5 ring-0 shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)]"
       >
+        {!isCustomStructure ? (
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger
+              className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
+            >
+              <SmileIcon aria-hidden="true" className="size-4" />
+              {t("documentMenu.addIcon")}
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent className="grid w-[156px] grid-cols-4 gap-1 p-2">
+              {["📄", "💡", "📌", "🧭", "✍️", "🗂️", "⭐", "🚀"].map((icon) => (
+                <DropdownMenuItem
+                  key={icon}
+                  className="h-8 justify-center text-lg"
+                  onClick={() => onIcon(icon)}
+                >
+                  {icon}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+        ) : null}
         {actions.map((action) => (
           <DropdownMenuItem
             key={action.label}
-            className={workspaceOverflowMenuItemClass}
+            className={cn(workspaceOverflowMenuItemClass, "gap-2 px-2")}
             aria-pressed={action.pressed}
             onClick={action.run}
           >
+            <action.Icon aria-hidden="true" className="size-4" />
             {action.label}
             {action.pressed ? <CheckIcon className="ml-auto size-4" /> : null}
           </DropdownMenuItem>
@@ -1681,12 +2007,21 @@ function WorkspaceScalarPropertyField({
         inputId={inputId}
         inputType={workspacePropertyInputType(property.valueType)}
         value={value}
-        onCommit={(draft) =>
+        onCommit={(draft) => {
+          const coerced = coerceWorkspacePropertyDraft(
+            property.valueType,
+            draft,
+          );
           updateProperty(
             property.id,
-            coerceWorkspacePropertyDraft(property.valueType, draft),
-          )
-        }
+            property.multiple && typeof coerced === "string"
+              ? coerced
+                  .split(",")
+                  .map((item) => item.trim())
+                  .filter(Boolean)
+              : coerced,
+          );
+        }}
       />
     </label>
   );
@@ -1782,7 +2117,7 @@ function WorkspacePropertyGroup({
       return (
         property.writable &&
         property.ownership !== "system" &&
-        !["title", "tags"].includes(property.id) &&
+        !["title", "tags", "icon", "cover"].includes(property.id) &&
         [
           "text",
           "number",
@@ -1820,6 +2155,406 @@ function WorkspacePropertyGroup({
           updateProperty={updateProperty}
         />
       ))}
+    </div>
+  );
+}
+
+const structurePropertyCatalog: readonly {
+  readonly key:
+    | "propertyText"
+    | "propertyContent"
+    | "propertyLabel"
+    | "propertyObject"
+    | "propertyCheckbox"
+    | "propertyDateTime"
+    | "propertyNumber"
+    | "propertyDescription"
+    | "propertyCover"
+    | "propertyIcon"
+    | "propertyCreatedAt"
+    | "propertyLastUpdatedAt"
+    | "propertyAliases";
+  readonly valueType: PropertyValueType;
+  readonly Icon: React.ElementType;
+  readonly specialId?: "aliases" | "cover" | "description" | "icon";
+}[] = [
+  { key: "propertyText", valueType: "text", Icon: TypeIcon },
+  { key: "propertyContent", valueType: "richText", Icon: AlignLeftIcon },
+  { key: "propertyLabel", valueType: "label", Icon: ListIcon },
+  { key: "propertyObject", valueType: "entity", Icon: MousePointer2Icon },
+  { key: "propertyCheckbox", valueType: "boolean", Icon: CheckSquareIcon },
+  { key: "propertyDateTime", valueType: "date", Icon: CalendarClockIcon },
+  { key: "propertyNumber", valueType: "number", Icon: ListChecksIcon },
+  {
+    key: "propertyDescription",
+    valueType: "text",
+    Icon: AlignLeftIcon,
+    specialId: "description",
+  },
+  {
+    key: "propertyCover",
+    valueType: "media",
+    Icon: ImageIcon,
+    specialId: "cover",
+  },
+  {
+    key: "propertyIcon",
+    valueType: "text",
+    Icon: SmileIcon,
+    specialId: "icon",
+  },
+  { key: "propertyCreatedAt", valueType: "createdAt", Icon: CalendarClockIcon },
+  {
+    key: "propertyLastUpdatedAt",
+    valueType: "lastUpdatedAt",
+    Icon: CalendarClockIcon,
+  },
+  {
+    key: "propertyAliases",
+    valueType: "text",
+    Icon: CopyIcon,
+    specialId: "aliases",
+  },
+];
+
+function AddStructurePropertyControl({
+  entity,
+  onAddCover,
+  onAddIcon,
+  onReplaceSchema,
+  propertyDefinitions,
+  structures,
+  update,
+}: {
+  readonly entity: SupportedWorkspaceEntity;
+  readonly onAddCover: () => void;
+  readonly onAddIcon: () => void;
+  readonly onReplaceSchema: (
+    propertyDefinitions: readonly PropertyDefinition[],
+  ) => void;
+  readonly propertyDefinitions: readonly PropertyDefinition[];
+  readonly structures: readonly WorkspaceStructure[];
+  readonly update: EntityUpdate;
+}) {
+  const t = useTranslations("workspace");
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const [objectTypeQuery, setObjectTypeQuery] = React.useState("");
+  const visibleCatalog = structurePropertyCatalog.filter((item) =>
+    t(`documentMenu.${item.key}`)
+      .toLocaleLowerCase()
+      .includes(query.trim().toLocaleLowerCase()),
+  );
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [activeObjectTypeIndex, setActiveObjectTypeIndex] = React.useState(0);
+  const [objectSubOpen, setObjectSubOpen] = React.useState(false);
+  const objectSubTriggerRef = React.useRef<HTMLDivElement>(null);
+  const objectTypeInputRef = React.useRef<HTMLInputElement>(null);
+  const visibleTargetStructures = structures.filter((targetStructure) =>
+    targetStructure.singularName
+      .toLocaleLowerCase()
+      .includes(objectTypeQuery.trim().toLocaleLowerCase()),
+  );
+  React.useEffect(() => {
+    if (!objectSubOpen) return;
+    const focusTimer = window.setTimeout(() =>
+      objectTypeInputRef.current?.focus(),
+    );
+    return () => window.clearTimeout(focusTimer);
+  }, [objectSubOpen]);
+
+  function addSpecialProperty(item: (typeof structurePropertyCatalog)[number]) {
+    if (item.specialId === "description") {
+      if ("description" in entity) {
+        update({ description: entity.description ?? "" });
+      }
+      return true;
+    }
+    if (item.specialId === "aliases") {
+      if ("aliases" in entity) update({ aliases: entity.aliases ?? [] });
+      return true;
+    }
+    if (item.specialId === "cover") {
+      onAddCover();
+      return true;
+    }
+    if (item.specialId === "icon") {
+      onAddIcon();
+      return true;
+    }
+    return false;
+  }
+
+  function addProperty(
+    item: (typeof structurePropertyCatalog)[number],
+    targetStructure?: WorkspaceStructure,
+  ) {
+    if (addSpecialProperty(item)) return;
+    if (item.valueType === "entity" && !targetStructure) return;
+    const definition: PropertyDefinition = {
+      id: `property-${crypto.randomUUID()}`,
+      name: targetStructure?.singularName ?? t(`documentMenu.${item.key}`),
+      ownership: "normal",
+      valueType: item.valueType,
+      writable: !["createdAt", "lastUpdatedAt"].includes(item.valueType),
+      multiple: item.valueType === "entity",
+      ...(item.valueType === "label" ? { options: [] } : {}),
+      ...(targetStructure ? { targetStructureIds: [targetStructure.id] } : {}),
+    };
+    onReplaceSchema([...propertyDefinitions, definition]);
+  }
+
+  return (
+    <div className="group/add-property -mx-1.5 mt-2 flex h-8 items-center">
+      <DropdownMenu
+        open={open}
+        onOpenChange={(nextOpen) => {
+          setOpen(nextOpen);
+          if (nextOpen) setActiveIndex(0);
+          else {
+            setQuery("");
+            setObjectTypeQuery("");
+            setActiveObjectTypeIndex(0);
+            setObjectSubOpen(false);
+          }
+        }}
+      >
+        <DropdownMenuTrigger className="pointer-events-none inline-flex h-7 items-center gap-1.5 rounded-lg px-2 text-sm text-muted-foreground opacity-0 outline-none transition-opacity duration-300 ease-out group-hover/add-property:pointer-events-auto group-hover/add-property:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100 focus-visible:pointer-events-auto focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-ring/40 [@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100 motion-reduce:transition-none">
+          <span aria-hidden className="text-xs">
+            ＋
+          </span>
+          {t("documentMenu.addProperty")}
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="start"
+          sideOffset={4}
+          className={cn(
+            workspaceOverflowMenuContentClass,
+            "h-[430px] w-[290px] min-w-[290px] overflow-hidden p-1.5",
+          )}
+        >
+          <input
+            aria-label={t("documentMenu.searchProperties")}
+            aria-activedescendant={
+              visibleCatalog[activeIndex]
+                ? `structure-property-${visibleCatalog[activeIndex].key}`
+                : undefined
+            }
+            placeholder={t("documentMenu.searchProperties")}
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setActiveIndex(0);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowDown") {
+                event.preventDefault();
+                event.stopPropagation();
+                setActiveIndex((current) =>
+                  Math.min(current + 1, visibleCatalog.length - 1),
+                );
+                return;
+              }
+              if (event.key === "ArrowUp") {
+                event.preventDefault();
+                event.stopPropagation();
+                setActiveIndex((current) => Math.max(current - 1, 0));
+                return;
+              }
+              if (event.key === "Enter" && visibleCatalog[activeIndex]) {
+                event.preventDefault();
+                event.stopPropagation();
+                const activeItem = visibleCatalog[activeIndex];
+                if (activeItem.valueType === "entity") {
+                  objectSubTriggerRef.current?.click();
+                } else {
+                  addProperty(activeItem);
+                  setOpen(false);
+                }
+                return;
+              }
+              if (event.key === "Escape") {
+                event.preventDefault();
+                event.stopPropagation();
+                setOpen(false);
+                return;
+              }
+              event.stopPropagation();
+            }}
+            className="mb-1 h-8 w-full rounded-lg bg-muted px-2 text-sm outline-none placeholder:text-muted-foreground"
+          />
+          <div className="max-h-[378px] overflow-y-auto">
+            {visibleCatalog.map((item) => {
+              const itemContent = (
+                <>
+                  <item.Icon
+                    aria-hidden="true"
+                    className="size-4 text-muted-foreground"
+                  />
+                  {t(`documentMenu.${item.key}`)}
+                </>
+              );
+              if (item.valueType === "entity") {
+                return (
+                  <DropdownMenuSub
+                    key={item.key}
+                    open={objectSubOpen}
+                    onOpenChange={(nextOpen) => {
+                      setObjectSubOpen(nextOpen);
+                      if (!nextOpen) {
+                        setObjectTypeQuery("");
+                        setActiveObjectTypeIndex(0);
+                      }
+                    }}
+                  >
+                    <DropdownMenuSubTrigger
+                      ref={objectSubTriggerRef}
+                      id={`structure-property-${item.key}`}
+                      data-active={item === visibleCatalog[activeIndex]}
+                      data-property-type={item.valueType}
+                      className={cn(
+                        workspaceOverflowMenuItemClass,
+                        "gap-2 px-2 data-[active=true]:bg-accent",
+                      )}
+                      onPointerMove={() =>
+                        setActiveIndex(visibleCatalog.indexOf(item))
+                      }
+                    >
+                      {itemContent}
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuSubContent
+                      sideOffset={-16}
+                      className="h-[346px] w-[222px] min-w-[222px] overflow-hidden p-1.5"
+                    >
+                      <input
+                        ref={objectTypeInputRef}
+                        aria-label={t("documentMenu.searchObjectTypes")}
+                        aria-activedescendant={
+                          visibleTargetStructures[activeObjectTypeIndex]
+                            ? `structure-property-target-${visibleTargetStructures[activeObjectTypeIndex].id}`
+                            : undefined
+                        }
+                        placeholder={t("documentMenu.searchObjectTypes")}
+                        value={objectTypeQuery}
+                        onChange={(event) => {
+                          setObjectTypeQuery(event.target.value);
+                          setActiveObjectTypeIndex(0);
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === "ArrowDown") {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            setActiveObjectTypeIndex((current) =>
+                              Math.min(
+                                current + 1,
+                                visibleTargetStructures.length - 1,
+                              ),
+                            );
+                            return;
+                          }
+                          if (event.key === "ArrowUp") {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            setActiveObjectTypeIndex((current) =>
+                              Math.max(current - 1, 0),
+                            );
+                            return;
+                          }
+                          if (
+                            event.key === "Enter" &&
+                            visibleTargetStructures[activeObjectTypeIndex]
+                          ) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            addProperty(
+                              item,
+                              visibleTargetStructures[activeObjectTypeIndex],
+                            );
+                            setOpen(false);
+                            return;
+                          }
+                          if (event.key === "Escape") {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            setObjectSubOpen(false);
+                            objectSubTriggerRef.current?.focus();
+                            return;
+                          }
+                          event.stopPropagation();
+                        }}
+                        className="mb-1 h-8 w-full rounded-lg bg-muted px-2 text-sm outline-none placeholder:text-muted-foreground"
+                      />
+                      <div className="max-h-[296px] overflow-y-auto">
+                        {visibleTargetStructures.map(
+                          (targetStructure, targetIndex) => (
+                            <DropdownMenuItem
+                              key={targetStructure.id}
+                              id={`structure-property-target-${targetStructure.id}`}
+                              data-active={
+                                targetIndex === activeObjectTypeIndex
+                              }
+                              className={cn(
+                                workspaceOverflowMenuItemClass,
+                                "gap-2 px-2 data-[active=true]:bg-accent",
+                              )}
+                              onPointerMove={() =>
+                                setActiveObjectTypeIndex(targetIndex)
+                              }
+                              onClick={() => {
+                                addProperty(item, targetStructure);
+                                setObjectSubOpen(false);
+                                setOpen(false);
+                              }}
+                            >
+                              <ObjectIconBadge
+                                icon={
+                                  objectTypeDefinitionById[
+                                    targetStructure.iconName
+                                  ]?.icon ?? objectTypeDefinitionById.page.icon
+                                }
+                                tone={targetStructure.tone}
+                                variant="menu"
+                              />
+                              {targetStructure.singularName}
+                            </DropdownMenuItem>
+                          ),
+                        )}
+                        {visibleTargetStructures.length === 0 ? (
+                          <p
+                            role="status"
+                            className="px-2 py-3 text-center text-sm text-muted-foreground"
+                          >
+                            {t("documentMenu.noMatchingObjectTypes")}
+                          </p>
+                        ) : null}
+                      </div>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuSub>
+                );
+              }
+              return (
+                <DropdownMenuItem
+                  key={item.key}
+                  id={`structure-property-${item.key}`}
+                  data-active={item === visibleCatalog[activeIndex]}
+                  data-property-type={item.valueType}
+                  data-property-id={item.specialId}
+                  className={cn(
+                    workspaceOverflowMenuItemClass,
+                    "gap-2 px-2 data-[active=true]:bg-accent",
+                  )}
+                  onPointerMove={() =>
+                    setActiveIndex(visibleCatalog.indexOf(item))
+                  }
+                  onClick={() => addProperty(item)}
+                >
+                  {itemContent}
+                </DropdownMenuItem>
+              );
+            })}
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
@@ -1862,14 +2597,55 @@ function RelatedContentStateMessage({
   );
 }
 
+function RelatedContentInlineTitle({
+  label,
+  onCommit,
+  value,
+}: {
+  readonly label: string;
+  readonly onCommit: (value: string) => void;
+  readonly value: string;
+}) {
+  const { commitNow, inputProps, setDraft } = useBufferedTextCommit({
+    value,
+    onCommit,
+  });
+  return (
+    <input
+      {...inputProps}
+      type="text"
+      data-slot="workspace-object-related-content-title-input"
+      aria-label={label}
+      placeholder={label}
+      className="mb-1 h-7 w-full rounded-md bg-transparent px-1 text-[15px] font-medium leading-[19px] outline-none transition-colors duration-100 placeholder:text-muted-foreground/50 hover:bg-muted focus:bg-background focus:ring-2 focus:ring-ring/30 motion-reduce:transition-none"
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          commitNow();
+          event.currentTarget.blur();
+        }
+        if (event.key === "Escape") {
+          event.preventDefault();
+          setDraft(value);
+          event.currentTarget.blur();
+        }
+      }}
+    />
+  );
+}
+
 function RelatedContent({ entityId }: { readonly entityId: string }) {
   const t = useTranslations("workspace");
+  const [expandedRelatedIds, setExpandedRelatedIds] = React.useState<
+    ReadonlySet<string>
+  >(() => new Set());
   const {
     createdEntities,
     objectTypes,
     openInSidePanel,
     selectEntity,
     spaceId,
+    updateWorkspaceEntity,
   } = useWorkspace();
   const source = createdEntities.find((item) => item.id === entityId);
   const state = React.useMemo(
@@ -1889,8 +2665,7 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
     return null;
   }
   const related = state.kind === "ready" ? state.results.slice(0, 5) : [];
-  const hasContinuation =
-    state.kind === "ready" && state.results.length > related.length;
+  if (state.kind === "empty") return null;
   const openContinuation = () =>
     openInSidePanel({
       id: "relatedContent",
@@ -1904,49 +2679,39 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
       data-slot="workspace-object-related-content"
       data-state={state.kind}
       data-result-revision={"revision" in state ? state.revision : undefined}
-      className="mt-8 border-t pt-6"
+      className="mt-16"
       aria-labelledby={`${entityId}-related-heading`}
     >
-      <div className="group/related-section relative flex min-h-8 items-center gap-2 pr-10">
+      <div
+        data-slot="workspace-object-related-content-heading"
+        className="group/related-heading flex h-8 items-center"
+      >
         <h2
           id={`${entityId}-related-heading`}
-          className="inline-flex items-center gap-2 text-base font-semibold"
+          className="-ml-1.5 flex items-center rounded-lg px-1.5 py-0.5 text-sm font-medium hover:bg-muted"
         >
           {t("explore.relatedContent")}
-          {state.kind === "ready" ? (
-            <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-              {related.length}
-            </span>
-          ) : null}
+          <span
+            data-slot="workspace-object-related-content-count"
+            className="ml-1.5 rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-normal leading-4 text-muted-foreground"
+          >
+            {related.length}
+          </span>
         </h2>
-        {related.length > 0 ? (
+        {state.kind === "ready" ? (
           <Button
             type="button"
             variant="ghost"
-            size="icon-sm"
-            aria-label={t("explore.openEntity", {
-              title:
-                createdEntities.find(
-                  (candidate) => candidate.id === related[0]?.targetId,
-                )?.title || t("lifecycle.untitled"),
-            })}
-            className="pointer-events-none absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover/related-section:pointer-events-auto group-hover/related-section:opacity-100 group-focus-within/related-section:pointer-events-auto group-focus-within/related-section:opacity-100 motion-reduce:transition-none"
-            onClick={() => selectEntity(related[0]?.targetId || "")}
+            size="sm"
+            className="pointer-events-none ml-auto h-7 w-[109.859px] px-2 text-xs text-muted-foreground opacity-0 transition-opacity duration-200 ease-out group-hover/related-heading:pointer-events-auto group-hover/related-heading:opacity-100 focus-visible:pointer-events-auto focus-visible:opacity-100 motion-reduce:transition-none"
+            data-slot="workspace-object-related-content-more"
+            onClick={openContinuation}
           >
-            <ExternalLinkIcon className="size-3.5" />
+            {t("explore.showMore")}
           </Button>
         ) : null}
       </div>
-      {state.kind === "ready" ? (
-        <p className="mt-1 text-xs text-muted-foreground">
-          {state.partial
-            ? t("linking.relatedContentPartial")
-            : state.stale
-              ? t("linking.relatedContentStale")
-              : t("linking.relatedContentProvider")}
-        </p>
-      ) : null}
-      <div className="mt-4 grid gap-1">
+      <div className="mt-1 grid gap-1">
         {state.kind === "ready" ? (
           related.map((result) => {
             const item = createdEntities.find(
@@ -1957,53 +2722,151 @@ function RelatedContent({ entityId }: { readonly entityId: string }) {
               (candidate) => candidate.id === item.objectTypeId,
             );
             const Icon = objectType?.icon ?? objectTypeDefinitionById.page.icon;
+            const expanded = expandedRelatedIds.has(item.id);
             return (
-              <button
+              <div
                 key={item.id}
-                type="button"
-                className={cn(
-                  workspaceListRowClass,
-                  "group/related-row min-h-11",
-                )}
-                onClick={() => selectEntity(item.id)}
+                data-slot="workspace-object-related-content-row"
+                className="group/related-row w-full rounded-lg bg-transparent px-1 transition-colors duration-100 ease-out hover:bg-muted focus-within:bg-muted motion-reduce:transition-none"
               >
-                <AppHeaderCaretDownIcon className="size-3 -rotate-90 text-muted-foreground" />
-                <ObjectIconBadge
-                  icon={Icon}
-                  tone={objectType?.tone ?? "blue"}
-                  className="size-5 rounded-md"
-                  iconClassName="size-3.5"
-                />
-                <span className="min-w-0 flex-1 truncate text-sm font-medium">
-                  {item.title || t("lifecycle.untitled")}
-                </span>
-                {objectType ? (
-                  <span className="inline-flex rounded-md border px-2 py-1 text-xs text-muted-foreground opacity-0 transition-opacity duration-200 group-hover/related-row:opacity-100 group-focus-visible/related-row:opacity-100 motion-reduce:transition-none">
-                    {objectType.singularLabel ?? objectType.label}
+                <div className="flex h-[33px] items-center">
+                  <button
+                    type="button"
+                    data-slot="workspace-object-related-content-disclosure"
+                    aria-expanded={expandedRelatedIds.has(item.id)}
+                    aria-label={t("explore.openEntity", {
+                      title: item.title || t("lifecycle.untitled"),
+                    })}
+                    className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-lg outline-none hover:bg-background focus-visible:ring-2 focus-visible:ring-ring/30"
+                    onClick={() =>
+                      setExpandedRelatedIds((current) => {
+                        const next = new Set(current);
+                        if (next.has(item.id)) next.delete(item.id);
+                        else next.add(item.id);
+                        return next;
+                      })
+                    }
+                  >
+                    <AppHeaderCaretDownIcon
+                      className={cn(
+                        "size-3.5 text-foreground transition-transform duration-200 ease-in-out motion-reduce:transition-none",
+                        !expanded && "-rotate-90",
+                      )}
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    data-slot="workspace-object-related-content-navigation"
+                    className="min-w-0 flex-1 truncate text-left text-[15px] font-medium leading-[19px] outline-none focus-visible:underline"
+                    onClick={() => selectEntity(item.id)}
+                  >
+                    {item.title || t("lifecycle.untitled")}
+                  </button>
+                  <div className="pointer-events-none ml-1 flex shrink-0 items-center gap-1 opacity-20 transition-opacity duration-300 linear group-hover/related-row:pointer-events-auto group-hover/related-row:opacity-100 group-focus-within/related-row:pointer-events-auto group-focus-within/related-row:opacity-100 motion-reduce:transition-none">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="h-[22px] w-[22px]"
+                      data-slot="workspace-object-related-content-side-panel"
+                      aria-label={t("tabs.openInSidePanel")}
+                      onClick={() =>
+                        openInSidePanel({
+                          id: item.id,
+                          label: item.title || t("lifecycle.untitled"),
+                          icon: Icon,
+                          iconClassName:
+                            objectIconToneBadgeClass[
+                              objectType?.tone ?? "blue"
+                            ],
+                          draggable: true,
+                        })
+                      }
+                    >
+                      <ExternalLinkIcon className="size-3.5" />
+                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger
+                        type="button"
+                        data-slot="workspace-object-related-content-options"
+                        aria-label={t("actions.moreOptions")}
+                        className={cn(
+                          buttonVariants({
+                            variant: "ghost",
+                            size: "icon-sm",
+                          }),
+                          "h-[22px] w-[22px]",
+                        )}
+                      >
+                        <AppHeaderDotsIcon className="size-3.5" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => selectEntity(item.id)}>
+                          {t("explore.openEntity", {
+                            title: item.title || t("lifecycle.untitled"),
+                          })}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            openInSidePanel({
+                              id: item.id,
+                              label: item.title || t("lifecycle.untitled"),
+                              icon: Icon,
+                              iconClassName:
+                                objectIconToneBadgeClass[
+                                  objectType?.tone ?? "blue"
+                                ],
+                              draggable: true,
+                            })
+                          }
+                        >
+                          {t("tabs.openInSidePanel")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  <span className="mr-1 inline-flex h-[22px] items-center gap-1 rounded-md border border-primary/35 bg-primary/5 px-1.5 text-xs text-primary">
+                    <Icon className="size-3" />
+                    {objectType?.singularLabel ??
+                      objectType?.label ??
+                      t("objectTypeStudio.untitled")}
                   </span>
+                </div>
+                {expanded ? (
+                  <div
+                    data-slot="workspace-object-related-content-preview"
+                    className="ml-7 min-h-16 border-l border-border px-3 pb-3 pt-1"
+                  >
+                    <RelatedContentInlineTitle
+                      label={t("fields.title")}
+                      value={item.title}
+                      onCommit={(title) =>
+                        updateWorkspaceEntity(item.id, { title })
+                      }
+                    />
+                    {isDocumentWorkspaceEntity(item) ? (
+                      <BlockEditor
+                        ariaLabel={t("fields.text")}
+                        placeholder={t("fields.text")}
+                        value={item.body}
+                        editable={false}
+                        className="mt-0 min-h-0"
+                        labels={editorLabels(t)}
+                      />
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        {objectType?.singularLabel ?? objectType?.label}
+                      </p>
+                    )}
+                  </div>
                 ) : null}
-                <span className="rounded-md border px-2 py-1 text-xs text-muted-foreground">
-                  {result.score.toFixed(2)}
-                </span>
-              </button>
+              </div>
             );
           })
         ) : (
           <RelatedContentStateMessage state={state} />
         )}
       </div>
-      {hasContinuation ? (
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="mt-3"
-          data-slot="workspace-object-related-content-more"
-          onClick={openContinuation}
-        >
-          {t("explore.findMore")}
-        </Button>
-      ) : null}
     </section>
   );
 }
@@ -2019,12 +2882,10 @@ function isDocumentWorkspaceEntity(
 }
 
 function ReferenceList({
-  count,
   emptyLabel,
   items,
   title,
 }: {
-  readonly count?: React.ReactNode;
   readonly emptyLabel: string;
   readonly items: readonly {
     id: string;
@@ -2036,48 +2897,25 @@ function ReferenceList({
 }) {
   return (
     <section className="grid gap-2">
-      <h3 className="inline-flex min-h-8 items-center gap-2 text-sm font-medium">
-        <span>{title}</span>
-        {count}
-      </h3>
+      <h3 className="text-sm font-medium">{title}</h3>
       {items.length === 0 ? (
         <p className="text-sm text-muted-foreground">{emptyLabel}</p>
       ) : (
         <div className="grid gap-1">
           {items.map((item) => (
-            <div
+            <button
               key={item.id}
-              className={cn(
-                workspaceListRowClass,
-                "group/reference-row relative min-h-10 pr-10",
-              )}
+              type="button"
+              className={cn(workspaceListRowClass, "min-h-10")}
+              onClick={item.onClick}
             >
-              <button
-                type="button"
-                data-slot="workspace-backlink-row"
-                className="grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-md text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
-                onClick={item.onClick}
-              >
-                <span className="min-w-0 truncate text-sm">{item.label}</span>
-                <span className="rounded-md border px-2 py-0.5 text-xs text-muted-foreground">
-                  {item.meta}
-                </span>
-              </button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                aria-label={item.label}
-                className="pointer-events-none absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover/reference-row:pointer-events-auto group-hover/reference-row:opacity-100 group-focus-within/reference-row:pointer-events-auto group-focus-within/reference-row:opacity-100 motion-reduce:transition-none"
-                onClick={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  item.onClick?.();
-                }}
-              >
-                <ExternalLinkIcon className="size-3.5" />
-              </Button>
-            </div>
+              <span className="min-w-0 flex-1 truncate text-left text-sm">
+                {item.label}
+              </span>
+              <span className="rounded-md border px-2 py-0.5 text-xs text-muted-foreground">
+                {item.meta}
+              </span>
+            </button>
           ))}
         </div>
       )}
@@ -2116,7 +2954,7 @@ function MentionSourceRow({
         type="button"
         data-slot="workspace-mention-disclosure"
         aria-expanded={expanded}
-        className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 pr-20 text-left"
+        className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 pr-1 text-left"
         onClick={() => setExpanded((current) => !current)}
       >
         <AppHeaderCaretDownIcon
@@ -2137,17 +2975,13 @@ function MentionSourceRow({
           {sourceTypeLabel}
         </span>
       </button>
-      <div className="pointer-events-none absolute right-1 top-1 flex h-7 w-[76px] items-center gap-0.5 rounded-md bg-background/95 opacity-0 shadow-sm transition-opacity group-hover/mention:pointer-events-auto group-hover/mention:opacity-100 group-focus-within/mention:pointer-events-auto group-focus-within/mention:opacity-100 motion-reduce:transition-none">
+      <div className="pointer-events-none absolute right-1 top-1 flex items-center gap-0.5 rounded-md bg-background/95 opacity-0 shadow-sm transition-opacity group-hover/mention:pointer-events-auto group-hover/mention:opacity-100 group-focus-within/mention:pointer-events-auto group-focus-within/mention:opacity-100 motion-reduce:transition-none">
         <Button
           type="button"
           variant="ghost"
           size="icon-sm"
           aria-label={openLabel}
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            onOpen();
-          }}
+          onClick={onOpen}
         >
           <ExternalLinkIcon className="size-3.5" />
         </Button>
@@ -2155,8 +2989,6 @@ function MentionSourceRow({
           <DropdownMenuTrigger
             type="button"
             aria-label={optionsLabel}
-            onClick={(event) => event.stopPropagation()}
-            onPointerDown={(event) => event.stopPropagation()}
             className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
           >
             <AppHeaderDotsIcon className="size-4" />
@@ -2173,11 +3005,7 @@ function MentionSourceRow({
           variant="ghost"
           size="icon-sm"
           aria-label={convertLabel}
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            onConvert();
-          }}
+          onClick={onConvert}
         >
           <LinkIcon className="size-3.5" />
         </Button>
@@ -2189,24 +3017,85 @@ function MentionSourceRow({
   );
 }
 
+function editorLabels(t: ReturnType<typeof useTranslations<"workspace">>) {
+  return {
+    bold: t("editor.bold"),
+    italic: t("editor.italic"),
+    code: t("editor.code"),
+    slashMenu: {
+      cancel: t("editor.slashMenu.cancel"),
+      createPage: t("editor.slashMenu.createPage"),
+      empty: t("editor.slashMenu.empty"),
+      text: t("editor.slashMenu.text"),
+      smallText: t("editor.slashMenu.smallText"),
+      page: t("editor.slashMenu.page"),
+      heading1: t("editor.slashMenu.heading1"),
+      heading2: t("editor.slashMenu.heading2"),
+      heading3: t("editor.slashMenu.heading3"),
+      heading4: t("editor.slashMenu.heading4"),
+      navigate: t("editor.slashMenu.navigate"),
+      bulletList: t("editor.slashMenu.bulletList"),
+      alphabeticalList: t("editor.slashMenu.alphabeticalList"),
+      orderedList: t("editor.slashMenu.orderedList"),
+      romanList: t("editor.slashMenu.romanList"),
+      taskList: t("editor.slashMenu.taskList"),
+      tableBlock: t("editor.slashMenu.tableBlock"),
+      select: t("editor.slashMenu.select"),
+      blockquote: t("editor.slashMenu.blockquote"),
+      codeBlock: t("editor.slashMenu.codeBlock"),
+      columns: t("editor.slashMenu.columns"),
+      emojiText: t("editor.slashMenu.emojiText"),
+      group: t("editor.slashMenu.group"),
+      highlight: t("editor.slashMenu.highlight"),
+      horizontalRule: t("editor.slashMenu.horizontalRule"),
+      math: t("editor.slashMenu.math"),
+      mermaid: t("editor.slashMenu.mermaid"),
+      objectEmbed: t("editor.slashMenu.objectEmbed"),
+      objectInline: t("editor.slashMenu.objectInline"),
+      title: t("editor.slashMenu.title"),
+      toggle: t("editor.slashMenu.toggle"),
+    },
+  };
+}
+
 function ReferencePanel({
   entity,
 }: {
   readonly entity: DocumentWorkspaceEntity;
 }) {
   const t = useTranslations("workspace");
-  const { createdEntities, objectTypes, selectEntity, updateWorkspaceEntity } =
-    useWorkspace();
+  const {
+    createdEntities,
+    objectTypes,
+    selectEntity,
+    structures,
+    updateWorkspaceEntity,
+  } = useWorkspace();
   const linkIndex = React.useMemo(
     () => createWorkspaceObjectLinkIndex(createdEntities),
     [createdEntities],
   );
   const backlinks = selectBacklinksForObject(linkIndex, entity.id);
+  const objectsInside = selectObjectsInside(linkIndex, entity.id).filter(
+    (reference) => reference.kind === "embed",
+  );
+  const backlinkPreviewSources = backlinks.reduce<DocumentWorkspaceEntity[]>(
+    (sources, backlink) => {
+      if (sources.some((source) => source.id === backlink.sourceId)) {
+        return sources;
+      }
+      const source = createdEntities.find(
+        (candidate) => candidate.id === backlink.sourceId,
+      );
+      if (isDocumentWorkspaceEntity(source)) sources.push(source);
+      return sources;
+    },
+    [],
+  );
   const mentionCandidates = findUnlinkedMentionCandidates(
     createdEntities,
     entity.id,
   );
-
   function convertMention(candidate: (typeof mentionCandidates)[number]) {
     const source = createdEntities.find(
       (item) => item.id === candidate.sourceId,
@@ -2224,11 +3113,8 @@ function ReferencePanel({
         data-slot="workspace-unlinked-mentions"
         aria-describedby={`${entity.id}-mentions-help`}
       >
-        <summary className="inline-flex min-h-8 cursor-pointer items-center gap-2 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
-          <span>{t("linking.unlinkedMentions")}</span>
-          <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-            {mentionCandidates.length}
-          </span>
+        <summary className="cursor-pointer text-sm font-medium">
+          {t("linking.unlinkedMentions")} {mentionCandidates.length}
         </summary>
         <p id={`${entity.id}-mentions-help`} className="sr-only">
           {t("linking.mentionsHelp")}
@@ -2268,12 +3154,17 @@ function ReferencePanel({
       </details>
     ) : null;
 
-  if (backlinks.length === 0 && mentionCandidates.length === 0) return null;
+  const hasRelationshipReadingContent =
+    backlinks.length > 0 ||
+    backlinkPreviewSources.length > 0 ||
+    mentionCandidates.length > 0 ||
+    objectsInside.length > 0;
+  if (!hasRelationshipReadingContent) return null;
 
   return (
     <section
       data-slot="workspace-object-linking"
-      className="mt-8 grid gap-4 border-t pt-6"
+      className="mt-16 grid gap-6"
       aria-labelledby={`${entity.id}-linking-heading`}
     >
       <h2 id={`${entity.id}-linking-heading`} className="sr-only">
@@ -2282,14 +3173,6 @@ function ReferencePanel({
 
       {backlinks.length > 0 ? (
         <ReferenceList
-          count={
-            <span
-              data-slot="workspace-reference-count"
-              className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
-            >
-              {t("linking.references", { count: backlinks.length })}
-            </span>
-          }
           emptyLabel={t("linking.noBacklinks")}
           items={backlinks.map((item) => ({
             id: `${item.sourceId}-${item.kind}-${item.blockId ?? "object"}`,
@@ -2303,7 +3186,92 @@ function ReferencePanel({
         />
       ) : null}
 
+      {backlinkPreviewSources.map((source) => (
+        <section
+          key={`${source.id}-readonly-backlink`}
+          data-slot="workspace-readonly-backlink-preview"
+          className="grid gap-2 border-l pl-3"
+        >
+          <h3 className="truncate text-sm font-medium">
+            {getEntityTitle(source, t("lifecycle.untitled"))}
+          </h3>
+          <BlockEditor
+            ariaLabel={t("fields.text")}
+            placeholder={t("fields.text")}
+            value={source.body}
+            editable={false}
+            className="mt-0 min-h-0"
+            labels={editorLabels(t)}
+          />
+        </section>
+      ))}
+
       {mentionsSection}
+
+      {objectsInside
+        .filter((item) => item.kind === "embed" && !item.missing)
+        .map((item) => {
+          const target = createdEntities.find(
+            (candidate) => candidate.id === item.targetId,
+          );
+          if (
+            !target ||
+            (target.kind !== "document" && target.kind !== "quote")
+          ) {
+            return null;
+          }
+          const objectType = objectTypes.find(
+            (candidate) => candidate.id === target.objectTypeId,
+          );
+          return (
+            <section
+              key={`${item.targetId}-embed`}
+              data-slot="workspace-object-transclusion"
+              className="rounded-lg border bg-muted/20 p-3"
+            >
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <h3 className="truncate text-sm font-medium">
+                  {getEntityTitle(target, t("lifecycle.untitled"))}
+                </h3>
+                {objectType ? (
+                  <span className="text-xs text-muted-foreground">
+                    {objectType.singularLabel ?? objectType.label}
+                  </span>
+                ) : null}
+              </div>
+              <BlockEditor
+                ariaLabel={t("linking.editTransclusion")}
+                placeholder={t("fields.text")}
+                value={target.body}
+                onChange={(body) => updateWorkspaceEntity(target.id, { body })}
+                className="mt-0 min-h-20"
+                labels={editorLabels(t)}
+                referenceEntities={createdEntities}
+                referenceStructures={structures}
+              />
+            </section>
+          );
+        })}
+
+      {objectsInside.length > 0 ? (
+        <ReferenceList
+          emptyLabel={t("linking.noObjectsInside")}
+          items={objectsInside.map((item) => {
+            const target = createdEntities.find(
+              (candidate) => candidate.id === item.targetId,
+            );
+            return {
+              id: `${item.targetId}-${item.kind}-${item.targetBlockId ?? "object"}`,
+              label: item.missing
+                ? t("linking.missingTarget", { id: item.targetId })
+                : getEntityTitle(target, item.targetId),
+              meta: item.kind,
+              onClick: target ? () => selectEntity(target.id) : undefined,
+            };
+          })}
+          title={t("explore.objectsInside")}
+        />
+      ) : null}
     </section>
   );
 }
@@ -2323,7 +3291,6 @@ function DocumentPage({
   const [collectionsActivationRequest, setCollectionsActivationRequest] =
     React.useState(0);
   const [customizeOpen, setCustomizeOpen] = React.useState(false);
-  const [relationshipOpen, setRelationshipOpen] = React.useState(false);
   const {
     createdEntities,
     createOrReuseWorkspaceTag,
@@ -2331,6 +3298,9 @@ function DocumentPage({
     createWorkspacePage,
     deleteWorkspaceEntity,
     duplicateWorkspaceEntity,
+    pinnedEntities,
+    replaceWorkspaceStructureSchema,
+    setFindInPageOpen,
     setFocusMode,
     setPinnedEntities,
     selectEntity,
@@ -2339,57 +3309,8 @@ function DocumentPage({
     structures,
   } = useWorkspace();
   const tags = entityTags(entity);
-  const linkableEntities = createdEntities.filter(
-    (item) => item.id !== entity.id,
-  );
-
-  function appendReference(targetId: string) {
-    const target = createdEntities.find((item) => item.id === targetId);
-    if (!target) return;
-    update({
-      body: {
-        ...entity.body,
-        doc: {
-          ...entity.body.doc,
-          content: [
-            ...entity.body.doc.content,
-            {
-              type: "paragraph",
-              attrs: { id: `${entity.id}-link-${targetId}` },
-              content: [
-                {
-                  type: "text",
-                  text: getEntityTitle(target, targetId),
-                  marks: [createObjectReferenceMark(targetId)],
-                },
-              ],
-            },
-          ],
-        },
-      },
-    });
-    setRelationshipOpen(false);
-  }
-
-  function appendEmbed(targetId: string) {
-    update({
-      body: {
-        ...entity.body,
-        doc: {
-          ...entity.body.doc,
-          content: [
-            ...entity.body.doc.content,
-            {
-              type: "paragraph",
-              attrs: { id: `${entity.id}-embed-${targetId}` },
-              content: [createObjectEmbedNode(targetId)],
-            },
-          ],
-        },
-      },
-    });
-    setRelationshipOpen(false);
-  }
+  const isCustomStructure = structure.ownership === "custom";
+  const isPinned = pinnedEntities.some((item) => item.id === entity.id);
 
   function exportMarkdown() {
     const source = `# ${entity.title}\n\n${blockEditorDocumentToMarkdown(entity.body)}`;
@@ -2438,21 +3359,29 @@ function DocumentPage({
         customize={
           <PageCustomizeControl
             entity={entity}
+            isCustomStructure={isCustomStructure}
             onAddCover={() => coverInputRef.current?.click()}
+            onIcon={(customIcon) => update({ customIcon })}
             onUpdate={update}
           />
         }
         menu={
           <DocumentMoreMenu
-            onAddRelationship={() => setRelationshipOpen(true)}
+            isPinned={isPinned}
             onChangeType={() => showMessage(t("documentMenu.changeType"))}
             onCustomize={() => setCustomizeOpen(true)}
             onDelete={() => deleteWorkspaceEntity(entity.id)}
             onDuplicate={() => duplicateWorkspaceEntity(entity.id)}
-            onEditCollections={() =>
-              setCollectionsActivationRequest((current) => current + 1)
+            onEditCollections={
+              isCustomStructure
+                ? undefined
+                : () =>
+                    setCollectionsActivationRequest((current) => current + 1)
             }
             onExport={exportMarkdown}
+            onFind={
+              isCustomStructure ? undefined : () => setFindInPageOpen(true)
+            }
             onImport={() => importInputRef.current?.click()}
             onPin={() => {
               const Icon =
@@ -2460,18 +3389,20 @@ function DocumentPage({
                 objectTypeDefinitionById.page.icon;
               setPinnedEntities((current) =>
                 current.some((item) => item.id === entity.id)
-                  ? current
+                  ? current.filter((item) => item.id !== entity.id)
                   : [
                       ...current,
                       {
                         id: entity.id,
-                        label: entity.title || t("objectTypeStudio.untitled"),
+                        label: entity.title || t("lifecycle.untitled"),
                         icon: Icon,
                         tone: structure.tone,
                       },
                     ],
               );
-              showMessage(t("documentMenu.pinned"));
+              showMessage(
+                t(isPinned ? "documentMenu.unpinned" : "documentMenu.pinned"),
+              );
             }}
             onPresent={() => setFocusMode(true)}
             onShare={() => {
@@ -2532,6 +3463,16 @@ function DocumentPage({
           className="mt-3 h-40 w-full rounded-xl object-cover"
         />
       ) : null}
+      {entity.customIcon ? (
+        <button
+          type="button"
+          aria-label={t("documentMenu.addIcon")}
+          className="mt-3 block text-5xl leading-none"
+          onClick={() => update({ customIcon: undefined })}
+        >
+          {entity.customIcon}
+        </button>
+      ) : null}
       <Dialog open={customizeOpen} onOpenChange={setCustomizeOpen}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
@@ -2552,54 +3493,27 @@ function DocumentPage({
           </Button>
         </DialogContent>
       </Dialog>
-      <Dialog open={relationshipOpen} onOpenChange={setRelationshipOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>{t("linking.addRelationship")}</DialogTitle>
-            <DialogDescription>{t("linking.mentionsHelp")}</DialogDescription>
-          </DialogHeader>
-          <div
-            className="grid max-h-72 gap-1 overflow-y-auto"
-            data-slot="workspace-link-picker"
-          >
-            {linkableEntities.slice(0, 6).map((target) => (
-              <div
-                key={target.id}
-                className="grid grid-cols-[minmax(0,1fr)_auto] rounded-lg border"
-              >
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="min-w-0 justify-start rounded-r-none"
-                  onClick={() => appendReference(target.id)}
-                >
-                  <span className="truncate">
-                    {t("linking.linkObject", {
-                      title: getEntityTitle(target, t("lifecycle.untitled")),
-                    })}
-                  </span>
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="rounded-l-none border-l"
-                  onClick={() => appendEmbed(target.id)}
-                >
-                  {t("linking.embed")}
-                </Button>
-              </div>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
       <BufferedTitle
         label={t("fields.title")}
         value={entity.title}
         onCommit={(title) => update({ title })}
       />
       <ObjectPageTags entity={entity} update={update} />
+      {structure.ownership === "custom" ? (
+        <div data-slot="workspace-add-structure-property">
+          <AddStructurePropertyControl
+            entity={entity}
+            onAddCover={() => coverInputRef.current?.click()}
+            onAddIcon={() => update({ customIcon: entity.customIcon || "📄" })}
+            onReplaceSchema={(propertyDefinitions) =>
+              replaceWorkspaceStructureSchema(structure.id, propertyDefinitions)
+            }
+            propertyDefinitions={structure.propertyDefinitions}
+            structures={structures}
+            update={update}
+          />
+        </div>
+      ) : null}
       <WorkspacePropertyGroup
         entity={entity}
         structure={structure}
@@ -2630,7 +3544,7 @@ function DocumentPage({
           }}
           referenceEntities={createdEntities}
           referenceStructures={structures}
-          className="mt-0"
+          className="mt-4 min-h-0"
           labels={{
             bold: t("editor.bold"),
             italic: t("editor.italic"),
@@ -2799,12 +3713,14 @@ function TablePage({
   const {
     deleteWorkspaceEntity,
     duplicateWorkspaceEntity,
+    pinnedEntities,
     selectEntity,
     setFocusMode,
     setPinnedEntities,
     setWorkspaceEntityPropertyValue,
     showMessage,
   } = useWorkspace();
+  const isPinned = pinnedEntities.some((item) => item.id === entity.id);
   const cells = [...entity.cells].sort(
     (left, right) => left.row - right.row || left.column - right.column,
   );
@@ -2829,6 +3745,7 @@ function TablePage({
         }
         menu={
           <DocumentMoreMenu
+            isPinned={isPinned}
             onChangeType={() => showMessage(t("documentMenu.changeType"))}
             onCustomize={() => showMessage(t("documentMenu.customizeHint"))}
             onDelete={() => deleteWorkspaceEntity(entity.id)}
@@ -2863,18 +3780,20 @@ function TablePage({
                 objectTypeDefinitionById.table.icon;
               setPinnedEntities((current) =>
                 current.some((item) => item.id === entity.id)
-                  ? current
+                  ? current.filter((item) => item.id !== entity.id)
                   : [
                       ...current,
                       {
                         id: entity.id,
-                        label: entity.title || t("objectTypeStudio.untitled"),
+                        label: entity.title || t("lifecycle.untitled"),
                         icon: Icon,
                         tone: structure.tone,
                       },
                     ],
               );
-              showMessage(t("documentMenu.pinned"));
+              showMessage(
+                t(isPinned ? "documentMenu.unpinned" : "documentMenu.pinned"),
+              );
             }}
             onPresent={() => setFocusMode(true)}
             onShare={() => {
@@ -2990,11 +3909,13 @@ function FilePage({
   const {
     deleteWorkspaceEntity,
     duplicateWorkspaceEntity,
+    pinnedEntities,
     selectEntity,
     setFocusMode,
     setPinnedEntities,
     showMessage,
   } = useWorkspace();
+  const isPinned = pinnedEntities.some((item) => item.id === entity.id);
   const [fileError, setFileError] = React.useState(false);
   const replaceInputRef = React.useRef<HTMLInputElement>(null);
   const download = React.useCallback(() => {
@@ -3012,6 +3933,7 @@ function FilePage({
         structure={structure}
         menu={
           <DocumentMoreMenu
+            isPinned={isPinned}
             onChangeType={() => showMessage(t("documentMenu.changeType"))}
             onCustomize={() => showMessage(t("documentMenu.customizeHint"))}
             onDelete={() => deleteWorkspaceEntity(entity.id)}
@@ -3027,18 +3949,20 @@ function FilePage({
                 objectTypeDefinitionById.file.icon;
               setPinnedEntities((current) =>
                 current.some((item) => item.id === entity.id)
-                  ? current
+                  ? current.filter((item) => item.id !== entity.id)
                   : [
                       ...current,
                       {
                         id: entity.id,
-                        label: entity.title || t("objectTypeStudio.untitled"),
+                        label: entity.title || t("lifecycle.untitled"),
                         icon: Icon,
                         tone: structure.tone,
                       },
                     ],
               );
-              showMessage(t("documentMenu.pinned"));
+              showMessage(
+                t(isPinned ? "documentMenu.unpinned" : "documentMenu.pinned"),
+              );
             }}
             onPresent={() => setFocusMode(true)}
             onShare={() => {
@@ -3284,10 +4208,7 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
       data-lifecycle-contract={objectLifecycleContractSlots.ObjectEditorShell}
       data-object-kind={entity.kind}
       data-object-type={entity.objectTypeId}
-      className={cn(
-        workspaceRouteClass,
-        "w-full overflow-y-auto [scrollbar-gutter:stable]",
-      )}
+      className={cn(workspaceRouteClass, "w-full overflow-y-auto")}
     >
       <div
         data-slot="workspace-object-page-column"
@@ -3295,7 +4216,7 @@ function WorkspaceObjectPageView({ entity }: WorkspaceObjectPageViewProps) {
         className={cn(
           workspaceLongformColumnClass,
           wideLayout && "lg:max-w-[72rem]",
-          "min-h-[calc(100%+3.75rem)] lg:pt-9",
+          "lg:pt-[100px]",
         )}
       >
         <WorkspaceObjectPageContent

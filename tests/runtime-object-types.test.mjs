@@ -13,6 +13,7 @@ import {
   renameStructure,
   replaceStructureSchema,
   selectCreatableStructures,
+  selectObjectTypeConversionTargets,
   validatePropertyDefinition,
   validateStructureRegistry,
   validateWorkspaceStructure,
@@ -88,6 +89,42 @@ test("canonical registries keep built-in, reserved, and preset identities separa
     RESERVED_STRUCTURES.every(
       (structure) => structure.ownership === "reserved",
     ),
+  );
+});
+
+test("object type conversion targets exclude the current and utility Structures while preserving registry order", () => {
+  const withFirstCustom = expectSuccess(
+    createCustomStructure(
+      canonicalRegistry,
+      customStructureInput({ singularName: "First", pluralName: "Firsts" }),
+      () => "custom-first",
+    ),
+  );
+  const registry = expectSuccess(
+    createCustomStructure(
+      withFirstCustom,
+      customStructureInput({ singularName: "Second", pluralName: "Seconds" }),
+      () => "custom-second",
+    ),
+  );
+
+  assert.deepEqual(
+    selectObjectTypeConversionTargets(registry, "page").map(
+      (structure) => structure.id,
+    ),
+    [
+      "task",
+      "weblink",
+      "image",
+      "pdf",
+      "audio",
+      "file",
+      "tweet",
+      "ai-chat",
+      "tag",
+      "custom-first",
+      "custom-second",
+    ],
   );
 });
 

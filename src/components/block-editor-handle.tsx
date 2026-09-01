@@ -1,15 +1,14 @@
 "use client";
 
 import { computePosition, offset, type VirtualElement } from "@floating-ui/dom";
+import { ArrowDownIcon } from "@phosphor-icons/react/dist/csr/ArrowDown";
+import { ArrowUpIcon } from "@phosphor-icons/react/dist/csr/ArrowUp";
+import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
+import { DotsSixVerticalIcon as PhosphorDotsSixVerticalIcon } from "@phosphor-icons/react/dist/csr/DotsSixVertical";
+import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
+import { TrashIcon as Trash2Icon } from "@phosphor-icons/react/dist/csr/Trash";
 import type { Editor } from "@tiptap/core";
 import DragHandle from "@tiptap/extension-drag-handle-react";
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  CopyIcon,
-  PlusIcon,
-  Trash2Icon,
-} from "lucide-react";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
@@ -38,25 +37,16 @@ const POST_DRAG_MENU_SUPPRESSION_MS = 160;
 const HANDLE_POSITION_CONFIG = {
   placement: "left-start" as const,
   strategy: "fixed" as const,
-  middleware: [offset(2)],
+  middleware: [offset(0)],
 };
 
 function DotsSixVerticalIcon(props: React.ComponentProps<"svg">) {
   return (
-    <svg
-      viewBox="0 0 16 16"
-      fill="currentColor"
-      aria-hidden="true"
+    <PhosphorDotsSixVerticalIcon
       data-slot="block-editor-six-dot-icon"
+      weight="regular"
       {...props}
-    >
-      <circle cx="5" cy="3.5" r="1.15" />
-      <circle cx="11" cy="3.5" r="1.15" />
-      <circle cx="5" cy="8" r="1.15" />
-      <circle cx="11" cy="8" r="1.15" />
-      <circle cx="5" cy="12.5" r="1.15" />
-      <circle cx="11" cy="12.5" r="1.15" />
-    </svg>
+    />
   );
 }
 

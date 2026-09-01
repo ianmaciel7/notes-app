@@ -4,9 +4,9 @@ The selected localhost object page still differs materially from the current aut
 
 ## What Changes
 
-- Align the complete Page surface from the object header through related content: type control, Collections, Customize, overflow, title, Tags, optional properties, editor body, relationship sections, related-content rows, and the editor utility trigger.
+- Align the complete object surface from the header through related content for both built-in Pages and custom-Structure instances: type control, Collections, Customize, overflow, title, Tags, optional/addable properties, editor body, relationship sections, related-content rows, and the editor utility trigger.
 - Treat every visible affordance as a state machine with measured idle, hover, focus-visible, pointer, keyboard, open, Escape/outside-close, post-click, persistence, unavailable, reduced-motion, and responsive states when supported.
-- Match the current reference menus and selectors without copying its weaker semantics: searchable type selection, inline Collections and Tags pickers, all observed Customize entries (including Alias commands), and the complete Page overflow command families.
+- Match the current reference menus and selectors without copying its weaker semantics: searchable type selection, inline Collections and Tags pickers, Structure/state-dependent Customize and overflow catalogs, and the custom-Structure Add property surface.
 - Complete reference-aligned editor behavior for per-block plus and grip controls, slash-command aliases and ordering, `@` object-reference suggestions, selection, cancellation, focus recovery, and canonical link creation.
 - Replace the local always-expanded generic relationship builder with reference-aligned derived relationship and related-content composition while preserving explicit local link/embed authoring through an appropriate transient control.
 - Register correlated evidence for the exact reference and localhost states, including viewport, semantic selection, DOM/accessibility, rectangles, computed styles, transitions, behavior, console state, redactions, and explicitly untested mutations.

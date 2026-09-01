@@ -123,6 +123,68 @@
   adjacent surfaces without overlap, and restore the recorded width within one
   rendered CSS pixel after a reversible audit drag.
 
+### Object pages and runtime properties
+
+- Object-page composition is Structure-driven. A built-in Page and an instance
+  of a custom Structure may share primitives and geometry, but their Customize,
+  overflow, property, empty-state, and relationship catalogs must be derived
+  from the owning `WorkspaceObjectState.structures` record and current entity
+  state. Never impose a Page-only command inventory on every object type.
+- The stable empty custom-object order is header controls, Title, Tags, optional
+  Structure properties, the hover/focus-revealed Add property action, and the
+  editor. Derived backlinks, Mentions, embedded objects, Objects Inside, and
+  related content mount only when their canonical selectors return content; an
+  empty page must not reserve a generic relationship builder or blank section.
+- Add property is an independent transient action for custom Structures. It
+  occupies stable layout space while remaining pointer-inert when visually
+  hidden, reveals on property-region hover or keyboard focus without shifting
+  the editor, and opens a searchable popup without changing the schema merely
+  because the surface opened. Selecting a new writable property type performs
+  one guarded schema update; selecting an existing optional/system projection
+  such as Icon, Cover image, Created at, Last updated, Description, or Aliases
+  changes presentation/property visibility without duplicating its definition.
+- The current `1282x912` custom-object reference exposes 32px rows in this
+  order: Text, Content, Label, Object selection, Checkbox, Date and time,
+  Number, Description, Cover image, Icon, Created at, Last updated, and Aliases.
+  The popup measured `290x430px` with a focused `276x32px` search row, 12px
+  radius, semantic border, and the shared three-layer shadow. Treat these as
+  timestamped evidence; the stable rule is canonical order, property-type
+  icons, bounded searchable geometry, keyboard highlighting, and non-mutating
+  Escape/outside cancellation.
+- Object selection is a two-stage commit. Hovering, focusing, or activating its
+  catalog row opens a second searchable menu of runtime Structures; opening,
+  filtering, and cancelling that menu do not alter the schema. Choosing exactly
+  one target Structure creates one entity property constrained by that stable
+  Structure id, with multiple selection enabled by default and no fixed set, as
+  documented by the official Capacities object-property contract.
+- Empty inline selectors must expose a truthful next action rather than a blank
+  dialog shell. In the measured empty custom-object state, Collections retained
+  its inline textbox and exposed only the create-collection row. Opening an
+  empty selector never creates or selects data; focus, keyboard traversal,
+  Escape/outside close, and exactly-once persistence remain explicit contracts.
+- The Collections popup projects only unselected matching collections. It hides
+  the create action while matches exist and shows `New Collection` (or the
+  query-qualified equivalent) only when no unselected result matches. Creating
+  is immediate, selects the new collection, closes the popup, and persists once;
+  selecting an existing collection keeps the input and popup open while removing
+  that selected result. The collection chip exposes its removal target only on
+  hover or keyboard focus, and removal changes membership without deleting the
+  collection itself.
+- Customize and overflow catalogs are state-dependent. The measured empty
+  custom object exposed Generate Title, Fill All Properties, and Wide Layout in
+  Customize, while its overflow omitted Find in Page and Edit Collections.
+  Built-in Page evidence exposes a broader catalog. Tests and documentation
+  must assert the applicable state-derived catalog instead of one universal
+  screenshot inventory.
+- Every property-type, object-type, menu, and disclosure icon comes from the
+  central registry or the owning shared icon helper. Icons remain aligned in a
+  dedicated leading column and preserve neighboring text geometry on hover,
+  focus, selection, and submenu open.
+- Reference generic pointer targets without roles are evidence of vendor
+  appearance, not an accessibility requirement. Local Add property and selector
+  rows keep explicit roles, names, keyboard reachability, highlighted state,
+  Escape/outside-close behavior, and focus recovery.
+
 ### Pages listing and cards
 
 - Overview/All selection, result count, filter, sort, group, layout, and rendered
@@ -156,6 +218,12 @@
   `artifacts/reference-evidence/capacities-pages-listing/2026-08-28-matched-1294x912/`.
   Its action matrix is the source for observed parity verdicts; this document
   carries the stable design rules derived from those observations.
+- Object-page behavior is additionally governed by the correlated bundles under
+  `artifacts/reference-evidence/capacities-object-page/`, including the
+  `2026-08-31-browser-comments-hover-states`,
+  `2026-08-31-editor-controls-states`, and
+  `2026-09-01-custom-object-empty-property-menu` states. A bundle for a populated
+  built-in Page does not prove an empty custom-Structure state, or vice versa.
 - Persisted images are sanitized Capacities-only crops. Localhost evidence uses
   DOM/accessibility, geometry/style, behavior, console, and focused browser-test
   artifacts; localhost screenshots are not stored.

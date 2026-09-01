@@ -36,6 +36,14 @@ The current full-surface refresh is stored under `artifacts/reference-evidence/c
 
 The August 31 follow-up audit at 1059x912 identified the remaining object-page appearance mismatch as a shell split issue rather than a row-composition issue: the fixed local contextual panel compressed the main Page card while Capacities preserved a roughly 474px main card and 277px contextual panel. The accepted local contract now uses a 35.5% contextual-panel default, 240px minimum, relative resize preservation, a textarea-backed 30/33px title field, stable scrollbar gutter, 54-70px trailing scroll range, and the reference secondary text color for metadata controls.
 
+## Object-page hover and click addendum (2026-08-31)
+
+The user-requested state sequence is registered under `artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/`. It correlates the `1282x912` Capacities and localhost Page surfaces for header idle/hover, Customize open, type selector colors, Collections idle/hover/open, Related Content idle/hover, every safely available related-row disclosure, and Show More side-panel activation. Its `interaction-styles.json` records the measured opacity, pointer-event, geometry, transition, SVG-path, and color-palette values; `action-matrix.md` distinguishes shared behavior from canonical data differences. The viewport photographs were explicitly requested for this capture, and the manifest records their scope and limitations.
+
+## Object-page editor control addendum (2026-08-31)
+
+The follow-up editor-state bundle is stored under `artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/`. It records full-viewport photographs plus DOM, geometry, computed-style, focus, and behavior observations for block-handle idle/hover, grip click/Escape, the corrected flush handle edge, and strict header-only Customize hover. The matched local browser suite now passes the five formerly blocked plus/grip/slash rows. The action matrix keeps the authenticated `@` title/alias surface explicitly `not tested`, because opening it requires editing remote content; executable local tests cover normalized title/alias lookup, identity deduplication, Structure eligibility, exact replacement, rename-safe backlinks, and atomic rejection without treating that as live-reference proof.
+
 ## Matched-state geometry matrix
 
 The current Pages comparison is valid only for the recorded August 28 matched state: viewport `1294x912`, expanded 288px navigation in both environments, Pages / Tudo / Gallery-grid selection, and an expanded Graph panel. A sidebar or panel width is not a universal desktop constant.

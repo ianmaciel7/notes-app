@@ -94,6 +94,59 @@ test("object links, block references, and embeds derive backlinks and contextual
   assert.equal(selectContextualGraphEdges(index, "target").length, 3);
 });
 
+test("forward content references preserve embeds and inline object links", () => {
+  const source = documentEntity("source", "Source", {
+    schemaVersion: 2,
+    doc: {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          attrs: { id: "inline-link-block" },
+          content: [
+            {
+              type: "text",
+              text: "Inline target",
+              marks: [createObjectReferenceMark("inline-target")],
+            },
+          ],
+        },
+        {
+          type: "paragraph",
+          attrs: { id: "embed-block" },
+          content: [createObjectEmbedNode("embed-target")],
+        },
+      ],
+    },
+  });
+  const inlineTarget = documentEntity(
+    "inline-target",
+    "Inline target",
+    blockEditorDocumentFromPlainText("Inline target body"),
+  );
+  const embedTarget = documentEntity(
+    "embed-target",
+    "Embed target",
+    blockEditorDocumentFromPlainText("Embed target body"),
+  );
+  const index = createWorkspaceObjectLinkIndex([
+    source,
+    inlineTarget,
+    embedTarget,
+  ]);
+
+  assert.deepEqual(
+    selectObjectsInside(index, "source").map((reference) => ({
+      kind: reference.kind,
+      targetId: reference.targetId,
+    })),
+    [
+      { kind: "object", targetId: "inline-target" },
+      { kind: "embed", targetId: "embed-target" },
+    ],
+  );
+});
+
 test("missing targets are explicit repairable states", () => {
   const body = {
     schemaVersion: 2,

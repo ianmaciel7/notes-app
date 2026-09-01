@@ -469,7 +469,7 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
 }, testInfo) => {
   testInfo.snapshotSuffix = "";
   await page.setViewportSize({ width: 1280, height: 800 });
-  const { editor, errors } = await openPageEditor(
+  const { editor, errors, workspace } = await openPageEditor(
     page,
     ["Alpha", "Beta", "Gamma"].join("\n"),
   );
@@ -545,6 +545,41 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
     caret: "hide",
     maxDiffPixelRatio: 0.02,
   });
+
+  const initialOrder = await editor.locator("p").allTextContents();
+  await page.mouse.move(
+    (dragBox?.x ?? 0) + (dragBox?.width ?? 0) / 2,
+    (dragBox?.y ?? 0) + (dragBox?.height ?? 0) / 2,
+  );
+  await page.mouse.down();
+  await page.mouse.move(
+    (dragBox?.x ?? 0) + (dragBox?.width ?? 0) / 2 + 2,
+    (dragBox?.y ?? 0) + (dragBox?.height ?? 0) / 2 + 2,
+  );
+  await page.mouse.up();
+  expect(await editor.locator("p").allTextContents()).toEqual(initialOrder);
+  await expect(
+    page.locator('[data-slot="block-editor-block-menu"]'),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+
+  await insertControl.dispatchEvent("pointerdown", {
+    bubbles: true,
+    cancelable: true,
+    pointerId: 17,
+    pointerType: "mouse",
+  });
+  expect(
+    await dragRoot.evaluate((node) => (node as HTMLElement).draggable),
+  ).toBe(false);
+  await page.locator("body").dispatchEvent("pointercancel", {
+    bubbles: true,
+    pointerId: 17,
+    pointerType: "mouse",
+  });
+  expect(
+    await dragRoot.evaluate((node) => (node as HTMLElement).draggable),
+  ).toBe(true);
 
   const beta = editor.locator("p").filter({ hasText: "Beta" }).first();
   await beta.hover();
@@ -647,8 +682,32 @@ test("plus and six-dot grip keep their independent Capacities behaviors", async 
   await expect(dropCursor).toHaveCount(0);
   expect(errors).toEqual([]);
 
+  await page.mouse.move(1270, 10);
+  await expect(handle).toBeHidden();
+  const title = workspace.getByRole("textbox", { name: "Título" });
+  await title.focus();
+  await expect(title).toBeFocused();
+  await expect(handle).toBeHidden();
+
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(handle).toBeHidden();
+});
+
+test("block handles stay excluded for coarse touch pointers", async ({ browser }) => {
+  const context = await browser.newContext({
+    hasTouch: true,
+    viewport: { width: 1024, height: 768 },
+  });
+  const page = await context.newPage();
+  try {
+    const { editor } = await openPageEditor(page, "Touch target");
+    await editor.locator("p").first().tap();
+    await expect(
+      page.locator('[data-slot="block-editor-block-handle"]'),
+    ).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
 });
 
 test("table block cells support keyboard selection, controls, persistence, and mobile containment", async ({
