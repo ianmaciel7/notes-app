@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "id": "capacities",
+    "url": "https://app.capacities.io/[space]/[object]",
+    "productSurface": "empty custom-Structure object page"
+  },
+  "capturedAt": "2026-09-01T07:00:00-03:00",
+  "viewport": {
+    "width": 1282,
+    "height": 912,
+    "deviceScaleFactor": 1
+  },
+  "surface": {
+    "component": "custom object header, empty metadata, Add property, editor placeholder, Customize, and overflow",
+    "semanticSelection": "untitled object owned by a custom Structure with no selected collection, tags, or populated optional properties"
+  },
+  "semanticState": "authenticated custom object in an empty property state",
+  "persistedState": "one user-authorized collection was created to verify direct creation and reload persistence; its object membership was restored to empty, while final collection deletion remained pending because destructive confirmation was not accepted",
+  "interactions": [
+    "baseline DOM and geometry",
+    "header hover",
+    "Customize open and Escape close",
+    "overflow open",
+    "Collections empty open",
+    "Collections ArrowUp and ArrowDown with input focus retained",
+    "Collections query filtering and Escape cancellation",
+    "Collections direct create, membership remove and reselect, and reload persistence",
+    "Add property open",
+    "Add property ArrowDown",
+    "Add property Escape close"
+  ],
+  "artifacts": [
+    {
+      "stateId": "custom-object-empty-action-matrix",
+      "kind": "dom-style-behavior",
+      "path": "action-matrix.md"
+    }
+  ],
+  "provenance": "current authenticated in-app browser DOM, computed-style, geometry, focus, and reversible interaction probes",
+  "confidence": "confirmed for recorded rows",
+  "redactions": [
+    "workspace and object identifiers",
+    "account identity",
+    "cookies, storage, authentication material, and network payloads",
+    "unrelated private object content"
+  ],
+  "freshness": "live authenticated refresh on 2026-09-01",
+  "limitations": [
+    "one exact collection artifact remains pending deletion because the browser required a fresh destructive confirmation; its identifier is intentionally excluded from this sanitized bundle",
+    "no property, tag, type, title, or content mutation was committed",
+    "Tags and type-selector open states were not exercised in this refresh",
+    "reduced motion, responsive checkpoints, and console state were not tested",
+    "no screenshot was persisted; evidence is limited to structured DOM, style, geometry, focus, and behavior observations"
+  ],
+  "refreshReason": "Existing object-page bundles covered a populated Page but not the supplied empty custom-Structure state or its Add property selector."
+}

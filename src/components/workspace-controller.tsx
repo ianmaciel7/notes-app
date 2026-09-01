@@ -1053,6 +1053,10 @@ type WorkspaceContextValue = {
     propertyId: string,
     presentation: NumberPresentation,
   ) => void;
+  replaceWorkspaceStructureSchema: (
+    structureId: string,
+    propertyDefinitions: readonly PropertyDefinition[],
+  ) => void;
   updateWorkspaceStructurePresentation: (
     id: string,
     presentation: StructurePresentation,
@@ -2829,6 +2833,20 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [workspaceObjects.structures],
   );
 
+  const replaceWorkspaceStructureSchema = React.useCallback(
+    (
+      structureId: string,
+      propertyDefinitions: readonly PropertyDefinition[],
+    ) => {
+      dispatchWorkspaceObjects({
+        type: "replaceStructureSchema",
+        id: structureId,
+        propertyDefinitions,
+      });
+    },
+    [],
+  );
+
   const deleteWorkspaceStructure = React.useCallback((id: string) => {
     dispatchWorkspaceObjects({ type: "deleteStructure", id });
   }, []);
@@ -2889,6 +2907,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       createWorkspaceStructureFromPreset,
       updateWorkspaceStructure,
       updateWorkspacePropertyNumberPresentation,
+      replaceWorkspaceStructureSchema,
       updateWorkspaceStructurePresentation,
       deleteWorkspaceStructure,
       createWorkspaceEntity,
@@ -2954,6 +2973,7 @@ function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       createWorkspaceStructureFromPreset,
       updateWorkspaceStructure,
       updateWorkspacePropertyNumberPresentation,
+      replaceWorkspaceStructureSchema,
       updateWorkspaceStructurePresentation,
       deleteWorkspaceStructure,
       createWorkspaceEntity,

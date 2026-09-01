@@ -247,10 +247,14 @@ function isCanonicalizableLink(value: Record<string, unknown>) {
   return hasCanonicalizableLinkAttrs(value.attrs);
 }
 
-function shouldDropParagraphSizeDefault(value: Record<string, unknown>) {
+function hasCanonicalizableParagraphDefaults(value: Record<string, unknown>) {
   if (value.type !== "paragraph") return false;
   if (!isRecord(value.attrs)) return false;
-  return value.attrs.size === null || value.attrs.size === undefined;
+  return [
+    value.attrs.size,
+    value.attrs.emoji,
+    value.attrs.toggleCollapsed,
+  ].some((attribute) => attribute === null || attribute === undefined);
 }
 
 function shouldDropOrderedListDefaults(value: Record<string, unknown>) {
@@ -259,6 +263,18 @@ function shouldDropOrderedListDefaults(value: Record<string, unknown>) {
   if (value.attrs.id !== undefined) return false;
   if (value.attrs.start !== 1) return false;
   return value.attrs.type === null || value.attrs.type === undefined;
+}
+
+function withoutNullishParagraphDefaults(
+  attrs: Record<string, unknown>,
+): Record<string, unknown> | undefined {
+  const normalized = { ...attrs };
+  for (const key of ["size", "emoji", "toggleCollapsed"] as const) {
+    if (normalized[key] === null || normalized[key] === undefined) {
+      delete normalized[key];
+    }
+  }
+  return Object.keys(normalized).length > 0 ? normalized : undefined;
 }
 
 function canonicalizeKnownEditorDefaults(value: unknown): unknown {
@@ -274,9 +290,10 @@ function canonicalizeKnownEditorDefaults(value: unknown): unknown {
     canonical.attrs = { href: value.attrs.href };
   }
 
-  if (shouldDropParagraphSizeDefault(value) && isRecord(canonical.attrs)) {
-    delete canonical.attrs.size;
-    if (Object.keys(canonical.attrs).length === 0) delete canonical.attrs;
+  if (hasCanonicalizableParagraphDefaults(value) && isRecord(canonical.attrs)) {
+    const attrs = withoutNullishParagraphDefaults(canonical.attrs);
+    if (attrs) canonical.attrs = attrs;
+    else delete canonical.attrs;
   }
   if (shouldDropOrderedListDefaults(value)) delete canonical.attrs;
   return canonical;
@@ -631,7 +648,9 @@ function isColumnNode(value: Record<string, unknown>) {
 function isColumnCount(value: unknown) {
   return (
     value === undefined ||
-    (Number.isInteger(value) && (value as number) >= 2 && (value as number) <= 4)
+    (Number.isInteger(value) &&
+      (value as number) >= 2 &&
+      (value as number) <= 4)
   );
 }
 

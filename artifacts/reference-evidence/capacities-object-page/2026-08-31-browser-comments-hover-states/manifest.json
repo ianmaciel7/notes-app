@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-31T19:30:00-03:00",
+  "surface": "object-page browser comments 1-6",
+  "viewport": { "width": 1282, "height": 912 },
+  "sources": [
+    {
+      "name": "Capacities",
+      "route": "authenticated object page (workspace and object identifiers redacted)"
+    },
+    {
+      "name": "localhost",
+      "route": "/pt-BR/:spaceId/:objectId (identifiers redacted)"
+    }
+  ],
+  "refreshReason": "The user reported that hover-only controls were always visible and requested photographs of every safe state, including click outcomes.",
+  "interactions": [
+    "idle",
+    "hover",
+    "pointer exit",
+    "click",
+    "expanded",
+    "popover open",
+    "side panel open"
+  ],
+  "artifacts": {
+    "reference": [
+      "reference-header-idle.png",
+      "reference-header-hover.png",
+      "reference-header-hover-exit.png",
+      "reference-personalize-open-full.png",
+      "reference-type-picker-open.png",
+      "reference-collections-idle.png",
+      "reference-collections-hover.png",
+      "reference-collections-hover-exit.png",
+      "reference-collections-clicked.png",
+      "reference-related-header-idle.png",
+      "reference-related-header-hover.png",
+      "reference-related-header-hover-exit.png",
+      "reference-related-item-1-hover.png",
+      "reference-related-item-1-clicked.png",
+      "reference-related-item-2-hover.png",
+      "reference-related-item-2-clicked.png",
+      "reference-related-item-3-hover.png",
+      "reference-related-item-3-clicked.png",
+      "reference-related-show-more-clicked.png"
+    ],
+    "localhost": [
+      "localhost-header-idle.png",
+      "localhost-header-hover.png",
+      "localhost-header-hover-exit.png",
+      "localhost-personalize-open.png",
+      "localhost-type-picker-open.png",
+      "localhost-collections-idle.png",
+      "localhost-collections-hover.png",
+      "localhost-collections-hover-exit.png",
+      "localhost-collections-clicked.png",
+      "localhost-related-idle.png",
+      "localhost-related-hover.png",
+      "localhost-related-hover-exit.png",
+      "localhost-related-item-hover.png",
+      "localhost-related-item-clicked.png",
+      "localhost-related-show-more-clicked.png"
+    ],
+    "structured": ["interaction-styles.json", "action-matrix.md"]
+  },
+  "refreshes": [
+    {
+      "capturedAt": "2026-08-31T20:36:00-03:00",
+      "viewport": { "width": 1280, "height": 720, "devicePixelRatio": 1 },
+      "mode": "read-only authenticated audit",
+      "refreshReason": "Fill missing tag-chip, inline-title focus, exact row-action, object-container, and side-panel geometry evidence without changing page data.",
+      "artifacts": [
+        "reference-readonly-audit.json",
+        "reference-current-idle-full.png",
+        "reference-tag-hover-current-full.png",
+        "reference-collection-hover-current-full.png",
+        "reference-related-header-hover-current-full.png",
+        "reference-related-row-hover-current-full.png",
+        "reference-related-row-expanded-current-full.png",
+        "reference-inline-title-focus-current-full.png",
+        "reference-related-side-panel-current-full.png"
+      ]
+    }
+  ],
+  "redactions": [
+    "Authenticated workspace and object identifiers are omitted from structured artifacts.",
+    "No cookies, storage, network payloads, credentials, or copied vendor source are stored."
+  ],
+  "limitations": [
+    "Reference click checks were limited to non-mutating disclosure, selector, menu, and side-panel transitions.",
+    "Screenshot clip coordinates were unreliable in the browser runtime, so the user-authorized state photographs retain the visible viewport.",
+    "Reference and localhost contain different canonical objects; content names and counts are not parity assertions."
+    ,"The read-only 1280x720 refresh used full-viewport screenshots because screenshot clip coordinates were unreliable."
+  ]
+}

@@ -2,7 +2,7 @@
 title: Current Capacities workspace parity contract
 reference_type: authenticated-product
 source_type: live-browser-measurement
-updated: 2026-08-28
+updated: 2026-08-31
 confidence: confirmed
 ---
 
@@ -29,6 +29,14 @@ The same pass now records the complete safe sidebar utility and card pre-commit 
 ## Reusable object-page bundle (2026-08-28)
 
 The focused object-page evidence is stored under `artifacts/reference-evidence/capacities-object-page/2026-08-28-mentions-utilities/`. It records the object header, an expanded one-item Mentions section, source-row anatomy, and the separately exercised edge-triggered Structure/Statistics utility. The persisted image is a sanitized Capacities-only crop; localhost evidence is structural and behavioral only, never an image. The manifest redacts authenticated route identifiers and records the route fingerprint, interaction matrix, limitations, and reversible text-entry check.
+
+## Object-page hover and click addendum (2026-08-31)
+
+The user-requested state sequence is registered under `artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/`. It correlates the `1282x912` Capacities and localhost Page surfaces for header idle/hover, Customize open, type selector colors, Collections idle/hover/open, Related Content idle/hover, every safely available related-row disclosure, and Show More side-panel activation. Its `interaction-styles.json` records the measured opacity, pointer-event, geometry, transition, SVG-path, and color-palette values; `action-matrix.md` distinguishes shared behavior from canonical data differences. The viewport photographs were explicitly requested for this capture, and the manifest records their scope and limitations.
+
+## Object-page editor control addendum (2026-08-31)
+
+The follow-up editor-state bundle is stored under `artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/`. It records full-viewport photographs plus DOM, geometry, computed-style, focus, and behavior observations for block-handle idle/hover, grip click/Escape, the corrected flush handle edge, and strict header-only Customize hover. The matched local browser suite now passes the five formerly blocked plus/grip/slash rows. The action matrix keeps the authenticated `@` title/alias surface explicitly `not tested`, because opening it requires editing remote content; executable local tests cover normalized title/alias lookup, identity deduplication, Structure eligibility, exact replacement, rename-safe backlinks, and atomic rejection without treating that as live-reference proof.
 
 ## Matched-state geometry matrix
 

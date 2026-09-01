@@ -43,19 +43,15 @@ async function openWorkspace(page: Page) {
 }
 
 function objectTypeWorkspace(page: Page) {
-  return page
-    .locator('[data-slot="workspace-object-type-view"]')
-    .filter({
-      visible: true,
-    });
+  return page.locator('[data-slot="workspace-object-type-view"]').filter({
+    visible: true,
+  });
 }
 
 function createdObjectWorkspace(page: Page) {
-  return page
-    .locator('[data-slot="workspace-object-page-view"]')
-    .filter({
-      visible: true,
-    });
+  return page.locator('[data-slot="workspace-object-page-view"]').filter({
+    visible: true,
+  });
 }
 
 async function createPageObject(page: Page) {
@@ -94,6 +90,13 @@ async function persistedSnapshot(page: Page) {
   });
 }
 
+async function persistedSidebarSnapshot(page: Page) {
+  return page.evaluate(() => {
+    const value = window.localStorage.getItem("notes-app:workspace-sidebar:v1");
+    return value ? JSON.parse(value) : null;
+  });
+}
+
 async function persistedMediaBlobKeys(page: Page) {
   return page.evaluate(async () => {
     const request = window.indexedDB.open("notes-app-media-assets", 1);
@@ -106,7 +109,9 @@ async function persistedMediaBlobKeys(page: Page) {
     });
     try {
       if (!database.objectStoreNames.contains("blobs")) return [];
-      const store = database.transaction("blobs", "readonly").objectStore("blobs");
+      const store = database
+        .transaction("blobs", "readonly")
+        .objectStore("blobs");
       const keys = await new Promise<IDBValidKey[]>((resolve, reject) => {
         const keysRequest = store.getAllKeys();
         keysRequest.onerror = () => reject(keysRequest.error);
@@ -745,12 +750,13 @@ test("contextual panel entries and Explore actions dispatch route-specific bodie
   await writeCreatedObjectTitle(page, "Context target");
   await createPageObject(page);
   await writeCreatedObjectTitle(page, "Context source");
-  await expect
-    .poll(async () => (await persistedEntities(page)).length)
-    .toBe(2);
+  await expect.poll(async () => (await persistedEntities(page)).length).toBe(2);
 
   const linkPicker = await openLinkPicker(page);
-  await linkPicker.getByRole("button", { name: /^Vincular / }).first().click();
+  await linkPicker
+    .getByRole("button", { name: /^Vincular / })
+    .first()
+    .click();
   await linkPicker
     .getByRole("button", { name: "Incorporar", exact: true })
     .click();
@@ -902,7 +908,7 @@ test("Page Customize exposes every reference action and persists property outcom
   const header = main.locator('[data-slot="workspace-object-page-header"]');
   const customize = main.getByRole("button", { name: "Personalizar" });
   const actionNames = [
-    "Gerar Título",
+    "Adicionar Ícone",
     "Adicionar Descrição",
     "Preencher Descrição",
     "Adicionar Aliases",
@@ -931,7 +937,7 @@ test("Page Customize exposes every reference action and persists property outcom
   await page.keyboard.press("Escape");
 
   for (const name of actionNames.filter(
-    (name) => name !== "Adicionar Imagem de Capa",
+    (name) => name !== "Adicionar Ícone" && name !== "Adicionar Imagem de Capa",
   )) {
     menu = await openCustomize();
     await menu.getByRole("menuitem", { name }).click();
@@ -968,6 +974,494 @@ test("Page Customize exposes every reference action and persists property outcom
     aliases: ["Customizable page"],
     description: "Customizable page",
   });
+  expect(errors).toEqual([]);
+});
+
+test("custom object collection creator matches the measured Capacities interaction", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1282, height: 912 });
+  const errors = await openWorkspace(page);
+  await createCustomStructure(page, "Objeto coleção", "Objetos coleção");
+  await selectNewObject(page, "Objeto coleção");
+
+  const workspace = createdObjectWorkspace(page);
+  const collections = workspace.getByRole("textbox", {
+    name: "Coleções",
+    exact: true,
+  });
+  const before = await persistedSidebarSnapshot(page);
+  await collections.click();
+  const popup = page.locator('[data-slot="popover-content"][data-open]');
+  const create = popup.getByRole("button", {
+    name: "Novo Coleção",
+    exact: true,
+  });
+  await expect(collections).toBeFocused();
+  await expect(create).toHaveAttribute("data-active", "true");
+  expect((await popup.boundingBox())?.width).toBeCloseTo(257.6, 0);
+  expect((await popup.boundingBox())?.height).toBeCloseTo(45.6, 0);
+  expect((await create.boundingBox())?.width).toBeCloseTo(244, 0);
+  expect((await create.boundingBox())?.height).toBeCloseTo(32, 0);
+  expect((await create.locator("svg").boundingBox())?.width).toBe(14);
+  await collections.press("ArrowDown");
+  await collections.press("ArrowUp");
+  await expect(collections).toBeFocused();
+  await collections.press("Escape");
+  await expect(popup).toBeHidden();
+  await expect(collections).not.toBeFocused();
+  expect(await persistedSidebarSnapshot(page)).toEqual(before);
+
+  await collections.click();
+  await create.click();
+  const defaultChip = workspace.locator(
+    '[data-slot="workspace-object-page-collection-chip"]',
+  );
+  const defaultRemove = defaultChip.getByRole("button", {
+    name: "Remover Sem título",
+  });
+  await expect(defaultChip).toContainText("Sem título");
+  await expect(defaultRemove).toHaveCSS("opacity", "0");
+  await defaultChip.hover();
+  await expect(defaultRemove).toHaveCSS("opacity", "1");
+  await defaultRemove.click();
+
+  await collections.click();
+  await expect(
+    popup.getByRole("button", { name: "Sem título", exact: true }),
+  ).toBeVisible();
+  await expect(create).toHaveCount(0);
+  await collections.press("Enter");
+  await expect(popup).toBeVisible();
+  await expect(collections).toBeFocused();
+  await expect(
+    popup.getByRole("button", { name: "Sem título", exact: true }),
+  ).toHaveCount(0);
+  await expect(create).toBeVisible();
+
+  await collections.fill("Coleção teclado");
+  await collections.press("Enter");
+  await expect(popup).toBeHidden();
+  await expect(
+    workspace.getByRole("button", { name: "Remover Coleção teclado" }),
+  ).toBeVisible();
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect(
+    createdObjectWorkspace(page).getByRole("button", {
+      name: "Remover Coleção teclado",
+    }),
+  ).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("empty custom object matches the measured collections, customize, overflow, and property menus", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.setViewportSize({ width: 1282, height: 912 });
+  const errors = await openWorkspace(page);
+  await createCustomStructure(page, "Objeto parity", "Objetos parity");
+  await selectNewObject(page, "Objeto parity");
+
+  const workspace = createdObjectWorkspace(page);
+  const header = workspace.locator(
+    '[data-slot="workspace-object-page-header"]',
+  );
+  const collections = header.getByRole("textbox", {
+    name: "Coleções",
+    exact: true,
+  });
+  const beforeCollectionSnapshot = await persistedSnapshot(page);
+  const customStructure = beforeCollectionSnapshot.structures.find(
+    (candidate: { ownership: string; singularName: string }) =>
+      candidate.ownership === "custom" &&
+      candidate.singularName === "Objeto parity",
+  );
+  expect(customStructure?.id).toBeTruthy();
+  await collections.click();
+  const collectionsPopover = page.locator(
+    '[data-slot="popover-content"][data-open]',
+  );
+  const createCollection = collectionsPopover.getByRole("button", {
+    name: "Novo Coleção",
+    exact: true,
+  });
+  await expect(createCollection).toBeVisible();
+  await expect(collections).toBeFocused();
+  await expect(collections).toHaveAttribute(
+    "aria-activedescendant",
+    "object-page-collection-create",
+  );
+  await expect(createCollection).toHaveAttribute("data-active", "true");
+  expect((await collectionsPopover.boundingBox())?.width).toBeCloseTo(257.6, 0);
+  expect((await collectionsPopover.boundingBox())?.height).toBeCloseTo(45.6, 0);
+  expect((await createCollection.boundingBox())?.width).toBeCloseTo(244, 0);
+  expect((await createCollection.boundingBox())?.height).toBeCloseTo(32, 0);
+  expect((await createCollection.locator("svg").boundingBox())?.width).toBe(14);
+  await page.keyboard.press("Escape");
+  await expect(collectionsPopover).toBeHidden();
+  await expect(collections).not.toBeFocused();
+  expect(await persistedSnapshot(page)).toEqual(beforeCollectionSnapshot);
+
+  await collections.click();
+  await collectionsPopover
+    .getByRole("button", { name: "Novo Coleção", exact: true })
+    .click();
+  await expect(collectionsPopover).toBeHidden();
+  await expect(
+    workspace.getByRole("button", { name: "Remover Sem título" }),
+  ).toBeVisible();
+
+  await collections.fill("Coleção teclado");
+  await expect(collectionsPopover).toBeVisible();
+  await expect(collections).toHaveAttribute(
+    "aria-activedescendant",
+    "object-page-collection-create",
+  );
+  await collections.press("ArrowDown");
+  await collections.press("ArrowUp");
+  await expect(collections).toBeFocused();
+  await collections.press("Enter");
+  await expect(collectionsPopover).toBeHidden();
+  await expect(
+    workspace.getByRole("button", { name: "Remover Coleção teclado" }),
+  ).toBeVisible();
+  await expect
+    .poll(async () => {
+      const snapshot = await persistedSnapshot(page);
+      return snapshot.entities.find(
+        (candidate: { objectTypeId: string }) =>
+          candidate.objectTypeId === customStructure?.id,
+      )?.collections;
+    })
+    .toHaveLength(2);
+  await expect(
+    page
+      .locator('[data-slot="app-sidebar-collection-row"]')
+      .filter({ hasText: "Coleção teclado" }),
+  ).toBeVisible();
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect(
+    createdObjectWorkspace(page).getByRole("button", {
+      name: "Remover Coleção teclado",
+    }),
+  ).toBeVisible();
+  const reloadedWorkspace = createdObjectWorkspace(page);
+  await reloadedWorkspace
+    .getByRole("button", { name: "Remover Coleção teclado" })
+    .click();
+  const reloadedCollections = reloadedWorkspace.getByRole("textbox", {
+    name: "Coleções",
+    exact: true,
+  });
+  await reloadedCollections.click();
+  await expect(
+    collectionsPopover.getByRole("button", {
+      name: "Coleção teclado",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    collectionsPopover.getByRole("button", {
+      name: "Novo Coleção",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  await reloadedCollections.press("Enter");
+  await expect(collectionsPopover).toBeVisible();
+  await expect(reloadedCollections).toBeFocused();
+  await expect(
+    collectionsPopover.getByRole("button", {
+      name: "Coleção teclado",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  await expect(
+    collectionsPopover.getByRole("button", {
+      name: "Novo Coleção",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await reloadedCollections.press("Escape");
+
+  await header.hover();
+  const customize = header.getByRole("button", { name: "Personalizar" });
+  await expect
+    .poll(() =>
+      customize.evaluate((element) => {
+        const style = getComputedStyle(element);
+        return {
+          duration: style.transitionDuration,
+          opacity: style.opacity,
+          timing: style.transitionTimingFunction,
+        };
+      }),
+    )
+    .toEqual({ duration: "0.3s", opacity: "0.5", timing: "linear" });
+  await customize.click();
+  let menu = page.getByRole("menu", { name: "Personalizar" });
+  await expect(menu.getByRole("menuitem")).toHaveCount(3);
+  for (const label of [
+    "Gerar Título",
+    "Preencher Todas as Propriedades",
+    "Layout Amplo",
+  ]) {
+    await expect(menu.getByRole("menuitem", { name: label })).toBeVisible();
+  }
+  await page.keyboard.press("Escape");
+
+  await header.getByRole("button", { name: "Mais opções" }).click();
+  menu = page.getByRole("menu").filter({ visible: true });
+  await expect(menu.getByRole("menuitem")).toHaveCount(13);
+  await expect(
+    menu.getByText("Localizar na página", { exact: true }),
+  ).toHaveCount(0);
+  await expect(menu.getByText("Editar Coleções", { exact: true })).toHaveCount(
+    0,
+  );
+  await expect(menu.getByText("Ctrl⇧*", { exact: true })).toBeVisible();
+  const overflowBox = await menu.boundingBox();
+  expect(overflowBox?.width).toBeGreaterThanOrEqual(268);
+  expect(overflowBox?.width).toBeLessThanOrEqual(271);
+  await page.keyboard.press("Escape");
+
+  const propertyRegion = workspace.locator(
+    '[data-slot="workspace-add-structure-property"]',
+  );
+  const beforePropertySnapshot = await persistedSnapshot(page);
+  const persistedCustomStructure = beforePropertySnapshot.structures.find(
+    (candidate: { id: string }) => candidate.id === customStructure.id,
+  );
+  const initialPropertyCount =
+    persistedCustomStructure.propertyDefinitions.length;
+  await propertyRegion.hover();
+  await propertyRegion
+    .getByRole("button", { name: "Adicionar propriedade" })
+    .click();
+  menu = page.getByRole("menu").filter({ visible: true });
+  const propertySearch = menu.getByRole("textbox", {
+    name: "Buscar propriedades",
+  });
+  await expect(propertySearch).toBeFocused();
+  await expect(menu.getByRole("menuitem")).toHaveCount(13);
+  const propertyBox = await menu.boundingBox();
+  expect(propertyBox?.width).toBeGreaterThanOrEqual(289);
+  expect(propertyBox?.width).toBeLessThanOrEqual(291);
+  expect(propertyBox?.height).toBeGreaterThanOrEqual(429);
+  expect(propertyBox?.height).toBeLessThanOrEqual(431);
+  await expect(propertySearch).toHaveAttribute(
+    "aria-activedescendant",
+    "structure-property-propertyText",
+  );
+  await propertySearch.press("ArrowDown");
+  await expect(propertySearch).toBeFocused();
+  await expect(propertySearch).toHaveAttribute(
+    "aria-activedescendant",
+    "structure-property-propertyContent",
+  );
+  await propertySearch.press("Escape");
+  await expect(menu).toBeHidden();
+  expect(
+    (await persistedSnapshot(page)).structures.find(
+      (candidate: { id: string }) => candidate.id === customStructure.id,
+    ).propertyDefinitions,
+  ).toHaveLength(initialPropertyCount);
+
+  await propertyRegion.hover();
+  await propertyRegion
+    .getByRole("button", { name: "Adicionar propriedade" })
+    .click();
+  menu = page.getByRole("menu").filter({ visible: true });
+  await menu
+    .getByRole("menuitem", { name: "Seleção de objeto", exact: true })
+    .hover();
+  const objectTypeSearch = page.getByRole("textbox", {
+    name: "Buscar tipos de objeto",
+  });
+  await expect(objectTypeSearch).toBeFocused();
+  const objectTypeMenu = page
+    .getByRole("menu")
+    .filter({ has: objectTypeSearch, visible: true });
+  await page.waitForTimeout(300);
+  const objectTypeBox = await objectTypeMenu.boundingBox();
+  expect(objectTypeBox?.width).toBeGreaterThanOrEqual(221);
+  expect(objectTypeBox?.width).toBeLessThanOrEqual(223);
+  expect(objectTypeBox?.height).toBeGreaterThanOrEqual(345);
+  expect(objectTypeBox?.height).toBeLessThanOrEqual(347);
+  await expect(
+    objectTypeMenu.getByRole("menuitem", {
+      name: "Objeto parity",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await objectTypeSearch.press("Escape");
+  await expect(objectTypeMenu).toBeHidden();
+  await page.keyboard.press("Escape");
+  expect(
+    (await persistedSnapshot(page)).structures.find(
+      (candidate: { id: string }) => candidate.id === customStructure.id,
+    ).propertyDefinitions,
+  ).toHaveLength(initialPropertyCount);
+
+  await propertyRegion.hover();
+  await propertyRegion
+    .getByRole("button", { name: "Adicionar propriedade" })
+    .click();
+  menu = page.getByRole("menu").filter({ visible: true });
+  await menu.getByRole("menuitem", { name: "Texto", exact: true }).click();
+  await expect(workspace.getByLabel("Texto", { exact: true })).toBeVisible();
+  await expect
+    .poll(async () => {
+      const snapshot = await persistedSnapshot(page);
+      return snapshot.structures.find(
+        (candidate: { id: string }) => candidate.id === customStructure.id,
+      ).propertyDefinitions.length;
+    })
+    .toBe(initialPropertyCount + 1);
+
+  await propertyRegion.hover();
+  await propertyRegion
+    .getByRole("button", { name: "Adicionar propriedade" })
+    .click();
+  menu = page.getByRole("menu").filter({ visible: true });
+  await menu
+    .getByRole("menuitem", { name: "Seleção de objeto", exact: true })
+    .hover();
+  await page
+    .getByRole("menu")
+    .filter({
+      has: page.getByRole("textbox", { name: "Buscar tipos de objeto" }),
+    })
+    .getByRole("menuitem", { name: "Objeto parity", exact: true })
+    .click();
+  await expect(
+    workspace.getByLabel("Objeto parity", { exact: true }),
+  ).toBeVisible();
+  await expect
+    .poll(async () => {
+      const snapshot = await persistedSnapshot(page);
+      return snapshot.structures
+        .find(
+          (candidate: { id: string }) => candidate.id === customStructure.id,
+        )
+        .propertyDefinitions.find(
+          (definition: { name: string }) => definition.name === "Objeto parity",
+        );
+    })
+    .toMatchObject({
+      multiple: true,
+      targetStructureIds: [customStructure.id],
+      valueType: "entity",
+    });
+
+  await propertyRegion.hover();
+  await propertyRegion
+    .getByRole("button", { name: "Adicionar propriedade" })
+    .click();
+  menu = page.getByRole("menu").filter({ visible: true });
+  await page.mouse.click(4, 4);
+  await expect(menu).toBeHidden();
+  expect(
+    (await persistedSnapshot(page)).structures.find(
+      (candidate: { id: string }) => candidate.id === customStructure.id,
+    ).propertyDefinitions,
+  ).toHaveLength(initialPropertyCount + 2);
+  expect(errors).toEqual([]);
+});
+
+test("object selection property chooses one runtime Structure before committing", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await page.setViewportSize({ width: 1282, height: 912 });
+  const errors = await openWorkspace(page);
+  await createCustomStructure(page, "Objeto alvo", "Objetos alvo");
+  await selectNewObject(page, "Objeto alvo");
+
+  const workspace = createdObjectWorkspace(page);
+  const propertyRegion = workspace.locator(
+    '[data-slot="workspace-add-structure-property"]',
+  );
+  const beforeSnapshot = await persistedSnapshot(page);
+  const customStructure = beforeSnapshot.structures.find(
+    (candidate: { ownership: string; singularName: string }) =>
+      candidate.ownership === "custom" &&
+      candidate.singularName === "Objeto alvo",
+  );
+  const initialPropertyCount = customStructure.propertyDefinitions.length;
+
+  await propertyRegion.hover();
+  await propertyRegion
+    .getByRole("button", { name: "Adicionar propriedade" })
+    .click();
+  let propertyMenu = page.getByRole("menu").filter({ visible: true });
+  await propertyMenu
+    .getByRole("menuitem", { name: "Seleção de objeto", exact: true })
+    .hover();
+  const objectTypeSearch = page.getByRole("textbox", {
+    name: "Buscar tipos de objeto",
+  });
+  await expect(objectTypeSearch).toBeFocused();
+  const objectTypeMenu = page
+    .getByRole("menu")
+    .filter({ has: objectTypeSearch, visible: true });
+  await page.waitForTimeout(300);
+  const box = await objectTypeMenu.boundingBox();
+  expect(box?.width).toBeGreaterThanOrEqual(221);
+  expect(box?.width).toBeLessThanOrEqual(223);
+  expect(box?.height).toBeGreaterThanOrEqual(345);
+  expect(box?.height).toBeLessThanOrEqual(347);
+  await expect(
+    objectTypeMenu.getByRole("menuitem", {
+      name: "Objeto alvo",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await objectTypeSearch.press("Escape");
+  await page.keyboard.press("Escape");
+  expect(
+    (await persistedSnapshot(page)).structures.find(
+      (candidate: { id: string }) => candidate.id === customStructure.id,
+    ).propertyDefinitions,
+  ).toHaveLength(initialPropertyCount);
+
+  await propertyRegion.hover();
+  await propertyRegion
+    .getByRole("button", { name: "Adicionar propriedade" })
+    .click();
+  propertyMenu = page.getByRole("menu").filter({ visible: true });
+  await propertyMenu
+    .getByRole("menuitem", { name: "Seleção de objeto", exact: true })
+    .hover();
+  await page
+    .getByRole("menu")
+    .filter({
+      has: page.getByRole("textbox", { name: "Buscar tipos de objeto" }),
+    })
+    .getByRole("menuitem", { name: "Objeto alvo", exact: true })
+    .click();
+  await expect(
+    workspace.getByLabel("Objeto alvo", { exact: true }),
+  ).toBeVisible();
+  await expect
+    .poll(async () => {
+      const snapshot = await persistedSnapshot(page);
+      return snapshot.structures
+        .find(
+          (candidate: { id: string }) => candidate.id === customStructure.id,
+        )
+        .propertyDefinitions.find(
+          (definition: { name: string }) => definition.name === "Objeto alvo",
+        );
+    })
+    .toMatchObject({
+      multiple: true,
+      targetStructureIds: [customStructure.id],
+      valueType: "entity",
+    });
   expect(errors).toEqual([]);
 });
 
@@ -1228,22 +1722,29 @@ test("object page header controls keep fluid click and keyboard states", async (
   await expect(collectionPopover).toBeVisible();
   await expect
     .poll(async () => (await collectionPopover.boundingBox())?.width ?? 0)
-    .toBeCloseTo(257, 0);
+    .toBeCloseTo(257.6, 0);
   await expect(
     collectionPopover.getByText("Nenhuma coleção encontrada", { exact: true }),
   ).toHaveCount(0);
   await expect(collectionPopover.getByRole("textbox")).toHaveCount(0);
   await collections.fill("no matching collection");
   await expect(collections).toHaveValue("no matching collection");
-  await expect(collectionPopover.getByRole("button")).toHaveCount(0);
+  await expect(
+    collectionPopover.getByRole("button", {
+      name: "Novo ‘no matching collection’",
+      exact: true,
+    }),
+  ).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(collectionPopover).toBeHidden();
-  await expect(collections).toBeFocused();
+  await expect(collections).not.toBeFocused();
   await expect(collections).toHaveValue("");
 
   await expectStableBoxOnHover(tags);
   await tags.click();
-  const tagsPopover = page.locator('[data-slot="popover-content"][data-open]');
+  const tagsPopover = page.locator(
+    '[data-slot="workspace-object-page-tags-menu"][data-open]',
+  );
   await expect(tagsPopover).toBeVisible();
   await expect(
     tagsPopover.getByText("Novo Etiqueta", { exact: true }),
@@ -1308,6 +1809,7 @@ test("object page header controls keep fluid click and keyboard states", async (
     name: "Personalizar",
     exact: true,
   });
+  await reloadedHeader.hover();
   await reloadedCustomize.click();
   menu = page.getByRole("menu", { name: "Personalizar" });
   await expect(menu).toBeVisible();
@@ -1529,10 +2031,11 @@ test("Page Collections and overflow controls keep Page metadata synchronized", a
     workspace.getByRole("button", { name: "Remover Overflow collection" }),
   ).toBeVisible();
   await expect
-    .poll(async () =>
-      (await persistedEntities(page)).find(
-        (candidate: { id: string }) => candidate.id === pageEntity?.id,
-      )?.collections,
+    .poll(
+      async () =>
+        (await persistedEntities(page)).find(
+          (candidate: { id: string }) => candidate.id === pageEntity?.id,
+        )?.collections,
     )
     .toHaveLength(1);
   await page
@@ -1550,6 +2053,7 @@ test("Page Collections and overflow controls keep Page metadata synchronized", a
   await collectionPage.click();
   await expect(workspace).toBeVisible();
 
+  await header.hover();
   await customize.click();
   const customizeMenu = page.getByRole("menu", { name: "Personalizar" });
   await expect(customizeMenu).toBeVisible();
@@ -1588,10 +2092,11 @@ test("Page Collections and overflow controls keep Page metadata synchronized", a
     }),
   ).toHaveCount(0);
   await expect
-    .poll(async () =>
-      (await persistedEntities(page)).find(
-        (candidate: { id: string }) => candidate.id === pageEntity?.id,
-      )?.collections,
+    .poll(
+      async () =>
+        (await persistedEntities(page)).find(
+          (candidate: { id: string }) => candidate.id === pageEntity?.id,
+        )?.collections,
     )
     .toEqual([]);
 
@@ -1835,7 +2340,9 @@ test("durable media import reloads previews reuses duplicate blobs and garbage c
   const workspace = objectTypeWorkspace(page);
   await expect(workspace).toBeVisible();
   const fileChooserPromise = page.waitForEvent("filechooser");
-  await workspace.getByRole("button", { name: "Importar", exact: true }).click();
+  await workspace
+    .getByRole("button", { name: "Importar", exact: true })
+    .click();
   const fileChooser = await fileChooserPromise;
   await fileChooser.setFiles({
     buffer: Buffer.from("%PDF-1.4\n% durable-media"),
@@ -1862,9 +2369,9 @@ test("durable media import reloads previews reuses duplicate blobs and garbage c
   expect(imported?.assetId).toBeTruthy();
   expect(imported?.contentHash).toBe(imported?.assetId);
   expect(imported?.storageState).toBe("stored");
-  await expect.poll(() => persistedMediaBlobKeys(page)).toEqual([
-    `media:${imported?.contentHash}`,
-  ]);
+  await expect
+    .poll(() => persistedMediaBlobKeys(page))
+    .toEqual([`media:${imported?.contentHash}`]);
 
   await page.reload();
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
@@ -1904,16 +2411,16 @@ test("durable media import reloads previews reuses duplicate blobs and garbage c
         .map((entity: { assetId?: string }) => entity.assetId);
     })
     .toEqual([imported?.assetId, imported?.assetId]);
-  await expect.poll(() => persistedMediaBlobKeys(page)).toEqual([
-    `media:${imported?.contentHash}`,
-  ]);
+  await expect
+    .poll(() => persistedMediaBlobKeys(page))
+    .toEqual([`media:${imported?.contentHash}`]);
   await createdObjectWorkspace(page)
     .getByRole("button", { name: "Mais opções", exact: true })
     .click();
   await page.getByRole("menuitem", { name: "Excluir Objeto" }).click();
-  await expect.poll(() => persistedMediaBlobKeys(page)).toEqual([
-    `media:${imported?.contentHash}`,
-  ]);
+  await expect
+    .poll(() => persistedMediaBlobKeys(page))
+    .toEqual([`media:${imported?.contentHash}`]);
   const remaining = (await persistedEntities(page)).find(
     (entity: { id: string; objectTypeId: string; title: string }) =>
       entity.objectTypeId === "pdf" && entity.title === "durable-media",
@@ -1934,7 +2441,9 @@ test("mobile media quota failure stays recoverable without canonical asset", asy
   await page.setViewportSize({ width: 390, height: 844 });
   const errors = await openWorkspace(page);
 
-  await page.getByRole("button", { name: "Abrir navegação", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Abrir navegação", exact: true })
+    .click();
   await page
     .getByRole("dialog", { name: "Navegação" })
     .getByRole("button", { name: "Novo", exact: true })
@@ -2021,7 +2530,9 @@ test("production object-type commands render named outcomes", async ({
   await expect(sortMenu).toBeVisible();
   await sortMenu.getByRole("menuitem", { name: "Título" }).click();
   await expect(
-    workspace.locator('[data-lifecycle-contract="object-projection-card"]').first(),
+    workspace
+      .locator('[data-lifecycle-contract="object-projection-card"]')
+      .first(),
   ).toContainText("Page alpha");
   await page.keyboard.press("Escape");
   await expect(sortMenu).toBeHidden();
@@ -2064,9 +2575,11 @@ test("production object-type commands render named outcomes", async ({
     .click();
   await page.getByRole("menuitem", { name: "Novo a partir do modelo" }).click();
   await expect(
-    page.locator(
-      '[data-slot="object-type-command-destination"][data-kind="template"]',
-    ).filter({ visible: true }),
+    page
+      .locator(
+        '[data-slot="object-type-command-destination"][data-kind="template"]',
+      )
+      .filter({ visible: true }),
   ).toBeVisible();
   await page
     .locator('[data-slot="app-sidebar-object-type-row"]')
@@ -2077,11 +2590,15 @@ test("production object-type commands render named outcomes", async ({
   await workspace
     .getByRole("button", { name: "Mais opções", exact: true })
     .click();
-  await page.getByRole("menuitem", { name: "Configurações do tipo de objeto" }).click();
+  await page
+    .getByRole("menuitem", { name: "Configurações do tipo de objeto" })
+    .click();
   await expect(
-    page.locator(
-      '[data-slot="object-type-command-destination"][data-kind="settings"]',
-    ).filter({ visible: true }),
+    page
+      .locator(
+        '[data-slot="object-type-command-destination"][data-kind="settings"]',
+      )
+      .filter({ visible: true }),
   ).toBeVisible();
   expect(await persistedEntities(page)).toHaveLength(2);
   expect(errors).toEqual([]);
@@ -2242,11 +2759,10 @@ test("Page editor utility remains contained on a narrow viewport", async ({
     name: "Ferramentas do editor",
     exact: true,
   });
-  await expectContainedUsableSurface(
-    page,
-    utilities,
-    { width: 390, height: 844 },
-  );
+  await expectContainedUsableSurface(page, utilities, {
+    width: 390,
+    height: 844,
+  });
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),
   ).toBeLessThanOrEqual(390);
@@ -2287,6 +2803,103 @@ test("Page editor utility outline navigates to a canonical heading block", async
   expect(errors).toEqual([]);
 });
 
+test("@ object reference uses runtime Structure appearance and commits once", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 1282, height: 912 });
+  const errors = await openWorkspace(page);
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Atlas Canonical");
+  const targetWorkspace = createdObjectWorkspace(page);
+  const header = targetWorkspace.locator(
+    '[data-slot="workspace-object-page-header"]',
+  );
+  await header.hover();
+  await targetWorkspace.getByRole("button", { name: "Personalizar" }).click();
+  await page.getByRole("menuitem", { name: "Adicionar Aliases" }).click();
+  await targetWorkspace.getByLabel("Aliases").fill("Projeto Atlas");
+  await targetWorkspace.getByLabel("Aliases").blur();
+  const targetId = (await persistedEntities(page)).find(
+    (entity: { title: string }) => entity.title === "Atlas Canonical",
+  )?.id;
+  expect(targetId).toBeTruthy();
+
+  await createPageObject(page);
+  await writeCreatedObjectTitle(page, "Reference Source");
+  const sourceWorkspace = createdObjectWorkspace(page);
+  const editor = sourceWorkspace.getByRole("textbox", { name: "Text" });
+  await editor.fill("Meet ");
+  await editor.press("End");
+  await editor.pressSequentially("@Projeto Atlas");
+
+  const menu = page.getByRole("listbox", { name: "References" });
+  await expect(menu).toBeVisible();
+  await expect(menu.getByRole("option")).toHaveCount(1);
+  const option = menu.getByRole("option").first();
+  const iconHost = option.locator('[data-slot="block-editor-reference-icon"]');
+  await expect(iconHost).toHaveAttribute("data-icon-name", "page");
+  await expect(iconHost).toHaveAttribute("data-icon-tone", "blue");
+  await expect(iconHost.locator('[data-slot="object-icon"]')).toHaveAttribute(
+    "data-icon-name",
+    "page",
+  );
+  await page.screenshot({
+    path: "artifacts/reference-evidence/capacities-object-page/2026-08-31-editor-controls-states/local-object-reference-menu.png",
+  });
+
+  await option.click();
+  await expect(menu).toBeHidden();
+  await expect(editor.locator("span[data-object-id]")).toHaveCount(1);
+  await expect(editor.locator("span[data-object-id]")).toHaveAttribute(
+    "data-object-id",
+    targetId,
+  );
+  await expect(editor).toBeFocused();
+  await expect
+    .poll(async () => {
+      const source = (await persistedEntities(page)).find(
+        (entity: { title: string }) => entity.title === "Reference Source",
+      );
+      return source?.body?.doc?.content
+        ?.flatMap(
+          (node: {
+            content?: {
+              marks?: { attrs?: { objectId?: string }; type: string }[];
+            }[];
+          }) => node.content ?? [],
+        )
+        .flatMap(
+          (node: {
+            marks?: { attrs?: { objectId?: string }; type: string }[];
+          }) => node.marks ?? [],
+        )
+        .filter(
+          (mark: { attrs?: { objectId?: string }; type: string }) =>
+            mark.type === "objectLink" && mark.attrs?.objectId === targetId,
+        ).length;
+    })
+    .toBe(1);
+
+  await page.reload();
+  await page.locator('[data-slot="app-shell-provider"]').waitFor();
+  await expect(
+    createdObjectWorkspace(page).locator(`span[data-object-id="${targetId}"]`),
+  ).toHaveCount(1);
+
+  await page.getByRole("tab", { name: "Atlas Canonical" }).click();
+  await expect(createdObjectWorkspace(page)).toContainText("Reference Source");
+  await page
+    .getByRole("button", { name: "Abrir menu do painel lateral" })
+    .click();
+  await page.getByRole("menuitem", { name: "Visualização em grafo" }).click();
+  const graph = page.locator('[data-slot="workspace-graph"]').last();
+  await expect(graph).toContainText("Atlas Canonical");
+  await expect(graph).toContainText("Reference Source");
+  expect(errors).toEqual([]);
+});
+
 test("Page mention conversion links the exact source occurrence", async ({
   page,
 }) => {
@@ -2312,11 +2925,11 @@ test("Page mention conversion links the exact source occurrence", async ({
   const mentionsHeading = mentions.locator(":scope > summary");
   await mentionsHeading.click();
   await expect(mentions).toContainText("1");
-  await expect(mentions.getByText("Mention source", { exact: true })).toBeHidden();
+  await expect(
+    mentions.getByText("Mention source", { exact: true }),
+  ).toBeHidden();
   await mentionsHeading.click();
-  await mentions
-    .locator('[data-slot="workspace-mention-disclosure"]')
-    .click();
+  await mentions.locator('[data-slot="workspace-mention-disclosure"]').click();
   await expect(
     mentions.getByRole("button", { name: "Abrir fonte", exact: true }),
   ).toBeVisible();
@@ -2338,7 +2951,9 @@ test("Page mention conversion links the exact source occurrence", async ({
     createdObjectWorkspace(page).getByText("Links de entrada", { exact: true }),
   ).toBeVisible();
   await expect(
-    createdObjectWorkspace(page).locator('[data-slot="workspace-reference-count"]'),
+    createdObjectWorkspace(page).locator(
+      '[data-slot="workspace-reference-count"]',
+    ),
   ).toContainText("1 referência");
   await expect
     .poll(async () => {
@@ -2346,8 +2961,9 @@ test("Page mention conversion links the exact source occurrence", async ({
         (entity: { title: string }) => entity.title === "Mention source",
       );
       return source?.body?.doc?.content
-        ?.flatMap((node: { content?: { marks?: { type: string }[] }[] }) =>
-          node.content ?? [],
+        ?.flatMap(
+          (node: { content?: { marks?: { type: string }[] }[] }) =>
+            node.content ?? [],
         )
         .flatMap((node: { marks?: { type: string }[] }) => node.marks ?? [])
         .filter((mark: { type: string }) => mark.type === "objectLink").length;
@@ -2416,9 +3032,7 @@ test("Page related content ranks explicit collection signals without replacing s
   const initialRelated = createdObjectWorkspace(page).locator(
     '[data-slot="workspace-object-related-content"]',
   );
-  await expect(initialRelated).toBeVisible();
-  await expect(initialRelated).toHaveAttribute("data-state", "empty");
-  await expect(initialRelated).not.toContainText("Orchid ledger");
+  await expect(initialRelated).toHaveCount(0);
 
   await createPageCollection(page, "Related collection");
   await page.getByRole("tab", { name: "Orchid ledger" }).click();
@@ -2476,7 +3090,9 @@ test("deleting the active Page removes stale tabs and selects a valid fallback",
     .poll(async () => {
       const snapshot = await persistedSnapshot(page);
       return {
-        titles: snapshot.entities.map((entity: { title: string }) => entity.title),
+        titles: snapshot.entities.map(
+          (entity: { title: string }) => entity.title,
+        ),
         trashed: snapshot.trashRecords.map(
           (record: { entityId: string }) => record.entityId,
         ),
@@ -2522,18 +3138,26 @@ test("Trash route restores purges and empties recoverable objects accessibly", a
     .first();
   await expect(trashView).toBeVisible();
   await expect(trashView.getByPlaceholder("Buscar na lixeira")).toBeVisible();
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(3);
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(3);
   await expect(trashView).toContainText("remove em");
   await page.keyboard.press("Escape");
-  await expect(page.locator('[data-slot="app-sidebar-trash-surface"]')).toBeHidden();
+  await expect(
+    page.locator('[data-slot="app-sidebar-trash-surface"]'),
+  ).toBeHidden();
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(
     trashView.locator('button:has-text("Esvaziar lixeira")'),
   ).toBeVisible();
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(3);
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(3);
   await expect
     .poll(() =>
-      trashView.evaluate((element) => element.scrollWidth <= element.clientWidth),
+      trashView.evaluate(
+        (element) => element.scrollWidth <= element.clientWidth,
+      ),
     )
     .toBe(true);
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -2542,16 +3166,24 @@ test("Trash route restores purges and empties recoverable objects accessibly", a
     .locator('[data-slot="workspace-trash-view"]')
     .filter({ visible: true })
     .first();
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(3);
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(3);
 
   await trashView.getByPlaceholder("Buscar na lixeira").fill("Restore");
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(1);
-  await trashView.getByRole("button", { name: "Restaurar", exact: true }).click();
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(1);
+  await trashView
+    .getByRole("button", { name: "Restaurar", exact: true })
+    .click();
   await expectActiveEditorTitle(page, "Restore me page");
 
   await page.getByRole("button", { name: "Lixeira", exact: true }).click();
   await trashView.getByPlaceholder("Buscar na lixeira").fill("");
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(2);
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(2);
 
   const purgeRow = trashView
     .locator('[data-slot="workspace-trash-item"]')
@@ -2566,7 +3198,9 @@ test("Trash route restores purges and empties recoverable objects accessibly", a
   await purgeDialog
     .getByRole("button", { name: "Excluir permanentemente", exact: true })
     .click();
-  await expect(trashView.locator('[data-slot="workspace-trash-item"]')).toHaveCount(1);
+  await expect(
+    trashView.locator('[data-slot="workspace-trash-item"]'),
+  ).toHaveCount(1);
 
   await trashView
     .getByRole("button", { name: "Esvaziar lixeira", exact: true })
@@ -2580,7 +3214,8 @@ test("Trash route restores purges and empties recoverable objects accessibly", a
   await expect
     .poll(() =>
       page.evaluate(() =>
-        document.activeElement?.closest('[data-slot="workspace-trash-view"]')
+        document.activeElement
+          ?.closest('[data-slot="workspace-trash-view"]')
           ?.getAttribute("data-slot"),
       ),
     )
@@ -2770,6 +3405,30 @@ test("workspace overflow menu supports submenu, outside click, and Escape", asyn
   for (const row of await rows.all()) {
     expect((await row.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(32);
   }
+  const iconizedLabels = [
+    "Personalizar",
+    "Usar Template",
+    "Editar Coleções",
+    "Fixar na Barra Lateral",
+    "Mudar Tipo",
+    "Configurações do Tipo de Objeto",
+    "Compartilhar",
+    "Apresentar",
+    "Exportar",
+    "Importar",
+    "Estatísticas de Texto",
+    "Copiar",
+    "Duplicar",
+    "Excluir Objeto",
+  ];
+  for (const label of iconizedLabels) {
+    const row = menu.getByRole("menuitem").filter({ hasText: label }).first();
+    await expect(row.locator("svg").first()).toBeVisible();
+    expect((await row.locator("svg").first().boundingBox())?.width).toBe(16);
+  }
+  await page.screenshot({
+    path: "artifacts/reference-evidence/capacities-object-page/2026-08-31-browser-comments-hover-states/local-overflow-menu-icons.png",
+  });
   await menu.getByText("Personalizar", { exact: true }).hover();
   const customizeSubmenu = page.getByRole("menuitem", {
     name: "Layout Amplo",
@@ -2786,6 +3445,20 @@ test("workspace overflow menu supports submenu, outside click, and Escape", asyn
   await trigger.click();
   await page.mouse.click(5, 300);
   await expect(menu).toBeHidden();
+
+  await trigger.click();
+  await menu.getByRole("menuitem", { name: "Fixar na Barra Lateral" }).click();
+  await trigger.click();
+  const unpin = menu.getByRole("menuitem", {
+    name: "Desafixar da Barra Lateral",
+  });
+  await expect(unpin).toBeVisible();
+  await unpin.click();
+  await trigger.click();
+  await expect(
+    menu.getByRole("menuitem", { name: "Fixar na Barra Lateral" }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
   expect(errors).toEqual([]);
 });
 
@@ -3359,13 +4032,16 @@ test("every supported New family persists once and reopens from its tab projecti
         name: `parity-${family.id}.${family.id === "image" ? "png" : family.id === "audio" ? "wav" : family.id === "pdf" ? "pdf" : "txt"}`,
       });
       await expect
-        .poll(async () => {
-          const entities = await persistedEntities(page);
-          return entities.some(
-            (entity: { objectTypeId: string }) =>
-              entity.objectTypeId === family.id,
-          );
-        }, { timeout: 20_000 })
+        .poll(
+          async () => {
+            const entities = await persistedEntities(page);
+            return entities.some(
+              (entity: { objectTypeId: string }) =>
+                entity.objectTypeId === family.id,
+            );
+          },
+          { timeout: 20_000 },
+        )
         .toBe(true);
     }
 
@@ -3893,9 +4569,9 @@ test("workspace database migrates legacy local snapshots and reloads", async ({
 
   await page.goto("/pt-BR");
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
-  await expect(
-    page.getByRole("textbox", { name: "Título" }),
-  ).toHaveValue("Legacy migrated page");
+  await expect(page.getByRole("textbox", { name: "Título" })).toHaveValue(
+    "Legacy migrated page",
+  );
   await expect
     .poll(async () => {
       const records = await persistedWorkspaceDatabaseRecords(page);
@@ -3911,9 +4587,9 @@ test("workspace database migrates legacy local snapshots and reloads", async ({
 
   await page.reload();
   await page.locator('[data-slot="app-shell-provider"]').waitFor();
-  await expect(
-    page.getByRole("textbox", { name: "Título" }),
-  ).toHaveValue("Legacy migrated page");
+  await expect(page.getByRole("textbox", { name: "Título" })).toHaveValue(
+    "Legacy migrated page",
+  );
   expect(errors).toEqual([]);
 });
 

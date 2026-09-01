@@ -866,7 +866,9 @@ test("workspace UI exposes every lifecycle family with localized accessible surf
     assert.match(toolbarIcons, new RegExp(`\\| "${iconName}"`));
     assert.match(content, new RegExp(`name="${iconName}"`));
   }
-  assert.match(toolbarIcons, /viewBox="0 0 256 256"/);
+  assert.match(toolbarIcons, /type \{ Icon \} from "@phosphor-icons\/react"/);
+  assert.match(toolbarIcons, /const objectTypeToolbarIcon:/);
+  assert.match(toolbarIcons, /weight="regular"/);
   assert.match(toolbarIcons, /data-slot="object-type-toolbar-icon"/);
   assert.match(content, /<AppSidebarSourceIcon\s+name="settings"/);
   assert.match(content, /\[&>svg\]:size-3/);
