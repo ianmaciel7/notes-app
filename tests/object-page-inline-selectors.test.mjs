@@ -79,9 +79,10 @@ test("empty tag selector exposes the compact Capacities menu contract", async ()
     /data-slot="workspace-object-page-tags-empty-selector"/,
   );
   assert.match(tagsSource, /<ObjectTagIcon className="size-3\.5" \/>/);
-  assert.doesNotMatch(tagsSource, /AppHeaderSparkleIcon/);
+  assert.match(tagsSource, /data-slot="workspace-object-page-tags-sparkle"/);
+  assert.match(tagsSource, /group-hover\/tag-selector:opacity-100/);
   assert.match(tagsSource, /data-slot="workspace-object-page-tags-menu"/);
-  assert.match(tagsSource, /"w-\[257px\] min-w-\[257px\] gap-0 p-1\.5"/);
+  assert.match(tagsSource, /"w-\[257\.6px\] min-w-\[257\.6px\] gap-0 p-1\.5"/);
   assert.ok(
     tagsSource.indexOf('t("documentMenu.newTagEmpty")') <
       tagsSource.indexOf('t("documentMenu.searchAllTags")'),
@@ -91,6 +92,10 @@ test("empty tag selector exposes the compact Capacities menu contract", async ()
     tagsSource,
     /setTagPickerQuery\(nextQuery\)[\s\S]+setPendingTagIds\(tags\)[\s\S]+setTagPickerOpen\(true\)/,
   );
+  assert.match(tagsSource, /aria-activedescendant=/);
+  assert.match(tagsSource, /event\.key === "ArrowUp"/);
+  assert.match(tagsSource, /activateTagOption\(activeIndex\)/);
+  assert.match(tagsSource, /documentMenu\.newTag", \{ tag: query\.trim\(\) \}/);
 });
 
 test("applied page tags navigate to their tag object instead of removing metadata", async () => {
@@ -118,6 +123,12 @@ test("applied page tags reveal an independent removal action on hover", async ()
   assert.match(source, /data-slot="workspace-object-page-tag-remove"/);
   assert.match(source, /group-hover\/tag-chip:opacity-100/);
   assert.match(source, /group-focus-within\/tag-chip:opacity-100/);
+  assert.match(source, /workspace-object-page-tag-remove/);
+  assert.match(source, /w-\[31\.56px\]/);
+  assert.match(
+    source,
+    /<XIcon aria-hidden="true" className="size-\[12\.6px\]"/,
+  );
   assert.match(
     source,
     /update\(\{ tags: tags\.filter\(\(item\) => item !== tagId\) \}\)/,
