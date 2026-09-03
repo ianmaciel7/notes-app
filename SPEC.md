@@ -9,15 +9,19 @@ A local-first, zero-operating-cost web application unifying the core superpowers
 
 ---
 
-## 2. Infrastructure & Cost Model ($0.00 MVP)
-- **Hosting**: Firebase Hosting (serving Next.js static export bundle via CDN).
-- **Backend Services (Firebase Spark Plan)**:
-  - **Auth**: Firebase Auth (Email/Password, Google OAuth).
-  - **Database**: Cloud Firestore (Metadata & synchronization, staying under 50k reads / 20k writes per day).
-  - **Storage**: Firebase Cloud Storage (PDF/EPUB blobs, staying under 5GB total / 1GB daily transfer).
-  - **Remote Config**: Dynamic feature flagging without code redeployments.
+## 2. Infrastructure & Cost Model (Firebase Blaze Plan - Pay-as-you-go)
+- **Hosting & Compute**: **Firebase App Hosting** (running on Google Cloud Run + Cloud CDN for Full-Stack Next.js App Router with Server-Side Rendering, Server Components, and Route Handlers).
+- **Billing Plan**: **Firebase Blaze Plan (Pay-as-you-go)**:
+  - *Official Firebase Requirement*: As documented by Firebase, server-side compute instances (Cloud Run / Cloud Functions / App Hosting) and Secret Manager require the Blaze Plan.
+  - *Cost Control*: The Blaze plan retains substantial free-tier allowances (2M Cloud Run requests/mo, 180k vCPU-sec, 360k GiB-sec, 50k Firestore reads / 20k writes daily, 5GB Cloud Storage, 50k MAU Firebase Auth). With scale-to-zero (`minInstances: 0`) and Cloud Budget alert limits, operating cost stays virtually $0.00 at MVP scale.
+- **Backend Services & Server Runtime**:
+  - **Auth**: Firebase Auth (Email/Password, Google OAuth) with server-side token verification via `firebase-admin`.
+  - **Database**: Cloud Firestore (Metadata & synchronization, staying within free quotas).
+  - **Storage**: Firebase Cloud Storage (PDF/EPUB blobs, staying within free quotas).
+  - **Server Endpoints**: Next.js Route Handlers (`/api/ai/generate` for secure AI proxy, `/api/documents/parse` for server-side document parsing).
+  - **Secret Management**: Google Cloud Secret Manager / Firebase App Hosting environment secrets for AI API keys.
 - **Client Runtime**:
-  - Browser IndexedDB via **Dexie.js** as the single source of truth for reads and writes.
+  - Browser IndexedDB via **Dexie.js** as the local-first source of truth for zero-latency reads and writes.
   - **Zustand** for transient UI state (split panes, active drawer, search queries).
   - **Tailwind CSS** + `@tailwindcss/typography` for zero-runtime styling.
 
@@ -254,10 +258,15 @@ Floating bar anchored above text selection providing:
 
 ## 6. AI Card Generation Engine (`lib/ai/generator.ts`)
 
-### 6.1 Client-Orchestrated BYOK Flow
-1. User provides Google Gemini API key or Groq API key in Settings (stored in local IndexedDB).
-2. Document text is chunked into logical units (~1,500 words or Markdown sections).
-3. Directly queries Google Gemini 2.0 Flash (`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`) with `response_mime_type: "application/json"`.
+### 6.1 Dual-Engine Generation Architecture (Server Route Handler + Client BYOK)
+1. **Server-Side Gateway (`/api/ai/generate`)**:
+   - Primary production mode using Next.js Route Handlers running on Cloud Run.
+   - Credentials securely stored as environment secrets (Google Cloud Secret Manager / Firebase App Hosting).
+   - Document text chunk is sent via POST request to `/api/ai/generate`.
+   - The route handler queries Google Gemini 2.0 Flash (`@google/genai` SDK or REST) with structured JSON schema output and streams or returns structured card objects.
+2. **Client-Side BYOK Fallback**:
+   - Optional setting where user provides their personal Google Gemini or Groq API key (stored in local IndexedDB).
+   - If configured, queries Google Gemini 2.0 Flash or Groq Llama 3.3 directly from the browser.
 
 ### 6.2 Structured Output Schema
 ```json
@@ -324,8 +333,8 @@ Floating bar anchored above text selection providing:
 
 ## 9. Implementation Roadmap
 1. **Phase 1: Project Setup & Storage Core**
-   - Initialize Next.js App Router with `output: 'export'`, Tailwind CSS, and Lucide icons.
-   - Configure Dexie.js database tables, TypeScript types, and `firebase.json` SPA rewrites.
+   - Initialize Next.js App Router (Full-Stack hybrid), Tailwind CSS, and Lucide icons.
+   - Configure Dexie.js database tables, TypeScript types, and `apphosting.yaml` configuration.
 2. **Phase 2: 3-Pane Capacities Shell & Navigation**
    - Build Sidebar, Command Palette (`Cmd+K`), Split View container, and Right Inspector.
    - Connect Zustand state store with Dexie `useLiveQuery`.
@@ -333,13 +342,14 @@ Floating bar anchored above text selection providing:
    - Implement `pdfjs-dist` PDF viewer and Markdown reader.
    - Integrate CSS Custom Highlight API and floating selection toolbar.
 4. **Phase 4: AI Generation Pipeline**
-   - Implement client-side BYOK API settings (Gemini 2.0 Flash / Groq).
+   - Implement Server Route Handler (`/api/ai/generate`) using official Google Gen AI SDK.
+   - Implement client-side BYOK API settings (Gemini 2.0 Flash / Groq fallback).
    - Build chunker, structured output handler, and automatic anchor/highlight synthesizer.
    - Implement AI Staging Drawer.
 5. **Phase 5: FSRS Spaced Repetition & Exam Burndown Dashboard**
    - Implement FSRS mathematical state machine.
    - Build interactive flashcard study session (Again, Hard, Good, Easy keyboard shortcuts `1-4`, Space to flip).
    - Build Exam Goal Pacing Dashboard with burndown chart.
-6. **Phase 6: Firebase Sync & Deployment**
-   - Implement Firebase Auth and Firestore background synchronization.
-   - Deploy static export to Firebase Hosting.
+6. **Phase 6: Firebase Full-Stack Integration & Deployment**
+   - Implement Firebase Auth, server-side token validation via `firebase-admin`, and Firestore sync.
+   - Deploy full-stack Next.js app to **Firebase App Hosting** on the **Blaze Plan**.

@@ -1,15 +1,21 @@
 # Architectural Decisions & Constraints
 
-## Decision 1: Centralized Firebase Platform & Next.js Architecture
-- **Framework**: Next.js App Router configured for Static Export (`output: 'export'`), ensuring 100% compatibility with Firebase Hosting.
-- **Hosting & Infrastructure**: Fully centralized on Google Firebase (**Spark Plan - $0.00 Cost**):
-  - **Firebase Hosting**: High-speed CDN hosting for the statically exported Next.js client bundle. `firebase.json` configured with SPA rewrites (`"rewrites": [{"source": "**", "destination": "/index.html"}]`) for smooth client-side routing. Zero Cloud Function overhead.
-  - **Firebase Authentication**: Email/Password & Google OAuth for user accounts (free unlimited on Spark).
-  - **Cloud Firestore**: Background sync for entities, relations, and SRS states (within 50k reads/20k writes daily free tier).
-  - **Firebase Storage**: Ingested document blobs (within 5GB total storage / 1GB daily transfer free tier).
-- **Styling Engine**: **Tailwind CSS**. Compiles to zero-runtime, atomic static CSS files, ensuring ultra-light bundle sizes, instant page loads, and native dark/light mode switching.
-- **Offline & Local-First Engine**: Dexie.js (IndexedDB) for zero-latency local operations and full offline availability. Reads/writes hit Dexie first; background sync handles Firestore.
-- **Feature Flags**: Firebase Remote Config + `NEXT_PUBLIC_*` environment variables for dynamic zero-cost feature toggles without code redeployments.
+## Decision 1: Centralized Firebase Platform & Next.js Full-Stack Architecture
+- **Framework**: Next.js App Router configured for **Full-Stack Hybrid (Server-Side & Client-Side)**:
+  - **Server-Side (Node.js runtime / Cloud Run)**: React Server Components (RSC), Route Handlers (`/api/*`), Server Actions, dynamic SSR, and server-side token validation (`firebase-admin`).
+  - **Client-Side (`'use client'`)**: Offline-first interactive components, Dexie.js (IndexedDB) local cache, PDF/Markdown reader, and instant UI state.
+- **Hosting & Infrastructure**: Google Firebase (**Blaze Plan - Pay-as-you-go**):
+  - *Official Firebase Requirement*: According to official Firebase documentation, running full-stack Next.js with server-side features (SSR, Server Components, API routes) requires compute instances (Cloud Run / Cloud Functions), which necessitates the **Blaze Plan** (the Spark free plan is strictly limited to static file hosting without compute or outbound networking).
+  - **Firebase App Hosting**: Deployed using Firebase App Hosting (built on Google Cloud Run and Cloud CDN) for native Next.js App Router support, streaming SSR, and zero-config caching. Configured with scale-to-zero (`minInstances: 0`) and strict instance caps to remain well within free tier usage allowances ($0.00 - near zero for MVP).
+  - **Firebase Authentication**: Email/Password & Google OAuth for user accounts, with server-side ID token verification via `firebase-admin` in Route Handlers.
+  - **Cloud Firestore & Firebase Storage**: Direct client access through Firebase Client SDK guarded by Security Rules, plus administrative operations via `firebase-admin` on the server.
+- **Server-Side Compute & Security Capabilities**:
+  - **Protected AI Gateway (`/api/ai/generate`)**: Server-side proxy for Google Gemini 2.0 Flash / Groq LLMs. Securely utilizes environment secrets (via Google Cloud Secret Manager / Firebase App Hosting) so production API keys are never exposed to the client.
+  - **Server-Side Document Ingestion (`/api/documents/parse`)**: Offloads heavy PDF and EPUB parsing/chunking to the server runtime, preventing mobile and low-end client UI freezes.
+- **Styling Engine**: **Tailwind CSS**. Compiles to zero-runtime, atomic CSS, ensuring ultra-light bundle sizes, instant loads, and native dark/light mode.
+- **Offline & Local-First Engine**: Dexie.js (IndexedDB) retained as the single source of truth for reads and writes. Immediate local UI feedback, with background sync to Firestore and server API routes when online.
+- **Cost Guardrails**: Cloud Run concurrency (80 requests/container), `maxInstances: 2`, and Google Cloud Budget Alerts at $1.00 thresholds to prevent unexpected charges while leveraging generous Blaze free allowances (2M Cloud Run requests/mo, 50k Firestore reads/day).
+
 
 ## Decision 2: Data Model & Capacities-Emulated Object Architecture
 - **Model Pattern**: Hybrid Typed-Relational Model with Capacities Graph Semantics.
@@ -24,8 +30,10 @@
 - **UI Pacing Visualizer**: Live Exam Dashboard featuring a burndown chart with real-time status indicators (`On Track`, `Behind`, `Ahead`) and pending/overdue counters.
 
 ## Decision 4: AI Generation Pipeline & Grounded Relational Linking
-- **Architecture**: Client-Orchestrated Hybrid Pipeline with direct client-to-model streaming (BYOK - user API key stored in browser `localStorage`/Dexie).
-- **Supported Providers**: Google Gemini 2.0 Flash (free via Google AI Studio) and Groq Llama 3.3 70B (free tier), togglable via Firebase Remote Config / feature flags.
+- **Architecture**: **Dual-Engine AI Pipeline (Server Route Handler + Client BYOK Fallback)**:
+  - **Server-Side AI Gateway (`/api/ai/generate`)**: Primary mode utilizing Next.js Route Handlers. Uses server-side API keys injected via Secret Manager / Firebase App Hosting, preventing sensitive credentials from leaking into client browser bundles.
+  - **Client-Side BYOK Fallback**: Optional user-supplied API key stored locally in Dexie/localStorage for users who prefer using their personal quotas.
+- **Supported Providers**: Google Gemini 2.0 Flash (via official Google Gen AI SDK) and Groq Llama 3.3 70B, with server-side streaming responses.
 - **Structured Output**: Enforced JSON Schema requiring verbatim `exactQuote`, `front`, `back`, and optional `clozeContent`.
 - **Automatic Anchor & Highlight Synthesis**: The client matches `exactQuote` against the active document chunk, calculates exact offsets/page coordinates, generates a `Highlight` entity, and relationally binds the `Flashcard` to the `Highlight`.
 - **Staging Drawer**: Interactive review UI allowing users to verify, edit, or reject AI-generated cards against live highlighted source text before committing to the database.
@@ -36,10 +44,10 @@
 - **DOM Integrity**: Zero DOM mutation—leaves React virtual DOM and text nodes completely untouched, eliminating reconciliation bugs and supporting multi-paragraph selections.
 - **Floating Action Toolbar**: Contextual selection menu with color picker, "Generate Flashcard with AI", "Add Note", and "Copy Deep Link".
 
-## Decision 6: 3-Pane Adaptive Workspace & Clean SPA Routing
+## Decision 6: 3-Pane Adaptive Workspace & Next.js Dynamic Routing
 - **Layout**: 3-Pane workspace mirroring Capacities:
   - Collapsible Left Sidebar (240px): Quick switcher (`Cmd+K`), Daily Notes/Calendar, Object Types list, Tags.
   - Main Workspace (Flex-1): Split View support (e.g. PDF reader on the left, Flashcards/Notes on the right) with Tailwind typography styling.
   - Collapsible Right Inspector (320px): Object Properties, Outgoing Relations, Incoming Backlinks, and interactive 2D Local Graph preview.
-- **Client Routing**: Next.js App Router catch-all static route with Firebase rewrite rules for clean SPA URLs (`/objects/:id`, `/files/:id`).
+- **Full-Stack Routing**: Native Next.js App Router dynamic routes (`/objects/[id]`, `/files/[id]`) with React Server Components providing fast initial server-side hydration and dynamic metadata, while child components leverage `'use client'` for local-first Dexie reactivity.
 - **State Management**: **Zustand** combined with Dexie `useLiveQuery` for zero-overhead reactive local state.
