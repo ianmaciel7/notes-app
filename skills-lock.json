@@ -1,6 +1,24 @@
 {
   "version": 1,
   "skills": {
+    "browser-trace": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/browser-trace/SKILL.md",
+      "computedHash": "a49568a18e931b3587a4cce9b234a44427fbe325578bd7124ad149010e1b70ca"
+    },
+    "creative-director": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/creative-director/SKILL.md",
+      "computedHash": "0fbdf993d5f23a33a21d14acc12cae688a81d1d3a4e234967b27e13f6b7993a0"
+    },
+    "design-brief": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/design-brief/SKILL.md",
+      "computedHash": "fa56e5291e0b9934efbc3961151264be750331556170b7c37a534c312f63fe91"
+    },
     "firebase-app-hosting-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
@@ -25,11 +43,29 @@
       "skillPath": "skills/firebase-security-rules-auditor/SKILL.md",
       "computedHash": "be877f6c7aaf460791dd6103a08906734036c26bd7c686cfdb8b60e4b2f65742"
     },
+    "frontend-design": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "08b0dc8042c4b85a9c57d80e8580bc958da1375824ec2a6a1289dd004a780abb"
+    },
     "graphify": {
       "source": "graphify-labs/graphify",
       "sourceType": "github",
       "skillPath": "graphify/SKILL.md",
       "computedHash": "4c960cd917302a9addaae08e44fa37e4f7b0f3735dfb36bcf9643bb08adb6a73"
+    },
+    "shadcn": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "skillPath": "skills/shadcn/SKILL.md",
+      "computedHash": "9b5a0bc8d34287ac67d8e59a84ce3beb0cc29d2bfc50159804600d79cfc2a549"
+    },
+    "style-extractor": {
+      "source": "Lucent-Snow/style-extractor",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "caeefc3693bef41b27612f0e76b811a4250a31bb553f3f8bca8f3ec273e022ee"
     },
     "tailwind-4-docs": {
       "source": "lombiq/tailwind-agent-skills",
@@ -37,11 +73,29 @@
       "skillPath": "skills/tailwind-4-docs/SKILL.md",
       "computedHash": "4900f575f24641b1af459cda37cbb8438ecf3f8f1a63148384197cb730895093"
     },
+    "ui-test": {
+      "source": "browserbase/skills",
+      "sourceType": "github",
+      "skillPath": "skills/ui-test/SKILL.md",
+      "computedHash": "d881ae3b0140ba5d1bb0155a1fe818b6ff2acfd76637e2f0f38913a8e66b469a"
+    },
+    "ui-verification": {
+      "source": "amazon-agi-labs/nova-act-agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ui-verification/SKILL.md",
+      "computedHash": "fdbc495d4889c77ba9c6b937a5a818000fb7cb25e47df088a51837b91a78548f"
+    },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",
       "sourceType": "github",
       "skillPath": "skills/react-best-practices/SKILL.md",
       "computedHash": "ca7b0c0c6e5f2750043f7f0cd72d16ac4e2abc48f9b5500d047a4b77a2506212"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
     }
   }
 }

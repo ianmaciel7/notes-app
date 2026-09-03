@@ -55,4 +55,10 @@ When working on specific domains, leverage the installed skills in `.agents/skil
 - `firebase-auth-basics` & `firebase-firestore`: Firebase Auth and Cloud Firestore query/indexing patterns.
 - `firebase-security-rules-auditor`: Security rule verification and auditing.
 - `graphify`: Knowledge graph query and navigation (run `graphify query "<question>"` for architecture/codebase context).
+- `shadcn`: Official shadcn/ui component management, composition, accessibility, and style rules.
+- `blocknote`: Notion-style block editor (`@blocknote/react`, `@blocknote/shadcn`) with Tailwind v4 and Dexie persistence.
+- `find-skills`: Discover and install additional agent skills on demand.
+- `capacities-docs`: Comprehensive documentation, measured geometry, interaction state machines, and browser verification workflows for Capacities workspace UI parity.
+- `typed-service-contracts`: Type-safe contracts between client, server, and local database.
+- `tdd-red-green-refactor`: Standard test-driven development workflow (red -> green -> refactor).
 

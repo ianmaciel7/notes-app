@@ -14,7 +14,8 @@
       "!**/build",
       "!**/next-env.d.ts",
       "!**/node_modules",
-      "!**/public"
+      "!**/public",
+      "!**/.agents"
     ]
   },
   "formatter": {
