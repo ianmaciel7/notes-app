@@ -10,6 +10,6 @@
 - [x] Add branch ruleset templates for `dev`, `stag`, and `main`.
 - [x] Add staging and production Firebase App Hosting runtime configuration.
 - [x] Update testing, deployment, and contribution documentation.
-- [ ] Confirm the first pull request passes `Quality` and `Security`.
+- [x] Confirm the first pull request passes `Quality` and `Security`.
 - [ ] Enable/import the branch rulesets in GitHub repository settings after the checks exist on the long-lived branches.
 - [ ] Confirm Firebase App Hosting backend-to-branch bindings for `stag` and `main`.
