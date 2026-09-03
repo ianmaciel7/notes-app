@@ -39,3 +39,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# git worktrees
+/.worktrees/
+
+# graphify
+/graphify-out/
+
+# os
+Thumbs.db
+
