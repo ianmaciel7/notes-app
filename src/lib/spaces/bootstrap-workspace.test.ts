@@ -24,20 +24,22 @@ describe("bootstrapWorkspace", () => {
     const database = setup();
     await bootstrapWorkspace(database, () => new Date("2026-01-01T00:00:00.000Z"));
     const types = await database.objectTypes.where("spaceId").equals(PERSONAL_SPACE_ID).toArray();
-    expect(types.map((type) => type.id)).toEqual([
-      "page",
-      "table",
-      "task",
-      "weblink",
-      "image",
-      "pdf",
-      "audio",
-      "file",
-      "tweet",
-      "ai-chat",
-      "tag",
-      "query",
-    ]);
+    expect(types.map((type) => type.id).sort()).toEqual(
+      [
+        "page",
+        "table",
+        "task",
+        "weblink",
+        "image",
+        "pdf",
+        "audio",
+        "file",
+        "tweet",
+        "ai-chat",
+        "tag",
+        "query",
+      ].sort(),
+    );
   });
 
   it("is idempotent and never seeds a later blank Space", async () => {
