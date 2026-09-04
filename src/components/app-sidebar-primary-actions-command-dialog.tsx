@@ -177,181 +177,77 @@ function NewContentCommandDialog({
   const deferredQuery = React.useDeferredValue(query);
   const normalizedQuery = normalizeQuery(deferredQuery.trim());
 
-  // --- Build Palette Items ---
+  // --- Build Palette Items from Real Database Entities ---
 
   const recentItems: PaletteItem[] = React.useMemo(() => {
-    if (createdEntities.length > 0) {
-      return createdEntities.map((entity: any, index: number) => {
-        const typeDef =
-          objectTypes.find((t: any) => t.id === entity.objectTypeId) ??
-          objectTypeDefinitionById[entity.objectTypeId] ??
-          objectTypeDefinitionById.page;
-
-        const isToday = index < 3;
-        return {
-          id: `recent-${entity.id}`,
-          kind: "recent" as const,
-          group: isToday ? "Hoje" : "Anterior",
-          title: entity.title || "Sem título",
-          objectTypeLabel: typeDef?.singularLabel ?? typeDef?.label ?? "Page",
-          icon: typeDef?.icon,
-          tone: typeDef?.tone ?? "blue",
-          execute: ({
-            openInNewTab,
-            openInSidePanel: openInSide,
-          }: {
-            openInNewTab?: boolean;
-            openInSidePanel?: boolean;
-          }) => {
-            if (openInSide) {
-              openInSidePanel({
-                id: entity.id,
-                label: entity.title || "Sem título",
-                draggable: true,
-              });
-            } else if (openInNewTab) {
-              const tabId = entity.id;
-              setMainTabs((current: any[]) =>
-                current.some((tab) => tab.id === tabId)
-                  ? current
-                  : [
-                      ...current,
-                      {
-                        id: tabId,
-                        label: entity.title || "Sem título",
-                        icon: typeDef?.icon,
-                        draggable: true,
-                      },
-                    ],
-              );
-              setMainValue(tabId);
-            } else {
-              selectEntity(entity.id);
-            }
-            onOpenChange(false);
-          },
-        };
-      });
+    if (!createdEntities || createdEntities.length === 0) {
+      return [];
     }
 
-    // Default sample recent items matching Capacities UI structure when empty (image.png)
-    const sampleTypes = [
-      {
-        id: "prisma",
-        title: "Prisma",
-        typeId: "table",
-        objectTypeLabel: "Prisma",
-        tone: "lime" as const,
-        group: "Hoje" as const,
-      },
-      {
-        id: "daily",
-        title: "Notas Diárias",
-        typeId: "atomic-note",
-        objectTypeLabel: "Notas Diárias",
-        tone: "blue" as const,
-        group: "Hoje" as const,
-      },
-      {
-        id: "genai",
-        title: "Generative AI Leader",
-        typeId: "book",
-        objectTypeLabel: "Cursos",
-        tone: "teal" as const,
-        group: "Hoje" as const,
-      },
-      {
-        id: "autoscaling",
-        title: "Autoscaling policy",
-        typeId: "area",
-        objectTypeLabel: "GCP",
-        tone: "yellow" as const,
-        group: "Hoje" as const,
-      },
-      {
-        id: "gcp",
-        title: "GCP",
-        typeId: "area",
-        objectTypeLabel: "GCP",
-        tone: "yellow" as const,
-        group: "Hoje" as const,
-      },
-      {
-        id: "data",
-        title: "Data",
-        typeId: "definition",
-        objectTypeLabel: "Data",
-        tone: "violet" as const,
-        group: "Hoje" as const,
-      },
-      {
-        id: "queries",
-        title: "Queries",
-        typeId: "query",
-        objectTypeLabel: "Queries",
-        tone: "green" as const,
-        group: "Anterior" as const,
-      },
-      {
-        id: "notas",
-        title: "Notas",
-        typeId: "page",
-        objectTypeLabel: "Notas",
-        tone: "gray" as const,
-        group: "Anterior" as const,
-      },
-      {
-        id: "sem-titulo",
-        title: "Sem título",
-        typeId: "book",
-        objectTypeLabel: "Cursos",
-        tone: "teal" as const,
-        group: "Anterior" as const,
-      },
-      {
-        id: "cursos",
-        title: "Cursos",
-        typeId: "book",
-        objectTypeLabel: "Cursos",
-        tone: "teal" as const,
-        group: "Anterior" as const,
-      },
-      {
-        id: "cloud-monitoring",
-        title: "Cloud Monitoring",
-        typeId: "area",
-        objectTypeLabel: "GCP",
-        tone: "yellow" as const,
-        group: "Anterior" as const,
-      },
-    ];
+    const isToday = (dateString?: string) => {
+      if (!dateString) return false;
+      const date = new Date(dateString);
+      const now = new Date();
+      return (
+        date.getDate() === now.getDate() &&
+        date.getMonth() === now.getMonth() &&
+        date.getFullYear() === now.getFullYear()
+      );
+    };
 
-    return sampleTypes.map((sample) => {
-      const typeDef = objectTypeDefinitionById[sample.typeId] ?? objectTypeDefinitionById.page;
+    const sortedEntities = [...createdEntities].sort((a: any, b: any) => {
+      const timeA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+      const timeB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+      return timeB - timeA;
+    });
+
+    return sortedEntities.map((entity: any) => {
+      const typeDef =
+        objectTypes.find((t: any) => t.id === entity.objectTypeId) ??
+        objectTypeDefinitionById[entity.objectTypeId] ??
+        objectTypeDefinitionById.page;
+
+      const group = isToday(entity.updatedAt || entity.createdAt) ? "Hoje" : "Anterior";
+
       return {
-        id: `recent-sample-${sample.id}`,
+        id: `recent-${entity.id}`,
         kind: "recent" as const,
-        group: sample.group,
-        title: sample.title,
-        objectTypeLabel: sample.objectTypeLabel ?? typeDef.label,
-        icon: typeDef.icon,
-        tone: sample.tone,
-        execute: async ({ openInNewTab, openInSidePanel: openInSide }) => {
+        group,
+        title: entity.title || "Sem título",
+        objectTypeLabel: typeDef?.singularLabel ?? typeDef?.label ?? "Page",
+        icon: typeDef?.icon,
+        tone: typeDef?.tone ?? "blue",
+        execute: ({
+          openInNewTab,
+          openInSidePanel: openInSide,
+        }: {
+          openInNewTab?: boolean;
+          openInSidePanel?: boolean;
+        }) => {
           if (openInSide) {
-            openInSidePanel({ id: sample.id, label: sample.title, draggable: true });
+            openInSidePanel({
+              id: entity.id,
+              label: entity.title || "Sem título",
+              draggable: true,
+            });
+          } else if (openInNewTab) {
+            const tabId = entity.id;
+            setMainTabs((current: any[]) =>
+              current.some((tab) => tab.id === tabId)
+                ? current
+                : [
+                    ...current,
+                    {
+                      id: tabId,
+                      label: entity.title || "Sem título",
+                      icon: typeDef?.icon,
+                      draggable: true,
+                    },
+                  ],
+            );
+            setMainValue(tabId);
           } else {
-            const entity = await createWorkspaceEntity(sample.typeId, sample.title);
-            if (entity && openInNewTab) {
-              setMainTabs((current: any[]) =>
-                current.some((tab) => tab.id === entity.id)
-                  ? current
-                  : [
-                      ...current,
-                      { id: entity.id, label: entity.title, icon: typeDef.icon, draggable: true },
-                    ],
-              );
-              setMainValue(entity.id);
-            }
+            selectEntity(entity.id);
           }
           onOpenChange(false);
         },
@@ -359,7 +255,6 @@ function NewContentCommandDialog({
     });
   }, [
     createdEntities,
-    createWorkspaceEntity,
     objectTypes,
     onOpenChange,
     openInSidePanel,
@@ -604,379 +499,391 @@ function NewContentCommandDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        id="command-palette"
         data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationMenu}
         showCloseButton={false}
         overlayClassName="bg-black/50 backdrop-blur-none"
         className={cn(
-          "preview-card-core top-0 left-0 flex h-dvh w-full translate-x-0 translate-y-0 flex-col gap-0 border-0 bg-popover p-0 text-popover-foreground ring-0 outline-none transition-all duration-200 select-none [scrollbar-width:thin] [scrollbar-color:var(--bg-el)_transparent]",
-          "sm:top-[10vh] sm:left-1/2 sm:h-auto sm:max-h-[85vh] sm:-translate-x-1/2 sm:rounded-xl sm:border sm:border-border sm:bg-card sm:text-card-foreground sm:shadow-[0_2px_3px_#00000001,0_4px_9px_#00000003,0_8px_12px_#00000001]",
+          "fixed z-50 top-0 left-0 h-dvh w-full translate-x-0 translate-y-0 sm:top-[10vh] sm:left-1/2 sm:-translate-x-1/2 sm:translate-y-0 sm:h-auto sm:max-h-[85vh] p-0 border-0 bg-transparent ring-0 outline-none select-none transition-all duration-200 flex flex-col items-center justify-start max-w-full",
           isExpanded
             ? "sm:w-[min(56rem,calc(100vw-2rem))] sm:max-w-4xl sm:max-h-[92vh]"
             : "sm:w-[min(42rem,calc(100vw-3rem))] sm:max-w-2xl",
         )}
       >
-        <DialogHeader className="sr-only">
-          <DialogTitle>{t("primaryNavigation.search")}</DialogTitle>
-          <DialogDescription>
-            Buscar por conteúdo e ações, ou colar da área de transferência
-          </DialogDescription>
-        </DialogHeader>
+        <div
+          data-slot="command"
+          className={cn(
+            "preview-card-core flex w-full transform flex-col border-front bg-front h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border sm:shadow-[0_2px_3px_#00000001,0_4px_9px_#00000003,0_8px_12px_#00000001] transition-all duration-200 overflow-hidden",
+          )}
+        >
+          <DialogHeader className="sr-only">
+            <DialogTitle>{t("primaryNavigation.search")}</DialogTitle>
+            <DialogDescription>
+              Buscar por conteúdo e ações, ou colar da área de transferência
+            </DialogDescription>
+          </DialogHeader>
 
-        {/* --- Capacities Outer Card Header --- */}
-        <div className="w-full px-3 py-2 pb-0">
-          {/* Top Search Input Row */}
-          <div className="space-between pointer-events-auto flex items-center gap-x-[9px] border-b border-base px-0.5 py-0.5 pb-2 text-base font-normal text-primary">
-            {/* Search Icon */}
-            <div className="pointer-events-none flex items-center justify-center text-[1.25em]">
-              <span
-                className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
-                style={{ verticalAlign: "-0.125em" }}
-              >
-                <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
-                  <CapacitiesSearchIcon />
+          {/* --- Capacities Outer Card Header --- */}
+          <div className="w-full px-3 py-2 pb-0">
+            {/* Top Search Input Row */}
+            <div className="space-between pointer-events-auto flex items-center gap-x-[9px] border-b border-base px-0.5 py-0.5 pb-2 text-base font-normal text-primary">
+              {/* Search Icon */}
+              <div className="pointer-events-none flex items-center justify-center text-[1.25em]">
+                <span
+                  className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
+                  style={{ verticalAlign: "-0.125em" }}
+                >
+                  <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+                    <CapacitiesSearchIcon />
+                  </span>
                 </span>
-              </span>
+              </div>
+
+              {/* Input & Top Right Action Buttons */}
+              <div className="flex w-full min-w-0 flex-1 items-center justify-between gap-x-2">
+                <input
+                  ref={inputRef}
+                  data-slot="command-input"
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Buscar por conteúdo e ações, ou colar da área de transferência"
+                  autoComplete="off"
+                  autoFocus
+                  className="h-7 w-full min-w-0 flex-1 select-text appearance-none bg-transparent text-[14px] sm:text-[15px] leading-tight text-foreground placeholder:text-subtle placeholder:opacity-60 outline-none"
+                />
+
+                <div className="flex shrink-0 items-center gap-x-0.5">
+                  {/* Help Button */}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://docs.capacities.io/reference/search"
+                    className="inline-flex size-7 items-center justify-center rounded-base text-secondary transition-colors hover:bg-front-hover hover:text-primary"
+                    title="Ajuda com a busca"
+                  >
+                    <CapacitiesHelpIcon className="size-4" />
+                  </a>
+
+                  {/* Expand / Fullscreen Button */}
+                  <button
+                    type="button"
+                    onClick={() => setIsExpanded((prev) => !prev)}
+                    className="inline-flex size-7 items-center justify-center rounded-base text-secondary transition-colors hover:bg-front-hover hover:text-primary"
+                    title={isExpanded ? "Reduzir visualização" : "Expandir visualização"}
+                  >
+                    <CapacitiesExpandIcon className="size-4" />
+                  </button>
+                </div>
+              </div>
             </div>
 
-            {/* Input & Top Right Action Buttons */}
-            <div className="flex w-full min-w-0 flex-1 items-center justify-between gap-x-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Buscar por conteúdo e ações, ou colar da área de transferência"
-                autoComplete="off"
-                autoFocus
-                className="h-7 w-full min-w-0 flex-1 select-text appearance-none bg-transparent text-[14px] sm:text-[15px] leading-tight text-foreground placeholder:text-subtle placeholder:opacity-60 outline-none"
-              />
-
-              <div className="flex shrink-0 items-center gap-x-0.5">
-                {/* Help Button */}
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href="https://docs.capacities.io/reference/search"
-                  className="inline-flex size-7 items-center justify-center rounded-base text-secondary transition-colors hover:bg-front-hover hover:text-primary"
-                  title="Ajuda com a busca"
-                >
-                  <CapacitiesHelpIcon className="size-4" />
-                </a>
-
-                {/* Expand / Fullscreen Button */}
+            {/* Sub-header Option Pill: Abrir em nova aba */}
+            <div className="mt-1.5 flex px-0.5 pb-2">
+              <span className="text-[11px]">
                 <button
                   type="button"
-                  onClick={() => setIsExpanded((prev) => !prev)}
-                  className="inline-flex size-7 items-center justify-center rounded-base text-secondary transition-colors hover:bg-front-hover hover:text-primary"
-                  title={isExpanded ? "Reduzir visualização" : "Expandir visualização"}
+                  onClick={() => setOpenInNewTab((prev) => !prev)}
+                  className={cn(
+                    "box-border relative inline-flex cursor-pointer select-none flex-row items-center whitespace-nowrap rounded-[0.475em] border py-[0.2em] px-[0.49em] text-[11px] leading-[1.3] transition-colors outline-none",
+                    openInNewTab
+                      ? "border-primary bg-primary/10 text-primary font-medium"
+                      : "border-base bg-el text-secondary hover:text-primary",
+                  )}
                 >
-                  <CapacitiesExpandIcon className="size-4" />
+                  <span className="mr-[0.325em] ml-[-0.1em] inline-flex min-h-[1em] min-w-[1em] shrink-0 items-center justify-center rounded-[0.33em]">
+                    <span
+                      className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative p-[0.1em]"
+                      style={{ verticalAlign: "-0.125em" }}
+                    >
+                      <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+                        <CapacitiesNewTabIcon />
+                      </span>
+                    </span>
+                  </span>
+                  <span className="inline min-w-[1.3em] whitespace-nowrap text-center">
+                    Abrir em nova aba
+                  </span>
                 </button>
+              </span>
+            </div>
+          </div>
+
+          {/* --- Scrollable Content List Container --- */}
+          <div className="relative flex w-full min-w-0 flex-1 flex-col rounded-none border-t border-base sm:max-h-[70vh] sm:rounded-b">
+            <div
+              id="control-dropdown-container"
+              className="scroll-container flex h-full max-h-[65vh] w-full flex-col overflow-y-auto overflow-x-hidden px-1.5 py-0.5 sm:max-h-[70vh]"
+              style={{ scrollBehavior: "auto", scrollPadding: "2rem" }}
+            >
+              <div className="flex flex-col py-1">
+                {/* --- SECTION 1: RECENTEMENTE ABERTOS --- */}
+                {filteredRecentItems.length > 0 && (
+                  <>
+                    <div className="px-2.5 pt-2 pb-2 text-sm font-normal text-secondary">
+                      Recentemente abertos
+                    </div>
+
+                    {hojeRecent.length > 0 && (
+                      <>
+                        <div className="px-2.5 pt-2 pb-1 text-xs font-medium text-subtle">Hoje</div>
+                        {hojeRecent.map((item) => {
+                          const globalIdx = allFilteredItems.findIndex((i) => i.id === item.id);
+                          const isSelected = globalIdx === activeIndex;
+
+                          return (
+                            <div
+                              key={item.id}
+                              className="relative flex w-full shrink-0 grow-0 px-1.5 py-[0.5px]"
+                            >
+                              <button
+                                type="button"
+                                ref={(node) => {
+                                  if (node) itemRefs.current.set(item.id, node);
+                                  else itemRefs.current.delete(item.id);
+                                }}
+                                data-active={isSelected || undefined}
+                                onPointerMove={() => setActiveIndex(globalIdx)}
+                                onClick={() => item.execute({ openInNewTab })}
+                                className={cn(
+                                  "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
+                                  isSelected
+                                    ? "bg-el text-primary active:border-state-active"
+                                    : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
+                                )}
+                              >
+                                <div className="shrink-0">
+                                  <ObjectIconBadge
+                                    icon={item.icon ?? CapacitiesSearchIcon}
+                                    tone={item.tone ?? "blue"}
+                                    variant="menu"
+                                  />
+                                </div>
+                                <div className="flex min-w-0 flex-1 items-center">
+                                  <span className="truncate">{item.title}</span>
+                                </div>
+
+                                {item.objectTypeLabel && (
+                                  <div className="flex shrink-0 items-center">
+                                    <span className="text-xxs">
+                                      <span
+                                        className={cn(
+                                          "box-border relative inline-flex select-none flex-row items-center whitespace-nowrap rounded-[0.475em] border py-[0.2em] px-[0.49em] text-[11px] leading-[1.3] transition-colors",
+                                          objectIconToneBadgeClass[item.tone ?? "blue"],
+                                        )}
+                                      >
+                                        <span className="mr-[0.325em] ml-[-0.1em] inline-flex min-h-[1em] min-w-[1em] shrink-0 items-center justify-center rounded-[0.33em]">
+                                          <span
+                                            className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
+                                            style={{ verticalAlign: "-0.125em" }}
+                                          >
+                                            <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+                                              {React.createElement(
+                                                item.icon ?? CapacitiesSearchIcon,
+                                              )}
+                                            </span>
+                                          </span>
+                                        </span>
+                                        <span className="inline min-w-[1.3em] whitespace-nowrap text-center">
+                                          {item.objectTypeLabel}
+                                        </span>
+                                      </span>
+                                    </span>
+                                  </div>
+                                )}
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </>
+                    )}
+
+                    {anteriorRecent.length > 0 && (
+                      <>
+                        <div className="px-2.5 pt-2 pb-1 text-xs font-medium text-subtle">
+                          Anterior
+                        </div>
+                        {anteriorRecent.map((item) => {
+                          const globalIdx = allFilteredItems.findIndex((i) => i.id === item.id);
+                          const isSelected = globalIdx === activeIndex;
+
+                          return (
+                            <div
+                              key={item.id}
+                              className="relative flex w-full shrink-0 grow-0 px-1.5 py-[0.5px]"
+                            >
+                              <button
+                                type="button"
+                                ref={(node) => {
+                                  if (node) itemRefs.current.set(item.id, node);
+                                  else itemRefs.current.delete(item.id);
+                                }}
+                                data-active={isSelected || undefined}
+                                onPointerMove={() => setActiveIndex(globalIdx)}
+                                onClick={() => item.execute({ openInNewTab })}
+                                className={cn(
+                                  "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
+                                  isSelected
+                                    ? "bg-el text-primary active:border-state-active"
+                                    : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
+                                )}
+                              >
+                                <div className="shrink-0">
+                                  <ObjectIconBadge
+                                    icon={item.icon ?? CapacitiesSearchIcon}
+                                    tone={item.tone ?? "blue"}
+                                    variant="menu"
+                                  />
+                                </div>
+                                <div className="flex min-w-0 flex-1 items-center">
+                                  <span className="truncate">{item.title}</span>
+                                </div>
+
+                                {item.objectTypeLabel && (
+                                  <div className="flex shrink-0 items-center">
+                                    <span className="text-xxs">
+                                      <span
+                                        className={cn(
+                                          "box-border relative inline-flex select-none flex-row items-center whitespace-nowrap rounded-[0.475em] border py-[0.2em] px-[0.49em] text-[11px] leading-[1.3] transition-colors",
+                                          objectIconToneBadgeClass[item.tone ?? "blue"],
+                                        )}
+                                      >
+                                        <span className="mr-[0.325em] ml-[-0.1em] inline-flex min-h-[1em] min-w-[1em] shrink-0 items-center justify-center rounded-[0.33em]">
+                                          <span
+                                            className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
+                                            style={{ verticalAlign: "-0.125em" }}
+                                          >
+                                            <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+                                              {React.createElement(
+                                                item.icon ?? CapacitiesSearchIcon,
+                                              )}
+                                            </span>
+                                          </span>
+                                        </span>
+                                        <span className="inline min-w-[1.3em] whitespace-nowrap text-center">
+                                          {item.objectTypeLabel}
+                                        </span>
+                                      </span>
+                                    </span>
+                                  </div>
+                                )}
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </>
+                    )}
+                  </>
+                )}
+
+                {/* --- SECTION 2: TODAS AS AÇÕES --- */}
+                {filteredActionItems.length > 0 && (
+                  <>
+                    <div className="px-2.5 pt-4 pb-2 text-sm font-normal text-secondary">
+                      Todas as ações
+                    </div>
+
+                    {filteredActionItems.map((item) => {
+                      const globalIdx = allFilteredItems.findIndex((i) => i.id === item.id);
+                      const isSelected = globalIdx === activeIndex;
+
+                      return (
+                        <div
+                          key={item.id}
+                          className="relative flex w-full shrink-0 grow-0 px-1.5 py-[0.5px]"
+                        >
+                          <button
+                            type="button"
+                            ref={(node) => {
+                              if (node) itemRefs.current.set(item.id, node);
+                              else itemRefs.current.delete(item.id);
+                            }}
+                            data-active={isSelected || undefined}
+                            onPointerMove={() => setActiveIndex(globalIdx)}
+                            onClick={() => item.execute({ openInNewTab })}
+                            className={cn(
+                              "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
+                              isSelected
+                                ? "bg-el text-primary active:border-state-active"
+                                : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
+                            )}
+                          >
+                            {/* Left Icon & Title */}
+                            <div className="shrink-0">
+                              <ObjectIconBadge
+                                icon={item.icon ?? CapacitiesSearchIcon}
+                                tone={item.tone ?? "blue"}
+                                variant="menu"
+                              />
+                            </div>
+                            <div className="flex min-w-0 flex-1 items-center">
+                              <span className="truncate">{item.title}</span>
+                            </div>
+
+                            {/* Shortcuts */}
+                            {item.shortcuts && item.shortcuts.length > 0 && (
+                              <div className="flex shrink-0 items-center text-xs text-subtle">
+                                <span className="flex items-center gap-1 font-normal normal-case">
+                                  {item.shortcuts.map((k) => (
+                                    <span
+                                      key={k}
+                                      className="rounded border border-base bg-el px-1.5 py-0.5 text-xs text-secondary leading-normal"
+                                    >
+                                      {k}
+                                    </span>
+                                  ))}
+                                </span>
+                              </div>
+                            )}
+
+                            {/* Far Right Action Cursor Button */}
+                            <div className="flex shrink-0 items-center">
+                              <div className="flex size-6 items-center justify-center rounded-base bg-el p-0.5 text-secondary">
+                                <span
+                                  className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
+                                  style={{ verticalAlign: "-0.125em" }}
+                                >
+                                  <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+                                    <CapacitiesActionCursorIcon />
+                                  </span>
+                                </span>
+                              </div>
+                            </div>
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </>
+                )}
+
+                {allFilteredItems.length === 0 && (
+                  <div className="p-8 text-center text-sm text-muted-foreground">
+                    Nenhum resultado encontrado para &quot;{query}&quot;
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Sub-header Option Pill: Abrir em nova aba */}
-          <div className="mt-1.5 flex px-0.5 pb-2">
-            <span className="text-[11px]">
-              <button
-                type="button"
-                onClick={() => setOpenInNewTab((prev) => !prev)}
-                className={cn(
-                  "box-border relative inline-flex cursor-pointer select-none flex-row items-center whitespace-nowrap rounded-[0.475em] border py-[0.2em] px-[0.49em] text-[11px] leading-[1.3] transition-colors outline-none",
-                  openInNewTab
-                    ? "border-primary bg-primary/10 text-primary font-medium"
-                    : "border-base bg-el text-secondary hover:text-primary",
-                )}
-              >
-                <span className="mr-[0.325em] ml-[-0.1em] inline-flex min-h-[1em] min-w-[1em] shrink-0 items-center justify-center rounded-[0.33em]">
-                  <span
-                    className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative p-[0.1em]"
-                    style={{ verticalAlign: "-0.125em" }}
-                  >
-                    <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
-                      <CapacitiesNewTabIcon />
-                    </span>
-                  </span>
-                </span>
-                <span className="inline min-w-[1.3em] whitespace-nowrap text-center">
-                  Abrir em nova aba
-                </span>
-              </button>
+          {/* Bottom Footer Navigation Bar */}
+          <div className="flex h-9 shrink-0 items-center gap-x-4 border-t border-border px-3 py-1.5 text-xs text-muted-foreground select-none">
+            <span className="whitespace-nowrap">
+              <span className="font-medium text-foreground">↑ ↓</span> para navegar
+            </span>
+            <span className="whitespace-nowrap">
+              <span className="font-medium text-foreground">Esc</span> para abortar
+            </span>
+            <span className="whitespace-nowrap">
+              <span className="font-medium text-foreground">↵</span> para selecionar
+            </span>
+            <span className="whitespace-nowrap">
+              <span className="font-medium text-foreground">⌘ ↵ / Ctrl ↵</span> em nova aba
+            </span>
+            <span className="whitespace-nowrap">
+              <span className="font-medium text-foreground">⇧ ↵</span> no painel lateral
             </span>
           </div>
-        </div>
-
-        {/* --- Scrollable Content List Container --- */}
-        <div className="relative flex w-full min-w-0 flex-1 flex-col rounded-none border-t border-base sm:max-h-[70vh] sm:rounded-b">
-          <div
-            id="control-dropdown-container"
-            className="scroll-container flex h-full max-h-[65vh] w-full flex-col overflow-y-auto overflow-x-hidden px-1.5 py-0.5 sm:max-h-[70vh]"
-            style={{ scrollBehavior: "auto", scrollPadding: "2rem" }}
-          >
-            <div className="flex flex-col py-1">
-              {/* --- SECTION 1: RECENTEMENTE ABERTOS --- */}
-              {filteredRecentItems.length > 0 && (
-                <>
-                  <div className="px-2.5 pt-2 pb-2 text-sm font-normal text-secondary">
-                    Recentemente abertos
-                  </div>
-
-                  {hojeRecent.length > 0 && (
-                    <>
-                      <div className="px-2.5 pt-2 pb-1 text-xs font-medium text-subtle">Hoje</div>
-                      {hojeRecent.map((item) => {
-                        const globalIdx = allFilteredItems.findIndex((i) => i.id === item.id);
-                        const isSelected = globalIdx === activeIndex;
-
-                        return (
-                          <div
-                            key={item.id}
-                            className="relative flex w-full shrink-0 grow-0 px-1.5 py-[0.5px]"
-                          >
-                            <button
-                              type="button"
-                              ref={(node) => {
-                                if (node) itemRefs.current.set(item.id, node);
-                                else itemRefs.current.delete(item.id);
-                              }}
-                              data-active={isSelected || undefined}
-                              onPointerMove={() => setActiveIndex(globalIdx)}
-                              onClick={() => item.execute({ openInNewTab })}
-                              className={cn(
-                                "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
-                                isSelected
-                                  ? "bg-el text-primary active:border-state-active"
-                                  : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
-                              )}
-                            >
-                              <div className="shrink-0">
-                                <ObjectIconBadge
-                                  icon={item.icon ?? CapacitiesSearchIcon}
-                                  tone={item.tone ?? "blue"}
-                                  variant="menu"
-                                />
-                              </div>
-                              <div className="flex min-w-0 flex-1 items-center">
-                                <span className="truncate">{item.title}</span>
-                              </div>
-
-                              {item.objectTypeLabel && (
-                                <div className="flex shrink-0 items-center">
-                                  <span className="text-xxs">
-                                    <span
-                                      className={cn(
-                                        "box-border relative inline-flex select-none flex-row items-center whitespace-nowrap rounded-[0.475em] border py-[0.2em] px-[0.49em] text-[11px] leading-[1.3] transition-colors",
-                                        objectIconToneBadgeClass[item.tone ?? "blue"],
-                                      )}
-                                    >
-                                      <span className="mr-[0.325em] ml-[-0.1em] inline-flex min-h-[1em] min-w-[1em] shrink-0 items-center justify-center rounded-[0.33em]">
-                                        <span
-                                          className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
-                                          style={{ verticalAlign: "-0.125em" }}
-                                        >
-                                          <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
-                                            {React.createElement(item.icon ?? CapacitiesSearchIcon)}
-                                          </span>
-                                        </span>
-                                      </span>
-                                      <span className="inline min-w-[1.3em] whitespace-nowrap text-center">
-                                        {item.objectTypeLabel}
-                                      </span>
-                                    </span>
-                                  </span>
-                                </div>
-                              )}
-                            </button>
-                          </div>
-                        );
-                      })}
-                    </>
-                  )}
-
-                  {anteriorRecent.length > 0 && (
-                    <>
-                      <div className="px-2.5 pt-2 pb-1 text-xs font-medium text-subtle">
-                        Anterior
-                      </div>
-                      {anteriorRecent.map((item) => {
-                        const globalIdx = allFilteredItems.findIndex((i) => i.id === item.id);
-                        const isSelected = globalIdx === activeIndex;
-
-                        return (
-                          <div
-                            key={item.id}
-                            className="relative flex w-full shrink-0 grow-0 px-1.5 py-[0.5px]"
-                          >
-                            <button
-                              type="button"
-                              ref={(node) => {
-                                if (node) itemRefs.current.set(item.id, node);
-                                else itemRefs.current.delete(item.id);
-                              }}
-                              data-active={isSelected || undefined}
-                              onPointerMove={() => setActiveIndex(globalIdx)}
-                              onClick={() => item.execute({ openInNewTab })}
-                              className={cn(
-                                "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
-                                isSelected
-                                  ? "bg-el text-primary active:border-state-active"
-                                  : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
-                              )}
-                            >
-                              <div className="shrink-0">
-                                <ObjectIconBadge
-                                  icon={item.icon ?? CapacitiesSearchIcon}
-                                  tone={item.tone ?? "blue"}
-                                  variant="menu"
-                                />
-                              </div>
-                              <div className="flex min-w-0 flex-1 items-center">
-                                <span className="truncate">{item.title}</span>
-                              </div>
-
-                              {item.objectTypeLabel && (
-                                <div className="flex shrink-0 items-center">
-                                  <span className="text-xxs">
-                                    <span
-                                      className={cn(
-                                        "box-border relative inline-flex select-none flex-row items-center whitespace-nowrap rounded-[0.475em] border py-[0.2em] px-[0.49em] text-[11px] leading-[1.3] transition-colors",
-                                        objectIconToneBadgeClass[item.tone ?? "blue"],
-                                      )}
-                                    >
-                                      <span className="mr-[0.325em] ml-[-0.1em] inline-flex min-h-[1em] min-w-[1em] shrink-0 items-center justify-center rounded-[0.33em]">
-                                        <span
-                                          className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
-                                          style={{ verticalAlign: "-0.125em" }}
-                                        >
-                                          <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
-                                            {React.createElement(item.icon ?? CapacitiesSearchIcon)}
-                                          </span>
-                                        </span>
-                                      </span>
-                                      <span className="inline min-w-[1.3em] whitespace-nowrap text-center">
-                                        {item.objectTypeLabel}
-                                      </span>
-                                    </span>
-                                  </span>
-                                </div>
-                              )}
-                            </button>
-                          </div>
-                        );
-                      })}
-                    </>
-                  )}
-                </>
-              )}
-
-              {/* --- SECTION 2: TODAS AS AÇÕES --- */}
-              {filteredActionItems.length > 0 && (
-                <>
-                  <div className="px-2.5 pt-4 pb-2 text-sm font-normal text-secondary">
-                    Todas as ações
-                  </div>
-
-                  {filteredActionItems.map((item) => {
-                    const globalIdx = allFilteredItems.findIndex((i) => i.id === item.id);
-                    const isSelected = globalIdx === activeIndex;
-
-                    return (
-                      <div
-                        key={item.id}
-                        className="relative flex w-full shrink-0 grow-0 px-1.5 py-[0.5px]"
-                      >
-                        <button
-                          type="button"
-                          ref={(node) => {
-                            if (node) itemRefs.current.set(item.id, node);
-                            else itemRefs.current.delete(item.id);
-                          }}
-                          data-active={isSelected || undefined}
-                          onPointerMove={() => setActiveIndex(globalIdx)}
-                          onClick={() => item.execute({ openInNewTab })}
-                          className={cn(
-                            "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
-                            isSelected
-                              ? "bg-el text-primary active:border-state-active"
-                              : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
-                          )}
-                        >
-                          {/* Left Icon & Title */}
-                          <div className="shrink-0">
-                            <ObjectIconBadge
-                              icon={item.icon ?? CapacitiesSearchIcon}
-                              tone={item.tone ?? "blue"}
-                              variant="menu"
-                            />
-                          </div>
-                          <div className="flex min-w-0 flex-1 items-center">
-                            <span className="truncate">{item.title}</span>
-                          </div>
-
-                          {/* Shortcuts */}
-                          {item.shortcuts && item.shortcuts.length > 0 && (
-                            <div className="flex shrink-0 items-center text-xs text-subtle">
-                              <span className="flex items-center gap-1 font-normal normal-case">
-                                {item.shortcuts.map((k) => (
-                                  <span
-                                    key={k}
-                                    className="rounded border border-base bg-el px-1.5 py-0.5 text-xs text-secondary leading-normal"
-                                  >
-                                    {k}
-                                  </span>
-                                ))}
-                              </span>
-                            </div>
-                          )}
-
-                          {/* Far Right Action Cursor Button */}
-                          <div className="flex shrink-0 items-center">
-                            <div className="flex size-6 items-center justify-center rounded-base bg-el p-0.5 text-secondary">
-                              <span
-                                className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
-                                style={{ verticalAlign: "-0.125em" }}
-                              >
-                                <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
-                                  <CapacitiesActionCursorIcon />
-                                </span>
-                              </span>
-                            </div>
-                          </div>
-                        </button>
-                      </div>
-                    );
-                  })}
-                </>
-              )}
-
-              {allFilteredItems.length === 0 && (
-                <div className="p-8 text-center text-sm text-muted-foreground">
-                  Nenhum resultado encontrado para &quot;{query}&quot;
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Footer Navigation Bar */}
-        <div className="flex h-9 shrink-0 items-center gap-x-4 border-t border-border px-3 py-1.5 text-xs text-muted-foreground select-none">
-          <span className="whitespace-nowrap">
-            <span className="font-medium text-foreground">↑ ↓</span> para navegar
-          </span>
-          <span className="whitespace-nowrap">
-            <span className="font-medium text-foreground">Esc</span> para abortar
-          </span>
-          <span className="whitespace-nowrap">
-            <span className="font-medium text-foreground">↵</span> para selecionar
-          </span>
-          <span className="whitespace-nowrap">
-            <span className="font-medium text-foreground">⌘ ↵ / Ctrl ↵</span> em nova aba
-          </span>
-          <span className="whitespace-nowrap">
-            <span className="font-medium text-foreground">⇧ ↵</span> no painel lateral
-          </span>
         </div>
       </DialogContent>
     </Dialog>

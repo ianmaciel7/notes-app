@@ -7,6 +7,12 @@
       "skillPath": "skills/browser-trace/SKILL.md",
       "computedHash": "a49568a18e931b3587a4cce9b234a44427fbe325578bd7124ad149010e1b70ca"
     },
+    "context7-mcp": {
+      "source": "upstash/context7",
+      "sourceType": "github",
+      "skillPath": "skills/context7-mcp/SKILL.md",
+      "computedHash": "954151658cec03361a75b712d8611a551f4c929976b0540799bce84d900a351f"
+    },
     "creative-director": {
       "source": "nexu-io/open-design",
       "sourceType": "github",
@@ -93,6 +99,12 @@
       "sourceType": "github",
       "skillPath": "skills/tailwind-4-docs/SKILL.md",
       "computedHash": "4900f575f24641b1af459cda37cbb8438ecf3f8f1a63148384197cb730895093"
+    },
+    "test-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/test-driven-development/SKILL.md",
+      "computedHash": "a4126a9c5f17be3c228aa9e5755898ade283448b86099f56f40852e8c14532be"
     },
     "ui-test": {
       "source": "browserbase/skills",

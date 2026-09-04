@@ -60,6 +60,6 @@ When working on specific domains, leverage the installed skills in `.agents/skil
 - `blocknote`: Notion-style block editor (`@blocknote/react`, `@blocknote/shadcn`) with Tailwind v4 and Dexie persistence.
 - `find-skills`: Discover and install additional agent skills on demand.
 - `capacities-docs`: Comprehensive documentation, measured geometry, interaction state machines, and browser verification workflows for Capacities workspace UI parity.
-- `typed-service-contracts`: Type-safe contracts between client, server, and local database.
-- `tdd-red-green-refactor`: Standard test-driven development workflow (red -> green -> refactor).
+- `test-driven-development`: Official Test-Driven Development workflow (obra/superpowers).
+- `context7-mcp`: Official Upstash Context7 documentation and code examples lookup integration for modern libraries.
 
