@@ -1,0 +1,83 @@
+name: Apply create Space state fix
+
+on:
+  push:
+    branches:
+      - fix/create-space-state
+
+permissions:
+  contents: write
+
+jobs:
+  apply-and-verify:
+    if: github.event.head_commit.message == 'chore: apply create Space state fix'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/create-space-state
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.20.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Apply minimal WorkspaceProvider fix
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/components/workspace-controller.tsx')
+          text = path.read_text()
+
+          state_anchor = '''  const [customSections, setCustomSections] = React.useState<any[]>([]);\n\n  const openInSidePanel = React.useCallback(\n'''
+          state_replacement = '''  const [customSections, setCustomSections] = React.useState<any[]>([]);\n\n  const createSpace = React.useCallback((name: string) => {\n    const normalizedName = name.trim();\n    if (!normalizedName) return;\n\n    const id = `space-${crypto.randomUUID()}`;\n    setSpaces((current) => [...current, { id, name: normalizedName, icon: "user" }]);\n    setSpaceId(id);\n  }, []);\n\n  const openInSidePanel = React.useCallback(\n'''
+          if state_anchor not in text:
+              raise SystemExit('createSpace insertion anchor not found')
+          text = text.replace(state_anchor, state_replacement, 1)
+
+          value_anchor = '''      setSpaces,\n      switchSpace: setSpaceId,\n'''
+          value_replacement = '''      setSpaces,\n      createSpace,\n      switchSpace: setSpaceId,\n'''
+          if value_anchor not in text:
+              raise SystemExit('context value anchor not found')
+          text = text.replace(value_anchor, value_replacement, 1)
+
+          deps_anchor = '''      spaces,\n      spaceId,\n      mainTabs,\n'''
+          deps_replacement = '''      spaces,\n      spaceId,\n      createSpace,\n      mainTabs,\n'''
+          if deps_anchor not in text:
+              raise SystemExit('memo dependency anchor not found')
+          text = text.replace(deps_anchor, deps_replacement, 1)
+
+          path.write_text(text)
+          PY
+          pnpm exec biome format --write src/components/workspace-controller.tsx tests/space-create-state.spec.ts
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Run create Space regression
+        shell: bash
+        run: |
+          pnpm dev > /tmp/notes-app.log 2>&1 &
+          APP_PID=$!
+          trap 'kill $APP_PID 2>/dev/null || true' EXIT
+          for i in {1..60}; do
+            if curl --fail --silent http://localhost:3000 >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          pnpm exec playwright test tests/space-create-state.spec.ts --reporter=line
+      - run: pnpm lint
+      - name: Commit verified fix and remove temporary workflows
+        shell: bash
+        run: |
+          rm -f .github/workflows/verify-create-space-state.yml
+          rm -f .github/workflows/apply-create-space-state.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/components/workspace-controller.tsx tests/space-create-state.spec.ts .github/workflows
+          git commit -m 'fix: create and activate new Spaces'
+          git push origin HEAD:fix/create-space-state
