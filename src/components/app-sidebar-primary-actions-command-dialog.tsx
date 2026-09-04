@@ -130,10 +130,10 @@ type PaletteItem = {
   title: string;
   group?: "Hoje" | "Anterior";
   objectTypeLabel?: string;
-  icon?: React.ElementType;
+  icon?: React.ElementType<any>;
   tone?: ObjectIconTone;
   shortcuts?: string[];
-  execute: (options: { openInNewTab?: boolean; openInSidePanel?: boolean }) => void;
+  execute: (options: { openInNewTab?: boolean; openInSidePanel?: boolean }) => void | Promise<void>;
 };
 
 function NewContentCommandDialog({
@@ -196,7 +196,13 @@ function NewContentCommandDialog({
           objectTypeLabel: typeDef?.singularLabel ?? typeDef?.label ?? "Page",
           icon: typeDef?.icon,
           tone: typeDef?.tone ?? "blue",
-          execute: ({ openInNewTab, openInSidePanel: openInSide }) => {
+          execute: ({
+            openInNewTab,
+            openInSidePanel: openInSide,
+          }: {
+            openInNewTab?: boolean;
+            openInSidePanel?: boolean;
+          }) => {
             if (openInSide) {
               openInSidePanel({
                 id: entity.id,
@@ -477,7 +483,12 @@ function NewContentCommandDialog({
         title: `Criar ${label}`,
         icon: typeDef.icon,
         tone: typeDef.tone ?? "blue",
-        execute: async ({ openInNewTab }) => {
+        execute: async ({
+          openInNewTab,
+        }: {
+          openInNewTab?: boolean;
+          openInSidePanel?: boolean;
+        }) => {
           const entity = await createWorkspaceEntity(typeDef.id, label);
           if (entity && openInNewTab) {
             setMainTabs((current: any[]) =>
@@ -734,7 +745,7 @@ function NewContentCommandDialog({
                               onPointerMove={() => setActiveIndex(globalIdx)}
                               onClick={() => item.execute({ openInNewTab })}
                               className={cn(
-                                "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-start text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
+                                "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
                                 isSelected
                                   ? "bg-el text-primary active:border-state-active"
                                   : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
@@ -745,18 +756,14 @@ function NewContentCommandDialog({
                                   icon={item.icon ?? CapacitiesSearchIcon}
                                   tone={item.tone ?? "blue"}
                                   variant="menu"
-                                  className="mt-1"
                                 />
                               </div>
-                              <div className="flex h-auto min-w-0 flex-1 flex-col pt-[0.5px]">
-                                <div className="flex min-h-5 items-center font-normal line-clamp-2">
-                                  <span>{item.title}</span>
-                                </div>
-                                <div className="font-normal" />
+                              <div className="flex min-w-0 flex-1 items-center">
+                                <span className="truncate">{item.title}</span>
                               </div>
 
                               {item.objectTypeLabel && (
-                                <div className="flex h-full shrink-0 items-center pt-[3.5px]">
+                                <div className="flex shrink-0 items-center">
                                   <span className="text-xxs">
                                     <span
                                       className={cn(
@@ -812,7 +819,7 @@ function NewContentCommandDialog({
                               onPointerMove={() => setActiveIndex(globalIdx)}
                               onClick={() => item.execute({ openInNewTab })}
                               className={cn(
-                                "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-start text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
+                                "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
                                 isSelected
                                   ? "bg-el text-primary active:border-state-active"
                                   : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
@@ -823,18 +830,14 @@ function NewContentCommandDialog({
                                   icon={item.icon ?? CapacitiesSearchIcon}
                                   tone={item.tone ?? "blue"}
                                   variant="menu"
-                                  className="mt-1"
                                 />
                               </div>
-                              <div className="flex h-auto min-w-0 flex-1 flex-col pt-[0.5px]">
-                                <div className="flex min-h-5 items-center font-normal line-clamp-2">
-                                  <span>{item.title}</span>
-                                </div>
-                                <div className="font-normal" />
+                              <div className="flex min-w-0 flex-1 items-center">
+                                <span className="truncate">{item.title}</span>
                               </div>
 
                               {item.objectTypeLabel && (
-                                <div className="flex h-full shrink-0 items-center pt-[3.5px]">
+                                <div className="flex shrink-0 items-center">
                                   <span className="text-xxs">
                                     <span
                                       className={cn(
@@ -894,7 +897,7 @@ function NewContentCommandDialog({
                           onPointerMove={() => setActiveIndex(globalIdx)}
                           onClick={() => item.execute({ openInNewTab })}
                           className={cn(
-                            "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-start text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
+                            "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
                             isSelected
                               ? "bg-el text-primary active:border-state-active"
                               : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
@@ -906,19 +909,15 @@ function NewContentCommandDialog({
                               icon={item.icon ?? CapacitiesSearchIcon}
                               tone={item.tone ?? "blue"}
                               variant="menu"
-                              className="mt-1"
                             />
                           </div>
-                          <div className="flex h-auto w-24 grow flex-col pt-[0.5px]">
-                            <div className="flex min-h-5 items-center font-normal line-clamp-2">
-                              <span>{item.title}</span>
-                            </div>
-                            <div className="font-normal" />
+                          <div className="flex min-w-0 flex-1 items-center">
+                            <span className="truncate">{item.title}</span>
                           </div>
 
                           {/* Shortcuts */}
                           {item.shortcuts && item.shortcuts.length > 0 && (
-                            <div className="flex h-full items-center text-xs text-subtle">
+                            <div className="flex shrink-0 items-center text-xs text-subtle">
                               <span className="flex items-center gap-1 font-normal normal-case">
                                 {item.shortcuts.map((k) => (
                                   <span
@@ -933,8 +932,8 @@ function NewContentCommandDialog({
                           )}
 
                           {/* Far Right Action Cursor Button */}
-                          <div className="flex h-full flex-col justify-start">
-                            <div className="flex h-sm w-sm items-center justify-center gap-x-1 rounded-base bg-el p-0.5 text-secondary">
+                          <div className="flex shrink-0 items-center">
+                            <div className="flex size-6 items-center justify-center rounded-base bg-el p-0.5 text-secondary">
                               <span
                                 className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
                                 style={{ verticalAlign: "-0.125em" }}

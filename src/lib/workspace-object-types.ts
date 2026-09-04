@@ -264,19 +264,28 @@ export const OBJECT_ICON_NAMES = [
   "weblink",
 ] as const satisfies readonly ObjectIconName[];
 
-const iconTones = [
+export const OBJECT_ICON_TONES = [
   "amber",
   "blue",
   "cyan",
   "emerald",
+  "fuchsia",
   "gray",
   "green",
+  "lime",
+  "neutral",
   "orange",
+  "pink",
   "purple",
   "red",
   "rose",
   "sky",
+  "teal",
+  "violet",
+  "yellow",
 ] as const satisfies readonly ObjectIconTone[];
+
+const iconTones = OBJECT_ICON_TONES;
 
 const propertyValueTypes = [
   "title",
@@ -1005,7 +1014,7 @@ function validateStructureKindAndAppearance(
   if (typeof iconName !== "string" || !OBJECT_ICON_NAMES.includes(iconName as ObjectIconName)) {
     return failure("invalid-appearance", "Structure icon name is not supported.");
   }
-  if (typeof tone !== "string" || !iconTones.includes(tone as ObjectIconTone)) {
+  if (typeof tone !== "string" || !(iconTones as readonly string[]).includes(tone)) {
     return failure("invalid-appearance", "Structure tone is not supported.");
   }
   if (
@@ -1318,7 +1327,7 @@ export function updateStructureAppearance(
   if (!editable.ok) return editable;
   const iconName = update.iconName ?? editable.value.iconName;
   const tone = update.tone ?? editable.value.tone;
-  if (!OBJECT_ICON_NAMES.includes(iconName) || !iconTones.includes(tone)) {
+  if (!OBJECT_ICON_NAMES.includes(iconName) || !(iconTones as readonly string[]).includes(tone)) {
     return failure("invalid-appearance", "Structure appearance is not supported.");
   }
   return ok(

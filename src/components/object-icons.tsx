@@ -38,12 +38,12 @@ type ObjectIconProps = Omit<IconProps, "name" | "weight">;
 type ObjectTypeDefinition = {
   id: string;
   label: string;
-  icon: ElementType<ObjectIconProps>;
+  icon: ElementType<any>;
   tone: ObjectIconTone;
 };
 
 type ObjectIconBadgeProps = ComponentPropsWithoutRef<"span"> & {
-  icon: ElementType<ObjectIconProps>;
+  icon: ElementType<any>;
   tone: ObjectIconTone;
   iconClassName?: string;
   variant?: "default" | "menu" | "sidebar";
