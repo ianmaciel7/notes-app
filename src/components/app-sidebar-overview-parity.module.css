@@ -1,0 +1,22 @@
+.root [data-slot="app-sidebar-scroll-area"] [data-slot="scroll-area-viewport"] {
+  overflow-x: hidden !important;
+  scroll-behavior: auto;
+  scroll-padding: 2rem;
+}
+
+.root
+  [data-slot="app-sidebar-scroll-area"]
+  [data-slot="scroll-area-scrollbar"][data-orientation="vertical"] {
+  width: 6px !important;
+  padding: 0 !important;
+  transition: width 300ms ease-in-out;
+}
+
+.root
+  [data-slot="app-sidebar-scroll-area"]
+  [data-slot="scroll-area-scrollbar"][data-orientation="vertical"]:hover,
+.root
+  [data-slot="app-sidebar-scroll-area"]
+  [data-slot="scroll-area-scrollbar"][data-orientation="vertical"]:active {
+  width: 10px !important;
+}
