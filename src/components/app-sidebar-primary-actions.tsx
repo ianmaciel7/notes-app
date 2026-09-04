@@ -28,6 +28,7 @@ import {
   compactMenuSearchClass,
   compactMenuSurfaceClass,
 } from "@/components/ui/compact-menu";
+import type { InteractionTooltipConfig } from "@/components/ui/interaction-hint";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useWorkspace } from "@/components/workspace-controller";
@@ -77,17 +78,34 @@ function getActionAriaDescription(
   return descriptions.join("\n") || undefined;
 }
 
+function getActionShortcutChords(
+  hints: readonly AppSidebarPrimaryActionHint[],
+  platform: ShortcutPlatform,
+) {
+  return hints
+    .flatMap((hint) => (hint.shortcut ? hint.shortcut.split(/\s+or\s+/i).filter(Boolean) : []))
+    .map((shortcut) => formatShortcutAriaChord(shortcut, platform));
+}
+
 function getActionAriaShortcuts(
   hints: readonly AppSidebarPrimaryActionHint[],
   platform: ShortcutPlatform,
 ) {
-  const shortcuts = hints.flatMap((hint) =>
-    hint.shortcut ? hint.shortcut.split(/\s+or\s+/i).filter(Boolean) : [],
-  );
+  const shortcuts = getActionShortcutChords(hints, platform);
+  return shortcuts.length > 0 ? shortcuts.join(" ") : undefined;
+}
 
-  return shortcuts.length > 0
-    ? shortcuts.map((shortcut) => formatShortcutAriaChord(shortcut, platform)).join(" ")
-    : undefined;
+function getActionTooltip(
+  label: string,
+  description: string | undefined,
+  shortcuts: readonly string[],
+): InteractionTooltipConfig {
+  return {
+    text: label,
+    description,
+    shortcuts,
+    side: "right",
+  };
 }
 
 function NewContentMenu({
@@ -117,7 +135,9 @@ function NewContentMenu({
     [localizedItems, normalizedQuery],
   );
   const hintDescription = getActionAriaDescription(action.hints, action.label);
+  const hintShortcutChords = getActionShortcutChords(action.hints, shortcutPlatform);
   const hintShortcuts = getActionAriaShortcuts(action.hints, shortcutPlatform);
+  const tooltip = getActionTooltip(action.label, hintDescription, hintShortcutChords);
 
   function resetMenu() {
     setQuery("");
@@ -182,8 +202,7 @@ function NewContentMenu({
           <Button
             id="workspace-new-trigger"
             data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationTrigger}
-            data-hint
-            data-hint-side="right"
+            tooltip={tooltip}
             aria-label={action.label}
             aria-description={hintDescription}
             aria-keyshortcuts={hintShortcuts}
@@ -432,7 +451,9 @@ function AppSidebarPrimaryActionItem({
   }
 
   const hintDescription = getActionAriaDescription(action.hints, action.label);
+  const hintShortcutChords = getActionShortcutChords(action.hints, shortcutPlatform);
   const hintShortcuts = getActionAriaShortcuts(action.hints, shortcutPlatform);
+  const tooltip = getActionTooltip(action.label, hintDescription, hintShortcutChords);
 
   return (
     <div data-slot="app-sidebar-primary-action" className="w-full">
@@ -441,8 +462,7 @@ function AppSidebarPrimaryActionItem({
         variant="ghost"
         size="default"
         data-active={active || undefined}
-        data-hint
-        data-hint-side="right"
+        tooltip={tooltip}
         aria-label={action.label}
         aria-description={hintDescription}
         aria-keyshortcuts={hintShortcuts}
