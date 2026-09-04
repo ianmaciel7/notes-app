@@ -19,8 +19,7 @@ function setup() {
 }
 
 function entityFixture(
-  input: Pick<SpaceEntityRecord, "id" | "spaceId" | "objectTypeId"> &
-    Partial<SpaceEntityRecord>,
+  input: Pick<SpaceEntityRecord, "id" | "spaceId" | "objectTypeId"> & Partial<SpaceEntityRecord>,
 ): SpaceEntityRecord {
   return {
     id: input.id,
@@ -63,10 +62,7 @@ describe("Space repository", () => {
     const first = await repository.createBlankSpace("First");
     const second = await repository.createBlankSpace("Second");
     await repository.reorderSpaces([second.id, first.id]);
-    expect((await repository.listSpaces()).map((space) => space.id)).toEqual([
-      second.id,
-      first.id,
-    ]);
+    expect((await repository.listSpaces()).map((space) => space.id)).toEqual([second.id, first.id]);
   });
 
   it("keeps object types and objects isolated", async () => {

@@ -41,9 +41,9 @@ describe("Space projections", () => {
       entity("personal-a", "personal", "Shared phrase"),
       entity("other-a", "other", "Shared phrase"),
     ]);
-    expect((await searchEntitiesInSpace(database, "personal", "shared")).map((item) => item.id)).toEqual([
-      "personal-a",
-    ]);
+    expect(
+      (await searchEntitiesInSpace(database, "personal", "shared")).map((item) => item.id),
+    ).toEqual(["personal-a"]);
   });
 
   it("filters backlinks and graph edges by Space before resolving entities", async () => {

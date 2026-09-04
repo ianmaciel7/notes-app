@@ -265,7 +265,11 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const createWorkspaceEntity = React.useCallback(
     async (objectTypeId: string, label?: string) => {
       try {
-        const entity = await repository.createEntity(spaceId, objectTypeId, `Untitled ${label ?? "Object"}`);
+        const entity = await repository.createEntity(
+          spaceId,
+          objectTypeId,
+          `Untitled ${label ?? "Object"}`,
+        );
         setActiveEntityId(entity.id);
         const objectType = objectTypes.find((item) => item.id === objectTypeId);
         if (objectType) {
@@ -306,9 +310,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     const byId = new Map(objectTypes.map((item) => [item.id, item]));
     return createdEntities.flatMap((entity) => {
       const type = byId.get(entity.objectTypeId);
-      return type
-        ? [{ id: entity.id, label: entity.title, icon: type.icon, tone: type.tone }]
-        : [];
+      return type ? [{ id: entity.id, label: entity.title, icon: type.icon, tone: type.tone }] : [];
     });
   }, [createdEntities, objectTypes]);
 

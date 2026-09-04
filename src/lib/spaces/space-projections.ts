@@ -30,7 +30,9 @@ export async function listBacklinksInSpace(
 ) {
   const relations = await database.relations.where("spaceId").equals(spaceId).toArray();
   const sourceIds = new Set(
-    relations.filter((relation) => relation.targetId === targetId).map((relation) => relation.sourceId),
+    relations
+      .filter((relation) => relation.targetId === targetId)
+      .map((relation) => relation.sourceId),
   );
   if (sourceIds.size === 0) return [];
   const entities = await database.entities.where("spaceId").equals(spaceId).toArray();
@@ -58,9 +60,7 @@ export async function buildGraphInSpace(
       objectTypeId: entity.objectTypeId,
     })),
     edges: relations
-      .filter(
-        (relation) => nodeIds.has(relation.sourceId) && nodeIds.has(relation.targetId),
-      )
+      .filter((relation) => nodeIds.has(relation.sourceId) && nodeIds.has(relation.targetId))
       .map((relation) => ({
         id: relation.id,
         sourceId: relation.sourceId,

@@ -39,8 +39,7 @@ export class KnowledgeDatabase extends Dexie {
         "[spaceId+id], spaceId, id, [spaceId+sourceId], [spaceId+targetId], sourceId, targetId, propertyId",
       media: "[spaceId+id], spaceId, id, [spaceId+mimeType], mimeType, updatedAt",
       spaceSettings: "[spaceId+id], spaceId, id, [spaceId+key], key, updatedAt",
-      trash:
-        "[spaceId+id], spaceId, id, [spaceId+entityId], entityId, purgeAfter, trashedAt",
+      trash: "[spaceId+id], spaceId, id, [spaceId+entityId], entityId, purgeAfter, trashedAt",
     });
   }
 }

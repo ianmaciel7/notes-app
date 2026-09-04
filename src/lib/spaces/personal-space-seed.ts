@@ -11,9 +11,7 @@ export type PersonalSpaceSeed = {
   objectTypes: SpaceObjectTypeRecord[];
 };
 
-export function createPersonalSpaceSeed(
-  now: () => Date = () => new Date(),
-): PersonalSpaceSeed {
+export function createPersonalSpaceSeed(now: () => Date = () => new Date()): PersonalSpaceSeed {
   const timestamp = now().toISOString();
   return {
     space: {

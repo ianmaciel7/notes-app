@@ -112,16 +112,18 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
 
     await database.transaction(
       "rw",
-      database.spaces,
-      database.appSettings,
-      database.objectTypes,
-      database.entities,
-      database.collections,
-      database.tags,
-      database.relations,
-      database.media,
-      database.spaceSettings,
-      database.trash,
+      [
+        database.spaces,
+        database.appSettings,
+        database.objectTypes,
+        database.entities,
+        database.collections,
+        database.tags,
+        database.relations,
+        database.media,
+        database.spaceSettings,
+        database.trash,
+      ],
       async () => {
         await Promise.all([
           database.objectTypes.where("spaceId").equals(spaceId).delete(),
@@ -248,7 +250,9 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
 
   async function replaceCollections(
     spaceId: string,
-    records: Readonly<Record<string, Omit<SpaceCollectionRecord, "spaceId"> | SpaceCollectionRecord>>,
+    records: Readonly<
+      Record<string, Omit<SpaceCollectionRecord, "spaceId"> | SpaceCollectionRecord>
+    >,
   ) {
     await requireSpace(spaceId);
     await database.transaction("rw", database.collections, async () => {
@@ -267,11 +271,7 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     return record;
   }
 
-  async function assertSameSpaceEntityTargets(
-    spaceId: string,
-    sourceId: string,
-    targetId: string,
-  ) {
+  async function assertSameSpaceEntityTargets(spaceId: string, sourceId: string, targetId: string) {
     const [source, target] = await Promise.all([
       database.entities.get([spaceId, sourceId]),
       database.entities.get([spaceId, targetId]),
@@ -307,7 +307,9 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
   }
 
   async function getSpaceSetting(spaceId: string, key: string) {
-    return (await database.spaceSettings.get([spaceId, `setting:${spaceId}:${key}`]))?.value ?? null;
+    return (
+      (await database.spaceSettings.get([spaceId, `setting:${spaceId}:${key}`]))?.value ?? null
+    );
   }
 
   function listTrash(spaceId: string) {

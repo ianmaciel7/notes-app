@@ -52,9 +52,7 @@ export function useSpaceData() {
 
   const objectTypeRecordsQuery = useLiveQuery<SpaceObjectTypeRecord[]>(
     async () =>
-      activeSpaceId
-        ? await db.objectTypes.where("spaceId").equals(activeSpaceId).toArray()
-        : [],
+      activeSpaceId ? await db.objectTypes.where("spaceId").equals(activeSpaceId).toArray() : [],
     [activeSpaceId],
   );
   const entitiesQuery = useLiveQuery<SpaceEntityRecord[]>(
@@ -64,9 +62,7 @@ export function useSpaceData() {
   );
   const collectionsQuery = useLiveQuery<SpaceCollectionRecord[]>(
     async () =>
-      activeSpaceId
-        ? await db.collections.where("spaceId").equals(activeSpaceId).toArray()
-        : [],
+      activeSpaceId ? await db.collections.where("spaceId").equals(activeSpaceId).toArray() : [],
     [activeSpaceId],
   );
   const tagsQuery = useLiveQuery<SpaceTagRecord[]>(
@@ -89,7 +85,8 @@ export function useSpaceData() {
 
   const counts = React.useMemo(() => groupEntitiesByObjectType(entities), [entities]);
   const objectTypes = React.useMemo(
-    () => objectTypeRecords.map((record) => presentWorkspaceObjectType(record, counts[record.id] ?? 0)),
+    () =>
+      objectTypeRecords.map((record) => presentWorkspaceObjectType(record, counts[record.id] ?? 0)),
     [counts, objectTypeRecords],
   );
   const objectTypeCollections = React.useMemo(

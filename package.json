@@ -11,7 +11,8 @@
     "check": "biome check --write .",
     "ladle:dev": "ladle serve",
     "ladle:build": "ladle build",
-    "ladle:preview": "ladle preview"
+    "ladle:preview": "ladle preview",
+    "test:unit": "vitest run"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -33,6 +34,8 @@
     "cmdk": "^1.1.1",
     "cn": "^0.2.4",
     "date-fns": "^4.4.0",
+    "dexie": "^4.4.5",
+    "dexie-react-hooks": "^4.4.0",
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.5.0",
     "lucide-react": "^1.39.0",
@@ -55,8 +58,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "fake-indexeddb": "^6.2.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^5.0.0"
   },
   "packageManager": "pnpm@11.20.0"
 }

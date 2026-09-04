@@ -18,7 +18,9 @@ test("new Spaces are blank and remain isolated after reload", async ({ page }) =
   await expect(page.getByText("Pages", { exact: true }).first()).toBeVisible();
 
   const firstOpen = await openSpaceSwitcher(page);
-  await firstOpen.popup.locator('[data-slot="combobox-separator"] + div > button:first-of-type').click();
+  await firstOpen.popup
+    .locator('[data-slot="combobox-separator"] + div > button:first-of-type')
+    .click();
   const dialog = page.locator('[data-slot="app-sidebar-space-create-dialog"]');
   await dialog.locator("input").fill("Blank Space");
   await dialog.locator('button[type="submit"]').click();
