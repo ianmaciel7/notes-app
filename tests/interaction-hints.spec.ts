@@ -75,6 +75,22 @@ test("keyboard focus opens an explicit tooltip and Escape dismisses it", async (
   await expect(hint).toBeHidden();
 });
 
+test("standard tooltips stay hidden on mobile by default", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("http://localhost:3000");
+  await page.waitForLoadState("networkidle");
+
+  const action = page
+    .locator(
+      '[data-slot="app-header-action"][data-interaction-tooltip-trigger][aria-label]:not([disabled])',
+    )
+    .first();
+  await expect(action).toBeVisible();
+  await action.hover();
+
+  await expect(page.locator('[data-slot="interaction-hint"]')).toBeHidden();
+});
+
 test("sidebar action tooltips are explicit and not HoverCard previews", async ({ page }) => {
   await page.goto("http://localhost:3000");
   await page.waitForLoadState("networkidle");
