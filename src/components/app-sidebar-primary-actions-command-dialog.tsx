@@ -3,7 +3,10 @@
 import { useTranslations } from "next-intl";
 import * as React from "react";
 
-import { WorkspaceSidebar as BaseWorkspaceSidebar } from "./app-sidebar-primary-actions";
+import {
+  type AppSidebarObjectType,
+  WorkspaceSidebar as BaseWorkspaceSidebar,
+} from "./app-sidebar-primary-actions";
 import {
   Command,
   CommandEmpty,
@@ -32,6 +35,7 @@ function NewContentCommandDialog({
 }) {
   const t = useTranslations("workspace");
   const { objectTypes, createWorkspaceEntity } = useWorkspace();
+  const availableObjectTypes = objectTypes as readonly AppSidebarObjectType[];
 
   function selectObjectType(objectTypeId: string, objectTypeLabel: string) {
     createWorkspaceEntity(objectTypeId, objectTypeLabel);
@@ -44,7 +48,7 @@ function NewContentCommandDialog({
         data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationMenu}
         showCloseButton={false}
         overlayClassName="bg-black/50 backdrop-blur-none"
-        className="top-0 left-0 flex h-dvh w-full max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none bg-popover p-0 ring-0 sm:top-[10vh] sm:left-1/2 sm:h-auto sm:max-h-[85vh] sm:w-[min(42rem,calc(100vw-3rem))] sm:-translate-x-1/2 sm:rounded-xl sm:ring-1 sm:ring-foreground/10"
+        className="top-0 left-0 flex h-dvh w-full max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none bg-popover p-0 ring-0 sm:top-[10vh] sm:left-1/2 sm:h-auto sm:max-h-[85vh] sm:w-[min(42rem,calc(100vw-3rem))] sm:max-w-2xl sm:-translate-x-1/2 sm:rounded-xl sm:ring-1 sm:ring-foreground/10"
       >
         <DialogHeader className="sr-only">
           <DialogTitle>{t("primaryNavigation.new")}</DialogTitle>
@@ -63,7 +67,7 @@ function NewContentCommandDialog({
           <CommandList className="min-h-0 max-h-none flex-1 scroll-py-8 overflow-x-hidden overflow-y-auto px-1.5 py-1">
             <CommandEmpty>{t("primaryNavigation.searchContentType")}</CommandEmpty>
             <CommandGroup heading={t("primaryNavigation.typesLabel")}>
-              {objectTypes.map((objectType: any) => {
+              {availableObjectTypes.map((objectType) => {
                 const label = objectType.singularLabel ?? objectType.label;
                 return (
                   <CommandItem
