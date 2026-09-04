@@ -10,7 +10,6 @@ import {
 } from "@/components/app-header-icons";
 import { AppShellContext } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 const appHeaderTheme = {} as React.CSSProperties;
@@ -98,7 +97,7 @@ function AppHeader({
         className="pointer-events-none flex max-w-max shrink-0 items-center justify-end pr-2.5 text-xs text-[var(--app-header-text-secondary)]"
       >
         <div className="pointer-events-auto flex items-center gap-1 px-1">
-          <AppHeaderAction aria-label={focusLabel} tooltip={focusLabel} onClick={onFocus}>
+          <AppHeaderAction aria-label={focusLabel} onClick={onFocus}>
             <AppHeaderCircleDashedIcon className="size-4" />
           </AppHeaderAction>
           {end}
@@ -127,21 +126,11 @@ function AppHeaderHistory({
 }) {
   return (
     <div data-slot="app-header-history" className={cn("flex items-center", className)} {...props}>
-      <AppHeaderAction
-        aria-label={backLabel}
-        tooltip={backLabel}
-        disabled={backDisabled}
-        onClick={onBack}
-      >
+      <AppHeaderAction aria-label={backLabel} disabled={backDisabled} onClick={onBack}>
         <AppHeaderCaretLeftIcon className="size-4" />
       </AppHeaderAction>
 
-      <AppHeaderAction
-        aria-label={forwardLabel}
-        tooltip={forwardLabel}
-        disabled={forwardDisabled}
-        onClick={onForward}
-      >
+      <AppHeaderAction aria-label={forwardLabel} disabled={forwardDisabled} onClick={onForward}>
         <AppHeaderCaretRightIcon className="size-4" />
       </AppHeaderAction>
     </div>
@@ -152,15 +141,13 @@ function AppHeaderAction({
   className,
   variant = "ghost",
   size = "icon-sm",
-  tooltip,
   children,
   ...props
-}: React.ComponentProps<typeof Button> & {
-  tooltip?: React.ReactNode;
-}) {
-  const button = (
+}: React.ComponentProps<typeof Button>) {
+  return (
     <Button
       data-slot="app-header-action"
+      data-hint-side="bottom"
       type="button"
       variant={variant}
       size={size}
@@ -174,17 +161,6 @@ function AppHeaderAction({
     >
       {children}
     </Button>
-  );
-
-  if (!tooltip) return button;
-
-  return (
-    <Tooltip>
-      <TooltipTrigger render={button} />
-      <TooltipContent side="bottom" sideOffset={8}>
-        {tooltip}
-      </TooltipContent>
-    </Tooltip>
   );
 }
 
@@ -217,7 +193,6 @@ function AppFocusModeControls({
             <div className="flex min-w-0 flex-row overflow-hidden">
               <AppHeaderAction
                 aria-label={backLabel}
-                tooltip={backLabel}
                 disabled={backDisabled}
                 className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
                 onClick={onBack}
@@ -226,7 +201,6 @@ function AppFocusModeControls({
               </AppHeaderAction>
               <AppHeaderAction
                 aria-label={forwardLabel}
-                tooltip={forwardLabel}
                 disabled={forwardDisabled}
                 className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
                 onClick={onForward}
@@ -241,7 +215,6 @@ function AppFocusModeControls({
 
         <AppHeaderAction
           aria-label={exitLabel}
-          tooltip={exitLabel}
           className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
           onClick={onExit}
         >

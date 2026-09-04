@@ -122,6 +122,17 @@ export function formatShortcutChord(chord: string, platform: ShortcutPlatform): 
     : [...formattedModifiers, key].join("+");
 }
 
+export function formatShortcutAriaChord(chord: string, platform: ShortcutPlatform): string {
+  const parsed = parseShortcutChord(chord);
+  const formattedModifiers = parsed.modifiers.map((modifier) => {
+    if (modifier === "Mod") return platform === "mac" ? "Meta" : "Control";
+    if (modifier === "Ctrl") return "Control";
+    return modifier;
+  });
+
+  return [...formattedModifiers, parsed.key].join("+");
+}
+
 export function resolveShortcutChord(
   event: KeyboardLikeEvent,
   platform: ShortcutPlatform,

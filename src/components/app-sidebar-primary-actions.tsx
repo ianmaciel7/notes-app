@@ -28,13 +28,9 @@ import {
   compactMenuSearchClass,
   compactMenuSurfaceClass,
 } from "@/components/ui/compact-menu";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
-import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { useWorkspace } from "@/components/workspace-controller";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
 import { cn } from "@/lib/utils";
 
@@ -50,7 +46,7 @@ import {
   createCollectionId,
   type WorkspaceCollectionRecord,
 } from "@/lib/workspace-domain-identities";
-import { formatShortcutChord, type ShortcutPlatform } from "@/lib/workspace-shortcuts";
+import { formatShortcutAriaChord, type ShortcutPlatform } from "@/lib/workspace-shortcuts";
 
 type AppSidebarPrimaryActionId = "new" | "search" | "explore" | "calendar" | "tasks";
 
@@ -70,6 +66,30 @@ function normalizeMenuQuery(value: string) {
     .toLocaleLowerCase();
 }
 
+function getActionAriaDescription(
+  hints: readonly AppSidebarPrimaryActionHint[],
+  label: string,
+) {
+  const descriptions = hints
+    .map((hint) => hint.description.trim())
+    .filter((description) => description.length > 0 && description !== label.trim());
+
+  return descriptions.join("\n") || undefined;
+}
+
+function getActionAriaShortcuts(
+  hints: readonly AppSidebarPrimaryActionHint[],
+  platform: ShortcutPlatform,
+) {
+  const shortcuts = hints.flatMap((hint) =>
+    hint.shortcut ? hint.shortcut.split(/\s+or\s+/i).filter(Boolean) : [],
+  );
+
+  return shortcuts.length > 0
+    ? shortcuts.map((shortcut) => formatShortcutAriaChord(shortcut, platform)).join(" ")
+    : undefined;
+}
+
 function NewContentMenu({
   action,
   objectTypes,
@@ -80,6 +100,7 @@ function NewContentMenu({
   onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
 }) {
   const t = useTranslations("workspace");
+  const shortcutPlatform = useShortcutPlatform();
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [activeIndex, setActiveIndex] = React.useState(0);
@@ -95,6 +116,8 @@ function NewContentMenu({
     () => localizedItems.filter((item) => normalizeMenuQuery(item.label).includes(normalizedQuery)),
     [localizedItems, normalizedQuery],
   );
+  const hintDescription = getActionAriaDescription(action.hints, action.label);
+  const hintShortcuts = getActionAriaShortcuts(action.hints, shortcutPlatform);
 
   function resetMenu() {
     setQuery("");
@@ -159,6 +182,11 @@ function NewContentMenu({
           <Button
             id="workspace-new-trigger"
             data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationTrigger}
+            data-hint
+            data-hint-side="right"
+            aria-label={action.label}
+            aria-description={hintDescription}
+            aria-keyshortcuts={hintShortcuts}
             type="button"
             variant="ghost"
             size="default"
@@ -333,32 +361,6 @@ function useShortcutPlatform(): ShortcutPlatform {
   return useIsMac() ? "mac" : "windows";
 }
 
-function AppSidebarShortcut({ shortcut }: { shortcut: string }) {
-  const t = useTranslations("workspace.primaryNavigation");
-  const platform = useShortcutPlatform();
-  const keys = shortcut.split(/\s+or\s+/i);
-  const keyOccurrences = new Map<string, number>();
-  const keyedKeys = keys.map((key) => {
-    const occurrence = (keyOccurrences.get(key) ?? 0) + 1;
-    keyOccurrences.set(key, occurrence);
-    return { id: `${key}-${occurrence}`, value: key };
-  });
-
-  return (
-    <KbdGroup className="flex-wrap">
-      {keyedKeys.map(({ id, value }) =>
-        value === "or" ? (
-          <span key={id} className="px-0.5 text-xs text-muted-foreground">
-            {t("or")}
-          </span>
-        ) : (
-          <Kbd key={id}>{formatShortcutChord(value, platform)}</Kbd>
-        ),
-      )}
-    </KbdGroup>
-  );
-}
-
 function useSidebarPrimaryCommandHints() {
   const t = useTranslations("workspace");
   const runtime = React.useMemo(
@@ -403,19 +405,6 @@ function useSidebarPrimaryCommandHints() {
   );
 }
 
-function AppSidebarPrimaryActionHintContent({ hints }: { hints: AppSidebarPrimaryActionHint[] }) {
-  return (
-    <div className="flex flex-col gap-3">
-      {hints.map((hint) => (
-        <div key={hint.description} className="flex flex-col gap-1.5">
-          <p>{hint.description}</p>
-          {hint.shortcut && <AppSidebarShortcut shortcut={hint.shortcut} />}
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function AppSidebarPrimaryActionItem({
   action,
   active,
@@ -429,17 +418,8 @@ function AppSidebarPrimaryActionItem({
   onAction?: (action: AppSidebarPrimaryActionId) => void;
   onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
 }) {
-  const isMobile = useIsMobile();
-  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [open, setOpen] = React.useState(false);
+  const shortcutPlatform = useShortcutPlatform();
   const Icon = action.icon;
-
-  React.useEffect(
-    () => () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    },
-    [],
-  );
 
   if (action.id === "new") {
     return (
@@ -451,70 +431,33 @@ function AppSidebarPrimaryActionItem({
     );
   }
 
-  function clearTimer() {
-    if (!timerRef.current) return;
-    clearTimeout(timerRef.current);
-    timerRef.current = null;
-  }
-
-  function scheduleOpen() {
-    if (isMobile) return;
-
-    clearTimer();
-    timerRef.current = setTimeout(() => {
-      setOpen(true);
-      timerRef.current = null;
-    }, 200);
-  }
-
-  function closeHint() {
-    clearTimer();
-    setOpen(false);
-  }
+  const hintDescription = getActionAriaDescription(action.hints, action.label);
+  const hintShortcuts = getActionAriaShortcuts(action.hints, shortcutPlatform);
 
   return (
-    <div
-      data-slot="app-sidebar-primary-action"
-      className="w-full"
-      onPointerEnter={scheduleOpen}
-      onPointerLeave={closeHint}
-    >
-      <HoverCard open={open && !isMobile}>
-        <HoverCardTrigger render={<span className="block w-full" />}>
-          <Button
-            type="button"
-            variant="ghost"
-            size="default"
-            data-active={active || undefined}
-            className={cn(
-              "group/interactive h-8 w-full justify-start gap-x-1.5 px-2 font-normal",
-              "text-sm text-muted-foreground",
-              workspaceRowStateClass,
-              "[&_svg]:size-4",
-            )}
-            onPointerDown={() => {
-              closeHint();
-              if (action.id !== "new") onAction?.(action.id);
-            }}
-            onClick={() => {
-              closeHint();
-              onAction?.(action.id);
-            }}
-          >
-            <Icon data-icon="inline-start" />
-            <span className="min-w-0 truncate">{action.label}</span>
-          </Button>
-        </HoverCardTrigger>
-
-        <HoverCardContent
-          side="right"
-          align="center"
-          sideOffset={8}
-          className="pointer-events-none w-max max-w-56 text-sm leading-snug"
-        >
-          <AppSidebarPrimaryActionHintContent hints={action.hints} />
-        </HoverCardContent>
-      </HoverCard>
+    <div data-slot="app-sidebar-primary-action" className="w-full">
+      <Button
+        type="button"
+        variant="ghost"
+        size="default"
+        data-active={active || undefined}
+        data-hint
+        data-hint-side="right"
+        aria-label={action.label}
+        aria-description={hintDescription}
+        aria-keyshortcuts={hintShortcuts}
+        className={cn(
+          "group/interactive h-8 w-full justify-start gap-x-1.5 px-2 font-normal",
+          "text-sm text-muted-foreground",
+          workspaceRowStateClass,
+          "[&_svg]:size-4",
+        )}
+        onPointerDown={() => onAction?.(action.id)}
+        onClick={() => onAction?.(action.id)}
+      >
+        <Icon data-icon="inline-start" />
+        <span className="min-w-0 truncate">{action.label}</span>
+      </Button>
     </div>
   );
 }
@@ -757,97 +700,95 @@ function WorkspaceSidebar() {
   }
 
   return (
-    <TooltipProvider delay={200}>
-      <AppSidebar
-        spaces={spaces}
-        value={spaceId}
-        onValueChange={switchSpace}
-        onReorder={setSpaces}
-        onCreateSpace={createSpace}
-        onDeleteSpace={deleteSpace}
-        onRenameSpace={renameSpace}
-        labels={{
-          changeSpace: t("spaces.changeSpace"),
-          clearSearch: t("spaces.clearSearch"),
-          createSpace: t("spaces.createSpace"),
-          createSpaceSubmit: t("spaces.createSpaceSubmit"),
-          createSpaceTitle: t("spaces.createSpace"),
-          deleteSpace: t("spaces.deleteSpace"),
-          deleteSpaceConfirmation: t("spaces.deleteSpaceConfirmation", {
-            name: "{name}",
-          }),
-          deleteSpaceDescription: t("spaces.deleteSpaceDescription"),
-          deleteSpaceError: t("spaces.deleteSpaceError"),
-          empty: t("spaces.empty"),
-          nameSpace: t("spaces.name"),
-          renameSpace: t("spaces.renameSpace"),
-          saveSpace: t("spaces.save"),
-          search: t("spaces.search"),
-          spaceSettings: t("spaces.settings"),
-          spaceSettingsDescription: t("spaces.settingsDescription"),
-        }}
-      >
-        <div className="flex h-full min-h-0 flex-col">
-          <div className="my-px mt-0 shrink-0 px-2 pr-1 pb-1.5">
-            <AppSidebarPrimaryActions
-              activeAction={activeAction}
-              objectTypes={objectTypes}
-              onSelectObjectType={createWorkspaceEntity}
-              onAction={(action) => {
-                if (action === "search") {
-                  openCommandPaletteFromSidebar();
-                  return;
-                }
-                setCommandPaletteOpen(false);
-                setSideSearchOpen(false);
-                if (action !== "new") {
-                  setActiveAction(action);
-                  setActiveEntityId(null);
-                  setMainValue(`primary-action:${action}`);
-                  if (action === "explore") setSideValue("explore");
-                }
-              }}
-            />
-          </div>
-
-          <AppSidebarOverview
-            activeId={activeEntityId}
-            onActiveIdChange={(id) => {
-              if (id !== null) {
-                setSideSearchOpen(false);
-                selectEntity(id);
+    <AppSidebar
+      spaces={spaces}
+      value={spaceId}
+      onValueChange={switchSpace}
+      onReorder={setSpaces}
+      onCreateSpace={createSpace}
+      onDeleteSpace={deleteSpace}
+      onRenameSpace={renameSpace}
+      labels={{
+        changeSpace: t("spaces.changeSpace"),
+        clearSearch: t("spaces.clearSearch"),
+        createSpace: t("spaces.createSpace"),
+        createSpaceSubmit: t("spaces.createSpaceSubmit"),
+        createSpaceTitle: t("spaces.createSpace"),
+        deleteSpace: t("spaces.deleteSpace"),
+        deleteSpaceConfirmation: t("spaces.deleteSpaceConfirmation", {
+          name: "{name}",
+        }),
+        deleteSpaceDescription: t("spaces.deleteSpaceDescription"),
+        deleteSpaceError: t("spaces.deleteSpaceError"),
+        empty: t("spaces.empty"),
+        nameSpace: t("spaces.name"),
+        renameSpace: t("spaces.renameSpace"),
+        saveSpace: t("spaces.save"),
+        search: t("spaces.search"),
+        spaceSettings: t("spaces.settings"),
+        spaceSettingsDescription: t("spaces.settingsDescription"),
+      }}
+    >
+      <div className="flex h-full min-h-0 flex-col">
+        <div className="my-px mt-0 shrink-0 px-2 pr-1 pb-1.5">
+          <AppSidebarPrimaryActions
+            activeAction={activeAction}
+            objectTypes={objectTypes}
+            onSelectObjectType={createWorkspaceEntity}
+            onAction={(action) => {
+              if (action === "search") {
+                openCommandPaletteFromSidebar();
+                return;
+              }
+              setCommandPaletteOpen(false);
+              setSideSearchOpen(false);
+              if (action !== "new") {
+                setActiveAction(action);
+                setActiveEntityId(null);
+                setMainValue(`primary-action:${action}`);
+                if (action === "explore") setSideValue("explore");
               }
             }}
-            pinnedEntities={pinnedEntities}
-            availablePinnedEntities={availablePinnedEntities}
-            objectTypes={objectTypes}
-            objectTypeCollections={visibleObjectTypeCollections}
-            customSections={customSections}
-            trashItems={trashItems}
-            onCreateObjectTypeFromPreset={createWorkspaceStructureFromPreset}
-            onCreateObjectType={createWorkspaceStructure}
-            onUpdateObjectType={updateWorkspaceStructure}
-            onDeleteObjectType={deleteWorkspaceStructure}
-            onEmptyTrash={emptyTrash}
-            onPurgeTrashItem={purgeTrashItem}
-            onRestoreTrashItem={restoreTrashItem}
-            onPinnedEntitiesChange={setPinnedEntities}
-            onOpenPinnedInSidePanel={(entity) => {
-              openInSidePanel({
-                id: entity.id,
-                label: entity.label,
-                icon: entity.icon,
-                iconClassName: objectIconToneBadgeClass[entity.tone],
-                draggable: true,
-              });
-            }}
-            onCustomSectionsChange={setCustomSections}
-            onCollectionAction={handleCollectionAction}
-            onOpenShortcuts={() => setShortcutBrowserOpen(true)}
           />
         </div>
-      </AppSidebar>
-    </TooltipProvider>
+
+        <AppSidebarOverview
+          activeId={activeEntityId}
+          onActiveIdChange={(id) => {
+            if (id !== null) {
+              setSideSearchOpen(false);
+              selectEntity(id);
+            }
+          }}
+          pinnedEntities={pinnedEntities}
+          availablePinnedEntities={availablePinnedEntities}
+          objectTypes={objectTypes}
+          objectTypeCollections={visibleObjectTypeCollections}
+          customSections={customSections}
+          trashItems={trashItems}
+          onCreateObjectTypeFromPreset={createWorkspaceStructureFromPreset}
+          onCreateObjectType={createWorkspaceStructure}
+          onUpdateObjectType={updateWorkspaceStructure}
+          onDeleteObjectType={deleteWorkspaceStructure}
+          onEmptyTrash={emptyTrash}
+          onPurgeTrashItem={purgeTrashItem}
+          onRestoreTrashItem={restoreTrashItem}
+          onPinnedEntitiesChange={setPinnedEntities}
+          onOpenPinnedInSidePanel={(entity) => {
+            openInSidePanel({
+              id: entity.id,
+              label: entity.label,
+              icon: entity.icon,
+              iconClassName: objectIconToneBadgeClass[entity.tone],
+              draggable: true,
+            });
+          }}
+          onCustomSectionsChange={setCustomSections}
+          onCollectionAction={handleCollectionAction}
+          onOpenShortcuts={() => setShortcutBrowserOpen(true)}
+        />
+      </div>
+    </AppSidebar>
   );
 }
 

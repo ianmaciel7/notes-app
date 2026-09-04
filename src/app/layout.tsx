@@ -4,7 +4,7 @@ import "./space-switcher.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme-provider";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { InteractionProvider } from "@/components/ui/interaction-provider";
 
 export const metadata: Metadata = {
   title: "Notes App",
@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="h-full flex flex-col overflow-hidden bg-background text-foreground font-sans">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider>
-            <TooltipProvider>{children}</TooltipProvider>
+            <InteractionProvider>{children}</InteractionProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

@@ -54,7 +54,7 @@ All colors are defined via modern OKLCH tokens in [`src/app/globals.css`](file:/
 ### Typography & Hierarchy
 - **Primary Ink (`--foreground`)**: `oklch(0.145 0 0)` / `#18181B` (Light) | `oklch(0.985 0 0)` / `#FAFAFA` (Dark)
   - Page titles, headings, and high-priority body content.
-- **Muted Steel (`--muted-foreground`)**: `oklch(0.556 0 0)` / `#71717A` (Light) | `oklch(0.708 0 0)` / `#A1A1AA` (Dark)
+- **Muted Steel (`--muted-foreground`)**: `oklch(0.556 0.0051 33.89)` / `#71717A` (Light) | `oklch(0.708 0.006 30.59)` / `#A1A1AA` (Dark)
   - Metadata, timestamps, backlinks count, property keys, and placeholder labels.
 
 ### Functional States & Highlighting
@@ -161,3 +161,67 @@ To maintain production excellence and avoid generic AI design pitfalls:
 - **Accessibility & Spacing**:
   - Target sizes: minimum `44px` touch target for primary touch interactions, `28px–32px` for high-density desktop toolbar icons.
   - High-contrast text compliance against all theme backgrounds.
+
+---
+
+## 7. Accessible Interaction Contract
+
+Interaction semantics are **ARIA-first** and presentation is centralized. A component must not invent its own tooltip timer, copy, positioning, or floating-surface styling.
+
+### Canonical semantics
+
+1. **`aria-label` is the canonical action name.** Do not duplicate the same string in `tooltip`, `title`, `data-tooltip`, or component-specific hint props.
+2. **Icon-only `Button` controls must have `aria-label`.** The shared button primitive automatically opts icon-sized labeled buttons into the standard visual hint.
+3. **Text controls opt into the standard hint with `data-hint`.** `data-hint` is a behavior flag only; it never contains user-facing copy.
+4. **`aria-description` contains optional explanatory copy.** The interaction hint mirrors it for sighted users while assistive technology keeps the semantic description. Never repeat the `aria-label` verbatim in `aria-description`.
+5. **`aria-keyshortcuts` contains keyboard shortcuts.** Shortcut rendering is derived from that attribute; do not maintain separate visual shortcut strings when an ARIA shortcut is available.
+6. **`data-hint-side` is presentation-only.** Supported values are `top`, `right`, `bottom`, and `left`.
+7. **Popup state remains native ARIA.** Interactive triggers use `aria-haspopup`, `aria-expanded`, and `aria-controls` as appropriate.
+
+```tsx
+<Button aria-label="Navegar para frente" size="icon-sm">
+  <CaretRightIcon />
+</Button>
+
+<Button
+  aria-label="Explorar"
+  aria-description="Abrir Explorar no painel lateral"
+  aria-keyshortcuts="Control+Shift+J"
+  data-hint
+  data-hint-side="right"
+>
+  Explorar
+</Button>
+```
+
+### One behavior owner
+
+`InteractionProvider` is mounted once at the application root. `Button` transparently registers standard hints with one detached Base UI Tooltip handle, so callers keep a single component and `aria-label` remains the source of truth:
+
+- pointer hover opens after **200 ms**;
+- keyboard focus opens immediately;
+- close delay is **0 ms**;
+- moving between hints within **400 ms** opens the next hint immediately;
+- floating offset is **6 px** with Base UI collision handling;
+- Base UI owns Escape, focus, hover, touch suppression, and adjacent-tooltip delay grouping;
+- an already-open popup (`aria-expanded="true"`) disables its hint trigger;
+- hints are non-interactive and have no arrow by default.
+
+These values intentionally mirror the archived Capacities tooltip behavior documented under `artifacts/reference-evidence/floating-interactions/`.
+
+### Hint vs preview vs popup
+
+The visual system shares tokens and positioning primitives, but semantics remain distinct:
+
+- **Hint** — auxiliary explanation of a control. Copy comes from ARIA. Non-interactive. Global behavior is owned by `InteractionProvider`.
+- **Preview (`HoverCard`)** — a sighted preview of the destination/object itself. Use Base UI Preview Card semantics. Default trigger dwell is **330 ms**, close tolerance is **180 ms**, and object previews use the shared preview surface.
+- **Popover/Menu** — interactive content opened explicitly by click/focus/keyboard. Its state is expressed through popup ARIA and it does not inherit hover-hint timing.
+
+### Floating surface rules
+
+- `tooltipSurfaceClass` in `shared-styles.ts` is the single visual token for hints/tooltips.
+- `floatingInteractionSurfaceClass` in `shared-styles.ts` is the shared preview/popover surface token.
+- `Kbd` is the single keycap treatment; `KbdGroup` is a semantic `<span>` container, never a nested `<kbd>` element.
+- Components must not add local `setTimeout` hover logic for hints.
+- Components must not duplicate `aria-label` into a separate tooltip prop.
+- Components must not recreate collision detection, z-index, border, shadow, or motion when a shared primitive already owns it.
