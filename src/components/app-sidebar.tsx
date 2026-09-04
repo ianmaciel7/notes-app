@@ -39,9 +39,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { InputGroupAddon, InputGroupButton } from "@/components/ui/input-group";
+import { InteractionTooltipTrigger } from "@/components/ui/interaction-tooltip-trigger";
 import {
   Sheet,
   SheetContent,
@@ -205,10 +205,8 @@ function AppSidebarSpaceSwitcher({
   const dragSessionRef = React.useRef<DragSession | null>(null);
   const suppressComboboxCloseUntilRef = React.useRef(0);
   const suppressSelectionUntilRef = React.useRef(0);
-  const hintTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [open, setOpen] = React.useState(false);
-  const [hintOpen, setHintOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [draftSpaces, setDraftSpaces] = React.useState<AppSidebarSpace[] | null>(null);
   const [draggingId, setDraggingId] = React.useState<string | null>(null);
@@ -235,31 +233,6 @@ function AppSidebarSpaceSwitcher({
   }, [displayedSpaces, query]);
 
   const isSorting = hasActiveSpaceSort(draggingId, dragSessionRef.current);
-
-  function clearHintTimer() {
-    if (!hintTimerRef.current) return;
-    clearTimeout(hintTimerRef.current);
-    hintTimerRef.current = null;
-  }
-
-  function hideHint() {
-    clearHintTimer();
-    setHintOpen(false);
-  }
-
-  function scheduleHint() {
-    if (open || isMobile) return;
-
-    clearHintTimer();
-    hintTimerRef.current = setTimeout(() => {
-      setHintOpen(true);
-      hintTimerRef.current = null;
-    }, 400);
-  }
-
-  // The timer lives in a ref and this effect intentionally installs one unmount cleanup.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: ref-backed cleanup is mount-scoped
-  React.useEffect(() => () => clearHintTimer(), []);
 
   function measureItems() {
     const positions = new Map<string, number>();
@@ -523,7 +496,6 @@ function AppSidebarSpaceSwitcher({
 
     event.preventDefault();
     event.stopPropagation();
-    hideHint();
 
     dragSessionRef.current = {
       id: spaceId,
@@ -725,7 +697,6 @@ function AppSidebarSpaceSwitcher({
           }
 
           setQuery("");
-          hideHint();
           setOpen(true);
         }}
         onValueChange={(space) => {
@@ -738,7 +709,6 @@ function AppSidebarSpaceSwitcher({
             return;
           }
 
-          hideHint();
           onValueChange(space.id);
           if (isMobile) setOpen(false);
         }}
@@ -746,47 +716,36 @@ function AppSidebarSpaceSwitcher({
         <div
           data-slot="app-sidebar-space-switcher"
           className={cn("relative inline-flex min-w-0 max-w-full", className)}
-          onPointerEnter={scheduleHint}
-          onPointerLeave={hideHint}
         >
-          <HoverCard open={hintOpen && !open && !isMobile}>
-            <HoverCardTrigger render={<span className="inline-flex min-w-0 max-w-full" />}>
-              <ComboboxTrigger
-                aria-label={text.changeSpace}
-                className={cn(
-                  "[&>svg:last-child]:hidden",
-                  "data-[popup-open]:focus-visible:border-transparent data-[popup-open]:focus-visible:ring-0",
-                )}
-                onPointerDown={hideHint}
-                render={
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="default"
-                    className="w-auto max-w-full min-w-0 justify-start gap-0 px-2"
-                  />
-                }
-              >
-                <span className="inline-flex w-auto min-w-0 items-center overflow-hidden text-sm font-medium text-foreground">
-                  <SelectedIcon data-icon="inline-start" className="!mr-2 size-[14px] shrink-0" />
-                  <span className="truncate">{selectedSpace.name}</span>
-                </span>
-                <AppSidebarChevronsUpDownIcon
-                  data-icon="inline-end"
-                  className="ml-1 size-[14px] shrink-0 text-muted-foreground"
+          <InteractionTooltipTrigger
+            tooltip={{ text: text.changeSpace, side: "right" }}
+            disabled={open}
+          >
+            <ComboboxTrigger
+              aria-label={text.changeSpace}
+              className={cn(
+                "[&>svg:last-child]:hidden",
+                "data-[popup-open]:focus-visible:border-transparent data-[popup-open]:focus-visible:ring-0",
+              )}
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="default"
+                  className="w-auto max-w-full min-w-0 justify-start gap-0 px-2"
                 />
-              </ComboboxTrigger>
-            </HoverCardTrigger>
-
-            <HoverCardContent
-              side="right"
-              align="center"
-              sideOffset={12}
-              className="w-auto whitespace-nowrap"
+              }
             >
-              {text.changeSpace}
-            </HoverCardContent>
-          </HoverCard>
+              <span className="inline-flex w-auto min-w-0 items-center overflow-hidden text-sm font-medium text-foreground">
+                <SelectedIcon data-icon="inline-start" className="!mr-2 size-[14px] shrink-0" />
+                <span className="truncate">{selectedSpace.name}</span>
+              </span>
+              <AppSidebarChevronsUpDownIcon
+                data-icon="inline-end"
+                className="ml-1 size-[14px] shrink-0 text-muted-foreground"
+              />
+            </ComboboxTrigger>
+          </InteractionTooltipTrigger>
         </div>
 
         {!isMobile && (
