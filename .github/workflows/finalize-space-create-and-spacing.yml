@@ -1,0 +1,100 @@
+name: Finalize Space creation and spacing
+
+on:
+  push:
+    branches:
+      - fix/create-space-and-switcher-spacing
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/create-space-and-switcher-spacing
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.20.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Verify Create-space gap test is red before the final CSS change
+        shell: bash
+        run: |
+          pnpm dev > /tmp/notes-app-red.log 2>&1 &
+          APP_PID=$!
+          trap 'kill $APP_PID 2>/dev/null || true' EXIT
+          for i in {1..60}; do
+            if curl --fail --silent http://localhost:3000 >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          set +e
+          pnpm exec playwright test tests/space-create-and-spacing.spec.ts --grep "Create space action keeps" --reporter=line > /tmp/red.log 2>&1
+          STATUS=$?
+          set -e
+          cat /tmp/red.log
+          if [ "$STATUS" -eq 0 ]; then
+            echo "Expected the Create-space gap regression to fail before the production change."
+            exit 1
+          fi
+          grep -q 'Expected: "8px"' /tmp/red.log
+          grep -q 'Received: "6px"' /tmp/red.log
+          kill $APP_PID 2>/dev/null || true
+          wait $APP_PID 2>/dev/null || true
+          trap - EXIT
+      - name: Apply final spacing and format changed files
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path("src/app/space-switcher.css")
+          text = path.read_text()
+          anchor = ''') [data-slot="combobox-separator"] + div > button:first-of-type {
+            height: 2rem;
+          '''
+          replacement = ''') [data-slot="combobox-separator"] + div > button:first-of-type {
+            height: 2rem;
+            column-gap: 0.5rem;
+          '''
+          if anchor not in text:
+              raise SystemExit("Create-space button CSS anchor not found")
+          path.write_text(text.replace(anchor, replacement, 1))
+          PY
+          pnpm exec biome format --write src/components/workspace-controller.tsx src/app/space-switcher.css tests/space-create-and-spacing.spec.ts
+      - name: Run all Space switcher regressions
+        shell: bash
+        run: |
+          pnpm dev > /tmp/notes-app-green.log 2>&1 &
+          APP_PID=$!
+          trap 'kill $APP_PID 2>/dev/null || true' EXIT
+          for i in {1..60}; do
+            if curl --fail --silent http://localhost:3000 >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          pnpm exec playwright test \
+            tests/space-create-and-spacing.spec.ts \
+            tests/space-switcher-clear-button.spec.ts \
+            tests/space-switcher-phantom-addon.spec.ts \
+            --reporter=line
+      - run: pnpm lint
+      - name: Commit verified production and test changes
+        shell: bash
+        run: |
+          rm -f .github/workflows/finalize-space-create-and-spacing.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/components/workspace-controller.tsx src/app/space-switcher.css tests/space-create-and-spacing.spec.ts .github/workflows
+          git commit -m 'fix: finalize Space creation and switcher spacing'
+          git push origin HEAD:fix/create-space-and-switcher-spacing
