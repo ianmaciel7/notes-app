@@ -46,10 +46,10 @@ function InteractionProvider({ children }: { children: React.ReactNode }) {
               data-slot="interaction-hint"
               side={payload.side}
               sideOffset={6}
-              className="pointer-events-none max-w-64"
+              className="pointer-events-none max-w-40"
             >
               <div className="flex min-w-0 flex-col gap-1.5">
-                <div className="min-w-0 whitespace-pre-wrap">{payload.label}</div>
+                <div className="min-w-0 whitespace-pre-wrap">{payload.text}</div>
                 {payload.description ? (
                   <div className="whitespace-pre-line font-normal text-muted-foreground">
                     {payload.description}
