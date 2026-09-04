@@ -1,0 +1,121 @@
+name: Capture Space switcher structural verification
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.20.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Measure Space switcher
+        shell: bash
+        run: |
+          pnpm dev > /tmp/notes-app-next.log 2>&1 &
+          for i in {1..60}; do
+            if curl --fail --silent http://localhost:3000 >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          mkdir -p artifacts/reference-evidence/space-switcher
+          node <<'NODE'
+          const fs = require('fs');
+          const { chromium } = require('@playwright/test');
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const page = await browser.newPage({ viewport: { width: 545, height: 230 } });
+            await page.goto('http://localhost:3000');
+            await page.waitForLoadState('networkidle');
+
+            const trigger = page.locator('[data-slot="app-sidebar-space-switcher"] button').first();
+            await trigger.click();
+
+            const popup = page.locator(
+              '[data-slot="combobox-content"][aria-label="Change space"], [data-slot="combobox-content"][aria-label="Alterar espaço"]'
+            ).first();
+            await popup.waitFor({ state: 'visible' });
+
+            const search = popup.locator(':scope > [data-slot="input-group"]').first();
+            const addonSelector = ':scope > [data-slot="input-group-addon"][data-align="inline-end"]';
+            const addons = search.locator(addonSelector);
+            const emptyAddonCount = await addons.count();
+
+            const input = search.locator('[data-slot="input-group-control"]');
+            await input.fill('aaaaaaa');
+            const filledAddonCount = await addons.count();
+            const clear = addons.locator('button').last();
+
+            const searchBox = await search.boundingBox();
+            const clearBox = await clear.boundingBox();
+            const rightInset = searchBox && clearBox
+              ? searchBox.x + searchBox.width - (clearBox.x + clearBox.width)
+              : null;
+
+            await page.screenshot({
+              path: 'artifacts/reference-evidence/space-switcher/after-structural-fix.png',
+              fullPage: true,
+            });
+
+            const result = {
+              emptyAddonCount,
+              filledAddonCount,
+              rightInset,
+              expected: {
+                emptyAddonCount: 0,
+                filledAddonCount: 1,
+                rightInset: '8..10px',
+              },
+            };
+            fs.writeFileSync(
+              'artifacts/reference-evidence/space-switcher/after-structural-fix.json',
+              JSON.stringify(result, null, 2) + '\n'
+            );
+            console.log(JSON.stringify(result));
+
+            await browser.close();
+            if (
+              emptyAddonCount !== 0 ||
+              filledAddonCount !== 1 ||
+              rightInset === null ||
+              rightInset < 8 ||
+              rightInset > 10
+            ) {
+              process.exit(1);
+            }
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
+      - run: pnpm lint
+      - name: Preserve evidence and remove temporary workflow
+        if: always()
+        shell: bash
+        run: |
+          rm -f .github/workflows/capture-space-switcher-structure.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add artifacts/reference-evidence/space-switcher .github/workflows/capture-space-switcher-structure.yml
+          if ! git diff --cached --quiet; then
+            git commit -m "test: preserve Space switcher structural evidence"
+            git push origin HEAD:dev
+          fi
