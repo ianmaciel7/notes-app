@@ -33,3 +33,4 @@ jobs:
             sleep 1
           done
           pnpm exec playwright test tests/space-create-state.spec.ts --reporter=line
+      - run: pnpm lint
