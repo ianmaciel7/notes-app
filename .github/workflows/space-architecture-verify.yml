@@ -46,6 +46,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
 
           sidebar = Path("src/components/app-sidebar.tsx")
           text = sidebar.read_text()
@@ -57,20 +58,15 @@ jobs:
 
           repository = Path("src/lib/spaces/space-repository.ts")
           text = repository.read_text()
-          old = '''    await database.transaction(
-              "rw",
-              database.spaces,
-              database.appSettings,
-              database.objectTypes,
-              database.entities,
-              database.collections,
-              database.tags,
-              database.relations,
-              database.media,
-              database.spaceSettings,
-              database.trash,
-              async () => {'''
-          new = '''    await database.transaction(
+          pattern = re.compile(
+              r'await database\.transaction\(\s*"rw",\s*'
+              r'database\.spaces,\s*database\.appSettings,\s*database\.objectTypes,\s*'
+              r'database\.entities,\s*database\.collections,\s*database\.tags,\s*'
+              r'database\.relations,\s*database\.media,\s*database\.spaceSettings,\s*'
+              r'database\.trash,\s*async \(\) => \{',
+              re.MULTILINE,
+          )
+          replacement = '''await database.transaction(
               "rw",
               [
                 database.spaces,
@@ -85,9 +81,10 @@ jobs:
                 database.trash,
               ],
               async () => {'''
-          if old not in text:
-              raise SystemExit("Dexie deleteSpace transaction block not found")
-          repository.write_text(text.replace(old, new, 1))
+          updated, count = pattern.subn(replacement, text, count=1)
+          if count != 1:
+              raise SystemExit(f"expected one Dexie deleteSpace transaction block, found {count}")
+          repository.write_text(updated)
           PY
 
       - name: Format changed implementation files
