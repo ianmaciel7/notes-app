@@ -37,6 +37,22 @@ function entityFixture(
   };
 }
 
+async function createBookType(
+  repository: ReturnType<typeof createSpaceRepository>,
+  spaceId: string,
+) {
+  await repository.createObjectType(spaceId, {
+    singularName: "Book",
+    pluralName: "Books",
+    iconName: "book",
+    tone: "purple",
+    lifecycleKind: "document",
+  });
+  const type = (await repository.listObjectTypes(spaceId))[0];
+  if (!type) throw new Error("Book type was not created");
+  return type;
+}
+
 describe("Space repository", () => {
   it("creates and activates a completely blank Space", async () => {
     const { database, repository } = setup();
@@ -57,6 +73,11 @@ describe("Space repository", () => {
     }
   });
 
+  it("rejects selecting an unknown Space", async () => {
+    const { repository } = setup();
+    await expect(repository.setActiveSpace("missing")).rejects.toThrow("Unknown Space");
+  });
+
   it("persists Space order", async () => {
     const { repository } = setup();
     const first = await repository.createBlankSpace("First");
@@ -70,23 +91,72 @@ describe("Space repository", () => {
     const first = await repository.createBlankSpace("First");
     const second = await repository.createBlankSpace("Second");
 
-    await repository.createObjectType(first.id, {
-      singularName: "Book",
-      pluralName: "Books",
-      iconName: "book",
-      tone: "purple",
-      lifecycleKind: "document",
-    });
-    const type = (await repository.listObjectTypes(first.id))[0];
-    expect(type?.pluralName).toBe("Books");
+    const type = await createBookType(repository, first.id);
+    expect(type.pluralName).toBe("Books");
     expect(await repository.listObjectTypes(second.id)).toEqual([]);
 
-    if (!type) throw new Error("Book type was not created");
     await repository.createEntity(first.id, type.id, "Domain-Driven Design");
     expect((await repository.listEntities(first.id)).map((entity) => entity.title)).toEqual([
       "Domain-Driven Design",
     ]);
     expect(await repository.listEntities(second.id)).toEqual([]);
+  });
+
+  it("keeps collections and tags isolated", async () => {
+    const { database, repository } = setup();
+    const first = await repository.createBlankSpace("First");
+    const second = await repository.createBlankSpace("Second");
+    const type = await createBookType(repository, first.id);
+
+    await repository.createCollection(first.id, type.id, "Unread");
+    await repository.createTag(first.id, "Important");
+
+    expect(
+      (await database.collections.where("spaceId").equals(first.id).toArray()).map(
+        (item) => item.name,
+      ),
+    ).toEqual(["Unread"]);
+    expect(await database.collections.where("spaceId").equals(second.id).count()).toBe(0);
+    expect(
+      (await database.tags.where("spaceId").equals(first.id).toArray()).map((item) => item.name),
+    ).toEqual(["Important"]);
+    expect(await database.tags.where("spaceId").equals(second.id).count()).toBe(0);
+  });
+
+  it("keeps media settings and trash isolated", async () => {
+    const { repository } = setup();
+    const first = await repository.createBlankSpace("First");
+    const second = await repository.createBlankSpace("Second");
+    const timestamp = "2026-01-01T00:00:00.000Z";
+
+    await repository.putMedia(first.id, {
+      id: "paper",
+      spaceId: first.id,
+      name: "paper.pdf",
+      mimeType: "application/pdf",
+      blobKey: "blob-paper",
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    });
+    await repository.setSpaceSetting(first.id, "sidebar.sort", "alphabetical");
+    await repository.putTrash(first.id, {
+      id: "trash:entity-a",
+      spaceId: first.id,
+      entityId: "entity-a",
+      label: "Deleted page",
+      typeLabel: "Page",
+      trashedAt: timestamp,
+      purgeAfter: "2026-02-01T00:00:00.000Z",
+    });
+
+    expect((await repository.listMedia(first.id)).map((item) => item.id)).toEqual(["paper"]);
+    expect(await repository.listMedia(second.id)).toEqual([]);
+    expect(await repository.getSpaceSetting(first.id, "sidebar.sort")).toBe("alphabetical");
+    expect(await repository.getSpaceSetting(second.id, "sidebar.sort")).toBeNull();
+    expect((await repository.listTrash(first.id)).map((item) => item.entityId)).toEqual([
+      "entity-a",
+    ]);
+    expect(await repository.listTrash(second.id)).toEqual([]);
   });
 
   it("allows the same logical id in different Spaces", async () => {
