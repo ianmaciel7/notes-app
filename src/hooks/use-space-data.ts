@@ -8,7 +8,15 @@ import { db } from "@/lib/db";
 import { bootstrapWorkspace } from "@/lib/spaces/bootstrap-workspace";
 import { groupEntitiesByObjectType } from "@/lib/spaces/space-projections";
 import { createSpaceRepository } from "@/lib/spaces/space-repository";
-import { ACTIVE_SPACE_SETTING_ID } from "@/lib/spaces/space-types";
+import {
+  ACTIVE_SPACE_SETTING_ID,
+  type SpaceCollectionRecord,
+  type SpaceEntityRecord,
+  type SpaceObjectTypeRecord,
+  type SpaceRecord,
+  type SpaceTagRecord,
+  type SpaceTrashRecord,
+} from "@/lib/spaces/space-types";
 
 export function useSpaceData() {
   const repository = React.useMemo(() => createSpaceRepository(db), []);
@@ -32,47 +40,47 @@ export function useSpaceData() {
     };
   }, []);
 
-  const spaces = useLiveQuery(() => db.spaces.orderBy("sortOrder").toArray(), [], []);
-  const activeSpaceId = useLiveQuery(
+  const spaces = useLiveQuery<SpaceRecord[]>(
+    () => db.spaces.orderBy("sortOrder").toArray(),
+    [],
+    [],
+  );
+  const activeSpaceId = useLiveQuery<string | null>(
     async () => (await db.appSettings.get(ACTIVE_SPACE_SETTING_ID))?.value ?? null,
     [],
     null,
   );
-  const objectTypeRecords = useLiveQuery(
-    () =>
+  const objectTypeRecords = useLiveQuery<SpaceObjectTypeRecord[]>(
+    async () =>
       activeSpaceId
-        ? db.objectTypes.where("spaceId").equals(activeSpaceId).toArray()
-        : Promise.resolve([]),
+        ? await db.objectTypes.where("spaceId").equals(activeSpaceId).toArray()
+        : [],
     [activeSpaceId],
     [],
   );
-  const entities = useLiveQuery(
-    () =>
-      activeSpaceId
-        ? db.entities.where("spaceId").equals(activeSpaceId).toArray()
-        : Promise.resolve([]),
+  const entities = useLiveQuery<SpaceEntityRecord[]>(
+    async () =>
+      activeSpaceId ? await db.entities.where("spaceId").equals(activeSpaceId).toArray() : [],
     [activeSpaceId],
     [],
   );
-  const collections = useLiveQuery(
-    () =>
+  const collections = useLiveQuery<SpaceCollectionRecord[]>(
+    async () =>
       activeSpaceId
-        ? db.collections.where("spaceId").equals(activeSpaceId).toArray()
-        : Promise.resolve([]),
+        ? await db.collections.where("spaceId").equals(activeSpaceId).toArray()
+        : [],
     [activeSpaceId],
     [],
   );
-  const tags = useLiveQuery(
-    () =>
-      activeSpaceId ? db.tags.where("spaceId").equals(activeSpaceId).toArray() : Promise.resolve([]),
+  const tags = useLiveQuery<SpaceTagRecord[]>(
+    async () =>
+      activeSpaceId ? await db.tags.where("spaceId").equals(activeSpaceId).toArray() : [],
     [activeSpaceId],
     [],
   );
-  const trash = useLiveQuery(
-    () =>
-      activeSpaceId
-        ? db.trash.where("spaceId").equals(activeSpaceId).toArray()
-        : Promise.resolve([]),
+  const trash = useLiveQuery<SpaceTrashRecord[]>(
+    async () =>
+      activeSpaceId ? await db.trash.where("spaceId").equals(activeSpaceId).toArray() : [],
     [activeSpaceId],
     [],
   );
