@@ -17,6 +17,7 @@ import {
   WorkspaceNewContentDialogController,
   WorkspaceSidebar,
 } from "@/components/app-sidebar-primary-actions-command-dialog";
+import { FocusModeProvider } from "@/components/focus-mode-provider";
 import {
   WorkspaceMainHeader,
   WorkspaceProvider,
@@ -26,44 +27,46 @@ import {
 export default function HomePage() {
   return (
     <AppShellProvider>
-      <WorkspaceProvider>
-        <WorkspaceNewContentDialogController />
+      <FocusModeProvider>
+        <WorkspaceProvider>
+          <WorkspaceNewContentDialogController />
 
-        <AppShell>
-          <AppShellPanelGroup>
-            <AppShellSidebar>
-              <WorkspaceSidebar />
-            </AppShellSidebar>
+          <AppShell>
+            <AppShellPanelGroup>
+              <AppShellSidebar>
+                <WorkspaceSidebar />
+              </AppShellSidebar>
 
-            <AppShellWorkspace>
-              <AppShellMain>
-                <WorkspaceMainHeader />
-                <AppShellSurface className="h-full w-full" />
-              </AppShellMain>
+              <AppShellWorkspace>
+                <AppShellMain>
+                  <WorkspaceMainHeader />
+                  <AppShellSurface className="h-full w-full" />
+                </AppShellMain>
 
-              <AppShellSidePanel>
+                <AppShellSidePanel>
+                  <WorkspaceSidePanelHeader />
+                  <AppShellSurface side="side-panel" className="h-full w-full" />
+                </AppShellSidePanel>
+              </AppShellWorkspace>
+            </AppShellPanelGroup>
+
+            <AppShellSidebarTrigger />
+          </AppShell>
+
+          <AppShellMobile>
+            <AppShellHeader className="relative">
+              <AppShellMobileSidebar>
+                <WorkspaceSidebar />
+              </AppShellMobileSidebar>
+              <AppShellMobileSidePanel className="flex flex-col p-0">
                 <WorkspaceSidePanelHeader />
                 <AppShellSurface side="side-panel" className="h-full w-full" />
-              </AppShellSidePanel>
-            </AppShellWorkspace>
-          </AppShellPanelGroup>
-
-          <AppShellSidebarTrigger />
-        </AppShell>
-
-        <AppShellMobile>
-          <AppShellHeader className="relative">
-            <AppShellMobileSidebar>
-              <WorkspaceSidebar />
-            </AppShellMobileSidebar>
-            <AppShellMobileSidePanel className="flex flex-col p-0">
-              <WorkspaceSidePanelHeader />
-              <AppShellSurface side="side-panel" className="h-full w-full" />
-            </AppShellMobileSidePanel>
-          </AppShellHeader>
-          <AppShellSurface className="h-full w-full" />
-        </AppShellMobile>
-      </WorkspaceProvider>
+              </AppShellMobileSidePanel>
+            </AppShellHeader>
+            <AppShellSurface className="h-full w-full" />
+          </AppShellMobile>
+        </WorkspaceProvider>
+      </FocusModeProvider>
     </AppShellProvider>
   );
 }
