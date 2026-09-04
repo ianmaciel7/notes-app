@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import * as React from "react";
 
+import { AppSidebarFooter, AppSidebarHelpSection, AppSidebarUtilityRow } from "@/components/app-sidebar-floating-nav";
 import { AppSidebarObjectsIcon, AppSidebarPinIcon } from "@/components/app-sidebar-icons";
 import { AppSidebarObjectTypeStudio } from "@/components/app-sidebar-object-type-studio";
 import { ObjectAreaIcon } from "@/components/object-icons";
@@ -15,8 +16,6 @@ import {
   AppSidebarAddSection,
   type AppSidebarCollectionAction,
   type AppSidebarCustomSection,
-  AppSidebarFooter,
-  AppSidebarHelpSection,
   type AppSidebarObjectType,
   AppSidebarObjectTypeRow,
   AppSidebarOverview as BaseAppSidebarOverview,
@@ -31,7 +30,6 @@ import {
   type AppSidebarTrashItem,
   AppSidebarTrashRow,
   AppSidebarTypeLabel,
-  AppSidebarUtilityRow,
 } from "./app-sidebar-overview";
 
 import styles from "./app-sidebar-overview-parity.module.css";
