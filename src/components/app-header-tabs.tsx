@@ -187,7 +187,7 @@ function AppHeaderTabIcon({ tab, neutral }: { tab: AppHeaderTab; neutral?: boole
         tab.iconClassName ??
           (neutral
             ? "bg-transparent text-[var(--app-tab-text-secondary)]"
-            : "bg-[oklch(0.9766_0.0016_67.01)] text-[oklch(0.4289_0.0021_324.71)]"),
+            : "bg-[oklch(0.9856_0.0016_67.00)] text-[oklch(0.3887_0.0052_301.05)] dark:bg-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]"),
       )}
     >
       <span
@@ -839,7 +839,9 @@ function AppSpaceHeader({
             const absoluteIndex = range.start + localIndex;
             return (
               <React.Fragment key={renderKey}>
-                {before && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />}
+                {before && (
+                  <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[var(--app-block-selection-border)]" />
+                )}
                 {/* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual tab wrapper */}
                 <div
                   role="presentation"
@@ -906,7 +908,9 @@ function AppSpaceHeader({
                     onTogglePin={() => togglePin(tab)}
                   />
                 </div>
-                {after && <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[#7b8fd8]" />}
+                {after && (
+                  <div className="h-6 w-[1.5px] shrink-0 rounded-full bg-[var(--app-block-selection-border)]" />
+                )}
               </React.Fragment>
             );
           })}

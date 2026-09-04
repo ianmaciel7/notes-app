@@ -164,11 +164,11 @@ function AppSidebarObjectTypeCard({
       data-selected={selected || undefined}
       ref={buttonRef}
       className={cn(
-        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] dark:border-border bg-white dark:bg-card px-2.5 text-left",
-        "text-[14px] font-semibold text-[#2f2c29] dark:text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
+        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-border bg-card px-2.5 text-left",
+        "text-[14px] font-semibold text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
         "transition-[background-color,border-color,box-shadow,filter] duration-150",
-        "hover:border-[#cbc7c1] dark:hover:border-border hover:bg-[#faf9f8] dark:hover:bg-accent hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)]",
-        "active:brightness-[0.98] data-[selected=true]:border-[#bdb8b0] dark:data-[selected=true]:border-border data-[selected=true]:bg-[#f7f5f3] dark:data-[selected=true]:bg-accent",
+        "hover:border-[var(--app-border-base-strong)] hover:bg-[var(--app-bg-front-hover)] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)]",
+        "active:brightness-[0.98] data-[selected=true]:border-[var(--app-border-base-strong)] data-[selected=true]:bg-[var(--app-bg-el-subtle-hover)]",
       )}
       onClick={() => onSelect(preset)}
     >
@@ -177,7 +177,7 @@ function AppSidebarObjectTypeCard({
       {selected && (
         <span
           aria-hidden="true"
-          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-[#34302c] dark:bg-primary text-white dark:text-primary-foreground"
+          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
         >
           <AppSidebarCheckIcon className="size-3" />
         </span>
@@ -203,15 +203,15 @@ function AppSidebarCustomObjectTypeCard({
       data-lifecycle-contract={objectLifecycleContractSlots.CustomObjectTypeForm}
       data-selected={selected || undefined}
       className={cn(
-        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] dark:border-border bg-white dark:bg-card px-2.5 text-left",
-        "text-[14px] font-semibold text-[#2f2c29] dark:text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
+        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-border bg-card px-2.5 text-left",
+        "text-[14px] font-semibold text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
         "transition-[background-color,border-color,box-shadow,filter] duration-150",
-        "hover:border-[#cbc7c1] dark:hover:border-border hover:bg-[#faf9f8] dark:hover:bg-accent hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)]",
-        "active:brightness-[0.98] data-[selected=true]:border-[#bdb8b0] dark:data-[selected=true]:border-border data-[selected=true]:bg-[#f7f5f3] dark:data-[selected=true]:bg-accent",
+        "hover:border-[var(--app-border-base-strong)] hover:bg-[var(--app-bg-front-hover)] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)]",
+        "active:brightness-[0.98] data-[selected=true]:border-[var(--app-border-base-strong)] data-[selected=true]:bg-[var(--app-bg-el-subtle-hover)]",
       )}
       onClick={onSelect}
     >
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-[8px] border border-[#cfcac4] dark:border-border bg-white dark:bg-muted text-[#5f5a55] dark:text-muted-foreground">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-[8px] border border-[var(--app-border-el)] bg-[var(--app-bg-el)] text-[var(--app-text-secondary)]">
         <AppSidebarPlusIcon className="size-[18px]" />
       </span>
       <span className="min-w-0 truncate">{label}</span>
@@ -237,10 +237,10 @@ function AppSidebarBasicObjectTypeCard({
       data-card-family="basic"
       data-selected={selected || undefined}
       className={cn(
-        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] dark:border-border bg-white dark:bg-card px-2.5 text-left",
-        "text-[14px] font-semibold text-[#2f2c29] dark:text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
+        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-border bg-card px-2.5 text-left",
+        "text-[14px] font-semibold text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
         "transition-[background-color,border-color,box-shadow,filter] duration-150",
-        "hover:border-[#cbc7c1] dark:hover:border-border hover:bg-[#faf9f8] dark:hover:bg-accent hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)] active:brightness-[0.98] data-[selected=true]:border-[#bdb8b0] dark:data-[selected=true]:border-border data-[selected=true]:bg-[#f7f5f3] dark:data-[selected=true]:bg-accent",
+        "hover:border-[var(--app-border-base-strong)] hover:bg-[var(--app-bg-front-hover)] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)] active:brightness-[0.98] data-[selected=true]:border-[var(--app-border-base-strong)] data-[selected=true]:bg-[var(--app-bg-el-subtle-hover)]",
       )}
       onClick={() => onSelect(structure)}
     >
@@ -249,7 +249,7 @@ function AppSidebarBasicObjectTypeCard({
       {selected && (
         <span
           aria-hidden="true"
-          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-[#34302c] text-white"
+          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
         >
           <AppSidebarCheckIcon className="size-3" />
         </span>
@@ -294,7 +294,7 @@ function AppSidebarObjectTypeDetails({
       className={cn(
         "pointer-events-auto absolute bottom-0 right-0 top-0 z-20 -mb-1 -mr-1 -mt-1",
         "flex min-h-0 w-full origin-center scale-100 transform flex-col overflow-hidden",
-        "border border-[#d9dce3] bg-[#f8f9fb] shadow-xl transition duration-150 ease-out",
+        "border border-border bg-[var(--app-bg-back)] shadow-xl transition duration-150 ease-out",
         "sm:w-[28rem] sm:rounded-lg",
       )}
     >
@@ -316,7 +316,7 @@ function AppSidebarObjectTypeDetails({
                         "transition duration-200 ease-out hover:bg-muted hover:text-foreground active:brightness-[0.97]",
                       )}
                     >
-                      <ObjectIdeaIcon className="-mr-px size-[1em] text-amber-500 dark:text-amber-400" />
+                      <ObjectIdeaIcon className="-mr-px size-[1em] text-[oklch(0.5708_0.1192_59.46)] dark:text-[oklch(0.9243_0.1151_95.76)]" />
                       <span className="mr-1 whitespace-nowrap">{t("details.learnMore")}</span>
                     </button>
                   </div>
@@ -328,7 +328,7 @@ function AppSidebarObjectTypeDetails({
                     <div className="flex select-none items-baseline pb-1.5 text-xs text-muted-foreground">
                       <span>{t("details.icon")}</span>
                     </div>
-                    <div className="relative flex size-8 shrink-0 items-center justify-center rounded-lg border text-lg leading-none text-[oklch(0.4289_0.0021_324.71)] [border-color:oklch(0.8643_0.0017_67.13)] [border-width:0.5px] [background-color:oklch(0.9766_0.0016_67.01)]">
+                    <div className="relative flex size-8 shrink-0 items-center justify-center rounded-lg border text-lg leading-none text-[oklch(0.3887_0.0052_301.05)] dark:text-[oklch(0.9163_0.0017_67.07)] [border-color:oklch(0.8643_0.0017_67.13)] dark:[border-color:oklch(0.4918_0.0038_16.70)] [border-width:0.5px] [background-color:oklch(0.9856_0.0016_67.00)] dark:[background-color:oklch(0.2987_0.0072_285.88)]">
                       <button
                         type="button"
                         className="relative flex h-full w-full shrink-0 grow-0 cursor-pointer appearance-none items-center justify-center rounded-[0.445rem] bg-transparent text-[18px] leading-none hover:brightness-95 focus:outline-none"
@@ -403,9 +403,9 @@ function AppSidebarObjectTypeDetails({
                 </div>
 
                 <div className="mt-4 flex w-full grow flex-col">
-                  <div className="mt-3 flex w-full rounded-lg bg-[#e8f1ff] px-3 py-2 text-sm text-[#2556a8]">
+                  <div className="mt-3 flex w-full rounded-lg bg-[var(--app-block-bg-blue)] px-3 py-2 text-sm text-[var(--app-block-text-blue)]">
                     <div className="w-6 shrink-0 grow-0">
-                      <div className="-mt-0.5 -mb-1 -ml-1.5 flex size-6 shrink-0 grow-0 items-center justify-center rounded-lg leading-none text-blue-600 dark:text-blue-300">
+                      <div className="-mt-0.5 -mb-1 -ml-1.5 flex size-6 shrink-0 grow-0 items-center justify-center rounded-lg leading-none text-[var(--app-block-text-blue)]">
                         <ObjectTypeDetailsIcon name="info" />
                       </div>
                     </div>
@@ -474,10 +474,10 @@ function AppSidebarObjectTypeDetails({
         </ScrollArea>
       </div>
 
-      <div className="sticky bottom-0 flex w-full shrink-0 justify-center bg-[#f8f9fb] px-4 py-4">
+      <div className="sticky bottom-0 flex w-full shrink-0 justify-center bg-[var(--app-bg-back)] px-4 py-4">
         <Button
           type="button"
-          className="h-8 w-full justify-center rounded-lg bg-[#45464f] px-3 text-sm font-medium text-white shadow-none hover:bg-[#35363e]"
+          className="h-8 w-full justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground shadow-none hover:bg-[var(--app-primary-hover)]"
           disabled={isCustom && customName.trim().length === 0}
           onClick={onConfirm}
         >
@@ -593,18 +593,18 @@ function AppSidebarObjectTypeStudio({
         <DialogContent
           showCloseButton={false}
           className={cn(
-            "flex h-[min(784px,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] flex-col gap-0 overflow-hidden rounded-[8px] bg-white dark:bg-popover p-0 text-[#1f1c19] dark:text-popover-foreground sm:w-[min(1152px,calc(100vw-4rem))] sm:max-w-[min(1152px,calc(100vw-4rem))]",
+            "flex h-[min(784px,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] flex-col gap-0 overflow-hidden rounded-[8px] bg-popover p-0 text-popover-foreground sm:w-[min(1152px,calc(100vw-4rem))] sm:max-w-[min(1152px,calc(100vw-4rem))]",
             "shadow-[0_18px_60px_rgb(0_0_0/0.22)] ring-1 ring-black/10 dark:ring-white/10",
           )}
         >
-          <DialogHeader className="flex h-[56px] shrink-0 justify-center gap-0 border-b border-[#e7e2dc] dark:border-border px-5 py-0">
+          <DialogHeader className="flex h-[56px] shrink-0 justify-center gap-0 border-b border-border px-5 py-0">
             <DialogTitle className="text-[18px] font-semibold leading-none tracking-[-0.01em]">
               {t("title")}
             </DialogTitle>
             <DialogDescription className="sr-only">{t("description")}</DialogDescription>
           </DialogHeader>
 
-          <div className="relative flex min-h-0 flex-1 overflow-hidden bg-white dark:bg-popover">
+          <div className="relative flex min-h-0 flex-1 overflow-hidden bg-popover">
             <ScrollArea
               className={cn(
                 "min-h-0 flex-1",
@@ -621,9 +621,9 @@ function AppSidebarObjectTypeStudio({
               >
                 <section
                   aria-label={t("intro.title")}
-                  className="mb-7 flex w-full max-w-[647px] gap-3 rounded-[8px] bg-[#e6f7ef] dark:bg-emerald-950/40 px-3 py-2.5 text-[#064e3b] dark:text-emerald-200"
+                  className="mb-7 flex w-full max-w-[647px] gap-3 rounded-[8px] bg-[var(--app-block-bg-green)] px-3 py-2.5 text-[var(--app-block-text-green)]"
                 >
-                  <ObjectIdeaIcon className="mt-0.5 size-4 shrink-0 text-[#36b77b] dark:text-emerald-400" />
+                  <ObjectIdeaIcon className="mt-0.5 size-4 shrink-0 text-[var(--app-block-text-green)]" />
                   <div className="min-w-0 text-[14px] leading-[1.45]">
                     <h2 className="font-semibold">{t("intro.title")}</h2>
                     <p className="mt-2 font-normal">
@@ -632,7 +632,7 @@ function AppSidebarObjectTypeStudio({
                         href="https://docs.capacities.io/reference/object-types"
                         target="_blank"
                         rel="noreferrer"
-                        className="font-medium text-[#2563eb] dark:text-blue-400 underline underline-offset-2"
+                        className="font-medium text-[var(--app-external-link)] underline underline-offset-2 hover:text-[var(--app-external-link-hover)]"
                       >
                         {t("intro.learnMore")}
                       </a>
@@ -664,7 +664,7 @@ function AppSidebarObjectTypeStudio({
                   />
                 </div>
 
-                <h2 className="mt-9 text-[16px] font-semibold leading-none text-[#1f1c19] dark:text-foreground">
+                <h2 className="mt-9 text-[16px] font-semibold leading-none text-foreground">
                   {t("basicTypes")}
                 </h2>
                 <div

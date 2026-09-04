@@ -177,14 +177,14 @@ function NewContentMenu({
         alignOffset={6}
         className={cn(
           compactMenuSurfaceClass,
-          "box-content h-[361px] w-[22rem] min-w-0 max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-[oklch(0.9163_0.0017_67.07)] shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
+          "box-content h-[361px] w-[22rem] min-w-0 max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-border shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
         )}
       >
         <div className="h-11 shrink-0 p-1.5">
           <div
             className={cn(
               compactMenuSearchClass,
-              "flex h-8 items-center rounded-[8px] bg-[oklch(0.9676_0.0016_67.02)]",
+              "flex h-8 items-center rounded-[8px] bg-muted",
             )}
           >
             <Input
@@ -234,7 +234,7 @@ function NewContentMenu({
                 onClick={() => selectItem(id)}
                 className={cn(
                   compactMenuItemClass,
-                  "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] px-1 text-left font-normal outline-none hover:bg-[#f3f1ee] data-[active=true]:bg-[#f3f1ee]",
+                  "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] px-1 text-left font-normal outline-none hover:bg-muted data-[active=true]:bg-muted",
                 )}
               >
                 <ObjectIconBadge icon={Icon} tone={tone} variant="menu" />

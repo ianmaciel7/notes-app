@@ -608,8 +608,8 @@ function AppSidebarSpaceSwitcher({
             <span
               aria-hidden="true"
               className={cn(
-                "grab-handle invisible absolute bottom-0 left-0 top-0 z-10 flex items-center justify-start bg-[#f3f1ee] pr-px text-[#8f8983]",
-                "cursor-grab transition-none hover:text-[#595550] group-hover/space:visible",
+                "grab-handle invisible absolute bottom-0 left-0 top-0 z-10 flex items-center justify-start bg-muted pr-px text-muted-foreground",
+                "cursor-grab transition-none hover:text-[var(--app-text-secondary)] group-hover/space:visible",
                 !isSorting && "group-hover/space:opacity-100",
                 isDragging && "visible cursor-grabbing opacity-100",
               )}
@@ -634,7 +634,7 @@ function AppSidebarSpaceSwitcher({
 
         <span className="ml-1 flex flex-row items-center gap-1">
           {isSelected && (
-            <span className="flex items-center justify-center text-[#282522] dark:text-[oklch(0.96_0_0)]">
+            <span className="flex items-center justify-center text-foreground">
               <AppSidebarCheckIcon className="size-[1em]" />
             </span>
           )}
@@ -659,7 +659,7 @@ function AppSidebarSpaceSwitcher({
             type="button"
             variant="ghost"
             size="default"
-            className={cn(compactMenuActionButtonClass, "justify-start px-1 text-[#282522] dark:text-[oklch(0.96_0_0)]")}
+            className={cn(compactMenuActionButtonClass, "justify-start px-1 text-foreground")}
             onClick={openCreateDialog}
           >
             <span className="flex h-6 shrink-0 flex-row items-center justify-center">
@@ -673,7 +673,7 @@ function AppSidebarSpaceSwitcher({
             type="button"
             variant="ghost"
             size="default"
-            className={cn(compactMenuActionButtonClass, "justify-start px-1 text-[#282522] dark:text-[oklch(0.96_0_0)]")}
+            className={cn(compactMenuActionButtonClass, "justify-start px-1 text-foreground")}
             onClick={openSettingsDialog}
           >
             {text.spaceSettings}
