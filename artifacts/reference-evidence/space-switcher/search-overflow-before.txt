@@ -1,0 +1,1 @@
+User-supplied screenshot evidence from 2026-09-04 showing the Space switcher search field overflowing/clipping on the popup's right edge. Original image retained separately by project workflow policy when binary upload is available.
