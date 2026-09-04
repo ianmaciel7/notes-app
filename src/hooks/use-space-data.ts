@@ -40,50 +40,52 @@ export function useSpaceData() {
     };
   }, []);
 
-  const spaces = useLiveQuery<SpaceRecord[]>(
+  const spacesQuery = useLiveQuery<SpaceRecord[]>(
     () => db.spaces.orderBy("sortOrder").toArray(),
     [],
-    [],
   );
-  const activeSpaceId = useLiveQuery<string | null>(
+  const activeSpaceIdQuery = useLiveQuery<string | null>(
     async () => (await db.appSettings.get(ACTIVE_SPACE_SETTING_ID))?.value ?? null,
     [],
-    null,
   );
-  const objectTypeRecords = useLiveQuery<SpaceObjectTypeRecord[]>(
+  const activeSpaceId = activeSpaceIdQuery ?? null;
+
+  const objectTypeRecordsQuery = useLiveQuery<SpaceObjectTypeRecord[]>(
     async () =>
       activeSpaceId
         ? await db.objectTypes.where("spaceId").equals(activeSpaceId).toArray()
         : [],
     [activeSpaceId],
-    [],
   );
-  const entities = useLiveQuery<SpaceEntityRecord[]>(
+  const entitiesQuery = useLiveQuery<SpaceEntityRecord[]>(
     async () =>
       activeSpaceId ? await db.entities.where("spaceId").equals(activeSpaceId).toArray() : [],
     [activeSpaceId],
-    [],
   );
-  const collections = useLiveQuery<SpaceCollectionRecord[]>(
+  const collectionsQuery = useLiveQuery<SpaceCollectionRecord[]>(
     async () =>
       activeSpaceId
         ? await db.collections.where("spaceId").equals(activeSpaceId).toArray()
         : [],
     [activeSpaceId],
-    [],
   );
-  const tags = useLiveQuery<SpaceTagRecord[]>(
+  const tagsQuery = useLiveQuery<SpaceTagRecord[]>(
     async () =>
       activeSpaceId ? await db.tags.where("spaceId").equals(activeSpaceId).toArray() : [],
     [activeSpaceId],
-    [],
   );
-  const trash = useLiveQuery<SpaceTrashRecord[]>(
+  const trashQuery = useLiveQuery<SpaceTrashRecord[]>(
     async () =>
       activeSpaceId ? await db.trash.where("spaceId").equals(activeSpaceId).toArray() : [],
     [activeSpaceId],
-    [],
   );
+
+  const spaces = spacesQuery ?? [];
+  const objectTypeRecords = objectTypeRecordsQuery ?? [];
+  const entities = entitiesQuery ?? [];
+  const collections = collectionsQuery ?? [];
+  const tags = tagsQuery ?? [];
+  const trash = trashQuery ?? [];
 
   const counts = React.useMemo(() => groupEntitiesByObjectType(entities), [entities]);
   const objectTypes = React.useMemo(
