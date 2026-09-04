@@ -13,7 +13,10 @@ import {
   AppShellSurface,
   AppShellWorkspace,
 } from "@/components/app-shell";
-import { WorkspaceSidebar } from "@/components/app-sidebar-primary-actions-command-dialog";
+import {
+  WorkspaceNewContentDialogController,
+  WorkspaceSidebar,
+} from "@/components/app-sidebar-primary-actions-command-dialog";
 import {
   WorkspaceMainHeader,
   WorkspaceProvider,
@@ -24,6 +27,8 @@ export default function HomePage() {
   return (
     <AppShellProvider>
       <WorkspaceProvider>
+        <WorkspaceNewContentDialogController />
+
         <AppShell>
           <AppShellPanelGroup>
             <AppShellSidebar>
