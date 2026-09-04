@@ -3,9 +3,9 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import * as React from "react";
 
-import { presentWorkspaceObjectType } from "@/components/workspace-object-type-presenter";
+import { presentWorkspaceObjectType } from "@/components/space-object-type-presenter";
 import { db } from "@/lib/db";
-import { bootstrapWorkspace } from "@/lib/spaces/bootstrap-workspace";
+import { bootstrapSpace } from "@/lib/spaces/bootstrap-space";
 import { groupEntitiesByObjectType } from "@/lib/spaces/space-projections";
 import { createSpaceRepository } from "@/lib/spaces/space-repository";
 import {
@@ -25,7 +25,7 @@ export function useSpaceData() {
 
   React.useEffect(() => {
     let cancelled = false;
-    void bootstrapWorkspace(db)
+    void bootstrapSpace(db)
       .then(() => {
         if (!cancelled) setBootstrapped(true);
       })

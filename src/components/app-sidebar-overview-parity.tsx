@@ -12,9 +12,9 @@ import { AppSidebarObjectsIcon, AppSidebarPinIcon } from "@/components/app-sideb
 import { AppSidebarObjectTypeStudio } from "@/components/app-sidebar-object-type-studio";
 import { ObjectAreaIcon } from "@/components/object-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import type { WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
+import type { CreateStructureInput, ObjectIconName } from "@/lib/space-object-types";
 import { cn } from "@/lib/utils";
-import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
-import type { CreateStructureInput, ObjectIconName } from "@/lib/workspace-object-types";
 
 import {
   AppSidebarAddSection,

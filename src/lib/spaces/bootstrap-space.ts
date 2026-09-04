@@ -2,7 +2,7 @@ import type { KnowledgeDatabase } from "@/lib/db";
 import { createPersonalSpaceSeed } from "@/lib/spaces/personal-space-seed";
 import { ACTIVE_SPACE_SETTING_ID, PERSONAL_SPACE_ID } from "@/lib/spaces/space-types";
 
-export async function bootstrapWorkspace(
+export async function bootstrapSpace(
   database: KnowledgeDatabase,
   now: () => Date = () => new Date(),
 ) {
@@ -31,3 +31,5 @@ export async function bootstrapWorkspace(
     },
   );
 }
+
+export const bootstrapWorkspace = bootstrapSpace;

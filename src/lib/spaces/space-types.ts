@@ -1,4 +1,4 @@
-import type { WorkspaceStructure } from "@/lib/workspace-object-types";
+import type { WorkspaceStructure } from "@/lib/space-object-types";
 import type { BaseEntity } from "@/types/schema";
 
 export const PERSONAL_SPACE_ID = "personal";

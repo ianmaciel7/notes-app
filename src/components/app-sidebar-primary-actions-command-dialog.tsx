@@ -8,6 +8,7 @@ import {
   objectIconToneBadgeClass,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
+import { useWorkspace } from "@/components/space-controller";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +16,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useWorkspace } from "@/components/workspace-controller";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
 import { cn } from "@/lib/utils";
 import { WorkspaceSidebar as BaseWorkspaceSidebar } from "./app-sidebar-primary-actions";

@@ -74,13 +74,13 @@ const workspaceRevealActionClass =
 const workspaceSectionRevealActionClass =
   "pointer-events-none opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/app-sidebar-section:pointer-events-auto group-hover/app-sidebar-section:opacity-100 group-focus-within/app-sidebar-section:pointer-events-auto group-focus-within/app-sidebar-section:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100";
 
-import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
+import type { WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
 import {
   type CreateStructureInput,
   OBJECT_ICON_NAMES,
   type ObjectIconName,
   type StructureOwnership,
-} from "@/lib/workspace-object-types";
+} from "@/lib/space-object-types";
 
 type AppSidebarSortMode = "manual" | "alphabetical";
 

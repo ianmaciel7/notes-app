@@ -22,7 +22,7 @@ import {
   WorkspaceMainHeader,
   WorkspaceProvider,
   WorkspaceSidePanelHeader,
-} from "@/components/workspace-controller";
+} from "@/components/space-controller";
 
 export default function HomePage() {
   return (

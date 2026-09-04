@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { resolveInteractionTooltip } from "../src/components/ui/interaction-hint";
-import { formatShortcutAriaChord } from "../src/lib/workspace-shortcuts";
+import { formatShortcutAriaChord } from "../src/lib/space-shortcuts";
 
 test("shortcut chords expose standards-based ARIA modifier names", () => {
   expect(formatShortcutAriaChord("Mod+Shift+J", "windows")).toBe("Control+Shift+J");

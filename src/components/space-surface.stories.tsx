@@ -14,7 +14,7 @@ import {
   workspaceReferenceSecondaryTextClass,
   workspaceRouteClass,
   workspaceSectionTitleClass,
-} from "./workspace-surface";
+} from "./space-surface";
 
 export const EmptyState: Story = () => (
   <div className="p-6">

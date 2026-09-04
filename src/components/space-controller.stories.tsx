@@ -4,7 +4,7 @@ import {
   WorkspaceMainHeader,
   WorkspaceProvider,
   WorkspaceSidePanelHeader,
-} from "./workspace-controller";
+} from "./space-controller";
 
 export const MainHeaderInWorkspace: Story = () => (
   <WorkspaceProvider>

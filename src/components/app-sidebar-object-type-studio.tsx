@@ -21,14 +21,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
-import { cn } from "@/lib/utils";
 import {
   BUILT_IN_STRUCTURES,
   type CreateStructureInput,
   OBJECT_TYPE_PRESETS,
   type ObjectTypePreset,
   type WorkspaceStructure,
-} from "@/lib/workspace-object-types";
+} from "@/lib/space-object-types";
+import { cn } from "@/lib/utils";
 
 type AppSidebarObjectTypeStudioProps = {
   onCreateFromPreset?: (presetId: string) => void;

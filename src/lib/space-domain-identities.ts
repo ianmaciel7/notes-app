@@ -1,9 +1,4 @@
-import type {
-  CollectionId,
-  StructureId,
-  TagId,
-  WorkspaceStructure,
-} from "./workspace-object-types.ts";
+import type { CollectionId, StructureId, TagId, WorkspaceStructure } from "./space-object-types.ts";
 
 // Minimal inline type (workspace-objects.ts removed from project)
 // biome-ignore lint/suspicious/noExplicitAny: stub type

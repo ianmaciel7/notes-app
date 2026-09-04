@@ -21,7 +21,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
 import {
   getWorkspacePanelPresentation,
   WORKSPACE_CONTEXT_PANEL_DEFAULT_SIZE_PERCENT,
@@ -33,7 +32,8 @@ import {
   WORKSPACE_SIDEBAR_MIN_WIDTH_PX,
   WORKSPACE_SURFACE_GUTTER_PX,
   WORKSPACE_SURFACE_RADIUS_PX,
-} from "@/lib/workspace-layout";
+} from "@/lib/space-layout";
+import { cn } from "@/lib/utils";
 
 const APP_SHELL_LEFT_DEFAULT = `${WORKSPACE_SIDEBAR_DEFAULT_WIDTH_PX}px`;
 const APP_SHELL_LEFT_MIN = `${WORKSPACE_SIDEBAR_MIN_WIDTH_PX}px`;

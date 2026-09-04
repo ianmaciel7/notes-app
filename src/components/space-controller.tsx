@@ -24,17 +24,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useSpaceData } from "@/hooks/use-space-data";
 import { db } from "@/lib/db";
+import type {
+  CreateStructureInput,
+  ObjectIconName,
+  ObjectIconTone,
+} from "@/lib/space-object-types";
 import {
   buildGraphInSpace,
   listBacklinksInSpace,
   searchEntitiesInSpace,
 } from "@/lib/spaces/space-projections";
 import { PERSONAL_SPACE_ID } from "@/lib/spaces/space-types";
-import type {
-  CreateStructureInput,
-  ObjectIconName,
-  ObjectIconTone,
-} from "@/lib/workspace-object-types";
 
 // biome-ignore lint/suspicious/noExplicitAny: context compatibility while legacy UI APIs are migrated
 export type WorkspaceContextValue = Record<string, any>;

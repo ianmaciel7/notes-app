@@ -32,7 +32,7 @@ import type { ComponentPropsWithoutRef, ElementType } from "react";
 import type {
   ObjectIconTone,
   ObjectIconName as PersistedObjectIconName,
-} from "@/lib/workspace-object-types";
+} from "@/lib/space-object-types";
 
 type ObjectIconProps = Omit<IconProps, "name" | "weight">;
 type ObjectTypeDefinition = {

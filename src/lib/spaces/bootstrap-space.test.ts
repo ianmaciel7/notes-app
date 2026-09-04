@@ -2,7 +2,7 @@ import "fake-indexeddb/auto";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createKnowledgeDatabase } from "@/lib/db";
-import { bootstrapWorkspace } from "@/lib/spaces/bootstrap-workspace";
+import { bootstrapSpace, bootstrapWorkspace } from "@/lib/spaces/bootstrap-space";
 import { createSpaceRepository } from "@/lib/spaces/space-repository";
 import { PERSONAL_SPACE_ID } from "@/lib/spaces/space-types";
 

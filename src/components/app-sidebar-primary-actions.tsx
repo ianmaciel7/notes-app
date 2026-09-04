@@ -21,6 +21,7 @@ import {
   ObjectIconBadge,
   objectIconToneBadgeClass,
 } from "@/components/object-icons";
+import { useWorkspace } from "@/components/space-controller";
 import { Button } from "@/components/ui/button";
 import {
   CompactMenuItemText,
@@ -31,7 +32,6 @@ import {
 import { Input } from "@/components/ui/input";
 import type { InteractionTooltipConfig } from "@/components/ui/interaction-hint";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useWorkspace } from "@/components/workspace-controller";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
 import { cn } from "@/lib/utils";
 
@@ -42,12 +42,9 @@ import {
   createWorkspaceCommandRuntime,
   projectWorkspaceCommands,
   type WorkspaceCommandId,
-} from "@/lib/workspace-command-registry";
-import {
-  createCollectionId,
-  type WorkspaceCollectionRecord,
-} from "@/lib/workspace-domain-identities";
-import { formatShortcutAriaChord, type ShortcutPlatform } from "@/lib/workspace-shortcuts";
+} from "@/lib/space-command-registry";
+import { createCollectionId, type WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
+import { formatShortcutAriaChord, type ShortcutPlatform } from "@/lib/space-shortcuts";
 
 type AppSidebarPrimaryActionId = "new" | "search" | "explore" | "calendar" | "tasks";
 

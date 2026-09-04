@@ -17,8 +17,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { WORKSPACE_RAIL_HEIGHT_PX } from "@/lib/space-layout";
 import { cn } from "@/lib/utils";
-import { WORKSPACE_RAIL_HEIGHT_PX } from "@/lib/workspace-layout";
 
 const SIDE_TAB_MAX_WIDTH = 160;
 const SIDE_TAB_MIN_WIDTH = 44;

@@ -1,4 +1,4 @@
-import { resolveShortcutChord, type ShortcutPlatform } from "./workspace-shortcuts.ts";
+import { resolveShortcutChord, type ShortcutPlatform } from "./space-shortcuts.ts";
 
 export type WorkspaceCommandCategory =
   | "navigation"

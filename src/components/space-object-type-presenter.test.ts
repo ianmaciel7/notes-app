@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
 
 import { ObjectPageIcon } from "@/components/object-icons";
-import { presentWorkspaceObjectType } from "@/components/workspace-object-type-presenter";
+import { presentWorkspaceObjectType } from "@/components/space-object-type-presenter";
 
 it("maps persisted object type metadata to the existing UI icon and labels", () => {
   const value = presentWorkspaceObjectType(
