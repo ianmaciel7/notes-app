@@ -25,7 +25,7 @@ function HintShortcut({ shortcut }: { shortcut: string }) {
   const keys = shortcut.split("+").map((part) => normalizeShortcutKey(part))
 
   return (
-    <KbdGroup className="gap-0.5">
+    <KbdGroup>
       {keys.map((key, index) => (
         <Kbd key={`${shortcut}-${key}-${index}`}>{key}</Kbd>
       ))}
