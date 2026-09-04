@@ -20,6 +20,8 @@ jobs:
 
       - name: Merge verified Space feature without committing
         run: |
+          git config user.name "Ian Maciel"
+          git config user.email "ianmaciel76@gmail.com"
           git fetch origin feat/space-scoped-data-architecture
           git merge --no-commit --no-ff origin/feat/space-scoped-data-architecture
 
@@ -106,8 +108,6 @@ jobs:
         run: |
           rm .github/workflows/space-integration-verify.yml
           rm -rf test-results
-          git config user.name "Ian Maciel"
-          git config user.email "ianmaciel76@gmail.com"
           git add -A
           git commit -m "feat: integrate Space-scoped data architecture"
           git push origin HEAD:integrate/space-scoped-data-architecture
