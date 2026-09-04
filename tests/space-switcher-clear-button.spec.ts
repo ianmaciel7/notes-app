@@ -14,6 +14,7 @@ test("Space switcher search keeps the Capacities 6px outer inset on both sides",
 
   const search = popup.locator('[data-slot="input-group"]').first();
   await expect(search).toBeVisible();
+  await page.waitForTimeout(250);
 
   const popupBox = await popup.boundingBox();
   const searchBox = await search.boundingBox();
