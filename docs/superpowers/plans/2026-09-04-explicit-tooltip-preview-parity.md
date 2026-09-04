@@ -109,4 +109,5 @@
   - Runtime unavailable in the current environment: no project checkout/dependency installation is available for starting Next.js + Playwright.
 - [x] **Step 3:** Compare the final `dev` diff against the starting SHA and confirm no unrelated concurrent changes were overwritten.
   - A concurrent `fix: match Capacities focus mode behavior` commit landed during the work. Its `page.tsx`, focus provider/evidence/test, and expanded `app-header.tsx` behavior remain preserved; the current header still contains the explicit tooltip configuration.
-- [ ] **Step 4:** Verify the remote `dev` HEAD and available GitHub status checks.
+- [x] **Step 4:** Verify the remote `dev` HEAD and available GitHub status checks.
+  - Remote `dev` was verified after implementation. GitHub currently reports no combined statuses and no workflow runs for the checked HEAD; this is recorded as absence of CI evidence, not as a passing CI result.
