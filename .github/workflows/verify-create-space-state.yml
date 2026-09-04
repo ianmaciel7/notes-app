@@ -1,0 +1,35 @@
+name: Verify create Space state
+
+on:
+  push:
+    branches:
+      - fix/create-space-state
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.20.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Run create Space regression
+        shell: bash
+        run: |
+          pnpm dev > /tmp/notes-app.log 2>&1 &
+          APP_PID=$!
+          trap 'kill $APP_PID 2>/dev/null || true' EXIT
+          for i in {1..60}; do
+            if curl --fail --silent http://localhost:3000 >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          pnpm exec playwright test tests/space-create-state.spec.ts --reporter=line
