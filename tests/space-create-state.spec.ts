@@ -25,5 +25,7 @@ test("creating a Space adds it and makes it active", async ({ page }) => {
 
   await trigger.click();
   const reopenedPopup = page.locator(popupSelector).first();
-  await expect(reopenedPopup.locator("[data-space-sort-id]", { hasText: "Created Space" })).toBeVisible();
+  await expect(
+    reopenedPopup.locator("[data-space-sort-id]", { hasText: "Created Space" }),
+  ).toBeVisible();
 });

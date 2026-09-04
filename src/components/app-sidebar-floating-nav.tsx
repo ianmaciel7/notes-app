@@ -330,4 +330,4 @@ function AppSidebarFooter({ onOpenShortcuts }: { onOpenShortcuts?: () => void })
   );
 }
 
-export { AppSidebarFooter, AppSidebarHelpSection, AppSidebarUtilityRow }
+export { AppSidebarFooter, AppSidebarHelpSection, AppSidebarUtilityRow };

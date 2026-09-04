@@ -19,18 +19,14 @@ test("focus mode matches the Capacities collapsed chrome and compensated floatin
   const sidebar = page.locator('[data-slot="app-shell-sidebar"]');
   const sidePanel = page.locator('[data-slot="app-shell-side-panel"]');
 
-  await expect
-    .poll(async () => (await sidebar.boundingBox())?.width ?? 0)
-    .toBeLessThan(2);
-  await expect
-    .poll(async () => (await sidePanel.boundingBox())?.width ?? 0)
-    .toBeLessThan(2);
+  await expect.poll(async () => (await sidebar.boundingBox())?.width ?? 0).toBeLessThan(2);
+  await expect.poll(async () => (await sidePanel.boundingBox())?.width ?? 0).toBeLessThan(2);
 
   const secondary = page.locator('[data-slot="app-focus-mode-secondary"]');
   const compensation = page.locator('[data-slot="app-focus-mode-compensation"]');
   const secondaryWidth = await secondary.evaluate((element) => element.scrollWidth);
-  const compensationWidth = await compensation.evaluate((element) =>
-    element.getBoundingClientRect().width,
+  const compensationWidth = await compensation.evaluate(
+    (element) => element.getBoundingClientRect().width,
   );
 
   expect(compensationWidth).toBeGreaterThan(secondaryWidth);

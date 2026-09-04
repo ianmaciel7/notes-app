@@ -28,7 +28,6 @@ import {
   CompactMenuItemText,
   compactMenuActionButtonClass,
   compactMenuItemClass,
-  compactMenuSearchClass,
   compactMenuSurfaceClass,
 } from "@/components/ui/compact-menu";
 import {
@@ -450,14 +449,14 @@ function AppSidebarSpaceSwitcher({
     setCreateOpen(true);
   }
 
-  function openSettingsDialog() {
+  function _openSettingsDialog() {
     if (!selectedSpace) return;
     setOpen(false);
     setRenameName(selectedSpace.name);
     setSettingsOpen(true);
   }
 
-  function openDeleteDialog() {
+  function _openDeleteDialog() {
     setOpen(false);
     setDeleteConfirmation("");
     setDeleteError(false);
@@ -521,7 +520,13 @@ function AppSidebarSpaceSwitcher({
         showClear={false}
         placeholder={text.search}
         aria-label={text.search}
-        className={cn(compactMenuSearchClass, mobile && "h-9")}
+        className={cn(
+          "h-8 w-[calc(100%-0.75rem)] gap-2 m-1.5 px-[9px] border-0 rounded-lg bg-[var(--app-bg-el)] text-[var(--app-text-secondary)] shadow-none shrink-0",
+          "[&_[data-slot=input-group-control]]:h-full [&_[data-slot=input-group-control]]:p-0 [&_[data-slot=input-group-control]]:border-0 [&_[data-slot=input-group-control]]:bg-transparent [&_[data-slot=input-group-control]]:text-[var(--app-text-secondary)] [&_[data-slot=input-group-control]]:shadow-none [&_[data-slot=input-group-control]]:outline-none [&_[data-slot=input-group-control]::placeholder]:text-[var(--app-text-subtle)] [&_[data-slot=input-group-control]::placeholder]:opacity-60",
+          "[&_[data-slot=input-group-addon]]:p-0 [&_[data-slot=input-group-addon][data-align=inline-end]:has(>button)]:mr-0",
+          "[&>[data-slot=input-group-addon]:empty]:hidden",
+          mobile && "w-full",
+        )}
       >
         {query.length > 0 && (
           <InputGroupAddon align="inline-end">
@@ -530,6 +535,7 @@ function AppSidebarSpaceSwitcher({
               variant="ghost"
               size="icon-xs"
               aria-label={text.clearSearch}
+              className="size-[1.2em] p-[0.17em] border-[0.5px] border-border rounded-full bg-[var(--app-bg-el)] text-[var(--app-text-subtle)] shadow-none active:bg-[var(--app-bg-el-active)] active:transform-none"
               onPointerDown={(event) => event.preventDefault()}
               onClick={clearSearch}
             >
@@ -571,7 +577,8 @@ function AppSidebarSpaceSwitcher({
         aria-grabbed={isDragging}
         className={cn(
           compactMenuItemClass,
-          "group/space [&>span:last-child]:hidden",
+          "h-8 min-h-8 px-1 rounded-lg text-[var(--app-text-primary)] hover:bg-[var(--app-bg-el)] data-[highlighted]:bg-[var(--app-bg-el)] active:brightness-95",
+          "group/space [&>span:last-child]:hidden [&>[data-selected]]:hidden",
           "data-[dragging=true]:pointer-events-none data-[dragging=true]:opacity-30",
         )}
       >
@@ -580,8 +587,8 @@ function AppSidebarSpaceSwitcher({
             <span
               aria-hidden="true"
               className={cn(
-                "grab-handle invisible absolute bottom-0 left-0 top-0 z-10 flex items-center justify-start bg-muted pr-px text-muted-foreground",
-                "cursor-grab transition-none hover:text-[var(--app-text-secondary)] group-hover/space:visible",
+                "grab-handle invisible absolute bottom-0 left-0 top-0 z-10 flex items-center justify-start bg-[var(--app-bg-el)] pr-px text-[var(--app-text-subtle)] hover:text-[var(--app-text-secondary)]",
+                "cursor-grab transition-none group-hover/space:visible",
                 !isSorting && "group-hover/space:opacity-100",
                 isDragging && "visible cursor-grabbing opacity-100",
               )}
@@ -620,7 +627,7 @@ function AppSidebarSpaceSwitcher({
 
     return (
       <>
-        <ComboboxSeparator />
+        <ComboboxSeparator className="my-1 h-[0.5px] bg-border" />
         <div
           className={cn(
             "min-w-0",
@@ -631,7 +638,10 @@ function AppSidebarSpaceSwitcher({
             type="button"
             variant="ghost"
             size="default"
-            className={cn(compactMenuActionButtonClass, "justify-start px-1 text-foreground")}
+            className={cn(
+              compactMenuActionButtonClass,
+              "h-8 min-h-8 justify-start border-transparent px-1 text-[var(--app-text-primary)] hover:bg-[var(--app-bg-el)] active:brightness-95 active:transform-none",
+            )}
             onClick={openCreateDialog}
           >
             <span className="flex h-6 shrink-0 flex-row items-center justify-center">
@@ -640,24 +650,6 @@ function AppSidebarSpaceSwitcher({
               </CompactMenuIconFrame>
             </span>
             {text.createSpace}
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="default"
-            className={cn(compactMenuActionButtonClass, "justify-start px-1 text-foreground")}
-            onClick={openSettingsDialog}
-          >
-            {text.spaceSettings}
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="default"
-            className={cn(compactMenuActionButtonClass, "justify-start px-1 text-destructive")}
-            onClick={openDeleteDialog}
-          >
-            {text.deleteSpace}
           </Button>
         </div>
       </>
@@ -758,11 +750,9 @@ function AppSidebarSpaceSwitcher({
             finalFocus={false}
             aria-label={text.changeSpace}
             className={cn(
-              "mt-1",
+              "mt-1 min-w-72 max-h-[27rem] overflow-hidden rounded-xl border-border bg-[var(--app-bg-front)] text-[var(--app-text-subtle)] shadow-[0_3px_5px_#00000003,0_5px_10px_#00000005,0_10px_14px_#00000003] outline-none",
               compactMenuSurfaceClass,
               "data-closed:animate-none data-closed:duration-0 data-closed:opacity-0 data-closed:zoom-out-100",
-              "*:data-[slot=input-group]:!m-0 *:data-[slot=input-group]:!mx-1.5 *:data-[slot=input-group]:!mt-1.5 *:data-[slot=input-group]:!mb-1.5 *:data-[slot=input-group]:shrink-0",
-              "*:data-[slot=input-group]:[&>[data-slot=input-group-addon]:empty]:hidden",
             )}
           >
             {renderSearch()}
@@ -773,14 +763,14 @@ function AppSidebarSpaceSwitcher({
                 maxHeight: `min(${SPACE_MENU_MAX_HEIGHT}, calc(var(--available-height) - 2.75rem))`,
               }}
             >
-              <ComboboxEmpty>
+              <ComboboxEmpty className="my-4 p-0 pb-1.5 gap-1.5 text-[var(--app-text-secondary)] [&_svg]:text-[var(--app-text-subtle)]">
                 <span className="inline-flex w-full min-w-0 items-center justify-center gap-1.5">
                   <AppSidebarAlertIcon />
                   <span className="truncate">{text.empty}</span>
                 </span>
               </ComboboxEmpty>
 
-              <ComboboxList className="max-h-none min-w-0 overflow-visible overflow-x-hidden px-1.5 pb-1.5 pt-0">
+              <ComboboxList className="max-h-none min-w-0 overflow-visible overflow-x-hidden px-1.5 pb-1.5 pt-0 scroll-p-8">
                 {(space: AppSidebarSpace) => renderSpaceItem(space)}
               </ComboboxList>
 

@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-test("Space switcher search keeps the Capacities 6px outer inset on both sides", async ({ page }) => {
+test("Space switcher search keeps the Capacities 6px outer inset on both sides", async ({
+  page,
+}) => {
   await page.goto("http://localhost:3000");
   await page.waitForLoadState("networkidle");
 
@@ -8,7 +10,9 @@ test("Space switcher search keeps the Capacities 6px outer inset on both sides",
   await trigger.click();
 
   const popup = page
-    .locator('[data-slot="combobox-content"][aria-label="Change space"], [data-slot="combobox-content"][aria-label="Alterar espaço"]')
+    .locator(
+      '[data-slot="combobox-content"][aria-label="Change space"], [data-slot="combobox-content"][aria-label="Alterar espaço"]',
+    )
     .first();
   await expect(popup).toBeVisible();
 

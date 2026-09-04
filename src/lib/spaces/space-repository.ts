@@ -1,16 +1,4 @@
 import type { KnowledgeDatabase } from "@/lib/db";
-import { createCollectionId, createTagId } from "@/lib/workspace-domain-identities";
-import {
-  createCustomStructure,
-  deleteStructure,
-  instantiateObjectTypePreset,
-  renameStructure,
-  updateStructureAppearance,
-  type CreateStructureInput,
-  type ObjectIconName,
-  type ObjectIconTone,
-  type WorkspaceStructure,
-} from "@/lib/workspace-object-types";
 import type {
   SpaceCollectionRecord,
   SpaceEntityRecord,
@@ -26,6 +14,18 @@ import {
   LOCAL_ACCOUNT_ID,
   PERSONAL_SPACE_ID,
 } from "@/lib/spaces/space-types";
+import { createCollectionId, createTagId } from "@/lib/workspace-domain-identities";
+import {
+  type CreateStructureInput,
+  createCustomStructure,
+  deleteStructure,
+  instantiateObjectTypePreset,
+  type ObjectIconName,
+  type ObjectIconTone,
+  renameStructure,
+  updateStructureAppearance,
+  type WorkspaceStructure,
+} from "@/lib/workspace-object-types";
 
 function stripSpaceId(record: SpaceObjectTypeRecord): WorkspaceStructure {
   const { spaceId: _spaceId, ...structure } = record;

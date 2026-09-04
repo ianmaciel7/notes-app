@@ -649,6 +649,7 @@ function AppSidebarObjectTypeRow({
   onSelect,
   onCollectionsOpenChange,
   onCollectionAction,
+  onCreateEntity,
   onUpdate,
   onDelete,
 }: {
@@ -664,6 +665,7 @@ function AppSidebarObjectTypeRow({
     objectType: AppSidebarObjectType,
     collection: WorkspaceCollectionRecord,
   ) => void;
+  onCreateEntity?: (objectTypeId: string, label: string) => void;
   onUpdate?: (
     id: string,
     input: {
@@ -740,7 +742,10 @@ function AppSidebarObjectTypeRow({
         </button>
 
         <div
-          className={cn("flex w-12 shrink-0 items-center justify-end", workspaceRevealActionClass)}
+          className={cn(
+            "flex w-16 shrink-0 items-center justify-end gap-0.5",
+            workspaceRevealActionClass,
+          )}
         >
           <span
             className={cn(
@@ -752,6 +757,23 @@ function AppSidebarObjectTypeRow({
               {objectType.count}
             </span>
           </span>
+
+          {onCreateEntity && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-xs"
+              aria-label={`Criar ${objectType.singularLabel ?? objectType.label}`}
+              title={`Criar ${objectType.singularLabel ?? objectType.label}`}
+              className="size-[22px] shrink-0 opacity-0 transition-opacity duration-150 group-hover/object-type-row:opacity-70 hover:!opacity-100"
+              onClick={(e) => {
+                e.stopPropagation();
+                onCreateEntity(objectType.id, objectType.singularLabel ?? objectType.label);
+              }}
+            >
+              <AppSidebarPlusIcon className="size-3" />
+            </Button>
+          )}
 
           <AppSidebarObjectTypeMenu
             objectType={objectType}
@@ -1516,6 +1538,7 @@ type AppSidebarOverviewProps = {
   objectTypes?: AppSidebarObjectType[];
   objectTypeCollections?: Record<string, WorkspaceCollectionRecord>;
   customSections?: AppSidebarCustomSection[];
+  onCreateEntity?: (objectTypeId: string, label: string) => void;
   onCreateObjectTypeFromPreset?: (presetId: string) => void;
   onCreateObjectType?: (input: CreateStructureInput) => void;
   onUpdateObjectType?: (
@@ -1646,6 +1669,7 @@ function AppSidebarOverview({
   objectTypes = [],
   objectTypeCollections = {},
   customSections: controlledCustomSections,
+  onCreateEntity,
   onCreateObjectTypeFromPreset,
   onCreateObjectType,
   onUpdateObjectType,
@@ -1821,6 +1845,7 @@ function AppSidebarOverview({
                 active={activeId === objectType.id}
                 activeId={activeId}
                 onSelect={() => setActiveId(objectType.id)}
+                onCreateEntity={onCreateEntity}
                 onCollectionsOpenChange={(open) =>
                   setObjectTypeCollectionsOpen((current) => ({
                     ...current,

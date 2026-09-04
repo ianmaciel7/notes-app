@@ -3,13 +3,17 @@
 import { useTranslations } from "next-intl";
 import * as React from "react";
 
-import { AppSidebarFooter, AppSidebarHelpSection, AppSidebarUtilityRow } from "@/components/app-sidebar-floating-nav";
+import {
+  AppSidebarFooter,
+  AppSidebarHelpSection,
+  AppSidebarUtilityRow,
+} from "@/components/app-sidebar-floating-nav";
 import { AppSidebarObjectsIcon, AppSidebarPinIcon } from "@/components/app-sidebar-icons";
 import { AppSidebarObjectTypeStudio } from "@/components/app-sidebar-object-type-studio";
 import { ObjectAreaIcon } from "@/components/object-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
 import { cn } from "@/lib/utils";
+import type { WorkspaceCollectionRecord } from "@/lib/workspace-domain-identities";
 import type { CreateStructureInput, ObjectIconName } from "@/lib/workspace-object-types";
 
 import {
@@ -18,7 +22,6 @@ import {
   type AppSidebarCustomSection,
   type AppSidebarObjectType,
   AppSidebarObjectTypeRow,
-  AppSidebarOverview as BaseAppSidebarOverview,
   type AppSidebarPinnedEntity,
   AppSidebarPinnedPicker,
   AppSidebarPinnedRow,
@@ -30,9 +33,8 @@ import {
   type AppSidebarTrashItem,
   AppSidebarTrashRow,
   AppSidebarTypeLabel,
+  type AppSidebarOverview as BaseAppSidebarOverview,
 } from "./app-sidebar-overview";
-
-import styles from "./app-sidebar-overview-parity.module.css";
 
 type AppSidebarOverviewProps = React.ComponentProps<typeof BaseAppSidebarOverview>;
 type AppSidebarDragState = { kind: "pinned"; id: string } | null;
@@ -219,8 +221,7 @@ function AppSidebarOverview({
   >(
     (next) => {
       if (controlledCustomSections !== undefined) {
-        const resolved =
-          typeof next === "function" ? next(controlledCustomSections) : next;
+        const resolved = typeof next === "function" ? next(controlledCustomSections) : next;
         onCustomSectionsChange?.(resolved);
         return;
       }
@@ -252,7 +253,7 @@ function AppSidebarOverview({
     <div
       ref={rootRef}
       data-slot="app-sidebar-overview"
-      className={cn(styles.root, "flex min-h-0 flex-1 flex-col")}
+      className="flex min-h-0 flex-1 flex-col"
       onDragEndCapture={() => setDrag(null)}
     >
       <ScrollArea
@@ -262,7 +263,16 @@ function AppSidebarOverview({
           "[&_[data-slot=scroll-area-viewport]>div]:!flex",
           "[&_[data-slot=scroll-area-viewport]>div]:!min-h-full",
           "[&_[data-slot=scroll-area-viewport]>div]:!w-full",
-          "[&_[data-slot=scroll-area-scrollbar]]:!p-0",
+          "[&_[data-slot=scroll-area-viewport]]:!overflow-x-hidden",
+          "[&_[data-slot=scroll-area-viewport]]:scroll-auto",
+          "[&_[data-slot=scroll-area-viewport]]:scroll-p-8",
+          "[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]]:!w-[6px]",
+          "[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]]:!p-0",
+          "[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]]:transition-[width]",
+          "[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]]:duration-300",
+          "[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]]:ease-in-out",
+          "[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]:hover]:!w-[10px]",
+          "[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]:active]:!w-[10px]",
         )}
       >
         <div className="flex min-h-full w-full flex-col">
@@ -335,7 +345,8 @@ function AppSidebarOverview({
                 key={objectType.id}
                 objectType={objectType}
                 collections={Object.values(objectTypeCollections).filter(
-                  (collection: WorkspaceCollectionRecord) => collection.structureId === objectType.id,
+                  (collection: WorkspaceCollectionRecord) =>
+                    collection.structureId === objectType.id,
                 )}
                 collectionsOpen={objectTypeCollectionsOpen[objectType.id] ?? true}
                 active={activeId === objectType.id}
@@ -405,6 +416,7 @@ function AppSidebarOverview({
   );
 }
 
+export type { CreateStructureInput, ObjectIconName };
 export {
   AppSidebarAddSection,
   type AppSidebarCollectionAction,
@@ -427,5 +439,3 @@ export {
   AppSidebarTypeLabel,
   AppSidebarUtilityRow,
 };
-
-export type { CreateStructureInput, ObjectIconName };

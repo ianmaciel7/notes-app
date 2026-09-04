@@ -116,5 +116,5 @@ function useFocusMode() {
   return React.useContext(FocusModeContext);
 }
 
-export { FocusModeProvider, useFocusMode };
 export type { FocusModeContextValue };
+export { FocusModeProvider, useFocusMode };

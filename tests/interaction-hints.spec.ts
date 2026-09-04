@@ -118,11 +118,13 @@ test("sidebar action tooltips are explicit and not HoverCard previews", async ({
   }
 });
 
-test("New uses an explicit tooltip while its command dialog remains click-driven", async ({ page }) => {
+test("New uses an explicit tooltip while its command dialog remains click-driven", async ({
+  page,
+}) => {
   await page.goto("http://localhost:3000");
   await page.waitForLoadState("networkidle");
 
-  const trigger = page.locator('#workspace-new-trigger[data-interaction-tooltip-trigger]');
+  const trigger = page.locator("#workspace-new-trigger[data-interaction-tooltip-trigger]");
   await expect(trigger).toBeVisible();
   await trigger.click();
 

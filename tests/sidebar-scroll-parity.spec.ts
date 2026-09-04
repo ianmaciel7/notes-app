@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-test("sidebar keeps pinned content inside the shared vertical scroll viewport", async ({ page }) => {
+test("sidebar keeps pinned content inside the shared vertical scroll viewport", async ({
+  page,
+}) => {
   await page.goto("http://localhost:3000");
   await page.waitForLoadState("networkidle");
 
@@ -19,9 +21,7 @@ test("sidebar keeps pinned content inside the shared vertical scroll viewport", 
   await pinnedRegion.hover();
   await page.mouse.wheel(0, 420);
 
-  await expect
-    .poll(() => viewport.evaluate((element) => element.scrollTop))
-    .toBeGreaterThan(0);
+  await expect.poll(() => viewport.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
 });
 
 test("sidebar scrollbar widens on hover like Capacities", async ({ page }) => {

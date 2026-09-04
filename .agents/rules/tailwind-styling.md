@@ -22,6 +22,13 @@ description: Rules for styling with Tailwind CSS v4, theme tokens, and typograph
   }
   ```
 - **DO NOT create `tailwind.config.js` or `tailwind.config.ts`**.
+- **NO CSS Modules (`.module.css`) or Per-Component CSS Files**:
+  - Never create `.module.css` files or standalone component stylesheets.
+  - Express all component styles via Tailwind CSS v4 utility classes, `cva()` variants, and arbitrary descendant variants.
+  - When targeting deep child elements (e.g. Radix / Base-UI data slots), use Tailwind v4 arbitrary variant syntax directly in `className`:
+    - `[&_[data-slot=scroll-area-viewport]]:!overflow-x-hidden`
+    - `[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]]:!w-[6px]`
+    - `[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]:hover]:!w-[10px]`
 - Do not use `@apply` directives in stylesheet files.
 
 ## 2. Component Design & Layout

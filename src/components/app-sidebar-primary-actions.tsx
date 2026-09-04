@@ -28,8 +28,8 @@ import {
   compactMenuSearchClass,
   compactMenuSurfaceClass,
 } from "@/components/ui/compact-menu";
-import type { InteractionTooltipConfig } from "@/components/ui/interaction-hint";
 import { Input } from "@/components/ui/input";
+import type { InteractionTooltipConfig } from "@/components/ui/interaction-hint";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useWorkspace } from "@/components/workspace-controller";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
@@ -67,10 +67,7 @@ function normalizeMenuQuery(value: string) {
     .toLocaleLowerCase();
 }
 
-function getActionAriaDescription(
-  hints: readonly AppSidebarPrimaryActionHint[],
-  label: string,
-) {
+function getActionAriaDescription(hints: readonly AppSidebarPrimaryActionHint[], label: string) {
   const descriptions = hints
     .map((hint) => hint.description.trim())
     .filter((description) => description.length > 0 && description !== label.trim());
@@ -229,10 +226,7 @@ function NewContentMenu({
       >
         <div className="h-11 shrink-0 p-1.5">
           <div
-            className={cn(
-              compactMenuSearchClass,
-              "flex h-8 items-center rounded-[8px] bg-muted",
-            )}
+            className={cn(compactMenuSearchClass, "flex h-8 items-center rounded-[8px] bg-muted")}
           >
             <Input
               value={query}
@@ -786,6 +780,7 @@ function WorkspaceSidebar() {
           objectTypeCollections={visibleObjectTypeCollections}
           customSections={customSections}
           trashItems={trashItems}
+          onCreateEntity={createWorkspaceEntity}
           onCreateObjectTypeFromPreset={createWorkspaceStructureFromPreset}
           onCreateObjectType={createWorkspaceStructure}
           onUpdateObjectType={updateWorkspaceStructure}

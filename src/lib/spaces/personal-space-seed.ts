@@ -1,10 +1,10 @@
-import { BUILT_IN_STRUCTURES } from "@/lib/workspace-object-types";
 import {
   LOCAL_ACCOUNT_ID,
   PERSONAL_SPACE_ID,
   type SpaceObjectTypeRecord,
   type SpaceRecord,
 } from "@/lib/spaces/space-types";
+import { BUILT_IN_STRUCTURES } from "@/lib/workspace-object-types";
 
 export type PersonalSpaceSeed = {
   space: SpaceRecord;

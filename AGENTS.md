@@ -28,6 +28,7 @@ This repository is a local-first, zero-operating-cost web application unifying:
   - In PDF reader (`pdfjs-dist`), render canvas overlay / SVG bounding boxes positioned over the transparent text layer.
 - **NO Client-Side Server Credentials**: Never import `firebase-admin` or expose production AI API keys in client components. The AI Gateway lives exclusively at `/api/ai/generate`.
 - **NO Arbitrary Schemas**: All data entities must extend `BaseEntity` (`id`, `type`, `title`, `blocks`, `tags`, `relations`, `properties`) defined in `SPEC.md`. Local database name is `KnowledgeOS_DB`.
+- **NO Component CSS Modules / Standalone CSS Files**: Never create `.module.css` files or per-component CSS stylesheets. Express all styling via Tailwind CSS v4 utility classes, `cva()` variants, arbitrary descendant selectors (`[&_[data-slot=...]]:...`), or global theme tokens in `src/app/globals.css`.
 
 ## 3. Architectural Blueprint & Data Flow
 - **Offline & Local-First Single Source of Truth**: Dexie.js (IndexedDB at `src/lib/db.ts`). Every read and write immediately hits Dexie with `_syncStatus = 'pending'`.

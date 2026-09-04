@@ -1,6 +1,6 @@
-import { expect, test } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
+import { expect, test } from "@playwright/test";
 
 const read = (file: string) => fs.readFileSync(path.join(process.cwd(), file), "utf8");
 
@@ -13,7 +13,7 @@ test("active control hints never use native title tooltips", () => {
 
   for (const source of sources) {
     const text = read(source);
-    expect(text, source).not.toMatch(/\btitle=(?:\{|\")/);
+    expect(text, source).not.toMatch(/\btitle=(?:\{|")/);
   }
 });
 
@@ -24,7 +24,7 @@ test("space switcher uses a standard tooltip instead of a HoverCard timer", () =
   expect(source).not.toContain("hintOpen");
   expect(source).not.toContain("scheduleHint");
   expect(source).not.toContain("<HoverCard");
-  expect(source).toContain("tooltip={{ text: text.changeSpace, side: \"right\" }}");
+  expect(source).toContain('tooltip={{ text: text.changeSpace, side: "right" }}');
 });
 
 test("tab actions use explicit tooltips and tab previews delegate timing to PreviewCard", () => {
@@ -33,7 +33,7 @@ test("tab actions use explicit tooltips and tab previews delegate timing to Prev
   expect(source).not.toContain("TAB_PREVIEW_DELAY");
   expect(source).not.toContain("previewTimerRef");
   expect(source).not.toContain("setPreviewOpen");
-  expect(source).toContain("tooltip={{ text: label, side: \"bottom\" }}");
+  expect(source).toContain('tooltip={{ text: label, side: "bottom" }}');
   expect(source).toContain("<HoverCard>");
   expect(source).toContain("<HoverCardTrigger");
 });
@@ -52,6 +52,6 @@ test("help and footer hints use the shared tooltip contract instead of native or
 
   expect(source).not.toContain("title={tooltip}");
   expect(source).not.toContain("function AppSidebarFooterTooltip");
-  expect(source).toContain("tooltip={tooltip ? { text: tooltip, side: \"right\" } : undefined}");
-  expect(source).toContain("tooltip={{ text: label, side: \"top\" }}");
+  expect(source).toContain('tooltip={tooltip ? { text: tooltip, side: "right" } : undefined}');
+  expect(source).toContain('tooltip={{ text: label, side: "top" }}');
 });

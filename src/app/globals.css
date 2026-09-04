@@ -381,6 +381,20 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Capacities Parity Theme Tokens */
+  --color-el: var(--app-bg-el);
+  --color-el-hover: var(--app-bg-el-hover);
+  --color-el-active: var(--app-bg-el-active);
+  --color-el-strong: var(--app-bg-el-strong);
+  --color-front: var(--app-bg-front);
+  --color-front-hover: var(--app-bg-front-hover);
+  --color-base: var(--app-border-el);
+  --color-subtle: var(--app-text-subtle);
+  --color-text-primary: var(--app-text-primary);
+  --color-text-secondary: var(--app-text-secondary);
+  --color-text-subtle: var(--app-text-subtle);
+  --color-state-active: oklch(0.6129 0.175 259.87);
 }
 
 :root {
@@ -482,6 +496,29 @@
   --side-header-text-primary: oklch(0.2191 0.0058 285.84);
   --side-header-text-secondary: oklch(0.3887 0.0052 301.05);
   --side-header-text-subtle: oklch(0.5725 0.0051 33.89);
+
+  /* Capacities Parity Design Tokens */
+  --font-code:
+    "Overpass Mono", "SF Mono", "SFMono-Regular", "JetBrains Mono NF", "JetBrains Mono",
+    "Roboto Mono NF", "Roboto Mono", "Liberation Mono", Consolas, ui-monospace, monospace;
+  --color-border-front: var(--border);
+  --color-border-base: var(--border);
+  --color-bg-front: var(--card);
+  --color-bg-base: var(--background);
+  --color-bg-back: var(--background);
+  --color-bg-el: var(--muted);
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--sidebar-foreground);
+  --color-text-subtle: var(--muted-foreground);
+  --shadow-capacities-card: 0 2px 3px #00000001, 0 4px 9px #00000003, 0 8px 12px #00000001;
+  --el-h-xs: 1.375rem;
+  --el-h-sm: 1.75rem;
+  --el-h-base: 2rem;
+  --el-h-lg: 2.25rem;
+  --el-w-xs: 1.375rem;
+  --el-w-sm: 1.75rem;
+  --el-w-base: 2rem;
+  --el-w-lg: 2.25rem;
 }
 
 .dark {
@@ -582,4 +619,55 @@
   --side-header-text-primary: oklch(1 0.0001 263.28);
   --side-header-text-secondary: oklch(0.9163 0.0017 67.07);
   --side-header-text-subtle: oklch(0.7161 0.006 30.59);
+
+  /* Capacities Parity Design Tokens */
+  --color-border-front: var(--border);
+  --color-border-base: var(--border);
+  --color-bg-front: var(--card);
+  --color-bg-base: var(--background);
+  --color-bg-back: var(--background);
+  --color-bg-el: var(--muted);
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--sidebar-foreground);
+  --color-text-subtle: var(--muted-foreground);
 }
+
+.preview-card-core {
+  --color-border-base: var(--app-border-el);
+  --color-border-front: var(--app-border-base-strong);
+  --color-bg-front: var(--card);
+  --color-bg-base: var(--background);
+  --color-bg-el: var(--app-bg-el);
+  --color-text-primary: var(--app-text-primary);
+  --color-text-secondary: var(--app-text-secondary);
+  --color-text-subtle: var(--app-text-subtle);
+}
+
+.preview-card-core .text-secondary {
+  color: var(--app-text-secondary);
+}
+
+.preview-card-core .text-subtle {
+  color: var(--app-text-subtle);
+}
+
+.preview-card-core .text-primary {
+  color: var(--app-text-primary);
+}
+
+.preview-card-core .bg-el {
+  background-color: var(--app-bg-el);
+}
+
+.preview-card-core .bg-front {
+  background-color: var(--app-bg-front);
+}
+
+.preview-card-core .border-base {
+  border-color: var(--app-border-el);
+}
+
+.preview-card-core .border-front {
+  border-color: var(--app-border-base-strong);
+}
+

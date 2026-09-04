@@ -17,8 +17,7 @@ const workspaceSectionTitleClass = "text-sm font-medium leading-5 text-foregroun
 
 const workspaceMetaTextClass = "text-[13px] leading-5 text-muted-foreground";
 
-const workspaceReferenceSecondaryTextClass =
-  "text-[var(--app-text-secondary)]";
+const workspaceReferenceSecondaryTextClass = "text-[var(--app-text-secondary)]";
 
 const workspaceCardGridClass = "grid w-full grid-cols-1 gap-2 sm:grid-cols-2";
 

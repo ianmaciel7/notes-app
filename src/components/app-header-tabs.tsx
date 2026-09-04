@@ -1,5 +1,6 @@
 "use client";
 
+import { cva } from "class-variance-authority";
 import * as React from "react";
 
 import {
@@ -15,18 +16,13 @@ import { Input } from "@/components/ui/input";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
 import { cn } from "@/lib/utils";
 
-const workspaceTabStateClass =
-  "transition-[background-color,border-color,color,opacity] duration-150 ease-out motion-reduce:transition-none";
-const workspaceSmallActionStateClass =
-  "transition-[background-color,color,opacity] duration-150 ease-out motion-reduce:transition-none";
-
 const MAIN_TAB_MAX_WIDTH = 200;
 const MAIN_TAB_MIN_WIDTH = 82;
 const MAIN_TAB_GAP = 5;
 const SIDE_TAB_MAX_WIDTH = 160;
 const SIDE_TAB_MIN_WIDTH = 44;
 const SIDE_TAB_GAP = 4;
-const SIDE_TAB_CONTROLS_WIDTH = 28;
+const _SIDE_TAB_CONTROLS_WIDTH = 28;
 
 const appHeaderTabTheme = {} as React.CSSProperties;
 
@@ -173,6 +169,22 @@ function getVisibleRange(tabs: AppHeaderTab[], value: string, maxVisible: number
   return { start, end: start + maxVisible };
 }
 
+const tabIconBadgeVariants = cva(
+  "inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 grow-0 items-center justify-center rounded-[0.33em]",
+  {
+    variants: {
+      neutral: {
+        true: "bg-transparent text-[var(--app-tab-text-secondary)]",
+        false:
+          "bg-[oklch(0.9856_0.0016_67.00)] text-[oklch(0.3887_0.0052_301.05)] dark:bg-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]",
+      },
+    },
+    defaultVariants: {
+      neutral: false,
+    },
+  },
+);
+
 function AppHeaderTabIcon({ tab, neutral }: { tab: AppHeaderTab; neutral?: boolean }) {
   const Icon = tab.icon;
   if (!Icon) return null;
@@ -180,13 +192,7 @@ function AppHeaderTabIcon({ tab, neutral }: { tab: AppHeaderTab; neutral?: boole
   return (
     <span
       data-slot="app-header-tab-icon"
-      className={cn(
-        "inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 grow-0 items-center justify-center rounded-[0.33em]",
-        tab.iconClassName ??
-          (neutral
-            ? "bg-transparent text-[var(--app-tab-text-secondary)]"
-            : "bg-[oklch(0.9856_0.0016_67.00)] text-[oklch(0.3887_0.0052_301.05)] dark:bg-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]"),
-      )}
+      className={cn(tabIconBadgeVariants({ neutral: Boolean(neutral) }), tab.iconClassName)}
     >
       <span
         className="inline-flex min-h-[1.3em] min-w-[1.3em] items-center justify-center rounded-[0.33em] p-[0.1em] text-[0.94em]"
@@ -197,6 +203,10 @@ function AppHeaderTabIcon({ tab, neutral }: { tab: AppHeaderTab; neutral?: boole
     </span>
   );
 }
+
+const tabActionVariants = cva(
+  "relative h-7 w-[18px] shrink-0 rounded-[8px] border border-transparent bg-transparent p-0 text-xs text-[var(--app-tab-text-subtle)] transition-[background-color,color,opacity] duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)] active:z-20 active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
+);
 
 function AppHeaderTabAction({
   label,
@@ -214,21 +224,19 @@ function AppHeaderTabAction({
       data-slot="app-header-tab-action"
       type="button"
       variant="ghost"
-      size="default"
+      size="icon-xs"
       aria-label={label}
       tooltip={{ text: label, side: "bottom" }}
-      className={cn(
-        "relative h-7 w-[18px] shrink-0 rounded-lg border border-transparent bg-transparent p-0",
-        "text-xs text-[var(--app-tab-text-subtle)]",
-        workspaceSmallActionStateClass,
-        "hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)]",
-        "active:z-20 active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
-        className,
-      )}
+      className={cn(tabActionVariants(), className)}
       onClick={onClick}
     >
-      <span className="inline-flex size-3 items-center justify-center [&>svg]:size-full">
-        {children}
+      <span
+        className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
+        style={{ verticalAlign: "-0.125em" }}
+      >
+        <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+          {children}
+        </span>
       </span>
     </Button>
   );
@@ -287,6 +295,60 @@ function hasReservedTabActions({
   return !fitContent && Boolean(pinnable || closable);
 }
 
+const tabButtonVariants = cva(
+  "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] py-[3px] pl-[6px] pr-px text-[13px] leading-[1.3] outline-none ring-0 transition-[background-color,border-color,color,opacity] duration-150 ease-out motion-reduce:transition-none",
+  {
+    variants: {
+      fitContent: {
+        true: "w-auto rounded-lg",
+        false: "min-w-11 flex-1",
+      },
+      hasActions: {
+        true: "",
+        false: "rounded-lg",
+      },
+      neutral: {
+        true: "border-transparent bg-transparent text-[var(--app-tab-text-primary)] font-normal",
+        false: "border-[0.5px]",
+      },
+      active: {
+        true: "",
+        false: "",
+      },
+      dragging: {
+        true: "cursor-grabbing opacity-40",
+        false: "",
+      },
+    },
+    compoundVariants: [
+      {
+        fitContent: false,
+        hasActions: true,
+        className: "rounded-l-lg rounded-r-none border-r-0",
+      },
+      {
+        neutral: false,
+        active: true,
+        className:
+          "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)] font-medium text-[var(--app-tab-text-primary)]",
+      },
+      {
+        neutral: false,
+        active: false,
+        className:
+          "border-transparent text-[var(--app-tab-text-subtle)] hover:bg-[var(--app-tab-bg-back-hover)] hover:text-[var(--app-tab-text-secondary)]",
+      },
+    ],
+    defaultVariants: {
+      fitContent: false,
+      hasActions: false,
+      neutral: false,
+      active: false,
+      dragging: false,
+    },
+  },
+);
+
 function getTabButtonClassName({
   active,
   neutral,
@@ -296,21 +358,13 @@ function getTabButtonClassName({
 }: Pick<AppHeaderTabProps, "active" | "neutral" | "fitContent" | "dragging"> & {
   hasActions: boolean;
 }) {
-  return cn(
-    "relative flex h-8 min-w-0 cursor-pointer select-none items-center gap-x-[0.3em] py-[3px] pl-[6px] pr-[2px] text-[13px] leading-[1.3] outline-none ring-0",
-    workspaceTabStateClass,
-    fitContent ? "w-auto rounded-[8px]" : "min-w-11 flex-1",
-    !neutral && "border-[0.5px]",
-    !fitContent && (hasActions ? "rounded-l-[8px] rounded-r-none border-r-0" : "rounded-[8px]"),
-    neutral && "border-transparent bg-transparent text-[var(--app-tab-text-primary)] font-normal",
-    !neutral &&
-      active &&
-      "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)] font-medium text-[var(--app-tab-text-primary)]",
-    !neutral &&
-      !active &&
-      "border-transparent text-[var(--app-tab-text-subtle)] hover:bg-[var(--app-tab-bg-back-hover)] hover:text-[var(--app-tab-text-secondary)]",
-    dragging && "cursor-grabbing opacity-40",
-  );
+  return tabButtonVariants({
+    active: Boolean(active),
+    neutral: Boolean(neutral),
+    fitContent: Boolean(fitContent),
+    dragging: Boolean(dragging),
+    hasActions: Boolean(hasActions),
+  });
 }
 
 function OverlayPinAction({
@@ -335,7 +389,11 @@ function OverlayPinAction({
         onTogglePin();
       }}
     >
-      {pinned ? <AppHeaderPushPinFillIcon /> : <AppHeaderPushPinIcon />}
+      {pinned ? (
+        <AppHeaderPushPinFillIcon className="size-3.5" />
+      ) : (
+        <AppHeaderPushPinIcon className="size-3.5" />
+      )}
     </AppHeaderTabAction>
   );
 }
@@ -368,10 +426,53 @@ function OverlayCloseAction({
         onClose();
       }}
     >
-      <AppHeaderCloseIcon />
+      <AppHeaderCloseIcon className="size-3.5" />
     </AppHeaderTabAction>
   );
 }
+
+const reservedActionsVariants = cva(
+  "flex h-8 shrink-0 items-center justify-end rounded-r-[8px] border-[0.5px] border-l-0 pr-[2px] transition-[background-color,border-color,opacity] duration-200 ease-out motion-reduce:transition-none",
+  {
+    variants: {
+      layout: {
+        double: "w-[38px]",
+        single: "w-5",
+      },
+      active: {
+        true: "",
+        false: "",
+      },
+      neutral: {
+        true: "",
+        false: "",
+      },
+    },
+    compoundVariants: [
+      {
+        active: true,
+        neutral: false,
+        className: "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)]",
+      },
+      {
+        active: false,
+        neutral: false,
+        className:
+          "border-transparent bg-[var(--app-tab-bg-back)] group-hover/tab:bg-[var(--app-tab-bg-back-hover)]",
+      },
+      {
+        neutral: true,
+        className:
+          "border-transparent bg-[var(--app-tab-bg-back)] group-hover/tab:bg-[var(--app-tab-bg-back-hover)]",
+      },
+    ],
+    defaultVariants: {
+      layout: "single",
+      active: false,
+      neutral: false,
+    },
+  },
+);
 
 function ReservedTabActions({
   active,
@@ -398,13 +499,11 @@ function ReservedTabActions({
   return (
     <span
       data-slot="app-header-tab-actions"
-      className={cn(
-        "flex h-8 shrink-0 items-center rounded-r-[8px] border-[0.5px] border-l-0 pr-[2px] transition-[background-color,border-color,opacity] duration-200 ease-out motion-reduce:transition-none",
-        pinnable && closable ? "w-[38px]" : "w-5",
-        active && !neutral
-          ? "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)]"
-          : "border-transparent bg-[var(--app-tab-bg-back)] group-hover/tab:bg-[var(--app-tab-bg-back-hover)]",
-      )}
+      className={reservedActionsVariants({
+        layout: pinnable && closable ? "double" : "single",
+        active: Boolean(active),
+        neutral: Boolean(neutral),
+      })}
     >
       {pinnable ? (
         <OverlayPinAction pinned={pinned} labels={labels} onTogglePin={onTogglePin} />
@@ -434,7 +533,7 @@ function FitContentCloseAction({
 }) {
   if (!fitContent || !closable || !onClose) return null;
   return (
-    <div className="flex h-full shrink-0 items-center pl-[2px] pr-[2px]">
+    <div className="flex h-full shrink-0 items-center pr-[2px]">
       <AppHeaderTabAction
         label={label}
         className="pointer-events-none opacity-0 transition-opacity duration-100 ease-out group-hover/tab:pointer-events-auto group-hover/tab:opacity-100 group-focus-within/tab:opacity-100"
@@ -444,7 +543,7 @@ function FitContentCloseAction({
           onClose();
         }}
       >
-        <AppHeaderCloseIcon />
+        <AppHeaderCloseIcon className="size-3.5" />
       </AppHeaderTabAction>
     </div>
   );
@@ -480,7 +579,11 @@ function FitContentPinAction({
           onTogglePin();
         }}
       >
-        {pinned ? <AppHeaderPushPinFillIcon /> : <AppHeaderPushPinIcon />}
+        {pinned ? (
+          <AppHeaderPushPinFillIcon className="size-3.5" />
+        ) : (
+          <AppHeaderPushPinIcon className="size-3.5" />
+        )}
       </AppHeaderTabAction>
     </div>
   );

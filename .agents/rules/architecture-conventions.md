@@ -8,6 +8,7 @@ description: Core architectural rules, tooling guidelines, package manager, and 
 ## 1. Tooling & Commands
 - **Package Manager**: Use `pnpm` exclusively (`pnpm add`, `pnpm run dev`, `pnpm build`, `pnpm check`). Never use `npm` or `yarn`.
 - **Linter & Formatter**: Biome is the sole linter and formatter (`pnpm check --write .`, `pnpm lint`, `pnpm format`). Do NOT create, configure, or install ESLint or Prettier.
+- **Styling**: Tailwind CSS v4 CSS-first configuration (`@theme` in `src/app/globals.css`). Do NOT create `tailwind.config.js` or `tailwind.config.ts`. Never create `.module.css` files or per-component CSS stylesheets; use Tailwind v4 utility classes and arbitrary descendant selectors.
 - **TypeScript & React**: Next.js 16 App Router with React 19. Keep client component boundaries lean (`'use client'`). Consult `node_modules/next/dist/docs/` for breaking changes.
 
 ## 2. Database & Data Architecture

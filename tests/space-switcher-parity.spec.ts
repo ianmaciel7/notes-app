@@ -8,7 +8,9 @@ test("space switcher matches Capacities menu composition and empty state", async
   await trigger.click();
 
   const popup = page
-    .locator('[data-slot="combobox-content"][aria-label="Change space"], [data-slot="combobox-content"][aria-label="Alterar espaço"]')
+    .locator(
+      '[data-slot="combobox-content"][aria-label="Change space"], [data-slot="combobox-content"][aria-label="Alterar espaço"]',
+    )
     .first();
   await expect(popup).toBeVisible();
 
@@ -18,10 +20,10 @@ test("space switcher matches Capacities menu composition and empty state", async
 
   const selectedSpace = popup.locator('[data-space-sort-id][aria-selected="true"]').first();
   await expect(selectedSpace).toBeVisible();
-  await expect(selectedSpace.locator(':scope > [data-selected]')).toHaveCSS("display", "none");
+  await expect(selectedSpace.locator(":scope > [data-selected]")).toHaveCSS("display", "none");
   await expect(selectedSpace.locator('svg[data-icon-name="check"]')).toBeVisible();
 
-  const firstSpace = popup.locator('[data-space-sort-id]').first();
+  const firstSpace = popup.locator("[data-space-sort-id]").first();
   const iconFrame = firstSpace
     .locator('[data-slot="compact-menu-icon-frame"][data-variant="bordered"]')
     .first();

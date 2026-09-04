@@ -47,13 +47,20 @@ export type ObjectIconTone =
   | "blue"
   | "cyan"
   | "emerald"
+  | "fuchsia"
   | "gray"
   | "green"
+  | "lime"
+  | "neutral"
   | "orange"
+  | "pink"
   | "purple"
   | "red"
   | "rose"
-  | "sky";
+  | "sky"
+  | "teal"
+  | "violet"
+  | "yellow";
 
 export type PropertyValueType =
   | "title"

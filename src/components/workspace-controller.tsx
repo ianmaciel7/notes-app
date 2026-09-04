@@ -525,12 +525,13 @@ export function WorkspaceMainHeader() {
         onValueChange={setMainValue}
         onTabsChange={setMainTabs}
         onCreate={() => {
-          const id = `tab-${Date.now()}`;
-          setMainTabs((previous: AppHeaderTab[]) => [
-            ...previous,
-            { id, label: "Untitled Page", icon: ObjectPageIcon, draggable: true },
-          ]);
-          setMainValue(id);
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(
+              new CustomEvent("workspace:open-command-palette", {
+                detail: { openInNewTab: true },
+              }),
+            );
+          }
         }}
       />
     </AppHeader>
@@ -558,12 +559,13 @@ export function WorkspaceSidePanelHeader() {
         openInSidePanel({ id: tabId, label: item.label, icon: item.icon, draggable: true });
       }}
       onCreate={() => {
-        const id = `side-${Date.now()}`;
-        setSideTabs((previous: AppHeaderTab[]) => [
-          ...previous,
-          { id, label: "Side Panel", icon: ObjectPageIcon, draggable: true },
-        ]);
-        setSideValue(id);
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(
+            new CustomEvent("workspace:open-command-palette", {
+              detail: { openInNewTab: true },
+            }),
+          );
+        }
       }}
     />
   );
