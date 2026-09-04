@@ -13,7 +13,7 @@ import {
   AppShellSurface,
   AppShellWorkspace,
 } from "@/components/app-shell";
-import { WorkspaceSidebar } from "@/components/app-sidebar-primary-actions";
+import { WorkspaceSidebar } from "@/components/app-sidebar-primary-actions-command-dialog";
 import {
   WorkspaceMainHeader,
   WorkspaceProvider,
