@@ -26,9 +26,9 @@ type InteractionHintPayload = {
 
 function normalizeShortcuts(shortcuts: InteractionTooltipConfig["shortcuts"]) {
   if (!shortcuts) return []
-  return (Array.isArray(shortcuts) ? shortcuts : [shortcuts])
-    .map((shortcut) => shortcut.trim())
-    .filter(Boolean)
+
+  const values = typeof shortcuts === "string" ? [shortcuts] : shortcuts
+  return values.map((shortcut) => shortcut.trim()).filter(Boolean)
 }
 
 function resolveInteractionTooltip(
