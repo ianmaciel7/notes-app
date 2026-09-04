@@ -69,6 +69,13 @@
 :is(
   [data-slot="combobox-content"][aria-label="Change space"],
   [data-slot="combobox-content"][aria-label="Alterar espaço"]
+) > [data-slot="input-group"] [data-slot="input-group-addon"][data-align="inline-end"]:has(> button) {
+  margin-right: 0;
+}
+
+:is(
+  [data-slot="combobox-content"][aria-label="Change space"],
+  [data-slot="combobox-content"][aria-label="Alterar espaço"]
 ) > [data-slot="input-group"] [data-slot="input-group-addon"] button {
   width: 1.2em;
   height: 1.2em;
