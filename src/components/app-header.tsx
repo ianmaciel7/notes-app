@@ -97,7 +97,11 @@ function AppHeader({
         className="pointer-events-none flex max-w-max shrink-0 items-center justify-end pr-2.5 text-xs text-[var(--app-header-text-secondary)]"
       >
         <div className="pointer-events-auto flex items-center gap-1 px-1">
-          <AppHeaderAction aria-label={focusLabel} onClick={onFocus}>
+          <AppHeaderAction
+            aria-label={focusLabel}
+            tooltip={{ text: focusLabel, side: "bottom" }}
+            onClick={onFocus}
+          >
             <AppHeaderCircleDashedIcon className="size-4" />
           </AppHeaderAction>
           {end}
@@ -126,11 +130,21 @@ function AppHeaderHistory({
 }) {
   return (
     <div data-slot="app-header-history" className={cn("flex items-center", className)} {...props}>
-      <AppHeaderAction aria-label={backLabel} disabled={backDisabled} onClick={onBack}>
+      <AppHeaderAction
+        aria-label={backLabel}
+        tooltip={{ text: backLabel, side: "bottom" }}
+        disabled={backDisabled}
+        onClick={onBack}
+      >
         <AppHeaderCaretLeftIcon className="size-4" />
       </AppHeaderAction>
 
-      <AppHeaderAction aria-label={forwardLabel} disabled={forwardDisabled} onClick={onForward}>
+      <AppHeaderAction
+        aria-label={forwardLabel}
+        tooltip={{ text: forwardLabel, side: "bottom" }}
+        disabled={forwardDisabled}
+        onClick={onForward}
+      >
         <AppHeaderCaretRightIcon className="size-4" />
       </AppHeaderAction>
     </div>
@@ -147,7 +161,6 @@ function AppHeaderAction({
   return (
     <Button
       data-slot="app-header-action"
-      data-hint-side="bottom"
       type="button"
       variant={variant}
       size={size}
@@ -193,6 +206,7 @@ function AppFocusModeControls({
             <div className="flex min-w-0 flex-row overflow-hidden">
               <AppHeaderAction
                 aria-label={backLabel}
+                tooltip={{ text: backLabel, side: "bottom" }}
                 disabled={backDisabled}
                 className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
                 onClick={onBack}
@@ -201,6 +215,7 @@ function AppFocusModeControls({
               </AppHeaderAction>
               <AppHeaderAction
                 aria-label={forwardLabel}
+                tooltip={{ text: forwardLabel, side: "bottom" }}
                 disabled={forwardDisabled}
                 className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
                 onClick={onForward}
@@ -215,6 +230,7 @@ function AppFocusModeControls({
 
         <AppHeaderAction
           aria-label={exitLabel}
+          tooltip={{ text: exitLabel, side: "bottom" }}
           className="border-[var(--app-header-border-front)] bg-[color-mix(in_oklch,var(--app-header-bg-base),transparent_30%)] shadow-sm backdrop-blur"
           onClick={onExit}
         >
