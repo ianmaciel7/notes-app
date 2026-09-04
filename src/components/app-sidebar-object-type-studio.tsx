@@ -1,0 +1,712 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import * as React from "react";
+import { AppSidebarCheckIcon, AppSidebarPlusIcon } from "@/components/app-sidebar-icons";
+import {
+  ObjectAreaIcon,
+  ObjectIconBadge,
+  ObjectIdeaIcon,
+  objectTypeDefinitionById,
+} from "@/components/object-icons";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
+import { cn } from "@/lib/utils";
+import {
+  BUILT_IN_STRUCTURES,
+  type CreateStructureInput,
+  OBJECT_TYPE_PRESETS,
+  type ObjectTypePreset,
+  type WorkspaceStructure,
+} from "@/lib/workspace-object-types";
+
+type AppSidebarObjectTypeStudioProps = {
+  onCreateFromPreset?: (presetId: string) => void;
+  onCreateCustom?: (input: CreateStructureInput) => void;
+  trigger?: React.ReactElement<React.ComponentPropsWithoutRef<"button">>;
+  className?: string;
+};
+
+const objectTypeDetailsIconPaths = {
+  arrowRight:
+    "m224.49 136.49l-72 72a12 12 0 0 1-17-17L187 140H40a12 12 0 0 1 0-24h147l-51.49-51.52a12 12 0 0 1 17-17l72 72a12 12 0 0 1-.02 17.01",
+  edit: "m229.66 58.34l-32-32a8 8 0 0 0-11.32 0l-96 96A8 8 0 0 0 88 128v32a8 8 0 0 0 8 8h32a8 8 0 0 0 5.66-2.34l96-96a8 8 0 0 0 0-11.32M124.69 152H104v-20.69l64-64L188.69 88ZM200 76.69L179.31 56L192 43.31L212.69 64ZM224 128v80a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h80a8 8 0 0 1 0 16H48v160h160v-80a8 8 0 0 1 16 0",
+  info: "M144 176a8 8 0 0 1-8 8a16 16 0 0 1-16-16v-40a8 8 0 0 1 0-16a16 16 0 0 1 16 16v40a8 8 0 0 1 8 8m88-48A104 104 0 1 1 128 24a104.11 104.11 0 0 1 104 104m-16 0a88 88 0 1 0-88 88a88.1 88.1 0 0 0 88-88m-92-32a12 12 0 1 0-12-12a12 12 0 0 0 12 12",
+  palette:
+    "M200.77 53.89A103.27 103.27 0 0 0 128 24h-1.07A104 104 0 0 0 24 128c0 43 26.58 79.06 69.36 94.17A32 32 0 0 0 136 192a16 16 0 0 1 16-16h46.21a31.81 31.81 0 0 0 31.2-24.88a104.4 104.4 0 0 0 2.59-24a103.28 103.28 0 0 0-31.23-73.23m13 93.71a15.89 15.89 0 0 1-15.56 12.4H152a32 32 0 0 0-32 32a16 16 0 0 1-21.31 15.07C62.49 194.3 40 164 40 128a88 88 0 0 1 87.09-88h.9a88.35 88.35 0 0 1 88 87.25a89 89 0 0 1-2.18 20.35ZM140 76a12 12 0 1 1-12-12a12 12 0 0 1 12 12m-44 24a12 12 0 1 1-12-12a12 12 0 0 1 12 12m0 56a12 12 0 1 1-12-12a12 12 0 0 1 12 12m88-56a12 12 0 1 1-12-12a12 12 0 0 1 12 12",
+} as const;
+
+function ObjectTypeDetailsIcon({
+  name,
+  className,
+}: {
+  name: keyof typeof objectTypeDetailsIconPaths;
+  className?: string;
+}) {
+  return (
+    <svg
+      viewBox="0 0 256 256"
+      fill="currentColor"
+      aria-hidden="true"
+      className={cn("size-[1em]", className)}
+    >
+      {name === "info" && <path d="M224 128a96 96 0 1 1-96-96a96 96 0 0 1 96 96" opacity=".2" />}
+      <path d={objectTypeDetailsIconPaths[name]} />
+    </svg>
+  );
+}
+
+const suggestedObjectTypeOrder = [
+  "book",
+  "person",
+  "area",
+  "meeting",
+  "quote",
+  "definition",
+  "idea",
+  "place",
+  "project",
+  "organization",
+  "atomic-note",
+  "media",
+  "travel",
+] as const;
+
+const basicObjectTypeOrder = [
+  "page",
+  "tag",
+  "image",
+  "weblink",
+  "pdf",
+  "audio",
+  "file",
+  "tweet",
+  "ai-chat",
+  "table",
+  "task",
+  "query",
+] as const;
+
+const suggestedObjectTypes: readonly ObjectTypePreset[] = suggestedObjectTypeOrder
+  .map((id) => OBJECT_TYPE_PRESETS.find((preset) => preset.id === id))
+  .filter((preset): preset is ObjectTypePreset => Boolean(preset));
+
+const basicObjectTypes: readonly WorkspaceStructure[] = basicObjectTypeOrder
+  .map((id) => BUILT_IN_STRUCTURES.find((structure) => structure.id === id))
+  .filter((structure): structure is WorkspaceStructure => Boolean(structure));
+
+type ObjectTypeCardAppearance = Pick<ObjectTypePreset, "iconName" | "tone">;
+type ObjectTypeSelection = ObjectTypePreset | WorkspaceStructure;
+
+const previewPropertyIds: Record<string, readonly string[]> = {
+  book: [
+    "title",
+    "description",
+    "tags",
+    "notes",
+    "cover",
+    "author",
+    "rating",
+    "recommendedBy",
+    "medium",
+  ],
+};
+
+function AppSidebarObjectTypeIcon({
+  preset,
+  className,
+}: {
+  preset: ObjectTypeCardAppearance;
+  className?: string;
+}) {
+  const Icon = objectTypeDefinitionById[preset.iconName]?.icon ?? ObjectAreaIcon;
+
+  return (
+    <ObjectIconBadge
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectIconTonePreview}
+      icon={Icon}
+      tone={preset.tone}
+      className={cn("size-8 rounded-[8px]", className)}
+      iconClassName="size-[18px]"
+    />
+  );
+}
+
+function AppSidebarObjectTypeCard({
+  preset,
+  selected,
+  onSelect,
+  label,
+  buttonRef,
+}: {
+  preset: ObjectTypePreset;
+  selected: boolean;
+  onSelect: (preset: ObjectTypePreset) => void;
+  label: string;
+  buttonRef?: React.Ref<HTMLButtonElement>;
+}) {
+  return (
+    <button
+      type="button"
+      data-slot="app-sidebar-object-type-card"
+      data-card-family="suggested"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectTypePresetCard}
+      data-selected={selected || undefined}
+      ref={buttonRef}
+      className={cn(
+        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] dark:border-border bg-white dark:bg-card px-2.5 text-left",
+        "text-[14px] font-semibold text-[#2f2c29] dark:text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
+        "transition-[background-color,border-color,box-shadow,filter] duration-150",
+        "hover:border-[#cbc7c1] dark:hover:border-border hover:bg-[#faf9f8] dark:hover:bg-accent hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)]",
+        "active:brightness-[0.98] data-[selected=true]:border-[#bdb8b0] dark:data-[selected=true]:border-border data-[selected=true]:bg-[#f7f5f3] dark:data-[selected=true]:bg-accent",
+      )}
+      onClick={() => onSelect(preset)}
+    >
+      <AppSidebarObjectTypeIcon preset={preset} />
+      <span className="min-w-0 truncate">{label}</span>
+      {selected && (
+        <span
+          aria-hidden="true"
+          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-[#34302c] dark:bg-primary text-white dark:text-primary-foreground"
+        >
+          <AppSidebarCheckIcon className="size-3" />
+        </span>
+      )}
+    </button>
+  );
+}
+
+function AppSidebarCustomObjectTypeCard({
+  selected,
+  onSelect,
+  label,
+}: {
+  selected: boolean;
+  onSelect: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      data-slot="app-sidebar-object-type-card"
+      data-card-family="suggested"
+      data-lifecycle-contract={objectLifecycleContractSlots.CustomObjectTypeForm}
+      data-selected={selected || undefined}
+      className={cn(
+        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] dark:border-border bg-white dark:bg-card px-2.5 text-left",
+        "text-[14px] font-semibold text-[#2f2c29] dark:text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
+        "transition-[background-color,border-color,box-shadow,filter] duration-150",
+        "hover:border-[#cbc7c1] dark:hover:border-border hover:bg-[#faf9f8] dark:hover:bg-accent hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)]",
+        "active:brightness-[0.98] data-[selected=true]:border-[#bdb8b0] dark:data-[selected=true]:border-border data-[selected=true]:bg-[#f7f5f3] dark:data-[selected=true]:bg-accent",
+      )}
+      onClick={onSelect}
+    >
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-[8px] border border-[#cfcac4] dark:border-border bg-white dark:bg-muted text-[#5f5a55] dark:text-muted-foreground">
+        <AppSidebarPlusIcon className="size-[18px]" />
+      </span>
+      <span className="min-w-0 truncate">{label}</span>
+    </button>
+  );
+}
+
+function AppSidebarBasicObjectTypeCard({
+  structure,
+  label,
+  selected,
+  onSelect,
+}: {
+  structure: WorkspaceStructure;
+  label: string;
+  selected: boolean;
+  onSelect: (structure: WorkspaceStructure) => void;
+}) {
+  return (
+    <button
+      type="button"
+      data-slot="app-sidebar-object-type-card"
+      data-card-family="basic"
+      data-selected={selected || undefined}
+      className={cn(
+        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-[#dedbd7] dark:border-border bg-white dark:bg-card px-2.5 text-left",
+        "text-[14px] font-semibold text-[#2f2c29] dark:text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
+        "transition-[background-color,border-color,box-shadow,filter] duration-150",
+        "hover:border-[#cbc7c1] dark:hover:border-border hover:bg-[#faf9f8] dark:hover:bg-accent hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)] active:brightness-[0.98] data-[selected=true]:border-[#bdb8b0] dark:data-[selected=true]:border-border data-[selected=true]:bg-[#f7f5f3] dark:data-[selected=true]:bg-accent",
+      )}
+      onClick={() => onSelect(structure)}
+    >
+      <AppSidebarObjectTypeIcon preset={structure} />
+      <span className="min-w-0 truncate">{label}</span>
+      {selected && (
+        <span
+          aria-hidden="true"
+          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-[#34302c] text-white"
+        >
+          <AppSidebarCheckIcon className="size-3" />
+        </span>
+      )}
+    </button>
+  );
+}
+
+function AppSidebarObjectTypeDetails({
+  selection,
+  customName,
+  pluralName,
+  onCustomNameChange,
+  onPluralNameChange,
+  onClose,
+  onConfirm,
+}: {
+  selection: ObjectTypeSelection | null;
+  customName: string;
+  pluralName: string;
+  onCustomNameChange: (value: string) => void;
+  onPluralNameChange: (value: string) => void;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
+  const t = useTranslations("workspace.objectTypeStudio");
+  const isCustom = selection === null;
+  const customNameInputId = React.useId();
+  const pluralNameInputId = React.useId();
+  const displayPreset: ObjectTypeCardAppearance = selection ?? {
+    iconName: "area",
+    tone: "gray",
+  };
+  const propertyIds = selection
+    ? (previewPropertyIds[selection.id] ?? ["title", "description", "tags"])
+    : [];
+
+  return (
+    <aside
+      data-slot="app-sidebar-object-type-details"
+      data-lifecycle-contract={objectLifecycleContractSlots.ObjectTypeDetailsPanel}
+      className={cn(
+        "pointer-events-auto absolute bottom-0 right-0 top-0 z-20 -mb-1 -mr-1 -mt-1",
+        "flex min-h-0 w-full origin-center scale-100 transform flex-col overflow-hidden",
+        "border border-[#d9dce3] bg-[#f8f9fb] shadow-xl transition duration-150 ease-out",
+        "sm:w-[28rem] sm:rounded-lg",
+      )}
+    >
+      <div className="relative min-h-0 grow">
+        <ScrollArea className="h-full">
+          <div className="flex min-h-full flex-col px-[18px] py-5 pb-8">
+            {isCustom ? (
+              <>
+                <div className="flex flex-col gap-y-1.5">
+                  <div className="flex items-center gap-x-2">
+                    <div className="text-lg font-semibold text-foreground">
+                      {t("details.customTitle")}
+                    </div>
+                    <button
+                      type="button"
+                      className={cn(
+                        "relative flex h-7 max-w-min shrink-0 items-center justify-center gap-x-1.5 truncate rounded-lg",
+                        "border border-transparent bg-transparent px-3 pr-2 pl-2.5 text-xs text-muted-foreground",
+                        "transition duration-200 ease-out hover:bg-muted hover:text-foreground active:brightness-[0.97]",
+                      )}
+                    >
+                      <ObjectIdeaIcon className="-mr-px size-[1em] text-amber-500 dark:text-amber-400" />
+                      <span className="mr-1 whitespace-nowrap">{t("details.learnMore")}</span>
+                    </button>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{t("details.customDescription")}</p>
+                </div>
+
+                <div className="mt-5 flex w-full gap-x-3">
+                  <div className="flex shrink-0 flex-col">
+                    <div className="flex select-none items-baseline pb-1.5 text-xs text-muted-foreground">
+                      <span>{t("details.icon")}</span>
+                    </div>
+                    <div className="relative flex size-8 shrink-0 items-center justify-center rounded-lg border text-lg leading-none text-[oklch(0.4289_0.0021_324.71)] [border-color:oklch(0.8643_0.0017_67.13)] [border-width:0.5px] [background-color:oklch(0.9766_0.0016_67.01)]">
+                      <button
+                        type="button"
+                        className="relative flex h-full w-full shrink-0 grow-0 cursor-pointer appearance-none items-center justify-center rounded-[0.445rem] bg-transparent text-[18px] leading-none hover:brightness-95 focus:outline-none"
+                      >
+                        <ObjectTypeDetailsIcon name="edit" className="text-[1em] opacity-90" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex min-w-0 flex-1 flex-col gap-y-1">
+                    <label
+                      htmlFor={customNameInputId}
+                      className="select-none text-xs text-muted-foreground"
+                    >
+                      {t("details.name")}
+                    </label>
+                    <div className="flex h-8 w-full min-w-44 flex-row items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2 text-sm text-foreground hover:border-muted-foreground/40">
+                      <Input
+                        id={customNameInputId}
+                        value={customName}
+                        placeholder={t("details.namePlaceholder")}
+                        aria-label={t("details.name")}
+                        autoFocus
+                        autoComplete="off"
+                        onChange={(event) => onCustomNameChange(event.target.value)}
+                        className="h-full w-full appearance-none border-0 bg-transparent p-0 shadow-none outline-none placeholder:text-muted-foreground placeholder:opacity-60 focus-visible:ring-0"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-3 flex w-full gap-x-3">
+                  <div className="flex shrink-0 flex-col">
+                    <div className="flex select-none items-baseline pb-1.5 text-xs text-muted-foreground">
+                      <span>{t("details.color")}</span>
+                    </div>
+                    <div className="relative flex size-8 shrink-0 items-center justify-center rounded-lg">
+                      <button
+                        type="button"
+                        className={cn(
+                          "relative flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg",
+                          "border border-border bg-muted text-base text-muted-foreground",
+                          "transition duration-200 ease-out hover:border-muted-foreground/40 active:brightness-[0.97] focus:outline-none",
+                        )}
+                      >
+                        <span className="rounded-lg p-[3px]">
+                          <ObjectTypeDetailsIcon name="palette" />
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex min-w-0 flex-1 flex-col gap-y-1">
+                    <label
+                      htmlFor={pluralNameInputId}
+                      className="select-none text-xs text-muted-foreground"
+                    >
+                      {t("details.pluralName")}
+                    </label>
+                    <div className="flex h-8 w-full min-w-44 flex-row items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2 text-sm text-foreground hover:border-muted-foreground/40">
+                      <Input
+                        id={pluralNameInputId}
+                        value={pluralName}
+                        placeholder={t("details.pluralNamePlaceholder")}
+                        aria-label={t("details.pluralName")}
+                        autoComplete="off"
+                        onChange={(event) => onPluralNameChange(event.target.value)}
+                        className="h-full w-full appearance-none border-0 bg-transparent p-0 shadow-none outline-none placeholder:text-muted-foreground placeholder:opacity-60 focus-visible:ring-0"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex w-full grow flex-col">
+                  <div className="mt-3 flex w-full rounded-lg bg-[#e8f1ff] px-3 py-2 text-sm text-[#2556a8]">
+                    <div className="w-6 shrink-0 grow-0">
+                      <div className="-mt-0.5 -mb-1 -ml-1.5 flex size-6 shrink-0 grow-0 items-center justify-center rounded-lg leading-none text-blue-600 dark:text-blue-300">
+                        <ObjectTypeDetailsIcon name="info" />
+                      </div>
+                    </div>
+                    <div className="flex w-20 grow flex-col gap-y-2 text-sm font-normal">
+                      <div>{t("details.customHint")}</div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : selection ? (
+              <>
+                <div className="flex shrink-0 items-center gap-3 border-b pb-4">
+                  <AppSidebarObjectTypeIcon preset={displayPreset} />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold">
+                      {t(`objectTypes.${selection.id}`)}
+                    </p>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {selection.id === "book"
+                        ? t("details.bookDescription")
+                        : t("details.previewDescription", {
+                            type: t(`objectTypes.${selection.id}`),
+                          })}
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label={t("details.close")}
+                    onClick={onClose}
+                  >
+                    ×
+                  </Button>
+                </div>
+                <div className="mt-4">
+                  <p className="mb-2 text-xs font-medium text-foreground">
+                    {t("details.properties")}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {propertyIds.map((propertyId) => (
+                      <span
+                        key={propertyId}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 py-1 text-xs text-foreground"
+                      >
+                        <ObjectTypeDetailsIcon
+                          name={propertyId === "description" ? "info" : "edit"}
+                          className="text-muted-foreground"
+                        />
+                        {t(`details.propertyNames.${propertyId}`)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-5 flex gap-2 rounded-lg bg-muted/50 px-3 py-2 text-sm text-foreground">
+                  <ObjectTypeDetailsIcon
+                    name="info"
+                    className="mt-0.5 shrink-0 text-muted-foreground"
+                  />
+                  <span>{t("details.previewHint")}</span>
+                </div>
+              </>
+            ) : null}
+          </div>
+        </ScrollArea>
+      </div>
+
+      <div className="sticky bottom-0 flex w-full shrink-0 justify-center bg-[#f8f9fb] px-4 py-4">
+        <Button
+          type="button"
+          className="h-8 w-full justify-center rounded-lg bg-[#45464f] px-3 text-sm font-medium text-white shadow-none hover:bg-[#35363e]"
+          disabled={isCustom && customName.trim().length === 0}
+          onClick={onConfirm}
+        >
+          <span className="mr-2">{t("details.confirm")}</span>
+          <ObjectTypeDetailsIcon name="arrowRight" />
+        </Button>
+      </div>
+    </aside>
+  );
+}
+
+function AppSidebarObjectTypeStudio({
+  onCreateFromPreset,
+  onCreateCustom,
+  trigger,
+  className,
+}: AppSidebarObjectTypeStudioProps) {
+  const t = useTranslations("workspace.objectTypeStudio");
+  const [open, setOpen] = React.useState(false);
+  const [selectedObjectType, setSelectedObjectType] = React.useState<ObjectTypeSelection | null>(
+    null,
+  );
+  const [detailsOpen, setDetailsOpen] = React.useState(false);
+  const [customName, setCustomName] = React.useState("");
+  const [pluralName, setPluralName] = React.useState("");
+  const firstPresetRef = React.useRef<HTMLButtonElement>(null);
+
+  React.useEffect(() => {
+    if (!open || detailsOpen) return;
+    const focusTimer = window.setTimeout(() => {
+      firstPresetRef.current?.focus();
+    }, 0);
+    return () => window.clearTimeout(focusTimer);
+  }, [open, detailsOpen]);
+
+  function resetSelection() {
+    setSelectedObjectType(null);
+    setDetailsOpen(false);
+    setCustomName("");
+    setPluralName("");
+  }
+
+  function handleOpenChange(nextOpen: boolean) {
+    setOpen(nextOpen);
+    if (!nextOpen) resetSelection();
+  }
+
+  function selectPreset(preset: ObjectTypePreset) {
+    setSelectedObjectType(preset);
+    setCustomName("");
+    setPluralName("");
+    setDetailsOpen(true);
+  }
+
+  function selectCustom() {
+    setSelectedObjectType(null);
+    setCustomName("");
+    setPluralName("");
+    setDetailsOpen(true);
+  }
+
+  function confirmSelection() {
+    if (selectedObjectType) {
+      onCreateFromPreset?.(selectedObjectType.id);
+      setOpen(false);
+      resetSelection();
+      return;
+    }
+
+    const name = customName.trim();
+    if (!name) return;
+
+    onCreateCustom?.({
+      singularName: name,
+      pluralName: pluralName.trim() || name,
+      iconName: "area",
+      tone: "gray",
+      lifecycleKind: "document",
+    });
+    setOpen(false);
+    resetSelection();
+  }
+
+  function selectBasic(structure: WorkspaceStructure) {
+    setSelectedObjectType(structure);
+    setCustomName("");
+    setPluralName("");
+    setDetailsOpen(true);
+  }
+
+  return (
+    <div
+      data-slot="app-sidebar-object-type-studio"
+      className={cn(trigger ? "inline-flex" : "px-2", className)}
+    >
+      <Dialog open={open} onOpenChange={handleOpenChange}>
+        <DialogTrigger
+          render={
+            trigger ?? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="default"
+                className="w-full justify-start px-2 font-normal text-muted-foreground"
+              >
+                <AppSidebarPlusIcon data-icon="inline-start" />
+                <span className="min-w-0 truncate">{t("trigger")}</span>
+              </Button>
+            )
+          }
+        />
+
+        <DialogContent
+          showCloseButton={false}
+          className={cn(
+            "flex h-[min(784px,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] flex-col gap-0 overflow-hidden rounded-[8px] bg-white dark:bg-popover p-0 text-[#1f1c19] dark:text-popover-foreground sm:w-[min(1152px,calc(100vw-4rem))] sm:max-w-[min(1152px,calc(100vw-4rem))]",
+            "shadow-[0_18px_60px_rgb(0_0_0/0.22)] ring-1 ring-black/10 dark:ring-white/10",
+          )}
+        >
+          <DialogHeader className="flex h-[56px] shrink-0 justify-center gap-0 border-b border-[#e7e2dc] dark:border-border px-5 py-0">
+            <DialogTitle className="text-[18px] font-semibold leading-none tracking-[-0.01em]">
+              {t("title")}
+            </DialogTitle>
+            <DialogDescription className="sr-only">{t("description")}</DialogDescription>
+          </DialogHeader>
+
+          <div className="relative flex min-h-0 flex-1 overflow-hidden bg-white dark:bg-popover">
+            <ScrollArea
+              className={cn(
+                "min-h-0 flex-1",
+                "[&_[data-slot=scroll-area-scrollbar][data-orientation=vertical]]:w-1.5",
+                "[&_[data-slot=scroll-area-scrollbar]]:p-0",
+                "[&_[data-slot=scroll-area-thumb]]:rounded-full",
+              )}
+            >
+              <div
+                className={cn(
+                  "flex min-h-full flex-col px-5 pb-6 pt-6",
+                  detailsOpen && "pr-[calc(28rem+1.25rem)]",
+                )}
+              >
+                <section
+                  aria-label={t("intro.title")}
+                  className="mb-7 flex w-full max-w-[647px] gap-3 rounded-[8px] bg-[#e6f7ef] dark:bg-emerald-950/40 px-3 py-2.5 text-[#064e3b] dark:text-emerald-200"
+                >
+                  <ObjectIdeaIcon className="mt-0.5 size-4 shrink-0 text-[#36b77b] dark:text-emerald-400" />
+                  <div className="min-w-0 text-[14px] leading-[1.45]">
+                    <h2 className="font-semibold">{t("intro.title")}</h2>
+                    <p className="mt-2 font-normal">
+                      {t("intro.body")}{" "}
+                      <a
+                        href="https://docs.capacities.io/reference/object-types"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-medium text-[#2563eb] dark:text-blue-400 underline underline-offset-2"
+                      >
+                        {t("intro.learnMore")}
+                      </a>
+                    </p>
+                  </div>
+                </section>
+
+                <div
+                  className={cn(
+                    "grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 md:grid-cols-4",
+                    detailsOpen ? "lg:grid-cols-3" : "lg:grid-cols-5",
+                  )}
+                >
+                  {suggestedObjectTypes.map((preset) => (
+                    <AppSidebarObjectTypeCard
+                      key={preset.id}
+                      preset={preset}
+                      selected={detailsOpen && selectedObjectType?.id === preset.id}
+                      onSelect={selectPreset}
+                      label={t(`objectTypes.${preset.id}`)}
+                      buttonRef={preset.id === "book" ? firstPresetRef : undefined}
+                    />
+                  ))}
+
+                  <AppSidebarCustomObjectTypeCard
+                    selected={detailsOpen && selectedObjectType === null}
+                    onSelect={selectCustom}
+                    label={t("createOwn")}
+                  />
+                </div>
+
+                <h2 className="mt-9 text-[16px] font-semibold leading-none text-[#1f1c19] dark:text-foreground">
+                  {t("basicTypes")}
+                </h2>
+                <div
+                  className={cn(
+                    "mt-6 grid grid-cols-2 gap-x-3 gap-y-3 sm:grid-cols-3 md:grid-cols-4",
+                    detailsOpen ? "lg:grid-cols-3" : "lg:grid-cols-5",
+                  )}
+                >
+                  {basicObjectTypes.map((structure) => (
+                    <AppSidebarBasicObjectTypeCard
+                      key={structure.id}
+                      structure={structure}
+                      selected={detailsOpen && selectedObjectType?.id === structure.id}
+                      onSelect={selectBasic}
+                      label={t(`objectTypes.${structure.id}`)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </ScrollArea>
+
+            {detailsOpen && (
+              <AppSidebarObjectTypeDetails
+                selection={selectedObjectType}
+                customName={customName}
+                pluralName={pluralName}
+                onCustomNameChange={setCustomName}
+                onPluralNameChange={setPluralName}
+                onClose={resetSelection}
+                onConfirm={confirmSelection}
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+export {
+  AppSidebarObjectTypeIcon,
+  AppSidebarObjectTypeStudio,
+  type AppSidebarObjectTypeStudioProps,
+  suggestedObjectTypes,
+};

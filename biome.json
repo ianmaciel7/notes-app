@@ -15,7 +15,8 @@
       "!**/next-env.d.ts",
       "!**/node_modules",
       "!**/public",
-      "!**/.agents"
+      "!**/.agents",
+      "!**/src/components/ui"
     ]
   },
   "formatter": {
