@@ -42,6 +42,54 @@ jobs:
           fs.writeFileSync("package.json", `${JSON.stringify(pkg, null, 2)}\n`);
           NODE
 
+      - name: Apply compatibility type fixes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          sidebar = Path("src/components/app-sidebar.tsx")
+          text = sidebar.read_text()
+          old = '(props: React.ComponentProps<"svg">) => ('
+          count = text.count(old)
+          if count != 2:
+              raise SystemExit(f"expected 2 Space icon SVG prop sites, found {count}")
+          sidebar.write_text(text.replace(old, '(props: Omit<React.ComponentProps<"svg">, "name">) => ('))
+
+          repository = Path("src/lib/spaces/space-repository.ts")
+          text = repository.read_text()
+          old = '''    await database.transaction(
+              "rw",
+              database.spaces,
+              database.appSettings,
+              database.objectTypes,
+              database.entities,
+              database.collections,
+              database.tags,
+              database.relations,
+              database.media,
+              database.spaceSettings,
+              database.trash,
+              async () => {'''
+          new = '''    await database.transaction(
+              "rw",
+              [
+                database.spaces,
+                database.appSettings,
+                database.objectTypes,
+                database.entities,
+                database.collections,
+                database.tags,
+                database.relations,
+                database.media,
+                database.spaceSettings,
+                database.trash,
+              ],
+              async () => {'''
+          if old not in text:
+              raise SystemExit("Dexie deleteSpace transaction block not found")
+          repository.write_text(text.replace(old, new, 1))
+          PY
+
       - name: Format changed implementation files
         run: |
           pnpm exec biome format --write \
@@ -59,6 +107,7 @@ jobs:
             src/hooks/use-space-data.ts \
             src/components/workspace-object-type-presenter.ts \
             src/components/workspace-controller.tsx \
+            src/components/app-sidebar.tsx \
             tests/space-isolation.spec.ts \
             vitest.config.ts
 
