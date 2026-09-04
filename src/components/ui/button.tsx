@@ -3,6 +3,7 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 import { cva, type VariantProps } from "class-variance-authority"
+import type { ReactElement } from "react"
 import {
   interactionHintHandle,
   type InteractionHintPayload,
@@ -55,7 +56,7 @@ type ButtonProps = ButtonPrimitive.Props &
   }
 
 type ExplicitTooltipTriggerProps = {
-  button: React.ReactElement
+  button: ReactElement
   payload: InteractionHintPayload
   disabled: boolean
 }
