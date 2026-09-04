@@ -3,8 +3,8 @@
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 import {
   floatingPositionerClass,
+  tooltipMotionClass,
   tooltipSurfaceClass,
-  workspaceTooltipStateClass,
 } from "@/components/ui/shared-styles"
 import { cn } from "@/lib/utils"
 
@@ -64,17 +64,15 @@ function TooltipContent({
       >
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
-          className={cn(
-            tooltipSurfaceClass,
-            workspaceTooltipStateClass,
-            "w-fit max-w-64 origin-(--transform-origin) data-[side=bottom]:slide-in-from-top-1 data-[side=inline-end]:slide-in-from-left-1 data-[side=inline-start]:slide-in-from-right-1 data-[side=left]:slide-in-from-right-1 data-[side=right]:slide-in-from-left-1 data-[side=top]:slide-in-from-bottom-1 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
-            className,
-          )}
+          className={cn(tooltipSurfaceClass, tooltipMotionClass, "w-fit max-w-40", className)}
           {...props}
         >
           {children}
           {showArrow ? (
-            <TooltipPrimitive.Arrow className="size-2 rotate-45 rounded-[1px] border-r border-b border-border/50 bg-popover/70 fill-popover/70 dark:bg-background/70" />
+            <TooltipPrimitive.Arrow
+              data-slot="tooltip-arrow"
+              className="size-2 rotate-45 rounded-[1px] border-r border-b border-border/50 bg-popover/50 fill-popover/50 dark:bg-background/70"
+            />
           ) : null}
         </TooltipPrimitive.Popup>
       </TooltipPrimitive.Positioner>
