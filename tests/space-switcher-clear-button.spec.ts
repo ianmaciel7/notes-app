@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("Space switcher clear button keeps the Capacities 9px right inset", async ({ page }) => {
+test("Space switcher search keeps the Capacities 6px outer inset on both sides", async ({ page }) => {
   await page.goto("http://localhost:3000");
   await page.waitForLoadState("networkidle");
 
@@ -13,20 +13,20 @@ test("Space switcher clear button keeps the Capacities 9px right inset", async (
   await expect(popup).toBeVisible();
 
   const search = popup.locator('[data-slot="input-group"]').first();
-  const input = search.locator('[data-slot="input-group-control"]');
-  await input.fill("aaaaaaa");
+  await expect(search).toBeVisible();
+  await page.waitForTimeout(250);
 
-  const clear = search
-    .locator('button[aria-label="Clear search"], button[aria-label="Limpar busca"]')
-    .first();
-  await expect(clear).toBeVisible();
-
+  const popupBox = await popup.boundingBox();
   const searchBox = await search.boundingBox();
-  const clearBox = await clear.boundingBox();
+  expect(popupBox).not.toBeNull();
   expect(searchBox).not.toBeNull();
-  expect(clearBox).not.toBeNull();
 
-  const rightInset = searchBox!.x + searchBox!.width - (clearBox!.x + clearBox!.width);
-  expect(rightInset).toBeGreaterThanOrEqual(8);
-  expect(rightInset).toBeLessThanOrEqual(10);
+  const leftInset = searchBox!.x - popupBox!.x;
+  const rightInset = popupBox!.x + popupBox!.width - (searchBox!.x + searchBox!.width);
+
+  expect(leftInset).toBeGreaterThanOrEqual(5);
+  expect(leftInset).toBeLessThanOrEqual(7);
+  expect(rightInset).toBeGreaterThanOrEqual(5);
+  expect(rightInset).toBeLessThanOrEqual(7);
+  expect(Math.abs(leftInset - rightInset)).toBeLessThanOrEqual(1);
 });
