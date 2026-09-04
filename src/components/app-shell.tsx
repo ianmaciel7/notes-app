@@ -599,6 +599,7 @@ function AppShellSidebarTrigger({
 }: React.ComponentProps<typeof Button>) {
   const { leftCollapsed, toggleLeft } = useAppShell();
   const t = useTranslations("workspace.shell");
+  const label = leftCollapsed ? t("expandNavigation") : t("collapseNavigation");
 
   return (
     <div
@@ -612,9 +613,10 @@ function AppShellSidebarTrigger({
         type="button"
         variant="ghost"
         size="icon-sm"
+        tooltip={{ text: label, side: "bottom" }}
         className={cn("bg-transparent aria-expanded:bg-transparent", className)}
         aria-expanded={!leftCollapsed}
-        aria-label={leftCollapsed ? t("expandNavigation") : t("collapseNavigation")}
+        aria-label={label}
         onClick={(event) => {
           onClick?.(event);
           if (!event.defaultPrevented) toggleLeft();
@@ -634,6 +636,7 @@ function AppShellSidePanelTrigger({
 }: React.ComponentProps<typeof Button>) {
   const { rightCollapsed, rightPanelTriggerRef, toggleRight } = useAppShell();
   const t = useTranslations("workspace.shell");
+  const label = rightCollapsed ? t("expandContext") : t("collapseContext");
 
   if (!rightCollapsed) return null;
 
@@ -644,9 +647,10 @@ function AppShellSidePanelTrigger({
         type="button"
         variant="ghost"
         size="icon-sm"
+        tooltip={{ text: label, side: "bottom" }}
         className={cn("bg-transparent aria-expanded:bg-transparent", className)}
         aria-expanded={!rightCollapsed}
-        aria-label={rightCollapsed ? t("expandContext") : t("collapseContext")}
+        aria-label={label}
         onClick={(event) => {
           onClick?.(event);
           if (!event.defaultPrevented) toggleRight();
