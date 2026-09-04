@@ -5,7 +5,6 @@ import * as React from "react";
 
 import { AppSidebarSunIcon } from "@/components/app-sidebar-icons";
 import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon";
-import { AppSidebarSection } from "@/components/app-sidebar-overview";
 import type { ObjectIconProps } from "@/components/object-icons";
 import { useTheme } from "@/components/theme-provider";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +29,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+
+import { AppSidebarSection } from "./app-sidebar-overview";
 
 const workspaceRowStateClass =
   "transition-[background-color,color,filter,opacity] duration-200 ease-out motion-reduce:transition-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground data-[active=true]:brightness-[0.965]";
