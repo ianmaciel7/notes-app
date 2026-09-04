@@ -3,10 +3,7 @@
 import { useTranslations } from "next-intl";
 import * as React from "react";
 
-import {
-  type AppSidebarObjectType,
-  WorkspaceSidebar as BaseWorkspaceSidebar,
-} from "./app-sidebar-primary-actions";
+import { WorkspaceSidebar as BaseWorkspaceSidebar } from "./app-sidebar-primary-actions";
 import {
   Command,
   CommandEmpty,
@@ -35,7 +32,7 @@ function NewContentCommandDialog({
 }) {
   const t = useTranslations("workspace");
   const { objectTypes, createWorkspaceEntity } = useWorkspace();
-  const availableObjectTypes = objectTypes as readonly AppSidebarObjectType[];
+  const availableObjectTypes = objectTypes ?? [];
 
   function selectObjectType(objectTypeId: string, objectTypeLabel: string) {
     createWorkspaceEntity(objectTypeId, objectTypeLabel);
@@ -67,7 +64,7 @@ function NewContentCommandDialog({
           <CommandList className="min-h-0 max-h-none flex-1 scroll-py-8 overflow-x-hidden overflow-y-auto px-1.5 py-1">
             <CommandEmpty>{t("primaryNavigation.searchContentType")}</CommandEmpty>
             <CommandGroup heading={t("primaryNavigation.typesLabel")}>
-              {availableObjectTypes.map((objectType) => {
+              {availableObjectTypes.map((objectType: any) => {
                 const label = objectType.singularLabel ?? objectType.label;
                 return (
                   <CommandItem
@@ -106,50 +103,48 @@ function NewContentCommandDialog({
   );
 }
 
-function WorkspaceSidebar() {
-  const [newContentOpen, setNewContentOpen] = React.useState(false);
+function isNewContentTrigger(target: EventTarget | null) {
+  return target instanceof Element && target.closest("#workspace-new-trigger") !== null;
+}
+
+function WorkspaceNewContentDialogController() {
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
-    function openFromWorkspace(event: Event) {
+    function blockLegacyPointerDown(event: PointerEvent) {
+      if (!isNewContentTrigger(event.target)) return;
       event.stopImmediatePropagation();
-      setNewContentOpen(true);
     }
 
+    function openFromClick(event: MouseEvent) {
+      if (!isNewContentTrigger(event.target)) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      setOpen(true);
+    }
+
+    function openFromWorkspace(event: Event) {
+      event.stopImmediatePropagation();
+      setOpen(true);
+    }
+
+    document.addEventListener("pointerdown", blockLegacyPointerDown, true);
+    document.addEventListener("click", openFromClick, true);
     window.addEventListener("workspace:open-new-palette", openFromWorkspace, true);
-    return () => window.removeEventListener("workspace:open-new-palette", openFromWorkspace, true);
+
+    return () => {
+      document.removeEventListener("pointerdown", blockLegacyPointerDown, true);
+      document.removeEventListener("click", openFromClick, true);
+      window.removeEventListener("workspace:open-new-palette", openFromWorkspace, true);
+    };
   }, []);
 
-  function isNewContentTrigger(event: React.SyntheticEvent) {
-    const target = event.target;
-    return target instanceof Element && target.closest("#workspace-new-trigger") !== null;
-  }
+  return <NewContentCommandDialog open={open} onOpenChange={setOpen} />;
+}
 
-  function blockLegacyPopoverPointerDown(event: React.SyntheticEvent) {
-    if (!isNewContentTrigger(event)) return;
-    event.stopPropagation();
-  }
-
-  function openNewContentDialog(event: React.SyntheticEvent) {
-    if (!isNewContentTrigger(event)) return;
-    event.preventDefault();
-    event.stopPropagation();
-    setNewContentOpen(true);
-  }
-
-  return (
-    <>
-      <div
-        className="contents"
-        onPointerDownCapture={blockLegacyPopoverPointerDown}
-        onClickCapture={openNewContentDialog}
-      >
-        <BaseWorkspaceSidebar />
-      </div>
-
-      <NewContentCommandDialog open={newContentOpen} onOpenChange={setNewContentOpen} />
-    </>
-  );
+function WorkspaceSidebar() {
+  return <BaseWorkspaceSidebar />;
 }
 
 export * from "./app-sidebar-primary-actions";
-export { WorkspaceSidebar };
+export { WorkspaceNewContentDialogController, WorkspaceSidebar };
