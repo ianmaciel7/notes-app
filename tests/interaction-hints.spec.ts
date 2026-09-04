@@ -55,6 +55,7 @@ test("explicit header tooltips open on hover and keep ARIA independent", async (
   await expect(hint).toBeVisible({ timeout: 1_000 });
   await expect(hint).toContainText(label!);
   await expect(hint).toHaveClass(/max-w-40/);
+  await expect(hint.locator('[data-slot="tooltip-arrow"]')).toHaveCount(0);
 });
 
 test("keyboard focus opens an explicit tooltip and Escape dismisses it", async ({ page }) => {
