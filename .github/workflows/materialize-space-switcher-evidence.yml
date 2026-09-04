@@ -1,0 +1,35 @@
+name: Materialize Space switcher evidence
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decode screenshots and verify
+        shell: bash
+        run: |
+          base64 -d artifacts/reference-evidence/space-switcher/clear-button-before.webp.b64 > artifacts/reference-evidence/space-switcher/clear-button-before.webp
+          base64 -d artifacts/reference-evidence/space-switcher/clear-button-annotated.webp.b64 > artifacts/reference-evidence/space-switcher/clear-button-annotated.webp
+          test "$(sha256sum artifacts/reference-evidence/space-switcher/clear-button-before.webp | cut -d' ' -f1)" = "0829d7f108a63999f04daca2769887b268aca4be2ec47d0a27ccc4d9c32d80b7"
+          test "$(sha256sum artifacts/reference-evidence/space-switcher/clear-button-annotated.webp | cut -d' ' -f1)" = "607d0665110def6a777c514d02481019eb79573667e41ff79fc2abffef1eabf4"
+          file artifacts/reference-evidence/space-switcher/*.webp
+          rm artifacts/reference-evidence/space-switcher/*.webp.b64
+          sed -i 's/clear-button-before.png/clear-button-before.webp/' artifacts/reference-evidence/space-switcher/README.md
+          sed -i 's/clear-button-annotated.png/clear-button-annotated.webp/' artifacts/reference-evidence/space-switcher/README.md
+      - name: Commit evidence and remove temporary workflow
+        shell: bash
+        run: |
+          rm .github/workflows/materialize-space-switcher-evidence.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add artifacts/reference-evidence/space-switcher .github/workflows/materialize-space-switcher-evidence.yml
+          git commit -m "docs: preserve Space switcher screenshot evidence"
+          git push origin HEAD:dev
