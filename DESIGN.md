@@ -166,20 +166,27 @@ To maintain production excellence and avoid generic AI design pitfalls:
 
 ## 7. Accessible Interaction Contract
 
-Interaction semantics are **ARIA-first** and presentation is centralized. A component must not invent its own tooltip timer, copy, positioning, or floating-surface styling.
+Accessibility semantics and sighted floating interactions are **separate contracts**. ARIA describes controls to assistive technology; it never opts a control into a visual tooltip by itself. Tooltips, entity previews, and popups use distinct Base UI primitives and must follow the archived Capacities behavior documented under `artifacts/reference-evidence/floating-interactions/`.
 
-### Canonical semantics
+### Accessibility semantics
 
-1. **`aria-label` is the canonical action name.** Do not duplicate the same string in `tooltip`, `title`, `data-tooltip`, or component-specific hint props.
-2. **Icon-only `Button` controls must have `aria-label`.** The shared button primitive automatically opts icon-sized labeled buttons into the standard visual hint.
-3. **Text controls opt into the standard hint with `data-hint`.** `data-hint` is a behavior flag only; it never contains user-facing copy.
-4. **`aria-description` contains optional explanatory copy.** The interaction hint mirrors it for sighted users while assistive technology keeps the semantic description. Never repeat the `aria-label` verbatim in `aria-description`.
-5. **`aria-keyshortcuts` contains keyboard shortcuts.** Shortcut rendering is derived from that attribute; do not maintain separate visual shortcut strings when an ARIA shortcut is available.
-6. **`data-hint-side` is presentation-only.** Supported values are `top`, `right`, `bottom`, and `left`.
-7. **Popup state remains native ARIA.** Interactive triggers use `aria-haspopup`, `aria-expanded`, and `aria-controls` as appropriate.
+1. **`aria-label` names a control for assistive technology.** It does not create a visual tooltip.
+2. **Icon-only controls still require `aria-label`.** A labeled icon button may intentionally have no sighted tooltip.
+3. **`aria-description` is optional assistive description.** It is not automatically mirrored into a visual tooltip.
+4. **`aria-keyshortcuts` advertises actual keyboard shortcuts.** Visual keycap pills are supplied explicitly from the same command metadata rather than read back from the DOM.
+5. **Popup state remains native ARIA.** Interactive triggers use `aria-haspopup`, `aria-expanded`, and `aria-controls` as appropriate.
+6. **Do not use `title`, `data-hint`, or ARIA attributes as implicit tooltip opt-in mechanisms.**
+
+### Explicit tooltips
+
+Use the shared `Button` `tooltip` prop only where the equivalent Capacities interaction exposes a sighted hint. Tooltip copy/configuration is explicit, while ARIA metadata remains independently correct.
 
 ```tsx
-<Button aria-label="Navegar para frente" size="icon-sm">
+<Button
+  aria-label="Navegar para frente"
+  tooltip={{ text: "Navegar para frente", side: "bottom" }}
+  size="icon-sm"
+>
   <CaretRightIcon />
 </Button>
 
@@ -187,41 +194,65 @@ Interaction semantics are **ARIA-first** and presentation is centralized. A comp
   aria-label="Explorar"
   aria-description="Abrir Explorar no painel lateral"
   aria-keyshortcuts="Control+Shift+J"
-  data-hint
-  data-hint-side="right"
+  tooltip={{
+    text: "Explorar",
+    description: "Abrir Explorar no painel lateral",
+    shortcuts: ["Control+Shift+J"],
+    side: "right",
+  }}
 >
   Explorar
 </Button>
 ```
 
-### One behavior owner
+`InteractionProvider` is mounted once at the application root and owns one detached Base UI Tooltip handle. `Button` registers with it **only when `tooltip` is present**.
 
-`InteractionProvider` is mounted once at the application root. `Button` transparently registers standard hints with one detached Base UI Tooltip handle, so callers keep a single component and `aria-label` remains the source of truth:
+Capacities-parity defaults from the archived `Interactable59846.js` and `index59846.css`:
 
 - pointer hover opens after **200 ms**;
-- keyboard focus opens immediately;
+- keyboard focus opens through the Base UI tooltip primitive;
 - close delay is **0 ms**;
-- moving between hints within **400 ms** opens the next hint immediately;
-- floating offset is **6 px** with Base UI collision handling;
-- Base UI owns Escape, focus, hover, touch suppression, and adjacent-tooltip delay grouping;
-- an already-open popup (`aria-expanded="true"`) disables its hint trigger;
-- hints are non-interactive and have no arrow by default.
+- moving between tooltips within the provider timeout opens the next hint without the normal dwell; this project keeps a **400 ms** provider timeout;
+- floating offset is **6 px** with collision handling;
+- default width is **`max-w-40`**;
+- default arrow is **off**;
+- tooltip popup is **non-interactive**;
+- tooltip display is **disabled on mobile by default**; explicit `showOnMobile` may opt in when reference evidence requires it;
+- an already-open popup (`aria-expanded="true"`) disables its tooltip trigger;
+- visual motion is a restrained opacity fade of about **180 ms**, with no popover-style zoom or directional slide;
+- the surface uses the shared compact translucent tooltip token: 50%-strength front background/border, `text-xs`, medium weight, restrained shadow, and approximately **8 px** backdrop blur.
 
-These values intentionally mirror the archived Capacities tooltip behavior documented under `artifacts/reference-evidence/floating-interactions/`.
+Per-trigger `delay` and `closeDelay` overrides are allowed only when reference evidence requires different behavior.
 
-### Hint vs preview vs popup
+### Tooltip vs preview vs popup
 
-The visual system shares tokens and positioning primitives, but semantics remain distinct:
+The visual family may share theme tokens, but semantics, timing, and primitives remain distinct:
 
-- **Hint** — auxiliary explanation of a control. Copy comes from ARIA. Non-interactive. Global behavior is owned by `InteractionProvider`.
-- **Preview (`HoverCard`)** — a sighted preview of the destination/object itself. Use Base UI Preview Card semantics. Default trigger dwell is **330 ms**, close tolerance is **180 ms**, and object previews use the shared preview surface.
-- **Popover/Menu** — interactive content opened explicitly by click/focus/keyboard. Its state is expressed through popup ARIA and it does not inherit hover-hint timing.
+- **Tooltip** — explicit auxiliary explanation of a control. Uses Base UI Tooltip through `Button.tooltip`. Non-interactive by default. Defaults: 200 ms open, 0 ms close, 6 px offset, `max-w-40`, desktop by default.
+- **Entity preview (`HoverCard`)** — a sighted preview of the destination/object itself. Uses Base UI Preview Card. Defaults from `RootEntity59846.js`: **330 ms** open dwell, **180 ms** close tolerance, **top** placement, **4 px** main-axis offset, desktop only. Pointer entry into the preview keeps it open so the preview can be interacted with. The standard shell is compact (`w-72 p-1.5 text-xs`) and uses opacity-only motion (about 150 ms in / 100 ms out).
+- **Popover/Menu** — interactive action/content surface opened explicitly by click/focus/keyboard. It does not inherit tooltip or entity-preview hover timing.
+- **Dialog/Command Palette** — modal interaction surface with its own focus/overlay behavior. It must never be implemented as a HoverCard or hover tooltip.
+- **Full object preview modal** — the editable object preview described by Capacities navigation documentation is separate from an entity hover preview and from the Tooltip primitive.
+
+The official Capacities navigation documentation establishes preview-on-hover as an object/tab capability, while the archived application bundle supplies the exact hover-preview timing and floating geometry. The official shortcuts documentation defines shortcut semantics; the archived Tooltip implementation supplies their visual presentation inside explicit hints.
 
 ### Floating surface rules
 
-- `tooltipSurfaceClass` in `shared-styles.ts` is the single visual token for hints/tooltips.
-- `floatingInteractionSurfaceClass` in `shared-styles.ts` is the shared preview/popover surface token.
-- `Kbd` is the single keycap treatment; `KbdGroup` is a semantic `<span>` container, never a nested `<kbd>` element.
-- Components must not add local `setTimeout` hover logic for hints.
-- Components must not duplicate `aria-label` into a separate tooltip prop.
-- Components must not recreate collision detection, z-index, border, shadow, or motion when a shared primitive already owns it.
+- `tooltipSurfaceClass` is the single visual surface token for standard tooltips.
+- `tooltipMotionClass` owns tooltip fade behavior; do not add zoom/slide locally.
+- `floatingInteractionSurfaceClass` is the shared structural surface for preview/popover-style cards where appropriate.
+- `previewSurfaceMotionClass` owns entity-preview fade behavior; previews must not inherit popover zoom/slide motion.
+- `HoverCard` is reserved for destination/object preview content, never just because a tooltip has two lines or a shortcut.
+- Components must not add local `setTimeout` hover logic when a shared Base UI primitive owns the timing.
+- Components must not derive `tooltip` from `aria-label`, `aria-description`, or `aria-keyshortcuts` inside the shared `Button`.
+- Components must not recreate collision detection, z-index, border, shadow, or motion when a shared primitive/token already owns it.
+- `Kbd` is the single keycap treatment; `KbdGroup` remains a semantic `<span>` container rather than nested `<kbd>` markup.
+
+### Reference sources
+
+The normative interaction values above were confirmed against the user-provided archive bundle, especially:
+
+- `https://app.capacities.io/Interactable59846.js` — explicit Tooltip configuration, timing, width, offset, mobile behavior, arrow/interaction defaults, and composed tooltip content.
+- `https://app.capacities.io/RootEntity59846.js` — `EntityHoverPreview` dwell, close tolerance, desktop gating, pointer path, placement, and floating offset.
+- `https://app.capacities.io/index59846.css` — `.base-tooltip` and `.preview-card-core` surfaces.
+- `artifacts/reference-evidence/floating-interactions/README.md` — durable source/evidence mapping and captured screenshots.
