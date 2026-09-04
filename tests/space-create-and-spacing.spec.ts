@@ -24,7 +24,9 @@ test("Create space adds and selects the new Space", async ({ page }) => {
 
   await trigger.click();
   const reopenedPopup = page.locator(popupSelector).first();
-  await expect(reopenedPopup.locator('[data-space-sort-id]', { hasText: "Created Space" })).toBeVisible();
+  await expect(
+    reopenedPopup.locator('[data-space-sort-id]', { hasText: "Created Space" }),
+  ).toBeVisible();
 });
 
 test("Space rows keep an 8px icon-to-text gap", async ({ page }) => {
@@ -38,5 +40,22 @@ test("Space rows keep an 8px icon-to-text gap", async ({ page }) => {
   await expect(row).toBeVisible();
 
   const columnGap = await row.evaluate((element) => getComputedStyle(element).columnGap);
+  expect(columnGap).toBe("8px");
+});
+
+test("Create space action keeps an 8px icon-to-text gap", async ({ page }) => {
+  await page.goto("http://localhost:3000");
+  await page.waitForLoadState("networkidle");
+
+  const trigger = page.locator('[data-slot="app-sidebar-space-switcher"] button').first();
+  await trigger.click();
+
+  const createAction = page
+    .locator(popupSelector)
+    .first()
+    .locator('[data-slot="combobox-separator"] + div > button:first-of-type');
+  await expect(createAction).toBeVisible();
+
+  const columnGap = await createAction.evaluate((element) => getComputedStyle(element).columnGap);
   expect(columnGap).toBe("8px");
 });
