@@ -9,6 +9,7 @@ import {
   AppHeaderPushPinFillIcon,
   AppHeaderPushPinIcon,
 } from "@/components/app-header-icons";
+import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
@@ -18,8 +19,6 @@ const workspaceTabStateClass =
   "transition-[background-color,border-color,color,opacity] duration-150 ease-out motion-reduce:transition-none";
 const workspaceSmallActionStateClass =
   "transition-[background-color,color,opacity] duration-150 ease-out motion-reduce:transition-none";
-const workspaceTooltipStateClass =
-  "transition-[background-color,color,opacity,transform] duration-150 ease-out motion-reduce:transition-none motion-reduce:animate-none";
 
 const MAIN_TAB_MAX_WIDTH = 200;
 const MAIN_TAB_MIN_WIDTH = 82;
@@ -28,7 +27,6 @@ const SIDE_TAB_MAX_WIDTH = 160;
 const SIDE_TAB_MIN_WIDTH = 44;
 const SIDE_TAB_GAP = 4;
 const SIDE_TAB_CONTROLS_WIDTH = 28;
-const TAB_PREVIEW_DELAY = 200;
 
 const appHeaderTabTheme = {} as React.CSSProperties;
 
@@ -212,17 +210,19 @@ function AppHeaderTabAction({
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }) {
   return (
-    <button
+    <Button
       data-slot="app-header-tab-action"
       type="button"
+      variant="ghost"
+      size="default"
       aria-label={label}
-      title={label}
+      tooltip={{ text: label, side: "bottom" }}
       className={cn(
-        "relative flex h-7 w-[18px] shrink-0 items-center justify-center rounded-lg border border-transparent bg-transparent",
+        "relative h-7 w-[18px] shrink-0 rounded-lg border border-transparent bg-transparent p-0",
         "text-xs text-[var(--app-tab-text-subtle)]",
         workspaceSmallActionStateClass,
         "hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)]",
-        "active:z-20 active:brightness-[0.97] focus:outline-none",
+        "active:z-20 active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
         className,
       )}
       onClick={onClick}
@@ -230,7 +230,7 @@ function AppHeaderTabAction({
       <span className="inline-flex size-3 items-center justify-center [&>svg]:size-full">
         {children}
       </span>
-    </button>
+    </Button>
   );
 }
 
@@ -513,29 +513,6 @@ function AppHeaderTabItem({
     ...actionLabels,
   };
 
-  const [previewOpen, setPreviewOpen] = React.useState(false);
-  const previewTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const clearPreviewTimer = React.useCallback(() => {
-    if (previewTimerRef.current) clearTimeout(previewTimerRef.current);
-    previewTimerRef.current = null;
-  }, []);
-
-  const closePreview = React.useCallback(() => {
-    clearPreviewTimer();
-    setPreviewOpen(false);
-  }, [clearPreviewTimer]);
-
-  const schedulePreview = React.useCallback(() => {
-    if (!tab.preview || active || dragging) return;
-    clearPreviewTimer();
-    previewTimerRef.current = setTimeout(() => {
-      previewTimerRef.current = null;
-      setPreviewOpen(true);
-    }, TAB_PREVIEW_DELAY);
-  }, [active, clearPreviewTimer, dragging, tab.preview]);
-
-  React.useEffect(() => () => clearPreviewTimer(), [clearPreviewTimer]);
   const hasReservedActions = hasReservedTabActions({
     fitContent,
     pinnable,
@@ -554,14 +531,8 @@ function AppHeaderTabItem({
         className,
       )}
       style={{ ...appHeaderTabTheme, ...style }}
-      onPointerEnter={(event) => {
-        schedulePreview();
-        onPointerEnter?.(event);
-      }}
-      onPointerLeave={(event) => {
-        closePreview();
-        onPointerLeave?.(event);
-      }}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
       {...props}
     >
       <div className={cn("relative flex min-w-0 items-center", fitContent ? undefined : "w-full")}>
@@ -628,14 +599,9 @@ function AppHeaderTabItem({
   if (!tab.preview || active || dragging) return tabNode;
 
   return (
-    <HoverCard open={previewOpen}>
+    <HoverCard>
       <HoverCardTrigger render={<div className="min-w-0" />}>{tabNode}</HoverCardTrigger>
-      <HoverCardContent
-        side="bottom"
-        align="center"
-        sideOffset={8}
-        className={cn("w-64", workspaceTooltipStateClass)}
-      >
+      <HoverCardContent side="bottom" align="center" sideOffset={4}>
         {tab.preview}
       </HoverCardContent>
     </HoverCard>
@@ -709,14 +675,17 @@ function AppHeaderTabList({
                   )}
                 </button>
                 {tabs.length > 1 && (
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon-xs"
                     aria-label={`Close ${tab.label}`}
-                    className="flex size-6 items-center justify-center rounded-md text-[var(--app-tab-text-subtle)] opacity-0 hover:bg-[var(--app-tab-bg-front-hover)] group-hover/list:opacity-100"
+                    tooltip={{ text: `Close ${tab.label}`, side: "bottom" }}
+                    className="text-[var(--app-tab-text-subtle)] opacity-0 hover:bg-[var(--app-tab-bg-front-hover)] group-hover/list:opacity-100"
                     onClick={() => onClose(tab)}
                   >
                     <AppHeaderCloseIcon className="size-3" />
-                  </button>
+                  </Button>
                 )}
               </div>
             ))}
@@ -739,15 +708,17 @@ function HeaderControlButton({
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }) {
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="icon-sm"
       aria-label={label}
-      title={label}
+      tooltip={{ text: label, side: "bottom" }}
       className={cn(
-        "relative flex size-7 shrink-0 items-center justify-center rounded-lg border border-transparent bg-transparent",
+        "relative shrink-0 rounded-lg border border-transparent bg-transparent",
         "text-sm text-[var(--app-tab-text-secondary)] transition-[opacity] duration-200 ease-out",
         "hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)]",
-        "active:z-20 active:brightness-[0.97] focus:outline-none",
+        "active:z-20 active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
         className,
       )}
       onClick={onClick}
@@ -755,7 +726,7 @@ function HeaderControlButton({
       <span className="inline-flex size-4 items-center justify-center [&>svg]:size-full">
         {children}
       </span>
-    </button>
+    </Button>
   );
 }
 
