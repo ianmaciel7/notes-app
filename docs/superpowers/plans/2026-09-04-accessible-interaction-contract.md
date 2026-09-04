@@ -1,5 +1,7 @@
 # Accessible Interaction Contract Implementation Plan
 
+> **Superseded on 2026-09-04 by `docs/superpowers/plans/2026-09-04-explicit-tooltip-preview-parity.md`.** The ARIA-derived visual-hint architecture below is retained only as historical implementation context and is no longer normative. `DESIGN.md#7-accessible-interaction-contract` now requires explicit visual tooltips independent from ARIA metadata.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace ad-hoc tooltip/hint behavior with one ARIA-first interaction contract grounded in the archived Capacities behavior.
