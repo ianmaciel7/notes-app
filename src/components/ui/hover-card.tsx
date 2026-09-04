@@ -9,24 +9,38 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
 
-function HoverCard({ ...props }: PreviewCardPrimitive.Root.Props) {
-  return <PreviewCardPrimitive.Root data-slot="hover-card" {...props} />
+function HoverCard({
+  open,
+  defaultOpen,
+  onOpenChange,
+  ...props
+}: PreviewCardPrimitive.Root.Props) {
+  const isMobile = useIsMobile()
+
+  return (
+    <PreviewCardPrimitive.Root
+      data-slot="hover-card"
+      open={isMobile ? false : open}
+      defaultOpen={isMobile ? false : defaultOpen}
+      onOpenChange={(nextOpen, eventDetails) => {
+        if (isMobile && nextOpen) return
+        onOpenChange?.(nextOpen, eventDetails)
+      }}
+      {...props}
+    />
+  )
 }
 
 function HoverCardTrigger({
   delay = 330,
   closeDelay = 180,
-  disabled = false,
   ...props
 }: PreviewCardPrimitive.Trigger.Props) {
-  const isMobile = useIsMobile()
-
   return (
     <PreviewCardPrimitive.Trigger
       data-slot="hover-card-trigger"
       delay={delay}
       closeDelay={closeDelay}
-      disabled={disabled || isMobile}
       {...props}
     />
   )
