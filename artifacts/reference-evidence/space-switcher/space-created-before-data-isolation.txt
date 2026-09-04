@@ -1,0 +1,8 @@
+User-provided reference image for the Space isolation architecture work.
+
+Original task asset: a2d50b1b-ffb4-449c-b96d-068f338f8af1.png
+Dimensions: 427x262
+Converted working copy: space-created-before-data-isolation.webp
+Purpose: shows a newly created Space selected in the switcher before object-type/object data isolation is implemented.
+
+The binary image is retained in the task environment and referenced by the adjacent Markdown evidence note. Repository binary upload is intentionally deferred to implementation execution, where the evidence artifact can be committed through the normal git checkout without encoding it as text.

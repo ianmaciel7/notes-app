@@ -1,0 +1,1 @@
+The original screenshot for this design is available in the task workspace at `/mnt/data/a2d50b1b-ffb4-449c-b96d-068f338f8af1.png` and should be committed as `space-created-before-data-isolation.webp` during implementation before the design branch is integrated. Do not replace this evidence with a recreated image.
