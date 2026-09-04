@@ -17,7 +17,7 @@ This design is grounded in the current project architecture plus the preserved C
 - Historical branch `old-4` also contains `workspace-database.ts`, which already indexed persisted records by `spaceId`.
 - Preserved Capacities references establish that content belongs to one Space and that a new Space may start blank.
 
-At the time of this design, `package.json` does not yet include Dexie even though the architectural documents require it. The implementation phase will add Dexie rather than introduce a competing persistence layer.
+At the time of this design, `package.json` does not yet include Dexie even though the architectural documents require it. The implementation phase will add `dexie` and `dexie-react-hooks` rather than introduce a competing persistence layer.
 
 ## Decision
 
@@ -36,7 +36,7 @@ A newly created Space starts blank:
 
 Only the minimum internal Space metadata required to identify and activate the Space is created automatically.
 
-The existing application data is migrated into the existing Personal Space rather than copied into every newly created Space.
+The existing application data and the object-type catalog currently belonging to Personal Space are migrated/materialized into Personal Space only. They are never copied into newly created Spaces.
 
 ## Why this approach
 
@@ -100,12 +100,12 @@ tags
   spaceId
   ...
 
-relations
+relationIndex
   id
   spaceId
   sourceId
   targetId
-  ...
+  ...derived/index fields
 
 media
   id
@@ -117,11 +117,14 @@ spaceSettings
   spaceId
   ...
 
-syncQueue
-  id
-  spaceId
-  ...
+appSettings
+  key
+  value
 ```
+
+Canonical object data continues to follow the `BaseEntity` model in `SPEC.md`. A separate relation table, when used, is an index/projection for efficient relation and backlink queries rather than a competing canonical object schema.
+
+Future sync records may also carry `spaceId`, but a sync queue is not required for this implementation slice.
 
 The exact table set may be expanded as the existing object model is connected, but the isolation invariant does not change.
 
@@ -134,23 +137,25 @@ These rules are mandatory rather than conventions:
 3. UI code must not query Space-owned tables without applying active-Space scope.
 4. Object type schemas are owned by one Space. Editing a type in Space A must not mutate a type in Space B.
 5. Objects cannot silently reference objects in another Space.
-6. Search, graph, backlinks, collections, trash, AI retrieval, export, and sync queues operate on one Space by default.
+6. Search, graph, backlinks, collections, trash, AI retrieval, export, and future sync queues operate on one Space by default.
 7. Cross-Space copy/move is a future explicit workflow; it must never happen as an accidental side effect of ordinary create/edit actions.
 8. Creating a Space never clones Personal Space content or schemas unless a future explicit template/import flow is invoked.
 
 ## Active Space state
 
-`activeSpaceId` is application preference/state, not the owner of domain data.
+`activeSpaceId` is an application preference, not the owner of domain data.
 
-The active Space should be restored across reloads, but the durable domain source remains Dexie. React Context or Zustand may expose the selected Space to the component tree, while `useLiveQuery` reads Space-owned records from Dexie using that `activeSpaceId`.
+The durable preference is stored in Dexie's `appSettings` table under a stable key such as `activeSpaceId`. React Context may mirror the selected ID for immediate component coordination, but the authoritative list of Spaces and Space-owned domain records comes from Dexie. Zustand is not required for this implementation slice; it remains available for transient UI state if/when the existing application adopts it.
 
-The provider should therefore evolve from storing the entire Space list and workspace content in `useState` to coordinating:
+Space-scoped components use `useLiveQuery` from `dexie-react-hooks` with the active `spaceId` to read their data.
+
+The provider therefore evolves from storing the entire Space list and workspace content in `useState` to coordinating:
 
 - persisted Space records from Dexie;
-- a persisted or locally remembered `activeSpaceId` preference;
-- transient dialog/menu/open-state in React/Zustand only.
+- the persisted `activeSpaceId` preference;
+- transient dialog/menu/open-state in React state only.
 
-No second in-memory copy of the domain database should become an authoritative source.
+No second in-memory copy of the domain database becomes an authoritative source.
 
 ## Create Space flow
 
@@ -162,7 +167,7 @@ On confirmation:
 2. Generate a stable Space ID.
 3. In one local transaction, insert only the `SpaceRecord` and any strictly required internal settings row.
 4. Do not seed object types or objects.
-5. Set the new Space as active after the transaction succeeds.
+5. Persist the new Space as `activeSpaceId` only after the creation transaction succeeds.
 6. Let Space-scoped reactive queries update the sidebar/main workspace to the empty state.
 
 If persistence fails, the UI must not switch to a Space that was not committed.
@@ -192,22 +197,25 @@ The application shell may stay mounted. Data-bearing components react to `active
 
 Existing pre-Space data must not be discarded.
 
-A migration will:
+The migration/bootstrap will:
 
 1. Ensure a durable Personal Space record exists.
-2. Assign all legacy Space-less persistent user data to that Personal Space.
-3. Preserve object IDs and relationships where possible.
-4. Add `spaceId` indexes required by the new schema.
-5. Record the schema version so migration is idempotent.
-6. Make Personal Space active when no valid stored active Space exists.
+2. Assign all legacy Space-less persisted user data to Personal Space.
+3. Materialize the object-type definitions that currently belong to the existing Personal workspace into Personal Space exactly once, even when those definitions are currently hardcoded or in-memory rather than already persisted.
+4. Preserve existing object IDs and relationships where possible.
+5. Add `spaceId` indexes required by the new schema.
+6. Record the schema version/bootstrap marker so the migration is idempotent.
+7. Make Personal Space active when no valid stored active Space exists.
 
-A migration must never copy legacy content into newly created Spaces.
+The migration must never seed the Personal object-type catalog into any Space created after migration.
 
 ## Object types and blank Spaces
 
 A blank Space has no user-facing object types.
 
-This means a new Space should not inherit the object type list currently visible in Personal Space. Object type creation later writes a type record with the active `spaceId`. The sidebar derives its object type section from the active Space's object type query.
+This means a new Space does not inherit the object type list currently visible in Personal Space. Object type creation later writes a type record with the active `spaceId`. The sidebar derives its object type section from the active Space's object-type query.
+
+System-internal records required by the editor/runtime are not presented as user object types and do not violate the blank-Space requirement.
 
 Future template support may explicitly copy selected object type schemas into a Space, but template inheritance is outside this change.
 
@@ -227,14 +235,15 @@ No global search is introduced by this change. A future cross-Space search can b
 
 ## Persistence and transactions
 
-Dexie transactions should be used for operations that must remain atomic, including:
+Dexie transactions are used for operations that must remain atomic, including:
 
 - Space creation plus required internal settings;
-- Space deletion plus owned data cleanup;
+- active-Space persistence when coupled to creation;
+- future Space deletion plus owned data cleanup;
 - future object copy/move between Spaces;
 - migrations.
 
-Space activation should occur only after the corresponding create transaction succeeds.
+Space activation occurs only after the corresponding create transaction succeeds.
 
 ## Deletion semantics
 
@@ -246,7 +255,7 @@ When implemented, deletion must remove only records owned by that `spaceId`, rej
 
 - Invalid/blank Space name: reject before database write.
 - Failed creation transaction: keep the previous active Space and surface an error.
-- Stored `activeSpaceId` no longer exists: fall back to Personal Space or the first valid Space.
+- Stored `activeSpaceId` no longer exists: fall back to Personal Space or the first valid Space and persist the repaired preference.
 - Corrupt legacy data during migration: fail safely without partially assigning records across Spaces.
 - Cross-Space relation attempt: reject at the repository/domain boundary, not only in UI validation.
 
@@ -259,7 +268,7 @@ When implemented, deletion must remove only records owned by that `spaceId`, rej
 - creating an object in Space A does not expose it in Space B;
 - relations across Spaces are rejected;
 - Space-scoped search does not leak results;
-- migration assigns legacy data only to Personal Space;
+- migration assigns legacy data and existing Personal object types only to Personal Space;
 - failed transaction does not activate an unpersisted Space.
 
 ### Database integration tests
@@ -267,7 +276,8 @@ When implemented, deletion must remove only records owned by that `spaceId`, rej
 - Dexie schema and `spaceId` indexes are created correctly;
 - live queries update after switching active Space;
 - reload restores Spaces and active Space;
-- migration is idempotent.
+- migration/bootstrap is idempotent;
+- current Personal object types are materialized once and are not seeded into later Spaces.
 
 ### Playwright tests
 
@@ -280,10 +290,10 @@ When implemented, deletion must remove only records owned by that `spaceId`, rej
 
 This architecture change includes:
 
-- adding Dexie as the local persistence layer required by the existing architectural decisions;
+- adding `dexie` and `dexie-react-hooks` as the local persistence layer required by the existing architectural decisions;
 - creating the Space-aware database schema;
 - persisting Spaces and active Space preference;
-- migrating current legacy data to Personal Space;
+- migrating current legacy data and current Personal object-type definitions to Personal Space;
 - connecting current object type/object queries to `spaceId` where those flows already exist;
 - making new Spaces blank;
 - adding regression tests for isolation and persistence.
@@ -295,7 +305,8 @@ This architecture change does not include:
 - global search across Spaces;
 - templates that seed object types into a Space;
 - collaborative permissions/access control UI;
-- account/team Spaces beyond the local account boundary already modeled.
+- account/team Spaces beyond the local account boundary already modeled;
+- Space deletion UI.
 
 ## Expected implementation shape
 
@@ -303,9 +314,9 @@ The exact file names should follow the current repository at implementation time
 
 - `src/lib/db.ts`: Dexie database and versioned schema.
 - a Space repository/service module: persistent CRUD and isolation-aware operations.
-- a migration module for assigning legacy records to Personal Space.
+- a migration/bootstrap module for assigning legacy records and existing Personal object-type definitions to Personal Space.
 - the workspace provider/store: active Space coordination only, not authoritative domain storage.
-- Space-scoped hooks/selectors using Dexie `useLiveQuery`.
+- Space-scoped hooks/selectors using `dexie-react-hooks`.
 - current sidebar/object-type/object consumers updated to use active-Space queries.
 - focused unit/database/Playwright tests.
 
@@ -314,7 +325,7 @@ The exact file names should follow the current repository at implementation time
 This design preserves the current architectural constraints:
 
 - Dexie/IndexedDB remains the local-first source of truth.
-- React/Zustand remains transient UI state.
+- React/Zustand remains transient UI state rather than persistent domain state.
 - persistent entities continue to follow the `BaseEntity` model in `SPEC.md`.
 - future Firestore sync can use `spaceId` as a required partition key.
 - the UI continues to mirror Capacities while the domain model enforces isolation beneath the visual layer.
@@ -338,9 +349,9 @@ The implementation is complete only when all of the following are true:
 
 1. A newly created Space persists after reload.
 2. A newly created Space contains no user object types or objects.
-3. Personal Space retains existing migrated content.
+3. Personal Space retains existing content and its current object-type catalog after migration.
 4. Creating data in one Space never makes it visible in another Space through ordinary object type/object/search/relation flows.
 5. Switching Spaces updates all connected data-bearing UI surfaces to the selected Space.
 6. Cross-Space relations are rejected by domain/repository logic.
 7. Active Space restoration is resilient to missing/deleted Space IDs.
-8. Automated tests cover persistence, blank creation, migration, and isolation.
+8. Automated tests cover persistence, blank creation, migration/bootstrap, and isolation.
