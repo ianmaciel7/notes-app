@@ -1,16 +1,9 @@
 "use client"
 
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
-import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 import { cva, type VariantProps } from "class-variance-authority"
-import type { ReactElement } from "react"
-import {
-  interactionHintHandle,
-  type InteractionHintPayload,
-  type InteractionTooltip,
-  resolveInteractionTooltip,
-} from "@/components/ui/interaction-hint"
-import { useIsMobile } from "@/hooks/use-mobile"
+import type { InteractionTooltip } from "@/components/ui/interaction-hint"
+import { InteractionTooltipTrigger } from "@/components/ui/interaction-tooltip-trigger"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
@@ -55,32 +48,6 @@ type ButtonProps = ButtonPrimitive.Props &
     tooltip?: InteractionTooltip
   }
 
-type ExplicitTooltipTriggerProps = {
-  button: ReactElement
-  payload: InteractionHintPayload
-  disabled: boolean
-}
-
-function ExplicitTooltipTrigger({
-  button,
-  payload,
-  disabled,
-}: ExplicitTooltipTriggerProps) {
-  const isMobile = useIsMobile()
-
-  return (
-    <TooltipPrimitive.Trigger
-      handle={interactionHintHandle}
-      payload={payload}
-      delay={payload.delay}
-      closeDelay={payload.closeDelay}
-      disabled={disabled || (isMobile && !payload.showOnMobile)}
-      render={button}
-      data-interaction-tooltip-trigger=""
-    />
-  )
-}
-
 function Button({
   className,
   variant = "default",
@@ -90,7 +57,6 @@ function Button({
   "aria-expanded": ariaExpanded,
   ...props
 }: ButtonProps) {
-  const payload = resolveInteractionTooltip(tooltip)
   const tooltipDisabled = disabled || ariaExpanded === true || ariaExpanded === "true"
 
   const button = (
@@ -103,10 +69,12 @@ function Button({
     />
   )
 
-  if (!payload) return button
+  if (!tooltip) return button
 
   return (
-    <ExplicitTooltipTrigger button={button} payload={payload} disabled={tooltipDisabled} />
+    <InteractionTooltipTrigger tooltip={tooltip} disabled={tooltipDisabled}>
+      {button}
+    </InteractionTooltipTrigger>
   )
 }
 
