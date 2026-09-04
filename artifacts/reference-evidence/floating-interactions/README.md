@@ -53,6 +53,8 @@ The captured tooltip contract is explicit: a visual tooltip is instantiated from
 
 The captured tooltip transition is an opacity fade of about **180 ms**; it does not use popover-style zoom or directional slide motion.
 
+The captured `RenderShortcut` pill treatment used inside richer tooltips is also explicit: normal font weight/casing, `text-xs`, approximately **0.5 px** border, element-style background, secondary text, small radius, `px-1 py-0.5`, `leading-[1.7]`, and one spacing unit between individual key pills. The Notes App shared `Kbd`/`KbdGroup` now maps to that treatment.
+
 ### `https://app.capacities.io/RootEntity59846.js`
 
 The captured `EntityHoverPreview` behavior includes:
