@@ -10,13 +10,13 @@ import {
 } from "@/components/app-header-icons";
 import { type AppHeaderTab, AppHeaderTabItem } from "@/components/app-header-tabs";
 import { AppShellContext } from "@/components/app-shell";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { WORKSPACE_RAIL_HEIGHT_PX } from "@/lib/workspace-layout";
 
@@ -209,15 +209,18 @@ function SideHeaderAction({
   children: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }) {
-  const button = (
-    <button
+  return (
+    <Button
       type="button"
+      variant="ghost"
+      size="icon-sm"
       aria-label={label}
+      tooltip={{ text: label, side: placement }}
       className={cn(
-        "relative flex h-7 shrink-0 items-center justify-center rounded-lg border border-transparent bg-transparent",
+        "relative h-7 shrink-0 rounded-lg border border-transparent bg-transparent p-0",
         "text-sm text-[var(--side-header-text-secondary)] transition-[opacity] duration-200 ease-out",
         "hover:bg-[var(--side-header-bg-front-hover)] hover:text-[var(--side-header-text-primary)]",
-        "active:z-20 active:brightness-[0.97] focus:outline-none",
+        "active:z-20 active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
         className,
       )}
       style={{ width }}
@@ -226,16 +229,7 @@ function SideHeaderAction({
       <span className="inline-flex size-4 items-center justify-center [&>svg]:size-full">
         {children}
       </span>
-    </button>
-  );
-
-  return (
-    <Tooltip>
-      <TooltipTrigger render={button} />
-      <TooltipContent side={placement} sideOffset={8} className="px-2 py-1.5 text-xs">
-        {label}
-      </TooltipContent>
-    </Tooltip>
+    </Button>
   );
 }
 
