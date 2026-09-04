@@ -16,7 +16,9 @@ test("Space switcher clear button keeps the Capacities 9px right inset", async (
   const input = search.locator('[data-slot="input-group-control"]');
   await input.fill("aaaaaaa");
 
-  const clear = search.locator('[data-slot="combobox-clear"]');
+  const clear = search
+    .locator('button[aria-label="Clear search"], button[aria-label="Limpar busca"]')
+    .first();
   await expect(clear).toBeVisible();
 
   const searchBox = await search.boundingBox();
