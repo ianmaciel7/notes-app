@@ -1,0 +1,97 @@
+name: Verify Space architecture
+
+on:
+  push:
+    branches:
+      - feat/space-scoped-data-architecture
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/space-scoped-data-architecture
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.20.0
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install existing dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Add local-first persistence dependencies
+        run: |
+          pnpm add dexie dexie-react-hooks
+          pnpm add -D vitest fake-indexeddb
+          pnpm pkg set scripts.test:unit="vitest run"
+
+      - name: Format changed implementation files
+        run: |
+          pnpm exec biome format --write \
+            src/types/schema.ts \
+            src/lib/db.ts \
+            src/lib/spaces/space-types.ts \
+            src/lib/spaces/space-repository.ts \
+            src/lib/spaces/personal-space-seed.ts \
+            src/lib/spaces/bootstrap-workspace.ts \
+            src/lib/spaces/space-projections.ts \
+            src/lib/db.test.ts \
+            src/lib/spaces/space-repository.test.ts \
+            src/lib/spaces/bootstrap-workspace.test.ts \
+            src/lib/spaces/space-projections.test.ts \
+            src/hooks/use-space-data.ts \
+            src/components/workspace-object-type-presenter.ts \
+            src/components/workspace-controller.tsx \
+            tests/space-isolation.spec.ts \
+            vitest.config.ts
+
+      - name: Unit tests
+        run: pnpm test:unit
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Start production app
+        run: |
+          pnpm start > /tmp/notes-app.log 2>&1 &
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:3000 >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/notes-app.log
+          exit 1
+
+      - name: Space browser regression
+        run: pnpm exec playwright test tests/space-create-state.spec.ts tests/space-isolation.spec.ts --project=chromium
+
+      - name: Commit verified dependency lock and formatting
+        if: success()
+        run: |
+          rm .github/workflows/space-architecture-verify.yml
+          git config user.name "Ian Maciel"
+          git config user.email "ianmaciel76@gmail.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No final generated changes to commit"
+          else
+            git commit -m "feat: finalize Space-scoped local data architecture"
+            git push origin HEAD:feat/space-scoped-data-architecture
+          fi
