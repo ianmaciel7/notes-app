@@ -707,7 +707,13 @@ function WorkspaceSidebar() {
 
   function openCommandPaletteFromSidebar() {
     setSideSearchOpen(false);
-    window.setTimeout(() => setCommandPaletteOpen(true), 0);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("workspace:open-command-palette", {
+          detail: { openInNewTab: false },
+        }),
+      );
+    }
   }
 
   return (

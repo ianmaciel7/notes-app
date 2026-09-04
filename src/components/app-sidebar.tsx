@@ -521,7 +521,7 @@ function AppSidebarSpaceSwitcher({
         placeholder={text.search}
         aria-label={text.search}
         className={cn(
-          "h-8 w-[calc(100%-0.75rem)] gap-2 m-1.5 px-[9px] border-0 rounded-lg bg-[var(--app-bg-el)] text-[var(--app-text-secondary)] shadow-none shrink-0",
+          "h-8 w-[calc(100%-0.75rem)] gap-2 m-1.5 px-[9px] !border-0 rounded-lg bg-[var(--app-bg-el)] text-[var(--app-text-secondary)] shadow-none shrink-0",
           "[&_[data-slot=input-group-control]]:h-full [&_[data-slot=input-group-control]]:p-0 [&_[data-slot=input-group-control]]:border-0 [&_[data-slot=input-group-control]]:bg-transparent [&_[data-slot=input-group-control]]:text-[var(--app-text-secondary)] [&_[data-slot=input-group-control]]:shadow-none [&_[data-slot=input-group-control]]:outline-none [&_[data-slot=input-group-control]::placeholder]:text-[var(--app-text-subtle)] [&_[data-slot=input-group-control]::placeholder]:opacity-60",
           "[&_[data-slot=input-group-addon]]:p-0 [&_[data-slot=input-group-addon][data-align=inline-end]:has(>button)]:mr-0",
           "[&>[data-slot=input-group-addon]:empty]:hidden",
@@ -750,7 +750,7 @@ function AppSidebarSpaceSwitcher({
             finalFocus={false}
             aria-label={text.changeSpace}
             className={cn(
-              "mt-1 min-w-72 max-h-[27rem] overflow-hidden rounded-xl border-border bg-[var(--app-bg-front)] text-[var(--app-text-subtle)] shadow-[0_3px_5px_#00000003,0_5px_10px_#00000005,0_10px_14px_#00000003] outline-none",
+              "min-w-72 max-h-[27rem] overflow-hidden rounded-xl border-border bg-[var(--app-bg-front)] text-[var(--app-text-subtle)] shadow-[0_3px_5px_#00000003,0_5px_10px_#00000005,0_10px_14px_#00000003] outline-none",
               compactMenuSurfaceClass,
               "data-closed:animate-none data-closed:duration-0 data-closed:opacity-0 data-closed:zoom-out-100",
             )}
@@ -949,7 +949,7 @@ function AppSidebar({
 }: AppSidebarProps) {
   return (
     <div data-slot="app-sidebar" className={cn("flex h-full min-w-0 flex-col", className)}>
-      <AppShellHeader className="px-2 py-[13px] pr-9">
+      <AppShellHeader className="relative z-10 px-2 py-[13px] pr-9">
         <AppSidebarSpaceSwitcher
           spaces={spaces}
           value={value}

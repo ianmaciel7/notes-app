@@ -54,3 +54,7 @@ __pycache__/
 # os
 Thumbs.db
 
+# temporary files
+/tmp/
+/.tmp/
+/temp/

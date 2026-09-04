@@ -18,6 +18,16 @@ import {
 } from "@/components/ui/dialog";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
 import { cn } from "@/lib/utils";
+import { CalendarBlankIcon } from "@phosphor-icons/react/dist/csr/CalendarBlank";
+import { CompassIcon } from "@phosphor-icons/react/dist/csr/Compass";
+import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
+import { EyeIcon } from "@phosphor-icons/react/dist/csr/Eye";
+import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
+import { GraphIcon } from "@phosphor-icons/react/dist/csr/Graph";
+import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
+import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
+import { SparkleIcon } from "@phosphor-icons/react/dist/csr/Sparkle";
 import { WorkspaceSidebar as BaseWorkspaceSidebar } from "./app-sidebar-primary-actions";
 
 // --- Capacities SVG Icons ---
@@ -92,7 +102,7 @@ function CapacitiesNewTabIcon(props: React.SVGProps<SVGSVGElement>) {
     >
       <path
         fill="currentColor"
-        d="M216 36H40a20 20 0 0 0-20 20v144a20 20 0 0 0 20 20h176a20 20 0 0 0 20-20V56a20 20 0 0 0-20-20m-4 24v24H44V60ZM44 196v-88h168v88Z"
+        d="M228 104a12 12 0 0 1-24 0V69l-82.34 82.34a12 12 0 0 1-16.97-16.97L187.05 52H152a12 12 0 0 1 0-24h64a12 12 0 0 1 12 12Zm-44 24a12 12 0 0 0-12 12v64H44V84h64a12 12 0 0 0 0-24H40a20 20 0 0 0-20 20v136a20 20 0 0 0 20 20h136a20 20 0 0 0 20-20v-68a12 12 0 0 0-12-12Z"
       />
     </svg>
   );
@@ -269,6 +279,8 @@ function NewContentCommandDialog({
         id: "action-calendar",
         kind: "action",
         title: "Abrir calendário",
+        icon: CalendarBlankIcon,
+        tone: "cyan",
         shortcuts: ["Ctrl", "Alt", "H"],
         execute: () => {
           setActiveAction("calendar");
@@ -280,6 +292,8 @@ function NewContentCommandDialog({
         id: "action-today",
         kind: "action",
         title: "Abrir hoje",
+        icon: CalendarBlankIcon,
+        tone: "cyan",
         shortcuts: ["Ctrl", "Alt", "H"],
         execute: () => {
           setActiveAction("calendar");
@@ -291,6 +305,8 @@ function NewContentCommandDialog({
         id: "action-settings",
         kind: "action",
         title: "Abrir configurações",
+        icon: GearIcon,
+        tone: "gray",
         shortcuts: ["Ctrl", ","],
         execute: () => {
           showMessage("Configurações do espaço");
@@ -301,6 +317,8 @@ function NewContentCommandDialog({
         id: "action-graph",
         kind: "action",
         title: "Abrir visualização em gráfico",
+        icon: GraphIcon,
+        tone: "purple",
         execute: () => {
           openInSidePanel({ id: "graph-view", label: "Local Graph", draggable: true });
           onOpenChange(false);
@@ -310,6 +328,8 @@ function NewContentCommandDialog({
         id: "action-internal-objects",
         kind: "action",
         title: "Abrir objetos internos",
+        icon: CubeIcon,
+        tone: "emerald",
         execute: () => {
           showMessage("Objetos internos");
           onOpenChange(false);
@@ -319,6 +339,8 @@ function NewContentCommandDialog({
         id: "action-related-content",
         kind: "action",
         title: "Abrir conteúdo relacionado",
+        icon: LinkSimpleIcon,
+        tone: "rose",
         execute: () => {
           openInSidePanel({ id: "backlinks", label: "Backlinks", draggable: true });
           onOpenChange(false);
@@ -328,6 +350,8 @@ function NewContentCommandDialog({
         id: "action-focus-mode",
         kind: "action",
         title: "Alternar modo de foco",
+        icon: EyeIcon,
+        tone: "violet",
         shortcuts: ["Ctrl", "M"],
         execute: () => {
           if (typeof window !== "undefined") {
@@ -340,6 +364,8 @@ function NewContentCommandDialog({
         id: "action-whats-new",
         kind: "action",
         title: "Novidades",
+        icon: SparkleIcon,
+        tone: "amber",
         execute: () => {
           showMessage("KnowledgeOS v2.0 - Local-first Capacities Parity");
           onOpenChange(false);
@@ -349,6 +375,8 @@ function NewContentCommandDialog({
         id: "action-explore",
         kind: "action",
         title: "Abrir Explorar. Use o atalho novamente para iniciar um novo chat.",
+        icon: CompassIcon,
+        tone: "fuchsia",
         shortcuts: ["Ctrl", "J"],
         execute: () => {
           setActiveAction("explore");
@@ -360,6 +388,8 @@ function NewContentCommandDialog({
         id: "action-extended-search",
         kind: "action",
         title: "Abrir busca estendida",
+        icon: MagnifyingGlassIcon,
+        tone: "sky",
         shortcuts: ["Ctrl", "P"],
         execute: () => {
           onOpenChange(false);
@@ -406,6 +436,8 @@ function NewContentCommandDialog({
       id: `action-space-${space.id}`,
       kind: "action",
       title: `Abrir espaço "${space.name}"`,
+      icon: HouseIcon,
+      tone: "teal" as const,
       execute: () => {
         void switchSpace(space.id);
         onOpenChange(false);
@@ -581,32 +613,19 @@ function NewContentCommandDialog({
 
             {/* Sub-header Option Pill: Abrir em nova aba */}
             <div className="mt-1.5 flex px-0.5 pb-2">
-              <span className="text-[11px]">
-                <button
-                  type="button"
-                  onClick={() => setOpenInNewTab((prev) => !prev)}
-                  className={cn(
-                    "box-border relative inline-flex cursor-pointer select-none flex-row items-center whitespace-nowrap rounded-[0.475em] border py-[0.2em] px-[0.49em] text-[11px] leading-[1.3] transition-colors outline-none",
-                    openInNewTab
-                      ? "border-primary bg-primary/10 text-primary font-medium"
-                      : "border-base bg-el text-secondary hover:text-primary",
-                  )}
-                >
-                  <span className="mr-[0.325em] ml-[-0.1em] inline-flex min-h-[1em] min-w-[1em] shrink-0 items-center justify-center rounded-[0.33em]">
-                    <span
-                      className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative p-[0.1em]"
-                      style={{ verticalAlign: "-0.125em" }}
-                    >
-                      <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
-                        <CapacitiesNewTabIcon />
-                      </span>
-                    </span>
-                  </span>
-                  <span className="inline min-w-[1.3em] whitespace-nowrap text-center">
-                    Abrir em nova aba
-                  </span>
-                </button>
-              </span>
+              <button
+                type="button"
+                onClick={() => setOpenInNewTab((prev) => !prev)}
+                className={cn(
+                  "inline-flex cursor-pointer select-none items-center gap-1 rounded-[6px] border px-[7px] py-[3px] text-[11px] font-medium leading-tight transition-colors outline-none",
+                  openInNewTab
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-base bg-el text-secondary hover:border-base-strong hover:text-primary",
+                )}
+              >
+                <CapacitiesNewTabIcon className="size-[12px] shrink-0" aria-hidden="true" />
+                Abrir em nova aba
+              </button>
             </div>
           </div>
 
@@ -647,10 +666,10 @@ function NewContentCommandDialog({
                                 onPointerMove={() => setActiveIndex(globalIdx)}
                                 onClick={() => item.execute({ openInNewTab })}
                                 className={cn(
-                                  "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
+                                  "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2.5 px-2 py-1.5 rounded-[8px] border border-transparent outline-none transition-colors",
                                   isSelected
-                                    ? "bg-el text-primary active:border-state-active"
-                                    : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
+                                    ? "bg-el text-primary shadow-xs font-normal"
+                                    : "text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
                                 )}
                               >
                                 <div className="shrink-0">
@@ -723,10 +742,10 @@ function NewContentCommandDialog({
                                 onPointerMove={() => setActiveIndex(globalIdx)}
                                 onClick={() => item.execute({ openInNewTab })}
                                 className={cn(
-                                  "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
+                                  "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2.5 px-2 py-1.5 rounded-[8px] border border-transparent outline-none transition-colors",
                                   isSelected
-                                    ? "bg-el text-primary active:border-state-active"
-                                    : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
+                                    ? "bg-el text-primary shadow-xs font-normal"
+                                    : "text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
                                 )}
                               >
                                 <div className="shrink-0">
@@ -803,10 +822,10 @@ function NewContentCommandDialog({
                             onPointerMove={() => setActiveIndex(globalIdx)}
                             onClick={() => item.execute({ openInNewTab })}
                             className={cn(
-                              "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2 p-1 rounded-base border border-transparent outline-none transition-colors",
+                              "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2.5 px-2 py-1.5 rounded-[8px] border border-transparent outline-none transition-colors",
                               isSelected
-                                ? "bg-el text-primary active:border-state-active"
-                                : "text-text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
+                                ? "bg-el text-primary shadow-xs font-normal"
+                                : "text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
                             )}
                           >
                             {/* Left Icon & Title */}
@@ -828,7 +847,7 @@ function NewContentCommandDialog({
                                   {item.shortcuts.map((k) => (
                                     <span
                                       key={k}
-                                      className="rounded border border-base bg-el px-1.5 py-0.5 text-xs text-secondary leading-normal"
+                                      className="rounded-[4px] border border-base bg-el px-1.5 py-0.5 text-[11px] font-medium text-secondary leading-tight"
                                     >
                                       {k}
                                     </span>
@@ -839,7 +858,7 @@ function NewContentCommandDialog({
 
                             {/* Far Right Action Cursor Button */}
                             <div className="flex shrink-0 items-center">
-                              <div className="flex size-6 items-center justify-center rounded-base bg-el p-0.5 text-secondary">
+                              <div className="flex size-6 items-center justify-center rounded-[6px] bg-el p-0.5 text-secondary transition-colors group-hover/dropdown-item:text-primary">
                                 <span
                                   className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
                                   style={{ verticalAlign: "-0.125em" }}
