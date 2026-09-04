@@ -21,7 +21,7 @@ function HoverCard({
     <PreviewCardPrimitive.Root
       data-slot="hover-card"
       open={isMobile ? false : open}
-      defaultOpen={isMobile ? false : defaultOpen}
+      defaultOpen={isMobile ? undefined : defaultOpen}
       onOpenChange={(nextOpen, eventDetails) => {
         if (isMobile && nextOpen) return
         onOpenChange?.(nextOpen, eventDetails)
