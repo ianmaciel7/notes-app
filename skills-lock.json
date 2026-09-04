@@ -19,6 +19,20 @@
       "skillPath": "skills/design-brief/SKILL.md",
       "computedHash": "fa56e5291e0b9934efbc3961151264be750331556170b7c37a534c312f63fe91"
     },
+    "design-taste-frontend": {
+      "source": "Leonxlnx/taste-skill",
+      "ref": "main",
+      "sourceType": "github",
+      "skillPath": "skills/taste-skill/SKILL.md",
+      "computedHash": "6d838b246d0e35d0b53f4f23f98ba7a1dd561937e64f7d0c7553b0928e376c3e"
+    },
+    "emil-design-eng": {
+      "source": "emilkowalski/skills",
+      "ref": "main",
+      "sourceType": "github",
+      "skillPath": "skills/emil-design-eng/SKILL.md",
+      "computedHash": "41b0a4dc1a27164fe297845a6c6850a39e9242c42c9be999967fcee9df2c5974"
+    },
     "firebase-app-hosting-basics": {
       "source": "firebase/agent-skills",
       "sourceType": "github",
@@ -54,6 +68,13 @@
       "sourceType": "github",
       "skillPath": "graphify/SKILL.md",
       "computedHash": "4c960cd917302a9addaae08e44fa37e4f7b0f3735dfb36bcf9643bb08adb6a73"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "ref": "main",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "73702c168d9ab290221349687855fcac419e5ca3183c039aad2e80404e2c5533"
     },
     "shadcn": {
       "source": "shadcn/ui",
