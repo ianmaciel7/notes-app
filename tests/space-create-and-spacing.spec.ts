@@ -25,7 +25,7 @@ test("Create space adds and selects the new Space", async ({ page }) => {
   await trigger.click();
   const reopenedPopup = page.locator(popupSelector).first();
   await expect(
-    reopenedPopup.locator('[data-space-sort-id]', { hasText: "Created Space" }),
+    reopenedPopup.locator("[data-space-sort-id]", { hasText: "Created Space" }),
   ).toBeVisible();
 });
 
@@ -36,7 +36,7 @@ test("Space rows keep an 8px icon-to-text gap", async ({ page }) => {
   const trigger = page.locator('[data-slot="app-sidebar-space-switcher"] button').first();
   await trigger.click();
 
-  const row = page.locator(popupSelector).first().locator('[data-space-sort-id]').first();
+  const row = page.locator(popupSelector).first().locator("[data-space-sort-id]").first();
   await expect(row).toBeVisible();
 
   const columnGap = await row.evaluate((element) => getComputedStyle(element).columnGap);

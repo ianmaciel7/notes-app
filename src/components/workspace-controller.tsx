@@ -212,15 +212,15 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [customSections, setCustomSections] = React.useState<any[]>([]);
 
   const createSpace = React.useCallback((name: string) => {
-  const normalizedName = name.trim();
-  if (!normalizedName) return;
+    const normalizedName = name.trim();
+    if (!normalizedName) return;
 
-  const id = `space-${crypto.randomUUID()}`;
-  setSpaces((current) => [...current, { id, name: normalizedName, icon: "user" }]);
-  setSpaceId(id);
-}, []);
+    const id = `space-${crypto.randomUUID()}`;
+    setSpaces((current) => [...current, { id, name: normalizedName, icon: "user" }]);
+    setSpaceId(id);
+  }, []);
 
-const openInSidePanel = React.useCallback(
+  const openInSidePanel = React.useCallback(
     (
       tabOrDescriptor: Partial<AppHeaderTab> & {
         id?: string;
