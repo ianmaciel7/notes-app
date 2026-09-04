@@ -109,6 +109,7 @@
   [data-slot="combobox-content"][aria-label="Alterar espaço"]
 ) [data-space-sort-id] {
   min-height: 2rem;
+  column-gap: 0.5rem;
   height: 2rem;
   padding-inline: 0.25rem;
   border-radius: 0.5rem;

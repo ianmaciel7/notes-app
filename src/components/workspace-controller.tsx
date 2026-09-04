@@ -211,7 +211,16 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [objectTypeCollections, setObjectTypeCollections] = React.useState<Record<string, any>>({});
   const [customSections, setCustomSections] = React.useState<any[]>([]);
 
-  const openInSidePanel = React.useCallback(
+  const createSpace = React.useCallback((name: string) => {
+  const normalizedName = name.trim();
+  if (!normalizedName) return;
+
+  const id = `space-${crypto.randomUUID()}`;
+  setSpaces((current) => [...current, { id, name: normalizedName, icon: "user" }]);
+  setSpaceId(id);
+}, []);
+
+const openInSidePanel = React.useCallback(
     (
       tabOrDescriptor: Partial<AppHeaderTab> & {
         id?: string;
@@ -236,6 +245,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       spaces,
       spaceId,
       setSpaces,
+      createSpace,
       switchSpace: setSpaceId,
       mainTabs,
       setMainTabs,
@@ -258,6 +268,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [
       spaces,
       spaceId,
+      createSpace,
       mainTabs,
       mainValue,
       sideTabs,
