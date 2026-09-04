@@ -4,7 +4,13 @@ const floatingInteractionSurfaceClass =
   "rounded-[12px] border border-border bg-popover text-popover-foreground shadow-[0_2px_3px_rgb(0_0_0/0.01),0_4px_9px_rgb(0_0_0/0.03),0_8px_12px_rgb(0_0_0/0.01)] outline-hidden"
 
 const tooltipSurfaceClass =
-  "box-content rounded-[8px] border border-border/50 bg-popover/70 px-2 py-1 text-xs font-medium leading-normal text-foreground shadow-sm backdrop-blur-[8px] dark:bg-background/70"
+  "box-content rounded-[8px] border border-border/50 bg-popover/50 px-2 py-1 text-xs font-medium leading-normal text-foreground shadow-sm backdrop-blur-[8px] dark:bg-background/70"
+
+const tooltipMotionClass =
+  "duration-[180ms] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
+
+const previewSurfaceMotionClass =
+  "duration-150 data-open:animate-in data-open:fade-in-0 data-closed:duration-100 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const overlayClass =
   "fixed inset-0 isolate z-50 bg-black/45 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
@@ -72,7 +78,7 @@ const workspaceSubmenuStateClass =
   "transition-[background-color,color,opacity,transform] duration-200 ease-out motion-reduce:transition-none motion-reduce:animate-none"
 
 const workspaceTooltipStateClass =
-  "transition-[background-color,color,opacity,transform] duration-150 ease-out motion-reduce:transition-none motion-reduce:animate-none"
+  "transition-opacity duration-[180ms] ease-out motion-reduce:transition-none motion-reduce:animate-none"
 
 const workspaceSurfaceMotionClass =
   "transition-[width,height,transform,opacity] duration-200 ease-out motion-reduce:transition-none motion-reduce:animate-none"
@@ -95,6 +101,8 @@ export {
   floatingSurfaceBaseClass,
   floatingSurfaceClass,
   overlayClass,
+  previewSurfaceMotionClass,
+  tooltipMotionClass,
   tooltipSurfaceClass,
   workspaceCompoundControlClass,
   workspaceRevealActionClass,
