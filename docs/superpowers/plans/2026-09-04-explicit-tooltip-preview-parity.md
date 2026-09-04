@@ -31,10 +31,10 @@
 - Consumes: `resolveInteractionTooltip`, explicit `tooltip` Button behavior, rendered header/sidebar controls.
 - Produces: tests proving ARIA alone does not create a visual tooltip and explicit tooltip controls still render Capacities-style hints.
 
-- [ ] **Step 1:** Add a pure contract test asserting `resolveInteractionTooltip(undefined)` is `undefined` and explicit string/config values normalize to tooltip payloads.
-- [ ] **Step 2:** Change runtime assertions from `[data-hint]` to explicit `[data-interaction-tooltip-trigger]` controls.
-- [ ] **Step 3:** Assert sidebar/header tooltip controls still expose their ARIA metadata independently.
-- [ ] **Step 4:** Assert the standard tooltip popup uses `max-w-40` and no arrow.
+- [x] **Step 1:** Add a pure contract test asserting `resolveInteractionTooltip(undefined)` is `undefined` and explicit string/config values normalize to tooltip payloads.
+- [x] **Step 2:** Change runtime assertions from `[data-hint]` to explicit `[data-interaction-tooltip-trigger]` controls.
+- [x] **Step 3:** Assert sidebar/header tooltip controls still expose their ARIA metadata independently.
+- [x] **Step 4:** Assert the standard tooltip popup uses `max-w-40` and no arrow.
 
 ### Task 2: Make Button tooltips explicit
 
@@ -48,12 +48,12 @@
 **Interfaces:**
 - Produces: `InteractionTooltip`, `InteractionTooltipConfig`, `resolveInteractionTooltip()`, and `ButtonProps.tooltip`.
 
-- [ ] **Step 1:** Define `InteractionTooltip` as either a string or config with `text`, optional `description`, `shortcuts`, `side`, `delay`, `closeDelay`, and `showOnMobile`.
-- [ ] **Step 2:** Normalize tooltip values without reading ARIA attributes.
-- [ ] **Step 3:** Remove `data-hint`/icon-size automatic registration from `Button`; return the plain button when `tooltip` is absent.
-- [ ] **Step 4:** Wrap only explicitly configured buttons in the detached Tooltip trigger, with mobile disabled unless `showOnMobile` is true.
-- [ ] **Step 5:** Render explicit tooltip payloads in `InteractionProvider` and keep provider defaults at 200/0/400.
-- [ ] **Step 6:** Match archived `.base-tooltip`: content-box, base radius, 50% front surface, 50% strong border, xs/medium text, 8 px blur, restrained shadow, `max-w-40`, fade-only motion, no arrow.
+- [x] **Step 1:** Define `InteractionTooltip` as either a string or config with `text`, optional `description`, `shortcuts`, `side`, `delay`, `closeDelay`, and `showOnMobile`.
+- [x] **Step 2:** Normalize tooltip values without reading ARIA attributes.
+- [x] **Step 3:** Remove `data-hint`/icon-size automatic registration from `Button`; return the plain button when `tooltip` is absent.
+- [x] **Step 4:** Wrap only explicitly configured buttons in the detached Tooltip trigger, with mobile disabled unless `showOnMobile` is true.
+- [x] **Step 5:** Render explicit tooltip payloads in `InteractionProvider` and keep provider defaults at 200/0/400.
+- [x] **Step 6:** Match archived `.base-tooltip`: content-box, base radius, 50% front surface, 50% strong border, xs/medium text, 8 px blur, restrained shadow, `max-w-40`, fade-only motion, no arrow.
 
 ### Task 3: Match Capacities entity HoverCard behavior
 
@@ -64,10 +64,10 @@
 **Interfaces:**
 - Produces: Preview Card defaults of 330/180 ms, top/4 px geometry, preview-card surface, fade-only motion.
 
-- [ ] **Step 1:** Change HoverCard trigger defaults to 330 ms open and 180 ms close.
-- [ ] **Step 2:** Change HoverCard content defaults to top placement and 4 px offset.
-- [ ] **Step 3:** Match the archived entity preview shell (`w-72`, compact `p-1.5`, xs typography) while keeping caller class overrides possible.
-- [ ] **Step 4:** Remove popover-like zoom/slide motion from HoverCard and use preview fade motion only.
+- [x] **Step 1:** Change HoverCard trigger defaults to 330 ms open and 180 ms close.
+- [x] **Step 2:** Change HoverCard content defaults to top placement and 4 px offset.
+- [x] **Step 3:** Match the archived entity preview shell (`w-72`, compact `p-1.5`, xs typography) while keeping caller class overrides possible.
+- [x] **Step 4:** Remove popover-like zoom/slide motion from HoverCard and use preview fade motion only.
 
 ### Task 4: Migrate known application controls explicitly
 
@@ -79,10 +79,10 @@
 - Consumes: `Button.tooltip`.
 - Produces: explicit tooltip ownership for header history/focus controls and sidebar New/Search/Explore/Calendar/Tasks actions.
 
-- [ ] **Step 1:** Pass explicit tooltip text to header actions while keeping ARIA labels unchanged.
-- [ ] **Step 2:** Convert sidebar command hints into explicit tooltip config using the same translated action/hint data and keyboard shortcuts.
-- [ ] **Step 3:** Remove `data-hint` and `data-hint-side` usage from those controls.
-- [ ] **Step 4:** Keep popup triggers and command-dialog behavior independent from tooltip state.
+- [x] **Step 1:** Pass explicit tooltip text to header actions while keeping ARIA labels unchanged.
+- [x] **Step 2:** Convert sidebar command hints into explicit tooltip config using the same translated action/hint data and keyboard shortcuts.
+- [x] **Step 3:** Remove `data-hint` and `data-hint-side` usage from those controls.
+- [x] **Step 4:** Keep popup triggers and command-dialog behavior independent from tooltip state.
 
 ### Task 5: Correct the design contract and reference evidence
 
@@ -94,16 +94,19 @@
 **Interfaces:**
 - Produces: durable documentation matching the archived Capacities sources and official navigation/shortcut docs.
 
-- [ ] **Step 1:** Replace the statement that ARIA automatically owns visual hints with the explicit-tooltip rule.
-- [ ] **Step 2:** Document tooltip defaults and HoverCard preview defaults separately.
-- [ ] **Step 3:** Mark the previous ARIA-derived implementation plan as superseded by this corrective plan.
-- [ ] **Step 4:** Keep source references to `Interactable59846.js`, `RootEntity59846.js`, and `index59846.css`.
+- [x] **Step 1:** Replace the statement that ARIA automatically owns visual hints with the explicit-tooltip rule.
+- [x] **Step 2:** Document tooltip defaults and HoverCard preview defaults separately.
+- [x] **Step 3:** Mark the previous ARIA-derived implementation plan as superseded by this corrective plan.
+- [x] **Step 4:** Keep source references to `Interactable59846.js`, `RootEntity59846.js`, and `index59846.css`.
 
 ### Task 6: Verify the change
 
 **Files:** all changed files above.
 
 - [ ] **Step 1:** Transpile every modified `.ts`/`.tsx` file with TypeScript and require zero syntax diagnostics.
+  - Partial verification completed: the changed UI primitives, header, shared styles, and regression test transpile without syntax diagnostics. The full sidebar module could not be executed in a repository dependency environment here.
 - [ ] **Step 2:** Run Playwright interaction tests if a runnable dependency environment is available; otherwise report the runtime limitation explicitly.
-- [ ] **Step 3:** Compare the final `dev` diff against the starting SHA and confirm no unrelated concurrent changes were overwritten.
+  - Runtime unavailable in the current environment: no project checkout/dependency installation is available for starting Next.js + Playwright.
+- [x] **Step 3:** Compare the final `dev` diff against the starting SHA and confirm no unrelated concurrent changes were overwritten.
+  - A concurrent `fix: match Capacities focus mode behavior` commit landed during the work. Its `page.tsx`, focus provider/evidence/test, and expanded `app-header.tsx` behavior remain preserved; the current header still contains the explicit tooltip configuration.
 - [ ] **Step 4:** Verify the remote `dev` HEAD and available GitHub status checks.
