@@ -4,8 +4,9 @@ import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card
 import {
   floatingInteractionSurfaceClass,
   floatingPositionerClass,
-  floatingSurfaceClass,
+  previewSurfaceMotionClass,
 } from "@/components/ui/shared-styles"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
 
 function HoverCard({ ...props }: PreviewCardPrimitive.Root.Props) {
@@ -15,13 +16,17 @@ function HoverCard({ ...props }: PreviewCardPrimitive.Root.Props) {
 function HoverCardTrigger({
   delay = 330,
   closeDelay = 180,
+  disabled = false,
   ...props
 }: PreviewCardPrimitive.Trigger.Props) {
+  const isMobile = useIsMobile()
+
   return (
     <PreviewCardPrimitive.Trigger
       data-slot="hover-card-trigger"
       delay={delay}
       closeDelay={closeDelay}
+      disabled={disabled || isMobile}
       {...props}
     />
   )
@@ -29,10 +34,10 @@ function HoverCardTrigger({
 
 function HoverCardContent({
   className,
-  side = "bottom",
+  side = "top",
   sideOffset = 4,
   align = "center",
-  alignOffset = 4,
+  alignOffset = 0,
   collisionPadding = 8,
   ...props
 }: PreviewCardPrimitive.Popup.Props &
@@ -54,8 +59,8 @@ function HoverCardContent({
           data-slot="hover-card-content"
           className={cn(
             floatingInteractionSurfaceClass,
-            floatingSurfaceClass,
-            "w-64 p-2.5 text-sm",
+            previewSurfaceMotionClass,
+            "w-72 p-1.5 text-xs",
             className,
           )}
           {...props}
