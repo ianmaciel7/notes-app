@@ -131,7 +131,20 @@ jobs:
           exit 1
 
       - name: Space browser regression
-        run: pnpm exec playwright test tests/space-create-state.spec.ts tests/space-isolation.spec.ts --project=chromium
+        run: |
+          pnpm exec playwright test \
+            tests/space-create-state.spec.ts \
+            tests/space-isolation.spec.ts \
+            tests/space-switcher-parity.spec.ts \
+            tests/space-switcher-clear-button.spec.ts \
+            tests/space-switcher-phantom-addon.spec.ts
+
+      - name: Audit Space-owned reads and React state
+        run: |
+          echo "Space-owned Dexie reads:"
+          rg "db\.(objectTypes|entities|collections|tags|relations|media|spaceSettings|trash)" src || true
+          echo "Potential authoritative React domain state:"
+          rg "useState.*(spaces|objectTypes|createdEntities|objectTypeCollections|trashItems|media)" src/components src/hooks || true
 
       - name: Commit verified dependency lock and formatting
         if: success()
