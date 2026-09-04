@@ -1,0 +1,213 @@
+name: Publish verified Space creation fix
+
+on:
+  push:
+    branches:
+      - fix/create-space-and-switcher-spacing
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: github.event.head_commit.message == 'chore: publish verified Space creation fix'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.20.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Start clean from latest dev
+        shell: bash
+        run: |
+          git fetch origin dev
+          git checkout -B publish-create-space origin/dev
+      - name: Apply bounded Space changes
+        shell: python
+        run: |
+          from pathlib import Path
+
+          controller = Path('src/components/workspace-controller.tsx')
+          text = controller.read_text()
+
+          if 'const createSpace = React.useCallback' not in text:
+              anchor = '  const openInSidePanel = React.useCallback(\n'
+              replacement = '''  const createSpace = React.useCallback((name: string) => {\n    const normalizedName = name.trim();\n    if (!normalizedName) return;\n\n    const id = `space-${crypto.randomUUID()}`;\n    setSpaces((current) => [...current, { id, name: normalizedName, icon: "user" }]);\n    setSpaceId(id);\n  }, []);\n\n  const openInSidePanel = React.useCallback(\n'''
+              if anchor not in text:
+                  raise SystemExit('workspace createSpace insertion anchor not found')
+              text = text.replace(anchor, replacement, 1)
+
+          if '      createSpace,\n      switchSpace: setSpaceId,' not in text:
+              anchor = '      setSpaces,\n      switchSpace: setSpaceId,\n'
+              if anchor not in text:
+                  raise SystemExit('workspace value anchor not found')
+              text = text.replace(anchor, '      setSpaces,\n      createSpace,\n      switchSpace: setSpaceId,\n', 1)
+
+          dependency_anchor = '      spaces,\n      spaceId,\n      mainTabs,\n'
+          if dependency_anchor in text:
+              text = text.replace(
+                  dependency_anchor,
+                  '      spaces,\n      spaceId,\n      createSpace,\n      mainTabs,\n',
+                  1,
+              )
+
+          controller.write_text(text)
+
+          css = Path('src/app/space-switcher.css')
+          css_text = css.read_text()
+
+          row_anchor = ''') [data-space-sort-id] {\n  min-height: 2rem;\n  height: 2rem;\n'''
+          if row_anchor in css_text:
+              css_text = css_text.replace(
+                  row_anchor,
+                  ''') [data-space-sort-id] {\n  min-height: 2rem;\n  height: 2rem;\n  column-gap: 0.5rem;\n''',
+                  1,
+              )
+          elif 'column-gap: 0.5rem;' not in css_text:
+              raise SystemExit('Space row CSS anchor not found')
+
+          create_selector = ''') [data-slot="combobox-separator"] + div > button:first-of-type {\n  height: 2rem;\n  min-height: 2rem;\n'''
+          create_with_gap = ''') [data-slot="combobox-separator"] + div > button:first-of-type {\n  height: 2rem;\n  min-height: 2rem;\n  column-gap: 0.5rem;\n'''
+          if create_selector in css_text:
+              css_text = css_text.replace(create_selector, create_with_gap, 1)
+          elif create_with_gap not in css_text:
+              raise SystemExit('Create-space action CSS anchor not found')
+
+          css.write_text(css_text)
+      - name: Write regression test and evidence manifest
+        shell: bash
+        run: |
+          cat > tests/space-create-and-spacing.spec.ts <<'EOF'
+          import { expect, test } from "@playwright/test";
+
+          const popupSelector =
+            '[data-slot="combobox-content"][aria-label="Change space"], [data-slot="combobox-content"][aria-label="Alterar espaço"]';
+
+          test("Create space adds and selects the new Space", async ({ page }) => {
+            await page.goto("http://localhost:3000");
+            await page.waitForLoadState("networkidle");
+
+            const trigger = page.locator('[data-slot="app-sidebar-space-switcher"] button').first();
+            await trigger.click();
+
+            const popup = page.locator(popupSelector).first();
+            await expect(popup).toBeVisible();
+            await popup.locator('[data-slot="combobox-separator"] + div > button:first-of-type').click();
+
+            const dialog = page.locator('[data-slot="app-sidebar-space-create-dialog"]');
+            await expect(dialog).toBeVisible();
+            await dialog.locator("input").fill("Created Space");
+            await dialog.locator('button[type="submit"]').click();
+
+            await expect(dialog).toBeHidden();
+            await expect(trigger).toContainText("Created Space");
+
+            await trigger.click();
+            const reopenedPopup = page.locator(popupSelector).first();
+            await expect(
+              reopenedPopup.locator('[data-space-sort-id]', { hasText: "Created Space" }),
+            ).toBeVisible();
+          });
+
+          test("Space rows keep an 8px icon-to-text gap", async ({ page }) => {
+            await page.goto("http://localhost:3000");
+            await page.waitForLoadState("networkidle");
+
+            const trigger = page.locator('[data-slot="app-sidebar-space-switcher"] button').first();
+            await trigger.click();
+
+            const row = page.locator(popupSelector).first().locator('[data-space-sort-id]').first();
+            await expect(row).toBeVisible();
+
+            const columnGap = await row.evaluate((element) => getComputedStyle(element).columnGap);
+            expect(columnGap).toBe("8px");
+          });
+
+          test("Create space action keeps an 8px icon-to-text gap", async ({ page }) => {
+            await page.goto("http://localhost:3000");
+            await page.waitForLoadState("networkidle");
+
+            const trigger = page.locator('[data-slot="app-sidebar-space-switcher"] button').first();
+            await trigger.click();
+
+            const createAction = page
+              .locator(popupSelector)
+              .first()
+              .locator('[data-slot="combobox-separator"] + div > button:first-of-type');
+            await expect(createAction).toBeVisible();
+
+            const columnGap = await createAction.evaluate(
+              (element) => getComputedStyle(element).columnGap,
+            );
+            expect(columnGap).toBe("8px");
+          });
+          EOF
+
+          mkdir -p artifacts/reference-evidence/space-switcher
+          cat > artifacts/reference-evidence/space-switcher/create-space-and-spacing-evidence.md <<'EOF'
+          # Create Space and spacing evidence
+
+          User-provided visual references from 2026-09-04 were used for this bounded change.
+
+          - Create Space dialog screenshot SHA-256: `71e756ced592fe9f65f47e3f2ec9922a9521386f5b765803a91e00efb90d8f23`
+          - Current Space switcher screenshot SHA-256: `6c086e4765c0078320bda97ed7eba0f89df2c1f72c05da2e2d9bc80bb896faf5`
+          - Capacities Space switcher reference screenshot SHA-256: `8731d9b20577380004a42117f76e65ca7a5abf7ff7169e1ea511b81845f5a0c8`
+
+          Expected behavior verified by regression tests:
+
+          - Creating a Space adds it to the Context-backed `spaces` state.
+          - The newly created Space becomes the active Space immediately.
+          - Space rows use an 8 px icon-to-text gap.
+          - The Create space action uses an 8 px icon-to-text gap.
+          EOF
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Format bounded changes
+        run: pnpm exec biome format --write src/components/workspace-controller.tsx src/app/space-switcher.css tests/space-create-and-spacing.spec.ts
+      - name: Run Space switcher regressions
+        shell: bash
+        run: |
+          pnpm dev > /tmp/notes-app-next.log 2>&1 &
+          for i in {1..60}; do
+            if curl --fail --silent http://localhost:3000 >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          pnpm exec playwright test \
+            tests/space-create-and-spacing.spec.ts \
+            tests/space-switcher-clear-button.spec.ts \
+            tests/space-switcher-phantom-addon.spec.ts \
+            --reporter=line
+      - name: Run lint
+        run: pnpm lint
+      - name: Verify bounded diff
+        shell: bash
+        run: |
+          git diff --check
+          changed="$(git status --short | awk '{print $2}' | sort)"
+          printf '%s\n' "$changed"
+          printf '%s\n' "$changed" | grep -Fx 'artifacts/reference-evidence/space-switcher/create-space-and-spacing-evidence.md'
+          printf '%s\n' "$changed" | grep -Fx 'src/app/space-switcher.css'
+          printf '%s\n' "$changed" | grep -Fx 'src/components/workspace-controller.tsx'
+          printf '%s\n' "$changed" | grep -Fx 'tests/space-create-and-spacing.spec.ts'
+          test "$(printf '%s\n' "$changed" | sed '/^$/d' | wc -l)" -eq 4
+      - name: Commit and push to dev
+        shell: bash
+        run: |
+          git config user.name 'Ian'
+          git config user.email '52354240+ianmaciel7@users.noreply.github.com'
+          git add \
+            src/components/workspace-controller.tsx \
+            src/app/space-switcher.css \
+            tests/space-create-and-spacing.spec.ts \
+            artifacts/reference-evidence/space-switcher/create-space-and-spacing-evidence.md
+          git commit -m 'fix: create Spaces and align switcher spacing'
+          git push origin HEAD:dev
