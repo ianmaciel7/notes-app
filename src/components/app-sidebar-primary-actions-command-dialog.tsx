@@ -119,11 +119,18 @@ function WorkspaceSidebar() {
     return () => window.removeEventListener("workspace:open-new-palette", openFromWorkspace, true);
   }, []);
 
-  function interceptNewContentTrigger(event: React.SyntheticEvent) {
+  function isNewContentTrigger(event: React.SyntheticEvent) {
     const target = event.target;
-    if (!(target instanceof Element)) return;
-    if (!target.closest("#workspace-new-trigger")) return;
+    return target instanceof Element && target.closest("#workspace-new-trigger") !== null;
+  }
 
+  function blockLegacyPopoverPointerDown(event: React.SyntheticEvent) {
+    if (!isNewContentTrigger(event)) return;
+    event.stopPropagation();
+  }
+
+  function openNewContentDialog(event: React.SyntheticEvent) {
+    if (!isNewContentTrigger(event)) return;
     event.preventDefault();
     event.stopPropagation();
     setNewContentOpen(true);
@@ -133,8 +140,8 @@ function WorkspaceSidebar() {
     <>
       <div
         className="contents"
-        onPointerDownCapture={interceptNewContentTrigger}
-        onClickCapture={interceptNewContentTrigger}
+        onPointerDownCapture={blockLegacyPopoverPointerDown}
+        onClickCapture={openNewContentDialog}
       >
         <BaseWorkspaceSidebar />
       </div>
