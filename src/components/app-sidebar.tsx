@@ -453,7 +453,7 @@ function AppSidebarSpaceSwitcher({
     typeof selectedSpace.icon === "function" ||
     (typeof selectedSpace.icon === "object" && selectedSpace.icon !== null)
       ? selectedSpace.icon
-      : (props: React.ComponentProps<"svg">) => (
+      : (props: Omit<React.ComponentProps<"svg">, "name">) => (
           <AppSidebarSourceIcon
             name={
               (typeof selectedSpace.icon === "string"
@@ -573,7 +573,7 @@ function AppSidebarSpaceSwitcher({
     const Icon =
       typeof space.icon === "function" || (typeof space.icon === "object" && space.icon !== null)
         ? space.icon
-        : (props: React.ComponentProps<"svg">) => (
+        : (props: Omit<React.ComponentProps<"svg">, "name">) => (
             <AppSidebarSourceIcon
               name={
                 (typeof space.icon === "string" ? space.icon : "user") as React.ComponentProps<
