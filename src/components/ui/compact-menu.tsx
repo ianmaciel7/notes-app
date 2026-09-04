@@ -39,7 +39,7 @@ const compactMenuSearchClass =
   "h-6 w-full rounded-[7px] border-0 bg-muted px-[9px] text-sm text-[var(--app-text-secondary)] shadow-none [&>input]:h-full [&>input]:px-0 [&>input]:py-0 [&>input]:text-sm [&>input]:placeholder:text-muted-foreground [&>input]:placeholder:opacity-60"
 
 const compactMenuItemClass =
-  "group/compact-menu-item min-h-0 w-full min-w-0 gap-0 rounded-[7px] px-0 py-0 pr-1 text-sm text-foreground data-highlighted:bg-muted data-highlighted:text-foreground"
+  "group/compact-menu-item min-h-0 w-full min-w-0 gap-0 rounded-[7px] px-0 py-0 pr-1 text-sm text-foreground data-highlighted:bg-muted data-highlighted:text-foreground [&>[data-slot=compact-menu-item-text]]:ml-2"
 
 const sidebarContextMenuContentClass = "w-[269px]"
 
@@ -54,7 +54,7 @@ const workspaceOverflowMenuItemClass =
   "h-8 min-h-8 rounded-[8px] px-1 text-sm leading-normal transition-colors duration-200 ease-out motion-reduce:transition-none"
 
 const compactMenuActionButtonClass = cn(
-  "relative flex h-6 w-full shrink-0 cursor-pointer items-center justify-center gap-x-1.5 truncate rounded-lg border border-border bg-muted px-3 text-sm font-normal text-[var(--app-text-secondary)] hover:border-[var(--app-border-base-strong)] hover:bg-[var(--app-bg-el-hover)] hover:text-foreground active:brightness-[0.97] focus:outline-none disabled:pointer-events-none disabled:opacity-50",
+  "relative flex h-6 w-full shrink-0 cursor-pointer items-center justify-center gap-x-2 truncate rounded-lg border border-border bg-muted px-3 text-sm font-normal text-[var(--app-text-secondary)] hover:border-[var(--app-border-base-strong)] hover:bg-[var(--app-bg-el-hover)] hover:text-foreground active:brightness-[0.97] focus:outline-none disabled:pointer-events-none disabled:opacity-50",
   workspaceSmallActionStateClass,
 )
 

@@ -21,6 +21,16 @@ test("space switcher matches Capacities menu composition and empty state", async
   await expect(selectedSpace.locator(':scope > [data-selected]')).toHaveCSS("display", "none");
   await expect(selectedSpace.locator('svg[data-icon-name="check"]')).toBeVisible();
 
+  const firstSpace = popup.locator('[data-space-sort-id]').first();
+  const iconFrame = firstSpace
+    .locator('[data-slot="compact-menu-icon-frame"][data-variant="bordered"]')
+    .first();
+  const itemText = firstSpace.locator(':scope > [data-slot="compact-menu-item-text"]');
+  const [iconBox, textBox] = await Promise.all([iconFrame.boundingBox(), itemText.boundingBox()]);
+  expect(iconBox).not.toBeNull();
+  expect(textBox).not.toBeNull();
+  expect(Math.round(textBox!.x - (iconBox!.x + iconBox!.width))).toBe(8);
+
   const footer = popup.locator('[data-slot="combobox-separator"] + div').first();
   await expect(footer.locator("button:visible")).toHaveCount(1);
   await expect(footer.locator("button:visible").first()).toHaveCSS("height", "32px");
