@@ -5,9 +5,11 @@ import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 import { cva, type VariantProps } from "class-variance-authority"
 import {
   interactionHintHandle,
-  type HintSide,
   type InteractionHintPayload,
+  type InteractionTooltip,
+  resolveInteractionTooltip,
 } from "@/components/ui/interaction-hint"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
@@ -49,65 +51,61 @@ const buttonVariants = cva(
 
 type ButtonProps = ButtonPrimitive.Props &
   VariantProps<typeof buttonVariants> & {
-    "data-hint"?: "" | "off" | true
-    "data-hint-side"?: HintSide
+    tooltip?: InteractionTooltip
   }
 
-const iconButtonSizes = new Set(["icon", "icon-xs", "icon-sm", "icon-lg"])
+type ExplicitTooltipTriggerProps = {
+  button: React.ReactElement
+  payload: InteractionHintPayload
+  disabled: boolean
+}
 
-function splitAriaShortcuts(value: string | undefined) {
-  return value?.trim().split(/\s+/).filter(Boolean) ?? []
+function ExplicitTooltipTrigger({
+  button,
+  payload,
+  disabled,
+}: ExplicitTooltipTriggerProps) {
+  const isMobile = useIsMobile()
+
+  return (
+    <TooltipPrimitive.Trigger
+      handle={interactionHintHandle}
+      payload={payload}
+      delay={payload.delay}
+      closeDelay={payload.closeDelay}
+      disabled={disabled || (isMobile && !payload.showOnMobile)}
+      render={button}
+      data-interaction-tooltip-trigger=""
+    />
+  )
 }
 
 function Button({
   className,
   variant = "default",
   size = "default",
-  "aria-label": ariaLabel,
-  "aria-description": ariaDescription,
-  "aria-keyshortcuts": ariaKeyShortcuts,
+  tooltip,
+  disabled = false,
   "aria-expanded": ariaExpanded,
-  "data-hint": dataHint,
-  "data-hint-side": dataHintSide = "top",
   ...props
 }: ButtonProps) {
-  const hasAccessibleLabel = typeof ariaLabel === "string" && ariaLabel.trim().length > 0
-  const isIconButton = typeof size === "string" && iconButtonSizes.has(size)
-  const hintRequested = dataHint !== "off" && (dataHint === true || dataHint === "" || isIconButton)
-  const shouldHint = hasAccessibleLabel && hintRequested
-  const hintDisabled = ariaExpanded === true || ariaExpanded === "true"
+  const payload = resolveInteractionTooltip(tooltip)
+  const tooltipDisabled = disabled || ariaExpanded === true || ariaExpanded === "true"
 
   const button = (
     <ButtonPrimitive
       data-slot="button"
-      aria-label={ariaLabel}
-      aria-description={ariaDescription}
-      aria-keyshortcuts={ariaKeyShortcuts}
+      disabled={disabled}
       aria-expanded={ariaExpanded}
-      data-hint={dataHint === "off" ? "off" : shouldHint ? "" : undefined}
-      data-hint-side={shouldHint ? dataHintSide : undefined}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
   )
 
-  if (!shouldHint) return button
-
-  const payload: InteractionHintPayload = {
-    label: ariaLabel as string,
-    description: typeof ariaDescription === "string" ? ariaDescription : undefined,
-    shortcuts: splitAriaShortcuts(ariaKeyShortcuts),
-    side: dataHintSide,
-  }
+  if (!payload) return button
 
   return (
-    <TooltipPrimitive.Trigger
-      handle={interactionHintHandle}
-      payload={payload}
-      disabled={hintDisabled}
-      render={button}
-      data-interaction-hint-trigger=""
-    />
+    <ExplicitTooltipTrigger button={button} payload={payload} disabled={tooltipDisabled} />
   )
 }
 
