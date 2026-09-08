@@ -363,7 +363,7 @@ const STATIC_COMMANDS: readonly StaticCommandDefinition[] = [
     order: 80,
     labelKey: "commands.createTask.label",
     descriptionKey: "commands.createTask.description",
-    shortcuts: ["Alt+Enter"],
+    shortcuts: ["Mod+Shift+T"],
     isAvailable: (runtime) => Boolean(runtime.actions.createTask && runtime.state.canCreateTask),
     execute: (runtime) => runtime.actions.createTask?.(),
   },

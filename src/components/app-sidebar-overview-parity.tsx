@@ -36,7 +36,10 @@ import {
   type AppSidebarOverview as BaseAppSidebarOverview,
 } from "./app-sidebar-overview";
 
-type AppSidebarOverviewProps = React.ComponentProps<typeof BaseAppSidebarOverview>;
+type AppSidebarOverviewProps = NonNullable<React.ComponentProps<typeof BaseAppSidebarOverview>>;
+type AppSidebarSelectionEvent = Parameters<
+  NonNullable<AppSidebarOverviewProps["onActiveIdChange"]>
+>[1];
 type AppSidebarDragState = { kind: "pinned"; id: string } | null;
 
 const DRAG_SCROLL_EDGE_PX = 56;
@@ -178,9 +181,9 @@ function AppSidebarOverview({
   const isControlled = controlledActiveId !== undefined;
   const activeId = isControlled ? controlledActiveId : internalActiveId;
 
-  function setActiveId(id: string | null) {
+  function setActiveId(id: string | null, event?: AppSidebarSelectionEvent) {
     if (!isControlled) setInternalActiveId(id);
-    onActiveIdChange?.(id);
+    onActiveIdChange?.(id, event);
   }
 
   const [pinnedOpen, setPinnedOpen] = React.useState(true);
@@ -305,7 +308,7 @@ function AppSidebarOverview({
                     active={activeId === entity.id}
                     dragging={drag?.kind === "pinned" && drag.id === entity.id}
                     draggable={pinnedSort === "manual"}
-                    onSelect={() => setActiveId(entity.id)}
+                    onSelect={(event) => setActiveId(entity.id, event)}
                     onOpenInSidePanel={() =>
                       onOpenPinnedInSidePanel?.(entity) ?? setActiveId(entity.id)
                     }
@@ -351,16 +354,16 @@ function AppSidebarOverview({
                 collectionsOpen={objectTypeCollectionsOpen[objectType.id] ?? true}
                 active={activeId === objectType.id}
                 activeId={activeId}
-                onSelect={() => setActiveId(objectType.id)}
+                onSelect={(event) => setActiveId(objectType.id, event)}
                 onCollectionsOpenChange={(open) =>
                   setObjectTypeCollectionsOpen((current) => ({
                     ...current,
                     [objectType.id]: open,
                   }))
                 }
-                onCollectionAction={(action, type, collection) => {
-                  if (action === "open") setActiveId(collection.id);
-                  onCollectionAction?.(action, type, collection);
+                onCollectionAction={(action, type, collection, event) => {
+                  if (action === "open") setActiveId(collection.id, event);
+                  onCollectionAction?.(action, type, collection, event);
                 }}
                 onUpdate={onUpdateObjectType}
                 onDelete={onDeleteObjectType}

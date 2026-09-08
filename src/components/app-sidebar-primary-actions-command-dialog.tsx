@@ -352,7 +352,7 @@ function NewContentCommandDialog({
         title: "Alternar modo de foco",
         icon: EyeIcon,
         tone: "violet",
-        shortcuts: ["Ctrl", "M"],
+        shortcuts: ["Ctrl", "Shift", "M"],
         execute: () => {
           if (typeof window !== "undefined") {
             window.dispatchEvent(new CustomEvent("workspace:toggle-focus-mode"));
@@ -390,7 +390,7 @@ function NewContentCommandDialog({
         title: "Abrir busca estendida",
         icon: MagnifyingGlassIcon,
         tone: "sky",
-        shortcuts: ["Ctrl", "P"],
+        shortcuts: ["Ctrl", "Shift", "P"],
         execute: () => {
           onOpenChange(false);
         },
@@ -933,6 +933,7 @@ function WorkspaceNewContentDialogController() {
     function handleGlobalKeyDown(event: KeyboardEvent) {
       if (
         (event.metaKey || event.ctrlKey) &&
+        !event.shiftKey &&
         (event.key === "k" ||
           event.key === "K" ||
           event.key === "p" ||

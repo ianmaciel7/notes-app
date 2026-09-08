@@ -65,10 +65,14 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
+import {
+  recordSidebarNavigationTrace,
+  sidebarNavigationTraceEnabled,
+} from "@/lib/sidebar-navigation-trace";
 import { cn } from "@/lib/utils";
 
 const workspaceRowStateClass =
-  "transition-[background-color,color,filter,opacity] duration-200 ease-out motion-reduce:transition-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground data-[active=true]:brightness-[0.965]";
+  "transition-[background-color,color,filter,opacity] duration-200 ease-out motion-reduce:transition-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:brightness-[0.965]";
 const workspaceRevealActionClass =
   "pointer-events-none invisible opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/interactive:pointer-events-auto group-hover/interactive:visible group-hover/interactive:opacity-100 group-focus-within/interactive:pointer-events-auto group-focus-within/interactive:visible group-focus-within/interactive:opacity-100";
 const workspaceSectionRevealActionClass =
@@ -106,6 +110,127 @@ type AppSidebarTrashItem = {
   trashedAt: string;
   typeLabel: string;
 };
+
+type AppSidebarSelectionEvent = {
+  readonly __sidebarNavigationIntent?: "current" | "new-tab" | "side-panel";
+  readonly ctrlKey?: boolean;
+  readonly metaKey?: boolean;
+  readonly shiftKey?: boolean;
+};
+
+function mergeSelectionModifierEvent(
+  event: AppSidebarSelectionEvent,
+  pressedModifiers?: AppSidebarSelectionEvent | null,
+): AppSidebarSelectionEvent {
+  return {
+    ctrlKey: Boolean(event.ctrlKey || pressedModifiers?.ctrlKey),
+    metaKey: Boolean(event.metaKey || pressedModifiers?.metaKey),
+    shiftKey: Boolean(event.shiftKey || pressedModifiers?.shiftKey),
+  };
+}
+
+function getSelectionModifierEvent(
+  event: React.MouseEvent<HTMLElement>,
+  pressedModifiers?: AppSidebarSelectionEvent | null,
+): AppSidebarSelectionEvent {
+  return mergeSelectionModifierEvent(
+    {
+      ctrlKey: event.ctrlKey || event.getModifierState("Control"),
+      metaKey: event.metaKey || event.getModifierState("Meta"),
+      shiftKey: event.shiftKey || event.getModifierState("Shift"),
+    },
+    pressedModifiers,
+  );
+}
+
+function useAppSidebarPressedModifiers() {
+  const pressedModifiersRef = React.useRef<AppSidebarSelectionEvent>({});
+
+  React.useEffect(() => {
+    function setModifier(event: KeyboardEvent, pressed: boolean) {
+      if (event.key === "Control") {
+        pressedModifiersRef.current = { ...pressedModifiersRef.current, ctrlKey: pressed };
+      }
+      if (event.key === "Meta") {
+        pressedModifiersRef.current = { ...pressedModifiersRef.current, metaKey: pressed };
+      }
+      if (event.key === "Shift") {
+        pressedModifiersRef.current = { ...pressedModifiersRef.current, shiftKey: pressed };
+      }
+    }
+
+    function syncModifierState(event: KeyboardEvent) {
+      pressedModifiersRef.current = {
+        ctrlKey: event.ctrlKey || pressedModifiersRef.current.ctrlKey,
+        metaKey: event.metaKey || pressedModifiersRef.current.metaKey,
+        shiftKey: event.shiftKey || pressedModifiersRef.current.shiftKey,
+      };
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      syncModifierState(event);
+      setModifier(event, true);
+    }
+
+    function handleKeyUp(event: KeyboardEvent) {
+      setModifier(event, false);
+    }
+
+    function clearModifiers() {
+      pressedModifiersRef.current = {};
+    }
+
+    window.addEventListener("keydown", handleKeyDown, true);
+    window.addEventListener("keyup", handleKeyUp, true);
+    window.addEventListener("blur", clearModifiers);
+    document.addEventListener("keydown", handleKeyDown, true);
+    document.addEventListener("keyup", handleKeyUp, true);
+    document.addEventListener("visibilitychange", clearModifiers);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown, true);
+      window.removeEventListener("keyup", handleKeyUp, true);
+      window.removeEventListener("blur", clearModifiers);
+      document.removeEventListener("keydown", handleKeyDown, true);
+      document.removeEventListener("keyup", handleKeyUp, true);
+      document.removeEventListener("visibilitychange", clearModifiers);
+    };
+  }, []);
+
+  return pressedModifiersRef;
+}
+
+function createSyntheticSelectionEvent(
+  modifierEvent: AppSidebarSelectionEvent,
+): AppSidebarSelectionEvent {
+  const explicitIntent: AppSidebarSelectionEvent["__sidebarNavigationIntent"] = modifierEvent.shiftKey
+    ? "side-panel"
+    : modifierEvent.ctrlKey || modifierEvent.metaKey
+      ? "new-tab"
+      : "current";
+
+  const selectionEvent = {
+    __sidebarNavigationIntent: explicitIntent,
+    ctrlKey: Boolean(modifierEvent.ctrlKey),
+    metaKey: Boolean(modifierEvent.metaKey),
+    shiftKey: Boolean(modifierEvent.shiftKey),
+  };
+  logSidebarClick("synthetic-selection-event", selectionEvent);
+  return selectionEvent;
+}
+
+function hasSelectionModifier(event: AppSidebarSelectionEvent) {
+  return Boolean(event.ctrlKey || event.metaKey || event.shiftKey);
+}
+
+function shouldLogSidebarClick() {
+  return sidebarNavigationTraceEnabled();
+}
+
+function logSidebarClick(label: string, details: Record<string, unknown>) {
+  recordSidebarNavigationTrace("sidebar-click", label, details);
+  if (!shouldLogSidebarClick()) return;
+  console.info(`[sidebar-click] ${label}`, details);
+}
 
 type AppSidebarObjectType = {
   id: string;
@@ -361,11 +486,13 @@ function AppSidebarPinnedMenu({
   onUnpin,
   onOpen,
   onOpenInSidePanel,
+  onOpenInNewTab,
 }: {
   entity: AppSidebarPinnedEntity;
   onUnpin: () => void;
   onOpen: () => void;
   onOpenInSidePanel: () => void;
+  onOpenInNewTab: () => void;
 }) {
   const t = useTranslations("workspace");
   return (
@@ -389,7 +516,9 @@ function AppSidebarPinnedMenu({
         <DropdownMenuItem onClick={onOpenInSidePanel}>
           {t("sidebarPinned.openInSidePanel")}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={onOpen}>{t("sidebarPinned.openInNewTab")}</DropdownMenuItem>
+        <DropdownMenuItem onClick={onOpenInNewTab}>
+          {t("sidebarPinned.openInNewTab")}
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onUnpin}>
           <AppSidebarPinOffIcon />
@@ -410,17 +539,52 @@ function AppSidebarPinnedRow({
   onOpenInSidePanel,
   onDragStart,
   onDrop,
+  pressedModifiersRef,
 }: {
   entity: AppSidebarPinnedEntity;
   active: boolean;
   dragging: boolean;
   draggable: boolean;
-  onSelect: () => void;
+  onSelect: (event: AppSidebarSelectionEvent) => void;
   onUnpin: () => void;
   onOpenInSidePanel: () => void;
   onDragStart: () => void;
   onDrop: () => void;
+  pressedModifiersRef?: React.RefObject<AppSidebarSelectionEvent | null>;
 }) {
+  const pendingModifierEventRef = React.useRef<AppSidebarSelectionEvent | null>(null);
+  const skipNextClickRef = React.useRef(false);
+
+  function handleModifiedOpen(event: React.MouseEvent<HTMLButtonElement>) {
+    const modifierEvent = getSelectionModifierEvent(event, pressedModifiersRef?.current);
+    logSidebarClick("pinned-event", {
+      ctrlKey: Boolean(modifierEvent.ctrlKey),
+      eventCtrlKey: event.ctrlKey,
+      eventMetaKey: event.metaKey,
+      eventShiftKey: event.shiftKey,
+      eventType: event.type,
+      label: entity.label,
+      metaKey: Boolean(modifierEvent.metaKey),
+      pressedCtrlKey: Boolean(pressedModifiersRef?.current?.ctrlKey),
+      pressedMetaKey: Boolean(pressedModifiersRef?.current?.metaKey),
+      pressedShiftKey: Boolean(pressedModifiersRef?.current?.shiftKey),
+      shiftKey: Boolean(modifierEvent.shiftKey),
+    });
+    if (!hasSelectionModifier(modifierEvent)) return false;
+    if (event.type === "mousedown" || event.type === "pointerdown") {
+      pendingModifierEventRef.current = modifierEvent;
+      return true;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.type === "contextmenu" || event.type === "auxclick") {
+      pendingModifierEventRef.current = null;
+      skipNextClickRef.current = true;
+    }
+    onSelect(createSyntheticSelectionEvent(modifierEvent));
+    return true;
+  }
+
   return (
     /* biome-ignore lint/a11y/noStaticElementInteractions: native drag events belong on the visual row wrapper */
     <div
@@ -444,7 +608,7 @@ function AppSidebarPinnedRow({
         data-dragging={dragging || undefined}
         className={cn(
           "group/interactive group/pinned-row flex h-[29px] w-full shrink-0 items-center rounded-md py-px pr-1.5 pl-[3px]",
-          "text-left text-sm font-normal text-muted-foreground",
+          "text-left text-sm font-normal text-sidebar-foreground",
           workspaceRowStateClass,
           "data-[dragging=true]:opacity-40",
         )}
@@ -452,7 +616,41 @@ function AppSidebarPinnedRow({
         <button
           type="button"
           className="relative flex min-w-0 flex-1 items-center py-px text-left outline-none"
-          onClick={onSelect}
+          onPointerDownCapture={(event) => {
+            if (!skipNextClickRef.current) handleModifiedOpen(event as React.MouseEvent<HTMLButtonElement>);
+          }}
+          onPointerDown={(event) => {
+            if (!skipNextClickRef.current) handleModifiedOpen(event as React.MouseEvent<HTMLButtonElement>);
+          }}
+          onMouseDownCapture={(event) => {
+            if (!skipNextClickRef.current) handleModifiedOpen(event);
+          }}
+          onMouseDown={(event) => {
+            if (!skipNextClickRef.current) handleModifiedOpen(event);
+          }}
+          onContextMenu={(event) => {
+            handleModifiedOpen(event);
+          }}
+          onAuxClick={(event) => {
+            handleModifiedOpen(event);
+          }}
+          onClick={(event) => {
+            if (skipNextClickRef.current) {
+              skipNextClickRef.current = false;
+              event.preventDefault();
+              event.stopPropagation();
+              return;
+            }
+            const pendingModifierEvent = pendingModifierEventRef.current;
+            pendingModifierEventRef.current = null;
+            if (pendingModifierEvent && hasSelectionModifier(pendingModifierEvent)) {
+              event.preventDefault();
+              event.stopPropagation();
+              onSelect(createSyntheticSelectionEvent(pendingModifierEvent));
+              return;
+            }
+            if (!handleModifiedOpen(event)) onSelect(event);
+          }}
         >
           <span
             data-lifecycle-contract={objectLifecycleContractSlots.ObjectCountBadge}
@@ -477,8 +675,9 @@ function AppSidebarPinnedRow({
           <AppSidebarPinnedMenu
             entity={entity}
             onUnpin={onUnpin}
-            onOpen={onSelect}
+            onOpen={() => onSelect({})}
             onOpenInSidePanel={onOpenInSidePanel}
+            onOpenInNewTab={() => onSelect({ __sidebarNavigationIntent: "new-tab" })}
           />
         </div>
       </div>
@@ -652,18 +851,20 @@ function AppSidebarObjectTypeRow({
   onCreateEntity,
   onUpdate,
   onDelete,
+  pressedModifiersRef,
 }: {
   objectType: AppSidebarObjectType;
   collections: readonly WorkspaceCollectionRecord[];
   collectionsOpen: boolean;
   active: boolean;
   activeId: string | null;
-  onSelect: () => void;
+  onSelect: (event: AppSidebarSelectionEvent) => void;
   onCollectionsOpenChange: (open: boolean) => void;
   onCollectionAction: (
     action: AppSidebarCollectionAction,
     objectType: AppSidebarObjectType,
     collection: WorkspaceCollectionRecord,
+    event?: AppSidebarSelectionEvent,
   ) => void;
   onCreateEntity?: (objectTypeId: string, label: string) => void;
   onUpdate?: (
@@ -676,9 +877,75 @@ function AppSidebarObjectTypeRow({
     },
   ) => void;
   onDelete?: (id: string) => void;
+  pressedModifiersRef?: React.RefObject<AppSidebarSelectionEvent | null>;
 }) {
   const t = useTranslations("workspace.sidebarCollections");
   const hasCollections = collections.length > 0;
+  const pendingModifierEventRef = React.useRef<AppSidebarSelectionEvent | null>(null);
+  const skipNextClickRef = React.useRef(false);
+
+  function handleModifiedSelect(event: React.MouseEvent<HTMLButtonElement>) {
+    const modifierEvent = getSelectionModifierEvent(event, pressedModifiersRef?.current);
+    logSidebarClick("object-type-event", {
+      ctrlKey: Boolean(modifierEvent.ctrlKey),
+      eventCtrlKey: event.ctrlKey,
+      eventMetaKey: event.metaKey,
+      eventShiftKey: event.shiftKey,
+      eventType: event.type,
+      label: objectType.label,
+      metaKey: Boolean(modifierEvent.metaKey),
+      pressedCtrlKey: Boolean(pressedModifiersRef?.current?.ctrlKey),
+      pressedMetaKey: Boolean(pressedModifiersRef?.current?.metaKey),
+      pressedShiftKey: Boolean(pressedModifiersRef?.current?.shiftKey),
+      shiftKey: Boolean(modifierEvent.shiftKey),
+    });
+    if (!hasSelectionModifier(modifierEvent)) return false;
+    if (event.type === "mousedown" || event.type === "pointerdown") {
+      pendingModifierEventRef.current = modifierEvent;
+      return true;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.type === "contextmenu" || event.type === "auxclick") {
+      pendingModifierEventRef.current = null;
+      skipNextClickRef.current = true;
+    }
+    onSelect(createSyntheticSelectionEvent(modifierEvent));
+    return true;
+  }
+
+  function handleModifiedCollectionOpen(
+    event: React.MouseEvent<HTMLButtonElement>,
+    collection: WorkspaceCollectionRecord,
+  ) {
+    const modifierEvent = getSelectionModifierEvent(event, pressedModifiersRef?.current);
+    logSidebarClick("collection-event", {
+      collection: collection.name,
+      ctrlKey: Boolean(modifierEvent.ctrlKey),
+      eventCtrlKey: event.ctrlKey,
+      eventMetaKey: event.metaKey,
+      eventShiftKey: event.shiftKey,
+      eventType: event.type,
+      metaKey: Boolean(modifierEvent.metaKey),
+      pressedCtrlKey: Boolean(pressedModifiersRef?.current?.ctrlKey),
+      pressedMetaKey: Boolean(pressedModifiersRef?.current?.metaKey),
+      pressedShiftKey: Boolean(pressedModifiersRef?.current?.shiftKey),
+      shiftKey: Boolean(modifierEvent.shiftKey),
+    });
+    if (!hasSelectionModifier(modifierEvent)) return false;
+    if (event.type === "mousedown" || event.type === "pointerdown") {
+      pendingModifierEventRef.current = modifierEvent;
+      return true;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.type === "contextmenu" || event.type === "auxclick") {
+      pendingModifierEventRef.current = null;
+      skipNextClickRef.current = true;
+    }
+    onCollectionAction("open", objectType, collection, createSyntheticSelectionEvent(modifierEvent));
+    return true;
+  }
 
   return (
     <div data-slot="app-sidebar-object-type-row-wrapper" className="mx-2">
@@ -687,7 +954,7 @@ function AppSidebarObjectTypeRow({
         data-active={active || undefined}
         className={cn(
           "group/interactive group/object-type-row flex h-[29px] w-full shrink-0 items-center rounded-md py-px pr-1.5 pl-[3px]",
-          "text-left text-sm font-normal text-muted-foreground",
+          "text-left text-sm font-normal text-sidebar-foreground",
           workspaceRowStateClass,
         )}
       >
@@ -726,7 +993,45 @@ function AppSidebarObjectTypeRow({
         <button
           type="button"
           className="relative flex min-w-0 flex-1 items-center py-px text-left outline-none"
-          onClick={onSelect}
+          onPointerDownCapture={(event) => {
+            if (!skipNextClickRef.current) {
+              handleModifiedSelect(event as React.MouseEvent<HTMLButtonElement>);
+            }
+          }}
+          onPointerDown={(event) => {
+            if (!skipNextClickRef.current) {
+              handleModifiedSelect(event as React.MouseEvent<HTMLButtonElement>);
+            }
+          }}
+          onMouseDownCapture={(event) => {
+            if (!skipNextClickRef.current) handleModifiedSelect(event);
+          }}
+          onMouseDown={(event) => {
+            if (!skipNextClickRef.current) handleModifiedSelect(event);
+          }}
+          onContextMenu={(event) => {
+            handleModifiedSelect(event);
+          }}
+          onAuxClick={(event) => {
+            handleModifiedSelect(event);
+          }}
+          onClick={(event) => {
+            if (skipNextClickRef.current) {
+              skipNextClickRef.current = false;
+              event.preventDefault();
+              event.stopPropagation();
+              return;
+            }
+            const pendingModifierEvent = pendingModifierEventRef.current;
+            pendingModifierEventRef.current = null;
+            if (pendingModifierEvent && hasSelectionModifier(pendingModifierEvent)) {
+              event.preventDefault();
+              event.stopPropagation();
+              onSelect(createSyntheticSelectionEvent(pendingModifierEvent));
+              return;
+            }
+            if (!handleModifiedSelect(event)) onSelect(event);
+          }}
         >
           <span className="flex w-12 min-w-0 flex-1 items-center gap-x-1.5 truncate">
             {hasCollections ? (
@@ -793,7 +1098,7 @@ function AppSidebarObjectTypeRow({
                 data-slot="app-sidebar-collection-row"
                 data-active={collectionId === activeId || undefined}
                 className={cn(
-                  "group/collection-row group/interactive flex h-[29px] w-full min-w-0 items-center rounded-md pl-[26px] pr-1 text-sm font-normal text-muted-foreground",
+                  "group/collection-row group/interactive flex h-[29px] w-full min-w-0 items-center rounded-md pl-[26px] pr-1 text-sm font-normal text-sidebar-foreground",
                   workspaceRowStateClass,
                 )}
               >
@@ -801,7 +1106,60 @@ function AppSidebarObjectTypeRow({
                   type="button"
                   draggable={false}
                   className="flex min-w-0 flex-1 items-center text-left"
-                  onClick={() => onCollectionAction("open", objectType, collection)}
+                  onPointerDownCapture={(event) => {
+                    if (!skipNextClickRef.current) {
+                      handleModifiedCollectionOpen(
+                        event as React.MouseEvent<HTMLButtonElement>,
+                        collection,
+                      );
+                    }
+                  }}
+                  onPointerDown={(event) => {
+                    if (!skipNextClickRef.current) {
+                      handleModifiedCollectionOpen(
+                        event as React.MouseEvent<HTMLButtonElement>,
+                        collection,
+                      );
+                    }
+                  }}
+                  onMouseDownCapture={(event) => {
+                    if (!skipNextClickRef.current) {
+                      handleModifiedCollectionOpen(event, collection);
+                    }
+                  }}
+                  onMouseDown={(event) => {
+                    if (!skipNextClickRef.current) handleModifiedCollectionOpen(event, collection);
+                  }}
+                  onContextMenu={(event) => {
+                    handleModifiedCollectionOpen(event, collection);
+                  }}
+                  onAuxClick={(event) => {
+                    handleModifiedCollectionOpen(event, collection);
+                  }}
+                  onClick={(event) => {
+                    if (skipNextClickRef.current) {
+                      skipNextClickRef.current = false;
+                      event.preventDefault();
+                      event.stopPropagation();
+                      return;
+                    }
+                    const pendingModifierEvent = pendingModifierEventRef.current;
+                    pendingModifierEventRef.current = null;
+                    if (pendingModifierEvent && hasSelectionModifier(pendingModifierEvent)) {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      onCollectionAction(
+                        "open",
+                        objectType,
+                        collection,
+                        createSyntheticSelectionEvent(pendingModifierEvent),
+                      );
+                      return;
+                    }
+                    if (!handleModifiedCollectionOpen(event, collection)) {
+                      onCollectionAction("open", objectType, collection, event);
+                    }
+                  }}
                 >
                   <span className="mr-1.5 inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 items-center justify-center">
                     <ObjectIconBadge icon={ObjectCollectionIcon} tone="gray" variant="sidebar" />
@@ -996,7 +1354,7 @@ function AppSidebarAddSection({
 
 const utilityRowClass = cn(
   buttonVariants({ variant: "ghost", size: "default" }),
-  "group/interactive group/utility h-8 w-full justify-start gap-x-1.5 px-2 font-normal text-muted-foreground",
+  "group/interactive group/utility h-8 w-full justify-start gap-x-1.5 px-2 font-normal text-sidebar-foreground",
   workspaceRowStateClass,
   "active:brightness-[0.97]",
 );
@@ -1532,7 +1890,7 @@ function AppSidebarTrashRow({
 
 type AppSidebarOverviewProps = {
   activeId?: string | null;
-  onActiveIdChange?: (id: string | null) => void;
+  onActiveIdChange?: (id: string | null, event?: AppSidebarSelectionEvent) => void;
   pinnedEntities?: AppSidebarPinnedEntity[];
   availablePinnedEntities?: AppSidebarPinnedEntity[];
   objectTypes?: AppSidebarObjectType[];
@@ -1555,6 +1913,7 @@ type AppSidebarOverviewProps = {
     action: AppSidebarCollectionAction,
     objectType: AppSidebarObjectType,
     collection: WorkspaceCollectionRecord,
+    event?: AppSidebarSelectionEvent,
   ) => void;
   onPinnedEntitiesChange?: React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>;
   onOpenPinnedInSidePanel?: (entity: AppSidebarPinnedEntity) => void;
@@ -1689,9 +2048,16 @@ function AppSidebarOverview({
   const isControlled = controlledActiveId !== undefined;
   const activeId = isControlled ? controlledActiveId : internalActiveId;
 
-  function setActiveId(id: string | null) {
+  function setActiveId(id: string | null, event?: AppSidebarSelectionEvent) {
+    logSidebarClick("active-id-change", {
+      ctrlKey: Boolean(event?.ctrlKey),
+      explicitIntent: event?.__sidebarNavigationIntent,
+      id,
+      metaKey: Boolean(event?.metaKey),
+      shiftKey: Boolean(event?.shiftKey),
+    });
     if (!isControlled) setInternalActiveId(id);
-    onActiveIdChange?.(id);
+    onActiveIdChange?.(id, event);
   }
   const [pinnedOpen, setPinnedOpen] = React.useState(true);
   const [objectTypesOpen, setObjectTypesOpen] = React.useState(true);
@@ -1705,6 +2071,7 @@ function AppSidebarOverview({
     AppSidebarCustomSection[]
   >([]);
   const [drag, setDrag] = React.useState<AppSidebarDragState>(null);
+  const pressedModifiersRef = useAppSidebarPressedModifiers();
 
   const pinned = controlledPinned ?? internalPinned;
   const customSections = controlledCustomSections ?? internalCustomSections;
@@ -1787,7 +2154,7 @@ function AppSidebarOverview({
                 active={activeId === entity.id}
                 dragging={drag?.kind === "pinned" && drag.id === entity.id}
                 draggable={pinnedSort === "manual"}
-                onSelect={() => setActiveId(entity.id)}
+                onSelect={(event) => setActiveId(entity.id, event)}
                 onOpenInSidePanel={() =>
                   onOpenPinnedInSidePanel?.(entity) ?? setActiveId(entity.id)
                 }
@@ -1795,6 +2162,7 @@ function AppSidebarOverview({
                   setPinned((current) => current.filter((item) => item.id !== entity.id))
                 }
                 onDragStart={() => setDrag({ kind: "pinned", id: entity.id })}
+                pressedModifiersRef={pressedModifiersRef}
                 onDrop={() => {
                   if (drag?.kind !== "pinned" || pinnedSort !== "manual") return;
                   setPinned((current) => reorderById(current, drag.id, entity.id));
@@ -1844,7 +2212,7 @@ function AppSidebarOverview({
                 collectionsOpen={objectTypeCollectionsOpen[objectType.id] ?? true}
                 active={activeId === objectType.id}
                 activeId={activeId}
-                onSelect={() => setActiveId(objectType.id)}
+                onSelect={(event) => setActiveId(objectType.id, event)}
                 onCreateEntity={onCreateEntity}
                 onCollectionsOpenChange={(open) =>
                   setObjectTypeCollectionsOpen((current) => ({
@@ -1852,14 +2220,15 @@ function AppSidebarOverview({
                     [objectType.id]: open,
                   }))
                 }
-                onCollectionAction={(action, type, collection) => {
+                onCollectionAction={(action, type, collection, event) => {
                   if (action === "open") {
-                    setActiveId(collection.id);
+                    setActiveId(collection.id, event);
                   }
-                  onCollectionAction?.(action, type, collection);
+                  onCollectionAction?.(action, type, collection, event);
                 }}
                 onUpdate={onUpdateObjectType}
                 onDelete={onDeleteObjectType}
+                pressedModifiersRef={pressedModifiersRef}
               />
             ))}
           </AppSidebarSection>
@@ -1934,3 +2303,4 @@ export {
   AppSidebarTypeLabel,
   AppSidebarUtilityRow,
 };
+

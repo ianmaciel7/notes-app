@@ -10,6 +10,7 @@ import {
   AppHeaderPushPinFillIcon,
   AppHeaderPushPinIcon,
 } from "@/components/app-header-icons";
+import { objectIconToneBadgeClass, objectTypeDefinitions } from "@/components/object-icons";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
@@ -188,11 +189,15 @@ const tabIconBadgeVariants = cva(
 function AppHeaderTabIcon({ tab, neutral }: { tab: AppHeaderTab; neutral?: boolean }) {
   const Icon = tab.icon;
   if (!Icon) return null;
+  const objectIconDefinition = objectTypeDefinitions.find((definition) => definition.icon === Icon);
+  const iconClassName =
+    tab.iconClassName ??
+    (objectIconDefinition ? objectIconToneBadgeClass[objectIconDefinition.tone] : undefined);
 
   return (
     <span
       data-slot="app-header-tab-icon"
-      className={cn(tabIconBadgeVariants({ neutral: Boolean(neutral) }), tab.iconClassName)}
+      className={cn(tabIconBadgeVariants({ neutral: Boolean(neutral) }), iconClassName)}
     >
       <span
         className="inline-flex min-h-[1.3em] min-w-[1.3em] items-center justify-center rounded-[0.33em] p-[0.1em] text-[0.94em]"
@@ -205,7 +210,7 @@ function AppHeaderTabIcon({ tab, neutral }: { tab: AppHeaderTab; neutral?: boole
 }
 
 const tabActionVariants = cva(
-  "relative h-7 w-[18px] shrink-0 rounded-[8px] border border-transparent bg-transparent p-0 text-xs text-[var(--app-tab-text-subtle)] transition-[background-color,color,opacity] duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)] active:z-20 active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
+  "relative h-7 w-[18px] shrink-0 rounded-[8px] border border-transparent bg-transparent p-0 text-xs text-[var(--app-tab-text-subtle)] transition-[background-color,color,opacity] duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--app-tab-bg-front-hover)] hover:text-primary active:z-20 active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
 );
 
 function AppHeaderTabAction({
@@ -308,7 +313,7 @@ const tabButtonVariants = cva(
         false: "rounded-lg",
       },
       neutral: {
-        true: "border-transparent bg-transparent text-[var(--app-tab-text-primary)] font-normal",
+        true: "border-transparent bg-transparent text-primary font-normal",
         false: "border-[0.5px]",
       },
       active: {
@@ -330,13 +335,13 @@ const tabButtonVariants = cva(
         neutral: false,
         active: true,
         className:
-          "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)] font-medium text-[var(--app-tab-text-primary)]",
+          "border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-base)] font-medium text-primary",
       },
       {
         neutral: false,
         active: false,
         className:
-          "border-transparent text-[var(--app-tab-text-subtle)] hover:bg-[var(--app-tab-bg-back-hover)] hover:text-[var(--app-tab-text-secondary)]",
+          "border-transparent text-[var(--app-tab-text-subtle)] hover:bg-[var(--app-tab-bg-back-hover)] hover:text-sidebar-foreground",
       },
     ],
     defaultVariants: {
@@ -820,7 +825,7 @@ function HeaderControlButton({
       className={cn(
         "relative shrink-0 rounded-lg border border-transparent bg-transparent",
         "text-sm text-[var(--app-tab-text-secondary)] transition-[opacity] duration-200 ease-out",
-        "hover:bg-[var(--app-tab-bg-front-hover)] hover:text-[var(--app-tab-text-primary)]",
+        "hover:bg-[var(--app-tab-bg-front-hover)] hover:text-primary",
         "active:z-20 active:translate-y-0 active:brightness-[0.97] focus-visible:border-transparent focus-visible:ring-0",
         className,
       )}

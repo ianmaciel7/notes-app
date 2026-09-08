@@ -15,7 +15,9 @@ import {
   defaultSpecialItems,
   type SidePanelSpecialEntryId,
 } from "@/components/app-side-panel-header";
-import { ObjectPageIcon } from "@/components/object-icons";
+import { useFocusMode } from "@/components/focus-mode-provider";
+import { ObjectPageIcon, objectIconToneBadgeClass } from "@/components/object-icons";
+import { useTheme } from "@/components/theme-provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,7 +42,13 @@ import { PERSONAL_SPACE_ID } from "@/lib/spaces/space-types";
 export type WorkspaceContextValue = Record<string, any>;
 
 const initialMainTabs = [
-  { id: "page-1", label: "Untitled Page", icon: ObjectPageIcon, draggable: true },
+  {
+    id: "page",
+    label: "Pages",
+    icon: ObjectPageIcon,
+    iconClassName: objectIconToneBadgeClass.blue,
+    draggable: true,
+  },
 ];
 const initialSideTabs = [
   { id: "side-1", label: "Explore", icon: AppHeaderCompassIcon, draggable: true },
@@ -56,11 +64,11 @@ const defaultWorkspaceContext: WorkspaceContextValue = {
   switchSpace: () => {},
   activeAction: undefined,
   setActiveAction: () => {},
-  activeEntityId: "overview",
+  activeEntityId: "page",
   setActiveEntityId: () => {},
   mainTabs: initialMainTabs,
   setMainTabs: () => {},
-  mainValue: "page-1",
+  mainValue: "page",
   setMainValue: () => {},
   sideTabs: initialSideTabs,
   setSideTabs: () => {},
@@ -99,6 +107,9 @@ const defaultWorkspaceContext: WorkspaceContextValue = {
 const WorkspaceContext = React.createContext<WorkspaceContextValue>(defaultWorkspaceContext);
 
 export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
+  const appShell = React.useContext(AppShellContext);
+  const focusMode = useFocusMode();
+  const { toggleTheme } = useTheme();
   const {
     repository,
     ready,
@@ -115,11 +126,11 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const spaceId = persistedSpaceId ?? PERSONAL_SPACE_ID;
 
   const [mainTabs, setMainTabs] = React.useState<AppHeaderTab[]>(initialMainTabs);
-  const [mainValue, setMainValue] = React.useState("page-1");
+  const [mainValue, setMainValue] = React.useState("page");
   const [sideTabs, setSideTabs] = React.useState<AppHeaderTab[]>(initialSideTabs);
   const [sideValue, setSideValue] = React.useState("side-1");
   const [activeAction, setActiveAction] = React.useState<string | undefined>();
-  const [activeEntityId, setActiveEntityId] = React.useState<string | null>("overview");
+  const [activeEntityId, setActiveEntityId] = React.useState<string | null>("page");
   // biome-ignore lint/suspicious/noExplicitAny: legacy sidebar item type is intentionally preserved
   const [pinnedEntities, setPinnedEntities] = React.useState<any[]>([]);
   // biome-ignore lint/suspicious/noExplicitAny: legacy custom section shape is owned by AppSidebarOverview
@@ -140,11 +151,11 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   const resetSpaceUi = React.useCallback(() => {
     setActiveAction(undefined);
-    setActiveEntityId("overview");
+    setActiveEntityId("page");
     setPinnedEntities([]);
     setCustomSections([]);
     setMainTabs(initialMainTabs);
-    setMainValue("page-1");
+    setMainValue("page");
     setSideTabs(initialSideTabs);
     setSideValue("side-1");
   }, []);
@@ -277,6 +288,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
             id: entity.id,
             label: entity.title,
             icon: objectType.icon,
+            iconClassName: objectIconToneBadgeClass[objectType.tone],
             draggable: true,
           };
           setMainTabs((current) =>
@@ -357,6 +369,164 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     },
     [],
   );
+
+  React.useEffect(() => {
+    function targetIsEditable(target: EventTarget | null) {
+      if (!(target instanceof HTMLElement)) return false;
+      return (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable
+      );
+    }
+
+    function openCommandPalette(openInNewTab = false) {
+      window.dispatchEvent(
+        new CustomEvent("workspace:open-command-palette", {
+          detail: { openInNewTab },
+        }),
+      );
+    }
+
+    function closeCurrentTab() {
+      if (mainTabs.length <= 1) return;
+      const index = mainTabs.findIndex((tab) => tab.id === mainValue);
+      const nextTabs = mainTabs.filter((tab) => tab.id !== mainValue);
+      const fallback = nextTabs[index] ?? nextTabs[index - 1] ?? nextTabs[0];
+      setMainTabs(nextTabs);
+      if (fallback) setMainValue(fallback.id);
+    }
+
+    function selectRelativeTab(direction: 1 | -1) {
+      if (mainTabs.length < 2) return;
+      const index = Math.max(
+        0,
+        mainTabs.findIndex((tab) => tab.id === mainValue),
+      );
+      const nextIndex = (index + direction + mainTabs.length) % mainTabs.length;
+      setMainValue(mainTabs[nextIndex]?.id ?? mainValue);
+    }
+
+    function claimShortcut(event: KeyboardEvent) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+
+    function handleGlobalKeyDown(event: KeyboardEvent) {
+      const key = event.key.toLowerCase();
+      const mod = event.metaKey || event.ctrlKey;
+      const editable = targetIsEditable(event.target);
+
+      if (event.isComposing) return;
+
+      if (mod && event.shiftKey && key === "t" && !editable) {
+        claimShortcut(event);
+        void createWorkspaceEntity("task", "Task");
+        return;
+      }
+
+      if (mod && event.shiftKey && key === "p" && !editable) {
+        claimShortcut(event);
+        openCommandPalette(false);
+        return;
+      }
+
+      if (mod && event.shiftKey && key === "b" && !editable) {
+        claimShortcut(event);
+        setShortcutBrowserOpen((open: boolean) => !open);
+        return;
+      }
+
+      if (mod && key === "," && !editable) {
+        claimShortcut(event);
+        showMessage("Settings");
+        return;
+      }
+
+      if (mod && key === "w" && !editable) {
+        claimShortcut(event);
+        closeCurrentTab();
+        return;
+      }
+
+      if (mod && event.altKey && key === "h" && !editable) {
+        claimShortcut(event);
+        setActiveAction("calendar");
+        setActiveEntityId(null);
+        setMainValue("primary-action:calendar");
+        return;
+      }
+
+      if (mod && key === "j" && !editable) {
+        claimShortcut(event);
+        setActiveAction("explore");
+        setActiveEntityId(null);
+        setMainValue("primary-action:explore");
+        setSideValue("explore");
+        return;
+      }
+
+      if (mod && event.shiftKey && key === "l" && !editable) {
+        claimShortcut(event);
+        toggleTheme();
+        return;
+      }
+
+      if (mod && event.shiftKey && key === "m" && !editable) {
+        claimShortcut(event);
+        focusMode?.toggle();
+        return;
+      }
+
+      if (mod && event.shiftKey && event.key === "ArrowLeft" && !editable) {
+        claimShortcut(event);
+        appShell?.toggleLeft();
+        return;
+      }
+
+      if (mod && event.shiftKey && event.key === "ArrowRight" && !editable) {
+        claimShortcut(event);
+        appShell?.toggleRight();
+        return;
+      }
+
+      if (mod && event.altKey && event.key === "ArrowRight" && !editable) {
+        claimShortcut(event);
+        appShell?.toggleRight();
+        return;
+      }
+
+      if (mod && (event.key === "ArrowLeft" || event.key === "[") && !editable) {
+        claimShortcut(event);
+        window.history.back();
+        return;
+      }
+
+      if (mod && (event.key === "ArrowRight" || event.key === "]") && !editable) {
+        claimShortcut(event);
+        window.history.forward();
+        return;
+      }
+
+      if (mod && key === "tab" && !editable) {
+        claimShortcut(event);
+        selectRelativeTab(event.shiftKey ? -1 : 1);
+      }
+    }
+
+    window.addEventListener("keydown", handleGlobalKeyDown, true);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown, true);
+  }, [
+    appShell,
+    createWorkspaceEntity,
+    focusMode,
+    mainTabs,
+    mainValue,
+    setShortcutBrowserOpen,
+    showMessage,
+    toggleTheme,
+  ]);
 
   const value = React.useMemo<WorkspaceContextValue>(
     () => ({
@@ -467,7 +637,7 @@ export function WorkspaceMainHeader() {
   const toggleRight = appShell?.toggleRight;
   const rightPanelTriggerRef = appShell?.rightPanelTriggerRef;
   const tabs = mainTabs && mainTabs.length > 0 ? mainTabs : initialMainTabs;
-  const value = mainValue || tabs[0]?.id || "page-1";
+  const value = mainValue || tabs[0]?.id || "page";
 
   function openSpecialEntry(entryId: SidePanelSpecialEntryId) {
     const item = defaultSpecialItems.find((candidate) => candidate.id === entryId);

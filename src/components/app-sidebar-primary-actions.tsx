@@ -52,6 +52,10 @@ import {
 } from "@/lib/space-command-registry";
 import { createCollectionId, type WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
 import { formatShortcutAriaChord, type ShortcutPlatform } from "@/lib/space-shortcuts";
+import {
+  recordSidebarNavigationTrace,
+  sidebarNavigationTraceEnabled,
+} from "@/lib/sidebar-navigation-trace";
 
 type AppSidebarPrimaryActionId = "new" | "search" | "explore" | "calendar" | "tasks";
 
@@ -82,6 +86,97 @@ type NewContentDialogConfig = {
   linkPlaceholder?: string;
   title: string;
 };
+
+type SidebarNavigationIntent = "current" | "new-tab" | "side-panel";
+
+type SidebarModifierEvent = {
+  readonly __sidebarNavigationIntent?: SidebarNavigationIntent;
+  readonly ctrlKey?: boolean;
+  readonly metaKey?: boolean;
+  readonly shiftKey?: boolean;
+};
+
+type SidebarMainTab = {
+  readonly id: string;
+  readonly label: string;
+  readonly draggable?: boolean;
+  readonly [key: string]: unknown;
+};
+
+type SidebarMainTabUpdateInput = {
+  readonly currentTabs: readonly SidebarMainTab[];
+  readonly intent: Exclude<SidebarNavigationIntent, "side-panel">;
+  readonly mainValue: string;
+  readonly newTabId?: string;
+  readonly nextTab: SidebarMainTab;
+};
+
+function shouldLogSidebarNavigation() {
+  return sidebarNavigationTraceEnabled();
+}
+
+function logSidebarNavigation(label: string, details: Record<string, unknown>) {
+  recordSidebarNavigationTrace("sidebar-navigation", label, details);
+  if (!shouldLogSidebarNavigation()) return;
+  console.info(`[sidebar-navigation] ${label}`, details);
+}
+
+function getObjectIconToneClass(tone: unknown) {
+  return typeof tone === "string" && tone in objectIconToneBadgeClass
+    ? objectIconToneBadgeClass[tone as keyof typeof objectIconToneBadgeClass]
+    : undefined;
+}
+
+function getSidebarNavigationIntent(event?: SidebarModifierEvent): SidebarNavigationIntent {
+  if (event?.__sidebarNavigationIntent) return event.__sidebarNavigationIntent;
+  if (event?.shiftKey) return "side-panel";
+  if (event?.ctrlKey || event?.metaKey) return "new-tab";
+  return "current";
+}
+
+function createSidebarMainTabUpdate({
+  currentTabs,
+  intent,
+  mainValue,
+  newTabId,
+  nextTab,
+}: SidebarMainTabUpdateInput) {
+  const tab = { ...nextTab, draggable: true };
+
+  if (intent === "new-tab") {
+    const tabId = newTabId ?? `${tab.id}:${Date.now()}`;
+    logSidebarNavigation("create-new-tab", {
+      baseTabId: tab.id,
+      mainValue,
+      newTabId: tabId,
+      tabCountBefore: currentTabs.length,
+    });
+    return {
+      mainValue: tabId,
+      tabs: [...currentTabs, { ...tab, id: tabId }],
+    };
+  }
+
+  if (currentTabs.some((item) => item.id === tab.id)) {
+    return {
+      mainValue: tab.id,
+      tabs: currentTabs.map((item) => (item.id === tab.id ? { ...item, ...tab } : item)),
+    };
+  }
+
+  const activeIndex = currentTabs.findIndex((item) => item.id === mainValue);
+  if (activeIndex >= 0) {
+    return {
+      mainValue: tab.id,
+      tabs: currentTabs.map((item, index) => (index === activeIndex ? tab : item)),
+    };
+  }
+
+  return {
+    mainValue: tab.id,
+    tabs: currentTabs.length > 0 ? [tab, ...currentTabs.slice(1)] : [tab],
+  };
+}
 
 function NewContentUploadFileIcon(props: React.ComponentProps<"svg">) {
   return (
@@ -401,7 +496,9 @@ function createNewContentMenuItems(
       objectTypeId: item.id,
       hasChevron: true,
       label: item.singularLabel ?? item.label,
-      searchLabels: [item.label, item.singularLabel, item.id].filter(Boolean),
+      searchLabels: [item.label, item.singularLabel, item.id].filter(
+        (value): value is string => Boolean(value),
+      ),
       sourceIndex,
     }))
     .sort((a, b) => {
@@ -986,6 +1083,7 @@ function WorkspaceSidebar() {
     setActiveAction,
     activeEntityId,
     setActiveEntityId,
+    mainValue,
     setMainTabs,
     setMainValue,
     selectEntity,
@@ -1028,32 +1126,109 @@ function WorkspaceSidebar() {
     [hiddenCollectionIds, objectTypeCollections],
   );
 
+  function openSidebarSelection(id: string, event?: SidebarModifierEvent) {
+    setActiveAction(undefined);
+    setActiveEntityId(id);
+
+      function navigateMainTab(tab: any) {
+        const nextTab = { ...tab, draggable: true };
+        const intent = getSidebarNavigationIntent(event);
+        logSidebarNavigation("navigate-main-tab", {
+          ctrlKey: Boolean(event?.ctrlKey),
+          explicitIntent: event?.__sidebarNavigationIntent,
+          id: nextTab.id,
+          intent,
+          label: nextTab.label,
+          metaKey: Boolean(event?.metaKey),
+          shiftKey: Boolean(event?.shiftKey),
+        });
+        if (intent === "side-panel") {
+          openInSidePanel(nextTab);
+          return;
+      }
+
+      const forceNewTabId = intent === "new-tab" ? `${nextTab.id}:${Date.now()}` : undefined;
+      setMainTabs((current: any[]) => {
+        const result = createSidebarMainTabUpdate({
+          currentTabs: current,
+          intent,
+          mainValue,
+          newTabId: forceNewTabId,
+          nextTab,
+        });
+        logSidebarNavigation("tabs-after-update", {
+          activeTabId: result.mainValue,
+          tabCountAfter: result.tabs.length,
+          tabIds: result.tabs.map((item) => item.id),
+        });
+        return result.tabs;
+      });
+      setMainValue(forceNewTabId ?? nextTab.id);
+    }
+
+    const objectType = objectTypes.find((item: AppSidebarObjectType) => item.id === id);
+    if (objectType) {
+      navigateMainTab({
+        id,
+        label: objectType.label,
+        icon: objectType.icon,
+        iconClassName: getObjectIconToneClass(objectType.tone),
+      });
+      return;
+    }
+
+    const entity = createdEntities.find((item: any) => item.id === id);
+    if (entity) {
+      const entityType = objectTypes.find(
+        (item: AppSidebarObjectType) => item.id === entity.objectTypeId,
+      );
+      navigateMainTab({
+        id,
+        label: entity.title,
+        icon: entityType?.icon,
+        iconClassName: getObjectIconToneClass(entityType?.tone),
+      });
+      return;
+    }
+
+    const pinnedEntity =
+      pinnedEntities.find((item: any) => item.id === id) ??
+      availablePinnedEntities.find((item: any) => item.id === id);
+    if (pinnedEntity) {
+      navigateMainTab({
+        id,
+        label: pinnedEntity.label,
+        icon: pinnedEntity.icon,
+        iconClassName: getObjectIconToneClass(pinnedEntity.tone),
+      });
+      return;
+    }
+
+    const collection = visibleObjectTypeCollections[id];
+    if (collection) {
+      const tabId = `object-type-item:collection:${id}`;
+      navigateMainTab({
+        id: tabId,
+        label: collection.name,
+        icon: ObjectCollectionIcon,
+        iconClassName: objectIconToneBadgeClass.gray,
+      });
+      return;
+    }
+
+    selectEntity(id);
+  }
+
   function handleCollectionAction(
     action: AppSidebarCollectionAction,
     objectType: AppSidebarObjectType,
     collection: WorkspaceCollectionRecord,
+    event?: SidebarModifierEvent,
   ) {
     const collectionId = collection.id;
 
     if (action === "open") {
-      const tabId = `object-type-item:collection:${collectionId}`;
-      setMainTabs((current: any[]) =>
-        current.some((item: any) => item.id === tabId)
-          ? current
-          : [
-              ...current,
-              {
-                id: tabId,
-                label: collection.name,
-                icon: ObjectCollectionIcon,
-                iconClassName: objectIconToneBadgeClass.gray,
-                draggable: true,
-              },
-            ],
-      );
-      setActiveAction(undefined);
-      setMainValue(tabId);
-      setActiveEntityId(tabId);
+      openSidebarSelection(collectionId, event);
       return;
     }
 
@@ -1213,10 +1388,17 @@ function WorkspaceSidebar() {
 
         <AppSidebarOverview
           activeId={activeEntityId}
-          onActiveIdChange={(id) => {
+          onActiveIdChange={(id, event) => {
             if (id !== null) {
+              logSidebarNavigation("active-id-change-received", {
+                ctrlKey: Boolean(event?.ctrlKey),
+                explicitIntent: event?.__sidebarNavigationIntent,
+                id,
+                metaKey: Boolean(event?.metaKey),
+                shiftKey: Boolean(event?.shiftKey),
+              });
               setSideSearchOpen(false);
-              selectEntity(id);
+              openSidebarSelection(id, event);
             }
           }}
           pinnedEntities={pinnedEntities}
@@ -1260,7 +1442,10 @@ export {
   type AppSidebarPrimaryActionsProps,
   type AppSidebarPrimaryNavigationAction,
   type AppSidebarShortcut,
+  createSidebarMainTabUpdate,
   createNewContentMenuItems,
   defaultActions,
+  getSidebarNavigationIntent,
+  logSidebarNavigation,
   WorkspaceSidebar,
 };

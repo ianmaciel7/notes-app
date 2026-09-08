@@ -1,6 +1,10 @@
 import { expect, it } from "vitest";
 
-import { createNewContentMenuItems } from "@/components/app-sidebar-primary-actions";
+import {
+  createNewContentMenuItems,
+  createSidebarMainTabUpdate,
+  getSidebarNavigationIntent,
+} from "@/components/app-sidebar-primary-actions";
 import { shouldOpenNewContentCommandDialogForEvent } from "@/components/app-sidebar-primary-actions-command-dialog";
 import { ObjectPageIcon } from "@/components/object-icons";
 
@@ -11,7 +15,16 @@ it("keeps the compact new-object menu separate from the search command dialog", 
 
 it("offers to create a page from unmatched new-object menu text", () => {
   const items = createNewContentMenuItems(
-    [{ id: "page", label: "Pages", singularLabel: "Page", icon: ObjectPageIcon, tone: "blue" }],
+    [
+      {
+        id: "page",
+        label: "Pages",
+        singularLabel: "Page",
+        icon: ObjectPageIcon,
+        tone: "blue",
+        count: 0,
+      },
+    ],
     "llklk",
   );
 
@@ -29,7 +42,16 @@ it("offers to create a page from unmatched new-object menu text", () => {
 
 it("marks matching object type rows as direct menu actions with chevrons", () => {
   const items = createNewContentMenuItems(
-    [{ id: "page", label: "Pages", singularLabel: "Page", icon: ObjectPageIcon, tone: "blue" }],
+    [
+      {
+        id: "page",
+        label: "Pages",
+        singularLabel: "Page",
+        icon: ObjectPageIcon,
+        tone: "blue",
+        count: 0,
+      },
+    ],
     "pag",
   );
 
@@ -45,7 +67,16 @@ it("marks matching object type rows as direct menu actions with chevrons", () =>
 
 it("matches content type labels with accent-agnostic query normalization", () => {
   const items = createNewContentMenuItems(
-    [{ id: "note", label: "Anotações", singularLabel: "Nota", icon: ObjectPageIcon, tone: "blue" }],
+    [
+      {
+        id: "note",
+        label: "Anotações",
+        singularLabel: "Nota",
+        icon: ObjectPageIcon,
+        tone: "blue",
+        count: 0,
+      },
+    ],
     "anotacoes",
   );
 
@@ -60,7 +91,16 @@ it("matches content type labels with accent-agnostic query normalization", () =>
 
 it("keeps create fallback for unmatched query while preserving singular labels", () => {
   const items = createNewContentMenuItems(
-    [{ id: "page", label: "Páginas", singularLabel: "Página", icon: ObjectPageIcon, tone: "blue" }],
+    [
+      {
+        id: "page",
+        label: "Páginas",
+        singularLabel: "Página",
+        icon: ObjectPageIcon,
+        tone: "blue",
+        count: 0,
+      },
+    ],
     "novo texto",
   );
 
@@ -73,5 +113,95 @@ it("keeps create fallback for unmatched query while preserving singular labels",
       badgeLabel: "Página",
       isCreateFallback: true,
     },
+  ]);
+});
+
+it("routes sidebar modifier clicks like Capacities", () => {
+  expect(getSidebarNavigationIntent()).toBe("current");
+  expect(getSidebarNavigationIntent({ ctrlKey: true })).toBe("new-tab");
+  expect(getSidebarNavigationIntent({ metaKey: true })).toBe("new-tab");
+  expect(getSidebarNavigationIntent({ shiftKey: true })).toBe("side-panel");
+  expect(getSidebarNavigationIntent({ ctrlKey: true, shiftKey: true })).toBe("side-panel");
+  expect(
+    getSidebarNavigationIntent({ __sidebarNavigationIntent: "new-tab", ctrlKey: false }),
+  ).toBe("new-tab");
+});
+
+it("opens a ctrl-clicked sidebar item in a new tab without replacing the current tab", () => {
+  const currentTabs = [
+    { id: "page", label: "Pages", draggable: true },
+    { id: "image", label: "Images", draggable: true },
+  ];
+
+  const result = createSidebarMainTabUpdate({
+    currentTabs,
+    mainValue: "page",
+    intent: "new-tab",
+    nextTab: { id: "pdf", label: "PDFs" },
+    newTabId: "pdf:fixed",
+  });
+
+  expect(result.mainValue).toBe("pdf:fixed");
+  expect(result.tabs).toEqual([
+    { id: "page", label: "Pages", draggable: true },
+    { id: "image", label: "Images", draggable: true },
+    { id: "pdf:fixed", label: "PDFs", draggable: true },
+  ]);
+});
+
+it("opens repeated ctrl-clicks on the same pinned item as separate tab instances", () => {
+  const firstOpen = createSidebarMainTabUpdate({
+    currentTabs: [{ id: "page", label: "Pages", draggable: true }],
+    mainValue: "page",
+    intent: "new-tab",
+    nextTab: { id: "entity-zzz", label: "Untitled zzz" },
+    newTabId: "entity-zzz:one",
+  });
+  const secondOpen = createSidebarMainTabUpdate({
+    currentTabs: firstOpen.tabs,
+    mainValue: firstOpen.mainValue,
+    intent: "new-tab",
+    nextTab: { id: "entity-zzz", label: "Untitled zzz" },
+    newTabId: "entity-zzz:two",
+  });
+
+  expect(secondOpen.mainValue).toBe("entity-zzz:two");
+  expect(secondOpen.tabs.map((tab) => tab.id)).toEqual([
+    "page",
+    "entity-zzz:one",
+    "entity-zzz:two",
+  ]);
+});
+
+it("preserves a pinned entity tab when opening its base id normally after ctrl-click", () => {
+  const result = createSidebarMainTabUpdate({
+    currentTabs: [
+      { id: "page", label: "Pages", draggable: true },
+      { id: "entity-zzz:one", label: "Untitled zzz", draggable: true },
+    ],
+    mainValue: "entity-zzz:one",
+    intent: "current",
+    nextTab: { id: "entity-zzz", label: "Untitled zzz" },
+  });
+
+  expect(result.mainValue).toBe("entity-zzz");
+  expect(result.tabs.map((tab) => tab.id)).toEqual(["page", "entity-zzz"]);
+});
+
+it("replaces the active sidebar tab on a normal click", () => {
+  const result = createSidebarMainTabUpdate({
+    currentTabs: [
+      { id: "page", label: "Pages", draggable: true },
+      { id: "image", label: "Images", draggable: true },
+    ],
+    mainValue: "page",
+    intent: "current",
+    nextTab: { id: "pdf", label: "PDFs" },
+  });
+
+  expect(result.mainValue).toBe("pdf");
+  expect(result.tabs).toEqual([
+    { id: "pdf", label: "PDFs", draggable: true },
+    { id: "image", label: "Images", draggable: true },
   ]);
 });
