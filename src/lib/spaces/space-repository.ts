@@ -30,6 +30,7 @@ import {
 } from "@/lib/spaces/space-types";
 
 export const PINNED_ENTITY_IDS_SETTING_KEY = "sidebar.pinnedEntityIds";
+const TEXT_QUOTE_CONTEXT_LENGTH = 48;
 
 function stripSpaceId(record: SpaceObjectTypeRecord): WorkspaceStructure {
   const { spaceId: _spaceId, ...structure } = record;
@@ -81,6 +82,22 @@ function createStudyGoalRecord(base: SpaceEntityRecord): SpaceEntityRecord & Stu
     dailyNewCardsQuota: 0,
     expectedDailyReviews: 0,
     targetFileIds: [],
+  };
+}
+
+function synthesizeQuoteAnchor(sourceText: string, exactQuote: string) {
+  const exactText = exactQuote.trim();
+  if (!exactText) throw new Error("Exact quote is required.");
+
+  const startOffset = sourceText.indexOf(exactText);
+  if (startOffset === -1) throw new Error("Exact quote was not found in source text.");
+
+  const endOffset = startOffset + exactText.length;
+  return {
+    exactText,
+    prefix: sourceText.slice(Math.max(0, startOffset - TEXT_QUOTE_CONTEXT_LENGTH), startOffset),
+    suffix: sourceText.slice(endOffset, Math.min(sourceText.length, endOffset + TEXT_QUOTE_CONTEXT_LENGTH)),
+    location: { startOffset, endOffset },
   };
 }
 
@@ -433,6 +450,67 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     return record;
   }
 
+  async function createGroundedFlashcardFromQuote(
+    spaceId: string,
+    input: {
+      objectTypeId: string;
+      fileId: string;
+      sourceText: string;
+      exactQuote: string;
+      front: string;
+      back: string;
+      title?: string;
+      color?: HighlightEntity["color"];
+      location?: Omit<HighlightEntity["location"], "startOffset" | "endOffset">;
+      cardType?: "basic" | "cloze" | "reversed";
+      clozeContent?: string;
+      aiGenerated?: boolean;
+      aiPromptContext?: string;
+      referenceDate?: Date;
+    },
+  ) {
+    const anchor = synthesizeQuoteAnchor(input.sourceText, input.exactQuote);
+    const title = input.title?.trim() || input.front.trim() || anchor.exactText.slice(0, 80);
+    const location = {
+      ...input.location,
+      ...anchor.location,
+    };
+
+    const highlight = await createHighlightEntity(spaceId, {
+      objectTypeId: input.objectTypeId,
+      title,
+      fileId: input.fileId,
+      exactText: anchor.exactText,
+      prefix: anchor.prefix,
+      suffix: anchor.suffix,
+      color: input.color ?? "yellow",
+      location,
+      referenceDate: input.referenceDate,
+    });
+
+    const flashcard = await createFlashcardEntity(spaceId, {
+      objectTypeId: input.objectTypeId,
+      title,
+      front: input.front,
+      back: input.back,
+      fileId: input.fileId,
+      sourceHighlightId: highlight.id,
+      sourceQuoteSnippet: anchor.exactText,
+      cardType: input.cardType,
+      clozeContent: input.clozeContent,
+      aiGenerated: input.aiGenerated ?? true,
+      aiPromptContext: input.aiPromptContext,
+      referenceDate: input.referenceDate,
+    });
+
+    const updatedHighlight = await database.entities.get([spaceId, highlight.id]);
+    return {
+      highlight:
+        updatedHighlight && isHighlightRecord(updatedHighlight) ? updatedHighlight : highlight,
+      flashcard,
+    };
+  }
+
   async function recordFlashcardReview(
     spaceId: string,
     flashcardId: string,
@@ -602,6 +680,7 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     createEntity,
     updateEntity,
     createHighlightEntity,
+    createGroundedFlashcardFromQuote,
     createCollection,
     replaceCollections,
     createFlashcardEntity,

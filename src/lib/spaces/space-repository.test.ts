@@ -276,6 +276,67 @@ describe("Space repository", () => {
     });
   });
 
+  it("creates grounded flashcards by synthesizing a highlight from an exact quote", async () => {
+    const { database, repository } = setup();
+    const space = await repository.createBlankSpace("First");
+    const type = await createBookType(repository, space.id);
+
+    const result = await repository.createGroundedFlashcardFromQuote(space.id, {
+      objectTypeId: type.id,
+      fileId: "paper",
+      sourceText:
+        "Before retrieval practice improves retention after repeated tests.",
+      exactQuote: "retrieval practice improves retention",
+      front: "What improves retention?",
+      back: "Retrieval practice.",
+      title: "Retrieval practice",
+      color: "blue",
+      referenceDate: new Date("2026-01-01T00:00:00.000Z"),
+    });
+
+    expect(result.highlight).toMatchObject({
+      type: "highlight",
+      fileId: "paper",
+      exactText: "retrieval practice improves retention",
+      prefix: "Before ",
+      suffix: " after repeated tests.",
+      color: "blue",
+      location: { startOffset: 7, endOffset: 44 },
+      cardCount: 1,
+      _syncStatus: "pending",
+    });
+    expect(result.flashcard).toMatchObject({
+      type: "flashcard",
+      fileId: "paper",
+      sourceHighlightId: result.highlight.id,
+      sourceQuoteSnippet: "retrieval practice improves retention",
+      front: "What improves retention?",
+      back: "Retrieval practice.",
+      aiGenerated: true,
+      _syncStatus: "pending",
+    });
+
+    const persistedHighlight = await database.entities.get([space.id, result.highlight.id]);
+    expect(persistedHighlight?.cardCount).toBe(1);
+  });
+
+  it("rejects grounded flashcards when the exact quote is not in the source text", async () => {
+    const { repository } = setup();
+    const space = await repository.createBlankSpace("First");
+    const type = await createBookType(repository, space.id);
+
+    await expect(
+      repository.createGroundedFlashcardFromQuote(space.id, {
+        objectTypeId: type.id,
+        fileId: "paper",
+        sourceText: "The source chunk contains only real text.",
+        exactQuote: "fabricated quote",
+        front: "Question",
+        back: "Answer",
+      }),
+    ).rejects.toThrow("Exact quote was not found");
+  });
+
   it("rejects flashcards whose source highlight is missing in the active Space", async () => {
     const { repository } = setup();
     const space = await repository.createBlankSpace("First");

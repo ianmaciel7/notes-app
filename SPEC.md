@@ -99,6 +99,7 @@ export interface BaseEntity {
 - Identity fields are immutable through generic updates: `id`, `spaceId`, `objectTypeId`, and `createdAt` cannot be rewritten by `updateEntity`.
 - `createHighlightEntity(spaceId, input)` creates backend/local-first `Highlight` records with `fileId`, `exactText`, optional quote context (`prefix`, `suffix`), color, location metadata, and `cardCount = 0`.
 - `createFlashcardEntity(spaceId, input)` requires a source `Highlight` in the same Space for non-manual provenance and increments that highlight's `cardCount` when a card is created.
+- `createGroundedFlashcardFromQuote(spaceId, input)` validates that `exactQuote` exists verbatim inside the provided source text, synthesizes `startOffset`, `endOffset`, `prefix`, and `suffix`, creates the source `Highlight`, creates the linked `Flashcard`, and returns both records with `cardCount` synchronized.
 - Current implementation focus is backend/local persistence. Dedicated UI editors for `front/back`, goal date, retention target, and pacing settings are deferred.
 
 ### 3.2 Specific Typed Entities
@@ -304,11 +305,11 @@ Floating bar anchored above text selection providing:
 ```
 
 ### 6.3 Automatic Anchor Synthesis
-1. Client searches chunk text for `exactQuote`.
-2. Calculates `startOffset`, `endOffset`, and contextual `prefix`/`suffix`.
-3. Creates `Highlight` entity in Dexie.js.
-4. Generates `Flashcard` entity with `sourceHighlightId = highlight.id` and initial FSRS state (`state = 'new'`).
-5. Displays cards in the **Staging Drawer** for user verification and acceptance.
+1. Client or local orchestration searches chunk text for `exactQuote`.
+2. Repository calculates `startOffset`, `endOffset`, and contextual `prefix`/`suffix`.
+3. Repository creates a `Highlight` entity in Dexie.js.
+4. Repository generates a `Flashcard` entity with `sourceHighlightId = highlight.id` and initial FSRS state (`state = 'new'`).
+5. Staging Drawer presentation and remote provider orchestration remain deferred UI/API work; the local persistence contract is already implemented.
 
 ---
 
@@ -356,9 +357,10 @@ Floating bar anchored above text selection providing:
    - Implement `pdfjs-dist` PDF viewer and Markdown reader.
    - Integrate CSS Custom Highlight API and floating selection toolbar.
 4. **Phase 4: AI Generation Pipeline**
+   - Implemented backend/local exact-quote grounding from source text into `Highlight` plus linked `Flashcard` records.
    - Implement Server Route Handler (`/api/ai/generate`) using official Google Gen AI SDK.
    - Implement client-side BYOK API settings (Gemini 2.0 Flash / Groq fallback).
-   - Build chunker, structured output handler, and automatic anchor/highlight synthesizer.
+   - Build chunker and structured output handler for remote AI responses.
    - Implement AI Staging Drawer.
 5. **Phase 5: FSRS Spaced Repetition & Exam Burndown Dashboard**
    - Implemented FSRS mathematical state machine.
