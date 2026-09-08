@@ -63,3 +63,13 @@ export interface FlashcardEntity extends BaseEntity {
   aiGenerated: boolean;
   aiPromptContext?: string;
 }
+
+export interface StudyGoalEntity extends BaseEntity {
+  type: "study_goal";
+  targetExamDate: string;
+  targetRetentionRate: number;
+  totalCards: number;
+  dailyNewCardsQuota: number;
+  expectedDailyReviews: number;
+  targetFileIds: string[];
+}

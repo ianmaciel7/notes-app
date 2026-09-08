@@ -150,12 +150,10 @@ type PaletteItem = {
   }) => void | Promise<void>;
 };
 
-const DEFAULT_RECENT_COMMAND_ITEMS_LIMIT = 1;
 type CommandPaletteSelectSource = "keyboard" | "pointer";
 
-function getVisibleCommandPaletteRecentItems<T>(items: readonly T[], normalizedQuery: string): T[] {
-  if (normalizedQuery.length > 0) return [...items];
-  return items.slice(0, DEFAULT_RECENT_COMMAND_ITEMS_LIMIT);
+function getVisibleCommandPaletteRecentItems<T>(items: readonly T[], _normalizedQuery: string): T[] {
+  return [...items];
 }
 
 function shouldCloseCommandPaletteAfterSelect(source: CommandPaletteSelectSource) {
@@ -565,7 +563,7 @@ function NewContentCommandDialog({
         showCloseButton={false}
         overlayClassName="bg-black/50 backdrop-blur-none"
         className={cn(
-          "fixed z-50 top-0 left-0 h-dvh w-full translate-x-0 translate-y-0 sm:top-[8vh] sm:left-1/2 sm:-translate-x-1/2 sm:translate-y-0 sm:h-auto sm:max-h-[84vh] p-0 border-0 bg-transparent ring-0 outline-none select-none transition-all duration-200 flex flex-col items-center justify-start max-w-full",
+          "fixed z-50 top-0 left-0 h-dvh w-full translate-x-0 translate-y-0 sm:top-[10vh] sm:left-1/2 sm:-translate-x-1/2 sm:translate-y-0 sm:h-auto sm:max-h-[85vh] p-0 border-0 bg-transparent ring-0 outline-none select-none transition-all duration-200 flex flex-col items-center justify-start max-w-full",
           isExpanded
             ? "sm:w-[min(56rem,calc(100vw-2rem))] sm:max-w-4xl sm:max-h-[92vh]"
             : "sm:w-[min(42rem,calc(100vw-3rem))] sm:max-w-2xl",
@@ -660,7 +658,7 @@ function NewContentCommandDialog({
           </div>
 
           {/* --- Scrollable Content List Container --- */}
-          <div className="relative flex w-full min-w-0 flex-1 flex-col rounded-none border-t border-base sm:max-h-[70vh] sm:rounded-b">
+                <div className="relative flex w-full min-w-0 flex-1 flex-col rounded-none sm:max-h-[70vh] sm:rounded-b">
             <div
               id="control-dropdown-container"
               className="scroll-container flex h-full max-h-[65vh] w-full flex-col overflow-y-auto overflow-x-hidden px-1.5 py-0.5 sm:max-h-[70vh]"

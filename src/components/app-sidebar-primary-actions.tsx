@@ -896,6 +896,10 @@ const defaultActions: AppSidebarPrimaryAction[] = [
   },
 ];
 
+function shouldHandlePrimaryActionOnPointerDown() {
+  return false;
+}
+
 function useIsMac() {
   const [isMac, setIsMac] = React.useState(false);
 
@@ -1002,7 +1006,6 @@ function AppSidebarPrimaryActionItem({
           workspaceRowStateClass,
           "[&_svg]:size-4",
         )}
-        onPointerDown={() => onAction?.(action.id)}
         onClick={() => onAction?.(action.id)}
       >
         <Icon data-icon="inline-start" />
@@ -1447,5 +1450,6 @@ export {
   defaultActions,
   getSidebarNavigationIntent,
   logSidebarNavigation,
+  shouldHandlePrimaryActionOnPointerDown,
   WorkspaceSidebar,
 };

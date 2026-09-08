@@ -24,6 +24,7 @@ import {
   WorkspaceSidePanelHeader,
 } from "@/components/space-controller";
 import { WorkspaceFlashcardReviewPanel } from "@/components/workspace-flashcard-review-panel";
+import { WorkspaceStudyGoalDashboard } from "@/components/workspace-study-goal-dashboard";
 
 export default function HomePage() {
   return (
@@ -42,7 +43,12 @@ export default function HomePage() {
                 <AppShellMain>
                   <WorkspaceMainHeader />
                   <AppShellSurface className="h-full w-full">
-                    <WorkspaceFlashcardReviewPanel />
+                    <div className="flex h-full min-h-0 flex-col">
+                      <WorkspaceStudyGoalDashboard />
+                      <div className="min-h-0 flex-1">
+                        <WorkspaceFlashcardReviewPanel />
+                      </div>
+                    </div>
                   </AppShellSurface>
                 </AppShellMain>
 
@@ -67,7 +73,12 @@ export default function HomePage() {
               </AppShellMobileSidePanel>
             </AppShellHeader>
             <AppShellSurface className="h-full w-full">
-              <WorkspaceFlashcardReviewPanel />
+              <div className="flex h-full min-h-0 flex-col">
+                <WorkspaceStudyGoalDashboard />
+                <div className="min-h-0 flex-1">
+                  <WorkspaceFlashcardReviewPanel />
+                </div>
+              </div>
             </AppShellSurface>
           </AppShellMobile>
         </WorkspaceProvider>

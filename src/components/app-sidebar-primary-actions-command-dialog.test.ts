@@ -4,6 +4,7 @@ import {
   createNewContentMenuItems,
   createSidebarMainTabUpdate,
   getSidebarNavigationIntent,
+  shouldHandlePrimaryActionOnPointerDown,
 } from "@/components/app-sidebar-primary-actions";
 import {
   getVisibleCommandPaletteRecentItems,
@@ -18,6 +19,10 @@ it("keeps the compact new-object menu separate from the search command dialog", 
   expect(shouldOpenNewContentCommandDialogForEvent("workspace:open-command-palette")).toBe(true);
 });
 
+it("fires sidebar primary actions from click rather than pointerdown", () => {
+  expect(shouldHandlePrimaryActionOnPointerDown()).toBe(false);
+});
+
 it("does not render the open-in-new-tab pill in the Capacities-style command palette", () => {
   expect(shouldRenderCommandPaletteOpenInNewTabToggle()).toBe(false);
 });
@@ -30,14 +35,14 @@ it("keeps keyboard selection as an explicit command submission", () => {
   expect(shouldCloseCommandPaletteAfterSelect("keyboard")).toBe(true);
 });
 
-it("keeps the default command palette close to Capacities by showing only the latest recent item", () => {
+it("keeps all recent command palette items visible like Capacities", () => {
   const items = [
     { id: "recent-1", kind: "recent" as const, title: "Latest", execute: () => {} },
     { id: "recent-2", kind: "recent" as const, title: "Older", execute: () => {} },
     { id: "recent-3", kind: "recent" as const, title: "Oldest", execute: () => {} },
   ];
 
-  expect(getVisibleCommandPaletteRecentItems(items, "")).toEqual([items[0]]);
+  expect(getVisibleCommandPaletteRecentItems(items, "")).toEqual(items);
 });
 
 it("shows all matching recent command palette items once the user searches", () => {
