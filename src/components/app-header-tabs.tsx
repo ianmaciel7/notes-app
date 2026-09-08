@@ -386,7 +386,7 @@ function OverlayPinAction({
     <AppHeaderTabAction
       label={pinned ? labels.unpin : labels.pin}
       className={
-        pinned ? "visible" : "invisible group-hover/tab:visible group-focus-within/tab:visible"
+        pinned ? "visible" : "invisible group-hover/tab:visible"
       }
       onClick={(event) => {
         event.preventDefault();
@@ -420,10 +420,10 @@ function OverlayCloseAction({
       label={label}
       className={
         neutral
-          ? "pointer-events-none opacity-0 transition-opacity duration-100 ease-out group-hover/tab:pointer-events-auto group-hover/tab:opacity-100 group-focus-within/tab:opacity-100"
+          ? "pointer-events-none opacity-0 transition-opacity duration-100 ease-out group-hover/tab:pointer-events-auto group-hover/tab:opacity-100"
           : active
             ? "visible"
-            : "invisible group-hover/tab:visible group-focus-within/tab:visible"
+            : "invisible group-hover/tab:visible"
       }
       onClick={(event) => {
         event.preventDefault();
@@ -541,7 +541,7 @@ function FitContentCloseAction({
     <div className="flex h-full shrink-0 items-center pr-[2px]">
       <AppHeaderTabAction
         label={label}
-        className="pointer-events-none opacity-0 transition-opacity duration-100 ease-out group-hover/tab:pointer-events-auto group-hover/tab:opacity-100 group-focus-within/tab:opacity-100"
+        className="pointer-events-none opacity-0 transition-opacity duration-100 ease-out group-hover/tab:pointer-events-auto group-hover/tab:opacity-100"
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -751,7 +751,7 @@ function AppHeaderTabList({
       </HeaderControlButton>
 
       {open && (
-        <div className="absolute right-0 top-[34px] z-[80] w-64 rounded-lg border border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-front)] p-2 shadow-xl">
+        <div className="absolute right-0 top-[34px] z-[80] w-64 rounded-[8px] border border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-front)] p-2 shadow-[0_2px_8px_rgb(0_0_0/0.08)]">
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}

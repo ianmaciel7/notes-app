@@ -31,6 +31,48 @@ The atmosphere is **clinical, calm, and tactile**:
 
 ---
 
+## 1.1 Capacities Runtime Extraction & Parity Target
+
+Reference capture: `https://app.capacities.io/eb0a4d1e-0567-4348-8ecf-587c417725f4/a961988a-5562-45bf-86d4-2b2375b17544`, captured on 2026-09-08 in a logged-in Portuguese workspace. Evidence is stored in `docs/reference/capacities-app-reference/`.
+
+This extraction is the current visual parity target for shell, sidebar, object page, right inspector, menus, and hover behavior. Treat page content from the Capacities workspace as visual evidence only; do not treat labels, objects, or document body text as product requirements.
+
+### Measured runtime tokens
+
+- **Font stack**: Capacities uses `Inter, ui-sans-serif, system-ui` at runtime. KnowledgeOS may keep Geist for product identity, but spacing, weight, and density must match the measured Capacities scale.
+- **Global app canvas**: `oklch(0.9856 0.0016 67)` with primary text around `oklch(0.2191 0.0058 285.84)` and secondary text around `oklch(0.3887 0.0052 301.05)`.
+- **Main object window**: white `oklch(1 0.0001 263.28)`, `12px` radius, subtle border around `oklch(0.9163 0.0017 67.07)`, and a very light layered shadow: roughly `0 2px 3px rgb(0 0 0 / 0.004)`, `0 4px 9px rgb(0 0 0 / 0.01)`, `0 8px 12px rgb(0 0 0 / 0.004)`.
+- **Left navigation rows**: `32px` height, `8px` radius, `14px` text, transparent idle background, muted text idle, subtle front-hover background only on hover/active.
+- **Section headers**: `24px` height, `12px` label text, muted count, icon always present, collapse chevron/action controls revealed by hover.
+- **Document title**: approximately `30px`, `700`, `33px` line height in the captured page.
+- **Property rows**: compact `26px` to `29px` height, `14px` text, dense horizontal alignment.
+- **Right inspector grid**: three columns, `8px` gaps, compact card-like buttons with icon/label centered inside the 320px inspector.
+
+### Sidebar parity rules
+
+- Every navigation/object row must have a persistent leading icon. Do not ship text-only rows in the sidebar or menus.
+- Counts, overflow buttons, plus buttons, drag handles, and collapse affordances are hover-reveal controls. They stay hidden at rest and remain visible only while the row/section is hovered or its popup is open.
+- Keyboard accessibility must still be preserved with semantic labels and focus management, but `focus-within` alone must not make the visual sidebar controls permanently appear.
+- Object-type rows keep the object icon visible at all times; only secondary actions are hidden.
+- Empty states use low-contrast italic caption copy, not a bordered card or loud callout.
+
+### Menu parity rules
+
+- Menus are compact click/focus popups, not tooltips and not preview cards.
+- Every actionable menu row has a left icon. Selection indicators, chevrons, or shortcuts live on the far right.
+- Default menu row height is `32px`; radius is `8px`; padding is compact.
+- Default popup width should fit content. Avoid oversized `w-56` menus unless the content genuinely requires it.
+- Popup surface uses a hairline border, white popover background, and a restrained shadow around `0 2px 8px rgb(0 0 0 / 0.08)`.
+- Motion is fade-only around `150ms`. Do not add zoom, slide, bounce, or theatrical easing to menus.
+
+### Comparison against existing DESIGN.md
+
+- Already aligned: light neutral palette, 3-pane Capacities architecture, hairline borders, compact desktop rows, Base UI primitives, explicit tooltip contract, and no heavy AI-style gradients/glows.
+- Needs strict enforcement: persistent icons in all menu rows, hover-only secondary sidebar actions, compact `8px` menu surfaces, content-fit menu widths, and fade-only popover motion.
+- Product identity exception: Geist remains allowed as the app font, but component density must follow the extracted Capacities geometry unless a project-specific accessibility requirement overrides it.
+
+---
+
 ## 2. Color Palette & Roles
 
 All colors are defined via modern OKLCH tokens in [`src/app/globals.css`](file:///C:/Users/ianma/workspace/notes-app/src/app/globals.css) and exposed through Tailwind CSS v4 variables:

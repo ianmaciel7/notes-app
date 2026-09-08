@@ -75,6 +75,11 @@ export function useSpaceData() {
       activeSpaceId ? await db.trash.where("spaceId").equals(activeSpaceId).toArray() : [],
     [activeSpaceId],
   );
+  const pinnedEntityIdsQuery = useLiveQuery<string[]>(
+    async () =>
+      activeSpaceId ? await repository.listPinnedEntityIds(activeSpaceId) : [],
+    [activeSpaceId, repository],
+  );
 
   const spaces = spacesQuery ?? [];
   const objectTypeRecords = objectTypeRecordsQuery ?? [];
@@ -82,6 +87,7 @@ export function useSpaceData() {
   const collections = collectionsQuery ?? [];
   const tags = tagsQuery ?? [];
   const trash = trashQuery ?? [];
+  const pinnedEntityIds = pinnedEntityIdsQuery ?? [];
 
   const counts = React.useMemo(() => groupEntitiesByObjectType(entities), [entities]);
   const objectTypes = React.useMemo(
@@ -119,6 +125,7 @@ export function useSpaceData() {
     objectTypeRecords,
     createdEntities: entities,
     objectTypeCollections,
+    pinnedEntityIds,
     tags,
     trashItems,
   };

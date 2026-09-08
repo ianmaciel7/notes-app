@@ -52,4 +52,4 @@ pnpm format
 - [SPEC.md](SPEC.md) — Comprehensive functional specification, entity schemas, FSRS math, and implementation roadmap.
 - [DECISIONS.md](DECISIONS.md) — Architectural decision records (ADRs) covering Firebase, Dexie, FSRS, AI Gateway, and Reader engine.
 - [AGENTS.md](AGENTS.md) — Coding conventions, negative constraints, and instructions for AI pairing agents.
-- [CLAUDE.md](CLAUDE.md) / [.cursorrules](.cursorrules) — Agent entrypoints for Claude Code and Cursor.
+- [CLAUDE.md](CLAUDE.md) — Agent entrypoint for Claude Code.

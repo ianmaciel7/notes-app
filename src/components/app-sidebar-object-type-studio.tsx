@@ -294,7 +294,7 @@ function AppSidebarObjectTypeDetails({
       className={cn(
         "pointer-events-auto absolute bottom-0 right-0 top-0 z-20 -mb-1 -mr-1 -mt-1",
         "flex min-h-0 w-full origin-center scale-100 transform flex-col overflow-hidden",
-        "border border-border bg-[var(--app-bg-back)] shadow-xl transition duration-150 ease-out",
+        "border border-border bg-[var(--app-bg-back)] shadow-[0_8px_24px_rgb(0_0_0/0.12)] transition duration-150 ease-out",
         "sm:w-[28rem] sm:rounded-lg",
       )}
     >

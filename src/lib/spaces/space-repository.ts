@@ -1,5 +1,6 @@
 import type { KnowledgeDatabase } from "@/lib/db";
 import { createCollectionId, createTagId } from "@/lib/space-domain-identities";
+import { applyFSRSReview, createInitialSRSState, type FSRSRating } from "@/lib/srs/fsrs";
 import {
   type CreateStructureInput,
   createCustomStructure,
@@ -21,15 +22,29 @@ import type {
   SpaceTagRecord,
   SpaceTrashRecord,
 } from "@/lib/spaces/space-types";
+import type { FlashcardEntity } from "@/types/schema";
 import {
   ACTIVE_SPACE_SETTING_ID,
   LOCAL_ACCOUNT_ID,
   PERSONAL_SPACE_ID,
 } from "@/lib/spaces/space-types";
 
+export const PINNED_ENTITY_IDS_SETTING_KEY = "sidebar.pinnedEntityIds";
+
 function stripSpaceId(record: SpaceObjectTypeRecord): WorkspaceStructure {
   const { spaceId: _spaceId, ...structure } = record;
   return structure;
+}
+
+function normalizePinnedEntityIds(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((id): id is string => typeof id === "string" && id.trim().length > 0);
+}
+
+function isFlashcardRecord(
+  entity: SpaceEntityRecord,
+): entity is SpaceEntityRecord & FlashcardEntity {
+  return entity.type === "flashcard" && typeof entity.srs === "object" && entity.srs !== null;
 }
 
 export function createSpaceRepository(database: KnowledgeDatabase) {
@@ -236,6 +251,80 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     return entity;
   }
 
+  async function createFlashcardEntity(
+    spaceId: string,
+    input: {
+      objectTypeId: string;
+      title: string;
+      front: string;
+      back: string;
+      fileId: string;
+      sourceHighlightId: string;
+      sourceQuoteSnippet: string;
+      cardType?: "basic" | "cloze" | "reversed";
+      clozeContent?: string;
+      aiGenerated?: boolean;
+      aiPromptContext?: string;
+      referenceDate?: Date;
+    },
+  ) {
+    await requireSpace(spaceId);
+    const objectType = await database.objectTypes.get([spaceId, input.objectTypeId]);
+    if (!objectType) throw new Error("Unknown object type in active Space.");
+
+    const timestamp = (input.referenceDate ?? new Date()).toISOString();
+    const record: SpaceEntityRecord & FlashcardEntity = {
+      id: `flashcard-${crypto.randomUUID()}`,
+      spaceId,
+      objectTypeId: input.objectTypeId,
+      type: "flashcard",
+      title: input.title.trim(),
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      blocks: [],
+      tags: [],
+      relations: [],
+      properties: {},
+      cardType: input.cardType ?? "basic",
+      front: input.front,
+      back: input.back,
+      fileId: input.fileId,
+      sourceHighlightId: input.sourceHighlightId,
+      sourceQuoteSnippet: input.sourceQuoteSnippet,
+      clozeContent: input.clozeContent,
+      srs: createInitialSRSState(new Date(timestamp)),
+      aiGenerated: Boolean(input.aiGenerated),
+      aiPromptContext: input.aiPromptContext,
+      _syncStatus: "pending",
+    };
+
+    await database.entities.add(record);
+    return record;
+  }
+
+  async function recordFlashcardReview(
+    spaceId: string,
+    flashcardId: string,
+    rating: FSRSRating,
+    reviewDate?: Date,
+  ) {
+    await requireSpace(spaceId);
+    const entity = await database.entities.get([spaceId, flashcardId]);
+    if (!entity) throw new Error("Flashcard not found.");
+    if (!isFlashcardRecord(entity)) throw new Error("Target entity is not a flashcard.");
+    if (!entity.srs) throw new Error("Flashcard has no SRS state.");
+
+    const now = reviewDate ?? new Date();
+    const { nextState, daysUntilDue } = applyFSRSReview({ card: entity.srs, now }, rating);
+
+    await database.entities.update([spaceId, flashcardId], {
+      updatedAt: now.toISOString(),
+      srs: nextState,
+    });
+
+    return { entity, nextState, daysUntilDue };
+  }
+
   async function createCollection(spaceId: string, structureId: string, name: string) {
     await requireSpace(spaceId);
     if (!(await database.objectTypes.get([spaceId, structureId]))) {
@@ -312,6 +401,42 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     );
   }
 
+  async function listPinnedEntityIds(spaceId: string) {
+    await requireSpace(spaceId);
+    const value = normalizePinnedEntityIds(
+      await getSpaceSetting(spaceId, PINNED_ENTITY_IDS_SETTING_KEY),
+    );
+    if (value.length === 0) return [];
+
+    const [entities, collections] = await Promise.all([
+      database.entities.where("spaceId").equals(spaceId).toArray(),
+      database.collections.where("spaceId").equals(spaceId).toArray(),
+    ]);
+    const validIds = new Set([
+      ...entities.map((entity) => entity.id),
+      ...collections.map((collection) => collection.id),
+    ]);
+    return value.filter((id, index) => value.indexOf(id) === index && validIds.has(id));
+  }
+
+  async function setPinnedEntityIds(spaceId: string, ids: readonly string[]) {
+    await requireSpace(spaceId);
+    const uniqueIds = ids.filter((id, index) => ids.indexOf(id) === index);
+    const [entities, collections] = await Promise.all([
+      database.entities.where("spaceId").equals(spaceId).toArray(),
+      database.collections.where("spaceId").equals(spaceId).toArray(),
+    ]);
+    const validIds = new Set([
+      ...entities.map((entity) => entity.id),
+      ...collections.map((collection) => collection.id),
+    ]);
+    await setSpaceSetting(
+      spaceId,
+      PINNED_ENTITY_IDS_SETTING_KEY,
+      uniqueIds.filter((id) => validIds.has(id)),
+    );
+  }
+
   function listTrash(spaceId: string) {
     return database.trash.where("spaceId").equals(spaceId).toArray();
   }
@@ -346,6 +471,8 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     createEntity,
     createCollection,
     replaceCollections,
+    createFlashcardEntity,
+    recordFlashcardReview,
     createTag,
     assertSameSpaceEntityTargets,
     createRelation,
@@ -353,6 +480,8 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     listMedia,
     setSpaceSetting,
     getSpaceSetting,
+    listPinnedEntityIds,
+    setPinnedEntityIds,
     listTrash,
     putTrash,
     deleteTrash,

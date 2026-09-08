@@ -27,7 +27,7 @@ This repository is a local-first, zero-operating-cost web application unifying:
   - In Markdown/Web text, strictly use the **CSS Custom Highlight API** (`CSS.highlights.set()`) with W3C Text Quote Selectors.
   - In PDF reader (`pdfjs-dist`), render canvas overlay / SVG bounding boxes positioned over the transparent text layer.
 - **NO Client-Side Server Credentials**: Never import `firebase-admin` or expose production AI API keys in client components. The AI Gateway lives exclusively at `/api/ai/generate`.
-- **NO Arbitrary Schemas**: All data entities must extend `BaseEntity` (`id`, `type`, `title`, `blocks`, `tags`, `relations`, `properties`) defined in `SPEC.md`. Local database name is `KnowledgeOS_DB`.
+- **NO Arbitrary Schemas**: All data entities must extend `BaseEntity` as defined in `SPEC.md` (including fields like `id`, `type`, `title`, `createdAt`, `updatedAt`, optional `icon` and `coverImage`, `blocks`, `tags`, `relations`, optional `backlinks`, `properties`, and `_syncStatus`).
 - **NO Component CSS Modules / Standalone CSS Files**: Never create `.module.css` files or per-component CSS stylesheets. Express all styling via Tailwind CSS v4 utility classes, `cva()` variants, arbitrary descendant selectors (`[&_[data-slot=...]]:...`), or global theme tokens in `src/app/globals.css`.
 
 ## 3. Architectural Blueprint & Data Flow
@@ -62,4 +62,3 @@ When working on specific domains, leverage the installed skills in `.agents/skil
 - `capacities-docs`: Comprehensive documentation, measured geometry, interaction state machines, and browser verification workflows for Capacities workspace UI parity.
 - `test-driven-development`: Official Test-Driven Development workflow (obra/superpowers).
 - `context7-mcp`: Official Upstash Context7 documentation and code examples lookup integration for modern libraries.
-

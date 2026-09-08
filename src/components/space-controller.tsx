@@ -16,7 +16,11 @@ import {
   type SidePanelSpecialEntryId,
 } from "@/components/app-side-panel-header";
 import { useFocusMode } from "@/components/focus-mode-provider";
-import { ObjectPageIcon, objectIconToneBadgeClass } from "@/components/object-icons";
+import {
+  ObjectCollectionIcon,
+  ObjectPageIcon,
+  objectIconToneBadgeClass,
+} from "@/components/object-icons";
 import { useTheme } from "@/components/theme-provider";
 import {
   DropdownMenu,
@@ -120,6 +124,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     objectTypeRecords,
     createdEntities,
     objectTypeCollections,
+    pinnedEntityIds,
     tags,
     trashItems,
   } = useSpaceData();
@@ -131,8 +136,6 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [sideValue, setSideValue] = React.useState("side-1");
   const [activeAction, setActiveAction] = React.useState<string | undefined>();
   const [activeEntityId, setActiveEntityId] = React.useState<string | null>("page");
-  // biome-ignore lint/suspicious/noExplicitAny: legacy sidebar item type is intentionally preserved
-  const [pinnedEntities, setPinnedEntities] = React.useState<any[]>([]);
   // biome-ignore lint/suspicious/noExplicitAny: legacy custom section shape is owned by AppSidebarOverview
   const [customSections, setCustomSections] = React.useState<any[]>([]);
   const [, setCommandPaletteOpen] = React.useState(false);
@@ -152,7 +155,6 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const resetSpaceUi = React.useCallback(() => {
     setActiveAction(undefined);
     setActiveEntityId("page");
-    setPinnedEntities([]);
     setCustomSections([]);
     setMainTabs(initialMainTabs);
     setMainValue("page");
@@ -325,6 +327,48 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       return type ? [{ id: entity.id, label: entity.title, icon: type.icon, tone: type.tone }] : [];
     });
   }, [createdEntities, objectTypes]);
+
+  const pinnedEntities = React.useMemo(() => {
+    const availableById = new Map(availablePinnedEntities.map((entity) => [entity.id, entity]));
+    const collectionsById = new Map(
+      Object.values(objectTypeCollections).map((collection: any) => [collection.id, collection]),
+    );
+
+    return pinnedEntityIds.flatMap((id: string) => {
+      const entity = availableById.get(id);
+      if (entity) return [entity];
+
+      const collection = collectionsById.get(id);
+      if (collection) {
+        return [
+          {
+            id: collection.id,
+            label: collection.name,
+            icon: ObjectCollectionIcon,
+            tone: "gray" as const,
+          },
+        ];
+      }
+
+      return [];
+    });
+  }, [availablePinnedEntities, objectTypeCollections, pinnedEntityIds]);
+
+  const setPinnedEntities = React.useCallback(
+    // biome-ignore lint/suspicious/noExplicitAny: preserves the existing React setter-style API
+    (next: any) => {
+      const resolved = typeof next === "function" ? next(pinnedEntities) : next;
+      void repository
+        .setPinnedEntityIds(
+          spaceId,
+          resolved.map((entity: { id: string }) => entity.id),
+        )
+        .catch((cause: unknown) => {
+          showMessage(cause instanceof Error ? cause.message : String(cause));
+        });
+    },
+    [pinnedEntities, repository, showMessage, spaceId],
+  );
 
   const selectEntity = React.useCallback((id: string) => {
     setActiveAction(undefined);

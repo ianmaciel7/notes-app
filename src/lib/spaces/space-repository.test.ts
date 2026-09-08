@@ -159,6 +159,29 @@ describe("Space repository", () => {
     expect(await repository.listTrash(second.id)).toEqual([]);
   });
 
+  it("persists pinned entity ids per Space and ignores ids from other Spaces", async () => {
+    const { database, repository } = setup();
+    const first = await repository.createBlankSpace("First");
+    const second = await repository.createBlankSpace("Second");
+    const type = await createBookType(repository, first.id);
+    const collection = await repository.createCollection(first.id, type.id, "Reading");
+    await database.entities.bulkAdd([
+      entityFixture({ id: "first-book", spaceId: first.id, objectTypeId: type.id }),
+      entityFixture({ id: "other-book", spaceId: second.id, objectTypeId: "page" }),
+    ]);
+
+    await repository.setPinnedEntityIds(first.id, [
+      "first-book",
+      collection.id,
+      "first-book",
+      "other-book",
+      "missing",
+    ]);
+
+    expect(await repository.listPinnedEntityIds(first.id)).toEqual(["first-book", collection.id]);
+    expect(await repository.listPinnedEntityIds(second.id)).toEqual([]);
+  });
+
   it("allows the same logical id in different Spaces", async () => {
     const { database, repository } = setup();
     const first = await repository.createBlankSpace("First");
@@ -169,6 +192,43 @@ describe("Space repository", () => {
     ]);
     expect(await database.entities.get([first.id, "same"])).toBeDefined();
     expect(await database.entities.get([second.id, "same"])).toBeDefined();
+  });
+
+  it("creates a flashcard entity with initial FSRS state and records review persistence", async () => {
+    const { database, repository } = setup();
+    const space = await repository.createBlankSpace("First");
+    const type = await createBookType(repository, space.id);
+
+    const flashcard = await repository.createFlashcardEntity(space.id, {
+      objectTypeId: type.id,
+      title: "What is a closure?",
+      front: "What is a closure in JavaScript?",
+      back: "A function that remembers references to variables outside itself.",
+      fileId: "source-file-id",
+      sourceHighlightId: "highlight-id",
+      sourceQuoteSnippet: "function with lexical scope memory",
+      cardType: "basic",
+      aiGenerated: false,
+      referenceDate: new Date("2026-01-01T00:00:00.000Z"),
+    });
+
+    const persisted = await repository.listEntities(space.id);
+    const savedFlashcard = persisted.find((entity) => entity.id === flashcard.id);
+    expect(savedFlashcard).toBeDefined();
+    expect(savedFlashcard?.type).toBe("flashcard");
+    expect(savedFlashcard?.srs?.state).toBe("new");
+    expect(savedFlashcard?.srs?.interval).toBe(0);
+
+    const reviewed = await repository.recordFlashcardReview(
+      space.id,
+      flashcard.id,
+      3,
+      new Date("2026-01-02T00:00:00.000Z"),
+    );
+
+    const afterReview = await database.entities.get([space.id, flashcard.id]);
+    expect(afterReview?.srs?.state).toBe("review");
+    expect(reviewed.nextState.state).toBe("review");
   });
 
   it("rejects cross-Space relations", async () => {

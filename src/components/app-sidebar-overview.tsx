@@ -4,9 +4,11 @@ import { useTranslations } from "next-intl";
 import * as React from "react";
 
 import {
+  AppSidebarArrowDownIcon,
   AppSidebarCheckIcon,
   AppSidebarCopyIcon,
   AppSidebarDotsIcon,
+  AppSidebarGripVerticalIcon,
   AppSidebarObjectsIcon,
   AppSidebarPinIcon,
   AppSidebarPinOffIcon,
@@ -74,9 +76,9 @@ import { cn } from "@/lib/utils";
 const workspaceRowStateClass =
   "transition-[background-color,color,filter,opacity] duration-200 ease-out motion-reduce:transition-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:brightness-[0.965]";
 const workspaceRevealActionClass =
-  "pointer-events-none invisible opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/interactive:pointer-events-auto group-hover/interactive:visible group-hover/interactive:opacity-100 group-focus-within/interactive:pointer-events-auto group-focus-within/interactive:visible group-focus-within/interactive:opacity-100";
+  "pointer-events-none invisible opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/interactive:pointer-events-auto group-hover/interactive:visible group-hover/interactive:opacity-100 data-popup-open:pointer-events-auto data-popup-open:visible data-popup-open:opacity-100";
 const workspaceSectionRevealActionClass =
-  "pointer-events-none opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/app-sidebar-section:pointer-events-auto group-hover/app-sidebar-section:opacity-100 group-focus-within/app-sidebar-section:pointer-events-auto group-focus-within/app-sidebar-section:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100";
+  "pointer-events-none opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/app-sidebar-section:pointer-events-auto group-hover/app-sidebar-section:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100";
 
 import type { WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
 import {
@@ -358,12 +360,14 @@ function AppSidebarSectionMenu({
         <AppSidebarDotsIcon />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent side="right" align="start" sideOffset={8} className="w-56">
+      <DropdownMenuContent side="right" align="start" sideOffset={8} className="w-48">
         <DropdownMenuItem onClick={() => onValueChange("manual")}>
+          <AppSidebarGripVerticalIcon />
           {t("manual")}
           {value === "manual" && <AppSidebarCheckIcon className="ml-auto" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onValueChange("alphabetical")}>
+          <AppSidebarArrowDownIcon />
           {t("alphabetical")}
           {value === "alphabetical" && <AppSidebarCheckIcon className="ml-auto" />}
         </DropdownMenuItem>
@@ -402,18 +406,16 @@ function AppSidebarSection({
       open={open}
       onOpenChange={onOpenChange}
       data-slot="app-sidebar-section"
-      onPointerEnter={() => setActionsRevealed(true)}
-      onPointerLeave={() => setActionsRevealed(false)}
-      onFocusCapture={() => setActionsRevealed(true)}
-      onBlurCapture={(event) => {
-        const nextTarget = event.relatedTarget instanceof Node ? event.relatedTarget : null;
-        if (!event.currentTarget.contains(nextTarget)) {
-          setActionsRevealed(false);
-        }
-      }}
-      className="group/app-sidebar-section flex shrink-0 flex-col"
+      className="flex shrink-0 flex-col"
     >
-      <div className={cn("mt-0 mr-2 ml-px bg-sidebar px-2 pr-1", sticky && "sticky top-0 z-[5]")}>
+      <div
+        onPointerEnter={() => setActionsRevealed(true)}
+        onPointerLeave={() => setActionsRevealed(false)}
+        className={cn(
+          "group/app-sidebar-section mt-0 mr-2 ml-px bg-sidebar px-2 pr-1",
+          sticky && "sticky top-0 z-[5]",
+        )}
+      >
         <div
           className={cn(
             "flex h-6 w-full select-none items-center gap-x-1.5 truncate rounded-md px-2 py-1",
@@ -514,9 +516,11 @@ function AppSidebarPinnedMenu({
           {t("sidebarPinned.open")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onOpenInSidePanel}>
+          <AppSidebarObjectsIcon />
           {t("sidebarPinned.openInSidePanel")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onOpenInNewTab}>
+          <AppSidebarSourceIcon name="external" />
           {t("sidebarPinned.openInNewTab")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -764,6 +768,7 @@ function AppSidebarObjectTypeMenu({
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive" onClick={() => onDelete?.(objectType.id)}>
+                <AppSidebarSourceIcon name="trash" />
                 {t("details.delete")}
               </DropdownMenuItem>
             </>
@@ -969,7 +974,7 @@ function AppSidebarObjectTypeRow({
               "relative ml-[5px] inline-flex size-[21px] shrink-0 items-center justify-center rounded-md bg-transparent text-muted-foreground",
               "transition-[background-color,opacity] duration-150 ease-out motion-reduce:transition-none",
               "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:bg-sidebar-accent focus-visible:text-sidebar-accent-foreground",
-              "focus-visible:[&_[data-slot=app-sidebar-object-type-icon]]:opacity-0 focus-visible:[&_[data-slot=app-sidebar-object-type-chevron]]:opacity-100",
+                    "focus-visible:ring-1 focus-visible:ring-ring/40",
             )}
             onClick={() => onCollectionsOpenChange(!collectionsOpen)}
           >

@@ -1,7 +1,7 @@
 const floatingPositionerClass = "isolate z-50"
 
 const floatingInteractionSurfaceClass =
-  "rounded-[12px] border border-border bg-popover text-popover-foreground shadow-[0_2px_3px_rgb(0_0_0/0.01),0_4px_9px_rgb(0_0_0/0.03),0_8px_12px_rgb(0_0_0/0.01)] outline-hidden"
+  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[0_2px_8px_rgb(0_0_0/0.08)] outline-hidden"
 
 const tooltipSurfaceClass =
   "box-content rounded-[8px] border border-border/50 bg-popover/50 px-2 py-1 text-xs font-medium leading-normal text-foreground shadow-sm backdrop-blur-[8px] dark:bg-background/70"
@@ -16,19 +16,19 @@ const overlayClass =
   "fixed inset-0 isolate z-50 bg-black/45 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const floatingSurfaceBaseClass =
-  "rounded-[12px] border border-border bg-popover text-popover-foreground shadow-[0_12px_34px_rgb(0_0_0/0.16),0_2px_8px_rgb(0_0_0/0.08)] outline-hidden ring-1 ring-black/5 dark:ring-white/10"
+  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[0_2px_8px_rgb(0_0_0/0.08)] outline-hidden"
 
 const dialogSurfaceBaseClass =
-  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[0_18px_60px_rgb(0_0_0/0.22)] outline-none ring-1 ring-black/10 dark:ring-white/10"
+  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[0_8px_24px_rgb(0_0_0/0.12)] outline-none"
 
 const floatingSurfaceClass =
-  "origin-(--transform-origin) duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
+  "origin-(--transform-origin) duration-150 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const dialogSurfaceClass =
-  "duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
+  "duration-150 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const floatingListItemClass =
-  "relative flex h-8 min-h-8 cursor-default items-center gap-2 rounded-[8px] px-1 py-0 text-sm leading-normal outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-muted-foreground [&_svg:not([class*='size-'])]:size-3"
+  "relative flex h-8 min-h-8 cursor-default items-center gap-2 rounded-[8px] px-1 py-0 text-sm leading-normal outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-muted-foreground [&_svg:not([class*='size-'])]:size-3.5"
 
 const floatingListItemFocusClass =
   "focus:bg-muted focus:text-foreground not-data-[variant=destructive]:focus:**:text-foreground"
@@ -60,10 +60,10 @@ const workspaceRowStateClass =
   "transition-[background-color,color,filter,opacity] duration-200 ease-out motion-reduce:transition-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground data-[active=true]:brightness-[0.965]"
 
 const workspaceRevealActionClass =
-  "pointer-events-none invisible opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/interactive:pointer-events-auto group-hover/interactive:visible group-hover/interactive:opacity-100 group-focus-within/interactive:pointer-events-auto group-focus-within/interactive:visible group-focus-within/interactive:opacity-100"
+  "pointer-events-none invisible opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/interactive:pointer-events-auto group-hover/interactive:visible group-hover/interactive:opacity-100 data-popup-open:pointer-events-auto data-popup-open:visible data-popup-open:opacity-100"
 
 const workspaceSectionRevealActionClass =
-  "pointer-events-none opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/app-sidebar-section:pointer-events-auto group-hover/app-sidebar-section:opacity-100 group-focus-within/app-sidebar-section:pointer-events-auto group-focus-within/app-sidebar-section:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100"
+  "pointer-events-none opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/app-sidebar-section:pointer-events-auto group-hover/app-sidebar-section:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100"
 
 const workspaceTabStateClass =
   "transition-[background-color,border-color,color,opacity] duration-150 ease-out motion-reduce:transition-none"

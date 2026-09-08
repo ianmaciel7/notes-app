@@ -1,3 +1,5 @@
+import type { SRSItemState } from "@/lib/srs/fsrs";
+
 export type SystemEntityType =
   | "page"
   | "file"
@@ -45,5 +47,19 @@ export type BaseEntity = {
   tags: string[];
   relations: EntityRelation[];
   properties: Record<string, unknown>;
+  srs?: SRSItemState;
   _syncStatus?: "synced" | "pending" | "conflict";
 };
+
+export interface FlashcardEntity extends BaseEntity {
+  type: "flashcard";
+  cardType: "basic" | "cloze" | "reversed";
+  front: string;
+  back: string;
+  fileId: string;
+  sourceHighlightId: string;
+  sourceQuoteSnippet: string;
+  clozeContent?: string;
+  aiGenerated: boolean;
+  aiPromptContext?: string;
+}
