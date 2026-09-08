@@ -57,11 +57,52 @@ type AppSidebarPrimaryActionHint = {
   shortcut?: string;
 };
 
+type NewContentMenuItem = AppSidebarObjectType & {
+  objectTypeId: string;
+  createTitle?: string;
+  badgeLabel?: string;
+  isCreateFallback?: boolean;
+};
+
 function normalizeMenuQuery(value: string) {
   return value
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLocaleLowerCase();
+}
+
+function createNewContentMenuItems(
+  objectTypes: readonly AppSidebarObjectType[],
+  query: string,
+): NewContentMenuItem[] {
+  const normalizedQuery = normalizeMenuQuery(query.trim());
+  const localizedItems = objectTypes.map((item) => ({
+    ...item,
+    objectTypeId: item.id,
+    label: item.singularLabel ?? item.label,
+  }));
+  const filteredItems = localizedItems.filter((item) =>
+    normalizeMenuQuery(item.label).includes(normalizedQuery),
+  );
+
+  if (filteredItems.length > 0 || normalizedQuery.length === 0) {
+    return filteredItems;
+  }
+
+  const pageType = localizedItems.find((item) => item.id === "page") ?? localizedItems[0];
+  if (!pageType) return [];
+
+  return [
+    {
+      ...pageType,
+      id: "__create-page-from-query",
+      objectTypeId: pageType.id,
+      label: `Criar '${query.trim()}'`,
+      createTitle: query.trim(),
+      badgeLabel: pageType.label,
+      isCreateFallback: true,
+    },
+  ];
 }
 
 function getActionAriaDescription(hints: readonly AppSidebarPrimaryActionHint[], label: string) {
@@ -119,14 +160,9 @@ function NewContentMenu({
   const optionRefs = React.useRef(new Map<string, HTMLButtonElement>());
   const Icon = action.icon;
   const deferredQuery = React.useDeferredValue(query);
-  const normalizedQuery = normalizeMenuQuery(deferredQuery.trim());
-  const localizedItems = objectTypes.map((item) => ({
-    ...item,
-    label: item.singularLabel ?? item.label,
-  }));
   const items = React.useMemo(
-    () => localizedItems.filter((item) => normalizeMenuQuery(item.label).includes(normalizedQuery)),
-    [localizedItems, normalizedQuery],
+    () => createNewContentMenuItems(objectTypes, deferredQuery),
+    [objectTypes, deferredQuery],
   );
   const hintDescription = getActionAriaDescription(action.hints, action.label);
   const hintShortcutChords = getActionShortcutChords(action.hints, shortcutPlatform);
@@ -144,8 +180,11 @@ function NewContentMenu({
   }
 
   function selectItem(objectTypeId: string) {
-    const selectedItem = localizedItems.find((item) => item.id === objectTypeId);
-    onSelectObjectType?.(objectTypeId, selectedItem?.label);
+    const selectedItem = items.find((item) => item.id === objectTypeId || item.objectTypeId === objectTypeId);
+    onSelectObjectType?.(
+      selectedItem?.objectTypeId ?? objectTypeId,
+      selectedItem?.createTitle ?? selectedItem?.label,
+    );
     setOpen(false);
     resetMenu();
   }
@@ -218,12 +257,15 @@ function NewContentMenu({
         alignOffset={6}
         className={cn(
           compactMenuSurfaceClass,
-          "box-content h-[361px] w-[22rem] min-w-0 max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-border shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
+          "box-content w-[22rem] min-w-0 max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-border shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
         )}
       >
         <div className="h-11 shrink-0 p-1.5">
           <div
-            className={cn(compactMenuSearchClass, "flex h-8 items-center rounded-[8px] bg-muted")}
+            className={cn(
+              compactMenuSearchClass,
+              "flex h-8 items-center rounded-[8px] border border-transparent bg-muted transition-colors focus-within:bg-muted",
+            )}
           >
             <Input
               value={query}
@@ -235,13 +277,13 @@ function NewContentMenu({
               placeholder={t("primaryNavigation.search")}
               aria-label={t("primaryNavigation.searchContentType")}
               aria-controls="new-content-menu-listbox"
-              aria-activedescendant={
-                items[activeIndex] ? `new-content-option-${items[activeIndex].id}` : undefined
-              }
+          aria-activedescendant={
+            items[activeIndex] ? `new-content-option-${items[activeIndex].id}` : undefined
+          }
               role="combobox"
               aria-autocomplete="list"
               aria-expanded={open}
-              className="h-full border-0 bg-transparent p-0 shadow-none placeholder:text-muted-foreground placeholder:opacity-60 focus-visible:ring-0"
+              className="h-full border-0 bg-transparent p-0 text-foreground shadow-none placeholder:text-muted-foreground placeholder:opacity-100 focus-visible:ring-0"
               autoFocus
             />
           </div>
@@ -251,9 +293,9 @@ function NewContentMenu({
           id="new-content-menu-listbox"
           role="listbox"
           aria-label={t("primaryNavigation.typesLabel")}
-          className="h-72 min-h-0 shrink-0 overflow-y-auto px-1.5"
+          className="min-h-0 max-h-72 shrink overflow-y-auto px-1.5 pb-1.5"
         >
-          {items.map(({ id, icon: Icon, label, tone }, index) => {
+          {items.map(({ id, icon: Icon, label, tone, badgeLabel, isCreateFallback }, index) => {
             return (
               <button
                 key={id}
@@ -272,12 +314,31 @@ function NewContentMenu({
                 onClick={() => selectItem(id)}
                 className={cn(
                   compactMenuItemClass,
-                  "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] px-1 text-left font-normal outline-none hover:bg-muted data-[active=true]:bg-muted",
+                  "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] border border-transparent px-1 text-left font-normal outline-none hover:bg-muted focus-visible:bg-muted data-[active=true]:bg-muted",
                 )}
               >
-                <ObjectIconBadge icon={Icon} tone={tone} variant="menu" />
+                {isCreateFallback ? (
+                  <span className="inline-flex shrink-0 items-center justify-center rounded-[0.475em] border border-transparent p-1 text-muted-foreground">
+                    <AppSidebarPlusIcon className="size-3" />
+                  </span>
+                ) : (
+                  <ObjectIconBadge icon={Icon} tone={tone} variant="menu" />
+                )}
                 <CompactMenuItemText>{label}</CompactMenuItemText>
-                <AppSidebarChevronRightIcon className="ml-auto size-3 text-muted-foreground" />
+                {badgeLabel && (
+                  <span
+                    className={cn(
+                      "ml-auto inline-flex h-7 shrink-0 items-center gap-1 rounded-[7px] border px-2 text-sm text-foreground",
+                      objectIconToneBadgeClass[tone],
+                    )}
+                  >
+                    <Icon className="size-3" />
+                    <span>{badgeLabel}</span>
+                  </span>
+                )}
+                {!isCreateFallback && (
+                  <AppSidebarChevronRightIcon className="ml-auto size-3 text-muted-foreground" />
+                )}
               </button>
             );
           })}
@@ -818,6 +879,7 @@ export {
   type AppSidebarPrimaryActionsProps,
   type AppSidebarPrimaryNavigationAction,
   type AppSidebarShortcut,
+  createNewContentMenuItems,
   defaultActions,
   WorkspaceSidebar,
 };

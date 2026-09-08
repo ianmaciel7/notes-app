@@ -909,8 +909,8 @@ function NewContentCommandDialog({
   );
 }
 
-function isNewContentTrigger(target: EventTarget | null) {
-  return target instanceof Element && target.closest("#workspace-new-trigger") !== null;
+function shouldOpenNewContentCommandDialogForEvent(eventType: string) {
+  return eventType === "workspace:open-command-palette";
 }
 
 function WorkspaceNewContentDialogController() {
@@ -918,20 +918,8 @@ function WorkspaceNewContentDialogController() {
   const [openInNewTab, setOpenInNewTab] = React.useState(false);
 
   React.useEffect(() => {
-    function blockLegacyPointerDown(event: PointerEvent) {
-      if (!isNewContentTrigger(event.target)) return;
-      event.stopImmediatePropagation();
-    }
-
-    function openFromClick(event: MouseEvent) {
-      if (!isNewContentTrigger(event.target)) return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      setOpenInNewTab(false);
-      setOpen(true);
-    }
-
     function openFromWorkspace(event: Event) {
+      if (!shouldOpenNewContentCommandDialogForEvent(event.type)) return;
       event.stopImmediatePropagation();
       const customEvent = event as CustomEvent<{ openInNewTab?: boolean }>;
       if (customEvent.detail?.openInNewTab !== undefined) {
@@ -958,21 +946,21 @@ function WorkspaceNewContentDialogController() {
           (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
         if (!isEditable || event.key.toLowerCase() === "k") {
           event.preventDefault();
+          if (event.key.toLowerCase() === "u") {
+            window.dispatchEvent(new CustomEvent("workspace:open-new-palette"));
+            return;
+          }
           setOpenInNewTab(false);
           setOpen((prev) => !prev);
         }
       }
     }
 
-    document.addEventListener("pointerdown", blockLegacyPointerDown, true);
-    document.addEventListener("click", openFromClick, true);
     window.addEventListener("workspace:open-new-palette", openFromWorkspace, true);
     window.addEventListener("workspace:open-command-palette", openFromWorkspace, true);
     window.addEventListener("keydown", handleGlobalKeyDown, true);
 
     return () => {
-      document.removeEventListener("pointerdown", blockLegacyPointerDown, true);
-      document.removeEventListener("click", openFromClick, true);
       window.removeEventListener("workspace:open-new-palette", openFromWorkspace, true);
       window.removeEventListener("workspace:open-command-palette", openFromWorkspace, true);
       window.removeEventListener("keydown", handleGlobalKeyDown, true);
@@ -993,4 +981,8 @@ function WorkspaceSidebar() {
 }
 
 export * from "./app-sidebar-primary-actions";
-export { WorkspaceNewContentDialogController, WorkspaceSidebar };
+export {
+  shouldOpenNewContentCommandDialogForEvent,
+  WorkspaceNewContentDialogController,
+  WorkspaceSidebar,
+};
