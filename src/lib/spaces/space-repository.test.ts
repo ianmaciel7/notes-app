@@ -199,6 +199,14 @@ describe("Space repository", () => {
     const { database, repository } = setup();
     const space = await repository.createBlankSpace("First");
     const type = await createBookType(repository, space.id);
+    const highlight = await repository.createHighlightEntity(space.id, {
+      objectTypeId: type.id,
+      fileId: "source-file-id",
+      exactText: "function with lexical scope memory",
+      color: "yellow",
+      location: { startOffset: 10, endOffset: 44 },
+      referenceDate: new Date("2026-01-01T00:00:00.000Z"),
+    });
 
     const flashcard = await repository.createFlashcardEntity(space.id, {
       objectTypeId: type.id,
@@ -206,7 +214,7 @@ describe("Space repository", () => {
       front: "What is a closure in JavaScript?",
       back: "A function that remembers references to variables outside itself.",
       fileId: "source-file-id",
-      sourceHighlightId: "highlight-id",
+      sourceHighlightId: highlight.id,
       sourceQuoteSnippet: "function with lexical scope memory",
       cardType: "basic",
       aiGenerated: false,
@@ -230,6 +238,60 @@ describe("Space repository", () => {
     const afterReview = await database.entities.get([space.id, flashcard.id]);
     expect(afterReview?.srs?.state).toBe("review");
     expect(reviewed.nextState.state).toBe("review");
+  });
+
+  it("creates highlight entities with source quote anchors", async () => {
+    const { database, repository } = setup();
+    const space = await repository.createBlankSpace("First");
+    const type = await createBookType(repository, space.id);
+
+    const highlight = await repository.createHighlightEntity(space.id, {
+      objectTypeId: type.id,
+      title: "Important quote",
+      fileId: "paper",
+      exactText: "retrieval practice improves retention",
+      prefix: "The evidence says ",
+      suffix: " across exams.",
+      color: "green",
+      location: { pageNumber: 3, startOffset: 120, endOffset: 156 },
+      userNote: "Use for memory card",
+      referenceDate: new Date("2026-01-01T00:00:00.000Z"),
+    });
+
+    const persisted = await database.entities.get([space.id, highlight.id]);
+    expect(persisted).toMatchObject({
+      id: highlight.id,
+      type: "highlight",
+      objectTypeId: type.id,
+      title: "Important quote",
+      fileId: "paper",
+      exactText: "retrieval practice improves retention",
+      prefix: "The evidence says ",
+      suffix: " across exams.",
+      color: "green",
+      location: { pageNumber: 3, startOffset: 120, endOffset: 156 },
+      userNote: "Use for memory card",
+      cardCount: 0,
+      _syncStatus: "pending",
+    });
+  });
+
+  it("rejects flashcards whose source highlight is missing in the active Space", async () => {
+    const { repository } = setup();
+    const space = await repository.createBlankSpace("First");
+    const type = await createBookType(repository, space.id);
+
+    await expect(
+      repository.createFlashcardEntity(space.id, {
+        objectTypeId: type.id,
+        title: "Missing source",
+        front: "Question",
+        back: "Answer",
+        fileId: "source-file-id",
+        sourceHighlightId: "missing-highlight",
+        sourceQuoteSnippet: "quote",
+      }),
+    ).rejects.toThrow("Source highlight not found");
   });
 
   it("creates manual flashcards with the fields required by the real review UI", async () => {

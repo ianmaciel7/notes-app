@@ -97,6 +97,8 @@ export interface BaseEntity {
   - `study_goal`: initializes `targetExamDate`, `targetRetentionRate`, `totalCards`, `dailyNewCardsQuota`, `expectedDailyReviews`, and `targetFileIds`.
 - `updateEntity(spaceId, entityId, update)` persists editable entity fields, refreshes `updatedAt`, and marks `_syncStatus = 'pending'`.
 - Identity fields are immutable through generic updates: `id`, `spaceId`, `objectTypeId`, and `createdAt` cannot be rewritten by `updateEntity`.
+- `createHighlightEntity(spaceId, input)` creates backend/local-first `Highlight` records with `fileId`, `exactText`, optional quote context (`prefix`, `suffix`), color, location metadata, and `cardCount = 0`.
+- `createFlashcardEntity(spaceId, input)` requires a source `Highlight` in the same Space for non-manual provenance and increments that highlight's `cardCount` when a card is created.
 - Current implementation focus is backend/local persistence. Dedicated UI editors for `front/back`, goal date, retention target, and pacing settings are deferred.
 
 ### 3.2 Specific Typed Entities
@@ -350,6 +352,7 @@ Floating bar anchored above text selection providing:
    - Build Sidebar, Command Palette (`Cmd+K`), Split View container, and Right Inspector.
    - Connect Zustand state store with Dexie `useLiveQuery`.
 3. **Phase 3: Reader Engine & Non-Mutating Highlighting**
+   - Backend/local repository can now create `Highlight` entities with quote anchors and validate flashcard provenance.
    - Implement `pdfjs-dist` PDF viewer and Markdown reader.
    - Integrate CSS Custom Highlight API and floating selection toolbar.
 4. **Phase 4: AI Generation Pipeline**

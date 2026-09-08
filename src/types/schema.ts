@@ -64,6 +64,24 @@ export interface FlashcardEntity extends BaseEntity {
   aiPromptContext?: string;
 }
 
+export interface HighlightEntity extends BaseEntity {
+  type: "highlight";
+  fileId: string;
+  exactText: string;
+  prefix?: string;
+  suffix?: string;
+  color: "yellow" | "blue" | "green" | "pink" | "purple";
+  location: {
+    pageNumber?: number;
+    startOffset?: number;
+    endOffset?: number;
+    cfi?: string;
+    domSelector?: string;
+  };
+  userNote?: string;
+  cardCount?: number;
+}
+
 export interface StudyGoalEntity extends BaseEntity {
   type: "study_goal";
   targetExamDate: string;

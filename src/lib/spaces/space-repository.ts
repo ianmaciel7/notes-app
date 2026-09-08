@@ -22,7 +22,7 @@ import type {
   SpaceTagRecord,
   SpaceTrashRecord,
 } from "@/lib/spaces/space-types";
-import type { FlashcardEntity, StudyGoalEntity } from "@/types/schema";
+import type { FlashcardEntity, HighlightEntity, StudyGoalEntity } from "@/types/schema";
 import {
   ACTIVE_SPACE_SETTING_ID,
   LOCAL_ACCOUNT_ID,
@@ -45,6 +45,10 @@ function isFlashcardRecord(
   entity: SpaceEntityRecord,
 ): entity is SpaceEntityRecord & FlashcardEntity {
   return entity.type === "flashcard" && typeof entity.srs === "object" && entity.srs !== null;
+}
+
+function isHighlightRecord(entity: SpaceEntityRecord): entity is SpaceEntityRecord & HighlightEntity {
+  return entity.type === "highlight";
 }
 
 function createManualFlashcardRecord(
@@ -316,6 +320,55 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     return entity;
   }
 
+  async function createHighlightEntity(
+    spaceId: string,
+    input: {
+      objectTypeId: string;
+      fileId: string;
+      exactText: string;
+      color: HighlightEntity["color"];
+      location: HighlightEntity["location"];
+      title?: string;
+      prefix?: string;
+      suffix?: string;
+      userNote?: string;
+      referenceDate?: Date;
+    },
+  ) {
+    await requireSpace(spaceId);
+    const objectType = await database.objectTypes.get([spaceId, input.objectTypeId]);
+    if (!objectType) throw new Error("Unknown object type in active Space.");
+    const exactText = input.exactText.trim();
+    if (!exactText) throw new Error("Highlight exact text is required.");
+
+    const timestamp = (input.referenceDate ?? new Date()).toISOString();
+    const record: SpaceEntityRecord & HighlightEntity = {
+      id: `highlight-${crypto.randomUUID()}`,
+      spaceId,
+      objectTypeId: input.objectTypeId,
+      type: "highlight",
+      title: input.title?.trim() || exactText.slice(0, 80),
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      blocks: [],
+      tags: [],
+      relations: [],
+      properties: {},
+      fileId: input.fileId,
+      exactText,
+      prefix: input.prefix,
+      suffix: input.suffix,
+      color: input.color,
+      location: structuredClone(input.location),
+      userNote: input.userNote,
+      cardCount: 0,
+      _syncStatus: "pending",
+    };
+
+    await database.entities.add(record);
+    return record;
+  }
+
   async function createFlashcardEntity(
     spaceId: string,
     input: {
@@ -336,6 +389,10 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     await requireSpace(spaceId);
     const objectType = await database.objectTypes.get([spaceId, input.objectTypeId]);
     if (!objectType) throw new Error("Unknown object type in active Space.");
+    const sourceHighlight = await database.entities.get([spaceId, input.sourceHighlightId]);
+    if (!sourceHighlight || !isHighlightRecord(sourceHighlight)) {
+      throw new Error("Source highlight not found.");
+    }
 
     const timestamp = (input.referenceDate ?? new Date()).toISOString();
     const record: SpaceEntityRecord & FlashcardEntity = {
@@ -363,7 +420,16 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
       _syncStatus: "pending",
     };
 
-    await database.entities.add(record);
+    await database.transaction("rw", database.entities, async () => {
+      await database.entities.add(record);
+      const updatedSourceHighlight: SpaceEntityRecord & HighlightEntity = {
+        ...sourceHighlight,
+        updatedAt: timestamp,
+        cardCount: (sourceHighlight.cardCount ?? 0) + 1,
+        _syncStatus: "pending",
+      };
+      await database.entities.put(updatedSourceHighlight);
+    });
     return record;
   }
 
@@ -535,6 +601,7 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     listEntities,
     createEntity,
     updateEntity,
+    createHighlightEntity,
     createCollection,
     replaceCollections,
     createFlashcardEntity,

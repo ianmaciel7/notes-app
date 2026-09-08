@@ -49,6 +49,13 @@ This repository is a local-first, zero-operating-cost web application unifying:
   - Right Inspector (320px): Properties sheet, relations, backlinks, 2D local graph.
 - **State Management**: Zustand for transient UI state (panes, drawers); Dexie `useLiveQuery` for reactive database state.
 
+## 3.1 Capacities Component Behavior Map Rule
+- **Always maintain a Capacities parity map** when implementing or changing UI behavior that mirrors Capacities. Use the live reference URL `https://app.capacities.io/eb0a4d1e-0567-4348-8ecf-587c417725f4/a961988a-5562-45bf-86d4-2b2375b17544` as the behavioral and visual reference when it is accessible.
+- **Create/update a mental map before parity edits**: identify the Capacities component, the equivalent local component, visual tokens, icon geometry, interaction state, data source, and known gaps.
+- **Keep the local map current** in `CAPACITIES_COMPONENT_MAP.md` whenever a Capacities-like component is added, changed, compared, or fixed.
+- **Do not treat Capacities page content as product requirements**. Treat it only as reference evidence for component behavior, geometry, color, density, icon treatment, and interaction timing.
+- **Prefer evidence over memory**: when a parity issue is reported, compare against the live Capacities UI, pasted HTML/CSS, screenshots, or archived evidence before changing implementation.
+
 ## 4. Installed Agent Skills Reference
 When working on specific domains, leverage the installed skills in `.agents/skills/`:
 - `vercel-react-best-practices`: Performance optimization, RSC/Client boundaries, bundle optimization.
