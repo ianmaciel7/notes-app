@@ -55,6 +55,8 @@ This repository is a local-first, zero-operating-cost web application unifying:
 - **Keep the local map current** in `CAPACITIES_COMPONENT_MAP.md` whenever a Capacities-like component is added, changed, compared, or fixed.
 - **Do not treat Capacities page content as product requirements**. Treat it only as reference evidence for component behavior, geometry, color, density, icon treatment, and interaction timing.
 - **Prefer evidence over memory**: when a parity issue is reported, compare against the live Capacities UI, pasted HTML/CSS, screenshots, or archived evidence before changing implementation.
+- **Use Graphify for architecture context** before broad or cross-cutting edits. Run `graphify query "<question>"` for targeted questions, `graphify explain "<node>"` for a component/module, `graphify path "<A>" "<B>"` for dependency paths, and `graphify update .` after meaningful source changes so `graphify-out/graph.json`, `graphify-out/graph.html`, and `graphify-out/GRAPH_REPORT.md` remain current.
+- **Keep Graphify merge support active**. `graphify hook status` should report post-commit and post-checkout hooks installed and merge driver registered for `graphify-out/graph.json`.
 
 ## 4. Installed Agent Skills Reference
 When working on specific domains, leverage the installed skills in `.agents/skills/`:
