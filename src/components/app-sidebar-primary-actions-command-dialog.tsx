@@ -661,7 +661,7 @@ function NewContentCommandDialog({
                 <div className="relative flex w-full min-w-0 flex-1 flex-col rounded-none sm:max-h-[70vh] sm:rounded-b">
             <div
               id="control-dropdown-container"
-              className="scroll-container flex h-full max-h-[65vh] w-full flex-col overflow-y-auto overflow-x-hidden px-1.5 py-0.5 sm:max-h-[70vh]"
+              className="scroll-container flex h-full w-full flex-col overflow-y-auto overflow-x-hidden overflow-auto px-1.5 py-0.5"
               style={{ scrollBehavior: "auto", scrollPadding: "2rem" }}
             >
               <div className="flex flex-col py-1">
@@ -699,7 +699,7 @@ function NewContentCommandDialog({
                                   })
                                 }
                                 className={cn(
-                                  "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2.5 px-2 py-1.5 rounded-[8px] border border-transparent outline-none transition-colors",
+                                  "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-start text-left text-sm gap-x-2 rounded-base border border-transparent p-1 outline-none",
                                   isSelected
                                     ? "bg-el text-primary shadow-xs font-normal"
                                     : "text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
@@ -780,7 +780,7 @@ function NewContentCommandDialog({
                                   })
                                 }
                                 className={cn(
-                                  "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2.5 px-2 py-1.5 rounded-[8px] border border-transparent outline-none transition-colors",
+                                  "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-start text-left text-sm gap-x-2 rounded-base border border-transparent p-1 outline-none",
                                   isSelected
                                     ? "bg-el text-primary shadow-xs font-normal"
                                     : "text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
@@ -865,7 +865,7 @@ function NewContentCommandDialog({
                               })
                             }
                             className={cn(
-                              "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2.5 px-2 py-1.5 rounded-[8px] border border-transparent outline-none transition-colors",
+                              "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-start text-left text-sm gap-x-2 rounded-base border border-transparent p-1 outline-none",
                               isSelected
                                 ? "bg-el text-primary shadow-xs font-normal"
                                 : "text-primary hover:text-primary active:text-primary sm:hover:bg-front-hover active:brightness-95",
@@ -929,21 +929,21 @@ function NewContentCommandDialog({
           </div>
 
           {/* Bottom Footer Navigation Bar */}
-          <div className="flex h-9 shrink-0 items-center gap-x-4 border-t border-border px-3 py-1.5 text-xs text-muted-foreground select-none">
+          <div className="mx-1 flex h-sm shrink-0 gap-x-3 border-t border-base px-1 py-1.5 text-xs text-secondary select-none">
             <span className="whitespace-nowrap">
-              <span className="font-medium text-foreground">↑ ↓</span> para navegar
+              <span className="font-medium text-secondary">↑↓</span> para navegar
             </span>
             <span className="whitespace-nowrap">
-              <span className="font-medium text-foreground">Esc</span> para abortar
+              <span className="font-medium text-secondary">Esc</span> para abortar
             </span>
             <span className="whitespace-nowrap">
-              <span className="font-medium text-foreground">↵</span> para selecionar
+              <span className="font-medium text-secondary">↵</span> para selecionar
             </span>
             <span className="whitespace-nowrap">
-              <span className="font-medium text-foreground">⌘ ↵ / Ctrl ↵</span> em nova aba
+              <span className="font-medium text-secondary">⌘↵ / Ctrl↵</span> em nova aba
             </span>
             <span className="whitespace-nowrap">
-              <span className="font-medium text-foreground">⇧ ↵</span> no painel lateral
+              <span className="font-medium text-secondary">⇧↵</span> no painel lateral
             </span>
           </div>
         </div>
