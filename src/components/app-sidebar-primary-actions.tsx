@@ -24,6 +24,13 @@ import {
 import { useWorkspace } from "@/components/space-controller";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   CompactMenuItemText,
   compactMenuItemClass,
   compactMenuSearchClass,
@@ -62,7 +69,245 @@ type NewContentMenuItem = AppSidebarObjectType & {
   createTitle?: string;
   badgeLabel?: string;
   isCreateFallback?: boolean;
+  hasChevron?: boolean;
+  searchLabels?: string[];
 };
+
+type NewContentDialogKind = "file" | "query" | "task" | "url";
+
+type NewContentDialogConfig = {
+  actionLabel: string;
+  description: string;
+  kind: NewContentDialogKind;
+  linkPlaceholder?: string;
+  title: string;
+};
+
+const newContentDialogObjectTypes = new Set([
+  "file",
+  "image",
+  "pdf",
+  "task",
+  "tweet",
+  "weblink",
+]);
+
+function getNewContentDialogConfig(item: NewContentMenuItem): NewContentDialogConfig {
+  if (item.objectTypeId === "query") {
+    return {
+      actionLabel: "Criar query",
+      description: "Defina filtros para criar uma query salva.",
+      kind: "query",
+      title: "Adicionar Query",
+    };
+  }
+
+  if (item.objectTypeId === "task") {
+    return {
+      actionLabel: "Criar tarefa",
+      description: "Digite o titulo da tarefa antes de criar.",
+      kind: "task",
+      title: "Adicionar Tarefa",
+    };
+  }
+
+  if (item.objectTypeId === "tweet") {
+    return {
+      actionLabel: "Adicionar Tweet",
+      description: "Cole o link de um Tweet/X para criar o objeto.",
+      kind: "url",
+      linkPlaceholder: "https://x.com/...",
+      title: "Adicionar Tweet",
+    };
+  }
+
+  if (item.objectTypeId === "weblink") {
+    return {
+      actionLabel: "Adicionar link",
+      description: "Cole uma URL para criar o Weblink.",
+      kind: "url",
+      linkPlaceholder: "https://example.com",
+      title: "Adicionar Weblink",
+    };
+  }
+
+  if (item.objectTypeId === "pdf") {
+    return {
+      actionLabel: "Selecionar arquivo(s)",
+      description: "Selecione um ou varios arquivos. O limite maximo de tamanho total dos arquivos e 10 GB.",
+      kind: "file",
+      linkPlaceholder: "https://example.com/file.pdf",
+      title: "Adicionar PDF",
+    };
+  }
+
+  if (item.objectTypeId === "image") {
+    return {
+      actionLabel: "Selecionar arquivo(s)",
+      description: "Selecione uma ou varias imagens. O limite maximo de tamanho total dos arquivos e 10 GB.",
+      kind: "file",
+      linkPlaceholder: "https://example.com/image.png",
+      title: "Adicionar Imagem",
+    };
+  }
+
+  return {
+    actionLabel: "Selecionar arquivo(s)",
+    description: "Selecione um ou varios arquivos. O limite maximo de tamanho total dos arquivos e 10 GB.",
+    kind: "file",
+    linkPlaceholder: "https://example.com/file",
+    title: "Adicionar Arquivo",
+  };
+}
+
+function NewContentCreationDialog({
+  item,
+  onOpenChange,
+}: {
+  item: NewContentMenuItem | null;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const config = item ? getNewContentDialogConfig(item) : null;
+  const [mode, setMode] = React.useState<"upload" | "link">("upload");
+
+  React.useEffect(() => {
+    if (item) setMode("upload");
+  }, [item]);
+
+  return (
+    <Dialog open={Boolean(item)} onOpenChange={onOpenChange}>
+      <DialogContent
+        className={cn(
+          "flex !max-w-[calc(100vw-3rem)] max-w-none flex-col gap-0 overflow-hidden rounded-[6px] border-border bg-card p-0 shadow-[0_16px_48px_rgb(0_0_0/0.22)] sm:!max-w-none",
+          config?.kind === "task"
+            ? "!w-[min(42rem,calc(100vw-3rem))] min-h-[154px]"
+            : "!h-[min(49rem,calc(100dvh-5rem))] !w-[min(64rem,calc(100vw-3rem))]",
+        )}
+      >
+        {config && (
+          <>
+            {config.kind === "task" ? (
+              <div className="flex min-h-[154px] flex-col justify-between p-4">
+                <DialogHeader className="sr-only">
+                  <DialogTitle>{config.title}</DialogTitle>
+                  <DialogDescription>{config.description}</DialogDescription>
+                </DialogHeader>
+                <Input placeholder="Adicionar tarefa" autoFocus />
+                <div className="flex items-center justify-end gap-2">
+                  <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
+                    Cancelar
+                  </Button>
+                  <Button type="button" variant="outline">
+                    Abrir
+                  </Button>
+                  <Button type="button">Adicionar tarefa</Button>
+                </div>
+              </div>
+            ) : (
+              <DialogHeader className="shrink-0 gap-0 px-3 pt-4 pb-0 text-left">
+                <DialogTitle className="text-[1.55rem] font-semibold leading-8 tracking-[-0.03em] text-foreground">
+                  {config.title}
+                </DialogTitle>
+                <DialogDescription className="sr-only">{config.description}</DialogDescription>
+              </DialogHeader>
+            )}
+
+            {config.kind === "file" && (
+              <div className="flex min-h-0 flex-1 flex-col">
+                <div className="flex h-[54px] shrink-0 items-center gap-2 px-3">
+                  <Button
+                    type="button"
+                    variant={mode === "upload" ? "secondary" : "ghost"}
+                    className="h-9 rounded-[8px] px-3 text-sm"
+                    onClick={() => setMode("upload")}
+                  >
+                    Carregar
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={mode === "link" ? "secondary" : "ghost"}
+                    className="h-9 rounded-[8px] px-3 text-sm"
+                    onClick={() => setMode("link")}
+                  >
+                    Adicionar um link
+                  </Button>
+                  {item?.objectTypeId === "image" && (
+                    <>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="h-9 rounded-[8px] px-3 text-sm"
+                      >
+                        Unsplash
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="h-9 rounded-[8px] px-3 text-sm"
+                      >
+                        Gerar
+                      </Button>
+                    </>
+                  )}
+                </div>
+                {mode === "upload" ? (
+                  <>
+                    <div className="shrink-0 bg-muted/40 px-5 py-3 text-sm leading-5 text-foreground">
+                      <p>{config.description}</p>
+                    </div>
+                    <div className="flex min-h-0 flex-1 flex-col px-3 pt-4 pb-5">
+                      <div className="flex min-h-0 flex-1 flex-col items-center justify-center rounded-[4px] border-2 border-dashed border-border bg-muted/20 text-center text-muted-foreground">
+                        <span className="mb-3 inline-flex size-8 items-center justify-center rounded-md text-2xl leading-none">
+                          +
+                        </span>
+                        <p className="text-sm">Arraste e solte</p>
+                      </div>
+                      <div className="mt-5 flex shrink-0 items-center justify-center gap-2">
+                        <Button type="button" variant="outline" className="h-8 rounded-[6px] px-3">
+                          {config.actionLabel}
+                        </Button>
+                        <Button type="button" className="h-8 rounded-[6px] px-3">
+                          Selecionar Pasta
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="grid gap-3 px-4 pt-4">
+                    <Input placeholder={config.linkPlaceholder} autoFocus />
+                    <Button type="button" className="w-fit">
+                      Adicionar link
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {config.kind === "url" && (
+              <div className="grid gap-3 px-4 pt-5">
+                <Input placeholder={config.linkPlaceholder} autoFocus />
+                <Button type="button" className="w-fit">
+                  {config.actionLabel}
+                </Button>
+              </div>
+            )}
+
+            {config.kind === "query" && (
+              <div className="grid gap-3 px-4 pt-5">
+                <Input placeholder="Filtrar objetos..." autoFocus />
+                <Button type="button" className="w-fit">
+                  {config.actionLabel}
+                </Button>
+              </div>
+            )}
+
+            {config.kind === "task" && null}
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 function normalizeMenuQuery(value: string) {
   return value
@@ -71,18 +316,55 @@ function normalizeMenuQuery(value: string) {
     .toLocaleLowerCase();
 }
 
+const newContentMenuBuiltinOrder = new Map(
+  [
+    "query",
+    "task",
+    "table",
+    "tweet",
+    "file",
+    "audio",
+    "pdf",
+    "weblink",
+    "image",
+    "tag",
+    "page",
+  ].map((id, index) => [id, index]),
+);
+
+const newContentMenuExcludedTypes = new Set(["ai-chat", "daily-note"]);
+
 function createNewContentMenuItems(
   objectTypes: readonly AppSidebarObjectType[],
   query: string,
 ): NewContentMenuItem[] {
   const normalizedQuery = normalizeMenuQuery(query.trim());
-  const localizedItems = objectTypes.map((item) => ({
-    ...item,
-    objectTypeId: item.id,
-    label: item.singularLabel ?? item.label,
-  }));
+  const localizedItems = objectTypes
+    .filter((item) => !newContentMenuExcludedTypes.has(item.id))
+    .map((item, sourceIndex) => ({
+      ...item,
+      objectTypeId: item.id,
+      hasChevron: true,
+      label: item.singularLabel ?? item.label,
+      searchLabels: [item.label, item.singularLabel, item.id].filter(Boolean),
+      sourceIndex,
+    }))
+    .sort((a, b) => {
+      const aOrder = newContentMenuBuiltinOrder.get(a.id);
+      const bOrder = newContentMenuBuiltinOrder.get(b.id);
+
+      if (aOrder === undefined && bOrder === undefined) {
+        return a.sourceIndex - b.sourceIndex;
+      }
+
+      if (aOrder === undefined) return -1;
+      if (bOrder === undefined) return 1;
+      return aOrder - bOrder;
+    });
   const filteredItems = localizedItems.filter((item) =>
-    normalizeMenuQuery(item.label).includes(normalizedQuery),
+    item.searchLabels.some((value) =>
+      normalizeMenuQuery(value ?? "").includes(normalizedQuery),
+    ),
   );
 
   if (filteredItems.length > 0 || normalizedQuery.length === 0) {
@@ -157,7 +439,11 @@ function NewContentMenu({
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [creationDialogItem, setCreationDialogItem] = React.useState<NewContentMenuItem | null>(
+    null,
+  );
   const optionRefs = React.useRef(new Map<string, HTMLButtonElement>());
+  const searchInputId = "new-content-menu-search";
   const Icon = action.icon;
   const deferredQuery = React.useDeferredValue(query);
   const items = React.useMemo(
@@ -180,7 +466,16 @@ function NewContentMenu({
   }
 
   function selectItem(objectTypeId: string) {
-    const selectedItem = items.find((item) => item.id === objectTypeId || item.objectTypeId === objectTypeId);
+    const selectedItem = items.find(
+      (item) => item.id === objectTypeId || item.objectTypeId === objectTypeId,
+    );
+    if (selectedItem && newContentDialogObjectTypes.has(selectedItem.objectTypeId)) {
+      setCreationDialogItem(selectedItem);
+      setOpen(false);
+      resetMenu();
+      return;
+    }
+
     onSelectObjectType?.(
       selectedItem?.objectTypeId ?? objectTypeId,
       selectedItem?.createTitle ?? selectedItem?.label,
@@ -219,6 +514,24 @@ function NewContentMenu({
   }, [activeIndex, items, open]);
 
   React.useEffect(() => {
+    if (open) {
+      const timer = window.setTimeout(() => {
+        document.getElementById(searchInputId)?.focus();
+      }, 0);
+      return () => window.clearTimeout(timer);
+    }
+
+    const timer = window.setTimeout(() => {
+      document.getElementById("workspace-new-trigger")?.focus();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [open]);
+
+  React.useEffect(() => {
+    setActiveIndex((current) => Math.min(current, Math.max(items.length - 1, 0)));
+  }, [items.length]);
+
+  React.useEffect(() => {
     function openFromWorkspace() {
       setQuery("");
       setActiveIndex(0);
@@ -229,37 +542,38 @@ function NewContentMenu({
   }, []);
 
   return (
-    <Popover open={open} onOpenChange={handleOpenChange}>
-      <PopoverTrigger
-        render={
-          <Button
-            id="workspace-new-trigger"
-            data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationTrigger}
-            tooltip={tooltip}
-            aria-label={action.label}
-            aria-description={hintDescription}
-            aria-keyshortcuts={hintShortcuts}
-            type="button"
-            variant="ghost"
-            size="default"
-            className="h-8 w-full justify-start gap-x-1.5 px-2 font-normal text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground [&_svg]:size-4"
-          />
-        }
-      >
-        <Icon data-icon="inline-start" />
-        <span className="min-w-0 truncate">{action.label}</span>
-      </PopoverTrigger>
-      <PopoverContent
-        data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationMenu}
-        side="bottom"
-        align="start"
-        sideOffset={-1}
-        alignOffset={6}
-        className={cn(
-          compactMenuSurfaceClass,
-          "box-content w-[22rem] min-w-12 max-h-72 max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-border shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
-        )}
-      >
+    <>
+      <Popover open={open} onOpenChange={handleOpenChange}>
+        <PopoverTrigger
+          render={
+            <Button
+              id="workspace-new-trigger"
+              data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationTrigger}
+              tooltip={tooltip}
+              aria-label={action.label}
+              aria-description={hintDescription}
+              aria-keyshortcuts={hintShortcuts}
+              type="button"
+              variant="ghost"
+              size="default"
+              className="h-8 w-full justify-start gap-x-1.5 px-2 font-normal text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground [&_svg]:size-4"
+            />
+          }
+        >
+          <Icon data-icon="inline-start" />
+          <span className="min-w-0 truncate">{action.label}</span>
+        </PopoverTrigger>
+        <PopoverContent
+          data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationMenu}
+          side="bottom"
+          align="start"
+          sideOffset={-1}
+          alignOffset={6}
+          className={cn(
+            compactMenuSurfaceClass,
+            "box-content w-[min(22rem,calc(100vw-1.75rem))] min-w-44 max-h-[min(18rem,calc(100dvh-8rem))] max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-border shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
+          )}
+        >
         <div className="h-11 shrink-0 p-1.5">
           <div
             className={cn(
@@ -268,6 +582,7 @@ function NewContentMenu({
             )}
           >
             <Input
+              id={searchInputId}
               value={query}
               onChange={(event) => {
                 setQuery(event.target.value);
@@ -277,9 +592,11 @@ function NewContentMenu({
               placeholder={t("primaryNavigation.search")}
               aria-label={t("primaryNavigation.searchContentType")}
               aria-controls="new-content-menu-listbox"
-          aria-activedescendant={
-            items[activeIndex] ? `new-content-option-${items[activeIndex].id}` : undefined
-          }
+              aria-activedescendant={
+                items[activeIndex]
+                  ? `new-content-option-${items[activeIndex].id}`
+                  : undefined
+              }
               role="combobox"
               aria-autocomplete="list"
               aria-expanded={open}
@@ -293,9 +610,9 @@ function NewContentMenu({
           id="new-content-menu-listbox"
           role="listbox"
           aria-label={t("primaryNavigation.typesLabel")}
-          className="min-h-0 flex-1 overflow-y-auto px-1.5 pb-1.5"
+          className="min-h-0 max-h-[min(12.5rem,calc(100dvh-15rem))] flex-1 overflow-y-auto px-1.5 pb-1.5"
         >
-          {items.map(({ id, icon: Icon, label, tone, badgeLabel, isCreateFallback }, index) => {
+          {items.map(({ id, icon: Icon, label, tone, badgeLabel, isCreateFallback, hasChevron }, index) => {
             return (
               <button
                 key={id}
@@ -336,7 +653,7 @@ function NewContentMenu({
                     <span>{badgeLabel}</span>
                   </span>
                 )}
-                {!isCreateFallback && (
+                {hasChevron && (
                   <AppSidebarChevronRightIcon className="ml-auto size-3 text-muted-foreground" />
                 )}
               </button>
@@ -355,8 +672,15 @@ function NewContentMenu({
             <span className="font-medium text-muted-foreground">↵</span> para selecionar
           </span>
         </div>
-      </PopoverContent>
-    </Popover>
+        </PopoverContent>
+      </Popover>
+      <NewContentCreationDialog
+        item={creationDialogItem}
+        onOpenChange={(nextOpen) => {
+          if (!nextOpen) setCreationDialogItem(null);
+        }}
+      />
+    </>
   );
 }
 
