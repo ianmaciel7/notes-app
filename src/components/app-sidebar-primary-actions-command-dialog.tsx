@@ -146,6 +146,17 @@ type PaletteItem = {
   execute: (options: { openInNewTab?: boolean; openInSidePanel?: boolean }) => void | Promise<void>;
 };
 
+const DEFAULT_RECENT_COMMAND_ITEMS_LIMIT = 1;
+
+function getVisibleCommandPaletteRecentItems<T>(items: readonly T[], normalizedQuery: string): T[] {
+  if (normalizedQuery.length > 0) return [...items];
+  return items.slice(0, DEFAULT_RECENT_COMMAND_ITEMS_LIMIT);
+}
+
+function shouldRenderCommandPaletteOpenInNewTabToggle() {
+  return false;
+}
+
 function NewContentCommandDialog({
   open,
   onOpenChange,
@@ -464,14 +475,19 @@ function NewContentCommandDialog({
     [recentItems, normalizedQuery],
   );
 
+  const visibleRecentItems = React.useMemo(
+    () => getVisibleCommandPaletteRecentItems(filteredRecentItems, normalizedQuery),
+    [filteredRecentItems, normalizedQuery],
+  );
+
   const filteredActionItems = React.useMemo(
     () => actionItems.filter((item) => normalizeQuery(item.title).includes(normalizedQuery)),
     [actionItems, normalizedQuery],
   );
 
   const allFilteredItems = React.useMemo(
-    () => [...filteredRecentItems, ...filteredActionItems],
-    [filteredRecentItems, filteredActionItems],
+    () => [...visibleRecentItems, ...filteredActionItems],
+    [visibleRecentItems, filteredActionItems],
   );
 
   // Keyboard navigation & Auto-scroll
@@ -520,12 +536,12 @@ function NewContentCommandDialog({
 
   // Split recent items into Hoje & Anterior
   const hojeRecent = React.useMemo(
-    () => filteredRecentItems.filter((i) => i.group === "Hoje"),
-    [filteredRecentItems],
+    () => visibleRecentItems.filter((i) => i.group === "Hoje"),
+    [visibleRecentItems],
   );
   const anteriorRecent = React.useMemo(
-    () => filteredRecentItems.filter((i) => i.group !== "Hoje"),
-    [filteredRecentItems],
+    () => visibleRecentItems.filter((i) => i.group !== "Hoje"),
+    [visibleRecentItems],
   );
 
   return (
@@ -536,7 +552,7 @@ function NewContentCommandDialog({
         showCloseButton={false}
         overlayClassName="bg-black/50 backdrop-blur-none"
         className={cn(
-          "fixed z-50 top-0 left-0 h-dvh w-full translate-x-0 translate-y-0 sm:top-[10vh] sm:left-1/2 sm:-translate-x-1/2 sm:translate-y-0 sm:h-auto sm:max-h-[85vh] p-0 border-0 bg-transparent ring-0 outline-none select-none transition-all duration-200 flex flex-col items-center justify-start max-w-full",
+          "fixed z-50 top-0 left-0 h-dvh w-full translate-x-0 translate-y-0 sm:top-[8vh] sm:left-1/2 sm:-translate-x-1/2 sm:translate-y-0 sm:h-auto sm:max-h-[84vh] p-0 border-0 bg-transparent ring-0 outline-none select-none transition-all duration-200 flex flex-col items-center justify-start max-w-full",
           isExpanded
             ? "sm:w-[min(56rem,calc(100vw-2rem))] sm:max-w-4xl sm:max-h-[92vh]"
             : "sm:w-[min(42rem,calc(100vw-3rem))] sm:max-w-2xl",
@@ -611,22 +627,23 @@ function NewContentCommandDialog({
               </div>
             </div>
 
-            {/* Sub-header Option Pill: Abrir em nova aba */}
-            <div className="mt-1.5 flex px-0.5 pb-2">
-              <button
-                type="button"
-                onClick={() => setOpenInNewTab((prev) => !prev)}
-                className={cn(
-                  "inline-flex cursor-pointer select-none items-center gap-1 rounded-[6px] border px-[7px] py-[3px] text-[11px] font-medium leading-tight transition-colors outline-none",
-                  openInNewTab
-                    ? "border-primary/40 bg-primary/10 text-primary"
-                    : "border-base bg-el text-secondary hover:border-base-strong hover:text-primary",
-                )}
-              >
-                <CapacitiesNewTabIcon className="size-[12px] shrink-0" aria-hidden="true" />
-                Abrir em nova aba
-              </button>
-            </div>
+            {shouldRenderCommandPaletteOpenInNewTabToggle() && (
+              <div className="mt-1.5 flex px-0.5 pb-2">
+                <button
+                  type="button"
+                  onClick={() => setOpenInNewTab((prev) => !prev)}
+                  className={cn(
+                    "inline-flex cursor-pointer select-none items-center gap-1 rounded-[6px] border px-[7px] py-[3px] text-[11px] font-medium leading-tight transition-colors outline-none",
+                    openInNewTab
+                      ? "border-primary/40 bg-primary/10 text-primary"
+                      : "border-base bg-el text-secondary hover:border-base-strong hover:text-primary",
+                  )}
+                >
+                  <CapacitiesNewTabIcon className="size-[12px] shrink-0" aria-hidden="true" />
+                  Abrir em nova aba
+                </button>
+              </div>
+            )}
           </div>
 
           {/* --- Scrollable Content List Container --- */}
@@ -638,7 +655,7 @@ function NewContentCommandDialog({
             >
               <div className="flex flex-col py-1">
                 {/* --- SECTION 1: RECENTEMENTE ABERTOS --- */}
-                {filteredRecentItems.length > 0 && (
+                {visibleRecentItems.length > 0 && (
                   <>
                     <div className="px-2.5 pt-2 pb-2 text-sm font-normal text-secondary">
                       Recentemente abertos
@@ -983,6 +1000,8 @@ function WorkspaceSidebar() {
 
 export * from "./app-sidebar-primary-actions";
 export {
+  getVisibleCommandPaletteRecentItems,
+  shouldRenderCommandPaletteOpenInNewTabToggle,
   shouldOpenNewContentCommandDialogForEvent,
   WorkspaceNewContentDialogController,
   WorkspaceSidebar,
