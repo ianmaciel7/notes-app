@@ -90,6 +90,15 @@ export interface BaseEntity {
 }
 ```
 
+### 3.1.1 Local Repository Write Contract
+- Dexie-backed repository methods are the canonical write path for backend/local-first behavior.
+- `createEntity(spaceId, objectTypeId, title)` creates normal object entities and materializes special backend defaults for system study types:
+  - `flashcard`: initializes `cardType`, `front`, `back`, provenance placeholders, `aiGenerated = false`, and initial `srs`.
+  - `study_goal`: initializes `targetExamDate`, `targetRetentionRate`, `totalCards`, `dailyNewCardsQuota`, `expectedDailyReviews`, and `targetFileIds`.
+- `updateEntity(spaceId, entityId, update)` persists editable entity fields, refreshes `updatedAt`, and marks `_syncStatus = 'pending'`.
+- Identity fields are immutable through generic updates: `id`, `spaceId`, `objectTypeId`, and `createdAt` cannot be rewritten by `updateEntity`.
+- Current implementation focus is backend/local persistence. Dedicated UI editors for `front/back`, goal date, retention target, and pacing settings are deferred.
+
 ### 3.2 Specific Typed Entities
 
 ```typescript
@@ -336,6 +345,7 @@ Floating bar anchored above text selection providing:
 1. **Phase 1: Project Setup & Storage Core**
    - Initialize Next.js App Router (Full-Stack hybrid), Tailwind CSS, and Lucide icons.
    - Configure Dexie.js database tables, TypeScript types, and `apphosting.yaml` configuration.
+   - Implemented Space repository create/update write paths for entities, including protected identity fields and special defaults for `flashcard` and `study_goal`.
 2. **Phase 2: 3-Pane Capacities Shell & Navigation**
    - Build Sidebar, Command Palette (`Cmd+K`), Split View container, and Right Inspector.
    - Connect Zustand state store with Dexie `useLiveQuery`.

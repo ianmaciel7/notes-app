@@ -297,7 +297,35 @@ describe("Space repository", () => {
       back: "Updated back",
       _syncStatus: "pending",
     });
-    expect(updated?.updatedAt).not.toBe(flashcard.updatedAt);
+    expect(Number.isFinite(new Date(updated?.updatedAt ?? "").getTime())).toBe(true);
+  });
+
+  it("does not allow generic entity updates to rewrite identity fields", async () => {
+    const { database, repository } = setup();
+    await bootstrapWorkspace(database, () => new Date("2026-01-01T00:00:00.000Z"));
+    const flashcard = await repository.createEntity(PERSONAL_SPACE_ID, "flashcard", "Manual card");
+
+    await repository.updateEntity(
+      PERSONAL_SPACE_ID,
+      flashcard.id,
+      {
+        id: "rewritten",
+        spaceId: "other-space",
+        objectTypeId: "page",
+        createdAt: "1999-01-01T00:00:00.000Z",
+        title: "Still editable",
+      } as never,
+    );
+
+    const updated = await database.entities.get([PERSONAL_SPACE_ID, flashcard.id]);
+    expect(updated).toMatchObject({
+      id: flashcard.id,
+      spaceId: PERSONAL_SPACE_ID,
+      objectTypeId: "flashcard",
+      createdAt: flashcard.createdAt,
+      title: "Still editable",
+    });
+    expect(await database.entities.get([PERSONAL_SPACE_ID, "rewritten"])).toBeUndefined();
   });
 
   it("rejects cross-Space relations", async () => {

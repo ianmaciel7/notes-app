@@ -718,7 +718,7 @@ function NewContentCommandDialog({
                                 </div>
 
                                 {item.objectTypeLabel && (
-                                  <div className="flex shrink-0 items-center">
+                                  <div className="flex h-full shrink-0 items-start gap-1 pt-[3.5px]">
                                     <span className="text-xxs">
                                       <span
                                         className={cn(
@@ -800,7 +800,7 @@ function NewContentCommandDialog({
                                 </div>
 
                                 {item.objectTypeLabel && (
-                                  <div className="flex shrink-0 items-center">
+                                  <div className="flex h-full shrink-0 items-start gap-1 pt-[3.5px]">
                                     <span className="text-xxs">
                                       <span
                                         className={cn(

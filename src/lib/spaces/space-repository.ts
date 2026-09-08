@@ -264,14 +264,22 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
   async function updateEntity(
     spaceId: string,
     entityId: string,
-    update: Partial<Omit<SpaceEntityRecord, "id" | "spaceId" | "objectTypeId" | "createdAt">>,
+    update: Partial<Omit<SpaceEntityRecord, "id" | "spaceId" | "objectTypeId" | "createdAt">> &
+      Record<string, unknown>,
   ) {
     await requireSpace(spaceId);
     const entity = await database.entities.get([spaceId, entityId]);
     if (!entity) throw new Error("Entity not found.");
+    const {
+      id: _id,
+      spaceId: _spaceId,
+      objectTypeId: _objectTypeId,
+      createdAt: _createdAt,
+      ...editableUpdate
+    } = structuredClone(update) as Partial<SpaceEntityRecord>;
 
     await database.entities.update([spaceId, entityId], {
-      ...structuredClone(update),
+      ...editableUpdate,
       updatedAt: new Date().toISOString(),
       _syncStatus: "pending",
     });
