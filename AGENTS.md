@@ -37,6 +37,7 @@ This repository is a local-first, zero-operating-cost web application unifying:
   - **Firebase Auth**: Email/Password & Google OAuth with server-side ID token verification via `firebase-admin`.
   - **Cloud Firestore**: Background sync with Last-Write-Wins (LWW) conflict resolution.
 - **SRS Engine**: Modern FSRS (Free Spaced Repetition Scheduler) algorithm in `src/lib/srs/fsrs.ts`. Supports 4 rating responses (`Again=1`, `Hard=2`, `Good=3`, `Easy=4`) and exam burndown calculation (`DailyNewQuota = ceil(Unlearned / (DaysRemaining - BufferDays))`).
+- **Flashcard/SRS UI Data Rule**: Components that display or review flashcards must consume real Dexie-backed workspace data (`useLiveQuery`, `useSpaceData`, or Space repository APIs) and persist reviews through repository methods. Do not ship mock flashcard queues or local-only fake review state.
 - **AI Gateway & Card Generation**:
   - Server Route Handler at `/api/ai/generate` querying Google Gemini 2.0 Flash / Groq LLMs.
   - Generates structured JSON schema with verbatim `exactQuote`, `cardType`, `front`, `back`.

@@ -15,6 +15,7 @@ A local-first, zero-operating-cost web application unifying the core superpowers
 - **Cloud Backend**: Google Firebase (App Hosting on Cloud Run, Firebase Auth, Cloud Firestore)
 - **Styling**: Tailwind CSS v4 (CSS-first configuration)
 - **State Management**: Zustand (transient UI) + Dexie `useLiveQuery` (database reactivity)
+- **SRS Review**: Local-first flashcard review deck backed by real Dexie entities and FSRS review persistence.
 - **Linter & Formatter**: Biome
 - **Package Manager**: `pnpm`
 

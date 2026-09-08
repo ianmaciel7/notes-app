@@ -24,6 +24,7 @@
 
 ## Decision 3: SRS Core & Goal-Driven Exam Pacing
 - **Algorithm**: Modern FSRS (Free Spaced Repetition Scheduler). Superior to SM-2 in stability modeling, retrievability decay, and preventing review backlogs.
+- **Review Persistence**: Flashcard review UI reads real Dexie entities from the active Space and records `Again`, `Hard`, `Good`, `Easy` ratings through `recordFlashcardReview`, keeping Dexie as the single source of truth and marking changed records with pending local sync state.
 - **Dynamic Goal Burndown**:
   - Daily new card quota formula: `DailyNew = ceil(UnlearnedCards / (DaysRemaining - BufferDays))`, with a default pre-exam consolidation buffer (7–14 days).
   - Review load projection based on FSRS stability decay.

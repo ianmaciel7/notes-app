@@ -26,3 +26,5 @@ description: Rules for FSRS spaced repetition scheduler implementation, mathemat
 ## 3. Storage Model
 - Store card SRS states on `Flashcard.srs` (`dueDate`, `interval`, `easeFactor`, `stability`, `difficulty`, `repetitionCount`, `lapses`).
 - Primary Dexie index: `srs.dueDate, srs.state` for instantaneous review queries.
+- Review components must query real Dexie-backed `Flashcard` entities from the active Space and persist ratings through the Space repository. Do not use mock queues, fake cards, or component-only review state for shipped SRS UI.
+- Due queue selection includes only `type === "flashcard"` records with an SRS state and `srs.dueDate` at or before the review timestamp.

@@ -23,6 +23,7 @@ import {
   WorkspaceProvider,
   WorkspaceSidePanelHeader,
 } from "@/components/space-controller";
+import { WorkspaceFlashcardReviewPanel } from "@/components/workspace-flashcard-review-panel";
 
 export default function HomePage() {
   return (
@@ -40,7 +41,9 @@ export default function HomePage() {
               <AppShellWorkspace>
                 <AppShellMain>
                   <WorkspaceMainHeader />
-                  <AppShellSurface className="h-full w-full" />
+                  <AppShellSurface className="h-full w-full">
+                    <WorkspaceFlashcardReviewPanel />
+                  </AppShellSurface>
                 </AppShellMain>
 
                 <AppShellSidePanel>
@@ -63,7 +66,9 @@ export default function HomePage() {
                 <AppShellSurface side="side-panel" className="h-full w-full" />
               </AppShellMobileSidePanel>
             </AppShellHeader>
-            <AppShellSurface className="h-full w-full" />
+            <AppShellSurface className="h-full w-full">
+              <WorkspaceFlashcardReviewPanel />
+            </AppShellSurface>
           </AppShellMobile>
         </WorkspaceProvider>
       </FocusModeProvider>

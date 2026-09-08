@@ -178,6 +178,7 @@ The application layout strictly follows the **Capacities 3-Pane Geometry**:
 2. **Main Center (`flex-1`)**:
    - Split-view container supporting 50/50, 60/40, or full single-pane focus.
    - Document reader respects reading column width (`max-w-3xl mx-auto px-6 py-10`).
+   - Flashcard review surface uses a compact work panel with due/total counters, front/back reveal, and four rating buttons (`Again`, `Hard`, `Good`, `Easy`). It displays empty/loading states from live workspace data instead of mocks.
 3. **Right Inspector Panel (`w-80` / 320px fixed)**:
    - Collapsible properties sheet.
    - Border-left `1px solid var(--border)`.

@@ -314,6 +314,7 @@ Floating bar anchored above text selection providing:
   - **Split View (`grid grid-cols-2 divide-x divide-neutral-200 dark:divide-neutral-800`)**:
     - Left Pane: PDF / Reader view with active highlights.
     - Right Pane: Note editor, flashcard review deck, or AI staging drawer.
+  - **Flashcard Review Deck**: Reads real `Flashcard` entities from Dexie via reactive workspace data, selects cards whose `srs.dueDate` is due, flips front/back, and persists `Again`, `Hard`, `Good`, `Easy` reviews through the Space repository FSRS path. No mock review data is allowed in this surface.
 - **Pane 3: Right Inspector Panel (`w-80 border-l border-neutral-200 dark:border-neutral-800`)**:
   - **Properties Sheet**: Object type icon, title, tags, custom attributes.
   - **Relations & Backlinks**: Outgoing links and incoming backlinks with excerpt previews.
@@ -347,8 +348,9 @@ Floating bar anchored above text selection providing:
    - Build chunker, structured output handler, and automatic anchor/highlight synthesizer.
    - Implement AI Staging Drawer.
 5. **Phase 5: FSRS Spaced Repetition & Exam Burndown Dashboard**
-   - Implement FSRS mathematical state machine.
-   - Build interactive flashcard study session (Again, Hard, Good, Easy keyboard shortcuts `1-4`, Space to flip).
+   - Implemented FSRS mathematical state machine.
+   - Implemented interactive flashcard study session backed by real Dexie `Flashcard` entities and repository review persistence.
+   - Add keyboard shortcuts (`1-4`, Space to flip) to the study session.
    - Build Exam Goal Pacing Dashboard with burndown chart.
 6. **Phase 6: Firebase Full-Stack Integration & Deployment**
    - Implement Firebase Auth, server-side token validation via `firebase-admin`, and Firestore sync.

@@ -41,6 +41,7 @@ import {
   searchEntitiesInSpace,
 } from "@/lib/spaces/space-projections";
 import { PERSONAL_SPACE_ID } from "@/lib/spaces/space-types";
+import type { FSRSRating } from "@/lib/srs/fsrs";
 
 // biome-ignore lint/suspicious/noExplicitAny: context compatibility while legacy UI APIs are migrated
 export type WorkspaceContextValue = Record<string, any>;
@@ -98,6 +99,7 @@ const defaultWorkspaceContext: WorkspaceContextValue = {
   setShortcutBrowserOpen: () => {},
   openInSidePanel: () => {},
   createWorkspaceEntity: () => {},
+  reviewFlashcard: async () => null,
   showMessage: () => {},
   trashItems: [],
   emptyTrash: () => {},
@@ -305,6 +307,20 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       }
     },
     [objectTypes, repository, showMessage, spaceId],
+  );
+
+  const reviewFlashcard = React.useCallback(
+    async (flashcardId: string, rating: FSRSRating) => {
+      try {
+        await repository.recordFlashcardReview(spaceId, flashcardId, rating);
+        showMessage("Flashcard review saved");
+        return true;
+      } catch (cause) {
+        showMessage(cause instanceof Error ? cause.message : String(cause));
+        return false;
+      }
+    },
+    [repository, showMessage, spaceId],
   );
 
   const setObjectTypeCollections = React.useCallback(
@@ -616,6 +632,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setShortcutBrowserOpen,
       openInSidePanel,
       createWorkspaceEntity,
+      reviewFlashcard,
       showMessage,
       trashItems,
       emptyTrash,
@@ -656,6 +673,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setObjectTypeCollections,
       openInSidePanel,
       createWorkspaceEntity,
+      reviewFlashcard,
       showMessage,
       trashItems,
       emptyTrash,
