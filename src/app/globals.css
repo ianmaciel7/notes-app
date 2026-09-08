@@ -389,7 +389,7 @@
   --color-el-strong: var(--app-bg-el-strong);
   --color-front: var(--app-bg-front);
   --color-front-hover: var(--app-bg-front-hover);
-  --color-base: var(--app-border-el);
+  --color-base: var(--app-border-base);
   --color-subtle: var(--app-text-subtle);
   --color-text-primary: var(--app-text-primary);
   --color-text-secondary: var(--app-text-secondary);
@@ -576,6 +576,8 @@
   --app-bg-el: var(--bg-el);
   --app-bg-el-hover: var(--bg-el-hover);
   --app-bg-el-active: var(--bg-el-active);
+  --app-border-base: var(--border-base);
+  --app-border-front: var(--border-front);
   --app-border-base-strong: var(--border-base-strong);
   --app-border-el: var(--border-el);
   --app-border-el-hover: var(--border-el-hover);
@@ -750,6 +752,8 @@
   --app-bg-el: var(--bg-el);
   --app-bg-el-hover: var(--bg-el-hover);
   --app-bg-el-active: var(--bg-el-active);
+  --app-border-base: var(--border-base);
+  --app-border-front: var(--border-front);
   --app-border-base-strong: var(--border-base-strong);
   --app-border-el: var(--border-el);
   --app-border-el-hover: var(--border-el-hover);
@@ -804,10 +808,10 @@
 }
 
 .preview-card-core {
-  --color-border-base: var(--app-border-el);
-  --color-border-front: var(--app-border-base-strong);
-  --color-bg-front: var(--card);
-  --color-bg-base: var(--background);
+  --color-border-base: var(--app-border-base);
+  --color-border-front: var(--app-border-front);
+  --color-bg-front: var(--app-bg-front);
+  --color-bg-base: var(--app-bg-base);
   --color-bg-el: var(--app-bg-el);
   --color-text-primary: var(--app-text-primary);
   --color-text-secondary: var(--app-text-secondary);
@@ -835,11 +839,11 @@
 }
 
 .preview-card-core .border-base {
-  border-color: var(--app-border-el);
+  border-color: var(--app-border-base);
 }
 
 .preview-card-core .border-front {
-  border-color: var(--app-border-base-strong);
+  border-color: var(--app-border-front);
 }
 
 .capacities-card-frame {

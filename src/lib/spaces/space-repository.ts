@@ -22,7 +22,7 @@ import type {
   SpaceTagRecord,
   SpaceTrashRecord,
 } from "@/lib/spaces/space-types";
-import type { FlashcardEntity } from "@/types/schema";
+import type { FlashcardEntity, StudyGoalEntity } from "@/types/schema";
 import {
   ACTIVE_SPACE_SETTING_ID,
   LOCAL_ACCOUNT_ID,
@@ -45,6 +45,39 @@ function isFlashcardRecord(
   entity: SpaceEntityRecord,
 ): entity is SpaceEntityRecord & FlashcardEntity {
   return entity.type === "flashcard" && typeof entity.srs === "object" && entity.srs !== null;
+}
+
+function createManualFlashcardRecord(
+  base: SpaceEntityRecord,
+): SpaceEntityRecord & FlashcardEntity {
+  return {
+    ...base,
+    type: "flashcard",
+    cardType: "basic",
+    front: base.title,
+    back: "",
+    fileId: "manual",
+    sourceHighlightId: "manual",
+    sourceQuoteSnippet: "",
+    srs: createInitialSRSState(new Date(base.createdAt)),
+    aiGenerated: false,
+  };
+}
+
+function createStudyGoalRecord(base: SpaceEntityRecord): SpaceEntityRecord & StudyGoalEntity {
+  const targetExamDate = new Date(base.createdAt);
+  targetExamDate.setDate(targetExamDate.getDate() + 30);
+
+  return {
+    ...base,
+    type: "study_goal",
+    targetExamDate: targetExamDate.toISOString(),
+    targetRetentionRate: 0.9,
+    totalCards: 0,
+    dailyNewCardsQuota: 0,
+    expectedDailyReviews: 0,
+    targetFileIds: [],
+  };
 }
 
 export function createSpaceRepository(database: KnowledgeDatabase) {
@@ -228,12 +261,30 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     return database.entities.where("spaceId").equals(spaceId).toArray();
   }
 
+  async function updateEntity(
+    spaceId: string,
+    entityId: string,
+    update: Partial<Omit<SpaceEntityRecord, "id" | "spaceId" | "objectTypeId" | "createdAt">>,
+  ) {
+    await requireSpace(spaceId);
+    const entity = await database.entities.get([spaceId, entityId]);
+    if (!entity) throw new Error("Entity not found.");
+
+    await database.entities.update([spaceId, entityId], {
+      ...structuredClone(update),
+      updatedAt: new Date().toISOString(),
+      _syncStatus: "pending",
+    });
+
+    return database.entities.get([spaceId, entityId]);
+  }
+
   async function createEntity(spaceId: string, objectTypeId: string, title?: string) {
     await requireSpace(spaceId);
     const objectType = await database.objectTypes.get([spaceId, objectTypeId]);
     if (!objectType) throw new Error("Unknown object type in active Space.");
     const timestamp = new Date().toISOString();
-    const entity: SpaceEntityRecord = {
+    const baseEntity: SpaceEntityRecord = {
       id: `entity-${crypto.randomUUID()}`,
       spaceId,
       objectTypeId,
@@ -247,6 +298,12 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
       properties: {},
       _syncStatus: "pending",
     };
+    const entity =
+      objectTypeId === "flashcard"
+        ? createManualFlashcardRecord(baseEntity)
+        : objectTypeId === "study_goal"
+          ? createStudyGoalRecord(baseEntity)
+          : baseEntity;
     await database.entities.add(entity);
     return entity;
   }
@@ -469,6 +526,7 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     deleteObjectType,
     listEntities,
     createEntity,
+    updateEntity,
     createCollection,
     replaceCollections,
     createFlashcardEntity,

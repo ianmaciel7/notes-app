@@ -518,6 +518,8 @@ export const BUILT_IN_STRUCTURES = deepFreeze([
   defineStructure("page", "Page", "Pages", "page", "blue", "document", "built-in"),
   defineStructure("table", "Table", "Tables", "table", "blue", "table", "built-in"),
   defineStructure("task", "Task", "Tasks", "task", "orange", "task", "built-in"),
+  defineStructure("flashcard", "Flashcard", "Flashcards", "definition", "amber", "document", "built-in"),
+  defineStructure("study_goal", "Study goal", "Study goals", "project", "emerald", "document", "built-in"),
   defineStructure("weblink", "Weblink", "Weblinks", "weblink", "blue", "url", "built-in"),
   defineStructure("image", "Image", "Images", "image", "red", "file", "built-in"),
   defineStructure("pdf", "PDF", "PDFs", "pdf", "red", "file", "built-in"),

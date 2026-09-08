@@ -572,7 +572,7 @@ function NewContentCommandDialog({
         <div
           data-slot="command"
           className={cn(
-            "preview-card-core flex w-full transform flex-col border-front bg-front h-full sm:h-auto sm:max-h-[85vh] sm:rounded-xl sm:border sm:shadow-[0_2px_3px_#00000001,0_4px_9px_#00000003,0_8px_12px_#00000001] transition-all duration-200 overflow-hidden",
+            "preview-card-core flex w-full transform flex-col border-front bg-front h-full sm:h-auto sm:max-h-[85vh] sm:rounded-[12px] sm:border sm:shadow-[0_2px_3px_#00000001,0_4px_9px_#00000003,0_8px_12px_#00000001] transition-all duration-200 overflow-hidden",
           )}
         >
           <DialogHeader className="sr-only">
@@ -585,7 +585,7 @@ function NewContentCommandDialog({
           {/* --- Capacities Outer Card Header --- */}
           <div className="w-full px-3 py-2 pb-0">
             {/* Top Search Input Row */}
-            <div className="space-between pointer-events-auto flex items-center gap-x-[9px] border-b border-base px-0.5 py-0.5 pb-2 text-base font-normal text-primary">
+            <div className="space-between pointer-events-auto flex items-center gap-x-[9px] border-b border-base px-0.5 py-0.5 pb-2 text-md font-normal text-primary">
               {/* Search Icon */}
               <div className="pointer-events-none flex items-center justify-center text-[1.25em]">
                 <span
@@ -610,7 +610,7 @@ function NewContentCommandDialog({
                   placeholder="Buscar por conteúdo e ações, ou colar da área de transferência"
                   autoComplete="off"
                   autoFocus
-                  className="h-7 w-full min-w-0 flex-1 select-text appearance-none bg-transparent text-[14px] sm:text-[15px] leading-tight text-foreground placeholder:text-subtle placeholder:opacity-60 outline-none"
+                  className="h-(--el-h-base) w-full min-w-0 flex-1 select-text appearance-none bg-transparent text-md leading-none text-primary placeholder:text-subtle placeholder:opacity-60 outline-none"
                 />
 
                 <div className="flex shrink-0 items-center gap-x-0.5">
@@ -708,11 +708,12 @@ function NewContentCommandDialog({
                                 <div className="shrink-0">
                                   <ObjectIconBadge
                                     icon={item.icon ?? CapacitiesSearchIcon}
+                                    className="mt-1"
                                     tone={item.tone ?? "blue"}
                                     variant="menu"
                                   />
                                 </div>
-                                <div className="flex min-w-0 flex-1 items-center">
+                                <div className="flex min-h-(--el-h-sm) min-w-0 flex-1 items-center">
                                   <span className="truncate">{item.title}</span>
                                 </div>
 
@@ -789,11 +790,12 @@ function NewContentCommandDialog({
                                 <div className="shrink-0">
                                   <ObjectIconBadge
                                     icon={item.icon ?? CapacitiesSearchIcon}
+                                    className="mt-1"
                                     tone={item.tone ?? "blue"}
                                     variant="menu"
                                   />
                                 </div>
-                                <div className="flex min-w-0 flex-1 items-center">
+                                <div className="flex min-h-(--el-h-sm) min-w-0 flex-1 items-center">
                                   <span className="truncate">{item.title}</span>
                                 </div>
 
@@ -875,11 +877,12 @@ function NewContentCommandDialog({
                             <div className="shrink-0">
                               <ObjectIconBadge
                                 icon={item.icon ?? CapacitiesSearchIcon}
+                                className="mt-1"
                                 tone={item.tone ?? "blue"}
                                 variant="menu"
                               />
                             </div>
-                            <div className="flex min-w-0 flex-1 items-center">
+                            <div className="flex min-h-(--el-h-sm) min-w-0 flex-1 items-center">
                               <span className="truncate">{item.title}</span>
                             </div>
 
@@ -901,7 +904,7 @@ function NewContentCommandDialog({
 
                             {/* Far Right Action Cursor Button */}
                             <div className="flex shrink-0 items-center">
-                              <div className="flex size-6 items-center justify-center rounded-[6px] bg-el p-0.5 text-secondary transition-colors group-hover/dropdown-item:text-primary">
+                              <div className="flex h-(--el-h-sm) w-(--el-w-sm) items-center justify-center gap-x-1 rounded-base bg-el p-0.5 text-secondary transition-colors group-hover/dropdown-item:text-primary">
                                 <span
                                   className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative"
                                   style={{ verticalAlign: "-0.125em" }}
@@ -929,7 +932,7 @@ function NewContentCommandDialog({
           </div>
 
           {/* Bottom Footer Navigation Bar */}
-          <div className="mx-1 flex h-sm shrink-0 gap-x-3 border-t border-base px-1 py-1.5 text-xs text-secondary select-none">
+          <div className="mx-1 flex h-(--el-h-sm) shrink-0 gap-x-3 border-t border-base px-1 py-1.5 text-xs text-secondary select-none">
             <span className="whitespace-nowrap">
               <span className="font-medium text-secondary">↑↓</span> para navegar
             </span>

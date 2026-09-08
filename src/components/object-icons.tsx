@@ -246,7 +246,7 @@ function ObjectIconBadge({
         variant === "sidebar"
           ? "min-h-[1.3em] min-w-[1.3em] rounded-[0.33em]"
           : variant === "menu"
-            ? "rounded-[0.475em] border p-1 [border-width:0.5px]"
+            ? "h-[22px] w-[22px] rounded-[0.475em] border p-1 [border-width:0.5px]"
             : "size-6 rounded-[7px] border",
         objectIconToneBadgeClass[tone],
         className,
@@ -258,7 +258,7 @@ function ObjectIconBadge({
       <Icon
         className={
           iconClassName ??
-          (variant === "sidebar" ? "size-[1em]" : variant === "menu" ? "size-3" : "size-4")
+          (variant === "sidebar" ? "size-[1em]" : variant === "menu" ? "size-3.5" : "size-4")
         }
       />
     </span>

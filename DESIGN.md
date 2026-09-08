@@ -1,21 +1,21 @@
 ---
 name: "KnowledgeOS"
 colors:
-  background: "#FFFFFF"
-  foreground: "#18181B"
-  surface: "#FAFAFA"
-  card: "#FFFFFF"
-  border: "#E4E4E7"
-  primary: "#18181B"
-  primary-foreground: "#FAFAFA"
-  secondary: "#F4F4F5"
-  secondary-foreground: "#18181B"
-  muted: "#F4F4F5"
-  muted-foreground: "#71717A"
+  background: "oklch(0.9856 0.0016 67)"
+  foreground: "oklch(0.2191 0.0058 285.84)"
+  surface: "oklch(0.9856 0.0016 67)"
+  card: "oklch(1 0.0001 263.28)"
+  border: "oklch(0.9163 0.0017 67.07)"
+  primary: "oklch(0.3887 0.0052 301.05)"
+  primary-foreground: "oklch(0.9676 0.0016 67.02)"
+  secondary: "oklch(0.9676 0.0016 67.02)"
+  secondary-foreground: "oklch(0.2191 0.0058 285.84)"
+  muted: "oklch(0.9676 0.0016 67.02)"
+  muted-foreground: "oklch(0.5725 0.0051 33.89)"
   destructive: "#EF4444"
-  sidebar: "#FAFAFA"
-  sidebar-border: "#E4E4E7"
-  ring: "#A1A1AA"
+  sidebar: "oklch(0.9856 0.0016 67)"
+  sidebar-border: "oklch(0.9163 0.0017 67.07)"
+  ring: "oklch(0.7161 0.006 30.59)"
 ---
 
 # Design System: KnowledgeOS
@@ -61,6 +61,8 @@ This extraction is the current visual parity target for shell, sidebar, object p
 - Menus are compact click/focus popups, not tooltips and not preview cards.
 - Every actionable menu row has a left icon. Selection indicators, chevrons, or shortcuts live on the far right.
 - Default menu row height is `32px`; radius is `8px`; padding is compact.
+- Command/search palette shell uses the captured Capacities geometry: `672px` desktop width (`sm:max-w-2xl`), `12px` card radius, `~585px` captured height at 1280px viewport, `43px` header row, `32px` input/control height (`--el-h-base`), and `16px` header input text.
+- Command/search palette menu badges follow the captured Capacities geometry: left badge uses `p-1`, `0.5px` border, `12px` inner icon (`h-3 w-3`), and `mt-1` alignment inside `items-start` rows. Far-right cursor/action affordances use the explicit element tokens `h-(--el-h-sm) w-(--el-w-sm)` (`28px` by `28px`) with a `1em` icon, not Tailwind `h-sm w-sm` container utilities and not `24px` square buttons.
 - Default popup width should fit content. Avoid oversized `w-56` menus unless the content genuinely requires it.
 - Popup surface uses a hairline border, white popover background, and a restrained shadow around `0 2px 8px rgb(0 0 0 / 0.08)`.
 - Motion is fade-only around `150ms`. Do not add zoom, slide, bounce, or theatrical easing to menus.
@@ -75,22 +77,30 @@ This extraction is the current visual parity target for shell, sidebar, object p
 
 ## 2. Color Palette & Roles
 
-All colors are defined via modern OKLCH tokens in [`src/app/globals.css`](file:///C:/Users/ianma/workspace/notes-app/src/app/globals.css) and exposed through Tailwind CSS v4 variables:
+All colors are defined via modern OKLCH tokens in `src/app/globals.css` and exposed through Tailwind CSS v4 variables. Capacities parity components must use the `front`, `base`, `el`, `primary`, `secondary`, and `subtle` semantic tokens instead of generic shadcn color aliases when matching captured Capacities UI.
 
 ### Primary Foundation & Surfaces
-- **Canvas White (`--background`)**: `oklch(1 0 0)` / `#FFFFFF` (Light) | `oklch(0.145 0 0)` / `#18181B` (Dark)
+- **Canvas (`--background`)**: `oklch(0.9856 0.0016 67)` (Light) | `oklch(0.1605 0.0063 285.63)` (Dark)
   - Primary application viewport surface.
-- **Surface Elevation (`--card`, `--popover`)**: `oklch(1 0 0)` / `#FFFFFF` (Light) | `oklch(0.205 0 0)` / `#27272A` (Dark)
+- **Front Surface (`--bg-front`, `--app-bg-front`, `--color-front`)**: `oklch(1 0.0001 263.28)` (Light) | `oklch(0.2191 0.0058 285.84)` (Dark)
   - Modals, popovers, property sheets, and floating toolbars.
-- **Sidebar Rail (`--sidebar`)**: `oklch(0.985 0 0)` / `#FAFAFA` (Light) | `oklch(0.205 0 0)` / `#27272A` (Dark)
+- **Element Surface (`--bg-el`, `--app-bg-el`, `--color-el`)**: `oklch(0.9676 0.0016 67.02)` (Light) | `oklch(0.2987 0.0072 285.88)` (Dark)
+  - Selected command rows, keycap pills, compact icon button fills, and secondary controls.
+- **Sidebar Rail (`--sidebar`)**: `oklch(0.9856 0.0016 67)` (Light) | `oklch(0.1605 0.0063 285.63)` (Dark)
   - Navigation drawer, daily note calendar rail, and object directory.
+- **Hairline Border (`--border-base`, `--border-front`, `--app-border-base`, `--app-border-front`)**: `oklch(0.9163 0.0017 67.07)` (Light) | `oklch(0.2987 0.0072 285.88)` (Dark)
+  - Command palette header divider, preview-card shell borders, footer separators, pane dividers, and neutral menu outlines. Do not substitute `--border-base-strong` or `--border-el` for Capacities `border-base` / `border-front`; those are visibly darker.
 
 ### Interactive & Accents
-- **Primary Ink (`--primary`)**: `oklch(0.205 0 0)` / `#18181B` (Light) | `oklch(0.922 0 0)` / `#E4E4E7` (Dark)
+- **Primary Ink (`--text-primary`, `--app-text-primary`, `--color-text-primary`)**: `oklch(0.2191 0.0058 285.84)` (Light) | `oklch(1 0.0001 263.28)` (Dark)
   - Primary call-to-action buttons, active navigation pills, and focused tab indicators.
-- **Subtle Surface (`--secondary`, `--muted`, `--accent`)**: `oklch(0.97 0 0)` / `#F4F4F5` (Light) | `oklch(0.269 0 0)` / `#3F3F46` (Dark)
+- **Secondary Ink (`--text-secondary`, `--app-text-secondary`, `--color-text-secondary`)**: `oklch(0.3887 0.0052 301.05)` (Light) | `oklch(0.9163 0.0017 67.07)` (Dark)
+  - Section headings, footer shortcut text, inactive high-density controls, and supporting menu labels.
+- **Subtle Ink (`--text-subtle`, `--app-text-subtle`, `--color-text-subtle`)**: `oklch(0.5725 0.0051 33.89)` (Light) | `oklch(0.7161 0.006 30.59)` (Dark)
+  - Placeholder text, secondary group labels, disabled-looking metadata, and quiet counts.
+- **Subtle Surface (`--secondary`, `--muted`, `--accent`)**: `oklch(0.9676 0.0016 67.02)` (Light) | `oklch(0.2987 0.0072 285.88)` (Dark)
   - Hover states, tag chips, secondary button backgrounds, and code snippets.
-- **Focus Ring (`--ring`)**: `oklch(0.708 0 0)` / `#A1A1AA` (Light) | `oklch(0.556 0 0)` / `#71717A` (Dark)
+- **Focus Ring (`--ring`)**: `oklch(0.7161 0.006 30.59)` (Light) | `oklch(0.8643 0.0017 67.13)` (Dark)
   - 3px semi-transparent ring outline for accessible keyboard navigation (`focus-visible`).
 
 ### Typography & Hierarchy
@@ -112,10 +122,10 @@ All colors are defined via modern OKLCH tokens in [`src/app/globals.css`](file:/
 
 ## 3. Typography Rules
 
-KnowledgeOS uses **Geist** (Vercel’s engineered sans-serif) and **Geist Mono** loaded via `next/font/google`:
+KnowledgeOS uses **Inter** for Capacities parity UI and local fallback system fonts:
 
-- **Sans-Serif (`--font-sans`)**: Geist Sans. Highly legible at small UI sizes (11px–13px) with clean geometry for reading notes.
-- **Monospace (`--font-mono`)**: Geist Mono. Used exclusively for code blocks, exact text anchor offsets, SRS stability/difficulty metrics, and burndown calculations.
+- **Sans-Serif (`--font-sans`)**: `Inter, ui-sans-serif, system-ui`. This matches the captured Capacities runtime and preserves density at 11px-15px UI sizes.
+- **Monospace (`--font-mono`)**: `ui-monospace, SFMono-Regular, Consolas, monospace`. Used exclusively for code blocks, exact text anchor offsets, SRS stability/difficulty metrics, and burndown calculations.
 
 ### Type Scale & Hierarchy
 - **Display / Document Title (H1)**: `text-3xl sm:text-4xl font-semibold tracking-tight leading-tight` (32px–36px)

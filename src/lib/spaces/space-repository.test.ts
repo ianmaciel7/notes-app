@@ -2,8 +2,9 @@ import "fake-indexeddb/auto";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createKnowledgeDatabase } from "@/lib/db";
+import { bootstrapWorkspace } from "@/lib/spaces/bootstrap-space";
 import { createSpaceRepository } from "@/lib/spaces/space-repository";
-import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
+import { PERSONAL_SPACE_ID, type SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 const opened: ReturnType<typeof createKnowledgeDatabase>[] = [];
 
@@ -229,6 +230,74 @@ describe("Space repository", () => {
     const afterReview = await database.entities.get([space.id, flashcard.id]);
     expect(afterReview?.srs?.state).toBe("review");
     expect(reviewed.nextState.state).toBe("review");
+  });
+
+  it("creates manual flashcards with the fields required by the real review UI", async () => {
+    const { database, repository } = setup();
+    await bootstrapWorkspace(database, () => new Date("2026-01-01T00:00:00.000Z"));
+
+    const flashcard = await repository.createEntity(
+      PERSONAL_SPACE_ID,
+      "flashcard",
+      "Manual card",
+    );
+
+    expect(flashcard).toMatchObject({
+      type: "flashcard",
+      objectTypeId: "flashcard",
+      title: "Manual card",
+      cardType: "basic",
+      front: "Manual card",
+      back: "",
+      fileId: "manual",
+      sourceHighlightId: "manual",
+      sourceQuoteSnippet: "",
+      aiGenerated: false,
+      _syncStatus: "pending",
+    });
+    expect(flashcard.srs?.state).toBe("new");
+  });
+
+  it("creates study goals with pacing fields required by the dashboard", async () => {
+    const { database, repository } = setup();
+    await bootstrapWorkspace(database, () => new Date("2026-01-01T00:00:00.000Z"));
+
+    const goal = await repository.createEntity(PERSONAL_SPACE_ID, "study_goal", "Biology exam");
+
+    expect(goal).toMatchObject({
+      type: "study_goal",
+      objectTypeId: "study_goal",
+      title: "Biology exam",
+      targetRetentionRate: 0.9,
+      totalCards: 0,
+      dailyNewCardsQuota: 0,
+      expectedDailyReviews: 0,
+      targetFileIds: [],
+      _syncStatus: "pending",
+    });
+    const targetExamDate = (goal as unknown as { targetExamDate: string }).targetExamDate;
+    expect(Number.isFinite(new Date(targetExamDate).getTime())).toBe(true);
+  });
+
+  it("updates entity fields in the active Space and marks the record pending", async () => {
+    const { database, repository } = setup();
+    await bootstrapWorkspace(database, () => new Date("2026-01-01T00:00:00.000Z"));
+    const flashcard = await repository.createEntity(PERSONAL_SPACE_ID, "flashcard", "Manual card");
+
+    await repository.updateEntity(PERSONAL_SPACE_ID, flashcard.id, {
+      title: "Updated card",
+      front: "Updated front",
+      back: "Updated back",
+    });
+
+    const updated = await database.entities.get([PERSONAL_SPACE_ID, flashcard.id]);
+    expect(updated).toMatchObject({
+      title: "Updated card",
+      front: "Updated front",
+      back: "Updated back",
+      _syncStatus: "pending",
+    });
+    expect(updated?.updatedAt).not.toBe(flashcard.updatedAt);
   });
 
   it("rejects cross-Space relations", async () => {

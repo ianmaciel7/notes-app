@@ -18,6 +18,16 @@ export async function bootstrapSpace(
       if (!personal) {
         await database.spaces.add(seed.space);
         await database.objectTypes.bulkAdd(seed.objectTypes);
+      } else {
+        const currentIds = new Set(
+          (await database.objectTypes.where("spaceId").equals(PERSONAL_SPACE_ID).toArray()).map(
+            (type) => type.id,
+          ),
+        );
+        const missingObjectTypes = seed.objectTypes.filter((type) => !currentIds.has(type.id));
+        if (missingObjectTypes.length > 0) {
+          await database.objectTypes.bulkAdd(missingObjectTypes);
+        }
       }
 
       const active = await database.appSettings.get(ACTIVE_SPACE_SETTING_ID);
