@@ -36,7 +36,7 @@ const compactMenuSurfaceClass = cn(
 )
 
 const compactMenuSearchClass =
-  "h-6 w-full rounded-[7px] border-0 bg-muted px-[9px] text-sm text-[var(--app-text-secondary)] shadow-none [&>input]:h-full [&>input]:px-0 [&>input]:py-0 [&>input]:text-sm [&>input]:placeholder:text-muted-foreground [&>input]:placeholder:opacity-60"
+  "h-6 w-full rounded-[7px] border-0 bg-muted px-[9px] text-sm text-foreground shadow-none [&>input]:h-full [&>input]:px-0 [&>input]:py-0 [&>input]:text-sm [&>input]:text-foreground [&>input]:placeholder:text-muted-foreground [&>input]:placeholder:opacity-100"
 
 const compactMenuItemClass =
   "group/compact-menu-item min-h-0 w-full min-w-0 gap-0 rounded-[7px] px-0 py-0 pr-1 text-sm text-foreground data-highlighted:bg-muted data-highlighted:text-foreground [&>[data-slot=compact-menu-item-text]]:ml-2"

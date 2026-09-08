@@ -257,14 +257,14 @@ function NewContentMenu({
         alignOffset={6}
         className={cn(
           compactMenuSurfaceClass,
-          "box-content w-[22rem] min-w-0 max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-border shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
+          "box-content w-[22rem] min-w-12 max-h-72 max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-border shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
         )}
       >
         <div className="h-11 shrink-0 p-1.5">
           <div
             className={cn(
               compactMenuSearchClass,
-              "flex h-8 items-center rounded-[8px] border border-transparent bg-muted transition-colors focus-within:bg-muted",
+              "flex h-8 items-center rounded-[8px] border border-transparent bg-muted transition-[border-color,box-shadow] focus-within:border-ring focus-within:bg-muted focus-within:ring-3 focus-within:ring-ring/50",
             )}
           >
             <Input
@@ -283,7 +283,7 @@ function NewContentMenu({
               role="combobox"
               aria-autocomplete="list"
               aria-expanded={open}
-              className="h-full border-0 bg-transparent p-0 text-foreground shadow-none placeholder:text-muted-foreground placeholder:opacity-100 focus-visible:ring-0"
+              className="h-full border-0 bg-transparent p-0 text-sm text-foreground shadow-none placeholder:text-muted-foreground placeholder:opacity-100 focus-visible:ring-0"
               autoFocus
             />
           </div>
@@ -293,7 +293,7 @@ function NewContentMenu({
           id="new-content-menu-listbox"
           role="listbox"
           aria-label={t("primaryNavigation.typesLabel")}
-          className="min-h-0 max-h-72 shrink overflow-y-auto px-1.5 pb-1.5"
+          className="min-h-0 flex-1 overflow-y-auto px-1.5 pb-1.5"
         >
           {items.map(({ id, icon: Icon, label, tone, badgeLabel, isCreateFallback }, index) => {
             return (
@@ -314,7 +314,7 @@ function NewContentMenu({
                 onClick={() => selectItem(id)}
                 className={cn(
                   compactMenuItemClass,
-                  "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] border border-transparent px-1 text-left font-normal outline-none hover:bg-muted focus-visible:bg-muted data-[active=true]:bg-muted",
+                  "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] border border-transparent px-1 text-left text-sm font-normal outline-none hover:bg-muted focus-visible:border-ring focus-visible:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 data-[active=true]:bg-muted",
                 )}
               >
                 {isCreateFallback ? (
@@ -346,16 +346,13 @@ function NewContentMenu({
 
         <div className="mx-1 flex h-[29px] shrink-0 items-center gap-x-3 border-t border-border px-1 py-1.5 text-xs leading-4 text-muted-foreground">
           <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">↑↓</span>{" "}
-            {t("primaryNavigation.navigate")}
+            <span className="font-medium text-muted-foreground">↑↓</span> para navegar
           </span>
           <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">Esc</span>{" "}
-            {t("primaryNavigation.cancel")}
+            <span className="font-medium text-muted-foreground">Esc</span> para abortar
           </span>
           <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">↵</span>{" "}
-            {t("primaryNavigation.select")}
+            <span className="font-medium text-muted-foreground">↵</span> para selecionar
           </span>
         </div>
       </PopoverContent>
