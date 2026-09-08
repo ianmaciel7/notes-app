@@ -83,6 +83,49 @@ type NewContentDialogConfig = {
   title: string;
 };
 
+function NewContentUploadFileIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+      <path
+        d="M7 3.75h6.25L18 8.5v11.75H7z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeDasharray="4 3"
+      />
+      <path
+        d="M13.25 3.75V8.5H18"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function NewContentFolderIcon(props: React.ComponentProps<"svg">) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+      <path
+        d="M3.75 7.25h5.1l1.65 2h9.75v8.9a1.6 1.6 0 0 1-1.6 1.6H5.35a1.6 1.6 0 0 1-1.6-1.6z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.75 9.25V6.85a1.6 1.6 0 0 1 1.6-1.6h3.1l1.7 2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 const newContentDialogObjectTypes = new Set([
   "file",
   "image",
@@ -257,16 +300,20 @@ function NewContentCreationDialog({
                     </div>
                     <div className="flex min-h-0 flex-1 flex-col px-3 pt-4 pb-5">
                       <div className="flex min-h-0 flex-1 flex-col items-center justify-center rounded-[4px] border-2 border-dashed border-border bg-muted/20 text-center text-muted-foreground">
-                        <span className="mb-3 inline-flex size-8 items-center justify-center rounded-md text-2xl leading-none">
-                          +
-                        </span>
+                        <NewContentUploadFileIcon className="mb-3 size-7 text-muted-foreground" />
                         <p className="text-sm">Arraste e solte</p>
                       </div>
                       <div className="mt-5 flex shrink-0 items-center justify-center gap-2">
-                        <Button type="button" variant="outline" className="h-8 rounded-[6px] px-3">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="h-8 gap-1.5 rounded-[6px] px-3"
+                        >
+                          <NewContentUploadFileIcon className="size-3.5" />
                           {config.actionLabel}
                         </Button>
-                        <Button type="button" className="h-8 rounded-[6px] px-3">
+                        <Button type="button" className="h-8 gap-1.5 rounded-[6px] px-3">
+                          <NewContentFolderIcon className="size-3.5" />
                           Selecionar Pasta
                         </Button>
                       </div>
@@ -274,8 +321,12 @@ function NewContentCreationDialog({
                   </>
                 ) : (
                   <div className="grid gap-3 px-4 pt-4">
-                    <Input placeholder={config.linkPlaceholder} autoFocus />
-                    <Button type="button" className="w-fit">
+                    <Input
+                      placeholder={config.linkPlaceholder}
+                      className="text-foreground placeholder:text-muted-foreground placeholder:opacity-100"
+                      autoFocus
+                    />
+                    <Button type="button" variant="secondary" className="w-fit">
                       Adicionar link
                     </Button>
                   </div>
@@ -285,8 +336,12 @@ function NewContentCreationDialog({
 
             {config.kind === "url" && (
               <div className="grid gap-3 px-4 pt-5">
-                <Input placeholder={config.linkPlaceholder} autoFocus />
-                <Button type="button" className="w-fit">
+                <Input
+                  placeholder={config.linkPlaceholder}
+                  className="text-foreground placeholder:text-muted-foreground placeholder:opacity-100"
+                  autoFocus
+                />
+                <Button type="button" variant="secondary" className="w-fit">
                   {config.actionLabel}
                 </Button>
               </div>
@@ -639,7 +694,12 @@ function NewContentMenu({
                     <AppSidebarPlusIcon className="size-3" />
                   </span>
                 ) : (
-                  <ObjectIconBadge icon={Icon} tone={tone} variant="menu" />
+                  <ObjectIconBadge
+                    icon={Icon}
+                    tone={tone}
+                    variant="menu"
+                    iconClassName="size-3.5"
+                  />
                 )}
                 <CompactMenuItemText>{label}</CompactMenuItemText>
                 {badgeLabel && (
@@ -654,7 +714,7 @@ function NewContentMenu({
                   </span>
                 )}
                 {hasChevron && (
-                  <AppSidebarChevronRightIcon className="ml-auto size-3 text-muted-foreground" />
+                  <AppSidebarChevronRightIcon className="ml-auto size-3.5 text-muted-foreground" />
                 )}
               </button>
             );
