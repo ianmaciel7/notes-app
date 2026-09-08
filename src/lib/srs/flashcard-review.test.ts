@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { selectDueFlashcards } from "@/lib/srs/flashcard-review";
+import { getFlashcardReviewShortcutRating, selectDueFlashcards } from "@/lib/srs/flashcard-review";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 function flashcardFixture(
@@ -56,5 +56,15 @@ describe("selectDueFlashcards", () => {
     expect(selectDueFlashcards([future, page, due], now).map((entity) => entity.id)).toEqual([
       "due-card",
     ]);
+  });
+});
+
+describe("getFlashcardReviewShortcutRating", () => {
+  it("maps number shortcuts to FSRS ratings", () => {
+    expect(getFlashcardReviewShortcutRating("1")).toBe(1);
+    expect(getFlashcardReviewShortcutRating("2")).toBe(2);
+    expect(getFlashcardReviewShortcutRating("3")).toBe(3);
+    expect(getFlashcardReviewShortcutRating("4")).toBe(4);
+    expect(getFlashcardReviewShortcutRating("5")).toBeNull();
   });
 });

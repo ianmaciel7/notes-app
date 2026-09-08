@@ -143,14 +143,23 @@ type PaletteItem = {
   icon?: React.ElementType<any>;
   tone?: ObjectIconTone;
   shortcuts?: string[];
-  execute: (options: { openInNewTab?: boolean; openInSidePanel?: boolean }) => void | Promise<void>;
+  execute: (options?: {
+    openInNewTab?: boolean;
+    openInSidePanel?: boolean;
+    closePalette?: boolean;
+  }) => void | Promise<void>;
 };
 
 const DEFAULT_RECENT_COMMAND_ITEMS_LIMIT = 1;
+type CommandPaletteSelectSource = "keyboard" | "pointer";
 
 function getVisibleCommandPaletteRecentItems<T>(items: readonly T[], normalizedQuery: string): T[] {
   if (normalizedQuery.length > 0) return [...items];
   return items.slice(0, DEFAULT_RECENT_COMMAND_ITEMS_LIMIT);
+}
+
+function shouldCloseCommandPaletteAfterSelect(source: CommandPaletteSelectSource) {
+  return source === "keyboard";
 }
 
 function shouldRenderCommandPaletteOpenInNewTabToggle() {
@@ -241,10 +250,12 @@ function NewContentCommandDialog({
         execute: ({
           openInNewTab,
           openInSidePanel: openInSide,
+          closePalette = true,
         }: {
           openInNewTab?: boolean;
           openInSidePanel?: boolean;
-        }) => {
+          closePalette?: boolean;
+        } = {}) => {
           if (openInSide) {
             openInSidePanel({
               id: entity.id,
@@ -270,7 +281,7 @@ function NewContentCommandDialog({
           } else {
             selectEntity(entity.id);
           }
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       };
     });
@@ -293,10 +304,10 @@ function NewContentCommandDialog({
         icon: CalendarBlankIcon,
         tone: "cyan",
         shortcuts: ["Ctrl", "Alt", "H"],
-        execute: () => {
+        execute: ({ closePalette = true } = {}) => {
           setActiveAction("calendar");
           setMainValue("primary-action:calendar");
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       },
       {
@@ -306,10 +317,10 @@ function NewContentCommandDialog({
         icon: CalendarBlankIcon,
         tone: "cyan",
         shortcuts: ["Ctrl", "Alt", "H"],
-        execute: () => {
+        execute: ({ closePalette = true } = {}) => {
           setActiveAction("calendar");
           setMainValue("primary-action:calendar");
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       },
       {
@@ -319,9 +330,9 @@ function NewContentCommandDialog({
         icon: GearIcon,
         tone: "gray",
         shortcuts: ["Ctrl", ","],
-        execute: () => {
+        execute: ({ closePalette = true } = {}) => {
           showMessage("Configurações do espaço");
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       },
       {
@@ -330,9 +341,9 @@ function NewContentCommandDialog({
         title: "Abrir visualização em gráfico",
         icon: GraphIcon,
         tone: "purple",
-        execute: () => {
+        execute: ({ closePalette = true } = {}) => {
           openInSidePanel({ id: "graph-view", label: "Local Graph", draggable: true });
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       },
       {
@@ -341,9 +352,9 @@ function NewContentCommandDialog({
         title: "Abrir objetos internos",
         icon: CubeIcon,
         tone: "emerald",
-        execute: () => {
+        execute: ({ closePalette = true } = {}) => {
           showMessage("Objetos internos");
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       },
       {
@@ -352,9 +363,9 @@ function NewContentCommandDialog({
         title: "Abrir conteúdo relacionado",
         icon: LinkSimpleIcon,
         tone: "rose",
-        execute: () => {
+        execute: ({ closePalette = true } = {}) => {
           openInSidePanel({ id: "backlinks", label: "Backlinks", draggable: true });
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       },
       {
@@ -364,11 +375,11 @@ function NewContentCommandDialog({
         icon: EyeIcon,
         tone: "violet",
         shortcuts: ["Ctrl", "Shift", "M"],
-        execute: () => {
+        execute: ({ closePalette = true } = {}) => {
           if (typeof window !== "undefined") {
             window.dispatchEvent(new CustomEvent("workspace:toggle-focus-mode"));
           }
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       },
       {
@@ -377,9 +388,9 @@ function NewContentCommandDialog({
         title: "Novidades",
         icon: SparkleIcon,
         tone: "amber",
-        execute: () => {
+        execute: ({ closePalette = true } = {}) => {
           showMessage("KnowledgeOS v2.0 - Local-first Capacities Parity");
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       },
       {
@@ -389,10 +400,10 @@ function NewContentCommandDialog({
         icon: CompassIcon,
         tone: "fuchsia",
         shortcuts: ["Ctrl", "J"],
-        execute: () => {
+        execute: ({ closePalette = true } = {}) => {
           setActiveAction("explore");
           setMainValue("primary-action:explore");
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       },
       {
@@ -402,8 +413,8 @@ function NewContentCommandDialog({
         icon: MagnifyingGlassIcon,
         tone: "sky",
         shortcuts: ["Ctrl", "Shift", "P"],
-        execute: () => {
-          onOpenChange(false);
+        execute: ({ closePalette = true } = {}) => {
+          if (closePalette) onOpenChange(false);
         },
       },
     ];
@@ -421,9 +432,11 @@ function NewContentCommandDialog({
         tone: typeDef.tone ?? "blue",
         execute: async ({
           openInNewTab,
+          closePalette = true,
         }: {
           openInNewTab?: boolean;
           openInSidePanel?: boolean;
+          closePalette?: boolean;
         }) => {
           const entity = await createWorkspaceEntity(typeDef.id, label);
           if (entity && openInNewTab) {
@@ -433,11 +446,11 @@ function NewContentCommandDialog({
                 : [
                     ...current,
                     { id: entity.id, label: entity.title, icon: typeDef.icon, draggable: true },
-                  ],
+              ],
             );
             setMainValue(entity.id);
           }
-          onOpenChange(false);
+          if (closePalette) onOpenChange(false);
         },
       };
     });
@@ -449,9 +462,9 @@ function NewContentCommandDialog({
       title: `Abrir espaço "${space.name}"`,
       icon: HouseIcon,
       tone: "teal" as const,
-      execute: () => {
+      execute: ({ closePalette = true } = {}) => {
         void switchSpace(space.id);
-        onOpenChange(false);
+        if (closePalette) onOpenChange(false);
       },
     }));
 
@@ -681,7 +694,12 @@ function NewContentCommandDialog({
                                 }}
                                 data-active={isSelected || undefined}
                                 onPointerMove={() => setActiveIndex(globalIdx)}
-                                onClick={() => item.execute({ openInNewTab })}
+                                onClick={() =>
+                                  item.execute({
+                                    openInNewTab,
+                                    closePalette: shouldCloseCommandPaletteAfterSelect("pointer"),
+                                  })
+                                }
                                 className={cn(
                                   "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2.5 px-2 py-1.5 rounded-[8px] border border-transparent outline-none transition-colors",
                                   isSelected
@@ -757,7 +775,12 @@ function NewContentCommandDialog({
                                 }}
                                 data-active={isSelected || undefined}
                                 onPointerMove={() => setActiveIndex(globalIdx)}
-                                onClick={() => item.execute({ openInNewTab })}
+                                onClick={() =>
+                                  item.execute({
+                                    openInNewTab,
+                                    closePalette: shouldCloseCommandPaletteAfterSelect("pointer"),
+                                  })
+                                }
                                 className={cn(
                                   "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2.5 px-2 py-1.5 rounded-[8px] border border-transparent outline-none transition-colors",
                                   isSelected
@@ -837,7 +860,12 @@ function NewContentCommandDialog({
                             }}
                             data-active={isSelected || undefined}
                             onPointerMove={() => setActiveIndex(globalIdx)}
-                            onClick={() => item.execute({ openInNewTab })}
+                            onClick={() =>
+                              item.execute({
+                                openInNewTab,
+                                closePalette: shouldCloseCommandPaletteAfterSelect("pointer"),
+                              })
+                            }
                             className={cn(
                               "group/dropdown-item flex w-full shrink-0 cursor-pointer select-none flex-row items-center text-left text-sm gap-x-2.5 px-2 py-1.5 rounded-[8px] border border-transparent outline-none transition-colors",
                               isSelected
@@ -1000,6 +1028,7 @@ function WorkspaceSidebar() {
 
 export * from "./app-sidebar-primary-actions";
 export {
+  shouldCloseCommandPaletteAfterSelect,
   getVisibleCommandPaletteRecentItems,
   shouldRenderCommandPaletteOpenInNewTabToggle,
   shouldOpenNewContentCommandDialogForEvent,

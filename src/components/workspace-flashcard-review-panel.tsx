@@ -6,6 +6,7 @@ import { useWorkspace } from "@/components/space-controller";
 import { Button } from "@/components/ui/button";
 import {
   isFlashcardReviewEntity,
+  getFlashcardReviewShortcutRating,
   selectDueFlashcards,
   type FlashcardReviewEntity,
 } from "@/lib/srs/flashcard-review";
@@ -69,6 +70,37 @@ export function WorkspaceFlashcardReviewPanel() {
     setPendingRating(null);
     if (reviewed) setShowBack(false);
   }
+
+  React.useEffect(() => {
+    function targetIsEditable(target: EventTarget | null) {
+      if (!(target instanceof HTMLElement)) return false;
+      return (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable
+      );
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (!activeCard || pendingRating !== null || targetIsEditable(event.target)) return;
+
+      if (event.code === "Space") {
+        event.preventDefault();
+        setShowBack((visible) => !visible);
+        return;
+      }
+
+      const rating = getFlashcardReviewShortcutRating(event.key);
+      if (!showBack || rating === null) return;
+
+      event.preventDefault();
+      void recordReview(rating);
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeCard, pendingRating, showBack]);
 
   return (
     <section className="flex h-full min-h-0 w-full flex-col overflow-hidden bg-card">

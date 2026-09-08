@@ -7,6 +7,7 @@ import {
 } from "@/components/app-sidebar-primary-actions";
 import {
   getVisibleCommandPaletteRecentItems,
+  shouldCloseCommandPaletteAfterSelect,
   shouldRenderCommandPaletteOpenInNewTabToggle,
   shouldOpenNewContentCommandDialogForEvent,
 } from "@/components/app-sidebar-primary-actions-command-dialog";
@@ -19,6 +20,14 @@ it("keeps the compact new-object menu separate from the search command dialog", 
 
 it("does not render the open-in-new-tab pill in the Capacities-style command palette", () => {
   expect(shouldRenderCommandPaletteOpenInNewTabToggle()).toBe(false);
+});
+
+it("keeps the command palette open after pointer selection", () => {
+  expect(shouldCloseCommandPaletteAfterSelect("pointer")).toBe(false);
+});
+
+it("keeps keyboard selection as an explicit command submission", () => {
+  expect(shouldCloseCommandPaletteAfterSelect("keyboard")).toBe(true);
 });
 
 it("keeps the default command palette close to Capacities by showing only the latest recent item", () => {
