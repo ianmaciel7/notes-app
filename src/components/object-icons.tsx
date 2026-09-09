@@ -143,7 +143,8 @@ const customObjectIconPaths: Record<ObjectIconName, string[]> = {
     "M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z",
   ],
   flashcard: [
-    "M230.91,124A8,8,0,0,1,228,134.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,121.09l92,53.65,92-53.65A8,8,0,0,1,230.91,124ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26ZM232,192H216V176a8,8,0,0,0-16,0v16H184a8,8,0,0,0,0,16h16v16a8,8,0,0,0,16,0V208h16a8,8,0,0,0,0-16Zm-92,23.76-12,7L36,169.09A8,8,0,0,0,28,182.91l96,56a8,8,0,0,0,8.06,0l16-9.33A8,8,0,1,0,140,215.76Z",
+    "M76,36H200a20,20,0,0,1,20,20V160a20,20,0,0,1-20,20H184V164H200a4,4,0,0,0,4-4V56a4,4,0,0,0-4-4H76a4,4,0,0,0-4,4V72H56V56A20,20,0,0,1,76,36Z",
+    "M48,76H172a20,20,0,0,1,20,20V200a20,20,0,0,1-20,20H48a20,20,0,0,1-20-20V96A20,20,0,0,1,48,76Zm0,16a4,4,0,0,0-4,4V200a4,4,0,0,0,4,4H172a4,4,0,0,0,4-4V96a4,4,0,0,0-4-4H48Zm24,40a8,8,0,0,1,8-8h80a8,8,0,0,1,0,16H80A8,8,0,0,1,72,132Zm0,36a8,8,0,0,1,8-8h56a8,8,0,0,1,0,16H80A8,8,0,0,1,72,168Z",
   ],
   idea: [
     "M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Zm-16.11-9.34a57.6,57.6,0,0,0-46.56-46.55,8,8,0,0,0-2.66,15.78c16.57,2.79,30.63,16.85,33.44,33.45A8,8,0,0,0,176,104a9,9,0,0,0,1.35-.11A8,8,0,0,0,183.89,94.66Z",
@@ -227,7 +228,7 @@ function createObjectIcon(name: ObjectIconName) {
             {...props}
           >
             {customObjectIconPaths[name].map((path) => (
-              <path d={path} key={path} />
+              <path clipRule="evenodd" d={path} fillRule="evenodd" key={path} />
             ))}
           </svg>
         </span>
@@ -309,7 +310,7 @@ const objectTypeDefinitions: ObjectTypeDefinition[] = [
   { id: "file", label: "File", icon: ObjectFileIcon, tone: "red" },
   { id: "tweet", label: "Tweet", icon: ObjectTweetIcon, tone: "blue" },
   { id: "ai-chat", label: "AI chat", icon: ObjectAiChatIcon, tone: "purple" },
-  { id: "study_goal", label: "Study goal", icon: ObjectStudyGoalIcon, tone: "lime" },
+  { id: "study-goal", label: "Study goal", icon: ObjectStudyGoalIcon, tone: "lime" },
   { id: "table", label: "Table", icon: ObjectTableIcon, tone: "blue" },
   { id: "task", label: "Task", icon: ObjectTaskIcon, tone: "orange" },
   { id: "query", label: "Query", icon: ObjectQueryIcon, tone: "green" },

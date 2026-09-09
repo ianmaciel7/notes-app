@@ -29,7 +29,7 @@ const expectedObjectTypes = {
   file: ["file", "red"],
   tweet: ["tweet", "blue"],
   "ai-chat": ["ai-chat", "purple"],
-  study_goal: ["study-goal", "lime"],
+  "study-goal": ["study-goal", "lime"],
   table: ["table", "blue"],
   task: ["task", "orange"],
   query: ["query", "green"],
@@ -64,6 +64,22 @@ describe("object type visual contract", () => {
     expect(source).toContain('"study-goal": [');
     expect(source).toContain('flashcard: "fuchsia"');
     expect(source).toContain('study_goal: "lime"');
+  });
+
+  it("renders flashcards as a clean two-card icon", () => {
+    const definition = objectTypeDefinitions.find((item) => item.id === "flashcard");
+
+    expect(definition).toBeDefined();
+    if (!definition) {
+      throw new Error("Missing object type definition for flashcard");
+    }
+
+    const Icon = definition.icon;
+    const markup = renderToStaticMarkup(<Icon />);
+    const pathCount = markup.match(/<path/g)?.length ?? 0;
+
+    expect(pathCount).toBeGreaterThanOrEqual(2);
+    expect(pathCount).toBeLessThanOrEqual(3);
   });
 
   it("renders every object type from local React SVG components", () => {
