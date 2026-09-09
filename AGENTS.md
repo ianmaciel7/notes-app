@@ -22,6 +22,9 @@ This repository is a local-first, zero-operating-cost web application unifying:
 - **Styling**: Tailwind CSS v4 CSS-first configuration (`@theme` in `src/app/globals.css`). Do NOT create `tailwind.config.js` or `tailwind.config.ts`.
 - **TypeScript & Runtime**: Next.js 16.3+ App Router with React 19.2+. Follow documentation in `node_modules/next/dist/docs/`. Keep client boundaries lean (`'use client'`).
 
+## Security Policy
+This project maintains a security policy in [SECURITY.md](./SECURITY.md). All AI coding agents MUST read and follow it before making changes, especially when work touches authentication, authorization, sync, storage, document parsing, AI generation, secret handling, Firestore rules, or user data boundaries.
+
 ## 2. Critical Negative Constraints (Never Do)
 - **NO Direct DOM Mutations**: Never manipulate DOM text nodes for highlights (breaks React Virtual DOM).
   - In Markdown/Web text, strictly use the **CSS Custom Highlight API** (`CSS.highlights.set()`) with W3C Text Quote Selectors.
