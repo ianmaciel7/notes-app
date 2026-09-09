@@ -69,7 +69,14 @@ const defaultSideTab: AppHeaderTab = {
 const initialSideTabs = [defaultSideTab];
 
 const PERSONAL_SPACE_ROUTE_GUID = "996adc8d-8e17-463b-92de-1b11a58e9c64";
+const WORKSPACE_MAIN_TABS_STORAGE_KEY = "knowledgeos.workspace.mainTabsState";
 const WORKSPACE_SIDE_STATE_STORAGE_KEY = "knowledgeos.workspace.sidePanelState";
+
+type WorkspaceMainTabsStorageState = {
+  mainValue: string;
+  spaceId: string;
+  tabIds: string[];
+};
 
 export function createWorkspaceRouteSpaceSegment(spaceId?: string | null) {
   if (!spaceId || spaceId === PERSONAL_SPACE_ID) return PERSONAL_SPACE_ROUTE_GUID;
@@ -133,6 +140,50 @@ export function upsertWorkspaceTab(currentTabs: AppHeaderTab[], nextTab: AppHead
   });
 
   return found ? tabs : [...currentTabs, nextTab];
+}
+
+export function createWorkspaceMainTabsStorageState({
+  mainValue,
+  spaceId,
+  tabs,
+}: {
+  mainValue: string;
+  spaceId: string;
+  tabs: readonly Pick<AppHeaderTab, "id">[];
+}): WorkspaceMainTabsStorageState {
+  const tabIds = Array.from(new Set(tabs.map((tab) => tab.id).filter(Boolean)));
+  const safeTabIds = tabIds.length > 0 ? tabIds : ["page"];
+  const safeMainValue = safeTabIds.includes(mainValue) ? mainValue : (safeTabIds[0] ?? "page");
+
+  return {
+    mainValue: safeMainValue,
+    spaceId,
+    tabIds: safeTabIds,
+  };
+}
+
+export function resolveWorkspaceMainTabsFromStoredState({
+  createTab,
+  defaultTabs,
+  storedState,
+}: {
+  createTab: (id: string) => AppHeaderTab | null;
+  defaultTabs: AppHeaderTab[];
+  routeMainValue?: string | null;
+  storedState?: WorkspaceMainTabsStorageState | null;
+}) {
+  if (!storedState || storedState.tabIds.length === 0) return null;
+
+  const restoredTabs = storedState.tabIds.flatMap((id) => {
+    const tab = createTab(id);
+    return tab ? [tab] : [];
+  });
+  const tabs = restoredTabs.length > 0 ? restoredTabs : defaultTabs;
+  const mainValue = tabs.some((tab) => tab.id === storedState.mainValue)
+    ? storedState.mainValue
+    : (tabs[0]?.id ?? "page");
+
+  return { tabs, mainValue };
 }
 
 export function resolveWorkspaceEntityTitle(
@@ -247,6 +298,26 @@ function getStoredWorkspaceSideValue() {
     if (!raw) return null;
     const parsed = JSON.parse(raw) as { sideValue?: unknown };
     return typeof parsed.sideValue === "string" ? parsed.sideValue : null;
+  } catch {
+    return null;
+  }
+}
+
+function getStoredWorkspaceMainTabsState(spaceId: string) {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(WORKSPACE_MAIN_TABS_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as {
+      mainValue?: unknown;
+      spaceId?: unknown;
+      tabIds?: unknown;
+    };
+    if (parsed.spaceId !== spaceId) return null;
+    if (typeof parsed.mainValue !== "string" || !Array.isArray(parsed.tabIds)) return null;
+    const tabIds = parsed.tabIds.filter((id): id is string => typeof id === "string");
+    if (tabIds.length === 0) return null;
+    return { mainValue: parsed.mainValue, spaceId, tabIds };
   } catch {
     return null;
   }
@@ -682,26 +753,41 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   );
 
   React.useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !ready) return;
+
+    function applyMainValue(nextMainValue: string) {
+      setMainValue(nextMainValue);
+      setActiveAction(
+        nextMainValue.startsWith("primary-action:")
+          ? nextMainValue.replace("primary-action:", "")
+          : undefined,
+      );
+      if (!nextMainValue.startsWith("primary-action:")) setActiveEntityId(nextMainValue);
+    }
 
     function restoreWorkspaceRouteState() {
       const routeState = getWorkspaceRouteStateFromLocation(
         window.location.pathname,
         window.location.search,
       );
-      if (routeState.mainValue) {
+      const storedMainTabsState = getStoredWorkspaceMainTabsState(spaceId);
+      const restoredMainTabsState = resolveWorkspaceMainTabsFromStoredState({
+        createTab: createRestoredMainTab,
+        defaultTabs: initialMainTabs,
+        routeMainValue: routeState.mainValue,
+        storedState: storedMainTabsState,
+      });
+
+      if (restoredMainTabsState) {
+        setMainTabs(restoredMainTabsState.tabs);
+        applyMainValue(restoredMainTabsState.mainValue);
+      } else if (routeState.mainValue) {
         const nextMainValue = resolveWorkspaceRouteMainValue(routeState.mainValue);
         const restoredTab = createRestoredMainTab(nextMainValue);
         if (restoredTab) {
           setMainTabs((current) => upsertWorkspaceTab(current, restoredTab));
         }
-        setMainValue(nextMainValue);
-        setActiveAction(
-          nextMainValue.startsWith("primary-action:")
-            ? nextMainValue.replace("primary-action:", "")
-            : undefined,
-        );
-        if (!nextMainValue.startsWith("primary-action:")) setActiveEntityId(nextMainValue);
+        applyMainValue(nextMainValue);
       }
       const nextSideValue = routeState.sideValue ?? getStoredWorkspaceSideValue();
       if (nextSideValue) {
@@ -724,7 +810,13 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     setRouteRestored(true);
     window.addEventListener("popstate", restoreWorkspaceRouteState);
     return () => window.removeEventListener("popstate", restoreWorkspaceRouteState);
-  }, [createRestoredMainTab, createRestoredSideTab, resolveWorkspaceRouteMainValue]);
+  }, [
+    createRestoredMainTab,
+    createRestoredSideTab,
+    ready,
+    resolveWorkspaceRouteMainValue,
+    spaceId,
+  ]);
 
   React.useEffect(() => {
     if (typeof window === "undefined" || !routeRestored) return;
@@ -744,6 +836,14 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     window.history[method]({ mainValue }, "", nextPath);
     hasSyncedInitialUrlRef.current = true;
   }, [mainValue, routeRestored, spaceId]);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined" || !routeRestored) return;
+    window.localStorage.setItem(
+      WORKSPACE_MAIN_TABS_STORAGE_KEY,
+      JSON.stringify(createWorkspaceMainTabsStorageState({ mainValue, spaceId, tabs: mainTabs })),
+    );
+  }, [mainTabs, mainValue, routeRestored, spaceId]);
 
   React.useEffect(() => {
     if (typeof window === "undefined" || !routeRestored) return;

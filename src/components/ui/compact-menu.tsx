@@ -36,15 +36,16 @@ const compactMenuSurfaceClass = cn(
 )
 
 const compactMenuSearchClass =
-  "h-6 w-full rounded-[7px] border-0 bg-muted px-[9px] text-sm text-foreground shadow-none [&>input]:h-full [&>input]:px-0 [&>input]:py-0 [&>input]:text-sm [&>input]:text-foreground [&>input]:placeholder:text-muted-foreground [&>input]:placeholder:opacity-100"
+  "h-6 w-full rounded-[7px] border-0 bg-el px-[9px] text-sm text-primary shadow-none [&>input]:h-full [&>input]:px-0 [&>input]:py-0 [&>input]:text-sm [&>input]:text-primary [&>input]:placeholder:text-subtle [&>input]:placeholder:opacity-100"
 
 const compactMenuItemClass =
-  "group/compact-menu-item min-h-0 w-full min-w-0 gap-0 rounded-[7px] px-0 py-0 pr-1 text-sm text-foreground data-highlighted:bg-muted data-highlighted:text-foreground [&>[data-slot=compact-menu-item-text]]:ml-2"
+  "group/compact-menu-item min-h-0 w-full min-w-0 gap-0 rounded-base px-0 py-0 pr-1 text-sm text-primary data-highlighted:bg-el data-highlighted:text-primary [&>[data-slot=compact-menu-item-text]]:ml-2"
 
-const sidebarContextMenuContentClass = "w-[269px] p-1.5"
+const sidebarContextMenuContentClass =
+  "preview-card-core box-content !w-[257px] !min-w-0 select-none rounded-xl border-front bg-front !p-1.5 text-left text-xs font-sans font-normal text-subtle shadow-[var(--app-shadow-sidebar-popover)]"
 
 const sidebarContextSubmenuContentClass = cn(
-  "w-[269px] p-1.5",
+  "preview-card-core box-content !w-auto min-w-[220px] select-none rounded-xl border-front bg-front !p-1.5 text-left text-xs font-sans font-normal text-subtle shadow-[var(--app-shadow-sidebar-popover)]",
   workspaceSubmenuStateClass,
 )
 
@@ -55,15 +56,15 @@ const workspaceOverflowMenuItemClass =
 
 const sidebarContextMenuItemClass = cn(
   workspaceOverflowMenuItemClass,
-  "h-base min-h-base justify-between gap-2 pl-1 pr-1 text-[var(--app-text-primary)]",
-  "hover:bg-[var(--app-bg-el)] data-highlighted:bg-[var(--app-bg-el)] data-highlighted:text-[var(--app-text-primary)]",
+  "h-base min-h-base justify-between gap-2 pl-1 pr-1 text-left font-normal text-[var(--app-text-primary)]",
+  "hover:bg-[var(--app-bg-el)] data-highlighted:bg-[var(--app-bg-el)] data-highlighted:text-[var(--app-text-primary)] data-popup-open:bg-[var(--app-bg-el)] data-popup-open:text-[var(--app-text-primary)] data-open:bg-[var(--app-bg-el)] data-open:text-[var(--app-text-primary)]",
 )
 
 const sidebarContextMenuSeparatorClass =
   "my-1 h-0 border-b-[0.5px] border-front bg-transparent"
 
 const compactMenuActionButtonClass = cn(
-  "relative flex h-6 w-full shrink-0 cursor-pointer items-center justify-center gap-x-2 truncate rounded-lg border border-border bg-muted px-3 text-sm font-normal text-[var(--app-text-secondary)] hover:border-[var(--app-border-base-strong)] hover:bg-[var(--app-bg-el-hover)] hover:text-foreground active:brightness-[0.97] focus:outline-none disabled:pointer-events-none disabled:opacity-50",
+  "relative flex h-6 w-full shrink-0 cursor-pointer items-center justify-center gap-x-2 truncate rounded-lg border border-front bg-el px-3 text-sm font-normal text-[var(--app-text-secondary)] hover:border-[var(--app-border-base-strong)] hover:bg-[var(--app-bg-el-hover)] hover:text-primary active:brightness-[0.97] focus:outline-none disabled:pointer-events-none disabled:opacity-50",
   workspaceSmallActionStateClass,
 )
 
@@ -82,8 +83,8 @@ function CompactMenuIconFrame({
       className={cn(
         compactMenuIconShellClass,
         variant === "bordered"
-          ? "border border-border bg-popover text-muted-foreground [border-width:0.5px]"
-          : "border border-transparent text-muted-foreground",
+          ? "border border-transparent text-subtle [border-width:0.5px]"
+          : "border border-transparent text-subtle",
         className,
       )}
     >
@@ -108,7 +109,7 @@ function CompactMenuItemText({
     >
       <span className="flex min-w-0 flex-1 items-center justify-center truncate">
         <span className="flex min-w-0 flex-1 items-center truncate">
-          <span className="max-w-full truncate pt-px text-foreground">
+          <span className="max-w-full truncate pt-px text-primary">
             {children}
           </span>
         </span>
@@ -159,8 +160,8 @@ function CompactMenuAccountPanel({
       className={cn("flex w-full flex-col p-2 sm:w-72", className)}
     >
       <div className="flex w-full flex-col text-sm">
-        <div className="truncate font-medium text-foreground">{name}</div>
-        <div className="truncate text-muted-foreground">{email}</div>
+        <div className="truncate font-medium text-primary">{name}</div>
+        <div className="truncate text-subtle">{email}</div>
       </div>
       <div className="mt-1">
         <div className="inline max-h-max grow-0 self-center">

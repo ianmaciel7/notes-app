@@ -40,6 +40,7 @@ import {
   sidebarContextMenuContentClass,
   sidebarContextMenuItemClass,
   sidebarContextMenuSeparatorClass,
+  sidebarContextSubmenuContentClass,
 } from "@/components/ui/compact-menu";
 import {
   Dialog,
@@ -55,6 +56,9 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -272,7 +276,7 @@ const objectTypeMenuIconPaths = {
   chevronRight:
     "m181.66 133.66l-80 80a8 8 0 0 1-11.32-11.32L164.69 128L90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32",
   changeType:
-    "M224 48v48a8 8 0 0 1-8 8h-48a8 8 0 0 1 0-16h28.7l-13.1-13.1a80 80 0 0 0-135.3 34.5a8 8 0 0 1-15.5-3.8a96 96 0 0 1 162.8-41.9L208 76.7V48a8 8 0 0 1 16 0M224.2 146.6a96 96 0 0 1-162.8 41.9L48 175.3V204a8 8 0 0 1-16 0v-48a8 8 0 0 1 8-8h48a8 8 0 0 1 0 16H59.3l13.1 13.1a80 80 0 0 0 135.3-34.5a8 8 0 0 1 15.5 4",
+    "M224 48v48a8 8 0 0 1-8 8h-48a8 8 0 0 1 0-16h28.69l-14.63-14.63a79.56 79.56 0 0 0-56.13-23.43h-.45a79.52 79.52 0 0 0-55.89 22.77a8 8 0 0 1-11.18-11.44a96 96 0 0 1 135 .79L208 76.69V48a8 8 0 0 1 16 0m-37.59 135.29a80 80 0 0 1-112.47-.66L59.31 168H88a8 8 0 0 0 0-16H40a8 8 0 0 0-8 8v48a8 8 0 0 0 16 0v-28.69l14.63 14.63A95.43 95.43 0 0 0 130 222.06h.53a95.36 95.36 0 0 0 67.07-27.33a8 8 0 0 0-11.18-11.44Z",
   export:
     "m205.66 149.66-72 72a8 8 0 0 1-11.32 0l-72-72a8 8 0 0 1 11.32-11.32L120 196.69V40a8 8 0 0 1 16 0v156.69l58.34-58.35a8 8 0 0 1 11.32 11.32",
   import:
@@ -302,12 +306,28 @@ function AppSidebarObjectTypeMenuIcon({
   );
 }
 
-function CollectionMenuIcon({ children }: { children: React.ReactNode }) {
-  return <SidebarContextMenuIcon>{children}</SidebarContextMenuIcon>;
+function CollectionMenuIcon({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <SidebarContextMenuIcon className={className}>{children}</SidebarContextMenuIcon>;
 }
 
-function SidebarContextMenuIcon({ children }: { children: React.ReactNode }) {
-  return <CompactMenuIconFrame variant="ghost">{children}</CompactMenuIconFrame>;
+function SidebarContextMenuIcon({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <CompactMenuIconFrame variant="ghost" className={className}>
+      {children}
+    </CompactMenuIconFrame>
+  );
 }
 
 function reorderById<T extends { id: string }>(items: T[], fromId: string, toId: string) {
@@ -557,13 +577,23 @@ function AppSidebarPinnedMenu({
         sideOffset={8}
         className={sidebarContextMenuContentClass}
       >
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={onOpen}>
-          <SidebarContextMenuIcon>
-            <AppSidebarSourceIcon name="external" />
-          </SidebarContextMenuIcon>
-          <CompactMenuItemText>{t("lifecycle.task.open")}</CompactMenuItemText>
-          <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
-        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className={sidebarContextMenuItemClass}>
+            <SidebarContextMenuIcon>
+              <AppSidebarSourceIcon name="external" />
+            </SidebarContextMenuIcon>
+            <CompactMenuItemText>{t("lifecycle.task.open")}</CompactMenuItemText>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className={sidebarContextSubmenuContentClass}>
+            <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={onOpen}>
+              <SidebarContextMenuIcon>
+                <AppSidebarSourceIcon name="external" />
+              </SidebarContextMenuIcon>
+              <CompactMenuItemText>{t("documentMenu.openInView")}</CompactMenuItemText>
+              <DropdownMenuShortcut>{t("documentMenu.openInViewShortcut")}</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
         <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={onUnpin}>
           <SidebarContextMenuIcon>
@@ -611,25 +641,36 @@ function AppSidebarPinnedMenu({
           <DropdownMenuShortcut>Ctrl I</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
-          <SidebarContextMenuIcon>
-            <AppSidebarCopyIcon />
-          </SidebarContextMenuIcon>
-          <CompactMenuItemText>{t("documentMenu.copy")}</CompactMenuItemText>
-          <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
-        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className={sidebarContextMenuItemClass}>
+            <SidebarContextMenuIcon>
+              <AppSidebarCopyIcon />
+            </SidebarContextMenuIcon>
+            <CompactMenuItemText>{t("documentMenu.copy")}</CompactMenuItemText>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className={sidebarContextSubmenuContentClass}>
+            <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+              <SidebarContextMenuIcon>
+                <AppSidebarCopyIcon />
+              </SidebarContextMenuIcon>
+              <CompactMenuItemText>{t("documentMenu.copyMarkdown")}</CompactMenuItemText>
+            </DropdownMenuItem>
+            <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+              <SidebarContextMenuIcon>
+                <AppSidebarCopyIcon />
+              </SidebarContextMenuIcon>
+              <CompactMenuItemText>{t("documentMenu.copyObjectReference")}</CompactMenuItemText>
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
           <SidebarContextMenuIcon>
             <AppSidebarCopyIcon />
           </SidebarContextMenuIcon>
           <CompactMenuItemText>{t("documentMenu.duplicate")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className={sidebarContextMenuItemClass}
-          variant="destructive"
-          onClick={pendingAction}
-        >
-          <SidebarContextMenuIcon>
+        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+          <SidebarContextMenuIcon className="text-red-500 dark:text-red-400">
             <AppSidebarSourceIcon name="trash" />
           </SidebarContextMenuIcon>
           <CompactMenuItemText>{t("documentMenu.deleteObject")}</CompactMenuItemText>
@@ -2090,13 +2131,23 @@ function AppSidebarCollectionMenu({
         sideOffset={8}
         className={sidebarContextMenuContentClass}
       >
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("open")}>
-          <CollectionMenuIcon>
-            <AppSidebarSourceIcon name="external" />
-          </CollectionMenuIcon>
-          <CompactMenuItemText>{t("lifecycle.task.open")}</CompactMenuItemText>
-          <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
-        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className={sidebarContextMenuItemClass}>
+            <CollectionMenuIcon>
+              <AppSidebarSourceIcon name="external" />
+            </CollectionMenuIcon>
+            <CompactMenuItemText>{t("lifecycle.task.open")}</CompactMenuItemText>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className={sidebarContextSubmenuContentClass}>
+            <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("open")}>
+              <CollectionMenuIcon>
+                <AppSidebarSourceIcon name="external" />
+              </CollectionMenuIcon>
+              <CompactMenuItemText>{t("documentMenu.openInView")}</CompactMenuItemText>
+              <DropdownMenuShortcut>{t("documentMenu.openInViewShortcut")}</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
         <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("unpin-type")}>
           <CollectionMenuIcon>
@@ -2144,25 +2195,36 @@ function AppSidebarCollectionMenu({
           <DropdownMenuShortcut>Ctrl I</DropdownMenuShortcut>
         </DropdownMenuItem>
         <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("copy")}>
-          <CollectionMenuIcon>
-            <AppSidebarCopyIcon />
-          </CollectionMenuIcon>
-          <CompactMenuItemText>{t("documentMenu.copy")}</CompactMenuItemText>
-          <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
-        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className={sidebarContextMenuItemClass}>
+            <CollectionMenuIcon>
+              <AppSidebarCopyIcon />
+            </CollectionMenuIcon>
+            <CompactMenuItemText>{t("documentMenu.copy")}</CompactMenuItemText>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className={sidebarContextSubmenuContentClass}>
+            <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("copy")}>
+              <CollectionMenuIcon>
+                <AppSidebarCopyIcon />
+              </CollectionMenuIcon>
+              <CompactMenuItemText>{t("documentMenu.copyMarkdown")}</CompactMenuItemText>
+            </DropdownMenuItem>
+            <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("copy")}>
+              <CollectionMenuIcon>
+                <AppSidebarCopyIcon />
+              </CollectionMenuIcon>
+              <CompactMenuItemText>{t("documentMenu.copyObjectReference")}</CompactMenuItemText>
+            </DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("duplicate")}>
           <CollectionMenuIcon>
             <AppSidebarCopyIcon />
           </CollectionMenuIcon>
           <CompactMenuItemText>{t("documentMenu.duplicate")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          className={sidebarContextMenuItemClass}
-          variant="destructive"
-          onClick={action("delete")}
-        >
-          <CollectionMenuIcon>
+        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("delete")}>
+          <CollectionMenuIcon className="text-red-500 dark:text-red-400">
             <AppSidebarSourceIcon name="trash" />
           </CollectionMenuIcon>
           <CompactMenuItemText>{t("documentMenu.deleteObject")}</CompactMenuItemText>

@@ -1,7 +1,7 @@
 const floatingPositionerClass = "isolate z-50"
 
 const floatingInteractionSurfaceClass =
-  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[var(--app-shadow-floating)] outline-hidden"
+  "rounded-xl border border-front bg-front text-primary shadow-[var(--app-shadow-preview-card)] outline-hidden"
 
 const tooltipSurfaceClass =
   "box-content rounded-[8px] border border-border/50 bg-popover/50 px-2 py-1 text-xs font-medium leading-normal text-foreground shadow-sm backdrop-blur-[8px] dark:bg-background/70"
@@ -16,7 +16,7 @@ const overlayClass =
   "fixed inset-0 isolate z-50 bg-[var(--app-overlay-strong)] duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const floatingSurfaceBaseClass =
-  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[var(--app-shadow-floating)] outline-hidden"
+  "rounded-xl border border-front bg-front text-primary shadow-[var(--app-shadow-preview-card)] outline-hidden"
 
 const dialogSurfaceBaseClass =
   "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[var(--app-shadow-dialog)] outline-none"
@@ -28,16 +28,16 @@ const dialogSurfaceClass =
   "duration-150 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const floatingListItemClass =
-  "relative flex h-8 min-h-8 cursor-default items-center gap-2 rounded-[8px] px-1 py-0 text-sm leading-normal outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-muted-foreground [&_svg:not([class*='size-'])]:size-3.5"
+  "relative flex h-8 min-h-8 cursor-default items-center gap-2 rounded-base px-1 py-0 text-sm leading-normal text-primary outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-subtle [&_svg:not([class*='size-'])]:size-3.5"
 
 const floatingListItemFocusClass =
-  "focus:bg-muted focus:text-foreground not-data-[variant=destructive]:focus:**:text-foreground"
+  "focus:bg-el focus:text-primary not-data-[variant=destructive]:focus:**:text-primary"
 
 const floatingSearchListItemClass =
   "flex h-8 w-full items-center gap-2 rounded-lg px-1.5 text-left text-sm outline-none hover:bg-muted focus-visible:bg-muted"
 
 const floatingListItemHighlightedClass =
-  "data-highlighted:bg-muted data-highlighted:text-foreground not-data-[variant=destructive]:data-highlighted:**:text-foreground"
+  "data-highlighted:bg-el data-highlighted:text-primary not-data-[variant=destructive]:data-highlighted:**:text-primary"
 
 const floatingListItemSelectedClass =
   "data-selected:bg-[var(--app-bg-el-hover)] data-selected:text-foreground data-selected:*:[svg]:text-foreground"
@@ -54,7 +54,7 @@ const controlIconSelectorClass =
 const floatingIndicatorClass =
   "pointer-events-none absolute right-2 flex size-4 items-center justify-center"
 
-const floatingSeparatorClass = "my-1 h-px bg-border"
+const floatingSeparatorClass = "my-1 h-0 border-b-[0.5px] border-front bg-transparent"
 
 const workspaceRowStateClass =
   "transition-[background-color,color,filter,opacity] duration-200 ease-out motion-reduce:transition-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground data-[active=true]:brightness-[0.965]"

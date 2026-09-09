@@ -632,7 +632,8 @@
   --app-shadow-popover:
     0 3px 5px rgb(0 0 0 / 0.01), 0 5px 10px rgb(0 0 0 / 0.02), 0 10px 14px rgb(0 0 0 / 0.01);
   --app-shadow-preview-card: 0 2px 3px #00000001, 0 4px 9px #00000003, 0 8px 12px #00000001;
-  --app-shadow-sidebar-popover: 0 3px 5px #00000003, 0 5px 10px #00000005, 0 10px 14px #00000003;
+  --app-shadow-sidebar-popover:
+    0 1px 2px rgb(0 0 0 / 0.04), 0 5px 14px rgb(0 0 0 / 0.08), 0 14px 34px rgb(0 0 0 / 0.05);
   --app-slider-thumb-bg: oklch(1 0.0001 263.28);
   --app-tab-icon-bg: oklch(0.9856 0.0016 67);
   --app-tab-icon-text: oklch(0.3887 0.0052 301.05);
@@ -898,7 +899,8 @@
   --app-shadow-popover:
     0 3px 5px rgb(0 0 0 / 0.01), 0 5px 10px rgb(0 0 0 / 0.02), 0 10px 14px rgb(0 0 0 / 0.01);
   --app-shadow-preview-card: 0 2px 3px #00000001, 0 4px 9px #00000003, 0 8px 12px #00000001;
-  --app-shadow-sidebar-popover: 0 3px 5px #00000003, 0 5px 10px #00000005, 0 10px 14px #00000003;
+  --app-shadow-sidebar-popover:
+    0 1px 2px rgb(0 0 0 / 0.16), 0 5px 14px rgb(0 0 0 / 0.22), 0 14px 34px rgb(0 0 0 / 0.18);
   --app-slider-thumb-bg: oklch(1 0.0001 263.28);
   --app-tab-icon-bg: oklch(0.2987 0.0072 285.88);
   --app-tab-icon-text: oklch(0.9163 0.0017 67.07);

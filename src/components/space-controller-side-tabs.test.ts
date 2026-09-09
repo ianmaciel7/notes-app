@@ -4,8 +4,10 @@ import {
   createWorkspaceRouteMainSegment,
   createWorkspaceRouteSpaceSegment,
   createWorkspaceUrlPath,
+  createWorkspaceMainTabsStorageState,
   filterSidePanelSpecialItemsForContext,
   isDefaultExploreSideTab,
+  resolveWorkspaceMainTabsFromStoredState,
   resolveWorkspaceMainValueFromRouteSegment,
   resolveWorkspaceEntityTitle,
   resolveSidePanelTabsAfterOpen,
@@ -199,4 +201,34 @@ it("uses an exact typed title for create-from-query while preserving default unt
   expect(resolveWorkspaceEntityTitle("Page")).toBe("Untitled Page");
   expect(resolveWorkspaceEntityTitle("Page", { title: "zzzzzzzzzz" })).toBe("zzzzzzzzzz");
   expect(resolveWorkspaceEntityTitle(undefined, { title: "  zzzzzzzzzz  " })).toBe("zzzzzzzzzz");
+});
+
+it("stores the open main tabs without resurrecting a closed route tab on refresh", () => {
+  const storedState = createWorkspaceMainTabsStorageState({
+    mainValue: "page",
+    spaceId: "personal",
+    tabs: [
+      { id: "page", label: "Pages", icon: ExploreIcon, draggable: true },
+      { id: "page", label: "Pages duplicate", icon: ExploreIcon, draggable: true },
+    ],
+  });
+
+  expect(storedState).toEqual({
+    mainValue: "page",
+    spaceId: "personal",
+    tabIds: ["page"],
+  });
+
+  const restoredState = resolveWorkspaceMainTabsFromStoredState({
+    createTab: (id) =>
+      id === "page" ? { id, label: "Pages", icon: ExploreIcon, draggable: true } : null,
+    defaultTabs: [{ id: "page", label: "Pages", icon: ExploreIcon, draggable: true }],
+    routeMainValue: "entity-closed",
+    storedState,
+  });
+
+  expect(restoredState).toEqual({
+    mainValue: "page",
+    tabs: [{ id: "page", label: "Pages", icon: ExploreIcon, draggable: true }],
+  });
 });
