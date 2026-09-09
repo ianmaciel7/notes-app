@@ -4,11 +4,11 @@ import { useTranslations } from "next-intl";
 import * as React from "react";
 import { AppSidebarCheckIcon, AppSidebarPlusIcon } from "@/components/app-sidebar-icons";
 import {
+  getCapacitiesObjectTypeTone,
   ObjectAreaIcon,
   ObjectAtomicNoteIcon,
   ObjectIconBadge,
   ObjectIdeaIcon,
-  getCapacitiesObjectTypeTone,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
 import { Button } from "@/components/ui/button";
@@ -26,8 +26,8 @@ import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
 import {
   BUILT_IN_STRUCTURES,
   type CreateStructureInput,
-  type ObjectIconTone,
   OBJECT_TYPE_PRESETS,
+  type ObjectIconTone,
   type ObjectTypePreset,
   type WorkspaceStructure,
 } from "@/lib/space-object-types";
@@ -142,9 +142,7 @@ function AppSidebarObjectTypeIcon({
   className?: string;
 }) {
   const isAtomicNote =
-    preset.id === "atomic-note" ||
-    preset.id === "atomic_note" ||
-    preset.iconName === "atomic-note";
+    preset.id === "atomic-note" || preset.id === "atomic_note" || preset.iconName === "atomic-note";
   const Icon = isAtomicNote
     ? ObjectAtomicNoteIcon
     : (objectTypeDefinitionById[preset.iconName]?.icon ?? ObjectAreaIcon);
@@ -155,7 +153,7 @@ function AppSidebarObjectTypeIcon({
       data-lifecycle-contract={objectLifecycleContractSlots.ObjectIconTonePreview}
       icon={Icon}
       tone={tone}
-      className={cn("h-base w-base rounded-base border-[0.5px] text-lg leading-none", className)}
+      className={cn("size-8 rounded-base border-[0.5px] text-lg leading-none", className)}
       iconClassName="size-[1em]"
       style={capacitiesObjectTypeToneStyle(tone)}
     />
@@ -220,7 +218,7 @@ function AppSidebarCustomObjectTypeCard({
       onClick={onSelect}
     >
       <span
-        className="flex h-base w-base shrink-0 items-center justify-center rounded-base border-[0.5px] text-lg leading-none"
+        className="flex size-8 shrink-0 items-center justify-center rounded-base border-[0.5px] text-lg leading-none"
         style={capacitiesObjectTypeToneStyle("gray")}
       >
         <AppSidebarPlusIcon className="size-[1em]" />
@@ -286,6 +284,7 @@ function AppSidebarObjectTypeDetails({
   const customNameInputId = React.useId();
   const pluralNameInputId = React.useId();
   const displayPreset: ObjectTypeCardAppearance = selection ?? {
+    id: "custom",
     iconName: "area",
     tone: "gray",
   };
@@ -599,7 +598,7 @@ function AppSidebarObjectTypeStudio({
         <DialogContent
           showCloseButton={false}
           className={cn(
-            "flex h-[min(784px,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] flex-col gap-0 overflow-hidden rounded-[8px] bg-popover p-0 text-popover-foreground sm:w-[min(1152px,calc(100vw-4rem))] sm:max-w-[min(1152px,calc(100vw-4rem))]",
+            "flex h-[min(784px,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] flex-col gap-0 overflow-hidden rounded-[8px] bg-popover p-0 text-popover-foreground sm:w-[min(1128px,calc(100vw-4rem))] sm:max-w-[min(1128px,calc(100vw-4rem))]",
             "shadow-[0_18px_60px_rgb(0_0_0/0.22)] ring-1 ring-black/10 dark:ring-white/10",
           )}
         >
@@ -610,7 +609,7 @@ function AppSidebarObjectTypeStudio({
             <DialogDescription className="sr-only">{t("description")}</DialogDescription>
           </DialogHeader>
 
-          <div className="relative flex min-h-0 flex-1 overflow-hidden bg-popover">
+          <div className="relative flex min-h-0 flex-1 overflow-hidden bg-[var(--app-bg-front)]">
             <ScrollArea
               className={cn(
                 "min-h-0 flex-1",
@@ -621,13 +620,14 @@ function AppSidebarObjectTypeStudio({
             >
               <div
                 className={cn(
-                  "flex min-h-full flex-col px-5 pb-6 pt-6",
+                  "flex min-h-full flex-col px-5 pb-6 pt-4",
                   detailsOpen && "pr-[calc(28rem+1.25rem)]",
                 )}
               >
                 <section
+                  data-slot="app-sidebar-object-type-intro"
                   aria-label={t("intro.title")}
-                  className="mb-7 flex w-full max-w-[647px] gap-3 rounded-[8px] bg-[var(--app-block-bg-green)] px-3 py-2.5 text-[var(--app-block-text-green)]"
+                  className="mb-7 flex w-full max-w-[672px] gap-3 rounded-[8px] bg-[var(--app-block-bg-green)] px-3 py-2 text-[var(--app-block-text-green)]"
                 >
                   <ObjectIdeaIcon className="mt-0.5 size-4 shrink-0 text-[var(--app-block-text-green)]" />
                   <div className="min-w-0 text-[14px] leading-[1.45]">
@@ -693,15 +693,24 @@ function AppSidebarObjectTypeStudio({
             </ScrollArea>
 
             {detailsOpen && (
-              <AppSidebarObjectTypeDetails
-                selection={selectedObjectType}
-                customName={customName}
-                pluralName={pluralName}
-                onCustomNameChange={setCustomName}
-                onPluralNameChange={setPluralName}
-                onClose={resetSelection}
-                onConfirm={confirmSelection}
-              />
+              <>
+                <button
+                  type="button"
+                  aria-label={t("details.close")}
+                  data-slot="app-sidebar-object-type-details-dismiss-layer"
+                  className="absolute inset-y-0 left-0 right-[calc(28rem+1.25rem)] z-10 cursor-default bg-transparent"
+                  onClick={resetSelection}
+                />
+                <AppSidebarObjectTypeDetails
+                  selection={selectedObjectType}
+                  customName={customName}
+                  pluralName={pluralName}
+                  onCustomNameChange={setCustomName}
+                  onPluralNameChange={setPluralName}
+                  onClose={resetSelection}
+                  onConfirm={confirmSelection}
+                />
+              </>
             )}
           </div>
         </DialogContent>

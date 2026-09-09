@@ -518,6 +518,14 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
+      if (mod && event.altKey && key === "t" && !editable) {
+        claimShortcut(event);
+        setActiveAction("tasks");
+        setActiveEntityId(null);
+        setMainValue("primary-action:tasks");
+        return;
+      }
+
       if (mod && key === "j" && !editable) {
         claimShortcut(event);
         setActiveAction("explore");

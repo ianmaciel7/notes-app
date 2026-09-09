@@ -23,8 +23,10 @@ import {
   WorkspaceProvider,
   WorkspaceSidePanelHeader,
 } from "@/components/space-controller";
-import { WorkspaceFlashcardReviewPanel } from "@/components/workspace-flashcard-review-panel";
-import { WorkspaceStudyGoalDashboard } from "@/components/workspace-study-goal-dashboard";
+import {
+  WorkspaceMainContent,
+  WorkspaceSidePanelContent,
+} from "@/components/workspace-main-content";
 
 export default function HomePage() {
   return (
@@ -38,23 +40,18 @@ export default function HomePage() {
               <AppShellSidebar>
                 <WorkspaceSidebar />
               </AppShellSidebar>
-
               <AppShellWorkspace>
                 <AppShellMain>
                   <WorkspaceMainHeader />
                   <AppShellSurface className="h-full w-full">
-                    <div className="flex h-full min-h-0 flex-col">
-                      <WorkspaceStudyGoalDashboard />
-                      <div className="min-h-0 flex-1">
-                        <WorkspaceFlashcardReviewPanel />
-                      </div>
-                    </div>
+                    <WorkspaceMainContent />
                   </AppShellSurface>
                 </AppShellMain>
-
                 <AppShellSidePanel>
                   <WorkspaceSidePanelHeader />
-                  <AppShellSurface side="side-panel" className="h-full w-full" />
+                  <AppShellSurface side="side-panel" className="h-full w-full">
+                    <WorkspaceSidePanelContent />
+                  </AppShellSurface>
                 </AppShellSidePanel>
               </AppShellWorkspace>
             </AppShellPanelGroup>
@@ -69,16 +66,13 @@ export default function HomePage() {
               </AppShellMobileSidebar>
               <AppShellMobileSidePanel className="flex flex-col p-0">
                 <WorkspaceSidePanelHeader />
-                <AppShellSurface side="side-panel" className="h-full w-full" />
+                <AppShellSurface side="side-panel" className="h-full w-full">
+                  <WorkspaceSidePanelContent />
+                </AppShellSurface>
               </AppShellMobileSidePanel>
             </AppShellHeader>
             <AppShellSurface className="h-full w-full">
-              <div className="flex h-full min-h-0 flex-col">
-                <WorkspaceStudyGoalDashboard />
-                <div className="min-h-0 flex-1">
-                  <WorkspaceFlashcardReviewPanel />
-                </div>
-              </div>
+              <WorkspaceMainContent />
             </AppShellSurface>
           </AppShellMobile>
         </WorkspaceProvider>

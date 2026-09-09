@@ -4,6 +4,7 @@ import { BookmarkSimpleIcon } from "@phosphor-icons/react/dist/csr/BookmarkSimpl
 import { BookOpenIcon } from "@phosphor-icons/react/dist/csr/BookOpen";
 import { BrainIcon } from "@phosphor-icons/react/dist/csr/Brain";
 import { BuildingsIcon } from "@phosphor-icons/react/dist/csr/Buildings";
+import { CardsThreeIcon } from "@phosphor-icons/react/dist/csr/CardsThree";
 import { ChatsIcon } from "@phosphor-icons/react/dist/csr/Chats";
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import { CodeIcon } from "@phosphor-icons/react/dist/csr/Code";
@@ -18,7 +19,6 @@ import { ListMagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/ListMagn
 import { MapPinIcon } from "@phosphor-icons/react/dist/csr/MapPin";
 import { QuotesIcon } from "@phosphor-icons/react/dist/csr/Quotes";
 import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
-import { StackIcon } from "@phosphor-icons/react/dist/csr/Stack";
 import { SuitcaseRollingIcon } from "@phosphor-icons/react/dist/csr/SuitcaseRolling";
 import { TableIcon } from "@phosphor-icons/react/dist/csr/Table";
 import { TagIcon } from "@phosphor-icons/react/dist/csr/Tag";
@@ -57,8 +57,7 @@ const objectIconToneTextClass: Record<ObjectIconTone, string> = {
   fuchsia: "text-[oklch(0.5124_0.1866_323.57)] dark:text-[oklch(0.9030_0.0733_319.57)]",
   gray: "text-[oklch(0.3887_0.0052_301.05)] dark:text-[oklch(0.9163_0.0017_67.07)]",
   green: "text-[oklch(0.5327_0.1221_151.70)] dark:text-[oklch(0.9250_0.0805_156.05)]",
-  indigo:
-    "text-[oklch(0.4788_0.1814_280.04)] dark:text-[oklch(0.9014_0.0477_273.69)]",
+  indigo: "text-[oklch(0.4788_0.1814_280.04)] dark:text-[oklch(0.9014_0.0477_273.69)]",
   lime: "text-[oklch(0.5189_0.1237_130.14)] dark:text-[oklch(0.9382_0.1216_124.35)]",
   neutral: "text-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]",
   orange: "text-[oklch(0.5570_0.1387_43.21)] dark:text-[oklch(0.9015_0.0729_70.69)]",
@@ -147,7 +146,7 @@ const phosphorObjectIcon: Record<ObjectIconName, Icon> = {
   "ai-chat": ChatsIcon,
   archive: ArchiveIcon,
   area: SquareIcon,
-  "atomic-note": ArchiveIcon,
+  "atomic-note": CardsThreeIcon,
   audio: WaveformIcon,
   book: BookOpenIcon,
   code: CodeIcon,
@@ -314,6 +313,7 @@ function ObjectIconBadge({
 }
 
 export {
+  getCapacitiesObjectTypeTone,
   ObjectAiChatIcon,
   ObjectArchiveIcon,
   ObjectAreaIcon,
@@ -352,5 +352,4 @@ export {
   objectIconToneTextClass,
   objectTypeDefinitionById,
   objectTypeDefinitions,
-  getCapacitiesObjectTypeTone,
 };

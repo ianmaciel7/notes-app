@@ -22,6 +22,7 @@ import { CalendarBlankIcon } from "@phosphor-icons/react/dist/csr/CalendarBlank"
 import { CompassIcon } from "@phosphor-icons/react/dist/csr/Compass";
 import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
 import { EyeIcon } from "@phosphor-icons/react/dist/csr/Eye";
+import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
 import { GraphIcon } from "@phosphor-icons/react/dist/csr/Graph";
 import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
@@ -296,22 +297,9 @@ function NewContentCommandDialog({
   const actionItems: PaletteItem[] = React.useMemo(() => {
     const actions: PaletteItem[] = [
       {
-        id: "action-calendar",
-        kind: "action",
-        title: "Abrir calendário",
-        icon: CalendarBlankIcon,
-        tone: "cyan",
-        shortcuts: ["Ctrl", "Alt", "H"],
-        execute: ({ closePalette = true } = {}) => {
-          setActiveAction("calendar");
-          setMainValue("primary-action:calendar");
-          if (closePalette) onOpenChange(false);
-        },
-      },
-      {
         id: "action-today",
         kind: "action",
-        title: "Abrir hoje",
+        title: "Abrir painel de hoje",
         icon: CalendarBlankIcon,
         tone: "cyan",
         shortcuts: ["Ctrl", "Alt", "H"],
@@ -392,6 +380,19 @@ function NewContentCommandDialog({
         },
       },
       {
+        id: "action-tasks",
+        kind: "action",
+        title: "Abrir tarefas",
+        icon: CheckCircleIcon,
+        tone: "emerald",
+        shortcuts: ["Ctrl", "Alt", "T"],
+        execute: ({ closePalette = true } = {}) => {
+          setActiveAction("tasks");
+          setMainValue("primary-action:tasks");
+          if (closePalette) onOpenChange(false);
+        },
+      },
+      {
         id: "action-explore",
         kind: "action",
         title: "Abrir Explorar. Use o atalho novamente para iniciar um novo chat.",
@@ -412,6 +413,8 @@ function NewContentCommandDialog({
         tone: "sky",
         shortcuts: ["Ctrl", "Shift", "P"],
         execute: ({ closePalette = true } = {}) => {
+          setActiveAction("search");
+          setMainValue("primary-action:search");
           if (closePalette) onOpenChange(false);
         },
       },

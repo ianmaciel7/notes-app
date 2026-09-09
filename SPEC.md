@@ -11,7 +11,7 @@ A local-first, zero-operating-cost web application unifying the core superpowers
 
 ## 2. Infrastructure & Cost Model (Firebase Blaze Plan - Pay-as-you-go)
 - **Hosting & Compute**: **Firebase App Hosting** (running on Google Cloud Run + Cloud CDN for Full-Stack Next.js App Router with Server-Side Rendering, Server Components, and Route Handlers).
-- **App Hosting Config**: Implemented `apphosting.yaml` using the resource profile previously present in old branches (`cpu: 1`, `memoryMiB: 512`, `minInstances: 0`, `maxInstances: 2`, `concurrency: 80`) plus runtime env/secrets for Firestore database id and AI provider keys.
+- **App Hosting Config**: Implemented `apphosting.yaml` using the resource profile previously present in old branches (`cpu: 1`, `memoryMiB: 512`, `minInstances: 0`, `maxInstances: 2`, `concurrency: 80`) plus runtime env/secrets for Firestore database id, Firebase Storage bucket, and AI provider keys.
 - **Billing Plan**: **Firebase Blaze Plan (Pay-as-you-go)**:
   - *Official Firebase Requirement*: As documented by Firebase, server-side compute instances (Cloud Run / Cloud Functions / App Hosting) and Secret Manager require the Blaze Plan.
   - *Cost Control*: The Blaze plan retains substantial free-tier allowances (2M Cloud Run requests/mo, 180k vCPU-sec, 360k GiB-sec, 50k Firestore reads / 20k writes daily, 5GB Cloud Storage, 50k MAU Firebase Auth). With scale-to-zero (`minInstances: 0`) and Cloud Budget alert limits, operating cost stays virtually $0.00 at MVP scale.
@@ -415,7 +415,7 @@ The local structured output parser is implemented in `lib/ai/card-generation.ts`
    - Implemented authenticated remote sync push handler for server-mediated Firestore mutation commits.
    - Implemented `/api/sync/push` Route Handler with `firebase-admin` verification and lazy server-only Firestore bearer token resolution after request JSON and Firebase auth validation.
    - Implemented `/api/storage/upload` Route Handler with `firebase-admin` verification and server-only Firebase Storage writes for PDF/EPUB blobs.
-   - Implemented `apphosting.yaml`, `firebase.json`, and `.env.example` for Firebase App Hosting configuration.
+   - Implemented `apphosting.yaml`, `firebase.json`, and `.env.example` for Firebase App Hosting configuration, including runtime secrets for AI providers and Firebase Storage bucket selection.
    - Implemented `firestore.rules` for user-scoped private data access.
    - Deploy full-stack Next.js app to **Firebase App Hosting** on the **Blaze Plan** after selecting/connecting the real Firebase project and provisioning referenced secrets.
 6. **Phase 6: Final UI Surfaces & Polish**
