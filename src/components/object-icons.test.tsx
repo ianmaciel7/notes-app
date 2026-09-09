@@ -5,10 +5,6 @@ import { describe, expect, it } from "vitest";
 
 import { objectTypeDefinitions } from "@/components/object-icons";
 
-function normalizeSvgPath(path: string) {
-  return path.replaceAll(/[\s,]/g, "");
-}
-
 const expectedObjectTypes = {
   book: ["book", "purple"],
   person: ["person", "orange"],
@@ -54,27 +50,34 @@ describe("object type visual contract", () => {
       const Icon = definition.icon;
       const markup = renderToStaticMarkup(<Icon />);
       expect(markup).toContain(`data-icon-name="${iconName}"`);
+      expect(markup).toContain(`data-local-object-icon="${iconName}"`);
+      expect(markup).toContain('viewBox="0 0 256 256"');
+      expect(markup).toContain('fill="currentColor"');
       expect(markup).toContain("<path");
-      if (id === "atomic-note") {
-        const expectedPath =
-          "M208,88H48a16,16,0,0,0-16,16v96a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V104A16,16,0,0,0,208,88Zm0,112H48V104H208v96ZM48,64a8,8,0,0,1,8-8H200a8,8,0,0,1,0,16H56A8,8,0,0,1,48,64ZM64,32a8,8,0,0,1,8-8H184a8,8,0,0,1,0,16H72A8,8,0,0,1,64,32Z";
-        expect(normalizeSvgPath(markup)).toContain(normalizeSvgPath(expectedPath));
-      }
     },
   );
 
   it("uses distinct study icons and colors for flashcards and study goals", () => {
     const source = readFileSync(new URL("object-icons.tsx", import.meta.url), "utf8");
 
-    expect(source).toContain(
-      'import { StackPlusIcon } from "@phosphor-icons/react/dist/csr/StackPlus"',
-    );
-    expect(source).toContain(
-      'import { GraduationCapIcon } from "@phosphor-icons/react/dist/csr/GraduationCap"',
-    );
-    expect(source).toContain("flashcard: StackPlusIcon");
-    expect(source).toContain('"study-goal": GraduationCapIcon');
+    expect(source).toContain("flashcard: [");
+    expect(source).toContain('"study-goal": [');
     expect(source).toContain('flashcard: "fuchsia"');
     expect(source).toContain('study_goal: "lime"');
+  });
+
+  it("renders every object type from local React SVG components", () => {
+    const source = readFileSync(new URL("object-icons.tsx", import.meta.url), "utf8");
+
+    expect(source).not.toContain("@phosphor-icons/react/dist/csr");
+
+    for (const definition of objectTypeDefinitions) {
+      const Icon = definition.icon;
+      const markup = renderToStaticMarkup(<Icon />);
+
+      expect(markup).toContain("data-local-object-icon=");
+      expect(markup).toContain("<svg");
+      expect(markup).toContain("<path");
+    }
   });
 });

@@ -1,108 +1,78 @@
-import type { Icon, IconProps } from "@phosphor-icons/react";
-import { ArchiveIcon } from "@phosphor-icons/react/dist/csr/Archive";
-import { BookmarkSimpleIcon } from "@phosphor-icons/react/dist/csr/BookmarkSimple";
-import { BookOpenIcon } from "@phosphor-icons/react/dist/csr/BookOpen";
-import { BrainIcon } from "@phosphor-icons/react/dist/csr/Brain";
-import { BuildingsIcon } from "@phosphor-icons/react/dist/csr/Buildings";
-import { CardsThreeIcon } from "@phosphor-icons/react/dist/csr/CardsThree";
-import { ChatsIcon } from "@phosphor-icons/react/dist/csr/Chats";
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { CodeIcon } from "@phosphor-icons/react/dist/csr/Code";
-import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
-import { FileIcon } from "@phosphor-icons/react/dist/csr/File";
-import { FilePdfIcon } from "@phosphor-icons/react/dist/csr/FilePdf";
-import { FileTextIcon } from "@phosphor-icons/react/dist/csr/FileText";
-import { GlobeHemisphereWestIcon } from "@phosphor-icons/react/dist/csr/GlobeHemisphereWest";
-import { GraduationCapIcon } from "@phosphor-icons/react/dist/csr/GraduationCap";
-import { ImageIcon } from "@phosphor-icons/react/dist/csr/Image";
-import { LightbulbIcon } from "@phosphor-icons/react/dist/csr/Lightbulb";
-import { ListMagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/ListMagnifyingGlass";
-import { MapPinIcon } from "@phosphor-icons/react/dist/csr/MapPin";
-import { QuotesIcon } from "@phosphor-icons/react/dist/csr/Quotes";
-import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
-import { StackPlusIcon } from "@phosphor-icons/react/dist/csr/StackPlus";
-import { SuitcaseRollingIcon } from "@phosphor-icons/react/dist/csr/SuitcaseRolling";
-import { TableIcon } from "@phosphor-icons/react/dist/csr/Table";
-import { TagIcon } from "@phosphor-icons/react/dist/csr/Tag";
-import { TelevisionSimpleIcon } from "@phosphor-icons/react/dist/csr/TelevisionSimple";
-import { TwitterLogoIcon } from "@phosphor-icons/react/dist/csr/TwitterLogo";
-import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
-import { UsersThreeIcon } from "@phosphor-icons/react/dist/csr/UsersThree";
-import { WaveformIcon } from "@phosphor-icons/react/dist/csr/Waveform";
-import type { ComponentPropsWithoutRef, ElementType } from "react";
+import type { ComponentPropsWithoutRef, ElementType, SVGProps } from "react";
 
 import type {
   ObjectIconTone,
   ObjectIconName as PersistedObjectIconName,
 } from "@/lib/space-object-types";
 
-type ObjectIconProps = Omit<IconProps, "name" | "weight">;
+type ObjectIconProps = SVGProps<SVGSVGElement>;
+type ObjectTypeIcon = ElementType<ObjectIconProps>;
 type ObjectTypeDefinition = {
   id: string;
   label: string;
-  icon: ElementType<any>;
+  icon: ObjectTypeIcon;
   tone: ObjectIconTone;
 };
 
 type ObjectIconBadgeProps = ComponentPropsWithoutRef<"span"> & {
-  icon: ElementType<any>;
+  icon: ObjectTypeIcon;
   tone: ObjectIconTone;
   iconClassName?: string;
   variant?: "default" | "menu" | "sidebar";
 };
 
 const objectIconToneTextClass: Record<ObjectIconTone, string> = {
-  amber: "text-[oklch(0.5708_0.1192_59.46)] dark:text-[oklch(0.9243_0.1151_95.76)]",
-  blue: "text-[oklch(0.5035_0.1579_264.41)] dark:text-[oklch(0.8823_0.0571_254.14)]",
-  cyan: "text-[oklch(0.4908_0.0793_218.94)] dark:text-[oklch(0.9167_0.0772_205.09)]",
-  emerald: "text-[oklch(0.4933_0.0939_167.09)] dark:text-[oklch(0.9049_0.0895_164.20)]",
-  fuchsia: "text-[oklch(0.5124_0.1866_323.57)] dark:text-[oklch(0.9030_0.0733_319.57)]",
-  gray: "text-[oklch(0.3887_0.0052_301.05)] dark:text-[oklch(0.9163_0.0017_67.07)]",
-  green: "text-[oklch(0.5327_0.1221_151.70)] dark:text-[oklch(0.9250_0.0805_156.05)]",
-  indigo: "text-[oklch(0.4788_0.1814_280.04)] dark:text-[oklch(0.9014_0.0477_273.69)]",
-  lime: "text-[oklch(0.5189_0.1237_130.14)] dark:text-[oklch(0.9382_0.1216_124.35)]",
-  neutral: "text-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]",
-  orange: "text-[oklch(0.5570_0.1387_43.21)] dark:text-[oklch(0.9015_0.0729_70.69)]",
-  pink: "text-[oklch(0.5203_0.1617_358.32)] dark:text-[oklch(0.8994_0.0589_343.16)]",
-  purple: "text-[oklch(0.5082_0.1955_304.61)] dark:text-[oklch(0.9024_0.0605_306.66)]",
-  red: "text-[oklch(0.5060_0.1552_24.58)] dark:text-[oklch(0.8845_0.0592_18.27)]",
-  rose: "text-[oklch(0.5096_0.1640_12.19)] dark:text-[oklch(0.8925_0.0559_9.93)]",
-  sky: "text-[oklch(0.4914_0.0976_237.18)] dark:text-[oklch(0.9014_0.0556_230.95)]",
-  teal: "text-[oklch(0.4954_0.0774_186.74)] dark:text-[oklch(0.9099_0.0927_180.48)]",
-  violet: "text-[oklch(0.5047_0.2017_295.51)] dark:text-[oklch(0.8943_0.0550_293.25)]",
-  yellow: "text-[oklch(0.5532_0.1050_76.42)] dark:text-[oklch(0.9451_0.1242_101.55)]",
+  amber: "text-[var(--type-label-text-amber)]",
+  blue: "text-[var(--type-label-text-blue)]",
+  cyan: "text-[var(--type-label-text-cyan)]",
+  emerald: "text-[var(--type-label-text-emerald)]",
+  fuchsia: "text-[var(--type-label-text-fuchsia)]",
+  gray: "text-[var(--type-label-text-gray)]",
+  green: "text-[var(--type-label-text-green)]",
+  indigo: "text-[var(--type-label-text-indigo)]",
+  lime: "text-[var(--type-label-text-lime)]",
+  neutral: "text-[var(--type-label-text-neutral)]",
+  orange: "text-[var(--type-label-text-orange)]",
+  pink: "text-[var(--type-label-text-pink)]",
+  purple: "text-[var(--type-label-text-purple)]",
+  red: "text-[var(--type-label-text-red)]",
+  rose: "text-[var(--type-label-text-rose)]",
+  sky: "text-[var(--type-label-text-sky)]",
+  teal: "text-[var(--type-label-text-teal)]",
+  violet: "text-[var(--type-label-text-violet)]",
+  yellow: "text-[var(--type-label-text-yellow)]",
 };
 
 const objectIconToneBadgeClass: Record<ObjectIconTone, string> = {
   amber:
-    "border-[oklch(0.8790_0.1533_91.61)] bg-[oklch(0.9746_0.0399_94.73)] text-[oklch(0.5708_0.1192_59.46)] dark:border-[oklch(0.7463_0.1550_72.02)] dark:bg-[oklch(0.3740_0.0489_49.61)] dark:text-[oklch(0.9243_0.1151_95.76)]",
-  blue: "border-[oklch(0.8091_0.0957_251.83)] bg-[oklch(0.9513_0.0235_256.13)] text-[oklch(0.5035_0.1579_264.41)] dark:border-[oklch(0.6129_0.1750_259.87)] dark:bg-[oklch(0.3498_0.0543_269.40)] dark:text-[oklch(0.8823_0.0571_254.14)]",
-  cyan: "border-[oklch(0.8651_0.1154_207.11)] bg-[oklch(0.9704_0.0314_204.11)] text-[oklch(0.4908_0.0793_218.94)] dark:border-[oklch(0.6766_0.1167_214.15)] dark:bg-[oklch(0.3007_0.0267_224.29)] dark:text-[oklch(0.9167_0.0772_205.09)]",
+    "border-[var(--type-label-border-amber)] bg-[var(--type-label-bg-amber)] text-[var(--type-label-text-amber)]",
+  blue: "border-[var(--type-label-border-blue)] bg-[var(--type-label-bg-blue)] text-[var(--type-label-text-blue)]",
+  cyan: "border-[var(--type-label-border-cyan)] bg-[var(--type-label-bg-cyan)] text-[var(--type-label-text-cyan)]",
   emerald:
-    "border-[oklch(0.8452_0.1299_165.01)] bg-[oklch(0.9660_0.0361_163.39)] text-[oklch(0.4933_0.0939_167.09)] dark:border-[oklch(0.6669_0.1375_163.89)] dark:bg-[oklch(0.3029_0.0391_174.11)] dark:text-[oklch(0.9049_0.0895_164.20)]",
+    "border-[var(--type-label-border-emerald)] bg-[var(--type-label-bg-emerald)] text-[var(--type-label-text-emerald)]",
   fuchsia:
-    "border-[oklch(0.8330_0.1322_321.41)] bg-[oklch(0.9650_0.0269_320.10)] text-[oklch(0.5124_0.1866_323.57)] dark:border-[oklch(0.6548_0.2419_322.21)] dark:bg-[oklch(0.3931_0.1141_324.82)] dark:text-[oklch(0.9030_0.0733_319.57)]",
-  gray: "border-[oklch(0.8643_0.0017_67.13)] bg-[oklch(0.9856_0.0016_67.00)] text-[oklch(0.3887_0.0052_301.05)] dark:border-[oklch(0.4918_0.0038_16.70)] dark:bg-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]",
+    "border-[var(--type-label-border-fuchsia)] bg-[var(--type-label-bg-fuchsia)] text-[var(--type-label-text-fuchsia)]",
+  gray: "border-[var(--type-label-border-gray)] bg-[var(--type-label-bg-gray)] text-[var(--type-label-text-gray)]",
   green:
-    "border-[oklch(0.8712_0.1363_154.48)] bg-[oklch(0.9732_0.0311_157.36)] text-[oklch(0.5327_0.1221_151.70)] dark:border-[oklch(0.6981_0.1758_150.49)] dark:bg-[oklch(0.3406_0.0437_157.15)] dark:text-[oklch(0.9250_0.0805_156.05)]",
+    "border-[var(--type-label-border-green)] bg-[var(--type-label-bg-green)] text-[var(--type-label-text-green)]",
   indigo:
-    "border-[oklch(0.7853_0.1042_274.71)] bg-[oklch(0.9469_0.0252_271.12)] text-[oklch(0.4788_0.1814_280.04)] dark:border-[oklch(0.5837_0.1894_277.77)] dark:bg-[oklch(0.3522_0.0535_284.77)] dark:text-[oklch(0.9014_0.0477_273.69)]",
-  lime: "border-[oklch(0.8972_0.1785_126.69)] bg-[oklch(0.9766_0.0483_121.18)] text-[oklch(0.5189_0.1237_130.14)] dark:border-[oklch(0.7313_0.1880_130.19)] dark:bg-[oklch(0.3653_0.0648_128.67)] dark:text-[oklch(0.9382_0.1216_124.35)]",
+    "border-[var(--type-label-border-indigo)] bg-[var(--type-label-bg-indigo)] text-[var(--type-label-text-indigo)]",
+  lime: "border-[var(--type-label-border-lime)] bg-[var(--type-label-bg-lime)] text-[var(--type-label-text-lime)]",
   neutral:
-    "border-[oklch(0.8643_0.0017_67.13)] bg-[oklch(0.9676_0.0016_67.02)] text-[oklch(0.2987_0.0072_285.88)] dark:border-[oklch(0.4918_0.0038_16.70)] dark:bg-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]",
+    "border-[var(--type-label-border-neutral)] bg-[var(--type-label-bg-neutral)] text-[var(--type-label-text-neutral)]",
   orange:
-    "border-[oklch(0.8366_0.1165_66.28)] bg-[oklch(0.9668_0.0264_74.74)] text-[oklch(0.5570_0.1387_43.21)] dark:border-[oklch(0.6867_0.1727_49.09)] dark:bg-[oklch(0.3606_0.0502_39.71)] dark:text-[oklch(0.9015_0.0729_70.69)]",
-  pink: "border-[oklch(0.8228_0.1095_345.98)] bg-[oklch(0.9613_0.0209_342.30)] text-[oklch(0.5203_0.1617_358.32)] dark:border-[oklch(0.6464_0.1975_353.62)] dark:bg-[oklch(0.4103_0.1020_357.14)] dark:text-[oklch(0.8994_0.0589_343.16)]",
+    "border-[var(--type-label-border-orange)] bg-[var(--type-label-bg-orange)] text-[var(--type-label-text-orange)]",
+  pink: "border-[var(--type-label-border-pink)] bg-[var(--type-label-bg-pink)] text-[var(--type-label-text-pink)]",
   purple:
-    "border-[oklch(0.8268_0.1083_306.36)] bg-[oklch(0.9630_0.0229_308.05)] text-[oklch(0.5082_0.1955_304.61)] dark:border-[oklch(0.6212_0.2186_304.36)] dark:bg-[oklch(0.3493_0.0724_308.39)] dark:text-[oklch(0.9024_0.0605_306.66)]",
-  red: "border-[oklch(0.8077_0.1035_19.54)] bg-[oklch(0.9530_0.0218_17.35)] text-[oklch(0.5060_0.1552_24.58)] dark:border-[oklch(0.6272_0.1917_24.54)] dark:bg-[oklch(0.3586_0.0571_20.25)] dark:text-[oklch(0.8845_0.0592_18.27)]",
-  rose: "border-[oklch(0.8097_0.1061_11.61)] bg-[oklch(0.9563_0.0218_13.86)] text-[oklch(0.5096_0.1640_12.19)] dark:border-[oklch(0.6345_0.2004_15.44)] dark:bg-[oklch(0.3588_0.0694_1.78)] dark:text-[oklch(0.8925_0.0559_9.93)]",
-  sky: "border-[oklch(0.8276_0.1013_230.34)] bg-[oklch(0.9654_0.0192_235.84)] text-[oklch(0.4914_0.0976_237.18)] dark:border-[oklch(0.6587_0.1360_235.85)] dark:bg-[oklch(0.3160_0.0372_234.47)] dark:text-[oklch(0.9014_0.0556_230.95)]",
-  teal: "border-[oklch(0.8549_0.1251_181.11)] bg-[oklch(0.9678_0.0321_182.40)] text-[oklch(0.4954_0.0774_186.74)] dark:border-[oklch(0.6738_0.1149_183.05)] dark:bg-[oklch(0.3652_0.0444_191.00)] dark:text-[oklch(0.9099_0.0927_180.48)]",
+    "border-[var(--type-label-border-purple)] bg-[var(--type-label-bg-purple)] text-[var(--type-label-text-purple)]",
+  red: "border-[var(--type-label-border-red)] bg-[var(--type-label-bg-red)] text-[var(--type-label-text-red)]",
+  rose: "border-[var(--type-label-border-rose)] bg-[var(--type-label-bg-rose)] text-[var(--type-label-text-rose)]",
+  sky: "border-[var(--type-label-border-sky)] bg-[var(--type-label-bg-sky)] text-[var(--type-label-text-sky)]",
+  teal: "border-[var(--type-label-border-teal)] bg-[var(--type-label-bg-teal)] text-[var(--type-label-text-teal)]",
   violet:
-    "border-[oklch(0.8112_0.1014_293.55)] bg-[oklch(0.9564_0.0229_293.96)] text-[oklch(0.5047_0.2017_295.51)] dark:border-[oklch(0.6027_0.2044_293.24)] dark:bg-[oklch(0.4196_0.1217_298.90)] dark:text-[oklch(0.8943_0.0550_293.25)]",
+    "border-[var(--type-label-border-violet)] bg-[var(--type-label-bg-violet)] text-[var(--type-label-text-violet)]",
   yellow:
-    "border-[oklch(0.9053_0.1656_98.12)] bg-[oklch(0.9810_0.0480_103.47)] text-[oklch(0.5532_0.1050_76.42)] dark:border-[oklch(0.7610_0.1520_87.61)] dark:bg-[oklch(0.4065_0.0606_68.35)] dark:text-[oklch(0.9451_0.1242_101.55)]",
+    "border-[var(--type-label-border-yellow)] bg-[var(--type-label-bg-yellow)] text-[var(--type-label-text-yellow)]",
 };
 
 const capacitiesObjectTypeToneById: Record<string, ObjectIconTone> = {
@@ -144,42 +114,100 @@ function getCapacitiesObjectTypeTone(
 
 type ObjectIconName = PersistedObjectIconName | "code" | "knowledge";
 
-const phosphorObjectIcon: Record<ObjectIconName, Icon> = {
-  "ai-chat": ChatsIcon,
-  archive: ArchiveIcon,
-  area: SquareIcon,
-  "atomic-note": CardsThreeIcon,
-  audio: WaveformIcon,
-  book: BookOpenIcon,
-  code: CodeIcon,
-  definition: BookmarkSimpleIcon,
-  file: FileIcon,
-  flashcard: StackPlusIcon,
-  idea: LightbulbIcon,
-  image: ImageIcon,
-  knowledge: BrainIcon,
-  media: TelevisionSimpleIcon,
-  meeting: UsersThreeIcon,
-  organization: BuildingsIcon,
-  page: FileTextIcon,
-  pdf: FilePdfIcon,
-  person: UserIcon,
-  place: MapPinIcon,
-  project: CubeIcon,
-  query: ListMagnifyingGlassIcon,
-  quote: QuotesIcon,
-  "study-goal": GraduationCapIcon,
-  table: TableIcon,
-  tag: TagIcon,
-  task: CheckCircleIcon,
-  travel: SuitcaseRollingIcon,
-  tweet: TwitterLogoIcon,
-  weblink: GlobeHemisphereWestIcon,
+const customObjectIconPaths: Record<ObjectIconName, string[]> = {
+  "ai-chat": [
+    "M216,80H184V48a16,16,0,0,0-16-16H40A16,16,0,0,0,24,48V176a8,8,0,0,0,13,6.22L72,154V184a16,16,0,0,0,16,16h93.59L219,230.22a8,8,0,0,0,5,1.78,8,8,0,0,0,8-8V96A16,16,0,0,0,216,80ZM66.55,137.78,40,159.25V48H168v88H71.58A8,8,0,0,0,66.55,137.78ZM216,207.25l-26.55-21.47a8,8,0,0,0-5-1.78H88V152h80a16,16,0,0,0,16-16V96h32Z",
+  ],
+  archive: [
+    "M224,48H32A16,16,0,0,0,16,64V88a16,16,0,0,0,16,16v88a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V104a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM208,192H48V104H208ZM224,88H32V64H224V88ZM96,136a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,136Z",
+  ],
+  area: [
+    "M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Z",
+  ],
+  "atomic-note": [
+    "M208,88H48a16,16,0,0,0-16,16v96a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V104A16,16,0,0,0,208,88Zm0,112H48V104H208v96ZM48,64a8,8,0,0,1,8-8H200a8,8,0,0,1,0,16H56A8,8,0,0,1,48,64ZM64,32a8,8,0,0,1,8-8H184a8,8,0,0,1,0,16H72A8,8,0,0,1,64,32Z",
+  ],
+  audio: [
+    "M56,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0ZM88,24a8,8,0,0,0-8,8V224a8,8,0,0,0,16,0V32A8,8,0,0,0,88,24Zm40,32a8,8,0,0,0-8,8V192a8,8,0,0,0,16,0V64A8,8,0,0,0,128,56Zm40,32a8,8,0,0,0-8,8v64a8,8,0,0,0,16,0V96A8,8,0,0,0,168,88Zm40-16a8,8,0,0,0-8,8v96a8,8,0,0,0,16,0V80A8,8,0,0,0,208,72Z",
+  ],
+  book: [
+    "M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z",
+  ],
+  code: [
+    "M69.12,94.15,28.5,128l40.62,33.85a8,8,0,1,1-10.24,12.29l-48-40a8,8,0,0,1,0-12.29l48-40a8,8,0,0,1,10.24,12.3Zm176,27.7-48-40a8,8,0,1,0-10.24,12.3L227.5,128l-40.62,33.85a8,8,0,1,0,10.24,12.29l48-40a8,8,0,0,0,0-12.29ZM162.73,32.48a8,8,0,0,0-10.25,4.79l-64,176a8,8,0,0,0,4.79,10.26A8.14,8.14,0,0,0,96,224a8,8,0,0,0,7.52-5.27l64-176A8,8,0,0,0,162.73,32.48Z",
+  ],
+  definition: [
+    "M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Zm0,177.57-51.77-32.35a8,8,0,0,0-8.48,0L72,209.57V48H184Z",
+  ],
+  file: [
+    "M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z",
+  ],
+  flashcard: [
+    "M230.91,124A8,8,0,0,1,228,134.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,121.09l92,53.65,92-53.65A8,8,0,0,1,230.91,124ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26ZM232,192H216V176a8,8,0,0,0-16,0v16H184a8,8,0,0,0,0,16h16v16a8,8,0,0,0,16,0V208h16a8,8,0,0,0,0-16Zm-92,23.76-12,7L36,169.09A8,8,0,0,0,28,182.91l96,56a8,8,0,0,0,8.06,0l16-9.33A8,8,0,1,0,140,215.76Z",
+  ],
+  idea: [
+    "M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Zm-16.11-9.34a57.6,57.6,0,0,0-46.56-46.55,8,8,0,0,0-2.66,15.78c16.57,2.79,30.63,16.85,33.44,33.45A8,8,0,0,0,176,104a9,9,0,0,0,1.35-.11A8,8,0,0,0,183.89,94.66Z",
+  ],
+  image: [
+    "M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V158.75l-26.07-26.06a16,16,0,0,0-22.63,0l-20,20-44-44a16,16,0,0,0-22.62,0L40,149.37V56ZM40,172l52-52,80,80H40Zm176,28H194.63l-36-36,20-20L216,181.38V200ZM144,100a12,12,0,1,1,12,12A12,12,0,0,1,144,100Z",
+  ],
+  knowledge: [
+    "M248,124a56.11,56.11,0,0,0-32-50.61V72a48,48,0,0,0-88-26.49A48,48,0,0,0,40,72v1.39a56,56,0,0,0,0,101.2V176a48,48,0,0,0,88,26.49A48,48,0,0,0,216,176v-1.41A56.09,56.09,0,0,0,248,124ZM88,208a32,32,0,0,1-31.81-28.56A55.87,55.87,0,0,0,64,180h8a8,8,0,0,0,0-16H64A40,40,0,0,1,50.67,86.27,8,8,0,0,0,56,78.73V72a32,32,0,0,1,64,0v68.26A47.8,47.8,0,0,0,88,128a8,8,0,0,0,0,16,32,32,0,0,1,0,64Zm104-44h-8a8,8,0,0,0,0,16h8a55.87,55.87,0,0,0,7.81-.56A32,32,0,1,1,168,144a8,8,0,0,0,0-16,47.8,47.8,0,0,0-32,12.26V72a32,32,0,0,1,64,0v6.73a8,8,0,0,0,5.33,7.54A40,40,0,0,1,192,164Zm16-52a8,8,0,0,1-8,8h-4a36,36,0,0,1-36-36V80a8,8,0,0,1,16,0v4a20,20,0,0,0,20,20h4A8,8,0,0,1,208,112ZM60,120H56a8,8,0,0,1,0-16h4A20,20,0,0,0,80,84V80a8,8,0,0,1,16,0v4A36,36,0,0,1,60,120Z",
+  ],
+  media: [
+    "M216,64H147.31l34.35-34.34a8,8,0,1,0-11.32-11.32L128,60.69,85.66,18.34A8,8,0,0,0,74.34,29.66L108.69,64H40A16,16,0,0,0,24,80V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm0,136H40V80H216V200Z",
+  ],
+  meeting: [
+    "M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z",
+  ],
+  organization: [
+    "M240,208H224V96a16,16,0,0,0-16-16H144V32a16,16,0,0,0-24.88-13.32L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,32V208H48ZM112,112v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm-32,0v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm0,56v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Zm32,0v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Z",
+  ],
+  page: [
+    "M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-32-80a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,136Zm0,32a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,168Z",
+  ],
+  pdf: [
+    "M224,152a8,8,0,0,1-8,8H192v16h16a8,8,0,0,1,0,16H192v16a8,8,0,0,1-16,0V152a8,8,0,0,1,8-8h32A8,8,0,0,1,224,152ZM92,172a28,28,0,0,1-28,28H56v8a8,8,0,0,1-16,0V152a8,8,0,0,1,8-8H64A28,28,0,0,1,92,172Zm-16,0a12,12,0,0,0-12-12H56v24h8A12,12,0,0,0,76,172Zm88,8a36,36,0,0,1-36,36H112a8,8,0,0,1-8-8V152a8,8,0,0,1,8-8h16A36,36,0,0,1,164,180Zm-16,0a20,20,0,0,0-20-20h-8v40h8A20,20,0,0,0,148,180ZM40,112V40A16,16,0,0,1,56,24h96a8,8,0,0,1,5.66,2.34l56,56A8,8,0,0,1,216,88v24a8,8,0,0,1-16,0V96H152a8,8,0,0,1-8-8V40H56v72a8,8,0,0,1-16,0ZM160,80h28.69L160,51.31Z",
+  ],
+  person: [
+    "M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z",
+  ],
+  place: [
+    "M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z",
+  ],
+  project: [
+    "M223.68,66.15,135.68,18h0a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32h0l80.34,44L128,120,47.66,76ZM40,90l80,43.78v85.79L40,175.82Zm96,129.57V133.82L216,90v85.78Z",
+  ],
+  query: [
+    "M32,64a8,8,0,0,1,8-8H216a8,8,0,0,1,0,16H40A8,8,0,0,1,32,64Zm8,72h72a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16Zm88,48H40a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16Zm109.66,13.66a8,8,0,0,1-11.32,0L206,177.36A40,40,0,1,1,217.36,166l20.3,20.3A8,8,0,0,1,237.66,197.66ZM184,168a24,24,0,1,0-24-24A24,24,0,0,0,184,168Z",
+  ],
+  quote: [
+    "M100,56H40A16,16,0,0,0,24,72v64a16,16,0,0,0,16,16h60v8a32,32,0,0,1-32,32,8,8,0,0,0,0,16,48.05,48.05,0,0,0,48-48V72A16,16,0,0,0,100,56Zm0,80H40V72h60ZM216,56H156a16,16,0,0,0-16,16v64a16,16,0,0,0,16,16h60v8a32,32,0,0,1-32,32,8,8,0,0,0,0,16,48.05,48.05,0,0,0,48-48V72A16,16,0,0,0,216,56Zm0,80H156V72h60Z",
+  ],
+  "study-goal": [
+    "M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V240a8,8,0,0,0,16,0V199.51a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM128,200c-43.27,0-68.72-21.14-80-33.71V126.4l76.24,40.66a8,8,0,0,0,7.52,0L176,143.47v46.34C163.4,195.69,147.52,200,128,200Zm80-33.75a97.83,97.83,0,0,1-16,14.25V134.93l16-8.53ZM188,118.94l-.22-.13-56-29.87a8,8,0,0,0-7.52,14.12L171,128l-43,22.93L25,96,128,41.07,231,96Z",
+  ],
+  table: [
+    "M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM40,112H80v32H40Zm56,0H216v32H96ZM216,64V96H40V64ZM40,160H80v32H40Zm176,32H96V160H216v32Z",
+  ],
+  tag: [
+    "M243.31,136,144,36.69A15.86,15.86,0,0,0,132.69,32H40a8,8,0,0,0-8,8v92.69A15.86,15.86,0,0,0,36.69,144L136,243.31a16,16,0,0,0,22.63,0l84.68-84.68a16,16,0,0,0,0-22.63Zm-96,96L48,132.69V48h84.69L232,147.31ZM96,84A12,12,0,1,1,84,72,12,12,0,0,1,96,84Z",
+  ],
+  task: [
+    "M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z",
+  ],
+  travel: [
+    "M104,88v96a8,8,0,0,1-16,0V88a8,8,0,0,1,16,0Zm24-8a8,8,0,0,0-8,8v96a8,8,0,0,0,16,0V88A8,8,0,0,0,128,80Zm32,0a8,8,0,0,0-8,8v96a8,8,0,0,0,16,0V88A8,8,0,0,0,160,80Zm48-16V208a16,16,0,0,1-16,16H176v16a8,8,0,0,1-16,0V224H96v16a8,8,0,0,1-16,0V224H64a16,16,0,0,1-16-16V64A16,16,0,0,1,64,48H88V24A24,24,0,0,1,112,0h32a24,24,0,0,1,24,24V48h24A16,16,0,0,1,208,64ZM104,48h48V24a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8Zm88,160V64H64V208H192Z",
+  ],
+  tweet: [
+    "M247.39,68.94A8,8,0,0,0,240,64H209.57A48.66,48.66,0,0,0,168.1,40a46.91,46.91,0,0,0-33.75,13.7A47.9,47.9,0,0,0,120,88v6.09C79.74,83.47,46.81,50.72,46.46,50.37a8,8,0,0,0-13.65,4.92c-4.31,47.79,9.57,79.77,22,98.18a110.93,110.93,0,0,0,21.88,24.2c-15.23,17.53-39.21,26.74-39.47,26.84a8,8,0,0,0-3.85,11.93c.75,1.12,3.75,5.05,11.08,8.72C53.51,229.7,65.48,232,80,232c70.67,0,129.72-54.42,135.75-124.44l29.91-29.9A8,8,0,0,0,247.39,68.94Zm-45,29.41a8,8,0,0,0-2.32,5.14C196,166.58,143.28,216,80,216c-10.56,0-18-1.4-23.22-3.08,11.51-6.25,27.56-17,37.88-32.48A8,8,0,0,0,92,169.08c-.47-.27-43.91-26.34-44-96,16,13,45.25,33.17,78.67,38.79A8,8,0,0,0,136,104V88a32,32,0,0,1,9.6-22.92A30.94,30.94,0,0,1,167.9,56c12.66.16,24.49,7.88,29.44,19.21A8,8,0,0,0,204.67,80h16Z",
+  ],
+  weblink: [
+    "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z",
+  ],
 };
 
 function createObjectIcon(name: ObjectIconName) {
-  const PhosphorIcon = phosphorObjectIcon[name];
-
   function ObjectIcon({ className, ...props }: ObjectIconProps) {
     return (
       <span
@@ -187,14 +215,21 @@ function createObjectIcon(name: ObjectIconName) {
         style={{ verticalAlign: "-0.125em" }}
       >
         <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
-          <PhosphorIcon
+          <svg
+            viewBox="0 0 256 256"
+            fill="currentColor"
             data-slot="object-icon"
             data-icon-name={name}
-            weight="regular"
+            data-local-object-icon={name}
             aria-hidden="true"
+            focusable="false"
             className={className}
             {...props}
-          />
+          >
+            {customObjectIconPaths[name].map((path) => (
+              <path d={path} key={path} />
+            ))}
+          </svg>
         </span>
       </span>
     );
