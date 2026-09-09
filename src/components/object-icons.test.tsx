@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { URL } from "node:url";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
@@ -60,4 +62,13 @@ describe("object type visual contract", () => {
       }
     },
   );
+
+  it("uses distinct study icons for flashcards and study goals", () => {
+    const source = readFileSync(new URL("object-icons.tsx", import.meta.url), "utf8");
+
+    expect(source).toContain('import { CardsIcon } from "@phosphor-icons/react/dist/csr/Cards"');
+    expect(source).toContain('import { ExamIcon } from "@phosphor-icons/react/dist/csr/Exam"');
+    expect(source).toContain("flashcard: CardsIcon");
+    expect(source).toContain('"study-goal": ExamIcon');
+  });
 });

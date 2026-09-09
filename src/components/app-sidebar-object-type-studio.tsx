@@ -114,7 +114,7 @@ type ObjectTypeCardAppearance = Pick<ObjectTypePreset, "iconName" | "id" | "tone
 type ObjectTypeSelection = ObjectTypePreset | WorkspaceStructure;
 
 const capacitiesObjectTypeCardClass =
-  "flex w-full cursor-pointer select-none flex-row items-center justify-start gap-x-3 rounded-base border border-[var(--app-border-el)] bg-[var(--app-bg-el-subtle)] px-2 py-2.5 text-left text-lg font-medium text-[var(--app-text-primary)] transition-colors hover:border-[var(--app-border-el-hover)] hover:bg-[var(--app-bg-el-subtle-hover)] active:brightness-95 data-[selected=true]:border-[var(--app-border-el-hover)] data-[selected=true]:bg-[var(--app-bg-el-subtle-hover)]";
+  "flex w-full cursor-pointer select-none flex-row items-center justify-start gap-x-3 rounded-base border border-[var(--app-border-el)] bg-[var(--app-bg-el-subtle)] px-2 py-2.5 text-left text-lg font-medium text-[var(--app-text-primary)] transition-colors hover:border-[var(--app-border-el-hover)] hover:bg-[var(--app-bg-el-subtle-hover)] active:brightness-95 data-[selected=true]:border-[var(--app-border-el-hover)] data-[selected=true]:bg-[var(--app-bg-el-subtle-hover)] dark:border-[oklch(0.3688_0.0051_286.01)] dark:bg-[oklch(0.2574_0.0056_285.92)] dark:text-[oklch(1_0.0001_263.28)] dark:hover:border-[oklch(0.4454_0.0042_354.34)] dark:hover:bg-[oklch(0.278_0.0055_285.95)] dark:data-[selected=true]:border-[oklch(0.4454_0.0042_354.34)] dark:data-[selected=true]:bg-[oklch(0.2987_0.0072_285.88)]";
 
 const capacitiesObjectTypeToneStyle = (tone: ObjectIconTone): React.CSSProperties => ({
   backgroundColor: `var(--type-label-bg-${tone})`,
@@ -191,7 +191,7 @@ function AppSidebarObjectTypeCard({
       {selected && (
         <span
           aria-hidden="true"
-          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
+          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-[var(--app-button-primary-bg)] text-[var(--app-button-primary-text)]"
         >
           <AppSidebarCheckIcon className="size-3" />
         </span>
@@ -255,7 +255,7 @@ function AppSidebarBasicObjectTypeCard({
       {selected && (
         <span
           aria-hidden="true"
-          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground"
+          className="ml-auto flex size-5 shrink-0 items-center justify-center rounded-full bg-[var(--app-button-primary-bg)] text-[var(--app-button-primary-text)]"
         >
           <AppSidebarCheckIcon className="size-3" />
         </span>
@@ -484,7 +484,7 @@ function AppSidebarObjectTypeDetails({
       <div className="sticky bottom-0 flex w-full shrink-0 justify-center bg-[var(--app-bg-back)] px-4 py-4">
         <Button
           type="button"
-          className="h-8 w-full justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground shadow-none hover:bg-[var(--app-primary-hover)] disabled:bg-[var(--app-bg-el-strong)] disabled:text-[var(--app-text-subtle)] disabled:opacity-60"
+          className="h-8 w-full justify-center rounded-lg bg-[var(--app-button-primary-bg)] px-3 text-sm font-medium text-[var(--app-button-primary-text)] shadow-none hover:bg-[var(--app-button-primary-bg-hover)] hover:text-[var(--app-button-primary-text-hover)] disabled:bg-[var(--app-bg-el-subtle-active)] disabled:text-[var(--app-text-subtle)] disabled:opacity-60"
           disabled={isCustom && customName.trim().length === 0}
           onClick={onConfirm}
         >

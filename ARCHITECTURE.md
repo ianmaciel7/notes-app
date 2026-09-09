@@ -215,6 +215,20 @@ The app follows a 3-pane workspace model:
 
 Capacities-like UI behavior should maintain parity evidence in `CAPACITIES_COMPONENT_MAP.md` whenever comparable components are added or changed.
 
+## Addressable UI State
+
+Prefer URL-addressable state for workspace context that should survive refreshes, support browser history, or be shareable as a link.
+
+Good URL state includes:
+
+- Active space, view, object, collection, tag, document, or flashcard review context.
+- Search, filter, sort, and tab selections that materially change the user's current workspace view.
+- Reader location or split-view targets when restoring the same working context matters.
+
+Keep purely ephemeral state outside the URL. Examples include transient hover state, open menus, drag state, optimistic in-flight flags, temporary form drafts, unsaved editor selection, and short-lived animation state.
+
+Use Zustand for transient UI state and repository/Dexie data for durable workspace data. Do not duplicate durable entity data into query parameters; URLs should identify or parameterize views, not become a second database.
+
 ## Security Boundaries
 
 The main security boundaries are:

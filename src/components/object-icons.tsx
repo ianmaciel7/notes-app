@@ -4,11 +4,13 @@ import { BookmarkSimpleIcon } from "@phosphor-icons/react/dist/csr/BookmarkSimpl
 import { BookOpenIcon } from "@phosphor-icons/react/dist/csr/BookOpen";
 import { BrainIcon } from "@phosphor-icons/react/dist/csr/Brain";
 import { BuildingsIcon } from "@phosphor-icons/react/dist/csr/Buildings";
+import { CardsIcon } from "@phosphor-icons/react/dist/csr/Cards";
 import { CardsThreeIcon } from "@phosphor-icons/react/dist/csr/CardsThree";
 import { ChatsIcon } from "@phosphor-icons/react/dist/csr/Chats";
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import { CodeIcon } from "@phosphor-icons/react/dist/csr/Code";
 import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
+import { ExamIcon } from "@phosphor-icons/react/dist/csr/Exam";
 import { FileIcon } from "@phosphor-icons/react/dist/csr/File";
 import { FilePdfIcon } from "@phosphor-icons/react/dist/csr/FilePdf";
 import { FileTextIcon } from "@phosphor-icons/react/dist/csr/FileText";
@@ -22,7 +24,6 @@ import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
 import { SuitcaseRollingIcon } from "@phosphor-icons/react/dist/csr/SuitcaseRolling";
 import { TableIcon } from "@phosphor-icons/react/dist/csr/Table";
 import { TagIcon } from "@phosphor-icons/react/dist/csr/Tag";
-import { TargetIcon } from "@phosphor-icons/react/dist/csr/Target";
 import { TelevisionSimpleIcon } from "@phosphor-icons/react/dist/csr/TelevisionSimple";
 import { TwitterLogoIcon } from "@phosphor-icons/react/dist/csr/TwitterLogo";
 import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
@@ -153,7 +154,7 @@ const phosphorObjectIcon: Record<ObjectIconName, Icon> = {
   code: CodeIcon,
   definition: BookmarkSimpleIcon,
   file: FileIcon,
-  flashcard: CardsThreeIcon,
+  flashcard: CardsIcon,
   idea: LightbulbIcon,
   image: ImageIcon,
   knowledge: BrainIcon,
@@ -167,7 +168,7 @@ const phosphorObjectIcon: Record<ObjectIconName, Icon> = {
   project: CubeIcon,
   query: ListMagnifyingGlassIcon,
   quote: QuotesIcon,
-  "study-goal": TargetIcon,
+  "study-goal": ExamIcon,
   table: TableIcon,
   tag: TagIcon,
   task: CheckCircleIcon,
