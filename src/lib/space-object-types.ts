@@ -520,6 +520,30 @@ function defineStructure(
   });
 }
 
+function defineStructureWithProperties(
+  id: string,
+  singularName: string,
+  pluralName: string,
+  iconName: ObjectIconName,
+  tone: ObjectIconTone,
+  lifecycleKind: StructureLifecycleKind,
+  ownership: StructureOwnership,
+  propertyDefinitions: readonly PropertyDefinition[],
+): WorkspaceStructure {
+  return deepFreeze({
+    collectionIds: [],
+    iconName,
+    id,
+    lifecycleKind,
+    ownership,
+    pluralName,
+    presentation: clonePresentation(defaultPresentation),
+    propertyDefinitions: mergeDefaultPropertyDefinitions(propertyDefinitions),
+    singularName,
+    tone,
+  });
+}
+
 export const BUILT_IN_STRUCTURES = deepFreeze([
   defineStructure("page", "Page", "Pages", "page", "blue", "document", "built-in"),
   defineStructure("table", "Table", "Tables", "table", "blue", "table", "built-in"),
@@ -542,7 +566,49 @@ export const BUILT_IN_STRUCTURES = deepFreeze([
     "document",
     "built-in",
   ),
-  defineStructure("weblink", "Weblink", "Weblinks", "weblink", "blue", "url", "built-in"),
+  defineStructureWithProperties(
+    "weblink",
+    "Weblink",
+    "Weblinks",
+    "weblink",
+    "blue",
+    "url",
+    "built-in",
+    [
+      {
+        id: "url",
+        multiple: false,
+        name: "URL",
+        ownership: "default",
+        valueType: "url",
+        writable: true,
+      },
+      {
+        id: "category",
+        multiple: false,
+        name: "Category",
+        ownership: "default",
+        valueType: "label",
+        writable: true,
+      },
+      {
+        id: "topic",
+        multiple: false,
+        name: "Topic",
+        ownership: "default",
+        valueType: "text",
+        writable: true,
+      },
+      {
+        id: "keywords",
+        multiple: true,
+        name: "Keywords",
+        ownership: "default",
+        valueType: "text",
+        writable: true,
+      },
+    ],
+  ),
   defineStructure("image", "Image", "Images", "image", "red", "file", "built-in"),
   defineStructure("pdf", "PDF", "PDFs", "pdf", "red", "file", "built-in"),
   defineStructure("audio", "Audio", "Audio", "audio", "red", "file", "built-in"),

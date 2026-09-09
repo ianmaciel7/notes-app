@@ -44,6 +44,15 @@ function normalizePinnedEntityIds(value: unknown): string[] {
   return value.filter((id): id is string => typeof id === "string" && id.trim().length > 0);
 }
 
+function normalizeEntityUrl(value: string | undefined) {
+  if (!value) return undefined;
+  try {
+    return new URL(value.trim()).href.replace(/\/$/, "");
+  } catch {
+    return undefined;
+  }
+}
+
 function isFlashcardRecord(
   entity: SpaceEntityRecord,
 ): entity is SpaceEntityRecord & FlashcardEntity {
@@ -351,6 +360,7 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     const objectType = await database.objectTypes.get([spaceId, objectTypeId]);
     if (!objectType) throw new Error("Unknown object type in active Space.");
     const timestamp = new Date().toISOString();
+    const pastedUrl = objectTypeId === "weblink" ? normalizeEntityUrl(title) : undefined;
     const baseEntity: SpaceEntityRecord = {
       id: `entity-${crypto.randomUUID()}`,
       spaceId,
@@ -362,7 +372,7 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
       blocks: [],
       tags: [],
       relations: [],
-      properties: {},
+      properties: pastedUrl ? { url: pastedUrl } : {},
       _syncStatus: "pending",
     };
     const entity =

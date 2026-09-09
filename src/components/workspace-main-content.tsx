@@ -6,8 +6,22 @@ import { useWorkspace } from "@/components/space-controller";
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import { WorkspaceFlashcardReviewPanel } from "@/components/workspace-flashcard-review-panel";
-import { WorkspaceStudyGoalDashboard } from "@/components/workspace-study-goal-dashboard";
+import { PendingImplementation } from "@/components/pending-implementation";
+import { WorkspaceObjectRenderer } from "@/components/workspace-object-renderer";
+import { WorkspaceSidePanelRenderer } from "@/components/workspace-side-panel-renderer";
+
+type WorkspaceTabLike = {
+  id: string;
+  label?: string;
+};
+
+export function getWorkspaceTabPendingName(
+  tabs: WorkspaceTabLike[] | undefined,
+  value: string | undefined,
+  fallback: string,
+) {
+  return tabs?.find((tab) => tab.id === value)?.label ?? fallback;
+}
 
 function formatDate(value: string) {
   const date = new Date(value);
@@ -605,276 +619,50 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 }
 
 function WorkspaceDefaultPanel() {
-  return (
-    <div className="flex h-full min-h-0 w-full flex-col">
-      <WorkspaceStudyGoalDashboard />
-      <div className="min-h-0 flex-1">
-        <WorkspaceFlashcardReviewPanel />
-      </div>
-    </div>
-  );
-}
+  const { createdEntities, mainTabs, mainValue, objectTypes } = useWorkspace();
+  const name = getWorkspaceTabPendingName(mainTabs, mainValue, "Main panel");
+  const activeEntity = createdEntities.find((entity: { id: string }) => entity.id === mainValue);
+  const objectType = activeEntity
+    ? objectTypes.find((item: { id: string }) => item.id === activeEntity.objectTypeId)
+    : undefined;
 
-function SidePanelSection({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="border-b border-border px-4 py-3 last:border-b-0">
-      <h2 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{title}</h2>
-      <div className="mt-3">{children}</div>
-    </section>
-  );
-}
-
-function MiniGraphPreview({
-  activeTitle,
-  related,
-}: {
-  activeTitle: string;
-  related: { id: string; title: string }[];
-}) {
-  const orbit = related.slice(0, 6);
-  const center = { x: 112, y: 76 };
-  const radius = 52;
+  if (activeEntity) {
+    return <WorkspaceObjectRenderer entity={activeEntity} objectType={objectType} tabName={name} />;
+  }
 
   return (
-    <div className="relative h-40 overflow-hidden rounded-[8px] border border-border bg-background">
-      <svg
-        className="h-full w-full"
-        viewBox="0 0 224 152"
-        role="img"
-        aria-label="Local graph preview"
-      >
-        <title>Local graph preview for {activeTitle}</title>
-        {orbit.map((node, index) => {
-          const angle = (index / Math.max(1, orbit.length)) * Math.PI * 2 - Math.PI / 2;
-          const x = center.x + Math.cos(angle) * radius;
-          const y = center.y + Math.sin(angle) * radius;
-          return (
-            <g key={`edge-${node.id}`}>
-              <line
-                x1={center.x}
-                y1={center.y}
-                x2={x}
-                y2={y}
-                className="stroke-border"
-                strokeWidth="1"
-              />
-            </g>
-          );
-        })}
-        {orbit.map((node, index) => {
-          const angle = (index / Math.max(1, orbit.length)) * Math.PI * 2 - Math.PI / 2;
-          const x = center.x + Math.cos(angle) * radius;
-          const y = center.y + Math.sin(angle) * radius;
-          return (
-            <g key={node.id}>
-              <circle cx={x} cy={y} r="9" className="fill-muted stroke-border" strokeWidth="1" />
-              <title>{node.title || "Sem título"}</title>
-            </g>
-          );
-        })}
-        <circle
-          cx={center.x}
-          cy={center.y}
-          r="15"
-          className="fill-primary/15 stroke-primary"
-          strokeWidth="1.5"
-        />
-        <circle cx={center.x} cy={center.y} r="4" className="fill-primary" />
-      </svg>
+    <div className="flex h-full min-h-0 w-full items-center justify-center bg-card p-6">
+      <PendingImplementation
+        area="Main panel"
+        className="max-w-2xl"
+        description={`${name} should be implemented here.`}
+        name={name}
+      />
     </div>
   );
 }
 
 export function WorkspaceSidePanelContent() {
-  const {
-    activeEntityId,
-    createdEntities,
-    objectTypes,
-    sideValue,
-    listBacklinks,
-    buildGraph,
-    setActiveAction,
-    setActiveEntityId,
-    setMainTabs,
-    setMainValue,
-  } = useWorkspace();
-  const activeEntity = React.useMemo(() => {
-    if (!activeEntityId || activeEntityId === "page") return undefined;
-    return createdEntities.find((entity) => entity.id === activeEntityId);
-  }, [activeEntityId, createdEntities]);
-  const objectType = React.useMemo(() => {
-    if (!activeEntity) return undefined;
-    return objectTypes.find((item) => item.id === activeEntity.objectTypeId);
-  }, [activeEntity, objectTypes]);
-  const [backlinks, setBacklinks] = React.useState<typeof createdEntities>([]);
-  const [graphSummary, setGraphSummary] = React.useState<{
-    nodes: number;
-    edges: number;
-    related: typeof createdEntities;
-  }>({ nodes: 0, edges: 0, related: [] });
-
-  React.useEffect(() => {
-    let cancelled = false;
-
-    if (!activeEntity) {
-      setBacklinks([]);
-      setGraphSummary({ nodes: 0, edges: 0, related: [] });
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    void Promise.all([listBacklinks(activeEntity.id), buildGraph()]).then(
-      ([nextBacklinks, graph]) => {
-        if (cancelled) return;
-        const relatedIds = new Set(
-          graph.edges.flatMap((edge: { sourceId: string; targetId: string }) =>
-            edge.sourceId === activeEntity.id
-              ? [edge.targetId]
-              : edge.targetId === activeEntity.id
-                ? [edge.sourceId]
-                : [],
-          ),
-        );
-        setBacklinks(nextBacklinks);
-        setGraphSummary({
-          nodes: graph.nodes.length,
-          edges: graph.edges.length,
-          related: createdEntities.filter((entity) => relatedIds.has(entity.id)).slice(0, 5),
-        });
-      },
-    );
-
-    return () => {
-      cancelled = true;
-    };
-  }, [activeEntity, buildGraph, createdEntities, listBacklinks]);
-
-  function openEntity(entity: (typeof createdEntities)[number]) {
-    const type = objectTypes.find((item) => item.id === entity.objectTypeId);
-    setActiveAction(undefined);
-    setActiveEntityId(entity.id);
-    setMainTabs((current: { id: string }[]) => {
-      if (current.some((item) => item.id === entity.id)) return current;
-      return [
-        ...current,
-        {
-          id: entity.id,
-          label: entity.title || "Sem título",
-          icon: type?.icon,
-          iconClassName: type ? objectIconToneBadgeClass[type.tone] : undefined,
-          draggable: true,
-        },
-      ];
-    });
-    setMainValue(entity.id);
-  }
-
-  if (!activeEntity) {
-    return (
-      <div className="flex h-full min-h-0 items-center justify-center p-6 text-center text-sm text-muted-foreground">
-        Selecione um objeto para ver propriedades, backlinks e relações locais.
-      </div>
-    );
-  }
+  const { activeEntityId, createdEntities, setSideTabs, setSideValue, sideTabs, sideValue } =
+    useWorkspace();
+  const name = getWorkspaceTabPendingName(sideTabs, sideValue, "Side panel");
+  const activeEntity = createdEntities.find(
+    (entity: { id: string }) => entity.id === activeEntityId,
+  );
 
   return (
-    <div className="flex h-full min-h-0 flex-col overflow-auto bg-card">
-      <SidePanelSection
-        title={
-          sideValue === "graph-view"
-            ? "Graph"
-            : sideValue === "backlinks"
-              ? "Backlinks"
-              : "Inspector"
-        }
-      >
-        <div className="flex items-start gap-3">
-          {objectType?.icon ? (
-            <span
-              className={`inline-flex size-8 shrink-0 items-center justify-center rounded-[8px] border ${objectIconToneBadgeClass[objectType.tone]}`}
-            >
-              {React.createElement(objectType.icon, { className: "size-4" })}
-            </span>
-          ) : null}
-          <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-foreground">
-              {activeEntity.title || "Sem título"}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {objectType?.singularLabel ?? objectType?.label ?? activeEntity.objectTypeId}
-            </p>
-          </div>
-        </div>
-      </SidePanelSection>
-
-      <SidePanelSection title="Properties">
-        <dl className="space-y-2 text-sm">
-          <div className="flex items-center justify-between gap-3">
-            <dt className="text-muted-foreground">Atualizado</dt>
-            <dd className="text-right text-foreground">{formatDate(activeEntity.updatedAt)}</dd>
-          </div>
-          <div className="flex items-center justify-between gap-3">
-            <dt className="text-muted-foreground">Tags</dt>
-            <dd className="text-foreground">{activeEntity.tags.length}</dd>
-          </div>
-          <div className="flex items-center justify-between gap-3">
-            <dt className="text-muted-foreground">Relações</dt>
-            <dd className="text-foreground">{activeEntity.relations.length}</dd>
-          </div>
-        </dl>
-      </SidePanelSection>
-
-      <SidePanelSection title="Backlinks">
-        {backlinks.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Nenhum backlink encontrado.</p>
-        ) : (
-          <div className="space-y-1">
-            {backlinks.map((entity) => (
-              <button
-                key={entity.id}
-                type="button"
-                className="block w-full rounded-[8px] px-2 py-1.5 text-left text-sm text-foreground hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                onClick={() => openEntity(entity)}
-              >
-                {entity.title || "Sem título"}
-              </button>
-            ))}
-          </div>
-        )}
-      </SidePanelSection>
-
-      <SidePanelSection title="Local graph">
-        <MiniGraphPreview
-          activeTitle={activeEntity.title || "Sem título"}
-          related={graphSummary.related}
-        />
-        <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-          <div className="rounded-[8px] border border-border bg-background p-2">
-            <p className="text-lg font-semibold text-foreground">{graphSummary.nodes}</p>
-            <p className="text-xs text-muted-foreground">objetos</p>
-          </div>
-          <div className="rounded-[8px] border border-border bg-background p-2">
-            <p className="text-lg font-semibold text-foreground">{graphSummary.edges}</p>
-            <p className="text-xs text-muted-foreground">links</p>
-          </div>
-        </div>
-        {graphSummary.related.length > 0 ? (
-          <div className="mt-3 space-y-1">
-            {graphSummary.related.map((entity) => (
-              <button
-                key={entity.id}
-                type="button"
-                className="block w-full rounded-[8px] px-2 py-1.5 text-left text-xs text-muted-foreground hover:bg-muted/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                onClick={() => openEntity(entity)}
-              >
-                {entity.title || "Sem título"}
-              </button>
-            ))}
-          </div>
-        ) : null}
-      </SidePanelSection>
-    </div>
+    <WorkspaceSidePanelRenderer
+      activeMainObjectTitle={activeEntity?.title}
+      activeTabLabel={name}
+      sideValue={sideValue}
+      onOpenItem={(item) => {
+        setSideTabs((current: { id: string }[]) => {
+          if (current.some((tab) => tab.id === item.id)) return current;
+          return [...current, { id: item.id, label: item.label, icon: item.icon, draggable: true }];
+        });
+        setSideValue(item.id);
+      }}
+    />
   );
 }
 

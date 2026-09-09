@@ -509,6 +509,22 @@ describe("Space repository", () => {
     expect(Number.isFinite(new Date(targetExamDate).getTime())).toBe(true);
   });
 
+  it("stores pasted URLs on Weblink entities", async () => {
+    const { database, repository } = setup();
+    await bootstrapWorkspace(database, () => new Date("2026-01-01T00:00:00.000Z"));
+
+    const weblink = await repository.createEntity(
+      PERSONAL_SPACE_ID,
+      "weblink",
+      "https://example.com/article",
+    );
+
+    expect(weblink).toMatchObject({
+      objectTypeId: "weblink",
+      properties: { url: "https://example.com/article" },
+    });
+  });
+
   it("updates entity fields in the active Space and marks the record pending", async () => {
     const { database, repository } = setup();
     await bootstrapWorkspace(database, () => new Date("2026-01-01T00:00:00.000Z"));

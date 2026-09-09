@@ -2,7 +2,7 @@ import "fake-indexeddb/auto";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createKnowledgeDatabase } from "@/lib/db";
-import { bootstrapSpace, bootstrapWorkspace } from "@/lib/spaces/bootstrap-space";
+import { bootstrapWorkspace } from "@/lib/spaces/bootstrap-space";
 import { createSpaceRepository } from "@/lib/spaces/space-repository";
 import { PERSONAL_SPACE_ID } from "@/lib/spaces/space-types";
 
@@ -74,5 +74,18 @@ describe("bootstrapWorkspace", () => {
     ).map((type) => type.id);
     expect(ids).toContain("flashcard");
     expect(ids).toContain("study_goal");
+  });
+
+  it("seeds Weblink with a URL property", async () => {
+    const database = setup();
+    await bootstrapWorkspace(database, () => new Date("2026-01-01T00:00:00.000Z"));
+
+    const weblink = await database.objectTypes.get([PERSONAL_SPACE_ID, "weblink"]);
+
+    expect(weblink?.propertyDefinitions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "url", name: "URL", valueType: "url" }),
+      ]),
+    );
   });
 });
