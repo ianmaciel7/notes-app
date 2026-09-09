@@ -50,6 +50,7 @@ export type ObjectIconTone =
   | "fuchsia"
   | "gray"
   | "green"
+  | "indigo"
   | "lime"
   | "neutral"
   | "orange"
@@ -272,6 +273,7 @@ export const OBJECT_ICON_TONES = [
   "fuchsia",
   "gray",
   "green",
+  "indigo",
   "lime",
   "neutral",
   "orange",
@@ -558,15 +560,15 @@ function definePreset(
 export const OBJECT_TYPE_PRESETS = deepFreeze([
   definePreset("book", "Book", "Books", "book", "purple"),
   definePreset("person", "Person", "People", "person", "orange"),
-  definePreset("area", "Area", "Areas", "area", "blue"),
+  definePreset("area", "Area", "Areas", "area", "indigo"),
   definePreset("meeting", "Meeting", "Meetings", "meeting", "red"),
-  definePreset("definition", "Definition", "Definitions", "definition", "purple"),
-  definePreset("idea", "Idea", "Ideas", "idea", "amber"),
+  definePreset("definition", "Definition", "Definitions", "definition", "violet"),
+  definePreset("idea", "Idea", "Ideas", "idea", "yellow"),
   definePreset("place", "Place", "Places", "place", "emerald"),
-  definePreset("project", "Project", "Projects", "project", "emerald"),
+  definePreset("project", "Project", "Projects", "project", "green"),
   definePreset("organization", "Organization", "Organizations", "organization", "red"),
-  definePreset("media", "Media", "Media", "media", "cyan"),
-  definePreset("travel", "Travel", "Travel", "travel", "purple"),
+  definePreset("media", "Media", "Media", "media", "teal"),
+  definePreset("travel", "Travel", "Travel", "travel", "violet"),
   definePreset("quote", "Quote", "Quotes", "quote", "rose", "quote"),
   definePreset("atomic-note", "Atomic note", "Atomic notes", "atomic-note", "amber"),
 ] satisfies readonly ObjectTypePreset[]);

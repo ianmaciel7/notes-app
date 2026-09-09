@@ -5,8 +5,10 @@ import * as React from "react";
 import { AppSidebarCheckIcon, AppSidebarPlusIcon } from "@/components/app-sidebar-icons";
 import {
   ObjectAreaIcon,
+  ObjectAtomicNoteIcon,
   ObjectIconBadge,
   ObjectIdeaIcon,
+  getCapacitiesObjectTypeTone,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
 import { Button } from "@/components/ui/button";
@@ -24,6 +26,7 @@ import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
 import {
   BUILT_IN_STRUCTURES,
   type CreateStructureInput,
+  type ObjectIconTone,
   OBJECT_TYPE_PRESETS,
   type ObjectTypePreset,
   type WorkspaceStructure,
@@ -105,8 +108,17 @@ const basicObjectTypes: readonly WorkspaceStructure[] = basicObjectTypeOrder
   .map((id) => BUILT_IN_STRUCTURES.find((structure) => structure.id === id))
   .filter((structure): structure is WorkspaceStructure => Boolean(structure));
 
-type ObjectTypeCardAppearance = Pick<ObjectTypePreset, "iconName" | "tone">;
+type ObjectTypeCardAppearance = Pick<ObjectTypePreset, "iconName" | "id" | "tone">;
 type ObjectTypeSelection = ObjectTypePreset | WorkspaceStructure;
+
+const capacitiesObjectTypeCardClass =
+  "hover:border-[oklch(0.8643_0.0017_67.13)] flex w-full cursor-pointer select-none flex-row items-center justify-start gap-x-3 rounded-base border border-[oklch(0.9163_0.0017_67.07)] bg-[oklch(1_0.0001_263.28)] px-2 py-2.5 text-left text-lg font-medium text-[oklch(0.3887_0.0052_301.05)] transition-colors hover:bg-[oklch(0.9856_0.0016_67)] active:brightness-95 data-[selected=true]:border-[oklch(0.8643_0.0017_67.13)] data-[selected=true]:bg-[oklch(0.9856_0.0016_67)]";
+
+const capacitiesObjectTypeToneStyle = (tone: ObjectIconTone): React.CSSProperties => ({
+  backgroundColor: `var(--type-label-bg-${tone})`,
+  borderColor: `var(--type-label-border-${tone})`,
+  color: `var(--type-label-text-${tone})`,
+});
 
 const previewPropertyIds: Record<string, readonly string[]> = {
   book: [
@@ -129,15 +141,23 @@ function AppSidebarObjectTypeIcon({
   preset: ObjectTypeCardAppearance;
   className?: string;
 }) {
-  const Icon = objectTypeDefinitionById[preset.iconName]?.icon ?? ObjectAreaIcon;
+  const isAtomicNote =
+    preset.id === "atomic-note" ||
+    preset.id === "atomic_note" ||
+    preset.iconName === "atomic-note";
+  const Icon = isAtomicNote
+    ? ObjectAtomicNoteIcon
+    : (objectTypeDefinitionById[preset.iconName]?.icon ?? ObjectAreaIcon);
+  const tone = isAtomicNote ? "amber" : getCapacitiesObjectTypeTone(preset.id, preset.tone);
 
   return (
     <ObjectIconBadge
       data-lifecycle-contract={objectLifecycleContractSlots.ObjectIconTonePreview}
       icon={Icon}
-      tone={preset.tone}
-      className={cn("size-8 rounded-[8px]", className)}
-      iconClassName="size-[18px]"
+      tone={tone}
+      className={cn("h-base w-base rounded-base border-[0.5px] text-lg leading-none", className)}
+      iconClassName="size-[1em]"
+      style={capacitiesObjectTypeToneStyle(tone)}
     />
   );
 }
@@ -163,17 +183,11 @@ function AppSidebarObjectTypeCard({
       data-lifecycle-contract={objectLifecycleContractSlots.ObjectTypePresetCard}
       data-selected={selected || undefined}
       ref={buttonRef}
-      className={cn(
-        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-border bg-card px-2.5 text-left",
-        "text-[14px] font-semibold text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
-        "transition-[background-color,border-color,box-shadow,filter] duration-150",
-        "hover:border-[var(--app-border-base-strong)] hover:bg-[var(--app-bg-front-hover)] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)]",
-        "active:brightness-[0.98] data-[selected=true]:border-[var(--app-border-base-strong)] data-[selected=true]:bg-[var(--app-bg-el-subtle-hover)]",
-      )}
+      className={capacitiesObjectTypeCardClass}
       onClick={() => onSelect(preset)}
     >
       <AppSidebarObjectTypeIcon preset={preset} />
-      <span className="min-w-0 truncate">{label}</span>
+      <span className="line-clamp-1 min-w-0 flex-1 text-left text-sm font-semibold">{label}</span>
       {selected && (
         <span
           aria-hidden="true"
@@ -202,19 +216,16 @@ function AppSidebarCustomObjectTypeCard({
       data-card-family="suggested"
       data-lifecycle-contract={objectLifecycleContractSlots.CustomObjectTypeForm}
       data-selected={selected || undefined}
-      className={cn(
-        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-border bg-card px-2.5 text-left",
-        "text-[14px] font-semibold text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
-        "transition-[background-color,border-color,box-shadow,filter] duration-150",
-        "hover:border-[var(--app-border-base-strong)] hover:bg-[var(--app-bg-front-hover)] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)]",
-        "active:brightness-[0.98] data-[selected=true]:border-[var(--app-border-base-strong)] data-[selected=true]:bg-[var(--app-bg-el-subtle-hover)]",
-      )}
+      className={capacitiesObjectTypeCardClass}
       onClick={onSelect}
     >
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-[8px] border border-[var(--app-border-el)] bg-[var(--app-bg-el)] text-[var(--app-text-secondary)]">
-        <AppSidebarPlusIcon className="size-[18px]" />
+      <span
+        className="flex h-base w-base shrink-0 items-center justify-center rounded-base border-[0.5px] text-lg leading-none"
+        style={capacitiesObjectTypeToneStyle("gray")}
+      >
+        <AppSidebarPlusIcon className="size-[1em]" />
       </span>
-      <span className="min-w-0 truncate">{label}</span>
+      <span className="line-clamp-1 min-w-0 flex-1 text-left text-sm font-semibold">{label}</span>
     </button>
   );
 }
@@ -236,16 +247,11 @@ function AppSidebarBasicObjectTypeCard({
       data-slot="app-sidebar-object-type-card"
       data-card-family="basic"
       data-selected={selected || undefined}
-      className={cn(
-        "flex h-[54px] w-full items-center gap-3 rounded-[8px] border border-border bg-card px-2.5 text-left",
-        "text-[14px] font-semibold text-card-foreground shadow-[0_1px_2px_rgb(0_0_0/0.02)]",
-        "transition-[background-color,border-color,box-shadow,filter] duration-150",
-        "hover:border-[var(--app-border-base-strong)] hover:bg-[var(--app-bg-front-hover)] hover:shadow-[0_2px_8px_rgb(0_0_0/0.04)] active:brightness-[0.98] data-[selected=true]:border-[var(--app-border-base-strong)] data-[selected=true]:bg-[var(--app-bg-el-subtle-hover)]",
-      )}
+      className={capacitiesObjectTypeCardClass}
       onClick={() => onSelect(structure)}
     >
       <AppSidebarObjectTypeIcon preset={structure} />
-      <span className="min-w-0 truncate">{label}</span>
+      <span className="line-clamp-1 min-w-0 flex-1 text-left text-sm font-semibold">{label}</span>
       {selected && (
         <span
           aria-hidden="true"

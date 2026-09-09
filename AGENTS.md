@@ -42,7 +42,16 @@ This repository is a local-first, zero-operating-cost web application unifying:
   - Server Route Handler at `/api/ai/generate` querying Google Gemini 2.0 Flash / Groq LLMs.
   - Generates structured JSON schema with verbatim `exactQuote`, `cardType`, `front`, `back`.
   - Automatic anchor synthesis matches `exactQuote` to text chunk, generates `Highlight`, and binds `Flashcard.sourceHighlightId`.
+  - Persist generated cards through the grounding orchestrator/repository path; never save AI cards whose `exactQuote` cannot be found verbatim in the source text.
   - Staging Drawer allows user review before committing to Dexie.
+- **Document Parsing**:
+  - Server Route Handler at `/api/documents/parse` accepts extracted text, HTML, and base64 PDF/EPUB payloads.
+  - EPUB extraction uses backend `jszip` parsing over XHTML/HTML/XML content files.
+  - PDF extraction currently supports simple uncompressed text operators (`Tj`/`TJ`) as a backend baseline; do not claim OCR or advanced compressed-stream support without adding a dedicated adapter and tests.
+- **Remote Sync Gateway**:
+  - Server Route Handler at `/api/sync/push` verifies Firebase ID tokens with `firebase-admin`, validates sync mutation payloads, and writes to Firestore REST `batchWrite` using server-only credentials under `users/{uid}/spaces/{spaceId}/entities/{entityId}`.
+  - Prefer Application Default Credentials via `google-auth-library` in hosted environments; `FIRESTORE_ACCESS_TOKEN` is only an override for local/server testing.
+  - Keep `firestore.rules` aligned with user-scoped remote paths; do not add global private-data collections without matching rule updates and tests.
 - **UI Architecture**: 3-Pane workspace mirroring Capacities:
   - Left Sidebar (240px): Navigation, Command Palette (`Cmd+K`), Object directory, tags.
   - Main Center (Flex-1): Split View (PDF/Reader on left, Notes/Flashcards on right).
@@ -57,6 +66,7 @@ This repository is a local-first, zero-operating-cost web application unifying:
 - **Prefer evidence over memory**: when a parity issue is reported, compare against the live Capacities UI, pasted HTML/CSS, screenshots, or archived evidence before changing implementation.
 - **Use Graphify for architecture context** before broad or cross-cutting edits. Run `graphify query "<question>"` for targeted questions, `graphify explain "<node>"` for a component/module, `graphify path "<A>" "<B>"` for dependency paths, and `graphify update .` after meaningful source changes so `graphify-out/graph.json`, `graphify-out/graph.html`, and `graphify-out/GRAPH_REPORT.md` remain current.
 - **Keep Graphify merge support active**. `graphify hook status` should report post-commit and post-checkout hooks installed and merge driver registered for `graphify-out/graph.json`.
+- **Keep icon tone sources synchronized**. Object type icon tone changes must update both `src/lib/space-object-types.ts` and `src/components/object-icons.tsx`; otherwise the modal, sidebar, and command palette can drift.
 
 ## 4. Installed Agent Skills Reference
 When working on specific domains, leverage the installed skills in `.agents/skills/`:

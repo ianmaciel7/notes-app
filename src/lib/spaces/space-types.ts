@@ -77,3 +77,16 @@ export type SpaceTrashRecord = {
   trashedAt: string;
   purgeAfter: string;
 };
+
+export type SyncMutationRecord = {
+  id: string;
+  spaceId: string;
+  entityId: string;
+  entityType: string;
+  operation: "set" | "delete";
+  status: "pending" | "syncing" | "synced" | "failed";
+  payload?: unknown;
+  error?: string;
+  createdAt: string;
+  updatedAt: string;
+};

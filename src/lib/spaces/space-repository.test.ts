@@ -74,6 +74,116 @@ describe("Space repository", () => {
     }
   });
 
+  it("queues entity writes for background sync", async () => {
+    const { database, repository } = setup();
+    const space = await repository.createBlankSpace("First");
+    const type = await createBookType(repository, space.id);
+
+    const entity = await repository.createEntity(space.id, type.id, "Queued entity");
+
+    const mutations = await database.syncMutations.where("entityId").equals(entity.id).toArray();
+    expect(mutations).toHaveLength(1);
+    expect(mutations[0]).toMatchObject({
+      spaceId: space.id,
+      entityId: entity.id,
+      entityType: entity.type,
+      operation: "set",
+      status: "pending",
+    });
+  });
+
+  it("deletes an entity, removes its same-Space relations, and queues a delete mutation", async () => {
+    const { database, repository } = setup();
+    const space = await repository.createBlankSpace("First");
+    const type = await createBookType(repository, space.id);
+    const target = await repository.createEntity(space.id, type.id, "Target");
+    const source = await repository.createEntity(space.id, type.id, "Source");
+    const otherA = await repository.createEntity(space.id, type.id, "Other A");
+    const otherB = await repository.createEntity(space.id, type.id, "Other B");
+
+    await repository.createRelation({
+      id: "relation:source:target",
+      spaceId: space.id,
+      sourceId: source.id,
+      targetId: target.id,
+      propertyId: "related",
+      createdAt: "2026-01-01T00:00:00.000Z",
+    });
+    await repository.createRelation({
+      id: "relation:target:other-a",
+      spaceId: space.id,
+      sourceId: target.id,
+      targetId: otherA.id,
+      propertyId: "related",
+      createdAt: "2026-01-01T00:00:00.000Z",
+    });
+    await repository.createRelation({
+      id: "relation:other-a:other-b",
+      spaceId: space.id,
+      sourceId: otherA.id,
+      targetId: otherB.id,
+      propertyId: "related",
+      createdAt: "2026-01-01T00:00:00.000Z",
+    });
+
+    await repository.deleteEntity(space.id, target.id, new Date("2026-01-02T00:00:00.000Z"));
+
+    expect(await database.entities.get([space.id, target.id])).toBeUndefined();
+    expect((await database.relations.where("spaceId").equals(space.id).toArray()).map((relation) => relation.id)).toEqual([
+      "relation:other-a:other-b",
+    ]);
+
+    const mutations = await database.syncMutations.where("entityId").equals(target.id).toArray();
+    const deleteMutation = mutations.find((mutation) => mutation.operation === "delete");
+    expect(deleteMutation).toMatchObject({
+      spaceId: space.id,
+      entityId: target.id,
+      entityType: target.type,
+      operation: "delete",
+      status: "pending",
+      payload: { id: target.id, title: "Target" },
+      createdAt: "2026-01-02T00:00:00.000Z",
+      updatedAt: "2026-01-02T00:00:00.000Z",
+    });
+  });
+
+  it("creates text file entities with extracted text metadata and sync mutation", async () => {
+    const { database, repository } = setup();
+    const space = await repository.createBlankSpace("First");
+    const type = await createBookType(repository, space.id);
+
+    const file = await repository.createTextFileEntity(space.id, type.id, {
+      fileName: "memory.md",
+      mimeType: "text/markdown",
+      text: "Retrieval practice improves retention.",
+      referenceDate: new Date("2026-01-01T00:00:00.000Z"),
+    });
+
+    expect(file).toMatchObject({
+      type: "file",
+      objectTypeId: type.id,
+      title: "memory.md",
+      fileType: "markdown",
+      originalName: "memory.md",
+      sizeBytes: 38,
+      extractedText: "Retrieval practice improves retention.",
+      parsingStatus: "completed",
+      _syncStatus: "pending",
+    });
+    expect(file.fileHash).toHaveLength(64);
+
+    const persisted = await database.entities.get([space.id, file.id]);
+    expect(persisted).toMatchObject({ id: file.id, type: "file" });
+    const mutations = await database.syncMutations.where("entityId").equals(file.id).toArray();
+    expect(mutations).toHaveLength(1);
+    expect(mutations[0]).toMatchObject({
+      entityId: file.id,
+      entityType: "file",
+      operation: "set",
+      status: "pending",
+    });
+  });
+
   it("rejects selecting an unknown Space", async () => {
     const { repository } = setup();
     await expect(repository.setActiveSpace("missing")).rejects.toThrow("Unknown Space");
@@ -317,7 +427,7 @@ describe("Space repository", () => {
     });
 
     const persistedHighlight = await database.entities.get([space.id, result.highlight.id]);
-    expect(persistedHighlight?.cardCount).toBe(1);
+    expect((persistedHighlight as { cardCount?: number } | undefined)?.cardCount).toBe(1);
   });
 
   it("rejects grounded flashcards when the exact quote is not in the source text", async () => {

@@ -51,6 +51,19 @@ export type BaseEntity = {
   _syncStatus?: "synced" | "pending" | "conflict";
 };
 
+export interface FileEntity extends BaseEntity {
+  type: "file";
+  fileType: "pdf" | "epub" | "markdown" | "web_article";
+  originalName: string;
+  sourceUrl?: string;
+  localBlobKey?: string;
+  sizeBytes: number;
+  fileHash: string;
+  extractedText?: string;
+  parsingStatus: "pending" | "processing" | "completed" | "error";
+  pageCount?: number;
+}
+
 export interface FlashcardEntity extends BaseEntity {
   type: "flashcard";
   cardType: "basic" | "cloze" | "reversed";

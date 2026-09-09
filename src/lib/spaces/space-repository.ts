@@ -1,4 +1,5 @@
 import type { KnowledgeDatabase } from "@/lib/db";
+import { prepareTextDocumentForIngestion } from "@/lib/documents/document-processing";
 import { createCollectionId, createTagId } from "@/lib/space-domain-identities";
 import { applyFSRSReview, createInitialSRSState, type FSRSRating } from "@/lib/srs/fsrs";
 import {
@@ -22,7 +23,8 @@ import type {
   SpaceTagRecord,
   SpaceTrashRecord,
 } from "@/lib/spaces/space-types";
-import type { FlashcardEntity, HighlightEntity, StudyGoalEntity } from "@/types/schema";
+import { createSyncQueue } from "@/lib/sync/sync-queue";
+import type { FileEntity, FlashcardEntity, HighlightEntity, StudyGoalEntity } from "@/types/schema";
 import {
   ACTIVE_SPACE_SETTING_ID,
   LOCAL_ACCOUNT_ID,
@@ -102,6 +104,8 @@ function synthesizeQuoteAnchor(sourceText: string, exactQuote: string) {
 }
 
 export function createSpaceRepository(database: KnowledgeDatabase) {
+  const syncQueue = createSyncQueue(database);
+
   async function requireSpace(spaceId: string) {
     const space = await database.spaces.get(spaceId);
     if (!space) throw new Error(`Unknown Space: ${spaceId}`);
@@ -305,7 +309,38 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
       _syncStatus: "pending",
     });
 
-    return database.entities.get([spaceId, entityId]);
+    const updatedEntity = await database.entities.get([spaceId, entityId]);
+    if (updatedEntity) {
+      await syncQueue.enqueueEntityMutation({ entity: updatedEntity, operation: "set" });
+    }
+    return updatedEntity;
+  }
+
+  async function deleteEntity(spaceId: string, entityId: string, referenceDate?: Date) {
+    await requireSpace(spaceId);
+    const entity = await database.entities.get([spaceId, entityId]);
+    if (!entity) throw new Error("Entity not found.");
+
+    await database.transaction(
+      "rw",
+      database.entities,
+      database.relations,
+      database.syncMutations,
+      async () => {
+        await Promise.all([
+          database.relations.where("[spaceId+sourceId]").equals([spaceId, entityId]).delete(),
+          database.relations.where("[spaceId+targetId]").equals([spaceId, entityId]).delete(),
+        ]);
+        await database.entities.delete([spaceId, entityId]);
+        await syncQueue.enqueueEntityMutation({
+          entity: { ...entity, _syncStatus: "pending" },
+          operation: "delete",
+          referenceDate,
+        });
+      },
+    );
+
+    return entity;
   }
 
   async function createEntity(spaceId: string, objectTypeId: string, title?: string) {
@@ -333,8 +368,42 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
         : objectTypeId === "study_goal"
           ? createStudyGoalRecord(baseEntity)
           : baseEntity;
-    await database.entities.add(entity);
+    await database.transaction("rw", database.entities, database.syncMutations, async () => {
+      await database.entities.add(entity);
+      await syncQueue.enqueueEntityMutation({ entity, operation: "set" });
+    });
     return entity;
+  }
+
+  async function createTextFileEntity(
+    spaceId: string,
+    objectTypeId: string,
+    input: {
+      fileName: string;
+      mimeType?: string;
+      text: string;
+      sourceUrl?: string;
+      localBlobKey?: string;
+      pageCount?: number;
+      referenceDate?: Date;
+      chunkOptions?: { maxChars: number; overlapChars?: number };
+    },
+  ) {
+    await requireSpace(spaceId);
+    const objectType = await database.objectTypes.get([spaceId, objectTypeId]);
+    if (!objectType) throw new Error("Unknown object type in active Space.");
+    const prepared = await prepareTextDocumentForIngestion(input);
+    const record: SpaceEntityRecord & FileEntity = {
+      ...prepared.file,
+      spaceId,
+      objectTypeId,
+    };
+
+    await database.transaction("rw", database.entities, database.syncMutations, async () => {
+      await database.entities.add(record);
+      await syncQueue.enqueueEntityMutation({ entity: record, operation: "set" });
+    });
+    return record;
   }
 
   async function createHighlightEntity(
@@ -382,7 +451,10 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
       _syncStatus: "pending",
     };
 
-    await database.entities.add(record);
+    await database.transaction("rw", database.entities, database.syncMutations, async () => {
+      await database.entities.add(record);
+      await syncQueue.enqueueEntityMutation({ entity: record, operation: "set" });
+    });
     return record;
   }
 
@@ -437,7 +509,7 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
       _syncStatus: "pending",
     };
 
-    await database.transaction("rw", database.entities, async () => {
+    await database.transaction("rw", database.entities, database.syncMutations, async () => {
       await database.entities.add(record);
       const updatedSourceHighlight: SpaceEntityRecord & HighlightEntity = {
         ...sourceHighlight,
@@ -446,6 +518,8 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
         _syncStatus: "pending",
       };
       await database.entities.put(updatedSourceHighlight);
+      await syncQueue.enqueueEntityMutation({ entity: record, operation: "set" });
+      await syncQueue.enqueueEntityMutation({ entity: updatedSourceHighlight, operation: "set" });
     });
     return record;
   }
@@ -529,7 +603,13 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     await database.entities.update([spaceId, flashcardId], {
       updatedAt: now.toISOString(),
       srs: nextState,
+      _syncStatus: "pending",
     });
+
+    const updatedEntity = await database.entities.get([spaceId, flashcardId]);
+    if (updatedEntity) {
+      await syncQueue.enqueueEntityMutation({ entity: updatedEntity, operation: "set" });
+    }
 
     return { entity, nextState, daysUntilDue };
   }
@@ -678,7 +758,9 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     deleteObjectType,
     listEntities,
     createEntity,
+    createTextFileEntity,
     updateEntity,
+    deleteEntity,
     createHighlightEntity,
     createGroundedFlashcardFromQuote,
     createCollection,

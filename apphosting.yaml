@@ -1,0 +1,20 @@
+runConfig:
+  cpu: 1
+  memoryMiB: 512
+  minInstances: 0
+  maxInstances: 2
+  concurrency: 80
+
+env:
+  - variable: FIRESTORE_DATABASE_ID
+    value: "(default)"
+    availability:
+      - RUNTIME
+  - variable: GEMINI_API_KEY
+    secret: geminiApiKey
+    availability:
+      - RUNTIME
+  - variable: GROQ_API_KEY
+    secret: groqApiKey
+    availability:
+      - RUNTIME

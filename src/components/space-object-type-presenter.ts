@@ -1,4 +1,7 @@
-import { objectTypeDefinitionById } from "@/components/object-icons";
+import {
+  getCapacitiesObjectTypeTone,
+  objectTypeDefinitionById,
+} from "@/components/object-icons";
 import type { SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 
 export function presentWorkspaceObjectType(record: SpaceObjectTypeRecord, count: number) {
@@ -11,7 +14,7 @@ export function presentWorkspaceObjectType(record: SpaceObjectTypeRecord, count:
     singularLabel: record.singularName,
     icon: definition.icon,
     iconName: record.iconName,
-    tone: record.tone,
+    tone: getCapacitiesObjectTypeTone(record.id, record.tone),
     ownership: record.ownership,
     count,
   };

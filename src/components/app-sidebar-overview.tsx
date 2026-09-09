@@ -18,12 +18,14 @@ import {
 import { AppSidebarObjectTypeStudio } from "@/components/app-sidebar-object-type-studio";
 import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon";
 import {
+  getCapacitiesObjectTypeTone,
   ObjectAreaIcon,
   ObjectCollectionIcon,
   ObjectIconBadge,
   type ObjectIconProps,
   type ObjectIconTone,
   objectIconToneBadgeClass,
+  objectTypeDefinitionById,
 } from "@/components/object-icons";
 import { useTheme } from "@/components/theme-provider";
 import { Badge } from "@/components/ui/badge";
@@ -332,6 +334,17 @@ function AppSidebarTypeLabel({
       <span className="block min-w-0 truncate text-left text-[1em]">{children}</span>
     </span>
   );
+}
+
+function getAppSidebarObjectTypeAppearance(objectType: AppSidebarObjectType) {
+  const canonicalIcon = objectType.iconName
+    ? objectTypeDefinitionById[objectType.iconName]?.icon
+    : undefined;
+
+  return {
+    icon: canonicalIcon ?? objectType.icon,
+    tone: getCapacitiesObjectTypeTone(objectType.id, objectType.tone),
+  };
 }
 
 function AppSidebarSectionMenu({
@@ -886,6 +899,7 @@ function AppSidebarObjectTypeRow({
 }) {
   const t = useTranslations("workspace.sidebarCollections");
   const hasCollections = collections.length > 0;
+  const appearance = getAppSidebarObjectTypeAppearance(objectType);
   const pendingModifierEventRef = React.useRef<AppSidebarSelectionEvent | null>(null);
   const skipNextClickRef = React.useRef(false);
 
@@ -982,7 +996,7 @@ function AppSidebarObjectTypeRow({
               data-slot="app-sidebar-object-type-icon"
               className="absolute inset-0 flex items-center justify-center opacity-100 transition-opacity duration-150 motion-reduce:transition-none group-hover/object-type-row:opacity-0"
             >
-              <ObjectIconBadge icon={objectType.icon} tone={objectType.tone} variant="sidebar" />
+              <ObjectIconBadge icon={appearance.icon} tone={appearance.tone} variant="sidebar" />
             </span>
             <AppSidebarObjectTypeMenuIcon
               data-slot="app-sidebar-object-type-chevron"
@@ -1044,7 +1058,7 @@ function AppSidebarObjectTypeRow({
                 {objectType.label}
               </span>
             ) : (
-              <AppSidebarTypeLabel icon={objectType.icon} tone={objectType.tone}>
+              <AppSidebarTypeLabel icon={appearance.icon} tone={appearance.tone}>
                 {objectType.label}
               </AppSidebarTypeLabel>
             )}
@@ -1167,7 +1181,16 @@ function AppSidebarObjectTypeRow({
                   }}
                 >
                   <span className="mr-1.5 inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 items-center justify-center">
-                    <ObjectIconBadge icon={ObjectCollectionIcon} tone="gray" variant="sidebar" />
+                    <ObjectIconBadge
+                      icon={ObjectCollectionIcon}
+                      tone="amber"
+                      variant="sidebar"
+                      style={{
+                        backgroundColor: "var(--type-label-bg-amber)",
+                        color: "var(--type-label-text-amber)",
+                        borderColor: "var(--type-label-border-amber)",
+                      }}
+                    />
                   </span>
                   <span className="min-w-0 truncate">{collection.name}</span>
                 </button>

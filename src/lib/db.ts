@@ -11,6 +11,7 @@ import type {
   SpaceSettingRecord,
   SpaceTagRecord,
   SpaceTrashRecord,
+  SyncMutationRecord,
 } from "@/lib/spaces/space-types";
 
 export class KnowledgeDatabase extends Dexie {
@@ -24,6 +25,7 @@ export class KnowledgeDatabase extends Dexie {
   media!: Table<SpaceMediaRecord, [string, string]>;
   spaceSettings!: Table<SpaceSettingRecord, [string, string]>;
   trash!: Table<SpaceTrashRecord, [string, string]>;
+  syncMutations!: EntityTable<SyncMutationRecord, "id">;
 
   constructor(name = "KnowledgeOS_DB") {
     super(name);
@@ -40,6 +42,10 @@ export class KnowledgeDatabase extends Dexie {
       media: "[spaceId+id], spaceId, id, [spaceId+mimeType], mimeType, updatedAt",
       spaceSettings: "[spaceId+id], spaceId, id, [spaceId+key], key, updatedAt",
       trash: "[spaceId+id], spaceId, id, [spaceId+entityId], entityId, purgeAfter, trashedAt",
+    });
+    this.version(2).stores({
+      syncMutations:
+        "id, status, [status+updatedAt], spaceId, entityId, entityType, operation, updatedAt",
     });
   }
 }

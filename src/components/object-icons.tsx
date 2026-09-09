@@ -16,16 +16,16 @@ import { ImageIcon } from "@phosphor-icons/react/dist/csr/Image";
 import { LightbulbIcon } from "@phosphor-icons/react/dist/csr/Lightbulb";
 import { ListMagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/ListMagnifyingGlass";
 import { MapPinIcon } from "@phosphor-icons/react/dist/csr/MapPin";
-import { MonitorPlayIcon } from "@phosphor-icons/react/dist/csr/MonitorPlay";
 import { QuotesIcon } from "@phosphor-icons/react/dist/csr/Quotes";
 import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
 import { StackIcon } from "@phosphor-icons/react/dist/csr/Stack";
 import { SuitcaseRollingIcon } from "@phosphor-icons/react/dist/csr/SuitcaseRolling";
 import { TableIcon } from "@phosphor-icons/react/dist/csr/Table";
 import { TagIcon } from "@phosphor-icons/react/dist/csr/Tag";
+import { TelevisionSimpleIcon } from "@phosphor-icons/react/dist/csr/TelevisionSimple";
 import { TwitterLogoIcon } from "@phosphor-icons/react/dist/csr/TwitterLogo";
 import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
-import { UsersIcon } from "@phosphor-icons/react/dist/csr/Users";
+import { UsersThreeIcon } from "@phosphor-icons/react/dist/csr/UsersThree";
 import { WaveformIcon } from "@phosphor-icons/react/dist/csr/Waveform";
 import type { ComponentPropsWithoutRef, ElementType } from "react";
 
@@ -57,6 +57,8 @@ const objectIconToneTextClass: Record<ObjectIconTone, string> = {
   fuchsia: "text-[oklch(0.5124_0.1866_323.57)] dark:text-[oklch(0.9030_0.0733_319.57)]",
   gray: "text-[oklch(0.3887_0.0052_301.05)] dark:text-[oklch(0.9163_0.0017_67.07)]",
   green: "text-[oklch(0.5327_0.1221_151.70)] dark:text-[oklch(0.9250_0.0805_156.05)]",
+  indigo:
+    "text-[oklch(0.4788_0.1814_280.04)] dark:text-[oklch(0.9014_0.0477_273.69)]",
   lime: "text-[oklch(0.5189_0.1237_130.14)] dark:text-[oklch(0.9382_0.1216_124.35)]",
   neutral: "text-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]",
   orange: "text-[oklch(0.5570_0.1387_43.21)] dark:text-[oklch(0.9015_0.0729_70.69)]",
@@ -82,6 +84,8 @@ const objectIconToneBadgeClass: Record<ObjectIconTone, string> = {
   gray: "border-[oklch(0.8643_0.0017_67.13)] bg-[oklch(0.9856_0.0016_67.00)] text-[oklch(0.3887_0.0052_301.05)] dark:border-[oklch(0.4918_0.0038_16.70)] dark:bg-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]",
   green:
     "border-[oklch(0.8712_0.1363_154.48)] bg-[oklch(0.9732_0.0311_157.36)] text-[oklch(0.5327_0.1221_151.70)] dark:border-[oklch(0.6981_0.1758_150.49)] dark:bg-[oklch(0.3406_0.0437_157.15)] dark:text-[oklch(0.9250_0.0805_156.05)]",
+  indigo:
+    "border-[oklch(0.7853_0.1042_274.71)] bg-[oklch(0.9469_0.0252_271.12)] text-[oklch(0.4788_0.1814_280.04)] dark:border-[oklch(0.5837_0.1894_277.77)] dark:bg-[oklch(0.3522_0.0535_284.77)] dark:text-[oklch(0.9014_0.0477_273.69)]",
   lime: "border-[oklch(0.8972_0.1785_126.69)] bg-[oklch(0.9766_0.0483_121.18)] text-[oklch(0.5189_0.1237_130.14)] dark:border-[oklch(0.7313_0.1880_130.19)] dark:bg-[oklch(0.3653_0.0648_128.67)] dark:text-[oklch(0.9382_0.1216_124.35)]",
   neutral:
     "border-[oklch(0.8643_0.0017_67.13)] bg-[oklch(0.9676_0.0016_67.02)] text-[oklch(0.2987_0.0072_285.88)] dark:border-[oklch(0.4918_0.0038_16.70)] dark:bg-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]",
@@ -100,13 +104,50 @@ const objectIconToneBadgeClass: Record<ObjectIconTone, string> = {
     "border-[oklch(0.9053_0.1656_98.12)] bg-[oklch(0.9810_0.0480_103.47)] text-[oklch(0.5532_0.1050_76.42)] dark:border-[oklch(0.7610_0.1520_87.61)] dark:bg-[oklch(0.4065_0.0606_68.35)] dark:text-[oklch(0.9451_0.1242_101.55)]",
 };
 
+const capacitiesObjectTypeToneById: Record<string, ObjectIconTone> = {
+  "ai-chat": "purple",
+  "atomic-note": "amber",
+  area: "indigo",
+  audio: "red",
+  book: "purple",
+  definition: "violet",
+  file: "red",
+  flashcard: "amber",
+  idea: "yellow",
+  image: "red",
+  media: "teal",
+  meeting: "red",
+  organization: "red",
+  page: "blue",
+  pdf: "red",
+  person: "orange",
+  place: "emerald",
+  project: "green",
+  query: "green",
+  quote: "rose",
+  study_goal: "green",
+  table: "blue",
+  tag: "orange",
+  task: "orange",
+  travel: "violet",
+  tweet: "blue",
+  weblink: "blue",
+};
+
+function getCapacitiesObjectTypeTone(
+  id: string | undefined,
+  fallback: ObjectIconTone,
+): ObjectIconTone {
+  return id ? (capacitiesObjectTypeToneById[id] ?? fallback) : fallback;
+}
+
 type ObjectIconName = PersistedObjectIconName | "code" | "knowledge";
 
 const phosphorObjectIcon: Record<ObjectIconName, Icon> = {
   "ai-chat": ChatsIcon,
   archive: ArchiveIcon,
   area: SquareIcon,
-  "atomic-note": StackIcon,
+  "atomic-note": ArchiveIcon,
   audio: WaveformIcon,
   book: BookOpenIcon,
   code: CodeIcon,
@@ -115,8 +156,8 @@ const phosphorObjectIcon: Record<ObjectIconName, Icon> = {
   idea: LightbulbIcon,
   image: ImageIcon,
   knowledge: BrainIcon,
-  media: MonitorPlayIcon,
-  meeting: UsersIcon,
+  media: TelevisionSimpleIcon,
+  meeting: UsersThreeIcon,
   organization: BuildingsIcon,
   page: FileTextIcon,
   pdf: FilePdfIcon,
@@ -138,14 +179,21 @@ function createObjectIcon(name: ObjectIconName) {
 
   function ObjectIcon({ className, ...props }: ObjectIconProps) {
     return (
-      <PhosphorIcon
-        data-slot="object-icon"
-        data-icon-name={name}
-        weight="regular"
-        aria-hidden="true"
-        className={className}
-        {...props}
-      />
+      <span
+        className="relative inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none"
+        style={{ verticalAlign: "-0.125em" }}
+      >
+        <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+          <PhosphorIcon
+            data-slot="object-icon"
+            data-icon-name={name}
+            weight="regular"
+            aria-hidden="true"
+            className={className}
+            {...props}
+          />
+        </span>
+      </span>
     );
   }
 
@@ -185,18 +233,18 @@ const ObjectCollectionIcon = ObjectAtomicNoteIcon;
 const objectTypeDefinitions: ObjectTypeDefinition[] = [
   { id: "book", label: "Book", icon: ObjectBookIcon, tone: "purple" },
   { id: "person", label: "Person", icon: ObjectPersonIcon, tone: "orange" },
-  { id: "area", label: "Area", icon: ObjectAreaIcon, tone: "blue" },
+  { id: "area", label: "Area", icon: ObjectAreaIcon, tone: "indigo" },
   { id: "meeting", label: "Meeting", icon: ObjectMeetingIcon, tone: "red" },
   { id: "quote", label: "Quote", icon: ObjectQuoteIcon, tone: "rose" },
   {
     id: "definition",
     label: "Definition",
     icon: ObjectDefinitionIcon,
-    tone: "purple",
+    tone: "violet",
   },
-  { id: "idea", label: "Idea", icon: ObjectIdeaIcon, tone: "amber" },
+  { id: "idea", label: "Idea", icon: ObjectIdeaIcon, tone: "yellow" },
   { id: "place", label: "Place", icon: ObjectPlaceIcon, tone: "emerald" },
-  { id: "project", label: "Project", icon: ObjectProjectIcon, tone: "emerald" },
+  { id: "project", label: "Project", icon: ObjectProjectIcon, tone: "green" },
   {
     id: "organization",
     label: "Organization",
@@ -209,8 +257,8 @@ const objectTypeDefinitions: ObjectTypeDefinition[] = [
     icon: ObjectAtomicNoteIcon,
     tone: "amber",
   },
-  { id: "media", label: "Media", icon: ObjectMediaIcon, tone: "cyan" },
-  { id: "travel", label: "Travel", icon: ObjectTravelIcon, tone: "purple" },
+  { id: "media", label: "Media", icon: ObjectMediaIcon, tone: "teal" },
+  { id: "travel", label: "Travel", icon: ObjectTravelIcon, tone: "violet" },
   { id: "page", label: "Page", icon: ObjectPageIcon, tone: "blue" },
   { id: "tag", label: "Tag", icon: ObjectTagIcon, tone: "orange" },
   { id: "image", label: "Image", icon: ObjectImageIcon, tone: "red" },
@@ -304,4 +352,5 @@ export {
   objectIconToneTextClass,
   objectTypeDefinitionById,
   objectTypeDefinitions,
+  getCapacitiesObjectTypeTone,
 };
