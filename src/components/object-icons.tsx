@@ -6,7 +6,7 @@ import type {
 } from "@/lib/space-object-types";
 
 type ObjectIconProps = SVGProps<SVGSVGElement>;
-type ObjectTypeIcon = ElementType<ObjectIconProps>;
+export type ObjectTypeIcon = ElementType<ObjectIconProps>;
 type ObjectTypeDefinition = {
   id: string;
   label: string;
@@ -362,13 +362,7 @@ function getObjectTypeIconAppearance({
 type ObjectTypeIconBadgeProps = Omit<ObjectIconBadgeProps, "icon" | "tone"> &
   ObjectTypeIconAppearanceInput;
 
-function ObjectTypeIconBadge({
-  id,
-  icon,
-  iconName,
-  tone,
-  ...props
-}: ObjectTypeIconBadgeProps) {
+function ObjectTypeIconBadge({ id, icon, iconName, tone, ...props }: ObjectTypeIconBadgeProps) {
   const appearance = getObjectTypeIconAppearance({ id, icon, iconName, tone });
   return <ObjectIconBadge icon={appearance.icon} tone={appearance.tone} {...props} />;
 }
@@ -410,6 +404,7 @@ function ObjectIconBadge({
 
 export {
   getCapacitiesObjectTypeTone,
+  getObjectTypeIconAppearance,
   ObjectAiChatIcon,
   ObjectArchiveIcon,
   ObjectAreaIcon,
@@ -424,7 +419,6 @@ export {
   type ObjectIconBadgeProps,
   type ObjectIconProps,
   type ObjectIconTone,
-  getObjectTypeIconAppearance,
   ObjectIdeaIcon,
   ObjectImageIcon,
   ObjectKnowledgeIcon,
@@ -445,11 +439,11 @@ export {
   ObjectTravelIcon,
   ObjectTweetIcon,
   type ObjectTypeDefinition,
+  type ObjectTypeIconAppearance,
+  ObjectTypeIconBadge,
   ObjectWeblinkIcon,
   objectIconToneBadgeClass,
   objectIconToneTextClass,
   objectTypeDefinitionById,
   objectTypeDefinitions,
-  ObjectTypeIconBadge,
-  type ObjectTypeIconAppearance,
 };

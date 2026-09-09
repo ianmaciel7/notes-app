@@ -1,17 +1,17 @@
 import { expect, it } from "vitest";
 
 import {
+  createWorkspaceMainTabsStorageState,
   createWorkspaceRouteMainSegment,
   createWorkspaceRouteSpaceSegment,
   createWorkspaceUrlPath,
-  createWorkspaceMainTabsStorageState,
   filterSidePanelSpecialItemsForContext,
   isDefaultExploreSideTab,
+  resolveSidePanelTabsAfterClose,
+  resolveSidePanelTabsAfterOpen,
+  resolveWorkspaceEntityTitle,
   resolveWorkspaceMainTabsFromStoredState,
   resolveWorkspaceMainValueFromRouteSegment,
-  resolveWorkspaceEntityTitle,
-  resolveSidePanelTabsAfterOpen,
-  resolveSidePanelTabsAfterClose,
   resolveWorkspaceSidePanelContext,
   upsertWorkspaceTab,
 } from "@/components/space-controller";
@@ -207,10 +207,7 @@ it("stores the open main tabs without resurrecting a closed route tab on refresh
   const storedState = createWorkspaceMainTabsStorageState({
     mainValue: "page",
     spaceId: "personal",
-    tabs: [
-      { id: "page", label: "Pages", icon: ExploreIcon, draggable: true },
-      { id: "page", label: "Pages duplicate", icon: ExploreIcon, draggable: true },
-    ],
+    tabs: [{ id: "page" }, { id: "page" }],
   });
 
   expect(storedState).toEqual({

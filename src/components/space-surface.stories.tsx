@@ -46,7 +46,7 @@ export const WorkspaceSurfacesOverview: Story = () => (
           <span className={workspaceReferenceSecondaryTextClass}>secondary text styling</span>.
         </p>
 
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 flex flex-col gap-4">
           <div className={workspaceFieldGroupClass}>
             <p className={workspaceSectionTitleClass}>Field Group Container</p>
             <p className={workspaceMetaTextClass}>Encapsulated group properties surface.</p>

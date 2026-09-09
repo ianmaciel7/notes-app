@@ -1,17 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { objectIconToneBadgeClass } from "@/components/object-icons";
+import type { AppHeaderTab } from "@/components/app-header-tabs";
+import { type ObjectIconTone, objectIconToneBadgeClass } from "@/components/object-icons";
+import { PendingImplementation } from "@/components/pending-implementation";
 import { useWorkspace } from "@/components/space-controller";
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
-import { PendingImplementation } from "@/components/pending-implementation";
 import {
-  WorkspaceObjectListRenderer,
   WorkspaceObjectRenderer,
+  WorkspaceObjectTypeListView,
 } from "@/components/workspace-object-renderer";
 import { WorkspaceSidePanelRenderer } from "@/components/workspace-side-panel-renderer";
+import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 type WorkspaceTabLike = {
   id: string;
@@ -52,12 +55,12 @@ function formatDate(value: string) {
 
 function EmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <div className="flex h-full min-h-0 items-center justify-center rounded-[12px] border border-dashed border-border bg-card p-8 text-center">
-      <div className="max-w-md">
-        <h2 className="text-lg font-medium text-foreground">{title}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">{description}</p>
-      </div>
-    </div>
+    <Empty className="h-full min-h-0 border-dashed bg-card p-8">
+      <EmptyHeader>
+        <EmptyTitle>{title}</EmptyTitle>
+        <EmptyDescription>{description}</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   );
 }
 
@@ -115,7 +118,7 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
   const objectTypeById = React.useMemo(() => {
     return Object.fromEntries(
-      objectTypes.map((item) => [item.id, item.singularLabel ?? item.label]),
+      objectTypes.map((item: any) => [item.id, item.singularLabel ?? item.label]),
     );
   }, [objectTypes]);
 
@@ -123,7 +126,7 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
     const needle = query.trim().toLocaleLowerCase();
     if (!needle) return createdEntities;
 
-    return createdEntities.filter((entity) => {
+    return createdEntities.filter((entity: any) => {
       const haystack = `${entity.title} ${entity.objectTypeId} ${entity.id}`.toLocaleLowerCase();
       return haystack.includes(needle);
     });
@@ -131,7 +134,7 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
   React.useEffect(() => {
     if (activeEntityId && activeEntityId !== "page") {
-      const activeResultIndex = results.findIndex((result) => result.id === activeEntityId);
+      const activeResultIndex = results.findIndex((result: any) => result.id === activeEntityId);
       setActiveSearchIndex(activeResultIndex >= 0 ? activeResultIndex : 0);
     } else {
       setActiveSearchIndex(0);
@@ -190,18 +193,20 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }
 
   function openEntity(entity: (typeof createdEntities)[number]) {
-    const objectType = objectTypes.find((item) => item.id === entity.objectTypeId);
+    const objectType = objectTypes.find((item: any) => item.id === entity.objectTypeId);
     setActiveAction(undefined);
     setActiveEntityId(entity.id);
-    setMainTabs((current) => {
-      if (current.some((item) => item.id === entity.id)) return current;
+    setMainTabs((current: any[]) => {
+      if (current.some((item: any) => item.id === entity.id)) return current;
       return [
         ...current,
         {
           id: entity.id,
           label: entity.title || "Sem título",
           icon: objectType?.icon,
-          iconClassName: objectType ? objectIconToneBadgeClass[objectType.tone] : undefined,
+          iconClassName: objectType
+            ? objectIconToneBadgeClass[objectType.tone as ObjectIconTone]
+            : undefined,
           draggable: true,
         },
       ];
@@ -246,8 +251,8 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
             <span className="font-medium text-foreground">Ctrl+K</span> para abrir a paleta.
           </p>
         ) : (
-          <ul className="space-y-2">
-            {results.map((entity) => {
+          <ul className="flex flex-col gap-2">
+            {results.map((entity: any) => {
               const typeName = objectTypeById[entity.objectTypeId] ?? "Unknown";
               const isActive = activeSearchIndex === results.indexOf(entity);
               const itemId = `search-result-${entity.id}`;
@@ -255,8 +260,6 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
                 <li
                   key={entity.id}
                   id={itemId}
-                  role="option"
-                  aria-selected={isActive || activeEntityId === entity.id}
                   className={`rounded-[10px] border px-3 py-2 text-sm text-foreground ${
                     isActive || activeEntityId === entity.id
                       ? "border-primary bg-muted/50"
@@ -268,7 +271,9 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
                     className="w-full rounded text-left"
                     onClick={() => openEntity(entity)}
                     onMouseEnter={() =>
-                      setActiveSearchIndex(results.findIndex((result) => result.id === entity.id))
+                      setActiveSearchIndex(
+                        results.findIndex((result: any) => result.id === entity.id),
+                      )
                     }
                   >
                     <p className="font-medium">{entity.title || "Sem título"}</p>
@@ -321,12 +326,6 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   const [activeTypeId, setActiveTypeId] = React.useState<string | undefined>(undefined);
 
   const byType = React.useMemo(() => {
-    type ExploreTypeBucket = {
-      typeId: string;
-      count: number;
-      latestEntity: (typeof createdEntities)[number];
-    };
-
     const buckets = new Map<string, number>();
     const latestByType = new Map<string, (typeof createdEntities)[number]>();
     for (const entity of createdEntities) {
@@ -348,7 +347,7 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
   const typeLabelById = React.useMemo(() => {
     return Object.fromEntries(
-      objectTypes.map((item) => [item.id, item.singularLabel ?? item.label]),
+      objectTypes.map((item: any) => [item.id, item.singularLabel ?? item.label]),
     );
   }, [objectTypes]);
 
@@ -359,17 +358,17 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
     }
 
     if (activeEntityId && activeEntityId !== "page") {
-      const activeEntity = createdEntities.find((entity) => entity.id === activeEntityId);
+      const activeEntity = createdEntities.find((entity: any) => entity.id === activeEntityId);
       if (
         activeEntity?.objectTypeId &&
-        byType.some((bucket) => bucket.typeId === activeEntity.objectTypeId)
+        byType.some((bucket: any) => bucket.typeId === activeEntity.objectTypeId)
       ) {
         setActiveTypeId(activeEntity.objectTypeId);
         return;
       }
     }
 
-    setActiveTypeId((current) => current ?? byType[0]?.typeId);
+    setActiveTypeId((current: any) => current ?? byType[0]?.typeId);
   }, [activeEntityId, createdEntities, byType]);
 
   function handleExploreKeyDown(event: React.KeyboardEvent<HTMLElement>) {
@@ -377,7 +376,7 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      const index = byType.findIndex((item) => item.typeId === activeTypeId);
+      const index = byType.findIndex((item: any) => item.typeId === activeTypeId);
       const safeIndex = Math.max(0, index >= 0 ? index : 0);
       const nextIndex =
         event.key === "ArrowDown"
@@ -394,22 +393,24 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }
 
   function openType(typeId: string) {
-    const entry = byType.find((item) => item.typeId === typeId);
+    const entry = byType.find((item: any) => item.typeId === typeId);
     const entity = entry?.latestEntity;
     if (!entity) return;
-    const objectType = objectTypes.find((item) => item.id === typeId);
+    const objectType = objectTypes.find((item: any) => item.id === typeId);
 
     setActiveAction(undefined);
     setActiveEntityId(entity.id);
-    setMainTabs((current) => {
-      if (current.some((item) => item.id === entity.id)) return current;
+    setMainTabs((current: any[]) => {
+      if (current.some((item: any) => item.id === entity.id)) return current;
       return [
         ...current,
         {
           id: entity.id,
           label: entity.title || "Sem título",
           icon: objectType?.icon,
-          iconClassName: objectType ? objectIconToneBadgeClass[objectType.tone] : undefined,
+          iconClassName: objectType
+            ? objectIconToneBadgeClass[objectType.tone as ObjectIconTone]
+            : undefined,
           draggable: true,
         },
       ];
@@ -463,8 +464,6 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
               <article
                 key={typeId}
                 id={`explore-type-${typeId}`}
-                role="option"
-                aria-selected={activeTypeId === typeId}
                 className={`rounded-[10px] border p-3 text-sm text-foreground hover:bg-muted/60 ${
                   activeTypeId === typeId
                     ? "border-primary bg-muted/50"
@@ -504,7 +503,7 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   const [activeTaskId, setActiveTaskId] = React.useState<string | undefined>(undefined);
   const listContainerRef = React.useRef<HTMLDivElement>(null);
   const tasks = React.useMemo(() => {
-    return createdEntities.filter((entity) => entity.objectTypeId === "task");
+    return createdEntities.filter((entity: any) => entity.objectTypeId === "task");
   }, [createdEntities]);
 
   React.useEffect(() => {
@@ -513,12 +512,12 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
       return;
     }
 
-    if (activeEntityId && tasks.some((task) => task.id === activeEntityId)) {
+    if (activeEntityId && tasks.some((task: any) => task.id === activeEntityId)) {
       setActiveTaskId(activeEntityId);
       return;
     }
 
-    setActiveTaskId((current) => current ?? tasks[0]?.id);
+    setActiveTaskId((current: any) => current ?? tasks[0]?.id);
   }, [activeEntityId, tasks]);
 
   React.useEffect(() => {
@@ -533,7 +532,7 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      const index = tasks.findIndex((task) => task.id === activeTaskId);
+      const index = tasks.findIndex((task: any) => task.id === activeTaskId);
       const safeIndex = Math.max(0, index >= 0 ? index : 0);
       const nextIndex =
         event.key === "ArrowDown"
@@ -545,7 +544,7 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
     if (event.key === "Enter" && activeTaskId) {
       event.preventDefault();
-      const target = tasks.find((task) => task.id === activeTaskId);
+      const target = tasks.find((task: any) => task.id === activeTaskId);
       if (target) {
         openTask(target);
       }
@@ -553,18 +552,20 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }
 
   function openTask(task: (typeof createdEntities)[number]) {
-    const objectType = objectTypes.find((item) => item.id === task.objectTypeId);
+    const objectType = objectTypes.find((item: any) => item.id === task.objectTypeId);
     setActiveAction(undefined);
     setActiveEntityId(task.id);
-    setMainTabs((current) => {
-      if (current.some((item) => item.id === task.id)) return current;
+    setMainTabs((current: any[]) => {
+      if (current.some((item: any) => item.id === task.id)) return current;
       return [
         ...current,
         {
           id: task.id,
           label: task.title || "Sem título",
           icon: objectType?.icon,
-          iconClassName: objectType ? objectIconToneBadgeClass[objectType.tone] : undefined,
+          iconClassName: objectType
+            ? objectIconToneBadgeClass[objectType.tone as ObjectIconTone]
+            : undefined,
           draggable: true,
         },
       ];
@@ -574,7 +575,7 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
   function handleCreateTask() {
     void createWorkspaceEntity("task", "Task")
-      .then((entity) => {
+      .then((entity: any) => {
         if (!entity) return;
         openTask(entity);
       })
@@ -604,13 +605,11 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
             </Button>
           </div>
         ) : (
-          <ul className="space-y-2">
-            {tasks.map((task) => (
+          <ul className="flex flex-col gap-2">
+            {tasks.map((task: any) => (
               <li
                 key={task.id}
                 id={`task-result-${task.id}`}
-                role="option"
-                aria-selected={activeTaskId === task.id}
                 className={`rounded-[10px] border px-3 py-2 text-sm text-foreground ${
                   activeTaskId === task.id ? "border-primary bg-muted/50" : "border-border"
                 }`}
@@ -636,7 +635,18 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 }
 
 function WorkspaceMainSurface() {
-  const { createdEntities, mainTabs, mainValue, objectTypeRecords, objectTypes } = useWorkspace();
+  const {
+    createWorkspaceEntity,
+    createdEntities,
+    mainTabs,
+    mainValue,
+    objectTypeRecords,
+    objectTypes,
+    setActiveAction,
+    setActiveEntityId,
+    setMainTabs,
+    setMainValue,
+  } = useWorkspace();
   const name = getWorkspaceTabPendingName(mainTabs, mainValue, "Main panel");
   const activeEntity = createdEntities.find((entity: { id: string }) => entity.id === mainValue);
   const objectType = activeEntity
@@ -647,15 +657,45 @@ function WorkspaceMainSurface() {
     return <WorkspaceObjectRenderer entity={activeEntity} objectType={objectType} tabName={name} />;
   }
 
+  function openObjectTypeEntity(entity: SpaceEntityRecord) {
+    const entityType = objectTypes.find(
+      (item: { id: string; icon?: React.ElementType; tone: ObjectIconTone }) =>
+        item.id === entity.objectTypeId,
+    ) as { id: string; icon?: React.ElementType; tone: ObjectIconTone } | undefined;
+    setActiveAction(undefined);
+    setActiveEntityId(entity.id);
+    setMainTabs((current: AppHeaderTab[]) => {
+      if (current.some((item: AppHeaderTab) => item.id === entity.id)) return current;
+      return [
+        ...current,
+        {
+          id: entity.id,
+          label: entity.title || "Untitled",
+          kind: "object",
+          icon: entityType?.icon,
+          iconClassName: entityType ? objectIconToneBadgeClass[entityType.tone] : undefined,
+          draggable: true,
+        },
+      ];
+    });
+    setMainValue(entity.id);
+  }
+
+  function createObjectTypeEntity(objectTypeId: string) {
+    void createWorkspaceEntity(objectTypeId);
+  }
+
   const activeObjectTypeRecord = objectTypeRecords.find(
     (item: { id: string }) => item.id === mainValue,
   );
   if (activeObjectTypeRecord) {
     return (
-      <WorkspaceObjectListRenderer
+      <WorkspaceObjectTypeListView
         entities={createdEntities}
         objectType={activeObjectTypeRecord}
         tabName={name}
+        onCreateEntity={() => createObjectTypeEntity(activeObjectTypeRecord.id)}
+        onOpenEntity={openObjectTypeEntity}
       />
     );
   }
@@ -663,14 +703,17 @@ function WorkspaceMainSurface() {
   const activeObjectType = objectTypes.find((item: { id: string }) => item.id === mainValue);
   if (activeObjectType) {
     return (
-      <WorkspaceObjectListRenderer
+      <WorkspaceObjectTypeListView
         entities={createdEntities}
         objectType={{
           id: activeObjectType.id,
           pluralName: activeObjectType.label,
           singularName: activeObjectType.singularLabel ?? activeObjectType.label,
+          tone: activeObjectType.tone,
         }}
         tabName={name}
+        onCreateEntity={() => createObjectTypeEntity(activeObjectType.id)}
+        onOpenEntity={openObjectTypeEntity}
       />
     );
   }

@@ -14,8 +14,8 @@ import {
 import {
   type AppSidebarCollectionAction,
   type AppSidebarObjectType,
-  type AppSidebarPinnedEntity,
   AppSidebarOverview,
+  type AppSidebarPinnedEntity,
 } from "@/components/app-sidebar-overview";
 import {
   ObjectCollectionIcon,

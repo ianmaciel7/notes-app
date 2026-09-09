@@ -57,7 +57,7 @@ function AppSidebarUtilityRow({
   active,
   onClick,
 }: {
-  icon: React.ElementType<ObjectIconProps>;
+  icon: React.ComponentType<any>;
   label: string;
   external?: boolean;
   href?: string;
@@ -131,35 +131,35 @@ function AppSidebarHelpSection() {
 
   return (
     <AppSidebarSection
-      icon={(props) => <AppSidebarSourceIcon name="help" {...props} />}
+      icon={(props) => <AppSidebarSourceIcon name={"help" as const} {...props} />}
       label={t("sidebarHelp.title")}
       open={open}
       onOpenChange={setOpen}
     >
       <div data-slot="app-sidebar-help-items" className="flex flex-col px-2 pr-0.5">
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="graduation" {...props} />}
+          icon={(props) => <AppSidebarSourceIcon name={"graduation" as const} {...props} />}
           label={t("sidebarHelp.getStarted")}
         />
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="help" {...props} />}
+          icon={(props) => <AppSidebarSourceIcon name={"help" as const} {...props} />}
           label={t("sidebarHelp.askQuestion")}
           external
           tooltip={t("sidebarHelp.askQuestionTooltip")}
         />
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="documentation" {...props} />}
+          icon={(props) => <AppSidebarSourceIcon name={"documentation" as const} {...props} />}
           label={t("sidebarHelp.documentation")}
           external
           href={t("sidebarHelp.documentationUrl")}
           tooltip={t("sidebarHelp.documentationTooltip")}
         />
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="news" {...props} />}
+          icon={(props) => <AppSidebarSourceIcon name={"news" as const} {...props} />}
           label={t("sidebarHelp.whatsNew")}
         />
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="feedback" {...props} />}
+          icon={(props) => <AppSidebarSourceIcon name={"feedback" as const} {...props} />}
           label={t("sidebarHelp.feedback")}
           href="https://capacities.io/feedback"
           external

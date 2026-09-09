@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  type AppHeaderTab,
   shouldRenderMainTabAsNeutral,
   shouldUseStrongAppHeaderTabLabel,
-  type AppHeaderTab,
 } from "@/components/app-header-tabs";
 
 describe("app header tab presentation", () => {

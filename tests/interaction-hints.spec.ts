@@ -53,7 +53,7 @@ test("explicit header tooltips open on hover and keep ARIA independent", async (
   await action.hover();
   const hint = page.locator('[data-slot="interaction-hint"]');
   await expect(hint).toBeVisible({ timeout: 1_000 });
-  await expect(hint).toContainText(label!);
+  await expect(hint).toContainText(label ?? "");
   await expect(hint).toHaveClass(/max-w-40/);
   await expect(hint.locator('[data-slot="tooltip-arrow"]')).toHaveCount(0);
 });
@@ -112,7 +112,7 @@ test("sidebar action tooltips are explicit and not HoverCard previews", async ({
 
   const hint = page.locator('[data-slot="interaction-hint"]');
   await expect(hint).toBeVisible({ timeout: 1_000 });
-  await expect(hint).toContainText(label!);
+  await expect(hint).toContainText(label ?? "");
   if (description) {
     await expect(hint).toContainText(description.split("\n")[0] ?? description);
   }

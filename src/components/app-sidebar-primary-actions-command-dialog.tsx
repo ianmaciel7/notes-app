@@ -16,6 +16,7 @@ import * as React from "react";
 import {
   ObjectIconBadge,
   type ObjectIconTone,
+  type ObjectTypeIcon,
   objectIconToneBadgeClass,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
@@ -713,7 +714,7 @@ function NewContentCommandDialog({
                               >
                                 <div className="shrink-0">
                                   <ObjectIconBadge
-                                    icon={item.icon ?? CapacitiesSearchIcon}
+                                    icon={(item.icon ?? CapacitiesSearchIcon) as ObjectTypeIcon}
                                     className="mt-1"
                                     tone={item.tone ?? "blue"}
                                     variant="menu"
@@ -795,7 +796,7 @@ function NewContentCommandDialog({
                               >
                                 <div className="shrink-0">
                                   <ObjectIconBadge
-                                    icon={item.icon ?? CapacitiesSearchIcon}
+                                    icon={(item.icon ?? CapacitiesSearchIcon) as ObjectTypeIcon}
                                     className="mt-1"
                                     tone={item.tone ?? "blue"}
                                     variant="menu"
@@ -882,7 +883,7 @@ function NewContentCommandDialog({
                             {/* Left Icon & Title */}
                             <div className="shrink-0">
                               <ObjectIconBadge
-                                icon={item.icon ?? CapacitiesSearchIcon}
+                                icon={(item.icon ?? CapacitiesSearchIcon) as ObjectTypeIcon}
                                 className="mt-1"
                                 tone={item.tone ?? "blue"}
                                 variant="menu"

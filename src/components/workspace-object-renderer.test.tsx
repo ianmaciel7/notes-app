@@ -2,9 +2,9 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 
 import {
-  WorkspaceObjectListRenderer,
-  WorkspaceObjectRenderer,
   getWorkspaceWeblinkUrl,
+  WorkspaceObjectRenderer,
+  WorkspaceObjectTypeListView,
 } from "@/components/workspace-object-renderer";
 import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 
@@ -84,21 +84,89 @@ it("renders unfinished object types through PendingImplementation", () => {
   expect(markup).toContain('data-slot="pending-implementation-card"');
 });
 
-it("renders object type list tabs with a list-specific pending surface", () => {
+it("renders only objects belonging to the active object type", () => {
   const markup = renderToStaticMarkup(
-    <WorkspaceObjectListRenderer
+    <WorkspaceObjectTypeListView
+      entities={[
+        entityFixture({
+          objectTypeId: "study_goal",
+          title: "Biology exam",
+          blocks: [
+            {
+              id: "block-a",
+              type: "paragraph",
+              content: "Review respiratory physiology before Friday.",
+            },
+          ],
+          tags: ["exam"],
+        }),
+        entityFixture({ id: "page-a", objectTypeId: "page", title: "Research notes" }),
+      ]}
+      objectType={objectTypeFixture()}
+      tabName="Study goals"
+    />,
+  );
+
+  expect(markup).toContain("Study goals");
+  expect(markup).toContain("Visão geral");
+  expect(markup).toContain("Tudo");
+  expect(markup).toContain('data-slot="workspace-object-data-view"');
+  expect(markup).toContain('data-slot="workspace-object-data-view-cards"');
+  expect(markup).toContain("Biology exam");
+  expect(markup).toContain("Review respiratory physiology before Friday.");
+  expect(markup).toContain("exam");
+  expect(markup).not.toContain("Research notes");
+  expect(markup.match(/data-slot="workspace-object-type-list-item"/g)).toHaveLength(1);
+  expect(markup.match(/data-slot="workspace-object-type-card-preview"/g)).toHaveLength(1);
+  expect(markup).not.toContain("Implementation pending");
+});
+
+it("renders the Capacities-style split new action", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceObjectTypeListView
+      entities={[]}
+      objectType={objectTypeFixture()}
+      tabName="Study goals"
+      onCreateEntity={() => {}}
+    />,
+  );
+
+  expect(markup).toContain('data-slot="workspace-object-type-new-action"');
+  expect(markup).toContain('data-slot="workspace-object-type-new-menu"');
+  expect(markup).toContain("Novo Study goal");
+});
+
+it("keeps data-view cards legible and labels icon-only controls", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceObjectTypeListView
       entities={[entityFixture({ objectTypeId: "study_goal", title: "Biology exam" })]}
       objectType={objectTypeFixture()}
       tabName="Study goals"
     />,
   );
 
-  expect(markup).toContain("Study goals list");
-  expect(markup).toContain("Object type list");
-  expect(markup.match(/data-slot="pending-implementation"/g)).toHaveLength(1);
-  expect(markup).toContain('data-variant="workspace"');
-  expect(markup).toContain('data-slot="pending-implementation-card"');
-  expect(markup).not.toContain("Study goal object");
-  expect(markup).not.toContain("1 object");
-  expect(markup).not.toContain("Biology exam");
+  expect(markup).not.toContain('data-slot="workspace-object-type-list-item" class="min-w-0"><button disabled');
+  expect(markup).toContain("!text-[var(--app-text-primary)]");
+  expect(markup).toContain('aria-label="Buscar em Study goals"');
+  expect(markup).toContain('aria-label="Recolher cabeçalho"');
+  expect(markup).toContain('aria-label="Mais ações"');
+  expect(markup).toContain('aria-label="Quantidade de objetos: 1 objeto"');
+  expect(markup).toContain('aria-label="Filtrar objetos"');
+  expect(markup).toContain('aria-label="Classificar objetos"');
+  expect(markup).toContain('aria-label="Agrupar objetos"');
+  expect(markup).toContain('aria-label="Escolher layout"');
+});
+
+it("renders an empty state when the active object type has no objects", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceObjectTypeListView
+      entities={[entityFixture({ objectTypeId: "page", title: "Research notes" })]}
+      objectType={objectTypeFixture()}
+      tabName="Study goals"
+    />,
+  );
+
+  expect(markup).toContain("Ainda não há Study goals");
+  expect(markup).toContain("Crie um(a) Study goal para adicionar aqui.");
+  expect(markup).not.toContain("Implementation pending");
 });

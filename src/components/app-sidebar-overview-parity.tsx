@@ -164,7 +164,6 @@ function AppSidebarOverview({
   onCreateObjectTypeFromPreset,
   onCreateObjectType,
   onUpdateObjectType,
-  onDeleteObjectType,
   onPinnedEntitiesChange,
   onOpenPinnedInSidePanel,
   onCustomSectionsChange,
@@ -366,7 +365,6 @@ function AppSidebarOverview({
                   onCollectionAction?.(action, type, collection, event);
                 }}
                 onUpdate={onUpdateObjectType}
-                onDelete={onDeleteObjectType}
               />
             ))}
           </AppSidebarSection>

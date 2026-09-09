@@ -20,9 +20,10 @@ test("new content trigger opens one centered command dialog instead of a sidebar
   const viewport = page.viewportSize();
   expect(dialogBox).not.toBeNull();
   expect(viewport).not.toBeNull();
+  if (!dialogBox || !viewport) throw new Error("Viewport/dialog box missing");
 
-  const dialogCenterX = dialogBox!.x + dialogBox!.width / 2;
-  const viewportCenterX = viewport!.width / 2;
+  const dialogCenterX = dialogBox.x + dialogBox.width / 2;
+  const viewportCenterX = viewport.width / 2;
   expect(Math.abs(dialogCenterX - viewportCenterX)).toBeLessThanOrEqual(2);
 });
 

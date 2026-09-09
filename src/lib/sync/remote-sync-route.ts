@@ -66,7 +66,7 @@ export async function handleAuthenticatedSyncPushRequest(
     fetcher?: Fetcher;
   },
 ): Promise<SyncPushResult> {
-  let user;
+  let user: { uid: string; email?: string };
   try {
     user = await requireAuthenticatedUser(dependencies.headers, dependencies.verifier);
   } catch (error) {

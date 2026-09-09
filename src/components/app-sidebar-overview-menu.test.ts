@@ -120,6 +120,40 @@ it("uses the captured Capacities popup width and submenu affordances", () => {
   expect(overflowRowSource).not.toContain("leading-normal");
 });
 
+it("keeps object type settings as an enabled Capacities context menu item", () => {
+  const componentSource = readSource("components/app-sidebar-overview.tsx");
+  const objectTypeMenuSource = componentSource.slice(
+    componentSource.indexOf("function AppSidebarObjectTypeMenu({"),
+    componentSource.indexOf("function AppSidebarObjectTypeRow"),
+  );
+
+  expect(objectTypeMenuSource).toContain("<DropdownMenuItem");
+  expect(objectTypeMenuSource).toContain("onClick={openSettings}");
+  expect(objectTypeMenuSource).toContain("sidebarContextMenuItemClass");
+  expect(objectTypeMenuSource).not.toContain("disabled={!editable}");
+});
+
+it("keeps object type menus aligned with the captured Capacities option set", () => {
+  const componentSource = readSource("components/app-sidebar-overview.tsx");
+  const objectTypeMenuSource = componentSource.slice(
+    componentSource.indexOf("function AppSidebarObjectTypeMenu({"),
+    componentSource.indexOf("function AppSidebarObjectTypeRow"),
+  );
+
+  expect(objectTypeMenuSource).toContain('tWorkspace("lifecycle.task.open")');
+  expect(objectTypeMenuSource).toContain('tSidebar("createObject"');
+  expect(objectTypeMenuSource).toContain('tOverview("newFromTemplate")');
+  expect(objectTypeMenuSource).toContain('tOverview("newQuery")');
+  expect(objectTypeMenuSource).toContain('tOverview("newCollection")');
+  expect(objectTypeMenuSource).toContain('tWorkspace("documentMenu.pinSidebar")');
+  expect(objectTypeMenuSource).toContain('tOverview("typeSettings")');
+  expect(objectTypeMenuSource).toContain('tWorkspace("documentMenu.import")');
+  expect(objectTypeMenuSource).toContain("<DropdownMenuSub>");
+  expect(objectTypeMenuSource).toContain("<DropdownMenuSubTrigger");
+  expect(objectTypeMenuSource).toContain("<DropdownMenuSubContent");
+  expect(objectTypeMenuSource).not.toContain('t("details.delete")');
+});
+
 it("keeps context submenu messages available for every locale", () => {
   const localeFiles = ["en.json", "es.json", "pt-BR.json"];
 

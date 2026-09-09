@@ -46,8 +46,7 @@ export function PendingImplementation({
     );
   }
 
-  const variantClassName =
-    variant === "workspace" ? "border-0 bg-transparent" : "border border-border bg-muted/25";
+  const variantClassName = "border border-border bg-muted/25";
 
   return (
     <Empty

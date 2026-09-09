@@ -24,9 +24,10 @@ test("Space switcher search keeps the Capacities 6px outer inset on both sides",
   const searchBox = await search.boundingBox();
   expect(popupBox).not.toBeNull();
   expect(searchBox).not.toBeNull();
+  if (!popupBox || !searchBox) throw new Error("Box measurements missing");
 
-  const leftInset = searchBox!.x - popupBox!.x;
-  const rightInset = popupBox!.x + popupBox!.width - (searchBox!.x + searchBox!.width);
+  const leftInset = searchBox.x - popupBox.x;
+  const rightInset = popupBox.x + popupBox.width - (searchBox.x + searchBox.width);
 
   expect(leftInset).toBeGreaterThanOrEqual(5);
   expect(leftInset).toBeLessThanOrEqual(7);

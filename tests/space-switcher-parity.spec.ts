@@ -31,7 +31,8 @@ test("space switcher matches Capacities menu composition and empty state", async
   const [iconBox, textBox] = await Promise.all([iconFrame.boundingBox(), itemText.boundingBox()]);
   expect(iconBox).not.toBeNull();
   expect(textBox).not.toBeNull();
-  expect(Math.round(textBox!.x - (iconBox!.x + iconBox!.width))).toBe(8);
+  if (!iconBox || !textBox) throw new Error("Bounding box missing");
+  expect(Math.round(textBox.x - (iconBox.x + iconBox.width))).toBe(8);
 
   const footer = popup.locator('[data-slot="combobox-separator"] + div').first();
   await expect(footer.locator("button:visible")).toHaveCount(1);

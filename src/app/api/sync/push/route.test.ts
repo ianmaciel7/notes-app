@@ -34,7 +34,7 @@ vi.mock("@/lib/sync/remote-sync-route", () => ({
       headers: dependencies.headers,
       projectId: dependencies.projectId,
       accessToken: dependencies.accessToken,
-      fallbackAccessToken: await dependencies.getAccessToken?.(),
+      fallbackAccessToken: (await dependencies.getAccessToken?.()) ?? undefined,
     });
     return { status: 201, body: { accepted: true } };
   },

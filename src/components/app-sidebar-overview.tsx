@@ -455,7 +455,7 @@ function AppSidebarSection({
   sticky = true,
   children,
 }: {
-  icon: React.ElementType<ObjectIconProps>;
+  icon: React.ComponentType<any>;
   label: string;
   count?: number;
   sort?: AppSidebarSortMode;
@@ -709,6 +709,7 @@ function AppSidebarPinnedRow({
   dragging: boolean;
   draggable: boolean;
   onSelect: (event: AppSidebarSelectionEvent) => void;
+  onOpenInSidePanel?: () => void;
   onUnpin: () => void;
   onAction?: (action: AppSidebarCollectionAction, entity: AppSidebarPinnedEntity) => void;
   onDragStart: () => void;
@@ -851,10 +852,13 @@ function AppSidebarPinnedRow({
 
 function AppSidebarObjectTypeMenu({
   objectType,
+  onOpen,
+  onCreateEntity,
   onUpdate,
-  onDelete,
 }: {
   objectType: AppSidebarObjectType;
+  onOpen: () => void;
+  onCreateEntity?: (objectTypeId: string, label: string) => void;
   onUpdate?: (
     id: string,
     input: {
@@ -864,9 +868,11 @@ function AppSidebarObjectTypeMenu({
       tone: AppSidebarTone;
     },
   ) => void;
-  onDelete?: (id: string) => void;
 }) {
-  const t = useTranslations("workspace.objectTypeStudio");
+  const tWorkspace = useTranslations("workspace");
+  const tSidebar = useTranslations("workspace.sidebarCollections");
+  const tOverview = useTranslations("workspace.objectTypeOverview");
+  const tStudio = useTranslations("workspace.objectTypeStudio");
   const [settingsOpen, setSettingsOpen] = React.useState(false);
   const settingsNameInputId = React.useId();
   const settingsPluralInputId = React.useId();
@@ -878,7 +884,7 @@ function AppSidebarObjectTypeMenu({
   const [pluralName, setPluralName] = React.useState(objectType.label);
   const [iconName, setIconName] = React.useState<ObjectIconName>(objectType.iconName ?? "area");
   const [tone, setTone] = React.useState<AppSidebarTone>(objectType.tone);
-  const editable = objectType.ownership === "custom" || objectType.ownership === "legacy";
+  const objectTypeSingularName = objectType.singularLabel ?? objectType.label;
 
   function openSettings() {
     setSingularName(objectType.singularLabel ?? objectType.label);
@@ -904,7 +910,7 @@ function AppSidebarObjectTypeMenu({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger
-          aria-label={t("actionsLabel", { type: objectType.label })}
+          aria-label={tStudio("actionsLabel", { type: objectType.label })}
           className={cn(
             buttonVariants({ variant: "ghost", size: "icon-xs" }),
             "size-[22px] shrink-0 opacity-0 transition-opacity duration-150",
@@ -920,31 +926,76 @@ function AppSidebarObjectTypeMenu({
           sideOffset={8}
           className={sidebarContextMenuContentClass}
         >
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className={sidebarContextMenuItemClass}>
+              <SidebarContextMenuIcon>
+                <AppSidebarSourceIcon name="external" />
+              </SidebarContextMenuIcon>
+              <CompactMenuItemText>{tWorkspace("lifecycle.task.open")}</CompactMenuItemText>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent className={sidebarContextSubmenuContentClass}>
+              <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={onOpen}>
+                <SidebarContextMenuIcon>
+                  <AppSidebarSourceIcon name="external" />
+                </SidebarContextMenuIcon>
+                <CompactMenuItemText>{tWorkspace("documentMenu.openInView")}</CompactMenuItemText>
+                <DropdownMenuShortcut>
+                  {tWorkspace("documentMenu.openInViewShortcut")}
+                </DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
           <DropdownMenuItem
             className={sidebarContextMenuItemClass}
-            onClick={openSettings}
-            disabled={!editable}
+            onClick={() => onCreateEntity?.(objectType.id, objectTypeSingularName)}
           >
+            <SidebarContextMenuIcon>
+              <AppSidebarObjectTypeMenuIcon name="plus" />
+            </SidebarContextMenuIcon>
+            <CompactMenuItemText>
+              {tSidebar("createObject", { type: objectTypeSingularName })}
+            </CompactMenuItemText>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
+          <DropdownMenuItem className={sidebarContextMenuItemClass}>
+            <SidebarContextMenuIcon>
+              <AppSidebarObjectTypeMenuIcon name="changeType" />
+            </SidebarContextMenuIcon>
+            <CompactMenuItemText>{tOverview("newFromTemplate")}</CompactMenuItemText>
+          </DropdownMenuItem>
+          <DropdownMenuItem className={sidebarContextMenuItemClass}>
+            <SidebarContextMenuIcon>
+              <AppSidebarObjectTypeMenuIcon name="changeType" />
+            </SidebarContextMenuIcon>
+            <CompactMenuItemText>{tOverview("newQuery")}</CompactMenuItemText>
+          </DropdownMenuItem>
+          <DropdownMenuItem className={sidebarContextMenuItemClass}>
+            <SidebarContextMenuIcon>
+              <ObjectCollectionIcon className="size-3" />
+            </SidebarContextMenuIcon>
+            <CompactMenuItemText>{tOverview("newCollection")}</CompactMenuItemText>
+          </DropdownMenuItem>
+          <DropdownMenuItem className={sidebarContextMenuItemClass}>
+            <SidebarContextMenuIcon>
+              <AppSidebarObjectTypeMenuIcon name="pin" />
+            </SidebarContextMenuIcon>
+            <CompactMenuItemText>{tWorkspace("documentMenu.pinSidebar")}</CompactMenuItemText>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
+          <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={openSettings}>
             <SidebarContextMenuIcon>
               <AppSidebarObjectTypeMenuIcon name="settings" />
             </SidebarContextMenuIcon>
-            <CompactMenuItemText>{t("details.settings")}</CompactMenuItemText>
+            <CompactMenuItemText>{tOverview("typeSettings")}</CompactMenuItemText>
           </DropdownMenuItem>
-          {editable && (
-            <>
-              <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
-              <DropdownMenuItem
-                className={sidebarContextMenuItemClass}
-                variant="destructive"
-                onClick={() => onDelete?.(objectType.id)}
-              >
-                <SidebarContextMenuIcon>
-                  <AppSidebarSourceIcon name="trash" />
-                </SidebarContextMenuIcon>
-                <CompactMenuItemText>{t("details.delete")}</CompactMenuItemText>
-              </DropdownMenuItem>
-            </>
-          )}
+          <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
+          <DropdownMenuItem className={sidebarContextMenuItemClass}>
+            <SidebarContextMenuIcon>
+              <AppSidebarObjectTypeMenuIcon name="import" />
+            </SidebarContextMenuIcon>
+            <CompactMenuItemText>{tWorkspace("documentMenu.import")}</CompactMenuItemText>
+            <DropdownMenuShortcut>Ctrl I</DropdownMenuShortcut>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -952,12 +1003,12 @@ function AppSidebarObjectTypeMenu({
         <DialogContent>
           <form onSubmit={saveSettings}>
             <DialogHeader>
-              <DialogTitle>{t("details.settings")}</DialogTitle>
-              <DialogDescription>{t("details.settingsDescription")}</DialogDescription>
+              <DialogTitle>{tStudio("details.settings")}</DialogTitle>
+              <DialogDescription>{tStudio("details.settingsDescription")}</DialogDescription>
             </DialogHeader>
             <div className="grid gap-3 py-4">
               <label htmlFor={settingsNameInputId} className="grid gap-1 text-sm">
-                {t("details.name")}
+                {tStudio("details.name")}
                 <Input
                   id={settingsNameInputId}
                   value={singularName}
@@ -966,7 +1017,7 @@ function AppSidebarObjectTypeMenu({
                 />
               </label>
               <label htmlFor={settingsPluralInputId} className="grid gap-1 text-sm">
-                {t("details.pluralName")}
+                {tStudio("details.pluralName")}
                 <Input
                   id={settingsPluralInputId}
                   value={pluralName}
@@ -974,7 +1025,7 @@ function AppSidebarObjectTypeMenu({
                 />
               </label>
               <label htmlFor={settingsIconInputId} className="grid gap-1 text-sm">
-                {t("details.icon")}
+                {tStudio("details.icon")}
                 <select
                   id={settingsIconInputId}
                   value={iconName}
@@ -989,7 +1040,7 @@ function AppSidebarObjectTypeMenu({
                 </select>
               </label>
               <label htmlFor={settingsToneInputId} className="grid gap-1 text-sm">
-                {t("details.color")}
+                {tStudio("details.color")}
                 <select
                   id={settingsToneInputId}
                   value={tone}
@@ -1006,7 +1057,7 @@ function AppSidebarObjectTypeMenu({
             </div>
             <DialogFooter>
               <Button type="submit" disabled={!singularName.trim() || !pluralName.trim()}>
-                {t("details.save")}
+                {tStudio("details.save")}
               </Button>
             </DialogFooter>
           </form>
@@ -1027,7 +1078,6 @@ function AppSidebarObjectTypeRow({
   onCollectionAction,
   onCreateEntity,
   onUpdate,
-  onDelete,
   pressedModifiersRef,
 }: {
   objectType: AppSidebarObjectType;
@@ -1053,7 +1103,6 @@ function AppSidebarObjectTypeRow({
       tone: AppSidebarTone;
     },
   ) => void;
-  onDelete?: (id: string) => void;
   pressedModifiersRef?: React.RefObject<AppSidebarSelectionEvent | null>;
 }) {
   const t = useTranslations("workspace.sidebarCollections");
@@ -1276,8 +1325,9 @@ function AppSidebarObjectTypeRow({
 
           <AppSidebarObjectTypeMenu
             objectType={objectType}
+            onOpen={() => onSelect({})}
+            onCreateEntity={onCreateEntity}
             onUpdate={onUpdate}
-            onDelete={onDelete}
           />
         </div>
       </div>
@@ -1571,7 +1621,7 @@ function AppSidebarUtilityRow({
   active,
   onClick,
 }: {
-  icon: React.ElementType<ObjectIconProps>;
+  icon: React.ComponentType<any>;
   label: string;
   external?: boolean;
   href?: string;
@@ -1657,35 +1707,35 @@ function AppSidebarHelpSection() {
 
   return (
     <AppSidebarSection
-      icon={(props) => <AppSidebarSourceIcon name="help" {...props} />}
+      icon={(props) => <AppSidebarSourceIcon name={"help" as const} {...props} />}
       label={t("sidebarHelp.title")}
       open={open}
       onOpenChange={setOpen}
     >
       <div data-slot="app-sidebar-help-items" className="flex flex-col px-2 pr-0.5">
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="graduation" {...props} />}
+          icon={(props) => <AppSidebarSourceIcon name={"graduation" as const} {...props} />}
           label={t("sidebarHelp.getStarted")}
         />
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="help" {...props} />}
+          icon={(props) => <AppSidebarSourceIcon name={"help" as const} {...props} />}
           label={t("sidebarHelp.askQuestion")}
           external
           tooltip={t("sidebarHelp.askQuestionTooltip")}
         />
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="documentation" {...props} />}
+          icon={(props) => <AppSidebarSourceIcon name={"documentation" as const} {...props} />}
           label={t("sidebarHelp.documentation")}
           external
           href={t("sidebarHelp.documentationUrl")}
           tooltip={t("sidebarHelp.documentationTooltip")}
         />
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="news" {...props} />}
+          icon={(props) => <AppSidebarSourceIcon name={"news" as const} {...props} />}
           label={t("sidebarHelp.whatsNew")}
         />
         <AppSidebarUtilityRow
-          icon={(props) => <AppSidebarSourceIcon name="feedback" {...props} />}
+          icon={(props) => <AppSidebarSourceIcon name={"feedback" as const} {...props} />}
           label={t("sidebarHelp.feedback")}
           href="https://capacities.io/feedback"
           external
@@ -2119,6 +2169,7 @@ type AppSidebarOverviewProps = {
     event?: AppSidebarSelectionEvent,
   ) => void;
   onPinnedAction?: (action: AppSidebarCollectionAction, entity: AppSidebarPinnedEntity) => void;
+  onOpenPinnedInSidePanel?: (entity: AppSidebarPinnedEntity) => void;
   onPinnedEntitiesChange?: React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>;
   onCustomSectionsChange?: React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>;
   trashItems?: readonly AppSidebarTrashItem[];
@@ -2283,7 +2334,6 @@ function AppSidebarOverview({
   onCreateObjectTypeFromPreset,
   onCreateObjectType,
   onUpdateObjectType,
-  onDeleteObjectType,
   onPinnedEntitiesChange,
   onCustomSectionsChange,
   onCollectionAction,
@@ -2476,7 +2526,6 @@ function AppSidebarOverview({
                   onCollectionAction?.(action, type, collection, event);
                 }}
                 onUpdate={onUpdateObjectType}
-                onDelete={onDeleteObjectType}
                 pressedModifiersRef={pressedModifiersRef}
               />
             ))}
