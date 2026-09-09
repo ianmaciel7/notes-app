@@ -114,7 +114,7 @@ type ObjectTypeCardAppearance = Pick<ObjectTypePreset, "iconName" | "id" | "tone
 type ObjectTypeSelection = ObjectTypePreset | WorkspaceStructure;
 
 const capacitiesObjectTypeCardClass =
-  "flex w-full cursor-pointer select-none flex-row items-center justify-start gap-x-3 rounded-base border border-[var(--app-border-el)] bg-[var(--app-bg-el-subtle)] px-2 py-2.5 text-left text-lg font-medium text-[var(--app-text-primary)] transition-colors hover:border-[var(--app-border-el-hover)] hover:bg-[var(--app-bg-el-subtle-hover)] active:brightness-95 data-[selected=true]:border-[var(--app-border-el-hover)] data-[selected=true]:bg-[var(--app-bg-el-subtle-hover)] dark:border-[oklch(0.3688_0.0051_286.01)] dark:bg-[oklch(0.2574_0.0056_285.92)] dark:text-[oklch(1_0.0001_263.28)] dark:hover:border-[oklch(0.4454_0.0042_354.34)] dark:hover:bg-[oklch(0.278_0.0055_285.95)] dark:data-[selected=true]:border-[oklch(0.4454_0.0042_354.34)] dark:data-[selected=true]:bg-[oklch(0.2987_0.0072_285.88)]";
+  "flex w-full cursor-pointer select-none flex-row items-center justify-start gap-x-3 rounded-base border border-[var(--app-border-el)] bg-[var(--app-bg-el-subtle)] px-2 py-2.5 text-left text-lg font-medium text-[var(--app-text-primary)] transition-colors hover:border-[var(--app-border-el-hover)] hover:bg-[var(--app-bg-el-subtle-hover)] active:brightness-95 data-[selected=true]:border-[var(--app-border-el-hover)] data-[selected=true]:bg-[var(--app-bg-el-subtle-active)]";
 
 const capacitiesObjectTypeToneStyle = (tone: ObjectIconTone): React.CSSProperties => ({
   backgroundColor: `var(--type-label-bg-${tone})`,
@@ -323,7 +323,7 @@ function AppSidebarObjectTypeDetails({
                         "transition duration-200 ease-out hover:bg-muted hover:text-foreground active:brightness-[0.97]",
                       )}
                     >
-                      <ObjectIdeaIcon className="-mr-px size-[1em] text-[oklch(0.5708_0.1192_59.46)] dark:text-[oklch(0.9243_0.1151_95.76)]" />
+                      <ObjectIdeaIcon className="-mr-px size-[1em] text-[var(--app-object-type-learn-more-icon)]" />
                       <span className="mr-1 whitespace-nowrap">{t("details.learnMore")}</span>
                     </button>
                   </div>
@@ -335,7 +335,7 @@ function AppSidebarObjectTypeDetails({
                     <div className="flex select-none items-baseline pb-1.5 text-xs text-muted-foreground">
                       <span>{t("details.icon")}</span>
                     </div>
-                    <div className="relative flex size-8 shrink-0 items-center justify-center rounded-lg border text-lg leading-none text-[oklch(0.3887_0.0052_301.05)] dark:text-[oklch(0.9163_0.0017_67.07)] [border-color:oklch(0.8643_0.0017_67.13)] dark:[border-color:oklch(0.4918_0.0038_16.70)] [border-width:0.5px] [background-color:oklch(0.9856_0.0016_67.00)] dark:[background-color:oklch(0.2987_0.0072_285.88)]">
+                    <div className="relative flex size-8 shrink-0 items-center justify-center rounded-lg border text-lg leading-none text-[var(--app-object-type-control-text)] [background-color:var(--app-object-type-control-bg)] [border-color:var(--app-object-type-control-border)] [border-width:0.5px]">
                       <button
                         type="button"
                         className="relative flex h-full w-full shrink-0 grow-0 cursor-pointer appearance-none items-center justify-center rounded-[0.445rem] bg-transparent text-[18px] leading-none hover:brightness-95 focus:outline-none"

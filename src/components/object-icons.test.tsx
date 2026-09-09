@@ -16,7 +16,7 @@ const expectedObjectTypes = {
   meeting: ["meeting", "red"],
   quote: ["quote", "rose"],
   definition: ["definition", "violet"],
-  flashcard: ["flashcard", "amber"],
+  flashcard: ["flashcard", "fuchsia"],
   idea: ["idea", "yellow"],
   place: ["place", "emerald"],
   project: ["project", "green"],
@@ -33,7 +33,7 @@ const expectedObjectTypes = {
   file: ["file", "red"],
   tweet: ["tweet", "blue"],
   "ai-chat": ["ai-chat", "purple"],
-  study_goal: ["study-goal", "green"],
+  study_goal: ["study-goal", "lime"],
   table: ["table", "blue"],
   task: ["task", "orange"],
   query: ["query", "green"],
@@ -63,12 +63,18 @@ describe("object type visual contract", () => {
     },
   );
 
-  it("uses distinct study icons for flashcards and study goals", () => {
+  it("uses distinct study icons and colors for flashcards and study goals", () => {
     const source = readFileSync(new URL("object-icons.tsx", import.meta.url), "utf8");
 
-    expect(source).toContain('import { CardsIcon } from "@phosphor-icons/react/dist/csr/Cards"');
-    expect(source).toContain('import { ExamIcon } from "@phosphor-icons/react/dist/csr/Exam"');
-    expect(source).toContain("flashcard: CardsIcon");
-    expect(source).toContain('"study-goal": ExamIcon');
+    expect(source).toContain(
+      'import { StackPlusIcon } from "@phosphor-icons/react/dist/csr/StackPlus"',
+    );
+    expect(source).toContain(
+      'import { GraduationCapIcon } from "@phosphor-icons/react/dist/csr/GraduationCap"',
+    );
+    expect(source).toContain("flashcard: StackPlusIcon");
+    expect(source).toContain('"study-goal": GraduationCapIcon');
+    expect(source).toContain('flashcard: "fuchsia"');
+    expect(source).toContain('study_goal: "lime"');
   });
 });

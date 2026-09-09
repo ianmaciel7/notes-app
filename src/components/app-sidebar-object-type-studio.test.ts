@@ -36,14 +36,19 @@ it("uses theme tokens for the object type cards so dark mode stays Capacities-li
   expect(componentSource).toContain("text-[var(--app-text-primary)]");
   expect(componentSource).toContain("border-[var(--app-border-el)]");
   expect(componentSource).toContain("hover:bg-[var(--app-bg-el-subtle-hover)]");
-  expect(componentSource).toContain("dark:bg-[oklch(0.2574_0.0056_285.92)]");
-  expect(componentSource).toContain("dark:text-[oklch(1_0.0001_263.28)]");
-  expect(componentSource).toContain("dark:hover:bg-[oklch(0.278_0.0055_285.95)]");
+  expect(componentSource).toContain("data-[selected=true]:bg-[var(--app-bg-el-subtle-active)]");
+  expect(componentSource).toContain("text-[var(--app-object-type-control-text)]");
+  expect(componentSource).toContain("[background-color:var(--app-object-type-control-bg)]");
   expect(componentSource).toContain("bg-[var(--app-button-primary-bg)]");
   expect(componentSource).toContain("text-[var(--app-button-primary-text)]");
+  expect(globalCss).toContain("--app-object-type-control-bg:");
+  expect(globalCss).toContain("--app-object-type-control-text:");
   expect(globalCss).toContain("--app-bg-el-subtle-active:");
   expect(globalCss).toContain("--app-button-primary-bg:");
   expect(globalCss).toContain("--type-label-bg-blue: oklch(0.3498 0.0543 269.4);");
+  expect(componentSource).not.toContain("dark:bg-[oklch(");
+  expect(componentSource).not.toContain("dark:text-[oklch(");
+  expect(componentSource).not.toContain("[background-color:oklch(");
   expect(componentSource).not.toContain("bg-[oklch(1_0.0001_263.28)]");
 });
 

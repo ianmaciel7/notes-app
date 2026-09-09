@@ -4,23 +4,23 @@ import { BookmarkSimpleIcon } from "@phosphor-icons/react/dist/csr/BookmarkSimpl
 import { BookOpenIcon } from "@phosphor-icons/react/dist/csr/BookOpen";
 import { BrainIcon } from "@phosphor-icons/react/dist/csr/Brain";
 import { BuildingsIcon } from "@phosphor-icons/react/dist/csr/Buildings";
-import { CardsIcon } from "@phosphor-icons/react/dist/csr/Cards";
 import { CardsThreeIcon } from "@phosphor-icons/react/dist/csr/CardsThree";
 import { ChatsIcon } from "@phosphor-icons/react/dist/csr/Chats";
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import { CodeIcon } from "@phosphor-icons/react/dist/csr/Code";
 import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
-import { ExamIcon } from "@phosphor-icons/react/dist/csr/Exam";
 import { FileIcon } from "@phosphor-icons/react/dist/csr/File";
 import { FilePdfIcon } from "@phosphor-icons/react/dist/csr/FilePdf";
 import { FileTextIcon } from "@phosphor-icons/react/dist/csr/FileText";
 import { GlobeHemisphereWestIcon } from "@phosphor-icons/react/dist/csr/GlobeHemisphereWest";
+import { GraduationCapIcon } from "@phosphor-icons/react/dist/csr/GraduationCap";
 import { ImageIcon } from "@phosphor-icons/react/dist/csr/Image";
 import { LightbulbIcon } from "@phosphor-icons/react/dist/csr/Lightbulb";
 import { ListMagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/ListMagnifyingGlass";
 import { MapPinIcon } from "@phosphor-icons/react/dist/csr/MapPin";
 import { QuotesIcon } from "@phosphor-icons/react/dist/csr/Quotes";
 import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
+import { StackPlusIcon } from "@phosphor-icons/react/dist/csr/StackPlus";
 import { SuitcaseRollingIcon } from "@phosphor-icons/react/dist/csr/SuitcaseRolling";
 import { TableIcon } from "@phosphor-icons/react/dist/csr/Table";
 import { TagIcon } from "@phosphor-icons/react/dist/csr/Tag";
@@ -113,7 +113,7 @@ const capacitiesObjectTypeToneById: Record<string, ObjectIconTone> = {
   book: "purple",
   definition: "violet",
   file: "red",
-  flashcard: "amber",
+  flashcard: "fuchsia",
   idea: "yellow",
   image: "red",
   media: "teal",
@@ -126,7 +126,7 @@ const capacitiesObjectTypeToneById: Record<string, ObjectIconTone> = {
   project: "green",
   query: "green",
   quote: "rose",
-  study_goal: "green",
+  study_goal: "lime",
   table: "blue",
   tag: "orange",
   task: "orange",
@@ -154,7 +154,7 @@ const phosphorObjectIcon: Record<ObjectIconName, Icon> = {
   code: CodeIcon,
   definition: BookmarkSimpleIcon,
   file: FileIcon,
-  flashcard: CardsIcon,
+  flashcard: StackPlusIcon,
   idea: LightbulbIcon,
   image: ImageIcon,
   knowledge: BrainIcon,
@@ -168,7 +168,7 @@ const phosphorObjectIcon: Record<ObjectIconName, Icon> = {
   project: CubeIcon,
   query: ListMagnifyingGlassIcon,
   quote: QuotesIcon,
-  "study-goal": ExamIcon,
+  "study-goal": GraduationCapIcon,
   table: TableIcon,
   tag: TagIcon,
   task: CheckCircleIcon,
@@ -247,7 +247,7 @@ const objectTypeDefinitions: ObjectTypeDefinition[] = [
     icon: ObjectDefinitionIcon,
     tone: "violet",
   },
-  { id: "flashcard", label: "Flashcard", icon: ObjectFlashcardIcon, tone: "amber" },
+  { id: "flashcard", label: "Flashcard", icon: ObjectFlashcardIcon, tone: "fuchsia" },
   { id: "idea", label: "Idea", icon: ObjectIdeaIcon, tone: "yellow" },
   { id: "place", label: "Place", icon: ObjectPlaceIcon, tone: "emerald" },
   { id: "project", label: "Project", icon: ObjectProjectIcon, tone: "green" },
@@ -274,7 +274,7 @@ const objectTypeDefinitions: ObjectTypeDefinition[] = [
   { id: "file", label: "File", icon: ObjectFileIcon, tone: "red" },
   { id: "tweet", label: "Tweet", icon: ObjectTweetIcon, tone: "blue" },
   { id: "ai-chat", label: "AI chat", icon: ObjectAiChatIcon, tone: "purple" },
-  { id: "study_goal", label: "Study goal", icon: ObjectStudyGoalIcon, tone: "green" },
+  { id: "study_goal", label: "Study goal", icon: ObjectStudyGoalIcon, tone: "lime" },
   { id: "table", label: "Table", icon: ObjectTableIcon, tone: "blue" },
   { id: "task", label: "Task", icon: ObjectTaskIcon, tone: "orange" },
   { id: "query", label: "Query", icon: ObjectQueryIcon, tone: "green" },
