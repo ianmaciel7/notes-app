@@ -15,6 +15,20 @@ type WorkspaceTabLike = {
   label?: string;
 };
 
+const contextMenuPendingActions = {
+  "change-type": "Change type",
+  export: "Export",
+  import: "Import",
+  present: "Present",
+  settings: "Object type settings",
+  share: "Share",
+} as const;
+
+export function getContextMenuPendingDetails(action: string) {
+  const name = contextMenuPendingActions[action as keyof typeof contextMenuPendingActions];
+  return name ? { description: `${name} should be implemented here.`, name } : undefined;
+}
+
 export function getWorkspaceTabPendingName(
   tabs: WorkspaceTabLike[] | undefined,
   value: string | undefined,
@@ -642,6 +656,28 @@ function WorkspaceDefaultPanel() {
   );
 }
 
+function ContextMenuPendingActionPanel({
+  action,
+  onReturn,
+}: WorkspaceActionPanelProps & { action: string }) {
+  const details = getContextMenuPendingDetails(action);
+  if (!details) return null;
+
+  return (
+    <section className="flex h-full min-h-0 flex-col bg-card p-6">
+      <WorkspaceActionPanelHeader label="Context menu" title={details.name} onReturn={onReturn} />
+      <div className="flex min-h-0 flex-1 items-center justify-center">
+        <PendingImplementation
+          area="Workspace action"
+          className="max-w-2xl"
+          description={details.description}
+          name={details.name}
+        />
+      </div>
+    </section>
+  );
+}
+
 export function WorkspaceSidePanelContent() {
   const { activeEntityId, createdEntities, sideTabs, sideValue } = useWorkspace();
   const name = getWorkspaceTabPendingName(sideTabs, sideValue, "Side panel");
@@ -712,6 +748,14 @@ export function WorkspaceMainContent() {
   if (activeAction === "calendar") return <CalendarActionPanel onReturn={returnToWorkspace} />;
   if (activeAction === "explore") return <ExploreActionPanel onReturn={returnToWorkspace} />;
   if (activeAction === "tasks") return <TasksActionPanel onReturn={returnToWorkspace} />;
+  if (activeAction?.startsWith("pending:")) {
+    return (
+      <ContextMenuPendingActionPanel
+        action={activeAction.replace("pending:", "")}
+        onReturn={returnToWorkspace}
+      />
+    );
+  }
 
   return <WorkspaceDefaultPanel />;
 }

@@ -14,6 +14,7 @@ import {
 import {
   type AppSidebarCollectionAction,
   type AppSidebarObjectType,
+  type AppSidebarPinnedEntity,
   AppSidebarOverview,
 } from "@/components/app-sidebar-overview";
 import {
@@ -1242,6 +1243,12 @@ function WorkspaceSidebar() {
   ) {
     const collectionId = collection.id;
 
+    function showPendingAction() {
+      setActiveAction(`pending:${action}`);
+      setActiveEntityId(null);
+      setMainValue(`primary-action:pending:${action}`);
+    }
+
     if (action === "open") {
       openSidebarSelection(collectionId, event);
       return;
@@ -1254,41 +1261,27 @@ function WorkspaceSidebar() {
       return;
     }
 
-    if (action === "change-type" || action === "settings") {
-      selectEntity(objectType.id);
-      showMessage(t("documentMenu.typeSettingsHint"));
-      return;
-    }
-
-    if (action === "share") {
-      void navigator.clipboard?.writeText(collection.name).catch(() => undefined);
-      showMessage(t("documentMenu.shareHint"));
-      return;
-    }
-
-    if (action === "present") {
-      selectEntity(collectionId);
-      showMessage(t("documentMenu.presentHint"));
-      return;
-    }
-
-    if (action === "export") {
-      selectEntity(collectionId);
-      showMessage(t("documentMenu.exported"));
-      return;
-    }
-
-    if (action === "import") {
-      selectEntity(objectType.id);
-      window.setTimeout(() => {
-        document.getElementById(`object-type-import-${objectType.id}`)?.click();
-      }, 0);
-      return;
-    }
-
-    if (action === "copy") {
-      void navigator.clipboard?.writeText(collection.name).catch(() => undefined);
+    if (action === "copy-markdown") {
+      void navigator.clipboard?.writeText(`# ${collection.name}`).catch(() => undefined);
       showMessage(t("documentMenu.copied"));
+      return;
+    }
+
+    if (action === "copy-reference") {
+      void navigator.clipboard?.writeText(`[[${collection.name}]]`).catch(() => undefined);
+      showMessage(t("documentMenu.copied"));
+      return;
+    }
+
+    if (
+      action === "change-type" ||
+      action === "settings" ||
+      action === "share" ||
+      action === "present" ||
+      action === "export" ||
+      action === "import"
+    ) {
+      showPendingAction();
       return;
     }
 
@@ -1327,6 +1320,24 @@ function WorkspaceSidebar() {
     }));
     setPinnedEntities((current: any[]) => current.filter((item: any) => item.id !== collectionId));
     setActiveEntityId(objectType.id);
+  }
+
+  function handlePinnedAction(action: AppSidebarCollectionAction, entity: AppSidebarPinnedEntity) {
+    if (action === "copy-markdown") {
+      void navigator.clipboard?.writeText(`# ${entity.label}`).catch(() => undefined);
+      showMessage(t("documentMenu.copied"));
+      return;
+    }
+
+    if (action === "copy-reference") {
+      void navigator.clipboard?.writeText(`[[${entity.label}]]`).catch(() => undefined);
+      showMessage(t("documentMenu.copied"));
+      return;
+    }
+
+    setActiveAction(`pending:${action}`);
+    setActiveEntityId(null);
+    setMainValue(`primary-action:pending:${action}`);
   }
 
   function openCommandPaletteFromSidebar() {
@@ -1425,6 +1436,7 @@ function WorkspaceSidebar() {
           onPinnedEntitiesChange={setPinnedEntities}
           onCustomSectionsChange={setCustomSections}
           onCollectionAction={handleCollectionAction}
+          onPinnedAction={handlePinnedAction}
           onOpenShortcuts={() => setShortcutBrowserOpen(true)}
         />
       </div>

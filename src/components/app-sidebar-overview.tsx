@@ -268,7 +268,8 @@ type AppSidebarCollectionAction =
   | "present"
   | "export"
   | "import"
-  | "copy"
+  | "copy-markdown"
+  | "copy-reference"
   | "duplicate"
   | "delete";
 
@@ -550,13 +551,15 @@ function AppSidebarPinnedMenu({
   entity,
   onUnpin,
   onOpen,
+  onAction,
 }: {
   entity: AppSidebarPinnedEntity;
   onUnpin: () => void;
   onOpen: () => void;
+  onAction?: (action: AppSidebarCollectionAction, entity: AppSidebarPinnedEntity) => void;
 }) {
   const t = useTranslations("workspace");
-  const pendingAction = () => undefined;
+  const action = (name: AppSidebarCollectionAction) => () => onAction?.(name, entity);
 
   return (
     <DropdownMenu>
@@ -602,38 +605,38 @@ function AppSidebarPinnedMenu({
           <CompactMenuItemText>{t("documentMenu.unpinSidebar")}</CompactMenuItemText>
         </DropdownMenuItem>
         <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("change-type")}>
           <SidebarContextMenuIcon>
             <AppSidebarObjectTypeMenuIcon name="changeType" />
           </SidebarContextMenuIcon>
           <CompactMenuItemText>{t("documentMenu.changeType")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("settings")}>
           <SidebarContextMenuIcon>
             <AppSidebarSourceIcon name="settings" />
           </SidebarContextMenuIcon>
           <CompactMenuItemText>{t("documentMenu.typeSettings")}</CompactMenuItemText>
         </DropdownMenuItem>
         <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("share")}>
           <SidebarContextMenuIcon>
             <AppSidebarSourceIcon name="share" />
           </SidebarContextMenuIcon>
           <CompactMenuItemText>{t("documentMenu.share")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("present")}>
           <SidebarContextMenuIcon>
             <AppSidebarObjectTypeMenuIcon name="present" />
           </SidebarContextMenuIcon>
           <CompactMenuItemText>{t("documentMenu.present")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("export")}>
           <SidebarContextMenuIcon>
             <AppSidebarObjectTypeMenuIcon name="export" />
           </SidebarContextMenuIcon>
           <CompactMenuItemText>{t("documentMenu.export")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("import")}>
           <SidebarContextMenuIcon>
             <AppSidebarObjectTypeMenuIcon name="import" />
           </SidebarContextMenuIcon>
@@ -649,13 +652,19 @@ function AppSidebarPinnedMenu({
             <CompactMenuItemText>{t("documentMenu.copy")}</CompactMenuItemText>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className={sidebarContextSubmenuContentClass}>
-            <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+            <DropdownMenuItem
+              className={sidebarContextMenuItemClass}
+              onClick={action("copy-markdown")}
+            >
               <SidebarContextMenuIcon>
                 <AppSidebarCopyIcon />
               </SidebarContextMenuIcon>
               <CompactMenuItemText>{t("documentMenu.copyMarkdown")}</CompactMenuItemText>
             </DropdownMenuItem>
-            <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+            <DropdownMenuItem
+              className={sidebarContextMenuItemClass}
+              onClick={action("copy-reference")}
+            >
               <SidebarContextMenuIcon>
                 <AppSidebarCopyIcon />
               </SidebarContextMenuIcon>
@@ -663,13 +672,13 @@ function AppSidebarPinnedMenu({
             </DropdownMenuItem>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("duplicate")}>
           <SidebarContextMenuIcon>
             <AppSidebarCopyIcon />
           </SidebarContextMenuIcon>
           <CompactMenuItemText>{t("documentMenu.duplicate")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={pendingAction}>
+        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("delete")}>
           <SidebarContextMenuIcon className="text-red-500 dark:text-red-400">
             <AppSidebarSourceIcon name="trash" />
           </SidebarContextMenuIcon>
@@ -687,6 +696,7 @@ function AppSidebarPinnedRow({
   draggable,
   onSelect,
   onUnpin,
+  onAction,
   onDragStart,
   onDrop,
   pressedModifiersRef,
@@ -697,6 +707,7 @@ function AppSidebarPinnedRow({
   draggable: boolean;
   onSelect: (event: AppSidebarSelectionEvent) => void;
   onUnpin: () => void;
+  onAction?: (action: AppSidebarCollectionAction, entity: AppSidebarPinnedEntity) => void;
   onDragStart: () => void;
   onDrop: () => void;
   pressedModifiersRef?: React.RefObject<AppSidebarSelectionEvent | null>;
@@ -823,7 +834,12 @@ function AppSidebarPinnedRow({
           )}
         >
           <span className="ml-auto" />
-          <AppSidebarPinnedMenu entity={entity} onUnpin={onUnpin} onOpen={() => onSelect({})} />
+          <AppSidebarPinnedMenu
+            entity={entity}
+            onAction={onAction}
+            onUnpin={onUnpin}
+            onOpen={() => onSelect({})}
+          />
         </div>
       </div>
     </div>
@@ -2088,6 +2104,7 @@ type AppSidebarOverviewProps = {
     collection: WorkspaceCollectionRecord,
     event?: AppSidebarSelectionEvent,
   ) => void;
+  onPinnedAction?: (action: AppSidebarCollectionAction, entity: AppSidebarPinnedEntity) => void;
   onPinnedEntitiesChange?: React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>;
   onCustomSectionsChange?: React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>;
   trashItems?: readonly AppSidebarTrashItem[];
@@ -2203,13 +2220,19 @@ function AppSidebarCollectionMenu({
             <CompactMenuItemText>{t("documentMenu.copy")}</CompactMenuItemText>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className={sidebarContextSubmenuContentClass}>
-            <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("copy")}>
+            <DropdownMenuItem
+              className={sidebarContextMenuItemClass}
+              onClick={action("copy-markdown")}
+            >
               <CollectionMenuIcon>
                 <AppSidebarCopyIcon />
               </CollectionMenuIcon>
               <CompactMenuItemText>{t("documentMenu.copyMarkdown")}</CompactMenuItemText>
             </DropdownMenuItem>
-            <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("copy")}>
+            <DropdownMenuItem
+              className={sidebarContextMenuItemClass}
+              onClick={action("copy-reference")}
+            >
               <CollectionMenuIcon>
                 <AppSidebarCopyIcon />
               </CollectionMenuIcon>
@@ -2250,6 +2273,7 @@ function AppSidebarOverview({
   onPinnedEntitiesChange,
   onCustomSectionsChange,
   onCollectionAction,
+  onPinnedAction,
   onEmptyTrash,
   onPurgeTrashItem,
   onRestoreTrashItem,
@@ -2367,6 +2391,7 @@ function AppSidebarOverview({
                 active={activeId === entity.id}
                 dragging={drag?.kind === "pinned" && drag.id === entity.id}
                 draggable={pinnedSort === "manual"}
+                onAction={onPinnedAction}
                 onSelect={(event) => setActiveId(entity.id, event)}
                 onUnpin={() =>
                   setPinned((current) => current.filter((item) => item.id !== entity.id))

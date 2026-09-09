@@ -11,6 +11,7 @@ function readSource(relativePath: string) {
 it("renders sidebar action menus with Capacities compact rows and framed icons", () => {
   const componentSource = readSource("components/app-sidebar-overview.tsx");
   const compactMenuSource = readSource("components/ui/compact-menu.tsx");
+  const globalsSource = readSource("app/globals.css");
   const sharedStylesSource = readSource("components/ui/shared-styles.ts");
 
   expect(compactMenuSource).toContain("sidebarContextMenuItemClass");
@@ -25,6 +26,9 @@ it("renders sidebar action menus with Capacities compact rows and framed icons",
   expect(sharedStylesSource).toContain("bg-front");
   expect(sharedStylesSource).toContain("border-front");
   expect(sharedStylesSource).toContain("text-primary");
+  expect(globalsSource).toContain(
+    "0 3px 5px #00000003, 0 5px 10px #00000005, 0 10px 14px #00000003",
+  );
   expect(componentSource).toContain("function CollectionMenuIcon");
   expect(componentSource).toContain('variant="ghost"');
   expect(componentSource).toContain("sidebarContextMenuItemClass");
@@ -38,7 +42,8 @@ it("keeps collection context menu actions aligned with the captured Capacities c
   expect(componentSource).toContain('| "change-type"');
   expect(componentSource).toContain('| "present"');
   expect(componentSource).toContain('| "export"');
-  expect(componentSource).toContain('| "copy"');
+  expect(componentSource).toContain('| "copy-markdown"');
+  expect(componentSource).toContain('| "copy-reference"');
   expect(componentSource).toContain('t("documentMenu.unpinSidebar")');
   expect(componentSource).toContain('t("documentMenu.changeType")');
   expect(componentSource).toContain('t("documentMenu.present")');
@@ -52,6 +57,8 @@ it("keeps collection context menu actions aligned with the captured Capacities c
   expect(componentSource).toContain("<DropdownMenuSub>");
   expect(componentSource).toContain("<DropdownMenuSubTrigger");
   expect(componentSource).toContain("<DropdownMenuSubContent");
+  expect(componentSource).toContain('action("copy-markdown")');
+  expect(componentSource).toContain('action("copy-reference")');
 });
 
 it("keeps pinned item menus on the same Capacities object action set", () => {
@@ -75,6 +82,9 @@ it("keeps pinned item menus on the same Capacities object action set", () => {
   expect(pinnedMenuSource).toContain('t("documentMenu.deleteObject")');
   expect(pinnedMenuSource).not.toContain('t("sidebarPinned.openInSidePanel")');
   expect(pinnedMenuSource).not.toContain('t("sidebarPinned.openInNewTab")');
+  expect(pinnedMenuSource).not.toContain("const pendingAction");
+  expect(pinnedMenuSource).toContain('action("copy-markdown")');
+  expect(pinnedMenuSource).toContain('action("copy-reference")');
 });
 
 it("keeps destructive object actions styled like Capacities with only the icon in red", () => {
@@ -95,10 +105,19 @@ it("keeps destructive object actions styled like Capacities with only the icon i
 
 it("uses the captured Capacities popup width and submenu affordances", () => {
   const compactMenuSource = readSource("components/ui/compact-menu.tsx");
+  const overflowRowSource = compactMenuSource.slice(
+    compactMenuSource.indexOf("const workspaceOverflowMenuItemClass"),
+    compactMenuSource.indexOf("const sidebarContextMenuItemClass"),
+  );
 
-  expect(compactMenuSource).toContain("w-[257px]");
+  expect(compactMenuSource).toContain("w-[255px]");
+  expect(compactMenuSource).toContain("rounded-[12px]");
+  expect(compactMenuSource).toContain("rounded-[12px] border border-[var(--app-border-front)]");
+  expect(compactMenuSource).toContain("border-b-[0.5px] border-[var(--app-border-front)]");
   expect(compactMenuSource).toContain("w-auto min-w-[220px]");
   expect(compactMenuSource).toContain("data-popup-open:bg-[var(--app-bg-el)]");
+  expect(overflowRowSource).toContain("leading-5");
+  expect(overflowRowSource).not.toContain("leading-normal");
 });
 
 it("keeps context submenu messages available for every locale", () => {
