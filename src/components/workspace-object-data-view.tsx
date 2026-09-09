@@ -43,6 +43,12 @@ function ObjectTypeDataViewCard({
 }) {
   const previewLines = getCardPreviewLines(entity);
   const singularName = objectType.singularName || objectType.pluralName;
+  const tone = objectType.tone ?? "gray";
+  const typeLabelStyle = {
+    backgroundColor: `var(--type-label-bg-${tone})`,
+    borderColor: `var(--type-label-border-${tone})`,
+    color: `var(--type-label-text-${tone})`,
+  };
 
   return (
     <li
@@ -51,10 +57,11 @@ function ObjectTypeDataViewCard({
     >
       <button
         type="button"
+        disabled={!onOpenEntity}
         className={cn(
           "group flex w-full text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/30",
           layout === "cards"
-            ? "min-h-[20.125rem] flex-col overflow-hidden rounded-xl border border-[var(--app-border-el)] bg-[var(--app-bg-front)] py-2.5 text-sm shadow-[0_2px_3px_0_rgba(0,0,0,0.004),0_4px_9px_0_rgba(0,0,0,0.01),0_8px_12px_0_rgba(0,0,0,0.004)] hover:bg-[var(--app-bg-el-subtle)]"
+            ? "h-[20.125rem] flex-col overflow-hidden rounded-[12px] border border-[var(--app-border-el)] bg-[var(--app-bg-front)] py-2.5 text-sm shadow-[0_2px_3px_0_rgba(0,0,0,0.004),0_4px_9px_0_rgba(0,0,0,0.01),0_8px_12px_0_rgba(0,0,0,0.004)] hover:bg-[var(--app-bg-el-subtle)] disabled:cursor-default disabled:opacity-100"
             : "min-h-12 items-center gap-3 rounded-[8px] border border-[var(--app-border-el)] bg-[var(--app-bg-front)] px-3 py-2 hover:bg-[var(--app-bg-el-subtle)]",
         )}
         onClick={() => onOpenEntity?.(entity)}
@@ -66,7 +73,10 @@ function ObjectTypeDataViewCard({
           )}
         >
           {layout === "cards" ? (
-            <span className="inline-flex items-center gap-1 rounded-[0.475em] border border-[var(--app-border-el)] bg-[var(--app-bg-el)] px-1.5 py-0.5 text-[11px] leading-none text-[var(--app-text-secondary)]">
+            <span
+              className="inline-flex items-center gap-1 rounded-[0.475em] border px-1.5 py-0.5 text-[11px] leading-none"
+              style={typeLabelStyle}
+            >
               <ObjectTypeIconBadge
                 id={objectType.id}
                 iconName={objectType.iconName}
@@ -139,10 +149,12 @@ export function WorkspaceObjectDataView({
     groupBy === "tag"
       ? Array.from(
           entities.reduce((result, entity) => {
-            const key = entity.tags[0] || "Sem etiqueta";
-            const group = result.get(key) ?? [];
-            group.push(entity);
-            result.set(key, group);
+            const keys = entity.tags.length ? entity.tags : ["Sem etiqueta"];
+            for (const key of keys) {
+              const group = result.get(key) ?? [];
+              group.push(entity);
+              result.set(key, group);
+            }
             return result;
           }, new Map<string, SpaceEntityRecord[]>()),
         )

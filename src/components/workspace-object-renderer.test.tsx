@@ -145,7 +145,6 @@ it("keeps data-view cards legible and labels icon-only controls", () => {
     />,
   );
 
-  expect(markup).not.toContain('data-slot="workspace-object-type-list-item" class="min-w-0"><button disabled');
   expect(markup).toContain("!text-[var(--app-text-primary)]");
   expect(markup).toContain('aria-label="Buscar em Study goals"');
   expect(markup).toContain('aria-label="Recolher cabeçalho"');

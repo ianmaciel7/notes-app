@@ -174,6 +174,7 @@ export function WorkspaceObjectTypeListView({
   const [loadedPreferencesKey, setLoadedPreferencesKey] = React.useState<string | null>(null);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [headerCollapsed, setHeaderCollapsed] = React.useState(false);
+  const searchTriggerRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => {
     const nextPreferences = readObjectTypeListPreferences(preferencesKey);
@@ -215,6 +216,7 @@ export function WorkspaceObjectTypeListView({
   const layout: WorkspaceObjectDataViewLayout =
     preferences.mode === "overview" ? "cards" : preferences.allLayout;
   const objectCountLabel = `${items.length} ${items.length === 1 ? "objeto" : "objetos"}`;
+  const hasFilteredResults = Boolean(preferences.query.trim()) || preferences.filter !== "all";
 
   return (
     <section
@@ -246,6 +248,7 @@ export function WorkspaceObjectTypeListView({
                     if (event.key === "Escape") {
                       setSearchOpen(false);
                       updatePreferences({ query: "" });
+                      requestAnimationFrame(() => searchTriggerRef.current?.focus());
                     }
                   }}
                   placeholder={`Buscar em ${listName}`}
@@ -254,6 +257,7 @@ export function WorkspaceObjectTypeListView({
               ) : (
                 <Button
                   type="button"
+                  ref={searchTriggerRef}
                   variant="ghost"
                   size="icon-sm"
                   tooltip="Buscar nesta visualização"
@@ -359,7 +363,7 @@ export function WorkspaceObjectTypeListView({
         {!headerCollapsed ? (
           <div
             data-slot="workspace-object-type-list-toolbar"
-            className="mt-4 flex min-h-8 items-center gap-1 overflow-x-auto text-sm text-[var(--app-text-secondary)]"
+            className="mt-4 flex min-h-8 items-center gap-0 overflow-x-auto text-sm text-[var(--app-text-secondary)]"
           >
           <button
             type="button"
@@ -389,21 +393,17 @@ export function WorkspaceObjectTypeListView({
             <List className="size-3.5" />
             Tudo
           </button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            tooltip="Quantidade de objetos"
+          <span
             aria-label={`Quantidade de objetos: ${objectCountLabel}`}
-            className="ml-auto h-7 shrink-0 gap-1.5 rounded-lg px-1.5 text-xs text-[var(--app-text-secondary)]"
+            className="ml-auto mr-2 flex h-7 shrink-0 items-center gap-1.5 rounded-lg px-1.5 text-xs text-[var(--app-text-secondary)]"
           >
             <Hash className="size-3.5" />
             {items.length}
-          </Button>
+          </span>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button type="button" variant="ghost" size="sm" tooltip="Filtrar" aria-label="Filtrar objetos" className="h-7 w-8 rounded-lg px-2">
+                <Button type="button" variant="ghost" size="sm" tooltip="Filtrar" aria-label="Filtrar objetos" className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]">
                   <SlidersHorizontal className="size-3.5" />
                 </Button>
               }
@@ -419,7 +419,7 @@ export function WorkspaceObjectTypeListView({
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button type="button" variant="ghost" size="sm" tooltip="Classificar" aria-label="Classificar objetos" className="h-7 w-8 rounded-lg px-2">
+                <Button type="button" variant="ghost" size="sm" tooltip="Classificar" aria-label="Classificar objetos" className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]">
                   <ArrowDownUp className="size-3.5" />
                 </Button>
               }
@@ -436,7 +436,7 @@ export function WorkspaceObjectTypeListView({
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button type="button" variant="ghost" size="sm" tooltip="Agrupar por" aria-label="Agrupar objetos" className="h-7 w-8 rounded-lg px-2">
+                <Button type="button" variant="ghost" size="sm" tooltip="Agrupar por" aria-label="Agrupar objetos" className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]">
                   <Rows3 className="size-3.5" />
                 </Button>
               }
@@ -451,14 +451,14 @@ export function WorkspaceObjectTypeListView({
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button type="button" variant="ghost" size="sm" tooltip="Layout" aria-label="Escolher layout" className="h-7 w-[46px] rounded-lg px-1.5">
+                <Button type="button" variant="ghost" size="sm" tooltip="Layout" aria-label="Escolher layout" className="ml-1 h-7 w-[46px] rounded-lg px-1.5 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]">
                   {preferences.allLayout === "cards" ? <Grid2X2 className="size-3.5" /> : <List className="size-3.5" />}
                   <ChevronDown className="size-3.5" />
                 </Button>
               }
             />
             <DropdownMenuContent align="end" className="min-w-40">
-              <DropdownMenuRadioGroup value={preferences.allLayout} onValueChange={(allLayout) => updatePreferences({ allLayout: allLayout as WorkspaceObjectDataViewLayout })}>
+              <DropdownMenuRadioGroup value={preferences.allLayout} onValueChange={(allLayout) => updatePreferences({ allLayout: allLayout as WorkspaceObjectDataViewLayout, mode: "all" })}>
                 <DropdownMenuRadioItem value="cards">Cartões</DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="list">Lista</DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
@@ -475,10 +475,18 @@ export function WorkspaceObjectTypeListView({
         {items.length === 0 ? (
           <WorkspaceEmptyState
             className="mt-2 border-[var(--app-border-el)] bg-[var(--app-bg-front)]"
-            title={`Ainda não há ${listName}`}
-            description={`Crie ${singularName === listName ? "um objeto" : `um(a) ${singularName}`} para adicionar aqui.`}
+            title={hasFilteredResults ? "Nenhum resultado encontrado" : `Ainda não há ${listName}`}
+            description={
+              hasFilteredResults
+                ? "Ajuste ou limpe a busca e os filtros para ver outros objetos."
+                : `Crie ${singularName === listName ? "um objeto" : `um(a) ${singularName}`} para adicionar aqui.`
+            }
             action={
-              onCreateEntity ? (
+              hasFilteredResults ? (
+                <Button type="button" size="sm" onClick={() => updatePreferences({ filter: "all", query: "" })}>
+                  Limpar filtros
+                </Button>
+              ) : onCreateEntity ? (
                 <Button type="button" size="sm" onClick={onCreateEntity}>
                   <Plus className="size-3.5" />
                   Novo {singularName}
