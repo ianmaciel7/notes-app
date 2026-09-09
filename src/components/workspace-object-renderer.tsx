@@ -6,9 +6,20 @@ import { PendingImplementation } from "@/components/pending-implementation";
 import { Button, buttonVariants } from "@/components/ui/button";
 import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 
+type WorkspaceObjectTypeListInfo = Pick<
+  SpaceObjectTypeRecord,
+  "id" | "pluralName" | "singularName"
+>;
+
 type WorkspaceObjectRendererProps = {
   entity: SpaceEntityRecord;
   objectType?: SpaceObjectTypeRecord;
+  tabName: string;
+};
+
+type WorkspaceObjectListRendererProps = {
+  entities: readonly SpaceEntityRecord[];
+  objectType: WorkspaceObjectTypeListInfo;
   tabName: string;
 };
 
@@ -43,14 +54,29 @@ function PendingObjectRenderer({ entity, objectType, tabName }: WorkspaceObjectR
   const objectTypeName = getObjectTypeName(entity, objectType);
 
   return (
-    <div className="flex h-full min-h-0 w-full items-center justify-center bg-card p-6">
-      <PendingImplementation
-        area={objectTypeName}
-        className="max-w-2xl"
-        description={`${tabName} should be implemented here.`}
-        name={`${objectTypeName} object`}
-      />
-    </div>
+    <PendingImplementation
+      area={objectTypeName}
+      description={`${tabName} should be implemented here.`}
+      name={`${objectTypeName} object`}
+      variant="workspace"
+    />
+  );
+}
+
+export function WorkspaceObjectListRenderer({
+  entities: _entities,
+  objectType,
+  tabName,
+}: WorkspaceObjectListRendererProps) {
+  const listName = objectType.pluralName || tabName;
+
+  return (
+    <PendingImplementation
+      area="Object type list"
+      description={`${listName} list view should be implemented here.`}
+      name={`${listName} list`}
+      variant="workspace"
+    />
   );
 }
 
@@ -60,14 +86,12 @@ function WorkspaceWeblinkObject({ entity }: { entity: SpaceEntityRecord }) {
 
   if (!url) {
     return (
-      <div className="flex h-full min-h-0 w-full items-center justify-center bg-card p-6">
-        <PendingImplementation
-          area="Weblink"
-          className="max-w-2xl"
-          description="Add a URL property to render this saved link."
-          name="Weblink URL"
-        />
-      </div>
+      <PendingImplementation
+        area="Weblink"
+        description="Add a URL property to render this saved link."
+        name="Weblink URL"
+        variant="workspace"
+      />
     );
   }
 

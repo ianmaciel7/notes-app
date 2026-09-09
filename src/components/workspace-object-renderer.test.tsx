@@ -2,10 +2,11 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 
 import {
+  WorkspaceObjectListRenderer,
   WorkspaceObjectRenderer,
   getWorkspaceWeblinkUrl,
 } from "@/components/workspace-object-renderer";
-import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
+import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 
 function entityFixture(input: Partial<SpaceEntityRecord> = {}): SpaceEntityRecord {
   return {
@@ -21,6 +22,22 @@ function entityFixture(input: Partial<SpaceEntityRecord> = {}): SpaceEntityRecor
     relations: input.relations ?? [],
     properties: input.properties ?? {},
     _syncStatus: input._syncStatus ?? "pending",
+  };
+}
+
+function objectTypeFixture(input: Partial<SpaceObjectTypeRecord> = {}): SpaceObjectTypeRecord {
+  return {
+    id: input.id ?? "study_goal",
+    spaceId: input.spaceId ?? "personal",
+    ownership: input.ownership ?? "built-in",
+    singularName: input.singularName ?? "Study goal",
+    pluralName: input.pluralName ?? "Study goals",
+    iconName: input.iconName ?? "study-goal",
+    tone: input.tone ?? "lime",
+    lifecycleKind: input.lifecycleKind ?? "document",
+    propertyDefinitions: input.propertyDefinitions ?? [],
+    collectionIds: input.collectionIds ?? [],
+    presentation: input.presentation ?? { defaultView: "list", availableViews: ["list"] },
   };
 }
 
@@ -62,4 +79,26 @@ it("renders unfinished object types through PendingImplementation", () => {
 
   expect(markup).toContain("Page object");
   expect(markup).toContain("Implementation pending");
+  expect(markup.match(/data-slot="pending-implementation"/g)).toHaveLength(1);
+  expect(markup).toContain('data-variant="workspace"');
+  expect(markup).toContain('data-slot="pending-implementation-card"');
+});
+
+it("renders object type list tabs with a list-specific pending surface", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceObjectListRenderer
+      entities={[entityFixture({ objectTypeId: "study_goal", title: "Biology exam" })]}
+      objectType={objectTypeFixture()}
+      tabName="Study goals"
+    />,
+  );
+
+  expect(markup).toContain("Study goals list");
+  expect(markup).toContain("Object type list");
+  expect(markup.match(/data-slot="pending-implementation"/g)).toHaveLength(1);
+  expect(markup).toContain('data-variant="workspace"');
+  expect(markup).toContain('data-slot="pending-implementation-card"');
+  expect(markup).not.toContain("Study goal object");
+  expect(markup).not.toContain("1 object");
+  expect(markup).not.toContain("Biology exam");
 });

@@ -100,14 +100,12 @@ function SidePanelPending({
   "activeMainObjectTitle" | "activeTabLabel" | "sideValue"
 >) {
   return (
-    <div className="flex h-full min-h-0 items-center justify-center bg-card p-4">
-      <PendingImplementation
-        area="Side panel"
-        className="w-full"
-        description={getSidePanelDescription({ activeMainObjectTitle, activeTabLabel, sideValue })}
-        name={activeTabLabel}
-      />
-    </div>
+    <PendingImplementation
+      area="Side panel"
+      description={getSidePanelDescription({ activeMainObjectTitle, activeTabLabel, sideValue })}
+      name={activeTabLabel}
+      variant="workspace"
+    />
   );
 }
 

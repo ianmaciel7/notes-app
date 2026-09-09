@@ -18,14 +18,14 @@ import {
 import { AppSidebarObjectTypeStudio } from "@/components/app-sidebar-object-type-studio";
 import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon";
 import {
-  getCapacitiesObjectTypeTone,
+  getObjectTypeIconAppearance,
   ObjectAreaIcon,
   ObjectCollectionIcon,
   ObjectIconBadge,
   type ObjectIconProps,
   type ObjectIconTone,
+  ObjectTypeIconBadge,
   objectIconToneBadgeClass,
-  objectTypeDefinitionById,
 } from "@/components/object-icons";
 import { useTheme } from "@/components/theme-provider";
 import { Badge } from "@/components/ui/badge";
@@ -347,11 +347,15 @@ function reorderById<T extends { id: string }>(items: T[], fromId: string, toId:
 }
 
 function AppSidebarTypeLabel({
+  id,
   icon: Icon,
+  iconName,
   tone,
   children,
 }: {
+  id?: string;
   icon: React.ElementType<ObjectIconProps>;
+  iconName?: ObjectIconName;
   tone: AppSidebarTone;
   children: React.ReactNode;
 }) {
@@ -364,7 +368,13 @@ function AppSidebarTypeLabel({
       )}
     >
       <span className="mr-[0.4em] ml-[-0.1em] inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 items-center justify-center">
-        <ObjectIconBadge icon={Icon} tone={tone} variant="sidebar" />
+        <ObjectTypeIconBadge
+          id={id}
+          icon={Icon}
+          iconName={iconName}
+          tone={tone}
+          variant="sidebar"
+        />
       </span>
 
       <span className="block min-w-0 truncate text-left text-[1em]">{children}</span>
@@ -373,14 +383,7 @@ function AppSidebarTypeLabel({
 }
 
 function getAppSidebarObjectTypeAppearance(objectType: AppSidebarObjectType) {
-  const canonicalIcon = objectType.iconName
-    ? objectTypeDefinitionById[objectType.iconName]?.icon
-    : undefined;
-
-  return {
-    icon: canonicalIcon ?? objectType.icon,
-    tone: getCapacitiesObjectTypeTone(objectType.id, objectType.tone),
-  };
+  return getObjectTypeIconAppearance(objectType);
 }
 
 function AppSidebarSectionMenu({
@@ -1157,7 +1160,13 @@ function AppSidebarObjectTypeRow({
               data-slot="app-sidebar-object-type-icon"
               className="absolute inset-0 flex items-center justify-center opacity-100 transition-opacity duration-150 motion-reduce:transition-none group-hover/object-type-row:opacity-0"
             >
-              <ObjectIconBadge icon={appearance.icon} tone={appearance.tone} variant="sidebar" />
+              <ObjectTypeIconBadge
+                id={objectType.id}
+                icon={appearance.icon}
+                iconName={appearance.iconName}
+                tone={appearance.tone}
+                variant="sidebar"
+              />
             </span>
             <AppSidebarObjectTypeMenuIcon
               data-slot="app-sidebar-object-type-chevron"
@@ -1219,7 +1228,12 @@ function AppSidebarObjectTypeRow({
                 {objectType.label}
               </span>
             ) : (
-              <AppSidebarTypeLabel icon={appearance.icon} tone={appearance.tone}>
+              <AppSidebarTypeLabel
+                id={objectType.id}
+                icon={appearance.icon}
+                iconName={appearance.iconName}
+                tone={appearance.tone}
+              >
                 {objectType.label}
               </AppSidebarTypeLabel>
             )}

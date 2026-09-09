@@ -6,9 +6,8 @@ import { AppSidebarCheckIcon, AppSidebarPlusIcon } from "@/components/app-sideba
 import {
   getCapacitiesObjectTypeTone,
   ObjectAreaIcon,
-  ObjectAtomicNoteIcon,
-  ObjectIconBadge,
   ObjectIdeaIcon,
+  ObjectTypeIconBadge,
   objectTypeDefinitionById,
 } from "@/components/object-icons";
 import { Button } from "@/components/ui/button";
@@ -143,17 +142,14 @@ function AppSidebarObjectTypeIcon({
   preset: ObjectTypeCardAppearance;
   className?: string;
 }) {
-  const isAtomicNote =
-    preset.id === "atomic-note" || preset.id === "atomic_note" || preset.iconName === "atomic-note";
-  const Icon = isAtomicNote
-    ? ObjectAtomicNoteIcon
-    : (objectTypeDefinitionById[preset.iconName]?.icon ?? ObjectAreaIcon);
-  const tone = isAtomicNote ? "amber" : getCapacitiesObjectTypeTone(preset.id, preset.tone);
+  const tone = getCapacitiesObjectTypeTone(preset.id, preset.tone);
 
   return (
-    <ObjectIconBadge
+    <ObjectTypeIconBadge
       data-lifecycle-contract={objectLifecycleContractSlots.ObjectIconTonePreview}
-      icon={Icon}
+      id={preset.id}
+      icon={objectTypeDefinitionById[preset.iconName]?.icon ?? ObjectAreaIcon}
+      iconName={preset.iconName}
       tone={tone}
       className={cn("size-8 rounded-base border-[0.5px] text-lg leading-none", className)}
       iconClassName="size-[1em]"

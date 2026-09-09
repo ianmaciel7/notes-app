@@ -31,3 +31,16 @@ it("renders each selected Explore item as a PendingImplementation surface", () =
   expect(markup).toContain("Implementation pending");
   expect(markup).toContain("Git");
 });
+
+it("uses the shared pending implementation appearance without a side-panel wrapper", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceSidePanelRenderer activeTabLabel="Explore" sideValue="side-1" />,
+  );
+
+  expect(markup.match(/data-slot="pending-implementation"/g)).toHaveLength(1);
+  expect(markup).toContain('data-variant="workspace"');
+  expect(markup).toContain('data-slot="pending-implementation-card"');
+  expect(markup).toContain("border border-dashed border-border bg-muted/20");
+  expect(markup).not.toContain("bg-card p-4");
+  expect(markup).not.toContain("border border-border bg-muted/25");
+});

@@ -21,6 +21,19 @@ type ObjectIconBadgeProps = ComponentPropsWithoutRef<"span"> & {
   variant?: "default" | "menu" | "sidebar";
 };
 
+type ObjectTypeIconAppearanceInput = {
+  id?: string;
+  iconName?: PersistedObjectIconName;
+  tone: ObjectIconTone;
+  icon?: ObjectTypeIcon;
+};
+
+type ObjectTypeIconAppearance = {
+  icon: ObjectTypeIcon;
+  iconName: PersistedObjectIconName;
+  tone: ObjectIconTone;
+};
+
 const objectIconToneTextClass: Record<ObjectIconTone, string> = {
   amber: "text-[var(--type-label-text-amber)]",
   blue: "text-[var(--type-label-text-blue)]",
@@ -103,6 +116,14 @@ const capacitiesObjectTypeToneById: Record<string, ObjectIconTone> = {
   travel: "violet",
   tweet: "blue",
   weblink: "blue",
+};
+
+const canonicalObjectTypeAppearanceById: Record<
+  string,
+  { iconName: PersistedObjectIconName; tone: ObjectIconTone }
+> = {
+  atomic_note: { iconName: "atomic-note", tone: "amber" },
+  study_goal: { iconName: "study-goal", tone: "lime" },
 };
 
 function getCapacitiesObjectTypeTone(
@@ -321,6 +342,37 @@ const objectTypeDefinitionById = Object.fromEntries(
   objectTypeDefinitions.map((definition) => [definition.id, definition]),
 ) as Record<string, ObjectTypeDefinition>;
 
+function getObjectTypeIconAppearance({
+  id,
+  icon,
+  iconName,
+  tone,
+}: ObjectTypeIconAppearanceInput): ObjectTypeIconAppearance {
+  const canonical = id ? canonicalObjectTypeAppearanceById[id] : undefined;
+  const resolvedIconName = canonical?.iconName ?? iconName;
+  const definition = resolvedIconName ? objectTypeDefinitionById[resolvedIconName] : undefined;
+
+  return {
+    icon: definition?.icon ?? icon ?? ObjectAreaIcon,
+    iconName: (definition?.id ?? resolvedIconName ?? "area") as PersistedObjectIconName,
+    tone: canonical?.tone ?? getCapacitiesObjectTypeTone(id, tone),
+  };
+}
+
+type ObjectTypeIconBadgeProps = Omit<ObjectIconBadgeProps, "icon" | "tone"> &
+  ObjectTypeIconAppearanceInput;
+
+function ObjectTypeIconBadge({
+  id,
+  icon,
+  iconName,
+  tone,
+  ...props
+}: ObjectTypeIconBadgeProps) {
+  const appearance = getObjectTypeIconAppearance({ id, icon, iconName, tone });
+  return <ObjectIconBadge icon={appearance.icon} tone={appearance.tone} {...props} />;
+}
+
 function ObjectIconBadge({
   icon: Icon,
   tone,
@@ -372,6 +424,7 @@ export {
   type ObjectIconBadgeProps,
   type ObjectIconProps,
   type ObjectIconTone,
+  getObjectTypeIconAppearance,
   ObjectIdeaIcon,
   ObjectImageIcon,
   ObjectKnowledgeIcon,
@@ -385,6 +438,7 @@ export {
   ObjectProjectIcon,
   ObjectQueryIcon,
   ObjectQuoteIcon,
+  ObjectStudyGoalIcon,
   ObjectTableIcon,
   ObjectTagIcon,
   ObjectTaskIcon,
@@ -396,4 +450,6 @@ export {
   objectIconToneTextClass,
   objectTypeDefinitionById,
   objectTypeDefinitions,
+  ObjectTypeIconBadge,
+  type ObjectTypeIconAppearance,
 };

@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { PendingImplementation } from "@/components/pending-implementation";
-import { WorkspaceObjectRenderer } from "@/components/workspace-object-renderer";
+import {
+  WorkspaceObjectListRenderer,
+  WorkspaceObjectRenderer,
+} from "@/components/workspace-object-renderer";
 import { WorkspaceSidePanelRenderer } from "@/components/workspace-side-panel-renderer";
 
 type WorkspaceTabLike = {
@@ -632,27 +635,53 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   );
 }
 
-function WorkspaceDefaultPanel() {
-  const { createdEntities, mainTabs, mainValue, objectTypes } = useWorkspace();
+function WorkspaceMainSurface() {
+  const { createdEntities, mainTabs, mainValue, objectTypeRecords, objectTypes } = useWorkspace();
   const name = getWorkspaceTabPendingName(mainTabs, mainValue, "Main panel");
   const activeEntity = createdEntities.find((entity: { id: string }) => entity.id === mainValue);
   const objectType = activeEntity
-    ? objectTypes.find((item: { id: string }) => item.id === activeEntity.objectTypeId)
+    ? objectTypeRecords.find((item: { id: string }) => item.id === activeEntity.objectTypeId)
     : undefined;
 
   if (activeEntity) {
     return <WorkspaceObjectRenderer entity={activeEntity} objectType={objectType} tabName={name} />;
   }
 
-  return (
-    <div className="flex h-full min-h-0 w-full items-center justify-center bg-card p-6">
-      <PendingImplementation
-        area="Main panel"
-        className="max-w-2xl"
-        description={`${name} should be implemented here.`}
-        name={name}
+  const activeObjectTypeRecord = objectTypeRecords.find(
+    (item: { id: string }) => item.id === mainValue,
+  );
+  if (activeObjectTypeRecord) {
+    return (
+      <WorkspaceObjectListRenderer
+        entities={createdEntities}
+        objectType={activeObjectTypeRecord}
+        tabName={name}
       />
-    </div>
+    );
+  }
+
+  const activeObjectType = objectTypes.find((item: { id: string }) => item.id === mainValue);
+  if (activeObjectType) {
+    return (
+      <WorkspaceObjectListRenderer
+        entities={createdEntities}
+        objectType={{
+          id: activeObjectType.id,
+          pluralName: activeObjectType.label,
+          singularName: activeObjectType.singularLabel ?? activeObjectType.label,
+        }}
+        tabName={name}
+      />
+    );
+  }
+
+  return (
+    <PendingImplementation
+      area="Main panel"
+      description={`${name} should be implemented here.`}
+      name={name}
+      variant="workspace"
+    />
   );
 }
 
@@ -757,5 +786,5 @@ export function WorkspaceMainContent() {
     );
   }
 
-  return <WorkspaceDefaultPanel />;
+  return <WorkspaceMainSurface />;
 }
