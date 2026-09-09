@@ -1,7 +1,6 @@
 import type { KnowledgeDatabase } from "@/lib/db";
 import { prepareTextDocumentForIngestion } from "@/lib/documents/document-processing";
 import { createCollectionId, createTagId } from "@/lib/space-domain-identities";
-import { applyFSRSReview, createInitialSRSState, type FSRSRating } from "@/lib/srs/fsrs";
 import {
   type CreateStructureInput,
   createCustomStructure,
@@ -23,13 +22,14 @@ import type {
   SpaceTagRecord,
   SpaceTrashRecord,
 } from "@/lib/spaces/space-types";
-import { createSyncQueue } from "@/lib/sync/sync-queue";
-import type { FileEntity, FlashcardEntity, HighlightEntity, StudyGoalEntity } from "@/types/schema";
 import {
   ACTIVE_SPACE_SETTING_ID,
   LOCAL_ACCOUNT_ID,
   PERSONAL_SPACE_ID,
 } from "@/lib/spaces/space-types";
+import { applyFSRSReview, createInitialSRSState, type FSRSRating } from "@/lib/srs/fsrs";
+import { createSyncQueue } from "@/lib/sync/sync-queue";
+import type { FileEntity, FlashcardEntity, HighlightEntity, StudyGoalEntity } from "@/types/schema";
 
 export const PINNED_ENTITY_IDS_SETTING_KEY = "sidebar.pinnedEntityIds";
 const TEXT_QUOTE_CONTEXT_LENGTH = 48;
@@ -50,13 +50,13 @@ function isFlashcardRecord(
   return entity.type === "flashcard" && typeof entity.srs === "object" && entity.srs !== null;
 }
 
-function isHighlightRecord(entity: SpaceEntityRecord): entity is SpaceEntityRecord & HighlightEntity {
+function isHighlightRecord(
+  entity: SpaceEntityRecord,
+): entity is SpaceEntityRecord & HighlightEntity {
   return entity.type === "highlight";
 }
 
-function createManualFlashcardRecord(
-  base: SpaceEntityRecord,
-): SpaceEntityRecord & FlashcardEntity {
+function createManualFlashcardRecord(base: SpaceEntityRecord): SpaceEntityRecord & FlashcardEntity {
   return {
     ...base,
     type: "flashcard",
@@ -98,7 +98,10 @@ function synthesizeQuoteAnchor(sourceText: string, exactQuote: string) {
   return {
     exactText,
     prefix: sourceText.slice(Math.max(0, startOffset - TEXT_QUOTE_CONTEXT_LENGTH), startOffset),
-    suffix: sourceText.slice(endOffset, Math.min(sourceText.length, endOffset + TEXT_QUOTE_CONTEXT_LENGTH)),
+    suffix: sourceText.slice(
+      endOffset,
+      Math.min(sourceText.length, endOffset + TEXT_QUOTE_CONTEXT_LENGTH),
+    ),
     location: { startOffset, endOffset },
   };
 }

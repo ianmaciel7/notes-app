@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { selectStudyGoalDashboard } from "@/lib/srs/study-goal-dashboard";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
+import { selectStudyGoalDashboard } from "@/lib/srs/study-goal-dashboard";
 
 function baseEntity(input: Partial<SpaceEntityRecord> & Pick<SpaceEntityRecord, "id" | "type">) {
   return {

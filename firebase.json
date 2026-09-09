@@ -2,13 +2,7 @@
   "apphosting": {
     "backendId": "notes-app",
     "rootDir": "/",
-    "ignore": [
-      "node_modules",
-      ".git",
-      "firebase-debug.log",
-      "firebase-debug.*.log",
-      "functions"
-    ]
+    "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log", "functions"]
   },
   "firestore": {
     "rules": "firestore.rules"

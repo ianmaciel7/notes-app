@@ -5,10 +5,10 @@ import * as React from "react";
 import { useWorkspace } from "@/components/space-controller";
 import { Button } from "@/components/ui/button";
 import {
-  isFlashcardReviewEntity,
-  getFlashcardReviewShortcutRating,
-  selectDueFlashcards,
   type FlashcardReviewEntity,
+  getFlashcardReviewShortcutRating,
+  isFlashcardReviewEntity,
+  selectDueFlashcards,
 } from "@/lib/srs/flashcard-review";
 import type { FSRSRating } from "@/lib/srs/fsrs";
 

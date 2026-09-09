@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import { createFirebaseAuthVerifier } from "@/lib/auth/firebase-auth";
-import { handleAuthenticatedSyncPushRequest } from "@/lib/sync/remote-sync-route";
 import type { SyncMutationRecord } from "@/lib/spaces/space-types";
+import { handleAuthenticatedSyncPushRequest } from "@/lib/sync/remote-sync-route";
 
 function mutationFixture(input: Partial<SyncMutationRecord> = {}): SyncMutationRecord {
   return {
@@ -12,21 +12,19 @@ function mutationFixture(input: Partial<SyncMutationRecord> = {}): SyncMutationR
     entityType: input.entityType ?? "page",
     operation: input.operation ?? "set",
     status: input.status ?? "pending",
-    payload:
-      input.payload ??
-      {
-        id: "entity-a",
-        spaceId: "space-a",
-        objectTypeId: "page",
-        type: "page",
-        title: "Synced page",
-        createdAt: "2026-01-01T00:00:00.000Z",
-        updatedAt: "2026-01-02T00:00:00.000Z",
-        blocks: [],
-        tags: [],
-        relations: [],
-        properties: {},
-      },
+    payload: input.payload ?? {
+      id: "entity-a",
+      spaceId: "space-a",
+      objectTypeId: "page",
+      type: "page",
+      title: "Synced page",
+      createdAt: "2026-01-01T00:00:00.000Z",
+      updatedAt: "2026-01-02T00:00:00.000Z",
+      blocks: [],
+      tags: [],
+      relations: [],
+      properties: {},
+    },
     createdAt: input.createdAt ?? "2026-01-03T00:00:00.000Z",
     updatedAt: input.updatedAt ?? "2026-01-03T00:00:00.000Z",
   };

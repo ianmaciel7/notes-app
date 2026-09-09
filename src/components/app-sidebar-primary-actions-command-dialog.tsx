@@ -1,5 +1,16 @@
 "use client";
 
+import { CalendarBlankIcon } from "@phosphor-icons/react/dist/csr/CalendarBlank";
+import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
+import { CompassIcon } from "@phosphor-icons/react/dist/csr/Compass";
+import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
+import { EyeIcon } from "@phosphor-icons/react/dist/csr/Eye";
+import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
+import { GraphIcon } from "@phosphor-icons/react/dist/csr/Graph";
+import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
+import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
+import { SparkleIcon } from "@phosphor-icons/react/dist/csr/Sparkle";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 import {
@@ -18,17 +29,6 @@ import {
 } from "@/components/ui/dialog";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
 import { cn } from "@/lib/utils";
-import { CalendarBlankIcon } from "@phosphor-icons/react/dist/csr/CalendarBlank";
-import { CompassIcon } from "@phosphor-icons/react/dist/csr/Compass";
-import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
-import { EyeIcon } from "@phosphor-icons/react/dist/csr/Eye";
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
-import { GraphIcon } from "@phosphor-icons/react/dist/csr/Graph";
-import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
-import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
-import { SparkleIcon } from "@phosphor-icons/react/dist/csr/Sparkle";
 import { WorkspaceSidebar as BaseWorkspaceSidebar } from "./app-sidebar-primary-actions";
 
 // --- Capacities SVG Icons ---
@@ -153,7 +153,10 @@ type PaletteItem = {
 
 type CommandPaletteSelectSource = "keyboard" | "pointer";
 
-function getVisibleCommandPaletteRecentItems<T>(items: readonly T[], _normalizedQuery: string): T[] {
+function getVisibleCommandPaletteRecentItems<T>(
+  items: readonly T[],
+  _normalizedQuery: string,
+): T[] {
   return [...items];
 }
 
@@ -447,7 +450,7 @@ function NewContentCommandDialog({
                 : [
                     ...current,
                     { id: entity.id, label: entity.title, icon: typeDef.icon, draggable: true },
-              ],
+                  ],
             );
             setMainValue(entity.id);
           }
@@ -564,7 +567,7 @@ function NewContentCommandDialog({
         id="command-palette"
         data-lifecycle-contract={objectLifecycleContractSlots.ObjectCreationMenu}
         showCloseButton={false}
-        overlayClassName="bg-black/50 backdrop-blur-none"
+        overlayClassName="bg-[var(--app-overlay-command)] backdrop-blur-none"
         className={cn(
           "fixed z-50 top-0 left-0 h-dvh w-full translate-x-0 translate-y-0 sm:top-[10vh] sm:left-1/2 sm:-translate-x-1/2 sm:translate-y-0 sm:h-auto sm:max-h-[85vh] p-0 border-0 bg-transparent ring-0 outline-none select-none transition-all duration-200 flex flex-col items-center justify-start max-w-full",
           isExpanded
@@ -575,7 +578,7 @@ function NewContentCommandDialog({
         <div
           data-slot="command"
           className={cn(
-            "preview-card-core flex w-full transform flex-col border-front bg-front h-full sm:h-auto sm:max-h-[85vh] sm:rounded-[12px] sm:border sm:shadow-[0_2px_3px_#00000001,0_4px_9px_#00000003,0_8px_12px_#00000001] transition-all duration-200 overflow-hidden",
+            "preview-card-core flex w-full transform flex-col border-front bg-front h-full sm:h-auto sm:max-h-[85vh] sm:rounded-[12px] sm:border sm:shadow-[var(--app-shadow-preview-card)] transition-all duration-200 overflow-hidden",
           )}
         >
           <DialogHeader className="sr-only">
@@ -661,7 +664,7 @@ function NewContentCommandDialog({
           </div>
 
           {/* --- Scrollable Content List Container --- */}
-                <div className="relative flex w-full min-w-0 flex-1 flex-col rounded-none sm:max-h-[70vh] sm:rounded-b">
+          <div className="relative flex w-full min-w-0 flex-1 flex-col rounded-none sm:max-h-[70vh] sm:rounded-b">
             <div
               id="control-dropdown-container"
               className="scroll-container flex h-full w-full flex-col overflow-y-auto overflow-x-hidden overflow-auto px-1.5 py-0.5"
@@ -1032,10 +1035,10 @@ function WorkspaceSidebar() {
 
 export * from "./app-sidebar-primary-actions";
 export {
-  shouldCloseCommandPaletteAfterSelect,
   getVisibleCommandPaletteRecentItems,
-  shouldRenderCommandPaletteOpenInNewTabToggle,
+  shouldCloseCommandPaletteAfterSelect,
   shouldOpenNewContentCommandDialogForEvent,
+  shouldRenderCommandPaletteOpenInNewTabToggle,
   WorkspaceNewContentDialogController,
   WorkspaceSidebar,
 };

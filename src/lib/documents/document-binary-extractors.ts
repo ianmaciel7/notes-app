@@ -22,7 +22,11 @@ function decodePdfLiteralString(value: string) {
 }
 
 function compactExtractedText(text: string) {
-  return text.replace(/[ \t]+/g, " ").replace(/\s*\n\s*/g, "\n").replace(/\n{2,}/g, "\n").trim();
+  return text
+    .replace(/[ \t]+/g, " ")
+    .replace(/\s*\n\s*/g, "\n")
+    .replace(/\n{2,}/g, "\n")
+    .trim();
 }
 
 function decodeBasicHtmlEntities(value: string) {

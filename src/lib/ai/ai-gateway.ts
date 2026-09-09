@@ -1,7 +1,4 @@
-import {
-  parseGeneratedCardsResponse,
-  type GeneratedCardsResponse,
-} from "@/lib/ai/card-generation";
+import { type GeneratedCardsResponse, parseGeneratedCardsResponse } from "@/lib/ai/card-generation";
 
 export type AiProvider = "gemini" | "groq";
 
@@ -40,8 +37,9 @@ async function parseProviderResponse(response: Response) {
 }
 
 function extractGeminiText(payload: unknown) {
-  const candidate = (payload as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> })
-    .candidates?.[0];
+  const candidate = (
+    payload as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> }
+  ).candidates?.[0];
   const text = candidate?.content?.parts?.find((part) => typeof part.text === "string")?.text;
   if (!text) throw new Error("Gemini response did not include generated JSON text.");
   return text;
@@ -49,7 +47,8 @@ function extractGeminiText(payload: unknown) {
 
 function extractGroqText(payload: unknown) {
   const choice = (payload as { choices?: Array<{ message?: { content?: string } }> }).choices?.[0];
-  if (!choice?.message?.content) throw new Error("Groq response did not include generated JSON text.");
+  if (!choice?.message?.content)
+    throw new Error("Groq response did not include generated JSON text.");
   return choice.message.content;
 }
 
@@ -83,7 +82,7 @@ export async function generateCardsWithAiProvider(input: {
   const response = await fetcher("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
-      "authorization": `Bearer ${input.apiKey}`,
+      authorization: `Bearer ${input.apiKey}`,
       "content-type": "application/json",
     },
     body: JSON.stringify({

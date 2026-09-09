@@ -93,7 +93,8 @@ describe("Authenticated Firebase Storage upload route handler", () => {
     expect(result).toEqual({
       status: 200,
       body: {
-        blobKey: "gs://demo.appspot.com/users/user-a/spaces/space-a/media/blob-a-retrieval-practice.pdf",
+        blobKey:
+          "gs://demo.appspot.com/users/user-a/spaces/space-a/media/blob-a-retrieval-practice.pdf",
         path: "users/user-a/spaces/space-a/media/blob-a-retrieval-practice.pdf",
         sizeBytes: 9,
         mimeType: "application/pdf",

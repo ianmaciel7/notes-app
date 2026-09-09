@@ -1,6 +1,6 @@
 import type { KnowledgeDatabase } from "@/lib/db";
-import { createSyncQueue } from "@/lib/sync/sync-queue";
 import type { SyncMutationRecord } from "@/lib/spaces/space-types";
+import { createSyncQueue } from "@/lib/sync/sync-queue";
 
 export type SyncBatchWriter = {
   commit(mutations: SyncMutationRecord[]): Promise<void>;
@@ -28,9 +28,7 @@ export function createSyncEngine(database: KnowledgeDatabase, writer: SyncBatchW
     const mutations = await queue.listPendingMutations(input.batchSize);
     if (mutations.length === 0) return { attempted: 0, synced: 0, failed: 0 };
 
-    await Promise.all(
-      mutations.map((mutation) => queue.markMutationSyncing(mutation.id, now)),
-    );
+    await Promise.all(mutations.map((mutation) => queue.markMutationSyncing(mutation.id, now)));
 
     try {
       await writer.commit(mutations);

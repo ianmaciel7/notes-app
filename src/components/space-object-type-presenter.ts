@@ -1,7 +1,4 @@
-import {
-  getCapacitiesObjectTypeTone,
-  objectTypeDefinitionById,
-} from "@/components/object-icons";
+import { getCapacitiesObjectTypeTone, objectTypeDefinitionById } from "@/components/object-icons";
 import type { SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 
 export function presentWorkspaceObjectType(record: SpaceObjectTypeRecord, count: number) {

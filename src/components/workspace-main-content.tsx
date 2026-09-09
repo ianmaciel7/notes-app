@@ -1,12 +1,11 @@
 "use client";
 
 import * as React from "react";
-
-import { useWorkspace } from "@/components/space-controller";
 import { objectIconToneBadgeClass } from "@/components/object-icons";
+import { useWorkspace } from "@/components/space-controller";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
 import { WorkspaceFlashcardReviewPanel } from "@/components/workspace-flashcard-review-panel";
 import { WorkspaceStudyGoalDashboard } from "@/components/workspace-study-goal-dashboard";
 
@@ -84,7 +83,9 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }, []);
 
   const objectTypeById = React.useMemo(() => {
-    return Object.fromEntries(objectTypes.map((item) => [item.id, item.singularLabel ?? item.label]));
+    return Object.fromEntries(
+      objectTypes.map((item) => [item.id, item.singularLabel ?? item.label]),
+    );
   }, [objectTypes]);
 
   const results = React.useMemo(() => {
@@ -259,11 +260,7 @@ function CalendarActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
   return (
     <section className="flex h-full min-h-0 flex-col gap-4 bg-card px-6 py-4">
-      <WorkspaceActionPanelHeader
-        label="Calendar"
-        title="Agenda"
-        onReturn={onReturn}
-      />
+      <WorkspaceActionPanelHeader label="Calendar" title="Agenda" onReturn={onReturn} />
 
       <div className="min-h-0 flex-1 rounded-[12px] border border-border p-4 text-sm text-muted-foreground">
         <CalendarComponent
@@ -272,7 +269,9 @@ function CalendarActionPanel({ onReturn }: WorkspaceActionPanelProps) {
           onSelect={(nextDate) => setSelectedDate(nextDate as Date | undefined)}
           className="h-full w-full [&_*]:text-sm"
         />
-        <p className="mt-3">Data selecionada: {selectedDate ? formatDate(selectedDate.toISOString()) : "Nenhuma"}</p>
+        <p className="mt-3">
+          Data selecionada: {selectedDate ? formatDate(selectedDate.toISOString()) : "Nenhuma"}
+        </p>
       </div>
     </section>
   );
@@ -302,7 +301,10 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
     for (const entity of createdEntities) {
       buckets.set(entity.objectTypeId, (buckets.get(entity.objectTypeId) ?? 0) + 1);
       const current = latestByType.get(entity.objectTypeId);
-      if (!current || new Date(entity.updatedAt).getTime() > new Date(current.updatedAt).getTime()) {
+      if (
+        !current ||
+        new Date(entity.updatedAt).getTime() > new Date(current.updatedAt).getTime()
+      ) {
         latestByType.set(entity.objectTypeId, entity);
       }
     }
@@ -314,7 +316,9 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }, [createdEntities]);
 
   const typeLabelById = React.useMemo(() => {
-    return Object.fromEntries(objectTypes.map((item) => [item.id, item.singularLabel ?? item.label]));
+    return Object.fromEntries(
+      objectTypes.map((item) => [item.id, item.singularLabel ?? item.label]),
+    );
   }, [objectTypes]);
 
   React.useEffect(() => {
@@ -325,7 +329,10 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
     if (activeEntityId && activeEntityId !== "page") {
       const activeEntity = createdEntities.find((entity) => entity.id === activeEntityId);
-      if (activeEntity?.objectTypeId && byType.some((bucket) => bucket.typeId === activeEntity.objectTypeId)) {
+      if (
+        activeEntity?.objectTypeId &&
+        byType.some((bucket) => bucket.typeId === activeEntity.objectTypeId)
+      ) {
         setActiveTypeId(activeEntity.objectTypeId);
         return;
       }
@@ -390,11 +397,7 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
   return (
     <section className="flex h-full min-h-0 flex-col gap-4 bg-card px-6 py-4">
-      <WorkspaceActionPanelHeader
-        label="Explore"
-        title="Explorar estrutura"
-        onReturn={onReturn}
-      />
+      <WorkspaceActionPanelHeader label="Explore" title="Explorar estrutura" onReturn={onReturn} />
 
       <div
         ref={listContainerRef}
@@ -432,7 +435,9 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
                 role="option"
                 aria-selected={activeTypeId === typeId}
                 className={`rounded-[10px] border p-3 text-sm text-foreground hover:bg-muted/60 ${
-                  activeTypeId === typeId ? "border-primary bg-muted/50" : "border-border bg-background"
+                  activeTypeId === typeId
+                    ? "border-primary bg-muted/50"
+                    : "border-border bg-background"
                 }`}
               >
                 <button
@@ -586,7 +591,9 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
                   onMouseEnter={() => setActiveTaskId(task.id)}
                 >
                   <p className="font-medium">{task.title || "Sem título"}</p>
-                  <p className="text-xs text-muted-foreground">Atualizada em {formatDate(task.updatedAt)}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Atualizada em {formatDate(task.updatedAt)}
+                  </p>
                 </button>
               </li>
             ))}
@@ -630,7 +637,12 @@ function MiniGraphPreview({
 
   return (
     <div className="relative h-40 overflow-hidden rounded-[8px] border border-border bg-background">
-      <svg className="h-full w-full" viewBox="0 0 224 152" role="img" aria-label="Local graph preview">
+      <svg
+        className="h-full w-full"
+        viewBox="0 0 224 152"
+        role="img"
+        aria-label="Local graph preview"
+      >
         <title>Local graph preview for {activeTitle}</title>
         {orbit.map((node, index) => {
           const angle = (index / Math.max(1, orbit.length)) * Math.PI * 2 - Math.PI / 2;
@@ -660,7 +672,13 @@ function MiniGraphPreview({
             </g>
           );
         })}
-        <circle cx={center.x} cy={center.y} r="15" className="fill-primary/15 stroke-primary" strokeWidth="1.5" />
+        <circle
+          cx={center.x}
+          cy={center.y}
+          r="15"
+          className="fill-primary/15 stroke-primary"
+          strokeWidth="1.5"
+        />
         <circle cx={center.x} cy={center.y} r="4" className="fill-primary" />
       </svg>
     </div>
@@ -706,24 +724,26 @@ export function WorkspaceSidePanelContent() {
       };
     }
 
-    void Promise.all([listBacklinks(activeEntity.id), buildGraph()]).then(([nextBacklinks, graph]) => {
-      if (cancelled) return;
-      const relatedIds = new Set(
-        graph.edges.flatMap((edge: { sourceId: string; targetId: string }) =>
-          edge.sourceId === activeEntity.id
-            ? [edge.targetId]
-            : edge.targetId === activeEntity.id
-              ? [edge.sourceId]
-              : [],
-        ),
-      );
-      setBacklinks(nextBacklinks);
-      setGraphSummary({
-        nodes: graph.nodes.length,
-        edges: graph.edges.length,
-        related: createdEntities.filter((entity) => relatedIds.has(entity.id)).slice(0, 5),
-      });
-    });
+    void Promise.all([listBacklinks(activeEntity.id), buildGraph()]).then(
+      ([nextBacklinks, graph]) => {
+        if (cancelled) return;
+        const relatedIds = new Set(
+          graph.edges.flatMap((edge: { sourceId: string; targetId: string }) =>
+            edge.sourceId === activeEntity.id
+              ? [edge.targetId]
+              : edge.targetId === activeEntity.id
+                ? [edge.sourceId]
+                : [],
+          ),
+        );
+        setBacklinks(nextBacklinks);
+        setGraphSummary({
+          nodes: graph.nodes.length,
+          edges: graph.edges.length,
+          related: createdEntities.filter((entity) => relatedIds.has(entity.id)).slice(0, 5),
+        });
+      },
+    );
 
     return () => {
       cancelled = true;
@@ -760,7 +780,15 @@ export function WorkspaceSidePanelContent() {
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-auto bg-card">
-      <SidePanelSection title={sideValue === "graph-view" ? "Graph" : sideValue === "backlinks" ? "Backlinks" : "Inspector"}>
+      <SidePanelSection
+        title={
+          sideValue === "graph-view"
+            ? "Graph"
+            : sideValue === "backlinks"
+              ? "Backlinks"
+              : "Inspector"
+        }
+      >
         <div className="flex items-start gap-3">
           {objectType?.icon ? (
             <span
@@ -770,8 +798,12 @@ export function WorkspaceSidePanelContent() {
             </span>
           ) : null}
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-foreground">{activeEntity.title || "Sem título"}</p>
-            <p className="text-xs text-muted-foreground">{objectType?.singularLabel ?? objectType?.label ?? activeEntity.objectTypeId}</p>
+            <p className="truncate text-sm font-medium text-foreground">
+              {activeEntity.title || "Sem título"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {objectType?.singularLabel ?? objectType?.label ?? activeEntity.objectTypeId}
+            </p>
           </div>
         </div>
       </SidePanelSection>
@@ -847,7 +879,8 @@ export function WorkspaceSidePanelContent() {
 }
 
 export function WorkspaceMainContent() {
-  const { activeAction, setActiveAction, setActiveEntityId, setMainValue, mainValue } = useWorkspace();
+  const { activeAction, setActiveAction, setActiveEntityId, setMainValue, mainValue } =
+    useWorkspace();
   const previousWorkspaceMainRef = React.useRef<string>("page");
   const actionReturnRef = React.useRef<string | null>(null);
   const escapeEnabledRef = React.useRef(false);
@@ -883,9 +916,7 @@ export function WorkspaceMainContent() {
       const target = event.target as EventTarget | null;
       if (target instanceof HTMLElement) {
         const isEditable =
-          target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.isContentEditable;
+          target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable;
         if (isEditable) return;
       }
 

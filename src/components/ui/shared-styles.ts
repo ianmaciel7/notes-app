@@ -1,7 +1,7 @@
 const floatingPositionerClass = "isolate z-50"
 
 const floatingInteractionSurfaceClass =
-  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[0_2px_8px_rgb(0_0_0/0.08)] outline-hidden"
+  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[var(--app-shadow-floating)] outline-hidden"
 
 const tooltipSurfaceClass =
   "box-content rounded-[8px] border border-border/50 bg-popover/50 px-2 py-1 text-xs font-medium leading-normal text-foreground shadow-sm backdrop-blur-[8px] dark:bg-background/70"
@@ -13,13 +13,13 @@ const previewSurfaceMotionClass =
   "duration-150 data-open:animate-in data-open:fade-in-0 data-closed:duration-100 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const overlayClass =
-  "fixed inset-0 isolate z-50 bg-black/45 duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
+  "fixed inset-0 isolate z-50 bg-[var(--app-overlay-strong)] duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const floatingSurfaceBaseClass =
-  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[0_2px_8px_rgb(0_0_0/0.08)] outline-hidden"
+  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[var(--app-shadow-floating)] outline-hidden"
 
 const dialogSurfaceBaseClass =
-  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[0_8px_24px_rgb(0_0_0/0.12)] outline-none"
+  "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[var(--app-shadow-dialog)] outline-none"
 
 const floatingSurfaceClass =
   "origin-(--transform-origin) duration-150 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"

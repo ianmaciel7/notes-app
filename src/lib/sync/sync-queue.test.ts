@@ -2,8 +2,8 @@ import "fake-indexeddb/auto";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createKnowledgeDatabase } from "@/lib/db";
-import { createSyncQueue } from "@/lib/sync/sync-queue";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
+import { createSyncQueue } from "@/lib/sync/sync-queue";
 
 const opened: ReturnType<typeof createKnowledgeDatabase>[] = [];
 

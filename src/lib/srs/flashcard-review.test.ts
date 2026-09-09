@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import { getFlashcardReviewShortcutRating, selectDueFlashcards } from "@/lib/srs/flashcard-review";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
+import { getFlashcardReviewShortcutRating, selectDueFlashcards } from "@/lib/srs/flashcard-review";
 
 function flashcardFixture(
   input: Partial<SpaceEntityRecord> & {

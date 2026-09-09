@@ -25,9 +25,7 @@ export type LocalEntityGraph = {
 
 function sameSpaceEntities(entities: readonly SpaceEntityRecord[], spaceId: string) {
   return new Map(
-    entities
-      .filter((entity) => entity.spaceId === spaceId)
-      .map((entity) => [entity.id, entity]),
+    entities.filter((entity) => entity.spaceId === spaceId).map((entity) => [entity.id, entity]),
   );
 }
 

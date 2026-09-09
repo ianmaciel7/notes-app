@@ -2,9 +2,9 @@ import "fake-indexeddb/auto";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createKnowledgeDatabase } from "@/lib/db";
+import type { SpaceEntityRecord, SyncMutationRecord } from "@/lib/spaces/space-types";
 import { createSyncEngine, resolveLwwSyncDecision } from "@/lib/sync/sync-engine";
 import { createSyncQueue } from "@/lib/sync/sync-queue";
-import type { SpaceEntityRecord, SyncMutationRecord } from "@/lib/spaces/space-types";
 
 const opened: ReturnType<typeof createKnowledgeDatabase>[] = [];
 

@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  buildEntityBacklinks,
-  buildLocalEntityGraph,
-} from "@/lib/spaces/space-graph";
+import { buildEntityBacklinks, buildLocalEntityGraph } from "@/lib/spaces/space-graph";
 import type { SpaceEntityRecord, SpaceRelationRecord } from "@/lib/spaces/space-types";
 
 function entityFixture(input: Partial<SpaceEntityRecord> & Pick<SpaceEntityRecord, "id">) {
@@ -23,7 +20,9 @@ function entityFixture(input: Partial<SpaceEntityRecord> & Pick<SpaceEntityRecor
   } satisfies SpaceEntityRecord;
 }
 
-function relationFixture(input: Partial<SpaceRelationRecord> & Pick<SpaceRelationRecord, "sourceId" | "targetId">) {
+function relationFixture(
+  input: Partial<SpaceRelationRecord> & Pick<SpaceRelationRecord, "sourceId" | "targetId">,
+) {
   return {
     id: input.id ?? `relation:${input.sourceId}:${input.targetId}`,
     spaceId: input.spaceId ?? "space-a",
@@ -93,8 +92,18 @@ describe("Space graph", () => {
       { id: "incoming", title: "Incoming", type: "page", depth: 1 },
     ]);
     expect(graph.edges).toEqual([
-      { id: "relation:center:outgoing", sourceId: "center", targetId: "outgoing", propertyId: "related" },
-      { id: "relation:incoming:center", sourceId: "incoming", targetId: "center", propertyId: "related" },
+      {
+        id: "relation:center:outgoing",
+        sourceId: "center",
+        targetId: "outgoing",
+        propertyId: "related",
+      },
+      {
+        id: "relation:incoming:center",
+        sourceId: "incoming",
+        targetId: "center",
+        propertyId: "related",
+      },
     ]);
   });
 });

@@ -29,7 +29,9 @@ export function extractBearerToken(headers: Headers) {
   return token.length > 0 ? token : null;
 }
 
-export function createFirebaseAdminAuthAdapter(adminAuth: FirebaseAdminAuthLike): FirebaseIdTokenAdapter {
+export function createFirebaseAdminAuthAdapter(
+  adminAuth: FirebaseAdminAuthLike,
+): FirebaseIdTokenAdapter {
   return {
     verifyIdToken(token) {
       return adminAuth.verifyIdToken(token);

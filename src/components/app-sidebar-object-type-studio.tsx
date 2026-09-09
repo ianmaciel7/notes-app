@@ -301,7 +301,7 @@ function AppSidebarObjectTypeDetails({
       className={cn(
         "pointer-events-auto absolute bottom-0 right-0 top-0 z-20 -mb-1 -mr-1 -mt-1",
         "flex min-h-0 w-full origin-center scale-100 transform flex-col overflow-hidden",
-        "border border-border bg-[var(--app-bg-back)] shadow-[0_8px_24px_rgb(0_0_0/0.12)] transition duration-150 ease-out",
+        "border border-border bg-[var(--app-bg-back)] shadow-[var(--app-shadow-dialog)] transition duration-150 ease-out",
         "sm:w-[28rem] sm:rounded-lg",
       )}
     >
@@ -601,7 +601,7 @@ function AppSidebarObjectTypeStudio({
           showCloseButton={false}
           className={cn(
             "flex h-[min(784px,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] flex-col gap-0 overflow-hidden rounded-[8px] bg-popover p-0 text-popover-foreground sm:w-[min(1128px,calc(100vw-4rem))] sm:max-w-[min(1128px,calc(100vw-4rem))]",
-            "shadow-[0_18px_60px_rgb(0_0_0/0.22)] ring-1 ring-black/10 dark:ring-white/10",
+            "shadow-[var(--app-shadow-modal)] ring-1 ring-[var(--app-modal-ring)]",
           )}
         >
           <DialogHeader className="flex h-[56px] shrink-0 justify-center gap-0 border-b border-border px-5 py-0">

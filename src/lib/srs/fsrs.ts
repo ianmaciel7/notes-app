@@ -74,13 +74,13 @@ function clamp01(value: number) {
 function retrievability(timeInDays: number, stability: number) {
   const t = Math.max(0, timeInDays);
   const s = Math.max(MIN_STABILITY, stability);
-  return Math.pow(1 + FACTOR * (t / s), DECAY);
+  return (1 + FACTOR * (t / s)) ** DECAY;
 }
 
 function calcInterval(stability: number, target = DEFAULT_RETRIEVABILITY_TARGET) {
   const s = Math.max(MIN_STABILITY, stability);
   const capped = clamp01(target);
-  return s / FACTOR * (Math.pow(capped, 1 / DECAY) - 1);
+  return (s / FACTOR) * (capped ** (1 / DECAY) - 1);
 }
 
 function floorInterval(value: number) {
@@ -159,7 +159,8 @@ export function applyFSRSReview(review: ReviewContext, rating: FSRSRating): Revi
       ...nextState,
       dueDate: nextState.dueDate,
       lastReviewedAt: nowDate,
-      difficulty: clamp01((nextState.difficulty ?? MIN_DIFFICULTY) / MAX_DIFFICULTY) * MAX_DIFFICULTY,
+      difficulty:
+        clamp01((nextState.difficulty ?? MIN_DIFFICULTY) / MAX_DIFFICULTY) * MAX_DIFFICULTY,
     },
     daysUntilDue: nextState.interval,
   };

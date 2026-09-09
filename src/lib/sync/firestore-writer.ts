@@ -1,5 +1,5 @@
-import type { SyncBatchWriter } from "@/lib/sync/sync-engine";
 import type { SyncMutationRecord } from "@/lib/spaces/space-types";
+import type { SyncBatchWriter } from "@/lib/sync/sync-engine";
 
 type FirestoreValue =
   | { nullValue: null }
@@ -85,12 +85,15 @@ export function createFirestoreRestSyncWriter(input: {
         {
           method: "POST",
           headers: {
-            "authorization": `Bearer ${input.accessToken}`,
+            authorization: `Bearer ${input.accessToken}`,
             "content-type": "application/json",
           },
           body: JSON.stringify({
             writes: mutations.map((mutation) =>
-              mutationToWrite({ projectId: input.projectId, databaseId, ownerUid: input.ownerUid }, mutation),
+              mutationToWrite(
+                { projectId: input.projectId, databaseId, ownerUid: input.ownerUid },
+                mutation,
+              ),
             ),
           }),
         },

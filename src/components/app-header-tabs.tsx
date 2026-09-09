@@ -176,8 +176,7 @@ const tabIconBadgeVariants = cva(
     variants: {
       neutral: {
         true: "bg-transparent text-[var(--app-tab-text-secondary)]",
-        false:
-          "bg-[oklch(0.9856_0.0016_67.00)] text-[oklch(0.3887_0.0052_301.05)] dark:bg-[oklch(0.2987_0.0072_285.88)] dark:text-[oklch(0.9163_0.0017_67.07)]",
+        false: "bg-[var(--app-tab-icon-bg)] text-[var(--app-tab-icon-text)]",
       },
     },
     defaultVariants: {
@@ -385,9 +384,7 @@ function OverlayPinAction({
   return (
     <AppHeaderTabAction
       label={pinned ? labels.unpin : labels.pin}
-      className={
-        pinned ? "visible" : "invisible group-hover/tab:visible"
-      }
+      className={pinned ? "visible" : "invisible group-hover/tab:visible"}
       onClick={(event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -751,7 +748,7 @@ function AppHeaderTabList({
       </HeaderControlButton>
 
       {open && (
-        <div className="absolute right-0 top-[34px] z-[80] w-64 rounded-[8px] border border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-front)] p-2 shadow-[0_2px_8px_rgb(0_0_0/0.08)]">
+        <div className="absolute right-0 top-[34px] z-[80] w-64 rounded-[8px] border border-[var(--app-tab-border-front)] bg-[var(--app-tab-bg-front)] p-2 shadow-[var(--app-shadow-floating)]">
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}

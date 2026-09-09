@@ -206,11 +206,12 @@ function useAppSidebarPressedModifiers() {
 function createSyntheticSelectionEvent(
   modifierEvent: AppSidebarSelectionEvent,
 ): AppSidebarSelectionEvent {
-  const explicitIntent: AppSidebarSelectionEvent["__sidebarNavigationIntent"] = modifierEvent.shiftKey
-    ? "side-panel"
-    : modifierEvent.ctrlKey || modifierEvent.metaKey
-      ? "new-tab"
-      : "current";
+  const explicitIntent: AppSidebarSelectionEvent["__sidebarNavigationIntent"] =
+    modifierEvent.shiftKey
+      ? "side-panel"
+      : modifierEvent.ctrlKey || modifierEvent.metaKey
+        ? "new-tab"
+        : "current";
 
   const selectionEvent = {
     __sidebarNavigationIntent: explicitIntent,
@@ -634,10 +635,12 @@ function AppSidebarPinnedRow({
           type="button"
           className="relative flex min-w-0 flex-1 items-center py-px text-left outline-none"
           onPointerDownCapture={(event) => {
-            if (!skipNextClickRef.current) handleModifiedOpen(event as React.MouseEvent<HTMLButtonElement>);
+            if (!skipNextClickRef.current)
+              handleModifiedOpen(event as React.MouseEvent<HTMLButtonElement>);
           }}
           onPointerDown={(event) => {
-            if (!skipNextClickRef.current) handleModifiedOpen(event as React.MouseEvent<HTMLButtonElement>);
+            if (!skipNextClickRef.current)
+              handleModifiedOpen(event as React.MouseEvent<HTMLButtonElement>);
           }}
           onMouseDownCapture={(event) => {
             if (!skipNextClickRef.current) handleModifiedOpen(event);
@@ -962,7 +965,12 @@ function AppSidebarObjectTypeRow({
       pendingModifierEventRef.current = null;
       skipNextClickRef.current = true;
     }
-    onCollectionAction("open", objectType, collection, createSyntheticSelectionEvent(modifierEvent));
+    onCollectionAction(
+      "open",
+      objectType,
+      collection,
+      createSyntheticSelectionEvent(modifierEvent),
+    );
     return true;
   }
 
@@ -988,7 +996,7 @@ function AppSidebarObjectTypeRow({
               "relative ml-[5px] inline-flex size-[21px] shrink-0 items-center justify-center rounded-md bg-transparent text-muted-foreground",
               "transition-[background-color,opacity] duration-150 ease-out motion-reduce:transition-none",
               "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:bg-sidebar-accent focus-visible:text-sidebar-accent-foreground",
-                    "focus-visible:ring-1 focus-visible:ring-ring/40",
+              "focus-visible:ring-1 focus-visible:ring-ring/40",
             )}
             onClick={() => onCollectionsOpenChange(!collectionsOpen)}
           >
@@ -2331,4 +2339,3 @@ export {
   AppSidebarTypeLabel,
   AppSidebarUtilityRow,
 };
-

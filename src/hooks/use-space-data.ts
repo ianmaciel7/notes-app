@@ -76,8 +76,7 @@ export function useSpaceData() {
     [activeSpaceId],
   );
   const pinnedEntityIdsQuery = useLiveQuery<string[]>(
-    async () =>
-      activeSpaceId ? await repository.listPinnedEntityIds(activeSpaceId) : [],
+    async () => (activeSpaceId ? await repository.listPinnedEntityIds(activeSpaceId) : []),
     [activeSpaceId, repository],
   );
 

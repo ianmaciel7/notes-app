@@ -541,7 +541,7 @@ function AppShellSurface({
       <Card
         data-slot="app-shell-surface"
         className={cn(
-          "h-full w-full gap-0 overflow-hidden rounded-[12px] border border-border bg-card py-0 ring-0 shadow-[0_2px_3px_rgb(0_0_0/0.004),0_4px_9px_rgb(0_0_0/0.01),0_8px_12px_rgb(0_0_0/0.004)]",
+          "h-full w-full gap-0 overflow-hidden rounded-[12px] border border-border bg-card py-0 ring-0 shadow-[var(--app-shadow-preview-card)]",
           className,
         )}
         {...props}

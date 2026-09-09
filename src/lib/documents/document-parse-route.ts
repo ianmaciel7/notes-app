@@ -1,7 +1,7 @@
 import {
   inferDocumentFileType,
-  prepareTextDocumentForIngestion,
   type PreparedTextDocument,
+  prepareTextDocumentForIngestion,
 } from "@/lib/documents/document-processing";
 
 export type DocumentParseResult = {

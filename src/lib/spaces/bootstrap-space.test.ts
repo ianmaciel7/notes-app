@@ -58,14 +58,20 @@ describe("bootstrapWorkspace", () => {
   it("adds missing built-in study structures to an existing Personal Space", async () => {
     const database = setup();
     await bootstrapWorkspace(database);
-    await database.objectTypes.where("[spaceId+id]").equals([PERSONAL_SPACE_ID, "flashcard"]).delete();
-    await database.objectTypes.where("[spaceId+id]").equals([PERSONAL_SPACE_ID, "study_goal"]).delete();
+    await database.objectTypes
+      .where("[spaceId+id]")
+      .equals([PERSONAL_SPACE_ID, "flashcard"])
+      .delete();
+    await database.objectTypes
+      .where("[spaceId+id]")
+      .equals([PERSONAL_SPACE_ID, "study_goal"])
+      .delete();
 
     await bootstrapWorkspace(database);
 
-    const ids = (await database.objectTypes.where("spaceId").equals(PERSONAL_SPACE_ID).toArray()).map(
-      (type) => type.id,
-    );
+    const ids = (
+      await database.objectTypes.where("spaceId").equals(PERSONAL_SPACE_ID).toArray()
+    ).map((type) => type.id);
     expect(ids).toContain("flashcard");
     expect(ids).toContain("study_goal");
   });

@@ -1,6 +1,6 @@
-import { selectDueFlashcards } from "@/lib/srs/flashcard-review";
-import { estimatePacingStatus, parseIsoOrNow, type PacingStatus } from "@/lib/srs/fsrs";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
+import { selectDueFlashcards } from "@/lib/srs/flashcard-review";
+import { estimatePacingStatus, type PacingStatus, parseIsoOrNow } from "@/lib/srs/fsrs";
 import type { StudyGoalEntity } from "@/types/schema";
 
 export type StudyGoalDashboardEntity = SpaceEntityRecord & StudyGoalEntity;
@@ -21,9 +21,7 @@ export type StudyGoalDashboard = {
   status: PacingStatus;
 };
 
-export function isStudyGoalEntity(
-  entity: SpaceEntityRecord,
-): entity is StudyGoalDashboardEntity {
+export function isStudyGoalEntity(entity: SpaceEntityRecord): entity is StudyGoalDashboardEntity {
   const candidate = entity as SpaceEntityRecord & Partial<StudyGoalEntity>;
   return (
     candidate.type === "study_goal" &&
@@ -41,12 +39,15 @@ export function selectStudyGoalDashboard(
   now: Date = new Date(),
 ): StudyGoalDashboard | null {
   const goal = entities.filter(isStudyGoalEntity).toSorted((left, right) => {
-    return parseIsoOrNow(left.targetExamDate).getTime() - parseIsoOrNow(right.targetExamDate).getTime();
+    return (
+      parseIsoOrNow(left.targetExamDate).getTime() - parseIsoOrNow(right.targetExamDate).getTime()
+    );
   })[0];
   if (!goal) return null;
 
   const flashcards = entities.filter(
-    (entity) => entity.type === "flashcard" && typeof entity.srs === "object" && entity.srs !== null,
+    (entity) =>
+      entity.type === "flashcard" && typeof entity.srs === "object" && entity.srs !== null,
   );
   const learnedCards = flashcards.filter((card) => (card.srs?.repetitionCount ?? 0) > 0).length;
   const totalCards = Math.max(goal.totalCards || 0, flashcards.length);

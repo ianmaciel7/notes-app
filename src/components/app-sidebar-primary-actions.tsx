@@ -24,18 +24,18 @@ import {
 import { useWorkspace } from "@/components/space-controller";
 import { Button } from "@/components/ui/button";
 import {
+  CompactMenuItemText,
+  compactMenuItemClass,
+  compactMenuSearchClass,
+  compactMenuSurfaceClass,
+} from "@/components/ui/compact-menu";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  CompactMenuItemText,
-  compactMenuItemClass,
-  compactMenuSearchClass,
-  compactMenuSurfaceClass,
-} from "@/components/ui/compact-menu";
 import { Input } from "@/components/ui/input";
 import type { InteractionTooltipConfig } from "@/components/ui/interaction-hint";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -46,16 +46,16 @@ const workspaceRowStateClass =
   "transition-[background-color,color,filter,opacity] duration-200 ease-out motion-reduce:transition-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground data-[active=true]:brightness-[0.965]";
 
 import {
+  recordSidebarNavigationTrace,
+  sidebarNavigationTraceEnabled,
+} from "@/lib/sidebar-navigation-trace";
+import {
   createWorkspaceCommandRuntime,
   projectWorkspaceCommands,
   type WorkspaceCommandId,
 } from "@/lib/space-command-registry";
 import { createCollectionId, type WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
 import { formatShortcutAriaChord, type ShortcutPlatform } from "@/lib/space-shortcuts";
-import {
-  recordSidebarNavigationTrace,
-  sidebarNavigationTraceEnabled,
-} from "@/lib/sidebar-navigation-trace";
 
 type AppSidebarPrimaryActionId = "new" | "search" | "explore" | "calendar" | "tasks";
 
@@ -221,14 +221,7 @@ function NewContentFolderIcon(props: React.ComponentProps<"svg">) {
   );
 }
 
-const newContentDialogObjectTypes = new Set([
-  "file",
-  "image",
-  "pdf",
-  "task",
-  "tweet",
-  "weblink",
-]);
+const newContentDialogObjectTypes = new Set(["file", "image", "pdf", "task", "tweet", "weblink"]);
 
 function getNewContentDialogConfig(item: NewContentMenuItem): NewContentDialogConfig {
   if (item.objectTypeId === "query") {
@@ -272,7 +265,8 @@ function getNewContentDialogConfig(item: NewContentMenuItem): NewContentDialogCo
   if (item.objectTypeId === "pdf") {
     return {
       actionLabel: "Selecionar arquivo(s)",
-      description: "Selecione um ou varios arquivos. O limite maximo de tamanho total dos arquivos e 10 GB.",
+      description:
+        "Selecione um ou varios arquivos. O limite maximo de tamanho total dos arquivos e 10 GB.",
       kind: "file",
       linkPlaceholder: "https://example.com/file.pdf",
       title: "Adicionar PDF",
@@ -282,7 +276,8 @@ function getNewContentDialogConfig(item: NewContentMenuItem): NewContentDialogCo
   if (item.objectTypeId === "image") {
     return {
       actionLabel: "Selecionar arquivo(s)",
-      description: "Selecione uma ou varias imagens. O limite maximo de tamanho total dos arquivos e 10 GB.",
+      description:
+        "Selecione uma ou varias imagens. O limite maximo de tamanho total dos arquivos e 10 GB.",
       kind: "file",
       linkPlaceholder: "https://example.com/image.png",
       title: "Adicionar Imagem",
@@ -291,7 +286,8 @@ function getNewContentDialogConfig(item: NewContentMenuItem): NewContentDialogCo
 
   return {
     actionLabel: "Selecionar arquivo(s)",
-    description: "Selecione um ou varios arquivos. O limite maximo de tamanho total dos arquivos e 10 GB.",
+    description:
+      "Selecione um ou varios arquivos. O limite maximo de tamanho total dos arquivos e 10 GB.",
     kind: "file",
     linkPlaceholder: "https://example.com/file",
     title: "Adicionar Arquivo",
@@ -316,7 +312,7 @@ function NewContentCreationDialog({
     <Dialog open={Boolean(item)} onOpenChange={onOpenChange}>
       <DialogContent
         className={cn(
-          "flex !max-w-[calc(100vw-3rem)] max-w-none flex-col gap-0 overflow-hidden rounded-[6px] border-border bg-card p-0 shadow-[0_16px_48px_rgb(0_0_0/0.22)] sm:!max-w-none",
+          "flex !max-w-[calc(100vw-3rem)] max-w-none flex-col gap-0 overflow-hidden rounded-[6px] border-border bg-card p-0 shadow-[var(--app-shadow-modal)] sm:!max-w-none",
           config?.kind === "task"
             ? "!w-[min(42rem,calc(100vw-3rem))] min-h-[154px]"
             : "!h-[min(49rem,calc(100dvh-5rem))] !w-[min(64rem,calc(100vw-3rem))]",
@@ -496,8 +492,8 @@ function createNewContentMenuItems(
       objectTypeId: item.id,
       hasChevron: true,
       label: item.singularLabel ?? item.label,
-      searchLabels: [item.label, item.singularLabel, item.id].filter(
-        (value): value is string => Boolean(value),
+      searchLabels: [item.label, item.singularLabel, item.id].filter((value): value is string =>
+        Boolean(value),
       ),
       sourceIndex,
     }))
@@ -514,9 +510,7 @@ function createNewContentMenuItems(
       return aOrder - bOrder;
     });
   const filteredItems = localizedItems.filter((item) =>
-    item.searchLabels.some((value) =>
-      normalizeMenuQuery(value ?? "").includes(normalizedQuery),
-    ),
+    item.searchLabels.some((value) => normalizeMenuQuery(value ?? "").includes(normalizedQuery)),
   );
 
   if (filteredItems.length > 0 || normalizedQuery.length === 0) {
@@ -723,112 +717,115 @@ function NewContentMenu({
           alignOffset={6}
           className={cn(
             compactMenuSurfaceClass,
-            "box-content w-[min(22rem,calc(100vw-1.75rem))] min-w-44 max-h-[min(18rem,calc(100dvh-8rem))] max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-border shadow-[0_3px_5px_rgb(0_0_0/0.01),0_5px_10px_rgb(0_0_0/0.02),0_10px_14px_rgb(0_0_0/0.01)] ring-0",
+            "box-content w-[min(22rem,calc(100vw-1.75rem))] min-w-44 max-h-[min(18rem,calc(100dvh-8rem))] max-w-[calc(100vw-1rem)] gap-0 rounded-[12px] border-border shadow-[var(--app-shadow-popover)] ring-0",
           )}
         >
-        <div className="h-11 shrink-0 p-1.5">
-          <div
-            className={cn(
-              compactMenuSearchClass,
-              "flex h-8 items-center rounded-[8px] border border-transparent bg-muted transition-[border-color,box-shadow] focus-within:border-ring focus-within:bg-muted focus-within:ring-3 focus-within:ring-ring/50",
-            )}
-          >
-            <Input
-              id={searchInputId}
-              value={query}
-              onChange={(event) => {
-                setQuery(event.target.value);
-                setActiveIndex(0);
-              }}
-              onKeyDown={handleInputKeyDown}
-              placeholder={t("primaryNavigation.search")}
-              aria-label={t("primaryNavigation.searchContentType")}
-              aria-controls="new-content-menu-listbox"
-              aria-activedescendant={
-                items[activeIndex]
-                  ? `new-content-option-${items[activeIndex].id}`
-                  : undefined
-              }
-              role="combobox"
-              aria-autocomplete="list"
-              aria-expanded={open}
-              className="h-full border-0 bg-transparent p-0 text-sm text-foreground shadow-none placeholder:text-muted-foreground placeholder:opacity-100 focus-visible:ring-0"
-              autoFocus
-            />
-          </div>
-        </div>
-
-        <div
-          id="new-content-menu-listbox"
-          role="listbox"
-          aria-label={t("primaryNavigation.typesLabel")}
-          className="min-h-0 max-h-[min(12.5rem,calc(100dvh-15rem))] flex-1 overflow-y-auto px-1.5 pb-1.5"
-        >
-          {items.map(({ id, icon: Icon, label, tone, badgeLabel, isCreateFallback, hasChevron }, index) => {
-            return (
-              <button
-                key={id}
-                data-lifecycle-contract={objectLifecycleContractSlots.ObjectTypeOptionRow}
-                ref={(node) => {
-                  if (node) optionRefs.current.set(id, node);
-                  else optionRefs.current.delete(id);
+          <div className="h-11 shrink-0 p-1.5">
+            <div
+              className={cn(
+                compactMenuSearchClass,
+                "flex h-8 items-center rounded-[8px] border border-transparent bg-muted transition-[border-color,box-shadow] focus-within:border-ring focus-within:bg-muted focus-within:ring-3 focus-within:ring-ring/50",
+              )}
+            >
+              <Input
+                id={searchInputId}
+                value={query}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setActiveIndex(0);
                 }}
-                id={`new-content-option-${id}`}
-                type="button"
-                role="option"
-                aria-selected={index === activeIndex}
-                tabIndex={-1}
-                data-active={index === activeIndex || undefined}
-                onPointerMove={() => setActiveIndex(index)}
-                onClick={() => selectItem(id)}
-                className={cn(
-                  compactMenuItemClass,
-                  "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] border border-transparent px-1 text-left text-sm font-normal outline-none hover:bg-muted focus-visible:border-ring focus-visible:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 data-[active=true]:bg-muted",
-                )}
-              >
-                {isCreateFallback ? (
-                  <span className="inline-flex shrink-0 items-center justify-center rounded-[0.475em] border border-transparent p-1 text-muted-foreground">
-                    <AppSidebarPlusIcon className="size-3" />
-                  </span>
-                ) : (
-                  <ObjectIconBadge
-                    icon={Icon}
-                    tone={tone}
-                    variant="menu"
-                    iconClassName="size-3.5"
-                  />
-                )}
-                <CompactMenuItemText>{label}</CompactMenuItemText>
-                {badgeLabel && (
-                  <span
+                onKeyDown={handleInputKeyDown}
+                placeholder={t("primaryNavigation.search")}
+                aria-label={t("primaryNavigation.searchContentType")}
+                aria-controls="new-content-menu-listbox"
+                aria-activedescendant={
+                  items[activeIndex] ? `new-content-option-${items[activeIndex].id}` : undefined
+                }
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded={open}
+                className="h-full border-0 bg-transparent p-0 text-sm text-foreground shadow-none placeholder:text-muted-foreground placeholder:opacity-100 focus-visible:ring-0"
+                autoFocus
+              />
+            </div>
+          </div>
+
+          <div
+            id="new-content-menu-listbox"
+            role="listbox"
+            aria-label={t("primaryNavigation.typesLabel")}
+            className="min-h-0 max-h-[min(12.5rem,calc(100dvh-15rem))] flex-1 overflow-y-auto px-1.5 pb-1.5"
+          >
+            {items.map(
+              (
+                { id, icon: Icon, label, tone, badgeLabel, isCreateFallback, hasChevron },
+                index,
+              ) => {
+                return (
+                  <button
+                    key={id}
+                    data-lifecycle-contract={objectLifecycleContractSlots.ObjectTypeOptionRow}
+                    ref={(node) => {
+                      if (node) optionRefs.current.set(id, node);
+                      else optionRefs.current.delete(id);
+                    }}
+                    id={`new-content-option-${id}`}
+                    type="button"
+                    role="option"
+                    aria-selected={index === activeIndex}
+                    tabIndex={-1}
+                    data-active={index === activeIndex || undefined}
+                    onPointerMove={() => setActiveIndex(index)}
+                    onClick={() => selectItem(id)}
                     className={cn(
-                      "ml-auto inline-flex h-7 shrink-0 items-center gap-1 rounded-[7px] border px-2 text-sm text-foreground",
-                      objectIconToneBadgeClass[tone],
+                      compactMenuItemClass,
+                      "flex h-8 min-h-8 items-center justify-between gap-2 rounded-[8px] border border-transparent px-1 text-left text-sm font-normal outline-none hover:bg-muted focus-visible:border-ring focus-visible:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 data-[active=true]:bg-muted",
                     )}
                   >
-                    <Icon className="size-3" />
-                    <span>{badgeLabel}</span>
-                  </span>
-                )}
-                {hasChevron && (
-                  <AppSidebarChevronRightIcon className="ml-auto size-3.5 text-muted-foreground" />
-                )}
-              </button>
-            );
-          })}
-        </div>
+                    {isCreateFallback ? (
+                      <span className="inline-flex shrink-0 items-center justify-center rounded-[0.475em] border border-transparent p-1 text-muted-foreground">
+                        <AppSidebarPlusIcon className="size-3" />
+                      </span>
+                    ) : (
+                      <ObjectIconBadge
+                        icon={Icon}
+                        tone={tone}
+                        variant="menu"
+                        iconClassName="size-3.5"
+                      />
+                    )}
+                    <CompactMenuItemText>{label}</CompactMenuItemText>
+                    {badgeLabel && (
+                      <span
+                        className={cn(
+                          "ml-auto inline-flex h-7 shrink-0 items-center gap-1 rounded-[7px] border px-2 text-sm text-foreground",
+                          objectIconToneBadgeClass[tone],
+                        )}
+                      >
+                        <Icon className="size-3" />
+                        <span>{badgeLabel}</span>
+                      </span>
+                    )}
+                    {hasChevron && (
+                      <AppSidebarChevronRightIcon className="ml-auto size-3.5 text-muted-foreground" />
+                    )}
+                  </button>
+                );
+              },
+            )}
+          </div>
 
-        <div className="mx-1 flex h-[29px] shrink-0 items-center gap-x-3 border-t border-border px-1 py-1.5 text-xs leading-4 text-muted-foreground">
-          <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">↑↓</span> para navegar
-          </span>
-          <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">Esc</span> para abortar
-          </span>
-          <span className="whitespace-nowrap">
-            <span className="font-medium text-muted-foreground">↵</span> para selecionar
-          </span>
-        </div>
+          <div className="mx-1 flex h-[29px] shrink-0 items-center gap-x-3 border-t border-border px-1 py-1.5 text-xs leading-4 text-muted-foreground">
+            <span className="whitespace-nowrap">
+              <span className="font-medium text-muted-foreground">↑↓</span> para navegar
+            </span>
+            <span className="whitespace-nowrap">
+              <span className="font-medium text-muted-foreground">Esc</span> para abortar
+            </span>
+            <span className="whitespace-nowrap">
+              <span className="font-medium text-muted-foreground">↵</span> para selecionar
+            </span>
+          </div>
         </PopoverContent>
       </Popover>
       <NewContentCreationDialog
@@ -1133,21 +1130,21 @@ function WorkspaceSidebar() {
     setActiveAction(undefined);
     setActiveEntityId(id);
 
-      function navigateMainTab(tab: any) {
-        const nextTab = { ...tab, draggable: true };
-        const intent = getSidebarNavigationIntent(event);
-        logSidebarNavigation("navigate-main-tab", {
-          ctrlKey: Boolean(event?.ctrlKey),
-          explicitIntent: event?.__sidebarNavigationIntent,
-          id: nextTab.id,
-          intent,
-          label: nextTab.label,
-          metaKey: Boolean(event?.metaKey),
-          shiftKey: Boolean(event?.shiftKey),
-        });
-        if (intent === "side-panel") {
-          openInSidePanel(nextTab);
-          return;
+    function navigateMainTab(tab: any) {
+      const nextTab = { ...tab, draggable: true };
+      const intent = getSidebarNavigationIntent(event);
+      logSidebarNavigation("navigate-main-tab", {
+        ctrlKey: Boolean(event?.ctrlKey),
+        explicitIntent: event?.__sidebarNavigationIntent,
+        id: nextTab.id,
+        intent,
+        label: nextTab.label,
+        metaKey: Boolean(event?.metaKey),
+        shiftKey: Boolean(event?.shiftKey),
+      });
+      if (intent === "side-panel") {
+        openInSidePanel(nextTab);
+        return;
       }
 
       const forceNewTabId = intent === "new-tab" ? `${nextTab.id}:${Date.now()}` : undefined;
@@ -1445,8 +1442,8 @@ export {
   type AppSidebarPrimaryActionsProps,
   type AppSidebarPrimaryNavigationAction,
   type AppSidebarShortcut,
-  createSidebarMainTabUpdate,
   createNewContentMenuItems,
+  createSidebarMainTabUpdate,
   defaultActions,
   getSidebarNavigationIntent,
   logSidebarNavigation,

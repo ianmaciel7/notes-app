@@ -9,7 +9,7 @@ const workspaceScrollAreaClass = "min-h-0 flex-1 overflow-y-auto";
 const workspaceLongformColumnClass = "mx-auto w-full max-w-[50rem] pb-12 pl-10 pr-8 pt-9";
 
 const workspaceEditorSurfaceClass =
-  "mx-3 mt-6 min-h-[302px] shrink-0 rounded-[12px] border border-border bg-card px-6 pb-8 pt-7 shadow-[0_1px_2px_rgb(0_0_0/0.02)] sm:px-10";
+  "mx-3 mt-6 min-h-[302px] shrink-0 rounded-[12px] border border-border bg-card px-6 pb-8 pt-7 shadow-[var(--app-shadow-card-subtle)] sm:px-10";
 
 const workspaceOverviewContentClass = "min-h-0 flex-1 overflow-y-auto px-5 pb-8 pt-4";
 
@@ -27,7 +27,7 @@ const workspaceListRowClass =
   "group flex min-h-10 w-full items-center gap-2 rounded-[8px] px-2 py-1.5 text-left text-sm text-foreground outline-none transition-colors duration-150 hover:bg-muted focus-visible:bg-muted focus-visible:ring-2 focus-visible:ring-ring/30 motion-reduce:transition-none";
 
 const workspaceNamedCardClass =
-  "group flex min-h-[68px] flex-col justify-center rounded-[12px] border border-border bg-card px-3 py-2 text-left shadow-[0_1px_2px_rgb(0_0_0/0.02)] outline-none transition-[background-color,border-color,box-shadow] duration-150 hover:bg-muted/50 focus-within:border-ring/40 focus-within:bg-muted/50 focus-within:ring-2 focus-within:ring-ring/20 motion-reduce:transition-none";
+  "group flex min-h-[68px] flex-col justify-center rounded-[12px] border border-border bg-card px-3 py-2 text-left shadow-[var(--app-shadow-card-subtle)] outline-none transition-[background-color,border-color,box-shadow] duration-150 hover:bg-muted/50 focus-within:border-ring/40 focus-within:bg-muted/50 focus-within:ring-2 focus-within:ring-ring/20 motion-reduce:transition-none";
 
 const workspaceFieldGroupClass = "rounded-[12px] border border-border bg-card p-3";
 

@@ -1,5 +1,5 @@
-import type { KnowledgeDatabase } from "@/lib/db";
 import type { AiProvider } from "@/lib/ai/ai-gateway";
+import type { KnowledgeDatabase } from "@/lib/db";
 
 const AI_SETTINGS_PREFIX = "ai";
 const PREFERRED_PROVIDER_SETTING_ID = `${AI_SETTINGS_PREFIX}:preferredProvider`;

@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 
 import {
-  SIDEBAR_NAVIGATION_TRACE_DATASET_KEY,
   readSidebarNavigationTrace,
   recordSidebarNavigationTrace,
+  SIDEBAR_NAVIGATION_TRACE_DATASET_KEY,
 } from "@/lib/sidebar-navigation-trace";
 
 beforeEach(() => {

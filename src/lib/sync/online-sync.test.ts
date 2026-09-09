@@ -2,9 +2,9 @@ import "fake-indexeddb/auto";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { createKnowledgeDatabase } from "@/lib/db";
+import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 import { createOnlineSyncRunner, shouldRunOnlineSync } from "@/lib/sync/online-sync";
 import { createSyncQueue } from "@/lib/sync/sync-queue";
-import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 const opened: ReturnType<typeof createKnowledgeDatabase>[] = [];
 
@@ -38,9 +38,7 @@ function entityFixture(): SpaceEntityRecord {
 
 describe("Online sync runner", () => {
   it("only runs when online, project id, and access token are available", () => {
-    expect(shouldRunOnlineSync({ online: false, projectId: "p", accessToken: "t" })).toBe(
-      false,
-    );
+    expect(shouldRunOnlineSync({ online: false, projectId: "p", accessToken: "t" })).toBe(false);
     expect(shouldRunOnlineSync({ online: true, projectId: "", accessToken: "t" })).toBe(false);
     expect(shouldRunOnlineSync({ online: true, projectId: "p", accessToken: "" })).toBe(false);
     expect(shouldRunOnlineSync({ online: true, projectId: "p", accessToken: "t" })).toBe(true);
@@ -95,9 +93,7 @@ describe("Online sync runner", () => {
       },
     });
 
-    await expect(
-      runner.runOnce({ now: new Date("2026-01-04T00:00:00.000Z") }),
-    ).resolves.toEqual({
+    await expect(runner.runOnce({ now: new Date("2026-01-04T00:00:00.000Z") })).resolves.toEqual({
       attempted: 1,
       synced: 1,
       failed: 0,

@@ -39,8 +39,10 @@ function isValidMutation(value: unknown): value is SyncMutationRecord {
   if (typeof value.entityType !== "string" || value.entityType.trim().length === 0) return false;
   if (!isSyncOperation(value.operation)) return false;
   if (!isSyncStatus(value.status)) return false;
-  if (typeof value.createdAt !== "string" || Number.isNaN(Date.parse(value.createdAt))) return false;
-  if (typeof value.updatedAt !== "string" || Number.isNaN(Date.parse(value.updatedAt))) return false;
+  if (typeof value.createdAt !== "string" || Number.isNaN(Date.parse(value.createdAt)))
+    return false;
+  if (typeof value.updatedAt !== "string" || Number.isNaN(Date.parse(value.updatedAt)))
+    return false;
   if (value.operation === "set" && value.payload === undefined) return false;
   return true;
 }
@@ -80,7 +82,8 @@ export async function handleAuthenticatedSyncPushRequest(
   }
 
   const projectId = dependencies.projectId?.trim();
-  const accessToken = dependencies.accessToken?.trim() ?? (await dependencies.getAccessToken?.())?.trim();
+  const accessToken =
+    dependencies.accessToken?.trim() ?? (await dependencies.getAccessToken?.())?.trim();
   if (!projectId || !accessToken) {
     return { status: 503, body: { error: "Remote sync is not configured." } };
   }

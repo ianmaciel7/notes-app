@@ -9,9 +9,7 @@ import {
 
 describe("Firebase auth boundary", () => {
   it("extracts Bearer tokens from authorization headers", () => {
-    expect(extractBearerToken(new Headers({ authorization: "Bearer id-token" }))).toBe(
-      "id-token",
-    );
+    expect(extractBearerToken(new Headers({ authorization: "Bearer id-token" }))).toBe("id-token");
     expect(extractBearerToken(new Headers({ authorization: "Basic nope" }))).toBeNull();
     expect(extractBearerToken(new Headers())).toBeNull();
   });

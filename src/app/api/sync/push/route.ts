@@ -16,7 +16,9 @@ export async function POST(request: Request) {
     headers: request.headers,
     verifier: createServerFirebaseAuthVerifier(),
     projectId:
-      process.env.FIREBASE_PROJECT_ID ?? process.env.GOOGLE_CLOUD_PROJECT ?? process.env.GCLOUD_PROJECT,
+      process.env.FIREBASE_PROJECT_ID ??
+      process.env.GOOGLE_CLOUD_PROJECT ??
+      process.env.GCLOUD_PROJECT,
     accessToken: process.env.FIRESTORE_ACCESS_TOKEN,
     getAccessToken: process.env.FIRESTORE_ACCESS_TOKEN ? undefined : getGoogleCloudAccessToken,
     databaseId: process.env.FIRESTORE_DATABASE_ID,

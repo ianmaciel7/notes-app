@@ -49,9 +49,7 @@ function recordSidebarNavigationTrace(
     label,
     scope,
   };
-  const nextTrace = [...readSidebarNavigationTrace(), entry].slice(
-    -SIDEBAR_NAVIGATION_TRACE_LIMIT,
-  );
+  const nextTrace = [...readSidebarNavigationTrace(), entry].slice(-SIDEBAR_NAVIGATION_TRACE_LIMIT);
   document.documentElement.dataset[SIDEBAR_NAVIGATION_TRACE_DATASET_KEY] =
     JSON.stringify(nextTrace);
 
@@ -61,10 +59,10 @@ function recordSidebarNavigationTrace(
 }
 
 export {
+  readSidebarNavigationTrace,
+  recordSidebarNavigationTrace,
   SIDEBAR_NAVIGATION_TRACE_DATASET_KEY,
   SIDEBAR_NAVIGATION_TRACE_EVENT,
   type SidebarNavigationTraceEntry,
-  readSidebarNavigationTrace,
-  recordSidebarNavigationTrace,
   sidebarNavigationTraceEnabled,
 };

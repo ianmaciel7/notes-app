@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  chunkTextForCardGeneration,
-  parseGeneratedCardsResponse,
-} from "@/lib/ai/card-generation";
+import { chunkTextForCardGeneration, parseGeneratedCardsResponse } from "@/lib/ai/card-generation";
 
 describe("AI card generation helpers", () => {
   it("chunks source text without exceeding the maximum size and keeps source offsets", () => {

@@ -1,8 +1,7 @@
 import "fake-indexeddb/auto";
 import { afterEach, describe, expect, it } from "vitest";
-
-import { createKnowledgeDatabase } from "@/lib/db";
 import { createByokSettingsStore } from "@/lib/ai/byok-settings";
+import { createKnowledgeDatabase } from "@/lib/db";
 
 const opened: ReturnType<typeof createKnowledgeDatabase>[] = [];
 
@@ -31,9 +30,7 @@ describe("BYOK AI settings", () => {
   it("rejects empty provider API keys", async () => {
     const { store } = setup();
 
-    await expect(store.setProviderApiKey("gemini", "   ")).rejects.toThrow(
-      "API key is required",
-    );
+    await expect(store.setProviderApiKey("gemini", "   ")).rejects.toThrow("API key is required");
   });
 
   it("clears one provider key without removing the other provider", async () => {

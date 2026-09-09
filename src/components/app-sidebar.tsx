@@ -750,7 +750,7 @@ function AppSidebarSpaceSwitcher({
             finalFocus={false}
             aria-label={text.changeSpace}
             className={cn(
-              "min-w-72 max-h-[27rem] overflow-hidden rounded-xl border-border bg-[var(--app-bg-front)] text-[var(--app-text-subtle)] shadow-[0_3px_5px_#00000003,0_5px_10px_#00000005,0_10px_14px_#00000003] outline-none",
+              "min-w-72 max-h-[27rem] overflow-hidden rounded-xl border-border bg-[var(--app-bg-front)] text-[var(--app-text-subtle)] shadow-[var(--app-shadow-sidebar-popover)] outline-none",
               compactMenuSurfaceClass,
               "data-closed:animate-none data-closed:duration-0 data-closed:opacity-0 data-closed:zoom-out-100",
             )}

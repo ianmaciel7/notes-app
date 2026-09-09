@@ -129,9 +129,11 @@ describe("Space repository", () => {
     await repository.deleteEntity(space.id, target.id, new Date("2026-01-02T00:00:00.000Z"));
 
     expect(await database.entities.get([space.id, target.id])).toBeUndefined();
-    expect((await database.relations.where("spaceId").equals(space.id).toArray()).map((relation) => relation.id)).toEqual([
-      "relation:other-a:other-b",
-    ]);
+    expect(
+      (await database.relations.where("spaceId").equals(space.id).toArray()).map(
+        (relation) => relation.id,
+      ),
+    ).toEqual(["relation:other-a:other-b"]);
 
     const mutations = await database.syncMutations.where("entityId").equals(target.id).toArray();
     const deleteMutation = mutations.find((mutation) => mutation.operation === "delete");
@@ -394,8 +396,7 @@ describe("Space repository", () => {
     const result = await repository.createGroundedFlashcardFromQuote(space.id, {
       objectTypeId: type.id,
       fileId: "paper",
-      sourceText:
-        "Before retrieval practice improves retention after repeated tests.",
+      sourceText: "Before retrieval practice improves retention after repeated tests.",
       exactQuote: "retrieval practice improves retention",
       front: "What improves retention?",
       back: "Retrieval practice.",
@@ -469,11 +470,7 @@ describe("Space repository", () => {
     const { database, repository } = setup();
     await bootstrapWorkspace(database, () => new Date("2026-01-01T00:00:00.000Z"));
 
-    const flashcard = await repository.createEntity(
-      PERSONAL_SPACE_ID,
-      "flashcard",
-      "Manual card",
-    );
+    const flashcard = await repository.createEntity(PERSONAL_SPACE_ID, "flashcard", "Manual card");
 
     expect(flashcard).toMatchObject({
       type: "flashcard",
@@ -538,17 +535,13 @@ describe("Space repository", () => {
     await bootstrapWorkspace(database, () => new Date("2026-01-01T00:00:00.000Z"));
     const flashcard = await repository.createEntity(PERSONAL_SPACE_ID, "flashcard", "Manual card");
 
-    await repository.updateEntity(
-      PERSONAL_SPACE_ID,
-      flashcard.id,
-      {
-        id: "rewritten",
-        spaceId: "other-space",
-        objectTypeId: "page",
-        createdAt: "1999-01-01T00:00:00.000Z",
-        title: "Still editable",
-      } as never,
-    );
+    await repository.updateEntity(PERSONAL_SPACE_ID, flashcard.id, {
+      id: "rewritten",
+      spaceId: "other-space",
+      objectTypeId: "page",
+      createdAt: "1999-01-01T00:00:00.000Z",
+      title: "Still editable",
+    } as never);
 
     const updated = await database.entities.get([PERSONAL_SPACE_ID, flashcard.id]);
     expect(updated).toMatchObject({

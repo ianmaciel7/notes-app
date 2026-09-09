@@ -136,7 +136,7 @@ function DropdownMenuSubTrigger({
       className={cn(
         floatingListItemClass,
         floatingListItemFocusClass,
-        "data-inset:pl-7 data-popup-open:bg-[#f3f1ee] data-popup-open:text-[#1f1c19] data-open:bg-[#f3f1ee] data-open:text-[#1f1c19] dark:data-popup-open:bg-accent dark:data-popup-open:text-accent-foreground dark:data-open:bg-accent dark:data-open:text-accent-foreground",
+        "data-inset:pl-7 data-popup-open:bg-[var(--app-dropdown-submenu-bg)] data-popup-open:text-[var(--app-dropdown-submenu-text)] data-open:bg-[var(--app-dropdown-submenu-bg)] data-open:text-[var(--app-dropdown-submenu-text)]",
         className
       )}
       {...props}
@@ -266,7 +266,7 @@ function DropdownMenuShortcut({
     <span
       data-slot="dropdown-menu-shortcut"
       className={cn(
-        "ml-auto text-xs tracking-normal text-[#8f8983] group-focus/dropdown-menu-item:text-[#8f8983]",
+        "ml-auto text-xs tracking-normal text-[var(--app-dropdown-shortcut-text)] group-focus/dropdown-menu-item:text-[var(--app-dropdown-shortcut-text)]",
         className
       )}
       {...props}

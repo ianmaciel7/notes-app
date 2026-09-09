@@ -9,8 +9,8 @@ import {
 import {
   getVisibleCommandPaletteRecentItems,
   shouldCloseCommandPaletteAfterSelect,
-  shouldRenderCommandPaletteOpenInNewTabToggle,
   shouldOpenNewContentCommandDialogForEvent,
+  shouldRenderCommandPaletteOpenInNewTabToggle,
 } from "@/components/app-sidebar-primary-actions-command-dialog";
 import { ObjectPageIcon } from "@/components/object-icons";
 
@@ -163,9 +163,9 @@ it("routes sidebar modifier clicks like Capacities", () => {
   expect(getSidebarNavigationIntent({ metaKey: true })).toBe("new-tab");
   expect(getSidebarNavigationIntent({ shiftKey: true })).toBe("side-panel");
   expect(getSidebarNavigationIntent({ ctrlKey: true, shiftKey: true })).toBe("side-panel");
-  expect(
-    getSidebarNavigationIntent({ __sidebarNavigationIntent: "new-tab", ctrlKey: false }),
-  ).toBe("new-tab");
+  expect(getSidebarNavigationIntent({ __sidebarNavigationIntent: "new-tab", ctrlKey: false })).toBe(
+    "new-tab",
+  );
 });
 
 it("opens a ctrl-clicked sidebar item in a new tab without replacing the current tab", () => {

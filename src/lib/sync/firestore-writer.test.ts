@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
-
-import {
-  createFirestoreRestSyncWriter,
-  toFirestoreValue,
-} from "@/lib/sync/firestore-writer";
 import type { SpaceEntityRecord, SyncMutationRecord } from "@/lib/spaces/space-types";
+import { createFirestoreRestSyncWriter, toFirestoreValue } from "@/lib/sync/firestore-writer";
 
 function entityFixture(): SpaceEntityRecord {
   return {
