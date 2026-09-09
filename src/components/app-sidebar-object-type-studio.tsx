@@ -95,6 +95,8 @@ const basicObjectTypeOrder = [
   "file",
   "tweet",
   "ai-chat",
+  "flashcard",
+  "study_goal",
   "table",
   "task",
   "query",
@@ -112,7 +114,7 @@ type ObjectTypeCardAppearance = Pick<ObjectTypePreset, "iconName" | "id" | "tone
 type ObjectTypeSelection = ObjectTypePreset | WorkspaceStructure;
 
 const capacitiesObjectTypeCardClass =
-  "hover:border-[oklch(0.8643_0.0017_67.13)] flex w-full cursor-pointer select-none flex-row items-center justify-start gap-x-3 rounded-base border border-[oklch(0.9163_0.0017_67.07)] bg-[oklch(1_0.0001_263.28)] px-2 py-2.5 text-left text-lg font-medium text-[oklch(0.3887_0.0052_301.05)] transition-colors hover:bg-[oklch(0.9856_0.0016_67)] active:brightness-95 data-[selected=true]:border-[oklch(0.8643_0.0017_67.13)] data-[selected=true]:bg-[oklch(0.9856_0.0016_67)]";
+  "flex w-full cursor-pointer select-none flex-row items-center justify-start gap-x-3 rounded-base border border-[var(--app-border-el)] bg-[var(--app-bg-el-subtle)] px-2 py-2.5 text-left text-lg font-medium text-[var(--app-text-primary)] transition-colors hover:border-[var(--app-border-el-hover)] hover:bg-[var(--app-bg-el-subtle-hover)] active:brightness-95 data-[selected=true]:border-[var(--app-border-el-hover)] data-[selected=true]:bg-[var(--app-bg-el-subtle-hover)]";
 
 const capacitiesObjectTypeToneStyle = (tone: ObjectIconTone): React.CSSProperties => ({
   backgroundColor: `var(--type-label-bg-${tone})`,
@@ -466,7 +468,7 @@ function AppSidebarObjectTypeDetails({
                   </div>
                 </div>
 
-                <div className="mt-5 flex gap-2 rounded-lg bg-muted/50 px-3 py-2 text-sm text-foreground">
+                <div className="mt-5 flex gap-2 rounded-lg bg-[var(--app-bg-el-subtle)] px-3 py-2 text-sm text-[var(--app-text-secondary)]">
                   <ObjectTypeDetailsIcon
                     name="info"
                     className="mt-0.5 shrink-0 text-muted-foreground"
@@ -482,7 +484,7 @@ function AppSidebarObjectTypeDetails({
       <div className="sticky bottom-0 flex w-full shrink-0 justify-center bg-[var(--app-bg-back)] px-4 py-4">
         <Button
           type="button"
-          className="h-8 w-full justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground shadow-none hover:bg-[var(--app-primary-hover)]"
+          className="h-8 w-full justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground shadow-none hover:bg-[var(--app-primary-hover)] disabled:bg-[var(--app-bg-el-strong)] disabled:text-[var(--app-text-subtle)] disabled:opacity-60"
           disabled={isCustom && customName.trim().length === 0}
           onClick={onConfirm}
         >

@@ -22,6 +22,7 @@ import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
 import { SuitcaseRollingIcon } from "@phosphor-icons/react/dist/csr/SuitcaseRolling";
 import { TableIcon } from "@phosphor-icons/react/dist/csr/Table";
 import { TagIcon } from "@phosphor-icons/react/dist/csr/Tag";
+import { TargetIcon } from "@phosphor-icons/react/dist/csr/Target";
 import { TelevisionSimpleIcon } from "@phosphor-icons/react/dist/csr/TelevisionSimple";
 import { TwitterLogoIcon } from "@phosphor-icons/react/dist/csr/TwitterLogo";
 import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
@@ -152,6 +153,7 @@ const phosphorObjectIcon: Record<ObjectIconName, Icon> = {
   code: CodeIcon,
   definition: BookmarkSimpleIcon,
   file: FileIcon,
+  flashcard: CardsThreeIcon,
   idea: LightbulbIcon,
   image: ImageIcon,
   knowledge: BrainIcon,
@@ -165,6 +167,7 @@ const phosphorObjectIcon: Record<ObjectIconName, Icon> = {
   project: CubeIcon,
   query: ListMagnifyingGlassIcon,
   quote: QuotesIcon,
+  "study-goal": TargetIcon,
   table: TableIcon,
   tag: TagIcon,
   task: CheckCircleIcon,
@@ -205,6 +208,7 @@ const ObjectAreaIcon = createObjectIcon("area");
 const ObjectMeetingIcon = createObjectIcon("meeting");
 const ObjectQuoteIcon = createObjectIcon("quote");
 const ObjectDefinitionIcon = createObjectIcon("definition");
+const ObjectFlashcardIcon = createObjectIcon("flashcard");
 const ObjectIdeaIcon = createObjectIcon("idea");
 const ObjectPlaceIcon = createObjectIcon("place");
 const ObjectProjectIcon = createObjectIcon("project");
@@ -224,6 +228,7 @@ const ObjectAiChatIcon = createObjectIcon("ai-chat");
 const ObjectTableIcon = createObjectIcon("table");
 const ObjectTaskIcon = createObjectIcon("task");
 const ObjectQueryIcon = createObjectIcon("query");
+const ObjectStudyGoalIcon = createObjectIcon("study-goal");
 const ObjectArchiveIcon = createObjectIcon("archive");
 const ObjectCodeIcon = createObjectIcon("code");
 const ObjectKnowledgeIcon = createObjectIcon("knowledge");
@@ -241,6 +246,7 @@ const objectTypeDefinitions: ObjectTypeDefinition[] = [
     icon: ObjectDefinitionIcon,
     tone: "violet",
   },
+  { id: "flashcard", label: "Flashcard", icon: ObjectFlashcardIcon, tone: "amber" },
   { id: "idea", label: "Idea", icon: ObjectIdeaIcon, tone: "yellow" },
   { id: "place", label: "Place", icon: ObjectPlaceIcon, tone: "emerald" },
   { id: "project", label: "Project", icon: ObjectProjectIcon, tone: "green" },
@@ -267,6 +273,7 @@ const objectTypeDefinitions: ObjectTypeDefinition[] = [
   { id: "file", label: "File", icon: ObjectFileIcon, tone: "red" },
   { id: "tweet", label: "Tweet", icon: ObjectTweetIcon, tone: "blue" },
   { id: "ai-chat", label: "AI chat", icon: ObjectAiChatIcon, tone: "purple" },
+  { id: "study_goal", label: "Study goal", icon: ObjectStudyGoalIcon, tone: "green" },
   { id: "table", label: "Table", icon: ObjectTableIcon, tone: "blue" },
   { id: "task", label: "Task", icon: ObjectTaskIcon, tone: "orange" },
   { id: "query", label: "Query", icon: ObjectQueryIcon, tone: "green" },

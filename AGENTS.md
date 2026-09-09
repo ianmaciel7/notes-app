@@ -41,6 +41,7 @@ This project maintains a security policy in [SECURITY.md](./SECURITY.md). All AI
   - **Cloud Firestore**: Background sync with Last-Write-Wins (LWW) conflict resolution.
 - **SRS Engine**: Modern FSRS (Free Spaced Repetition Scheduler) algorithm in `src/lib/srs/fsrs.ts`. Supports 4 rating responses (`Again=1`, `Hard=2`, `Good=3`, `Easy=4`) and exam burndown calculation (`DailyNewQuota = ceil(Unlearned / (DaysRemaining - BufferDays))`).
 - **Flashcard/SRS UI Data Rule**: Components that display or review flashcards must consume real Dexie-backed workspace data (`useLiveQuery`, `useSpaceData`, or Space repository APIs) and persist reviews through repository methods. Do not ship mock flashcard queues or local-only fake review state.
+- **Study Object Type Visibility Rule**: `flashcard` and `study_goal` are required built-in study object types. Any UI that lists built-in/basic/creatable object types must include both, including the Add Object Type modal. Keep their schema/icon/label sources synchronized across `src/lib/space-object-types.ts`, `src/components/object-icons.tsx`, and `src/messages/*.json`.
 - **AI Gateway & Card Generation**:
   - Server Route Handler at `/api/ai/generate` querying Google Gemini 2.0 Flash / Groq LLMs.
   - Generates structured JSON schema with verbatim `exactQuote`, `cardType`, `front`, `back`.

@@ -589,6 +589,8 @@
   --app-block-selection-border: oklch(0.7137 0.1435 254.63);
   --app-block-bg-green: oklch(0.9646 0.035 156.65);
   --app-block-text-green: oklch(0.3322 0.083 162.1);
+  --app-block-bg-blue: oklch(0.9513 0.0235 256.13);
+  --app-block-text-blue: oklch(0.3975 0.118 260.12);
   --app-internal-link: oklch(0.3887 0.0052 301.05);
   --app-internal-link-hover: oklch(0.4668 0.0039 16.75);
   --app-external-link: oklch(0.6129 0.175 259.87);
@@ -789,8 +791,10 @@
   --app-text-selection: #5090dd3a;
   --app-block-selection: #5090dd3a;
   --app-block-selection-border: oklch(0.7137 0.1435 254.63);
-  --app-block-bg-green: oklch(0.234 0.041 162.4);
-  --app-block-text-green: oklch(0.809 0.139 157.8);
+  --app-block-bg-green: oklch(0.242 0.032 160.8);
+  --app-block-text-green: oklch(0.833 0.079 157.4);
+  --app-block-bg-blue: oklch(0.286 0.041 263.2);
+  --app-block-text-blue: oklch(0.835 0.067 254.8);
   --app-internal-link: oklch(0.8643 0.0017 67.13);
   --app-internal-link-hover: oklch(0.9163 0.0017 67.07);
   --app-external-link: oklch(0.7137 0.1435 254.63);

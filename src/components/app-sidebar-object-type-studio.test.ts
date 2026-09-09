@@ -21,9 +21,28 @@ it("keeps the add-object-type intro as a compact green Capacities callout", () =
   expect(componentSource).toContain("bg-[var(--app-bg-front)]");
   expect(globalCss).toContain("--app-block-bg-green:");
   expect(globalCss).toContain("--app-block-text-green:");
+  expect(globalCss).toContain("--app-block-bg-blue:");
+  expect(globalCss).toContain("--app-block-text-blue:");
   expect(globalCss).toContain("--type-label-text-amber:");
   expect(globalCss).toContain("--type-label-bg-amber:");
   expect(globalCss).toContain("--type-label-border-amber:");
+});
+
+it("uses theme tokens for the object type cards so dark mode stays Capacities-like", () => {
+  const componentSource = readSource("components/app-sidebar-object-type-studio.tsx");
+
+  expect(componentSource).toContain("bg-[var(--app-bg-el-subtle)]");
+  expect(componentSource).toContain("text-[var(--app-text-primary)]");
+  expect(componentSource).toContain("border-[var(--app-border-el)]");
+  expect(componentSource).toContain("hover:bg-[var(--app-bg-el-subtle-hover)]");
+  expect(componentSource).not.toContain("bg-[oklch(1_0.0001_263.28)]");
+});
+
+it("includes built-in study object types in the basic picker grid", () => {
+  const componentSource = readSource("components/app-sidebar-object-type-studio.tsx");
+
+  expect(componentSource).toContain('"flashcard"');
+  expect(componentSource).toContain('"study_goal"');
 });
 
 it("dismisses the object type details panel when the backing content is clicked", () => {
