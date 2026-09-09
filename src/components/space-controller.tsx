@@ -14,6 +14,7 @@ import {
   AppSidePanelHeader,
   defaultSpecialItems,
   type SidePanelSpecialEntryId,
+  type SideSpecialItem,
 } from "@/components/app-side-panel-header";
 import { useFocusMode } from "@/components/focus-mode-provider";
 import {
@@ -80,6 +81,60 @@ export function resolveSidePanelTabsAfterOpen(
   if (activeIsDefaultExplore) return [nextTab];
 
   return [...currentTabs, nextTab];
+}
+
+export type WorkspaceSidePanelContext = "collection" | "item" | "list";
+
+export function resolveWorkspaceSidePanelContext({
+  activeEntityId,
+  collections,
+  entities,
+  mainValue,
+  objectTypes,
+}: {
+  activeEntityId?: string | null;
+  collections: readonly { id: string }[];
+  entities: readonly { id: string }[];
+  mainValue?: string | null;
+  objectTypes: readonly { id: string }[];
+}): WorkspaceSidePanelContext {
+  const activeIds = [activeEntityId, mainValue].filter((value): value is string => Boolean(value));
+  const collectionIds = new Set(collections.map((collection) => collection.id));
+  const entityIds = new Set(entities.map((entity) => entity.id));
+  const objectTypeIds = new Set(objectTypes.map((objectType) => objectType.id));
+
+  if (
+    mainValue?.startsWith("object-type-item:collection:") ||
+    activeIds.some((id) => collectionIds.has(id))
+  ) {
+    return "collection";
+  }
+
+  if (activeIds.some((id) => entityIds.has(id))) return "item";
+
+  if (activeIds.some((id) => objectTypeIds.has(id)) || activeIds.includes("page")) {
+    return "list";
+  }
+
+  return "list";
+}
+
+const sidePanelSpecialItemsByContext: Record<
+  WorkspaceSidePanelContext,
+  ReadonlySet<SidePanelSpecialEntryId> | null
+> = {
+  collection: new Set(["graphView", "aiAssistantChat", "localSpaceQuery"]),
+  item: null,
+  list: new Set(["aiAssistantChat", "localSpaceQuery"]),
+};
+
+export function filterSidePanelSpecialItemsForContext(
+  items: readonly SideSpecialItem[],
+  context: WorkspaceSidePanelContext,
+) {
+  const allowed = sidePanelSpecialItemsByContext[context];
+  if (!allowed) return [...items];
+  return items.filter((item) => allowed.has(item.id));
 }
 
 const defaultWorkspaceContext: WorkspaceContextValue = {
@@ -729,16 +784,36 @@ export function useWorkspace() {
 }
 
 export function WorkspaceMainHeader() {
-  const { mainTabs, setMainTabs, mainValue, setMainValue, openInSidePanel } = useWorkspace();
+  const {
+    activeEntityId,
+    createdEntities,
+    mainTabs,
+    mainValue,
+    objectTypeCollections,
+    objectTypes,
+    setMainTabs,
+    setMainValue,
+    openInSidePanel,
+  } = useWorkspace();
   const appShell = React.useContext(AppShellContext);
   const rightCollapsed = appShell?.rightCollapsed ?? false;
   const toggleRight = appShell?.toggleRight;
   const rightPanelTriggerRef = appShell?.rightPanelTriggerRef;
   const tabs = mainTabs && mainTabs.length > 0 ? mainTabs : initialMainTabs;
   const value = mainValue || tabs[0]?.id || "page";
+  const specialItems = filterSidePanelSpecialItemsForContext(
+    defaultSpecialItems,
+    resolveWorkspaceSidePanelContext({
+      activeEntityId,
+      collections: Object.values(objectTypeCollections ?? {}),
+      entities: createdEntities,
+      mainValue,
+      objectTypes,
+    }),
+  );
 
   function openSpecialEntry(entryId: SidePanelSpecialEntryId) {
-    const item = defaultSpecialItems.find((candidate) => candidate.id === entryId);
+    const item = specialItems.find((candidate) => candidate.id === entryId);
     if (!item) return;
     const tabId = entryId === "aiAssistantChat" ? `aiAssistantChat_${Date.now()}` : entryId;
     openInSidePanel({ id: tabId, label: item.label, icon: item.icon, draggable: true });
@@ -768,7 +843,7 @@ export function WorkspaceMainHeader() {
                 <AppHeaderCaretDownIcon className="size-2.5" />
               </DropdownMenuTrigger>
               <DropdownMenuContent side="bottom" align="end" sideOffset={6} className="w-64 p-1.5">
-                {defaultSpecialItems.map((item) => {
+                {specialItems.map((item) => {
                   const Icon = item.icon;
                   return (
                     <DropdownMenuItem
@@ -807,11 +882,32 @@ export function WorkspaceMainHeader() {
 }
 
 export function WorkspaceSidePanelHeader() {
-  const { sideTabs, setSideTabs, sideValue, setSideValue, openInSidePanel } = useWorkspace();
+  const {
+    activeEntityId,
+    createdEntities,
+    mainValue,
+    objectTypeCollections,
+    objectTypes,
+    sideTabs,
+    setSideTabs,
+    sideValue,
+    setSideValue,
+    openInSidePanel,
+  } = useWorkspace();
   const appShell = React.useContext(AppShellContext);
   const toggleRight = appShell?.toggleRight;
   const tabs = sideTabs && sideTabs.length > 0 ? sideTabs : initialSideTabs;
   const value = sideValue || tabs[0]?.id || "side-1";
+  const specialItems = filterSidePanelSpecialItemsForContext(
+    defaultSpecialItems,
+    resolveWorkspaceSidePanelContext({
+      activeEntityId,
+      collections: Object.values(objectTypeCollections ?? {}),
+      entities: createdEntities,
+      mainValue,
+      objectTypes,
+    }),
+  );
 
   return (
     <AppSidePanelHeader
@@ -821,7 +917,7 @@ export function WorkspaceSidePanelHeader() {
       onTabsChange={setSideTabs}
       onHide={toggleRight}
       onSpecialEntrySelect={(entryId) => {
-        const item = defaultSpecialItems.find((candidate) => candidate.id === entryId);
+        const item = specialItems.find((candidate) => candidate.id === entryId);
         if (!item) return;
         const tabId = entryId === "aiAssistantChat" ? `aiAssistantChat_${Date.now()}` : entryId;
         openInSidePanel({ id: tabId, label: item.label, icon: item.icon, draggable: true });
@@ -835,6 +931,7 @@ export function WorkspaceSidePanelHeader() {
           );
         }
       }}
+      specialItems={specialItems}
     />
   );
 }
