@@ -643,8 +643,7 @@ function WorkspaceDefaultPanel() {
 }
 
 export function WorkspaceSidePanelContent() {
-  const { activeEntityId, createdEntities, setSideTabs, setSideValue, sideTabs, sideValue } =
-    useWorkspace();
+  const { activeEntityId, createdEntities, sideTabs, sideValue } = useWorkspace();
   const name = getWorkspaceTabPendingName(sideTabs, sideValue, "Side panel");
   const activeEntity = createdEntities.find(
     (entity: { id: string }) => entity.id === activeEntityId,
@@ -655,13 +654,6 @@ export function WorkspaceSidePanelContent() {
       activeMainObjectTitle={activeEntity?.title}
       activeTabLabel={name}
       sideValue={sideValue}
-      onOpenItem={(item) => {
-        setSideTabs((current: { id: string }[]) => {
-          if (current.some((tab) => tab.id === item.id)) return current;
-          return [...current, { id: item.id, label: item.label, icon: item.icon, draggable: true }];
-        });
-        setSideValue(item.id);
-      }}
     />
   );
 }

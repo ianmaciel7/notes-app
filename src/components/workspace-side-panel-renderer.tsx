@@ -64,7 +64,6 @@ const sidePanelItems: SidePanelItem[] = [
 type WorkspaceSidePanelRendererProps = {
   activeMainObjectTitle?: string;
   activeTabLabel: string;
-  onOpenItem?: (item: SidePanelItem) => void;
   sideValue: string;
 };
 

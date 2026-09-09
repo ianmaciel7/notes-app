@@ -59,6 +59,29 @@ const initialSideTabs = [
   { id: "side-1", label: "Explore", icon: AppHeaderCompassIcon, draggable: true },
 ];
 
+export function isDefaultExploreSideTab(tab: Pick<AppHeaderTab, "id" | "label">) {
+  return tab.id === "side-1" || tab.id === "explore" || tab.label === "Explore";
+}
+
+export function resolveSidePanelTabsAfterOpen(
+  currentTabs: AppHeaderTab[],
+  activeValue: string,
+  nextTab: AppHeaderTab,
+) {
+  if (currentTabs.some((tab) => tab.id === nextTab.id)) return currentTabs;
+
+  const [onlyTab] = currentTabs;
+  const activeIsDefaultExplore =
+    onlyTab &&
+    currentTabs.length === 1 &&
+    isDefaultExploreSideTab(onlyTab) &&
+    (activeValue === onlyTab.id || activeValue === "explore");
+
+  if (activeIsDefaultExplore) return [nextTab];
+
+  return [...currentTabs, nextTab];
+}
+
 const defaultWorkspaceContext: WorkspaceContextValue = {
   spaces: [{ id: PERSONAL_SPACE_ID, name: "Personal Space", icon: "user" }],
   spaceId: PERSONAL_SPACE_ID,
@@ -422,12 +445,17 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     ) => {
       const id = tabOrDescriptor.id ?? `side-${Date.now()}`;
       setSideTabs((current) => {
-        if (current.some((tab) => tab.id === id)) return current;
-        return [...current, { label: "Side Panel", ...tabOrDescriptor, id, draggable: true }];
+        const nextTab: AppHeaderTab = {
+          label: "Side Panel",
+          ...tabOrDescriptor,
+          id,
+          draggable: true,
+        };
+        return resolveSidePanelTabsAfterOpen(current, sideValue, nextTab);
       });
       setSideValue(id);
     },
-    [],
+    [sideValue],
   );
 
   React.useEffect(() => {
