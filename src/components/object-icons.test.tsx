@@ -82,6 +82,22 @@ describe("object type visual contract", () => {
     expect(pathCount).toBeLessThanOrEqual(3);
   });
 
+  it("renders media with the Capacities split-panel glyph", () => {
+    const definition = objectTypeDefinitions.find((item) => item.id === "media");
+
+    expect(definition).toBeDefined();
+    if (!definition) {
+      throw new Error("Missing object type definition for media");
+    }
+
+    const Icon = definition.icon;
+    const markup = renderToStaticMarkup(<Icon />);
+
+    expect(markup).toContain("M40,80H144V200H40");
+    expect(markup).toContain("H160V80h56");
+    expect(markup).toContain("a12,12,0,1,1-12-12");
+  });
+
   it("renders every object type from local React SVG components", () => {
     const source = readFileSync(new URL("object-icons.tsx", import.meta.url), "utf8");
 
