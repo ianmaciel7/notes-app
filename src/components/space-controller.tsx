@@ -46,11 +46,15 @@ import type { FSRSRating } from "@/lib/srs/fsrs";
 
 // biome-ignore lint/suspicious/noExplicitAny: context compatibility while legacy UI APIs are migrated
 export type WorkspaceContextValue = Record<string, any>;
+export type CreateWorkspaceEntityOptions = {
+  title?: string;
+};
 
-const initialMainTabs = [
+const initialMainTabs: AppHeaderTab[] = [
   {
     id: "page",
     label: "Pages",
+    kind: "object-list",
     icon: ObjectPageIcon,
     iconClassName: objectIconToneBadgeClass.blue,
     draggable: true,
@@ -129,6 +133,15 @@ export function upsertWorkspaceTab(currentTabs: AppHeaderTab[], nextTab: AppHead
   });
 
   return found ? tabs : [...currentTabs, nextTab];
+}
+
+export function resolveWorkspaceEntityTitle(
+  objectTypeLabel?: string,
+  options: CreateWorkspaceEntityOptions = {},
+) {
+  const title = options.title?.trim();
+  if (title) return title;
+  return `Untitled ${objectTypeLabel ?? "Object"}`;
 }
 
 export type WorkspaceSidePanelContext = "collection" | "item" | "list";
@@ -460,12 +473,12 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   );
 
   const createWorkspaceEntity = React.useCallback(
-    async (objectTypeId: string, label?: string) => {
+    async (objectTypeId: string, label?: string, options?: CreateWorkspaceEntityOptions) => {
       try {
         const entity = await repository.createEntity(
           spaceId,
           objectTypeId,
-          `Untitled ${label ?? "Object"}`,
+          resolveWorkspaceEntityTitle(label, options),
         );
         setActiveEntityId(entity.id);
         const objectType = objectTypes.find((item) => item.id === objectTypeId);
@@ -473,6 +486,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           const tab: AppHeaderTab = {
             id: entity.id,
             label: entity.title,
+            kind: "object",
             icon: objectType.icon,
             iconClassName: objectIconToneBadgeClass[objectType.tone],
             draggable: true,
@@ -602,6 +616,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         return {
           id,
           label: objectType.label,
+          kind: "object-list",
           icon: objectType.icon,
           iconClassName: objectIconToneBadgeClass[objectType.tone],
           draggable: true,
@@ -614,6 +629,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         return {
           id,
           label: entity.title || "Sem título",
+          kind: "object",
           icon: entityType?.icon,
           iconClassName: entityType ? objectIconToneBadgeClass[entityType.tone] : undefined,
           draggable: true,

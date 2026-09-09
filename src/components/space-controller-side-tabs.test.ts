@@ -7,6 +7,7 @@ import {
   filterSidePanelSpecialItemsForContext,
   isDefaultExploreSideTab,
   resolveWorkspaceMainValueFromRouteSegment,
+  resolveWorkspaceEntityTitle,
   resolveSidePanelTabsAfterOpen,
   resolveSidePanelTabsAfterClose,
   resolveWorkspaceSidePanelContext,
@@ -192,4 +193,10 @@ it("uses clean GUID-like route segments while preserving internal entity ids", (
       { id: "entity-41a189bd-9309-4a6f-aa02-5e5aa1023ee2" },
     ]),
   ).toBe("entity-41a189bd-9309-4a6f-aa02-5e5aa1023ee2");
+});
+
+it("uses an exact typed title for create-from-query while preserving default untitled labels", () => {
+  expect(resolveWorkspaceEntityTitle("Page")).toBe("Untitled Page");
+  expect(resolveWorkspaceEntityTitle("Page", { title: "zzzzzzzzzz" })).toBe("zzzzzzzzzz");
+  expect(resolveWorkspaceEntityTitle(undefined, { title: "  zzzzzzzzzz  " })).toBe("zzzzzzzzzz");
 });

@@ -38,6 +38,7 @@ type HeaderTabLayout = {
 export type AppHeaderTab = {
   id: string;
   label: string;
+  kind?: "object" | "object-list" | "collection" | "action";
   icon?: React.ElementType;
   iconClassName?: string;
   pinned?: boolean;
@@ -277,6 +278,18 @@ function handleTabKeyDown(event: React.KeyboardEvent<HTMLElement>, onOpen?: () =
 
 function dataFlag(value: boolean) {
   return value || undefined;
+}
+
+function getAppHeaderTabKind(tab: Pick<AppHeaderTab, "kind">) {
+  return tab.kind ?? "object";
+}
+
+function shouldUseStrongAppHeaderTabLabel(tab: Pick<AppHeaderTab, "kind">, active: boolean) {
+  return active && getAppHeaderTabKind(tab) === "object-list";
+}
+
+function shouldRenderMainTabAsNeutral(tab: Pick<AppHeaderTab, "kind">, tabCount: number) {
+  return tabCount === 1 && getAppHeaderTabKind(tab) !== "object-list";
 }
 
 function getTabRenderItems(tabs: AppHeaderTab[]) {
@@ -623,12 +636,14 @@ function AppHeaderTabItem({
     pinnable,
     closable,
   });
+  const useStrongLabel = shouldUseStrongAppHeaderTabLabel(tab, active);
 
   const tabNode = (
     <div
       data-slot="app-header-tab"
       data-active={dataFlag(active)}
       data-neutral={dataFlag(neutral)}
+      data-tab-kind={getAppHeaderTabKind(tab)}
       data-pinned={dataFlag(Boolean(tab.pinned))}
       className={cn(
         "group/tab pointer-events-auto relative min-w-0 max-w-full rounded-md",
@@ -664,8 +679,14 @@ function AppHeaderTabItem({
             if (closable) onClose?.();
           }}
         >
-          <AppHeaderTabIcon tab={tab} neutral={neutral || fitContent} />
-          <span className={cn("min-w-0 truncate text-left", fitContent ? undefined : "flex-1")}>
+          <AppHeaderTabIcon tab={tab} neutral={neutral} />
+          <span
+            className={cn(
+              "min-w-0 truncate text-left",
+              fitContent ? undefined : "flex-1",
+              useStrongLabel && "font-semibold",
+            )}
+          >
             {tab.label}
           </span>
           <FitContentPinAction
@@ -910,6 +931,7 @@ function AppSpaceHeader({
         >
           {visibleTabs.map(({ tab, renderKey }, localIndex) => {
             const active = tab.id === value;
+            const neutral = shouldRenderMainTabAsNeutral(tab, tabs.length);
             const before = dropTarget?.id === tab.id && dropTarget.position === "before";
             const after = dropTarget?.id === tab.id && dropTarget.position === "after";
             const absoluteIndex = range.start + localIndex;
@@ -971,7 +993,7 @@ function AppSpaceHeader({
                   <AppHeaderTabItem
                     tab={tab}
                     active={active}
-                    neutral={tabs.length === 1}
+                    neutral={neutral}
                     fitContent={tabs.length === 1}
                     closable={tabs.length > 1}
                     pinnable
@@ -1023,10 +1045,13 @@ function AppSpaceHeader({
 export {
   AppHeaderTabItem,
   AppSpaceHeader,
+  getAppHeaderTabKind,
   MAIN_TAB_GAP,
   MAIN_TAB_MAX_WIDTH,
   MAIN_TAB_MIN_WIDTH,
   SIDE_TAB_GAP,
   SIDE_TAB_MAX_WIDTH,
   SIDE_TAB_MIN_WIDTH,
+  shouldRenderMainTabAsNeutral,
+  shouldUseStrongAppHeaderTabLabel,
 };

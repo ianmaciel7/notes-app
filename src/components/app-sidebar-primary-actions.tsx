@@ -578,7 +578,11 @@ function NewContentMenu({
 }: {
   action: AppSidebarPrimaryAction;
   objectTypes: readonly AppSidebarObjectType[];
-  onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
+  onSelectObjectType?: (
+    objectTypeId: string,
+    objectTypeLabel?: string,
+    options?: { title?: string },
+  ) => void;
 }) {
   const t = useTranslations("workspace");
   const shortcutPlatform = useShortcutPlatform();
@@ -622,10 +626,9 @@ function NewContentMenu({
       return;
     }
 
-    onSelectObjectType?.(
-      selectedItem?.objectTypeId ?? objectTypeId,
-      selectedItem?.createTitle ?? selectedItem?.label,
-    );
+    onSelectObjectType?.(selectedItem?.objectTypeId ?? objectTypeId, selectedItem?.label, {
+      title: selectedItem?.createTitle,
+    });
     setOpen(false);
     resetMenu();
   }
@@ -849,7 +852,11 @@ type AppSidebarPrimaryAction = {
 type AppSidebarPrimaryActionsProps = {
   activeAction?: AppSidebarPrimaryNavigationAction;
   onAction?: (action: AppSidebarPrimaryActionId) => void;
-  onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
+  onSelectObjectType?: (
+    objectTypeId: string,
+    objectTypeLabel?: string,
+    options?: { title?: string },
+  ) => void;
   objectTypes?: readonly AppSidebarObjectType[];
   actions?: AppSidebarPrimaryAction[];
   className?: string;
@@ -966,7 +973,11 @@ function AppSidebarPrimaryActionItem({
   active: boolean;
   objectTypes: readonly AppSidebarObjectType[];
   onAction?: (action: AppSidebarPrimaryActionId) => void;
-  onSelectObjectType?: (objectTypeId: string, objectTypeLabel?: string) => void;
+  onSelectObjectType?: (
+    objectTypeId: string,
+    objectTypeLabel?: string,
+    options?: { title?: string },
+  ) => void;
 }) {
   const shortcutPlatform = useShortcutPlatform();
   const Icon = action.icon;
@@ -1171,6 +1182,7 @@ function WorkspaceSidebar() {
       navigateMainTab({
         id,
         label: objectType.label,
+        kind: "object-list",
         icon: objectType.icon,
         iconClassName: getObjectIconToneClass(objectType.tone),
       });
@@ -1185,6 +1197,7 @@ function WorkspaceSidebar() {
       navigateMainTab({
         id,
         label: entity.title,
+        kind: "object",
         icon: entityType?.icon,
         iconClassName: getObjectIconToneClass(entityType?.tone),
       });
@@ -1198,6 +1211,7 @@ function WorkspaceSidebar() {
       navigateMainTab({
         id,
         label: pinnedEntity.label,
+        kind: visibleObjectTypeCollections[id] ? "collection" : "object",
         icon: pinnedEntity.icon,
         iconClassName: getObjectIconToneClass(pinnedEntity.tone),
       });
@@ -1210,6 +1224,7 @@ function WorkspaceSidebar() {
       navigateMainTab({
         id: tabId,
         label: collection.name,
+        kind: "collection",
         icon: ObjectCollectionIcon,
         iconClassName: objectIconToneBadgeClass.gray,
       });
@@ -1232,32 +1247,6 @@ function WorkspaceSidebar() {
       return;
     }
 
-    if (action === "create" || action === "template") {
-      createWorkspaceEntity(objectType.id, objectType.label);
-      if (action === "template") {
-        showMessage(t("objectTypeOverview.templateCreated"));
-      }
-      return;
-    }
-
-    if (action === "pin") {
-      setPinnedEntities((current: any[]) =>
-        current.some((item: any) => item.id === collectionId)
-          ? current
-          : [
-              ...current,
-              {
-                id: collectionId,
-                label: collection.name,
-                icon: ObjectCollectionIcon,
-                tone: "gray",
-              },
-            ],
-      );
-      showMessage(t("objectTypeOverview.pinnedToSidebar"));
-      return;
-    }
-
     if (action === "unpin-type") {
       setHiddenCollectionIds((current: Set<string>) => new Set(current).add(collectionId));
       setActiveEntityId(objectType.id);
@@ -1265,9 +1254,9 @@ function WorkspaceSidebar() {
       return;
     }
 
-    if (action === "settings") {
+    if (action === "change-type" || action === "settings") {
       selectEntity(objectType.id);
-      showMessage(t("objectTypeOverview.settingsDescription"));
+      showMessage(t("documentMenu.typeSettingsHint"));
       return;
     }
 
@@ -1277,11 +1266,29 @@ function WorkspaceSidebar() {
       return;
     }
 
+    if (action === "present") {
+      selectEntity(collectionId);
+      showMessage(t("documentMenu.presentHint"));
+      return;
+    }
+
+    if (action === "export") {
+      selectEntity(collectionId);
+      showMessage(t("documentMenu.exported"));
+      return;
+    }
+
     if (action === "import") {
       selectEntity(objectType.id);
       window.setTimeout(() => {
         document.getElementById(`object-type-import-${objectType.id}`)?.click();
       }, 0);
+      return;
+    }
+
+    if (action === "copy") {
+      void navigator.clipboard?.writeText(collection.name).catch(() => undefined);
+      showMessage(t("documentMenu.copied"));
       return;
     }
 
@@ -1416,15 +1423,6 @@ function WorkspaceSidebar() {
           onPurgeTrashItem={purgeTrashItem}
           onRestoreTrashItem={restoreTrashItem}
           onPinnedEntitiesChange={setPinnedEntities}
-          onOpenPinnedInSidePanel={(entity) => {
-            openInSidePanel({
-              id: entity.id,
-              label: entity.label,
-              icon: entity.icon,
-              iconClassName: objectIconToneBadgeClass[entity.tone],
-              draggable: true,
-            });
-          }}
           onCustomSectionsChange={setCustomSections}
           onCollectionAction={handleCollectionAction}
           onOpenShortcuts={() => setShortcutBrowserOpen(true)}
