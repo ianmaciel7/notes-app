@@ -161,7 +161,7 @@ function getVisibleCommandPaletteRecentItems<T>(
 }
 
 function shouldCloseCommandPaletteAfterSelect(source: CommandPaletteSelectSource) {
-  return source === "keyboard";
+  return source === "keyboard" || source === "pointer";
 }
 
 function shouldRenderCommandPaletteOpenInNewTabToggle() {

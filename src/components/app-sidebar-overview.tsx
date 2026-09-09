@@ -33,10 +33,13 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   CompactMenuAccountPanel,
+  CompactMenuIconFrame,
+  CompactMenuItemText,
   CompactMenuPlanBadge,
   compactMenuActionButtonClass,
   sidebarContextMenuContentClass,
   sidebarContextSubmenuContentClass,
+  workspaceOverflowMenuItemClass,
 } from "@/components/ui/compact-menu";
 import {
   Dialog,
@@ -81,6 +84,12 @@ const workspaceRevealActionClass =
   "pointer-events-none invisible opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/interactive:pointer-events-auto group-hover/interactive:visible group-hover/interactive:opacity-100 data-popup-open:pointer-events-auto data-popup-open:visible data-popup-open:opacity-100";
 const workspaceSectionRevealActionClass =
   "pointer-events-none opacity-0 transition-opacity duration-200 ease-out motion-reduce:transition-none group-hover/app-sidebar-section:pointer-events-auto group-hover/app-sidebar-section:opacity-100 data-popup-open:pointer-events-auto data-popup-open:opacity-100";
+const collectionMenuItemClass = cn(
+  workspaceOverflowMenuItemClass,
+  "h-base min-h-base justify-between gap-2 pl-1 pr-1 text-[var(--app-text-primary)]",
+  "hover:bg-[var(--app-bg-el)] data-highlighted:bg-[var(--app-bg-el)] data-highlighted:text-[var(--app-text-primary)]",
+);
+const collectionMenuSeparatorClass = "my-1 h-0 border-b-[0.5px] border-front bg-transparent";
 
 import type { WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
 import {
@@ -294,6 +303,10 @@ function AppSidebarObjectTypeMenuIcon({
       </svg>
     </span>
   );
+}
+
+function CollectionMenuIcon({ children }: { children: React.ReactNode }) {
+  return <CompactMenuIconFrame variant="ghost">{children}</CompactMenuIconFrame>;
 }
 
 function reorderById<T extends { id: string }>(items: T[], fromId: string, toId: string) {
@@ -1994,62 +2007,90 @@ function AppSidebarCollectionMenu({
         side="right"
         align="start"
         sideOffset={8}
-        className={sidebarContextMenuContentClass}
+        className={cn(sidebarContextMenuContentClass, "p-1.5")}
       >
-        <DropdownMenuItem onClick={action("open")}>
-          <AppSidebarSourceIcon name="external" />
-          {t("lifecycle.task.open")}
+        <DropdownMenuItem className={collectionMenuItemClass} onClick={action("open")}>
+          <CollectionMenuIcon>
+            <AppSidebarSourceIcon name="external" />
+          </CollectionMenuIcon>
+          <CompactMenuItemText>{t("lifecycle.task.open")}</CompactMenuItemText>
           <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={action("create")}>
-          <AppSidebarPlusIcon />
-          {t("sidebarCollections.createObject", { type: objectTypeName })}
+        <DropdownMenuItem className={collectionMenuItemClass} onClick={action("create")}>
+          <CollectionMenuIcon>
+            <AppSidebarPlusIcon />
+          </CollectionMenuIcon>
+          <CompactMenuItemText>
+            {t("sidebarCollections.createObject", { type: objectTypeName })}
+          </CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={action("template")}>
-          <AppSidebarCopyIcon />
-          {t("objectTypeOverview.newFromTemplate")}
+        <DropdownMenuSeparator className={collectionMenuSeparatorClass} />
+        <DropdownMenuItem className={collectionMenuItemClass} onClick={action("template")}>
+          <CollectionMenuIcon>
+            <AppSidebarCopyIcon />
+          </CollectionMenuIcon>
+          <CompactMenuItemText>{t("objectTypeOverview.newFromTemplate")}</CompactMenuItemText>
           <AppSidebarObjectTypeMenuIcon name="chevronRight" className="ml-auto" />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={action("pin")}>
-          <AppSidebarPinIcon />
-          {t("documentMenu.pinSidebar")}
+        <DropdownMenuItem className={collectionMenuItemClass} onClick={action("pin")}>
+          <CollectionMenuIcon>
+            <AppSidebarPinIcon />
+          </CollectionMenuIcon>
+          <CompactMenuItemText>{t("documentMenu.pinSidebar")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={action("unpin-type")}>
-          <AppSidebarPinOffIcon />
-          {t("sidebarCollections.unpinFromType")}
+        <DropdownMenuItem className={collectionMenuItemClass} onClick={action("unpin-type")}>
+          <CollectionMenuIcon>
+            <AppSidebarPinOffIcon />
+          </CollectionMenuIcon>
+          <CompactMenuItemText>{t("sidebarCollections.unpinFromType")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={action("settings")}>
-          <AppSidebarSourceIcon name="settings" />
-          {t("documentMenu.typeSettings")}
+        <DropdownMenuSeparator className={collectionMenuSeparatorClass} />
+        <DropdownMenuItem className={collectionMenuItemClass} onClick={action("settings")}>
+          <CollectionMenuIcon>
+            <AppSidebarSourceIcon name="settings" />
+          </CollectionMenuIcon>
+          <CompactMenuItemText>{t("documentMenu.typeSettings")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={action("share")}>
-          <AppSidebarSourceIcon name="share" />
-          {t("documentMenu.share")}
+        <DropdownMenuSeparator className={collectionMenuSeparatorClass} />
+        <DropdownMenuItem className={collectionMenuItemClass} onClick={action("share")}>
+          <CollectionMenuIcon>
+            <AppSidebarSourceIcon name="share" />
+          </CollectionMenuIcon>
+          <CompactMenuItemText>{t("documentMenu.share")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={action("import")}>
-          <AppSidebarObjectTypeMenuIcon name="import" />
-          {t("documentMenu.import")}
+        <DropdownMenuItem className={collectionMenuItemClass} onClick={action("import")}>
+          <CollectionMenuIcon>
+            <AppSidebarObjectTypeMenuIcon name="import" />
+          </CollectionMenuIcon>
+          <CompactMenuItemText>{t("documentMenu.import")}</CompactMenuItemText>
           <DropdownMenuShortcut>Ctrl I</DropdownMenuShortcut>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className={collectionMenuSeparatorClass} />
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
-            <AppSidebarCopyIcon />
-            {t("documentMenu.copy")}
+          <DropdownMenuSubTrigger className={collectionMenuItemClass}>
+            <CollectionMenuIcon>
+              <AppSidebarCopyIcon />
+            </CollectionMenuIcon>
+            <CompactMenuItemText>{t("documentMenu.copy")}</CompactMenuItemText>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className={sidebarContextSubmenuContentClass}>
-            <DropdownMenuItem onClick={action("duplicate")}>
-              <AppSidebarCopyIcon />
-              {t("documentMenu.duplicate")}
+            <DropdownMenuItem className={collectionMenuItemClass} onClick={action("duplicate")}>
+              <CollectionMenuIcon>
+                <AppSidebarCopyIcon />
+              </CollectionMenuIcon>
+              <CompactMenuItemText>{t("documentMenu.duplicate")}</CompactMenuItemText>
             </DropdownMenuItem>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
-        <DropdownMenuItem variant="destructive" onClick={action("delete")}>
-          <AppSidebarSourceIcon name="trash" />
-          {t("sidebarCollections.deleteCollection")}
+        <DropdownMenuItem
+          className={collectionMenuItemClass}
+          variant="destructive"
+          onClick={action("delete")}
+        >
+          <CollectionMenuIcon>
+            <AppSidebarSourceIcon name="trash" />
+          </CollectionMenuIcon>
+          <CompactMenuItemText>{t("sidebarCollections.deleteCollection")}</CompactMenuItemText>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

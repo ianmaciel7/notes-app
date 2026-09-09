@@ -1,10 +1,16 @@
 import { expect, it } from "vitest";
 
 import {
+  createWorkspaceRouteMainSegment,
+  createWorkspaceRouteSpaceSegment,
+  createWorkspaceUrlPath,
   filterSidePanelSpecialItemsForContext,
   isDefaultExploreSideTab,
+  resolveWorkspaceMainValueFromRouteSegment,
   resolveSidePanelTabsAfterOpen,
+  resolveSidePanelTabsAfterClose,
   resolveWorkspaceSidePanelContext,
+  upsertWorkspaceTab,
 } from "@/components/space-controller";
 
 const ExploreIcon = () => null;
@@ -69,6 +75,49 @@ it("selects an existing side tab without duplicating it", () => {
   ).toBe(currentTabs);
 });
 
+it("resets the side panel to Explore when the last side tab is closed", () => {
+  expect(
+    resolveSidePanelTabsAfterClose(
+      [{ id: "localSpaceQuery", label: "Search", icon: SearchIcon, draggable: true }],
+      "localSpaceQuery",
+      { id: "localSpaceQuery", label: "Search", icon: SearchIcon, draggable: true },
+      { id: "side-1", label: "Explore", icon: ExploreIcon, draggable: true },
+    ),
+  ).toEqual({
+    tabs: [{ id: "side-1", label: "Explore", icon: ExploreIcon, draggable: true }],
+    value: "side-1",
+    closedLastTab: true,
+  });
+});
+
+it("updates an existing restored tab when icon metadata loads later", () => {
+  const nextTabs = upsertWorkspaceTab(
+    [{ id: "entity-1", label: "Untitled aaa", draggable: true }],
+    {
+      id: "entity-1",
+      label: "Untitled aaa",
+      icon: GraphIcon,
+      iconClassName: "text-blue-600",
+      draggable: true,
+    },
+  );
+
+  expect(nextTabs).toHaveLength(1);
+  expect(nextTabs[0]?.icon).toBe(GraphIcon);
+  expect(nextTabs[0]?.iconClassName).toBe("text-blue-600");
+});
+
+it("appends a restored tab that does not exist yet", () => {
+  expect(
+    upsertWorkspaceTab([{ id: "page", label: "Pages", icon: ExploreIcon, draggable: true }], {
+      id: "entity-1",
+      label: "Untitled aaa",
+      icon: GraphIcon,
+      draggable: true,
+    }).map((tab) => tab.id),
+  ).toEqual(["page", "entity-1"]);
+});
+
 it("detects list, item, and collection contexts from the active workspace state", () => {
   const state = {
     collections: [{ id: "collection:reading" }],
@@ -120,4 +169,27 @@ it("filters side-panel special entries by workspace context", () => {
     "aiAssistantChat",
     "localSpaceQuery",
   ]);
+});
+
+it("creates a workspace URL from the active main and side tabs", () => {
+  expect(
+    createWorkspaceUrlPath({
+      currentSearch: "?view=dense",
+      mainValue: "entity-41a189bd-9309-4a6f-aa02-5e5aa1023ee2",
+      spaceId: "personal",
+    }),
+  ).toBe("/996adc8d-8e17-463b-92de-1b11a58e9c64/41a189bd-9309-4a6f-aa02-5e5aa1023ee2?view=dense");
+});
+
+it("uses clean GUID-like route segments while preserving internal entity ids", () => {
+  expect(createWorkspaceRouteSpaceSegment("personal")).toBe("996adc8d-8e17-463b-92de-1b11a58e9c64");
+  expect(createWorkspaceRouteMainSegment("entity-41a189bd-9309-4a6f-aa02-5e5aa1023ee2")).toBe(
+    "41a189bd-9309-4a6f-aa02-5e5aa1023ee2",
+  );
+
+  expect(
+    resolveWorkspaceMainValueFromRouteSegment("41a189bd-9309-4a6f-aa02-5e5aa1023ee2", [
+      { id: "entity-41a189bd-9309-4a6f-aa02-5e5aa1023ee2" },
+    ]),
+  ).toBe("entity-41a189bd-9309-4a6f-aa02-5e5aa1023ee2");
 });

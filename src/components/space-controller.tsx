@@ -56,9 +56,21 @@ const initialMainTabs = [
     draggable: true,
   },
 ];
-const initialSideTabs = [
-  { id: "side-1", label: "Explore", icon: AppHeaderCompassIcon, draggable: true },
-];
+const defaultSideTab: AppHeaderTab = {
+  id: "side-1",
+  label: "Explore",
+  icon: AppHeaderCompassIcon,
+  draggable: true,
+};
+const initialSideTabs = [defaultSideTab];
+
+const PERSONAL_SPACE_ROUTE_GUID = "996adc8d-8e17-463b-92de-1b11a58e9c64";
+const WORKSPACE_SIDE_STATE_STORAGE_KEY = "knowledgeos.workspace.sidePanelState";
+
+export function createWorkspaceRouteSpaceSegment(spaceId?: string | null) {
+  if (!spaceId || spaceId === PERSONAL_SPACE_ID) return PERSONAL_SPACE_ROUTE_GUID;
+  return spaceId;
+}
 
 export function isDefaultExploreSideTab(tab: Pick<AppHeaderTab, "id" | "label">) {
   return tab.id === "side-1" || tab.id === "explore" || tab.label === "Explore";
@@ -81,6 +93,42 @@ export function resolveSidePanelTabsAfterOpen(
   if (activeIsDefaultExplore) return [nextTab];
 
   return [...currentTabs, nextTab];
+}
+
+export function resolveSidePanelTabsAfterClose(
+  currentTabs: AppHeaderTab[],
+  activeValue: string,
+  closingTab: AppHeaderTab,
+  defaultTab: AppHeaderTab = defaultSideTab,
+) {
+  if (currentTabs.length <= 1) {
+    return {
+      tabs: [defaultTab],
+      value: defaultTab.id,
+      closedLastTab: true,
+    };
+  }
+
+  const index = currentTabs.findIndex((tab) => tab.id === closingTab.id);
+  const tabs = currentTabs.filter((tab) => tab.id !== closingTab.id);
+  const fallback = tabs[index] ?? tabs[index - 1] ?? tabs[0] ?? defaultTab;
+
+  return {
+    tabs,
+    value: activeValue === closingTab.id ? fallback.id : activeValue,
+    closedLastTab: false,
+  };
+}
+
+export function upsertWorkspaceTab(currentTabs: AppHeaderTab[], nextTab: AppHeaderTab) {
+  let found = false;
+  const tabs = currentTabs.map((tab) => {
+    if (tab.id !== nextTab.id) return tab;
+    found = true;
+    return { ...tab, ...nextTab };
+  });
+
+  return found ? tabs : [...currentTabs, nextTab];
 }
 
 export type WorkspaceSidePanelContext = "collection" | "item" | "list";
@@ -135,6 +183,60 @@ export function filterSidePanelSpecialItemsForContext(
   const allowed = sidePanelSpecialItemsByContext[context];
   if (!allowed) return [...items];
   return items.filter((item) => allowed.has(item.id));
+}
+
+export function createWorkspaceRouteMainSegment(mainValue?: string | null) {
+  return (mainValue || "page").replace(/^entity-/, "");
+}
+
+export function resolveWorkspaceMainValueFromRouteSegment(
+  routeMainValue: string,
+  entities: readonly { id: string }[],
+) {
+  return (
+    entities.find((entity) => entity.id === routeMainValue)?.id ??
+    entities.find((entity) => createWorkspaceRouteMainSegment(entity.id) === routeMainValue)?.id ??
+    routeMainValue
+  );
+}
+
+export function createWorkspaceUrlPath({
+  currentSearch = "",
+  mainValue,
+  spaceId = PERSONAL_SPACE_ID,
+}: {
+  currentSearch?: string;
+  mainValue?: string | null;
+  spaceId?: string | null;
+}) {
+  const params = new URLSearchParams(currentSearch);
+  params.delete("main");
+  params.delete("side");
+  const query = params.toString();
+  return `/${encodeURIComponent(createWorkspaceRouteSpaceSegment(spaceId))}/${encodeURIComponent(
+    createWorkspaceRouteMainSegment(mainValue),
+  )}${query ? `?${query}` : ""}`;
+}
+
+function getWorkspaceRouteStateFromLocation(pathname: string, search: string) {
+  const [, , routeMainValue] = pathname.split("/").map((segment) => decodeURIComponent(segment));
+  const params = new URLSearchParams(search);
+  return {
+    mainValue: routeMainValue || params.get("main"),
+    sideValue: params.get("side"),
+  };
+}
+
+function getStoredWorkspaceSideValue() {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(WORKSPACE_SIDE_STATE_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { sideValue?: unknown };
+    return typeof parsed.sideValue === "string" ? parsed.sideValue : null;
+  } catch {
+    return null;
+  }
 }
 
 const defaultWorkspaceContext: WorkspaceContextValue = {
@@ -216,6 +318,8 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const [sideValue, setSideValue] = React.useState("side-1");
   const [activeAction, setActiveAction] = React.useState<string | undefined>();
   const [activeEntityId, setActiveEntityId] = React.useState<string | null>("page");
+  const [routeRestored, setRouteRestored] = React.useState(false);
+  const hasSyncedInitialUrlRef = React.useRef(false);
   // biome-ignore lint/suspicious/noExplicitAny: legacy custom section shape is owned by AppSidebarOverview
   const [customSections, setCustomSections] = React.useState<any[]>([]);
   const [, setCommandPaletteOpen] = React.useState(false);
@@ -425,7 +529,9 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const pinnedEntities = React.useMemo(() => {
     const availableById = new Map(availablePinnedEntities.map((entity) => [entity.id, entity]));
     const collectionsById = new Map(
-      Object.values(objectTypeCollections).map((collection: any) => [collection.id, collection]),
+      Object.values(objectTypeCollections).map(
+        (collection: { id: string; name: string }) => [collection.id, collection] as const,
+      ),
     );
 
     return pinnedEntityIds.flatMap((id: string) => {
@@ -489,6 +595,46 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [spaceId],
   );
   const buildGraph = React.useCallback(() => buildGraphInSpace(db, spaceId), [spaceId]);
+  const createRestoredMainTab = React.useCallback(
+    (id: string): AppHeaderTab | null => {
+      const objectType = objectTypes.find((item) => item.id === id);
+      if (objectType) {
+        return {
+          id,
+          label: objectType.label,
+          icon: objectType.icon,
+          iconClassName: objectIconToneBadgeClass[objectType.tone],
+          draggable: true,
+        };
+      }
+
+      const entity = createdEntities.find((item) => item.id === id);
+      if (entity) {
+        const entityType = objectTypes.find((item) => item.id === entity.objectTypeId);
+        return {
+          id,
+          label: entity.title || "Sem título",
+          icon: entityType?.icon,
+          iconClassName: entityType ? objectIconToneBadgeClass[entityType.tone] : undefined,
+          draggable: true,
+        };
+      }
+
+      return null;
+    },
+    [createdEntities, objectTypes],
+  );
+
+  const createRestoredSideTab = React.useCallback((id: string): AppHeaderTab | null => {
+    const item = defaultSpecialItems.find((candidate) => candidate.id === id);
+    if (!item) return null;
+    return {
+      id,
+      label: item.label,
+      icon: item.icon,
+      draggable: true,
+    };
+  }, []);
 
   const openInSidePanel = React.useCallback(
     (
@@ -512,6 +658,81 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     },
     [sideValue],
   );
+
+  const resolveWorkspaceRouteMainValue = React.useCallback(
+    (routeMainValue: string) =>
+      resolveWorkspaceMainValueFromRouteSegment(routeMainValue, createdEntities),
+    [createdEntities],
+  );
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    function restoreWorkspaceRouteState() {
+      const routeState = getWorkspaceRouteStateFromLocation(
+        window.location.pathname,
+        window.location.search,
+      );
+      if (routeState.mainValue) {
+        const nextMainValue = resolveWorkspaceRouteMainValue(routeState.mainValue);
+        const restoredTab = createRestoredMainTab(nextMainValue);
+        if (restoredTab) {
+          setMainTabs((current) => upsertWorkspaceTab(current, restoredTab));
+        }
+        setMainValue(nextMainValue);
+        setActiveAction(
+          nextMainValue.startsWith("primary-action:")
+            ? nextMainValue.replace("primary-action:", "")
+            : undefined,
+        );
+        if (!nextMainValue.startsWith("primary-action:")) setActiveEntityId(nextMainValue);
+      }
+      const nextSideValue = routeState.sideValue ?? getStoredWorkspaceSideValue();
+      if (nextSideValue) {
+        const restoredTab = createRestoredSideTab(nextSideValue);
+        if (restoredTab) {
+          setSideTabs((current) => {
+            if (current.some((tab) => tab.id === restoredTab.id)) return current;
+            const [onlyTab] = current;
+            if (onlyTab && current.length === 1 && isDefaultExploreSideTab(onlyTab)) {
+              return [restoredTab];
+            }
+            return [...current, restoredTab];
+          });
+        }
+        setSideValue(nextSideValue);
+      }
+    }
+
+    restoreWorkspaceRouteState();
+    setRouteRestored(true);
+    window.addEventListener("popstate", restoreWorkspaceRouteState);
+    return () => window.removeEventListener("popstate", restoreWorkspaceRouteState);
+  }, [createRestoredMainTab, createRestoredSideTab, resolveWorkspaceRouteMainValue]);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined" || !routeRestored) return;
+
+    const currentPath = `${window.location.pathname}${window.location.search}`;
+    const nextPath = createWorkspaceUrlPath({
+      currentSearch: window.location.search,
+      mainValue,
+      spaceId,
+    });
+    if (currentPath === nextPath) {
+      hasSyncedInitialUrlRef.current = true;
+      return;
+    }
+
+    const method = hasSyncedInitialUrlRef.current ? "pushState" : "replaceState";
+    window.history[method]({ mainValue }, "", nextPath);
+    hasSyncedInitialUrlRef.current = true;
+  }, [mainValue, routeRestored, spaceId]);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined" || !routeRestored) return;
+    window.localStorage.setItem(WORKSPACE_SIDE_STATE_STORAGE_KEY, JSON.stringify({ sideValue }));
+  }, [routeRestored, sideValue]);
 
   React.useEffect(() => {
     function targetIsEditable(target: EventTarget | null) {
@@ -668,16 +889,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
     window.addEventListener("keydown", handleGlobalKeyDown, true);
     return () => window.removeEventListener("keydown", handleGlobalKeyDown, true);
-  }, [
-    appShell,
-    createWorkspaceEntity,
-    focusMode,
-    mainTabs,
-    mainValue,
-    setShortcutBrowserOpen,
-    showMessage,
-    toggleTheme,
-  ]);
+  }, [appShell, createWorkspaceEntity, focusMode, mainTabs, mainValue, showMessage, toggleTheme]);
 
   const value = React.useMemo<WorkspaceContextValue>(
     () => ({
@@ -757,6 +969,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       createdEntities,
       tags,
       customSections,
+      setPinnedEntities,
       createWorkspaceStructureFromPreset,
       createWorkspaceStructure,
       updateWorkspaceStructure,
@@ -898,6 +1111,16 @@ export function WorkspaceSidePanelHeader() {
   const toggleRight = appShell?.toggleRight;
   const tabs = sideTabs && sideTabs.length > 0 ? sideTabs : initialSideTabs;
   const value = sideValue || tabs[0]?.id || "side-1";
+  const handleSideTabCloseRequest = React.useCallback(
+    (tab: AppHeaderTab) => {
+      if (tabs.length > 1) return undefined;
+      const nextState = resolveSidePanelTabsAfterClose(tabs, value, tab);
+      setSideTabs(nextState.tabs);
+      setSideValue(nextState.value);
+      return undefined;
+    },
+    [setSideTabs, setSideValue, tabs, value],
+  );
   const specialItems = filterSidePanelSpecialItemsForContext(
     defaultSpecialItems,
     resolveWorkspaceSidePanelContext({
@@ -915,6 +1138,7 @@ export function WorkspaceSidePanelHeader() {
       value={value}
       onValueChange={setSideValue}
       onTabsChange={setSideTabs}
+      onCloseRequest={handleSideTabCloseRequest}
       onHide={toggleRight}
       onSpecialEntrySelect={(entryId) => {
         const item = specialItems.find((candidate) => candidate.id === entryId);

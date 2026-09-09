@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -29,8 +30,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale} className="h-full antialiased font-sans" suppressHydrationWarning>
       <head>
-        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: anti-fouc theme script */}
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <Script id="notes-app-theme" strategy="beforeInteractive">
+          {themeScript}
+        </Script>
       </head>
       <body className="h-full flex flex-col overflow-hidden bg-background text-foreground font-sans">
         <NextIntlClientProvider locale={locale} messages={messages}>

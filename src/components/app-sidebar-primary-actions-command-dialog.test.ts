@@ -27,8 +27,8 @@ it("does not render the open-in-new-tab pill in the Capacities-style command pal
   expect(shouldRenderCommandPaletteOpenInNewTabToggle()).toBe(false);
 });
 
-it("keeps the command palette open after pointer selection", () => {
-  expect(shouldCloseCommandPaletteAfterSelect("pointer")).toBe(false);
+it("closes the command palette after pointer selection", () => {
+  expect(shouldCloseCommandPaletteAfterSelect("pointer")).toBe(true);
 });
 
 it("keeps keyboard selection as an explicit command submission", () => {
