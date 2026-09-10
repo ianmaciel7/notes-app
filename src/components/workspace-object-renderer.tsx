@@ -98,6 +98,10 @@ type WorkspaceObjectTypeListPreferences = {
   sort: WorkspaceObjectTypeListSort;
 };
 
+type StoredWorkspaceObjectTypeListPreferences = Partial<WorkspaceObjectTypeListPreferences> & {
+  sortNewestFirst?: boolean;
+};
+
 const objectTypeListPreferencesPrefix = "knowledgeos.workspace.objectTypeList";
 
 const defaultObjectTypeListPreferences: WorkspaceObjectTypeListPreferences = {
@@ -116,13 +120,12 @@ function getObjectTypeListPreferencesKey(spaceId: string, objectTypeId: string) 
 function readObjectTypeListPreferences(key: string): WorkspaceObjectTypeListPreferences {
   if (typeof window === "undefined") return defaultObjectTypeListPreferences;
   try {
-    const value = JSON.parse(window.localStorage.getItem(key) ?? "null") as
-      | Partial<WorkspaceObjectTypeListPreferences>
-      | null;
+    const value = JSON.parse(
+      window.localStorage.getItem(key) ?? "null",
+    ) as StoredWorkspaceObjectTypeListPreferences | null;
     return {
       allLayout: value?.allLayout === "list" ? "list" : "cards",
-      filter:
-        value?.filter === "tagged" || value?.filter === "untagged" ? value.filter : "all",
+      filter: value?.filter === "tagged" || value?.filter === "untagged" ? value.filter : "all",
       groupBy: value?.groupBy === "tag" ? "tag" : "none",
       mode: value?.mode === "overview" ? "overview" : "all",
       query: typeof value?.query === "string" ? value.query : "",
@@ -365,112 +368,174 @@ export function WorkspaceObjectTypeListView({
             data-slot="workspace-object-type-list-toolbar"
             className="mt-4 flex min-h-8 items-center gap-0 overflow-x-auto text-sm text-[var(--app-text-secondary)]"
           >
-          <button
-            type="button"
-            aria-pressed={preferences.mode === "overview"}
-            onClick={() => updatePreferences({ mode: "overview" })}
-            className={cn(
-              "flex h-8 shrink-0 items-center gap-1.5 rounded-xl px-3 text-sm transition-colors",
-              preferences.mode === "overview"
-                ? "bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
-                : "hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
-            )}
-          >
-            <LayoutGrid className="size-3.5" />
-            Visão geral
-          </button>
-          <button
-            type="button"
-            aria-pressed={preferences.mode === "all"}
-            onClick={() => updatePreferences({ mode: "all" })}
-            className={cn(
-              "flex h-8 shrink-0 items-center gap-1.5 rounded-xl px-3 text-sm transition-colors",
-              preferences.mode === "all"
-                ? "bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
-                : "hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
-            )}
-          >
-            <List className="size-3.5" />
-            Tudo
-          </button>
-          <span
-            aria-label={`Quantidade de objetos: ${objectCountLabel}`}
-            className="ml-auto mr-2 flex h-7 shrink-0 items-center gap-1.5 rounded-lg px-1.5 text-xs text-[var(--app-text-secondary)]"
-          >
-            <Hash className="size-3.5" />
-            {items.length}
-          </span>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button type="button" variant="ghost" size="sm" tooltip="Filtrar" aria-label="Filtrar objetos" className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]">
-                  <SlidersHorizontal className="size-3.5" />
-                </Button>
-              }
-            />
-            <DropdownMenuContent align="end" className="min-w-48">
-              <DropdownMenuRadioGroup value={preferences.filter} onValueChange={(filter) => updatePreferences({ filter: filter as WorkspaceObjectTypeListFilter })}>
-                <DropdownMenuRadioItem value="all">Todos os objetos</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="tagged">Com etiquetas</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="untagged">Sem etiquetas</DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button type="button" variant="ghost" size="sm" tooltip="Classificar" aria-label="Classificar objetos" className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]">
-                  <ArrowDownUp className="size-3.5" />
-                </Button>
-              }
-            />
-            <DropdownMenuContent align="end" className="min-w-52">
-              <DropdownMenuRadioGroup value={preferences.sort} onValueChange={(sort) => updatePreferences({ sort: sort as WorkspaceObjectTypeListSort })}>
-                <DropdownMenuRadioItem value="updated-desc">Atualização, mais recente</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="updated-asc">Atualização, mais antiga</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="title-asc">Título, crescente</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="title-desc">Título, decrescente</DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button type="button" variant="ghost" size="sm" tooltip="Agrupar por" aria-label="Agrupar objetos" className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]">
-                  <Rows3 className="size-3.5" />
-                </Button>
-              }
-            />
-            <DropdownMenuContent align="end" className="min-w-44">
-              <DropdownMenuRadioGroup value={preferences.groupBy} onValueChange={(groupBy) => updatePreferences({ groupBy: groupBy as WorkspaceObjectDataViewGroup })}>
-                <DropdownMenuRadioItem value="none">Sem agrupamento</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="tag">Etiqueta</DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button type="button" variant="ghost" size="sm" tooltip="Layout" aria-label="Escolher layout" className="ml-1 h-7 w-[46px] rounded-lg px-1.5 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]">
-                  {preferences.allLayout === "cards" ? <Grid2X2 className="size-3.5" /> : <List className="size-3.5" />}
-                  <ChevronDown className="size-3.5" />
-                </Button>
-              }
-            />
-            <DropdownMenuContent align="end" className="min-w-40">
-              <DropdownMenuRadioGroup value={preferences.allLayout} onValueChange={(allLayout) => updatePreferences({ allLayout: allLayout as WorkspaceObjectDataViewLayout, mode: "all" })}>
-                <DropdownMenuRadioItem value="cards">Cartões</DropdownMenuRadioItem>
-                <DropdownMenuRadioItem value="list">Lista</DropdownMenuRadioItem>
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            <button
+              type="button"
+              aria-pressed={preferences.mode === "overview"}
+              onClick={() => updatePreferences({ mode: "overview" })}
+              className={cn(
+                "flex h-8 shrink-0 items-center gap-1.5 rounded-xl px-3 text-sm transition-colors",
+                preferences.mode === "overview"
+                  ? "bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
+                  : "hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
+              )}
+            >
+              <LayoutGrid className="size-3.5" />
+              Visão geral
+            </button>
+            <button
+              type="button"
+              aria-pressed={preferences.mode === "all"}
+              onClick={() => updatePreferences({ mode: "all" })}
+              className={cn(
+                "flex h-8 shrink-0 items-center gap-1.5 rounded-xl px-3 text-sm transition-colors",
+                preferences.mode === "all"
+                  ? "bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
+                  : "hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
+              )}
+            >
+              <List className="size-3.5" />
+              Tudo
+            </button>
+            <span
+              aria-label={`Quantidade de objetos: ${objectCountLabel}`}
+              role="status"
+              className="ml-auto mr-2 flex h-7 shrink-0 items-center gap-1.5 rounded-lg px-1.5 text-xs text-[var(--app-text-secondary)]"
+            >
+              <Hash className="size-3.5" />
+              {items.length}
+            </span>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    tooltip="Filtrar"
+                    aria-label="Filtrar objetos"
+                    className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
+                  >
+                    <SlidersHorizontal className="size-3.5" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end" className="min-w-48">
+                <DropdownMenuRadioGroup
+                  value={preferences.filter}
+                  onValueChange={(filter) =>
+                    updatePreferences({ filter: filter as WorkspaceObjectTypeListFilter })
+                  }
+                >
+                  <DropdownMenuRadioItem value="all">Todos os objetos</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="tagged">Com etiquetas</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="untagged">Sem etiquetas</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    tooltip="Classificar"
+                    aria-label="Classificar objetos"
+                    className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
+                  >
+                    <ArrowDownUp className="size-3.5" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end" className="min-w-52">
+                <DropdownMenuRadioGroup
+                  value={preferences.sort}
+                  onValueChange={(sort) =>
+                    updatePreferences({ sort: sort as WorkspaceObjectTypeListSort })
+                  }
+                >
+                  <DropdownMenuRadioItem value="updated-desc">
+                    Atualização, mais recente
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="updated-asc">
+                    Atualização, mais antiga
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="title-asc">Título, crescente</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="title-desc">
+                    Título, decrescente
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    tooltip="Agrupar por"
+                    aria-label="Agrupar objetos"
+                    className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
+                  >
+                    <Rows3 className="size-3.5" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end" className="min-w-44">
+                <DropdownMenuRadioGroup
+                  value={preferences.groupBy}
+                  onValueChange={(groupBy) =>
+                    updatePreferences({ groupBy: groupBy as WorkspaceObjectDataViewGroup })
+                  }
+                >
+                  <DropdownMenuRadioItem value="none">Sem agrupamento</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="tag">Etiqueta</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    tooltip="Layout"
+                    aria-label="Escolher layout"
+                    className="ml-1 h-7 w-[46px] rounded-lg px-1.5 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
+                  >
+                    {preferences.allLayout === "cards" ? (
+                      <Grid2X2 className="size-3.5" />
+                    ) : (
+                      <List className="size-3.5" />
+                    )}
+                    <ChevronDown className="size-3.5" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end" className="min-w-40">
+                <DropdownMenuRadioGroup
+                  value={preferences.allLayout}
+                  onValueChange={(allLayout) =>
+                    updatePreferences({
+                      allLayout: allLayout as WorkspaceObjectDataViewLayout,
+                      mode: "all",
+                    })
+                  }
+                >
+                  <DropdownMenuRadioItem value="cards">Cartões</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="list">Lista</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         ) : null}
       </header>
 
       <div
         data-slot="workspace-object-type-list-scroll"
-        className="min-h-0 flex-1 overflow-y-auto bg-[var(--app-bg-base)] px-3 pb-4 pt-2"
+        className="min-h-0 flex-1 overflow-y-auto bg-[var(--app-bg-base)] px-3 pb-4 pt-2.5"
       >
         {items.length === 0 ? (
           <WorkspaceEmptyState
@@ -483,7 +548,11 @@ export function WorkspaceObjectTypeListView({
             }
             action={
               hasFilteredResults ? (
-                <Button type="button" size="sm" onClick={() => updatePreferences({ filter: "all", query: "" })}>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => updatePreferences({ filter: "all", query: "" })}
+                >
                   Limpar filtros
                 </Button>
               ) : onCreateEntity ? (

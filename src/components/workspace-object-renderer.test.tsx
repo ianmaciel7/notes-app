@@ -146,6 +146,12 @@ it("keeps data-view cards legible and labels icon-only controls", () => {
   );
 
   expect(markup).toContain("!text-[var(--app-text-primary)]");
+  expect(markup).toContain("h-[19.25rem]");
+  expect(markup).toContain("gap-y-1");
+  expect(markup).toContain("grid-cols-2");
+  expect(markup).toContain("text-[16px]");
+  expect(markup).toContain("text-[13.5px]");
+  expect(markup).toContain("hover:shadow-[0_2px_3px_0_rgba(0,0,0,0.008)");
   expect(markup).toContain('aria-label="Buscar em Study goals"');
   expect(markup).toContain('aria-label="Recolher cabeçalho"');
   expect(markup).toContain('aria-label="Mais ações"');
