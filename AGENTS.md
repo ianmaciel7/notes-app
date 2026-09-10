@@ -30,9 +30,9 @@ This repository is a local-first, zero-operating-cost web application unifying:
 - Before declaring an implementation complete, run the required verification for the selected workflow and report the real result. Never invent results, weaken gates, lower thresholds, or hide failures.
 
 ## Code Quality Gates
-- Use [docs/code-quality.md](./docs/code-quality.md) for the detailed quality policy, gate semantics, exclusions, hooks, CI behavior, and troubleshooting.
-- Run focused checks after relevant code, config, lockfile, or test changes. Use `pnpm quality:fast` for quick local feedback.
-- Run `pnpm verify` before declaring an implementation complete. Never invent results, weaken gates, lower thresholds, update baselines, or hide failures to claim success.
+- Use [docs/code-quality-metrics.md](./docs/code-quality-metrics.md) for the local structural quality policy, support matrix, and reporting limits.
+- Run `pnpm metrics` after relevant code changes when the concern is structural quality or maintainability. Use `pnpm metrics:report` when evidence needs to be saved locally.
+- Biome is the only analyzer in this metrics flow. Do not present unsupported metrics as measured, and do not raise limits, add suppressions, or expand exclusions to make results look better.
 
 ## Security Policy
 This project maintains a security policy in [SECURITY.md](./SECURITY.md). All AI coding agents MUST read and follow it before making changes, especially when work touches authentication, authorization, sync, storage, document parsing, AI generation, secret handling, Firestore rules, or user data boundaries.

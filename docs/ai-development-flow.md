@@ -7,7 +7,7 @@ This repository uses a lightweight, spec-anchored workflow for AI-assisted softw
 - Use progressive disclosure: start with `AGENTS.md`, then load only the relevant sections of `SPEC.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `SECURITY.md`, plans, skills, and source files.
 - Use the smallest workflow that fits the risk. Do not create subagents, services, frameworks, or long documents to make a small task look rigorous.
 - Keep Biome as the only general linter and formatter.
-- Use executable checks for claims. LLM review can find risks, but it does not replace lint, typecheck, tests, build, security review, or browser verification.
+- Use executable checks for claims. LLM review can find risks, but it does not replace lint, metrics, focused tests, build, security review, or browser verification.
 - Preserve local changes. Inspect `git status --short` before modifying files and do not reset, commit, push, merge, deploy, or change remote protections without explicit authorization.
 
 ## Workflow Selection
@@ -17,8 +17,8 @@ The helper in `src/tooling/ai-development-flow.ts` defines the project policy in
 | Level | When to use | Required artifact | Verification |
 | --- | --- | --- | --- |
 | Lightweight | Docs-only, wording, or low-risk local cleanup | None | Usually `pnpm format:check` plus diff review. |
-| Bounded | Feature, behavior change, UI interaction, or ordinary bugfix with clear scope | `docs/specs/YYYY-MM-DD-<change>.md` or bugfix spec | Focused failing test first when feasible, then `pnpm quality:fast`. |
-| Complex | Auth, authorization, sync, storage, document parsing, AI generation, secrets, database migrations, architecture boundaries, or broad cross-cutting changes | Persistent spec and plan | Focused tests, `pnpm quality`, `pnpm verify`, spec review, quality review, and security review when relevant. |
+| Bounded | Feature, behavior change, UI interaction, or ordinary bugfix with clear scope | `docs/specs/YYYY-MM-DD-<change>.md` or bugfix spec | Focused failing test first when feasible, then `pnpm lint` and `pnpm metrics`. |
+| Complex | Auth, authorization, sync, storage, document parsing, AI generation, secrets, database migrations, architecture boundaries, or broad cross-cutting changes | Persistent spec and plan | Focused tests, `pnpm lint`, `pnpm metrics`, `pnpm test:unit`, spec review, quality review, and security review when relevant. |
 
 If a task moves into a higher-risk category during implementation, pause the current step, update the spec/plan, and continue with the stronger workflow.
 

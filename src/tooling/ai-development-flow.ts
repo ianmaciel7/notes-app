@@ -39,12 +39,7 @@ export function classifyDevelopmentWork(input: DevelopmentWorkInput): Developmen
       level: "complex",
       requiredArtifact: kind === "bugfix" ? "bugfix-spec" : "change-spec",
       requiresPersistentSpec: true,
-      requiredChecks: [
-        "focused regression test",
-        "pnpm quality:fast",
-        "pnpm quality",
-        "pnpm verify",
-      ],
+      requiredChecks: ["focused regression test", "pnpm lint", "pnpm metrics", "pnpm test:unit"],
       requiredReviews: ["spec review", "quality review", "security review"],
     };
   }
@@ -54,7 +49,7 @@ export function classifyDevelopmentWork(input: DevelopmentWorkInput): Developmen
       level: "bounded",
       requiredArtifact: kind === "bugfix" ? "bugfix-spec" : "change-spec",
       requiresPersistentSpec: true,
-      requiredChecks: ["focused regression test", "pnpm quality:fast"],
+      requiredChecks: ["focused regression test", "pnpm lint", "pnpm metrics"],
       requiredReviews: ["spec review", "quality review"],
     };
   }
@@ -65,7 +60,7 @@ export function classifyDevelopmentWork(input: DevelopmentWorkInput): Developmen
     requiresPersistentSpec: false,
     requiredChecks: normalizedFiles.every(isDocumentationFile)
       ? ["pnpm format:check"]
-      : ["pnpm quality:fast"],
+      : ["pnpm lint"],
     requiredReviews: ["diff review"],
   };
 }

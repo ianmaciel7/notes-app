@@ -44,7 +44,7 @@ describe("summarizeRequiredWorkflow", () => {
       level: "bounded",
       requiredArtifact: "change-spec",
       requiresPersistentSpec: true,
-      requiredChecks: ["focused test", "pnpm quality:fast"],
+      requiredChecks: ["focused test", "pnpm lint", "pnpm metrics"],
       requiredReviews: ["spec review", "quality review"],
     });
 
@@ -53,7 +53,7 @@ describe("summarizeRequiredWorkflow", () => {
       "Record a change-spec before implementation.",
       "Plan the smallest independently verifiable change.",
       "Implement with a failing focused test before production code when feasible.",
-      "Run focused test and pnpm quality:fast.",
+      "Run focused test, pnpm lint and pnpm metrics.",
       "Review against the spec, then review quality and risk.",
     ]);
   });

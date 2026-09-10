@@ -41,6 +41,23 @@
           "options": {
             "max": 4
           }
+        },
+        "noExcessiveLinesPerFunction": {
+          "level": "error",
+          "options": {
+            "maxLines": 80,
+            "skipBlankLines": true,
+            "skipIifes": false
+          }
+        }
+      },
+      "style": {
+        "noExcessiveLinesPerFile": {
+          "level": "warn",
+          "options": {
+            "maxLines": 600,
+            "skipBlankLines": true
+          }
         }
       },
       "correctness": {
