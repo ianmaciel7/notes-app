@@ -22,6 +22,18 @@ This repository is a local-first, zero-operating-cost web application unifying:
 - **Styling**: Tailwind CSS v4 CSS-first configuration (`@theme` in `src/app/globals.css`). Do NOT create `tailwind.config.js` or `tailwind.config.ts`.
 - **TypeScript & Runtime**: Next.js 16.3+ App Router with React 19.2+. Follow documentation in `node_modules/next/dist/docs/`. Keep client boundaries lean (`'use client'`).
 
+## AI Development Flow
+- Use [docs/ai-development-flow.md](./docs/ai-development-flow.md) as the operational guide for AI-assisted development in this repository.
+- Choose the lightest workflow that fits the risk: lightweight docs/local cleanup, bounded feature or bugfix, or complex security/data/architecture work.
+- For bounded or complex work, create a focused change spec or bugfix spec from [docs/templates](./docs/templates/) before implementation when the behavior is non-trivial.
+- Implement behavior with focused tests first when feasible, preserve existing contracts, and run relevant checks after changes.
+- Before declaring an implementation complete, run the required verification for the selected workflow and report the real result. Never invent results, weaken gates, lower thresholds, or hide failures.
+
+## Code Quality Gates
+- Use [docs/code-quality.md](./docs/code-quality.md) for the detailed quality policy, gate semantics, exclusions, hooks, CI behavior, and troubleshooting.
+- Run focused checks after relevant code, config, lockfile, or test changes. Use `pnpm quality:fast` for quick local feedback.
+- Run `pnpm verify` before declaring an implementation complete. Never invent results, weaken gates, lower thresholds, update baselines, or hide failures to claim success.
+
 ## Security Policy
 This project maintains a security policy in [SECURITY.md](./SECURITY.md). All AI coding agents MUST read and follow it before making changes, especially when work touches authentication, authorization, sync, storage, document parsing, AI generation, secret handling, Firestore rules, or user data boundaries.
 

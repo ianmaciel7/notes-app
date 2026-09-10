@@ -1,0 +1,30 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "next.config.ts",
+    "postcss.config.mjs",
+    "vitest.config.ts",
+    "playwright.config.ts",
+    "scripts/quality/agent-hook.ts",
+    "scripts/quality/check-complexity.mjs",
+    "src/app/**/*.{ts,tsx}",
+    "src/messages/*.json",
+    "src/messages/editor/*.json",
+    "tests/**/*.spec.ts"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx}",
+    "tests/**/*.ts",
+    "*.config.{js,cjs,mjs,ts}",
+    "scripts/**/*.{ts,js,mjs,cjs}"
+  ],
+  "ignore": ["src/**/*.stories.tsx", "src/vite-env.d.ts", "src/components/ui/**"],
+  "ignoreDependencies": [
+    "@ladle/react",
+    "agentation",
+    "agentation-mcp",
+    "shadcn",
+    "tailwindcss",
+    "tsx"
+  ]
+}

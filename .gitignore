@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
 
 # next.js
 /.next/
@@ -59,3 +61,6 @@ Thumbs.db
 /tmp/
 /.tmp/
 /temp/
+
+# local Codex app state
+/.codex/

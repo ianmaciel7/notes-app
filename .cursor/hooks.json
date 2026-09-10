@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      {
+        "command": "pnpm tsx scripts/quality/agent-hook.ts cursor-after-file-edit",
+        "timeout": 10
+      }
+    ],
+    "stop": [
+      {
+        "command": "pnpm tsx scripts/quality/agent-hook.ts cursor-stop",
+        "timeout": 150,
+        "loop_limit": 2
+      }
+    ]
+  }
+}

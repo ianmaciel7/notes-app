@@ -29,6 +29,20 @@
     "enabled": true,
     "rules": {
       "preset": "recommended",
+      "complexity": {
+        "noExcessiveCognitiveComplexity": {
+          "level": "error",
+          "options": {
+            "maxAllowedComplexity": 15
+          }
+        },
+        "useMaxParams": {
+          "level": "warn",
+          "options": {
+            "max": 4
+          }
+        }
+      },
       "correctness": {
         "useExhaustiveDependencies": "warn"
       }

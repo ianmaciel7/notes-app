@@ -3,6 +3,7 @@ allowBuilds:
   '@parcel/watcher': false
   '@swc/core': false
   better-sqlite3: true
+  core-js: false
   esbuild: true
   msw: true
   protobufjs: true
