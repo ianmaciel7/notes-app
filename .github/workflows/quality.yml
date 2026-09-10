@@ -36,8 +36,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run quality gate
-        run: pnpm quality
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Run unit tests
+        run: pnpm test:unit
+
+      - name: Test quality tooling
+        run: node --test scripts/quality/*.test.mjs
 
       - name: Build production app
         run: pnpm build
