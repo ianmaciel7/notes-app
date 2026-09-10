@@ -1,13 +1,17 @@
 "use client";
 
 import { useLiveQuery } from "dexie-react-hooks";
+import { useTranslations } from "next-intl";
 import * as React from "react";
 
 import { presentWorkspaceObjectType } from "@/components/space-object-type-presenter";
 import { db } from "@/lib/db";
 import { bootstrapSpace } from "@/lib/spaces/bootstrap-space";
 import { groupEntitiesByObjectType } from "@/lib/spaces/space-projections";
-import { createSpaceRepository } from "@/lib/spaces/space-repository";
+import {
+  createSpaceRepository,
+  OBJECT_TYPE_ORDER_SETTING_KEY,
+} from "@/lib/spaces/space-repository";
 import {
   ACTIVE_SPACE_SETTING_ID,
   type SpaceCollectionRecord,
@@ -19,6 +23,8 @@ import {
 } from "@/lib/spaces/space-types";
 
 export function useSpaceData() {
+  const objectTypeName = useTranslations("workspace.objectTypeStudio.objectTypes");
+  const objectTypePluralName = useTranslations("workspace.objectTypeStudio.objectTypePlurals");
   const repository = React.useMemo(() => createSpaceRepository(db), []);
   const [bootstrapError, setBootstrapError] = React.useState<Error | null>(null);
   const [bootstrapped, setBootstrapped] = React.useState(false);
@@ -79,6 +85,13 @@ export function useSpaceData() {
     async () => (activeSpaceId ? await repository.listPinnedEntityIds(activeSpaceId) : []),
     [activeSpaceId, repository],
   );
+  const objectTypeOrderQuery = useLiveQuery<unknown>(
+    async () =>
+      activeSpaceId
+        ? await repository.getSpaceSetting(activeSpaceId, OBJECT_TYPE_ORDER_SETTING_KEY)
+        : null,
+    [activeSpaceId, repository],
+  );
 
   const spaces = spacesQuery ?? [];
   const objectTypeRecords = objectTypeRecordsQuery ?? [];
@@ -87,12 +100,25 @@ export function useSpaceData() {
   const tags = tagsQuery ?? [];
   const trash = trashQuery ?? [];
   const pinnedEntityIds = pinnedEntityIdsQuery ?? [];
+  const objectTypeOrder = Array.isArray(objectTypeOrderQuery)
+    ? objectTypeOrderQuery.filter((id): id is string => typeof id === "string")
+    : [];
 
   const counts = React.useMemo(() => groupEntitiesByObjectType(entities), [entities]);
   const objectTypes = React.useMemo(
     () =>
-      objectTypeRecords.map((record) => presentWorkspaceObjectType(record, counts[record.id] ?? 0)),
-    [counts, objectTypeRecords],
+      objectTypeRecords.map((record) => {
+        const localizedLabels =
+          record.ownership === "built-in"
+            ? {
+                plurals: { [record.id]: objectTypePluralName(record.id) },
+                singulars: { [record.id]: objectTypeName(record.id) },
+              }
+            : undefined;
+
+        return presentWorkspaceObjectType(record, counts[record.id] ?? 0, localizedLabels);
+      }),
+    [counts, objectTypeName, objectTypePluralName, objectTypeRecords],
   );
   const objectTypeCollections = React.useMemo(
     () => Object.fromEntries(collections.map((collection) => [collection.id, collection])),
@@ -125,6 +151,7 @@ export function useSpaceData() {
     createdEntities: entities,
     objectTypeCollections,
     pinnedEntityIds,
+    objectTypeOrder,
     tags,
     trashItems,
   };

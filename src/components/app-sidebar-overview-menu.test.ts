@@ -61,6 +61,28 @@ it("keeps collection context menu actions aligned with the captured Capacities c
   expect(componentSource).toContain('action("copy-reference")');
 });
 
+it("keeps object type context menus aligned with the captured Capacities type options", () => {
+  const componentSource = readSource("components/app-sidebar-overview.tsx");
+
+  const objectTypeMenuSource = componentSource.slice(
+    componentSource.indexOf("function AppSidebarObjectTypeMenu({"),
+    componentSource.indexOf("function AppSidebarObjectTypeRow"),
+  );
+
+  expect(objectTypeMenuSource).toContain("onOpenObjectType?.()");
+  expect(objectTypeMenuSource).toContain("onCreateEntity?.(objectType.id");
+  expect(objectTypeMenuSource).toContain('action("new-from-template")');
+  expect(objectTypeMenuSource).toContain('action("new-query")');
+  expect(objectTypeMenuSource).toContain('action("new-collection")');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.open")');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.createObject"');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.newFromTemplate")');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.newQuery")');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.newCollection")');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.pinSidebar")');
+  expect(objectTypeMenuSource).toContain('t("documentMenu.typeSettings")');
+});
+
 it("keeps pinned item menus on the same Capacities object action set", () => {
   const componentSource = readSource("components/app-sidebar-overview.tsx");
 
@@ -87,8 +109,52 @@ it("keeps pinned item menus on the same Capacities object action set", () => {
   expect(pinnedMenuSource).toContain('action("copy-reference")');
 });
 
-it("keeps destructive object actions styled like Capacities with only the icon in red", () => {
+it("makes pinned and object type rows draggable without adding visible handles", () => {
   const componentSource = readSource("components/app-sidebar-overview.tsx");
+  const paritySource = readSource("components/app-sidebar-overview-parity.tsx");
+
+  const pinnedRowSource = componentSource.slice(
+    componentSource.indexOf("function AppSidebarPinnedRow"),
+    componentSource.indexOf("function AppSidebarObjectTypeMenu({"),
+  );
+  const objectTypeRowSource = componentSource.slice(
+    componentSource.indexOf("function AppSidebarObjectTypeRow"),
+    componentSource.indexOf("function AppSidebarAddSection"),
+  );
+
+  expect(pinnedRowSource).toContain("draggable={draggable}");
+  expect(pinnedRowSource).not.toContain("row-drag-handle");
+  expect(objectTypeRowSource).toContain("draggable={draggable}");
+  expect(objectTypeRowSource).toContain("onDragStart={onDragStart}");
+  expect(objectTypeRowSource).toContain("onDragEnd={onDragEnd}");
+  expect(objectTypeRowSource).toContain("data-object-type-id={objectType.id}");
+  expect(objectTypeRowSource).toContain("onPointerEnter={handleObjectTypeDragOverTarget}");
+  expect(objectTypeRowSource).toContain("onMouseEnter={handleObjectTypeDragOverTarget}");
+  expect(objectTypeRowSource).toContain("onDragOverTarget();");
+  expect(objectTypeRowSource).not.toContain("row-drag-handle");
+  expect(componentSource).toContain('setObjectSort("manual")');
+  expect(paritySource).toContain('draggable={objectSort === "manual"}');
+  expect(paritySource).toContain(
+    'onDragStart={() => setDrag({ kind: "object-type", id: objectType.id })}',
+  );
+  expect(paritySource).toContain('data-slot="app-sidebar-pinned-region"');
+  expect(paritySource).toContain("function handlePinnedDrop");
+  expect(paritySource).toContain("setPinned((current) => [");
+});
+
+it("persists object type ordering in the active space", () => {
+  const controllerSource = readSource("components/space-controller.tsx");
+  const dataSource = readSource("hooks/use-space-data.ts");
+
+  expect(controllerSource).toContain("OBJECT_TYPE_ORDER_SETTING_KEY");
+  expect(controllerSource).toContain("setSpaceSetting(spaceId, OBJECT_TYPE_ORDER_SETTING_KEY");
+  expect(dataSource).toContain("getSpaceSetting(activeSpaceId, OBJECT_TYPE_ORDER_SETTING_KEY)");
+});
+
+it("renders delete object menu actions in the destructive color", () => {
+  const componentSource = readSource("components/app-sidebar-overview.tsx");
+  const compactMenuSource = readSource("components/ui/compact-menu.tsx");
+  const globalsSource = readSource("app/globals.css");
   const pinnedMenuSource = componentSource.slice(
     componentSource.indexOf("function AppSidebarPinnedMenu"),
     componentSource.indexOf("function AppSidebarPinnedRow"),
@@ -100,7 +166,18 @@ it("keeps destructive object actions styled like Capacities with only the icon i
 
   expect(pinnedMenuSource).not.toContain('variant="destructive"');
   expect(collectionMenuSource).not.toContain('variant="destructive"');
-  expect(componentSource).toContain("text-red-500 dark:text-red-400");
+  expect(globalsSource).toContain("--destructive-menu-action:");
+  expect(compactMenuSource).toContain("var(--destructive-menu-action)");
+  expect(compactMenuSource).toContain("sidebarContextMenuDestructiveItemClass");
+  expect(pinnedMenuSource).toContain("sidebarContextMenuDestructiveItemClass");
+  expect(collectionMenuSource).toContain("sidebarContextMenuDestructiveItemClass");
+  expect(pinnedMenuSource).toContain('className="text-[var(--destructive-menu-action)]"');
+  expect(collectionMenuSource).toContain('className="text-[var(--destructive-menu-action)]"');
+  expect(pinnedMenuSource).toContain('className="[&_*]:!text-[var(--destructive-menu-action)]"');
+  expect(collectionMenuSource).toContain(
+    'className="[&_*]:!text-[var(--destructive-menu-action)]"',
+  );
+  expect(componentSource).not.toContain("text-red-500 dark:text-red-400");
 });
 
 it("uses the captured Capacities popup width and submenu affordances", () => {

@@ -1,7 +1,15 @@
 import { renderToStaticMarkup } from "react-dom/server";
+import { readFileSync } from "node:fs";
+import { fileURLToPath, URL } from "node:url";
 import { expect, it } from "vitest";
 
 import { PendingImplementation } from "@/components/pending-implementation";
+
+const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
+
+function readProjectSource(relativePath: string) {
+  return readFileSync(new URL(relativePath, `file://${projectRoot}/`), "utf8");
+}
 
 it("renders the pending component name passed by props", () => {
   const markup = renderToStaticMarkup(
@@ -35,4 +43,14 @@ it("can render a workspace pending surface with a shared pending card treatment"
   expect(markup).toContain('data-slot="pending-implementation-card"');
   expect(markup).toContain("border border-dashed border-border bg-muted/20");
   expect(markup).not.toContain("border border-border bg-muted/25");
+});
+
+it("has Ladle stories for pending implementation panel states", () => {
+  const storySource = readProjectSource("src/components/pending-implementation.stories.tsx");
+
+  expect(storySource).toContain("PendingImplementation");
+  expect(storySource).toContain("MainPanelPages");
+  expect(storySource).toContain("SidePanelExplore");
+  expect(storySource).toContain("Páginas should be implemented here.");
+  expect(storySource).toContain("Explore should be implemented here.");
 });

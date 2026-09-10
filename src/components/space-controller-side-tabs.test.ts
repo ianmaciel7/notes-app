@@ -13,6 +13,7 @@ import {
   resolveWorkspaceMainTabsFromStoredState,
   resolveWorkspaceMainValueFromRouteSegment,
   resolveWorkspaceSidePanelContext,
+  shouldRenderWorkspaceHeaderTabs,
   upsertWorkspaceTab,
 } from "@/components/space-controller";
 
@@ -228,4 +229,9 @@ it("stores the open main tabs without resurrecting a closed route tab on refresh
     mainValue: "page",
     tabs: [{ id: "page", label: "Pages", icon: ExploreIcon, draggable: true }],
   });
+});
+
+it("hides workspace header tabs until persisted route state is restored", () => {
+  expect(shouldRenderWorkspaceHeaderTabs(false)).toBe(false);
+  expect(shouldRenderWorkspaceHeaderTabs(true)).toBe(true);
 });

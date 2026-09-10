@@ -1100,12 +1100,15 @@ function WorkspaceSidebar() {
     setMainValue,
     selectEntity,
     pinnedEntities,
+    objectTypeOrder,
     availablePinnedEntities,
     objectTypes,
     objectTypeCollections,
     createdEntities,
     customSections,
     setPinnedEntities,
+    moveEntityToCollection,
+    setObjectTypeOrder,
     setCommandPaletteOpen,
     createWorkspaceStructureFromPreset,
     createWorkspaceStructure,
@@ -1340,6 +1343,12 @@ function WorkspaceSidebar() {
     setMainValue(`primary-action:pending:${action}`);
   }
 
+  function handleObjectTypeAction(action: AppSidebarCollectionAction) {
+    setActiveAction(`pending:${action}`);
+    setActiveEntityId(null);
+    setMainValue(`primary-action:pending:${action}`);
+  }
+
   function openCommandPaletteFromSidebar() {
     setSideSearchOpen(false);
     if (typeof window !== "undefined") {
@@ -1420,6 +1429,7 @@ function WorkspaceSidebar() {
             }
           }}
           pinnedEntities={pinnedEntities}
+          objectTypeOrder={objectTypeOrder}
           availablePinnedEntities={availablePinnedEntities}
           objectTypes={objectTypes}
           objectTypeCollections={visibleObjectTypeCollections}
@@ -1434,8 +1444,11 @@ function WorkspaceSidebar() {
           onPurgeTrashItem={purgeTrashItem}
           onRestoreTrashItem={restoreTrashItem}
           onPinnedEntitiesChange={setPinnedEntities}
+          onObjectTypeOrderChange={setObjectTypeOrder}
           onCustomSectionsChange={setCustomSections}
           onCollectionAction={handleCollectionAction}
+          onMovePinnedEntityToCollection={moveEntityToCollection}
+          onObjectTypeAction={handleObjectTypeAction}
           onPinnedAction={handlePinnedAction}
           onOpenShortcuts={() => setShortcutBrowserOpen(true)}
         />

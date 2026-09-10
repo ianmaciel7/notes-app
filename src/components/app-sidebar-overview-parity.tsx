@@ -34,13 +34,17 @@ import {
   AppSidebarTrashRow,
   AppSidebarTypeLabel,
   type AppSidebarOverview as BaseAppSidebarOverview,
+  setSidebarDragPreview,
 } from "./app-sidebar-overview";
 
 type AppSidebarOverviewProps = NonNullable<React.ComponentProps<typeof BaseAppSidebarOverview>>;
 type AppSidebarSelectionEvent = Parameters<
   NonNullable<AppSidebarOverviewProps["onActiveIdChange"]>
 >[1];
-type AppSidebarDragState = { kind: "pinned"; id: string } | null;
+type AppSidebarDragState =
+  | { kind: "pinned"; id: string }
+  | { kind: "object-type"; id: string }
+  | null;
 
 const DRAG_SCROLL_EDGE_PX = 56;
 const DRAG_SCROLL_MIN_SPEED = 1;
@@ -159,15 +163,20 @@ function AppSidebarOverview({
   pinnedEntities: controlledPinned,
   availablePinnedEntities = [],
   objectTypes = [],
+  objectTypeOrder: controlledObjectTypeOrder,
   objectTypeCollections = {},
   customSections: controlledCustomSections,
   onCreateObjectTypeFromPreset,
   onCreateObjectType,
+  onObjectTypeAction,
   onUpdateObjectType,
+  onDeleteObjectType,
   onPinnedEntitiesChange,
+  onObjectTypeOrderChange,
   onOpenPinnedInSidePanel,
   onCustomSectionsChange,
   onCollectionAction,
+  onMovePinnedEntityToCollection,
   onEmptyTrash,
   onPurgeTrashItem,
   onRestoreTrashItem,
@@ -192,16 +201,39 @@ function AppSidebarOverview({
   >({});
   const [pinnedSort, setPinnedSort] = React.useState<AppSidebarSortMode>("manual");
   const [objectSort, setObjectSort] = React.useState<AppSidebarSortMode>("manual");
+  const [objectTypeOrder, setObjectTypeOrder] = React.useState<string[]>(() =>
+    controlledObjectTypeOrder?.length
+      ? [...controlledObjectTypeOrder]
+      : objectTypes.map((objectType) => objectType.id),
+  );
   const [internalPinned, setInternalPinned] = React.useState<AppSidebarPinnedEntity[]>([]);
   const [internalCustomSections, setInternalCustomSections] = React.useState<
     AppSidebarCustomSection[]
   >([]);
   const [drag, setDrag] = React.useState<AppSidebarDragState>(null);
+  const dragRef = React.useRef<AppSidebarDragState>(null);
 
   useSidebarDragAutoScroll(drag !== null, rootRef);
 
   const pinned = controlledPinned ?? internalPinned;
   const customSections = controlledCustomSections ?? internalCustomSections;
+  const draggedObjectType =
+    drag?.kind === "object-type" ? objectTypes.find((item) => item.id === drag.id) : undefined;
+
+  React.useEffect(() => {
+    if (controlledObjectTypeOrder?.length) {
+      setObjectTypeOrder([...controlledObjectTypeOrder]);
+      return;
+    }
+
+    setObjectTypeOrder((current) => {
+      const nextIds = objectTypes.map((objectType) => objectType.id);
+      const nextIdSet = new Set(nextIds);
+      const keptIds = current.filter((id) => nextIdSet.has(id));
+      const addedIds = nextIds.filter((id) => !keptIds.includes(id));
+      return [...keptIds, ...addedIds];
+    });
+  }, [controlledObjectTypeOrder, objectTypes]);
 
   const setPinned = React.useCallback<
     React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>
@@ -243,13 +275,84 @@ function AppSidebarOverview({
     [pinned, pinnedSort],
   );
 
-  const visibleObjectTypes = React.useMemo(
-    () =>
-      objectSort === "alphabetical"
-        ? [...objectTypes].sort((a, b) => a.label.localeCompare(b.label, "pt-BR"))
-        : objectTypes,
-    [objectSort, objectTypes],
+  const visibleObjectTypes = React.useMemo(() => {
+    if (objectSort === "alphabetical") {
+      return [...objectTypes].sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
+    }
+
+    const orderIndex = new Map(objectTypeOrder.map((id, index) => [id, index]));
+    return [...objectTypes].sort(
+      (a, b) =>
+        (orderIndex.get(a.id) ?? Number.MAX_SAFE_INTEGER) -
+        (orderIndex.get(b.id) ?? Number.MAX_SAFE_INTEGER),
+    );
+  }, [objectSort, objectTypeOrder, objectTypes]);
+
+  const startDrag = React.useCallback((nextDrag: AppSidebarDragState) => {
+    dragRef.current = nextDrag;
+    setDrag(nextDrag);
+  }, []);
+
+  const clearDrag = React.useCallback(() => {
+    dragRef.current = null;
+    setDrag(null);
+  }, []);
+
+  const moveObjectType = React.useCallback(
+    (fromId: string, toId: string) => {
+      if (fromId === toId) return;
+
+      const sourceOrder =
+        objectSort === "alphabetical" ? visibleObjectTypes.map((item) => item.id) : objectTypeOrder;
+      const nextOrder = reorderById(
+        sourceOrder.map((id) => ({ id })),
+        fromId,
+        toId,
+      ).map((item) => item.id);
+
+      setObjectTypeOrder(nextOrder);
+      setObjectSort("manual");
+      onObjectTypeOrderChange?.(nextOrder);
+    },
+    [objectSort, objectTypeOrder, onObjectTypeOrderChange, visibleObjectTypes],
   );
+
+  const pinObjectType = React.useCallback(
+    (objectTypeId: string, beforeId?: string) => {
+      const objectType = objectTypes.find((item) => item.id === objectTypeId);
+      if (!objectType || pinned.some((item) => item.id === objectType.id)) return;
+
+      setPinned((current) => {
+        const pinnedEntity = {
+          id: objectType.id,
+          label: objectType.label,
+          icon: objectType.icon,
+          tone: objectType.tone,
+        };
+        if (!beforeId) return [...current, pinnedEntity];
+        const targetIndex = current.findIndex((item) => item.id === beforeId);
+        if (targetIndex < 0) return [...current, pinnedEntity];
+        const next = [...current];
+        next.splice(targetIndex, 0, pinnedEntity);
+        return next;
+      });
+    },
+    [objectTypes, pinned, setPinned],
+  );
+
+  function handlePinnedDragOver(event: React.DragEvent<HTMLDivElement>) {
+    const currentDrag = dragRef.current ?? drag;
+    if (currentDrag?.kind !== "object-type") return;
+    event.preventDefault();
+  }
+
+  function handlePinnedDrop(event: React.DragEvent<HTMLDivElement>) {
+    const currentDrag = dragRef.current ?? drag;
+    if (currentDrag?.kind !== "object-type") return;
+    event.preventDefault();
+    pinObjectType(currentDrag.id);
+    clearDrag();
+  }
 
   return (
     <div
@@ -278,7 +381,19 @@ function AppSidebarOverview({
         )}
       >
         <div className="flex min-h-full w-full flex-col">
-          <div data-slot="app-sidebar-pinned-region" className="shrink-0">
+          {/* biome-ignore lint/a11y/noStaticElementInteractions: drop target belongs on the pinned region wrapper */}
+          <div
+            role="presentation"
+            data-slot="app-sidebar-pinned-region"
+            data-dnd-type="droppable"
+            data-dnd-id="sidebar-pinned"
+            data-workspace-section-key="pinned"
+            className="shrink-0"
+            onDragOver={handlePinnedDragOver}
+            onDragOverCapture={handlePinnedDragOver}
+            onDrop={handlePinnedDrop}
+            onDropCapture={handlePinnedDrop}
+          >
             <AppSidebarSection
               icon={AppSidebarPinIcon}
               label={t("sidebarPinned.title")}
@@ -295,33 +410,65 @@ function AppSidebarOverview({
                 />
               }
             >
-              {visiblePinned.length === 0 ? (
+              {visiblePinned.length === 0 && !draggedObjectType ? (
                 <p className="h-10 px-5 py-1.5 text-xs italic leading-[18px] text-muted-foreground">
                   {t("sidebarPinned.noPinnedContent")}
                 </p>
               ) : (
-                visiblePinned.map((entity) => (
-                  <AppSidebarPinnedRow
-                    key={entity.id}
-                    entity={entity}
-                    active={activeId === entity.id}
-                    dragging={drag?.kind === "pinned" && drag.id === entity.id}
-                    draggable={pinnedSort === "manual"}
-                    onSelect={(event) => setActiveId(entity.id, event)}
-                    onOpenInSidePanel={() =>
-                      onOpenPinnedInSidePanel?.(entity) ?? setActiveId(entity.id)
-                    }
-                    onUnpin={() =>
-                      setPinned((current) => current.filter((item) => item.id !== entity.id))
-                    }
-                    onDragStart={() => setDrag({ kind: "pinned", id: entity.id })}
-                    onDrop={() => {
-                      if (drag?.kind !== "pinned" || pinnedSort !== "manual") return;
-                      setPinned((current) => reorderById(current, drag.id, entity.id));
-                      setDrag(null);
-                    }}
-                  />
-                ))
+                <>
+                  {draggedObjectType && !pinnedIds.has(draggedObjectType.id) && (
+                    <div
+                      data-slot="app-sidebar-drag-preview"
+                      className="mx-2 flex h-[29px] items-center rounded-md border border-dashed border-sidebar-ring/70 bg-sidebar-accent/60 px-[3px] text-sm text-sidebar-foreground"
+                    >
+                      <AppSidebarTypeLabel
+                        icon={draggedObjectType.icon}
+                        tone={draggedObjectType.tone}
+                      >
+                        {draggedObjectType.label}
+                      </AppSidebarTypeLabel>
+                    </div>
+                  )}
+                  {visiblePinned.map((entity) => (
+                    <AppSidebarPinnedRow
+                      key={entity.id}
+                      entity={entity}
+                      active={activeId === entity.id}
+                      dragging={drag?.kind === "pinned" && drag.id === entity.id}
+                      draggable={pinnedSort === "manual" || drag?.kind === "object-type"}
+                      onSelect={(event) => setActiveId(entity.id, event)}
+                      onOpenInSidePanel={() =>
+                        onOpenPinnedInSidePanel?.(entity) ?? setActiveId(entity.id)
+                      }
+                      onUnpin={() =>
+                        setPinned((current) => current.filter((item) => item.id !== entity.id))
+                      }
+                      onDragStart={(event) => {
+                        setSidebarDragPreview(event);
+                        event.dataTransfer.setData("application/x-sidebar-drag-kind", "pinned");
+                        event.dataTransfer.setData("application/x-sidebar-drag-id", entity.id);
+                        startDrag({ kind: "pinned", id: entity.id });
+                      }}
+                      onDragOverTarget={() => {
+                        const currentDrag = dragRef.current;
+                        if (currentDrag?.kind === "pinned" && pinnedSort === "manual") {
+                          setPinned((current) => reorderById(current, currentDrag.id, entity.id));
+                        }
+                      }}
+                      onDrop={() => {
+                        const currentDrag = dragRef.current ?? drag;
+                        if (currentDrag?.kind === "object-type") {
+                          pinObjectType(currentDrag.id, entity.id);
+                          clearDrag();
+                          return;
+                        }
+                        if (currentDrag?.kind !== "pinned" || pinnedSort !== "manual") return;
+                        setPinned((current) => reorderById(current, currentDrag.id, entity.id));
+                        clearDrag();
+                      }}
+                    />
+                  ))}
+                </>
               )}
             </AppSidebarSection>
           </div>
@@ -353,6 +500,8 @@ function AppSidebarOverview({
                 collectionsOpen={objectTypeCollectionsOpen[objectType.id] ?? true}
                 active={activeId === objectType.id}
                 activeId={activeId}
+                dragging={drag?.kind === "object-type" && drag.id === objectType.id}
+                draggable={objectSort === "manual"}
                 onSelect={(event) => setActiveId(objectType.id, event)}
                 onCollectionsOpenChange={(open) =>
                   setObjectTypeCollectionsOpen((current) => ({
@@ -364,7 +513,45 @@ function AppSidebarOverview({
                   if (action === "open") setActiveId(collection.id, event);
                   onCollectionAction?.(action, type, collection, event);
                 }}
+                onObjectTypeAction={onObjectTypeAction}
                 onUpdate={onUpdateObjectType}
+                onDelete={onDeleteObjectType}
+                onDragStart={(event) => {
+                  setSidebarDragPreview(event);
+                  event.dataTransfer.setData("application/x-sidebar-drag-kind", "object-type");
+                  event.dataTransfer.setData("application/x-sidebar-drag-id", objectType.id);
+                  startDrag({ kind: "object-type", id: objectType.id });
+                }}
+                onPointerDown={() => {
+                  dragRef.current = { kind: "object-type", id: objectType.id };
+                }}
+                onDragEnd={clearDrag}
+                onDragOverTarget={() => {
+                  const currentDrag = dragRef.current;
+                  if (currentDrag?.kind !== "object-type") return;
+                  moveObjectType(currentDrag.id, objectType.id);
+                }}
+                onDrop={() => {
+                  const currentDrag = dragRef.current ?? drag;
+                  if (currentDrag?.kind !== "object-type") return;
+                  moveObjectType(currentDrag.id, objectType.id);
+                  clearDrag();
+                }}
+                onCollectionDrop={(collectionId, event) => {
+                  const transferKind = event.dataTransfer.getData(
+                    "application/x-sidebar-drag-kind",
+                  );
+                  const transferId = event.dataTransfer.getData("application/x-sidebar-drag-id");
+                  const pinnedId =
+                    transferKind === "pinned" && transferId
+                      ? transferId
+                      : dragRef.current?.kind === "pinned"
+                        ? dragRef.current.id
+                        : undefined;
+                  if (!pinnedId) return;
+                  onMovePinnedEntityToCollection?.(pinnedId, collectionId);
+                  clearDrag();
+                }}
               />
             ))}
           </AppSidebarSection>

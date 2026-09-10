@@ -1,9 +1,15 @@
 import { cookies } from "next/headers";
 import { getRequestConfig } from "next-intl/server";
+import {
+  defaultLocale,
+  type Locale,
+  localeCookieName,
+  locales,
+  resolveServerLocale,
+} from "@/lib/i18n-locale";
 
-export const locales = ["en", "es", "pt-BR"] as const;
-export type Locale = (typeof locales)[number];
-export const defaultLocale: Locale = "pt-BR";
+export type { Locale };
+export { defaultLocale, locales };
 
 const editorMessagesByLocale = {
   en: () => import("../messages/editor/en.json").then((m) => m.default),
@@ -13,10 +19,7 @@ const editorMessagesByLocale = {
 
 export default getRequestConfig(async () => {
   const cookieStore = await cookies();
-  const rawLocale = cookieStore.get("NEXT_LOCALE")?.value;
-  const locale: Locale = locales.includes(rawLocale as Locale)
-    ? (rawLocale as Locale)
-    : defaultLocale;
+  const locale = resolveServerLocale(cookieStore.get(localeCookieName)?.value);
 
   const [messages, editorMessages] = await Promise.all([
     import(`../messages/${locale}.json`).then((m) => m.default),

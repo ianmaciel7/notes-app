@@ -429,6 +429,7 @@
   --accent: oklch(0.9856 0.0016 67);
   --accent-foreground: oklch(0.2191 0.0058 285.84);
   --destructive: oklch(0.6272 0.1917 24.54);
+  --destructive-menu-action: var(--destructive);
   --border: oklch(0.9163 0.0017 67.07);
   --input: oklch(0.9163 0.0017 67.07);
   --ring: oklch(0.7161 0.006 30.59);
@@ -583,6 +584,8 @@
   --app-bg-el: var(--bg-el);
   --app-bg-el-hover: var(--bg-el-hover);
   --app-bg-el-active: var(--bg-el-active);
+  --app-bg-el-subtle: var(--bg-el-subtle);
+  --app-bg-el-subtle-hover: var(--bg-el-subtle-hover);
   --app-bg-el-subtle-active: var(--bg-el-subtle-active);
   --app-button-primary-bg: var(--bg-button-primary);
   --app-button-primary-bg-hover: var(--bg-button-primary-hover);
@@ -644,8 +647,6 @@
   --app-code-text: oklch(0.2191 0.0058 285.84);
   --app-horizontal-line: oklch(0.8643 0.0017 67.13);
   --app-quote-line: oklch(0.7161 0.006 30.59);
-  --app-bg-el-subtle: oklch(1 0.0001 263.28);
-  --app-bg-el-subtle-hover: oklch(0.9676 0.0016 67.02);
   --app-primary-hover: oklch(0.4668 0.0039 16.75);
 
   --app-header-bg-base: var(--bg-base);
@@ -784,6 +785,7 @@
   --accent: oklch(0.2574 0.0056 285.92);
   --accent-foreground: oklch(1 0.0001 263.28);
   --destructive: oklch(0.6693 0.1818 23.36);
+  --destructive-menu-action: var(--destructive);
   --border: oklch(0.2987 0.0072 285.88);
   --input: oklch(0.2987 0.0072 285.88);
   --ring: oklch(0.8643 0.0017 67.13);
@@ -849,6 +851,8 @@
   --app-bg-el: var(--bg-el);
   --app-bg-el-hover: var(--bg-el-hover);
   --app-bg-el-active: var(--bg-el-active);
+  --app-bg-el-subtle: var(--bg-el-subtle);
+  --app-bg-el-subtle-hover: var(--bg-el-subtle-hover);
   --app-bg-el-subtle-active: var(--bg-el-subtle-active);
   --app-button-primary-bg: var(--bg-button-primary);
   --app-button-primary-bg-hover: var(--bg-button-primary-hover);

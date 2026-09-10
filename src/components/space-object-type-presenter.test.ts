@@ -73,3 +73,30 @@ it("keeps built-in study goal visuals canonical when persisted metadata drifts",
   expect(value.icon).toBe(ObjectStudyGoalIcon);
   expect(value.tone).toBe("lime");
 });
+
+it("uses localized built-in object type labels for presentation without changing persisted metadata", () => {
+  const value = presentWorkspaceObjectType(
+    {
+      id: "study_goal",
+      spaceId: "personal",
+      ownership: "built-in",
+      singularName: "Study goal",
+      pluralName: "Study goals",
+      iconName: "study-goal",
+      tone: "lime",
+      lifecycleKind: "document",
+      propertyDefinitions: [],
+      collectionIds: [],
+      presentation: { defaultView: "list", availableViews: ["list"] },
+    },
+    1,
+    {
+      plurals: { study_goal: "Metas de estudo" },
+      singulars: { study_goal: "Meta de estudo" },
+    },
+  );
+
+  expect(value.label).toBe("Metas de estudo");
+  expect(value.singularLabel).toBe("Meta de estudo");
+  expect(value.iconName).toBe("study-goal");
+});

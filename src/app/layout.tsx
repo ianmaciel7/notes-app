@@ -4,8 +4,10 @@ import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { InteractionSoundTools } from "@/components/interaction-sounds";
+import { LocaleStorageSync } from "@/components/locale-storage-sync";
 import { ThemeProvider } from "@/components/theme-provider";
 import { InteractionProvider } from "@/components/ui/interaction-provider";
+import { resolveServerLocale } from "@/lib/i18n-locale";
 
 export const metadata: Metadata = {
   title: "Notes App",
@@ -25,7 +27,7 @@ const themeScript = `(function() {
 })();`;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const locale = await getLocale();
+  const locale = resolveServerLocale(await getLocale());
   const messages = await getMessages();
 
   return (
@@ -37,6 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className="h-full flex flex-col overflow-hidden bg-background text-foreground font-sans">
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <LocaleStorageSync locale={locale} />
           <ThemeProvider>
             <InteractionProvider>
               {children}

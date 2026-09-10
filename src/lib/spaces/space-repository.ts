@@ -32,6 +32,7 @@ import { createSyncQueue } from "@/lib/sync/sync-queue";
 import type { FileEntity, FlashcardEntity, HighlightEntity, StudyGoalEntity } from "@/types/schema";
 
 export const PINNED_ENTITY_IDS_SETTING_KEY = "sidebar.pinnedEntityIds";
+export const OBJECT_TYPE_ORDER_SETTING_KEY = "sidebar.objectTypeOrder";
 const TEXT_QUOTE_CONTEXT_LENGTH = 48;
 
 function stripSpaceId(record: SpaceObjectTypeRecord): WorkspaceStructure {
@@ -372,6 +373,7 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
       blocks: [],
       tags: [],
       relations: [],
+      collections: [],
       properties: pastedUrl ? { url: pastedUrl } : {},
       _syncStatus: "pending",
     };
@@ -710,13 +712,15 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
     );
     if (value.length === 0) return [];
 
-    const [entities, collections] = await Promise.all([
+    const [entities, collections, objectTypes] = await Promise.all([
       database.entities.where("spaceId").equals(spaceId).toArray(),
       database.collections.where("spaceId").equals(spaceId).toArray(),
+      database.objectTypes.where("spaceId").equals(spaceId).toArray(),
     ]);
     const validIds = new Set([
       ...entities.map((entity) => entity.id),
       ...collections.map((collection) => collection.id),
+      ...objectTypes.map((objectType) => objectType.id),
     ]);
     return value.filter((id, index) => value.indexOf(id) === index && validIds.has(id));
   }
@@ -724,13 +728,15 @@ export function createSpaceRepository(database: KnowledgeDatabase) {
   async function setPinnedEntityIds(spaceId: string, ids: readonly string[]) {
     await requireSpace(spaceId);
     const uniqueIds = ids.filter((id, index) => ids.indexOf(id) === index);
-    const [entities, collections] = await Promise.all([
+    const [entities, collections, objectTypes] = await Promise.all([
       database.entities.where("spaceId").equals(spaceId).toArray(),
       database.collections.where("spaceId").equals(spaceId).toArray(),
+      database.objectTypes.where("spaceId").equals(spaceId).toArray(),
     ]);
     const validIds = new Set([
       ...entities.map((entity) => entity.id),
       ...collections.map((collection) => collection.id),
+      ...objectTypes.map((objectType) => objectType.id),
     ]);
     await setSpaceSetting(
       spaceId,

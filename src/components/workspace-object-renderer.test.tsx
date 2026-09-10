@@ -3,6 +3,7 @@ import { expect, it } from "vitest";
 
 import {
   getWorkspaceWeblinkUrl,
+  WorkspaceListRenderer,
   WorkspaceObjectRenderer,
   WorkspaceObjectTypeListView,
 } from "@/components/workspace-object-renderer";
@@ -82,6 +83,40 @@ it("renders unfinished object types through PendingImplementation", () => {
   expect(markup.match(/data-slot="pending-implementation"/g)).toHaveLength(1);
   expect(markup).toContain('data-variant="workspace"');
   expect(markup).toContain('data-slot="pending-implementation-card"');
+});
+
+it("renders a workspace object list with each entity using the object renderer", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceListRenderer
+      entities={[
+        entityFixture({
+          id: "entity-weblink",
+          objectTypeId: "weblink",
+          properties: { url: "https://example.com/article" },
+          title: "Example article",
+        }),
+        entityFixture({
+          id: "entity-flashcard",
+          objectTypeId: "flashcard",
+          title: "Photosynthesis card",
+        }),
+      ]}
+      objectTypes={[
+        objectTypeFixture({ id: "weblink", singularName: "Weblink", pluralName: "Weblinks" }),
+        objectTypeFixture({
+          id: "flashcard",
+          singularName: "Flashcard",
+          pluralName: "Flashcards",
+        }),
+      ]}
+      tabName="Study objects"
+    />,
+  );
+
+  expect(markup).toContain("Example article");
+  expect(markup).toContain("https://example.com/article");
+  expect(markup).toContain("Photosynthesis card");
+  expect(markup).toContain("Flashcard object");
 });
 
 it("renders only objects belonging to the active object type", () => {

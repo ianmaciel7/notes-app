@@ -43,6 +43,8 @@ it("uses theme tokens for the object type cards so dark mode stays Capacities-li
   expect(componentSource).toContain("text-[var(--app-button-primary-text)]");
   expect(globalCss).toContain("--app-object-type-control-bg:");
   expect(globalCss).toContain("--app-object-type-control-text:");
+  expect(globalCss).toContain("--app-bg-el-subtle: var(--bg-el-subtle);");
+  expect(globalCss).toContain("--app-bg-el-subtle-hover: var(--bg-el-subtle-hover);");
   expect(globalCss).toContain("--app-bg-el-subtle-active:");
   expect(globalCss).toContain("--app-button-primary-bg:");
   expect(globalCss).toContain("--type-label-bg-blue: oklch(0.3498 0.0543 269.4);");

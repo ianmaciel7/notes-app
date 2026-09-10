@@ -26,6 +26,7 @@ export type SpaceObjectTypeRecord = WorkspaceStructure & {
 export type SpaceEntityRecord = BaseEntity & {
   spaceId: string;
   objectTypeId: string;
+  collections?: string[];
 };
 
 export type SpaceCollectionRecord = {

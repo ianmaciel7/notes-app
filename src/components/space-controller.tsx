@@ -41,6 +41,7 @@ import {
   listBacklinksInSpace,
   searchEntitiesInSpace,
 } from "@/lib/spaces/space-projections";
+import { OBJECT_TYPE_ORDER_SETTING_KEY } from "@/lib/spaces/space-repository";
 import { PERSONAL_SPACE_ID } from "@/lib/spaces/space-types";
 import type { FSRSRating } from "@/lib/srs/fsrs";
 
@@ -323,9 +324,14 @@ function getStoredWorkspaceMainTabsState(spaceId: string) {
   }
 }
 
+export function shouldRenderWorkspaceHeaderTabs(routeRestored: boolean) {
+  return routeRestored;
+}
+
 const defaultWorkspaceContext: WorkspaceContextValue = {
   spaces: [{ id: PERSONAL_SPACE_ID, name: "Personal Space", icon: "user" }],
   spaceId: PERSONAL_SPACE_ID,
+  routeRestored: false,
   setSpaces: () => {},
   createSpace: () => {},
   deleteSpace: () => false,
@@ -352,6 +358,7 @@ const defaultWorkspaceContext: WorkspaceContextValue = {
   tags: [],
   customSections: [],
   setPinnedEntities: () => {},
+  moveEntityToCollection: () => {},
   setCommandPaletteOpen: () => {},
   createWorkspaceStructureFromPreset: () => {},
   createWorkspaceStructure: () => {},
@@ -391,6 +398,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     createdEntities,
     objectTypeCollections,
     pinnedEntityIds,
+    objectTypeOrder,
     tags,
     trashItems,
   } = useSpaceData();
@@ -618,6 +626,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         (collection: { id: string; name: string }) => [collection.id, collection] as const,
       ),
     );
+    const objectTypesById = new Map(objectTypes.map((objectType) => [objectType.id, objectType]));
 
     return pinnedEntityIds.flatMap((id: string) => {
       const entity = availableById.get(id);
@@ -635,9 +644,36 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         ];
       }
 
+      const objectType = objectTypesById.get(id);
+      if (objectType) {
+        return [
+          {
+            id: objectType.id,
+            label: objectType.label,
+            icon: objectType.icon,
+            tone: objectType.tone,
+          },
+        ];
+      }
+
       return [];
     });
-  }, [availablePinnedEntities, objectTypeCollections, pinnedEntityIds]);
+  }, [availablePinnedEntities, objectTypeCollections, objectTypes, pinnedEntityIds]);
+
+  const moveEntityToCollection = React.useCallback(
+    (entityId: string, collectionId: string) => {
+      const entity = createdEntities.find((item) => item.id === entityId);
+      if (!entity || entity.collections?.includes(collectionId)) return;
+      void repository
+        .updateEntity(spaceId, entityId, {
+          collections: [...(entity.collections ?? []), collectionId],
+        })
+        .catch((cause: unknown) =>
+          showMessage(cause instanceof Error ? cause.message : String(cause)),
+        );
+    },
+    [createdEntities, repository, showMessage, spaceId],
+  );
 
   const setPinnedEntities = React.useCallback(
     // biome-ignore lint/suspicious/noExplicitAny: preserves the existing React setter-style API
@@ -653,6 +689,17 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         });
     },
     [pinnedEntities, repository, showMessage, spaceId],
+  );
+
+  const setObjectTypeOrder = React.useCallback(
+    (next: readonly string[]) => {
+      void repository
+        .setSpaceSetting(spaceId, OBJECT_TYPE_ORDER_SETTING_KEY, [...next])
+        .catch((cause: unknown) => {
+          showMessage(cause instanceof Error ? cause.message : String(cause));
+        });
+    },
+    [repository, showMessage, spaceId],
   );
 
   const selectEntity = React.useCallback((id: string) => {
@@ -1013,6 +1060,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       ready,
       spaces,
       spaceId,
+      routeRestored,
       setSpaces,
       createSpace,
       deleteSpace,
@@ -1032,6 +1080,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setSideValue,
       selectEntity,
       pinnedEntities,
+      objectTypeOrder,
       availablePinnedEntities,
       objectTypes,
       objectTypeRecords,
@@ -1040,6 +1089,8 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       tags,
       customSections,
       setPinnedEntities,
+      moveEntityToCollection,
+      setObjectTypeOrder,
       setCommandPaletteOpen,
       createWorkspaceStructureFromPreset,
       createWorkspaceStructure,
@@ -1065,6 +1116,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       ready,
       spaces,
       spaceId,
+      routeRestored,
       setSpaces,
       createSpace,
       deleteSpace,
@@ -1078,6 +1130,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       sideValue,
       selectEntity,
       pinnedEntities,
+      objectTypeOrder,
       availablePinnedEntities,
       objectTypes,
       objectTypeRecords,
@@ -1086,6 +1139,8 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       tags,
       customSections,
       setPinnedEntities,
+      moveEntityToCollection,
+      setObjectTypeOrder,
       createWorkspaceStructureFromPreset,
       createWorkspaceStructure,
       updateWorkspaceStructure,
@@ -1120,6 +1175,7 @@ export function WorkspaceMainHeader() {
     mainValue,
     objectTypeCollections,
     objectTypes,
+    routeRestored,
     setMainTabs,
     setMainValue,
     openInSidePanel,
@@ -1130,6 +1186,7 @@ export function WorkspaceMainHeader() {
   const rightPanelTriggerRef = appShell?.rightPanelTriggerRef;
   const tabs = mainTabs && mainTabs.length > 0 ? mainTabs : initialMainTabs;
   const value = mainValue || tabs[0]?.id || "page";
+  const tabsRestored = shouldRenderWorkspaceHeaderTabs(Boolean(routeRestored));
   const specialItems = filterSidePanelSpecialItemsForContext(
     defaultSpecialItems,
     resolveWorkspaceSidePanelContext({
@@ -1191,21 +1248,29 @@ export function WorkspaceMainHeader() {
         ) : null
       }
     >
-      <AppSpaceHeader
-        tabs={tabs}
-        value={value}
-        onValueChange={setMainValue}
-        onTabsChange={setMainTabs}
-        onCreate={() => {
-          if (typeof window !== "undefined") {
-            window.dispatchEvent(
-              new CustomEvent("workspace:open-command-palette", {
-                detail: { openInNewTab: true },
-              }),
-            );
-          }
-        }}
-      />
+      {tabsRestored ? (
+        <AppSpaceHeader
+          tabs={tabs}
+          value={value}
+          onValueChange={setMainValue}
+          onTabsChange={setMainTabs}
+          onCreate={() => {
+            if (typeof window !== "undefined") {
+              window.dispatchEvent(
+                new CustomEvent("workspace:open-command-palette", {
+                  detail: { openInNewTab: true },
+                }),
+              );
+            }
+          }}
+        />
+      ) : (
+        <div
+          aria-hidden="true"
+          data-slot="workspace-header-tabs-loading"
+          className="h-8 min-w-0 flex-1"
+        />
+      )}
     </AppHeader>
   );
 }

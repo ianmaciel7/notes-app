@@ -1,7 +1,16 @@
 import { getObjectTypeIconAppearance } from "@/components/object-icons";
 import type { SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 
-export function presentWorkspaceObjectType(record: SpaceObjectTypeRecord, count: number) {
+type WorkspaceObjectTypeLabels = {
+  plurals?: Partial<Record<string, string>>;
+  singulars?: Partial<Record<string, string>>;
+};
+
+export function presentWorkspaceObjectType(
+  record: SpaceObjectTypeRecord,
+  count: number,
+  labels: WorkspaceObjectTypeLabels = {},
+) {
   const appearance = getObjectTypeIconAppearance({
     id: record.id,
     iconName: record.iconName,
@@ -10,8 +19,8 @@ export function presentWorkspaceObjectType(record: SpaceObjectTypeRecord, count:
 
   return {
     id: record.id,
-    label: record.pluralName,
-    singularLabel: record.singularName,
+    label: labels.plurals?.[record.id] ?? record.pluralName,
+    singularLabel: labels.singulars?.[record.id] ?? record.singularName,
     icon: appearance.icon,
     iconName: appearance.iconName,
     tone: appearance.tone,

@@ -13,8 +13,9 @@ import {
   WorkspaceObjectRenderer,
   WorkspaceObjectTypeListView,
 } from "@/components/workspace-object-renderer";
-import { WorkspaceSidePanelRenderer } from "@/components/workspace-side-panel-renderer";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
+
+export { WorkspaceSidePanelContent } from "@/components/workspace-side-panel-content";
 
 type WorkspaceTabLike = {
   id: string;
@@ -25,6 +26,10 @@ const contextMenuPendingActions = {
   "change-type": "Change type",
   export: "Export",
   import: "Import",
+  "new-collection": "New Collection",
+  "new-from-template": "New from Template",
+  "new-query": "New Query",
+  "pin-sidebar": "Pin to Sidebar",
   present: "Present",
   settings: "Object type settings",
   share: "Share",
@@ -634,7 +639,7 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   );
 }
 
-function WorkspaceMainSurface() {
+export function WorkspaceDefaultPanel() {
   const {
     createWorkspaceEntity,
     createdEntities,
@@ -750,22 +755,6 @@ function ContextMenuPendingActionPanel({
   );
 }
 
-export function WorkspaceSidePanelContent() {
-  const { activeEntityId, createdEntities, sideTabs, sideValue } = useWorkspace();
-  const name = getWorkspaceTabPendingName(sideTabs, sideValue, "Side panel");
-  const activeEntity = createdEntities.find(
-    (entity: { id: string }) => entity.id === activeEntityId,
-  );
-
-  return (
-    <WorkspaceSidePanelRenderer
-      activeMainObjectTitle={activeEntity?.title}
-      activeTabLabel={name}
-      sideValue={sideValue}
-    />
-  );
-}
-
 export function WorkspaceMainContent() {
   const { activeAction, setActiveAction, setActiveEntityId, setMainValue, mainValue } =
     useWorkspace();
@@ -829,5 +818,5 @@ export function WorkspaceMainContent() {
     );
   }
 
-  return <WorkspaceMainSurface />;
+  return <WorkspaceDefaultPanel />;
 }

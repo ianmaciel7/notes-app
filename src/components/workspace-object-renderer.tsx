@@ -58,6 +58,12 @@ type WorkspaceObjectTypeListViewProps = {
   onOpenEntity?: (entity: SpaceEntityRecord) => void;
 };
 
+type WorkspaceListRendererProps = {
+  entities: readonly SpaceEntityRecord[];
+  objectTypes?: readonly SpaceObjectTypeRecord[];
+  tabName: string;
+};
+
 function readStringProperty(entity: SpaceEntityRecord, keys: string[]) {
   for (const key of keys) {
     const value = entity.properties[key];
@@ -654,4 +660,44 @@ export function WorkspaceObjectRenderer(props: WorkspaceObjectRendererProps) {
   }
 
   return <PendingObjectRenderer {...props} />;
+}
+
+export function WorkspaceListRenderer({
+  entities,
+  objectTypes = [],
+  tabName,
+}: WorkspaceListRendererProps) {
+  if (entities.length === 0) {
+    return (
+      <PendingImplementation
+        area={tabName}
+        description={`${tabName} does not have objects to render yet.`}
+        name="Object list"
+        variant="workspace"
+      />
+    );
+  }
+
+  return (
+    <div className="h-full min-h-0 w-full overflow-auto bg-card p-6">
+      <div className="mx-auto grid max-w-6xl gap-4 lg:grid-cols-2">
+        {entities.map((entity) => {
+          const objectType = objectTypes.find((candidate) => candidate.id === entity.objectTypeId);
+
+          return (
+            <section
+              className="min-h-[22rem] overflow-hidden rounded-lg border border-border bg-card"
+              key={entity.id}
+            >
+              <WorkspaceObjectRenderer
+                entity={entity}
+                objectType={objectType}
+                tabName={entity.title || tabName}
+              />
+            </section>
+          );
+        })}
+      </div>
+    </div>
+  );
 }

@@ -524,6 +524,14 @@
     "openedTab": {
       "description": "Empieza a escribir o agrega contenido a este objeto."
     },
+    "objectTypeMenu": {
+      "createObject": "Crear {type}",
+      "newCollection": "Nueva colección",
+      "newFromTemplate": "Nuevo desde plantilla",
+      "newQuery": "Nueva Query",
+      "open": "Abrir",
+      "pinSidebar": "Fijar en la barra lateral"
+    },
     "objectTypeStudio": {
       "basicTypes": "Tipos básicos",
       "createOwn": "Crea el tuyo",

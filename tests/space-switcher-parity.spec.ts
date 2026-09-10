@@ -17,6 +17,7 @@ test("space switcher matches Capacities menu composition and empty state", async
   const search = popup.locator('[data-slot="input-group"]').first();
   await expect(search).toHaveCSS("height", "32px");
   await expect(popup).toHaveCSS("border-radius", "12px");
+  await expect(popup).toHaveCSS("width", "278px");
 
   const selectedSpace = popup.locator('[data-space-sort-id][aria-selected="true"]').first();
   await expect(selectedSpace).toBeVisible();
@@ -34,9 +35,7 @@ test("space switcher matches Capacities menu composition and empty state", async
   if (!iconBox || !textBox) throw new Error("Bounding box missing");
   expect(Math.round(textBox.x - (iconBox.x + iconBox.width))).toBe(8);
 
-  const footer = popup.locator('[data-slot="combobox-separator"] + div').first();
-  await expect(footer.locator("button:visible")).toHaveCount(1);
-  await expect(footer.locator("button:visible").first()).toHaveCSS("height", "32px");
+  await expect(popup.locator('[data-slot="combobox-separator"]')).toHaveCount(0);
 
   const input = popup.locator('[data-slot="input-group-control"]').first();
   await input.fill("__no_space_matches__");

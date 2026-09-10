@@ -52,6 +52,11 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
 const SPACE_MENU_MAX_HEIGHT = "27rem";
+const spaceSwitcherContentClass = cn(
+  compactMenuSurfaceClass,
+  "box-border !w-[278px] !min-w-[278px] max-h-[27rem] overflow-hidden rounded-[12px] border border-[var(--app-border-front)] bg-[var(--app-bg-base)] text-[var(--app-text-subtle)] shadow-[var(--app-shadow-sidebar-popover)] outline-none",
+  "data-closed:animate-none data-closed:duration-0 data-closed:opacity-0 data-closed:zoom-out-100",
+);
 
 type AppSidebarSpace = {
   id: string;
@@ -521,7 +526,7 @@ function AppSidebarSpaceSwitcher({
         placeholder={text.search}
         aria-label={text.search}
         className={cn(
-          "h-8 w-[calc(100%-0.75rem)] gap-2 m-1.5 px-[9px] !border-0 rounded-lg bg-[var(--app-bg-el)] text-[var(--app-text-secondary)] shadow-none shrink-0",
+          "h-8 w-[calc(100%-0.5625rem)] gap-2 m-1.5 px-[9px] !border-0 rounded-lg bg-[var(--app-bg-el)] text-[var(--app-text-secondary)] shadow-none shrink-0",
           "[&_[data-slot=input-group-control]]:h-full [&_[data-slot=input-group-control]]:p-0 [&_[data-slot=input-group-control]]:border-0 [&_[data-slot=input-group-control]]:bg-transparent [&_[data-slot=input-group-control]]:text-[var(--app-text-secondary)] [&_[data-slot=input-group-control]]:shadow-none [&_[data-slot=input-group-control]]:outline-none [&_[data-slot=input-group-control]::placeholder]:text-[var(--app-text-subtle)] [&_[data-slot=input-group-control]::placeholder]:opacity-60",
           "[&_[data-slot=input-group-addon]]:p-0 [&_[data-slot=input-group-addon][data-align=inline-end]:has(>button)]:mr-0",
           "[&>[data-slot=input-group-addon]:empty]:hidden",
@@ -577,7 +582,7 @@ function AppSidebarSpaceSwitcher({
         aria-grabbed={isDragging}
         className={cn(
           compactMenuItemClass,
-          "h-8 min-h-8 px-1 rounded-lg text-[var(--app-text-primary)] hover:bg-[var(--app-bg-el)] data-[highlighted]:bg-[var(--app-bg-el)] active:brightness-95",
+          "h-8 min-h-8 px-1 rounded-lg text-[var(--app-text-primary)] hover:bg-[var(--app-bg-el)] data-highlighted:bg-transparent data-selected:bg-transparent active:brightness-95",
           "group/space [&>span:last-child]:hidden [&>[data-selected]]:hidden",
           "data-[dragging=true]:pointer-events-none data-[dragging=true]:opacity-30",
         )}
@@ -749,11 +754,7 @@ function AppSidebarSpaceSwitcher({
             initialFocus={searchInputRef}
             finalFocus={false}
             aria-label={text.changeSpace}
-            className={cn(
-              "min-w-72 max-h-[27rem] overflow-hidden rounded-xl border-border bg-[var(--app-bg-front)] text-[var(--app-text-subtle)] shadow-[var(--app-shadow-sidebar-popover)] outline-none",
-              compactMenuSurfaceClass,
-              "data-closed:animate-none data-closed:duration-0 data-closed:opacity-0 data-closed:zoom-out-100",
-            )}
+            className={spaceSwitcherContentClass}
           >
             {renderSearch()}
 
@@ -763,7 +764,7 @@ function AppSidebarSpaceSwitcher({
                 maxHeight: `min(${SPACE_MENU_MAX_HEIGHT}, calc(var(--available-height) - 2.75rem))`,
               }}
             >
-              <ComboboxEmpty className="my-4 p-0 pb-1.5 gap-1.5 text-[var(--app-text-secondary)] [&_svg]:text-[var(--app-text-subtle)]">
+              <ComboboxEmpty className="min-h-[52px] gap-1.5 p-0 text-[var(--app-text-secondary)] [&_svg]:text-[var(--app-text-subtle)]">
                 <span className="inline-flex w-full min-w-0 items-center justify-center gap-1.5">
                   <AppSidebarAlertIcon />
                   <span className="truncate">{text.empty}</span>
@@ -773,8 +774,6 @@ function AppSidebarSpaceSwitcher({
               <ComboboxList className="max-h-none min-w-0 overflow-visible overflow-x-hidden px-1.5 pb-1.5 pt-0 scroll-p-8">
                 {(space: AppSidebarSpace) => renderSpaceItem(space)}
               </ComboboxList>
-
-              {renderFooter()}
             </div>
           </ComboboxContent>
         )}
