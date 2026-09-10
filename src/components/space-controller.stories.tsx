@@ -1,6 +1,5 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 
-import { WorkspaceNewContentDialogController } from "./app-sidebar-primary-actions-command-dialog";
 import {
   AppShell,
   AppShellMain,
@@ -11,12 +10,17 @@ import {
   AppShellSurface,
   AppShellWorkspace,
 } from "./app-shell";
+import { WorkspaceNewContentDialogController } from "./app-sidebar-primary-actions-command-dialog";
 import { FocusModeProvider } from "./focus-mode-provider";
 import {
   WorkspaceMainHeader,
   WorkspaceProvider,
   WorkspaceSidePanelHeader,
 } from "./space-controller";
+
+export default {
+  title: "Components / Space controller",
+} satisfies StoryDefault;
 
 function WorkspaceStoryFrame({ children }: { children: React.ReactNode }) {
   return (

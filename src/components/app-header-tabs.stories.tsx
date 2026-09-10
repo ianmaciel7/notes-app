@@ -1,8 +1,12 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
 
 import { type AppHeaderTab, AppHeaderTabItem, AppSpaceHeader } from "./app-header-tabs";
 import { ObjectPageIcon, ObjectQueryIcon } from "./object-icons";
+
+export default {
+  title: "Components / App header tabs",
+} satisfies StoryDefault;
 
 const sampleTabs: AppHeaderTab[] = [
   { id: "tab-1", label: "Dashboard Page", icon: ObjectPageIcon, pinned: true },

@@ -1,9 +1,13 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
 
 import type { AppSidebarSpace } from "./app-sidebar";
 import { AppSidebar } from "./app-sidebar";
 import { ObjectPageIcon } from "./object-icons";
+
+export default {
+  title: "Components / App sidebar",
+} satisfies StoryDefault;
 
 const sampleSpaces: AppSidebarSpace[] = [
   { id: "personal", name: "Personal Space", icon: ObjectPageIcon },

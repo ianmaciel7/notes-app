@@ -1,6 +1,10 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 
 import { PendingImplementation } from "./pending-implementation";
+
+export default {
+  title: "Components / Pending implementation",
+} satisfies StoryDefault;
 
 export const Default: Story = () => (
   <div className="flex min-h-screen items-center justify-center bg-card p-6">

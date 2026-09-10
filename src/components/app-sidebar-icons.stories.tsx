@@ -1,6 +1,10 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 
 import * as Icons from "./app-sidebar-icons";
+
+export default {
+  title: "Components / App sidebar icons",
+} satisfies StoryDefault;
 
 export const AllSidebarIcons: Story = () => {
   const iconList = [

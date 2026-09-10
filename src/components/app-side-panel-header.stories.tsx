@@ -1,7 +1,11 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
 
 import { AppSidePanelHeader } from "./app-side-panel-header";
+
+export default {
+  title: "Components / App side panel header",
+} satisfies StoryDefault;
 
 const initialSideTabs = [
   { id: "tab-1", label: "Graph View" },

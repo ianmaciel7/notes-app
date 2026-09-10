@@ -1,18 +1,14 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
 
 import { useWorkspace, WorkspaceProvider } from "./space-controller";
-import {
-  WorkspaceDefaultPanel,
-  WorkspaceMainContent,
-} from "./workspace-main-content";
+import { WorkspaceDefaultPanel, WorkspaceMainContent } from "./workspace-main-content";
 
-type WorkspaceActionState =
-  | "search"
-  | "calendar"
-  | "explore"
-  | "tasks"
-  | `pending:${string}`;
+export default {
+  title: "Components / Workspace main content",
+} satisfies StoryDefault;
+
+type WorkspaceActionState = "search" | "calendar" | "explore" | "tasks" | `pending:${string}`;
 
 function WorkspaceStoryState({ activeAction }: { activeAction?: WorkspaceActionState }) {
   const { setActiveAction, setActiveEntityId, setMainValue } = useWorkspace();

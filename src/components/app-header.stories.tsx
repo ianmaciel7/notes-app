@@ -1,7 +1,11 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 
 import { AppFocusModeControls, AppHeader, AppHeaderAction, AppHeaderHistory } from "./app-header";
 import { AppHeaderCircleDashedIcon } from "./app-header-icons";
+
+export default {
+  title: "Components / App header",
+} satisfies StoryDefault;
 
 export const DefaultHeader: Story = () => (
   <div className="w-full overflow-hidden rounded-lg border bg-background">

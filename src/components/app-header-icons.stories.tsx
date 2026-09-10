@@ -1,6 +1,10 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 
 import * as Icons from "./app-header-icons";
+
+export default {
+  title: "Components / App header icons",
+} satisfies StoryDefault;
 
 export const AllHeaderIcons: Story = () => {
   const iconList = [

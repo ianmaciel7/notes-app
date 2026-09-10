@@ -1,10 +1,14 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 
 import {
   AppSidebarSourceIcon,
   type AppSidebarSourceIconName,
   AppSidebarWorkspaceIcon,
 } from "./app-sidebar-source-icon";
+
+export default {
+  title: "Components / App sidebar source icon",
+} satisfies StoryDefault;
 
 const sourceIconNames: AppSidebarSourceIconName[] = [
   "workspace",

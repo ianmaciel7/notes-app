@@ -1,7 +1,11 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 import { NextIntlClientProvider } from "next-intl";
 
 import { AppSidebarObjectTypeStudio } from "./app-sidebar-object-type-studio";
+
+export default {
+  title: "Components / App sidebar object type studio",
+} satisfies StoryDefault;
 
 const messages = {
   workspace: {

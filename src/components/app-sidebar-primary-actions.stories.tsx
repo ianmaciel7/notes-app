@@ -1,8 +1,12 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 import { NextIntlClientProvider } from "next-intl";
 
 import { AppSidebarPrimaryActions } from "./app-sidebar-primary-actions";
 import { ObjectPageIcon, ObjectQueryIcon } from "./object-icons";
+
+export default {
+  title: "Components / App sidebar primary actions",
+} satisfies StoryDefault;
 
 const messages = {
   workspace: {

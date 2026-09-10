@@ -1,8 +1,12 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 
 import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 
 import { WorkspaceObjectRenderer } from "./workspace-object-renderer";
+
+export default {
+  title: "Components / Workspace object renderer",
+} satisfies StoryDefault;
 
 const now = "2026-09-10T13:00:00.000Z";
 

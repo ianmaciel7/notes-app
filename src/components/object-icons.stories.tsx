@@ -1,6 +1,10 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 
 import { ObjectIconBadge, objectTypeDefinitions } from "./object-icons";
+
+export default {
+  title: "Components / Object icons",
+} satisfies StoryDefault;
 
 export const ObjectIconBadgeGallery: Story = () => (
   <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">

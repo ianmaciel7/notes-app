@@ -1,5 +1,9 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 import { Button } from "./button";
+
+export default {
+  title: "Components / UI / Button",
+} satisfies StoryDefault;
 
 export const Default: Story = () => <Button>Default Button</Button>;
 

@@ -1,4 +1,4 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 import { NextIntlClientProvider } from "next-intl";
 
 import {
@@ -13,6 +13,10 @@ import {
   AppShellSurface,
   AppShellWorkspace,
 } from "./app-shell";
+
+export default {
+  title: "Components / App shell",
+} satisfies StoryDefault;
 
 const messages = {
   workspace: {

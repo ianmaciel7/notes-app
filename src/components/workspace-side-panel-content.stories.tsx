@@ -1,10 +1,14 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
 
 import { AppHeaderCircleDashedIcon, AppHeaderGraphIcon } from "@/components/app-header-icons";
 
 import { useWorkspace, WorkspaceProvider } from "./space-controller";
 import { WorkspaceSidePanelContent } from "./workspace-side-panel-content";
+
+export default {
+  title: "Components / Workspace side panel content",
+} satisfies StoryDefault;
 
 type SidePanelStoryStateProps = {
   activeMainObjectTitle?: string;

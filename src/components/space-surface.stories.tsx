@@ -1,4 +1,4 @@
-import type { Story } from "@ladle/react";
+import type { Story, StoryDefault } from "@ladle/react";
 import { Folder } from "lucide-react";
 import {
   WorkspaceEmptyState,
@@ -15,6 +15,10 @@ import {
   workspaceRouteClass,
   workspaceSectionTitleClass,
 } from "./space-surface";
+
+export default {
+  title: "Components / Space surface",
+} satisfies StoryDefault;
 
 export const EmptyState: Story = () => (
   <div className="p-6">

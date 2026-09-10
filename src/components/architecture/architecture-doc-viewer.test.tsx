@@ -55,12 +55,24 @@ graph TD
 
 it("registers architecture Markdown stories in Ladle", () => {
   const configSource = readProjectSource(".ladle/config.mjs");
-  const storySource = readProjectSource(
-    "src/components/architecture/workspace-architecture.stories.tsx",
-  );
+  const storySource = readProjectSource("docs/workspace/workspace-architecture.stories.tsx");
 
   expect(configSource).toContain("mdx");
+  expect(configSource).toContain("docs/**/*.stories.@(js|jsx|ts|tsx|mdx)");
+  expect(storySource).toContain('title: "Docs / Workspace"');
   expect(storySource).toContain("workspace-main-content.architecture.md?raw");
   expect(storySource).toContain("WorkspaceMainContentGraph");
   expect(storySource).toContain("WorkspaceSidePanelContentGraph");
+});
+
+it("keeps workspace architecture docs aligned with the simple Capacities content model", () => {
+  const mainArchitecture = readProjectSource(
+    "docs/workspace/workspace-main-content.architecture.md",
+  );
+
+  expect(mainArchitecture).toContain("Object type list");
+  expect(mainArchitecture).toContain("Collection list");
+  expect(mainArchitecture).toContain("Tag view");
+  expect(mainArchitecture).toContain("WorkspaceListRenderer");
+  expect(mainArchitecture).toContain("WorkspaceObjectRenderer");
 });
