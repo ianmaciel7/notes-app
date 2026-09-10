@@ -2,7 +2,7 @@ allowBuilds:
   '@firebase/util': true
   '@parcel/watcher': false
   '@swc/core': false
-  better-sqlite3: false
+  better-sqlite3: true
   esbuild: true
   msw: true
   protobufjs: true
