@@ -1,91 +1,100 @@
 # Code Quality Metrics
 
-Este projeto usa um fluxo exclusivamente local para qualidade estrutural e manutenibilidade. O
-analisador deste fluxo e somente o Biome 2.5.11, conforme `package.json`,
-`pnpm-lock.yaml`, `biome.json` e `node_modules/@biomejs/biome/package.json`.
+Structural quality and maintainability metrics use an explicit local-only flow.
+Biome is the sole analyzer in this flow. The installed version and configuration
+are pinned by `package.json`, `pnpm-lock.yaml`, and `biome.json`.
 
-## Comandos
+## Commands
 
-| Comando | Comportamento |
+| Command | Behavior |
 | --- | --- |
-| `pnpm metrics` | Executa `biome lint` apenas com as regras selecionadas e falha em erros ou avisos. |
-| `pnpm metrics:report` | Executa as mesmas regras, valida o JSON do Biome e salva `reports/code-quality-metrics/latest.json`. |
+| `pnpm metrics` | Run selected Biome lint rules and fail on errors or warnings. |
+| `pnpm metrics:report` | Validate reporter JSON and save raw and summarized reports. |
 
-Os comandos nao rodam formatacao, testes, cobertura, seguranca, build, Git hooks, CI ou comparacao
-com branch. O escopo padrao e o codigo salvo incluido por `biome.json`.
+These commands do not run formatting, tests, coverage, security analysis, builds,
+Git hooks, CI, or branch comparisons. The source scope comes from `biome.json`.
+The reports are saved to `reports/code-quality-metrics/biome-latest.json` and
+`reports/code-quality-metrics/latest.json`, which remain local artifacts.
 
-## Regras Selecionadas
+## Selected Rules
 
-| Regra Biome | Limite | Papel |
+| Biome rule | Configured limit | Meaning |
 | --- | --- | --- |
-| `complexity/noExcessiveCognitiveComplexity` | 15, erro | Indicador nativo de complexidade cognitiva por funcao. |
-| `complexity/useMaxParams` | 4, aviso | Indicador nativo de quantidade de parametros por funcao/metodo. |
-| `complexity/noExcessiveLinesPerFunction` | 80, erro | Indicador nativo de tamanho de funcao. |
-| `style/noExcessiveLinesPerFile` | 600, aviso | Indicador nativo de tamanho de arquivo. |
+| `complexity/noExcessiveCognitiveComplexity` | 15, error | Native cognitive-complexity threshold per function. |
+| `complexity/useMaxParams` | 4, warning | Parameter-count threshold per function or method. |
+| `complexity/noExcessiveLinesPerFunction` | 80, error | Function-body size, excluding blank lines. |
+| `style/noExcessiveLinesPerFile` | 600, warning | File size, excluding blank lines. |
 
-`metrics` usa `--error-on-warnings`, entao avisos selecionados tambem tornam o comando reprovado.
-Isso preserva a severidade do `lint` geral e torna o fluxo de metricas mais estrito.
+`biome.json` owns thresholds; `scripts/quality/biome-metrics-core.mjs` owns the
+selected rule identities and derives reporter categories/support entries from
+them. Do not maintain parallel category lists. `--error-on-warnings` makes the
+metrics command stricter than ordinary lint without changing lint severity.
 
-## Convencao De Manutenibilidade
+## Reporting Contract
 
-O numero agregado no relatorio se chama:
+The aggregate is named **Occurrences of the selected Biome maintainability rules**.
+It counts emitted diagnostics in those four categories, not every quality issue,
+not remediation effort, and not metric values for functions that produced no
+threshold diagnostic. All diagnostics remain in the report, including parser
+failures; the aggregate must not hide them.
 
-> Ocorrencias das regras de manutenibilidade selecionadas no Biome.
+The CLI invokes the installed Biome JavaScript launcher with Node directly, not a
+shell command or platform-specific `.cmd` shim. It keeps stdout and stderr
+separate, validates numeric summary counters and diagnostic records, preserves
+nonzero exit codes, and refuses malformed reports. Reports with failing summaries
+cannot become successful merely because the child returned exit code zero.
+The capture buffer is bounded; exceeding it is an explicit failure, not a partial
+clean report. The Biome JSON reporter is experimental and must be revalidated
+when its schema changes.
 
-Ele conta somente diagnosticos emitidos pelas quatro regras acima. Nao representa todos os problemas
-de qualidade, nao inclui formatacao e nao substitui revisao humana.
+## Support Matrix
 
-## Matriz De Suporte
+| Metric | Unit | Support and limitation |
+| --- | --- | --- |
+| Cognitive complexity | Function | Native threshold diagnostic; not cyclomatic, perceived complexity, or WMC. |
+| Parameter count | Function/method | Native threshold diagnostic; not local-variable count or API quality. |
+| Lines per function | Function | Native threshold diagnostic; not responsibility or cohesion. |
+| Lines per file | File | Native threshold diagnostic; not module/package architecture. |
+| ABC size | Function/method | NOT MEASURED. Requires a defined assignments/branches/conditions counter. |
+| Perceived complexity | Function/method | NOT MEASURED. RuboCop's metric is not Biome cognitive complexity. |
+| Local-variable count | Function/method | NOT MEASURED. Unused-variable diagnostics are not a total count. |
+| Methods or attributes per class | Class | NOT MEASURED. Constructor, accessor, inheritance, and field policies would be needed. |
+| Overloads per method | TypeScript function/method | NOT MEASURED. Do not count overload signatures using regular expressions. |
+| Fan-in / fan-out | File/module/package | NOT MEASURED. Import-line counts are not resolved dependency counts. |
+| Afferent / efferent coupling (Ca / Ce) | Package/module | NOT MEASURED. Requires explicit boundaries and a dependency graph. |
+| Instability (I) | Package/module | NOT MEASURED. Requires Ca and Ce and a zero-denominator policy. |
+| Abstractness (A) | Package/module | NOT MEASURED. Do not invent interfaces to improve a score. |
+| Main-sequence distance (D) | Package/module | NOT MEASURED. A and I are unavailable. |
+| Relational cohesion (H) | Module/package | NOT MEASURED. Requires a relationship model and selected formula. |
+| CBO | Class | NOT MEASURED. Requires resolved class coupling. |
+| WMC | Class | NOT MEASURED. Do not relabel summed cognitive complexity as WMC. |
+| RFC | Class | NOT MEASURED. Requires a resolved response/call set. |
+| NOC | Class | NOT MEASURED. Applies to real inheritance hierarchies only. |
+| LCOM / LCOM-HS | Class | NOT MEASURED. Requires a specified variant and attribute-access model. |
+| TCC / LCC | Class | NOT MEASURED. Requires direct/indirect method-connection analysis. |
+| Technical Debt Ratio | Project | NOT MEASURED. No remediation/development cost model is configured. |
+| Maintainability Rating | Project | NOT MEASURED. Do not derive A–E ratings from diagnostic counts. |
 
-| Metrica | Unidade de analise | Definicao | Aplicabilidade | Suporte | Evidencia | Resultado | Limitacao |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Complexidade cognitiva | Funcao | Pontuacao cognitiva calculada pelo Biome. | Aplicavel a funcoes TS/TSX/JS/JSX incluidas. | Nativo do Biome | `lint/complexity/noExcessiveCognitiveComplexity`; `pnpm metrics`. | Violacao de limite quando emitida; nao lista valores de funcoes aprovadas. | Nao e complexidade ciclomatica, percebida ou WMC. |
-| Quantidade de parametros | Funcao/metodo | Numero de parametros na assinatura. | Aplicavel a funcoes e metodos. | Nativo do Biome | `lint/complexity/useMaxParams`; max 4. | Violacao de limite quando emitida. | Nao mede variaveis locais nem qualidade da API. |
-| Linhas por funcao | Funcao | Linhas no corpo da funcao, ignorando linhas em branco. | Aplicavel a funcoes analisadas pelo Biome. | Nativo do Biome | `lint/complexity/noExcessiveLinesPerFunction`; max 80. | Violacao de limite quando emitida. | Nao mede responsabilidade, coesao ou complexidade logica. |
-| Linhas por arquivo | Arquivo | Linhas no arquivo, ignorando linhas em branco. | Aplicavel a arquivos suportados pelo Biome. | Nativo do Biome | `lint/style/noExcessiveLinesPerFile`; max 600. | Violacao de limite quando emitida. | Nao equivale a modulo, pacote ou arquitetura. |
-| Tamanho ABC | Funcao/metodo | Assignments, branches e conditions segundo uma variante documentada. | Faz sentido para codigo TS, mas requer contador AST proprio. | Nao suportado no fluxo atual | Nenhuma regra nativa selecionada no Biome 2.5.11. | NAO MEDIDO | Nao ha contagem separada de assignments, calls e conditions via Biome. |
-| Complexidade percebida | Funcao/metodo | Metrica especifica do RuboCop Metrics/PerceivedComplexity. | Conceitualmente aplicavel, mas definida para outro ecossistema. | Nao suportado no fluxo atual | Sem regra Biome equivalente. | NAO MEDIDO | Nao confundir com complexidade cognitiva. |
-| Quantidade de variaveis locais | Funcao/metodo | Contagem total de locais, com politica para parametros, destructuring e escopos internos. | Aplicavel a TS, mas requer definicao e analise AST. | Nao suportado no fluxo atual | Biome pode detectar variaveis nao usadas, mas isso nao e total de locais. | NAO MEDIDO | Nao converter ausencia de unused vars em quantidade zero. |
-| Numero de metodos por classe | Classe | Contagem de construtores, metodos, estaticos, getters/setters conforme convencao. | Aplicavel apenas a classes presentes. | Nao suportado no fluxo atual | Sem regra Biome selecionada para contagem por classe. | NAO MEDIDO | Nao conta propriedades-funcao nem metodos herdados. |
-| Numero de atributos por classe | Classe | Contagem de campos/propriedades conforme convencao. | Aplicavel apenas a classes presentes. | Nao suportado no fluxo atual | Sem regra Biome selecionada. | NAO MEDIDO | Campos estaticos, herdados e inferidos nao sao tratados. |
-| Numero de sobrecargas por metodo | Metodo/funcao TS | Assinaturas de overload separadas da implementacao. | Aplicavel a TypeScript quando houver overloads. | Nao suportado no fluxo atual | Sem regra Biome selecionada. | NAO MEDIDO | Nao contar assinaturas por regex. |
-| Fan-in | Arquivo/modulo/pacote | Dependencias de entrada por granularidade definida. | Aplicavel a grafo de imports TS. | Nao suportado no fluxo atual | Biome nao calcula fan-in no comando selecionado. | NAO MEDIDO | Linhas de import nao sao fan-in. |
-| Fan-out | Arquivo/modulo/pacote | Dependencias de saida por granularidade definida. | Aplicavel a grafo de imports TS. | Nao suportado no fluxo atual | Biome nao calcula fan-out no comando selecionado. | NAO MEDIDO | Linhas de import nao sao fan-out. |
-| Acoplamento aferente (Ca) | Pacote/modulo | Dependentes externos a fronteira analisada. | Requer fronteiras explicitas. | Nao suportado no fluxo atual | Sem metrica Biome equivalente. | NAO MEDIDO | Ciclos/imports restritos seriam verificacoes, nao Ca. |
-| Acoplamento eferente (Ce) | Pacote/modulo | Dependencias externas a fronteira analisada. | Requer fronteiras explicitas. | Nao suportado no fluxo atual | Sem metrica Biome equivalente. | NAO MEDIDO | Import restrito nao e Ce. |
-| Instabilidade (I) | Pacote/modulo | `Ce / (Ca + Ce)`, com denominador zero definido. | Requer Ca e Ce. | Nao suportado no fluxo atual | Sem Ca/Ce medidos. | NAO MEDIDO | Nao calcular com dados ausentes. |
-| Grau de abstracao (A) | Pacote/modulo | Proporcao de tipos abstratos em universo definido. | Pouco aplicavel ao estilo funcional/React dominante. | Nao suportado no fluxo atual | Sem metrica Biome equivalente. | NAO MEDIDO | Nao criar interfaces para melhorar indicador. |
-| Distancia da sequencia principal (D) | Pacote/modulo | Distancia calculada a partir de A e I. | Requer A e I. | Nao suportado no fluxo atual | A e I nao medidos. | NAO MEDIDO | Nao calcular com dados ausentes. |
-| Coesao relacional (H) | Modulo/pacote | Relacoes internas e formula escolhida. | Requer modelo de relacoes. | Nao suportado no fluxo atual | Sem metrica Biome equivalente. | NAO MEDIDO | Nao inferir coesao qualitativa como H. |
-| CBO | Classe | Relacoes entre classes que contam como acoplamento. | Aplicavel somente a classes reais. | Nao suportado no fluxo atual | Sem regra Biome equivalente. | NAO MEDIDO | Projeto e majoritariamente funcional/React. |
-| WMC | Classe | Soma de metodos com peso definido, normalmente complexidade ciclomatica. | Aplicavel somente a classes reais. | Nao suportado no fluxo atual | Biome nao mede complexidade ciclomatica nem WMC. | NAO MEDIDO | Nao somar complexidade cognitiva e chamar de WMC. |
-| RFC | Classe | Conjunto de metodos de resposta e chamadas resolvidas. | Aplicavel somente a classes reais. | Nao suportado no fluxo atual | Sem resolvedor de chamadas no fluxo Biome. | NAO MEDIDO | Chamadas dinamicas/imports nao resolvidos ficam fora. |
-| NOC | Classe | Numero de subclasses diretas. | Aplicavel somente a hierarquias de classes. | Nao suportado no fluxo atual | Sem regra Biome equivalente. | NAO MEDIDO | Nao transforma componentes em classes. |
-| LCOM | Classe | Variante especifica de falta de coesao. | Aplicavel somente a classes reais. | Nao suportado no fluxo atual | Sem regra Biome equivalente. | NAO MEDIDO | Variante nao definida no Biome. |
-| LCOM-HS | Classe | Henderson-Sellers, com casos degenerados. | Aplicavel somente a classes reais. | Nao suportado no fluxo atual | Sem regra Biome equivalente. | NAO MEDIDO | Requer modelo de uso de atributos por metodo. |
-| TCC | Classe | Conexao direta entre metodos. | Aplicavel somente a classes reais. | Nao suportado no fluxo atual | Sem regra Biome equivalente. | NAO MEDIDO | Requer analise de acesso a estado. |
-| LCC | Classe | Conexao indireta entre metodos. | Aplicavel somente a classes reais. | Nao suportado no fluxo atual | Sem regra Biome equivalente. | NAO MEDIDO | Requer grafo interno de metodos. |
-| Technical Debt Ratio | Projeto | Razao entre custo de remediacao e custo de desenvolvimento. | Requer modelo de custo. | Nao suportado no fluxo atual | Sem modelo configurado. | NAO MEDIDO | Nao atribuir minutos arbitrarios. |
-| Maintainability Rating | Projeto | Nota derivada de proporcao de divida tecnica. | Requer Technical Debt Ratio. | Nao suportado no fluxo atual | Sem TDR medido. | NAO MEDIDO | Nao gerar notas A-E a partir de diagnosticos. |
+Architectural import/cycle rules, when enabled, are checks named after their rules,
+not measurements of Ca, Ce, CBO, fan-in, or fan-out. Class-based metrics apply only
+to actual classes; this predominantly functional React codebase must not be
+restructured into classes for a metric.
 
-## Verificacoes Arquiteturais
+## Qualitative Review and Tests
 
-Biome possui regras de importacao e ciclo, mas este fluxo nao as usa como metricas de acoplamento.
-Caso sejam habilitadas no futuro, documente-as como verificacoes arquiteturais pelo nome da regra,
-nao como Ca, Ce, CBO, fan-in ou fan-out.
+AI review may identify mixed responsibilities, duplication, and oversized code
+with file and location evidence. Keep that analysis separate from the automated
+report and do not assign unmeasured scores or percentages.
 
-## Revisao Qualitativa Da IA
+Run `node --test scripts/quality/biome-metrics.test.mjs` to test the CLI's reporting
+and failure behavior with synthetic reporter fixtures. Passing these tests does
+not mean the real application's Biome checks pass.
 
-A IA pode apontar funcoes longas, responsabilidades misturadas e oportunidades de refatoracao com
-arquivo e trecho. Isso deve ficar separado do relatorio automatico e nao pode receber pontuacao,
-percentual ou nome de metrica que o Biome nao mediu.
+## Official References
 
-## Fontes Consultadas
-
-- Biome JavaScript rules: https://biomejs.dev/linter/javascript/rules/
-- Biome `noExcessiveCognitiveComplexity`: https://biomejs.dev/linter/rules/no-excessive-cognitive-complexity/
-- Biome `useMaxParams`: https://biomejs.dev/linter/rules/use-max-params/
-- Biome `noExcessiveLinesPerFunction`: https://biomejs.dev/linter/rules/no-excessive-lines-per-function/javascript/
-- Biome `noExcessiveLinesPerFile`: https://biomejs.dev/linter/rules/no-excessive-lines-per-file/javascript/
-- Biome CLI: https://biomejs.dev/reference/cli/
-- Biome plugins: https://biomejs.dev/linter/plugins/
+- https://biomejs.dev/linter/javascript/rules/
+- https://biomejs.dev/linter/rules/no-excessive-cognitive-complexity/
+- https://biomejs.dev/linter/rules/use-max-params/
+- https://biomejs.dev/linter/rules/no-excessive-lines-per-function/javascript/
+- https://biomejs.dev/linter/rules/no-excessive-lines-per-file/javascript/
+- https://biomejs.dev/reference/cli/
