@@ -62,6 +62,8 @@ function Button({
   const button = (
     <ButtonPrimitive
       data-slot="button"
+      data-cuelume-press=""
+      data-cuelume-release=""
       disabled={disabled}
       aria-expanded={ariaExpanded}
       className={cn(buttonVariants({ variant, size, className }))}

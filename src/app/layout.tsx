@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { InteractionSoundTools } from "@/components/interaction-sounds";
 import { ThemeProvider } from "@/components/theme-provider";
 import { InteractionProvider } from "@/components/ui/interaction-provider";
 
@@ -37,7 +38,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="h-full flex flex-col overflow-hidden bg-background text-foreground font-sans">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider>
-            <InteractionProvider>{children}</InteractionProvider>
+            <InteractionProvider>
+              {children}
+              <InteractionSoundTools />
+            </InteractionProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
