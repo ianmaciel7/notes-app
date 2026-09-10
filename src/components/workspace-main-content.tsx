@@ -33,6 +33,7 @@ type WorkspaceMainPanelContext = {
   mainTabs: AppHeaderTab[];
   mainValue: string;
   objectTypeRecords: SpaceObjectTypeRecord[];
+  objectTypeCollections: Record<string, { id: string; name: string }>;
   objectTypes: AppSidebarObjectType[];
   ready?: boolean;
   setActiveAction: (action: string | undefined) => void;
@@ -40,6 +41,20 @@ type WorkspaceMainPanelContext = {
   setMainTabs: React.Dispatch<React.SetStateAction<AppHeaderTab[]>>;
   setMainValue: (value: string) => void;
 };
+
+function localizeBuiltInObjectType(
+  record: SpaceObjectTypeRecord,
+  objectTypes: readonly AppSidebarObjectType[],
+): SpaceObjectTypeRecord {
+  if (record.ownership !== "built-in") return record;
+  const localized = objectTypes.find((objectType) => objectType.id === record.id);
+  if (!localized) return record;
+  return {
+    ...record,
+    pluralName: localized.label,
+    singularName: localized.singularLabel ?? localized.label,
+  };
+}
 
 const contextMenuPendingActions = {
   "change-type": "Change type",
@@ -507,6 +522,7 @@ export function WorkspaceDefaultPanel() {
     mainTabs,
     mainValue,
     objectTypeRecords,
+    objectTypeCollections,
     objectTypes,
     setActiveAction,
     setActiveEntityId,
@@ -514,9 +530,22 @@ export function WorkspaceDefaultPanel() {
     setMainValue,
   } = useWorkspace() as WorkspaceMainPanelContext;
   const name = getWorkspaceTabPendingName(mainTabs, mainValue, "Main panel");
+  const collectionNamesById = React.useMemo(
+    () =>
+      Object.fromEntries(
+        Object.values(objectTypeCollections ?? {}).map((collection) => [
+          collection.id,
+          collection.name,
+        ]),
+      ),
+    [objectTypeCollections],
+  );
   const activeEntity = createdEntities.find((entity: { id: string }) => entity.id === mainValue);
-  const objectType = activeEntity
+  const objectTypeRecord = activeEntity
     ? objectTypeRecords.find((item: { id: string }) => item.id === activeEntity.objectTypeId)
+    : undefined;
+  const objectType = objectTypeRecord
+    ? localizeBuiltInObjectType(objectTypeRecord, objectTypes)
     : undefined;
 
   if (activeEntity) {
@@ -555,10 +584,12 @@ export function WorkspaceDefaultPanel() {
     (item: { id: string }) => item.id === mainValue,
   );
   if (activeObjectTypeRecord) {
+    const displayedObjectType = localizeBuiltInObjectType(activeObjectTypeRecord, objectTypes);
     return (
       <WorkspaceObjectTypeListView
+        collectionNamesById={collectionNamesById}
         entities={createdEntities}
-        objectType={activeObjectTypeRecord}
+        objectType={displayedObjectType}
         tabName={name}
         onCreateEntity={() => createObjectTypeEntity(activeObjectTypeRecord.id)}
         onOpenEntity={openObjectTypeEntity}
@@ -570,6 +601,7 @@ export function WorkspaceDefaultPanel() {
   if (activeObjectType) {
     return (
       <WorkspaceObjectTypeListView
+        collectionNamesById={collectionNamesById}
         entities={createdEntities}
         objectType={{
           id: activeObjectType.id,

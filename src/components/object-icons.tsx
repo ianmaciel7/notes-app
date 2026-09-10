@@ -1,3 +1,4 @@
+import { ChevronDown } from "lucide-react";
 import type { ComponentPropsWithoutRef, ElementType, SVGProps } from "react";
 
 import type {
@@ -33,6 +34,15 @@ type ObjectTypeIconAppearance = {
   iconName: PersistedObjectIconName;
   tone: ObjectIconTone;
 };
+
+type ObjectTypeLabelChipProps = ComponentPropsWithoutRef<"span"> &
+  ObjectTypeIconAppearanceInput & {
+    iconClassName?: string;
+    interactive?: boolean;
+    label: string;
+    showMenuIndicator?: boolean;
+    variant?: "compact" | "default";
+  };
 
 const objectIconToneTextClass: Record<ObjectIconTone, string> = {
   amber: "text-[var(--type-label-text-amber)]",
@@ -349,7 +359,8 @@ function getObjectTypeIconAppearance({
   tone,
 }: ObjectTypeIconAppearanceInput): ObjectTypeIconAppearance {
   const canonical = id ? canonicalObjectTypeAppearanceById[id] : undefined;
-  const resolvedIconName = canonical?.iconName ?? iconName;
+  const resolvedIconName =
+    canonical?.iconName ?? iconName ?? (id && objectTypeDefinitionById[id] ? id : undefined);
   const definition = resolvedIconName ? objectTypeDefinitionById[resolvedIconName] : undefined;
 
   return {
@@ -365,6 +376,109 @@ type ObjectTypeIconBadgeProps = Omit<ObjectIconBadgeProps, "icon" | "tone"> &
 function ObjectTypeIconBadge({ id, icon, iconName, tone, ...props }: ObjectTypeIconBadgeProps) {
   const appearance = getObjectTypeIconAppearance({ id, icon, iconName, tone });
   return <ObjectIconBadge icon={appearance.icon} tone={appearance.tone} {...props} />;
+}
+
+function ObjectTypeLabelChip({
+  className,
+  icon,
+  iconClassName,
+  iconName,
+  id,
+  interactive: interactiveProp,
+  label,
+  onClick,
+  onKeyDown,
+  role,
+  showMenuIndicator = false,
+  tone,
+  variant = "default",
+  style,
+  tabIndex,
+  ...props
+}: ObjectTypeLabelChipProps) {
+  const appearance = getObjectTypeIconAppearance({ id, icon, iconName, tone });
+  const Icon = appearance.icon;
+  const interactive = interactiveProp ?? Boolean(onClick);
+  const chipClassName = [
+    "inline-flex shrink-0 select-none flex-row items-center whitespace-nowrap rounded-[0.475em] border-[0.0625em] px-[0.49em] py-[0.2em] leading-[1.3] transition-[filter,box-shadow]",
+    interactive
+      ? "cursor-pointer hover:brightness-[0.98] active:brightness-[0.94]"
+      : "cursor-default",
+    variant === "compact" ? "text-[11px]" : "text-[14px]",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const chipStyle = {
+    backgroundColor: `var(--type-label-bg-${appearance.tone})`,
+    borderColor: `var(--type-label-border-${appearance.tone})`,
+    color: `var(--type-label-text-${appearance.tone})`,
+    ...style,
+  };
+
+  const chipContent = (
+    <>
+      <span
+        data-slot="object-type-label-chip-icon"
+        className="mr-[0.325em] ml-[-0.1em] inline-flex min-h-[1em] min-w-[1em] shrink-0 grow-0 items-center justify-center rounded-[0.33em]"
+      >
+        <span
+          className="relative inline-flex size-[1em] min-h-[1.3em] min-w-[1.3em] shrink-0 grow-0 items-center justify-center rounded-[0.33em] p-[0.1em] text-[0.94em] leading-none"
+          style={{ verticalAlign: "-0.125em" }}
+        >
+          <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+            <Icon className={iconClassName ?? "size-full"} />
+          </span>
+        </span>
+      </span>
+      <span data-slot="object-type-label-chip-text" className="inline min-w-[1.3em] text-center">
+        {label}
+      </span>
+      {showMenuIndicator ? (
+        <span
+          aria-hidden="true"
+          className="ml-[0.28em] mr-[-0.12em] inline-flex size-[1.1em] shrink-0 items-center justify-center rounded-[0.33em] opacity-80"
+          data-slot="object-type-label-chip-menu-indicator"
+        >
+          <ChevronDown className="size-[0.85em] stroke-[2.4]" />
+        </span>
+      ) : null}
+    </>
+  );
+
+  if (interactive) {
+    const buttonProps = props as ComponentPropsWithoutRef<"button">;
+
+    return (
+      <button
+        data-interactive="true"
+        data-slot="object-type-label-chip"
+        onClick={onClick as ComponentPropsWithoutRef<"button">["onClick"]}
+        onKeyDown={onKeyDown as ComponentPropsWithoutRef<"button">["onKeyDown"]}
+        role={role}
+        style={chipStyle}
+        tabIndex={tabIndex}
+        type="button"
+        {...buttonProps}
+        className={chipClassName}
+      >
+        {chipContent}
+      </button>
+    );
+  }
+
+  return (
+    <span
+      data-slot="object-type-label-chip"
+      role={role}
+      style={chipStyle}
+      tabIndex={tabIndex}
+      {...props}
+      className={chipClassName}
+    >
+      {chipContent}
+    </span>
+  );
 }
 
 function ObjectIconBadge({
@@ -441,6 +555,8 @@ export {
   type ObjectTypeDefinition,
   type ObjectTypeIconAppearance,
   ObjectTypeIconBadge,
+  ObjectTypeLabelChip,
+  type ObjectTypeLabelChipProps,
   ObjectWeblinkIcon,
   objectIconToneBadgeClass,
   objectIconToneTextClass,

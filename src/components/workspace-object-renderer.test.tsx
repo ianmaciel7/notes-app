@@ -27,6 +27,7 @@ function entityFixture(input: Partial<SpaceEntityRecord> = {}): SpaceEntityRecor
     createdAt: input.createdAt ?? "2026-01-01T00:00:00.000Z",
     updatedAt: input.updatedAt ?? "2026-01-01T00:00:00.000Z",
     blocks: input.blocks ?? [],
+    collections: input.collections ?? [],
     tags: input.tags ?? [],
     relations: input.relations ?? [],
     properties: input.properties ?? {},
@@ -121,6 +122,34 @@ it("renders page objects with their saved blocks instead of a pending placeholde
   expect(markup).not.toContain("Implementation pending");
 });
 
+it("renders individual object headers with the Capacities-style object type label chip", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceObjectRenderer
+      entity={entityFixture({
+        objectTypeId: "page",
+        title: "aaa",
+      })}
+      objectType={objectTypeFixture({
+        id: "page",
+        singularName: "Página",
+        pluralName: "Páginas",
+        iconName: "page",
+        tone: "blue",
+      })}
+      tabName="aaa"
+    />,
+  );
+
+  expect(markup).toContain('data-slot="workspace-object-type-header-chip"');
+  expect(markup).toContain('data-slot="object-type-label-chip"');
+  expect(markup).toContain("Página");
+  expect(markup).toContain("var(--type-label-bg-blue)");
+  expect(markup).toContain("var(--type-label-border-blue)");
+  expect(markup).toContain("var(--type-label-text-blue)");
+  expect(markup).toContain('data-local-object-icon="page"');
+  expect(markup).not.toContain(">PAGE<");
+});
+
 it("renders a workspace object list with each entity using the object renderer", () => {
   const markup = renderToStaticMarkup(
     <WorkspaceListRenderer
@@ -193,7 +222,7 @@ it("renders only objects belonging to the active object type", () => {
   expect(markup).not.toContain("Implementation pending");
 });
 
-it("renders the object type list in the Capacities-style rounded panel shell", () => {
+it("renders the object type list as the borderless interior of the Capacities shell", () => {
   const markup = renderToStaticMarkup(
     <WorkspaceObjectTypeListView
       entities={[entityFixture({ objectTypeId: "study_goal", title: "Biology exam" })]}
@@ -211,12 +240,17 @@ it("renders the object type list in the Capacities-style rounded panel shell", (
   expect(rootClass).toContain("w-full");
   expect(rootClass).toContain("flex-col");
   expect(rootClass).toContain("overflow-hidden");
-  expect(rootClass).toContain("rounded-xl");
-  expect(rootClass).toContain("border");
-  expect(rootClass).toContain("border-[var(--app-border-front)]");
-  expect(rootClass).toContain("bg-[var(--app-bg-base)]");
+  expect(rootClass).toContain("rounded-none");
+  expect(rootClass).toContain("border-0");
+  expect(rootClass).toContain("bg-transparent");
   expect(rootClass).toContain("text-[var(--app-text-primary)]");
-  expect(rootClass).toContain("shadow-[0_2px_3px_0_rgba(0,0,0,0.004)");
+  expect(rootClass).toContain("shadow-none");
+  expect(markup).toContain("items-center justify-between gap-2 py-4");
+  expect(markup).toContain("overflow-x-auto pb-1.5 pt-px text-sm");
+  expect(markup).toContain(
+    'class="dataview-heading-icon-container mr-2.5 size-8 shrink-0 rounded-[8px] border border-[var(--app-border-front)] bg-[var(--app-bg-front)] p-0.5"',
+  );
+  expect(markup).toContain("dataview-heading max-w-max truncate text-xl font-bold leading-5");
 });
 
 it("renders the object type list menus with compact Capacities rows and leading icons", () => {
@@ -292,11 +326,13 @@ it("matches the Capacities object-type overview tab chrome and empty section lay
   )?.[1];
 
   expect(overviewTabClass).toContain("h-8");
-  expect(overviewTabClass).toContain("border-[var(--app-border-front)]");
+  expect(overviewTabClass).toContain("border-0");
   expect(overviewTabClass).toContain("bg-[var(--app-bg-el)]");
   expect(overviewTabClass).toContain("px-3.5");
-  expect(allTabClass).toContain("border-[var(--app-border-el)]");
-  expect(allTabClass).toContain("text-[var(--app-text-secondary)]");
+  expect(overviewTabClass).toContain("text-xs");
+  expect(overviewTabClass).toContain("rounded-[12px]");
+  expect(allTabClass).toContain("border-0");
+  expect(allTabClass).toContain("text-[var(--app-text-subtle)]");
   expect(allTabClass).toContain("hover:bg-[var(--app-bg-el-hover)]");
   expect(markup).toContain(
     "py-10 flex w-full flex-col items-center justify-center gap-4 text-center",
@@ -331,21 +367,37 @@ it("matches the Capacities object-type heading treatment", () => {
   expect(markup).toContain(">Páginas</h1>");
 });
 
-it("keeps data-view cards legible and labels icon-only controls", () => {
+it("keeps data-view cards legible, complete, and labels icon-only controls", () => {
   const markup = renderToStaticMarkup(
     <WorkspaceObjectTypeListView
-      entities={[entityFixture({ objectTypeId: "study_goal", title: "Biology exam" })]}
+      entities={[
+        entityFixture({
+          collections: ["collection-exams"],
+          objectTypeId: "study_goal",
+          tags: ["zz-test-tag"],
+          title: "Biology exam",
+        }),
+      ]}
+      collectionNamesById={{ "collection-exams": "Exam prep" }}
       objectType={objectTypeFixture()}
       tabName="Study goals"
     />,
   );
 
   expect(markup).toContain("!text-[var(--app-text-primary)]");
-  expect(markup).toContain("h-[19.25rem]");
+  expect(markup).toContain("h-[21rem]");
   expect(markup).toContain("gap-y-1");
   expect(markup).toContain("grid-cols-2");
   expect(markup).toContain("text-[16px]");
   expect(markup).toContain("text-[13.5px]");
+  expect(markup).toContain('data-slot="workspace-object-type-card-collections"');
+  expect(markup).toContain('data-slot="workspace-object-type-card-tags"');
+  expect(markup).toContain('data-slot="workspace-object-type-card-collection-chip"');
+  expect(markup).toContain('data-slot="workspace-object-type-card-tag-chip"');
+  expect(markup).toContain("Exam prep");
+  expect(markup).toContain("zz-test-tag");
+  expect(markup).toContain("var(--app-tag-bg-lime)");
+  expect(markup).toContain("shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]");
   expect(markup).toContain("hover:shadow-[0_2px_3px_0_rgba(0,0,0,0.008)");
   expect(markup).toContain('aria-label="Buscar em Study goals"');
   expect(markup).toContain('aria-label="Recolher cabeçalho"');

@@ -1,8 +1,14 @@
 "use client";
 
-import { Plus, Tag } from "lucide-react";
+import { Tag as PhosphorTag } from "@phosphor-icons/react";
+import { Plus } from "lucide-react";
+import type { ReactNode } from "react";
 
-import { ObjectTypeIconBadge } from "@/components/object-icons";
+import {
+  ObjectCollectionIcon,
+  ObjectTypeIconBadge,
+  ObjectTypeLabelChip,
+} from "@/components/object-icons";
 import { Button } from "@/components/ui/button";
 import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 import { cn } from "@/lib/utils";
@@ -17,6 +23,7 @@ export type WorkspaceObjectDataViewType = Pick<
   Partial<Pick<SpaceObjectTypeRecord, "iconName" | "spaceId" | "tone">>;
 
 type WorkspaceObjectDataViewProps = {
+  collectionNamesById?: Readonly<Record<string, string>>;
   entities: readonly SpaceEntityRecord[];
   layout: WorkspaceObjectDataViewLayout;
   groupBy?: WorkspaceObjectDataViewGroup;
@@ -36,22 +43,53 @@ function getCardPreviewLines(entity: SpaceEntityRecord) {
     .slice(0, 3);
 }
 
+function WorkspaceCardPropertyIcon({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex size-4 shrink-0 items-center justify-center text-[var(--app-text-subtle)]">
+      {children}
+    </span>
+  );
+}
+
+function WorkspaceCardPropertyChip({
+  children,
+  kind,
+}: {
+  children: ReactNode;
+  kind: "collection" | "tag";
+}) {
+  return (
+    <span
+      data-slot={`workspace-object-type-card-${kind}-chip`}
+      className={cn(
+        "inline-flex max-w-full min-w-0 items-center rounded-[0.475em] border px-[0.49em] py-[0.2em] leading-[1.3]",
+        kind === "collection"
+          ? "border-[var(--app-border-front)] bg-[color-mix(in_srgb,var(--app-bg-el)_30%,var(--app-bg-base))] text-[var(--app-text-secondary)]"
+          : "border-[var(--app-tag-bg-lime)] bg-[var(--app-tag-bg-lime)] text-[var(--app-tag-text-lime)]",
+      )}
+    >
+      {children}
+    </span>
+  );
+}
+
 function ObjectTypeDataViewCard({
+  collectionNamesById = {},
   entity,
   layout,
   objectType,
   onOpenEntity,
-}: Pick<WorkspaceObjectDataViewProps, "layout" | "objectType" | "onOpenEntity"> & {
+}: Pick<
+  WorkspaceObjectDataViewProps,
+  "collectionNamesById" | "layout" | "objectType" | "onOpenEntity"
+> & {
   entity: SpaceEntityRecord;
 }) {
   const previewLines = getCardPreviewLines(entity);
   const singularName = objectType.singularName || objectType.pluralName;
-  const tone = objectType.tone ?? "gray";
-  const typeLabelStyle = {
-    backgroundColor: `var(--type-label-bg-${tone})`,
-    borderColor: `var(--type-label-border-${tone})`,
-    color: `var(--type-label-text-${tone})`,
-  };
+  const collectionLabels = (entity.collections ?? []).map(
+    (collectionId) => collectionNamesById[collectionId] ?? collectionId,
+  );
 
   return (
     <li data-slot="workspace-object-type-list-item" className={cn(layout === "cards" && "min-w-0")}>
@@ -61,7 +99,7 @@ function ObjectTypeDataViewCard({
         className={cn(
           "group flex text-left outline-none transition-[background-color,box-shadow] focus-visible:ring-2 focus-visible:ring-ring/30",
           layout === "cards"
-            ? "h-[19.25rem] w-[calc(100%-1px)] flex-col gap-y-1 overflow-hidden rounded-[12px] border border-[var(--app-border-el)] bg-[var(--app-bg-front)] py-2.5 text-sm shadow-[0_2px_3px_0_rgba(0,0,0,0.004),0_4px_9px_0_rgba(0,0,0,0.01),0_8px_12px_0_rgba(0,0,0,0.004)] hover:shadow-[0_2px_3px_0_rgba(0,0,0,0.008),0_4px_9px_0_rgba(0,0,0,0.01),0_8px_12px_0_rgba(0,0,0,0.008)] disabled:cursor-default disabled:opacity-100"
+            ? "h-[21rem] w-[calc(100%-1px)] flex-col gap-y-1 overflow-hidden rounded-[12px] border border-[var(--app-border-front)] bg-[var(--app-bg-front)] py-2.5 text-sm shadow-[0_2px_3px_0_rgba(0,0,0,0.004),0_4px_9px_0_rgba(0,0,0,0.01),0_8px_12px_0_rgba(0,0,0,0.004)] hover:shadow-[0_2px_3px_0_rgba(0,0,0,0.008),0_4px_9px_0_rgba(0,0,0,0.01),0_8px_12px_0_rgba(0,0,0,0.008)] disabled:cursor-default disabled:opacity-100"
             : "min-h-12 w-full items-center gap-3 rounded-[8px] border border-[var(--app-border-el)] bg-[var(--app-bg-front)] px-3 py-2 hover:bg-[var(--app-bg-el-subtle)]",
         )}
         onClick={() => onOpenEntity?.(entity)}
@@ -73,19 +111,13 @@ function ObjectTypeDataViewCard({
           )}
         >
           {layout === "cards" ? (
-            <span
-              className="inline-flex h-[20.671875px] items-center rounded-[0.475em] border px-[0.49em] py-[0.2em] text-[11px] leading-[1.3]"
-              style={typeLabelStyle}
-            >
-              <ObjectTypeIconBadge
-                id={objectType.id}
-                iconName={objectType.iconName}
-                tone={objectType.tone ?? "gray"}
-                className="-ml-[0.1em] mr-[0.325em] size-[1.3em] border-0 bg-transparent"
-                iconClassName="size-[0.94em]"
-              />
-              <span className="min-w-[1.3em] text-center">{singularName}</span>
-            </span>
+            <ObjectTypeLabelChip
+              id={objectType.id}
+              iconName={objectType.iconName}
+              label={singularName}
+              tone={objectType.tone ?? "gray"}
+              variant="compact"
+            />
           ) : (
             <>
               <ObjectTypeIconBadge
@@ -112,7 +144,7 @@ function ObjectTypeDataViewCard({
             <div className="h-48 px-2.5">
               <div
                 data-slot="workspace-object-type-card-preview"
-                className="h-full w-full overflow-hidden rounded-[8px] border border-[var(--app-border-el-subtle)] bg-[var(--app-bg-el)] px-4 pb-4 pt-3 text-sm leading-5 text-[var(--app-text-secondary)]"
+                className="h-full w-full overflow-hidden rounded-[8px] border border-[var(--app-border-front)] bg-[var(--app-bg-back)] px-4 pb-4 pt-3 text-sm leading-5 text-[var(--app-text-secondary)] shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]"
               >
                 {previewLines.map((line) => (
                   <p key={line.id} className="mb-3 line-clamp-3 last:mb-0">
@@ -121,13 +153,48 @@ function ObjectTypeDataViewCard({
                 ))}
               </div>
             </div>
-            <div className="flex h-6 w-full items-center overflow-hidden px-2.5 text-[13.5px] leading-[19.2px] text-[var(--app-text-primary)]">
-              <Tag className="mr-1 size-3 shrink-0 text-[var(--app-text-secondary)]" />
-              {entity.tags.length ? (
-                <span className="truncate">{entity.tags.slice(0, 2).join(", ")}</span>
-              ) : (
-                <span>Vazio</span>
-              )}
+            <div
+              data-slot="workspace-object-type-card-collections"
+              className="flex h-6 w-full items-center overflow-hidden px-2.5 text-[13.5px] leading-[19.2px] text-[var(--app-text-primary)]"
+            >
+              <div className="flex h-6 min-w-0 flex-1 items-center gap-1.5">
+                <WorkspaceCardPropertyIcon>
+                  <ObjectCollectionIcon className="!h-4 !w-[13.5px] text-[var(--app-text-subtle)]" />
+                </WorkspaceCardPropertyIcon>
+                <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden">
+                  {collectionLabels.length ? (
+                    collectionLabels.slice(0, 2).map((label) => (
+                      <WorkspaceCardPropertyChip key={label} kind="collection">
+                        <ObjectCollectionIcon className="mr-[0.325em] ml-[-0.1em] text-[var(--app-text-secondary)]" />
+                        <span className="truncate">{label}</span>
+                      </WorkspaceCardPropertyChip>
+                    ))
+                  ) : (
+                    <span className="truncate text-[var(--app-text-subtle)]">Vazio</span>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div
+              data-slot="workspace-object-type-card-tags"
+              className="flex h-6 w-full items-center overflow-hidden px-2.5 text-[13.5px] leading-[19.2px] text-[var(--app-text-primary)]"
+            >
+              <div className="flex h-6 min-w-0 flex-1 items-center gap-1.5">
+                <WorkspaceCardPropertyIcon>
+                  <PhosphorTag className="relative top-[-0.625px] left-[0.703125px] h-4 w-[13.953125px]" />
+                </WorkspaceCardPropertyIcon>
+                <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden">
+                  {entity.tags.length ? (
+                    entity.tags.slice(0, 2).map((tag) => (
+                      <WorkspaceCardPropertyChip key={tag} kind="tag">
+                        <span className="truncate">{tag}</span>
+                      </WorkspaceCardPropertyChip>
+                    ))
+                  ) : (
+                    <span className="truncate text-[var(--app-text-subtle)]">Vazio</span>
+                  )}
+                </div>
+              </div>
             </div>
           </>
         ) : null}
@@ -137,6 +204,7 @@ function ObjectTypeDataViewCard({
 }
 
 export function WorkspaceObjectDataView({
+  collectionNamesById,
   entities,
   groupBy = "none",
   layout,
@@ -181,6 +249,7 @@ export function WorkspaceObjectDataView({
         >
           {groupEntities.map((entity) => (
             <ObjectTypeDataViewCard
+              collectionNamesById={collectionNamesById}
               key={entity.id}
               entity={entity}
               layout={layout}

@@ -1,14 +1,22 @@
 "use client";
 
 import {
+  CaretDown as PhosphorCaretDown,
+  FunnelSimple as PhosphorFunnelSimple,
+  GridFour as PhosphorGridFour,
+  Hash as PhosphorHash,
+  Layout as PhosphorLayout,
+  ListBullets as PhosphorListBullets,
+  Plus as PhosphorPlus,
+  SortAscending as PhosphorSortAscending,
+  SquareSplitVertical as PhosphorSquareSplitVertical,
+} from "@phosphor-icons/react";
+import {
   ArrowDownUp,
-  ChevronDown,
   ChevronUp,
   Copy,
   ExternalLink,
   Grid2X2,
-  Hash,
-  LayoutPanelTop,
   List,
   MoreHorizontal,
   Plus,
@@ -18,7 +26,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
-import { ObjectTypeIconBadge } from "@/components/object-icons";
+import { ObjectTypeIconBadge, ObjectTypeLabelChip } from "@/components/object-icons";
 import { PendingImplementation } from "@/components/pending-implementation";
 import { WorkspaceEmptyState } from "@/components/space-surface";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -58,6 +66,7 @@ type WorkspaceObjectRendererProps = {
 };
 
 type WorkspaceObjectTypeListViewProps = {
+  collectionNamesById?: Readonly<Record<string, string>>;
   entities: readonly SpaceEntityRecord[];
   objectType: WorkspaceObjectTypeListInfo;
   tabName: string;
@@ -225,6 +234,16 @@ function WorkspaceObjectTypeMenuLabel({ children }: { children: React.ReactNode 
   return <CompactMenuItemText>{children}</CompactMenuItemText>;
 }
 
+function WorkspaceObjectTypeModeIcon({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="-ml-1.5 mr-1 inline-flex shrink-0 items-center justify-center p-1 text-[var(--app-text-subtle)]">
+      <span className="inline-flex size-3 items-center justify-center [&>svg]:size-full">
+        {children}
+      </span>
+    </span>
+  );
+}
+
 function getObjectTypeListPreferencesKey(spaceId: string, objectTypeId: string) {
   return `${objectTypeListPreferencesPrefix}.${spaceId}.${objectTypeId}`;
 }
@@ -267,17 +286,13 @@ function WorkspaceGenericObject({ entity, objectType }: WorkspaceObjectRendererP
       className="flex h-full min-h-0 w-full flex-col overflow-auto bg-[var(--app-bg-front)]"
     >
       <header className="border-b border-[var(--app-border-front)] px-8 py-7">
-        <div className="flex min-w-0 items-center gap-2">
-          <ObjectTypeIconBadge
+        <div data-slot="workspace-object-type-header-chip" className="flex min-w-0 items-center">
+          <ObjectTypeLabelChip
             id={objectType?.id ?? entity.objectTypeId}
             iconName={objectType?.iconName}
+            label={objectTypeName}
             tone={objectType?.tone ?? "gray"}
-            className="size-6 rounded-md"
-            iconClassName="size-3.5"
           />
-          <p className="text-xs font-medium uppercase text-[var(--app-text-secondary)]">
-            {objectTypeName}
-          </p>
         </div>
         <h1 className="mt-3 break-words text-3xl font-semibold text-[var(--app-text-primary)]">
           {entity.title || "Sem título"}
@@ -348,10 +363,12 @@ function WorkspaceObjectTypeOverviewEmptyCard({
 }
 
 function WorkspaceObjectTypeOverview({
+  collectionNamesById,
   entities,
   objectType,
   onOpenEntity,
 }: Pick<WorkspaceObjectTypeListViewProps, "onOpenEntity"> & {
+  collectionNamesById?: Readonly<Record<string, string>>;
   entities: readonly SpaceEntityRecord[];
   objectType: WorkspaceObjectTypeListInfo;
 }) {
@@ -364,6 +381,7 @@ function WorkspaceObjectTypeOverview({
         {entities.length ? (
           <WorkspaceObjectDataView
             entities={entities}
+            collectionNamesById={collectionNamesById}
             layout="cards"
             groupBy="none"
             objectType={objectType}
@@ -399,6 +417,7 @@ function WorkspaceObjectTypeOverview({
 }
 
 export function WorkspaceObjectTypeListView({
+  collectionNamesById,
   entities,
   objectType,
   tabName,
@@ -465,16 +484,16 @@ export function WorkspaceObjectTypeListView({
   return (
     <section
       data-slot="workspace-object-type-list-view"
-      className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-xl border border-[var(--app-border-front)] bg-[var(--app-bg-base)] text-[var(--app-text-primary)] shadow-[0_2px_3px_0_rgba(0,0,0,0.004),0_4px_9px_0_rgba(0,0,0,0.01),0_8px_12px_0_rgba(0,0,0,0.004)]"
+      className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-none border-0 bg-transparent text-[var(--app-text-primary)] shadow-none"
     >
-      <header className="shrink-0 border-b border-[var(--app-border-front)] bg-[var(--app-bg-front)] px-3 pb-1.5 pt-4">
-        <div className="flex min-h-8 items-center justify-between gap-2">
+      <header className="shrink-0 px-3">
+        <div className="flex min-h-8 items-center justify-between gap-2 py-4">
           <div
             data-slot="workspace-object-type-heading"
             data-context-menu-entity-context-key={`${objectType.id}:${singularName}`}
             className="flex min-w-0 grow items-center truncate"
           >
-            <div className="dataview-heading-icon-container mr-2.5 size-[26px] shrink-0">
+            <div className="dataview-heading-icon-container mr-2.5 size-8 shrink-0 rounded-[8px] border border-[var(--app-border-front)] bg-[var(--app-bg-front)] p-0.5">
               <div className="dataview-heading-icon-fill h-full w-full">
                 <ObjectTypeIconBadge
                   id={objectType.id}
@@ -485,11 +504,11 @@ export function WorkspaceObjectTypeListView({
                 />
               </div>
             </div>
-            <h1 className="dataview-heading max-w-max truncate text-xl font-semibold leading-6 text-[var(--app-text-primary)]">
+            <h1 className="dataview-heading max-w-max truncate text-xl font-bold leading-5 text-[var(--app-text-primary)]">
               {listName}
             </h1>
           </div>
-          <div className="flex shrink-0 items-center gap-1.5">
+          <div className="flex shrink-0 items-center gap-2">
             <div className="flex h-8 items-center rounded-lg bg-[var(--app-bg-el)]">
               {searchOpen ? (
                 <Input
@@ -585,27 +604,27 @@ export function WorkspaceObjectTypeListView({
             </div>
             {onCreateEntity ? (
               <div data-slot="workspace-object-type-new-action">
-                <ButtonGroup className="h-8 overflow-hidden rounded-lg bg-[var(--app-button-primary-bg)] text-[var(--app-button-primary-text)]">
+                <ButtonGroup className="h-8 w-[102.296875px] overflow-hidden rounded-[8px] bg-[var(--app-button-primary-bg)] text-[var(--app-button-primary-text)]">
                   <Button
                     type="button"
-                    size="sm"
-                    className="h-8 rounded-r-none border-r border-white/15 bg-transparent px-2.5 text-[var(--app-button-primary-text)] hover:bg-white/10"
+                    className="h-8 w-[73.296875px] gap-[0.25em] rounded-l-[8px] rounded-r-none border-0 bg-transparent pl-3 pr-[11px] text-sm font-normal text-[var(--app-button-primary-text)] hover:bg-white/10"
                     onClick={onCreateEntity}
                   >
-                    <Plus className="size-3.5" />
+                    <span className="ml-[-0.2em] inline-flex size-[1.1em] shrink-0 items-center justify-center [&>svg]:size-full">
+                      <PhosphorPlus />
+                    </span>
                     Novo
                   </Button>
-                  <div data-slot="workspace-object-type-new-menu">
+                  <div data-slot="workspace-object-type-new-menu" className="-ml-px w-[30px]">
                     <DropdownMenu>
                       <DropdownMenuTrigger
                         render={
                           <Button
                             type="button"
-                            size="icon-sm"
                             aria-label={`Novo ${singularName}`}
-                            className="h-8 w-8 rounded-l-none bg-transparent text-[var(--app-button-primary-text)] hover:bg-white/10"
+                            className="h-8 w-[30px] rounded-l-none rounded-r-[8px] border-0 border-l border-l-[var(--app-text-secondary)] bg-transparent p-0 text-[var(--app-button-primary-text)] hover:bg-white/10"
                           >
-                            <ChevronDown className="size-3.5" />
+                            <PhosphorCaretDown className="size-3.5" />
                           </Button>
                         }
                       />
@@ -645,20 +664,22 @@ export function WorkspaceObjectTypeListView({
         {!headerCollapsed ? (
           <div
             data-slot="workspace-object-type-list-toolbar"
-            className="mt-4 flex min-h-8 items-center gap-0 overflow-x-auto text-sm text-[var(--app-text-secondary)]"
+            className="flex min-h-8 items-center gap-0 overflow-x-auto pb-1.5 pt-px text-sm text-[var(--app-text-secondary)]"
           >
             <button
               type="button"
               aria-pressed={preferences.mode === "overview"}
               onClick={() => updatePreferences({ mode: "overview" })}
               className={cn(
-                "relative flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3.5 py-1 text-sm font-medium transition-all duration-250",
+                "relative flex h-8 shrink-0 items-center rounded-[12px] border-0 px-3.5 py-1 text-xs font-medium transition-all duration-250",
                 preferences.mode === "overview"
-                  ? "border-[var(--app-border-front)] bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
-                  : "border-[var(--app-border-el)] text-[var(--app-text-secondary)] hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
+                  ? "bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
+                  : "text-[var(--app-text-subtle)] hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
               )}
             >
-              <LayoutPanelTop className="size-3.5 text-[var(--app-text-secondary)]" />
+              <WorkspaceObjectTypeModeIcon>
+                <PhosphorLayout />
+              </WorkspaceObjectTypeModeIcon>
               Visão geral
             </button>
             <button
@@ -666,21 +687,23 @@ export function WorkspaceObjectTypeListView({
               aria-pressed={preferences.mode === "all"}
               onClick={() => updatePreferences({ mode: "all" })}
               className={cn(
-                "relative flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3.5 py-1 text-sm font-medium transition-all duration-250",
+                "relative flex h-8 shrink-0 items-center rounded-[12px] border-0 px-3.5 py-1 text-xs font-medium transition-all duration-250",
                 preferences.mode === "all"
-                  ? "border-[var(--app-border-front)] bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
-                  : "border-[var(--app-border-el)] text-[var(--app-text-secondary)] hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
+                  ? "bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
+                  : "text-[var(--app-text-subtle)] hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
               )}
             >
-              <List className="size-3.5 text-[var(--app-text-secondary)]" />
+              <WorkspaceObjectTypeModeIcon>
+                <PhosphorListBullets />
+              </WorkspaceObjectTypeModeIcon>
               Tudo
             </button>
             <span
               aria-label={`Quantidade de objetos: ${objectCountLabel}`}
               role="status"
-              className="ml-auto mr-2 flex h-7 shrink-0 items-center gap-1.5 rounded-lg px-1.5 text-xs text-[var(--app-text-secondary)]"
+              className="ml-auto mr-2 flex h-7 shrink-0 items-center gap-1.5 rounded-[8px] border border-transparent px-1.5 text-xs text-[var(--app-text-secondary)]"
             >
-              <Hash className="size-3.5" />
+              <PhosphorHash className="size-3.5" />
               {items.length}
             </span>
             <DropdownMenu>
@@ -692,9 +715,9 @@ export function WorkspaceObjectTypeListView({
                     size="sm"
                     tooltip="Filtrar"
                     aria-label="Filtrar objetos"
-                    className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
+                    className="h-7 w-8 rounded-[8px] px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
                   >
-                    <SlidersHorizontal className="size-3.5" />
+                    <PhosphorFunnelSimple className="size-3.5" />
                   </Button>
                 }
               />
@@ -735,9 +758,9 @@ export function WorkspaceObjectTypeListView({
                     size="sm"
                     tooltip="Classificar"
                     aria-label="Classificar objetos"
-                    className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
+                    className="h-7 w-8 rounded-[8px] px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
                   >
-                    <ArrowDownUp className="size-3.5" />
+                    <PhosphorSortAscending className="size-3.5" />
                   </Button>
                 }
               />
@@ -794,9 +817,9 @@ export function WorkspaceObjectTypeListView({
                     size="sm"
                     tooltip="Agrupar por"
                     aria-label="Agrupar objetos"
-                    className="h-7 w-8 rounded-lg px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
+                    className="h-7 w-8 rounded-[8px] px-2 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
                   >
-                    <Rows3 className="size-3.5" />
+                    <PhosphorSquareSplitVertical className="size-3.5" />
                   </Button>
                 }
               />
@@ -831,14 +854,14 @@ export function WorkspaceObjectTypeListView({
                     size="sm"
                     tooltip="Layout"
                     aria-label="Escolher layout"
-                    className="ml-1 h-7 w-[46px] rounded-lg px-1.5 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
+                    className="ml-1 h-7 w-[46px] gap-1.5 rounded-[8px] px-1.5 hover:!bg-[var(--app-bg-el-hover)] aria-expanded:!bg-[var(--app-bg-el)]"
                   >
                     {preferences.allLayout === "cards" ? (
-                      <Grid2X2 className="size-3.5" />
+                      <PhosphorGridFour className="size-3.5" />
                     ) : (
-                      <List className="size-3.5" />
+                      <PhosphorListBullets className="size-3.5" />
                     )}
-                    <ChevronDown className="size-3.5" />
+                    <PhosphorCaretDown className="size-3" />
                   </Button>
                 }
               />
@@ -903,6 +926,7 @@ export function WorkspaceObjectTypeListView({
           />
         ) : preferences.mode === "overview" ? (
           <WorkspaceObjectTypeOverview
+            collectionNamesById={collectionNamesById}
             entities={items}
             objectType={objectType}
             onOpenEntity={onOpenEntity}
@@ -910,6 +934,7 @@ export function WorkspaceObjectTypeListView({
         ) : (
           <WorkspaceObjectDataView
             entities={items}
+            collectionNamesById={collectionNamesById}
             layout={layout}
             groupBy={preferences.groupBy}
             objectType={objectType}

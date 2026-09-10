@@ -59,14 +59,15 @@ function ObjectTypeListStoryPreferences({
 
 const pageType = workspaceObjectTypeFixture({
   id: "page",
-  pluralName: "Pages",
-  singularName: "Page",
+  pluralName: "Páginas",
+  singularName: "Página",
   tone: "blue",
 });
 
 const pageEntities = [
   workspaceEntityFixture({
     id: "page-empty-title",
+    collections: ["collection-study"],
     title: "ffffffffff",
     tags: [],
     updatedAt: "2026-09-10T13:10:00.000Z",
@@ -177,10 +178,10 @@ export const PagePending: Story = () => (
       entity={workspaceEntityFixture({
         id: "entity-page",
         objectTypeId: "page",
-        title: "Project notes",
+        title: "aaa",
       })}
       objectType={pageType}
-      tabName="Project notes"
+      tabName="aaa"
     />
   </ObjectRendererFrame>
 );
@@ -189,9 +190,10 @@ export const PagesOverviewGrid: Story = () => (
   <ObjectTypeListFrame>
     <ObjectTypeListStoryPreferences objectTypeId={pageType.id}>
       <WorkspaceObjectTypeListView
+        collectionNamesById={{ "collection-study": "Exam prep" }}
         entities={pageEntities}
         objectType={pageType}
-        tabName="Pages"
+        tabName="Páginas"
         onCreateEntity={() => undefined}
         onOpenEntity={() => undefined}
       />

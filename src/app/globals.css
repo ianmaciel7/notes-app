@@ -602,6 +602,8 @@
   --app-text-primary: var(--text-primary);
   --app-text-secondary: var(--text-secondary);
   --app-text-subtle: var(--text-subtle);
+  --app-tag-bg-lime: oklch(0.9669 0.0659 122.38);
+  --app-tag-text-lime: oklch(0.3653 0.0648 128.67);
   --app-text-selection: #4494f748;
   --app-block-selection: #4494f748;
   --app-block-selection-border: oklch(0.7137 0.1435 254.63);
@@ -869,6 +871,8 @@
   --app-text-primary: var(--text-primary);
   --app-text-secondary: var(--text-secondary);
   --app-text-subtle: var(--text-subtle);
+  --app-tag-bg-lime: var(--type-label-bg-lime);
+  --app-tag-text-lime: var(--type-label-text-lime);
   --app-text-selection: #5090dd3a;
   --app-block-selection: #5090dd3a;
   --app-block-selection-border: oklch(0.7137 0.1435 254.63);

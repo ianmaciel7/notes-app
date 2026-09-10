@@ -3,7 +3,7 @@ import { URL } from "node:url";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import { objectTypeDefinitions } from "@/components/object-icons";
+import { ObjectTypeLabelChip, objectTypeDefinitions } from "@/components/object-icons";
 
 const expectedObjectTypes = {
   book: ["book", "purple"],
@@ -111,5 +111,82 @@ describe("object type visual contract", () => {
       expect(markup).toContain("<svg");
       expect(markup).toContain("<path");
     }
+  });
+});
+
+describe("object type label chip visual contract", () => {
+  it("renders the Capacities-style object type label chip in default and compact scales", () => {
+    const defaultMarkup = renderToStaticMarkup(
+      <ObjectTypeLabelChip
+        id="page"
+        iconName="page"
+        label="Página"
+        tone="blue"
+        variant="default"
+      />,
+    );
+    const compactMarkup = renderToStaticMarkup(
+      <ObjectTypeLabelChip
+        id="atomic-note"
+        iconName="atomic-note"
+        label="Nota atômica"
+        tone="amber"
+        variant="compact"
+      />,
+    );
+
+    expect(defaultMarkup).toContain('data-slot="object-type-label-chip"');
+    expect(defaultMarkup).toContain("text-[14px]");
+    expect(defaultMarkup).toContain("leading-[1.3]");
+    expect(defaultMarkup).toContain("px-[0.49em]");
+    expect(defaultMarkup).toContain("py-[0.2em]");
+    expect(defaultMarkup).toContain("rounded-[0.475em]");
+    expect(defaultMarkup).toContain("border-[0.0625em]");
+    expect(defaultMarkup).toContain("var(--type-label-bg-blue)");
+    expect(defaultMarkup).toContain("var(--type-label-border-blue)");
+    expect(defaultMarkup).toContain("var(--type-label-text-blue)");
+    expect(defaultMarkup).toContain("Página");
+    expect(defaultMarkup).toContain('data-slot="object-type-label-chip-icon"');
+    expect(defaultMarkup).toContain('data-slot="object-type-label-chip-text"');
+
+    expect(compactMarkup).toContain("text-[11px]");
+    expect(compactMarkup).toContain("Nota atômica");
+    expect(compactMarkup).toContain("var(--type-label-bg-amber)");
+  });
+
+  it("resolves the correct icon for every label chip from the object type id", () => {
+    for (const definition of objectTypeDefinitions) {
+      const markup = renderToStaticMarkup(
+        <ObjectTypeLabelChip
+          id={definition.id}
+          label={definition.label}
+          tone={definition.tone}
+          variant="default"
+        />,
+      );
+
+      expect(markup).toContain(`data-local-object-icon="${definition.id}"`);
+      if (definition.id !== "area") {
+        expect(markup).not.toContain('data-local-object-icon="area"');
+      }
+    }
+  });
+
+  it("renders interactive chips as keyboard-reachable controls with a menu affordance", () => {
+    const markup = renderToStaticMarkup(
+      <ObjectTypeLabelChip
+        id="page"
+        label="Página"
+        onClick={() => undefined}
+        showMenuIndicator
+        tone="blue"
+      />,
+    );
+
+    expect(markup).toContain('data-interactive="true"');
+    expect(markup).toContain("<button");
+    expect(markup).toContain('type="button"');
+    expect(markup).toContain("hover:brightness-[0.98]");
+    expect(markup).toContain('data-slot="object-type-label-chip-menu-indicator"');
   });
 });

@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { InteractionSoundTools } from "@/components/interaction-sounds";
 import { LocaleStorageSync } from "@/components/locale-storage-sync";
+import { NuqsProvider } from "@/components/nuqs-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { InteractionProvider } from "@/components/ui/interaction-provider";
 import { resolveServerLocale } from "@/lib/i18n-locale";
@@ -42,7 +43,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <LocaleStorageSync locale={locale} />
           <ThemeProvider>
             <InteractionProvider>
-              {children}
+              <NuqsProvider>{children}</NuqsProvider>
               <InteractionSoundTools />
             </InteractionProvider>
           </ThemeProvider>
