@@ -187,22 +187,24 @@ export function estimatePacingStatus(inputs: GoalPacingInputs): PacingResult {
     totalDays < 30 ? Math.max(1, Math.floor(totalDays * 0.2)) : Math.min(7, Math.max(1, totalDays));
   const availableDays = Math.max(1, totalDays - bufferDays);
   const dailyNewCardQuota = Math.max(
-    1,
+    0,
     Math.ceil(inputs.unlearnedCardCount / Math.max(1, availableDays)),
   );
 
   const elapsedRatio = Math.max(
     0,
-    Math.min(1, inputs.daysElapsed / Math.max(1, Math.max(totalDays, inputs.daysElapsed))),
+    Math.min(1, inputs.daysElapsed / Math.max(1, totalDays + inputs.daysElapsed)),
   );
   const expectedCompleted = inputs.totalCards * elapsedRatio;
   const normalizedActual = Math.max(0, inputs.actualCompletedCards);
   const status: PacingStatus =
-    normalizedActual >= expectedCompleted * 1.05
-      ? "ahead"
-      : normalizedActual >= expectedCompleted * 0.95
-        ? "onTrack"
-        : "behind";
+    expectedCompleted === 0 && normalizedActual === 0
+      ? "onTrack"
+      : normalizedActual >= expectedCompleted * 1.05
+        ? "ahead"
+        : normalizedActual >= expectedCompleted * 0.95
+          ? "onTrack"
+          : "behind";
 
   return {
     status,

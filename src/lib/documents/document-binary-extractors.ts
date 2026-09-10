@@ -4,6 +4,7 @@ import type {
   BinaryDocumentExtraction,
   BinaryDocumentExtractors,
 } from "@/lib/documents/document-parse-route";
+import { decodeBasicHtmlEntities, stripHtmlMarkup } from "@/lib/documents/html-to-text";
 
 function decodeUtf8(bytes: Uint8Array) {
   return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
@@ -29,27 +30,8 @@ function compactExtractedText(text: string) {
     .trim();
 }
 
-function decodeBasicHtmlEntities(value: string) {
-  return value
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;/gi, "'");
-}
-
 function extractReadableHtmlText(html: string) {
-  return compactExtractedText(
-    decodeBasicHtmlEntities(
-      html
-        .replace(/<script[\s\S]*?<\/script>/gi, " ")
-        .replace(/<style[\s\S]*?<\/style>/gi, " ")
-        .replace(/<\/(h[1-6]|p|li|blockquote|section|article|div)>/gi, "\n")
-        .replace(/<br\s*\/?>/gi, "\n")
-        .replace(/<[^>]+>/g, " "),
-    ),
-  );
+  return compactExtractedText(decodeBasicHtmlEntities(stripHtmlMarkup(html)));
 }
 
 export async function extractPdfTextFromBytes(

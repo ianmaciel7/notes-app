@@ -3,6 +3,7 @@ import {
   type PreparedTextDocument,
   prepareTextDocumentForIngestion,
 } from "@/lib/documents/document-processing";
+import { decodeBasicHtmlEntities, stripHtmlMarkup } from "@/lib/documents/html-to-text";
 
 export type DocumentParseResult = {
   status: number;
@@ -27,24 +28,9 @@ function asRecord(value: unknown): Record<string, unknown> {
   return typeof value === "object" && value !== null ? (value as Record<string, unknown>) : {};
 }
 
-function decodeBasicHtmlEntities(value: string) {
-  return value
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;/gi, "'");
-}
-
 function extractReadableHtmlText(html: string) {
   return decodeBasicHtmlEntities(
-    html
-      .replace(/<script[\s\S]*?<\/script>/gi, " ")
-      .replace(/<style[\s\S]*?<\/style>/gi, " ")
-      .replace(/<\/(h[1-6]|p|li|blockquote|section|article|div)>/gi, "\n")
-      .replace(/<br\s*\/?>/gi, "\n")
-      .replace(/<[^>]+>/g, " ")
+    stripHtmlMarkup(html)
       .replace(/[ \t]+\n/g, "\n")
       .replace(/\n[ \t]+/g, "\n")
       .replace(/[ \t]{2,}/g, " ")

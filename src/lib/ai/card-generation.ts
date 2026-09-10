@@ -19,50 +19,58 @@ export type TextGenerationChunk = {
   endOffset: number;
 };
 
+function validateChunkOptions(options: { maxChars: number; overlapChars?: number }) {
+  const { maxChars, overlapChars = 0 } = options;
+  if (!Number.isSafeInteger(maxChars) || maxChars <= 0) {
+    throw new Error("maxChars must be a positive safe integer.");
+  }
+  if (!Number.isSafeInteger(overlapChars) || overlapChars < 0) {
+    throw new Error("overlapChars must be a non-negative safe integer.");
+  }
+  if (overlapChars >= maxChars) {
+    throw new Error("overlapChars must be smaller than maxChars.");
+  }
+  return { maxChars, overlapChars };
+}
+
+function nextChunkStart(sourceText: string, start: number, end: number, overlap: number) {
+  // A short word before a long word must not rewind the cursor into the same chunk.
+  let next = Math.max(start + 1, end - overlap);
+  while (next > 0 && sourceText[next - 1] !== " " && sourceText[next] !== " " && next < end) {
+    next += 1;
+  }
+  while (next < sourceText.length && sourceText[next] === " ") next += 1;
+  return next;
+}
+
 export function chunkTextForCardGeneration(
   sourceText: string,
   options: { maxChars: number; overlapChars?: number },
 ): TextGenerationChunk[] {
-  const maxChars = Math.floor(options.maxChars);
-  const overlapChars = Math.floor(options.overlapChars ?? 0);
-  if (maxChars <= 0) throw new Error("maxChars must be greater than zero.");
-  if (overlapChars < 0) throw new Error("overlapChars cannot be negative.");
-  if (overlapChars >= maxChars) throw new Error("overlapChars must be smaller than maxChars.");
-
+  const { maxChars, overlapChars } = validateChunkOptions(options);
   const chunks: TextGenerationChunk[] = [];
   let startOffset = 0;
+
   while (startOffset < sourceText.length) {
     const hardEnd = Math.min(sourceText.length, startOffset + maxChars);
-    let endOffset = hardEnd;
-    if (hardEnd < sourceText.length) {
-      const breakOffset = sourceText.lastIndexOf(" ", hardEnd);
-      if (breakOffset > startOffset) endOffset = breakOffset;
-    }
+    const breakOffset = startOffset + sourceText.slice(startOffset, hardEnd + 1).lastIndexOf(" ");
+    const endOffset =
+      hardEnd < sourceText.length && breakOffset > startOffset ? breakOffset : hardEnd;
+    const segment = sourceText.slice(startOffset, endOffset);
+    const text = segment.trim();
 
-    const text = sourceText.slice(startOffset, endOffset).trim();
     if (text) {
-      const leadingWhitespace = sourceText.slice(startOffset, endOffset).search(/\S/);
-      const normalizedStartOffset =
-        leadingWhitespace === -1 ? startOffset : startOffset + leadingWhitespace;
+      const normalizedStartOffset = startOffset + segment.indexOf(text);
       chunks.push({
         id: `chunk-${chunks.length}`,
         text,
         startOffset: normalizedStartOffset,
-        endOffset,
+        endOffset: normalizedStartOffset + text.length,
       });
     }
 
     if (endOffset >= sourceText.length) break;
-    startOffset = Math.max(0, endOffset - overlapChars);
-    while (
-      startOffset > 0 &&
-      sourceText[startOffset - 1] !== " " &&
-      sourceText[startOffset] !== " " &&
-      startOffset < endOffset
-    ) {
-      startOffset += 1;
-    }
-    while (sourceText[startOffset] === " " && startOffset < sourceText.length) startOffset += 1;
+    startOffset = nextChunkStart(sourceText, startOffset, endOffset, overlapChars);
   }
 
   return chunks;
