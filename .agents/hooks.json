@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "pnpm tsx scripts/quality/agent-hook.ts antigravity-post-tool-use",
+            "command": "node --experimental-strip-types scripts/quality/agent-hook.ts antigravity-post-tool-use",
             "timeout": 10
           }
         ]
@@ -17,7 +17,7 @@
     "Stop": [
       {
         "type": "command",
-        "command": "pnpm tsx scripts/quality/agent-hook.ts antigravity-stop",
+        "command": "node --experimental-strip-types scripts/quality/agent-hook.ts antigravity-stop",
         "timeout": 150
       }
     ]

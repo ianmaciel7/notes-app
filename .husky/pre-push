@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+set -eu
 
-pnpm quality:fast
+pnpm format:check
+pnpm lint
+pnpm typecheck

@@ -4,6 +4,10 @@ alwaysApply: true
 
 # Quality Gate
 
-Follow the repository policy in `AGENTS.md` and `docs/code-quality.md`.
+Follow `AGENTS.md` and the selected workflow in `docs/ai-development-flow.md`.
+Use `docs/code-quality.md` for supported checks and automation, and
+`docs/code-quality-metrics.md` for the local-only Biome metrics flow.
 
-Run relevant checks after meaningful code, config, lockfile, or test changes. Run `pnpm verify` before declaring an implementation complete. Never invent results, weaken gates, lower thresholds, update baselines, or hide failures to claim success.
+Run focused regression tests and relevant lint, metrics, type, build, and browser
+checks. Report real results and blockers. Never invent passing results, weaken
+gates, raise thresholds, add suppressions, or expand exclusions to hide failures.
