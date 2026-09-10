@@ -6,7 +6,10 @@ import ptBR from "@/messages/pt-BR.json";
 
 const locales = { en, es, "pt-BR": ptBR } as const;
 const requiredStudyObjectTypes = ["flashcard", "study_goal"] as const;
-const builtInObjectTypes = BUILT_IN_STRUCTURES.map((structure) => structure.id);
+type LocalizedObjectTypeId = keyof typeof en.workspace.objectTypeStudio.objectTypes;
+const builtInObjectTypes = BUILT_IN_STRUCTURES.map(
+  (structure) => structure.id as LocalizedObjectTypeId,
+);
 
 describe("object type messages", () => {
   it.each(Object.entries(locales))(

@@ -469,15 +469,23 @@ export function WorkspaceObjectTypeListView({
     >
       <header className="shrink-0 border-b border-[var(--app-border-front)] bg-[var(--app-bg-front)] px-3 pb-1.5 pt-4">
         <div className="flex min-h-8 items-center justify-between gap-2">
-          <div className="flex min-w-0 items-center gap-2.5">
-            <ObjectTypeIconBadge
-              id={objectType.id}
-              iconName={objectType.iconName}
-              tone={objectType.tone ?? "gray"}
-              className="size-[26px] rounded-[7px]"
-              iconClassName="size-3.5"
-            />
-            <h1 className="truncate text-xl font-semibold leading-6 text-[var(--app-text-primary)]">
+          <div
+            data-slot="workspace-object-type-heading"
+            data-context-menu-entity-context-key={`${objectType.id}:${singularName}`}
+            className="flex min-w-0 grow items-center truncate"
+          >
+            <div className="dataview-heading-icon-container mr-2.5 size-[26px] shrink-0">
+              <div className="dataview-heading-icon-fill h-full w-full">
+                <ObjectTypeIconBadge
+                  id={objectType.id}
+                  iconName={objectType.iconName}
+                  tone={objectType.tone ?? "gray"}
+                  className="size-full rounded-[7px]"
+                  iconClassName="size-3.5 opacity-90"
+                />
+              </div>
+            </div>
+            <h1 className="dataview-heading max-w-max truncate text-xl font-semibold leading-6 text-[var(--app-text-primary)]">
               {listName}
             </h1>
           </div>

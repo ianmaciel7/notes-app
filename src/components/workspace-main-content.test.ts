@@ -58,7 +58,6 @@ it("exposes Ladle stories for workspace main content and action states", () => {
   expect(storySource).toContain("export const PendingStates");
   expect(storySource).toContain('"search"');
   expect(storySource).toContain('"calendar"');
-  expect(storySource).toContain('"explore"');
   expect(storySource).toContain('"tasks"');
   expect(storySource).toContain('"pending:change-type"');
   expect(storySource).toContain('"pending:export"');
@@ -72,6 +71,14 @@ it("exposes Ladle stories for workspace main content and action states", () => {
   expect(storySource).toContain('"pending:share"');
 });
 
+it("keeps Explore out of the main content panel like Capacities", () => {
+  const componentSource = readProjectSource("src/components/workspace-main-content.tsx");
+
+  expect(componentSource).not.toContain("function ExploreActionPanel");
+  expect(componentSource).not.toContain('activeAction === "explore"');
+  expect(componentSource).not.toContain("primary-action:explore");
+});
+
 it("documents every WorkspaceMainContent component surface", () => {
   const architectureDoc = readProjectSource(
     "docs/workspace/workspace-main-content.architecture.md",
@@ -83,7 +90,6 @@ it("documents every WorkspaceMainContent component surface", () => {
     "WorkspaceActionPanelHeader",
     "SearchActionPanel",
     "CalendarActionPanel",
-    "ExploreActionPanel",
     "TasksActionPanel",
     "ContextMenuPendingActionPanel",
     "WorkspaceObjectRenderer",

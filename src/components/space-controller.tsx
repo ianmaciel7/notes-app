@@ -250,6 +250,14 @@ export function filterSidePanelSpecialItemsForContext(
   return items.filter((item) => allowed.has(item.id));
 }
 
+export function resolveWorkspaceExploreActivation(mainValue: string) {
+  return {
+    activeAction: undefined,
+    mainValue,
+    sideValue: "explore",
+  };
+}
+
 export function createWorkspaceRouteMainSegment(mainValue?: string | null) {
   return (mainValue || "page").replace(/^entity-/, "");
 }
@@ -369,6 +377,7 @@ const defaultWorkspaceContext: WorkspaceContextValue = {
   setSideSearchOpen: () => {},
   setShortcutBrowserOpen: () => {},
   openInSidePanel: () => {},
+  openExploreSidePanel: () => {},
   createWorkspaceEntity: () => {},
   reviewFlashcard: async () => null,
   showMessage: () => {},
@@ -789,9 +798,17 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         return resolveSidePanelTabsAfterOpen(current, sideValue, nextTab);
       });
       setSideValue(id);
+      if (appShell?.rightCollapsed) appShell.toggleRight();
     },
-    [sideValue],
+    [appShell, sideValue],
   );
+
+  const openExploreSidePanel = React.useCallback(() => {
+    const activation = resolveWorkspaceExploreActivation(mainValue);
+    setActiveAction(activation.activeAction);
+    setSideValue(activation.sideValue);
+    if (appShell?.rightCollapsed) appShell.toggleRight();
+  }, [appShell, mainValue]);
 
   const resolveWorkspaceRouteMainValue = React.useCallback(
     (routeMainValue: string) =>
@@ -995,10 +1012,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
       if (mod && key === "j" && !editable) {
         claimShortcut(event);
-        setActiveAction("explore");
-        setActiveEntityId(null);
-        setMainValue("primary-action:explore");
-        setSideValue("explore");
+        openExploreSidePanel();
         return;
       }
 
@@ -1052,7 +1066,16 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
     window.addEventListener("keydown", handleGlobalKeyDown, true);
     return () => window.removeEventListener("keydown", handleGlobalKeyDown, true);
-  }, [appShell, createWorkspaceEntity, focusMode, mainTabs, mainValue, showMessage, toggleTheme]);
+  }, [
+    appShell,
+    createWorkspaceEntity,
+    focusMode,
+    mainTabs,
+    mainValue,
+    openExploreSidePanel,
+    showMessage,
+    toggleTheme,
+  ]);
 
   const value = React.useMemo<WorkspaceContextValue>(
     () => ({
@@ -1101,6 +1124,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setSideSearchOpen,
       setShortcutBrowserOpen,
       openInSidePanel,
+      openExploreSidePanel,
       createWorkspaceEntity,
       reviewFlashcard,
       showMessage,
@@ -1147,6 +1171,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       deleteWorkspaceStructure,
       setObjectTypeCollections,
       openInSidePanel,
+      openExploreSidePanel,
       createWorkspaceEntity,
       reviewFlashcard,
       showMessage,

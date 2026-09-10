@@ -169,7 +169,7 @@
         "label": "Abrir hoje"
       },
       "openExplore": {
-        "description": "Abrir Explorar na workspace principal.",
+        "description": "Abrir Explorar no painel lateral.",
         "label": "Abrir Explorar"
       },
       "openExtendedSearch": {

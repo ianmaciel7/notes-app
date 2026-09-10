@@ -1,12 +1,11 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   shouldEnableInteractionSounds,
   shouldRenderAgentationToolbar,
 } from "@/components/interaction-sounds";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 describe("interaction sounds", () => {
   it("enables Cuelume unless the user has muted interaction sounds", () => {

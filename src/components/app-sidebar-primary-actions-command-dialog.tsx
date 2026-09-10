@@ -171,6 +171,7 @@ type CommandDialogContext = {
     options?: { title?: string },
   ) => Promise<SpaceEntityRecord | null>;
   objectTypes: CommandPaletteObjectType[];
+  openExploreSidePanel: () => void;
   openInSidePanel: (tab: Partial<AppHeaderTab> & { id: string; label: string }) => void;
   selectEntity: (id: string) => void;
   setActiveAction: (action: string | undefined) => void;
@@ -218,6 +219,7 @@ function NewContentCommandDialog({
     setMainTabs,
     setMainValue,
     setActiveAction,
+    openExploreSidePanel,
     openInSidePanel,
     showMessage,
   } = useWorkspace() as CommandDialogContext;
@@ -429,13 +431,12 @@ function NewContentCommandDialog({
       {
         id: "action-explore",
         kind: "action",
-        title: "Abrir Explorar. Use o atalho novamente para iniciar um novo chat.",
+        title: "Abrir Explorar no painel lateral",
         icon: CompassIcon,
         tone: "fuchsia",
         shortcuts: ["Ctrl", "J"],
         execute: ({ closePalette = true } = {}) => {
-          setActiveAction("explore");
-          setMainValue("primary-action:explore");
+          openExploreSidePanel();
           if (closePalette) onOpenChange(false);
         },
       },
@@ -508,6 +509,7 @@ function NewContentCommandDialog({
     createWorkspaceEntity,
     objectTypes,
     onOpenChange,
+    openExploreSidePanel,
     openInSidePanel,
     setActiveAction,
     setMainTabs,

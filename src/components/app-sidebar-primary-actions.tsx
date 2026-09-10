@@ -58,9 +58,13 @@ import {
   type WorkspaceCommandId,
 } from "@/lib/space-command-registry";
 import { createCollectionId, type WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
-import type { CreateStructureInput, ObjectIconName, ObjectIconTone } from "@/lib/space-object-types";
-import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
+import type {
+  CreateStructureInput,
+  ObjectIconName,
+  ObjectIconTone,
+} from "@/lib/space-object-types";
 import { formatShortcutAriaChord, type ShortcutPlatform } from "@/lib/space-shortcuts";
+import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 type AppSidebarPrimaryActionId = "new" | "search" | "explore" | "calendar" | "tasks";
 
@@ -130,6 +134,7 @@ type WorkspaceSidebarContext = {
   objectTypeCollections: Record<string, WorkspaceCollectionRecord>;
   objectTypeOrder: string[];
   objectTypes: AppSidebarObjectType[];
+  openExploreSidePanel: () => void;
   openInSidePanel: (tab: SidebarMainTab) => void;
   pinnedEntities: AppSidebarPinnedEntity[];
   purgeTrashItem: (id: string) => void;
@@ -1184,9 +1189,9 @@ function WorkspaceSidebar() {
     setObjectTypeCollections,
     setCustomSections,
     setSideSearchOpen,
-    setSideValue,
     setShortcutBrowserOpen,
     openInSidePanel,
+    openExploreSidePanel,
     createWorkspaceEntity,
     showMessage,
     trashItems,
@@ -1376,17 +1381,17 @@ function WorkspaceSidebar() {
       return;
     }
 
-    if (
-      createdEntities.some((entity) => entity.collections?.includes(collectionId))
-    ) {
+    if (createdEntities.some((entity) => entity.collections?.includes(collectionId))) {
       showMessage(t("lifecycle.errors.referenced-object"));
       return;
     }
 
-    setObjectTypeCollections((current) =>
-      Object.fromEntries(
-        Object.entries(current).filter(([id]) => id !== collectionId),
-      ) as Record<string, WorkspaceCollectionRecord>,
+    setObjectTypeCollections(
+      (current) =>
+        Object.fromEntries(Object.entries(current).filter(([id]) => id !== collectionId)) as Record<
+          string,
+          WorkspaceCollectionRecord
+        >,
     );
     setPinnedEntities((current) => current.filter((item) => item.id !== collectionId));
     setActiveEntityId(objectType.id);
@@ -1468,13 +1473,16 @@ function WorkspaceSidebar() {
                 openCommandPaletteFromSidebar();
                 return;
               }
+              if (action === "explore") {
+                openExploreSidePanel();
+                return;
+              }
               setCommandPaletteOpen(false);
               setSideSearchOpen(false);
               if (action !== "new") {
                 setActiveAction(action);
                 setActiveEntityId(null);
                 setMainValue(`primary-action:${action}`);
-                if (action === "explore") setSideValue("explore");
               }
             }}
           />

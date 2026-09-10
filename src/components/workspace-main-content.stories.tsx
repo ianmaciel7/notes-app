@@ -4,7 +4,7 @@ import * as React from "react";
 import { useWorkspace, WorkspaceProvider } from "./space-controller";
 import { WorkspaceMainContent } from "./workspace-main-content";
 
-const primaryActionOptions = ["search", "calendar", "explore", "tasks"] as const;
+const primaryActionOptions = ["search", "calendar", "tasks"] as const;
 const pendingActionOptions = [
   "pending:change-type",
   "pending:export",

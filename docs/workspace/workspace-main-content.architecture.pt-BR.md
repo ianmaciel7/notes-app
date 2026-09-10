@@ -8,7 +8,6 @@ graph TD
   WorkspaceMainContent --> WorkspaceDefaultPanel
   WorkspaceMainContent --> SearchActionPanel
   WorkspaceMainContent --> CalendarActionPanel
-  WorkspaceMainContent --> ExploreActionPanel
   WorkspaceMainContent --> TasksActionPanel
   WorkspaceMainContent --> ContextMenuPendingActionPanel
   Sidebar --> ObjectTypeList[Lista de tipos de objeto]
@@ -23,7 +22,6 @@ graph TD
   WorkspaceObjectRenderer --> SidePanelContext[Contexto do painel lateral]
   SearchActionPanel --> WorkspaceActionPanelHeader
   CalendarActionPanel --> WorkspaceActionPanelHeader
-  ExploreActionPanel --> WorkspaceActionPanelHeader
   TasksActionPanel --> WorkspaceActionPanelHeader
   ContextMenuPendingActionPanel --> PendingImplementation
 ```
@@ -34,7 +32,7 @@ Lista de tipo de objeto significa "mostrar todos os objetos deste tipo". Lista d
 
 ## Limite dos Componentes
 
-`WorkspaceMainContent` decide o que o painel central mostra. A navegação normal vai para `WorkspaceDefaultPanel`, que escolhe entre `WorkspaceObjectTypeListView` para abas de lista ou `WorkspaceObjectRenderer` para um objeto aberto. Search, Calendar, Explore, Tasks e ações pendentes de menu de contexto são superfícies temporárias de ação, não o modelo central de conteúdo.
+`WorkspaceMainContent` decide o que o painel central mostra. A navegação normal vai para `WorkspaceDefaultPanel`, que escolhe entre `WorkspaceObjectTypeListView` para abas de lista ou `WorkspaceObjectRenderer` para um objeto aberto. Search, Calendar, Tasks e ações pendentes de menu de contexto são superfícies temporárias de ação, não o modelo central de conteúdo. Explore permanece no painel lateral como no Capacities.
 
 ## Responsabilidades dos Componentes
 
@@ -42,13 +40,11 @@ Lista de tipo de objeto significa "mostrar todos os objetos deste tipo". Lista d
 
 `WorkspaceDefaultPanel` é a superfície normal de navegação. Ele resolve o `mainValue` ativo contra entidades reais do Dexie e registros de tipo de objeto, depois abre uma visão de objeto único ou uma lista de tipo de objeto. Rotas desconhecidas ou ainda não implementadas caem em `PendingImplementation`.
 
-`WorkspaceActionPanelHeader` é o cabeçalho compartilhado dos painéis temporários. Ele fornece label, título, botão de retorno e dica de Escape para que Search, Calendar, Explore, Tasks e ações pendentes se comportem de forma consistente.
+`WorkspaceActionPanelHeader` é o cabeçalho compartilhado dos painéis temporários. Ele fornece label, título, botão de retorno e dica de Escape para que Search, Calendar, Tasks e ações pendentes se comportem de forma consistente.
 
 `SearchActionPanel` é a busca de entidades dentro do workspace. Ele filtra `createdEntities` por título, id do tipo de objeto ou id da entidade; suporta seleção por setas/Enter; abre resultados como abas principais; e usa os tons dos tipos de objeto para estilizar os ícones das abas.
 
 `CalendarActionPanel` é a superfície temporária de navegação por data. Ele envolve o componente compartilhado `Calendar`, controla a data selecionada localmente e mantém o painel isolado de persistência até o fluxo de notas diárias ou agenda ser conectado a dados reais.
-
-`ExploreActionPanel` agrupa entidades existentes por `objectTypeId`. Ele mostra uma entrada navegável por tipo de objeto populado, usa a entidade mais recente de cada grupo como alvo de abertura e mantém a exploração por tipo separada da Search global.
 
 `TasksActionPanel` filtra as entidades do workspace para o tipo `task`. Ele suporta navegação por teclado, abre tarefas selecionadas no conjunto de abas principais e pode criar a primeira tarefa pelo caminho persistido de `createWorkspaceEntity`.
 

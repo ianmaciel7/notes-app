@@ -38,7 +38,9 @@ export default {
 export const WorkspaceMainContentGraph: Story<WorkspaceArchitectureStoryProps> = ({
   locale = "pt-BR",
 }) => (
-  <ArchitectureDocViewer markdown={workspaceMainContentDocs[locale] ?? workspaceMainContentDocs.en} />
+  <ArchitectureDocViewer
+    markdown={workspaceMainContentDocs[locale] ?? workspaceMainContentDocs.en}
+  />
 );
 
 export const WorkspaceSidePanelContentGraph: Story = () => (

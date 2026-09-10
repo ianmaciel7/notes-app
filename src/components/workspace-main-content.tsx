@@ -8,7 +8,6 @@ import { PendingImplementation } from "@/components/pending-implementation";
 import { useWorkspace } from "@/components/space-controller";
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import {
   WorkspaceObjectRenderer,
@@ -93,17 +92,6 @@ const workspaceActionPanelItemActiveClass =
 const workspaceActionPanelMutedTextClass = "text-[var(--app-text-secondary)]";
 
 const workspaceActionPanelSubtleTextClass = "text-[var(--app-text-subtle)]";
-
-function EmptyState({ title, description }: { title: string; description: string }) {
-  return (
-    <Empty className="h-full min-h-0 border border-[var(--app-border-front)] bg-[var(--app-bg-front)] p-8">
-      <EmptyHeader>
-        <EmptyTitle>{title}</EmptyTitle>
-        <EmptyDescription>{description}</EmptyDescription>
-      </EmptyHeader>
-    </Empty>
-  );
-}
 
 type WorkspaceActionPanelProps = {
   onReturn: () => void;
@@ -359,181 +347,6 @@ function CalendarActionPanel({ onReturn }: WorkspaceActionPanelProps) {
         <p className="mt-3">
           Data selecionada: {selectedDate ? formatDate(selectedDate.toISOString()) : "Nenhuma"}
         </p>
-      </div>
-    </section>
-  );
-}
-
-function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
-  const {
-    createdEntities,
-    objectTypes,
-    setMainTabs,
-    setActiveAction,
-    activeEntityId,
-    setActiveEntityId,
-    setMainValue,
-  } = useWorkspace() as WorkspaceMainPanelContext;
-  const [activeTypeId, setActiveTypeId] = React.useState<string | undefined>(undefined);
-
-  const byType = React.useMemo(() => {
-    const buckets = new Map<string, number>();
-    const latestByType = new Map<string, (typeof createdEntities)[number]>();
-    for (const entity of createdEntities) {
-      buckets.set(entity.objectTypeId, (buckets.get(entity.objectTypeId) ?? 0) + 1);
-      const current = latestByType.get(entity.objectTypeId);
-      if (
-        !current ||
-        new Date(entity.updatedAt).getTime() > new Date(current.updatedAt).getTime()
-      ) {
-        latestByType.set(entity.objectTypeId, entity);
-      }
-    }
-    return Array.from(buckets.entries()).map(([typeId, count]) => ({
-      typeId,
-      count,
-      latestEntity: latestByType.get(typeId) as (typeof createdEntities)[number],
-    }));
-  }, [createdEntities]);
-
-  const typeLabelById = React.useMemo(() => {
-    return Object.fromEntries(
-      objectTypes.map((item) => [item.id, item.singularLabel ?? item.label]),
-    );
-  }, [objectTypes]);
-
-  React.useEffect(() => {
-    if (!createdEntities.length) {
-      setActiveTypeId(undefined);
-      return;
-    }
-
-    if (activeEntityId && activeEntityId !== "page") {
-      const activeEntity = createdEntities.find((entity) => entity.id === activeEntityId);
-      if (
-        activeEntity?.objectTypeId &&
-        byType.some((bucket) => bucket.typeId === activeEntity.objectTypeId)
-      ) {
-        setActiveTypeId(activeEntity.objectTypeId);
-        return;
-      }
-    }
-
-    setActiveTypeId((current) => current ?? byType[0]?.typeId);
-  }, [activeEntityId, createdEntities, byType]);
-
-  function handleExploreKeyDown(event: React.KeyboardEvent<HTMLElement>) {
-    if (byType.length === 0) return;
-
-    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-      event.preventDefault();
-      const index = byType.findIndex((item) => item.typeId === activeTypeId);
-      const safeIndex = Math.max(0, index >= 0 ? index : 0);
-      const nextIndex =
-        event.key === "ArrowDown"
-          ? (safeIndex + 1) % byType.length
-          : (safeIndex - 1 + byType.length) % byType.length;
-      setActiveTypeId(byType[nextIndex]?.typeId);
-      return;
-    }
-
-    if (event.key === "Enter" && activeTypeId) {
-      event.preventDefault();
-      openType(activeTypeId);
-    }
-  }
-
-  function openType(typeId: string) {
-    const entry = byType.find((item) => item.typeId === typeId);
-    const entity = entry?.latestEntity;
-    if (!entity) return;
-    const objectType = objectTypes.find((item) => item.id === typeId);
-
-    setActiveAction(undefined);
-    setActiveEntityId(entity.id);
-    setMainTabs((current) => {
-      if (current.some((item) => item.id === entity.id)) return current;
-      return [
-        ...current,
-        {
-          id: entity.id,
-          label: entity.title || "Sem título",
-          icon: objectType?.icon,
-          iconClassName: objectType
-            ? objectIconToneBadgeClass[objectType.tone as ObjectIconTone]
-            : undefined,
-          draggable: true,
-        },
-      ];
-    });
-    setMainValue(entity.id);
-  }
-
-  const listContainerRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    const timeout = window.setTimeout(() => {
-      listContainerRef.current?.focus();
-    }, 0);
-    return () => window.clearTimeout(timeout);
-  }, []);
-
-  return (
-    <section className={workspaceActionPanelClass}>
-      <WorkspaceActionPanelHeader label="Explore" title="Explorar estrutura" onReturn={onReturn} />
-
-      <div
-        ref={listContainerRef}
-        className={workspaceActionPanelSurfaceClass}
-        tabIndex={0}
-        role="listbox"
-        aria-activedescendant={activeTypeId ? `explore-type-${activeTypeId}` : undefined}
-        onKeyDown={handleExploreKeyDown}
-        aria-label="Explorer panel actions"
-      >
-        {byType.length === 0 ? (
-          <div className="flex h-full min-h-0 flex-col items-center justify-center gap-4">
-            <EmptyState
-              title="Sem objetos ainda"
-              description="Crie objetos no painel lateral para começar a explorar conexões."
-            />
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                if (typeof window !== "undefined") {
-                  window.dispatchEvent(new CustomEvent("workspace:open-command-palette"));
-                }
-              }}
-            >
-              Abrir criação rápida
-            </Button>
-          </div>
-        ) : (
-          <div className="grid gap-2 sm:grid-cols-2">
-            {byType.map(({ typeId, count }) => (
-              <article
-                key={typeId}
-                id={`explore-type-${typeId}`}
-                className={`${workspaceActionPanelItemClass} ${
-                  activeTypeId === typeId ? workspaceActionPanelItemActiveClass : ""
-                }`}
-              >
-                <button
-                  type="button"
-                  onClick={() => openType(typeId)}
-                  className="w-full rounded text-left"
-                  onMouseEnter={() => setActiveTypeId(typeId)}
-                >
-                  <p className="font-medium">{typeLabelById[typeId] ?? typeId}</p>
-                  <p className={`text-xs ${workspaceActionPanelSubtleTextClass}`}>
-                    {count} item(ns)
-                  </p>
-                </button>
-              </article>
-            ))}
-          </div>
-        )}
       </div>
     </section>
   );
@@ -855,7 +668,6 @@ export function WorkspaceMainContent() {
 
   if (activeAction === "search") return <SearchActionPanel onReturn={returnToWorkspace} />;
   if (activeAction === "calendar") return <CalendarActionPanel onReturn={returnToWorkspace} />;
-  if (activeAction === "explore") return <ExploreActionPanel onReturn={returnToWorkspace} />;
   if (activeAction === "tasks") return <TasksActionPanel onReturn={returnToWorkspace} />;
   if (activeAction?.startsWith("pending:")) {
     return (

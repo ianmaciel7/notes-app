@@ -305,6 +305,32 @@ it("matches the Capacities object-type overview tab chrome and empty section lay
   expect(markup).not.toContain('data-slot="workspace-object-type-overview-empty-card"');
 });
 
+it("matches the Capacities object-type heading treatment", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceObjectTypeListView
+      entities={[entityFixture({ objectTypeId: "page", title: "Sem título" })]}
+      objectType={objectTypeFixture({
+        id: "page",
+        iconName: "page",
+        pluralName: "Páginas",
+        singularName: "Página",
+        tone: "blue",
+      })}
+      tabName="Páginas"
+    />,
+  );
+
+  expect(markup).toContain('data-slot="workspace-object-type-heading"');
+  expect(markup).toContain('data-context-menu-entity-context-key="page:Página"');
+  expect(markup).toContain("dataview-heading-icon-container");
+  expect(markup).toContain("dataview-heading-icon-fill");
+  expect(markup).toContain("bg-[var(--type-label-bg-blue)]");
+  expect(markup).toContain("text-[var(--type-label-text-blue)]");
+  expect(markup).toContain("opacity-90");
+  expect(markup).toContain("dataview-heading max-w-max");
+  expect(markup).toContain(">Páginas</h1>");
+});
+
 it("keeps data-view cards legible and labels icon-only controls", () => {
   const markup = renderToStaticMarkup(
     <WorkspaceObjectTypeListView

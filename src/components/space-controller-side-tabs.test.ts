@@ -10,6 +10,7 @@ import {
   resolveSidePanelTabsAfterClose,
   resolveSidePanelTabsAfterOpen,
   resolveWorkspaceEntityTitle,
+  resolveWorkspaceExploreActivation,
   resolveWorkspaceMainTabsFromStoredState,
   resolveWorkspaceMainValueFromRouteSegment,
   resolveWorkspaceSidePanelContext,
@@ -173,6 +174,14 @@ it("filters side-panel special entries by workspace context", () => {
     "aiAssistantChat",
     "localSpaceQuery",
   ]);
+});
+
+it("opens Explore in the side panel without replacing the main workspace", () => {
+  expect(resolveWorkspaceExploreActivation("page")).toEqual({
+    activeAction: undefined,
+    mainValue: "page",
+    sideValue: "explore",
+  });
 });
 
 it("creates a workspace URL from the active main and side tabs", () => {

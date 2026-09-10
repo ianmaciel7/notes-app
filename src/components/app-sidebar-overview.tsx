@@ -268,6 +268,10 @@ type AppSidebarCollectionAction =
   | "unpin-type"
   | "change-type"
   | "settings"
+  | "new-from-template"
+  | "new-query"
+  | "new-collection"
+  | "pin-sidebar"
   | "share"
   | "present"
   | "export"
@@ -1203,7 +1207,7 @@ function AppSidebarObjectTypeRow({
   onDragOverTarget: () => void;
   dropTarget?: boolean;
   onDrop: () => void;
-  onCollectionDrop?: (collectionId: string, event: React.DragEvent<HTMLDivElement>) => void;
+  onCollectionDrop?: (collectionId: string, event: React.DragEvent<HTMLElement>) => void;
   pressedModifiersRef?: React.RefObject<AppSidebarSelectionEvent | null>;
 }) {
   const t = useTranslations("workspace.sidebarCollections");

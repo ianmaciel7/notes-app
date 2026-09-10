@@ -8,7 +8,6 @@ graph TD
   WorkspaceMainContent --> WorkspaceDefaultPanel
   WorkspaceMainContent --> SearchActionPanel
   WorkspaceMainContent --> CalendarActionPanel
-  WorkspaceMainContent --> ExploreActionPanel
   WorkspaceMainContent --> TasksActionPanel
   WorkspaceMainContent --> ContextMenuPendingActionPanel
   Sidebar --> ObjectTypeList[Object type list]
@@ -23,7 +22,6 @@ graph TD
   WorkspaceObjectRenderer --> SidePanelContext[Side panel context]
   SearchActionPanel --> WorkspaceActionPanelHeader
   CalendarActionPanel --> WorkspaceActionPanelHeader
-  ExploreActionPanel --> WorkspaceActionPanelHeader
   TasksActionPanel --> WorkspaceActionPanelHeader
   ContextMenuPendingActionPanel --> PendingImplementation
 ```
@@ -34,7 +32,7 @@ Object type list means “show all objects of this type”. Collection list mean
 
 ## Component Boundary
 
-`WorkspaceMainContent` decides what the main panel shows. Normal browsing goes to `WorkspaceDefaultPanel`, which chooses either `WorkspaceObjectTypeListView` for list-like tabs or `WorkspaceObjectRenderer` for one opened object. Search, Calendar, Explore, Tasks, and pending context-menu actions are temporary action surfaces, not the core content model.
+`WorkspaceMainContent` decides what the main panel shows. Normal browsing goes to `WorkspaceDefaultPanel`, which chooses either `WorkspaceObjectTypeListView` for list-like tabs or `WorkspaceObjectRenderer` for one opened object. Search, Calendar, Tasks, and pending context-menu actions are temporary action surfaces, not the core content model. Explore stays in the side panel like Capacities.
 
 ## Component Responsibilities
 
@@ -42,13 +40,11 @@ Object type list means “show all objects of this type”. Collection list mean
 
 `WorkspaceDefaultPanel` is the normal browsing surface. It resolves the active `mainValue` against real Dexie-backed entities and object type records, then opens either a single object view or an object type list view. Unknown or not-yet-implemented routes fall back to `PendingImplementation`.
 
-`WorkspaceActionPanelHeader` is the shared header used by temporary panels. It provides the panel label, title, return button, and Escape affordance so Search, Calendar, Explore, Tasks, and pending actions behave consistently.
+`WorkspaceActionPanelHeader` is the shared header used by temporary panels. It provides the panel label, title, return button, and Escape affordance so Search, Calendar, Tasks, and pending actions behave consistently.
 
 `SearchActionPanel` is the in-workspace entity search surface. It filters `createdEntities` by title, object type id, or entity id; supports arrow/Enter keyboard selection; opens results as main tabs; and uses object type tone metadata for tab icon styling.
 
 `CalendarActionPanel` is the date navigation placeholder surface. It wraps the shared `Calendar` component, tracks the selected date locally, and keeps the panel isolated from persistence until the calendar workflow is connected to real daily-note or scheduling data.
-
-`ExploreActionPanel` groups existing entities by `objectTypeId`. It shows one navigable entry per populated object type, uses the newest entity in each bucket as the open target, and keeps object type exploration distinct from global Search.
 
 `TasksActionPanel` filters workspace entities down to the `task` object type. It supports keyboard navigation, opens selected tasks in the main tab set, and can create the first task through the repository-backed `createWorkspaceEntity` path.
 
