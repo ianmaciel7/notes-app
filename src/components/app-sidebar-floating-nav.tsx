@@ -5,7 +5,6 @@ import * as React from "react";
 
 import { AppSidebarSunIcon } from "@/components/app-sidebar-icons";
 import { AppSidebarSourceIcon } from "@/components/app-sidebar-source-icon";
-import type { ObjectIconProps } from "@/components/object-icons";
 import { useTheme } from "@/components/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -57,7 +56,7 @@ function AppSidebarUtilityRow({
   active,
   onClick,
 }: {
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
   external?: boolean;
   href?: string;

@@ -38,6 +38,7 @@ import {
   CompactMenuPlanBadge,
   compactMenuActionButtonClass,
   sidebarContextMenuContentClass,
+  sidebarContextMenuDestructiveItemClass,
   sidebarContextMenuItemClass,
   sidebarContextMenuSeparatorClass,
   sidebarContextSubmenuContentClass,
@@ -476,7 +477,7 @@ function AppSidebarSection({
   sticky = true,
   children,
 }: {
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
   count?: number;
   sort?: AppSidebarSortMode;
@@ -1765,7 +1766,7 @@ function AppSidebarUtilityRow({
   active,
   onClick,
 }: {
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
   external?: boolean;
   href?: string;

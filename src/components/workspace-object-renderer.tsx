@@ -1,34 +1,35 @@
 "use client";
 
-import * as React from "react";
 import {
   ArrowDownUp,
   ChevronDown,
   ChevronUp,
   Copy,
   ExternalLink,
-  Hash,
   Grid2X2,
-  LayoutGrid,
+  Hash,
+  LayoutPanelTop,
   List,
-  Rows3,
   MoreHorizontal,
   Plus,
+  Rows3,
   Search,
   SlidersHorizontal,
 } from "lucide-react";
+import * as React from "react";
 
 import { ObjectTypeIconBadge } from "@/components/object-icons";
 import { PendingImplementation } from "@/components/pending-implementation";
 import { WorkspaceEmptyState } from "@/components/space-surface";
-import {
-  WorkspaceObjectDataView,
-  type WorkspaceObjectDataViewGroup,
-  type WorkspaceObjectDataViewLayout,
-  type WorkspaceObjectDataViewType,
-} from "@/components/workspace-object-data-view";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
+import {
+  CompactMenuIconFrame,
+  CompactMenuItemText,
+  sidebarContextMenuContentClass,
+  sidebarContextMenuItemClass,
+  sidebarContextMenuSeparatorClass,
+} from "@/components/ui/compact-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,6 +40,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import {
+  WorkspaceObjectDataView,
+  type WorkspaceObjectDataViewGroup,
+  type WorkspaceObjectDataViewLayout,
+  type WorkspaceObjectDataViewType,
+} from "@/components/workspace-object-data-view";
 import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 import { cn } from "@/lib/utils";
 
@@ -91,6 +98,97 @@ function getObjectTypeName(entity: SpaceEntityRecord, objectType?: SpaceObjectTy
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
+function getReadablePropertyValue(value: unknown): string | undefined {
+  if (value === null || value === undefined || value === "") return undefined;
+  if (typeof value === "string") return value;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (Array.isArray(value)) {
+    const items = value.map(getReadablePropertyValue).filter(Boolean);
+    return items.length ? items.join(", ") : undefined;
+  }
+  if (typeof value === "object") return JSON.stringify(value);
+  return undefined;
+}
+
+function getReadableProperties(entity: SpaceEntityRecord, hiddenKeys: string[] = []) {
+  const hidden = new Set(hiddenKeys.map((key) => key.toLocaleLowerCase()));
+  return Object.entries(entity.properties)
+    .filter(([key]) => !hidden.has(key.toLocaleLowerCase()))
+    .map(([key, value]) => [key, getReadablePropertyValue(value)] as const)
+    .filter(([, value]) => value);
+}
+
+function renderWorkspaceBlock(block: SpaceEntityRecord["blocks"][number]) {
+  const content = block.content.trim();
+
+  if (block.type === "divider") {
+    return <hr key={block.id} className="my-5 border-[var(--app-border-el)]" />;
+  }
+
+  if (!content) return null;
+
+  if (block.type === "heading_1") {
+    return (
+      <h2 key={block.id} className="mt-6 text-2xl font-semibold text-[var(--app-text-primary)]">
+        {content}
+      </h2>
+    );
+  }
+
+  if (block.type === "heading_2") {
+    return (
+      <h3 key={block.id} className="mt-5 text-xl font-semibold text-[var(--app-text-primary)]">
+        {content}
+      </h3>
+    );
+  }
+
+  if (block.type === "heading_3") {
+    return (
+      <h4 key={block.id} className="mt-4 text-base font-semibold text-[var(--app-text-primary)]">
+        {content}
+      </h4>
+    );
+  }
+
+  if (block.type === "quote" || block.type === "callout") {
+    return (
+      <blockquote
+        key={block.id}
+        className="rounded-lg border-l-2 border-[var(--app-border-front)] bg-[var(--app-bg-el)] px-4 py-3 text-[var(--app-text-secondary)]"
+      >
+        {content}
+      </blockquote>
+    );
+  }
+
+  if (block.type === "code") {
+    return (
+      <pre
+        key={block.id}
+        className="overflow-x-auto rounded-lg bg-[var(--app-bg-el)] p-3 text-sm text-[var(--app-text-primary)]"
+      >
+        <code>{content}</code>
+      </pre>
+    );
+  }
+
+  if (block.type === "bullet_list" || block.type === "numbered_list") {
+    return (
+      <p key={block.id} className="pl-4 text-[var(--app-text-primary)]">
+        {block.type === "bullet_list" ? "• " : "1. "}
+        {content}
+      </p>
+    );
+  }
+
+  return (
+    <p key={block.id} className="text-[var(--app-text-primary)]">
+      {content}
+    </p>
+  );
+}
+
 type WorkspaceObjectTypeListMode = "all" | "overview";
 type WorkspaceObjectTypeListFilter = "all" | "tagged" | "untagged";
 type WorkspaceObjectTypeListSort = "updated-desc" | "updated-asc" | "title-asc" | "title-desc";
@@ -114,10 +212,18 @@ const defaultObjectTypeListPreferences: WorkspaceObjectTypeListPreferences = {
   allLayout: "cards",
   filter: "all",
   groupBy: "none",
-  mode: "all",
+  mode: "overview",
   query: "",
   sort: "updated-desc",
 };
+
+function WorkspaceObjectTypeMenuIcon({ children }: { children: React.ReactNode }) {
+  return <CompactMenuIconFrame variant="ghost">{children}</CompactMenuIconFrame>;
+}
+
+function WorkspaceObjectTypeMenuLabel({ children }: { children: React.ReactNode }) {
+  return <CompactMenuItemText>{children}</CompactMenuItemText>;
+}
 
 function getObjectTypeListPreferencesKey(spaceId: string, objectTypeId: string) {
   return `${objectTypeListPreferencesPrefix}.${spaceId}.${objectTypeId}`;
@@ -150,16 +256,145 @@ function readObjectTypeListPreferences(key: string): WorkspaceObjectTypeListPref
   }
 }
 
-function PendingObjectRenderer({ entity, objectType, tabName }: WorkspaceObjectRendererProps) {
+function WorkspaceGenericObject({ entity, objectType }: WorkspaceObjectRendererProps) {
   const objectTypeName = getObjectTypeName(entity, objectType);
+  const readableProperties = getReadableProperties(entity);
+  const hasBody = entity.blocks.some((block) => block.type === "divider" || block.content.trim());
 
   return (
-    <PendingImplementation
-      area={objectTypeName}
-      description={`${tabName} should be implemented here.`}
-      name={`${objectTypeName} object`}
-      variant="workspace"
-    />
+    <article
+      data-slot="workspace-generic-object"
+      className="flex h-full min-h-0 w-full flex-col overflow-auto bg-[var(--app-bg-front)]"
+    >
+      <header className="border-b border-[var(--app-border-front)] px-8 py-7">
+        <div className="flex min-w-0 items-center gap-2">
+          <ObjectTypeIconBadge
+            id={objectType?.id ?? entity.objectTypeId}
+            iconName={objectType?.iconName}
+            tone={objectType?.tone ?? "gray"}
+            className="size-6 rounded-md"
+            iconClassName="size-3.5"
+          />
+          <p className="text-xs font-medium uppercase text-[var(--app-text-secondary)]">
+            {objectTypeName}
+          </p>
+        </div>
+        <h1 className="mt-3 break-words text-3xl font-semibold text-[var(--app-text-primary)]">
+          {entity.title || "Sem título"}
+        </h1>
+        {entity.tags.length ? (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {entity.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-md border border-[var(--app-border-el)] bg-[var(--app-bg-el)] px-2 py-1 text-xs text-[var(--app-text-secondary)]"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        ) : null}
+      </header>
+      <div className="flex min-h-0 flex-1 flex-col gap-4 px-8 py-7">
+        {hasBody ? (
+          <div className="space-y-3 text-sm leading-6">
+            {entity.blocks.map(renderWorkspaceBlock)}
+          </div>
+        ) : (
+          <WorkspaceEmptyState
+            className="border-[var(--app-border-el)] bg-[var(--app-bg-front)]"
+            title="Sem conteúdo"
+            description="Este objeto ainda não tem blocos salvos."
+          />
+        )}
+        {readableProperties.length ? (
+          <section className="mt-4 border-t border-[var(--app-border-front)] pt-4">
+            <h2 className="text-sm font-medium text-[var(--app-text-primary)]">Propriedades</h2>
+            <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
+              {readableProperties.map(([key, value]) => (
+                <div
+                  key={key}
+                  className="rounded-lg border border-[var(--app-border-el)] bg-[var(--app-bg-el)] p-3"
+                >
+                  <dt className="text-xs font-medium uppercase text-[var(--app-text-secondary)]">
+                    {key}
+                  </dt>
+                  <dd className="mt-1 break-words text-[var(--app-text-primary)]">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ) : null}
+      </div>
+    </article>
+  );
+}
+
+function WorkspaceObjectTypeOverviewEmptyCard({
+  description,
+  title,
+}: {
+  description: string;
+  title: string;
+}) {
+  return (
+    <div className="py-10 flex w-full flex-col items-center justify-center gap-4 text-center">
+      <div className="flex flex-col items-center gap-1.5">
+        <h3 className="text-sm font-medium text-[var(--app-text-secondary)]">{title}</h3>
+        <p className="max-w-md px-4 text-xs text-[var(--app-text-secondary)]">{description}</p>
+      </div>
+    </div>
+  );
+}
+
+function WorkspaceObjectTypeOverview({
+  entities,
+  objectType,
+  onOpenEntity,
+}: Pick<WorkspaceObjectTypeListViewProps, "onOpenEntity"> & {
+  entities: readonly SpaceEntityRecord[];
+  objectType: WorkspaceObjectTypeListInfo;
+}) {
+  return (
+    <div data-slot="workspace-object-type-overview" className="w-full space-y-6">
+      <section data-slot="workspace-object-type-overview-recent">
+        <h2 className="mb-2 px-0.5 text-sm font-medium text-[var(--app-text-secondary)]">
+          Recentemente aberto
+        </h2>
+        {entities.length ? (
+          <WorkspaceObjectDataView
+            entities={entities}
+            layout="cards"
+            groupBy="none"
+            objectType={objectType}
+            onOpenEntity={onOpenEntity}
+          />
+        ) : (
+          <WorkspaceObjectTypeOverviewEmptyCard
+            title="Sem objetos recentes"
+            description="Os objetos abertos recentemente aparecerão aqui."
+          />
+        )}
+      </section>
+      <section data-slot="workspace-object-type-overview-collections">
+        <h2 className="mb-2 px-0.5 text-sm font-medium text-[var(--app-text-secondary)]">
+          Coleções
+        </h2>
+        <WorkspaceObjectTypeOverviewEmptyCard
+          title="Sem coleções"
+          description="Você pode mudar isso criando uma nova coleção."
+        />
+      </section>
+      <section data-slot="workspace-object-type-overview-queries">
+        <h2 className="mb-2 px-0.5 text-sm font-medium text-[var(--app-text-secondary)]">
+          Queries
+        </h2>
+        <WorkspaceObjectTypeOverviewEmptyCard
+          title="Sem queries"
+          description="As Queries que você criar neste banco de dados aparecerão aqui."
+        />
+      </section>
+    </div>
   );
 }
 
@@ -201,7 +436,7 @@ export function WorkspaceObjectTypeListView({
     setPreferences((current) => ({ ...current, ...update }));
   }
 
-  const items = React.useMemo(() => {
+  const items = React.useMemo<SpaceEntityRecord[]>(() => {
     const normalizedQuery = preferences.query.trim().toLocaleLowerCase();
     const matchingItems = entities.filter((entity) => {
       if (entity.objectTypeId !== objectType.id) return false;
@@ -230,7 +465,7 @@ export function WorkspaceObjectTypeListView({
   return (
     <section
       data-slot="workspace-object-type-list-view"
-      className="flex h-full min-h-0 w-full flex-col overflow-hidden bg-[var(--app-bg-base)] text-[var(--app-text-primary)]"
+      className="relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-xl border border-[var(--app-border-front)] bg-[var(--app-bg-base)] text-[var(--app-text-primary)] shadow-[0_2px_3px_0_rgba(0,0,0,0.004),0_4px_9px_0_rgba(0,0,0,0.01),0_8px_12px_0_rgba(0,0,0,0.004)]"
     >
       <header className="shrink-0 border-b border-[var(--app-border-front)] bg-[var(--app-bg-front)] px-3 pb-1.5 pt-4">
         <div className="flex min-h-8 items-center justify-between gap-2">
@@ -307,21 +542,35 @@ export function WorkspaceObjectTypeListView({
                     </Button>
                   }
                 />
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setSearchOpen(true)}>Buscar</DropdownMenuItem>
+                <DropdownMenuContent align="end" className={sidebarContextMenuContentClass}>
                   <DropdownMenuItem
+                    className={sidebarContextMenuItemClass}
+                    onClick={() => setSearchOpen(true)}
+                  >
+                    <WorkspaceObjectTypeMenuIcon>
+                      <Search />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>Buscar</WorkspaceObjectTypeMenuLabel>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className={sidebarContextMenuItemClass}
                     onClick={() =>
                       updatePreferences({
                         allLayout: "cards",
                         filter: "all",
                         groupBy: "none",
-                        mode: "all",
+                        mode: "overview",
                         query: "",
                         sort: "updated-desc",
                       })
                     }
                   >
-                    Restaurar visualização
+                    <WorkspaceObjectTypeMenuIcon>
+                      <Rows3 />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>
+                      Restaurar visualização
+                    </WorkspaceObjectTypeMenuLabel>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -352,13 +601,29 @@ export function WorkspaceObjectTypeListView({
                           </Button>
                         }
                       />
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={onCreateEntity}>
-                          Novo {singularName}
+                      <DropdownMenuContent align="end" className={sidebarContextMenuContentClass}>
+                        <DropdownMenuItem
+                          className={sidebarContextMenuItemClass}
+                          onClick={onCreateEntity}
+                        >
+                          <WorkspaceObjectTypeMenuIcon>
+                            <Plus />
+                          </WorkspaceObjectTypeMenuIcon>
+                          <WorkspaceObjectTypeMenuLabel>
+                            Novo {singularName}
+                          </WorkspaceObjectTypeMenuLabel>
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => setSearchOpen(true)}>
-                          Buscar em {listName}
+                        <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
+                        <DropdownMenuItem
+                          className={sidebarContextMenuItemClass}
+                          onClick={() => setSearchOpen(true)}
+                        >
+                          <WorkspaceObjectTypeMenuIcon>
+                            <Search />
+                          </WorkspaceObjectTypeMenuIcon>
+                          <WorkspaceObjectTypeMenuLabel>
+                            Buscar em {listName}
+                          </WorkspaceObjectTypeMenuLabel>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -379,13 +644,13 @@ export function WorkspaceObjectTypeListView({
               aria-pressed={preferences.mode === "overview"}
               onClick={() => updatePreferences({ mode: "overview" })}
               className={cn(
-                "flex h-8 shrink-0 items-center gap-1.5 rounded-xl px-3 text-sm transition-colors",
+                "relative flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3.5 py-1 text-sm font-medium transition-all duration-250",
                 preferences.mode === "overview"
-                  ? "bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
-                  : "hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
+                  ? "border-[var(--app-border-front)] bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
+                  : "border-[var(--app-border-el)] text-[var(--app-text-secondary)] hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
               )}
             >
-              <LayoutGrid className="size-3.5" />
+              <LayoutPanelTop className="size-3.5 text-[var(--app-text-secondary)]" />
               Visão geral
             </button>
             <button
@@ -393,13 +658,13 @@ export function WorkspaceObjectTypeListView({
               aria-pressed={preferences.mode === "all"}
               onClick={() => updatePreferences({ mode: "all" })}
               className={cn(
-                "flex h-8 shrink-0 items-center gap-1.5 rounded-xl px-3 text-sm transition-colors",
+                "relative flex h-8 shrink-0 items-center gap-1.5 rounded-xl border px-3.5 py-1 text-sm font-medium transition-all duration-250",
                 preferences.mode === "all"
-                  ? "bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
-                  : "hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
+                  ? "border-[var(--app-border-front)] bg-[var(--app-bg-el)] text-[var(--app-text-primary)]"
+                  : "border-[var(--app-border-el)] text-[var(--app-text-secondary)] hover:bg-[var(--app-bg-el-hover)] hover:text-[var(--app-text-primary)]",
               )}
             >
-              <List className="size-3.5" />
+              <List className="size-3.5 text-[var(--app-text-secondary)]" />
               Tudo
             </button>
             <span
@@ -425,16 +690,31 @@ export function WorkspaceObjectTypeListView({
                   </Button>
                 }
               />
-              <DropdownMenuContent align="end" className="min-w-48">
+              <DropdownMenuContent align="end" className={sidebarContextMenuContentClass}>
                 <DropdownMenuRadioGroup
                   value={preferences.filter}
                   onValueChange={(filter) =>
                     updatePreferences({ filter: filter as WorkspaceObjectTypeListFilter })
                   }
                 >
-                  <DropdownMenuRadioItem value="all">Todos os objetos</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="tagged">Com etiquetas</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="untagged">Sem etiquetas</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem className={sidebarContextMenuItemClass} value="all">
+                    <WorkspaceObjectTypeMenuIcon>
+                      <SlidersHorizontal />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>Todos os objetos</WorkspaceObjectTypeMenuLabel>
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem className={sidebarContextMenuItemClass} value="tagged">
+                    <WorkspaceObjectTypeMenuIcon>
+                      <SlidersHorizontal />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>Com etiquetas</WorkspaceObjectTypeMenuLabel>
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem className={sidebarContextMenuItemClass} value="untagged">
+                    <WorkspaceObjectTypeMenuIcon>
+                      <SlidersHorizontal />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>Sem etiquetas</WorkspaceObjectTypeMenuLabel>
+                  </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -453,22 +733,46 @@ export function WorkspaceObjectTypeListView({
                   </Button>
                 }
               />
-              <DropdownMenuContent align="end" className="min-w-52">
+              <DropdownMenuContent align="end" className={sidebarContextMenuContentClass}>
                 <DropdownMenuRadioGroup
                   value={preferences.sort}
                   onValueChange={(sort) =>
                     updatePreferences({ sort: sort as WorkspaceObjectTypeListSort })
                   }
                 >
-                  <DropdownMenuRadioItem value="updated-desc">
-                    Atualização, mais recente
+                  <DropdownMenuRadioItem
+                    className={sidebarContextMenuItemClass}
+                    value="updated-desc"
+                  >
+                    <WorkspaceObjectTypeMenuIcon>
+                      <ArrowDownUp />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>
+                      Atualização, mais recente
+                    </WorkspaceObjectTypeMenuLabel>
                   </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="updated-asc">
-                    Atualização, mais antiga
+                  <DropdownMenuRadioItem
+                    className={sidebarContextMenuItemClass}
+                    value="updated-asc"
+                  >
+                    <WorkspaceObjectTypeMenuIcon>
+                      <ArrowDownUp />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>
+                      Atualização, mais antiga
+                    </WorkspaceObjectTypeMenuLabel>
                   </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="title-asc">Título, crescente</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="title-desc">
-                    Título, decrescente
+                  <DropdownMenuRadioItem className={sidebarContextMenuItemClass} value="title-asc">
+                    <WorkspaceObjectTypeMenuIcon>
+                      <ArrowDownUp />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>Título, crescente</WorkspaceObjectTypeMenuLabel>
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem className={sidebarContextMenuItemClass} value="title-desc">
+                    <WorkspaceObjectTypeMenuIcon>
+                      <ArrowDownUp />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>Título, decrescente</WorkspaceObjectTypeMenuLabel>
                   </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
@@ -488,15 +792,25 @@ export function WorkspaceObjectTypeListView({
                   </Button>
                 }
               />
-              <DropdownMenuContent align="end" className="min-w-44">
+              <DropdownMenuContent align="end" className={sidebarContextMenuContentClass}>
                 <DropdownMenuRadioGroup
                   value={preferences.groupBy}
                   onValueChange={(groupBy) =>
                     updatePreferences({ groupBy: groupBy as WorkspaceObjectDataViewGroup })
                   }
                 >
-                  <DropdownMenuRadioItem value="none">Sem agrupamento</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="tag">Etiqueta</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem className={sidebarContextMenuItemClass} value="none">
+                    <WorkspaceObjectTypeMenuIcon>
+                      <Rows3 />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>Sem agrupamento</WorkspaceObjectTypeMenuLabel>
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem className={sidebarContextMenuItemClass} value="tag">
+                    <WorkspaceObjectTypeMenuIcon>
+                      <Rows3 />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>Etiqueta</WorkspaceObjectTypeMenuLabel>
+                  </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -520,7 +834,7 @@ export function WorkspaceObjectTypeListView({
                   </Button>
                 }
               />
-              <DropdownMenuContent align="end" className="min-w-40">
+              <DropdownMenuContent align="end" className={sidebarContextMenuContentClass}>
                 <DropdownMenuRadioGroup
                   value={preferences.allLayout}
                   onValueChange={(allLayout) =>
@@ -530,8 +844,18 @@ export function WorkspaceObjectTypeListView({
                     })
                   }
                 >
-                  <DropdownMenuRadioItem value="cards">Cartões</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="list">Lista</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem className={sidebarContextMenuItemClass} value="cards">
+                    <WorkspaceObjectTypeMenuIcon>
+                      <Grid2X2 />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>Cartões</WorkspaceObjectTypeMenuLabel>
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem className={sidebarContextMenuItemClass} value="list">
+                    <WorkspaceObjectTypeMenuIcon>
+                      <List />
+                    </WorkspaceObjectTypeMenuIcon>
+                    <WorkspaceObjectTypeMenuLabel>Lista</WorkspaceObjectTypeMenuLabel>
+                  </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -569,6 +893,12 @@ export function WorkspaceObjectTypeListView({
               ) : undefined
             }
           />
+        ) : preferences.mode === "overview" ? (
+          <WorkspaceObjectTypeOverview
+            entities={items}
+            objectType={objectType}
+            onOpenEntity={onOpenEntity}
+          />
         ) : (
           <WorkspaceObjectDataView
             entities={items}
@@ -589,6 +919,8 @@ export const WorkspaceObjectListRenderer = WorkspaceObjectTypeListView;
 function WorkspaceWeblinkObject({ entity }: { entity: SpaceEntityRecord }) {
   const url = getWorkspaceWeblinkUrl(entity);
   const description = readStringProperty(entity, ["description", "Description", "summary"]);
+  const readableProperties = getReadableProperties(entity, ["url", "href", "sourceUrl"]);
+  const hasBody = entity.blocks.some((block) => block.type === "divider" || block.content.trim());
 
   if (!url) {
     return (
@@ -602,12 +934,14 @@ function WorkspaceWeblinkObject({ entity }: { entity: SpaceEntityRecord }) {
   }
 
   return (
-    <article className="flex h-full min-h-0 w-full flex-col overflow-auto bg-card">
-      <div className="border-b border-border px-8 py-7">
-        <p className="text-xs font-medium uppercase text-muted-foreground">Weblink</p>
+    <article className="flex h-full min-h-0 w-full flex-col overflow-auto bg-[var(--app-bg-front)]">
+      <div className="border-b border-[var(--app-border-front)] px-8 py-7">
+        <p className="text-xs font-medium uppercase text-[var(--app-text-secondary)]">Weblink</p>
         <div className="mt-3 flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
-            <h1 className="truncate text-3xl font-semibold text-foreground">{entity.title}</h1>
+            <h1 className="truncate text-3xl font-semibold text-[var(--app-text-primary)]">
+              {entity.title}
+            </h1>
             <a
               className="mt-2 block truncate text-sm text-primary hover:underline"
               href={url}
@@ -639,16 +973,38 @@ function WorkspaceWeblinkObject({ entity }: { entity: SpaceEntityRecord }) {
           </div>
         </div>
         {description ? (
-          <p className="mt-5 max-w-2xl text-sm text-muted-foreground">{description}</p>
+          <p className="mt-5 max-w-2xl text-sm text-[var(--app-text-secondary)]">{description}</p>
         ) : null}
       </div>
       <div className="min-h-0 flex-1 px-8 py-7">
-        <PendingImplementation
-          area="Weblink notes"
-          className="min-h-64"
-          description="Notes, saved article content, summary, keywords, category, and topic should be implemented here."
-          name="Weblink reader"
-        />
+        {hasBody || readableProperties.length ? (
+          <div className="space-y-5 text-sm leading-6">
+            {hasBody ? (
+              <div className="space-y-3">{entity.blocks.map(renderWorkspaceBlock)}</div>
+            ) : null}
+            {readableProperties.length ? (
+              <dl className="grid gap-2 sm:grid-cols-2">
+                {readableProperties.map(([key, value]) => (
+                  <div
+                    key={key}
+                    className="rounded-lg border border-[var(--app-border-el)] bg-[var(--app-bg-el)] p-3"
+                  >
+                    <dt className="text-xs font-medium uppercase text-[var(--app-text-secondary)]">
+                      {key}
+                    </dt>
+                    <dd className="mt-1 break-words text-[var(--app-text-primary)]">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
+          </div>
+        ) : (
+          <WorkspaceEmptyState
+            className="border-[var(--app-border-el)] bg-[var(--app-bg-front)]"
+            title="Sem notas"
+            description="Este link ainda não tem blocos ou propriedades extras salvas."
+          />
+        )}
       </div>
     </article>
   );
@@ -659,7 +1015,7 @@ export function WorkspaceObjectRenderer(props: WorkspaceObjectRendererProps) {
     return <WorkspaceWeblinkObject entity={props.entity} />;
   }
 
-  return <PendingObjectRenderer {...props} />;
+  return <WorkspaceGenericObject {...props} />;
 }
 
 export function WorkspaceListRenderer({
@@ -679,14 +1035,14 @@ export function WorkspaceListRenderer({
   }
 
   return (
-    <div className="h-full min-h-0 w-full overflow-auto bg-card p-6">
+    <div className="h-full min-h-0 w-full overflow-auto bg-[var(--app-bg-base)] p-6">
       <div className="mx-auto grid max-w-6xl gap-4 lg:grid-cols-2">
         {entities.map((entity) => {
           const objectType = objectTypes.find((candidate) => candidate.id === entity.objectTypeId);
 
           return (
             <section
-              className="min-h-[22rem] overflow-hidden rounded-lg border border-border bg-card"
+              className="min-h-[22rem] overflow-hidden rounded-lg border border-[var(--app-border-front)] bg-[var(--app-bg-front)]"
               key={entity.id}
             >
               <WorkspaceObjectRenderer

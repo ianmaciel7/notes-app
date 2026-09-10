@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "agentation": "set AGENTATION_STORE=memory&& node node_modules/agentation-mcp/dist/cli.js server",
     "build": "next build",
     "start": "next start",
     "lint": "biome lint .",
@@ -64,6 +65,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "agentation": "^3.0.2",
+    "agentation-mcp": "^1.2.0",
     "fake-indexeddb": "^6.2.5",
     "tailwindcss": "^4",
     "typescript": "^5",

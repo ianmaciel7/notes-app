@@ -1,6 +1,6 @@
-import { renderToStaticMarkup } from "react-dom/server";
 import { readFileSync } from "node:fs";
 import { fileURLToPath, URL } from "node:url";
+import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 
 import { PendingImplementation } from "@/components/pending-implementation";
@@ -28,7 +28,7 @@ it("renders the pending component name passed by props", () => {
   expect(markup).toContain("border border-border bg-muted/25");
 });
 
-it("can render a workspace pending surface with a shared pending card treatment", () => {
+it("can render a workspace pending surface with a quiet caption treatment", () => {
   const markup = renderToStaticMarkup(
     <PendingImplementation
       area="Main panel"
@@ -40,8 +40,11 @@ it("can render a workspace pending surface with a shared pending card treatment"
 
   expect(markup).toContain('data-variant="workspace"');
   expect(markup).toContain("border-0 bg-transparent");
-  expect(markup).toContain('data-slot="pending-implementation-card"');
-  expect(markup).toContain("border border-dashed border-border bg-muted/20");
+  expect(markup).toContain('data-slot="pending-implementation-caption"');
+  expect(markup).toContain("text-[var(--app-text-subtle)]");
+  expect(markup).toContain("italic");
+  expect(markup).not.toContain('data-slot="pending-implementation-card"');
+  expect(markup).not.toContain("border border-dashed border-border bg-muted/20");
   expect(markup).not.toContain("border border-border bg-muted/25");
 });
 

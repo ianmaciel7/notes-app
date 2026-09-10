@@ -7,6 +7,7 @@ import {
   ArchitectureDocViewer,
   parseArchitectureMarkdown,
 } from "@/components/architecture/architecture-doc-viewer";
+import { WorkspaceMainContentGraph } from "../../../docs/workspace/workspace-architecture.stories";
 
 const projectRoot = fileURLToPath(new URL("../../../", import.meta.url));
 
@@ -60,9 +61,21 @@ it("registers architecture Markdown stories in Ladle", () => {
   expect(configSource).toContain("mdx");
   expect(configSource).toContain("docs/**/*.stories.@(js|jsx|ts|tsx|mdx)");
   expect(storySource).toContain('title: "Docs / Workspace"');
-  expect(storySource).toContain("workspace-main-content.architecture.md?raw");
+  expect(storySource).toContain("workspace-main-content.architecture.en.md?raw");
+  expect(storySource).toContain("workspace-main-content.architecture.pt-BR.md?raw");
+  expect(storySource).toContain('type: "inline-radio"');
   expect(storySource).toContain("WorkspaceMainContentGraph");
   expect(storySource).toContain("WorkspaceSidePanelContentGraph");
+});
+
+it("renders the WorkspaceMainContent architecture story in Portuguese and English", () => {
+  const portugueseMarkup = renderToStaticMarkup(<WorkspaceMainContentGraph locale="pt-BR" />);
+  const englishMarkup = renderToStaticMarkup(<WorkspaceMainContentGraph locale="en" />);
+
+  expect(portugueseMarkup).toContain("Arquitetura do WorkspaceMainContent");
+  expect(portugueseMarkup).toContain("Responsabilidades dos Componentes");
+  expect(englishMarkup).toContain("WorkspaceMainContent Architecture");
+  expect(englishMarkup).toContain("Component Responsibilities");
 });
 
 it("keeps workspace architecture docs aligned with the simple Capacities content model", () => {

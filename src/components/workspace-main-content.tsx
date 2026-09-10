@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import type { AppHeaderTab } from "@/components/app-header-tabs";
+import type { AppSidebarObjectType } from "@/components/app-sidebar-overview";
 import { type ObjectIconTone, objectIconToneBadgeClass } from "@/components/object-icons";
 import { PendingImplementation } from "@/components/pending-implementation";
 import { useWorkspace } from "@/components/space-controller";
@@ -13,13 +14,32 @@ import {
   WorkspaceObjectRenderer,
   WorkspaceObjectTypeListView,
 } from "@/components/workspace-object-renderer";
-import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
+import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 
 export { WorkspaceSidePanelContent } from "@/components/workspace-side-panel-content";
 
 type WorkspaceTabLike = {
   id: string;
   label?: string;
+};
+
+type WorkspaceMainPanelContext = {
+  activeEntityId?: string | null;
+  createdEntities: SpaceEntityRecord[];
+  createWorkspaceEntity: (
+    objectTypeId: string,
+    label?: string,
+    options?: { title?: string },
+  ) => Promise<SpaceEntityRecord | null>;
+  mainTabs: AppHeaderTab[];
+  mainValue: string;
+  objectTypeRecords: SpaceObjectTypeRecord[];
+  objectTypes: AppSidebarObjectType[];
+  ready?: boolean;
+  setActiveAction: (action: string | undefined) => void;
+  setActiveEntityId: (id: string | null) => void;
+  setMainTabs: React.Dispatch<React.SetStateAction<AppHeaderTab[]>>;
+  setMainValue: (value: string) => void;
 };
 
 const contextMenuPendingActions = {
@@ -58,9 +78,25 @@ function formatDate(value: string) {
   }).format(date);
 }
 
+const workspaceActionPanelClass =
+  "flex h-full min-h-0 flex-col gap-4 bg-[var(--app-bg-front)] px-6 py-4 text-[var(--app-text-primary)]";
+
+const workspaceActionPanelSurfaceClass =
+  "min-h-0 flex-1 overflow-auto rounded-[12px] border border-[var(--app-border-front)] bg-[var(--app-bg-base)] p-4";
+
+const workspaceActionPanelItemClass =
+  "rounded-[10px] border border-[var(--app-border-front)] bg-[var(--app-bg-front)] px-3 py-2 text-sm text-[var(--app-text-primary)] transition-colors hover:bg-[var(--app-bg-el-hover)]";
+
+const workspaceActionPanelItemActiveClass =
+  "border-[var(--app-border-base-strong)] bg-[var(--app-bg-el)]";
+
+const workspaceActionPanelMutedTextClass = "text-[var(--app-text-secondary)]";
+
+const workspaceActionPanelSubtleTextClass = "text-[var(--app-text-subtle)]";
+
 function EmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <Empty className="h-full min-h-0 border-dashed bg-card p-8">
+    <Empty className="h-full min-h-0 border border-[var(--app-border-front)] bg-[var(--app-bg-front)] p-8">
       <EmptyHeader>
         <EmptyTitle>{title}</EmptyTitle>
         <EmptyDescription>{description}</EmptyDescription>
@@ -85,11 +121,17 @@ function WorkspaceActionPanelHeader({
   return (
     <div className="flex items-center justify-between gap-3">
       <div>
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
-        <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
+        <p
+          className={`text-xs font-medium uppercase tracking-wide ${workspaceActionPanelSubtleTextClass}`}
+        >
+          {label}
+        </p>
+        <h1 className="text-2xl font-semibold text-[var(--app-text-primary)]">{title}</h1>
       </div>
       <div className="flex items-center gap-2">
-        <span className="hidden text-xs text-muted-foreground sm:inline">Esc para sair</span>
+        <span className={`hidden text-xs sm:inline ${workspaceActionPanelSubtleTextClass}`}>
+          Esc para sair
+        </span>
         <Button type="button" variant="outline" size="sm" onClick={onReturn}>
           Voltar
         </Button>
@@ -108,7 +150,7 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
     activeEntityId,
     setActiveEntityId,
     setMainValue,
-  } = useWorkspace();
+  } = useWorkspace() as WorkspaceMainPanelContext;
   const [query, setQuery] = React.useState("");
   const searchInputRef = React.useRef<HTMLInputElement>(null);
   const [activeSearchIndex, setActiveSearchIndex] = React.useState(0);
@@ -123,7 +165,7 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
   const objectTypeById = React.useMemo(() => {
     return Object.fromEntries(
-      objectTypes.map((item: any) => [item.id, item.singularLabel ?? item.label]),
+      objectTypes.map((item) => [item.id, item.singularLabel ?? item.label]),
     );
   }, [objectTypes]);
 
@@ -131,7 +173,7 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
     const needle = query.trim().toLocaleLowerCase();
     if (!needle) return createdEntities;
 
-    return createdEntities.filter((entity: any) => {
+    return createdEntities.filter((entity) => {
       const haystack = `${entity.title} ${entity.objectTypeId} ${entity.id}`.toLocaleLowerCase();
       return haystack.includes(needle);
     });
@@ -139,13 +181,13 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
   React.useEffect(() => {
     if (activeEntityId && activeEntityId !== "page") {
-      const activeResultIndex = results.findIndex((result: any) => result.id === activeEntityId);
+      const activeResultIndex = results.findIndex((result) => result.id === activeEntityId);
       setActiveSearchIndex(activeResultIndex >= 0 ? activeResultIndex : 0);
     } else {
       setActiveSearchIndex(0);
     }
     searchInputRef.current?.focus();
-  }, [query, results.length, activeEntityId, results]);
+  }, [activeEntityId, results]);
 
   function safeSearchIndex() {
     return Math.max(0, Math.min(activeSearchIndex, Math.max(0, results.length - 1)));
@@ -198,11 +240,11 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }
 
   function openEntity(entity: (typeof createdEntities)[number]) {
-    const objectType = objectTypes.find((item: any) => item.id === entity.objectTypeId);
+    const objectType = objectTypes.find((item) => item.id === entity.objectTypeId);
     setActiveAction(undefined);
     setActiveEntityId(entity.id);
-    setMainTabs((current: any[]) => {
-      if (current.some((item: any) => item.id === entity.id)) return current;
+    setMainTabs((current) => {
+      if (current.some((item) => item.id === entity.id)) return current;
       return [
         ...current,
         {
@@ -220,10 +262,13 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }
 
   return (
-    <section className="flex h-full min-h-0 flex-col gap-4 bg-card px-6 py-4">
+    <section className={workspaceActionPanelClass}>
       <WorkspaceActionPanelHeader label="Search" title="Search" onReturn={onReturn} />
       <div className="flex flex-col gap-3">
-        <label className="text-sm text-muted-foreground" htmlFor="workspace-search-input">
+        <label
+          className={`text-sm ${workspaceActionPanelMutedTextClass}`}
+          htmlFor="workspace-search-input"
+        >
           Busque por título, tipo ou ID da entidade.
         </label>
         <Input
@@ -239,7 +284,7 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
       <div
         ref={listContainerRef}
-        className="min-h-0 flex-1 overflow-auto rounded-[12px] border border-border bg-background p-4"
+        className={workspaceActionPanelSurfaceClass}
         tabIndex={0}
         aria-activedescendant={
           results[activeSearchIndex] ? `search-result-${results[activeSearchIndex]?.id}` : undefined
@@ -249,15 +294,16 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
         onKeyDown={handleSearchListKeyDown}
       >
         {!ready ? (
-          <p className="text-sm text-muted-foreground">Carregando workspace…</p>
+          <p className={`text-sm ${workspaceActionPanelMutedTextClass}`}>Carregando workspace…</p>
         ) : results.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
+          <p className={`text-sm ${workspaceActionPanelMutedTextClass}`}>
             Nenhum resultado encontrado. Tente outro termo ou use o atalho{" "}
-            <span className="font-medium text-foreground">Ctrl+K</span> para abrir a paleta.
+            <span className="font-medium text-[var(--app-text-primary)]">Ctrl+K</span> para abrir a
+            paleta.
           </p>
         ) : (
           <ul className="flex flex-col gap-2">
-            {results.map((entity: any) => {
+            {results.map((entity) => {
               const typeName = objectTypeById[entity.objectTypeId] ?? "Unknown";
               const isActive = activeSearchIndex === results.indexOf(entity);
               const itemId = `search-result-${entity.id}`;
@@ -265,10 +311,10 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
                 <li
                   key={entity.id}
                   id={itemId}
-                  className={`rounded-[10px] border px-3 py-2 text-sm text-foreground ${
+                  className={`${workspaceActionPanelItemClass} ${
                     isActive || activeEntityId === entity.id
-                      ? "border-primary bg-muted/50"
-                      : "border-border bg-background"
+                      ? workspaceActionPanelItemActiveClass
+                      : ""
                   }`}
                 >
                   <button
@@ -276,13 +322,11 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
                     className="w-full rounded text-left"
                     onClick={() => openEntity(entity)}
                     onMouseEnter={() =>
-                      setActiveSearchIndex(
-                        results.findIndex((result: any) => result.id === entity.id),
-                      )
+                      setActiveSearchIndex(results.findIndex((result) => result.id === entity.id))
                     }
                   >
                     <p className="font-medium">{entity.title || "Sem título"}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className={`text-xs ${workspaceActionPanelSubtleTextClass}`}>
                       {typeName} · atualizada em {formatDate(entity.updatedAt)}
                     </p>
                   </button>
@@ -300,10 +344,12 @@ function CalendarActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(new Date());
 
   return (
-    <section className="flex h-full min-h-0 flex-col gap-4 bg-card px-6 py-4">
+    <section className={workspaceActionPanelClass}>
       <WorkspaceActionPanelHeader label="Calendar" title="Agenda" onReturn={onReturn} />
 
-      <div className="min-h-0 flex-1 rounded-[12px] border border-border p-4 text-sm text-muted-foreground">
+      <div
+        className={`${workspaceActionPanelSurfaceClass} text-sm ${workspaceActionPanelMutedTextClass}`}
+      >
         <CalendarComponent
           mode="single"
           selected={selectedDate}
@@ -327,7 +373,7 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
     activeEntityId,
     setActiveEntityId,
     setMainValue,
-  } = useWorkspace();
+  } = useWorkspace() as WorkspaceMainPanelContext;
   const [activeTypeId, setActiveTypeId] = React.useState<string | undefined>(undefined);
 
   const byType = React.useMemo(() => {
@@ -352,7 +398,7 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
   const typeLabelById = React.useMemo(() => {
     return Object.fromEntries(
-      objectTypes.map((item: any) => [item.id, item.singularLabel ?? item.label]),
+      objectTypes.map((item) => [item.id, item.singularLabel ?? item.label]),
     );
   }, [objectTypes]);
 
@@ -363,17 +409,17 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
     }
 
     if (activeEntityId && activeEntityId !== "page") {
-      const activeEntity = createdEntities.find((entity: any) => entity.id === activeEntityId);
+      const activeEntity = createdEntities.find((entity) => entity.id === activeEntityId);
       if (
         activeEntity?.objectTypeId &&
-        byType.some((bucket: any) => bucket.typeId === activeEntity.objectTypeId)
+        byType.some((bucket) => bucket.typeId === activeEntity.objectTypeId)
       ) {
         setActiveTypeId(activeEntity.objectTypeId);
         return;
       }
     }
 
-    setActiveTypeId((current: any) => current ?? byType[0]?.typeId);
+    setActiveTypeId((current) => current ?? byType[0]?.typeId);
   }, [activeEntityId, createdEntities, byType]);
 
   function handleExploreKeyDown(event: React.KeyboardEvent<HTMLElement>) {
@@ -381,7 +427,7 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      const index = byType.findIndex((item: any) => item.typeId === activeTypeId);
+      const index = byType.findIndex((item) => item.typeId === activeTypeId);
       const safeIndex = Math.max(0, index >= 0 ? index : 0);
       const nextIndex =
         event.key === "ArrowDown"
@@ -398,15 +444,15 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }
 
   function openType(typeId: string) {
-    const entry = byType.find((item: any) => item.typeId === typeId);
+    const entry = byType.find((item) => item.typeId === typeId);
     const entity = entry?.latestEntity;
     if (!entity) return;
-    const objectType = objectTypes.find((item: any) => item.id === typeId);
+    const objectType = objectTypes.find((item) => item.id === typeId);
 
     setActiveAction(undefined);
     setActiveEntityId(entity.id);
-    setMainTabs((current: any[]) => {
-      if (current.some((item: any) => item.id === entity.id)) return current;
+    setMainTabs((current) => {
+      if (current.some((item) => item.id === entity.id)) return current;
       return [
         ...current,
         {
@@ -433,12 +479,12 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }, []);
 
   return (
-    <section className="flex h-full min-h-0 flex-col gap-4 bg-card px-6 py-4">
+    <section className={workspaceActionPanelClass}>
       <WorkspaceActionPanelHeader label="Explore" title="Explorar estrutura" onReturn={onReturn} />
 
       <div
         ref={listContainerRef}
-        className="min-h-0 flex-1 overflow-auto rounded-[12px] border border-border p-4"
+        className={workspaceActionPanelSurfaceClass}
         tabIndex={0}
         role="listbox"
         aria-activedescendant={activeTypeId ? `explore-type-${activeTypeId}` : undefined}
@@ -469,10 +515,8 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
               <article
                 key={typeId}
                 id={`explore-type-${typeId}`}
-                className={`rounded-[10px] border p-3 text-sm text-foreground hover:bg-muted/60 ${
-                  activeTypeId === typeId
-                    ? "border-primary bg-muted/50"
-                    : "border-border bg-background"
+                className={`${workspaceActionPanelItemClass} ${
+                  activeTypeId === typeId ? workspaceActionPanelItemActiveClass : ""
                 }`}
               >
                 <button
@@ -482,7 +526,9 @@ function ExploreActionPanel({ onReturn }: WorkspaceActionPanelProps) {
                   onMouseEnter={() => setActiveTypeId(typeId)}
                 >
                   <p className="font-medium">{typeLabelById[typeId] ?? typeId}</p>
-                  <p className="text-xs text-muted-foreground">{count} item(ns)</p>
+                  <p className={`text-xs ${workspaceActionPanelSubtleTextClass}`}>
+                    {count} item(ns)
+                  </p>
                 </button>
               </article>
             ))}
@@ -504,11 +550,11 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
     setActiveEntityId,
     setMainValue,
     objectTypes,
-  } = useWorkspace();
+  } = useWorkspace() as WorkspaceMainPanelContext;
   const [activeTaskId, setActiveTaskId] = React.useState<string | undefined>(undefined);
   const listContainerRef = React.useRef<HTMLDivElement>(null);
   const tasks = React.useMemo(() => {
-    return createdEntities.filter((entity: any) => entity.objectTypeId === "task");
+    return createdEntities.filter((entity) => entity.objectTypeId === "task");
   }, [createdEntities]);
 
   React.useEffect(() => {
@@ -517,12 +563,12 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
       return;
     }
 
-    if (activeEntityId && tasks.some((task: any) => task.id === activeEntityId)) {
+    if (activeEntityId && tasks.some((task) => task.id === activeEntityId)) {
       setActiveTaskId(activeEntityId);
       return;
     }
 
-    setActiveTaskId((current: any) => current ?? tasks[0]?.id);
+    setActiveTaskId((current) => current ?? tasks[0]?.id);
   }, [activeEntityId, tasks]);
 
   React.useEffect(() => {
@@ -537,7 +583,7 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      const index = tasks.findIndex((task: any) => task.id === activeTaskId);
+      const index = tasks.findIndex((task) => task.id === activeTaskId);
       const safeIndex = Math.max(0, index >= 0 ? index : 0);
       const nextIndex =
         event.key === "ArrowDown"
@@ -549,7 +595,7 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
     if (event.key === "Enter" && activeTaskId) {
       event.preventDefault();
-      const target = tasks.find((task: any) => task.id === activeTaskId);
+      const target = tasks.find((task) => task.id === activeTaskId);
       if (target) {
         openTask(target);
       }
@@ -557,11 +603,11 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }
 
   function openTask(task: (typeof createdEntities)[number]) {
-    const objectType = objectTypes.find((item: any) => item.id === task.objectTypeId);
+    const objectType = objectTypes.find((item) => item.id === task.objectTypeId);
     setActiveAction(undefined);
     setActiveEntityId(task.id);
-    setMainTabs((current: any[]) => {
-      if (current.some((item: any) => item.id === task.id)) return current;
+    setMainTabs((current) => {
+      if (current.some((item) => item.id === task.id)) return current;
       return [
         ...current,
         {
@@ -580,7 +626,7 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
 
   function handleCreateTask() {
     void createWorkspaceEntity("task", "Task")
-      .then((entity: any) => {
+      .then((entity) => {
         if (!entity) return;
         openTask(entity);
       })
@@ -588,12 +634,12 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
   }
 
   return (
-    <section className="flex h-full min-h-0 flex-col gap-4 bg-card px-6 py-4">
+    <section className={workspaceActionPanelClass}>
       <WorkspaceActionPanelHeader label="Tasks" title="Tarefas" onReturn={onReturn} />
 
       <div
         ref={listContainerRef}
-        className="min-h-0 flex-1 overflow-auto rounded-[12px] border border-border p-4"
+        className={workspaceActionPanelSurfaceClass}
         role="listbox"
         tabIndex={0}
         aria-activedescendant={activeTaskId ? `task-result-${activeTaskId}` : undefined}
@@ -601,22 +647,24 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
         aria-label="Task list"
       >
         {!ready ? (
-          <p className="text-sm text-muted-foreground">Carregando tarefas…</p>
+          <p className={`text-sm ${workspaceActionPanelMutedTextClass}`}>Carregando tarefas…</p>
         ) : tasks.length === 0 ? (
           <div className="flex flex-col gap-3">
-            <p className="text-sm text-muted-foreground">Nenhuma tarefa encontrada.</p>
+            <p className={`text-sm ${workspaceActionPanelMutedTextClass}`}>
+              Nenhuma tarefa encontrada.
+            </p>
             <Button type="button" variant="outline" onClick={handleCreateTask}>
               Criar primeira tarefa
             </Button>
           </div>
         ) : (
           <ul className="flex flex-col gap-2">
-            {tasks.map((task: any) => (
+            {tasks.map((task) => (
               <li
                 key={task.id}
                 id={`task-result-${task.id}`}
-                className={`rounded-[10px] border px-3 py-2 text-sm text-foreground ${
-                  activeTaskId === task.id ? "border-primary bg-muted/50" : "border-border"
+                className={`${workspaceActionPanelItemClass} ${
+                  activeTaskId === task.id ? workspaceActionPanelItemActiveClass : ""
                 }`}
               >
                 <button
@@ -626,7 +674,7 @@ function TasksActionPanel({ onReturn }: WorkspaceActionPanelProps) {
                   onMouseEnter={() => setActiveTaskId(task.id)}
                 >
                   <p className="font-medium">{task.title || "Sem título"}</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className={`text-xs ${workspaceActionPanelSubtleTextClass}`}>
                     Atualizada em {formatDate(task.updatedAt)}
                   </p>
                 </button>
@@ -651,7 +699,7 @@ export function WorkspaceDefaultPanel() {
     setActiveEntityId,
     setMainTabs,
     setMainValue,
-  } = useWorkspace();
+  } = useWorkspace() as WorkspaceMainPanelContext;
   const name = getWorkspaceTabPendingName(mainTabs, mainValue, "Main panel");
   const activeEntity = createdEntities.find((entity: { id: string }) => entity.id === mainValue);
   const objectType = activeEntity
@@ -741,7 +789,7 @@ function ContextMenuPendingActionPanel({
   if (!details) return null;
 
   return (
-    <section className="flex h-full min-h-0 flex-col bg-card p-6">
+    <section className={workspaceActionPanelClass}>
       <WorkspaceActionPanelHeader label="Context menu" title={details.name} onReturn={onReturn} />
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <PendingImplementation

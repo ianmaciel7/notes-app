@@ -34,9 +34,12 @@ describe("interaction sounds", () => {
     expect(markup).toContain("data-cuelume-toggle");
   });
 
-  it("keeps Agentation development-only", () => {
-    expect(shouldRenderAgentationToolbar("development")).toBe(true);
-    expect(shouldRenderAgentationToolbar("production")).toBe(false);
-    expect(shouldRenderAgentationToolbar("test")).toBe(false);
+  it("keeps Agentation opt-in and development-only", () => {
+    expect(shouldRenderAgentationToolbar("development", "true")).toBe(true);
+    expect(shouldRenderAgentationToolbar("development", "1")).toBe(true);
+    expect(shouldRenderAgentationToolbar("development")).toBe(false);
+    expect(shouldRenderAgentationToolbar("development", "false")).toBe(false);
+    expect(shouldRenderAgentationToolbar("production", "true")).toBe(false);
+    expect(shouldRenderAgentationToolbar("test", "true")).toBe(false);
   });
 });

@@ -13,6 +13,8 @@ import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGl
 import { SparkleIcon } from "@phosphor-icons/react/dist/csr/Sparkle";
 import { useTranslations } from "next-intl";
 import * as React from "react";
+import type { AppHeaderTab } from "@/components/app-header-tabs";
+import type { AppSidebarObjectType } from "@/components/app-sidebar-overview";
 import {
   ObjectIconBadge,
   type ObjectIconTone,
@@ -29,6 +31,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
+import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 import { cn } from "@/lib/utils";
 import { WorkspaceSidebar as BaseWorkspaceSidebar } from "./app-sidebar-primary-actions";
 
@@ -142,7 +145,7 @@ type PaletteItem = {
   title: string;
   group?: "Hoje" | "Anterior";
   objectTypeLabel?: string;
-  icon?: React.ElementType<any>;
+  icon?: ObjectTypeIcon;
   tone?: ObjectIconTone;
   shortcuts?: string[];
   execute: (options?: {
@@ -150,6 +153,32 @@ type PaletteItem = {
     openInSidePanel?: boolean;
     closePalette?: boolean;
   }) => void | Promise<void>;
+};
+
+type CommandPaletteObjectType = Pick<AppSidebarObjectType, "id" | "label" | "icon" | "tone"> & {
+  singularLabel?: string;
+};
+
+function getCommandObjectTypeLabel(typeDef: { label: string; singularLabel?: unknown }) {
+  return typeof typeDef.singularLabel === "string" ? typeDef.singularLabel : typeDef.label;
+}
+
+type CommandDialogContext = {
+  createdEntities: SpaceEntityRecord[];
+  createWorkspaceEntity: (
+    objectTypeId: string,
+    label?: string,
+    options?: { title?: string },
+  ) => Promise<SpaceEntityRecord | null>;
+  objectTypes: CommandPaletteObjectType[];
+  openInSidePanel: (tab: Partial<AppHeaderTab> & { id: string; label: string }) => void;
+  selectEntity: (id: string) => void;
+  setActiveAction: (action: string | undefined) => void;
+  setMainTabs: React.Dispatch<React.SetStateAction<AppHeaderTab[]>>;
+  setMainValue: (value: string) => void;
+  showMessage: (message: string) => void;
+  spaces: { id: string; name: string }[];
+  switchSpace: (spaceId: string) => void;
 };
 
 type CommandPaletteSelectSource = "keyboard" | "pointer";
@@ -191,7 +220,7 @@ function NewContentCommandDialog({
     setActiveAction,
     openInSidePanel,
     showMessage,
-  } = useWorkspace();
+  } = useWorkspace() as CommandDialogContext;
 
   const [query, setQuery] = React.useState("");
   const [openInNewTab, setOpenInNewTab] = React.useState(initialOpenInNewTab);
@@ -228,26 +257,27 @@ function NewContentCommandDialog({
       );
     };
 
-    const sortedEntities = [...createdEntities].sort((a: any, b: any) => {
+    const sortedEntities = [...createdEntities].sort((a, b) => {
       const timeA = new Date(a.updatedAt || a.createdAt || 0).getTime();
       const timeB = new Date(b.updatedAt || b.createdAt || 0).getTime();
       return timeB - timeA;
     });
 
-    return sortedEntities.map((entity: any) => {
+    return sortedEntities.map((entity) => {
       const typeDef =
-        objectTypes.find((t: any) => t.id === entity.objectTypeId) ??
+        objectTypes.find((type) => type.id === entity.objectTypeId) ??
         objectTypeDefinitionById[entity.objectTypeId] ??
         objectTypeDefinitionById.page;
 
       const group = isToday(entity.updatedAt || entity.createdAt) ? "Hoje" : "Anterior";
+      const objectTypeLabel = getCommandObjectTypeLabel(typeDef);
 
       return {
         id: `recent-${entity.id}`,
         kind: "recent" as const,
         group,
         title: entity.title || "Sem título",
-        objectTypeLabel: typeDef?.singularLabel ?? typeDef?.label ?? "Page",
+        objectTypeLabel: objectTypeLabel || "Page",
         icon: typeDef?.icon,
         tone: typeDef?.tone ?? "blue",
         execute: ({
@@ -267,7 +297,7 @@ function NewContentCommandDialog({
             });
           } else if (openInNewTab) {
             const tabId = entity.id;
-            setMainTabs((current: any[]) =>
+            setMainTabs((current) =>
               current.some((tab) => tab.id === tabId)
                 ? current
                 : [
@@ -427,7 +457,7 @@ function NewContentCommandDialog({
     // Creation commands for object types
     const creationActions: PaletteItem[] = (
       objectTypes.length > 0 ? objectTypes : Object.values(objectTypeDefinitionById)
-    ).map((typeDef: any) => {
+    ).map((typeDef: CommandPaletteObjectType) => {
       const label = typeDef.singularLabel ?? typeDef.label;
       return {
         id: `action-create-${typeDef.id}`,
@@ -442,10 +472,10 @@ function NewContentCommandDialog({
           openInNewTab?: boolean;
           openInSidePanel?: boolean;
           closePalette?: boolean;
-        }) => {
+        } = {}) => {
           const entity = await createWorkspaceEntity(typeDef.id, label);
           if (entity && openInNewTab) {
-            setMainTabs((current: any[]) =>
+            setMainTabs((current) =>
               current.some((tab) => tab.id === entity.id)
                 ? current
                 : [
@@ -461,7 +491,7 @@ function NewContentCommandDialog({
     });
 
     // Open Space actions
-    const spaceActions: PaletteItem[] = spaces.map((space: any) => ({
+    const spaceActions: PaletteItem[] = spaces.map((space) => ({
       id: `action-space-${space.id}`,
       kind: "action",
       title: `Abrir espaço "${space.name}"`,
@@ -509,10 +539,6 @@ function NewContentCommandDialog({
   );
 
   // Keyboard navigation & Auto-scroll
-  React.useEffect(() => {
-    setActiveIndex(0);
-  }, [deferredQuery]);
-
   React.useEffect(() => {
     const activeItem = allFilteredItems[activeIndex];
     if (!open || !activeItem) return;
@@ -612,7 +638,10 @@ function NewContentCommandDialog({
                   data-slot="command-input"
                   type="text"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setActiveIndex(0);
+                  }}
                   onKeyDown={handleKeyDown}
                   placeholder="Buscar por conteúdo e ações, ou colar da área de transferência"
                   autoComplete="off"

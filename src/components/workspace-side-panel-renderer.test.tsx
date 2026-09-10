@@ -39,8 +39,10 @@ it("uses the shared pending implementation appearance without a side-panel wrapp
 
   expect(markup.match(/data-slot="pending-implementation"/g)).toHaveLength(1);
   expect(markup).toContain('data-variant="workspace"');
-  expect(markup).toContain('data-slot="pending-implementation-card"');
-  expect(markup).toContain("border border-dashed border-border bg-muted/20");
+  expect(markup).toContain('data-slot="pending-implementation-caption"');
+  expect(markup).toContain("border-0 bg-transparent");
   expect(markup).not.toContain("bg-card p-4");
+  expect(markup).not.toContain('data-slot="pending-implementation-card"');
+  expect(markup).not.toContain("border border-dashed border-border bg-muted/20");
   expect(markup).not.toContain("border border-border bg-muted/25");
 });

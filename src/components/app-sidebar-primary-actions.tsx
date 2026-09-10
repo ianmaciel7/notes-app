@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import * as React from "react";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar, type AppSidebarSpace } from "@/components/app-sidebar";
 import {
   AppSidebarCalendarIcon,
   AppSidebarChevronRightIcon,
@@ -13,9 +13,11 @@ import {
 } from "@/components/app-sidebar-icons";
 import {
   type AppSidebarCollectionAction,
+  type AppSidebarCustomSection,
   type AppSidebarObjectType,
   AppSidebarOverview,
   type AppSidebarPinnedEntity,
+  type AppSidebarTrashItem,
 } from "@/components/app-sidebar-overview";
 import {
   ObjectCollectionIcon,
@@ -56,6 +58,8 @@ import {
   type WorkspaceCommandId,
 } from "@/lib/space-command-registry";
 import { createCollectionId, type WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
+import type { CreateStructureInput, ObjectIconName, ObjectIconTone } from "@/lib/space-object-types";
+import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 import { formatShortcutAriaChord, type ShortcutPlatform } from "@/lib/space-shortcuts";
 
 type AppSidebarPrimaryActionId = "new" | "search" | "explore" | "calendar" | "tasks";
@@ -102,6 +106,69 @@ type SidebarMainTab = {
   readonly label: string;
   readonly draggable?: boolean;
   readonly [key: string]: unknown;
+};
+
+type WorkspaceSidebarContext = {
+  activeAction?: AppSidebarPrimaryNavigationAction;
+  activeEntityId: string | null;
+  availablePinnedEntities: AppSidebarPinnedEntity[];
+  createSpace: (name: string) => void;
+  createWorkspaceEntity: (
+    objectTypeId: string,
+    objectTypeLabel?: string,
+    options?: { title?: string },
+  ) => void;
+  createWorkspaceStructure: (input: CreateStructureInput) => void;
+  createWorkspaceStructureFromPreset: (presetId: string) => void;
+  createdEntities: SpaceEntityRecord[];
+  customSections: AppSidebarCustomSection[];
+  deleteSpace: (id: string, confirmation: string) => boolean;
+  deleteWorkspaceStructure: (id: string) => void;
+  emptyTrash: () => void;
+  mainValue: string;
+  moveEntityToCollection: (entityId: string, collectionId: string) => void;
+  objectTypeCollections: Record<string, WorkspaceCollectionRecord>;
+  objectTypeOrder: string[];
+  objectTypes: AppSidebarObjectType[];
+  openInSidePanel: (tab: SidebarMainTab) => void;
+  pinnedEntities: AppSidebarPinnedEntity[];
+  purgeTrashItem: (id: string) => void;
+  renameSpace: (id: string, name: string) => void;
+  restoreTrashItem: (id: string) => void;
+  selectEntity: (id: string) => void;
+  setActiveAction: (action: string | undefined) => void;
+  setActiveEntityId: (id: string | null) => void;
+  setCommandPaletteOpen: (open: boolean) => void;
+  setCustomSections: React.Dispatch<React.SetStateAction<AppSidebarCustomSection[]>>;
+  setMainTabs: React.Dispatch<React.SetStateAction<SidebarMainTab[]>>;
+  setMainValue: (value: string) => void;
+  setObjectTypeCollections: (
+    next:
+      | Record<string, WorkspaceCollectionRecord>
+      | ((
+          current: Record<string, WorkspaceCollectionRecord>,
+        ) => Record<string, WorkspaceCollectionRecord>),
+  ) => void;
+  setObjectTypeOrder: (order: readonly string[]) => void;
+  setPinnedEntities: React.Dispatch<React.SetStateAction<AppSidebarPinnedEntity[]>>;
+  setShortcutBrowserOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSideSearchOpen: (open: boolean) => void;
+  setSideValue: (value: string) => void;
+  showMessage: (message: string) => void;
+  spaceId: string;
+  spaces: AppSidebarSpace[];
+  switchSpace: (spaceId: string) => void;
+  trashItems: AppSidebarTrashItem[];
+  updateWorkspaceStructure: (
+    id: string,
+    update: {
+      singularName: string;
+      pluralName: string;
+      iconName?: ObjectIconName;
+      tone?: ObjectIconTone;
+    },
+  ) => void;
+  setSpaces: (spaces: readonly { id: string }[]) => void;
 };
 
 type SidebarMainTabUpdateInput = {
@@ -1126,7 +1193,7 @@ function WorkspaceSidebar() {
     emptyTrash,
     purgeTrashItem,
     restoreTrashItem,
-  } = useWorkspace();
+  } = useWorkspace() as WorkspaceSidebarContext;
   const [hiddenCollectionIds, setHiddenCollectionIds] = React.useState<Set<string>>(
     () => new Set(),
   );
@@ -1145,7 +1212,7 @@ function WorkspaceSidebar() {
     setActiveAction(undefined);
     setActiveEntityId(id);
 
-    function navigateMainTab(tab: any) {
+    function navigateMainTab(tab: SidebarMainTab) {
       const nextTab = { ...tab, draggable: true };
       const intent = getSidebarNavigationIntent(event);
       logSidebarNavigation("navigate-main-tab", {
@@ -1163,7 +1230,7 @@ function WorkspaceSidebar() {
       }
 
       const forceNewTabId = intent === "new-tab" ? `${nextTab.id}:${Date.now()}` : undefined;
-      setMainTabs((current: any[]) => {
+      setMainTabs((current) => {
         const result = createSidebarMainTabUpdate({
           currentTabs: current,
           intent,
@@ -1193,7 +1260,7 @@ function WorkspaceSidebar() {
       return;
     }
 
-    const entity = createdEntities.find((item: any) => item.id === id);
+    const entity = createdEntities.find((item) => item.id === id);
     if (entity) {
       const entityType = objectTypes.find(
         (item: AppSidebarObjectType) => item.id === entity.objectTypeId,
@@ -1209,8 +1276,8 @@ function WorkspaceSidebar() {
     }
 
     const pinnedEntity =
-      pinnedEntities.find((item: any) => item.id === id) ??
-      availablePinnedEntities.find((item: any) => item.id === id);
+      pinnedEntities.find((item) => item.id === id) ??
+      availablePinnedEntities.find((item) => item.id === id);
     if (pinnedEntity) {
       navigateMainTab({
         id,
@@ -1289,13 +1356,13 @@ function WorkspaceSidebar() {
     }
 
     if (action === "duplicate") {
-      setObjectTypeCollections((current: Record<string, any>) => {
+      setObjectTypeCollections((current) => {
         const existing = Object.values(current).filter(
-          (item: any) => item.structureId === objectType.id,
+          (item) => item.structureId === objectType.id,
         );
         let suffix = 1;
         let copy = `${collection.name} copy`;
-        while (existing.some((item: any) => item.name === copy)) {
+        while (existing.some((item) => item.name === copy)) {
           suffix += 1;
           copy = `${collection.name} copy ${suffix}`;
         }
@@ -1310,18 +1377,18 @@ function WorkspaceSidebar() {
     }
 
     if (
-      createdEntities.some(
-        (entity: any) => "collections" in entity && entity.collections.includes(collectionId),
-      )
+      createdEntities.some((entity) => entity.collections?.includes(collectionId))
     ) {
       showMessage(t("lifecycle.errors.referenced-object"));
       return;
     }
 
-    setObjectTypeCollections((current: Record<string, any>) => ({
-      ...Object.fromEntries(Object.entries(current).filter(([id]) => id !== collectionId)),
-    }));
-    setPinnedEntities((current: any[]) => current.filter((item: any) => item.id !== collectionId));
+    setObjectTypeCollections((current) =>
+      Object.fromEntries(
+        Object.entries(current).filter(([id]) => id !== collectionId),
+      ) as Record<string, WorkspaceCollectionRecord>,
+    );
+    setPinnedEntities((current) => current.filter((item) => item.id !== collectionId));
     setActiveEntityId(objectType.id);
   }
 

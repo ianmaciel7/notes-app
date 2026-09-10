@@ -171,6 +171,15 @@ it("renders delete object menu actions with only the trash icon in the destructi
   expect(globalsSource).toContain("--destructive-menu-action:");
   expect(compactMenuSource).toContain("var(--destructive-menu-action)");
   expect(compactMenuSource).toContain("sidebarContextMenuDestructiveItemClass");
+  expect(compactMenuSource).toContain(
+    "[&_[data-slot=compact-menu-icon-frame]_svg]:text-[var(--destructive-menu-action)]",
+  );
+  expect(compactMenuSource).toContain(
+    "hover:[&_[data-slot=compact-menu-icon-frame]_svg]:text-[var(--destructive-menu-action)]",
+  );
+  expect(compactMenuSource).toContain(
+    "data-highlighted:[&_[data-slot=compact-menu-icon-frame]_svg]:text-[var(--destructive-menu-action)]",
+  );
   expect(pinnedMenuSource).toContain("sidebarContextMenuDestructiveItemClass");
   expect(collectionMenuSource).toContain("sidebarContextMenuDestructiveItemClass");
   expect(pinnedMenuSource).toContain('className="text-[var(--destructive-menu-action)]"');

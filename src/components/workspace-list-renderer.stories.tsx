@@ -1,78 +1,34 @@
 import type { Story, StoryDefault } from "@ladle/react";
-
-import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
-
 import { WorkspaceListRenderer } from "./workspace-object-renderer";
+import { workspaceEntityFixture, workspaceObjectTypeFixture } from "./workspace-story-fixtures";
 
 export default {
   title: "Components / Workspace list renderer",
 } satisfies StoryDefault;
-
-const now = "2026-09-10T13:00:00.000Z";
-
-function entityFixture(input: Partial<SpaceEntityRecord> = {}): SpaceEntityRecord {
-  const objectTypeId = input.objectTypeId ?? "page";
-
-  return {
-    id: input.id ?? `entity-${objectTypeId}`,
-    spaceId: input.spaceId ?? "personal",
-    objectTypeId,
-    type: input.type ?? objectTypeId,
-    title: input.title ?? "Untitled object",
-    createdAt: input.createdAt ?? now,
-    updatedAt: input.updatedAt ?? now,
-    blocks: input.blocks ?? [],
-    tags: input.tags ?? [],
-    relations: input.relations ?? [],
-    properties: input.properties ?? {},
-    _syncStatus: input._syncStatus ?? "pending",
-  };
-}
-
-function objectTypeFixture(
-  input: Partial<SpaceObjectTypeRecord> & Pick<SpaceObjectTypeRecord, "id" | "singularName">,
-): SpaceObjectTypeRecord {
-  return {
-    id: input.id,
-    spaceId: input.spaceId ?? "personal",
-    ownership: input.ownership ?? "built-in",
-    singularName: input.singularName,
-    pluralName: input.pluralName ?? `${input.singularName}s`,
-    iconName: input.iconName ?? "page",
-    tone: input.tone ?? "blue",
-    lifecycleKind: input.lifecycleKind ?? "document",
-    propertyDefinitions: input.propertyDefinitions ?? [],
-    collectionIds: input.collectionIds ?? [],
-    presentation: input.presentation ?? {
-      availableViews: ["list"],
-      defaultView: "list",
-    },
-  };
-}
 
 function ListRendererFrame({ children }: { children: React.ReactNode }) {
   return <div className="h-screen min-h-0 w-full overflow-hidden bg-card">{children}</div>;
 }
 
 const objectTypes = [
-  objectTypeFixture({
+  workspaceObjectTypeFixture({
     id: "weblink",
     iconName: "weblink",
     singularName: "Weblink",
     tone: "blue",
   }),
-  objectTypeFixture({
+  workspaceObjectTypeFixture({
     id: "page",
     singularName: "Page",
     tone: "blue",
   }),
-  objectTypeFixture({
+  workspaceObjectTypeFixture({
     id: "flashcard",
     iconName: "flashcard",
     singularName: "Flashcard",
     tone: "violet",
   }),
-  objectTypeFixture({
+  workspaceObjectTypeFixture({
     id: "study_goal",
     iconName: "study-goal",
     singularName: "Study goal",
@@ -84,7 +40,7 @@ export const MixedObjectList: Story = () => (
   <ListRendererFrame>
     <WorkspaceListRenderer
       entities={[
-        entityFixture({
+        workspaceEntityFixture({
           id: "entity-weblink",
           objectTypeId: "weblink",
           properties: {
@@ -93,7 +49,7 @@ export const MixedObjectList: Story = () => (
           },
           title: "Research article",
         }),
-        entityFixture({
+        workspaceEntityFixture({
           id: "entity-page",
           objectTypeId: "page",
           title: "Project notes",
@@ -109,12 +65,12 @@ export const StudyObjectTypesPendingList: Story = () => (
   <ListRendererFrame>
     <WorkspaceListRenderer
       entities={[
-        entityFixture({
+        workspaceEntityFixture({
           id: "entity-flashcard",
           objectTypeId: "flashcard",
           title: "Photosynthesis card",
         }),
-        entityFixture({
+        workspaceEntityFixture({
           id: "entity-study-goal",
           objectTypeId: "study_goal",
           title: "Biology final",

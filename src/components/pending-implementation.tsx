@@ -31,18 +31,28 @@ export function PendingImplementation({
 
   if (variant === "workspace") {
     return (
-      <Empty
-        className={cn("border-0 bg-transparent p-6", className)}
+      <div
+        className={cn(
+          "flex h-full min-h-0 w-full items-center justify-center border-0 bg-transparent p-6 text-center",
+          className,
+        )}
         data-slot="pending-implementation"
         data-variant="workspace"
       >
         <div
-          className="flex w-[min(100%,19rem)] flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-border bg-muted/20 p-6 text-center"
-          data-slot="pending-implementation-card"
+          className="max-w-sm text-sm italic leading-6 text-[var(--app-text-subtle)]"
+          data-slot="pending-implementation-caption"
         >
-          {content}
+          {area ? (
+            <p className="text-xs font-medium uppercase not-italic text-[var(--app-text-subtle)]">
+              {area}
+            </p>
+          ) : null}
+          <p className="mt-1 font-medium not-italic text-[var(--app-text-secondary)]">{name}</p>
+          <p className="mt-1">Implementation pending</p>
+          {description ? <p className="mt-1">{description}</p> : null}
         </div>
-      </Empty>
+      </div>
     );
   }
 

@@ -62,7 +62,7 @@ const sidebarContextMenuItemClass = cn(
 
 const sidebarContextMenuDestructiveItemClass = cn(
   sidebarContextMenuItemClass,
-  "text-[var(--app-text-primary)] hover:text-[var(--app-text-primary)] data-highlighted:text-[var(--app-text-primary)] data-popup-open:text-[var(--app-text-primary)] data-open:text-[var(--app-text-primary)] [&_[data-slot=compact-menu-icon-frame]]:text-[var(--destructive-menu-action)]",
+  "text-[var(--app-text-primary)] hover:text-[var(--app-text-primary)] data-highlighted:text-[var(--app-text-primary)] data-popup-open:text-[var(--app-text-primary)] data-open:text-[var(--app-text-primary)] [&_[data-slot=compact-menu-icon-frame]]:text-[var(--destructive-menu-action)] [&_[data-slot=compact-menu-icon-frame]_svg]:text-[var(--destructive-menu-action)] hover:[&_[data-slot=compact-menu-icon-frame]_svg]:text-[var(--destructive-menu-action)] data-highlighted:[&_[data-slot=compact-menu-icon-frame]_svg]:text-[var(--destructive-menu-action)]",
 )
 
 const sidebarContextMenuSeparatorClass =

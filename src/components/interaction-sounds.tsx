@@ -18,8 +18,11 @@ function shouldEnableInteractionSounds(
   return storedPreference !== "off" && !prefersReducedMotion;
 }
 
-function shouldRenderAgentationToolbar(environment = process.env.NODE_ENV) {
-  return environment === "development";
+function shouldRenderAgentationToolbar(
+  environment = process.env.NODE_ENV,
+  agentationEnabled = process.env.NEXT_PUBLIC_AGENTATION_ENABLED,
+) {
+  return environment === "development" && ["1", "true"].includes(agentationEnabled ?? "");
 }
 
 function InteractionSoundBinder() {

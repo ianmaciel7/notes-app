@@ -2,13 +2,33 @@ import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
 
 import { useWorkspace, WorkspaceProvider } from "./space-controller";
-import { WorkspaceDefaultPanel, WorkspaceMainContent } from "./workspace-main-content";
+import { WorkspaceMainContent } from "./workspace-main-content";
+
+const primaryActionOptions = ["search", "calendar", "explore", "tasks"] as const;
+const pendingActionOptions = [
+  "pending:change-type",
+  "pending:export",
+  "pending:import",
+  "pending:new-collection",
+  "pending:new-from-template",
+  "pending:new-query",
+  "pending:pin-sidebar",
+  "pending:present",
+  "pending:settings",
+  "pending:share",
+] as const;
+
+type PrimaryActionState = (typeof primaryActionOptions)[number];
+type PendingActionState = (typeof pendingActionOptions)[number];
+type WorkspaceActionState = PrimaryActionState | PendingActionState;
+
+type WorkspaceActionStoryProps = {
+  activeAction: WorkspaceActionState;
+};
 
 export default {
   title: "Components / Workspace main content",
 } satisfies StoryDefault;
-
-type WorkspaceActionState = "search" | "calendar" | "explore" | "tasks" | `pending:${string}`;
 
 function WorkspaceStoryState({ activeAction }: { activeAction?: WorkspaceActionState }) {
   const { setActiveAction, setActiveEntityId, setMainValue } = useWorkspace();
@@ -19,6 +39,9 @@ function WorkspaceStoryState({ activeAction }: { activeAction?: WorkspaceActionS
       if (activeAction) {
         setActiveEntityId(null);
         setMainValue(`primary-action:${activeAction}`);
+      } else {
+        setActiveEntityId("page");
+        setMainValue("page");
       }
     }
 
@@ -45,98 +68,42 @@ function WorkspaceContentStoryFrame({
   );
 }
 
-export const MainContentDefaultRoute: Story = () => (
+export const Default: Story = () => (
   <WorkspaceContentStoryFrame>
     <WorkspaceMainContent />
   </WorkspaceContentStoryFrame>
 );
 
-export const DefaultPanelPagesPending: Story = () => (
-  <WorkspaceContentStoryFrame>
-    <WorkspaceDefaultPanel />
-  </WorkspaceContentStoryFrame>
-);
-
-export const SearchAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="search">
+export const PrimaryActions: Story<WorkspaceActionStoryProps> = ({ activeAction = "calendar" }) => (
+  <WorkspaceContentStoryFrame activeAction={activeAction}>
     <WorkspaceMainContent />
   </WorkspaceContentStoryFrame>
 );
 
-export const CalendarAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="calendar">
+PrimaryActions.args = {
+  activeAction: "calendar",
+};
+PrimaryActions.argTypes = {
+  activeAction: {
+    control: { type: "select" },
+    options: primaryActionOptions,
+  },
+};
+
+export const PendingStates: Story<WorkspaceActionStoryProps> = ({
+  activeAction = "pending:new-query",
+}) => (
+  <WorkspaceContentStoryFrame activeAction={activeAction}>
     <WorkspaceMainContent />
   </WorkspaceContentStoryFrame>
 );
 
-export const ExploreAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="explore">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const TasksAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="tasks">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const PendingChangeTypeAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="pending:change-type">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const PendingExportAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="pending:export">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const PendingImportAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="pending:import">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const PendingNewCollectionAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="pending:new-collection">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const PendingNewFromTemplateAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="pending:new-from-template">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const PendingNewQueryAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="pending:new-query">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const PendingPinSidebarAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="pending:pin-sidebar">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const PendingPresentAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="pending:present">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const PendingSettingsAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="pending:settings">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
-
-export const PendingShareAction: Story = () => (
-  <WorkspaceContentStoryFrame activeAction="pending:share">
-    <WorkspaceMainContent />
-  </WorkspaceContentStoryFrame>
-);
+PendingStates.args = {
+  activeAction: "pending:new-query",
+};
+PendingStates.argTypes = {
+  activeAction: {
+    control: { type: "select" },
+    options: pendingActionOptions,
+  },
+};

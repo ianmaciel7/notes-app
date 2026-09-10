@@ -47,27 +47,62 @@ it("gives every unavailable context action a named pending implementation", () =
   });
 });
 
-it("exposes Ladle stories for workspace main content and its default panel", () => {
+it("exposes Ladle stories for workspace main content and action states", () => {
   const componentSource = readProjectSource("src/components/workspace-main-content.tsx");
   const storySource = readProjectSource("src/components/workspace-main-content.stories.tsx");
 
   expect(componentSource).toContain("export function WorkspaceDefaultPanel");
   expect(storySource).toContain("WorkspaceMainContent");
-  expect(storySource).toContain("WorkspaceDefaultPanel");
-  expect(storySource).toContain("MainContentDefaultRoute");
-  expect(storySource).toContain("DefaultPanelPagesPending");
-  expect(storySource).toContain("SearchAction");
-  expect(storySource).toContain("CalendarAction");
-  expect(storySource).toContain("ExploreAction");
-  expect(storySource).toContain("TasksAction");
-  expect(storySource).toContain("PendingChangeTypeAction");
-  expect(storySource).toContain("PendingExportAction");
-  expect(storySource).toContain("PendingImportAction");
-  expect(storySource).toContain("PendingNewCollectionAction");
-  expect(storySource).toContain("PendingNewFromTemplateAction");
-  expect(storySource).toContain("PendingNewQueryAction");
-  expect(storySource).toContain("PendingPinSidebarAction");
-  expect(storySource).toContain("PendingPresentAction");
-  expect(storySource).toContain("PendingSettingsAction");
-  expect(storySource).toContain("PendingShareAction");
+  expect(storySource).toContain("export const Default");
+  expect(storySource).toContain("export const PrimaryActions");
+  expect(storySource).toContain("export const PendingStates");
+  expect(storySource).toContain('"search"');
+  expect(storySource).toContain('"calendar"');
+  expect(storySource).toContain('"explore"');
+  expect(storySource).toContain('"tasks"');
+  expect(storySource).toContain('"pending:change-type"');
+  expect(storySource).toContain('"pending:export"');
+  expect(storySource).toContain('"pending:import"');
+  expect(storySource).toContain('"pending:new-collection"');
+  expect(storySource).toContain('"pending:new-from-template"');
+  expect(storySource).toContain('"pending:new-query"');
+  expect(storySource).toContain('"pending:pin-sidebar"');
+  expect(storySource).toContain('"pending:present"');
+  expect(storySource).toContain('"pending:settings"');
+  expect(storySource).toContain('"pending:share"');
+});
+
+it("documents every WorkspaceMainContent component surface", () => {
+  const architectureDoc = readProjectSource(
+    "docs/workspace/workspace-main-content.architecture.md",
+  );
+
+  for (const componentName of [
+    "WorkspaceMainContent",
+    "WorkspaceDefaultPanel",
+    "WorkspaceActionPanelHeader",
+    "SearchActionPanel",
+    "CalendarActionPanel",
+    "ExploreActionPanel",
+    "TasksActionPanel",
+    "ContextMenuPendingActionPanel",
+    "WorkspaceObjectRenderer",
+    "WorkspaceObjectTypeListView",
+    "PendingImplementation",
+  ]) {
+    expect(architectureDoc).toContain(`\`${componentName}\``);
+  }
+
+  expect(architectureDoc).toContain("## Component Responsibilities");
+});
+
+it("keeps workspace action panels on Capacities app tokens", () => {
+  const componentSource = readProjectSource("src/components/workspace-main-content.tsx");
+
+  expect(componentSource).toContain("workspaceActionPanelClass");
+  expect(componentSource).toContain("bg-[var(--app-bg-front)]");
+  expect(componentSource).toContain("border-[var(--app-border-front)]");
+  expect(componentSource).toContain("text-[var(--app-text-secondary)]");
+  expect(componentSource).not.toContain("flex h-full min-h-0 flex-col gap-4 bg-card px-6 py-4");
+  expect(componentSource).not.toContain("border border-border bg-background p-4");
 });

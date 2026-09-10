@@ -30,7 +30,7 @@ graph TD
 
 ## Simple Route
 
-Object type list means “show all objects of this type”. Collection list means “show a manual subset inside one object type”. Tag view means “show related objects across object types”.
+Object type list means "show all objects of this type". Collection list means "show a manual subset inside one object type". Tag view means "show related objects across object types".
 
 ## Component Boundary
 

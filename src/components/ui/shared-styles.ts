@@ -1,7 +1,7 @@
 const floatingPositionerClass = "isolate z-50"
 
 const floatingInteractionSurfaceClass =
-  "rounded-xl border border-front bg-front text-primary shadow-[var(--app-shadow-preview-card)] outline-hidden"
+  "rounded-xl border border-[var(--app-border-front)] bg-front text-primary shadow-[var(--app-shadow-preview-card)] outline-hidden"
 
 const tooltipSurfaceClass =
   "box-content rounded-[8px] border border-border/50 bg-popover/50 px-2 py-1 text-xs font-medium leading-normal text-foreground shadow-sm backdrop-blur-[8px] dark:bg-background/70"
@@ -16,7 +16,7 @@ const overlayClass =
   "fixed inset-0 isolate z-50 bg-[var(--app-overlay-strong)] duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none motion-reduce:transition-none"
 
 const floatingSurfaceBaseClass =
-  "rounded-xl border border-front bg-front text-primary shadow-[var(--app-shadow-preview-card)] outline-hidden"
+  "rounded-xl border border-[var(--app-border-front)] bg-front text-primary shadow-[var(--app-shadow-preview-card)] outline-hidden"
 
 const dialogSurfaceBaseClass =
   "rounded-[8px] border border-border bg-popover text-popover-foreground shadow-[var(--app-shadow-dialog)] outline-none"
@@ -54,7 +54,7 @@ const controlIconSelectorClass =
 const floatingIndicatorClass =
   "pointer-events-none absolute right-2 flex size-4 items-center justify-center"
 
-const floatingSeparatorClass = "my-1 h-0 border-b-[0.5px] border-front bg-transparent"
+const floatingSeparatorClass = "my-1 h-0 border-b-[0.5px] border-[var(--app-border-front)] bg-transparent"
 
 const workspaceRowStateClass =
   "transition-[background-color,color,filter,opacity] duration-200 ease-out motion-reduce:transition-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-foreground data-[active=true]:brightness-[0.965]"
@@ -75,7 +75,7 @@ const workspaceSmallActionStateClass =
   "transition-[background-color,color,opacity] duration-150 ease-out motion-reduce:transition-none"
 
 const workspaceSubmenuStateClass =
-  "transition-[background-color,color,opacity,transform] duration-200 ease-out motion-reduce:transition-none motion-reduce:animate-none"
+  "transition-[background-color,color,opacity] duration-150 ease-out motion-reduce:transition-none motion-reduce:animate-none"
 
 const workspaceTooltipStateClass =
   "transition-opacity duration-[180ms] ease-out motion-reduce:transition-none motion-reduce:animate-none"

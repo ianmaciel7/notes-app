@@ -2,6 +2,7 @@ import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
 
 import { AppHeaderCircleDashedIcon, AppHeaderGraphIcon } from "@/components/app-header-icons";
+import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 import { useWorkspace, WorkspaceProvider } from "./space-controller";
 import { WorkspaceSidePanelContent } from "./workspace-side-panel-content";
@@ -41,11 +42,13 @@ function SidePanelStoryState({
     }
 
     let cancelled = false;
-    void createWorkspaceEntity("page", "Page", { title: activeMainObjectTitle }).then((entity) => {
-      if (cancelled || !entity) return;
-      setActiveEntityId(entity.id);
-      setMainValue(entity.id);
-    });
+    void createWorkspaceEntity("page", "Page", { title: activeMainObjectTitle }).then(
+      (entity: SpaceEntityRecord | null) => {
+        if (cancelled || !entity) return;
+        setActiveEntityId(entity.id);
+        setMainValue(entity.id);
+      },
+    );
 
     return () => {
       cancelled = true;
