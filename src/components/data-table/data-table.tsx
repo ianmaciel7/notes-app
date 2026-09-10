@@ -1,15 +1,22 @@
-'use no memo';
-'use client';
+"use no memo";
+"use client";
 
-import { DataTablePagination } from './data-table-pagination';
-import type { DataTableFeatures } from './data-table-features';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { getColumnPinningStyle } from './data-table-utils';
-import { cn } from '@/lib/utils';
-import type { ReactTable, RowData } from '@tanstack/react-table';
-import type * as React from 'react';
+import type { ReactTable, RowData } from "@tanstack/react-table";
+import type * as React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+import type { DataTableFeatures } from "./data-table-features";
+import { DataTablePagination } from "./data-table-pagination";
+import { getColumnPinningStyle } from "./data-table-utils";
 
-interface DataTableProps<TData extends RowData> extends React.ComponentProps<'div'> {
+interface DataTableProps<TData extends RowData> extends React.ComponentProps<"div"> {
   table: ReactTable<DataTableFeatures, TData>;
   actionBar?: React.ReactNode;
 }
@@ -22,7 +29,11 @@ export const DataTable = <TData extends RowData>({
   ...props
 }: DataTableProps<TData>) => {
   return (
-    <div data-slot="data-table" className={cn('flex w-full flex-col gap-2.5 overflow-auto', className)} {...props}>
+    <div
+      data-slot="data-table"
+      className={cn("flex w-full flex-col gap-2.5 overflow-auto", className)}
+      {...props}
+    >
       {children}
       <div data-slot="data-table-content" className="overflow-hidden rounded-md border">
         <Table>
@@ -46,7 +57,7 @@ export const DataTable = <TData extends RowData>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}

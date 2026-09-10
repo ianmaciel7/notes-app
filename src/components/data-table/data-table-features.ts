@@ -1,4 +1,3 @@
-import type { DataTableColumnMeta } from './data-table-utils';
 import {
   columnFacetingFeature,
   columnFilteringFeature,
@@ -19,7 +18,8 @@ import {
   rowSortingFeature,
   sortFns,
   tableFeatures,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
+import type { DataTableColumnMeta } from "./data-table-utils";
 
 export const dataTableFeatures = tableFeatures({
   columnFacetingFeature,

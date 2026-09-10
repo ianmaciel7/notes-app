@@ -1,8 +1,16 @@
-import type { DataTableFeatures } from './data-table-features';
-import type { Column, Row, RowData } from '@tanstack/react-table';
-import type * as React from 'react';
+import type { Column, Row, RowData } from "@tanstack/react-table";
+import type * as React from "react";
+import type { DataTableFeatures } from "./data-table-features";
 
-export type FilterVariant = 'text' | 'number' | 'range' | 'date' | 'dateRange' | 'boolean' | 'select' | 'multiSelect';
+export type FilterVariant =
+  | "text"
+  | "number"
+  | "range"
+  | "date"
+  | "dateRange"
+  | "boolean"
+  | "select"
+  | "multiSelect";
 
 export interface ExtendedColumnSort<TData> {
   id: Extract<keyof TData, string>;
@@ -18,7 +26,7 @@ export interface Option {
 
 export interface DataTableRowAction<TData extends RowData> {
   row: Row<DataTableFeatures, TData>;
-  variant: 'update' | 'delete';
+  variant: "update" | "delete";
 }
 
 export interface DataTableColumnMeta {
@@ -39,38 +47,41 @@ export const getColumnPinningStyle = <TData extends RowData>({
   withBorder?: boolean;
 }): React.CSSProperties => {
   const isPinned = column.getIsPinned();
-  const isLastStartPinnedColumn = isPinned === 'start' && column.getIsLastColumn('start');
-  const isFirstEndPinnedColumn = isPinned === 'end' && column.getIsFirstColumn('end');
+  const isLastStartPinnedColumn = isPinned === "start" && column.getIsLastColumn("start");
+  const isFirstEndPinnedColumn = isPinned === "end" && column.getIsFirstColumn("end");
 
   return {
     boxShadow: withBorder
       ? isLastStartPinnedColumn
-        ? '-4px 0 4px -4px var(--border) inset'
+        ? "-4px 0 4px -4px var(--border) inset"
         : isFirstEndPinnedColumn
-          ? '4px 0 4px -4px var(--border) inset'
+          ? "4px 0 4px -4px var(--border) inset"
           : undefined
       : undefined,
-    insetInlineStart: isPinned === 'start' ? `${column.getStart('start')}px` : undefined,
-    insetInlineEnd: isPinned === 'end' ? `${column.getAfter('end')}px` : undefined,
+    insetInlineStart: isPinned === "start" ? `${column.getStart("start")}px` : undefined,
+    insetInlineEnd: isPinned === "end" ? `${column.getAfter("end")}px` : undefined,
     opacity: isPinned ? 0.97 : 1,
-    position: isPinned ? 'sticky' : 'relative',
-    background: 'var(--background)',
+    position: isPinned ? "sticky" : "relative",
+    background: "var(--background)",
     width: column.getSize(),
     zIndex: isPinned ? 1 : undefined,
   };
 };
 
-export const formatDate = (date: Date | string | number | undefined, opts: Intl.DateTimeFormatOptions = {}) => {
-  if (!date) return '';
+export const formatDate = (
+  date: Date | string | number | undefined,
+  opts: Intl.DateTimeFormatOptions = {},
+) => {
+  if (!date) return "";
 
   try {
-    return new Intl.DateTimeFormat('en-US', {
-      month: opts.month ?? 'long',
-      day: opts.day ?? 'numeric',
-      year: opts.year ?? 'numeric',
+    return new Intl.DateTimeFormat("en-US", {
+      month: opts.month ?? "long",
+      day: opts.day ?? "numeric",
+      year: opts.year ?? "numeric",
       ...opts,
     }).format(new Date(date));
   } catch {
-    return '';
+    return "";
   }
 };

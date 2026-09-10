@@ -1,21 +1,20 @@
-'use no memo';
-'use client';
+"use no memo";
+"use client";
 
-import type { DataTableFeatures } from './data-table-features';
+import type { CellData, Column, RowData } from "@tanstack/react-table";
+import { ChevronDown, ChevronsUpDown, ChevronUp, EyeOff, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
-import type { CellData, Column, RowData } from '@tanstack/react-table';
-import { ChevronDown, ChevronsUpDown, ChevronUp, EyeOff, X } from 'lucide-react';
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import type { DataTableFeatures } from "./data-table-features";
 
-interface DataTableColumnHeaderProps<TData extends RowData, TValue extends CellData> extends React.ComponentProps<
-  typeof DropdownMenuTrigger
-> {
+interface DataTableColumnHeaderProps<TData extends RowData, TValue extends CellData>
+  extends React.ComponentProps<typeof DropdownMenuTrigger> {
   column: Column<DataTableFeatures, TData, TValue>;
   label: string;
 }
@@ -28,7 +27,11 @@ export const DataTableColumnHeader = <TData extends RowData, TValue extends Cell
 }: DataTableColumnHeaderProps<TData, TValue>) => {
   if (!column.getCanSort() && !column.getCanHide()) {
     return (
-      <div data-slot="data-table-column-header" className={cn(className)} {...(props as React.ComponentProps<'div'>)}>
+      <div
+        data-slot="data-table-column-header"
+        className={cn(className)}
+        {...(props as React.ComponentProps<"div">)}
+      >
         {label}
       </div>
     );
@@ -39,16 +42,16 @@ export const DataTableColumnHeader = <TData extends RowData, TValue extends Cell
       <DropdownMenuTrigger
         data-slot="data-table-column-header"
         className={cn(
-          '-ms-1.5 flex h-8 items-center gap-1.5 rounded-md px-2 py-1.5 hover:bg-accent focus:outline-none focus:ring-1 focus:ring-ring data-[state=open]:bg-accent [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground',
+          "-ms-1.5 flex h-8 items-center gap-1.5 rounded-md px-2 py-1.5 hover:bg-accent focus:outline-none focus:ring-1 focus:ring-ring data-[state=open]:bg-accent [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground",
           className,
         )}
         {...props}
       >
         {label}
         {column.getCanSort() &&
-          (column.getIsSorted() === 'desc' ? (
+          (column.getIsSorted() === "desc" ? (
             <ChevronDown />
-          ) : column.getIsSorted() === 'asc' ? (
+          ) : column.getIsSorted() === "asc" ? (
             <ChevronUp />
           ) : (
             <ChevronsUpDown />
@@ -59,7 +62,7 @@ export const DataTableColumnHeader = <TData extends RowData, TValue extends Cell
           <>
             <DropdownMenuCheckboxItem
               className="relative pe-8 ps-2 [&>span:first-child]:end-2 [&>span:first-child]:start-auto [&_svg]:text-muted-foreground"
-              checked={column.getIsSorted() === 'asc'}
+              checked={column.getIsSorted() === "asc"}
               onClick={() => column.toggleSorting(false)}
             >
               <ChevronUp />
@@ -67,14 +70,17 @@ export const DataTableColumnHeader = <TData extends RowData, TValue extends Cell
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
               className="relative pe-8 ps-2 [&>span:first-child]:end-2 [&>span:first-child]:start-auto [&_svg]:text-muted-foreground"
-              checked={column.getIsSorted() === 'desc'}
+              checked={column.getIsSorted() === "desc"}
               onClick={() => column.toggleSorting(true)}
             >
               <ChevronDown />
               Desc
             </DropdownMenuCheckboxItem>
             {column.getIsSorted() && (
-              <DropdownMenuItem className="ps-2 [&_svg]:text-muted-foreground" onClick={() => column.clearSorting()}>
+              <DropdownMenuItem
+                className="ps-2 [&_svg]:text-muted-foreground"
+                onClick={() => column.clearSorting()}
+              >
                 <X />
                 Reset
               </DropdownMenuItem>

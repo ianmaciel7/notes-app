@@ -136,25 +136,30 @@ it("sends large distinct-document batches in bounded requests", async () => {
   expect(batchSizes).toEqual([500, 1]);
 });
 
-it.each([false, true])("preserves an edit made in flight (same timestamp: %s)", async (sameTime) => {
-  const database = createKnowledgeDatabase(`sync-regression-${crypto.randomUUID()}`);
-  opened.push(database);
-  const queue = createSyncQueue(database);
-  const original = entityFixture();
-  await database.entities.add(original);
-  await queue.enqueueEntityMutation({ entity: original, operation: "set" });
-  const engine = createSyncEngine(database, {
-    async commit() {
-      const newer: SpaceEntityRecord = {
-        ...original,
-        title: "Edited during sync",
-        updatedAt: sameTime ? original.updatedAt : "2026-09-11T00:00:00.000Z",
-      };
-      await database.entities.put(newer);
-      await queue.enqueueEntityMutation({ entity: newer, operation: "set" });
-    },
-  });
-  await engine.pushPendingMutations();
-  expect((await database.entities.get([original.spaceId, original.id]))?._syncStatus).toBe("pending");
-  expect(await queue.listPendingMutations()).toHaveLength(1);
-});
+it.each([false, true])(
+  "preserves an edit made in flight (same timestamp: %s)",
+  async (sameTime) => {
+    const database = createKnowledgeDatabase(`sync-regression-${crypto.randomUUID()}`);
+    opened.push(database);
+    const queue = createSyncQueue(database);
+    const original = entityFixture();
+    await database.entities.add(original);
+    await queue.enqueueEntityMutation({ entity: original, operation: "set" });
+    const engine = createSyncEngine(database, {
+      async commit() {
+        const newer: SpaceEntityRecord = {
+          ...original,
+          title: "Edited during sync",
+          updatedAt: sameTime ? original.updatedAt : "2026-09-11T00:00:00.000Z",
+        };
+        await database.entities.put(newer);
+        await queue.enqueueEntityMutation({ entity: newer, operation: "set" });
+      },
+    });
+    await engine.pushPendingMutations();
+    expect((await database.entities.get([original.spaceId, original.id]))?._syncStatus).toBe(
+      "pending",
+    );
+    expect(await queue.listPendingMutations()).toHaveLength(1);
+  },
+);

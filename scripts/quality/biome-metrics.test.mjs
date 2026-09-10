@@ -101,7 +101,10 @@ test("only selected rule occurrences are counted and all diagnostics are retaine
   assert.equal(run(cwd).status, 1);
   const report = JSON.parse(readFileSync(reportPath(cwd), "utf8"));
   assert.equal(report.maintainabilityConvention.diagnosticCount, 2);
-  assert.equal(report.maintainabilityConvention.diagnosticsByRule["lint/complexity/useMaxParams"], 2);
+  assert.equal(
+    report.maintainabilityConvention.diagnosticsByRule["lint/complexity/useMaxParams"],
+    2,
+  );
   assert.deepEqual(report.diagnostics, diagnostics);
 });
 

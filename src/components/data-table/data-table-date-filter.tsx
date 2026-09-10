@@ -1,27 +1,27 @@
-'use no memo';
-'use client';
+"use no memo";
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import type { DataTableFeatures } from './data-table-features';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
-import { formatDate } from './data-table-utils';
-import { cn } from '@/lib/utils';
-import type { Column, RowData } from '@tanstack/react-table';
-import { CalendarIcon, XCircle } from 'lucide-react';
-import * as React from 'react';
-import type { DateRange } from 'react-day-picker';
+import type { Column, RowData } from "@tanstack/react-table";
+import { CalendarIcon, XCircle } from "lucide-react";
+import * as React from "react";
+import type { DateRange } from "react-day-picker";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import type { DataTableFeatures } from "./data-table-features";
+import { formatDate } from "./data-table-utils";
 
 type DateSelection = Date[] | DateRange;
 
 const getIsDateRange = (value: DateSelection): value is DateRange => {
-  return value && typeof value === 'object' && !Array.isArray(value);
+  return value && typeof value === "object" && !Array.isArray(value);
 };
 
 const parseAsDate = (timestamp: number | string | undefined): Date | undefined => {
   if (!timestamp) return undefined;
-  const numericTimestamp = typeof timestamp === 'string' ? Number(timestamp) : timestamp;
+  const numericTimestamp = typeof timestamp === "string" ? Number(timestamp) : timestamp;
   const date = new Date(numericTimestamp);
   return !Number.isNaN(date.getTime()) ? date : undefined;
 };
@@ -33,14 +33,14 @@ const parseColumnFilterValue = (value: unknown) => {
 
   if (Array.isArray(value)) {
     return value.map((item) => {
-      if (typeof item === 'number' || typeof item === 'string') {
+      if (typeof item === "number" || typeof item === "string") {
         return item;
       }
       return undefined;
     });
   }
 
-  if (typeof value === 'string' || typeof value === 'number') {
+  if (typeof value === "string" || typeof value === "number") {
     return [value];
   }
 
@@ -85,11 +85,11 @@ export const DataTableDateFilter = <TData extends RowData>({
         return;
       }
 
-      if (multiple && !('getTime' in date)) {
+      if (multiple && !("getTime" in date)) {
         const from = date.from?.getTime();
         const to = date.to?.getTime();
         column.setFilterValue(from || to ? [from, to] : undefined);
-      } else if (!multiple && 'getTime' in date) {
+      } else if (!multiple && "getTime" in date) {
         column.setFilterValue(date.getTime());
       }
     },
@@ -110,7 +110,7 @@ export const DataTableDateFilter = <TData extends RowData>({
   }, [multiple, selectedDates]);
 
   const formatDateRange = React.useCallback((range: DateRange) => {
-    if (!range.from && !range.to) return '';
+    if (!range.from && !range.to) return "";
     if (range.from && range.to) {
       return `${formatDate(range.from)} - ${formatDate(range.to)}`;
     }
@@ -122,14 +122,17 @@ export const DataTableDateFilter = <TData extends RowData>({
       if (!getIsDateRange(selectedDates)) return null;
 
       const hasSelectedDates = selectedDates.from || selectedDates.to;
-      const dateText = hasSelectedDates ? formatDateRange(selectedDates) : 'Select date range';
+      const dateText = hasSelectedDates ? formatDateRange(selectedDates) : "Select date range";
 
       return (
         <span className="flex items-center gap-2">
           <span>{title}</span>
           {hasSelectedDates && (
             <>
-              <Separator orientation="vertical" className="mx-0.5 data-[orientation=vertical]:h-4" />
+              <Separator
+                orientation="vertical"
+                className="mx-0.5 data-[orientation=vertical]:h-4"
+              />
               <span>{dateText}</span>
             </>
           )}
@@ -140,7 +143,7 @@ export const DataTableDateFilter = <TData extends RowData>({
     if (getIsDateRange(selectedDates)) return null;
 
     const hasSelectedDate = selectedDates.length > 0;
-    const dateText = hasSelectedDate ? formatDate(selectedDates[0]) : 'Select date';
+    const dateText = hasSelectedDate ? formatDate(selectedDates[0]) : "Select date";
 
     return (
       <span className="flex items-center gap-2">
@@ -170,7 +173,19 @@ export const DataTableDateFilter = <TData extends RowData>({
             <XCircle />
           </Button>
         ) : null}
-        <PopoverTrigger render={<Button variant="outline" size="sm" data-slot="data-table-date-filter" className={cn('border-dashed font-normal', hasValue && 'rounded-s-none')} />}>{hasValue ? null : <CalendarIcon />}{label}</PopoverTrigger>
+        <PopoverTrigger
+          render={
+            <Button
+              variant="outline"
+              size="sm"
+              data-slot="data-table-date-filter"
+              className={cn("border-dashed font-normal", hasValue && "rounded-s-none")}
+            />
+          }
+        >
+          {hasValue ? null : <CalendarIcon />}
+          {label}
+        </PopoverTrigger>
       </div>
       <PopoverContent className="w-auto p-0" align="start">
         {multiple ? (
@@ -178,7 +193,9 @@ export const DataTableDateFilter = <TData extends RowData>({
             autoFocus
             captionLayout="dropdown"
             mode="range"
-            selected={getIsDateRange(selectedDates) ? selectedDates : { from: undefined, to: undefined }}
+            selected={
+              getIsDateRange(selectedDates) ? selectedDates : { from: undefined, to: undefined }
+            }
             onSelect={onSelect}
           />
         ) : (

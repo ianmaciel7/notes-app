@@ -7,7 +7,7 @@ import {
   hasRelevantQualityChanges,
   type QualityCommandResult,
   runQualityCommand,
-} from "../../src/tooling/quality-hooks.ts";
+} from "../tooling/quality-hooks.ts";
 
 const execFileAsync = promisify(execFile);
 const QUALITY_TIMEOUT_MS = 120_000;
@@ -64,7 +64,10 @@ function printJson(value: unknown): void {
   process.stdout.write(`${JSON.stringify(value)}\n`);
 }
 
-async function handleStop(mode: "cursor-stop" | "antigravity-stop", input: Record<string, unknown>) {
+async function handleStop(
+  mode: "cursor-stop" | "antigravity-stop",
+  input: Record<string, unknown>,
+) {
   const changedFiles = await collectChangedFiles();
   if (!hasRelevantQualityChanges(changedFiles)) {
     printJson(mode === "antigravity-stop" ? { decision: "" } : {});

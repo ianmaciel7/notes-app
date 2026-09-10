@@ -5,7 +5,11 @@ const RULE_DEFINITIONS = [
     unit: "Function",
   },
   { rule: "complexity/useMaxParams", metric: "Parameter count", unit: "Function/method" },
-  { rule: "complexity/noExcessiveLinesPerFunction", metric: "Lines per function", unit: "Function" },
+  {
+    rule: "complexity/noExcessiveLinesPerFunction",
+    metric: "Lines per function",
+    unit: "Function",
+  },
   { rule: "style/noExcessiveLinesPerFile", metric: "Lines per file", unit: "File" },
 ];
 

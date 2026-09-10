@@ -1,17 +1,17 @@
-'use no memo';
-'use client';
+"use no memo";
+"use client";
 
-import { Button } from '@/components/ui/button';
-import type { DataTableFeatures } from './data-table-features';
-import { Field, FieldLabel, FieldLegend, FieldSet } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
-import { Slider } from '@/components/ui/slider';
-import { cn } from '@/lib/utils';
-import type { Column, RowData } from '@tanstack/react-table';
-import { PlusCircle, XCircle } from 'lucide-react';
-import * as React from 'react';
+import type { Column, RowData } from "@tanstack/react-table";
+import { PlusCircle, XCircle } from "lucide-react";
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Field, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
+import type { DataTableFeatures } from "./data-table-features";
 
 interface Range {
   min: number;
@@ -21,15 +21,20 @@ interface Range {
 type RangeValue = [number, number];
 
 const getIsValidRange = (value: unknown): value is RangeValue => {
-  return Array.isArray(value) && value.length === 2 && typeof value[0] === 'number' && typeof value[1] === 'number';
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    typeof value[0] === "number" &&
+    typeof value[1] === "number"
+  );
 };
 
 const parseValuesAsNumbers = (value: unknown): RangeValue | undefined => {
   if (!Array.isArray(value) || value.length !== 2) return undefined;
 
   const parsed = value.map((v) => {
-    if (typeof v === 'number') return v;
-    if (typeof v === 'string' && v.trim() !== '') return Number(v);
+    if (typeof v === "number") return v;
+    if (typeof v === "string" && v.trim() !== "") return Number(v);
     return Number.NaN;
   });
 
@@ -45,7 +50,10 @@ interface DataTableSliderFilterProps<TData extends RowData> {
   title?: string;
 }
 
-export const DataTableSliderFilter = <TData extends RowData>({ column, title }: DataTableSliderFilterProps<TData>) => {
+export const DataTableSliderFilter = <TData extends RowData>({
+  column,
+  title,
+}: DataTableSliderFilterProps<TData>) => {
   const id = React.useId();
 
   const columnFilterValue = parseValuesAsNumbers(column.getFilterValue());
@@ -63,7 +71,7 @@ export const DataTableSliderFilter = <TData extends RowData>({ column, title }: 
       const values = column.getFacetedMinMaxValues();
       if (values && Array.isArray(values) && values.length === 2) {
         const [facetMinValue, facetMaxValue] = values;
-        if (typeof facetMinValue === 'number' && typeof facetMaxValue === 'number') {
+        if (typeof facetMinValue === "number" && typeof facetMaxValue === "number") {
           minValue = facetMinValue;
           maxValue = facetMaxValue;
         }
@@ -71,7 +79,12 @@ export const DataTableSliderFilter = <TData extends RowData>({ column, title }: 
     }
 
     const rangeSize = maxValue - minValue;
-    const step = rangeSize <= 20 ? 1 : rangeSize <= 100 ? Math.ceil(rangeSize / 20) : Math.ceil(rangeSize / 50);
+    const step =
+      rangeSize <= 20
+        ? 1
+        : rangeSize <= 100
+          ? Math.ceil(rangeSize / 20)
+          : Math.ceil(rangeSize / 50);
 
     return { min: minValue, max: maxValue, step };
   }, [column, defaultRange]);
@@ -90,7 +103,7 @@ export const DataTableSliderFilter = <TData extends RowData>({ column, title }: 
   const commitFrom = React.useCallback(() => {
     if (fromDraft === null) return;
     const numValue = Number(fromDraft);
-    if (fromDraft.trim() !== '' && Number.isFinite(numValue)) {
+    if (fromDraft.trim() !== "" && Number.isFinite(numValue)) {
       const clamped = Math.min(Math.max(numValue, min), range[1]);
       column.setFilterValue([clamped, range[1]]);
     }
@@ -100,7 +113,7 @@ export const DataTableSliderFilter = <TData extends RowData>({ column, title }: 
   const commitTo = React.useCallback(() => {
     if (toDraft === null) return;
     const numValue = Number(toDraft);
-    if (toDraft.trim() !== '' && Number.isFinite(numValue)) {
+    if (toDraft.trim() !== "" && Number.isFinite(numValue)) {
       const clamped = Math.min(Math.max(numValue, range[0]), max);
       column.setFilterValue([range[0], clamped]);
     }
@@ -146,13 +159,29 @@ export const DataTableSliderFilter = <TData extends RowData>({ column, title }: 
             <XCircle />
           </Button>
         ) : null}
-        <PopoverTrigger render={<Button variant="outline" size="sm" data-slot="data-table-slider-filter" className={cn('border-dashed font-normal', columnFilterValue && 'rounded-s-none')} />}>{columnFilterValue ? null : <PlusCircle />}<span>{title}</span>{columnFilterValue ? (
-                            <>
-                              <Separator orientation="vertical" className="mx-0.5 data-[orientation=vertical]:h-4" />
-                              {formatValue(columnFilterValue[0])} - {formatValue(columnFilterValue[1])}
-                              {unit ? ` ${unit}` : ''}
-                            </>
-                          ) : null}</PopoverTrigger>
+        <PopoverTrigger
+          render={
+            <Button
+              variant="outline"
+              size="sm"
+              data-slot="data-table-slider-filter"
+              className={cn("border-dashed font-normal", columnFilterValue && "rounded-s-none")}
+            />
+          }
+        >
+          {columnFilterValue ? null : <PlusCircle />}
+          <span>{title}</span>
+          {columnFilterValue ? (
+            <>
+              <Separator
+                orientation="vertical"
+                className="mx-0.5 data-[orientation=vertical]:h-4"
+              />
+              {formatValue(columnFilterValue[0])} - {formatValue(columnFilterValue[1])}
+              {unit ? ` ${unit}` : ""}
+            </>
+          ) : null}
+        </PopoverTrigger>
       </div>
       <PopoverContent align="start" className="flex w-auto flex-col gap-4">
         <FieldSet className="gap-3">
@@ -179,12 +208,12 @@ export const DataTableSliderFilter = <TData extends RowData>({ column, title }: 
                   onChange={(event) => setFromDraft(event.target.value)}
                   onBlur={commitFrom}
                   onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
+                    if (event.key === "Enter") {
                       event.preventDefault();
                       commitFrom();
                     }
                   }}
-                  className={cn('h-8 w-24', unit && 'pe-8')}
+                  className={cn("h-8 w-24", unit && "pe-8")}
                 />
                 {unit && (
                   <span className="absolute top-0 bottom-0 end-0 flex items-center rounded-e-md bg-accent px-2 text-muted-foreground text-sm">
@@ -212,12 +241,12 @@ export const DataTableSliderFilter = <TData extends RowData>({ column, title }: 
                   onChange={(event) => setToDraft(event.target.value)}
                   onBlur={commitTo}
                   onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
+                    if (event.key === "Enter") {
                       event.preventDefault();
                       commitTo();
                     }
                   }}
-                  className={cn('h-8 w-24', unit && 'pe-8')}
+                  className={cn("h-8 w-24", unit && "pe-8")}
                 />
                 {unit && (
                   <span className="absolute top-0 bottom-0 end-0 flex items-center rounded-e-md bg-accent px-2 text-muted-foreground text-sm">

@@ -14,15 +14,15 @@ Whenever the agent is requested to open, launch, or interact with a browser (via
    - If the user explicitly asks to open the browser or specifies a profile mode, proceed immediately without redundant confirmation.
 
 2. **Reliable Cross-Platform Desktop Launching (Environment Independent)**:
-   - To ensure compatibility across Windows, Linux, macOS, and WSL, **always launch via the dedicated Python skill script**:
+   - To ensure compatibility across Windows, Linux, macOS, and WSL, **always launch via the dedicated project script**:
      ```bash
-     python .agents/skills/browser-launcher/scripts/open_browser.py --url "http://localhost:3000"
+     python scripts/open_browser.py --url "http://localhost:3000"
      ```
-   - For specific browsers:
+   - For specific browsers and profiles (e.g. user `ianmaciel76@gmail.com` profile):
      ```bash
-     python .agents/skills/browser-launcher/scripts/open_browser.py --url "http://localhost:3000" --browser chrome
+     python scripts/open_browser.py --url "https://app.capacities.io" --browser chrome --profile-dir "Default"
      # or for Brave:
-     python .agents/skills/browser-launcher/scripts/open_browser.py --url "http://localhost:3000" --browser brave
+     python scripts/open_browser.py --url "http://localhost:3000" --browser brave
      ```
 
 

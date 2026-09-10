@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import escomplex from "typhonjs-escomplex";
 import ts from "typescript";
+import escomplex from "typhonjs-escomplex";
 
 const DEFAULT_MAX = 10;
 const DEFAULT_ROOT = "src";

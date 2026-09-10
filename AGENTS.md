@@ -21,6 +21,7 @@ This repository is a local-first, zero-operating-cost web application unifying:
 - **Linting & Formatting**: Biome is the sole linter/formatter (`pnpm check --write .`, `pnpm lint`, `pnpm format`). Do NOT install ESLint or Prettier.
 - **Styling**: Tailwind CSS v4 CSS-first configuration (`@theme` in `src/app/globals.css`). Do NOT create `tailwind.config.js` or `tailwind.config.ts`.
 - **TypeScript & Runtime**: Next.js 16.3+ App Router with React 19.2+. Follow documentation in `node_modules/next/dist/docs/`. Keep client boundaries lean (`'use client'`).
+- **Directory Layout & Tooling Isolation**: `src/` is strictly reserved for Next.js web application runtime code. All developer scripts, CLI utilities, browser launchers (`scripts/open_browser.py`), code quality checkers (`scripts/quality/`), and tooling modules (`scripts/tooling/`) live exclusively in `scripts/`.
 
 ## AI Development Flow
 - Use [docs/ai-development-flow.md](./docs/ai-development-flow.md) as the operational guide for AI-assisted development in this repository.

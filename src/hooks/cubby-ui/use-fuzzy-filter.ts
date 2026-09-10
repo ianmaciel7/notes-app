@@ -13,12 +13,12 @@ export type FuzzyThreshold =
 
 const thresholdMap: Record<FuzzyThreshold, Ranking> = {
   "case-sensitive-equal": matchSorter.rankings.CASE_SENSITIVE_EQUAL,
-  "equal": matchSorter.rankings.EQUAL,
+  equal: matchSorter.rankings.EQUAL,
   "starts-with": matchSorter.rankings.STARTS_WITH,
   "word-starts-with": matchSorter.rankings.WORD_STARTS_WITH,
-  "contains": matchSorter.rankings.CONTAINS,
-  "acronym": matchSorter.rankings.ACRONYM,
-  "matches": matchSorter.rankings.MATCHES,
+  contains: matchSorter.rankings.CONTAINS,
+  acronym: matchSorter.rankings.ACRONYM,
+  matches: matchSorter.rankings.MATCHES,
 };
 
 function resolveThreshold(threshold: FuzzyThreshold | undefined): Ranking | undefined {
@@ -34,9 +34,7 @@ export interface UseFuzzyFilterOptions {
 export function useFuzzyFilter<T>(options: UseFuzzyFilterOptions) {
   const resolvedThreshold = resolveThreshold(options.threshold);
   const resolvedKeys = options.keys.map((key) =>
-    typeof key === "string"
-      ? key
-      : { key: key.key, threshold: resolveThreshold(key.threshold) },
+    typeof key === "string" ? key : { key: key.key, threshold: resolveThreshold(key.threshold) },
   );
 
   const filter = (items: T[], query: string): T[] => {

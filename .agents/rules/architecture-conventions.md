@@ -20,3 +20,7 @@ description: Core architectural rules, tooling guidelines, package manager, and 
 
 ## 3. Reference Specifications
 - Always adhere to architectural decisions in `DECISIONS.md` and detailed entity schemas in `SPEC.md`.
+
+## 4. Directory Layout & Tooling Isolation
+- **`src/` Application Isolation**: `src/` is strictly reserved for web application runtime code (App Router pages, components, API routes, hooks, lib). Never place CLI automation scripts or dev tooling inside `src/`.
+- **`scripts/` Centralized Tooling**: All developer scripts, CLI utilities, browser launchers (`scripts/open_browser.py`), code quality checkers (`scripts/quality/`), and tooling modules (`scripts/tooling/`) live in `scripts/`.
