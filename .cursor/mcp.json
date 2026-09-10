@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "shoogle": {
+      "url": "https://mcp.shoogle.dev/mcp"
+    },
+    "user-shoogle": {
+      "url": "https://mcp.shoogle.dev/mcp"
+    }
+  }
+}

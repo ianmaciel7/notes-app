@@ -82,6 +82,12 @@
       "skillPath": ".agents/skills/impeccable/SKILL.md",
       "computedHash": "73702c168d9ab290221349687855fcac419e5ca3183c039aad2e80404e2c5533"
     },
+    "search-registry-items": {
+      "source": "alibey-10/shoogle",
+      "sourceType": "github",
+      "skillPath": "skills/search-registry-items/SKILL.md",
+      "computedHash": "109b782b2697d70a2bc31728bcde618eca8d88d6df227952e4bbcf9c39eca10e"
+    },
     "shadcn": {
       "source": "shadcn/ui",
       "sourceType": "github",
