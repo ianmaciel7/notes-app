@@ -134,9 +134,11 @@ it("makes pinned and object type rows draggable without adding visible handles",
   expect(objectTypeRowSource).not.toContain("row-drag-handle");
   expect(componentSource).toContain('setObjectSort("manual")');
   expect(paritySource).toContain('draggable={objectSort === "manual"}');
+  expect(paritySource).toContain("setSidebarDragPreview(event)");
   expect(paritySource).toContain(
-    'onDragStart={() => setDrag({ kind: "object-type", id: objectType.id })}',
+    'event.dataTransfer.setData("application/x-sidebar-drag-kind", "object-type")',
   );
+  expect(paritySource).toContain('startDrag({ kind: "object-type", id: objectType.id })');
   expect(paritySource).toContain('data-slot="app-sidebar-pinned-region"');
   expect(paritySource).toContain("function handlePinnedDrop");
   expect(paritySource).toContain("setPinned((current) => [");
@@ -151,7 +153,7 @@ it("persists object type ordering in the active space", () => {
   expect(dataSource).toContain("getSpaceSetting(activeSpaceId, OBJECT_TYPE_ORDER_SETTING_KEY)");
 });
 
-it("renders delete object menu actions in the destructive color", () => {
+it("renders delete object menu actions with only the trash icon in the destructive color", () => {
   const componentSource = readSource("components/app-sidebar-overview.tsx");
   const compactMenuSource = readSource("components/ui/compact-menu.tsx");
   const globalsSource = readSource("app/globals.css");
@@ -173,9 +175,14 @@ it("renders delete object menu actions in the destructive color", () => {
   expect(collectionMenuSource).toContain("sidebarContextMenuDestructiveItemClass");
   expect(pinnedMenuSource).toContain('className="text-[var(--destructive-menu-action)]"');
   expect(collectionMenuSource).toContain('className="text-[var(--destructive-menu-action)]"');
-  expect(pinnedMenuSource).toContain('className="[&_*]:!text-[var(--destructive-menu-action)]"');
-  expect(collectionMenuSource).toContain(
+  expect(pinnedMenuSource).not.toContain(
     'className="[&_*]:!text-[var(--destructive-menu-action)]"',
+  );
+  expect(collectionMenuSource).not.toContain(
+    'className="[&_*]:!text-[var(--destructive-menu-action)]"',
+  );
+  expect(compactMenuSource).not.toContain(
+    "[&_[data-slot=compact-menu-item-text]_*]:text-[var(--destructive-menu-action)]",
   );
   expect(componentSource).not.toContain("text-red-500 dark:text-red-400");
 });
@@ -218,12 +225,12 @@ it("keeps object type menus aligned with the captured Capacities option set", ()
   );
 
   expect(objectTypeMenuSource).toContain('tWorkspace("lifecycle.task.open")');
-  expect(objectTypeMenuSource).toContain('tSidebar("createObject"');
-  expect(objectTypeMenuSource).toContain('tOverview("newFromTemplate")');
-  expect(objectTypeMenuSource).toContain('tOverview("newQuery")');
-  expect(objectTypeMenuSource).toContain('tOverview("newCollection")');
-  expect(objectTypeMenuSource).toContain('tWorkspace("documentMenu.pinSidebar")');
-  expect(objectTypeMenuSource).toContain('tOverview("typeSettings")');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.createObject"');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.newFromTemplate")');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.newQuery")');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.newCollection")');
+  expect(objectTypeMenuSource).toContain('t("objectTypeMenu.pinSidebar")');
+  expect(objectTypeMenuSource).toContain('t("documentMenu.typeSettings")');
   expect(objectTypeMenuSource).toContain('tWorkspace("documentMenu.import")');
   expect(objectTypeMenuSource).toContain("<DropdownMenuSub>");
   expect(objectTypeMenuSource).toContain("<DropdownMenuSubTrigger");

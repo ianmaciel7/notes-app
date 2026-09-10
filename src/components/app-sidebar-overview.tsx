@@ -702,8 +702,11 @@ function AppSidebarPinnedMenu({
           </SidebarContextMenuIcon>
           <CompactMenuItemText>{t("documentMenu.duplicate")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("delete")}>
-          <SidebarContextMenuIcon className="text-red-500 dark:text-red-400">
+        <DropdownMenuItem
+          className={sidebarContextMenuDestructiveItemClass}
+          onClick={action("delete")}
+        >
+          <SidebarContextMenuIcon className="text-[var(--destructive-menu-action)]">
             <AppSidebarSourceIcon name="trash" />
           </SidebarContextMenuIcon>
           <CompactMenuItemText>{t("documentMenu.deleteObject")}</CompactMenuItemText>
@@ -895,14 +898,14 @@ function AppSidebarPinnedRow({
 
 function AppSidebarObjectTypeMenu({
   objectType,
-  onOpen,
+  onOpenObjectType,
   onCreateEntity,
   onAction,
   onUpdate,
   onDelete,
 }: {
   objectType: AppSidebarObjectType;
-  onOpen: () => void;
+  onOpenObjectType?: () => void;
   onCreateEntity?: (objectTypeId: string, label: string) => void;
   onAction?: (action: AppSidebarCollectionAction, objectType: AppSidebarObjectType) => void;
   onUpdate?: (
@@ -916,9 +919,8 @@ function AppSidebarObjectTypeMenu({
   ) => void;
   onDelete?: (id: string) => void;
 }) {
+  const t = useTranslations("workspace");
   const tWorkspace = useTranslations("workspace");
-  const tSidebar = useTranslations("workspace.sidebarCollections");
-  const tOverview = useTranslations("workspace.objectTypeOverview");
   const tStudio = useTranslations("workspace.objectTypeStudio");
   const [settingsOpen, setSettingsOpen] = React.useState(false);
   const settingsNameInputId = React.useId();
@@ -983,11 +985,14 @@ function AppSidebarObjectTypeMenu({
               <CompactMenuItemText>{tWorkspace("lifecycle.task.open")}</CompactMenuItemText>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent className={sidebarContextSubmenuContentClass}>
-              <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={onOpen}>
+              <DropdownMenuItem
+                className={sidebarContextMenuItemClass}
+                onClick={() => onOpenObjectType?.()}
+              >
                 <SidebarContextMenuIcon>
                   <AppSidebarSourceIcon name="external" />
                 </SidebarContextMenuIcon>
-                <CompactMenuItemText>{tWorkspace("documentMenu.openInView")}</CompactMenuItemText>
+                <CompactMenuItemText>{t("objectTypeMenu.open")}</CompactMenuItemText>
                 <DropdownMenuShortcut>
                   {tWorkspace("documentMenu.openInViewShortcut")}
                 </DropdownMenuShortcut>
@@ -1002,7 +1007,7 @@ function AppSidebarObjectTypeMenu({
               <AppSidebarObjectTypeMenuIcon name="plus" />
             </SidebarContextMenuIcon>
             <CompactMenuItemText>
-              {tSidebar("createObject", { type: objectTypeSingularName })}
+              {t("objectTypeMenu.createObject", { type: objectTypeSingularName })}
             </CompactMenuItemText>
           </DropdownMenuItem>
           <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
@@ -1013,13 +1018,13 @@ function AppSidebarObjectTypeMenu({
             <SidebarContextMenuIcon>
               <AppSidebarObjectTypeMenuIcon name="changeType" />
             </SidebarContextMenuIcon>
-            <CompactMenuItemText>{tOverview("newFromTemplate")}</CompactMenuItemText>
+            <CompactMenuItemText>{t("objectTypeMenu.newFromTemplate")}</CompactMenuItemText>
           </DropdownMenuItem>
           <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("new-query")}>
             <SidebarContextMenuIcon>
               <AppSidebarObjectTypeMenuIcon name="changeType" />
             </SidebarContextMenuIcon>
-            <CompactMenuItemText>{tOverview("newQuery")}</CompactMenuItemText>
+            <CompactMenuItemText>{t("objectTypeMenu.newQuery")}</CompactMenuItemText>
           </DropdownMenuItem>
           <DropdownMenuItem
             className={sidebarContextMenuItemClass}
@@ -1028,24 +1033,28 @@ function AppSidebarObjectTypeMenu({
             <SidebarContextMenuIcon>
               <ObjectCollectionIcon className="size-3" />
             </SidebarContextMenuIcon>
-            <CompactMenuItemText>{tOverview("newCollection")}</CompactMenuItemText>
+            <CompactMenuItemText>{t("objectTypeMenu.newCollection")}</CompactMenuItemText>
           </DropdownMenuItem>
           <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("pin-sidebar")}>
             <SidebarContextMenuIcon>
               <AppSidebarObjectTypeMenuIcon name="pin" />
             </SidebarContextMenuIcon>
-            <CompactMenuItemText>{tWorkspace("documentMenu.pinSidebar")}</CompactMenuItemText>
+            <CompactMenuItemText>{t("objectTypeMenu.pinSidebar")}</CompactMenuItemText>
           </DropdownMenuItem>
           <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
-          <DropdownMenuItem
-            className={sidebarContextMenuItemClass}
-            onClick={openSettings}
-            disabled={!editable}
-          >
+          <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={openSettings}>
             <SidebarContextMenuIcon>
               <AppSidebarObjectTypeMenuIcon name="settings" />
             </SidebarContextMenuIcon>
-            <CompactMenuItemText>{tOverview("typeSettings")}</CompactMenuItemText>
+            <CompactMenuItemText>{t("documentMenu.typeSettings")}</CompactMenuItemText>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
+          <DropdownMenuItem className={sidebarContextMenuItemClass}>
+            <SidebarContextMenuIcon>
+              <AppSidebarObjectTypeMenuIcon name="import" />
+            </SidebarContextMenuIcon>
+            <CompactMenuItemText>{tWorkspace("documentMenu.import")}</CompactMenuItemText>
+            <DropdownMenuShortcut>Ctrl I</DropdownMenuShortcut>
           </DropdownMenuItem>
           {editable && (
             <>
@@ -1450,7 +1459,7 @@ function AppSidebarObjectTypeRow({
 
           <AppSidebarObjectTypeMenu
             objectType={objectType}
-            onOpen={() => onSelect({})}
+            onOpenObjectType={() => onSelect({})}
             onCreateEntity={onCreateEntity}
             onAction={onObjectTypeAction}
             onUpdate={onUpdate}
@@ -2453,8 +2462,11 @@ function AppSidebarCollectionMenu({
           </CollectionMenuIcon>
           <CompactMenuItemText>{t("documentMenu.duplicate")}</CompactMenuItemText>
         </DropdownMenuItem>
-        <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={action("delete")}>
-          <CollectionMenuIcon className="text-red-500 dark:text-red-400">
+        <DropdownMenuItem
+          className={sidebarContextMenuDestructiveItemClass}
+          onClick={action("delete")}
+        >
+          <CollectionMenuIcon className="text-[var(--destructive-menu-action)]">
             <AppSidebarSourceIcon name="trash" />
           </CollectionMenuIcon>
           <CompactMenuItemText>{t("documentMenu.deleteObject")}</CompactMenuItemText>
