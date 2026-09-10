@@ -89,7 +89,7 @@ describe("Online sync runner", () => {
       ownerUid: "user-a",
       fetcher: async (url, init) => {
         calls.push({ url: String(url), body: JSON.parse(String(init?.body)) });
-        return new Response(JSON.stringify({ writeResults: [{}] }), { status: 200 });
+        return Response.json({ writeResults: [{}], status: [{}] });
       },
     });
 

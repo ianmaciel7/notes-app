@@ -1,5 +1,6 @@
 import type { SyncMutationRecord } from "@/lib/spaces/space-types";
 import type { SyncBatchWriter } from "@/lib/sync/sync-engine";
+import { coalesceSyncMutations } from "@/lib/sync/sync-mutations";
 
 type FirestoreValue =
   | { nullValue: null }
@@ -10,6 +11,9 @@ type FirestoreValue =
   | { mapValue: { fields: Record<string, FirestoreValue> } };
 
 type Fetcher = typeof fetch;
+type FirestoreDocumentConfig = { projectId: string; databaseId: string; ownerUid?: string };
+const MAX_WRITES_PER_BATCH = 500;
+const FIRESTORE_REQUEST_TIMEOUT_MS = 30_000;
 
 export function toFirestoreValue(value: unknown): FirestoreValue {
   if (value === null || value === undefined) return { nullValue: null };
@@ -35,10 +39,7 @@ export function toFirestoreValue(value: unknown): FirestoreValue {
   return { stringValue: String(value) };
 }
 
-function documentName(
-  config: { projectId: string; databaseId: string; ownerUid?: string },
-  mutation: SyncMutationRecord,
-) {
+function documentName(config: FirestoreDocumentConfig, mutation: SyncMutationRecord) {
   const documentRoot = [`projects/${config.projectId}/databases/${config.databaseId}/documents`];
   if (config.ownerUid) {
     documentRoot.push("users", encodeURIComponent(config.ownerUid));
@@ -53,10 +54,7 @@ function documentName(
   ].join("/");
 }
 
-function mutationToWrite(
-  config: { projectId: string; databaseId: string; ownerUid?: string },
-  mutation: SyncMutationRecord,
-) {
+function mutationToWrite(config: FirestoreDocumentConfig, mutation: SyncMutationRecord) {
   const name = documentName(config, mutation);
   if (mutation.operation === "delete") return { delete: name };
   const payloadValue = toFirestoreValue(mutation.payload);
@@ -65,6 +63,39 @@ function mutationToWrite(
   }
   const fields = payloadValue.mapValue.fields;
   return { update: { name, fields } };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+async function assertBatchAcknowledged(response: Response, expectedWrites: number) {
+  if (!response.ok) {
+    throw new Error(`Firestore batchWrite failed with status ${response.status}.`);
+  }
+
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch {
+    throw new Error("Firestore batchWrite returned invalid JSON.");
+  }
+  if (
+    !isRecord(body) ||
+    !Array.isArray(body.status) ||
+    !Array.isArray(body.writeResults) ||
+    body.status.length !== expectedWrites ||
+    body.writeResults.length !== expectedWrites ||
+    !body.writeResults.every(isRecord)
+  ) {
+    throw new Error("Firestore batchWrite returned an incomplete acknowledgement.");
+  }
+
+  // Protobuf JSON may omit the default success code (0), leaving an empty object.
+  const accepted = body.status.every(
+    (status) => isRecord(status) && (status.code === undefined || status.code === 0),
+  );
+  if (!accepted) throw new Error("Firestore batchWrite rejected one or more writes.");
 }
 
 export function createFirestoreRestSyncWriter(input: {
@@ -76,31 +107,28 @@ export function createFirestoreRestSyncWriter(input: {
 }): SyncBatchWriter {
   const databaseId = input.databaseId ?? "(default)";
   const fetcher = input.fetcher ?? fetch;
+  const config = { projectId: input.projectId, databaseId, ownerUid: input.ownerUid };
 
   return {
     async commit(mutations: SyncMutationRecord[]) {
-      if (mutations.length === 0) return;
-      const response = await fetcher(
-        `https://firestore.googleapis.com/v1/projects/${input.projectId}/databases/${databaseId}/documents:batchWrite`,
-        {
-          method: "POST",
-          headers: {
-            authorization: `Bearer ${input.accessToken}`,
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            writes: mutations.map((mutation) =>
-              mutationToWrite(
-                { projectId: input.projectId, databaseId, ownerUid: input.ownerUid },
-                mutation,
-              ),
-            ),
-          }),
-        },
+      const writes = coalesceSyncMutations(mutations).map((mutation) =>
+        mutationToWrite(config, mutation),
       );
-
-      if (!response.ok) {
-        throw new Error(`Firestore batchWrite failed with status ${response.status}.`);
+      for (let offset = 0; offset < writes.length; offset += MAX_WRITES_PER_BATCH) {
+        const batch = writes.slice(offset, offset + MAX_WRITES_PER_BATCH);
+        const response = await fetcher(
+          `https://firestore.googleapis.com/v1/projects/${input.projectId}/databases/${databaseId}/documents:batchWrite`,
+          {
+            method: "POST",
+            headers: {
+              authorization: `Bearer ${input.accessToken}`,
+              "content-type": "application/json",
+            },
+            signal: AbortSignal.timeout(FIRESTORE_REQUEST_TIMEOUT_MS),
+            body: JSON.stringify({ writes: batch }),
+          },
+        );
+        await assertBatchAcknowledged(response, batch.length);
       }
     },
   };

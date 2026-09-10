@@ -68,7 +68,12 @@ describe("Authenticated remote sync push route handler", () => {
     const calls: Array<{ authorization?: string; body: unknown }> = [];
 
     const result = await handleAuthenticatedSyncPushRequest(
-      { mutations: [mutationFixture(), mutationFixture({ id: "sync-b", operation: "delete" })] },
+      {
+        mutations: [
+          mutationFixture(),
+          mutationFixture({ id: "sync-b", entityId: "entity-b", operation: "delete" }),
+        ],
+      },
       {
         headers: new Headers({ authorization: "Bearer id-token" }),
         verifier: verifier(),
@@ -79,7 +84,7 @@ describe("Authenticated remote sync push route handler", () => {
             authorization: new Headers(init?.headers).get("authorization") ?? undefined,
             body: JSON.parse(String(init?.body)),
           });
-          return new Response(JSON.stringify({ writeResults: [{}, {}] }), { status: 200 });
+          return Response.json({ writeResults: [{}, {}], status: [{}, {}] });
         },
       },
     );
@@ -99,7 +104,7 @@ describe("Authenticated remote sync push route handler", () => {
         },
         {
           delete:
-            "projects/demo-project/databases/(default)/documents/users/user-a/spaces/space-a/entities/entity-a",
+            "projects/demo-project/databases/(default)/documents/users/user-a/spaces/space-a/entities/entity-b",
         },
       ],
     });
@@ -152,7 +157,7 @@ describe("Authenticated remote sync push route handler", () => {
           calls.push({
             authorization: new Headers(init?.headers).get("authorization") ?? undefined,
           });
-          return new Response(JSON.stringify({ writeResults: [{}] }), { status: 200 });
+          return Response.json({ writeResults: [{}], status: [{}] });
         },
       },
     );

@@ -70,7 +70,7 @@ describe("Firestore REST sync writer", () => {
           authorization: new Headers(init?.headers).get("authorization") ?? undefined,
           body: JSON.parse(String(init?.body)),
         });
-        return new Response(JSON.stringify({ writeResults: [{}, {}] }), { status: 200 });
+        return Response.json({ writeResults: [{}, {}], status: [{}, {}] });
       },
     });
 
