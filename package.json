@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "open:workspace": "python scripts/open_workspace.py",
     "agentation": "set AGENTATION_STORE=memory&& node node_modules/agentation-mcp/dist/cli.js server",
     "build": "next build",
     "start": "next start",
