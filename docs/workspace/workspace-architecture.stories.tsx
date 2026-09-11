@@ -1,6 +1,6 @@
 import type { Story, StoryDefault } from "@ladle/react";
 
-import { ArchitectureDocViewer } from "../../src/components/architecture/architecture-doc-viewer";
+import { ArchitectureDocViewer } from "../../src/app/_components/architecture/architecture-doc-viewer";
 import mainContentArchitectureEn from "./workspace-main-content.architecture.en.md?raw";
 import mainContentArchitecturePtBr from "./workspace-main-content.architecture.pt-BR.md?raw";
 import sidePanelArchitecture from "./workspace-side-panel-content.architecture.md?raw";

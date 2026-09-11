@@ -54,7 +54,7 @@ This project maintains a security policy in [SECURITY.md](./SECURITY.md). All AI
   - **Cloud Firestore**: Background sync with Last-Write-Wins (LWW) conflict resolution.
 - **SRS Engine**: Modern FSRS (Free Spaced Repetition Scheduler) algorithm in `src/lib/srs/fsrs.ts`. Supports 4 rating responses (`Again=1`, `Hard=2`, `Good=3`, `Easy=4`) and exam burndown calculation (`DailyNewQuota = ceil(Unlearned / (DaysRemaining - BufferDays))`).
 - **Flashcard/SRS UI Data Rule**: Components that display or review flashcards must consume real Dexie-backed workspace data (`useLiveQuery`, `useSpaceData`, or Space repository APIs) and persist reviews through repository methods. Do not ship mock flashcard queues or local-only fake review state.
-- **Study Object Type Visibility Rule**: `flashcard` and `study_goal` are required built-in study object types. Any UI that lists built-in/basic/creatable object types must include both, including the Add Object Type modal. Keep their schema/icon/label sources synchronized across `src/lib/space-object-types.ts`, `src/components/object-icons.tsx`, and `src/messages/*.json`.
+- **Study Object Type Visibility Rule**: `flashcard` and `study_goal` are required built-in study object types. Any UI that lists built-in/basic/creatable object types must include both, including the Add Object Type modal. Keep their schema/icon/label sources synchronized across `src/lib/space-object-types.ts`, `src/app/_components/objects/object-icons.tsx`, and `src/messages/*.json`.
 - **AI Gateway & Card Generation**:
   - Server Route Handler at `/api/ai/generate` querying Google Gemini 2.0 Flash / Groq LLMs.
   - Generates structured JSON schema with verbatim `exactQuote`, `cardType`, `front`, `back`.
@@ -83,7 +83,7 @@ This project maintains a security policy in [SECURITY.md](./SECURITY.md). All AI
 - **Prefer evidence over memory**: when a parity issue is reported, compare against the live Capacities UI, pasted HTML/CSS, screenshots, or archived evidence before changing implementation.
 - **Use Graphify for architecture context** before broad or cross-cutting edits. Run `graphify query "<question>"` for targeted questions, `graphify explain "<node>"` for a component/module, `graphify path "<A>" "<B>"` for dependency paths, and `graphify update .` after meaningful source changes so `graphify-out/graph.json`, `graphify-out/graph.html`, and `graphify-out/GRAPH_REPORT.md` remain current.
 - **Keep Graphify merge support active**. `graphify hook status` should report post-commit and post-checkout hooks installed and merge driver registered for `graphify-out/graph.json`.
-- **Keep icon tone sources synchronized**. Object type icon tone changes must update both `src/lib/space-object-types.ts` and `src/components/object-icons.tsx`; otherwise the modal, sidebar, and command palette can drift.
+- **Keep icon tone sources synchronized**. Object type icon tone changes must update both `src/lib/space-object-types.ts` and `src/app/_components/objects/object-icons.tsx`; otherwise the modal, sidebar, and command palette can drift.
 
 ## 4. Installed Agent Skills Reference
 When working on specific domains, leverage the installed skills in `.agents/skills/`:

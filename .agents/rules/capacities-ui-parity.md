@@ -15,7 +15,7 @@ When building the 3-Pane workspace mirroring Capacities, follow the architectura
 
 ## 2. Centralized Object Identity & Icons
 
-- All object type icons and tones must be managed through a central registry (`src/components/object-icons.tsx`).
+- All object type icons and tones must be managed through a central registry (`src/app/_components/objects/object-icons.tsx`).
 - The same object type must render identical icons and color tones across sidebar, tabs, search palettes, and cards.
 - Do not paste ad hoc SVGs or one-off icon replacements in feature components.
 

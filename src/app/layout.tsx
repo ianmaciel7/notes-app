@@ -3,10 +3,10 @@ import Script from "next/script";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { InteractionSoundTools } from "@/components/interaction-sounds";
-import { LocaleStorageSync } from "@/components/locale-storage-sync";
-import { NuqsProvider } from "@/components/nuqs-provider";
-import { ThemeProvider } from "@/components/theme-provider";
+import { InteractionSoundTools } from "@/app/_providers/interaction-sounds";
+import { LocaleStorageSync } from "@/app/_providers/locale-storage-sync";
+import { NuqsProvider } from "@/app/_providers/nuqs-provider";
+import { ThemeProvider } from "@/app/_providers/theme-provider";
 import { InteractionProvider } from "@/components/ui/interaction-provider";
 import { resolveServerLocale } from "@/lib/i18n-locale";
 

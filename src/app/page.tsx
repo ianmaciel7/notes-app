@@ -12,21 +12,21 @@ import {
   AppShellSidePanel,
   AppShellSurface,
   AppShellWorkspace,
-} from "@/components/app-shell";
+} from "@/app/_components/workspace/app-shell";
 import {
   WorkspaceNewContentDialogController,
   WorkspaceSidebar,
-} from "@/components/app-sidebar-primary-actions-command-dialog";
-import { FocusModeProvider } from "@/components/focus-mode-provider";
+} from "@/app/_components/workspace/app-sidebar-primary-actions-command-dialog";
+import { FocusModeProvider } from "@/app/_components/workspace/focus-mode-provider";
 import {
   WorkspaceMainHeader,
   WorkspaceProvider,
   WorkspaceSidePanelHeader,
-} from "@/components/space-controller";
+} from "@/app/_components/workspace/space-controller";
 import {
   WorkspaceMainContent,
   WorkspaceSidePanelContent,
-} from "@/components/workspace-main-content";
+} from "@/app/_components/workspace/workspace-main-content";
 
 export default function HomePage() {
   return (

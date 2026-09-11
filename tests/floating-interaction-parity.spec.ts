@@ -6,8 +6,8 @@ const read = (file: string) => fs.readFileSync(path.join(process.cwd(), file), "
 
 test("active control hints never use native title tooltips", () => {
   const sources = [
-    "src/components/app-header-tabs.tsx",
-    "src/components/app-sidebar-floating-nav.tsx",
+    "src/app/_components/workspace/app-header-tabs.tsx",
+    "src/app/_components/workspace/app-sidebar-floating-nav.tsx",
     "src/components/ui/sidebar.tsx",
   ];
 
@@ -18,7 +18,7 @@ test("active control hints never use native title tooltips", () => {
 });
 
 test("space switcher uses a standard tooltip instead of a HoverCard timer", () => {
-  const source = read("src/components/app-sidebar.tsx");
+  const source = read("src/app/_components/workspace/app-sidebar.tsx");
 
   expect(source).not.toContain("hintTimerRef");
   expect(source).not.toContain("hintOpen");
@@ -28,7 +28,7 @@ test("space switcher uses a standard tooltip instead of a HoverCard timer", () =
 });
 
 test("tab actions use explicit tooltips and tab previews delegate timing to PreviewCard", () => {
-  const source = read("src/components/app-header-tabs.tsx");
+  const source = read("src/app/_components/workspace/app-header-tabs.tsx");
 
   expect(source).not.toContain("TAB_PREVIEW_DELAY");
   expect(source).not.toContain("previewTimerRef");
@@ -39,8 +39,8 @@ test("tab actions use explicit tooltips and tab previews delegate timing to Prev
 });
 
 test("side-panel and shell icon controls use the shared explicit tooltip contract", () => {
-  const sidePanel = read("src/components/app-side-panel-header.tsx");
-  const shell = read("src/components/app-shell.tsx");
+  const sidePanel = read("src/app/_components/workspace/app-side-panel-header.tsx");
+  const shell = read("src/app/_components/workspace/app-shell.tsx");
 
   expect(sidePanel).not.toContain("TooltipContent side={placement}");
   expect(sidePanel).toContain("tooltip={{ text: label, side: placement }}");
@@ -48,7 +48,7 @@ test("side-panel and shell icon controls use the shared explicit tooltip contrac
 });
 
 test("help and footer hints use the shared tooltip contract instead of native or local wrappers", () => {
-  const source = read("src/components/app-sidebar-floating-nav.tsx");
+  const source = read("src/app/_components/workspace/app-sidebar-floating-nav.tsx");
 
   expect(source).not.toContain("title={tooltip}");
   expect(source).not.toContain("function AppSidebarFooterTooltip");

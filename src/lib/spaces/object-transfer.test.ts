@@ -1,5 +1,5 @@
 import { afterEach, expect, it, vi } from "vitest";
-import { objectEntityFixture } from "@/components/objects/object-view-fixtures";
+import { objectEntityFixture } from "@/app/_components/objects/object-view-fixtures";
 import { copyWorkspaceText, entityToMarkdown } from "@/lib/spaces/object-transfer";
 
 afterEach(() => vi.unstubAllGlobals());

@@ -2,6 +2,8 @@
 trigger: glob
 globs:
   - "src/components/**/*.tsx"
+  - "src/app/_components/**/*.tsx"
+  - "src/app/**/_components/**/*.tsx"
 description: >-
   Mandatory shadcn-first standards for all UI components and subcomponents:
   Base UI, base-nova, composition, data-slot, semantic theme tokens,

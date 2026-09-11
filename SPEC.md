@@ -439,10 +439,10 @@ All paths below refer to the audit commit in section 1.1.
 | --- | --- |
 | `src/lib/db.ts` | All declared tables, compound keys, and versions 1/2. |
 | `src/lib/spaces/space-types.ts` | Space-scoped record shapes, including collection/tag/relation/media/trash/sync metadata. |
-| `src/components/workspace-main-content.tsx` | Search, calendar, task and explorer action panels; object/type dispatch; pending context-menu action mapping. |
-| `src/components/workspace-object-data-view.tsx` | Only `cards` and `list` layouts; grouping by none or tag; object preview rendering. |
-| `src/components/workspace-object-renderer.tsx` | Generic read-only object rendering, weblink specialization, stored list preferences, and always-empty collection/query overview sections. |
-| `src/components/workspace-side-panel-renderer.tsx` | Graph, backlinks, objects-inside, related-content, AI-chat, and local-query labels all resolve to a pending renderer. |
+| `src/app/_components/workspace/workspace-main-content.tsx` | Search, calendar, task and explorer action panels; object/type dispatch; pending context-menu action mapping. |
+| `src/app/_components/workspace/workspace-object-data-view.tsx` | Only `cards` and `list` layouts; grouping by none or tag; object preview rendering. |
+| `src/app/_components/workspace/workspace-object-renderer.tsx` | Generic read-only object rendering, weblink specialization, stored list preferences, and always-empty collection/query overview sections. |
+| `src/app/_components/workspace/workspace-side-panel-renderer.tsx` | Graph, backlinks, objects-inside, related-content, AI-chat, and local-query labels all resolve to a pending renderer. |
 | `AGENTS.md`, `SECURITY.md`, `ARCHITECTURE.md`, previous `DECISIONS.md` and `SPEC.md` | Existing product scope, security constraints, and previously documented backend contracts. |
 
 The repository tree and component presence were also inspected. Tree entries were not treated as proof that every module or test was read or executed.

@@ -20,7 +20,9 @@
       }
     ],
     "paths": {
-      "@/components/app-sidebar-overview": ["./src/components/app-sidebar-overview-parity.tsx"],
+      "@/app/_components/workspace/app-sidebar-overview": [
+        "./src/app/_components/workspace/app-sidebar-overview-parity.tsx"
+      ],
       "@/*": ["./src/*"]
     }
   },

@@ -18,7 +18,7 @@ describe("hasRelevantQualityChanges", () => {
   test("treats source, tests, lockfiles, and tool configuration as relevant", () => {
     expect(
       hasRelevantQualityChanges([
-        "src/components/app-sidebar.tsx",
+        "src/app/_components/workspace/app-sidebar.tsx",
         "tests/sidebar.spec.ts",
         "pnpm-lock.yaml",
         ".cursor/hooks.json",

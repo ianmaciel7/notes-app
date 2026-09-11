@@ -20,7 +20,7 @@ Do not overwrite concurrent dev changes. Temporary audit workflows are not produ
 - [x] Implement scoped transactional domain operations in small modules; preserve schema IDs.
   Assert rollback leaves original data intact when a queued write fails.
 - [x] Add edit controls and specialized task/flashcard/goal behavior using existing primitives.
-  Files: `src/components/objects/detail/`, `src/components/objects/types/`.
+  Files: `src/app/_components/objects/detail/`, `src/app/_components/objects/types/`.
   Assert saved data survives a new database connection and reviews change SRS state.
 - [x] Add tab-target regression tests; resolve collection and duplicated tabs without placeholders.
   Files: workspace main content and scoped tab target model.

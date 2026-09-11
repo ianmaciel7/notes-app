@@ -8,34 +8,34 @@ Dynamic user-defined types use `CustomObjectList` and `CustomObjectDetail` with 
 
 | Type id | List | Detail | Directory |
 | --- | --- | --- | --- |
-| `page` | `PageList` | `PageDetail` | `src/components/objects/types/page/` |
-| `table` | `TableList` | `TableDetail` | `src/components/objects/types/table/` |
-| `task` | `TaskList` | `TaskDetail` | `src/components/objects/types/task/` |
-| `flashcard` | `FlashcardList` | `FlashcardDetail` | `src/components/objects/types/flashcard/` |
-| `study_goal` | `StudyGoalList` | `StudyGoalDetail` | `src/components/objects/types/study-goal/` |
-| `weblink` | `WeblinkList` | `WeblinkDetail` | `src/components/objects/types/weblink/` |
-| `image` | `ImageList` | `ImageDetail` | `src/components/objects/types/image/` |
-| `pdf` | `PdfList` | `PdfDetail` | `src/components/objects/types/pdf/` |
-| `audio` | `AudioList` | `AudioDetail` | `src/components/objects/types/audio/` |
-| `file` | `FileList` | `FileDetail` | `src/components/objects/types/file/` |
-| `tweet` | `TweetList` | `TweetDetail` | `src/components/objects/types/tweet/` |
-| `ai-chat` | `AiChatList` | `AiChatDetail` | `src/components/objects/types/ai-chat/` |
-| `tag` | `TagList` | `TagDetail` | `src/components/objects/types/tag/` |
-| `query` | `QueryList` | `QueryDetail` | `src/components/objects/types/query/` |
-| `book` | `BookList` | `BookDetail` | `src/components/objects/types/book/` |
-| `person` | `PersonList` | `PersonDetail` | `src/components/objects/types/person/` |
-| `area` | `AreaList` | `AreaDetail` | `src/components/objects/types/area/` |
-| `meeting` | `MeetingList` | `MeetingDetail` | `src/components/objects/types/meeting/` |
-| `definition` | `DefinitionList` | `DefinitionDetail` | `src/components/objects/types/definition/` |
-| `idea` | `IdeaList` | `IdeaDetail` | `src/components/objects/types/idea/` |
-| `place` | `PlaceList` | `PlaceDetail` | `src/components/objects/types/place/` |
-| `project` | `ProjectList` | `ProjectDetail` | `src/components/objects/types/project/` |
-| `organization` | `OrganizationList` | `OrganizationDetail` | `src/components/objects/types/organization/` |
-| `media` | `MediaList` | `MediaDetail` | `src/components/objects/types/media/` |
-| `travel` | `TravelList` | `TravelDetail` | `src/components/objects/types/travel/` |
-| `quote` | `QuoteList` | `QuoteDetail` | `src/components/objects/types/quote/` |
-| `atomic-note` | `AtomicNoteList` | `AtomicNoteDetail` | `src/components/objects/types/atomic-note/` |
-| `Dynamic / unknown` | `CustomObjectList` | `CustomObjectDetail` | `src/components/objects/types/custom-object/` |
+| `page` | `PageList` | `PageDetail` | `src/app/_components/objects/types/page/` |
+| `table` | `TableList` | `TableDetail` | `src/app/_components/objects/types/table/` |
+| `task` | `TaskList` | `TaskDetail` | `src/app/_components/objects/types/task/` |
+| `flashcard` | `FlashcardList` | `FlashcardDetail` | `src/app/_components/objects/types/flashcard/` |
+| `study_goal` | `StudyGoalList` | `StudyGoalDetail` | `src/app/_components/objects/types/study-goal/` |
+| `weblink` | `WeblinkList` | `WeblinkDetail` | `src/app/_components/objects/types/weblink/` |
+| `image` | `ImageList` | `ImageDetail` | `src/app/_components/objects/types/image/` |
+| `pdf` | `PdfList` | `PdfDetail` | `src/app/_components/objects/types/pdf/` |
+| `audio` | `AudioList` | `AudioDetail` | `src/app/_components/objects/types/audio/` |
+| `file` | `FileList` | `FileDetail` | `src/app/_components/objects/types/file/` |
+| `tweet` | `TweetList` | `TweetDetail` | `src/app/_components/objects/types/tweet/` |
+| `ai-chat` | `AiChatList` | `AiChatDetail` | `src/app/_components/objects/types/ai-chat/` |
+| `tag` | `TagList` | `TagDetail` | `src/app/_components/objects/types/tag/` |
+| `query` | `QueryList` | `QueryDetail` | `src/app/_components/objects/types/query/` |
+| `book` | `BookList` | `BookDetail` | `src/app/_components/objects/types/book/` |
+| `person` | `PersonList` | `PersonDetail` | `src/app/_components/objects/types/person/` |
+| `area` | `AreaList` | `AreaDetail` | `src/app/_components/objects/types/area/` |
+| `meeting` | `MeetingList` | `MeetingDetail` | `src/app/_components/objects/types/meeting/` |
+| `definition` | `DefinitionList` | `DefinitionDetail` | `src/app/_components/objects/types/definition/` |
+| `idea` | `IdeaList` | `IdeaDetail` | `src/app/_components/objects/types/idea/` |
+| `place` | `PlaceList` | `PlaceDetail` | `src/app/_components/objects/types/place/` |
+| `project` | `ProjectList` | `ProjectDetail` | `src/app/_components/objects/types/project/` |
+| `organization` | `OrganizationList` | `OrganizationDetail` | `src/app/_components/objects/types/organization/` |
+| `media` | `MediaList` | `MediaDetail` | `src/app/_components/objects/types/media/` |
+| `travel` | `TravelList` | `TravelDetail` | `src/app/_components/objects/types/travel/` |
+| `quote` | `QuoteList` | `QuoteDetail` | `src/app/_components/objects/types/quote/` |
+| `atomic-note` | `AtomicNoteList` | `AtomicNoteDetail` | `src/app/_components/objects/types/atomic-note/` |
+| `Dynamic / unknown` | `CustomObjectList` | `CustomObjectDetail` | `src/app/_components/objects/types/custom-object/` |
 
 Each directory contains `<slug>-list.tsx` and `<slug>-detail.tsx`.
 Weblinks additionally contain `weblink-heading.tsx` for safe external navigation and copying.
