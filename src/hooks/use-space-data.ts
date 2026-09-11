@@ -5,46 +5,18 @@ import { useTranslations } from "next-intl";
 import * as React from "react";
 
 import { presentWorkspaceObjectType } from "@/components/space-object-type-presenter";
+import { useBootstrapSpace } from "@/hooks/use-bootstrap-space";
 import { db } from "@/lib/db";
-import { bootstrapSpace } from "@/lib/spaces/bootstrap-space";
 import { groupEntitiesByObjectType } from "@/lib/spaces/space-projections";
-import {
-  createSpaceRepository,
-  OBJECT_TYPE_ORDER_SETTING_KEY,
-} from "@/lib/spaces/space-repository";
-import {
-  ACTIVE_SPACE_SETTING_ID,
-  type SpaceCollectionRecord,
-  type SpaceEntityRecord,
-  type SpaceObjectTypeRecord,
-  type SpaceRecord,
-  type SpaceTagRecord,
-  type SpaceTrashRecord,
-} from "@/lib/spaces/space-types";
+import { createSpaceRepository } from "@/lib/spaces/space-repository";
+import { readSpaceSnapshot } from "@/lib/spaces/space-snapshot";
+import { ACTIVE_SPACE_SETTING_ID, type SpaceRecord } from "@/lib/spaces/space-types";
 
 export function useSpaceData() {
   const objectTypeName = useTranslations("workspace.objectTypeStudio.objectTypes");
   const objectTypePluralName = useTranslations("workspace.objectTypeStudio.objectTypePlurals");
   const repository = React.useMemo(() => createSpaceRepository(db), []);
-  const [bootstrapError, setBootstrapError] = React.useState<Error | null>(null);
-  const [bootstrapped, setBootstrapped] = React.useState(false);
-
-  React.useEffect(() => {
-    let cancelled = false;
-    void bootstrapSpace(db)
-      .then(() => {
-        if (!cancelled) setBootstrapped(true);
-      })
-      .catch((error: unknown) => {
-        if (!cancelled) {
-          setBootstrapError(error instanceof Error ? error : new Error(String(error)));
-          setBootstrapped(true);
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const { bootstrapped, bootstrapError } = useBootstrapSpace();
 
   const spacesQuery = useLiveQuery<SpaceRecord[]>(
     () => db.spaces.orderBy("sortOrder").toArray(),
@@ -56,52 +28,17 @@ export function useSpaceData() {
   );
   const activeSpaceId = activeSpaceIdQuery ?? null;
 
-  const objectTypeRecordsQuery = useLiveQuery<SpaceObjectTypeRecord[]>(
-    async () =>
-      activeSpaceId ? await db.objectTypes.where("spaceId").equals(activeSpaceId).toArray() : [],
-    [activeSpaceId],
-  );
-  const entitiesQuery = useLiveQuery<SpaceEntityRecord[]>(
-    async () =>
-      activeSpaceId ? await db.entities.where("spaceId").equals(activeSpaceId).toArray() : [],
-    [activeSpaceId],
-  );
-  const collectionsQuery = useLiveQuery<SpaceCollectionRecord[]>(
-    async () =>
-      activeSpaceId ? await db.collections.where("spaceId").equals(activeSpaceId).toArray() : [],
-    [activeSpaceId],
-  );
-  const tagsQuery = useLiveQuery<SpaceTagRecord[]>(
-    async () =>
-      activeSpaceId ? await db.tags.where("spaceId").equals(activeSpaceId).toArray() : [],
-    [activeSpaceId],
-  );
-  const trashQuery = useLiveQuery<SpaceTrashRecord[]>(
-    async () =>
-      activeSpaceId ? await db.trash.where("spaceId").equals(activeSpaceId).toArray() : [],
-    [activeSpaceId],
-  );
-  const pinnedEntityIdsQuery = useLiveQuery<string[]>(
-    async () => (activeSpaceId ? await repository.listPinnedEntityIds(activeSpaceId) : []),
-    [activeSpaceId, repository],
-  );
-  const objectTypeOrderQuery = useLiveQuery<unknown>(
-    async () =>
-      activeSpaceId
-        ? await repository.getSpaceSetting(activeSpaceId, OBJECT_TYPE_ORDER_SETTING_KEY)
-        : null,
-    [activeSpaceId, repository],
-  );
-
+  const snapshotQuery = useLiveQuery(() => readSpaceSnapshot(db, activeSpaceId), [activeSpaceId]);
+  const snapshot = snapshotQuery?.spaceId === activeSpaceId ? snapshotQuery : undefined;
   const spaces = spacesQuery ?? [];
-  const objectTypeRecords = objectTypeRecordsQuery ?? [];
-  const entities = entitiesQuery ?? [];
-  const collections = collectionsQuery ?? [];
-  const tags = tagsQuery ?? [];
-  const trash = trashQuery ?? [];
-  const pinnedEntityIds = pinnedEntityIdsQuery ?? [];
-  const objectTypeOrder = Array.isArray(objectTypeOrderQuery)
-    ? objectTypeOrderQuery.filter((id): id is string => typeof id === "string")
+  const objectTypeRecords = snapshot?.objectTypes ?? [];
+  const entities = snapshot?.entities ?? [];
+  const collections = snapshot?.collections ?? [];
+  const tags = snapshot?.tags ?? [];
+  const trash = snapshot?.trash ?? [];
+  const pinnedEntityIds = snapshot?.pinnedEntityIds ?? [];
+  const objectTypeOrder = Array.isArray(snapshot?.objectTypeOrder)
+    ? snapshot.objectTypeOrder.filter((id): id is string => typeof id === "string")
     : [];
 
   const counts = React.useMemo(() => groupEntitiesByObjectType(entities), [entities]);
@@ -142,7 +79,7 @@ export function useSpaceData() {
 
   return {
     repository,
-    ready: bootstrapped && !bootstrapError && activeSpaceId !== null,
+    ready: bootstrapped && !bootstrapError && Boolean(snapshot),
     error: bootstrapError,
     spaces: uiSpaces,
     spaceId: activeSpaceId,

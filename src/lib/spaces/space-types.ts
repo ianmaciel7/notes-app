@@ -77,6 +77,8 @@ export type SpaceTrashRecord = {
   typeLabel: string;
   trashedAt: string;
   purgeAfter: string;
+  entitySnapshot?: SpaceEntityRecord;
+  relationSnapshots?: SpaceRelationRecord[];
 };
 
 export type SyncMutationRecord = {

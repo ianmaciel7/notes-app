@@ -7,6 +7,7 @@ import {
   ObjectDetailHeader,
 } from "@/components/objects/object-detail";
 import type { ObjectTypeDetailProps } from "@/components/objects/object-view-types";
+import { StudyGoalProgress } from "@/components/objects/types/study-goal/study-goal-progress";
 
 export function StudyGoalDetail(props: ObjectTypeDetailProps) {
   return (
@@ -15,6 +16,7 @@ export function StudyGoalDetail(props: ObjectTypeDetailProps) {
         <ObjectHeading {...props} />
       </ObjectDetailHeader>
       <ObjectDetailContent>
+        <StudyGoalProgress entity={props.entity} />
         <ObjectBody entity={props.entity} />
         <ObjectProperties entity={props.entity} />
       </ObjectDetailContent>

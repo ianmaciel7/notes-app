@@ -85,3 +85,35 @@ describe("cyclomatic complexity gate", () => {
     }
   });
 });
+
+test("reports malformed TypeScript rather than silently accepting it", async () => {
+  const root = await mkdtemp(join(tmpdir(), "complexity-syntax "));
+  try {
+    await writeFile(join(root, "invalid.ts"), "export function broken( {");
+    await expect(
+      execFileAsync(process.execPath, [SCRIPT_PATH, "--root", root]),
+    ).rejects.toMatchObject({ code: 1, stdout: expect.stringContaining("could not be analyzed") });
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("counts nested callbacks independently using their original source locations", async () => {
+  const root = await mkdtemp(join(tmpdir(), "complexity-nested "));
+  try {
+    await writeFile(
+      join(root, "nested.ts"),
+      `export function outer() {
+  return (value: number) => { if (value > 0) return 1; if (value < 0) return -1; return 0; };
+}`,
+    );
+    await expect(
+      execFileAsync(process.execPath, [SCRIPT_PATH, "--root", root, "--max", "2"]),
+    ).rejects.toMatchObject({
+      code: 1,
+      stdout: expect.stringContaining("nested.ts:2 <anonymous> cyclomatic=3"),
+    });
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});

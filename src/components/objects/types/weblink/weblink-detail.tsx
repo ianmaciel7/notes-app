@@ -4,6 +4,7 @@ import {
   getWeblinkUrl,
   hasObjectBody,
 } from "@/components/objects/detail/object-detail-model";
+import { ObjectHeading } from "@/components/objects/detail/object-heading";
 import { ObjectPropertyValues } from "@/components/objects/detail/object-properties";
 import {
   ObjectDetail,
@@ -12,7 +13,6 @@ import {
 } from "@/components/objects/object-detail";
 import type { ObjectTypeDetailProps } from "@/components/objects/object-view-types";
 import { WeblinkHeading } from "@/components/objects/types/weblink/weblink-heading";
-import { PendingImplementation } from "@/components/pending-implementation";
 import { WorkspaceEmptyState } from "@/components/space-surface";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
@@ -42,12 +42,17 @@ export function WeblinkDetail({ entity }: ObjectTypeDetailProps) {
   const url = getWeblinkUrl(entity);
   if (!url) {
     return (
-      <PendingImplementation
-        area="Weblink"
-        description="Add a URL property to render this saved link."
-        name="Weblink URL"
-        variant="workspace"
-      />
+      <ObjectDetail data-object-view="weblink-detail">
+        <ObjectDetailHeader>
+          <ObjectHeading entity={entity} tabName={entity.title} />
+        </ObjectDetailHeader>
+        <ObjectDetailContent>
+          <WorkspaceEmptyState
+            title="Link sem URL"
+            description="Use Editar objeto para salvar uma URL HTTP ou HTTPS."
+          />
+        </ObjectDetailContent>
+      </ObjectDetail>
     );
   }
   return (

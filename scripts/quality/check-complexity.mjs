@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import ts from "typescript";
-import escomplex from "typhonjs-escomplex";
+import { analyzeFunctions } from "./cyclomatic-metrics.mjs";
 
 const DEFAULT_MAX = 10;
 const DEFAULT_ROOT = "src";
@@ -29,10 +28,9 @@ const parseFailures = [];
 
 for (const file of files) {
   const source = await readFile(file, "utf8");
-  const analyzableSource = transpileForAnalysis(source, file);
 
   try {
-    const report = escomplex.analyzeModule(analyzableSource, { commonjs: true });
+    const report = analyzeFunctions(source, file);
     for (const method of report.methods ?? []) {
       if (method.cyclomatic > max) {
         violations.push({
@@ -129,28 +127,6 @@ function parseArgs(args) {
   }
 
   return parsed;
-}
-
-function transpileForAnalysis(source, file) {
-  const result = ts.transpileModule(source, {
-    compilerOptions: {
-      jsx: file.endsWith(".tsx") ? ts.JsxEmit.ReactJSX : ts.JsxEmit.Preserve,
-      module: ts.ModuleKind.ESNext,
-      target: ts.ScriptTarget.ES2022,
-    },
-    fileName: file,
-    reportDiagnostics: true,
-  });
-
-  const diagnostics = result.diagnostics ?? [];
-  if (diagnostics.length > 0) {
-    const message = diagnostics
-      .map((diagnostic) => ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"))
-      .join("\n");
-    throw new Error(message);
-  }
-
-  return result.outputText;
 }
 
 function formatPath(file) {

@@ -121,7 +121,7 @@ export const DataTableSliderFilter = <TData extends RowData>({
   }, [toDraft, column, max, range]);
 
   const onSliderValueChange = React.useCallback(
-    (value: RangeValue) => {
+    (value: number | readonly number[]) => {
       if (Array.isArray(value) && value.length === 2) {
         setFromDraft(null);
         setToDraft(null);

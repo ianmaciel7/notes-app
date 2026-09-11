@@ -64,7 +64,7 @@ function WorkspaceCardPropertyChip({
       className={cn(
         "inline-flex max-w-full min-w-0 items-center rounded-[0.475em] border px-[0.49em] py-[0.2em] leading-[1.3]",
         kind === "collection"
-          ? "border-[var(--app-border-front)] bg-[color-mix(in_srgb,var(--app-bg-el)_30%,var(--app-bg-base))] text-[var(--app-text-secondary)]"
+          ? "border-[var(--app-border-front)] bg-muted/30 text-[var(--app-text-secondary)]"
           : "border-[var(--app-tag-bg-lime)] bg-[var(--app-tag-bg-lime)] text-[var(--app-tag-text-lime)]",
       )}
     >

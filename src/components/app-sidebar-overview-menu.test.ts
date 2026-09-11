@@ -150,7 +150,10 @@ it("persists object type ordering in the active space", () => {
 
   expect(controllerSource).toContain("OBJECT_TYPE_ORDER_SETTING_KEY");
   expect(controllerSource).toContain("setSpaceSetting(spaceId, OBJECT_TYPE_ORDER_SETTING_KEY");
-  expect(dataSource).toContain("getSpaceSetting(activeSpaceId, OBJECT_TYPE_ORDER_SETTING_KEY)");
+  expect(dataSource).toContain("readSpaceSnapshot(db, activeSpaceId)");
+  expect(readSource("lib/spaces/space-snapshot.ts")).toContain(
+    "getSpaceSetting(spaceId, OBJECT_TYPE_ORDER_SETTING_KEY)",
+  );
 });
 
 it("renders delete object menu actions with only the trash icon in the destructive color", () => {

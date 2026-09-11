@@ -1,11 +1,15 @@
 "use client";
 
 import { Copy, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { ObjectActions } from "@/components/objects/detail/object-actions";
 import { readStringProperty } from "@/components/objects/detail/object-detail-model";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { copyWorkspaceText } from "@/lib/spaces/object-transfer";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 export function WeblinkHeading({ entity, url }: { entity: SpaceEntityRecord; url: string }) {
+  const [copyError, setCopyError] = useState<string | null>(null);
   const description = readStringProperty(entity, ["description", "Description", "summary"]);
   return (
     <>
@@ -25,25 +29,36 @@ export function WeblinkHeading({ entity, url }: { entity: SpaceEntityRecord; url
           </a>
         </div>
         <div className="flex items-center gap-2">
+          <ObjectActions entity={entity} />
           <a
             className={buttonVariants({ variant: "outline" })}
             href={url}
             rel="noopener noreferrer"
             target="_blank"
           >
-            <ExternalLink className="size-4" aria-hidden="true" />Open
+            <ExternalLink className="size-4" aria-hidden="true" />
+            Open
           </a>
           <Button
             type="button"
             variant="secondary"
             onClick={() => {
-              void navigator.clipboard?.writeText(url).catch(() => undefined);
+              setCopyError(null);
+              void copyWorkspaceText(url).catch((error: unknown) =>
+                setCopyError(error instanceof Error ? error.message : String(error)),
+              );
             }}
           >
-            <Copy className="size-4" aria-hidden="true" />Copy URL
+            <Copy className="size-4" aria-hidden="true" />
+            Copy URL
           </Button>
         </div>
       </div>
+      {copyError && (
+        <p role="alert" className="text-sm text-destructive">
+          {copyError}
+        </p>
+      )}
       {description && (
         <p className="mt-5 max-w-2xl text-sm text-[var(--app-text-secondary)]">{description}</p>
       )}

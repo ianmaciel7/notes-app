@@ -1,5 +1,5 @@
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
-import { selectDueFlashcards } from "@/lib/srs/flashcard-review";
+import { isFlashcardReviewEntity, selectDueFlashcards } from "@/lib/srs/flashcard-review";
 import { estimatePacingStatus, type PacingStatus, parseIsoOrNow } from "@/lib/srs/fsrs";
 import type { StudyGoalEntity } from "@/types/schema";
 
@@ -37,18 +37,25 @@ function daysBetween(start: Date, end: Date) {
 export function selectStudyGoalDashboard(
   entities: readonly SpaceEntityRecord[],
   now: Date = new Date(),
+  goalId?: string,
 ): StudyGoalDashboard | null {
-  const goal = entities.filter(isStudyGoalEntity).toSorted((left, right) => {
-    return (
-      parseIsoOrNow(left.targetExamDate).getTime() - parseIsoOrNow(right.targetExamDate).getTime()
-    );
-  })[0];
+  const goal = entities
+    .filter(isStudyGoalEntity)
+    .filter((item) => !goalId || item.id === goalId)
+    .toSorted((left, right) => {
+      return (
+        parseIsoOrNow(left.targetExamDate).getTime() - parseIsoOrNow(right.targetExamDate).getTime()
+      );
+    })[0];
   if (!goal) return null;
 
-  const flashcards = entities.filter(
-    (entity) =>
-      entity.type === "flashcard" && typeof entity.srs === "object" && entity.srs !== null,
-  );
+  const flashcards = entities
+    .filter(isFlashcardReviewEntity)
+    .filter(
+      (card) =>
+        card.spaceId === goal.spaceId &&
+        (!goal.targetFileIds?.length || goal.targetFileIds.includes(card.fileId)),
+    );
   const learnedCards = flashcards.filter((card) => (card.srs?.repetitionCount ?? 0) > 0).length;
   const totalCards = Math.max(goal.totalCards || 0, flashcards.length);
   const unlearnedCards = Math.max(0, totalCards - learnedCards);
@@ -70,7 +77,7 @@ export function selectStudyGoalDashboard(
     totalCards,
     learnedCards,
     unlearnedCards,
-    dueCards: selectDueFlashcards(entities, now).length,
+    dueCards: selectDueFlashcards(flashcards, now).length,
     daysRemaining: pacing.daysRemaining,
     expectedCompleted: pacing.expectedCompleted,
     dailyNewCardQuota: pacing.dailyNewCardQuota,

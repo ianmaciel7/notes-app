@@ -7,6 +7,7 @@ import {
   ObjectDetailHeader,
 } from "@/components/objects/object-detail";
 import type { ObjectTypeDetailProps } from "@/components/objects/object-view-types";
+import { TaskStatus } from "@/components/objects/types/task/task-status";
 
 export function TaskDetail(props: ObjectTypeDetailProps) {
   return (
@@ -15,6 +16,7 @@ export function TaskDetail(props: ObjectTypeDetailProps) {
         <ObjectHeading {...props} />
       </ObjectDetailHeader>
       <ObjectDetailContent>
+        <TaskStatus entity={props.entity} />
         <ObjectBody entity={props.entity} />
         <ObjectProperties entity={props.entity} />
       </ObjectDetailContent>

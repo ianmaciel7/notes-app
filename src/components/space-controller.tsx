@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-
 import { AppHeader, AppHeaderAction } from "@/components/app-header";
 import {
   AppHeaderCaretDownIcon,
@@ -43,12 +42,14 @@ import {
 } from "@/lib/spaces/space-projections";
 import { OBJECT_TYPE_ORDER_SETTING_KEY } from "@/lib/spaces/space-repository";
 import { PERSONAL_SPACE_ID } from "@/lib/spaces/space-types";
+import { resolveWorkspaceTabTarget } from "@/lib/spaces/workspace-tab-target";
 import type { FSRSRating } from "@/lib/srs/fsrs";
 
 // biome-ignore lint/suspicious/noExplicitAny: context compatibility while legacy UI APIs are migrated
 export type WorkspaceContextValue = Record<string, any>;
 export type CreateWorkspaceEntityOptions = {
   title?: string;
+  collectionId?: string;
 };
 
 const initialMainTabs: AppHeaderTab[] = [
@@ -567,6 +568,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
           spaceId,
           objectTypeId,
           resolveWorkspaceEntityTitle(label, options),
+          options?.collectionId,
         );
         setActiveEntityId(entity.id);
         const objectType = objectTypes.find((item) => item.id === objectTypeId);
@@ -722,10 +724,23 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     );
   }, [repository, showMessage, spaceId, trashItems]);
   const purgeTrashItem = React.useCallback(
-    (id: string) => void repository.deleteTrash(spaceId, id),
-    [repository, spaceId],
+    (id: string) =>
+      void repository.deleteTrash(spaceId, id).catch((cause: unknown) => {
+        showMessage(cause instanceof Error ? cause.message : String(cause));
+      }),
+    [repository, showMessage, spaceId],
   );
-  const restoreTrashItem = purgeTrashItem;
+  const restoreTrashItem = React.useCallback(
+    async (id: string) => {
+      try {
+        await repository.restoreTrash(spaceId, id);
+        showMessage("Object restored");
+      } catch (cause) {
+        showMessage(cause instanceof Error ? cause.message : String(cause));
+      }
+    },
+    [repository, showMessage, spaceId],
+  );
 
   const searchEntities = React.useCallback(
     (query: string) => searchEntitiesInSpace(db, spaceId, query),
@@ -738,11 +753,23 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const buildGraph = React.useCallback(() => buildGraphInSpace(db, spaceId), [spaceId]);
   const createRestoredMainTab = React.useCallback(
     (id: string): AppHeaderTab | null => {
-      const objectType = objectTypes.find((item) => item.id === id);
+      const target = resolveWorkspaceTabTarget(id, {
+        entityIds: createdEntities.map((entity) => entity.id),
+        objectTypeIds: objectTypes.map((type) => type.id),
+        collections: objectTypeCollections,
+      });
+      const objectTypeId = target?.kind === "collection" ? target.objectTypeId : target?.id;
+      const objectType =
+        target?.kind !== "entity"
+          ? objectTypes.find((item) => item.id === objectTypeId)
+          : undefined;
       if (objectType) {
         return {
           id,
-          label: objectType.label,
+          label:
+            target?.kind === "collection"
+              ? objectTypeCollections[target.id].name
+              : objectType.label,
           kind: "object-list",
           icon: objectType.icon,
           iconClassName: objectIconToneBadgeClass[objectType.tone],
@@ -750,7 +777,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         };
       }
 
-      const entity = createdEntities.find((item) => item.id === id);
+      const entity = createdEntities.find((item) => item.id === target?.id);
       if (entity) {
         const entityType = objectTypes.find((item) => item.id === entity.objectTypeId);
         return {
@@ -765,7 +792,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
       return null;
     },
-    [createdEntities, objectTypes],
+    [createdEntities, objectTypes, objectTypeCollections],
   );
 
   const createRestoredSideTab = React.useCallback((id: string): AppHeaderTab | null => {

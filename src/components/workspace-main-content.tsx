@@ -13,7 +13,13 @@ import {
   WorkspaceObjectRenderer,
   WorkspaceObjectTypeListView,
 } from "@/components/workspace-object-renderer";
-import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
+import { searchWorkspaceEntities } from "@/lib/spaces/entity-search";
+import type {
+  SpaceCollectionRecord,
+  SpaceEntityRecord,
+  SpaceObjectTypeRecord,
+} from "@/lib/spaces/space-types";
+import { resolveWorkspaceTabTarget } from "@/lib/spaces/workspace-tab-target";
 
 export { WorkspaceSidePanelContent } from "@/components/workspace-side-panel-content";
 
@@ -28,12 +34,12 @@ type WorkspaceMainPanelContext = {
   createWorkspaceEntity: (
     objectTypeId: string,
     label?: string,
-    options?: { title?: string },
+    options?: { title?: string; collectionId?: string },
   ) => Promise<SpaceEntityRecord | null>;
   mainTabs: AppHeaderTab[];
   mainValue: string;
   objectTypeRecords: SpaceObjectTypeRecord[];
-  objectTypeCollections: Record<string, { id: string; name: string }>;
+  objectTypeCollections: Record<string, SpaceCollectionRecord>;
   objectTypes: AppSidebarObjectType[];
   ready?: boolean;
   setActiveAction: (action: string | undefined) => void;
@@ -172,15 +178,10 @@ function SearchActionPanel({ onReturn }: WorkspaceActionPanelProps) {
     );
   }, [objectTypes]);
 
-  const results = React.useMemo(() => {
-    const needle = query.trim().toLocaleLowerCase();
-    if (!needle) return createdEntities;
-
-    return createdEntities.filter((entity) => {
-      const haystack = `${entity.title} ${entity.objectTypeId} ${entity.id}`.toLocaleLowerCase();
-      return haystack.includes(needle);
-    });
-  }, [createdEntities, query]);
+  const results = React.useMemo(
+    () => searchWorkspaceEntities(createdEntities, query),
+    [createdEntities, query],
+  );
 
   React.useEffect(() => {
     if (activeEntityId && activeEntityId !== "page") {
@@ -540,7 +541,15 @@ export function WorkspaceDefaultPanel() {
       ),
     [objectTypeCollections],
   );
-  const activeEntity = createdEntities.find((entity: { id: string }) => entity.id === mainValue);
+  const target = resolveWorkspaceTabTarget(mainValue, {
+    entityIds: createdEntities.map((entity) => entity.id),
+    objectTypeIds: objectTypes.map((type) => type.id),
+    collections: objectTypeCollections,
+  });
+  const activeEntity =
+    target?.kind === "entity"
+      ? createdEntities.find((entity) => entity.id === target.id)
+      : undefined;
   const objectTypeRecord = activeEntity
     ? objectTypeRecords.find((item: { id: string }) => item.id === activeEntity.objectTypeId)
     : undefined;
@@ -577,18 +586,23 @@ export function WorkspaceDefaultPanel() {
   }
 
   function createObjectTypeEntity(objectTypeId: string) {
-    void createWorkspaceEntity(objectTypeId);
+    void createWorkspaceEntity(objectTypeId, undefined, {
+      collectionId: target?.kind === "collection" ? target.id : undefined,
+    });
   }
 
-  const activeObjectTypeRecord = objectTypeRecords.find(
-    (item: { id: string }) => item.id === mainValue,
-  );
+  const typeId = target?.kind === "collection" ? target.objectTypeId : target?.id;
+  const visibleEntities =
+    target?.kind === "collection"
+      ? createdEntities.filter((entity) => entity.collections?.includes(target.id))
+      : createdEntities;
+  const activeObjectTypeRecord = objectTypeRecords.find((item) => item.id === typeId);
   if (activeObjectTypeRecord) {
     const displayedObjectType = localizeBuiltInObjectType(activeObjectTypeRecord, objectTypes);
     return (
       <WorkspaceObjectTypeListView
         collectionNamesById={collectionNamesById}
-        entities={createdEntities}
+        entities={visibleEntities}
         objectType={displayedObjectType}
         tabName={name}
         onCreateEntity={() => createObjectTypeEntity(activeObjectTypeRecord.id)}

@@ -201,7 +201,7 @@ export const KnowledgeGraph = forwardRef<
 			ctx?.scale(scale, scale);
 
 			if (ctx) {
-				ctx.fillStyle = "#18181b";
+				ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--app-bg-front").trim();
 				ctx.fillRect(0, 0, width, height);
 			}
 
@@ -262,7 +262,7 @@ export const KnowledgeGraph = forwardRef<
 			}
 
 			const colorScale = (type: string, customColor?: string) =>
-				customColor || colorMapping[type] || "#6b7280";
+				customColor || colorMapping[type] || "var(--muted-foreground)";
 
 			// Set legend items
 			setLegendItems(
@@ -328,7 +328,7 @@ export const KnowledgeGraph = forwardRef<
 				.data(linksCopy)
 				.join("line")
 				.attr("class", "link")
-				.attr("stroke", "#6b7280")
+				.attr("stroke", "var(--muted-foreground)")
 				.attr("stroke-opacity", 0.5)
 				.attr("stroke-width", 2);
 
@@ -341,7 +341,7 @@ export const KnowledgeGraph = forwardRef<
 						.attr("class", "link-label")
 						.attr("text-anchor", "middle")
 						.attr("font-size", "10px")
-						.attr("fill", "#9ca3af")
+						.attr("fill", "var(--muted-foreground)")
 						.text((d: GraphLink) => d.label || "")
 				: null;
 
@@ -394,7 +394,7 @@ export const KnowledgeGraph = forwardRef<
 				.append("circle")
 				.attr("r", (d: GraphNode) => d.size || 20)
 				.attr("fill", (d: GraphNode) => colorScale(d.type, d.color))
-				.attr("stroke", "#27272a")
+				.attr("stroke", "var(--border)")
 				.attr("stroke-width", 2);
 
 			// Add labels
@@ -405,7 +405,7 @@ export const KnowledgeGraph = forwardRef<
 				.attr("dy", ".35em")
 				.attr("font-size", "11px")
 				.attr("font-weight", "500")
-				.attr("fill", "#ffffff")
+				.attr("fill", "var(--foreground)")
 				.attr("pointer-events", "none")
 				.text((d: GraphNode) =>
 					d.label.length > 12 ? `${d.label.substring(0, 10)}...` : d.label,

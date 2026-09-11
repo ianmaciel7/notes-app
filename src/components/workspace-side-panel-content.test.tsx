@@ -24,7 +24,7 @@ function readProjectSource(relativePath: string) {
 
 it("renders the active side panel tab through the real workspace context", () => {
   const markup = renderToStaticMarkup(
-    <NextIntlClientProvider locale="en" messages={ladleMessages}>
+    <NextIntlClientProvider locale="en" timeZone="UTC" messages={ladleMessages}>
       <WorkspaceProvider>
         <WorkspaceSidePanelContent />
       </WorkspaceProvider>
@@ -32,7 +32,8 @@ it("renders the active side panel tab through the real workspace context", () =>
   );
 
   expect(markup).toContain("Explore");
-  expect(markup).toContain("Implementation pending");
+  expect(markup).toContain("Selecione um objeto");
+  expect(markup).not.toContain("Implementation pending");
 });
 
 it("has Ladle stories for side panel content states", () => {

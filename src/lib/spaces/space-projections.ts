@@ -1,26 +1,14 @@
 import type { KnowledgeDatabase } from "@/lib/db";
+import { searchWorkspaceEntities } from "@/lib/spaces/entity-search";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
-
-function normalizeSearchText(value: string) {
-  return value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLocaleLowerCase();
-}
 
 export async function searchEntitiesInSpace(
   database: KnowledgeDatabase,
   spaceId: string,
   query: string,
 ) {
-  const normalized = normalizeSearchText(query.trim());
   const entities = await database.entities.where("spaceId").equals(spaceId).toArray();
-  if (!normalized) return entities;
-  return entities.filter((entity) =>
-    normalizeSearchText([entity.title, entity.type, entity.objectTypeId].join(" ")).includes(
-      normalized,
-    ),
-  );
+  return searchWorkspaceEntities(entities, query);
 }
 
 export async function listBacklinksInSpace(

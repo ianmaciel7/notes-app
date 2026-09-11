@@ -17,7 +17,7 @@ The current object composition is documented in
 | List preference state | `useObjectList`, `object-list-model`, `object-list-storage` | Scoped by space and type; invalid or unavailable storage does not crash the view. |
 | Result cards and rows | `WorkspaceObjectDataView` | Existing summary presentation remains in place; its own extraction is outstanding. |
 | Full-detail embeds | `EmbeddedObjectList` | Deliberate full details, not summary rows. |
-| Main/side workspace | Existing workspace controllers and renderers | Navigation remains outside the structural bases; right-panel detail integration is outstanding. |
+| Main/side workspace | Existing workspace controllers and renderers | Scoped tab targets and real right-panel details/inspectors; navigation remains outside structural bases. |
 
 ## Comparison record: 2026-09-10 composition refactor
 
@@ -39,3 +39,20 @@ The current object composition is documented in
 Keep this index and the detailed inventory current when component ownership changes. Consult the
 historical map for untouched surface contracts. Preserve previous evidence; distinguish source
 inspection, executed tests and actual browser measurements. Do not claim visual parity from JSX.
+
+## Runtime corrections: 2026-09-11
+
+`ObjectActions` composes `ObjectEditor` and reversible trash actions. Concrete
+flashcard/task/study-goal details compose their own persisted interaction controls.
+`useObjectMutation` delegates to the Space repository; database writes and sync
+queue writes are atomic. `useSpaceData` waits for one complete scoped snapshot.
+
+`WorkspaceSidePanelContent` resolves side-panel object tabs to the per-type detail
+renderer. `WorkspaceSidePanelRenderer`, `WorkspaceLocalGraph` and the inspector
+model use stored entities and relations, with honest empty/unsupported states.
+Collection tab filtering, creation and duplication preserve actual membership.
+
+[Runtime audit and remaining gaps](docs/audits/2026-09-11-real-workspace-features.md)
+records source inspection, executed test/build evidence, the blocked local browser
+attempt and unresolved application features. No pixel-parity or full-E2E claim is
+made. Historical observations above remain historical, not newly measured.

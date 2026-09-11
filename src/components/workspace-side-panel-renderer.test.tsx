@@ -1,48 +1,70 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
-
+import { objectEntityFixture } from "@/components/objects/object-view-fixtures";
 import { WorkspaceSidePanelRenderer } from "@/components/workspace-side-panel-renderer";
 
-it("renders Explore itself as one pending implementation", () => {
-  const markup = renderToStaticMarkup(
-    <WorkspaceSidePanelRenderer
-      activeMainObjectTitle="Git"
-      activeTabLabel="Explore"
-      sideValue="side-1"
-    />,
-  );
+const note = objectEntityFixture({ id: "note", title: "Real note" });
+const source = objectEntityFixture({ id: "source", title: "Linked source" });
+const relation = {
+  id: "link",
+  spaceId: "personal",
+  sourceId: "source",
+  targetId: "note",
+  propertyId: "reference",
+  createdAt: note.createdAt,
+};
+const context = {
+  activeEntityId: "note",
+  spaceId: "personal",
+  entities: [note, source],
+  relations: [relation],
+};
 
-  expect(markup).toContain("Explore");
-  expect(markup).toContain("Implementation pending");
-  expect(markup.match(/Implementation pending/g)).toHaveLength(1);
-  expect(markup).not.toContain("Graph view");
-});
-
-it("renders each selected Explore item as a PendingImplementation surface", () => {
-  const markup = renderToStaticMarkup(
-    <WorkspaceSidePanelRenderer
-      activeMainObjectTitle="Git"
-      activeTabLabel="Graph view"
-      sideValue="graphView"
-    />,
-  );
-
-  expect(markup).toContain("Graph view");
-  expect(markup).toContain("Implementation pending");
-  expect(markup).toContain("Git");
-});
-
-it("uses the shared pending implementation appearance without a side-panel wrapper", () => {
+it("shows an honest empty context instead of a fake or pending Explore screen", () => {
   const markup = renderToStaticMarkup(
     <WorkspaceSidePanelRenderer activeTabLabel="Explore" sideValue="side-1" />,
   );
+  expect(markup).toContain("Explore");
+  expect(markup).toContain("Selecione um objeto");
+  expect(markup).not.toContain("Implementation pending");
+});
 
-  expect(markup.match(/data-slot="pending-implementation"/g)).toHaveLength(1);
-  expect(markup).toContain('data-variant="workspace"');
-  expect(markup).toContain('data-slot="pending-implementation-caption"');
-  expect(markup).toContain("border-0 bg-transparent");
-  expect(markup).not.toContain("bg-card p-4");
-  expect(markup).not.toContain('data-slot="pending-implementation-card"');
-  expect(markup).not.toContain("border border-dashed border-border bg-muted/20");
-  expect(markup).not.toContain("border border-border bg-muted/25");
+it("renders stored backlinks and excludes a foreign-space source with the same id", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceSidePanelRenderer
+      {...context}
+      entities={[
+        ...context.entities,
+        { ...source, spaceId: "other", title: "Private other space" },
+      ]}
+      activeTabLabel="Backlinks"
+      sideValue="backlinks"
+    />,
+  );
+  expect(markup).toContain("Linked source");
+  expect(markup).not.toContain("Private other space");
+  expect(markup).not.toContain("Implementation pending");
+});
+
+it("renders a graph with real nodes and edges and no invented connections", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceSidePanelRenderer {...context} activeTabLabel="Graph view" sideValue="graphView" />,
+  );
+  expect(markup).toContain("Real note");
+  expect(markup).toContain("Linked source");
+  expect(markup.match(/data-slot="graph-edge"/g)).toHaveLength(1);
+});
+
+it("searches saved workspace entities without requiring a selected object", () => {
+  const markup = renderToStaticMarkup(
+    <WorkspaceSidePanelRenderer
+      {...context}
+      activeEntityId={undefined}
+      activeTabLabel="Search"
+      sideValue="localSpaceQuery"
+    />,
+  );
+  expect(markup).toContain("Pesquisar neste espaço");
+  expect(markup).toContain("Real note");
+  expect(markup).toContain("Linked source");
 });

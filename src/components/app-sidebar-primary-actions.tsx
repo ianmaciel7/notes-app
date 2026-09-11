@@ -42,7 +42,15 @@ import {
 import { Input } from "@/components/ui/input";
 import type { InteractionTooltipConfig } from "@/components/ui/interaction-hint";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  collectionMembers,
+  copySidebarText,
+  duplicateWorkspaceCollection,
+  runObjectMenuAction,
+  workspaceActionError,
+} from "@/components/workspace-object-menu-actions";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
+import { entityToMarkdown, exportWorkspaceObjects } from "@/lib/spaces/object-transfer";
 import { cn } from "@/lib/utils";
 
 const workspaceRowStateClass =
@@ -57,7 +65,7 @@ import {
   projectWorkspaceCommands,
   type WorkspaceCommandId,
 } from "@/lib/space-command-registry";
-import { createCollectionId, type WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
+import type { WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
 import type {
   CreateStructureInput,
   ObjectIconName,
@@ -1310,82 +1318,11 @@ function WorkspaceSidebar() {
     selectEntity(id);
   }
 
-  function handleCollectionAction(
-    action: AppSidebarCollectionAction,
-    objectType: AppSidebarObjectType,
-    collection: WorkspaceCollectionRecord,
-    event?: SidebarModifierEvent,
-  ) {
-    const collectionId = collection.id;
-
-    function showPendingAction() {
-      setActiveAction(`pending:${action}`);
-      setActiveEntityId(null);
-      setMainValue(`primary-action:pending:${action}`);
-    }
-
-    if (action === "open") {
-      openSidebarSelection(collectionId, event);
-      return;
-    }
-
-    if (action === "unpin-type") {
-      setHiddenCollectionIds((current: Set<string>) => new Set(current).add(collectionId));
-      setActiveEntityId(objectType.id);
-      showMessage(t("objectTypeOverview.unpinnedFromSidebar"));
-      return;
-    }
-
-    if (action === "copy-markdown") {
-      void navigator.clipboard?.writeText(`# ${collection.name}`).catch(() => undefined);
-      showMessage(t("documentMenu.copied"));
-      return;
-    }
-
-    if (action === "copy-reference") {
-      void navigator.clipboard?.writeText(`[[${collection.name}]]`).catch(() => undefined);
-      showMessage(t("documentMenu.copied"));
-      return;
-    }
-
-    if (
-      action === "change-type" ||
-      action === "settings" ||
-      action === "share" ||
-      action === "present" ||
-      action === "export" ||
-      action === "import"
-    ) {
-      showPendingAction();
-      return;
-    }
-
-    if (action === "duplicate") {
-      setObjectTypeCollections((current) => {
-        const existing = Object.values(current).filter(
-          (item) => item.structureId === objectType.id,
-        );
-        let suffix = 1;
-        let copy = `${collection.name} copy`;
-        while (existing.some((item) => item.name === copy)) {
-          suffix += 1;
-          copy = `${collection.name} copy ${suffix}`;
-        }
-        const id = createCollectionId(objectType.id, copy, new Set(Object.keys(current)));
-        return {
-          ...current,
-          [id]: { id, name: copy, structureId: objectType.id },
-        };
-      });
-      showMessage(t("objectTypeOverview.collectionCreated"));
-      return;
-    }
-
-    if (createdEntities.some((entity) => entity.collections?.includes(collectionId))) {
+  function deleteEmptyCollection(collectionId: string, objectTypeId: string) {
+    if (collectionMembers(createdEntities, { spaceId, id: collectionId }).length > 0) {
       showMessage(t("lifecycle.errors.referenced-object"));
       return;
     }
-
     setObjectTypeCollections(
       (current) =>
         Object.fromEntries(Object.entries(current).filter(([id]) => id !== collectionId)) as Record<
@@ -1394,25 +1331,103 @@ function WorkspaceSidebar() {
         >,
     );
     setPinnedEntities((current) => current.filter((item) => item.id !== collectionId));
-    setActiveEntityId(objectType.id);
+    setActiveEntityId(objectTypeId);
   }
 
-  function handlePinnedAction(action: AppSidebarCollectionAction, entity: AppSidebarPinnedEntity) {
-    if (action === "copy-markdown") {
-      void navigator.clipboard?.writeText(`# ${entity.label}`).catch(() => undefined);
-      showMessage(t("documentMenu.copied"));
+  function handleCollectionAction(
+    action: AppSidebarCollectionAction,
+    objectType: AppSidebarObjectType,
+    collection: WorkspaceCollectionRecord,
+    event?: SidebarModifierEvent,
+  ) {
+    const collectionId = collection.id;
+    switch (action) {
+      case "open":
+        openSidebarSelection(collectionId, event);
+        return;
+      case "unpin-type":
+        setHiddenCollectionIds((current: Set<string>) => new Set(current).add(collectionId));
+        setActiveEntityId(objectType.id);
+        showMessage(t("objectTypeOverview.unpinnedFromSidebar"));
+        return;
+      case "copy-markdown": {
+        const members = collectionMembers(createdEntities, { spaceId, id: collectionId });
+        copySidebarText(
+          [`# ${collection.name}`, ...members.map(entityToMarkdown)].join("\n\n"),
+          showMessage,
+          t("documentMenu.copied"),
+        );
+        return;
+      }
+      case "copy-reference":
+        copySidebarText(`[[${collection.name}]]`, showMessage, t("documentMenu.copied"));
+        return;
+      case "export":
+        try {
+          exportWorkspaceObjects(
+            collection.name,
+            collectionMembers(createdEntities, { spaceId, id: collectionId }),
+          );
+        } catch (error) {
+          showMessage(workspaceActionError(error));
+        }
+        return;
+      case "duplicate":
+        void duplicateWorkspaceCollection(spaceId, collectionId)
+          .then(() => showMessage(t("objectTypeOverview.collectionCreated")))
+          .catch((error: unknown) => showMessage(workspaceActionError(error)));
+        return;
+      case "delete":
+        deleteEmptyCollection(collectionId, objectType.id);
+        return;
+      default:
+        setActiveAction(`pending:${action}`);
+        setActiveEntityId(null);
+        setMainValue(`primary-action:pending:${action}`);
+    }
+  }
+
+  async function handlePinnedAction(
+    action: AppSidebarCollectionAction,
+    pinned: AppSidebarPinnedEntity,
+  ) {
+    const collection = objectTypeCollections[pinned.id];
+    const collectionType =
+      collection && objectTypes.find((type) => type.id === collection.structureId);
+    if (collection && collectionType) {
+      handleCollectionAction(action, collectionType, collection);
       return;
     }
-
-    if (action === "copy-reference") {
-      void navigator.clipboard?.writeText(`[[${entity.label}]]`).catch(() => undefined);
-      showMessage(t("documentMenu.copied"));
+    const entity = createdEntities.find(
+      (item) => item.id === pinned.id && item.spaceId === spaceId,
+    );
+    if (!entity) {
+      showMessage("O objeto não está disponível neste espaço.");
       return;
     }
-
-    setActiveAction(`pending:${action}`);
-    setActiveEntityId(null);
-    setMainValue(`primary-action:pending:${action}`);
+    try {
+      const result = await runObjectMenuAction(action, entity);
+      switch (result) {
+        case "copied":
+          showMessage(t("documentMenu.copied"));
+          return;
+        case "exported":
+          return;
+        case "open":
+          openSidebarSelection(entity.id);
+          return;
+        case "deleted":
+          setActiveAction(undefined);
+          setActiveEntityId(null);
+          setMainValue(entity.objectTypeId);
+          return;
+      }
+      setActiveAction(`pending:${action}`);
+      setActiveEntityId(null);
+      setMainValue(`primary-action:pending:${action}`);
+    } catch (error) {
+      showMessage(workspaceActionError(error));
+    }
   }
 
   function handleObjectTypeAction(action: AppSidebarCollectionAction) {

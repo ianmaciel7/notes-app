@@ -81,3 +81,23 @@ describe("selectStudyGoalDashboard", () => {
     });
   });
 });
+
+it("uses the selected goal and limits its cards to the same Space and chosen files", () => {
+  const goal = {
+    ...baseEntity({ id: "selected", type: "study_goal" }),
+    targetExamDate: "2026-02-01T00:00:00.000Z",
+    targetRetentionRate: 0.9,
+    totalCards: 0,
+    targetFileIds: ["file-1"],
+  } as SpaceEntityRecord;
+  const earlier = { ...goal, id: "earlier", targetExamDate: "2026-01-02T00:00:00.000Z" };
+  const otherFile = { ...flashcard("other-file", 0), fileId: "file-2" };
+  const otherSpace = { ...flashcard("other-space", 0), spaceId: "other" };
+  expect(
+    selectStudyGoalDashboard(
+      [earlier, goal, flashcard("included", 1), otherFile, otherSpace],
+      new Date("2026-01-01T00:00:00.000Z"),
+      "selected",
+    ),
+  ).toMatchObject({ goalId: "selected", totalCards: 1, learnedCards: 1, dueCards: 1 });
+});
