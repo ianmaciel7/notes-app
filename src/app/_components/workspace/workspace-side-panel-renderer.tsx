@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { WorkspaceLocalGraph } from "@/app/_components/workspace/workspace-local-graph";
 import { getInspectorEntities } from "@/app/_components/workspace/workspace-side-panel-model";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { searchWorkspaceEntities } from "@/lib/spaces/entity-search";
 import { buildLocalEntityGraph } from "@/lib/spaces/space-graph";
 import type { SpaceEntityRecord, SpaceRelationRecord } from "@/lib/spaces/space-types";

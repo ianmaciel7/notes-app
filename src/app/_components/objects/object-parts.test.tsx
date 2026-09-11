@@ -5,13 +5,21 @@ import {
   ObjectDetailContent,
   ObjectDetailHeader,
 } from "@/app/_components/objects/object-detail";
-import { ObjectList, ObjectListContent, ObjectListHeader } from "@/app/_components/objects/object-list";
+import {
+  ObjectList,
+  ObjectListContent,
+  ObjectListHeader,
+} from "@/app/_components/objects/object-list";
 
 it("composes list content without a controller or provider", () => {
   const markup = renderToStaticMarkup(
     <ObjectList aria-label="Objects" className="test-extension">
-      <ObjectListHeader><h1>Pages</h1></ObjectListHeader>
-      <ObjectListContent><p>List content</p></ObjectListContent>
+      <ObjectListHeader>
+        <h1>Pages</h1>
+      </ObjectListHeader>
+      <ObjectListContent>
+        <p>List content</p>
+      </ObjectListContent>
     </ObjectList>,
   );
   expect(markup).toContain('aria-label="Objects"');
@@ -23,8 +31,12 @@ it("composes list content without a controller or provider", () => {
 it("keeps semantic article content and permits omitting the aside", () => {
   const markup = renderToStaticMarkup(
     <ObjectDetail aria-label="Page detail">
-      <ObjectDetailHeader><h1>Research</h1></ObjectDetailHeader>
-      <ObjectDetailContent><p>Saved notes</p></ObjectDetailContent>
+      <ObjectDetailHeader>
+        <h1>Research</h1>
+      </ObjectDetailHeader>
+      <ObjectDetailContent>
+        <p>Saved notes</p>
+      </ObjectDetailContent>
     </ObjectDetail>,
   );
   expect(markup).toContain("<article");

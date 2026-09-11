@@ -1,9 +1,7 @@
 import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 
 /** In-memory fixtures for tests and isolated Ladle stories, never a production data source. */
-export function objectEntityFixture(
-  input: Partial<SpaceEntityRecord> = {},
-): SpaceEntityRecord {
+export function objectEntityFixture(input: Partial<SpaceEntityRecord> = {}): SpaceEntityRecord {
   return {
     id: "fixture-page",
     spaceId: "personal",

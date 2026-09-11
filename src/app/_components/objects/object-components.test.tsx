@@ -2,10 +2,11 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 import { resolveObjectComponents } from "@/app/_components/objects/object-components";
 import { ObjectDetailResolver } from "@/app/_components/objects/object-detail-resolver";
-import { objectEntityFixture, objectTypeFixture } from "@/app/_components/objects/object-view-fixtures";
 import {
-  CustomObjectDetail,
-} from "@/app/_components/objects/types/custom-object/custom-object-detail";
+  objectEntityFixture,
+  objectTypeFixture,
+} from "@/app/_components/objects/object-view-fixtures";
+import { CustomObjectDetail } from "@/app/_components/objects/types/custom-object/custom-object-detail";
 import { CustomObjectList } from "@/app/_components/objects/types/custom-object/custom-object-list";
 import { BUILT_IN_STRUCTURES, OBJECT_TYPE_PRESETS } from "@/lib/space-object-types";
 

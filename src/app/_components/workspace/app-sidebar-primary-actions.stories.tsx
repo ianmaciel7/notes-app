@@ -1,7 +1,6 @@
 import type { Story, StoryDefault } from "@ladle/react";
-
-import { AppSidebarPrimaryActions } from "./app-sidebar-primary-actions";
 import { ObjectPageIcon, ObjectQueryIcon } from "@/app/_components/objects/object-icons";
+import { AppSidebarPrimaryActions } from "./app-sidebar-primary-actions";
 
 export default {
   title: "Components / App Sidebar / Primary Actions",

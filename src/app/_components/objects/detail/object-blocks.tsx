@@ -12,9 +12,7 @@ function ObjectBlock({ block }: { block: Block }) {
   switch (block.type) {
     case "heading_1":
       return (
-        <h2 className="mt-6 text-2xl font-semibold text-[var(--app-text-primary)]">
-          {content}
-        </h2>
+        <h2 className="mt-6 text-2xl font-semibold text-[var(--app-text-primary)]">{content}</h2>
       );
     case "heading_2":
       return (

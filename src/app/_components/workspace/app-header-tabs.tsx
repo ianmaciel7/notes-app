@@ -2,7 +2,10 @@
 
 import { cva } from "class-variance-authority";
 import * as React from "react";
-
+import {
+  objectIconToneBadgeClass,
+  objectTypeDefinitions,
+} from "@/app/_components/objects/object-icons";
 import {
   AppHeaderCaretDownIcon,
   AppHeaderCloseIcon,
@@ -10,7 +13,6 @@ import {
   AppHeaderPushPinFillIcon,
   AppHeaderPushPinIcon,
 } from "@/app/_components/workspace/app-header-icons";
-import { objectIconToneBadgeClass, objectTypeDefinitions } from "@/app/_components/objects/object-icons";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";

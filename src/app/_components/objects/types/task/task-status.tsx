@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useObjectMutation } from "@/app/_components/objects/use-object-mutation";
+import { Button } from "@/components/ui/button";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 export function TaskStatus({ entity }: { entity: SpaceEntityRecord }) {

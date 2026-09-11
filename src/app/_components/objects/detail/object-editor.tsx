@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ObjectEditFields } from "@/app/_components/objects/detail/object-edit-fields";
 import { buildObjectEdit } from "@/app/_components/objects/detail/object-edit-model";
+import { useObjectMutation } from "@/app/_components/objects/use-object-mutation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useObjectMutation } from "@/app/_components/objects/use-object-mutation";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 function ObjectEditForm({ entity, onSaved }: { entity: SpaceEntityRecord; onSaved: () => void }) {

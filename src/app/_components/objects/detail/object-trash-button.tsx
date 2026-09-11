@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useObjectMutation } from "@/app/_components/objects/use-object-mutation";
 import { useWorkspace } from "@/app/_components/workspace/space-controller";
 import {
   AlertDialog,
@@ -11,7 +12,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useObjectMutation } from "@/app/_components/objects/use-object-mutation";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 export function ObjectTrashButton({ entity }: { entity: SpaceEntityRecord }) {

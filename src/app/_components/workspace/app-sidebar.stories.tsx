@@ -1,9 +1,8 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
-
+import { ObjectPageIcon } from "@/app/_components/objects/object-icons";
 import type { AppSidebarSpace } from "./app-sidebar";
 import { AppSidebar } from "./app-sidebar";
-import { ObjectPageIcon } from "@/app/_components/objects/object-icons";
 
 export default {
   title: "Components / App Sidebar",

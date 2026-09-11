@@ -2,7 +2,6 @@ import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
 
 import { AppSidebarChevronRightIcon } from "@/app/_components/workspace/app-sidebar-icons";
-import { ObjectIconBadge, ObjectTypeLabelChip, objectTypeDefinitions } from "./object-icons";
 import {
   CompactMenuItemText,
   compactMenuItemClass,
@@ -11,6 +10,7 @@ import {
 } from "@/components/ui/compact-menu";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ObjectIconBadge, ObjectTypeLabelChip, objectTypeDefinitions } from "./object-icons";
 
 const portugueseObjectTypeLabels: Record<string, string> = {
   "ai-chat": "Chat de IA",

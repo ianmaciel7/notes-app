@@ -13,8 +13,6 @@ import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGl
 import { SparkleIcon } from "@phosphor-icons/react/dist/csr/Sparkle";
 import { useTranslations } from "next-intl";
 import * as React from "react";
-import type { AppHeaderTab } from "@/app/_components/workspace/app-header-tabs";
-import type { AppSidebarObjectType } from "@/app/_components/workspace/app-sidebar-overview";
 import {
   ObjectIconBadge,
   type ObjectIconTone,
@@ -22,6 +20,8 @@ import {
   objectIconToneBadgeClass,
   objectTypeDefinitionById,
 } from "@/app/_components/objects/object-icons";
+import type { AppHeaderTab } from "@/app/_components/workspace/app-header-tabs";
+import type { AppSidebarObjectType } from "@/app/_components/workspace/app-sidebar-overview";
 import { useWorkspace } from "@/app/_components/workspace/space-controller";
 import {
   Dialog,

@@ -9,7 +9,9 @@ function readSource(relativePath: string) {
 }
 
 it("keeps the add-object-type intro as a compact green Capacities callout", () => {
-  const componentSource = readSource("app/_components/workspace/app-sidebar-object-type-studio.tsx");
+  const componentSource = readSource(
+    "app/_components/workspace/app-sidebar-object-type-studio.tsx",
+  );
   const globalCss = readSource("app/globals.css");
 
   expect(componentSource).toContain('data-slot="app-sidebar-object-type-intro"');
@@ -29,7 +31,9 @@ it("keeps the add-object-type intro as a compact green Capacities callout", () =
 });
 
 it("uses theme tokens for the object type cards so dark mode stays Capacities-like", () => {
-  const componentSource = readSource("app/_components/workspace/app-sidebar-object-type-studio.tsx");
+  const componentSource = readSource(
+    "app/_components/workspace/app-sidebar-object-type-studio.tsx",
+  );
   const globalCss = readSource("app/globals.css");
 
   expect(componentSource).toContain("bg-[var(--app-bg-el-subtle)]");
@@ -55,14 +59,18 @@ it("uses theme tokens for the object type cards so dark mode stays Capacities-li
 });
 
 it("includes built-in study object types in the basic picker grid", () => {
-  const componentSource = readSource("app/_components/workspace/app-sidebar-object-type-studio.tsx");
+  const componentSource = readSource(
+    "app/_components/workspace/app-sidebar-object-type-studio.tsx",
+  );
 
   expect(componentSource).toContain('"flashcard"');
   expect(componentSource).toContain('"study_goal"');
 });
 
 it("dismisses the object type details panel when the backing content is clicked", () => {
-  const componentSource = readSource("app/_components/workspace/app-sidebar-object-type-studio.tsx");
+  const componentSource = readSource(
+    "app/_components/workspace/app-sidebar-object-type-studio.tsx",
+  );
 
   expect(componentSource).toContain('data-slot="app-sidebar-object-type-details-dismiss-layer"');
   expect(componentSource).toContain("onClick={resetSelection}");

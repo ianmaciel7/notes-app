@@ -38,13 +38,7 @@ export function ObjectListChoice<T extends string>({
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            aria-label={label}
-            tooltip={label}
-          >
+          <Button type="button" variant="ghost" size="icon-sm" aria-label={label} tooltip={label}>
             <Icon className="size-3.5" aria-hidden="true" />
           </Button>
         }

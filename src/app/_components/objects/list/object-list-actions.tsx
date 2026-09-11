@@ -41,14 +41,18 @@ export function ObjectListMoreActions({ view }: { view: ObjectListView }) {
           className={sidebarContextMenuItemClass}
           onClick={() => view.setSearchOpen(true)}
         >
-          <CompactMenuIconFrame variant="ghost"><Search /></CompactMenuIconFrame>
+          <CompactMenuIconFrame variant="ghost">
+            <Search />
+          </CompactMenuIconFrame>
           <CompactMenuItemText>Buscar</CompactMenuItemText>
         </DropdownMenuItem>
         <DropdownMenuItem
           className={sidebarContextMenuItemClass}
           onClick={() => view.updatePreferences({ ...defaultObjectListPreferences })}
         >
-          <CompactMenuIconFrame variant="ghost"><Rows3 /></CompactMenuIconFrame>
+          <CompactMenuIconFrame variant="ghost">
+            <Rows3 />
+          </CompactMenuIconFrame>
           <CompactMenuItemText>Restaurar visualização</CompactMenuItemText>
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -78,7 +82,9 @@ function ObjectListCreateMenu({ view }: { view: ObjectListView }) {
         />
         <DropdownMenuContent align="end" className={sidebarContextMenuContentClass}>
           <DropdownMenuItem className={sidebarContextMenuItemClass} onClick={onCreateEntity}>
-            <CompactMenuIconFrame variant="ghost"><Plus /></CompactMenuIconFrame>
+            <CompactMenuIconFrame variant="ghost">
+              <Plus />
+            </CompactMenuIconFrame>
             <CompactMenuItemText>Novo {singularName}</CompactMenuItemText>
           </DropdownMenuItem>
           <DropdownMenuSeparator className={sidebarContextMenuSeparatorClass} />
@@ -86,7 +92,9 @@ function ObjectListCreateMenu({ view }: { view: ObjectListView }) {
             className={sidebarContextMenuItemClass}
             onClick={() => view.setSearchOpen(true)}
           >
-            <CompactMenuIconFrame variant="ghost"><Search /></CompactMenuIconFrame>
+            <CompactMenuIconFrame variant="ghost">
+              <Search />
+            </CompactMenuIconFrame>
             <CompactMenuItemText>Buscar em {listName}</CompactMenuItemText>
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -114,7 +122,8 @@ export function ObjectListCreateAction({ view }: { view: ObjectListView }) {
             "text-[var(--app-button-primary-text)]",
           )}
         >
-          <Plus className="size-3.5" aria-hidden="true" />Novo
+          <Plus className="size-3.5" aria-hidden="true" />
+          Novo
         </Button>
         <ObjectListCreateMenu view={view} />
       </ButtonGroup>

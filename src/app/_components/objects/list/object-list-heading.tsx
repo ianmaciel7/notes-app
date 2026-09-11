@@ -1,11 +1,11 @@
 import { ChevronUp } from "lucide-react";
-import { ObjectTypeIconBadge } from "@/app/_components/objects/object-icons";
 import {
   ObjectListCreateAction,
   ObjectListMoreActions,
 } from "@/app/_components/objects/list/object-list-actions";
 import { ObjectListSearch } from "@/app/_components/objects/list/object-list-search";
 import type { ObjectListView } from "@/app/_components/objects/list/use-object-list";
+import { ObjectTypeIconBadge } from "@/app/_components/objects/object-icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

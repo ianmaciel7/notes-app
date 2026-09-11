@@ -2,7 +2,6 @@
 
 import { useTranslations } from "next-intl";
 import * as React from "react";
-import { AppSidebarCheckIcon, AppSidebarPlusIcon } from "@/app/_components/workspace/app-sidebar-icons";
 import {
   getCapacitiesObjectTypeTone,
   ObjectAreaIcon,
@@ -10,6 +9,10 @@ import {
   ObjectTypeIconBadge,
   objectTypeDefinitionById,
 } from "@/app/_components/objects/object-icons";
+import {
+  AppSidebarCheckIcon,
+  AppSidebarPlusIcon,
+} from "@/app/_components/workspace/app-sidebar-icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

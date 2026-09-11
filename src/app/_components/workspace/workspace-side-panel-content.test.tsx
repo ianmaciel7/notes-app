@@ -37,7 +37,9 @@ it("renders the active side panel tab through the real workspace context", () =>
 });
 
 it("has Ladle stories for side panel content states", () => {
-  const storySource = readProjectSource("src/app/_components/workspace/workspace-side-panel-content.stories.tsx");
+  const storySource = readProjectSource(
+    "src/app/_components/workspace/workspace-side-panel-content.stories.tsx",
+  );
 
   expect(storySource).toContain("WorkspaceSidePanelContent");
   expect(storySource).toContain("ExploreOverview");

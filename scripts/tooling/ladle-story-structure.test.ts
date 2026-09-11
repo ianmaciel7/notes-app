@@ -4,7 +4,10 @@ import { fileURLToPath, URL } from "node:url";
 import { expect, it } from "vitest";
 
 const projectRoot = fileURLToPath(new URL("../../", import.meta.url));
-const storyRoots = [join(projectRoot, "src", "components"), join(projectRoot, "src", "app", "_components")];
+const storyRoots = [
+  join(projectRoot, "src", "components"),
+  join(projectRoot, "src", "app", "_components"),
+];
 
 function readProjectSource(relativePath: string) {
   return readFileSync(new URL(relativePath, `file://${projectRoot}/`), "utf8");

@@ -1,7 +1,10 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
 
-import { AppHeaderCircleDashedIcon, AppHeaderGraphIcon } from "@/app/_components/workspace/app-header-icons";
+import {
+  AppHeaderCircleDashedIcon,
+  AppHeaderGraphIcon,
+} from "@/app/_components/workspace/app-header-icons";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 import { useWorkspace, WorkspaceProvider } from "./space-controller";

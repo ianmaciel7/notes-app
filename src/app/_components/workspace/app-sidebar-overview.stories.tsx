@@ -1,7 +1,6 @@
 import type { Story, StoryDefault } from "@ladle/react";
-
-import { AppSidebarTypeLabel } from "./app-sidebar-overview";
 import { ObjectBookIcon, ObjectPageIcon } from "@/app/_components/objects/object-icons";
+import { AppSidebarTypeLabel } from "./app-sidebar-overview";
 
 export default {
   title: "Components / App Sidebar / Overview",

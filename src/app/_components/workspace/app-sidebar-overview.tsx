@@ -2,7 +2,16 @@
 
 import { useTranslations } from "next-intl";
 import * as React from "react";
-
+import {
+  getObjectTypeIconAppearance,
+  ObjectAreaIcon,
+  ObjectCollectionIcon,
+  ObjectIconBadge,
+  type ObjectIconProps,
+  type ObjectIconTone,
+  ObjectTypeIconBadge,
+  objectIconToneBadgeClass,
+} from "@/app/_components/objects/object-icons";
 import {
   AppSidebarArrowDownIcon,
   AppSidebarCheckIcon,
@@ -17,16 +26,6 @@ import {
 } from "@/app/_components/workspace/app-sidebar-icons";
 import { AppSidebarObjectTypeStudio } from "@/app/_components/workspace/app-sidebar-object-type-studio";
 import { AppSidebarSourceIcon } from "@/app/_components/workspace/app-sidebar-source-icon";
-import {
-  getObjectTypeIconAppearance,
-  ObjectAreaIcon,
-  ObjectCollectionIcon,
-  ObjectIconBadge,
-  type ObjectIconProps,
-  type ObjectIconTone,
-  ObjectTypeIconBadge,
-  objectIconToneBadgeClass,
-} from "@/app/_components/objects/object-icons";
 import { useTheme } from "@/app/_providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -43,6 +42,17 @@ import {
   sidebarContextMenuSeparatorClass,
   sidebarContextSubmenuContentClass,
 } from "@/components/ui/compact-menu";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import {
   Dialog,
   DialogContent,
@@ -830,43 +840,26 @@ function AppSidebarPinnedRow({
       >
         <button
           type="button"
+          draggable={false}
           className="relative flex min-w-0 flex-1 items-center py-px text-left outline-none"
-          onPointerDownCapture={(event) => {
-            if (!skipNextClickRef.current)
-              handleModifiedOpen(event as React.MouseEvent<HTMLButtonElement>);
-          }}
-          onPointerDown={(event) => {
-            if (!skipNextClickRef.current)
-              handleModifiedOpen(event as React.MouseEvent<HTMLButtonElement>);
-          }}
-          onMouseDownCapture={(event) => {
-            if (!skipNextClickRef.current) handleModifiedOpen(event);
-          }}
-          onMouseDown={(event) => {
-            if (!skipNextClickRef.current) handleModifiedOpen(event);
-          }}
-          onContextMenu={(event) => {
-            handleModifiedOpen(event);
-          }}
-          onAuxClick={(event) => {
-            handleModifiedOpen(event);
+          onKeyDown={(event) => {
+            if (
+              event.key === "Delete" ||
+              (event.key === "Backspace" && (event.metaKey || event.ctrlKey))
+            ) {
+              event.preventDefault();
+              onUnpin();
+            }
           }}
           onClick={(event) => {
-            if (skipNextClickRef.current) {
-              skipNextClickRef.current = false;
+            const modifierEvent = getSelectionModifierEvent(event, pressedModifiersRef?.current);
+            if (hasSelectionModifier(modifierEvent)) {
               event.preventDefault();
               event.stopPropagation();
+              onSelect(createSyntheticSelectionEvent(modifierEvent));
               return;
             }
-            const pendingModifierEvent = pendingModifierEventRef.current;
-            pendingModifierEventRef.current = null;
-            if (pendingModifierEvent && hasSelectionModifier(pendingModifierEvent)) {
-              event.preventDefault();
-              event.stopPropagation();
-              onSelect(createSyntheticSelectionEvent(pendingModifierEvent));
-              return;
-            }
-            if (!handleModifiedOpen(event)) onSelect(event);
+            onSelect(event);
           }}
         >
           <span
@@ -928,6 +921,7 @@ function AppSidebarObjectTypeMenu({
   const tWorkspace = useTranslations("workspace");
   const tStudio = useTranslations("workspace.objectTypeStudio");
   const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
   const settingsNameInputId = React.useId();
   const settingsPluralInputId = React.useId();
   const settingsIconInputId = React.useId();
@@ -1067,7 +1061,7 @@ function AppSidebarObjectTypeMenu({
               <DropdownMenuItem
                 className={sidebarContextMenuItemClass}
                 variant="destructive"
-                onClick={() => onDelete?.(objectType.id)}
+                onClick={() => setDeleteConfirmOpen(true)}
               >
                 <SidebarContextMenuIcon>
                   <AppSidebarSourceIcon name="trash" />
@@ -1078,6 +1072,32 @@ function AppSidebarObjectTypeMenu({
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Excluir tipo de objeto?</DialogTitle>
+            <DialogDescription>
+              Tem certeza que deseja excluir o tipo de objeto &quot;{objectType.label}&quot;? Esta
+              ação não pode ser desfeita.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)}>
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                setDeleteConfirmOpen(false);
+                onDelete?.(objectType.id);
+              }}
+            >
+              Excluir
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
         <DialogContent>
@@ -1369,45 +1389,17 @@ function AppSidebarObjectTypeRow({
 
         <button
           type="button"
+          draggable={false}
           className="relative flex min-w-0 flex-1 items-center py-px text-left outline-none"
-          onPointerDownCapture={(event) => {
-            if (!skipNextClickRef.current) {
-              handleModifiedSelect(event as React.MouseEvent<HTMLButtonElement>);
-            }
-          }}
-          onPointerDown={(event) => {
-            if (!skipNextClickRef.current) {
-              handleModifiedSelect(event as React.MouseEvent<HTMLButtonElement>);
-            }
-          }}
-          onMouseDownCapture={(event) => {
-            if (!skipNextClickRef.current) handleModifiedSelect(event);
-          }}
-          onMouseDown={(event) => {
-            if (!skipNextClickRef.current) handleModifiedSelect(event);
-          }}
-          onContextMenu={(event) => {
-            handleModifiedSelect(event);
-          }}
-          onAuxClick={(event) => {
-            handleModifiedSelect(event);
-          }}
           onClick={(event) => {
-            if (skipNextClickRef.current) {
-              skipNextClickRef.current = false;
+            const modifierEvent = getSelectionModifierEvent(event, pressedModifiersRef?.current);
+            if (hasSelectionModifier(modifierEvent)) {
               event.preventDefault();
               event.stopPropagation();
+              onSelect(createSyntheticSelectionEvent(modifierEvent));
               return;
             }
-            const pendingModifierEvent = pendingModifierEventRef.current;
-            pendingModifierEventRef.current = null;
-            if (pendingModifierEvent && hasSelectionModifier(pendingModifierEvent)) {
-              event.preventDefault();
-              event.stopPropagation();
-              onSelect(createSyntheticSelectionEvent(pendingModifierEvent));
-              return;
-            }
-            if (!handleModifiedSelect(event)) onSelect(event);
+            onSelect(event);
           }}
         >
           <span className="flex w-12 min-w-0 flex-1 items-center gap-x-1.5 truncate">
@@ -2065,6 +2057,10 @@ function AppSidebarFooter({ onOpenShortcuts }: { onOpenShortcuts?: () => void })
 function AppSidebarTrashRow({
   active,
   items = [],
+  isDropTarget,
+  onDragOver,
+  onDragLeave,
+  onDrop,
   onEmptyTrash,
   onOpenChange,
   onPurgeTrashItem,
@@ -2072,6 +2068,10 @@ function AppSidebarTrashRow({
 }: {
   active: boolean;
   items?: readonly AppSidebarTrashItem[];
+  isDropTarget?: boolean;
+  onDragOver?: (event: React.DragEvent) => void;
+  onDragLeave?: (event: React.DragEvent) => void;
+  onDrop?: (event: React.DragEvent) => void;
   onEmptyTrash?: () => void;
   onOpenChange: (open: boolean) => void;
   onPurgeTrashItem?: (id: string) => void;
@@ -2139,9 +2139,15 @@ function AppSidebarTrashRow({
       >
         <PopoverTrigger
           data-slot="app-sidebar-utility-row"
+          data-drop-target={isDropTarget || undefined}
+          onDragOver={onDragOver}
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}
           className={cn(
             utilityRowClass,
             active && "bg-sidebar-accent text-sidebar-accent-foreground brightness-[0.965]",
+            isDropTarget &&
+              "bg-destructive/15 text-destructive ring-1 ring-destructive/30 brightness-105",
           )}
         >
           <span className="flex w-full min-w-0 items-center">

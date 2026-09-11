@@ -2,6 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import * as React from "react";
+import {
+  ObjectCollectionIcon,
+  ObjectIconBadge,
+  objectIconToneBadgeClass,
+} from "@/app/_components/objects/object-icons";
 import { AppSidebar, type AppSidebarSpace } from "@/app/_components/workspace/app-sidebar";
 import {
   AppSidebarCalendarIcon,
@@ -19,12 +24,14 @@ import {
   type AppSidebarPinnedEntity,
   type AppSidebarTrashItem,
 } from "@/app/_components/workspace/app-sidebar-overview";
-import {
-  ObjectCollectionIcon,
-  ObjectIconBadge,
-  objectIconToneBadgeClass,
-} from "@/app/_components/objects/object-icons";
 import { useWorkspace } from "@/app/_components/workspace/space-controller";
+import {
+  collectionMembers,
+  copySidebarText,
+  duplicateWorkspaceCollection,
+  runObjectMenuAction,
+  workspaceActionError,
+} from "@/app/_components/workspace/workspace-object-menu-actions";
 import { Button } from "@/components/ui/button";
 import {
   CompactMenuItemText,
@@ -42,13 +49,6 @@ import {
 import { Input } from "@/components/ui/input";
 import type { InteractionTooltipConfig } from "@/components/ui/interaction-hint";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import {
-  collectionMembers,
-  copySidebarText,
-  duplicateWorkspaceCollection,
-  runObjectMenuAction,
-  workspaceActionError,
-} from "@/app/_components/workspace/workspace-object-menu-actions";
 import { objectLifecycleContractSlots } from "@/lib/object-lifecycle-contracts";
 import { entityToMarkdown, exportWorkspaceObjects } from "@/lib/spaces/object-transfer";
 import { cn } from "@/lib/utils";

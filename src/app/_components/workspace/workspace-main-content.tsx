@@ -1,18 +1,21 @@
 "use client";
 
 import * as React from "react";
+import {
+  type ObjectIconTone,
+  objectIconToneBadgeClass,
+} from "@/app/_components/objects/object-icons";
+import { PendingImplementation } from "@/app/_components/shared/pending-implementation";
 import type { AppHeaderTab } from "@/app/_components/workspace/app-header-tabs";
 import type { AppSidebarObjectType } from "@/app/_components/workspace/app-sidebar-overview";
-import { type ObjectIconTone, objectIconToneBadgeClass } from "@/app/_components/objects/object-icons";
-import { PendingImplementation } from "@/app/_components/shared/pending-implementation";
 import { useWorkspace } from "@/app/_components/workspace/space-controller";
-import { Button } from "@/components/ui/button";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
 import {
   WorkspaceObjectRenderer,
   WorkspaceObjectTypeListView,
 } from "@/app/_components/workspace/workspace-object-renderer";
+import { Button } from "@/components/ui/button";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
 import { searchWorkspaceEntities } from "@/lib/spaces/entity-search";
 import type {
   SpaceCollectionRecord,

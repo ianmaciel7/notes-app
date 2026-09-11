@@ -2,15 +2,17 @@
 
 import { useTranslations } from "next-intl";
 import * as React from "react";
-
+import { ObjectAreaIcon } from "@/app/_components/objects/object-icons";
 import {
   AppSidebarFooter,
   AppSidebarHelpSection,
   AppSidebarUtilityRow,
 } from "@/app/_components/workspace/app-sidebar-floating-nav";
-import { AppSidebarObjectsIcon, AppSidebarPinIcon } from "@/app/_components/workspace/app-sidebar-icons";
+import {
+  AppSidebarObjectsIcon,
+  AppSidebarPinIcon,
+} from "@/app/_components/workspace/app-sidebar-icons";
 import { AppSidebarObjectTypeStudio } from "@/app/_components/workspace/app-sidebar-object-type-studio";
-import { ObjectAreaIcon } from "@/app/_components/objects/object-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { WorkspaceCollectionRecord } from "@/lib/space-domain-identities";
 import type { CreateStructureInput, ObjectIconName } from "@/lib/space-object-types";
@@ -212,6 +214,7 @@ function AppSidebarOverview({
   >([]);
   const [drag, setDrag] = React.useState<AppSidebarDragState>(null);
   const dragRef = React.useRef<AppSidebarDragState>(null);
+  const [trashDropTarget, setTrashDropTarget] = React.useState(false);
 
   useSidebarDragAutoScroll(drag !== null, rootRef);
 
@@ -585,6 +588,24 @@ function AppSidebarOverview({
               <AppSidebarTrashRow
                 active={activeId === "trash"}
                 items={trashItems}
+                isDropTarget={trashDropTarget}
+                onDragOver={(event) => {
+                  const currentDrag = dragRef.current ?? drag;
+                  if (currentDrag) {
+                    event.preventDefault();
+                    setTrashDropTarget(true);
+                  }
+                }}
+                onDragLeave={() => setTrashDropTarget(false)}
+                onDrop={(event) => {
+                  event.preventDefault();
+                  setTrashDropTarget(false);
+                  const currentDrag = dragRef.current ?? drag;
+                  if (currentDrag?.kind === "pinned") {
+                    setPinned((current) => current.filter((item) => item.id !== currentDrag.id));
+                    clearDrag();
+                  }
+                }}
                 onEmptyTrash={onEmptyTrash}
                 onOpenChange={() => setActiveId("trash")}
                 onPurgeTrashItem={onPurgeTrashItem}

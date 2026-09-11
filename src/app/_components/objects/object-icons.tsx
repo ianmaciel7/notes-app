@@ -41,6 +41,7 @@ type ObjectTypeLabelChipProps = ComponentPropsWithoutRef<"span"> &
     interactive?: boolean;
     label: string;
     showMenuIndicator?: boolean;
+    splitMenuIndicator?: boolean;
     variant?: "compact" | "default";
   };
 
@@ -390,6 +391,7 @@ function ObjectTypeLabelChip({
   onKeyDown,
   role,
   showMenuIndicator = false,
+  splitMenuIndicator = false,
   tone,
   variant = "default",
   style,
@@ -434,7 +436,33 @@ function ObjectTypeLabelChip({
       <span data-slot="object-type-label-chip-text" className="inline min-w-[1.3em] text-center">
         {label}
       </span>
-      {showMenuIndicator ? (
+      {splitMenuIndicator ? (
+        <span className="inline-flex self-center items-center">
+          <div
+            className="relative pointer-events-auto ml-[0.4em] rounded-r-[0.325em] pl-[0.2em] pr-[0.2em] mr-[-0.35em] cursor-pointer hover:brightness-[0.97] dark:hover:brightness-[1.04] h-full border-l-[0.5px]"
+            style={{
+              borderColor: `var(--type-label-border-${appearance.tone})`,
+              backgroundColor: `var(--type-label-bg-${appearance.tone})`,
+            }}
+            data-slot="object-type-label-chip-split-indicator"
+          >
+            <div>
+              <span>
+                <div className="relative inline-block">
+                  <span
+                    className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative inline"
+                    style={{ verticalAlign: "-0.125em" }}
+                  >
+                    <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+                      <ChevronDown className="size-[0.85em] stroke-[2.4]" />
+                    </span>
+                  </span>
+                </div>
+              </span>
+            </div>
+          </div>
+        </span>
+      ) : showMenuIndicator ? (
         <span
           aria-hidden="true"
           className="ml-[0.28em] mr-[-0.12em] inline-flex size-[1.1em] shrink-0 items-center justify-center rounded-[0.33em] opacity-80"

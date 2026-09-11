@@ -49,7 +49,9 @@ it("can render a workspace pending surface with a quiet caption treatment", () =
 });
 
 it("has Ladle stories for pending implementation panel states", () => {
-  const storySource = readProjectSource("src/app/_components/shared/pending-implementation.stories.tsx");
+  const storySource = readProjectSource(
+    "src/app/_components/shared/pending-implementation.stories.tsx",
+  );
 
   expect(storySource).toContain("PendingImplementation");
   expect(storySource).toContain("MainPanelPages");

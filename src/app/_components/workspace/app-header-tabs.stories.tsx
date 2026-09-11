@@ -1,8 +1,7 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import * as React from "react";
-
-import { type AppHeaderTab, AppHeaderTabItem, AppSpaceHeader } from "./app-header-tabs";
 import { ObjectPageIcon, ObjectQueryIcon } from "@/app/_components/objects/object-icons";
+import { type AppHeaderTab, AppHeaderTabItem, AppSpaceHeader } from "./app-header-tabs";
 
 export default {
   title: "Components / App Header / Tabs",

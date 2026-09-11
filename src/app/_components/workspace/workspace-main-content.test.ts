@@ -48,8 +48,12 @@ it("gives every unavailable context action a named pending implementation", () =
 });
 
 it("exposes Ladle stories for workspace main content and action states", () => {
-  const componentSource = readProjectSource("src/app/_components/workspace/workspace-main-content.tsx");
-  const storySource = readProjectSource("src/app/_components/workspace/workspace-main-content.stories.tsx");
+  const componentSource = readProjectSource(
+    "src/app/_components/workspace/workspace-main-content.tsx",
+  );
+  const storySource = readProjectSource(
+    "src/app/_components/workspace/workspace-main-content.stories.tsx",
+  );
 
   expect(componentSource).toContain("export function WorkspaceDefaultPanel");
   expect(storySource).toContain("WorkspaceMainContent");
@@ -72,7 +76,9 @@ it("exposes Ladle stories for workspace main content and action states", () => {
 });
 
 it("keeps Explore out of the main content panel like Capacities", () => {
-  const componentSource = readProjectSource("src/app/_components/workspace/workspace-main-content.tsx");
+  const componentSource = readProjectSource(
+    "src/app/_components/workspace/workspace-main-content.tsx",
+  );
 
   expect(componentSource).not.toContain("function ExploreActionPanel");
   expect(componentSource).not.toContain('activeAction === "explore"');
@@ -103,7 +109,9 @@ it("documents every WorkspaceMainContent component surface", () => {
 });
 
 it("keeps workspace action panels on Capacities app tokens", () => {
-  const componentSource = readProjectSource("src/app/_components/workspace/workspace-main-content.tsx");
+  const componentSource = readProjectSource(
+    "src/app/_components/workspace/workspace-main-content.tsx",
+  );
 
   expect(componentSource).toContain("workspaceActionPanelClass");
   expect(componentSource).toContain("bg-[var(--app-bg-front)]");

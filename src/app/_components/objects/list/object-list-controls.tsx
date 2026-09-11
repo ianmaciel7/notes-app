@@ -1,10 +1,10 @@
 import { cva } from "class-variance-authority";
 import { ArrowDownUp, Grid2X2, Hash, List, Rows3, SlidersHorizontal } from "lucide-react";
-import type { ObjectListPreferences } from "@/app/_components/objects/list/object-list-model";
 import {
   ObjectListChoice,
   type ObjectListChoiceOption,
 } from "@/app/_components/objects/list/object-list-choice";
+import type { ObjectListPreferences } from "@/app/_components/objects/list/object-list-model";
 import type { ObjectListView } from "@/app/_components/objects/list/use-object-list";
 import { Button } from "@/components/ui/button";
 
@@ -81,7 +81,8 @@ export function ObjectListControls({ view }: { view: ObjectListView }) {
         aria-label={`Quantidade de objetos: ${countLabel}`}
         className="ml-auto mr-2 flex h-7 shrink-0 items-center gap-1.5 px-1.5 text-xs"
       >
-        <Hash className="size-3.5" aria-hidden="true" />{view.items.length}
+        <Hash className="size-3.5" aria-hidden="true" />
+        {view.items.length}
       </span>
       <ObjectListChoice
         label="Filtrar objetos"

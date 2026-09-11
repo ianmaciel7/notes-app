@@ -17,7 +17,9 @@ describe("component location boundaries", () => {
   it("keeps src/components reserved for the global ui design system", () => {
     const componentsDir = join(repoRoot, "src", "components");
     const entries = readdirSync(componentsDir).filter((name) => !name.startsWith("."));
-    const directories = entries.filter((name) => statSync(join(componentsDir, name)).isDirectory()).sort();
+    const directories = entries
+      .filter((name) => statSync(join(componentsDir, name)).isDirectory())
+      .sort();
     const files = entries.filter((name) => statSync(join(componentsDir, name)).isFile()).sort();
 
     expect(directories).toEqual(["ui"]);

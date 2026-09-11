@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-
+import { ObjectPageIcon } from "@/app/_components/objects/object-icons";
 import {
   createNewContentMenuItems,
   createSidebarMainTabUpdate,
@@ -12,7 +12,6 @@ import {
   shouldOpenNewContentCommandDialogForEvent,
   shouldRenderCommandPaletteOpenInNewTabToggle,
 } from "@/app/_components/workspace/app-sidebar-primary-actions-command-dialog";
-import { ObjectPageIcon } from "@/app/_components/objects/object-icons";
 
 it("keeps the compact new-object menu separate from the search command dialog", () => {
   expect(shouldOpenNewContentCommandDialogForEvent("workspace:open-new-palette")).toBe(false);

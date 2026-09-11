@@ -262,7 +262,9 @@ it("renders the object type list as the borderless interior of the Capacities sh
 });
 
 it("renders the object type list menus with compact Capacities rows and leading icons", () => {
-  const componentSource = readProjectSource("src/app/_components/objects/list/object-list-actions.tsx");
+  const componentSource = readProjectSource(
+    "src/app/_components/objects/list/object-list-actions.tsx",
+  );
   const markup = renderToStaticMarkup(
     <WorkspaceObjectTypeListView
       entities={[entityFixture({ objectTypeId: "study_goal", title: "Biology exam" })]}

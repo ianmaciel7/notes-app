@@ -18,7 +18,7 @@ export function ObjectDetailHeader({ className, ...props }: ComponentProps<"head
   return (
     <header
       data-slot="object-detail-header"
-      className={cn("border-b border-[var(--app-border-front)] px-8 py-7", className)}
+      className={cn("border-b border-[var(--app-border-front)] px-8 pt-9 pb-4", className)}
       {...props}
     />
   );

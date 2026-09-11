@@ -1,6 +1,11 @@
 "use client";
 
 import * as React from "react";
+import {
+  ObjectCollectionIcon,
+  ObjectPageIcon,
+  objectIconToneBadgeClass,
+} from "@/app/_components/objects/object-icons";
 import { AppHeader, AppHeaderAction } from "@/app/_components/workspace/app-header";
 import {
   AppHeaderCaretDownIcon,
@@ -16,11 +21,7 @@ import {
   type SideSpecialItem,
 } from "@/app/_components/workspace/app-side-panel-header";
 import { useFocusMode } from "@/app/_components/workspace/focus-mode-provider";
-import {
-  ObjectCollectionIcon,
-  ObjectPageIcon,
-  objectIconToneBadgeClass,
-} from "@/app/_components/objects/object-icons";
+import { useSpaceData } from "@/app/_components/workspace/use-space-data";
 import { useTheme } from "@/app/_providers/theme-provider";
 import {
   DropdownMenu,
@@ -28,7 +29,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSpaceData } from "@/app/_components/workspace/use-space-data";
 import { db } from "@/lib/db";
 import type {
   CreateStructureInput,

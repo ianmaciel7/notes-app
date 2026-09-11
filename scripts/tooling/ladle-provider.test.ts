@@ -24,7 +24,9 @@ it("keeps the global Ladle provider free of production-distorting canvas padding
 });
 
 it("mounts workspace header stories with the same new-content controller used by the app", () => {
-  const storySource = readProjectSource("src/app/_components/workspace/space-controller.stories.tsx");
+  const storySource = readProjectSource(
+    "src/app/_components/workspace/space-controller.stories.tsx",
+  );
 
   expect(storySource).toContain("WorkspaceNewContentDialogController");
   expect(storySource).toContain("<AppShellProvider>");

@@ -2,8 +2,8 @@ import { Plus } from "lucide-react";
 import { ObjectListOverview } from "@/app/_components/objects/list/object-list-overview";
 import type { ObjectListView } from "@/app/_components/objects/list/use-object-list";
 import { WorkspaceEmptyState } from "@/app/_components/workspace/space-surface";
-import { Button } from "@/components/ui/button";
 import { WorkspaceObjectDataView } from "@/app/_components/workspace/workspace-object-data-view";
+import { Button } from "@/components/ui/button";
 
 function ObjectListEmpty({ view }: { view: ObjectListView }) {
   const { preferences, listName, singularName, onCreateEntity } = view;
@@ -29,7 +29,8 @@ function ObjectListEmpty({ view }: { view: ObjectListView }) {
           </Button>
         ) : onCreateEntity ? (
           <Button type="button" size="sm" onClick={onCreateEntity}>
-            <Plus className="size-3.5" aria-hidden="true" />Novo {singularName}
+            <Plus className="size-3.5" aria-hidden="true" />
+            Novo {singularName}
           </Button>
         ) : undefined
       }

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { readEntityField } from "@/app/_components/objects/detail/object-edit-model";
-import { Button } from "@/components/ui/button";
 import { useObjectMutation } from "@/app/_components/objects/use-object-mutation";
+import { Button } from "@/components/ui/button";
 import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
 
 const ratings = [

@@ -17,11 +17,7 @@ export function ObjectList({ className, ...props }: ComponentProps<"section">) {
 
 export function ObjectListHeader({ className, ...props }: ComponentProps<"header">) {
   return (
-    <header
-      data-slot="object-list-header"
-      className={cn("shrink-0 px-3", className)}
-      {...props}
-    />
+    <header data-slot="object-list-header" className={cn("shrink-0 px-3", className)} {...props} />
   );
 }
 

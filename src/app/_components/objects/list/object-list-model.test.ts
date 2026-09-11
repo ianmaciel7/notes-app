@@ -1,5 +1,4 @@
 import { expect, it } from "vitest";
-import { objectEntityFixture, objectTypeFixture } from "@/app/_components/objects/object-view-fixtures";
 import {
   defaultObjectListPreferences,
   objectListPreferencesKey,
@@ -11,14 +10,22 @@ import {
   readObjectListPreferences,
   writeObjectListPreferences,
 } from "@/app/_components/objects/list/object-list-storage";
+import {
+  objectEntityFixture,
+  objectTypeFixture,
+} from "@/app/_components/objects/object-view-fixtures";
 
 it("isolates an object list by both type and space", () => {
   const own = objectEntityFixture();
   const foreign = objectEntityFixture({ id: "foreign", spaceId: "work" });
   const otherType = objectEntityFixture({ id: "task", objectTypeId: "task" });
-  expect(selectObjectListEntities(
-    [own, foreign, otherType], objectTypeFixture(), defaultObjectListPreferences,
-  )).toEqual([own]);
+  expect(
+    selectObjectListEntities(
+      [own, foreign, otherType],
+      objectTypeFixture(),
+      defaultObjectListPreferences,
+    ),
+  ).toEqual([own]);
 });
 
 it("rejects ambiguous unscoped lists instead of merging spaces", () => {
@@ -59,8 +66,12 @@ it("migrates the old sort preference without inventing new values", () => {
 
 it("handles denied reads and quota-limited writes without crashing", () => {
   const storage = {
-    getItem() { throw new Error("Access denied"); },
-    setItem() { throw new Error("Quota exceeded"); },
+    getItem() {
+      throw new Error("Access denied");
+    },
+    setItem() {
+      throw new Error("Quota exceeded");
+    },
   };
   expect(readObjectListPreferences("view", storage)).toEqual(defaultObjectListPreferences);
   expect(writeObjectListPreferences("view", defaultObjectListPreferences, storage)).toBe(false);
@@ -70,15 +81,19 @@ it("persists independent view preferences with the legacy namespace", () => {
   const values = new Map<string, string>();
   const storage = {
     getItem: (key: string) => values.get(key) ?? null,
-    setItem: (key: string, value: string) => { values.set(key, value); },
+    setItem: (key: string, value: string) => {
+      values.set(key, value);
+    },
   };
   const a = objectListPreferencesKey("personal", "page");
   const b = objectListPreferencesKey("work", "page");
   expect(a).toBe("knowledgeos.workspace.objectTypeList.personal.page");
-  expect(writeObjectListPreferences(a, { ...defaultObjectListPreferences, query: "A" }, storage))
-    .toBe(true);
-  expect(writeObjectListPreferences(b, { ...defaultObjectListPreferences, query: "B" }, storage))
-    .toBe(true);
+  expect(
+    writeObjectListPreferences(a, { ...defaultObjectListPreferences, query: "A" }, storage),
+  ).toBe(true);
+  expect(
+    writeObjectListPreferences(b, { ...defaultObjectListPreferences, query: "B" }, storage),
+  ).toBe(true);
   expect(readObjectListPreferences(a, storage).query).toBe("A");
   expect(readObjectListPreferences(b, storage).query).toBe("B");
 });
