@@ -13,12 +13,12 @@ changes, storage migration or fictional type capabilities. Preserve existing qua
 
 ## Tasks
 
-- [ ] Add regression tests for selection, preferences and URL protocols.
-- [ ] Extract typed models, structural parts, and focused list controls.
-- [ ] Add concrete List/Detail pairs and explicit resolver; preserve compatibility exports.
-- [ ] Update source-location assertions to follow extracted modules without removing checks.
-- [ ] Document complete component inventory and remaining integration/quality debt.
-- [ ] Inspect changes; run available tests and record unavailable project checks.
+- [x] Add regression tests for selection, preferences and URL protocols.
+- [x] Extract typed models, structural parts, and focused list controls.
+- [x] Add concrete List/Detail pairs and explicit resolver; preserve compatibility exports.
+- [x] Update source-location assertions to follow extracted modules without removing checks.
+- [x] Document complete component inventory and remaining integration/quality debt.
+- [x] Inspect changes; run available tests and record unavailable project checks.
 - [ ] Publish spec and implementation commits, fast-forward dev without force.
 
 ## Verification commands
@@ -38,3 +38,6 @@ GitHub connector reads/writes are available. The local execution container curre
 resolve github.com and has no repository dependencies. Use the globally available TypeScript
 compiler only for explicitly labeled syntax checks and dependency-free model tests. Do not
 claim full typecheck, Vitest, Biome, visual parity, or CI success from these checks.
+
+Execution evidence: ../../architecture/object-components-verification.md.
+Remote publication is verified from the final commit and branch response, not inferred from this plan.

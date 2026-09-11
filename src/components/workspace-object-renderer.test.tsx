@@ -17,6 +17,16 @@ function readProjectSource(relativePath: string) {
   return readFileSync(new URL(relativePath, `file://${projectRoot}/`), "utf8");
 }
 
+function getModeButtonClass(markup: string, label: string, pressed: boolean) {
+  const buttons = markup.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g);
+  for (const [, attributes, content] of buttons) {
+    if (!attributes.includes(`aria-pressed="${pressed}"`)) continue;
+    if (!content.includes(label)) continue;
+    return attributes.match(/class="([^"]+)"/)?.[1];
+  }
+  return undefined;
+}
+
 function entityFixture(input: Partial<SpaceEntityRecord> = {}): SpaceEntityRecord {
   return {
     id: input.id ?? "entity-a",
@@ -125,10 +135,7 @@ it("renders page objects with their saved blocks instead of a pending placeholde
 it("renders individual object headers with the Capacities-style object type label chip", () => {
   const markup = renderToStaticMarkup(
     <WorkspaceObjectRenderer
-      entity={entityFixture({
-        objectTypeId: "page",
-        title: "aaa",
-      })}
+      entity={entityFixture({ objectTypeId: "page", title: "aaa" })}
       objectType={objectTypeFixture({
         id: "page",
         singularName: "Página",
@@ -248,13 +255,14 @@ it("renders the object type list as the borderless interior of the Capacities sh
   expect(markup).toContain("items-center justify-between gap-2 py-4");
   expect(markup).toContain("overflow-x-auto pb-1.5 pt-px text-sm");
   expect(markup).toContain(
-    'class="dataview-heading-icon-container mr-2.5 size-8 shrink-0 rounded-[8px] border border-[var(--app-border-front)] bg-[var(--app-bg-front)] p-0.5"',
+    'class="dataview-heading-icon-container mr-2.5 size-8 shrink-0 rounded-[8px] ' +
+      'border border-[var(--app-border-front)] bg-[var(--app-bg-front)] p-0.5"',
   );
   expect(markup).toContain("dataview-heading max-w-max truncate text-xl font-bold leading-5");
 });
 
 it("renders the object type list menus with compact Capacities rows and leading icons", () => {
-  const componentSource = readProjectSource("src/components/workspace-object-renderer.tsx");
+  const componentSource = readProjectSource("src/components/objects/list/object-list-actions.tsx");
   const markup = renderToStaticMarkup(
     <WorkspaceObjectTypeListView
       entities={[entityFixture({ objectTypeId: "study_goal", title: "Biology exam" })]}
@@ -318,12 +326,8 @@ it("matches the Capacities object-type overview tab chrome and empty section lay
     />,
   );
 
-  const overviewTabClass = markup.match(
-    /<button type="button" aria-pressed="true" class="([^"]+)">[\s\S]*?Visão geral/,
-  )?.[1];
-  const allTabClass = markup.match(
-    /<button type="button" aria-pressed="false" class="([^"]+)">[\s\S]*?Tudo/,
-  )?.[1];
+  const overviewTabClass = getModeButtonClass(markup, "Visão geral", true);
+  const allTabClass = getModeButtonClass(markup, "Tudo", false);
 
   expect(overviewTabClass).toContain("h-8");
   expect(overviewTabClass).toContain("border-0");
