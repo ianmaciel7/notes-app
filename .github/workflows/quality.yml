@@ -56,6 +56,19 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Archive verification runtime
+        if: github.ref == 'refs/heads/dev'
+        run: tar --exclude=node_modules/.cache -czf verification-runtime.tar.gz node_modules public .gitignore
+
+      - name: Upload verification runtime
+        if: github.ref == 'refs/heads/dev'
+        uses: actions/upload-artifact@v6
+        with:
+          name: verification-runtime-${{ github.sha }}
+          path: verification-runtime.tar.gz
+          retention-days: 1
+          if-no-files-found: error
+
       - name: Check formatting
         run: pnpm format:check
 
