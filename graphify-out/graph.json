@@ -7122,7 +7122,7 @@
       "file_type": "code",
       "norm_label": "docblockitem()",
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L293"
+      "source_location": "L274"
     },
     {
       "id": "src_components_ladle_doc_viewer_docviewer",
@@ -7134,7 +7134,7 @@
       "file_type": "code",
       "norm_label": "docviewer()",
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L309"
+      "source_location": "L286"
     },
     {
       "id": "src_components_ladle_doc_viewer_headingblock",
@@ -7146,7 +7146,7 @@
       "file_type": "code",
       "norm_label": "headingblock()",
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L284"
+      "source_location": "L267"
     },
     {
       "id": "src_components_ladle_doc_viewer_mermaiddiagram",
@@ -7158,7 +7158,7 @@
       "file_type": "code",
       "norm_label": "mermaiddiagram()",
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L228"
+      "source_location": "L219"
     },
     {
       "id": "src_components_ladle_doc_viewer_parsedocmarkdown",
@@ -7194,7 +7194,7 @@
       "file_type": "code",
       "norm_label": "rendermermaidsvg()",
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L154"
+      "source_location": "L149"
     },
     {
       "id": "src_components_ladle_doc_viewer_usedarkmode",
@@ -33710,7 +33710,7 @@
       "file_type": "code",
       "norm_label": "architecturedocviewer",
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L329"
+      "source_location": "L306"
     },
     {
       "id": "src_components_ladle_doc_viewer_parsearchitecturemarkdown",
@@ -77266,7 +77266,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L310",
+      "source_location": "L287",
       "weight": 1.0
     },
     {
@@ -77278,7 +77278,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L229",
+      "source_location": "L220",
       "weight": 1.0
     },
     {
@@ -77290,7 +77290,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L237",
+      "source_location": "L228",
       "weight": 1.0
     },
     {
@@ -119718,7 +119718,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L154",
+      "source_location": "L149",
       "weight": 1.0
     },
     {
@@ -119740,7 +119740,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L228",
+      "source_location": "L219",
       "weight": 1.0
     },
     {
@@ -119751,7 +119751,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L284",
+      "source_location": "L267",
       "weight": 1.0
     },
     {
@@ -119762,7 +119762,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L293",
+      "source_location": "L274",
       "weight": 1.0
     },
     {
@@ -119773,7 +119773,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L309",
+      "source_location": "L286",
       "weight": 1.0
     },
     {
@@ -119784,7 +119784,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L329",
+      "source_location": "L306",
       "weight": 1.0
     },
     {
@@ -137048,7 +137048,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "src/components/ladle/doc-viewer.tsx",
-      "source_location": "L117",
+      "source_location": "L112",
       "weight": 1.0
     },
     {
@@ -138436,5 +138436,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a995a6e1298342ee3ca1e72585dad5127160bc2a"
+  "built_at_commit": "b7ed811624ee2c14ffde43e0ec7a6fd29f6fdc82"
 }

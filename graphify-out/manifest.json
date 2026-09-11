@@ -1992,9 +1992,9 @@
     "semantic_hash": ""
   },
   "src/components/ladle/doc-viewer.tsx": {
-    "mtime": 1789170399.0376034,
-    "seen": 1789170437.2932506,
-    "ast_hash": "49476d92d6433212a23c8f9094b83f53",
+    "mtime": 1789170486.3906012,
+    "seen": 1789170576.9119365,
+    "ast_hash": "0d6feabff89fc8cfe9e0542931b06749",
     "semantic_hash": ""
   },
   "docs/decisions/0001-nextjs-16-react-19-baseline.md": {
@@ -2058,15 +2058,15 @@
     "semantic_hash": ""
   },
   "docs/decisions/decisions.stories.tsx": {
-    "mtime": 1789170174.5872161,
-    "seen": 1789170437.2932506,
-    "ast_hash": "b1cff27bfa13014cc2c8b06fe8b78b33",
+    "mtime": 1789170443.5431662,
+    "seen": 1789170576.9119365,
+    "ast_hash": "30b7d321afde44ae61a84291f8fc2c22",
     "semantic_hash": ""
   },
   "docs/guides/guides.stories.tsx": {
-    "mtime": 1789170193.3469863,
-    "seen": 1789170437.2932506,
-    "ast_hash": "d2dfc4fa134b4b84a8bb1198691e7441",
+    "mtime": 1789170443.5426602,
+    "seen": 1789170576.9119365,
+    "ast_hash": "dcb4931ba677c24309b37079a96bd2e5",
     "semantic_hash": ""
   },
   "docs/reference/reference.stories.tsx": {
