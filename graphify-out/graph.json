@@ -20942,7 +20942,7 @@
       "node_kind": "heading",
       "norm_label": "graphify",
       "source_file": "AGENTS.md",
-      "source_location": "L9"
+      "source_location": "L11"
     },
     {
       "id": "agents_language_rule",
@@ -20954,7 +20954,7 @@
       "node_kind": "heading",
       "norm_label": "language rule",
       "source_file": "AGENTS.md",
-      "source_location": "L35"
+      "source_location": "L45"
     },
     {
       "id": "agents_path_configuration_rule",
@@ -20966,19 +20966,19 @@
       "node_kind": "heading",
       "norm_label": "path & configuration rule",
       "source_file": "AGENTS.md",
-      "source_location": "L39"
+      "source_location": "L49"
     },
     {
-      "id": "agents_recommended_mcp_servers",
-      "label": "Recommended MCP Servers",
+      "id": "agents_recommended_mcp_servers_skills",
+      "label": "Recommended MCP Servers & Skills",
       "_origin": "ast",
       "community": 137,
       "community_name": "This is NOT the Next.js you know",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "recommended mcp servers",
+      "norm_label": "recommended mcp servers & skills",
       "source_file": "AGENTS.md",
-      "source_location": "L43"
+      "source_location": "L57"
     },
     {
       "id": "agents_reference_worktrees_worktrees",
@@ -20990,7 +20990,7 @@
       "node_kind": "heading",
       "norm_label": "reference worktrees (`.worktrees/`)",
       "source_file": "AGENTS.md",
-      "source_location": "L22"
+      "source_location": "L28"
     },
     {
       "id": "agents_specialized_subagent_roles_agents_agents",
@@ -21002,7 +21002,7 @@
       "node_kind": "heading",
       "norm_label": "specialized subagent roles (`.agents/agents/`)",
       "source_file": "AGENTS.md",
-      "source_location": "L47"
+      "source_location": "L71"
     },
     {
       "id": "agents_this_is_not_the_next_js_you_know",
@@ -105999,13 +105999,24 @@
     },
     {
       "source": "agents_this_is_not_the_next_js_you_know",
+      "target": "agents_graphify",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "agents_this_is_not_the_next_js_you_know",
       "target": "agents_reference_worktrees_worktrees",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "AGENTS.md",
-      "source_location": "L22",
+      "source_location": "L28",
       "weight": 1.0
     },
     {
@@ -106016,7 +106027,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "AGENTS.md",
-      "source_location": "L35",
+      "source_location": "L45",
       "weight": 1.0
     },
     {
@@ -106027,18 +106038,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "AGENTS.md",
-      "source_location": "L39",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
       "source": "agents_this_is_not_the_next_js_you_know",
-      "target": "agents_recommended_mcp_servers",
+      "target": "agents_recommended_mcp_servers_skills",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "AGENTS.md",
-      "source_location": "L43",
+      "source_location": "L57",
       "weight": 1.0
     },
     {
@@ -106049,18 +106060,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "AGENTS.md",
-      "source_location": "L47",
-      "weight": 1.0
-    },
-    {
-      "source": "agents_this_is_not_the_next_js_you_know",
-      "target": "agents_graphify",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "AGENTS.md",
-      "source_location": "L9",
+      "source_location": "L71",
       "weight": 1.0
     },
     {
@@ -120085,7 +120085,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "AGENTS.md",
-      "source_location": "L50",
+      "source_location": "L74",
       "weight": 1.0
     },
     {
@@ -120096,7 +120096,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "AGENTS.md",
-      "source_location": "L51",
+      "source_location": "L75",
       "weight": 1.0
     },
     {
@@ -120107,7 +120107,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "AGENTS.md",
-      "source_location": "L52",
+      "source_location": "L76",
       "weight": 1.0
     },
     {
@@ -120118,7 +120118,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "AGENTS.md",
-      "source_location": "L53",
+      "source_location": "L77",
       "weight": 1.0
     },
     {
@@ -121719,5 +121719,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "66bd996cee29724aa33b9e5752745d4ff389350a"
+  "built_at_commit": "bb3d77b0d71e481899808ea540490b65dab98160"
 }

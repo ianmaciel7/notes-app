@@ -1356,9 +1356,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1789165544.9039807,
-    "seen": 1789165566.619143,
-    "ast_hash": "7e087d7cea3d25f5e8cfa021fb9ad0ea",
+    "mtime": 1789168192.4070592,
+    "seen": 1789168265.157224,
+    "ast_hash": "aadc55bdab8f3ab6f62674f60910396f",
     "semantic_hash": ""
   },
   ".agents/hooks.json": {
@@ -1440,9 +1440,9 @@
     "semantic_hash": ""
   },
   "ARCHITECTURE.md": {
-    "mtime": 1789165307.0817301,
-    "seen": 1789165405.6378179,
-    "ast_hash": "88a7bae8f2d6b12f13fda23d3d4e4124",
+    "mtime": 1789167876.0155377,
+    "seen": 1789168265.157224,
+    "ast_hash": "fcba5d2fdede7ee9a0afe1fa43cdf798",
     "semantic_hash": ""
   },
   "public/file.svg": {

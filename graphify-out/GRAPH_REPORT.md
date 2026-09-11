@@ -1,7 +1,7 @@
 # Graph Report - notes-app  (2026-09-11)
 
 ## Corpus Check
-- 252 files · ~493,097 words
+- 252 files · ~493,147 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `66bd996c`
+- Built from commit: `bb3d77b0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -855,7 +855,7 @@ Nodes (4): introspect_postgres(), _quote_ident(), Connect to PostgreSQL, reconst
 
 ### Community 137 - "This is NOT the Next.js you know"
 Cohesion: 0.17
-Nodes (7): graphify, Language Rule, Path & Configuration Rule, Recommended MCP Servers, Reference Worktrees (`.worktrees/`), Specialized Subagent Roles (`.agents/agents/`), This is NOT the Next.js you know
+Nodes (7): graphify, Language Rule, Path & Configuration Rule, Recommended MCP Servers & Skills, Reference Worktrees (`.worktrees/`), Specialized Subagent Roles (`.agents/agents/`), This is NOT the Next.js you know
 
 ### Community 138 - "__main__.py"
 Cohesion: 0.11
