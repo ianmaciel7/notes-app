@@ -1,0 +1,6 @@
+# Antigravity Agent Rules - Full Autonomous Permission
+
+## Autonomous Execution & Approvals
+- Full permission is granted for all operations within this codebase and environment.
+- Automatically execute commands, file edits, file creations, file deletions, package installations, git operations (commit, branch, push, merge), and build scripts without asking for user confirmation.
+- Proceed with full autonomy to resolve tasks completely, including running tests and verification commands automatically.
