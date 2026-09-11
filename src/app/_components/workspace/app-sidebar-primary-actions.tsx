@@ -23,7 +23,7 @@ import {
   AppSidebarOverview,
   type AppSidebarPinnedEntity,
   type AppSidebarTrashItem,
-} from "@/app/_components/workspace/app-sidebar-overview";
+} from "@/app/_components/workspace/app-sidebar-overview-parity";
 import { useWorkspace } from "@/app/_components/workspace/space-controller";
 import {
   collectionMembers,

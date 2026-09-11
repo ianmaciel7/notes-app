@@ -7,7 +7,7 @@ import { getObjectTypeName } from "@/app/_components/objects/detail/object-detai
 import { ObjectTypeLabelChip } from "@/app/_components/objects/object-icons";
 import { useObjectMutation } from "@/app/_components/objects/use-object-mutation";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import type { ObjectIconName, ObjectIconTone } from "@/app/_components/objects/object-icons";
+import type { ObjectIconName, ObjectIconTone } from "@/lib/space-object-types";
 import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
 
 export type ObjectTypeDetailProps = {

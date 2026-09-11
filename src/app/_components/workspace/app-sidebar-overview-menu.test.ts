@@ -128,8 +128,7 @@ it("makes pinned and object type rows draggable without adding visible handles",
   expect(objectTypeRowSource).toContain("onDragStart={onDragStart}");
   expect(objectTypeRowSource).toContain("onDragEnd={onDragEnd}");
   expect(objectTypeRowSource).toContain("data-object-type-id={objectType.id}");
-  expect(objectTypeRowSource).toContain("onPointerEnter={handleObjectTypeDragOverTarget}");
-  expect(objectTypeRowSource).toContain("onMouseEnter={handleObjectTypeDragOverTarget}");
+  expect(objectTypeRowSource).toContain("onDragOver={(event) => {");
   expect(objectTypeRowSource).toContain("onDragOverTarget();");
   expect(objectTypeRowSource).not.toContain("row-drag-handle");
   expect(componentSource).toContain('setObjectSort("manual")');

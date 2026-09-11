@@ -813,12 +813,6 @@ function AppSidebarPinnedRow({
         event.preventDefault();
         onDragOverTarget?.();
       }}
-      onPointerEnter={() => {
-        if (draggable) onDragOverTarget?.();
-      }}
-      onMouseEnter={() => {
-        if (draggable) onDragOverTarget?.();
-      }}
       onDrop={(event) => {
         if (!draggable) return;
         event.preventDefault();
@@ -1304,11 +1298,6 @@ function AppSidebarObjectTypeRow({
     return true;
   }
 
-  function handleObjectTypeDragOverTarget() {
-    if (!draggable) return;
-    onDragOverTarget();
-  }
-
   return (
     /* biome-ignore lint/a11y/noStaticElementInteractions: native drag drop target belongs on the visual row wrapper */
     <div
@@ -1323,8 +1312,6 @@ function AppSidebarObjectTypeRow({
       onDragStart={onDragStart}
       onPointerDown={onPointerDown}
       onDragEnd={onDragEnd}
-      onPointerEnter={handleObjectTypeDragOverTarget}
-      onMouseEnter={handleObjectTypeDragOverTarget}
       onDragOver={(event) => {
         if (!draggable) return;
         event.preventDefault();

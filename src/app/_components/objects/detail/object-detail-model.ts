@@ -22,9 +22,9 @@ export function getWeblinkUrl(entity: SpaceEntityRecord): string | undefined {
 
 export function getObjectTypeName(
   entity: SpaceEntityRecord,
-  objectType?: SpaceObjectTypeRecord,
+  objectType?: SpaceObjectTypeRecord | { singularName?: string; label?: string },
 ): string {
-  const name = objectType?.singularName ?? entity.objectTypeId.replace(/[-_]/g, " ");
+  const name = objectType?.singularName ?? ("label" in (objectType ?? {}) ? (objectType as { label?: string }).label : undefined) ?? entity.objectTypeId.replace(/[-_]/g, " ");
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
