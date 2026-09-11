@@ -1,0 +1,17 @@
+{
+  "graphify-auto-update": {
+    "enabled": true,
+    "PostToolUse": [
+      {
+        "matcher": "write_to_file|replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run --with graphifyy -m graphify update .",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
