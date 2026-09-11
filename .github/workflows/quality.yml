@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 permissions:
   contents: read
@@ -21,6 +22,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Archive verification sources
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          git archive --format=tar.gz --output=verification-source.tar.gz HEAD \
+            src tests scripts .agents .github .ladle docs \
+            AGENTS.md ARCHITECTURE.md CAPACITIES_COMPONENT_MAP.md CONTRIBUTING.md \
+            DECISIONS.md SECURITY.md SPEC.md TESTING.md \
+            package.json pnpm-lock.yaml pnpm-workspace.yaml biome.json components.json \
+            tsconfig.json vitest.config.ts playwright.config.ts next.config.ts postcss.config.mjs
+
+      - name: Upload verification sources
+        if: github.ref == 'refs/heads/dev'
+        uses: actions/upload-artifact@v6
+        with:
+          name: verification-source-${{ github.sha }}
+          path: verification-source.tar.gz
+          retention-days: 1
+          if-no-files-found: error
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
