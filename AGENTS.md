@@ -30,6 +30,8 @@ The `.worktrees/` folder contains historical iterations of the project for archi
 
 When implementing or refactoring features, inspect these worktrees as authoritative baseline references.
 
+**Strict Rule**: The `.worktrees/` directory and all its contents are strictly **READ-ONLY**. AI agents must **NEVER** create, edit, modify, or delete any files or directories inside `.worktrees/`.
+
 ## Language Rule
 
 - Always write all code, docstrings, comments, commit messages, and project documentation (including `ARCHITECTURE.md`, `README.md`, design docs, etc.) in **English**, unless the user explicitly requests otherwise.
@@ -37,4 +39,9 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 ## Path & Configuration Rule
 
 - Always use relative paths or portable command names in configuration files (such as `.codex/hooks.json`, `.husky/*`, etc.). Never hardcode absolute user-dependent paths (such as `C:\Users\ianma\...`).
+
+## Recommended MCP Servers
+
+- **Open Design MCP**: Used for UI component design and visual asset synchronization. See [.agents/mcp_config.example.json](.agents/mcp_config.example.json) for an environment configuration template. Ensure the local Open Design desktop application is running on your machine.
+
 

@@ -1338,9 +1338,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786222955.2206926,
-    "seen": 1789163613.327723,
-    "ast_hash": "01a0517a5160ef8c4cbd308676fb3e8a",
+    "mtime": 1789165366.493726,
+    "seen": 1789165405.6378179,
+    "ast_hash": "20ad686bd09335d922bb76b9828700d9",
     "semantic_hash": ""
   },
   ".codex/hooks.json": {
@@ -1356,9 +1356,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1789163538.4818592,
-    "seen": 1789163613.327723,
-    "ast_hash": "0f4db1acc19ffac84c58a3410417551b",
+    "mtime": 1789165241.665831,
+    "seen": 1789165405.6378179,
+    "ast_hash": "be7002f95bdd75259cde6a5aa97ad628",
     "semantic_hash": ""
   },
   ".agents/hooks.json": {
@@ -1392,9 +1392,9 @@
     "semantic_hash": ""
   },
   "biome.json": {
-    "mtime": 1789163142.8963366,
-    "seen": 1789163613.327723,
-    "ast_hash": "8ce0ceeca61bf89fc6cadf408f68f6df",
+    "mtime": 1789164266.43647,
+    "seen": 1789165405.6378179,
+    "ast_hash": "3a29964cc218c00b2fca41bb7f524f78",
     "semantic_hash": ""
   },
   "next.config.ts": {
@@ -1440,9 +1440,9 @@
     "semantic_hash": ""
   },
   "ARCHITECTURE.md": {
-    "mtime": 1789163347.0522127,
-    "seen": 1789163613.327723,
-    "ast_hash": "245683c4ac8469b1dfcae1d478f297c1",
+    "mtime": 1789165307.0817301,
+    "seen": 1789165405.6378179,
+    "ast_hash": "88a7bae8f2d6b12f13fda23d3d4e4124",
     "semantic_hash": ""
   },
   "public/file.svg": {
@@ -1485,6 +1485,36 @@
     "mtime": 1789163794.6763532,
     "seen": 1789163834.2500818,
     "ast_hash": "23eca6aa38aeab9f53a082d20b13aace",
+    "semantic_hash": ""
+  },
+  ".agents/mcp_config.example.json": {
+    "mtime": 1789164994.9477267,
+    "seen": 1789165405.6378179,
+    "ast_hash": "c90fe72c9b2be7ea9331eca7c3cd5958",
+    "semantic_hash": ""
+  },
+  ".agents/agents/architect/agent.md": {
+    "mtime": 1789165386.341193,
+    "seen": 1789165405.6378179,
+    "ast_hash": "7eee471da1cba6d05c99a323c2b13b67",
+    "semantic_hash": ""
+  },
+  ".agents/rules/mcp-servers.md": {
+    "mtime": 1789165311.8608108,
+    "seen": 1789165405.6378179,
+    "ast_hash": "ea6597523273901eb6a06ec980f05e66",
+    "semantic_hash": ""
+  },
+  ".agents/rules/worktrees-read-only.md": {
+    "mtime": 1789165172.800189,
+    "seen": 1789165405.6378179,
+    "ast_hash": "22159e1e187d494705bf88a4f5e58b07",
+    "semantic_hash": ""
+  },
+  "DECISIONS.md": {
+    "mtime": 1789163819.5228722,
+    "seen": 1789165405.6378179,
+    "ast_hash": "a63475fb054fe2ad24fd82335fbedda5",
     "semantic_hash": ""
   }
 }

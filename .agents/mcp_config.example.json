@@ -1,0 +1,19 @@
+{
+  "$comment": "Este é um arquivo de exemplo do MCP para Open Design. Como os caminhos e executáveis variam por sistema operacional (Windows, Linux, macOS) e por usuário, cada desenvolvedor deve usar a configuração gerada pelo seu aplicativo local do Open Design.",
+  "mcpServers": {
+    "open-design-windows-example": {
+      "command": "%APPDATA%\\Open Design\\en\\389d361392356ad9\\Open Design.exe",
+      "args": [
+        "%APPDATA%\\Open Design\\launcher\\channels\\stable\\namespaces\\release-stable-win\\versions\\0.21.1\\payload\\resources\\app\\prebundled\\daemon\\daemon-cli.mjs",
+        "mcp"
+      ],
+      "env": {
+        "OD_DATA_DIR": "%APPDATA%\\Open Design\\namespaces\\release-stable-win\\data",
+        "OD_SIDECAR_IPC_PATH": "\\\\.\\pipe\\open-design-release-stable-win-daemon",
+        "OD_MCP_BOOTSTRAP_COMMAND": "%LOCALAPPDATA%\\Programs\\Open Design\\Open Design.exe",
+        "OD_MCP_BOOTSTRAP_ARGS": "[\"--headless\"]",
+        "ELECTRON_RUN_AS_NODE": "1"
+      }
+    }
+  }
+}

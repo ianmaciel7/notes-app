@@ -21,6 +21,13 @@ Used by some of the world's largest companies, Next.js enables you to create ful
 - Visit our [Learn Next.js](https://nextjs.org/learn) course to get started with Next.js.
 - Visit the [Next.js Showcase](https://nextjs.org/showcase) to see more sites built with Next.js.
 
+## AI & Development Setup
+
+This project uses AI agent rules and Model Context Protocol (MCP) integrations:
+- **Agent Instructions**: See [AGENTS.md](file:///C:/Users/ianma/workspace/notes-app/AGENTS.md) for agent guidelines and project rules.
+- **Open Design MCP**: For UI design & asset synchronization. See [.agents/mcp_config.example.json](file:///C:/Users/ianma/workspace/notes-app/.agents/mcp_config.example.json) to set up your local `mcp_config.json`.
+
+
 ## Documentation
 
 Visit [https://nextjs.org/docs](https://nextjs.org/docs) to view the full documentation.
