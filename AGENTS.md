@@ -44,4 +44,13 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 
 - **Open Design MCP**: Used for UI component design and visual asset synchronization. See [.agents/mcp_config.example.json](.agents/mcp_config.example.json) for an environment configuration template. Ensure the local Open Design desktop application is running on your machine.
 
+## Specialized Subagent Roles (`.agents/agents/`)
+
+When working on complex tasks, subagents can be invoked via `invoke_subagent` to specialize in specific areas:
+- **`architect`** ([`.agents/agents/architect/agent.md`](.agents/agents/architect/agent.md)): For system design, cross-module planning, server/client boundaries, and trade-off evaluation before coding.
+- **`code-reviewer`** ([`.agents/agents/code-reviewer/agent.md`](.agents/agents/code-reviewer/agent.md)): For auditing diffs, correctness, accessibility, regressions, and code quality.
+- **`security-reviewer`** ([`.agents/agents/security-reviewer/agent.md`](.agents/agents/security-reviewer/agent.md)): For threat modeling, auth boundaries, secret leakage prevention, and security policies.
+- **`test-engineer`** ([`.agents/agents/test-engineer/agent.md`](.agents/agents/test-engineer/agent.md)): For regression test strategies, verification commands (`pnpm check`, `pnpm build`), and test coverage.
+
+
 

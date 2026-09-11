@@ -1356,9 +1356,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1789165241.665831,
-    "seen": 1789165405.6378179,
-    "ast_hash": "be7002f95bdd75259cde6a5aa97ad628",
+    "mtime": 1789165544.9039807,
+    "seen": 1789165566.619143,
+    "ast_hash": "7e087d7cea3d25f5e8cfa021fb9ad0ea",
     "semantic_hash": ""
   },
   ".agents/hooks.json": {
@@ -1515,6 +1515,24 @@
     "mtime": 1789163819.5228722,
     "seen": 1789165405.6378179,
     "ast_hash": "a63475fb054fe2ad24fd82335fbedda5",
+    "semantic_hash": ""
+  },
+  ".agents/agents/code-reviewer/agent.md": {
+    "mtime": 1789165411.2486825,
+    "seen": 1789165566.619143,
+    "ast_hash": "8a23118bc55ef798134699ff1020cd08",
+    "semantic_hash": ""
+  },
+  ".agents/agents/security-reviewer/agent.md": {
+    "mtime": 1789165431.4440005,
+    "seen": 1789165566.619143,
+    "ast_hash": "b1baee541e26104e81d63df63ccd5d0b",
+    "semantic_hash": ""
+  },
+  ".agents/agents/test-engineer/agent.md": {
+    "mtime": 1789165451.3628583,
+    "seen": 1789165566.619143,
+    "ast_hash": "1be9486f65d1f3f8a71955f525403704",
     "semantic_hash": ""
   }
 }
