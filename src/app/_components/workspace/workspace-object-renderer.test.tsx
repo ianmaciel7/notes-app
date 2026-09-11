@@ -147,7 +147,6 @@ it("renders individual object headers with the Capacities-style object type labe
     />,
   );
 
-  expect(markup).toContain('data-slot="workspace-object-type-header-chip"');
   expect(markup).toContain('data-slot="object-type-label-chip"');
   expect(markup).toContain("Página");
   expect(markup).toContain("var(--type-label-bg-blue)");

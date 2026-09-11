@@ -56,3 +56,9 @@ Collection tab filtering, creation and duplication preserve actual membership.
 records source inspection, executed test/build evidence, the blocked local browser
 attempt and unresolved application features. No pixel-parity or full-E2E claim is
 made. Historical observations above remain historical, not newly measured.
+
+### Sidebar Drag/Click Parity Update: 2026-09-11
+- Reference URL: `https://app.capacities.io/19fe8909-0859-4bd4-86b3-f84722711858/ded1c298-7d1a-4bfc-99ce-09273329bcae`
+- **Click vs Drag Separation**: Isolated inner row buttons with `draggable={false}` and removed redundant `onPointerDownCapture` / `onMouseDownCapture` event listeners, resolving pointer hijacking and ensuring pure single clicks navigate cleanly without initiating unwanted HTML5 drag state.
+- **Trash Drop Target**: `AppSidebarTrashRow` enabled as an active drop target (`isDropTarget`, `onDragOver`, `onDragLeave`, `onDrop`), supporting dragging pinned items directly to trash with visual drop highlighting (`bg-destructive/15 ring-1 ring-destructive/30`).
+- **Context Menu & Shortcuts**: Integrated native `@/components/ui/context-menu` for right-clicking anywhere on sidebar rows, added `Delete`/`Backspace` keyboard shortcuts for unpinning/trashing items, and added pre-deletion confirmation dialogs for custom object types.

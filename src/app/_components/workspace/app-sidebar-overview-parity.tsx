@@ -301,9 +301,51 @@ function AppSidebarOverview({
     setDrag(null);
   }, []);
 
+  const measureItems = React.useCallback((selector: string, dataAttribute: string) => {
+    const positions = new Map<string, number>();
+    if (!rootRef.current) return positions;
+    const elements = rootRef.current.querySelectorAll<HTMLElement>(selector);
+    elements.forEach((element) => {
+      const id = element.getAttribute(dataAttribute);
+      if (id) positions.set(id, element.getBoundingClientRect().top);
+    });
+    return positions;
+  }, []);
+
+  const animateReorder = React.useCallback(
+    (previousPositions: Map<string, number>, selector: string, dataAttribute: string) => {
+      if (!rootRef.current) return;
+      window.requestAnimationFrame(() => {
+        const elements = rootRef.current?.querySelectorAll<HTMLElement>(selector);
+        elements?.forEach((element) => {
+          const id = element.getAttribute(dataAttribute);
+          if (!id) return;
+          const previousTop = previousPositions.get(id);
+          if (previousTop === undefined) return;
+
+          const currentTop = element.getBoundingClientRect().top;
+          const delta = previousTop - currentTop;
+          if (Math.abs(delta) < 0.5) return;
+
+          element.getAnimations().forEach((animation) => animation.cancel());
+          element.animate(
+            [{ transform: `translateY(${delta}px)` }, { transform: "translateY(0)" }],
+            { duration: 180, easing: "cubic-bezier(0.2, 0, 0, 1)" },
+          );
+        });
+      });
+    },
+    [],
+  );
+
   const moveObjectType = React.useCallback(
     (fromId: string, toId: string) => {
       if (fromId === toId) return;
+
+      const previousPositions = measureItems(
+        '[data-slot="app-sidebar-object-type-row-wrapper"]',
+        "data-object-type-id",
+      );
 
       const sourceOrder =
         objectSort === "alphabetical" ? visibleObjectTypes.map((item) => item.id) : objectTypeOrder;
@@ -316,8 +358,34 @@ function AppSidebarOverview({
       setObjectTypeOrder(nextOrder);
       setObjectSort("manual");
       onObjectTypeOrderChange?.(nextOrder);
+
+      animateReorder(
+        previousPositions,
+        '[data-slot="app-sidebar-object-type-row-wrapper"]',
+        "data-object-type-id",
+      );
     },
-    [objectSort, objectTypeOrder, onObjectTypeOrderChange, visibleObjectTypes],
+    [animateReorder, measureItems, objectSort, objectTypeOrder, onObjectTypeOrderChange, visibleObjectTypes],
+  );
+
+  const reorderPinned = React.useCallback(
+    (fromId: string, toId: string) => {
+      if (fromId === toId) return;
+
+      const previousPositions = measureItems(
+        '[data-slot="app-sidebar-pinned-row-wrapper"]',
+        "data-pinned-id",
+      );
+
+      setPinned((current) => reorderById(current, fromId, toId));
+
+      animateReorder(
+        previousPositions,
+        '[data-slot="app-sidebar-pinned-row-wrapper"]',
+        "data-pinned-id",
+      );
+    },
+    [animateReorder, measureItems, setPinned],
   );
 
   const pinObjectType = React.useCallback(
@@ -455,7 +523,7 @@ function AppSidebarOverview({
                       onDragOverTarget={() => {
                         const currentDrag = dragRef.current;
                         if (currentDrag?.kind === "pinned" && pinnedSort === "manual") {
-                          setPinned((current) => reorderById(current, currentDrag.id, entity.id));
+                          reorderPinned(currentDrag.id, entity.id);
                         }
                       }}
                       onDrop={() => {

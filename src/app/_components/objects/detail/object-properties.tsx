@@ -85,7 +85,7 @@ export function ObjectProperties(props: PropertyProps) {
           />
           <button
             type="button"
-            className="rounded bg-[var(--app-button-primary-bg)] px-3 py-1 text-xs text-white"
+            className="rounded bg-[var(--app-button-primary-bg)] px-3 py-1 text-xs text-primary-foreground"
             onClick={handleSaveProperty}
           >
             Salvar

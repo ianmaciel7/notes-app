@@ -7,7 +7,14 @@ import { getObjectTypeName } from "@/app/_components/objects/detail/object-detai
 import { ObjectTypeLabelChip } from "@/app/_components/objects/object-icons";
 import { useObjectMutation } from "@/app/_components/objects/use-object-mutation";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import type { SpaceEntityRecord } from "@/lib/spaces/space-types";
+import type { ObjectIconName, ObjectIconTone } from "@/app/_components/objects/object-icons";
+import type { SpaceEntityRecord, SpaceObjectTypeRecord } from "@/lib/spaces/space-types";
+
+export type ObjectTypeDetailProps = {
+  entity: SpaceEntityRecord;
+  objectType?: SpaceObjectTypeRecord | { id: string; label?: string; iconName?: ObjectIconName; tone?: ObjectIconTone };
+  tabName?: string;
+};
 
 const tagToneList = [
   "fuchsia",
@@ -97,16 +104,13 @@ function PageViewTopBar({ entity, objectType }: ObjectTypeDetailProps) {
       <div className="shrink-0 grow pointer-events-none group-hover/page-view-header:pointer-events-auto flex min-w-0 min-h-0 items-center overflow-hidden">
         <div className="min-h-[26px] min-w-0 flex flex-1 items-center justify-end gap-x-0 overflow-hidden">
           <Popover>
-            <PopoverTrigger asChild>
-              <button
-                type="button"
-                tabIndex={0}
-                className="bg-transparent hover:bg-[var(--app-bg-front-hover)] border border-transparent text-[var(--app-text-secondary)] hover:text-[var(--app-text-primary)] rounded-base px-2 h-[26px] text-sm justify-center ring-state-active box-border cursor-pointer gap-x-1.5 max-w-full truncate relative flex shrink-0 items-center transition-opacity duration-200 pointer-events-auto"
-              >
-                <SlidersHorizontal className="size-3.5" />
-                <span>Personalizar</span>
-                <ChevronDown className="size-3.5" />
-              </button>
+            <PopoverTrigger
+              tabIndex={0}
+              className="bg-transparent hover:bg-[var(--app-bg-front-hover)] border border-transparent text-[var(--app-text-secondary)] hover:text-[var(--app-text-primary)] rounded-base px-2 h-[26px] text-sm justify-center ring-state-active box-border cursor-pointer gap-x-1.5 max-w-full truncate relative flex shrink-0 items-center transition-opacity duration-200 pointer-events-auto"
+            >
+              <SlidersHorizontal className="size-3.5" />
+              <span>Personalizar</span>
+              <ChevronDown className="size-3.5" />
             </PopoverTrigger>
             <PopoverContent align="end" className="w-56 p-2 text-sm">
               <div className="font-medium text-[var(--app-text-primary)] mb-2 px-2 py-1">

@@ -23,18 +23,15 @@ export function ObjectActions({ entity }: { entity: SpaceEntityRecord }) {
       data-context-menu-entity-context-key={`${entity.id}:Page`}
     >
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button
-            type="button"
-            aria-label="Mais ações"
-            className="border-[var(--app-border-el-subtle)] hover:border-[var(--app-border-el-subtle-hover)] bg-[var(--app-bg-base)] border text-[var(--app-text-secondary)] hover:text-[var(--app-text-primary)] w-[26px] h-[26px] text-sm justify-center ring-state-active box-border cursor-pointer gap-x-1.5 max-w-full truncate rounded-base relative flex shrink-0 items-center transition-[opacity] duration-200 ease-out no-drag"
-          >
-            <span className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative">
-              <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
-                <MoreHorizontal className="size-4" />
-              </span>
+        <DropdownMenuTrigger
+          aria-label="Mais ações"
+          className="border-[var(--app-border-el-subtle)] hover:border-[var(--app-border-el-subtle-hover)] bg-[var(--app-bg-base)] border text-[var(--app-text-secondary)] hover:text-[var(--app-text-primary)] w-[26px] h-[26px] text-sm justify-center ring-state-active box-border cursor-pointer gap-x-1.5 max-w-full truncate rounded-base relative flex shrink-0 items-center transition-[opacity] duration-200 ease-out no-drag"
+        >
+          <span className="inline-flex size-[1em] shrink-0 grow-0 items-center justify-center leading-none relative">
+            <span className="inline-flex size-full items-center justify-center [&>svg]:size-full">
+              <MoreHorizontal className="size-4" />
             </span>
-          </button>
+          </span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuItem onClick={() => setEditorOpen(true)}>

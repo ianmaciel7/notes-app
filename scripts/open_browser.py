@@ -54,10 +54,12 @@ def find_windows_browser(preferred: str = "auto") -> str | None:
     return None
 
 
+import getpass
+
 def launch_windows(url: str | list[str], browser_choice: str = "auto", profile_dir: str | None = None) -> bool:
     urls = [url] if isinstance(url, str) else url
     target_exe = find_windows_browser(browser_choice)
-    user_name = os.environ.get("USERNAME", "ianma")
+    user_name = os.environ.get("USERNAME") or getpass.getuser()
     task_name = f"OpenBrowserApp_{random.randint(10000, 99999)}"
     temp_dir = os.environ.get("TEMP", r"C:\Windows\Temp")
     bat_path = os.path.join(temp_dir, f"{task_name}.bat")

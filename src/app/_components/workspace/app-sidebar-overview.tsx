@@ -1485,65 +1485,40 @@ function AppSidebarObjectTypeRow({
                 <button
                   type="button"
                   draggable={false}
-                  className="flex min-w-0 flex-1 items-center text-left"
+                  className="flex min-w-0 flex-1 items-center text-left outline-none"
                   onDragOver={(event) => event.preventDefault()}
                   onDrop={(event) => {
                     event.preventDefault();
                     onCollectionDrop?.(collectionId, event);
                   }}
-                  onPointerDownCapture={(event) => {
-                    if (!skipNextClickRef.current) {
-                      handleModifiedCollectionOpen(
-                        event as React.MouseEvent<HTMLButtonElement>,
+                  onKeyDown={(event) => {
+                    if (
+                      event.key === "Delete" ||
+                      (event.key === "Backspace" && (event.metaKey || event.ctrlKey))
+                    ) {
+                      event.preventDefault();
+                      onCollectionAction(
+                        "delete",
+                        objectType,
                         collection,
+                        event as unknown as AppSidebarSelectionEvent,
                       );
                     }
-                  }}
-                  onPointerDown={(event) => {
-                    if (!skipNextClickRef.current) {
-                      handleModifiedCollectionOpen(
-                        event as React.MouseEvent<HTMLButtonElement>,
-                        collection,
-                      );
-                    }
-                  }}
-                  onMouseDownCapture={(event) => {
-                    if (!skipNextClickRef.current) {
-                      handleModifiedCollectionOpen(event, collection);
-                    }
-                  }}
-                  onMouseDown={(event) => {
-                    if (!skipNextClickRef.current) handleModifiedCollectionOpen(event, collection);
-                  }}
-                  onContextMenu={(event) => {
-                    handleModifiedCollectionOpen(event, collection);
-                  }}
-                  onAuxClick={(event) => {
-                    handleModifiedCollectionOpen(event, collection);
                   }}
                   onClick={(event) => {
-                    if (skipNextClickRef.current) {
-                      skipNextClickRef.current = false;
-                      event.preventDefault();
-                      event.stopPropagation();
-                      return;
-                    }
-                    const pendingModifierEvent = pendingModifierEventRef.current;
-                    pendingModifierEventRef.current = null;
-                    if (pendingModifierEvent && hasSelectionModifier(pendingModifierEvent)) {
+                    const modifierEvent = getSelectionModifierEvent(event, pressedModifiersRef?.current);
+                    if (hasSelectionModifier(modifierEvent)) {
                       event.preventDefault();
                       event.stopPropagation();
                       onCollectionAction(
                         "open",
                         objectType,
                         collection,
-                        createSyntheticSelectionEvent(pendingModifierEvent),
+                        createSyntheticSelectionEvent(modifierEvent),
                       );
                       return;
                     }
-                    if (!handleModifiedCollectionOpen(event, collection)) {
-                      onCollectionAction("open", objectType, collection, event);
-                    }
+                    onCollectionAction("open", objectType, collection, event);
                   }}
                 >
                   <span className="mr-1.5 inline-flex min-h-[1.3em] min-w-[1.3em] shrink-0 items-center justify-center">
