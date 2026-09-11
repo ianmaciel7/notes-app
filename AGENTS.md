@@ -1,3 +1,11 @@
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `dist/docs/` before writing any code. Heed deprecation notices.
+
+<!-- END:nextjs-agent-rules -->
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
@@ -21,4 +29,12 @@ The `.worktrees/` folder contains historical iterations of the project for archi
 - `.worktrees/old-5`: Full Capacities component map reference, Next.js 16 + React 19 architecture, FSRS engine, and AI proxy setup.
 
 When implementing or refactoring features, inspect these worktrees as authoritative baseline references.
+
+## Language Rule
+
+- Always write all code, docstrings, comments, commit messages, and project documentation (including `ARCHITECTURE.md`, `README.md`, design docs, etc.) in **English**, unless the user explicitly requests otherwise.
+
+## Path & Configuration Rule
+
+- Always use relative paths or portable command names in configuration files (such as `.codex/hooks.json`, `.husky/*`, etc.). Never hardcode absolute user-dependent paths (such as `C:\Users\ianma\...`).
 
