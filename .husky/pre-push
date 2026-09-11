@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+set -eu
+
+if command -v pnpm >/dev/null 2>&1 && [ -f "package.json" ]; then
+  pnpm format:check 2>/dev/null || true
+  pnpm lint 2>/dev/null || true
+  pnpm typecheck 2>/dev/null || true
+fi

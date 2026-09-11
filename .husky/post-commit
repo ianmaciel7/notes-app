@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+set -eu
+
+if command -v graphify >/dev/null 2>&1; then
+  graphify update . || true
+elif command -v python >/dev/null 2>&1; then
+  python -m graphify update . 2>/dev/null || true
+fi
