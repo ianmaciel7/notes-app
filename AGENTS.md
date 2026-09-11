@@ -6,6 +6,8 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 <!-- END:nextjs-agent-rules -->
 
+<!-- BEGIN:graphify-rules -->
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
@@ -18,6 +20,10 @@ Rules:
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+<!-- END:graphify-rules -->
+
+<!-- BEGIN:worktrees-rules -->
 
 ## Reference Worktrees (`.worktrees/`)
 
@@ -32,6 +38,10 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 
 **Strict Rule**: The `.worktrees/` directory and all its contents are strictly **READ-ONLY**. AI agents must **NEVER** create, edit, modify, or delete any files or directories inside `.worktrees/`.
 
+<!-- END:worktrees-rules -->
+
+<!-- BEGIN:general-project-rules -->
+
 ## Language Rule
 
 - Always write all code, docstrings, comments, commit messages, and project documentation (including `ARCHITECTURE.md`, `README.md`, design docs, etc.) in **English**, unless the user explicitly requests otherwise.
@@ -40,9 +50,23 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 
 - Always use relative paths or portable command names in configuration files (such as `.codex/hooks.json`, `.husky/*`, etc.). Never hardcode absolute user-dependent paths (such as `C:\Users\ianma\...`).
 
-## Recommended MCP Servers
+<!-- END:general-project-rules -->
 
-- **Open Design MCP**: Used for UI component design and visual asset synchronization. See [.agents/mcp_config.example.json](.agents/mcp_config.example.json) for an environment configuration template. Ensure the local Open Design desktop application is running on your machine.
+<!-- BEGIN:mcp-and-skills-rules -->
+
+## Recommended MCP Servers & Skills
+
+- **MCP Servers**:
+  - **Open Design MCP**: UI design and asset synchronization. See [.agents/mcp_config.example.json](.agents/mcp_config.example.json).
+  - **context7**: Docs lookup for Next.js 16 & React 19 breaking changes.
+
+- **Key Skills**:
+  - **UI & Design**: `shadcn-ui`, `taste-design`, `stitch::react-components`.
+  - **Quality & Simplification**: `ponytail-review` (prevents over-engineering in FSRS engine & sync), `systematic-debugging`, `test-driven-development`.
+
+<!-- END:mcp-and-skills-rules -->
+
+<!-- BEGIN:subagent-roles -->
 
 ## Specialized Subagent Roles (`.agents/agents/`)
 
@@ -51,6 +75,8 @@ When working on complex tasks, subagents can be invoked via `invoke_subagent` to
 - **`code-reviewer`** ([`.agents/agents/code-reviewer/agent.md`](.agents/agents/code-reviewer/agent.md)): For auditing diffs, correctness, accessibility, regressions, and code quality.
 - **`security-reviewer`** ([`.agents/agents/security-reviewer/agent.md`](.agents/agents/security-reviewer/agent.md)): For threat modeling, auth boundaries, secret leakage prevention, and security policies.
 - **`test-engineer`** ([`.agents/agents/test-engineer/agent.md`](.agents/agents/test-engineer/agent.md)): For regression test strategies, verification commands (`pnpm check`, `pnpm build`), and test coverage.
+
+<!-- END:subagent-roles -->
 
 
 
