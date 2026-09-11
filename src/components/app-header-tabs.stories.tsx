@@ -5,7 +5,7 @@ import { type AppHeaderTab, AppHeaderTabItem, AppSpaceHeader } from "./app-heade
 import { ObjectPageIcon, ObjectQueryIcon } from "./object-icons";
 
 export default {
-  title: "Components / App header tabs",
+  title: "Components / App Header / Tabs",
 } satisfies StoryDefault;
 
 const sampleTabs: AppHeaderTab[] = [
@@ -14,13 +14,13 @@ const sampleTabs: AppHeaderTab[] = [
   { id: "tab-3", label: "Project Notes", icon: ObjectPageIcon },
 ];
 
-export const DefaultTabItem: Story = () => (
+export const Default: Story = () => (
   <div className="w-64 p-4">
     <AppHeaderTabItem tab={{ id: "demo-1", label: "Sample Tab", icon: ObjectPageIcon }} active />
   </div>
 );
 
-export const TabItemStates: Story = () => (
+export const States: Story = () => (
   <div className="flex w-64 flex-col gap-2 p-4">
     <AppHeaderTabItem
       tab={{ id: "demo-active", label: "Active Tab", icon: ObjectPageIcon }}
@@ -43,7 +43,7 @@ export const TabItemStates: Story = () => (
   </div>
 );
 
-export const SpaceHeaderBar: Story = () => {
+export const Interactive: Story = () => {
   const [tabs, setTabs] = React.useState(sampleTabs);
   const [value, setValue] = React.useState("tab-1");
 

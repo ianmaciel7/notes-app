@@ -17,7 +17,7 @@ import {
 } from "./space-surface";
 
 export default {
-  title: "Components / Space surface",
+  title: "Components / Workspace / Surfaces",
 } satisfies StoryDefault;
 
 export const EmptyState: Story = () => (
@@ -30,7 +30,7 @@ export const EmptyState: Story = () => (
   </div>
 );
 
-export const EmptyStateCompact: Story = () => (
+export const CompactEmptyState: Story = () => (
   <div className="p-6 max-w-sm">
     <WorkspaceEmptyState
       compact
@@ -40,7 +40,7 @@ export const EmptyStateCompact: Story = () => (
   </div>
 );
 
-export const WorkspaceSurfacesOverview: Story = () => (
+export const Overview: Story = () => (
   <div className={workspaceContentScopeClass}>
     <div className={workspaceRouteClass}>
       <div className={workspaceOverviewContentClass}>

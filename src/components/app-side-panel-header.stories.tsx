@@ -4,7 +4,7 @@ import * as React from "react";
 import { AppSidePanelHeader } from "./app-side-panel-header";
 
 export default {
-  title: "Components / App side panel header",
+  title: "Components / Side Panel / Header",
 } satisfies StoryDefault;
 
 const initialSideTabs = [
@@ -12,7 +12,7 @@ const initialSideTabs = [
   { id: "tab-2", label: "Backlinks" },
 ];
 
-export const DefaultSidePanelHeader: Story = () => {
+export const Interactive: Story = () => {
   const [tabs, setTabs] = React.useState(initialSideTabs);
   const [value, setValue] = React.useState("tab-1");
 

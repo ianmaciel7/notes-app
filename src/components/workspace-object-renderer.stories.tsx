@@ -4,7 +4,7 @@ import { WorkspaceObjectRenderer, WorkspaceObjectTypeListView } from "./workspac
 import { workspaceEntityFixture, workspaceObjectTypeFixture } from "./workspace-story-fixtures";
 
 export default {
-  title: "Components / Workspace object renderer",
+  title: "Components / Workspace / Objects",
 } satisfies StoryDefault;
 
 function ObjectRendererFrame({ children }: { children: React.ReactNode }) {
@@ -142,7 +142,7 @@ const pageEntities = [
   }),
 ];
 
-export const WeblinkWithUrl: Story = () => (
+export const Weblink: Story = () => (
   <ObjectRendererFrame>
     <WorkspaceObjectRenderer
       entity={workspaceEntityFixture({
@@ -159,7 +159,7 @@ export const WeblinkWithUrl: Story = () => (
   </ObjectRendererFrame>
 );
 
-export const WeblinkMissingUrl: Story = () => (
+export const MissingLink: Story = () => (
   <ObjectRendererFrame>
     <WorkspaceObjectRenderer
       entity={workspaceEntityFixture({
@@ -172,7 +172,7 @@ export const WeblinkMissingUrl: Story = () => (
   </ObjectRendererFrame>
 );
 
-export const PagePending: Story = () => (
+export const Page: Story = () => (
   <ObjectRendererFrame>
     <WorkspaceObjectRenderer
       entity={workspaceEntityFixture({
@@ -186,7 +186,7 @@ export const PagePending: Story = () => (
   </ObjectRendererFrame>
 );
 
-export const PagesOverviewGrid: Story = () => (
+export const PageOverview: Story = () => (
   <ObjectTypeListFrame>
     <ObjectTypeListStoryPreferences objectTypeId={pageType.id}>
       <WorkspaceObjectTypeListView

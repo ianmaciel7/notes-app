@@ -3,10 +3,10 @@ import type { Story, StoryDefault } from "@ladle/react";
 import * as Icons from "./app-sidebar-icons";
 
 export default {
-  title: "Components / App sidebar icons",
+  title: "Components / App Sidebar / Icons",
 } satisfies StoryDefault;
 
-export const AllSidebarIcons: Story = () => {
+export const Gallery: Story = () => {
   const iconList = [
     { name: "AppSidebarAlertIcon", Component: Icons.AppSidebarAlertIcon },
     { name: "AppSidebarArchiveIcon", Component: Icons.AppSidebarArchiveIcon },

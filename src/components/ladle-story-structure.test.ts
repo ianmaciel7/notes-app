@@ -20,7 +20,7 @@ function listStoryFiles(directory: string): string[] {
     .sort();
 }
 
-it("groups docs and component stories under separate Ladle roots", () => {
+it("groups stories under separate Components, UI, and Docs roots", () => {
   const configSource = readProjectSource(".ladle/config.mjs");
   const componentStoryFiles = listStoryFiles(componentsRoot);
 
@@ -31,7 +31,8 @@ it("groups docs and component stories under separate Ladle roots", () => {
     const relativePath = relative(projectRoot, storyFile).replaceAll("\\", "/");
     const storySource = readProjectSource(relativePath);
 
-    expect(storySource, relativePath).toContain('title: "Components / ');
+    const group = relativePath.startsWith("src/components/ui/") ? "UI" : "Components";
+    expect(storySource, relativePath).toContain(`title: "${group} / `);
   }
 
   expect(readProjectSource("docs/workspace/workspace-architecture.stories.tsx")).toContain(

@@ -1,37 +1,11 @@
 import type { Story, StoryDefault } from "@ladle/react";
-import { NextIntlClientProvider } from "next-intl";
 
 import { AppSidebarPrimaryActions } from "./app-sidebar-primary-actions";
 import { ObjectPageIcon, ObjectQueryIcon } from "./object-icons";
 
 export default {
-  title: "Components / App sidebar primary actions",
+  title: "Components / App Sidebar / Primary Actions",
 } satisfies StoryDefault;
-
-const messages = {
-  workspace: {
-    primaryNavigation: {
-      navigationLabel: "Primary Navigation",
-      new: "New",
-      search: "Search",
-      explore: "Explore",
-      calendar: "Calendar",
-      tasks: "Tasks",
-      searchHint: "Quick search",
-      extendedSearchHint: "Extended search",
-      exploreHint: "Explore knowledge graph",
-      exploreSideHint: "Explore in side panel",
-      calendarHint: "View calendar",
-      tasksHint: "View tasks",
-      or: "or",
-      searchContentType: "Search content types",
-      typesLabel: "Content Types",
-      navigate: "Navigate",
-      cancel: "Cancel",
-      select: "Select",
-    },
-  },
-};
 
 const sampleObjectTypes = [
   {
@@ -52,14 +26,12 @@ const sampleObjectTypes = [
   },
 ];
 
-export const SidebarActions: Story = () => (
-  <NextIntlClientProvider locale="en" messages={messages}>
-    <div className="w-64 border rounded-lg bg-sidebar p-4">
-      <AppSidebarPrimaryActions
-        objectTypes={sampleObjectTypes}
-        onAction={(actionId) => alert(`Action clicked: ${actionId}`)}
-        onSelectObjectType={(typeId) => alert(`New item type selected: ${typeId}`)}
-      />
-    </div>
-  </NextIntlClientProvider>
+export const Default: Story = () => (
+  <div className="w-64 border rounded-lg bg-sidebar p-4">
+    <AppSidebarPrimaryActions
+      objectTypes={sampleObjectTypes}
+      onAction={(actionId) => alert(`Action clicked: ${actionId}`)}
+      onSelectObjectType={(typeId) => alert(`New item type selected: ${typeId}`)}
+    />
+  </div>
 );

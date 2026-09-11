@@ -4,10 +4,10 @@ import { AppSidebarTypeLabel } from "./app-sidebar-overview";
 import { ObjectBookIcon, ObjectPageIcon } from "./object-icons";
 
 export default {
-  title: "Components / App sidebar overview",
+  title: "Components / App Sidebar / Overview",
 } satisfies StoryDefault;
 
-export const TypeBadgeLabels: Story = () => (
+export const TypeLabels: Story = () => (
   <div className="flex w-64 flex-col gap-2 p-4">
     <AppSidebarTypeLabel icon={ObjectBookIcon} tone="purple">
       Books Collection

@@ -27,7 +27,7 @@ type WorkspaceActionStoryProps = {
 };
 
 export default {
-  title: "Components / Workspace main content",
+  title: "Components / Workspace / Main Content",
 } satisfies StoryDefault;
 
 function WorkspaceStoryState({ activeAction }: { activeAction?: WorkspaceActionState }) {

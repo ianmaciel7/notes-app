@@ -4,10 +4,10 @@ import { AppFocusModeControls, AppHeader, AppHeaderAction, AppHeaderHistory } fr
 import { AppHeaderCircleDashedIcon } from "./app-header-icons";
 
 export default {
-  title: "Components / App header",
+  title: "Components / App Header",
 } satisfies StoryDefault;
 
-export const DefaultHeader: Story = () => (
+export const Default: Story = () => (
   <div className="w-full overflow-hidden rounded-lg border bg-background">
     <AppHeader
       backDisabled={false}
@@ -21,7 +21,7 @@ export const DefaultHeader: Story = () => (
   </div>
 );
 
-export const HeaderHistoryControls: Story = () => (
+export const HistoryControls: Story = () => (
   <div className="flex items-center gap-4 p-4">
     <AppHeaderHistory
       backDisabled={false}
@@ -32,7 +32,7 @@ export const HeaderHistoryControls: Story = () => (
   </div>
 );
 
-export const HeaderSingleAction: Story = () => (
+export const SingleAction: Story = () => (
   <div className="flex items-center gap-2 p-4">
     <AppHeaderAction tooltip="Custom Tooltip Action" onClick={() => alert("Clicked")}>
       <AppHeaderCircleDashedIcon className="size-4" />
@@ -40,7 +40,7 @@ export const HeaderSingleAction: Story = () => (
   </div>
 );
 
-export const FocusModeOverlay: Story = () => (
+export const FocusMode: Story = () => (
   <div className="relative h-48 w-full rounded-lg border bg-muted/20 p-4">
     <AppFocusModeControls
       onBack={() => alert("Back")}

@@ -3,7 +3,7 @@ import { WorkspaceListRenderer } from "./workspace-object-renderer";
 import { workspaceEntityFixture, workspaceObjectTypeFixture } from "./workspace-story-fixtures";
 
 export default {
-  title: "Components / Workspace list renderer",
+  title: "Components / Workspace / Lists",
 } satisfies StoryDefault;
 
 function ListRendererFrame({ children }: { children: React.ReactNode }) {
@@ -36,7 +36,7 @@ const objectTypes = [
   }),
 ];
 
-export const MixedObjectList: Story = () => (
+export const MixedObjects: Story = () => (
   <ListRendererFrame>
     <WorkspaceListRenderer
       entities={[
@@ -61,7 +61,7 @@ export const MixedObjectList: Story = () => (
   </ListRendererFrame>
 );
 
-export const StudyObjectTypesPendingList: Story = () => (
+export const StudyObjects: Story = () => (
   <ListRendererFrame>
     <WorkspaceListRenderer
       entities={[
@@ -82,7 +82,7 @@ export const StudyObjectTypesPendingList: Story = () => (
   </ListRendererFrame>
 );
 
-export const EmptyObjectList: Story = () => (
+export const Empty: Story = () => (
   <ListRendererFrame>
     <WorkspaceListRenderer entities={[]} objectTypes={objectTypes} tabName="Pages" />
   </ListRendererFrame>

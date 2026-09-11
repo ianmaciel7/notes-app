@@ -7,7 +7,10 @@ import {
   ArchitectureDocViewer,
   parseArchitectureMarkdown,
 } from "@/components/architecture/architecture-doc-viewer";
-import { WorkspaceMainContentGraph } from "../../../docs/workspace/workspace-architecture.stories";
+import workspaceArchitectureMeta, {
+  WorkspaceMainContentGraph,
+  WorkspaceSidePanelContentGraph,
+} from "../../../docs/workspace/workspace-architecture.stories";
 
 const projectRoot = fileURLToPath(new URL("../../../", import.meta.url));
 
@@ -88,4 +91,14 @@ it("keeps workspace architecture docs aligned with the simple Capacities content
   expect(mainArchitecture).toContain("Tag view");
   expect(mainArchitecture).toContain("WorkspaceListRenderer");
   expect(mainArchitecture).toContain("WorkspaceObjectRenderer");
+});
+
+it("exposes the language control only for the translated architecture document", () => {
+  expect(workspaceArchitectureMeta).not.toHaveProperty("args");
+  expect(workspaceArchitectureMeta).not.toHaveProperty("argTypes");
+  expect(WorkspaceMainContentGraph.args).toEqual({ locale: "pt-BR" });
+  expect(WorkspaceMainContentGraph.argTypes?.locale).toMatchObject({
+    options: ["pt-BR", "en"],
+  });
+  expect(WorkspaceSidePanelContentGraph.argTypes).toBeUndefined();
 });

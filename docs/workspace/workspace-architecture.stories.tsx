@@ -17,23 +17,8 @@ const workspaceMainContentDocs: Record<WorkspaceArchitectureLocale, string> = {
 };
 
 export default {
-  argTypes: {
-    locale: {
-      control: {
-        labels: {
-          en: "English",
-          "pt-BR": "Português do Brasil",
-        },
-        type: "inline-radio",
-      },
-      options: ["pt-BR", "en"],
-    },
-  },
-  args: {
-    locale: "pt-BR",
-  },
   title: "Docs / Workspace",
-} satisfies StoryDefault<WorkspaceArchitectureStoryProps>;
+} satisfies StoryDefault;
 
 export const WorkspaceMainContentGraph: Story<WorkspaceArchitectureStoryProps> = ({
   locale = "pt-BR",
@@ -43,6 +28,23 @@ export const WorkspaceMainContentGraph: Story<WorkspaceArchitectureStoryProps> =
   />
 );
 
+WorkspaceMainContentGraph.storyName = "Main Content";
+WorkspaceMainContentGraph.args = { locale: "pt-BR" };
+WorkspaceMainContentGraph.argTypes = {
+  locale: {
+    control: {
+      labels: {
+        en: "English",
+        "pt-BR": "Português do Brasil",
+      },
+      type: "inline-radio",
+    },
+    options: ["pt-BR", "en"],
+  },
+};
+
 export const WorkspaceSidePanelContentGraph: Story = () => (
   <ArchitectureDocViewer markdown={sidePanelArchitecture} />
 );
+
+WorkspaceSidePanelContentGraph.storyName = "Side Panel Content";

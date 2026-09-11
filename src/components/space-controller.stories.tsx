@@ -19,7 +19,7 @@ import {
 } from "./space-controller";
 
 export default {
-  title: "Components / Space controller",
+  title: "Components / Workspace / Headers",
 } satisfies StoryDefault;
 
 function WorkspaceStoryFrame({ children }: { children: React.ReactNode }) {
@@ -35,27 +35,7 @@ function WorkspaceStoryFrame({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const MainHeaderInWorkspace: Story = () => (
-  <WorkspaceStoryFrame>
-    <AppShell>
-      <AppShellPanelGroup>
-        <AppShellSidebar />
-        <AppShellWorkspace>
-          <AppShellMain>
-            <WorkspaceMainHeader />
-            <AppShellSurface className="h-full w-full" />
-          </AppShellMain>
-          <AppShellSidePanel>
-            <WorkspaceSidePanelHeader />
-            <AppShellSurface side="side-panel" className="h-full w-full" />
-          </AppShellSidePanel>
-        </AppShellWorkspace>
-      </AppShellPanelGroup>
-    </AppShell>
-  </WorkspaceStoryFrame>
-);
-
-export const SidePanelHeaderInWorkspace: Story = () => (
+export const Default: Story = () => (
   <WorkspaceStoryFrame>
     <AppShell>
       <AppShellPanelGroup>

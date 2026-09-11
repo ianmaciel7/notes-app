@@ -3,10 +3,10 @@ import type { Story, StoryDefault } from "@ladle/react";
 import * as Icons from "./app-header-icons";
 
 export default {
-  title: "Components / App header icons",
+  title: "Components / App Header / Icons",
 } satisfies StoryDefault;
 
-export const AllHeaderIcons: Story = () => {
+export const Gallery: Story = () => {
   const iconList = [
     { name: "AppHeaderBookOpenIcon", Component: Icons.AppHeaderBookOpenIcon },
     { name: "AppHeaderCaretDownIcon", Component: Icons.AppHeaderCaretDownIcon },

@@ -3,7 +3,7 @@ import type { Story, StoryDefault } from "@ladle/react";
 import { PendingImplementation } from "./pending-implementation";
 
 export default {
-  title: "Components / Pending implementation",
+  title: "Components / Pending Implementation",
 } satisfies StoryDefault;
 
 export const Default: Story = () => (
@@ -38,3 +38,7 @@ export const SidePanelExplore: Story = () => (
     />
   </div>
 );
+
+MainPanelPages.storyName = "MainPanel";
+
+SidePanelExplore.storyName = "SidePanel";

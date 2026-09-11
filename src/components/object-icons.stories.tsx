@@ -48,10 +48,10 @@ function getPortugueseObjectTypeLabel(id: string, fallback: string) {
 }
 
 export default {
-  title: "Components / Object icons",
+  title: "Components / Objects / Icons",
 } satisfies StoryDefault;
 
-export const ObjectIconBadgeGallery: Story = () => (
+export const Badges: Story = () => (
   <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
     {objectTypeDefinitions.map(({ id, label, icon: Icon, tone }) => (
       <div
@@ -66,7 +66,7 @@ export const ObjectIconBadgeGallery: Story = () => (
   </div>
 );
 
-export const BadgeVariants: Story = () => {
+export const Variants: Story = () => {
   const sample = objectTypeDefinitions[0];
   if (!sample) return null;
   const Icon = sample.icon;
@@ -352,7 +352,7 @@ function ObjectTypeLabelChipMenuExample({
   );
 }
 
-export const ObjectTypeLabelChipGallery: Story = () => {
+export const TypeLabels: Story = () => {
   const [selectedId, setSelectedId] = React.useState(objectTypeDefinitions[0]?.id ?? "");
 
   return (

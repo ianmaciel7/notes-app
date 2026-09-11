@@ -6,7 +6,7 @@ import { AppSidebar } from "./app-sidebar";
 import { ObjectPageIcon } from "./object-icons";
 
 export default {
-  title: "Components / App sidebar",
+  title: "Components / App Sidebar",
 } satisfies StoryDefault;
 
 const sampleSpaces: AppSidebarSpace[] = [
@@ -14,7 +14,7 @@ const sampleSpaces: AppSidebarSpace[] = [
   { id: "work", name: "Work & Projects", icon: ObjectPageIcon },
 ];
 
-export const SidebarWithSpaceSwitcher: Story = () => {
+export const Interactive: Story = () => {
   const [spaces, setSpaces] = React.useState(sampleSpaces);
   const [value, setValue] = React.useState("personal");
 

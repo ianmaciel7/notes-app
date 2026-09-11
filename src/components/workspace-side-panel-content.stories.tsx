@@ -8,7 +8,7 @@ import { useWorkspace, WorkspaceProvider } from "./space-controller";
 import { WorkspaceSidePanelContent } from "./workspace-side-panel-content";
 
 export default {
-  title: "Components / Workspace side panel content",
+  title: "Components / Side Panel / Content",
 } satisfies StoryDefault;
 
 type SidePanelStoryStateProps = {
@@ -105,3 +105,9 @@ export const SearchForObject: Story = () => (
     sideValue="localSpaceQuery"
   />
 );
+
+ExploreOverview.storyName = "Explore";
+
+GraphViewForObject.storyName = "Graph";
+
+SearchForObject.storyName = "Search";
