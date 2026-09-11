@@ -150,3 +150,17 @@ flowchart LR
 
 - **Historical Codebases**: Inspect `.worktrees/` (`old`, `old-2`, `old-3`, `old-4`, `old-5`) for baseline reference implementations when porting algorithms or Capacities feature parity.
 - **Dependency Topology**: Refer to `graphify-out/GRAPH_REPORT.md` and `graphify-out/graph.json` for architectural relationship queries.
+
+---
+
+## 7. Project Governance & Decision Framework Matrix
+
+To maintain codebase integrity, developer ergonomics, and agent alignment, governance artifacts are partitioned into four distinct layers:
+
+| Governance Layer | Primary File / Location | Core Purpose | When to Use / Update |
+| --- | --- | --- | --- |
+| **Agent Directives** | [`AGENTS.md`](file:///C:/Users/ianma/workspace/notes-app/AGENTS.md) | Entry point for AI coding assistants | Overview of repository rules, sitemap, worktree references, and command triggers. |
+| **Operational Rules** | [`.agents/rules/*.md`](file:///C:/Users/ianma/workspace/notes-app/.agents/rules) | Single-responsibility, strict coding policies | Granular constraints (*"How to write code/configs"*), e.g. `portable-paths.md`, `language.md`. |
+| **Architectural Decisions** | [`DECISIONS.md`](file:///C:/Users/ianma/workspace/notes-app/DECISIONS.md) | Historical MADR Decision Log (ADRs) | Documenting **WHY** a technical choice was made, trade-offs, and rejected options. |
+| **Security Policies** | [`SECURITY.md`](file:///C:/Users/ianma/workspace/notes-app/SECURITY.md) | Threat model, trust boundaries, and security rules | Documenting **HOW** credentials, user data, server routes, and cloud permissions are isolated. |
+

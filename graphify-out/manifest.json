@@ -1474,5 +1474,17 @@
     "seen": 1789163613.327723,
     "ast_hash": "a2760511c65806022ad20adf74370ff3",
     "semantic_hash": ""
+  },
+  ".agents/rules/portable-paths.md": {
+    "mtime": 1789163597.9814034,
+    "seen": 1789163652.116232,
+    "ast_hash": "be129d71ec0ed68bc59c457fd67dd3ae",
+    "semantic_hash": ""
+  },
+  "SECURITY.md": {
+    "mtime": 1789163794.6763532,
+    "seen": 1789163834.2500818,
+    "ast_hash": "23eca6aa38aeab9f53a082d20b13aace",
+    "semantic_hash": ""
   }
 }
