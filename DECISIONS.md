@@ -1,5 +1,7 @@
 # Architectural Decision Log (MADR)
 
+> **Note**: Architectural Decision Records (ADRs) are organized under [`docs/decisions/`](docs/decisions/README.md).
+
 All architectural decisions for `notes-app` are documented here using the [MADR (Markdown Architectural Decision Records)](https://adr.github.io/madr/) format.
 
 ---

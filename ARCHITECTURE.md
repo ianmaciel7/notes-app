@@ -1,5 +1,7 @@
 # Architecture Overview (Matklad Pattern)
 
+> **Note**: This architecture specification is maintained under [`docs/architecture/overview.md`](docs/architecture/overview.md).
+
 This document provides a high-level overview of the **Notes App** architecture, directory layout, core abstractions, and engineering invariants. It is written following the **Matklad ARCHITECTURE.md** pattern to help new contributors and automated agents quickly orient themselves within the codebase.
 
 ---
@@ -161,6 +163,6 @@ To maintain codebase integrity, developer ergonomics, and agent alignment, gover
 | --- | --- | --- | --- |
 | **Agent Directives** | [`AGENTS.md`](AGENTS.md) | Entry point for AI coding assistants | Overview of repository rules, sitemap, worktree references, and command triggers. |
 | **Operational Rules** | [`.agents/rules/*.md`](.agents/rules/) | Single-responsibility, strict coding policies | Granular constraints (*"How to write code/configs"*), e.g. `portable-paths.md`, `language.md`. |
-| **Architectural Decisions** | [`DECISIONS.md`](DECISIONS.md) | Historical MADR Decision Log (ADRs) | Documenting **WHY** a technical choice was made, trade-offs, and rejected options. |
+| **Architectural Decisions** | [`docs/decisions/`](docs/decisions/README.md) | Historical MADR Decision Log (ADRs) | Documenting **WHY** a technical choice was made, trade-offs, and rejected options. |
 | **Security Policies** | [`SECURITY.md`](SECURITY.md) | Threat model, trust boundaries, and security rules | Documenting **HOW** credentials, user data, server routes, and cloud permissions are isolated. |
 

@@ -31,7 +31,7 @@ You are a test engineer responsible for practical, high-signal verification.
 3. Primary local shell is Windows PowerShell.
 
 **Testing Process:**
-1. Inspect `package.json`, existing code, `ARCHITECTURE.md`, and affected source files.
+1. Inspect `package.json`, existing code, `docs/architecture/overview.md`, `docs/guides/development.md`, and affected source files.
 2. Identify changed behavior, edge cases, failure modes, and user workflows.
 3. Choose the lightest effective mix of static checks (`pnpm check`), unit tests, and build validation (`pnpm build`).
 4. For UI changes, include keyboard, focus, semantic HTML, contrast, loading, empty, and error states.

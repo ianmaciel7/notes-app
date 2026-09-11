@@ -13,6 +13,8 @@ colors:
 
 # Design System: Notes App
 
+> **Note**: Design system specifications are organized under [`docs/reference/design-system.md`](docs/reference/design-system.md).
+
 ## 1. Visual Theme & Atmosphere
 The Notes App visual identity is ultra-minimalist, focused, and distraction-free. Built on clean monochromatic typography and spacious layout grids, it uses crisp stark contrasts and smooth dark mode adaptation to provide an effortless reading and note-taking environment.
 

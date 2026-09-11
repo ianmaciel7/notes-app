@@ -1,0 +1,14 @@
+{
+  "home": {
+    "title": "Notes App",
+    "description": "Minimalist note-taking application with internationalization and component support.",
+    "cta": "Get Started"
+  },
+  "workspace": {
+    "architecture": {
+      "title": "Workspace Architecture",
+      "mainContentTitle": "Main Content",
+      "sidePanelTitle": "Side Panel"
+    }
+  }
+}

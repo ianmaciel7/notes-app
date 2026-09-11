@@ -1,0 +1,14 @@
+{
+  "home": {
+    "title": "Notes App",
+    "description": "Aplicação de notas minimalista com internacionalização e suporte a componentes.",
+    "cta": "Começar a construir"
+  },
+  "workspace": {
+    "architecture": {
+      "title": "Arquitetura da Workspace",
+      "mainContentTitle": "Conteúdo Principal",
+      "sidePanelTitle": "Painel Lateral"
+    }
+  }
+}
