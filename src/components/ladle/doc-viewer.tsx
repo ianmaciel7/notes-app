@@ -3,7 +3,7 @@
 import { useLadleContext } from "@ladle/react";
 import * as React from "react";
 
-type DocBlock =
+export type DocBlock =
   | {
       depth: number;
       kind: "heading";
@@ -16,49 +16,171 @@ type DocBlock =
   | {
       code: string;
       kind: "mermaid";
+    }
+  | {
+      code: string;
+      kind: "code";
+      language: string;
+    }
+  | {
+      kind: "hr";
+    }
+  | {
+      items: string[];
+      kind: "list";
+      ordered: boolean;
+    }
+  | {
+      headers: string[];
+      kind: "table";
+      rows: string[][];
     };
 
+function tryParseTableLine(trimmed: string): { isDelimiter: boolean; cells: string[] } | null {
+  if (!(trimmed.startsWith("|") && trimmed.endsWith("|"))) return null;
+  const cells = trimmed
+    .split("|")
+    .slice(1, -1)
+    .map((cell) => cell.trim());
+  const isDelimiter = cells.every((cell) => /^[-:\s]+$/.test(cell));
+  return { cells, isDelimiter };
+}
+
+function tryParseHeading(trimmed: string): { depth: number; text: string } | null {
+  const match = /^(#{1,6})\s+(.+)$/.exec(trimmed);
+  if (!match) return null;
+  return {
+    depth: match[1]?.length ?? 1,
+    text: match[2] ?? "",
+  };
+}
+
+function tryParseList(trimmed: string): { isOrdered: boolean; text: string } | null {
+  const unorderedMatch = /^[-*+]\s+(.+)$/.exec(trimmed);
+  if (unorderedMatch) return { isOrdered: false, text: unorderedMatch[1] ?? "" };
+  const orderedMatch = /^\d+\.\s+(.+)$/.exec(trimmed);
+  if (orderedMatch) return { isOrdered: true, text: orderedMatch[1] ?? "" };
+  return null;
+}
+
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: sequential line scanner
+// biome-ignore lint/complexity/noExcessiveLinesPerFunction: sequential line scanner
 export function parseDocMarkdown(markdown: string): DocBlock[] {
   const blocks: DocBlock[] = [];
   const lines = markdown.replace(/\r\n/g, "\n").split("\n");
-  let paragraph: string[] = [];
-  let mermaid: string[] | null = null;
 
-  function flushParagraph() {
+  let paragraph: string[] = [];
+  let codeBlock: { code: string[]; language: string; isMermaid: boolean } | null = null;
+  let currentTable: { headers: string[]; rows: string[][] } | null = null;
+  let currentList: { items: string[]; ordered: boolean } | null = null;
+
+  const flushParagraph = () => {
     const text = paragraph.join(" ").trim();
     if (text) blocks.push({ kind: "paragraph", text });
     paragraph = [];
-  }
+  };
 
-  for (const line of lines) {
-    const trimmed = line.trim();
+  const flushTable = () => {
+    if (currentTable) {
+      if (currentTable.headers.length > 0 || currentTable.rows.length > 0) {
+        blocks.push({
+          headers: currentTable.headers,
+          kind: "table",
+          rows: currentTable.rows,
+        });
+      }
+      currentTable = null;
+    }
+  };
 
-    if (mermaid) {
+  const flushList = () => {
+    if (currentList) {
+      if (currentList.items.length > 0) {
+        blocks.push({
+          items: currentList.items,
+          kind: "list",
+          ordered: currentList.ordered,
+        });
+      }
+      currentList = null;
+    }
+  };
+
+  const flushAll = () => {
+    flushParagraph();
+    flushTable();
+    flushList();
+  };
+
+  for (const rawLine of lines) {
+    const trimmed = rawLine.trim();
+
+    if (codeBlock) {
       if (trimmed === "```") {
-        blocks.push({ code: mermaid.join("\n").trim(), kind: "mermaid" });
-        mermaid = null;
+        const codeText = codeBlock.code.join("\n");
+        if (codeBlock.isMermaid) {
+          blocks.push({ code: codeText.trim(), kind: "mermaid" });
+        } else {
+          blocks.push({
+            code: codeText,
+            kind: "code",
+            language: codeBlock.language,
+          });
+        }
+        codeBlock = null;
       } else {
-        mermaid.push(line);
+        codeBlock.code.push(rawLine);
       }
       continue;
     }
 
-    if (trimmed === "```mermaid") {
-      flushParagraph();
-      mermaid = [];
+    if (trimmed.startsWith("```")) {
+      flushAll();
+      const lang = trimmed.slice(3).trim();
+      codeBlock = { code: [], isMermaid: lang === "mermaid", language: lang };
       continue;
     }
 
-    const headingMatch = /^(#{1,3})\s+(.+)$/.exec(trimmed);
-    if (headingMatch) {
+    const tableLine = tryParseTableLine(trimmed);
+    if (tableLine) {
       flushParagraph();
-      blocks.push({
-        depth: headingMatch[1]?.length ?? 1,
-        kind: "heading",
-        text: headingMatch[2] ?? "",
-      });
+      flushList();
+      if (!tableLine.isDelimiter) {
+        if (!currentTable) {
+          currentTable = { headers: tableLine.cells, rows: [] };
+        } else {
+          currentTable.rows.push(tableLine.cells);
+        }
+      }
       continue;
     }
+    if (currentTable) flushTable();
+
+    if (/^(---|[*]{3,}|_{3,})$/.test(trimmed)) {
+      flushAll();
+      blocks.push({ kind: "hr" });
+      continue;
+    }
+
+    const heading = tryParseHeading(trimmed);
+    if (heading) {
+      flushAll();
+      blocks.push({ depth: heading.depth, kind: "heading", text: heading.text });
+      continue;
+    }
+
+    const listItem = tryParseList(trimmed);
+    if (listItem) {
+      flushParagraph();
+      if (!currentList || currentList.ordered !== listItem.isOrdered) {
+        flushList();
+        currentList = { items: [listItem.text], ordered: listItem.isOrdered };
+      } else {
+        currentList.items.push(listItem.text);
+      }
+      continue;
+    }
+    if (currentList) flushList();
 
     if (!trimmed) {
       flushParagraph();
@@ -68,7 +190,7 @@ export function parseDocMarkdown(markdown: string): DocBlock[] {
     paragraph.push(trimmed);
   }
 
-  flushParagraph();
+  flushAll();
   return blocks;
 }
 
@@ -216,6 +338,83 @@ async function renderMermaidSvg(id: string, code: string, isDark: boolean): Prom
   return result.svg;
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: token matching matcher
+function InlineMarkdown({ text }: { text: string }): React.ReactNode {
+  if (!text) return null;
+
+  const tokenRegex =
+    /(`[^`]+`)|(\[[^\]]+\]\([^)]+\))|(\*\*[^*]+\*\*|__[^_]+__)|(\*[^*]+\*|_[^_]+_)/g;
+  const matches = Array.from(text.matchAll(tokenRegex));
+
+  if (matches.length === 0) return text;
+
+  const nodes: React.ReactNode[] = [];
+  let lastIndex = 0;
+
+  for (const match of matches) {
+    const matchIndex = match.index ?? 0;
+    if (matchIndex > lastIndex) {
+      nodes.push(text.substring(lastIndex, matchIndex));
+    }
+
+    const [fullMatch, codeMatch, linkMatch, boldMatch, italicMatch] = match;
+
+    if (codeMatch) {
+      nodes.push(
+        <code
+          key={`code-${matchIndex}`}
+          className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs font-medium text-foreground"
+        >
+          {codeMatch.slice(1, -1)}
+        </code>,
+      );
+    } else if (linkMatch) {
+      const linkExec = /\[([^\]]+)\]\(([^)]+)\)/.exec(linkMatch);
+      if (linkExec) {
+        const linkText = linkExec[1] ?? "";
+        const linkUrl = linkExec[2] ?? "";
+        nodes.push(
+          <a
+            key={`link-${matchIndex}`}
+            className="font-medium text-primary underline underline-offset-4 hover:opacity-80"
+            href={linkUrl}
+            rel="noopener noreferrer"
+            target={linkUrl.startsWith("http") ? "_blank" : undefined}
+          >
+            <InlineMarkdown text={linkText} />
+          </a>,
+        );
+      } else {
+        nodes.push(linkMatch);
+      }
+    } else if (boldMatch) {
+      const boldContent = boldMatch.slice(2, -2);
+      nodes.push(
+        <strong key={`bold-${matchIndex}`} className="font-semibold text-foreground">
+          <InlineMarkdown text={boldContent} />
+        </strong>,
+      );
+    } else if (italicMatch) {
+      const italicContent = italicMatch.slice(1, -1);
+      nodes.push(
+        <em key={`italic-${matchIndex}`} className="italic">
+          <InlineMarkdown text={italicContent} />
+        </em>,
+      );
+    } else {
+      nodes.push(fullMatch);
+    }
+
+    lastIndex = matchIndex + fullMatch.length;
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(text.substring(lastIndex));
+  }
+
+  return <>{nodes}</>;
+}
+
 function MermaidDiagram({ code }: { code: string }) {
   const isDark = useDarkMode();
   const [svg, setSvg] = React.useState<string | null>(null);
@@ -245,7 +444,7 @@ function MermaidDiagram({ code }: { code: string }) {
 
   return (
     <figure
-      className="overflow-auto rounded-lg border border-border bg-card p-4 transition-colors"
+      className="my-4 overflow-auto rounded-lg border border-border bg-card p-4 transition-colors"
       data-ladle-mermaid
     >
       {svg ? (
@@ -257,7 +456,7 @@ function MermaidDiagram({ code }: { code: string }) {
           role="img"
         />
       ) : (
-        <pre className="whitespace-pre-wrap text-xs text-muted-foreground">{code}</pre>
+        <pre className="whitespace-pre-wrap font-mono text-xs text-muted-foreground">{code}</pre>
       )}
       {error ? <figcaption className="mt-3 text-xs text-destructive">{error}</figcaption> : null}
     </figure>
@@ -265,10 +464,94 @@ function MermaidDiagram({ code }: { code: string }) {
 }
 
 function HeadingBlock({ depth, text }: { depth: number; text: string }) {
-  const Heading = depth === 1 ? "h1" : depth === 2 ? "h2" : "h3";
+  const Heading = depth === 1 ? "h1" : depth === 2 ? "h2" : depth === 3 ? "h3" : "h4";
   const className =
-    depth === 1 ? "text-3xl font-semibold" : "text-xl font-semibold text-foreground";
-  return <Heading className={className}>{text}</Heading>;
+    depth === 1
+      ? "text-3xl font-semibold tracking-tight text-foreground mt-6 mb-2"
+      : depth === 2
+        ? "text-xl font-semibold tracking-tight text-foreground mt-5 mb-2 border-b border-border pb-2"
+        : depth === 3
+          ? "text-lg font-semibold tracking-tight text-foreground mt-4 mb-1"
+          : "text-base font-semibold tracking-tight text-foreground mt-3 mb-1";
+
+  return (
+    <Heading className={className}>
+      <InlineMarkdown text={text} />
+    </Heading>
+  );
+}
+
+function CodeBlockItem({ code, language }: { code: string; language: string }) {
+  return (
+    <div className="my-3 overflow-hidden rounded-lg border border-border bg-muted/60">
+      {language ? (
+        <div className="border-b border-border bg-muted/80 px-4 py-1.5 font-mono text-[11px] font-medium uppercase text-muted-foreground">
+          {language}
+        </div>
+      ) : null}
+      <pre className="overflow-x-auto p-4 whitespace-pre font-mono text-xs leading-relaxed text-foreground">
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+}
+
+function TableBlockItem({ headers, rows }: { headers: string[]; rows: string[][] }) {
+  return (
+    <div className="my-4 overflow-x-auto rounded-lg border border-border">
+      <table className="w-full border-collapse text-left text-sm">
+        {headers.length > 0 ? (
+          <thead>
+            <tr className="border-b border-border bg-muted/50">
+              {headers.map((header, idx) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: header position key
+                <th key={`head-${idx}-${header}`} className="p-3 font-semibold text-foreground">
+                  <InlineMarkdown text={header} />
+                </th>
+              ))}
+            </tr>
+          </thead>
+        ) : null}
+        <tbody>
+          {rows.map((row, rIdx) => (
+            <tr
+              // biome-ignore lint/suspicious/noArrayIndexKey: row position key
+              key={`row-${rIdx}`}
+              className="border-b border-border last:border-0 hover:bg-muted/20"
+            >
+              {row.map((cell, cIdx) => (
+                <td
+                  // biome-ignore lint/suspicious/noArrayIndexKey: cell position key
+                  key={`cell-${rIdx}-${cIdx}`}
+                  className="p-3 text-muted-foreground"
+                >
+                  <InlineMarkdown text={cell} />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function ListBlockItem({ items, ordered }: { items: string[]; ordered: boolean }) {
+  const ListTag = ordered ? "ol" : "ul";
+  const listClass = ordered
+    ? "my-2 ml-6 list-decimal space-y-1 text-sm text-muted-foreground"
+    : "my-2 ml-6 list-disc space-y-1 text-sm text-muted-foreground";
+
+  return (
+    <ListTag className={listClass}>
+      {items.map((item, idx) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: list item index key
+        <li key={`item-${idx}-${item.slice(0, 10)}`} className="leading-6">
+          <InlineMarkdown text={item} />
+        </li>
+      ))}
+    </ListTag>
+  );
 }
 
 function DocBlockItem({ block }: { block: DocBlock }) {
@@ -280,21 +563,37 @@ function DocBlockItem({ block }: { block: DocBlock }) {
     return <MermaidDiagram code={block.code} />;
   }
 
-  return <p className="max-w-3xl text-sm leading-6 text-muted-foreground">{block.text}</p>;
+  if (block.kind === "code") {
+    return <CodeBlockItem code={block.code} language={block.language} />;
+  }
+
+  if (block.kind === "table") {
+    return <TableBlockItem headers={block.headers} rows={block.rows} />;
+  }
+
+  if (block.kind === "list") {
+    return <ListBlockItem items={block.items} ordered={block.ordered} />;
+  }
+
+  if (block.kind === "hr") {
+    return <hr className="my-6 border-border" />;
+  }
+
+  return (
+    <p className="my-1 max-w-3xl text-sm leading-6 text-muted-foreground">
+      <InlineMarkdown text={block.text} />
+    </p>
+  );
 }
 
 export function DocViewer({ markdown }: { markdown: string }) {
   const blocks = React.useMemo(() => parseDocMarkdown(markdown), [markdown]);
 
   return (
-    <article className="min-h-screen bg-card px-8 py-7 text-foreground font-sans">
-      <div className="mx-auto flex max-w-5xl flex-col gap-5">
-        {blocks.map((block) => {
-          const key =
-            block.kind === "mermaid"
-              ? `${block.kind}-${block.code}`
-              : `${block.kind}-${block.text}`;
-
+    <article className="min-h-screen bg-card px-8 py-7 font-sans text-foreground">
+      <div className="mx-auto flex max-w-5xl flex-col gap-2">
+        {blocks.map((block, index) => {
+          const key = `doc-block-${index}-${block.kind}`;
           return <DocBlockItem block={block} key={key} />;
         })}
       </div>

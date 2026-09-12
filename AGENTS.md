@@ -63,6 +63,7 @@ When implementing or refactoring features, inspect these worktrees as authoritat
   - **context7**: Docs lookup for Next.js 16 & React 19 breaking changes.
 
 - **Key Skills**:
+  - **Architecture & Documentation**: `adr` ([`.agents/skills/adr`](.agents/skills/adr)), `doc-translator` ([`.agents/skills/doc-translator`](.agents/skills/doc-translator)).
   - **UI & Design**: `shadcn-ui`, `taste-design`, `stitch::react-components`.
   - **Quality & Simplification**: `vitest` (official unit testing & mocking), `ponytail-review` (prevents over-engineering in FSRS engine & sync), `systematic-debugging`, `test-driven-development`.
   - **Competitive Intelligence**: `competitive-intelligence` ([`.agents/skills/competitive-intelligence`](.agents/skills/competitive-intelligence)). Reference whenever in doubt regarding feature models, architectural decisions, or PKM parity. Continuously increment and expand this skill whenever researching or finding new competitive information.

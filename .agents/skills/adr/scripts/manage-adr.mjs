@@ -204,7 +204,8 @@ function createAdr(title) {
     .replace(/\{\{PRO_1\}\}/g, 'simple and reliable')
     .replace(/\{\{CON_1\}\}/g, 'slight learning curve')
     .replace(/\{\{PRO_2\}\}/g, 'familiar to team')
-    .replace(/\{\{CON_2\}\}/g, 'insufficient scalability');
+    .replace(/\{\{CON_2\}\}/g, 'insufficient scalability')
+    .replace(/\{\{REJECTION_REASON_2\}\}/g, 'does not fulfill the latency and offline persistence requirements');
 
   fs.writeFileSync(targetPath, template, 'utf8');
   console.log(`\n✓ Created new ADR: ${path.relative(WORKSPACE_ROOT, targetPath)}`);

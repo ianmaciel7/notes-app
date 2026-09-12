@@ -42,3 +42,4 @@ Chosen option: **{{CHOSEN_OPTION}}** because {{JUSTIFICATION}}.
 
 * Good, because {{PRO_2}}
 * Bad, because {{CON_2}}
+* **Rejected because**: {{REJECTION_REASON_2}}
