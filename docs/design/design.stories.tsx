@@ -1,6 +1,6 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
-import designSystemEnDoc from "./design-system.md?raw";
+import designSystemEnDoc from "../../DESIGN.md?raw";
 
 type DesignLocale = "pt-BR" | "en";
 
