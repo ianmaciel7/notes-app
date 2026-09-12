@@ -1,5 +1,6 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
+import readmePtBrDoc from "../translations/pt-BR/architecture/README.md?raw";
 import readmeEnDoc from "./README.md?raw";
 
 type ArchitectureLocale = "pt-BR" | "en";
@@ -22,7 +23,7 @@ const localeArgTypes = {
 };
 
 const readmeDocs: Record<ArchitectureLocale, string> = {
-  "pt-BR": readmeEnDoc,
+  "pt-BR": readmePtBrDoc,
   en: readmeEnDoc,
 };
 

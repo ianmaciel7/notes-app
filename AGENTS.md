@@ -64,7 +64,7 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 
 - **Key Skills**:
   - **UI & Design**: `shadcn-ui`, `taste-design`, `stitch::react-components`.
-  - **Quality & Simplification**: `ponytail-review` (prevents over-engineering in FSRS engine & sync), `systematic-debugging`, `test-driven-development`.
+  - **Quality & Simplification**: `vitest` (official unit testing & mocking), `ponytail-review` (prevents over-engineering in FSRS engine & sync), `systematic-debugging`, `test-driven-development`.
   - **Competitive Intelligence**: `competitive-intelligence` ([`.agents/skills/competitive-intelligence`](.agents/skills/competitive-intelligence)). Reference whenever in doubt regarding feature models, architectural decisions, or PKM parity. Continuously increment and expand this skill whenever researching or finding new competitive information.
 
 <!-- END:mcp-and-skills-rules -->
@@ -76,8 +76,9 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 When working on complex tasks, subagents can be invoked via `invoke_subagent` to specialize in specific areas:
 - **`architect`** ([`.agents/agents/architect/agent.md`](.agents/agents/architect/agent.md)): For system design, cross-module planning, server/client boundaries, and trade-off evaluation before coding.
 - **`code-reviewer`** ([`.agents/agents/code-reviewer/agent.md`](.agents/agents/code-reviewer/agent.md)): For auditing diffs, correctness, accessibility, regressions, and code quality.
+- **`doc-maintainer`** ([`.agents/agents/doc-maintainer/agent.md`](.agents/agents/doc-maintainer/agent.md)): For creating, auditing, updating, and synchronizing ADRs, architecture specs, and markdown documentation.
 - **`security-reviewer`** ([`.agents/agents/security-reviewer/agent.md`](.agents/agents/security-reviewer/agent.md)): For threat modeling, auth boundaries, secret leakage prevention, and security policies.
-- **`test-engineer`** ([`.agents/agents/test-engineer/agent.md`](.agents/agents/test-engineer/agent.md)): For regression test strategies, verification commands (`pnpm check`, `pnpm build`), and test coverage.
+- **`test-engineer`** ([`.agents/agents/test-engineer/agent.md`](.agents/agents/test-engineer/agent.md)): For regression test strategies, verification commands (`pnpm check`, `pnpm test`, `pnpm build`), and test coverage.
 
 <!-- END:subagent-roles -->
 

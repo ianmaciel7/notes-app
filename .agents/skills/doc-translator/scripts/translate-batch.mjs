@@ -166,7 +166,8 @@ async function processFile(filePath, options) {
 
   let outputPath = filePath;
   if (options.outDir) {
-    const relative = path.relative(process.cwd(), filePath);
+    const baseDir = options.dir ? path.resolve(options.dir) : process.cwd();
+    const relative = path.relative(baseDir, filePath);
     outputPath = path.join(options.outDir, relative);
   } else if (!options.inPlace) {
     const ext = path.extname(filePath);
@@ -190,15 +191,18 @@ async function processFile(filePath, options) {
   return { input: filePath, output: outputPath, bytes: finalContent.length, status: 'success' };
 }
 
-function findMarkdownFiles(dirPath) {
+function findMarkdownFiles(dirPath, ignoreDir = null) {
   const results = [];
   if (!fs.existsSync(dirPath)) return results;
 
   const entries = fs.readdirSync(dirPath, { withFileTypes: true });
   for (const entry of entries) {
     const fullPath = path.join(dirPath, entry.name);
+    if (ignoreDir && path.resolve(fullPath) === path.resolve(ignoreDir)) {
+      continue;
+    }
     if (entry.isDirectory()) {
-      results.push(...findMarkdownFiles(fullPath));
+      results.push(...findMarkdownFiles(fullPath, ignoreDir));
     } else if (entry.isFile() && entry.name.endsWith('.md')) {
       results.push(fullPath);
     }
@@ -230,7 +234,8 @@ async function main() {
       process.stderr.write(`Error: Directory not found '${options.dir}'. Check path and try again.\n`);
       process.exit(1);
     }
-    filesToProcess = findMarkdownFiles(absDir);
+    const ignoreDir = options.outDir ? path.resolve(options.outDir) : null;
+    filesToProcess = findMarkdownFiles(absDir, ignoreDir);
   }
 
   if (filesToProcess.length === 0) {

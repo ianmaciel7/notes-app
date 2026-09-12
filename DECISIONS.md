@@ -10,10 +10,10 @@ All architectural decisions for `notes-app` are documented here using the [MADR 
 
 | ID | Title | Status | Date |
 | --- | --- | --- | --- |
-| [ADR-0001](#adr-0001-nextjs-16--react-19-app-router-baseline) | Next.js 16 + React 19 App Router Baseline | Accepted | 2026-09-11 |
-| [ADR-0002](#adr-0002-biome-as-unified-linter--formatter) | Biome as Unified Linter & Formatter | Accepted | 2026-09-11 |
+| [ADR-0001](#adr-0001-nextjs-16-react-19-app-router-baseline) | Next.js 16 + React 19 App Router Baseline | Accepted | 2026-09-11 |
+| [ADR-0002](#adr-0002-biome-as-unified-linter-formatter) | Biome as Unified Linter & Formatter | Accepted | 2026-09-11 |
 | [ADR-0003](#adr-0003-automated-knowledge-graph-updates-via-husky) | Automated Knowledge Graph Updates via Husky | Accepted | 2026-09-11 |
-| [ADR-0004](#adr-0004-strict-path--configuration-portability-rule) | Strict Path & Configuration Portability Rule | Accepted | 2026-09-11 |
+| [ADR-0004](#adr-0004-strict-path-configuration-portability-rule) | Strict Path & Configuration Portability Rule | Accepted | 2026-09-11 |
 
 ---
 
@@ -137,7 +137,7 @@ Chosen option: **Husky v9 git hooks** because `post-commit` and `post-merge` aut
 
 ### Context and Problem Statement
 
-Configuration files such as `.codex/hooks.json` previously contained hardcoded absolute user paths (e.g., `C:/Users/ianma/...`), breaking cross-machine portability and CI environments.
+Configuration files such as `.codex/hooks.json` previously contained hardcoded absolute user paths (e.g., `C:/Users/<username>/...`), breaking cross-machine portability and CI environments.
 
 ### Decision Drivers
 

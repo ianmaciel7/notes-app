@@ -6,7 +6,7 @@
 
 ## Context and Problem Statement
 
-Configuration files such as `.codex/hooks.json` previously contained hardcoded absolute user paths (e.g., `C:/Users/ianma/...`), breaking cross-machine portability and CI environments.
+Configuration files such as `.codex/hooks.json` previously contained hardcoded absolute user paths (e.g., `C:/Users/<username>/...`), breaking cross-machine portability and CI environments.
 
 ## Decision Drivers
 

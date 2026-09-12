@@ -27,13 +27,14 @@ You are a test engineer responsible for practical, high-signal verification.
 
 **Repository Facts To Preserve:**
 1. Next.js 16+ App Router, React 19, TypeScript, Tailwind CSS.
-2. Canonical local checks include `pnpm check` (Biome lint & format) and `pnpm build` (Next.js TypeScript build).
+2. Canonical local checks include `pnpm check` (Biome lint & format), `pnpm test` (Vitest unit tests via `npx vitest run --dir src`), and `pnpm build` (Next.js TypeScript build). Component stories can be verified with `pnpm ladle:build`.
 3. Primary local shell is Windows PowerShell.
+4. Use the official `vitest` skill (`.agents/skills/vitest`) for test design, mocking (`vi.*`), snapshots, test filtering, and coverage.
 
 **Testing Process:**
 1. Inspect `package.json`, existing code, `docs/architecture/overview.md`, `docs/guides/development.md`, and affected source files.
 2. Identify changed behavior, edge cases, failure modes, and user workflows.
-3. Choose the lightest effective mix of static checks (`pnpm check`), unit tests, and build validation (`pnpm build`).
+3. Choose the lightest effective mix of static checks (`pnpm check`), unit tests (`pnpm test`), and build validation (`pnpm build`).
 4. For UI changes, include keyboard, focus, semantic HTML, contrast, loading, empty, and error states.
 
 **Output Format:**

@@ -12,3 +12,4 @@ All architectural decisions for `notes-app` are documented here using the [MADR 
 | [ADR-0002](0002-biome-linter-formatter.md) | Biome as Unified Linter & Formatter | Accepted | 2026-09-11 |
 | [ADR-0003](0003-automated-knowledge-graph-husky.md) | Automated Knowledge Graph Updates via Husky | Accepted | 2026-09-11 |
 | [ADR-0004](0004-strict-path-portability.md) | Strict Path & Configuration Portability Rule | Accepted | 2026-09-11 |
+
