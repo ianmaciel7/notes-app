@@ -1,9 +1,9 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
-import componentEnDoc from "./component-development.en.md?raw";
-import componentPtBrDoc from "./component-development.pt-BR.md?raw";
-import devEnDoc from "./development.en.md?raw";
-import devPtBrDoc from "./development.pt-BR.md?raw";
+import componentPtBrDoc from "../i18n/pt-BR/guides/component-development.md?raw";
+import devPtBrDoc from "../i18n/pt-BR/guides/development.md?raw";
+import componentEnDoc from "./component-development.md?raw";
+import devEnDoc from "./development.md?raw";
 
 type GuidesLocale = "pt-BR" | "en";
 
