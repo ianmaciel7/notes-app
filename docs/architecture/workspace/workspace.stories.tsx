@@ -1,8 +1,8 @@
 import type { Story, StoryDefault } from "@ladle/react";
 
 import { DocViewer } from "../../../src/components/ladle/doc-viewer";
-import mainContentArchitectureEn from "./workspace-main-content.architecture.en.md?raw";
-import mainContentArchitecturePtBr from "./workspace-main-content.architecture.pt-BR.md?raw";
+import workspaceUiEn from "./ui.md?raw";
+import workspaceUiPtBr from "./ui.pt-BR.md?raw";
 
 type WorkspaceArchitectureLocale = "pt-BR" | "en";
 
@@ -11,19 +11,19 @@ type WorkspaceArchitectureStoryProps = {
 };
 
 const workspaceMainContentDocs: Record<WorkspaceArchitectureLocale, string> = {
-  "pt-BR": mainContentArchitecturePtBr,
-  en: mainContentArchitectureEn,
+  "pt-BR": workspaceUiPtBr,
+  en: workspaceUiEn,
 };
 
 export default {
-  title: "Docs / Workspace",
+  title: "Docs / Architecture / Workspace",
 } satisfies StoryDefault;
 
 export const WorkspaceMainContentGraph: Story<WorkspaceArchitectureStoryProps> = ({
   locale = "pt-BR",
 }) => <DocViewer markdown={workspaceMainContentDocs[locale] ?? workspaceMainContentDocs.en} />;
 
-WorkspaceMainContentGraph.storyName = "Main Content";
+WorkspaceMainContentGraph.storyName = "UI";
 WorkspaceMainContentGraph.args = { locale: "pt-BR" };
 WorkspaceMainContentGraph.argTypes = {
   locale: {

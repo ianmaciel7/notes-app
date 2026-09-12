@@ -31,7 +31,7 @@ This project uses AI agent rules and Model Context Protocol (MCP) integrations:
 ## Documentation
 
 Project documentation follows a **Docs as Code** model located under [`docs/`](docs/):
-- **Architecture**: See [docs/architecture/overview.md](docs/architecture/overview.md) for system design, components, and invariants.
+- **Architecture**: See [docs/architecture/README.md](docs/architecture/README.md) for system design, components, and invariants.
 - **Decisions**: See [docs/decisions/README.md](docs/decisions/README.md) for Architectural Decision Records (ADRs).
 - **Guides**: See [docs/guides/development.md](docs/guides/development.md) for local setup, testing, and workflow instructions.
 - **Reference**: See [docs/reference/design-system.md](docs/reference/design-system.md) and [docs/reference/conventions.md](docs/reference/conventions.md) for specs and conventions.

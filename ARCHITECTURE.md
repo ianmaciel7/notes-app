@@ -1,6 +1,6 @@
 # Architecture Overview (Matklad Pattern)
 
-> **Note**: This architecture specification is maintained under [`docs/architecture/overview.md`](docs/architecture/overview.md).
+> **Note**: This architecture specification is maintained under [`docs/architecture/README.md`](docs/architecture/README.md).
 
 This document provides a high-level overview of the **Notes App** architecture, directory layout, core abstractions, and engineering invariants. It is written following the **Matklad ARCHITECTURE.md** pattern to help new contributors and automated agents quickly orient themselves within the codebase.
 
