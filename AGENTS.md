@@ -65,6 +65,7 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 - **Key Skills**:
   - **UI & Design**: `shadcn-ui`, `taste-design`, `stitch::react-components`.
   - **Quality & Simplification**: `ponytail-review` (prevents over-engineering in FSRS engine & sync), `systematic-debugging`, `test-driven-development`.
+  - **Competitive Intelligence**: `competitive-intelligence` ([`.agents/skills/competitive-intelligence`](.agents/skills/competitive-intelligence)). Reference whenever in doubt regarding feature models, architectural decisions, or PKM parity. Continuously increment and expand this skill whenever researching or finding new competitive information.
 
 <!-- END:mcp-and-skills-rules -->
 

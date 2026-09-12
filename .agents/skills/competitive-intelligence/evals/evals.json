@@ -1,0 +1,35 @@
+{
+  "skill_name": "competitive-intelligence",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "How does Capacities handle custom content types, properties, and metadata schemas compared to raw Markdown files?",
+      "expected_output": "Detailed explanation of Capacities object-based model, typed entities, dynamic property schemas, and key parity requirements for notes-app.",
+      "assertions": [
+        "Mentions object types and dynamic property schemas",
+        "Contrasts typed entities against raw Markdown files in folder trees",
+        "References references/capacities.md for deep schema specs"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "What developer APIs, MCP endpoints, or automation protocols does Capacities expose?",
+      "expected_output": "Comprehensive list of Capacities developer surfaces including REST API, MCP server endpoint, and X-Callback URLs.",
+      "assertions": [
+        "Identifies native MCP endpoint at https://api.capacities.io/mcp",
+        "Mentions REST API overview at developers.capacities.io/api/overview",
+        "Notes that legacy /api/reference path returns HTTP 404"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "What multi-channel ingestion integrations exist in Capacities for capturing highlights and messages?",
+      "expected_output": "Summary of Capacities ingestion integrations including Readwise, Telegram, WhatsApp, Email, and Raycast.",
+      "assertions": [
+        "Mentions Readwise highlight sync",
+        "Lists mobile messaging bots (WhatsApp/Telegram)",
+        "Mentions email forwarding and Raycast extension"
+      ]
+    }
+  ]
+}

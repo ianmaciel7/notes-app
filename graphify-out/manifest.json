@@ -2074,5 +2074,17 @@
     "seen": 1789170437.2932506,
     "ast_hash": "56470767e185665da6a55dc6de5a7bea",
     "semantic_hash": ""
+  },
+  ".agents/skills/competitive-intelligence/SKILL.md": {
+    "mtime": 1789171500.4066894,
+    "seen": 1789171549.9010088,
+    "ast_hash": "09e2c08e4ccd3d4247ef59534f203de4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/competitive-intelligence/references/capacities.md": {
+    "mtime": 1789171473.519529,
+    "seen": 1789171549.9010088,
+    "ast_hash": "3f4c5837741cd1b45c8e3030a6e88d4f",
+    "semantic_hash": ""
   }
 }
