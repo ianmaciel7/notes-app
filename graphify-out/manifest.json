@@ -1536,9 +1536,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1789169973.031403,
-    "seen": 1789170019.4973834,
-    "ast_hash": "962147971a1b00ee9822ca10b8b92cc7",
+    "mtime": 1789178700.991922,
+    "seen": 1789179031.6687574,
+    "ast_hash": "3cc7c07b2cc4671020ca24efc8f54c9b",
     "semantic_hash": ""
   },
   "components.json": {
@@ -2021,16 +2021,10 @@
     "ast_hash": "7782ee22cda77372a8cc73cb93c7e926",
     "semantic_hash": ""
   },
-  "docs/reference/design-system.md": {
-    "mtime": 1789176705.6224446,
-    "seen": 1789176775.961203,
-    "ast_hash": "b06fcdd162ab70e9531ebfcae331d1e0",
-    "semantic_hash": ""
-  },
   "docs/architecture/architecture.stories.tsx": {
-    "mtime": 1789177180.6186275,
-    "seen": 1789177212.2592556,
-    "ast_hash": "e070d18deb5182ed35a27142563db4c5",
+    "mtime": 1789177510.999527,
+    "seen": 1789179031.6687574,
+    "ast_hash": "559ba9b6fb36a01893586da89744b9df",
     "semantic_hash": ""
   },
   "docs/decisions/decisions.stories.tsx": {
@@ -2105,70 +2099,10 @@
     "ast_hash": "fb07b2355238a26da25b1d927c8612db",
     "semantic_hash": ""
   },
-  "docs/design/design-system.md": {
-    "mtime": 1789169760.1225317,
-    "seen": 1789176775.961203,
-    "ast_hash": "6b2120cffbd9476107f5faef36ae7dfa",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/architecture/README.md": {
-    "mtime": 1789176705.613724,
-    "seen": 1789177212.2592556,
-    "ast_hash": "73349be42431a094057146f4d7318354",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md": {
-    "mtime": 1789176705.614805,
-    "seen": 1789177212.2592556,
-    "ast_hash": "c95b833a98a88762c77de96c9464e55c",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md": {
-    "mtime": 1789176705.6165614,
-    "seen": 1789177212.2592556,
-    "ast_hash": "5ac30fd52bcdb0ebb27dc467a576b4b5",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md": {
-    "mtime": 1789176705.6165614,
-    "seen": 1789177212.2592556,
-    "ast_hash": "ee64acb50bb83ae25876a6674c927759",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/decisions/0004-strict-path-portability.md": {
-    "mtime": 1789176705.6180775,
-    "seen": 1789177212.2592556,
-    "ast_hash": "d382e9895d1f7a7a5aba25b724da6491",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/decisions/README.md": {
-    "mtime": 1789176705.6180775,
-    "seen": 1789177212.2592556,
-    "ast_hash": "94de6e703ec24adcbd5c652a4ece2b92",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/guides/component-development.md": {
-    "mtime": 1789176705.6195936,
-    "seen": 1789177212.2592556,
-    "ast_hash": "9d1f99ed5c5cc587917c6559ef579cf2",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/guides/development.md": {
-    "mtime": 1789176705.6195936,
-    "seen": 1789177212.2592556,
-    "ast_hash": "c669088d759e32ac89665fe8d75a4e07",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/reference/conventions.md": {
-    "mtime": 1789176705.6209414,
-    "seen": 1789177212.2592556,
-    "ast_hash": "a7763af0727a085d985565b157ed1155",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/reference/design-system.md": {
-    "mtime": 1789176705.6209414,
-    "seen": 1789177212.2592556,
-    "ast_hash": "c1caf40f8ac237f308f3583c02542391",
+  "docs/design/design.stories.tsx": {
+    "mtime": 1789178884.264054,
+    "seen": 1789179031.6687574,
+    "ast_hash": "7fb3ccf8091d7efeb168508cec1a6e41",
     "semantic_hash": ""
   }
 }
