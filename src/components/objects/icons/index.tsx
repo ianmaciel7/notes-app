@@ -32,7 +32,7 @@ export * from "./tag-icon";
 export * from "./task-icon";
 export * from "./travel-icon";
 export * from "./tweet-icon";
-export * from "./types";
+export * from "../../../lib/space-object-types";
 export * from "./weblink-icon";
 
 import { AiChatIcon } from "./ai-chat-icon";
@@ -66,7 +66,7 @@ import { TagIcon } from "./tag-icon";
 import { TaskIcon } from "./task-icon";
 import { TravelIcon } from "./travel-icon";
 import { TweetIcon } from "./tweet-icon";
-import type { ObjectIconProps } from "./types";
+import type { ObjectIconProps } from "../../../lib/space-object-types";
 import { WeblinkIcon } from "./weblink-icon";
 
 export const objectIconRegistry: Record<string, React.ComponentType<ObjectIconProps>> = {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { ObjectIconProps } from "./types";
+import type { ObjectIconProps } from "../../../lib/space-object-types";
 
 export const IconBase = React.forwardRef<SVGSVGElement, ObjectIconProps>(function IconBase(
   { children, className, ...props },

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { IconBase } from "./icon-base";
-import type { ObjectIconProps } from "./types";
+import type { ObjectIconProps } from "../../../lib/space-object-types";
 
 export const MediaIcon = React.forwardRef<SVGSVGElement, ObjectIconProps>(
   function MediaIcon(props, ref) {
