@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "d3-visualization": {
+      "source": "nexu-io/open-design",
+      "sourceType": "github",
+      "skillPath": "skills/d3-visualization/SKILL.md",
+      "computedHash": "49d9dedab1f2caa7b71a96f018a00ef08932a2d71d8fe66c9fe4c159dd9acb49"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",

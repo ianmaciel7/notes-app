@@ -11,6 +11,7 @@ import adr3EnDoc from "./0003-automated-knowledge-graph-husky.md?raw";
 import adr4EnDoc from "./0004-strict-path-portability.md?raw";
 import adr5EnDoc from "./0005-ladle-component-workbench-and-documentation-viewer.md?raw";
 import adr6EnDoc from "./0006-historical-reference-architecture-synthesis.md?raw";
+import adr7EnDoc from "./0007-blocknote-rich-text-editor-integration-and-ladle-story-workbench.md?raw";
 import readmeEnDoc from "./README.md?raw";
 
 type DecisionsLocale = "pt-BR" | "en";
@@ -67,6 +68,11 @@ const adr6Docs: Record<DecisionsLocale, string> = {
   en: adr6EnDoc,
 };
 
+const adr7Docs: Record<DecisionsLocale, string> = {
+  "pt-BR": adr7EnDoc,
+  en: adr7EnDoc,
+};
+
 export default {
   title: "Docs / Decisions",
 } satisfies StoryDefault;
@@ -119,3 +125,10 @@ export const ADR0006: Story<DecisionsStoryProps> = ({ locale = "en" }) => (
 ADR0006.storyName = "0006 - Historical Reference Architecture Synthesis";
 ADR0006.args = { locale: "en" };
 ADR0006.argTypes = localeArgTypes;
+
+export const ADR0007: Story<DecisionsStoryProps> = ({ locale = "en" }) => (
+  <DocViewer markdown={adr7Docs[locale] ?? adr7Docs.en} />
+);
+ADR0007.storyName = "0007 - BlockNote Editor & Ladle Workbench";
+ADR0007.args = { locale: "en" };
+ADR0007.argTypes = localeArgTypes;

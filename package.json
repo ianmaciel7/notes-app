@@ -11,6 +11,7 @@
     "check": "biome check --write .",
     "typecheck": "tsc --noEmit",
     "test": "npx vitest run --dir src",
+    "ladle": "ladle serve",
     "ladle:dev": "ladle serve",
     "ladle:build": "ladle build",
     "ladle:preview": "ladle preview",
@@ -18,6 +19,9 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
+    "@blocknote/core": "^0.54.2",
+    "@blocknote/react": "^0.54.2",
+    "@blocknote/shadcn": "^0.54.2",
     "@shadcn/react": "^0.3.1",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",
