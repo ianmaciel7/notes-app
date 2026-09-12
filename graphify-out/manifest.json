@@ -2075,18 +2075,6 @@
     "ast_hash": "38c73c7bf9a6632b5112646257e067a5",
     "semantic_hash": ""
   },
-  "docs/architecture/workspace/workspace.stories.tsx": {
-    "mtime": 1789177180.6186275,
-    "seen": 1789177212.2592556,
-    "ast_hash": "f3c3e00b07bf90f894d5c1580678e2ac",
-    "semantic_hash": ""
-  },
-  "docs/architecture/workspace/ui.md": {
-    "mtime": 1789176705.6093605,
-    "seen": 1789176775.961203,
-    "ast_hash": "fdba7d49db4cf62ff394a41ad357d38f",
-    "semantic_hash": ""
-  },
   ".agents/skills/doc-translator/evals/evals.json": {
     "mtime": 1789175959.2437043,
     "seen": 1789176775.961203,
@@ -2127,12 +2115,6 @@
     "mtime": 1789176705.613724,
     "seen": 1789177212.2592556,
     "ast_hash": "73349be42431a094057146f4d7318354",
-    "semantic_hash": ""
-  },
-  "docs/translations/pt-BR/architecture/workspace/ui.md": {
-    "mtime": 1789176705.614805,
-    "seen": 1789177212.2592556,
-    "ast_hash": "c0f0e1ebe70190bfb6245dcee10188a2",
     "semantic_hash": ""
   },
   "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md": {

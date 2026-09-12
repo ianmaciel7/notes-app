@@ -1,7 +1,6 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
-import overviewPtBrDoc from "../translations/pt-BR/architecture/README.md?raw";
-import overviewEnDoc from "./README.md?raw";
+import readmeEnDoc from "./README.md?raw";
 
 type ArchitectureLocale = "pt-BR" | "en";
 
@@ -9,9 +8,22 @@ type ArchitectureStoryProps = {
   locale: ArchitectureLocale;
 };
 
-const overviewDocs: Record<ArchitectureLocale, string> = {
-  "pt-BR": overviewPtBrDoc,
-  en: overviewEnDoc,
+const localeArgTypes = {
+  locale: {
+    control: {
+      labels: {
+        en: "English",
+        "pt-BR": "Português do Brasil",
+      },
+      type: "inline-radio" as const,
+    },
+    options: ["pt-BR", "en"],
+  },
+};
+
+const readmeDocs: Record<ArchitectureLocale, string> = {
+  "pt-BR": readmeEnDoc,
+  en: readmeEnDoc,
 };
 
 export default {
@@ -19,20 +31,8 @@ export default {
 } satisfies StoryDefault;
 
 export const Overview: Story<ArchitectureStoryProps> = ({ locale = "pt-BR" }) => (
-  <DocViewer markdown={overviewDocs[locale] ?? overviewDocs.en} />
+  <DocViewer markdown={readmeDocs[locale] ?? readmeDocs.en} />
 );
-
-Overview.storyName = "README";
+Overview.storyName = "Overview";
 Overview.args = { locale: "pt-BR" };
-Overview.argTypes = {
-  locale: {
-    control: {
-      labels: {
-        en: "English",
-        "pt-BR": "Português do Brasil",
-      },
-      type: "inline-radio",
-    },
-    options: ["pt-BR", "en"],
-  },
-};
+Overview.argTypes = localeArgTypes;
