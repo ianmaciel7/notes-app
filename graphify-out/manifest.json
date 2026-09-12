@@ -1356,9 +1356,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1789217754.3870692,
-    "seen": 1789217803.932401,
-    "ast_hash": "9c6ff287f760b9e4e3a3bcf8ab8ed527",
+    "mtime": 1789217903.5690117,
+    "seen": 1789217955.218939,
+    "ast_hash": "5d38360ef2d63f2695a7bd59d436718e",
     "semantic_hash": ""
   },
   ".agents/hooks.json": {
@@ -2382,9 +2382,9 @@
     "semantic_hash": ""
   },
   "GEMINI.md": {
-    "mtime": 1789217775.0869308,
-    "seen": 1789217803.932401,
-    "ast_hash": "68a6c68ef625890d50a8dadcef967ede",
+    "mtime": 1789217911.2598069,
+    "seen": 1789217955.218939,
+    "ast_hash": "b53da667d6441c2a8f199ee4424e45b1",
     "semantic_hash": ""
   },
   "src/components/ui/button.stories.tsx": {
@@ -2397,6 +2397,12 @@
     "mtime": 1789217749.237064,
     "seen": 1789217803.932401,
     "ast_hash": "2a016c56d541cd674ced7504caa6599f",
+    "semantic_hash": ""
+  },
+  ".agents/rules/doc-freshness.md": {
+    "mtime": 1789217918.4473197,
+    "seen": 1789217955.218939,
+    "ast_hash": "2bc23de29594f1f58138bcd99162eeab",
     "semantic_hash": ""
   }
 }
