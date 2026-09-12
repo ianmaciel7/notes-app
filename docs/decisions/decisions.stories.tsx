@@ -1,10 +1,10 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
-import adr1PtBrDoc from "../i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md?raw";
-import adr2PtBrDoc from "../i18n/pt-BR/decisions/0002-biome-linter-formatter.md?raw";
-import adr3PtBrDoc from "../i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md?raw";
-import adr4PtBrDoc from "../i18n/pt-BR/decisions/0004-strict-path-portability.md?raw";
-import readmePtBrDoc from "../i18n/pt-BR/decisions/README.md?raw";
+import adr1PtBrDoc from "../translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md?raw";
+import adr2PtBrDoc from "../translations/pt-BR/decisions/0002-biome-linter-formatter.md?raw";
+import adr3PtBrDoc from "../translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md?raw";
+import adr4PtBrDoc from "../translations/pt-BR/decisions/0004-strict-path-portability.md?raw";
+import readmePtBrDoc from "../translations/pt-BR/decisions/README.md?raw";
 import adr1EnDoc from "./0001-nextjs-16-react-19-baseline.md?raw";
 import adr2EnDoc from "./0002-biome-linter-formatter.md?raw";
 import adr3EnDoc from "./0003-automated-knowledge-graph-husky.md?raw";

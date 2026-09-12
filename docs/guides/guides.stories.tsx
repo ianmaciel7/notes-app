@@ -1,7 +1,7 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
-import componentPtBrDoc from "../i18n/pt-BR/guides/component-development.md?raw";
-import devPtBrDoc from "../i18n/pt-BR/guides/development.md?raw";
+import componentPtBrDoc from "../translations/pt-BR/guides/component-development.md?raw";
+import devPtBrDoc from "../translations/pt-BR/guides/development.md?raw";
 import componentEnDoc from "./component-development.md?raw";
 import devEnDoc from "./development.md?raw";
 

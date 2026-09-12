@@ -23817,7 +23817,7 @@
       "source_location": "L71"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme",
+      "id": "docs_translations_pt_br_architecture_readme",
       "label": "pt-BR/architecture/README.md",
       "_origin": "ast",
       "community": 112,
@@ -23825,11 +23825,11 @@
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "pt-br/architecture/readme.md",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_1_vis\u00e3o_geral_bird_s_eye_view",
+      "id": "docs_translations_pt_br_architecture_readme_1_vis\u00e3o_geral_bird_s_eye_view",
       "label": "1. Vis\u00e3o Geral (Bird's Eye View)",
       "_origin": "ast",
       "community": 112,
@@ -23837,11 +23837,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "1. visao geral (bird's eye view)",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L7"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_2_mapa_do_c\u00f3digo_estrutura_oficial_de_pastas",
+      "id": "docs_translations_pt_br_architecture_readme_2_mapa_do_c\u00f3digo_estrutura_oficial_de_pastas",
       "label": "2. Mapa do C\u00f3digo & Estrutura Oficial de Pastas",
       "_origin": "ast",
       "community": 112,
@@ -23849,11 +23849,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "2. mapa do codigo & estrutura oficial de pastas",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L18"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_3_invariantes_arquiteturais",
+      "id": "docs_translations_pt_br_architecture_readme_3_invariantes_arquiteturais",
       "label": "3. Invariantes Arquiteturais",
       "_origin": "ast",
       "community": 112,
@@ -23861,11 +23861,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "3. invariantes arquiteturais",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L82"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_4_fluxos_de_dados_principais",
+      "id": "docs_translations_pt_br_architecture_readme_4_fluxos_de_dados_principais",
       "label": "4. Fluxos de Dados Principais",
       "_origin": "ast",
       "community": 112,
@@ -23873,11 +23873,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4. fluxos de dados principais",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L106"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
+      "id": "docs_translations_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
       "label": "5. Quest\u00f5es Transversais (Cross-Cutting Concerns)",
       "_origin": "ast",
       "community": 112,
@@ -23885,11 +23885,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "5. questoes transversais (cross-cutting concerns)",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L132"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_6_worktrees_de_refer\u00eancia_topologia_da_base_de_c\u00f3digo",
+      "id": "docs_translations_pt_br_architecture_readme_6_worktrees_de_refer\u00eancia_topologia_da_base_de_c\u00f3digo",
       "label": "6. Worktrees de Refer\u00eancia & Topologia da Base de C\u00f3digo",
       "_origin": "ast",
       "community": 112,
@@ -23897,11 +23897,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "6. worktrees de referencia & topologia da base de codigo",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L149"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_7_governan\u00e7a_do_projeto_matriz_de_decis\u00f5es",
+      "id": "docs_translations_pt_br_architecture_readme_7_governan\u00e7a_do_projeto_matriz_de_decis\u00f5es",
       "label": "7. Governan\u00e7a do Projeto & Matriz de Decis\u00f5es",
       "_origin": "ast",
       "community": 112,
@@ -23909,11 +23909,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "7. governanca do projeto & matriz de decisoes",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L156"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_a_busca_de_dados_acesso_direto_rsc",
+      "id": "docs_translations_pt_br_architecture_readme_a_busca_de_dados_acesso_direto_rsc",
       "label": "A. Busca de Dados (Acesso Direto RSC)",
       "_origin": "ast",
       "community": 112,
@@ -23921,11 +23921,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "a. busca de dados (acesso direto rsc)",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L108"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_b_muta\u00e7\u00e3o_de_dados_fluxo_de_server_actions",
+      "id": "docs_translations_pt_br_architecture_readme_b_muta\u00e7\u00e3o_de_dados_fluxo_de_server_actions",
       "label": "B. Muta\u00e7\u00e3o de Dados (Fluxo de Server Actions)",
       "_origin": "ast",
       "community": 112,
@@ -23933,11 +23933,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "b. mutacao de dados (fluxo de server actions)",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L120"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_estiliza\u00e7\u00e3o_temas",
+      "id": "docs_translations_pt_br_architecture_readme_estiliza\u00e7\u00e3o_temas",
       "label": "Estiliza\u00e7\u00e3o & Temas",
       "_origin": "ast",
       "community": 112,
@@ -23945,11 +23945,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "estilizacao & temas",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L134"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_gerenciamento_de_estado",
+      "id": "docs_translations_pt_br_architecture_readme_gerenciamento_de_estado",
       "label": "Gerenciamento de Estado",
       "_origin": "ast",
       "community": 112,
@@ -23957,11 +23957,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "gerenciamento de estado",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L143"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_tratamento_de_erros_estados_de_carregamento",
+      "id": "docs_translations_pt_br_architecture_readme_tratamento_de_erros_estados_de_carregamento",
       "label": "Tratamento de Erros & Estados de Carregamento",
       "_origin": "ast",
       "community": 112,
@@ -23969,11 +23969,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "tratamento de erros & estados de carregamento",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L139"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
+      "id": "docs_translations_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
       "label": "Vis\u00e3o Geral da Arquitetura (Padr\u00e3o Matklad)",
       "_origin": "ast",
       "community": 112,
@@ -23981,11 +23981,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "visao geral da arquitetura (padrao matklad)",
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_readme",
+      "id": "docs_translations_pt_br_decisions_readme",
       "label": "pt-BR/decisions/README.md",
       "_origin": "ast",
       "community": 112,
@@ -23993,11 +23993,11 @@
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "pt-br/decisions/readme.md",
-      "source_file": "docs/i18n/pt-BR/decisions/README.md",
+      "source_file": "docs/translations/pt-BR/decisions/README.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_readme_registro_de_decis\u00f5es_arquiteturais_madr",
+      "id": "docs_translations_pt_br_decisions_readme_registro_de_decis\u00f5es_arquiteturais_madr",
       "label": "Registro de Decis\u00f5es Arquiteturais (MADR)",
       "_origin": "ast",
       "community": 112,
@@ -24005,11 +24005,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "registro de decisoes arquiteturais (madr)",
-      "source_file": "docs/i18n/pt-BR/decisions/README.md",
+      "source_file": "docs/translations/pt-BR/decisions/README.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_readme_\u00edndice_de_registros_de_decis\u00f5es_arquiteturais_adrs",
+      "id": "docs_translations_pt_br_decisions_readme_\u00edndice_de_registros_de_decis\u00f5es_arquiteturais_adrs",
       "label": "\u00cdndice de Registros de Decis\u00f5es Arquiteturais (ADRs)",
       "_origin": "ast",
       "community": 112,
@@ -24017,7 +24017,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "indice de registros de decisoes arquiteturais (adrs)",
-      "source_file": "docs/i18n/pt-BR/decisions/README.md",
+      "source_file": "docs/translations/pt-BR/decisions/README.md",
       "source_location": "L7"
     },
     {
@@ -35474,7 +35474,7 @@
       "source_location": "L33"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_workspace_ui",
+      "id": "docs_translations_pt_br_architecture_workspace_ui",
       "label": "pt-BR/architecture/workspace/ui.md",
       "_origin": "ast",
       "community": 265,
@@ -35482,11 +35482,11 @@
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "pt-br/architecture/workspace/ui.md",
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_workspace_ui_1_barra_de_cabe\u00e7alho",
+      "id": "docs_translations_pt_br_architecture_workspace_ui_1_barra_de_cabe\u00e7alho",
       "label": "1. Barra de Cabe\u00e7alho",
       "_origin": "ast",
       "community": 265,
@@ -35494,11 +35494,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "1. barra de cabecalho",
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
       "source_location": "L17"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_workspace_ui_2_barra_de_busca_e_ferramentas",
+      "id": "docs_translations_pt_br_architecture_workspace_ui_2_barra_de_busca_e_ferramentas",
       "label": "2. Barra de Busca e Ferramentas",
       "_origin": "ast",
       "community": 265,
@@ -35506,11 +35506,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "2. barra de busca e ferramentas",
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
       "source_location": "L21"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_workspace_ui_3_componente_de_cart\u00e3o_de_nota",
+      "id": "docs_translations_pt_br_architecture_workspace_ui_3_componente_de_cart\u00e3o_de_nota",
       "label": "3. Componente de Cart\u00e3o de Nota",
       "_origin": "ast",
       "community": 265,
@@ -35518,11 +35518,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "3. componente de cartao de nota",
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
       "source_location": "L29"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_workspace_ui_4_di\u00e1logo_modal_de_cria\u00e7\u00e3o_de_nota",
+      "id": "docs_translations_pt_br_architecture_workspace_ui_4_di\u00e1logo_modal_de_cria\u00e7\u00e3o_de_nota",
       "label": "4. Di\u00e1logo Modal de Cria\u00e7\u00e3o de Nota",
       "_origin": "ast",
       "community": 265,
@@ -35530,11 +35530,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4. dialogo modal de criacao de nota",
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
       "source_location": "L38"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_workspace_ui_5_visualiza\u00e7\u00e3o_de_estado_vazio",
+      "id": "docs_translations_pt_br_architecture_workspace_ui_5_visualiza\u00e7\u00e3o_de_estado_vazio",
       "label": "5. Visualiza\u00e7\u00e3o de Estado Vazio",
       "_origin": "ast",
       "community": 265,
@@ -35542,11 +35542,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "5. visualizacao de estado vazio",
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
       "source_location": "L46"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
+      "id": "docs_translations_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
       "label": "Componentes Visuais e Detalhes do Layout",
       "_origin": "ast",
       "community": 265,
@@ -35554,11 +35554,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "componentes visuais e detalhes do layout",
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
       "source_location": "L15"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_workspace_ui_guia_de_interface_de_usu\u00e1rio_do_workspace",
+      "id": "docs_translations_pt_br_architecture_workspace_ui_guia_de_interface_de_usu\u00e1rio_do_workspace",
       "label": "Guia de Interface de Usu\u00e1rio do Workspace",
       "_origin": "ast",
       "community": 265,
@@ -35566,11 +35566,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "guia de interface de usuario do workspace",
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_workspace_ui_tema_e_comportamento_responsivo",
+      "id": "docs_translations_pt_br_architecture_workspace_ui_tema_e_comportamento_responsivo",
       "label": "Tema e Comportamento Responsivo",
       "_origin": "ast",
       "community": 265,
@@ -35578,11 +35578,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "tema e comportamento responsivo",
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
       "source_location": "L50"
     },
     {
-      "id": "docs_i18n_pt_br_architecture_workspace_ui_vis\u00e3o_geral_do_layout_da_interface",
+      "id": "docs_translations_pt_br_architecture_workspace_ui_vis\u00e3o_geral_do_layout_da_interface",
       "label": "Vis\u00e3o Geral do Layout da Interface",
       "_origin": "ast",
       "community": 265,
@@ -35590,7 +35590,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "visao geral do layout da interface",
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
       "source_location": "L5"
     },
     {
@@ -38022,7 +38022,7 @@
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline",
+      "id": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline",
       "label": "pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
       "_origin": "ast",
       "community": 301,
@@ -38030,11 +38030,11 @@
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "pt-br/decisions/0001-nextjs-16-react-19-baseline.md",
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
+      "id": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
       "label": "ADR-0001: Baseline do App Router com Next.js 16 + React 19",
       "_origin": "ast",
       "community": 301,
@@ -38042,11 +38042,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "adr-0001: baseline do app router com next.js 16 + react 19",
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_consequ\u00eancias_negativas",
+      "id": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_consequ\u00eancias_negativas",
       "label": "Consequ\u00eancias Negativas",
       "_origin": "ast",
       "community": 301,
@@ -38054,11 +38054,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "consequencias negativas",
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
       "source_location": "L32"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_consequ\u00eancias_positivas",
+      "id": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_consequ\u00eancias_positivas",
       "label": "Consequ\u00eancias Positivas",
       "_origin": "ast",
       "community": 301,
@@ -38066,11 +38066,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "consequencias positivas",
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
       "source_location": "L27"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_contexto_e_declara\u00e7\u00e3o_do_problema",
+      "id": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_contexto_e_declara\u00e7\u00e3o_do_problema",
       "label": "Contexto e Declara\u00e7\u00e3o do Problema",
       "_origin": "ast",
       "community": 301,
@@ -38078,11 +38078,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "contexto e declaracao do problema",
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
       "source_location": "L7"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_direcionadores_da_decis\u00e3o",
+      "id": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_direcionadores_da_decis\u00e3o",
       "label": "Direcionadores da Decis\u00e3o",
       "_origin": "ast",
       "community": 301,
@@ -38090,11 +38090,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "direcionadores da decisao",
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
       "source_location": "L11"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_op\u00e7\u00f5es_consideradas",
+      "id": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_op\u00e7\u00f5es_consideradas",
       "label": "Op\u00e7\u00f5es Consideradas",
       "_origin": "ast",
       "community": 301,
@@ -38102,11 +38102,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "opcoes consideradas",
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
       "source_location": "L17"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_resultado_da_decis\u00e3o",
+      "id": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_resultado_da_decis\u00e3o",
       "label": "Resultado da Decis\u00e3o",
       "_origin": "ast",
       "community": 301,
@@ -38114,7 +38114,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "resultado da decisao",
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
       "source_location": "L23"
     },
     {
@@ -39127,7 +39127,7 @@
       "source_file": "mermaid"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter",
+      "id": "docs_translations_pt_br_decisions_0002_biome_linter_formatter",
       "label": "pt-BR/decisions/0002-biome-linter-formatter.md",
       "_origin": "ast",
       "community": 323,
@@ -39135,11 +39135,11 @@
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "pt-br/decisions/0002-biome-linter-formatter.md",
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
+      "id": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
       "label": "ADR-0002: Biome como Linter & Formatador Unificado",
       "_origin": "ast",
       "community": 323,
@@ -39147,11 +39147,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "adr-0002: biome como linter & formatador unificado",
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_consequ\u00eancias_negativas",
+      "id": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_consequ\u00eancias_negativas",
       "label": "Consequ\u00eancias Negativas",
       "_origin": "ast",
       "community": 323,
@@ -39159,11 +39159,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "consequencias negativas",
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
       "source_location": "L33"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_consequ\u00eancias_positivas",
+      "id": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_consequ\u00eancias_positivas",
       "label": "Consequ\u00eancias Positivas",
       "_origin": "ast",
       "community": 323,
@@ -39171,11 +39171,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "consequencias positivas",
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
       "source_location": "L27"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_contexto_e_declara\u00e7\u00e3o_do_problema",
+      "id": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_contexto_e_declara\u00e7\u00e3o_do_problema",
       "label": "Contexto e Declara\u00e7\u00e3o do Problema",
       "_origin": "ast",
       "community": 323,
@@ -39183,11 +39183,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "contexto e declaracao do problema",
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
       "source_location": "L7"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_direcionadores_da_decis\u00e3o",
+      "id": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_direcionadores_da_decis\u00e3o",
       "label": "Direcionadores da Decis\u00e3o",
       "_origin": "ast",
       "community": 323,
@@ -39195,11 +39195,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "direcionadores da decisao",
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
       "source_location": "L11"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_op\u00e7\u00f5es_consideradas",
+      "id": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_op\u00e7\u00f5es_consideradas",
       "label": "Op\u00e7\u00f5es Consideradas",
       "_origin": "ast",
       "community": 323,
@@ -39207,11 +39207,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "opcoes consideradas",
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
       "source_location": "L17"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_resultado_da_decis\u00e3o",
+      "id": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_resultado_da_decis\u00e3o",
       "label": "Resultado da Decis\u00e3o",
       "_origin": "ast",
       "community": 323,
@@ -39219,7 +39219,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "resultado da decisao",
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
       "source_location": "L23"
     },
     {
@@ -39271,7 +39271,7 @@
       "source_location": "L15"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky",
+      "id": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky",
       "label": "pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
       "_origin": "ast",
       "community": 325,
@@ -39279,11 +39279,11 @@
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "pt-br/decisions/0003-automated-knowledge-graph-husky.md",
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
+      "id": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
       "label": "ADR-0003: Atualiza\u00e7\u00f5es Automatizadas do Grafo de Conhecimento via Husky",
       "_origin": "ast",
       "community": 325,
@@ -39291,11 +39291,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "adr-0003: atualizacoes automatizadas do grafo de conhecimento via husky",
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_consequ\u00eancias_negativas",
+      "id": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_consequ\u00eancias_negativas",
       "label": "Consequ\u00eancias Negativas",
       "_origin": "ast",
       "community": 325,
@@ -39303,11 +39303,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "consequencias negativas",
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
       "source_location": "L32"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_consequ\u00eancias_positivas",
+      "id": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_consequ\u00eancias_positivas",
       "label": "Consequ\u00eancias Positivas",
       "_origin": "ast",
       "community": 325,
@@ -39315,11 +39315,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "consequencias positivas",
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
       "source_location": "L27"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_contexto_e_declara\u00e7\u00e3o_do_problema",
+      "id": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_contexto_e_declara\u00e7\u00e3o_do_problema",
       "label": "Contexto e Declara\u00e7\u00e3o do Problema",
       "_origin": "ast",
       "community": 325,
@@ -39327,11 +39327,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "contexto e declaracao do problema",
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
       "source_location": "L7"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_direcionadores_da_decis\u00e3o",
+      "id": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_direcionadores_da_decis\u00e3o",
       "label": "Direcionadores da Decis\u00e3o",
       "_origin": "ast",
       "community": 325,
@@ -39339,11 +39339,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "direcionadores da decisao",
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
       "source_location": "L11"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_op\u00e7\u00f5es_consideradas",
+      "id": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_op\u00e7\u00f5es_consideradas",
       "label": "Op\u00e7\u00f5es Consideradas",
       "_origin": "ast",
       "community": 325,
@@ -39351,11 +39351,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "opcoes consideradas",
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
       "source_location": "L17"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_resultado_da_decis\u00e3o",
+      "id": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_resultado_da_decis\u00e3o",
       "label": "Resultado da Decis\u00e3o",
       "_origin": "ast",
       "community": 325,
@@ -39363,7 +39363,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "resultado da decisao",
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
       "source_location": "L23"
     },
     {
@@ -39532,7 +39532,7 @@
       "source_location": "L75"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0004_strict_path_portability",
+      "id": "docs_translations_pt_br_decisions_0004_strict_path_portability",
       "label": "pt-BR/decisions/0004-strict-path-portability.md",
       "_origin": "ast",
       "community": 329,
@@ -39540,11 +39540,11 @@
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "pt-br/decisions/0004-strict-path-portability.md",
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
+      "id": "docs_translations_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
       "label": "ADR-0004: Regra Estrita de Portabilidade de Caminhos & Configura\u00e7\u00f5es",
       "_origin": "ast",
       "community": 329,
@@ -39552,11 +39552,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "adr-0004: regra estrita de portabilidade de caminhos & configuracoes",
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0004_strict_path_portability_consequ\u00eancias_negativas",
+      "id": "docs_translations_pt_br_decisions_0004_strict_path_portability_consequ\u00eancias_negativas",
       "label": "Consequ\u00eancias Negativas",
       "_origin": "ast",
       "community": 329,
@@ -39564,11 +39564,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "consequencias negativas",
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
       "source_location": "L30"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0004_strict_path_portability_consequ\u00eancias_positivas",
+      "id": "docs_translations_pt_br_decisions_0004_strict_path_portability_consequ\u00eancias_positivas",
       "label": "Consequ\u00eancias Positivas",
       "_origin": "ast",
       "community": 329,
@@ -39576,11 +39576,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "consequencias positivas",
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
       "source_location": "L25"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0004_strict_path_portability_contexto_e_declara\u00e7\u00e3o_do_problema",
+      "id": "docs_translations_pt_br_decisions_0004_strict_path_portability_contexto_e_declara\u00e7\u00e3o_do_problema",
       "label": "Contexto e Declara\u00e7\u00e3o do Problema",
       "_origin": "ast",
       "community": 329,
@@ -39588,11 +39588,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "contexto e declaracao do problema",
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
       "source_location": "L7"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0004_strict_path_portability_direcionadores_da_decis\u00e3o",
+      "id": "docs_translations_pt_br_decisions_0004_strict_path_portability_direcionadores_da_decis\u00e3o",
       "label": "Direcionadores da Decis\u00e3o",
       "_origin": "ast",
       "community": 329,
@@ -39600,11 +39600,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "direcionadores da decisao",
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
       "source_location": "L11"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0004_strict_path_portability_op\u00e7\u00f5es_consideradas",
+      "id": "docs_translations_pt_br_decisions_0004_strict_path_portability_op\u00e7\u00f5es_consideradas",
       "label": "Op\u00e7\u00f5es Consideradas",
       "_origin": "ast",
       "community": 329,
@@ -39612,11 +39612,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "opcoes consideradas",
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
       "source_location": "L16"
     },
     {
-      "id": "docs_i18n_pt_br_decisions_0004_strict_path_portability_resultado_da_decis\u00e3o",
+      "id": "docs_translations_pt_br_decisions_0004_strict_path_portability_resultado_da_decis\u00e3o",
       "label": "Resultado da Decis\u00e3o",
       "_origin": "ast",
       "community": 329,
@@ -39624,7 +39624,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "resultado da decisao",
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
       "source_location": "L21"
     },
     {
@@ -39950,7 +39950,7 @@
       "source_location": "L156"
     },
     {
-      "id": "docs_i18n_pt_br_guides_development",
+      "id": "docs_translations_pt_br_guides_development",
       "label": "pt-BR/guides/development.md",
       "_origin": "ast",
       "community": 332,
@@ -39958,11 +39958,11 @@
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "pt-br/guides/development.md",
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
+      "source_file": "docs/translations/pt-BR/guides/development.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_guides_development_1_pr\u00e9_requisitos_instala\u00e7\u00e3o",
+      "id": "docs_translations_pt_br_guides_development_1_pr\u00e9_requisitos_instala\u00e7\u00e3o",
       "label": "1. Pr\u00e9-requisitos & Instala\u00e7\u00e3o",
       "_origin": "ast",
       "community": 332,
@@ -39970,11 +39970,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "1. pre-requisitos & instalacao",
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
+      "source_file": "docs/translations/pt-BR/guides/development.md",
       "source_location": "L7"
     },
     {
-      "id": "docs_i18n_pt_br_guides_development_2_executando_o_servidor_de_desenvolvimento",
+      "id": "docs_translations_pt_br_guides_development_2_executando_o_servidor_de_desenvolvimento",
       "label": "2. Executando o Servidor de Desenvolvimento",
       "_origin": "ast",
       "community": 332,
@@ -39982,11 +39982,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "2. executando o servidor de desenvolvimento",
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
+      "source_file": "docs/translations/pt-BR/guides/development.md",
       "source_location": "L20"
     },
     {
-      "id": "docs_i18n_pt_br_guides_development_3_qualidade_de_c\u00f3digo_verifica\u00e7\u00e3o",
+      "id": "docs_translations_pt_br_guides_development_3_qualidade_de_c\u00f3digo_verifica\u00e7\u00e3o",
       "label": "3. Qualidade de C\u00f3digo & Verifica\u00e7\u00e3o",
       "_origin": "ast",
       "community": 332,
@@ -39994,11 +39994,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "3. qualidade de codigo & verificacao",
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
+      "source_file": "docs/translations/pt-BR/guides/development.md",
       "source_location": "L32"
     },
     {
-      "id": "docs_i18n_pt_br_guides_development_4_grafo_de_conhecimento_graphify",
+      "id": "docs_translations_pt_br_guides_development_4_grafo_de_conhecimento_graphify",
       "label": "4. Grafo de Conhecimento (`graphify`)",
       "_origin": "ast",
       "community": 332,
@@ -40006,11 +40006,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4. grafo de conhecimento (`graphify`)",
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
+      "source_file": "docs/translations/pt-BR/guides/development.md",
       "source_location": "L56"
     },
     {
-      "id": "docs_i18n_pt_br_guides_development_5_trabalhando_com_agentes_de_ia",
+      "id": "docs_translations_pt_br_guides_development_5_trabalhando_com_agentes_de_ia",
       "label": "5. Trabalhando com Agentes de IA",
       "_origin": "ast",
       "community": 332,
@@ -40018,11 +40018,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "5. trabalhando com agentes de ia",
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
+      "source_file": "docs/translations/pt-BR/guides/development.md",
       "source_location": "L66"
     },
     {
-      "id": "docs_i18n_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
+      "id": "docs_translations_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
       "label": "Guia de Desenvolvimento Local & Workflow",
       "_origin": "ast",
       "community": 332,
@@ -40030,7 +40030,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "guia de desenvolvimento local & workflow",
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
+      "source_file": "docs/translations/pt-BR/guides/development.md",
       "source_location": "L1"
     },
     {
@@ -40078,7 +40078,7 @@
       "source_location": "L4609"
     },
     {
-      "id": "docs_i18n_pt_br_guides_component_development",
+      "id": "docs_translations_pt_br_guides_component_development",
       "label": "pt-BR/guides/component-development.md",
       "_origin": "ast",
       "community": 336,
@@ -40086,11 +40086,11 @@
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "pt-br/guides/component-development.md",
-      "source_file": "docs/i18n/pt-BR/guides/component-development.md",
+      "source_file": "docs/translations/pt-BR/guides/component-development.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_guides_component_development_comandos",
+      "id": "docs_translations_pt_br_guides_component_development_comandos",
       "label": "Comandos",
       "_origin": "ast",
       "community": 336,
@@ -40098,11 +40098,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "comandos",
-      "source_file": "docs/i18n/pt-BR/guides/component-development.md",
+      "source_file": "docs/translations/pt-BR/guides/component-development.md",
       "source_location": "L7"
     },
     {
-      "id": "docs_i18n_pt_br_guides_component_development_guia_de_desenvolvimento_de_componentes_ladle",
+      "id": "docs_translations_pt_br_guides_component_development_guia_de_desenvolvimento_de_componentes_ladle",
       "label": "Guia de Desenvolvimento de Componentes & Ladle",
       "_origin": "ast",
       "community": 336,
@@ -40110,11 +40110,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "guia de desenvolvimento de componentes & ladle",
-      "source_file": "docs/i18n/pt-BR/guides/component-development.md",
+      "source_file": "docs/translations/pt-BR/guides/component-development.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_guides_component_development_recursos_conven\u00e7\u00f5es",
+      "id": "docs_translations_pt_br_guides_component_development_recursos_conven\u00e7\u00f5es",
       "label": "Recursos & Conven\u00e7\u00f5es",
       "_origin": "ast",
       "community": 336,
@@ -40122,11 +40122,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "recursos & convencoes",
-      "source_file": "docs/i18n/pt-BR/guides/component-development.md",
+      "source_file": "docs/translations/pt-BR/guides/component-development.md",
       "source_location": "L15"
     },
     {
-      "id": "docs_i18n_pt_br_reference_conventions",
+      "id": "docs_translations_pt_br_reference_conventions",
       "label": "pt-BR/reference/conventions.md",
       "_origin": "ast",
       "community": 337,
@@ -40134,11 +40134,11 @@
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "pt-br/reference/conventions.md",
-      "source_file": "docs/i18n/pt-BR/reference/conventions.md",
+      "source_file": "docs/translations/pt-BR/reference/conventions.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_reference_conventions_1_conven\u00e7\u00f5es_de_diret\u00f3rios",
+      "id": "docs_translations_pt_br_reference_conventions_1_conven\u00e7\u00f5es_de_diret\u00f3rios",
       "label": "1. Conven\u00e7\u00f5es de Diret\u00f3rios",
       "_origin": "ast",
       "community": 337,
@@ -40146,11 +40146,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "1. convencoes de diretorios",
-      "source_file": "docs/i18n/pt-BR/reference/conventions.md",
+      "source_file": "docs/translations/pt-BR/reference/conventions.md",
       "source_location": "L7"
     },
     {
-      "id": "docs_i18n_pt_br_reference_conventions_2_regras_princ\u00edpios_de_c\u00f3digo",
+      "id": "docs_translations_pt_br_reference_conventions_2_regras_princ\u00edpios_de_c\u00f3digo",
       "label": "2. Regras & Princ\u00edpios de C\u00f3digo",
       "_origin": "ast",
       "community": 337,
@@ -40158,11 +40158,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "2. regras & principios de codigo",
-      "source_file": "docs/i18n/pt-BR/reference/conventions.md",
+      "source_file": "docs/translations/pt-BR/reference/conventions.md",
       "source_location": "L19"
     },
     {
-      "id": "docs_i18n_pt_br_reference_conventions_conven\u00e7\u00f5es_diretrizes_da_base_de_c\u00f3digo",
+      "id": "docs_translations_pt_br_reference_conventions_conven\u00e7\u00f5es_diretrizes_da_base_de_c\u00f3digo",
       "label": "Conven\u00e7\u00f5es & Diretrizes da Base de C\u00f3digo",
       "_origin": "ast",
       "community": 337,
@@ -40170,7 +40170,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "convencoes & diretrizes da base de codigo",
-      "source_file": "docs/i18n/pt-BR/reference/conventions.md",
+      "source_file": "docs/translations/pt-BR/reference/conventions.md",
       "source_location": "L1"
     },
     {
@@ -51960,7 +51960,7 @@
       "source_location": "L97"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system",
+      "id": "docs_translations_pt_br_reference_design_system",
       "label": "pt-BR/reference/design-system.md",
       "_origin": "ast",
       "community": 89,
@@ -51971,11 +51971,11 @@
       },
       "node_kind": "page",
       "norm_label": "pt-br/reference/design-system.md",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L1"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_1_tema_visual_atmosfera",
+      "id": "docs_translations_pt_br_reference_design_system_1_tema_visual_atmosfera",
       "label": "1. Tema Visual & Atmosfera",
       "_origin": "ast",
       "community": 89,
@@ -51983,11 +51983,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "1. tema visual & atmosfera",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L16"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_2_paleta_de_cores_pap\u00e9is",
+      "id": "docs_translations_pt_br_reference_design_system_2_paleta_de_cores_pap\u00e9is",
       "label": "2. Paleta de Cores & Pap\u00e9is",
       "_origin": "ast",
       "community": 89,
@@ -51995,11 +51995,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "2. paleta de cores & papeis",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L21"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_3_regras_de_tipografia",
+      "id": "docs_translations_pt_br_reference_design_system_3_regras_de_tipografia",
       "label": "3. Regras de Tipografia",
       "_origin": "ast",
       "community": 89,
@@ -52007,11 +52007,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "3. regras de tipografia",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L36"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_4_estiliza\u00e7\u00e3o_de_componentes",
+      "id": "docs_translations_pt_br_reference_design_system_4_estiliza\u00e7\u00e3o_de_componentes",
       "label": "4. Estiliza\u00e7\u00e3o de Componentes",
       "_origin": "ast",
       "community": 89,
@@ -52019,11 +52019,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "4. estilizacao de componentes",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L44"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_5_princ\u00edpios_de_layout",
+      "id": "docs_translations_pt_br_reference_design_system_5_princ\u00edpios_de_layout",
       "label": "5. Princ\u00edpios de Layout",
       "_origin": "ast",
       "community": 89,
@@ -52031,11 +52031,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "5. principios de layout",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L54"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_6_notas_de_design_system_para_gera\u00e7\u00e3o_open_design",
+      "id": "docs_translations_pt_br_reference_design_system_6_notas_de_design_system_para_gera\u00e7\u00e3o_open_design",
       "label": "6. Notas de Design System para Gera\u00e7\u00e3o Open Design",
       "_origin": "ast",
       "community": 89,
@@ -52043,11 +52043,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "6. notas de design system para geracao open design",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L63"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_bot\u00f5es",
+      "id": "docs_translations_pt_br_reference_design_system_bot\u00f5es",
       "label": "Bot\u00f5es",
       "_origin": "ast",
       "community": 89,
@@ -52055,11 +52055,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "botoes",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L45"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_cards_container_principal",
+      "id": "docs_translations_pt_br_reference_design_system_cards_container_principal",
       "label": "Cards & Container Principal",
       "_origin": "ast",
       "community": 89,
@@ -52067,11 +52067,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "cards & container principal",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L50"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_comportamento_responsivo_toque",
+      "id": "docs_translations_pt_br_reference_design_system_comportamento_responsivo_toque",
       "label": "Comportamento Responsivo & Toque",
       "_origin": "ast",
       "community": 89,
@@ -52079,11 +52079,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "comportamento responsivo & toque",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L59"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_design_system_notes_app",
+      "id": "docs_translations_pt_br_reference_design_system_design_system_notes_app",
       "label": "Design System: Notes App",
       "_origin": "ast",
       "community": 89,
@@ -52091,11 +52091,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "design system: notes app",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L14"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_estados_funcionais_elementos_interativos",
+      "id": "docs_translations_pt_br_reference_design_system_estados_funcionais_elementos_interativos",
       "label": "Estados Funcionais & Elementos Interativos",
       "_origin": "ast",
       "community": 89,
@@ -52103,11 +52103,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "estados funcionais & elementos interativos",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L32"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_funda\u00e7\u00e3o_prim\u00e1ria",
+      "id": "docs_translations_pt_br_reference_design_system_funda\u00e7\u00e3o_prim\u00e1ria",
       "label": "Funda\u00e7\u00e3o Prim\u00e1ria",
       "_origin": "ast",
       "community": 89,
@@ -52115,11 +52115,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "fundacao primaria",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L22"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_grid_estrutura",
+      "id": "docs_translations_pt_br_reference_design_system_grid_estrutura",
       "label": "Grid & Estrutura",
       "_origin": "ast",
       "community": 89,
@@ -52127,11 +52127,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "grid & estrutura",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L55"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_hierarquia_pesos",
+      "id": "docs_translations_pt_br_reference_design_system_hierarquia_pesos",
       "label": "Hierarquia & Pesos",
       "_origin": "ast",
       "community": 89,
@@ -52139,11 +52139,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "hierarquia & pesos",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L37"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_linguagem_a_utilizar",
+      "id": "docs_translations_pt_br_reference_design_system_linguagem_a_utilizar",
       "label": "Linguagem a Utilizar",
       "_origin": "ast",
       "community": 89,
@@ -52151,11 +52151,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "linguagem a utilizar",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L64"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_prompts_para_componentes",
+      "id": "docs_translations_pt_br_reference_design_system_prompts_para_componentes",
       "label": "Prompts para Componentes",
       "_origin": "ast",
       "community": 89,
@@ -52163,11 +52163,11 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "prompts para componentes",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L66"
     },
     {
-      "id": "docs_i18n_pt_br_reference_design_system_tipografia_hierarquia_de_texto",
+      "id": "docs_translations_pt_br_reference_design_system_tipografia_hierarquia_de_texto",
       "label": "Tipografia & Hierarquia de Texto",
       "_origin": "ast",
       "community": 89,
@@ -52175,7 +52175,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "tipografia & hierarquia de texto",
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
       "source_location": "L26"
     },
     {
@@ -122352,897 +122352,6 @@
       "weight": 1.0
     },
     {
-      "source": "docs_i18n_pt_br_architecture_readme",
-      "target": "docs_i18n_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_4_fluxos_de_dados_principais",
-      "target": "docs_i18n_pt_br_architecture_readme_a_busca_de_dados_acesso_direto_rsc",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L108",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_4_fluxos_de_dados_principais",
-      "target": "docs_i18n_pt_br_architecture_readme_b_muta\u00e7\u00e3o_de_dados_fluxo_de_server_actions",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L120",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
-      "target": "docs_i18n_pt_br_architecture_readme_estiliza\u00e7\u00e3o_temas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L134",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
-      "target": "docs_i18n_pt_br_architecture_readme_tratamento_de_erros_estados_de_carregamento",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L139",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
-      "target": "docs_i18n_pt_br_architecture_readme_gerenciamento_de_estado",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L143",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
-      "target": "docs_i18n_pt_br_architecture_readme_4_fluxos_de_dados_principais",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L106",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
-      "target": "docs_i18n_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L132",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
-      "target": "docs_i18n_pt_br_architecture_readme_6_worktrees_de_refer\u00eancia_topologia_da_base_de_c\u00f3digo",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L149",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
-      "target": "docs_i18n_pt_br_architecture_readme_7_governan\u00e7a_do_projeto_matriz_de_decis\u00f5es",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L156",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
-      "target": "docs_i18n_pt_br_architecture_readme_2_mapa_do_c\u00f3digo_estrutura_oficial_de_pastas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L18",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
-      "target": "docs_i18n_pt_br_architecture_readme_1_vis\u00e3o_geral_bird_s_eye_view",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
-      "target": "docs_i18n_pt_br_architecture_readme_3_invariantes_arquiteturais",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
-      "source_location": "L82",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_workspace_ui",
-      "target": "docs_i18n_pt_br_architecture_workspace_ui_guia_de_interface_de_usu\u00e1rio_do_workspace",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
-      "target": "docs_i18n_pt_br_architecture_workspace_ui_1_barra_de_cabe\u00e7alho",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
-      "source_location": "L17",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
-      "target": "docs_i18n_pt_br_architecture_workspace_ui_2_barra_de_busca_e_ferramentas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
-      "source_location": "L21",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
-      "target": "docs_i18n_pt_br_architecture_workspace_ui_3_componente_de_cart\u00e3o_de_nota",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
-      "source_location": "L29",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
-      "target": "docs_i18n_pt_br_architecture_workspace_ui_4_di\u00e1logo_modal_de_cria\u00e7\u00e3o_de_nota",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
-      "source_location": "L38",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
-      "target": "docs_i18n_pt_br_architecture_workspace_ui_5_visualiza\u00e7\u00e3o_de_estado_vazio",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
-      "source_location": "L46",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_workspace_ui_guia_de_interface_de_usu\u00e1rio_do_workspace",
-      "target": "docs_i18n_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
-      "source_location": "L15",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_workspace_ui_guia_de_interface_de_usu\u00e1rio_do_workspace",
-      "target": "docs_i18n_pt_br_architecture_workspace_ui_vis\u00e3o_geral_do_layout_da_interface",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
-      "source_location": "L5",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_architecture_workspace_ui_guia_de_interface_de_usu\u00e1rio_do_workspace",
-      "target": "docs_i18n_pt_br_architecture_workspace_ui_tema_e_comportamento_responsivo",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/workspace/ui.md",
-      "source_location": "L50",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline",
-      "target": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
-      "target": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_direcionadores_da_decis\u00e3o",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
-      "source_location": "L11",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
-      "target": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_op\u00e7\u00f5es_consideradas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
-      "source_location": "L17",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
-      "target": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_resultado_da_decis\u00e3o",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
-      "source_location": "L23",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
-      "target": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_contexto_e_declara\u00e7\u00e3o_do_problema",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
-      "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_resultado_da_decis\u00e3o",
-      "target": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_consequ\u00eancias_positivas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
-      "source_location": "L27",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_resultado_da_decis\u00e3o",
-      "target": "docs_i18n_pt_br_decisions_0001_nextjs_16_react_19_baseline_consequ\u00eancias_negativas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
-      "source_location": "L32",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter",
-      "target": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
-      "target": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_direcionadores_da_decis\u00e3o",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
-      "source_location": "L11",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
-      "target": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_op\u00e7\u00f5es_consideradas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
-      "source_location": "L17",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
-      "target": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_resultado_da_decis\u00e3o",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
-      "source_location": "L23",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
-      "target": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_contexto_e_declara\u00e7\u00e3o_do_problema",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
-      "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_resultado_da_decis\u00e3o",
-      "target": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_consequ\u00eancias_positivas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
-      "source_location": "L27",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_resultado_da_decis\u00e3o",
-      "target": "docs_i18n_pt_br_decisions_0002_biome_linter_formatter_consequ\u00eancias_negativas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0002-biome-linter-formatter.md",
-      "source_location": "L33",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky",
-      "target": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
-      "target": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_direcionadores_da_decis\u00e3o",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
-      "source_location": "L11",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
-      "target": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_op\u00e7\u00f5es_consideradas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
-      "source_location": "L17",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
-      "target": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_resultado_da_decis\u00e3o",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
-      "source_location": "L23",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
-      "target": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_contexto_e_declara\u00e7\u00e3o_do_problema",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
-      "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_resultado_da_decis\u00e3o",
-      "target": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_consequ\u00eancias_positivas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
-      "source_location": "L27",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_resultado_da_decis\u00e3o",
-      "target": "docs_i18n_pt_br_decisions_0003_automated_knowledge_graph_husky_consequ\u00eancias_negativas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
-      "source_location": "L32",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0004_strict_path_portability",
-      "target": "docs_i18n_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
-      "target": "docs_i18n_pt_br_decisions_0004_strict_path_portability_direcionadores_da_decis\u00e3o",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
-      "source_location": "L11",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
-      "target": "docs_i18n_pt_br_decisions_0004_strict_path_portability_op\u00e7\u00f5es_consideradas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
-      "source_location": "L16",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
-      "target": "docs_i18n_pt_br_decisions_0004_strict_path_portability_resultado_da_decis\u00e3o",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
-      "source_location": "L21",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
-      "target": "docs_i18n_pt_br_decisions_0004_strict_path_portability_contexto_e_declara\u00e7\u00e3o_do_problema",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
-      "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0004_strict_path_portability_resultado_da_decis\u00e3o",
-      "target": "docs_i18n_pt_br_decisions_0004_strict_path_portability_consequ\u00eancias_positivas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
-      "source_location": "L25",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_0004_strict_path_portability_resultado_da_decis\u00e3o",
-      "target": "docs_i18n_pt_br_decisions_0004_strict_path_portability_consequ\u00eancias_negativas",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/0004-strict-path-portability.md",
-      "source_location": "L30",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_readme",
-      "target": "docs_i18n_pt_br_decisions_readme_registro_de_decis\u00f5es_arquiteturais_madr",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/README.md",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_decisions_readme_registro_de_decis\u00f5es_arquiteturais_madr",
-      "target": "docs_i18n_pt_br_decisions_readme_\u00edndice_de_registros_de_decis\u00f5es_arquiteturais_adrs",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/decisions/README.md",
-      "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_guides_component_development",
-      "target": "docs_i18n_pt_br_guides_component_development_guia_de_desenvolvimento_de_componentes_ladle",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/guides/component-development.md",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_guides_component_development_guia_de_desenvolvimento_de_componentes_ladle",
-      "target": "docs_i18n_pt_br_guides_component_development_recursos_conven\u00e7\u00f5es",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/guides/component-development.md",
-      "source_location": "L15",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_guides_component_development_guia_de_desenvolvimento_de_componentes_ladle",
-      "target": "docs_i18n_pt_br_guides_component_development_comandos",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/guides/component-development.md",
-      "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_guides_development",
-      "target": "docs_i18n_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
-      "target": "docs_i18n_pt_br_guides_development_2_executando_o_servidor_de_desenvolvimento",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
-      "source_location": "L20",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
-      "target": "docs_i18n_pt_br_guides_development_3_qualidade_de_c\u00f3digo_verifica\u00e7\u00e3o",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
-      "source_location": "L32",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
-      "target": "docs_i18n_pt_br_guides_development_4_grafo_de_conhecimento_graphify",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
-      "source_location": "L56",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
-      "target": "docs_i18n_pt_br_guides_development_5_trabalhando_com_agentes_de_ia",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
-      "source_location": "L66",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
-      "target": "docs_i18n_pt_br_guides_development_1_pr\u00e9_requisitos_instala\u00e7\u00e3o",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/guides/development.md",
-      "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_conventions",
-      "target": "docs_i18n_pt_br_reference_conventions_conven\u00e7\u00f5es_diretrizes_da_base_de_c\u00f3digo",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/conventions.md",
-      "source_location": "L1",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_conventions_conven\u00e7\u00f5es_diretrizes_da_base_de_c\u00f3digo",
-      "target": "docs_i18n_pt_br_reference_conventions_2_regras_princ\u00edpios_de_c\u00f3digo",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/conventions.md",
-      "source_location": "L19",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_conventions_conven\u00e7\u00f5es_diretrizes_da_base_de_c\u00f3digo",
-      "target": "docs_i18n_pt_br_reference_conventions_1_conven\u00e7\u00f5es_de_diret\u00f3rios",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/conventions.md",
-      "source_location": "L7",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system",
-      "target": "docs_i18n_pt_br_reference_design_system_design_system_notes_app",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L14",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_2_paleta_de_cores_pap\u00e9is",
-      "target": "docs_i18n_pt_br_reference_design_system_funda\u00e7\u00e3o_prim\u00e1ria",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L22",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_2_paleta_de_cores_pap\u00e9is",
-      "target": "docs_i18n_pt_br_reference_design_system_tipografia_hierarquia_de_texto",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L26",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_2_paleta_de_cores_pap\u00e9is",
-      "target": "docs_i18n_pt_br_reference_design_system_estados_funcionais_elementos_interativos",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L32",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_3_regras_de_tipografia",
-      "target": "docs_i18n_pt_br_reference_design_system_hierarquia_pesos",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L37",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_4_estiliza\u00e7\u00e3o_de_componentes",
-      "target": "docs_i18n_pt_br_reference_design_system_bot\u00f5es",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L45",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_4_estiliza\u00e7\u00e3o_de_componentes",
-      "target": "docs_i18n_pt_br_reference_design_system_cards_container_principal",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L50",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_5_princ\u00edpios_de_layout",
-      "target": "docs_i18n_pt_br_reference_design_system_grid_estrutura",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L55",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_5_princ\u00edpios_de_layout",
-      "target": "docs_i18n_pt_br_reference_design_system_comportamento_responsivo_toque",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L59",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_6_notas_de_design_system_para_gera\u00e7\u00e3o_open_design",
-      "target": "docs_i18n_pt_br_reference_design_system_linguagem_a_utilizar",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L64",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_6_notas_de_design_system_para_gera\u00e7\u00e3o_open_design",
-      "target": "docs_i18n_pt_br_reference_design_system_prompts_para_componentes",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L66",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_design_system_notes_app",
-      "target": "docs_i18n_pt_br_reference_design_system_1_tema_visual_atmosfera",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L16",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_design_system_notes_app",
-      "target": "docs_i18n_pt_br_reference_design_system_2_paleta_de_cores_pap\u00e9is",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L21",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_design_system_notes_app",
-      "target": "docs_i18n_pt_br_reference_design_system_3_regras_de_tipografia",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L36",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_design_system_notes_app",
-      "target": "docs_i18n_pt_br_reference_design_system_4_estiliza\u00e7\u00e3o_de_componentes",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L44",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_design_system_notes_app",
-      "target": "docs_i18n_pt_br_reference_design_system_5_princ\u00edpios_de_layout",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L54",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_i18n_pt_br_reference_design_system_design_system_notes_app",
-      "target": "docs_i18n_pt_br_reference_design_system_6_notas_de_design_system_para_gera\u00e7\u00e3o_open_design",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/reference/design-system.md",
-      "source_location": "L63",
-      "weight": 1.0
-    },
-    {
       "source": "docs_reference_conventions",
       "target": "docs_reference_conventions_codebase_conventions_guidelines",
       "relation": "contains",
@@ -123537,6 +122646,897 @@
       "confidence_score": 1.0,
       "source_file": "docs/reference/reference.stories.tsx",
       "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme",
+      "target": "docs_translations_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_4_fluxos_de_dados_principais",
+      "target": "docs_translations_pt_br_architecture_readme_a_busca_de_dados_acesso_direto_rsc",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L108",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_4_fluxos_de_dados_principais",
+      "target": "docs_translations_pt_br_architecture_readme_b_muta\u00e7\u00e3o_de_dados_fluxo_de_server_actions",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L120",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
+      "target": "docs_translations_pt_br_architecture_readme_estiliza\u00e7\u00e3o_temas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L134",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
+      "target": "docs_translations_pt_br_architecture_readme_tratamento_de_erros_estados_de_carregamento",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L139",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
+      "target": "docs_translations_pt_br_architecture_readme_gerenciamento_de_estado",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L143",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
+      "target": "docs_translations_pt_br_architecture_readme_4_fluxos_de_dados_principais",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L106",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
+      "target": "docs_translations_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L132",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
+      "target": "docs_translations_pt_br_architecture_readme_6_worktrees_de_refer\u00eancia_topologia_da_base_de_c\u00f3digo",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L149",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
+      "target": "docs_translations_pt_br_architecture_readme_7_governan\u00e7a_do_projeto_matriz_de_decis\u00f5es",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L156",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
+      "target": "docs_translations_pt_br_architecture_readme_2_mapa_do_c\u00f3digo_estrutura_oficial_de_pastas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
+      "target": "docs_translations_pt_br_architecture_readme_1_vis\u00e3o_geral_bird_s_eye_view",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
+      "target": "docs_translations_pt_br_architecture_readme_3_invariantes_arquiteturais",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
+      "source_location": "L82",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_workspace_ui",
+      "target": "docs_translations_pt_br_architecture_workspace_ui_guia_de_interface_de_usu\u00e1rio_do_workspace",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
+      "target": "docs_translations_pt_br_architecture_workspace_ui_1_barra_de_cabe\u00e7alho",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
+      "target": "docs_translations_pt_br_architecture_workspace_ui_2_barra_de_busca_e_ferramentas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
+      "target": "docs_translations_pt_br_architecture_workspace_ui_3_componente_de_cart\u00e3o_de_nota",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
+      "target": "docs_translations_pt_br_architecture_workspace_ui_4_di\u00e1logo_modal_de_cria\u00e7\u00e3o_de_nota",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
+      "target": "docs_translations_pt_br_architecture_workspace_ui_5_visualiza\u00e7\u00e3o_de_estado_vazio",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_workspace_ui_guia_de_interface_de_usu\u00e1rio_do_workspace",
+      "target": "docs_translations_pt_br_architecture_workspace_ui_componentes_visuais_e_detalhes_do_layout",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_workspace_ui_guia_de_interface_de_usu\u00e1rio_do_workspace",
+      "target": "docs_translations_pt_br_architecture_workspace_ui_vis\u00e3o_geral_do_layout_da_interface",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_architecture_workspace_ui_guia_de_interface_de_usu\u00e1rio_do_workspace",
+      "target": "docs_translations_pt_br_architecture_workspace_ui_tema_e_comportamento_responsivo",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/architecture/workspace/ui.md",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline",
+      "target": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
+      "target": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_direcionadores_da_decis\u00e3o",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
+      "target": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_op\u00e7\u00f5es_consideradas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
+      "target": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_resultado_da_decis\u00e3o",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_adr_0001_baseline_do_app_router_com_next_js_16_react_19",
+      "target": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_contexto_e_declara\u00e7\u00e3o_do_problema",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_resultado_da_decis\u00e3o",
+      "target": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_consequ\u00eancias_positivas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_resultado_da_decis\u00e3o",
+      "target": "docs_translations_pt_br_decisions_0001_nextjs_16_react_19_baseline_consequ\u00eancias_negativas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0002_biome_linter_formatter",
+      "target": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
+      "target": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_direcionadores_da_decis\u00e3o",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
+      "target": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_op\u00e7\u00f5es_consideradas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
+      "target": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_resultado_da_decis\u00e3o",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_adr_0002_biome_como_linter_formatador_unificado",
+      "target": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_contexto_e_declara\u00e7\u00e3o_do_problema",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_resultado_da_decis\u00e3o",
+      "target": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_consequ\u00eancias_positivas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_resultado_da_decis\u00e3o",
+      "target": "docs_translations_pt_br_decisions_0002_biome_linter_formatter_consequ\u00eancias_negativas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky",
+      "target": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
+      "target": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_direcionadores_da_decis\u00e3o",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
+      "target": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_op\u00e7\u00f5es_consideradas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
+      "target": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_resultado_da_decis\u00e3o",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_location": "L23",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_adr_0003_atualiza\u00e7\u00f5es_automatizadas_do_grafo_de_conhecimento_via_husky",
+      "target": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_contexto_e_declara\u00e7\u00e3o_do_problema",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_resultado_da_decis\u00e3o",
+      "target": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_consequ\u00eancias_positivas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_resultado_da_decis\u00e3o",
+      "target": "docs_translations_pt_br_decisions_0003_automated_knowledge_graph_husky_consequ\u00eancias_negativas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0004_strict_path_portability",
+      "target": "docs_translations_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
+      "target": "docs_translations_pt_br_decisions_0004_strict_path_portability_direcionadores_da_decis\u00e3o",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
+      "target": "docs_translations_pt_br_decisions_0004_strict_path_portability_op\u00e7\u00f5es_consideradas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
+      "target": "docs_translations_pt_br_decisions_0004_strict_path_portability_resultado_da_decis\u00e3o",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0004_strict_path_portability_adr_0004_regra_estrita_de_portabilidade_de_caminhos_configura\u00e7\u00f5es",
+      "target": "docs_translations_pt_br_decisions_0004_strict_path_portability_contexto_e_declara\u00e7\u00e3o_do_problema",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0004_strict_path_portability_resultado_da_decis\u00e3o",
+      "target": "docs_translations_pt_br_decisions_0004_strict_path_portability_consequ\u00eancias_positivas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_0004_strict_path_portability_resultado_da_decis\u00e3o",
+      "target": "docs_translations_pt_br_decisions_0004_strict_path_portability_consequ\u00eancias_negativas",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/0004-strict-path-portability.md",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_readme",
+      "target": "docs_translations_pt_br_decisions_readme_registro_de_decis\u00f5es_arquiteturais_madr",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/README.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_decisions_readme_registro_de_decis\u00f5es_arquiteturais_madr",
+      "target": "docs_translations_pt_br_decisions_readme_\u00edndice_de_registros_de_decis\u00f5es_arquiteturais_adrs",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/decisions/README.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_guides_component_development",
+      "target": "docs_translations_pt_br_guides_component_development_guia_de_desenvolvimento_de_componentes_ladle",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/guides/component-development.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_guides_component_development_guia_de_desenvolvimento_de_componentes_ladle",
+      "target": "docs_translations_pt_br_guides_component_development_recursos_conven\u00e7\u00f5es",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/guides/component-development.md",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_guides_component_development_guia_de_desenvolvimento_de_componentes_ladle",
+      "target": "docs_translations_pt_br_guides_component_development_comandos",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/guides/component-development.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_guides_development",
+      "target": "docs_translations_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/guides/development.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
+      "target": "docs_translations_pt_br_guides_development_2_executando_o_servidor_de_desenvolvimento",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/guides/development.md",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
+      "target": "docs_translations_pt_br_guides_development_3_qualidade_de_c\u00f3digo_verifica\u00e7\u00e3o",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/guides/development.md",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
+      "target": "docs_translations_pt_br_guides_development_4_grafo_de_conhecimento_graphify",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/guides/development.md",
+      "source_location": "L56",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
+      "target": "docs_translations_pt_br_guides_development_5_trabalhando_com_agentes_de_ia",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/guides/development.md",
+      "source_location": "L66",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_guides_development_guia_de_desenvolvimento_local_workflow",
+      "target": "docs_translations_pt_br_guides_development_1_pr\u00e9_requisitos_instala\u00e7\u00e3o",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/guides/development.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_conventions",
+      "target": "docs_translations_pt_br_reference_conventions_conven\u00e7\u00f5es_diretrizes_da_base_de_c\u00f3digo",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/conventions.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_conventions_conven\u00e7\u00f5es_diretrizes_da_base_de_c\u00f3digo",
+      "target": "docs_translations_pt_br_reference_conventions_2_regras_princ\u00edpios_de_c\u00f3digo",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/conventions.md",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_conventions_conven\u00e7\u00f5es_diretrizes_da_base_de_c\u00f3digo",
+      "target": "docs_translations_pt_br_reference_conventions_1_conven\u00e7\u00f5es_de_diret\u00f3rios",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/conventions.md",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system",
+      "target": "docs_translations_pt_br_reference_design_system_design_system_notes_app",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_2_paleta_de_cores_pap\u00e9is",
+      "target": "docs_translations_pt_br_reference_design_system_funda\u00e7\u00e3o_prim\u00e1ria",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_2_paleta_de_cores_pap\u00e9is",
+      "target": "docs_translations_pt_br_reference_design_system_tipografia_hierarquia_de_texto",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_2_paleta_de_cores_pap\u00e9is",
+      "target": "docs_translations_pt_br_reference_design_system_estados_funcionais_elementos_interativos",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_3_regras_de_tipografia",
+      "target": "docs_translations_pt_br_reference_design_system_hierarquia_pesos",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_4_estiliza\u00e7\u00e3o_de_componentes",
+      "target": "docs_translations_pt_br_reference_design_system_bot\u00f5es",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L45",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_4_estiliza\u00e7\u00e3o_de_componentes",
+      "target": "docs_translations_pt_br_reference_design_system_cards_container_principal",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_5_princ\u00edpios_de_layout",
+      "target": "docs_translations_pt_br_reference_design_system_grid_estrutura",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L55",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_5_princ\u00edpios_de_layout",
+      "target": "docs_translations_pt_br_reference_design_system_comportamento_responsivo_toque",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L59",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_6_notas_de_design_system_para_gera\u00e7\u00e3o_open_design",
+      "target": "docs_translations_pt_br_reference_design_system_linguagem_a_utilizar",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L64",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_6_notas_de_design_system_para_gera\u00e7\u00e3o_open_design",
+      "target": "docs_translations_pt_br_reference_design_system_prompts_para_componentes",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L66",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_design_system_notes_app",
+      "target": "docs_translations_pt_br_reference_design_system_1_tema_visual_atmosfera",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_design_system_notes_app",
+      "target": "docs_translations_pt_br_reference_design_system_2_paleta_de_cores_pap\u00e9is",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_design_system_notes_app",
+      "target": "docs_translations_pt_br_reference_design_system_3_regras_de_tipografia",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_design_system_notes_app",
+      "target": "docs_translations_pt_br_reference_design_system_4_estiliza\u00e7\u00e3o_de_componentes",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L44",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_design_system_notes_app",
+      "target": "docs_translations_pt_br_reference_design_system_5_princ\u00edpios_de_layout",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_translations_pt_br_reference_design_system_design_system_notes_app",
+      "target": "docs_translations_pt_br_reference_design_system_6_notas_de_design_system_para_gera\u00e7\u00e3o_open_design",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/translations/pt-BR/reference/design-system.md",
+      "source_location": "L63",
       "weight": 1.0
     },
     {
@@ -141536,13 +141536,13 @@
       "weight": 1.0
     },
     {
-      "source": "docs_i18n_pt_br_architecture_readme",
-      "target": "docs_i18n_pt_br_decisions_readme",
+      "source": "docs_translations_pt_br_architecture_readme",
+      "target": "docs_translations_pt_br_decisions_readme",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "docs/i18n/pt-BR/architecture/README.md",
+      "source_file": "docs/translations/pt-BR/architecture/README.md",
       "source_location": "L164",
       "weight": 1.0
     },
@@ -143178,5 +143178,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e5f79d4f9e23bf348e6d63fb7558cf697da7b085"
+  "built_at_commit": "b2f88ddc5e9797443ae4a5adc9e44cbd5807cd18"
 }

@@ -1,7 +1,7 @@
 import type { Story, StoryDefault } from "@ladle/react";
 
 import { DocViewer } from "../../../src/components/ladle/doc-viewer";
-import workspaceUiPtBr from "../../i18n/pt-BR/architecture/workspace/ui.md?raw";
+import workspaceUiPtBr from "../../translations/pt-BR/architecture/workspace/ui.md?raw";
 import workspaceUiEn from "./ui.md?raw";
 
 type WorkspaceArchitectureLocale = "pt-BR" | "en";

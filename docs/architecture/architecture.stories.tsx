@@ -1,6 +1,6 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
-import overviewPtBrDoc from "../i18n/pt-BR/architecture/README.md?raw";
+import overviewPtBrDoc from "../translations/pt-BR/architecture/README.md?raw";
 import overviewEnDoc from "./README.md?raw";
 
 type ArchitectureLocale = "pt-BR" | "en";
