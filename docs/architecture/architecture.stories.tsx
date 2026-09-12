@@ -91,4 +91,3 @@ export const HistoricalSynthesis: Story<ArchitectureStoryProps> = ({ locale = "e
 HistoricalSynthesis.storyName = "Historical Reference Synthesis";
 HistoricalSynthesis.args = { locale: "en" };
 HistoricalSynthesis.argTypes = localeArgTypes;
-

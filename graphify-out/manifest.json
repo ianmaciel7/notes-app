@@ -2022,9 +2022,9 @@
     "semantic_hash": ""
   },
   "docs/architecture/architecture.stories.tsx": {
-    "mtime": 1789219254.484084,
-    "seen": 1789220151.059347,
-    "ast_hash": "c0a98e6d1c83ed92e51bebee44cdad9e",
+    "mtime": 1789220468.0129862,
+    "seen": 1789220503.8084426,
+    "ast_hash": "98364dcebc25a5dc2cee6184aad935fc",
     "semantic_hash": ""
   },
   "docs/decisions/decisions.stories.tsx": {
@@ -2064,9 +2064,9 @@
     "semantic_hash": ""
   },
   "docs/architecture/README.md": {
-    "mtime": 1789219268.432168,
-    "seen": 1789220151.0599012,
-    "ast_hash": "840955862b4ec945ecedce9d85f50460",
+    "mtime": 1789220251.0246267,
+    "seen": 1789220268.3799994,
+    "ast_hash": "12c738fc3f0e3403112c76024f5c6bf8",
     "semantic_hash": ""
   },
   ".agents/skills/doc-translator/evals/evals.json": {
@@ -2423,36 +2423,6 @@
     "ast_hash": "190392fc80cc67ed466d4f6f667977f8",
     "semantic_hash": ""
   },
-  "src/components/spaces/space-nav-item.tsx": {
-    "mtime": 1789220120.5490315,
-    "seen": 1789220151.059347,
-    "ast_hash": "13f3bab887c7950edadade18f2bbf664",
-    "semantic_hash": ""
-  },
-  "src/components/spaces/space-theme-utils.ts": {
-    "mtime": 1789220115.1654193,
-    "seen": 1789220151.059347,
-    "ast_hash": "b0d290e6b9d0982f0a6f3fae8a85b43d",
-    "semantic_hash": ""
-  },
-  "src/components/spaces/spaces-provider.tsx": {
-    "mtime": 1789220115.1712592,
-    "seen": 1789220151.059347,
-    "ast_hash": "ba45354dc5f661225128c44cd53ac648",
-    "semantic_hash": ""
-  },
-  "src/lib/db/repositories/space-repository.ts": {
-    "mtime": 1789220115.1808035,
-    "seen": 1789220151.059347,
-    "ast_hash": "b3ea89448f605c9e885eccd6b376e9aa",
-    "semantic_hash": ""
-  },
-  "src/types/space.ts": {
-    "mtime": 1789220115.1643727,
-    "seen": 1789220151.059347,
-    "ast_hash": "4d51784ef7864adb0bfbd5e007c1dcb0",
-    "semantic_hash": ""
-  },
   "docs/architecture/routing.md": {
     "mtime": 1789219536.0765305,
     "seen": 1789220151.0599012,
@@ -2463,6 +2433,18 @@
     "mtime": 1789220110.9597359,
     "seen": 1789220151.0599012,
     "ast_hash": "00afc101c5cedad4a108f803aec314c7",
+    "semantic_hash": ""
+  },
+  "docs/architecture/spaces.md": {
+    "mtime": 1789220173.886998,
+    "seen": 1789220268.3799994,
+    "ast_hash": "a8152c24436afeb86523d4cbd3b78613",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/architecture/spaces.md": {
+    "mtime": 1789220185.86298,
+    "seen": 1789220268.3799994,
+    "ast_hash": "c931193d9175d3d5fa31b7302a020783",
     "semantic_hash": ""
   }
 }
