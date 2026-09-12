@@ -19,6 +19,12 @@
       "skillPath": "graphify/SKILL.md",
       "computedHash": "0e7686eb9ad348a4f27d72a1ae14204b5a642e976682c4e03e028b4fa3d5d6b8"
     },
+    "sync-plate-ui": {
+      "source": "udecode/plate",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/sync-plate-ui/SKILL.md",
+      "computedHash": "6930e7763e92e69b9cf007ff1d42341cca913b66a2f5f054d928448dea4975f6"
+    },
     "vitest": {
       "source": "antfu/skills",
       "sourceType": "github",

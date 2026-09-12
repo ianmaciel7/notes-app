@@ -12,6 +12,7 @@ import adr4EnDoc from "./0004-strict-path-portability.md?raw";
 import adr5EnDoc from "./0005-ladle-component-workbench-and-documentation-viewer.md?raw";
 import adr6EnDoc from "./0006-historical-reference-architecture-synthesis.md?raw";
 import adr7EnDoc from "./0007-blocknote-rich-text-editor-integration-and-ladle-story-workbench.md?raw";
+import adr8EnDoc from "./0008-plate-rich-text-editor-framework-migration.md?raw";
 import readmeEnDoc from "./README.md?raw";
 
 type DecisionsLocale = "pt-BR" | "en";
@@ -73,6 +74,11 @@ const adr7Docs: Record<DecisionsLocale, string> = {
   en: adr7EnDoc,
 };
 
+const adr8Docs: Record<DecisionsLocale, string> = {
+  "pt-BR": adr8EnDoc,
+  en: adr8EnDoc,
+};
+
 export default {
   title: "Docs / Decisions",
 } satisfies StoryDefault;
@@ -132,3 +138,10 @@ export const ADR0007: Story<DecisionsStoryProps> = ({ locale = "en" }) => (
 ADR0007.storyName = "0007 - BlockNote Editor & Ladle Workbench";
 ADR0007.args = { locale: "en" };
 ADR0007.argTypes = localeArgTypes;
+
+export const ADR0008: Story<DecisionsStoryProps> = ({ locale = "en" }) => (
+  <DocViewer markdown={adr8Docs[locale] ?? adr8Docs.en} />
+);
+ADR0008.storyName = "0008 - Plate Editor Migration";
+ADR0008.args = { locale: "en" };
+ADR0008.argTypes = localeArgTypes;

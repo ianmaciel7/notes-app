@@ -1,6 +1,8 @@
 # ADR-0007: BlockNote Rich-Text Editor Integration and Ladle Story Workbench
 
-* **Status**: Accepted
+> **Superseded**: This decision has been superseded by [ADR-0008: Plate Rich-Text Editor Framework Migration](0008-plate-rich-text-editor-framework-migration.md). Plate replaces BlockNote for rich-text editing across the application.
+
+* **Status**: Superseded by ADR-0008
 * **Deciders**: Engineering & Product Team
 * **Date**: 2026-09-12
 

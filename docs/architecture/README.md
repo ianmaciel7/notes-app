@@ -149,7 +149,7 @@ flowchart LR
 ## 6. Reference Worktrees & Codebase Topology
 
 - **Historical Codebases & Synthesis**: Inspect `.worktrees/` (`old`, `old-2`, `old-3`, `old-4`, `old-5`) for baseline reference implementations. See [`../../graphify-out/HISTORICAL_REFERENCE_SYNTHESIS.md](../../graphify-out/HISTORICAL_REFERENCE_SYNTHESIS.md)`, [`spaces.md`](spaces.md), [`entities.md`](entities.md), [`routing.md`](routing.md), and [`ADR-0006`](../decisions/0006-historical-reference-architecture-synthesis.md) for synthesized specs covering entity evolution, Capacities object model parity, FSRS exam burndown math, routing taxonomy, multi-tenant spaces, and sync protocols.
-- **Editor Architecture & Component Isolation**: See [`ADR-0007`](../decisions/0007-blocknote-rich-text-editor-integration-and-ladle-story-workbench.md) for BlockNote rich-text editor integration (`@blocknote/*`), SSR dynamic loading isolation, and visual verification in Ladle.
+- **Editor Architecture & Component Isolation**: See [`ADR-0008`](../decisions/0008-plate-rich-text-editor-framework-migration.md) for the Plate rich-text editor migration (`platejs` v53, `@platejs/basic-nodes`, Slate, and `@plate` component registry in `components.json`), headless static SSR rendering (`EditorStatic`), and visual verification in Ladle (`src/components/editor/editor.stories.tsx`). (Note: [`ADR-0007`](../decisions/0007-blocknote-rich-text-editor-integration-and-ladle-story-workbench.md) for BlockNote is superseded by ADR-0008).
 - **Dependency Topology**: Refer to `graphify-out/GRAPH_REPORT.md` and `graphify-out/graph.json` for architectural relationship queries.
 
 

@@ -1,46 +1,62 @@
 "use client";
 
-import { useCreateBlockNote } from "@blocknote/react";
-import { BlockNoteView } from "@blocknote/shadcn";
 import type { Story, StoryDefault } from "@ladle/react";
+import { BasicBlocksPlugin, BasicMarksPlugin } from "@platejs/basic-nodes/react";
+import { Plate, usePlateEditor } from "platejs/react";
+import { Editor, EditorContainer } from "@/components/ui/editor";
 
 export default {
-  title: "Editor / BlockNote",
+  title: "Editor / Plate",
 } satisfies StoryDefault;
 
 export const Default: Story = () => {
-  const editor = useCreateBlockNote({
-    initialContent: [
+  const editor = usePlateEditor({
+    plugins: [BasicBlocksPlugin, BasicMarksPlugin],
+    value: [
       {
-        type: "heading",
-        props: {
-          level: 1,
-        },
-        content: "Welcome to BlockNote in Ladle",
+        type: "h1",
+        children: [{ text: "Welcome to Plate in Ladle" }],
       },
       {
-        type: "paragraph",
-        content:
-          "This is a live, block-based rich text editor running inside the Ladle component workbench. You can type slash '/' to open block commands, edit text inline, and structure notes dynamically.",
+        type: "p",
+        children: [
+          {
+            text: "This is a live rich-text editor powered by Plate and Slate, rendering seamlessly in the Ladle component workbench with shadcn/ui styling.",
+          },
+        ],
       },
       {
-        type: "bulletListItem",
-        content: "First block item with fast Vite HMR",
-      },
-      {
-        type: "bulletListItem",
-        content: "Styled seamlessly with shadcn/ui & Tailwind CSS v4",
-      },
-      {
-        type: "paragraph",
-        content: "Try highlighting this text to test the formatting bubble menu!",
+        type: "p",
+        children: [
+          {
+            text: "It supports rich text marks like ",
+          },
+          {
+            bold: true,
+            text: "bold text",
+          },
+          {
+            text: ", ",
+          },
+          {
+            italic: true,
+            text: "italic text",
+          },
+          {
+            text: ", and full block management.",
+          },
+        ],
       },
     ],
   });
 
   return (
-    <div className="p-6 max-w-3xl mx-auto border rounded-xl bg-background shadow-xs">
-      <BlockNoteView editor={editor} />
+    <div className="p-6 max-w-3xl mx-auto">
+      <Plate editor={editor}>
+        <EditorContainer className="border rounded-xl p-4 bg-background shadow-xs min-h-[300px]">
+          <Editor placeholder="Type your notes here..." />
+        </EditorContainer>
+      </Plate>
     </div>
   );
 };

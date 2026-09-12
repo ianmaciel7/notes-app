@@ -14,4 +14,5 @@ All architectural decisions for `notes-app` are documented here using the [MADR 
 | [ADR-0004](0004-strict-path-portability.md) | Strict Path & Configuration Portability Rule | Accepted | 2026-09-11 |
 | [ADR-0005](0005-ladle-component-workbench-and-documentation-viewer.md) | Ladle Component Workbench and Documentation Viewer | Accepted | 2026-09-12 |
 | [ADR-0006](0006-historical-reference-architecture-synthesis.md) | Historical Reference Architecture Synthesis & Baseline Specifications | Accepted | 2026-09-12 |
-| [ADR-0007](0007-blocknote-rich-text-editor-integration-and-ladle-story-workbench.md) | BlockNote Rich-Text Editor Integration and Ladle Story Workbench | Accepted | 2026-09-12 |
+| [ADR-0007](0007-blocknote-rich-text-editor-integration-and-ladle-story-workbench.md) | BlockNote Rich-Text Editor Integration and Ladle Story Workbench | Superseded by ADR-0008 | 2026-09-12 |
+| [ADR-0008](0008-plate-rich-text-editor-framework-migration.md) | Plate Rich-Text Editor Framework Migration | Accepted | 2026-09-12 |

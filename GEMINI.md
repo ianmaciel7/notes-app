@@ -19,9 +19,9 @@ The primary agent in this repository operates as a **Lead Orchestrator** (*Orque
 - **Deconstruct and Delegate**: Break incoming tasks into domain-focused subtasks and dispatch them to specialized subagents using `invoke_subagent`.
 - **Orchestrator Execution Loop**:
   1. **Triage**: Analyze requirements, dependencies, scope, and technical boundaries; identify involved subagent domains.
-  2. **Planning**: Formulate a structured, step-by-step execution plan with clear deliverables and review checkpoints.
-  3. **Delegation**: Dispatch targeted briefs to specialized subagents (`research`, `architect`, `test-engineer`, `security-reviewer`, `code-reviewer`, `doc-maintainer`).
-  4. **Synthesis & Quality Gate**: Validate deliverables from subagents, resolve cross-component tradeoffs, verify test and build commands (`pnpm check`, `pnpm test`, `pnpm build`), and report concise findings to the user.
+  2. **DAG Task Graph Construction (Graph Engine)**: For complex, slow, or multi-component operations, map dependencies into a Task DAG (Directed Acyclic Graph) containing independent nodes for concurrent execution and sequential checkpoints.
+  3. **Delegation & Parallel Fan-Out (Scatter)**: Dispatch targeted briefs to specialized subagents using `invoke_subagent`. When an activity is heavy or slow, spawn **multiple homogeneous subagents** (multiple subagents of the *same role*) in parallel with non-overlapping scopes (e.g., splitting files or directories across 3 `research` workers or 2 `test-engineer` workers).
+  4. **Synthesis & Quality Gate (Gather)**: Aggregate findings from all subagent nodes, resolve cross-component tradeoffs, verify test and build commands (`pnpm check`, `pnpm test`, `pnpm build`), and report concise findings to the user.
 
 ---
 
@@ -32,16 +32,16 @@ The primary agent in this repository operates as a **Lead Orchestrator** (*Orque
 | Subagent | Specification | Domain & Mandatory Trigger |
 | :--- | :--- | :--- |
 | **`architect`** | [`.agents/agents/architect/agent.md`](.agents/agents/architect/agent.md) | Mandatory for system design, cross-module boundaries, Server vs. Client component placement (Next.js 16/React 19), state management, and trade-off evaluation before non-trivial coding. |
-| **`research`** | General Subagent | Mandatory for broad codebase exploration, cross-directory context gathering, dependency auditing, and external technical documentation lookup. |
+| **`research`** | [`.agents/agents/research/agent.md`](.agents/agents/research/agent.md) | Mandatory for broad codebase exploration, cross-directory context gathering, dependency auditing, and external technical documentation lookup. |
 | **`code-reviewer`** | [`.agents/agents/code-reviewer/agent.md`](.agents/agents/code-reviewer/agent.md) | Mandatory for auditing diffs, correctness, accessibility, performance, and code quality before concluding tasks. |
 | **`doc-maintainer`** | [`.agents/agents/doc-maintainer/agent.md`](.agents/agents/doc-maintainer/agent.md) | Mandatory for creating, auditing, updating, and synchronizing ADRs (`docs/decisions/`, `DECISIONS.md`), architecture specs (`ARCHITECTURE.md`), and markdown documentation. |
 | **`security-reviewer`** | [`.agents/agents/security-reviewer/agent.md`](.agents/agents/security-reviewer/agent.md) | Mandatory for threat modeling, auth workflows, secrets leakage prevention, and security policies. |
 | **`test-engineer`** | [`.agents/agents/test-engineer/agent.md`](.agents/agents/test-engineer/agent.md) | Mandatory for Vitest test suite design, regression test plans, and executing verification commands (`pnpm check`, `pnpm test`, `pnpm build`). |
 
-### Execution Protocol:
-- Launch subagents using `invoke_subagent` with clear, domain-scoped prompts.
-- Avoid polling loops: the messaging system reactively resumes on completion.
-- Always review and synthesize subagent outputs before concluding tasks.
+### Graph Execution & Parallel Subagent Protocol:
+- **Task Graph Execution (DAG Engine)**: For multi-step or multi-file tasks, construct a directed dependency graph. Execute independent graph nodes concurrently in parallel.
+- **Homogeneous Parallel Scaling (Fan-Out)**: If a single role task is broad, slow, or complex (e.g. codebase-wide audit or test generation across 10 modules), break the workload into distinct partitions and instantiate multiple concurrent subagents of the same type (`TypeName: "research"`, `TypeName: "test-engineer"`, etc.) in a single `invoke_subagent` array call.
+- **Scatter-Gather Synthesis**: The orchestrator receives completed responses asynchronously, merges outputs, updates the task graph state, and advances to the next step without unnecessary polling loops.
 
 ---
 
@@ -80,6 +80,10 @@ The `.worktrees/` folder contains historical iterations of the project for archi
 
 ### 4. Ladle Documentation Visibility Invariant Rule
 - Any markdown documentation created or modified under `docs/` (such as `docs/architecture/`, `docs/decisions/`, `docs/design/`, `docs/guides/`, `docs/reference/`) **MUST ALWAYS** be registered and exported as a Ladle story in the corresponding `.stories.tsx` file (e.g. `docs/architecture/architecture.stories.tsx`). Leaving markdown documentation unexposed in the Ladle DocViewer workbench is strictly forbidden.
+
+### 5. Domain & Object Types Location Rule
+- All object type definitions, space types, icon names, and tones (`ObjectIconName`, `ObjectIconTone`, `StructureLifecycleKind`, etc.) **MUST ALWAYS** be located in `src/lib/` (specifically `src/lib/space-object-types.ts`), **NEVER** isolated exclusively inside UI component folders (like `src/components/objects/icons/types.ts`).
+- UI components under `src/components/` must import these domain types from `@/lib/space-object-types` (or have local re-exports pointing to `@/lib/space-object-types`). Non-UI layers (database models, space schemas, command registries, sync engines) must be able to use these types without importing from UI components.
 
 ### 4. Recommended MCP Servers & Skills
 - **MCP Servers**:
