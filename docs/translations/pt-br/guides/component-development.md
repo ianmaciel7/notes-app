@@ -1,26 +1,26 @@
-# Component Development & Ladle Guide
+# Guia de Desenvolvimento de Componentes & Ladle
 
-This project uses **Ladle** (`@ladle/react`) for fast component development, story isolation, and architectural documentation rendering.
-
----
-
-## Commands
-
-- `pnpm ladle:dev` / `npm run ladle:dev`: Starts the Ladle development server at `http://localhost:61000`.
-- `pnpm ladle:build` / `npm run ladle:build`: Builds a static Ladle catalog.
-- `pnpm ladle:preview` / `npm run ladle:preview`: Previews the built Ladle site locally.
+Este projeto utiliza o **Ladle** (`@ladle/react`) para desenvolvimento rápido de componentes, isolamento de stories e renderização de documentação arquitetural.
 
 ---
 
-## Features & Conventions
+## Comandos
 
-1. **Markdown & Mermaid Support**:
-   - Component stories under `docs/**/*.stories.tsx` can render Markdown files (with raw imports `?raw`) using `<ArchitectureDocViewer />`.
-   - Mermaid diagrams (` ```mermaid `) inside Markdown are rendered interactively with automatic light/dark theme adaptation.
+- `pnpm ladle:dev` / `npm run ladle:dev`: Inicia o servidor de desenvolvimento do Ladle em `http://localhost:61000`.
+- `pnpm ladle:build` / `npm run ladle:build`: Gera o catálogo estático do Ladle.
+- `pnpm ladle:preview` / `npm run ladle:preview`: Visualiza o site estático do Ladle construído localmente.
 
-2. **Global Language Switcher (`pt-BR` / `en`)**:
-   - Ladle stories include a radio control to toggle the active `locale` between Brazilian Portuguese (`pt-BR`) and English (`en`).
-   - Sourced via `next-intl` configuration and `src/lib/i18n-locale.ts`.
+---
 
-3. **Story Directory Structure**:
-   - Place architectural stories alongside their respective feature docs in `docs/architecture/<feature>/`.
+## Recursos & Convenções
+
+1. **Suporte a Markdown & Mermaid**:
+   - Stories de componentes sob `docs/**/*.stories.tsx` podem renderizar arquivos Markdown (com imports brutos `?raw`) usando `<ArchitectureDocViewer />`.
+   - Diagramas Mermaid (` ```mermaid `) dentro do Markdown são renderizados interativamente com adaptação automática a temas claro/escuro (light/dark).
+
+2. **Seletor Global de Idioma (`pt-BR` / `en`)**:
+   - As stories do Ladle incluem um controle de rádio para alternar o `locale` ativo entre Português do Brasil (`pt-BR`) e Inglês (`en`).
+   - Integrado via configuração do `next-intl` e `src/lib/i18n-locale.ts`.
+
+3. **Estrutura de Diretórios de Stories**:
+   - Aloje stories arquiteturais junto com a documentação de funcionalidades correspondente em `docs/architecture/<funcionalidade>/`.

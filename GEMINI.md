@@ -78,6 +78,9 @@ The `.worktrees/` folder contains historical iterations of the project for archi
 ### 3. Documentation Freshness & Synchronization Rule
 - Documentation must never be outdated. Whenever code, architecture, schemas, APIs, or behaviors are modified or added, all corresponding documentation (including `ARCHITECTURE.md`, `README.md`, `DECISIONS.md`, ADRs in `docs/decisions/`, and Ladle stories) and decision logs must be updated immediately alongside the code changes.
 
+### 4. Ladle Documentation Visibility Invariant Rule
+- Any markdown documentation created or modified under `docs/` (such as `docs/architecture/`, `docs/decisions/`, `docs/design/`, `docs/guides/`, `docs/reference/`) **MUST ALWAYS** be registered and exported as a Ladle story in the corresponding `.stories.tsx` file (e.g. `docs/architecture/architecture.stories.tsx`). Leaving markdown documentation unexposed in the Ladle DocViewer workbench is strictly forbidden.
+
 ### 4. Recommended MCP Servers & Skills
 - **MCP Servers**:
   - **Shoogle MCP (`shoogle`, `user-shoogle`)**: Search and registry item lookup service (`https://mcp.shoogle.dev/mcp`). Template provided at [`.agents/mcp_config.example.json`](.agents/mcp_config.example.json).

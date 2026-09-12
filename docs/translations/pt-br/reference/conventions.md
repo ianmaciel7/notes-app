@@ -1,34 +1,34 @@
-# Codebase Conventions & Guidelines
+# Convenções & Diretrizes da Base de Código
 
-This document outlines structural rules, naming conventions, and file organization standards for `notes-app`.
-
----
-
-## 1. Directory Conventions
-
-- **`src/app/`**: Next.js App Router route segments, layouts, pages, and API route handlers.
-- **`src/components/ui/`**: Primitive, unstyled shadcn/ui components. Pure presentational UI with zero domain logic.
-- **`src/components/common/`**: Shared layout components (Navbar, Sidebar, Shell).
-- **`src/components/features/`**: Feature-encapsulated UI domain components (`notes/`, `srs/`, `ingestion/`).
-- **`src/lib/`**: Framework-agnostic pure logic engines, math, and database clients.
-- **`src/actions/`**: Next.js Server Actions for data mutations.
-- **`src/types/`**: Global TypeScript interfaces and DTOs.
+Este documento descreve as regras estruturais, convenções de nomenclatura e padrões de organização de arquivos para o `notes-app`.
 
 ---
 
-## 2. Coding Rules & Principles
+## 1. Convenções de Diretórios
 
-1. **React Server Components (RSC) by Default**:
-   - Keep components server-side unless browser state/hooks are strictly required. Add `"use client"` only at leaf interactive nodes.
+- **`src/app/`**: Segmentos de rota do Next.js App Router, layouts, páginas e manipuladores de rotas de API (Route Handlers).
+- **`src/components/ui/`**: Componentes primitivos e sem estilo do shadcn/ui. UI puramente de apresentação com zero lógica de domínio.
+- **`src/components/common/`**: Componentes compartilhados de layout (Navbar, Sidebar, Shell).
+- **`src/components/features/`**: Componentes de UI encapsulados por domínio de funcionalidade (`notes/`, `srs/`, `ingestion/`).
+- **`src/lib/`**: Motores de lógica pura agnósticos de framework, matemática e clientes de banco de dados.
+- **`src/actions/`**: Next.js Server Actions para mutações de dados.
+- **`src/types/`**: Interfaces globais do TypeScript e DTOs.
 
-2. **Language Requirement**:
-   - All code, comments, docstrings, and commit messages must be written in **English**.
+---
 
-3. **Portable Paths**:
-   - Never hardcode user-specific absolute paths. Always use relative paths or portable environment variables.
+## 2. Regras & Princípios de Código
 
-4. **Linting & Formatting**:
-   - Managed via Biome (`biome.json`). Run `pnpm check` before committing code.
+1. **React Server Components (RSC) por Padrão**:
+   - Mantenha os componentes no lado do servidor, a menos que hooks/estados de navegador sejam estritamente necessários. Adicione `"use client"` apenas nos nós folha interativos.
 
-5. **Knowledge Graph (`graphify`)**:
-   - AST knowledge graph is maintained at `graphify-out/`. Keep graph updated via `graphify update .`.
+2. **Requisito de Idioma**:
+   - Todo o código, comentários, docstrings e mensagens de commit devem ser escritos em **Inglês**.
+
+3. **Caminhos Portáveis**:
+   - Nunca coloque caminhos absolutos específicos de usuário hardcoded. Sempre use caminhos relativos ou variáveis de ambiente portáveis.
+
+4. **Linting & Formatação**:
+   - Gerenciado via Biome (`biome.json`). Execute `pnpm check` antes de commitá-lo.
+
+5. **Grafo de Conhecimento (`graphify`)**:
+   - O grafo de conhecimento AST é mantido em `graphify-out/`. Mantenha o grafo atualizado via `graphify update .`.

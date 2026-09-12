@@ -92,6 +92,9 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 ### Documentation Freshness & Synchronization Rule
 - Documentation must never be outdated. Whenever code, architecture, schemas, APIs, or behaviors are modified or added, all corresponding documentation (including `ARCHITECTURE.md`, `README.md`, `DECISIONS.md`, ADRs in `docs/decisions/`, and Ladle stories) and decision logs must be updated immediately alongside the code changes.
 
+### Ladle Documentation Visibility Invariant Rule
+- Any markdown documentation created or modified under `docs/` (such as `docs/architecture/`, `docs/decisions/`, `docs/design/`, `docs/guides/`, `docs/reference/`) **MUST ALWAYS** be registered and exported as a Ladle story in the corresponding `.stories.tsx` file (e.g. `docs/architecture/architecture.stories.tsx`). Leaving markdown documentation unexposed in the Ladle DocViewer workbench is strictly forbidden.
+
 <!-- END:general-project-rules -->
 
 <!-- BEGIN:mcp-and-skills-rules -->

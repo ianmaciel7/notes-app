@@ -150,8 +150,9 @@ flowchart LR
 
 ## 6. Reference Worktrees & Codebase Topology
 
-- **Historical Codebases**: Inspect `.worktrees/` (`old`, `old-2`, `old-3`, `old-4`, `old-5`) for baseline reference implementations when porting algorithms or Capacities feature parity.
+- **Historical Codebases & Synthesis**: Inspect `.worktrees/` (`old`, `old-2`, `old-3`, `old-4`, `old-5`) for baseline reference implementations. See [`graphify-out/HISTORICAL_REFERENCE_SYNTHESIS.md`](graphify-out/HISTORICAL_REFERENCE_SYNTHESIS.md) and [`ADR-0006`](docs/decisions/0006-historical-reference-architecture-synthesis.md) for synthesized specs covering entity evolution, Capacities object model parity, FSRS exam burndown math, and sync protocols.
 - **Dependency Topology**: Refer to `graphify-out/GRAPH_REPORT.md` and `graphify-out/graph.json` for architectural relationship queries.
+
 
 ---
 

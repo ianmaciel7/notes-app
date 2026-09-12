@@ -1,39 +1,39 @@
-# Design System Reference
+# Referência do Design System
 
-> **Note**: This reference specification is adapted from [`DESIGN.md`](../../DESIGN.md).
+> **Nota**: Esta especificação de referência é adaptada de [`DESIGN.md`](../../DESIGN.md).
 
 ---
 
-## 1. Visual Theme & Atmosphere
-The Notes App visual identity is ultra-minimalist, focused, and distraction-free. Built on clean monochromatic typography and spacious layout grids, it uses crisp stark contrasts and smooth dark mode adaptation to provide an effortless reading and note-taking environment.
+## 1. Tema Visual & Atmosfera
+A identidade visual do Notes App é ultra-minimalista, focada e livre de distrações. Construída com tipografia monocromática limpa e grids de layout espaçosos, utiliza contrastes nítidos e adaptação suave ao modo escuro (dark mode) para fornecer um ambiente sem esforço para leitura e anotações.
 
-The design relies on Geist and Geist Mono font pairs to evoke a modern, high-precision developer aesthetic combined with generous vertical whitespace and pill-shaped rounded action controls.
+O design apoia-se nos pares de fontes Geist e Geist Mono para evocar uma estética moderna e de alta precisão para desenvolvedores, combinada com espaçamento vertical generoso e controles de ação arredondados em formato de pílula (pill-shaped).
 
-## 2. Color Palette & Roles
-### Primary Foundation
-- **Pure Canvas White (`#ffffff`)** — Default light mode background.
-- **Deep Midnight Black (`#0a0a0a` / `#000000`)** — Dark mode background & high-contrast primary text.
+## 2. Paleta de Cores & Papéis
+### Base Primária
+- **Branco de Tela Puro (`#ffffff`)** — Fundo padrão no modo claro (light mode).
+- **Preto Meia-Noite Profundo (`#0a0a0a` / `#000000`)** — Fundo no modo escuro & texto primário de alto contraste.
 
-### Typography & Text Hierarchy
-- **Primary Ink (`#171717`)** — High-contrast body text in light mode.
-- **Off-White Soft (`#ededed`)** — Primary body text in dark mode.
-- **Muted Slate Body (`#52525b` / `zinc-600`)** — Secondary description text.
-- **Dark Mode Slate (`#a1a1aa` / `zinc-400`)** — Secondary text in dark mode.
+### Tipografia & Hierarquia de Texto
+- **Tinta Primária (`#171717`)** — Texto do corpo de alto contraste no modo claro.
+- **Off-White Suave (`#ededed`)** — Texto do corpo primário no modo escuro.
+- **Corpo Grafite Atenuado (`#52525b` / `zinc-600`)** — Texto secundário de descrição.
+- **Grafite do Modo Escuro (`#a1a1aa` / `zinc-400`)** — Texto secundário no modo escuro.
 
-### Functional States & Interactive Elements
-- **Foreground Action Button (`#171717` / `#ffffff`)** — Main CTA background with pill radius.
-- **Border Subtle (`rgba(0,0,0,0.08)`)** — Hairline component borders and subtle dividers.
+### Estados Funcionais & Elementos Interativos
+- **Botão de Ação Destacado (`#171717` / `#ffffff`)** — Fundo do CTA principal com raio estilo pílula.
+- **Borda Sutil (`rgba(0,0,0,0.08)`)** — Bordas finas de componentes e divisores sutis.
 
-## 3. Typography Rules
-### Hierarchy & Weights
-- **Font Sans**: Geist (`var(--font-geist-sans)`), clean geometric sans-serif.
-- **Font Mono**: Geist Mono (`var(--font-geist-mono)`), crisp monospace for code inline blocks.
-- **H1 Display**: `3xl` (30px), font-weight `600` (semibold), line-height `1.25`, tracking `tight`.
-- **Body Large**: `lg` (18px), line-height `1.75` (relaxed), secondary color.
-- **Code Snippet**: `font-mono`, size `0.9em`, background pill overlay.
+## 3. Regras de Tipografia
+### Hierarquia & Pesos
+- **Fonte Sans**: Geist (`var(--font-geist-sans)`), sans-serif geométrica limpa.
+- **Fonte Mono**: Geist Mono (`var(--font-geist-mono)`), monospace nítida para blocos e código inline.
+- **H1 Display**: `3xl` (30px), peso da fonte `600` (semibold), altura de linha `1.25`, tracking `tight`.
+- **Corpo Grande**: `lg` (18px), altura de linha `1.75` (relaxada), cor secundária.
+- **Trecho de Código**: `font-mono`, tamanho `0.9em`, sobreposição de fundo estilo pílula.
 
-## 4. Component Stylings
-### Buttons
-- Pill shape (`rounded-full`), height `48px` (`h-12`), horizontal padding `20px` (`px-5`).
-- Primary button: Solid black background with white text (inverted in dark mode), subtle hover transition to `#383838`.
-- Secondary button: Transparent background with hairline border (`border-black/[.08]`), soft background hover state (`hover:bg-black/[.04]`).
+## 4. Estilização de Componentes
+### Botões
+- Formato de pílula (`rounded-full`), altura `48px` (`h-12`), preenchimento horizontal `20px` (`px-5`).
+- Botão primário: Fundo preto sólido com texto branco (invertido no modo escuro), transição suave de hover para `#383838`.
+- Botão secundário: Fundo transparente com borda fina (`border-black/[.08]`), estado de hover com fundo suave (`hover:bg-black/[.04]`).

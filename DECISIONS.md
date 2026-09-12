@@ -15,6 +15,8 @@ All architectural decisions for `notes-app` are documented here using the [MADR 
 | [ADR-0003](#adr-0003-automated-knowledge-graph-updates-via-husky) | Automated Knowledge Graph Updates via Husky | Accepted | 2026-09-11 |
 | [ADR-0004](#adr-0004-strict-path-configuration-portability-rule) | Strict Path & Configuration Portability Rule | Accepted | 2026-09-11 |
 | [ADR-0005](#adr-0005-ladle-component-workbench-and-documentation-viewer) | Ladle Component Workbench and Documentation Viewer | Accepted | 2026-09-12 |
+| [ADR-0006](#adr-0006-historical-reference-architecture-synthesis-baseline-specifications) | Historical Reference Architecture Synthesis & Baseline Specifications | Accepted | 2026-09-12 |
+
 
 ---
 
@@ -224,3 +226,43 @@ Chosen option: **Dual-Role Ladle setup with restored UI component stories in `sr
 * Good, because fewer story files need maintenance in `src/`.
 * Bad, because UI components can only be tested inside full Next.js page layouts, hindering isolated component testing.
 * **Rejected because**: Testing components solely in page contexts leads to slower iteration loops and unverified edge states.
+
+---
+
+## ADR-0006: Historical Reference Architecture Synthesis & Baseline Specifications
+
+* **Status**: Accepted
+* **Deciders**: Engineering & Product Team
+* **Date**: 2026-09-12
+
+### Context and Problem Statement
+
+The repository contains multiple historical reference implementations in read-only worktrees (`.worktrees/old`, `.worktrees/old-2`, `.worktrees/old-3`, `.worktrees/old-4`, and `.worktrees/old-5`). These worktrees contain evolving iterations of entity models, Capacities object parity, FSRS burndown schemas, and sync protocols. We needed to synthesize these historical findings into authoritative architecture documentation and establish a formal reference spec in [`docs/architecture/HISTORICAL_REFERENCE_SYNTHESIS.md`](docs/architecture/HISTORICAL_REFERENCE_SYNTHESIS.md).
+
+### Decision Drivers
+
+* **Specification Integrity**: Consolidate dispersed architectural knowledge across historical worktrees into a single reference spec.
+* **Feature Parity Alignment**: Clarify object studio schemas and Capacities visual parity requirements.
+* **Algorithmic Accuracy**: Formally document the exact FSRS memory decay equations and exam goal burndown math.
+* **Replication Standards**: Document the offline-first sync outbox pattern, conflict resolution candidates, and tombstone mechanisms.
+
+### Considered Options
+
+1. **Synthesize historical reference findings into `docs/architecture/HISTORICAL_REFERENCE_SYNTHESIS.md` and index via ADR-0006**
+2. **Leave historical reference code scattered in `.worktrees/` without centralized architectural documentation**
+3. **Re-implement features from scratch without documenting historical specifications**
+
+### Decision Outcome
+
+Chosen option: **Synthesize historical reference findings into `docs/architecture/HISTORICAL_REFERENCE_SYNTHESIS.md` and index via ADR-0006** because establishing an explicit comparative specification prevents reinventing past designs, ensures mathematical consistency in SRS calculations, and provides clear blueprints for space-scoped entities and sync protocols.
+
+#### Positive Consequences
+
+* Centralizes entity evolution, Capacities object model parity, FSRS math, and sync protocols in [`docs/architecture/HISTORICAL_REFERENCE_SYNTHESIS.md`](docs/architecture/HISTORICAL_REFERENCE_SYNTHESIS.md).
+* Serves as an unambiguous blueprint for active feature implementation in `src/`.
+* Synchronizes architecture specs and decision logs across `DECISIONS.md`, `docs/decisions/README.md`, and `ARCHITECTURE.md`.
+
+#### Negative Consequences
+
+* Documentation must be updated if future sync protocol payloads or FSRS default parameters are modified.
+

@@ -17,7 +17,7 @@ The application is built on **Next.js (App Router)**, **React 19**, **TypeScript
 
 ## 2. Code Map & Official Folder Structure
 
-The project strictly follows the **official Next.js App Router conventions** combined with the standard **shadcn/ui** component directory structure.
+The project strictly follows the **official Next.js App Router conventions** combined with the standard **shadcn/ui** component directory structure. For full details on URL hierarchy, query taxonomy, and route parameters, see the [`URL Architecture & Routing Specification`](routing.md). For details on multi-tenant workspace management, see the [`Spaces Architecture Specification`](spaces.md).
 
 ```text
 .
@@ -148,8 +148,9 @@ flowchart LR
 
 ## 6. Reference Worktrees & Codebase Topology
 
-- **Historical Codebases**: Inspect `.worktrees/` (`old`, `old-2`, `old-3`, `old-4`, `old-5`) for baseline reference implementations when porting algorithms or Capacities feature parity.
+- **Historical Codebases & Synthesis**: Inspect `.worktrees/` (`old`, `old-2`, `old-3`, `old-4`, `old-5`) for baseline reference implementations. See [`../../graphify-out/HISTORICAL_REFERENCE_SYNTHESIS.md](../../graphify-out/HISTORICAL_REFERENCE_SYNTHESIS.md)`, [`entities.md`](entities.md), [`routing.md`](routing.md), and [`ADR-0006`](../decisions/0006-historical-reference-architecture-synthesis.md) for synthesized specs covering entity evolution, Capacities object model parity, FSRS exam burndown math, routing taxonomy, and sync protocols.
 - **Dependency Topology**: Refer to `graphify-out/GRAPH_REPORT.md` and `graphify-out/graph.json` for architectural relationship queries.
+
 
 ---
 

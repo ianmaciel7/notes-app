@@ -1,34 +1,34 @@
-# ADR-0003: Automated Knowledge Graph Updates via Husky
+# ADR-0003: Atualizações Automatizadas do Grafo de Conhecimento via Husky
 
-* **Status**: Accepted
-* **Deciders**: Engineering & Product Team
-* **Date**: 2026-09-11
+* **Status**: Aceito
+* **Decisores**: Equipe de Engenharia & Produto
+* **Data**: 2026-09-11
 
-## Context and Problem Statement
+## Contexto e Declaração do Problema
 
-The repository relies on `graphify` (`graphify-out/graph.json`) to maintain a structural AST knowledge graph. Manual updates by developers lead to stale graph data over time.
+O repositório depende do `graphify` (`graphify-out/graph.json`) para manter um grafo de conhecimento estrutural de AST. Atualizações manuais por desenvolvedores levariam a dados desatualizados no grafo com o passar do tempo.
 
-## Decision Drivers
+## Direcionadores da Decisão
 
-* Keep `graphify-out/graph.json` continuously synchronized after code modifications.
-* Zero token cost (AST-only update).
-* Non-blocking git hook workflows.
+* Manter o `graphify-out/graph.json` continuamente sincronizado após modificações de código.
+* Custo zero de tokens (atualização apenas de AST).
+* Workflows de git hooks não bloqueantes.
 
-## Considered Options
+## Opções Consideradas
 
 1. **Husky v9 git hooks** (`post-commit`, `post-merge`, `pre-commit`, `pre-push`)
-2. Manual developer execution of `graphify update .`
-3. CI-only graph rebuilds
+2. Execução manual do `graphify update .` pelos desenvolvedores
+3. Reconstrução do grafo apenas em CI
 
-## Decision Outcome
+## Resultado da Decisão
 
-Chosen option: **Husky v9 git hooks** because `post-commit` and `post-merge` automatically run `graphify update .` to update the AST graph locally, while `pre-commit` runs Biome staged checks and `pre-push` runs typechecking.
+Opção escolhida: **Husky v9 git hooks** porque `post-commit` e `post-merge` executam automaticamente `graphify update .` para atualizar o grafo AST localmente, enquanto `pre-commit` executa checagens do Biome em arquivos staged e `pre-push` executa checagens de tipos (typechecking).
 
-### Positive Consequences
+### Consequências Positivas
 
-* The knowledge graph is always current after developer commits and pulls.
-* Code quality errors are caught before pushing code to remote branches.
+* O grafo de conhecimento permanece sempre atualizado após commits e pulls dos desenvolvedores.
+* Erros de qualidade de código são capturados antes de enviar código para branches remotas.
 
-### Negative Consequences
+### Consequências Negativas
 
-* Commits take an additional 1-2 seconds for AST extraction.
+* Commits levam de 1 a 2 segundos adicionais para a extração da AST.

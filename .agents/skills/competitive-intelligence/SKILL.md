@@ -17,6 +17,12 @@ Use this skill when:
 - Planning import/export migration pathways (from Notion, Obsidian, Tana, Capacities, Evernote, Apple Notes).
 - Developing developer platform interfaces (REST API, MCP endpoints, X-Callback URLs).
 
+## Core Premises & Principles
+
+1. **Live External Verification for Currency & Accuracy**: Never rely on stale assumptions or static training priors. Always cross-reference external links, official documentation roots (e.g., `docs.capacities.io`, `developers.capacities.io`), and machine-readable endpoints (`llms.txt`, `llms-full.txt`, OpenAPI/REST specs) to obtain the most exact, current information.
+2. **Active Web Querying & Freshness**: Whenever verifying cutting-edge features, API endpoints, or competitor updates, actively fetch the latest documentation via search or direct URL lookup to prevent design regressions caused by outdated snapshots or deprecated routes (such as 404 endpoints).
+3. **Evidence-Based Source Attribution**: Every architectural parity claim, schema design, or competitive requirement must reference verified official documentation links, live endpoint schemas, or audited inventory records.
+
 ## Progressive Disclosure & Reference Reading
 
 Read specific reference files based on the target competitor:
