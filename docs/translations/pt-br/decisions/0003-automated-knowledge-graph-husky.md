@@ -1,34 +1,34 @@
-# ADR-0003: Atualizações Automatizadas do Grafo de Conhecimento via Husky
+# ADR-0003: Automated Knowledge Graph Updates via Husky
 
-* **Status**: Aceito
-* **Decisores**: Equipe de Engenharia & Produto
-* **Data**: 2026-09-11
+* **Status**: Accepted
+* **Deciders**: Engineering & Product Team
+* **Date**: 2026-09-11
 
-## Contexto e Declaração do Problema
+## Context and Problem Statement
 
-O repositório depende do `graphify` (`graphify-out/graph.json`) para manter um grafo de conhecimento AST estrutural. Atualizações manuais por desenvolvedores levam a dados de grafo desatualizados com o tempo.
+The repository relies on `graphify` (`graphify-out/graph.json`) to maintain a structural AST knowledge graph. Manual updates by developers lead to stale graph data over time.
 
-## Direcionadores de Decisão
+## Decision Drivers
 
-* Manter o `graphify-out/graph.json` continuamente sincronizado após modificações no código.
-* Custo zero de tokens (atualização apenas via AST).
-* Fluxos de trabalho com git hooks não bloqueantes.
+* Keep `graphify-out/graph.json` continuously synchronized after code modifications.
+* Zero token cost (AST-only update).
+* Non-blocking git hook workflows.
 
-## Opções Consideradas
+## Considered Options
 
-1. **Git hooks do Husky v9** (`post-commit`, `post-merge`, `pre-commit`, `pre-push`)
-2. Execução manual de `graphify update .` pelo desenvolvedor
-3. Reconstruções de grafo apenas no CI
+1. **Husky v9 git hooks** (`post-commit`, `post-merge`, `pre-commit`, `pre-push`)
+2. Manual developer execution of `graphify update .`
+3. CI-only graph rebuilds
 
-## Resultado da Decisão
+## Decision Outcome
 
-Opção escolhida: **Git hooks do Husky v9** porque `post-commit` e `post-merge` executam automaticamente o `graphify update .` para atualizar o grafo AST localmente, enquanto `pre-commit` executa checagens do Biome em arquivos staged e `pre-push` executa a verificação de tipos.
+Chosen option: **Husky v9 git hooks** because `post-commit` and `post-merge` automatically run `graphify update .` to update the AST graph locally, while `pre-commit` runs Biome staged checks and `pre-push` runs typechecking.
 
-### Consequências Positivas
+### Positive Consequences
 
-* O grafo de conhecimento está sempre atualizado após commits e pulls dos desenvolvedores.
-* Erros de qualidade de código são capturados antes de enviar o código para branches remotas.
+* The knowledge graph is always current after developer commits and pulls.
+* Code quality errors are caught before pushing code to remote branches.
 
-### Consequências Negativas
+### Negative Consequences
 
-* Commits levam de 1 a 2 segundos adicionais para extração da AST.
+* Commits take an additional 1-2 seconds for AST extraction.

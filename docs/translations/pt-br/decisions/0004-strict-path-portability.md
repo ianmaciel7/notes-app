@@ -1,32 +1,32 @@
-# ADR-0004: Regra Estrita de Portabilidade de Caminhos e Configurações
+# ADR-0004: Strict Path & Configuration Portability Rule
 
-* **Status**: Aceito
-* **Decisores**: Equipe de Engenharia & Produto
-* **Data**: 2026-09-11
+* **Status**: Accepted
+* **Deciders**: Engineering & Product Team
+* **Date**: 2026-09-11
 
-## Contexto e Declaração do Problema
+## Context and Problem Statement
 
-Arquivos de configuração como `.codex/hooks.json` anteriormente continham caminhos absolutos hardcoded de usuários (ex: `C:/Users/ianma/...`), o que quebrava a portabilidade entre diferentes máquinas e ambientes de CI.
+Configuration files such as `.codex/hooks.json` previously contained hardcoded absolute user paths (e.g., `C:/Users/<username>/...`), breaking cross-machine portability and CI environments.
 
-## Direcionadores de Decisão
+## Decision Drivers
 
-* O repositório deve compilar e executar perfeitamente em diferentes ambientes de desenvolvimento (Windows, macOS, Linux, CI).
-* Nenhum caminho de sistema específico de usuário em configurações commitadas.
+* Repository must build and run seamlessly across different developer environments (Windows, macOS, Linux, CI).
+* No user-specific system paths in committed configurations.
 
-## Opções Consideradas
+## Considered Options
 
-1. **Caminhos relativos & nomes de comandos portáveis** em todos os arquivos de configuração + aplicação estrita de regras de agente em `AGENTS.md` & `.agents/rules/portable-paths.md`.
-2. Scripts de resolução de caminhos absolutos.
+1. **Relative paths & portable command names** in all configuration files + explicit agent rule enforcement in `AGENTS.md` & `.agents/rules/portable-paths.md`.
+2. Absolute path resolution scripts.
 
-## Resultado da Decisão
+## Decision Outcome
 
-Opção escolhida: **Caminhos relativos & nomes de comandos portáveis** (ex: `graphify hook-check`) porque garante 100% de portabilidade em todos os sistemas operacionais e setups de usuários.
+Chosen option: **Relative paths & portable command names** (e.g., `graphify hook-check`) because it ensures 100% portability across all operating systems and user setups.
 
-### Consequências Positivas
+### Positive Consequences
 
-* Arquivos de configuração podem ser commitados com segurança sem conflitos de ambiente de usuário.
-* Aplicado entre agentes de IA através de `.agents/rules/portable-paths.md`.
+* Configuration files can be committed safely without user environment conflicts.
+* Enforced across AI agents via `.agents/rules/portable-paths.md`.
 
-### Consequências Negativas
+### Negative Consequences
 
-* Comandos CLI devem estar presentes no `PATH` do ambiente do usuário ou ser invocados relativamente.
+* CLI commands must be present in the user's environment `PATH` or invoked relatively.

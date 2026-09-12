@@ -1,35 +1,35 @@
-# ADR-0002: Biome como Linter e Formatador Unificado
+# ADR-0002: Biome as Unified Linter & Formatter
 
-* **Status**: Aceito
-* **Decisores**: Equipe de Engenharia & Produto
-* **Data**: 2026-09-11
+* **Status**: Accepted
+* **Deciders**: Engineering & Product Team
+* **Date**: 2026-09-11
 
-## Contexto e Declaração do Problema
+## Context and Problem Statement
 
-O template inicial do projeto incluia configurações de ESLint e Prettier, o que introduzia uma execução de linting mais lenta e overhead de configurações duplicadas no repositório.
+The initial project template included ESLint and Prettier setups, which introduced slower linting execution and duplicate configuration overhead across the repository.
 
-## Direcionadores de Decisão
+## Decision Drivers
 
-* Velocidade de execução para loops de feedback de desenvolvedores e hooks de pre-commit do git.
-* Ferramenta única substituindo ESLint, Prettier e ordenação de imports.
-* Suporte nativo a diretivas do TypeScript e Tailwind CSS v4.
+* Execution speed for developer feedback loops and git pre-commit hooks.
+* Single tool replacing ESLint, Prettier, and import sorting.
+* Native support for TypeScript and Tailwind CSS v4 directives.
 
-## Opções Consideradas
+## Considered Options
 
 1. **Biome** (`@biomejs/biome`) 2.5
 2. ESLint 9 + Prettier
 3. Oxlint
 
-## Resultado da Decisão
+## Decision Outcome
 
-Opção escolhida: **Biome** (`@biomejs/biome`) porque ele executa em ~50ms em todo o workspace, oferece presets recomendados de linting prontos para uso e gerencia regras de formatação e parsers de CSS de forma limpa via `biome.json`.
+Chosen option: **Biome** (`@biomejs/biome`) because it executes in ~50ms across the workspace, provides recommended linting presets out of the box, and handles formatting and CSS parser rules cleanly via `biome.json`.
 
-### Consequências Positivas
+### Positive Consequences
 
-* Execução ultra-rápida do comando `pnpm run check` (abaixo de 100ms).
-* Zero fricção de configuração entre regras de linting e formatação.
-* Arquivo de configuração único `biome.json`.
+* Ultra-fast `pnpm run check` execution (sub-100ms).
+* Zero configuration friction between linting and formatting rules.
+* Single `biome.json` configuration file.
 
-### Consequências Negativas
+### Negative Consequences
 
-* Exige desabilitar extensões padrão do ESLint no IDE.
+* Requires disabling default ESLint plugins in IDE extensions.

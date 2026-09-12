@@ -1338,9 +1338,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1789172532.7144425,
-    "seen": 1789172558.082466,
-    "ast_hash": "4d6bd68aa8baecf389f1fe4f1a11c0a4",
+    "mtime": 1789217246.310369,
+    "seen": 1789217432.4141529,
+    "ast_hash": "94adaedbf11d0a95330bc85a5dfa12eb",
     "semantic_hash": ""
   },
   ".codex/hooks.json": {
@@ -1356,9 +1356,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1789216714.3122058,
-    "seen": 1789216736.9524884,
-    "ast_hash": "93f8a1663a1ea1442cc531dcbe9fc32d",
+    "mtime": 1789217383.161776,
+    "seen": 1789217432.4141529,
+    "ast_hash": "2e808b47d1dc957b91746fdaf214624e",
     "semantic_hash": ""
   },
   ".agents/hooks.json": {
@@ -2076,9 +2076,9 @@
     "semantic_hash": ""
   },
   ".agents/skills/doc-translator/scripts/translate-batch.mjs": {
-    "mtime": 1789216143.65094,
-    "seen": 1789216736.9514873,
-    "ast_hash": "6d68a6ef06c86b6db7892c9213d23d5a",
+    "mtime": 1789217313.2483358,
+    "seen": 1789217432.412746,
+    "ast_hash": "deda94aab64ef7c640a51107e4ae5575",
     "semantic_hash": ""
   },
   ".agents/agents/doc-maintainer/agent.md": {
@@ -2307,6 +2307,78 @@
     "mtime": 1789216564.5873518,
     "seen": 1789216736.9524884,
     "ast_hash": "b450676c5cc4e01bbb9ad13aac8d0ecb",
+    "semantic_hash": ""
+  },
+  ".agents/rules/subagent-delegation.md": {
+    "mtime": 1789217385.914724,
+    "seen": 1789217432.4137378,
+    "ast_hash": "a8435f053772676199c361347e156666",
+    "semantic_hash": ""
+  },
+  "docs/reference/design-system.md": {
+    "mtime": 1789217212.7802246,
+    "seen": 1789217432.4141529,
+    "ast_hash": "b2e05c56587dc36501736f9fbedd0e3d",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/architecture/README.md": {
+    "mtime": 1789217342.1706667,
+    "seen": 1789217432.4141529,
+    "ast_hash": "38c73c7bf9a6632b5112646257e067a5",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/decisions/0001-nextjs-16-react-19-baseline.md": {
+    "mtime": 1789217349.9956734,
+    "seen": 1789217432.4141529,
+    "ast_hash": "491bfe25c83f9919f48044139c66c33c",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/decisions/0002-biome-linter-formatter.md": {
+    "mtime": 1789217357.8900714,
+    "seen": 1789217432.4141529,
+    "ast_hash": "9234809153e34c7bba1fcc42fba9c3a4",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md": {
+    "mtime": 1789217366.3299706,
+    "seen": 1789217432.4141529,
+    "ast_hash": "c514765fe1e49e61978b932bcbcc65dc",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/decisions/0004-strict-path-portability.md": {
+    "mtime": 1789217373.6660476,
+    "seen": 1789217432.4141529,
+    "ast_hash": "ce4e799cc9ca30fd02daa258b5effeb7",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/decisions/README.md": {
+    "mtime": 1789217377.6821227,
+    "seen": 1789217432.4141529,
+    "ast_hash": "d2d842a3458b3028cac55a50c70ea2a3",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/guides/component-development.md": {
+    "mtime": 1789217384.3769014,
+    "seen": 1789217432.4141529,
+    "ast_hash": "3a6ff866816450375efae10d61609f05",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/guides/development.md": {
+    "mtime": 1789217396.249101,
+    "seen": 1789217432.4141529,
+    "ast_hash": "d7191724937fbdcf3d42e548d3f3335a",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/reference/conventions.md": {
+    "mtime": 1789217405.3326128,
+    "seen": 1789217432.4141529,
+    "ast_hash": "7782ee22cda77372a8cc73cb93c7e926",
+    "semantic_hash": ""
+  },
+  "docs/translations/pt-BR/reference/design-system.md": {
+    "mtime": 1789217417.0550082,
+    "seen": 1789217457.3054938,
+    "ast_hash": "b2e05c56587dc36501736f9fbedd0e3d",
     "semantic_hash": ""
   }
 }

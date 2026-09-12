@@ -1,15 +1,15 @@
-# Guia de Desenvolvimento Local & Fluxo de Trabalho
+# Local Development & Workflow Guide
 
-Este guia cobre tarefas recorrentes para desenvolvedores que trabalham no `notes-app`.
+This guide covers recurring tasks for developers working on `notes-app`.
 
 ---
 
-## 1. Pré-requisitos & Instalação
+## 1. Prerequisites & Installation
 
-* **Node.js**: v20 ou superior
-* **Gerenciador de Pacotes**: `pnpm` (versão 9+)
+* **Node.js**: v20 or higher
+* **Package Manager**: `pnpm` (version 9+)
 
-Instale as dependências:
+Install dependencies:
 
 ```bash
 pnpm install
@@ -17,35 +17,35 @@ pnpm install
 
 ---
 
-## 2. Executando o Servidor de Desenvolvimento
+## 2. Running the Development Server
 
-Inicie o Next.js no modo de desenvolvimento com Turbopack:
+Start Next.js in development mode with Turbopack:
 
 ```bash
 pnpm dev
 ```
 
-Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 3. Qualidade de Código & Verificação
+## 3. Code Quality & Verification
 
-Usamos o **Biome** para linting e formatação rápidos e unificados, juntamente com a checagem de tipos do TypeScript.
+We use **Biome** for fast, unified linting and formatting, along with TypeScript typechecking.
 
-Execute a verificação de qualidade de código:
+Run code quality check:
 
 ```bash
 pnpm check
 ```
 
-Aplique automaticamente correções de formatação e linting seguras:
+Automatically apply formatting and safe lint fixes:
 
 ```bash
 pnpm check:fix
 ```
 
-Verificação de build (executa o build de produção):
+Build verification (runs production build):
 
 ```bash
 pnpm build
@@ -53,19 +53,19 @@ pnpm build
 
 ---
 
-## 4. Grafo de Conhecimento (`graphify`)
+## 4. Knowledge Graph (`graphify`)
 
-O projeto utiliza o `graphify` para manter a estrutura AST e os relacionamentos entre arquivos:
+The project uses `graphify` to maintain AST structure and cross-file relationships:
 
-* Consultar o grafo: `graphify query "<pergunta>"`
-* Visualizar o caminho mais curto: `graphify path "<A>" "<B>"`
-* Atualizar o grafo após edições: `graphify update .`
+* Query the graph: `graphify query "<question>"`
+* View shortest path: `graphify path "<A>" "<B>"`
+* Update graph after edits: `graphify update .`
 
 ---
 
-## 5. Trabalhando com Agentes de IA
+## 5. Working with AI Agents
 
-Ao interagir com assistentes de código de IA nesta base de código:
+When interacting with AI coding assistants in this codebase:
 
-* Consulte [`AGENTS.md`](../../AGENTS.md) para as instruções principais.
-* Garanta que todas as regras de caminhos de sistema sigam [.agents/rules/portable-paths.md](../../.agents/rules/portable-paths.md).
+* Refer to [`AGENTS.md`](../../AGENTS.md) for primary instructions.
+* Ensure all system path rules follow [.agents/rules/portable-paths.md](../../.agents/rules/portable-paths.md).

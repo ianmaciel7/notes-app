@@ -59,7 +59,7 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 ## Recommended MCP Servers & Skills
 
 - **MCP Servers**:
-  - **Open Design MCP**: UI design and asset synchronization. See [.agents/mcp_config.example.json](.agents/mcp_config.example.json).
+  - **Shoogle MCP (`shoogle`, `user-shoogle`)**: Search and registry item lookup service (`https://mcp.shoogle.dev/mcp`). See [.agents/mcp_config.example.json](.agents/mcp_config.example.json).
   - **context7**: Docs lookup for Next.js 16 & React 19 breaking changes.
 
 - **Key Skills**:
@@ -72,14 +72,16 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 
 <!-- BEGIN:subagent-roles -->
 
-## Specialized Subagent Roles (`.agents/agents/`)
+## Subagent Delegation Policy (`.agents/agents/`)
 
-When working on complex tasks, subagents can be invoked via `invoke_subagent` to specialize in specific areas:
-- **`architect`** ([`.agents/agents/architect/agent.md`](.agents/agents/architect/agent.md)): For system design, cross-module planning, server/client boundaries, and trade-off evaluation before coding.
-- **`code-reviewer`** ([`.agents/agents/code-reviewer/agent.md`](.agents/agents/code-reviewer/agent.md)): For auditing diffs, correctness, accessibility, regressions, and code quality.
-- **`doc-maintainer`** ([`.agents/agents/doc-maintainer/agent.md`](.agents/agents/doc-maintainer/agent.md)): For creating, auditing, updating, and synchronizing ADRs, architecture specs, and markdown documentation.
-- **`security-reviewer`** ([`.agents/agents/security-reviewer/agent.md`](.agents/agents/security-reviewer/agent.md)): For threat modeling, auth boundaries, secret leakage prevention, and security policies.
-- **`test-engineer`** ([`.agents/agents/test-engineer/agent.md`](.agents/agents/test-engineer/agent.md)): For regression test strategies, verification commands (`pnpm check`, `pnpm test`, `pnpm build`), and test coverage.
+**Mandatory Delegation Rule**: Do NOT perform complex or multi-step tasks end-to-end in isolation. Whenever a task involves architecture, research, code review, testing, or documentation, ALWAYS invoke specialized subagents using `invoke_subagent`:
+
+- **`architect`** ([`.agents/agents/architect/agent.md`](.agents/agents/architect/agent.md)): Mandatory for system design, cross-module planning, server/client boundaries, and trade-off evaluation before non-trivial coding.
+- **`research`**: Mandatory for broad codebase exploration, dependency auditing, or gathering context across multiple directories.
+- **`code-reviewer`** ([`.agents/agents/code-reviewer/agent.md`](.agents/agents/code-reviewer/agent.md)): Mandatory for auditing diffs, correctness, accessibility, regressions, and code quality before declaring completion.
+- **`doc-maintainer`** ([`.agents/agents/doc-maintainer/agent.md`](.agents/agents/doc-maintainer/agent.md)): Mandatory for creating, auditing, updating, and synchronizing ADRs, architecture specs, and markdown documentation.
+- **`security-reviewer`** ([`.agents/agents/security-reviewer/agent.md`](.agents/agents/security-reviewer/agent.md)): Mandatory for threat modeling, auth boundaries, secret leakage prevention, and security policies.
+- **`test-engineer`** ([`.agents/agents/test-engineer/agent.md`](.agents/agents/test-engineer/agent.md)): Mandatory for regression test strategies, verification commands (`pnpm check`, `pnpm test`, `pnpm build`), and test coverage.
 
 <!-- END:subagent-roles -->
 

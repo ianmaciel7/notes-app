@@ -25,7 +25,7 @@ Used by some of the world's largest companies, Next.js enables you to create ful
 
 This project uses AI agent rules and Model Context Protocol (MCP) integrations:
 - **Agent Instructions**: See [AGENTS.md](file:///C:/Users/ianma/workspace/notes-app/AGENTS.md) for agent guidelines and project rules.
-- **Open Design MCP**: For UI design & asset synchronization. See [.agents/mcp_config.example.json](file:///C:/Users/ianma/workspace/notes-app/.agents/mcp_config.example.json) to set up your local `mcp_config.json`.
+- **Shoogle MCP (`shoogle`, `user-shoogle`)**: For search and registry item lookup (`https://mcp.shoogle.dev/mcp`). See [.agents/mcp_config.example.json](file:///C:/Users/ianma/workspace/notes-app/.agents/mcp_config.example.json) to set up your local `mcp_config.json`.
 
 
 ## Documentation

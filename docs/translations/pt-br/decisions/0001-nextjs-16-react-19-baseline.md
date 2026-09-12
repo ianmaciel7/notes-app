@@ -1,34 +1,34 @@
-# ADR-0001: Baseline Next.js 16 + React 19 App Router
+# ADR-0001: Next.js 16 + React 19 App Router Baseline
 
-* **Status**: Aceito
-* **Decisores**: Equipe de Engenharia & Produto
-* **Data**: 2026-09-11
+* **Status**: Accepted
+* **Deciders**: Engineering & Product Team
+* **Date**: 2026-09-11
 
-## Contexto e Declaração do Problema
+## Context and Problem Statement
 
-O `notes-app` requer um framework web full-stack moderno, de alto desempenho e local-first, capaz de suportar edição avançada de notas, visualização em grafo, leitura de documentos e proxying de APIs no servidor (gateways de IA, parsing).
+`notes-app` requires a modern, performant, local-first full-stack web framework capable of handling rich note editing, graph visualization, document reading, and server-side API proxying (AI gateways, parsing).
 
-## Direcionadores de Decisão
+## Decision Drivers
 
-* Suporte a React 19 Server Components e navegação via App Router.
-* Integração de primeira classe com TypeScript e suporte a estilos Tailwind CSS v4.
-* Tempos de build rápidos e suporte ao Turbopack.
+* Support for React 19 Server Components and App Router navigation.
+* First-class TypeScript integration and Tailwind CSS v4 styling support.
+* Fast build times and Turbopack support.
 
-## Opções Consideradas
+## Considered Options
 
 1. **Next.js 16 (App Router)** + React 19 + Tailwind CSS v4
-2. Vite + React 19 SPA com backend Node.js separado
-3. Next.js Pages Router (legado)
+2. Vite + React 19 SPA with separate Node.js backend
+3. Next.js Pages Router (legacy)
 
-## Resultado da Decisão
+## Decision Outcome
 
-Opção escolhida: **Next.js 16 (App Router)** porque fornece Route Handlers full-stack para gateways de IA/parsing, Server Components para renderização de alto desempenho e compatibilidade perfeita com Tailwind CSS v4.
+Chosen option: **Next.js 16 (App Router)** because it provides full-stack Route Handlers for AI/parsing gateways, Server Components for high-performance rendering, and seamless compatibility with Tailwind CSS v4.
 
-### Consequências Positivas
+### Positive Consequences
 
-* Separação clara entre componentes cliente (banco de dados offline Dexie) e handlers no servidor.
-* Geração de rotas de primeira classe e velocidade de build com Turbopack.
+* Clean separation between client components (Dexie offline database) and server handlers.
+* First-class route generation and Turbopack build speed.
 
-### Consequências Negativas
+### Negative Consequences
 
-* Mudanças incompatíveis (breaking changes) no React 19 exigem validação rigorosa de tipos nas props de layout.
+* React 19 breaking changes require careful type validation in layout props.

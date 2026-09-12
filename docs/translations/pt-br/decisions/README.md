@@ -1,14 +1,15 @@
-# Registro de Decisões Arquiteturais (MADR)
+# Architectural Decision Log (MADR)
 
-Todas as decisões arquiteturais do `notes-app` estão documentadas aqui utilizando o formato [MADR (Markdown Architectural Decision Records)](https://adr.github.io/madr/).
+All architectural decisions for `notes-app` are documented here using the [MADR (Markdown Architectural Decision Records)](https://adr.github.io/madr/) format.
 
 ---
 
-## Índice de Registros de Decisão Arquitetural (ADRs)
+## Index of Architectural Decision Records (ADRs)
 
-| ID | Título | Status | Data |
+| ID | Title | Status | Date |
 | --- | --- | --- | --- |
-| [ADR-0001](0001-nextjs-16-react-19-baseline.md) | Baseline Next.js 16 + React 19 App Router | Aceito | 2026-09-11 |
-| [ADR-0002](0002-biome-linter-formatter.md) | Biome como Linter e Formatador Unificado | Aceito | 2026-09-11 |
-| [ADR-0003](0003-automated-knowledge-graph-husky.md) | Atualizações Automatizadas do Grafo de Conhecimento via Husky | Aceito | 2026-09-11 |
-| [ADR-0004](0004-strict-path-portability.md) | Regra Estrita de Portabilidade de Caminhos e Configurações | Aceito | 2026-09-11 |
+| [ADR-0001](0001-nextjs-16-react-19-baseline.md) | Next.js 16 + React 19 App Router Baseline | Accepted | 2026-09-11 |
+| [ADR-0002](0002-biome-linter-formatter.md) | Biome as Unified Linter & Formatter | Accepted | 2026-09-11 |
+| [ADR-0003](0003-automated-knowledge-graph-husky.md) | Automated Knowledge Graph Updates via Husky | Accepted | 2026-09-11 |
+| [ADR-0004](0004-strict-path-portability.md) | Strict Path & Configuration Portability Rule | Accepted | 2026-09-11 |
+

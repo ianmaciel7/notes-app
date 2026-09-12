@@ -1,165 +1,165 @@
-# Visão Geral da Arquitetura (Padrão Matklad)
+# Architecture Overview (Matklad Pattern)
 
-Este documento fornece uma visão geral de alto nível da arquitetura do **Notes App**, estrutura de diretórios, abstrações principais e invariantes de engenharia. Foi escrito seguindo o padrão **Matklad ARCHITECTURE.md** para ajudar novos colaboradores e agentes automatizados a se orientarem rapidamente na base de código.
-
----
-
-## 1. Visão Geral
-
-O **Notes App** é uma aplicação web unificada de estudos e gerenciamento de conhecimento local-first com custo operacional zero. Ele unifica três domínios principais:
-1. **Arquitetura de Objetos (Estilo Capacities)**: Notas interconectadas, tipos de objetos flexíveis e links bidirecionais.
-2. **Ingestão de Documentos (Estilo Readwise)**: Destacamento, parsing de documentos e importação de leituras externas.
-3. **Sistema de Repetição Espaçada (Estilo Anki/FSRS)**: Flashcards, gerenciamento de fila de revisão e algoritmos de retenção de memória.
-
-A aplicação foi construída sobre **Next.js (App Router)**, **React 19**, **TypeScript** e **shadcn/ui** (estilizado com Tailwind CSS), otimizada para velocidade, armazenamento local e desempenho de Server Components.
+This document provides a high-level overview of the **Notes App** architecture, directory layout, core abstractions, and engineering invariants. It is written following the **Matklad ARCHITECTURE.md** pattern to help new contributors and automated agents quickly orient themselves within the codebase.
 
 ---
 
-## 2. Mapa do Código & Estrutura Oficial de Pastas
+## 1. Bird's Eye View
 
-O projeto segue estritamente as **convenções oficiais do Next.js App Router** combinadas com a estrutura de componentes padrão do **shadcn/ui**.
+The **Notes App** is a local-first, zero-operating-cost unified study and knowledge management web application. It unifies three core domains:
+1. **Object Architecture (Capacities-style)**: Interconnected notes, flexible object types, and bidirectional linking.
+2. **Document Ingestion (Readwise-style)**: Highlighting, document parsing, and external reading imports.
+3. **Spaced Repetition System (Anki/FSRS-style)**: Flashcards, review queue management, and memory retention algorithms.
+
+The application is built on **Next.js (App Router)**, **React 19**, **TypeScript**, and **shadcn/ui** (styled with Tailwind CSS), optimized for speed, local storage, and server component performance.
+
+---
+
+## 2. Code Map & Official Folder Structure
+
+The project strictly follows the **official Next.js App Router conventions** combined with the standard **shadcn/ui** component directory structure.
 
 ```text
 .
-├── app/                      # Next.js App Router (Rotas, Layouts, Páginas, Server Actions)
-│   ├── (auth)/               # Grupo de rotas para autenticação (login, cadastro)
+├── app/                      # Next.js App Router (Routes, Layouts, Pages, Server Actions)
+│   ├── (auth)/               # Route Group for authentication (login, register)
 │   │   ├── login/
 │   │   └── layout.tsx
-│   ├── (dashboard)/          # Grupo de rotas para a interface principal
-│   │   ├── notes/            # Página /notes e rotas dinâmicas de detalhes
+│   ├── (dashboard)/          # Route Group for the main application UI
+│   │   ├── notes/            # /notes page and dynamic detail routes
 │   │   │   ├── [id]/
 │   │   │   └── page.tsx
-│   │   ├── srs/              # Interface de estudo de repetição espaçada /srs
-│   │   ├── layout.tsx        # Shell do dashboard (layout Sidebar + Header)
-│   │   └── page.tsx          # Página principal do dashboard
-│   ├── api/                  # Route Handlers para endpoints REST externos / webhooks
+│   │   ├── srs/              # /srs spaced repetition study interface
+│   │   ├── layout.tsx        # Dashboard shell (Sidebar + Header layout)
+│   │   └── page.tsx          # Main dashboard landing page
+│   ├── api/                  # Route Handlers for external REST endpoints / webhooks
 │   │   └── route.ts
-│   ├── globals.css           # Variáveis CSS globais do Tailwind CSS & shadcn/ui
-│   ├── layout.tsx            # Layout Raiz (Provedores de tema, fontes, metadados)
-│   ├── loading.tsx           # UI global de carregamento (fronteira React Suspense)
-│   ├── error.tsx             # Error Boundary global para erros não tratados
-│   └── not-found.tsx         # Página 404 personalizada
+│   ├── globals.css           # Global Tailwind CSS & shadcn/ui CSS variable definitions
+│   ├── layout.tsx            # Root Layout (Theme providers, font configuration, metadata)
+│   ├── loading.tsx           # Global fallback loading UI (React Suspense boundary)
+│   ├── error.tsx             # Global Error Boundary for unhandled route errors
+│   └── not-found.tsx         # Custom 404 page
 │
-├── components/               # Componentes React de UI (Server & Client)
-│   ├── ui/                   # Componentes primitivos shadcn/ui (Gerados via CLI)
+├── components/               # React UI Components (Server & Client)
+│   ├── ui/                   # Primitive, unstyled shadcn/ui components (Generated via CLI)
 │   │   ├── button.tsx
 │   │   ├── dialog.tsx
 │   │   └── input.tsx
-│   ├── common/               # Componentes de layout compartilhados (Navbar, Sidebar)
+│   ├── common/               # Shared layout & composite components (Navbar, Sidebar, Footer)
 │   │   ├── navbar.tsx
 │   │   └── sidebar.tsx
-│   └── features/             # Componentes de domínio (Encapsulados por domínio)
-│       ├── notes/            # Editor de notas, cards de nota, listas de tags
-│       ├── srs/              # Visualizador de flashcards, botões de classificação
-│       └── ingestion/        # Importador de documentos, parser de destaques
+│   └── features/             # Feature-based domain components (Encapsulated by domain)
+│       ├── notes/            # Note editor, note cards, tag lists
+│       ├── srs/              # Flashcard viewer, rating buttons, SRS progress charts
+│       └── ingestion/        # Document importer, highlight parser
 │
-├── lib/                      # Utilitários puros, clientes de banco e motores de lógica
-│   ├── utils.ts              # Utilitário de junção de classes `cn()` (clsx + tailwind-merge)
-│   ├── db/                   # Cliente de banco de dados (SQLite/IndexedDB/ORM)
-│   ├── srs/                  # Algoritmo matemático FSRS e motor de agendamento
-│   └── validations/          # Esqueletos de validação Zod para formulários e Server Actions
+├── lib/                      # Pure utilities, database clients, and domain logic engines
+│   ├── utils.ts              # `cn()` class merging utility (clsx + tailwind-merge)
+│   ├── db/                   # Database client (SQLite/IndexedDB/ORM instance)
+│   ├── srs/                  # Pure FSRS algorithm math & card scheduling engine
+│   └── validations/          # Zod validation schemas for forms and server actions
 │
-├── actions/                  # Next.js Server Actions (Mutações no backend)
-│   ├── notes.ts              # Server Actions CRUD para notas e objetos
-│   └── srs.ts                # Server Actions para submissão de revisões SRS
+├── actions/                  # Next.js Server Actions (Backend mutations & data writes)
+│   ├── notes.ts              # CRUD Server Actions for notes and objects
+│   └── srs.ts                # Server Actions for submitting SRS card reviews
 │
-├── hooks/                    # Hooks React reutilizáveis no lado do cliente
+├── hooks/                    # Reusable Client-side React Hooks
 │   ├── use-debounce.ts
 │   └── use-local-storage.ts
 │
-├── types/                    # Interfaces globais TypeScript e definições de tipos
-│   ├── note.ts               # DTOs de notas e modelos de banco de dados
-│   └── srs.ts                # Tipos de estado dos flashcards e FSRS
+├── types/                    # Global TypeScript interfaces and type definitions
+│   ├── note.ts               # Note & Object DTOs and database models
+│   └── srs.ts                # Flashcard and FSRS state types
 │
-├── public/                   # Arquivos estáticos públicos (imagens, ícones, SVGs)
-├── .agents/                  # Configurações, regras e skills do agente de IA
-├── graphify-out/             # Grafo de conhecimento e topologia gerados pelo Graphify
-└── .worktrees/               # Implementações históricas de referência para paridade
+├── public/                   # Public static assets (images, icons, SVGs)
+├── .agents/                  # AI agent configuration, rules, and skills
+├── graphify-out/             # Knowledge graph & dependency topology generated by Graphify
+└── .worktrees/               # Historical reference implementations for feature parity
 ```
 
 ---
 
-## 3. Invariantes Arquiteturais
+## 3. Architectural Invariants
 
-Qualquer colaborador (e assistente de IA) deve manter estritamente as seguintes regras de engenharia:
+Every contributor (and AI assistant) must strictly maintain the following engineering rules:
 
-1. **React Server Components (RSC) por Padrão**:
-   - Todos os componentes dentro de `app/` e `components/` são Server Components por padrão.
-   - Adicione `"use client"` **apenas nas folhas** da árvore de componentes onde a interatividade no navegador (estado do React, manipuladores de eventos, APIs de cliente) for necessária.
+1. **React Server Components (RSC) by Default**:
+   - All components inside `app/` and `components/` are Server Components by default.
+   - Add `"use client"` **only at the leaf nodes** of the component tree where browser interactivity (React state, event handlers, client APIs) is required.
 
-2. **Isolamento de Primitivos em `components/ui/` (Primitivos shadcn)**:
-   - Arquivos dentro de `components/ui/` pertencem exclusivamente ao **shadcn/ui**.
-   - **Invariante**: Nunca embutir lógica de domínio, chamadas de API ou estado específico da aplicação em `components/ui/`. Eles devem permanecer como primitivos puramente apresentacionais.
+2. **Primitive Isolation in `components/ui/` (shadcn primitives)**:
+   - Files within `components/ui/` belong exclusively to **shadcn/ui**.
+   - **Invariant**: Never embed domain logic, API calls, or app-specific state in `components/ui/`. They must remain pure, presentational UI primitives.
 
-3. **Encapsulamento de Domínio em `components/features/`**:
-   - A lógica de UI específica de um domínio deve ser organizada sob `components/features/<feature-name>/`.
-   - Nunca vazar componentes de domínio para os diretórios globais `components/common/` ou `components/ui/`.
+3. **Domain Encapsulation in `components/features/`**:
+   - Domain-specific UI logic must be organized under `components/features/<feature-name>/`.
+   - Never leak domain components into global `components/common/` or `components/ui/`.
 
-4. **Validação Estrita de Fronteiras (Zod)**:
-   - Todo payload de entrada que chegar via Server Actions ou Route Handlers deve ser validado usando esquemas Zod localizados em `lib/validations/`.
+4. **Strict Boundary Validation (Zod)**:
+   - Every input payload arriving via Server Actions or Route Handlers must be validated using Zod schemas located in `lib/validations/`.
 
-5. **Lógica de Negócios Desacoplada em `lib/`**:
-   - A lógica computacional central (ex: algoritmos de repetição espaçada FSRS) deve ser implementada como funções TypeScript puras e agnósticas de framework em `lib/`. Isso permite testes unitários sem overhead e execução local-first.
+5. **Decoupled Business Logic in `lib/`**:
+   - Core computational logic (e.g., FSRS spaced repetition algorithms) must be implemented as pure, framework-agnostic TypeScript functions in `lib/`. This enables zero-overhead unit testing and local-first execution.
 
 ---
 
-## 4. Fluxos Principais de Dados
+## 4. Key Data Flows
 
-### A. Busca de Dados (Acesso Direto RSC)
+### A. Data Fetching (RSC Direct Access)
 ```mermaid
 flowchart TD
-    Req["Navegador / Requisição do Usuário"] -->|Requisição HTTP| Router[Next.js App Router]
+    Req[Browser / User Request] -->|HTTP Request| Router[Next.js App Router]
     Router --> Layout[app/layout.tsx]
     Layout --> Page["app/(dashboard)/notes/page.tsx (RSC)"]
-    Page -->|Consulta Direta| DB[(Local Storage / Cliente DB)]
-    DB -->|Retorna Registros| Page
-    Page -->|Renderiza Stream HTML| UI[Componentes shadcn/ui]
-    UI -->|Resposta Hidratada| Req
+    Page -->|Direct Query| DB[(Local Storage / DB Client)]
+    DB -->|Return Records| Page
+    Page -->|Render HTML Stream| UI[shadcn/ui Components]
+    UI -->|Hydrated Response| Req
 ```
 
-### B. Mutação de Dados (Fluxo de Server Actions)
+### B. Data Mutation (Server Actions Flow)
 ```mermaid
 flowchart LR
-    ClientUI[Componente Cliente] -->|Invoca Action| Action[actions/notes.ts]
-    Action -->|1. Valida Payload| Zod[lib/validations/notes.ts]
-    Zod -->|2. Persiste Dados| DB[(Storage / DB)]
-    DB -->|3. Dispara Revalidação| Cache[revalidatePath / revalidateTag]
-    Cache -->|4. Atualiza Stream| ClientUI
+    ClientUI[Client Component] -->|Invoke Action| Action[actions/notes.ts]
+    Action -->|1. Validate Payload| Zod[lib/validations/notes.ts]
+    Zod -->|2. Persist Data| DB[(Storage / DB)]
+    DB -->|3. Trigger Revalidation| Cache[revalidatePath / revalidateTag]
+    Cache -->|4. Update Stream| ClientUI
 ```
 
 ---
 
-## 5. Questões Transversais (Cross-Cutting Concerns)
+## 5. Cross-Cutting Concerns
 
-### Estilização & Temas
-- Estilizado usando **Tailwind CSS** com **Variáveis CSS** definidas em `app/globals.css`.
-- Cores e tokens de design mapeiam diretamente para as variáveis CSS do shadcn (`--background`, `--foreground`, `--primary`, etc.).
-- Use o utilitário `cn(...)` em `lib/utils.ts` para junção condicional de classes.
+### Styling & Theming
+- Styled using **Tailwind CSS** with **CSS Variables** defined in `app/globals.css`.
+- Colors and design tokens map directly to shadcn CSS variables (`--background`, `--foreground`, `--primary`, etc.).
+- Use the `cn(...)` utility from `lib/utils.ts` for conditional class joining.
 
-### Tratamento de Erros & Estados de Carregamento
-- **`loading.tsx`**: Utiliza primitivos `Skeleton` do shadcn para fallbacks de carregamento instantâneo via React Suspense.
-- **`error.tsx`**: Captura exceções não tratadas em tempo de execução no nível de segmento de rota sem derrubar a aplicação.
+### Error Handling & Loading States
+- **`loading.tsx`**: Uses shadcn `Skeleton` primitives for instant loading fallbacks via React Suspense.
+- **`error.tsx`**: Catches unhandled runtime exceptions at the route segment level without crashing the app.
 
-### Gerenciamento de Estado
-- **Estado de Servidor**: Gerenciado nativamente por Next.js RSC, Server Actions e revalidação de cache.
-- **Estado de Cliente**: Mantido localmente nos componentes interativos (`useState`, `useReducer`) ou em Contextos React mínimos para sinalizadores de UI.
-
----
-
-## 6. Worktrees de Referência & Topologia do Código
-
-- **Bases de Código Históricas**: Inspecione `.worktrees/` (`old`, `old-2`, `old-3`, `old-4`, `old-5`) para implementações de referência ao portar algoritmos ou paridade de funcionalidades do Capacities.
-- **Topologia de Dependências**: Consulte `graphify-out/GRAPH_REPORT.md` e `graphify-out/graph.json` para consultas sobre relacionamentos arquiteturais.
+### State Management
+- **Server State**: Managed natively by Next.js RSC, Server Actions, and cache revalidation.
+- **Client State**: Kept local to interactive UI components (`useState`, `useReducer`) or minimal React Context for UI flags.
 
 ---
 
-## 7. Governança do Projeto & Matriz de Decisões
+## 6. Reference Worktrees & Codebase Topology
 
-Para manter a integridade da base de código, ergonomia de desenvolvimento e alinhamento de agentes, os artefatos de governança são divididos em quatro camadas:
+- **Historical Codebases**: Inspect `.worktrees/` (`old`, `old-2`, `old-3`, `old-4`, `old-5`) for baseline reference implementations when porting algorithms or Capacities feature parity.
+- **Dependency Topology**: Refer to `graphify-out/GRAPH_REPORT.md` and `graphify-out/graph.json` for architectural relationship queries.
 
-| Camada de Governança | Arquivo / Localização Principal | Objetivo Central | Quando Usar / Atualizar |
+---
+
+## 7. Project Governance & Decision Framework Matrix
+
+To maintain codebase integrity, developer ergonomics, and agent alignment, governance artifacts are partitioned into four distinct layers:
+
+| Governance Layer | Primary File / Location | Core Purpose | When to Use / Update |
 | --- | --- | --- | --- |
-| **Diretivas de Agente** | [`AGENTS.md`](../../AGENTS.md) | Ponto de entrada para assistentes de IA | Visão geral de regras do repositório, mapa, referências a worktrees e comandos. |
-| **Regras Operacionais** | [`.agents/rules/*.md`](../../.agents/rules/) | Políticas de código de responsabilidade única | Restrições granulares (*"Como escrever código/configs"*), ex: `portable-paths.md`, `language.md`. |
-| **Decisões Arquiteturais** | [`docs/decisions/`](../decisions/README.md) | Registro de Decisões MADR (ADRs) | Documentação de **POR QUE** uma escolha técnica foi feita, trade-offs e opções rejeitadas. |
-| **Políticas de Segurança** | [`SECURITY.md`](../../SECURITY.md) | Modelo de ameaças, limites de confiança e segurança | Documentação de **COMO** credenciais, dados de usuário, rotas e permissões são isolados. |
+| **Agent Directives** | [`AGENTS.md`](../../AGENTS.md) | Entry point for AI coding assistants | Overview of repository rules, sitemap, worktree references, and command triggers. |
+| **Operational Rules** | [`.agents/rules/*.md`](../../.agents/rules/) | Single-responsibility, strict coding policies | Granular constraints (*"How to write code/configs"*), e.g. `portable-paths.md`, `language.md`. |
+| **Architectural Decisions** | [`docs/decisions/`](../decisions/README.md) | MADR Decision Log (ADRs) | Documenting **WHY** a technical choice was made, trade-offs, and rejected options. |
+| **Security Policies** | [`SECURITY.md`](../../SECURITY.md) | Threat model, trust boundaries, and security rules | Documenting **HOW** credentials, user data, server routes, and cloud permissions are isolated. |

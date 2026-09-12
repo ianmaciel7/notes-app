@@ -198,10 +198,11 @@ function findMarkdownFiles(dirPath, ignoreDir = null) {
   const entries = fs.readdirSync(dirPath, { withFileTypes: true });
   for (const entry of entries) {
     const fullPath = path.join(dirPath, entry.name);
-    if (ignoreDir && path.resolve(fullPath) === path.resolve(ignoreDir)) {
+    if (ignoreDir && path.resolve(fullPath).toLowerCase() === path.resolve(ignoreDir).toLowerCase()) {
       continue;
     }
     if (entry.isDirectory()) {
+      if (entry.name === 'translations') continue;
       results.push(...findMarkdownFiles(fullPath, ignoreDir));
     } else if (entry.isFile() && entry.name.endsWith('.md')) {
       results.push(fullPath);
