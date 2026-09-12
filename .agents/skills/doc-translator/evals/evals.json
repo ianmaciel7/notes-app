@@ -1,0 +1,33 @@
+{
+  "skill_name": "doc-translator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Translate docs/architecture/README.md to English while preserving markdown structure and links.",
+      "expected_output": "A fully translated English markdown file with frontmatter, Mermaid diagrams, code fences, and relative links preserved.",
+      "files": [
+        "docs/architecture/README.md"
+      ],
+      "assertions": [
+        "Code fences (```) and inline code (`...`) remain untranslated",
+        "Relative markdown links and file paths are preserved verbatim",
+        "Mermaid flowchart node IDs and control flow remain intact",
+        "Prose and section headings are translated into English"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Batch translate all markdown files in docs/ to Portuguese and save them to docs/translations/pt.",
+      "expected_output": "Translated Portuguese markdown files saved in docs/translations/pt/ maintaining original directory hierarchy.",
+      "files": [
+        "docs/architecture/README.md",
+        "docs/guides/development.md"
+      ],
+      "assertions": [
+        "Script runs non-interactively and completes with exit code 0",
+        "Output directory docs/translations/pt contains corresponding .md files",
+        "Frontmatter keys (name, status, date) remain untranslated"
+      ]
+    }
+  ]
+}

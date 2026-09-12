@@ -1,16 +1,16 @@
 # Graph Report - notes-app  (2026-09-11)
 
 ## Corpus Check
-- 357 files · ~524,240 words
+- 359 files · ~526,207 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4528 nodes · 7815 edges · 335 communities (229 shown, 78 thin omitted)
+- 4547 nodes · 7832 edges · 339 communities (233 shown, 77 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 132 edges (avg confidence: 0.86)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `964e1074`
+- Built from commit: `e5f79d4f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,12 +19,12 @@
 - engine.py
 - sanitize_metadata
 - cli.py
-- normalize_id
+- _js_extra_walk
 - html.py
-- extract.py
+- Path
 - cache.py
 - reflect.py
-- serve.py
+- Graph
 - export.py
 - CsharpNameResolver
 - watch.py
@@ -39,13 +39,13 @@
 - write_callflow_html
 - /graphify
 - _call_llm
-- detect.py
+- Path
 - Path
 - devDependencies
 - analyze.py
 - prs.py
 - What You Must Do When Invoked
-- _match_anchored_ignore_pattern
+- detect.py
 - What You Must Do When Invoked
 - compilerOptions
 - scip_ingest.py
@@ -79,27 +79,27 @@
 - includes
 - transcribe.py
 - save_manifest
-- decisions/README.md
+- docs/decisions/README.md
 - affected.py
 - questionnaire.tsx
-- _get_backend_api_key
-- MinHash
+- Path
+- extract
 - link_cross_repo_member_calls
 - Architecture Overview (Matklad Pattern)
-- objc.py
+- pascal.py
 - _normalize_ts_import_types
-- _read_text
+- extract.py
 - semantic_cleanup.py
 - google_workspace.py
 - _ImageRef
 - dedup.py
-- paths.py
 - edge_data
-- _build_server
-- serve
+- wiki.py
+- Design System: Notes App
+- serve.py
 - security.py
 - Design System: Notes App
-- _ip_is_blocked
+- validate_url
 - components.json
 - _agents_install
 - Security Policy
@@ -109,7 +109,7 @@
 - attach_graph_impact
 - resolver_registry.py
 - options
-- _GraphContextCache
+- _load_graph
 - graphify reference: extra exports and benchmark
 - graphify reference: extra exports and benchmark
 - graphify reference: extra exports and benchmark
@@ -127,11 +127,11 @@
 - first_present
 - introspect_cargo
 - csharp_dispatch.py
-- Design System: Notes App
+- Visão Geral da Arquitetura (Padrão Matklad)
 - extract_sql
 - Migrating a language extractor out of extract.py
 - _looks_like_context_exceeded
-- _resolve_js_import_target
+- _find_node_tiers
 - normalize_sections
 - humanize_label
 - graphify reference: query, path, explain
@@ -201,7 +201,7 @@
 - graphify.md
 - README.md
 - Architectural Decision Log (MADR)
-- _StoredSourcePaths
+- translate-batch.mjs
 - ToolError
 - graphify reference: GitHub clone and cross-repo merge
 - graphify reference: transcribe video and audio
@@ -263,12 +263,12 @@
 - decisions.stories.tsx
 - guides.stories.tsx
 - dependencies
-- _is_noise_dir
+- _is_ignored
 - reference.stories.tsx
 - rules
 - MCP Server Requirements & Usage Rules
 - ADR-0004: Strict Path & Configuration Portability Rule
-- Guia de Desenvolvimento Local & Workflow
+- Documentation Translator
 - __main__.py
 - worktrees-read-only.md
 - Architecture Overview (Matklad Pattern)
@@ -276,7 +276,7 @@
 - Visual Components & Layout Details
 - verilog.py
 - carousel.tsx
-- Visão Geral da Arquitetura (Padrão Matklad)
+- Componentes Visuais e Detalhes do Layout
 - introspect_postgres
 - chart.tsx
 - toast.tsx
@@ -290,16 +290,16 @@
 - bubble.tsx
 - toggle-group.tsx
 - vcs
-- _query_terms
+- Agent Skills Authoring & Architecture Rules
 - alert.tsx
 - ADR-0001: Next.js 16 + React 19 App Router Baseline
 - marker.tsx
 - native-select.tsx
 - ADR-0002: Biome as Unified Linter & Formatter
-- ADR-0001: Baseline do App Router com Next.js 16 + React 19
+- _is_sensitive
 - ADR-0003: Automated Knowledge Graph Updates via Husky
 - package.json
-- _is_ignored
+- ADR-0001: Baseline do App Router com Next.js 16 + React 19
 - next
 - cmdk
 - next-intl
@@ -310,18 +310,21 @@
 - shadcn
 - tw-animate-css
 - raw.d.ts
-- _StageTimer
+- ADR-0002: Biome como Linter & Formatador Unificado
 - Component Development & Ladle Guide
-- Componentes Visuais e Detalhes do Layout
+- ADR-0003: Atualizações Automatizadas do Grafo de Conhecimento via Husky
 - architecture.stories.tsx
 - workspace.stories.tsx
-- _vault_lookup
-- Component Development & Ladle Guide
-- Guia de Desenvolvimento de Componentes & Ladle
-- Codebase Conventions & Guidelines
-- Convenções & Diretrizes da Base de Código
+- markdown.py
+- ADR-0004: Regra Estrita de Portabilidade de Caminhos & Configurações
+- ADR-0003: Automated Knowledge Graph Updates via Husky
+- ADR-0004: Strict Path & Configuration Portability Rule
+- Guia de Desenvolvimento Local & Workflow
 - DocViewer
-- _cut_lines_to_budget
+- _kotlin_package_index
+- _UF
+- Guia de Desenvolvimento de Componentes & Ladle
+- Convenções & Diretrizes da Base de Código
 
 ## God Nodes (most connected - your core abstractions)
 1. `_read_text()` - 127 edges
@@ -336,81 +339,81 @@
 10. `_collect_js_symbol_resolution_facts()` - 31 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `deduplicate_entities()` --uses--> `MinHash`  [INFERRED]
-  .agents/skills/graphify/dedup.py → .agents/skills/graphify/_minhash.py
 - `scope_semantic_result()` --calls--> `_hashable()`  [INFERRED]
   .agents/skills/graphify/cache.py → .agents/skills/graphify/build.py
 - `dispatch_command()` --calls--> `to_html()`  [INFERRED]
   .agents/skills/graphify/cli.py → .agents/skills/graphify/exporters/html.py
 - `dispatch_command()` --calls--> `_gh()`  [INFERRED]
   .agents/skills/graphify/cli.py → .agents/skills/graphify/prs.py
+- `dispatch_command()` --calls--> `_load_graph()`  [INFERRED]
+  .agents/skills/graphify/cli.py → .agents/skills/graphify/serve.py
 - `convert_google_workspace_file()` --calls--> `xlsx_to_markdown()`  [INFERRED]
   .agents/skills/graphify/google_workspace.py → .agents/skills/graphify/detect.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (335 total, 78 thin omitted)
+## Communities (339 total, 77 thin omitted)
 
 ### Community 0 - "_make_id"
 Cohesion: 0.03
-Nodes (127): extract_lazarus_package(), _import_java(), _import_php(), _import_scala(), Extract package metadata from Lazarus .lpk package files (XML format). .lpk is…, extract_apex(), Path, Apex extractor. Moved verbatim from graphify/extract.py. (+119 more)
+Nodes (113): _import_java(), _import_php(), _import_scala(), extract_apex(), Path, Apex extractor. Moved verbatim from graphify/extract.py., Extract classes, interfaces, enums, methods, and Salesforce constructs from…, _file_stem() (+105 more)
 
 ### Community 1 - "engine.py"
 Cohesion: 0.02
-Nodes (152): _c_collect_type_refs(), _cpp_collect_type_refs(), _csharp_attribute_names(), _csharp_bare_call_name(), _csharp_classify_base(), _csharp_collect_type_refs(), _csharp_extra_walk(), _csharp_method_receiver_types() (+144 more)
+Nodes (110): _import_c(), _cpp_declarator_name(), _cpp_local_var_types(), _csharp_bare_call_name(), _csharp_classify_base(), _csharp_extra_walk(), _csharp_method_receiver_types(), _csharp_namespace_id() (+102 more)
 
 ### Community 2 - "sanitize_metadata"
-Cohesion: 0.10
-Nodes (24): _import_csharp(), _import_kotlin(), _bash_assignment_base(), _bash_source_suffix(), extract_bash(), Path, Bash extractor. Moved verbatim from graphify/extract.py., Extract functions, source imports, and cross-function calls from a .sh file. (+16 more)
+Cohesion: 0.16
+Nodes (15): _import_csharp(), _import_kotlin(), _bash_assignment_base(), _bash_source_suffix(), extract_bash(), Path, Bash extractor. Moved verbatim from graphify/extract.py., Extract functions, source imports, and cross-function calls from a .sh file. (+7 more)
 
 ### Community 3 - "cli.py"
 Cohesion: 0.05
-Nodes (77): dedupe_edges(), dedupe_nodes(), distinct_repo_tags(), prefix_graph_for_global(), prune_repo_from_graph(), Return a copy of G with all node IDs prefixed with repo_tag::. Labels are…, Return a unique, human-meaningful repo tag per input graph for merge-graphs.…, Remove all nodes tagged with repo_tag from G in-place. Returns count removed. (+69 more)
+Nodes (75): distinct_repo_tags(), prune_repo_from_graph(), Return a unique, human-meaningful repo tag per input graph for merge-graphs.…, Remove all nodes tagged with repo_tag from G in-place. Returns count removed., _bash_invokes_search(), _clone_repo(), _default_graph_path(), dispatch_command() (+67 more)
 
-### Community 4 - "normalize_id"
-Cohesion: 0.07
-Nodes (33): Get the name from a node using config.name_field, falling back to child types., _resolve_name(), _find_body(), _js_collect_pattern_idents(), _js_extra_walk(), _js_local_bound_names(), _js_member_assignment_target(), _js_scan_member_assignments() (+25 more)
+### Community 4 - "_js_extra_walk"
+Cohesion: 0.06
+Nodes (33): _import_js(), _dynamic_import_js(), _find_body(), _find_require_call(), _js_collect_pattern_idents(), _js_extra_walk(), _js_import_binds_external(), _js_local_bound_names() (+25 more)
 
 ### Community 5 - "html.py"
-Cohesion: 0.12
-Nodes (21): Shared constants/helpers for the graphify exporters package. Symbols used by…, _html_document_title(), _html_script(), _html_styles(), _hyperedge_script(), Graph, html — moved verbatim from graphify/export.py., Return the effective viz node limit, honoring GRAPHIFY_VIZ_NODE_LIMIT env var.… (+13 more)
+Cohesion: 0.16
+Nodes (15): Shared constants/helpers for the graphify exporters package. Symbols used by…, _html_document_title(), _html_script(), _html_styles(), _hyperedge_script(), Graph, html — moved verbatim from graphify/export.py., Return the effective viz node limit, honoring GRAPHIFY_VIZ_NODE_LIMIT env var.… (+7 more)
 
-### Community 6 - "extract.py"
-Cohesion: 0.02
-Nodes (152): _augment_cpp_string_tests(), _bind_member_field_tables(), _blank_keeping_newlines(), _canonicalize_csharp_namespace_nodes(), _check_tree_sitter_version(), extract(), extract_c(), extract_cpp() (+144 more)
+### Community 6 - "Path"
+Cohesion: 0.03
+Nodes (86): _augment_cpp_string_tests(), _blank_keeping_newlines(), extract_c(), extract_cpp(), extract_csharp(), extract_groovy(), extract_java(), extract_js() (+78 more)
 
 ### Community 7 - "cache.py"
 Cohesion: 0.06
 Nodes (70): _absolutize_ids_in(), _absolutize_source_files_in(), _body_content(), cache_dir(), cached_files(), cached_word_count(), check_semantic_cache(), _cleanup_stale_ast_entries() (+62 more)
 
 ### Community 8 - "reflect.py"
-Cohesion: 0.06
-Nodes (59): _log_path(), log_query(), _log_responses(), nodes_from_result(), Any, Path, Query logging for graphify — append-only JSONL, fail-silent., Append one JSONL record to the query log. Never raises. (+51 more)
+Cohesion: 0.05
+Nodes (71): _log_path(), log_query(), _log_responses(), nodes_from_result(), Any, Path, Query logging for graphify — append-only JSONL, fail-silent., Append one JSONL record to the query log. Never raises. (+63 more)
 
-### Community 9 - "serve.py"
+### Community 9 - "Graph"
 Cohesion: 0.09
-Nodes (50): _bfs(), _complete_induced_edges(), _compute_idf(), _dfs(), _display_graph_path(), _filter_graph_by_context(), _find_node(), find_node_ambiguity() (+42 more)
+Nodes (35): _bfs(), _complete_induced_edges(), _compute_idf(), _dfs(), _display_graph_path(), _filter_graph_by_context(), _infer_context_filters(), _node_rationale_text() (+27 more)
 
 ### Community 10 - "export.py"
-Cohesion: 0.08
-Nodes (39): _adopt_pre_manifest_notes(), attach_hyperedges(), _cap_filename(), _cypher_escape(), _cypher_label(), _dedup_node_filenames(), _git_head(), _is_graphify_note() (+31 more)
+Cohesion: 0.05
+Nodes (68): _node_community_map(), Invert communities dict: node_id -> community_id., _prune_graph_json_sources(), Drop nodes/edges/hyperedges owned by ``stale_sources`` from graph.json in…, _adopt_pre_manifest_notes(), attach_hyperedges(), backup_if_protected(), _cap_filename() (+60 more)
 
 ### Community 11 - "CsharpNameResolver"
-Cohesion: 0.15
-Nodes (12): _build_csharp_type_def_index(), CsharpNameResolver, _is_dotnet_source_file(), _metadata(), Path, C# cross-file resolution. The config-driven C# *extractor* (``extract_csharp``…, Namespace/using/alias-aware C# simple-name resolution. Factored out of…, Return deterministic ``(namespace, name) -> node_id`` C# type definitions. (+4 more)
+Cohesion: 0.06
+Nodes (39): _bind_member_field_tables(), _park_unresolved_member_call(), Keep a member call whose receiver type is declared nowhere in this corpus. A…, Resolve cross-file Swift member calls (``recv.method()``) to the real…, Resolve cross-file Python qualified class-method calls (``ClassName.method()``)…, Resolve cross-file TS/JS member calls via constructor-injection type tables…, Resolve cross-file C++ member calls (``f.bar()``, ``f->bar()``, ``Foo::bar()``,…, Resolve C# member calls (``recv.Method()``) to the receiver's declared type… (+31 more)
 
 ### Community 12 - "watch.py"
-Cohesion: 0.07
-Nodes (58): _apply_resource_limits(), _batch_needs_llm_flag(), _batch_triggers_rebuild(), _canonical_graph_for_compare(), _canonical_topology_for_compare(), _changed_path_candidates(), _check_shrink(), check_update() (+50 more)
+Cohesion: 0.04
+Nodes (82): dedupe_edges(), dedupe_nodes(), disambiguate_file_labels_in_nodes(), Relabel colliding-basename file nodes on a raw node-dict list, in place…, Collapse nodes sharing an ``id``, last-writer-wins on attributes. Mirrors what…, Collapse exact parallel edges by ``(source, target, relation)``, keeping the…, community_member_sigs(), Per-community membership fingerprints: ``{cid: sha256(sorted member ids)}``.… (+74 more)
 
 ### Community 13 - "sidebar.tsx"
 Cohesion: 0.06
 Nodes (16): Sheet(), SheetContent(), SheetDescription(), SheetHeader(), SheetTitle(), Sidebar(), SidebarContext, SidebarContextProps (+8 more)
 
 ### Community 14 - "symbol_resolution.py"
-Cohesion: 0.09
-Nodes (40): disambiguate_ambiguous_candidates(), _is_test_path(), _path_proximity_winner(), Classify a source path as a test path (case-insensitive, segment-aware). Shared…, Pick the candidate whose source file is closest to the call site.…, Resolve an ambiguous bare-name call to one candidate, or ``None``. Shared god-…, _bash_make_id(), build_label_index() (+32 more)
+Cohesion: 0.11
+Nodes (34): _bash_make_id(), build_label_index(), build_python_symbol_index(), existing_edge_pairs(), _file_node_id_for_path(), find_unique_python_symbol(), ImportedSymbol, iter_raw_calls() (+26 more)
 
 ### Community 15 - "hooks.py"
 Cohesion: 0.07
@@ -418,7 +421,7 @@ Nodes (53): _detached_launch(), _git_root(), _has_merge_attr(), _hooks_dir(), in
 
 ### Community 16 - "extract_files_direct"
 Cohesion: 0.10
-Nodes (38): bisect_slice(), FileSlice, A contiguous ``[start, end)`` character range of a splittable text file.…, The on-disk path a unit belongs to (the parent file for a slice)., Read just this slice's characters from its parent file. Goes through…, Split a slice into two halves at a newline near its midpoint, or None. Used by…, read_slice_text(), unit_path() (+30 more)
+Nodes (36): FileSlice, A contiguous ``[start, end)`` character range of a splittable text file.…, The on-disk path a unit belongs to (the parent file for a slice)., Read just this slice's characters from its parent file. Goes through…, read_slice_text(), unit_path(), _bind_node_evidence(), _build_image_refs() (+28 more)
 
 ### Community 17 - "biome.json"
 Cohesion: 0.18
@@ -434,7 +437,7 @@ Nodes (32): For always-on context in Devin sessions, For --cluster-only, For git
 
 ### Community 20 - "llm.py"
 Cohesion: 0.05
-Nodes (53): _backend_supports_vision(), _balanced_object(), _claude_cli_available(), _community_label_lines(), detect_backend(), _envelope_after_preamble(), generate_community_labels(), _get_tokenizer() (+45 more)
+Nodes (53): backend_detection_env_vars(), _backend_env_keys(), _backend_supports_vision(), _balanced_object(), _claude_cli_available(), _community_label_lines(), detect_backend(), generate_community_labels() (+45 more)
 
 ### Community 21 - "write_callflow_html"
 Cohesion: 0.09
@@ -446,11 +449,11 @@ Nodes (30): For --cluster-only, For git commit hook, For /graphify add, For /gra
 
 ### Community 23 - "_call_llm"
 Cohesion: 0.07
-Nodes (46): _anthropic_response_text(), _azure_client(), _backend_pkg_hint(), _bedrock_inference_config(), _bedrock_response_text(), _call_azure(), _call_bedrock(), _call_claude() (+38 more)
+Nodes (44): _anthropic_response_text(), _azure_client(), _backend_pkg_hint(), _bedrock_inference_config(), _bedrock_response_text(), _call_azure(), _call_bedrock(), _call_claude() (+36 more)
 
-### Community 24 - "detect.py"
-Cohesion: 0.07
-Nodes (53): _auto_follow_symlinks(), classify_file(), convert_office_file(), count_words(), docx_to_markdown(), _env_command_args(), extract_pdf_text(), _file_within_size_cap() (+45 more)
+### Community 24 - "Path"
+Cohesion: 0.13
+Nodes (24): _auto_follow_symlinks(), convert_office_file(), count_words(), docx_to_markdown(), extract_pdf_text(), _file_within_size_cap(), _md5_file(), _os_path() (+16 more)
 
 ### Community 25 - "Path"
 Cohesion: 0.09
@@ -461,20 +464,20 @@ Cohesion: 0.11
 Nodes (19): @biomejs/biome, @ladle/react, devDependencies, @biomejs/biome, @ladle/react, tailwindcss, @tailwindcss/postcss, @types/node (+11 more)
 
 ### Community 27 - "analyze.py"
-Cohesion: 0.08
-Nodes (45): _cross_community_surprises(), _cross_file_surprises(), _cross_language(), _file_category(), find_import_cycles(), god_nodes(), graph_diff(), _is_concept_node() (+37 more)
+Cohesion: 0.12
+Nodes (31): _cross_community_surprises(), _cross_file_surprises(), _cross_language(), _file_category(), find_import_cycles(), god_nodes(), graph_diff(), _is_concept_node() (+23 more)
 
 ### Community 28 - "prs.py"
-Cohesion: 0.26
-Nodes (22): bold(), _c(), _ci_icon(), _classify(), cmd_prs(), cyan(), dim(), green() (+14 more)
+Cohesion: 0.19
+Nodes (28): bold(), _c(), _ci_icon(), _classify(), cmd_prs(), cyan(), _detect_default_branch(), dim() (+20 more)
 
 ### Community 29 - "What You Must Do When Invoked"
 Cohesion: 0.07
 Nodes (26): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+18 more)
 
-### Community 30 - "_match_anchored_ignore_pattern"
-Cohesion: 0.50
-Nodes (4): _match_anchored_ignore_pattern(), _match_globstar_parts(), Recursive ``**``-aware segment match, memoized via an explicit dict. Lifted out…, Match an anchored gitignore pattern without letting ``*`` cross ``/``.
+### Community 30 - "detect.py"
+Cohesion: 0.11
+Nodes (25): classify_file(), _env_command_args(), FileType, _is_graphable_source(), _looks_like_paper(), _match_anchored_ignore_pattern(), _match_globstar_parts(), _parse_ignore_pattern() (+17 more)
 
 ### Community 31 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -537,8 +540,8 @@ Cohesion: 0.08
 Nodes (24): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+16 more)
 
 ### Community 46 - "file_slice.py"
-Cohesion: 0.21
-Nodes (14): _best_cut(), expand_oversized_files(), is_splittable_text(), _pdf_text(), Path, Intra-file slicing for oversized text documents (#1369). The extraction packer…, True for document types that may be sliced. Covers plain text read straight off…, Return a cut index in ``(start, end]`` at the strongest nearby boundary.… (+6 more)
+Cohesion: 0.18
+Nodes (16): _best_cut(), bisect_slice(), expand_oversized_files(), is_splittable_text(), _pdf_text(), Path, Intra-file slicing for oversized text documents (#1369). The extraction packer…, True for document types that may be sliced. Covers plain text read straight off… (+8 more)
 
 ### Community 47 - "generate_section_flowchart"
 Cohesion: 0.11
@@ -561,8 +564,8 @@ Cohesion: 0.19
 Nodes (22): _canonical_edge(), _count_extra(), diagnose_extraction(), diagnose_file(), _edge_list(), _exact_signature(), format_diagnostic_json(), format_diagnostic_report() (+14 more)
 
 ### Community 52 - "ingest.py"
-Cohesion: 0.13
-Nodes (28): _detect_url_type(), _download_binary(), _fetch_arxiv(), _fetch_html(), _fetch_tweet(), _fetch_webpage(), _html_to_markdown(), ingest() (+20 more)
+Cohesion: 0.14
+Nodes (26): _detect_url_type(), _download_binary(), _fetch_arxiv(), _fetch_html(), _fetch_tweet(), _fetch_webpage(), _html_to_markdown(), ingest() (+18 more)
 
 ### Community 53 - "menubar.tsx"
 Cohesion: 0.09
@@ -585,8 +588,8 @@ Cohesion: 0.13
 Nodes (20): _describe_node(), format_node_refs(), generate_call_table_rows(), generate_section_cards(), generate_section_intro(), is_zh(), pick_text(), Render node references as readable labels instead of internal IDs. (+12 more)
 
 ### Community 58 - "detect"
-Cohesion: 0.12
-Nodes (24): detect(), _find_vcs_root(), _git_info_exclude(), _git_tracked_path_keys(), ignored_predicate(), _is_regular_file(), _load_dir_own_ignore(), _load_graphifyignore() (+16 more)
+Cohesion: 0.13
+Nodes (21): detect(), _find_vcs_root(), _git_info_exclude(), _git_tracked_path_keys(), ignored_predicate(), _is_regular_file(), _load_dir_own_ignore(), _load_graphifyignore() (+13 more)
 
 ### Community 59 - "mcp_ingest.py"
 Cohesion: 0.17
@@ -616,13 +619,13 @@ Nodes (16): affected_nodes(), AffectedHit, _as_repo_relative(), _bare_name(), fo
 Cohesion: 0.10
 Nodes (7): Button(), buttonVariants, Calendar(), QuestionnaireNext(), QuestionnairePrevious(), QuestionnaireSkip(), QuestionnaireSubmit()
 
-### Community 67 - "_get_backend_api_key"
-Cohesion: 0.17
-Nodes (12): backend_detection_env_vars(), _backend_env_keys(), _default_model_for_backend(), _format_backend_env_keys(), _get_backend_api_key(), Return accepted API-key environment variables for a backend., Return the first configured API key for backend, or an empty string., Return user-facing accepted API-key variable names. (+4 more)
+### Community 67 - "Path"
+Cohesion: 0.05
+Nodes (66): _emit_rescued_import(), extract_astro(), extract_svelte(), extract_vue(), Recover ``import('…')`` edges the AST pass does not emit for plain JS/TS. tree-…, Resolve a regex-rescued import specifier the way ``_import_js`` does. Returns…, Shared edge/stub emit for the Svelte/Astro/Vue regex-rescue import passes.…, Extract imports from .svelte files: script-block via JS AST + template regex… (+58 more)
 
-### Community 68 - "MinHash"
-Cohesion: 0.15
-Nodes (11): _lsh_integrate(), _mh_coeffs(), MinHash, MinHashLSH, _optimal_lsh_params(), MinHash + band-LSH — datasketch-compatible drop-in (no scipy). datasketch.lsh…, MinHash sketch — same API as datasketch.MinHash for the subset used here., Numerical integration — replaces scipy.integrate.quad for LSH param search. (+3 more)
+### Community 68 - "extract"
+Cohesion: 0.07
+Nodes (32): _canonicalize_csharp_namespace_nodes(), _check_tree_sitter_version(), extract(), _extract_parallel(), _extract_single_file(), _file_node_id(), _is_top_level_function_definition(), _lang_family() (+24 more)
 
 ### Community 69 - "link_cross_repo_member_calls"
 Cohesion: 0.20
@@ -632,17 +635,17 @@ Nodes (15): _drop_previous_output(), _index_declarations(), _index_members(), _k
 Cohesion: 0.15
 Nodes (13): 1. Bird's Eye View, 2. Code Map & Official Folder Structure, 3. Architectural Invariants, 4. Key Data Flows, 5. Cross-Cutting Concerns, 6. Reference Worktrees & Codebase Topology, 7. Project Governance & Decision Framework Matrix, A. Data Fetching (RSC Direct Access) (+5 more)
 
-### Community 71 - "objc.py"
-Cohesion: 0.14
-Nodes (17): _import_c(), _cpp_declarator_name(), _cpp_local_var_types(), Return the bare variable name from a C++ declaration declarator, unwrapping…, Collect ``var -> ClassName`` from local variable declarations in a C++ function…, extract_objc(), _objc_category_base_stem(), _objc_is_category() (+9 more)
+### Community 71 - "pascal.py"
+Cohesion: 0.09
+Nodes (30): extract_csproj(), extract_lazarus_package(), _project_xml_is_safe(), Reject XML that declares DTDs or entities. Stdlib ``xml.etree.ElementTree``…, Extract package metadata from Lazarus .lpk package files (XML format). .lpk is…, Extract packages, project refs, and target framework from a…, extract_pascal(), _extract_pascal_regex() (+22 more)
 
 ### Community 72 - "_normalize_ts_import_types"
-Cohesion: 0.13
-Nodes (20): extract_js(), _extract_js_rationale(), _normalize_ts_import_types(), Any, Return whether an import-call match starts in executable source. Regex matching…, Collect byte ranges tree-sitter already parsed as type arguments., Return the ranges in ``ranges`` that contain ``offset``. Scanning the full…, Index :func:`_ts_type_argument_ranges` for :func:`_ts_ranges_containing`.… (+12 more)
+Cohesion: 0.17
+Nodes (16): _normalize_ts_import_types(), Any, Return whether an import-call match starts in executable source. Regex matching…, Collect byte ranges tree-sitter already parsed as type arguments., Return the ranges in ``ranges`` that contain ``offset``. Scanning the full…, Index :func:`_ts_type_argument_ranges` for :func:`_ts_ranges_containing`.…, Return parser error nodes without depending on a grammar's error name., Tell whether a masked generic is backed by an actual parse failure. A valid… (+8 more)
 
-### Community 73 - "_read_text"
-Cohesion: 0.03
-Nodes (136): _augment_js_reexport_edges(), _emit_rescued_import(), extract_astro(), extract_svelte(), extract_vue(), _get_c_func_name(), _import_lua(), _import_python() (+128 more)
+### Community 73 - "extract.py"
+Cohesion: 0.04
+Nodes (118): _augment_js_reexport_edges(), _get_c_func_name(), _import_lua(), _import_python(), _import_swift(), Deterministic structural extraction from source code using tree-sitter. Outputs…, Encode trailing Ruby method suffixes (!, ?, =) into safe node ID components…, Extract require('module') from Lua variable_declaration nodes. (+110 more)
 
 ### Community 74 - "semantic_cleanup.py"
 Cohesion: 0.19
@@ -653,40 +656,40 @@ Cohesion: 0.24
 Nodes (14): convert_google_workspace_file(), _extract_file_id_from_url(), _extract_resource_key(), Any, Path, Optional Google Workspace shortcut export support. Google Drive for desktop…, Export a Google Workspace shortcut to a Markdown sidecar. Returns the converted…, Extract a Drive file ID from common Google Docs/Drive URL shapes. (+6 more)
 
 ### Community 76 - "_ImageRef"
-Cohesion: 0.17
-Nodes (13): _anthropic_content(), _bedrock_content(), _image_notes(), _ImageRef, _openai_content(), A single image destined for a vision request. `raw` is None when the image is…, Return refs with pixel data dropped (for non-vision backends)., Text block listing the images so the model emits one node per image. Always… (+5 more)
+Cohesion: 0.09
+Nodes (25): _anthropic_content(), _bedrock_content(), _call_claude_cli(), _claude_cli_envelope(), _claude_cli_error(), _claude_cli_supports_json_schema(), _envelope_after_preamble(), _image_notes() (+17 more)
 
 ### Community 77 - "dedup.py"
-Cohesion: 0.06
-Nodes (52): _collision_rank(), _content_richness(), _content_token_swap(), _crossfile_fileanchored_blocked(), deduplicate_entities(), _defines_id(), _entropy(), _id_prefixes() (+44 more)
+Cohesion: 0.05
+Nodes (62): _collision_rank(), _content_richness(), _content_token_swap(), _crossfile_fileanchored_blocked(), deduplicate_entities(), _defines_id(), _entropy(), _id_prefixes() (+54 more)
 
-### Community 78 - "paths.py"
-Cohesion: 0.07
-Nodes (37): _estimate_tokens(), _hr(), print_benchmark(), Graph, _query_subgraph_tokens(), Token-reduction benchmark - measures how much context graphify saves vs naive…, Print a human-readable benchmark report., Return unicode_char if stdout can encode it, else ascii_fallback. Windows… (+29 more)
+### Community 78 - "edge_data"
+Cohesion: 0.16
+Nodes (17): _estimate_tokens(), _hr(), print_benchmark(), Graph, _query_subgraph_tokens(), Token-reduction benchmark - measures how much context graphify saves vs naive…, Print a human-readable benchmark report., Return unicode_char if stdout can encode it, else ascii_fallback. Windows… (+9 more)
 
-### Community 79 - "edge_data"
-Cohesion: 0.20
-Nodes (17): edge_data(), Return one edge attribute dict for (u, v), tolerating MultiGraph. For…, Largest filename stem an exporter may write directly into ``output_dir``.…, stem_filename_budget(), _community_article(), _cross_community_links(), _god_node_article(), _index_md() (+9 more)
+### Community 79 - "wiki.py"
+Cohesion: 0.26
+Nodes (13): _community_article(), _cross_community_links(), _god_node_article(), _index_md(), _md_link(), Graph, Path, Generate a Wikipedia-style wiki from the graph. Writes: - index.md — agent… (+5 more)
 
-### Community 80 - "_build_server"
-Cohesion: 0.21
-Nodes (13): _detect_default_branch(), fetch_prs(), fetch_worktrees(), format_prs_text(), _gh(), _parse_ci(), Auto-detect the repo's default branch via gh, then git, then fall back to…, Plain-text PR summary for MCP output (no ANSI). (+5 more)
+### Community 80 - "Design System: Notes App"
+Cohesion: 0.11
+Nodes (17): 1. Visual Theme & Atmosphere, 2. Color Palette & Roles, 3. Typography Rules, 4. Component Stylings, 5. Layout Principles, 6. Design System Notes for Open Design Generation, Buttons, Cards & Main Container (+9 more)
 
-### Community 81 - "serve"
-Cohesion: 0.15
-Nodes (11): _build_http_app(), _filter_blank_stdin(), _main(), _MCPASGIApp, Filter blank lines from stdin before MCP reads it. Some MCP clients (Claude…, Start the MCP server over stdio (the default, per-developer transport)., Raw-ASGI wrapper around the Streamable HTTP session manager. Passed to a…, Build the Starlette ASGI app for the Streamable HTTP transport. Split out from… (+3 more)
+### Community 81 - "serve.py"
+Cohesion: 0.08
+Nodes (35): default_graph_json(), Default ``graph.json`` path under the configured output dir. The package-wide…, compute_pr_impact(), fetch_pr_files(), fetch_worktrees(), format_prs_text(), _parse_ci(), Return (communities_touched, nodes_affected) for a set of changed files. Builds… (+27 more)
 
 ### Community 82 - "security.py"
-Cohesion: 0.10
-Nodes (17): _build_opener(), _max_graph_file_bytes(), _NoFileRedirectHandler, Path, urllib handler that routes http:// through _SSRFGuardedHTTPConnection., urllib handler that routes https:// through _SSRFGuardedHTTPSConnection., Redirect handler that re-validates every redirect target. Prevents open-…, Resolve *path* and verify it stays inside *base*. *base* defaults to the… (+9 more)
+Cohesion: 0.09
+Nodes (21): _build_opener(), _max_graph_file_bytes(), Path, Resolve *host* once and return (family, validated_ip) for the first address…, HTTPConnection that resolves + validates DNS once, then connects to the exact…, HTTPSConnection variant of _SSRFGuardedHTTPConnection. Connects to the…, urllib handler that routes http:// through _SSRFGuardedHTTPConnection., urllib handler that routes https:// through _SSRFGuardedHTTPSConnection. (+13 more)
 
 ### Community 83 - "Design System: Notes App"
 Cohesion: 0.06
 Nodes (34): 1. Visual Theme & Atmosphere, 2. Color Palette & Roles, 3. Typography Rules, 4. Component Stylings, 5. Layout Principles, 6. Design System Notes for Open Design Generation, Buttons, Cards & Main Container (+26 more)
 
-### Community 84 - "_ip_is_blocked"
-Cohesion: 0.17
-Nodes (10): _ip_is_blocked(), Resolve *host* once and return (family, validated_ip) for the first address…, HTTPConnection that resolves + validates DNS once, then connects to the exact…, HTTPSConnection variant of _SSRFGuardedHTTPConnection. Connects to the…, Return True if *ip* falls in a private/reserved/internal range. Shared by…, _resolve_and_validate(), _SSRFGuardedHTTPConnection, _SSRFGuardedHTTPSConnection (+2 more)
+### Community 84 - "validate_url"
+Cohesion: 0.22
+Nodes (8): _ip_is_blocked(), _NoFileRedirectHandler, Raise ValueError if *url* is not http or https, or targets a private/internal…, Redirect handler that re-validates every redirect target. Prevents open-…, Return True if *ip* falls in a private/reserved/internal range. Shared by…, validate_url(), IPv4Address, IPv6Address
 
 ### Community 85 - "components.json"
 Cohesion: 0.09
@@ -706,15 +709,15 @@ Nodes (17): cluster(), cohesion_score(), label_communities_by_hub(), _native_lei
 
 ### Community 89 - "Design System: Notes App"
 Cohesion: 0.11
-Nodes (17): 1. Visual Theme & Atmosphere, 2. Color Palette & Roles, 3. Typography Rules, 4. Component Stylings, 5. Layout Principles, 6. Design System Notes for Open Design Generation, Buttons, Cards & Main Container (+9 more)
+Nodes (17): 1. Tema Visual & Atmosfera, 2. Paleta de Cores & Papéis, 3. Regras de Tipografia, 4. Estilização de Componentes, 5. Princípios de Layout, 6. Notas de Design System para Geração Open Design, Botões, Cards & Container Principal (+9 more)
 
 ### Community 90 - "complexity"
 Cohesion: 0.18
 Nodes (11): noExcessiveCognitiveComplexity, noExcessiveLinesPerFunction, useMaxParams, level, options, level, max, maxAllowedComplexity (+3 more)
 
 ### Community 91 - "attach_graph_impact"
-Cohesion: 0.20
-Nodes (11): attach_graph_impact(), build_community_labels(), compute_pr_impact(), fetch_pr_files(), _load_graph_json(), _path_match(), Path, True if graph_src and pr_file refer to the same file (path-boundary safe). (+3 more)
+Cohesion: 0.29
+Nodes (8): attach_graph_impact(), build_community_labels(), _load_graph_json(), _path_match(), Path, True if graph_src and pr_file refer to the same file (path-boundary safe)., Return {community_id: [top_labels]} extracted from graph node data., Fetch PR file lists concurrently, compute graph impact, return community labels.
 
 ### Community 92 - "resolver_registry.py"
 Cohesion: 0.24
@@ -724,9 +727,9 @@ Nodes (10): LanguageResolver, Path, Registry for cross-file, language-specific r
 Cohesion: 0.29
 Nodes (8): level, options, options, maxLines, skipBlankLines, skipIifes, style, noExcessiveLinesPerFile
 
-### Community 94 - "_GraphContextCache"
-Cohesion: 0.25
-Nodes (6): _communities_from_graph(), _GraphContextCache, Thread-safe graph contexts: one pinned default plus an LRU of projects., Build one entry for an already-resolved path and known file key.…, Return a fresh context, retaining project contexts by LRU order.…, Reconstruct community dict from community property stored on nodes.
+### Community 94 - "_load_graph"
+Cohesion: 0.22
+Nodes (7): _communities_from_graph(), _GraphContextCache, _load_graph(), Thread-safe graph contexts: one pinned default plus an LRU of projects., Build one entry for an already-resolved path and known file key.…, Return a fresh context, retaining project contexts by LRU order.…, Reconstruct community dict from community property stored on nodes.
 
 ### Community 95 - "graphify reference: extra exports and benchmark"
 Cohesion: 0.22
@@ -796,9 +799,9 @@ Nodes (7): introspect_cargo(), _load_toml(), _member_manifest_paths(), Any, Path
 Cohesion: 0.32
 Nodes (7): _is_csharp(), _method_label(), Member-level interface dispatch for C# (#3003). A C# call through a…, True when the node is a declaration that lives in a C# file. Every end of a…, Return a method node's bare name, for matching. Case is kept: C# is case…, Link each single-implementer interface method to its implementation. Purely…, resolve_csharp_interface_dispatch()
 
-### Community 112 - "Design System: Notes App"
-Cohesion: 0.11
-Nodes (17): 1. Tema Visual & Atmosfera, 2. Paleta de Cores & Papéis, 3. Regras de Tipografia, 4. Estilização de Componentes, 5. Princípios de Layout, 6. Notas de Design System para Geração Open Design, Botões, Cards & Container Principal (+9 more)
+### Community 112 - "Visão Geral da Arquitetura (Padrão Matklad)"
+Cohesion: 0.12
+Nodes (15): 1. Visão Geral (Bird's Eye View), 2. Mapa do Código & Estrutura Oficial de Pastas, 3. Invariantes Arquiteturais, 4. Fluxos de Dados Principais, 5. Questões Transversais (Cross-Cutting Concerns), 6. Worktrees de Referência & Topologia da Base de Código, 7. Governança do Projeto & Matriz de Decisões, A. Busca de Dados (Acesso Direto RSC) (+7 more)
 
 ### Community 113 - "extract_sql"
 Cohesion: 0.21
@@ -812,9 +815,9 @@ Nodes (7): Helper classification, Invariants (non-negotiable), Migrating a langu
 Cohesion: 0.40
 Nodes (5): _looks_like_context_exceeded(), _looks_like_timeout(), Heuristically classify an exception as a context-window overflow. Different…, Classify an exception as a recognized subprocess or SDK timeout., BaseException
 
-### Community 116 - "_resolve_js_import_target"
-Cohesion: 0.18
-Nodes (11): _import_js(), _dynamic_import_js(), _find_require_call(), _js_import_binds_external(), True when a JS/TS import specifier names a module outside the scanned corpus.…, Detect dynamic import() calls in JS/TS and emit imports_from edges. Handles…, Return the call_expression node if `value_node` is a `require(...)` call or…, Detect CommonJS require imports inside lexical_declaration /… (+3 more)
+### Community 116 - "_find_node_tiers"
+Cohesion: 0.16
+Nodes (14): _find_node(), find_node_ambiguity(), _find_node_tiers(), _get_trigram_index(), Return match tiers in precedence order: (source_exact, exact, prefix,…, Return node IDs whose label or ID matches the search term (diacritic-…, Return rival candidates when the winning match tier spans several source files.…, Shared node resolution for the get_node / get_neighbors tools. Returns… (+6 more)
 
 ### Community 117 - "normalize_sections"
 Cohesion: 0.33
@@ -885,8 +888,8 @@ Cohesion: 0.12
 Nodes (7): Dialog(), DialogContent(), DialogDescription(), DialogFooter(), DialogHeader(), DialogTitle(), DialogTrigger()
 
 ### Community 134 - "tree_html.py"
-Cohesion: 0.30
-Nodes (11): _is_file_node_label(), Whether *label* is a file node's label for *source_file* — the bare basename,…, build_tree(), _common_root(), emit_html(), _make_truncation_leaf(), Any, Path (+3 more)
+Cohesion: 0.38
+Nodes (9): build_tree(), _common_root(), emit_html(), _make_truncation_leaf(), Any, Path, tree_html — emit a D3 v7 collapsible-tree HTML view of a graph. A self-…, Build a ``{name, total_count, children}`` hierarchy. Each leaf is either a code… (+1 more)
 
 ### Community 135 - "pascal_resolution.py"
 Cohesion: 0.50
@@ -1077,28 +1080,28 @@ Cohesion: 0.17
 Nodes (10): 1. Directory Conventions, 2. Coding Rules & Principles, Codebase Conventions & Guidelines, AI & Development Setup, Community, Contributing, Documentation, Getting Started (+2 more)
 
 ### Community 185 - "Architectural Decision Log (MADR)"
-Cohesion: 0.06
-Nodes (30): ADR-0001: Next.js 16 + React 19 App Router Baseline, ADR-0002: Biome as Unified Linter & Formatter, ADR-0003: Automated Knowledge Graph Updates via Husky, ADR-0004: Strict Path & Configuration Portability Rule, Architectural Decision Log (MADR), Considered Options, Considered Options, Considered Options (+22 more)
+Cohesion: 0.12
+Nodes (16): ADR-0001: Next.js 16 + React 19 App Router Baseline, ADR-0002: Biome as Unified Linter & Formatter, Architectural Decision Log (MADR), Considered Options, Considered Options, Context and Problem Statement, Context and Problem Statement, Decision Drivers (+8 more)
 
-### Community 186 - "_StoredSourcePaths"
-Cohesion: 0.29
-Nodes (3): Resolve source_file values across current and legacy graph roots., Whether stored relative source_file paths resolve under ``root``. Samples the…, _StoredSourcePaths
+### Community 186 - "translate-batch.mjs"
+Cohesion: 0.27
+Nodes (11): __dirname, __filename, findMarkdownFiles(), logDiagnostic(), main(), parseArgs(), processFile(), protectMarkdown() (+3 more)
 
 ### Community 187 - "ToolError"
 Cohesion: 0.67
 Nodes (3): Raised by a tool handler to signal an error result. A normal string return is…, ToolError, Exception
 
 ### Community 239 - "build.py"
-Cohesion: 0.06
-Nodes (70): _abs_identity(), build(), build_from_json(), build_merge(), _build_prune_sets(), _coerce_hyperedge_member_refs(), _coerce_id(), _coerce_non_string_ids() (+62 more)
+Cohesion: 0.05
+Nodes (72): _abs_identity(), build(), build_from_json(), build_merge(), _build_prune_sets(), _coerce_hyperedge_member_refs(), _coerce_id(), _coerce_non_string_ids() (+64 more)
 
 ### Community 240 - "_QueryScores"
 Cohesion: 0.67
 Nodes (3): _QueryScores, Per-query scoring result, returned by the private `_score_query` helper.…, NamedTuple
 
 ### Community 241 - "Local Development & Workflow Guide"
-Cohesion: 0.12
-Nodes (13): Path & Configuration Portability Rule, 1. Prerequisites & Installation, 2. Running the Development Server, 3. Code Quality & Verification, 4. Knowledge Graph (`graphify`), 5. Working with AI Agents, 1. Prerequisites & Installation, 2. Running the Development Server (+5 more)
+Cohesion: 0.22
+Nodes (7): Path & Configuration Portability Rule, 1. Prerequisites & Installation, 2. Running the Development Server, 3. Code Quality & Verification, 4. Knowledge Graph (`graphify`), 5. Working with AI Agents, Local Development & Workflow Guide
 
 ### Community 246 - "doc-viewer.tsx"
 Cohesion: 0.27
@@ -1116,9 +1119,9 @@ Nodes (5): componentDocs, devDocs, GuidesLocale, GuidesStoryProps, localeArgType
 Cohesion: 0.10
 Nodes (21): @base-ui/react, class-variance-authority, cn, date-fns, input-otp, lucide-react, dependencies, @base-ui/react (+13 more)
 
-### Community 251 - "_is_noise_dir"
-Cohesion: 0.25
-Nodes (8): _has_build_output_markers(), _has_coverage_artifacts(), _has_venv_markers(), _is_noise_dir(), True only when *d* holds files a coverage tool actually generated. ``coverage``…, True only when *d* holds evidence a build tool generated it. ``out`` is a…, True only when *d* has actual virtualenv/conda structure on disk.…, Return True if this directory name looks like a venv, cache, or dep dir.
+### Community 251 - "_is_ignored"
+Cohesion: 0.12
+Nodes (17): _has_build_output_markers(), _has_coverage_artifacts(), _has_venv_markers(), _is_ignored(), _is_noise_dir(), _is_scan_ignored(), _path_identity(), Portable comparison key for an existing filesystem path. (+9 more)
 
 ### Community 252 - "reference.stories.tsx"
 Cohesion: 0.25
@@ -1136,9 +1139,9 @@ Nodes (3): 1. Open Design MCP (`open-design`), MCP Server Requirements & Usage R
 Cohesion: 0.25
 Nodes (7): ADR-0004: Strict Path & Configuration Portability Rule, Considered Options, Context and Problem Statement, Decision Drivers, Decision Outcome, Negative Consequences, Positive Consequences
 
-### Community 257 - "Guia de Desenvolvimento Local & Workflow"
-Cohesion: 0.29
-Nodes (6): 1. Pré-requisitos & Instalação, 2. Executando o Servidor de Desenvolvimento, 3. Qualidade de Código & Verificação, 4. Grafo de Conhecimento (`graphify`), 5. Trabalhando com Agentes de IA, Guia de Desenvolvimento Local & Workflow
+### Community 257 - "Documentation Translator"
+Cohesion: 0.17
+Nodes (11): 1. Default Target Language, 2. What MUST Be Translated, 3. What MUST NOT Be Translated (Preserve Verbatim), Automated Batch Translation Tool, Available Scripts, Common Mistakes & Red Flags, Core Translation Workflow, Documentation Translator (+3 more)
 
 ### Community 258 - "__main__.py"
 Cohesion: 0.09
@@ -1164,9 +1167,9 @@ Nodes (10): _augment_systemverilog_semantics(), extract_verilog(), Path, Verilog
 Cohesion: 0.19
 Nodes (12): CarouselApi, CarouselContent(), CarouselContext, CarouselContextProps, CarouselItem(), CarouselNext(), CarouselOptions, CarouselPlugin (+4 more)
 
-### Community 265 - "Visão Geral da Arquitetura (Padrão Matklad)"
-Cohesion: 0.15
-Nodes (13): 1. Visão Geral (Bird's Eye View), 2. Mapa do Código & Estrutura Oficial de Pastas, 3. Invariantes Arquiteturais, 4. Fluxos de Dados Principais, 5. Questões Transversais (Cross-Cutting Concerns), 6. Worktrees de Referência & Topologia da Base de Código, 7. Governança do Projeto & Matriz de Decisões, A. Busca de Dados (Acesso Direto RSC) (+5 more)
+### Community 265 - "Componentes Visuais e Detalhes do Layout"
+Cohesion: 0.20
+Nodes (9): 1. Barra de Cabeçalho, 2. Barra de Busca e Ferramentas, 3. Componente de Cartão de Nota, 4. Diálogo Modal de Criação de Nota, 5. Visualização de Estado Vazio, Componentes Visuais e Detalhes do Layout, Guia de Interface de Usuário do Workspace, Tema e Comportamento Responsivo (+1 more)
 
 ### Community 266 - "introspect_postgres"
 Cohesion: 0.50
@@ -1204,9 +1207,9 @@ Nodes (4): ToggleGroupContext, ToggleGroupItem(), Toggle(), toggleVariants
 Cohesion: 0.50
 Nodes (4): vcs, clientKind, enabled, useIgnoreFile
 
-### Community 286 - "_query_terms"
-Cohesion: 0.29
-Nodes (7): _has_chinese(), _is_searchable(), _query_terms(), Segment Chinese text and keep the original term for exact matching., True if term is Chinese, non-English, or an English word longer than 2 chars., Split a query into searchable terms, segmenting Chinese text, then drop…, _segment_chinese()
+### Community 286 - "Agent Skills Authoring & Architecture Rules"
+Cohesion: 0.25
+Nodes (7): 1. Directory Structure Standards, 2. SKILL.md Frontmatter Specification, 3. Progressive Disclosure & Context Budget, 4. Agentic Script Design (`scripts/`), 5. Evaluation & Test Suite (`evals/evals.json`), Agent Skills Authoring & Architecture Rules, Validation Rules:
 
 ### Community 289 - "ADR-0001: Next.js 16 + React 19 App Router Baseline"
 Cohesion: 0.25
@@ -1216,9 +1219,9 @@ Nodes (7): ADR-0001: Next.js 16 + React 19 App Router Baseline, Considered Optio
 Cohesion: 0.25
 Nodes (7): ADR-0002: Biome as Unified Linter & Formatter, Considered Options, Context and Problem Statement, Decision Drivers, Decision Outcome, Negative Consequences, Positive Consequences
 
-### Community 295 - "ADR-0001: Baseline do App Router com Next.js 16 + React 19"
-Cohesion: 0.06
-Nodes (30): ADR-0001: Baseline do App Router com Next.js 16 + React 19, Consequências Negativas, Consequências Positivas, Contexto e Declaração do Problema, Direcionadores da Decisão, Opções Consideradas, Resultado da Decisão, ADR-0002: Biome como Linter & Formatador Unificado (+22 more)
+### Community 295 - "_is_sensitive"
+Cohesion: 0.25
+Nodes (8): _generic_keyword_hit(), _is_env_template(), _is_prose_note(), _is_sensitive(), True for `.env.example` / `.envrc.sample` style committed templates (#2184)., A prose/note file (.md/.rst/...) whose stem is a multi-word topic slug is…, True if a generic secret keyword appears load-bearing in the filename. Secret-…, Return True if this file likely contains secrets and should be skipped.
 
 ### Community 296 - "ADR-0003: Automated Knowledge Graph Updates via Husky"
 Cohesion: 0.25
@@ -1228,17 +1231,21 @@ Nodes (7): ADR-0003: Automated Knowledge Graph Updates via Husky, Considered Opt
 Cohesion: 0.50
 Nodes (3): name, private, version
 
-### Community 301 - "_is_ignored"
-Cohesion: 0.33
-Nodes (6): _is_ignored(), _is_scan_ignored(), _path_identity(), Portable comparison key for an existing filesystem path., Return True if the path should be ignored per .graphifyignore patterns. Uses…, Apply ignore rules while preserving Git-tracked paths. ``patterns`` combines…
+### Community 301 - "ADR-0001: Baseline do App Router com Next.js 16 + React 19"
+Cohesion: 0.25
+Nodes (7): ADR-0001: Baseline do App Router com Next.js 16 + React 19, Consequências Negativas, Consequências Positivas, Contexto e Declaração do Problema, Direcionadores da Decisão, Opções Consideradas, Resultado da Decisão
+
+### Community 323 - "ADR-0002: Biome como Linter & Formatador Unificado"
+Cohesion: 0.25
+Nodes (7): ADR-0002: Biome como Linter & Formatador Unificado, Consequências Negativas, Consequências Positivas, Contexto e Declaração do Problema, Direcionadores da Decisão, Opções Consideradas, Resultado da Decisão
 
 ### Community 324 - "Component Development & Ladle Guide"
 Cohesion: 0.50
 Nodes (3): Commands, Component Development & Ladle Guide, Features & Conventions
 
-### Community 325 - "Componentes Visuais e Detalhes do Layout"
-Cohesion: 0.20
-Nodes (9): 1. Barra de Cabeçalho, 2. Barra de Busca e Ferramentas, 3. Componente de Cartão de Nota, 4. Diálogo Modal de Criação de Nota, 5. Visualização de Estado Vazio, Componentes Visuais e Detalhes do Layout, Guia de Interface de Usuário do Workspace, Tema e Comportamento Responsivo (+1 more)
+### Community 325 - "ADR-0003: Atualizações Automatizadas do Grafo de Conhecimento via Husky"
+Cohesion: 0.25
+Nodes (7): ADR-0003: Atualizações Automatizadas do Grafo de Conhecimento via Husky, Consequências Negativas, Consequências Positivas, Contexto e Declaração do Problema, Direcionadores da Decisão, Opções Consideradas, Resultado da Decisão
 
 ### Community 326 - "architecture.stories.tsx"
 Cohesion: 0.40
@@ -1248,45 +1255,57 @@ Nodes (3): ArchitectureLocale, ArchitectureStoryProps, overviewDocs
 Cohesion: 0.40
 Nodes (3): WorkspaceArchitectureLocale, WorkspaceArchitectureStoryProps, workspaceMainContentDocs
 
-### Community 328 - "_vault_lookup"
-Cohesion: 0.27
-Nodes (10): _active_scan_root(), _build_link_index(), _nfc(), Path, The scan root of the extraction in flight, or None outside extract().…, Index every linkable document under *root* by NFC-normalized basename. Each…, Resolve *target* (a normalized wikilink path, `.md` already appended) against…, Resolve a markdown link target to the absolute path of a sibling document.… (+2 more)
+### Community 328 - "markdown.py"
+Cohesion: 0.16
+Nodes (19): _active_scan_root(), _build_link_index(), extract_markdown(), _nfc(), _parse_frontmatter(), _parse_frontmatter_fallback(), Path, Markdown extractor. Moved verbatim from graphify/extract.py. (+11 more)
 
-### Community 329 - "Component Development & Ladle Guide"
-Cohesion: 0.50
-Nodes (3): Commands, Component Development & Ladle Guide, Features & Conventions
+### Community 329 - "ADR-0004: Regra Estrita de Portabilidade de Caminhos & Configurações"
+Cohesion: 0.25
+Nodes (7): ADR-0004: Regra Estrita de Portabilidade de Caminhos & Configurações, Consequências Negativas, Consequências Positivas, Contexto e Declaração do Problema, Direcionadores da Decisão, Opções Consideradas, Resultado da Decisão
 
-### Community 330 - "Guia de Desenvolvimento de Componentes & Ladle"
+### Community 330 - "ADR-0003: Automated Knowledge Graph Updates via Husky"
+Cohesion: 0.29
+Nodes (7): ADR-0003: Automated Knowledge Graph Updates via Husky, Considered Options, Context and Problem Statement, Decision Drivers, Decision Outcome, Negative Consequences, Positive Consequences
+
+### Community 331 - "ADR-0004: Strict Path & Configuration Portability Rule"
+Cohesion: 0.29
+Nodes (7): ADR-0004: Strict Path & Configuration Portability Rule, Considered Options, Context and Problem Statement, Decision Drivers, Decision Outcome, Negative Consequences, Positive Consequences
+
+### Community 332 - "Guia de Desenvolvimento Local & Workflow"
+Cohesion: 0.29
+Nodes (6): 1. Pré-requisitos & Instalação, 2. Executando o Servidor de Desenvolvimento, 3. Qualidade de Código & Verificação, 4. Grafo de Conhecimento (`graphify`), 5. Trabalhando com Agentes de IA, Guia de Desenvolvimento Local & Workflow
+
+### Community 334 - "_kotlin_package_index"
+Cohesion: 0.33
+Nodes (6): _kotlin_package_index(), Group per-file results by the Kotlin package they declare. ``kotlin_package``…, Rewrite Kotlin ``imports`` edge targets from the bare last segment to the node…, Resolve Kotlin fully-qualified call expressions (#2550).…, _resolve_kotlin_import_targets(), _resolve_kotlin_qualified_calls()
+
+### Community 336 - "Guia de Desenvolvimento de Componentes & Ladle"
 Cohesion: 0.50
 Nodes (3): Comandos, Guia de Desenvolvimento de Componentes & Ladle, Recursos & Convenções
 
-### Community 331 - "Codebase Conventions & Guidelines"
-Cohesion: 0.50
-Nodes (3): 1. Directory Conventions, 2. Coding Rules & Principles, Codebase Conventions & Guidelines
-
-### Community 332 - "Convenções & Diretrizes da Base de Código"
+### Community 337 - "Convenções & Diretrizes da Base de Código"
 Cohesion: 0.50
 Nodes (3): 1. Convenções de Diretórios, 2. Regras & Princípios de Código, Convenções & Diretrizes da Base de Código
 
 ## Knowledge Gaps
-- **1055 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `ignoreUnknown` (+1050 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 2622 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **78 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **1061 isolated node(s):** `__filename`, `__dirname`, `$schema`, `enabled`, `clientKind` (+1056 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 2635 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **77 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `dispatch_command()` connect `cli.py` to `__main__.py`, `html.py`, `extract.py`, `cache.py`, `reflect.py`, `serve.py`, `export.py`, `introspect_postgres`, `tree_html.py`, `watch.py`, `hooks.py`, `extract_files_direct`, `llm.py`, `write_callflow_html`, `_call_llm`, `analyze.py`, `prs.py`, `diagnostics.py`, `ingest.py`, `detect`, `save_manifest`, `affected.py`, `_StageTimer`, `_get_backend_api_key`, `link_cross_repo_member_calls`, `semantic_cleanup.py`, `paths.py`, `edge_data`, `_build_server`, `cluster.py`, `introspect_cargo`, `build.py`?**
-  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Why does `dispatch_command()` connect `cli.py` to `__main__.py`, `html.py`, `tree_html.py`, `cache.py`, `reflect.py`, `Graph`, `export.py`, `introspect_postgres`, `watch.py`, `hooks.py`, `extract_files_direct`, `llm.py`, `write_callflow_html`, `_call_llm`, `analyze.py`, `prs.py`, `diagnostics.py`, `ingest.py`, `detect`, `save_manifest`, `affected.py`, `extract`, `link_cross_repo_member_calls`, `semantic_cleanup.py`, `edge_data`, `wiki.py`, `cluster.py`, `_load_graph`, `introspect_cargo`, `build.py`, `_find_node_tiers`?**
+  _High betweenness centrality (0.040) - this node is a cross-community bridge._
 - **Why does `save_semantic_cache()` connect `cache.py` to `extract_files_direct`, `cli.py`, `llm.py`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
-- **Why does `extract()` connect `extract.py` to `_make_id`, `cli.py`, `cache.py`, `_read_text`, `CsharpNameResolver`, `watch.py`, `symbol_resolution.py`, `resolver_registry.py`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `extract()` connect `extract` to `_make_id`, `cli.py`, `Path`, `Path`, `cache.py`, `extract.py`, `export.py`, `CsharpNameResolver`, `watch.py`, `symbol_resolution.py`, `resolver_registry.py`?**
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **Are the 5 inferred relationships involving `dispatch_command()` (e.g. with `to_html()` and `_file_hash()`) actually correct?**
   _`dispatch_command()` has 5 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `$schema`, `enabled`, `clientKind` to the rest of the system?**
-  _1055 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `__filename`, `__dirname`, `$schema` to the rest of the system?**
+  _1061 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `_make_id` be split into smaller, more focused modules?**
-  _Cohesion score 0.026659312373598087 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.02917742116485243 - nodes in this community are weakly interconnected._
 - **Should `engine.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.016552075375604786 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.022756005056890013 - nodes in this community are weakly interconnected._
