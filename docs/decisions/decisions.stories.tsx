@@ -13,6 +13,7 @@ import adr5EnDoc from "./0005-ladle-component-workbench-and-documentation-viewer
 import adr6EnDoc from "./0006-historical-reference-architecture-synthesis.md?raw";
 import adr7EnDoc from "./0007-blocknote-rich-text-editor-integration-and-ladle-story-workbench.md?raw";
 import adr8EnDoc from "./0008-plate-rich-text-editor-framework-migration.md?raw";
+import adr9EnDoc from "./0009-capacities-block-editor-domain-and-plate-v53-plugin-architecture.md?raw";
 import readmeEnDoc from "./README.md?raw";
 
 type DecisionsLocale = "pt-BR" | "en";
@@ -77,6 +78,11 @@ const adr7Docs: Record<DecisionsLocale, string> = {
 const adr8Docs: Record<DecisionsLocale, string> = {
   "pt-BR": adr8EnDoc,
   en: adr8EnDoc,
+};
+
+const adr9Docs: Record<DecisionsLocale, string> = {
+  "pt-BR": adr9EnDoc,
+  en: adr9EnDoc,
 };
 
 export default {
@@ -145,3 +151,10 @@ export const ADR0008: Story<DecisionsStoryProps> = ({ locale = "en" }) => (
 ADR0008.storyName = "0008 - Plate Editor Migration";
 ADR0008.args = { locale: "en" };
 ADR0008.argTypes = localeArgTypes;
+
+export const ADR0009: Story<DecisionsStoryProps> = ({ locale = "en" }) => (
+  <DocViewer markdown={adr9Docs[locale] ?? adr9Docs.en} />
+);
+ADR0009.storyName = "0009 - Capacities Editor & Plate Plugins";
+ADR0009.args = { locale: "en" };
+ADR0009.argTypes = localeArgTypes;

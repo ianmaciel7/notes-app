@@ -1,16 +1,16 @@
 import { ChevronDown, Plus } from "lucide-react";
-import { ObjectIcon } from "@/components/objects/icons";
-import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
+import type { ObjectIconName } from "../../../lib/space-object-types";
+import { cn } from "../../../lib/utils";
+import { Button } from "../../ui/button";
+import { ButtonGroup } from "../../ui/button-group";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import type { ObjectIconName } from "@/lib/space-object-types";
-import { cn } from "@/lib/utils";
+} from "../../ui/dropdown-menu";
+import { ObjectIcon } from "../icons/icon-registry";
 
 export interface ObjectSplitButtonOption {
   id: string;

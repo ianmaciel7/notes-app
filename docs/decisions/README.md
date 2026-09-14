@@ -16,3 +16,5 @@ All architectural decisions for `notes-app` are documented here using the [MADR 
 | [ADR-0006](0006-historical-reference-architecture-synthesis.md) | Historical Reference Architecture Synthesis & Baseline Specifications | Accepted | 2026-09-12 |
 | [ADR-0007](0007-blocknote-rich-text-editor-integration-and-ladle-story-workbench.md) | BlockNote Rich-Text Editor Integration and Ladle Story Workbench | Superseded by ADR-0008 | 2026-09-12 |
 | [ADR-0008](0008-plate-rich-text-editor-framework-migration.md) | Plate Rich-Text Editor Framework Migration | Accepted | 2026-09-12 |
+| [ADR-0009](0009-capacities-block-editor-domain-and-plate-v53-plugin-architecture.md) | Capacities Block Editor Domain and Plate v53 Plugin Architecture | Accepted | 2026-09-14 |
+

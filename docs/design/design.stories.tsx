@@ -1,6 +1,7 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import designSystemEnDoc from "../../DESIGN.md?raw";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
+import designSystemPtDoc from "../translations/pt-BR/reference/design-system.md?raw";
 
 type DesignLocale = "pt-BR" | "en";
 
@@ -22,7 +23,7 @@ const localeArgTypes = {
 };
 
 const designSystemDocs: Record<DesignLocale, string> = {
-  "pt-BR": designSystemEnDoc,
+  "pt-BR": designSystemPtDoc,
   en: designSystemEnDoc,
 };
 

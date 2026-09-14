@@ -1512,9 +1512,9 @@
     "semantic_hash": ""
   },
   "DECISIONS.md": {
-    "mtime": 1789223396.2922404,
-    "seen": 1789223806.7257397,
-    "ast_hash": "8373c7c1db67effc992d97d41f6dddb2",
+    "mtime": 1789381966.6056771,
+    "seen": 1789382030.5506272,
+    "ast_hash": "47909cebd3ecdbb6ab774fe153ab5cd9",
     "semantic_hash": ""
   },
   ".agents/agents/code-reviewer/agent.md": {
@@ -1536,9 +1536,9 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1789178700.991922,
-    "seen": 1789179031.6687574,
-    "ast_hash": "3cc7c07b2cc4671020ca24efc8f54c9b",
+    "mtime": 1789380990.3714645,
+    "seen": 1789381055.1385748,
+    "ast_hash": "c31c0fd551ed7f6d92af1ab29ff66b1c",
     "semantic_hash": ""
   },
   "components.json": {
@@ -1602,9 +1602,9 @@
     "semantic_hash": ""
   },
   "src/components/ui/button-group.tsx": {
-    "mtime": 1789168480.3335116,
-    "seen": 1789168526.9576418,
-    "ast_hash": "889d757fa39a91648dc6bc96a8a3e20e",
+    "mtime": 1789381240.7528474,
+    "seen": 1789382030.5506272,
+    "ast_hash": "73935d141c3efda694153234c38f5c38",
     "semantic_hash": ""
   },
   "src/components/ui/button.tsx": {
@@ -1830,8 +1830,8 @@
     "semantic_hash": ""
   },
   "src/components/ui/separator.tsx": {
-    "mtime": 1789168474.965539,
-    "seen": 1789168526.9576418,
+    "mtime": 1789381277.4816678,
+    "seen": 1789382030.5506272,
     "ast_hash": "68ef96041727d804c3b82aeade49c246",
     "semantic_hash": ""
   },
@@ -1998,9 +1998,9 @@
     "semantic_hash": ""
   },
   "docs/decisions/README.md": {
-    "mtime": 1789223302.297995,
-    "seen": 1789223806.7257397,
-    "ast_hash": "c2a8bf2ea1b0988b814b275e1f3692f0",
+    "mtime": 1789381966.603589,
+    "seen": 1789382030.5506272,
+    "ast_hash": "f6b7541c9a41e34d0c2bf74a85d2e74c",
     "semantic_hash": ""
   },
   "docs/guides/component-development.md": {
@@ -2028,9 +2028,9 @@
     "semantic_hash": ""
   },
   "docs/decisions/decisions.stories.tsx": {
-    "mtime": 1789223234.0935514,
-    "seen": 1789223806.7223115,
-    "ast_hash": "7e21f6fc08af0c3d657edd0fd412f448",
+    "mtime": 1789381992.8040879,
+    "seen": 1789382030.5506272,
+    "ast_hash": "d389a889c5124044bc7a7034c82a8e77",
     "semantic_hash": ""
   },
   "docs/guides/guides.stories.tsx": {
@@ -2316,9 +2316,9 @@
     "semantic_hash": ""
   },
   "docs/reference/design-system.md": {
-    "mtime": 1789217212.7802246,
-    "seen": 1789217432.4141529,
-    "ast_hash": "b2e05c56587dc36501736f9fbedd0e3d",
+    "mtime": 1789381014.8643153,
+    "seen": 1789381055.1385748,
+    "ast_hash": "9393cf9323c2b1587b94cfff4ba3510a",
     "semantic_hash": ""
   },
   "docs/translations/pt-BR/architecture/README.md": {
@@ -2568,14 +2568,14 @@
     "semantic_hash": ""
   },
   "src/components/objects/icons/icons.stories.tsx": {
-    "mtime": 1789223622.1840236,
-    "seen": 1789223806.7223115,
+    "mtime": 1789381865.6381192,
+    "seen": 1789382030.5506272,
     "ast_hash": "a8462df627ec4d638371943a232ca29d",
     "semantic_hash": ""
   },
   "src/components/objects/icons/icons.test.tsx": {
-    "mtime": 1789223630.5124934,
-    "seen": 1789223806.7223115,
+    "mtime": 1789381865.6441948,
+    "seen": 1789382030.5506272,
     "ast_hash": "328bf68ea141ec910156489b97563f80",
     "semantic_hash": ""
   },
@@ -2592,8 +2592,8 @@
     "semantic_hash": ""
   },
   "src/components/objects/icons/index.tsx": {
-    "mtime": 1789380304.3501596,
-    "seen": 1789380654.406294,
+    "mtime": 1789381865.6381192,
+    "seen": 1789382030.5506272,
     "ast_hash": "704fdebdaf89cd0d3ea7551d2491ee07",
     "semantic_hash": ""
   },
@@ -2747,34 +2747,52 @@
     "ast_hash": "363a82348864e96338be5dad5702c6d5",
     "semantic_hash": ""
   },
-  "src/components/objects/split-buttons/index.ts": {
-    "mtime": 1789380613.6208355,
-    "seen": 1789380654.406294,
-    "ast_hash": "7ca03b62bce0a15073df9fc50ae555d1",
-    "semantic_hash": ""
-  },
-  "src/components/objects/split-buttons/object-split-button.stories.tsx": {
-    "mtime": 1789380613.6223502,
-    "seen": 1789380654.406294,
-    "ast_hash": "42ca6df637070dab1faeebc92a94431a",
-    "semantic_hash": ""
-  },
   "src/components/objects/split-buttons/object-split-button.tsx": {
-    "mtime": 1789380669.1750839,
-    "seen": 1789380989.302935,
-    "ast_hash": "dba5e1f94745a9e3ffb186cef6c673a5",
-    "semantic_hash": ""
-  },
-  "src/components/objects/split-buttons/object-type-split-chip.stories.tsx": {
-    "mtime": 1789380423.892138,
-    "seen": 1789380654.406294,
-    "ast_hash": "b4b5cbc3c35e9adb8f787794c42a47d9",
+    "mtime": 1789381865.6514313,
+    "seen": 1789382030.5506272,
+    "ast_hash": "5d406b70407d37ed868e732288b9c9a7",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/object-type-split-chip.tsx": {
-    "mtime": 1789380873.067372,
-    "seen": 1789380989.302935,
-    "ast_hash": "66f133a24b83ec1b91bd39085cbbcc72",
+    "mtime": 1789381997.4146771,
+    "seen": 1789382030.5506272,
+    "ast_hash": "b84bdf4a0cb8903dc2212dc59ecef72c",
+    "semantic_hash": ""
+  },
+  "src/components/objects/split-buttons/index.tsx": {
+    "mtime": 1789381997.4075992,
+    "seen": 1789382030.5506272,
+    "ast_hash": "208863468769f0b72a31c97ee9165c36",
+    "semantic_hash": ""
+  },
+  "src/components/objects/split-buttons/split-button-base.tsx": {
+    "mtime": 1789381966.5056567,
+    "seen": 1789382030.5506272,
+    "ast_hash": "fa914b785c9894700b2e7c2213355ddb",
+    "semantic_hash": ""
+  },
+  "src/components/objects/split-buttons/split-buttons.stories.tsx": {
+    "mtime": 1789381722.4587898,
+    "seen": 1789382030.5506272,
+    "ast_hash": "27aef9adf181ce61cbb658d92a496b59",
+    "semantic_hash": ""
+  },
+  "src/components/objects/split-buttons/split-buttons.test.tsx": {
+    "mtime": 1789381722.4567635,
+    "seen": 1789382030.5506272,
+    "ast_hash": "53f24c0745389c4130ca240345e69874",
+    "semantic_hash": ""
+  },
+  "vitest.config.mts": {
+    "mtime": 1789381298.0838156,
+    "seen": 1789382030.5506272,
+    "ast_hash": "5e137f6b1dd3a37d9ebbfb56f08b89b7",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0009-capacities-block-editor-domain-and-plate-v53-plugin-architecture.md": {
+    "mtime": 1789381962.2047014,
+    "seen": 1789382030.5506272,
+    "ast_hash": "d66865ffd14e62b84fb99283a6019a82",
     "semantic_hash": ""
   }
 }

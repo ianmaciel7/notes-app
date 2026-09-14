@@ -1,5 +1,5 @@
 import type { Story, StoryDefault } from "@ladle/react";
-import { ObjectIcon, objectIconRegistry } from "./index";
+import { ObjectIcon, objectIconRegistry } from "./icon-registry";
 
 export default {
   title: "Objects / Icons",

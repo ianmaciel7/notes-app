@@ -1,16 +1,12 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import {
-  DailyNoteIcon,
-  FlashcardIcon,
-  getObjectIcon,
-  ObjectIcon,
-  objectIconRegistry,
-  PageIcon,
-  StudyGoalIcon,
-  TableIcon,
-  TaskIcon,
-} from "./index";
+import { DailyNoteIcon } from "./daily-note-icon";
+import { FlashcardIcon } from "./flashcard-icon";
+import { getObjectIcon, ObjectIcon, objectIconRegistry } from "./icon-registry";
+import { PageIcon } from "./page-icon";
+import { StudyGoalIcon } from "./study-goal-icon";
+import { TableIcon } from "./table-icon";
+import { TaskIcon } from "./task-icon";
 
 describe("Object Icons", () => {
   it("renders all 32 object icons as pure SVG elements with exact attributes", () => {
