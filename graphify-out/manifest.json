@@ -1404,9 +1404,9 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1789421138.4865398,
-    "seen": 1789421192.0848048,
-    "ast_hash": "1879f8b9b3e569ac321ba6bf5152041a",
+    "mtime": 1789421295.7134044,
+    "seen": 1789421336.6174283,
+    "ast_hash": "1dcd280d3c998cf0614ae3e8454c337a",
     "semantic_hash": ""
   },
   "postcss.config.mjs": {
@@ -1422,9 +1422,9 @@
     "semantic_hash": ""
   },
   "src/app/page.tsx": {
-    "mtime": 1789420008.774401,
-    "seen": 1789420262.3022318,
-    "ast_hash": "d37043adeb80be8bad6ece72346a8614",
+    "mtime": 1789421269.9603095,
+    "seen": 1789421336.6174283,
+    "ast_hash": "1f02a318cc46ca0361dff0a182057dfe",
     "semantic_hash": ""
   },
   "tsconfig.json": {
@@ -2454,9 +2454,9 @@
     "semantic_hash": ""
   },
   "src/components/editor/editor.stories.tsx": {
-    "mtime": 1789420307.1684344,
-    "seen": 1789420388.0834267,
-    "ast_hash": "d2234c4d8f1d25d411f42dcb40c2fc68",
+    "mtime": 1789421316.0428033,
+    "seen": 1789421336.6174283,
+    "ast_hash": "043721c9a50234858b2489f9e7ccf2f8",
     "semantic_hash": ""
   },
   "src/components/ui/badge.stories.tsx": {
@@ -3294,27 +3294,27 @@
     "semantic_hash": ""
   },
   "src/lib/db/repositories/relation-repository.ts": {
-    "mtime": 1789420930.6287918,
-    "seen": 1789420964.2807257,
-    "ast_hash": "9dfd5d4e34ef1ffcdf889c2ec119554a",
+    "mtime": 1789421316.111063,
+    "seen": 1789421336.6174283,
+    "ast_hash": "0bcd139b53ae3ac85ead7e2222fb123a",
     "semantic_hash": ""
   },
   "src/lib/db/repositories/space-repository.ts": {
-    "mtime": 1789420900.0905888,
-    "seen": 1789420964.2807257,
-    "ast_hash": "d340dc0f78ed1b9288f2d022c3706c8b",
+    "mtime": 1789421316.134575,
+    "seen": 1789421336.6174283,
+    "ast_hash": "838488e33bb084731e9aab4b3b0b44c6",
     "semantic_hash": ""
   },
   "src/lib/db/repositories/sync-mutation-repository.ts": {
-    "mtime": 1789420909.128101,
-    "seen": 1789420964.2807257,
-    "ast_hash": "2421819fa044c8669aa1c2531c94a955",
+    "mtime": 1789421316.1116607,
+    "seen": 1789421336.6174283,
+    "ast_hash": "0e23fff1ffd844b49ffe7c4f3f75537c",
     "semantic_hash": ""
   },
   "src/lib/db/schema.ts": {
-    "mtime": 1789420890.376261,
-    "seen": 1789420964.2807257,
-    "ast_hash": "41bf62c03bc4815264dd5b5008ff1e4c",
+    "mtime": 1789421316.110064,
+    "seen": 1789421336.6174283,
+    "ast_hash": "48a758fd6ffde39427837dac2b7e82c8",
     "semantic_hash": ""
   },
   "src/lib/db/types.ts": {
@@ -3330,21 +3330,21 @@
     "semantic_hash": ""
   },
   "src/lib/db/hooks/use-live-query.ts": {
-    "mtime": 1789420972.8529963,
-    "seen": 1789421001.1003597,
-    "ast_hash": "6250f8576f5c60133803230eb3a8b728",
+    "mtime": 1789421316.1032453,
+    "seen": 1789421336.6174283,
+    "ast_hash": "0d0f238b7d2fdbdcc3e533df58f4ec25",
     "semantic_hash": ""
   },
   "src/lib/db/repositories/collection-repository.ts": {
-    "mtime": 1789420946.8147256,
-    "seen": 1789421001.1003597,
-    "ast_hash": "cfd31cf9a75ad865873097f0c0b1fc98",
+    "mtime": 1789421316.1162186,
+    "seen": 1789421336.6174283,
+    "ast_hash": "c3d827f4ee5afb063c0072cd255dad7a",
     "semantic_hash": ""
   },
   "src/lib/db/repositories/entity-repository.ts": {
-    "mtime": 1789420961.3569534,
-    "seen": 1789421001.1003597,
-    "ast_hash": "1fadfc48d9344348360227549b849603",
+    "mtime": 1789421316.1144063,
+    "seen": 1789421336.6174283,
+    "ast_hash": "bc1443c545801bfd28071fd3f0b24cce",
     "semantic_hash": ""
   },
   "src/lib/db/repositories/index.ts": {
@@ -3354,33 +3354,39 @@
     "semantic_hash": ""
   },
   "src/lib/db/repositories/tag-repository.ts": {
-    "mtime": 1789420951.9925952,
-    "seen": 1789421001.1003597,
-    "ast_hash": "40848f5e1ffa5ef9bc23a48571b4c984",
+    "mtime": 1789421316.110064,
+    "seen": 1789421336.6174283,
+    "ast_hash": "51187df33c52f7fa63957f5fc6dd2980",
     "semantic_hash": ""
   },
   "src/lib/db/repositories/trash-repository.ts": {
-    "mtime": 1789420940.6597009,
-    "seen": 1789421001.1003597,
-    "ast_hash": "90d69f05e478ff3f3112bdbbcc6331ed",
+    "mtime": 1789421316.1272786,
+    "seen": 1789421336.6174283,
+    "ast_hash": "279c942cbfda9e1feb0854529a231f72",
     "semantic_hash": ""
   },
   "src/lib/db/index.ts": {
-    "mtime": 1789420990.1519823,
-    "seen": 1789421082.725181,
-    "ast_hash": "1b4b165244954c03c29be4fab3f3de4c",
+    "mtime": 1789421316.1022356,
+    "seen": 1789421336.6174283,
+    "ast_hash": "b89f13559da1ff8bb71b23af7b1d6c4f",
     "semantic_hash": ""
   },
   "src/lib/db/provider.tsx": {
-    "mtime": 1789420981.2732482,
-    "seen": 1789421082.725181,
-    "ast_hash": "a352514adfdacf168aa610f1af14e288",
+    "mtime": 1789421316.1144063,
+    "seen": 1789421336.6174283,
+    "ast_hash": "8bfa81e6a7810c4ce81db08263d11fab",
     "semantic_hash": ""
   },
   "plopfile.mjs": {
-    "mtime": 1789421131.9396293,
-    "seen": 1789421192.0848048,
-    "ast_hash": "5af916a882b0d8774138584d9ca779c1",
+    "mtime": 1789421316.034369,
+    "seen": 1789421336.6174283,
+    "ast_hash": "48f1c9e8b7ebe6d8429a53a713e5d45d",
+    "semantic_hash": ""
+  },
+  "src/lib/db/__tests__/repositories.test.ts": {
+    "mtime": 1789421316.175394,
+    "seen": 1789421336.6174283,
+    "ast_hash": "affbf4f519f5674e6126744b60ac269a",
     "semantic_hash": ""
   }
 }

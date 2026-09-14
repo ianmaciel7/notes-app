@@ -33,7 +33,8 @@ export class KnowledgeDatabase extends Dexie {
       spaces: "id, accountId, sortOrder, [accountId+sortOrder], name, createdAt, updatedAt",
       appSettings: "id",
       objectTypes: "[spaceId+id], spaceId, id, ownership, lifecycleKind",
-      entities: "[spaceId+id], spaceId, id, [spaceId+objectTypeId], objectTypeId, type, updatedAt, *tags",
+      entities:
+        "[spaceId+id], spaceId, id, [spaceId+objectTypeId], objectTypeId, type, updatedAt, *tags",
       collections: "[spaceId+id], spaceId, id, [spaceId+structureId], structureId, name",
       tags: "[spaceId+id], spaceId, id, [spaceId+name], name",
       relations:

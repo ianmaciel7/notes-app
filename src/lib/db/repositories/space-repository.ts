@@ -24,7 +24,7 @@ export class SpaceRepository {
       window.dispatchEvent(new CustomEvent("spaces-updated", { detail: spaces }));
       if (activeSpaceId) {
         window.dispatchEvent(
-          new CustomEvent("space-changed", { detail: { spaceId: activeSpaceId } })
+          new CustomEvent("space-changed", { detail: { spaceId: activeSpaceId } }),
         );
       }
     } catch (e) {
@@ -50,10 +50,7 @@ export class SpaceRepository {
 
   async listSpaces(accountId = LOCAL_ACCOUNT_ID): Promise<SpaceRecord[]> {
     await this.ensureDefaultSpaces();
-    const spaces = await this.db.spaces
-      .where("accountId")
-      .equals(accountId)
-      .sortBy("sortOrder");
+    const spaces = await this.db.spaces.where("accountId").equals(accountId).sortBy("sortOrder");
     return spaces;
   }
 
@@ -189,7 +186,7 @@ export class SpaceRepository {
             value: fallback.id,
           });
         }
-      }
+      },
     );
 
     const remaining = await this.listSpaces();

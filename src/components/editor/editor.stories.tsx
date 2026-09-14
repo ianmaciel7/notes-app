@@ -163,7 +163,7 @@ export const SlashCommands: Story = () => {
     <StoryCanvas>
       <div className="mx-auto w-full max-w-md">
         <h3 className="mb-3 text-sm font-semibold">Slash Command Catalog</h3>
-        <SuggestionCombobox isOpen={true} query="" onSelect={() => { }} />
+        <SuggestionCombobox isOpen={true} query="" onSelect={() => {}} />
       </div>
     </StoryCanvas>
   );

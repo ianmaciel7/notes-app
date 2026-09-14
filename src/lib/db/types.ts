@@ -5,7 +5,7 @@ import type {
   StructureLifecycleKind,
   StructureOwnership,
 } from "@/lib/space-object-types";
-import type { SpaceIconName, SpaceRecord } from "@/types/space";
+import type { SpaceRecord } from "@/types/space";
 
 export type { SpaceIconName, SpaceRecord } from "@/types/space";
 

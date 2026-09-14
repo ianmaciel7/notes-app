@@ -31,23 +31,29 @@ export class TrashRepository {
       relationSnapshots: structuredClone(incidentRelations),
     };
 
-    await this.db.transaction("rw", this.db.entities, this.db.relations, this.db.trash, async () => {
-      // Remove incident relations from active graph
-      for (const rel of incidentRelations) {
-        await this.db.relations.delete([spaceId, rel.id]);
-      }
-      // Remove entity from active entities
-      await this.db.entities.delete([spaceId, entityId]);
-      // Save soft-delete tombstone
-      await this.db.trash.put(trashRecord);
-    });
+    await this.db.transaction(
+      "rw",
+      this.db.entities,
+      this.db.relations,
+      this.db.trash,
+      async () => {
+        // Remove incident relations from active graph
+        for (const rel of incidentRelations) {
+          await this.db.relations.delete([spaceId, rel.id]);
+        }
+        // Remove entity from active entities
+        await this.db.entities.delete([spaceId, entityId]);
+        // Save soft-delete tombstone
+        await this.db.trash.put(trashRecord);
+      },
+    );
 
     return trashRecord;
   }
 
   async restoreFromTrash(spaceId: string, trashId: string): Promise<SpaceEntityRecord> {
     const trash = await this.db.trash.get([spaceId, trashId]);
-    if (!trash || !trash.entitySnapshot) {
+    if (!trash?.entitySnapshot) {
       throw new Error(`Trash item "${trashId}" not found or contains no entity snapshot.`);
     }
 
@@ -56,20 +62,26 @@ export class TrashRepository {
       updatedAt: new Date().toISOString(),
     };
 
-    await this.db.transaction("rw", this.db.entities, this.db.relations, this.db.trash, async () => {
-      // Restore entity
-      await this.db.entities.put(restoredEntity);
+    await this.db.transaction(
+      "rw",
+      this.db.entities,
+      this.db.relations,
+      this.db.trash,
+      async () => {
+        // Restore entity
+        await this.db.entities.put(restoredEntity);
 
-      // Restore incident relations
-      if (trash.relationSnapshots && trash.relationSnapshots.length > 0) {
-        for (const rel of trash.relationSnapshots) {
-          await this.db.relations.put(rel);
+        // Restore incident relations
+        if (trash.relationSnapshots && trash.relationSnapshots.length > 0) {
+          for (const rel of trash.relationSnapshots) {
+            await this.db.relations.put(rel);
+          }
         }
-      }
 
-      // Remove tombstone from trash
-      await this.db.trash.delete([spaceId, trashId]);
-    });
+        // Remove tombstone from trash
+        await this.db.trash.delete([spaceId, trashId]);
+      },
+    );
 
     return restoredEntity;
   }

@@ -94,7 +94,8 @@ export class EntityRepository {
     }
 
     if (filter?.tag) {
-      results = results.filter((e) => e.tags.includes(filter.tag!));
+      const tag = filter.tag;
+      results = results.filter((e) => e.tags.includes(tag));
     }
 
     if (filter?.inboxStatus) {
@@ -111,7 +112,7 @@ export class EntityRepository {
   async updateEntity(
     spaceId: string,
     entityId: string,
-    patch: Partial<Omit<SpaceEntityRecord, "spaceId" | "id" | "createdAt">>
+    patch: Partial<Omit<SpaceEntityRecord, "spaceId" | "id" | "createdAt">>,
   ): Promise<SpaceEntityRecord> {
     const existing = await this.getEntity(spaceId, entityId);
     if (!existing) {
@@ -178,7 +179,7 @@ export class EntityRepository {
           entityType: entity.type,
           operation: "delete",
         });
-      }
+      },
     );
   }
 }

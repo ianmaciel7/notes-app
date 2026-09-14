@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 export function useSafeLiveQuery<T>(
   querier: () => Promise<T> | T,
   deps: unknown[],
-  fallback: T
+  fallback: T,
 ): T {
   const [mounted, setMounted] = useState(false);
 

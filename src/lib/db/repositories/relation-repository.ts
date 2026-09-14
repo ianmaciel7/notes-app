@@ -8,7 +8,7 @@ export class RelationRepository {
     spaceId: string,
     sourceId: string,
     targetId: string,
-    propertyId: string
+    propertyId: string,
   ): Promise<SpaceRelationRecord> {
     // Multi-tenant boundary check: both source and target must reside in the same space
     const [source, target] = await Promise.all([
@@ -18,12 +18,12 @@ export class RelationRepository {
 
     if (!source) {
       throw new Error(
-        `Cannot link relation: source entity "${sourceId}" does not exist in space "${spaceId}".`
+        `Cannot link relation: source entity "${sourceId}" does not exist in space "${spaceId}".`,
       );
     }
     if (!target) {
       throw new Error(
-        `Cannot link relation: target entity "${targetId}" does not exist in space "${spaceId}".`
+        `Cannot link relation: target entity "${targetId}" does not exist in space "${spaceId}".`,
       );
     }
 
@@ -42,7 +42,9 @@ export class RelationRepository {
 
     // Also update source entity's relations array for fast client hydration
     const existingRelations = source.relations || [];
-    if (!existingRelations.some((r) => r.targetEntityId === targetId && r.propertyId === propertyId)) {
+    if (
+      !existingRelations.some((r) => r.targetEntityId === targetId && r.propertyId === propertyId)
+    ) {
       await this.db.entities.update([spaceId, sourceId], {
         relations: [
           ...existingRelations,
@@ -61,17 +63,11 @@ export class RelationRepository {
   }
 
   async listOutgoingRelations(spaceId: string, sourceId: string): Promise<SpaceRelationRecord[]> {
-    return this.db.relations
-      .where("[spaceId+sourceId]")
-      .equals([spaceId, sourceId])
-      .toArray();
+    return this.db.relations.where("[spaceId+sourceId]").equals([spaceId, sourceId]).toArray();
   }
 
   async listIncomingBacklinks(spaceId: string, targetId: string): Promise<SpaceRelationRecord[]> {
-    return this.db.relations
-      .where("[spaceId+targetId]")
-      .equals([spaceId, targetId])
-      .toArray();
+    return this.db.relations.where("[spaceId+targetId]").equals([spaceId, targetId]).toArray();
   }
 
   async deleteRelation(spaceId: string, id: string): Promise<void> {
@@ -82,9 +78,9 @@ export class RelationRepository {
 
     // Remove from source entity relations array
     const source = await this.db.entities.get([spaceId, relation.sourceId]);
-    if (source && source.relations) {
+    if (source?.relations) {
       const updated = source.relations.filter(
-        (r) => !(r.targetEntityId === relation.targetId && r.propertyId === relation.propertyId)
+        (r) => !(r.targetEntityId === relation.targetId && r.propertyId === relation.propertyId),
       );
       await this.db.entities.update([spaceId, relation.sourceId], {
         relations: updated,
@@ -93,7 +89,10 @@ export class RelationRepository {
     }
   }
 
-  async deleteRelationsForEntity(spaceId: string, entityId: string): Promise<SpaceRelationRecord[]> {
+  async deleteRelationsForEntity(
+    spaceId: string,
+    entityId: string,
+  ): Promise<SpaceRelationRecord[]> {
     const [outgoing, incoming] = await Promise.all([
       this.listOutgoingRelations(spaceId, entityId),
       this.listIncomingBacklinks(spaceId, entityId),

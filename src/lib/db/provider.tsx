@@ -1,8 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { type Repositories, createRepositories } from "./repositories";
-import { KnowledgeDatabase, createKnowledgeDatabase } from "./schema";
+import type React from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { createRepositories, type Repositories } from "./repositories";
+import { createKnowledgeDatabase, type KnowledgeDatabase } from "./schema";
 
 interface DatabaseContextValue {
   database: KnowledgeDatabase | null;
@@ -56,11 +57,7 @@ export function DatabaseProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  return (
-    <DatabaseContext.Provider value={state}>
-      {children}
-    </DatabaseContext.Provider>
-  );
+  return <DatabaseContext.Provider value={state}>{children}</DatabaseContext.Provider>;
 }
 
 export function useDatabase(): DatabaseContextValue {

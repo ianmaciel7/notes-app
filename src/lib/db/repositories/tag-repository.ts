@@ -14,10 +14,7 @@ export class TagRepository {
 
   async findByName(spaceId: string, name: string): Promise<SpaceTagRecord | undefined> {
     const trimmed = name.trim().toLowerCase();
-    return this.db.tags
-      .where("[spaceId+name]")
-      .equals([spaceId, trimmed])
-      .first();
+    return this.db.tags.where("[spaceId+name]").equals([spaceId, trimmed]).first();
   }
 
   async createTag(spaceId: string, name: string): Promise<SpaceTagRecord> {

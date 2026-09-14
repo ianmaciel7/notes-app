@@ -21,7 +21,7 @@ export class CollectionRepository {
   async createCollection(
     spaceId: string,
     structureId: string,
-    name: string
+    name: string,
   ): Promise<SpaceCollectionRecord> {
     const trimmed = name.trim();
     if (!trimmed) throw new Error("Collection name cannot be empty.");

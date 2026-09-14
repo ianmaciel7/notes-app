@@ -284,7 +284,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
-      <header className="border-b bg-card px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+      <header className="bg-card px-6 py-4 flex items-center justify-between sticky top-0 z-10">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-primary text-primary-foreground">
             <Notebook className="h-5 w-5" />
