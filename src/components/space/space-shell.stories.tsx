@@ -25,7 +25,7 @@ export const Default: Story = () => (
           </SpaceShellSidebar>
           <SpaceShellWorkspace>
             <SpaceShellMain>
-              <SpaceShellHeader className="border-b px-4">
+              <SpaceShellHeader className="px-4">
                 <div className="text-sm font-semibold">Space header</div>
               </SpaceShellHeader>
               <SpaceShellContent>

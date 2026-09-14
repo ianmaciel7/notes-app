@@ -16,7 +16,8 @@
     "ladle:build": "ladle build",
     "ladle:preview": "ladle preview",
     "dev:all": "concurrently \"pnpm dev\" \"pnpm ladle:dev\"",
-    "batch:replace": "node scripts/batch-replace.mjs"
+    "generate": "plop",
+    "g": "plop"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -53,6 +54,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "concurrently": "^9.1.2",
+    "plop": "^4.0.5",
     "tailwindcss": "^4.3.3",
     "typescript": "^5",
     "vitest": "^3.0.0"
