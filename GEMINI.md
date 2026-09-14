@@ -97,7 +97,10 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 - Do **NOT** create or use `docs/superpowers/`, `docs/superpowers/plans/`, or `docs/superpowers/specs/`. Superpowers skill defaults are overridden by repository policy.
 - All architectural decisions, designs, schemas, and library selections **MUST** be authored as MADR-format ADRs in `docs/decisions/` via `.agents/skills/adr`, synced to `DECISIONS.md`, and registered as Ladle stories. Implementation plans belong in `docs/plans/` or attached directly to an ADR, never in `docs/superpowers/plans/`.
 
-### 8. Recommended MCP Servers & Skills
+### 8. Prefer Batch Operations Rule
+- Whenever performing operations that can be parallelized (such as modifying multiple distinct files, dispatching parallel subagent workflows, or querying resources), AI agents **MUST** batch tool calls in a single response turn instead of executing them sequentially across multiple turns.
+
+### 9. Recommended MCP Servers & Skills
 - **MCP Servers**:
   - **Shoogle MCP (`shoogle`, `user-shoogle`)**: Search and registry item lookup service (`https://mcp.shoogle.dev/mcp`). Template provided at [`.agents/mcp_config.example.json`](.agents/mcp_config.example.json).
   - **context7**: Documentation lookup for Next.js 16 & React 19 breaking changes and APIs.

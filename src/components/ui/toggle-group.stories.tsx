@@ -1,7 +1,7 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 
-export default { title: "Componentes / UI / Toggle Group" } satisfies StoryDefault;
+export default { title: "Components / UI / Toggle Group" } satisfies StoryDefault;
 
 export const Default: Story = () => (
   <ToggleGroup defaultValue={["left"]} aria-label="Text alignment">

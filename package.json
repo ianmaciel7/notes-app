@@ -15,7 +15,8 @@
     "ladle:dev": "ladle serve",
     "ladle:build": "ladle build",
     "ladle:preview": "ladle preview",
-    "dev:all": "concurrently \"pnpm dev\" \"pnpm ladle:dev\""
+    "dev:all": "concurrently \"pnpm dev\" \"pnpm ladle:dev\"",
+    "batch:replace": "node scripts/batch-replace.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
