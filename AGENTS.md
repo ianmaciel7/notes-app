@@ -59,6 +59,16 @@ history before reusing an approach.
 - Use Shoogle or another appropriate registry/search integration when looking for reusable components or packages.
 - Inspect generated or downloaded files and adapt them to the repository's conventions before considering the work complete.
 
+## Agent configuration
+
+- The Vercel agent definitions are mirrored in `.codex/agents/` and
+  `.agents/agents/`.
+- Keep both definitions aligned in name, purpose, plugin dependency, skill
+  catalog, and scope. Only the file format differs: Codex uses TOML and
+  Antigravity uses Markdown with YAML frontmatter.
+- Codex discovers project-scoped agents from `.codex/agents/*.toml`. Its
+  machine-wide alternative is `C:\Users\ianma\.codex\agents`.
+
 ## Contribution guidelines
 
 - Preserve existing changes and avoid destructive commands.
