@@ -1,13 +1,7 @@
 "use client";
 
 import { BaseBasicBlocksPlugin, BaseBasicMarksPlugin } from "@platejs/basic-nodes";
-import {
-  Plate,
-  useEditorRef,
-  useEditorSelection,
-  useEditorValue,
-  usePlateEditor,
-} from "platejs/react";
+import { Plate, useEditorRef, useEditorSelection, usePlateEditor } from "platejs/react";
 import * as React from "react";
 import { Editor, EditorContainer } from "@/components/ui/editor";
 import {
@@ -29,7 +23,6 @@ import { SuggestionCombobox } from "./ui/suggestion-combobox";
 function EditorChrome({ readOnly }: { readOnly: boolean }) {
   const editor = useEditorRef();
   const selection = useEditorSelection();
-  const value = useEditorValue();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [isToolbarVisible, setIsToolbarVisible] = React.useState(false);
@@ -52,7 +45,7 @@ function EditorChrome({ readOnly }: { readOnly: boolean }) {
       selection.focus.offset !== selection.anchor.offset ||
         selection.focus.path.join(".") !== selection.anchor.path.join("."),
     );
-  }, [editor, readOnly, selection, value]);
+  }, [editor, readOnly, selection]);
 
   const toggleMark = (mark: "bold" | "italic" | "code" | "link" | "math" | "highlight") => {
     editor.tf.toggleMark(mark);

@@ -5,7 +5,12 @@ import { SuggestionCombobox } from "./suggestion-combobox";
 describe("SuggestionCombobox", () => {
   it("exposes listbox semantics and keyboard-action hooks", () => {
     const html = renderToStaticMarkup(
-      <SuggestionCombobox isOpen query="heading" onSelect={() => undefined} onClose={() => undefined} />,
+      <SuggestionCombobox
+        isOpen
+        query="heading"
+        onSelect={() => undefined}
+        onClose={() => undefined}
+      />,
     );
 
     expect(html).toContain('data-slot="editor-suggestion-combobox"');

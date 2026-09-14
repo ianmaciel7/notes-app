@@ -1,22 +1,22 @@
 # Graph Report - notes-app  (2026-09-14)
 
 ## Corpus Check
-- 524 files · ~591,662 words
+- 525 files · ~591,720 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5766 nodes · 9795 edges · 437 communities (313 shown, 102 thin omitted)
+- 5767 nodes · 9797 edges · 439 communities (313 shown, 104 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 173 edges (avg confidence: 0.86)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2ac802e0`
+- Built from commit: `e28c04b1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - _make_id
-- engine.py
+- _read_text
 - Visão Geral da Arquitetura (Padrão Matklad)
 - cli.py
 - Test API
@@ -25,7 +25,7 @@
 - cache.py
 - reflect.py
 - serve.py
-- export.py
+- html.py
 - _ImageRef
 - watch.py
 - sidebar.tsx
@@ -38,7 +38,7 @@
 - _key
 - write_callflow_html
 - /graphify
-- Path
+- _resolve_js_import_target
 - link_cross_repo_member_calls
 - Path
 - devDependencies
@@ -104,7 +104,7 @@
 - _agents_install
 - Security Policy
 - Sync Plate UI
-- tree_html.py
+- check_graph_file_size_cap
 - complexity
 - URL Architecture & Routing Taxonomy Specification
 - resolver_registry.py
@@ -302,7 +302,7 @@
 - ADR-0003: Automated Knowledge Graph Updates via Husky
 - ADR-0007: BlockNote Rich-Text Editor Integration and Ladle Story Workbench
 - ObjectSplitButtonGroup
-- _js_extra_walk
+- disambiguate_ambiguous_candidates
 - semantic_cleanup.py
 - Describe API
 - ObjectSplitButton
@@ -392,7 +392,7 @@
 - editor.tsx
 - editor-capacities.tsx
 - space-object-types.ts
-- paths.py
+- benchmark.py
 - edge_data
 - button.tsx
 - trigger-controller.ts
@@ -420,7 +420,9 @@
 - _call_llm
 - tag-split-button.tsx
 - travel-icon.tsx
+- suggestion-combobox.tsx
 - ObjectSplitButtonSeparator
+- _StageTimer
 - pdf-icon.tsx
 - weblink-icon.tsx
 - pascal_resolution.py
@@ -450,31 +452,31 @@
   .agents/skills/graphify/cache.py → .agents/skills/graphify/build.py
 - `dispatch_command()` --calls--> `to_html()`  [INFERRED]
   .agents/skills/graphify/cli.py → .agents/skills/graphify/exporters/html.py
-- `dispatch_command()` --calls--> `_gh()`  [INFERRED]
-  .agents/skills/graphify/cli.py → .agents/skills/graphify/prs.py
-- `dispatch_command()` --calls--> `_load_graph()`  [INFERRED]
-  .agents/skills/graphify/cli.py → .agents/skills/graphify/serve.py
+- `dispatch_command()` --calls--> `_file_hash()`  [INFERRED]
+  .agents/skills/graphify/cli.py → .agents/skills/graphify/global_graph.py
+- `dispatch_command()` --calls--> `_save_manifest()`  [INFERRED]
+  .agents/skills/graphify/cli.py → .agents/skills/graphify/global_graph.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (437 total, 102 thin omitted)
+## Communities (439 total, 104 thin omitted)
 
 ### Community 0 - "_make_id"
 Cohesion: 0.02
-Nodes (162): extract_lazarus_package(), _import_csharp(), _import_java(), _import_js(), _import_kotlin(), _import_php(), _import_scala(), Extract package metadata from Lazarus .lpk package files (XML format). .lpk is… (+154 more)
+Nodes (136): extract_lazarus_package(), _import_csharp(), _import_java(), _import_kotlin(), _import_php(), _import_python(), _import_scala(), Extract package metadata from Lazarus .lpk package files (XML format). .lpk is… (+128 more)
 
-### Community 1 - "engine.py"
+### Community 1 - "_read_text"
 Cohesion: 0.02
-Nodes (141): extract_c(), extract_java(), extract_kotlin(), extract_lua(), extract_php(), extract_ruby(), extract_scala(), extract_swift() (+133 more)
+Nodes (183): _get_c_func_name(), _import_c(), _import_swift(), Emit module-level ``imports`` edges and report the imported modules. A Swift…, Recursively unwrap declarator to find the innermost identifier (C)., _read_text(), _c_collect_type_refs(), _cpp_collect_type_refs() (+175 more)
 
 ### Community 2 - "Visão Geral da Arquitetura (Padrão Matklad)"
 Cohesion: 0.14
 Nodes (15): 1. Visão Geral, 1. Visão Geral (Bird's Eye View), 2. Mapa de Código & Estrutura Oficial de Pastas, 2. Mapa do Código & Estrutura Oficial de Pastas, 3. Invariantes Arquiteturais, 4. Fluxos de Dados Principais, 4. Fluxos Principais de Dados, 6. Worktrees de Referência & Topologia da Base de Código (+7 more)
 
 ### Community 3 - "cli.py"
-Cohesion: 0.05
-Nodes (80): print_benchmark(), Print a human-readable benchmark report., distinct_repo_tags(), prefix_graph_for_global(), prune_repo_from_graph(), Return a copy of G with all node IDs prefixed with repo_tag::. Labels are…, Return a unique, human-meaningful repo tag per input graph for merge-graphs.…, Remove all nodes tagged with repo_tag from G in-place. Returns count removed. (+72 more)
+Cohesion: 0.03
+Nodes (115): _node_community_map(), Invert communities dict: node_id -> community_id., distinct_repo_tags(), Return a unique, human-meaningful repo tag per input graph for merge-graphs.…, _bash_invokes_search(), _clone_repo(), _default_graph_path(), dispatch_command() (+107 more)
 
 ### Community 4 - "Test API"
 Cohesion: 0.10
@@ -485,8 +487,8 @@ Cohesion: 0.12
 Nodes (16): backend_detection_env_vars(), _backend_env_keys(), detect_backend(), _format_backend_env_keys(), _get_backend_api_key(), _ollama_host_is_link_local_or_metadata(), Return accepted API-key environment variables for a backend., Return the first configured API key for backend, or an empty string. (+8 more)
 
 ### Community 6 - "Path"
-Cohesion: 0.04
-Nodes (76): _augment_cpp_string_tests(), _blank_keeping_newlines(), _canonicalize_csharp_namespace_nodes(), _check_tree_sitter_version(), extract(), extract_cpp(), extract_csharp(), extract_groovy() (+68 more)
+Cohesion: 0.02
+Nodes (123): _augment_cpp_string_tests(), _blank_keeping_newlines(), _canonicalize_csharp_namespace_nodes(), _check_tree_sitter_version(), _emit_rescued_import(), extract(), extract_astro(), extract_c() (+115 more)
 
 ### Community 7 - "cache.py"
 Cohesion: 0.06
@@ -498,19 +500,19 @@ Nodes (61): _log_path(), log_query(), _log_responses(), nodes_from_result(), Any
 
 ### Community 9 - "serve.py"
 Cohesion: 0.05
-Nodes (76): edge_datas(), Return every edge attribute dict for (u, v); always a list., _ApiKeyMiddleware, _bfs(), _communities_from_graph(), _complete_induced_edges(), _compute_idf(), _cut_lines_to_budget() (+68 more)
+Nodes (69): edge_datas(), Return every edge attribute dict for (u, v); always a list., _ApiKeyMiddleware, _bfs(), _communities_from_graph(), _complete_induced_edges(), _compute_idf(), _cut_lines_to_budget() (+61 more)
 
-### Community 10 - "export.py"
-Cohesion: 0.05
-Nodes (68): _node_community_map(), Invert communities dict: node_id -> community_id., _adopt_pre_manifest_notes(), attach_hyperedges(), backup_if_protected(), _cap_filename(), _cypher_escape(), _cypher_label() (+60 more)
+### Community 10 - "html.py"
+Cohesion: 0.18
+Nodes (13): Shared constants/helpers for the graphify exporters package. Symbols used by…, _html_document_title(), _html_script(), _html_styles(), _hyperedge_script(), Graph, html — moved verbatim from graphify/export.py., Return a portable label for the graph.html <title>. Tracked artifacts must not… (+5 more)
 
 ### Community 11 - "_ImageRef"
 Cohesion: 0.08
 Nodes (39): _anthropic_content(), _azure_client(), _backend_pkg_hint(), _bedrock_content(), _call_azure(), _call_bedrock(), _call_claude(), _call_claude_cli() (+31 more)
 
 ### Community 12 - "watch.py"
-Cohesion: 0.04
-Nodes (77): dedupe_edges(), dedupe_nodes(), disambiguate_file_labels_in_nodes(), Relabel colliding-basename file nodes on a raw node-dict list, in place…, Collapse nodes sharing an ``id``, last-writer-wins on attributes. Mirrors what…, Collapse exact parallel edges by ``(source, target, relation)``, keeping the…, community_member_sigs(), label_communities_by_hub() (+69 more)
+Cohesion: 0.05
+Nodes (75): dedupe_edges(), dedupe_nodes(), disambiguate_file_labels_in_nodes(), Relabel colliding-basename file nodes on a raw node-dict list, in place…, Collapse nodes sharing an ``id``, last-writer-wins on attributes. Mirrors what…, Collapse exact parallel edges by ``(source, target, relation)``, keeping the…, community_member_sigs(), Per-community membership fingerprints: ``{cid: sha256(sorted member ids)}``.… (+67 more)
 
 ### Community 13 - "sidebar.tsx"
 Cohesion: 0.06
@@ -552,9 +554,9 @@ Nodes (30): CallflowOptions, classify_edges(), first_list(), html_comment_text()
 Cohesion: 0.06
 Nodes (30): For --cluster-only, For git commit hook, For /graphify add, For /graphify explain, For /graphify path, For /graphify query, For native CLAUDE.md integration, For --update (incremental re-extraction) (+22 more)
 
-### Community 23 - "Path"
-Cohesion: 0.06
-Nodes (60): _emit_rescued_import(), extract_astro(), extract_svelte(), extract_vue(), Recover ``import('…')`` edges the AST pass does not emit for plain JS/TS. tree-…, Resolve a regex-rescued import specifier the way ``_import_js`` does. Returns…, Shared edge/stub emit for the Svelte/Astro/Vue regex-rescue import passes.…, Extract imports from .svelte files: script-block via JS AST + template regex… (+52 more)
+### Community 23 - "_resolve_js_import_target"
+Cohesion: 0.18
+Nodes (11): _import_js(), _dynamic_import_js(), _find_require_call(), _js_import_binds_external(), True when a JS/TS import specifier names a module outside the scanned corpus.…, Detect dynamic import() calls in JS/TS and emit imports_from edges. Handles…, Return the call_expression node if `value_node` is a `require(...)` call or…, Detect CommonJS require imports inside lexical_declaration /… (+3 more)
 
 ### Community 24 - "link_cross_repo_member_calls"
 Cohesion: 0.20
@@ -749,12 +751,12 @@ Cohesion: 0.20
 Nodes (6): componentDocs, devDocs, GuidesLocale, GuidesStoryProps, ladleRulesDocs, localeArgTypes
 
 ### Community 72 - "_normalize_ts_import_types"
-Cohesion: 0.13
-Nodes (20): extract_js(), _extract_js_rationale(), _normalize_ts_import_types(), Any, Return whether an import-call match starts in executable source. Regex matching…, Collect byte ranges tree-sitter already parsed as type arguments., Return the ranges in ``ranges`` that contain ``offset``. Scanning the full…, Index :func:`_ts_type_argument_ranges` for :func:`_ts_ranges_containing`.… (+12 more)
+Cohesion: 0.17
+Nodes (16): _normalize_ts_import_types(), Any, Return whether an import-call match starts in executable source. Regex matching…, Collect byte ranges tree-sitter already parsed as type arguments., Return the ranges in ``ranges`` that contain ``offset``. Scanning the full…, Index :func:`_ts_type_argument_ranges` for :func:`_ts_ranges_containing`.…, Return parser error nodes without depending on a grammar's error name., Tell whether a masked generic is backed by an actual parse failure. A valid… (+8 more)
 
 ### Community 73 - "extract.py"
 Cohesion: 0.04
-Nodes (118): _augment_js_reexport_edges(), _get_c_func_name(), _import_lua(), _import_python(), _import_swift(), Deterministic structural extraction from source code using tree-sitter. Outputs…, Encode trailing Ruby method suffixes (!, ?, =) into safe node ID components…, Extract require('module') from Lua variable_declaration nodes. (+110 more)
+Nodes (132): _augment_js_reexport_edges(), extract_vue(), _import_lua(), Deterministic structural extraction from source code using tree-sitter. Outputs…, Encode trailing Ruby method suffixes (!, ?, =) into safe node ID components…, Extract require('module') from Lua variable_declaration nodes., Collapse whitespace and truncate ``text`` to ``width`` chars for a rationale…, Extract imports, symbols, and type refs from a ``.vue`` SFC. Masks the… (+124 more)
 
 ### Community 74 - "CsharpNameResolver"
 Cohesion: 0.15
@@ -781,8 +783,8 @@ Cohesion: 0.13
 Nodes (24): _auto_follow_symlinks(), convert_office_file(), count_words(), docx_to_markdown(), extract_pdf_text(), _file_within_size_cap(), _md5_file(), _os_path() (+16 more)
 
 ### Community 80 - "cluster.py"
-Cohesion: 0.23
-Nodes (15): cluster(), cohesion_score(), _native_leiden(), _partition(), Graph, Community detection on NetworkX graphs. Uses Leiden (graspologic) if available,…, Context manager to suppress stdout/stderr during library calls. graspologic's…, Run Leiden community detection. Returns {community_id: [node_ids]}. Community… (+7 more)
+Cohesion: 0.20
+Nodes (17): cluster(), cohesion_score(), label_communities_by_hub(), _native_leiden(), _partition(), Graph, Community detection on NetworkX graphs. Uses Leiden (graspologic) if available,…, Context manager to suppress stdout/stderr during library calls. graspologic's… (+9 more)
 
 ### Community 81 - "_json_fragment_candidates"
 Cohesion: 0.33
@@ -816,9 +818,9 @@ Nodes (12): Asset Classification & Sensitivity, Core Security Invariants, Covere
 Cohesion: 0.09
 Nodes (21): Agent-Native Requirements, Apply Mode, Autogoal Dependency, Command Parsing, Completion Gates, Core Take, Dashboard Mode, Decisions (+13 more)
 
-### Community 89 - "tree_html.py"
-Cohesion: 0.38
-Nodes (9): build_tree(), _common_root(), emit_html(), _make_truncation_leaf(), Any, Path, tree_html — emit a D3 v7 collapsible-tree HTML view of a graph. A self-…, Build a ``{name, total_count, children}`` hierarchy. Each leaf is either a code… (+1 more)
+### Community 89 - "check_graph_file_size_cap"
+Cohesion: 0.12
+Nodes (29): prefix_graph_for_global(), prune_repo_from_graph(), Return a copy of G with all node IDs prefixed with repo_tag::. Labels are…, Remove all nodes tagged with repo_tag from G in-place. Returns count removed., _file_hash(), global_add(), global_list(), global_path() (+21 more)
 
 ### Community 90 - "complexity"
 Cohesion: 0.18
@@ -1189,8 +1191,8 @@ Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
 ### Community 184 - "README.md"
-Cohesion: 0.17
-Nodes (10): 1. Directory Conventions, 2. Coding Rules & Principles, Codebase Conventions & Guidelines, AI & Development Setup, Community, Contributing, Documentation, Getting Started (+2 more)
+Cohesion: 0.10
+Nodes (17): Path & Configuration Portability Rule, 1. Prerequisites & Installation, 2. Running the Development Server, 3. Code Quality & Verification, 4. Knowledge Graph (`graphify`), 5. Working with AI Agents, Local Development & Workflow Guide, 1. Directory Conventions (+9 more)
 
 ### Community 185 - "ADR-0005: Ladle Component Workbench and Documentation Viewer"
 Cohesion: 0.18
@@ -1364,9 +1366,9 @@ Nodes (11): ADR-0007: BlockNote Rich-Text Editor Integration and Ladle Story Wor
 Cohesion: 0.17
 Nodes (9): CollectionSplitButton(), CollectionSplitButtonProps, ObjectCollectionSplitButton, DailyNoteSplitButtonProps, ObjectDailyNoteSplitButton, ObjectSplitButtonGroup(), ObjectTravelSplitButton, TravelSplitButton() (+1 more)
 
-### Community 302 - "_js_extra_walk"
-Cohesion: 0.10
-Nodes (22): _find_body(), _js_collect_pattern_idents(), _js_extra_walk(), _js_local_bound_names(), _js_member_assignment_target(), _js_scan_member_assignments(), _js_topmost_closures(), _python_local_bound_names() (+14 more)
+### Community 302 - "disambiguate_ambiguous_candidates"
+Cohesion: 0.33
+Nodes (6): disambiguate_ambiguous_candidates(), _is_test_path(), _path_proximity_winner(), Classify a source path as a test path (case-insensitive, segment-aware). Shared…, Pick the candidate whose source file is closest to the call site.…, Resolve an ambiguous bare-name call to one candidate, or ``None``. Shared god-…
 
 ### Community 303 - "semantic_cleanup.py"
 Cohesion: 0.19
@@ -1401,8 +1403,8 @@ Cohesion: 0.22
 Nodes (7): IdeaSplitButton(), IdeaSplitButtonProps, ObjectIdeaSplitButton, ObjectSplitButtonItem(), ObjectTweetSplitButton, TweetSplitButton(), TweetSplitButtonProps
 
 ### Community 313 - "mcp_ingest.py"
-Cohesion: 0.08
-Nodes (36): _extract_spock_fallback(), Regex-based fallback for Spock spec files where tree-sitter-groovy cannot parse…, extract_sql(), _mask_sql_comments(), _norm_ident(), Path, Sql extractor. Moved verbatim from graphify/extract.py., Masked text only — see _scan_sql for the span-reporting form. (+28 more)
+Cohesion: 0.09
+Nodes (32): _extract_spock_fallback(), Regex-based fallback for Spock spec files where tree-sitter-groovy cannot parse…, extract_sql(), _mask_sql_comments(), _norm_ident(), Path, Sql extractor. Moved verbatim from graphify/extract.py., Masked text only — see _scan_sql for the span-reporting form. (+24 more)
 
 ### Community 314 - "ObjectSplitButtonAction"
 Cohesion: 0.22
@@ -1564,10 +1566,6 @@ Nodes (3): name, private, version
 Cohesion: 0.22
 Nodes (9): ADR-0001: Next.js 16 + React 19 App Router Baseline, Architectural Decision Log (MADR), Considered Options, Context and Problem Statement, Decision Drivers, Decision Outcome, Index of Architectural Decision Records (ADRs), Negative Consequences (+1 more)
 
-### Community 373 - "AGENTS.md"
-Cohesion: 0.14
-Nodes (8): Path & Configuration Portability Rule, This is NOT the Next.js you know, 1. Prerequisites & Installation, 2. Running the Development Server, 3. Code Quality & Verification, 4. Knowledge Graph (`graphify`), 5. Working with AI Agents, Local Development & Workflow Guide
-
 ### Community 374 - "ADR-0002: Biome as Unified Linter & Formatter"
 Cohesion: 0.29
 Nodes (7): ADR-0002: Biome as Unified Linter & Formatter, Considered Options, Context and Problem Statement, Decision Drivers, Decision Outcome, Negative Consequences, Positive Consequences
@@ -1618,11 +1616,11 @@ Nodes (7): IdeaIcon, ObjectIdeaIcon, ImageIcon, ObjectImageIcon, ObjectQuoteIcon
 
 ### Community 389 - "utils.ts"
 Cohesion: 0.18
-Nodes (7): KEY_OBJECT_BLOCK, ObjectBlockElement(), ObjectBlockElementProps, ObjectBlockPlugin, BlockGutterHandleProps, EditorStatic(), editorVariants
+Nodes (7): KEY_MATH_BLOCK, MathBlockElement(), MathBlockElementProps, MathBlockPlugin, BlockGutterHandleProps, EditorStatic(), editorVariants
 
 ### Community 390 - "editor.stories.tsx"
-Cohesion: 0.09
-Nodes (11): initialDoc, sampleTable, GroupBlockElement(), KEY_MATH_BLOCK, MathBlockElement(), MathBlockElementProps, MathBlockPlugin, DEFAULT_COMMAND_ITEMS (+3 more)
+Cohesion: 0.11
+Nodes (7): initialDoc, sampleTable, GroupBlockElement(), KEY_OBJECT_BLOCK, ObjectBlockElement(), ObjectBlockElementProps, ObjectBlockPlugin
 
 ### Community 391 - "file-split-button.tsx"
 Cohesion: 0.50
@@ -1644,9 +1642,9 @@ Nodes (15): CapacitiesEditorProps, CodeBlockMermaidElementProps, CodeBlockMermai
 Cohesion: 0.14
 Nodes (11): MediaIcon, ObjectMediaIcon, ObjectPlaceIcon, PlaceIcon, CollectionId, ObjectIconName, ObjectIconTone, StructureId (+3 more)
 
-### Community 396 - "paths.py"
+### Community 396 - "benchmark.py"
 Cohesion: 0.07
-Nodes (34): _estimate_tokens(), _hr(), Graph, _query_subgraph_tokens(), Token-reduction benchmark - measures how much context graphify saves vs naive…, Return unicode_char if stdout can encode it, else ascii_fallback. Windows…, Horizontal rule that survives non-UTF-8 stdout (e.g. Windows cp1252 console)., Run BFS from best-matching nodes and return estimated tokens in the subgraph… (+26 more)
+Nodes (35): _estimate_tokens(), _hr(), print_benchmark(), Graph, _query_subgraph_tokens(), Token-reduction benchmark - measures how much context graphify saves vs naive…, Print a human-readable benchmark report., Return unicode_char if stdout can encode it, else ascii_fallback. Windows… (+27 more)
 
 ### Community 397 - "edge_data"
 Cohesion: 0.23
@@ -1700,6 +1698,10 @@ Nodes (24): _anthropic_response_text(), _bedrock_inference_config(), _bedrock_re
 Cohesion: 0.50
 Nodes (3): ObjectTagSplitButton, TagSplitButton(), TagSplitButtonProps
 
+### Community 424 - "suggestion-combobox.tsx"
+Cohesion: 0.40
+Nodes (4): DEFAULT_COMMAND_ITEMS, SuggestionCombobox(), SuggestionComboboxProps, SuggestionItem
+
 ### Community 425 - "ObjectSplitButtonSeparator"
 Cohesion: 0.22
 Nodes (7): AiChatSplitButton(), AiChatSplitButtonProps, ObjectAiChatSplitButton, ArchiveSplitButton(), ArchiveSplitButtonProps, ObjectArchiveSplitButton, ObjectSplitButtonSeparator()
@@ -1715,22 +1717,22 @@ Nodes (17): _build_opener(), _max_graph_file_bytes(), _NoFileRedirectHandler, Pa
 ## Knowledge Gaps
 - **1734 isolated node(s):** `__filename`, `__dirname`, `WORKSPACE_ROOT`, `DECISIONS_DIR`, `DECISIONS_INDEX_FILE` (+1729 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 3359 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **102 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **104 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `dispatch_command()` connect `cli.py` to `_get_backend_api_key`, `Path`, `cache.py`, `save_manifest`, `serve.py`, `export.py`, `_ImageRef`, `paths.py`, `watch.py`, `edge_data`, `hooks.py`, `reflect.py`, `write_callflow_html`, `link_cross_repo_member_calls`, `analyze.py`, `prs.py`, `__main__.py`, `semantic_cleanup.py`, `diagnostics.py`, `ingest.py`, `detect`, `introspect_postgres`, `generate_community_labels`, `affected.py`, `llm.py`, `cluster.py`, `tree_html.py`, `introspect_cargo`, `build.py`?**
+- **Why does `dispatch_command()` connect `cli.py` to `_get_backend_api_key`, `Path`, `cache.py`, `save_manifest`, `serve.py`, `html.py`, `_ImageRef`, `benchmark.py`, `watch.py`, `edge_data`, `hooks.py`, `reflect.py`, `write_callflow_html`, `link_cross_repo_member_calls`, `analyze.py`, `prs.py`, `__main__.py`, `_StageTimer`, `semantic_cleanup.py`, `diagnostics.py`, `ingest.py`, `detect`, `introspect_postgres`, `generate_community_labels`, `affected.py`, `llm.py`, `cluster.py`, `check_graph_file_size_cap`, `introspect_cargo`, `build.py`?**
   _High betweenness centrality (0.029) - this node is a cross-community bridge._
-- **Why does `extract()` connect `Path` to `_make_id`, `cli.py`, `cache.py`, `extract.py`, `CsharpNameResolver`, `watch.py`, `symbol_resolution.py`, `Path`, `resolver_registry.py`?**
+- **Why does `extract()` connect `Path` to `_make_id`, `cli.py`, `cache.py`, `extract.py`, `CsharpNameResolver`, `watch.py`, `disambiguate_ambiguous_candidates`, `symbol_resolution.py`, `resolver_registry.py`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
-- **Why does `_file_stem()` connect `_make_id` to `engine.py`, `robot.py`, `Path`, `_normalize_ts_import_types`, `extract.py`, `markdown.py`, `symbol_resolution.py`, `mcp_ingest.py`, `extract_xaml`, `build.py`, `verilog.py`?**
+- **Why does `_file_stem()` connect `_make_id` to `_read_text`, `robot.py`, `Path`, `extract.py`, `markdown.py`, `symbol_resolution.py`, `_resolve_js_import_target`, `mcp_ingest.py`, `extract_xaml`, `build.py`, `verilog.py`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Are the 5 inferred relationships involving `dispatch_command()` (e.g. with `to_html()` and `_file_hash()`) actually correct?**
   _`dispatch_command()` has 5 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `__filename`, `__dirname`, `WORKSPACE_ROOT` to the rest of the system?**
   _1734 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `_make_id` be split into smaller, more focused modules?**
-  _Cohesion score 0.019828115408225905 - nodes in this community are weakly interconnected._
-- **Should `engine.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.018486590038314175 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.024214495182237117 - nodes in this community are weakly interconnected._
+- **Should `_read_text` be split into smaller, more focused modules?**
+  _Cohesion score 0.017180566617362614 - nodes in this community are weakly interconnected._

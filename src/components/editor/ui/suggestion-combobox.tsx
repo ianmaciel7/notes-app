@@ -103,6 +103,8 @@ export function SuggestionCombobox({
       item.description.toLowerCase().includes(query.toLowerCase()),
   );
 
+  // Query changes reset keyboard navigation to the first result.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: query is the intentional reset key.
   React.useEffect(() => setActiveIndex(0), [query]);
 
   if (!isOpen) return null;

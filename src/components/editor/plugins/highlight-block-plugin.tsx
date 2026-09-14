@@ -47,13 +47,13 @@ export function HighlightBlockElement({
       )}
     >
       <div className="flex items-start gap-3">
-         <Quote aria-hidden="true" className="size-5 shrink-0 opacity-60 mt-0.5" />
+        <Quote aria-hidden="true" className="size-5 shrink-0 opacity-60 mt-0.5" />
         <div className="flex-1 space-y-1">
           <div>{children}</div>
           {(sourceLabel || sourceUrl) && (
             <div className="not-italic mt-2 flex items-center gap-1.5 text-xs opacity-75">
-               <Link2 aria-hidden="true" className="size-3" />
-               {sourceUrl && /^https?:\/\//i.test(sourceUrl) ? (
+              <Link2 aria-hidden="true" className="size-3" />
+              {sourceUrl && /^https?:\/\//i.test(sourceUrl) ? (
                 <a
                   href={sourceUrl}
                   target="_blank"

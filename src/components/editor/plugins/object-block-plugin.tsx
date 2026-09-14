@@ -44,7 +44,11 @@ export function ObjectBlockElement({
           className,
         )}
       >
-        {state === "offline" ? <WifiOff aria-hidden="true" className="size-4" /> : <Lock aria-hidden="true" className="size-4" />}
+        {state === "offline" ? (
+          <WifiOff aria-hidden="true" className="size-4" />
+        ) : (
+          <Lock aria-hidden="true" className="size-4" />
+        )}
         <span>
           {title} ({state})
         </span>
