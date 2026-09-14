@@ -1,5 +1,5 @@
 /**
- * Capacities Block Editor Domain - Document Schema (v3)
+ * Structured Block Editor Domain - Document Schema (v3)
  */
 
 export const BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION = 3 as const;

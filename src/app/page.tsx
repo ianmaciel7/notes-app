@@ -40,7 +40,7 @@ const INITIAL_NOTES: Note[] = [
     id: "1",
     title: "Project Parity Architecture",
     content:
-      "Review baseline Capacities ingestion pipelines and sync protocols. Align React 19 server components with Next.js 16.",
+      "Review baseline ingestion pipelines and sync protocols. Align React 19 server components with Next.js 16.",
     category: "work",
     pinned: true,
     date: "Sep 11, 2026",

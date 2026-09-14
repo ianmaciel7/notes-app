@@ -1,5 +1,5 @@
 /**
- * Capacities Block Editor Domain - Table Block Model
+ * Structured Block Editor Domain - Table Block Model
  * Matrix operations: row/column insertion, deletion, sorting, cell styling, CSV export, and Markdown table parsing.
  */
 

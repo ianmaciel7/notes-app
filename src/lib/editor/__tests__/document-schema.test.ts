@@ -33,7 +33,7 @@ describe("document-schema", () => {
     expect(processed[0].attrs?.id).toMatch(/^block:/);
   });
 
-  it("round-trips between Capacities AST and Slate AST without loss", () => {
+  it("round-trips between document AST and Slate AST without loss", () => {
     const doc = {
       ...createEmptyBlockDocument(),
       doc: {

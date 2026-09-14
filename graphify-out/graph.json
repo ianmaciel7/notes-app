@@ -417,7 +417,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonvariantprops",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L268"
+      "source_location": "L291"
     },
     {
       "id": "src_components_objects_split_buttons_query_split_button_querysplitbuttonprops",
@@ -599,7 +599,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonactionprops",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L183"
+      "source_location": "L203"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_objectsplitbuttoncontentprops",
@@ -612,7 +612,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttoncontentprops",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L249"
+      "source_location": "L272"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_objectsplitbuttoncontextvalue",
@@ -625,7 +625,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttoncontextvalue",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L149"
+      "source_location": "L169"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_objectsplitbuttongroupprops",
@@ -638,7 +638,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttongroupprops",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L172"
+      "source_location": "L192"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_objectsplitbuttonitemprops",
@@ -651,7 +651,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonitemprops",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L255"
+      "source_location": "L278"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_objectsplitbuttonoption",
@@ -664,7 +664,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonoption",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L261"
+      "source_location": "L284"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_objectsplitbuttonprops",
@@ -677,7 +677,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonprops",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L159"
+      "source_location": "L179"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_objectsplitbuttonseparatorprops",
@@ -690,7 +690,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonseparatorprops",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L218"
+      "source_location": "L238"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_objectsplitbuttonsize",
@@ -703,7 +703,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonsize",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L147"
+      "source_location": "L167"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_objectsplitbuttontriggerprops",
@@ -716,7 +716,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttontriggerprops",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L224"
+      "source_location": "L247"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_variantstyle",
@@ -1158,7 +1158,7 @@
       "file_type": "code",
       "norm_label": "capacitieseditorprops",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L74"
+      "source_location": "L67"
     },
     {
       "id": "src_components_editor_plugins_code_mermaid_plugin_codeblockmermaidelementprops",
@@ -7565,7 +7565,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttoncontent()",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L251"
+      "source_location": "L274"
     },
     {
       "id": "src_components_objects_split_buttons_study_goal_split_button_studygoalsplitbutton",
@@ -12029,7 +12029,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttongroup()",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L174"
+      "source_location": "L194"
     },
     {
       "id": "src_components_objects_split_buttons_travel_split_button_travelsplitbutton",
@@ -12209,7 +12209,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbutton()",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L164"
+      "source_location": "L184"
     },
     {
       "id": "src_components_objects_split_buttons_quote_split_button_quotesplitbutton",
@@ -12257,7 +12257,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttontrigger()",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L229"
+      "source_location": "L252"
     },
     {
       "id": "src_components_objects_icons_icons_stories_alliconsgrid",
@@ -12317,7 +12317,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonitem()",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L257"
+      "source_location": "L280"
     },
     {
       "id": "src_components_objects_split_buttons_tweet_split_button_tweetsplitbutton",
@@ -12509,7 +12509,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonaction()",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L190"
+      "source_location": "L210"
     },
     {
       "id": "src_components_objects_split_buttons_organization_split_button_organizationsplitbutton",
@@ -13409,7 +13409,7 @@
       "file_type": "code",
       "norm_label": "capacitieseditor()",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L82"
+      "source_location": "L75"
     },
     {
       "id": "src_lib_editor_document_schema_capacitiesdoctoslate",
@@ -15173,7 +15173,7 @@
       "file_type": "code",
       "norm_label": "editorchrome()",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L29"
+      "source_location": "L23"
     },
     {
       "id": "src_lib_editor_trigger_controller_resolvesuggestiontrigger",
@@ -15593,7 +15593,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonseparator()",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L220"
+      "source_location": "L240"
     },
     {
       "id": "ladle_components_provider",
@@ -45214,7 +45214,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttoncontext",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L154"
+      "source_location": "L174"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_objectsplitbuttonsizes",
@@ -45225,7 +45225,7 @@
       "file_type": "code",
       "norm_label": "objectsplitbuttonsizes",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L141"
+      "source_location": "L161"
     },
     {
       "id": "src_components_objects_split_buttons_object_split_button_variantstyles",
@@ -45236,7 +45236,7 @@
       "file_type": "code",
       "norm_label": "variantstyles",
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L24"
+      "source_location": "L25"
     },
     {
       "id": "src_components_ui_button_group",
@@ -54410,7 +54410,7 @@
       "file_type": "code",
       "norm_label": "objectblockplugin",
       "source_file": "src/components/editor/plugins/object-block-plugin.tsx",
-      "source_location": "L102"
+      "source_location": "L106"
     },
     {
       "id": "src_components_objects_split_buttons_file_split_button",
@@ -54542,7 +54542,7 @@
       "file_type": "code",
       "norm_label": "codeblockmermaidplugin",
       "source_file": "src/components/editor/plugins/code-mermaid-plugin.tsx",
-      "source_location": "L50"
+      "source_location": "L54"
     },
     {
       "id": "src_components_editor_plugins_code_mermaid_plugin_key_code_block_mermaid",
@@ -94583,7 +94583,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L116",
+      "source_location": "L109",
       "weight": 1.0
     },
     {
@@ -94595,7 +94595,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L89",
+      "source_location": "L82",
       "weight": 1.0
     },
     {
@@ -94607,7 +94607,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L90",
+      "source_location": "L83",
       "weight": 1.0
     },
     {
@@ -94619,7 +94619,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L46",
+      "source_location": "L39",
       "weight": 1.0
     },
     {
@@ -95771,7 +95771,7 @@
       "confidence_score": 1.0,
       "context": "field",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L75",
+      "source_location": "L68",
       "weight": 1.0
     },
     {
@@ -105124,78 +105124,6 @@
     },
     {
       "source": "src_components_editor_editor_capacities",
-      "target": "src_components_ui_editor_editor",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L12",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_editor_editor_capacities",
-      "target": "src_components_ui_editor_editorcontainer",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L12",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_editor_editor_capacities",
-      "target": "src_lib_editor_document_schema_blockeditordocument",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L13",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_editor_editor_capacities",
-      "target": "src_lib_editor_document_schema_capacitiesdoctoslate",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L13",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_editor_editor_capacities",
-      "target": "src_lib_editor_document_schema_createemptyblockdocument",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L13",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_editor_editor_capacities",
-      "target": "src_lib_editor_document_schema_slatetocapacitiesdoc",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L13",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_editor_editor_capacities",
       "target": "src_lib_editor_trigger_controller_resolvesuggestiontrigger",
       "relation": "imports",
       "_origin": "ast",
@@ -105203,7 +105131,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L19",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -105215,7 +105143,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L20",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -105227,7 +105155,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L21",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -105239,7 +105167,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L21",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -105251,7 +105179,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L21",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -105263,7 +105191,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L22",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -105275,7 +105203,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L23",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -105287,7 +105215,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L24",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -105299,7 +105227,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L25",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -105311,7 +105239,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L26",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -105323,7 +105251,79 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L27",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_editor_editor_capacities",
+      "target": "src_components_ui_editor_editor",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/editor/editor-capacities.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_editor_editor_capacities",
+      "target": "src_components_ui_editor_editorcontainer",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/editor/editor-capacities.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_editor_editor_capacities",
+      "target": "src_lib_editor_document_schema_blockeditordocument",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/editor/editor-capacities.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_editor_editor_capacities",
+      "target": "src_lib_editor_document_schema_capacitiesdoctoslate",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/editor/editor-capacities.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_editor_editor_capacities",
+      "target": "src_lib_editor_document_schema_createemptyblockdocument",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/editor/editor-capacities.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_editor_editor_capacities",
+      "target": "src_lib_editor_document_schema_slatetocapacitiesdoc",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/editor/editor-capacities.tsx",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -113706,19 +113706,7 @@
     },
     {
       "source": "src_components_editor_editor_capacities",
-      "target": "src_components_ui_editor",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L12",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_editor_editor_capacities",
-      "target": "src_lib_editor_document_schema",
+      "target": "src_lib_editor_trigger_controller",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -113730,18 +113718,6 @@
     },
     {
       "source": "src_components_editor_editor_capacities",
-      "target": "src_lib_editor_trigger_controller",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L19",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_editor_editor_capacities",
       "target": "src_components_editor_plugins_code_mermaid_plugin",
       "relation": "imports_from",
       "_origin": "ast",
@@ -113749,7 +113725,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L20",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -113761,7 +113737,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L21",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -113773,7 +113749,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L22",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -113785,7 +113761,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L23",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -113797,7 +113773,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L24",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -113809,7 +113785,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L25",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -113821,7 +113797,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L26",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -113833,7 +113809,31 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L27",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_editor_editor_capacities",
+      "target": "src_components_ui_editor",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/editor/editor-capacities.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_editor_editor_capacities",
+      "target": "src_lib_editor_document_schema",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/editor/editor-capacities.tsx",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -156065,7 +156065,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L29",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -156076,7 +156076,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L74",
+      "source_location": "L67",
       "weight": 1.0
     },
     {
@@ -156087,7 +156087,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/editor/editor-capacities.tsx",
-      "source_location": "L82",
+      "source_location": "L75",
       "weight": 1.0
     },
     {
@@ -156241,7 +156241,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/editor/plugins/code-mermaid-plugin.tsx",
-      "source_location": "L50",
+      "source_location": "L54",
       "weight": 1.0
     },
     {
@@ -156439,7 +156439,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/editor/plugins/object-block-plugin.tsx",
-      "source_location": "L102",
+      "source_location": "L106",
       "weight": 1.0
     },
     {
@@ -158188,7 +158188,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L141",
+      "source_location": "L161",
       "weight": 1.0
     },
     {
@@ -158199,7 +158199,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L147",
+      "source_location": "L167",
       "weight": 1.0
     },
     {
@@ -158210,40 +158210,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L149",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_objects_split_buttons_object_split_button",
-      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttoncontext",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L154",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_objects_split_buttons_object_split_button",
-      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttonprops",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L159",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_objects_split_buttons_object_split_button",
-      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbutton",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L164",
+      "source_location": "L169",
       "weight": 1.0
     },
     {
@@ -158259,18 +158226,7 @@
     },
     {
       "source": "src_components_objects_split_buttons_object_split_button",
-      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttongroupprops",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L172",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_objects_split_buttons_object_split_button",
-      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttongroup",
+      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttoncontext",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -158281,13 +158237,57 @@
     },
     {
       "source": "src_components_objects_split_buttons_object_split_button",
+      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttonprops",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
+      "source_location": "L179",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_objects_split_buttons_object_split_button",
+      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbutton",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
+      "source_location": "L184",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_objects_split_buttons_object_split_button",
+      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttongroupprops",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
+      "source_location": "L192",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_objects_split_buttons_object_split_button",
+      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttongroup",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
+      "source_location": "L194",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_objects_split_buttons_object_split_button",
       "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttonactionprops",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L183",
+      "source_location": "L203",
       "weight": 1.0
     },
     {
@@ -158298,7 +158298,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L190",
+      "source_location": "L210",
       "weight": 1.0
     },
     {
@@ -158309,7 +158309,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L218",
+      "source_location": "L238",
       "weight": 1.0
     },
     {
@@ -158320,7 +158320,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L220",
+      "source_location": "L240",
       "weight": 1.0
     },
     {
@@ -158331,18 +158331,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L224",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_objects_split_buttons_object_split_button",
-      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttontrigger",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L229",
+      "source_location": "L247",
       "weight": 1.0
     },
     {
@@ -158353,7 +158342,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L24",
+      "source_location": "L25",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_objects_split_buttons_object_split_button",
+      "target": "src_components_objects_split_buttons_object_split_button_objectsplitbuttontrigger",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
+      "source_location": "L252",
       "weight": 1.0
     },
     {
@@ -158364,7 +158364,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L249",
+      "source_location": "L272",
       "weight": 1.0
     },
     {
@@ -158375,7 +158375,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L251",
+      "source_location": "L274",
       "weight": 1.0
     },
     {
@@ -158386,7 +158386,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L255",
+      "source_location": "L278",
       "weight": 1.0
     },
     {
@@ -158397,7 +158397,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L257",
+      "source_location": "L280",
       "weight": 1.0
     },
     {
@@ -158408,7 +158408,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L261",
+      "source_location": "L284",
       "weight": 1.0
     },
     {
@@ -158419,7 +158419,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/objects/split-buttons/object-split-button.tsx",
-      "source_location": "L268",
+      "source_location": "L291",
       "weight": 1.0
     },
     {
@@ -179535,7 +179535,7 @@
       "confidence_score": 0.85,
       "context": "collection",
       "source_file": "src/components/editor/plugins/code-mermaid-plugin.tsx",
-      "source_location": "L53",
+      "source_location": "L57",
       "weight": 1.0
     },
     {
@@ -179607,7 +179607,7 @@
       "confidence_score": 0.85,
       "context": "collection",
       "source_file": "src/components/editor/plugins/object-block-plugin.tsx",
-      "source_location": "L105",
+      "source_location": "L109",
       "weight": 1.0
     },
     {
@@ -180203,5 +180203,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e28c04b1f6a2903af317a5e8ae0bb4dbec72d566"
+  "built_at_commit": "c6caf7773eb3863f281b4d2e475bec5376d1c4b9"
 }

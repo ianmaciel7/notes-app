@@ -28,6 +28,7 @@ export function GroupBlockElement({
 
   return (
     <div
+      data-slot="editor-group-block"
       {...attributes}
       {...props}
       className={cn(
@@ -62,6 +63,7 @@ export function ColumnLayoutElement({
 }: ColumnLayoutElementProps) {
   return (
     <div
+      data-slot="editor-column-layout"
       {...attributes}
       {...props}
       className={cn("my-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", className)}
@@ -79,6 +81,7 @@ export function ColumnElement({
 }: React.ComponentPropsWithoutRef<"div"> & { attributes?: Record<string, unknown> }) {
   return (
     <div
+      data-slot="editor-column"
       {...attributes}
       {...props}
       className={cn(

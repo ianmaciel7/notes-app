@@ -24,7 +24,7 @@ const initialDoc = {
       {
         type: "heading",
         attrs: { id: "block:editor-heading", level: 1 },
-        content: [{ type: "text", text: "Capacities Editor Parity in notes-app" }],
+        content: [{ type: "text", text: "Structured Editor Parity in notes-app" }],
       },
       {
         type: "paragraph",
@@ -114,8 +114,8 @@ export const HighlightBlock: Story = () => (
       <HighlightBlockElement
         element={{
           color: "yellow",
-          sourceLabel: "Capacities Parity Spec",
-          sourceUrl: "https://capacities.io",
+          sourceLabel: "Structured Editor Specification",
+          sourceUrl: "https://example.com/editor-specification",
         }}
       >
         Knowledge management should center around structured object types and block transclusion.
