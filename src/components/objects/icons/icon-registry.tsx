@@ -1,5 +1,5 @@
 import type * as React from "react";
-import type { ObjectIconProps } from "../../../lib/space-object-types";
+import type { ObjectIconName, ObjectIconProps } from "../../../lib/space-object-types";
 import { AiChatIcon } from "./ai-chat-icon";
 import { ArchiveIcon } from "./archive-icon";
 import { AreaIcon } from "./area-icon";
@@ -33,7 +33,8 @@ import { TravelIcon } from "./travel-icon";
 import { TweetIcon } from "./tweet-icon";
 import { WeblinkIcon } from "./weblink-icon";
 
-export const objectIconRegistry: Record<string, React.ComponentType<ObjectIconProps>> = {
+export const objectIconRegistry: Record<string, React.ComponentType<ObjectIconProps>> &
+  Record<ObjectIconName, React.ComponentType<ObjectIconProps>> = {
   "ai-chat": AiChatIcon,
   archive: ArchiveIcon,
   area: AreaIcon,
@@ -79,7 +80,7 @@ export function getObjectIcon(type: string): React.ComponentType<ObjectIconProps
   return objectIconRegistry[normalized] ?? PageIcon;
 }
 
-export function ObjectIcon({ type, ...props }: { type: string } & ObjectIconProps) {
+export function ObjectIcon({ type, ...props }: { type: ObjectIconName } & ObjectIconProps) {
   const Component = getObjectIcon(type);
   return <Component {...props} />;
 }

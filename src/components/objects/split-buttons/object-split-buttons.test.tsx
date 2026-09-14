@@ -6,6 +6,7 @@ import {
   ObjectSplitButtonDynamic,
   objectSplitButtonRegistry,
 } from "./object-split-button-registry";
+import type { ObjectSplitButtonOption } from "./object-split-button";
 import { PageSplitButton } from "./page-split-button";
 import { TaskSplitButton } from "./task-split-button";
 import { WeblinkSplitButton } from "./weblink-split-button";
@@ -28,22 +29,22 @@ describe("Object Split Buttons", () => {
   it("renders specific split buttons (e.g. WeblinkSplitButton, TaskSplitButton) with default properties", () => {
     const htmlWeblink = renderToStaticMarkup(<WeblinkSplitButton />);
     expect(htmlWeblink).toContain("Weblink");
-    expect(htmlWeblink).toContain("bg-cyan-50");
+    expect(htmlWeblink).toContain("--object-split-button-bg:var(--tone-cyan-bg)");
 
     const htmlTask = renderToStaticMarkup(<TaskSplitButton />);
     expect(htmlTask).toContain("Tarefa");
-    expect(htmlTask).toContain("bg-red-50");
+    expect(htmlTask).toContain("--object-split-button-bg:var(--tone-red-bg)");
   });
 
   it("keeps the disclosure trigger visually integrated with the object variant", () => {
     const html = renderToStaticMarkup(<PageSplitButton />);
 
-    expect(html).toContain("hover:bg-blue-100");
-    expect(html).toContain("border-blue-200");
+    expect(html).toContain("hover:bg-[var(--object-split-button-hover-bg)]");
+    expect(html).toContain("--object-split-button-border:var(--tone-blue-border)");
     expect(html).toContain("rounded-lg");
     expect(html).toContain("size-8");
-    expect(html.match(/bg-blue-50/g)).toHaveLength(2);
-    expect(html.match(/border-blue-200/g)).toHaveLength(2);
+    expect(html.match(/--object-split-button-bg:var\(--tone-blue-bg\)/g)).toHaveLength(2);
+    expect(html.match(/--object-split-button-border:var\(--tone-blue-border\)/g)).toHaveLength(2);
     expect(html).not.toContain("ghost");
     expect(html).not.toContain("bg-primary text-primary-foreground");
   });
@@ -60,9 +61,20 @@ describe("Object Split Buttons", () => {
     );
 
     expect(html).toContain("Page");
-    expect(html).toContain("bg-blue-50");
+    expect(html).toContain("--object-split-button-bg:var(--tone-blue-bg)");
     expect(html).toContain("h-7");
     expect(html).not.toContain('disabled=""');
+  });
+
+  it("inherits menu item attributes through ObjectSplitButtonOption", () => {
+    const option = {
+      "data-testid": "task-option",
+      id: "task",
+      label: "Task",
+      onClick: (event) => event.preventDefault(),
+    } satisfies ObjectSplitButtonOption;
+
+    expect(option["data-testid"]).toBe("task-option");
   });
 
   it("resolves object types and aliases through getObjectSplitButton", () => {

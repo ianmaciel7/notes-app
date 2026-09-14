@@ -85,7 +85,7 @@ export function FloatingToolbar({
         title="Highlight / Callout"
         className="flex size-7 items-center justify-center rounded-lg text-popover-foreground hover:bg-accent cursor-pointer"
       >
-        <Highlighter className="size-3.5 text-amber-500" />
+        <Highlighter className="size-3.5 text-[var(--tone-amber-text)]" />
       </button>
     </div>
   );

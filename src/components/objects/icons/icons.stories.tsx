@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { ObjectIcon, objectIconRegistry } from "./icon-registry";
 
 export default {
-  title: "Componentes / Objects / Icons",
+  title: "Objects / Icons",
 } satisfies StoryDefault;
 
 const storyShellStyle: CSSProperties = {
@@ -109,27 +109,27 @@ export const ColorInheritance: Story = () => (
   <div className="flex flex-col gap-6 p-6">
     <h2 className="text-xl font-semibold">CurrentColor Tone Inheritance</h2>
     <div className="flex flex-wrap items-center gap-4">
-      <div className="flex items-center gap-2 rounded-md bg-blue-500/10 px-3 py-1.5 text-blue-500">
+      <div className="flex items-center gap-2 rounded-md bg-[var(--tone-blue-bg)] px-3 py-1.5 text-[var(--tone-blue-text)]">
         <ObjectIcon type="page" className="size-5" />
         <span className="text-sm font-medium">Blue (page)</span>
       </div>
-      <div className="flex items-center gap-2 rounded-md bg-emerald-500/10 px-3 py-1.5 text-emerald-500">
+      <div className="flex items-center gap-2 rounded-md bg-[var(--tone-emerald-bg)] px-3 py-1.5 text-[var(--tone-emerald-text)]">
         <ObjectIcon type="place" className="size-5" />
         <span className="text-sm font-medium">Emerald (place)</span>
       </div>
-      <div className="flex items-center gap-2 rounded-md bg-amber-500/10 px-3 py-1.5 text-amber-500">
+      <div className="flex items-center gap-2 rounded-md bg-[var(--tone-amber-bg)] px-3 py-1.5 text-[var(--tone-amber-text)]">
         <ObjectIcon type="atomic-note" className="size-5" />
         <span className="text-sm font-medium">Amber (atomic-note)</span>
       </div>
-      <div className="flex items-center gap-2 rounded-md bg-rose-500/10 px-3 py-1.5 text-rose-500">
+      <div className="flex items-center gap-2 rounded-md bg-[var(--tone-rose-bg)] px-3 py-1.5 text-[var(--tone-rose-text)]">
         <ObjectIcon type="quote" className="size-5" />
         <span className="text-sm font-medium">Rose (quote)</span>
       </div>
-      <div className="flex items-center gap-2 rounded-md bg-purple-500/10 px-3 py-1.5 text-purple-500">
+      <div className="flex items-center gap-2 rounded-md bg-[var(--tone-purple-bg)] px-3 py-1.5 text-[var(--tone-purple-text)]">
         <ObjectIcon type="book" className="size-5" />
         <span className="text-sm font-medium">Purple (book)</span>
       </div>
-      <div className="flex items-center gap-2 rounded-md bg-orange-500/10 px-3 py-1.5 text-orange-500">
+      <div className="flex items-center gap-2 rounded-md bg-[var(--tone-orange-bg)] px-3 py-1.5 text-[var(--tone-orange-text)]">
         <ObjectIcon type="person" className="size-5" />
         <span className="text-sm font-medium">Orange (person)</span>
       </div>

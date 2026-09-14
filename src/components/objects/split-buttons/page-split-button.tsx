@@ -37,10 +37,10 @@ export function PageSplitButton({
           onClick={onChevronClick}
         />
         <ObjectSplitButtonContent>
-          {options.map((option) => (
-            <ObjectSplitButtonItem key={option.id} onClick={option.onClick}>
-              {option.leadingIcon}
-              <span>{option.label}</span>
+          {options.map(({ id, label, leadingIcon, ...itemProps }) => (
+            <ObjectSplitButtonItem key={id} {...itemProps}>
+              {leadingIcon}
+              <span>{label}</span>
             </ObjectSplitButtonItem>
           ))}
         </ObjectSplitButtonContent>

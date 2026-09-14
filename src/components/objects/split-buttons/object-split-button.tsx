@@ -24,137 +24,137 @@ export interface VariantStyle {
 
 export const variantStyles: Record<ObjectIconTone, VariantStyle> = {
   amber: {
-    bg: "bg-amber-50 dark:bg-amber-950/40",
-    text: "text-amber-600 dark:text-amber-400",
-    border: "border-amber-200 dark:border-amber-800",
-    hoverBg: "hover:bg-amber-100 dark:hover:bg-amber-900/50",
-    divider: "bg-amber-200 dark:bg-amber-800",
+    bg: "var(--tone-amber-bg)",
+    text: "var(--tone-amber-text)",
+    border: "var(--tone-amber-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-amber-bg), var(--foreground) 5%)",
+    divider: "var(--tone-amber-border)",
   },
   blue: {
-    bg: "bg-blue-50 dark:bg-blue-950/40",
-    text: "text-blue-600 dark:text-blue-400",
-    border: "border-blue-200 dark:border-blue-800",
-    hoverBg: "hover:bg-blue-100 dark:hover:bg-blue-900/50",
-    divider: "bg-blue-200 dark:bg-blue-800",
+    bg: "var(--tone-blue-bg)",
+    text: "var(--tone-blue-text)",
+    border: "var(--tone-blue-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-blue-bg), var(--foreground) 5%)",
+    divider: "var(--tone-blue-border)",
   },
   cyan: {
-    bg: "bg-cyan-50 dark:bg-cyan-950/40",
-    text: "text-cyan-600 dark:text-cyan-400",
-    border: "border-cyan-200 dark:border-cyan-800",
-    hoverBg: "hover:bg-cyan-100 dark:hover:bg-cyan-900/50",
-    divider: "bg-cyan-200 dark:bg-cyan-800",
+    bg: "var(--tone-cyan-bg)",
+    text: "var(--tone-cyan-text)",
+    border: "var(--tone-cyan-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-cyan-bg), var(--foreground) 5%)",
+    divider: "var(--tone-cyan-border)",
   },
   emerald: {
-    bg: "bg-emerald-50 dark:bg-emerald-950/40",
-    text: "text-emerald-600 dark:text-emerald-400",
-    border: "border-emerald-200 dark:border-emerald-800",
-    hoverBg: "hover:bg-emerald-100 dark:hover:bg-emerald-900/50",
-    divider: "bg-emerald-200 dark:bg-emerald-800",
+    bg: "var(--tone-emerald-bg)",
+    text: "var(--tone-emerald-text)",
+    border: "var(--tone-emerald-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-emerald-bg), var(--foreground) 5%)",
+    divider: "var(--tone-emerald-border)",
   },
   fuchsia: {
-    bg: "bg-fuchsia-50 dark:bg-fuchsia-950/40",
-    text: "text-fuchsia-600 dark:text-fuchsia-400",
-    border: "border-fuchsia-200 dark:border-fuchsia-800",
-    hoverBg: "hover:bg-fuchsia-100 dark:hover:bg-fuchsia-900/50",
-    divider: "bg-fuchsia-200 dark:bg-fuchsia-800",
+    bg: "var(--tone-fuchsia-bg)",
+    text: "var(--tone-fuchsia-text)",
+    border: "var(--tone-fuchsia-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-fuchsia-bg), var(--foreground) 5%)",
+    divider: "var(--tone-fuchsia-border)",
   },
   gray: {
-    bg: "bg-slate-50 dark:bg-slate-950/40",
-    text: "text-slate-600 dark:text-slate-400",
-    border: "border-slate-200 dark:border-slate-800",
-    hoverBg: "hover:bg-slate-100 dark:hover:bg-slate-900/50",
-    divider: "bg-slate-200 dark:bg-slate-800",
+    bg: "var(--tone-gray-bg)",
+    text: "var(--tone-gray-text)",
+    border: "var(--tone-gray-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-gray-bg), var(--foreground) 5%)",
+    divider: "var(--tone-gray-border)",
   },
   green: {
-    bg: "bg-green-50 dark:bg-green-950/40",
-    text: "text-green-600 dark:text-green-400",
-    border: "border-green-200 dark:border-green-800",
-    hoverBg: "hover:bg-green-100 dark:hover:bg-green-900/50",
-    divider: "bg-green-200 dark:bg-green-800",
+    bg: "var(--tone-green-bg)",
+    text: "var(--tone-green-text)",
+    border: "var(--tone-green-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-green-bg), var(--foreground) 5%)",
+    divider: "var(--tone-green-border)",
   },
   indigo: {
-    bg: "bg-indigo-50 dark:bg-indigo-950/40",
-    text: "text-indigo-600 dark:text-indigo-400",
-    border: "border-indigo-200 dark:border-indigo-800",
-    hoverBg: "hover:bg-indigo-100 dark:hover:bg-indigo-900/50",
-    divider: "bg-indigo-200 dark:bg-indigo-800",
+    bg: "var(--tone-indigo-bg)",
+    text: "var(--tone-indigo-text)",
+    border: "var(--tone-indigo-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-indigo-bg), var(--foreground) 5%)",
+    divider: "var(--tone-indigo-border)",
   },
   lime: {
-    bg: "bg-lime-50 dark:bg-lime-950/40",
-    text: "text-lime-600 dark:text-lime-400",
-    border: "border-lime-200 dark:border-lime-800",
-    hoverBg: "hover:bg-lime-100 dark:hover:bg-lime-900/50",
-    divider: "bg-lime-200 dark:bg-lime-800",
+    bg: "var(--tone-lime-bg)",
+    text: "var(--tone-lime-text)",
+    border: "var(--tone-lime-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-lime-bg), var(--foreground) 5%)",
+    divider: "var(--tone-lime-border)",
   },
   neutral: {
-    bg: "bg-muted/80",
-    text: "text-foreground",
-    border: "border-border",
-    hoverBg: "hover:bg-muted",
-    divider: "bg-border",
+    bg: "var(--muted)",
+    text: "var(--foreground)",
+    border: "var(--border)",
+    hoverBg: "color-mix(in oklch, var(--muted), var(--foreground) 5%)",
+    divider: "var(--border)",
   },
   orange: {
-    bg: "bg-orange-50 dark:bg-orange-950/40",
-    text: "text-orange-600 dark:text-orange-400",
-    border: "border-orange-200 dark:border-orange-800",
-    hoverBg: "hover:bg-orange-100 dark:hover:bg-orange-900/50",
-    divider: "bg-orange-200 dark:bg-orange-800",
+    bg: "var(--tone-orange-bg)",
+    text: "var(--tone-orange-text)",
+    border: "var(--tone-orange-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-orange-bg), var(--foreground) 5%)",
+    divider: "var(--tone-orange-border)",
   },
   pink: {
-    bg: "bg-pink-50 dark:bg-pink-950/40",
-    text: "text-pink-600 dark:text-pink-400",
-    border: "border-pink-200 dark:border-pink-800",
-    hoverBg: "hover:bg-pink-100 dark:hover:bg-pink-900/50",
-    divider: "bg-pink-200 dark:bg-pink-800",
+    bg: "var(--tone-pink-bg)",
+    text: "var(--tone-pink-text)",
+    border: "var(--tone-pink-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-pink-bg), var(--foreground) 5%)",
+    divider: "var(--tone-pink-border)",
   },
   purple: {
-    bg: "bg-purple-50 dark:bg-purple-950/40",
-    text: "text-purple-600 dark:text-purple-400",
-    border: "border-purple-200 dark:border-purple-800",
-    hoverBg: "hover:bg-purple-100 dark:hover:bg-purple-900/50",
-    divider: "bg-purple-200 dark:bg-purple-800",
+    bg: "var(--tone-purple-bg)",
+    text: "var(--tone-purple-text)",
+    border: "var(--tone-purple-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-purple-bg), var(--foreground) 5%)",
+    divider: "var(--tone-purple-border)",
   },
   red: {
-    bg: "bg-red-50 dark:bg-red-950/40",
-    text: "text-red-600 dark:text-red-400",
-    border: "border-red-200 dark:border-red-800",
-    hoverBg: "hover:bg-red-100 dark:hover:bg-red-900/50",
-    divider: "bg-red-200 dark:bg-red-800",
+    bg: "var(--tone-red-bg)",
+    text: "var(--tone-red-text)",
+    border: "var(--tone-red-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-red-bg), var(--foreground) 5%)",
+    divider: "var(--tone-red-border)",
   },
   rose: {
-    bg: "bg-rose-50 dark:bg-rose-950/40",
-    text: "text-rose-600 dark:text-rose-400",
-    border: "border-rose-200 dark:border-rose-800",
-    hoverBg: "hover:bg-rose-100 dark:hover:bg-rose-900/50",
-    divider: "bg-rose-200 dark:bg-rose-800",
+    bg: "var(--tone-rose-bg)",
+    text: "var(--tone-rose-text)",
+    border: "var(--tone-rose-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-rose-bg), var(--foreground) 5%)",
+    divider: "var(--tone-rose-border)",
   },
   sky: {
-    bg: "bg-sky-50 dark:bg-sky-950/40",
-    text: "text-sky-600 dark:text-sky-400",
-    border: "border-sky-200 dark:border-sky-800",
-    hoverBg: "hover:bg-sky-100 dark:hover:bg-sky-900/50",
-    divider: "bg-sky-200 dark:bg-sky-800",
+    bg: "var(--tone-sky-bg)",
+    text: "var(--tone-sky-text)",
+    border: "var(--tone-sky-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-sky-bg), var(--foreground) 5%)",
+    divider: "var(--tone-sky-border)",
   },
   teal: {
-    bg: "bg-teal-50 dark:bg-teal-950/40",
-    text: "text-teal-600 dark:text-teal-400",
-    border: "border-teal-200 dark:border-teal-800",
-    hoverBg: "hover:bg-teal-100 dark:hover:bg-teal-900/50",
-    divider: "bg-teal-200 dark:bg-teal-800",
+    bg: "var(--tone-teal-bg)",
+    text: "var(--tone-teal-text)",
+    border: "var(--tone-teal-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-teal-bg), var(--foreground) 5%)",
+    divider: "var(--tone-teal-border)",
   },
   violet: {
-    bg: "bg-violet-50 dark:bg-violet-950/40",
-    text: "text-violet-600 dark:text-violet-400",
-    border: "border-violet-200 dark:border-violet-800",
-    hoverBg: "hover:bg-violet-100 dark:hover:bg-violet-900/50",
-    divider: "bg-violet-200 dark:bg-violet-800",
+    bg: "var(--tone-violet-bg)",
+    text: "var(--tone-violet-text)",
+    border: "var(--tone-violet-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-violet-bg), var(--foreground) 5%)",
+    divider: "var(--tone-violet-border)",
   },
   yellow: {
-    bg: "bg-yellow-50 dark:bg-yellow-950/40",
-    text: "text-yellow-600 dark:text-yellow-400",
-    border: "border-yellow-200 dark:border-yellow-800",
-    hoverBg: "hover:bg-yellow-100 dark:hover:bg-yellow-900/50",
-    divider: "bg-yellow-200 dark:bg-yellow-800",
+    bg: "var(--tone-yellow-bg)",
+    text: "var(--tone-yellow-text)",
+    border: "var(--tone-yellow-border)",
+    hoverBg: "color-mix(in oklch, var(--tone-yellow-bg), var(--foreground) 5%)",
+    divider: "var(--tone-yellow-border)",
   },
 };
 
@@ -176,6 +176,12 @@ const ObjectSplitButtonContext = React.createContext<ObjectSplitButtonContextVal
   variant: "blue",
 });
 
+function semanticStyle(values: Record<string, string>): React.CSSProperties {
+  const style: React.CSSProperties = {};
+  Object.assign(style, values);
+  return style;
+}
+
 type ObjectSplitButtonProps = React.ComponentProps<typeof SplitButton> & {
   size?: ObjectSplitButtonSize;
   variant?: ObjectIconTone;
@@ -194,7 +200,7 @@ type ObjectSplitButtonGroupProps = React.ComponentProps<typeof SplitButtonGroup>
 function ObjectSplitButtonGroup({ className, ...props }: ObjectSplitButtonGroupProps) {
   return (
     <SplitButtonGroup
-      className={cn("font-medium transition-colors select-none", className)}
+      className={cn("group/split-button font-medium transition-colors select-none", className)}
       {...props}
     />
   );
@@ -204,7 +210,7 @@ type ObjectSplitButtonActionProps = Omit<
   React.ComponentProps<typeof SplitButtonAction>,
   "size" | "type" | "variant"
 > & {
-  type?: ObjectIconName | (string & {});
+  type?: ObjectIconName;
 };
 
 function ObjectSplitButtonAction({
@@ -214,18 +220,23 @@ function ObjectSplitButtonAction({
   ...props
 }: ObjectSplitButtonActionProps) {
   const { size, variant } = React.useContext(ObjectSplitButtonContext);
-  const variantStyle = variantStyles[variant] ?? variantStyles.blue;
+  const variantStyle = variantStyles[variant];
 
   return (
     <SplitButtonAction
       className={cn(
-        variantStyle.bg,
-        variantStyle.hoverBg,
-        variantStyle.text,
-        variantStyle.border,
+        "bg-[var(--object-split-button-bg)] text-[var(--object-split-button-text)]",
+        "border-[var(--object-split-button-border)] hover:bg-[var(--object-split-button-hover-bg)]",
+        "group-hover/split-button:bg-[var(--object-split-button-hover-bg)]",
         className,
       )}
       size={objectSplitButtonSizes[size].action}
+      style={semanticStyle({
+        "--object-split-button-bg": variantStyle.bg,
+        "--object-split-button-hover-bg": variantStyle.hoverBg,
+        "--object-split-button-border": variantStyle.border,
+        "--object-split-button-text": variantStyle.text,
+      })}
       variant="outline"
       {...props}
     >
@@ -239,9 +250,17 @@ type ObjectSplitButtonSeparatorProps = React.ComponentProps<typeof SplitButtonSe
 
 function ObjectSplitButtonSeparator({ className, ...props }: ObjectSplitButtonSeparatorProps) {
   const { variant } = React.useContext(ObjectSplitButtonContext);
-  const variantStyle = variantStyles[variant] ?? variantStyles.blue;
+  const variantStyle = variantStyles[variant];
 
-  return <SplitButtonSeparator className={cn(variantStyle.divider, className)} {...props} />;
+  return (
+    <SplitButtonSeparator
+      className={cn("bg-[var(--object-split-button-divider)]", className)}
+      style={semanticStyle({
+        "--object-split-button-divider": variantStyle.divider,
+      })}
+      {...props}
+    />
+  );
 }
 
 type ObjectSplitButtonTriggerProps = Omit<
@@ -251,18 +270,23 @@ type ObjectSplitButtonTriggerProps = Omit<
 
 function ObjectSplitButtonTrigger({ className, ...props }: ObjectSplitButtonTriggerProps) {
   const { size, variant } = React.useContext(ObjectSplitButtonContext);
-  const variantStyle = variantStyles[variant] ?? variantStyles.blue;
+  const variantStyle = variantStyles[variant];
 
   return (
     <SplitButtonTrigger
       className={cn(
-        variantStyle.bg,
-        variantStyle.hoverBg,
-        variantStyle.text,
-        variantStyle.border,
+        "bg-[var(--object-split-button-bg)] text-[var(--object-split-button-text)]",
+        "border-[var(--object-split-button-border)] hover:bg-[var(--object-split-button-hover-bg)]",
+        "group-hover/split-button:bg-[var(--object-split-button-hover-bg)]",
         className,
       )}
       size={objectSplitButtonSizes[size].trigger}
+      style={semanticStyle({
+        "--object-split-button-bg": variantStyle.bg,
+        "--object-split-button-hover-bg": variantStyle.hoverBg,
+        "--object-split-button-border": variantStyle.border,
+        "--object-split-button-text": variantStyle.text,
+      })}
       variant="outline"
       {...props}
     />
@@ -281,22 +305,28 @@ function ObjectSplitButtonItem(props: ObjectSplitButtonItemProps) {
   return <SplitButtonItem {...props} />;
 }
 
-export interface ObjectSplitButtonOption {
+export type ObjectSplitButtonOption = Omit<
+  React.ComponentProps<typeof SplitButtonItem>,
+  "children" | "id" | "onClick"
+> & {
   id: string;
   label: string;
   leadingIcon?: React.ReactNode;
-  onClick?: () => void;
-}
+  onClick?: React.ComponentProps<typeof SplitButtonItem>["onClick"];
+};
 
-export type ObjectSplitButtonVariantProps = {
-  type?: ObjectIconName | (string & {});
+export type ObjectSplitButtonVariantProps = Omit<
+  React.ComponentProps<typeof SplitButtonGroup>,
+  "children" | "className"
+> & {
+  type?: ObjectIconName;
   label?: string;
   variant?: ObjectIconTone;
-  onLabelClick?: () => void;
+  onLabelClick?: React.ComponentProps<typeof SplitButtonAction>["onClick"];
   options?: ObjectSplitButtonOption[];
-  onChevronClick?: () => void;
+  onChevronClick?: React.ComponentProps<typeof SplitButtonTrigger>["onClick"];
   size?: ObjectSplitButtonSize;
-  className?: string;
+  className?: React.ComponentProps<typeof SplitButtonGroup>["className"];
   dropdownAriaLabel?: string;
 };
 

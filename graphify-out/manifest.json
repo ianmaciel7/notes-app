@@ -2562,9 +2562,9 @@
     "semantic_hash": ""
   },
   "src/components/objects/icons/icons.stories.tsx": {
-    "mtime": 1789402451.905388,
-    "seen": 1789402559.1717992,
-    "ast_hash": "de63393545c40a3332decf963008f5f8",
+    "mtime": 1789404129.5033686,
+    "seen": 1789404292.5737827,
+    "ast_hash": "e53a9485a36ea3ac7a31a7d7c28b8819",
     "semantic_hash": ""
   },
   "src/components/objects/icons/icons.test.tsx": {
@@ -2736,9 +2736,9 @@
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/object-split-button.tsx": {
-    "mtime": 1789403538.5016038,
-    "seen": 1789403674.600813,
-    "ast_hash": "f272fce0ee83460fa1eb3691e5151d78",
+    "mtime": 1789404425.6240165,
+    "seen": 1789404541.0554564,
+    "ast_hash": "bb3b4b25260537d201a5f8474aafa8df",
     "semantic_hash": ""
   },
   "vitest.config.mts": {
@@ -2802,9 +2802,9 @@
     "semantic_hash": ""
   },
   "src/components/editor/ui/floating-toolbar.tsx": {
-    "mtime": 1789402689.687294,
-    "seen": 1789402736.8725574,
-    "ast_hash": "95ee1c507afb737c04b6a146725b8efb",
+    "mtime": 1789404131.1292877,
+    "seen": 1789404292.5737827,
+    "ast_hash": "8e91b6d99c1fb11256fbb4559771f2e5",
     "semantic_hash": ""
   },
   "src/components/editor/ui/suggestion-combobox.tsx": {
@@ -2814,9 +2814,9 @@
     "semantic_hash": ""
   },
   "src/components/objects/icons/icon-registry.tsx": {
-    "mtime": 1789393162.195701,
-    "seen": 1789393377.944959,
-    "ast_hash": "6e3894458bd6c10edf1e7bc03bff2bdf",
+    "mtime": 1789403929.59597,
+    "seen": 1789404292.5737827,
+    "ast_hash": "3db8c7d85f70395694f19e4d8eca06a9",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/ai-chat-split-button.tsx": {
@@ -2928,9 +2928,9 @@
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/page-split-button.tsx": {
-    "mtime": 1789402451.9418752,
-    "seen": 1789402559.1717992,
-    "ast_hash": "141f1ff3fe1e59fb33edff92ce9d0dc6",
+    "mtime": 1789404427.04977,
+    "seen": 1789404541.0554564,
+    "ast_hash": "16cd6acbd653544561b0e74307e82ed6",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/pdf-split-button.tsx": {
@@ -3210,9 +3210,9 @@
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/object-split-button-registry.tsx": {
-    "mtime": 1789402451.9347394,
-    "seen": 1789402559.1717992,
-    "ast_hash": "0b33b9d99374d427654c09fab6126708",
+    "mtime": 1789403930.8791282,
+    "seen": 1789404292.5737827,
+    "ast_hash": "ff87c2df34efa3b6f13e96c26bc16df2",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/object-split-buttons.stories.tsx": {
@@ -3222,9 +3222,9 @@
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/object-split-buttons.test.tsx": {
-    "mtime": 1789402451.978491,
-    "seen": 1789402559.1717992,
-    "ast_hash": "f62060fce1dde5078051c6b35bc77788",
+    "mtime": 1789404492.021805,
+    "seen": 1789404541.0554564,
+    "ast_hash": "365cc4d6894fd24ce5973f1f17684840",
     "semantic_hash": ""
   },
   "src/lib/editor/__tests__/trigger-controller.test.ts": {

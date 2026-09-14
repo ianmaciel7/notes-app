@@ -1,4 +1,5 @@
 import type * as React from "react";
+import type { ObjectIconName } from "@/lib/space-object-types";
 import { AiChatSplitButton } from "./ai-chat-split-button";
 import { ArchiveSplitButton } from "./archive-split-button";
 import { AreaSplitButton } from "./area-split-button";
@@ -36,7 +37,7 @@ import { WeblinkSplitButton } from "./weblink-split-button";
 export const objectSplitButtonRegistry: Record<
   string,
   React.ComponentType<ObjectSplitButtonVariantProps>
-> = {
+> & Record<ObjectIconName, React.ComponentType<ObjectSplitButtonVariantProps>> = {
   "ai-chat": AiChatSplitButton,
   archive: ArchiveSplitButton,
   area: AreaSplitButton,
@@ -87,7 +88,7 @@ export function getObjectSplitButton(
 export function ObjectSplitButtonDynamic({
   type,
   ...props
-}: { type: string } & ObjectSplitButtonVariantProps) {
+}: Omit<ObjectSplitButtonVariantProps, "type"> & { type: string }) {
   const Component = getObjectSplitButton(type);
   return <Component {...props} />;
 }
