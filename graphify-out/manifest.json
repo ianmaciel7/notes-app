@@ -2562,9 +2562,9 @@
     "semantic_hash": ""
   },
   "src/components/objects/icons/icons.stories.tsx": {
-    "mtime": 1789382268.1644218,
-    "seen": 1789383184.0374558,
-    "ast_hash": "e37828850384ef24de09da8010655b2a",
+    "mtime": 1789389131.2601426,
+    "seen": 1789389163.494678,
+    "ast_hash": "d3cdeb3985e4e4732154aee31df39919",
     "semantic_hash": ""
   },
   "src/components/objects/icons/icons.test.tsx": {
@@ -3081,6 +3081,18 @@
     "mtime": 1789383246.770683,
     "seen": 1789383323.310156,
     "ast_hash": "3aab3a21536710873ef78072ddc44235",
+    "semantic_hash": ""
+  },
+  ".ladle/components.tsx": {
+    "mtime": 1789389131.2561417,
+    "seen": 1789389163.494678,
+    "ast_hash": "196672b0031af17127f983ed34cad060",
+    "semantic_hash": ""
+  },
+  ".ladle/config.mjs": {
+    "mtime": 1789221339.004743,
+    "seen": 1789389163.494678,
+    "ast_hash": "a6db2fe649cfd9719c97b4ef862572da",
     "semantic_hash": ""
   }
 }
