@@ -2454,9 +2454,9 @@
     "semantic_hash": ""
   },
   "src/components/editor/editor.stories.tsx": {
-    "mtime": 1789398318.1730385,
-    "seen": 1789398355.545506,
-    "ast_hash": "76ed31529c15bcff9299bc751901a918",
+    "mtime": 1789398405.7515497,
+    "seen": 1789401908.769514,
+    "ast_hash": "14c065548da19eefcdcb1d7799f2c037",
     "semantic_hash": ""
   },
   "src/components/ui/badge.stories.tsx": {

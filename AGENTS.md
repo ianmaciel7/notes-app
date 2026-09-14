@@ -102,6 +102,9 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 - All object type definitions, space types, icon names, and tones (`ObjectIconName`, `ObjectIconTone`, `StructureLifecycleKind`, etc.) **MUST ALWAYS** be located in `src/lib/` (specifically `src/lib/space-object-types.ts`), **NEVER** isolated exclusively inside UI component folders (like `src/components/objects/icons/types.ts`).
 - UI components under `src/components/` must import these domain types from `@/lib/space-object-types` (or have local re-exports pointing to `@/lib/space-object-types`). Non-UI layers (database models, space schemas, command registries, sync engines) must be able to use these types without importing from UI components.
 
+### Component Reuse Rule
+- All UI components **MUST** inherit from or compose an existing component whenever one provides the required base behavior or structure. New standalone components are allowed only when no suitable existing component exists, and the reason must be documented in the change.
+
 <!-- END:general-project-rules -->
 
 <!-- BEGIN:mcp-and-skills-rules -->
