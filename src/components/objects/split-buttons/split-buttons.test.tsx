@@ -38,7 +38,13 @@ describe("Object Split Buttons", () => {
 
   it("exposes the toned object-type split button as ObjectSplitButton", () => {
     const html = renderToStaticMarkup(
-      <ObjectSplitButton type="page" label="Page" tone="blue" size="sm" />,
+      <ObjectSplitButton
+        type="page"
+        label="Page"
+        tone="blue"
+        size="sm"
+        onChevronClick={() => undefined}
+      />,
     );
 
     expect(html).toContain("Page");
