@@ -1,8 +1,16 @@
 import type * as React from "react";
-import type { ObjectIconName, ObjectIconTone } from "../../../lib/space-object-types";
-import { cn } from "../../../lib/utils";
-import { SplitButton, type SplitButtonSize } from "../../ui/split-button";
-import { ObjectIcon } from "../icons/icon-registry";
+import type { ObjectIconName, ObjectIconTone } from "@/lib/space-object-types";
+import { cn } from "@/lib/utils";
+import {
+  SplitButton,
+  SplitButtonAction,
+  SplitButtonContent,
+  SplitButtonGroup,
+  SplitButtonItem,
+  SplitButtonSeparator,
+  SplitButtonTrigger,
+} from "@/components/ui/split-button";
+import { ObjectIcon } from "@/components/objects/icons/icon-registry";
 import { toneStyles } from "./split-button-base";
 
 export interface ObjectSplitButtonOption {
@@ -33,50 +41,65 @@ export interface ObjectSplitButtonProps {
   dropdownAriaLabel?: string;
 }
 
-const objectSplitButtonSizes: Record<
-  NonNullable<ObjectSplitButtonProps["size"]>,
-  SplitButtonSize
-> = {
-  sm: "xs",
-  md: "sm",
-  lg: "default",
-};
+const objectSplitButtonSizes = {
+  sm: { action: "xs", trigger: "icon-xs" },
+  md: { action: "sm", trigger: "icon-sm" },
+  lg: { action: "default", trigger: "icon" },
+} as const;
 
 export function ObjectSplitButton({
   type = "page",
   label = "",
   tone = "blue",
   onLabelClick,
-  options,
+  options = [],
   onChevronClick,
   size = "md",
   className,
   dropdownAriaLabel = "Object type options",
 }: ObjectSplitButtonProps) {
   const toneStyle = toneStyles[tone] ?? toneStyles.blue;
+  const buttonSize = objectSplitButtonSizes[size];
+  const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <SplitButton
-      ariaLabel={label}
-      dropdownAriaLabel={dropdownAriaLabel}
-      label={label}
-      leadingIcon={<ObjectIcon type={type} />}
-      onPrimaryClick={onLabelClick}
-      onDisclosureClick={onChevronClick}
-      options={options?.map((option) => ({
-        id: option.id,
-        label: option.label,
-        leadingIcon: option.leadingIcon,
-        onClick: option.onClick,
-      }))}
-      size={objectSplitButtonSizes[size]}
-      className={cn(
-        "border font-medium transition-colors select-none",
-        toneStyle.bg,
-        toneStyle.text,
-        toneStyle.border,
-        className,
-      )}
-    />
+    <SplitButton>
+      <SplitButtonGroup
+        aria-label={label || dropdownAriaLabel}
+        className={cn(
+          "border font-medium transition-colors select-none",
+          toneStyle.bg,
+          toneStyle.text,
+          toneStyle.border,
+          className,
+        )}
+      >
+        <SplitButtonAction
+          aria-label={label || undefined}
+          onClick={onLabelClick}
+          size={buttonSize.action}
+          variant="ghost"
+          className="gap-1.5"
+        >
+          <ObjectIcon type={type} />
+          {label && <span>{label}</span>}
+        </SplitButtonAction>
+        <SplitButtonSeparator orientation="vertical" />
+        <SplitButtonTrigger
+          aria-label={dropdownAriaLabel}
+          disabled={triggerDisabled}
+          onClick={onChevronClick}
+          size={buttonSize.trigger}
+        />
+        <SplitButtonContent>
+          {options.map((option) => (
+            <SplitButtonItem key={option.id} onClick={option.onClick}>
+              {option.leadingIcon}
+              <span>{option.label}</span>
+            </SplitButtonItem>
+          ))}
+        </SplitButtonContent>
+      </SplitButtonGroup>
+    </SplitButton>
   );
 }
