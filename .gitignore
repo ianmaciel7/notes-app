@@ -8,6 +8,12 @@
 # testing
 /coverage
 
+# temporary files and caches
+/.temp/
+/.cache/
+/.eslintcache
+/.turbo/
+
 # next.js
 /.next/
 /out/
@@ -23,6 +29,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+*.log
 
 # local env files
 .env*.local
@@ -30,6 +38,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# other deployment platforms
+.netlify
 
 # typescript
 *.tsbuildinfo
