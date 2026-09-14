@@ -4,6 +4,7 @@ import componentPtBrDoc from "../translations/pt-BR/guides/component-development
 import devPtBrDoc from "../translations/pt-BR/guides/development.md?raw";
 import componentEnDoc from "./component-development.md?raw";
 import devEnDoc from "./development.md?raw";
+import ladleRulesEnDoc from "../../.agents/rules/ladle-stories.md?raw";
 
 type GuidesLocale = "pt-BR" | "en";
 
@@ -34,6 +35,11 @@ const componentDocs: Record<GuidesLocale, string> = {
   en: componentEnDoc,
 };
 
+const ladleRulesDocs: Record<GuidesLocale, string> = {
+  en: ladleRulesEnDoc,
+  "pt-BR": ladleRulesEnDoc,
+};
+
 export default {
   title: "Docs / Guides",
 } satisfies StoryDefault;
@@ -51,3 +57,10 @@ export const ComponentDevelopment: Story<GuidesStoryProps> = ({ locale = "pt-BR"
 ComponentDevelopment.storyName = "Component Development";
 ComponentDevelopment.args = { locale: "pt-BR" };
 ComponentDevelopment.argTypes = localeArgTypes;
+
+export const LadleStoryRules: Story<GuidesStoryProps> = ({ locale = "en" }) => (
+  <DocViewer markdown={ladleRulesDocs[locale] ?? ladleRulesDocs.en} />
+);
+LadleStoryRules.storyName = "Ladle Story Rules";
+LadleStoryRules.args = { locale: "en" };
+LadleStoryRules.argTypes = localeArgTypes;

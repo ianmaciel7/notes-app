@@ -24,3 +24,4 @@ This project uses **Ladle** (`@ladle/react`) for fast component development, sto
 
 3. **Story Directory Structure**:
    - Place architectural stories alongside their respective feature docs in `docs/architecture/<feature>/`.
+   - Follow the complete naming, accessibility, state, layout, and verification standard in [`.agents/rules/ladle-stories.md`](../../.agents/rules/ladle-stories.md).
