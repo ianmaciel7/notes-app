@@ -1,9 +1,9 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
 import conventionsPtBrDoc from "../translations/pt-BR/reference/conventions.md?raw";
-import designSystemPtBrDoc from "../translations/pt-BR/reference/design-system.md?raw";
+import designSystemPtBrDoc from "../translations/pt-BR/design/README.md?raw";
 import conventionsEnDoc from "./conventions.md?raw";
-import designSystemEnDoc from "./design-system.md?raw";
+import designSystemEnDoc from "../design/README.md?raw";
 
 type ReferenceLocale = "pt-BR" | "en";
 

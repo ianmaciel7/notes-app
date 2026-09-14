@@ -39,7 +39,7 @@ Chosen option: **Plate JS v53 with Custom Domain Plugins**, because:
 * **15+ Block Types Supported**: Full parity across Paragraphs, Headings (H1–H4), Bullet/Numbered/Task Lists, Quotes, Code Blocks with Mermaid diagrams, LaTeX Math equations, Highlight Callouts with source citations, 2–4 Column Grids, Card Containers, Matrix Tables, and Object Transclusion Cards.
 * **Bidirectional AST Round-Tripping**: Lossless conversion between Plate Slate AST and Capacities Document Schema v3.
 * **Granular Backlink Anchoring**: All blocks receive stable `block:<uuid>` identifiers required for block-level references (`((`) and transclusions.
-* **100% Test Coverage**: Complete Vitest test suites (`src/lib/editor/__tests__/document-schema.test.ts` and `table-model.test.ts`) validating AST depth limits, ID persistence, and table operations.
+* **100% Test Coverage**: Complete Vitest test suites (`src/lib/editor/document-schema.test.ts` and `table-model.test.ts`) validating AST depth limits, ID persistence, and table operations.
 
 ### Negative Consequences
 

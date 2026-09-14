@@ -2,12 +2,24 @@ import type { BlockEditorDocument } from "@/lib/editor/document-schema";
 import type {
   ObjectIconName,
   ObjectIconTone,
+  SpaceIconName,
   StructureLifecycleKind,
   StructureOwnership,
 } from "@/lib/space-object-types";
-import type { SpaceRecord } from "@/types/space";
 
-export type { SpaceIconName, SpaceRecord } from "@/types/space";
+export interface SpaceRecord {
+  id: string;
+  name: string;
+  description?: string;
+  icon: SpaceIconName;
+  color: ObjectIconTone;
+  accountId: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type { SpaceIconName };
 
 export const LOCAL_ACCOUNT_ID = "local-account";
 export const PERSONAL_SPACE_ID = "personal-space";

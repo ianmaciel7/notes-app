@@ -77,3 +77,24 @@ export type ObjectIconTone =
   | "teal"
   | "violet"
   | "yellow";
+
+export type SpaceIconName =
+  | "folder"
+  | "briefcase"
+  | "book-open"
+  | "code"
+  | "brain"
+  | "zap"
+  | "user"
+  | "sparkles"
+  | "layers"
+  | "globe"
+  | "terminal"
+  | "compass";
+
+export interface SpaceStats {
+  readonly entityCount: number;
+  readonly noteCount: number;
+  readonly flashcardCount: number;
+  readonly fileCount: number;
+}

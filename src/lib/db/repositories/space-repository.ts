@@ -1,5 +1,5 @@
+import { validateCreateSpaceInput } from "@/lib/validations/space";
 import type { CreateSpaceInput, SpaceRecord } from "@/types/space";
-import { validateCreateSpaceInput } from "@/types/space";
 import type { KnowledgeDatabase } from "../schema";
 import {
   ACTIVE_SPACE_SETTING_ID,

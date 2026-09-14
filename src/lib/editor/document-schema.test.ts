@@ -6,7 +6,7 @@ import {
   ensureBlockIds,
   slateToCapacitiesDoc,
   validateBlockDocument,
-} from "../document-schema";
+} from "./document-schema";
 
 describe("document-schema", () => {
   it("creates empty document with correct schema version and block ID", () => {

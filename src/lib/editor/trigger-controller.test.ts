@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveSuggestionTrigger } from "../trigger-controller";
+import { resolveSuggestionTrigger } from "./trigger-controller";
 
 describe("trigger-controller", () => {
   it("resolves the longest trigger at a whitespace boundary", () => {

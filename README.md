@@ -24,8 +24,8 @@ Used by some of the world's largest companies, Next.js enables you to create ful
 ## AI & Development Setup
 
 This project uses AI agent rules and Model Context Protocol (MCP) integrations:
-- **Agent Instructions**: See [AGENTS.md](file:///C:/Users/ianma/workspace/notes-app/AGENTS.md) for agent guidelines and project rules.
-- **Shoogle MCP (`shoogle`, `user-shoogle`)**: For search and registry item lookup (`https://mcp.shoogle.dev/mcp`). See [.agents/mcp_config.example.json](file:///C:/Users/ianma/workspace/notes-app/.agents/mcp_config.example.json) to set up your local `mcp_config.json`.
+- **Agent Instructions**: See [AGENTS.md](AGENTS.md) for agent guidelines and project rules.
+- **Shoogle MCP (`shoogle`, `user-shoogle`)**: For search and registry item lookup (`https://mcp.shoogle.dev/mcp`). See [.agents/mcp_config.example.json](.agents/mcp_config.example.json) to set up your local `mcp_config.json`.
 
 
 ## Documentation
@@ -34,7 +34,7 @@ Project documentation follows a **Docs as Code** model located under [`docs/`](d
 - **Architecture**: See [docs/architecture/README.md](docs/architecture/README.md) for system design, components, and invariants.
 - **Decisions**: See [docs/decisions/README.md](docs/decisions/README.md) for Architectural Decision Records (ADRs).
 - **Guides**: See [docs/guides/development.md](docs/guides/development.md) for local setup, testing, and workflow instructions.
-- **Reference**: See [docs/reference/design-system.md](docs/reference/design-system.md) and [docs/reference/conventions.md](docs/reference/conventions.md) for specs and conventions.
+- **Design & Reference**: See [docs/design/README.md](docs/design/README.md) and [docs/reference/conventions.md](docs/reference/conventions.md) for design specs and conventions.
 
 For external framework documentation, visit [https://nextjs.org/docs](https://nextjs.org/docs).
 

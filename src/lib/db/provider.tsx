@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { createRepositories, type Repositories } from "./repositories";
+import { createRepositories, type Repositories } from "./repositories/repository-factory";
 import { createKnowledgeDatabase, type KnowledgeDatabase } from "./schema";
 
 interface DatabaseContextValue {

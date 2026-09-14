@@ -4,7 +4,7 @@ import {
   exportTableBlockToCsv,
   setTableCellText,
   tableBlockToMarkdown,
-} from "../table-model";
+} from "./table-model";
 
 describe("table-model", () => {
   it("creates table model with default dimensions", () => {

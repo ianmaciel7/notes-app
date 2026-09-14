@@ -9,7 +9,6 @@ This project uses **Ladle** (`@ladle/react`) for fast component development, sto
 - `pnpm ladle:dev` / `npm run ladle:dev`: Starts the Ladle development server at `http://localhost:61000`.
 - `pnpm ladle:build` / `npm run ladle:build`: Builds a static Ladle catalog.
 - `pnpm ladle:preview` / `npm run ladle:preview`: Previews the built Ladle site locally.
-- `pnpm generate` / `pnpm g`: Interactive Plop generator for scaffolding new components and their Ladle stories (`pnpm g component <name>`).
 
 ---
 

@@ -15,9 +15,7 @@
     "ladle:dev": "ladle serve",
     "ladle:build": "ladle build",
     "ladle:preview": "ladle preview",
-    "dev:all": "concurrently \"pnpm dev\" \"pnpm ladle:dev\"",
-    "generate": "plop",
-    "g": "plop"
+    "dev:all": "concurrently \"pnpm dev\" \"pnpm ladle:dev\""
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -41,6 +39,7 @@
     "react-dom": "^19.0.0",
     "react-resizable-panels": "^4.12.4",
     "recharts": "3.8.0",
+    "server-only": "^0.0.1",
     "shadcn": "^4.21.0",
     "slate": "^0.126.2",
     "slate-dom": "^0.126.0",
@@ -57,7 +56,6 @@
     "@types/react-dom": "^19",
     "concurrently": "^9.1.2",
     "fake-indexeddb": "^6.2.5",
-    "plop": "^4.0.5",
     "tailwindcss": "^4.3.3",
     "typescript": "^5",
     "vitest": "^3.0.0"

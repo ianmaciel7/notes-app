@@ -1,6 +1,7 @@
 import type { Story, StoryDefault } from "@ladle/react";
-import historicalEnDoc from "../../graphify-out/HISTORICAL_REFERENCE_SYNTHESIS.md?raw";
+import historicalEnDoc from "./HISTORICAL_REFERENCE_SYNTHESIS.md?raw";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
+import entitiesPtBrDoc from "../translations/pt-BR/architecture/entities.md?raw";
 import readmePtBrDoc from "../translations/pt-BR/architecture/README.md?raw";
 import routingPtBrDoc from "../translations/pt-BR/architecture/routing.md?raw";
 import spacesPtBrDoc from "../translations/pt-BR/architecture/spaces.md?raw";
@@ -39,7 +40,7 @@ const routingDocs: Record<ArchitectureLocale, string> = {
 };
 
 const entitiesDocs: Record<ArchitectureLocale, string> = {
-  "pt-BR": entitiesEnDoc,
+  "pt-BR": entitiesPtBrDoc,
   en: entitiesEnDoc,
 };
 

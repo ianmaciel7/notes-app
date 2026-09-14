@@ -1,5 +1,5 @@
 ---
-name: Notes App Design System
+name: Notes App Design System Documentation
 colors:
   background: "oklch(1 0 0)"
   foreground: "oklch(0.145 0 0)"
@@ -18,6 +18,7 @@ colors:
 # Notes App Design System Specification
 
 > **Status**: Authoritative Reference  
+> **Source**: Synchronized directly with [`DESIGN.md`](../../DESIGN.md)  
 > **Architecture**: Local-First Knowledge Graph & Object Studio  
 > **Visual Direction**: Editorial Minimalism, Monastic Knowledge Sanctuary, Capacities Parity  
 > **UI Stack**: Next.js 16 (App Router), React 19, Tailwind CSS v4, Base UI Primitives, Plate Rich-Text Editor  
@@ -540,11 +541,11 @@ flowchart TD
 
 ### Related Architecture Documents
 
-- [Primary Architecture Specification](ARCHITECTURE.md)
-- [Domain Entities & Knowledge Architecture Specification](docs/architecture/entities.md)
-- [Space Partitioning & Multi-Tenant Specification](docs/architecture/spaces.md)
-- [Routing & App Router Layout Specification](docs/architecture/routing.md)
-- [Historical Reference Synthesis (Worktrees & Capacities)](docs/architecture/HISTORICAL_REFERENCE_SYNTHESIS.md)
-- [Architectural Decision Records Index (MADR)](DECISIONS.md)
-- [ADR-0008: Plate Rich-Text Editor Framework Migration](docs/decisions/0008-plate-rich-text-editor-framework-migration.md)
-- [Design System Specification](docs/design/README.md)
+- [Primary Architecture Specification](../architecture/README.md)
+- [Domain Entities & Knowledge Architecture Specification](../architecture/entities.md)
+- [Space Partitioning & Multi-Tenant Specification](../architecture/spaces.md)
+- [Routing & App Router Layout Specification](../architecture/routing.md)
+- [Historical Reference Synthesis (Worktrees & Capacities)](../architecture/HISTORICAL_REFERENCE_SYNTHESIS.md)
+- [Architectural Decision Records Index (MADR)](../../DECISIONS.md)
+- [ADR-0008: Plate Rich-Text Editor Framework Migration](../decisions/0008-plate-rich-text-editor-framework-migration.md)
+- [Design System Specification Root](../../DESIGN.md)

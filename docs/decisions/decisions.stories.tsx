@@ -4,6 +4,11 @@ import adr1PtBrDoc from "../translations/pt-BR/decisions/0001-nextjs-16-react-19
 import adr2PtBrDoc from "../translations/pt-BR/decisions/0002-biome-linter-formatter.md?raw";
 import adr3PtBrDoc from "../translations/pt-BR/decisions/0003-automated-knowledge-graph-husky.md?raw";
 import adr4PtBrDoc from "../translations/pt-BR/decisions/0004-strict-path-portability.md?raw";
+import adr5PtBrDoc from "../translations/pt-BR/decisions/0005-ladle-component-workbench-and-documentation-viewer.md?raw";
+import adr6PtBrDoc from "../translations/pt-BR/decisions/0006-historical-reference-architecture-synthesis.md?raw";
+import adr7PtBrDoc from "../translations/pt-BR/decisions/0007-blocknote-rich-text-editor-integration-and-ladle-story-workbench.md?raw";
+import adr8PtBrDoc from "../translations/pt-BR/decisions/0008-plate-rich-text-editor-framework-migration.md?raw";
+import adr9PtBrDoc from "../translations/pt-BR/decisions/0009-capacities-block-editor-domain-and-plate-v53-plugin-architecture.md?raw";
 import readmePtBrDoc from "../translations/pt-BR/decisions/README.md?raw";
 import adr1EnDoc from "./0001-nextjs-16-react-19-baseline.md?raw";
 import adr2EnDoc from "./0002-biome-linter-formatter.md?raw";
@@ -61,27 +66,27 @@ const adr4Docs: Record<DecisionsLocale, string> = {
 };
 
 const adr5Docs: Record<DecisionsLocale, string> = {
-  "pt-BR": adr5EnDoc,
+  "pt-BR": adr5PtBrDoc,
   en: adr5EnDoc,
 };
 
 const adr6Docs: Record<DecisionsLocale, string> = {
-  "pt-BR": adr6EnDoc,
+  "pt-BR": adr6PtBrDoc,
   en: adr6EnDoc,
 };
 
 const adr7Docs: Record<DecisionsLocale, string> = {
-  "pt-BR": adr7EnDoc,
+  "pt-BR": adr7PtBrDoc,
   en: adr7EnDoc,
 };
 
 const adr8Docs: Record<DecisionsLocale, string> = {
-  "pt-BR": adr8EnDoc,
+  "pt-BR": adr8PtBrDoc,
   en: adr8EnDoc,
 };
 
 const adr9Docs: Record<DecisionsLocale, string> = {
-  "pt-BR": adr9EnDoc,
+  "pt-BR": adr9PtBrDoc,
   en: adr9EnDoc,
 };
 

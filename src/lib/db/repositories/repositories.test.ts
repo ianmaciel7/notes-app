@@ -1,10 +1,9 @@
-﻿import "fake-indexeddb/auto";
+import "fake-indexeddb/auto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
   BLOCK_ID_PREFIX,
 } from "@/lib/editor/document-schema";
-import { createRepositories, type Repositories } from "../repositories";
 import { KnowledgeDatabase } from "../schema";
 import {
   ACTIVE_SPACE_SETTING_ID,
@@ -13,6 +12,7 @@ import {
   PERSONAL_SPACE_ID,
   type SpaceEntityRecord,
 } from "../types";
+import { createRepositories, type Repositories } from "./repository-factory";
 
 async function seedCascadeTables(db: KnowledgeDatabase, spaceId: string) {
   const now = new Date().toISOString();
