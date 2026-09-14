@@ -16,7 +16,7 @@ import { ImageSplitButton } from "./image-split-button";
 import { KnowledgeSplitButton } from "./knowledge-split-button";
 import { MediaSplitButton } from "./media-split-button";
 import { MeetingSplitButton } from "./meeting-split-button";
-import type { ObjectSplitButtonControlProps } from "./object-split-button";
+import type { ObjectSplitButtonVariantProps } from "./object-split-button";
 import { OrganizationSplitButton } from "./organization-split-button";
 import { PageSplitButton } from "./page-split-button";
 import { PdfSplitButton } from "./pdf-split-button";
@@ -35,7 +35,7 @@ import { WeblinkSplitButton } from "./weblink-split-button";
 
 export const objectSplitButtonRegistry: Record<
   string,
-  React.ComponentType<ObjectSplitButtonControlProps>
+  React.ComponentType<ObjectSplitButtonVariantProps>
 > = {
   "ai-chat": AiChatSplitButton,
   archive: ArchiveSplitButton,
@@ -77,7 +77,7 @@ export const objectSplitButtonRegistry: Record<
   atomic_note: AtomicNoteSplitButton,
 };
 
-export function getObjectSplitButton(type: string): React.ComponentType<ObjectSplitButtonControlProps> {
+export function getObjectSplitButton(type: string): React.ComponentType<ObjectSplitButtonVariantProps> {
   const normalized = type.toLowerCase().trim();
   return objectSplitButtonRegistry[normalized] ?? PageSplitButton;
 }
@@ -85,7 +85,7 @@ export function getObjectSplitButton(type: string): React.ComponentType<ObjectSp
 export function ObjectSplitButtonDynamic({
   type,
   ...props
-}: { type: string } & ObjectSplitButtonControlProps) {
+}: { type: string } & ObjectSplitButtonVariantProps) {
   const Component = getObjectSplitButton(type);
   return <Component {...props} />;
 }

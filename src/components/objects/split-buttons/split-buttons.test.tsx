@@ -1,7 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { DailyNoteSplitButton } from "./daily-note-split-button";
-import { ObjectSplitButtonControl } from "./object-split-button";
 import { PageSplitButton } from "./page-split-button";
 import {
   getObjectSplitButton,
@@ -38,7 +37,7 @@ describe("Object Split Buttons", () => {
 
   it("exposes the toned object-type split button as ObjectSplitButton", () => {
     const html = renderToStaticMarkup(
-      <ObjectSplitButtonControl
+      <PageSplitButton
         type="page"
         label="Page"
         tone="blue"

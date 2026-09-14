@@ -1,6 +1,8 @@
 import type { Story, StoryDefault } from "@ladle/react";
-import { ObjectSplitButtonControl } from "./object-split-button";
 import { ObjectSplitButtonDynamic, objectSplitButtonRegistry } from "./split-button-registry";
+import { PageSplitButton } from "./page-split-button";
+import { TaskSplitButton } from "./task-split-button";
+import { WeblinkSplitButton } from "./weblink-split-button";
 
 export default {
   title: "Objects / Split Buttons",
@@ -41,15 +43,15 @@ export const SizeVariants: Story = () => (
     <h2 className="text-xl font-semibold">Size Variants (Small, Medium, Large)</h2>
     <div className="flex items-center gap-6">
       <div className="flex flex-col items-start gap-2">
-        <ObjectSplitButtonControl size="sm" type="page" label="Página (Small)" tone="blue" />
+        <PageSplitButton size="sm" label="Página (Small)" tone="blue" />
         <span className="text-xs text-muted-foreground">h-6 (sm)</span>
       </div>
       <div className="flex flex-col items-start gap-2">
-        <ObjectSplitButtonControl size="md" type="task" label="Tarefa (Medium)" tone="red" />
+        <TaskSplitButton size="md" label="Tarefa (Medium)" tone="red" />
         <span className="text-xs text-muted-foreground">h-7 (md)</span>
       </div>
       <div className="flex flex-col items-start gap-2">
-        <ObjectSplitButtonControl size="lg" type="weblink" label="Weblink (Large)" tone="cyan" />
+        <WeblinkSplitButton size="lg" label="Weblink (Large)" tone="cyan" />
         <span className="text-xs text-muted-foreground">h-8 (lg)</span>
       </div>
     </div>
