@@ -11,7 +11,7 @@ import {
 } from "./card";
 
 export default {
-  title: "UI / Card",
+  title: "Componentes / UI / Card",
 } satisfies StoryDefault;
 
 export const Default: Story = () => (

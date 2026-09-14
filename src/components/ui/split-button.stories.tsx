@@ -11,7 +11,7 @@ import {
 } from "./split-button";
 
 export default {
-  title: "UI / Split Button",
+  title: "Componentes / UI / Split Button",
 } satisfies StoryDefault;
 
 export const Default: Story = () => (

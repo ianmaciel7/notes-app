@@ -2,7 +2,7 @@ import type { Story, StoryDefault } from "@ladle/react";
 import { Input } from "./input";
 
 export default {
-  title: "UI / Input",
+  title: "Componentes / UI / Input",
 } satisfies StoryDefault;
 
 export const Default: Story = () => (

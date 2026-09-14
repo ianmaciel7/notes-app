@@ -1,7 +1,7 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount } from "./avatar";
 
-export default { title: "UI / Avatar" } satisfies StoryDefault;
+export default { title: "Componentes / UI / Avatar" } satisfies StoryDefault;
 
 export const Default: Story = () => <Avatar><AvatarFallback>IM</AvatarFallback></Avatar>;
 
@@ -12,4 +12,3 @@ export const Group: Story = () => (
     <AvatarGroupCount>+4</AvatarGroupCount>
   </AvatarGroup>
 );
-

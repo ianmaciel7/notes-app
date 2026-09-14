@@ -1,7 +1,7 @@
 import type { Story, StoryDefault } from "@ladle/react";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 
-export default { title: "UI / Alert" } satisfies StoryDefault;
+export default { title: "Componentes / UI / Alert" } satisfies StoryDefault;
 
 export const Default: Story = () => (
   <Alert className="max-w-xl">
@@ -9,4 +9,3 @@ export const Default: Story = () => (
     <AlertDescription>This is a standard informational alert.</AlertDescription>
   </Alert>
 );
-

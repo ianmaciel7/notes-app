@@ -6,7 +6,7 @@ import {
   getObjectSplitButton,
   ObjectSplitButtonDynamic,
   objectSplitButtonRegistry,
-} from "./split-button-registry";
+} from "./object-split-button-registry";
 import { TaskSplitButton } from "./task-split-button";
 import { WeblinkSplitButton } from "./weblink-split-button";
 

@@ -2,7 +2,7 @@ import type { Story, StoryDefault } from "@ladle/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 export default {
-  title: "UI / Tabs",
+  title: "Componentes / UI / Tabs",
 } satisfies StoryDefault;
 
 export const Default: Story = () => (
