@@ -37679,7 +37679,7 @@
       "node_kind": "heading",
       "norm_label": "3. invariantes arquiteturais",
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L106"
+      "source_location": "L109"
     },
     {
       "id": "docs_translations_pt_br_architecture_readme_4_fluxos_de_dados_principais",
@@ -37691,7 +37691,7 @@
       "node_kind": "heading",
       "norm_label": "4. fluxos de dados principais",
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L144"
+      "source_location": "L147"
     },
     {
       "id": "docs_translations_pt_br_architecture_readme_4_fluxos_principais_de_dados",
@@ -37715,7 +37715,7 @@
       "node_kind": "heading",
       "norm_label": "5. preocupacoes transversais (cross-cutting concerns)",
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L175"
+      "source_location": "L178"
     },
     {
       "id": "docs_translations_pt_br_architecture_readme_5_quest\u00f5es_transversais_cross_cutting_concerns",
@@ -37739,7 +37739,7 @@
       "node_kind": "heading",
       "norm_label": "6. worktrees de referencia & topologia da base de codigo",
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L192"
+      "source_location": "L195"
     },
     {
       "id": "docs_translations_pt_br_architecture_readme_6_worktrees_de_refer\u00eancia_topologia_do_c\u00f3digo",
@@ -37775,7 +37775,7 @@
       "node_kind": "heading",
       "norm_label": "7. governanca do projeto & matriz do framework de decisao",
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L200"
+      "source_location": "L203"
     },
     {
       "id": "docs_translations_pt_br_architecture_readme_a_busca_de_dados_acesso_direto_rsc",
@@ -37799,7 +37799,7 @@
       "node_kind": "heading",
       "norm_label": "a. busca de dados (acesso direto via rsc atraves da dal)",
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L146"
+      "source_location": "L149"
     },
     {
       "id": "docs_translations_pt_br_architecture_readme_b_muta\u00e7\u00e3o_de_dados_fluxo_de_server_actions",
@@ -37811,7 +37811,7 @@
       "node_kind": "heading",
       "norm_label": "b. mutacao de dados (fluxo de server actions)",
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L160"
+      "source_location": "L163"
     },
     {
       "id": "docs_translations_pt_br_architecture_readme_bancada_de_componentes_visualizador_de_documenta\u00e7\u00e3o",
@@ -37823,7 +37823,7 @@
       "node_kind": "heading",
       "norm_label": "bancada de componentes & visualizador de documentacao",
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L186"
+      "source_location": "L189"
     },
     {
       "id": "docs_translations_pt_br_architecture_readme_estiliza\u00e7\u00e3o_temas",
@@ -37835,7 +37835,7 @@
       "node_kind": "heading",
       "norm_label": "estilizacao & temas",
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L177"
+      "source_location": "L180"
     },
     {
       "id": "docs_translations_pt_br_architecture_readme_internacionaliza\u00e7\u00e3o_i18n",
@@ -37847,7 +37847,7 @@
       "node_kind": "heading",
       "norm_label": "internacionalizacao (i18n)",
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L182"
+      "source_location": "L185"
     },
     {
       "id": "docs_translations_pt_br_architecture_readme_vis\u00e3o_geral_da_arquitetura_padr\u00e3o_matklad",
@@ -165369,7 +165369,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L146",
+      "source_location": "L149",
       "weight": 1.0
     },
     {
@@ -165380,7 +165380,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L160",
+      "source_location": "L163",
       "weight": 1.0
     },
     {
@@ -165413,7 +165413,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L177",
+      "source_location": "L180",
       "weight": 1.0
     },
     {
@@ -165424,7 +165424,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L182",
+      "source_location": "L185",
       "weight": 1.0
     },
     {
@@ -165435,7 +165435,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L186",
+      "source_location": "L189",
       "weight": 1.0
     },
     {
@@ -165457,7 +165457,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L144",
+      "source_location": "L147",
       "weight": 1.0
     },
     {
@@ -165468,7 +165468,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L175",
+      "source_location": "L178",
       "weight": 1.0
     },
     {
@@ -165490,7 +165490,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L192",
+      "source_location": "L195",
       "weight": 1.0
     },
     {
@@ -165501,7 +165501,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L200",
+      "source_location": "L203",
       "weight": 1.0
     },
     {
@@ -192902,7 +192902,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L194",
+      "source_location": "L197",
       "weight": 1.0
     },
     {
@@ -192913,7 +192913,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L194",
+      "source_location": "L197",
       "weight": 1.0
     },
     {
@@ -192924,7 +192924,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L195",
+      "source_location": "L198",
       "weight": 1.0
     },
     {
@@ -192935,7 +192935,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L195",
+      "source_location": "L198",
       "weight": 1.0
     },
     {
@@ -192968,7 +192968,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L206",
+      "source_location": "L209",
       "weight": 1.0
     },
     {
@@ -192979,7 +192979,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/translations/pt-BR/architecture/README.md",
-      "source_location": "L209",
+      "source_location": "L212",
       "weight": 1.0
     },
     {
@@ -195382,5 +195382,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4b8e040cfdb826e3e9d75317d8fcf50f42b95e98"
+  "built_at_commit": "a3418084518449c75451fc2777e033911a580f4a"
 }
