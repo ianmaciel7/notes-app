@@ -1,4 +1,4 @@
-# Cross-Agent Operating Principles
+# AGENTS.md Principles for Coding Agents
 
 This rule defines shared principles for coding agents working in this repository. It is written to be useful across Antigravity, Codex, Claude Code, and similar tools.
 
