@@ -19,11 +19,11 @@ export interface HighlightBlockElementProps extends React.ComponentPropsWithoutR
 }
 
 const colorMap = {
-  yellow: "border-amber-400 bg-amber-500/10 text-amber-950 dark:text-amber-100",
-  blue: "border-blue-400 bg-blue-500/10 text-blue-950 dark:text-blue-100",
-  green: "border-emerald-400 bg-emerald-500/10 text-emerald-950 dark:text-emerald-100",
-  pink: "border-pink-400 bg-pink-500/10 text-pink-950 dark:text-pink-100",
-  purple: "border-purple-400 bg-purple-500/10 text-purple-950 dark:text-purple-100",
+  yellow: "tone-badge-amber",
+  blue: "tone-badge-blue",
+  green: "tone-badge-emerald",
+  pink: "tone-badge-pink",
+  purple: "tone-badge-purple",
 };
 
 export function HighlightBlockElement({
@@ -37,6 +37,7 @@ export function HighlightBlockElement({
 
   return (
     <blockquote
+      data-slot="editor-highlight-block"
       {...attributes}
       {...props}
       className={cn(
@@ -46,13 +47,13 @@ export function HighlightBlockElement({
       )}
     >
       <div className="flex items-start gap-3">
-        <Quote className="size-5 shrink-0 opacity-60 mt-0.5" />
+         <Quote aria-hidden="true" className="size-5 shrink-0 opacity-60 mt-0.5" />
         <div className="flex-1 space-y-1">
           <div>{children}</div>
           {(sourceLabel || sourceUrl) && (
             <div className="not-italic mt-2 flex items-center gap-1.5 text-xs opacity-75">
-              <Link2 className="size-3" />
-              {sourceUrl ? (
+               <Link2 aria-hidden="true" className="size-3" />
+               {sourceUrl && /^https?:\/\//i.test(sourceUrl) ? (
                 <a
                   href={sourceUrl}
                   target="_blank"

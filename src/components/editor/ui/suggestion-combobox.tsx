@@ -16,7 +16,7 @@ import {
   Sigma,
   Table,
 } from "lucide-react";
-import type * as React from "react";
+import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export interface SuggestionItem {
@@ -84,6 +84,7 @@ export interface SuggestionComboboxProps {
   query?: string;
   token?: string;
   onSelect: (item: SuggestionItem) => void;
+  onClose?: () => void;
   className?: string;
 }
 
@@ -91,9 +92,10 @@ export function SuggestionCombobox({
   isOpen,
   query = "",
   onSelect,
+  onClose,
   className,
 }: SuggestionComboboxProps) {
-  if (!isOpen) return null;
+  const [activeIndex, setActiveIndex] = React.useState(0);
 
   const filtered = DEFAULT_COMMAND_ITEMS.filter(
     (item) =>
@@ -101,8 +103,33 @@ export function SuggestionCombobox({
       item.description.toLowerCase().includes(query.toLowerCase()),
   );
 
+  React.useEffect(() => setActiveIndex(0), [query]);
+
+  if (!isOpen) return null;
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      onClose?.();
+    } else if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActiveIndex((index) => Math.min(index + 1, Math.max(filtered.length - 1, 0)));
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveIndex((index) => Math.max(index - 1, 0));
+    } else if (event.key === "Enter" && filtered[activeIndex]) {
+      event.preventDefault();
+      onSelect(filtered[activeIndex]);
+    }
+  };
+
   return (
     <div
+      data-slot="editor-suggestion-combobox"
+      role="listbox"
+      aria-label="Block commands"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
       className={cn(
         "z-50 w-72 max-h-80 overflow-y-auto rounded-xl border border-border bg-popover p-1 shadow-lg text-popover-foreground animate-in fade-in-50 zoom-in-95",
         className,
@@ -116,14 +143,20 @@ export function SuggestionCombobox({
           No matching blocks found
         </div>
       ) : (
-        filtered.map((item) => {
+        filtered.map((item, index) => {
           const Icon = item.icon;
           return (
             <button
               key={item.id}
               type="button"
+              id={`suggestion-${item.id}`}
+              role="option"
+              aria-selected={activeIndex === index}
               onClick={() => onSelect(item)}
-              className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
+              className={cn(
+                "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                activeIndex === index && "bg-accent text-accent-foreground",
+              )}
             >
               <div className="flex size-7 items-center justify-center rounded-md border border-border bg-muted/50 text-foreground">
                 <Icon className="size-4" />

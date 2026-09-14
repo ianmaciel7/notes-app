@@ -28,6 +28,7 @@ export function CodeBlockMermaidElement({
 
   return (
     <div
+      data-slot="editor-code-block"
       {...attributes}
       {...props}
       className={cn(
@@ -37,7 +38,7 @@ export function CodeBlockMermaidElement({
     >
       <div className="flex items-center justify-between border-b border-border bg-muted/60 px-4 py-1.5 text-xs text-muted-foreground">
         <div className="flex items-center gap-1.5 font-medium">
-          {isMermaid ? <Workflow className="size-3.5 text-brand" /> : <Code className="size-3.5" />}
+          {isMermaid ? <Workflow aria-hidden="true" className="size-3.5 text-brand" /> : <Code aria-hidden="true" className="size-3.5" />}
           <span className="uppercase">{language}</span>
         </div>
       </div>

@@ -2,8 +2,7 @@
 
 import { Download, Table } from "lucide-react";
 import { createPlatePlugin, useEditorRef, usePath, useReadOnly } from "platejs/react";
-import type * as React from "react";
-import { Transforms } from "slate";
+import * as React from "react";
 import {
   cellKey,
   exportTableBlockToCsv,
@@ -37,7 +36,7 @@ export function TableBlockElement({
 
   const updateCell = (rowId: string, columnId: string, text: string) => {
     const nextTable = setTableCellText(table, rowId, columnId, text);
-    if (nextTable !== table) Transforms.setNodes(editor, { table: nextTable }, { at: path });
+    if (nextTable !== table) editor.tf.setNodes({ table: nextTable }, { at: path });
   };
 
   const copyCsv = async () => {
@@ -75,7 +74,13 @@ export function TableBlockElement({
             className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer"
           >
             <Download className="size-3" />
-            <span>{exportStatus === "copied" ? "Copied" : exportStatus === "failed" ? "Copy failed" : "CSV"}</span>
+            <span>
+              {exportStatus === "copied"
+                ? "Copied"
+                : exportStatus === "failed"
+                  ? "Copy failed"
+                  : "CSV"}
+            </span>
           </button>
         </div>
       </div>

@@ -36,6 +36,7 @@ export function ObjectBlockElement({
   if (state === "missing" || state === "permission-denied" || state === "offline") {
     return (
       <div
+        data-slot="editor-object-block"
         {...attributes}
         {...props}
         className={cn(
@@ -43,7 +44,7 @@ export function ObjectBlockElement({
           className,
         )}
       >
-        {state === "offline" ? <WifiOff className="size-4" /> : <Lock className="size-4" />}
+        {state === "offline" ? <WifiOff aria-hidden="true" className="size-4" /> : <Lock aria-hidden="true" className="size-4" />}
         <span>
           {title} ({state})
         </span>
@@ -55,6 +56,7 @@ export function ObjectBlockElement({
   if (viewKind === "inline") {
     return (
       <span
+        data-slot="editor-object-reference"
         {...attributes}
         {...props}
         className={cn(
@@ -62,7 +64,7 @@ export function ObjectBlockElement({
           className,
         )}
       >
-        <FileText className="size-3 text-muted-foreground" />
+        <FileText aria-hidden="true" className="size-3 text-muted-foreground" />
         <span>{title}</span>
         {children}
       </span>
@@ -71,6 +73,7 @@ export function ObjectBlockElement({
 
   return (
     <div
+      data-slot="editor-object-block"
       {...attributes}
       {...props}
       className={cn(
@@ -82,14 +85,14 @@ export function ObjectBlockElement({
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <div className="flex size-8 items-center justify-center rounded-lg bg-brand/10 text-brand">
-            <FileText className="size-4" />
+            <FileText aria-hidden="true" className="size-4" />
           </div>
           <div>
             <h4 className="text-sm font-semibold text-card-foreground">{title}</h4>
             <p className="text-xs text-muted-foreground">Object ID: {targetId}</p>
           </div>
         </div>
-        <ExternalLink className="size-4 text-muted-foreground hover:text-foreground cursor-pointer" />
+        <ExternalLink aria-hidden="true" className="size-4 text-muted-foreground" />
       </div>
       {children}
     </div>

@@ -30,6 +30,7 @@ export function MathBlockElement({
   if (sourceStatus === "invalid") {
     return (
       <span
+        data-slot="editor-math-block"
         {...attributes}
         {...props}
         className={cn(
@@ -37,7 +38,7 @@ export function MathBlockElement({
           className,
         )}
       >
-        <AlertCircle className="size-3.5" />
+        <AlertCircle aria-hidden="true" className="size-3.5" />
         <span>TeX Syntax Error: {source}</span>
         {children}
       </span>
@@ -47,6 +48,7 @@ export function MathBlockElement({
   if (isInline) {
     return (
       <span
+        data-slot="editor-math-inline"
         {...attributes}
         {...props}
         className={cn(
@@ -54,7 +56,7 @@ export function MathBlockElement({
           className,
         )}
       >
-        <Sigma className="size-3 text-brand" />
+        <Sigma aria-hidden="true" className="size-3 text-brand" />
         <span>{source}</span>
         {children}
       </span>
@@ -63,6 +65,7 @@ export function MathBlockElement({
 
   return (
     <div
+      data-slot="editor-math-block"
       {...attributes}
       {...props}
       className={cn(
@@ -71,7 +74,7 @@ export function MathBlockElement({
       )}
     >
       <div className="flex items-center gap-2 text-muted-foreground mb-2">
-        <Sigma className="size-4 text-brand" />
+        <Sigma aria-hidden="true" className="size-4 text-brand" />
         <span className="text-xs uppercase font-medium tracking-wider">LaTeX Equation</span>
       </div>
       <div className="text-base text-foreground font-semibold">

@@ -19,7 +19,6 @@ export function BlockGutterHandle({
   return (
     <div
       data-slot="editor-block-gutter"
-      aria-label="Block actions"
       className={cn(
         "group absolute left-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 opacity-0 hover:opacity-100 transition-opacity",
         className,

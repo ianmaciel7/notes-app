@@ -1602,9 +1602,9 @@
     "semantic_hash": ""
   },
   "src/components/ui/button-group.tsx": {
-    "mtime": 1789402414.3630247,
-    "seen": 1789402559.1717992,
-    "ast_hash": "a95d1c077bf0bace32a2563ddf48bc98",
+    "mtime": 1789402880.2295742,
+    "seen": 1789402953.10743,
+    "ast_hash": "94c733b7e96535d32bea06c4ef5143b7",
     "semantic_hash": ""
   },
   "src/components/ui/button.tsx": {
@@ -2736,9 +2736,9 @@
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/object-split-button.tsx": {
-    "mtime": 1789402451.969473,
-    "seen": 1789402559.1717992,
-    "ast_hash": "e53e16b2f9b56a4d704cae7dca73f101",
+    "mtime": 1789402899.631131,
+    "seen": 1789402953.10743,
+    "ast_hash": "75b53b58a5832a1f8d0246c3e85261f4",
     "semantic_hash": ""
   },
   "vitest.config.mts": {
@@ -2754,9 +2754,9 @@
     "semantic_hash": ""
   },
   "src/components/editor/editor-capacities.tsx": {
-    "mtime": 1789382828.5920248,
-    "seen": 1789383184.0374558,
-    "ast_hash": "3ee1bc078ab71dbc5c220f35bdf4d113",
+    "mtime": 1789402836.4754968,
+    "seen": 1789402953.10743,
+    "ast_hash": "d8960e91d64cb2a60f27f4bbba4f0cc0",
     "semantic_hash": ""
   },
   "src/components/editor/plugins/code-mermaid-plugin.tsx": {
@@ -2790,27 +2790,27 @@
     "semantic_hash": ""
   },
   "src/components/editor/plugins/table-block-plugin.tsx": {
-    "mtime": 1789382315.0603018,
-    "seen": 1789383184.0374558,
-    "ast_hash": "29961e38d204e8bedc2a7ae28b9b835b",
+    "mtime": 1789402826.9205997,
+    "seen": 1789402953.10743,
+    "ast_hash": "0426be2d41382819c758b8b2980e92eb",
     "semantic_hash": ""
   },
   "src/components/editor/ui/block-gutter-handle.tsx": {
-    "mtime": 1789382315.0781007,
-    "seen": 1789383184.0374558,
-    "ast_hash": "a151b2a51505e8e6cabf547b78d7ddd7",
+    "mtime": 1789402739.4543235,
+    "seen": 1789402953.10743,
+    "ast_hash": "26b872aaf54c0fa6e25432f33dca9f4a",
     "semantic_hash": ""
   },
   "src/components/editor/ui/floating-toolbar.tsx": {
-    "mtime": 1789382343.348045,
-    "seen": 1789383184.0374558,
-    "ast_hash": "df6ecf63415ead27361e1fd76f9b3b29",
+    "mtime": 1789402689.687294,
+    "seen": 1789402736.8725574,
+    "ast_hash": "95ee1c507afb737c04b6a146725b8efb",
     "semantic_hash": ""
   },
   "src/components/editor/ui/suggestion-combobox.tsx": {
-    "mtime": 1789382315.0633018,
-    "seen": 1789383184.0374558,
-    "ast_hash": "809e756123df82c71850700bfe4c2760",
+    "mtime": 1789402828.5896168,
+    "seen": 1789402953.10743,
+    "ast_hash": "3ec2617be70f433040b5e650d438ae0c",
     "semantic_hash": ""
   },
   "src/components/objects/icons/icon-registry.tsx": {
@@ -3024,14 +3024,14 @@
     "semantic_hash": ""
   },
   "src/lib/editor/document-schema.ts": {
-    "mtime": 1789402549.2547023,
-    "seen": 1789402559.1723068,
-    "ast_hash": "ba81660c34eb711945ea164f6d229629",
+    "mtime": 1789402700.184106,
+    "seen": 1789402736.8725574,
+    "ast_hash": "0a219c69310123965ed63ae76202e820",
     "semantic_hash": ""
   },
   "src/lib/editor/table-model.ts": {
-    "mtime": 1789402517.9098587,
-    "seen": 1789402559.1723068,
+    "mtime": 1789402675.4725735,
+    "seen": 1789402736.8725574,
     "ast_hash": "572bacd25e21c2da7197ea424cbac311",
     "semantic_hash": ""
   },
