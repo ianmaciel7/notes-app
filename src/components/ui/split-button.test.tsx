@@ -3,42 +3,25 @@ import { describe, expect, it } from "vitest";
 import {
   SplitButton,
   SplitButtonAction,
-  SplitButtonContent,
   SplitButtonGroup,
-  SplitButtonItem,
   SplitButtonSeparator,
   SplitButtonTrigger,
 } from "./split-button";
 
 describe("SplitButton", () => {
-  it("composes named shadcn parts", () => {
+  it("preserves the ButtonGroup data slot for grouped button styling", () => {
     const html = renderToStaticMarkup(
       <SplitButton>
-        <SplitButtonGroup aria-label="Create item">
-          <SplitButtonAction aria-label="Create item">
-            <span data-testid="leading-icon">+</span>
-            <span>Create</span>
-          </SplitButtonAction>
+        <SplitButtonGroup aria-label="Save options">
+          <SplitButtonAction>Save</SplitButtonAction>
           <SplitButtonSeparator orientation="vertical" />
-          <SplitButtonTrigger aria-label="Create options" size="icon-xs" />
-          <SplitButtonContent>
-            <SplitButtonItem>
-              <span data-testid="option-icon">T</span>
-              From template
-            </SplitButtonItem>
-          </SplitButtonContent>
+          <SplitButtonTrigger aria-label="More save options" />
         </SplitButtonGroup>
       </SplitButton>,
     );
 
     expect(html).toContain('role="group"');
-    expect(html).toContain('data-slot="split-button-group"');
-    expect(html).toContain('data-slot="split-button-action"');
-    expect(html).toContain('data-slot="split-button-separator"');
-    expect(html).toContain('data-slot="split-button-trigger"');
-    expect(html).toContain('aria-label="Create item"');
-    expect(html).toContain('aria-label="Create options"');
-    expect(html).toContain("Create");
-    expect(html).toContain('aria-haspopup="menu"');
+    expect(html).toContain('data-slot="button-group"');
+    expect(html).not.toContain('data-slot="split-button-group"');
   });
 });

@@ -35,6 +35,14 @@ describe("Object Split Buttons", () => {
     expect(htmlTask).toContain("bg-red-50");
   });
 
+  it("keeps the disclosure trigger visually integrated with the object tone", () => {
+    const html = renderToStaticMarkup(<PageSplitButton />);
+
+    expect(html).toContain("hover:bg-blue-100");
+    expect(html).toContain("border-blue-200");
+    expect(html).not.toContain("bg-primary text-primary-foreground");
+  });
+
   it("exposes the toned object-type split button as ObjectSplitButton", () => {
     const html = renderToStaticMarkup(
       <PageSplitButton

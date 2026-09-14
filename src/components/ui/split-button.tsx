@@ -14,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { cn } from "@/lib/utils"
 
 type SplitButtonProps = React.ComponentProps<typeof DropdownMenu>
 
@@ -28,7 +29,6 @@ function SplitButtonGroup({
 }: SplitButtonGroupProps) {
   return (
     <ButtonGroup
-      data-slot="split-button-group"
       {...props}
     />
   )
@@ -51,11 +51,13 @@ type SplitButtonSeparatorProps =
   React.ComponentProps<typeof ButtonGroupSeparator>
 
 function SplitButtonSeparator({
+  className,
   ...props
 }: SplitButtonSeparatorProps) {
   return (
     <ButtonGroupSeparator
       data-slot="split-button-separator"
+      className={cn("bg-border", className)}
       {...props}
     />
   )
@@ -67,7 +69,7 @@ type SplitButtonTriggerProps =
 
 function SplitButtonTrigger({
   children,
-  variant = "ghost",
+  variant = "default",
   size = "icon-sm",
   ...props
 }: SplitButtonTriggerProps) {

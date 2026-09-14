@@ -85,13 +85,16 @@ type ObjectSplitButtonActionProps = Omit<
 
 function ObjectSplitButtonAction({
   type = "page",
+  className,
   children,
   ...props
 }: ObjectSplitButtonActionProps) {
-  const { size } = React.useContext(ObjectSplitButtonContext);
+  const { size, tone } = React.useContext(ObjectSplitButtonContext);
+  const toneStyle = toneStyles[tone] ?? toneStyles.blue;
 
   return (
     <SplitButtonAction
+      className={cn(toneStyle.hoverBg, toneStyle.text, className)}
       size={objectSplitButtonSizes[size].action}
       variant="ghost"
       {...props}
@@ -106,10 +109,19 @@ type ObjectSplitButtonSeparatorProps = React.ComponentProps<
   typeof SplitButtonSeparator
 >;
 
-function ObjectSplitButtonSeparator(
-  props: ObjectSplitButtonSeparatorProps,
-) {
-  return <SplitButtonSeparator {...props} />;
+function ObjectSplitButtonSeparator({
+  className,
+  ...props
+}: ObjectSplitButtonSeparatorProps) {
+  const { tone } = React.useContext(ObjectSplitButtonContext);
+  const toneStyle = toneStyles[tone] ?? toneStyles.blue;
+
+  return (
+    <SplitButtonSeparator
+      className={cn(toneStyle.divider, className)}
+      {...props}
+    />
+  );
 }
 
 type ObjectSplitButtonTriggerProps = Omit<
@@ -117,14 +129,18 @@ type ObjectSplitButtonTriggerProps = Omit<
   "size"
 >;
 
-function ObjectSplitButtonTrigger(
-  props: ObjectSplitButtonTriggerProps,
-) {
-  const { size } = React.useContext(ObjectSplitButtonContext);
+function ObjectSplitButtonTrigger({
+  className,
+  ...props
+}: ObjectSplitButtonTriggerProps) {
+  const { size, tone } = React.useContext(ObjectSplitButtonContext);
+  const toneStyle = toneStyles[tone] ?? toneStyles.blue;
 
   return (
     <SplitButtonTrigger
+      className={cn(toneStyle.hoverBg, toneStyle.text, className)}
       size={objectSplitButtonSizes[size].trigger}
+      variant="ghost"
       {...props}
     />
   );

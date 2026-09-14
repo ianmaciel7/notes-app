@@ -2,6 +2,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@source "../../node_modules/@blocknote/shadcn";
 
 /* ─────────────────────────────────────────────────────────────────────────────
    DESIGN SYSTEM: Notes App — Monastic Knowledge Sanctuary
@@ -9,7 +10,7 @@
    Architecture: OKLCH color space · Capacities 18-tone palette · Three-pane shell
    ───────────────────────────────────────────────────────────────────────────── */
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark, .dark *));
 
 /* ─── Tailwind v4 Theme Mappings ─────────────────────────────────────────── */
 @theme inline {
@@ -85,6 +86,8 @@
   --radius-3xl: calc(var(--radius) * 2.2); /* 22px */
   --radius-4xl: calc(var(--radius) * 2.6); /* 26px */
   --radius-full: 9999px;
+  --radius-base: var(--radius-md);
+  --radius-small: var(--radius-sm);
 
   /* Control height scale (DESIGN.md §5) */
   --control-xs: 1.375rem; /*  22px */
@@ -208,6 +211,15 @@
   --app-text-selection: #4494f748;
   --app-block-selection: #4494f748;
   --app-block-selection-border: oklch(0.7137 0.1435 254.63);
+  --app-bubble-secondary-hover: color-mix(in oklch, var(--secondary), var(--foreground) 5%);
+  --app-bubble-muted-hover: color-mix(in oklch, var(--muted), var(--foreground) 5%);
+  --app-dropdown-shortcut-text: #8f8983;
+  --app-dropdown-submenu-bg: #f3f1ee;
+  --app-dropdown-submenu-text: #1f1c19;
+  --app-object-type-control-bg: oklch(0.9856 0.0016 67);
+  --app-object-type-control-border: oklch(0.8643 0.0017 67.13);
+  --app-object-type-control-text: oklch(0.3887 0.0052 301.05);
+  --app-object-type-learn-more-icon: oklch(0.5708 0.1192 59.46);
   --app-overlay-strong: rgb(0 0 0 / 45%);
   --app-overlay-command: rgb(0 0 0 / 50%);
   --app-overlay-soft: rgb(0 0 0 / 10%);
@@ -221,6 +233,8 @@
   --app-shadow-sidebar-popover: 0 3px 5px #00000003, 0 5px 10px #00000005, 0 10px 14px #00000003;
   --app-code-bg: oklch(0.9916 0.0016 67);
   --app-code-text: var(--text-primary);
+  --app-internal-link: var(--text-secondary);
+  --app-internal-link-hover: oklch(0.4668 0.0039 16.75);
   --app-horizontal-line: var(--border-base-strong);
   --app-quote-line: var(--border-strong);
 
@@ -334,6 +348,10 @@
   --tone-violet-text: oklch(0.46 0.21 285);
   --tone-violet-bg: oklch(0.95 0.04 285);
   --tone-violet-border: oklch(0.87 0.08 285);
+
+  --type-label-text-blue: var(--tone-blue-text);
+  --type-label-bg-blue: var(--tone-blue-bg);
+  --type-label-border-blue: var(--tone-blue-border);
 }
 
 /* ═════════════════════════════════════════════════════════════════════════════
@@ -410,6 +428,15 @@
   --app-text-selection: #5090dd3a;
   --app-block-selection: #5090dd3a;
   --app-block-selection-border: oklch(0.7137 0.1435 254.63);
+  --app-bubble-secondary-hover: color-mix(in oklch, var(--secondary), var(--foreground) 5%);
+  --app-bubble-muted-hover: color-mix(in oklch, var(--muted), var(--foreground) 5%);
+  --app-dropdown-shortcut-text: var(--text-subtle);
+  --app-dropdown-submenu-bg: var(--accent);
+  --app-dropdown-submenu-text: var(--accent-foreground);
+  --app-object-type-control-bg: oklch(0.2987 0.0072 285.88);
+  --app-object-type-control-border: oklch(0.4918 0.0038 16.7);
+  --app-object-type-control-text: oklch(0.9163 0.0017 67.07);
+  --app-object-type-learn-more-icon: oklch(0.9243 0.1151 95.76);
   --app-overlay-strong: rgb(0 0 0 / 45%);
   --app-overlay-command: rgb(0 0 0 / 50%);
   --app-overlay-soft: rgb(0 0 0 / 10%);
@@ -423,6 +450,8 @@
   --app-shadow-sidebar-popover: 0 3px 5px #00000003, 0 5px 10px #00000005, 0 10px 14px #00000003;
   --app-code-bg: oklch(0.278 0.0055 285.95);
   --app-code-text: var(--text-secondary);
+  --app-internal-link: var(--border-base-strong);
+  --app-internal-link-hover: var(--text-primary);
   --app-horizontal-line: oklch(0.4668 0.0039 16.75);
   --app-quote-line: var(--text-subtle);
 
@@ -534,6 +563,181 @@
   --tone-violet-text: oklch(0.78 0.17 285);
   --tone-violet-bg: oklch(0.26 0.09 285);
   --tone-violet-border: oklch(0.36 0.11 285);
+
+  --type-label-text-blue: var(--tone-blue-text);
+  --type-label-bg-blue: var(--tone-blue-bg);
+  --type-label-border-blue: var(--tone-blue-border);
+}
+
+@layer components {
+  .notes-block-editor {
+    min-height: 28px;
+    color: var(--foreground);
+    font-family: Inter, var(--font-sans), sans-serif;
+    font-size: 17px;
+    line-height: 28px;
+    white-space: pre-wrap;
+  }
+
+  .notes-block-editor > * + * {
+    margin-top: 1.25rem;
+  }
+
+  .notes-block-editor h1 {
+    font-size: 1.8em;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+
+  .notes-block-editor h2 {
+    font-size: 1.5em;
+    line-height: 1.25;
+    font-weight: 700;
+  }
+
+  .notes-block-editor h3 {
+    font-size: 1.25em;
+    line-height: 1.3;
+    font-weight: 650;
+  }
+
+  .notes-block-editor h4 {
+    font-size: 1.08em;
+    line-height: 1.35;
+    font-weight: 650;
+  }
+
+  .notes-block-editor ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+  }
+
+  .notes-block-editor ol {
+    list-style: decimal;
+    padding-left: 1.5rem;
+  }
+
+  .notes-block-editor blockquote {
+    border-left: 2px solid var(--app-quote-line);
+    padding-left: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .notes-block-editor hr {
+    margin: 1rem 0;
+    border: 0;
+    border-top: 1px solid var(--app-horizontal-line);
+  }
+
+  .notes-block-editor code {
+    border-radius: 0.25rem;
+    background: var(--app-code-bg);
+    color: var(--app-code-text);
+    padding: 0.1rem 0.25rem;
+    font-family: var(--font-mono);
+  }
+
+  .notes-block-editor pre {
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    background: var(--app-code-bg);
+    padding: 0.75rem;
+  }
+
+  .notes-block-editor a {
+    color: var(--app-internal-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .notes-block-editor a:hover {
+    color: var(--app-internal-link-hover);
+  }
+
+  .notes-block-editor [data-group-block],
+  .notes-block-editor [data-object-block] {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+  }
+
+  .notes-block-editor [data-group-block] {
+    padding: 0.75rem;
+  }
+
+  .notes-block-editor [data-object-block] {
+    display: block;
+    max-width: 100%;
+    padding: 0.65rem 0.75rem;
+  }
+
+  .notes-block-editor [data-table-block-view] th,
+  .notes-block-editor [data-table-block-view] td {
+    border: 1px solid var(--border);
+    min-width: 8rem;
+    padding: 0;
+    vertical-align: top;
+  }
+
+  .notes-block-editor [data-table-block-view] th {
+    background: var(--muted);
+    font-weight: 650;
+  }
+
+  .notes-block-editor [data-table-cell-id][data-selected] {
+    box-shadow: inset 0 0 0 2px var(--app-block-selection-border);
+  }
+
+  .notes-block-editor p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    color: var(--muted-foreground);
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .notes-block-editor ::selection {
+    background: var(--app-text-selection);
+  }
+
+  .preview-card-core {
+    --color-border-base: var(--app-border-base);
+    --color-border-front: var(--app-border-front);
+    --color-bg-front: var(--app-bg-front);
+    --color-bg-base: var(--app-bg-base);
+    --color-bg-el: var(--app-bg-el);
+    --color-text-primary: var(--app-text-primary);
+    --color-text-secondary: var(--app-text-secondary);
+    --color-text-subtle: var(--app-text-subtle);
+  }
+
+  .preview-card-core .text-secondary {
+    color: var(--app-text-secondary);
+  }
+
+  .preview-card-core .text-subtle {
+    color: var(--app-text-subtle);
+  }
+
+  .preview-card-core .bg-front {
+    background-color: var(--app-bg-front);
+  }
+
+  .preview-card-core .bg-base {
+    background-color: var(--app-bg-base);
+  }
+
+  .preview-card-core .bg-el {
+    background-color: var(--app-bg-el);
+  }
+
+  .preview-card-core .border-base {
+    border-color: var(--app-border-base);
+  }
+
+  .preview-card-core .border-front {
+    border-color: var(--app-border-front);
+  }
 }
 
 /* ═════════════════════════════════════════════════════════════════════════════
