@@ -41,6 +41,7 @@ The primary agent in this project operates as a **Lead Orchestrator** (*Orquestr
 ### Graph Execution & Parallel Subagent Protocol:
 - **Task Graph Execution (DAG Engine)**: For multi-step or multi-file tasks, construct a directed dependency graph. Execute independent graph nodes concurrently in parallel.
 - **Homogeneous Parallel Scaling (Fan-Out)**: If a single role task is broad, slow, or complex (e.g. codebase-wide audit or test generation across 10 modules), break the workload into distinct partitions and instantiate multiple concurrent subagents of the same type (`TypeName: "research"`, `TypeName: "test-engineer"`, etc.) in a single `invoke_subagent` array call.
+- **Multi-Worktree Parallel Fan-Out**: The orchestrator can dispatch 5 parallel `research` subagents in a single `invoke_subagent` call—one subagent dedicated to each worktree directory (`.worktrees/old`, `.worktrees/old-2`, `.worktrees/old-3`, `.worktrees/old-4`, `.worktrees/old-5`)—to search for information, compare implementations, or extract specs concurrently across all historical worktrees.
 - **Scatter-Gather Synthesis**: The orchestrator receives completed responses asynchronously, merges outputs, updates the task graph state, and advances to the next step without unnecessary polling loops.
 
 <!-- END:subagent-roles -->
@@ -74,6 +75,8 @@ The `.worktrees/` folder contains historical iterations of the project for archi
 - `.worktrees/old-5`: Full Capacities component map reference, Next.js 16 + React 19 architecture, FSRS engine, and AI proxy setup.
 
 When implementing or refactoring features, inspect these worktrees as authoritative baseline references.
+
+**Multi-Worktree Parallel Research**: Orchestrators can perform concurrent historical analysis by dispatching 5 parallel `research` subagents in a single `invoke_subagent` call, dedicating one subagent to each worktree directory (`.worktrees/old` through `.worktrees/old-5`) to search for information, compare implementations, or extract specs concurrently.
 
 **Strict Rule**: The `.worktrees/` directory and all its contents are strictly **READ-ONLY**. AI agents must **NEVER** create, edit, modify, or delete any files or directories inside `.worktrees/`.
 

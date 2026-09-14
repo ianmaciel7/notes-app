@@ -1,6 +1,6 @@
 import * as React from "react";
-import { IconBase } from "./icon-base";
 import type { ObjectIconProps } from "../../../lib/space-object-types";
+import { IconBase } from "./icon-base";
 
 export const KnowledgeIcon = React.forwardRef<SVGSVGElement, ObjectIconProps>(
   function KnowledgeIcon(props, ref) {
