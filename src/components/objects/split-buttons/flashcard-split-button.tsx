@@ -14,7 +14,7 @@ export type FlashcardSplitButtonProps = ObjectSplitButtonVariantProps;
 export function FlashcardSplitButton({
   type = "flashcard",
   label = "Flashcard",
-  tone = "violet",
+  variant = "violet",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function FlashcardSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

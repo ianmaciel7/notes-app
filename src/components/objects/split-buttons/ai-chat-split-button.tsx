@@ -14,7 +14,7 @@ export type AiChatSplitButtonProps = ObjectSplitButtonVariantProps;
 export function AiChatSplitButton({
   type = "ai-chat",
   label = "AI Chat",
-  tone = "purple",
+  variant = "purple",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function AiChatSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

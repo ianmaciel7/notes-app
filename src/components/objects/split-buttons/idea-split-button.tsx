@@ -14,7 +14,7 @@ export type IdeaSplitButtonProps = ObjectSplitButtonVariantProps;
 export function IdeaSplitButton({
   type = "idea",
   label = "Ideia",
-  tone = "yellow",
+  variant = "yellow",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function IdeaSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

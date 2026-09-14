@@ -13,7 +13,7 @@ import {
   SplitButtonTrigger,
 } from "@/components/ui/split-button";
 import { ObjectIcon } from "@/components/objects/icons/icon-registry";
-import { toneStyles } from "./split-button-base";
+import { variantStyles } from "./split-button-base";
 
 const objectSplitButtonSizes = {
   sm: { action: "sm", trigger: "icon-sm" },
@@ -25,27 +25,27 @@ type ObjectSplitButtonSize = keyof typeof objectSplitButtonSizes;
 
 type ObjectSplitButtonContextValue = {
   size: ObjectSplitButtonSize;
-  tone: ObjectIconTone;
+  variant: ObjectIconTone;
 };
 
 const ObjectSplitButtonContext =
   React.createContext<ObjectSplitButtonContextValue>({
     size: "md",
-    tone: "blue",
+    variant: "blue",
   });
 
 type ObjectSplitButtonProps = React.ComponentProps<typeof SplitButton> & {
   size?: ObjectSplitButtonSize;
-  tone?: ObjectIconTone;
+  variant?: ObjectIconTone;
 };
 
 function ObjectSplitButton({
   size = "md",
-  tone = "blue",
+  variant = "blue",
   ...props
 }: ObjectSplitButtonProps) {
   return (
-    <ObjectSplitButtonContext.Provider value={{ size, tone }}>
+    <ObjectSplitButtonContext.Provider value={{ size, variant }}>
       <SplitButton {...props} />
     </ObjectSplitButtonContext.Provider>
   );
@@ -59,16 +59,10 @@ function ObjectSplitButtonGroup({
   className,
   ...props
 }: ObjectSplitButtonGroupProps) {
-  const { tone } = React.useContext(ObjectSplitButtonContext);
-  const toneStyle = toneStyles[tone] ?? toneStyles.blue;
-
   return (
     <SplitButtonGroup
       className={cn(
-        "border font-medium transition-colors select-none",
-        toneStyle.bg,
-        toneStyle.text,
-        toneStyle.border,
+        "font-medium transition-colors select-none",
         className,
       )}
       {...props}
@@ -78,7 +72,7 @@ function ObjectSplitButtonGroup({
 
 type ObjectSplitButtonActionProps = Omit<
   React.ComponentProps<typeof SplitButtonAction>,
-  "size" | "type"
+  "size" | "type" | "variant"
 > & {
   type?: ObjectIconName | (string & {});
 };
@@ -89,14 +83,20 @@ function ObjectSplitButtonAction({
   children,
   ...props
 }: ObjectSplitButtonActionProps) {
-  const { size, tone } = React.useContext(ObjectSplitButtonContext);
-  const toneStyle = toneStyles[tone] ?? toneStyles.blue;
+  const { size, variant } = React.useContext(ObjectSplitButtonContext);
+  const variantStyle = variantStyles[variant] ?? variantStyles.blue;
 
   return (
     <SplitButtonAction
-      className={cn(toneStyle.hoverBg, toneStyle.text, className)}
+      className={cn(
+        variantStyle.bg,
+        variantStyle.hoverBg,
+        variantStyle.text,
+        variantStyle.border,
+        className,
+      )}
       size={objectSplitButtonSizes[size].action}
-      variant="ghost"
+      variant="outline"
       {...props}
     >
       <ObjectIcon type={type} />
@@ -113,12 +113,12 @@ function ObjectSplitButtonSeparator({
   className,
   ...props
 }: ObjectSplitButtonSeparatorProps) {
-  const { tone } = React.useContext(ObjectSplitButtonContext);
-  const toneStyle = toneStyles[tone] ?? toneStyles.blue;
+  const { variant } = React.useContext(ObjectSplitButtonContext);
+  const variantStyle = variantStyles[variant] ?? variantStyles.blue;
 
   return (
     <SplitButtonSeparator
-      className={cn("bg-current/20", toneStyle.divider, className)}
+      className={cn("bg-current/20", variantStyle.divider, className)}
       {...props}
     />
   );
@@ -126,21 +126,27 @@ function ObjectSplitButtonSeparator({
 
 type ObjectSplitButtonTriggerProps = Omit<
   React.ComponentProps<typeof SplitButtonTrigger>,
-  "size"
+  "size" | "variant"
 >;
 
 function ObjectSplitButtonTrigger({
   className,
   ...props
 }: ObjectSplitButtonTriggerProps) {
-  const { size, tone } = React.useContext(ObjectSplitButtonContext);
-  const toneStyle = toneStyles[tone] ?? toneStyles.blue;
+  const { size, variant } = React.useContext(ObjectSplitButtonContext);
+  const variantStyle = variantStyles[variant] ?? variantStyles.blue;
 
   return (
     <SplitButtonTrigger
-      className={cn(toneStyle.hoverBg, toneStyle.text, className)}
+      className={cn(
+        variantStyle.bg,
+        variantStyle.hoverBg,
+        variantStyle.text,
+        variantStyle.border,
+        className,
+      )}
       size={objectSplitButtonSizes[size].trigger}
-      variant="ghost"
+      variant="outline"
       {...props}
     />
   );
@@ -174,7 +180,7 @@ export interface ObjectSplitButtonOption {
 export type ObjectSplitButtonVariantProps = {
   type?: ObjectIconName | (string & {});
   label?: string;
-  tone?: ObjectIconTone;
+  variant?: ObjectIconTone;
   onLabelClick?: () => void;
   options?: ObjectSplitButtonOption[];
   onChevronClick?: () => void;

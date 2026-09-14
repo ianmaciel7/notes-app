@@ -14,7 +14,7 @@ export type QuerySplitButtonProps = ObjectSplitButtonVariantProps;
 export function QuerySplitButton({
   type = "query",
   label = "Consulta",
-  tone = "cyan",
+  variant = "cyan",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function QuerySplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

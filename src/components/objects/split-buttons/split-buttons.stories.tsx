@@ -43,15 +43,15 @@ export const SizeVariants: Story = () => (
     <h2 className="text-xl font-semibold">Size Variants (Small, Medium, Large)</h2>
     <div className="flex items-center gap-6">
       <div className="flex flex-col items-start gap-2">
-        <PageSplitButton size="sm" label="Página (Small)" tone="blue" />
+        <PageSplitButton size="sm" label="Página (Small)" variant="blue" />
         <span className="text-xs text-muted-foreground">h-6 (sm)</span>
       </div>
       <div className="flex flex-col items-start gap-2">
-        <TaskSplitButton size="md" label="Tarefa (Medium)" tone="red" />
+        <TaskSplitButton size="md" label="Tarefa (Medium)" variant="red" />
         <span className="text-xs text-muted-foreground">h-7 (md)</span>
       </div>
       <div className="flex flex-col items-start gap-2">
-        <WeblinkSplitButton size="lg" label="Weblink (Large)" tone="cyan" />
+        <WeblinkSplitButton size="lg" label="Weblink (Large)" variant="cyan" />
         <span className="text-xs text-muted-foreground">h-8 (lg)</span>
       </div>
     </div>

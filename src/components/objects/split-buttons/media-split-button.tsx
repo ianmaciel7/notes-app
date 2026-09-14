@@ -14,7 +14,7 @@ export type MediaSplitButtonProps = ObjectSplitButtonVariantProps;
 export function MediaSplitButton({
   type = "media",
   label = "Mídia",
-  tone = "pink",
+  variant = "pink",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function MediaSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

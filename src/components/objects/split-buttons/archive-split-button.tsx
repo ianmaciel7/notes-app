@@ -14,7 +14,7 @@ export type ArchiveSplitButtonProps = ObjectSplitButtonVariantProps;
 export function ArchiveSplitButton({
   type = "archive",
   label = "Arquivo",
-  tone = "gray",
+  variant = "gray",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function ArchiveSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

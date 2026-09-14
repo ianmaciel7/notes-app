@@ -14,7 +14,7 @@ export type AreaSplitButtonProps = ObjectSplitButtonVariantProps;
 export function AreaSplitButton({
   type = "area",
   label = "Área",
-  tone = "emerald",
+  variant = "emerald",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function AreaSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

@@ -14,7 +14,7 @@ export type CodeSplitButtonProps = ObjectSplitButtonVariantProps;
 export function CodeSplitButton({
   type = "code",
   label = "Código",
-  tone = "indigo",
+  variant = "indigo",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function CodeSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

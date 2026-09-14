@@ -14,7 +14,7 @@ export type DefinitionSplitButtonProps = ObjectSplitButtonVariantProps;
 export function DefinitionSplitButton({
   type = "definition",
   label = "Definição",
-  tone = "orange",
+  variant = "orange",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function DefinitionSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

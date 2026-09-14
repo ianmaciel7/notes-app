@@ -14,7 +14,7 @@ export type WeblinkSplitButtonProps = ObjectSplitButtonVariantProps;
 export function WeblinkSplitButton({
   type = "weblink",
   label = "Weblink",
-  tone = "cyan",
+  variant = "cyan",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function WeblinkSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

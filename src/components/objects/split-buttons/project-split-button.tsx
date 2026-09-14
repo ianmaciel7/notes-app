@@ -14,7 +14,7 @@ export type ProjectSplitButtonProps = ObjectSplitButtonVariantProps;
 export function ProjectSplitButton({
   type = "project",
   label = "Projeto",
-  tone = "violet",
+  variant = "violet",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function ProjectSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

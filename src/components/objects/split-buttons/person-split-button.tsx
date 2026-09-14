@@ -14,7 +14,7 @@ export type PersonSplitButtonProps = ObjectSplitButtonVariantProps;
 export function PersonSplitButton({
   type = "person",
   label = "Pessoa",
-  tone = "lime",
+  variant = "lime",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function PersonSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

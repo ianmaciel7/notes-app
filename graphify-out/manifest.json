@@ -2004,9 +2004,9 @@
     "semantic_hash": ""
   },
   "docs/guides/component-development.md": {
-    "mtime": 1789396776.3232293,
-    "seen": 1789396818.5019746,
-    "ast_hash": "21a8e7b7753acb180d01fd8882413afd",
+    "mtime": 1789396860.0992005,
+    "seen": 1789396978.4038591,
+    "ast_hash": "de902a8440d173c3843a5ffaaa47f14d",
     "semantic_hash": ""
   },
   "docs/guides/development.md": {
@@ -2034,9 +2034,9 @@
     "semantic_hash": ""
   },
   "docs/guides/guides.stories.tsx": {
-    "mtime": 1789396774.9454415,
-    "seen": 1789396818.500975,
-    "ast_hash": "600776895a0a1b541097a86b611133e3",
+    "mtime": 1789396870.0018334,
+    "seen": 1789396978.402861,
+    "ast_hash": "a5b10e27f1d0225b382a3f291401edb0",
     "semantic_hash": ""
   },
   "docs/reference/reference.stories.tsx": {
@@ -2454,9 +2454,9 @@
     "semantic_hash": ""
   },
   "src/components/editor/editor.stories.tsx": {
-    "mtime": 1789382343.325393,
-    "seen": 1789383184.0374558,
-    "ast_hash": "79d34b75e5c9affbe84309a0d041b2b9",
+    "mtime": 1789397205.727377,
+    "seen": 1789397373.2352262,
+    "ast_hash": "d24cbfaadb460e2425760c24a44298be",
     "semantic_hash": ""
   },
   "src/components/ui/badge.stories.tsx": {
@@ -2736,27 +2736,27 @@
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/object-split-button.tsx": {
-    "mtime": 1789395008.758129,
-    "seen": 1789395080.2552426,
-    "ast_hash": "7b38a78b1b3fb7bcaf8abe20bc55743b",
+    "mtime": 1789397534.9418142,
+    "seen": 1789397584.0631552,
+    "ast_hash": "ee2af5f0e01dbecd357f88dc8c7ea21e",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/split-button-base.tsx": {
-    "mtime": 1789394268.2033386,
-    "seen": 1789394462.0339804,
-    "ast_hash": "4b52ecece93062ec70e196574ebb92b3",
+    "mtime": 1789397419.5762959,
+    "seen": 1789397584.0631552,
+    "ast_hash": "a936a7e21b9e54f7ba829c3158d6a19e",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/split-buttons.stories.tsx": {
-    "mtime": 1789393600.759267,
-    "seen": 1789393647.0771663,
-    "ast_hash": "50837d3712f6717793c84183a00d3f1a",
+    "mtime": 1789397391.11006,
+    "seen": 1789397584.0631552,
+    "ast_hash": "15066fa599ebe0da76e7d0a44f203d69",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/split-buttons.test.tsx": {
-    "mtime": 1789395032.0715368,
-    "seen": 1789395080.2552426,
-    "ast_hash": "c6347801252d720b40ab4e3d4e41935c",
+    "mtime": 1789397536.1773245,
+    "seen": 1789397584.0631552,
+    "ast_hash": "b6a2d3448cc7cd57b58d612c4001a290",
     "semantic_hash": ""
   },
   "vitest.config.mts": {
@@ -2838,201 +2838,201 @@
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/ai-chat-split-button.tsx": {
-    "mtime": 1789393563.9082623,
-    "seen": 1789393647.0771663,
-    "ast_hash": "4b8961e7c41f33f5cfce2dcff9daf14a",
+    "mtime": 1789397390.9872408,
+    "seen": 1789397584.0631552,
+    "ast_hash": "c54c9ce656485a6adbed2d659d976964",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/archive-split-button.tsx": {
-    "mtime": 1789393563.9097226,
-    "seen": 1789393647.0771663,
-    "ast_hash": "2dd68b3c877e4a99bb07dfaa03b02f96",
+    "mtime": 1789397390.9907537,
+    "seen": 1789397584.0631552,
+    "ast_hash": "cda81b6be5f9f01e4fbef1c8e1c522dd",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/area-split-button.tsx": {
-    "mtime": 1789393563.9107294,
-    "seen": 1789393647.0771663,
-    "ast_hash": "d96f81da25eaf94bc0a90e8ed930532e",
+    "mtime": 1789397391.0056565,
+    "seen": 1789397584.0631552,
+    "ast_hash": "ab4af339db982a0cbb3824e12c0bbf15",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/atomic-note-split-button.tsx": {
-    "mtime": 1789393563.9117289,
-    "seen": 1789393647.0771663,
-    "ast_hash": "209e6714b92432790a3684f41efc9e79",
+    "mtime": 1789397391.009159,
+    "seen": 1789397584.0631552,
+    "ast_hash": "4391861df04a799a57c71c4313ccb217",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/audio-split-button.tsx": {
-    "mtime": 1789393563.9117289,
-    "seen": 1789393647.0771663,
-    "ast_hash": "92b5190e65f9bc8d566d40007c72e54b",
+    "mtime": 1789397391.0125349,
+    "seen": 1789397584.0631552,
+    "ast_hash": "1c8867fa85c88c6df4c231537b9db510",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/book-split-button.tsx": {
-    "mtime": 1789393563.9127288,
-    "seen": 1789393647.0771663,
-    "ast_hash": "f68fab58687c0471822c1c0befa906d4",
+    "mtime": 1789397391.0146365,
+    "seen": 1789397584.0631552,
+    "ast_hash": "9a03f8b490378ea7b52be647b1e5a1c6",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/code-split-button.tsx": {
-    "mtime": 1789393563.913729,
-    "seen": 1789393647.0771663,
-    "ast_hash": "4d3cfe67fc3ae2d83bc928ac08dc6fd6",
+    "mtime": 1789397391.0176444,
+    "seen": 1789397584.0631552,
+    "ast_hash": "0d359204daf8f70033e5b06ae50c6556",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/collection-split-button.tsx": {
-    "mtime": 1789393563.9147308,
-    "seen": 1789393647.0771663,
-    "ast_hash": "ca48c81659ae5b0ef43e6830132ba55b",
+    "mtime": 1789397391.0218234,
+    "seen": 1789397584.0631552,
+    "ast_hash": "277b2c86b88e031cb1187b7882ad59d8",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/daily-note-split-button.tsx": {
-    "mtime": 1789393563.9153843,
-    "seen": 1789393647.0771663,
-    "ast_hash": "eacc9b92e73117afdacddc8a970ab2c6",
+    "mtime": 1789397391.025823,
+    "seen": 1789397584.0631552,
+    "ast_hash": "ed640d48e04d74f8792b4546d6078bd6",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/definition-split-button.tsx": {
-    "mtime": 1789393563.9153843,
-    "seen": 1789393647.0771663,
-    "ast_hash": "2e53bcb91009403ad7a152ee6f2b380f",
+    "mtime": 1789397391.0293293,
+    "seen": 1789397584.0631552,
+    "ast_hash": "b1a6588eca85bb77d8305eb1b444bd98",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/file-split-button.tsx": {
-    "mtime": 1789393563.916396,
-    "seen": 1789393647.0771663,
-    "ast_hash": "00564c5165dff85df48945fa800199ca",
+    "mtime": 1789397391.0335112,
+    "seen": 1789397584.0631552,
+    "ast_hash": "ae5e37e6d866aa0dde06d9f6aedc581f",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/flashcard-split-button.tsx": {
-    "mtime": 1789393563.916396,
-    "seen": 1789393647.0771663,
-    "ast_hash": "ccbb90629aed75d3badb87dc4a1a5301",
+    "mtime": 1789397391.0405886,
+    "seen": 1789397584.0631552,
+    "ast_hash": "bb702245bad3292954e8413f9131827e",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/idea-split-button.tsx": {
-    "mtime": 1789393563.916396,
-    "seen": 1789393647.0771663,
-    "ast_hash": "20f7da400c2ee9d24d49d2ab715f6797",
+    "mtime": 1789397391.0485837,
+    "seen": 1789397584.0631552,
+    "ast_hash": "adefecc13effaa0d31a428d8ed71926e",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/image-split-button.tsx": {
-    "mtime": 1789393563.9179027,
-    "seen": 1789393647.0771663,
-    "ast_hash": "de61e0e841b8d252b17d3466a3b9366c",
+    "mtime": 1789397391.0541143,
+    "seen": 1789397584.0631552,
+    "ast_hash": "5e97cd31f786c2489393fb9816974f1e",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/knowledge-split-button.tsx": {
-    "mtime": 1789393563.9189115,
-    "seen": 1789393647.0771663,
-    "ast_hash": "077351e09289afa0c228f388b5df4765",
+    "mtime": 1789397391.057114,
+    "seen": 1789397584.0631552,
+    "ast_hash": "7c0f5ef2c67e724d6f1a69eea9727b26",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/media-split-button.tsx": {
-    "mtime": 1789393563.9189115,
-    "seen": 1789393647.0771663,
-    "ast_hash": "971422d2af11329e3b8e757482ed7c48",
+    "mtime": 1789397391.0620108,
+    "seen": 1789397584.0631552,
+    "ast_hash": "3eb8a8e8c3f1fe7bd0944ebffd4a3fa8",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/meeting-split-button.tsx": {
-    "mtime": 1789393563.9199111,
-    "seen": 1789393647.0771663,
-    "ast_hash": "a8d7a86f7518f2ca1a9522bb1ffee8db",
+    "mtime": 1789397391.0650084,
+    "seen": 1789397584.0631552,
+    "ast_hash": "24f67fd330e05dd0d2f9112b3d32e647",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/organization-split-button.tsx": {
-    "mtime": 1789393563.9199111,
-    "seen": 1789393647.0771663,
-    "ast_hash": "c67832f3928f5e18fb9d3fc94663ca0b",
+    "mtime": 1789397391.0725093,
+    "seen": 1789397584.0631552,
+    "ast_hash": "7fbceed2cdd8fe25db1fe0dd2f0cc02f",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/page-split-button.tsx": {
-    "mtime": 1789393563.9209187,
-    "seen": 1789393647.0771663,
-    "ast_hash": "68f86ecc54fce05c8201edfac926a266",
+    "mtime": 1789397391.0755703,
+    "seen": 1789397584.0631552,
+    "ast_hash": "87b6e615b86a33694e10d71684fdfacc",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/pdf-split-button.tsx": {
-    "mtime": 1789393563.9219227,
-    "seen": 1789393647.0771663,
-    "ast_hash": "58badcd73360aec28d91492801475618",
+    "mtime": 1789397391.0790777,
+    "seen": 1789397584.0631552,
+    "ast_hash": "c698479838211735e1bcbf05f961a40b",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/person-split-button.tsx": {
-    "mtime": 1789393563.9229198,
-    "seen": 1789393647.0771663,
-    "ast_hash": "3bdc895cedd8c2464878cd0dd8912f11",
+    "mtime": 1789397391.0856378,
+    "seen": 1789397584.0631552,
+    "ast_hash": "ddb56f44eab176710d3865642d8c9492",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/place-split-button.tsx": {
-    "mtime": 1789393563.9229198,
-    "seen": 1789393647.0771663,
-    "ast_hash": "47b794c2417bf4b5aba48632bd1b3c3f",
+    "mtime": 1789397391.089683,
+    "seen": 1789397584.0631552,
+    "ast_hash": "0d7c0515ad8ec1db1773efc7d21ed1ad",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/project-split-button.tsx": {
-    "mtime": 1789393563.9239185,
-    "seen": 1789393647.0771663,
-    "ast_hash": "df23cce894c090ad336499bd4d9e3986",
+    "mtime": 1789397391.0933664,
+    "seen": 1789397584.0631552,
+    "ast_hash": "d1fedb57fd71bb3a783365c80d90cc35",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/query-split-button.tsx": {
-    "mtime": 1789393563.938962,
-    "seen": 1789393647.0771663,
-    "ast_hash": "daa08ce445c360335ebf50b27e85f747",
+    "mtime": 1789397391.097432,
+    "seen": 1789397584.0631552,
+    "ast_hash": "b9c71548a197a009edcfdf421e75d391",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/quote-split-button.tsx": {
-    "mtime": 1789393563.9452603,
-    "seen": 1789393647.0771663,
-    "ast_hash": "1a73db8b9d4df2a4a8ee6f79e89ff29b",
+    "mtime": 1789397391.0999603,
+    "seen": 1789397584.0631552,
+    "ast_hash": "537333d971f1764c3a82d0d0543cca33",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/split-button-registry.tsx": {
-    "mtime": 1789393597.1545074,
-    "seen": 1789393647.0771663,
+    "mtime": 1789397391.106969,
+    "seen": 1789397584.0631552,
     "ast_hash": "a87882e33cae3c0a09b962e91f61f35a",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/study-goal-split-button.tsx": {
-    "mtime": 1789393563.9524982,
-    "seen": 1789393647.0771663,
-    "ast_hash": "c488f7034734be77b090e9ef4fe82cef",
+    "mtime": 1789397391.1155305,
+    "seen": 1789397584.0631552,
+    "ast_hash": "ee6b9489ddb698ba51701dfe6604d1cc",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/table-split-button.tsx": {
-    "mtime": 1789393563.9610252,
-    "seen": 1789393647.0771663,
-    "ast_hash": "63b98bf0de276fcce98c0f9b40c430d6",
+    "mtime": 1789397391.119048,
+    "seen": 1789397584.0631552,
+    "ast_hash": "974d4d19e5ef39b11879d7c5bb0c0e0b",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/tag-split-button.tsx": {
-    "mtime": 1789393563.9620245,
-    "seen": 1789393647.0771663,
-    "ast_hash": "dc667d914afeb5637412467b911dd826",
+    "mtime": 1789397391.1230657,
+    "seen": 1789397584.0631552,
+    "ast_hash": "2ada15465498ab40ef473664dbfd7d53",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/task-split-button.tsx": {
-    "mtime": 1789393563.9630263,
-    "seen": 1789393647.0771663,
-    "ast_hash": "1900754b9ddf8b3dbad75bf26b1dd907",
+    "mtime": 1789397391.126065,
+    "seen": 1789397584.0631552,
+    "ast_hash": "49be875e2b3fb7992270a870fa708c5e",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/travel-split-button.tsx": {
-    "mtime": 1789393563.9640248,
-    "seen": 1789393647.0771663,
-    "ast_hash": "4eef9189ec1aa0c71b6631c1df61d1ba",
+    "mtime": 1789397391.1285717,
+    "seen": 1789397584.0631552,
+    "ast_hash": "5c3f5267dfab221e08f4d83328ed4bd7",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/tweet-split-button.tsx": {
-    "mtime": 1789393563.9650257,
-    "seen": 1789393647.0771663,
-    "ast_hash": "0aaad00e556f9ff2321803a46c11df9f",
+    "mtime": 1789397391.131588,
+    "seen": 1789397584.0631552,
+    "ast_hash": "6e65d065d7c16d4caa33fa55d7e81b54",
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/weblink-split-button.tsx": {
-    "mtime": 1789393563.9650257,
-    "seen": 1789393647.0771663,
-    "ast_hash": "0e9c0b944c60497c3af2ca8b6175dbc5",
+    "mtime": 1789397391.1345873,
+    "seen": 1789397584.0631552,
+    "ast_hash": "ba17087a50a2179da3c3fc292e55302b",
     "semantic_hash": ""
   },
   "src/lib/editor/__tests__/document-schema.test.ts": {
@@ -3227,10 +3227,10 @@
     "ast_hash": "514c73deeb22ff96f3ce03df61a76ae0",
     "semantic_hash": ""
   },
-  "docs/guides/ladle-story-rules.md": {
-    "mtime": 1789396773.336653,
-    "seen": 1789396818.5019746,
-    "ast_hash": "5189aaf1c6a4ed631745eda6450347ce",
+  ".agents/rules/ladle-stories.md": {
+    "mtime": 1789396860.0962017,
+    "seen": 1789396978.402861,
+    "ast_hash": "44c62f111abe2213e872a9b882c2157e",
     "semantic_hash": ""
   }
 }

@@ -14,7 +14,7 @@ export type TagSplitButtonProps = ObjectSplitButtonVariantProps;
 export function TagSplitButton({
   type = "tag",
   label = "Etiqueta",
-  tone = "teal",
+  variant = "teal",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function TagSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

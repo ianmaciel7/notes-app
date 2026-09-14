@@ -14,7 +14,7 @@ export type AudioSplitButtonProps = ObjectSplitButtonVariantProps;
 export function AudioSplitButton({
   type = "audio",
   label = "Áudio",
-  tone = "rose",
+  variant = "rose",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function AudioSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

@@ -14,7 +14,7 @@ export type ImageSplitButtonProps = ObjectSplitButtonVariantProps;
 export function ImageSplitButton({
   type = "image",
   label = "Imagem",
-  tone = "fuchsia",
+  variant = "fuchsia",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function ImageSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

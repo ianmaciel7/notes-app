@@ -14,7 +14,7 @@ export type TableSplitButtonProps = ObjectSplitButtonVariantProps;
 export function TableSplitButton({
   type = "table",
   label = "Tabela",
-  tone = "indigo",
+  variant = "indigo",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function TableSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

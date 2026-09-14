@@ -14,7 +14,7 @@ export type CollectionSplitButtonProps = ObjectSplitButtonVariantProps;
 export function CollectionSplitButton({
   type = "collection",
   label = "Coleção",
-  tone = "sky",
+  variant = "sky",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function CollectionSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

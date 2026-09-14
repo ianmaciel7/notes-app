@@ -14,7 +14,7 @@ export type TaskSplitButtonProps = ObjectSplitButtonVariantProps;
 export function TaskSplitButton({
   type = "task",
   label = "Tarefa",
-  tone = "red",
+  variant = "red",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function TaskSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

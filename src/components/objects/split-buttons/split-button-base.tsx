@@ -1,6 +1,6 @@
 import type { ObjectIconTone } from "../../../lib/space-object-types";
 
-export interface ToneStyle {
+export interface VariantStyle {
   bg: string;
   text: string;
   border: string;
@@ -8,7 +8,7 @@ export interface ToneStyle {
   divider: string;
 }
 
-export const toneStyles: Record<ObjectIconTone, ToneStyle> = {
+export const variantStyles: Record<ObjectIconTone, VariantStyle> = {
   amber: {
     bg: "bg-amber-50 dark:bg-amber-950/40",
     text: "text-amber-600 dark:text-amber-400",

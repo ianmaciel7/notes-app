@@ -14,7 +14,7 @@ export type KnowledgeSplitButtonProps = ObjectSplitButtonVariantProps;
 export function KnowledgeSplitButton({
   type = "knowledge",
   label = "Conhecimento",
-  tone = "teal",
+  variant = "teal",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function KnowledgeSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

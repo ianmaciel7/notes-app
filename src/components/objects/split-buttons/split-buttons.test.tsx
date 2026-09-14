@@ -11,7 +11,7 @@ import { TaskSplitButton } from "./task-split-button";
 import { WeblinkSplitButton } from "./weblink-split-button";
 
 describe("Object Split Buttons", () => {
-  it("renders all 32 object split buttons cleanly with proper group roles and tone classes", () => {
+  it("renders all 32 object split buttons cleanly with proper group roles and variant classes", () => {
     const splitButtonNames = Object.keys(objectSplitButtonRegistry);
     expect(splitButtonNames.length).toBeGreaterThanOrEqual(32);
 
@@ -35,20 +35,25 @@ describe("Object Split Buttons", () => {
     expect(htmlTask).toContain("bg-red-50");
   });
 
-  it("keeps the disclosure trigger visually integrated with the object tone", () => {
+  it("keeps the disclosure trigger visually integrated with the object variant", () => {
     const html = renderToStaticMarkup(<PageSplitButton />);
 
     expect(html).toContain("hover:bg-blue-100");
     expect(html).toContain("border-blue-200");
+    expect(html).toContain("rounded-lg");
+    expect(html).toContain("size-8");
+    expect(html.match(/bg-blue-50/g)).toHaveLength(2);
+    expect(html.match(/border-blue-200/g)).toHaveLength(2);
+    expect(html).not.toContain("ghost");
     expect(html).not.toContain("bg-primary text-primary-foreground");
   });
 
-  it("exposes the toned object-type split button as ObjectSplitButton", () => {
+  it("exposes the variant-colored object-type split button as ObjectSplitButton", () => {
     const html = renderToStaticMarkup(
       <PageSplitButton
         type="page"
         label="Page"
-        tone="blue"
+        variant="blue"
         size="sm"
         onChevronClick={() => undefined}
       />,

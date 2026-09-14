@@ -14,7 +14,7 @@ export type StudyGoalSplitButtonProps = ObjectSplitButtonVariantProps;
 export function StudyGoalSplitButton({
   type = "study-goal",
   label = "Meta de Estudo",
-  tone = "purple",
+  variant = "purple",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function StudyGoalSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

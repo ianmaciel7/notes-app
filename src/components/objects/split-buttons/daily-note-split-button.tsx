@@ -14,7 +14,7 @@ export type DailyNoteSplitButtonProps = ObjectSplitButtonVariantProps;
 export function DailyNoteSplitButton({
   type = "daily-note",
   label = "Nota Diária",
-  tone = "green",
+  variant = "green",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function DailyNoteSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

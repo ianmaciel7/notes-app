@@ -14,7 +14,7 @@ export type AtomicNoteSplitButtonProps = ObjectSplitButtonVariantProps;
 export function AtomicNoteSplitButton({
   type = "atomic-note",
   label = "Nota Atômica",
-  tone = "yellow",
+  variant = "yellow",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function AtomicNoteSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

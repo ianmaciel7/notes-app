@@ -14,7 +14,7 @@ export type BookSplitButtonProps = ObjectSplitButtonVariantProps;
 export function BookSplitButton({
   type = "book",
   label = "Livro",
-  tone = "amber",
+  variant = "amber",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function BookSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

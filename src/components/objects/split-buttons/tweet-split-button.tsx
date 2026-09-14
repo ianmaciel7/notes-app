@@ -14,7 +14,7 @@ export type TweetSplitButtonProps = ObjectSplitButtonVariantProps;
 export function TweetSplitButton({
   type = "tweet",
   label = "Tweet",
-  tone = "sky",
+  variant = "sky",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function TweetSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

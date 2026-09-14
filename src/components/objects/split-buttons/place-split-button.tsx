@@ -14,7 +14,7 @@ export type PlaceSplitButtonProps = ObjectSplitButtonVariantProps;
 export function PlaceSplitButton({
   type = "place",
   label = "Lugar",
-  tone = "emerald",
+  variant = "emerald",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function PlaceSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

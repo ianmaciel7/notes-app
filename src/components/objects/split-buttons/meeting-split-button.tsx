@@ -14,7 +14,7 @@ export type MeetingSplitButtonProps = ObjectSplitButtonVariantProps;
 export function MeetingSplitButton({
   type = "meeting",
   label = "Reunião",
-  tone = "blue",
+  variant = "blue",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function MeetingSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

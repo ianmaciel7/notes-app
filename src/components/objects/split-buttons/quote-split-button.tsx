@@ -14,7 +14,7 @@ export type QuoteSplitButtonProps = ObjectSplitButtonVariantProps;
 export function QuoteSplitButton({
   type = "quote",
   label = "Citação",
-  tone = "amber",
+  variant = "amber",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function QuoteSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

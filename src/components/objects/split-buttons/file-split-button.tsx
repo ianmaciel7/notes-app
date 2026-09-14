@@ -14,7 +14,7 @@ export type FileSplitButtonProps = ObjectSplitButtonVariantProps;
 export function FileSplitButton({
   type = "file",
   label = "Arquivo",
-  tone = "neutral",
+  variant = "neutral",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function FileSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}

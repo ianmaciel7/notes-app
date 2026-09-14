@@ -14,7 +14,7 @@ export type PageSplitButtonProps = ObjectSplitButtonVariantProps;
 export function PageSplitButton({
   type = "page",
   label = "Página",
-  tone = "blue",
+  variant = "blue",
   onLabelClick,
   options = [],
   onChevronClick,
@@ -25,7 +25,7 @@ export function PageSplitButton({
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <ObjectSplitButton size={size} tone={tone}>
+    <ObjectSplitButton size={size} variant={variant}>
       <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
         className={className}
