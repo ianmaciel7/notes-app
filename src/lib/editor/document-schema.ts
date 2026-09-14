@@ -53,6 +53,8 @@ export function createEmptyBlockDocument(): BlockEditorDocument {
 
 export function ensureBlockIds(nodes: BlockEditorNode[]): BlockEditorNode[] {
   return nodes.map((node) => {
+    if (node.type === "text") return node;
+
     const existingId = node.attrs?.id;
     const validId = isBlockId(existingId) ? existingId : createBlockId();
     const attrs = { ...(node.attrs || {}), id: validId };
@@ -83,13 +85,20 @@ export function validateBlockDocument(doc: unknown): doc is BlockEditorDocument 
     if (record.marks !== undefined && !Array.isArray(record.marks)) return false;
     if (Array.isArray(record.marks)) {
       for (const mark of record.marks) {
-        if (!mark || typeof mark !== "object" || typeof (mark as Record<string, unknown>).type !== "string") {
+        if (
+          !mark ||
+          typeof mark !== "object" ||
+          typeof (mark as Record<string, unknown>).type !== "string"
+        ) {
           return false;
         }
       }
     }
     if (record.content !== undefined && !Array.isArray(record.content)) return false;
-    return !Array.isArray(record.content) || record.content.every((child) => validateNode(child, depth + 1));
+    return (
+      !Array.isArray(record.content) ||
+      record.content.every((child) => validateNode(child, depth + 1))
+    );
   };
 
   return innerDoc.content.every((node) => validateNode(node, 1));
