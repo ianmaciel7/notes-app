@@ -3100,5 +3100,23 @@
     "seen": 1789392228.3085601,
     "ast_hash": "a93c74fa2fb87626c098efc5f1997514",
     "semantic_hash": ""
+  },
+  ".agents/rules/input-performance.md": {
+    "mtime": 1789392496.8171248,
+    "seen": 1789392655.5155284,
+    "ast_hash": "3a2ff9fbd2420a5d7b454842071f75cf",
+    "semantic_hash": ""
+  },
+  ".agents/rules/nextjs-server-architecture.md": {
+    "mtime": 1789392496.8147314,
+    "seen": 1789392655.5155284,
+    "ast_hash": "07cdef366d53f0d553fda32b6765e768",
+    "semantic_hash": ""
+  },
+  ".agents/rules/shadcn-first.md": {
+    "mtime": 1789392579.633942,
+    "seen": 1789392655.5155284,
+    "ast_hash": "7554f64dbef2deca3076c3e53bde470c",
+    "semantic_hash": ""
   }
 }
