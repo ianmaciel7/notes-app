@@ -27,6 +27,9 @@
 .ladle/
 reports/
 
+# local reference worktrees
+.worktrees/
+
 # graphify sidecars & caches
 graphify-out/.graphify_*
 graphify-out/cache/
@@ -58,4 +61,3 @@ next-env.d.ts
 # OS metadata
 Thumbs.db
 Desktop.ini
-
