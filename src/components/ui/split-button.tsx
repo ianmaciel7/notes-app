@@ -51,6 +51,10 @@ function SplitButton({
   const hasOptions = options && options.length > 0
   const hasDisclosureAction = Boolean(onDisclosureClick)
   const groupAriaLabel = ariaLabel ?? (typeof label === "string" ? label : undefined) ?? dropdownAriaLabel
+  const primaryAriaLabel =
+    typeof label === "string" && label.length > 0
+      ? undefined
+      : ariaLabel ?? dropdownAriaLabel
 
   return (
     <ButtonGroup aria-label={groupAriaLabel} className={className}>
@@ -59,6 +63,7 @@ function SplitButton({
         variant={variant}
         onClick={onPrimaryClick}
         disabled={disabled}
+        aria-label={primaryAriaLabel}
         className="gap-1.5"
       >
         {leadingIcon}

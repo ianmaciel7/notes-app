@@ -3,6 +3,14 @@ import { describe, expect, it } from "vitest";
 import { SplitButton } from "./split-button";
 
 describe("SplitButton", () => {
+  it("labels an icon-only primary action", () => {
+    const html = renderToStaticMarkup(
+      <SplitButton ariaLabel="Create item" leadingIcon={<span>+</span>} />,
+    );
+
+    expect(html).toContain('aria-label="Create item"');
+  });
+
   it("renders the generic shadcn split-button shell with a menu trigger", () => {
     const html = renderToStaticMarkup(
       <SplitButton
