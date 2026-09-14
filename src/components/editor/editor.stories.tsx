@@ -13,7 +13,7 @@ import { TableBlockElement } from "./plugins/table-block-plugin";
 import { SuggestionCombobox } from "./ui/suggestion-combobox";
 
 export default {
-  title: "Editor / Capacities Parity",
+  title: "Editor / Structured Parity",
 } satisfies StoryDefault;
 
 const initialDoc = {

@@ -1184,7 +1184,7 @@
       "file_type": "code",
       "norm_label": "columnlayoutelementprops",
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L47"
+      "source_location": "L48"
     },
     {
       "id": "src_components_editor_plugins_group_column_plugin_groupblockelementprops",
@@ -14489,7 +14489,7 @@
       "file_type": "code",
       "norm_label": "columnelement()",
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L74"
+      "source_location": "L76"
     },
     {
       "id": "src_components_editor_plugins_group_column_plugin_columnlayoutelement",
@@ -14501,7 +14501,7 @@
       "file_type": "code",
       "norm_label": "columnlayoutelement()",
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L56"
+      "source_location": "L57"
     },
     {
       "id": "src_components_editor_ui_floating_toolbar_floatingtoolbar",
@@ -54575,7 +54575,7 @@
       "file_type": "code",
       "norm_label": "columnlayoutplugin",
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L102"
+      "source_location": "L105"
     },
     {
       "id": "src_components_editor_plugins_group_column_plugin_columnplugin",
@@ -54586,7 +54586,7 @@
       "file_type": "code",
       "norm_label": "columnplugin",
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L110"
+      "source_location": "L113"
     },
     {
       "id": "src_components_editor_plugins_group_column_plugin_groupblockplugin",
@@ -54597,7 +54597,7 @@
       "file_type": "code",
       "norm_label": "groupblockplugin",
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L94"
+      "source_location": "L97"
     },
     {
       "id": "src_components_editor_plugins_group_column_plugin_key_column",
@@ -156263,7 +156263,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L102",
+      "source_location": "L105",
       "weight": 1.0
     },
     {
@@ -156285,7 +156285,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L110",
+      "source_location": "L113",
       "weight": 1.0
     },
     {
@@ -156296,7 +156296,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L47",
+      "source_location": "L48",
       "weight": 1.0
     },
     {
@@ -156340,7 +156340,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L94",
+      "source_location": "L97",
       "weight": 1.0
     },
     {
@@ -179540,6 +179540,18 @@
     },
     {
       "source": "src_components_editor_plugins_group_column_plugin",
+      "target": "src_components_editor_plugins_group_column_plugin_groupblockelement",
+      "relation": "indirect_call",
+      "_origin": "ast",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "context": "collection",
+      "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_editor_plugins_group_column_plugin",
       "target": "src_components_editor_plugins_group_column_plugin_columnlayoutelement",
       "relation": "indirect_call",
       "_origin": "ast",
@@ -179547,7 +179559,7 @@
       "confidence_score": 0.85,
       "context": "collection",
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L105",
+      "source_location": "L108",
       "weight": 1.0
     },
     {
@@ -179559,19 +179571,7 @@
       "confidence_score": 0.85,
       "context": "collection",
       "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L113",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_editor_plugins_group_column_plugin",
-      "target": "src_components_editor_plugins_group_column_plugin_groupblockelement",
-      "relation": "indirect_call",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "collection",
-      "source_file": "src/components/editor/plugins/group-column-plugin.tsx",
-      "source_location": "L97",
+      "source_location": "L116",
       "weight": 1.0
     },
     {
