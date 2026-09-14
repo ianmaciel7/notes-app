@@ -37,7 +37,8 @@ import { WeblinkSplitButton } from "./weblink-split-button";
 export const objectSplitButtonRegistry: Record<
   string,
   React.ComponentType<ObjectSplitButtonVariantProps>
-> & Record<ObjectIconName, React.ComponentType<ObjectSplitButtonVariantProps>> = {
+> &
+  Record<ObjectIconName, React.ComponentType<ObjectSplitButtonVariantProps>> = {
   "ai-chat": AiChatSplitButton,
   archive: ArchiveSplitButton,
   area: AreaSplitButton,

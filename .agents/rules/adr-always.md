@@ -58,6 +58,7 @@ Record an ADR when the work involves any of the following:
 - **During implementation**: if the decision crystallizes mid-task, pause, write the ADR, then continue.
 - **After implementation**: if an ADR was deferred, write it immediately — never close a task without an ADR for each architectural choice made.
 - **Code reviewers** (`code-reviewer` subagent) MUST verify that a corresponding ADR exists before approving any PR or marking a task complete.
+- **Prohibition of Superpowers Specs**: Agents must NEVER use `docs/superpowers/` specs or plans as an alternative or precursor to an ADR. All technical designs and architectural choices must go directly through the ADR workflow in `docs/decisions/`, and execution/task plans must go to docs/plans/ or be attached to the ADR.
 
 ---
 

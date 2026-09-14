@@ -90,7 +90,14 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 - All object type definitions, space types, icon names, and tones (`ObjectIconName`, `ObjectIconTone`, `StructureLifecycleKind`, etc.) **MUST ALWAYS** be located in `src/lib/` (specifically `src/lib/space-object-types.ts`), **NEVER** isolated exclusively inside UI component folders (like `src/components/objects/icons/types.ts`).
 - UI components under `src/components/` must import these domain types from `@/lib/space-object-types` (or have local re-exports pointing to `@/lib/space-object-types`). Non-UI layers (database models, space schemas, command registries, sync engines) must be able to use these types without importing from UI components.
 
-### 4. Recommended MCP Servers & Skills
+### 6. Component Reuse Rule
+- All UI components **MUST** inherit from or compose an existing component whenever one provides the required base behavior or structure. New standalone components are allowed only when no suitable existing component exists, and the reason must be documented in the change.
+
+### 7. ADR Over Superpowers Rule
+- Do **NOT** create or use `docs/superpowers/`, `docs/superpowers/plans/`, or `docs/superpowers/specs/`. Superpowers skill defaults are overridden by repository policy.
+- All architectural decisions, designs, schemas, and library selections **MUST** be authored as MADR-format ADRs in `docs/decisions/` via `.agents/skills/adr`, synced to `DECISIONS.md`, and registered as Ladle stories. Implementation plans belong in `docs/plans/` or attached directly to an ADR, never in `docs/superpowers/plans/`.
+
+### 8. Recommended MCP Servers & Skills
 - **MCP Servers**:
   - **Shoogle MCP (`shoogle`, `user-shoogle`)**: Search and registry item lookup service (`https://mcp.shoogle.dev/mcp`). Template provided at [`.agents/mcp_config.example.json`](.agents/mcp_config.example.json).
   - **context7**: Documentation lookup for Next.js 16 & React 19 breaking changes and APIs.

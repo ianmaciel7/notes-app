@@ -1,12 +1,12 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { DailyNoteSplitButton } from "./daily-note-split-button";
+import type { ObjectSplitButtonOption } from "./object-split-button";
 import {
   getObjectSplitButton,
   ObjectSplitButtonDynamic,
   objectSplitButtonRegistry,
 } from "./object-split-button-registry";
-import type { ObjectSplitButtonOption } from "./object-split-button";
 import { PageSplitButton } from "./page-split-button";
 import { TaskSplitButton } from "./task-split-button";
 import { WeblinkSplitButton } from "./weblink-split-button";

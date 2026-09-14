@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { ObjectIcon, objectIconRegistry } from "./icon-registry";
 
 export default {
-  title: "Objects / Icons",
+  title: "Components / Objects / Icons",
 } satisfies StoryDefault;
 
 const storyShellStyle: CSSProperties = {

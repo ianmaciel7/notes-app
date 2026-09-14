@@ -8,7 +8,7 @@ import { TaskSplitButton } from "./task-split-button";
 import { WeblinkSplitButton } from "./weblink-split-button";
 
 export default {
-  title: "Componentes / Objects / Split Buttons",
+  title: "Components / Objects / Split Buttons",
 } satisfies StoryDefault;
 
 export const AllSplitButtonsGrid: Story = () => {

@@ -105,6 +105,10 @@ When implementing or refactoring features, inspect these worktrees as authoritat
 ### Component Reuse Rule
 - All UI components **MUST** inherit from or compose an existing component whenever one provides the required base behavior or structure. New standalone components are allowed only when no suitable existing component exists, and the reason must be documented in the change.
 
+### ADR Over Superpowers Rule
+- Do **NOT** create or use `docs/superpowers/`, `docs/superpowers/plans/`, or `docs/superpowers/specs/`. Superpowers skill defaults are overridden by repository policy.
+- All architectural decisions, designs, schemas, and library selections **MUST** be authored as MADR-format ADRs in `docs/decisions/` via `.agents/skills/adr`, synced to `DECISIONS.md`, and registered as Ladle stories. Implementation plans belong in `docs/plans/` or attached directly to an ADR, never in `docs/superpowers/plans/`.
+
 <!-- END:general-project-rules -->
 
 <!-- BEGIN:mcp-and-skills-rules -->
