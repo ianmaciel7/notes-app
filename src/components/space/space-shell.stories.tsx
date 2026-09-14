@@ -13,7 +13,7 @@ import {
   SpaceShellWorkspace,
 } from "./space-shell";
 
-export default { title: "Components / Space Shell" } satisfies StoryDefault;
+export default { title: "Components / Space / Space Shell" } satisfies StoryDefault;
 
 export const Default: Story = () => (
   <div className="h-[500px] w-full overflow-hidden rounded-lg border">
