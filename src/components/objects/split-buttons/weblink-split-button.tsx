@@ -1,7 +1,7 @@
-import { ObjectSplitButton, type ObjectSplitButtonProps } from "./object-split-button";
+import { ObjectSplitButtonControl, type ObjectSplitButtonControlProps } from "./object-split-button";
 
-export type WeblinkSplitButtonProps = Omit<ObjectSplitButtonProps, "type"> & {
-  type?: ObjectSplitButtonProps["type"];
+export type WeblinkSplitButtonProps = Omit<ObjectSplitButtonControlProps, "type"> & {
+  type?: ObjectSplitButtonControlProps["type"];
 };
 
 export function WeblinkSplitButton({
@@ -10,7 +10,7 @@ export function WeblinkSplitButton({
   tone = "cyan",
   ...props
 }: WeblinkSplitButtonProps) {
-  return <ObjectSplitButton type={type} label={label} tone={tone} {...props} />;
+  return <ObjectSplitButtonControl type={type} label={label} tone={tone} {...props} />;
 }
 
 export const ObjectWeblinkSplitButton = WeblinkSplitButton;

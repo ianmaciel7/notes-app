@@ -1,7 +1,7 @@
-import { ObjectSplitButton, type ObjectSplitButtonProps } from "./object-split-button";
+import { ObjectSplitButtonControl, type ObjectSplitButtonControlProps } from "./object-split-button";
 
-export type DailyNoteSplitButtonProps = Omit<ObjectSplitButtonProps, "type"> & {
-  type?: ObjectSplitButtonProps["type"];
+export type DailyNoteSplitButtonProps = Omit<ObjectSplitButtonControlProps, "type"> & {
+  type?: ObjectSplitButtonControlProps["type"];
 };
 
 export function DailyNoteSplitButton({
@@ -10,7 +10,7 @@ export function DailyNoteSplitButton({
   tone = "green",
   ...props
 }: DailyNoteSplitButtonProps) {
-  return <ObjectSplitButton type={type} label={label} tone={tone} {...props} />;
+  return <ObjectSplitButtonControl type={type} label={label} tone={tone} {...props} />;
 }
 
 export const ObjectDailyNoteSplitButton = DailyNoteSplitButton;

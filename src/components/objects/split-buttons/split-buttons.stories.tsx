@@ -1,5 +1,5 @@
 import type { Story, StoryDefault } from "@ladle/react";
-import { ObjectSplitButton } from "./object-split-button";
+import { ObjectSplitButtonControl } from "./object-split-button";
 import { ObjectSplitButtonDynamic, objectSplitButtonRegistry } from "./split-button-registry";
 
 export default {
@@ -41,15 +41,15 @@ export const SizeVariants: Story = () => (
     <h2 className="text-xl font-semibold">Size Variants (Small, Medium, Large)</h2>
     <div className="flex items-center gap-6">
       <div className="flex flex-col items-start gap-2">
-        <ObjectSplitButton size="sm" type="page" label="Página (Small)" tone="blue" />
+        <ObjectSplitButtonControl size="sm" type="page" label="Página (Small)" tone="blue" />
         <span className="text-xs text-muted-foreground">h-6 (sm)</span>
       </div>
       <div className="flex flex-col items-start gap-2">
-        <ObjectSplitButton size="md" type="task" label="Tarefa (Medium)" tone="red" />
+        <ObjectSplitButtonControl size="md" type="task" label="Tarefa (Medium)" tone="red" />
         <span className="text-xs text-muted-foreground">h-7 (md)</span>
       </div>
       <div className="flex flex-col items-start gap-2">
-        <ObjectSplitButton size="lg" type="weblink" label="Weblink (Large)" tone="cyan" />
+        <ObjectSplitButtonControl size="lg" type="weblink" label="Weblink (Large)" tone="cyan" />
         <span className="text-xs text-muted-foreground">h-8 (lg)</span>
       </div>
     </div>

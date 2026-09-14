@@ -1,7 +1,7 @@
-import { ObjectSplitButton, type ObjectSplitButtonProps } from "./object-split-button";
+import { ObjectSplitButtonControl, type ObjectSplitButtonControlProps } from "./object-split-button";
 
-export type PersonSplitButtonProps = Omit<ObjectSplitButtonProps, "type"> & {
-  type?: ObjectSplitButtonProps["type"];
+export type PersonSplitButtonProps = Omit<ObjectSplitButtonControlProps, "type"> & {
+  type?: ObjectSplitButtonControlProps["type"];
 };
 
 export function PersonSplitButton({
@@ -10,7 +10,7 @@ export function PersonSplitButton({
   tone = "lime",
   ...props
 }: PersonSplitButtonProps) {
-  return <ObjectSplitButton type={type} label={label} tone={tone} {...props} />;
+  return <ObjectSplitButtonControl type={type} label={label} tone={tone} {...props} />;
 }
 
 export const ObjectPersonSplitButton = PersonSplitButton;

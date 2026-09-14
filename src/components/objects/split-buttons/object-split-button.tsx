@@ -1,4 +1,6 @@
-import type * as React from "react";
+"use client";
+
+import * as React from "react";
 import type { ObjectIconName, ObjectIconTone } from "@/lib/space-object-types";
 import { cn } from "@/lib/utils";
 import {
@@ -13,41 +15,159 @@ import {
 import { ObjectIcon } from "@/components/objects/icons/icon-registry";
 import { toneStyles } from "./split-button-base";
 
-export interface ObjectSplitButtonOption {
-  id: string;
-  label: string;
-  leadingIcon?: React.ReactNode;
-  onClick?: () => void;
-}
-
-export interface ObjectSplitButtonProps {
-  /** The icon identifier registered in objectIconRegistry (e.g., 'page', 'book', 'task') */
-  type?: ObjectIconName | (string & {});
-  /** The displayed text label (e.g. 'Page') */
-  label?: string;
-  /** The color tone key for styling */
-  tone?: ObjectIconTone;
-  /** Callback when the main label/icon area is clicked */
-  onLabelClick?: () => void;
-  /** Dropdown menu options when clicking the disclosure chevron */
-  options?: ObjectSplitButtonOption[];
-  /** Optional custom dropdown trigger callback */
-  onChevronClick?: () => void;
-  /** Size variant, maps to Button size scale */
-  size?: "sm" | "md" | "lg";
-  /** Additional CSS class names */
-  className?: string;
-  /** Accessible label for the dropdown trigger */
-  dropdownAriaLabel?: string;
-}
-
 const objectSplitButtonSizes = {
   sm: { action: "xs", trigger: "icon-xs" },
   md: { action: "sm", trigger: "icon-sm" },
   lg: { action: "default", trigger: "icon" },
 } as const;
 
-export function ObjectSplitButton({
+type ObjectSplitButtonSize = keyof typeof objectSplitButtonSizes;
+
+type ObjectSplitButtonContextValue = {
+  size: ObjectSplitButtonSize;
+  tone: ObjectIconTone;
+};
+
+const ObjectSplitButtonContext =
+  React.createContext<ObjectSplitButtonContextValue>({
+    size: "md",
+    tone: "blue",
+  });
+
+type ObjectSplitButtonProps = React.ComponentProps<typeof SplitButton> & {
+  size?: ObjectSplitButtonSize;
+  tone?: ObjectIconTone;
+};
+
+function ObjectSplitButton({
+  size = "md",
+  tone = "blue",
+  ...props
+}: ObjectSplitButtonProps) {
+  return (
+    <ObjectSplitButtonContext.Provider value={{ size, tone }}>
+      <SplitButton {...props} />
+    </ObjectSplitButtonContext.Provider>
+  );
+}
+
+type ObjectSplitButtonGroupProps = React.ComponentProps<
+  typeof SplitButtonGroup
+>;
+
+function ObjectSplitButtonGroup({
+  className,
+  ...props
+}: ObjectSplitButtonGroupProps) {
+  const { tone } = React.useContext(ObjectSplitButtonContext);
+  const toneStyle = toneStyles[tone] ?? toneStyles.blue;
+
+  return (
+    <SplitButtonGroup
+      className={cn(
+        "border font-medium transition-colors select-none",
+        toneStyle.bg,
+        toneStyle.text,
+        toneStyle.border,
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+type ObjectSplitButtonActionProps = Omit<
+  React.ComponentProps<typeof SplitButtonAction>,
+  "size" | "type"
+> & {
+  type?: ObjectIconName | (string & {});
+};
+
+function ObjectSplitButtonAction({
+  type = "page",
+  children,
+  ...props
+}: ObjectSplitButtonActionProps) {
+  const { size } = React.useContext(ObjectSplitButtonContext);
+
+  return (
+    <SplitButtonAction
+      size={objectSplitButtonSizes[size].action}
+      variant="ghost"
+      {...props}
+    >
+      <ObjectIcon type={type} />
+      {children}
+    </SplitButtonAction>
+  );
+}
+
+type ObjectSplitButtonSeparatorProps = React.ComponentProps<
+  typeof SplitButtonSeparator
+>;
+
+function ObjectSplitButtonSeparator(
+  props: ObjectSplitButtonSeparatorProps,
+) {
+  return <SplitButtonSeparator {...props} />;
+}
+
+type ObjectSplitButtonTriggerProps = Omit<
+  React.ComponentProps<typeof SplitButtonTrigger>,
+  "size"
+>;
+
+function ObjectSplitButtonTrigger(
+  props: ObjectSplitButtonTriggerProps,
+) {
+  const { size } = React.useContext(ObjectSplitButtonContext);
+
+  return (
+    <SplitButtonTrigger
+      size={objectSplitButtonSizes[size].trigger}
+      {...props}
+    />
+  );
+}
+
+type ObjectSplitButtonContentProps = React.ComponentProps<
+  typeof SplitButtonContent
+>;
+
+function ObjectSplitButtonContent(
+  props: ObjectSplitButtonContentProps,
+) {
+  return <SplitButtonContent {...props} />;
+}
+
+type ObjectSplitButtonItemProps = React.ComponentProps<
+  typeof SplitButtonItem
+>;
+
+function ObjectSplitButtonItem(props: ObjectSplitButtonItemProps) {
+  return <SplitButtonItem {...props} />;
+}
+
+interface ObjectSplitButtonControlOption {
+  id: string;
+  label: string;
+  leadingIcon?: React.ReactNode;
+  onClick?: () => void;
+}
+
+type ObjectSplitButtonControlProps = {
+  type?: ObjectIconName | (string & {});
+  label?: string;
+  tone?: ObjectIconTone;
+  onLabelClick?: () => void;
+  options?: ObjectSplitButtonControlOption[];
+  onChevronClick?: () => void;
+  size?: ObjectSplitButtonSize;
+  className?: string;
+  dropdownAriaLabel?: string;
+};
+
+function ObjectSplitButtonControl({
   type = "page",
   label = "",
   tone = "blue",
@@ -57,49 +177,60 @@ export function ObjectSplitButton({
   size = "md",
   className,
   dropdownAriaLabel = "Object type options",
-}: ObjectSplitButtonProps) {
-  const toneStyle = toneStyles[tone] ?? toneStyles.blue;
-  const buttonSize = objectSplitButtonSizes[size];
+}: ObjectSplitButtonControlProps) {
   const triggerDisabled = options.length === 0 && !onChevronClick;
 
   return (
-    <SplitButton>
-      <SplitButtonGroup
+    <ObjectSplitButton size={size} tone={tone}>
+      <ObjectSplitButtonGroup
         aria-label={label || dropdownAriaLabel}
-        className={cn(
-          "border font-medium transition-colors select-none",
-          toneStyle.bg,
-          toneStyle.text,
-          toneStyle.border,
-          className,
-        )}
+        className={className}
       >
-        <SplitButtonAction
+        <ObjectSplitButtonAction
           aria-label={label || undefined}
           onClick={onLabelClick}
-          size={buttonSize.action}
-          variant="ghost"
-          className="gap-1.5"
+          type={type}
         >
-          <ObjectIcon type={type} />
           {label && <span>{label}</span>}
-        </SplitButtonAction>
-        <SplitButtonSeparator orientation="vertical" />
-        <SplitButtonTrigger
+        </ObjectSplitButtonAction>
+        <ObjectSplitButtonSeparator orientation="vertical" />
+        <ObjectSplitButtonTrigger
           aria-label={dropdownAriaLabel}
           disabled={triggerDisabled}
           onClick={onChevronClick}
-          size={buttonSize.trigger}
         />
-        <SplitButtonContent>
+        <ObjectSplitButtonContent>
           {options.map((option) => (
-            <SplitButtonItem key={option.id} onClick={option.onClick}>
+            <ObjectSplitButtonItem key={option.id} onClick={option.onClick}>
               {option.leadingIcon}
               <span>{option.label}</span>
-            </SplitButtonItem>
+            </ObjectSplitButtonItem>
           ))}
-        </SplitButtonContent>
-      </SplitButtonGroup>
-    </SplitButton>
+        </ObjectSplitButtonContent>
+      </ObjectSplitButtonGroup>
+    </ObjectSplitButton>
   );
 }
+
+export {
+  ObjectSplitButton,
+  ObjectSplitButtonAction,
+  ObjectSplitButtonContent,
+  ObjectSplitButtonGroup,
+  ObjectSplitButtonItem,
+  ObjectSplitButtonControl,
+  ObjectSplitButtonSeparator,
+  ObjectSplitButtonTrigger,
+};
+
+export type {
+  ObjectSplitButtonActionProps,
+  ObjectSplitButtonContentProps,
+  ObjectSplitButtonGroupProps,
+  ObjectSplitButtonItemProps,
+  ObjectSplitButtonControlProps,
+  ObjectSplitButtonProps,
+  ObjectSplitButtonSeparatorProps,
+  ObjectSplitButtonSize,
+  ObjectSplitButtonTriggerProps,
+};

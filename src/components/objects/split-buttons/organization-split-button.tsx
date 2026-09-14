@@ -1,7 +1,7 @@
-import { ObjectSplitButton, type ObjectSplitButtonProps } from "./object-split-button";
+import { ObjectSplitButtonControl, type ObjectSplitButtonControlProps } from "./object-split-button";
 
-export type OrganizationSplitButtonProps = Omit<ObjectSplitButtonProps, "type"> & {
-  type?: ObjectSplitButtonProps["type"];
+export type OrganizationSplitButtonProps = Omit<ObjectSplitButtonControlProps, "type"> & {
+  type?: ObjectSplitButtonControlProps["type"];
 };
 
 export function OrganizationSplitButton({
@@ -10,7 +10,7 @@ export function OrganizationSplitButton({
   tone = "neutral",
   ...props
 }: OrganizationSplitButtonProps) {
-  return <ObjectSplitButton type={type} label={label} tone={tone} {...props} />;
+  return <ObjectSplitButtonControl type={type} label={label} tone={tone} {...props} />;
 }
 
 export const ObjectOrganizationSplitButton = OrganizationSplitButton;
