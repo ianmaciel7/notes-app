@@ -31,7 +31,7 @@ flowchart TD
 ```
 
 ### Core Routing Principles
-1. **Space-Scoped Multi-Tenant Isolation**: Primary application views are namespaced under `/[spaceId]/` to enforce multi-tenant Space boundary isolation and deep-link shareability across team/workspace scopes.
+1. **Space-Scoped Multi-Tenant Isolation**: Primary application views are namespaced under `/[spaceId]/` to enforce multi-tenant Space boundary isolation and deep-link shareability across team/space scopes.
 2. **Unified Semantic Object Taxonomy (`/[spaceId]/[typeAlias]/[slugOrId]`)**: All system objects—whether core notes (`notes`), imported reading documents (`documents`), flashcard decks (`decks`), saved collections (`collections`), tags (`tags`), or custom user-defined Capacities-style object types (`books`, `people`, `meetings`)—share a unified dynamic route path pattern.
 3. **Dual Slug-or-ID Resolution**: The `[slugOrId]` segment accepts either a human-readable URL slug (e.g., `quantum-computing-notes`) or a canonical UUIDv4 / KSUID string identifier, with fast fallback resolution logic.
 4. **Deep-Linkable Query State**: Intersecting UI controls (active view modes, search queries, active inspector tabs, graph filter depth) are synchronized in URL query parameters for reproducible state sharing.
@@ -54,7 +54,7 @@ app/
 │
 ├── (dashboard)/                  # Main Application Route Group (authenticated layout)
 │   ├── layout.tsx                # Main dashboard shell (Sidebar, Header, Space Selector)
-│   ├── page.tsx                  # Root redirect or workspace launcher page
+│   ├── page.tsx                  # Root redirect or space launcher page
 │   └── [spaceId]/                # Space-scoped multi-tenant dynamic route segment
 │       ├── page.tsx              # Space home dashboard & activity feed
 │       ├── [typeAlias]/          # Dynamic Object Type & Entity Taxonomy Segment

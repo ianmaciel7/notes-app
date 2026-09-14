@@ -83,7 +83,7 @@ The initial project template included ESLint and Prettier setups, which introduc
 
 ### Decision Outcome
 
-Chosen option: **Biome** (`@biomejs/biome`) because it executes in ~50ms across the workspace, provides recommended linting presets out of the box, and handles formatting and CSS parser rules cleanly via `biome.json`.
+Chosen option: **Biome** (`@biomejs/biome`) because it executes in ~50ms across the repository, provides recommended linting presets out of the box, and handles formatting and CSS parser rules cleanly via `biome.json`.
 
 #### Positive Consequences
 
@@ -240,10 +240,10 @@ Chosen option: **Dual-Role Ladle setup with restored UI component stories in `sr
 ### Context and Problem Statement
 
 The repository contains multiple historical reference implementations in read-only worktrees (`.worktrees/old`, `.worktrees/old-2`, `.worktrees/old-3`, `.worktrees/old-4`, and `.worktrees/old-5`). These worktrees contain evolving iterations of four core architectural sub-systems:
-1. **Entity Evolution**: Migration from domain-specific study entities (`StudyGoal`, `Question`, `Flashcard`) to generic `WorkspaceStructure` object models and space-scoped multi-tenant entities (`SpaceEntityRecord`).
+1. **Entity Evolution**: Migration from domain-specific study entities (`StudyGoal`, `Question`, `Flashcard`) to generic `SpaceStructure` object models and space-scoped multi-tenant entities (`SpaceEntityRecord`).
 2. **Capacities Parity Object Models**: Object studio design with typed property definitions, 13 Capacities-native object presets, icon/tone color system, and Datatable/Gallery/List presentation views.
 3. **SRS Burndown Schemas**: Mathematical FSRS spaced repetition engine with retrievability decay math and exam goal pacing burndown calculations (`dailyNewCardQuota`).
-4. **Sync Protocol Structures**: Offline-first outbox operation queue (`WorkspaceOperation`), sequence-based push/pull replication (`WorkspaceRemoteChange`, `WorkspaceSyncCursor`), optimistic concurrency control (`WorkspaceConflict`), tombstone tracking (`WorkspaceTombstone`), and media binary sync states.
+4. **Sync Protocol Structures**: Offline-first outbox operation queue (`SpaceOperation`), sequence-based push/pull replication (`SpaceRemoteChange`, `SpaceSyncCursor`), optimistic concurrency control (`SpaceConflict`), tombstone tracking (`SpaceTombstone`), and media binary sync states.
 
 We needed to synthesize these historical findings into authoritative architecture documentation and establish a formal reference spec in `docs/architecture/HISTORICAL_REFERENCE_SYNTHESIS.md` for current and future development.
 

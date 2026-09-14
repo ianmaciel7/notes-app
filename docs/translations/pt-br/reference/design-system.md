@@ -36,7 +36,7 @@ A identidade visual e a experiência de produto do Notes App fundamentam-se nos 
 3. **Conteúdo em Primeiro Lugar (Content-First)**: Painéis laterais, trilhos de propriedades e botões de comando existem exclusivamente para apoiar o objeto de conhecimento ativo.
 4. **Densidade Silenciosa (Quiet Density)**: Controles compactos (22px, 28px, 32px, 36px) proporcionam alta capacidade informativa mantendo uma leitura limpa e descansada.
 5. **Geometria Estável (Anti-Layout Shift)**: Estados de hover, seleção, contadores dinâmicos e carregamento nunca alteram as dimensões físicas dos elementos (Cumulative Layout Shift = 0).
-6. **Foco e Acessibilidade (WCAG 2.2 AA/AAA)**: Alto contraste de texto, anéis de foco visíveis (`--workspace-focus`) e suporte completo a leitores de tela e navegação por teclado.
+6. **Foco e Acessibilidade (WCAG 2.2 AA/AAA)**: Alto contraste de texto, anéis de foco visíveis (`--space-focus`) e suporte completo a leitores de tela e navegação por teclado.
 
 ---
 
@@ -48,13 +48,15 @@ O sistema utiliza o espaço de cor **OKLCH** para garantir fidelidade de luminos
 
 | Token | Modo Claro (OKLCH) | Modo Escuro (OKLCH) | Função Semântica |
 | :--- | :--- | :--- | :--- |
-| `--bg-back` / `--workspace` | `oklch(0.9856 0.0016 67)` | `oklch(0.1605 0.0063 285.63)` | Fundo geral da aplicação e tela de fundo |
-| `--bg-base` / `--workspace-surface` | `oklch(1 0.0001 263.28)` | `oklch(0.1971 0.006 285.78)` | Superfície emoldurada da janela ativa / editor |
+| `--bg-back` / `--space` | `oklch(0.9856 0.0016 67)` | `oklch(0.1605 0.0063 285.63)` | Fundo geral da aplicação e tela de fundo |
+| `--bg-base` / `--space-surface` | `oklch(1 0.0001 263.28)` | `oklch(0.1971 0.006 285.78)` | Superfície emoldurada da janela ativa / editor |
 | `--bg-front` | `oklch(1 0.0001 263.28)` | `oklch(0.2191 0.0058 285.84)` | Cartões elevados, menus dropdown, popovers e modais |
-| `--bg-el` / `--workspace-hover` | `oklch(0.9676 0.0016 67.02)` | `oklch(0.2987 0.0072 285.88)` | Hover em linhas de lista, preenchimento de itens selecionados |
+| `--bg-el` / `--space-hover` | `oklch(0.9676 0.0016 67.02)` | `oklch(0.2987 0.0072 285.88)` | Hover em linhas de lista, preenchimento de itens selecionados |
 | `--bg-el-strong` | `oklch(0.9163 0.0017 67.07)` | `oklch(0.3688 0.0051 286.01)` | Controles ativos de alto contraste |
 | `--border-base` | `oklch(0.9163 0.0017 67.07)` | `oklch(0.2987 0.0072 285.88)` | Bordas finas de painéis e divisores estruturais (1px) |
-| `--border-strong` | `oklch(0.8643 0.0017 67.13)` | `oklch(0.3688 0.0051 286.01)` | Divisores destacados e contornos de foco |
+| `--border-front` | `oklch(0.9163 0.0017 67.07)` | `oklch(0.2987 0.0072 285.88)` | Borda hairline para popovers, preview cards e superfícies frontais |
+| `--border-base-strong` | `oklch(0.8643 0.0017 67.13)` | `oklch(0.3461 0.0069 285.94)` | Divisores destacados e contornos de controles |
+| `--border-strong` / `--ring` | `oklch(0.7161 0.006 30.59)` | `oklch(0.8643 0.0017 67.13)` | Anéis de foco e seleções de alto contraste |
 
 ### Hierarquia de Tinta & Tipografia
 
@@ -63,8 +65,14 @@ O sistema utiliza o espaço de cor **OKLCH** para garantir fidelidade de luminos
 | `--text-primary` | `oklch(0.2191 0.0058 285.84)` | `oklch(1 0.0001 263.28)` | Títulos de documentos, cabeçalhos, corpo principal |
 | `--text-secondary` | `oklch(0.3887 0.0052 301.05)` | `oklch(0.9163 0.0017 67.07)` | Rótulos de navegação, subtítulos, botões inativos |
 | `--text-subtle` | `oklch(0.5725 0.0051 33.89)` | `oklch(0.7161 0.006 30.59)` | Placeholders, contadores secundários, timestamps |
-| `--workspace-focus` | `oklch(0.54 0.14 250)` | `oklch(0.72 0.12 245)` | Indicador de foco por teclado de alta visibilidade |
+| `--space-focus` | `oklch(0.54 0.14 250)` | `oklch(0.72 0.12 245)` | Indicador de foco por teclado de alta visibilidade |
 | `--destructive` | `oklch(0.6272 0.1917 24.54)` | `oklch(0.6693 0.1818 23.36)` | Ações destrutivas, exclusão e alertas de erro |
+
+### Contrato de Aliases em Runtime
+
+`src/app/globals.css` expõe a paleta de paridade Capacities tanto pelos tokens compatíveis com shadcn (`--background`, `--foreground`, `--card`, `--popover`, `--primary`, `--border`, `--input`, `--ring`) quanto pelos aliases específicos do app (`--app-bg-*`, `--app-border-*`, `--app-text-*`, `--app-shadow-*`). Componentes devem consumir esses aliases em vez de repetir valores OKLCH literais.
+
+O token shadcn `--primary` usa intencionalmente a tinta de ação medida no Capacities (`oklch(0.3887 0.0052 301.05)` no modo claro), não uma cor de marca saturada. Azul, vermelho, verde, âmbar e violeta ficam reservados para foco, ações destrutivas, status, avisos e relações.
 
 ---
 

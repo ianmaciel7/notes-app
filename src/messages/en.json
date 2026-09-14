@@ -4,9 +4,9 @@
     "description": "Minimalist note-taking application with internationalization and component support.",
     "cta": "Get Started"
   },
-  "workspace": {
+  "space": {
     "architecture": {
-      "title": "Workspace Architecture",
+      "title": "Space Architecture",
       "mainContentTitle": "Main Content",
       "sidePanelTitle": "Side Panel"
     }

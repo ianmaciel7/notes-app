@@ -28,7 +28,7 @@ erDiagram
 ### Architecture Key Principles
 1. **Object-First over Folder-First**: Information items exist as typed semantic objects (Pages, Daily Notes, Tasks, Weblinks, Files, Highlights, Flashcards, Study Goals, Queries, AI Chats) scoped within multi-tenant Spaces rather than rigid folder hierarchies.
 2. **First-Class Graph Topography**: Explicit triple edges (`sourceId`, `targetId`, `propertyId`) enable fast bidirectional backlinks and local sub-graph extraction without full-text content parsing.
-3. **Compound Key Space Partitioning**: All IndexedDB entity tables utilize compound keys (`[spaceId+id]`) guaranteeing tenant and workspace isolation.
+3. **Compound Key Space Partitioning**: All IndexedDB entity tables utilize compound keys (`[spaceId+id]`) guaranteeing tenant and space isolation.
 4. **Coalesced LWW Offline Sync Outbox**: Atomic local transactions append mutation logs to `syncMutations`, using Last-Write-Wins (LWW) resolution and mutation coalescing prior to remote synchronization.
 5. **Graph-Safe Tombstones**: Soft-deletion preserves entity and relation snapshots, allowing atomic undelete without orphaned graph edges.
 
@@ -40,10 +40,10 @@ Persistent local state resides in browser IndexedDB managed by **Dexie.js** (`Kn
 
 | Table Name | Primary Key | Compound / Indexed Fields | Description |
 | :--- | :--- | :--- | :--- |
-| `spaces` | `id` | `accountId`, `sortOrder`, `[accountId+sortOrder]`, `name`, `createdAt`, `updatedAt` | Top-level tenant boundaries and workspace definitions. |
+| `spaces` | `id` | `accountId`, `sortOrder`, `[accountId+sortOrder]`, `name`, `createdAt`, `updatedAt` | Top-level tenant boundaries and space definitions. |
 | `appSettings` | `id` | `id`, `value` | Global client application settings, active space pointer, and BYOK configurations. |
 | `objectTypes` | `[spaceId+id]` | `spaceId`, `id`, `ownership`, `lifecycleKind` | Capacities-style dynamic and system object structures. |
-| `entities` | `[spaceId+id]` | `spaceId`, `id`, `[spaceId+objectTypeId]`, `objectTypeId`, `type`, `updatedAt`, `*tags` | Primary entity storage for all workspace domain objects. |
+| `entities` | `[spaceId+id]` | `spaceId`, `id`, `[spaceId+objectTypeId]`, `objectTypeId`, `type`, `updatedAt`, `*tags` | Primary entity storage for all space domain objects. |
 | `collections` | `[spaceId+id]` | `spaceId`, `id`, `[spaceId+structureId]`, `structureId`, `name` | Virtual collections and saved database views. |
 | `tags` | `[spaceId+id]` | `spaceId`, `id`, `[spaceId+name]`, `name` | Taxonomical classifications across space entities. |
 | `relations` | `[spaceId+id]` | `spaceId`, `id`, `[spaceId+sourceId]`, `[spaceId+targetId]`, `sourceId`, `targetId`, `propertyId` | Graph relation triples supporting bidirectional backlinks. |
@@ -74,7 +74,7 @@ export class KnowledgeDatabase extends Dexie {
 ## 3. Entity Specifications & Type Definitions
 
 ### A. Base Entity (`BaseEntity` / `SpaceEntityRecord`)
-The polymorphic foundation extended by all workspace domain entities.
+The polymorphic foundation extended by all space domain entities.
 
 ```typescript
 export type SystemEntityType =
@@ -252,7 +252,7 @@ export interface ContentBlock {
 ---
 
 ### E. Query Entity (`QueryEntity`, `type: "query"`)
-* **Purpose**: Capacities-style dynamic database view that reactively filters and projects workspace entities.
+* **Purpose**: Capacities-style dynamic database view that reactively filters and projects space entities.
 * **Fields**:
   * `targetObjectTypes`: string[] (object type IDs to query against)
   * `conjunction`: `'and' | 'or'`
@@ -391,7 +391,7 @@ Specialized representations of binary media assets stored in the `media` table:
 
 ---
 
-### M. Object Type Model (`SpaceObjectTypeRecord` / `WorkspaceStructure`)
+### M. Object Type Model (`SpaceObjectTypeRecord` / `SpaceStructure`)
 Capacities-style object type schema definition driving dynamic property validation, UI rendering, and graph relationships:
 
 ```typescript
@@ -492,7 +492,7 @@ export type PropertyDefinition = {
   readonly targetStructureIds?: readonly string[];
 };
 
-export type WorkspaceStructure = {
+export type SpaceStructure = {
   readonly id: string;
   readonly ownership: StructureOwnership;
   readonly singularName: string;
@@ -505,7 +505,7 @@ export type WorkspaceStructure = {
   readonly presentation: StructurePresentation;
 };
 
-export type SpaceObjectTypeRecord = WorkspaceStructure & {
+export type SpaceObjectTypeRecord = SpaceStructure & {
   spaceId: string;
 };
 ```
@@ -526,7 +526,7 @@ export type SpaceObjectTypeRecord = WorkspaceStructure & {
 3. `number`: Numeric quantity formatted according to `NumberPresentation`.
 4. `boolean`: Binary flag (`true` | `false`).
 5. `date`: ISO date, datetime, or date-range object.
-6. `entity`: Graph pointer to one or more workspace entities (`targetStructureIds`).
+6. `entity`: Graph pointer to one or more space entities (`targetStructureIds`).
 7. `label`: Controlled vocabulary chip selected from `PropertyLabelOption[]`.
 8. `richText`: Full block editor document sub-tree.
 9. `url`: Validated web URL.
@@ -645,7 +645,7 @@ stateDiagram-v2
     Trash --> [*]: Hard Purge (After purgeAfter retention window)
 ```
 
-1. **Capture (`inboxStatus: 'inbox'`)**: Raw information enters the user's workspace without cognitive overhead or mandatory categorization. The entity is immediately persisted locally and queued for background cloud replication.
+1. **Capture (`inboxStatus: 'inbox'`)**: Raw information enters the user's space without cognitive overhead or mandatory categorization. The entity is immediately persisted locally and queued for background cloud replication.
 2. **Triage (`inboxStatus: 'triaged'`)**: In the dedicated Inbox Triage interface, the user assigns an object type structure (e.g. Page, Task, Weblink, Meeting, Project), enriches custom properties, links related entities via bidirectional relations, and applies taxonomy tags.
 3. **Archive (`inboxStatus: 'archived'`)**: When an item's active lifecycle concludes, it moves to `archived`. Graph relationships, search indices, and backlinks remain fully operational, while filtering the entity out of active daily workflows.
 
@@ -706,7 +706,7 @@ Inspection of historical worktrees (`.worktrees/old` through `.worktrees/old-5`)
 timeline
     title Entity Model Architectural Evolution
     Era 1 (.worktrees/old, old-2, old-3) : Domain Study Models : Fixed StudyGoal, Question, Flashcard, Activity logs
-    Era 2 (.worktrees/old-4) : Capacities Object Models : 8 WorkspaceStructure lifecycle kinds, preset types, presentational views
+    Era 2 (.worktrees/old-4) : Capacities Object Models : 8 SpaceStructure lifecycle kinds, preset types, presentational views
     Era 3 (.worktrees/old-5) : Multi-Tenant Local-First : Space-scoped entity records, compound IndexedDB keys, FSRS engine, outbox sync
 ```
 

@@ -17,7 +17,7 @@ The application is built on **Next.js (App Router)**, **React 19**, **TypeScript
 
 ## 2. Code Map & Official Folder Structure
 
-The project strictly follows the **official Next.js App Router conventions** combined with the standard **shadcn/ui** component directory structure. For full details on URL hierarchy, query taxonomy, and route parameters, see the [`URL Architecture & Routing Specification`](routing.md). For details on multi-tenant workspace management, see the [`Spaces Architecture Specification`](spaces.md).
+The project strictly follows the **official Next.js App Router conventions** combined with the standard **shadcn/ui** component directory structure. For full details on URL hierarchy, query taxonomy, and route parameters, see the [`URL Architecture & Routing Specification`](routing.md). For details on multi-tenant space management, see the [`Spaces Architecture Specification`](spaces.md).
 
 ```text
 .

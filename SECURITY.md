@@ -43,9 +43,9 @@ This repository implements a local-first study and knowledge-management web appl
 | ----- | ----------- | ----------- |
 | Secrets & API Keys | **Critical** | Firebase Admin keys, AI provider credentials (Gemini, Groq), OAuth tokens, and production environment secrets. |
 | Auth Tokens | **Critical** | Firebase ID tokens and delegated bearer credentials. |
-| User Workspace Data | **High** | Notes, knowledge graphs, tags, relations, backlinks, flashcards, and study goals. |
+| User Space Data | **High** | Notes, knowledge graphs, tags, relations, backlinks, flashcards, and study goals. |
 | Document Payloads | **High** | Uploaded PDFs/EPUBs, extracted text, verbatim quotes, and generated text chunks. |
-| Local Storage | **High** | IndexedDB database holding local workspace state and pending sync mutations. |
+| Local Storage | **High** | IndexedDB database holding local space state and pending sync mutations. |
 | Firestore & Storage Paths | **High** | User-scoped remote Firestore documents and media storage blobs. |
 | Dependencies & Config | **Medium** | Lockfiles (`pnpm-lock.yaml`), Next.js config, build manifests, and security rules. |
 

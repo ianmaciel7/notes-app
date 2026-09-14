@@ -22,7 +22,7 @@ The initial project template included ESLint and Prettier setups, which introduc
 
 ## Decision Outcome
 
-Chosen option: **Biome** (`@biomejs/biome`) because it executes in ~50ms across the workspace, provides recommended linting presets out of the box, and handles formatting and CSS parser rules cleanly via `biome.json`.
+Chosen option: **Biome** (`@biomejs/biome`) because it executes in ~50ms across the repository, provides recommended linting presets out of the box, and handles formatting and CSS parser rules cleanly via `biome.json`.
 
 ### Positive Consequences
 

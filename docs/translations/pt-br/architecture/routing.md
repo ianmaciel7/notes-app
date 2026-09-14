@@ -57,7 +57,7 @@ app/
 │
 ├── (dashboard)/                  # Grupo de Rotas do Dashboard Principal (layout autenticado)
 │   ├── layout.tsx                # Shell do dashboard principal (Barra Lateral, Cabeçalho, Seletor de Espaço)
-│   ├── page.tsx                  # Redirecionamento raiz ou página de lançamento do workspace
+│   ├── page.tsx                  # Redirecionamento raiz ou página de lançamento do space
 │   └── [spaceId]/                # Segmento de rota dinâmica multitenant no escopo do Espaço
 │       ├── page.tsx              # Dashboard inicial do espaço e feed de atividades
 │       │
@@ -135,7 +135,7 @@ app/
 ## 4. Arquitetura de Resolução de Slugs Legíveis e Desambiguação
 
 ### A. Registro de Mapeamento de Aliases de Tipo
-Os tipos de objetos (`SpaceObjectTypeRecord` / `WorkspaceStructure`) definem aliases canônicos usados em segmentos de rota:
+Os tipos de objetos (`SpaceObjectTypeRecord` / `SpaceStructure`) definem aliases canônicos usados em segmentos de rota:
 - **Aliases de Tipos Nativos**:
   - `page` $\rightarrow$ `objectTypeId: 'page'` (Notas / Páginas Padrão)
   - `book` $\rightarrow$ `objectTypeId: 'book'` (Livros e Itens de Leitura)

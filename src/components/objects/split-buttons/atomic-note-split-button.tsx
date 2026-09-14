@@ -1,16 +1,16 @@
-import { ObjectTypeSplitChip, type ObjectTypeSplitChipProps } from "./object-type-split-chip";
+import { ObjectSplitButton, type ObjectSplitButtonProps } from "./object-split-button";
 
-export type AtomicNoteSplitButtonProps = Omit<ObjectTypeSplitChipProps, "iconType"> & {
-  iconType?: ObjectTypeSplitChipProps["iconType"];
+export type AtomicNoteSplitButtonProps = Omit<ObjectSplitButtonProps, "type"> & {
+  type?: ObjectSplitButtonProps["type"];
 };
 
 export function AtomicNoteSplitButton({
-  iconType = "atomic-note",
+  type = "atomic-note",
   label = "Nota Atômica",
   tone = "yellow",
   ...props
 }: AtomicNoteSplitButtonProps) {
-  return <ObjectTypeSplitChip iconType={iconType} label={label} tone={tone} {...props} />;
+  return <ObjectSplitButton type={type} label={label} tone={tone} {...props} />;
 }
 
 export const ObjectAtomicNoteSplitButton = AtomicNoteSplitButton;

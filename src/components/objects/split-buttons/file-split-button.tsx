@@ -1,16 +1,16 @@
-import { ObjectTypeSplitChip, type ObjectTypeSplitChipProps } from "./object-type-split-chip";
+import { ObjectSplitButton, type ObjectSplitButtonProps } from "./object-split-button";
 
-export type FileSplitButtonProps = Omit<ObjectTypeSplitChipProps, "iconType"> & {
-  iconType?: ObjectTypeSplitChipProps["iconType"];
+export type FileSplitButtonProps = Omit<ObjectSplitButtonProps, "type"> & {
+  type?: ObjectSplitButtonProps["type"];
 };
 
 export function FileSplitButton({
-  iconType = "file",
+  type = "file",
   label = "Arquivo",
   tone = "neutral",
   ...props
 }: FileSplitButtonProps) {
-  return <ObjectTypeSplitChip iconType={iconType} label={label} tone={tone} {...props} />;
+  return <ObjectSplitButton type={type} label={label} tone={tone} {...props} />;
 }
 
 export const ObjectFileSplitButton = FileSplitButton;

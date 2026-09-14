@@ -76,30 +76,38 @@ flowchart TD
 
 | CSS Variable | Light Mode (OKLCH) | Dark Mode (OKLCH) | Functional Role |
 | :--- | :--- | :--- | :--- |
-| `--bg-back` | `oklch(0.985 0 0)` | `oklch(0.120 0 0)` | Root application backdrop, gutter canvas surrounding floating framed panes. |
-| `--bg-base` | `oklch(1.000 0 0)` | `oklch(0.145 0 0)` | Primary working surface, editor canvas body, sidebar panel background. |
-| `--bg-front` | `oklch(1.000 0 0)` | `oklch(0.205 0 0)` | Elevated surfaces, hover cards, dropdown menus, modal dialogs, inspector sheets. |
-| `--bg-el` | `oklch(0.970 0 0)` | `oklch(0.269 0 0)` | Selected list rows, active tabs, subtle card backgrounds, badge foundations. |
-| `--bg-el-hover` | `oklch(0.000 0 0 / 4%)` | `oklch(1.000 0 0 / 6%)` | Ephemeral pointer hover overlay on interactive items and button controls. |
-| `--bg-el-active` | `oklch(0.000 0 0 / 8%)` | `oklch(1.000 0 0 / 12%)` | Pressed/depressed state for buttons, active navigation selections. |
+| `--bg-back` | `oklch(0.9856 0.0016 67)` | `oklch(0.1605 0.0063 285.63)` | Root application backdrop, gutter canvas surrounding floating framed panes. |
+| `--bg-base` | `oklch(1 0.0001 263.28)` | `oklch(0.1971 0.006 285.78)` | Primary working surface, editor canvas body, sidebar panel background. |
+| `--bg-front` | `oklch(1 0.0001 263.28)` | `oklch(0.2191 0.0058 285.84)` | Elevated surfaces, hover cards, dropdown menus, modal dialogs, inspector sheets. |
+| `--bg-el` | `oklch(0.9676 0.0016 67.02)` | `oklch(0.2987 0.0072 285.88)` | Selected list rows, active tabs, subtle card backgrounds, badge foundations. |
+| `--bg-el-hover` | `oklch(0.9406 0.0016 67.05)` | `oklch(0.3226 0.007 285.92)` | Ephemeral pointer hover overlay on interactive items and button controls. |
+| `--bg-el-active` | `oklch(0.9163 0.0017 67.07)` | `oklch(0.3688 0.0051 286.01)` | Pressed/depressed state for buttons, active navigation selections. |
+| `--bg-el-strong` | `oklch(0.9163 0.0017 67.07)` | `oklch(0.3688 0.0051 286.01)` | Strong selected state and compact control emphasis. |
 
 ### Border & Divider Tokens
 
 | CSS Variable | Light Mode (OKLCH) | Dark Mode (OKLCH) | Functional Role |
 | :--- | :--- | :--- | :--- |
-| `--border-base` | `oklch(0.922 0 0)` | `oklch(1.000 0 0 / 10%)` | Standard structural borders, card perimeters, panel dividers. |
+| `--border-base` | `oklch(0.9163 0.0017 67.07)` | `oklch(0.2987 0.0072 285.88)` | Standard structural borders, card perimeters, panel dividers. |
+| `--border-front` | `oklch(0.9163 0.0017 67.07)` | `oklch(0.2987 0.0072 285.88)` | Capacities parity hairline border for popovers, preview cards, and framed front surfaces. |
+| `--border-base-strong` | `oklch(0.8643 0.0017 67.13)` | `oklch(0.3461 0.0069 285.94)` | Stronger control outlines and emphasized dividers. |
 | `--border-subtle` | `oklch(0.000 0 0 / 6%)` | `oklch(1.000 0 0 / 8%)` | Hairline list dividers, table row borders, nested block boundaries. |
-| `--border-strong` | `oklch(0.708 0 0)` | `oklch(0.556 0 0)` | High-emphasis borders, active selection outlines, selected table cells. |
-| `--ring` | `oklch(0.708 0 0)` | `oklch(0.556 0 0)` | Keyboard focus ring (`ring-2 ring-ring/50 ring-offset-2`). |
+| `--border-strong` / `--ring` | `oklch(0.7161 0.006 30.59)` | `oklch(0.8643 0.0017 67.13)` | High-emphasis borders, active selection outlines, selected table cells, and keyboard focus rings. |
 
 ### Text & Typography Ink Tokens
 
 | CSS Variable | Light Mode (OKLCH) | Dark Mode (OKLCH) | Contrast Ratio (vs Surface) | Functional Role |
 | :--- | :--- | :--- | :--- | :--- |
-| `--text-primary` | `oklch(0.145 0 0)` | `oklch(0.985 0 0)` | ~14.5:1 (AAA) | Document headings, primary body prose, active title labels. |
-| `--text-secondary` | `oklch(0.439 0 0)` | `oklch(0.708 0 0)` | ~7.2:1 (AAA) | Secondary descriptions, timestamps, property keys, metadata badges. |
-| `--text-subtle` | `oklch(0.556 0 0)` | `oklch(0.556 0 0)` | ~4.8:1 (AA) | Placeholder text, disabled controls, breadcrumb separators, hotkey hints. |
+| `--text-primary` | `oklch(0.2191 0.0058 285.84)` | `oklch(1 0.0001 263.28)` | AA+ | Document headings, primary body prose, active title labels. |
+| `--text-secondary` | `oklch(0.3887 0.0052 301.05)` | `oklch(0.9163 0.0017 67.07)` | AA+ | Secondary descriptions, timestamps, property keys, metadata badges, and the shadcn `--primary` action ink. |
+| `--text-subtle` | `oklch(0.5725 0.0051 33.89)` | `oklch(0.7161 0.006 30.59)` | AA | Placeholder text, disabled controls, breadcrumb separators, hotkey hints. |
 | `--text-inverse` | `oklch(0.985 0 0)` | `oklch(0.145 0 0)` | ~14.5:1 (AAA) | High-contrast button labels, inverted badge text, solid tooltip prose. |
+
+### Runtime Alias Contract
+
+`src/app/globals.css` exposes the Capacities parity palette through both shadcn-compatible tokens (`--background`, `--foreground`, `--card`, `--popover`, `--primary`, `--border`, `--input`, `--ring`) and app-specific aliases (`--app-bg-*`, `--app-border-*`, `--app-text-*`, `--app-shadow-*`). Components should consume these aliases instead of duplicating literal OKLCH values.
+
+The shadcn `--primary` token intentionally uses the measured Capacities action ink (`oklch(0.3887 0.0052 301.05)` in light mode) rather than a saturated brand color. Blue, red, green, amber, and violet remain semantic cues for focus, destructive actions, status, warnings, and relations.
 
 ---
 
@@ -222,7 +230,7 @@ flowchart LR
 | `rounded-xs` | 4px (`0.25rem`) | Tooltips, micro status dots, inline code snippets |
 | `rounded-sm` | 6px (`0.375rem`) | Property label chips, tag pills, small menu items |
 | `rounded-md` | 8px (`0.500rem`) | Standard buttons, inputs, context menus, dropdown popovers |
-| `rounded-lg` / `radius` | 10px–12px (`0.625rem`–`0.75rem`) | Framed workspace canvas, cards, modal dialogs, inspector sheets |
+| `rounded-lg` / `radius` | 10px–12px (`0.625rem`–`0.75rem`) | Framed space canvas, cards, modal dialogs, inspector sheets |
 | `rounded-full` | 9999px | Avatars, floating pill action bars, status pills |
 
 ### Whisper Shadows & Glassmorphism
@@ -253,15 +261,15 @@ flowchart LR
 
 ---
 
-## 6. Three-Pane Workspace Shell Geometry
+## 6. Three-Pane Space Shell Geometry
 
-The workspace shell operates on a rigid **Three-Pane Framed Canvas Architecture**, isolating navigation, editing, and relational inspection into predictable spatial zones.
+The space shell operates on a rigid **Three-Pane Framed Canvas Architecture**, isolating navigation, editing, and relational inspection into predictable spatial zones.
 
 ```mermaid
 flowchart TD
     TopRail["Top Rail (Fixed 46px Height)\n[Breadcrumbs | Space Switcher | Global Search ⌘K | Sync Status | User Actions]"]
     
-    subgraph ShellBody ["Workspace Body (calc(100vh - 46px))"]
+    subgraph ShellBody ["Space Body (calc(100vh - 46px))"]
         LeftSidebar["Left Navigation Sidebar\n(Width: 240px–288px)\n[Daily Notes | Objects | Collections | Tags | Trash]"]
         CenterCanvas["Center Framed Canvas\n(Floating: 10px Outer Gutter, 12px Radius, 1px Border)\n[Document Header | Properties Bar | Plate Block Editor]"]
         RightInspector["Right Inspector Panel\n(Width: 320px–496px Collapsible)\n[6-Tab Action Grid: Graph, Objects, Related, Backlinks, AI, Search]"]
@@ -389,7 +397,7 @@ flowchart TD
 3. **Small-Card**: Compact grid card highlighting object icon, title, and up to 3 pinned properties (`smallCardVisiblePropertyIds`).
 4. **Wide-Card**: Feature card with top/left media cover image, object type badge, title, full property key-value grid, and backlink counter.
 5. **Embed**: Embedded interactive sub-view allowing full reading and block editing inside parent documents.
-6. **Page View**: Full-screen object workspace supporting three selectable layout widths:
+6. **Page View**: Full-screen object space supporting three selectable layout widths:
    - **Narrow**: 680px centered reading column.
    - **Standard**: 760px balanced editorial column.
    - **Wide**: 1080px or 100% full-width canvas for wide tables, data queries, and board views.
@@ -488,7 +496,7 @@ sequenceDiagram
 
 ## 11. AI Assistant & Agent Interaction Protocols
 
-The workspace integrates a privacy-conscious, context-grounded AI assistant operating under strict user-approval boundaries.
+The space integrates a privacy-conscious, context-grounded AI assistant operating under strict user-approval boundaries.
 
 ```mermaid
 flowchart TD

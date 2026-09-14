@@ -1,16 +1,16 @@
-# Spaces Multi-Tenant Architecture & Workspace Management
+# Spaces Multi-Tenant Architecture & Space Management
 
-This document provides a comprehensive architectural specification for the **Spaces** multi-tenant domain and workspace management suite in the **Notes App**. It details the local-first storage protocol, domain entity models, component suite under `src/components/spaces`, tone color system, icon mapping, and React 19 Context integration.
+This document provides a comprehensive architectural specification for the **Spaces** multi-tenant domain and space management suite in the **Notes App**. It details the local-first storage protocol, domain entity models, component suite under `src/components/spaces`, tone color system, icon mapping, and React 19 Context integration.
 
 ---
 
 ## 1. Overview & Architectural Goals
 
-The **Notes App** implements a multi-tenant workspace partitioning architecture inspired by **Capacities-like space parity**. A **Space** represents an isolated workspace boundary for a user's knowledge graph, notes, collections, spaced repetition cards, and uploaded documents.
+The **Notes App** implements a multi-tenant space partitioning architecture inspired by **Capacities-like space parity**. A **Space** represents an isolated space boundary for a user's knowledge graph, notes, collections, spaced repetition cards, and uploaded documents.
 
 ```mermaid
 flowchart TD
-    Account[User Account / Account ID] --> Space1["Space: Personal Workspace (blue / user)"]
+    Account[User Account / Account ID] --> Space1["Space: Personal Space (blue / user)"]
     Account --> Space2["Space: Engineering & Arch (emerald / code)"]
     Account --> Space3["Space: Research & Ideas (purple / brain)"]
 
@@ -20,8 +20,8 @@ flowchart TD
 ```
 
 ### Core Architecture Invariants
-1. **Multi-Tenant Workspace Isolation**: Every top-level entity, note, collection, and SRS item belongs strictly to a `spaceId`. Queries are scoped by `spaceId` to guarantee isolation between distinct domains (e.g., separating personal journal entries from engineering specs).
-2. **Capacities-Style Space Parity**: Workspaces are customizable through distinct visual identities, consisting of a name, description, Lucide icon, and color tone palette.
+1. **Multi-Tenant Space Isolation**: Every top-level entity, note, collection, and SRS item belongs strictly to a `spaceId`. Queries are scoped by `spaceId` to guarantee isolation between distinct domains (e.g., separating personal journal entries from engineering specs).
+2. **Capacities-Style Space Parity**: Spaces are customizable through distinct visual identities, consisting of a name, description, Lucide icon, and color tone palette.
 3. **Local-First & Offline Storage Protocol**: Spaces are managed via `SpaceRepository` using browser `localStorage` (key: `notes_app_spaces_v1` and `notes_app_active_space_id_v1`) with fallback to in-memory state during SSR or non-browser environments. Custom window events (`spaces-updated`, `space-changed`) trigger instant UI synchronization across context consumers.
 
 ---
@@ -96,7 +96,7 @@ Input payloads for space creation are validated client-side via `validateCreateS
 
 ## 3. Storage Protocol & Repository Pattern
 
-The [`SpaceRepository`](../../src/lib/db/repositories/space-repository.ts) provides a static service interface for workspace CRUD operations, order management, and active space persistence.
+The [`SpaceRepository`](../../src/lib/db/repositories/space-repository.ts) provides a static service interface for space CRUD operations, order management, and active space persistence.
 
 ```mermaid
 sequenceDiagram
@@ -123,14 +123,14 @@ sequenceDiagram
 ```
 
 ### Default Spaces Seed
-When no spaces are present in storage, `SpaceRepository` initializes two default workspaces for `default-user`:
-1. **Personal Workspace** (`id: "personal-space"`, icon: `"user"`, color: `"blue"`).
+When no spaces are present in storage, `SpaceRepository` initializes two default spaces for `default-user`:
+1. **Personal Space** (`id: "personal-space"`, icon: `"user"`, color: `"blue"`).
 2. **Engineering & Arch** (`id: "engineering-space"`, icon: `"code"`, color: `"emerald"`).
 
 ### Event-Driven Reactive Synchronization
 `SpaceRepository` dispatches browser native custom events upon mutation:
 - `spaces-updated`: Fired when a space is created, updated, deleted, or reordered.
-- `space-changed`: Fired when the active workspace context changes.
+- `space-changed`: Fired when the active space context changes.
 
 ---
 
@@ -155,7 +155,7 @@ src/components/spaces/
 | `SpaceCard` | Displays full space overview card with domain statistics (`SpaceStats`: notes, objects count), active indicator badge, and action buttons. | `Card`, `Badge`, `Button`, `FileText`, `Layers`, `Settings` |
 | `SpaceSwitcher` | Select dropdown / combobox component allowing users to switch the current active space from the global header or navigation shell. | `DropdownMenu` / `Select`, `useSpacesContext` |
 | `SpaceList` | Grid or vertical list component displaying active and inactive spaces with drag/drop or reorder capabilities. | `SpaceCard`, `SpaceNavItem` |
-| `CreateSpaceModal` | Dialog overlay for creating a new workspace, featuring input fields for name/description, icon picker grid, and tone color selector. | `Dialog`, `Input`, `Textarea`, `validateCreateSpaceInput` |
+| `CreateSpaceModal` | Dialog overlay for creating a new space, featuring input fields for name/description, icon picker grid, and tone color selector. | `Dialog`, `Input`, `Textarea`, `validateCreateSpaceInput` |
 | `SpaceSettingsModal` | Dialog overlay for editing existing space metadata, changing visual theme, or performing destructive deletion. | `Dialog`, `Button`, `SpaceRepository.deleteSpace` |
 
 ---

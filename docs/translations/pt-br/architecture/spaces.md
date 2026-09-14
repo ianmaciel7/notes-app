@@ -1,16 +1,16 @@
-# Arquitetura Multitenant de Espaços & Gestão de Workspaces
+# Arquitetura Multitenant de Espaços & Gestão de Spaces
 
-Este documento fornece uma especificação arquitetural abrangente para o domínio multitenant de **Espaços** (Spaces) e a suíte de gestão de workspaces no **Notes App**. Ele detalha o protocolo de armazenamento local-first, modelos de entidades de domínio, a suíte de componentes em `src/components/spaces`, o sistema de tonalidades de cores, mapeamento de ícones e integração com React 19 Context.
+Este documento fornece uma especificação arquitetural abrangente para o domínio multitenant de **Espaços** (Spaces) e a suíte de gestão de spaces no **Notes App**. Ele detalha o protocolo de armazenamento local-first, modelos de entidades de domínio, a suíte de componentes em `src/components/spaces`, o sistema de tonalidades de cores, mapeamento de ícones e integração com React 19 Context.
 
 ---
 
 ## 1. Visão Geral & Objetivos Arquiteturais
 
-O **Notes App** implementa uma arquitetura de particionamento de workspace multitenant inspirada no **paridade de espaços estilo Capacities**. Um **Espaço** (Space) representa um limite de workspace isolado para o grafo de conhecimento, notas, coleções, cartões de repetição espaçada e documentos do usuário.
+O **Notes App** implementa uma arquitetura de particionamento de space multitenant inspirada no **paridade de espaços estilo Capacities**. Um **Espaço** (Space) representa um limite de space isolado para o grafo de conhecimento, notas, coleções, cartões de repetição espaçada e documentos do usuário.
 
 ```mermaid
 flowchart TD
-    Account[Conta de Usuário / Account ID] --> Space1["Espaço: Personal Workspace (blue / user)"]
+    Account[Conta de Usuário / Account ID] --> Space1["Espaço: Personal Space (blue / user)"]
     Account --> Space2["Espaço: Engineering & Arch (emerald / code)"]
     Account --> Space3["Espaço: Research & Ideas (purple / brain)"]
 
@@ -20,8 +20,8 @@ flowchart TD
 ```
 
 ### Invariantes Fundamentais da Arquitetura
-1. **Isolamento Multitenant de Workspace**: Toda entidade, nota, coleção e item SRS de nível superior pertence estritamente a um `spaceId`. As consultas são delimitadas por `spaceId` para garantir o isolamento entre domínios distintos (ex.: separando notas pessoais de especificações de engenharia).
-2. **Paridade de Espaços Estilo Capacities**: Workspaces são customizáveis através de identidades visuais distintas, compostas por nome, descrição, ícone do Lucide e paleta de tonalidades de cor.
+1. **Isolamento Multitenant de Space**: Toda entidade, nota, coleção e item SRS de nível superior pertence estritamente a um `spaceId`. As consultas são delimitadas por `spaceId` para garantir o isolamento entre domínios distintos (ex.: separando notas pessoais de especificações de engenharia).
+2. **Paridade de Espaços Estilo Capacities**: Spaces são customizáveis através de identidades visuais distintas, compostas por nome, descrição, ícone do Lucide e paleta de tonalidades de cor.
 3. **Protocolo Local-First & Armazenamento Offline**: Os espaços são gerenciados via `SpaceRepository` usando o `localStorage` do navegador (chaves: `notes_app_spaces_v1` e `notes_app_active_space_id_v1`) com fallback para estado em memória durante SSR ou ambientes sem navegador. Eventos customizados na window (`spaces-updated`, `space-changed`) disparam sincronização instantânea de UI nos consumidores do contexto.
 
 ---
@@ -96,7 +96,7 @@ Os dados de entrada para criação de espaço são validados no cliente via `val
 
 ## 3. Protocolo de Armazenamento & Padrão Repository
 
-O [`SpaceRepository`](../../../src/lib/db/repositories/space-repository.ts) fornece uma interface de serviço estática para operações CRUD de workspace, ordenação e persistência do espaço ativo.
+O [`SpaceRepository`](../../../src/lib/db/repositories/space-repository.ts) fornece uma interface de serviço estática para operações CRUD de space, ordenação e persistência do espaço ativo.
 
 ```mermaid
 sequenceDiagram
@@ -123,14 +123,14 @@ sequenceDiagram
 ```
 
 ### Semente de Espaços Padrão
-Quando nenhum espaço está presente no armazenamento, o `SpaceRepository` inicializa dois workspaces padrão para `default-user`:
-1. **Personal Workspace** (`id: "personal-space"`, ícone: `"user"`, cor: `"blue"`).
+Quando nenhum espaço está presente no armazenamento, o `SpaceRepository` inicializa dois spaces padrão para `default-user`:
+1. **Personal Space** (`id: "personal-space"`, ícone: `"user"`, cor: `"blue"`).
 2. **Engineering & Arch** (`id: "engineering-space"`, ícone: `"code"`, cor: `"emerald"`).
 
 ### Sincronização Reativa Baseada em Eventos
 O `SpaceRepository` dispara eventos customizados nativos do navegador durante mutações:
 - `spaces-updated`: Disparado quando um espaço é criado, atualizado, excluído ou reordenado.
-- `space-changed`: Disparado quando o contexto do workspace ativo é alterado.
+- `space-changed`: Disparado quando o contexto do space ativo é alterado.
 
 ---
 

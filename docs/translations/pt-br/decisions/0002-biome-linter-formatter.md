@@ -22,7 +22,7 @@ O modelo inicial do projeto incluía configurações de ESLint e Prettier, o que
 
 ## Resultado da Decisão
 
-Opção escolhida: **Biome** (`@biomejs/biome`) porque ele é executado em ~50ms em todo o workspace, fornece predefinições recomendadas de linting prontas para uso e trata a formatação e regras do parser CSS de forma limpa via `biome.json`.
+Opção escolhida: **Biome** (`@biomejs/biome`) porque ele é executado em ~50ms em todo o repositório, fornece predefinições recomendadas de linting prontas para uso e trata a formatação e regras do parser CSS de forma limpa via `biome.json`.
 
 ### Consequências Positivas
 

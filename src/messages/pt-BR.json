@@ -4,9 +4,9 @@
     "description": "Aplicação de notas minimalista com internacionalização e suporte a componentes.",
     "cta": "Começar a construir"
   },
-  "workspace": {
+  "space": {
     "architecture": {
-      "title": "Arquitetura da Workspace",
+      "title": "Arquitetura do Espaço",
       "mainContentTitle": "Conteúdo Principal",
       "sidePanelTitle": "Painel Lateral"
     }

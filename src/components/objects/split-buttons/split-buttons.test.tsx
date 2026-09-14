@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { DailyNoteSplitButton } from "./daily-note-split-button";
+import { ObjectSplitButton } from "./object-split-button";
 import { PageSplitButton } from "./page-split-button";
 import {
   getObjectSplitButton,
@@ -33,6 +34,17 @@ describe("Object Split Buttons", () => {
     const htmlTask = renderToStaticMarkup(<TaskSplitButton />);
     expect(htmlTask).toContain("Tarefa");
     expect(htmlTask).toContain("bg-red-50");
+  });
+
+  it("exposes the toned object-type split button as ObjectSplitButton", () => {
+    const html = renderToStaticMarkup(
+      <ObjectSplitButton type="page" label="Page" tone="blue" size="sm" />,
+    );
+
+    expect(html).toContain("Page");
+    expect(html).toContain("bg-blue-50");
+    expect(html).toContain("h-6");
+    expect(html).not.toContain("disabled=\"\"");
   });
 
   it("resolves object types and aliases through getObjectSplitButton", () => {
