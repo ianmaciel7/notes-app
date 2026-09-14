@@ -14,3 +14,17 @@ Rules:
 - After modifying code files in this session, run `graphify update .` to keep the graph current (AST-only, no API cost)
 - Worktrees `.worktrees/old`, `old-2`, `old-3`, `old-4`, and `old-5` contain historical reference implementations of the project for architectural reference and feature parity.
 
+## Post-Edit Enforcement (Mandatory)
+
+After **any session** in which source code files are created, modified, or deleted, agents MUST run:
+
+```sh
+graphify update .
+```
+
+- This is a zero-cost, AST-only operation (no API calls, no LLM inference).
+- It MUST be the **last step** before declaring a task complete or closing a turn.
+- Do NOT skip this even for small or single-file edits.
+- The `code-reviewer` subagent must confirm this was run before approving completion.
+
+

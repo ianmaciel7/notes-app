@@ -7,3 +7,14 @@ Any markdown documentation file created or updated under the `docs/` directory h
 1. **Never Orphan Documentation**: It is strictly forbidden to add or modify a `.md` document under `docs/` without importing it into its domain's `.stories.tsx` suite.
 2. **Immediate Synchronization**: Whenever a new specification, ADR, guide, design doc, or entity reference is authored, the story file must be updated in the same commit / turn.
 3. **Ladle Workbench Verification**: Verify that the story exports properly using `pnpm build` or Ladle preview to guarantee renderability in the interactive DocViewer component.
+
+## ADR-Specific Invariant
+
+Every ADR file created under `docs/decisions/XXXX-slug.md` MUST be registered as a named export in `docs/decisions/decisions.stories.tsx` **in the same turn** the ADR is written. The export must follow this pattern:
+
+```tsx
+import adr_XXXX from "./XXXX-slug.md";
+export const ADR_XXXX: Story = () => <DocViewer content={adr_XXXX} />;
+```
+
+Failure to register the Ladle story is a **blocking invariant violation**. The `code-reviewer` subagent must verify this before declaring any ADR-related task complete.
