@@ -1,9 +1,15 @@
 "use client";
 
 import { Download, Table } from "lucide-react";
-import { createPlatePlugin } from "platejs/react";
+import { createPlatePlugin, useEditorRef, usePath, useReadOnly } from "platejs/react";
 import type * as React from "react";
-import { cellKey, exportTableBlockToCsv, type TableBlockModel } from "@/lib/editor/table-model";
+import { Transforms } from "slate";
+import {
+  cellKey,
+  exportTableBlockToCsv,
+  setTableCellText,
+  type TableBlockModel,
+} from "@/lib/editor/table-model";
 import { cn } from "@/lib/utils";
 
 export const KEY_TABLE_BLOCK = "tableBlock";
@@ -24,9 +30,29 @@ export function TableBlockElement({
   ...props
 }: TableBlockElementProps) {
   const { table } = element;
+  const editor = useEditorRef();
+  const path = usePath();
+  const readOnly = useReadOnly();
+  const [exportStatus, setExportStatus] = React.useState<"idle" | "copied" | "failed">("idle");
+
+  const updateCell = (rowId: string, columnId: string, text: string) => {
+    const nextTable = setTableCellText(table, rowId, columnId, text);
+    if (nextTable !== table) Transforms.setNodes(editor, { table: nextTable }, { at: path });
+  };
+
+  const copyCsv = async () => {
+    if (!table) return;
+    try {
+      await navigator.clipboard.writeText(exportTableBlockToCsv(table).content);
+      setExportStatus("copied");
+    } catch {
+      setExportStatus("failed");
+    }
+  };
 
   return (
     <div
+      data-slot="editor-table-block"
       {...attributes}
       {...props}
       className={cn(
@@ -44,16 +70,12 @@ export function TableBlockElement({
         <div className="flex items-center gap-1">
           <button
             type="button"
-            onClick={() => {
-              if (table) {
-                const csv = exportTableBlockToCsv(table);
-                navigator.clipboard.writeText(csv.content);
-              }
-            }}
+            aria-label="Copy table as CSV"
+            onClick={copyCsv}
             className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer"
           >
             <Download className="size-3" />
-            <span>CSV</span>
+            <span>{exportStatus === "copied" ? "Copied" : exportStatus === "failed" ? "Copy failed" : "CSV"}</span>
           </button>
         </div>
       </div>
@@ -88,7 +110,15 @@ export function TableBlockElement({
                         cell?.style?.background === "muted" && "bg-muted/20",
                       )}
                     >
-                      {cell ? cell.text || cell.content?.[0]?.text : ""}
+                      {cell ? (
+                        <input
+                          aria-label={`Row ${row.id}, column ${col.id}`}
+                          className="w-full min-w-24 bg-transparent outline-none"
+                          disabled={readOnly}
+                          value={cell.text || cell.content?.[0]?.text || ""}
+                          onChange={(event) => updateCell(row.id, col.id, event.target.value)}
+                        />
+                      ) : null}
                     </td>
                   );
                 })}

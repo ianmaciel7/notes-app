@@ -18,6 +18,8 @@ export function BlockGutterHandle({
 }: BlockGutterHandleProps) {
   return (
     <div
+      data-slot="editor-block-gutter"
+      aria-label="Block actions"
       className={cn(
         "group absolute left-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 opacity-0 hover:opacity-100 transition-opacity",
         className,
@@ -25,6 +27,7 @@ export function BlockGutterHandle({
     >
       <button
         type="button"
+        aria-label="Add block"
         onClick={(e) => {
           if (e.shiftKey) {
             onInsertAbove?.();
@@ -40,6 +43,7 @@ export function BlockGutterHandle({
 
       <button
         type="button"
+        aria-label="Open block menu"
         onClick={onOpenContextMenu}
         title="Drag to reorder (Click for block menu)"
         className="flex size-5 cursor-grab items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground active:cursor-grabbing"

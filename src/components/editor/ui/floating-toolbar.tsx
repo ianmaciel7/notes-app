@@ -18,6 +18,9 @@ export function FloatingToolbar({
 
   return (
     <div
+      data-slot="editor-floating-toolbar"
+      role="toolbar"
+      aria-label="Text formatting"
       className={cn(
         "z-50 flex items-center gap-0.5 rounded-xl border border-border bg-popover/95 backdrop-blur-xs p-1 shadow-md animate-in fade-in-50 zoom-in-95",
         className,
@@ -25,6 +28,7 @@ export function FloatingToolbar({
     >
       <button
         type="button"
+        aria-label="Bold"
         onClick={() => onToggleMark?.("bold")}
         title="Bold"
         className="flex size-7 items-center justify-center rounded-lg text-popover-foreground hover:bg-accent cursor-pointer"
@@ -34,6 +38,7 @@ export function FloatingToolbar({
 
       <button
         type="button"
+        aria-label="Italic"
         onClick={() => onToggleMark?.("italic")}
         title="Italic"
         className="flex size-7 items-center justify-center rounded-lg text-popover-foreground hover:bg-accent cursor-pointer"
@@ -43,6 +48,7 @@ export function FloatingToolbar({
 
       <button
         type="button"
+        aria-label="Inline code"
         onClick={() => onToggleMark?.("code")}
         title="Inline Code"
         className="flex size-7 items-center justify-center rounded-lg text-popover-foreground hover:bg-accent cursor-pointer"
@@ -54,6 +60,7 @@ export function FloatingToolbar({
 
       <button
         type="button"
+        aria-label="Insert link"
         onClick={() => onToggleMark?.("link")}
         title="Insert Link"
         className="flex size-7 items-center justify-center rounded-lg text-popover-foreground hover:bg-accent cursor-pointer"
@@ -63,6 +70,7 @@ export function FloatingToolbar({
 
       <button
         type="button"
+        aria-label="Inline math"
         onClick={() => onToggleMark?.("math")}
         title="Inline Math TeX"
         className="flex size-7 items-center justify-center rounded-lg text-popover-foreground hover:bg-accent cursor-pointer"
@@ -72,6 +80,7 @@ export function FloatingToolbar({
 
       <button
         type="button"
+        aria-label="Highlight"
         onClick={() => onToggleMark?.("highlight")}
         title="Highlight / Callout"
         className="flex size-7 items-center justify-center rounded-lg text-popover-foreground hover:bg-accent cursor-pointer"
