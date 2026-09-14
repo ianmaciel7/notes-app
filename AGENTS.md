@@ -4,11 +4,34 @@
 
 This is a Next.js application managed with pnpm.
 
+The `.worktrees/old` through `.worktrees/old-6` directories are historical
+attempts of this same project. They are reference worktrees, not separate
+projects. Preserve them as historical context and do not delete, reset, or
+rewrite them unless explicitly requested.
+
 ## Setup and development
 
 - Install dependencies: `pnpm install`
 - Start the development server: `pnpm dev`
 - Run tests: `pnpm test`
+
+### Worktree setup and references
+
+Whenever starting work on the project:
+
+1. Confirm the available worktrees and their branches with
+   `git worktree list`.
+2. Review the historical worktrees when prior implementation context is
+   relevant. Compare them with the active branch using commands such as
+   `git diff dev...old` or `git diff dev...old-6`.
+3. Work in the active checkout or in a newly requested worktree. Treat
+   `old`–`old-6` as read-only references by default.
+4. Run `pnpm install` in the worktree where the task will be implemented,
+   then run the project's relevant checks before making changes.
+
+The primary development branch is `dev`. Do not assume that the newest
+historical worktree is the correct implementation; inspect the code and
+history before reusing an approach.
 
 ## Code style
 
