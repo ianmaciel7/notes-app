@@ -1,9 +1,50 @@
 import type { Story, StoryDefault } from "@ladle/react";
+import type { CSSProperties } from "react";
 import { ObjectIcon, objectIconRegistry } from "./icon-registry";
 
 export default {
   title: "Objects / Icons",
 } satisfies StoryDefault;
+
+const storyShellStyle: CSSProperties = {
+  padding: "24px",
+  color: "var(--foreground, #171717)",
+  fontFamily:
+    'var(--font-geist-sans, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif)',
+};
+
+const iconGridStyle: CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fill, minmax(112px, 1fr))",
+  gap: "16px",
+};
+
+const iconCardStyle: CSSProperties = {
+  alignItems: "center",
+  border: "1px solid var(--border, #e5e5e5)",
+  borderRadius: "8px",
+  display: "flex",
+  flexDirection: "column",
+  gap: "8px",
+  justifyContent: "center",
+  minHeight: "82px",
+  padding: "16px",
+  textAlign: "center",
+};
+
+const iconStyle: CSSProperties = {
+  color: "var(--foreground, #171717)",
+  height: "24px",
+  width: "24px",
+};
+
+const iconLabelStyle: CSSProperties = {
+  color: "var(--muted-foreground, #737373)",
+  fontFamily:
+    'var(--font-geist-mono, "JetBrains Mono", "Overpass Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace)',
+  fontSize: "12px",
+  lineHeight: "16px",
+};
 
 export const AllIconsGrid: Story = () => {
   const iconEntries = Object.entries(objectIconRegistry).filter(
@@ -11,16 +52,24 @@ export const AllIconsGrid: Story = () => {
   );
 
   return (
-    <div className="p-6">
-      <h2 className="mb-4 text-xl font-semibold">Workspace Object Icons (32 types)</h2>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+    <div className="p-6" style={storyShellStyle}>
+      <h2 className="mb-4 text-xl font-semibold" style={{ margin: "0 0 16px", fontSize: "20px" }}>
+        Object Icons (32 types)
+      </h2>
+      <div
+        className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
+        style={iconGridStyle}
+      >
         {iconEntries.map(([name, Component]) => (
           <div
             key={name}
             className="flex flex-col items-center justify-center gap-2 rounded-lg border border-border p-4 text-center hover:bg-muted/50"
+            style={iconCardStyle}
           >
-            <Component className="size-6 text-foreground" />
-            <span className="text-xs font-mono text-muted-foreground">{name}</span>
+            <Component className="size-6 text-foreground" style={iconStyle} />
+            <span className="text-xs font-mono text-muted-foreground" style={iconLabelStyle}>
+              {name}
+            </span>
           </div>
         ))}
       </div>

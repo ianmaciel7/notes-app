@@ -528,7 +528,9 @@
     border-radius: 0.75rem; /* 12px */
     border: 1px solid var(--border-base);
     margin: var(--canvas-gutter);
-    @apply shadow-whisper;
+    box-shadow:
+      0 1px 2px 0   oklch(0 0 0 / 4%),
+      0 2px 6px 1px oklch(0 0 0 / 2%);
   }
 
   /* ── Tone Badge / Chip Formula (DESIGN.md §3) ────────────────────────
@@ -600,7 +602,10 @@
     top: 0;
     z-index: 50;
     border-bottom: 1px solid var(--border-base);
-    @apply surface-glass;
+    background-color: color-mix(in oklch, var(--bg-base) 80%, transparent);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid var(--border-subtle);
   }
 
   .workspace-body {
