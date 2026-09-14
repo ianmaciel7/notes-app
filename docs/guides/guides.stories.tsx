@@ -1,10 +1,10 @@
 import type { Story, StoryDefault } from "@ladle/react";
+import ladleRulesEnDoc from "../../.agents/rules/ladle-stories.md?raw";
 import { DocViewer } from "../../src/components/ladle/doc-viewer";
 import componentPtBrDoc from "../translations/pt-BR/guides/component-development.md?raw";
 import devPtBrDoc from "../translations/pt-BR/guides/development.md?raw";
 import componentEnDoc from "./component-development.md?raw";
 import devEnDoc from "./development.md?raw";
-import ladleRulesEnDoc from "../../.agents/rules/ladle-stories.md?raw";
 
 type GuidesLocale = "pt-BR" | "en";
 

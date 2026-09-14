@@ -34,13 +34,66 @@ describe("document-schema", () => {
   });
 
   it("round-trips between Capacities AST and Slate AST without loss", () => {
-    const doc = createEmptyBlockDocument();
+    const doc = {
+      ...createEmptyBlockDocument(),
+      doc: {
+        type: "doc" as const,
+        content: [
+          {
+            type: "paragraph",
+            attrs: { id: "block:paragraph" },
+            content: [
+              {
+                type: "text",
+                text: "formatted",
+                marks: [{ type: "bold", attrs: { color: "brand" } }],
+              },
+            ],
+          },
+        ],
+      },
+    };
     const slateValue = capacitiesDocToSlate(doc);
-    expect(slateValue).toBeDefined();
-    expect(Array.isArray(slateValue)).toBe(true);
+    expect(slateValue).toEqual([
+      {
+        type: "p",
+        id: "block:paragraph",
+        children: [
+          {
+            text: "formatted",
+            bold: true,
+            __marks: [{ type: "bold", attrs: { color: "brand" } }],
+          },
+        ],
+      },
+    ]);
 
     const recreated = slateToCapacitiesDoc(slateValue as unknown[]);
-    expect(recreated.schemaVersion).toBe(BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION);
-    expect(recreated.doc.content.length).toBe(doc.doc.content.length);
+    expect(recreated.doc.content[0].content?.[0]).toEqual({
+      type: "text",
+      text: "formatted",
+      marks: [{ type: "bold", attrs: { color: "brand" } }],
+    });
+  });
+
+  it("rejects malformed nodes and documents deeper than the supported limit", () => {
+    expect(
+      validateBlockDocument({
+        schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+        doc: { type: "doc", content: [{ type: 42 }] },
+      }),
+    ).toBe(false);
+
+    let node = { type: "paragraph" };
+    for (let index = 0; index <= 8; index += 1) {
+      node = { type: "group", content: [node] } as typeof node;
+    }
+
+    expect(
+      validateBlockDocument({
+        schemaVersion: BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+        doc: { type: "doc", content: [node] },
+      }),
+    ).toBe(false);
   });
 });

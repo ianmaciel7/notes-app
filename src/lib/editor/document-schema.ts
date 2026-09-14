@@ -68,18 +68,49 @@ export function validateBlockDocument(doc: unknown): doc is BlockEditorDocument 
   if (record.schemaVersion !== BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION) return false;
   if (!record.doc || typeof record.doc !== "object") return false;
   const innerDoc = record.doc as Record<string, unknown>;
-  return innerDoc.type === "doc" && Array.isArray(innerDoc.content);
+  if (innerDoc.type !== "doc" || !Array.isArray(innerDoc.content)) return false;
+
+  const validateNode = (node: unknown, depth: number): node is BlockEditorNode => {
+    if (!node || typeof node !== "object" || depth > MAX_BLOCK_DOCUMENT_DEPTH) return false;
+    const record = node as Record<string, unknown>;
+    if (typeof record.type !== "string" || record.type.length === 0) return false;
+    if (record.type === "text") {
+      return typeof record.text === "string";
+    }
+    if (record.attrs !== undefined && (!record.attrs || typeof record.attrs !== "object")) {
+      return false;
+    }
+    if (record.marks !== undefined && !Array.isArray(record.marks)) return false;
+    if (Array.isArray(record.marks)) {
+      for (const mark of record.marks) {
+        if (!mark || typeof mark !== "object" || typeof (mark as Record<string, unknown>).type !== "string") {
+          return false;
+        }
+      }
+    }
+    if (record.content !== undefined && !Array.isArray(record.content)) return false;
+    return !Array.isArray(record.content) || record.content.every((child) => validateNode(child, depth + 1));
+  };
+
+  return innerDoc.content.every((node) => validateNode(node, 1));
 }
 
 export function capacitiesDocToSlate(document: BlockEditorDocument): unknown[] {
   const convertNode = (node: BlockEditorNode): unknown => {
     if (node.type === "text") {
-      return { text: node.text ?? "" };
+      const slateText: Record<string, unknown> = { text: node.text ?? "" };
+      if (node.marks?.length) {
+        slateText.__marks = node.marks;
+        for (const mark of node.marks) {
+          slateText[mark.type] = true;
+        }
+      }
+      return slateText;
     }
     return {
       type: node.type === "paragraph" ? "p" : node.type,
-      id: node.attrs?.id || createBlockId(),
       ...node.attrs,
+      id: node.attrs?.id || createBlockId(),
       children: node.content ? node.content.map(convertNode) : [{ text: "" }],
     };
   };
@@ -89,7 +120,12 @@ export function capacitiesDocToSlate(document: BlockEditorDocument): unknown[] {
 export function slateToCapacitiesDoc(slateNodes: unknown[]): BlockEditorDocument {
   const convertSlateNode = (node: Record<string, unknown>): BlockEditorNode => {
     if (typeof node.text === "string") {
-      return { type: "text", text: node.text };
+      const marks = Array.isArray(node.__marks)
+        ? (node.__marks as BlockEditorMark[])
+        : Object.entries(node)
+            .filter(([key, value]) => key !== "text" && value === true)
+            .map(([type]) => ({ type }));
+      return { type: "text", text: node.text, ...(marks.length ? { marks } : {}) };
     }
     const { type, id, children, ...restAttrs } = node;
     const childrenArray = Array.isArray(children) ? (children as Record<string, unknown>[]) : [];

@@ -26,4 +26,18 @@ describe("SplitButton", () => {
     expect(html).toContain("size-8");
     expect(html).not.toContain('data-slot="split-button-group"');
   });
+
+  it("applies valid child rounding variants to strip inner right corners", () => {
+    const html = renderToStaticMarkup(
+      <SplitButton>
+        <SplitButtonGroup aria-label="Export options">
+          <SplitButtonAction>PDF</SplitButtonAction>
+          <SplitButtonTrigger aria-label="Dropdown options" />
+        </SplitButtonGroup>
+      </SplitButton>,
+    );
+
+    expect(html).toContain("[&amp;&gt;[data-slot]]:rounded-r-none");
+    expect(html).not.toContain("*:data-slot:rounded-r-none");
+  });
 });

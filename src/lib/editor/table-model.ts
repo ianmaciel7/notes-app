@@ -55,6 +55,29 @@ export function cellKey(rowId: string, columnId: string): string {
   return `${rowId}:${columnId}`;
 }
 
+export function setTableCellText(
+  table: TableBlockModel,
+  rowId: string,
+  columnId: string,
+  text: string,
+): TableBlockModel {
+  const key = cellKey(rowId, columnId);
+  const cell = table.cells[key];
+  if (!cell) return table;
+
+  return {
+    ...table,
+    cells: {
+      ...table.cells,
+      [key]: {
+        ...cell,
+        text,
+        content: [{ type: "text", text }],
+      },
+    },
+  };
+}
+
 export function createTableBlockModel(options?: {
   rowCount?: number;
   columnCount?: number;

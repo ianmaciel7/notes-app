@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { createTableBlockModel, exportTableBlockToCsv, tableBlockToMarkdown } from "../table-model";
+import {
+  createTableBlockModel,
+  exportTableBlockToCsv,
+  setTableCellText,
+  tableBlockToMarkdown,
+} from "../table-model";
 
 describe("table-model", () => {
   it("creates table model with default dimensions", () => {
@@ -21,5 +26,16 @@ describe("table-model", () => {
     const md = tableBlockToMarkdown(table);
     expect(md).toContain("|");
     expect(md).toContain("---");
+  });
+
+  it("updates a cell immutably and keeps CSV export in sync", () => {
+    const table = createTableBlockModel({ rowCount: 1, columnCount: 1 });
+    const rowId = table.rows[0].id;
+    const columnId = table.columns[0].id;
+    const updated = setTableCellText(table, rowId, columnId, 'A, "quoted"');
+
+    expect(updated).not.toBe(table);
+    expect(table.cells[`${rowId}:${columnId}`].text).toBe("");
+    expect(exportTableBlockToCsv(updated).content).toBe('"A, ""quoted"""');
   });
 });

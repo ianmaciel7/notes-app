@@ -26,15 +26,8 @@ export function PlaceSplitButton({
 
   return (
     <ObjectSplitButton size={size} variant={variant}>
-      <ObjectSplitButtonGroup
-        aria-label={label || dropdownAriaLabel}
-        className={className}
-      >
-        <ObjectSplitButtonAction
-          aria-label={label || undefined}
-          onClick={onLabelClick}
-          type={type}
-        >
+      <ObjectSplitButtonGroup aria-label={label || dropdownAriaLabel} className={className}>
+        <ObjectSplitButtonAction aria-label={label || undefined} onClick={onLabelClick} type={type}>
           {label && <span>{label}</span>}
         </ObjectSplitButtonAction>
         <ObjectSplitButtonSeparator orientation="vertical" />

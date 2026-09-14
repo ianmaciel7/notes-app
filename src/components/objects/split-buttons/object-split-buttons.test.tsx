@@ -1,12 +1,12 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { DailyNoteSplitButton } from "./daily-note-split-button";
-import { PageSplitButton } from "./page-split-button";
 import {
   getObjectSplitButton,
   ObjectSplitButtonDynamic,
   objectSplitButtonRegistry,
 } from "./object-split-button-registry";
+import { PageSplitButton } from "./page-split-button";
 import { TaskSplitButton } from "./task-split-button";
 import { WeblinkSplitButton } from "./weblink-split-button";
 
@@ -62,7 +62,7 @@ describe("Object Split Buttons", () => {
     expect(html).toContain("Page");
     expect(html).toContain("bg-blue-50");
     expect(html).toContain("h-7");
-    expect(html).not.toContain("disabled=\"\"");
+    expect(html).not.toContain('disabled=""');
   });
 
   it("resolves object types and aliases through getObjectSplitButton", () => {

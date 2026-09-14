@@ -77,7 +77,9 @@ export const objectSplitButtonRegistry: Record<
   atomic_note: AtomicNoteSplitButton,
 };
 
-export function getObjectSplitButton(type: string): React.ComponentType<ObjectSplitButtonVariantProps> {
+export function getObjectSplitButton(
+  type: string,
+): React.ComponentType<ObjectSplitButtonVariantProps> {
   const normalized = type.toLowerCase().trim();
   return objectSplitButtonRegistry[normalized] ?? PageSplitButton;
 }

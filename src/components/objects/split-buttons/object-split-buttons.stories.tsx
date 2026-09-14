@@ -1,5 +1,8 @@
 import type { Story, StoryDefault } from "@ladle/react";
-import { ObjectSplitButtonDynamic, objectSplitButtonRegistry } from "./object-split-button-registry";
+import {
+  ObjectSplitButtonDynamic,
+  objectSplitButtonRegistry,
+} from "./object-split-button-registry";
 import { PageSplitButton } from "./page-split-button";
 import { TaskSplitButton } from "./task-split-button";
 import { WeblinkSplitButton } from "./weblink-split-button";
