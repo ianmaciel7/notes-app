@@ -42,6 +42,9 @@ pnpm-debug.log*
 # other deployment platforms
 .netlify
 
+# git worktrees
+/.worktrees/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
