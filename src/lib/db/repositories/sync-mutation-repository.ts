@@ -1,5 +1,5 @@
+import type { SyncMutationRecord } from "@/lib/domain/records";
 import type { KnowledgeDatabase } from "../schema";
-import type { SyncMutationRecord } from "../types";
 
 export class SyncMutationRepository {
   constructor(private readonly db: KnowledgeDatabase) {}

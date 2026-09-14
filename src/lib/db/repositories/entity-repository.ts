@@ -1,6 +1,6 @@
+import type { SpaceEntityRecord } from "@/lib/domain/records";
 import { createEmptyBlockDocument } from "@/lib/editor/document-schema";
 import type { KnowledgeDatabase } from "../schema";
-import type { SpaceEntityRecord } from "../types";
 import { SyncMutationRepository } from "./sync-mutation-repository";
 import { TrashRepository } from "./trash-repository";
 

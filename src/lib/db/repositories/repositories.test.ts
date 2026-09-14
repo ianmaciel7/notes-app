@@ -1,17 +1,17 @@
 import "fake-indexeddb/auto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
-  BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
-  BLOCK_ID_PREFIX,
-} from "@/lib/editor/document-schema";
-import { KnowledgeDatabase } from "../schema";
-import {
   ACTIVE_SPACE_SETTING_ID,
   ENGINEERING_SPACE_ID,
   LOCAL_ACCOUNT_ID,
   PERSONAL_SPACE_ID,
-  type SpaceEntityRecord,
-} from "../types";
+} from "@/lib/domain/default-spaces";
+import type { SpaceEntityRecord } from "@/lib/domain/records";
+import {
+  BLOCK_EDITOR_DOCUMENT_SCHEMA_VERSION,
+  BLOCK_ID_PREFIX,
+} from "@/lib/editor/document-schema";
+import { KnowledgeDatabase } from "../schema";
 import { createRepositories, type Repositories } from "./repository-factory";
 
 async function seedCascadeTables(db: KnowledgeDatabase, spaceId: string) {

@@ -1,5 +1,9 @@
+import type {
+  SpaceEntityRecord,
+  SpaceRelationRecord,
+  SpaceTrashRecord,
+} from "@/lib/domain/records";
 import type { KnowledgeDatabase } from "../schema";
-import type { SpaceEntityRecord, SpaceRelationRecord, SpaceTrashRecord } from "../types";
 
 export class TrashRepository {
   constructor(private readonly db: KnowledgeDatabase) {}

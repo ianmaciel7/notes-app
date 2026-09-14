@@ -1,5 +1,5 @@
+import type { SpaceTagRecord } from "@/lib/domain/records";
 import type { KnowledgeDatabase } from "../schema";
-import type { SpaceTagRecord } from "../types";
 
 export class TagRepository {
   constructor(private readonly db: KnowledgeDatabase) {}

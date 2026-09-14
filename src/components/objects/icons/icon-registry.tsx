@@ -1,5 +1,5 @@
 import type * as React from "react";
-import type { ObjectIconName, ObjectIconProps } from "../../../lib/space-object-types";
+import type { ObjectIconName, ObjectIconProps } from "@/lib/space-object-types";
 import { AiChatIcon } from "./ai-chat-icon";
 import { ArchiveIcon } from "./archive-icon";
 import { AreaIcon } from "./area-icon";

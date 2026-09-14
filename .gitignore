@@ -54,6 +54,7 @@ next-env.d.ts
 # IDE / Editor settings
 .vscode/
 .idea/
+.mcp.json
 *.swp
 *.swo
 

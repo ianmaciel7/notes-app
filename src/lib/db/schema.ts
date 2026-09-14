@@ -11,7 +11,7 @@ import type {
   SpaceTagRecord,
   SpaceTrashRecord,
   SyncMutationRecord,
-} from "./types";
+} from "@/lib/domain/records";
 
 export class KnowledgeDatabase extends Dexie {
   spaces!: EntityTable<SpaceRecord, "id">;

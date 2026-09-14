@@ -1,12 +1,13 @@
-import { validateCreateSpaceInput } from "@/lib/validations/space";
-import type { CreateSpaceInput, SpaceRecord } from "@/types/space";
-import type { KnowledgeDatabase } from "../schema";
 import {
   ACTIVE_SPACE_SETTING_ID,
   DEFAULT_SPACES,
   LOCAL_ACCOUNT_ID,
   PERSONAL_SPACE_ID,
-} from "../types";
+} from "@/lib/domain/default-spaces";
+import type { SpaceRecord } from "@/lib/domain/records";
+import { validateCreateSpaceInput } from "@/lib/validations/space";
+import type { CreateSpaceInput } from "@/types/space";
+import type { KnowledgeDatabase } from "../schema";
 
 export const SPACES_STORAGE_KEY = "notes_app_spaces_v1";
 export const ACTIVE_SPACE_STORAGE_KEY = "notes_app_active_space_id_v1";

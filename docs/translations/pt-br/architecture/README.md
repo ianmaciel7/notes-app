@@ -59,7 +59,7 @@ O projeto segue estritamente as **convenções oficiais do Next.js 16 App Router
 │   ├── hooks/                    # Hooks React reutilizáveis
 │   │   └── use-mobile.ts         # Hook de detecção de breakpoint de tela móvel (< 768px)
 │   ├── lib/                      # Modelos de domínio centrais, banco de dados local e lógica pura
-│   │   ├── db/                   # Camada de banco de dados IndexedDB local-first (Dexie)
+│   │   ├── db/                   # Infraestrutura de banco IndexedDB local-first (Dexie)
 │   │   │   ├── hooks/            # Hooks de reatividade useLiveQuery
 │   │   │   ├── repositories/     # Repositórios de domínio (espaço, entidade, coleção, tag, lixeira, sincronização)
 │   │   │   │   ├── index.ts      # Fábrica de repositórios e contratos
@@ -67,7 +67,10 @@ O projeto segue estritamente as **convenções oficiais do Next.js 16 App Router
 │   │   │   ├── index.ts          # Inicialização da instância de banco de dados Dexie
 │   │   │   ├── provider.tsx      # Contexto DatabaseProvider para componentes cliente
 │   │   │   ├── schema.ts         # Definições de esquema Dexie e índices de tabelas
-│   │   │   └── types.ts          # Interfaces internas de registros de banco de dados
+│   │   │   └── types.ts          # Fachada de compatibilidade para imports legados
+│   │   ├── domain/               # Contratos compartilhados do domínio e dados iniciais
+│   │   │   ├── records.ts        # Registros compartilhados pelo DAL e persistência local
+│   │   │   └── default-spaces.ts # Identificadores e registros de espaços padrão
 │   │   ├── editor/               # AST puro do editor de blocos, modelo matricial de tabela e gatilhos
 │   │   │   ├── document-schema.ts # Esquema de documento Capacities v3 AST & conversão Slate
 │   │   │   ├── document-schema.test.ts # Testes do esquema de documentos
@@ -133,6 +136,7 @@ Todo colaborador (e assistente de IA) deve manter estritamente as seguintes regr
    - Conversões puras de AST, matemática matricial de tabelas e controladores de gatilhos residem em `src/lib/editor/`, totalmente desacoplados do React.
 
 7. **Banco de Dados Local-First & Repositórios (`src/lib/db/`)**:
+   - Os contratos compartilhados de persistência vivem em `src/lib/domain/records.ts`; `src/lib/db/types.ts` permanece apenas como fachada de compatibilidade para imports legados.
    - A persistência no cliente é fornecida pelo Dexie (IndexedDB) com repositórios estruturados (`src/lib/db/repositories/`) oferecendo assinaturas reativas com `useLiveQuery`, exclusões em cascata e filas de sincronização offline.
 
 8. **Bancada de Componentes Ladle & Colocação de Stories**:

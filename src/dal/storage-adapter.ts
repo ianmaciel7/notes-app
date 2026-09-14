@@ -1,6 +1,7 @@
 import "server-only";
-import { DEFAULT_SPACES, type SpaceEntityRecord } from "@/lib/db/types";
-import type { CreateSpaceInput, SpaceRecord } from "@/types/space";
+import { DEFAULT_SPACES } from "@/lib/domain/default-spaces";
+import type { SpaceEntityRecord, SpaceRecord } from "@/lib/domain/records";
+import type { CreateSpaceInput } from "@/types/space";
 
 export interface ServerStorageAdapter {
   listSpaces(accountId: string): Promise<SpaceRecord[]>;

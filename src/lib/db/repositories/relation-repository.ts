@@ -1,5 +1,5 @@
+import type { SpaceRelationRecord } from "@/lib/domain/records";
 import type { KnowledgeDatabase } from "../schema";
-import type { SpaceRelationRecord } from "../types";
 
 export class RelationRepository {
   constructor(private readonly db: KnowledgeDatabase) {}

@@ -58,14 +58,17 @@ The project strictly follows the **official Next.js 16 App Router conventions** 
 │   ├── hooks/                    # Reusable React hooks
 │   │   └── use-mobile.ts         # Viewport breakpoint detection hook (< 768px)
 │   ├── lib/                      # Core domain models, local database, validations, and pure logic
-│   │   ├── db/                   # Local-first IndexedDB database layer (Dexie)
+│   │   ├── db/                   # Local-first IndexedDB database infrastructure (Dexie)
 │   │   │   ├── hooks/            # useLiveQuery reactivity hooks
 │   │   │   ├── repositories/     # Domain repositories (space, entity, collection, tag, trash, sync)
 │   │   │   │   ├── repository-factory.ts # Repository factory and Repositories interface
 │   │   │   │   └── repositories.test.ts # Repository test suite
 │   │   │   ├── provider.tsx      # DatabaseProvider context for client components
 │   │   │   ├── schema.ts         # Dexie schema definitions and table indexes
-│   │   │   └── types.ts          # Internal database record interfaces & SpaceRecord
+│   │   │   └── types.ts          # Compatibility facade for legacy database imports
+│   │   ├── domain/                # Shared domain contracts and seed data
+│   │   │   ├── records.ts         # Shared records used by DAL and local persistence
+│   │   │   └── default-spaces.ts  # Shared space identifiers and default records
 │   │   ├── editor/               # Pure block editor AST, matrix table model, and triggers
 │   │   │   ├── document-schema.ts # Capacities document schema v3 AST & Slate conversion
 │   │   │   ├── document-schema.test.ts # Document schema tests
@@ -137,6 +140,7 @@ Every contributor (and AI assistant) must strictly maintain the following engine
 
 7. **Local-First Database & Repositories (`src/lib/db/`)**:
    - Client persistence is powered by Dexie (IndexedDB) with structured repositories (`src/lib/db/repositories/`) providing reactive `useLiveQuery` subscriptions, cascade deletions, and offline sync queues.
+   - Shared persistence contracts live in `src/lib/domain/records.ts`; `src/lib/db/types.ts` remains only as a compatibility facade for older imports.
 
 8. **Ladle Component Workbench & Story Colocation**:
    - Visual components have corresponding Ladle stories (`*.stories.tsx`) verifying states and theme tokens without running the Next.js development server.

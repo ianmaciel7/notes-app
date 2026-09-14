@@ -239,7 +239,7 @@ When implementing features in the primary workspace (`src/`):
 
 ## Related Documents
 
-- [Main Architecture Spec](../../ARCHITECTURE.md)
-- [Architecture Index](README.md)
-- [ADR-0006 Architectural Decision Record](../decisions/0006-historical-reference-architecture-synthesis.md)
-- [Decision Log](../../DECISIONS.md)
+- [Main Architecture Spec](../ARCHITECTURE.md)
+- [Architecture Index](../docs/architecture/README.md)
+- [ADR-0006 Architectural Decision Record](../docs/decisions/0006-historical-reference-architecture-synthesis.md)
+- [Decision Log](../DECISIONS.md)

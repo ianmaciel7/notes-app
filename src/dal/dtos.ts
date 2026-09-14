@@ -1,4 +1,5 @@
-import type { SpaceEntityRecord, SpaceRecord } from "@/lib/db/types";
+import "server-only";
+import type { SpaceEntityRecord, SpaceRecord } from "@/lib/domain/records";
 import type { EntityDTO, SpaceDTO, UserDTO } from "@/types/dtos";
 
 export type { EntityDTO, SpaceDTO, UserDTO };

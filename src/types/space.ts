@@ -1,4 +1,4 @@
-import type { SpaceRecord } from "@/lib/db/types";
+import type { SpaceRecord } from "@/lib/domain/records";
 import type { ObjectIconTone, SpaceIconName, SpaceStats } from "@/lib/space-object-types";
 import type { SpaceDTO } from "@/types/dtos";
 import type { ValidationResult } from "@/types/validation";
