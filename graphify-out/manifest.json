@@ -2454,9 +2454,9 @@
     "semantic_hash": ""
   },
   "src/components/editor/editor.stories.tsx": {
-    "mtime": 1789403114.3906696,
-    "seen": 1789403133.6064112,
-    "ast_hash": "cd156c3e5062e8cedcc4cc837d2fb95d",
+    "mtime": 1789403197.7293172,
+    "seen": 1789403270.5830424,
+    "ast_hash": "11d7425a21b3d8cf25cd27983680243f",
     "semantic_hash": ""
   },
   "src/components/ui/badge.stories.tsx": {
@@ -2736,8 +2736,8 @@
     "semantic_hash": ""
   },
   "src/components/objects/split-buttons/object-split-button.tsx": {
-    "mtime": 1789403040.9130492,
-    "seen": 1789403057.296322,
+    "mtime": 1789403538.5016038,
+    "seen": 1789403674.600813,
     "ast_hash": "f272fce0ee83460fa1eb3691e5151d78",
     "semantic_hash": ""
   },
@@ -3237,6 +3237,24 @@
     "mtime": 1789403048.087263,
     "seen": 1789403057.2953212,
     "ast_hash": "061ac3769c6bd7c70089768b121b28f9",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/superpowers.stories.tsx": {
+    "mtime": 1789403631.734405,
+    "seen": 1789403674.600813,
+    "ast_hash": "4650072aebcd6836e26d04a65cc8b7ff",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-09-14-components-audit-fix.md": {
+    "mtime": 1789403590.6538405,
+    "seen": 1789403674.6028194,
+    "ast_hash": "9cf6179c5ed602420116054c3c7ec216",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-09-14-components-audit-design.md": {
+    "mtime": 1789403588.3945217,
+    "seen": 1789403674.6028194,
+    "ast_hash": "bb82a50b0ba2ff9435fcdfbbfd64799e",
     "semantic_hash": ""
   }
 }
