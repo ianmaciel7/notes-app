@@ -21,8 +21,11 @@ export const Default: Story = () => (
         <SaveIcon aria-hidden="true" />
         Save
       </SplitButtonAction>
-      <SplitButtonSeparator orientation="vertical" />
-      <SplitButtonTrigger aria-label="More save options" />
+      <SplitButtonTrigger
+        aria-label="More save options"
+        variant="outline"
+        size="icon"
+      />
       <SplitButtonContent>
         <SplitButtonItem>
           <CopyIcon aria-hidden="true" />
@@ -36,6 +39,7 @@ export const Default: Story = () => (
     </SplitButtonGroup>
   </SplitButton>
 );
+
 
 export const Variants: Story = () => (
   <div className="flex flex-wrap items-center gap-4">
@@ -75,9 +79,12 @@ export const Sizes: Story = () => (
   <div className="flex flex-wrap items-center gap-4">
     <SplitButton>
       <SplitButtonGroup aria-label="Small save options">
-        <SplitButtonAction size="sm">Small</SplitButtonAction>
-        <SplitButtonSeparator orientation="vertical" />
-        <SplitButtonTrigger aria-label="More small save options" size="icon-sm" />
+        <SplitButtonAction variant="outline" size="sm">Small</SplitButtonAction>
+        <SplitButtonTrigger
+          aria-label="More small save options"
+          variant="outline"
+          size="icon-sm"
+        />
         <SplitButtonContent>
           <SplitButtonItem>Duplicate</SplitButtonItem>
           <SplitButtonItem>Move</SplitButtonItem>
@@ -87,9 +94,11 @@ export const Sizes: Story = () => (
 
     <SplitButton>
       <SplitButtonGroup aria-label="Default save options">
-        <SplitButtonAction>Default</SplitButtonAction>
-        <SplitButtonSeparator orientation="vertical" />
-        <SplitButtonTrigger aria-label="More default save options" />
+        <SplitButtonAction variant="outline">Default</SplitButtonAction>
+        <SplitButtonTrigger
+          aria-label="More default save options"
+          variant="outline"
+        />
         <SplitButtonContent>
           <SplitButtonItem>Duplicate</SplitButtonItem>
           <SplitButtonItem>Move</SplitButtonItem>

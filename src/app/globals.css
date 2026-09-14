@@ -10,7 +10,7 @@
    Architecture: OKLCH color space · Capacities 18-tone palette · Three-pane shell
    ───────────────────────────────────────────────────────────────────────────── */
 
-@custom-variant dark (&:is(.dark, .dark *));
+@custom-variant dark (&:is(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
 /* ─── Tailwind v4 Theme Mappings ─────────────────────────────────────────── */
 @theme inline {

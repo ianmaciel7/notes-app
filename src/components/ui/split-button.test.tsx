@@ -22,6 +22,8 @@ describe("SplitButton", () => {
 
     expect(html).toContain('role="group"');
     expect(html).toContain('data-slot="button-group"');
+    expect(html).toContain("border-border");
+    expect(html).toContain("size-8");
     expect(html).not.toContain('data-slot="split-button-group"');
   });
 });

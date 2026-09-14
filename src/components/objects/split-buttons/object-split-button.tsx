@@ -16,9 +16,9 @@ import { ObjectIcon } from "@/components/objects/icons/icon-registry";
 import { toneStyles } from "./split-button-base";
 
 const objectSplitButtonSizes = {
-  sm: { action: "xs", trigger: "icon-xs" },
-  md: { action: "sm", trigger: "icon-sm" },
-  lg: { action: "default", trigger: "icon" },
+  sm: { action: "sm", trigger: "icon-sm" },
+  md: { action: "default", trigger: "icon" },
+  lg: { action: "lg", trigger: "icon-lg" },
 } as const;
 
 type ObjectSplitButtonSize = keyof typeof objectSplitButtonSizes;
@@ -118,7 +118,7 @@ function ObjectSplitButtonSeparator({
 
   return (
     <SplitButtonSeparator
-      className={cn(toneStyle.divider, className)}
+      className={cn("bg-current/20", toneStyle.divider, className)}
       {...props}
     />
   );

@@ -56,7 +56,7 @@ describe("Object Split Buttons", () => {
 
     expect(html).toContain("Page");
     expect(html).toContain("bg-blue-50");
-    expect(html).toContain("h-6");
+    expect(html).toContain("h-7");
     expect(html).not.toContain("disabled=\"\"");
   });
 

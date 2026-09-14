@@ -23,24 +23,20 @@ function SplitButton(props: SplitButtonProps) {
 
 type SplitButtonGroupProps = React.ComponentProps<typeof ButtonGroup>
 
-function SplitButtonGroup({
-  ...props
-}: SplitButtonGroupProps) {
-  return (
-    <ButtonGroup
-      {...props}
-    />
-  )
+function SplitButtonGroup({ ...props }: SplitButtonGroupProps) {
+  return <ButtonGroup {...props} />
 }
 
 type SplitButtonActionProps = React.ComponentProps<typeof Button>
 
 function SplitButtonAction({
+  variant = "outline",
   ...props
 }: SplitButtonActionProps) {
   return (
     <Button
       data-slot="split-button-action"
+      variant={variant}
       {...props}
     />
   )
@@ -66,8 +62,8 @@ type SplitButtonTriggerProps =
 
 function SplitButtonTrigger({
   children,
-  variant = "default",
-  size = "icon-sm",
+  variant = "outline",
+  size = "icon",
   ...props
 }: SplitButtonTriggerProps) {
   return (
