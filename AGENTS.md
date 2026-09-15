@@ -71,6 +71,10 @@ history before reusing an approach.
   instead of hiding them with assertions.
 - Avoid `as` assertions, non-null assertions, and `any` unless the boundary is
   validated and the reason is documented.
+- Never introduce deprecated APIs, options, overloads, or package members. Treat
+  TypeScript deprecation diagnostics such as `ts(6385)` as implementation
+  errors: consult the installed package types and official documentation, then
+  migrate to the current API before considering the change complete.
 - Keep domain types and business rules independent from UI components so that
   data, server, and test modules do not import from presentation code.
 
@@ -303,13 +307,9 @@ CLI workflow rules:
 
 ## Agent configuration
 
-- The Vercel agent definitions are mirrored in `.codex/agents/` and
-  `.agents/agents/`.
-- Keep both definitions aligned in name, purpose, plugin dependency, skill
-  catalog, and scope. Only the file format differs: Codex uses TOML and
-  Antigravity uses Markdown with YAML frontmatter.
-- Codex discovers project-scoped agents from `.codex/agents/*.toml`. Its
-  machine-wide alternative is `C:\Users\ianma\.codex\agents`.
+- Workspace agent definitions are located in `.agents/agents/`.
+- Do not create, mirror, or recreate `.codex` directories or `.codex/agents/` configurations.
+- Antigravity discovers workspace agents from `.agents/agents/<name>/agent.md` and workspace rules from `.agents/rules/`.
 
 ## Contribution guidelines
 

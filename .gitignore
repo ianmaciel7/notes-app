@@ -11,6 +11,7 @@
 # temporary files and caches
 /.temp/
 /.superpowers/
+/.codex/
 /.cache/
 /.eslintcache
 /.turbo/

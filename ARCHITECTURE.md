@@ -7,11 +7,10 @@ changes.
 
 ## Current repository status
 
-The active `dev` checkout is currently a documentation scaffold. It does not
-yet contain a `package.json`, `src/`, `app/`, or `public/` directory. The
-structure below is the target structure for the Next.js application and must be
-introduced incrementally as features are implemented. Do not claim a target
-directory exists until it is present in the checkout.
+The active `dev` checkout contains the Next.js 16 App Router MVP. It uses
+TypeScript, Tailwind CSS v4, Biome, shadcn/ui source components, Firebase
+Google Auth, and static study fixtures. The historical `.worktrees/old*`
+directories remain read-only references.
 
 ## Application model
 
@@ -93,9 +92,8 @@ icon library, aliases, and component paths.
   `render`, or importing icons. Never assume Radix or Lucide without checking
   `components.json`.
 
-The active checkout currently has no `components.json` or installed shadcn
-components. Until shadcn is initialized, the structure above is a target
-contract, not evidence that those files already exist.
+The active checkout has been initialized through the official shadcn CLI. Its
+configured Base UI primitive API uses `render`, not Radix-only `asChild`.
 
 ### Route segment conventions
 

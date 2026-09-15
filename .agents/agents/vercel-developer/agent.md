@@ -9,6 +9,68 @@ Use the globally enabled `vercel@openai-curated` plugin and its complete skill
 catalog. Select only the relevant skill or skills for each task; do not treat
 all skills as active simultaneously.
 
+## Repository contract
+
+Before working:
+
+1. Read the repository `AGENTS.md` and `ARCHITECTURE.md`.
+2. Run `git worktree list` and work only in the active `dev` checkout unless
+   the user explicitly requests another worktree. Treat `old` through `old-6`
+   as read-only references.
+3. If `package.json` exists, run `pnpm install` in the implementation checkout
+   before project checks. Use `pnpm` exclusively.
+4. Confirm that `vercel@openai-curated` is installed and enabled. If it is not,
+   use the project's plugin-management workflow before continuing.
+
+For a documentation-only scaffold, bootstrap the application with the official
+CLIs rather than hand-writing the framework setup:
+
+- Create the Next.js project with `pnpm create next-app@latest`, passing the
+  App Router, TypeScript, Tailwind, `src/` directory, pnpm, and no ESLint
+  options required by the repository.
+- Inspect the generated project before changing it and preserve the existing
+  `AGENTS.md` and `ARCHITECTURE.md` contracts.
+- Run `pnpm dlx shadcn@latest info` after `components.json` exists.
+- Use `pnpm dlx shadcn@latest init` and
+  `pnpm dlx shadcn@latest add --all` for shadcn setup; inspect every generated
+  file and adapt it to the configured base, aliases, icon library, and Biome
+  rules.
+- Do not manually recreate Next.js or shadcn scaffolding, fetch registry files,
+  or use npm/yarn.
+
+The current product defaults are part of the implementation contract:
+
+- Next.js 16 App Router with `proxy.ts`, never `middleware.ts` unless the
+  installed Next.js version requires it.
+- Workspace routing uses `/` plus `[...workspace]`; locale is not in the URL.
+- English path segments and GUIDs identify persisted entities.
+- Static study content is view-only for visitors.
+- Google Firebase Auth is the only provider; review and editing require auth.
+- Firebase development, preview, and production configuration must remain
+  separate and secret-safe.
+- Do not add import/export or anonymous progress persistence unless explicitly
+  requested.
+
+Never expose Firebase Admin, private environment variables, ID-token signing
+material, or server credentials to Client Components. Route Handlers and
+server-side data access must validate authentication and authorization on every
+mutation; UI visibility is not an authorization boundary.
+
+## Skill selection
+
+Use the smallest relevant set:
+
+- `nextjs` for App Router, rendering, routing, caching, and runtime choices.
+- `auth` for Firebase/Google authentication and authorization flows.
+- `env-vars` for environment validation and Vercel environment setup.
+- `vercel-flags` only for feature-flag behavior, never as a credential or
+  database-environment boundary.
+- `shadcn` for shadcn/ui installation, composition, and registry checks.
+- `react-best-practices` for component boundaries and client performance.
+- `verification` for deployment or hosted-environment verification.
+
+Do not expand the task merely because another catalog skill is available.
+
 Available skills and their purposes:
 
 - `agent-browser`: browser automation for web-app tasks.
@@ -65,14 +127,6 @@ Available skills and their purposes:
 - `vercel-storage`: Blob, KV, and other Vercel storage options.
 - `verification`: validating builds, deployments, and runtime behavior.
 - `workflow`: durable workflows and multi-step execution.
-
-Use `nextjs` for Next.js App Router work. Use the other plugin skills only
-when the task matches their specific scope. Do not expand the task merely
-because another skill is available.
-
-Before working, verify that `vercel@openai-curated` is installed and enabled
-in the global Codex configuration. If it is missing or disabled, install or
-enable it through the Codex plugin manager before continuing.
 
 Follow the repository's `AGENTS.md`, preserve existing changes, protect
 secrets, add tests for behavior changes, and inspect the final diff before
