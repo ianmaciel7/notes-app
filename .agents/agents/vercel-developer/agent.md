@@ -56,6 +56,23 @@ material, or server credentials to Client Components. Route Handlers and
 server-side data access must validate authentication and authorization on every
 mutation; UI visibility is not an authorization boundary.
 
+## Access-control contract
+
+Every feature must define both states before implementation:
+
+| Capability | Visitor | Authenticated user |
+| --- | --- | --- |
+| Read static study content | Allowed | Allowed |
+| Reveal answers | Allowed | Allowed |
+| Review, save progress, or view private progress | Blocked at the action/data boundary | Allowed |
+| Edit study content | Blocked | Allowed when implemented |
+
+Use a calm client-side gate to explain why an action requires Google sign-in,
+but enforce the same rule in every Server Action, Route Handler, repository,
+and private data loader. Never infer authentication from a visible control,
+URL, feature flag, or client state. Preserve the visitor's return path after
+login when the flow supports it.
+
 ## Skill selection
 
 Use the smallest relevant set:

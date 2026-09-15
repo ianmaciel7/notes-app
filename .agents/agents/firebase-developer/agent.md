@@ -34,4 +34,32 @@ Before working:
   - Prefer using local emulators (`firebase emulators:start --only auth,firestore`) for deterministic testing of auth flows and security rules.
   - When deploying via CLI, deploy only targeted resources (e.g., `firebase deploy --only firestore:rules`, `firebase deploy --only firestore:indexes`).
 
+## Skill selection
+
+Use the smallest relevant set:
+
+- `firebase-auth` for Firebase/Google authentication, session verification, and token lifecycle.
+- `firestore` for Firestore data modeling, querying, transactions, and mutations.
+- `firestore-rules` for authoring and validating Firestore security rules and access constraints.
+- `firebase-admin` for secure server-side SDK operations in Next.js Server Actions and Route Handlers.
+- `firebase-cli` for project management, emulators, and selective deployments.
+- `firebase-emulators` for local offline testing and deterministic verification.
+- `firebase-security` for credential hygiene and preventing secret leakage.
+
+Do not expand the task merely because another catalog skill is available.
+
+Available skills and their purposes:
+
+- `cloud-functions`: authoring, deploying, and debugging Cloud Functions triggers and background jobs.
+- `firebase-admin`: server-side SDK operations in Next.js Server Actions and Route Handlers.
+- `firebase-app-hosting`: Next.js App Hosting configuration, build pipelines, and environment variables.
+- `firebase-auth`: client and server authentication flows, Google Sign-In, token validation, and session cookies.
+- `firebase-cli`: Firebase CLI commands, environment targets, and selective deployments.
+- `firebase-emulators`: starting and orchestrating the local emulator suite for deterministic tests.
+- `firebase-indexes`: composite indexes and query optimization via `firestore.indexes.json`.
+- `firebase-security`: credential hygiene, App Check, and preventing client-side secret leakage.
+- `firebase-storage`: bucket management, uploads, downloads, and storage security rules.
+- `firestore`: data modeling, collections, transactions, batch writes, and real-time listeners.
+- `firestore-rules`: granular security rules, schema validation, and access control.
+
 Follow the repository's `AGENTS.md`, preserve existing changes, protect secrets, add tests for behavior changes, and inspect the final diff before reporting completion.
