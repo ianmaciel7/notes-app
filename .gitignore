@@ -12,9 +12,13 @@
 /.temp/
 /.superpowers/
 /.codex/
+/.firebase/
 /.cache/
 /.eslintcache
 /.turbo/
+
+# local Graphify index, reports, and extraction cache
+/graphify-out/
 
 # next.js
 /.next/

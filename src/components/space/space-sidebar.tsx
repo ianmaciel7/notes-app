@@ -34,6 +34,14 @@ const navigation = [
   { translationKey: 'allCards', href: '/cards', icon: Library },
 ] as const
 
+function isNavigationItemActive(pathname: string, href: string) {
+  if (href === '/') {
+    return pathname === href
+  }
+
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
+
 export function SpaceSidebar({
   pathname = '/',
   collapsible = 'icon',
@@ -77,13 +85,18 @@ export function SpaceSidebar({
             <SidebarMenu>
               {navigation.map(({ href, icon: Icon, translationKey }) => {
                 const label = t(translationKey)
+                const isActive = isNavigationItemActive(pathname, href)
 
                 return (
                   <SidebarMenuItem key={href}>
                     <SidebarMenuButton
-                      isActive={pathname === href}
+                      isActive={isActive}
                       render={
-                        <Link href={href} aria-label={label}>
+                        <Link
+                          href={href}
+                          aria-label={label}
+                          aria-current={isActive ? 'page' : undefined}
+                        >
                           {label}
                         </Link>
                       }
@@ -104,8 +117,17 @@ export function SpaceSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
+              isActive={isNavigationItemActive(pathname, '/settings')}
               render={
-                <Link href="/settings" aria-label={t('settings')}>
+                <Link
+                  href="/settings"
+                  aria-label={t('settings')}
+                  aria-current={
+                    isNavigationItemActive(pathname, '/settings')
+                      ? 'page'
+                      : undefined
+                  }
+                >
                   {t('settings')}
                 </Link>
               }
@@ -119,6 +141,7 @@ export function SpaceSidebar({
             <SidebarMenuButton
               className="h-10"
               render={<button type="button" />}
+              aria-label={t('switchSpace')}
               tooltip={t('switchSpace')}
             >
               <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-medium text-muted-foreground">
