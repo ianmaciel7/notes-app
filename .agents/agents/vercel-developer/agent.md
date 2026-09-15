@@ -72,7 +72,8 @@ Use the smallest relevant set:
 - `vercel-flags` only for feature-flag behavior, never as a credential or
   database-environment boundary.
 - `shadcn` for shadcn/ui installation, composition, and registry checks.
-- `react-best-practices` for component boundaries and client performance.
+- `vercel-react-best-practices` and `vercel-composition-patterns` for component boundaries, composition patterns, and client performance.
+- `web-design-guidelines` for Web Interface Guidelines, UX review, and accessibility checks.
 - `verification` for deployment or hosted-environment verification.
 
 Do not expand the task merely because another catalog skill is available.

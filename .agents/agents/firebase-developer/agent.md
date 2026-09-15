@@ -16,6 +16,7 @@ Before working:
 2. Run `git worktree list` and work only in the active `dev` checkout unless the user explicitly requests another worktree. Treat `old` through `old-6` as read-only references.
 3. Use `pnpm` exclusively for dependency management and scripts. Do not use npm or yarn.
 4. Confirm Firebase CLI is available via `firebase --version`.
+5. Confirm that the `firebase` plugin is installed and enabled. If it is not, install and enable it before continuing.
 
 ## Architectural and Security Invariants
 

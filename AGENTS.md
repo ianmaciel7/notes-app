@@ -39,10 +39,18 @@ the relevant source document when a change materially affects its scope.
 ## Setup and development
 
 - Install dependencies: `pnpm install`
+- Restore agent skills: `npx skills experimental_install` (when `skills-lock.json` exists and skills in `.agents/skills/` are missing)
 - Start the development server: `pnpm dev`
 - Run tests: `pnpm test`
 - Use `pnpm` exclusively for project commands and dependency management. Do
   not use npm or yarn for this repository.
+- **Mandatory setup verification**: Before implementing any changes, always verify
+  that all project dependencies, required CLI tools (e.g., `firebase-tools`),
+  required plugins (specifically the `firebase` plugin and `vercel@openai-curated`),
+  and agent skills are installed and enabled. If any package, CLI tool, plugin
+  (such as `firebase`), or locked skill from `skills-lock.json` is missing or not
+  installed, proactively install, enable, or restore it immediately as part of
+  setup before proceeding.
 
 ### Worktree setup and references
 
@@ -55,8 +63,11 @@ Whenever starting work on the project:
    `git diff dev...old` or `git diff dev...old-6`.
 3. Work in the active checkout or in a newly requested worktree. Treat
    `old`–`old-6` as read-only references by default.
-4. Run `pnpm install` in the worktree where the task will be implemented,
-   then run the project's relevant checks before making changes.
+4. Run `pnpm install` in the worktree where the task will be implemented. If
+   `skills-lock.json` exists and skills in `.agents/skills/` are missing, run
+   `npx skills experimental_install` to restore them. Ensure all required
+   tools, plugins (`firebase`), and skills are fully installed and active, then
+   run the project's relevant checks before making changes.
 
 The primary development branch is `dev`. Do not assume that the newest
 historical worktree is the correct implementation; inspect the code and
