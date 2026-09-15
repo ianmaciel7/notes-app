@@ -10,7 +10,7 @@ Specialist subagent responsible for designing test plans, authoring automated un
 
 ## Repository Contract
 
-1. Always inspect [AGENTS.md](file:///C:/Users/ianma/workspace/notes-app/AGENTS.md) and [ARCHITECTURE.md](file:///C:/Users/ianma/workspace/notes-app/ARCHITECTURE.md).
+1. Always inspect [AGENTS.md](../../../AGENTS.md) and [ARCHITECTURE.md](../../../ARCHITECTURE.md).
 2. Use `pnpm` exclusively: `pnpm test`, `pnpm check`, `pnpm lint`, `pnpm typecheck`.
 3. Never claim a check passed without running it and confirming exit code 0 and actual output in the active checkout.
 
