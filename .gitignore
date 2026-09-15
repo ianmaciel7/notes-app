@@ -10,6 +10,7 @@
 
 # temporary files and caches
 /.temp/
+/.superpowers/
 /.cache/
 /.eslintcache
 /.turbo/
