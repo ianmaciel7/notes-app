@@ -9,6 +9,32 @@ attempts of this same project. They are reference worktrees, not separate
 projects. Preserve them as historical context and do not delete, reset, or
 rewrite them unless explicitly requested.
 
+## Markdown document responsibilities
+
+Each Markdown document has a defined scope. Do not duplicate or move a rule to
+the wrong document just because it is convenient.
+
+| File or location | Responsibility | Authority |
+| --- | --- | --- |
+| `AGENTS.md` | Repository-wide instructions for coding agents: workflow, safety, commands, style, framework, testing, and contribution rules. | Canonical operational instructions |
+| `ARCHITECTURE.md` | System structure, runtime boundaries, routes, data flow, security boundaries, and architectural invariants. | Canonical architecture |
+| `SPEC.md` | Product behavior and requirements, including visitor/authenticated access, scope, and future seams. | Canonical product behavior |
+| `DESIGN.md` | Visual direction, interaction principles, responsive behavior, and UI language. | Canonical design direction |
+| `DECISIONS.md` | Durable architectural decisions and their rationale. Record why a choice was made; do not use it as a task list. | Canonical decision record |
+| `README.md` | Human-facing project introduction and getting-started information. Keep it concise and do not replace agent instructions with it. | Canonical human entry point |
+| `CLAUDE.md` / `GEMINI.md` | Compatibility entry points that reference `AGENTS.md`. Keep them as pointers unless a tool requires provider-specific instructions. | Delegates to `AGENTS.md` |
+| `.agents/README.md` | How workspace agent customization is organized. | Agent-discovery guidance |
+| `.agents/rules/agents.md` | General principles for agent instruction files, precedence, and scope. | Agent-rule guidance |
+| `.agents/agents/*/agent.md` | Role-specific operating instructions for a named agent. These files must consult the root documents and must not redefine product or architecture truth. | Agent role guidance |
+| `.agents/skills/*/SKILL.md` | Reusable task procedure for a specific skill. Follow it only when that skill is selected. | Skill procedure |
+| `.worktrees/old*/**/*.md` | Historical implementation context only. Never treat these files as authoritative for the active checkout. | Read-only reference |
+
+When documents disagree, resolve them by scope: user/system instructions and
+the root `AGENTS.md` govern agent behavior; `SPEC.md` governs product behavior;
+`ARCHITECTURE.md` governs system structure; `DESIGN.md` governs visual and
+interaction direction; and `DECISIONS.md` explains accepted trade-offs. Update
+the relevant source document when a change materially affects its scope.
+
 ## Setup and development
 
 - Install dependencies: `pnpm install`

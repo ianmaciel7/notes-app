@@ -17,6 +17,11 @@ URL.
 | Persist FSRS review state | No | Yes |
 | Edit content | No | Future milestone |
 
+The access rule applies to both UI and data behavior: visitors receive a calm
+sign-in explanation at blocked actions, while every server mutation and private
+data read independently verifies Firebase authentication. Hidden controls,
+URLs, feature flags, and client state are never authorization mechanisms.
+
 Firebase projects and web credentials are separate for development, Vercel
 preview, and production. Vercel feature flags may control rollout, but never
 replace Firebase environment separation or server authorization.
