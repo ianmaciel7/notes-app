@@ -73,7 +73,7 @@ export function SpaceShell({ pathname }: SpaceShellProps) {
         )}
       </header>
 
-      <div className="mx-auto grid min-h-[calc(100vh-3.5rem)] max-w-[1440px] lg:grid-cols-[240px_minmax(0,1fr)_320px]">
+      <div className="grid min-h-[calc(100vh-3.5rem)] lg:grid-cols-[220px_minmax(0,1fr)_280px]">
         <aside className="hidden border-r border-border/70 px-4 py-6 lg:block">
           <p className="mb-3 px-2 text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
             {t('study')}
@@ -89,13 +89,33 @@ export function SpaceShell({ pathname }: SpaceShellProps) {
             </Button>
           </nav>
           <Separator className="my-6" />
+          <p className="mb-3 px-2 text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+            {t('decks')}
+          </p>
+          <div className="flex flex-col gap-1">
+            {studyDecks.map((deck) => (
+              <button
+                key={deck.id}
+                type="button"
+                aria-pressed={selectedDeck.id === deck.id}
+                onClick={() => setSelectedDeckId(deck.id)}
+                className={`flex items-center justify-between rounded-lg px-2 py-2 text-left text-sm transition-colors hover:bg-muted/70 ${selectedDeck.id === deck.id ? 'bg-muted font-medium' : 'text-muted-foreground'}`}
+              >
+                <span className="truncate">{deck.title}</span>
+                <span className="ml-2 text-xs tabular-nums">
+                  {deck.cards.length}
+                </span>
+              </button>
+            ))}
+          </div>
+          <Separator className="my-6" />
           <p className="px-2 text-xs leading-5 text-muted-foreground">
             {t('previewOnly')}
           </p>
         </aside>
 
-        <main className="min-w-0 px-5 py-8 lg:px-10 lg:py-12">
-          <div className="mx-auto max-w-3xl">
+        <main className="min-w-0 px-5 py-8 lg:px-12 lg:py-12">
+          <div className="mx-auto max-w-4xl">
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
               {t('eyebrow')}
             </p>
@@ -107,7 +127,7 @@ export function SpaceShell({ pathname }: SpaceShellProps) {
             </p>
 
             <section
-              className="mt-10 grid gap-3 sm:grid-cols-3"
+              className="mt-10 grid gap-3 sm:grid-cols-2 lg:hidden"
               aria-label={t('decks')}
             >
               {studyDecks.map((deck) => (
@@ -174,16 +194,22 @@ export function SpaceShell({ pathname }: SpaceShellProps) {
           </div>
         </main>
 
-        <aside className="hidden border-l border-border/70 bg-muted/20 px-5 py-8 xl:block">
-          <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            {t('today')}
-          </p>
-          <p className="mt-4 font-serif text-3xl">0</p>
-          <p className="mt-1 text-sm text-muted-foreground">{t('due')}</p>
-          <Separator className="my-6" />
-          <p className="text-sm leading-6 text-muted-foreground">
-            {t('previewOnly')}
-          </p>
+        <aside className="hidden border-l border-border/70 bg-muted/20 px-6 py-8 xl:block">
+          <Card className="border-border/70 bg-background shadow-none">
+            <CardHeader>
+              <CardDescription>{t('today')}</CardDescription>
+              <CardTitle className="font-serif text-4xl">0</CardTitle>
+              <CardDescription>{t('due')}</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              <div className="h-2 overflow-hidden rounded-full bg-muted">
+                <div className="h-full w-0 rounded-full bg-primary" />
+              </div>
+              <p className="text-sm leading-6 text-muted-foreground">
+                {t('previewOnly')}
+              </p>
+            </CardContent>
+          </Card>
         </aside>
       </div>
     </div>
