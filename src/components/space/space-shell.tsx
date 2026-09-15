@@ -25,7 +25,7 @@ import { signOutFromFirebase } from '@/lib/auth/firebase-client'
 import { studyDecks } from '@/lib/study/fixtures'
 import { StudyReview } from './study-review'
 
-type StudySpaceProps = { pathname: string }
+type SpaceShellProps = { pathname: string }
 
 function accentClass(accent: string) {
   if (accent === 'violet') return 'bg-secondary text-secondary-foreground'
@@ -33,7 +33,7 @@ function accentClass(accent: string) {
   return 'bg-primary/10 text-primary'
 }
 
-export function StudySpace({ pathname }: StudySpaceProps) {
+export function SpaceShell({ pathname }: SpaceShellProps) {
   const t = useTranslations('space')
   const { user } = useFirebaseUser()
   const [selectedDeckId, setSelectedDeckId] = useState(studyDecks[0]?.id ?? '')

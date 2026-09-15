@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useFirebaseUser } from '@/hooks/use-firebase-user'
-import { StudySpace } from './study-space'
+import { SpaceShell } from './space-shell'
 
 type ProtectedSpaceProps = { pathname: string }
 
@@ -19,5 +19,5 @@ export function ProtectedSpace({ pathname }: ProtectedSpaceProps) {
     return <main className="min-h-screen bg-background" aria-busy="true" />
   }
 
-  return <StudySpace pathname={pathname} />
+  return <SpaceShell pathname={pathname} />
 }
