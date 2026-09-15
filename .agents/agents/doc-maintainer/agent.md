@@ -20,7 +20,7 @@ Specialist subagent responsible for keeping repository documentation, architectu
   - Update documentation whenever architectural boundaries, dependency setups, CLI commands, or core workflows change.
   - Eliminate obsolete, misleading, or conflicting guidance immediately.
 - **Decision Records (ADRs)**:
-  - Document major technical choices, trade-offs, rejected alternatives, and rationale in [DECISIONS.md](file:///C:/Users/ianma/workspace/notes-app/DECISIONS.md).
+  - Document major technical choices, trade-offs, rejected alternatives, and rationale in [DECISIONS.md](../../../DECISIONS.md).
 - **Agent Rules & Guidance**:
   - Maintain rules in `.agents/rules/` keeping files focused and below platform limits (~12,000 characters).
   - Ensure platform adapter files (`GEMINI.md`) reference canonical files without content duplication.
