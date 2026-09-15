@@ -1,47 +1,58 @@
 # Decisions
 
-## URL shape
+## URLs and authentication
 
-Use English, GUID-backed segments such as `/study/{cardGuid}`. The root and
-catch-all `[...space]` route preserve the space pattern used by the
-historical reference while allowing future feature areas.
-
-## Authentication
-
-Use Firebase Authentication with Google as the only provider. The study space
-is private and requires login; all progress mutations still verify a Firebase
-ID token on the server.
-
-The visitor/authenticated split is a product rule in `SPEC.md`, while this
-document records the architectural consequence: client gates improve clarity,
-but Server Actions, Route Handlers, repositories, and private loaders must
-repeat the authorization check at their own boundaries.
+Use English GUID-backed routes such as `/study/{cardGuid}`. Firebase Google
+Auth is the only provider; every Server Action, Route Handler, repository, and
+private loader repeats authorization.
 
 ## Scheduling and storage
 
-Use `ts-fsrs` for the first scheduler implementation and persist only
-authenticated review state in Firestore. Static card content remains in typed
-fixtures for now; IndexedDB/import/export are deferred.
+Use `ts-fsrs` and persist authenticated review state in Firestore. Static card
+content remains in typed fixtures; IndexedDB, import/export, and generic
+knowledge objects are deferred.
 
-## Object icon and split-button parity
+## UI conventions
 
-Object types use a shared `ObjectIcon` primitive and a typed
-`ObjectIconName` union. Actionable object types also receive a dedicated
-split-button composition built on the shared split-button primitives. The
-`question` type follows this convention so icon rendering and action controls
-remain consistent.
+Object types use the shared `ObjectIcon` primitive and typed
+`ObjectIconName`; actionable types also use matching split buttons. Use the
+existing shadcn/Base UI source components and semantic tokens.
 
-## Deployment environments
+## Environments and agent plugins
 
-Development, Vercel preview, and production use distinct Firebase projects and
-environment variables. Feature flags can stage product behavior, but cannot be
-used as a substitute for isolation or authorization.
+Development, Vercel preview, and production use separate Firebase projects.
+Agent integrations are workspace plugins under `.agents/plugins`; standalone
+repo skills remain tracked in `skills-lock.json`.
 
-## Workspace agent plugins and customization structure
+## Historical worktrees
 
-Agent capabilities for domain ecosystems (Vercel and Firebase) are packaged as
-workspace plugins under `.agents/plugins/vercel` and `.agents/plugins/firebase`
-following the official Antigravity plugin specification (`plugin.json`, `skills/`,
-`mcp_config.json`, and hooks). Standalone individual skill duplicates were
-removed in favor of this namespaced plugin bundle architecture, leaving only
-repo-level standalone skills (such as `grill-me`) tracked in `skills-lock.json`.
+Read-only `.worktrees/old*` checkouts are reference material, not merge
+sources. Keep the active Next.js App Router, Firebase, DTO, and shadcn/Base UI
+architecture authoritative; retain only product-neutral lessons such as
+accessible navigation, real actions, space isolation, and responsive panels.
+
+`SpaceShell`, `SpaceProvider`, and `SpaceSidebar` own current study
+navigation. Future work is additive: navigation data, saved sections,
+preferences, Spaces, then contextual panels. A feature is not adopted merely
+because a historical worktree or installed dependency contains it.
+
+## Future data and actions
+
+Preferences must be validated, versioned, migration-tested, and scoped to the
+verified user and future `spaceId`; they never authorize access. Once Spaces
+exist, repositories, server boundaries, and Firestore rules verify ownership
+and scope independently.
+
+Every visible control reaches an authorized, active-scope operation and
+reports loading, success, and failure truthfully. Typed objects, views,
+reader/highlights, grounded AI, local-first sync, and recovery remain deferred
+until they have focused designs, validated data, migrations, and authorization
+boundaries. The MVP remains typed study fixtures, Firebase-backed reviews, and
+`ts-fsrs`.
+
+The extracted historical architecture also establishes these guardrails for
+future work: generic objects use stable typed schemas and `spaceId`; saved
+queries are declarative; reader highlights preserve source text; AI cards keep
+verified quote provenance; sync requires an outbox/conflict/tombstone design;
+and recovery/import/export retain restorable data. None of these contracts
+changes the MVP until implemented and tested end to end.

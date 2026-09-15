@@ -2,38 +2,58 @@
 
 ## MVP
 
-KnowledgeOS is a read-first study space with preinstalled static decks.
-Each card has a stable GUID and can be opened at `/study/{cardGuid}`. The
-catch-all space route preserves future paths without putting locale in the
-URL.
-
-## Access model
+KnowledgeOS is a private, read-first study space with preinstalled static
+decks. Each card has a stable GUID at `/study/{cardGuid}`; the catch-all space
+route preserves future paths without locale in the URL.
 
 | Capability | Visitor | Google-authenticated user |
 | --- | --- | --- |
-| Browse decks and cards | No | Yes |
-| Reveal a card answer | No | Yes |
-| Submit Again/Hard/Good/Easy | No | Yes |
+| Browse, reveal, and review cards | No | Yes |
 | Persist FSRS review state | No | Yes |
 | Edit content | No | Future milestone |
 
-The study space is a private application area. Visitors are redirected to
-Google sign-in before its UI is rendered. Every server mutation and private
-data read independently verifies Firebase authentication. Hidden controls,
-URLs, feature flags, and client state are never authorization mechanisms.
+Every private read and mutation independently verifies Firebase
+authentication. Client state, hidden controls, URLs, and flags never authorize
+access. Development, preview, and production use separate Firebase projects.
 
-Firebase projects and web credentials are separate for development, Vercel
-preview, and production. Vercel feature flags may control rollout, but never
-replace Firebase environment separation or server authorization.
+## Current UI
 
-## Future seams
+The shared sidebar provides real links, one semantic active route, and the
+same navigation model on desktop and mobile. The space switcher is
+presentational until a Space domain exists. Object controls use typed icons and
+matching split-button variants; `question` is supported.
 
-The `StudyDeck`/`StudyCard` DTOs and `/api/reviews` boundary leave room for a
-repository layer and adapters for Capacities or Notion. Import/export is
-intentionally out of scope until the local study flow is stable.
+## Deferred workspace capabilities
 
-## Object controls
+Historical worktrees are reference material, not shipped behavior or a visual
+parity target. Future work is staged: typed navigation; saved sections and
+preferences; Spaces; then contextual panels.
 
-The object UI supports typed object icons and matching split-button controls
-for object actions. `question` is a supported object type and has both an icon
-and split-button variant.
+- Navigation stays accessible and responsive: drawers close with Escape and
+  return focus, motion respects `prefers-reduced-motion`, and no state creates
+  page overflow.
+- Preferences are validated, versioned, migration-tested, and scoped to the
+  verified user and future `spaceId`.
+- Spaces scope all relevant data by `spaceId`. A future three-pane shell,
+  tabs, graph, search, AI, or focus mode requires real content and mobile
+  behavior first.
+- Typed objects and views, study goals, reader/highlights, grounded AI cards,
+  local-first sync, recovery/import/export, and knowledge search each require
+  a separate product, data, authorization, and migration design.
+
+### Extracted future contract
+
+| Area | Required contract when enabled |
+| --- | --- |
+| Objects | Stable IDs, typed properties, collections, tags, relations and backlinks; `spaceId` scope. |
+| Views | Declarative saved queries; table/list/gallery presentations; never executable query code. |
+| Study goals | Real FSRS scheduling, separate due/new quotas, and explicit zero-card, overdue and timezone handling. |
+| Reader | Non-mutating PDF/Markdown/EPUB/web highlighting with quote plus durable location anchors and failure states. |
+| Grounded AI | Server-only providers, validated candidates, and verified source-quote provenance. |
+| Sync | Only after specifying outbox, idempotency, retry, pull cursors, conflicts, tombstones and media states. |
+| Recovery | Restorable snapshots, attachments, retention/purge and honest import/export; metadata deletion is not restoration. |
+| UX quality | Real operations, loading/error states, keyboard parity, responsive behavior and evidence-based tests. |
+
+Every visible control must perform its named operation and report failures
+honestly. Historical fixtures, archived revisions, external branding, and
+unverified parity measurements are not product requirements.
