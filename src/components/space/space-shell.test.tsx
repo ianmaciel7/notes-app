@@ -15,15 +15,17 @@ describe('SpaceShell', () => {
       }) as unknown as MediaQueryList
   })
 
-  it('renders the study sidebar alongside the page content', () => {
+  it('renders the space sidebar alongside the page content', () => {
     render(
-      <SpaceShell pathname="/study">
-        <p>Study content</p>
+      <SpaceShell pathname="/">
+        <p>Page content</p>
       </SpaceShell>,
     )
 
     expect(screen.getByText('KnowledgeOS')).toBeTruthy()
-    expect(screen.getByText('React fundamentals')).toBeTruthy()
-    expect(screen.getByText('Study content')).toBeTruthy()
+    expect(screen.getByText('Overview')).toBeTruthy()
+    expect(screen.getByText('All cards')).toBeTruthy()
+    expect(screen.queryByText('React fundamentals')).toBeNull()
+    expect(screen.getByText('Page content')).toBeTruthy()
   })
 })

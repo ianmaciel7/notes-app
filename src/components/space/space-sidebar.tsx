@@ -1,12 +1,10 @@
 'use client'
 
 import {
-  BookOpen,
   ChevronsUpDown,
   Command,
   LayoutDashboard,
   Library,
-  Plus,
   Settings,
 } from 'lucide-react'
 
@@ -15,7 +13,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -24,12 +21,9 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from '@/components/ui/sidebar'
-import { studyDecks } from '@/lib/study/fixtures'
-import type { StudyDeck } from '@/lib/study/types'
 
 type SpaceSidebarProps = {
   pathname?: string
-  decks?: StudyDeck[]
 }
 
 const navigation = [
@@ -37,10 +31,7 @@ const navigation = [
   { label: 'All cards', href: '/cards', icon: Library },
 ] as const
 
-export function SpaceSidebar({
-  pathname = '/',
-  decks = studyDecks,
-}: SpaceSidebarProps) {
+export function SpaceSidebar({ pathname = '/' }: SpaceSidebarProps) {
   return (
     <Sidebar collapsible="icon" data-slot="space-sidebar">
       <SidebarHeader className="gap-3 p-4">
@@ -87,42 +78,6 @@ export function SpaceSidebar({
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>Study decks</SidebarGroupLabel>
-          <SidebarGroupAction
-            aria-label="Add study deck"
-            aria-disabled="true"
-            tabIndex={-1}
-            title="Add study deck"
-          >
-            <Plus aria-hidden="true" />
-          </SidebarGroupAction>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {decks.map((deck) => {
-                const href = `/study/${deck.id}`
-
-                return (
-                  <SidebarMenuItem key={deck.id}>
-                    <SidebarMenuButton
-                      isActive={pathname === href}
-                      render={
-                        <a href={href} aria-label={deck.title}>
-                          {deck.title}
-                        </a>
-                      }
-                      tooltip={deck.title}
-                    >
-                      <BookOpen aria-hidden="true" />
-                      <span>{deck.title}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
