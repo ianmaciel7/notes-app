@@ -48,6 +48,10 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
   --color-study-card-front: var(--study-card-front);
+  --color-deck-accent: var(--deck-accent);
+  --radius-study-card: var(--study-card-radius);
+  --spacing-design-base: var(--design-space-base);
+  --spacing-design-section: var(--design-space-section);
 }
 
 :root {
@@ -77,6 +81,9 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
+  /* KnowledgeOS DESIGN.md format tokens */
+  --design-space-base: 8px;
+  --design-space-section: 88px;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -85,7 +92,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  /* KnowledgeOS design tokens */
+  /* KnowledgeOS component aliases */
   --study-card-front: var(--background);
   --study-card-radius: var(--radius-lg);
   --deck-accent: var(--primary);

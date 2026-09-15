@@ -1,10 +1,78 @@
+---
+version: alpha
+name: KnowledgeOS
+description: Portuguese-first connected-object study studio for focused daily work
+colors:
+  background: oklch(1 0 0)
+  foreground: oklch(0.145 0 0)
+  primary: oklch(0.205 0 0)
+  primary-foreground: oklch(0.985 0 0)
+  muted: oklch(0.97 0 0)
+  muted-foreground: oklch(0.556 0 0)
+  border: oklch(0.922 0 0)
+  destructive: oklch(0.577 0.245 27.325)
+  sidebar: oklch(0.985 0 0)
+  dark-background: oklch(0.145 0 0)
+  dark-foreground: oklch(0.985 0 0)
+  dark-primary: oklch(0.922 0 0)
+  dark-primary-foreground: oklch(0.205 0 0)
+  dark-sidebar: oklch(0.205 0 0)
+  dark-border: oklch(1 0 0 / 10%)
+typography:
+  editorial-display:
+    fontFamily: Georgia, Cambria, Times New Roman, serif
+    fontSize: 30px
+    fontWeight: 400
+    lineHeight: 1.2
+  ui-body:
+    fontFamily: ui-sans-serif, system-ui, sans-serif
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 1.5
+  metadata:
+    fontFamily: ui-sans-serif, system-ui, sans-serif
+    fontSize: 12px
+    fontWeight: 500
+    lineHeight: 1.333333
+rounded:
+  sm: 6px
+  md: 8px
+  lg: 10px
+  full: 9999px
+spacing:
+  base: 8px
+  sm: 8px
+  md: 16px
+  lg: 24px
+  section: 88px
+components:
+  header-bar:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.foreground}"
+    height: 56px
+  sidebar:
+    backgroundColor: "{colors.sidebar}"
+    width: 240px
+  study-card:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.lg}"
+    padding: 32px
+  primary-button:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-foreground}"
+    rounded: "{rounded.full}"
+---
+
 # Design
 
 > **Status:** Accepted visual guidance for the active `dev` MVP. Product
 > behavior belongs in `SPEC.md`; system boundaries belong in
 > `ARCHITECTURE.md`; runtime token values belong in `src/app/globals.css`.
 
-## Scope and historical synthesis
+## Overview
+
+### Scope and historical synthesis
 
 The historical worktrees were reviewed before this document was updated:
 
@@ -20,7 +88,16 @@ sidebar, the header bar, and the study-card flow. This document describes what
 `dev` renders today and labels future Capacities-style surfaces as future;
 historical documents remain read-only references.
 
-## Direction
+This file follows the Google Labs `DESIGN.md` format: YAML front matter is the
+machine-readable token layer, while the Markdown prose carries the rationale
+and behavioral guidance. The official format is alpha and its normative
+references are [the repository guide](https://github.com/google-labs-code/design.md),
+[`docs/spec.md`](https://github.com/google-labs-code/design.md/blob/main/docs/spec.md),
+and [`PHILOSOPHY.md`](https://github.com/google-labs-code/design.md/blob/main/PHILOSOPHY.md).
+Tokens are kept aligned with `src/app/globals.css`; prose explains intent and
+implementation boundaries.
+
+### Product direction
 
 KnowledgeOS uses **editorial minimalism** as its organizing principle: content leads, chrome stays quiet, and generous spacing gives study cards room to breathe. Every surface decision follows three rules:
 
@@ -38,7 +115,7 @@ secondary actions appear in focused controls or menus.
 
 ---
 
-## Color system
+## Colors
 
 All color decisions map the project's shadcn semantic tokens to the CSS custom
 properties defined in `src/app/globals.css`.
@@ -99,7 +176,7 @@ Three font roles are in use. No additional typefaces may be introduced in MVP.
 
 ---
 
-## Spacing & layout
+## Layout
 
 ### Base unit
 
@@ -133,6 +210,21 @@ Major vertical sections are separated by `88px` (`mb-22` or equivalent). Within 
 - Rating row wraps to 2×2 grid if viewport < 360px.
 
 ---
+
+## Elevation & Depth
+
+KnowledgeOS is primarily flat. Hierarchy comes from semantic surface stepping
+and hairline borders rather than decorative elevation. The login card may use
+`shadow-sm`; study cards, navigation, and content surfaces do not use drop
+shadows. Future floating surfaces may define their own restrained elevation
+token when the component is implemented.
+
+## Shapes
+
+Use `rounded-lg` for cards and panels, `rounded-md` for controls, and
+`rounded-full` for pills, avatars, and study rating actions. Shape communicates
+component role; it is not decoration. Keep the 10px base radius and 8px
+spacing rhythm stable across responsive states.
 
 ## Components
 
@@ -232,7 +324,7 @@ A small accent chip used to label deck identity. Located at `src/components/spac
 
 ---
 
-## Interaction principles
+### Interaction principles
 
 Sidebar rows always keep a stable leading icon and accessible name. Icon-only
 collapse mode may hide visible labels, but must retain tooltips and keyboard
@@ -263,7 +355,7 @@ the primary row action.
 
 ---
 
-## Responsive behavior
+### Responsive behavior
 
 The desktop space has a navigation sidebar and content column, with a
 progress-rail slot reserved for future work. Small screens collapse the sidebar
