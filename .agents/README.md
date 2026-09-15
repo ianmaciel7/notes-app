@@ -2,6 +2,44 @@
 
 This directory defines workspace customizations discovered and indexed by Google Antigravity.
 
+## Architecture
+
+The workspace customizations are organized top-down: the `.agents` directory
+is the root, and its subagents, rules, and skills are discovered from their
+dedicated directories.
+
+```mermaid
+flowchart TB
+    workspace[Notes App workspace]
+    agentsRoot[.agents]
+    agentsReadme[README.md<br/>discovery guide]
+    subagents[agents/<br/>workspace subagents]
+    rules[rules/<br/>shared operating rules]
+    skills[skills/<br/>reusable task skills]
+
+    workspace --> agentsRoot
+    agentsRoot --> agentsReadme
+    agentsRoot --> subagents
+    agentsRoot --> rules
+    agentsRoot --> skills
+
+    subagents --> architect[architect/agent.md]
+    subagents --> reviewer[code-reviewer/agent.md]
+    subagents --> tester[test-engineer/agent.md]
+    subagents --> security[security-reviewer/agent.md]
+    subagents --> docs[doc-maintainer/agent.md]
+    subagents --> firebase[firebase-developer/agent.md]
+    subagents --> vercel[vercel-developer/agent.md]
+
+    rules --> agentRules[agents.md<br/>principles and precedence]
+    rules --> subagentRules[subagents.md<br/>orchestration and lifecycle]
+
+    skills --> grillMe[grill-me/SKILL.md]
+
+    subagents -. consult .-> rules
+    subagents -. invoke when relevant .-> skills
+```
+
 ## Discovery Structure
 
 - **Workspace Subagents**: Located in `.agents/agents/<name>/agent.md`
