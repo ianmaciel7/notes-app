@@ -25,6 +25,7 @@ the wrong document just because it is convenient.
 | `CLAUDE.md` / `GEMINI.md` | Compatibility entry points that reference `AGENTS.md`. Keep them as pointers unless a tool requires provider-specific instructions. | Delegates to `AGENTS.md` |
 | `.agents/README.md` | How workspace agent customization is organized. | Agent-discovery guidance |
 | `.agents/rules/agents.md` | General principles for agent instruction files, precedence, and scope. | Agent-rule guidance |
+| `.agents/rules/subagents.md` | Antigravity subagent orchestration, delegation matrix, and lifecycle standards. | Subagent orchestration guidance |
 | `.agents/agents/*/agent.md` | Role-specific operating instructions for a named agent. These files must consult the root documents and must not redefine product or architecture truth. | Agent role guidance |
 | `.agents/skills/*/SKILL.md` | Reusable task procedure for a specific skill. Follow it only when that skill is selected. | Skill procedure |
 | `.worktrees/old*/**/*.md` | Historical implementation context only. Never treat these files as authoritative for the active checkout. | Read-only reference |
@@ -333,9 +334,31 @@ CLI workflow rules:
 
 ## Agent configuration
 
-- Workspace agent definitions are located in `.agents/agents/`.
-- Do not create, mirror, or recreate `.codex` directories or `.codex/agents/` configurations.
-- Antigravity discovers workspace agents from `.agents/agents/<name>/agent.md` and workspace rules from `.agents/rules/`.
+- Workspace agent definitions are located in `.agents/agents/<name>/agent.md`.
+- Workspace rules are located in `.agents/rules/` and skills in `.agents/skills/<name>/SKILL.md`.
+- Do not create, mirror, or recreate `.codex` directories, `openai.yaml` files, or non-standard configurations.
+- Subagent definitions must use standard YAML frontmatter with `name`, `description`, and `subagent: true`.
+- Each subagent operates within an independent context window to maintain focus, prevent context pollution, and handle background execution.
+
+### Lead Orchestrator and Delegation Pattern
+
+- The primary Antigravity agent operates as a **Lead Orchestrator**, decomposing complex, multi-step, or domain-specialized tasks rather than executing everything monolithically.
+- Delegate subtasks concurrently to specialized subagents using `invoke_subagent`.
+- Antigravity uses reactive message wakeup: do **not** poll or loop on subagent status. Proceed with other work or stop calling tools; the system resumes execution automatically when a subagent reports back.
+- Monitor active subagents, view step transcripts, and manage processes via the `/agents` panel in the CLI or Desktop UI.
+
+### Mandatory Subagent Delegation Matrix
+
+| Domain | Subagent | Responsibility |
+| :--- | :--- | :--- |
+| **Research & Exploration** | `research` | Codebase searches, multi-directory file lookups, external documentation, and web references. |
+| **Architecture & System Design** | `architect` | System boundaries, RSC vs Client Component splits, refactoring strategy, and ADRs. |
+| **Code Review & Quality** | `code-reviewer` | Auditing git diffs, checking strict TypeScript, enforcing Biome styles, and catching regressions. |
+| **Testing & Verification** | `test-engineer` | Designing test plans, authoring tests, verifying build/test passes (`pnpm test`), and emulators. |
+| **Security & Privacy** | `security-reviewer` | Firebase Auth verification on server, Firestore default-deny security rules, and secret hygiene. |
+| **Documentation** | `doc-maintainer` | Maintaining living documentation (`AGENTS.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `SPEC.md`). |
+| **Firebase Operations** | `firebase-developer` | Client/Server SDK boundary, Firestore data modeling, Security Rules, and Emulator Suite. |
+| **Next.js & Vercel** | `vercel-developer` | Next.js App Router, SSR/RSC optimization, caching strategies, Vercel deployments, and shadcn/ui. |
 
 ## Contribution guidelines
 

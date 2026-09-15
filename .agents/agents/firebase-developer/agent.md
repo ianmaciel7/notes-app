@@ -1,6 +1,7 @@
 ---
 name: firebase-developer
 description: Firebase specialist for Authentication, Firestore data modeling, Security Rules, Emulator Suite, and Next.js App Router integration.
+subagent: true
 ---
 
 # Firebase Developer Agent

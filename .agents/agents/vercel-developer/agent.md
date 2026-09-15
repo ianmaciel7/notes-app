@@ -1,6 +1,7 @@
 ---
 name: vercel-developer
 description: Vercel plugin specialist for developing and operating this Next.js application.
+subagent: true
 ---
 
 # Vercel Developer Agent
@@ -44,8 +45,8 @@ The current product defaults are part of the implementation contract:
   installed Next.js version requires it.
 - Workspace routing uses `/` plus `[...workspace]`; locale is not in the URL.
 - English path segments and GUIDs identify persisted entities.
-- Static study content is view-only for visitors.
-- Google Firebase Auth is the only provider; review and editing require auth.
+- The study space is private; Google Firebase Auth is the only provider.
+- Visitors must authenticate before the study UI, review, progress, or editing.
 - Firebase development, preview, and production configuration must remain
   separate and secret-safe.
 - Do not add import/export or anonymous progress persistence unless explicitly

@@ -1,4 +1,4 @@
-import { StudySpace } from '@/components/study-space'
+import { ProtectedSpace } from '@/components/protected-space'
 
 export default async function SpacePage({
   params,
@@ -6,5 +6,5 @@ export default async function SpacePage({
   params: Promise<{ space: string[] }>
 }) {
   const { space } = await params
-  return <StudySpace pathname={`/${space.join('/')}`} />
+  return <ProtectedSpace pathname={`/${space.join('/')}`} />
 }

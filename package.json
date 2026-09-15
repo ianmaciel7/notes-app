@@ -11,6 +11,8 @@
     "format:check": "biome format",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "firebase:auth": "firebase emulators:start --only auth --project demo-notes-app",
+    "firebase:test": "node scripts/verify-firebase-emulator.mjs",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test"
   },
   "dependencies": {

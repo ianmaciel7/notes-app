@@ -11,14 +11,14 @@ URL.
 
 | Capability | Visitor | Google-authenticated user |
 | --- | --- | --- |
-| Browse decks and cards | Yes | Yes |
-| Reveal a card answer | Yes | Yes |
+| Browse decks and cards | No | Yes |
+| Reveal a card answer | No | Yes |
 | Submit Again/Hard/Good/Easy | No | Yes |
 | Persist FSRS review state | No | Yes |
 | Edit content | No | Future milestone |
 
-The access rule applies to both UI and data behavior: visitors receive a calm
-sign-in explanation at blocked actions, while every server mutation and private
+The study space is a private application area. Visitors are redirected to
+Google sign-in before its UI is rendered. Every server mutation and private
 data read independently verifies Firebase authentication. Hidden controls,
 URLs, feature flags, and client state are never authorization mechanisms.
 

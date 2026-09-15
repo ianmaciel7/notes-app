@@ -8,9 +8,9 @@ historical reference while allowing future feature areas.
 
 ## Authentication
 
-Use Firebase Authentication with Google as the only provider. Browsing is
-public; progress mutations verify a Firebase ID token on the server. Login is
-not a prerequisite for reading.
+Use Firebase Authentication with Google as the only provider. The study space
+is private and requires login; all progress mutations still verify a Firebase
+ID token on the server.
 
 The visitor/authenticated split is a product rule in `SPEC.md`, while this
 document records the architectural consequence: client gates improve clarity,

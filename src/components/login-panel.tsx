@@ -31,7 +31,7 @@ export function LoginPanel() {
     setPending(true)
     try {
       await signInWithGoogle()
-      window.location.href = '/study'
+      window.location.href = '/'
     } catch {
       setError(t('authError'))
     } finally {

@@ -3,6 +3,7 @@
 import { getApps, initializeApp } from 'firebase/app'
 import type { User } from 'firebase/auth'
 import {
+  connectAuthEmulator,
   GoogleAuthProvider,
   getAuth,
   onAuthStateChanged,
@@ -19,13 +20,27 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
+let emulatorConnected = false
+
 function getClientAuth() {
   if (!isFirebaseConfigured()) {
     return null
   }
 
   const app = getApps()[0] ?? initializeApp(firebaseConfig)
-  return getAuth(app)
+  const auth = getAuth(app)
+
+  if (
+    process.env.NEXT_PUBLIC_FIREBASE_USE_EMULATOR === 'true' &&
+    !emulatorConnected
+  ) {
+    connectAuthEmulator(auth, 'http://127.0.0.1:9099', {
+      disableWarnings: true,
+    })
+    emulatorConnected = true
+  }
+
+  return auth
 }
 
 export function isFirebaseConfigured() {

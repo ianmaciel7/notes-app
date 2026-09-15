@@ -9,9 +9,9 @@ accent washes for deck identity.
 
 ## Interaction principles
 
-- Visitors can browse static cards without an account.
+- Google sign-in is the front door to the study space.
 - Review is an intentional transition: reveal, rate, then save.
-- Google sign-in is requested at the save boundary, not at the front door.
+- Unauthenticated visitors are redirected before private study UI renders.
 - Progress and future editing belong to the authenticated space.
 - No import/export or anonymous persistence is exposed in this MVP.
 
