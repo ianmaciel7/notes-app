@@ -30,3 +30,10 @@ Specialist subagent responsible for auditing authentication workflows, Firestore
   - Inspect `.env`, `.env.example`, and configuration files to ensure dummy values are used and real credentials remain untracked.
 - **Input Sanitization & Injection Defense**:
   - Validate and sanitize all external inputs, payloads, and URL parameters before database operations.
+
+## Delegation
+
+- Delegate Firebase Auth, Firestore rules, emulator, and Firebase credential
+  checks to `firebase-developer` when the review requires implementation-level
+  Firebase expertise.
+- Keep responsibility for the overall security assessment and final findings.

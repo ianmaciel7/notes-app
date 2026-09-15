@@ -38,6 +38,10 @@ flowchart TB
 
     subagents -. consult .-> rules
     subagents -. invoke when relevant .-> skills
+    architect -. delegates architecture work .-> firebase
+    architect -. delegates Next.js/Vercel work .-> vercel
+    security -. delegates Firebase security work .-> firebase
+    vercel -. delegates Firebase integration work .-> firebase
 ```
 
 ## Discovery Structure
@@ -60,6 +64,11 @@ Each subagent is configured with standard YAML frontmatter (`subagent: true`) an
 5. **`doc-maintainer`**: Documentation specialist for keeping `AGENTS.md`, `ARCHITECTURE.md`, and specs updated.
 6. **`firebase-developer`**: Firebase specialist for Authentication, Firestore data models, security rules, and emulators.
 7. **`vercel-developer`**: Next.js & Vercel specialist for App Router, server actions, caching, and deployment.
+
+`firebase-developer` and `vercel-developer` remain independently invocable
+specialists. The primary orchestrator, `architect`, `security-reviewer`, and
+`vercel-developer` may delegate scoped work to them through the relationships
+defined in [rules/subagents.md](./rules/subagents.md).
 
 ## Workspace Rules
 

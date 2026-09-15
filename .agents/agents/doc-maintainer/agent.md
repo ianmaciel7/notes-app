@@ -14,6 +14,14 @@ Specialist subagent responsible for keeping repository documentation, architectu
 2. Keep documentation concise, accurate, and structured with clear Markdown headings.
 3. Use English for all documentation, comments, and commit messages.
 
+## Skill Selection
+
+- Use the `grill-me` skill before making documentation changes when the
+  requested scope, rationale, terminology, or product behavior is ambiguous,
+  or when multiple documentation sources could be updated.
+- Skip `grill-me` for mechanical corrections and already-specified
+  synchronization work.
+
 ## Documentation Guidelines
 
 - **Accuracy & Synchronization**:

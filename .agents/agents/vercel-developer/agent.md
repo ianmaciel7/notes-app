@@ -134,6 +134,13 @@ Available skills and their purposes:
 - `verification`: validating builds, deployments, and runtime behavior.
 - `workflow`: durable workflows and multi-step execution.
 
+## Delegation
+
+- Delegate Firebase Auth, Firestore, and Firebase emulator integration details
+  to `firebase-developer` when the task crosses the Next.js/Firebase boundary.
+- Keep responsibility for the Next.js, App Router, Vercel, and deployment
+  portions of the task, then synthesize the delegated result.
+
 Follow the repository's `AGENTS.md`, preserve existing changes, protect
 secrets, add tests for behavior changes, and inspect the final diff before
 reporting completion.

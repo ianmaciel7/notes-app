@@ -39,28 +39,22 @@ Before working:
 
 Use the smallest relevant set:
 
-- `firebase-auth` for Firebase/Google authentication, session verification, and token lifecycle.
-- `firestore` for Firestore data modeling, querying, transactions, and mutations.
-- `firestore-rules` for authoring and validating Firestore security rules and access constraints.
-- `firebase-admin` for secure server-side SDK operations in Next.js Server Actions and Route Handlers.
-- `firebase-cli` for project management, emulators, and selective deployments.
-- `firebase-emulators` for local offline testing and deterministic verification.
-- `firebase-security` for credential hygiene and preventing secret leakage.
+- `firebase-auth-basics` for Firebase/Google authentication, session verification, and token lifecycle.
+- `firebase-firestore` for Firestore data modeling, querying, transactions, and mutations.
+- `firestore-rules-creation` for authoring, refactoring, and validating Firestore security rules.
+- `firebase-security-rules-auditor` for auditing security rules, credential hygiene, and access constraints.
+- `firebase-basics` for Firebase CLI setup, project configuration, and targeted resource deployments.
+- `firebase-app-hosting-basics` for Next.js App Hosting deployment, configuration, and local emulator integration.
 
 Do not expand the task merely because another catalog skill is available.
 
 Available skills and their purposes:
 
-- `cloud-functions`: authoring, deploying, and debugging Cloud Functions triggers and background jobs.
-- `firebase-admin`: server-side SDK operations in Next.js Server Actions and Route Handlers.
-- `firebase-app-hosting`: Next.js App Hosting configuration, build pipelines, and environment variables.
-- `firebase-auth`: client and server authentication flows, Google Sign-In, token validation, and session cookies.
-- `firebase-cli`: Firebase CLI commands, environment targets, and selective deployments.
-- `firebase-emulators`: starting and orchestrating the local emulator suite for deterministic tests.
-- `firebase-indexes`: composite indexes and query optimization via `firestore.indexes.json`.
-- `firebase-security`: credential hygiene, App Check, and preventing client-side secret leakage.
-- `firebase-storage`: bucket management, uploads, downloads, and storage security rules.
-- `firestore`: data modeling, collections, transactions, batch writes, and real-time listeners.
-- `firestore-rules`: granular security rules, schema validation, and access control.
+- `firebase-app-hosting-basics`: Next.js App Hosting configuration, build pipelines, environment variables, and emulation.
+- `firebase-auth-basics`: client and server authentication flows, Google Sign-In, token validation, and session cookies.
+- `firebase-basics`: Firebase CLI commands, project targets, login, and selective resource deployments.
+- `firebase-firestore`: data modeling, collections, transactions, batch writes, and real-time listeners.
+- `firebase-security-rules-auditor`: security rules audit, credential hygiene, App Check, and preventing leakage.
+- `firestore-rules-creation`: granular security rules, schema validation, and access control.
 
 Follow the repository's `AGENTS.md`, preserve existing changes, protect secrets, add tests for behavior changes, and inspect the final diff before reporting completion.

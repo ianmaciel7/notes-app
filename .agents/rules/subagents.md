@@ -49,6 +49,21 @@ The primary agent operates as a **Lead Orchestrator**:
 
 ## Subagent Lifecycle & Tooling Best Practices
 
+## Delegation Relationships
+
+Specialists remain independently invocable; delegation describes preferred
+coordination, not nested agent registration:
+
+- `architect` delegates Firebase-specific architecture to `firebase-developer`
+  and Next.js/Vercel architecture to `vercel-developer`.
+- `security-reviewer` delegates Firebase Auth, Firestore, and emulator checks
+  to `firebase-developer` when implementation-level expertise is needed.
+- `vercel-developer` delegates Firebase integration details to
+  `firebase-developer` when a task crosses the Next.js and Firebase boundary.
+- `firebase-developer` returns Firebase-specific findings to the delegating
+  agent, which remains responsible for synthesizing the result and validating
+  the broader task.
+
 - **Independent Context**: Subagents operate in dedicated contexts; pass all critical constraints, file pointers, and requirements directly in the invocation prompt.
 - **Agent Manager**: In the Antigravity CLI or Desktop UI, track subagent states (*running*, *done*, *error*, *killed*) using the `/agents` panel.
 - **Skill Reuse**: Subagents leverage reusable skills defined in `.agents/skills/` or `~/.gemini/config/skills/` through progressive disclosure.
