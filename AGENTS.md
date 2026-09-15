@@ -11,6 +11,13 @@ Rules:
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
 
+## custom agents
+
+- Reusable agent role files live in `.agents/agents/*.md`.
+- When creating, reviewing, renaming, or improving custom agent role files, follow `.agents/skills/custom-agent/SKILL.md`.
+- Keep role files short, explicit about edit permissions, and clear about expected verification or handoff.
+- When editing skills under `.agents/skills/`, follow `.agents/skills/skill-creator/SKILL.md`.
+
 <!-- context7 -->
 Use the `ctx7` CLI to fetch current documentation whenever the user asks about a library, framework, SDK, API, CLI tool, or cloud service — even well-known ones like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. This includes API syntax, configuration, version migration, library-specific debugging, setup instructions, and CLI tool usage. Use even when you think you know the answer — your training data may not reflect recent changes. Prefer this over web search for library docs.
 
