@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { ObjectIcon } from "@/components/object/icons/icon-registry";
 import {
   SplitButton,
   SplitButtonAction,
@@ -11,7 +10,11 @@ import {
   SplitButtonSeparator,
   SplitButtonTrigger,
 } from "@/components/ui/split-button";
-import type { ObjectIconName, ObjectIconTone } from "@/lib/space-object-types";
+import type {
+  ObjectIconName,
+  ObjectIconTone,
+} from "@/lib/object";
+import { getObjectIcon } from '@/lib/object'
 import { cn } from "@/lib/utils";
 
 export interface VariantStyle {
@@ -221,6 +224,7 @@ function ObjectSplitButtonAction({
 }: ObjectSplitButtonActionProps) {
   const { size, variant } = React.useContext(ObjectSplitButtonContext);
   const variantStyle = variantStyles[variant];
+  const Icon = getObjectIcon(type);
 
   return (
     <SplitButtonAction
@@ -240,7 +244,7 @@ function ObjectSplitButtonAction({
       variant="outline"
       {...props}
     >
-      <ObjectIcon type={type} />
+      <Icon aria-hidden="true" />
       {children}
     </SplitButtonAction>
   );

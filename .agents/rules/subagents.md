@@ -38,7 +38,7 @@ The primary agent operates as a **Lead Orchestrator**:
 
 | Domain | Subagent | Primary Scope |
 | :--- | :--- | :--- |
-| **Research & Exploration** | `research` | Codebase exploration, file search sweeps, and web/API documentation retrieval. |
+| **Research & Exploration** | `search` | Codebase exploration, file search sweeps, and web/API documentation retrieval. |
 | **Architecture & System Design** | `architect` | System boundaries (RSC vs Client), component hierarchy, refactoring strategy, and ADRs. |
 | **Code Review & Quality** | `code-reviewer` | Auditing git diffs, checking strict TypeScript, enforcing Biome styles, and verifying contracts. |
 | **Testing & Verification** | `test-engineer` | Designing test plans, authoring tests, running verification commands (`pnpm test`), and emulator tests. |

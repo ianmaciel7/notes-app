@@ -95,6 +95,18 @@ icon library, aliases, and component paths.
 The active checkout has been initialized through the official shadcn CLI. Its
 configured Base UI primitive API uses `render`, not Radix-only `asChild`.
 
+### Domain object UI
+
+- `src/components/object/icons/` contains domain SVG components built on the
+  shared `ObjectIcon` primitive.
+- `src/lib/object.ts` owns the `ObjectIconName` union and `objectIconMap`
+  consumed by object UI.
+- `src/components/object/split-buttons/` contains feature compositions built
+  on the shared split-button primitives. Actionable object types keep their
+  icon and split-button variants paired.
+- The `question` type follows this path and does not create a new primitive or
+  runtime boundary.
+
 ### Route segment conventions
 
 - `page.tsx` defines the UI for a route.

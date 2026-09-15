@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { ObjectIconProps } from "@/lib/space-object-types";
+import type { ObjectIconProps } from "@/lib/object";
 import { ObjectIcon } from "./object-icon";
 
 export const PersonIcon = React.forwardRef<SVGSVGElement, ObjectIconProps>(

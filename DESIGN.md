@@ -139,16 +139,22 @@ The authenticated layout wrapper. Renders `<SidebarProvider>` → `<SpaceSidebar
 
 ### `space-sidebar` — `src/components/space/space-sidebar.tsx`
 
-Collapsible navigation sidebar with deck list.
+Collapsible navigation sidebar for the authenticated space.
 
 | Section | Content |
 |---|---|
 | Header | Brand button: `size-6 rounded-md bg-primary text-primary-foreground` icon + `font-serif text-base` wordmark |
-| Space group | "Space" label + Overview (`LayoutDashboard`) + All cards (`Library`) nav items |
-| Decks group | "Study decks" label + `<Plus>` group action + per-deck `<BookOpen>` menu items, linked to `/study/{deck.id}` |
+| Space group | Localized "Space" label + Overview (`LayoutDashboard`) + All cards (`Library`) nav items |
 | Footer | Settings link (`<Settings>`) + user switcher button (`size-6 rounded-md bg-muted` avatar initial + name + "Personal" subline + `<ChevronsUpDown>`) |
 | Collapse mode | `collapsible="icon"` — icon-only mode shows tooltips on hover; labels hidden |
 | Active state | `isActive` prop on `<SidebarMenuButton>` applies `bg-sidebar-accent text-sidebar-accent-foreground` |
+
+### Object icons and split buttons
+
+Object types use the shared 256×256 `ObjectIcon` primitive. The `question`
+object uses `QuestionIcon` and has a matching `QuestionSplitButton` composed
+from the shared split-button primitives. New actionable object types should
+preserve this icon and split-button pairing.
 
 ---
 

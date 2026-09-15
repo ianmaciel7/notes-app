@@ -23,6 +23,14 @@ Use `ts-fsrs` for the first scheduler implementation and persist only
 authenticated review state in Firestore. Static card content remains in typed
 fixtures for now; IndexedDB/import/export are deferred.
 
+## Object icon and split-button parity
+
+Object types use a shared `ObjectIcon` primitive and a typed
+`ObjectIconName` union. Actionable object types also receive a dedicated
+split-button composition built on the shared split-button primitives. The
+`question` type follows this convention so icon rendering and action controls
+remain consistent.
+
 ## Deployment environments
 
 Development, Vercel preview, and production use distinct Firebase projects and
@@ -37,4 +45,3 @@ following the official Antigravity plugin specification (`plugin.json`, `skills/
 `mcp_config.json`, and hooks). Standalone individual skill duplicates were
 removed in favor of this namespaced plugin bundle architecture, leaving only
 repo-level standalone skills (such as `grill-me`) tracked in `skills-lock.json`.
-

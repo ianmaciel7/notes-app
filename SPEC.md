@@ -31,3 +31,9 @@ replace Firebase environment separation or server authorization.
 The `StudyDeck`/`StudyCard` DTOs and `/api/reviews` boundary leave room for a
 repository layer and adapters for Capacities or Notion. Import/export is
 intentionally out of scope until the local study flow is stable.
+
+## Object controls
+
+The object UI supports typed object icons and matching split-button controls
+for object actions. `question` is a supported object type and has both an icon
+and split-button variant.
