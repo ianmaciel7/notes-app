@@ -47,6 +47,7 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --color-study-card-front: var(--study-card-front);
 }
 
 :root {
@@ -84,6 +85,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* KnowledgeOS design tokens */
+  --study-card-front: var(--background);
+  --study-card-radius: var(--radius-lg);
+  --deck-accent: var(--primary);
 }
 
 .dark {

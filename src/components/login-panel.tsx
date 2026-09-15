@@ -52,7 +52,11 @@ export function LoginPanel() {
           <CardDescription>{t('signInDescription')}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <Button onClick={handleSignIn} disabled={pending} className="w-full">
+          <Button
+            onClick={handleSignIn}
+            disabled={pending}
+            className="w-full rounded-full"
+          >
             {pending ? 'Loading...' : t('signIn')}
           </Button>
           {error ? <p className="text-sm text-destructive">{error}</p> : null}

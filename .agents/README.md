@@ -70,6 +70,7 @@ Each subagent is configured with standard YAML frontmatter (`subagent: true`) an
 5. **`doc-maintainer`**: Documentation specialist for keeping `AGENTS.md`, `ARCHITECTURE.md`, and specs updated.
 6. **`firebase-developer`**: Firebase specialist for Authentication, Firestore data models, security rules, and emulators.
 7. **`vercel-developer`**: Next.js & Vercel specialist for App Router, server actions, caching, and deployment.
+8. **`ui-designer`**: UI design and frontend implementation specialist for distinctive, accessible, responsive interfaces.
 
 `firebase-developer` and `vercel-developer` remain independently invocable
 specialists. The primary orchestrator, `architect`, `security-reviewer`, and

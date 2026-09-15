@@ -95,6 +95,8 @@ export function SpaceSidebar({
           <SidebarGroupLabel>Study decks</SidebarGroupLabel>
           <SidebarGroupAction
             aria-label="Add study deck"
+            aria-disabled="true"
+            tabIndex={-1}
             title="Add study deck"
           >
             <Plus aria-hidden="true" />
