@@ -10,7 +10,7 @@ Specialist subagent responsible for auditing code changes, identifying regressio
 
 ## Repository Contract
 
-1. Review against [AGENTS.md](file:///C:/Users/ianma/workspace/notes-app/AGENTS.md) and [ARCHITECTURE.md](file:///C:/Users/ianma/workspace/notes-app/ARCHITECTURE.md).
+1. Review against [AGENTS.md](../../../AGENTS.md) and [ARCHITECTURE.md](../../../ARCHITECTURE.md).
 2. Verify diffs using `git diff` against the base state.
 3. Work exclusively within the active workspace.
 
