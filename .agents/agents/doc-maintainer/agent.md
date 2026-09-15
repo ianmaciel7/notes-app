@@ -10,7 +10,7 @@ Specialist subagent responsible for keeping repository documentation, architectu
 
 ## Repository Contract
 
-1. Maintain [AGENTS.md](file:///C:/Users/ianma/workspace/notes-app/AGENTS.md), [ARCHITECTURE.md](file:///C:/Users/ianma/workspace/notes-app/ARCHITECTURE.md), [DECISIONS.md](file:///C:/Users/ianma/workspace/notes-app/DECISIONS.md), and [SPEC.md](file:///C:/Users/ianma/workspace/notes-app/SPEC.md).
+1. Maintain [AGENTS.md](../../../AGENTS.md), [ARCHITECTURE.md](../../../ARCHITECTURE.md), [DECISIONS.md](../../../DECISIONS.md), and [SPEC.md](../../../SPEC.md).
 2. Keep documentation concise, accurate, and structured with clear Markdown headings.
 3. Use English for all documentation, comments, and commit messages.
 
