@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { useFirebaseUser } from '@/hooks/use-firebase-user'
 import { getCurrentIdToken } from '@/lib/auth/firebase-client'
 import { scheduleReview } from '@/lib/study/scheduler'
 import type { CardRating, StudyCard } from '@/lib/study/types'
@@ -21,9 +22,35 @@ const ratings: CardRating[] = ['again', 'hard', 'good', 'easy']
 
 export function StudyReview({ card }: StudyReviewProps) {
   const t = useTranslations('space')
+  const { user, loading } = useFirebaseUser()
   const [revealed, setRevealed] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
+
+  if (loading) {
+    return (
+      <Card className="mt-8 h-40 animate-pulse border-border/70 shadow-none" />
+    )
+  }
+
+  if (!user) {
+    return (
+      <Card className="mt-8 border-border/70 shadow-none">
+        <CardHeader>
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+            {card.topic}
+          </p>
+          <CardTitle className="font-serif text-3xl leading-tight">
+            {t('reviewLocked')}
+          </CardTitle>
+          <CardDescription>{t('reviewLockedDescription')}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button render={<Link href="/login" />}>{t('signIn')}</Button>
+        </CardContent>
+      </Card>
+    )
+  }
 
   async function handleRating(rating: CardRating) {
     setMessage(null)

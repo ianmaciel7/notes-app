@@ -1,9 +1,11 @@
 'use client'
 
 import { getApps, initializeApp } from 'firebase/app'
+import type { User } from 'firebase/auth'
 import {
   GoogleAuthProvider,
   getAuth,
+  onAuthStateChanged,
   signInWithPopup,
   signOut,
 } from 'firebase/auth'
@@ -18,12 +20,21 @@ const firebaseConfig = {
 }
 
 function getClientAuth() {
-  if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  if (!isFirebaseConfigured()) {
     return null
   }
 
   const app = getApps()[0] ?? initializeApp(firebaseConfig)
   return getAuth(app)
+}
+
+export function isFirebaseConfigured() {
+  return Boolean(
+    firebaseConfig.apiKey &&
+      firebaseConfig.authDomain &&
+      firebaseConfig.projectId &&
+      firebaseConfig.appId,
+  )
 }
 
 export async function signInWithGoogle() {
@@ -41,4 +52,14 @@ export async function getCurrentIdToken() {
 export async function signOutFromFirebase() {
   const auth = getClientAuth()
   if (auth) await signOut(auth)
+}
+
+export function subscribeToAuthState(onChange: (user: User | null) => void) {
+  const auth = getClientAuth()
+  if (!auth) {
+    onChange(null)
+    return () => undefined
+  }
+
+  return onAuthStateChanged(auth, onChange)
 }

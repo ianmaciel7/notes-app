@@ -10,7 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { signInWithGoogle } from '@/lib/auth/firebase-client'
+import {
+  isFirebaseConfigured,
+  signInWithGoogle,
+} from '@/lib/auth/firebase-client'
 
 export function LoginPanel() {
   const t = useTranslations('space')
@@ -19,6 +22,12 @@ export function LoginPanel() {
 
   async function handleSignIn() {
     setError(null)
+
+    if (!isFirebaseConfigured()) {
+      setError(t('googleUnavailable'))
+      return
+    }
+
     setPending(true)
     try {
       await signInWithGoogle()

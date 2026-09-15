@@ -5,6 +5,7 @@ import {
   Brain,
   ChevronRight,
   LockKeyhole,
+  LogOut,
   Sparkles,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -19,6 +20,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { useFirebaseUser } from '@/hooks/use-firebase-user'
+import { signOutFromFirebase } from '@/lib/auth/firebase-client'
 import { studyDecks } from '@/lib/study/fixtures'
 import { StudyReview } from './study-review'
 
@@ -32,6 +35,7 @@ function accentClass(accent: string) {
 
 export function StudySpace({ pathname }: StudySpaceProps) {
   const t = useTranslations('space')
+  const { user } = useFirebaseUser()
   const [selectedDeckId, setSelectedDeckId] = useState(studyDecks[0]?.id ?? '')
   const selectedDeck = useMemo(
     () =>
@@ -56,10 +60,17 @@ export function StudySpace({ pathname }: StudySpaceProps) {
             </p>
           </div>
         </div>
-        <Button render={<Link href="/login" />} variant="outline" size="sm">
-          <LockKeyhole data-icon="inline-start" aria-hidden="true" />
-          {t('signIn')}
-        </Button>
+        {user ? (
+          <Button variant="outline" size="sm" onClick={signOutFromFirebase}>
+            <LogOut data-icon="inline-start" aria-hidden="true" />
+            {t('signOut')}
+          </Button>
+        ) : (
+          <Button render={<Link href="/login" />} variant="outline" size="sm">
+            <LockKeyhole data-icon="inline-start" aria-hidden="true" />
+            {t('signIn')}
+          </Button>
+        )}
       </header>
 
       <div className="mx-auto grid min-h-[calc(100vh-3.5rem)] max-w-[1440px] lg:grid-cols-[240px_minmax(0,1fr)_320px]">
