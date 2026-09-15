@@ -1,6 +1,13 @@
 {
   "space": {
     "brand": "KnowledgeOS",
+    "spaceLabel": "Espaço",
+    "overview": "Visão geral",
+    "allCards": "Todos os cartões",
+    "settings": "Configurações",
+    "switchSpace": "Trocar de espaço",
+    "spaceName": "Espaço do Ian",
+    "personal": "Pessoal",
     "eyebrow": "Espaço pessoal de estudo",
     "title": "Lembre o que importa.",
     "description": "Um lugar calmo para revisar ideias, uma carta por vez.",

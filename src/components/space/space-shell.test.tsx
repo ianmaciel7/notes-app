@@ -1,8 +1,10 @@
 // @vitest-environment jsdom
 
 import { render, screen } from '@testing-library/react'
+import { NextIntlClientProvider } from 'next-intl'
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import messages from '@/messages/en.json'
 import { SpaceShell } from './space-shell'
 
 describe('SpaceShell', () => {
@@ -17,9 +19,11 @@ describe('SpaceShell', () => {
 
   it('renders the space sidebar alongside the page content', () => {
     render(
-      <SpaceShell pathname="/">
-        <p>Page content</p>
-      </SpaceShell>,
+      <NextIntlClientProvider locale="en" messages={messages}>
+        <SpaceShell pathname="/">
+          <p>Page content</p>
+        </SpaceShell>
+      </NextIntlClientProvider>,
     )
 
     expect(screen.getByText('KnowledgeOS')).toBeTruthy()

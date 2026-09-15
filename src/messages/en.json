@@ -1,6 +1,13 @@
 {
   "space": {
     "brand": "KnowledgeOS",
+    "spaceLabel": "Space",
+    "overview": "Overview",
+    "allCards": "All cards",
+    "settings": "Settings",
+    "switchSpace": "Switch space",
+    "spaceName": "Ian's space",
+    "personal": "Personal",
     "eyebrow": "Personal study space",
     "title": "Remember what matters.",
     "description": "A quiet place to review ideas, one card at a time.",

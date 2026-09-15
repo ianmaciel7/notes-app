@@ -7,6 +7,9 @@ import {
   Library,
   Settings,
 } from 'lucide-react'
+import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import type { ComponentProps } from 'react'
 
 import {
   Sidebar,
@@ -22,34 +25,44 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar'
 
-type SpaceSidebarProps = {
+interface SpaceSidebarProps extends ComponentProps<typeof Sidebar> {
   pathname?: string
 }
 
 const navigation = [
-  { label: 'Overview', href: '/', icon: LayoutDashboard },
-  { label: 'All cards', href: '/cards', icon: Library },
+  { translationKey: 'overview', href: '/', icon: LayoutDashboard },
+  { translationKey: 'allCards', href: '/cards', icon: Library },
 ] as const
 
-export function SpaceSidebar({ pathname = '/' }: SpaceSidebarProps) {
+export function SpaceSidebar({
+  pathname = '/',
+  collapsible = 'icon',
+  ...sidebarProps
+}: SpaceSidebarProps) {
+  const t = useTranslations('space')
+
   return (
-    <Sidebar collapsible="icon" data-slot="space-sidebar">
+    <Sidebar
+      {...sidebarProps}
+      collapsible={collapsible}
+      data-slot="space-sidebar"
+    >
       <SidebarHeader className="gap-3 p-4">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               className="h-10"
               render={
-                <a href="/" aria-label="KnowledgeOS">
-                  KnowledgeOS
-                </a>
+                <Link href="/" aria-label={t('brand')}>
+                  {t('brand')}
+                </Link>
               }
-              tooltip="KnowledgeOS"
+              tooltip={t('brand')}
             >
               <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
                 <Command aria-hidden="true" />
               </span>
-              <span className="font-serif text-base">KnowledgeOS</span>
+              <span className="font-serif text-base">{t('brand')}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -59,25 +72,29 @@ export function SpaceSidebar({ pathname = '/' }: SpaceSidebarProps) {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Space</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('spaceLabel')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigation.map(({ href, icon: Icon, label }) => (
-                <SidebarMenuItem key={href}>
-                  <SidebarMenuButton
-                    isActive={pathname === href}
-                    render={
-                      <a href={href} aria-label={label}>
-                        {label}
-                      </a>
-                    }
-                    tooltip={label}
-                  >
-                    <Icon aria-hidden="true" />
-                    <span>{label}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navigation.map(({ href, icon: Icon, translationKey }) => {
+                const label = t(translationKey)
+
+                return (
+                  <SidebarMenuItem key={href}>
+                    <SidebarMenuButton
+                      isActive={pathname === href}
+                      render={
+                        <Link href={href} aria-label={label}>
+                          {label}
+                        </Link>
+                      }
+                      tooltip={label}
+                    >
+                      <Icon aria-hidden="true" />
+                      <span>{label}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -88,29 +105,29 @@ export function SpaceSidebar({ pathname = '/' }: SpaceSidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton
               render={
-                <a href="/settings" aria-label="Settings">
-                  Settings
-                </a>
+                <Link href="/settings" aria-label={t('settings')}>
+                  {t('settings')}
+                </Link>
               }
-              tooltip="Settings"
+              tooltip={t('settings')}
             >
               <Settings aria-hidden="true" />
-              <span>Settings</span>
+              <span>{t('settings')}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               className="h-10"
               render={<button type="button" />}
-              tooltip="Switch space"
+              tooltip={t('switchSpace')}
             >
               <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-medium text-muted-foreground">
                 I
               </span>
               <span className="flex min-w-0 flex-1 flex-col items-start gap-0.5">
-                <span className="truncate">Ian's space</span>
+                <span className="truncate">{t('spaceName')}</span>
                 <span className="truncate text-xs font-normal text-muted-foreground">
-                  Personal
+                  {t('personal')}
                 </span>
               </span>
               <ChevronsUpDown aria-hidden="true" />

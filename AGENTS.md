@@ -99,6 +99,10 @@ history before reusing an approach.
   into named helpers that can be tested independently.
 - Keep code and documentation in English.
 - Keep identifiers, filenames, test descriptions, comments, error messages, and user-facing application copy clear and idiomatic in English.
+- Store all user-facing application copy in `src/messages/*.json` and read it
+  with `next-intl`; do not hardcode visible labels, aria labels, tooltips,
+  status text, or navigation names in components. Keep every message key
+  synchronized across all supported locale files.
 - Use Biome as the formatter and linter when it is configured. Do not add
   ESLint or Prettier without an explicit project decision.
 - Use the repository's formatter configuration as the source of truth for
@@ -192,6 +196,10 @@ history before reusing an approach.
   class names and conditional classes.
 - New reusable components owning a DOM root must add stable kebab-case `data-slot`
   attributes to their root and meaningful sub-parts (e.g., `data-slot="settings-panel-header"`).
+- Feature wrappers around shadcn primitives must derive their props from the
+  wrapped component with `ComponentProps<typeof Primitive>` and forward those
+  props. Destructure only feature-specific props (such as route state) so
+  custom values never leak onto the DOM.
 - Put shared visual variants in typed maps or `cva()` definitions, keep domain
   variant types outside the primitive UI layer, and pass theme values through
   semantic tokens or CSS variables rather than raw palette classes.
