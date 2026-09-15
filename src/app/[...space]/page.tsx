@@ -1,4 +1,5 @@
-import { ProtectedSpace } from '@/components/space/protected-space'
+import { ProtectedRoute } from '@/components/auth/protected-route'
+import { SpaceShell } from '@/components/space/space-shell'
 
 export default async function SpacePage({
   params,
@@ -6,5 +7,9 @@ export default async function SpacePage({
   params: Promise<{ space: string[] }>
 }) {
   const { space } = await params
-  return <ProtectedSpace pathname={`/${space.join('/')}`} />
+  return (
+    <ProtectedRoute>
+      <SpaceShell pathname={`/${space.join('/')}`} />
+    </ProtectedRoute>
+  )
 }

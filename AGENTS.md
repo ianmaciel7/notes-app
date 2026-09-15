@@ -175,21 +175,27 @@ history before reusing an approach.
 - Treat shadcn/ui components as source code owned by the repository, not as a
   runtime dependency or opaque component package.
 - Use `components.json` as the source of truth for the shadcn template, base
-  (`radix` or `base`), style, icon library, aliases, and resolved paths.
+  (`radix` or `base`), style, icon library, aliases, and resolved paths. Expected project baseline: `base-nova`, `@base-ui/react`, `lucide-react`, `@/components/ui`, and `cn` from `@/lib/utils`.
 - Keep generated primitives in `src/components/ui/` and shared helpers in
   `src/lib/`, including `src/lib/utils.ts` with the project's `cn()` helper.
 - Keep feature compositions in `src/components/` and compose the primitives;
   do not copy or fork a primitive into a feature folder.
+- **Component Selection and Composition Order**: Before writing custom UI, follow this strict order:
+  1. Reuse an appropriate component already available under `@/components/ui`.
+  2. Inspect and add missing official components with `pnpm dlx shadcn@latest add <component>` from the package containing `components.json`.
+  3. Compose existing primitives and named parts. Create a custom primitive only when available components cannot meet the requirement.
 - For compound controls such as split buttons, wrap and compose the existing
   shadcn primitives instead of rebuilding their behavior. Preserve the
   primitive `data-slot` contract, expose typed props with
-  `React.ComponentProps<typeof Primitive>`, and use `cn()` for caller class
-  names and conditional classes.
+  `React.ComponentProps<typeof Primitive>`, `React.ComponentPropsWithRef`, or
+  CVA `VariantProps` (using intentional `Pick`/`Omit`), and use `cn()` for caller
+  class names and conditional classes.
+- New reusable components owning a DOM root must add stable kebab-case `data-slot`
+  attributes to their root and meaningful sub-parts (e.g., `data-slot="settings-panel-header"`).
 - Put shared visual variants in typed maps or `cva()` definitions, keep domain
   variant types outside the primitive UI layer, and pass theme values through
   semantic tokens or CSS variables rather than raw palette classes.
-- Use direct imports from the defining component files. Do not add barrel
-  exports for compound shadcn components or their primitives.
+- Use direct imports from the defining component files. Do **NOT** create or use `index.ts` barrel files for shadcn/ui components. Use lowercase kebab-case filenames for UI component files.
 - Do not create standalone CSS Modules or per-component stylesheets for UI.
   Use Tailwind CSS v4 utilities, `cva()` variants, arbitrary descendant
   selectors, and theme tokens in `src/app/globals.css`.
@@ -200,29 +206,56 @@ history before reusing an approach.
   markup or one-off CSS.
 - Before creating, fixing, or using a component, consult its shadcn docs with
   `pnpm dlx shadcn@latest docs <component>` and use the configured base API:
-  `asChild` for Radix or `render` for Base UI.
+  `asChild` for Radix or `render` for Base UI primitives.
+- For Base UI composition, use `render` on supporting primitives, not Radix-style `asChild`. Custom rendered
+  components must forward received props and ref to the correct DOM element and avoid
+  nested interactive elements.
+- When exposing custom `render` APIs with Base UI, use `useRender` and combine primitive
+  and consumer props with `mergeProps` (preserving handler execution order). Because
+  `mergeProps` does not merge refs, use `useRender` ref handling or ref composition.
+- Preserve state attributes supplied by the installed primitive (such as `data-open`,
+  `data-checked`, `data-disabled`, `data-size`, `data-variant`, or `data-orientation`).
+  Do not assume Radix `data-state` conventions on Base UI primitives. Avoid mirroring
+  these attributes with redundant React state.
+- In React 19, forward refs directly on component props without introducing `forwardRef`
+  mechanically. Preserve Next.js server/client boundaries by placing `'use client'` strictly
+  at client entry points.
 - Use semantic theme tokens such as `bg-background`, `text-foreground`,
-  `text-muted-foreground`, and `bg-primary`; do not use raw color classes for
-  component states or manually override dark-mode colors.
+  `border-border`, `ring-ring`, `text-muted-foreground`, and `bg-primary`; do not use raw color classes (such as `bg-blue-500` or hardcoded hex/RGB values) for
+  component states or manually override dark-mode colors. Do not modify `globals.css`
+  or global theme variables to fix a local component unless scoped to the task.
 - Use `flex`/`grid` with `gap-*`, `size-*` for equal dimensions, `truncate`,
   and `cn()` for conditional classes. Avoid `space-x-*`, `space-y-*`, manual
   template-literal class conditions, and manual overlay z-index values.
+- For dynamic layout styles, prefer inline CSS variables or utility tokens over arbitrary
+  values and avoid using `!important` as a specificity workaround.
 - Follow accessible shadcn composition: group menu/select/command items,
   include titles in Dialog/Sheet/Drawer, keep TabsTrigger inside TabsList,
   provide AvatarFallback, and use complete Card composition.
 - Use `FieldGroup`/`Field` for forms, `ToggleGroup` for small option sets,
   `FieldSet`/`FieldLegend` for related controls, and `data-invalid` plus
   `aria-invalid` for validation states.
+- Maintain accessible focus behavior and keyboard navigation across all controls: keep configured
+  focus rings (such as `outline-ring/50`); never remove focus outlines without an accessible replacement,
+  and do not rely on color alone for state indication.
+- For overlay components (Dialog, Sheet, Drawer, Popover, Tooltip), forward `side`, `align`,
+  and offset props to positioner parts; reuse anchor dimensions, available-space variables, and
+  transform origins. Validate Escape dismissal, outside click handling, focus restoration, clipping,
+  and `prefers-reduced-motion`. Tooltip content must remain strictly non-interactive.
 - Use `Alert`, `Empty`, `Separator`, `Skeleton`, `Badge`, and `sonner` for
   their respective patterns instead of recreating them with styled elements.
 - Put `data-icon` on icons inside Buttons, do not add manual icon sizing inside
   components, and pass icon components as objects rather than string keys.
+- Import icons explicitly from `lucide-react`. Do not mix icon libraries, import the entire icon
+  namespace for static icons, or redraw existing icons as custom inline SVG.
 - When a component renders an icon-bearing child internally, keep the icon
   accessible (`aria-hidden` when decorative) and apply the project's icon
   slot convention rather than adding ad-hoc width/height classes.
-- Use the project's configured icon library and primitive base. Do not replace
-  them with a different library or assume Radix APIs without checking
-  `components.json`.
+- Separate layout/state concerns: independent panels require independent state (e.g., sidebar visibility,
+  panel width, mobile behavior). Maintain one source of truth per state (`value`/`defaultValue`, `open`/`defaultOpen`).
+- For stories and tests: use production components and real visual providers; test relevant variants,
+  disabled/error/loading states, keyboard navigation, focus, RTL, and responsive layouts. Prefer semantic behavior
+  tests over raw snapshot testing.
 - When adding or updating a component, use `pnpm dlx shadcn@latest`, inspect
   every generated file, verify imports and composition, and run the relevant
   checks. Never use `--overwrite` without explicit approval.
@@ -237,6 +270,29 @@ history before reusing an approach.
   accessibility issues before considering it complete.
 - Do not use direct DOM mutations for application UI. Keep DOM updates under
   React's control, except for an explicitly documented browser API integration.
+- Clean up listeners, timers, subscriptions, and effects. Isolate persistence
+  and make shared managers replaceable/resettable for independent instances,
+  stories, and tests. Avoid hydration mismatches from browser-only state.
+- Keep state local unless composition requires sharing. Use context for related
+  parts, not mandatory global wrappers. Preserve required provider boundaries
+  and stable instances; never hide missing-provider errors with artificial fallbacks.
+
+### shadcn official references
+
+Consult these on demand — always use the installed version, not training-data assumptions:
+
+| Topic | URL |
+| --- | --- |
+| Configuration | https://ui.shadcn.com/docs/components-json |
+| CLI | https://ui.shadcn.com/docs/cli |
+| All components | https://ui.shadcn.com/docs/components |
+| Theming | https://ui.shadcn.com/docs/theming |
+| Base UI composition | https://base-ui.com/react/handbook/composition |
+| Rendering & refs | https://base-ui.com/react/utils/use-render |
+| Prop merging | https://base-ui.com/react/utils/merge-props |
+| State styling | https://base-ui.com/react/handbook/styling |
+| Lucide icons | https://lucide.dev/guide/react |
+| Client boundaries | https://nextjs.org/docs/app/api-reference/directives/use-client |
 
 ### shadcn CLI reference
 
@@ -335,10 +391,16 @@ CLI workflow rules:
   practical: `pnpm check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, and
   `pnpm build` according to the scripts that actually exist.
 - Do not claim a check passed unless it was run in the current checkout.
+- Verify **every affected component and meaningful part**, not a single
+  representative example. Run relevant lint, type-check, and tests; check
+  visual/interactive changes in a browser when available. Review consumers
+  and preserve unrelated work.
 - For meaningful UI changes, verify keyboard navigation, focus behavior,
   accessible names, loading/error states, responsive layout, and hydration.
 - Keep tests close to the behavior they cover and include regression tests for
   component variants, accessibility contracts, and server/client boundaries.
+- Report changes, completed checks, and limitations. Never claim passing tests,
+  visual parity, accessibility compliance, or compatibility without evidence.
 
 ## Tooling preferences
 
