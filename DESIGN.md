@@ -282,7 +282,7 @@ preserve this icon and split-button pairing.
 
 ---
 
-### `study-card` — _not yet built_
+### `study-card`
 
 The central study UI. Located at `src/components/space/study-card.tsx`.
 
@@ -310,7 +310,7 @@ The central study UI. Located at `src/components/space/study-card.tsx`.
 
 ---
 
-### `deck-badge` — _not yet built_
+### `deck-badge`
 
 A small accent chip used to label deck identity. Located at `src/components/space/deck-badge.tsx`.
 

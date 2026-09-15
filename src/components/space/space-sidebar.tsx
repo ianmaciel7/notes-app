@@ -12,6 +12,13 @@ import { useTranslations } from 'next-intl'
 import type { ComponentProps } from 'react'
 
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -22,14 +29,18 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
   SidebarSeparator,
 } from '@/components/ui/sidebar'
 import { useSpace } from './space-provider'
 
 type SpaceSidebarProps = ComponentProps<typeof Sidebar>
 
-const navigation = [
+const primaryNavigation = [
   { translationKey: 'overview', href: '/', icon: LayoutDashboard },
+] as const
+
+const studyNavigation = [
   { translationKey: 'allCards', href: '/cards', icon: Library },
 ] as const
 
@@ -39,6 +50,42 @@ function isNavigationItemActive(pathname: string, href: string) {
   }
 
   return pathname === href || pathname.startsWith(`${href}/`)
+}
+
+function NavigationItem({
+  href,
+  icon: Icon,
+  label,
+  pathname,
+}: {
+  href: string
+  icon: typeof LayoutDashboard
+  label: string
+  pathname: string
+}) {
+  const isActive = isNavigationItemActive(pathname, href)
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        isActive={isActive}
+        className="h-9 px-2.5"
+        render={
+          <Link
+            href={href}
+            aria-label={label}
+            aria-current={isActive ? 'page' : undefined}
+          >
+            {label}
+          </Link>
+        }
+        tooltip={label}
+      >
+        <Icon aria-hidden="true" className="size-4" />
+        <span>{label}</span>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
 }
 
 export function SpaceSidebar({
@@ -55,23 +102,46 @@ export function SpaceSidebar({
       collapsible={collapsible}
       data-slot="space-sidebar"
     >
-      <SidebarHeader className="gap-3 p-4">
+      <SidebarHeader className="p-3">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              className="h-10"
-              render={
-                <Link href="/" aria-label={t('brand')}>
-                  {t('brand')}
-                </Link>
-              }
-              tooltip={t('brand')}
-            >
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                <Command aria-hidden="true" />
-              </span>
-              <span className="font-serif text-base">{t('brand')}</span>
-            </SidebarMenuButton>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <SidebarMenuButton
+                    className="h-11 px-2.5"
+                    aria-label={t('switchSpace')}
+                    tooltip={t('switchSpace')}
+                  />
+                }
+              >
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                  <Command aria-hidden="true" className="size-3.5" />
+                </span>
+                <span className="flex min-w-0 flex-1 flex-col items-start gap-0.5 leading-tight">
+                  <span className="truncate text-xs font-medium text-muted-foreground">
+                    {t('brand')}
+                  </span>
+                  <span className="truncate font-serif text-[15px]">
+                    {t('spaceName')}
+                  </span>
+                  <span className="truncate text-xs font-normal text-muted-foreground">
+                    {t('personal')}
+                  </span>
+                </span>
+                <ChevronsUpDown
+                  aria-hidden="true"
+                  className="size-4 text-muted-foreground"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="min-w-56">
+                <DropdownMenuLabel>{t('spaceLabel')}</DropdownMenuLabel>
+                <DropdownMenuItem disabled>
+                  <Command aria-hidden="true" />
+                  <span>{t('spaceName')}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -79,45 +149,50 @@ export function SpaceSidebar({
       <SidebarSeparator />
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>{t('spaceLabel')}</SidebarGroupLabel>
+        <SidebarGroup className="px-3 py-3">
           <SidebarGroupContent>
-            <SidebarMenu>
-              {navigation.map(({ href, icon: Icon, translationKey }) => {
-                const label = t(translationKey)
-                const isActive = isNavigationItemActive(pathname, href)
+            <SidebarMenu className="gap-1">
+              {primaryNavigation.map(({ href, icon, translationKey }) => (
+                <NavigationItem
+                  key={href}
+                  href={href}
+                  icon={icon}
+                  label={t(translationKey)}
+                  pathname={pathname}
+                />
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-                return (
-                  <SidebarMenuItem key={href}>
-                    <SidebarMenuButton
-                      isActive={isActive}
-                      render={
-                        <Link
-                          href={href}
-                          aria-label={label}
-                          aria-current={isActive ? 'page' : undefined}
-                        >
-                          {label}
-                        </Link>
-                      }
-                      tooltip={label}
-                    >
-                      <Icon aria-hidden="true" />
-                      <span>{label}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
+        <SidebarGroup className="px-3 py-3">
+          <SidebarGroupLabel className="px-2 text-xs font-medium text-muted-foreground">
+            {t('study')}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="gap-1">
+              {studyNavigation.map(({ href, icon, translationKey }) => (
+                <NavigationItem
+                  key={href}
+                  href={href}
+                  icon={icon}
+                  label={t(translationKey)}
+                  pathname={pathname}
+                />
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarSeparator />
 
       <SidebarFooter className="p-3">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               isActive={settingsIsActive}
+              className="h-9 px-2.5"
               render={
                 <Link
                   href="/settings"
@@ -129,31 +204,14 @@ export function SpaceSidebar({
               }
               tooltip={t('settings')}
             >
-              <Settings aria-hidden="true" />
+              <Settings aria-hidden="true" className="size-4" />
               <span>{t('settings')}</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              className="h-10"
-              render={<button type="button" />}
-              aria-label={t('switchSpace')}
-              tooltip={t('switchSpace')}
-            >
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-medium text-muted-foreground">
-                I
-              </span>
-              <span className="flex min-w-0 flex-1 flex-col items-start gap-0.5">
-                <span className="truncate">{t('spaceName')}</span>
-                <span className="truncate text-xs font-normal text-muted-foreground">
-                  {t('personal')}
-                </span>
-              </span>
-              <ChevronsUpDown aria-hidden="true" />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+
+      <SidebarRail />
     </Sidebar>
   )
 }
