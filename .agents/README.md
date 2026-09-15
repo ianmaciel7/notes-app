@@ -16,12 +16,14 @@ flowchart TB
     subagents[agents/<br/>workspace subagents]
     rules[rules/<br/>shared operating rules]
     skills[skills/<br/>reusable task skills]
+    plugins[plugins/<br/>workspace plugins]
 
     workspace --> agentsRoot
     agentsRoot --> agentsReadme
     agentsRoot --> subagents
     agentsRoot --> rules
     agentsRoot --> skills
+    agentsRoot --> plugins
 
     subagents --> architect[architect/agent.md]
     subagents --> reviewer[code-reviewer/agent.md]
@@ -34,19 +36,23 @@ flowchart TB
     rules --> agentRules[agents.md<br/>principles and precedence]
     rules --> subagentRules[subagents.md<br/>orchestration and lifecycle]
 
-    skills --> grillMe[grill-me/SKILL.md]
+    plugins --> firebasePlugin[firebase/agent-skills<br/>auth, firestore, rules, cli, hosting]
+    plugins --> vercelPlugin[vercel/vercel-plugin<br/>nextjs, shadcn, react-best-practices, composition]
+    skills --> generalSkills[grill-me<br/>plan refinement]
 
-    subagents -. consult .-> rules
-    subagents -. invoke when relevant .-> skills
-    architect -. delegates architecture work .-> firebase
-    architect -. delegates Next.js/Vercel work .-> vercel
-    security -. delegates Firebase security work .-> firebase
-    vercel -. delegates Firebase integration work .-> firebase
+    subagents -.->|consult| rules
+    subagents -.->|invoke when relevant| skills
+    subagents -.->|use plugin capabilities| plugins
+    architect -.->|delegates architecture work| firebase
+    architect -.->|delegates Next.js and Vercel work| vercel
+    security -.->|delegates Firebase security work| firebase
+    vercel -.->|delegates Firebase integration work| firebase
 ```
 
 ## Discovery Structure
 
 - **Workspace Subagents**: Located in `.agents/agents/<name>/agent.md`
+- **Workspace Plugins**: Located in `.agents/plugins/<name>/plugin.json`
 - **Workspace Rules**: Located in `.agents/rules/*.md`
 - **Workspace Skills**: Located in `.agents/skills/<name>/SKILL.md`
 
@@ -69,6 +75,19 @@ Each subagent is configured with standard YAML frontmatter (`subagent: true`) an
 specialists. The primary orchestrator, `architect`, `security-reviewer`, and
 `vercel-developer` may delegate scoped work to them through the relationships
 defined in [rules/subagents.md](./rules/subagents.md).
+
+## Workspace Plugins & Skills Catalog
+
+### Project Plugins
+Installed via `npx plugins add <repo> --scope project`:
+
+- **`vercel/vercel-plugin`**: Complete Next.js, Vercel, shadcn/ui, React performance, composition patterns, web design guidelines, deployments, and caching capability suite.
+- **`firebase/agent-skills`**: Official Firebase plugin for Authentication, Cloud Firestore, Security Rules authoring & auditing, CLI management, and App Hosting emulation.
+
+### Workspace Skills
+Locked in [skills-lock.json](../skills-lock.json) and installed in `.agents/skills/`:
+
+- **`grill-me`**: Plan sharpening through interactive questions and decision probing.
 
 ## Workspace Rules
 

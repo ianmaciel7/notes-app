@@ -1,0 +1,6 @@
+{
+  "name": "vercel",
+  "description": "Vercel plugin providing full-stack Next.js, deployments, AI SDK, and web optimization skills",
+  "author": "Vercel",
+  "version": "0.49.1"
+}

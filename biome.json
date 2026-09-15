@@ -14,7 +14,8 @@
       "!dist",
       "!build",
       "!src/components/ui",
-      "!.agents/skills"
+      "!.agents/skills",
+      "!.agents/plugins"
     ]
   },
   "formatter": {

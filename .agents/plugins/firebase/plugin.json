@@ -1,0 +1,6 @@
+{
+  "name": "firebase",
+  "description": "Firebase plugin providing Authentication, Firestore, Security Rules, Cloud Functions, and App Hosting skills",
+  "author": "Firebase",
+  "version": "1.0.0"
+}

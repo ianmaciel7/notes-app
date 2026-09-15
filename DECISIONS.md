@@ -28,3 +28,13 @@ fixtures for now; IndexedDB/import/export are deferred.
 Development, Vercel preview, and production use distinct Firebase projects and
 environment variables. Feature flags can stage product behavior, but cannot be
 used as a substitute for isolation or authorization.
+
+## Workspace agent plugins and customization structure
+
+Agent capabilities for domain ecosystems (Vercel and Firebase) are packaged as
+workspace plugins under `.agents/plugins/vercel` and `.agents/plugins/firebase`
+following the official Antigravity plugin specification (`plugin.json`, `skills/`,
+`mcp_config.json`, and hooks). Standalone individual skill duplicates were
+removed in favor of this namespaced plugin bundle architecture, leaving only
+repo-level standalone skills (such as `grill-me`) tracked in `skills-lock.json`.
+

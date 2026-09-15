@@ -1,71 +1,11 @@
 {
   "version": 1,
   "skills": {
-    "firebase-app-hosting-basics": {
-      "source": "firebase/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/firebase-app-hosting-basics/SKILL.md",
-      "computedHash": "052ef64fe35efdf02b7e0dc121abc09b1514e8b228454ab2002af31448c0a212"
-    },
-    "firebase-auth-basics": {
-      "source": "firebase/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/firebase-auth-basics/SKILL.md",
-      "computedHash": "c2eead02bc534bd12d7d3bc8f7d99e10dc44ab13f416d1c5293df38ecc2f6848"
-    },
-    "firebase-basics": {
-      "source": "firebase/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/firebase-basics/SKILL.md",
-      "computedHash": "c0e06c4f5be407fcf74c9b76c91a4f87cac653a07c639904f82424fc4dbbe864"
-    },
-    "firebase-firestore": {
-      "source": "firebase/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/firebase-firestore/SKILL.md",
-      "computedHash": "e5dc35dcd89d3a24b7736ab8bdf16257aa66f180a385a19e5764bd30afe0907d"
-    },
-    "firebase-security-rules-auditor": {
-      "source": "firebase/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/firebase-security-rules-auditor/SKILL.md",
-      "computedHash": "be877f6c7aaf460791dd6103a08906734036c26bd7c686cfdb8b60e4b2f65742"
-    },
-    "firestore-rules-creation": {
-      "source": "firebase/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/firestore-rules-creation/SKILL.md",
-      "computedHash": "3388a7f2254fdd5f0f794c7debf198f8007349da4c697e4f5b295c6a42d2edd6"
-    },
     "grill-me": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/productivity/grill-me/SKILL.md",
       "computedHash": "5e0c683385eafd83f106ac6c9d67dfbbfe5aa4b3fe65aad114eb1055a99c818f"
-    },
-    "shadcn": {
-      "source": "shadcn/ui",
-      "sourceType": "github",
-      "skillPath": "skills/shadcn/SKILL.md",
-      "computedHash": "d04e43ec01e921558b93bb8046c14a42a22556689a2827243df900825a4e1604"
-    },
-    "vercel-composition-patterns": {
-      "source": "vercel-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/composition-patterns/SKILL.md",
-      "computedHash": "575757e3e25761c8c562d6e395d29f0b76c98b1273c0bd72d88e6ab1bc9c7d42"
-    },
-    "vercel-react-best-practices": {
-      "source": "vercel-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/react-best-practices/SKILL.md",
-      "computedHash": "ca7b0c0c6e5f2750043f7f0cd72d16ac4e2abc48f9b5500d047a4b77a2506212"
-    },
-    "web-design-guidelines": {
-      "source": "vercel-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/web-design-guidelines/SKILL.md",
-      "computedHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
     }
   }
 }

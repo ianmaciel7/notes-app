@@ -28,6 +28,7 @@ the wrong document just because it is convenient.
 | `.agents/rules/subagents.md` | Antigravity subagent orchestration, delegation matrix, and lifecycle standards. | Subagent orchestration guidance |
 | `.agents/agents/*/agent.md` | Role-specific operating instructions for a named agent. These files must consult the root documents and must not redefine product or architecture truth. | Agent role guidance |
 | `.agents/skills/*/SKILL.md` | Reusable task procedure for a specific skill. Follow it only when that skill is selected. | Skill procedure |
+| `.agents/plugins/*/plugin.json` | Plugin manifest packaging skills, rules, hooks, and MCP configs for a domain. | Canonical plugin bundle |
 | `.worktrees/old*/**/*.md` | Historical implementation context only. Never treat these files as authoritative for the active checkout. | Read-only reference |
 
 When documents disagree, resolve them by scope: user/system instructions and
@@ -39,6 +40,7 @@ the relevant source document when a change materially affects its scope.
 ## Setup and development
 
 - Install dependencies: `pnpm install`
+- Install required plugins: `npx plugins add vercel/vercel-plugin --scope project` and `npx plugins add firebase/agent-skills --scope project`
 - Restore agent skills: `npx skills experimental_install` (when `skills-lock.json` exists and skills in `.agents/skills/` are missing)
 - Start the development server: `pnpm dev`
 - Run tests: `pnpm test`
@@ -46,11 +48,11 @@ the relevant source document when a change materially affects its scope.
   not use npm or yarn for this repository.
 - **Mandatory setup verification**: Before implementing any changes, always verify
   that all project dependencies, required CLI tools (e.g., `firebase-tools`),
-  required plugins (specifically the `firebase` plugin and `vercel@openai-curated`),
-  and agent skills are installed and enabled. If any package, CLI tool, plugin
-  (such as `firebase`), or locked skill from `skills-lock.json` is missing or not
-  installed, proactively install, enable, or restore it immediately as part of
-  setup before proceeding.
+  required plugins (`vercel/vercel-plugin` and `firebase/agent-skills` installed
+  via `npx plugins add <repo> --scope project`), and agent skills are installed
+  and enabled. If any package, CLI tool, plugin, or locked skill from
+  `skills-lock.json` is missing or not installed, proactively install, enable, or
+  restore it immediately as part of setup before proceeding.
 
 ### Worktree setup and references
 
@@ -63,11 +65,13 @@ Whenever starting work on the project:
    `git diff dev...old` or `git diff dev...old-6`.
 3. Work in the active checkout or in a newly requested worktree. Treat
    `old`–`old-6` as read-only references by default.
-4. Run `pnpm install` in the worktree where the task will be implemented. If
+4. Run `pnpm install` in the worktree where the task will be implemented.
+   Ensure project plugins (`vercel/vercel-plugin`, `firebase/agent-skills`)
+   are installed with `npx plugins add <repo> --scope project`. If
    `skills-lock.json` exists and skills in `.agents/skills/` are missing, run
    `npx skills experimental_install` to restore them. Ensure all required
-   tools, plugins (`firebase`), and skills are fully installed and active, then
-   run the project's relevant checks before making changes.
+   tools, plugins, and skills are fully installed and active, then run the
+   project's relevant checks before making changes.
 
 The primary development branch is `dev`. Do not assume that the newest
 historical worktree is the correct implementation; inspect the code and
