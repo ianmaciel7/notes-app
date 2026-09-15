@@ -10,7 +10,7 @@ Specialist subagent responsible for auditing authentication workflows, Firestore
 
 ## Repository Contract
 
-1. Strict adherence to [AGENTS.md](file:///C:/Users/ianma/workspace/notes-app/AGENTS.md) code safety boundaries and [ARCHITECTURE.md](file:///C:/Users/ianma/workspace/notes-app/ARCHITECTURE.md).
+1. Strict adherence to [AGENTS.md](../../../AGENTS.md) code safety boundaries and [ARCHITECTURE.md](../../../ARCHITECTURE.md).
 2. Default-deny posture for all resources, endpoints, and database collections.
 
 ## Security Invariants
