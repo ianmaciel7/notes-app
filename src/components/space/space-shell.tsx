@@ -2,14 +2,11 @@
 
 import { useTranslations } from 'next-intl'
 import type { ComponentProps } from 'react'
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@/components/ui/sidebar'
+import { SidebarInset, SidebarTrigger } from '@/components/ui/sidebar'
+import { SpaceProvider } from './space-provider'
 import { SpaceSidebar } from './space-sidebar'
 
-interface SpaceShellProps extends ComponentProps<typeof SidebarProvider> {
+interface SpaceShellProps extends ComponentProps<typeof SpaceProvider> {
   pathname?: string
 }
 
@@ -21,8 +18,8 @@ export function SpaceShell({
   const t = useTranslations('space')
 
   return (
-    <SidebarProvider {...providerProps}>
-      <SpaceSidebar pathname={pathname} />
+    <SpaceProvider pathname={pathname} {...providerProps}>
+      <SpaceSidebar />
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger />
@@ -33,6 +30,6 @@ export function SpaceShell({
           {children}
         </main>
       </SidebarInset>
-    </SidebarProvider>
+    </SpaceProvider>
   )
 }

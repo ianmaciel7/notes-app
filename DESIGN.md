@@ -1,5 +1,25 @@
 # Design
 
+> **Status:** Accepted visual guidance for the active `dev` MVP. Product
+> behavior belongs in `SPEC.md`; system boundaries belong in
+> `ARCHITECTURE.md`; runtime token values belong in `src/app/globals.css`.
+
+## Scope and historical synthesis
+
+The historical worktrees were reviewed before this document was updated:
+
+| Source | Useful contribution | Decision for `dev` |
+|---|---|---|
+| `old-2`, `old-3` | Portuguese-first connected-object studio; quiet density, progressive disclosure, stable geometry | Adopt as the product posture and interaction baseline |
+| `old`, `old-4` | Three-region shell measurements, semantic focus behavior, explicit control contracts | Adopt the accessibility contracts; reserve the measured three-pane shell for a later workspace milestone |
+| `old-5` | Capacities runtime evidence, hover-reveal sidebar controls, distinct tooltip/preview/menu semantics | Adopt as a future parity track; do not introduce its warm palette or extra controls into the MVP |
+| `old-6` | Full object model, 18-tone palette, graph/inspector, editor, and AI surfaces | Keep as roadmap context only; these surfaces are not part of the current visual contract |
+
+The active branch is intentionally narrower: authentication, the space
+sidebar, the header bar, and the study-card flow. This document describes what
+`dev` renders today and labels future Capacities-style surfaces as future;
+historical documents remain read-only references.
+
 ## Direction
 
 KnowledgeOS uses **editorial minimalism** as its organizing principle: content leads, chrome stays quiet, and generous spacing gives study cards room to breathe. Every surface decision follows three rules:
@@ -10,11 +30,18 @@ KnowledgeOS uses **editorial minimalism** as its organizing principle: content l
 
 No gradients. No drop shadows. No decorative imagery. One inverted dark surface is permitted per page when a strong primary CTA is needed (e.g., the Reveal button inside a study card).
 
+The product posture is a Portuguese-first, connected-object study studio. The
+interface should feel calm during repeated daily work, but minimalism must not
+remove useful context, object identity, or accessible state. Prefer stable
+geometry and progressive disclosure: frequent actions stay discoverable while
+secondary actions appear in focused controls or menus.
+
 ---
 
 ## Color system
 
-All color decisions map Ollama design-system tokens to the app's semantic CSS custom properties defined in `src/app/globals.css`.
+All color decisions map the project's shadcn semantic tokens to the CSS custom
+properties defined in `src/app/globals.css`.
 
 | Role | Name | CSS variable | Light value (oklch) | Hex approx. |
 |---|---|---|---|---|
@@ -36,6 +63,11 @@ All color decisions map Ollama design-system tokens to the app's semantic CSS cu
 - Use `--border` at `border-border/70` opacity for card outlines (subtler than `border-border`).
 - Never introduce a new color not listed in the table above without a design decision record in `DECISIONS.md`.
 - Dark mode values are already defined in `.dark {}` in `globals.css`; all components must use semantic tokens only — no hardcoded hex or raw oklch values in component files.
+
+Historical parity palettes are evidence, not a second token system. If a
+future workspace surface needs Capacities parity, add semantic aliases to
+`globals.css` and record the decision before using them; do not copy literal
+OKLCH values from `old-5` or `old-6` into components.
 
 ---
 
@@ -202,6 +234,12 @@ A small accent chip used to label deck identity. Located at `src/components/spac
 
 ## Interaction principles
 
+Sidebar rows always keep a stable leading icon and accessible name. Icon-only
+collapse mode may hide visible labels, but must retain tooltips and keyboard
+focus. Counts, overflow actions, and other secondary affordances should be
+progressively disclosed only when that surface exists; they must never steal
+the primary row action.
+
 - Google sign-in is the front door to the study space.
 - Review is an intentional transition: reveal, rate, then save.
 - Unauthenticated visitors are redirected before private study UI renders.
@@ -210,11 +248,27 @@ A small accent chip used to label deck identity. Located at `src/components/spac
 - Loading and pending states use disabled UI + label swap; never spinner overlays.
 - Destructive actions (if any future ones exist) require explicit confirmation — no undo.
 
+### Accessibility and floating-surface contract
+
+- Every actionable surface has a stable semantic name; `aria-label`,
+  `aria-description`, and `aria-keyshortcuts` do not implicitly create visual
+  tooltips.
+- Tooltips are explicit, non-interactive hints. Entity previews and menus are
+  separate interaction types with their own primitives, timing, and focus
+  behavior; never substitute one for another.
+- Preserve visible focus rings (`outline-ring/50`), restore focus to a stable
+  trigger after closing an overlay, and respect `prefers-reduced-motion`.
+- A hidden hover action must also be removed from pointer hit testing and the
+  sequential keyboard order until it is revealed by the owning interaction.
+
 ---
 
 ## Responsive behavior
 
-The desktop space has a study rail, content column, and progress rail. Small screens collapse the rails and keep the deck/card content as the primary flow. The URL remains stable across viewport changes.
+The desktop space has a navigation sidebar and content column, with a
+progress-rail slot reserved for future work. Small screens collapse the sidebar
+and keep the deck/card content as the primary flow. The URL remains stable
+across viewport changes.
 
 ### Breakpoint table
 
@@ -225,6 +279,12 @@ The desktop space has a study rail, content column, and progress rail. Small scr
 | `lg` | ≥ 1024px | Sidebar visible (240px) + content column |
 | `xl` | ≥ 1280px | Sidebar + content + reserved progress rail slot |
 | `2xl` | ≥ 1536px | Same as `xl`; content column max-width caps at `max-w-3xl` |
+
+The three-pane editor/context geometry described by `old` and `old-6` is a
+future workspace composition, not an MVP requirement. When introduced, it
+must collapse progressively into drawers/sheets and preserve the study content
+as the primary mobile flow; it must not be retrofitted by shrinking the MVP
+content column below a readable measure.
 
 ### Mobile-specific rules
 

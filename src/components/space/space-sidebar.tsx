@@ -24,10 +24,9 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from '@/components/ui/sidebar'
+import { useSpace } from './space-provider'
 
-interface SpaceSidebarProps extends ComponentProps<typeof Sidebar> {
-  pathname?: string
-}
+type SpaceSidebarProps = ComponentProps<typeof Sidebar>
 
 const navigation = [
   { translationKey: 'overview', href: '/', icon: LayoutDashboard },
@@ -43,11 +42,12 @@ function isNavigationItemActive(pathname: string, href: string) {
 }
 
 export function SpaceSidebar({
-  pathname = '/',
   collapsible = 'icon',
   ...sidebarProps
 }: SpaceSidebarProps) {
   const t = useTranslations('space')
+  const { pathname } = useSpace()
+  const settingsIsActive = isNavigationItemActive(pathname, '/settings')
 
   return (
     <Sidebar
@@ -117,16 +117,12 @@ export function SpaceSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              isActive={isNavigationItemActive(pathname, '/settings')}
+              isActive={settingsIsActive}
               render={
                 <Link
                   href="/settings"
                   aria-label={t('settings')}
-                  aria-current={
-                    isNavigationItemActive(pathname, '/settings')
-                      ? 'page'
-                      : undefined
-                  }
+                  aria-current={settingsIsActive ? 'page' : undefined}
                 >
                   {t('settings')}
                 </Link>
