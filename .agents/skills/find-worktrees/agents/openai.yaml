@@ -1,0 +1,4 @@
+interface:
+  display_name: "Find Worktrees"
+  short_description: "Search local git worktrees quickly"
+  default_prompt: "Use $find-worktrees to find where a symbol, file, or behavior appears across local worktrees."

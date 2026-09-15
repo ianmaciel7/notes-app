@@ -1,39 +1,59 @@
-## graphify
+# Agent Instructions
 
-This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+## Graphify
 
-When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
+- Use `graphify query "<question>"` first for codebase questions when `graphify-out/graph.json` exists.
+- Use `graphify path "<A>" "<B>"` for relationships between files, symbols, or concepts.
+- Use `graphify explain "<concept>"` for focused concept context.
+- Use `graphify-out/wiki/index.md` for broad navigation when it exists.
+- Read `graphify-out/GRAPH_REPORT.md` only for broad architecture review or when query/path/explain is insufficient.
+- Dirty `graphify-out/` files are expected after hooks or incremental updates.
+- After modifying code or agent files, run `graphify update .`.
+- When the user types `/graphify`, use the installed graphify skill or instructions before anything else.
 
-Rules:
-- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
-- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
-- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
-- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
-- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+## Context7
 
-## custom agents
+- Use `npx ctx7@latest` for current docs when the user asks about a library, framework, SDK, API, CLI tool, or cloud service.
+- Do not use Context7 for refactoring, writing scripts from scratch, debugging business logic, code review, or general programming concepts.
+- Resolve first with `npx ctx7@latest library <name> "<what to look up>"` unless the user provides a `/org/project` ID.
+- Fetch docs with `npx ctx7@latest docs <libraryId> "<what to look up>"`.
+- Keep each docs query to one concept unless the question is specifically about how concepts interact.
+- Do not run more than 3 Context7 commands per question.
+- Do not include API keys, passwords, credentials, personal data, or proprietary code in Context7 queries.
+- Run Context7 outside Codex's default sandbox; if DNS/network errors occur, rerun outside the sandbox.
+- If quota fails, tell the user and suggest `npx ctx7@latest login` or `CONTEXT7_API_KEY`.
 
-- Reusable agent role files live in `.agents/agents/*.md`.
-- When creating, reviewing, renaming, or improving custom agent role files, follow `.agents/skills/custom-agent/SKILL.md`.
-- Keep role files short, explicit about edit permissions, and clear about expected verification or handoff.
-- When editing skills under `.agents/skills/`, follow `.agents/skills/skill-creator/SKILL.md`.
+## Custom Agents
 
-<!-- context7 -->
-Use the `ctx7` CLI to fetch current documentation whenever the user asks about a library, framework, SDK, API, CLI tool, or cloud service — even well-known ones like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. This includes API syntax, configuration, version migration, library-specific debugging, setup instructions, and CLI tool usage. Use even when you think you know the answer — your training data may not reflect recent changes. Prefer this over web search for library docs.
+- Reusable role files live in `.agents/agents/*.md`.
+- Follow `.agents/skills/custom-agent/SKILL.md` when creating, reviewing, renaming, or improving role files.
+- Keep role files short, explicit about edit permissions, and clear about verification or handoff.
+- Follow `.agents/skills/skill-creator/SKILL.md` when editing skills under `.agents/skills/`.
 
-Do not use for: refactoring, writing scripts from scratch, debugging business logic, code review, or general programming concepts.
+## Instruction Scope
 
-## Steps
+- Update `AGENTS.md` for durable repo-wide instructions that every coding agent should see.
+- Create or update a narrower rule file when the instruction is tool-specific, experimental, generated, or only applies to one workflow.
+- Prefer a nested `AGENTS.md` only when a subtree needs different commands or conventions from the repo root.
+- Keep temporary task notes out of `AGENTS.md`; put repeatable workflow guidance in a skill under `.agents/skills/`.
+- Do not duplicate the same instruction in `AGENTS.md` and a rule file; link to the narrower source when possible.
 
-1. Resolve library: `npx ctx7@latest library <name> "<what to look up>"` — use the official library name with proper punctuation (e.g., "Next.js" not "nextjs", "Customer.io" not "customerio", "Three.js" not "threejs")
-2. Pick the best match (ID format: `/org/project`) by: exact name match, description relevance, code snippet count, source reputation (High/Medium preferred), and benchmark score (higher is better). If results don't look right, try alternate names or queries (e.g., "next.js" not "nextjs", or rephrase the question)
-3. Fetch docs: `npx ctx7@latest docs <libraryId> "<what to look up>"` — run a separate `docs` command per distinct concept if the question spans multiple topics, unless it's about how they interact
-4. Answer using the fetched documentation
+## Commands
 
-You MUST call `library` first to get a valid ID unless the user provides one directly in `/org/project` format. Be specific about what to look up in the library's documentation — specific and detailed queries return better results than vague single words, but keep each query to a single concept unless the question is about how concepts interact; combined multi-topic queries dilute ranking and return shallow results for each topic. Do not run more than 3 commands per question. Do not include sensitive information (API keys, passwords, credentials) in queries.
+| Task | Command |
+|------|---------|
+| Update graph | `graphify update .` |
+| Graph query | `graphify query "<question>"` |
+| Graph path | `graphify path "<A>" "<B>"` |
+| Graph explain | `graphify explain "<concept>"` |
+| Resolve docs | `npx ctx7@latest library <name> "<what to look up>"` |
+| Fetch docs | `npx ctx7@latest docs <libraryId> "<what to look up>"` |
 
-For version-specific docs, use `/org/project/version` from the `library` output (e.g., `/vercel/next.js/v14.3.0`).
+## External References
 
-If a command fails with a quota error, inform the user and suggest `npx ctx7@latest login` or setting `CONTEXT7_API_KEY` env var for higher limits. Do not silently fall back to training data.
-Run Context7 CLI requests outside Codex's default sandbox. If a Context7 CLI command fails with DNS or network errors such as ENOTFOUND, host resolution failures, or fetch failed, rerun it outside the sandbox instead of retrying inside the sandbox.
-<!-- context7 -->
+| Need | File |
+|------|------|
+| Custom agent roles | `.agents/agents/*.md` |
+| Custom agent workflow | `.agents/skills/custom-agent/SKILL.md` |
+| Skill authoring | `.agents/skills/skill-creator/SKILL.md` |
+| Knowledge graph | `graphify-out/graph.json` |

@@ -11,6 +11,19 @@ You are a focused implementation agent. Your job is to make code changes that sa
 - Add or update tests when behavior changes.
 - Run the narrowest useful verification command before reporting completion.
 
+## Required Context
+
+- `AGENTS.md`
+- The closest nested `AGENTS.md`, when present.
+- Files directly involved in the requested change.
+- Nearby tests, helpers, and call sites before editing behavior.
+
+## Relevant Skills
+
+- Use `.agents/skills/find-docs/` when current library, framework, SDK, API, CLI, or cloud-service docs are needed.
+- Use `.agents/skills/skill-creator/` before editing skills under `.agents/skills/`.
+- Use `.agents/skills/custom-agent/` before editing role files under `.agents/agents/`.
+
 ## Workflow
 
 1. Restate the requested outcome in one sentence.
