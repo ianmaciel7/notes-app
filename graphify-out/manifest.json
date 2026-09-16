@@ -641,12 +641,6 @@
     "ast_hash": "2cd61fab1b5b32ba47cc1fe8dbce568e",
     "semantic_hash": ""
   },
-  "src/app/backup/page.tsx": {
-    "mtime": 1789565267.235671,
-    "seen": 1789565337.8194892,
-    "ast_hash": "7ccf37813bcdf6c6b5c863d538d65c7f",
-    "semantic_hash": ""
-  },
   "src/app/layout.tsx": {
     "mtime": 1789566041.536358,
     "seen": 1789566231.606124,
@@ -687,18 +681,6 @@
     "mtime": 1789567228.5535653,
     "seen": 1789567316.2396357,
     "ast_hash": "5b8f52f14f38354a9957ba2e7ca5d5c4",
-    "semantic_hash": ""
-  },
-  "src/components/study-card.test.tsx": {
-    "mtime": 1789568658.4919388,
-    "seen": 1789568668.7324507,
-    "ast_hash": "649fe1f561c39a2b8c1271abab8d6868",
-    "semantic_hash": ""
-  },
-  "src/components/study-card.tsx": {
-    "mtime": 1789567968.1483426,
-    "seen": 1789568078.5211537,
-    "ast_hash": "f207549f4742317229dd568e9de0fd85",
     "semantic_hash": ""
   },
   "src/components/ui/accordion.tsx": {
@@ -2069,18 +2051,6 @@
     "ast_hash": "d402fc2160d1f733bbecb5bea6efe198",
     "semantic_hash": ""
   },
-  "src/app/decks/[deckId]/page.tsx": {
-    "mtime": 1789565219.7906823,
-    "seen": 1789565337.8194892,
-    "ast_hash": "6d8612a0995995de1b2694a7630ae40e",
-    "semantic_hash": ""
-  },
-  "src/app/study/[deckId]/page.tsx": {
-    "mtime": 1789565381.404827,
-    "seen": 1789565404.264987,
-    "ast_hash": "b5bd2fe6b974a2e406dec344116fff23",
-    "semantic_hash": ""
-  },
   ".codex/skills/graphify/SKILL.md": {
     "mtime": 1789562615.8823063,
     "seen": 1789562640.1945825,
@@ -2225,12 +2195,6 @@
     "ast_hash": "ca8c66ebfd21e05c288194a08b241b45",
     "semantic_hash": ""
   },
-  "src/app/analytics/page.tsx": {
-    "mtime": 1789565309.3116517,
-    "seen": 1789565337.8194892,
-    "ast_hash": "a42af2446fe0478d1534484d81529a40",
-    "semantic_hash": ""
-  },
   "src/components/analytics-dashboard.tsx": {
     "mtime": 1789568571.6239517,
     "seen": 1789568635.7495668,
@@ -2277,12 +2241,6 @@
     "mtime": 1789568786.7868135,
     "seen": 1789569044.389459,
     "ast_hash": "26a6fd7f85ec595e27b37537c9b9c015",
-    "semantic_hash": ""
-  },
-  "src/components/study-session.tsx": {
-    "mtime": 1789568670.7732646,
-    "seen": 1789568784.2006288,
-    "ast_hash": "8ada869b54db448af6bb57b0011f802d",
     "semantic_hash": ""
   },
   "src/domain/error-analysis.test.ts": {
@@ -2651,10 +2609,52 @@
     "ast_hash": "18eab3c052362a9e906b7d34303c823e",
     "semantic_hash": ""
   },
-  "src/components/study-session.test.tsx": {
-    "mtime": 1789568976.9765272,
-    "seen": 1789569044.389459,
-    "ast_hash": "d6b9e9d9a62e9af6b1a9cee7969761cd",
+  "src/app/(auth)/(space)/(objects)/analytics/page.tsx": {
+    "mtime": 1789565309.3116517,
+    "seen": 1789569527.1548524,
+    "ast_hash": "a42af2446fe0478d1534484d81529a40",
+    "semantic_hash": ""
+  },
+  "src/app/(auth)/(space)/(objects)/backup/page.tsx": {
+    "mtime": 1789565267.235671,
+    "seen": 1789569527.1548524,
+    "ast_hash": "7ccf37813bcdf6c6b5c863d538d65c7f",
+    "semantic_hash": ""
+  },
+  "src/app/(auth)/(space)/(objects)/decks/[deckId]/page.tsx": {
+    "mtime": 1789565219.7906823,
+    "seen": 1789569527.1548524,
+    "ast_hash": "6d8612a0995995de1b2694a7630ae40e",
+    "semantic_hash": ""
+  },
+  "src/app/(auth)/(space)/(objects)/study/[deckId]/page.tsx": {
+    "mtime": 1789569490.4142115,
+    "seen": 1789569527.1548524,
+    "ast_hash": "ea1334778eb2b586209cd464018641b7",
+    "semantic_hash": ""
+  },
+  "src/components/study/study-card.test.tsx": {
+    "mtime": 1789569490.4127061,
+    "seen": 1789569527.1548524,
+    "ast_hash": "1c426f4cab1de4b9e75f4176c3beff0e",
+    "semantic_hash": ""
+  },
+  "src/components/study/study-card.tsx": {
+    "mtime": 1789567968.1483426,
+    "seen": 1789569527.1548524,
+    "ast_hash": "f207549f4742317229dd568e9de0fd85",
+    "semantic_hash": ""
+  },
+  "src/components/study/study-session.test.tsx": {
+    "mtime": 1789569490.3824706,
+    "seen": 1789569527.1548524,
+    "ast_hash": "d7e0ecedf41e8dcc8e93a49d85d53c5b",
+    "semantic_hash": ""
+  },
+  "src/components/study/study-session.tsx": {
+    "mtime": 1789569490.3814697,
+    "seen": 1789569527.1548524,
+    "ast_hash": "eda9a57d84922c9825511d84b2e0bda1",
     "semantic_hash": ""
   }
 }
