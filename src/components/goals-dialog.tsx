@@ -95,7 +95,7 @@ function GoalsDialogContent({
           Defina sua meta de revisões diárias e mensais para acompanhar seu progresso.
         </DialogDescription>
       </DialogHeader>
-      <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4 pt-2">
         {error ? <FieldError errors={[{ message: error }]} /> : null}
         <Field>
           <FieldLabel htmlFor={dailyId}>Meta diária (cartões por dia)</FieldLabel>

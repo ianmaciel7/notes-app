@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import { StudySession } from "@/components/study-session";
+import { StudySession } from "@/components/study/study-session";
 
 export default async function StudyPage({ params }: { params: Promise<{ deckId: string }> }) {
   const { deckId } = await params;

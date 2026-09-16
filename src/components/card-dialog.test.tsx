@@ -17,14 +17,14 @@ describe("CardDialog", () => {
     await user.click(screen.getByRole("button", { name: "Salvar cartão" }));
     expect(screen.getByText("Preencha a frente e o verso do cartão.")).toBeInTheDocument();
 
-    await user.type(screen.getByLabelText("Frente"), "O que é mitocôndria?");
-    await user.type(screen.getByLabelText("Verso"), "Organela responsável pela respiração celular.");
+    await user.type(screen.getByLabelText("Frente"), "Pergunta 1");
+    await user.type(screen.getByLabelText("Verso"), "Resposta 1");
     await user.click(screen.getByRole("button", { name: "Salvar cartão" }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
-        front: "O que é mitocôndria?",
-        back: "Organela responsável pela respiração celular.",
+        front: "Pergunta 1",
+        back: "Resposta 1",
         type: "anki",
       }),
     );
@@ -59,18 +59,18 @@ describe("CardDialog", () => {
     // Switch to Readwise tab
     await user.click(screen.getByRole("tab", { name: /Readwise/ }));
 
-    await user.type(screen.getByLabelText("Destaque / Citação"), "A imaginação é mais importante que o conhecimento.");
-    await user.type(screen.getByLabelText("Título da Obra"), "Sobre a Teoria da Relatividade");
-    await user.type(screen.getByLabelText("Autor(a)"), "Albert Einstein");
+    await user.type(screen.getByLabelText("Destaque / Citação"), "Trecho memorável");
+    await user.type(screen.getByLabelText("Título da Obra"), "Livro");
+    await user.type(screen.getByLabelText("Autor(a)"), "Autor");
 
     await user.click(screen.getByRole("button", { name: "Salvar cartão" }));
 
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
-        front: "A imaginação é mais importante que o conhecimento.",
+        front: "Trecho memorável",
         type: "readwise",
-        sourceTitle: "Sobre a Teoria da Relatividade",
-        sourceAuthor: "Albert Einstein",
+        sourceTitle: "Livro",
+        sourceAuthor: "Autor",
       }),
     );
   });

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { StudyCard } from "@/components/study-card";
+import { StudyCard } from "@/components/study/study-card";
 import type { CardRecord } from "@/data/types";
 
 const ankiCard: CardRecord = {
@@ -72,6 +72,23 @@ describe("StudyCard", () => {
       await user.keyboard(" ");
       expect(screen.queryByText(ankiCard.back)).not.toBeInTheDocument();
       expect(onRate).not.toHaveBeenCalled();
+    });
+
+    it("reveals and rates card using keyboard shortcuts (Space and keys 1-4)", async () => {
+      const onRate = vi.fn();
+      const user = userEvent.setup();
+
+      render(<StudyCard card={ankiCard} now={new Date("2026-09-15T12:00:00.000Z")} onRate={onRate} />);
+
+      expect(screen.queryByText(ankiCard.back)).not.toBeInTheDocument();
+
+      // Space reveals answer
+      await user.keyboard(" ");
+      expect(screen.getByText(ankiCard.back)).toBeInTheDocument();
+
+      // Key '3' triggers 'good' rating
+      await user.keyboard("3");
+      expect(onRate).toHaveBeenCalledWith("good");
     });
   });
 

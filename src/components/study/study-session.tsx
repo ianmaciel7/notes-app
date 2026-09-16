@@ -6,7 +6,7 @@ import { AlertCircle, ArrowLeft, CheckCircle2, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-import { StudyCard } from "@/components/study-card";
+import { StudyCard } from "@/components/study/study-card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { db, saveReview } from "@/data/db";
@@ -194,15 +194,15 @@ function StudySessionRunner({
               {studied
                 ? `${studied} ${studied === 1 ? "cartão revisado" : "cartões revisados"}`
                 : isMistakesMode
-                ? "Nenhuma questão com erro encontrada"
-                : "Tudo em dia"}
+                  ? "Nenhuma questão com erro encontrada"
+                  : "Tudo em dia"}
             </h1>
             <p className="text-sm text-muted-foreground">
               {studied
                 ? "Seu progresso e revisões foram salvos com sucesso."
                 : isMistakesMode
-                ? "Você não possui cartões pendentes de correção no momento."
-                : "Não há cartões disponíveis para esta sessão."}
+                  ? "Você não possui cartões pendentes de correção no momento."
+                  : "Não há cartões disponíveis para esta sessão."}
             </p>
           </div>
 
@@ -214,7 +214,7 @@ function StudySessionRunner({
               </div>
               <div className="text-center border-l border-border">
                 <dt className="text-xs text-muted-foreground font-medium">Difícil</dt>
-                <dd className="text-2xl font-bold text-amber-700 dark:text-amber-400 mt-1">{ratings.hard}</dd>
+                <dd className="text-2xl font-bold text-secondary-foreground mt-1">{ratings.hard}</dd>
               </div>
               <div className="text-center border-l border-border">
                 <dt className="text-xs text-muted-foreground font-medium">Bom</dt>

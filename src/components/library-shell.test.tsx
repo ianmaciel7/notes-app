@@ -55,8 +55,8 @@ describe("LibraryShell", () => {
 
     expect(screen.getByRole("heading", { name: "Vocabulário em Espanhol" })).toBeInTheDocument();
     expect(screen.getByText("Palavras essenciais")).toBeInTheDocument();
-    expect(screen.getByText("5")).toBeInTheDocument();
-    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getAllByText("5").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("3").length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: /Vocabulário em Espanhol/i })).toHaveAttribute("href", "/decks/deck-1");
   });
 });

@@ -678,9 +678,9 @@
     "semantic_hash": ""
   },
   "src/components/library-shell.test.tsx": {
-    "mtime": 1789568605.6014621,
-    "seen": 1789568635.7495668,
-    "ast_hash": "ee383d8b0edf7a963fdc242cd2439963",
+    "mtime": 1789568842.192551,
+    "seen": 1789569044.389459,
+    "ast_hash": "28db7438576a627cfb480bce18305588",
     "semantic_hash": ""
   },
   "src/components/library-shell.tsx": {
@@ -690,9 +690,9 @@
     "semantic_hash": ""
   },
   "src/components/study-card.test.tsx": {
-    "mtime": 1789568006.484951,
-    "seen": 1789568078.5211537,
-    "ast_hash": "e50dfc6cfbdb97650a472df1b4912cde",
+    "mtime": 1789568658.4919388,
+    "seen": 1789568668.7324507,
+    "ast_hash": "649fe1f561c39a2b8c1271abab8d6868",
     "semantic_hash": ""
   },
   "src/components/study-card.tsx": {
@@ -2274,15 +2274,15 @@
     "semantic_hash": ""
   },
   "src/components/goals-dialog.tsx": {
-    "mtime": 1789568524.1616082,
-    "seen": 1789568635.7495668,
-    "ast_hash": "3075cecd76bf0dfaa8a3f02816a348f8",
+    "mtime": 1789568786.7868135,
+    "seen": 1789569044.389459,
+    "ast_hash": "26a6fd7f85ec595e27b37537c9b9c015",
     "semantic_hash": ""
   },
   "src/components/study-session.tsx": {
-    "mtime": 1789566843.9519985,
-    "seen": 1789566869.1494462,
-    "ast_hash": "aee2e2a7cce1bbdf741e63c769d14ba2",
+    "mtime": 1789568670.7732646,
+    "seen": 1789568784.2006288,
+    "ast_hash": "8ada869b54db448af6bb57b0011f802d",
     "semantic_hash": ""
   },
   "src/domain/error-analysis.test.ts": {
@@ -2358,9 +2358,9 @@
     "semantic_hash": ""
   },
   "src/components/card-dialog.test.tsx": {
-    "mtime": 1789568444.5775924,
-    "seen": 1789568635.7495668,
-    "ast_hash": "13c1b3457024d2c4037e7cd7c2f325f0",
+    "mtime": 1789568951.8652935,
+    "seen": 1789569044.389459,
+    "ast_hash": "1e8cb5f0f680cacbdd29183d7e3ef9e6",
     "semantic_hash": ""
   },
   "src/components/goals-dialog.test.tsx": {
@@ -2634,9 +2634,9 @@
     "semantic_hash": ""
   },
   "src/components/login-view.test.tsx": {
-    "mtime": 1789568482.7347827,
-    "seen": 1789568635.7495668,
-    "ast_hash": "19b471f78adfe78cc2cc2003989fb99a",
+    "mtime": 1789568655.6353984,
+    "seen": 1789568668.7324507,
+    "ast_hash": "42ff9094fe848be17a4d99fb5b174129",
     "semantic_hash": ""
   },
   "src/domain/auth.ts": {
@@ -2649,6 +2649,12 @@
     "mtime": 1789568459.8217888,
     "seen": 1789568635.7501047,
     "ast_hash": "18eab3c052362a9e906b7d34303c823e",
+    "semantic_hash": ""
+  },
+  "src/components/study-session.test.tsx": {
+    "mtime": 1789568976.9765272,
+    "seen": 1789569044.389459,
+    "ast_hash": "d6b9e9d9a62e9af6b1a9cee7969761cd",
     "semantic_hash": ""
   }
 }

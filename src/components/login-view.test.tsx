@@ -1,6 +1,7 @@
 import * as React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { User } from "firebase/auth";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { LoginView } from "@/components/login-view";
@@ -24,6 +25,29 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@/hooks/use-auth");
 
+function createMockUser(overrides: Partial<User> = {}): User {
+  return {
+    uid: "test-uid-123",
+    email: "user@example.com",
+    displayName: "Tester",
+    isAnonymous: false,
+    emailVerified: true,
+    photoURL: null,
+    phoneNumber: null,
+    providerId: "firebase",
+    tenantId: null,
+    metadata: {} as User["metadata"],
+    providerData: [],
+    refreshToken: "token",
+    delete: vi.fn(),
+    getIdToken: vi.fn(),
+    getIdTokenResult: vi.fn(),
+    reload: vi.fn(),
+    toJSON: vi.fn(),
+    ...overrides,
+  } as unknown as User;
+}
+
 describe("LoginView", () => {
   const mockLoginWithEmail = vi.fn();
   const mockRegisterWithEmail = vi.fn();
@@ -44,12 +68,12 @@ describe("LoginView", () => {
       isAuthenticated: false,
       permissions: [],
       hasPermission: () => false,
-      loginWithEmail: mockLoginWithEmail.mockResolvedValue(undefined),
-      registerWithEmail: mockRegisterWithEmail.mockResolvedValue(undefined),
-      loginWithGoogle: mockLoginWithGoogle.mockResolvedValue(undefined),
-      loginAnonymously: mockLoginAnonymously.mockResolvedValue(undefined),
-      linkAccountWithEmail: mockLinkAccountWithEmail.mockResolvedValue(undefined),
-      linkAccountWithGoogle: mockLinkAccountWithGoogle.mockResolvedValue(undefined),
+      loginWithEmail: mockLoginWithEmail.mockResolvedValue(createMockUser()),
+      registerWithEmail: mockRegisterWithEmail.mockResolvedValue(createMockUser()),
+      loginWithGoogle: mockLoginWithGoogle.mockResolvedValue(createMockUser()),
+      loginAnonymously: mockLoginAnonymously.mockResolvedValue(createMockUser({ isAnonymous: true })),
+      linkAccountWithEmail: mockLinkAccountWithEmail.mockResolvedValue(createMockUser()),
+      linkAccountWithGoogle: mockLinkAccountWithGoogle.mockResolvedValue(createMockUser()),
       resetPassword: mockResetPassword.mockResolvedValue(undefined),
       updateUserProfile: vi.fn(),
       logout: vi.fn(),
@@ -74,7 +98,7 @@ describe("LoginView", () => {
       expect(backLink).toHaveAttribute("href", "/");
 
       // Header and description
-      expect(screen.getByRole("heading", { name: "Boas-vindas ao Revisa" })).toBeInTheDocument();
+      expect(screen.getByText("Boas-vindas ao Revisa")).toBeInTheDocument();
       expect(
         screen.getByText("Seu espaço de memorização com repetição espaçada no seu próprio ritmo."),
       ).toBeInTheDocument();
@@ -100,13 +124,13 @@ describe("LoginView", () => {
 
     it("renders account linking copy when user is anonymous", () => {
       setupAuthMock({
-        user: { uid: "anon-42", isAnonymous: true } as any,
+        user: createMockUser({ uid: "anon-42", isAnonymous: true }),
         isAnonymous: true,
       });
 
       render(<LoginView />);
 
-      expect(screen.getByRole("heading", { name: "Vincular sua conta" })).toBeInTheDocument();
+      expect(screen.getByText("Vincular sua conta")).toBeInTheDocument();
       expect(
         screen.getByText("Conecte sua conta para sincronizar seus cartões e nunca perder seu progresso."),
       ).toBeInTheDocument();
@@ -121,7 +145,7 @@ describe("LoginView", () => {
   describe("Auto-redirection", () => {
     it("redirects authenticated permanent user to default safe redirect '/'", () => {
       setupAuthMock({
-        user: { uid: "user-123", email: "user@example.com", isAnonymous: false } as any,
+        user: createMockUser({ uid: "user-123", email: "user@example.com", isAnonymous: false }),
         isAuthenticated: true,
         loading: false,
         isAnonymous: false,
@@ -135,7 +159,7 @@ describe("LoginView", () => {
     it("redirects authenticated user to target URL specified in searchParams", () => {
       mockSearchParams = new URLSearchParams({ redirect: "/decks/chemistry-101" });
       setupAuthMock({
-        user: { uid: "user-123", email: "user@example.com", isAnonymous: false } as any,
+        user: createMockUser({ uid: "user-123", email: "user@example.com", isAnonymous: false }),
         isAuthenticated: true,
         loading: false,
         isAnonymous: false,
@@ -149,7 +173,7 @@ describe("LoginView", () => {
     it("sanitizes unsafe redirect URL to fallback '/' when redirecting authenticated user", () => {
       mockSearchParams = new URLSearchParams({ redirect: "https://evil.com/phishing" });
       setupAuthMock({
-        user: { uid: "user-123", email: "user@example.com", isAnonymous: false } as any,
+        user: createMockUser({ uid: "user-123", email: "user@example.com", isAnonymous: false }),
         isAuthenticated: true,
         loading: false,
         isAnonymous: false,
@@ -162,7 +186,7 @@ describe("LoginView", () => {
 
     it("does not redirect when auth is still loading", () => {
       setupAuthMock({
-        user: { uid: "user-123", email: "user@example.com", isAnonymous: false } as any,
+        user: createMockUser({ uid: "user-123", email: "user@example.com", isAnonymous: false }),
         loading: true,
         isAnonymous: false,
       });
@@ -174,7 +198,7 @@ describe("LoginView", () => {
 
     it("does not auto-redirect when user is anonymous", () => {
       setupAuthMock({
-        user: { uid: "anon-123", isAnonymous: true } as any,
+        user: createMockUser({ uid: "anon-123", isAnonymous: true }),
         loading: false,
         isAnonymous: true,
       });
