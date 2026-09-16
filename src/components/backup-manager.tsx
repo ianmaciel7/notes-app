@@ -4,8 +4,8 @@ import { useRef, useState, type ChangeEvent } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Download, FileCheck2, ShieldCheck, Upload } from "lucide-react";
 
-import { AppFrame } from "@/components/app-frame";
 import { ConfirmAlertDialog } from "@/components/confirm-alert-dialog";
+import { SpaceLayout } from "@/components/space-layout";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -65,7 +65,7 @@ export function BackupManager() {
   }
 
   return (
-    <AppFrame active="backup">
+    <SpaceLayout active="backup">
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 space-y-8">
         {/* Page Heading */}
         <section className="space-y-1">
@@ -176,6 +176,6 @@ export function BackupManager() {
         onOpenChange={(open) => !open && setPendingBackup(null)}
         onConfirm={confirmImport}
       />
-    </AppFrame>
+    </SpaceLayout>
   );
 }

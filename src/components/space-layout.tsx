@@ -3,6 +3,7 @@ import { Archive, BarChart2, Library, Settings2, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { UserNav } from "@/components/user-nav";
 import { cn } from "@/lib/utils";
 
 interface SpaceLayoutProps {
@@ -68,9 +69,12 @@ export function SpaceLayout({ children, active }: SpaceLayoutProps) {
           </Link>
         </nav>
 
-        <div className="mt-auto pt-4 border-t border-sidebar-border text-sidebar-foreground/60 flex items-start gap-2 text-xs leading-relaxed">
-          <Settings2 size={16} className="shrink-0 mt-0.5" />
-          <span>Dados salvos neste dispositivo</span>
+        <div className="mt-auto pt-4 border-t border-sidebar-border space-y-3">
+          <UserNav />
+          <div className="text-sidebar-foreground/60 flex items-start gap-2 text-xs leading-relaxed">
+            <Settings2 size={16} className="shrink-0 mt-0.5" />
+            <span>Dados salvos neste dispositivo</span>
+          </div>
         </div>
       </aside>
 
@@ -89,6 +93,7 @@ export function SpaceLayout({ children, active }: SpaceLayoutProps) {
             <span>Revisa</span>
           </Link>
           <div className="flex items-center gap-2">
+            <UserNav compact />
             <Button
               render={<Link href="/analytics" />}
               nativeButton={false}

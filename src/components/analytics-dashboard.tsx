@@ -13,9 +13,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { AppFrame } from "@/components/app-frame";
 import { CardDialog } from "@/components/card-dialog";
 import { GoalsCard } from "@/components/goals-card";
+import { SpaceLayout } from "@/components/space-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -74,11 +74,11 @@ export function AnalyticsDashboard() {
 
   if (!decks || !cards || !schedules || !reviewLogs) {
     return (
-      <AppFrame active="analytics">
+      <SpaceLayout active="analytics">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-8 py-12 text-center text-muted-foreground text-sm">
           Carregando dados de desempenho...
         </div>
-      </AppFrame>
+      </SpaceLayout>
     );
   }
 
@@ -91,7 +91,7 @@ export function AnalyticsDashboard() {
   const totalLogs = errorStats.totalReviews;
 
   return (
-    <AppFrame active="analytics">
+    <SpaceLayout active="analytics">
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 space-y-8">
         {/* Page Heading */}
         <section className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 pb-2">
@@ -369,6 +369,6 @@ export function AnalyticsDashboard() {
           />
         ) : null}
       </div>
-    </AppFrame>
+    </SpaceLayout>
   );
 }

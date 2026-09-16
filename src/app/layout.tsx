@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AuthProvider } from "@/contexts/auth-context";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
@@ -24,7 +25,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col"><TooltipProvider>{children}</TooltipProvider></body>
+      <body className="min-h-full flex flex-col">
+        <AuthProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }

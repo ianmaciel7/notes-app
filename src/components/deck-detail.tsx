@@ -356,6 +356,6 @@ export function DeckDetail({ deckId }: DeckDetailProps) {
         onOpenChange={(open) => !open && setCardToDelete(null)}
         onConfirm={() => (cardToDelete ? deleteCard(db, cardToDelete.id) : undefined)}
       />
-    </AppFrame>
+    </SpaceLayout>
   );
 }
