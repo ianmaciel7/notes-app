@@ -14,10 +14,10 @@ import {
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { AppFrame } from "@/components/app-frame";
 import { CardDialog } from "@/components/card-dialog";
 import { ConfirmAlertDialog } from "@/components/confirm-alert-dialog";
 import { DeckDialog } from "@/components/deck-dialog";
+import { SpaceLayout } from "@/components/space-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -70,17 +70,17 @@ export function DeckDetail({ deckId }: DeckDetailProps) {
 
   if (deck === undefined || cards === undefined) {
     return (
-      <AppFrame active="decks">
+      <SpaceLayout active="decks">
         <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 py-12 text-center text-muted-foreground text-sm">
           Carregando baralho...
         </div>
-      </AppFrame>
+      </SpaceLayout>
     );
   }
 
   if (!deck) {
     return (
-      <AppFrame active="decks">
+      <SpaceLayout active="decks">
         <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 py-8 space-y-6">
           <Link
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground no-underline"
@@ -96,7 +96,7 @@ export function DeckDetail({ deckId }: DeckDetailProps) {
             </EmptyHeader>
           </Empty>
         </div>
-      </AppFrame>
+      </SpaceLayout>
     );
   }
 
@@ -110,8 +110,8 @@ export function DeckDetail({ deckId }: DeckDetailProps) {
   }
 
   return (
-    <AppFrame active="decks">
-      <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 space-y-8">
+    <SpaceLayout active="decks">
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 space-y-8">
         <Link
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground no-underline"
           href="/"

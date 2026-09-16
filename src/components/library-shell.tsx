@@ -10,9 +10,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { AppFrame } from "@/components/app-frame";
 import { DeckDialog } from "@/components/deck-dialog";
 import { GoalsCard } from "@/components/goals-card";
+import { SpaceLayout } from "@/components/space-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -90,7 +90,7 @@ export function LibraryShell(props: LibraryShellProps = {}) {
   const handleCreateDeck = props.onCreateDeck ?? (() => setDialogOpen(true));
 
   return (
-    <AppFrame active="decks">
+    <SpaceLayout active="decks">
       <div className="content-wrap space-y-6">
         <section className="page-heading">
           <div>
@@ -165,6 +165,6 @@ export function LibraryShell(props: LibraryShellProps = {}) {
         onClose={() => setDialogOpen(false)}
         onSubmit={(value) => createDeck(db, value).then(() => undefined)}
       />
-    </AppFrame>
+    </SpaceLayout>
   );
 }
