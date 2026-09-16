@@ -1,5 +1,56 @@
 # Agent Instructions
 
+## Package Manager
+
+- Use **pnpm** (`pnpm@11.20.0`); keep dependency changes in `package.json` and `pnpm-lock.yaml` together.
+
+## Commands
+
+| Task | Command |
+|------|---------|
+| Development | `pnpm dev` |
+| Lint | `pnpm lint` |
+| Typecheck | `pnpm typecheck` |
+| Unit tests | `pnpm test` |
+| E2E tests | `pnpm test:e2e` |
+| Production build | `pnpm build` |
+
+## Architecture
+
+- This is a Next.js 16 App Router application under `src/app/`; route pages live in `src/app/**/page.tsx`.
+- `src/components/` contains feature UI and client-side application shells; keep route composition in `src/app` and reusable UI in `src/components`.
+- `src/lib/` contains domain logic, types, persistence, backup, and WebMCP integration. Keep business rules out of route pages and presentational components.
+- Persistence is browser-local IndexedDB through Dexie (`src/lib/db.ts`); do not assume a server database or add server persistence without an explicit requirement.
+- Preserve the existing Portuguese (`pt-BR`) product language and accessibility/focus behavior.
+
+## Next.js and UI Conventions
+
+- Follow App Router conventions: use Server Components by default; add `"use client"` only to components that need browser APIs, state, effects, or event handlers.
+- Keep browser-only code (Dexie, `window`, file APIs) behind client boundaries and do not import it into Server Components.
+- Use route segments for navigation (`/backup`, `/baralhos/[deckId]`, `/estudar/[deckId]`); validate dynamic route data before use.
+- Use Tailwind CSS v4 and the design tokens in `src/app/globals.css`; avoid introducing a second styling system or scattering new global CSS.
+- Before changing App Router APIs, routing, caching, or Server Actions, consult the installed guides under `node_modules/next/dist/docs/`.
+- Do not edit generated output such as `.next/`, `next-env.d.ts`, or `tsconfig.tsbuildinfo`.
+- shadcn/ui is not installed yet. When it is introduced, keep generated primitives in `src/components/ui`, preserve the existing tokens, and compose them in feature components rather than editing generated primitives for product-specific behavior.
+- Before adding a new primitive, check whether an existing component or shadcn/ui primitive already covers the interaction; keep visual variants local and accessible.
+- Keep controlled text-entry state local; debounce Dexie writes and flush persistence on blur, submit, navigation, or unmount. Handle IME composition without committing partial input.
+
+## Verification
+
+- After changing code or agent instructions, run `graphify update .`.
+- For UI changes, run the focused component tests plus `pnpm typecheck` and `pnpm lint`; run E2E tests for route or interaction changes.
+- Run the checks you report and state skipped checks, failures, assumptions, and remaining risks honestly.
+- Inspect the final diff and repository status before reporting completion; preserve unrelated user changes.
+
+## Code Style
+
+- Use TypeScript strict mode, double quotes, semicolons, trailing commas, and 2-space indentation as established by the existing files and ESLint.
+- Name files and folders in kebab-case; use PascalCase for React components and types, camelCase for functions, variables, and hooks, and UPPER_SNAKE_CASE only for true constants.
+- Keep mutations and domain validation in `src/lib`; UI components should emit callbacks and render state rather than duplicate persistence rules.
+- Use semantic HTML, accessible names, `type="button"` for non-submit buttons, and the existing focus-visible behavior.
+- Write code in English: identifiers, types, functions, hooks, props, filenames, comments, test descriptions, and internal errors must use English.
+- Keep only user-facing product copy in Portuguese (`pt-BR`); preserve established domain identifiers such as `deck`, `card`, `schedule`, and `review`.
+
 ## Graphify
 
 - Use `graphify query "<question>"` first for codebase questions when `graphify-out/graph.json` exists.
@@ -25,7 +76,7 @@
 
 ## Custom Agents
 
-- Reusable role files live in `.agents/agents/*.md`.
+- Cross-tool role files live in `.agents/agents/*.md`; Codex CLI roles live in `.codex/agents/*.toml` and must define `name`, `description`, and `developer_instructions`.
 - Follow `.agents/skills/custom-agent/SKILL.md` when creating, reviewing, renaming, or improving role files.
 - Keep role files short, explicit about edit permissions, and clear about verification or handoff.
 - Follow `.agents/skills/skill-creator/SKILL.md` when editing skills under `.agents/skills/`.
@@ -37,18 +88,8 @@
 - Prefer a nested `AGENTS.md` only when a subtree needs different commands or conventions from the repo root.
 - Keep temporary task notes out of `AGENTS.md`; put repeatable workflow guidance in a skill under `.agents/skills/`.
 - Do not duplicate the same instruction in `AGENTS.md` and a rule file; link to the narrower source when possible.
-
-## Commands
-
-| Task | Command |
-|------|---------|
-| Update graph | `graphify update .` |
-| Graph query | `graphify query "<question>"` |
-| Graph path | `graphify path "<A>" "<B>"` |
-| Graph explain | `graphify explain "<concept>"` |
-| Resolve docs | `npx ctx7@latest library <name> "<what to look up>"` |
-| Fetch docs | `npx ctx7@latest docs <libraryId> "<what to look up>"` |
-
+- Treat `.worktrees/` as strictly read-only historical reference material and preserve unrelated user changes.
+- Never expose secrets or perform destructive, privileged, production-impacting, or irreversible actions without explicit authorization; use portable relative paths in repository configuration.
 ## External References
 
 | Need | File |

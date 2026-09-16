@@ -13,6 +13,10 @@
 
 # testing
 /coverage
+/test-results/
+
+# local scaffolding
+/.temp/
 
 # next.js
 /.next/

@@ -133,7 +133,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Search local git worktrees with ripgrep."
     )
-    parser.add_argument("pattern", help="Ripgrep pattern to search for.")
+    parser.add_argument("pattern", nargs="?", help="Ripgrep pattern to search for.")
     parser.add_argument(
         "--glob",
         action="append",
@@ -158,6 +158,11 @@ def main() -> int:
         action="store_true",
         help="Search files ignored by gitignore or rg ignore files.",
     )
+    parser.add_argument(
+        "--list",
+        action="store_true",
+        help="List matching worktrees without searching file contents.",
+    )
     args = parser.parse_args()
 
     repo = Path.cwd()
@@ -170,6 +175,15 @@ def main() -> int:
     if not worktrees:
         print("No matching worktrees found.")
         return 0
+
+    if args.list:
+        for worktree in worktrees:
+            branch = f" branch={worktree.branch}" if worktree.branch else ""
+            print(f"{worktree.label}\t{worktree.path}{branch}")
+        return 0
+
+    if not args.pattern:
+        parser.error("pattern is required unless --list is used")
 
     command = build_rg_command(args)
     matched = False
