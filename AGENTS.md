@@ -19,8 +19,8 @@
 
 - This is a Next.js 16 App Router application under `src/app/`; route pages live in `src/app/**/page.tsx`.
 - `src/components/` contains feature UI and client-side application shells; keep route composition in `src/app` and reusable UI in `src/components`.
-- `src/lib/` contains domain logic, types, persistence, backup, and WebMCP integration. Keep business rules out of route pages and presentational components.
-- Persistence is browser-local IndexedDB through Dexie (`src/lib/db.ts`); do not assume a server database or add server persistence without an explicit requirement.
+- `src/data/` contains browser-local IndexedDB access, backup serialization, and domain record types. `src/domain/` contains scheduling and study-queue rules. `src/integrations/` contains WebMCP integration. Keep business rules out of route pages and presentational components.
+- Persistence is browser-local IndexedDB through Dexie (`src/data/db.ts`); do not assume a server database or add server persistence without an explicit requirement.
 - Preserve the existing Portuguese (`pt-BR`) product language and accessibility/focus behavior.
 
 ## Next.js and UI Conventions
@@ -31,8 +31,8 @@
 - Use Tailwind CSS v4 and the design tokens in `src/app/globals.css`; avoid introducing a second styling system or scattering new global CSS.
 - Before changing App Router APIs, routing, caching, or Server Actions, consult the installed guides under `node_modules/next/dist/docs/`.
 - Do not edit generated output such as `.next/`, `next-env.d.ts`, or `tsconfig.tsbuildinfo`.
-- shadcn/ui is not installed yet. When it is introduced, keep generated primitives in `src/components/ui`, preserve the existing tokens, and compose them in feature components rather than editing generated primitives for product-specific behavior.
-- Before adding a new primitive, check whether an existing component or shadcn/ui primitive already covers the interaction; keep visual variants local and accessible.
+- shadcn/ui is configured through `components.json` with `base-nova`, `@base-ui/react`, `lucide-react`, `@/components/ui`, and `@/lib/utils`; follow the detailed rules in `.agents/rules/shadcn-first.md`.
+- Keep generated shadcn primitives in `src/components/ui`; compose them in feature components and do not put product-specific behavior in generated primitives.
 - Keep controlled text-entry state local; debounce Dexie writes and flush persistence on blur, submit, navigation, or unmount. Handle IME composition without committing partial input.
 
 ## Verification
@@ -46,7 +46,7 @@
 
 - Use TypeScript strict mode, double quotes, semicolons, trailing commas, and 2-space indentation as established by the existing files and ESLint.
 - Name files and folders in kebab-case; use PascalCase for React components and types, camelCase for functions, variables, and hooks, and UPPER_SNAKE_CASE only for true constants.
-- Keep mutations and domain validation in `src/lib`; UI components should emit callbacks and render state rather than duplicate persistence rules.
+- Keep persistence mutations and validation in `src/data`, and domain rules in `src/domain`; UI components should emit callbacks and render state rather than duplicate business rules.
 - Use semantic HTML, accessible names, `type="button"` for non-submit buttons, and the existing focus-visible behavior.
 - Write code in English: identifiers, types, functions, hooks, props, filenames, comments, test descriptions, and internal errors must use English.
 - Keep only user-facing product copy in Portuguese (`pt-BR`); preserve established domain identifiers such as `deck`, `card`, `schedule`, and `review`.

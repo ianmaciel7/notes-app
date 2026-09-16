@@ -1,4 +1,4 @@
-import type { CardRecord, CardSchedule, SessionGoal } from "@/lib/types";
+import type { CardRecord, CardSchedule, SessionGoal } from "@/data/types";
 
 export function buildStudyQueue(
   cards: CardRecord[],

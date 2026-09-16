@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { ArrowLeft, CheckCircle2, RotateCcw } from "lucide-react";
 import Link from "next/link";
@@ -9,10 +9,10 @@ import { useSearchParams } from "next/navigation";
 import { StudyCard } from "@/components/study-card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { db, saveReview } from "@/lib/db";
-import { scheduleReview } from "@/lib/scheduler";
-import { buildStudyQueue } from "@/lib/study-queue";
-import type { CardRecord, CardSchedule, DeckRecord, SessionGoal, StudyRating } from "@/lib/types";
+import { db, saveReview } from "@/data/db";
+import { scheduleReview } from "@/domain/scheduler";
+import { buildStudyQueue } from "@/domain/study-queue";
+import type { CardRecord, CardSchedule, DeckRecord, SessionGoal, StudyRating } from "@/data/types";
 
 interface StudyAppProps { deckId: string; }
 
@@ -46,16 +46,25 @@ function StudySession({ deck, cards, schedules, goal }: { deck: DeckRecord; card
   const [startedAt] = useState(() => new Date());
   const [queue] = useState(() => buildStudyQueue(cards, schedules, startedAt, goal));
   const [index, setIndex] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const savingRef = useRef(false);
   const [ratings, setRatings] = useState<Record<StudyRating, number>>({ again: 0, hard: 0, good: 0, easy: 0 });
   const scheduleByCard = useMemo(() => new Map(schedules.map((item) => [item.cardId, item])), [schedules]);
   const current = queue[index];
 
   const handleRate = useCallback(async (rating: StudyRating) => {
-    if (!current) return;
-    const result = scheduleReview(current.id, scheduleByCard.get(current.id), rating, new Date());
-    await saveReview(db, result.schedule, result.log);
-    setRatings((value) => ({ ...value, [rating]: value[rating] + 1 }));
-    setIndex((value) => value + 1);
+    if (!current || savingRef.current) return;
+    savingRef.current = true;
+    setSaving(true);
+    try {
+      const result = scheduleReview(current.id, scheduleByCard.get(current.id), rating, new Date());
+      await saveReview(db, result.schedule, result.log);
+      setRatings((value) => ({ ...value, [rating]: value[rating] + 1 }));
+      setIndex((value) => value + 1);
+    } finally {
+      savingRef.current = false;
+      setSaving(false);
+    }
   }, [current, scheduleByCard]);
 
   if (!current) {
@@ -81,7 +90,7 @@ function StudySession({ deck, cards, schedules, goal }: { deck: DeckRecord; card
         <div><strong>{deck.name}</strong><span>{index + 1} de {queue.length}</span></div>
         <Progress className="session-progress" value={queue.length ? (index / queue.length) * 100 : 0} aria-label={`${index} de ${queue.length} concluídos`} />
       </header>
-      <StudyCard key={current.id} card={current} schedule={scheduleByCard.get(current.id)} onRate={handleRate} />
+      <StudyCard key={current.id} card={current} schedule={scheduleByCard.get(current.id)} disabled={saving} onRate={handleRate} />
     </div>
   );
 }

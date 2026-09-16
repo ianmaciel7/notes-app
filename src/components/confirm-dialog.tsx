@@ -31,24 +31,34 @@ export function ConfirmDialog({
   onConfirm,
 }: ConfirmDialogProps) {
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  function handleOpenChange(nextOpen: boolean) {
+    if (!nextOpen) setError("");
+    onOpenChange(nextOpen);
+  }
 
   async function handleConfirm() {
     setSubmitting(true);
+    setError("");
     try {
       await onConfirm();
-      onOpenChange(false);
+      handleOpenChange(false);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Não foi possível concluir esta ação.");
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog open={open} onOpenChange={handleOpenChange}>
       <AlertDialogContent className="revisa-confirm-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
+        {error ? <p className="confirm-error" role="alert">{error}</p> : null}
         <AlertDialogFooter>
           <AlertDialogCancel disabled={submitting}>Cancelar</AlertDialogCancel>
           <AlertDialogAction variant="destructive" disabled={submitting} onClick={handleConfirm}>

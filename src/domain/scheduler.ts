@@ -1,6 +1,6 @@
 import { createEmptyCard, fsrs, Rating, type Card, type Grade } from "ts-fsrs";
 
-import type { CardSchedule, ReviewLogRecord, StudyRating } from "@/lib/types";
+import type { CardSchedule, ReviewLogRecord, StudyRating } from "@/data/types";
 
 const scheduler = fsrs({ request_retention: 0.9, enable_fuzz: false });
 

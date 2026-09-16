@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseBackup } from "@/lib/backup";
+import { parseBackup } from "@/data/backup";
 
 describe("backup validation", () => {
   it("accepts a complete versioned backup", () => {

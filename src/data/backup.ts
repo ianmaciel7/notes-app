@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { BackupEnvelope } from "@/lib/types";
+import type { BackupEnvelope } from "@/data/types";
 
 const date = z.string().datetime();
 const deckSchema = z.object({

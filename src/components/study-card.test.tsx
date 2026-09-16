@@ -29,4 +29,16 @@ describe("StudyCard", () => {
     await user.click(screen.getByRole("button", { name: /Bom/ }));
     expect(onRate).toHaveBeenCalledWith("good");
   });
+
+  it("blocks rating controls while a review is being saved", async () => {
+    const onRate = vi.fn();
+    const user = userEvent.setup();
+
+    render(<StudyCard card={card} now={new Date("2026-09-15T12:00:00.000Z")} onRate={onRate} disabled />);
+
+    expect(screen.getByRole("button", { name: "Mostrar resposta" })).toBeDisabled();
+    await user.keyboard(" ");
+    expect(screen.queryByText(card.back)).not.toBeInTheDocument();
+    expect(onRate).not.toHaveBeenCalled();
+  });
 });

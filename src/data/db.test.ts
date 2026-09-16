@@ -8,7 +8,7 @@ import {
   deleteDeck,
   replaceDatabase,
   type RevisaDatabase,
-} from "@/lib/db";
+} from "@/data/db";
 
 describe("Revisa database", () => {
   let db: RevisaDatabase;

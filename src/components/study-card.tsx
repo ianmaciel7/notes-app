@@ -5,8 +5,8 @@ import { Eye } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { previewRatings } from "@/lib/scheduler";
-import type { CardRecord, CardSchedule, StudyRating } from "@/lib/types";
+import { previewRatings } from "@/domain/scheduler";
+import type { CardRecord, CardSchedule, StudyRating } from "@/data/types";
 
 const labels: Record<StudyRating, string> = {
   again: "Novamente",
@@ -19,15 +19,17 @@ interface StudyCardProps {
   card: CardRecord;
   schedule?: CardSchedule;
   now?: Date;
+  disabled?: boolean;
   onRate: (rating: StudyRating) => void;
 }
 
-export function StudyCard({ card, schedule, now = new Date(), onRate }: StudyCardProps) {
+export function StudyCard({ card, schedule, now = new Date(), disabled = false, onRate }: StudyCardProps) {
   const [revealed, setRevealed] = useState(false);
   const previews = useMemo(() => previewRatings(schedule, now), [schedule, now]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (disabled) return;
       if (!revealed && event.code === "Space") {
         event.preventDefault();
         setRevealed(true);
@@ -40,7 +42,7 @@ export function StudyCard({ card, schedule, now = new Date(), onRate }: StudyCar
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [onRate, revealed]);
+  }, [disabled, onRate, revealed]);
 
   return (
     <div className="study-card-wrap">
@@ -58,11 +60,11 @@ export function StudyCard({ card, schedule, now = new Date(), onRate }: StudyCar
       </Card>
 
       {!revealed ? (
-        <Button className="reveal-button" type="button" onClick={() => setRevealed(true)}><Eye />Mostrar resposta</Button>
+        <Button className="reveal-button" type="button" disabled={disabled} onClick={() => setRevealed(true)}><Eye />Mostrar resposta</Button>
       ) : (
         <div className="rating-grid" aria-label="Avaliar resposta">
           {previews.map((preview, index) => (
-            <Button variant="outline" className={`rating-button rating-${preview.rating}`} type="button" key={preview.rating} onClick={() => onRate(preview.rating)}>
+            <Button variant="outline" className={`rating-button rating-${preview.rating}`} type="button" disabled={disabled} key={preview.rating} onClick={() => onRate(preview.rating)}>
               <span>{labels[preview.rating]}</span>
               <small>{index + 1} · {preview.intervalLabel}</small>
             </Button>

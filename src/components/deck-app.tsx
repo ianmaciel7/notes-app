@@ -14,8 +14,8 @@ import { Modal } from "@/components/modal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { createCard, db, deleteCard, deleteDeck, updateCard, updateDeck } from "@/lib/db";
-import type { CardRecord, SessionGoal } from "@/lib/types";
+import { createCard, db, deleteCard, deleteDeck, updateCard, updateDeck } from "@/data/db";
+import type { CardRecord, SessionGoal } from "@/data/types";
 
 interface DeckAppProps { deckId: string; }
 

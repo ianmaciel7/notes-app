@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { buildStudyQueue } from "@/lib/study-queue";
-import type { CardRecord, CardSchedule } from "@/lib/types";
+import { buildStudyQueue } from "@/domain/study-queue";
+import type { CardRecord, CardSchedule } from "@/data/types";
 
 const cards: CardRecord[] = [
   { id: "new-1", deckId: "deck", front: "N1", back: "B1", createdAt: "2026-01-01T00:00:00.000Z", updatedAt: "2026-01-01T00:00:00.000Z" },

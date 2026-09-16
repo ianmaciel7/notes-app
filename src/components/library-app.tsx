@@ -5,8 +5,8 @@ import { useLiveQuery } from "dexie-react-hooks";
 
 import { DeckDialog } from "@/components/deck-dialog";
 import { LibraryShell, type DeckSummary } from "@/components/library-shell";
-import { createDeck, db } from "@/lib/db";
-import { useRevisaWebMcp } from "@/lib/webmcp";
+import { createDeck, db } from "@/data/db";
+import { useRevisaWebMcp } from "@/integrations/webmcp";
 
 export function LibraryApp() {
   useRevisaWebMcp();

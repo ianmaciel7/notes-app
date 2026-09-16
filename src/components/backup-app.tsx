@@ -9,9 +9,9 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { parseBackup } from "@/lib/backup";
-import { createBackup, db, replaceDatabase } from "@/lib/db";
-import type { BackupEnvelope } from "@/lib/types";
+import { parseBackup } from "@/data/backup";
+import { createBackup, db, replaceDatabase } from "@/data/db";
+import type { BackupEnvelope } from "@/data/types";
 
 export function BackupApp() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -80,7 +80,7 @@ export function BackupApp() {
             <span className="backup-action-icon"><Upload size={22} /></span>
             <div><h2>Restaurar backup</h2><p>Escolha um arquivo do Revisa. A restauração substitui a biblioteca atual.</p></div>
             <Button variant="secondary" type="button" onClick={() => inputRef.current?.click()}><Upload />Escolher arquivo</Button>
-            <input ref={inputRef} className="visually-hidden" type="file" accept="application/json,.json" onChange={handleImport} />
+            <input ref={inputRef} className="visually-hidden" type="file" accept="application/json,.json" tabIndex={-1} aria-label="Arquivo de backup" onChange={handleImport} />
           </Card>
         </div>
 

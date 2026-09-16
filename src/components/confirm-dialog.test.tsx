@@ -29,4 +29,24 @@ describe("ConfirmDialog", () => {
 
     expect(onConfirm).toHaveBeenCalledOnce();
   });
+
+  it("keeps the dialog open and reports a failed action", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <ConfirmDialog
+        open
+        title="Excluir baralho?"
+        description="Todos os cartões também serão excluídos."
+        confirmLabel="Excluir baralho"
+        onOpenChange={vi.fn()}
+        onConfirm={() => Promise.reject(new Error("Falha ao excluir."))}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Excluir baralho" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("Falha ao excluir.");
+    expect(screen.getByRole("alertdialog", { name: "Excluir baralho?" })).toBeInTheDocument();
+  });
 });

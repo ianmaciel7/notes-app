@@ -142,6 +142,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .revisa-dialog-header [data-slot="dialog-title"] { font-size: 20px; font-weight: 700; }
 .revisa-dialog-header [data-slot="dialog-description"] { font-size: 13px; line-height: 1.5; }
 .revisa-confirm-dialog { border-radius: 8px; }
+.confirm-error { margin: 0; color: var(--destructive); font-size: 12px; }
 .form-stack { display: grid; gap: 17px; padding: 22px; }
 .field-group { display: grid; gap: 7px; }
 .field-group [data-slot="input"] { height: 44px; }

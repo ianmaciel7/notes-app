@@ -6,7 +6,7 @@ import type {
   CardSchedule,
   DeckRecord,
   ReviewLogRecord,
-} from "@/lib/types";
+} from "@/data/types";
 
 export class RevisaDatabase extends Dexie {
   decks!: EntityTable<DeckRecord, "id">;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { previewRatings, scheduleReview } from "@/lib/scheduler";
+import { previewRatings, scheduleReview } from "@/domain/scheduler";
 
 describe("FSRS scheduler", () => {
   const now = new Date("2026-09-15T12:00:00.000Z");

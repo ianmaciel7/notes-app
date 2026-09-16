@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { z } from "zod";
 
-import { createDeck, db } from "@/lib/db";
+import { createDeck, db } from "@/data/db";
 
 interface ModelContext {
   registerTool(tool: {
