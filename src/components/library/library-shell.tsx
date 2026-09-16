@@ -10,9 +10,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { DeckDialog } from "@/components/deck-dialog";
-import { GoalsCard } from "@/components/goals-card";
-import { SpaceLayout } from "@/components/space-layout";
+import { DeckDialog } from "@/components/deck/deck-dialog";
+import { GoalsCard } from "@/components/goals/goals-card";
+import { SpaceLayout } from "@/components/space/space-layout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {

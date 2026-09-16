@@ -5,7 +5,7 @@ import { ArrowLeft, BookOpen, ShieldCheck, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { AuthForm } from "@/components/auth-form";
+import { AuthForm } from "@/components/auth/auth-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
 import { getSafeRedirectUrl } from "@/lib/auth-validation";

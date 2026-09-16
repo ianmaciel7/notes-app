@@ -3,7 +3,7 @@
 import * as React from "react";
 import { LogIn, LogOut, Sparkles } from "lucide-react";
 
-import { AuthDialog } from "@/components/auth-dialog";
+import { AuthDialog } from "@/components/auth/auth-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";

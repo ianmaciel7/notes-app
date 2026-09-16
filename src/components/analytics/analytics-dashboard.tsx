@@ -14,8 +14,8 @@ import {
 import Link from "next/link";
 
 import { CardDialog } from "@/components/card-dialog";
-import { GoalsCard } from "@/components/goals-card";
-import { SpaceLayout } from "@/components/space-layout";
+import { GoalsCard } from "@/components/goals/goals-card";
+import { SpaceLayout } from "@/components/space/space-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {

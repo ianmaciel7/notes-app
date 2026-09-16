@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { AuthDialog } from "@/components/auth-dialog";
+import { AuthDialog } from "@/components/auth/auth-dialog";
 
 const mockLoginWithEmail = vi.fn().mockResolvedValue(undefined);
 const mockRegisterWithEmail = vi.fn().mockResolvedValue(undefined);

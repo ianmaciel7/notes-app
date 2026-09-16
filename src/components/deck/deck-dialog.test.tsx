@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { DeckDialog } from "@/components/deck-dialog";
+import { DeckDialog } from "@/components/deck/deck-dialog";
 
 describe("DeckDialog", () => {
   it("exposes its supporting copy as the dialog description", () => {

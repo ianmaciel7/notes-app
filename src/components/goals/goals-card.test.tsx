@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
-import { GoalsCard } from "@/components/goals-card";
+import { GoalsCard } from "@/components/goals/goals-card";
 import type { StudyGoalsProgress } from "@/data/types";
 
 describe("GoalsCard", () => {

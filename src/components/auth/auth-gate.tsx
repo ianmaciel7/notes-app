@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Lock, ShieldAlert } from "lucide-react";
 
-import { AuthDialog } from "@/components/auth-dialog";
+import { AuthDialog } from "@/components/auth/auth-dialog";
 import { Button } from "@/components/ui/button";
 import type { Permission, UserRole } from "@/domain/auth";
 import { useAuth } from "@/hooks/use-auth";

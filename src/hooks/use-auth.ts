@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { AuthContext, type AuthContextType } from "@/components/auth-provider";
+import { AuthContext, type AuthContextType } from "@/components/auth/auth-provider";
 import type { Permission, UserRole } from "@/domain/auth";
 
 const defaultAuthContext: AuthContextType = {
@@ -37,8 +37,8 @@ const defaultAuthContext: AuthContextType = {
   updateUserProfile: async () => {
     throw new Error("useAuth must be used within an AuthProvider");
   },
-  logout: async () => {},
-  clearError: () => {},
+  logout: async () => { },
+  clearError: () => { },
 };
 
 export function useAuth(): AuthContextType {

@@ -5,7 +5,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Download, FileCheck2, ShieldCheck, Sparkles, Upload } from "lucide-react";
 
 import { ConfirmAlertDialog } from "@/components/confirm-alert-dialog";
-import { SpaceLayout } from "@/components/space-layout";
+import { SpaceLayout } from "@/components/space/space-layout";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {

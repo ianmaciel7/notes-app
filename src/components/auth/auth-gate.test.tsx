@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { AuthGate } from "@/components/auth-gate";
+import { AuthGate } from "@/components/auth/auth-gate";
 import * as useAuthHook from "@/hooks/use-auth";
 
 vi.mock("@/components/auth-dialog", () => ({

@@ -2,7 +2,7 @@ import { render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { AuthProvider, getFriendlyErrorMessage } from "@/components/auth-provider";
+import { AuthProvider, getFriendlyErrorMessage } from "@/components/auth/auth-provider";
 import { useAuth } from "@/hooks/use-auth";
 
 const { mockCurrentUser } = vi.hoisted(() => ({
@@ -46,9 +46,9 @@ vi.mock("firebase/auth", () => {
     linkWithPopup: vi.fn(async () => ({
       user: { uid: "test-anon-uid", email: "linked-google@example.com", displayName: "Google Linked", isAnonymous: false },
     })),
-    sendPasswordResetEmail: vi.fn(async () => {}),
-    updateProfile: vi.fn(async () => {}),
-    signOut: vi.fn(async () => {}),
+    sendPasswordResetEmail: vi.fn(async () => { }),
+    updateProfile: vi.fn(async () => { }),
+    signOut: vi.fn(async () => { }),
   };
 });
 

@@ -1,4 +1,4 @@
-import { LibraryShell } from "@/components/library-shell";
+import { LibraryShell } from "@/components/library/library-shell";
 
 export default function Home() {
   return <LibraryShell />;

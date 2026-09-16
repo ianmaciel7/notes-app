@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { LoginView } from "@/components/login-view";
+import { LoginView } from "@/components/auth/login-view";
 
 export const metadata: Metadata = {
   title: "Entrar ou Criar Conta | Revisa",

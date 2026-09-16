@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import type { User } from "firebase/auth";
 import { describe, expect, it, vi } from "vitest";
 
-import { UserNav } from "@/components/user-nav";
+import { UserNav } from "@/components/user/user-nav";
 import * as useAuthModule from "@/hooks/use-auth";
 
 vi.mock("@/hooks/use-auth");

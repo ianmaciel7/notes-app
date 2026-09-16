@@ -16,8 +16,8 @@ import Link from "next/link";
 
 import { CardDialog } from "@/components/card-dialog";
 import { ConfirmAlertDialog } from "@/components/confirm-alert-dialog";
-import { DeckDialog } from "@/components/deck-dialog";
-import { SpaceLayout } from "@/components/space-layout";
+import { DeckDialog } from "@/components/deck/deck-dialog";
+import { SpaceLayout } from "@/components/space/space-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -239,8 +239,8 @@ export function DeckDetail({ deckId, className, active = "decks", ...props }: De
               const status = !schedule
                 ? "Novo"
                 : new Date(schedule.due).getTime() <= now
-                ? "Pendente"
-                : `Em ${new Date(schedule.due).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}`;
+                  ? "Pendente"
+                  : `Em ${new Date(schedule.due).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}`;
               const lapses = schedule?.lapses ?? 0;
               return (
                 <article

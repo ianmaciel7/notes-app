@@ -3,7 +3,7 @@ import { Archive, BarChart2, Library, Settings2, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { UserNav } from "@/components/user-nav";
+import { UserNav } from "@/components/user/user-nav";
 import { cn } from "@/lib/utils";
 
 export interface SpaceLayoutProps extends React.ComponentProps<"div"> {

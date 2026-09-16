@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import type { User } from "firebase/auth";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { LoginView } from "@/components/login-view";
+import { LoginView } from "@/components/auth/login-view";
 import * as useAuthModule from "@/hooks/use-auth";
 
 const mockPush = vi.fn();

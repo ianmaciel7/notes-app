@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ArrowLeft, CheckCircle2, LogIn, UserCheck, UserPlus, AlertCircle } from "lucide-react";
 
-import { GoogleSignInButton } from "@/components/google-sign-in-button";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { GoalsDialog } from "@/components/goals-dialog";
+import { GoalsDialog } from "@/components/goals/goals-dialog";
 
 describe("GoalsDialog", () => {
   it("renders goals and allows submitting valid values", async () => {

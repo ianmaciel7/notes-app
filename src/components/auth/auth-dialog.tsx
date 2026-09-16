@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { AuthForm, type AuthFormMode } from "@/components/auth-form";
+import { AuthForm, type AuthFormMode } from "@/components/auth/auth-form";
 import {
   Dialog,
   DialogContent,

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CheckCircle2, Flame, SlidersHorizontal, Target } from "lucide-react";
 
-import { GoalsDialog } from "@/components/goals-dialog";
+import { GoalsDialog } from "@/components/goals/goals-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
