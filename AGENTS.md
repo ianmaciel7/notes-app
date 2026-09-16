@@ -85,11 +85,13 @@
 
 - Update `AGENTS.md` for durable repo-wide instructions that every coding agent should see.
 - Create or update a narrower rule file when the instruction is tool-specific, experimental, generated, or only applies to one workflow.
+- Follow the guidelines in `.agents/rules/instruction-scoping.md` when scoping new agent rules.
 - Prefer a nested `AGENTS.md` only when a subtree needs different commands or conventions from the repo root.
 - Keep temporary task notes out of `AGENTS.md`; put repeatable workflow guidance in a skill under `.agents/skills/`.
 - Do not duplicate the same instruction in `AGENTS.md` and a rule file; link to the narrower source when possible.
 - Treat `.worktrees/` as strictly read-only historical reference material and preserve unrelated user changes.
 - Never expose secrets or perform destructive, privileged, production-impacting, or irreversible actions without explicit authorization; use portable relative paths in repository configuration.
+
 ## External References
 
 | Need | File |
@@ -97,17 +99,9 @@
 | Custom agent roles | `.agents/agents/*.md` |
 | Custom agent workflow | `.agents/skills/custom-agent/SKILL.md` |
 | Skill authoring | `.agents/skills/skill-creator/SKILL.md` |
+| Instruction scoping | `.agents/rules/instruction-scoping.md` |
+| UI & Component rules | `.agents/rules/shadcn-first.md` |
+| Tailwind CSS rules | `.agents/rules/tailwind-styling.md` |
+| Input performance | `.agents/rules/input-performance.md` |
+| React children props | `.agents/rules/react-children-props.md` |
 | Knowledge graph | `graphify-out/graph.json` |
-
-## graphify
-
-This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
-
-When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.
-
-Rules:
-- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
-- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
-- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
-- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
-- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).

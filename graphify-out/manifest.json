@@ -2094,9 +2094,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1789563472.2859817,
-    "seen": 1789563503.1312106,
-    "ast_hash": "b0111d9895eadc7a02dffa342d046cf7",
+    "mtime": 1789564299.7624164,
+    "seen": 1789564321.8396664,
+    "ast_hash": "bd37921fce3a0e8d4cd19a881117c04e",
     "semantic_hash": ""
   },
   "ARCHITECTURE.md": {
@@ -2184,9 +2184,9 @@
     "semantic_hash": ""
   },
   ".agents/rules/shadcn-first.md": {
-    "mtime": 1789562910.088941,
-    "seen": 1789562943.5112576,
-    "ast_hash": "dbd483b2986548e7dab5d1fa2d35b15e",
+    "mtime": 1789564150.5033314,
+    "seen": 1789564175.300768,
+    "ast_hash": "7554f64dbef2deca3076c3e53bde470c",
     "semantic_hash": ""
   },
   "src/data/backup.test.ts": {
@@ -2247,6 +2247,30 @@
     "mtime": 1789563469.3935573,
     "seen": 1789563503.1307058,
     "ast_hash": "d78a45a7457c61195bedf542748bbe7c",
+    "semantic_hash": ""
+  },
+  ".agents/rules/instruction-scoping.md": {
+    "mtime": 1789563908.592949,
+    "seen": 1789563994.4435122,
+    "ast_hash": "4df5137959bed63bd646d67f9d69ad9e",
+    "semantic_hash": ""
+  },
+  ".agents/rules/input-performance.md": {
+    "mtime": 1789564290.2883346,
+    "seen": 1789564321.8386672,
+    "ast_hash": "73e6848a3a4f344ad2b16c0d5c453c4b",
+    "semantic_hash": ""
+  },
+  ".agents/rules/react-children-props.md": {
+    "mtime": 1789564274.6065469,
+    "seen": 1789564321.8386672,
+    "ast_hash": "036737b182f1a4d39230e597e2030c17",
+    "semantic_hash": ""
+  },
+  ".agents/rules/tailwind-styling.md": {
+    "mtime": 1789564283.6463847,
+    "seen": 1789564321.8386672,
+    "ast_hash": "ca8c66ebfd21e05c288194a08b241b45",
     "semantic_hash": ""
   }
 }
