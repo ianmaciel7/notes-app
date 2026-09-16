@@ -18,10 +18,10 @@
     "semantic_hash": "073c476be067d6d4649b355483ee2690"
   },
   "package.json": {
-    "mtime": 1789589155.2416458,
-    "seen": 1789592870.121492,
-    "ast_hash": "9183e918f41013cfe4bc372548ea717a",
-    "semantic_hash": "9183e918f41013cfe4bc372548ea717a"
+    "mtime": 1789601410.7532833,
+    "seen": 1789601437.7117188,
+    "ast_hash": "5edc517f35b9d31c0d5694ffd07c6939",
+    "semantic_hash": ""
   },
   "postcss.config.mjs": {
     "mtime": 1786658707.501152,
@@ -510,9 +510,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1789593281.5012636,
-    "seen": 1789593396.5410833,
-    "ast_hash": "1dce6b8f6d20e9ef41a2a96be5329157",
+    "mtime": 1789600122.176636,
+    "seen": 1789600179.234261,
+    "ast_hash": "a1414b2650f4dfc7eab6488cd9045210",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
@@ -522,15 +522,15 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786658707.4921234,
-    "seen": 1789593396.5410833,
-    "ast_hash": "f15aaa42d5d299d091b1171097ea56ad",
+    "mtime": 1789600122.1795917,
+    "seen": 1789600179.234261,
+    "ast_hash": "9f973496a5563191c814679abcd632a6",
     "semantic_hash": ""
   },
   "pnpm-workspace.yaml": {
-    "mtime": 1789588982.225126,
-    "seen": 1789593396.5410833,
-    "ast_hash": "8da04eb565427354036cd216afd527c0",
+    "mtime": 1789601162.8750703,
+    "seen": 1789601235.9754944,
+    "ast_hash": "1a02637a787b5a754e8d1b7e13ccdc03",
     "semantic_hash": ""
   },
   "public/file.svg": {
@@ -564,9 +564,57 @@
     "semantic_hash": ""
   },
   "ARCHITECTURE.md": {
-    "mtime": 1789599846.3686764,
-    "seen": 1789599899.7228632,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1789600122.178645,
+    "seen": 1789600179.234261,
+    "ast_hash": "f69a1f07f5b645fb228489807d5a7467",
+    "semantic_hash": ""
+  },
+  ".agents/rules/graphify.md": {
+    "mtime": 1789600122.176636,
+    "seen": 1789600179.234261,
+    "ast_hash": "3d3218e6baec447166f35c1f575b8ef5",
+    "semantic_hash": ""
+  },
+  ".agents/rules/tooling.md": {
+    "mtime": 1789600122.1775749,
+    "seen": 1789600179.234261,
+    "ast_hash": "c1c3c0e2b9cefd827176b4ced2cda609",
+    "semantic_hash": ""
+  },
+  ".agents/rules/language.md": {
+    "mtime": 1789600766.2430806,
+    "seen": 1789601006.6040218,
+    "ast_hash": "d3968d3135eafdb2acf4063ff872c582",
+    "semantic_hash": ""
+  },
+  ".agents/rules/skill.md": {
+    "mtime": 1789600969.3130414,
+    "seen": 1789601006.6040218,
+    "ast_hash": "d8f762dceb827ea8683d795a88ce61dc",
+    "semantic_hash": ""
+  },
+  ".ladle/components.tsx": {
+    "mtime": 1789600962.7545278,
+    "seen": 1789601006.6040218,
+    "ast_hash": "8e43604d0bd9acbbe5baca596942036a",
+    "semantic_hash": ""
+  },
+  ".ladle/config.mjs": {
+    "mtime": 1789600961.2822382,
+    "seen": 1789601006.6040218,
+    "ast_hash": "b5194932b11c5d730cc841c464411bc0",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/2026-09-16-ladle-setup/task-5-report.md": {
+    "mtime": 1789601426.8759937,
+    "seen": 1789601492.3037586,
+    "ast_hash": "424f930d1c65c073bf92ed8997bd0aa2",
+    "semantic_hash": ""
+  },
+  "src/components/ui/button.stories.tsx": {
+    "mtime": 1789601753.7796009,
+    "seen": 1789601777.1266909,
+    "ast_hash": "1766536d4c4d2ee4f2b3281298725bf6",
     "semantic_hash": ""
   }
 }
