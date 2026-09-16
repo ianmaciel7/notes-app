@@ -23,7 +23,7 @@ const ratingButtonStyles: Record<StudyRating, string> = {
   easy: "border-border text-foreground hover:bg-secondary hover:border-border",
 };
 
-interface StudyCardProps {
+export interface StudyCardProps extends React.ComponentProps<typeof Card> {
   card: CardRecord;
   schedule?: CardSchedule;
   now?: Date;
@@ -31,7 +31,15 @@ interface StudyCardProps {
   onRate: (rating: StudyRating) => void;
 }
 
-export function StudyCard({ card, schedule, now = new Date(), disabled = false, onRate }: StudyCardProps) {
+export function StudyCard({
+  card,
+  schedule,
+  now = new Date(),
+  disabled = false,
+  onRate,
+  className,
+  ...props
+}: StudyCardProps) {
   const [revealed, setRevealed] = useState(false);
   const previews = useMemo(() => previewRatings(schedule, now), [schedule, now]);
 
@@ -53,7 +61,7 @@ export function StudyCard({ card, schedule, now = new Date(), disabled = false, 
   }, [disabled, onRate, revealed]);
 
   return (
-    <div className="w-full max-w-3xl mx-auto space-y-4">
+    <div className={cn("w-full max-w-3xl mx-auto space-y-4", className)} {...props}>
       <Card className="min-h-[350px] flex flex-col justify-center text-center shadow-lg border-border">
         <CardContent className="p-8 sm:p-12 flex flex-col items-center justify-center space-y-6">
           <div className="flex flex-col items-center space-y-3 w-full">

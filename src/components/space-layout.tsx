@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/button";
 import { UserNav } from "@/components/user-nav";
 import { cn } from "@/lib/utils";
 
-interface SpaceLayoutProps {
+export interface SpaceLayoutProps extends React.ComponentProps<"div"> {
   children: React.ReactNode;
   active?: "decks" | "analytics" | "backup";
 }
 
-export function SpaceLayout({ children, active }: SpaceLayoutProps) {
+export function SpaceLayout({ children, active, className, ...props }: SpaceLayoutProps) {
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-[232px_minmax(0,1fr)]">
+    <div className={cn("min-h-screen grid grid-cols-1 md:grid-cols-[232px_minmax(0,1fr)]", className)} {...props}>
       {/* Desktop Sidebar */}
       <aside
         className="hidden md:flex sticky top-0 h-screen p-6 bg-sidebar text-sidebar-foreground flex-col border-r border-sidebar-border"

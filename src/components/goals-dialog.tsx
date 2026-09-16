@@ -15,8 +15,7 @@ import {
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-interface GoalsDialogProps {
-  open: boolean;
+export interface GoalsDialogProps extends Omit<React.ComponentProps<typeof Dialog>, "children" | "onSubmit"> {
   dailyGoal: number;
   monthlyGoal: number;
   onClose: () => void;
@@ -29,6 +28,7 @@ export function GoalsDialog({
   monthlyGoal,
   onClose,
   onSubmit,
+  ...props
 }: GoalsDialogProps) {
   if (!open) return null;
   return (
@@ -38,6 +38,7 @@ export function GoalsDialog({
       monthlyGoal={monthlyGoal}
       onClose={onClose}
       onSubmit={onSubmit}
+      {...props}
     />
   );
 }
@@ -47,6 +48,7 @@ function GoalsDialogForm({
   monthlyGoal,
   onClose,
   onSubmit,
+  ...props
 }: Omit<GoalsDialogProps, "open">) {
   const dailyId = useId();
   const monthlyId = useId();
@@ -83,7 +85,7 @@ function GoalsDialogForm({
   };
 
   return (
-    <Dialog open onOpenChange={(next) => !next && onClose()}>
+    <Dialog open onOpenChange={(next) => !next && onClose()} {...props}>
       <DialogContent className="sm:max-w-md p-6">
         <DialogHeader className="pb-2">
           <DialogTitle>Metas de estudo</DialogTitle>

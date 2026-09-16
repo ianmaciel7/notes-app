@@ -4,6 +4,17 @@ import { describe, expect, it, vi } from "vitest";
 
 import { LibraryShell } from "@/components/library-shell";
 
+vi.mock("@/hooks/use-auth", () => ({
+  useAuth: () => ({
+    user: null,
+    loading: false,
+    loginWithEmail: vi.fn(),
+    registerWithEmail: vi.fn(),
+    loginWithGoogle: vi.fn(),
+    logout: vi.fn(),
+  }),
+}));
+
 describe("LibraryShell", () => {
   it("presents the empty library and starts deck creation", async () => {
     const onCreateDeck = vi.fn();

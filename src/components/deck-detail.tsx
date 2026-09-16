@@ -38,11 +38,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { createCard, db, deleteCard, deleteDeck, updateCard, updateDeck } from "@/data/db";
 import type { CardRecord, SessionGoal } from "@/data/types";
 
-interface DeckDetailProps {
+export interface DeckDetailProps extends React.ComponentProps<typeof SpaceLayout> {
   deckId: string;
 }
 
-export function DeckDetail({ deckId }: DeckDetailProps) {
+export function DeckDetail({ deckId, className, active = "decks", ...props }: DeckDetailProps) {
   const router = useRouter();
   const [deckDialogOpen, setDeckDialogOpen] = useState(false);
   const [cardDialog, setCardDialog] = useState<CardRecord | "new" | null>(null);
@@ -70,7 +70,7 @@ export function DeckDetail({ deckId }: DeckDetailProps) {
 
   if (deck === undefined || cards === undefined) {
     return (
-      <SpaceLayout active="decks">
+      <SpaceLayout active={active} className={className} {...props}>
         <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 py-12 text-center text-muted-foreground text-sm">
           Carregando baralho...
         </div>
@@ -80,7 +80,7 @@ export function DeckDetail({ deckId }: DeckDetailProps) {
 
   if (!deck) {
     return (
-      <SpaceLayout active="decks">
+      <SpaceLayout active={active} className={className} {...props}>
         <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 py-8 space-y-6">
           <Link
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground no-underline"
@@ -110,7 +110,7 @@ export function DeckDetail({ deckId }: DeckDetailProps) {
   }
 
   return (
-    <SpaceLayout active="decks">
+    <SpaceLayout active={active} className={className} {...props}>
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 space-y-8">
         <Link
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground no-underline"

@@ -2,7 +2,7 @@
 
 import { useRef, useState, type ChangeEvent } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
-import { Download, FileCheck2, ShieldCheck, Upload } from "lucide-react";
+import { Download, FileCheck2, ShieldCheck, Sparkles, Upload } from "lucide-react";
 
 import { ConfirmAlertDialog } from "@/components/confirm-alert-dialog";
 import { SpaceLayout } from "@/components/space-layout";
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { parseBackup } from "@/data/backup";
 import { createBackup, db, replaceDatabase } from "@/data/db";
+import { resetAndSeedDatabase } from "@/data/seed";
 import type { BackupEnvelope } from "@/data/types";
 
 export function BackupManager() {
@@ -24,6 +25,7 @@ export function BackupManager() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [pendingBackup, setPendingBackup] = useState<BackupEnvelope | null>(null);
+  const [confirmResetOpen, setConfirmResetOpen] = useState(false);
   const counts = useLiveQuery(async () => ({ decks: await db.decks.count(), cards: await db.cards.count() }), []);
 
   async function handleExport() {
@@ -64,15 +66,27 @@ export function BackupManager() {
     }
   }
 
+  async function confirmResetSeed() {
+    try {
+      const seed = await resetAndSeedDatabase(db);
+      setMessage(
+        `Banco de dados reiniciado com sucesso! ${seed.decks.length} baralhos, ${seed.cards.length} cartões e histórico de estudos carregados.`,
+      );
+      setConfirmResetOpen(false);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Não foi possível reiniciar o banco de dados.");
+    }
+  }
+
   return (
     <SpaceLayout active="backup">
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 space-y-8">
         {/* Page Heading */}
         <section className="space-y-1">
-          <p className="text-xs font-bold uppercase tracking-wider text-primary">Segurança</p>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Backup local</h1>
+          <p className="text-xs font-bold uppercase tracking-wider text-primary">Segurança & Dados</p>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Backup e Gerenciamento</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Leve seus baralhos com você ou restaure uma cópia anterior.
+            Leve seus baralhos com você, restaure uma cópia anterior ou inicialize com dados de demonstração.
           </p>
         </section>
 
@@ -94,7 +108,7 @@ export function BackupManager() {
         </section>
 
         {/* Action Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="flex flex-col justify-between p-6">
             <CardHeader className="p-0 gap-3">
               <span className="w-11 h-11 rounded-lg bg-secondary text-primary flex items-center justify-center">
@@ -148,6 +162,31 @@ export function BackupManager() {
               />
             </CardFooter>
           </Card>
+
+          <Card className="flex flex-col justify-between p-6 border-primary/30 bg-primary/5">
+            <CardHeader className="p-0 gap-3">
+              <span className="w-11 h-11 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                <Sparkles size={22} />
+              </span>
+              <div className="space-y-1">
+                <CardTitle className="text-lg font-bold">Dados de Exemplo</CardTitle>
+                <CardDescription className="text-xs leading-relaxed">
+                  Limpa o banco e insere 4 baralhos reais com cartões, agendamentos FSRS e métricas completas.
+                </CardDescription>
+              </div>
+            </CardHeader>
+            <CardFooter className="p-0 pt-6 bg-transparent">
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() => setConfirmResetOpen(true)}
+                className="w-full sm:w-auto gap-2"
+              >
+                <Sparkles size={16} />
+                <span>Resetar com dados reais</span>
+              </Button>
+            </CardFooter>
+          </Card>
         </div>
 
         {/* Alerts */}
@@ -175,6 +214,15 @@ export function BackupManager() {
         confirmLabel="Restaurar backup"
         onOpenChange={(open) => !open && setPendingBackup(null)}
         onConfirm={confirmImport}
+      />
+
+      <ConfirmAlertDialog
+        open={confirmResetOpen}
+        title="Resetar e carregar dados reais de exemplo?"
+        description="Esta ação apagará todos os baralhos, cartões e histórico atuais e inserirá 4 baralhos completos (24 cartões, revisões FSRS, ofensiva de estudo e análise de erros)."
+        confirmLabel="Sim, resetar e popular"
+        onOpenChange={(open) => setConfirmResetOpen(open)}
+        onConfirm={confirmResetSeed}
       />
     </SpaceLayout>
   );

@@ -42,7 +42,13 @@ import {
 } from "@/domain/error-analysis";
 import { calculateGoalsProgress } from "@/domain/goals";
 
-export function AnalyticsDashboard() {
+export interface AnalyticsDashboardProps extends React.ComponentProps<typeof SpaceLayout> {}
+
+export function AnalyticsDashboard({
+  className,
+  active = "analytics",
+  ...props
+}: AnalyticsDashboardProps = {}) {
   const [selectedDeckId, setSelectedDeckId] = useState<string>("all");
   const [editingCard, setEditingCard] = useState<CardRecord | null>(null);
 
@@ -74,7 +80,7 @@ export function AnalyticsDashboard() {
 
   if (!decks || !cards || !schedules || !reviewLogs) {
     return (
-      <SpaceLayout active="analytics">
+      <SpaceLayout active={active} className={className} {...props}>
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-8 py-12 text-center text-muted-foreground text-sm">
           Carregando dados de desempenho...
         </div>
@@ -91,7 +97,7 @@ export function AnalyticsDashboard() {
   const totalLogs = errorStats.totalReviews;
 
   return (
-    <SpaceLayout active="analytics">
+    <SpaceLayout active={active} className={className} {...props}>
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 space-y-8">
         {/* Page Heading */}
         <section className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 pb-2">

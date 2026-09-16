@@ -14,8 +14,9 @@ import { buildMistakeStudyQueue } from "@/domain/error-analysis";
 import { scheduleReview } from "@/domain/scheduler";
 import { buildStudyQueue } from "@/domain/study-queue";
 import type { CardRecord, CardSchedule, DeckRecord, ReviewLogRecord, SessionGoal, StudyRating } from "@/data/types";
+import { cn } from "@/lib/utils";
 
-interface StudySessionProps {
+export interface StudySessionProps extends React.ComponentProps<"div"> {
   deckId: string;
 }
 
@@ -25,7 +26,7 @@ function parseGoal(value: string | null): SessionGoal {
   return numeric === 10 || numeric === 20 || numeric === 50 ? numeric : 20;
 }
 
-export function StudySession({ deckId }: StudySessionProps) {
+export function StudySession({ deckId, className, ...props }: StudySessionProps) {
   const searchParams = useSearchParams();
   const goal = parseGoal(searchParams.get("meta"));
   const isMistakesMode = searchParams.get("mode") === "mistakes" || deckId === "mistakes";
@@ -69,7 +70,7 @@ export function StudySession({ deckId }: StudySessionProps) {
 
   if (deck === undefined || cards === undefined || schedules === undefined || reviewLogs === undefined) {
     return (
-      <div className="min-h-screen p-6 bg-background flex flex-col items-center justify-center text-muted-foreground text-sm">
+      <div className={cn("min-h-screen p-6 bg-background flex flex-col items-center justify-center text-muted-foreground text-sm", className)} {...props}>
         Preparando sua sessão...
       </div>
     );
@@ -77,7 +78,7 @@ export function StudySession({ deckId }: StudySessionProps) {
 
   if (!deck) {
     return (
-      <div className="min-h-screen p-6 bg-background flex flex-col items-center justify-center space-y-4">
+      <div className={cn("min-h-screen p-6 bg-background flex flex-col items-center justify-center space-y-4", className)} {...props}>
         <Link
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground no-underline"
           href="/"
@@ -102,6 +103,8 @@ export function StudySession({ deckId }: StudySessionProps) {
       goal={goal}
       isMistakesMode={isMistakesMode}
       isGlobalMistakes={isGlobalMistakes}
+      className={className}
+      {...props}
     />
   );
 }
@@ -114,6 +117,8 @@ function StudySessionRunner({
   goal,
   isMistakesMode,
   isGlobalMistakes,
+  className,
+  ...props
 }: {
   deck: DeckRecord;
   cards: CardRecord[];
@@ -122,7 +127,7 @@ function StudySessionRunner({
   goal: SessionGoal;
   isMistakesMode: boolean;
   isGlobalMistakes: boolean;
-}) {
+} & React.ComponentProps<"div">) {
   const [startedAt] = useState(() => new Date());
   const [queue] = useState(() => {
     if (isMistakesMode) {
@@ -176,7 +181,7 @@ function StudySessionRunner({
   if (!current) {
     const studied = Object.values(ratings).reduce((sum, value) => sum + value, 0);
     return (
-      <div className="min-h-screen p-6 bg-background flex flex-col justify-center items-center">
+      <div className={cn("min-h-screen p-6 bg-background flex flex-col justify-center items-center", className)} {...props}>
         <div className="w-full max-w-xl mx-auto text-center space-y-6">
           <span className="w-16 h-16 mx-auto rounded-2xl bg-secondary text-primary flex items-center justify-center">
             {isMistakesMode && studied === 0 ? <AlertCircle size={32} /> : <CheckCircle2 size={32} />}
@@ -249,7 +254,7 @@ function StudySessionRunner({
   }
 
   return (
-    <div className="min-h-screen p-4 sm:p-6 lg:p-8 bg-background flex flex-col justify-center">
+    <div className={cn("min-h-screen p-4 sm:p-6 lg:p-8 bg-background flex flex-col justify-center", className)} {...props}>
       {/* Session Progress Header */}
       <header className="w-full max-w-3xl mx-auto mb-6 grid grid-cols-[40px_1fr] sm:grid-cols-[40px_1fr_180px] gap-4 items-center">
         <Button

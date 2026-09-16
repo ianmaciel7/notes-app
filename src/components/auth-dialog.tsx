@@ -14,20 +14,19 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 
-interface AuthDialogProps {
-  open: boolean;
+export interface AuthDialogProps extends Omit<React.ComponentProps<typeof Dialog>, "children"> {
   onClose: () => void;
 }
 
-export function AuthDialog({ open, onClose }: AuthDialogProps) {
+export function AuthDialog({ open, onClose, ...props }: AuthDialogProps) {
   if (!open) return null;
-  return <AuthDialogContent onClose={onClose} />;
+  return <AuthDialogContent onClose={onClose} {...props} />;
 }
 
-function AuthDialogContent({ onClose }: { onClose: () => void }) {
+function AuthDialogContent({ onClose, ...props }: Omit<AuthDialogProps, "open">) {
   const { loginWithEmail, registerWithEmail, loginWithGoogle, error: authError, clearError } = useAuth();
   const [tab, setTab] = React.useState<"login" | "register">("login");
   const [email, setEmail] = React.useState("");
@@ -99,7 +98,7 @@ function AuthDialogContent({ onClose }: { onClose: () => void }) {
   const currentError = localError || authError;
 
   return (
-    <Dialog open onOpenChange={(isOpen) => !isOpen && onClose()}>
+    <Dialog open onOpenChange={(isOpen) => !isOpen && onClose()} {...props}>
       <DialogContent className="sm:max-w-[440px] p-6">
         <DialogHeader className="pb-2">
           <DialogTitle>Conta Revisa</DialogTitle>

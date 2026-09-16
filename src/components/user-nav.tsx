@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { LogIn, LogOut, User as UserIcon } from "lucide-react";
+import { LogIn, LogOut } from "lucide-react";
 
 import { AuthDialog } from "@/components/auth-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,18 +9,17 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
-interface UserNavProps {
+export interface UserNavProps extends React.ComponentProps<"div"> {
   compact?: boolean;
-  className?: string;
 }
 
-export function UserNav({ compact = false, className }: UserNavProps) {
+export function UserNav({ compact = false, className, ...props }: UserNavProps) {
   const { user, loading, logout } = useAuth();
   const [authDialogOpen, setAuthDialogOpen] = React.useState(false);
 
   if (loading) {
     return (
-      <div className={cn("flex items-center gap-2 text-xs text-muted-foreground animate-pulse", className)}>
+      <div className={cn("flex items-center gap-2 text-xs text-muted-foreground animate-pulse", className)} {...props}>
         <div className="w-7 h-7 rounded-full bg-muted shrink-0" />
         {!compact && <div className="h-3 w-16 bg-muted rounded" />}
       </div>
@@ -37,6 +36,7 @@ export function UserNav({ compact = false, className }: UserNavProps) {
             onClick={() => setAuthDialogOpen(true)}
             aria-label="Entrar na conta"
             className={className}
+            {...props}
           >
             <LogIn size={16} />
           </Button>
@@ -46,6 +46,7 @@ export function UserNav({ compact = false, className }: UserNavProps) {
             size="sm"
             onClick={() => setAuthDialogOpen(true)}
             className={cn("w-full justify-start gap-2 text-xs font-medium", className)}
+            {...props}
           >
             <LogIn size={15} />
             <span>Entrar / Cadastrar</span>
@@ -63,7 +64,7 @@ export function UserNav({ compact = false, className }: UserNavProps) {
 
   if (compact) {
     return (
-      <div className={cn("flex items-center gap-1.5", className)}>
+      <div className={cn("flex items-center gap-1.5", className)} {...props}>
         <Avatar size="sm" className="w-7 h-7">
           {user.photoURL && <AvatarImage src={user.photoURL} alt={displayName} />}
           <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-bold">
@@ -85,7 +86,7 @@ export function UserNav({ compact = false, className }: UserNavProps) {
   }
 
   return (
-    <div className={cn("flex flex-col gap-2 p-2 rounded-lg bg-sidebar-accent/40 border border-sidebar-border", className)}>
+    <div className={cn("flex flex-col gap-2 p-2 rounded-lg bg-sidebar-accent/40 border border-sidebar-border", className)} {...props}>
       <div className="flex items-center gap-2.5 min-w-0">
         <Avatar size="sm" className="w-7 h-7 shrink-0">
           {user.photoURL && <AvatarImage src={user.photoURL} alt={displayName} />}

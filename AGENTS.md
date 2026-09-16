@@ -9,6 +9,9 @@
 | Task | Command |
 |------|---------|
 | Development | `pnpm dev` |
+| Dev with emulators | `pnpm dev:all` |
+| Firebase emulators | `pnpm emulators` |
+| Export emulators | `pnpm emulators:export` |
 | Lint | `pnpm lint` |
 | Typecheck | `pnpm typecheck` |
 | Unit tests | `pnpm test` |
@@ -18,8 +21,11 @@
 ## Architecture
 
 - This is a Next.js 16 App Router application under `src/app/`; route pages live in `src/app/**/page.tsx`.
-- `src/components/` contains feature UI and client-side application shells; keep route composition in `src/app` and reusable UI in `src/components`.
-- `src/data/` contains browser-local IndexedDB access, backup serialization, and domain record types. `src/domain/` contains scheduling and study-queue rules. `src/integrations/` contains WebMCP integration. Keep business rules out of route pages and presentational components.
+- `src/components/` contains feature UI, application shells, and providers (e.g. `src/components/auth-provider.tsx`, `src/components/space-layout.tsx`); keep route composition in `src/app` and reusable UI / providers in `src/components`. Do not create a separate `src/contexts/` directory.
+- Component naming convention:
+  - Primitives/wrappers must follow official shadcn/Base UI suffixes: `*Dialog` (`DeckDialog`, `CardDialog`, `GoalsDialog`), `*AlertDialog` (`ConfirmAlertDialog`), `*Card` (`StudyCard`, `GoalsCard`).
+  - Screen/shell components use semantic domain names: `LibraryShell`, `DeckDetail`, `StudySession`, `BackupManager`, `AnalyticsDashboard`, `SpaceLayout`. Avoid generic `-app` or `-view` suffixes.
+- `src/data/` contains browser-local IndexedDB access, backup serialization, and domain record types. `src/domain/` contains scheduling and study-queue rules. `src/integrations/` contains WebMCP and Firebase integrations. Keep business rules out of route pages and presentational components.
 - Persistence is browser-local IndexedDB through Dexie (`src/data/db.ts`); do not assume a server database or add server persistence without an explicit requirement.
 - Preserve the existing Portuguese (`pt-BR`) product language and accessibility/focus behavior.
 
@@ -104,4 +110,6 @@
 | Tailwind CSS rules | `.agents/rules/tailwind-styling.md` |
 | Input performance | `.agents/rules/input-performance.md` |
 | React children props | `.agents/rules/react-children-props.md` |
+| Firebase basics | `.agents/skills/firebase-basics/SKILL.md` |
+| Firebase Auth basics | `.agents/skills/firebase-auth-basics/SKILL.md` |
 | Knowledge graph | `graphify-out/graph.json` |

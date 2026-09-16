@@ -13,12 +13,11 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-interface ConfirmAlertDialogProps {
-  open: boolean;
+export interface ConfirmAlertDialogProps extends Omit<React.ComponentProps<typeof AlertDialog>, "children" | "onOpenChange"> {
   title: string;
   description: string;
   confirmLabel: string;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange?: (open: boolean) => void;
   onConfirm: () => Promise<void> | void;
 }
 
@@ -29,13 +28,14 @@ export function ConfirmAlertDialog({
   confirmLabel,
   onOpenChange,
   onConfirm,
+  ...props
 }: ConfirmAlertDialogProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   function handleOpenChange(nextOpen: boolean) {
     if (!nextOpen) setError("");
-    onOpenChange(nextOpen);
+    onOpenChange?.(nextOpen);
   }
 
   async function handleConfirm() {
@@ -52,7 +52,7 @@ export function ConfirmAlertDialog({
   }
 
   return (
-    <AlertDialog open={open} onOpenChange={handleOpenChange}>
+    <AlertDialog open={open} onOpenChange={handleOpenChange} {...props}>
       <AlertDialogContent className="sm:max-w-md p-6">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>

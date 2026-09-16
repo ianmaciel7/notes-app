@@ -17,18 +17,19 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { db, saveUserSettings } from "@/data/db";
 import type { StudyGoalsProgress } from "@/data/types";
+import { cn } from "@/lib/utils";
 
-interface GoalsCardProps {
+export interface GoalsCardProps extends React.ComponentProps<typeof Card> {
   goalsProgress: StudyGoalsProgress;
 }
 
-export function GoalsCard({ goalsProgress }: GoalsCardProps) {
+export function GoalsCard({ goalsProgress, className, ...props }: GoalsCardProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const { daily, monthly, streak } = goalsProgress;
 
   return (
     <>
-      <Card className="transition-shadow hover:shadow-md">
+      <Card className={cn("transition-shadow hover:shadow-md", className)} {...props}>
         <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-secondary text-primary flex items-center justify-center">

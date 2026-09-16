@@ -15,14 +15,13 @@ import {
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 
-interface CardDialogProps {
-  open: boolean;
+export interface CardDialogProps extends Omit<React.ComponentProps<typeof Dialog>, "children" | "onSubmit"> {
   initial?: { front: string; back: string };
   onClose: () => void;
   onSubmit: (value: { front: string; back: string }) => Promise<void>;
 }
 
-export function CardDialog({ open, initial, onClose, onSubmit }: CardDialogProps) {
+export function CardDialog({ open, initial, onClose, onSubmit, ...props }: CardDialogProps) {
   if (!open) return null;
   return (
     <CardDialogForm
@@ -30,11 +29,12 @@ export function CardDialog({ open, initial, onClose, onSubmit }: CardDialogProps
       initial={initial}
       onClose={onClose}
       onSubmit={onSubmit}
+      {...props}
     />
   );
 }
 
-function CardDialogForm({ initial, onClose, onSubmit }: Omit<CardDialogProps, "open">) {
+function CardDialogForm({ initial, onClose, onSubmit, ...props }: Omit<CardDialogProps, "open">) {
   const frontId = useId();
   const backId = useId();
   const [front, setFront] = useState(initial?.front ?? "");
@@ -61,7 +61,7 @@ function CardDialogForm({ initial, onClose, onSubmit }: Omit<CardDialogProps, "o
   }
 
   return (
-    <Dialog open onOpenChange={(open) => !open && onClose()}>
+    <Dialog open onOpenChange={(open) => !open && onClose()} {...props}>
       <DialogContent className="sm:max-w-[520px] p-6">
         <DialogHeader className="pb-2">
           <DialogTitle>{initial ? "Editar cartão" : "Novo cartão"}</DialogTitle>

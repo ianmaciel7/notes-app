@@ -16,19 +16,26 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-interface DeckDialogProps {
-  open: boolean;
+export interface DeckDialogProps extends Omit<React.ComponentProps<typeof Dialog>, "children" | "onSubmit"> {
   initial?: { name: string; description: string };
   onClose: () => void;
   onSubmit: (value: { name: string; description: string }) => Promise<void>;
 }
 
-export function DeckDialog({ open, initial, onClose, onSubmit }: DeckDialogProps) {
+export function DeckDialog({ open, initial, onClose, onSubmit, ...props }: DeckDialogProps) {
   if (!open) return null;
-  return <DeckDialogForm key={`${initial?.name ?? "new"}:${initial?.description ?? ""}`} initial={initial} onClose={onClose} onSubmit={onSubmit} />;
+  return (
+    <DeckDialogForm
+      key={`${initial?.name ?? "new"}:${initial?.description ?? ""}`}
+      initial={initial}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      {...props}
+    />
+  );
 }
 
-function DeckDialogForm({ initial, onClose, onSubmit }: Omit<DeckDialogProps, "open">) {
+function DeckDialogForm({ initial, onClose, onSubmit, ...props }: Omit<DeckDialogProps, "open">) {
   const nameId = useId();
   const descriptionId = useId();
   const [name, setName] = useState(initial?.name ?? "");
@@ -55,7 +62,7 @@ function DeckDialogForm({ initial, onClose, onSubmit }: Omit<DeckDialogProps, "o
   }
 
   return (
-    <Dialog open onOpenChange={(open) => !open && onClose()}>
+    <Dialog open onOpenChange={(open) => !open && onClose()} {...props}>
       <DialogContent className="sm:max-w-[520px] p-6">
         <DialogHeader className="pb-2">
           <DialogTitle>{initial ? "Editar baralho" : "Novo baralho"}</DialogTitle>
