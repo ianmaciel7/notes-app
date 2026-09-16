@@ -20,7 +20,15 @@ import { createBackup, db, replaceDatabase } from "@/data/db";
 import { resetAndSeedDatabase } from "@/data/seed";
 import type { BackupEnvelope } from "@/data/types";
 
-export function BackupManager() {
+export interface BackupManagerProps extends Omit<React.ComponentProps<typeof SpaceLayout>, "children"> {
+  children?: React.ReactNode;
+}
+
+export function BackupManager({
+  className,
+  active = "backup",
+  ...props
+}: BackupManagerProps = {}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -79,7 +87,7 @@ export function BackupManager() {
   }
 
   return (
-    <SpaceLayout active="backup">
+    <SpaceLayout active={active} className={className} {...props}>
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12 space-y-8">
         {/* Page Heading */}
         <section className="space-y-1">

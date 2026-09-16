@@ -42,7 +42,9 @@ import {
 } from "@/domain/error-analysis";
 import { calculateGoalsProgress } from "@/domain/goals";
 
-export interface AnalyticsDashboardProps extends React.ComponentProps<typeof SpaceLayout> {}
+export interface AnalyticsDashboardProps extends Omit<React.ComponentProps<typeof SpaceLayout>, "children"> {
+  children?: React.ReactNode;
+}
 
 export function AnalyticsDashboard({
   className,
@@ -160,7 +162,7 @@ export function AnalyticsDashboard({
           <Card className="p-4">
             <CardHeader className="p-0 flex flex-row items-center justify-between text-muted-foreground">
               <span className="text-xs font-medium">Questões com Erro</span>
-              <AlertTriangle size={16} className="text-amber-500" />
+              <AlertTriangle size={16} className="text-muted-foreground" />
             </CardHeader>
             <CardContent className="p-0 pt-2">
               <div className="text-2xl font-bold text-foreground">
@@ -212,9 +214,9 @@ export function AnalyticsDashboard({
                   </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                  <span className="text-xs text-amber-700 dark:text-amber-400 font-medium">Difícil</span>
-                  <div className="text-lg font-bold text-amber-800 dark:text-amber-300 mt-0.5">
+                <div className="p-3 rounded-lg bg-secondary/50 border border-border">
+                  <span className="text-xs text-secondary-foreground font-medium">Difícil</span>
+                  <div className="text-lg font-bold text-secondary-foreground mt-0.5">
                     {errorStats.hardCount}{" "}
                     <span className="text-xs font-normal opacity-75">
                       ({Math.round((errorStats.hardCount / totalLogs) * 100)}%)
@@ -319,8 +321,8 @@ export function AnalyticsDashboard({
                           ) : null}
                           {item.lapses > 0 ? (
                             <Badge
-                              variant="secondary"
-                              className="text-[11px] bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20"
+                              variant="outline"
+                              className="text-[11px] text-muted-foreground border-border bg-secondary/30"
                             >
                               {item.lapses} {item.lapses === 1 ? "lapso" : "lapsos"}
                             </Badge>

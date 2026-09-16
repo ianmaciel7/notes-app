@@ -38,4 +38,25 @@ describe("LibraryShell", () => {
 
     expect(onCreateDeck).toHaveBeenCalledOnce();
   });
+
+  it("renders deck cards and study overview counters accurately", () => {
+    const decks = [
+      {
+        id: "deck-1",
+        name: "Vocabulário em Espanhol",
+        description: "Palavras essenciais",
+        cardCount: 20,
+        dueCount: 5,
+        newCount: 3,
+      },
+    ];
+
+    render(<LibraryShell decks={decks} dueCount={5} newCount={3} />);
+
+    expect(screen.getByRole("heading", { name: "Vocabulário em Espanhol" })).toBeInTheDocument();
+    expect(screen.getByText("Palavras essenciais")).toBeInTheDocument();
+    expect(screen.getByText("5")).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Vocabulário em Espanhol/i })).toHaveAttribute("href", "/decks/deck-1");
+  });
 });

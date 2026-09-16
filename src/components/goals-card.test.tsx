@@ -46,4 +46,28 @@ describe("GoalsCard", () => {
     expect(screen.getByLabelText(/meta diária/i)).toHaveValue(20);
     expect(screen.getByLabelText(/meta mensal/i)).toHaveValue(500);
   });
+
+  it("does not render streak badge when current streak is 0", () => {
+    const zeroStreakProgress: StudyGoalsProgress = {
+      ...sampleProgress,
+      streak: { current: 0, longest: 0, lastActiveDate: null },
+    };
+
+    render(<GoalsCard goalsProgress={zeroStreakProgress} />);
+    expect(screen.queryByText(/dia seguido/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/dias seguidos/i)).not.toBeInTheDocument();
+  });
+
+  it("renders singular streak label and completed celebration messages", () => {
+    const completedProgress: StudyGoalsProgress = {
+      daily: { goal: 10, count: 10, percentage: 100, isCompleted: true },
+      monthly: { goal: 100, count: 100, percentage: 100, isCompleted: true },
+      streak: { current: 1, longest: 5, lastActiveDate: "2026-09-16" },
+    };
+
+    render(<GoalsCard goalsProgress={completedProgress} />);
+    expect(screen.getByText(/1 dia seguido/i)).toBeInTheDocument();
+    expect(screen.getByText(/Parabéns! Você atingiu sua meta diária/i)).toBeInTheDocument();
+    expect(screen.getByText(/Meta mensal concluída com sucesso!/i)).toBeInTheDocument();
+  });
 });

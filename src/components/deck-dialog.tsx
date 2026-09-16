@@ -23,19 +23,23 @@ export interface DeckDialogProps extends Omit<React.ComponentProps<typeof Dialog
 }
 
 export function DeckDialog({ open, initial, onClose, onSubmit, ...props }: DeckDialogProps) {
-  if (!open) return null;
   return (
-    <DeckDialogForm
-      key={`${initial?.name ?? "new"}:${initial?.description ?? ""}`}
-      initial={initial}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      {...props}
-    />
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()} {...props}>
+      <DialogContent className="sm:max-w-[520px] p-6">
+        {open ? (
+          <DeckDialogContent
+            key={`${initial?.name ?? "new"}:${initial?.description ?? ""}`}
+            initial={initial}
+            onClose={onClose}
+            onSubmit={onSubmit}
+          />
+        ) : null}
+      </DialogContent>
+    </Dialog>
   );
 }
 
-function DeckDialogForm({ initial, onClose, onSubmit, ...props }: Omit<DeckDialogProps, "open">) {
+function DeckDialogContent({ initial, onClose, onSubmit }: Omit<DeckDialogProps, "open">) {
   const nameId = useId();
   const descriptionId = useId();
   const [name, setName] = useState(initial?.name ?? "");
@@ -62,32 +66,37 @@ function DeckDialogForm({ initial, onClose, onSubmit, ...props }: Omit<DeckDialo
   }
 
   return (
-    <Dialog open onOpenChange={(open) => !open && onClose()} {...props}>
-      <DialogContent className="sm:max-w-[520px] p-6">
-        <DialogHeader className="pb-2">
-          <DialogTitle>{initial ? "Editar baralho" : "Novo baralho"}</DialogTitle>
-          <DialogDescription>Organize cartões do mesmo assunto em um só lugar.</DialogDescription>
-        </DialogHeader>
-        <form className="space-y-4 pt-2" onSubmit={handleSubmit}>
-          <Field>
-            <FieldLabel htmlFor={nameId}>Nome</FieldLabel>
-            <Input id={nameId} autoFocus value={name} onChange={(event) => setName(event.target.value)} maxLength={80} />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor={descriptionId}>Descrição (opcional)</FieldLabel>
-            <Textarea id={descriptionId} value={description} onChange={(event) => setDescription(event.target.value)} maxLength={180} rows={3} />
-          </Field>
-          {error ? <FieldError errors={[{ message: error }]} /> : null}
-          <DialogFooter className="pt-2 flex justify-end gap-2">
-            <DialogClose render={<Button variant="outline" type="button" onClick={onClose} />}>
-              Cancelar
-            </DialogClose>
-            <Button type="submit" disabled={saving}>
-              {saving ? "Salvando..." : "Salvar baralho"}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <>
+      <DialogHeader className="pb-2">
+        <DialogTitle>{initial ? "Editar baralho" : "Novo baralho"}</DialogTitle>
+        <DialogDescription>Organize cartões do mesmo assunto em um só lugar.</DialogDescription>
+      </DialogHeader>
+      <form className="space-y-4 pt-2" onSubmit={handleSubmit}>
+        <Field>
+          <FieldLabel htmlFor={nameId}>Nome</FieldLabel>
+          <Input
+            id={nameId}
+            autoFocus
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            maxLength={80}
+            aria-invalid={Boolean(error && !name.trim())}
+          />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor={descriptionId}>Descrição (opcional)</FieldLabel>
+          <Textarea id={descriptionId} value={description} onChange={(event) => setDescription(event.target.value)} maxLength={180} rows={3} />
+        </Field>
+        {error ? <FieldError errors={[{ message: error }]} /> : null}
+        <DialogFooter className="pt-2 flex justify-end gap-2">
+          <DialogClose render={<Button variant="outline" type="button" />}>
+            Cancelar
+          </DialogClose>
+          <Button type="submit" disabled={saving}>
+            {saving ? "Salvando..." : "Salvar baralho"}
+          </Button>
+        </DialogFooter>
+      </form>
+    </>
   );
 }

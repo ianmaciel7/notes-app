@@ -38,7 +38,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { createCard, db, deleteCard, deleteDeck, updateCard, updateDeck } from "@/data/db";
 import type { CardRecord, SessionGoal } from "@/data/types";
 
-export interface DeckDetailProps extends React.ComponentProps<typeof SpaceLayout> {
+export interface DeckDetailProps extends Omit<React.ComponentProps<typeof SpaceLayout>, "children"> {
+  children?: React.ReactNode;
   deckId: string;
 }
 
@@ -187,7 +188,7 @@ export function DeckDetail({ deckId, className, active = "decks", ...props }: De
                 type="button"
                 render={<Link href={`/study/${deckId}?mode=mistakes`} />}
                 nativeButton={false}
-                className="gap-1.5 text-xs text-amber-700 dark:text-amber-400 border-amber-500/30 hover:bg-amber-500/10"
+                className="gap-1.5 text-xs text-secondary-foreground border-border hover:bg-secondary"
               >
                 <RotateCcw size={14} />
                 <span>Praticar erros ({mistakesCount})</span>
@@ -249,17 +250,29 @@ export function DeckDetail({ deckId, className, active = "decks", ...props }: De
                   <div className="space-y-1.5 flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <Badge variant="secondary" className="text-xs">{status}</Badge>
+                      {card.type === "readwise" ? (
+                        <Badge variant="outline" className="text-[11px] text-primary border-primary/30 bg-primary/5">
+                          Readwise
+                        </Badge>
+                      ) : card.type === "exam_topic" ? (
+                        <Badge variant="outline" className="text-[11px] text-primary border-primary/30 bg-primary/5">
+                          Simulado
+                        </Badge>
+                      ) : null}
                       {lapses > 0 ? (
                         <Badge
                           variant="outline"
-                          className="text-[11px] text-amber-700 dark:text-amber-400 border-amber-500/30 bg-amber-500/10"
+                          className="text-[11px] text-muted-foreground border-border bg-secondary/30"
                         >
                           {lapses} {lapses === 1 ? "lapso" : "lapsos"}
                         </Badge>
                       ) : null}
                     </div>
                     <h3 className="text-sm font-semibold text-foreground whitespace-pre-wrap">{card.front}</h3>
-                    <p className="text-xs text-muted-foreground whitespace-pre-wrap line-clamp-2">{card.back}</p>
+                    <p className="text-xs text-muted-foreground whitespace-pre-wrap line-clamp-2">
+                      {card.sourceTitle ? `Fonte: ${card.sourceTitle} — ` : ""}
+                      {card.explanation || card.back}
+                    </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <Tooltip>
@@ -310,7 +323,7 @@ export function DeckDetail({ deckId, className, active = "decks", ...props }: De
       />
       <CardDialog
         open={cardDialog !== null}
-        initial={cardDialog && cardDialog !== "new" ? { front: cardDialog.front, back: cardDialog.back } : undefined}
+        initial={cardDialog && cardDialog !== "new" ? cardDialog : undefined}
         onClose={() => setCardDialog(null)}
         onSubmit={(value) =>
           cardDialog && cardDialog !== "new"

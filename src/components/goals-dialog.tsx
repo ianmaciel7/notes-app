@@ -30,25 +30,28 @@ export function GoalsDialog({
   onSubmit,
   ...props
 }: GoalsDialogProps) {
-  if (!open) return null;
   return (
-    <GoalsDialogForm
-      key={`${dailyGoal}:${monthlyGoal}`}
-      dailyGoal={dailyGoal}
-      monthlyGoal={monthlyGoal}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      {...props}
-    />
+    <Dialog open={open} onOpenChange={(next) => !next && onClose()} {...props}>
+      <DialogContent className="sm:max-w-md p-6">
+        {open ? (
+          <GoalsDialogContent
+            key={`${dailyGoal}:${monthlyGoal}`}
+            dailyGoal={dailyGoal}
+            monthlyGoal={monthlyGoal}
+            onClose={onClose}
+            onSubmit={onSubmit}
+          />
+        ) : null}
+      </DialogContent>
+    </Dialog>
   );
 }
 
-function GoalsDialogForm({
+function GoalsDialogContent({
   dailyGoal,
   monthlyGoal,
   onClose,
   onSubmit,
-  ...props
 }: Omit<GoalsDialogProps, "open">) {
   const dailyId = useId();
   const monthlyId = useId();
@@ -62,13 +65,13 @@ function GoalsDialogForm({
     const parsedDaily = Number.parseInt(daily, 10);
     const parsedMonthly = Number.parseInt(monthly, 10);
 
-    if (Number.isNaN(parsedDaily) || parsedDaily < 1) {
-      setError("A meta diária deve ser de pelo menos 1 cartão.");
+    if (Number.isNaN(parsedDaily) || parsedDaily < 1 || parsedDaily > 1000) {
+      setError("A meta diária deve ser entre 1 e 1.000 cartões.");
       return;
     }
 
-    if (Number.isNaN(parsedMonthly) || parsedMonthly < 1) {
-      setError("A meta mensal deve ser de pelo menos 1 cartão.");
+    if (Number.isNaN(parsedMonthly) || parsedMonthly < 1 || parsedMonthly > 20000) {
+      setError("A meta mensal deve ser entre 1 e 20.000 cartões.");
       return;
     }
 
@@ -85,50 +88,50 @@ function GoalsDialogForm({
   };
 
   return (
-    <Dialog open onOpenChange={(next) => !next && onClose()} {...props}>
-      <DialogContent className="sm:max-w-md p-6">
-        <DialogHeader className="pb-2">
-          <DialogTitle>Metas de estudo</DialogTitle>
-          <DialogDescription>
-            Defina sua meta de revisões diárias e mensais para acompanhar seu progresso.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
-          {error ? <FieldError errors={[{ message: error }]} /> : null}
-          <Field>
-            <FieldLabel htmlFor={dailyId}>Meta diária (cartões por dia)</FieldLabel>
-            <Input
-              id={dailyId}
-              type="number"
-              min={1}
-              max={1000}
-              value={daily}
-              onChange={(e) => setDaily(e.target.value)}
-              required
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor={monthlyId}>Meta mensal (cartões por mês)</FieldLabel>
-            <Input
-              id={monthlyId}
-              type="number"
-              min={1}
-              max={20000}
-              value={monthly}
-              onChange={(e) => setMonthly(e.target.value)}
-              required
-            />
-          </Field>
-          <DialogFooter className="pt-2 flex justify-end gap-2">
-            <DialogClose render={<Button type="button" variant="outline" onClick={onClose} disabled={submitting} />}>
-              Cancelar
-            </DialogClose>
-            <Button type="submit" disabled={submitting}>
-              {submitting ? "Salvando..." : "Salvar metas"}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <>
+      <DialogHeader className="pb-2">
+        <DialogTitle>Metas de estudo</DialogTitle>
+        <DialogDescription>
+          Defina sua meta de revisões diárias e mensais para acompanhar seu progresso.
+        </DialogDescription>
+      </DialogHeader>
+      <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+        {error ? <FieldError errors={[{ message: error }]} /> : null}
+        <Field>
+          <FieldLabel htmlFor={dailyId}>Meta diária (cartões por dia)</FieldLabel>
+          <Input
+            id={dailyId}
+            type="number"
+            min={1}
+            max={1000}
+            value={daily}
+            onChange={(e) => setDaily(e.target.value)}
+            aria-invalid={Boolean(error)}
+            required
+          />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor={monthlyId}>Meta mensal (cartões por mês)</FieldLabel>
+          <Input
+            id={monthlyId}
+            type="number"
+            min={1}
+            max={20000}
+            value={monthly}
+            onChange={(e) => setMonthly(e.target.value)}
+            aria-invalid={Boolean(error)}
+            required
+          />
+        </Field>
+        <DialogFooter className="pt-2 flex justify-end gap-2">
+          <DialogClose render={<Button type="button" variant="outline" disabled={submitting} />}>
+            Cancelar
+          </DialogClose>
+          <Button type="submit" disabled={submitting}>
+            {submitting ? "Salvando..." : "Salvar metas"}
+          </Button>
+        </DialogFooter>
+      </form>
+    </>
   );
 }

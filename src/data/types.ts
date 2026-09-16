@@ -1,6 +1,14 @@
 export type StudyRating = "again" | "hard" | "good" | "easy";
 export type SessionGoal = 10 | 20 | 50 | "all";
 
+export type CardType = "anki" | "readwise" | "exam_topic";
+
+export interface ExamOption {
+  id: string;
+  text: string;
+  isCorrect?: boolean;
+}
+
 export interface DeckRecord {
   id: string;
   name: string;
@@ -12,8 +20,14 @@ export interface DeckRecord {
 export interface CardRecord {
   id: string;
   deckId: string;
+  type?: CardType;
   front: string;
   back: string;
+  sourceTitle?: string;
+  sourceAuthor?: string;
+  sourceUrl?: string;
+  options?: ExamOption[];
+  explanation?: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -74,7 +74,8 @@ export async function updateDeck(
 
 export async function createCard(
   database: RevisaDatabase,
-  input: Pick<CardRecord, "deckId" | "front" | "back">,
+  input: Pick<CardRecord, "deckId" | "front" | "back"> &
+    Partial<Pick<CardRecord, "type" | "sourceTitle" | "sourceAuthor" | "sourceUrl" | "options" | "explanation">>,
 ) {
   const front = input.front.trim();
   const back = input.back.trim();
@@ -83,8 +84,14 @@ export async function createCard(
   const card: CardRecord = {
     id: crypto.randomUUID(),
     deckId: input.deckId,
+    type: input.type ?? "anki",
     front,
     back,
+    ...(input.sourceTitle?.trim() ? { sourceTitle: input.sourceTitle.trim() } : {}),
+    ...(input.sourceAuthor?.trim() ? { sourceAuthor: input.sourceAuthor.trim() } : {}),
+    ...(input.sourceUrl?.trim() ? { sourceUrl: input.sourceUrl.trim() } : {}),
+    ...(input.options?.length ? { options: input.options } : {}),
+    ...(input.explanation?.trim() ? { explanation: input.explanation.trim() } : {}),
     createdAt: now,
     updatedAt: now,
   };
@@ -95,12 +102,29 @@ export async function createCard(
 export async function updateCard(
   database: RevisaDatabase,
   id: string,
-  input: Pick<CardRecord, "front" | "back">,
+  input: Partial<Pick<CardRecord, "front" | "back" | "type" | "sourceTitle" | "sourceAuthor" | "sourceUrl" | "options" | "explanation">>,
 ) {
-  const front = input.front.trim();
-  const back = input.back.trim();
-  if (!front || !back) throw new Error("Preencha a frente e o verso do cartão.");
-  await database.cards.update(id, { front, back, updatedAt: new Date().toISOString() });
+  const updates: Partial<CardRecord> = {
+    updatedAt: new Date().toISOString(),
+  };
+  if (input.front !== undefined) {
+    const front = input.front.trim();
+    if (!front) throw new Error("Preencha a frente e o verso do cartão.");
+    updates.front = front;
+  }
+  if (input.back !== undefined) {
+    const back = input.back.trim();
+    if (!back) throw new Error("Preencha a frente e o verso do cartão.");
+    updates.back = back;
+  }
+  if (input.type !== undefined) updates.type = input.type;
+  if (input.sourceTitle !== undefined) updates.sourceTitle = input.sourceTitle.trim();
+  if (input.sourceAuthor !== undefined) updates.sourceAuthor = input.sourceAuthor.trim();
+  if (input.sourceUrl !== undefined) updates.sourceUrl = input.sourceUrl.trim();
+  if (input.options !== undefined) updates.options = input.options;
+  if (input.explanation !== undefined) updates.explanation = input.explanation.trim();
+
+  await database.cards.update(id, updates);
 }
 
 export async function deleteCard(database: RevisaDatabase, cardId: string) {

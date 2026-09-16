@@ -61,7 +61,7 @@ export function ConfirmAlertDialog({
         {error ? <p className="text-xs text-destructive font-medium m-0" role="alert">{error}</p> : null}
         <AlertDialogFooter className="pt-2">
           <AlertDialogCancel disabled={submitting}>Cancelar</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" disabled={submitting} onClick={handleConfirm}>
+          <AlertDialogAction variant="destructive" disabled={submitting} aria-busy={submitting} onClick={handleConfirm}>
             {submitting ? "Aguarde..." : confirmLabel}
           </AlertDialogAction>
         </AlertDialogFooter>

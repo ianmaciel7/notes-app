@@ -37,7 +37,8 @@ export interface DeckSummary {
   newCount: number;
 }
 
-export interface LibraryShellProps extends React.ComponentProps<typeof SpaceLayout> {
+export interface LibraryShellProps extends Omit<React.ComponentProps<typeof SpaceLayout>, "children"> {
+  children?: React.ReactNode;
   decks?: DeckSummary[];
   dueCount?: number;
   newCount?: number;

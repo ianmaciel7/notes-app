@@ -27,4 +27,50 @@ describe("DeckDialog", () => {
 
     expect(onSubmit).toHaveBeenCalledWith({ name: "Biologia", description: "Células e genética" });
   });
+
+  it("populates initial values in edit mode and submits updates", async () => {
+    const onSubmit = vi.fn().mockResolvedValue(undefined);
+    const onClose = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <DeckDialog
+        open
+        initial={{ name: "História", description: "Idade Média" }}
+        onClose={onClose}
+        onSubmit={onSubmit}
+      />,
+    );
+
+    expect(screen.getByRole("dialog", { name: "Editar baralho" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Nome")).toHaveValue("História");
+    expect(screen.getByLabelText("Descrição (opcional)")).toHaveValue("Idade Média");
+
+    await user.clear(screen.getByLabelText("Nome"));
+    await user.type(screen.getByLabelText("Nome"), "História Geral");
+    await user.click(screen.getByRole("button", { name: "Salvar baralho" }));
+
+    expect(onSubmit).toHaveBeenCalledWith({ name: "História Geral", description: "Idade Média" });
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  it("displays error message when onSubmit rejects", async () => {
+    const onSubmit = vi.fn().mockRejectedValue(new Error("Falha ao salvar"));
+    const user = userEvent.setup();
+
+    render(<DeckDialog open onClose={vi.fn()} onSubmit={onSubmit} />);
+    await user.type(screen.getByLabelText("Nome"), "Química");
+    await user.click(screen.getByRole("button", { name: "Salvar baralho" }));
+
+    expect(await screen.findByText("Falha ao salvar")).toBeInTheDocument();
+  });
+
+  it("calls onClose when clicking Cancelar", async () => {
+    const onClose = vi.fn();
+    const user = userEvent.setup();
+
+    render(<DeckDialog open onClose={onClose} onSubmit={vi.fn()} />);
+    await user.click(screen.getByRole("button", { name: "Cancelar" }));
+    expect(onClose).toHaveBeenCalledOnce();
+  });
 });

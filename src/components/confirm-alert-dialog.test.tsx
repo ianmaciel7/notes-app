@@ -49,4 +49,26 @@ describe("ConfirmAlertDialog", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Falha ao excluir.");
     expect(screen.getByRole("alertdialog", { name: "Excluir baralho?" })).toBeInTheDocument();
   });
+
+  it("closes without confirming when clicking Cancelar", async () => {
+    const onConfirm = vi.fn();
+    const onOpenChange = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <ConfirmAlertDialog
+        open
+        title="Excluir baralho?"
+        description="Todos os cartões também serão excluídos."
+        confirmLabel="Excluir baralho"
+        onOpenChange={onOpenChange}
+        onConfirm={onConfirm}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Cancelar" }));
+
+    expect(onConfirm).not.toHaveBeenCalled();
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
 });
