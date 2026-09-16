@@ -1,0 +1,56 @@
+{
+  "skills-lock.json": {
+    "mtime": 1789593700.5360973,
+    "seen": 1789594215.004892,
+    "ast_hash": "dec0bbcda87efa9bb946561852794bad",
+    "semantic_hash": "dec0bbcda87efa9bb946561852794bad"
+  },
+  ".agents/rules/agents.md": {
+    "mtime": 1789593700.5288928,
+    "seen": 1789594215.004892,
+    "ast_hash": "0459a97d081eced0697f3783dd342632",
+    "semantic_hash": "0459a97d081eced0697f3783dd342632"
+  },
+  ".agents/skills/grill-me/SKILL.md": {
+    "mtime": 1789593700.5298915,
+    "seen": 1789594215.004892,
+    "ast_hash": "d235df798736c9a2de127ef44ec17c5c",
+    "semantic_hash": "d235df798736c9a2de127ef44ec17c5c"
+  },
+  ".agents/skills/grill-me/agents/openai.yaml": {
+    "mtime": 1789593700.5314019,
+    "seen": 1789594215.004892,
+    "ast_hash": "4f8d07281108635f083a7984848d404b",
+    "semantic_hash": "4f8d07281108635f083a7984848d404b"
+  },
+  "AGENTS.md": {
+    "mtime": 1789593700.5325766,
+    "seen": 1789594215.004892,
+    "ast_hash": "9dac2859a79ff39484feed84fa6f61a8",
+    "semantic_hash": "9dac2859a79ff39484feed84fa6f61a8"
+  },
+  "CLAUDE.md": {
+    "mtime": 1789593700.5335932,
+    "seen": 1789594215.004892,
+    "ast_hash": "771faa62feb60b7de901a397aebb29b0",
+    "semantic_hash": "771faa62feb60b7de901a397aebb29b0"
+  },
+  "GEMINI.md": {
+    "mtime": 1789593700.5335932,
+    "seen": 1789594215.004892,
+    "ast_hash": "d9c1aa00474b45b2de5f587fe328cb8d",
+    "semantic_hash": "d9c1aa00474b45b2de5f587fe328cb8d"
+  },
+  "GRAPHIFY_CONTEXT.md": {
+    "mtime": 1789593911.5778043,
+    "seen": 1789594215.004892,
+    "ast_hash": "3a33e52108862b5f118fcf6343239852",
+    "semantic_hash": "3a33e52108862b5f118fcf6343239852"
+  },
+  "README.md": {
+    "mtime": 1789593700.534582,
+    "seen": 1789594215.004892,
+    "ast_hash": "f0d033f9f6bb76b87106014bc5c7d745",
+    "semantic_hash": "f0d033f9f6bb76b87106014bc5c7d745"
+  }
+}

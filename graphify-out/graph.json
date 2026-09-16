@@ -1,0 +1,144 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "id": "agents_md",
+      "label": "AGENTS.md",
+      "author": null,
+      "captured_at": null,
+      "community": 0,
+      "contributor": null,
+      "file_type": "document",
+      "norm_label": "agents.md",
+      "rationale": "This is a standard Markdown file that gives coding agents project-specific context and instructions.",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null
+    },
+    {
+      "id": "claudie_md",
+      "label": "CLAUDE.md",
+      "author": null,
+      "captured_at": null,
+      "community": 0,
+      "contributor": null,
+      "file_type": "document",
+      "norm_label": "claude.md",
+      "rationale": "This file references AGENTS.md.",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null
+    },
+    {
+      "id": "gemini_md",
+      "label": "GEMINI.md",
+      "author": null,
+      "captured_at": null,
+      "community": 0,
+      "contributor": null,
+      "file_type": "document",
+      "norm_label": "gemini.md",
+      "rationale": "This file references AGENTS.md.",
+      "source_file": "GEMINI.md",
+      "source_location": null,
+      "source_url": null
+    },
+    {
+      "id": "skills_grill_me_agents_openai_yaml",
+      "label": "agents/openai.yaml",
+      "author": null,
+      "captured_at": null,
+      "community": 1,
+      "contributor": null,
+      "file_type": "document",
+      "norm_label": "agents/openai.yaml",
+      "rationale": "Policy and interface configuration for the grill-me skill.",
+      "source_file": ".agents/skills/grill-me/agents/openai.yaml",
+      "source_location": null,
+      "source_url": null
+    },
+    {
+      "id": "skills_grill_me_skill_md",
+      "label": "SKILL.md",
+      "author": null,
+      "captured_at": null,
+      "community": 1,
+      "contributor": null,
+      "file_type": "document",
+      "norm_label": "skill.md",
+      "rationale": "A skill definition for the grill-me tool.",
+      "source_file": ".agents/skills/grill-me/SKILL.md",
+      "source_location": null,
+      "source_url": null
+    },
+    {
+      "id": "agents_rules_agents_md",
+      "label": "AGENTS.md Principles for Coding Agents",
+      "author": null,
+      "captured_at": null,
+      "community": 2,
+      "contributor": null,
+      "file_type": "document",
+      "norm_label": "agents.md principles for coding agents",
+      "rationale": "This rule defines shared principles for coding agents working in this repository.",
+      "source_file": ".agents/rules/agents.md",
+      "source_location": null,
+      "source_url": null
+    },
+    {
+      "id": "graphify_context_md",
+      "label": "GRAPHIFY_CONTEXT.md",
+      "author": null,
+      "captured_at": null,
+      "community": 3,
+      "contributor": null,
+      "file_type": "document",
+      "norm_label": "graphify_context.md",
+      "rationale": "This directory is an older version or an earlier attempt of the notes-app project.",
+      "source_file": "GRAPHIFY_CONTEXT.md",
+      "source_location": null,
+      "source_url": null
+    },
+    {
+      "id": "readme_md",
+      "label": "README.md",
+      "author": null,
+      "captured_at": null,
+      "community": 4,
+      "contributor": null,
+      "file_type": "document",
+      "norm_label": "readme.md",
+      "rationale": "This is a placeholder README file.",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null
+    }
+  ],
+  "links": [
+    {
+      "source": "skills_grill_me_skill_md",
+      "target": "skills_grill_me_agents_openai_yaml",
+      "relation": "includes",
+      "confidence_score": 1.0,
+      "source_file": ".agents/skills/grill-me/SKILL.md"
+    },
+    {
+      "source": "claudie_md",
+      "target": "agents_md",
+      "relation": "references",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md"
+    },
+    {
+      "source": "gemini_md",
+      "target": "agents_md",
+      "relation": "references",
+      "confidence_score": 1.0,
+      "source_file": "GEMINI.md"
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "6529ceda0b84a536ca9f30480026ac2a21be049c"
+}

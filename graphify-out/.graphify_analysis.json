@@ -1,0 +1,41 @@
+{
+  "communities": {
+    "0": [
+      "agents_md",
+      "claudie_md",
+      "gemini_md"
+    ],
+    "1": [
+      "skills_grill_me_agents_openai_yaml",
+      "skills_grill_me_skill_md"
+    ],
+    "2": [
+      "agents_rules_agents_md"
+    ],
+    "3": [
+      "graphify_context_md"
+    ],
+    "4": [
+      "readme_md"
+    ]
+  },
+  "cohesion": {
+    "0": 0.6666666666666666,
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0,
+    "4": 1.0
+  },
+  "gods": [
+    {
+      "id": "agents_rules_agents_md",
+      "label": "AGENTS.md Principles for Coding Agents",
+      "degree": 0
+    }
+  ],
+  "surprises": [],
+  "tokens": {
+    "input": 3414,
+    "output": 884
+  }
+}
