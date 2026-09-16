@@ -7584,6 +7584,18 @@
       "source_location": "L1"
     },
     {
+      "id": "architecture",
+      "label": "ARCHITECTURE.md",
+      "_origin": "ast",
+      "community": 55,
+      "community_name": "ARCHITECTURE.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "architecture.md",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "L1"
+    },
+    {
       "id": "src_components_ui_command",
       "label": "command.tsx",
       "_origin": "ast",
@@ -19193,5 +19205,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fbc9c5eb5852f34b27d9a1c043f312adf272d74a"
+  "built_at_commit": "fb89f6285909d8b214d7be099974ed7a45dac8fc"
 }

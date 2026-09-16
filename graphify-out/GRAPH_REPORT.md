@@ -1,17 +1,17 @@
 # Graph Report - notes-app  (2026-09-16)
 
 ## Corpus Check
-- 88 files · ~33,666 words
+- 89 files · ~33,666 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 6 file(s) not represented in the graph (top: (none) 4, .ico 1, .css 1)
 
 ## Summary
-- 726 nodes · 937 edges · 55 communities (36 shown, 19 thin omitted)
+- 727 nodes · 937 edges · 56 communities (36 shown, 20 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fbc9c5eb`
+- Built from commit: `fb89f628`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -97,7 +97,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (55 total, 19 thin omitted)
+## Communities (56 total, 20 thin omitted)
 
 ### Community 0 - "sidebar.tsx"
 Cohesion: 0.05
@@ -244,20 +244,20 @@ Cohesion: 0.50
 Nodes (3): Deploy on Vercel, Getting Started, Learn More
 
 ## Knowledge Gaps
-- **179 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `ignoreUnknown` (+174 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 510 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **179 isolated node(s):** `SidebarContextProps`, `DrawerContextProps`, `CarouselApi`, `CarouselContextProps`, `CarouselOptions` (+174 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 511 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn` connect `cn` to `sidebar.tsx`, `package.json`, `combobox.tsx`, `lucide-react`, `menubar.tsx`, `command.tsx`, `questionnaire.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `alert-dialog.tsx`, `chart.tsx`, `react`, `item.tsx`, `attachment.tsx`, `navigation-menu.tsx`, `card.tsx`, `toast.tsx`, `pagination.tsx`, `marker.tsx`, `message-scroller.tsx`, `empty.tsx`, `class-variance-authority`, `button.tsx`, `alert.tsx`, `button-group.tsx`, `breadcrumb.tsx`, `bubble.tsx`, `resizable.tsx`?**
-  _High betweenness centrality (0.296) - this node is a cross-community bridge._
+  _High betweenness centrality (0.295) - this node is a cross-community bridge._
 - **Why does `react` connect `react` to `sidebar.tsx`, `package.json`, `combobox.tsx`, `lucide-react`, `menubar.tsx`, `command.tsx`, `questionnaire.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `alert-dialog.tsx`, `chart.tsx`, `item.tsx`, `cn`, `attachment.tsx`, `card.tsx`, `toast.tsx`, `pagination.tsx`, `marker.tsx`, `message-scroller.tsx`, `button.tsx`, `alert.tsx`, `breadcrumb.tsx`, `bubble.tsx`?**
   _High betweenness centrality (0.150) - this node is a cross-community bridge._
 - **Why does `lucide-react` connect `lucide-react` to `sidebar.tsx`, `package.json`, `combobox.tsx`, `button.tsx`, `menubar.tsx`, `command.tsx`, `breadcrumb.tsx`, `questionnaire.tsx`, `context-menu.tsx`, `carousel.tsx`, `navigation-menu.tsx`, `toast.tsx`, `pagination.tsx`, `message-scroller.tsx`?**
-  _High betweenness centrality (0.057) - this node is a cross-community bridge._
-- **What connects `$schema`, `enabled`, `clientKind` to the rest of the system?**
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
+- **What connects `SidebarContextProps`, `DrawerContextProps`, `CarouselApi` to the rest of the system?**
   _179 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `sidebar.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.05442176870748299 - nodes in this community are weakly interconnected._
