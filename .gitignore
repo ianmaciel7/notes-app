@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# local git worktrees (kept on disk for Codex/AGY)
+/.worktrees/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
