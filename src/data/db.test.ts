@@ -6,7 +6,9 @@ import {
   createDeck,
   createRevisaDatabase,
   deleteDeck,
+  getUserSettings,
   replaceDatabase,
+  saveUserSettings,
   type RevisaDatabase,
 } from "@/data/db";
 
@@ -35,7 +37,18 @@ describe("Revisa database", () => {
     expect(await db.reviewLogs.count()).toBe(0);
   });
 
-  it("exports and atomically replaces every collection", async () => {
+  it("saves and retrieves user settings", async () => {
+    const initial = await getUserSettings(db);
+    expect(initial.dailyCardGoal).toBe(20);
+    expect(initial.monthlyCardGoal).toBe(500);
+
+    await saveUserSettings(db, { dailyCardGoal: 35, monthlyCardGoal: 800 });
+    const updated = await getUserSettings(db);
+    expect(updated.dailyCardGoal).toBe(35);
+    expect(updated.monthlyCardGoal).toBe(800);
+  });
+
+  it("exports and atomically replaces every collection including settings", async () => {
     await createDeck(db, { name: "Antigo", description: "" });
     const backup = {
       schemaVersion: 1 as const,
@@ -44,6 +57,12 @@ describe("Revisa database", () => {
       cards: [],
       schedules: [],
       reviewLogs: [],
+      settings: {
+        id: "global" as const,
+        dailyCardGoal: 40,
+        monthlyCardGoal: 1000,
+        updatedAt: "2026-09-15T12:00:00.000Z",
+      },
     };
 
     await replaceDatabase(db, backup);
@@ -52,5 +71,6 @@ describe("Revisa database", () => {
     expect(exported.decks).toHaveLength(1);
     expect(exported.decks[0].name).toBe("Novo");
     expect(exported.exportedAt).toBe("2026-09-16T12:00:00.000Z");
+    expect(exported.settings?.dailyCardGoal).toBe(40);
   });
 });

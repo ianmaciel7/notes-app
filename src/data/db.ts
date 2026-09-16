@@ -6,13 +6,16 @@ import type {
   CardSchedule,
   DeckRecord,
   ReviewLogRecord,
+  UserSettingsRecord,
 } from "@/data/types";
+import { DEFAULT_DAILY_GOAL, DEFAULT_MONTHLY_GOAL } from "@/domain/goals";
 
 export class RevisaDatabase extends Dexie {
   decks!: EntityTable<DeckRecord, "id">;
   cards!: EntityTable<CardRecord, "id">;
   schedules!: EntityTable<CardSchedule, "cardId">;
   reviewLogs!: EntityTable<ReviewLogRecord, "id">;
+  settings!: EntityTable<UserSettingsRecord, "id">;
 
   constructor(name = "revisa") {
     super(name);
@@ -21,6 +24,13 @@ export class RevisaDatabase extends Dexie {
       cards: "id, deckId, createdAt, updatedAt",
       schedules: "cardId, due, state",
       reviewLogs: "id, cardId, deckId, reviewedAt",
+    });
+    this.version(2).stores({
+      decks: "id, name, updatedAt",
+      cards: "id, deckId, createdAt, updatedAt",
+      schedules: "cardId, due, state",
+      reviewLogs: "id, cardId, deckId, reviewedAt",
+      settings: "id",
     });
   }
 }
@@ -126,27 +136,66 @@ export async function saveReview(
   });
 }
 
+export async function getUserSettings(database: RevisaDatabase): Promise<UserSettingsRecord> {
+  const existing = await database.settings.get("global");
+  if (existing) return existing;
+  return {
+    id: "global",
+    dailyCardGoal: DEFAULT_DAILY_GOAL,
+    monthlyCardGoal: DEFAULT_MONTHLY_GOAL,
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+export async function saveUserSettings(
+  database: RevisaDatabase,
+  input: { dailyCardGoal?: number; monthlyCardGoal?: number },
+): Promise<UserSettingsRecord> {
+  const current = await getUserSettings(database);
+  const updated: UserSettingsRecord = {
+    id: "global",
+    dailyCardGoal: input.dailyCardGoal !== undefined ? Math.max(1, input.dailyCardGoal) : current.dailyCardGoal,
+    monthlyCardGoal: input.monthlyCardGoal !== undefined ? Math.max(1, input.monthlyCardGoal) : current.monthlyCardGoal,
+    updatedAt: new Date().toISOString(),
+  };
+  await database.settings.put(updated);
+  return updated;
+}
+
 export async function createBackup(database: RevisaDatabase, now = new Date()): Promise<BackupEnvelope> {
-  const [decks, cards, schedules, reviewLogs] = await Promise.all([
+  const [decks, cards, schedules, reviewLogs, settings] = await Promise.all([
     database.decks.toArray(),
     database.cards.toArray(),
     database.schedules.toArray(),
     database.reviewLogs.toArray(),
+    database.settings.get("global"),
   ]);
-  return { schemaVersion: 1, exportedAt: now.toISOString(), decks, cards, schedules, reviewLogs };
+  return {
+    schemaVersion: 1,
+    exportedAt: now.toISOString(),
+    decks,
+    cards,
+    schedules,
+    reviewLogs,
+    settings: settings || undefined,
+  };
 }
 
 export async function replaceDatabase(database: RevisaDatabase, backup: BackupEnvelope) {
-  await database.transaction("rw", database.decks, database.cards, database.schedules, database.reviewLogs, async () => {
+  await database.transaction("rw", database.decks, database.cards, database.schedules, database.reviewLogs, database.settings, async () => {
     await Promise.all([
       database.decks.clear(),
       database.cards.clear(),
       database.schedules.clear(),
       database.reviewLogs.clear(),
+      database.settings.clear(),
     ]);
     await database.decks.bulkAdd(backup.decks);
     await database.cards.bulkAdd(backup.cards);
     await database.schedules.bulkAdd(backup.schedules);
     await database.reviewLogs.bulkAdd(backup.reviewLogs);
+    if (backup.settings) {
+      await database.settings.put(backup.settings);
+    }
   });
 }

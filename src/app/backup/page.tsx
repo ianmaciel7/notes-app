@@ -1,5 +1,5 @@
-import { BackupApp } from "@/components/backup-app";
+import { BackupManager } from "@/components/backup-manager";
 
 export default function BackupPage() {
-  return <BackupApp />;
+  return <BackupManager />;
 }

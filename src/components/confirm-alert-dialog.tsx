@@ -13,7 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-interface ConfirmDialogProps {
+interface ConfirmAlertDialogProps {
   open: boolean;
   title: string;
   description: string;
@@ -22,14 +22,14 @@ interface ConfirmDialogProps {
   onConfirm: () => Promise<void> | void;
 }
 
-export function ConfirmDialog({
+export function ConfirmAlertDialog({
   open,
   title,
   description,
   confirmLabel,
   onOpenChange,
   onConfirm,
-}: ConfirmDialogProps) {
+}: ConfirmAlertDialogProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -53,13 +53,13 @@ export function ConfirmDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={handleOpenChange}>
-      <AlertDialogContent className="revisa-confirm-dialog">
+      <AlertDialogContent className="sm:max-w-md p-6">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
-        {error ? <p className="confirm-error" role="alert">{error}</p> : null}
-        <AlertDialogFooter>
+        {error ? <p className="text-xs text-destructive font-medium m-0" role="alert">{error}</p> : null}
+        <AlertDialogFooter className="pt-2">
           <AlertDialogCancel disabled={submitting}>Cancelar</AlertDialogCancel>
           <AlertDialogAction variant="destructive" disabled={submitting} onClick={handleConfirm}>
             {submitting ? "Aguarde..." : confirmLabel}

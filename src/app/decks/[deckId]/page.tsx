@@ -1,6 +1,6 @@
-import { DeckApp } from "@/components/deck-app";
+import { DeckDetail } from "@/components/deck-detail";
 
 export default async function DeckPage({ params }: { params: Promise<{ deckId: string }> }) {
   const { deckId } = await params;
-  return <DeckApp deckId={deckId} />;
+  return <DeckDetail deckId={deckId} />;
 }

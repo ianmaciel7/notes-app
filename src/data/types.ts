@@ -43,6 +43,59 @@ export interface ReviewLogRecord {
   previousSchedule: CardSchedule | null;
 }
 
+export interface UserSettingsRecord {
+  id: "global";
+  dailyCardGoal: number;
+  monthlyCardGoal: number;
+  updatedAt: string;
+}
+
+export interface CardErrorSummary {
+  cardId: string;
+  deckId: string;
+  deckName?: string;
+  front: string;
+  back: string;
+  lapses: number;
+  errorCount: number;
+  totalReviews: number;
+  errorRate: number;
+  lastRating?: StudyRating;
+  lastReviewedAt?: string;
+}
+
+export interface StudyGoalsProgress {
+  daily: {
+    goal: number;
+    count: number;
+    percentage: number;
+    isCompleted: boolean;
+  };
+  monthly: {
+    goal: number;
+    count: number;
+    percentage: number;
+    isCompleted: boolean;
+  };
+  streak: {
+    current: number;
+    longest: number;
+    lastActiveDate: string | null;
+  };
+}
+
+export interface OverallErrorStats {
+  totalReviews: number;
+  againCount: number;
+  hardCount: number;
+  goodCount: number;
+  easyCount: number;
+  retentionRate: number;
+  errorRate: number;
+  totalLapses: number;
+  problematicCardsCount: number;
+}
+
 export interface BackupEnvelope {
   schemaVersion: 1;
   exportedAt: string;
@@ -50,4 +103,5 @@ export interface BackupEnvelope {
   cards: CardRecord[];
   schedules: CardSchedule[];
   reviewLogs: ReviewLogRecord[];
+  settings?: UserSettingsRecord;
 }

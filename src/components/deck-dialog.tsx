@@ -2,10 +2,18 @@
 
 import { useId, useState, type FormEvent } from "react";
 
-import { Modal } from "@/components/modal";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 interface DeckDialogProps {
@@ -47,16 +55,32 @@ function DeckDialogForm({ initial, onClose, onSubmit }: Omit<DeckDialogProps, "o
   }
 
   return (
-    <Modal open title={initial ? "Editar baralho" : "Novo baralho"} description="Organize cartões do mesmo assunto em um só lugar." onClose={onClose}>
-      <form className="form-stack" onSubmit={handleSubmit}>
-        <div className="field-group"><Label htmlFor={nameId}>Nome</Label><Input id={nameId} autoFocus value={name} onChange={(event) => setName(event.target.value)} maxLength={80} /></div>
-        <div className="field-group"><Label htmlFor={descriptionId}>Descrição (opcional)</Label><Textarea id={descriptionId} value={description} onChange={(event) => setDescription(event.target.value)} maxLength={180} rows={3} /></div>
-        {error ? <p className="form-error" role="alert">{error}</p> : null}
-        <footer className="modal-actions">
-          <Button variant="outline" type="button" onClick={onClose}>Cancelar</Button>
-          <Button type="submit" disabled={saving}>{saving ? "Salvando..." : "Salvar baralho"}</Button>
-        </footer>
-      </form>
-    </Modal>
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-[520px] p-6">
+        <DialogHeader className="pb-2">
+          <DialogTitle>{initial ? "Editar baralho" : "Novo baralho"}</DialogTitle>
+          <DialogDescription>Organize cartões do mesmo assunto em um só lugar.</DialogDescription>
+        </DialogHeader>
+        <form className="space-y-4 pt-2" onSubmit={handleSubmit}>
+          <Field>
+            <FieldLabel htmlFor={nameId}>Nome</FieldLabel>
+            <Input id={nameId} autoFocus value={name} onChange={(event) => setName(event.target.value)} maxLength={80} />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor={descriptionId}>Descrição (opcional)</FieldLabel>
+            <Textarea id={descriptionId} value={description} onChange={(event) => setDescription(event.target.value)} maxLength={180} rows={3} />
+          </Field>
+          {error ? <FieldError errors={[{ message: error }]} /> : null}
+          <DialogFooter className="pt-2 flex justify-end gap-2">
+            <DialogClose render={<Button variant="outline" type="button" onClick={onClose} />}>
+              Cancelar
+            </DialogClose>
+            <Button type="submit" disabled={saving}>
+              {saving ? "Salvando..." : "Salvar baralho"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

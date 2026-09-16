@@ -1,8 +1,12 @@
 import { Suspense } from "react";
 
-import { StudyApp } from "@/components/study-app";
+import { StudySession } from "@/components/study-session";
 
 export default async function StudyPage({ params }: { params: Promise<{ deckId: string }> }) {
   const { deckId } = await params;
-  return <Suspense fallback={<div className="study-layout"><div className="loading-line">Preparando sua sessão...</div></div>}><StudyApp deckId={deckId} /></Suspense>;
+  return (
+    <Suspense fallback={<div className="min-h-screen p-6 bg-background flex flex-col items-center justify-center text-muted-foreground text-sm">Preparando sua sessão...</div>}>
+      <StudySession deckId={deckId} />
+    </Suspense>
+  );
 }

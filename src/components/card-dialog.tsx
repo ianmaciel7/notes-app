@@ -2,9 +2,17 @@
 
 import { useId, useState, type FormEvent } from "react";
 
-import { Modal } from "@/components/modal";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 
 interface CardDialogProps {
@@ -16,7 +24,14 @@ interface CardDialogProps {
 
 export function CardDialog({ open, initial, onClose, onSubmit }: CardDialogProps) {
   if (!open) return null;
-  return <CardDialogForm key={`${initial?.front ?? "new"}:${initial?.back ?? ""}`} initial={initial} onClose={onClose} onSubmit={onSubmit} />;
+  return (
+    <CardDialogForm
+      key={`${initial?.front ?? "new"}:${initial?.back ?? ""}`}
+      initial={initial}
+      onClose={onClose}
+      onSubmit={onSubmit}
+    />
+  );
 }
 
 function CardDialogForm({ initial, onClose, onSubmit }: Omit<CardDialogProps, "open">) {
@@ -46,16 +61,45 @@ function CardDialogForm({ initial, onClose, onSubmit }: Omit<CardDialogProps, "o
   }
 
   return (
-    <Modal open title={initial ? "Editar cartão" : "Novo cartão"} description="Escreva uma pergunta objetiva e uma resposta direta." onClose={onClose}>
-      <form className="form-stack" onSubmit={handleSubmit}>
-        <div className="field-group"><Label htmlFor={frontId}>Frente</Label><Textarea id={frontId} autoFocus value={front} onChange={(event) => setFront(event.target.value)} maxLength={600} rows={4} /></div>
-        <div className="field-group"><Label htmlFor={backId}>Verso</Label><Textarea id={backId} value={back} onChange={(event) => setBack(event.target.value)} maxLength={1200} rows={5} /></div>
-        {error ? <p className="form-error" role="alert">{error}</p> : null}
-        <footer className="modal-actions">
-          <Button variant="outline" type="button" onClick={onClose}>Cancelar</Button>
-          <Button type="submit" disabled={saving}>{saving ? "Salvando..." : "Salvar cartão"}</Button>
-        </footer>
-      </form>
-    </Modal>
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-[520px] p-6">
+        <DialogHeader className="pb-2">
+          <DialogTitle>{initial ? "Editar cartão" : "Novo cartão"}</DialogTitle>
+          <DialogDescription>Escreva uma pergunta objetiva e uma resposta direta.</DialogDescription>
+        </DialogHeader>
+        <form className="space-y-4 pt-2" onSubmit={handleSubmit}>
+          <Field>
+            <FieldLabel htmlFor={frontId}>Frente</FieldLabel>
+            <Textarea
+              id={frontId}
+              autoFocus
+              value={front}
+              onChange={(event) => setFront(event.target.value)}
+              maxLength={600}
+              rows={4}
+            />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor={backId}>Verso</FieldLabel>
+            <Textarea
+              id={backId}
+              value={back}
+              onChange={(event) => setBack(event.target.value)}
+              maxLength={1200}
+              rows={5}
+            />
+          </Field>
+          {error ? <FieldError errors={[{ message: error }]} /> : null}
+          <DialogFooter className="pt-2 flex justify-end gap-2">
+            <DialogClose render={<Button variant="outline" type="button" onClick={onClose} />}>
+              Cancelar
+            </DialogClose>
+            <Button type="submit" disabled={saving}>
+              {saving ? "Salvando..." : "Salvar cartão"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

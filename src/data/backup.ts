@@ -41,6 +41,12 @@ const reviewLogSchema: z.ZodType<BackupEnvelope["reviewLogs"][number]> = z.objec
   state: z.number().int(),
   previousSchedule: scheduleSchema.nullable(),
 });
+const settingsSchema = z.object({
+  id: z.literal("global"),
+  dailyCardGoal: z.number().int().positive(),
+  monthlyCardGoal: z.number().int().positive(),
+  updatedAt: date,
+});
 const backupSchema: z.ZodType<BackupEnvelope> = z.object({
   schemaVersion: z.literal(1),
   exportedAt: date,
@@ -48,6 +54,7 @@ const backupSchema: z.ZodType<BackupEnvelope> = z.object({
   cards: z.array(cardSchema),
   schedules: z.array(scheduleSchema),
   reviewLogs: z.array(reviewLogSchema),
+  settings: settingsSchema.optional(),
 });
 
 export function parseBackup(value: string): BackupEnvelope {
