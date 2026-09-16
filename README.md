@@ -26,7 +26,14 @@ pnpm build     # production build
 pnpm start     # production server
 pnpm lint      # Biome checks
 pnpm format    # format files with Biome
+pnpm ladle         # develop shared components
+pnpm ladle:build   # build the static component catalogue
+pnpm ladle:preview # preview the static catalogue
+pnpm dev:all       # run Next.js and Ladle together
 ```
+
+Stories live beside the component they document and use the `*.stories.tsx`
+naming pattern.
 
 ## Project layout
 
