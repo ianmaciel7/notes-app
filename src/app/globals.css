@@ -137,6 +137,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .deck-meta { display: flex; gap: 15px; padding-top: 13px; border-top: 1px solid var(--line); color: var(--muted-foreground); font-size: 11px; }
 .deck-meta strong { color: var(--foreground); }
 .revisa-dialog { max-height: calc(100vh - 40px); overflow-y: auto; gap: 0; padding: 0; border-radius: 8px; box-shadow: 0 26px 70px rgba(17, 27, 23, .24); }
+[data-slot="dialog-overlay"], [data-slot="alert-dialog-overlay"] { background: rgba(17, 27, 23, .56); backdrop-filter: none; }
 .revisa-dialog-header { padding: 22px 54px 18px 22px; border-bottom: 1px solid var(--line); }
 .revisa-dialog-header [data-slot="dialog-title"] { font-size: 20px; font-weight: 700; }
 .revisa-dialog-header [data-slot="dialog-description"] { font-size: 13px; line-height: 1.5; }

@@ -50,7 +50,7 @@ export function LibraryShell({ decks, dueCount, newCount, onCreateDeck }: Librar
           <Link className="brand" href="/" aria-label="Revisa, início">
             <span className="brand-mark"><Sparkles size={16} /></span><span>Revisa</span>
           </Link>
-          <Button render={<Link href="/backup" />} variant="outline" size="icon-lg" aria-label="Abrir backup"><Archive /></Button>
+          <Button render={<Link href="/backup" />} nativeButton={false} variant="outline" size="icon-lg" aria-label="Abrir backup"><Archive /></Button>
         </header>
 
         <div className="content-wrap">
@@ -87,7 +87,7 @@ export function LibraryShell({ decks, dueCount, newCount, onCreateDeck }: Librar
             <section className="deck-grid" aria-label="Baralhos">
               {decks.map((deck) => (
                 <Card className="deck-card" key={deck.id}>
-                  <Link className="deck-card-link" href={`/baralhos/${deck.id}`}>
+                  <Link className="deck-card-link" href={`/decks/${deck.id}`}>
                     <div className="deck-card-top"><span className="deck-icon"><BookOpen size={19} /></span><ChevronRight size={18} className="deck-arrow" /></div>
                     <div><h2>{deck.name}</h2><p>{deck.description || `${deck.cardCount} cartões`}</p></div>
                     <div className="deck-meta"><span><strong>{deck.dueCount}</strong> pendentes</span><span><strong>{deck.newCount}</strong> novos</span></div>

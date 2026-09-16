@@ -23,7 +23,7 @@ export function AppFrame({ children, active }: AppFrameProps) {
       <main className="main-area">
         <header className="mobile-header">
           <Link className="brand" href="/" aria-label="Revisa, início"><span className="brand-mark"><Sparkles size={16} /></span><span>Revisa</span></Link>
-          <Button render={<Link href="/backup" />} variant="outline" size="icon-lg" aria-label="Abrir backup"><Archive /></Button>
+          <Button render={<Link href="/backup" />} nativeButton={false} variant="outline" size="icon-lg" aria-label="Abrir backup"><Archive /></Button>
         </header>
         {children}
       </main>

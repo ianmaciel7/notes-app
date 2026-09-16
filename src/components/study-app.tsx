@@ -68,7 +68,7 @@ function StudySession({ deck, cards, schedules, goal }: { deck: DeckRecord; card
           <h1>{studied ? `${studied} ${studied === 1 ? "cartão revisado" : "cartões revisados"}` : "Tudo em dia"}</h1>
           <p>{studied ? "Seu progresso foi salvo neste dispositivo." : "Não há cartões disponíveis para esta sessão."}</p>
           {studied ? <dl className="summary-stats"><div><dt>Novamente</dt><dd>{ratings.again}</dd></div><div><dt>Difícil</dt><dd>{ratings.hard}</dd></div><div><dt>Bom</dt><dd>{ratings.good}</dd></div><div><dt>Fácil</dt><dd>{ratings.easy}</dd></div></dl> : null}
-          <div className="summary-actions"><Button render={<Link href={`/baralhos/${deck.id}`} />} variant="secondary"><ArrowLeft />Voltar ao baralho</Button><Button render={<Link href={`/estudar/${deck.id}?meta=${goal}`} />}><RotateCcw />Nova sessão</Button></div>
+          <div className="summary-actions"><Button render={<Link href={`/decks/${deck.id}`} />} nativeButton={false} variant="secondary"><ArrowLeft />Voltar ao baralho</Button><Button render={<Link href={`/study/${deck.id}?meta=${goal}`} />} nativeButton={false}><RotateCcw />Nova sessão</Button></div>
         </div>
       </div>
     );
@@ -77,7 +77,7 @@ function StudySession({ deck, cards, schedules, goal }: { deck: DeckRecord; card
   return (
     <div className="study-layout">
       <header className="study-header">
-        <Button render={<Link href={`/baralhos/${deck.id}`} />} variant="outline" size="icon-lg" aria-label="Sair da sessão"><ArrowLeft /></Button>
+        <Button render={<Link href={`/decks/${deck.id}`} />} nativeButton={false} variant="outline" size="icon-lg" aria-label="Sair da sessão"><ArrowLeft /></Button>
         <div><strong>{deck.name}</strong><span>{index + 1} de {queue.length}</span></div>
         <Progress className="session-progress" value={queue.length ? (index / queue.length) * 100 : 0} aria-label={`${index} de ${queue.length} concluídos`} />
       </header>

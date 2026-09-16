@@ -32,8 +32,8 @@ Routes are composed in `src/app/` and delegate interactive behavior to client co
 The application uses these route surfaces:
 
 - `/` — deck library.
-- `/baralhos/[deckId]` — deck detail and card management.
-- `/estudar/[deckId]` — study session for a deck.
+- `/decks/[deckId]` — deck detail and card management.
+- `/study/[deckId]` — study session for a deck.
 - `/backup` — export and restore controls.
 
 `AppFrame` provides shared navigation and the responsive application shell. Feature components own local form state, dialogs, study interactions, and browser event handling. Product-facing copy remains in Brazilian Portuguese.

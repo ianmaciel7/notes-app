@@ -54,7 +54,7 @@ export function DeckApp({ deckId }: DeckAppProps) {
   }
 
   function startSession(goal: SessionGoal) {
-    router.push(`/estudar/${deckId}?meta=${goal}`);
+    router.push(`/study/${deckId}?meta=${goal}`);
   }
 
   return (
