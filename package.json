@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:all": "concurrently --kill-others-on-fail --names next,ladle \"pnpm dev\" \"pnpm ladle\"",
     "build": "next build",
     "start": "next start",
     "ladle": "ladle serve",
@@ -39,6 +40,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "concurrently": "^10.0.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
