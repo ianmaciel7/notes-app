@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "graphify": {
+      "source": "graphifyy",
+      "sourceType": "package",
+      "skillPath": ".agents/skills/graphify/SKILL.md",
+      "computedHash": "db078943fd9807ce896a36939c0c9319c862a087"
+    },
+    "search-registry-items": {
+      "source": "alibey-10/shoogle",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/search-registry-items/SKILL.md",
+      "computedHash": "e82a68c5af0a7a8da7c23c301f7ca0cf2c3a2fc8"
+    }
+  }
+}
