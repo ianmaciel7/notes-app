@@ -30,9 +30,9 @@
     "semantic_hash": "239f3ebf717465dc636818a1a619398d"
   },
   "src/app/layout.tsx": {
-    "mtime": 1789638190.6318142,
-    "seen": 1789638428.2575998,
-    "ast_hash": "e0dc7d3dbf3152a7a63f034426444e84",
+    "mtime": 1789638684.040379,
+    "seen": 1789638734.202155,
+    "ast_hash": "a90e86656cf38cce37ca009b94ab22dd",
     "semantic_hash": ""
   },
   "src/app/page.tsx": {
@@ -594,15 +594,15 @@
     "semantic_hash": ""
   },
   ".ladle/components.tsx": {
-    "mtime": 1789638190.6318142,
-    "seen": 1789638428.2575998,
-    "ast_hash": "0c0bfb1ab8c5e3e4ca2b48394f801756",
+    "mtime": 1789638546.0456781,
+    "seen": 1789638734.202155,
+    "ast_hash": "8e43604d0bd9acbbe5baca596942036a",
     "semantic_hash": ""
   },
   ".ladle/config.mjs": {
-    "mtime": 1789600961.2822382,
-    "seen": 1789601006.6040218,
-    "ast_hash": "b5194932b11c5d730cc841c464411bc0",
+    "mtime": 1789638548.2205658,
+    "seen": 1789638734.202155,
+    "ast_hash": "cf88f753e14458e9558d16bfb06b7285",
     "semantic_hash": ""
   },
   ".superpowers/sdd/2026-09-16-ladle-setup/task-5-report.md": {
