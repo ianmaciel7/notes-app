@@ -12,6 +12,8 @@ export interface AppMessages {
     goToPreviousPage: string;
     goToNextPage: string;
     morePages: string;
+    carouselRoleDescription: string;
+    slideRoleDescription: string;
     previousSlide: string;
     nextSlide: string;
     scrollToEnd: string;

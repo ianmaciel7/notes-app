@@ -11,6 +11,8 @@ export const messages = {
       goToPreviousPage: "Go to previous page",
       goToNextPage: "Go to next page",
       morePages: "More pages",
+      carouselRoleDescription: "carousel",
+      slideRoleDescription: "slide",
       previousSlide: "Previous slide",
       nextSlide: "Next slide",
       scrollToEnd: "Scroll to end",
@@ -37,7 +39,7 @@ export const messages = {
       previous: "Previous",
       skip: "Skip",
       next: "Next",
-      submit: "Finalizar",
+      submit: "Submit",
     },
     errors: {
       generic: {
@@ -67,6 +69,8 @@ export const messages = {
       goToPreviousPage: "Ir para a página anterior",
       goToNextPage: "Ir para a próxima página",
       morePages: "Mais páginas",
+      carouselRoleDescription: "carrossel",
+      slideRoleDescription: "slide",
       previousSlide: "Slide anterior",
       nextSlide: "Próximo slide",
       scrollToEnd: "Rolar até o fim",

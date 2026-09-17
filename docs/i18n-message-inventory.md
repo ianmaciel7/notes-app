@@ -23,7 +23,7 @@ These app-owned shared primitives contain current accessibility defaults that sh
 | Source | Current literal(s) | Catalog key(s) |
 | --- | --- | --- |
 | `breadcrumb.tsx` | `breadcrumb`; `More` | `common.breadcrumbLabel`; `common.more` |
-| `carousel.tsx` | `carousel`; `slide`; `Previous slide`; `Next slide` | `common.previousSlide`; `common.nextSlide` (the role descriptions need a future catalog decision) |
+| `carousel.tsx` | `carousel`; `slide`; `Previous slide`; `Next slide` | `common.carouselRoleDescription`; `common.slideRoleDescription`; `common.previousSlide`; `common.nextSlide` |
 | `dialog.tsx`, `sheet.tsx` | `Close` | `common.close` |
 | `message-scroller.tsx` | `Scroll to end`; `Scroll to start` | `common.scrollToEnd`; `common.scrollToStart` |
 | `pagination.tsx` | `pagination`; `Previous`; `Next`; `Go to previous page`; `Go to next page`; `More pages` | `common.paginationLabel`; `questionnaire.previous`; `questionnaire.next`; `common.goToPreviousPage`; `common.goToNextPage`; `common.morePages` |
