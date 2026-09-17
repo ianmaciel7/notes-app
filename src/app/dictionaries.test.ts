@@ -10,4 +10,8 @@ describe("getDictionary", () => {
       home: { deployNow: "Implantar agora" },
     });
   });
+
+  it("rejects unsupported locales before dictionary lookup", async () => {
+    await expect(getDictionary("fr")).rejects.toThrow();
+  });
 });

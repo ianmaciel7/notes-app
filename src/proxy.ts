@@ -51,7 +51,10 @@ export function proxy(request: NextRequest) {
   if (hasSupportedLocale) return NextResponse.next();
 
   const locale = negotiateLocale(request.headers.get("accept-language"));
-  return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url));
+  const redirectUrl = request.nextUrl.clone();
+  redirectUrl.pathname = `/${locale}${pathname}`;
+
+  return NextResponse.redirect(redirectUrl);
 }
 
 export const config = {

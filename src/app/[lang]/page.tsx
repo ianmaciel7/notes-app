@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { AuthGate } from "@/components/auth-gate";
@@ -11,7 +12,12 @@ import {
 } from "@/components/ui/card";
 import { getCurrentUser } from "@/data/auth";
 
-export default function Home() {
+import { isSupportedLocale } from "./dictionaries";
+
+export default async function Home({ params }: PageProps<"/[lang]">) {
+  const { lang } = await params;
+  if (!isSupportedLocale(lang)) notFound();
+
   return (
     <Suspense
       fallback={
@@ -20,16 +26,16 @@ export default function Home() {
         </main>
       }
     >
-      <AuthenticatedHome />
+      <AuthenticatedHome locale={lang} />
     </Suspense>
   );
 }
 
-async function AuthenticatedHome() {
-  await getCurrentUser();
+async function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
+  await getCurrentUser(locale);
 
   return (
-    <AuthGate>
+    <AuthGate locale={locale}>
       <div className="flex flex-1 flex-col items-center justify-center bg-zinc-50 font-sans dark:bg-black">
         <main className="flex w-full max-w-3xl flex-1 flex-col items-center justify-between bg-white px-16 py-32 dark:bg-black sm:items-start">
           <Card className="flex w-full flex-1 flex-col items-center justify-between gap-0 rounded-none bg-white py-0 text-inherit ring-0 dark:bg-black sm:items-start">

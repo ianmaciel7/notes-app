@@ -54,3 +54,27 @@
 - Existing untracked Firebase and auth support files were retained. Only the
   sign-in route itself was relocated under the locale segment so proxy redirects
   continue to reach the current auth UI.
+
+## Fix Round 1 — Review Findings
+
+- Locale-aware auth navigation now preserves the active route locale.
+  - `getCurrentUser` redirects unauthenticated or invalid sessions to the
+    matching `/${lang}/sign-in` route.
+  - `AuthGate` receives the validated locale from the server page and redirects
+    client-side session failures to that locale's sign-in route.
+  - The localized sign-in page uses its route params for every successful-auth
+    callback, returning to `/${lang}` instead of `/`.
+- Proxy redirects now clone the incoming URL and update only `pathname`, so
+  query strings are retained.
+- Added regression coverage for query-string preservation, the `pt` → `pt-BR`
+  preference match, API/`_next`/static matcher exclusions, unsupported locale
+  dictionary validation, and locale-auth path construction.
+
+### Fix validation
+
+| Command | Outcome |
+| --- | --- |
+| `pnpm exec vitest run --config vitest.task-2-fix.config.ts` | Passed: 3 files, 9 tests. The temporary focused-test config was removed after the run. |
+| `pnpm exec biome check` on changed Task 2/fix-round source and tests | Passed: 9 files checked, no diagnostics. |
+| `pnpm exec tsc --noEmit` | Passed. |
+| `pnpm build` | Passed. Next.js 16.3.5 compiled, type-checked, generated both locale and sign-in routes, and recognized the Proxy. |
