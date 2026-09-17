@@ -1,7 +1,7 @@
 # Graph Report - notes-app  (2026-09-17)
 
 ## Corpus Check
-- 98 files · ~35,303 words
+- 98 files · ~35,313 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 6 file(s) not represented in the graph (top: (none) 4, .ico 1, .css 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2407b047`
+- Built from commit: `111db349`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -88,8 +88,8 @@
 5. `class-variance-authority` - 17 edges
 6. `compilerOptions` - 16 edges
 7. `What You Must Do When Invoked` - 12 edges
-8. `scripts` - 10 edges
-9. `/graphify` - 10 edges
+8. `/graphify` - 10 edges
+9. `scripts` - 10 edges
 10. `shadcn/ui Rules` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -274,7 +274,7 @@ Cohesion: 0.40
 Nodes (3): ref_base_ui_react_button, react-day-picker, Button()
 
 ## Knowledge Gaps
-- **211 isolated node(s):** `Project source of truth`, `Component architecture`, `Styling and composition`, `Icons and content`, `Existing patterns to preserve` (+206 more)
+- **211 isolated node(s):** `ButtonStoryProps`, `Variants`, `Sizes`, `iconSizes`, `SidebarContextProps` (+206 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 550 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **26 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -287,7 +287,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.147) - this node is a cross-community bridge._
 - **Why does `lucide-react` connect `lucide-react` to `input-otp.tsx`, `package.json`, `combobox.tsx`, `navigation-menu.tsx`, `menubar.tsx`, `select.tsx`, `react`, `sidebar.tsx`, `questionnaire.tsx`, `context-menu.tsx`, `carousel.tsx`, `pagination.tsx`, `toast.tsx`, `message-scroller.tsx`, `breadcrumb.tsx`, `button.tsx`?**
   _High betweenness centrality (0.054) - this node is a cross-community bridge._
-- **What connects `Project source of truth`, `Component architecture`, `Styling and composition` to the rest of the system?**
+- **What connects `ButtonStoryProps`, `Variants`, `Sizes` to the rest of the system?**
   _211 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `sidebar.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.053061224489795916 - nodes in this community are weakly interconnected._
