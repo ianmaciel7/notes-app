@@ -6,6 +6,7 @@ import "../globals.css";
 
 import { FirebaseProvider } from "@/components/firebase-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { I18nProvider } from "@/lib/i18n";
 import { supportedLocales } from "@/lib/i18n/types";
 
 import { getDictionary, isSupportedLocale } from "./dictionaries";
@@ -46,6 +47,8 @@ export default async function LocaleLayout({
 
   if (!isSupportedLocale(lang)) notFound();
 
+  const dictionary = await getDictionary(lang);
+
   return (
     <html
       lang={lang}
@@ -57,9 +60,11 @@ export default async function LocaleLayout({
       ].join(" ")}
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <FirebaseProvider>{children}</FirebaseProvider>
-        </ThemeProvider>
+        <I18nProvider dictionary={dictionary} locale={lang}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <FirebaseProvider>{children}</FirebaseProvider>
+          </ThemeProvider>
+        </I18nProvider>
       </body>
     </html>
   );
