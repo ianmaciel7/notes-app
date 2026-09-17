@@ -4,7 +4,9 @@ import { onIdTokenChanged, type User } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
 
+import { syncSession } from "@/lib/auth/client-session";
 import { auth } from "@/lib/firebase/client";
+import { useI18n } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n/routing";
 import type { Locale } from "@/lib/i18n/types";
 
@@ -15,6 +17,7 @@ export function AuthGate({
   children: ReactNode;
   locale: Locale;
 }) {
+  const { t } = useI18n();
   const router = useRouter();
   const signInPath = localePath(locale, "/sign-in");
   const [user, setUser] = useState<User | null>(null);
@@ -32,12 +35,7 @@ export function AuthGate({
         }
 
         const idToken = await nextUser.getIdToken();
-        const response = await fetch("/api/session", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${idToken}` },
-        });
-
-        if (!response.ok) {
+        if (!(await syncSession(idToken))) {
           setUser(null);
           setLoading(false);
           router.replace(signInPath);
@@ -53,7 +51,7 @@ export function AuthGate({
   if (loading || !user) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        Loading…
+        {t("common.loading")}
       </main>
     );
   }

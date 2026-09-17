@@ -1,6 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, use } from "react";
 
 import { AuthGate } from "@/components/auth-gate";
 import { Button } from "@/components/ui/button";
@@ -10,19 +12,19 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { getCurrentUser } from "@/data/auth";
+import { useI18n } from "@/lib/i18n";
 
 import { isSupportedLocale } from "./dictionaries";
 
-export default async function Home({ params }: PageProps<"/[lang]">) {
-  const { lang } = await params;
+export default function Home({ params }: PageProps<"/[lang]">) {
+  const { lang } = use(params);
   if (!isSupportedLocale(lang)) notFound();
 
   return (
     <Suspense
       fallback={
         <main className="flex min-h-screen items-center justify-center">
-          Loading…
+          <LoadingFallback />
         </main>
       }
     >
@@ -31,8 +33,22 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
   );
 }
 
-async function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
-  await getCurrentUser(locale);
+function LoadingFallback() {
+  const { t } = useI18n();
+
+  return t("common.loading");
+}
+
+function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
+  const { t } = useI18n();
+  const [headingPrefix = "", headingSuffix = ""] =
+    t("home.heading").split("page.tsx");
+  const [beforeTemplates = "", afterTemplates = ""] = t(
+    "home.description",
+  ).split(t("home.templates"));
+  const [betweenLinks = "", afterLearning = ""] = afterTemplates.split(
+    t("home.learning"),
+  );
 
   return (
     <AuthGate locale={locale}>
@@ -43,7 +59,7 @@ async function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
               <Image
                 className="h-5 w-[100px] dark:invert"
                 src="/next.svg"
-                alt="Next.js logo"
+                alt={t("home.logoAlt")}
                 width={100}
                 height={20}
                 priority
@@ -51,28 +67,28 @@ async function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
             </CardHeader>
             <CardContent className="flex w-full flex-col items-center gap-6 p-0 text-center sm:items-start sm:text-left">
               <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-                To get started, edit the{" "}
+                {headingPrefix}
                 <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
                   page.tsx
-                </code>{" "}
-                file.
+                </code>
+                {headingSuffix}
               </h1>
               <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-                Looking for a starting point or more instructions? Head over to{" "}
+                {beforeTemplates}
                 <a
                   href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                   className="font-medium text-zinc-950 dark:text-zinc-50"
                 >
-                  Templates
-                </a>{" "}
-                or the{" "}
+                  {t("home.templates")}
+                </a>
+                {betweenLinks}
                 <a
                   href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                   className="font-medium text-zinc-950 dark:text-zinc-50"
                 >
-                  Learning
-                </a>{" "}
-                center.
+                  {t("home.learning")}
+                </a>
+                {afterLearning}
               </p>
             </CardContent>
             <CardFooter className="flex w-full flex-col gap-4 rounded-none border-0 bg-transparent p-0 text-base font-medium sm:flex-row">
@@ -81,7 +97,7 @@ async function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
                 nativeButton={false}
                 render={
                   <a
-                    aria-label="Deploy Now"
+                    aria-label={t("home.deployNow")}
                     href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -89,11 +105,11 @@ async function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
                     <Image
                       className="h-[14px] w-4 dark:invert"
                       src="/vercel.svg"
-                      alt="Vercel logomark"
+                      alt={t("home.vercelLogomarkAlt")}
                       width={16}
                       height={14}
                     />
-                    Deploy Now
+                    {t("home.deployNow")}
                   </a>
                 }
               />
@@ -103,12 +119,12 @@ async function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
                 nativeButton={false}
                 render={
                   <a
-                    aria-label="Documentation"
+                    aria-label={t("home.documentation")}
                     href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Documentation
+                    {t("home.documentation")}
                   </a>
                 }
               />
