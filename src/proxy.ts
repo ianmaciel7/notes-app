@@ -4,6 +4,17 @@ import { NextResponse } from "next/server";
 import { type Locale, supportedLocales } from "@/lib/i18n/types";
 
 const defaultLocale: Locale = "en";
+const localeCookieName = "NEXT_LOCALE";
+const localeCookieOptions = {
+  maxAge: 60 * 60 * 24 * 365,
+  path: "/",
+  sameSite: "lax" as const,
+  secure: process.env.NODE_ENV !== "development",
+};
+
+function isSupportedLocale(value: string | undefined): value is Locale {
+  return supportedLocales.includes(value as Locale);
+}
 
 function negotiateLocale(acceptLanguage: string | null): Locale {
   if (!acceptLanguage) return defaultLocale;
@@ -44,17 +55,27 @@ function negotiateLocale(acceptLanguage: string | null): Locale {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const hasSupportedLocale = supportedLocales.some(
+  const matchedLocale = supportedLocales.find(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );
 
-  if (hasSupportedLocale) return NextResponse.next();
+  if (matchedLocale) {
+    const response = NextResponse.next();
+    response.cookies.set(localeCookieName, matchedLocale, localeCookieOptions);
+    return response;
+  }
 
-  const locale = negotiateLocale(request.headers.get("accept-language"));
+  const savedLocale = request.cookies.get(localeCookieName)?.value;
+  const locale = isSupportedLocale(savedLocale)
+    ? savedLocale
+    : negotiateLocale(request.headers.get("accept-language"));
+
   const redirectUrl = request.nextUrl.clone();
   redirectUrl.pathname = `/${locale}${pathname}`;
 
-  return NextResponse.redirect(redirectUrl);
+  const response = NextResponse.redirect(redirectUrl);
+  response.cookies.set(localeCookieName, locale, localeCookieOptions);
+  return response;
 }
 
 export const config = {

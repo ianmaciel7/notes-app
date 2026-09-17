@@ -7,4 +7,9 @@ describe("localePath", () => {
     expect(localePath("pt-BR", "/sign-in")).toBe("/pt-BR/sign-in");
     expect(localePath("en", "/")).toBe("/en");
   });
+
+  it("keeps the active locale for auth redirects", () => {
+    expect(localePath("pt-BR", "/sign-in")).not.toBe("/sign-in");
+    expect(localePath("pt-BR", "/sign-in")).toBe("/pt-BR/sign-in");
+  });
 });

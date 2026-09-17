@@ -1,8 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Suspense, use } from "react";
+import { Suspense } from "react";
 
 import { AuthGate } from "@/components/auth-gate";
 import { Button } from "@/components/ui/button";
@@ -12,19 +10,21 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { useI18n } from "@/lib/i18n";
+import { getCurrentUser } from "@/data/auth";
 
-import { isSupportedLocale } from "./dictionaries";
+import { getDictionary, isSupportedLocale } from "./dictionaries";
 
-export default function Home({ params }: PageProps<"/[lang]">) {
-  const { lang } = use(params);
+export default async function Home({ params }: PageProps<"/[lang]">) {
+  const { lang } = await params;
   if (!isSupportedLocale(lang)) notFound();
+
+  const dictionary = await getDictionary(lang);
 
   return (
     <Suspense
       fallback={
         <main className="flex min-h-screen items-center justify-center">
-          <LoadingFallback />
+          {dictionary.common.loading}
         </main>
       }
     >
@@ -33,21 +33,16 @@ export default function Home({ params }: PageProps<"/[lang]">) {
   );
 }
 
-function LoadingFallback() {
-  const { t } = useI18n();
+async function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
+  await getCurrentUser(locale);
+  const dictionary = await getDictionary(locale);
 
-  return t("common.loading");
-}
-
-function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
-  const { t } = useI18n();
   const [headingPrefix = "", headingSuffix = ""] =
-    t("home.heading").split("page.tsx");
-  const [beforeTemplates = "", afterTemplates = ""] = t(
-    "home.description",
-  ).split(t("home.templates"));
+    dictionary.home.heading.split("page.tsx");
+  const [beforeTemplates = "", afterTemplates = ""] =
+    dictionary.home.description.split(dictionary.home.templates);
   const [betweenLinks = "", afterLearning = ""] = afterTemplates.split(
-    t("home.learning"),
+    dictionary.home.learning,
   );
 
   return (
@@ -59,7 +54,7 @@ function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
               <Image
                 className="h-5 w-[100px] dark:invert"
                 src="/next.svg"
-                alt={t("home.logoAlt")}
+                alt={dictionary.home.logoAlt}
                 width={100}
                 height={20}
                 priority
@@ -79,14 +74,14 @@ function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
                   href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                   className="font-medium text-zinc-950 dark:text-zinc-50"
                 >
-                  {t("home.templates")}
+                  {dictionary.home.templates}
                 </a>
                 {betweenLinks}
                 <a
                   href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                   className="font-medium text-zinc-950 dark:text-zinc-50"
                 >
-                  {t("home.learning")}
+                  {dictionary.home.learning}
                 </a>
                 {afterLearning}
               </p>
@@ -97,7 +92,7 @@ function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
                 nativeButton={false}
                 render={
                   <a
-                    aria-label={t("home.deployNow")}
+                    aria-label={dictionary.home.deployNow}
                     href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -105,11 +100,11 @@ function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
                     <Image
                       className="h-[14px] w-4 dark:invert"
                       src="/vercel.svg"
-                      alt={t("home.vercelLogomarkAlt")}
+                      alt={dictionary.home.vercelLogomarkAlt}
                       width={16}
                       height={14}
                     />
-                    {t("home.deployNow")}
+                    {dictionary.home.deployNow}
                   </a>
                 }
               />
@@ -119,12 +114,12 @@ function AuthenticatedHome({ locale }: { locale: "en" | "pt-BR" }) {
                 nativeButton={false}
                 render={
                   <a
-                    aria-label={t("home.documentation")}
+                    aria-label={dictionary.home.documentation}
                     href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {t("home.documentation")}
+                    {dictionary.home.documentation}
                   </a>
                 }
               />

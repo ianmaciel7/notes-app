@@ -29,7 +29,6 @@ export async function generateMetadata({
   params,
 }: Pick<LayoutProps<"/[lang]">, "params">): Promise<Metadata> {
   const { lang } = await params;
-
   if (!isSupportedLocale(lang)) notFound();
 
   const dictionary = await getDictionary(lang);
@@ -44,7 +43,6 @@ export default async function LocaleLayout({
   params,
 }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
-
   if (!isSupportedLocale(lang)) notFound();
 
   const dictionary = await getDictionary(lang);

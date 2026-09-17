@@ -5,13 +5,16 @@ import type {
   QuestionnaireItemDefinition,
   Questionnaire as QuestionnairePrimitive,
 } from "@shadcn/react/questionnaire";
+import { CircleHelpIcon } from "lucide-react";
 import type * as React from "react";
 import type { ComponentProps } from "react";
+
 import { Badge } from "@/components/ui/badge";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
+  EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
 import {
@@ -28,6 +31,7 @@ import {
   QuestionnaireSubmit,
   QuestionnaireTitle,
 } from "@/components/ui/questionnaire";
+import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/lib/i18n";
 
 export type ExamQuestionType = "single-choice" | "multiple-choice";
@@ -88,11 +92,14 @@ export function ExamQuestionnaire({
 
   if (questions.length === 0) {
     return (
-      <Empty>
+      <Empty className="min-h-64 rounded-lg border">
+        <EmptyMedia variant="icon" aria-hidden="true">
+          <CircleHelpIcon />
+        </EmptyMedia>
         <EmptyHeader>
-          <EmptyTitle>No questions available</EmptyTitle>
+          <EmptyTitle>{t("questionnaire.emptyTitle")}</EmptyTitle>
           <EmptyDescription>
-            Add questions to start the questionnaire.
+            {t("questionnaire.emptyDescription")}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -119,7 +126,16 @@ export function ExamQuestionnaire({
             multiple={question.type === "multiple-choice"}
           >
             <QuestionnaireTitle>
-              {question.number}. {question.statement}
+              <span className="flex flex-wrap items-center gap-2">
+                <span>
+                  {question.number}. {question.statement}
+                </span>
+                <Badge variant="secondary">
+                  {question.type === "multiple-choice"
+                    ? "Multiple choice"
+                    : "Single choice"}
+                </Badge>
+              </span>
             </QuestionnaireTitle>
 
             {question.instructions ? (
@@ -150,6 +166,7 @@ export function ExamQuestionnaire({
         );
       })}
 
+      <Separator />
       <QuestionnaireActions>
         <QuestionnairePrevious />
         <QuestionnaireNext />

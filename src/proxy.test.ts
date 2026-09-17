@@ -71,5 +71,48 @@ describe("proxy", () => {
     const response = proxy(new NextRequest("https://notes.example.test/en"));
 
     expect(response.headers.get("location")).toBeNull();
+    expect(response.cookies.get("NEXT_LOCALE")?.value).toBe("en");
+  });
+
+  it("prefers a valid locale cookie over Accept-Language", () => {
+    const response = proxy(
+      new NextRequest("https://notes.example.test/settings", {
+        headers: {
+          cookie: "NEXT_LOCALE=pt-BR",
+          "accept-language": "en-US,en;q=0.9",
+        },
+      }),
+    );
+
+    expect(response.headers.get("location")).toBe(
+      "https://notes.example.test/pt-BR/settings",
+    );
+    expect(response.cookies.get("NEXT_LOCALE")?.value).toBe("pt-BR");
+  });
+
+  it("ignores an invalid locale cookie", () => {
+    const response = proxy(
+      new NextRequest("https://notes.example.test/settings", {
+        headers: {
+          cookie: "NEXT_LOCALE=fr",
+          "accept-language": "pt-BR",
+        },
+      }),
+    );
+
+    expect(response.headers.get("location")).toBe(
+      "https://notes.example.test/pt-BR/settings",
+    );
+    expect(response.cookies.get("NEXT_LOCALE")?.value).toBe("pt-BR");
+  });
+
+  it("writes a one-year root locale cookie", () => {
+    const response = proxy(new NextRequest("https://notes.example.test/en"));
+    const setCookie = response.headers.get("set-cookie");
+
+    expect(setCookie).toContain("NEXT_LOCALE=en");
+    expect(setCookie).toContain("Max-Age=31536000");
+    expect(setCookie).toContain("Path=/");
+    expect(setCookie).toContain("SameSite=lax");
   });
 });
