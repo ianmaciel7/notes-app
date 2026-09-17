@@ -4,6 +4,10 @@ import type { ComponentProps } from "react";
 
 import { Button } from "./button";
 
+export default {
+  title: "Components / Ui / Button",
+};
+
 type ButtonStoryProps = ComponentProps<typeof Button>;
 
 const variants = [

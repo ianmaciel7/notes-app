@@ -528,9 +528,9 @@
     "semantic_hash": ""
   },
   "pnpm-workspace.yaml": {
-    "mtime": 1789601162.8750703,
-    "seen": 1789601235.9754944,
-    "ast_hash": "1a02637a787b5a754e8d1b7e13ccdc03",
+    "mtime": 1789637180.4050696,
+    "seen": 1789637693.3541024,
+    "ast_hash": "103cb2ce729388a0674312a9b0cddbc2",
     "semantic_hash": ""
   },
   "public/file.svg": {
@@ -615,6 +615,12 @@
     "mtime": 1789601753.7796009,
     "seen": 1789601777.1266909,
     "ast_hash": "1766536d4c4d2ee4f2b3281298725bf6",
+    "semantic_hash": ""
+  },
+  ".agents/rules/shadcn.md": {
+    "mtime": 1789637636.4922476,
+    "seen": 1789637693.3541024,
+    "ast_hash": "984d59e6cf03e80feb75fc10a9617f56",
     "semantic_hash": ""
   }
 }
