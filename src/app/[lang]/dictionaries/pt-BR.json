@@ -1,0 +1,57 @@
+{
+  "common": {
+    "loading": "Carregando…",
+    "close": "Fechar",
+    "more": "Mais",
+    "breadcrumbLabel": "navegação estrutural",
+    "paginationLabel": "paginação",
+    "goToPreviousPage": "Ir para a página anterior",
+    "goToNextPage": "Ir para a próxima página",
+    "morePages": "Mais páginas",
+    "carouselRoleDescription": "carrossel",
+    "slideRoleDescription": "slide",
+    "previousSlide": "Slide anterior",
+    "nextSlide": "Próximo slide",
+    "scrollToEnd": "Rolar até o fim",
+    "scrollToStart": "Rolar até o início",
+    "toggleSidebar": "Alternar barra lateral",
+    "closeToast": "Fechar notificação"
+  },
+  "home": {
+    "metadataTitle": "Criar aplicativo Next",
+    "metadataDescription": "Gerado pelo create next app",
+    "logoAlt": "Logotipo do Next.js",
+    "heading": "Para começar, edite o arquivo page.tsx.",
+    "description": "Procurando um ponto de partida ou mais instruções? Acesse Templates ou o centro de Aprendizado.",
+    "templates": "Templates",
+    "learning": "Aprendizado",
+    "deployNow": "Implantar agora",
+    "documentation": "Documentação",
+    "vercelLogomarkAlt": "Logomarca da Vercel"
+  },
+  "questionnaire": {
+    "emptyTitle": "Nenhuma questão disponível",
+    "emptyDescription": "Adicione questões para iniciar o questionário.",
+    "previous": "Anterior",
+    "skip": "Pular",
+    "next": "Próxima",
+    "submit": "Finalizar"
+  },
+  "errors": {
+    "generic": {
+      "unexpected": "Algo deu errado. Tente novamente.",
+      "network": "Não foi possível conectar. Verifique sua conexão e tente novamente.",
+      "requiredField": "Este campo é obrigatório."
+    },
+    "auth": {
+      "invalidCredentials": "O e-mail ou a senha estão incorretos.",
+      "emailAlreadyInUse": "Já existe uma conta com este endereço de e-mail.",
+      "accountDisabled": "Esta conta foi desativada.",
+      "tooManyRequests": "Muitas tentativas. Tente novamente mais tarde.",
+      "operationNotAllowed": "Este método de entrada não está disponível.",
+      "requiresRecentLogin": "Entre novamente para continuar.",
+      "sessionExpired": "Sua sessão expirou. Entre novamente.",
+      "unknown": "Não foi possível concluir a autenticação. Tente novamente."
+    }
+  }
+}
