@@ -1,17 +1,17 @@
 # Graph Report - notes-app  (2026-09-17)
 
 ## Corpus Check
-- 98 files · ~35,313 words
+- 100 files · ~35,622 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 6 file(s) not represented in the graph (top: (none) 4, .ico 1, .css 1)
 
 ## Summary
-- 776 nodes · 985 edges · 67 communities (41 shown, 26 thin omitted)
+- 781 nodes · 995 edges · 58 communities (34 shown, 24 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `111db349`
+- Built from commit: `af7c2592`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -22,7 +22,7 @@
 - navigation-menu.tsx
 - menubar.tsx
 - biome.json
-- lucide-react
+- command.tsx
 - components.json
 - questionnaire.tsx
 - compilerOptions
@@ -32,30 +32,30 @@
 - carousel.tsx
 - alert-dialog.tsx
 - chart.tsx
-- field.tsx
 - cn
-- attachment.tsx
+- field.tsx
+- react
+- progress.tsx
 - toast.tsx
 - card.tsx
 - item.tsx
 - What You Must Do When Invoked
-- devDependencies
+- hover-card.tsx
 - Tool Reference
-- layout.tsx
+- radio-group.tsx
 - language.md
 - post-checkout
 - skill.md
 - post-commit
-- toggle-group.tsx
+- class-variance-authority
 - graphify reference: extra exports and benchmark
-- select.tsx
+- lucide-react
 - Task 5 Report
 - shadcn/ui Rules
 - graphify.md
 - collapsible.tsx
-- react
-- scripts
-- marker.tsx
+- button.stories.tsx
+- switch.tsx
 - graphify reference: query, path, explain
 - tooling.md
 - postcss.config.mjs
@@ -64,32 +64,25 @@
 - graphify reference: add a URL and watch a folder
 - graphify reference: commit hook and native AGENTS.md integration
 - graphify reference: incremental update and cluster-only
-- notes-app
+- Architecture
 - This is NOT the Next.js you know
 - graphify reference: GitHub clone and cross-repo merge
 - graphify reference: transcribe video and audio
 - extraction-spec.md
-- avatar.tsx
 - button-group.tsx
 - message-scroller.tsx
-- empty.tsx
-- tabs.tsx
-- class-variance-authority
-- bubble.tsx
 - button.tsx
-- input-otp.tsx
-- resizable.tsx
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn` - 61 edges
-2. `react` - 42 edges
+2. `react` - 43 edges
 3. `lucide-react` - 24 edges
-4. `Button()` - 17 edges
-5. `class-variance-authority` - 17 edges
+4. `class-variance-authority` - 17 edges
+5. `Button()` - 17 edges
 6. `compilerOptions` - 16 edges
 7. `What You Must Do When Invoked` - 12 edges
-8. `/graphify` - 10 edges
-9. `scripts` - 10 edges
+8. `scripts` - 10 edges
+9. `/graphify` - 10 edges
 10. `shadcn/ui Rules` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -107,15 +100,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (67 total, 26 thin omitted)
+## Communities (58 total, 24 thin omitted)
 
 ### Community 0 - "sidebar.tsx"
 Cohesion: 0.05
-Nodes (21): ref_base_ui_react_dialog, ref_base_ui_react_tooltip, Sheet(), SheetContent(), SheetDescription(), SheetHeader(), SheetTitle(), Sidebar() (+13 more)
+Nodes (20): ref_base_ui_react_tooltip, Sheet(), SheetContent(), SheetDescription(), SheetHeader(), SheetTitle(), Sidebar(), SidebarContext (+12 more)
 
 ### Community 1 - "package.json"
-Cohesion: 0.11
-Nodes (18): name, packageManager, private, version, babel-plugin-react-compiler, @biomejs/biome, concurrently, date-fns (+10 more)
+Cohesion: 0.04
+Nodes (43): nextConfig, devDependencies, babel-plugin-react-compiler, @biomejs/biome, concurrently, @ladle/react, tailwindcss, @tailwindcss/postcss (+35 more)
 
 ### Community 2 - "combobox.tsx"
 Cohesion: 0.08
@@ -133,9 +126,9 @@ Nodes (15): ref_base_ui_react_menu, ref_base_ui_react_menubar, DropdownMenu(), D
 Cohesion: 0.07
 Nodes (26): source, assist, actions, css, parser, next, react, files (+18 more)
 
-### Community 6 - "lucide-react"
-Cohesion: 0.06
-Nodes (10): ref_base_ui_react_accordion, ref_base_ui_react_checkbox, cmdk, lucide-react, Dialog(), DialogContent(), DialogDescription(), DialogHeader() (+2 more)
+### Community 6 - "command.tsx"
+Cohesion: 0.11
+Nodes (7): ref_base_ui_react_dialog, cmdk, Dialog(), DialogContent(), DialogDescription(), DialogHeader(), DialogTitle()
 
 ### Community 7 - "components.json"
 Cohesion: 0.09
@@ -151,7 +144,7 @@ Nodes (18): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModu
 
 ### Community 10 - "dependencies"
 Cohesion: 0.11
-Nodes (18): dependencies, @base-ui/react, class-variance-authority, cmdk, cn, date-fns, embla-carousel-react, input-otp (+10 more)
+Nodes (19): dependencies, @base-ui/react, class-variance-authority, cmdk, cn, date-fns, embla-carousel-react, input-otp (+11 more)
 
 ### Community 12 - "drawer.tsx"
 Cohesion: 0.13
@@ -169,45 +162,37 @@ Nodes (11): recharts, ChartConfig, ChartContext, ChartContextProps, ChartLegendC
 Cohesion: 0.16
 Nodes (3): Field(), fieldVariants, Label()
 
-### Community 18 - "cn"
-Cohesion: 0.04
-Nodes (9): ref_base_ui_react_popover, ref_base_ui_react_preview_card, ref_base_ui_react_progress, ref_base_ui_react_radio, ref_base_ui_react_radio_group, ref_base_ui_react_scroll_area, ref_base_ui_react_slider, ref_base_ui_react_switch (+1 more)
-
-### Community 19 - "attachment.tsx"
-Cohesion: 0.20
-Nodes (4): Attachment(), AttachmentMedia(), attachmentMediaVariants, attachmentVariants
+### Community 18 - "react"
+Cohesion: 0.05
+Nodes (10): ref_base_ui_react_avatar, ref_base_ui_react_popover, ref_base_ui_react_scroll_area, ref_next_font_google, react, src_app_globals, geistMono, geistSans (+2 more)
 
 ### Community 21 - "card.tsx"
 Cohesion: 0.25
 Nodes (5): ref_next_image, Card(), CardContent(), CardFooter(), CardHeader()
 
 ### Community 22 - "item.tsx"
-Cohesion: 0.18
-Nodes (4): Item(), ItemMedia(), itemMediaVariants, itemVariants
+Cohesion: 0.05
+Nodes (18): ref_base_ui_react_merge_props, ref_base_ui_react_use_render, Attachment(), AttachmentMedia(), attachmentMediaVariants, attachmentVariants, Badge(), badgeVariants (+10 more)
 
 ### Community 23 - "What You Must Do When Invoked"
 Cohesion: 0.08
 Nodes (24): For /graphify add and --watch, For /graphify query, For the commit hook and native AGENTS.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+16 more)
 
-### Community 24 - "devDependencies"
-Cohesion: 0.18
-Nodes (11): devDependencies, babel-plugin-react-compiler, @biomejs/biome, concurrently, @ladle/react, tailwindcss, @tailwindcss/postcss, @types/node (+3 more)
-
 ### Community 25 - "Tool Reference"
 Cohesion: 0.14
 Nodes (12): Call examples, Item fields, MCP server, Pagination, Response, Search behavior, Tool Reference, Gotchas (+4 more)
 
-### Community 26 - "layout.tsx"
-Cohesion: 0.20
-Nodes (7): nextConfig, next, ref_next_font_google, src_app_globals, geistMono, geistSans, metadata
-
-### Community 31 - "toggle-group.tsx"
-Cohesion: 0.33
-Nodes (6): ref_base_ui_react_toggle, ref_base_ui_react_toggle_group, ToggleGroupContext, ToggleGroupItem(), Toggle(), toggleVariants
+### Community 31 - "class-variance-authority"
+Cohesion: 0.08
+Nodes (14): ref_base_ui_react_tabs, ref_base_ui_react_toggle, ref_base_ui_react_toggle_group, class-variance-authority, Alert(), alertVariants, EmptyMedia(), emptyMediaVariants (+6 more)
 
 ### Community 32 - "graphify reference: extra exports and benchmark"
 Cohesion: 0.22
 Nodes (8): graphify reference: extra exports and benchmark, Step 6b - Wiki (only if --wiki flag), Step 7 - Neo4j export (only if --neo4j or --neo4j-push flag), Step 7a - FalkorDB export (only if --falkordb or --falkordb-push flag), Step 7b - SVG export (only if --svg flag), Step 7c - GraphML export (only if --graphml flag), Step 7d - MCP server (only if --mcp flag), Step 8 - Token reduction benchmark (only if total_words > 5000)
+
+### Community 33 - "lucide-react"
+Cohesion: 0.06
+Nodes (6): ref_base_ui_react_accordion, ref_base_ui_react_checkbox, ref_base_ui_react_select, input-otp, lucide-react, NativeSelectProps
 
 ### Community 34 - "Task 5 Report"
 Cohesion: 0.22
@@ -217,17 +202,9 @@ Nodes (8): Changes, Commit, Concerns, Fix Validation Output, Round 1 Fix, Status
 Cohesion: 0.20
 Nodes (9): Component architecture, Configuration and dependencies, Existing patterns to preserve, Icons and content, Next.js and repository constraints, Project source of truth, shadcn/ui Rules, Styling and composition (+1 more)
 
-### Community 38 - "react"
-Cohesion: 0.20
-Nodes (6): @ladle/react, react, ButtonStoryProps, iconSizes, Sizes, Variants
-
-### Community 39 - "scripts"
-Cohesion: 0.20
-Nodes (10): scripts, build, dev, dev:all, format, ladle, ladle:build, ladle:preview (+2 more)
-
-### Community 40 - "marker.tsx"
-Cohesion: 0.27
-Nodes (6): ref_base_ui_react_merge_props, ref_base_ui_react_use_render, Badge(), badgeVariants, Marker(), markerVariants
+### Community 38 - "button.stories.tsx"
+Cohesion: 0.29
+Nodes (5): @ladle/react, ButtonStoryProps, iconSizes, Sizes, Variants
 
 ### Community 41 - "graphify reference: query, path, explain"
 Cohesion: 0.33
@@ -245,9 +222,9 @@ Nodes (3): For git commit hook, For native AGENTS.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
-### Community 49 - "notes-app"
-Cohesion: 0.22
-Nodes (7): Architecture, Configuration, Structure, Commands, Getting started, notes-app, Project layout
+### Community 49 - "Architecture"
+Cohesion: 0.20
+Nodes (8): Architecture, Configuration, Data access and security, Structure, Commands, Getting started, notes-app, Project layout
 
 ### Community 50 - "This is NOT the Next.js you know"
 Cohesion: 0.50
@@ -257,41 +234,34 @@ Nodes (3): Documentation and agent resources, Project context, This is NOT the N
 Cohesion: 0.32
 Nodes (4): ref_base_ui_react_separator, ButtonGroup(), buttonGroupVariants, Separator()
 
-### Community 60 - "tabs.tsx"
-Cohesion: 0.33
-Nodes (3): ref_base_ui_react_tabs, TabsList(), tabsListVariants
-
-### Community 61 - "class-variance-authority"
-Cohesion: 0.33
-Nodes (3): class-variance-authority, Alert(), alertVariants
-
-### Community 62 - "bubble.tsx"
-Cohesion: 0.38
-Nodes (4): Bubble(), BubbleReactions(), bubbleReactionsVariants, bubbleVariants
-
 ### Community 63 - "button.tsx"
 Cohesion: 0.40
 Nodes (3): ref_base_ui_react_button, react-day-picker, Button()
 
 ## Knowledge Gaps
-- **211 isolated node(s):** `ButtonStoryProps`, `Variants`, `Sizes`, `iconSizes`, `SidebarContextProps` (+206 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 550 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **26 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **213 isolated node(s):** `Structure`, `Data access and security`, `Configuration`, `name`, `version` (+208 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 552 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **24 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+
+## Work-memory lessons
+
+**Known dead ends** — questions that led nowhere; don't re-derive.
+- "Explain the data folder using the Next.js data security guide and this repository architecture" -> `private`, `actions`, `clientKind`, `components.json`
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn` connect `cn` to `sidebar.tsx`, `package.json`, `combobox.tsx`, `navigation-menu.tsx`, `menubar.tsx`, `lucide-react`, `questionnaire.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `alert-dialog.tsx`, `chart.tsx`, `table.tsx`, `field.tsx`, `attachment.tsx`, `toast.tsx`, `card.tsx`, `item.tsx`, `toggle-group.tsx`, `select.tsx`, `marker.tsx`, `pagination.tsx`, `avatar.tsx`, `button-group.tsx`, `message-scroller.tsx`, `breadcrumb.tsx`, `empty.tsx`, `tabs.tsx`, `class-variance-authority`, `bubble.tsx`, `button.tsx`, `input-otp.tsx`, `resizable.tsx`?**
-  _High betweenness centrality (0.264) - this node is a cross-community bridge._
-- **Why does `react` connect `react` to `sidebar.tsx`, `package.json`, `combobox.tsx`, `menubar.tsx`, `lucide-react`, `questionnaire.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `alert-dialog.tsx`, `chart.tsx`, `table.tsx`, `field.tsx`, `cn`, `attachment.tsx`, `toast.tsx`, `card.tsx`, `item.tsx`, `toggle-group.tsx`, `select.tsx`, `marker.tsx`, `pagination.tsx`, `avatar.tsx`, `message-scroller.tsx`, `breadcrumb.tsx`, `class-variance-authority`, `bubble.tsx`, `button.tsx`, `input-otp.tsx`?**
-  _High betweenness centrality (0.147) - this node is a cross-community bridge._
-- **Why does `lucide-react` connect `lucide-react` to `input-otp.tsx`, `package.json`, `combobox.tsx`, `navigation-menu.tsx`, `menubar.tsx`, `select.tsx`, `react`, `sidebar.tsx`, `questionnaire.tsx`, `context-menu.tsx`, `carousel.tsx`, `pagination.tsx`, `toast.tsx`, `message-scroller.tsx`, `breadcrumb.tsx`, `button.tsx`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
-- **What connects `ButtonStoryProps`, `Variants`, `Sizes` to the rest of the system?**
-  _211 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `cn` connect `cn` to `sidebar.tsx`, `package.json`, `combobox.tsx`, `navigation-menu.tsx`, `menubar.tsx`, `command.tsx`, `questionnaire.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `alert-dialog.tsx`, `chart.tsx`, `field.tsx`, `react`, `progress.tsx`, `toast.tsx`, `card.tsx`, `item.tsx`, `hover-card.tsx`, `radio-group.tsx`, `class-variance-authority`, `lucide-react`, `switch.tsx`, `pagination.tsx`, `button-group.tsx`, `message-scroller.tsx`, `button.tsx`?**
+  _High betweenness centrality (0.260) - this node is a cross-community bridge._
+- **Why does `react` connect `react` to `sidebar.tsx`, `package.json`, `combobox.tsx`, `menubar.tsx`, `command.tsx`, `questionnaire.tsx`, `context-menu.tsx`, `drawer.tsx`, `carousel.tsx`, `alert-dialog.tsx`, `chart.tsx`, `field.tsx`, `toast.tsx`, `card.tsx`, `item.tsx`, `class-variance-authority`, `lucide-react`, `button.stories.tsx`, `pagination.tsx`, `message-scroller.tsx`, `button.tsx`?**
+  _High betweenness centrality (0.154) - this node is a cross-community bridge._
+- **Why does `lucide-react` connect `lucide-react` to `sidebar.tsx`, `package.json`, `combobox.tsx`, `navigation-menu.tsx`, `menubar.tsx`, `button.stories.tsx`, `command.tsx`, `questionnaire.tsx`, `context-menu.tsx`, `carousel.tsx`, `pagination.tsx`, `toast.tsx`, `item.tsx`, `message-scroller.tsx`, `button.tsx`?**
+  _High betweenness centrality (0.052) - this node is a cross-community bridge._
+- **What connects `Structure`, `Data access and security`, `Configuration` to the rest of the system?**
+  _213 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `sidebar.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.053061224489795916 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05442176870748299 - nodes in this community are weakly interconnected._
 - **Should `package.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.10526315789473684 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.04081632653061224 - nodes in this community are weakly interconnected._
 - **Should `combobox.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.07862903225806452 - nodes in this community are weakly interconnected._

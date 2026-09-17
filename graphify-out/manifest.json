@@ -18,9 +18,9 @@
     "semantic_hash": "073c476be067d6d4649b355483ee2690"
   },
   "package.json": {
-    "mtime": 1789601410.7532833,
-    "seen": 1789601437.7117188,
-    "ast_hash": "5edc517f35b9d31c0d5694ffd07c6939",
+    "mtime": 1789638072.7435997,
+    "seen": 1789638428.2575998,
+    "ast_hash": "26f8c4969c2556d75e901d840df5495c",
     "semantic_hash": ""
   },
   "postcss.config.mjs": {
@@ -30,10 +30,10 @@
     "semantic_hash": "239f3ebf717465dc636818a1a619398d"
   },
   "src/app/layout.tsx": {
-    "mtime": 1786658707.519298,
-    "seen": 1789592870.121492,
-    "ast_hash": "70f839ece80281c576701dc08f055685",
-    "semantic_hash": "70f839ece80281c576701dc08f055685"
+    "mtime": 1789638190.6318142,
+    "seen": 1789638428.2575998,
+    "ast_hash": "e0dc7d3dbf3152a7a63f034426444e84",
+    "semantic_hash": ""
   },
   "src/app/page.tsx": {
     "mtime": 1789592117.8834584,
@@ -564,9 +564,9 @@
     "semantic_hash": ""
   },
   "ARCHITECTURE.md": {
-    "mtime": 1789600122.178645,
-    "seen": 1789600179.234261,
-    "ast_hash": "f69a1f07f5b645fb228489807d5a7467",
+    "mtime": 1789638407.5941415,
+    "seen": 1789638428.2575998,
+    "ast_hash": "92abec1007ab35e81f82049691c53065",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -594,9 +594,9 @@
     "semantic_hash": ""
   },
   ".ladle/components.tsx": {
-    "mtime": 1789600962.7545278,
-    "seen": 1789601006.6040218,
-    "ast_hash": "8e43604d0bd9acbbe5baca596942036a",
+    "mtime": 1789638190.6318142,
+    "seen": 1789638428.2575998,
+    "ast_hash": "0c0bfb1ab8c5e3e4ca2b48394f801756",
     "semantic_hash": ""
   },
   ".ladle/config.mjs": {
@@ -621,6 +621,18 @@
     "mtime": 1789637636.4922476,
     "seen": 1789637693.3541024,
     "ast_hash": "984d59e6cf03e80feb75fc10a9617f56",
+    "semantic_hash": ""
+  },
+  "src/components/theme-provider.tsx": {
+    "mtime": 1789638190.6318142,
+    "seen": 1789638428.2575998,
+    "ast_hash": "624ad80d0857cde99ed65bf7393cca9f",
+    "semantic_hash": ""
+  },
+  "graphify-out/memory/query_20260917_094224_2322581d_explain_the_data_folder_using_the_next_js_data_sec.md": {
+    "mtime": 1789638144.6921237,
+    "seen": 1789638428.2575998,
+    "ast_hash": "6f60edd292459ce88e7ed3d4cb8b0d2e",
     "semantic_hash": ""
   }
 }
