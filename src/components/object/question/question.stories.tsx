@@ -1,7 +1,6 @@
 import type { Story } from "@ladle/react";
 import { useState } from "react";
 
-import en from "@/app/[lang]/dictionaries/en.json";
 import { I18nProvider } from "@/components/i18n-provider";
 import {
   Card,
@@ -10,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import en from "@/lib/i18n/dictionaries/en.json";
 
 import { type ExamQuestion, ExamQuestionnaire } from "./question";
 

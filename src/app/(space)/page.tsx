@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { Suspense } from "react";
 
-import { getDictionary, getServerLocale } from "@/app/[lang]/dictionaries";
-import { AuthGate } from "@/components/auth-gate";
+import { AuthGate } from "@/components/auth/auth-gate";
 import { UserNav } from "@/components/user/user-nav";
 import { getCurrentUser } from "@/data/auth";
+import { getDictionary, getServerLocale } from "@/lib/i18n/dictionaries";
 
 export default function HomePage() {
   return (

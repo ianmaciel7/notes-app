@@ -6,7 +6,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 
-import { ForgotPasswordAuthForm } from "@/components/forgot-password-auth-form";
+import { ForgotPasswordAuthForm } from "@/components/auth/forgot-password-auth-form";
 import {
   Card,
   CardContent,

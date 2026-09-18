@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { use } from "react";
 
-import { ForgotPasswordAuthScreen as ShadcnForgotPasswordAuthScreen } from "@/components/forgot-password-auth-screen";
+import { ForgotPasswordAuthScreen as ShadcnForgotPasswordAuthScreen } from "@/components/auth/forgot-password-auth-screen";
 import { localePath } from "@/lib/i18n/routing";
 
 export default function ForgotPasswordPage({

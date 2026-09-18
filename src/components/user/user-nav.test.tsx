@@ -4,10 +4,10 @@ import { signOut } from "firebase/auth";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import en from "@/app/[lang]/dictionaries/en.json";
-import { UserNav } from "@/components/user/user-nav";
 import { I18nProvider } from "@/components/i18n-provider";
+import { UserNav } from "@/components/user/user-nav";
 import { deleteSession } from "@/lib/auth/client-session";
+import en from "@/lib/i18n/dictionaries/en.json";
 
 const mockPush = vi.fn();
 const mockRefresh = vi.fn();

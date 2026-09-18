@@ -1,6 +1,6 @@
 import { type ReactNode, Suspense } from "react";
-import { getDictionary, getServerLocale } from "@/app/[lang]/dictionaries";
 import { I18nProvider } from "@/components/i18n-provider";
+import { getDictionary, getServerLocale } from "@/lib/i18n/dictionaries";
 
 export default function SpaceLayout({ children }: { children: ReactNode }) {
   return (

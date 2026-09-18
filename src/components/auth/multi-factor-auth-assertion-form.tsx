@@ -10,8 +10,8 @@ import {
 } from "firebase/auth";
 import { type ComponentProps, useState } from "react";
 
-import { SmsMultiFactorAssertionForm } from "@/components/sms-multi-factor-assertion-form";
-import { TotpMultiFactorAssertionForm } from "@/components/totp-multi-factor-assertion-form";
+import { SmsMultiFactorAssertionForm } from "@/components/auth/sms-multi-factor-assertion-form";
+import { TotpMultiFactorAssertionForm } from "@/components/auth/totp-multi-factor-assertion-form";
 import { Button } from "@/components/ui/button";
 
 export type MultiFactorAuthAssertionFormProps = {

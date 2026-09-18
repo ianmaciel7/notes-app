@@ -10,10 +10,10 @@ import type { User, UserCredential } from "firebase/auth";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 
-import { GitHubSignInButton } from "@/components/github-sign-in-button";
-import { GoogleSignInButton } from "@/components/google-sign-in-button";
-import { MultiFactorAuthAssertionScreen } from "@/components/multi-factor-auth-assertion-screen";
-import { SignInAuthForm } from "@/components/sign-in-auth-form";
+import { GitHubSignInButton } from "@/components/auth/github-sign-in-button";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
+import { MultiFactorAuthAssertionScreen } from "@/components/auth/multi-factor-auth-assertion-screen";
+import { SignInAuthForm } from "@/components/auth/sign-in-auth-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Card,

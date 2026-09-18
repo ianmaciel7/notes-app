@@ -1,3 +1,5 @@
+import "server-only";
+
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { type AppMessages, hasLocale, type Locale } from "@/lib/i18n/types";

@@ -8,7 +8,7 @@ vi.mock("next/headers", () => ({
   })),
 }));
 
-import { getDictionary } from "./[lang]/dictionaries";
+import { getDictionary } from "./dictionaries";
 
 describe("getDictionary", () => {
   it("loads the English dictionary", async () => {

@@ -5,9 +5,9 @@ import type { User, UserCredential } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { use, useCallback, useState } from "react";
 
-import { GitHubSignInButton } from "@/components/github-sign-in-button";
-import { GoogleSignInButton } from "@/components/google-sign-in-button";
-import { SignInAuthScreen as ShadcnSignInAuthScreen } from "@/components/sign-in-auth-screen";
+import { GitHubSignInButton } from "@/components/auth/github-sign-in-button";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
+import { SignInAuthScreen as ShadcnSignInAuthScreen } from "@/components/auth/sign-in-auth-screen";
 import { useI18n } from "@/hooks/use-i18n";
 import { syncSession } from "@/lib/auth/client-session";
 import { auth } from "@/lib/firebase/client";

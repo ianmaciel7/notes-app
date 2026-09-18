@@ -5,7 +5,7 @@ import {
   type MultiFactorAuthAssertionScreenProps,
   useUI,
 } from "@firebase-oss/ui-react";
-import { MultiFactorAuthAssertionForm } from "@/components/multi-factor-auth-assertion-form";
+import { MultiFactorAuthAssertionForm } from "@/components/auth/multi-factor-auth-assertion-form";
 import {
   Card,
   CardContent,

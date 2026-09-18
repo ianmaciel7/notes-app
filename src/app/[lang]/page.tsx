@@ -2,12 +2,11 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import { AuthGate } from "@/components/auth-gate";
+import { AuthGate } from "@/components/auth/auth-gate";
 import { UserNav } from "@/components/user/user-nav";
 import { getCurrentUser } from "@/data/auth";
+import { getDictionary, hasLocale } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/types";
-
-import { getDictionary, hasLocale } from "./dictionaries";
 
 export default async function Home({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;

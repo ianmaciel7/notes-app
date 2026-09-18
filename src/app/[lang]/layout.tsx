@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { I18nProvider } from "@/components/i18n-provider";
+import { getDictionary, hasLocale } from "@/lib/i18n/dictionaries";
 import { supportedLocales } from "@/lib/i18n/types";
-
-import { getDictionary, hasLocale } from "./dictionaries";
 
 export function generateStaticParams() {
   return supportedLocales.map((lang) => ({ lang }));

@@ -3,8 +3,8 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import ptBR from "@/app/[lang]/dictionaries/pt-BR.json";
 import { I18nProvider } from "@/components/i18n-provider";
+import ptBR from "@/lib/i18n/dictionaries/pt-BR.json";
 
 import { type ExamQuestion, ExamQuestionnaire } from "./question";
 

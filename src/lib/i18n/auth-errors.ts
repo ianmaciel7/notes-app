@@ -1,5 +1,5 @@
-import en from "@/app/[lang]/dictionaries/en.json";
-import ptBR from "@/app/[lang]/dictionaries/pt-BR.json";
+import en from "@/lib/i18n/dictionaries/en.json";
+import ptBR from "@/lib/i18n/dictionaries/pt-BR.json";
 import {
   type AppMessages,
   hasLocale,
