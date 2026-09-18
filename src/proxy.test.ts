@@ -72,6 +72,9 @@ describe("proxy", () => {
 
     expect(response.headers.get("location")).toBeNull();
     expect(response.cookies.get("NEXT_LOCALE")?.value).toBe("en");
+    expect(response.headers.get("x-middleware-request-x-next-locale")).toBe(
+      "en",
+    );
   });
 
   it("prefers a valid locale cookie over Accept-Language", () => {
@@ -128,6 +131,9 @@ describe("proxy", () => {
 
       expect(response.headers.get("location")).toBeNull();
       expect(response.cookies.get("NEXT_LOCALE")?.value).toBe("pt-BR");
+      expect(response.headers.get("x-middleware-request-x-next-locale")).toBe(
+        "pt-BR",
+      );
     });
 
     it("redirects authenticated user from /[lang] root to clean /", () => {

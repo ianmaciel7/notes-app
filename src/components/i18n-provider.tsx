@@ -2,7 +2,12 @@
 
 import { createContext, type ReactNode, useContext, useEffect } from "react";
 
-import type { AppMessages, Locale, MessageKey } from "@/lib/i18n/types";
+import {
+  type AppMessages,
+  type Locale,
+  localeCookieName,
+  type MessageKey,
+} from "@/lib/i18n/types";
 
 export type I18nContextValue = {
   locale: Locale;
@@ -39,8 +44,10 @@ export function I18nProvider({
   locale,
 }: I18nProviderProps) {
   useEffect(() => {
+    document.documentElement.lang = locale;
+
     try {
-      localStorage.setItem("NEXT_LOCALE", locale);
+      localStorage.setItem(localeCookieName, locale);
     } catch {
       // Ignore localStorage errors (e.g. storage disabled / sandbox)
     }

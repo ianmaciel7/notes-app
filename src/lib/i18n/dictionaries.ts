@@ -2,9 +2,13 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { type AppMessages, hasLocale, type Locale } from "@/lib/i18n/types";
-
-const defaultLocale: Locale = "en";
+import {
+  type AppMessages,
+  defaultLocale,
+  hasLocale,
+  type Locale,
+  localeCookieName,
+} from "@/lib/i18n/types";
 
 const dictionaryLoaders = {
   en: () => import("./dictionaries/en.json").then((module) => module.default),
@@ -18,7 +22,7 @@ export const isSupportedLocale = hasLocale;
 export async function getServerLocale(): Promise<Locale> {
   try {
     const cookieStore = await cookies();
-    const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
+    const cookieLocale = cookieStore.get(localeCookieName)?.value;
     if (hasLocale(cookieLocale)) return cookieLocale;
   } catch {
     // Outside request context

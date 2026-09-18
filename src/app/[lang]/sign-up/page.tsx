@@ -3,7 +3,7 @@
 import { useOnUserAuthenticated } from "@firebase-oss/ui-react";
 import type { User, UserCredential } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { use, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { GitHubSignInButton } from "@/components/auth/github-sign-in-button";
 import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
@@ -14,11 +14,10 @@ import { auth } from "@/lib/firebase/client";
 import { getAuthErrorMessage } from "@/lib/i18n/auth-errors";
 import { localePath } from "@/lib/i18n/routing";
 
-export default function SignUpPage({ params }: PageProps<"/[lang]/sign-up">) {
+export default function SignUpPage() {
   const router = useRouter();
-  const { lang } = use(params);
-  const { t } = useI18n();
-  const signInPath = localePath(lang, "/sign-in");
+  const { locale, t } = useI18n();
+  const signInPath = localePath(locale, "/sign-in");
   const [oauthErrorMessage, setOauthErrorMessage] = useState<string | null>(
     null,
   );

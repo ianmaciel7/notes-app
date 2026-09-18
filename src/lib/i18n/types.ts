@@ -1,8 +1,10 @@
 export const supportedLocales = ["en", "pt-BR"] as const;
-
 export type Locale = (typeof supportedLocales)[number];
+export const defaultLocale: Locale = "en";
+export const localeCookieName = "NEXT_LOCALE";
+export const localeHeaderName = "x-next-locale";
 
-export function hasLocale(locale: string | undefined): locale is Locale {
+export function hasLocale(locale: string | null | undefined): locale is Locale {
   return (
     typeof locale === "string" &&
     (supportedLocales as readonly string[]).includes(locale)

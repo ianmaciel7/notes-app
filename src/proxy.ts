@@ -1,10 +1,15 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { hasLocale, type Locale, supportedLocales } from "@/lib/i18n/types";
+import {
+  defaultLocale,
+  hasLocale,
+  type Locale,
+  localeCookieName,
+  localeHeaderName,
+  supportedLocales,
+} from "@/lib/i18n/types";
 
-const defaultLocale: Locale = "en";
-const localeCookieName = "NEXT_LOCALE";
 const sessionCookieName = "firebase_session";
 const localeCookieOptions = {
   maxAge: 60 * 60 * 24 * 365,
@@ -72,6 +77,9 @@ export function proxy(request: NextRequest) {
   const locale = hasLocale(savedLocale)
     ? savedLocale
     : negotiateLocale(request.headers.get("accept-language"));
+  const requestHeaders = new Headers(request.headers);
+
+  requestHeaders.set(localeHeaderName, matchedLocale ?? locale);
 
   // 1. If user is authenticated, keep them on clean unprefixed routes
   if (isAuthenticated) {
@@ -91,14 +99,22 @@ export function proxy(request: NextRequest) {
     }
 
     // Unprefixed route for authenticated user -> allow through
-    const response = NextResponse.next();
+    const response = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
     response.cookies.set(localeCookieName, locale, localeCookieOptions);
     return response;
   }
 
   // 2. If user is unauthenticated
   if (matchedLocale) {
-    const response = NextResponse.next();
+    const response = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
     response.cookies.set(localeCookieName, matchedLocale, localeCookieOptions);
     return response;
   }
