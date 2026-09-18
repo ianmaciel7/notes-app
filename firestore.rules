@@ -51,6 +51,7 @@ service cloud.firestore {
         && data.createdAt == resource.data.createdAt;
     }
 
+
     // Default deny all
     match /{document=**} {
       allow read, write: if false;

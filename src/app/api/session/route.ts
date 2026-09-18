@@ -75,17 +75,8 @@ export async function POST(request: Request) {
       token,
       SESSION_COOKIE_EXPIRES_IN_MS,
     );
-  } catch {
-    const existingCookie = (await cookies()).get(SESSION_COOKIE)?.value;
-    if (existingCookie) {
-      try {
-        await verifyFirebaseSessionCookie(existingCookie, true);
-        return NextResponse.json({ ok: true });
-      } catch {
-        // Existing cookie is invalid or revoked
-      }
-    }
-
+  } catch (error) {
+    console.error("Failed to create Firebase session cookie:", error);
     return NextResponse.json(
       { error: "Invalid bearer token" },
       { status: 401 },

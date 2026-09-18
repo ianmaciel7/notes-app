@@ -41,7 +41,11 @@ export async function getCurrentUser(locale?: Locale): Promise<CurrentUser> {
       email: decoded.email ?? null,
       displayName: decoded.name ?? null,
     };
-  } catch {
-    redirect(localePath(resolvedLocale, "/sign-in"));
+  } catch (error) {
+    console.error(
+      "Session verification failed, redirecting to sign-in:",
+      error,
+    );
+    redirect(localePath(resolvedLocale, "/sign-in?expired=true"));
   }
 }

@@ -81,6 +81,17 @@ export function proxy(request: NextRequest) {
 
   requestHeaders.set(localeHeaderName, matchedLocale ?? locale);
 
+  // If session expired or was revoked, clear cookie and permit access to sign-in
+  if (request.nextUrl.searchParams.get("expired") === "true") {
+    const response = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
+    response.cookies.delete(sessionCookieName);
+    return response;
+  }
+
   // 1. If user is authenticated, keep them on clean unprefixed routes
   if (isAuthenticated) {
     if (matchedLocale) {

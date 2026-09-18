@@ -1,0 +1,20 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Default deny all
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // User-scoped storage for attachments and notes data
+    match /users/{userId}/{allPaths=**} {
+      allow get, list: if request.auth != null && request.auth.uid == userId;
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp|gif)|application/pdf|text/(plain|markdown|csv)');
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
