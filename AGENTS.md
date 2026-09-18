@@ -15,6 +15,19 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Use pnpm commands defined in `package.json`.
 - Use Biome for linting and formatting.
 - Preserve the Next.js-managed block in `AGENTS.md`.
+- For repetitive Next.js migrations or API changes, check whether Next.js
+  provides an official codemod before writing custom edits.
+- Prefer official Next.js codemods through pnpm, for example
+  `pnpm dlx @next/codemod@latest <codemod-name> .`; do not add
+  `@next/codemod` as a project dependency unless there is recurring
+  maintenance value.
+- Before running a codemod, inspect the affected files with `rg`, exclude
+  generated or build output, and use any available dry-run or preview mode.
+- After running a codemod, inspect `git diff`, search for remaining old
+  patterns, then validate with the relevant project commands such as
+  `pnpm lint`, `pnpm test`, and `pnpm build`.
+- If a codemod leaves ambiguous or partial changes, finish those cases with
+  targeted manual edits.
 
 <!-- END:tooling-agent-rules -->
 
