@@ -6,7 +6,7 @@ import { cn } from "cn";
 import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
 import type * as React from "react";
 
-import { useI18n } from "@/lib/i18n";
+import { useI18n } from "@/hooks/use-i18n";
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<"nav">) {
   const { t } = useI18n();

@@ -11,6 +11,7 @@ This repository is a Next.js application using the App Router, React, and TypeSc
 - `src/data/`: server-only Data Access Layer (DAL) modules, when the application
   needs centralized database access, authorization checks, or DTO mapping.
 - `public/`: static assets.
+- `.agents/`: agent configurations, including custom subagents (`.agents/agents/firebase/agent.md`, `.agents/agents/research/agent.md`), domain skills (`.agents/skills/`), and rules (`.agents/rules/`).
 
 ## Data access and security
 
@@ -40,6 +41,11 @@ inputs and re-check authorization because they can be called through direct
 POST requests.
 
 These conventions follow the [Next.js Data Security guide](https://nextjs.org/docs/app/guides/data-security).
+
+## Subagents and agent automation
+
+- **Firebase (`.agents/agents/firebase/agent.md`)**: Supports Firebase capabilities (Authentication, Firestore modeling, Security Rules, App Hosting, Cloud Functions, and Data Connect), aggregating 12 specialized Firebase skills under `.agents/skills/`.
+- **Research (`.agents/agents/research/agent.md`)**: Supports codebase topology navigation, documentation retrieval, and component discovery by utilizing `.agents/skills/context7`, `.agents/skills/graphify`, and `.agents/skills/search-registry-items`.
 
 ## Configuration
 

@@ -15,7 +15,11 @@
     "scrollToEnd": "Scroll to end",
     "scrollToStart": "Scroll to start",
     "toggleSidebar": "Toggle Sidebar",
-    "closeToast": "Close toast"
+    "closeToast": "Close toast",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithGithub": "Continue with GitHub",
+    "orContinueWith": "Or continue with",
+    "signOut": "Sign out"
   },
   "home": {
     "metadataTitle": "Create Next App",
@@ -51,7 +55,15 @@
       "operationNotAllowed": "This sign-in method is not available.",
       "requiresRecentLogin": "Please sign in again to continue.",
       "sessionExpired": "Your session has expired. Please sign in again.",
-      "unknown": "Unable to complete authentication. Please try again."
+      "unknown": "Unable to complete authentication. Please try again.",
+      "popupClosedByUser": "The sign-in popup was closed before completing authentication.",
+      "popupBlocked": "The sign-in popup was blocked by your browser. Please allow popups and try again.",
+      "userNotFound": "No user found with this email address.",
+      "wrongPassword": "The password is incorrect.",
+      "weakPassword": "The password is too weak. Please choose a stronger password.",
+      "invalidEmail": "The email address is invalid.",
+      "accountExistsWithDifferentCredential": "An account already exists with the same email using a different sign-in provider.",
+      "unauthorizedDomain": "This domain is not authorized for authentication."
     }
   }
 }

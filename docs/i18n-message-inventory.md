@@ -8,7 +8,7 @@ The application implements a type-safe internationalization architecture support
 - **Server Components**: Load localized dictionaries asynchronously via `getDictionary(lang)` in `src/app/[lang]/dictionaries.ts`.
 - **Client Components**: Access translations via `useI18n().t` through `I18nProvider` in `src/lib/i18n/provider.tsx`, rendered by the root locale layout (`src/app/[lang]/layout.tsx`).
 - **Routing & Proxy**: Handled by `src/proxy.ts` with cookie (`NEXT_LOCALE`) and `Accept-Language` header negotiation, preserving pathnames and query strings.
-- **Error Normalization**: Handled by `getAuthErrorMessage(error, locale)` in `src/lib/i18n/auth-errors.ts`, mapping Firebase error codes to translated catalog messages.
+- **Error Normalization**: Handled by `getAuthErrorMessage(error, t)` in `src/lib/i18n/auth-errors.ts`, mapping Firebase error codes to translated catalog messages.
 
 ---
 
@@ -65,7 +65,7 @@ Shared UI primitives consume `useI18n().t` for localized accessibility labels an
 
 ## Authentication Error Normalization
 
-Direct rendering of raw exceptions (`error.message` or `String(error)`) has been eliminated in favor of `getAuthErrorMessage(error, locale)` from `src/lib/i18n/auth-errors.ts`:
+Direct rendering of raw exceptions (`error.message` or `String(error)`) has been eliminated in favor of `getAuthErrorMessage(error, t)` from `src/lib/i18n/auth-errors.ts`:
 
 - **Known Error Code Mapping**:
   - `auth/invalid-credential`, `auth/wrong-password`, `auth/user-not-found`, `auth/invalid-email`, `auth/invalid-verification-code` → `errors.auth.invalidCredentials`

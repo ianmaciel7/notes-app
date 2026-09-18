@@ -9,7 +9,9 @@ export type I18nContextValue = {
   t: <K extends MessageKey>(key: K) => string;
 };
 
-export const I18nContext = createContext<I18nContextValue | undefined>(undefined);
+export const I18nContext = createContext<I18nContextValue | undefined>(
+  undefined,
+);
 
 export type I18nProviderProps = {
   children: ReactNode;

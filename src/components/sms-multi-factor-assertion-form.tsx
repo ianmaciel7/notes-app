@@ -24,7 +24,8 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { getAuthErrorMessage, useI18n } from "@/lib/i18n";
+import { useI18n } from "@/hooks/use-i18n";
+import { getAuthErrorMessage } from "@/lib/i18n/auth-errors";
 
 type PhoneMultiFactorInfo = MultiFactorInfo & {
   phoneNumber?: string;
@@ -39,7 +40,7 @@ function SmsMultiFactorAssertionPhoneForm(
   props: SmsMultiFactorAssertionPhoneFormProps,
 ) {
   const ui = useUI();
-  const { locale } = useI18n();
+  const { t } = useI18n();
   const recaptchaContainerRef = useRef<HTMLDivElement>(null);
   const recaptchaVerifier = useRecaptchaVerifier(recaptchaContainerRef);
   const action = useSmsMultiFactorAssertionPhoneFormAction();
@@ -57,7 +58,7 @@ function SmsMultiFactorAssertionPhoneForm(
       });
       props.onSubmit(verificationId);
     } catch (error) {
-      setError(getAuthErrorMessage(error, locale));
+      setError(getAuthErrorMessage(error, t));
     }
   };
 
@@ -89,7 +90,7 @@ function SmsMultiFactorAssertionVerifyForm(
   props: SmsMultiFactorAssertionVerifyFormProps,
 ) {
   const ui = useUI();
-  const { locale } = useI18n();
+  const { t } = useI18n();
   const schema = useMultiFactorPhoneAuthVerifyFormSchema();
   const action = useSmsMultiFactorAssertionVerifyFormAction();
 
@@ -113,7 +114,7 @@ function SmsMultiFactorAssertionVerifyForm(
       });
       props.onSuccess(credential);
     } catch (error) {
-      form.setError("root", { message: getAuthErrorMessage(error, locale) });
+      form.setError("root", { message: getAuthErrorMessage(error, t) });
     }
   };
 

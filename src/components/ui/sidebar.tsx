@@ -22,9 +22,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useI18n } from "@/hooks/use-i18n";
 import { useIsMobile } from "@/hooks/use-mobile";
-
-import { useI18n } from "@/lib/i18n";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

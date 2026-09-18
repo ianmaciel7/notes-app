@@ -6,7 +6,7 @@ import { XIcon } from "lucide-react";
 import type * as React from "react";
 import { Button } from "@/components/ui/button";
 
-import { useI18n } from "@/lib/i18n";
+import { useI18n } from "@/hooks/use-i18n";
 
 function Sheet({ ...props }: SheetPrimitive.Root.Props) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;

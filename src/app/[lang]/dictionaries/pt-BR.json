@@ -15,7 +15,11 @@
     "scrollToEnd": "Rolar até o fim",
     "scrollToStart": "Rolar até o início",
     "toggleSidebar": "Alternar barra lateral",
-    "closeToast": "Fechar notificação"
+    "closeToast": "Fechar notificação",
+    "continueWithGoogle": "Continuar com o Google",
+    "continueWithGithub": "Continuar com o GitHub",
+    "orContinueWith": "Ou continue com",
+    "signOut": "Sair"
   },
   "home": {
     "metadataTitle": "Criar aplicativo Next",
@@ -51,7 +55,15 @@
       "operationNotAllowed": "Este método de entrada não está disponível.",
       "requiresRecentLogin": "Entre novamente para continuar.",
       "sessionExpired": "Sua sessão expirou. Entre novamente.",
-      "unknown": "Não foi possível concluir a autenticação. Tente novamente."
+      "unknown": "Não foi possível concluir a autenticação. Tente novamente.",
+      "popupClosedByUser": "A janela de autenticação foi fechada antes de concluir o acesso.",
+      "popupBlocked": "A janela de autenticação foi bloqueada pelo navegador. Permita pop-ups e tente novamente.",
+      "userNotFound": "Nenhum usuário encontrado com este e-mail.",
+      "wrongPassword": "A senha está incorreta.",
+      "weakPassword": "A senha é muito fraca. Escolha uma senha mais forte.",
+      "invalidEmail": "O endereço de e-mail é inválido.",
+      "accountExistsWithDifferentCredential": "Já existe uma conta com o mesmo e-mail vinculada a outro provedor de acesso.",
+      "unauthorizedDomain": "Este domínio não está autorizado para autenticação."
     }
   }
 }

@@ -9,18 +9,21 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { AlertCircle } from "lucide-react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { getAuthErrorMessage, useI18n } from "@/lib/i18n";
+import { useI18n } from "@/hooks/use-i18n";
+import { getAuthErrorMessage } from "@/lib/i18n/auth-errors";
 import { Policies } from "./policies";
 
 export type { SignInAuthFormProps };
 
 export function SignInAuthForm(props: SignInAuthFormProps) {
   const ui = useUI();
-  const { locale } = useI18n();
+  const { t } = useI18n();
   const schema = useSignInAuthFormSchema();
   const action = useSignInAuthFormAction();
 
@@ -38,7 +41,7 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
       const credential = await action(values);
       if (credential) props.onSignIn?.(credential);
     } catch (error) {
-      form.setError("root", { message: getAuthErrorMessage(error, locale) });
+      form.setError("root", { message: getAuthErrorMessage(error, t) });
     }
   }
 
@@ -51,67 +54,92 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
         <Controller
           control={form.control}
           name="email"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel htmlFor="email">
-                {getTranslation(ui, "labels", "emailAddress")}
-              </FieldLabel>
-              <Input
-                {...field}
-                id="email"
-                type="email"
-                aria-invalid={!!fieldState.error}
-              />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
-          )}
+          render={({ field, fieldState }) => {
+            const errorId = fieldState.error ? "email-error" : undefined;
+            return (
+              <Field data-invalid={!!fieldState.error}>
+                <FieldLabel htmlFor="email">
+                  {getTranslation(ui, "labels", "emailAddress")}
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="email"
+                  type="email"
+                  aria-invalid={!!fieldState.error}
+                  aria-describedby={errorId}
+                  onChange={(e) => {
+                    if (form.formState.errors.root) {
+                      form.clearErrors("root");
+                    }
+                    field.onChange(e);
+                  }}
+                />
+                {fieldState.error && (
+                  <FieldError id="email-error">
+                    {fieldState.error.message}
+                  </FieldError>
+                )}
+              </Field>
+            );
+          }}
         />
         <Controller
           control={form.control}
           name="password"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={!!fieldState.error}>
-              <FieldLabel
-                htmlFor="password"
-                className="flex items-center gap-2"
-              >
-                <span className="grow">
-                  {getTranslation(ui, "labels", "password")}
-                </span>
-                {props.onForgotPasswordClick ? (
-                  <Button
-                    type="button"
-                    variant="link"
-                    onClick={props.onForgotPasswordClick}
-                    size="sm"
-                  >
-                    <span className="text-xs">
+          render={({ field, fieldState }) => {
+            const errorId = fieldState.error ? "password-error" : undefined;
+            return (
+              <Field data-invalid={!!fieldState.error}>
+                <div className="flex items-center justify-between">
+                  <FieldLabel htmlFor="password">
+                    {getTranslation(ui, "labels", "password")}
+                  </FieldLabel>
+                  {props.onForgotPasswordClick ? (
+                    <Button
+                      type="button"
+                      variant="link"
+                      onClick={props.onForgotPasswordClick}
+                      size="sm"
+                      className="h-auto p-0 text-xs font-normal"
+                    >
                       {getTranslation(ui, "labels", "forgotPassword")}
-                    </span>
-                  </Button>
-                ) : null}
-              </FieldLabel>
-              <Input
-                {...field}
-                id="password"
-                type="password"
-                aria-invalid={!!fieldState.error}
-              />
-              {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
-              )}
-            </Field>
-          )}
+                    </Button>
+                  ) : null}
+                </div>
+                <Input
+                  {...field}
+                  id="password"
+                  type="password"
+                  aria-invalid={!!fieldState.error}
+                  aria-describedby={errorId}
+                  onChange={(e) => {
+                    if (form.formState.errors.root) {
+                      form.clearErrors("root");
+                    }
+                    field.onChange(e);
+                  }}
+                />
+                {fieldState.error && (
+                  <FieldError id="password-error">
+                    {fieldState.error.message}
+                  </FieldError>
+                )}
+              </Field>
+            );
+          }}
         />
         <Policies />
+        {form.formState.errors.root?.message && (
+          <Alert variant="destructive" role="alert">
+            <AlertCircle className="size-4" />
+            <AlertDescription>
+              {form.formState.errors.root.message}
+            </AlertDescription>
+          </Alert>
+        )}
         <Button type="submit" disabled={ui.state !== "idle"}>
           {getTranslation(ui, "labels", "signIn")}
         </Button>
-        {form.formState.errors.root && (
-          <FieldError>{form.formState.errors.root.message}</FieldError>
-        )}
         {props.onSignUpClick ? (
           <Button
             type="button"

@@ -16,7 +16,8 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { getAuthErrorMessage, useI18n } from "@/lib/i18n";
+import { useI18n } from "@/hooks/use-i18n";
+import { getAuthErrorMessage } from "@/lib/i18n/auth-errors";
 
 type TotpMultiFactorAssertionFormProps = {
   hint: MultiFactorInfo;
@@ -27,7 +28,7 @@ export function TotpMultiFactorAssertionForm(
   props: TotpMultiFactorAssertionFormProps,
 ) {
   const ui = useUI();
-  const { locale } = useI18n();
+  const { t } = useI18n();
   const schema = useMultiFactorTotpAuthVerifyFormSchema();
   const action = useTotpMultiFactorAssertionFormAction();
 
@@ -47,7 +48,7 @@ export function TotpMultiFactorAssertionForm(
       });
       props.onSuccess?.(credential);
     } catch (error) {
-      form.setError("root", { message: getAuthErrorMessage(error, locale) });
+      form.setError("root", { message: getAuthErrorMessage(error, t) });
     }
   };
 

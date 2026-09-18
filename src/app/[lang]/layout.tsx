@@ -5,11 +5,11 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 
 import { FirebaseProvider } from "@/components/firebase-provider";
+import { I18nProvider } from "@/components/i18n-provider";
 import { ThemeProvider } from "@/components/theme-provider";
-import { I18nProvider } from "@/lib/i18n";
 import { supportedLocales } from "@/lib/i18n/types";
 
-import { getDictionary, isSupportedLocale } from "./dictionaries";
+import { getDictionary, hasLocale } from "./dictionaries";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +29,7 @@ export async function generateMetadata({
   params,
 }: Pick<LayoutProps<"/[lang]">, "params">): Promise<Metadata> {
   const { lang } = await params;
-  if (!isSupportedLocale(lang)) notFound();
+  if (!hasLocale(lang)) notFound();
 
   const dictionary = await getDictionary(lang);
   return {
@@ -43,7 +43,7 @@ export default async function LocaleLayout({
   params,
 }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
-  if (!isSupportedLocale(lang)) notFound();
+  if (!hasLocale(lang)) notFound();
 
   const dictionary = await getDictionary(lang);
 

@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { type Locale, supportedLocales } from "@/lib/i18n/types";
+import { hasLocale, type Locale, supportedLocales } from "@/lib/i18n/types";
 
 const defaultLocale: Locale = "en";
 const localeCookieName = "NEXT_LOCALE";
@@ -11,10 +11,6 @@ const localeCookieOptions = {
   sameSite: "lax" as const,
   secure: process.env.NODE_ENV !== "development",
 };
-
-function isSupportedLocale(value: string | undefined): value is Locale {
-  return supportedLocales.includes(value as Locale);
-}
 
 function negotiateLocale(acceptLanguage: string | null): Locale {
   if (!acceptLanguage) return defaultLocale;
@@ -66,7 +62,7 @@ export function proxy(request: NextRequest) {
   }
 
   const savedLocale = request.cookies.get(localeCookieName)?.value;
-  const locale = isSupportedLocale(savedLocale)
+  const locale = hasLocale(savedLocale)
     ? savedLocale
     : negotiateLocale(request.headers.get("accept-language"));
 

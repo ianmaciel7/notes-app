@@ -3,10 +3,9 @@
 import { onIdTokenChanged, type User } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
-
+import { useI18n } from "@/hooks/use-i18n";
 import { syncSession } from "@/lib/auth/client-session";
 import { auth } from "@/lib/firebase/client";
-import { useI18n } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n/routing";
 import type { Locale } from "@/lib/i18n/types";
 

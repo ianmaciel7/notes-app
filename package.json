@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:all": "concurrently --kill-others-on-fail --names next,ladle \"pnpm dev\" \"pnpm ladle\"",
+    "dev:all": "concurrently --kill-others-on-fail --names next,ladle,firebase \"pnpm dev\" \"pnpm ladle\" \"pnpm firebase:emulators\"",
     "firebase:emulators": "npx -y firebase-tools@latest emulators:start --project demo-notes-app",
     "firebase:emulators:exec": "npx -y firebase-tools@latest emulators:exec --project demo-notes-app \"node -e 1\"",
     "build": "next build",

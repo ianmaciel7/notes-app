@@ -1,10 +1,6 @@
 import { notFound } from "next/navigation";
-
-import {
-  type AppMessages,
-  type Locale,
-  supportedLocales,
-} from "@/lib/i18n/types";
+import { lang } from "next/root-params";
+import { type AppMessages, hasLocale, type Locale } from "@/lib/i18n/types";
 
 const dictionaryLoaders = {
   en: () => import("./dictionaries/en.json").then((module) => module.default),
@@ -12,12 +8,12 @@ const dictionaryLoaders = {
     import("./dictionaries/pt-BR.json").then((module) => module.default),
 } satisfies Record<Locale, () => Promise<AppMessages>>;
 
-export function isSupportedLocale(locale: string): locale is Locale {
-  return supportedLocales.some((supportedLocale) => supportedLocale === locale);
-}
+export { hasLocale };
+export const isSupportedLocale = hasLocale;
 
-export async function getDictionary(locale: string): Promise<AppMessages> {
-  if (!isSupportedLocale(locale)) notFound();
+export async function getDictionary(locale?: string): Promise<AppMessages> {
+  const resolvedLocale = locale ?? (await lang());
+  if (!hasLocale(resolvedLocale)) notFound();
 
-  return dictionaryLoaders[locale]();
+  return dictionaryLoaders[resolvedLocale]();
 }

@@ -32,7 +32,7 @@ import {
   QuestionnaireTitle,
 } from "@/components/ui/questionnaire";
 import { Separator } from "@/components/ui/separator";
-import { useI18n } from "@/lib/i18n";
+import { useI18n } from "@/hooks/use-i18n";
 
 export type ExamQuestionType = "single-choice" | "multiple-choice";
 
