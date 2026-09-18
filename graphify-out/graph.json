@@ -199,32 +199,6 @@
       "source_location": "L12"
     },
     {
-      "id": "src_lib_i18n_types_locale",
-      "label": "Locale",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 151,
-      "community_name": "types.ts",
-      "file_type": "code",
-      "norm_label": "locale",
-      "source_file": "src/lib/i18n/types.ts",
-      "source_location": "L3"
-    },
-    {
-      "id": "src_lib_i18n_types_nestedmessagekey",
-      "label": "NestedMessageKey",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 151,
-      "community_name": "types.ts",
-      "file_type": "code",
-      "norm_label": "nestedmessagekey",
-      "source_file": "src/lib/i18n/types.ts",
-      "source_location": "L82"
-    },
-    {
       "id": "src_data_auth_currentuser",
       "label": "CurrentUser",
       "_callable": true,
@@ -335,7 +309,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "file_type": "code",
       "norm_label": "githubsigninbuttonprops",
       "source_file": "src/components/github-sign-in-button.tsx",
@@ -348,50 +322,11 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "file_type": "code",
       "norm_label": "googlesigninbuttonprops",
       "source_file": "src/components/google-sign-in-button.tsx",
       "source_location": "L42"
-    },
-    {
-      "id": "src_components_ui_pagination_paginationlinkprops",
-      "label": "PaginationLinkProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "paginationlinkprops",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L44"
-    },
-    {
-      "id": "src_components_user_nav_usernavprops",
-      "label": "UserNavProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "usernavprops",
-      "source_file": "src/components/user-nav.tsx",
-      "source_location": "L22"
-    },
-    {
-      "id": "src_lib_i18n_types_messagekey",
-      "label": "MessageKey",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "getAuthErrorMessage",
-      "file_type": "code",
-      "norm_label": "messagekey",
-      "source_file": "src/lib/i18n/types.ts",
-      "source_location": "L90"
     },
     {
       "id": "src_components_object_question_question_examquestion",
@@ -446,6 +381,58 @@
       "source_location": "L12"
     },
     {
+      "id": "src_lib_i18n_types_locale",
+      "label": "Locale",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "i18n-provider.tsx",
+      "file_type": "code",
+      "norm_label": "locale",
+      "source_file": "src/lib/i18n/types.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "src_lib_i18n_types_messagekey",
+      "label": "MessageKey",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "i18n-provider.tsx",
+      "file_type": "code",
+      "norm_label": "messagekey",
+      "source_file": "src/lib/i18n/types.ts",
+      "source_location": "L90"
+    },
+    {
+      "id": "src_lib_i18n_types_nestedmessagekey",
+      "label": "NestedMessageKey",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "i18n-provider.tsx",
+      "file_type": "code",
+      "norm_label": "nestedmessagekey",
+      "source_file": "src/lib/i18n/types.ts",
+      "source_location": "L82"
+    },
+    {
+      "id": "src_components_user_nav_usernavprops",
+      "label": "UserNavProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "user-nav.tsx",
+      "file_type": "code",
+      "norm_label": "usernavprops",
+      "source_file": "src/components/user-nav.tsx",
+      "source_location": "L22"
+    },
+    {
       "id": "src_components_object_question_question_examquestionnaireprops",
       "label": "ExamQuestionnaireProps",
       "_callable": true,
@@ -483,6 +470,139 @@
       "norm_label": "examquestiontype",
       "source_file": "src/components/object/question/question.tsx",
       "source_location": "L37"
+    },
+    {
+      "id": "src_components_ui_pagination_paginationlinkprops",
+      "label": "PaginationLinkProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 88,
+      "community_name": "pagination.tsx",
+      "file_type": "code",
+      "norm_label": "paginationlinkprops",
+      "source_file": "src/components/ui/pagination.tsx",
+      "source_location": "L44"
+    },
+    {
+      "id": "src_components_ui_sheet_sheet",
+      "label": "Sheet()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheet()",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L11"
+    },
+    {
+      "id": "src_components_ui_sheet_sheetclose",
+      "label": "SheetClose()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheetclose()",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L19"
+    },
+    {
+      "id": "src_components_ui_sheet_sheetcontent",
+      "label": "SheetContent()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheetcontent()",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L40"
+    },
+    {
+      "id": "src_components_ui_sheet_sheetdescription",
+      "label": "SheetDescription()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheetdescription()",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L118"
+    },
+    {
+      "id": "src_components_ui_sheet_sheetfooter",
+      "label": "SheetFooter()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheetfooter()",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L95"
+    },
+    {
+      "id": "src_components_ui_sheet_sheetheader",
+      "label": "SheetHeader()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheetheader()",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L85"
+    },
+    {
+      "id": "src_components_ui_sheet_sheetoverlay",
+      "label": "SheetOverlay()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheetoverlay()",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L27"
+    },
+    {
+      "id": "src_components_ui_sheet_sheetportal",
+      "label": "SheetPortal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheetportal()",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L23"
+    },
+    {
+      "id": "src_components_ui_sheet_sheettitle",
+      "label": "SheetTitle()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheettitle()",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L105"
+    },
+    {
+      "id": "src_components_ui_sheet_sheettrigger",
+      "label": "SheetTrigger()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheettrigger()",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L15"
     },
     {
       "id": "src_components_ui_sidebar_sidebar",
@@ -785,6 +905,54 @@
       "source_location": "L3"
     },
     {
+      "id": "src_components_ui_tooltip_tooltip",
+      "label": "Tooltip()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "tooltip()",
+      "source_file": "src/components/ui/tooltip.tsx",
+      "source_location": "L19"
+    },
+    {
+      "id": "src_components_ui_tooltip_tooltipcontent",
+      "label": "TooltipContent()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "tooltipcontent()",
+      "source_file": "src/components/ui/tooltip.tsx",
+      "source_location": "L27"
+    },
+    {
+      "id": "src_components_ui_tooltip_tooltipprovider",
+      "label": "TooltipProvider()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "tooltipprovider()",
+      "source_file": "src/components/ui/tooltip.tsx",
+      "source_location": "L6"
+    },
+    {
+      "id": "src_components_ui_tooltip_tooltiptrigger",
+      "label": "TooltipTrigger()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "tooltiptrigger()",
+      "source_file": "src/components/ui/tooltip.tsx",
+      "source_location": "L23"
+    },
+    {
       "id": "src_hooks_use_mobile_useismobile",
       "label": "useIsMobile()",
       "_callable": true,
@@ -867,18 +1035,6 @@
       "norm_label": "carddescription()",
       "source_file": "src/components/ui/card.tsx",
       "source_location": "L48"
-    },
-    {
-      "id": "src_components_ui_card_cardfooter",
-      "label": "CardFooter()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "sign-in-auth-screen.tsx",
-      "file_type": "code",
-      "norm_label": "cardfooter()",
-      "source_file": "src/components/ui/card.tsx",
-      "source_location": "L81"
     },
     {
       "id": "src_components_ui_card_cardheader",
@@ -995,6 +1151,18 @@
       "norm_label": "setdwarfwithdsymdebuginformationformat()",
       "source_file": ".agents/skills/xcode-project-setup/scripts/xcode_spm_setup/Sources/main.swift",
       "source_location": "L68"
+    },
+    {
+      "id": "src_components_i18n_provider_usei18n",
+      "label": "useI18n()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 112,
+      "community_name": "i18n Message Inventory",
+      "file_type": "code",
+      "norm_label": "usei18n()",
+      "source_file": "src/components/i18n-provider.tsx",
+      "source_location": "L53"
     },
     {
       "id": "src_components_ui_select_selectcontent",
@@ -1578,7 +1746,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 151,
-      "community_name": "types.ts",
+      "community_name": "proxy.ts",
       "file_type": "code",
       "norm_label": "negotiatelocale()",
       "source_file": "src/proxy.ts",
@@ -1590,7 +1758,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 151,
-      "community_name": "types.ts",
+      "community_name": "proxy.ts",
       "file_type": "code",
       "norm_label": "proxy()",
       "source_file": "src/proxy.ts",
@@ -1693,42 +1861,6 @@
       "source_location": "L55"
     },
     {
-      "id": "src_app_lang_page_authenticatedhome",
-      "label": "AuthenticatedHome()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "code",
-      "norm_label": "authenticatedhome()",
-      "source_file": "src/app/[lang]/page.tsx",
-      "source_location": "L37"
-    },
-    {
-      "id": "src_components_auth_gate_authgate",
-      "label": "AuthGate()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "code",
-      "norm_label": "authgate()",
-      "source_file": "src/components/auth-gate.tsx",
-      "source_location": "L12"
-    },
-    {
-      "id": "src_data_auth_getcurrentuser",
-      "label": "getCurrentUser()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "code",
-      "norm_label": "getcurrentuser()",
-      "source_file": "src/data/auth.ts",
-      "source_location": "L18"
-    },
-    {
       "id": "src_lib_firebase_admin_createfirebasesessioncookie",
       "label": "createFirebaseSessionCookie()",
       "_callable": true,
@@ -1789,16 +1921,64 @@
       "source_location": "L3"
     },
     {
-      "id": "src_components_ui_checkbox_checkbox",
-      "label": "Checkbox()",
+      "id": "src_components_ui_calendar_calendar",
+      "label": "Calendar()",
       "_callable": true,
       "_origin": "ast",
       "community": 16,
       "community_name": "cn",
       "file_type": "code",
-      "norm_label": "checkbox()",
-      "source_file": "src/components/ui/checkbox.tsx",
-      "source_location": "L7"
+      "norm_label": "calendar()",
+      "source_file": "src/components/ui/calendar.tsx",
+      "source_location": "L18"
+    },
+    {
+      "id": "src_components_ui_calendar_calendardaybutton",
+      "label": "CalendarDayButton()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "cn",
+      "file_type": "code",
+      "norm_label": "calendardaybutton()",
+      "source_file": "src/components/ui/calendar.tsx",
+      "source_location": "L189"
+    },
+    {
+      "id": "src_components_ui_hover_card_hovercard",
+      "label": "HoverCard()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "cn",
+      "file_type": "code",
+      "norm_label": "hovercard()",
+      "source_file": "src/components/ui/hover-card.tsx",
+      "source_location": "L6"
+    },
+    {
+      "id": "src_components_ui_hover_card_hovercardcontent",
+      "label": "HoverCardContent()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "cn",
+      "file_type": "code",
+      "norm_label": "hovercardcontent()",
+      "source_file": "src/components/ui/hover-card.tsx",
+      "source_location": "L16"
+    },
+    {
+      "id": "src_components_ui_hover_card_hovercardtrigger",
+      "label": "HoverCardTrigger()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "cn",
+      "file_type": "code",
+      "norm_label": "hovercardtrigger()",
+      "source_file": "src/components/ui/hover-card.tsx",
+      "source_location": "L10"
     },
     {
       "id": "src_components_ui_kbd_kbd",
@@ -2005,6 +2185,90 @@
       "source_location": "L29"
     },
     {
+      "id": "src_components_ui_breadcrumb_breadcrumb",
+      "label": "Breadcrumb()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 164,
+      "community_name": "class-variance-authority",
+      "file_type": "code",
+      "norm_label": "breadcrumb()",
+      "source_file": "src/components/ui/breadcrumb.tsx",
+      "source_location": "L11"
+    },
+    {
+      "id": "src_components_ui_breadcrumb_breadcrumbellipsis",
+      "label": "BreadcrumbEllipsis()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 164,
+      "community_name": "class-variance-authority",
+      "file_type": "code",
+      "norm_label": "breadcrumbellipsis()",
+      "source_file": "src/components/ui/breadcrumb.tsx",
+      "source_location": "L98"
+    },
+    {
+      "id": "src_components_ui_breadcrumb_breadcrumbitem",
+      "label": "BreadcrumbItem()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 164,
+      "community_name": "class-variance-authority",
+      "file_type": "code",
+      "norm_label": "breadcrumbitem()",
+      "source_file": "src/components/ui/breadcrumb.tsx",
+      "source_location": "L37"
+    },
+    {
+      "id": "src_components_ui_breadcrumb_breadcrumblink",
+      "label": "BreadcrumbLink()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 164,
+      "community_name": "class-variance-authority",
+      "file_type": "code",
+      "norm_label": "breadcrumblink()",
+      "source_file": "src/components/ui/breadcrumb.tsx",
+      "source_location": "L47"
+    },
+    {
+      "id": "src_components_ui_breadcrumb_breadcrumblist",
+      "label": "BreadcrumbList()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 164,
+      "community_name": "class-variance-authority",
+      "file_type": "code",
+      "norm_label": "breadcrumblist()",
+      "source_file": "src/components/ui/breadcrumb.tsx",
+      "source_location": "L24"
+    },
+    {
+      "id": "src_components_ui_breadcrumb_breadcrumbpage",
+      "label": "BreadcrumbPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 164,
+      "community_name": "class-variance-authority",
+      "file_type": "code",
+      "norm_label": "breadcrumbpage()",
+      "source_file": "src/components/ui/breadcrumb.tsx",
+      "source_location": "L67"
+    },
+    {
+      "id": "src_components_ui_breadcrumb_breadcrumbseparator",
+      "label": "BreadcrumbSeparator()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 164,
+      "community_name": "class-variance-authority",
+      "file_type": "code",
+      "norm_label": "breadcrumbseparator()",
+      "source_file": "src/components/ui/breadcrumb.tsx",
+      "source_location": "L80"
+    },
+    {
       "id": "src_components_ui_button_group_buttongroup",
       "label": "ButtonGroup()",
       "_callable": true,
@@ -2077,6 +2341,18 @@
       "source_location": "L43"
     },
     {
+      "id": "src_components_ui_checkbox_checkbox",
+      "label": "Checkbox()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 166,
+      "community_name": "lucide-react",
+      "file_type": "code",
+      "norm_label": "checkbox()",
+      "source_file": "src/components/ui/checkbox.tsx",
+      "source_location": "L7"
+    },
+    {
       "id": "src_components_multi_factor_auth_assertion_form_multifactorauthassertionform",
       "label": "MultiFactorAuthAssertionForm()",
       "_callable": true,
@@ -2135,6 +2411,18 @@
       "norm_label": "smsmultifactorassertionphoneform()",
       "source_file": "src/components/sms-multi-factor-assertion-form.tsx",
       "source_location": "L39"
+    },
+    {
+      "id": "src_components_sms_multi_factor_assertion_form_smsmultifactorassertionverifyform",
+      "label": "SmsMultiFactorAssertionVerifyForm()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 167,
+      "community_name": "sms-multi-factor-assertion-form.tsx",
+      "file_type": "code",
+      "norm_label": "smsmultifactorassertionverifyform()",
+      "source_file": "src/components/sms-multi-factor-assertion-form.tsx",
+      "source_location": "L89"
     },
     {
       "id": "src_components_totp_multi_factor_assertion_form_totpmultifactorassertionform",
@@ -2989,18 +3277,6 @@
       "source_location": "L17"
     },
     {
-      "id": "src_components_firebase_provider_firebaseprovider",
-      "label": "FirebaseProvider()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 24,
-      "community_name": "sign-in/page.tsx",
-      "file_type": "code",
-      "norm_label": "firebaseprovider()",
-      "source_file": "src/components/firebase-provider.tsx",
-      "source_location": "L16"
-    },
-    {
       "id": "src_components_forgot_password_auth_screen_forgotpasswordauthscreen",
       "label": "ForgotPasswordAuthScreen()",
       "_callable": true,
@@ -3037,16 +3313,40 @@
       "source_location": "L51"
     },
     {
-      "id": "src_components_sign_up_auth_screen_signupauthscreen",
-      "label": "SignUpAuthScreen()",
+      "id": "src_components_google_sign_in_button_googlesigninbutton",
+      "label": "GoogleSignInButton()",
       "_callable": true,
       "_origin": "ast",
       "community": 24,
       "community_name": "sign-in/page.tsx",
       "file_type": "code",
-      "norm_label": "signupauthscreen()",
-      "source_file": "src/components/sign-up-auth-screen.tsx",
-      "source_location": "L36"
+      "norm_label": "googlesigninbutton()",
+      "source_file": "src/components/google-sign-in-button.tsx",
+      "source_location": "L49"
+    },
+    {
+      "id": "src_components_google_sign_in_button_googlesigninbutton_handleclick",
+      "label": "handleClick()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "sign-in/page.tsx",
+      "file_type": "code",
+      "norm_label": "handleclick()",
+      "source_file": "src/components/google-sign-in-button.tsx",
+      "source_location": "L65"
+    },
+    {
+      "id": "src_lib_auth_client_session_deletesession",
+      "label": "deleteSession()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "sign-in/page.tsx",
+      "file_type": "code",
+      "norm_label": "deletesession()",
+      "source_file": "src/lib/auth/client-session.ts",
+      "source_location": "L13"
     },
     {
       "id": "src_lib_auth_client_session_syncsession",
@@ -3193,6 +3493,18 @@
       "source_location": "L128"
     },
     {
+      "id": "src_components_firebase_provider_firebaseprovider",
+      "label": "FirebaseProvider()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": "Task 2 Report \u2014 Locale Routing and Server Dictionaries",
+      "file_type": "code",
+      "norm_label": "firebaseprovider()",
+      "source_file": "src/components/firebase-provider.tsx",
+      "source_location": "L16"
+    },
+    {
       "id": "src_components_theme_provider_themeprovider",
       "label": "ThemeProvider()",
       "_callable": true,
@@ -3306,7 +3618,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "file_type": "code",
       "norm_label": "githubicon()",
       "source_file": "src/components/github-sign-in-button.tsx",
@@ -3318,143 +3630,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "file_type": "code",
       "norm_label": "googleicon()",
       "source_file": "src/components/google-sign-in-button.tsx",
       "source_location": "L12"
-    },
-    {
-      "id": "src_components_google_sign_in_button_googlesigninbutton",
-      "label": "GoogleSignInButton()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "googlesigninbutton()",
-      "source_file": "src/components/google-sign-in-button.tsx",
-      "source_location": "L49"
-    },
-    {
-      "id": "src_components_google_sign_in_button_googlesigninbutton_handleclick",
-      "label": "handleClick()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "handleclick()",
-      "source_file": "src/components/google-sign-in-button.tsx",
-      "source_location": "L65"
-    },
-    {
-      "id": "src_components_i18n_provider_usei18n",
-      "label": "useI18n()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "usei18n()",
-      "source_file": "src/components/i18n-provider.tsx",
-      "source_location": "L53"
-    },
-    {
-      "id": "src_components_sign_in_auth_screen_signinauthscreen",
-      "label": "SignInAuthScreen()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "signinauthscreen()",
-      "source_file": "src/components/sign-in-auth-screen.tsx",
-      "source_location": "L36"
-    },
-    {
-      "id": "src_components_ui_pagination_pagination",
-      "label": "Pagination()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "pagination()",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L13"
-    },
-    {
-      "id": "src_components_ui_pagination_paginationcontent",
-      "label": "PaginationContent()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "paginationcontent()",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L27"
-    },
-    {
-      "id": "src_components_ui_pagination_paginationellipsis",
-      "label": "PaginationEllipsis()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "paginationellipsis()",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L117"
-    },
-    {
-      "id": "src_components_ui_pagination_paginationitem",
-      "label": "PaginationItem()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "paginationitem()",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L40"
-    },
-    {
-      "id": "src_components_ui_pagination_paginationlink",
-      "label": "PaginationLink()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "paginationlink()",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L49"
-    },
-    {
-      "id": "src_components_ui_pagination_paginationnext",
-      "label": "PaginationNext()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "paginationnext()",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L95"
-    },
-    {
-      "id": "src_components_ui_pagination_paginationprevious",
-      "label": "PaginationPrevious()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "paginationprevious()",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L73"
     },
     {
       "id": "src_components_ui_spinner_spinner",
@@ -3462,7 +3642,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "file_type": "code",
       "norm_label": "spinner()",
       "source_file": "src/components/ui/spinner.tsx",
@@ -3503,258 +3683,6 @@
       "norm_label": "collapsibletrigger()",
       "source_file": "src/components/ui/collapsible.tsx",
       "source_location": "L9"
-    },
-    {
-      "id": "src_components_ui_avatar_avatar",
-      "label": "Avatar()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "avatar()",
-      "source_file": "src/components/ui/avatar.tsx",
-      "source_location": "L7"
-    },
-    {
-      "id": "src_components_ui_avatar_avatarbadge",
-      "label": "AvatarBadge()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "avatarbadge()",
-      "source_file": "src/components/ui/avatar.tsx",
-      "source_location": "L56"
-    },
-    {
-      "id": "src_components_ui_avatar_avatarfallback",
-      "label": "AvatarFallback()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "avatarfallback()",
-      "source_file": "src/components/ui/avatar.tsx",
-      "source_location": "L40"
-    },
-    {
-      "id": "src_components_ui_avatar_avatargroup",
-      "label": "AvatarGroup()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "avatargroup()",
-      "source_file": "src/components/ui/avatar.tsx",
-      "source_location": "L72"
-    },
-    {
-      "id": "src_components_ui_avatar_avatargroupcount",
-      "label": "AvatarGroupCount()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "avatargroupcount()",
-      "source_file": "src/components/ui/avatar.tsx",
-      "source_location": "L85"
-    },
-    {
-      "id": "src_components_ui_avatar_avatarimage",
-      "label": "AvatarImage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "avatarimage()",
-      "source_file": "src/components/ui/avatar.tsx",
-      "source_location": "L27"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenu",
-      "label": "DropdownMenu()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenu()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L8"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenucheckboxitem",
-      "label": "DropdownMenuCheckboxItem()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenucheckboxitem()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L153"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenucontent",
-      "label": "DropdownMenuContent()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenucontent()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L20"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenugroup",
-      "label": "DropdownMenuGroup()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenugroup()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L54"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenuitem",
-      "label": "DropdownMenuItem()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenuitem()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L78"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenulabel",
-      "label": "DropdownMenuLabel()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenulabel()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L58"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenuportal",
-      "label": "DropdownMenuPortal()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenuportal()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L12"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenuradiogroup",
-      "label": "DropdownMenuRadioGroup()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenuradiogroup()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L186"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenuradioitem",
-      "label": "DropdownMenuRadioItem()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenuradioitem()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L195"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenuseparator",
-      "label": "DropdownMenuSeparator()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenuseparator()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L226"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenushortcut",
-      "label": "DropdownMenuShortcut()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenushortcut()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L239"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenusub",
-      "label": "DropdownMenuSub()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenusub()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L101"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenusubcontent",
-      "label": "DropdownMenuSubContent()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenusubcontent()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L129"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenusubtrigger",
-      "label": "DropdownMenuSubTrigger()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenusubtrigger()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L105"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu_dropdownmenutrigger",
-      "label": "DropdownMenuTrigger()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdownmenutrigger()",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L16"
     },
     {
       "id": "src_components_ui_menubar_menubar",
@@ -3997,6 +3925,18 @@
       "source_location": "L39"
     },
     {
+      "id": "src_components_sign_in_auth_screen_signinauthscreen",
+      "label": "SignInAuthScreen()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "getAuthErrorMessage",
+      "file_type": "code",
+      "norm_label": "signinauthscreen()",
+      "source_file": "src/components/sign-in-auth-screen.tsx",
+      "source_location": "L36"
+    },
+    {
       "id": "src_components_sign_up_auth_form_signupauthform",
       "label": "SignUpAuthForm()",
       "_callable": true,
@@ -4021,16 +3961,16 @@
       "source_location": "L43"
     },
     {
-      "id": "src_components_sms_multi_factor_assertion_form_smsmultifactorassertionverifyform",
-      "label": "SmsMultiFactorAssertionVerifyForm()",
+      "id": "src_components_sign_up_auth_screen_signupauthscreen",
+      "label": "SignUpAuthScreen()",
       "_callable": true,
       "_origin": "ast",
       "community": 40,
       "community_name": "getAuthErrorMessage",
       "file_type": "code",
-      "norm_label": "smsmultifactorassertionverifyform()",
-      "source_file": "src/components/sms-multi-factor-assertion-form.tsx",
-      "source_location": "L89"
+      "norm_label": "signupauthscreen()",
+      "source_file": "src/components/sign-up-auth-screen.tsx",
+      "source_location": "L36"
     },
     {
       "id": "src_lib_i18n_auth_errors_getautherrormessage",
@@ -4153,18 +4093,6 @@
       "source_location": "L37"
     },
     {
-      "id": "src_components_user_nav_getinitials",
-      "label": "getInitials()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "user-nav.test.tsx",
-      "file_type": "code",
-      "norm_label": "getinitials()",
-      "source_file": "src/components/user-nav.tsx",
-      "source_location": "L29"
-    },
-    {
       "id": "src_components_user_nav_test_renderusernav",
       "label": "renderUserNav()",
       "_callable": true,
@@ -4177,28 +4105,16 @@
       "source_location": "L34"
     },
     {
-      "id": "src_components_user_nav_usernav",
-      "label": "UserNav()",
+      "id": "src_app_lang_layout_generatestaticparams",
+      "label": "generateStaticParams()",
       "_callable": true,
       "_origin": "ast",
-      "community": 49,
-      "community_name": "user-nav.test.tsx",
+      "community": 50,
+      "community_name": "shadcn/ui Rules",
       "file_type": "code",
-      "norm_label": "usernav()",
-      "source_file": "src/components/user-nav.tsx",
-      "source_location": "L43"
-    },
-    {
-      "id": "src_lib_auth_client_session_deletesession",
-      "label": "deleteSession()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "user-nav.test.tsx",
-      "file_type": "code",
-      "norm_label": "deletesession()",
-      "source_file": "src/lib/auth/client-session.ts",
-      "source_location": "L13"
+      "norm_label": "generatestaticparams()",
+      "source_file": "src/app/[lang]/layout.tsx",
+      "source_location": "L24"
     },
     {
       "id": "src_components_ui_table_table",
@@ -4489,88 +4405,160 @@
       "source_location": "L36"
     },
     {
-      "id": "src_components_ui_breadcrumb_breadcrumb",
-      "label": "Breadcrumb()",
+      "id": "src_components_ui_avatar_avatar",
+      "label": "Avatar()",
       "_callable": true,
       "_origin": "ast",
       "community": 64,
-      "community_name": "breadcrumb.tsx",
+      "community_name": "user-nav.tsx",
       "file_type": "code",
-      "norm_label": "breadcrumb()",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L11"
+      "norm_label": "avatar()",
+      "source_file": "src/components/ui/avatar.tsx",
+      "source_location": "L7"
     },
     {
-      "id": "src_components_ui_breadcrumb_breadcrumbellipsis",
-      "label": "BreadcrumbEllipsis()",
+      "id": "src_components_ui_avatar_avatarbadge",
+      "label": "AvatarBadge()",
       "_callable": true,
       "_origin": "ast",
       "community": 64,
-      "community_name": "breadcrumb.tsx",
+      "community_name": "user-nav.tsx",
       "file_type": "code",
-      "norm_label": "breadcrumbellipsis()",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L98"
+      "norm_label": "avatarbadge()",
+      "source_file": "src/components/ui/avatar.tsx",
+      "source_location": "L56"
     },
     {
-      "id": "src_components_ui_breadcrumb_breadcrumbitem",
-      "label": "BreadcrumbItem()",
+      "id": "src_components_ui_avatar_avatarfallback",
+      "label": "AvatarFallback()",
       "_callable": true,
       "_origin": "ast",
       "community": 64,
-      "community_name": "breadcrumb.tsx",
+      "community_name": "user-nav.tsx",
       "file_type": "code",
-      "norm_label": "breadcrumbitem()",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L37"
+      "norm_label": "avatarfallback()",
+      "source_file": "src/components/ui/avatar.tsx",
+      "source_location": "L40"
     },
     {
-      "id": "src_components_ui_breadcrumb_breadcrumblink",
-      "label": "BreadcrumbLink()",
+      "id": "src_components_ui_avatar_avatargroup",
+      "label": "AvatarGroup()",
       "_callable": true,
       "_origin": "ast",
       "community": 64,
-      "community_name": "breadcrumb.tsx",
+      "community_name": "user-nav.tsx",
       "file_type": "code",
-      "norm_label": "breadcrumblink()",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L47"
+      "norm_label": "avatargroup()",
+      "source_file": "src/components/ui/avatar.tsx",
+      "source_location": "L72"
     },
     {
-      "id": "src_components_ui_breadcrumb_breadcrumblist",
-      "label": "BreadcrumbList()",
+      "id": "src_components_ui_avatar_avatargroupcount",
+      "label": "AvatarGroupCount()",
       "_callable": true,
       "_origin": "ast",
       "community": 64,
-      "community_name": "breadcrumb.tsx",
+      "community_name": "user-nav.tsx",
       "file_type": "code",
-      "norm_label": "breadcrumblist()",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L24"
+      "norm_label": "avatargroupcount()",
+      "source_file": "src/components/ui/avatar.tsx",
+      "source_location": "L85"
     },
     {
-      "id": "src_components_ui_breadcrumb_breadcrumbpage",
-      "label": "BreadcrumbPage()",
+      "id": "src_components_ui_avatar_avatarimage",
+      "label": "AvatarImage()",
       "_callable": true,
       "_origin": "ast",
       "community": 64,
-      "community_name": "breadcrumb.tsx",
+      "community_name": "user-nav.tsx",
       "file_type": "code",
-      "norm_label": "breadcrumbpage()",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L67"
+      "norm_label": "avatarimage()",
+      "source_file": "src/components/ui/avatar.tsx",
+      "source_location": "L27"
     },
     {
-      "id": "src_components_ui_breadcrumb_breadcrumbseparator",
-      "label": "BreadcrumbSeparator()",
+      "id": "src_components_ui_dropdown_menu_dropdownmenu",
+      "label": "DropdownMenu()",
       "_callable": true,
       "_origin": "ast",
       "community": 64,
-      "community_name": "breadcrumb.tsx",
+      "community_name": "user-nav.tsx",
       "file_type": "code",
-      "norm_label": "breadcrumbseparator()",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L80"
+      "norm_label": "dropdownmenu()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_components_ui_dropdown_menu_dropdownmenucontent",
+      "label": "DropdownMenuContent()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "user-nav.tsx",
+      "file_type": "code",
+      "norm_label": "dropdownmenucontent()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L20"
+    },
+    {
+      "id": "src_components_ui_dropdown_menu_dropdownmenuitem",
+      "label": "DropdownMenuItem()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "user-nav.tsx",
+      "file_type": "code",
+      "norm_label": "dropdownmenuitem()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L78"
+    },
+    {
+      "id": "src_components_ui_dropdown_menu_dropdownmenuseparator",
+      "label": "DropdownMenuSeparator()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "user-nav.tsx",
+      "file_type": "code",
+      "norm_label": "dropdownmenuseparator()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L226"
+    },
+    {
+      "id": "src_components_ui_dropdown_menu_dropdownmenutrigger",
+      "label": "DropdownMenuTrigger()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "user-nav.tsx",
+      "file_type": "code",
+      "norm_label": "dropdownmenutrigger()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L16"
+    },
+    {
+      "id": "src_components_user_nav_getinitials",
+      "label": "getInitials()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "user-nav.tsx",
+      "file_type": "code",
+      "norm_label": "getinitials()",
+      "source_file": "src/components/user-nav.tsx",
+      "source_location": "L29"
+    },
+    {
+      "id": "src_components_user_nav_usernav",
+      "label": "UserNav()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "user-nav.tsx",
+      "file_type": "code",
+      "norm_label": "usernav()",
+      "source_file": "src/components/user-nav.tsx",
+      "source_location": "L43"
     },
     {
       "id": "src_components_policies_policies",
@@ -5113,124 +5101,124 @@
       "source_location": "L3"
     },
     {
-      "id": "src_components_ui_sheet_sheet",
-      "label": "Sheet()",
+      "id": "src_components_ui_dropdown_menu_dropdownmenucheckboxitem",
+      "label": "DropdownMenuCheckboxItem()",
       "_callable": true,
       "_origin": "ast",
       "community": 79,
-      "community_name": "sheet.tsx",
+      "community_name": "dropdown-menu.tsx",
       "file_type": "code",
-      "norm_label": "sheet()",
-      "source_file": "src/components/ui/sheet.tsx",
-      "source_location": "L11"
+      "norm_label": "dropdownmenucheckboxitem()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L153"
     },
     {
-      "id": "src_components_ui_sheet_sheetclose",
-      "label": "SheetClose()",
+      "id": "src_components_ui_dropdown_menu_dropdownmenugroup",
+      "label": "DropdownMenuGroup()",
       "_callable": true,
       "_origin": "ast",
       "community": 79,
-      "community_name": "sheet.tsx",
+      "community_name": "dropdown-menu.tsx",
       "file_type": "code",
-      "norm_label": "sheetclose()",
-      "source_file": "src/components/ui/sheet.tsx",
-      "source_location": "L19"
+      "norm_label": "dropdownmenugroup()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L54"
     },
     {
-      "id": "src_components_ui_sheet_sheetcontent",
-      "label": "SheetContent()",
+      "id": "src_components_ui_dropdown_menu_dropdownmenulabel",
+      "label": "DropdownMenuLabel()",
       "_callable": true,
       "_origin": "ast",
       "community": 79,
-      "community_name": "sheet.tsx",
+      "community_name": "dropdown-menu.tsx",
       "file_type": "code",
-      "norm_label": "sheetcontent()",
-      "source_file": "src/components/ui/sheet.tsx",
-      "source_location": "L40"
+      "norm_label": "dropdownmenulabel()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L58"
     },
     {
-      "id": "src_components_ui_sheet_sheetdescription",
-      "label": "SheetDescription()",
+      "id": "src_components_ui_dropdown_menu_dropdownmenuportal",
+      "label": "DropdownMenuPortal()",
       "_callable": true,
       "_origin": "ast",
       "community": 79,
-      "community_name": "sheet.tsx",
+      "community_name": "dropdown-menu.tsx",
       "file_type": "code",
-      "norm_label": "sheetdescription()",
-      "source_file": "src/components/ui/sheet.tsx",
-      "source_location": "L118"
+      "norm_label": "dropdownmenuportal()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L12"
     },
     {
-      "id": "src_components_ui_sheet_sheetfooter",
-      "label": "SheetFooter()",
+      "id": "src_components_ui_dropdown_menu_dropdownmenuradiogroup",
+      "label": "DropdownMenuRadioGroup()",
       "_callable": true,
       "_origin": "ast",
       "community": 79,
-      "community_name": "sheet.tsx",
+      "community_name": "dropdown-menu.tsx",
       "file_type": "code",
-      "norm_label": "sheetfooter()",
-      "source_file": "src/components/ui/sheet.tsx",
-      "source_location": "L95"
+      "norm_label": "dropdownmenuradiogroup()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L186"
     },
     {
-      "id": "src_components_ui_sheet_sheetheader",
-      "label": "SheetHeader()",
+      "id": "src_components_ui_dropdown_menu_dropdownmenuradioitem",
+      "label": "DropdownMenuRadioItem()",
       "_callable": true,
       "_origin": "ast",
       "community": 79,
-      "community_name": "sheet.tsx",
+      "community_name": "dropdown-menu.tsx",
       "file_type": "code",
-      "norm_label": "sheetheader()",
-      "source_file": "src/components/ui/sheet.tsx",
-      "source_location": "L85"
+      "norm_label": "dropdownmenuradioitem()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L195"
     },
     {
-      "id": "src_components_ui_sheet_sheetoverlay",
-      "label": "SheetOverlay()",
+      "id": "src_components_ui_dropdown_menu_dropdownmenushortcut",
+      "label": "DropdownMenuShortcut()",
       "_callable": true,
       "_origin": "ast",
       "community": 79,
-      "community_name": "sheet.tsx",
+      "community_name": "dropdown-menu.tsx",
       "file_type": "code",
-      "norm_label": "sheetoverlay()",
-      "source_file": "src/components/ui/sheet.tsx",
-      "source_location": "L27"
+      "norm_label": "dropdownmenushortcut()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L239"
     },
     {
-      "id": "src_components_ui_sheet_sheetportal",
-      "label": "SheetPortal()",
+      "id": "src_components_ui_dropdown_menu_dropdownmenusub",
+      "label": "DropdownMenuSub()",
       "_callable": true,
       "_origin": "ast",
       "community": 79,
-      "community_name": "sheet.tsx",
+      "community_name": "dropdown-menu.tsx",
       "file_type": "code",
-      "norm_label": "sheetportal()",
-      "source_file": "src/components/ui/sheet.tsx",
-      "source_location": "L23"
+      "norm_label": "dropdownmenusub()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L101"
     },
     {
-      "id": "src_components_ui_sheet_sheettitle",
-      "label": "SheetTitle()",
+      "id": "src_components_ui_dropdown_menu_dropdownmenusubcontent",
+      "label": "DropdownMenuSubContent()",
       "_callable": true,
       "_origin": "ast",
       "community": 79,
-      "community_name": "sheet.tsx",
+      "community_name": "dropdown-menu.tsx",
       "file_type": "code",
-      "norm_label": "sheettitle()",
-      "source_file": "src/components/ui/sheet.tsx",
+      "norm_label": "dropdownmenusubcontent()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
+      "source_location": "L129"
+    },
+    {
+      "id": "src_components_ui_dropdown_menu_dropdownmenusubtrigger",
+      "label": "DropdownMenuSubTrigger()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 79,
+      "community_name": "dropdown-menu.tsx",
+      "file_type": "code",
+      "norm_label": "dropdownmenusubtrigger()",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
       "source_location": "L105"
-    },
-    {
-      "id": "src_components_ui_sheet_sheettrigger",
-      "label": "SheetTrigger()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "sheet.tsx",
-      "file_type": "code",
-      "norm_label": "sheettrigger()",
-      "source_file": "src/components/ui/sheet.tsx",
-      "source_location": "L15"
     },
     {
       "id": "src_components_object_question_question_examquestionnaire",
@@ -5255,30 +5243,6 @@
       "norm_label": "handlesubmit()",
       "source_file": "src/components/object/question/question.tsx",
       "source_location": "L79"
-    },
-    {
-      "id": "src_components_ui_calendar_calendar",
-      "label": "Calendar()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "question.tsx",
-      "file_type": "code",
-      "norm_label": "calendar()",
-      "source_file": "src/components/ui/calendar.tsx",
-      "source_location": "L18"
-    },
-    {
-      "id": "src_components_ui_calendar_calendardaybutton",
-      "label": "CalendarDayButton()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "question.tsx",
-      "file_type": "code",
-      "norm_label": "calendardaybutton()",
-      "source_file": "src/components/ui/calendar.tsx",
-      "source_location": "L189"
     },
     {
       "id": "src_components_ui_empty_empty",
@@ -5538,7 +5502,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 83,
-      "community_name": "layout.tsx",
+      "community_name": "[lang]/page.tsx",
       "file_type": "code",
       "norm_label": "getdictionary()",
       "source_file": "src/app/[lang]/dictionaries.ts",
@@ -5550,23 +5514,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 83,
-      "community_name": "layout.tsx",
+      "community_name": "[lang]/page.tsx",
       "file_type": "code",
       "norm_label": "generatemetadata()",
       "source_file": "src/app/[lang]/layout.tsx",
       "source_location": "L28"
-    },
-    {
-      "id": "src_app_lang_layout_generatestaticparams",
-      "label": "generateStaticParams()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "layout.tsx",
-      "file_type": "code",
-      "norm_label": "generatestaticparams()",
-      "source_file": "src/app/[lang]/layout.tsx",
-      "source_location": "L24"
     },
     {
       "id": "src_app_lang_layout_localelayout",
@@ -5574,11 +5526,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 83,
-      "community_name": "layout.tsx",
+      "community_name": "[lang]/page.tsx",
       "file_type": "code",
       "norm_label": "localelayout()",
       "source_file": "src/app/[lang]/layout.tsx",
       "source_location": "L41"
+    },
+    {
+      "id": "src_app_lang_page_authenticatedhome",
+      "label": "AuthenticatedHome()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "[lang]/page.tsx",
+      "file_type": "code",
+      "norm_label": "authenticatedhome()",
+      "source_file": "src/app/[lang]/page.tsx",
+      "source_location": "L37"
     },
     {
       "id": "src_app_lang_page_home",
@@ -5586,11 +5550,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 83,
-      "community_name": "layout.tsx",
+      "community_name": "[lang]/page.tsx",
       "file_type": "code",
       "norm_label": "home()",
       "source_file": "src/app/[lang]/page.tsx",
       "source_location": "L18"
+    },
+    {
+      "id": "src_components_ui_card_cardfooter",
+      "label": "CardFooter()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "[lang]/page.tsx",
+      "file_type": "code",
+      "norm_label": "cardfooter()",
+      "source_file": "src/components/ui/card.tsx",
+      "source_location": "L81"
     },
     {
       "id": "src_lib_i18n_types_haslocale",
@@ -5598,7 +5574,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 83,
-      "community_name": "layout.tsx",
+      "community_name": "[lang]/page.tsx",
       "file_type": "code",
       "norm_label": "haslocale()",
       "source_file": "src/lib/i18n/types.ts",
@@ -5629,88 +5605,123 @@
       "source_location": "L17"
     },
     {
-      "id": "src_components_ui_tooltip_tooltip",
-      "label": "Tooltip()",
+      "id": "src_components_auth_gate_authgate",
+      "label": "AuthGate()",
       "_callable": true,
       "_origin": "ast",
       "community": 87,
-      "community_name": "tooltip.tsx",
+      "community_name": "getCurrentUser",
       "file_type": "code",
-      "norm_label": "tooltip()",
-      "source_file": "src/components/ui/tooltip.tsx",
-      "source_location": "L19"
+      "norm_label": "authgate()",
+      "source_file": "src/components/auth-gate.tsx",
+      "source_location": "L12"
     },
     {
-      "id": "src_components_ui_tooltip_tooltipcontent",
-      "label": "TooltipContent()",
+      "id": "src_data_auth_getcurrentuser",
+      "label": "getCurrentUser()",
       "_callable": true,
       "_origin": "ast",
       "community": 87,
-      "community_name": "tooltip.tsx",
+      "community_name": "getCurrentUser",
       "file_type": "code",
-      "norm_label": "tooltipcontent()",
-      "source_file": "src/components/ui/tooltip.tsx",
+      "norm_label": "getcurrentuser()",
+      "source_file": "src/data/auth.ts",
+      "source_location": "L18"
+    },
+    {
+      "id": "src_components_ui_pagination_pagination",
+      "label": "Pagination()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 88,
+      "community_name": "pagination.tsx",
+      "file_type": "code",
+      "norm_label": "pagination()",
+      "source_file": "src/components/ui/pagination.tsx",
+      "source_location": "L13"
+    },
+    {
+      "id": "src_components_ui_pagination_paginationcontent",
+      "label": "PaginationContent()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 88,
+      "community_name": "pagination.tsx",
+      "file_type": "code",
+      "norm_label": "paginationcontent()",
+      "source_file": "src/components/ui/pagination.tsx",
       "source_location": "L27"
     },
     {
-      "id": "src_components_ui_tooltip_tooltipprovider",
-      "label": "TooltipProvider()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 87,
-      "community_name": "tooltip.tsx",
-      "file_type": "code",
-      "norm_label": "tooltipprovider()",
-      "source_file": "src/components/ui/tooltip.tsx",
-      "source_location": "L6"
-    },
-    {
-      "id": "src_components_ui_tooltip_tooltiptrigger",
-      "label": "TooltipTrigger()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 87,
-      "community_name": "tooltip.tsx",
-      "file_type": "code",
-      "norm_label": "tooltiptrigger()",
-      "source_file": "src/components/ui/tooltip.tsx",
-      "source_location": "L23"
-    },
-    {
-      "id": "src_components_ui_hover_card_hovercard",
-      "label": "HoverCard()",
+      "id": "src_components_ui_pagination_paginationellipsis",
+      "label": "PaginationEllipsis()",
       "_callable": true,
       "_origin": "ast",
       "community": 88,
-      "community_name": "hover-card.tsx",
+      "community_name": "pagination.tsx",
       "file_type": "code",
-      "norm_label": "hovercard()",
-      "source_file": "src/components/ui/hover-card.tsx",
-      "source_location": "L6"
+      "norm_label": "paginationellipsis()",
+      "source_file": "src/components/ui/pagination.tsx",
+      "source_location": "L117"
     },
     {
-      "id": "src_components_ui_hover_card_hovercardcontent",
-      "label": "HoverCardContent()",
+      "id": "src_components_ui_pagination_paginationitem",
+      "label": "PaginationItem()",
       "_callable": true,
       "_origin": "ast",
       "community": 88,
-      "community_name": "hover-card.tsx",
+      "community_name": "pagination.tsx",
       "file_type": "code",
-      "norm_label": "hovercardcontent()",
-      "source_file": "src/components/ui/hover-card.tsx",
-      "source_location": "L16"
+      "norm_label": "paginationitem()",
+      "source_file": "src/components/ui/pagination.tsx",
+      "source_location": "L40"
     },
     {
-      "id": "src_components_ui_hover_card_hovercardtrigger",
-      "label": "HoverCardTrigger()",
+      "id": "src_components_ui_pagination_paginationlink",
+      "label": "PaginationLink()",
       "_callable": true,
       "_origin": "ast",
       "community": 88,
-      "community_name": "hover-card.tsx",
+      "community_name": "pagination.tsx",
       "file_type": "code",
-      "norm_label": "hovercardtrigger()",
-      "source_file": "src/components/ui/hover-card.tsx",
-      "source_location": "L10"
+      "norm_label": "paginationlink()",
+      "source_file": "src/components/ui/pagination.tsx",
+      "source_location": "L49"
+    },
+    {
+      "id": "src_components_ui_pagination_paginationnext",
+      "label": "PaginationNext()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 88,
+      "community_name": "pagination.tsx",
+      "file_type": "code",
+      "norm_label": "paginationnext()",
+      "source_file": "src/components/ui/pagination.tsx",
+      "source_location": "L95"
+    },
+    {
+      "id": "src_components_ui_pagination_paginationprevious",
+      "label": "PaginationPrevious()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 88,
+      "community_name": "pagination.tsx",
+      "file_type": "code",
+      "norm_label": "paginationprevious()",
+      "source_file": "src/components/ui/pagination.tsx",
+      "source_location": "L73"
+    },
+    {
+      "id": "src_components_ui_sheet",
+      "label": "sheet.tsx",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "sheet.tsx",
+      "source_file": "src/components/ui/sheet.tsx",
+      "source_location": "L1"
     },
     {
       "id": "src_components_ui_sidebar",
@@ -5754,6 +5765,17 @@
       "file_type": "code",
       "norm_label": "skeleton.tsx",
       "source_file": "src/components/ui/skeleton.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_ui_tooltip",
+      "label": "tooltip.tsx",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "file_type": "code",
+      "norm_label": "tooltip.tsx",
+      "source_file": "src/components/ui/tooltip.tsx",
       "source_location": "L1"
     },
     {
@@ -5920,6 +5942,28 @@
       "norm_label": "jsdom",
       "source_file": "package.json",
       "source_location": "L57"
+    },
+    {
+      "id": "ref_next_themes",
+      "label": "next-themes",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "package.json",
+      "file_type": "concept",
+      "norm_label": "next-themes",
+      "source_file": "package.json",
+      "source_location": "L35"
+    },
+    {
+      "id": "ref_react_day_picker",
+      "label": "react-day-picker",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "package.json",
+      "file_type": "concept",
+      "norm_label": "react-day-picker",
+      "source_file": "package.json",
+      "source_location": "L37"
     },
     {
       "id": "ref_react_dom",
@@ -7569,18 +7613,6 @@
       "source_location": "L131"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_sdk_android",
-      "label": "sdk_android.md",
-      "_origin": "ast",
-      "community": 108,
-      "community_name": "firebase-data-connect/SKILL.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "sdk_android.md",
-      "source_file": ".agents/skills/firebase-data-connect/reference/sdk_android.md",
-      "source_location": "L1"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_reference_sdk_flutter",
       "label": "sdk_flutter.md",
       "_origin": "ast",
@@ -7749,17 +7781,6 @@
       "source_location": "L88"
     },
     {
-      "id": "src_app_lang_page",
-      "label": "[lang]/page.tsx",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "sign-in-auth-screen.tsx",
-      "file_type": "code",
-      "norm_label": "[lang]/page.tsx",
-      "source_file": "src/app/[lang]/page.tsx",
-      "source_location": "L1"
-    },
-    {
       "id": "src_components_forgot_password_auth_screen",
       "label": "forgot-password-auth-screen.tsx",
       "_origin": "ast",
@@ -7848,15 +7869,15 @@
       "source_location": "L1"
     },
     {
-      "id": "ref_firebase_oss_ui_core",
-      "label": "@firebase-oss/ui-core",
+      "id": "ref_firebase_oss_ui_react",
+      "label": "@firebase-oss/ui-react",
       "_origin": "ast",
       "community": 11,
       "community_name": "sign-in-auth-screen.tsx",
       "file_type": "concept",
-      "norm_label": "@firebase-oss/ui-core",
+      "norm_label": "@firebase-oss/ui-react",
       "source_file": "package.json",
-      "source_location": "L21"
+      "source_location": "L22"
     },
     {
       "id": "agents_skills_firebase_firestore_references_standard_ios_setup",
@@ -8064,7 +8085,7 @@
       "label": "ARCHITECTURE.md",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "architecture.md",
@@ -8076,7 +8097,7 @@
       "label": "Architecture",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "architecture",
@@ -8088,7 +8109,7 @@
       "label": "Configuration",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "configuration",
@@ -8100,7 +8121,7 @@
       "label": "Data access and security",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "data access and security",
@@ -8112,7 +8133,7 @@
       "label": "Structure",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "structure",
@@ -8124,7 +8145,7 @@
       "label": "Subagents and agent automation",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "subagents and agent automation",
@@ -8136,7 +8157,7 @@
       "label": "FIREBASE_AUTHENTICATION.md",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "firebase_authentication.md",
@@ -8148,7 +8169,7 @@
       "label": "i18n-message-inventory.md",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "i18n-message-inventory.md",
@@ -8156,11 +8177,71 @@
       "source_location": "L1"
     },
     {
+      "id": "docs_i18n_message_inventory_app_owned_production_literals",
+      "label": "App-Owned Production Literals",
+      "_origin": "ast",
+      "community": 112,
+      "community_name": "i18n Message Inventory",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "app-owned production literals",
+      "source_file": "docs/i18n-message-inventory.md",
+      "source_location": "L15"
+    },
+    {
+      "id": "docs_i18n_message_inventory_authentication_error_normalization",
+      "label": "Authentication Error Normalization",
+      "_origin": "ast",
+      "community": 112,
+      "community_name": "i18n Message Inventory",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "authentication error normalization",
+      "source_file": "docs/i18n-message-inventory.md",
+      "source_location": "L66"
+    },
+    {
+      "id": "docs_i18n_message_inventory_boundary_with_firebase_ui_translations",
+      "label": "Boundary with Firebase UI Translations",
+      "_origin": "ast",
+      "community": 112,
+      "community_name": "i18n Message Inventory",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "boundary with firebase ui translations",
+      "source_file": "docs/i18n-message-inventory.md",
+      "source_location": "L88"
+    },
+    {
+      "id": "docs_i18n_message_inventory_i18n_message_inventory",
+      "label": "i18n Message Inventory",
+      "_origin": "ast",
+      "community": 112,
+      "community_name": "i18n Message Inventory",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "i18n message inventory",
+      "source_file": "docs/i18n-message-inventory.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "docs_i18n_message_inventory_shared_ui_primitives_accessibility_status_text",
+      "label": "Shared UI Primitives Accessibility & Status Text",
+      "_origin": "ast",
+      "community": 112,
+      "community_name": "i18n Message Inventory",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "shared ui primitives accessibility & status text",
+      "source_file": "docs/i18n-message-inventory.md",
+      "source_location": "L42"
+    },
+    {
       "id": "readme",
       "label": "README.md",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "readme.md",
@@ -8172,7 +8253,7 @@
       "label": "Commands",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "commands",
@@ -8184,7 +8265,7 @@
       "label": "Getting started",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "getting started",
@@ -8196,7 +8277,7 @@
       "label": "Internationalization (i18n)",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "internationalization (i18n)",
@@ -8208,7 +8289,7 @@
       "label": "notes-app",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "notes-app",
@@ -8220,7 +8301,7 @@
       "label": "Project layout",
       "_origin": "ast",
       "community": 112,
-      "community_name": "Architecture",
+      "community_name": "i18n Message Inventory",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "project layout",
@@ -8239,124 +8320,196 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_config_connect_from_sdk",
-      "label": "Connect from SDK",
+      "id": "agents_skills_firebase_data_connect_reference_operations_aliases",
+      "label": "Aliases",
       "_origin": "ast",
       "community": 115,
-      "community_name": "Emulator",
+      "community_name": "Queries",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "connect from sdk",
-      "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
-      "source_location": "L180"
+      "norm_label": "aliases",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L172"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_config_emulator",
-      "label": "Emulator",
+      "id": "agents_skills_firebase_data_connect_reference_operations_basic_query",
+      "label": "Basic Query",
       "_origin": "ast",
       "community": 115,
-      "community_name": "Emulator",
+      "community_name": "Queries",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "emulator",
-      "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
-      "source_location": "L155"
+      "norm_label": "basic query",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L59"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_config_emulator_configuration_firebase_json",
-      "label": "Emulator Configuration (firebase.json)",
+      "id": "agents_skills_firebase_data_connect_reference_operations_expression_operators_compare_with_server_values",
+      "label": "Expression Operators (Compare with Server Values)",
       "_origin": "ast",
       "community": 115,
-      "community_name": "Emulator",
+      "community_name": "Queries",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "emulator configuration (firebase.json)",
-      "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
-      "source_location": "L168"
+      "norm_label": "expression operators (compare with server values)",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L103"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_config_seed_data",
-      "label": "Seed Data",
+      "id": "agents_skills_firebase_data_connect_reference_operations_filter_operators",
+      "label": "Filter Operators",
       "_origin": "ast",
       "community": 115,
-      "community_name": "Emulator",
+      "community_name": "Queries",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "seed data",
-      "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
-      "source_location": "L196"
+      "norm_label": "filter operators",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L87"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_config_start_emulator",
-      "label": "Start Emulator",
+      "id": "agents_skills_firebase_data_connect_reference_operations_list_with_filtering",
+      "label": "List with Filtering",
       "_origin": "ast",
       "community": 115,
-      "community_name": "Emulator",
+      "community_name": "Queries",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "start emulator",
-      "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
-      "source_location": "L157"
+      "norm_label": "list with filtering",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L69"
     },
     {
-      "id": "docs_i18n_message_inventory_app_owned_production_literals",
-      "label": "App-Owned Production Literals",
+      "id": "agents_skills_firebase_data_connect_reference_operations_logical_operators",
+      "label": "Logical Operators",
       "_origin": "ast",
-      "community": 116,
-      "community_name": "i18n Message Inventory",
+      "community": 115,
+      "community_name": "Queries",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "app-owned production literals",
-      "source_file": "docs/i18n-message-inventory.md",
-      "source_location": "L15"
+      "norm_label": "logical operators",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L121"
     },
     {
-      "id": "docs_i18n_message_inventory_authentication_error_normalization",
-      "label": "Authentication Error Normalization",
+      "id": "agents_skills_firebase_data_connect_reference_operations_queries",
+      "label": "Queries",
       "_origin": "ast",
-      "community": 116,
-      "community_name": "i18n Message Inventory",
+      "community": 115,
+      "community_name": "Queries",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "authentication error normalization",
-      "source_file": "docs/i18n-message-inventory.md",
-      "source_location": "L66"
+      "norm_label": "queries",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L57"
     },
     {
-      "id": "docs_i18n_message_inventory_boundary_with_firebase_ui_translations",
-      "label": "Boundary with Firebase UI Translations",
+      "id": "agents_skills_firebase_data_connect_reference_operations_relational_queries",
+      "label": "Relational Queries",
       "_origin": "ast",
-      "community": 116,
-      "community_name": "i18n Message Inventory",
+      "community": 115,
+      "community_name": "Queries",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "boundary with firebase ui translations",
-      "source_file": "docs/i18n-message-inventory.md",
-      "source_location": "L88"
+      "norm_label": "relational queries",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L139"
     },
     {
-      "id": "docs_i18n_message_inventory_i18n_message_inventory",
-      "label": "i18n Message Inventory",
+      "id": "agents_skills_firebase_data_connect_reference_operations_create",
+      "label": "Create",
       "_origin": "ast",
       "community": 116,
-      "community_name": "i18n Message Inventory",
+      "community_name": "Mutations",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "i18n message inventory",
-      "source_file": "docs/i18n-message-inventory.md",
-      "source_location": "L1"
+      "norm_label": "create",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L189"
     },
     {
-      "id": "docs_i18n_message_inventory_shared_ui_primitives_accessibility_status_text",
-      "label": "Shared UI Primitives Accessibility & Status Text",
+      "id": "agents_skills_firebase_data_connect_reference_operations_create_with_server_values",
+      "label": "Create with Server Values",
       "_origin": "ast",
       "community": 116,
-      "community_name": "i18n Message Inventory",
+      "community_name": "Mutations",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "shared ui primitives accessibility & status text",
-      "source_file": "docs/i18n-message-inventory.md",
-      "source_location": "L42"
+      "norm_label": "create with server values",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L200"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_reference_operations_delete",
+      "label": "Delete",
+      "_origin": "ast",
+      "community": 116,
+      "community_name": "Mutations",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "delete",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L266"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_reference_operations_filtered_updates_deletes_user_owned",
+      "label": "Filtered Updates/Deletes (User-Owned)",
+      "_origin": "ast",
+      "community": 116,
+      "community_name": "Mutations",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "filtered updates/deletes (user-owned)",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L281"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_reference_operations_mutations",
+      "label": "Mutations",
+      "_origin": "ast",
+      "community": 116,
+      "community_name": "Mutations",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "mutations",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L187"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_reference_operations_update",
+      "label": "Update",
+      "_origin": "ast",
+      "community": 116,
+      "community_name": "Mutations",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "update",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L214"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_reference_operations_update_operators",
+      "label": "Update Operators",
+      "_origin": "ast",
+      "community": 116,
+      "community_name": "Mutations",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "update operators",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L229"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_reference_operations_upsert",
+      "label": "Upsert",
+      "_origin": "ast",
+      "community": 116,
+      "community_name": "Mutations",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "upsert",
+      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
+      "source_location": "L254"
     },
     {
       "id": "agents_skills_firebase_data_connect_reference_sdk_admin_node",
@@ -8477,6 +8630,18 @@
       "norm_label": "usage examples",
       "source_file": ".agents/skills/firebase-data-connect/reference/sdk_admin_node.md",
       "source_location": "L48"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_reference_sdk_android",
+      "label": "sdk_android.md",
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Android SDK",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "sdk_android.md",
+      "source_file": ".agents/skills/firebase-data-connect/reference/sdk_android.md",
+      "source_location": "L1"
     },
     {
       "id": "agents_skills_firebase_data_connect_reference_sdk_android_android_sdk",
@@ -11600,33 +11765,11 @@
       "source_location": "L14"
     },
     {
-      "id": "src_lib_i18n_types",
-      "label": "types.ts",
-      "_origin": "ast",
-      "community": 151,
-      "community_name": "types.ts",
-      "file_type": "code",
-      "norm_label": "types.ts",
-      "source_file": "src/lib/i18n/types.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_lib_i18n_types_supportedlocales",
-      "label": "supportedLocales",
-      "_origin": "ast",
-      "community": 151,
-      "community_name": "types.ts",
-      "file_type": "code",
-      "norm_label": "supportedlocales",
-      "source_file": "src/lib/i18n/types.ts",
-      "source_location": "L1"
-    },
-    {
       "id": "src_proxy",
       "label": "proxy.ts",
       "_origin": "ast",
       "community": 151,
-      "community_name": "types.ts",
+      "community_name": "proxy.ts",
       "file_type": "code",
       "norm_label": "proxy.ts",
       "source_file": "src/proxy.ts",
@@ -11637,7 +11780,7 @@
       "label": "config",
       "_origin": "ast",
       "community": 151,
-      "community_name": "types.ts",
+      "community_name": "proxy.ts",
       "file_type": "code",
       "norm_label": "config",
       "source_file": "src/proxy.ts",
@@ -11648,7 +11791,7 @@
       "label": "localeCookieOptions",
       "_origin": "ast",
       "community": 151,
-      "community_name": "types.ts",
+      "community_name": "proxy.ts",
       "file_type": "code",
       "norm_label": "localecookieoptions",
       "source_file": "src/proxy.ts",
@@ -11659,7 +11802,7 @@
       "label": "proxy.test.ts",
       "_origin": "ast",
       "community": 151,
-      "community_name": "types.ts",
+      "community_name": "proxy.ts",
       "file_type": "code",
       "norm_label": "proxy.test.ts",
       "source_file": "src/proxy.test.ts",
@@ -12186,186 +12329,6 @@
       "source_location": "L27"
     },
     {
-      "id": "docs_firebase_authentication_authentication_flow",
-      "label": "Authentication flow",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "authentication flow",
-      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
-      "source_location": "L35"
-    },
-    {
-      "id": "docs_firebase_authentication_authorization_rule",
-      "label": "Authorization rule",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "authorization rule",
-      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
-      "source_location": "L50"
-    },
-    {
-      "id": "docs_firebase_authentication_cache_components",
-      "label": "Cache Components",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "cache components",
-      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
-      "source_location": "L63"
-    },
-    {
-      "id": "docs_firebase_authentication_firebase_authentication",
-      "label": "Firebase Authentication",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "firebase authentication",
-      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "docs_firebase_authentication_local_development",
-      "label": "Local development",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "local development",
-      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
-      "source_location": "L6"
-    },
-    {
-      "id": "docs_firebase_authentication_production_checklist",
-      "label": "Production checklist",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "production checklist",
-      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
-      "source_location": "L77"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_2_report_fix_round_1_review_findings",
-      "label": "Fix Round 1 \u2014 Review Findings",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "fix round 1 \u2014 review findings",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-2-report.md",
-      "source_location": "L58"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_2_report_fix_validation",
-      "label": "Fix validation",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "fix validation",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-2-report.md",
-      "source_location": "L73"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report",
-      "label": "task-4-report.md",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "task-4-report.md",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_changes",
-      "label": "Changes",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "changes",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
-      "source_location": "L7"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_concerns",
-      "label": "Concerns",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "concerns",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
-      "source_location": "L32"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_scope_confirmation",
-      "label": "Scope confirmation",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "scope confirmation",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
-      "source_location": "L17"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_status",
-      "label": "Status",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "status",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
-      "source_location": "L3"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_task_4_report_app_owned_message_catalog_lookups",
-      "label": "Task 4 Report \u2014 App-Owned Message Catalog Lookups",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "task 4 report \u2014 app-owned message catalog lookups",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_validation",
-      "label": "Validation",
-      "_origin": "ast",
-      "community": 159,
-      "community_name": "route.ts",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "validation",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
-      "source_location": "L23"
-    },
-    {
       "id": "src_components_ui_aspect_ratio",
       "label": "aspect-ratio.tsx",
       "_origin": "ast",
@@ -12377,14 +12340,25 @@
       "source_location": "L1"
     },
     {
-      "id": "src_components_ui_checkbox",
-      "label": "checkbox.tsx",
+      "id": "src_components_ui_calendar",
+      "label": "calendar.tsx",
       "_origin": "ast",
       "community": 16,
       "community_name": "cn",
       "file_type": "code",
-      "norm_label": "checkbox.tsx",
-      "source_file": "src/components/ui/checkbox.tsx",
+      "norm_label": "calendar.tsx",
+      "source_file": "src/components/ui/calendar.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_ui_hover_card",
+      "label": "hover-card.tsx",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "cn",
+      "file_type": "code",
+      "norm_label": "hover-card.tsx",
+      "source_file": "src/components/ui/hover-card.tsx",
       "source_location": "L1"
     },
     {
@@ -12466,6 +12440,78 @@
       "type": "module"
     },
     {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report",
+      "label": "task-3-report.md",
+      "_origin": "ast",
+      "community": 161,
+      "community_name": "Task 3 Report \u2014 Client Component Dictionary Bridge",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "task-3-report.md",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_concerns",
+      "label": "Concerns",
+      "_origin": "ast",
+      "community": 161,
+      "community_name": "Task 3 Report \u2014 Client Component Dictionary Bridge",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "concerns",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
+      "source_location": "L29"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_scope_confirmation",
+      "label": "Scope confirmation",
+      "_origin": "ast",
+      "community": 161,
+      "community_name": "Task 3 Report \u2014 Client Component Dictionary Bridge",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "scope confirmation",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
+      "source_location": "L17"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_status",
+      "label": "Status",
+      "_origin": "ast",
+      "community": 161,
+      "community_name": "Task 3 Report \u2014 Client Component Dictionary Bridge",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "status",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_task_3_report_client_component_dictionary_bridge",
+      "label": "Task 3 Report \u2014 Client Component Dictionary Bridge",
+      "_origin": "ast",
+      "community": 161,
+      "community_name": "Task 3 Report \u2014 Client Component Dictionary Bridge",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "task 3 report \u2014 client component dictionary bridge",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_validation",
+      "label": "Validation",
+      "_origin": "ast",
+      "community": 161,
+      "community_name": "Task 3 Report \u2014 Client Component Dictionary Bridge",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "validation",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
+      "source_location": "L21"
+    },
+    {
       "id": "src_components_ui_accordion",
       "label": "accordion.tsx",
       "_origin": "ast",
@@ -12508,6 +12554,17 @@
       "norm_label": "badgevariants",
       "source_file": "src/components/ui/badge.tsx",
       "source_location": "L6"
+    },
+    {
+      "id": "src_components_ui_breadcrumb",
+      "label": "breadcrumb.tsx",
+      "_origin": "ast",
+      "community": 164,
+      "community_name": "class-variance-authority",
+      "file_type": "code",
+      "norm_label": "breadcrumb.tsx",
+      "source_file": "src/components/ui/breadcrumb.tsx",
+      "source_location": "L1"
     },
     {
       "id": "src_components_ui_button_group",
@@ -12563,6 +12620,100 @@
       "norm_label": "class-variance-authority",
       "source_file": "package.json",
       "source_location": "L25"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report",
+      "label": "task-4-report.md",
+      "_origin": "ast",
+      "community": 165,
+      "community_name": "Task 4 Report \u2014 App-Owned Message Catalog Lookups",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "task-4-report.md",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_concerns",
+      "label": "Concerns",
+      "_origin": "ast",
+      "community": 165,
+      "community_name": "Task 4 Report \u2014 App-Owned Message Catalog Lookups",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "concerns",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
+      "source_location": "L32"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_scope_confirmation",
+      "label": "Scope confirmation",
+      "_origin": "ast",
+      "community": 165,
+      "community_name": "Task 4 Report \u2014 App-Owned Message Catalog Lookups",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "scope confirmation",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
+      "source_location": "L17"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_status",
+      "label": "Status",
+      "_origin": "ast",
+      "community": 165,
+      "community_name": "Task 4 Report \u2014 App-Owned Message Catalog Lookups",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "status",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
+      "source_location": "L3"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_task_4_report_app_owned_message_catalog_lookups",
+      "label": "Task 4 Report \u2014 App-Owned Message Catalog Lookups",
+      "_origin": "ast",
+      "community": 165,
+      "community_name": "Task 4 Report \u2014 App-Owned Message Catalog Lookups",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "task 4 report \u2014 app-owned message catalog lookups",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_validation",
+      "label": "Validation",
+      "_origin": "ast",
+      "community": 165,
+      "community_name": "Task 4 Report \u2014 App-Owned Message Catalog Lookups",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "validation",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
+      "source_location": "L23"
+    },
+    {
+      "id": "src_components_ui_checkbox",
+      "label": "checkbox.tsx",
+      "_origin": "ast",
+      "community": 166,
+      "community_name": "lucide-react",
+      "file_type": "code",
+      "norm_label": "checkbox.tsx",
+      "source_file": "src/components/ui/checkbox.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "ref_lucide_react",
+      "label": "lucide-react",
+      "_origin": "ast",
+      "community": 166,
+      "community_name": "lucide-react",
+      "file_type": "concept",
+      "norm_label": "lucide-react",
+      "source_file": "package.json",
+      "source_location": "L33"
     },
     {
       "id": "src_components_multi_factor_auth_assertion_form",
@@ -13769,6 +13920,17 @@
       "source_location": "L1"
     },
     {
+      "id": "src_lib_auth_client_session_test",
+      "label": "client-session.test.ts",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "sign-in/page.tsx",
+      "file_type": "code",
+      "norm_label": "client-session.test.ts",
+      "source_file": "src/lib/auth/client-session.test.ts",
+      "source_location": "L1"
+    },
+    {
       "id": "src_lib_firebase_client",
       "label": "client.ts",
       "_origin": "ast",
@@ -14075,17 +14237,6 @@
       "source_location": "L1"
     },
     {
-      "id": "ref_next_themes",
-      "label": "next-themes",
-      "_origin": "ast",
-      "community": 27,
-      "community_name": "Task 2 Report \u2014 Locale Routing and Server Dictionaries",
-      "file_type": "concept",
-      "norm_label": "next-themes",
-      "source_file": "package.json",
-      "source_location": "L35"
-    },
-    {
       "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_2_report",
       "label": "task-2-report.md",
       "_origin": "ast",
@@ -14158,18 +14309,6 @@
       "source_location": "L26"
     },
     {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report",
-      "label": "task-3-report.md",
-      "_origin": "ast",
-      "community": 27,
-      "community_name": "Task 2 Report \u2014 Locale Routing and Server Dictionaries",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "task-3-report.md",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
-      "source_location": "L1"
-    },
-    {
       "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_changes",
       "label": "Changes",
       "_origin": "ast",
@@ -14180,66 +14319,6 @@
       "norm_label": "changes",
       "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
       "source_location": "L7"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_concerns",
-      "label": "Concerns",
-      "_origin": "ast",
-      "community": 27,
-      "community_name": "Task 2 Report \u2014 Locale Routing and Server Dictionaries",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "concerns",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
-      "source_location": "L29"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_scope_confirmation",
-      "label": "Scope confirmation",
-      "_origin": "ast",
-      "community": 27,
-      "community_name": "Task 2 Report \u2014 Locale Routing and Server Dictionaries",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "scope confirmation",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
-      "source_location": "L17"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_status",
-      "label": "Status",
-      "_origin": "ast",
-      "community": 27,
-      "community_name": "Task 2 Report \u2014 Locale Routing and Server Dictionaries",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "status",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
-      "source_location": "L3"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_task_3_report_client_component_dictionary_bridge",
-      "label": "Task 3 Report \u2014 Client Component Dictionary Bridge",
-      "_origin": "ast",
-      "community": 27,
-      "community_name": "Task 2 Report \u2014 Locale Routing and Server Dictionaries",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "task 3 report \u2014 client component dictionary bridge",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_3_report_validation",
-      "label": "Validation",
-      "_origin": "ast",
-      "community": 27,
-      "community_name": "Task 2 Report \u2014 Locale Routing and Server Dictionaries",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "validation",
-      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-3-report.md",
-      "source_location": "L21"
     },
     {
       "id": "husky_post_checkout",
@@ -14352,7 +14431,7 @@
       "label": "github-sign-in-button.tsx",
       "_origin": "ast",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "file_type": "code",
       "norm_label": "github-sign-in-button.tsx",
       "source_file": "src/components/github-sign-in-button.tsx",
@@ -14363,32 +14442,10 @@
       "label": "google-sign-in-button.tsx",
       "_origin": "ast",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "file_type": "code",
       "norm_label": "google-sign-in-button.tsx",
       "source_file": "src/components/google-sign-in-button.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_policies",
-      "label": "policies.tsx",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "policies.tsx",
-      "source_file": "src/components/policies.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_ui_pagination",
-      "label": "pagination.tsx",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "code",
-      "norm_label": "pagination.tsx",
-      "source_file": "src/components/ui/pagination.tsx",
       "source_location": "L1"
     },
     {
@@ -14396,7 +14453,7 @@
       "label": "spinner.tsx",
       "_origin": "ast",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "file_type": "code",
       "norm_label": "spinner.tsx",
       "source_file": "src/components/ui/spinner.tsx",
@@ -14407,7 +14464,7 @@
       "label": "use-i18n.ts",
       "_origin": "ast",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "file_type": "code",
       "norm_label": "use-i18n.ts",
       "source_file": "src/hooks/use-i18n.ts",
@@ -14418,22 +14475,11 @@
       "label": "utils.ts",
       "_origin": "ast",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "file_type": "code",
       "norm_label": "utils.ts",
       "source_file": "src/lib/utils.ts",
       "source_location": "L1"
-    },
-    {
-      "id": "ref_firebase_oss_ui_react",
-      "label": "@firebase-oss/ui-react",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "useI18n",
-      "file_type": "concept",
-      "norm_label": "@firebase-oss/ui-react",
-      "source_file": "package.json",
-      "source_location": "L22"
     },
     {
       "id": "agents_skills_graphify_references_exports",
@@ -15396,28 +15442,6 @@
       "source_location": "L60"
     },
     {
-      "id": "src_components_ui_avatar",
-      "label": "avatar.tsx",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "avatar.tsx",
-      "source_file": "src/components/ui/avatar.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_ui_dropdown_menu",
-      "label": "dropdown-menu.tsx",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "dropdown-menu.tsx",
-      "source_file": "src/components/ui/dropdown-menu.tsx",
-      "source_location": "L1"
-    },
-    {
       "id": "src_components_ui_menubar",
       "label": "menubar.tsx",
       "_origin": "ast",
@@ -15426,17 +15450,6 @@
       "file_type": "code",
       "norm_label": "menubar.tsx",
       "source_file": "src/components/ui/menubar.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_user_nav",
-      "label": "user-nav.tsx",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "file_type": "code",
-      "norm_label": "user-nav.tsx",
-      "source_file": "src/components/user-nav.tsx",
       "source_location": "L1"
     },
     {
@@ -15768,50 +15781,6 @@
       "source_location": "L1"
     },
     {
-      "id": "src_app_dictionaries_test",
-      "label": "dictionaries.test.ts",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "user-nav.test.tsx",
-      "file_type": "code",
-      "norm_label": "dictionaries.test.ts",
-      "source_file": "src/app/dictionaries.test.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_app_lang_dictionaries",
-      "label": "dictionaries.ts",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "user-nav.test.tsx",
-      "file_type": "code",
-      "norm_label": "dictionaries.ts",
-      "source_file": "src/app/[lang]/dictionaries.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_app_lang_dictionaries_dictionaryloaders",
-      "label": "dictionaryLoaders",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "user-nav.test.tsx",
-      "file_type": "code",
-      "norm_label": "dictionaryloaders",
-      "source_file": "src/app/[lang]/dictionaries.ts",
-      "source_location": "L5"
-    },
-    {
-      "id": "src_app_lang_dictionaries_issupportedlocale",
-      "label": "isSupportedLocale",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "user-nav.test.tsx",
-      "file_type": "code",
-      "norm_label": "issupportedlocale",
-      "source_file": "src/app/[lang]/dictionaries.ts",
-      "source_location": "L12"
-    },
-    {
       "id": "src_components_object_question_question_test",
       "label": "question.test.tsx",
       "_origin": "ast",
@@ -15865,17 +15834,6 @@
       "norm_label": "mockrefresh",
       "source_file": "src/components/user-nav.test.tsx",
       "source_location": "L13"
-    },
-    {
-      "id": "src_lib_auth_client_session_test",
-      "label": "client-session.test.ts",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "user-nav.test.tsx",
-      "file_type": "code",
-      "norm_label": "client-session.test.ts",
-      "source_file": "src/lib/auth/client-session.test.ts",
-      "source_location": "L1"
     },
     {
       "id": "ref_testing_library_react",
@@ -16231,6 +16189,18 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_code_language_rule",
+      "label": "Code Language Rule",
+      "_origin": "ast",
+      "community": 50,
+      "community_name": "shadcn/ui Rules",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "code language rule",
+      "source_file": "AGENTS.md",
+      "source_location": "L56"
+    },
+    {
       "id": "agents_component_architecture",
       "label": "Component architecture",
       "_origin": "ast",
@@ -16303,6 +16273,18 @@
       "source_location": "L153"
     },
     {
+      "id": "agents_internationalization_next_js_app_router",
+      "label": "Internationalization (Next.js App Router)",
+      "_origin": "ast",
+      "community": 50,
+      "community_name": "shadcn/ui Rules",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "internationalization (next.js app router)",
+      "source_file": "AGENTS.md",
+      "source_location": "L62"
+    },
+    {
       "id": "agents_next_js_and_repository_constraints",
       "label": "Next.js and repository constraints",
       "_origin": "ast",
@@ -16349,6 +16331,42 @@
       "norm_label": "project source of truth",
       "source_file": "AGENTS.md",
       "source_location": "L85"
+    },
+    {
+      "id": "agents_rules_language",
+      "label": "language.md",
+      "_origin": "ast",
+      "community": 50,
+      "community_name": "shadcn/ui Rules",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "language.md",
+      "source_file": ".agents/rules/language.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_rules_language_code_language_rule",
+      "label": "Code Language Rule",
+      "_origin": "ast",
+      "community": 50,
+      "community_name": "shadcn/ui Rules",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "code language rule",
+      "source_file": ".agents/rules/language.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_rules_language_internationalization_next_js_app_router",
+      "label": "Internationalization (Next.js App Router)",
+      "_origin": "ast",
+      "community": 50,
+      "community_name": "shadcn/ui Rules",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "internationalization (next.js app router)",
+      "source_file": ".agents/rules/language.md",
+      "source_location": "L7"
     },
     {
       "id": "agents_shadcn_ui_rules",
@@ -16876,7 +16894,7 @@
       "label": "operations.md",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "operations.md",
@@ -16884,35 +16902,11 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_operations_aliases",
-      "label": "Aliases",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "aliases",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L172"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_reference_operations_basic_query",
-      "label": "Basic Query",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "basic query",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L59"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_reference_operations_contents",
       "label": "Contents",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "contents",
@@ -16920,47 +16914,11 @@
       "source_location": "L3"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_operations_create",
-      "label": "Create",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "create",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L189"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_reference_operations_create_with_server_values",
-      "label": "Create with Server Values",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "create with server values",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L200"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_reference_operations_delete",
-      "label": "Delete",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "delete",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L266"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_reference_operations_embedded_queries",
       "label": "Embedded Queries",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "embedded queries",
@@ -16968,47 +16926,11 @@
       "source_location": "L368"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_operations_expression_operators_compare_with_server_values",
-      "label": "Expression Operators (Compare with Server Values)",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "expression operators (compare with server values)",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L103"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_reference_operations_filter_operators",
-      "label": "Filter Operators",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "filter operators",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L87"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_reference_operations_filtered_updates_deletes_user_owned",
-      "label": "Filtered Updates/Deletes (User-Owned)",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "filtered updates/deletes (user-owned)",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L281"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_reference_operations_generated_fields",
       "label": "Generated Fields",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "generated fields",
@@ -17020,7 +16942,7 @@
       "label": "Key Scalars",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "key scalars",
@@ -17028,35 +16950,11 @@
       "source_location": "L297"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_operations_list_with_filtering",
-      "label": "List with Filtering",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "list with filtering",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L69"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_reference_operations_logical_operators",
-      "label": "Logical Operators",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "logical operators",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L121"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_reference_operations_multi_step_operations",
       "label": "Multi-Step Operations",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "multi-step operations",
@@ -17064,23 +16962,11 @@
       "source_location": "L326"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_operations_mutations",
-      "label": "Mutations",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "mutations",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L187"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_reference_operations_operations_reference",
       "label": "Operations Reference",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "operations reference",
@@ -17088,23 +16974,11 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_operations_queries",
-      "label": "Queries",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "queries",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L57"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_reference_operations_referencing_generated_graphql_schema",
       "label": "Referencing Generated GraphQL Schema",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "referencing generated graphql schema",
@@ -17116,7 +16990,7 @@
       "label": "Relation Fields",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "relation fields",
@@ -17124,23 +16998,11 @@
       "source_location": "L29"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_operations_relational_queries",
-      "label": "Relational Queries",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "relational queries",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L139"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_reference_operations_transaction",
       "label": "@transaction",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "@transaction",
@@ -17148,47 +17010,11 @@
       "source_location": "L328"
     },
     {
-      "id": "agents_skills_firebase_data_connect_reference_operations_update",
-      "label": "Update",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "update",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L214"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_reference_operations_update_operators",
-      "label": "Update Operators",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "update operators",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L229"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_reference_operations_upsert",
-      "label": "Upsert",
-      "_origin": "ast",
-      "community": 56,
-      "community_name": "Mutations",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "upsert",
-      "source_file": ".agents/skills/firebase-data-connect/reference/operations.md",
-      "source_location": "L254"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_reference_operations_using_response_binding",
       "label": "Using response Binding",
       "_origin": "ast",
       "community": 56,
-      "community_name": "Mutations",
+      "community_name": "Operations Reference",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "using response binding",
@@ -17704,6 +17530,18 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_firebase_data_connect_reference_config_connect_from_sdk",
+      "label": "Connect from SDK",
+      "_origin": "ast",
+      "community": 61,
+      "community_name": "Configuration Reference",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "connect from sdk",
+      "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
+      "source_location": "L180"
+    },
+    {
       "id": "agents_skills_firebase_data_connect_reference_config_connector_yaml",
       "label": "connector.yaml",
       "_origin": "ast",
@@ -17774,6 +17612,30 @@
       "norm_label": "deployment",
       "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
       "source_location": "L210"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_reference_config_emulator",
+      "label": "Emulator",
+      "_origin": "ast",
+      "community": 61,
+      "community_name": "Configuration Reference",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "emulator",
+      "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
+      "source_location": "L155"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_reference_config_emulator_configuration_firebase_json",
+      "label": "Emulator Configuration (firebase.json)",
+      "_origin": "ast",
+      "community": 61,
+      "community_name": "Configuration Reference",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "emulator configuration (firebase.json)",
+      "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
+      "source_location": "L168"
     },
     {
       "id": "agents_skills_firebase_data_connect_reference_config_extension_settings",
@@ -17872,6 +17734,30 @@
       "source_location": "L90"
     },
     {
+      "id": "agents_skills_firebase_data_connect_reference_config_seed_data",
+      "label": "Seed Data",
+      "_origin": "ast",
+      "community": 61,
+      "community_name": "Configuration Reference",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "seed data",
+      "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
+      "source_location": "L196"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_reference_config_start_emulator",
+      "label": "Start Emulator",
+      "_origin": "ast",
+      "community": 61,
+      "community_name": "Configuration Reference",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "start emulator",
+      "source_file": ".agents/skills/firebase-data-connect/reference/config.md",
+      "source_location": "L157"
+    },
+    {
       "id": "agents_skills_firebase_data_connect_reference_config_vs_code_extension",
       "label": "VS Code Extension",
       "_origin": "ast",
@@ -17904,6 +17790,28 @@
       "norm_label": "i18ncontext",
       "source_file": "src/components/i18n-provider.tsx",
       "source_location": "L12"
+    },
+    {
+      "id": "src_lib_i18n_types",
+      "label": "types.ts",
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "i18n-provider.tsx",
+      "file_type": "code",
+      "norm_label": "types.ts",
+      "source_file": "src/lib/i18n/types.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_lib_i18n_types_supportedlocales",
+      "label": "supportedLocales",
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "i18n-provider.tsx",
+      "file_type": "code",
+      "norm_label": "supportedlocales",
+      "source_file": "src/lib/i18n/types.ts",
+      "source_location": "L1"
     },
     {
       "id": "docs_i18n_message_inventory_overview_and_architecture",
@@ -18218,14 +18126,25 @@
       "source_location": "L161"
     },
     {
-      "id": "src_components_ui_breadcrumb",
-      "label": "breadcrumb.tsx",
+      "id": "src_components_ui_avatar",
+      "label": "avatar.tsx",
       "_origin": "ast",
       "community": 64,
-      "community_name": "breadcrumb.tsx",
+      "community_name": "user-nav.tsx",
       "file_type": "code",
-      "norm_label": "breadcrumb.tsx",
-      "source_file": "src/components/ui/breadcrumb.tsx",
+      "norm_label": "avatar.tsx",
+      "source_file": "src/components/ui/avatar.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_user_nav",
+      "label": "user-nav.tsx",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "user-nav.tsx",
+      "file_type": "code",
+      "norm_label": "user-nav.tsx",
+      "source_file": "src/components/user-nav.tsx",
       "source_location": "L1"
     },
     {
@@ -18248,6 +18167,17 @@
       "file_type": "code",
       "norm_label": "forgot-password-auth-form.tsx",
       "source_file": "src/components/forgot-password-auth-form.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_policies",
+      "label": "policies.tsx",
+      "_origin": "ast",
+      "community": 67,
+      "community_name": "react",
+      "file_type": "code",
+      "norm_label": "policies.tsx",
+      "source_file": "src/components/policies.tsx",
       "source_location": "L1"
     },
     {
@@ -18339,15 +18269,15 @@
       "source_location": "L1"
     },
     {
-      "id": "ref_lucide_react",
-      "label": "lucide-react",
+      "id": "ref_firebase_oss_ui_core",
+      "label": "@firebase-oss/ui-core",
       "_origin": "ast",
       "community": 67,
       "community_name": "react",
       "file_type": "concept",
-      "norm_label": "lucide-react",
+      "norm_label": "@firebase-oss/ui-core",
       "source_file": "package.json",
-      "source_location": "L33"
+      "source_location": "L21"
     },
     {
       "id": "ref_react",
@@ -19796,14 +19726,14 @@
       "source_location": "L141"
     },
     {
-      "id": "src_components_ui_sheet",
-      "label": "sheet.tsx",
+      "id": "src_components_ui_dropdown_menu",
+      "label": "dropdown-menu.tsx",
       "_origin": "ast",
       "community": 79,
-      "community_name": "sheet.tsx",
+      "community_name": "dropdown-menu.tsx",
       "file_type": "code",
-      "norm_label": "sheet.tsx",
-      "source_file": "src/components/ui/sheet.tsx",
+      "norm_label": "dropdown-menu.tsx",
+      "source_file": "src/components/ui/dropdown-menu.tsx",
       "source_location": "L1"
     },
     {
@@ -19827,17 +19757,6 @@
       "norm_label": "buttonvariants",
       "source_file": "src/components/ui/button.tsx",
       "source_location": "L5"
-    },
-    {
-      "id": "src_components_ui_calendar",
-      "label": "calendar.tsx",
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "question.tsx",
-      "file_type": "code",
-      "norm_label": "calendar.tsx",
-      "source_file": "src/components/ui/calendar.tsx",
-      "source_location": "L1"
     },
     {
       "id": "src_components_ui_empty",
@@ -19871,17 +19790,6 @@
       "norm_label": "questionnaire.tsx",
       "source_file": "src/components/ui/questionnaire.tsx",
       "source_location": "L1"
-    },
-    {
-      "id": "ref_react_day_picker",
-      "label": "react-day-picker",
-      "_origin": "ast",
-      "community": 8,
-      "community_name": "question.tsx",
-      "file_type": "concept",
-      "norm_label": "react-day-picker",
-      "source_file": "package.json",
-      "source_location": "L37"
     },
     {
       "id": "vitest_config",
@@ -20110,11 +20018,55 @@
       "source_location": "L24"
     },
     {
+      "id": "src_app_dictionaries_test",
+      "label": "dictionaries.test.ts",
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "[lang]/page.tsx",
+      "file_type": "code",
+      "norm_label": "dictionaries.test.ts",
+      "source_file": "src/app/dictionaries.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_app_lang_dictionaries",
+      "label": "dictionaries.ts",
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "[lang]/page.tsx",
+      "file_type": "code",
+      "norm_label": "dictionaries.ts",
+      "source_file": "src/app/[lang]/dictionaries.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_app_lang_dictionaries_dictionaryloaders",
+      "label": "dictionaryLoaders",
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "[lang]/page.tsx",
+      "file_type": "code",
+      "norm_label": "dictionaryloaders",
+      "source_file": "src/app/[lang]/dictionaries.ts",
+      "source_location": "L5"
+    },
+    {
+      "id": "src_app_lang_dictionaries_issupportedlocale",
+      "label": "isSupportedLocale",
+      "_origin": "ast",
+      "community": 83,
+      "community_name": "[lang]/page.tsx",
+      "file_type": "code",
+      "norm_label": "issupportedlocale",
+      "source_file": "src/app/[lang]/dictionaries.ts",
+      "source_location": "L12"
+    },
+    {
       "id": "src_app_lang_layout",
       "label": "layout.tsx",
       "_origin": "ast",
       "community": 83,
-      "community_name": "layout.tsx",
+      "community_name": "[lang]/page.tsx",
       "file_type": "code",
       "norm_label": "layout.tsx",
       "source_file": "src/app/[lang]/layout.tsx",
@@ -20125,7 +20077,7 @@
       "label": "geistMono",
       "_origin": "ast",
       "community": 83,
-      "community_name": "layout.tsx",
+      "community_name": "[lang]/page.tsx",
       "file_type": "code",
       "norm_label": "geistmono",
       "source_file": "src/app/[lang]/layout.tsx",
@@ -20136,71 +20088,22 @@
       "label": "geistSans",
       "_origin": "ast",
       "community": 83,
-      "community_name": "layout.tsx",
+      "community_name": "[lang]/page.tsx",
       "file_type": "code",
       "norm_label": "geistsans",
       "source_file": "src/app/[lang]/layout.tsx",
       "source_location": "L14"
     },
     {
-      "id": "agents_code_language_rule",
-      "label": "Code Language Rule",
+      "id": "src_app_lang_page",
+      "label": "[lang]/page.tsx",
       "_origin": "ast",
       "community": 83,
-      "community_name": "layout.tsx",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "code language rule",
-      "source_file": "AGENTS.md",
-      "source_location": "L56"
-    },
-    {
-      "id": "agents_internationalization_next_js_app_router",
-      "label": "Internationalization (Next.js App Router)",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "layout.tsx",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "internationalization (next.js app router)",
-      "source_file": "AGENTS.md",
-      "source_location": "L62"
-    },
-    {
-      "id": "agents_rules_language",
-      "label": "language.md",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "layout.tsx",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "language.md",
-      "source_file": ".agents/rules/language.md",
+      "community_name": "[lang]/page.tsx",
+      "file_type": "code",
+      "norm_label": "[lang]/page.tsx",
+      "source_file": "src/app/[lang]/page.tsx",
       "source_location": "L1"
-    },
-    {
-      "id": "agents_rules_language_code_language_rule",
-      "label": "Code Language Rule",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "layout.tsx",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "code language rule",
-      "source_file": ".agents/rules/language.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_rules_language_internationalization_next_js_app_router",
-      "label": "Internationalization (Next.js App Router)",
-      "_origin": "ast",
-      "community": 83,
-      "community_name": "layout.tsx",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "internationalization (next.js app router)",
-      "source_file": ".agents/rules/language.md",
-      "source_location": "L7"
     },
     {
       "id": "agents_skills_firebase_auth_basics_references_client_sdk_web_connect_to_emulator",
@@ -20394,25 +20297,122 @@
       "source_location": "L1"
     },
     {
-      "id": "src_components_ui_tooltip",
-      "label": "tooltip.tsx",
+      "id": "docs_firebase_authentication_authentication_flow",
+      "label": "Authentication flow",
       "_origin": "ast",
       "community": 87,
-      "community_name": "tooltip.tsx",
-      "file_type": "code",
-      "norm_label": "tooltip.tsx",
-      "source_file": "src/components/ui/tooltip.tsx",
+      "community_name": "getCurrentUser",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "authentication flow",
+      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
+      "source_location": "L35"
+    },
+    {
+      "id": "docs_firebase_authentication_authorization_rule",
+      "label": "Authorization rule",
+      "_origin": "ast",
+      "community": 87,
+      "community_name": "getCurrentUser",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "authorization rule",
+      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
+      "source_location": "L50"
+    },
+    {
+      "id": "docs_firebase_authentication_cache_components",
+      "label": "Cache Components",
+      "_origin": "ast",
+      "community": 87,
+      "community_name": "getCurrentUser",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "cache components",
+      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
+      "source_location": "L63"
+    },
+    {
+      "id": "docs_firebase_authentication_firebase_authentication",
+      "label": "Firebase Authentication",
+      "_origin": "ast",
+      "community": 87,
+      "community_name": "getCurrentUser",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "firebase authentication",
+      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
       "source_location": "L1"
     },
     {
-      "id": "src_components_ui_hover_card",
-      "label": "hover-card.tsx",
+      "id": "docs_firebase_authentication_local_development",
+      "label": "Local development",
+      "_origin": "ast",
+      "community": 87,
+      "community_name": "getCurrentUser",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "local development",
+      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
+      "source_location": "L6"
+    },
+    {
+      "id": "docs_firebase_authentication_production_checklist",
+      "label": "Production checklist",
+      "_origin": "ast",
+      "community": 87,
+      "community_name": "getCurrentUser",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "production checklist",
+      "source_file": "docs/FIREBASE_AUTHENTICATION.md",
+      "source_location": "L77"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_2_report_fix_round_1_review_findings",
+      "label": "Fix Round 1 \u2014 Review Findings",
+      "_origin": "ast",
+      "community": 87,
+      "community_name": "getCurrentUser",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "fix round 1 \u2014 review findings",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-2-report.md",
+      "source_location": "L58"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_2_report_fix_validation",
+      "label": "Fix validation",
+      "_origin": "ast",
+      "community": 87,
+      "community_name": "getCurrentUser",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "fix validation",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-2-report.md",
+      "source_location": "L73"
+    },
+    {
+      "id": "superpowers_sdd_2026_09_17_extract_user_facing_messages_i18n_task_4_report_changes",
+      "label": "Changes",
+      "_origin": "ast",
+      "community": 87,
+      "community_name": "getCurrentUser",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "changes",
+      "source_file": ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-4-report.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "src_components_ui_pagination",
+      "label": "pagination.tsx",
       "_origin": "ast",
       "community": 88,
-      "community_name": "hover-card.tsx",
+      "community_name": "pagination.tsx",
       "file_type": "code",
-      "norm_label": "hover-card.tsx",
-      "source_file": "src/components/ui/hover-card.tsx",
+      "norm_label": "pagination.tsx",
+      "source_file": "src/components/ui/pagination.tsx",
       "source_location": "L1"
     },
     {
@@ -22438,6 +22438,18 @@
       "source_location": "L162"
     },
     {
+      "id": "ref_base_ui_react_tooltip",
+      "label": "ref_base_ui_react_tooltip",
+      "_origin": "semantic",
+      "community": 0,
+      "community_name": "sidebar.tsx",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_base_ui_react_tooltip",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "ref_base_ui_react_separator",
       "label": "ref_base_ui_react_separator",
       "_origin": "semantic",
@@ -22446,18 +22458,6 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_base_ui_react_separator",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_next_image",
-      "label": "ref_next_image",
-      "_origin": "semantic",
-      "community": 11,
-      "community_name": "sign-in-auth-screen.tsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_next_image",
       "source_file": "",
       "type": "external"
     },
@@ -22514,7 +22514,7 @@
       "label": "ref_next_experimental_testing_server",
       "_origin": "semantic",
       "community": 151,
-      "community_name": "types.ts",
+      "community_name": "proxy.ts",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_next_experimental_testing_server",
@@ -22526,7 +22526,7 @@
       "label": "ref_next_server",
       "_origin": "semantic",
       "community": 151,
-      "community_name": "types.ts",
+      "community_name": "proxy.ts",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_next_server",
@@ -22606,14 +22606,14 @@
       "type": "external"
     },
     {
-      "id": "ref_base_ui_react_checkbox",
-      "label": "ref_base_ui_react_checkbox",
+      "id": "ref_base_ui_react_preview_card",
+      "label": "ref_base_ui_react_preview_card",
       "_origin": "semantic",
       "community": 16,
       "community_name": "cn",
       "external": true,
       "file_type": "concept",
-      "norm_label": "ref_base_ui_react_checkbox",
+      "norm_label": "ref_base_ui_react_preview_card",
       "source_file": "",
       "type": "external"
     },
@@ -22702,6 +22702,18 @@
       "type": "external"
     },
     {
+      "id": "ref_base_ui_react_checkbox",
+      "label": "ref_base_ui_react_checkbox",
+      "_origin": "semantic",
+      "community": 166,
+      "community_name": "lucide-react",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_base_ui_react_checkbox",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "ref_base_ui_react_button",
       "label": "ref_base_ui_react_button",
       "_origin": "semantic",
@@ -22710,6 +22722,18 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_base_ui_react_button",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_hookform_resolvers_standard_schema",
+      "label": "ref_hookform_resolvers_standard_schema",
+      "_origin": "semantic",
+      "community": 167,
+      "community_name": "sms-multi-factor-assertion-form.tsx",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_hookform_resolvers_standard_schema",
       "source_file": "",
       "type": "external"
     },
@@ -22810,18 +22834,6 @@
       "type": "external"
     },
     {
-      "id": "ref_next_navigation",
-      "label": "ref_next_navigation",
-      "_origin": "semantic",
-      "community": 24,
-      "community_name": "sign-in/page.tsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_next_navigation",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "ref_base_ui_react_navigation_menu",
       "label": "ref_base_ui_react_navigation_menu",
       "_origin": "semantic",
@@ -22838,7 +22850,7 @@
       "label": "src_lib_utils_cn",
       "_origin": "semantic",
       "community": 31,
-      "community_name": "useI18n",
+      "community_name": "use-i18n.ts",
       "external": true,
       "file_type": "concept",
       "norm_label": "src_lib_utils_cn",
@@ -22858,30 +22870,6 @@
       "type": "external"
     },
     {
-      "id": "ref_base_ui_react_avatar",
-      "label": "ref_base_ui_react_avatar",
-      "_origin": "semantic",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_base_ui_react_avatar",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_base_ui_react_menu",
-      "label": "ref_base_ui_react_menu",
-      "_origin": "semantic",
-      "community": 4,
-      "community_name": "menubar.tsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_base_ui_react_menu",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "ref_base_ui_react_menubar",
       "label": "ref_base_ui_react_menubar",
       "_origin": "semantic",
@@ -22894,6 +22882,18 @@
       "type": "external"
     },
     {
+      "id": "src_app_lang_dictionaries_en",
+      "label": "src_app_lang_dictionaries_en",
+      "_origin": "semantic",
+      "community": 40,
+      "community_name": "getAuthErrorMessage",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "src_app_lang_dictionaries_en",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "ref_base_ui_react_direction_provider",
       "label": "ref_base_ui_react_direction_provider",
       "_origin": "semantic",
@@ -22902,30 +22902,6 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_base_ui_react_direction_provider",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_next_root_params",
-      "label": "ref_next_root_params",
-      "_origin": "semantic",
-      "community": 49,
-      "community_name": "user-nav.test.tsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_next_root_params",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "src_app_lang_dictionaries_en",
-      "label": "src_app_lang_dictionaries_en",
-      "_origin": "semantic",
-      "community": 49,
-      "community_name": "user-nav.test.tsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "src_app_lang_dictionaries_en",
       "source_file": "",
       "type": "external"
     },
@@ -22966,6 +22942,18 @@
       "type": "external"
     },
     {
+      "id": "ref_base_ui_react_avatar",
+      "label": "ref_base_ui_react_avatar",
+      "_origin": "semantic",
+      "community": 64,
+      "community_name": "user-nav.tsx",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_base_ui_react_avatar",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "ref_proxy",
       "label": "ref_proxy",
       "_origin": "semantic",
@@ -22986,18 +22974,6 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_base_ui_react_input",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_hookform_resolvers_standard_schema",
-      "label": "ref_hookform_resolvers_standard_schema",
-      "_origin": "semantic",
-      "community": 67,
-      "community_name": "react",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_hookform_resolvers_standard_schema",
       "source_file": "",
       "type": "external"
     },
@@ -23046,6 +23022,18 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_firebase_functions_v2_https",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_base_ui_react_menu",
+      "label": "ref_base_ui_react_menu",
+      "_origin": "semantic",
+      "community": 79,
+      "community_name": "dropdown-menu.tsx",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_base_ui_react_menu",
       "source_file": "",
       "type": "external"
     },
@@ -23102,10 +23090,46 @@
       "label": "ref_next_font_google",
       "_origin": "semantic",
       "community": 83,
-      "community_name": "layout.tsx",
+      "community_name": "[lang]/page.tsx",
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_next_font_google",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_next_image",
+      "label": "ref_next_image",
+      "_origin": "semantic",
+      "community": 83,
+      "community_name": "[lang]/page.tsx",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_next_image",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_next_navigation",
+      "label": "ref_next_navigation",
+      "_origin": "semantic",
+      "community": 83,
+      "community_name": "[lang]/page.tsx",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_next_navigation",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "ref_next_root_params",
+      "label": "ref_next_root_params",
+      "_origin": "semantic",
+      "community": 83,
+      "community_name": "[lang]/page.tsx",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "ref_next_root_params",
       "source_file": "",
       "type": "external"
     },
@@ -23114,7 +23138,7 @@
       "label": "src_app_lang_dictionaries_haslocale",
       "_origin": "semantic",
       "community": 83,
-      "community_name": "layout.tsx",
+      "community_name": "[lang]/page.tsx",
       "external": true,
       "file_type": "concept",
       "norm_label": "src_app_lang_dictionaries_haslocale",
@@ -23158,30 +23182,6 @@
       "type": "external"
     },
     {
-      "id": "ref_base_ui_react_tooltip",
-      "label": "ref_base_ui_react_tooltip",
-      "_origin": "semantic",
-      "community": 87,
-      "community_name": "tooltip.tsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_base_ui_react_tooltip",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "ref_base_ui_react_preview_card",
-      "label": "ref_base_ui_react_preview_card",
-      "_origin": "semantic",
-      "community": 88,
-      "community_name": "hover-card.tsx",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "ref_base_ui_react_preview_card",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "src_lib_i18n_index_getautherrormessage",
       "label": "src_lib_i18n_index_getautherrormessage",
       "_origin": "semantic",
@@ -23190,6 +23190,17 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "src_lib_i18n_index_getautherrormessage",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "src_hooks_use_i18n_usei18n",
+      "label": "src_hooks_use_i18n_usei18n",
+      "community": 31,
+      "community_name": "use-i18n.ts",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "src_hooks_use_i18n_usei18n",
       "source_file": "",
       "type": "external"
     }
@@ -23461,18 +23472,6 @@
     },
     {
       "source": "src_app_lang_sign_in_page_signinpage",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/app/[lang]/sign-in/page.tsx",
-      "source_location": "L20",
-      "weight": 1.0
-    },
-    {
-      "source": "src_app_lang_sign_in_page_signinpage",
       "target": "src_lib_i18n_routing_localepath",
       "relation": "calls",
       "_origin": "ast",
@@ -23505,18 +23504,6 @@
       "context": "call",
       "source_file": "src/app/[lang]/sign-in/page.tsx",
       "source_location": "L45",
-      "weight": 1.0
-    },
-    {
-      "source": "src_app_lang_sign_up_page_signuppage",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/app/[lang]/sign-up/page.tsx",
-      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -23557,18 +23544,6 @@
     },
     {
       "source": "src_components_auth_gate_authgate",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/auth-gate.tsx",
-      "source_location": "L19",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_auth_gate_authgate",
       "target": "src_lib_i18n_routing_localepath",
       "relation": "calls",
       "_origin": "ast",
@@ -23605,18 +23580,6 @@
     },
     {
       "source": "src_components_forgot_password_auth_form_forgotpasswordauthform",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/forgot-password-auth-form.tsx",
-      "source_location": "L27",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_forgot_password_auth_form_forgotpasswordauthform",
       "target": "src_lib_i18n_auth_errors_getautherrormessage",
       "relation": "calls",
       "_origin": "ast",
@@ -23640,30 +23603,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_components_github_sign_in_button_githubsigninbutton",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/github-sign-in-button.tsx",
-      "source_location": "L46",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_google_sign_in_button_googlesigninbutton",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/google-sign-in-button.tsx",
-      "source_location": "L60",
-      "weight": 1.0
-    },
-    {
       "source": "src_components_i18n_provider_i18nprovider",
       "target": "src_components_i18n_provider_getmessage",
       "relation": "calls",
@@ -23673,30 +23612,6 @@
       "context": "call",
       "source_file": "src/components/i18n-provider.tsx",
       "source_location": "L45",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_object_question_question_examquestionnaire",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/object/question/question.tsx",
-      "source_location": "L71",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_sign_in_auth_form_signinauthform",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/sign-in-auth-form.tsx",
-      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -23725,18 +23640,6 @@
     },
     {
       "source": "src_components_sign_in_auth_screen_signinauthscreen",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/sign-in-auth-screen.tsx",
-      "source_location": "L44",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_sign_in_auth_screen_signinauthscreen",
       "target": "src_lib_i18n_auth_errors_getautherrormessage",
       "relation": "calls",
       "_origin": "ast",
@@ -23745,18 +23648,6 @@
       "context": "call",
       "source_file": "src/components/sign-in-auth-screen.tsx",
       "source_location": "L60",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_sign_up_auth_form_signupauthform",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/sign-up-auth-form.tsx",
-      "source_location": "L28",
       "weight": 1.0
     },
     {
@@ -23785,18 +23676,6 @@
     },
     {
       "source": "src_components_sign_up_auth_screen_signupauthscreen",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/sign-up-auth-screen.tsx",
-      "source_location": "L44",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_sign_up_auth_screen_signupauthscreen",
       "target": "src_lib_i18n_auth_errors_getautherrormessage",
       "relation": "calls",
       "_origin": "ast",
@@ -23805,18 +23684,6 @@
       "context": "call",
       "source_file": "src/components/sign-up-auth-screen.tsx",
       "source_location": "L60",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_sms_multi_factor_assertion_form_smsmultifactorassertionphoneform",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/sms-multi-factor-assertion-form.tsx",
-      "source_location": "L43",
       "weight": 1.0
     },
     {
@@ -23841,30 +23708,6 @@
       "context": "call",
       "source_file": "src/components/sms-multi-factor-assertion-form.tsx",
       "source_location": "L117",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_sms_multi_factor_assertion_form_smsmultifactorassertionverifyform",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/sms-multi-factor-assertion-form.tsx",
-      "source_location": "L93",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_totp_multi_factor_assertion_form_totpmultifactorassertionform",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/totp-multi-factor-assertion-form.tsx",
-      "source_location": "L31",
       "weight": 1.0
     },
     {
@@ -23928,30 +23771,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_components_ui_breadcrumb_breadcrumb",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L12",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_ui_breadcrumb_breadcrumbellipsis",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L102",
-      "weight": 1.0
-    },
-    {
       "source": "src_components_ui_bubble_bubble",
       "target": "src_components_ui_bubble_bubblevariants",
       "relation": "calls",
@@ -24012,18 +23831,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_components_ui_carousel_carousel",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/carousel.tsx",
-      "source_location": "L108",
-      "weight": 1.0
-    },
-    {
       "source": "src_components_ui_carousel_carouselcontent",
       "target": "src_components_ui_carousel_usecarousel",
       "relation": "calls",
@@ -24048,18 +23855,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_components_ui_carousel_carouselitem",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/carousel.tsx",
-      "source_location": "L163",
-      "weight": 1.0
-    },
-    {
       "source": "src_components_ui_carousel_carouselnext",
       "target": "src_components_ui_carousel_usecarousel",
       "relation": "calls",
@@ -24072,18 +23867,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_components_ui_carousel_carouselnext",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/carousel.tsx",
-      "source_location": "L220",
-      "weight": 1.0
-    },
-    {
       "source": "src_components_ui_carousel_carouselprevious",
       "target": "src_components_ui_carousel_usecarousel",
       "relation": "calls",
@@ -24093,18 +23876,6 @@
       "context": "call",
       "source_file": "src/components/ui/carousel.tsx",
       "source_location": "L188",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_ui_carousel_carouselprevious",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/carousel.tsx",
-      "source_location": "L189",
       "weight": 1.0
     },
     {
@@ -24153,30 +23924,6 @@
       "context": "call",
       "source_file": "src/components/ui/chart.tsx",
       "source_location": "L155",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_ui_dialog_dialogcontent",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/dialog.tsx",
-      "source_location": "L51",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_ui_dialog_dialogfooter",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/dialog.tsx",
-      "source_location": "L103",
       "weight": 1.0
     },
     {
@@ -24288,54 +24035,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_components_ui_pagination_pagination",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L14",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_ui_pagination_paginationellipsis",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L121",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_ui_pagination_paginationnext",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L100",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_ui_pagination_paginationprevious",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/pagination.tsx",
-      "source_location": "L78",
-      "weight": 1.0
-    },
-    {
       "source": "src_components_ui_questionnaire_questionnairenext",
       "target": "src_components_ui_button_buttonvariants",
       "relation": "calls",
@@ -24381,18 +24080,6 @@
       "context": "call",
       "source_file": "src/components/ui/questionnaire.tsx",
       "source_location": "L299",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_ui_sheet_sheetcontent",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/sheet.tsx",
-      "source_location": "L50",
       "weight": 1.0
     },
     {
@@ -24456,18 +24143,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_components_ui_sidebar_sidebarrail",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/sidebar.tsx",
-      "source_location": "L283",
-      "weight": 1.0
-    },
-    {
       "source": "src_components_ui_sidebar_sidebartrigger",
       "target": "src_components_ui_sidebar_usesidebar",
       "relation": "calls",
@@ -24480,30 +24155,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_components_ui_sidebar_sidebartrigger",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/sidebar.tsx",
-      "source_location": "L260",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_ui_spinner_spinner",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/spinner.tsx",
-      "source_location": "L10",
-      "weight": 1.0
-    },
-    {
       "source": "src_components_ui_tabs_tabslist",
       "target": "src_components_ui_tabs_tabslistvariants",
       "relation": "calls",
@@ -24513,18 +24164,6 @@
       "context": "call",
       "source_file": "src/components/ui/tabs.tsx",
       "source_location": "L49",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_ui_toast_toastclose",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/ui/toast.tsx",
-      "source_location": "L125",
       "weight": 1.0
     },
     {
@@ -24549,18 +24188,6 @@
       "context": "call",
       "source_file": "src/components/ui/toggle.tsx",
       "source_location": "L38",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_user_nav_usernav",
-      "target": "src_components_i18n_provider_usei18n",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/user-nav.tsx",
-      "source_location": "L46",
       "weight": 1.0
     },
     {
@@ -25645,7 +25272,7 @@
     },
     {
       "source": "src_app_lang_sign_in_page",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25741,7 +25368,7 @@
     },
     {
       "source": "src_app_lang_sign_up_page",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25837,7 +25464,7 @@
     },
     {
       "source": "src_components_auth_gate",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -26005,7 +25632,7 @@
     },
     {
       "source": "src_components_forgot_password_auth_form",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -26137,7 +25764,7 @@
     },
     {
       "source": "src_components_github_sign_in_button",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -26185,7 +25812,7 @@
     },
     {
       "source": "src_components_google_sign_in_button",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -26569,7 +26196,7 @@
     },
     {
       "source": "src_components_object_question_question",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -26809,7 +26436,7 @@
     },
     {
       "source": "src_components_sign_in_auth_form",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -26989,7 +26616,7 @@
     },
     {
       "source": "src_components_sign_in_auth_screen",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -27097,7 +26724,7 @@
     },
     {
       "source": "src_components_sign_up_auth_form",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -27277,7 +26904,7 @@
     },
     {
       "source": "src_components_sign_up_auth_screen",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -27397,7 +27024,7 @@
     },
     {
       "source": "src_components_sms_multi_factor_assertion_form",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -27505,7 +27132,7 @@
     },
     {
       "source": "src_components_totp_multi_factor_assertion_form",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -27553,7 +27180,7 @@
     },
     {
       "source": "src_components_ui_breadcrumb",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -27613,7 +27240,7 @@
     },
     {
       "source": "src_components_ui_carousel",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -27793,7 +27420,7 @@
     },
     {
       "source": "src_components_ui_dialog",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -28057,7 +27684,7 @@
     },
     {
       "source": "src_components_ui_pagination",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -28105,7 +27732,7 @@
     },
     {
       "source": "src_components_ui_sheet",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -28249,7 +27876,7 @@
     },
     {
       "source": "src_components_ui_sidebar",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -28285,7 +27912,7 @@
     },
     {
       "source": "src_components_ui_spinner",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -28309,7 +27936,7 @@
     },
     {
       "source": "src_components_ui_toast",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -28345,7 +27972,7 @@
     },
     {
       "source": "src_components_user_nav",
-      "target": "src_components_i18n_provider_usei18n",
+      "target": "src_hooks_use_i18n_usei18n",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -53733,5 +53360,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f9f566181c5bc9995000d68b44b259e2590c81e8"
+  "built_at_commit": "612e0f66c207b288d87a63e43b9ab1ae3e6b10a5"
 }
