@@ -1,0 +1,67 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: /users/{userId}/notes/{noteId}
+// Document ID: auto-generated or client-generated unique ID
+// Fields:
+//   - title: string (required, 1..200 chars)
+//   - content: string (required, 0..50000 chars)
+//   - createdAt: timestamp (required on create, immutable on update)
+//   - updatedAt: timestamp (required on create and update)
+//   - tags: list (optional, <= 10 items, each item string <= 30 chars)
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidNotePayload(data) {
+      let allowedFields = ['title', 'content', 'createdAt', 'updatedAt', 'tags'];
+      return data.keys().hasOnly(allowedFields)
+        && data.title is string
+        && data.title.size() >= 1
+        && data.title.size() <= 200
+        && data.content is string
+        && data.content.size() <= 50000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp
+        && (!('tags' in data) || (data.tags is list && data.tags.size() <= 10));
+    }
+
+    function isValidNoteCreate(data) {
+      return data.keys().hasAll(['title', 'content', 'createdAt', 'updatedAt'])
+        && isValidNotePayload(data);
+    }
+
+    function isValidNoteUpdate(data) {
+      return data.keys().hasAll(['title', 'content', 'createdAt', 'updatedAt'])
+        && isValidNotePayload(data)
+        && data.createdAt == resource.data.createdAt;
+    }
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User-scoped notes collection
+    match /users/{userId}/notes/{noteId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidNoteCreate(request.resource.data);
+      allow update: if isOwner(userId) && isValidNoteUpdate(request.resource.data);
+      allow delete: if isOwner(userId);
+    }
+  }
+}

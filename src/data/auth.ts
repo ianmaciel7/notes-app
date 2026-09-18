@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cacheLife } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -16,6 +17,7 @@ export type CurrentUser = {
 
 export async function getCurrentUser(locale: Locale): Promise<CurrentUser> {
   "use cache: private";
+  cacheLife({ stale: 60 });
 
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) redirect(localePath(locale, "/sign-in"));

@@ -4,14 +4,14 @@ import { createContext, type ReactNode, useContext } from "react";
 
 import type { AppMessages, Locale, MessageKey } from "@/lib/i18n/types";
 
-type I18nContextValue = {
+export type I18nContextValue = {
   locale: Locale;
   t: <K extends MessageKey>(key: K) => string;
 };
 
-const I18nContext = createContext<I18nContextValue | undefined>(undefined);
+export const I18nContext = createContext<I18nContextValue | undefined>(undefined);
 
-type I18nProviderProps = {
+export type I18nProviderProps = {
   children: ReactNode;
   dictionary: AppMessages;
   locale: Locale;

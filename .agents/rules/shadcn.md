@@ -37,6 +37,8 @@ src/components/ui/ or feature components that consume it.
   components server-compatible.
 - Preserve the component's exported public API. If adding a subcomponent,
   export it from the same module with the other related parts.
+- Feature components that wrap a shadcn primitive must derive their public
+  props from that primitive. Use an `interface extends Omit<React.ComponentProps<typeof Primitive>, ...>` shape for controlled props, then forward the remaining props to the primitive.
 - Prefer primitive prop types from the underlying library, or
   React.ComponentProps<"element"> for native wrappers. Avoid any and avoid
   duplicating DOM props by hand.
@@ -143,4 +145,3 @@ Before finishing, verify that:
 - icon-only controls are labelled;
 - data-slot names and token classes are consistent with neighboring files;
 - no unnecessary dependency or global CSS change was introduced.
-

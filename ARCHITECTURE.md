@@ -14,6 +14,16 @@ This repository is a Next.js application using the App Router, React, and TypeSc
 
 ## Data access and security
 
+Authentication uses FirebaseUI in Client Components, an HttpOnly
+`firebase_session` cookie, and Firebase Admin token verification in the
+server-only DAL at `src/data/auth.ts`. Client route guards are only a UX layer;
+server-rendered pages, Server Actions, Route Handlers, and Firestore rules must
+perform their own authorization checks.
+
+With Cache Components enabled, session reads use `use cache: private` and are
+placed behind Suspense boundaries. User-specific cached data must derive its
+key from a verified UID and must never include tokens or other secrets.
+
 When adding persistent or private data access, prefer a dedicated DAL under
 `src/data/` (or `src/lib/data/` when the code is a more general shared utility).
 DAL modules should:
