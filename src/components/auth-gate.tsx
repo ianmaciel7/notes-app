@@ -14,11 +14,12 @@ export function AuthGate({
   locale,
 }: {
   children: ReactNode;
-  locale: Locale;
+  locale?: Locale;
 }) {
-  const { t } = useI18n();
+  const { t, locale: contextLocale } = useI18n();
   const router = useRouter();
-  const signInPath = localePath(locale, "/sign-in");
+  const resolvedLocale = locale ?? contextLocale;
+  const signInPath = localePath(resolvedLocale, "/sign-in");
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 

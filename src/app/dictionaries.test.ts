@@ -2,8 +2,10 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("next/root-params", () => ({
-  lang: vi.fn(async () => "en"),
+vi.mock("next/headers", () => ({
+  cookies: vi.fn(async () => ({
+    get: vi.fn(() => ({ value: "en" })),
+  })),
 }));
 
 import { getDictionary } from "./[lang]/dictionaries";
@@ -21,7 +23,7 @@ describe("getDictionary", () => {
     });
   });
 
-  it("loads dictionary using root-params when no locale is passed", async () => {
+  it("loads dictionary using cookies/fallback when no locale is passed", async () => {
     await expect(getDictionary()).resolves.toMatchObject({
       home: { deployNow: "Deploy Now" },
     });

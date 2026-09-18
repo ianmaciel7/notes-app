@@ -648,9 +648,9 @@
     "semantic_hash": ""
   },
   "src/components/auth-gate.tsx": {
-    "mtime": 1789730384.2974908,
-    "seen": 1789730466.3150277,
-    "ast_hash": "601e00cc4a13e3269a8c49ca979fb00d",
+    "mtime": 1789732760.3219352,
+    "seen": 1789733176.5268505,
+    "ast_hash": "5075e4b774029dc23e75fbfa562a4031",
     "semantic_hash": ""
   },
   "src/components/firebase-provider.tsx": {
@@ -762,9 +762,9 @@
     "semantic_hash": ""
   },
   "src/data/auth.ts": {
-    "mtime": 1789727927.248474,
-    "seen": 1789727976.9682357,
-    "ast_hash": "bb5e67bf20cadc99a5342e4931b26cf6",
+    "mtime": 1789732760.3523145,
+    "seen": 1789733176.5268505,
+    "ast_hash": "47a1f1396d440a7a479301d67dcb93ce",
     "semantic_hash": ""
   },
   "src/lib/auth/session.ts": {
@@ -780,9 +780,9 @@
     "semantic_hash": ""
   },
   "src/proxy.test.ts": {
-    "mtime": 1789643765.0450459,
-    "seen": 1789643949.947821,
-    "ast_hash": "df6f5291f7896b0ac251337fcc5a3ffb",
+    "mtime": 1789732760.327096,
+    "seen": 1789733176.5268505,
+    "ast_hash": "a8a51c810bcd0e895d83b388a8249440",
     "semantic_hash": ""
   },
   "docs/FIREBASE_AUTHENTICATION.md": {
@@ -792,9 +792,9 @@
     "semantic_hash": ""
   },
   "src/app/[lang]/dictionaries.ts": {
-    "mtime": 1789728950.90245,
-    "seen": 1789729072.3742204,
-    "ast_hash": "c452e283ce6a16564cb501df7c04fa2e",
+    "mtime": 1789733250.4912348,
+    "seen": 1789733443.0224135,
+    "ast_hash": "7ae4ed1fcd39e9228acfa1f1a8f3b4b9",
     "semantic_hash": ""
   },
   "src/app/[lang]/dictionaries/en.json": {
@@ -810,33 +810,33 @@
     "semantic_hash": ""
   },
   "src/app/[lang]/layout.tsx": {
-    "mtime": 1789730605.8938253,
-    "seen": 1789730892.4415977,
-    "ast_hash": "0e38e92c3b3418d9be5a1e9549c04a72",
+    "mtime": 1789732760.3185923,
+    "seen": 1789733176.5268505,
+    "ast_hash": "db5e50ad4072c99cd26b1abc270092b8",
     "semantic_hash": ""
   },
   "src/app/[lang]/page.tsx": {
-    "mtime": 1789729398.9365227,
-    "seen": 1789729741.2825038,
-    "ast_hash": "30dd21e2216e46e03d11676f93319e1d",
+    "mtime": 1789733250.4937396,
+    "seen": 1789733443.0224135,
+    "ast_hash": "d1a5d3be0e935f0a751edb8e94484772",
     "semantic_hash": ""
   },
   "src/app/[lang]/sign-in/page.tsx": {
-    "mtime": 1789730384.2984915,
-    "seen": 1789730466.3150277,
-    "ast_hash": "3a1075832f1a8b2dd219c33da02f57f5",
+    "mtime": 1789732760.320152,
+    "seen": 1789733176.5268505,
+    "ast_hash": "8aab9fd6604b6266c4698602a234b12b",
     "semantic_hash": ""
   },
   "src/app/dictionaries.test.ts": {
-    "mtime": 1789729315.685638,
-    "seen": 1789729741.2825038,
-    "ast_hash": "7f2e7c50ad40a3365c27819551a95d2f",
+    "mtime": 1789733250.4947493,
+    "seen": 1789733443.0224135,
+    "ast_hash": "ec6d47ca9a98804c8284701d2894ddb2",
     "semantic_hash": ""
   },
   "src/proxy.ts": {
-    "mtime": 1789729252.0911152,
-    "seen": 1789729741.2825038,
-    "ast_hash": "138b2c538a236dc05b0eb2040c1b82d0",
+    "mtime": 1789732760.3219352,
+    "seen": 1789733176.5268505,
+    "ast_hash": "7a08c8a931b0c7db584b67b491dc0d39",
     "semantic_hash": ""
   },
   ".superpowers/sdd/2026-09-17-extract-user-facing-messages-i18n/task-2-report.md": {
@@ -1398,9 +1398,9 @@
     "semantic_hash": ""
   },
   "src/app/[lang]/sign-up/page.tsx": {
-    "mtime": 1789730732.600572,
-    "seen": 1789730892.4415977,
-    "ast_hash": "c5dd6bd6f90f9c1c51fb99b278d287b7",
+    "mtime": 1789732750.3689833,
+    "seen": 1789733176.5268505,
+    "ast_hash": "2bbe1fbf657e5795a39bef366448da26",
     "semantic_hash": ""
   },
   "src/components/forgot-password-auth-form.tsx": {
@@ -1494,9 +1494,27 @@
     "semantic_hash": ""
   },
   "src/components/i18n-provider.tsx": {
-    "mtime": 1789730810.3604784,
-    "seen": 1789730892.4415977,
-    "ast_hash": "4cc557812c4ff74214d7dbc6ff029f7b",
+    "mtime": 1789732760.3240955,
+    "seen": 1789733176.5268505,
+    "ast_hash": "71e0cdd5f455a3c824e9c4b98540906a",
+    "semantic_hash": ""
+  },
+  "src/app/(space)/layout.tsx": {
+    "mtime": 1789733250.490228,
+    "seen": 1789733443.0224135,
+    "ast_hash": "26de1e626b46e5480d19e0266682f901",
+    "semantic_hash": ""
+  },
+  "src/app/(space)/page.tsx": {
+    "mtime": 1789733355.0721054,
+    "seen": 1789733443.0224135,
+    "ast_hash": "c3c801bf35042df650723817cb78f71f",
+    "semantic_hash": ""
+  },
+  "src/app/layout.tsx": {
+    "mtime": 1789733250.4937396,
+    "seen": 1789733443.0224135,
+    "ast_hash": "a1fa38398f74acc3d303a9c8f675059b",
     "semantic_hash": ""
   }
 }

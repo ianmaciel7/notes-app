@@ -18,7 +18,6 @@ export default function SignUpPage({ params }: PageProps<"/[lang]/sign-up">) {
   const router = useRouter();
   const { lang } = use(params);
   const { t } = useI18n();
-  const homePath = localePath(lang, "/");
   const signInPath = localePath(lang, "/sign-in");
   const [oauthErrorMessage, setOauthErrorMessage] = useState<string | null>(
     null,
@@ -34,9 +33,9 @@ export default function SignUpPage({ params }: PageProps<"/[lang]/sign-up">) {
         const token = await user.getIdToken();
         await syncSession(token);
       }
-      router.replace(homePath);
+      router.replace("/");
     },
-    [router, homePath],
+    [router],
   );
 
   const handleOAuthError = useCallback(

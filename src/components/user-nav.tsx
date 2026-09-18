@@ -67,7 +67,7 @@ export function UserNav({ user }: UserNavProps) {
       <DropdownMenuTrigger
         disabled={isLoading}
         aria-label={displayName || email || t("common.signOut")}
-        className="flex cursor-pointer items-center gap-2 rounded-full p-1 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+        className="flex cursor-pointer items-center gap-2 rounded-full py-1 pl-1 pr-1 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 sm:pr-3.5"
       >
         <Avatar size="sm">
           <AvatarFallback>{initials}</AvatarFallback>

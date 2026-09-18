@@ -5,12 +5,21 @@ import { hasLocale, type Locale, supportedLocales } from "@/lib/i18n/types";
 
 const defaultLocale: Locale = "en";
 const localeCookieName = "NEXT_LOCALE";
+const sessionCookieName = "firebase_session";
 const localeCookieOptions = {
   maxAge: 60 * 60 * 24 * 365,
   path: "/",
   sameSite: "lax" as const,
   secure: process.env.NODE_ENV !== "development",
 };
+
+const authPaths = ["/sign-in", "/sign-up", "/forgot-password"];
+
+function isAuthPath(pathname: string): boolean {
+  return authPaths.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`),
+  );
+}
 
 function negotiateLocale(acceptLanguage: string | null): Locale {
   if (!acceptLanguage) return defaultLocale;
@@ -51,20 +60,48 @@ function negotiateLocale(acceptLanguage: string | null): Locale {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const isAuthenticated = Boolean(
+    request.cookies.get(sessionCookieName)?.value,
+  );
+
   const matchedLocale = supportedLocales.find(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );
-
-  if (matchedLocale) {
-    const response = NextResponse.next();
-    response.cookies.set(localeCookieName, matchedLocale, localeCookieOptions);
-    return response;
-  }
 
   const savedLocale = request.cookies.get(localeCookieName)?.value;
   const locale = hasLocale(savedLocale)
     ? savedLocale
     : negotiateLocale(request.headers.get("accept-language"));
+
+  // 1. If user is authenticated, keep them on clean unprefixed routes
+  if (isAuthenticated) {
+    if (matchedLocale) {
+      const subPath = pathname.slice(matchedLocale.length + 1) || "/";
+      const targetPath = subPath === "/" || isAuthPath(subPath) ? "/" : subPath;
+
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = targetPath;
+      const response = NextResponse.redirect(redirectUrl);
+      response.cookies.set(
+        localeCookieName,
+        matchedLocale,
+        localeCookieOptions,
+      );
+      return response;
+    }
+
+    // Unprefixed route for authenticated user -> allow through
+    const response = NextResponse.next();
+    response.cookies.set(localeCookieName, locale, localeCookieOptions);
+    return response;
+  }
+
+  // 2. If user is unauthenticated
+  if (matchedLocale) {
+    const response = NextResponse.next();
+    response.cookies.set(localeCookieName, matchedLocale, localeCookieOptions);
+    return response;
+  }
 
   const redirectUrl = request.nextUrl.clone();
   redirectUrl.pathname = `/${locale}${pathname}`;

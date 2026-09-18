@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, type ReactNode, useContext } from "react";
+import { createContext, type ReactNode, useContext, useEffect } from "react";
 
 import type { AppMessages, Locale, MessageKey } from "@/lib/i18n/types";
 
@@ -38,6 +38,14 @@ export function I18nProvider({
   dictionary,
   locale,
 }: I18nProviderProps) {
+  useEffect(() => {
+    try {
+      localStorage.setItem("NEXT_LOCALE", locale);
+    } catch {
+      // Ignore localStorage errors (e.g. storage disabled / sandbox)
+    }
+  }, [locale]);
+
   return (
     <I18nContext.Provider
       value={{

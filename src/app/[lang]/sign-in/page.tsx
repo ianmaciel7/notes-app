@@ -18,8 +18,8 @@ export default function SignInPage({ params }: PageProps<"/[lang]/sign-in">) {
   const router = useRouter();
   const { lang } = use(params);
   const { t } = useI18n();
-  const homePath = localePath(lang, "/");
   const signUpPath = localePath(lang, "/sign-up");
+
   const forgotPasswordPath = localePath(lang, "/forgot-password");
   const [oauthErrorMessage, setOauthErrorMessage] = useState<string | null>(
     null,
@@ -35,9 +35,9 @@ export default function SignInPage({ params }: PageProps<"/[lang]/sign-in">) {
         const token = await user.getIdToken();
         await syncSession(token);
       }
-      router.replace(homePath);
+      router.replace("/");
     },
-    [router, homePath],
+    [router],
   );
 
   const handleOAuthError = useCallback(

@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { SESSION_CACHE_TAG, SESSION_COOKIE } from "@/lib/auth/session";
 import { verifyFirebaseSessionCookie } from "@/lib/firebase/admin";
 import { localePath } from "@/lib/i18n/routing";
-import type { Locale } from "@/lib/i18n/types";
+import { hasLocale, type Locale } from "@/lib/i18n/types";
 
 export type CurrentUser = {
   uid: string;
@@ -15,13 +15,18 @@ export type CurrentUser = {
   displayName: string | null;
 };
 
-export async function getCurrentUser(locale: Locale): Promise<CurrentUser> {
+export async function getCurrentUser(locale?: Locale): Promise<CurrentUser> {
   "use cache: private";
   cacheLife({ stale: 60 });
   cacheTag(SESSION_CACHE_TAG);
 
-  const sessionCookie = (await cookies()).get(SESSION_COOKIE)?.value;
-  if (!sessionCookie) redirect(localePath(locale, "/sign-in"));
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get(SESSION_COOKIE)?.value;
+  const rawLocale = cookieStore.get("NEXT_LOCALE")?.value;
+  const resolvedLocale: Locale =
+    locale ?? (hasLocale(rawLocale) ? rawLocale : "en");
+
+  if (!sessionCookie) redirect(localePath(resolvedLocale, "/sign-in"));
 
   try {
     const decoded = await verifyFirebaseSessionCookie(sessionCookie, true);
@@ -32,6 +37,6 @@ export async function getCurrentUser(locale: Locale): Promise<CurrentUser> {
       displayName: decoded.name ?? null,
     };
   } catch {
-    redirect(localePath(locale, "/sign-in"));
+    redirect(localePath(resolvedLocale, "/sign-in"));
   }
 }

@@ -1,34 +1,27 @@
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+import { getDictionary, getServerLocale } from "@/app/[lang]/dictionaries";
 import { AuthGate } from "@/components/auth-gate";
 import { UserNav } from "@/components/user-nav";
 import { getCurrentUser } from "@/data/auth";
-import type { Locale } from "@/lib/i18n/types";
 
-import { getDictionary, hasLocale } from "./dictionaries";
-
-export default async function Home({ params }: PageProps<"/[lang]">) {
-  const { lang } = await params;
-  if (!hasLocale(lang)) notFound();
-
-  const dictionary = await getDictionary(lang);
-
+export default function HomePage() {
   return (
     <Suspense
       fallback={
         <main className="flex min-h-screen items-center justify-center">
-          {dictionary.common.loading}
+          Loading...
         </main>
       }
     >
-      <AuthenticatedHome locale={lang} />
+      <SpaceHome />
     </Suspense>
   );
 }
 
-async function AuthenticatedHome({ locale }: { locale: Locale }) {
+async function SpaceHome() {
+  const locale = await getServerLocale();
   const user = await getCurrentUser(locale);
   const dictionary = await getDictionary(locale);
 
