@@ -11,7 +11,7 @@ This repository is a Next.js application using the App Router, React, and TypeSc
 - `src/data/`: server-only Data Access Layer (DAL) modules, when the application
   needs centralized database access, authorization checks, or DTO mapping.
 - `public/`: static assets.
-- `.agents/`: agent configurations, including custom subagents (`.agents/agents/firebase/agent.md`, `.agents/agents/research/agent.md`), domain skills (`.agents/skills/`), and rules (`.agents/rules/`).
+- `.agents/`: agent configurations, including custom subagents (`.agents/agents/firebase/agent.md`, `.agents/agents/research/agent.md`, `.agents/agents/code-reviewer/agent.md`, `.agents/agents/test-engineer/agent.md`, `.agents/agents/ui-engineer/agent.md`), domain skills (`.agents/skills/`), and rules (`.agents/rules/`).
 
 ## Data access and security
 
@@ -46,6 +46,9 @@ These conventions follow the [Next.js Data Security guide](https://nextjs.org/do
 
 - **Firebase (`.agents/agents/firebase/agent.md`)**: Supports Firebase capabilities (Authentication, Firestore modeling, Security Rules, App Hosting, Cloud Functions, and Data Connect), aggregating 12 specialized Firebase skills under `.agents/skills/`.
 - **Research (`.agents/agents/research/agent.md`)**: Supports codebase topology navigation, documentation retrieval, and component discovery by utilizing `.agents/skills/context7`, `.agents/skills/graphify`, and `.agents/skills/search-registry-items`.
+- **Code Reviewer (`.agents/agents/code-reviewer/agent.md`)**: Audits diffs, PRs, and modifications for bugs, regressions, security leaks, Biome linting, and enforces the no-index barrel files rule and repository conventions.
+- **Test Engineer (`.agents/agents/test-engineer/agent.md`)**: Designs test strategies, implements unit and component tests with Vitest and React Testing Library, authoring emulator integration tests and verifying test suites pass cleanly.
+- **UI Engineer (`.agents/agents/ui-engineer/agent.md`)**: Implements accessible, theme-aware UI primitives and feature components adhering to shadcn/ui base-nova style, `@base-ui/react`, Tailwind CSS v4, and Ladle stories (`*.stories.tsx`).
 
 ## Configuration
 

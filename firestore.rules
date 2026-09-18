@@ -1,18 +1,7 @@
 rules_version = '2';
 
 // ===============================================================
-// Assumed Data Model
-// ===============================================================
-//
-// Collection: /users/{userId}/notes/{noteId}
-// Document ID: auto-generated or client-generated unique ID
-// Fields:
-//   - title: string (required, 1..200 chars)
-//   - content: string (required, 0..50000 chars)
-//   - createdAt: timestamp (required on create, immutable on update)
-//   - updatedAt: timestamp (required on create and update)
-//   - tags: list (optional, <= 10 items, each item string <= 30 chars)
-//
+// ExamPrep Platform Security Rules
 // ===============================================================
 
 service cloud.firestore {
@@ -27,42 +16,78 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.role == 'admin' ||
+        request.auth.token.admin == true
+      );
+    }
+
     function isValidNotePayload(data) {
-      let allowedFields = ['title', 'content', 'createdAt', 'updatedAt', 'tags'];
+      let allowedFields = ['title', 'content', 'createdAt', 'updatedAt', 'tags', 'questionId', 'examId', 'userId', 'noteId'];
       return data.keys().hasOnly(allowedFields)
-        && data.title is string
-        && data.title.size() >= 1
-        && data.title.size() <= 200
+        && (!('title' in data) || (data.title is string && data.title.size() >= 1 && data.title.size() <= 200))
         && data.content is string
         && data.content.size() <= 50000
-        && data.createdAt is timestamp
+        && (!('questionId' in data) || (data.questionId is string && data.questionId.size() >= 1 && data.questionId.size() <= 200))
+        && (!('examId' in data) || (data.examId is string && data.examId.size() >= 1 && data.examId.size() <= 200))
+        && (!('userId' in data) || (data.userId is string && data.userId == request.auth.uid))
+        && (!('noteId' in data) || (data.noteId is string && data.noteId.size() >= 1 && data.noteId.size() <= 200))
         && data.updatedAt is timestamp
+        && (!('createdAt' in data) || data.createdAt is timestamp)
         && (!('tags' in data) || (data.tags is list && data.tags.size() <= 10));
     }
 
     function isValidNoteCreate(data) {
-      return data.keys().hasAll(['title', 'content', 'createdAt', 'updatedAt'])
+      return data.content is string
+        && data.updatedAt is timestamp
         && isValidNotePayload(data);
     }
 
     function isValidNoteUpdate(data) {
-      return data.keys().hasAll(['title', 'content', 'createdAt', 'updatedAt'])
+      return data.content is string
+        && data.updatedAt is timestamp
         && isValidNotePayload(data)
-        && data.createdAt == resource.data.createdAt;
+        && (!('createdAt' in resource.data) || !('createdAt' in data) || data.createdAt == resource.data.createdAt);
     }
-
 
     // Default deny all
     match /{document=**} {
       allow read, write: if false;
     }
 
-    // User-scoped notes collection
-    match /users/{userId}/notes/{noteId} {
-      allow get, list: if isOwner(userId);
-      allow create: if isOwner(userId) && isValidNoteCreate(request.resource.data);
-      allow update: if isOwner(userId) && isValidNoteUpdate(request.resource.data);
-      allow delete: if isOwner(userId);
+    // Exam Catalog and Questions:
+    // Authenticated users can read exam metadata and questions.
+    // Writes are restricted strictly to administrators.
+    match /exams/{examId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+
+      match /questions/{questionId} {
+        allow read: if isAuthenticated();
+        allow write: if isAdmin();
+      }
+    }
+
+    // User Scoped Data:
+    match /users/{userId} {
+      // User-scoped exam progress aggregates
+      match /examProgress/{examId} {
+        allow read, write: if isOwner(userId);
+
+        // Subcollection for per-question progress details
+        match /questionProgress/{questionId} {
+          allow read, write: if isOwner(userId);
+        }
+      }
+
+      // User study notes linked to questions and exams
+      match /notes/{noteId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidNoteCreate(request.resource.data);
+        allow update: if isOwner(userId) && isValidNoteUpdate(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
     }
   }
 }

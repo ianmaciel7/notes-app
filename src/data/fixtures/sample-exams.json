@@ -1,0 +1,582 @@
+{
+  "exams": [
+    {
+      "id": "cloud-arch-core",
+      "title": "Cloud Architecture Core",
+      "code": "CAC-101",
+      "provider": "generic",
+      "description": "Comprehensive evaluation of foundational cloud architecture principles, multi-region resilience, compute virtualization, and storage design patterns.",
+      "passingScore": 720,
+      "passingCriteria": {
+        "passingScore": 720,
+        "maxScore": 1000,
+        "percentage": 72
+      },
+      "durationMinutes": 90,
+      "totalQuestions": 5,
+      "questionCounts": {
+        "total": 5,
+        "byDomain": {
+          "domain-compute-storage": 2,
+          "domain-networking-security": 1,
+          "domain-resilience-ha": 2
+        }
+      },
+      "domains": [
+        {
+          "id": "domain-compute-storage",
+          "name": "Compute & Storage Architecture",
+          "description": "Virtual machines, containers, serverless compute, block, object, and caching tiers.",
+          "weightPercentage": 40
+        },
+        {
+          "id": "domain-networking-security",
+          "name": "Networking & Security Design",
+          "description": "VPC topology, private endpoints, firewall rules, and zero-trust policies.",
+          "weightPercentage": 35
+        },
+        {
+          "id": "domain-resilience-ha",
+          "name": "High Availability & Disaster Recovery",
+          "description": "Multi-region deployments, RTO/RPO objectives, and failover topologies.",
+          "weightPercentage": 25
+        }
+      ],
+      "isActive": true
+    },
+    {
+      "id": "devops-eng-fundamentals",
+      "title": "DevOps Engineering Fundamentals",
+      "code": "DEF-201",
+      "provider": "generic",
+      "description": "Practical assessment covering CI/CD pipelines, GitOps workflows, automated testing, container orchestration, and telemetry observability.",
+      "passingScore": 700,
+      "passingCriteria": {
+        "passingScore": 700,
+        "maxScore": 1000,
+        "percentage": 70
+      },
+      "durationMinutes": 90,
+      "totalQuestions": 5,
+      "questionCounts": {
+        "total": 5,
+        "byDomain": {
+          "domain-cicd-gitops": 2,
+          "domain-containers-k8s": 2,
+          "domain-observability": 1
+        }
+      },
+      "domains": [
+        {
+          "id": "domain-cicd-gitops",
+          "name": "CI/CD & GitOps Automation",
+          "description": "Continuous delivery pipelines, GitOps reconcilers, and shift-left security.",
+          "weightPercentage": 35
+        },
+        {
+          "id": "domain-containers-k8s",
+          "name": "Container Orchestration & Runtime",
+          "description": "Kubernetes pods, probes, deployments, and image security.",
+          "weightPercentage": 35
+        },
+        {
+          "id": "domain-observability",
+          "name": "Observability & Incident Management",
+          "description": "Metrics, logs, traces, alerts, and progressive rollback automation.",
+          "weightPercentage": 30
+        }
+      ],
+      "isActive": true
+    }
+  ],
+  "questions": [
+    {
+      "id": "cac-q1",
+      "examId": "cloud-arch-core",
+      "domainId": "domain-compute-storage",
+      "type": "single-choice",
+      "prompt": "A high-throughput financial trading application requires sub-millisecond retrieval of active session state across stateless API pods. Which persistence tier best meets this latency requirement?",
+      "options": [
+        {
+          "id": "opt-redis",
+          "text": "Distributed in-memory key-value cache cluster",
+          "explanation": "In-memory stores provide microsecond-to-millisecond read/write latencies ideal for ephemeral session states."
+        },
+        {
+          "id": "opt-s3",
+          "text": "Regional object storage bucket",
+          "explanation": "Object storage is optimized for throughput and high durability, not sub-millisecond session state lookup."
+        },
+        {
+          "id": "opt-glacier",
+          "text": "Cold archive tape-backed storage tier",
+          "explanation": "Archive storage takes minutes to hours for data retrieval."
+        },
+        {
+          "id": "opt-nfs",
+          "text": "Shared network-attached file system volume",
+          "explanation": "NFS protocols introduce network latency higher than in-memory caches and have concurrency locking overhead."
+        }
+      ],
+      "correctAnswer": "opt-redis",
+      "explanation": {
+        "general": "Distributed in-memory caching (such as Redis or Memcached) provides RAM-speed access with sub-millisecond response times required for stateless API session state lookup.",
+        "options": {
+          "opt-redis": "Correct. RAM-based storage yields sub-millisecond latencies.",
+          "opt-s3": "Incorrect. Object storage latency is tens to hundreds of milliseconds.",
+          "opt-glacier": "Incorrect. Cold archive is for long-term compliance storage.",
+          "opt-nfs": "Incorrect. NFS incurs POSIX locking and file system IO overhead."
+        },
+        "references": [
+          {
+            "title": "Cloud Caching Architecture Patterns",
+            "url": "https://example.com/docs/caching-patterns"
+          }
+        ]
+      },
+      "difficulty": "easy",
+      "order": 1
+    },
+    {
+      "id": "cac-q2",
+      "examId": "cloud-arch-core",
+      "domainId": "domain-networking-security",
+      "type": "multiple-choice",
+      "prompt": "An enterprise needs to restrict outbound data flow from private backend compute subnets while preventing direct exposure to the public internet. Which TWO networking mechanisms achieve this? (Select TWO).",
+      "options": [
+        {
+          "id": "opt-vpc-endpoints",
+          "text": "Private endpoints / VPC Interface endpoints for cloud service APIs",
+          "explanation": "Keeps API communications entirely on the private cloud backbone without internet routing."
+        },
+        {
+          "id": "opt-egress-nacl",
+          "text": "Stateful/Stateless egress firewall rules restricting traffic to approved CIDR ranges",
+          "explanation": "Enforces strict destination whitelist filtering at subnet boundaries."
+        },
+        {
+          "id": "opt-direct-igw",
+          "text": "Attaching an Internet Gateway directly to the private routing table",
+          "explanation": "An Internet Gateway route directly exposes subnets to public internet routing."
+        },
+        {
+          "id": "opt-wildcard-nat",
+          "text": "Deploying a public NAT Gateway with an unrestricted 0.0.0.0/0 route to all destinations",
+          "explanation": "Unrestricted NAT outbound routes allow exfiltration to arbitrary internet destinations."
+        }
+      ],
+      "correctAnswer": [
+        "opt-vpc-endpoints",
+        "opt-egress-nacl"
+      ],
+      "explanation": {
+        "general": "Private VPC Interface Endpoints prevent traffic from leaving the cloud backbone when consuming supported APIs, and egress firewall rules ensure traffic can only flow to approved destination CIDRs.",
+        "options": {
+          "opt-vpc-endpoints": "Correct. Connects directly over private network interfaces.",
+          "opt-egress-nacl": "Correct. Restricts outbound target destinations.",
+          "opt-direct-igw": "Incorrect. Violates the requirement of having no direct internet exposure.",
+          "opt-wildcard-nat": "Incorrect. Wildcard NAT routes allow traffic to unrestricted external endpoints."
+        }
+      },
+      "difficulty": "medium",
+      "order": 2
+    },
+    {
+      "id": "cac-q3",
+      "examId": "cloud-arch-core",
+      "domainId": "domain-resilience-ha",
+      "type": "drag-and-drop",
+      "prompt": "Match each architecture tier to its recommended zero-downtime traffic routing strategy.",
+      "dragDropSlots": [
+        {
+          "id": "slot-edge",
+          "label": "Edge & CDN Gateway"
+        },
+        {
+          "id": "slot-app",
+          "label": "Microservice Ingress Layer"
+        },
+        {
+          "id": "slot-db",
+          "label": "Relational Database Cluster"
+        }
+      ],
+      "dragDropItems": [
+        {
+          "id": "item-dns-weighted",
+          "text": "Weighted Anycast DNS & Edge Path Rewrites"
+        },
+        {
+          "id": "item-canary-ingress",
+          "text": "Traffic Splitter with Progressive Canary Percentage Shifting"
+        },
+        {
+          "id": "item-read-replica",
+          "text": "Read-Replica Promotion with Synchronous Replication"
+        }
+      ],
+      "correctAnswer": {
+        "slot-edge": "item-dns-weighted",
+        "slot-app": "item-canary-ingress",
+        "slot-db": "item-read-replica"
+      },
+      "explanation": {
+        "general": "Edge traffic distribution uses weighted DNS / anycast, microservices use progressive ingress canary shifting, and stateful databases use automated read-replica promotion to achieve zero-downtime upgrades.",
+        "references": [
+          {
+            "title": "Reliable Release Topologies",
+            "url": "https://example.com/docs/release-topologies"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "order": 3
+    },
+    {
+      "id": "cac-q4",
+      "examId": "cloud-arch-core",
+      "domainId": "domain-resilience-ha",
+      "type": "hotspot",
+      "prompt": "Review the multi-tier cloud infrastructure diagram. Click on the component that introduces a Single Point of Failure (SPOF) when an Availability Zone experiences an outage.",
+      "hotspotImage": "/fixtures/diagrams/cloud-arch-topology.svg",
+      "hotspotAreas": [
+        {
+          "id": "area-geo-dns",
+          "label": "Multi-Region Geo DNS",
+          "coordinates": [10, 10, 20, 20]
+        },
+        {
+          "id": "area-single-nat",
+          "label": "Single-AZ NAT Gateway",
+          "coordinates": [45, 35, 20, 25]
+        },
+        {
+          "id": "area-app-asg",
+          "label": "Multi-AZ Auto Scaling App Fleet",
+          "coordinates": [15, 65, 30, 25]
+        },
+        {
+          "id": "area-aurora-cluster",
+          "label": "Multi-AZ Clustered Database",
+          "coordinates": [60, 65, 30, 25]
+        }
+      ],
+      "correctAnswer": [
+        "area-single-nat"
+      ],
+      "explanation": {
+        "general": "Deploying only a single NAT Gateway in one AZ creates a single point of failure; if that AZ fails, private subnets in all other AZs lose outbound internet connectivity.",
+        "references": [
+          {
+            "title": "Multi-AZ Network High Availability",
+            "url": "https://example.com/docs/multi-az-nat"
+          }
+        ]
+      },
+      "difficulty": "hard",
+      "order": 4
+    },
+    {
+      "id": "cac-q5",
+      "examId": "cloud-arch-core",
+      "domainId": "domain-compute-storage",
+      "type": "case-study",
+      "prompt": "Review the case study tabs for 'Global Logistics Platform Modernization'. Based on the SLA requirements and existing topology, which architecture modification should the team prioritize to eliminate downtime during peak dispatch periods?",
+      "caseStudy": {
+        "title": "Case Study: Global Logistics Platform Modernization",
+        "tabs": [
+          {
+            "id": "tab-overview",
+            "title": "Company Overview",
+            "content": "LogiTrans operates freight logistics tracking for 50,000 active transport vehicles across 4 continents. Current telemetry updates stream at 12,000 events per second."
+          },
+          {
+            "id": "tab-requirements",
+            "title": "Business Requirements",
+            "content": "The service SLA mandates 99.99% availability, zero planned maintenance downtime, Recovery Time Objective (RTO) under 2 minutes, and Recovery Point Objective (RPO) under 5 seconds."
+          },
+          {
+            "id": "tab-current-topology",
+            "title": "Current Architecture",
+            "content": "The telemetry ingestion pipeline writes directly to a monolithic single-node PostgreSQL database located in a single cloud region. During fleet dispatch surges (08:00 UTC), write queue timeouts occur."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "opt-stream-partitioning",
+          "text": "Decouple ingestion using a distributed partitioned event stream buffer before persisting to a distributed NoSQL store",
+          "explanation": "Buffers high-velocity write bursts and decouples telemetry ingest from relational persistence bottlenecks."
+        },
+        {
+          "id": "opt-vertical-scaling",
+          "text": "Vertically scale the monolithic PostgreSQL instance to the highest available compute instance type",
+          "explanation": "Vertical scaling provides only temporary headroom and fails to meet 99.99% multi-region RTO/RPO requirements."
+        },
+        {
+          "id": "opt-sync-replica",
+          "text": "Add one synchronous read replica in the same availability zone",
+          "explanation": "Synchronous read replicas worsen write latency during ingest surges and do not solve single-AZ failure risks."
+        },
+        {
+          "id": "opt-periodic-batch",
+          "text": "Delay vehicle telematics telemetry into hourly batch ZIP uploads",
+          "explanation": "Violates near-real-time telemetry and the 5-second RPO requirement."
+        }
+      ],
+      "correctAnswer": "opt-stream-partitioning",
+      "explanation": {
+        "general": "Decoupling high-volume IoT telemetry ingestion with a distributed event stream (such as Apache Kafka or Managed Pub/Sub) absorbs traffic spikes, prevents database connection exhaustion, and provides high availability.",
+        "options": {
+          "opt-stream-partitioning": "Correct. Asynchronous event streaming accommodates bursty traffic without dropped packets.",
+          "opt-vertical-scaling": "Incorrect. Single instance vertical scaling retains a single point of failure.",
+          "opt-sync-replica": "Incorrect. Synchronous replicas degrade write throughput during peaks.",
+          "opt-periodic-batch": "Incorrect. Batching fails the sub-5-second RPO requirement."
+        }
+      },
+      "difficulty": "hard",
+      "order": 5
+    },
+    {
+      "id": "def-q1",
+      "examId": "devops-eng-fundamentals",
+      "domainId": "domain-cicd-gitops",
+      "type": "single-choice",
+      "prompt": "In a GitOps continuous deployment pipeline, what component is responsible for reconciling the actual cluster runtime state with the desired state declared in the Git repository?",
+      "options": [
+        {
+          "id": "opt-gitops-agent",
+          "text": "In-cluster GitOps controller/operator (e.g. ArgoCD, Flux)",
+          "explanation": "The in-cluster controller pulls declarations from Git and reconciles differences inside the cluster boundary."
+        },
+        {
+          "id": "opt-ci-webhook",
+          "text": "Out-of-cluster CI runner pushing imperative kubectl apply scripts",
+          "explanation": "Push-based CI runners require external administrative credentials and are not the pull-based GitOps reconciler."
+        },
+        {
+          "id": "opt-cron-job",
+          "text": "Nightly backup snapshot daemon",
+          "explanation": "Backup snapshotting does not manage continuous deployment or state synchronization."
+        },
+        {
+          "id": "opt-api-gateway",
+          "text": "Public Ingress Gateway",
+          "explanation": "Ingress gateways route external HTTP/TCP requests to services, not cluster manifest reconciliation."
+        }
+      ],
+      "correctAnswer": "opt-gitops-agent",
+      "explanation": {
+        "general": "A GitOps controller operates inside the target cluster, periodically checking the source Git repository and driving the cluster toward the desired declared state without exposing cluster management ports externally.",
+        "options": {
+          "opt-gitops-agent": "Correct. Pull-based reconciliation is the foundation of GitOps.",
+          "opt-ci-webhook": "Incorrect. Imperative push models require external cluster write access.",
+          "opt-cron-job": "Incorrect. Backups do not synchronize declared application states.",
+          "opt-api-gateway": "Incorrect. Ingress manages ingress traffic, not configuration drift."
+        }
+      },
+      "difficulty": "easy",
+      "order": 1
+    },
+    {
+      "id": "def-q2",
+      "examId": "devops-eng-fundamentals",
+      "domainId": "domain-containers-k8s",
+      "type": "multiple-choice",
+      "prompt": "Which TWO practices ensure reproducible, secure container images in enterprise CI/CD builds? (Select TWO).",
+      "options": [
+        {
+          "id": "opt-multi-stage",
+          "text": "Multi-stage builds separating build tooling from minimal distroless/slim runtime images",
+          "explanation": "Eliminates compilers, package managers, and superfluous binaries from the shipped image."
+        },
+        {
+          "id": "opt-digest-pinning",
+          "text": "Pinning base image references and dependencies to immutable SHA256 content digests",
+          "explanation": "Guarantees cryptographic immutability and guards against mutable tag poisoning."
+        },
+        {
+          "id": "opt-root-user",
+          "text": "Running runtime processes as root (UID 0) to avoid permissions barriers",
+          "explanation": "Running as root increases blast radius significantly if container breakout vulnerabilities occur."
+        },
+        {
+          "id": "opt-latest-tag",
+          "text": "Relying on the mutable :latest tag for seamless automatic updates",
+          "explanation": "Using mutable tags introduces non-deterministic builds and makes rollback verification unpredictable."
+        }
+      ],
+      "correctAnswer": [
+        "opt-multi-stage",
+        "opt-digest-pinning"
+      ],
+      "explanation": {
+        "general": "Multi-stage Docker builds reduce container attack surface by discarding build tools, while SHA256 digest pinning prevents upstream image mutation from compromising deployment integrity.",
+        "options": {
+          "opt-multi-stage": "Correct. Leaves only production runtime artifacts in the final container image.",
+          "opt-digest-pinning": "Correct. Ensures deterministic byte-for-byte base image references.",
+          "opt-root-user": "Incorrect. Violates principle of least privilege.",
+          "opt-latest-tag": "Incorrect. Non-reproducible and breaks change traceability."
+        }
+      },
+      "difficulty": "medium",
+      "order": 2
+    },
+    {
+      "id": "def-q3",
+      "examId": "devops-eng-fundamentals",
+      "domainId": "domain-containers-k8s",
+      "type": "drag-and-drop",
+      "prompt": "Match each Kubernetes reliability probe to its correct operational purpose.",
+      "dragDropSlots": [
+        {
+          "id": "slot-startup",
+          "label": "Startup Probe"
+        },
+        {
+          "id": "slot-liveness",
+          "label": "Liveness Probe"
+        },
+        {
+          "id": "slot-readiness",
+          "label": "Readiness Probe"
+        }
+      ],
+      "dragDropItems": [
+        {
+          "id": "item-slow-init",
+          "text": "Informs kubelet whether a slow-starting container has finished initial startup"
+        },
+        {
+          "id": "item-restart-stuck",
+          "text": "Detects deadlocks and triggers automatic container restart when unhealthy"
+        },
+        {
+          "id": "item-traffic-route",
+          "text": "Determines whether the pod is ready to accept incoming service endpoint traffic"
+        }
+      ],
+      "correctAnswer": {
+        "slot-startup": "item-slow-init",
+        "slot-liveness": "item-restart-stuck",
+        "slot-readiness": "item-traffic-route"
+      },
+      "explanation": {
+        "general": "The startup probe protects legacy/slow-loading apps during initial boot, liveness probe restarts hung processes, and readiness probe controls routing of traffic to the pod.",
+        "references": [
+          {
+            "title": "Kubernetes Pod Lifecycle & Probes",
+            "url": "https://example.com/docs/k8s-probes"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "order": 3
+    },
+    {
+      "id": "def-q4",
+      "examId": "devops-eng-fundamentals",
+      "domainId": "domain-cicd-gitops",
+      "type": "hotspot",
+      "prompt": "Examine the CI/CD pipeline workflow diagram. Click on the gate where automated Static Application Security Testing (SAST) and Software Composition Analysis (SCA) must execute to block vulnerabilities before container image creation.",
+      "hotspotImage": "/fixtures/diagrams/devops-pipeline-flow.svg",
+      "hotspotAreas": [
+        {
+          "id": "area-commit-lint",
+          "label": "Code Checkout & Linting",
+          "coordinates": [10, 20, 18, 30]
+        },
+        {
+          "id": "area-sast-sca",
+          "label": "Static Analysis & Dependency Scan Gate",
+          "coordinates": [32, 20, 20, 30]
+        },
+        {
+          "id": "area-docker-build",
+          "label": "Container Image Build & Push",
+          "coordinates": [56, 20, 18, 30]
+        },
+        {
+          "id": "area-prod-deploy",
+          "label": "Production Canary Deployment",
+          "coordinates": [78, 20, 18, 30]
+        }
+      ],
+      "correctAnswer": [
+        "area-sast-sca"
+      ],
+      "explanation": {
+        "general": "Shifting security left requires executing SAST and SCA immediately after compilation/linting and before container image generation, preventing vulnerable binaries from being packaged or uploaded to registries.",
+        "references": [
+          {
+            "title": "Shift-Left Pipeline Security Guidelines",
+            "url": "https://example.com/docs/devsecops-pipeline"
+          }
+        ]
+      },
+      "difficulty": "medium",
+      "order": 4
+    },
+    {
+      "id": "def-q5",
+      "examId": "devops-eng-fundamentals",
+      "domainId": "domain-observability",
+      "type": "case-study",
+      "prompt": "Review the case study tabs for 'FinPay High-Availability Payment Gateway'. What automated deployment rollback policy best protects transaction integrity when error budgets exceed threshold limits?",
+      "caseStudy": {
+        "title": "Case Study: FinPay High-Availability Payment Gateway",
+        "tabs": [
+          {
+            "id": "tab-context",
+            "title": "System Context",
+            "content": "FinPay processes real-time ISO 8583 banking transactions across dual Kubernetes clusters with an SLA of 99.999% uptime."
+          },
+          {
+            "id": "tab-metrics",
+            "title": "Observability Metrics",
+            "content": "Prometheus alerts trigger when HTTP 5xx responses exceed 0.01% of total transaction volume over a rolling 2-minute window."
+          },
+          {
+            "id": "tab-release",
+            "title": "Release Strategy",
+            "content": "Releases are deployed using progressive canary analysis shifting traffic 5%, 25%, 50%, 100% over 30 minutes."
+          }
+        ]
+      },
+      "options": [
+        {
+          "id": "opt-auto-canary-rollback",
+          "text": "Automated instant traffic rollback to the baseline version via Ingress routing when metric alerts fire",
+          "explanation": "Instantly diverts user traffic away from the flawed release without human delay."
+        },
+        {
+          "id": "opt-manual-drain",
+          "text": "Manual node draining requiring on-call engineer confirmation via chat ops",
+          "explanation": "Manual intervention adds several minutes of delay, violating strict 99.999% error budgets."
+        },
+        {
+          "id": "opt-wait-timeout",
+          "text": "Allowing the deployment to continue until client connections naturally time out",
+          "explanation": "Allows customer payment failures to accumulate and consumes SLA margin."
+        },
+        {
+          "id": "opt-reboot-cluster",
+          "text": "Initiating an immediate rolling restart of all cluster nodes simultaneously",
+          "explanation": "Cluster-wide restarts cause massive transaction drops and cascade outages."
+        }
+      ],
+      "correctAnswer": "opt-auto-canary-rollback",
+      "explanation": {
+        "general": "Progressive delivery with automated metric analysis automatically shifts ingress routing back to the proven baseline version the moment an anomaly or 5xx spike is detected.",
+        "options": {
+          "opt-auto-canary-rollback": "Correct. Sub-second automated remediation preserves SLA and customer transactions.",
+          "opt-manual-drain": "Incorrect. Human response time is too slow for 99.999% SLAs.",
+          "opt-wait-timeout": "Incorrect. Exposes active transactions to failures.",
+          "opt-reboot-cluster": "Incorrect. Causes systemic disruption."
+        }
+      },
+      "difficulty": "hard",
+      "order": 5
+    }
+  ]
+}

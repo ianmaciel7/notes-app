@@ -254,7 +254,7 @@ Before finishing, verify that:
 ## Documentation and agent resources
 
 - Architecture: `ARCHITECTURE.md`
-- Agents: `.agents/agents/` (e.g., `firebase` subagent in `.agents/agents/firebase/agent.md`, `research` subagent [`code-researcher`] in `.agents/agents/research/agent.md` for codebase exploration, Graphify queries, Context7 documentation, and Shoogle discovery)
+- Agents: `.agents/agents/` (e.g., `firebase` subagent in `.agents/agents/firebase/agent.md`, `research` subagent [`code-researcher`] in `.agents/agents/research/agent.md`, `code-reviewer` subagent in `.agents/agents/code-reviewer/agent.md`, `test-engineer` subagent in `.agents/agents/test-engineer/agent.md`, and `ui-engineer` subagent in `.agents/agents/ui-engineer/agent.md`)
 - Rules: `.agents/rules/`
 - Skills: `.agents/skills/`
 - Project overview and commands: `README.md`
