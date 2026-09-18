@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { AuthGate } from "@/components/auth-gate";
-import { UserNav } from "@/components/user-nav";
+import { UserNav } from "@/components/user/user-nav";
 import { getCurrentUser } from "@/data/auth";
 import type { Locale } from "@/lib/i18n/types";
 

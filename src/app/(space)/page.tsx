@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { getDictionary, getServerLocale } from "@/app/[lang]/dictionaries";
 import { AuthGate } from "@/components/auth-gate";
-import { UserNav } from "@/components/user-nav";
+import { UserNav } from "@/components/user/user-nav";
 import { getCurrentUser } from "@/data/auth";
 
 export default function HomePage() {
