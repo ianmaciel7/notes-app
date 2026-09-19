@@ -46,14 +46,25 @@ function validateAnswerForFormat(
 export function toPublicQuestion(
   question: QuestionWithIdentity,
 ): PublicQuestionDto {
-  const {
-    correctOptionIds: _correctOptionIds,
-    explanation: _explanation,
-    authorNotes: _authorNotes,
-    ...publicQuestion
-  } = question;
-
-  return publicQuestion;
+  return {
+    questionId: question.questionId,
+    questionRevisionId: question.questionRevisionId,
+    schemaVersion: question.schemaVersion,
+    format: question.format,
+    prompt: question.prompt,
+    options: question.options.map((option) => ({
+      id: option.id,
+      text: option.text,
+    })),
+    ...(question.source
+      ? {
+          source: {
+            title: question.source.title,
+            url: question.source.url,
+          },
+        }
+      : {}),
+  };
 }
 
 export function gradeQuestion(

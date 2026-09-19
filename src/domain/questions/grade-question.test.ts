@@ -155,6 +155,19 @@ describe("parseQuestionRevision", () => {
 });
 
 describe("toPublicQuestion", () => {
+  it("omits unexpected sensitive runtime fields from browser DTOs", () => {
+    const publicQuestion = toPublicQuestion({
+      ...multipleChoiceQuestion,
+      questionId: "question-1",
+      questionRevisionId: "question-revision-1",
+      sessionToken: "private-session-token",
+      rawSchedulerState: { stability: 3.5 },
+    });
+
+    expect(publicQuestion).not.toHaveProperty("sessionToken");
+    expect(publicQuestion).not.toHaveProperty("rawSchedulerState");
+  });
+
   it("omits answer keys and author notes from browser DTOs", () => {
     const publicQuestion = toPublicQuestion({
       ...multipleChoiceQuestion,
