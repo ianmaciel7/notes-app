@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   resolve: {
@@ -13,6 +13,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.{ts,tsx}"],
+    exclude: [...configDefaults.exclude, "**/*.firebase.test.ts"],
     setupFiles: ["./vitest.setup.ts"],
   },
 });

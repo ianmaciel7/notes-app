@@ -88,6 +88,8 @@ export async function createQuestionAction(input: {
   }
 }
 
+export const createQuestionDraftAction = createQuestionAction;
+
 export async function saveQuestionDraftAction(input: {
   spaceId: string;
   questionId: string;

@@ -84,6 +84,8 @@ export async function createExamAction(input: {
   }
 }
 
+export const createExamDraftAction = createExamAction;
+
 export async function saveExamDraftAction(input: {
   spaceId: string;
   examId: string;
