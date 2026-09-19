@@ -69,25 +69,23 @@ service cloud.firestore {
       }
     }
 
-    // Space-scoped typed objects and relations. The server DAL also enforces
-    // the authenticated user's membership before returning private spaces.
+    // Space-scoped typed objects and relations are server-only.
+    // Client SDK reads/writes are denied; access is mediated by Firebase Admin after server authorization.
     match /spaces/{spaceId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
+      allow read, write: if false;
 
-      match /objects/{objectId} {
-        allow read: if isAuthenticated();
-        allow write: if isAdmin();
-      }
-
-      match /relations/{relationId} {
-        allow read: if isAuthenticated();
-        allow write: if isAdmin();
+      match /{allSubpaths=**} {
+        allow read, write: if false;
       }
     }
 
     // User Scoped Data:
     match /users/{userId} {
+      // User-scoped spaces, attempts, question memory, and review events are server-only.
+      match /spaces/{spaceId}/{document=**} {
+        allow read, write: if false;
+      }
+
       // User-scoped UI and study preferences
       match /settings/{settingId} {
         allow read: if isOwner(userId) && settingId == 'preferences';

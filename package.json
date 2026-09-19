@@ -15,6 +15,8 @@
     "lint": "biome check",
     "test": "vitest run",
     "test:firebase": "firebase emulators:exec --only auth,firestore --project demo-notes-app \"pnpm exec vitest run --config vitest.firebase.config.ts\"",
+    "migrate:exam-fsrs": "tsx scripts/migrate-exam-fsrs-foundation.ts",
+    "verify:exam-fsrs": "tsx scripts/verify-exam-fsrs-migration.ts",
     "format": "biome format --write"
   },
   "dependencies": {
