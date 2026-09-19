@@ -15,12 +15,58 @@
         { "fieldPath": "tags", "arrayConfig": "CONTAINS" },
         { "fieldPath": "updatedAt", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "objects",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "type", "order": "ASCENDING" },
+        { "fieldPath": "lifecycle", "order": "ASCENDING" },
+        { "fieldPath": "updatedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "relations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "sourceObjectId", "order": "ASCENDING" },
+        { "fieldPath": "type", "order": "ASCENDING" },
+        { "fieldPath": "position", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "questionMemory",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "dueAt", "order": "ASCENDING" },
+        { "fieldPath": "questionId", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": [
     {
       "collectionGroup": "notes",
       "fieldPath": "content",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "revisions",
+      "fieldPath": "payload.authorNotes",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "revisions",
+      "fieldPath": "payload.correctOptionIds",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "attempts",
+      "fieldPath": "submittedAnswers",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "questionMemory",
+      "fieldPath": "card",
       "indexes": []
     }
   ]
