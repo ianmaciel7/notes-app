@@ -80,7 +80,7 @@ export async function createQuestionAction(input: {
     });
 
     if (input.tagIds && input.tagIds.length > 0) {
-      await setObjectTags(input.spaceId, record.id, input.tagIds);
+      await setObjectTags(user.uid, input.spaceId, record.id, input.tagIds);
     }
 
     return { ok: true, data: record };
@@ -155,7 +155,12 @@ export async function setQuestionTagsAction(input: {
   try {
     const user = await requireActionUser();
     await getOwnedSpace(user.uid, input.spaceId);
-    await setObjectTags(input.spaceId, input.questionId, input.tagIds);
+    await setObjectTags(
+      user.uid,
+      input.spaceId,
+      input.questionId,
+      input.tagIds,
+    );
     return { ok: true, data: undefined };
   } catch (err) {
     return toActionResultError(err);

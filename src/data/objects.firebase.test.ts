@@ -249,7 +249,7 @@ describe("tags repository", () => {
     const object = await createObjectDraft(OWNER, space.id, "question", "Q1");
     const tag = await upsertTag(space.id, "Math");
 
-    await setObjectTags(space.id, object.id, [tag.id]);
+    await setObjectTags(OWNER, space.id, object.id, [tag.id]);
 
     const snap = await getFirestore()
       .collection("spaces")
@@ -260,5 +260,37 @@ describe("tags repository", () => {
 
     expect(snap.docs).toHaveLength(1);
     expect(snap.docs[0].data().tagId).toBe(tag.id);
+  });
+
+  it("rejects an object that does not belong to the target space", async () => {
+    const targetSpace = await createPrivateSpace(OWNER, "Target Space");
+    const foreignSpace = await createPrivateSpace(OWNER, "Foreign Space");
+    const foreignObject = await createObjectDraft(
+      OWNER,
+      foreignSpace.id,
+      "question",
+      "Foreign Question",
+    );
+    const tag = await upsertTag(targetSpace.id, "Math");
+
+    await expect(
+      setObjectTags(OWNER, targetSpace.id, foreignObject.id, [tag.id]),
+    ).rejects.toMatchObject({ code: "forbidden" });
+  });
+
+  it("rejects tags that do not belong to the target space", async () => {
+    const targetSpace = await createPrivateSpace(OWNER, "Target Space");
+    const foreignSpace = await createPrivateSpace(OWNER, "Foreign Space");
+    const object = await createObjectDraft(
+      OWNER,
+      targetSpace.id,
+      "question",
+      "Question",
+    );
+    const foreignTag = await upsertTag(foreignSpace.id, "Foreign");
+
+    await expect(
+      setObjectTags(OWNER, targetSpace.id, object.id, [foreignTag.id]),
+    ).rejects.toMatchObject({ code: "validation-failed" });
   });
 });

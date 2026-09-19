@@ -162,12 +162,11 @@ export function Assessment({
           updateQuestionState(questionId, { checked, correct }),
         onRevealedChange: (revealed) =>
           updateQuestionState(questionId, { revealed }),
-        onSubmitAnswer: async (answer, isCorrect) => {
+        onSubmitAnswer: async (answer) => {
           const result = await recordAttemptAction({
             examId,
             questionId,
             submittedAnswer: answer,
-            isCorrect,
           });
           if (!result.success) {
             updateQuestionState(questionId, {

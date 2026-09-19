@@ -7,7 +7,27 @@ import { getOwnedSpace, listOwnedSpaces } from "@/data/spaces";
 import { hasLocale } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/types";
 
-export default async function SpaceDetailLayout({
+export default function SpaceDetailLayout({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ lang: string; spaceId: string }>;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          Loading space...
+        </div>
+      }
+    >
+      <SpaceDetailContent params={params}>{children}</SpaceDetailContent>
+    </Suspense>
+  );
+}
+
+async function SpaceDetailContent({
   children,
   params,
 }: {
@@ -17,30 +37,6 @@ export default async function SpaceDetailLayout({
   const { lang, spaceId } = await params;
   if (!hasLocale(lang)) notFound();
 
-  return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center">
-          Loading space...
-        </div>
-      }
-    >
-      <SpaceDetailContent lang={lang as Locale} spaceId={spaceId}>
-        {children}
-      </SpaceDetailContent>
-    </Suspense>
-  );
-}
-
-async function SpaceDetailContent({
-  children,
-  lang,
-  spaceId,
-}: {
-  children: ReactNode;
-  lang: Locale;
-  spaceId: string;
-}) {
   let user: { uid: string; email: string | null };
   try {
     user = await requireActionUser();

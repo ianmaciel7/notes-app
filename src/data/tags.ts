@@ -1,6 +1,8 @@
 import "server-only";
 
 import { getFirestore } from "firebase-admin/firestore";
+
+import { getOwnedSpace } from "@/data/spaces";
 import { DomainError } from "@/domain/shared/domain-error";
 
 export interface TagRecord {
@@ -52,15 +54,34 @@ export async function upsertTag(
 }
 
 export async function setObjectTags(
+  ownerId: string,
   spaceId: string,
   objectId: string,
   tagIds: string[],
 ): Promise<void> {
+  await getOwnedSpace(ownerId, spaceId);
   const db = getFirestore();
-  const objectTagsRef = db
-    .collection("spaces")
-    .doc(spaceId)
-    .collection("objectTags");
+  const spaceRef = db.collection("spaces").doc(spaceId);
+  const objectSnap = await spaceRef.collection("objects").doc(objectId).get();
+
+  if (!objectSnap.exists || objectSnap.data()?.ownerId !== ownerId) {
+    throw new DomainError("forbidden");
+  }
+
+  const tagSnapshots = await Promise.all(
+    tagIds.map((tagId) => spaceRef.collection("tags").doc(tagId).get()),
+  );
+  if (
+    tagSnapshots.some(
+      (snapshot) => !snapshot.exists || snapshot.data()?.spaceId !== spaceId,
+    )
+  ) {
+    throw new DomainError("validation-failed", {
+      message: "Every tag must belong to the target space.",
+    });
+  }
+
+  const objectTagsRef = spaceRef.collection("objectTags");
 
   const existing = await objectTagsRef.where("objectId", "==", objectId).get();
   const batch = db.batch();

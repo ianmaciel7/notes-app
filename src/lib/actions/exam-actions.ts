@@ -28,27 +28,24 @@ export async function recordAttemptAction(input: {
   examId: string;
   questionId: string;
   submittedAnswer: CorrectAnswer;
-  isCorrect: boolean;
 }): Promise<RecordAttemptResult> {
   try {
     const { uid: userId } = await requireActionUser();
 
-    // Verify answer correctness server-side if question document contains correctAnswer
-    let serverEvaluatedCorrectness = input.isCorrect;
     const questionDoc = await adminDb
       .collection("exams")
       .doc(input.examId)
       .collection("questions")
       .doc(input.questionId)
       .get();
-    if (questionDoc.exists) {
-      const qData = questionDoc.data();
-      if (qData?.correctAnswer !== undefined) {
-        serverEvaluatedCorrectness =
-          JSON.stringify(input.submittedAnswer) ===
-          JSON.stringify(qData.correctAnswer);
-      }
+
+    const correctAnswer = questionDoc.data()?.correctAnswer;
+    if (!questionDoc.exists || correctAnswer === undefined) {
+      return { success: false, error: "verification-failed" };
     }
+
+    const serverEvaluatedCorrectness =
+      JSON.stringify(input.submittedAnswer) === JSON.stringify(correctAnswer);
 
     const result = await recordQuestionAttempt({
       userId,
