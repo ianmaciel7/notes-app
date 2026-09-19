@@ -2227,8 +2227,8 @@
   },
   ".agents/skills/impeccable/scripts/data/font-index.json": {
     "mtime": 1789780445.2236204,
-    "seen": 1789828472.5852642,
-    "ast_hash": "",
+    "seen": 1789828915.1654284,
+    "ast_hash": "4a4426c85ec12df1d9a487a39d656ff4",
     "semantic_hash": ""
   },
   "src/components/object/assessment/assessment-state.ts": {
@@ -2352,9 +2352,9 @@
     "semantic_hash": ""
   },
   "src/app/[lang]/spaces/[spaceId]/layout.tsx": {
-    "mtime": 1789827844.8207033,
-    "seen": 1789827932.2125762,
-    "ast_hash": "bef26c2239cb1c63b0709c4e9f1a6f1e",
+    "mtime": 1789828874.3431854,
+    "seen": 1789828915.1654284,
+    "ast_hash": "24334743527ca7a3da19fa4b0f9a01d6",
     "semantic_hash": ""
   },
   "src/app/[lang]/spaces/[spaceId]/page.tsx": {
