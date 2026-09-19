@@ -54,14 +54,14 @@ async function SpaceHome() {
 
   return (
     <AuthGate locale={locale}>
-      <div className="min-h-screen bg-muted/30">
+      <div className="min-h-screen bg-background text-foreground">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:shadow-md focus:outline-none focus:ring-2 focus:ring-ring"
         >
           {dictionary.common.skipToContent}
         </a>
-        <header className="border-b bg-background/95 supports-[backdrop-filter]:bg-background/80">
+        <header className="border-border bg-background/95 supports-[backdrop-filter]:bg-background/80 border-b">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
             <Link
               href="/"
@@ -78,7 +78,7 @@ async function SpaceHome() {
           id="main-content"
           className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 sm:py-12"
         >
-          <section className="relative overflow-hidden rounded-2xl border bg-card px-6 py-8 shadow-sm sm:px-8 sm:py-10">
+          <section className="relative overflow-hidden rounded-2xl border border-border bg-card px-6 py-8 text-card-foreground shadow-sm sm:px-8 sm:py-10">
             <div className="relative max-w-2xl space-y-4">
               <h1 className="text-3xl font-semibold tracking-[-0.03em] text-balance sm:text-4xl">
                 {dictionary.exams.title}
@@ -113,7 +113,7 @@ async function SpaceHome() {
                   <li key={exam.id}>
                     <Card
                       size="sm"
-                      className="h-full border-border/70 shadow-sm motion-safe:transition-transform motion-safe:duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+                      className="h-full border-border/70 bg-card text-card-foreground shadow-sm motion-safe:transition-transform motion-safe:duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
                     >
                       <CardHeader className="gap-5 px-5 pt-5 sm:px-6 sm:pt-6">
                         <div className="flex items-center justify-between gap-4">
@@ -193,7 +193,7 @@ async function SpaceHome() {
                 ))}
               </ul>
             ) : (
-              <div className="rounded-2xl border border-dashed bg-card px-6 py-12 text-center">
+              <div className="rounded-2xl border border-border border-dashed bg-card px-6 py-12 text-center text-card-foreground">
                 <h3 className="font-semibold">{dictionary.exams.title}</h3>
                 <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
                   {dictionary.exams.noQuestions}

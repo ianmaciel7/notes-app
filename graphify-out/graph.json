@@ -24782,6 +24782,102 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_impeccable_reference_colorize",
+      "label": "colorize.md",
+      "_origin": "ast",
+      "community": 177,
+      "community_name": "colorize.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "colorize.md",
+      "source_file": ".agents/skills/impeccable/reference/colorize.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "agents_skills_impeccable_reference_colorize_apply_at_system_scale",
+      "label": "Apply at system scale",
+      "_origin": "ast",
+      "community": 177,
+      "community_name": "colorize.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "apply at system scale",
+      "source_file": ".agents/skills/impeccable/reference/colorize.md",
+      "source_location": "L40"
+    },
+    {
+      "id": "agents_skills_impeccable_reference_colorize_audit_before_choosing",
+      "label": "Audit before choosing",
+      "_origin": "ast",
+      "community": 177,
+      "community_name": "colorize.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "audit before choosing",
+      "source_file": ".agents/skills/impeccable/reference/colorize.md",
+      "source_location": "L12"
+    },
+    {
+      "id": "agents_skills_impeccable_reference_colorize_choose_a_strategy",
+      "label": "Choose a strategy",
+      "_origin": "ast",
+      "community": 177,
+      "community_name": "colorize.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "choose a strategy",
+      "source_file": ".agents/skills/impeccable/reference/colorize.md",
+      "source_location": "L25"
+    },
+    {
+      "id": "agents_skills_impeccable_reference_colorize_contrast_and_perception",
+      "label": "Contrast and perception",
+      "_origin": "ast",
+      "community": 177,
+      "community_name": "colorize.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "contrast and perception",
+      "source_file": ".agents/skills/impeccable/reference/colorize.md",
+      "source_location": "L53"
+    },
+    {
+      "id": "agents_skills_impeccable_reference_colorize_live_mode_signature_params",
+      "label": "Live-mode signature params",
+      "_origin": "ast",
+      "community": 177,
+      "community_name": "colorize.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "live-mode signature params",
+      "source_file": ".agents/skills/impeccable/reference/colorize.md",
+      "source_location": "L78"
+    },
+    {
+      "id": "agents_skills_impeccable_reference_colorize_verify",
+      "label": "Verify",
+      "_origin": "ast",
+      "community": 177,
+      "community_name": "colorize.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "verify",
+      "source_file": ".agents/skills/impeccable/reference/colorize.md",
+      "source_location": "L67"
+    },
+    {
+      "id": "agents_skills_impeccable_reference_colorize_visitor_mode",
+      "label": "Visitor mode",
+      "_origin": "ast",
+      "community": 177,
+      "community_name": "colorize.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "visitor mode",
+      "source_file": ".agents/skills/impeccable/reference/colorize.md",
+      "source_location": "L7"
+    },
+    {
       "id": "agents_rules_instruction_scoping",
       "label": "instruction-scoping.md",
       "_origin": "ast",
@@ -30187,102 +30283,6 @@
       "norm_label": "verifying the build",
       "source_file": ".agents/skills/impeccable/reference/android.md",
       "source_location": "L42"
-    },
-    {
-      "id": "agents_skills_impeccable_reference_colorize",
-      "label": "colorize.md",
-      "_origin": "ast",
-      "community": 225,
-      "community_name": "colorize.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "colorize.md",
-      "source_file": ".agents/skills/impeccable/reference/colorize.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_impeccable_reference_colorize_apply_at_system_scale",
-      "label": "Apply at system scale",
-      "_origin": "ast",
-      "community": 225,
-      "community_name": "colorize.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "apply at system scale",
-      "source_file": ".agents/skills/impeccable/reference/colorize.md",
-      "source_location": "L40"
-    },
-    {
-      "id": "agents_skills_impeccable_reference_colorize_audit_before_choosing",
-      "label": "Audit before choosing",
-      "_origin": "ast",
-      "community": 225,
-      "community_name": "colorize.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "audit before choosing",
-      "source_file": ".agents/skills/impeccable/reference/colorize.md",
-      "source_location": "L12"
-    },
-    {
-      "id": "agents_skills_impeccable_reference_colorize_choose_a_strategy",
-      "label": "Choose a strategy",
-      "_origin": "ast",
-      "community": 225,
-      "community_name": "colorize.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "choose a strategy",
-      "source_file": ".agents/skills/impeccable/reference/colorize.md",
-      "source_location": "L25"
-    },
-    {
-      "id": "agents_skills_impeccable_reference_colorize_contrast_and_perception",
-      "label": "Contrast and perception",
-      "_origin": "ast",
-      "community": 225,
-      "community_name": "colorize.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "contrast and perception",
-      "source_file": ".agents/skills/impeccable/reference/colorize.md",
-      "source_location": "L53"
-    },
-    {
-      "id": "agents_skills_impeccable_reference_colorize_live_mode_signature_params",
-      "label": "Live-mode signature params",
-      "_origin": "ast",
-      "community": 225,
-      "community_name": "colorize.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "live-mode signature params",
-      "source_file": ".agents/skills/impeccable/reference/colorize.md",
-      "source_location": "L78"
-    },
-    {
-      "id": "agents_skills_impeccable_reference_colorize_verify",
-      "label": "Verify",
-      "_origin": "ast",
-      "community": 225,
-      "community_name": "colorize.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "verify",
-      "source_file": ".agents/skills/impeccable/reference/colorize.md",
-      "source_location": "L67"
-    },
-    {
-      "id": "agents_skills_impeccable_reference_colorize_visitor_mode",
-      "label": "Visitor mode",
-      "_origin": "ast",
-      "community": 225,
-      "community_name": "colorize.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "visitor mode",
-      "source_file": ".agents/skills/impeccable/reference/colorize.md",
-      "source_location": "L7"
     },
     {
       "id": "agents_skills_impeccable_reference_critique_1_impatient_power_user_alex",
@@ -43452,18 +43452,6 @@
       "type": "external"
     },
     {
-      "id": "src_hooks_use_i18n_usei18n",
-      "label": "src_hooks_use_i18n_usei18n",
-      "_origin": "semantic",
-      "community": 177,
-      "community_name": "src_hooks_use_i18n_usei18n",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "src_hooks_use_i18n_usei18n",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "ref_base_ui_react_preview_card",
       "label": "ref_base_ui_react_preview_card",
       "_origin": "semantic",
@@ -43496,6 +43484,18 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ref_base_ui_react_scroll_area",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "src_hooks_use_i18n_usei18n",
+      "label": "src_hooks_use_i18n_usei18n",
+      "_origin": "semantic",
+      "community": 223,
+      "community_name": "src_hooks_use_i18n_usei18n",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "src_hooks_use_i18n_usei18n",
       "source_file": "",
       "type": "external"
     },
@@ -116664,5 +116664,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4959aea840e94a1941600dba56f6cbeee75cd830"
+  "built_at_commit": "416f5712aca2dbce3790a47151daf202ad65a816"
 }

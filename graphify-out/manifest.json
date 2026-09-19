@@ -1374,9 +1374,9 @@
     "semantic_hash": ""
   },
   "src/app/(space)/page.tsx": {
-    "mtime": 1789781783.4400766,
-    "seen": 1789781872.0871525,
-    "ast_hash": "01fc06b4b1b2eaf4e6a69d63b2d0eb0b",
+    "mtime": 1789783746.0633678,
+    "seen": 1789783794.9581618,
+    "ast_hash": "598aca878a91306b9b922a5756f66bc7",
     "semantic_hash": ""
   },
   "src/app/layout.tsx": {
@@ -1752,9 +1752,9 @@
     "semantic_hash": ""
   },
   "src/components/object/question/hotspot-question.tsx": {
-    "mtime": 1789783544.3788998,
-    "seen": 1789783551.7957375,
-    "ast_hash": "6cc88968844f5075e73618b2890dd5c2",
+    "mtime": 1789783588.0496638,
+    "seen": 1789783606.7666717,
+    "ast_hash": "e3e35a2744c9f5a9e2c2cfda33e35168",
     "semantic_hash": ""
   },
   "src/components/object/question/markdown-prompt.tsx": {
@@ -2347,7 +2347,7 @@
   },
   ".agents/skills/impeccable/scripts/data/font-index.json": {
     "mtime": 1789780445.2236204,
-    "seen": 1789781028.2675931,
+    "seen": 1789783606.7656682,
     "ast_hash": "",
     "semantic_hash": ""
   },

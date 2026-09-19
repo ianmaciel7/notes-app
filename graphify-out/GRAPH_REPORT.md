@@ -1,7 +1,7 @@
 # Graph Report - notes-app  (2026-09-18)
 
 ## Corpus Check
-- 396 files · ~272,361 words
+- 396 files · ~272,357 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 19 file(s) not represented in the graph (top: (none) 7, .toml 4, .rules 2)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4959aea8`
+- Built from commit: `416f5712`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -188,7 +188,7 @@
 - Q: Explain the data folder using the Next.js data security guide and this repository architecture
 - Design System Rule
 - exam-actions.ts
-- src_hooks_use_i18n_usei18n
+- colorize.md
 - actOnAgentTarget
 - Instruction Scoping Guidelines
 - Performance Optimization
@@ -229,8 +229,8 @@
 - Command guidance
 - Shape
 - scroll-area.tsx
+- src_hooks_use_i18n_usei18n
 - Android platform
-- colorize.md
 - Persona-Based Design Testing
 - Extract Flow
 - web-accessibility/SKILL.md
@@ -882,6 +882,10 @@ Nodes (5): Completion gate, Component change template, Design System Rule, Manda
 Cohesion: 0.16
 Nodes (23): Assessment(), saveQuestionNote(), recordQuestionAttempt(), toggleQuestionBookmark(), updateStudyGoals(), getActionUserId(), objectProperties(), recordAttemptAction() (+15 more)
 
+### Community 177 - "colorize.md"
+Cohesion: 0.25
+Nodes (7): Apply at system scale, Audit before choosing, Choose a strategy, Contrast and perception, Live-mode signature params, Verify, Visitor mode
+
 ### Community 178 - "actOnAgentTarget"
 Cohesion: 0.11
 Nodes (42): actOnAgentTarget(), agentTargetBusyReason(), agentTargetOverlayGone(), agentTargetTaken(), claimAgentTarget(), claimAndActOnAgentTarget(), clearStoredManualApplyState(), declineAgentTargetBusy() (+34 more)
@@ -1025,10 +1029,6 @@ Nodes (8): Cadence, Confirm and stop, Phase 1: Discovery interview, Phase 2: Res
 ### Community 224 - "Android platform"
 Cohesion: 0.25
 Nodes (8): Android platform, Color & theming, Components & motion, Layout & structure, The Android slop test, Touch targets, Typography, Verifying the build
-
-### Community 225 - "colorize.md"
-Cohesion: 0.25
-Nodes (7): Apply at system scale, Audit before choosing, Choose a strategy, Contrast and perception, Live-mode signature params, Verify, Visitor mode
 
 ### Community 226 - "Persona-Based Design Testing"
 Cohesion: 0.25
