@@ -93,5 +93,43 @@
       "accountExistsWithDifferentCredential": "Já existe uma conta com o mesmo e-mail vinculada a outro provedor de acesso.",
       "unauthorizedDomain": "Este domínio não está autorizado para autenticação."
     }
+  },
+  "spaces": {
+    "title": "Espaços",
+    "createSpace": "Criar Espaço",
+    "renameSpace": "Renomear Espaço",
+    "mySpaces": "Meus Espaços",
+    "overview": "Visão Geral",
+    "noSpaces": "Nenhum espaço ainda",
+    "namePlaceholder": "Nome do espaço",
+    "switchSpace": "Trocar de Espaço"
+  },
+  "objects": {
+    "questions": "Questões",
+    "exams": "Exames",
+    "collections": "Coleções",
+    "study": "Estudo"
+  },
+  "authoring": {
+    "title": "Autoria",
+    "newQuestion": "Nova Questão",
+    "newExam": "Novo Exame",
+    "saveDraft": "Salvar Rascunho",
+    "publish": "Publicar",
+    "archive": "Arquivar"
+  },
+  "attempts": {
+    "startAttempt": "Iniciar Exame",
+    "completeAttempt": "Enviar Exame",
+    "bookmark": "Marcar",
+    "passed": "Aprovado",
+    "failed": "Reprovado"
+  },
+  "study": {
+    "dueQuestions": "Questões Pendentes",
+    "rateAgain": "Errei",
+    "rateHard": "Difícil",
+    "rateGood": "Bom",
+    "rateEasy": "Fácil"
   }
 }

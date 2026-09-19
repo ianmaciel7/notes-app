@@ -1,6 +1,7 @@
 export type QuestionType =
   | "single-choice"
   | "multiple-choice"
+  | "true-false"
   | "drag-and-drop"
   | "hotspot"
   | "case-study";

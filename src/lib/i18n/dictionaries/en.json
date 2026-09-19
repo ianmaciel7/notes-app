@@ -93,5 +93,43 @@
       "accountExistsWithDifferentCredential": "An account already exists with the same email using a different sign-in provider.",
       "unauthorizedDomain": "This domain is not authorized for authentication."
     }
+  },
+  "spaces": {
+    "title": "Spaces",
+    "createSpace": "Create Space",
+    "renameSpace": "Rename Space",
+    "mySpaces": "My Spaces",
+    "overview": "Overview",
+    "noSpaces": "No spaces yet",
+    "namePlaceholder": "Space name",
+    "switchSpace": "Switch Space"
+  },
+  "objects": {
+    "questions": "Questions",
+    "exams": "Exams",
+    "collections": "Collections",
+    "study": "Study"
+  },
+  "authoring": {
+    "title": "Authoring",
+    "newQuestion": "New Question",
+    "newExam": "New Exam",
+    "saveDraft": "Save Draft",
+    "publish": "Publish",
+    "archive": "Archive"
+  },
+  "attempts": {
+    "startAttempt": "Start Exam",
+    "completeAttempt": "Submit Exam",
+    "bookmark": "Bookmark",
+    "passed": "Passed",
+    "failed": "Failed"
+  },
+  "study": {
+    "dueQuestions": "Due Questions",
+    "rateAgain": "Again",
+    "rateHard": "Hard",
+    "rateGood": "Good",
+    "rateEasy": "Easy"
   }
 }
