@@ -1,113 +1,34 @@
-import Image from "next/image";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
+import { notFound, redirect } from "next/navigation";
 
-import { AuthGate } from "@/components/auth/auth-gate";
-import { UserNav } from "@/components/user/user-nav";
-import { getCurrentUser } from "@/data/auth";
+import { requireActionUser } from "@/data/action-auth";
+import { createPrivateSpace, listOwnedSpaces } from "@/data/spaces";
 import { getDictionary, hasLocale } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/types";
 
-export default async function Home({ params }: PageProps<"/[lang]">) {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
-  const dictionary = await getDictionary(lang);
+  let user: { uid: string; email: string | null };
+  try {
+    user = await requireActionUser();
+  } catch {
+    redirect(`/${lang}/sign-in`);
+  }
 
-  return (
-    <Suspense
-      fallback={
-        <main className="flex min-h-screen items-center justify-center">
-          {dictionary.common.loading}
-        </main>
-      }
-    >
-      <AuthenticatedHome locale={lang} />
-    </Suspense>
+  const spaces = await listOwnedSpaces(user.uid);
+  if (spaces.length > 0) {
+    redirect(`/${lang}/spaces/${spaces[0].id}`);
+  }
+
+  const dictionary = await getDictionary(lang as Locale);
+  const defaultSpace = await createPrivateSpace(
+    user.uid,
+    dictionary.spaces.mySpaces,
   );
-}
-
-async function AuthenticatedHome({ locale }: { locale: Locale }) {
-  const user = await getCurrentUser(locale);
-  const dictionary = await getDictionary(locale);
-
-  const [headingPrefix = "", headingSuffix = ""] =
-    dictionary.home.heading.split("page.tsx");
-  const [beforeTemplates = "", afterTemplates = ""] =
-    dictionary.home.description.split(dictionary.home.templates);
-  const [betweenLinks = "", afterLearning = ""] = afterTemplates.split(
-    dictionary.home.learning,
-  );
-
-  return (
-    <AuthGate locale={locale}>
-      <div className="relative flex min-h-screen flex-col items-center justify-center bg-background font-sans">
-        <header className="absolute top-4 right-4 z-50 sm:top-6 sm:right-8">
-          <UserNav user={user} />
-        </header>
-
-        <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between bg-background px-16 py-32 sm:items-start">
-          <Image
-            className="h-5 w-[100px] dark:invert"
-            src="/next.svg"
-            alt={dictionary.home.logoAlt}
-            width={100}
-            height={20}
-            priority
-          />
-          <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-            <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-foreground">
-              {headingPrefix}
-              <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.9em]">
-                page.tsx
-              </code>
-              {headingSuffix}
-            </h1>
-            <p className="max-w-md text-lg leading-8 text-muted-foreground">
-              {beforeTemplates}
-              <a
-                href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                className="font-medium text-foreground"
-              >
-                {dictionary.home.templates}
-              </a>
-              {betweenLinks}
-              <a
-                href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                className="font-medium text-foreground"
-              >
-                {dictionary.home.learning}
-              </a>
-              {afterLearning}
-            </p>
-          </div>
-          <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-            <a
-              className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-5 text-primary-foreground transition-colors hover:bg-primary/80 md:w-[158px]"
-              href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                className="h-[14px] w-4 dark:invert"
-                src="/vercel.svg"
-                alt={dictionary.home.vercelLogomarkAlt}
-                width={16}
-                height={14}
-              />
-              {dictionary.home.deployNow}
-            </a>
-            <a
-              className="flex h-12 w-full items-center justify-center rounded-full border border-border px-5 transition-colors hover:border-transparent hover:bg-muted md:w-[158px]"
-              href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {dictionary.home.documentation}
-            </a>
-          </div>
-        </main>
-      </div>
-    </AuthGate>
-  );
+  redirect(`/${lang}/spaces/${defaultSpace.id}`);
 }

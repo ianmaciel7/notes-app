@@ -119,8 +119,8 @@ describe("proxy", () => {
     expect(setCookie).toContain("SameSite=lax");
   });
 
-  describe("authenticated routes in (space)", () => {
-    it("leaves unprefixed root / unchanged when user is authenticated", () => {
+  describe("authenticated routes with canonical locale prefixing", () => {
+    it("redirects authenticated user on unprefixed root / to negotiated locale", () => {
       const response = proxy(
         new NextRequest("https://notes.example.test/", {
           headers: {
@@ -129,55 +129,21 @@ describe("proxy", () => {
         }),
       );
 
+      expect(response.headers.get("location")).toBe(
+        "https://notes.example.test/pt-BR",
+      );
+    });
+
+    it("leaves authenticated user on /[lang] unchanged", () => {
+      const response = proxy(
+        new NextRequest("https://notes.example.test/pt-BR/spaces", {
+          headers: {
+            cookie: "firebase_session=valid_token",
+          },
+        }),
+      );
+
       expect(response.headers.get("location")).toBeNull();
-      expect(response.cookies.get("NEXT_LOCALE")?.value).toBe("pt-BR");
-      expect(response.headers.get("x-middleware-request-x-next-locale")).toBe(
-        "pt-BR",
-      );
-    });
-
-    it("redirects authenticated user from /[lang] root to clean /", () => {
-      const response = proxy(
-        new NextRequest("https://notes.example.test/pt-BR", {
-          headers: {
-            cookie: "firebase_session=valid_token",
-          },
-        }),
-      );
-
-      expect(response.headers.get("location")).toBe(
-        "https://notes.example.test/",
-      );
-      expect(response.cookies.get("NEXT_LOCALE")?.value).toBe("pt-BR");
-    });
-
-    it("redirects authenticated user from /[lang]/sign-in to clean /", () => {
-      const response = proxy(
-        new NextRequest("https://notes.example.test/en/sign-in", {
-          headers: {
-            cookie: "firebase_session=valid_token",
-          },
-        }),
-      );
-
-      expect(response.headers.get("location")).toBe(
-        "https://notes.example.test/",
-      );
-      expect(response.cookies.get("NEXT_LOCALE")?.value).toBe("en");
-    });
-
-    it("redirects authenticated user from /[lang]/custom-path to unprefixed path", () => {
-      const response = proxy(
-        new NextRequest("https://notes.example.test/pt-BR/notes", {
-          headers: {
-            cookie: "firebase_session=valid_token",
-          },
-        }),
-      );
-
-      expect(response.headers.get("location")).toBe(
-        "https://notes.example.test/notes",
-      );
       expect(response.cookies.get("NEXT_LOCALE")?.value).toBe("pt-BR");
     });
   });

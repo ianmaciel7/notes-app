@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   gradeQuestion,
+  type QuestionWithIdentity,
   toPublicQuestion,
 } from "@/domain/questions/grade-question";
 import {
@@ -162,7 +163,7 @@ describe("toPublicQuestion", () => {
       questionRevisionId: "question-revision-1",
       sessionToken: "private-session-token",
       rawSchedulerState: { stability: 3.5 },
-    });
+    } as unknown as QuestionWithIdentity);
 
     expect(publicQuestion).not.toHaveProperty("sessionToken");
     expect(publicQuestion).not.toHaveProperty("rawSchedulerState");

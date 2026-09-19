@@ -14,7 +14,11 @@ import { getDictionary, getServerLocale } from "@/lib/i18n/dictionaries";
 import type { Exam } from "@/types/exam";
 import type { Question } from "@/types/question";
 
-export default function ExamPage({ params }: PageProps<"/exam/[examId]">) {
+export default function ExamPage({
+  params,
+}: {
+  params: Promise<{ examId: string }>;
+}) {
   return (
     <Suspense
       fallback={

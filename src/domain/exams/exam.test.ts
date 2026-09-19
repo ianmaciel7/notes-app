@@ -1,13 +1,12 @@
 import { describe, expect, it } from "vitest";
-
-import { DomainError } from "@/domain/shared/domain-error";
-import type { ObjectRevision } from "@/domain/objects/object";
-import type { QuestionRevisionPayload } from "@/domain/questions/question";
 import {
   type ExamQuestionReference,
   type ExamRevisionPayload,
   validateExamForPublication,
 } from "@/domain/exams/exam";
+import type { ObjectRevision } from "@/domain/objects/object";
+import type { QuestionRevisionPayload } from "@/domain/questions/question";
+import type { DomainError } from "@/domain/shared/domain-error";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -129,7 +128,9 @@ describe("validateExamForPublication — invalid exams", () => {
     expect(() =>
       validateExamForPublication(payload, SPACE_ID, []),
     ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "validation-failed" }),
+      expect.objectContaining<Partial<DomainError>>({
+        code: "validation-failed",
+      }),
     );
   });
 
@@ -145,7 +146,9 @@ describe("validateExamForPublication — invalid exams", () => {
         { ...qrev, spaceId: SPACE_ID },
       ]),
     ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "validation-failed" }),
+      expect.objectContaining<Partial<DomainError>>({
+        code: "validation-failed",
+      }),
     );
   });
 
@@ -160,7 +163,9 @@ describe("validateExamForPublication — invalid exams", () => {
         { ...qrev, spaceId: "other-space" },
       ]),
     ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "validation-failed" }),
+      expect.objectContaining<Partial<DomainError>>({
+        code: "validation-failed",
+      }),
     );
   });
 
@@ -179,7 +184,9 @@ describe("validateExamForPublication — invalid exams", () => {
         { ...qrev, spaceId: SPACE_ID },
       ]),
     ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "validation-failed" }),
+      expect.objectContaining<Partial<DomainError>>({
+        code: "validation-failed",
+      }),
     );
   });
 
@@ -194,7 +201,9 @@ describe("validateExamForPublication — invalid exams", () => {
         { ...qrev, spaceId: SPACE_ID },
       ]),
     ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "validation-failed" }),
+      expect.objectContaining<Partial<DomainError>>({
+        code: "validation-failed",
+      }),
     );
   });
 
@@ -209,7 +218,9 @@ describe("validateExamForPublication — invalid exams", () => {
         { ...qrev, spaceId: SPACE_ID },
       ]),
     ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "validation-failed" }),
+      expect.objectContaining<Partial<DomainError>>({
+        code: "validation-failed",
+      }),
     );
   });
 
@@ -225,7 +236,9 @@ describe("validateExamForPublication — invalid exams", () => {
         { ...qrev, spaceId: SPACE_ID },
       ]),
     ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "validation-failed" }),
+      expect.objectContaining<Partial<DomainError>>({
+        code: "validation-failed",
+      }),
     );
   });
 
@@ -241,7 +254,9 @@ describe("validateExamForPublication — invalid exams", () => {
         { ...qrev, spaceId: SPACE_ID },
       ]),
     ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "validation-failed" }),
+      expect.objectContaining<Partial<DomainError>>({
+        code: "validation-failed",
+      }),
     );
   });
 });

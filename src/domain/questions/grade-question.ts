@@ -8,7 +8,7 @@ import {
 } from "@/domain/questions/question";
 import { DomainError } from "@/domain/shared/domain-error";
 
-type QuestionWithIdentity = QuestionRevisionPayload &
+export type QuestionWithIdentity = QuestionRevisionPayload &
   Pick<PublicQuestionDto, "questionId" | "questionRevisionId">;
 
 function sortedOptionIds(optionIds: string[]): string[] {

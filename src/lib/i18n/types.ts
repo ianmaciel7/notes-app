@@ -103,6 +103,44 @@ export interface AppMessages {
       unauthorizedDomain: string;
     };
   };
+  spaces: {
+    title: string;
+    createSpace: string;
+    renameSpace: string;
+    mySpaces: string;
+    overview: string;
+    noSpaces: string;
+    namePlaceholder: string;
+    switchSpace: string;
+  };
+  objects: {
+    questions: string;
+    exams: string;
+    collections: string;
+    study: string;
+  };
+  authoring: {
+    title: string;
+    newQuestion: string;
+    newExam: string;
+    saveDraft: string;
+    publish: string;
+    archive: string;
+  };
+  attempts: {
+    startAttempt: string;
+    completeAttempt: string;
+    bookmark: string;
+    passed: string;
+    failed: string;
+  };
+  study: {
+    dueQuestions: string;
+    rateAgain: string;
+    rateHard: string;
+    rateGood: string;
+    rateEasy: string;
+  };
 }
 
 type NestedMessageKey<T> = T extends string

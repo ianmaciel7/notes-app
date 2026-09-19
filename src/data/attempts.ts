@@ -12,6 +12,9 @@ import {
   scoreAttempt,
   validateAttemptCompletion,
 } from "@/domain/attempts/attempt";
+
+export type { AttemptRecord, AttemptScoreResult, AttemptItemRecord };
+
 import {
   gradeQuestion,
   toPublicQuestion,

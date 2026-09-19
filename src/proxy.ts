@@ -18,14 +18,6 @@ const localeCookieOptions = {
   secure: process.env.NODE_ENV !== "development",
 };
 
-const authPaths = ["/sign-in", "/sign-up", "/forgot-password"];
-
-function isAuthPath(pathname: string): boolean {
-  return authPaths.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`),
-  );
-}
-
 function negotiateLocale(acceptLanguage: string | null): Locale {
   if (!acceptLanguage) return defaultLocale;
 
@@ -65,9 +57,6 @@ function negotiateLocale(acceptLanguage: string | null): Locale {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isAuthenticated = Boolean(
-    request.cookies.get(sessionCookieName)?.value,
-  );
 
   const matchedLocale = supportedLocales.find(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
@@ -81,7 +70,7 @@ export function proxy(request: NextRequest) {
 
   requestHeaders.set(localeHeaderName, matchedLocale ?? locale);
 
-  // If session expired or was revoked, clear cookie and permit access to sign-in
+  // If session expired or was revoked, clear cookie
   if (request.nextUrl.searchParams.get("expired") === "true") {
     const response = NextResponse.next({
       request: {
@@ -92,34 +81,6 @@ export function proxy(request: NextRequest) {
     return response;
   }
 
-  // 1. If user is authenticated, keep them on clean unprefixed routes
-  if (isAuthenticated) {
-    if (matchedLocale) {
-      const subPath = pathname.slice(matchedLocale.length + 1) || "/";
-      const targetPath = subPath === "/" || isAuthPath(subPath) ? "/" : subPath;
-
-      const redirectUrl = request.nextUrl.clone();
-      redirectUrl.pathname = targetPath;
-      const response = NextResponse.redirect(redirectUrl);
-      response.cookies.set(
-        localeCookieName,
-        matchedLocale,
-        localeCookieOptions,
-      );
-      return response;
-    }
-
-    // Unprefixed route for authenticated user -> allow through
-    const response = NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    });
-    response.cookies.set(localeCookieName, locale, localeCookieOptions);
-    return response;
-  }
-
-  // 2. If user is unauthenticated
   if (matchedLocale) {
     const response = NextResponse.next({
       request: {
@@ -131,7 +92,7 @@ export function proxy(request: NextRequest) {
   }
 
   const redirectUrl = request.nextUrl.clone();
-  redirectUrl.pathname = `/${locale}${pathname}`;
+  redirectUrl.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
 
   const response = NextResponse.redirect(redirectUrl);
   response.cookies.set(localeCookieName, locale, localeCookieOptions);

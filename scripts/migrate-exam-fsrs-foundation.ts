@@ -48,15 +48,19 @@ export function convertLegacyQuestion(
 
   let explanation = "";
   if (typeof legacyQ.explanation === "object" && legacyQ.explanation !== null) {
-    explanation = legacyQ.explanation.general ?? "";
+    const explObj = legacyQ.explanation as Record<string, unknown>;
+    explanation = typeof explObj.general === "string" ? explObj.general : "";
   } else if (typeof legacyQ.explanation === "string") {
     explanation = legacyQ.explanation;
   }
 
+  const promptText =
+    typeof legacyQ.prompt === "string" ? legacyQ.prompt : "Untitled Question";
+
   const payload: QuestionRevisionPayload = {
     schemaVersion: 1,
     format,
-    prompt: legacyQ.prompt ?? "Untitled Question",
+    prompt: promptText,
     options: options.length > 0 ? options : [{ id: "opt-1", text: "Option 1" }],
     correctOptionIds,
     explanation: explanation || "Explanation provided.",
@@ -67,9 +71,7 @@ export function convertLegacyQuestion(
     spaceId,
     ownerId,
     type: "question",
-    title: legacyQ.prompt
-      ? legacyQ.prompt.slice(0, 100)
-      : `Question ${legacyQ.id}`,
+    title: promptText.slice(0, 100),
     lifecycle: "published",
     latestRevisionId: revisionId,
     publishedRevisionId: revisionId,
@@ -206,7 +208,7 @@ export function planMigration(opts: {
   for (let i = 0; i < opts.questions.length; i++) {
     const legacyQ = opts.questions[i];
     const converted = convertedQuestions[i];
-    questionMap.set(legacyQ.id, {
+    questionMap.set(String(legacyQ.id), {
       questionId: converted.object.id,
       revisionId: converted.revision.id,
     });
@@ -216,7 +218,7 @@ export function planMigration(opts: {
     const matchedRefs: Array<{ questionId: string; revisionId: string }> = [];
     for (const legacyQ of opts.questions) {
       if (legacyQ.examId === exam.id) {
-        const ref = questionMap.get(legacyQ.id);
+        const ref = questionMap.get(String(legacyQ.id));
         if (ref) matchedRefs.push(ref);
       }
     }

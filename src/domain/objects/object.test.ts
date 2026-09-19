@@ -1,13 +1,12 @@
 import { describe, expect, it } from "vitest";
-
-import { DomainError } from "@/domain/shared/domain-error";
 import {
+  assertLifecycleTransition,
   type ObjectLifecycle,
   type ObjectRecord,
   type ObjectRevision,
   type SpaceObjectType,
-  assertLifecycleTransition,
 } from "@/domain/objects/object";
+import type { DomainError } from "@/domain/shared/domain-error";
 
 // ---------------------------------------------------------------------------
 // assertLifecycleTransition
@@ -29,18 +28,18 @@ describe("assertLifecycleTransition", () => {
   });
 
   it("rejects draft → archived", () => {
-    expect(() =>
-      assertLifecycleTransition("draft", "archived"),
-    ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "lifecycle-conflict" }),
+    expect(() => assertLifecycleTransition("draft", "archived")).toThrowError(
+      expect.objectContaining<Partial<DomainError>>({
+        code: "lifecycle-conflict",
+      }),
     );
   });
 
   it("rejects published → draft", () => {
-    expect(() =>
-      assertLifecycleTransition("published", "draft"),
-    ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "lifecycle-conflict" }),
+    expect(() => assertLifecycleTransition("published", "draft")).toThrowError(
+      expect.objectContaining<Partial<DomainError>>({
+        code: "lifecycle-conflict",
+      }),
     );
   });
 
@@ -48,15 +47,17 @@ describe("assertLifecycleTransition", () => {
     expect(() =>
       assertLifecycleTransition("archived", "published"),
     ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "lifecycle-conflict" }),
+      expect.objectContaining<Partial<DomainError>>({
+        code: "lifecycle-conflict",
+      }),
     );
   });
 
   it("rejects same-state self-transition (draft → draft)", () => {
-    expect(() =>
-      assertLifecycleTransition("draft", "draft"),
-    ).toThrowError(
-      expect.objectContaining<Partial<DomainError>>({ code: "lifecycle-conflict" }),
+    expect(() => assertLifecycleTransition("draft", "draft")).toThrowError(
+      expect.objectContaining<Partial<DomainError>>({
+        code: "lifecycle-conflict",
+      }),
     );
   });
 });

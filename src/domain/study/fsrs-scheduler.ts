@@ -3,6 +3,7 @@ import {
   type CardInput,
   createEmptyCard,
   fsrs,
+  type Grade,
   Rating,
 } from "ts-fsrs";
 
@@ -39,11 +40,11 @@ export interface MemoryTransition {
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-const ratingMap: Record<MemoryRating, Rating> = {
-  again: Rating.Again,
-  hard: Rating.Hard,
-  good: Rating.Good,
-  easy: Rating.Easy,
+const ratingMap: Record<MemoryRating, Grade> = {
+  again: Rating.Again as Grade,
+  hard: Rating.Hard as Grade,
+  good: Rating.Good as Grade,
+  easy: Rating.Easy as Grade,
 };
 
 function toStoredCard(card: Card): StoredFsrsCard {
