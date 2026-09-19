@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "shadcn": {
+      "source": "shadcn-ui/ui",
+      "sourceType": "github",
+      "skillPath": "skills/shadcn/SKILL.md",
+      "computedHash": "d04e43ec01e921558b93bb8046c14a42a22556689a2827243df900825a4e1604"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "computedHash": "7e3c9cd74e9e2b4828527a857170e86310f2dab5ea8030a9043df2c7e6c88857"
+    },
+    "anthropic-sdlc": {
+      "source": ".agents/skills/anthropic-sdlc",
+      "sourceType": "local",
+      "skillPath": ".agents/skills/anthropic-sdlc/SKILL.md",
+      "computedHash": "2caffb05ee7ea4e5c33d4ce5f6645f1ed569584896b8ac41c6376af9dcc32297"
+    }
+  }
+}

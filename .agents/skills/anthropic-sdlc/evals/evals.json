@@ -1,0 +1,47 @@
+{
+  "skill_name": "anthropic-sdlc",
+  "evals": [
+    {
+      "id": 1,
+      "eval_name": "vague-feature-idea-no-artifacts",
+      "prompt": "I want to add a way for users to pin important notes to the top of their list in notes-app. There's no intent.md or spec for this yet, I just want to get something moving. Can you help me figure out what we're building?",
+      "expected_output": "Recognizes no intent.md exists and starts at Capture Intent rather than jumping to a spec or code. Interviews for problem/outcome/affected users/constraints/success criteria instead of inventing them. Writes intent.md using assets/intent-template.md structure. Explicitly flags it as a draft needing human approval and does not silently promote it to an approved spec or start implementing.",
+      "files": ["evals/files/intent-tagging.md"],
+      "expectations": [
+        "Identifies that the correct stage is Capture Intent (no intent.md / spec.md / plan.md exists yet for pinning)",
+        "Produces or proposes an intent.md-shaped artifact (problem, outcome, affected users/systems, constraints, success criteria, open questions)",
+        "Does not write implementation code or a step-by-step technical plan",
+        "Explicitly asks for human approval / flags the intent as a draft rather than treating it as approved",
+        "Does not silently invent unstated product decisions as settled facts"
+      ]
+    },
+    {
+      "id": 2,
+      "eval_name": "approved-intent-to-spec",
+      "prompt": "Here's the intent doc for note tagging that we already got approved (attached as intent-tagging.md). Let's move this forward.",
+      "expected_output": "Recognizes the approved intent.md and advances to Requirements & Design rather than re-deriving intent or jumping straight to a plan/implementation. Produces a spec.md-shaped artifact covering functional requirements, states, data/integration requirements, acceptance criteria, and traceability back to the intent, using assets/spec-template.md. Carries forward the intent's open questions (tag case-sensitivity, tag limit) rather than silently resolving them, and flags the spec as needing human approval before Plan Mode.",
+      "files": ["evals/files/intent-tagging.md"],
+      "expectations": [
+        "Identifies the correct stage as Requirements & Design because an approved intent.md already exists",
+        "Does not re-ask the Capture Intent interview questions that intent.md already answers",
+        "Produces a spec.md-shaped artifact with functional requirements and acceptance criteria, not a step-by-step implementation plan",
+        "Carries forward at least one open question from the intent (tag case-sensitivity or tag limit) rather than silently deciding it",
+        "States that the spec needs human approval before proceeding to Plan Mode / implementation"
+      ]
+    },
+    {
+      "id": 3,
+      "eval_name": "prod-incident-no-ticket",
+      "prompt": "We're getting reports today that some users' notes show stale content right after they edit and save it -- looks like a caching bug in prod. No ticket exists yet for this. What's our process here?",
+      "expected_output": "Recognizes this as a production incident with no existing ticket/intent, and routes it through Maintain / Close the Loop: diagnose with constrained/read-only investigation first, then write the finding as a new intent.md (not jump straight into an unreviewed prod fix), and note that it should be routed through human triage before restarting the lifecycle.",
+      "files": [],
+      "expectations": [
+        "Identifies this as entering the lifecycle via a production incident (Maintain / Close the Loop), not via Capture Intent for a fresh feature",
+        "Proposes read-only / diagnostic investigation before proposing or making any code change",
+        "Produces the finding as an intent.md-shaped artifact rather than an implementation plan or direct fix",
+        "States the finding needs to route through human triage before the lifecycle restarts",
+        "Does not claim the incident is resolved without executable evidence"
+      ]
+    }
+  ]
+}
