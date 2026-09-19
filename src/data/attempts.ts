@@ -4,6 +4,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import { getPublishedExamView } from "@/data/exam-authoring";
 import { getObjectRevision } from "@/data/objects";
 import { getOwnedSpace } from "@/data/spaces";
+import { ensureQuestionMemory } from "@/data/study";
 import {
   type AttemptItemRecord,
   type AttemptRecord,
@@ -136,7 +137,7 @@ export async function submitAttemptAnswer(
     .doc(attemptId);
   const itemRef = attemptRef.collection("items").doc(questionId);
 
-  return await db.runTransaction(async (transaction) => {
+  const feedback = await db.runTransaction(async (transaction) => {
     const attemptSnap = await transaction.get(attemptRef);
     const attemptData = attemptSnap.data() as AttemptRecord | undefined;
     if (
@@ -188,6 +189,10 @@ export async function submitAttemptAnswer(
 
     return feedback;
   });
+
+  await ensureQuestionMemory(userId, spaceId, questionId);
+
+  return feedback;
 }
 
 export async function toggleAttemptBookmark(
