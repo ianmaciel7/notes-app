@@ -47,6 +47,7 @@ Before authoring test suites or designing QA plans, read and adhere to:
 5. `README.md`: Testing commands (`pnpm test`, `pnpm test:watch`, `pnpm firebase:emulators:exec`).
 
 ## Graphify Knowledge Graph Usage
+- **Mandatory Delegation to Research Agent**: Whenever you need to look up, find, or investigate untested code paths, symbol callers, regression surfaces, or component dependencies, always call or delegate to the `research` subagent (`code-researcher`) to use Graphify (`graphify query`, `graphify path`, `graphify affected`) rather than searching manually.
 1. **Blast Radius & Affected Tests**: Run `graphify affected "<module>"` to identify which components, routes, or services depend on modified code and require test updates.
 2. **Dependency & Call Chain Tracing**: Run `graphify query "tests for <feature>"` or `graphify path` to verify dependency edges between test suites and implementation files.
 3. **Graph Synchronization**: Ensure `graphify update .` is executed after authoring new test suites or restructuring test utilities.

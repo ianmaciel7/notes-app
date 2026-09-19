@@ -52,6 +52,7 @@ Before creating, modifying, or auditing documentation, read and adhere to:
 8. `docs/research/` & `docs/decisions/`: Living research audits and Architectural Decision Records (ADRs).
 
 ## Graphify Knowledge Graph Usage
+- **Mandatory Delegation to Research Agent**: Whenever you need to look up, find, or verify existing documentation, architecture relationships, or codebase facts, always call or delegate to the `research` subagent (`code-researcher`) to explore the knowledge graph via Graphify (`graphify query`, `graphify path`, `graphify-out/GRAPH_REPORT.md`) rather than searching blindly.
 1. **Cluster & Concept Navigation**: Inspect `graphify-out/GRAPH_REPORT.md` and `graphify-out/wiki/index.md` to identify existing clusters, concepts, and undocumented nodes.
 2. **Context Discovery**: Use `graphify query "<topic>"` to discover undocumented modules or missing references across documentation files.
 3. **Graph Synchronization**: Always execute `graphify update .` after creating, editing, or reorganizing documentation, ADRs, or agent rules so that markdown nodes and links in the knowledge graph stay up to date.

@@ -46,6 +46,7 @@ Before conducting security reviews or threat modeling, read and strictly verify:
 5. `CONTEXT.md`: Data classification for user notes, folders, and study records.
 
 ## Graphify Knowledge Graph Usage
+- **Mandatory Delegation to Research Agent**: Whenever you need to look up, find, or audit reachability, data flows, or dependency paths across the codebase, always call or delegate to the `research` subagent (`code-researcher`) to perform Graphify pathfinding and query analysis (`graphify path`, `graphify query`, `graphify affected`) rather than attempting uncoordinated manual searches.
 1. **Boundary & Path Auditing**: Run `graphify path "<client-component>" "<dal-module>"` or `graphify query` to confirm zero import paths connect client bundles to server-only data access modules or Firebase Admin.
 2. **Blast Radius & Entry Points**: Run `graphify affected "auth"` or `graphify affected "session"` to enumerate all components and route handlers touching authentication state or tokens.
 3. **High-Centrality Node Inspection**: Check `graphify-out/GRAPH_REPORT.md` to identify high-degree god nodes handling data access or persistence that warrant elevated security auditing.

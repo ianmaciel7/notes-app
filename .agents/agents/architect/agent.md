@@ -51,10 +51,11 @@ Before designing architecture or making recommendations, read and strictly adher
 6. `docs/superpowers/specs/` & `docs/superpowers/plans/`: Specifications and plans for active features.
 
 ## Graphify Knowledge Graph Usage
+- **Mandatory Delegation to Research Agent**: Whenever you need to look up, find, trace, or investigate files, symbols, architectural patterns, or dependencies across the codebase, always call or delegate to the `research` subagent (`code-researcher`) to use Graphify (`graphify query`, `graphify path`, `graphify-out/GRAPH_REPORT.md`) and Context7 rather than conducting ad-hoc unguided searches.
 1. **Initial Topology & Clusters**: Inspect `graphify-out/GRAPH_REPORT.md` and `graphify-out/graph.json` before proposing architectural reorganizations.
 2. **Context Querying**:
-   - Run `graphify query "<question>"` for broad BFS traversal across subsystems.
-   - Run `graphify query "<question>" --dfs` to trace linear call chains and data flows.
+   - Run `graphify query "<question>"` for broad BFS traversal across subsystems (via `research`).
+   - Run `graphify query "<question>" --dfs` to trace linear call chains and data flows (via `research`).
 3. **Relationship Mapping**: Run `graphify path "<source>" "<target>"` to trace dependencies between components, modules, or services.
 4. **Blast Radius Analysis**: Run `graphify affected "<concept>"` before modifying shared services, DAL modules, or core data models.
 5. **Graph Synchronization**: Ensure `graphify update .` is executed whenever structural code or architectural documentation changes.

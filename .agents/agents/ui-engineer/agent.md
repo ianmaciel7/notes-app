@@ -70,6 +70,7 @@ Before creating, styling, or refactoring UI components, read and adhere to:
 6. `node_modules/next/dist/docs/`: Next.js 16 App Router UI conventions and breaking changes.
 
 ## Graphify Knowledge Graph Usage
+- **Mandatory Delegation to Research Agent**: Whenever you need to look up, find, or explore existing UI components, design tokens, or consumer usage across the codebase, always call or delegate to the `research` subagent (`code-researcher`) to search with Graphify (`graphify query`, `graphify path`, `graphify affected`) and Shoogle registry search rather than attempting blind searches.
 1. **Blast Radius on Shared Primitives**: Run `graphify affected "<component>"` before modifying any shared primitive in `src/components/ui/` to inspect all consuming features.
 2. **Hierarchy & Composition Mapping**: Run `graphify query "<UI component>"` to inspect parent-child relationships, slot structures, and layout nesting.
 3. **Graph Synchronization**: Ensure `graphify update .` is executed after creating or editing UI components, styles, or Ladle stories.

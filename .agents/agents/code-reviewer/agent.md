@@ -48,6 +48,7 @@ Before conducting reviews, read and strictly verify compliance with:
 5. `docs/i18n-message-inventory.md`: Verify newly added user-facing strings are registered in locale dictionaries.
 
 ## Graphify Knowledge Graph Usage
+- **Mandatory Delegation to Research Agent**: Whenever you need to look up, find, or investigate codebase context, caller hierarchies, or documentation during a review, always call or delegate to the `research` subagent (`code-researcher`) to leverage Graphify (`graphify query`, `graphify path`, `graphify affected`) and Context7 rather than conducting uncoordinated manual searches.
 1. **Cluster & Centrality Inspection**: Check `graphify-out/GRAPH_REPORT.md` to detect if the diff alters highly connected "god nodes" or core shared modules.
 2. **Blast Radius & Downstream Verification**: Run `graphify affected "<concept>"` to check which downstream consumers, routes, or tests may be impacted.
 3. **Dependency Tracing**: Run `graphify path "<source>" "<target>"` or `graphify query` to verify that architectural boundaries (e.g. client components never importing DAL modules) are preserved.

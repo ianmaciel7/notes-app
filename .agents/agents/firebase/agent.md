@@ -105,6 +105,7 @@ Before making Firebase architectural changes or writing rules:
 5. `firestore.rules`, `apphosting.yaml`, `firebase.json`: Authoritative Firebase configuration files.
 
 ## Graphify Knowledge Graph Usage
+- **Mandatory Delegation to Research Agent**: Whenever you need to look up, find, or trace Firebase usage, data access boundaries, or Firestore schema consumers across the codebase, always call or delegate to the `research` subagent (`code-researcher`) to query Graphify (`graphify query`, `graphify path`, `graphify affected`) and Context7 rather than running manual searches.
 1. **SDK Boundary Verification**: Run `graphify query "firebase"` or `graphify path` to trace where client SDK (`src/lib/firebase/client.ts`) vs Admin SDK (`src/data/*`) are imported. Ensure client modules never import server-only DAL.
 2. **Blast Radius Analysis**: Run `graphify affected "auth"` or `graphify affected "firestore"` before altering security rules or DAL query signatures to prevent breaking downstream routes or components.
 3. **Graph Synchronization**: Run `graphify update .` after updating Firebase schemas, security rules, or data access layer implementations.
