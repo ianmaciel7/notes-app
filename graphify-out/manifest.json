@@ -426,9 +426,9 @@
     "semantic_hash": ""
   },
   "skills-lock.json": {
-    "mtime": 1789772893.7700672,
-    "seen": 1789773576.6483753,
-    "ast_hash": "01f88ce433c453376abf4262e6fe59d9",
+    "mtime": 1789780480.4247503,
+    "seen": 1789780540.5872636,
+    "ast_hash": "bbea297e4dc3bf2fd89a8d10d62af2c2",
     "semantic_hash": ""
   },
   ".agents/skills/graphify/SKILL.md": {
@@ -498,9 +498,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1789778702.7510128,
-    "seen": 1789778710.997105,
-    "ast_hash": "9c4224353f241e51893c15e46700111c",
+    "mtime": 1789780524.3993583,
+    "seen": 1789780540.6369777,
+    "ast_hash": "ba2fa569fee0bcc1dcb87dc7435274a9",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
@@ -1596,9 +1596,9 @@
     "semantic_hash": ""
   },
   ".agents/agents/ui-engineer/agent.md": {
-    "mtime": 1789775660.697908,
-    "seen": 1789775862.207496,
-    "ast_hash": "3b2f91ca21e45b63e473c9e9755e1c24",
+    "mtime": 1789780690.3238478,
+    "seen": 1789780711.5831287,
+    "ast_hash": "fa1609f46ad6ee9b9a0ed10037afd5e0",
     "semantic_hash": ""
   },
   "scripts/seed-exams.ts": {
@@ -1791,6 +1791,564 @@
     "mtime": 1789776290.8699882,
     "seen": 1789777854.7409818,
     "ast_hash": "c90da6fba4dbad863606320885d35b35",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/scripts/command-metadata.json": {
+    "mtime": 1789780445.2156498,
+    "seen": 1789780540.5845165,
+    "ast_hash": "a1f7999a1969bcc66a9ca3a4f3782f98",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/scripts/data/font-index-failures.json": {
+    "mtime": 1789780445.2156498,
+    "seen": 1789780540.5845165,
+    "ast_hash": "5b4fd9d1631c390b9c5883d951b03983",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/scripts/impeccable": {
+    "mtime": 1789780445.2236204,
+    "seen": 1789780540.5845165,
+    "ast_hash": "f2fd10849e3dc2f9af15535c28470ad4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/scripts/live-browser-dom.js": {
+    "mtime": 1789780445.2251258,
+    "seen": 1789780540.5845165,
+    "ast_hash": "7e050dcec2e475b566fdeae1a7317e58",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/scripts/live-browser-ignores.js": {
+    "mtime": 1789780445.2251258,
+    "seen": 1789780540.5845165,
+    "ast_hash": "e08d31e97007cc803af9a5f0f6a39012",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/scripts/live-browser-session.js": {
+    "mtime": 1789780445.2261324,
+    "seen": 1789780540.5845165,
+    "ast_hash": "6d6d703be4ba100de389535ba2893fcd",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/scripts/live-browser.js": {
+    "mtime": 1789780445.229331,
+    "seen": 1789780540.5845165,
+    "ast_hash": "f809c645cf87d2fdc64ba4d35bbab0dc",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/scripts/modern-screenshot.umd.js": {
+    "mtime": 1789780445.2303379,
+    "seen": 1789780540.5845165,
+    "ast_hash": "c6afaf6ebceb162206f6a2e5b0ed653c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/evals/evals.json": {
+    "mtime": 1789780418.233969,
+    "seen": 1789780540.5845165,
+    "ast_hash": "278cce9b231d63694d24715f21674a1e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/evals/evals.json": {
+    "mtime": 1789780433.8346243,
+    "seen": 1789780540.5845165,
+    "ast_hash": "062388c119e1a06fc4d5535542019e40",
+    "semantic_hash": ""
+  },
+  ".agents/rules/ux-ui-agent-skills.md": {
+    "mtime": 1789780524.397852,
+    "seen": 1789780540.6181252,
+    "ast_hash": "95b180c1fc10923204401efc7d35b61c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/browser-testing-with-devtools/SKILL.md": {
+    "mtime": 1789780463.5135944,
+    "seen": 1789780540.6181252,
+    "ast_hash": "639b3e0f3bae1118b986269fb7bd5e87",
+    "semantic_hash": ""
+  },
+  ".agents/skills/frontend-ui-engineering/SKILL.md": {
+    "mtime": 1789780455.785439,
+    "seen": 1789780540.6338267,
+    "ast_hash": "632c501a0962adc45d9bee6dfed6038a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/SKILL.md": {
+    "mtime": 1789780445.196509,
+    "seen": 1789780540.6353323,
+    "ast_hash": "c62d3865136116f0a701348707eda77c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/agents/openai.yaml": {
+    "mtime": 1789780445.199616,
+    "seen": 1789780540.6353323,
+    "ast_hash": "7b0c955694fc8b2b320c03ada2080d00",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/adapt.md": {
+    "mtime": 1789780445.199616,
+    "seen": 1789780540.6353323,
+    "ast_hash": "8a46e11391e7830e4897a8fb75aed665",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/adapt.native.md": {
+    "mtime": 1789780445.2006204,
+    "seen": 1789780540.6353323,
+    "ast_hash": "e449a4bbc9a573065d364c43be6ff98c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/android.md": {
+    "mtime": 1789780445.2006204,
+    "seen": 1789780540.6353323,
+    "ast_hash": "c24b60e4c799a798519995dd2701eb74",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/animate.md": {
+    "mtime": 1789780445.2006204,
+    "seen": 1789780540.6353323,
+    "ast_hash": "0da30ea3dc408e0ed6a5510f6aa12d4a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/audit.md": {
+    "mtime": 1789780445.2016273,
+    "seen": 1789780540.6353323,
+    "ast_hash": "b3a00378a046d30856b936b169293945",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/audit.native.md": {
+    "mtime": 1789780445.2016273,
+    "seen": 1789780540.6353323,
+    "ast_hash": "402f61cffd8cb494114fa19838622c2a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/bolder.md": {
+    "mtime": 1789780445.2026255,
+    "seen": 1789780540.6353323,
+    "ast_hash": "8e2efd348a21efe109eb4c359929f28a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/clarify.md": {
+    "mtime": 1789780445.2026255,
+    "seen": 1789780540.6353323,
+    "ast_hash": "2f84bd6e658824d2b1219cd1f8c82946",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/colorize.md": {
+    "mtime": 1789780445.2026255,
+    "seen": 1789780540.6353323,
+    "ast_hash": "d6fbe400fcb6610199813179cefda4ca",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/craft-floor.md": {
+    "mtime": 1789780445.2026255,
+    "seen": 1789780540.6353323,
+    "ast_hash": "0db40782951ff992ac2ba6e97aae86f8",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/craft.md": {
+    "mtime": 1789780445.2026255,
+    "seen": 1789780540.6353323,
+    "ast_hash": "d27896066a5b2752e31873c3772e2803",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/critique.md": {
+    "mtime": 1789780445.2041295,
+    "seen": 1789780540.6353323,
+    "ast_hash": "96865eb8bd7d49f7e508a5b28068d414",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/degraded/asset-producer.md": {
+    "mtime": 1789780445.2041295,
+    "seen": 1789780540.6353323,
+    "ast_hash": "6669f95ddccb2bbe6ebb3dad14bec4c0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/degraded/documenter.md": {
+    "mtime": 1789780445.2051344,
+    "seen": 1789780540.6353323,
+    "ast_hash": "f6584090b949535f344e8c3a0d2e3653",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/degraded/finish-reviewer.md": {
+    "mtime": 1789780445.2051344,
+    "seen": 1789780540.6353323,
+    "ast_hash": "0268bb33f8a91f08d2ac952a08811e7b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/degraded/manual-edit-applier.md": {
+    "mtime": 1789780445.2051344,
+    "seen": 1789780540.6353323,
+    "ast_hash": "b0c19aba2d1bc52d22f6758cef85fe49",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/delight.md": {
+    "mtime": 1789780445.206134,
+    "seen": 1789780540.6353323,
+    "ast_hash": "7ca435a19cb82c7d8cafb2c594772969",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/distill.md": {
+    "mtime": 1789780445.206134,
+    "seen": 1789780540.6353323,
+    "ast_hash": "b70b0a6c7160284faa9cbac1ffec0391",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/doctor.md": {
+    "mtime": 1789780445.206134,
+    "seen": 1789780540.6353323,
+    "ast_hash": "a497f9d42a34c7af80feece3ceb8ba77",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/document.md": {
+    "mtime": 1789780445.2071335,
+    "seen": 1789780540.6353323,
+    "ast_hash": "21d6237f5515051b9d72831a23717960",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/extract.md": {
+    "mtime": 1789780445.2071335,
+    "seen": 1789780540.6353323,
+    "ast_hash": "5ee50cbe07c72a1494ec26710ad089a9",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/generate.md": {
+    "mtime": 1789780445.2071335,
+    "seen": 1789780540.6353323,
+    "ast_hash": "8f591da79cde944de860993fb1903cea",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/harden.md": {
+    "mtime": 1789780445.2071335,
+    "seen": 1789780540.6353323,
+    "ast_hash": "270f6945f6828886a9ba15fe8eade3c9",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/hooks.md": {
+    "mtime": 1789780445.2086382,
+    "seen": 1789780540.6353323,
+    "ast_hash": "3de43ca1d4b89439b2dffbc00fd24607",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/init.md": {
+    "mtime": 1789780445.2086382,
+    "seen": 1789780540.6353323,
+    "ast_hash": "6eebe2f6964326c86060309543aff55f",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/ios.md": {
+    "mtime": 1789780445.2086382,
+    "seen": 1789780540.6353323,
+    "ast_hash": "91ad1ec9152100168db6ec1079c0ad6b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/layout.md": {
+    "mtime": 1789780445.2086382,
+    "seen": 1789780540.6353323,
+    "ast_hash": "b471d163829307d1c283504763b11373",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/live-setup.md": {
+    "mtime": 1789780445.2096436,
+    "seen": 1789780540.6353323,
+    "ast_hash": "d40cc15546126c277e6a8aa16c26ed28",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/live.md": {
+    "mtime": 1789780445.2096436,
+    "seen": 1789780540.6353323,
+    "ast_hash": "326b540f2d6547fcb198bff6fc4ab8ac",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/new-work.md": {
+    "mtime": 1789780445.2106445,
+    "seen": 1789780540.6353323,
+    "ast_hash": "ba5c84a7d1c0635352558572cf34a804",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/onboard.md": {
+    "mtime": 1789780445.2106445,
+    "seen": 1789780540.6353323,
+    "ast_hash": "6f0bbcfebe2ab4f18f83994e9d7613e5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/operate.md": {
+    "mtime": 1789780445.2106445,
+    "seen": 1789780540.6353323,
+    "ast_hash": "e1c02f0c6823fef3c2a7b0c50aa9da04",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/optimize.md": {
+    "mtime": 1789780445.21165,
+    "seen": 1789780540.6353323,
+    "ast_hash": "7a72fcbe6ba22feabbeecd3ad75c1cb6",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/overdrive.md": {
+    "mtime": 1789780445.21165,
+    "seen": 1789780540.6353323,
+    "ast_hash": "3e67e1d99c83badae9f089045c648727",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/polish.md": {
+    "mtime": 1789780445.21165,
+    "seen": 1789780540.6353323,
+    "ast_hash": "df36be44b3e4dbf73997aa0aa1beef45",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/quieter.md": {
+    "mtime": 1789780445.21165,
+    "seen": 1789780540.6353323,
+    "ast_hash": "ac117ed4c47b51b1d9f26865c5d4aec0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/routing.md": {
+    "mtime": 1789780445.2132492,
+    "seen": 1789780540.6353323,
+    "ast_hash": "808abdaadddd593e2eef13622ae13e2d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/shape.md": {
+    "mtime": 1789780445.2132492,
+    "seen": 1789780540.6353323,
+    "ast_hash": "6fdc5a047039048759c1c40d21297f37",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/typeset.md": {
+    "mtime": 1789780445.2142622,
+    "seen": 1789780540.6353323,
+    "ast_hash": "772a5551ff34ca12c31f83aafe6a5d14",
+    "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/reference/visualize.md": {
+    "mtime": 1789780445.2142622,
+    "seen": 1789780540.6353323,
+    "ast_hash": "62118ec2ee136b71edcf66bce6f4705c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/performance-optimization/SKILL.md": {
+    "mtime": 1789780470.8244061,
+    "seen": 1789780540.6353323,
+    "ast_hash": "291e94a7b230759b2bc56a1751dd9616",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/README.md": {
+    "mtime": 1789780418.229385,
+    "seen": 1789780540.6353323,
+    "ast_hash": "36abb88b11d4b78f16788e9e9b6a31da",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/SKILL.md": {
+    "mtime": 1789780418.2311141,
+    "seen": 1789780540.6353323,
+    "ast_hash": "e475b9c0ec6b1307d400db3805ceab8e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/ai-interaction-and-uncertainty.md": {
+    "mtime": 1789780418.23538,
+    "seen": 1789780540.6353323,
+    "ast_hash": "97cef47ae4037641890c2dcf24af6d39",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/boundaries-and-traceability.md": {
+    "mtime": 1789780418.2363882,
+    "seen": 1789780540.6353323,
+    "ast_hash": "bd63e5dfc86eca60bdb8a1290d3e63d2",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/content-and-cognitive-demand.md": {
+    "mtime": 1789780418.2373867,
+    "seen": 1789780540.6353323,
+    "ast_hash": "c58d285701ee552e29bcb582a52ece4d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/engineering-handoff.md": {
+    "mtime": 1789780418.2373867,
+    "seen": 1789780540.6353323,
+    "ast_hash": "87ea6fa08138750bd1ad7b5795f02a32",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/information-architecture.md": {
+    "mtime": 1789780418.2388935,
+    "seen": 1789780540.6353323,
+    "ast_hash": "cd8e0103a93bc1f6b7dd656311893725",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/interaction-pattern-selection.md": {
+    "mtime": 1789780418.239901,
+    "seen": 1789780540.6353323,
+    "ast_hash": "d715c1229bc5ec654a0400622fef9be0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/interface-contracts-and-responsive-behavior.md": {
+    "mtime": 1789780418.239901,
+    "seen": 1789780540.6353323,
+    "ast_hash": "d5b23c241c58b95ca74d4616bac648dc",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/scenario-probes.md": {
+    "mtime": 1789780418.240907,
+    "seen": 1789780540.6353323,
+    "ast_hash": "262e2de6f6d873c6e4955e71e9d0f847",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/source-index.md": {
+    "mtime": 1789780418.241908,
+    "seen": 1789780540.6353323,
+    "ast_hash": "671270e5921dcc7c3f887166bba8e4a7",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/task-flows-and-state-models.md": {
+    "mtime": 1789780418.241908,
+    "seen": 1789780540.6353323,
+    "ast_hash": "be6f65aec6d111ffe7d479102aba8ed0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/references/usability-testing-and-privacy.md": {
+    "mtime": 1789780418.2429075,
+    "seen": 1789780540.6353323,
+    "ast_hash": "03750935b661f38c2fe7e5ebeb7d8587",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/templates/ai-interaction-contract.md": {
+    "mtime": 1789780418.2439096,
+    "seen": 1789780540.6353323,
+    "ast_hash": "2da6bd27fcf081030aee4555e9c822fc",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/templates/engineering-handoff.md": {
+    "mtime": 1789780418.245094,
+    "seen": 1789780540.6353323,
+    "ast_hash": "158b5a6505143c132e709a2d834df2a8",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/templates/interface-contract.md": {
+    "mtime": 1789780418.245094,
+    "seen": 1789780540.6353323,
+    "ast_hash": "e919dd07557b3f3d7e6ad71311da29a5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/templates/outcomes-to-design.md": {
+    "mtime": 1789780418.2465134,
+    "seen": 1789780540.6353323,
+    "ast_hash": "9f243b0fcefdf128279ebd8761da76a3",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/templates/screen-state-inventory.md": {
+    "mtime": 1789780418.2465134,
+    "seen": 1789780540.6353323,
+    "ast_hash": "c5e6649b37ffb2456d785acfbb7f5402",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/templates/task-flow-state-model.md": {
+    "mtime": 1789780418.2470653,
+    "seen": 1789780540.6353323,
+    "ast_hash": "4cb0e835b095f8ceb25aac4b502d4ef3",
+    "semantic_hash": ""
+  },
+  ".agents/skills/product-design-and-ux/templates/usability-study.md": {
+    "mtime": 1789780418.2481115,
+    "seen": 1789780540.6353323,
+    "ast_hash": "27a0bdadd345b4f3699dcd42720f8bd4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/README.md": {
+    "mtime": 1789780433.831347,
+    "seen": 1789780540.6353323,
+    "ast_hash": "c34725478886cdce899a4390a5de771a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/SKILL.md": {
+    "mtime": 1789780433.831347,
+    "seen": 1789780540.6353323,
+    "ast_hash": "f21845b701453d242ae42c9e8060a75d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/assets/acceptance-criteria-template.md": {
+    "mtime": 1789780433.8323503,
+    "seen": 1789780540.6353323,
+    "ast_hash": "251ef471f5d0ef8186c98d5f5541d861",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/assets/review-checklist-design.md": {
+    "mtime": 1789780433.8323503,
+    "seen": 1789780540.6353323,
+    "ast_hash": "50fc38cc64f9257e05942ff5a4176bed",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/assets/review-checklist-implementation.md": {
+    "mtime": 1789780433.8336174,
+    "seen": 1789780540.6353323,
+    "ast_hash": "18fcc56faa76c6f80be0b9fc319c7eb4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/assets/review-checklist-release.md": {
+    "mtime": 1789780433.8336174,
+    "seen": 1789780540.6353323,
+    "ast_hash": "00ef8387acca650667a8f7fcc08c873b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/references/composite-widgets.md": {
+    "mtime": 1789780433.8356245,
+    "seen": 1789780540.6353323,
+    "ast_hash": "59c77c9857f1c8d84321f53b7c92ea3d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/references/dialogs-disclosures-navigation.md": {
+    "mtime": 1789780433.8356245,
+    "seen": 1789780540.6353323,
+    "ast_hash": "04b3a55b862e7818b2ce4f56aa5794bc",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/references/forms-errors-authentication.md": {
+    "mtime": 1789780433.8366282,
+    "seen": 1789780540.6353323,
+    "ast_hash": "139e4e31426b06644f8ded262f3e1f79",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/references/keyboard-focus-and-routing.md": {
+    "mtime": 1789780433.8366282,
+    "seen": 1789780540.6353323,
+    "ast_hash": "147287f103df095c59a62ba0d83d4132",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/references/outcome-probes.md": {
+    "mtime": 1789780433.8376236,
+    "seen": 1789780540.6353323,
+    "ast_hash": "776061341447fccc0e14652a308f0ce5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/references/routing.md": {
+    "mtime": 1789780433.8376236,
+    "seen": 1789780540.6353323,
+    "ast_hash": "bbde1612166d4d0ebf7dce58566d54b0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/references/semantics-and-names.md": {
+    "mtime": 1789780433.8376236,
+    "seen": 1789780540.6353323,
+    "ast_hash": "eab346fa8e6b5c362716d7d0e13c1f4d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/references/source-index.md": {
+    "mtime": 1789780433.8386247,
+    "seen": 1789780540.6353323,
+    "ast_hash": "1ba92b2474bfe38eae60d12fcde9eab9",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/references/testing-and-evidence.md": {
+    "mtime": 1789780433.8391292,
+    "seen": 1789780540.6353323,
+    "ast_hash": "0321a5535b744118a416fe3a2c0b32ce",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-accessibility/references/visual-input-and-motion.md": {
+    "mtime": 1789780433.8401365,
+    "seen": 1789780540.6353323,
+    "ast_hash": "dac5dd50209124a39692707593f0653b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/web-design-guidelines/SKILL.md": {
+    "mtime": 1789780479.969166,
+    "seen": 1789780540.6353323,
+    "ast_hash": "8d96a7f6f0c5e1908bab8faf8cd2f9b4",
     "semantic_hash": ""
   }
 }

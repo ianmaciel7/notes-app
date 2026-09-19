@@ -286,4 +286,5 @@ Before finishing, verify that:
 - Agents: `.agents/agents/` (e.g., `architect` in `.agents/agents/architect/agent.md`, `code-reviewer` in `.agents/agents/code-reviewer/agent.md`, `doc-maintainer` in `.agents/agents/doc-maintainer/agent.md`, `firebase` in `.agents/agents/firebase/agent.md`, `research` in `.agents/agents/research/agent.md`, `security-reviewer` in `.agents/agents/security-reviewer/agent.md`, `test-engineer` in `.agents/agents/test-engineer/agent.md`, and `ui-engineer` in `.agents/agents/ui-engineer/agent.md`)
 - Rules: `.agents/rules/`
 - Skills: `.agents/skills/`
+- UX/UI skill stack and routing: `.agents/rules/ux-ui-agent-skills.md`
 - Project overview and commands: `README.md`

@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "browser-testing-with-devtools": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/browser-testing-with-devtools/SKILL.md",
+      "computedHash": "639950ea71851d9c4919608cba8b6276cd1ba30cd82acdc4949c701537eed661"
+    },
     "context7": {
       "source": "intellectronica/agent-skills",
       "sourceType": "github",
@@ -79,17 +85,53 @@
       "skillPath": "skills/firestore-rules-creation/SKILL.md",
       "computedHash": "3388a7f2254fdd5f0f794c7debf198f8007349da4c697e4f5b295c6a42d2edd6"
     },
+    "frontend-ui-engineering": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-ui-engineering/SKILL.md",
+      "computedHash": "cb4e981ecb5f701b451fc4e937a38049b49fd4523f213e06cffbd00b007060dc"
+    },
     "graphify": {
       "source": "graphifyy",
       "sourceType": "package",
       "skillPath": ".agents/skills/graphify/SKILL.md",
       "computedHash": "db078943fd9807ce896a36939c0c9319c862a087"
     },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "ec48c58ca973b42c826d5d3be9069b7023d2361ebf7f89ee56b0bae7eb92390a"
+    },
+    "performance-optimization": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/performance-optimization/SKILL.md",
+      "computedHash": "f0a8e3bdb9b7d199434c2a5dd7cbb7d3cf69d802029cde1ef5daa07bffa27efc"
+    },
+    "product-design-and-ux": {
+      "source": "magnus919/agent-skills",
+      "sourceType": "github",
+      "skillPath": "product-design-and-ux/SKILL.md",
+      "computedHash": "92216b6bd534ee9898276b074722b1142b6a8ff423a7f7f7e7914038c73200ec"
+    },
     "search-registry-items": {
       "source": "alibey-10/shoogle",
       "sourceType": "github",
       "skillPath": ".agents/skills/search-registry-items/SKILL.md",
       "computedHash": "e82a68c5af0a7a8da7c23c301f7ca0cf2c3a2fc8"
+    },
+    "web-accessibility": {
+      "source": "magnus919/agent-skills",
+      "sourceType": "github",
+      "skillPath": "web-accessibility/SKILL.md",
+      "computedHash": "176ebe534e30bf043dabd3c11474c23b90e888a1717745b8b891c8b8e2b27a31"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "d8e7d3afe37dcc8a97b99ffb5afdb4d0919ae0092ea8b68f44eb201f035e33ac"
     },
     "xcode-project-setup": {
       "source": "firebase/agent-skills",
