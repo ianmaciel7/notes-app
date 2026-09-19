@@ -29,6 +29,28 @@ The Lead Orchestrator should delegate to `test-engineer` whenever:
 - **Diagnosing & Fixing Failing Tests**: Investigating test failures reported by `pnpm test`, diagnosing root causes, and updating tests or alerting on regressions.
 - **Emulator & Integration Testing**: Validating Firebase authentication, Firestore rules, or data access flows using local emulators (`pnpm firebase:emulators:exec`).
 
+## Mandatory Rules to Read
+Before authoring test suites or designing QA plans, read and adhere to:
+1. `.agents/rules/no-index.md`: Test files must import directly from specific target modules; never import from or generate `index.ts`/`index.tsx` barrel files.
+2. `.agents/rules/language.md`: Write all test descriptions (`describe`, `it`), assertion messages, and variable names in English.
+3. `.agents/rules/tooling.md`: Run tests with `pnpm test` (Vitest) and format/lint with `pnpm lint` (Biome).
+4. `.agents/rules/portable-paths.md`: Use repository-relative paths in test fixtures, mocks, and snapshots.
+5. `.agents/rules/prefer-batch-operations.md`: Group test assertions and test setups logically to minimize redundant test cycles.
+6. `.agents/rules/knowledge-persistence.md`: Document comprehensive test plans and QA strategies in `docs/superpowers/plans/`.
+7. `.agents/rules/graphify.md`: Use knowledge graph queries to trace regression blast radius and identify dependent test suites.
+
+## Essential Documentation to Consult
+1. `ARCHITECTURE.md`: DAL contracts, mock boundaries, and `server-only` vitest aliasing in `vitest.config.ts`.
+2. `CONTEXT.md`: Application domain entities, state transitions, and edge cases to test.
+3. `docs/FIREBASE_AUTHENTICATION.md`: Auth mocking patterns, session token verification, and emulator test workflows.
+4. `docs/superpowers/specs/` & `docs/superpowers/plans/`: Feature specifications, acceptance criteria, and test requirements.
+5. `README.md`: Testing commands (`pnpm test`, `pnpm test:watch`, `pnpm firebase:emulators:exec`).
+
+## Graphify Knowledge Graph Usage
+1. **Blast Radius & Affected Tests**: Run `graphify affected "<module>"` to identify which components, routes, or services depend on modified code and require test updates.
+2. **Dependency & Call Chain Tracing**: Run `graphify query "tests for <feature>"` or `graphify path` to verify dependency edges between test suites and implementation files.
+3. **Graph Synchronization**: Ensure `graphify update .` is executed after authoring new test suites or restructuring test utilities.
+
 ## Testing Standards & Conventions
 
 When writing or modifying tests in this repository, strictly adhere to:

@@ -50,6 +50,30 @@ The Lead Orchestrator should delegate to `ui-engineer` whenever:
 - **Runtime UI Verification**: Verifying the rendered interface with `browser-testing-with-devtools` when behavior, layout, accessibility, or responsive rendering is part of the task.
 - **Measured Performance**: Using `performance-optimization` only after collecting evidence and rechecking the result after changes.
 
+## Mandatory Rules to Read
+Before creating, styling, or refactoring UI components, read and adhere to:
+1. `.agents/rules/shadcn.md`: Authoritative shadcn/ui base-nova rules, `@base-ui/react` primitives, CVA patterns, Lucide icons, `data-slot` selectors, and accessible labeling.
+2. `.agents/rules/design.md`: Mandatory design system requirements, semantic tokens, color calibration, anti-generic visual principles, and typography.
+3. `.agents/rules/ux-ui-agent-skills.md`: UX/UI skill routing and progressive disclosure protocols.
+4. `.agents/rules/no-index.md`: Strictly direct imports (e.g., `@/components/ui/button`); never introduce or import from barrel files.
+5. `.agents/rules/language.md`: Write all code, components, props, and comments in English; use i18n dictionaries for user-facing strings.
+6. `.agents/rules/portable-paths.md`: Use only repository-relative paths across components, Ladle stories, and assets.
+7. `.agents/rules/tooling.md`: Enforce Biome formatting/linting and run `pnpm ladle:build`.
+8. `.agents/rules/graphify.md`: Check component dependencies and blast radius before modifying shared UI primitives.
+
+## Essential Documentation to Consult
+1. `DESIGN.md`: Authoritative design system specifications, color palette tokens, radius, spacing, and elevation.
+2. `ARCHITECTURE.md`: Server vs client component boundaries, route hierarchy, and layouts.
+3. `CONTEXT.md`: UI context for notes, folders, tags, and study/exam flashcards.
+4. `docs/i18n-message-inventory.md`: Message keys, namespaces, and localization coverage for user-facing copy.
+5. `components.json`: Authoritative shadcn configuration file and path aliases.
+6. `node_modules/next/dist/docs/`: Next.js 16 App Router UI conventions and breaking changes.
+
+## Graphify Knowledge Graph Usage
+1. **Blast Radius on Shared Primitives**: Run `graphify affected "<component>"` before modifying any shared primitive in `src/components/ui/` to inspect all consuming features.
+2. **Hierarchy & Composition Mapping**: Run `graphify query "<UI component>"` to inspect parent-child relationships, slot structures, and layout nesting.
+3. **Graph Synchronization**: Ensure `graphify update .` is executed after creating or editing UI components, styles, or Ladle stories.
+
 ## Component Architecture & Styling Rules
 
 Strictly adhere to the repository's shadcn/ui guidelines:

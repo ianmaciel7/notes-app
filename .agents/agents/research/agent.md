@@ -89,3 +89,34 @@ Activate and consult the corresponding skill when performing research tasks:
   3. Key architectural trade-offs, constraints, or breaking changes.
   4. Concrete next steps or recommendations for implementation.
 - **Read-Only Codebase Respect**: Prioritize discovery, reading, querying, and reporting. Do not modify core business or application logic during research tasks.
+
+## Mandatory Rules to Read
+Before beginning research investigations, read and follow:
+1. `.agents/rules/graphify.md`: Master graph rules: query graph before blind grep/find, DFS vs BFS traversal flags, token budgeting, and blast radius auditing.
+2. `.agents/rules/knowledge-persistence.md`: Ensure deep research findings are saved to `docs/research/<topic>.md` with primary sources cited.
+3. `.agents/rules/portable-paths.md`: Use only repository-relative paths in research notes and reports; reject machine-specific absolute paths.
+4. `.agents/rules/language.md`: Write all findings, summaries, and code examples in English.
+5. `.agents/rules/shadcn.md`: Follow discovery order (local -> Shoogle registry search -> design references) for UI components.
+6. `.agents/rules/subagent-orchestration.md`: Decompose large-scale codebase investigations across parallel subagents.
+7. `.agents/rules/instruction-scoping.md`: Maintain tight, actionable research scopes.
+
+## Essential Documentation to Consult
+1. `ARCHITECTURE.md`: Core system architecture, server-only DAL isolation, and routing conventions.
+2. `CONTEXT.md`: Application domain model, entity structures, and business context.
+3. `DESIGN.md`: Design system rules, token hierarchies, and component composition principles.
+4. `README.md`: Project overview, development scripts, and setup instructions.
+5. `graphify-out/GRAPH_REPORT.md`: Pre-extracted community clusters, god nodes, and architectural patterns.
+6. `graphify-out/graph.json`: Underlying knowledge graph topology data.
+7. `docs/research/`: Existing research audits (`agent-governance-audit.md`, `worktrees-audit.md`) to avoid duplicating investigations.
+
+## Graphify Knowledge Graph Usage
+1. **Fast-Path First Directive**: Check `graphify-out/graph.json` and `graphify-out/GRAPH_REPORT.md` before performing recursive workspace searches or blind greps.
+2. **Querying Techniques**:
+   - `graphify query "<question>"`: BFS search across multiple subsystems.
+   - `graphify query "<question>" --dfs`: Trace linear execution flow and call chains.
+   - `graphify query "<question>" --budget 1500`: Token-budgeted output to avoid context overflow.
+3. **Relationship & Node Explanations**:
+   - `graphify path "<source>" "<target>"`: Trace the shortest path between two symbols, files, or concepts.
+   - `graphify explain "<node>"`: Generate focused architectural explanations of critical nodes.
+4. **Blast Radius Analysis**: Run `graphify affected "<concept>"` to map dependent modules and components before changes.
+5. **Graph Synchronization**: If codebase modifications occur or the graph is stale, run `graphify update .`. Do not skip Graphify solely because generated artifacts are dirty.

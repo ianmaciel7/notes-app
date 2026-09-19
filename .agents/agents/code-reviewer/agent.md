@@ -29,6 +29,30 @@ The Lead Orchestrator should delegate to `code-reviewer` whenever:
 - **Regression Detection**: Checking whether modifications break existing contracts, API surfaces, or type safety.
 - **Security Audits**: Ensuring server-only data access layer (DAL) boundaries are respected, auth checks are enforced, and secrets are not leaked to client components.
 
+## Mandatory Rules to Read
+Before conducting reviews, read and strictly verify compliance with:
+1. `.agents/rules/no-index.md`: Strictly enforce direct imports; flag any newly introduced `index.ts` or `index.tsx` files.
+2. `.agents/rules/language.md`: Verify English naming for all symbols, variables, and comments, and enforce i18n dictionaries for user copy.
+3. `.agents/rules/portable-paths.md`: Reject any hardcoded machine/user paths (`C:\Users\...` or `/home/...`) in code or docs.
+4. `.agents/rules/tooling.md`: Validate that changes adhere to Biome formatting/linting and repository pnpm scripts.
+5. `.agents/rules/shadcn.md`: Verify UI changes follow Base UI primitives, CVA patterns, tokenized styling, and accessible names.
+6. `.agents/rules/design.md`: Enforce semantic design tokens, color palette adherence, and anti-generic visual guidelines.
+7. `.agents/rules/skill.md`: Verify that external skills remain unmodified and read-only.
+8. `.agents/rules/graphify.md`: Verify that `graphify update .` is run when code or documentation is added/modified.
+
+## Essential Documentation to Consult
+1. `ARCHITECTURE.md`: Server-only DAL boundaries (`src/data/*`), App Router layouts, and authentication session flows.
+2. `DESIGN.md`: Mandatory design system specs, typography, radius, semantic color tokens, and motion guidelines.
+3. `CONTEXT.md`: Project domain entities, state transitions, and exam/FSRS model requirements.
+4. `docs/FIREBASE_AUTHENTICATION.md`: Auth flow contracts, session syncing, and token verification details.
+5. `docs/i18n-message-inventory.md`: Verify newly added user-facing strings are registered in locale dictionaries.
+
+## Graphify Knowledge Graph Usage
+1. **Cluster & Centrality Inspection**: Check `graphify-out/GRAPH_REPORT.md` to detect if the diff alters highly connected "god nodes" or core shared modules.
+2. **Blast Radius & Downstream Verification**: Run `graphify affected "<concept>"` to check which downstream consumers, routes, or tests may be impacted.
+3. **Dependency Tracing**: Run `graphify path "<source>" "<target>"` or `graphify query` to verify that architectural boundaries (e.g. client components never importing DAL modules) are preserved.
+4. **Graph Synchronization**: Confirm that `graphify update .` is executed whenever changes touch symbols, dependencies, or documentation.
+
 ## Review Methodology & Verification Checklist
 
 When conducting a code review, systematically evaluate:

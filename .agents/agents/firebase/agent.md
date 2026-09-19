@@ -86,3 +86,25 @@ Activate and consult the corresponding skill when performing specific Firebase t
 - **Security First**: Never leave Firestore or Storage rules open (`allow read, write: if true;`). Always enforce strict authentication and authorization checks.
 - **Progressive Skill Disclosure**: Consult the specific `SKILL.md` before executing unfamiliar or multi-step Firebase procedures.
 - **Verification**: Run emulators or automated test suites (`firebase emulators:exec`, unit tests) to validate changes before concluding tasks.
+
+## Mandatory Rules to Read
+Before making Firebase architectural changes or writing rules:
+1. `.agents/rules/no-index.md`: Strictly enforce direct imports; never introduce barrel files for Firebase client or server modules.
+2. `.agents/rules/language.md`: Ensure all schema fields, rule helpers, and functions are in English; use i18n dictionaries for user-facing error messages.
+3. `.agents/rules/portable-paths.md`: Use repository-relative paths across `firebase.json`, `apphosting.yaml`, and rules files.
+4. `.agents/rules/prefer-batch-operations.md`: Use batched writes and efficient Firestore batch transactions where appropriate.
+5. `.agents/rules/knowledge-persistence.md`: Document schema decisions, index choices, and rule patterns in repository documentation.
+6. `.agents/rules/tooling.md`: Adhere to repository pnpm commands and Biome formatting.
+7. `.agents/rules/graphify.md`: Use the knowledge graph to assess dependencies and blast radius before modifying shared auth or database interfaces.
+
+## Essential Documentation to Consult
+1. `ARCHITECTURE.md`: Server-only DAL (`src/data/*`), Firebase Admin SDK isolation, session cookie sync, and trust boundaries.
+2. `docs/FIREBASE_AUTHENTICATION.md`: Detailed authentication architecture, session management, token validation, and emulator setup.
+3. `CONTEXT.md`: Application domain entities (notes, folders, tags, study logs, FSRS flashcard cards) mapped to Firestore collections.
+4. `README.md`: Firebase emulator commands (`pnpm firebase:emulators:exec`) and project development setup.
+5. `firestore.rules`, `apphosting.yaml`, `firebase.json`: Authoritative Firebase configuration files.
+
+## Graphify Knowledge Graph Usage
+1. **SDK Boundary Verification**: Run `graphify query "firebase"` or `graphify path` to trace where client SDK (`src/lib/firebase/client.ts`) vs Admin SDK (`src/data/*`) are imported. Ensure client modules never import server-only DAL.
+2. **Blast Radius Analysis**: Run `graphify affected "auth"` or `graphify affected "firestore"` before altering security rules or DAL query signatures to prevent breaking downstream routes or components.
+3. **Graph Synchronization**: Run `graphify update .` after updating Firebase schemas, security rules, or data access layer implementations.
