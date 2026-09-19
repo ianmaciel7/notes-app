@@ -153,3 +153,31 @@ export async function replaceCollectionMembers(
 
   await batch.commit();
 }
+
+export async function getCollectionMemberIds(
+  ownerId: string,
+  spaceId: string,
+  collectionObjectId: string,
+): Promise<string[]> {
+  await getOwnedSpace(ownerId, spaceId);
+  const db = getFirestore();
+
+  const snap = await db
+    .collection("spaces")
+    .doc(spaceId)
+    .collection("relations")
+    .where("sourceObjectId", "==", collectionObjectId)
+    .where("type", "==", "collection-object")
+    .get();
+
+  const items = snap.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      targetObjectId: String(data.targetObjectId ?? ""),
+      position: Number(data.position ?? 0),
+    };
+  });
+
+  items.sort((a, b) => a.position - b.position);
+  return items.map((i) => i.targetObjectId);
+}

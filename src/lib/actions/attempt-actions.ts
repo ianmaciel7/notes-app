@@ -11,7 +11,17 @@ import {
   submitAttemptAnswer,
   toggleAttemptBookmark,
 } from "@/data/attempts";
+
+export type {
+  AttemptItemViewDto,
+  AttemptRecord,
+  AttemptScoreResult,
+  AttemptViewDto,
+} from "@/data/attempts";
+
 import type { QuestionFeedbackDto } from "@/domain/questions/question";
+export type { QuestionFeedbackDto };
+
 import {
   DomainError,
   type DomainErrorCode,
@@ -105,6 +115,14 @@ export async function toggleAttemptBookmarkAction(input: {
   } catch (err) {
     return toActionResultError(err);
   }
+}
+
+export async function bookmarkAttemptQuestionAction(input: {
+  spaceId: string;
+  attemptId: string;
+  questionId: string;
+}): Promise<ActionResult<{ isBookmarked: boolean }>> {
+  return toggleAttemptBookmarkAction(input);
 }
 
 export async function completeAttemptAction(input: {
