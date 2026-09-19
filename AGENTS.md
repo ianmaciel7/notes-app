@@ -18,6 +18,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Prefer Graphify for repository architecture, relationships, and broader codebase understanding.
 - Prefer Context7 for external framework and library documentation.
 - Prefer RTK for supported terminal commands to reduce command-output tokens.
+- If `rtk` cannot be started by the current shell (notably the broken WinGet
+  shim on Windows), resolve the installed executable with `Get-Command rtk`,
+  read its `Target`, and invoke that target directly. Do not treat this as a
+  missing dependency when the target executable exists.
 - Use Repomix only when a compact repository-wide snapshot is useful.
 - Prefer targeted retrieval over reading entire files or large parts of the repository.
 
