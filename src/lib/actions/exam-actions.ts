@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import { requireActionUser } from "@/data/action-auth";
 import sampleData from "@/data/fixtures/sample-exams.json";
 import { saveQuestionNote } from "@/data/notes";
 import {
@@ -9,8 +9,7 @@ import {
   toggleQuestionBookmark,
   updateStudyGoals,
 } from "@/data/progress";
-import { SESSION_COOKIE } from "@/lib/auth/session";
-import { adminDb, verifyFirebaseSessionCookie } from "@/lib/firebase/admin";
+import { adminDb } from "@/lib/firebase/admin";
 import type { QuestionNote } from "@/types/note";
 import type {
   ExamProgress,
@@ -28,27 +27,6 @@ function objectProperties(value: object) {
   );
 }
 
-async function getActionUserId(explicitUserId?: string): Promise<string> {
-  if (explicitUserId && explicitUserId.trim().length > 0) {
-    return explicitUserId.trim();
-  }
-
-  try {
-    const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get(SESSION_COOKIE)?.value;
-    if (sessionCookie) {
-      const decoded = await verifyFirebaseSessionCookie(sessionCookie, false);
-      if (decoded?.uid) {
-        return decoded.uid;
-      }
-    }
-  } catch {
-    // Session cookie not present or invalid
-  }
-
-  return "demo-user";
-}
-
 export interface RecordAttemptResult {
   success: boolean;
   examProgress?: ExamProgress;
@@ -61,10 +39,9 @@ export async function recordAttemptAction(input: {
   questionId: string;
   submittedAnswer: CorrectAnswer;
   isCorrect: boolean;
-  userId?: string;
 }): Promise<RecordAttemptResult> {
   try {
-    const userId = await getActionUserId(input.userId);
+    const { uid: userId } = await requireActionUser();
     const result = await recordQuestionAttempt({
       userId,
       examId: input.examId,
@@ -99,10 +76,9 @@ export async function toggleBookmarkAction(params: {
   examId: string;
   questionId: string;
   bookmarked?: boolean;
-  userId?: string;
 }): Promise<ToggleBookmarkResult> {
   try {
-    const userId = await getActionUserId(params.userId);
+    const { uid: userId } = await requireActionUser();
     const newStatus = await toggleQuestionBookmark({
       userId,
       examId: params.examId,
@@ -134,10 +110,9 @@ export interface SaveStudyGoalsResult {
 export async function saveStudyGoalsAction(params: {
   examId: string;
   goals: StudyGoalsInput;
-  userId?: string;
 }): Promise<SaveStudyGoalsResult> {
   try {
-    const userId = await getActionUserId(params.userId);
+    const { uid: userId } = await requireActionUser();
     const examProgress = await updateStudyGoals({
       userId,
       examId: params.examId,
@@ -169,10 +144,9 @@ export async function saveNoteAction(params: {
   examId: string;
   questionId: string;
   content: string;
-  userId?: string;
 }): Promise<SaveNoteResult> {
   try {
-    const userId = await getActionUserId(params.userId);
+    const { uid: userId } = await requireActionUser();
     const note = await saveQuestionNote(
       userId,
       params.questionId,

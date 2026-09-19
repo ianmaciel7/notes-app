@@ -14,6 +14,7 @@
     "ladle:preview": "ladle preview",
     "lint": "biome check",
     "test": "vitest run",
+    "test:firebase": "firebase emulators:exec --only auth,firestore --project demo-notes-app \"pnpm exec vitest run --config vitest.firebase.config.ts\"",
     "format": "biome format --write"
   },
   "dependencies": {
@@ -56,6 +57,7 @@
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
     "concurrently": "^9.2.1",
+    "firebase-tools": "^15.30.2",
     "jsdom": "^30.0.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.13",
