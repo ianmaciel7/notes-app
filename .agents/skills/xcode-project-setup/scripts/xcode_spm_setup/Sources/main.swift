@@ -119,23 +119,24 @@ func main() {
         }
         
         // 1. Add Plist to the project (Optional)
-        if let plistPath = plistPath {
-            print("Adding \(plistPath.lastComponent) to project...")
+        if plistPath != nil {
+            let plist = plistPath!
+            print("Adding \(plist.lastComponent) to project...")
             let mainGroup = rootObject.mainGroup
             
             let appName = target.name
             let groupToAddTo = mainGroup?.children.first(where: { $0.path == appName }) as? PBXGroup ?? mainGroup
             
             // Only add if it doesn't already exist
-            if groupToAddTo?.children.contains(where: { $0.path == plistPath.lastComponent || $0.name == plistPath.lastComponent }) == false {
-                let fileRef = try groupToAddTo?.addFile(at: plistPath, sourceRoot: projectPath.parent())
+            if groupToAddTo?.children.contains(where: { $0.path == plist.lastComponent || $0.name == plist.lastComponent }) == false {
+                let fileRef = try groupToAddTo?.addFile(at: plist, sourceRoot: projectPath.parent())
                 
                 if let fileRef = fileRef, let buildPhase = target.buildPhases.first(where: { $0.buildPhase == .resources }) as? PBXResourcesBuildPhase {
                     _ = try buildPhase.add(file: fileRef)
-                    print("Successfully added \(plistPath.lastComponent) to resources build phase.")
+                    print("Successfully added \(plist.lastComponent) to resources build phase.")
                 }
             } else {
-                print("\(plistPath.lastComponent) already exists in project.")
+                print("\(plist.lastComponent) already exists in project.")
             }
         }
         

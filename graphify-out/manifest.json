@@ -804,9 +804,9 @@
     "semantic_hash": ""
   },
   ".agents/skills/xcode-project-setup/scripts/xcode_spm_setup/Sources/main.swift": {
-    "mtime": 1789771804.5113628,
-    "seen": 1789773576.6483753,
-    "ast_hash": "3c909cc042e887a1dfeb09b4546365b1",
+    "mtime": 1789780929.4003222,
+    "seen": 1789780983.0065048,
+    "ast_hash": "46c8f20058422395bcb0ce48bd47eb81",
     "semantic_hash": ""
   },
   ".agents/skills/extension-to-functions-codebase/SKILL.md": {
