@@ -3,7 +3,11 @@ import "server-only";
 import { getFirestore } from "firebase-admin/firestore";
 import { getObjectRevision, listObjects } from "@/data/objects";
 import { getOwnedSpace } from "@/data/spaces";
-import type { QuestionRevisionPayload } from "@/domain/questions/question";
+import type {
+  AnswerOption,
+  QuestionFormat,
+  QuestionRevisionPayload,
+} from "@/domain/questions/question";
 import { DomainError } from "@/domain/shared/domain-error";
 import {
   createMemoryCard,
@@ -30,6 +34,9 @@ export interface DueStudyQueueItemDto {
   questionId: string;
   isDue: boolean;
   prompt: string;
+  options?: AnswerOption[];
+  format?: QuestionFormat;
+  revisionId?: string;
   dueAt?: string;
   stateVersion: number;
 }
@@ -296,6 +303,9 @@ export async function getDueStudyQueue(
   for (const item of queue) {
     const memory = memoryByQuestionId.get(item.questionId);
     let prompt = "";
+    let options: AnswerOption[] | undefined;
+    let format: QuestionFormat | undefined;
+    let revisionId: string | undefined;
     try {
       const objSnap = await db
         .collection("spaces")
@@ -313,6 +323,9 @@ export async function getDueStudyQueue(
           revId,
         );
         prompt = rev.payload.prompt;
+        options = rev.payload.options;
+        format = rev.payload.format;
+        revisionId = revId;
       }
     } catch {
       // fallback empty prompt
@@ -322,6 +335,9 @@ export async function getDueStudyQueue(
       questionId: item.questionId,
       isDue: item.isDue,
       prompt,
+      options,
+      format,
+      revisionId,
       dueAt: memory?.dueAt,
       stateVersion: memory?.stateVersion ?? 0,
     });

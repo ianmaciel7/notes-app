@@ -1,5 +1,6 @@
 "use server";
 
+import { getFirestore } from "firebase-admin/firestore";
 import { requireActionUser } from "@/data/action-auth";
 import { getObjectRevision } from "@/data/objects";
 import { getOwnedSpace } from "@/data/spaces";
@@ -88,18 +89,37 @@ export async function previewReviewRatingsAction(input: {
 export async function gradeStudyAnswerAction(input: {
   spaceId: string;
   questionId: string;
-  revisionId: string;
-  answer: { optionIds: string[] };
+  revisionId?: string;
+  answer?: { optionIds: string[] };
+  submittedAnswer?: { optionIds: string[] };
 }): Promise<ActionResult<QuestionFeedbackDto>> {
   try {
     const user = await requireActionUser();
     await getOwnedSpace(user.uid, input.spaceId);
+    let revId = input.revisionId;
+    if (!revId) {
+      const db = getFirestore();
+      const objSnap = await db
+        .collection("spaces")
+        .doc(input.spaceId)
+        .collection("objects")
+        .doc(input.questionId)
+        .get();
+      const objData = objSnap.data();
+      revId = objData?.publishedRevisionId ?? objData?.latestRevisionId;
+      if (!revId) {
+        throw new DomainError("not-found", {
+          message: "Question revision not found.",
+        });
+      }
+    }
     const rev = await getObjectRevision<QuestionRevisionPayload>(
       user.uid,
       input.spaceId,
-      input.revisionId,
+      revId,
     );
-    const feedback = gradeQuestion(rev.payload, input.answer);
+    const answer = input.submittedAnswer ?? input.answer ?? { optionIds: [] };
+    const feedback = gradeQuestion(rev.payload, answer);
     return { ok: true, data: feedback };
   } catch (err) {
     return toActionResultError(err);
