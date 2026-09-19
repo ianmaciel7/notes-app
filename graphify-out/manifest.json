@@ -2347,8 +2347,8 @@
   },
   ".agents/skills/impeccable/scripts/data/font-index.json": {
     "mtime": 1789780445.2236204,
-    "seen": 1789785316.1856976,
-    "ast_hash": "",
+    "seen": 1789785955.0423882,
+    "ast_hash": "4a4426c85ec12df1d9a487a39d656ff4",
     "semantic_hash": ""
   },
   "src/components/object/assessment/assessment-state.ts": {
