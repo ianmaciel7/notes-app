@@ -2350,5 +2350,11 @@
     "seen": 1789780540.6353323,
     "ast_hash": "8d96a7f6f0c5e1908bab8faf8cd2f9b4",
     "semantic_hash": ""
+  },
+  ".agents/skills/impeccable/scripts/data/font-index.json": {
+    "mtime": 1789780445.2236204,
+    "seen": 1789781028.2675931,
+    "ast_hash": "4a4426c85ec12df1d9a487a39d656ff4",
+    "semantic_hash": ""
   }
 }
