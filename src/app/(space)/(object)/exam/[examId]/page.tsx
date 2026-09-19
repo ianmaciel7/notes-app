@@ -3,10 +3,12 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { AuthGate } from "@/components/auth/auth-gate";
-import { ExamPractice } from "@/components/object/exam/exam-practice";
+import { Assessment } from "@/components/object/assessment/assessment";
 import { getCurrentUser } from "@/data/auth";
 import { getExamById } from "@/data/exams";
 import sampleData from "@/data/fixtures/sample-exams.json";
+import { getUserAssessmentViewMode } from "@/data/preferences";
+import { getUserExamProgress } from "@/data/progress";
 import { getPracticeQuestions } from "@/data/questions";
 import { getDictionary, getServerLocale } from "@/lib/i18n/dictionaries";
 import type { Exam } from "@/types/exam";
@@ -35,6 +37,9 @@ async function ExamContent({
   const locale = await getServerLocale();
   const user = await getCurrentUser(locale);
   const dictionary = await getDictionary(locale);
+  const initialMode = await getUserAssessmentViewMode(user.uid).catch(
+    () => "continuous" as const,
+  );
   let exam: Exam | null = null;
   let questions: Question[] = [];
 
@@ -59,6 +64,11 @@ async function ExamContent({
   }
 
   if (!exam) notFound();
+
+  const progress = await getUserExamProgress(user.uid, exam.id).catch(() => ({
+    examProgress: null,
+    questionProgress: {},
+  }));
 
   return (
     <AuthGate locale={locale}>
@@ -87,9 +97,14 @@ async function ExamContent({
             </h1>
             <p className="text-muted-foreground">{exam.description}</p>
           </div>
-          <ExamPractice
+          <Assessment
             examId={exam.id}
             questions={questions}
+            domainNames={Object.fromEntries(
+              exam.domains.map((domain) => [domain.id, domain.name]),
+            )}
+            initialMode={initialMode}
+            initialProgress={progress.questionProgress}
             labels={dictionary.exams}
           />
         </main>

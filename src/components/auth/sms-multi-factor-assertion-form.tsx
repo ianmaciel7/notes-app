@@ -76,7 +76,7 @@ function SmsMultiFactorAssertionPhoneForm(
       <Button onClick={onSubmit} disabled={ui.state !== "idle"}>
         {getTranslation(ui, "labels", "sendCode")}
       </Button>
-      {error && <div className="text-sm text-red-600">{error}</div>}
+      {error && <div className="text-sm text-destructive">{error}</div>}
     </div>
   );
 }

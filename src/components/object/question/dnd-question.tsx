@@ -166,7 +166,7 @@ export function DndQuestion({
 
           let slotBorder = "border-border";
           if (isCorrect) {
-            slotBorder = "border-emerald-600 bg-emerald-500/10";
+            slotBorder = "border-primary bg-primary/10";
           } else if (isWrong) {
             slotBorder = "border-destructive bg-destructive/10";
           } else if (selectedItemId) {
@@ -210,7 +210,7 @@ export function DndQuestion({
                     className={cn(
                       "flex items-center gap-2 rounded-md border px-3 py-1.5 text-xs font-medium",
                       isCorrect
-                        ? "border-emerald-600 bg-emerald-600/15 text-emerald-950 dark:text-emerald-100"
+                        ? "border-primary bg-primary/15 text-foreground"
                         : isWrong
                           ? "border-destructive bg-destructive/15 text-destructive-foreground"
                           : "border-primary/50 bg-primary/10 text-foreground",
@@ -250,7 +250,7 @@ export function DndQuestion({
 
                 {/* Status Badges on Reveal */}
                 {isRevealed && isCorrect && (
-                  <Badge className="gap-1 border-emerald-600 bg-emerald-600 text-white">
+                  <Badge className="gap-1">
                     <CheckCircle2Icon className="size-3.5" />
                     Correct
                   </Badge>
@@ -266,7 +266,7 @@ export function DndQuestion({
 
               {/* Show Expected item if wrong and revealed */}
               {isRevealed && isWrong && expectedItem && (
-                <div className="w-full text-right text-xs text-emerald-600 dark:text-emerald-400 font-medium sm:w-auto">
+                <div className="w-full text-right text-xs font-medium text-primary sm:w-auto">
                   Correct answer: {expectedItem.text}
                 </div>
               )}

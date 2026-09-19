@@ -74,11 +74,9 @@ export function MultiChoiceQuestion({
           if (isSelected && !isRevealed) {
             cardBorderClass = "border-primary bg-primary/5 ring-1 ring-primary";
           } else if (isRevealedCorrect) {
-            cardBorderClass =
-              "border-emerald-600 bg-emerald-500/10 dark:border-emerald-500";
+            cardBorderClass = "border-primary bg-primary/10";
           } else if (isRevealedMissed) {
-            cardBorderClass =
-              "border-emerald-600/70 border-dashed bg-emerald-500/5";
+            cardBorderClass = "border-primary/70 border-dashed bg-primary/5";
           } else if (isRevealedWrong) {
             cardBorderClass =
               "border-destructive bg-destructive/10 dark:border-destructive";
@@ -115,7 +113,7 @@ export function MultiChoiceQuestion({
                     </span>
 
                     {isRevealedCorrect && (
-                      <Badge className="gap-1 border-emerald-600 bg-emerald-600 text-white">
+                      <Badge className="gap-1">
                         <CheckCircle2Icon className="size-3.5" />
                         Correct
                       </Badge>
@@ -124,7 +122,7 @@ export function MultiChoiceQuestion({
                     {isRevealedMissed && (
                       <Badge
                         variant="outline"
-                        className="gap-1 border-emerald-600 text-emerald-700 dark:text-emerald-400"
+                        className="gap-1 border-primary text-primary"
                       >
                         <CheckCircle2Icon className="size-3.5" />
                         Missed
@@ -144,9 +142,9 @@ export function MultiChoiceQuestion({
                       className={cn(
                         "mt-2 rounded-md p-2.5 text-xs leading-relaxed",
                         isCorrect
-                          ? "bg-emerald-500/15 text-emerald-900 dark:text-emerald-200"
+                          ? "bg-primary/10 text-foreground"
                           : isSelected
-                            ? "bg-destructive/15 text-destructive dark:text-red-300"
+                            ? "bg-destructive/10 text-destructive"
                             : "bg-muted/70 text-muted-foreground",
                       )}
                     >

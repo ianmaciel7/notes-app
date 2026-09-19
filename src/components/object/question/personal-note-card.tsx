@@ -71,7 +71,7 @@ export function PersonalNoteCard({
         <div className="flex items-center justify-between">
           <div className="text-[11px] text-muted-foreground">
             {showSavedFeedback && (
-              <span className="flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
+              <span className="flex items-center gap-1 font-medium text-primary">
                 <CheckIcon className="size-3" />
                 Note saved
               </span>

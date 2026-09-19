@@ -1,6 +1,7 @@
 {
   "common": {
     "loading": "Carregando…",
+    "skipToContent": "Pular para o conteúdo",
     "close": "Fechar",
     "more": "Mais",
     "breadcrumbLabel": "navegação estrutural",
@@ -47,6 +48,7 @@
     "title": "Escolha uma prova para praticar",
     "description": "Resolva questões realistas, revise explicações e acompanhe os temas que precisam de mais estudo.",
     "questions": "questões",
+    "examCountLabel": "provas",
     "passScore": "Nota mínima",
     "startPractice": "Começar prática",
     "practice": "Prática",
@@ -54,7 +56,14 @@
     "nextQuestion": "Próxima questão",
     "previousQuestion": "Questão anterior",
     "complete": "Concluir",
-    "noQuestions": "Ainda não há questões disponíveis para esta prova."
+    "noQuestions": "Ainda não há questões disponíveis para esta prova.",
+    "view": "Visualização",
+    "continuous": "Contínua",
+    "focus": "Foco",
+    "question": "Questão",
+    "of": "de",
+    "answered": "respondidas",
+    "viewPreferenceError": "Não foi possível salvar a preferência de visualização."
   },
   "errors": {
     "generic": {

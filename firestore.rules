@@ -69,8 +69,34 @@ service cloud.firestore {
       }
     }
 
+    // Space-scoped typed objects and relations. The server DAL also enforces
+    // the authenticated user's membership before returning private spaces.
+    match /spaces/{spaceId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+
+      match /objects/{objectId} {
+        allow read: if isAuthenticated();
+        allow write: if isAdmin();
+      }
+
+      match /relations/{relationId} {
+        allow read: if isAuthenticated();
+        allow write: if isAdmin();
+      }
+    }
+
     // User Scoped Data:
     match /users/{userId} {
+      // User-scoped UI and study preferences
+      match /settings/{settingId} {
+        allow read: if isOwner(userId) && settingId == 'preferences';
+        allow create, update: if isOwner(userId)
+          && settingId == 'preferences'
+          && request.resource.data.keys().hasOnly(['assessmentViewMode'])
+          && request.resource.data.assessmentViewMode in ['continuous', 'focus'];
+      }
+
       // User-scoped exam progress aggregates
       match /examProgress/{examId} {
         allow read, write: if isOwner(userId);

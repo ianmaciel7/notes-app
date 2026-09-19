@@ -1,7 +1,20 @@
+import {
+  ArrowUpRightIcon,
+  CircleCheckIcon,
+  ListChecksIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
 import { AuthGate } from "@/components/auth/auth-gate";
+import { Badge } from "@/components/ui/badge";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { UserNav } from "@/components/user/user-nav";
 import { getCurrentUser } from "@/data/auth";
 import { getExams } from "@/data/exams";
@@ -42,63 +55,154 @@ async function SpaceHome() {
   return (
     <AuthGate locale={locale}>
       <div className="min-h-screen bg-muted/30">
-        <header className="border-b bg-background">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-            <Link href="/" className="font-semibold tracking-tight">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:shadow-md focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          {dictionary.common.skipToContent}
+        </a>
+        <header className="border-b bg-background/95 supports-[backdrop-filter]:bg-background/80">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+            <Link
+              href="/"
+              className="rounded-md font-semibold tracking-tight text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              translate="no"
+            >
               {dictionary.exams.brand}
             </Link>
             <UserNav user={user} />
           </div>
         </header>
 
-        <main className="mx-auto max-w-6xl space-y-8 px-6 py-10">
-          <section className="space-y-2">
-            <p className="text-sm font-medium text-primary">
-              {dictionary.exams.eyebrow}
-            </p>
-            <h1 className="text-3xl font-semibold tracking-tight">
-              {dictionary.exams.title}
-            </h1>
-            <p className="max-w-2xl text-muted-foreground">
-              {dictionary.exams.description}
-            </p>
+        <main
+          id="main-content"
+          className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 sm:py-12"
+        >
+          <section className="relative overflow-hidden rounded-2xl border bg-card px-6 py-8 shadow-sm sm:px-8 sm:py-10">
+            <div className="relative max-w-2xl space-y-4">
+              <h1 className="text-3xl font-semibold tracking-[-0.03em] text-balance sm:text-4xl">
+                {dictionary.exams.title}
+              </h1>
+              <p className="max-w-prose leading-7 text-muted-foreground">
+                {dictionary.exams.description}
+              </p>
+            </div>
           </section>
 
-          <section className="grid gap-5 md:grid-cols-2">
-            {exams.map((exam) => (
-              <article
-                key={exam.id}
-                className="flex flex-col justify-between rounded-xl border bg-background p-6 shadow-xs"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-                      {exam.code}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {exam.totalQuestions} {dictionary.exams.questions}
-                    </span>
-                  </div>
-                  <h2 className="text-xl font-semibold">{exam.title}</h2>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    {exam.description}
-                  </p>
-                </div>
+          <section
+            aria-labelledby="available-exams-heading"
+            className="space-y-4"
+          >
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <h2
+                  id="available-exams-heading"
+                  className="text-lg font-semibold"
+                >
+                  {dictionary.exams.eyebrow}
+                </h2>
+              </div>
+              <span className="hidden text-sm text-muted-foreground sm:inline">
+                {exams.length} {dictionary.exams.examCountLabel}
+              </span>
+            </div>
 
-                <div className="mt-6 flex items-center justify-between gap-4">
-                  <span className="text-xs text-muted-foreground">
-                    {dictionary.exams.passScore}:{" "}
-                    {exam.passingCriteria.percentage ?? exam.passingScore}%
-                  </span>
-                  <Link
-                    href={`/exam/${exam.id}`}
-                    className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-                  >
-                    {dictionary.exams.startPractice}
-                  </Link>
-                </div>
-              </article>
-            ))}
+            {exams.length > 0 ? (
+              <ul className="grid gap-5 md:grid-cols-2">
+                {exams.map((exam) => (
+                  <li key={exam.id}>
+                    <Card
+                      size="sm"
+                      className="h-full border-border/70 shadow-sm motion-safe:transition-transform motion-safe:duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+                    >
+                      <CardHeader className="gap-5 px-5 pt-5 sm:px-6 sm:pt-6">
+                        <div className="flex items-center justify-between gap-4">
+                          <Badge
+                            variant="secondary"
+                            className="font-mono tracking-wide"
+                            translate="no"
+                          >
+                            {exam.code}
+                          </Badge>
+                          <span className="text-xs font-medium text-muted-foreground">
+                            {exam.provider}
+                          </span>
+                        </div>
+                        <div className="space-y-2">
+                          <h3 className="text-xl font-semibold tracking-tight">
+                            {exam.title}
+                          </h3>
+                          <p className="text-sm leading-6 text-muted-foreground">
+                            {exam.description}
+                          </p>
+                        </div>
+                      </CardHeader>
+
+                      <CardContent className="flex-1 px-5 sm:px-6">
+                        <dl className="grid grid-cols-2 gap-3 border-t pt-4 text-sm">
+                          <div className="flex items-start gap-2">
+                            <ListChecksIcon
+                              aria-hidden="true"
+                              className="mt-0.5 size-4 shrink-0 text-primary"
+                            />
+                            <div>
+                              <dt className="text-xs text-muted-foreground">
+                                {dictionary.exams.questions}
+                              </dt>
+                              <dd className="mt-0.5 font-medium">
+                                {exam.totalQuestions}
+                              </dd>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <CircleCheckIcon
+                              aria-hidden="true"
+                              className="mt-0.5 size-4 shrink-0 text-primary"
+                            />
+                            <div>
+                              <dt className="text-xs text-muted-foreground">
+                                {dictionary.exams.passScore}
+                              </dt>
+                              <dd className="mt-0.5 font-medium">
+                                {exam.passingCriteria.percentage ??
+                                  exam.passingScore}
+                                %
+                              </dd>
+                            </div>
+                          </div>
+                        </dl>
+                      </CardContent>
+
+                      <CardFooter className="justify-between gap-4 px-5 py-4 sm:px-6">
+                        <span className="text-xs text-muted-foreground">
+                          {dictionary.exams.practice}
+                        </span>
+                        <Link
+                          href={`/exam/${exam.id}`}
+                          className={buttonVariants({
+                            size: "lg",
+                            className: "gap-2",
+                          })}
+                        >
+                          {dictionary.exams.startPractice}
+                          <ArrowUpRightIcon aria-hidden="true" />
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="rounded-2xl border border-dashed bg-card px-6 py-12 text-center">
+                <h3 className="font-semibold">{dictionary.exams.title}</h3>
+                <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+                  {dictionary.exams.noQuestions}
+                </p>
+                <Button className="mt-5" variant="outline" disabled>
+                  {dictionary.exams.startPractice}
+                </Button>
+              </div>
+            )}
           </section>
         </main>
       </div>

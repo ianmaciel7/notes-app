@@ -4,10 +4,19 @@ import { getApps, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import type { Exam } from "../src/types/exam";
 import type { Question } from "../src/types/question";
+import { DEFAULT_SPACE_ID } from "../src/types/space";
 
 interface FixtureData {
   exams: Exam[];
   questions: Question[];
+}
+
+function objectProperties(value: object) {
+  return Object.fromEntries(
+    Object.entries(value).filter(
+      ([key]) => key !== "id" && key !== "title" && key !== "examId",
+    ),
+  );
 }
 
 const projectId = process.env.FIREBASE_PROJECT_ID ?? "demo-notes-app";
@@ -41,6 +50,29 @@ async function seedExams(): Promise<void> {
   );
 
   const batch = db.batch();
+  const nowIso = new Date().toISOString();
+  const spaceRef = db.collection("spaces").doc(DEFAULT_SPACE_ID);
+  batch.set(
+    spaceRef,
+    {
+      name: "Exam Prep",
+      kind: "shared-catalog",
+      updatedAt: nowIso,
+      createdAt: nowIso,
+    },
+    { merge: true },
+  );
+  for (const objectType of [
+    { id: "exam", singularName: "Exam", pluralName: "Exams" },
+    { id: "question", singularName: "Question", pluralName: "Questions" },
+    { id: "study-plan", singularName: "Study plan", pluralName: "Study plans" },
+  ]) {
+    batch.set(
+      spaceRef.collection("objectTypes").doc(objectType.id),
+      { ...objectType, updatedAt: nowIso, createdAt: nowIso },
+      { merge: true },
+    );
+  }
 
   // 1. Seed Exam documents
   for (const exam of data.exams) {
@@ -51,6 +83,19 @@ async function seedExams(): Promise<void> {
       updatedAt: new Date().toISOString(),
     };
     batch.set(examRef, examData, { merge: true });
+    batch.set(
+      db
+        .collection("spaces")
+        .doc(DEFAULT_SPACE_ID)
+        .collection("objects")
+        .doc(exam.id),
+      {
+        objectTypeId: "exam",
+        properties: objectProperties(exam),
+        ...examData,
+      },
+      { merge: true },
+    );
     console.log(`  + Queued Exam: [${exam.code}] ${exam.title} (${exam.id})`);
   }
 
@@ -68,6 +113,36 @@ async function seedExams(): Promise<void> {
       updatedAt: new Date().toISOString(),
     };
     batch.set(questionRef, questionData, { merge: true });
+    batch.set(
+      db
+        .collection("spaces")
+        .doc(DEFAULT_SPACE_ID)
+        .collection("objects")
+        .doc(question.id),
+      {
+        objectTypeId: "question",
+        title: question.prompt,
+        properties: objectProperties(question),
+        ...questionData,
+      },
+      { merge: true },
+    );
+    batch.set(
+      db
+        .collection("spaces")
+        .doc(DEFAULT_SPACE_ID)
+        .collection("relations")
+        .doc(`${question.examId}-${question.id}`),
+      {
+        relationType: "contains-question",
+        sourceId: question.examId,
+        targetId: question.id,
+        properties: { order: question.order ?? 0, domainId: question.domainId },
+        createdAt: questionData.createdAt,
+        updatedAt: questionData.updatedAt,
+      },
+      { merge: true },
+    );
     console.log(
       `  + Queued Question: ${question.id} [${question.type}] for ${question.examId}`,
     );

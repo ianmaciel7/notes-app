@@ -75,8 +75,7 @@ export function HotspotQuestion({
             areaStyleClass =
               "border-2 border-primary bg-primary/30 shadow-md ring-2 ring-primary/40";
           } else if (isRevealedCorrect) {
-            areaStyleClass =
-              "border-2 border-emerald-600 bg-emerald-500/35 shadow-sm";
+            areaStyleClass = "border-2 border-primary bg-primary/20 shadow-sm";
           } else if (isRevealedWrong) {
             areaStyleClass =
               "border-2 border-destructive bg-destructive/35 shadow-sm";
@@ -104,13 +103,13 @@ export function HotspotQuestion({
               {/* Inner indicator badge */}
               <div className="flex h-full w-full items-center justify-center p-1">
                 {isRevealed && isRevealedCorrect && (
-                  <span className="flex items-center gap-1 rounded bg-emerald-600 px-1.5 py-0.5 text-[10px] font-bold text-white shadow-xs">
+                  <span className="flex items-center gap-1 rounded bg-primary px-1.5 py-0.5 text-[10px] font-bold text-primary-foreground shadow-xs">
                     <CheckCircle2Icon className="size-3" />
                     Correct Target
                   </span>
                 )}
                 {isRevealed && isRevealedWrong && (
-                  <span className="flex items-center gap-1 rounded bg-destructive px-1.5 py-0.5 text-[10px] font-bold text-white shadow-xs">
+                  <span className="flex items-center gap-1 rounded bg-destructive px-1.5 py-0.5 text-[10px] font-bold text-destructive-foreground shadow-xs">
                     <XCircleIcon className="size-3" />
                     Incorrect
                   </span>
@@ -151,17 +150,13 @@ export function HotspotQuestion({
                     ? "border-primary bg-primary/10 text-primary font-medium"
                     : "border-border hover:bg-muted/50",
                   isRevealedCorrect &&
-                    "border-emerald-600 bg-emerald-500/10 text-emerald-950 dark:text-emerald-200 font-medium",
+                    "border-primary bg-primary/10 text-foreground font-medium",
                   isRevealedWrong &&
-                    "border-destructive bg-destructive/10 text-destructive dark:text-red-300 font-medium",
+                    "border-destructive bg-destructive/10 text-destructive font-medium",
                 )}
               >
                 <span className="truncate">{area.label || area.id}</span>
-                {isRevealedCorrect && (
-                  <Badge className="border-emerald-600 bg-emerald-600 text-white">
-                    Correct
-                  </Badge>
-                )}
+                {isRevealedCorrect && <Badge>Correct</Badge>}
                 {isRevealedWrong && (
                   <Badge variant="destructive">Selected (Incorrect)</Badge>
                 )}

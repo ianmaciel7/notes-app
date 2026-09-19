@@ -18,6 +18,15 @@ import type {
   StudyGoalsInput,
 } from "@/types/progress";
 import type { CorrectAnswer } from "@/types/question";
+import { DEFAULT_SPACE_ID } from "@/types/space";
+
+function objectProperties(value: object) {
+  return Object.fromEntries(
+    Object.entries(value).filter(
+      ([key]) => key !== "id" && key !== "title" && key !== "examId",
+    ),
+  );
+}
 
 async function getActionUserId(explicitUserId?: string): Promise<string> {
   if (explicitUserId && explicitUserId.trim().length > 0) {
@@ -195,6 +204,32 @@ export async function seedSampleDataAction(): Promise<SeedSampleDataResult> {
   try {
     const batch = adminDb.batch();
     const nowIso = new Date().toISOString();
+    const spaceRef = adminDb.collection("spaces").doc(DEFAULT_SPACE_ID);
+    batch.set(
+      spaceRef,
+      {
+        name: "Exam Prep",
+        kind: "shared-catalog",
+        updatedAt: nowIso,
+        createdAt: nowIso,
+      },
+      { merge: true },
+    );
+    for (const objectType of [
+      { id: "exam", singularName: "Exam", pluralName: "Exams" },
+      { id: "question", singularName: "Question", pluralName: "Questions" },
+      {
+        id: "study-plan",
+        singularName: "Study plan",
+        pluralName: "Study plans",
+      },
+    ]) {
+      batch.set(
+        spaceRef.collection("objectTypes").doc(objectType.id),
+        { ...objectType, updatedAt: nowIso, createdAt: nowIso },
+        { merge: true },
+      );
+    }
 
     for (const exam of sampleData.exams) {
       const examRef = adminDb.collection("exams").doc(exam.id);
@@ -202,6 +237,23 @@ export async function seedSampleDataAction(): Promise<SeedSampleDataResult> {
         examRef,
         {
           ...exam,
+          updatedAt: nowIso,
+          createdAt: nowIso,
+        },
+        { merge: true },
+      );
+
+      const objectRef = adminDb
+        .collection("spaces")
+        .doc(DEFAULT_SPACE_ID)
+        .collection("objects")
+        .doc(exam.id);
+      batch.set(
+        objectRef,
+        {
+          objectTypeId: "exam",
+          title: exam.title,
+          properties: objectProperties(exam),
           updatedAt: nowIso,
           createdAt: nowIso,
         },
@@ -220,6 +272,43 @@ export async function seedSampleDataAction(): Promise<SeedSampleDataResult> {
         questionRef,
         {
           ...question,
+          updatedAt: nowIso,
+          createdAt: nowIso,
+        },
+        { merge: true },
+      );
+
+      const objectRef = adminDb
+        .collection("spaces")
+        .doc(DEFAULT_SPACE_ID)
+        .collection("objects")
+        .doc(question.id);
+      const relationRef = adminDb
+        .collection("spaces")
+        .doc(DEFAULT_SPACE_ID)
+        .collection("relations")
+        .doc(`${question.examId}-${question.id}`);
+      batch.set(
+        objectRef,
+        {
+          objectTypeId: "question",
+          title: question.prompt,
+          properties: objectProperties(question),
+          updatedAt: nowIso,
+          createdAt: nowIso,
+        },
+        { merge: true },
+      );
+      batch.set(
+        relationRef,
+        {
+          relationType: "contains-question",
+          sourceId: question.examId,
+          targetId: question.id,
+          properties: {
+            order: question.order ?? 0,
+            domainId: question.domainId,
+          },
           updatedAt: nowIso,
           createdAt: nowIso,
         },

@@ -25,6 +25,38 @@ src/components/ui/ or feature components that consume it.
 
 - Prefer the existing component before adding a new primitive. Review the
   matching file in src/components/ui/ and follow its API and styling shape.
+- Treat new component creation as the last option. Before writing a new
+  component, follow this discovery order: (1) inspect and compose the local
+  component and feature code, (2) search the shadcn/community registries with
+  the `search-registry-items` skill using a short component keyword, and (3)
+  review at least one relevant real-world reference when the interaction or
+  layout is non-trivial. Use the reference library below according to the
+  task; prefer real product flows for UX and component galleries for visual
+  direction.
+- Real product flows and app UI: https://mobbin.com/, https://pageflows.com/,
+  https://refero.design/, https://nicelydone.club/, https://www.saasframe.io/,
+  https://uisources.com/, and https://saasui.design/.
+- SaaS and landing pages: https://saaswebsites.com/,
+  https://saaslandingpage.com/, https://saaspo.com/, https://land-book.com/,
+  https://www.lapa.ninja/, https://landingfolio.com/, and
+  https://onepagelove.com/.
+- Web and visual exploration: https://recent.design/, https://siteinspire.com/,
+  https://www.awwwards.com/, https://minimal.gallery/, https://httpster.net/,
+  https://collectui.com/, https://layers.to/, https://dribbble.com/,
+  https://www.behance.net/, https://www.figma.com/community/, and
+  https://www.designmd.co/.
+- Design systems and focused patterns: https://designsystemsrepo.com/,
+  https://designsystems.surf/, https://navbar.gallery/, https://footer.design/,
+  https://bentogrids.com/, and https://muz.li/.
+- Use references to understand interaction states, information hierarchy,
+  accessibility, responsive behavior, and failure/recovery paths. Do not copy
+  visual styling blindly, treat a screenshot as proof of usability, or add a
+  dependency without checking its code, license, accessibility, and fit with
+  the repository's Base UI/shadcn conventions.
+- If no suitable equivalent exists, record the search terms and why local,
+  registry, and reference options were insufficient in the implementation
+  notes or pull request description. A new component must still compose from
+  existing primitives wherever possible and explain its distinct boundary.
 - Shared primitives should remain small, composable wrappers around the
   underlying primitive or semantic HTML element.
 - Interactive primitives in this repository use Base UI packages such as

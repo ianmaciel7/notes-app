@@ -12,7 +12,7 @@ import {
   StickyNoteIcon,
   XCircleIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { type PropsWithChildren, useEffect, useState } from "react";
 import { CaseStudyLayout } from "@/components/object/question/case-study-layout";
 import { DndQuestion } from "@/components/object/question/dnd-question";
 import { HotspotQuestion } from "@/components/object/question/hotspot-question";
@@ -82,9 +82,11 @@ export function evaluateAnswerCorrectness(
   }
 }
 
-export interface QuestionRendererProps {
+export interface QuestionCardProps {
   question: Question;
   initialAnswer?: CorrectAnswer;
+  initialChecked?: boolean;
+  initialRevealed?: boolean;
   isBookmarked?: boolean;
   onAnswerChange?: (answer: CorrectAnswer) => void;
   onSubmitAnswer?: (
@@ -94,39 +96,95 @@ export interface QuestionRendererProps {
   onToggleBookmark?: () => Promise<void> | void;
   initialNote?: string;
   onSaveNote?: (content: string) => Promise<void> | void;
+  onInteraction?: () => void;
+  onCheckedChange?: (checked: boolean, isCorrect: boolean) => void;
+  onRevealedChange?: (revealed: boolean) => void;
   mode?: "practice" | "simulation" | "review";
   readOnly?: boolean;
   forceReveal?: boolean;
   className?: string;
 }
 
-export function QuestionRenderer({
+type QuestionSectionProps = PropsWithChildren<{ className?: string }>;
+
+export function QuestionHeader({ children, className }: QuestionSectionProps) {
+  return (
+    <CardHeader
+      data-slot="question-header"
+      className={cn("border-b border-border/60 pb-3", className)}
+    >
+      {children}
+    </CardHeader>
+  );
+}
+
+export function QuestionStem({ children, className }: QuestionSectionProps) {
+  return (
+    <div data-slot="question-stem" className={cn(className)}>
+      {children}
+    </div>
+  );
+}
+
+export function QuestionChoices({ children, className }: QuestionSectionProps) {
+  return (
+    <div data-slot="question-choices" className={cn(className)}>
+      {children}
+    </div>
+  );
+}
+
+export function QuestionActions({ children, className }: QuestionSectionProps) {
+  return (
+    <div data-slot="question-actions" className={cn(className)}>
+      {children}
+    </div>
+  );
+}
+
+export function QuestionFeedback({
+  children,
+  className,
+}: QuestionSectionProps) {
+  return (
+    <div data-slot="question-feedback" className={cn(className)}>
+      {children}
+    </div>
+  );
+}
+
+export function QuestionCard({
   question,
   initialAnswer,
+  initialChecked = false,
+  initialRevealed = false,
   isBookmarked = false,
   onAnswerChange,
   onSubmitAnswer,
   onToggleBookmark,
   initialNote = "",
   onSaveNote,
+  onInteraction,
+  onCheckedChange,
+  onRevealedChange,
   mode = "practice",
   readOnly = false,
   forceReveal = false,
   className,
-}: QuestionRendererProps) {
+}: QuestionCardProps) {
   const [currentAnswer, setCurrentAnswer] = useState<CorrectAnswer | undefined>(
     initialAnswer,
   );
-  const [isChecked, setIsChecked] = useState(forceReveal);
-  const [isRevealed, setIsRevealed] = useState(forceReveal);
+  const [isChecked, setIsChecked] = useState(initialChecked || forceReveal);
+  const [isRevealed, setIsRevealed] = useState(initialRevealed || forceReveal);
   const [showNoteCard, setShowNoteCard] = useState(false);
   const [bookmarkedState, setBookmarkedState] = useState(isBookmarked);
 
   useEffect(() => {
     setCurrentAnswer(initialAnswer);
-    setIsChecked(forceReveal);
-    setIsRevealed(forceReveal);
-  }, [initialAnswer, forceReveal]);
+    setIsChecked(initialChecked || forceReveal);
+    setIsRevealed(initialRevealed || forceReveal);
+  }, [initialAnswer, initialChecked, initialRevealed, forceReveal]);
 
   useEffect(() => {
     setBookmarkedState(isBookmarked);
@@ -136,6 +194,7 @@ export function QuestionRenderer({
     if (readOnly || isRevealed) return;
     setCurrentAnswer(ans);
     onAnswerChange?.(ans);
+    onInteraction?.();
   };
 
   const handleCheckAnswer = async () => {
@@ -147,11 +206,19 @@ export function QuestionRenderer({
     );
     setIsChecked(true);
     setIsRevealed(true);
+    onInteraction?.();
+    onCheckedChange?.(true, isCorrect);
+    onRevealedChange?.(true);
     await onSubmitAnswer?.(currentAnswer, isCorrect);
   };
 
   const handleToggleReveal = () => {
-    setIsRevealed((prev) => !prev);
+    setIsRevealed((prev) => {
+      const next = !prev;
+      onInteraction?.();
+      onRevealedChange?.(next);
+      return next;
+    });
   };
 
   const handleResetAnswer = () => {
@@ -159,11 +226,15 @@ export function QuestionRenderer({
     setCurrentAnswer(undefined);
     setIsChecked(false);
     setIsRevealed(false);
+    onCheckedChange?.(false, false);
+    onRevealedChange?.(false);
+    onInteraction?.();
     onAnswerChange?.(undefined as unknown as CorrectAnswer);
   };
 
   const handleBookmarkClick = async () => {
     setBookmarkedState((prev) => !prev);
+    onInteraction?.();
     await onToggleBookmark?.();
   };
 
@@ -276,7 +347,7 @@ export function QuestionRenderer({
   const questionCardContent = (
     <Card className="border-border/80 bg-card shadow-xs">
       {/* Question Header with badges & action toggles */}
-      <CardHeader className="border-b border-border/60 pb-3">
+      <QuestionHeader>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="secondary" className="capitalize">
@@ -289,11 +360,11 @@ export function QuestionRenderer({
                 className={cn(
                   "capitalize",
                   question.difficulty === "easy" &&
-                    "border-emerald-600 text-emerald-700 dark:text-emerald-400",
+                    "border-primary text-primary",
                   question.difficulty === "medium" &&
-                    "border-amber-600 text-amber-700 dark:text-amber-400",
+                    "border-accent text-accent-foreground",
                   question.difficulty === "hard" &&
-                    "border-rose-600 text-rose-700 dark:text-rose-400",
+                    "border-destructive text-destructive",
                 )}
               >
                 {question.difficulty}
@@ -304,8 +375,8 @@ export function QuestionRenderer({
               <Badge
                 className={cn(
                   isAnswerCorrect
-                    ? "border-emerald-600 bg-emerald-600 text-white"
-                    : "bg-destructive text-white",
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-destructive text-destructive-foreground",
                 )}
               >
                 {isAnswerCorrect ? (
@@ -334,11 +405,11 @@ export function QuestionRenderer({
               className={cn(
                 "cursor-pointer",
                 bookmarkedState &&
-                  "text-amber-600 dark:text-amber-400 hover:text-amber-700",
+                  "text-accent-foreground hover:text-foreground",
               )}
             >
               {bookmarkedState ? (
-                <BookmarkCheckIcon className="size-4 fill-amber-500 text-amber-600" />
+                <BookmarkCheckIcon className="size-4 fill-current text-accent-foreground" />
               ) : (
                 <BookmarkIcon className="size-4" />
               )}
@@ -350,7 +421,10 @@ export function QuestionRenderer({
                 type="button"
                 variant="ghost"
                 size="icon-xs"
-                onClick={() => setShowNoteCard((prev) => !prev)}
+                onClick={() => {
+                  setShowNoteCard((prev) => !prev);
+                  onInteraction?.();
+                }}
                 aria-label="Toggle study note"
                 className={cn(
                   "cursor-pointer",
@@ -364,18 +438,20 @@ export function QuestionRenderer({
         </div>
 
         {/* Question Prompt */}
-        <CardTitle className="pt-2 font-medium text-base text-foreground leading-relaxed">
-          <MarkdownPrompt prompt={question.prompt} />
-        </CardTitle>
-      </CardHeader>
+        <QuestionStem>
+          <CardTitle className="pt-2 font-medium text-base text-foreground leading-relaxed">
+            <MarkdownPrompt prompt={question.prompt} />
+          </CardTitle>
+        </QuestionStem>
+      </QuestionHeader>
 
       <CardContent className="space-y-6 pt-5">
         {/* Render Interactive Options/Hotspot/DnD */}
-        {renderQuestionBody()}
+        <QuestionChoices>{renderQuestionBody()}</QuestionChoices>
 
         {/* Action Controls for Practice Mode */}
         {mode === "practice" && !readOnly && (
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/60 pt-4">
+          <QuestionActions className="flex flex-wrap items-center justify-between gap-3 border-t border-border/60 pt-4">
             <div className="flex items-center gap-2">
               <Button
                 type="button"
@@ -422,14 +498,14 @@ export function QuestionRenderer({
                 Reset
               </Button>
             )}
-          </div>
+          </QuestionActions>
         )}
 
         {/* Detailed Explanation Panel */}
         {(isRevealed || forceReveal) && question.explanation && (
-          <div className="rounded-lg border border-border/80 bg-muted/30 p-4 space-y-3">
+          <QuestionFeedback className="rounded-lg border border-border/80 bg-muted/30 p-4 space-y-3">
             <div className="flex items-center gap-2 font-semibold text-xs text-foreground uppercase tracking-wider">
-              <LightbulbIcon className="size-4 text-amber-500" />
+              <LightbulbIcon className="size-4 text-accent-foreground" />
               <span>Explanation &amp; Architecture Insights</span>
             </div>
 
@@ -460,7 +536,7 @@ export function QuestionRenderer({
                   </ul>
                 </div>
               )}
-          </div>
+          </QuestionFeedback>
         )}
 
         {/* Personal Note Card (Collapsible) */}
@@ -489,4 +565,8 @@ export function QuestionRenderer({
   }
 
   return <div className={cn("w-full", className)}>{questionCardContent}</div>;
+}
+
+export function QuestionRenderer(props: QuestionCardProps) {
+  return <QuestionCard {...props} />;
 }

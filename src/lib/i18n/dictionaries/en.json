@@ -1,6 +1,7 @@
 {
   "common": {
     "loading": "Loading…",
+    "skipToContent": "Skip to content",
     "close": "Close",
     "more": "More",
     "breadcrumbLabel": "breadcrumb",
@@ -47,6 +48,7 @@
     "title": "Choose an exam to practice",
     "description": "Work through realistic questions, review explanations, and track the areas that need more study.",
     "questions": "questions",
+    "examCountLabel": "exams",
     "passScore": "Passing score",
     "startPractice": "Start practice",
     "practice": "Practice",
@@ -54,7 +56,14 @@
     "nextQuestion": "Next question",
     "previousQuestion": "Previous question",
     "complete": "Complete",
-    "noQuestions": "No questions are available for this exam yet."
+    "noQuestions": "No questions are available for this exam yet.",
+    "view": "View",
+    "continuous": "Continuous",
+    "focus": "Focus",
+    "question": "Question",
+    "of": "of",
+    "answered": "answered",
+    "viewPreferenceError": "View preference could not be saved."
   },
   "errors": {
     "generic": {

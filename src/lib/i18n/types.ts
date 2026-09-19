@@ -14,6 +14,7 @@ export function hasLocale(locale: string | null | undefined): locale is Locale {
 export interface AppMessages {
   common: {
     loading: string;
+    skipToContent: string;
     close: string;
     more: string;
     breadcrumbLabel: string;
@@ -60,6 +61,7 @@ export interface AppMessages {
     title: string;
     description: string;
     questions: string;
+    examCountLabel: string;
     passScore: string;
     startPractice: string;
     practice: string;
@@ -68,6 +70,13 @@ export interface AppMessages {
     previousQuestion: string;
     complete: string;
     noQuestions: string;
+    view: string;
+    continuous: string;
+    focus: string;
+    question: string;
+    of: string;
+    answered: string;
+    viewPreferenceError: string;
   };
   errors: {
     generic: {

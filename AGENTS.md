@@ -125,6 +125,38 @@ src/components/ui/ or feature components that consume it.
 
 - Prefer the existing component before adding a new primitive. Review the
   matching file in src/components/ui/ and follow its API and styling shape.
+- Treat new component creation as the last option. Before writing a new
+  component, follow this discovery order: (1) inspect and compose the local
+  component and feature code, (2) search the shadcn/community registries with
+  the `search-registry-items` skill using a short component keyword, and (3)
+  review at least one relevant real-world reference when the interaction or
+  layout is non-trivial. Use the reference library below according to the
+  task; prefer real product flows for UX and component galleries for visual
+  direction.
+- Real product flows and app UI: https://mobbin.com/, https://pageflows.com/,
+  https://refero.design/, https://nicelydone.club/, https://www.saasframe.io/,
+  https://uisources.com/, and https://saasui.design/.
+- SaaS and landing pages: https://saaswebsites.com/,
+  https://saaslandingpage.com/, https://saaspo.com/, https://land-book.com/,
+  https://www.lapa.ninja/, https://landingfolio.com/, and
+  https://onepagelove.com/.
+- Web and visual exploration: https://recent.design/, https://siteinspire.com/,
+  https://www.awwwards.com/, https://minimal.gallery/, https://httpster.net/,
+  https://collectui.com/, https://layers.to/, https://dribbble.com/,
+  https://www.behance.net/, https://www.figma.com/community/, and
+  https://www.designmd.co/.
+- Design systems and focused patterns: https://designsystemsrepo.com/,
+  https://designsystems.surf/, https://navbar.gallery/, https://footer.design/,
+  https://bentogrids.com/, and https://muz.li/.
+- Use references to understand interaction states, information hierarchy,
+  accessibility, responsive behavior, and failure/recovery paths. Do not copy
+  visual styling blindly, treat a screenshot as proof of usability, or add a
+  dependency without checking its code, license, accessibility, and fit with
+  the repository's Base UI/shadcn conventions.
+- If no suitable equivalent exists, record the search terms and why local,
+  registry, and reference options were insufficient in the implementation
+  notes or pull request description. A new component must still compose from
+  existing primitives wherever possible and explain its distinct boundary.
 - Shared primitives should remain small, composable wrappers around the
   underlying primitive or semantic HTML element.
 - Interactive primitives in this repository use Base UI packages such as
@@ -246,6 +278,21 @@ Before finishing, verify that:
 - data-slot names and token classes are consistent with neighboring files;
 - no unnecessary dependency or global CSS change was introduced.
 
+<!-- BEGIN:design-system-rule -->
+
+# Design System Rule
+
+- Read `DESIGN.md` before every UI, styling, component, theme, or visual design
+  change.
+- Treat `DESIGN.md` as mandatory project configuration for semantic colors,
+  component composition, accessibility, and styling decisions.
+- If `DESIGN.md` does not define a required decision, update it before
+  implementing that decision.
+- Follow the implementation template and completion gate in
+  `.agents/rules/design.md`.
+
+<!-- END:design-system-rule -->
+
 <!-- BEGIN:knowledge-persistence-rules -->
 
 # Knowledge Retention & Persistence Rule
@@ -285,6 +332,7 @@ Before finishing, verify that:
 - Architecture: `ARCHITECTURE.md`
 - Agents: `.agents/agents/` (e.g., `architect` in `.agents/agents/architect/agent.md`, `code-reviewer` in `.agents/agents/code-reviewer/agent.md`, `doc-maintainer` in `.agents/agents/doc-maintainer/agent.md`, `firebase` in `.agents/agents/firebase/agent.md`, `research` in `.agents/agents/research/agent.md`, `security-reviewer` in `.agents/agents/security-reviewer/agent.md`, `test-engineer` in `.agents/agents/test-engineer/agent.md`, and `ui-engineer` in `.agents/agents/ui-engineer/agent.md`)
 - Rules: `.agents/rules/`
+- Design system: `DESIGN.md` and `.agents/rules/design.md`
 - Skills: `.agents/skills/`
 - UX/UI skill stack and routing: `.agents/rules/ux-ui-agent-skills.md`
 - Project overview and commands: `README.md`
