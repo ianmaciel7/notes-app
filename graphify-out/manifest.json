@@ -720,9 +720,9 @@
     "semantic_hash": ""
   },
   "src/proxy.test.ts": {
-    "mtime": 1789826238.9323692,
-    "seen": 1789827539.4675796,
-    "ast_hash": "0766760fb2fccccb575c3f865dc58d49",
+    "mtime": 1789828452.9109366,
+    "seen": 1789828472.5862763,
+    "ast_hash": "7c5e9beba94a9d8b3793531b30b3c041",
     "semantic_hash": ""
   },
   "docs/FIREBASE_AUTHENTICATION.md": {
@@ -2227,8 +2227,8 @@
   },
   ".agents/skills/impeccable/scripts/data/font-index.json": {
     "mtime": 1789780445.2236204,
-    "seen": 1789827539.4670672,
-    "ast_hash": "",
+    "seen": 1789828472.5852642,
+    "ast_hash": "4a4426c85ec12df1d9a487a39d656ff4",
     "semantic_hash": ""
   },
   "src/components/object/assessment/assessment-state.ts": {
@@ -2472,9 +2472,9 @@
     "semantic_hash": ""
   },
   "src/data/object-relations.ts": {
-    "mtime": 1789826351.6308906,
-    "seen": 1789827539.4670672,
-    "ast_hash": "8b4cacd5c44edecf275760eab0a6a07f",
+    "mtime": 1789828423.4202583,
+    "seen": 1789828472.5862763,
+    "ast_hash": "c429a9a2ef95f8d02471208a0ae26e19",
     "semantic_hash": ""
   },
   "src/data/objects.firebase.test.ts": {
