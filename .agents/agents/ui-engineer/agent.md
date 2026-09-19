@@ -10,7 +10,6 @@ tools:
   - find_by_name
   - list_dir
   - read_url_content
-  - call_mcp_tool
 subagent: true
 mainAgent: true
 model: inherit

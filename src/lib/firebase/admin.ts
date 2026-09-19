@@ -17,7 +17,6 @@ const adminApp = getApps()[0] ?? initializeApp({ projectId });
 
 export const adminAuth = getAuth(adminApp);
 export const adminDb = getFirestore(adminApp);
-adminDb.settings({ ignoreUndefinedProperties: true });
 export const adminStorage = getStorage(adminApp);
 
 export async function verifyFirebaseIdToken(idToken: string) {

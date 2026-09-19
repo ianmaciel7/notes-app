@@ -41,6 +41,21 @@
     "next": "Próxima",
     "submit": "Finalizar"
   },
+  "exams": {
+    "brand": "Espaço de estudos",
+    "eyebrow": "Preparação para certificações",
+    "title": "Escolha uma prova para praticar",
+    "description": "Resolva questões realistas, revise explicações e acompanhe os temas que precisam de mais estudo.",
+    "questions": "questões",
+    "passScore": "Nota mínima",
+    "startPractice": "Começar prática",
+    "practice": "Prática",
+    "checkAnswer": "Verificar resposta",
+    "nextQuestion": "Próxima questão",
+    "previousQuestion": "Questão anterior",
+    "complete": "Concluir",
+    "noQuestions": "Ainda não há questões disponíveis para esta prova."
+  },
   "errors": {
     "generic": {
       "unexpected": "Algo deu errado. Tente novamente.",

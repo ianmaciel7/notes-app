@@ -165,10 +165,7 @@
           "explanation": "Unrestricted NAT outbound routes allow exfiltration to arbitrary internet destinations."
         }
       ],
-      "correctAnswer": [
-        "opt-vpc-endpoints",
-        "opt-egress-nacl"
-      ],
+      "correctAnswer": ["opt-vpc-endpoints", "opt-egress-nacl"],
       "explanation": {
         "general": "Private VPC Interface Endpoints prevent traffic from leaving the cloud backbone when consuming supported APIs, and egress firewall rules ensure traffic can only flow to approved destination CIDRs.",
         "options": {
@@ -261,9 +258,7 @@
           "coordinates": [60, 65, 30, 25]
         }
       ],
-      "correctAnswer": [
-        "area-single-nat"
-      ],
+      "correctAnswer": ["area-single-nat"],
       "explanation": {
         "general": "Deploying only a single NAT Gateway in one AZ creates a single point of failure; if that AZ fails, private subnets in all other AZs lose outbound internet connectivity.",
         "references": [
@@ -406,10 +401,7 @@
           "explanation": "Using mutable tags introduces non-deterministic builds and makes rollback verification unpredictable."
         }
       ],
-      "correctAnswer": [
-        "opt-multi-stage",
-        "opt-digest-pinning"
-      ],
+      "correctAnswer": ["opt-multi-stage", "opt-digest-pinning"],
       "explanation": {
         "general": "Multi-stage Docker builds reduce container attack surface by discarding build tools, while SHA256 digest pinning prevents upstream image mutation from compromising deployment integrity.",
         "options": {
@@ -502,9 +494,7 @@
           "coordinates": [78, 20, 18, 30]
         }
       ],
-      "correctAnswer": [
-        "area-sast-sca"
-      ],
+      "correctAnswer": ["area-sast-sca"],
       "explanation": {
         "general": "Shifting security left requires executing SAST and SCA immediately after compilation/linting and before container image generation, preventing vulnerable binaries from being packaged or uploaded to registries.",
         "references": [

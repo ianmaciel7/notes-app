@@ -11,7 +11,6 @@ tools:
   - list_dir
   - read_url_content
   - search_web
-  - call_mcp_tool
 subagent: true
 mainAgent: true
 model: inherit

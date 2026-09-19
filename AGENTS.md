@@ -52,6 +52,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - If `graphify-out/wiki/index.md` exists, use it for broad navigation.
 - For multi-step codebase exploration or architectural investigation, delegate to the `research` subagent (`code-researcher`).
 - Do not skip Graphify because its generated files are dirty; skip only for stale/incorrect graph-output tasks or when explicitly requested.
+- Use the fast path: query an existing `graphify-out/graph.json` before rebuilding, and use `graphify check-update .` or the incremental update command before expensive extraction.
+- Before changing a highly connected shared component, service, API, database object, or authentication boundary, consider `graphify affected "<concept>"` and verify important results in source and tests.
+- Use God Nodes and community labels for architectural orientation, but treat them as guidance rather than design judgments. Preserve directed relationships when dependency or call direction matters.
+- Use Global Graph, repository cloning/merging, PostgreSQL introspection, or Cargo workspace introspection only when cross-project or external schema relationships materially affect the task.
+- Respect `.graphifyignore`, protect existing graphs from unexpectedly smaller replacements, and use force/replacement options only after confirming that deletions or refactors make the reduction intentional.
+- Prefer local/code-only extraction when project privacy matters; do not send non-code content to an external backend without authorization.
 - After modifying code, run `graphify update .`.
 
 <!-- END:graphify-agent-rules -->
@@ -240,7 +246,30 @@ Before finishing, verify that:
 - data-slot names and token classes are consistent with neighboring files;
 - no unnecessary dependency or global CSS change was introduced.
 
-<!-- END:shadcn-agent-rules -->
+<!-- BEGIN:knowledge-persistence-rules -->
+
+# Knowledge Retention & Persistence Rule
+
+- When an agent investigates a question, discovers critical architecture patterns, diagnoses recurring issues, or gathers information that is referenced multiple times—or when explicitly instructed to save knowledge—that information must NOT remain ephemeral in conversation chat logs.
+- Always persist knowledge to the correct canonical repository location for long-term reuse:
+  - **Codebase Knowledge Graph (`graphify-out/`)**: Run `graphify update .` after code or documentation changes to keep graph relationships current.
+  - **Research & Deep Audits**: Save structured analyses into `docs/research/<topic>.md`.
+  - **System Architecture**: Update `ARCHITECTURE.md` or `docs/decisions/`.
+  - **Rules & Conventions**: Save into `.agents/rules/<rule-name>.md` and link in `AGENTS.md`.
+  - **Developer Skills**: Save into `.agents/skills/<skill-name>/SKILL.md`.
+- Always cite primary sources (exact files, commit hashes, line numbers, or official documentation URLs).
+
+<!-- END:knowledge-persistence-rules -->
+
+<!-- BEGIN:subagent-decomposition-rules -->
+
+# Subagent Task Decomposition & Parallelization Rule
+
+- Whenever a task spans large surface areas—such as investigating multiple repositories/worktrees, auditing dozens of files, reviewing multiple packages, or running extensive exploratory research—the Lead Orchestrator must divide the work across specialized subagents using `invoke_subagent`.
+- Dispatch independent subagents concurrently (e.g., partitioning N items into parallel batches) to maximize throughput and minimize latency.
+- The Lead Orchestrator aggregates findings across all subagent reports and synthesizes them into repository documentation adhering to the Knowledge Retention rule.
+
+<!-- END:subagent-decomposition-rules -->
 
 ## Project context
 
@@ -254,7 +283,7 @@ Before finishing, verify that:
 ## Documentation and agent resources
 
 - Architecture: `ARCHITECTURE.md`
-- Agents: `.agents/agents/` (e.g., `firebase` subagent in `.agents/agents/firebase/agent.md`, `research` subagent [`code-researcher`] in `.agents/agents/research/agent.md`, `code-reviewer` subagent in `.agents/agents/code-reviewer/agent.md`, `test-engineer` subagent in `.agents/agents/test-engineer/agent.md`, and `ui-engineer` subagent in `.agents/agents/ui-engineer/agent.md`)
+- Agents: `.agents/agents/` (e.g., `architect` in `.agents/agents/architect/agent.md`, `code-reviewer` in `.agents/agents/code-reviewer/agent.md`, `doc-maintainer` in `.agents/agents/doc-maintainer/agent.md`, `firebase` in `.agents/agents/firebase/agent.md`, `research` in `.agents/agents/research/agent.md`, `security-reviewer` in `.agents/agents/security-reviewer/agent.md`, `test-engineer` in `.agents/agents/test-engineer/agent.md`, and `ui-engineer` in `.agents/agents/ui-engineer/agent.md`)
 - Rules: `.agents/rules/`
 - Skills: `.agents/skills/`
 - Project overview and commands: `README.md`

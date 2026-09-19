@@ -49,6 +49,9 @@ These conventions follow the [Next.js Data Security guide](https://nextjs.org/do
 - **Code Reviewer (`.agents/agents/code-reviewer/agent.md`)**: Audits diffs, PRs, and modifications for bugs, regressions, security leaks, Biome linting, and enforces the no-index barrel files rule and repository conventions.
 - **Test Engineer (`.agents/agents/test-engineer/agent.md`)**: Designs test strategies, implements unit and component tests with Vitest and React Testing Library, authoring emulator integration tests and verifying test suites pass cleanly.
 - **UI Engineer (`.agents/agents/ui-engineer/agent.md`)**: Implements accessible, theme-aware UI primitives and feature components adhering to shadcn/ui base-nova style, `@base-ui/react`, Tailwind CSS v4, and Ladle stories (`*.stories.tsx`).
+- **Architect (`.agents/agents/architect/agent.md`)**: Guides system boundaries, React Server Component (RSC) vs Client splits, refactoring strategies, and trade-off analysis before implementation.
+- **Security Reviewer (`.agents/agents/security-reviewer/agent.md`)**: Audits authentication flows, default-deny Firestore rules, server-side token validation, and prevents secret exposure.
+- **Documentation Maintainer (`.agents/agents/doc-maintainer/agent.md`)**: Manages Architectural Decision Records (ADRs), path portability audits, documentation freshness, and knowledge graph sync.
 
 ## Configuration
 

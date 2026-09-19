@@ -54,6 +54,21 @@ export interface AppMessages {
     next: string;
     submit: string;
   };
+  exams: {
+    brand: string;
+    eyebrow: string;
+    title: string;
+    description: string;
+    questions: string;
+    passScore: string;
+    startPractice: string;
+    practice: string;
+    checkAnswer: string;
+    nextQuestion: string;
+    previousQuestion: string;
+    complete: string;
+    noQuestions: string;
+  };
   errors: {
     generic: {
       unexpected: string;

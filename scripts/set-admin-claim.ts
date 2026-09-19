@@ -1,5 +1,5 @@
 import { getApps, initializeApp } from "firebase-admin/app";
-import { getAuth } from "firebase-admin/auth";
+import { getAuth, type UserRecord } from "firebase-admin/auth";
 
 const projectId = process.env.FIREBASE_PROJECT_ID ?? "demo-notes-app";
 
@@ -28,12 +28,9 @@ async function setAdminClaim(): Promise<void> {
     `[set-admin-claim] Auth Host: ${process.env.FIREBASE_AUTH_EMULATOR_HOST ?? "Google Cloud Production"}`,
   );
 
-  let userRecord;
-  if (target.includes("@")) {
-    userRecord = await auth.getUserByEmail(target);
-  } else {
-    userRecord = await auth.getUser(target);
-  }
+  const userRecord: UserRecord = target.includes("@")
+    ? await auth.getUserByEmail(target)
+    : await auth.getUser(target);
 
   const existingClaims = userRecord.customClaims ?? {};
   const updatedClaims = {

@@ -41,6 +41,21 @@
     "next": "Next",
     "submit": "Submit"
   },
+  "exams": {
+    "brand": "Study Space",
+    "eyebrow": "Certification preparation",
+    "title": "Choose an exam to practice",
+    "description": "Work through realistic questions, review explanations, and track the areas that need more study.",
+    "questions": "questions",
+    "passScore": "Passing score",
+    "startPractice": "Start practice",
+    "practice": "Practice",
+    "checkAnswer": "Check answer",
+    "nextQuestion": "Next question",
+    "previousQuestion": "Previous question",
+    "complete": "Complete",
+    "noQuestions": "No questions are available for this exam yet."
+  },
   "errors": {
     "generic": {
       "unexpected": "Something went wrong. Please try again.",

@@ -6,5 +6,11 @@
 - If `graphify-out/wiki/index.md` exists, use it for broad navigation.
 - For multi-step codebase exploration or architectural investigation, delegate to the `research` subagent (`code-researcher`).
 - Do not skip Graphify because its generated files are dirty; skip only for stale/incorrect graph-output tasks or when explicitly requested.
+- Use the fast path: query an existing `graphify-out/graph.json` before rebuilding, and use `graphify check-update .` or the incremental update command before expensive extraction.
+- Before changing a highly connected shared component, service, API, database object, or authentication boundary, consider `graphify affected "<concept>"` and verify important results in source and tests.
+- Use God Nodes and community labels for architectural orientation, but treat them as guidance rather than design judgments. Preserve directed relationships when dependency or call direction matters.
+- Use Global Graph, repository cloning/merging, PostgreSQL introspection, or Cargo workspace introspection only when cross-project or external schema relationships materially affect the task.
+- Respect `.graphifyignore`, protect existing graphs from unexpectedly smaller replacements, and use force/replacement options only after confirming that deletions or refactors make the reduction intentional.
+- Prefer local/code-only extraction when project privacy matters; do not send non-code content to an external backend without authorization.
 - After modifying code, run `graphify update .`.
 
