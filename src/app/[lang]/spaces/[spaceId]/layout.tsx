@@ -7,8 +7,6 @@ import { getOwnedSpace, listOwnedSpaces } from "@/data/spaces";
 import { hasLocale } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/types";
 
-export const instant = false;
-
 export default async function SpaceDetailLayout({
   children,
   params,

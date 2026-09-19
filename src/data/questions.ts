@@ -3,7 +3,8 @@ import "server-only";
 import { getSpaceObject, getSpaceRelations } from "@/data/space-objects";
 import { adminDb } from "@/lib/firebase/admin";
 import type { Question, QuestionType } from "@/types/question";
-import { DEFAULT_SPACE_ID } from "@/types/space";
+
+const DEFAULT_SPACE_ID = "exam-prep";
 
 export interface QuestionFilterOptions {
   domainId?: string;

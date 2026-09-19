@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { validateNoteInput } from "@/lib/notes/schema";
+import { validateNoteInput } from "@/domain/notes/note";
 import { auth, db, firebaseApp, functions, rtdb, storage } from "./client";
 
 describe("Firebase Client SDK Services", () => {

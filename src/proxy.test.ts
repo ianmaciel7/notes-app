@@ -146,5 +146,31 @@ describe("proxy", () => {
       expect(response.headers.get("location")).toBeNull();
       expect(response.cookies.get("NEXT_LOCALE")?.value).toBe("pt-BR");
     });
+
+    it("clears firebase_session cookie when expired=true on sign-in route", () => {
+      const response = proxy(
+        new NextRequest("https://notes.example.test/en/sign-in?expired=true", {
+          headers: {
+            cookie: "firebase_session=old_token",
+          },
+        }),
+      );
+
+      const deletedCookie = response.cookies.get("firebase_session");
+      expect(deletedCookie?.value).toBe("");
+      expect(deletedCookie?.maxAge).toBe(0);
+    });
+
+    it("does NOT clear firebase_session cookie when expired=true on regular routes", () => {
+      const response = proxy(
+        new NextRequest("https://notes.example.test/en/spaces?expired=true", {
+          headers: {
+            cookie: "firebase_session=valid_token",
+          },
+        }),
+      );
+
+      expect(response.cookies.get("firebase_session")?.maxAge).not.toBe(0);
+    });
   });
 });

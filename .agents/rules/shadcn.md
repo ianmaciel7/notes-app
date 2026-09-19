@@ -21,6 +21,13 @@ src/components/ui/ or feature components that consume it.
   prefix, Lucide as the icon library, RSC support, and rtl: false.
 - The repository uses pnpm, Biome, Next.js 16, React 19, and TypeScript.
 
+## Naming conventions
+
+- Follow shadcn suffix conventions: root components are bare nouns (e.g., `Card`, `Button`, `Dialog`); sub-components are compound nouns (`CardHeader`, `DialogContent`, `AlertDescription`).
+- `Screen`, `View`, `Page`, and `Panel` are **not** valid shadcn suffixes. Name feature components after what they visually **are**, not what they functionally do (e.g., `SignInCard` not `SignInScreen`).
+- Feature components in a domain folder must not repeat the folder name (e.g., `SignInCard` in `auth/`, not `AuthSignInCard`).
+- File name mirrors the export: `sign-in-card.tsx` exports `SignInCard`.
+
 ## Component architecture
 
 - Prefer the existing component before adding a new primitive. Review the
@@ -177,3 +184,21 @@ Before finishing, verify that:
 - icon-only controls are labelled;
 - data-slot names and token classes are consistent with neighboring files;
 - no unnecessary dependency or global CSS change was introduced.
+
+## Naming conventions for feature components
+
+- **No namespace repetition.** A feature component that lives inside a domain
+  folder must not repeat the folder name in the component or file name.
+  - ✅ `src/components/auth/sign-in-screen.tsx` → exports `SignInScreen`
+  - ❌ `src/components/auth/sign-in-auth-screen.tsx` → exports `SignInAuthScreen`
+  - The `auth/` folder already provides the namespace; repeating `-auth-` in the
+    filename and export name is redundant noise.
+- **File suffix pattern:** `[kebab-feature]-[role].tsx` where `role` is a
+  semantic role such as `screen`, `form`, `button`, `dialog`, `card`, etc.
+  Examples: `sign-in-screen.tsx`, `note-editor-form.tsx`, `tag-picker-button.tsx`.
+- **Export name pattern:** `[PascalFeature][Role]` without the domain prefix.
+  Examples: `SignInScreen`, `NoteEditorForm`, `TagPickerButton`.
+- **Type/interface pattern:** Suffix with `Props` → `SignInScreenProps`.
+  When re-exporting or aliasing a third-party props type internally, use
+  `Firebase<Original>` or similar to avoid collision with the local export.
+

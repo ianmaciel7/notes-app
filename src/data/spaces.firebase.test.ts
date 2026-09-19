@@ -2,7 +2,7 @@ import { getApps, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import { DomainError } from "@/domain/shared/domain-error";
-import { clearFirestoreCollections } from "@/test/clear-firestore";
+import { clearFirestoreCollections } from "@/tests/helpers/clear-firestore";
 import {
   createPrivateSpace,
   getOwnedSpace,

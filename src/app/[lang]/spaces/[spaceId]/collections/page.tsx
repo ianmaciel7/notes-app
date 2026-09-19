@@ -1,4 +1,3 @@
-import { getFirestore } from "firebase-admin/firestore";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -8,6 +7,7 @@ import {
   type CollectionItem,
 } from "@/components/authoring/collection-editor";
 import { requireActionUser } from "@/data/action-auth";
+import { getCollectionObjectRelations } from "@/data/object-relations";
 import { listObjects } from "@/data/objects";
 import { getOwnedSpace } from "@/data/spaces";
 import { hasLocale } from "@/lib/i18n/dictionaries";
@@ -31,29 +31,21 @@ async function CollectionsPageContent({ spaceId }: { spaceId: string }) {
   const user = await requireActionUser();
   await getOwnedSpace(user.uid, spaceId);
 
-  const [collectionObjects, allObjects] = await Promise.all([
+  const [collectionObjects, allObjects, relations] = await Promise.all([
     listObjects(user.uid, spaceId, "collection"),
     listObjects(user.uid, spaceId),
+    getCollectionObjectRelations(spaceId),
   ]);
-
-  const db = getFirestore();
-  const relationsSnap = await db
-    .collection("spaces")
-    .doc(spaceId)
-    .collection("relations")
-    .where("type", "==", "collection-object")
-    .get();
 
   const membersByCollection = new Map<
     string,
     { targetId: string; position: number }[]
   >();
 
-  for (const doc of relationsSnap.docs) {
-    const data = doc.data();
-    const sourceId = String(data.sourceObjectId ?? "");
-    const targetId = String(data.targetObjectId ?? "");
-    const position = Number(data.position ?? 0);
+  for (const relation of relations) {
+    const sourceId = relation.sourceObjectId;
+    const targetId = relation.targetObjectId;
+    const position = relation.position;
 
     const list = membersByCollection.get(sourceId) ?? [];
     list.push({ targetId, position });

@@ -2,6 +2,8 @@
 
 import { AlertTriangleIcon, RefreshCwIcon } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+
 export default function GlobalError({
   reset,
 }: {
@@ -20,14 +22,13 @@ export default function GlobalError({
                 Please try again. If the problem continues, reload the page.
               </p>
             </div>
-            <button
+            <Button
               type="button"
               onClick={() => reset()}
-              className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-primary px-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
             >
               <RefreshCwIcon data-icon="inline-start" />
               Try again
-            </button>
+            </Button>
           </section>
         </main>
       </body>

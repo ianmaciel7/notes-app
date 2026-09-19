@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 
 import { GitHubSignInButton } from "@/components/auth/github-sign-in-button";
 import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
-import { SignInAuthScreen as ShadcnSignInAuthScreen } from "@/components/auth/sign-in-auth-screen";
+import { SignInScreen } from "@/components/auth/sign-in-screen";
 import { useI18n } from "@/hooks/use-i18n";
 import { syncSession } from "@/lib/auth/client-session";
 import { auth } from "@/lib/firebase/client";
@@ -50,7 +50,7 @@ export default function SignInPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-muted/30 px-6 py-12">
-      <ShadcnSignInAuthScreen
+      <SignInScreen
         onSignIn={syncAndRedirect}
         onSignUpClick={() => router.push(signUpPath)}
         onForgotPasswordClick={() => router.push(forgotPasswordPath)}
@@ -64,7 +64,7 @@ export default function SignInPage() {
           onSignIn={syncAndRedirect}
           onError={handleOAuthError}
         />
-      </ShadcnSignInAuthScreen>
+      </SignInScreen>
     </main>
   );
 }

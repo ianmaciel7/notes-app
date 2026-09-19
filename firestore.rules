@@ -57,15 +57,13 @@ service cloud.firestore {
     }
 
     // Exam Catalog and Questions:
-    // Authenticated users can read exam metadata and questions.
-    // Writes are restricted strictly to administrators.
+    // Client SDK reads/writes are denied; access is mediated by Firebase Admin after server authorization.
+    // This protects question answers and explanations from exposure in client bundles.
     match /exams/{examId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
+      allow read, write: if false;
 
       match /questions/{questionId} {
-        allow read: if isAuthenticated();
-        allow write: if isAdmin();
+        allow read, write: if false;
       }
     }
 
@@ -95,13 +93,15 @@ service cloud.firestore {
           && request.resource.data.assessmentViewMode in ['continuous', 'focus'];
       }
 
-      // User-scoped exam progress aggregates
+      // User-scoped exam progress aggregates (client read-only, mutations via server DAL)
       match /examProgress/{examId} {
-        allow read, write: if isOwner(userId);
+        allow read: if isOwner(userId);
+        allow write: if false;
 
         // Subcollection for per-question progress details
         match /questionProgress/{questionId} {
-          allow read, write: if isOwner(userId);
+          allow read: if isOwner(userId);
+          allow write: if false;
         }
       }
 

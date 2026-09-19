@@ -10,7 +10,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { AlertCircle } from "lucide-react";
+import { AlertCircleIcon } from "lucide-react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -166,7 +166,7 @@ export function SignUpAuthForm(props: SignUpAuthFormProps) {
 
         {form.formState.errors.root?.message && (
           <Alert variant="destructive" role="alert">
-            <AlertCircle className="size-4" />
+            <AlertCircleIcon className="size-4" />
             <AlertDescription>
               {form.formState.errors.root.message}
             </AlertDescription>

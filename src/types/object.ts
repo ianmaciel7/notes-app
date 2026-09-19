@@ -36,10 +36,3 @@ export interface SpaceObjectRelationRecord {
   updatedAt?: string;
 }
 
-// Domain canonical types (prefer importing directly from @/domain/objects/object)
-export type {
-  ObjectLifecycle,
-  ObjectRecord,
-  ObjectRevision,
-  SpaceObjectType,
-} from "@/domain/objects/object";

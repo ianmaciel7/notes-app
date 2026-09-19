@@ -3,7 +3,8 @@ import "server-only";
 import { getSpaceObject, getSpaceObjects } from "@/data/space-objects";
 import { adminDb } from "@/lib/firebase/admin";
 import type { Exam } from "@/types/exam";
-import { DEFAULT_SPACE_ID } from "@/types/space";
+
+const DEFAULT_SPACE_ID = "exam-prep";
 
 function toExam(
   id: string,

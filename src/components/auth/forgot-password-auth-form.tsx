@@ -9,7 +9,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
@@ -51,7 +51,7 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
     return (
       <div className="flex flex-col gap-y-4">
         <Alert className="border-primary/20 bg-primary/5 text-foreground">
-          <CheckCircle2 className="size-4 text-primary" />
+          <CheckCircle2Icon className="size-4 text-primary" />
           <AlertDescription>
             {getTranslation(ui, "messages", "passwordResetEmailSent")}
           </AlertDescription>
@@ -110,7 +110,7 @@ export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
 
         {form.formState.errors.root?.message && (
           <Alert variant="destructive" role="alert">
-            <AlertCircle className="size-4" />
+            <AlertCircleIcon className="size-4" />
             <AlertDescription>
               {form.formState.errors.root.message}
             </AlertDescription>

@@ -74,7 +74,7 @@ it contributes a distinct capability.
 
 ## Sources
 
-- Global inventory: `C:\Users\ianma\.agents\skills`.
+- Global inventory: `~/.agents/skills`.
 - Project inventory: `.agents/skills/`.
 - Installation and agent mapping: `npx skills ls -g -a antigravity -a
   antigravity-cli -a codex -a gemini-cli`.

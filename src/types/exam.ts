@@ -42,9 +42,3 @@ export interface Exam {
   updatedAt?: string;
 }
 
-// Domain canonical types (prefer importing directly from @/domain/exams/exam)
-export type {
-  ExamPublicationSnapshot,
-  ExamQuestionReference,
-  ExamRevisionPayload,
-} from "@/domain/exams/exam";

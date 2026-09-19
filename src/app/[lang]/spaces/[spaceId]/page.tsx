@@ -24,8 +24,6 @@ import { getOwnedSpace } from "@/data/spaces";
 import { getDictionary, hasLocale } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/types";
 
-export const instant = false;
-
 export default async function SpaceOverviewPage({
   params,
 }: {

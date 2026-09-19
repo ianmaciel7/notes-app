@@ -70,8 +70,12 @@ export function proxy(request: NextRequest) {
 
   requestHeaders.set(localeHeaderName, matchedLocale ?? locale);
 
-  // If session expired or was revoked, clear cookie
-  if (request.nextUrl.searchParams.get("expired") === "true") {
+  // If session expired or was revoked, clear cookie only on sign-in route
+  const isSignInRoute =
+    pathname === "/sign-in" ||
+    pathname.endsWith("/sign-in") ||
+    pathname === `/${matchedLocale}/sign-in`;
+  if (isSignInRoute && request.nextUrl.searchParams.get("expired") === "true") {
     const response = NextResponse.next({
       request: {
         headers: requestHeaders,

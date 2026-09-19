@@ -7,7 +7,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { User, UserCredential } from "firebase/auth";
-import { AlertCircle } from "lucide-react";
+import { AlertCircleIcon } from "lucide-react";
 import { useState } from "react";
 
 import { GitHubSignInButton } from "@/components/auth/github-sign-in-button";
@@ -26,20 +26,20 @@ import { Separator } from "@/components/ui/separator";
 import { useI18n } from "@/hooks/use-i18n";
 import { getAuthErrorMessage } from "@/lib/i18n/auth-errors";
 
-export interface SignInAuthScreenProps
+export interface SignInCardProps
   extends Omit<FirebaseSignInAuthScreenProps, "onSignIn"> {
   onSignIn?: (credential?: UserCredential | User) => void | Promise<void>;
   oauthErrorMessage?: string | null;
   onOAuthError?: (error: unknown) => void;
 }
 
-export function SignInAuthScreen({
+export function SignInCard({
   children,
   onSignIn,
   oauthErrorMessage,
   onOAuthError,
   ...props
-}: SignInAuthScreenProps) {
+}: SignInCardProps) {
   const ui = useUI();
   const { t, locale } = useI18n();
   const [internalOAuthError, setInternalOAuthError] = useState<string | null>(
@@ -84,7 +84,7 @@ export function SignInAuthScreen({
           {displayedOAuthError ? (
             <div className="mb-4">
               <Alert variant="destructive" role="alert">
-                <AlertCircle className="size-4" />
+                <AlertCircleIcon className="size-4" />
                 <AlertDescription>{displayedOAuthError}</AlertDescription>
               </Alert>
             </div>

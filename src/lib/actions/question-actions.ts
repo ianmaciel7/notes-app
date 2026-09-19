@@ -7,6 +7,7 @@ import {
   publishRevision,
   saveDraftRevision,
 } from "@/data/objects";
+import { getOwnedSpace } from "@/data/spaces";
 import { setObjectTags } from "@/data/tags";
 import type { ObjectRecord, ObjectRevision } from "@/domain/objects/object";
 import type { QuestionRevisionPayload } from "@/domain/questions/question";
@@ -152,7 +153,8 @@ export async function setQuestionTagsAction(input: {
   tagIds: string[];
 }): Promise<ActionResult<void>> {
   try {
-    await requireActionUser();
+    const user = await requireActionUser();
+    await getOwnedSpace(user.uid, input.spaceId);
     await setObjectTags(input.spaceId, input.questionId, input.tagIds);
     return { ok: true, data: undefined };
   } catch (err) {
