@@ -34,6 +34,10 @@ export interface AppMessages {
     continueWithGithub: string;
     orContinueWith: string;
     signOut: string;
+    theme: string;
+    themeLight: string;
+    themeDark: string;
+    themeSystem: string;
   };
   home: {
     metadataTitle: string;

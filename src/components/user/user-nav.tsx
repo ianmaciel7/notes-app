@@ -1,8 +1,9 @@
 "use client";
 
 import { signOut } from "firebase/auth";
-import { LogOutIcon } from "lucide-react";
+import { LaptopIcon, LogOutIcon, MoonIcon, SunIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import { useState } from "react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -10,6 +11,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -44,6 +48,7 @@ export function UserNav({ user }: UserNavProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { locale, t } = useI18n();
+  const { setTheme, theme } = useTheme();
 
   const displayName = user?.displayName;
   const email = user?.email;
@@ -100,6 +105,25 @@ export function UserNav({ user }: UserNavProps) {
             <DropdownMenuSeparator />
           </>
         )}
+        <DropdownMenuRadioGroup
+          value={theme}
+          onValueChange={(value) => setTheme(value)}
+        >
+          <DropdownMenuLabel>{t("common.theme")}</DropdownMenuLabel>
+          <DropdownMenuRadioItem value="light" className="cursor-pointer">
+            <SunIcon />
+            <span>{t("common.themeLight")}</span>
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="dark" className="cursor-pointer">
+            <MoonIcon />
+            <span>{t("common.themeDark")}</span>
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="system" className="cursor-pointer">
+            <LaptopIcon />
+            <span>{t("common.themeSystem")}</span>
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           disabled={isLoading}

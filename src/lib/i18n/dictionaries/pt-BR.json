@@ -20,12 +20,16 @@
     "continueWithGoogle": "Continuar com o Google",
     "continueWithGithub": "Continuar com o GitHub",
     "orContinueWith": "Ou continue com",
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
+    "themeSystem": "Sistema"
   },
   "home": {
-    "metadataTitle": "Criar aplicativo Next",
-    "metadataDescription": "Gerado pelo create next app",
-    "logoAlt": "Logotipo do Next.js",
+    "metadataTitle": "Study Space",
+    "metadataDescription": "Pratique exames, revise explicações e acompanhe seu progresso.",
+    "logoAlt": "Logotipo do Study Space",
     "heading": "Para começar, edite o arquivo page.tsx.",
     "description": "Procurando um ponto de partida ou mais instruções? Acesse Templates ou o centro de Aprendizado.",
     "templates": "Templates",

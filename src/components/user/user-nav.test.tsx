@@ -31,6 +31,15 @@ vi.mock("@/lib/auth/client-session", () => ({
   deleteSession: vi.fn(),
 }));
 
+const mockSetTheme = vi.fn();
+
+vi.mock("next-themes", () => ({
+  useTheme: () => ({
+    setTheme: mockSetTheme,
+    theme: "system",
+  }),
+}));
+
 function renderUserNav(children: ReactNode) {
   return render(
     <I18nProvider dictionary={en} locale="en">
@@ -95,5 +104,18 @@ describe("UserNav", () => {
       expect(mockPush).toHaveBeenCalledWith("/en/sign-in");
       expect(mockRefresh).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it("changes the selected theme from the user menu", async () => {
+    const user = userEvent.setup();
+
+    renderUserNav(<UserNav user={{ displayName: "Jane Doe" }} />);
+
+    await user.click(screen.getByRole("button", { name: "Jane Doe" }));
+    await user.click(
+      await screen.findByRole("menuitemradio", { name: "Dark" }),
+    );
+
+    expect(mockSetTheme).toHaveBeenCalledWith("dark");
   });
 });
