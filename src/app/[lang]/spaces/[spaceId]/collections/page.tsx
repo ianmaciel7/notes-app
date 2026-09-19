@@ -3,9 +3,9 @@ import { Suspense } from "react";
 
 import {
   type AvailableObject,
-  CollectionEditor,
+  CollectionForm,
   type CollectionItem,
-} from "@/components/authoring/collection-editor";
+} from "@/components/authoring/collection-form";
 import { requireActionUser } from "@/data/action-auth";
 import { getCollectionObjectRelations } from "@/data/object-relations";
 import { listObjects } from "@/data/objects";
@@ -85,7 +85,7 @@ async function CollectionsPageContent({ spaceId }: { spaceId: string }) {
         </p>
       </div>
 
-      <CollectionEditor
+      <CollectionForm
         spaceId={spaceId}
         initialCollections={collectionsData}
         availableObjects={nonCollectionObjects}

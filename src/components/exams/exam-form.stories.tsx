@@ -1,10 +1,10 @@
 import type { Story } from "@ladle/react";
 import type { ExamAuthoringViewDto } from "@/data/exam-authoring";
 import type { QuestionSummaryDto } from "@/data/questions-v2";
-import { ExamEditor } from "./exam-editor";
+import { ExamForm } from "./exam-form";
 
 export default {
-  title: "Exams / ExamEditor",
+  title: "Exams / ExamForm",
 };
 
 const mockAvailableQuestions: QuestionSummaryDto[] = [
@@ -89,7 +89,7 @@ const mockEmptyExam: ExamAuthoringViewDto = {
 
 export const DraftWithQuestions: Story = () => (
   <div className="max-w-4xl p-4">
-    <ExamEditor
+    <ExamForm
       spaceId="space-1"
       exam={mockDraftExam}
       availableQuestions={mockAvailableQuestions}
@@ -99,7 +99,7 @@ export const DraftWithQuestions: Story = () => (
 
 export const EmptyDraft: Story = () => (
   <div className="max-w-4xl p-4">
-    <ExamEditor
+    <ExamForm
       spaceId="space-1"
       exam={mockEmptyExam}
       availableQuestions={mockAvailableQuestions}

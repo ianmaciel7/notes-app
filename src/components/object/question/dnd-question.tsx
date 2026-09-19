@@ -10,8 +10,11 @@ import {
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import type {
+  DragAndDropItem,
+  DragAndDropSlot,
+} from "@/domain/catalog/question";
 import { cn } from "@/lib/utils";
-import type { DragAndDropItem, DragAndDropSlot } from "@/types/question";
 
 interface DndQuestionProps {
   slots?: DragAndDropSlot[];

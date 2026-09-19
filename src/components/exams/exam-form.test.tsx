@@ -10,7 +10,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ExamAuthoringViewDto } from "@/data/exam-authoring";
 import type { QuestionSummaryDto } from "@/data/questions-v2";
 import * as examAuthoringActions from "@/lib/actions/exam-authoring-actions";
-import { ExamEditor } from "./exam-editor";
+import { ExamForm } from "./exam-form";
 
 vi.mock("@/lib/actions/exam-authoring-actions", () => ({
   saveExamDraftAction: vi.fn(),
@@ -19,7 +19,7 @@ vi.mock("@/lib/actions/exam-authoring-actions", () => ({
   archiveExamAction: vi.fn(),
 }));
 
-describe("ExamEditor", () => {
+describe("ExamForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -79,7 +79,7 @@ describe("ExamEditor", () => {
 
   it("renders exam initial title, instructions, passing percentage, and question list", () => {
     render(
-      <ExamEditor
+      <ExamForm
         spaceId="space-1"
         exam={sampleExam}
         availableQuestions={sampleAvailableQuestions}
@@ -100,7 +100,7 @@ describe("ExamEditor", () => {
 
   it("warns when a referenced question has a newer published revision and allows explicit upgrade", () => {
     render(
-      <ExamEditor
+      <ExamForm
         spaceId="space-1"
         exam={sampleExam}
         availableQuestions={sampleAvailableQuestions}
@@ -127,7 +127,7 @@ describe("ExamEditor", () => {
 
   it("adds a question from the picker and updates points", () => {
     render(
-      <ExamEditor
+      <ExamForm
         spaceId="space-1"
         exam={{
           ...sampleExam,
@@ -182,7 +182,7 @@ describe("ExamEditor", () => {
     };
 
     render(
-      <ExamEditor
+      <ExamForm
         spaceId="space-1"
         exam={twoQuestionsExam}
         availableQuestions={sampleAvailableQuestions}
@@ -211,7 +211,7 @@ describe("ExamEditor", () => {
 
   it("removes a question from the exam list", () => {
     render(
-      <ExamEditor
+      <ExamForm
         spaceId="space-1"
         exam={sampleExam}
         availableQuestions={sampleAvailableQuestions}
@@ -267,7 +267,7 @@ describe("ExamEditor", () => {
       });
 
     render(
-      <ExamEditor
+      <ExamForm
         spaceId="space-1"
         exam={sampleExam}
         availableQuestions={sampleAvailableQuestions}
@@ -324,7 +324,7 @@ describe("ExamEditor", () => {
     const publishSpy = vi.spyOn(examAuthoringActions, "publishExamAction");
 
     render(
-      <ExamEditor
+      <ExamForm
         spaceId="space-1"
         exam={{
           ...sampleExam,
@@ -376,7 +376,7 @@ describe("ExamEditor", () => {
       });
 
     render(
-      <ExamEditor
+      <ExamForm
         spaceId="space-1"
         exam={sampleExam}
         availableQuestions={sampleAvailableQuestions}
@@ -417,7 +417,7 @@ describe("ExamEditor", () => {
       });
 
     render(
-      <ExamEditor
+      <ExamForm
         spaceId="space-1"
         exam={sampleExam}
         availableQuestions={sampleAvailableQuestions}

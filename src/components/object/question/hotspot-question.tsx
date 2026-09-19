@@ -3,8 +3,8 @@
 import { CheckCircle2Icon, CrosshairIcon, XCircleIcon } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import type { HotspotArea } from "@/domain/catalog/question";
 import { cn } from "@/lib/utils";
-import type { HotspotArea } from "@/types/question";
 
 interface HotspotQuestionProps {
   imageUrl?: string;

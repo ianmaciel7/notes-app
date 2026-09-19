@@ -1,7 +1,7 @@
 import "server-only";
 
+import type { QuestionNote } from "@/domain/learning/question-note";
 import { adminDb } from "@/lib/firebase/admin";
-import type { QuestionNote } from "@/types/note";
 
 export async function getQuestionNote(
   userId: string,

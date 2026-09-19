@@ -3,8 +3,8 @@
 import { CheckCircle2Icon, XCircleIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import type { QuestionOption } from "@/domain/catalog/question";
 import { cn } from "@/lib/utils";
-import type { QuestionOption } from "@/types/question";
 
 interface SingleChoiceQuestionProps {
   options: QuestionOption[];

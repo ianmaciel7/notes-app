@@ -4,11 +4,11 @@ import { useEffect } from "react";
 import {
   QuestionCard,
   type QuestionCardProps,
-} from "@/components/object/question/question-renderer";
+} from "@/components/object/question/question-card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
-export function FocusQuestionView({
+export function FocusQuestion({
   questionIds,
   activeQuestionId,
   getCardProps,

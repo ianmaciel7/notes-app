@@ -1,4 +1,4 @@
-import type { CorrectAnswer } from "@/types/question";
+import type { CorrectAnswer } from "@/domain/catalog/question";
 
 export interface AssessmentQuestionState {
   answer?: CorrectAnswer;

@@ -10,6 +10,9 @@ This repository is a Next.js application using the App Router, React, and TypeSc
 - `src/components/exams/`: exam authoring and questionnaire components (question picker).
 - `src/components/spaces/`: space navigation shell and switcher.
 - `src/domain/`: pure business logic, invariants, validation schemas, and scheduling algorithms.
+  - `src/domain/assessment/`: client-safe assessment preferences shared by UI, actions, and the DAL.
+  - `src/domain/catalog/`: client-safe exam catalog read models and legacy space-object contracts.
+  - `src/domain/learning/`: client-safe learner progress and question-note contracts.
   - `src/domain/objects/`: versioned object records, revisions, and lifecycle transitions.
   - `src/domain/questions/`: question schemas, validation, grading, and redaction.
   - `src/domain/exams/`: exam composition, point weighting, and publication snapshot validation.
@@ -18,6 +21,7 @@ This repository is a Next.js application using the App Router, React, and TypeSc
   - `src/domain/shared/`: domain error definitions (`DomainError`).
 - `src/data/`: server-only Data Access Layer (DAL) modules mediating Firebase Admin Firestore.
 - `src/lib/actions/`: Server Actions exposing authenticated operations to the client.
+- `src/tests/`: cross-feature integration tests and shared test helpers. Feature and domain unit tests remain colocated with their source modules.
 - `public/`: static assets.
 - `.agents/`: agent configurations, subagents, domain skills, and repository rules.
 
@@ -27,7 +31,7 @@ This repository is a Next.js application using the App Router, React, and TypeSc
 
 The platform organizes content into private tenant boundaries called **Spaces**, managing typed content through an immutable revisioning model:
 
-### 1. SpaceRecord (`src/data/spaces.ts`, `src/types/space.ts`)
+### 1. SpaceRecord (`src/data/spaces.ts`)
 - **Isolation Boundary**: All content and learner data belong to a specific private space.
 - **Fields**:
   - `id`: Unique space identifier.

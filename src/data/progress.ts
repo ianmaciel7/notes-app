@@ -1,12 +1,12 @@
 import "server-only";
 
-import { adminDb } from "@/lib/firebase/admin";
 import type {
   ExamProgress,
   QuestionAttemptInput,
   QuestionProgress,
   StudyGoalsInput,
-} from "@/types/progress";
+} from "@/domain/learning/progress";
+import { adminDb } from "@/lib/firebase/admin";
 
 export async function getUserExamProgress(
   userId: string,

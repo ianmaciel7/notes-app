@@ -2,9 +2,9 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { getApps, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import type { Exam } from "../src/types/exam";
-import type { Question } from "../src/types/question";
-import { DEFAULT_SPACE_ID } from "../src/types/space";
+import { DEFAULT_CATALOG_SPACE_ID } from "../src/domain/catalog/constants";
+import type { Exam } from "../src/domain/catalog/exam";
+import type { Question } from "../src/domain/catalog/question";
 
 interface FixtureData {
   exams: Exam[];
@@ -51,7 +51,7 @@ async function seedExams(): Promise<void> {
 
   const batch = db.batch();
   const nowIso = new Date().toISOString();
-  const spaceRef = db.collection("spaces").doc(DEFAULT_SPACE_ID);
+  const spaceRef = db.collection("spaces").doc(DEFAULT_CATALOG_SPACE_ID);
   batch.set(
     spaceRef,
     {
@@ -86,7 +86,7 @@ async function seedExams(): Promise<void> {
     batch.set(
       db
         .collection("spaces")
-        .doc(DEFAULT_SPACE_ID)
+        .doc(DEFAULT_CATALOG_SPACE_ID)
         .collection("objects")
         .doc(exam.id),
       {
@@ -116,7 +116,7 @@ async function seedExams(): Promise<void> {
     batch.set(
       db
         .collection("spaces")
-        .doc(DEFAULT_SPACE_ID)
+        .doc(DEFAULT_CATALOG_SPACE_ID)
         .collection("objects")
         .doc(question.id),
       {
@@ -130,7 +130,7 @@ async function seedExams(): Promise<void> {
     batch.set(
       db
         .collection("spaces")
-        .doc(DEFAULT_SPACE_ID)
+        .doc(DEFAULT_CATALOG_SPACE_ID)
         .collection("relations")
         .doc(`${question.examId}-${question.id}`),
       {

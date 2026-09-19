@@ -3,8 +3,8 @@
 import { CheckCircle2Icon, InfoIcon, XCircleIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import type { QuestionOption } from "@/domain/catalog/question";
 import { cn } from "@/lib/utils";
-import type { QuestionOption } from "@/types/question";
 
 interface MultiChoiceQuestionProps {
   options: QuestionOption[];

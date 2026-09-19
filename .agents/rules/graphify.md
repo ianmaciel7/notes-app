@@ -1,5 +1,6 @@
 # Graphify Rules
 
+- **Mandatory search routing**: All repository file searches, symbol lookups, dependency investigations, and architecture questions MUST start with Graphify (`graphify query`, `graphify path`, `graphify explain`, or `graphify affected`) when `graphify-out/graph.json` exists. If the investigation is broad, multi-step, or architectural, delegate it to `.agents/agents/research/agent.md` and require that agent to use the Graphify skill. Direct `rg`, `find`, or equivalent searches are permitted only as targeted verification after Graphify has established the relevant scope, or when Graphify has no matching node.
 - For codebase questions, use `graphify query` when `graphify-out/graph.json` exists (use `--dfs` to trace linear execution/call chains, or default BFS for broad subsystem context).
 - Use `graphify path` for relationships and `graphify explain` for focused concepts.
 - Check `graphify-out/GRAPH_REPORT.md` for pre-extracted community clusters, god nodes, and architecture patterns.

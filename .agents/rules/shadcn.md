@@ -27,6 +27,11 @@ src/components/ui/ or feature components that consume it.
 - `Screen`, `View`, `Page`, and `Panel` are **not** valid shadcn suffixes. Name feature components after what they visually **are**, not what they functionally do (e.g., `SignInCard` not `SignInScreen`).
 - Feature components in a domain folder must not repeat the folder name (e.g., `SignInCard` in `auth/`, not `AuthSignInCard`).
 - File name mirrors the export: `sign-in-card.tsx` exports `SignInCard`.
+- Next.js App Router reserved names such as `page`, `layout`, `template`,
+  `default`, `loading`, `error`, `not-found`, `global-error`, `route`,
+  `proxy`, `icon`, `apple-icon`, `opengraph-image`, `twitter-image`,
+  `sitemap`, and `robots` are valid only for their corresponding special
+  files under `app/`; they are not general feature-component suffixes.
 
 ## Component architecture
 
@@ -110,19 +115,6 @@ src/components/ui/ or feature components that consume it.
   and useRender patterns where the existing component uses them. Do not
   replace them with an unrelated asChild implementation.
 
-## Icons and content
-
-- Use icons from lucide-react; do not add a second icon library for ordinary
-  UI.
-- Follow the existing *Icon naming convention, for example XIcon or
-  ChevronDownIcon.
-- Let the component's icon sizing styles control ordinary icons. Use the
-  component's icon size variants rather than ad-hoc icon dimensions.
-- Icon-only controls must have an accessible name using aria-label, visible
-  text, or an equivalent labelling relationship.
-- Preserve meaningful text and semantic elements. Use sr-only text when a
-  visual control needs a non-visible accessible label.
-
 ## Existing patterns to preserve
 
 - button.tsx: Base UI Button plus CVA variants and sizes; exports both Button
@@ -153,37 +145,6 @@ src/components/ui/ or feature components that consume it.
 - Keep global token changes in src/app/globals.css; do not hide global theme
   changes inside one component.
 
-## Next.js and repository constraints
-
-- Before changing Next.js code, read the relevant current documentation under
-  node_modules/next/dist/docs/; this project explicitly warns that its
-  Next.js version has breaking changes.
-- Preserve the Next.js-managed block in AGENTS.md.
-- Keep application code under src/ and shared UI under src/components/ui/.
-- Use the repository's pnpm scripts. Use Biome for formatting, linting, and
-  import organization; do not introduce a competing formatter or linter.
-- Keep imports organized in the style Biome produces. Prefer the configured
-  aliases for cross-directory imports and relative imports for tightly
-  colocated files such as stories.
-
-## Validation checklist
-
-After UI changes, run the smallest relevant checks and then the broader check
-when practical:
-
-1. pnpm lint
-2. pnpm format when formatting changed or is uncertain
-3. pnpm build for changes affecting routes, client/server boundaries, or
-   shared primitives
-4. pnpm ladle:build for component/story changes when practical
-
-Before finishing, verify that:
-
-- the component still exposes the expected exports and props;
-- keyboard, focus, disabled, invalid, and modal/menu interactions remain usable;
-- icon-only controls are labelled;
-- data-slot names and token classes are consistent with neighboring files;
-- no unnecessary dependency or global CSS change was introduced.
 
 ## Naming conventions for feature components
 
@@ -193,12 +154,25 @@ Before finishing, verify that:
   - ❌ `src/components/auth/sign-in-auth-screen.tsx` → exports `SignInAuthScreen`
   - The `auth/` folder already provides the namespace; repeating `-auth-` in the
     filename and export name is redundant noise.
-- **File suffix pattern:** `[kebab-feature]-[role].tsx` where `role` is a
-  semantic role such as `screen`, `form`, `button`, `dialog`, `card`, etc.
-  Examples: `sign-in-screen.tsx`, `note-editor-form.tsx`, `tag-picker-button.tsx`.
+- **File suffix pattern:** use a shadcn component noun or a bare domain noun.
+  Valid shadcn-style endings include `Card`, `Form`, `Button`, `Dialog`,
+  `Drawer`, `Sheet`, `Table`, `Toolbar`, `Header`, `Content`, `Footer`,
+  `Item`, `Group`, and `Trigger`. A feature may use a bare noun when no
+  shared primitive is being wrapped, such as `Questions` or `CaseStudy`.
 - **Export name pattern:** `[PascalFeature][Role]` without the domain prefix.
-  Examples: `SignInScreen`, `NoteEditorForm`, `TagPickerButton`.
+  Examples: `SignInCard`, `QuestionForm`, and `TagPickerButton`.
 - **Type/interface pattern:** Suffix with `Props` → `SignInScreenProps`.
   When re-exporting or aliasing a third-party props type internally, use
   `Firebase<Original>` or similar to avoid collision with the local export.
-
+- **Disallowed feature roles:** `Screen`, `View`, `Editor`, and `Shell` are
+  not shadcn suffixes. Choose the concrete composition instead, such as
+  `SignInCard`, `QuestionForm`, or `Questions`.
+- **Next.js exception:** App Router special files may use the framework's
+  reserved names when they are actually special files: `page`, `layout`,
+  `template`, `default`, `loading`, `error`, `not-found`, `global-error`,
+  `route`, `proxy`, `icon`, `apple-icon`, `opengraph-image`,
+  `twitter-image`, `sitemap`, and `robots`. This exception applies to the
+  required `app/` file conventions, not arbitrary feature components.
+- **File/export symmetry:** the file name mirrors the export, for example
+  `sign-in-card.tsx` exports `SignInCard` and `question-form.tsx` exports
+  `QuestionForm`.

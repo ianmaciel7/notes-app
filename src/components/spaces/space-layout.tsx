@@ -30,7 +30,7 @@ import { UserNav } from "@/components/user/user-nav";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/types";
 
-export interface SpaceShellProps {
+export interface SpaceLayoutProps {
   spaceId: string;
   lang: Locale;
   children: React.ReactNode;
@@ -41,13 +41,13 @@ export interface SpaceShellProps {
   } | null;
 }
 
-export async function SpaceShell({
+export async function SpaceLayout({
   spaceId,
   lang,
   children,
   spaces = [],
   user = null,
-}: SpaceShellProps) {
+}: SpaceLayoutProps) {
   const dictionary = await getDictionary(lang);
 
   const navItems = [

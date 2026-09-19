@@ -5,7 +5,7 @@ import {
   type MultiFactorAuthAssertionScreenProps,
   useUI,
 } from "@firebase-oss/ui-react";
-import { MultiFactorAuthAssertionForm } from "@/components/auth/multi-factor-auth-assertion-form";
+import { MultiFactorAssertionForm } from "@/components/auth/multi-factor-assertion-form";
 import {
   Card,
   CardContent,
@@ -14,12 +14,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export type MultiFactorAuthEnrollmentScreenProps =
-  MultiFactorAuthAssertionScreenProps;
+export type MultiFactorAssertionCardProps = MultiFactorAuthAssertionScreenProps;
 
-export function MultiFactorAuthAssertionScreen(
-  props: MultiFactorAuthEnrollmentScreenProps,
-) {
+export function MultiFactorAssertionCard(props: MultiFactorAssertionCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "multiFactorAssertion");
@@ -33,7 +30,7 @@ export function MultiFactorAuthAssertionScreen(
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <MultiFactorAuthAssertionForm {...props} />
+          <MultiFactorAssertionForm {...props} />
         </CardContent>
       </Card>
     </div>

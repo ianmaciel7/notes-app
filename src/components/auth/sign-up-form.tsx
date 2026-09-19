@@ -21,9 +21,9 @@ import { useI18n } from "@/hooks/use-i18n";
 import { getAuthErrorMessage } from "@/lib/i18n/auth-errors";
 import { Policies } from "./policies";
 
-export type { SignUpAuthFormProps };
+export type SignUpFormProps = SignUpAuthFormProps;
 
-export function SignUpAuthForm(props: SignUpAuthFormProps) {
+export function SignUpForm(props: SignUpFormProps) {
   const ui = useUI();
   const { t } = useI18n();
   const schema = useSignUpAuthFormSchema();

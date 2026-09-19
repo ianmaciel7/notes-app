@@ -41,4 +41,3 @@ export interface Exam {
   createdAt?: string;
   updatedAt?: string;
 }
-

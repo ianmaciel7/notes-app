@@ -19,9 +19,9 @@ import { useI18n } from "@/hooks/use-i18n";
 import { getAuthErrorMessage } from "@/lib/i18n/auth-errors";
 import { Policies } from "./policies";
 
-export type { SignInAuthFormProps };
+export type SignInFormProps = SignInAuthFormProps;
 
-export function SignInAuthForm(props: SignInAuthFormProps) {
+export function SignInForm(props: SignInFormProps) {
   const ui = useUI();
   const { t } = useI18n();
   const schema = useSignInAuthFormSchema();

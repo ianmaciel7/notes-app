@@ -13,7 +13,7 @@ import {
   XCircleIcon,
 } from "lucide-react";
 import { type PropsWithChildren, useEffect, useState } from "react";
-import { CaseStudyLayout } from "@/components/object/question/case-study-layout";
+import { CaseStudy } from "@/components/object/question/case-study";
 import { DndQuestion } from "@/components/object/question/dnd-question";
 import { HotspotQuestion } from "@/components/object/question/hotspot-question";
 import { MarkdownPrompt } from "@/components/object/question/markdown-prompt";
@@ -23,8 +23,12 @@ import { SingleChoiceQuestion } from "@/components/object/question/single-choice
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type {
+  CorrectAnswer,
+  Question,
+  QuestionType,
+} from "@/domain/catalog/question";
 import { cn } from "@/lib/utils";
-import type { CorrectAnswer, Question, QuestionType } from "@/types/question";
 
 export function evaluateAnswerCorrectness(
   type: QuestionType,
@@ -557,16 +561,12 @@ export function QuestionCard({
   if (question.type === "case-study" && question.caseStudy) {
     return (
       <div className={cn("w-full", className)}>
-        <CaseStudyLayout caseStudy={question.caseStudy}>
+        <CaseStudy caseStudy={question.caseStudy}>
           {questionCardContent}
-        </CaseStudyLayout>
+        </CaseStudy>
       </div>
     );
   }
 
   return <div className={cn("w-full", className)}>{questionCardContent}</div>;
-}
-
-export function QuestionRenderer(props: QuestionCardProps) {
-  return <QuestionCard {...props} />;
 }

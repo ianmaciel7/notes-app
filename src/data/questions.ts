@@ -1,10 +1,9 @@
 import "server-only";
 
 import { getSpaceObject, getSpaceRelations } from "@/data/space-objects";
+import { DEFAULT_CATALOG_SPACE_ID } from "@/domain/catalog/constants";
+import type { Question, QuestionType } from "@/domain/catalog/question";
 import { adminDb } from "@/lib/firebase/admin";
-import type { Question, QuestionType } from "@/types/question";
-
-const DEFAULT_SPACE_ID = "exam-prep";
 
 export interface QuestionFilterOptions {
   domainId?: string;
@@ -16,7 +15,7 @@ export interface QuestionFilterOptions {
 export async function getPracticeQuestions(
   examId: string,
   filterOptions?: QuestionFilterOptions,
-  spaceId = DEFAULT_SPACE_ID,
+  spaceId = DEFAULT_CATALOG_SPACE_ID,
 ): Promise<Question[]> {
   const relations = await getSpaceRelations(
     spaceId,

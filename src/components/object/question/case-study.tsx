@@ -4,14 +4,14 @@ import { BookOpenIcon } from "lucide-react";
 import { MarkdownPrompt } from "@/components/object/question/markdown-prompt";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { CaseStudyContext } from "@/types/question";
+import type { CaseStudyContext } from "@/domain/catalog/question";
 
-interface CaseStudyLayoutProps {
+interface CaseStudyProps {
   caseStudy: CaseStudyContext;
   children: React.ReactNode;
 }
 
-export function CaseStudyLayout({ caseStudy, children }: CaseStudyLayoutProps) {
+export function CaseStudy({ caseStudy, children }: CaseStudyProps) {
   const defaultTab = caseStudy.tabs[0]?.id || "tab-0";
 
   return (

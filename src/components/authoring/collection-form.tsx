@@ -47,17 +47,17 @@ export interface AvailableObject {
   lifecycle: ObjectLifecycle;
 }
 
-export interface CollectionEditorProps {
+export interface CollectionFormProps {
   spaceId: string;
   initialCollections: CollectionItem[];
   availableObjects: AvailableObject[];
 }
 
-export function CollectionEditor({
+export function CollectionForm({
   spaceId,
   initialCollections,
   availableObjects,
-}: CollectionEditorProps) {
+}: CollectionFormProps) {
   const [collections, setCollections] =
     React.useState<CollectionItem[]>(initialCollections);
   const [selectedCollectionId, setSelectedCollectionId] = React.useState<

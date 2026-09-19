@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import { QuestionEditor } from "@/components/authoring/question-editor";
+import { QuestionForm } from "@/components/authoring/question-form";
 import { requireActionUser } from "@/data/action-auth";
 import { getObjectRevision } from "@/data/objects";
 import { getQuestionAuthoringView } from "@/data/questions-v2";
@@ -64,7 +64,7 @@ async function QuestionEditorContent({
 
   return (
     <div className="space-y-6">
-      <QuestionEditor
+      <QuestionForm
         spaceId={spaceId}
         questionId={questionId}
         initialTitle={questionView.title}

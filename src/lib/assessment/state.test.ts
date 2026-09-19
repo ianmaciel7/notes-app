@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Question } from "@/types/question";
+import type { Question } from "@/domain/catalog/question";
 import {
   type AssessmentQuestionProgress,
   getInitialQuestionId,

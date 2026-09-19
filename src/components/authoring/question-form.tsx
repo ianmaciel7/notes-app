@@ -47,7 +47,7 @@ import {
   setQuestionTagsAction,
 } from "@/lib/actions/question-actions";
 
-export interface QuestionEditorProps {
+export interface QuestionFormProps {
   spaceId: string;
   questionId: string;
   initialTitle?: string;
@@ -60,7 +60,7 @@ export interface QuestionEditorProps {
   onArchived?: (record: ObjectRecord) => void;
 }
 
-export function QuestionEditor({
+export function QuestionForm({
   spaceId,
   questionId,
   initialTitle,
@@ -71,7 +71,7 @@ export function QuestionEditor({
   onSaved,
   onPublished,
   onArchived,
-}: QuestionEditorProps) {
+}: QuestionFormProps) {
   const [lifecycle, setLifecycle] =
     React.useState<ObjectLifecycle>(initialLifecycle);
   const [version, setVersion] = React.useState<number>(initialVersion);

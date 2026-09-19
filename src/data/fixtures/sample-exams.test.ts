@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { Exam } from "@/types/exam";
-import type { Question } from "@/types/question";
+import type { Exam } from "@/domain/catalog/exam";
+import type { Question } from "@/domain/catalog/question";
 import sampleData from "./sample-exams.json";
 
 describe("Sample Exams Fixtures", () => {

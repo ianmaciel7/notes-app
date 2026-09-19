@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { type ReactNode, Suspense } from "react";
 
-import { SpaceShell } from "@/components/spaces/space-shell";
+import { SpaceLayout } from "@/components/spaces/space-layout";
 import { requireActionUser } from "@/data/action-auth";
 import { getOwnedSpace, listOwnedSpaces } from "@/data/spaces";
 import { hasLocale } from "@/lib/i18n/dictionaries";
@@ -57,13 +57,13 @@ async function SpaceDetailContent({
   const spaces = await listOwnedSpaces(user.uid);
 
   return (
-    <SpaceShell
+    <SpaceLayout
       spaceId={spaceId}
       lang={lang}
       spaces={spaces.map((s) => ({ id: s.id, name: s.name }))}
       user={user}
     >
       {children}
-    </SpaceShell>
+    </SpaceLayout>
   );
 }

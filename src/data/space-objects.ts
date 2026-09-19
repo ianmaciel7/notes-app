@@ -1,11 +1,11 @@
 import "server-only";
 
-import { adminDb } from "@/lib/firebase/admin";
 import type {
   SpaceObjectRecord,
   SpaceObjectRelationRecord,
   SpaceObjectTypeId,
-} from "@/types/object";
+} from "@/domain/catalog/space-object";
+import { adminDb } from "@/lib/firebase/admin";
 
 function readObject(
   spaceId: string,

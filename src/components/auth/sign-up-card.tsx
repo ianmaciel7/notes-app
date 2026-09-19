@@ -12,8 +12,8 @@ import { useState } from "react";
 
 import { GitHubSignInButton } from "@/components/auth/github-sign-in-button";
 import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
-import { MultiFactorAuthAssertionScreen } from "@/components/auth/multi-factor-auth-assertion-screen";
-import { SignUpAuthForm } from "@/components/auth/sign-up-auth-form";
+import { MultiFactorAssertionCard } from "@/components/auth/multi-factor-assertion-card";
+import { SignUpForm } from "@/components/auth/sign-up-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Card,
@@ -52,7 +52,7 @@ export function SignUpCard({
   useOnUserAuthenticated((user) => onSignUp?.(user));
 
   if (ui.multiFactorResolver) {
-    return <MultiFactorAuthAssertionScreen />;
+    return <MultiFactorAssertionCard />;
   }
 
   const handleOAuthError = (error: unknown) => {
@@ -74,7 +74,7 @@ export function SignUpCard({
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <SignUpAuthForm onSignUp={handleCredentialSignUp} {...props} />
+          <SignUpForm onSignUp={handleCredentialSignUp} {...props} />
           <div className="relative my-4">
             <Separator />
             <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">

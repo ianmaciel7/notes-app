@@ -11,11 +11,11 @@ import type { ObjectRecord } from "@/domain/objects/object";
 import * as collectionActions from "@/lib/actions/collection-actions";
 import {
   type AvailableObject,
-  CollectionEditor,
+  CollectionForm,
   type CollectionItem,
-} from "./collection-editor";
+} from "./collection-form";
 
-describe("CollectionEditor", () => {
+describe("CollectionForm", () => {
   const initialCollections: CollectionItem[] = [
     {
       id: "col-1",
@@ -60,7 +60,7 @@ describe("CollectionEditor", () => {
 
   it("renders collection list and displays selected collection members", () => {
     render(
-      <CollectionEditor
+      <CollectionForm
         spaceId="space-1"
         initialCollections={initialCollections}
         availableObjects={availableObjects}
@@ -98,7 +98,7 @@ describe("CollectionEditor", () => {
       });
 
     render(
-      <CollectionEditor
+      <CollectionForm
         spaceId="space-1"
         initialCollections={initialCollections}
         availableObjects={availableObjects}
@@ -133,7 +133,7 @@ describe("CollectionEditor", () => {
       });
 
     render(
-      <CollectionEditor
+      <CollectionForm
         spaceId="space-1"
         initialCollections={initialCollections}
         availableObjects={availableObjects}
@@ -179,7 +179,7 @@ describe("CollectionEditor", () => {
       });
 
     render(
-      <CollectionEditor
+      <CollectionForm
         spaceId="space-1"
         initialCollections={initialCollections}
         availableObjects={availableObjects}

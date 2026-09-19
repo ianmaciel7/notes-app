@@ -1,5 +1,5 @@
-import type { Exam } from "@/types/exam";
-import type { Question } from "@/types/question";
+import type { Exam } from "@/domain/catalog/exam";
+import type { Question } from "@/domain/catalog/question";
 
 export type SpaceObjectTypeId = "exam" | "question" | "study-plan" | string;
 
@@ -35,4 +35,3 @@ export interface SpaceObjectRelationRecord {
   createdAt?: string;
   updatedAt?: string;
 }
-

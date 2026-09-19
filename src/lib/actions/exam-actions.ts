@@ -8,14 +8,14 @@ import {
   toggleQuestionBookmark,
   updateStudyGoals,
 } from "@/data/progress";
-import { adminDb } from "@/lib/firebase/admin";
-import type { QuestionNote } from "@/types/note";
+import type { CorrectAnswer } from "@/domain/catalog/question";
 import type {
   ExamProgress,
   QuestionProgress,
   StudyGoalsInput,
-} from "@/types/progress";
-import type { CorrectAnswer } from "@/types/question";
+} from "@/domain/learning/progress";
+import type { QuestionNote } from "@/domain/learning/question-note";
+import { adminDb } from "@/lib/firebase/admin";
 
 export interface RecordAttemptResult {
   success: boolean;

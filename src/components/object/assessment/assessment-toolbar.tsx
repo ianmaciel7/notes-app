@@ -2,7 +2,7 @@
 
 import { LayoutListIcon, PanelTopIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { AssessmentViewMode } from "@/types/assessment";
+import type { AssessmentViewMode } from "@/domain/assessment/preferences";
 
 export function AssessmentToolbar({
   mode,

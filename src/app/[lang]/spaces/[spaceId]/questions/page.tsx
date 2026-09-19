@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import { QuestionsView } from "@/components/authoring/questions-view";
+import { Questions } from "@/components/authoring/questions";
 import { requireActionUser } from "@/data/action-auth";
 import { listQuestionSummaries } from "@/data/questions-v2";
 import { getOwnedSpace } from "@/data/spaces";
@@ -35,6 +35,6 @@ async function QuestionsPageContent({
   const questions = await listQuestionSummaries(user.uid, spaceId);
 
   return (
-    <QuestionsView spaceId={spaceId} lang={lang} initialQuestions={questions} />
+    <Questions spaceId={spaceId} lang={lang} initialQuestions={questions} />
   );
 }

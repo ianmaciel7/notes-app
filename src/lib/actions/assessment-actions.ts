@@ -5,7 +5,7 @@ import {
   getAssessmentViewMode,
   saveUserAssessmentViewMode,
 } from "@/data/preferences";
-import type { AssessmentViewMode } from "@/types/assessment";
+import type { AssessmentViewMode } from "@/domain/assessment/preferences";
 
 export async function saveAssessmentViewModeAction(
   mode: unknown,

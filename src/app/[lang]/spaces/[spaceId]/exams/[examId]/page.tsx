@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
-import { ExamEditor } from "@/components/exams/exam-editor";
+import { ExamForm } from "@/components/exams/exam-form";
 import { requireActionUser } from "@/data/action-auth";
 import {
   type ExamAuthoringViewDto,
@@ -55,7 +55,7 @@ async function ExamAuthoringContent({
 
   return (
     <div className="mx-auto max-w-5xl">
-      <ExamEditor
+      <ExamForm
         spaceId={spaceId}
         exam={examView}
         availableQuestions={availableQuestions}

@@ -20,9 +20,9 @@ import { Input } from "@/components/ui/input";
 import { useI18n } from "@/hooks/use-i18n";
 import { getAuthErrorMessage } from "@/lib/i18n/auth-errors";
 
-export type { ForgotPasswordAuthFormProps };
+export type ForgotPasswordFormProps = ForgotPasswordAuthFormProps;
 
-export function ForgotPasswordAuthForm(props: ForgotPasswordAuthFormProps) {
+export function ForgotPasswordForm(props: ForgotPasswordFormProps) {
   const ui = useUI();
   const { t } = useI18n();
   const schema = useForgotPasswordAuthFormSchema();

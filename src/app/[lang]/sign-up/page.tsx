@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 
 import { GitHubSignInButton } from "@/components/auth/github-sign-in-button";
 import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
-import { SignUpScreen } from "@/components/auth/sign-up-screen";
+import { SignUpCard } from "@/components/auth/sign-up-card";
 import { useI18n } from "@/hooks/use-i18n";
 import { syncSession } from "@/lib/auth/client-session";
 import { auth } from "@/lib/firebase/client";
@@ -48,7 +48,7 @@ export default function SignUpPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-muted/30 px-6 py-12">
-      <SignUpScreen
+      <SignUpCard
         onSignUp={syncAndRedirect}
         onSignInClick={() => router.push(signInPath)}
         oauthErrorMessage={oauthErrorMessage}
@@ -61,7 +61,7 @@ export default function SignUpPage() {
           onSignIn={syncAndRedirect}
           onError={handleOAuthError}
         />
-      </SignUpScreen>
+      </SignUpCard>
     </main>
   );
 }

@@ -1,10 +1,9 @@
 import "server-only";
 
 import { getSpaceObject, getSpaceObjects } from "@/data/space-objects";
+import { DEFAULT_CATALOG_SPACE_ID } from "@/domain/catalog/constants";
+import type { Exam } from "@/domain/catalog/exam";
 import { adminDb } from "@/lib/firebase/admin";
-import type { Exam } from "@/types/exam";
-
-const DEFAULT_SPACE_ID = "exam-prep";
 
 function toExam(
   id: string,
@@ -38,7 +37,9 @@ function toExam(
   } as Exam;
 }
 
-export async function getExams(spaceId = DEFAULT_SPACE_ID): Promise<Exam[]> {
+export async function getExams(
+  spaceId = DEFAULT_CATALOG_SPACE_ID,
+): Promise<Exam[]> {
   const objects = await getSpaceObjects(spaceId, "exam");
   if (objects.length > 0) {
     return objects.map((object) => toExam(object.id, object));
@@ -79,7 +80,7 @@ export async function getExams(spaceId = DEFAULT_SPACE_ID): Promise<Exam[]> {
 
 export async function getExamById(
   examId: string,
-  spaceId = DEFAULT_SPACE_ID,
+  spaceId = DEFAULT_CATALOG_SPACE_ID,
 ): Promise<Exam | null> {
   const object = await getSpaceObject(spaceId, examId);
   if (object?.objectTypeId === "exam") {

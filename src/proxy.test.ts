@@ -158,7 +158,7 @@ describe("proxy", () => {
 
       const deletedCookie = response.cookies.get("firebase_session");
       expect(deletedCookie?.value).toBe("");
-      expect(deletedCookie?.maxAge).toBe(0);
+      expect(Number(deletedCookie?.expires)).toBe(0);
     });
 
     it("does NOT clear firebase_session cookie when expired=true on regular routes", () => {

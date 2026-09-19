@@ -6,9 +6,12 @@ import type {
   AssessmentSessionState,
 } from "@/components/object/assessment/assessment-state";
 import { AssessmentToolbar } from "@/components/object/assessment/assessment-toolbar";
-import { ContinuousQuestionView } from "@/components/object/assessment/continuous-question-view";
-import { FocusQuestionView } from "@/components/object/assessment/focus-question-view";
-import type { QuestionCardProps } from "@/components/object/question/question-renderer";
+import { ContinuousQuestions } from "@/components/object/assessment/continuous-questions";
+import { FocusQuestion } from "@/components/object/assessment/focus-question";
+import type { QuestionCardProps } from "@/components/object/question/question-card";
+import type { AssessmentViewMode } from "@/domain/assessment/preferences";
+import type { CorrectAnswer, Question } from "@/domain/catalog/question";
+import type { QuestionProgress } from "@/domain/learning/progress";
 import { saveAssessmentViewModeAction } from "@/lib/actions/assessment-actions";
 import {
   recordAttemptAction,
@@ -19,9 +22,6 @@ import {
   getInitialQuestionId,
   groupQuestionsByDomain,
 } from "@/lib/assessment/state";
-import type { AssessmentViewMode } from "@/types/assessment";
-import type { QuestionProgress } from "@/types/progress";
-import type { CorrectAnswer, Question } from "@/types/question";
 
 function createSessionState(
   progress: Record<string, QuestionProgress>,
@@ -219,7 +219,7 @@ export function Assessment({
         labels={labels}
       />
       {mode === "continuous" ? (
-        <ContinuousQuestionView
+        <ContinuousQuestions
           groups={groups}
           getCardProps={getCardProps}
           onVisibleQuestion={handleVisibleQuestion}
@@ -227,7 +227,7 @@ export function Assessment({
           scrollToQuestionId={scrollTargetId}
         />
       ) : (
-        <FocusQuestionView
+        <FocusQuestion
           questionIds={questionIds}
           activeQuestionId={activeQuestionId}
           getCardProps={getCardProps}

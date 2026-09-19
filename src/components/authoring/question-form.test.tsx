@@ -10,9 +10,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ObjectRecord, ObjectRevision } from "@/domain/objects/object";
 import type { QuestionRevisionPayload } from "@/domain/questions/question";
 import * as questionActions from "@/lib/actions/question-actions";
-import { QuestionEditor } from "./question-editor";
+import { QuestionForm } from "./question-form";
 
-describe("QuestionEditor", () => {
+describe("QuestionForm", () => {
   const defaultProps = {
     spaceId: "space-1",
     questionId: "q-100",
@@ -43,7 +43,7 @@ describe("QuestionEditor", () => {
   });
 
   it("renders with initial values, lifecycle badge, and version badge", () => {
-    render(<QuestionEditor {...defaultProps} />);
+    render(<QuestionForm {...defaultProps} />);
 
     expect(screen.getByText("Sample Question")).toBeDefined();
     expect(screen.getByTestId("lifecycle-badge").textContent).toBe("Draft");
@@ -69,16 +69,16 @@ describe("QuestionEditor", () => {
 
   it("renders published and archived lifecycle badges correctly", () => {
     const { rerender } = render(
-      <QuestionEditor {...defaultProps} initialLifecycle="published" />,
+      <QuestionForm {...defaultProps} initialLifecycle="published" />,
     );
     expect(screen.getByTestId("lifecycle-badge").textContent).toBe("Published");
 
-    rerender(<QuestionEditor {...defaultProps} initialLifecycle="archived" />);
+    rerender(<QuestionForm {...defaultProps} initialLifecycle="archived" />);
     expect(screen.getByTestId("lifecycle-badge").textContent).toBe("Archived");
   });
 
   it("allows changing format and sets options for true-false", () => {
-    render(<QuestionEditor {...defaultProps} />);
+    render(<QuestionForm {...defaultProps} />);
 
     const formatSelect = screen.getByLabelText("Question format");
     fireEvent.change(formatSelect, { target: { value: "true-false" } });
@@ -88,7 +88,7 @@ describe("QuestionEditor", () => {
   });
 
   it("allows adding and removing options for single/multiple choice", () => {
-    render(<QuestionEditor {...defaultProps} />);
+    render(<QuestionForm {...defaultProps} />);
 
     const addBtn = screen.getByRole("button", { name: /Add Option/i });
     fireEvent.click(addBtn);
@@ -104,7 +104,7 @@ describe("QuestionEditor", () => {
   });
 
   it("supports selecting multiple options in multiple-choice format", () => {
-    render(<QuestionEditor {...defaultProps} />);
+    render(<QuestionForm {...defaultProps} />);
 
     const formatSelect = screen.getByLabelText("Question format");
     fireEvent.change(formatSelect, { target: { value: "multiple-choice" } });
@@ -125,7 +125,7 @@ describe("QuestionEditor", () => {
     const saveSpy = vi.spyOn(questionActions, "saveQuestionDraftAction");
 
     render(
-      <QuestionEditor
+      <QuestionForm
         {...defaultProps}
         initialPayload={{
           ...defaultProps.initialPayload,
@@ -150,7 +150,7 @@ describe("QuestionEditor", () => {
     const saveSpy = vi.spyOn(questionActions, "saveQuestionDraftAction");
 
     render(
-      <QuestionEditor
+      <QuestionForm
         {...defaultProps}
         initialPayload={{
           ...defaultProps.initialPayload,
@@ -202,7 +202,7 @@ describe("QuestionEditor", () => {
         data: savedRevision,
       });
 
-    render(<QuestionEditor {...defaultProps} />);
+    render(<QuestionForm {...defaultProps} />);
 
     const saveBtn = screen.getByRole("button", { name: /Save Draft/i });
     fireEvent.click(saveBtn);
@@ -239,7 +239,7 @@ describe("QuestionEditor", () => {
       },
     });
 
-    render(<QuestionEditor {...defaultProps} />);
+    render(<QuestionForm {...defaultProps} />);
 
     const saveBtn = screen.getByRole("button", { name: /Save Draft/i });
     fireEvent.click(saveBtn);
@@ -269,7 +269,7 @@ describe("QuestionEditor", () => {
         data: pubRev,
       });
 
-    render(<QuestionEditor {...defaultProps} />);
+    render(<QuestionForm {...defaultProps} />);
 
     const publishBtn = screen.getByRole("button", { name: /Publish/i });
     fireEvent.click(publishBtn);
@@ -307,7 +307,7 @@ describe("QuestionEditor", () => {
         data: archivedRecord,
       });
 
-    render(<QuestionEditor {...defaultProps} initialLifecycle="published" />);
+    render(<QuestionForm {...defaultProps} initialLifecycle="published" />);
 
     const archiveBtn = screen.getByRole("button", { name: /Archive/i });
     fireEvent.click(archiveBtn);
@@ -331,7 +331,7 @@ describe("QuestionEditor", () => {
         data: undefined,
       });
 
-    render(<QuestionEditor {...defaultProps} />);
+    render(<QuestionForm {...defaultProps} />);
 
     const tagInput = screen.getByRole("textbox", { name: "Add tag" });
     fireEvent.change(tagInput, { target: { value: "algebra" } });

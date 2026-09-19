@@ -11,17 +11,13 @@ import { Input } from "@/components/ui/input";
 import type { QuestionSummaryDto } from "@/data/questions-v2";
 import type { ObjectLifecycle } from "@/domain/objects/object";
 
-export interface QuestionsViewProps {
+export interface QuestionsProps {
   spaceId: string;
   lang: string;
   initialQuestions: QuestionSummaryDto[];
 }
 
-export function QuestionsView({
-  spaceId,
-  lang,
-  initialQuestions,
-}: QuestionsViewProps) {
+export function Questions({ spaceId, lang, initialQuestions }: QuestionsProps) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [lifecycleFilter, setLifecycleFilter] = React.useState<
     "all" | ObjectLifecycle

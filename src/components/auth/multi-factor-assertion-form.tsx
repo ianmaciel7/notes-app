@@ -14,13 +14,13 @@ import { SmsMultiFactorAssertionForm } from "@/components/auth/sms-multi-factor-
 import { TotpMultiFactorAssertionForm } from "@/components/auth/totp-multi-factor-assertion-form";
 import { Button } from "@/components/ui/button";
 
-export type MultiFactorAuthAssertionFormProps = {
+export type MultiFactorAssertionFormProps = {
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function MultiFactorAuthAssertionForm({
+export function MultiFactorAssertionForm({
   onSuccess,
-}: MultiFactorAuthAssertionFormProps) {
+}: MultiFactorAssertionFormProps) {
   const ui = useUI();
   const resolver = ui.multiFactorResolver;
   const mfaAssertionFactorPrompt = getTranslation(
@@ -33,7 +33,7 @@ export function MultiFactorAuthAssertionForm({
 
   if (!resolver) {
     throw new Error(
-      "MultiFactorAuthAssertionForm requires a multi-factor resolver",
+      "MultiFactorAssertionForm requires a multi-factor resolver",
     );
   }
 

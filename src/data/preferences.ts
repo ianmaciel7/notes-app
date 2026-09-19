@@ -1,7 +1,7 @@
 import "server-only";
 
+import type { AssessmentViewMode } from "@/domain/assessment/preferences";
 import { adminDb } from "@/lib/firebase/admin";
-import type { AssessmentViewMode } from "@/types/assessment";
 
 const DEFAULT_ASSESSMENT_VIEW_MODE: AssessmentViewMode = "continuous";
 

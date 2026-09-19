@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
-import { SpaceShell } from "./space-shell";
+import { SpaceLayout } from "./space-layout";
 
 beforeAll(() => {
   Object.defineProperty(window, "matchMedia", {
@@ -59,13 +59,13 @@ vi.mock("@/lib/i18n/dictionaries", () => ({
   })),
 }));
 
-describe("SpaceShell", () => {
+describe("SpaceLayout", () => {
   afterEach(() => {
     cleanup();
   });
 
   it("renders navigation links including spaceId in hrefs", async () => {
-    const component = await SpaceShell({
+    const component = await SpaceLayout({
       spaceId: "space-123",
       lang: "en",
       spaces: [{ id: "space-123", name: "Alpha Space" }],

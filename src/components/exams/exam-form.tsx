@@ -29,7 +29,7 @@ import {
   saveExamDraftAction,
 } from "@/lib/actions/exam-authoring-actions";
 
-export interface ExamEditorProps {
+export interface ExamFormProps {
   spaceId: string;
   exam: ExamAuthoringViewDto;
   availableQuestions: QuestionSummaryDto[];
@@ -39,14 +39,14 @@ export interface ExamEditorProps {
   onArchived?: () => void;
 }
 
-export function ExamEditor({
+export function ExamForm({
   spaceId,
   exam,
   availableQuestions,
   onSaved,
   onPublished,
   onArchived,
-}: ExamEditorProps) {
+}: ExamFormProps) {
   const initialPayload = exam.draftPayload ?? exam.publishedPayload;
 
   const [instructions, setInstructions] = useState(

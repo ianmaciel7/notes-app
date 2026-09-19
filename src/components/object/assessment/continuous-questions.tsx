@@ -4,10 +4,10 @@ import { useEffect, useRef } from "react";
 import {
   QuestionCard,
   type QuestionCardProps,
-} from "@/components/object/question/question-renderer";
+} from "@/components/object/question/question-card";
 import type { QuestionDomainGroup } from "@/lib/assessment/state";
 
-export function ContinuousQuestionView({
+export function ContinuousQuestions({
   groups,
   getCardProps,
   onVisibleQuestion,

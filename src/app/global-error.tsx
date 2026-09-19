@@ -22,10 +22,7 @@ export default function GlobalError({
                 Please try again. If the problem continues, reload the page.
               </p>
             </div>
-            <Button
-              type="button"
-              onClick={() => reset()}
-            >
+            <Button type="button" onClick={() => reset()}>
               <RefreshCwIcon data-icon="inline-start" />
               Try again
             </Button>

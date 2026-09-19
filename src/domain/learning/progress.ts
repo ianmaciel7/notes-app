@@ -1,4 +1,4 @@
-import type { CorrectAnswer } from "./question";
+import type { CorrectAnswer } from "@/domain/catalog/question";
 
 export interface ExamProgress {
   examId: string;

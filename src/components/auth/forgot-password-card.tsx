@@ -6,7 +6,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 
-import { ForgotPasswordAuthForm } from "@/components/auth/forgot-password-auth-form";
+import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 import {
   Card,
   CardContent,
@@ -15,9 +15,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export type { ForgotPasswordAuthScreenProps };
+export type ForgotPasswordCardProps = ForgotPasswordAuthScreenProps;
 
-export function ForgotPasswordAuthScreen(props: ForgotPasswordAuthScreenProps) {
+export function ForgotPasswordCard(props: ForgotPasswordCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "forgotPassword");
@@ -31,7 +31,7 @@ export function ForgotPasswordAuthScreen(props: ForgotPasswordAuthScreenProps) {
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <ForgotPasswordAuthForm {...props} />
+          <ForgotPasswordForm {...props} />
         </CardContent>
       </Card>
     </div>
