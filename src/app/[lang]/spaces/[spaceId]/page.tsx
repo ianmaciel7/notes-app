@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -23,6 +24,8 @@ import { getOwnedSpace } from "@/data/spaces";
 import { getDictionary, hasLocale } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/types";
 
+export const instant = false;
+
 export default async function SpaceOverviewPage({
   params,
 }: {
@@ -31,9 +34,23 @@ export default async function SpaceOverviewPage({
   const { lang, spaceId } = await params;
   if (!hasLocale(lang)) notFound();
 
+  return (
+    <Suspense fallback={<div className="p-4">Loading overview...</div>}>
+      <SpaceOverviewContent lang={lang as Locale} spaceId={spaceId} />
+    </Suspense>
+  );
+}
+
+async function SpaceOverviewContent({
+  lang,
+  spaceId,
+}: {
+  lang: Locale;
+  spaceId: string;
+}) {
   const user = await requireActionUser();
   const space = await getOwnedSpace(user.uid, spaceId);
-  const dictionary = await getDictionary(lang as Locale);
+  const dictionary = await getDictionary(lang);
 
   const modules = [
     {

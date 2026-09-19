@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { Suspense } from "react";
 import { ExamEditor } from "@/components/exams/exam-editor";
 import { requireActionUser } from "@/data/action-auth";
 import {
@@ -16,6 +17,26 @@ export default async function ExamAuthoringPage({
   const { lang, spaceId, examId } = await params;
   if (!hasLocale(lang)) notFound();
 
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-5xl p-4">Loading exam editor...</div>
+      }
+    >
+      <ExamAuthoringContent lang={lang} spaceId={spaceId} examId={examId} />
+    </Suspense>
+  );
+}
+
+async function ExamAuthoringContent({
+  lang,
+  spaceId,
+  examId,
+}: {
+  lang: string;
+  spaceId: string;
+  examId: string;
+}) {
   let user: { uid: string; email: string | null };
   try {
     user = await requireActionUser();

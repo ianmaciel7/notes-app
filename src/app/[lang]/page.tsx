@@ -1,9 +1,12 @@
 import { notFound, redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { requireActionUser } from "@/data/action-auth";
 import { createPrivateSpace, listOwnedSpaces } from "@/data/spaces";
 import { getDictionary, hasLocale } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/types";
+
+export const instant = false;
 
 export default async function HomePage({
   params,
@@ -13,6 +16,20 @@ export default async function HomePage({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center">
+          Loading...
+        </main>
+      }
+    >
+      <HomeContent lang={lang as Locale} />
+    </Suspense>
+  );
+}
+
+async function HomeContent({ lang }: { lang: Locale }) {
   let user: { uid: string; email: string | null };
   try {
     user = await requireActionUser();
@@ -25,10 +42,12 @@ export default async function HomePage({
     redirect(`/${lang}/spaces/${spaces[0].id}`);
   }
 
-  const dictionary = await getDictionary(lang as Locale);
+  const dictionary = await getDictionary(lang);
   const defaultSpace = await createPrivateSpace(
     user.uid,
     dictionary.spaces.mySpaces,
   );
   redirect(`/${lang}/spaces/${defaultSpace.id}`);
+
+  return null;
 }

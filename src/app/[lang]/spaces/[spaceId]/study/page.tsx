@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { StudyDeck } from "@/components/study/study-deck";
 import { requireActionUser } from "@/data/action-auth";
 import { getOwnedSpace } from "@/data/spaces";
@@ -13,6 +14,20 @@ export default async function SpaceStudyPage({
   const { lang, spaceId } = await params;
   if (!hasLocale(lang)) notFound();
 
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto max-w-3xl py-6">
+          Loading study deck...
+        </div>
+      }
+    >
+      <StudyPageContent spaceId={spaceId} />
+    </Suspense>
+  );
+}
+
+async function StudyPageContent({ spaceId }: { spaceId: string }) {
   const user = await requireActionUser();
   await getOwnedSpace(user.uid, spaceId);
 

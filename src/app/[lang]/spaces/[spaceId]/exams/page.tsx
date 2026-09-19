@@ -1,6 +1,7 @@
 import { GraduationCapIcon, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { Suspense } from "react";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -24,6 +25,20 @@ export default async function SpaceExamsPage({
   const { lang, spaceId } = await params;
   if (!hasLocale(lang)) notFound();
 
+  return (
+    <Suspense fallback={<div className="p-4">Loading exams...</div>}>
+      <ExamsPageContent lang={lang as Locale} spaceId={spaceId} />
+    </Suspense>
+  );
+}
+
+async function ExamsPageContent({
+  lang,
+  spaceId,
+}: {
+  lang: Locale;
+  spaceId: string;
+}) {
   let user: { uid: string; email: string | null };
   try {
     user = await requireActionUser();
@@ -31,7 +46,7 @@ export default async function SpaceExamsPage({
     redirect(`/${lang}/sign-in`);
   }
 
-  const dictionary = await getDictionary(lang as Locale);
+  const dictionary = await getDictionary(lang);
   const exams = await listObjects(user.uid, spaceId, "exam");
 
   return (

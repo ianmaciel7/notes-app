@@ -1,5 +1,6 @@
 import { getFirestore } from "firebase-admin/firestore";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import {
   type AvailableObject,
@@ -19,6 +20,14 @@ export default async function CollectionsManagementPage({
   const { lang, spaceId } = await params;
   if (!hasLocale(lang)) notFound();
 
+  return (
+    <Suspense fallback={<div className="p-4">Loading collections...</div>}>
+      <CollectionsPageContent spaceId={spaceId} />
+    </Suspense>
+  );
+}
+
+async function CollectionsPageContent({ spaceId }: { spaceId: string }) {
   const user = await requireActionUser();
   await getOwnedSpace(user.uid, spaceId);
 

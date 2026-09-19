@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { QuestionsView } from "@/components/authoring/questions-view";
 import { requireActionUser } from "@/data/action-auth";
@@ -14,6 +15,20 @@ export default async function SpaceQuestionsPage({
   const { lang, spaceId } = await params;
   if (!hasLocale(lang)) notFound();
 
+  return (
+    <Suspense fallback={<div className="p-4">Loading questions...</div>}>
+      <QuestionsPageContent spaceId={spaceId} lang={lang} />
+    </Suspense>
+  );
+}
+
+async function QuestionsPageContent({
+  spaceId,
+  lang,
+}: {
+  spaceId: string;
+  lang: string;
+}) {
   const user = await requireActionUser();
   await getOwnedSpace(user.uid, spaceId);
 

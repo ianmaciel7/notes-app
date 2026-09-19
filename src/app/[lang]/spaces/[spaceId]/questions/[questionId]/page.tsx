@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { QuestionEditor } from "@/components/authoring/question-editor";
 import { requireActionUser } from "@/data/action-auth";
@@ -16,6 +17,20 @@ export default async function QuestionEditorPage({
   const { lang, spaceId, questionId } = await params;
   if (!hasLocale(lang)) notFound();
 
+  return (
+    <Suspense fallback={<div className="p-4">Loading question editor...</div>}>
+      <QuestionEditorContent spaceId={spaceId} questionId={questionId} />
+    </Suspense>
+  );
+}
+
+async function QuestionEditorContent({
+  spaceId,
+  questionId,
+}: {
+  spaceId: string;
+  questionId: string;
+}) {
   const user = await requireActionUser();
   await getOwnedSpace(user.uid, spaceId);
 
