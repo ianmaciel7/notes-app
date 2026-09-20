@@ -20,6 +20,7 @@ export default async function ObjectPage({
       eyebrow="Object detail"
       data={data}
       active="question"
+      current={object}
     >
       <ObjectDetail data={data} object={object} />
     </WorkspaceFrame>

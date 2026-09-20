@@ -8,9 +8,11 @@ import { logout } from "@/actions/recall";
 import { CommandPalette } from "@/components/recall/command-palette";
 import { ObjectEditor } from "@/components/recall/object-editor";
 import { SpaceSwitcher } from "@/components/recall/space-switcher";
+import { WorkspaceTabs } from "@/components/recall/workspace-tabs";
 import { Button } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
-import type { Snapshot } from "@/domain/recall";
+import type { RecallObject } from "@/domain/recall";
+import type { WorkspaceData } from "@/lib/workspace";
 
 const navItems = [
   { key: "overview", href: "/workspace", label: "Overview" },
@@ -26,12 +28,14 @@ export function WorkspaceFrame({
   eyebrow,
   data,
   active,
+  current,
 }: {
   children: ReactNode;
   title: string;
   eyebrow: string;
-  data: Snapshot;
+  data: WorkspaceData;
   active: (typeof navItems)[number]["key"];
+  current?: RecallObject;
 }) {
   const router = useRouter();
   const [adding, setAdding] = useState(false);
@@ -152,6 +156,7 @@ export function WorkspaceFrame({
             New object
           </Button>
         </header>
+        <WorkspaceTabs tabs={data.tabs} current={current} />
         <main className="mx-auto max-w-6xl px-5 py-10 lg:px-10">
           <p className="text-sm font-medium uppercase tracking-[0.16em] text-coral">
             {eyebrow}

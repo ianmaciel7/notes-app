@@ -138,3 +138,52 @@ test("the context panel is a semantic tablist and collapses reversibly", async (
   await restore.click();
   await expect(tabs).toBeVisible();
 });
+
+test("open object views persist, restore on reload, and close without deleting", async ({
+  page,
+}) => {
+  await signUp(page);
+  await createSpace(page, "Tabs");
+  const first = await createObject(page, {
+    kind: "note",
+    title: "First note",
+    text: "One.",
+  });
+  const second = await createObject(page, {
+    kind: "note",
+    title: "Second note",
+    text: "Two.",
+  });
+
+  const strip = page.getByLabel("Open objects");
+  await expect(
+    strip.getByRole("button", { name: "First note", exact: true }),
+  ).toBeVisible();
+  await expect(
+    strip.getByRole("button", { name: "Second note", exact: true }),
+  ).toBeVisible();
+
+  // A restored tab reopens the same object identity (spec.md 5.5).
+  await page.reload();
+  await expect(
+    strip.getByRole("button", { name: "First note", exact: true }),
+  ).toBeVisible();
+  await strip
+    .getByRole("button", { name: "First note", exact: true })
+    .first()
+    .click();
+  await page.waitForURL(`**/question/${first}`);
+
+  // Closing the active tab selects a successor deterministically.
+  await strip.getByRole("button", { name: "Close First note" }).click();
+  await page.waitForURL(`**/question/${second}`);
+  await expect(
+    strip.getByRole("button", { name: "First note", exact: true }),
+  ).toHaveCount(0);
+
+  // The object itself is untouched by closing its view.
+  await visit(page, "/question");
+  await expect(page.getByRole("link", { name: "First note" })).toBeVisible();
+  await page.goto(`/question/${first}`);
+  await expect(page.getByRole("heading", { name: "First note" })).toBeVisible();
+});
