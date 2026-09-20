@@ -3,8 +3,11 @@
 import { cookies } from "next/headers";
 import { z } from "zod";
 import {
+  type Attempt,
+  autoQuality,
   grade,
   objectInput,
+  quality,
   type RecallObject,
   type Snapshot,
   type Space,
@@ -13,21 +16,8 @@ import {
   schedule,
 } from "@/domain/recall";
 import { firebase } from "@/lib/firebase/admin";
+import { authorized, idSchema, user } from "@/lib/firebase/session";
 
-const idSchema = z.string().regex(/^[a-zA-Z0-9_-]{1,128}$/);
-async function user() {
-  const token = (await cookies()).get("recall-session")?.value;
-  if (!token) throw new Error("Please sign in to continue.");
-  return firebase().auth.verifySessionCookie(token, true);
-}
-async function authorized(spaceId: string) {
-  idSchema.parse(spaceId);
-  const caller = await user();
-  const doc = await firebase().db.collection("spaces").doc(spaceId).get();
-  if (!doc.exists || !doc.data()?.members.includes(caller.uid))
-    throw new Error("Space not found.");
-  return { caller, space: { ...doc.data(), id: doc.id } as Space };
-}
 export async function login(idToken: string) {
   const { auth } = firebase();
   const decoded = await auth.verifyIdToken(
@@ -257,11 +247,7 @@ export async function submitAnswer(
     if (prior.exists) {
       if (prior.data()?.objectId !== objectId)
         throw new Error("Attempt identifier already used.");
-      return prior.data() as {
-        correct: boolean;
-        expected: string[];
-        objectId: string;
-      };
+      return prior.data() as Attempt;
     }
     const question = await tx.get(db.collection("objects").doc(objectId));
     const data = question.data() as RecallObject | undefined;
@@ -277,22 +263,48 @@ export async function submitAnswer(
     const recordRef = base.collection("records").doc(objectId);
     const record = await tx.get(recordRef);
     const correct = grade(data, answers);
-    const result = {
+    // The record as it stood before this attempt is kept on the attempt so a
+    // later self-grade (rateAttempt) can recompute the schedule from the same
+    // base instead of compounding on top of the auto-graded one.
+    const result: Attempt = {
       correct,
       expected: data.answers,
       objectId,
       answeredAt: Date.now(),
+      previous: (record.data() as StudyRecord | undefined) ?? null,
+      quality: autoQuality(correct),
     };
     tx.set(
       recordRef,
-      schedule(
-        record.data() as StudyRecord | undefined,
-        correct,
-        result.answeredAt,
-      ),
+      schedule(result.previous ?? undefined, result.quality, result.answeredAt),
     );
     tx.set(attemptRef, result);
     return result;
+  });
+}
+
+export async function rateAttempt(
+  spaceId: string,
+  attemptId: string,
+  qualityGrade: number,
+) {
+  const { caller } = await authorized(spaceId);
+  idSchema.parse(attemptId);
+  quality.parse(qualityGrade);
+  const base = firebase()
+    .db.collection("spaces")
+    .doc(spaceId)
+    .collection("study")
+    .doc(caller.uid);
+  await firebase().db.runTransaction(async (tx) => {
+    const attemptRef = base.collection("attempts").doc(attemptId);
+    const attempt = (await tx.get(attemptRef)).data() as Attempt | undefined;
+    if (!attempt) throw new Error("Attempt not found.");
+    tx.set(
+      base.collection("records").doc(attempt.objectId),
+      schedule(attempt.previous ?? undefined, qualityGrade, attempt.answeredAt),
+    );
+    tx.update(attemptRef, { quality: qualityGrade });
   });
 }
 
@@ -400,7 +412,7 @@ export async function finishSession(sessionId: string) {
           records[index].ref,
           schedule(
             records[index].data() as StudyRecord | undefined,
-            result.correct,
+            autoQuality(result.correct),
             Date.now(),
           ),
         );

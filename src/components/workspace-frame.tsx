@@ -1,71 +1,102 @@
 "use client";
 
-import {
-  BookOpen,
-  Brain,
-  CircleHelp,
-  FileText,
-  Link2,
-  PanelLeft,
-  Search,
-} from "lucide-react";
+import { LogOut, PanelLeft, Search } from "lucide-react";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { type ReactNode, useEffect, useState } from "react";
+import { logout } from "@/actions/recall";
+import { ObjectEditor } from "@/components/recall/object-editor";
+import { SpaceSwitcher } from "@/components/recall/space-switcher";
 import { Button } from "@/components/ui/button";
+import type { Snapshot } from "@/domain/recall";
+
+const navItems = [
+  { key: "overview", href: "/workspace", label: "Overview" },
+  { key: "question", href: "/question", label: "Questions" },
+  { key: "study", href: "/study", label: "Study session" },
+  { key: "review", href: "/review", label: "Review queue" },
+  { key: "settings", href: "/settings", label: "Settings" },
+] as const;
 
 export function WorkspaceFrame({
   children,
   title,
   eyebrow,
+  data,
+  active,
 }: {
   children: ReactNode;
   title: string;
   eyebrow: string;
+  data: Snapshot;
+  active: (typeof navItems)[number]["key"];
 }) {
+  const router = useRouter();
+  const [adding, setAdding] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
+  useEffect(() => {
+    if (!navOpen) return;
+    const onKeyDown = (event: KeyboardEvent) =>
+      event.key === "Escape" && setNavOpen(false);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [navOpen]);
   return (
     <div className="min-h-screen bg-canvas text-ink lg:grid lg:grid-cols-[240px_1fr]">
-      <aside className="hidden border-r border-hairline bg-surface-soft lg:flex lg:flex-col">
+      {navOpen && (
+        <button
+          type="button"
+          aria-label="Close navigation"
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={() => setNavOpen(false)}
+        />
+      )}
+      <aside
+        className={`${navOpen ? "fixed inset-y-0 left-0 z-50 flex w-64" : "hidden"} flex-col border-r border-hairline bg-surface-soft lg:static lg:flex lg:w-auto`}
+      >
         <div className="flex h-16 items-center gap-3 border-b border-hairline px-6 text-sm font-medium">
           <span className="text-xl text-coral" aria-hidden="true">
             ✳
           </span>{" "}
           Recall
         </div>
-        <div className="flex flex-col gap-1 p-4">
-          <p className="px-3 pb-2 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Personal Space
-          </p>
-          <Link
-            className="rounded-lg bg-surface-card px-3 py-2.5 text-sm text-ink"
-            href="/workspace"
-          >
-            Overview
-          </Link>
-          <Link
-            className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-surface-card hover:text-ink"
-            href="/question"
-          >
-            Questions
-          </Link>
-          <Link
-            className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-surface-card hover:text-ink"
-            href="/study"
-          >
-            Study session
-          </Link>
-          <Link
-            className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-surface-card hover:text-ink"
-            href="/review"
-          >
-            Review queue
-          </Link>
+        <div className="border-b border-hairline px-2 py-2">
+          <SpaceSwitcher data={data} />
         </div>
-        <div className="mt-auto border-t border-hairline p-4">
+        <div className="flex flex-col gap-1 p-4">
+          {navItems.map((item) => (
+            <Link
+              key={item.key}
+              className={
+                item.key === active
+                  ? "rounded-lg bg-surface-card px-3 py-2.5 text-sm text-ink"
+                  : "rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-surface-card hover:text-ink"
+              }
+              href={item.href}
+              aria-current={item.key === active ? "page" : undefined}
+              onClick={() => setNavOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+        <div className="mt-auto flex flex-col gap-2 border-t border-hairline p-4">
           <Button
             variant="outline"
             className="w-full justify-start border-hairline bg-canvas"
           >
             <Search data-icon="inline-start" /> Search workspace
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-muted-foreground"
+            onClick={async () => {
+              await logout();
+              router.push("/login");
+              router.refresh();
+            }}
+          >
+            <LogOut data-icon="inline-start" /> Sign out
           </Button>
         </div>
       </aside>
@@ -77,11 +108,14 @@ export function WorkspaceFrame({
               size="icon"
               className="lg:hidden"
               aria-label="Open navigation"
+              aria-expanded={navOpen}
+              onClick={() => setNavOpen(true)}
             >
               <PanelLeft />
             </Button>
             <span className="text-sm text-muted-foreground">
-              Personal Space
+              {data.spaces.find((space) => space.id === data.spaceId)?.name ??
+                "No Space"}
             </span>
             <span className="text-muted-foreground">/</span>
             <span className="text-sm text-ink">{title}</span>
@@ -90,6 +124,8 @@ export function WorkspaceFrame({
             variant="outline"
             size="sm"
             className="border-hairline bg-canvas"
+            disabled={!data.spaceId}
+            onClick={() => setAdding(true)}
           >
             New object
           </Button>
@@ -102,14 +138,17 @@ export function WorkspaceFrame({
           {children}
         </main>
       </div>
+      {adding && (
+        <ObjectEditor
+          data={data}
+          onClose={() => setAdding(false)}
+          onSaved={async (id) => {
+            setAdding(false);
+            router.push(`/question/${id}`);
+            router.refresh();
+          }}
+        />
+      )}
     </div>
   );
 }
-
-export const objectIcon = {
-  question: CircleHelp,
-  note: FileText,
-  exam: BookOpen,
-  review: Brain,
-  link: Link2,
-};

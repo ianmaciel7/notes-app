@@ -215,3 +215,128 @@ The implementation plan introduces and modifies the following files across the 6
 - [x] Automated testing matrix covers Unit (Vitest), Integration (Emulator), and E2E (Playwright).
 - [x] All previously open questions from `intent.md` and `spec.md` are resolved and mapped.
 - [x] Ready to proceed with Phase 1 execution in the Build stage.
+
+## 8. Recorded drift from this plan (2026-09-20)
+
+The actual Build-stage implementation on `prototype` diverges from §2's per-phase file
+inventory in ways worth recording here rather than silently, per this repo's
+`anthropic-sdlc` skill (rule: material implementation drift updates `plan.md` in the
+same change):
+
+- **`middleware.ts` → `proxy.ts`.** Next.js 16 (the version pinned in this repo,
+  confirmed against `node_modules/next/dist/docs/`) renamed the `middleware.js`
+  convention to `proxy.js`; `middleware.ts` is deprecated and no longer the correct
+  file name. Route protection for `/workspace`, `/question`, `/study`, `/review`, and
+  the reverse redirect off `/login`, now live in `src/proxy.ts` (`export function
+  proxy`), doing a cheap cookie-presence check only — Next's own guidance is that
+  Proxy is for optimistic redirects, not a full session/authorization boundary, and
+  every Server Action already re-verifies the session cookie itself
+  (`src/actions/recall.ts`'s `user()`/`authorized()`).
+- **Consolidated domain/action files, not one file per concern.** Auth, Spaces,
+  polymorphic objects + links, moderation (archive/report/resolve), and the study/exam
+  session engine (Phases 1–4 of §2/§3) are implemented in two files —
+  `src/domain/recall.ts` and `src/actions/recall.ts` — instead of the
+  `auth.ts`/`spaces.ts`/`objects.ts`/`relations.ts`/`study.ts`/`exam.ts` split in §2's
+  file inventory. Functionally these cover: session cookies, Space create/invite,
+  object CRUD with immutable numbered revisions, `object_links` edges with same-Space
+  enforcement, the one-Exam-per-user rule (FR-10), report-and-hide moderation (FR-9),
+  and configurable practice/simulated-exam sessions (FR-11) with server-side grading
+  and scheduling.
+- **`firestore.rules` is a blanket `allow read, write: if false`,** not the granular
+  per-collection rules §1.1/§8 describe. This is intentional, not a gap: every read and
+  write goes through a Server Action on the Admin SDK (which bypasses rules), and there
+  is no direct-client Firestore path anywhere in the current code, so there is nothing
+  for a granular allow-rule to safely permit.
+- **Spaced-repetition scheduling (`schedule()` in `src/domain/recall.ts`) was
+  initially a simplified SM-2-family algorithm; it now implements §3 Phase 3 literally.**
+  Resolved in the second pass below — `schedule()` takes a 0–5 quality grade and applies
+  `EF' = EF + (0.1 - (5 - q) × (0.08 + (5 - q) × 0.02))` with a 1.3 floor and the
+  1 / 6 / `I(n-1) × EF'` interval ladder. Because auto-graded formats have no independent
+  self-assessment step, `autoQuality()` maps a machine verdict onto that scale (4 correct,
+  1 incorrect) and the learner can override it in practice mode.
+- **Component locations:** the Space switcher lives at
+  `src/components/recall/space-switcher.tsx` (next to the other Recall domain
+  components), not `src/components/workspace/space-switcher.tsx` from §2's Phase 1 row.
+
+### What this pass actually closed out (Build stage, Phase 1 + UI wiring)
+
+Before this pass, `src/actions/recall.ts` and `src/domain/recall.ts` already implemented
+the backend above, and `src/components/recall/object-editor.tsx` and
+`study-panel.tsx` already implemented a real create/edit dialog and a real
+practice/simulated-exam runner — but nothing rendered them: `/workspace`, `/question`,
+`/study`, and `/review` were static mockups with hardcoded fake data, there was no
+`recall-session` cookie route protection, and there was no Space switcher. This pass:
+
+- added `src/proxy.ts` (route protection, described above);
+- added `src/lib/workspace.ts` (`requireSnapshot()`, the shared authenticated
+  Space-scoped data loader for all four workspace pages);
+- added `src/components/recall/space-switcher.tsx` (switch/create Space, invite a
+  member — Phase 1's last missing piece) and wired it, plus sign-out and a "New
+  object" dialog, into `src/components/workspace-frame.tsx`;
+- rewired `/workspace`, `/question` (now a real object list via new
+  `src/components/recall/object-list.tsx`, with edit/archive/restore/report/resolve),
+  `/study`, and `/review` (via new `src/components/recall/study-session.tsx`) to real,
+  authenticated, Space-scoped data instead of static mockups.
+
+### What the second pass closed out (Build stage, Phases 2–6)
+
+- **Phase 2 (FR-8) — object detail.** `src/app/question/[id]/page.tsx` plus
+  `src/components/recall/object-detail.tsx` render any object kind with a Linked
+  objects rail and a reactive Backlinks panel, both navigable. A foreign Space's
+  object answers 404, never 403 (§6 Phase 6 item 3, spec.md §2.4.3).
+- **Phase 3 — literal SM-2.** As described above, plus the 0–5 self-grade UI in
+  `study-panel.tsx` (keyboard 0–5) backed by a new `rateAttempt()` action. Each
+  attempt stores the study record as it stood *before* it, so a self-grade recomputes
+  the schedule from that base rather than compounding on the auto-graded one.
+- **Phase 5 — API keys + MCP server, complete.** `src/domain/api-keys.ts`
+  (`rcl_live_` + 32 base62 chars by rejection sampling, SHA-256, bearer parsing),
+  `src/actions/api-keys.ts` (owner-only issue/list/revoke; the raw key is returned
+  once and never stored), `src/lib/mcp/tools.ts` (all four §7.2.3 tools), and
+  `src/app/api/mcp/route.ts` (JSON-RPC 2.0 over JSON or SSE). `/settings` exposes
+  key management.
+- **Phase 6 — partial.** CLS-stable `loading.tsx` skeletons for every workspace
+  segment via `WorkspaceSkeleton` (mirrors `WorkspaceFrame`'s box model exactly), a
+  real `not-found.tsx`, and a working mobile navigation drawer (the header button
+  was previously inert) with Escape-to-close and a labelled backdrop.
+
+Deliberate deviation from §2's file inventory, same rationale as the consolidation
+note above: `user()`/`authorized()` moved out of `src/actions/recall.ts` into
+`src/lib/firebase/session.ts` so `src/actions/api-keys.ts` could share them. They
+cannot simply be exported from a `"use server"` module — that would publish them to
+the browser as callable Server Actions.
+
+Still not done (later Build-stage work): the Playwright E2E suite and Vitest
+integration suite in §4 (neither `@playwright/test` nor `vitest` is a devDependency —
+the repo runs `node:test` via `tsx`), the full reduced-motion/focus-restoration
+matrix, the TipTap block editor, and the command palette / workspace tabs / context
+panel (FR-12, NFR-5).
+
+**Verification run for the second pass:** `pnpm exec tsc --noEmit` (clean), `pnpm lint`
+(clean, same single non-blocking `noDocumentCookie` warning), `pnpm test` (18/18
+passing — 12 in `tests/recall.test.ts`, 6 in the new `tests/api-keys.test.ts`),
+`pnpm run build` (succeeds; `/api/mcp` and `/settings` both appear in the route
+manifest). `/api/mcp` was additionally driven end-to-end against the local emulators
+with seeded Space/object/key fixtures, confirming every contract in spec.md §7.2.4:
+`initialize` and `tools/list` succeed; all four tools return their specified shapes
+(including `get_object`'s links and backlinks); a missing or revoked key gives
+`-32001`; a key whose creator is no longer a Space member gives `-32003`; passing a
+foreign `spaceId` gives `-32003`; a foreign object id gives `-32004`; out-of-range
+params give `-32602`; an unknown tool gives `-32601`; malformed JSON gives `-32700`;
+a bad envelope gives `-32600`; a notification returns 202 with no body; and an
+`Accept: text/event-stream` request returns the same payload as an SSE frame.
+`/settings` redirects to `/login` (307) when unauthenticated. Not verified in this
+pass: the create-Space/save-object/study mutation flows through an actual browser,
+which still needs a Playwright or `/qa` pass.
+
+**Verification run for the first pass:** `pnpm exec tsc --noEmit` (clean), `pnpm run lint`
+(clean, one non-blocking `noDocumentCookie` warning), `pnpm test` (8/8 passing,
+unchanged), `pnpm run build` (succeeds; `/workspace`, `/question`, `/study`, `/review`
+now render dynamically per-request as expected once they read cookies). Additionally
+verified live against the local Firebase emulators (`pnpm run emulators` +
+`pnpm run dev`): an unauthenticated request to `/workspace` and `/study` redirects to
+`/login` (307); a request to `/login` carrying a valid `recall-session` cookie
+redirects to `/workspace` (307); a request to `/workspace` with a valid session cookie
+for a freshly created emulator user returns 200 and renders the real "Create your first
+Space" empty state. Not verified in this pass: the create-Space/save-object/study
+mutation flows through an actual browser (would need a Playwright/qa pass, since these
+are Server Actions and not easily driven from curl).

@@ -69,4 +69,18 @@ Confirmed measurable acceptance targets:
 
 ## Implementation status
 
-The root application contains the static design foundation plus four verified workspace screens: Space Home, Question detail, Study Session setup, and Spaced-Repetition Review Queue. All core architectural decisions (MCP authentication with Space-scoped hashed API keys, collaborative private Space tenancy, SM-2 scheduling, and exam simulation modes) are formally resolved and incorporated into [spec.md](spec.md) and [plan.md](plan.md). Implementation of the authenticated data and execution boundary is now underway for the Build stage.
+**Updated 2026-09-20:** the authenticated data and execution boundary from the previous
+update is no longer just "underway" — `/workspace`, `/question`, `/study`, and
+`/review` are real, route-protected, Space-scoped Server Components backed by the
+existing auth/object/study Server Actions, with a working Space switcher, object
+create/edit/archive/report flow, and practice/simulated-exam session runner. See
+spec.md §12 and plan.md §8 for exactly what changed. A second pass on the same date
+closed out the items that update listed as outstanding: `/question/[id]` object detail
+with links and backlinks (FR-8), the `/api/mcp` read-only MCP server with Space-scoped
+hashed API keys managed from `/settings` (FR-7), and the literal SM-2 `EF'` formula
+with a 0–5 self-grade scale, plus CLS-stable loading skeletons. What remains is the
+TipTap block editor, the command palette / tabs surfaces (FR-12), and the browser-level
+E2E suite. All core architectural decisions (MCP authentication with Space-scoped
+hashed API keys, collaborative private Space tenancy, SM-2-family scheduling, and exam
+simulation modes) remain formally resolved and incorporated into [spec.md](spec.md) and
+[plan.md](plan.md).

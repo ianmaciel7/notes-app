@@ -64,6 +64,15 @@ export const objectInput = z
       });
   });
 export type ObjectInput = z.infer<typeof objectInput>;
+export const qualityScale = [
+  { value: 0, label: "Blackout" },
+  { value: 1, label: "Incorrect" },
+  { value: 2, label: "Hard" },
+  { value: 3, label: "Good" },
+  { value: 4, label: "Easy" },
+  { value: 5, label: "Perfect" },
+] as const;
+export const quality = z.number().int().min(0).max(5);
 export type StudyRecord = {
   version: 1;
   repetitions: number;
@@ -72,6 +81,7 @@ export type StudyRecord = {
   due: number;
   attempts: number;
   correct: number;
+  lastQuality: number;
 };
 export type RecallObject = ObjectInput & {
   id: string;
@@ -81,6 +91,14 @@ export type RecallObject = ObjectInput & {
   updatedAt: number;
   archived: boolean;
   reported: boolean;
+};
+export type Attempt = {
+  objectId: string;
+  correct: boolean;
+  expected: string[];
+  answeredAt: number;
+  previous: StudyRecord | null;
+  quality: number;
 };
 export type Space = {
   id: string;
@@ -129,19 +147,33 @@ export function grade(
   );
 }
 
+// An auto-graded format has no independent self-assessment step, so a machine
+// verdict maps onto the 0-5 scale rather than replacing it: "Easy" for a right
+// answer, "Incorrect" for a wrong one. A learner who self-grades in practice
+// mode overrides this via rateAttempt.
+export function autoQuality(correct: boolean) {
+  return correct ? 4 : 1;
+}
+
 export function schedule(
   previous: StudyRecord | undefined,
-  correct: boolean,
+  qualityGrade: number,
   now: number,
 ): StudyRecord {
-  const ease = Math.max(1.3, (previous?.ease ?? 2.5) + (correct ? 0.1 : -0.54));
-  const repetitions = correct ? (previous?.repetitions ?? 0) + 1 : 0;
-  const interval =
-    !correct || repetitions === 1
+  const q = quality.parse(qualityGrade);
+  const ease = Math.max(
+    1.3,
+    (previous?.ease ?? 2.5) + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02)),
+  );
+  const recalled = q >= 3;
+  const repetitions = recalled ? (previous?.repetitions ?? 0) + 1 : 0;
+  const interval = !recalled
+    ? 1
+    : repetitions === 1
       ? 1
       : repetitions === 2
         ? 6
-        : Math.round((previous?.interval ?? 6) * (previous?.ease ?? 2.5));
+        : Math.round((previous?.interval ?? 6) * ease);
   return {
     version: 1,
     repetitions,
@@ -149,6 +181,7 @@ export function schedule(
     ease,
     due: now + interval * 86400000,
     attempts: (previous?.attempts ?? 0) + 1,
-    correct: (previous?.correct ?? 0) + Number(correct),
+    correct: (previous?.correct ?? 0) + Number(recalled),
+    lastQuality: q,
   };
 }

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import {
   finishSession,
   loadSession,
+  rateAttempt,
   saveSessionAnswer,
   startSession,
   submitAnswer,
@@ -17,7 +18,11 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import type { Snapshot, StudySession } from "@/domain/recall";
+import {
+  qualityScale,
+  type Snapshot,
+  type StudySession,
+} from "@/domain/recall";
 
 export function StudyPanel({
   data,
@@ -33,6 +38,7 @@ export function StudyPanel({
     correct: boolean;
     expected: string[];
   } | null>(null);
+  const [rated, setRated] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [now, setNow] = useState(Date.now());
@@ -65,6 +71,37 @@ export function StudyPanel({
       setBusy(false);
     }
   }
+  async function rate(value: number) {
+    const current = session?.questions[index];
+    if (!session || !current || busy) return;
+    setBusy(true);
+    setError("");
+    try {
+      await rateAttempt(data.spaceId, `${session.id}_${current.id}`, value);
+      setRated(value);
+      await onUpdate();
+    } catch (cause) {
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : "Could not save your self-grade.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+  useEffect(() => {
+    if (!feedback) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.target instanceof HTMLInputElement || event.metaKey) return;
+      const value = Number(event.key);
+      if (event.key.trim() === "" || Number.isNaN(value) || value > 5) return;
+      event.preventDefault();
+      void rate(value);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  });
   // A deadline is stored on the server; reload cannot extend an exam.
   useEffect(() => {
     if (
@@ -210,6 +247,7 @@ export function StudyPanel({
               setIndex(0);
               setAnswers([]);
               setFeedback(null);
+              setRated(null);
             }}
           >
             Start another session
@@ -301,6 +339,34 @@ export function StudyPanel({
             <p className="mt-2 text-sm">{question.text}</p>
           </output>
         )}
+        {feedback && (
+          <fieldset disabled={busy}>
+            <legend className="text-sm font-medium">
+              How well did you recall this?
+            </legend>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {qualityScale.map((step) => (
+                <Button
+                  key={step.value}
+                  type="button"
+                  size="sm"
+                  variant={rated === step.value ? "default" : "outline"}
+                  onClick={() => rate(step.value)}
+                >
+                  <span aria-hidden="true" className="opacity-60">
+                    {step.value}
+                  </span>
+                  {step.label}
+                </Button>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {rated === null
+                ? "Press 0-5, or skip to keep the auto-graded result."
+                : "Review schedule updated."}
+            </p>
+          </fieldset>
+        )}
         {error && (
           <p role="alert" className="text-destructive">
             {error}
@@ -379,6 +445,7 @@ export function StudyPanel({
                     session.answers[session.questions[index + 1].id] ?? [],
                   );
                   setFeedback(null);
+                  setRated(null);
                 }
               }}
             >

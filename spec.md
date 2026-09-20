@@ -402,22 +402,63 @@ This section exists because the request behind this spec asked for explicit comp
 
 ## 12. Implementation and screen verification status
 
-The root branch currently exposes five verified routes: `/`, `/workspace`, `/question`, `/study`, and `/review`. The root includes a responsive Recall entry surface plus static Space Home, Question detail, Study Session setup, and Spaced-Repetition Review Queue screens. These screens use the approved design tokens and shared workspace frame, but their data and mutations are still placeholders.
+**Updated 2026-09-20 (Build stage, Phase 1 + UI wiring):** the root branch exposes five
+routes: `/`, `/workspace`, `/question`, `/study`, and `/review`, plus `/login`. `/`
+remains a static marketing entry surface. `src/proxy.ts` (Next.js 16 renamed
+`middleware.ts` to `proxy.ts` — see plan.md §8) now gates `/workspace`, `/question`,
+`/study`, and `/review` behind a `recall-session` cookie check, redirecting
+unauthenticated requests to `/login` and redirecting an already-signed-in caller away
+from `/login`. `/login`, `/workspace`, `/question`, `/study`, and `/review` are real
+Server Components reading an authenticated, Space-scoped `Snapshot` via
+`src/lib/workspace.ts#requireSnapshot()` — they are no longer static mockups with
+hardcoded data. A Space switcher (`src/components/recall/space-switcher.tsx`) supports
+creating a Space and inviting a member; the workspace shell supports sign-out and
+adding a new object (`src/components/recall/object-editor.tsx`, wired but pre-existing
+this pass); `/question` is a real object list (`src/components/recall/object-list.tsx`)
+supporting edit, archive/restore, and report/resolve (FR-9); `/study` and `/review` run
+the real practice/simulated-exam session engine
+(`src/components/recall/study-panel.tsx`, wired via `study-session.tsx`, both
+pre-existing this pass).
 
-The following screens and capabilities are specified by this document or the companion design artifact but are not implemented in the root branch:
+**Updated 2026-09-20 (Build stage, second pass — Phases 2, 3, 5 and part of 6).** Since
+the note above, the branch also exposes `/question/[id]` (a detail view for *any* object
+kind, with a Linked objects rail and a live Backlinks panel — FR-8), `/settings` (MCP API
+key management), and `/api/mcp` (the §7.2 JSON-RPC 2.0 read-only MCP server). `schedule()`
+now implements the literal §3 Phase 3 SM-2 `EF'` formula over a 0–5 quality scale, with a
+self-grade step in practice mode (keyboard 0–5) and `autoQuality()` mapping an auto-graded
+verdict onto that scale. Every workspace segment has a CLS-stable `loading.tsx` skeleton,
+the app has a real `not-found.tsx`, and the mobile navigation button — previously inert —
+now opens a dismissible drawer.
 
-- authenticated sign-in and Space selection;
-- Space Home with authenticated, real object data;
-- Question object detail with a real editor, links, and backlinks;
-- Note, Citation, Tag, Collection, and Exam object views;
-- Study Session execution, answer persistence, and practice mode;
-- simulated exam mode and timeout submission;
-- spaced-repetition review queue mutations and result state;
-- command palette, dialogs, menus, workspace tabs, and context-panel tabs;
-- moderation report/hide flows;
-- authenticated read-only MCP endpoint.
+The following screens and capabilities are specified by this document or the companion design artifact but are still not implemented in the root branch:
 
-Verification completed for the implemented routes: TypeScript compilation, production build, targeted Biome checks, and live browser accessibility inspection pass. No automated browser tests, screenshot comparisons, authentication tests, domain tests, or MCP tests exist yet. Full-repository Biome checking still reports diagnostics in untouched generated UI components. The screens are visually present but not product-complete, and the acceptance checkboxes above remain authoritative.
+- the TipTap block editor (§4) — object text is a plain textarea serialized into a minimal TipTap-shaped `body` document, not a real rich-text editor;
+- command palette, workspace tabs, and context-panel tabs (FR-12, NFR-5) — dialogs and menus exist;
+- per-kind detail *layouts* — `/question/[id]` renders every kind through one universal layout rather than a tailored view per kind;
+- the full reduced-motion and focus-restoration matrix (Phase 6), beyond the focus-visible styling in the generated primitives and Escape-to-dismiss on the drawer and dialogs;
+- the Playwright E2E suite and the Vitest integration suite in plan.md §4 — neither `@playwright/test` nor `vitest` is a devDependency; the repo runs `node:test` through `tsx` (see `TESTING.md`).
+
+Verification completed for the current routes: TypeScript compilation (`tsc --noEmit`),
+production build, Biome checks, and the existing Vitest-via-`tsx` unit suite (8/8
+passing, unchanged by this pass). This pass additionally verified live against the
+local Firebase emulators: unauthenticated requests to protected routes redirect to
+`/login` (307); a valid session cookie redirects away from `/login` and renders
+`/workspace`'s real empty state for a freshly created emulator user (200). The
+create-Space/save-object/study mutation paths were not driven through an actual
+browser in this pass (see plan.md §8) — that remains a good candidate for a Playwright
+or `/qa` pass.
+
+Verification for the second pass: `tsc --noEmit`, `pnpm lint`, `pnpm run build`, and 18
+passing unit tests (`tests/recall.test.ts` + `tests/api-keys.test.ts`). `/api/mcp` was
+driven end-to-end against the local emulators and satisfies every §7.2.4 contract —
+`-32001` for a missing or revoked key, `-32003` for a key whose creator lost Space
+membership and for a foreign `spaceId`, `-32004` for a foreign object id, `-32602`,
+`-32601`, `-32700`, `-32600`, 202 for notifications, and SSE framing under
+`Accept: text/event-stream` — with all four tools returning their specified shapes.
+Still absent: automated browser tests, screenshot comparisons, and an integration suite
+over the Server Actions. Full-repository Biome checking still reports diagnostics in
+untouched generated UI components. The screens are functionally wired to real data but
+not product-complete, and the acceptance checkboxes above remain authoritative.
 
 ## Related
 

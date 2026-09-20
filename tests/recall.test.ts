@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { grade, objectInput, schedule } from "../src/domain/recall";
+import {
+  autoQuality,
+  grade,
+  objectInput,
+  schedule,
+} from "../src/domain/recall";
 
 test("grade: single-choice evaluation", () => {
   const question = {
@@ -44,40 +49,69 @@ test("grade: matching evaluation", () => {
   assert.equal(grade(question, ["second", "first"]), false); // order-sensitive
 });
 
-test("schedule: initial correct attempt", () => {
-  const now = 1700000000000;
-  const next = schedule(undefined, true, now);
-  assert.equal(next.repetitions, 1);
-  assert.equal(next.interval, 1);
-  assert.equal(next.attempts, 1);
-  assert.equal(next.correct, 1);
-  assert.equal(next.due, now + 1 * 86400000);
+const now = 1700000000000;
+const close = (actual: number, expected: number) =>
+  assert.ok(
+    Math.abs(actual - expected) < 1e-9,
+    `expected ${actual} to be ${expected}`,
+  );
+
+test("schedule: SM-2 ease factor vectors across the 0-5 scale", () => {
+  // EF' = EF + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02)), floored at 1.3.
+  close(schedule(undefined, 5, now).ease, 2.6);
+  close(schedule(undefined, 4, now).ease, 2.5);
+  close(schedule(undefined, 3, now).ease, 2.36);
+  close(schedule(undefined, 2, now).ease, 2.18);
+  close(schedule(undefined, 1, now).ease, 1.96);
+  close(schedule(undefined, 0, now).ease, 1.7);
 });
 
-test("schedule: subsequent correct attempts scale interval and ease", () => {
-  const now = 1700000000000;
-  const first = schedule(undefined, true, now);
-  const second = schedule(first, true, now);
+test("schedule: ease factor never drops below 1.3", () => {
+  let record = schedule(undefined, 0, now);
+  for (let n = 0; n < 10; n++) record = schedule(record, 0, now);
+  assert.equal(record.ease, 1.3);
+});
+
+test("schedule: interval progression is 1, 6, then I(n-1) * EF'", () => {
+  const first = schedule(undefined, 4, now);
+  assert.equal(first.repetitions, 1);
+  assert.equal(first.interval, 1);
+  assert.equal(first.due, now + 86400000);
+
+  const second = schedule(first, 4, now);
   assert.equal(second.repetitions, 2);
   assert.equal(second.interval, 6);
-  assert.equal(second.due, now + 6 * 86400000);
 
-  const third = schedule(second, true, now);
+  const third = schedule(second, 4, now);
   assert.equal(third.repetitions, 3);
-  assert.equal(third.interval, Math.round(6 * second.ease));
+  assert.equal(third.interval, Math.round(6 * third.ease)); // uses the updated EF'
+  assert.equal(third.due, now + third.interval * 86400000);
 });
 
-test("schedule: incorrect attempt resets repetitions and interval", () => {
-  const now = 1700000000000;
-  const first = schedule(undefined, true, now);
-  const second = schedule(first, true, now);
-  const failed = schedule(second, false, now);
+test("schedule: a grade below 3 resets repetitions and interval", () => {
+  const second = schedule(schedule(undefined, 5, now), 5, now);
+  const lapsed = schedule(second, 2, now);
 
-  assert.equal(failed.repetitions, 0);
-  assert.equal(failed.interval, 1);
-  assert.equal(failed.attempts, 3);
-  assert.equal(failed.correct, 2);
-  assert.ok(failed.ease < second.ease);
+  assert.equal(lapsed.repetitions, 0);
+  assert.equal(lapsed.interval, 1);
+  assert.equal(lapsed.attempts, 3);
+  assert.equal(lapsed.correct, 2); // the lapse is not counted as a recall
+  assert.ok(lapsed.ease < second.ease);
+});
+
+test("schedule: grade 3 counts as a recall, grade 2 does not", () => {
+  assert.equal(schedule(undefined, 3, now).repetitions, 1);
+  assert.equal(schedule(undefined, 2, now).repetitions, 0);
+});
+
+test("schedule: rejects a grade outside the 0-5 scale", () => {
+  assert.throws(() => schedule(undefined, 6, now));
+  assert.throws(() => schedule(undefined, -1, now));
+});
+
+test("autoQuality: maps a machine verdict onto the 0-5 scale", () => {
+  assert.equal(schedule(undefined, autoQuality(true), now).repetitions, 1);
+  assert.equal(schedule(undefined, autoQuality(false), now).repetitions, 0);
 });
 
 test("objectInput: validates valid question object", () => {
