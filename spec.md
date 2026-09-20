@@ -436,7 +436,16 @@ The following screens and capabilities are specified by this document or the com
 - command palette, workspace tabs, and context-panel tabs (FR-12, NFR-5) — dialogs and menus exist;
 - per-kind detail *layouts* — `/question/[id]` renders every kind through one universal layout rather than a tailored view per kind;
 - the full reduced-motion and focus-restoration matrix (Phase 6), beyond the focus-visible styling in the generated primitives and Escape-to-dismiss on the drawer and dialogs;
-- the Playwright E2E suite and the Vitest integration suite in plan.md §4 — neither `@playwright/test` nor `vitest` is a devDependency; the repo runs `node:test` through `tsx` (see `TESTING.md`).
+- an accessibility (axe) pass and visual-regression coverage;
+- a CI workflow file — the gate is `pnpm lint && pnpm test && pnpm test:e2e && pnpm run build`, run by hand.
+
+**Updated 2026-09-20 (third pass — Phase 6 verification).** The Playwright E2E suite
+from plan.md §4 now exists (`tests/e2e/`, 9 specs, Chromium) and also serves as the
+integration suite; Vitest is deliberately not installed (see plan.md §8). It covers
+authoring with links and backlinks, practice grading and the 0–5 self-grade, the
+simulated exam, archiving, route protection, the cross-Space 404, and the MCP key
+lifecycle end to end including revocation. This closes §7.2's verification row and
+Phase 6's E2E row against a real browser, which no previous pass had done.
 
 Verification completed for the current routes: TypeScript compilation (`tsc --noEmit`),
 production build, Biome checks, and the existing Vitest-via-`tsx` unit suite (8/8

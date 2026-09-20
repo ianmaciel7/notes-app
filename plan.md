@@ -305,11 +305,31 @@ note above: `user()`/`authorized()` moved out of `src/actions/recall.ts` into
 cannot simply be exported from a `"use server"` module — that would publish them to
 the browser as callable Server Actions.
 
-Still not done (later Build-stage work): the Playwright E2E suite and Vitest
-integration suite in §4 (neither `@playwright/test` nor `vitest` is a devDependency —
-the repo runs `node:test` via `tsx`), the full reduced-motion/focus-restoration
-matrix, the TipTap block editor, and the command palette / workspace tabs / context
-panel (FR-12, NFR-5).
+### Phase 6 verification suite (third pass)
+
+`tests/e2e/` is now a Playwright suite (Chromium) of 9 specs covering authoring with
+links and backlinks (FR-8), practice grading with the 0–5 self-grade, the simulated
+exam, archiving removing a question from scope, route protection across all five
+workspace routes, the cross-Space 404, and the full MCP key lifecycle — issue in
+`/settings`, drive all four tools over HTTP, then revoke and confirm `-32001`.
+
+**Deviation from §4's testing matrix:** §4 names Vitest for the unit and integration
+rows. Vitest is deliberately not installed. `node:test` (via `tsx`) already covers the
+pure-domain unit row, and Playwright covers the integration row as well as E2E — the
+MCP server authenticates with a bearer key rather than a session cookie, so
+Playwright's `request` fixture drives it directly, in the same suite, against the same
+emulators. A third runner would add configuration surface without adding coverage.
+The Firestore-rules row of §4 is moot while `firestore.rules` is a blanket deny (see
+the drift note above): there are no granular rules to assert.
+
+Two non-obvious traps were found and are written up in `TESTING.md` so they are not
+rediscovered: Next 16 blocks `/_next/*` dev resources for `127.0.0.1` (the page renders
+but **never hydrates**, silently), and saving an object navigates between two
+`/question/<id>` URLs, so a path-pattern URL wait returns the previous id.
+
+Still not done (later Build-stage work): the full reduced-motion/focus-restoration
+matrix and an axe/visual-regression pass, the TipTap block editor, the command palette
+/ workspace tabs / context panel (FR-12, NFR-5), and a CI workflow file.
 
 **Verification run for the second pass:** `pnpm exec tsc --noEmit` (clean), `pnpm lint`
 (clean, same single non-blocking `noDocumentCookie` warning), `pnpm test` (18/18

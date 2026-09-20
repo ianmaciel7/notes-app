@@ -13,10 +13,10 @@ export class RpcError extends Error {
 
 export type McpContext = { spaceId: string; uid: string };
 
-// Every tool takes the spaceId explicitly so an MCP client can pass what it
-// thinks it is querying; the key's own binding is authoritative and a mismatch
-// is Forbidden rather than silently rescoped (spec.md 7.2.2).
-const inSpace = z.object({ spaceId: z.string() });
+// spaceId is optional because an MCP client is handed a key, not a Space id —
+// the key's binding is what scopes the query. A client that does pass one has
+// it checked: a mismatch is Forbidden, never silently rescoped (spec.md 7.2.2).
+const inSpace = z.object({ spaceId: z.string().optional() });
 
 async function visibleObjects(spaceId: string) {
   const result = await firebase()
@@ -69,7 +69,7 @@ const listObjects = {
       limit: { type: "number", minimum: 1, maximum: 100 },
       cursor: { type: "string" },
     },
-    required: ["spaceId"],
+    required: [],
   },
   async run(
     context: McpContext,
@@ -96,7 +96,7 @@ const getObject = {
   inputSchema: {
     type: "object",
     properties: { spaceId: { type: "string" }, objectId: { type: "string" } },
-    required: ["spaceId", "objectId"],
+    required: ["objectId"],
   },
   async run(context: McpContext, args: { objectId: string }) {
     const doc = await firebase()
@@ -143,7 +143,7 @@ const searchSpaceContent = {
       type: { type: "string", enum: [...kinds] },
       limit: { type: "number", minimum: 1, maximum: 50 },
     },
-    required: ["spaceId", "query"],
+    required: ["query"],
   },
   async run(
     context: McpContext,
@@ -180,7 +180,7 @@ const getStudySummary = {
   inputSchema: {
     type: "object",
     properties: { spaceId: { type: "string" } },
-    required: ["spaceId"],
+    required: [],
   },
   async run(context: McpContext) {
     const [objects, stored] = await Promise.all([
@@ -250,7 +250,7 @@ export async function callTool(
   const parsed = tool.schema.safeParse(rawArgs ?? {});
   if (!parsed.success)
     throw new RpcError(-32602, parsed.error.issues[0]?.message ?? "Bad params");
-  if (parsed.data.spaceId !== context.spaceId)
+  if (parsed.data.spaceId && parsed.data.spaceId !== context.spaceId)
     throw new RpcError(-32003, "This key is not bound to that Space.");
   // biome-ignore lint/suspicious/noExplicitAny: each tool narrows its own args via its zod schema.
   return tool.run(context, parsed.data as any);

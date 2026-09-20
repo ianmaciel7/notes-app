@@ -91,7 +91,10 @@ export function ApiKeysCard({
               Copy this key now — it is not shown again.
             </p>
             <div className="mt-3 flex items-center gap-2">
-              <code className="min-w-0 flex-1 truncate rounded bg-canvas px-3 py-2 text-sm">
+              <code
+                data-testid="issued-key"
+                className="min-w-0 flex-1 truncate rounded bg-canvas px-3 py-2 text-sm"
+              >
                 {issued}
               </code>
               <Button
