@@ -46,6 +46,15 @@ yarn-error.log*
 # serena
 .serena/project.local.yml
 
+# claude code — machine-local state only. Shared AI config is checked in:
+# .agents/ (hooks, rules, skills) and .claude/agents/ (subagent definitions).
+.claude/agent-memory/
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
+
+# generated QA artifacts (/qa skill)
+qa-output/
+
 # graphify
 graphify-out/cache/
 graphify-out/.graphify_*
