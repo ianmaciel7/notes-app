@@ -4,25 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { changeObject } from "@/actions/recall";
-import { KindIcon } from "@/components/recall/kind-icon";
+import { ContextPanel } from "@/components/recall/context-panel";
 import { ObjectEditor } from "@/components/recall/object-editor";
 import { RichText } from "@/components/recall/rich-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { RecallObject, Snapshot } from "@/domain/recall";
-
-function LinkedRow({ object }: { object: RecallObject }) {
-  return (
-    <Link
-      href={`/question/${object.id}`}
-      className="flex items-center gap-3 rounded-lg bg-canvas p-3 text-sm hover:bg-surface-card"
-    >
-      <KindIcon kind={object.kind} className="size-4 text-coral" />
-      <span className="min-w-0 flex-1 truncate">{object.title}</span>
-    </Link>
-  );
-}
 
 export function ObjectDetail({
   data,
@@ -163,40 +151,7 @@ export function ObjectDetail({
             </div>
           </CardContent>
         </Card>
-        <div className="flex h-fit flex-col gap-6">
-          <Card className="border-hairline bg-surface-soft shadow-none">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Link2 className="size-4 text-coral" /> Linked objects
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-3">
-              {linked.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  + Connect a related Note or Citation from Edit.
-                </p>
-              ) : (
-                linked.map((item) => <LinkedRow key={item.id} object={item} />)
-              )}
-            </CardContent>
-          </Card>
-          <Card className="border-hairline bg-surface-soft shadow-none">
-            <CardHeader>
-              <CardTitle className="text-lg">Backlinks</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-3">
-              {backlinks.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  No references yet — link to this item from any object.
-                </p>
-              ) : (
-                backlinks.map((item) => (
-                  <LinkedRow key={item.id} object={item} />
-                ))
-              )}
-            </CardContent>
-          </Card>
-        </div>
+        <ContextPanel object={object} linked={linked} backlinks={backlinks} />
       </div>
       {editing && (
         <ObjectEditor

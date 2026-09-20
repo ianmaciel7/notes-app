@@ -3,7 +3,7 @@
 import { LogOut, PanelLeft, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { logout } from "@/actions/recall";
 import { CommandPalette } from "@/components/recall/command-palette";
 import { ObjectEditor } from "@/components/recall/object-editor";
@@ -37,10 +37,23 @@ export function WorkspaceFrame({
   const [adding, setAdding] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
   const [searching, setSearching] = useState(false);
+  const navTrigger = useRef<HTMLButtonElement>(null);
+  const drawer = useRef<HTMLElement>(null);
+  // spec.md 5.5: the drawer is a custom aside, not a Dialog, so it has to do
+  // its own focus handling — move focus in on open, and hand it back to the
+  // opener on every dismissal path rather than stranding it offscreen.
+  function closeNav() {
+    setNavOpen(false);
+    navTrigger.current?.focus();
+  }
   useEffect(() => {
     if (!navOpen) return;
-    const onKeyDown = (event: KeyboardEvent) =>
-      event.key === "Escape" && setNavOpen(false);
+    drawer.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setNavOpen(false);
+      navTrigger.current?.focus();
+    };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [navOpen]);
@@ -51,11 +64,14 @@ export function WorkspaceFrame({
           type="button"
           aria-label="Close navigation"
           className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-          onClick={() => setNavOpen(false)}
+          onClick={closeNav}
         />
       )}
       <aside
-        className={`${navOpen ? "fixed inset-y-0 left-0 z-50 flex w-64" : "hidden"} flex-col border-r border-hairline bg-surface-soft lg:static lg:flex lg:w-auto`}
+        ref={drawer}
+        tabIndex={-1}
+        aria-label="Workspace navigation"
+        className={`${navOpen ? "fixed inset-y-0 left-0 z-50 flex w-64" : "hidden"} flex-col border-r border-hairline bg-surface-soft outline-none lg:static lg:flex lg:w-auto`}
       >
         <div className="flex h-16 items-center gap-3 border-b border-hairline px-6 text-sm font-medium">
           <span className="text-xl text-coral" aria-hidden="true">
@@ -77,7 +93,7 @@ export function WorkspaceFrame({
               }
               href={item.href}
               aria-current={item.key === active ? "page" : undefined}
-              onClick={() => setNavOpen(false)}
+              onClick={() => navOpen && closeNav()}
             >
               {item.label}
             </Link>
@@ -112,6 +128,7 @@ export function WorkspaceFrame({
               variant="ghost"
               size="icon"
               className="lg:hidden"
+              ref={navTrigger}
               aria-label="Open navigation"
               aria-expanded={navOpen}
               onClick={() => setNavOpen(true)}

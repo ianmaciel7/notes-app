@@ -232,3 +232,20 @@
   height: 0;
   pointer-events: none;
 }
+
+/* spec.md 5.3: motion explains state, so reduced-motion keeps the final state
+   and drops the transition rather than disabling the interaction. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: must beat utility transitions */
+    animation-duration: 0.01ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: must beat utility transitions */
+    animation-iteration-count: 1 !important;
+    /* biome-ignore lint/complexity/noImportantStyles: must beat utility transitions */
+    transition-duration: 0.01ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: must beat utility transitions */
+    scroll-behavior: auto !important;
+  }
+}

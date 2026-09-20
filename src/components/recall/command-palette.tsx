@@ -42,7 +42,9 @@ export function CommandPalette({
   const router = useRouter();
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key.toLowerCase() !== "k" || !(event.metaKey || event.ctrlKey))
+      // spec.md 5.5: Mod+K and Mod+P both open the one command dialog.
+      const key = event.key.toLowerCase();
+      if ((key !== "k" && key !== "p") || !(event.metaKey || event.ctrlKey))
         return;
       event.preventDefault();
       onOpenChange(!open);

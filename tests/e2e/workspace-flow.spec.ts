@@ -39,6 +39,7 @@ test("a question links to a note, and the note shows the backlink", async ({
   await expect(
     page.getByRole("heading", { name: "Mitochondria" }),
   ).toBeVisible();
+  await page.getByRole("tab", { name: /Backlinks/ }).click();
   await expect(
     page.locator(`a[href="/question/${questionId}"]`).first(),
   ).toBeVisible();
