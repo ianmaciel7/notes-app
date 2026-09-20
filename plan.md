@@ -327,9 +327,29 @@ rediscovered: Next 16 blocks `/_next/*` dev resources for `127.0.0.1` (the page 
 but **never hydrates**, silently), and saving an object navigates between two
 `/question/<id>` URLs, so a path-pattern URL wait returns the previous id.
 
+### TipTap rich text (fourth pass)
+
+§3 Phase 2's headless TipTap editor now exists (`src/components/recall/rich-text.tsx`,
+`@tiptap/react` + StarterKit): a toolbar, markdown input rules, and a read-only renderer
+that shares the same extension set and `.rich-text` styles, so authored and displayed
+content cannot drift. `objectInput.text` was replaced by `objectInput.body`, the
+ProseMirror document, and `text` is now derived server-side via `plainText(body)` —
+clients no longer send it, so the projection cannot be desynced from the document. The
+document is validated as untrusted input (`richDoc`) with a depth cap rather than trusted
+because TipTap produced it.
+
+Two bugs were found and fixed while wiring this up, both covered by the new E2E case:
+passing the parent's state back in as `content` re-applied it on every keystroke and
+silently reverted structure the editor had just created (the editor now owns its
+document via `defaultValue`), and the toolbar's active states re-rendered the editor
+until they were moved to `useEditorState`.
+
+Not done: inline object mention chips inside the editor (§3 Phase 2 lists them; linking
+is done through the Linked objects selector instead).
+
 Still not done (later Build-stage work): the full reduced-motion/focus-restoration
-matrix and an axe/visual-regression pass, the TipTap block editor, the command palette
-/ workspace tabs / context panel (FR-12, NFR-5), and a CI workflow file.
+matrix and an axe/visual-regression pass, the command palette / workspace tabs /
+context panel (FR-12, NFR-5), and a CI workflow file.
 
 **Verification run for the second pass:** `pnpm exec tsc --noEmit` (clean), `pnpm lint`
 (clean, same single non-blocking `noDocumentCookie` warning), `pnpm test` (18/18

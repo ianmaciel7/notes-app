@@ -1,6 +1,11 @@
 "use client";
 import { useState } from "react";
 import { saveObject } from "@/actions/recall";
+import {
+  emptyDoc,
+  RichTextEditor,
+  type RichValue,
+} from "@/components/recall/rich-text";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,6 +44,7 @@ export function ObjectEditor({
   const [format, setFormat] = useState<RecallObject["format"]>(
     object?.format ?? "single-choice",
   );
+  const [body, setBody] = useState<RichValue>(object?.body ?? emptyDoc);
   const [dirty, setDirty] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -79,7 +85,7 @@ export function ObjectEditor({
               kind,
               format,
               title: values.get("title"),
-              text: values.get("text"),
+              body,
               url: values.get("url") ?? "",
               options: lines("options"),
               answers: lines("answers"),
@@ -140,15 +146,16 @@ export function ObjectEditor({
                 />
               </Field>
               <Field>
-                <FieldLabel htmlFor="text">
+                <FieldLabel>
                   {kind === "question" ? "Explanation" : "Content"}
                 </FieldLabel>
-                <Textarea
-                  id="text"
-                  name="text"
-                  defaultValue={object?.text}
-                  rows={5}
-                  maxLength={50000}
+                <RichTextEditor
+                  label={kind === "question" ? "Explanation" : "Content"}
+                  defaultValue={object?.body ?? emptyDoc}
+                  onChange={(next) => {
+                    setBody(next);
+                    setDirty(true);
+                  }}
                 />
               </Field>
               {kind === "citation" && (

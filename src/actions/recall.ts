@@ -7,6 +7,7 @@ import {
   autoQuality,
   grade,
   objectInput,
+  plainText,
   quality,
   type RecallObject,
   type Snapshot,
@@ -171,13 +172,7 @@ export async function saveObject(
       updatedAt: Date.now(),
       archived: existing.data()?.archived ?? false,
       reported: existing.data()?.reported ?? false,
-      body: {
-        type: "doc",
-        content: input.text.split("\n").map((text) => ({
-          type: "paragraph",
-          content: text ? [{ type: "text", text }] : [],
-        })),
-      },
+      text: plainText(input.body),
     };
     tx.set(ref, value);
     tx.set(ref.collection("revisions").doc(String(value.version)), value);

@@ -7,7 +7,7 @@ let seq = 0;
 // React hydrates and is then dropped silently. Retry the action until the UI
 // actually reacts — checking first, so an already-settled UI is not clicked
 // again (a second click would hit a dialog overlay and never resolve).
-async function ensure(settled: Locator, action: () => Promise<void>) {
+export async function ensure(settled: Locator, action: () => Promise<void>) {
   await expect(async () => {
     if (!(await settled.isVisible())) await action();
     await expect(settled).toBeVisible({ timeout: 1000 });
@@ -77,7 +77,8 @@ export async function createObject(
   });
   await page.locator("#kind").selectOption(fields.kind);
   await page.locator("#title").fill(fields.title);
-  if (fields.text) await page.locator("#text").fill(fields.text);
+  if (fields.text)
+    await page.locator('[contenteditable="true"]').fill(fields.text);
   if (fields.options) await page.locator("#options").fill(fields.options);
   if (fields.answers) await page.locator("#answers").fill(fields.answers);
   if (fields.links) await page.locator("#links").selectOption(fields.links);

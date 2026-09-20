@@ -4,6 +4,7 @@ import {
   autoQuality,
   grade,
   objectInput,
+  plainText,
   schedule,
 } from "../src/domain/recall";
 
@@ -114,11 +115,19 @@ test("autoQuality: maps a machine verdict onto the 0-5 scale", () => {
   assert.equal(schedule(undefined, autoQuality(false), now).repetitions, 0);
 });
 
+const doc = (...paragraphs: string[]) => ({
+  type: "doc" as const,
+  content: paragraphs.map((text) => ({
+    type: "paragraph",
+    content: text ? [{ type: "text", text }] : [],
+  })),
+});
+
 test("objectInput: validates valid question object", () => {
   const validQuestion = {
     title: "What is 2 + 2?",
     kind: "question" as const,
-    text: "Basic arithmetic question",
+    body: doc("Basic arithmetic question"),
     url: "",
     format: "single-choice" as const,
     options: ["3", "4", "5"],
@@ -127,4 +136,51 @@ test("objectInput: validates valid question object", () => {
   };
   const parsed = objectInput.safeParse(validQuestion);
   assert.equal(parsed.success, true);
+});
+
+test("plainText: flattens a document to one line per block", () => {
+  assert.equal(plainText(doc("first", "second")), "first\nsecond");
+  assert.equal(plainText(doc("only", "")), "only\n");
+  assert.equal(plainText({ content: undefined }), "");
+});
+
+test("plainText: reads text out of nested marks and lists", () => {
+  const nested = {
+    content: [
+      {
+        type: "bulletList",
+        content: [
+          {
+            type: "listItem",
+            content: [
+              {
+                type: "paragraph",
+                content: [
+                  { type: "text", text: "bold", marks: [{ type: "bold" }] },
+                  { type: "text", text: " and plain" },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+  assert.equal(plainText(nested), "bold and plain");
+});
+
+test("objectInput: rejects a document nested past the depth cap", () => {
+  let node: Record<string, unknown> = { type: "text", text: "deep" };
+  for (let n = 0; n < 20; n++) node = { type: "paragraph", content: [node] };
+  const parsed = objectInput.safeParse({
+    title: "Deep",
+    kind: "note" as const,
+    body: { type: "doc", content: [node] },
+    url: "",
+    format: "single-choice" as const,
+    options: [],
+    answers: [],
+    links: [],
+  });
+  assert.equal(parsed.success, false);
 });

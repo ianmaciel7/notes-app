@@ -14,11 +14,61 @@ export const formats = [
   "fill-blank",
   "matching",
 ] as const;
+export type RichNode = {
+  type: string;
+  text?: string;
+  attrs?: Record<string, unknown>;
+  marks?: { type: string; attrs?: Record<string, unknown> }[];
+  content?: RichNode[];
+};
+// The editor's own JSON is stored verbatim, so it has to be validated as
+// untrusted input rather than trusted because TipTap produced it. Depth is
+// capped because a deeply nested document would otherwise recurse without
+// bound on every read.
+const maxDepth = 12;
+const richNode: z.ZodType<RichNode> = z.lazy(() =>
+  z.object({
+    type: z.string().max(40),
+    text: z.string().max(50000).optional(),
+    attrs: z.record(z.string(), z.unknown()).optional(),
+    marks: z
+      .array(
+        z.object({
+          type: z.string().max(40),
+          attrs: z.record(z.string(), z.unknown()).optional(),
+        }),
+      )
+      .max(10)
+      .optional(),
+    content: z.array(richNode).max(500).optional(),
+  }),
+);
+export const richDoc = z
+  .object({
+    type: z.literal("doc"),
+    content: z.array(richNode).max(500).optional(),
+  })
+  .refine(
+    (doc) => depthOf(doc) <= maxDepth,
+    "This content is nested too deeply.",
+  );
+
+function depthOf(node: RichNode | { content?: RichNode[] }): number {
+  const children = node.content ?? [];
+  return children.length ? 1 + Math.max(...children.map(depthOf)) : 1;
+}
+
+export function plainText(doc: { content?: RichNode[] }): string {
+  const walk = (node: RichNode): string =>
+    node.text ?? (node.content ?? []).map(walk).join("");
+  return (doc.content ?? []).map(walk).join("\n").slice(0, 50000);
+}
+
 export const objectInput = z
   .object({
     title: z.string().trim().min(1).max(180),
     kind: z.enum(kinds),
-    text: z.string().max(50000),
+    body: richDoc,
     url: z.union([
       z.literal(""),
       z.url().refine((v) => /^https?:\/\//i.test(v)),
@@ -91,6 +141,8 @@ export type RecallObject = ObjectInput & {
   updatedAt: number;
   archived: boolean;
   reported: boolean;
+  // Derived server-side from body via plainText(), for search and snippets.
+  text: string;
 };
 export type Attempt = {
   objectId: string;

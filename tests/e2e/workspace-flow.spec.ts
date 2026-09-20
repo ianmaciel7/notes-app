@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import {
   createObject,
   createSpace,
+  ensure,
   signUp,
   startSession,
   visit,
@@ -111,4 +112,46 @@ test("archiving an object removes it from the review scope", async ({
 
   await startSession(page, "all", "practice");
   await expect(page.getByText("No questions match this scope")).toBeVisible();
+});
+
+test("rich text formatting survives a save and renders on the detail view", async ({
+  page,
+}) => {
+  await signUp(page);
+  await createSpace(page, "Formatting");
+
+  await ensure(page.getByRole("heading", { name: "Add to your Space" }), () =>
+    page.getByRole("button", { name: "New object" }).click(),
+  );
+  await page.locator("#kind").selectOption("note");
+  await page.locator("#title").fill("Formatted note");
+
+  const editor = page.locator('[contenteditable="true"]');
+  const items = page.locator('[contenteditable="true"] li');
+  await editor.click();
+  await editor.pressSequentially("- first item");
+  await editor.press("Enter");
+  await editor.pressSequentially("second item");
+
+  // Typing after the input rule built the list must not revert it: the editor
+  // owns its document, so nothing re-applies the parent's copy on a keystroke.
+  await expect(items).toHaveCount(2);
+
+  await page.keyboard.down("Shift");
+  for (let n = 0; n < 6; n++) await page.keyboard.press("ArrowLeft");
+  await page.keyboard.up("Shift");
+  await page.getByRole("button", { name: "Bold" }).click();
+  await expect(page.locator('[contenteditable="true"] strong')).toHaveCount(1);
+
+  await page.getByRole("button", { name: "Save object" }).click();
+  await page.waitForURL(/\/question\/[^/]+$/);
+
+  await expect(page.locator(".rich-text li")).toHaveCount(2);
+  await expect(page.locator(".rich-text li").first()).toHaveText("first item");
+  await expect(page.locator(".rich-text strong")).toHaveCount(1);
+
+  // And it is the stored document, not editor state carried across the push.
+  await page.reload();
+  await expect(page.locator(".rich-text li")).toHaveCount(2);
+  await expect(page.locator(".rich-text strong")).toHaveCount(1);
 });

@@ -432,12 +432,18 @@ now opens a dismissible drawer.
 
 The following screens and capabilities are specified by this document or the companion design artifact but are still not implemented in the root branch:
 
-- the TipTap block editor (§4) — object text is a plain textarea serialized into a minimal TipTap-shaped `body` document, not a real rich-text editor;
 - command palette, workspace tabs, and context-panel tabs (FR-12, NFR-5) — dialogs and menus exist;
 - per-kind detail *layouts* — `/question/[id]` renders every kind through one universal layout rather than a tailored view per kind;
 - the full reduced-motion and focus-restoration matrix (Phase 6), beyond the focus-visible styling in the generated primitives and Escape-to-dismiss on the drawer and dialogs;
 - an accessibility (axe) pass and visual-regression coverage;
 - a CI workflow file — the gate is `pnpm lint && pnpm test && pnpm test:e2e && pnpm run build`, run by hand.
+
+**Updated 2026-09-20 (fourth pass — TipTap).** Object content is now authored in a real
+TipTap editor (`@tiptap/react` + StarterKit) with a formatting toolbar and markdown input
+rules, and the stored ProseMirror JSON is rendered back through the same extension set on
+the detail view. `text` became a server-derived plain-text projection of that document
+(`plainText()`), which is what search, snippets and the MCP tools read; clients no longer
+send it. The document is validated as untrusted input with a depth cap.
 
 **Updated 2026-09-20 (third pass — Phase 6 verification).** The Playwright E2E suite
 from plan.md §4 now exists (`tests/e2e/`, 9 specs, Chromium) and also serves as the

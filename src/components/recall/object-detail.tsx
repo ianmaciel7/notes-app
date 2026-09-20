@@ -6,6 +6,7 @@ import { useState } from "react";
 import { changeObject } from "@/actions/recall";
 import { KindIcon } from "@/components/recall/kind-icon";
 import { ObjectEditor } from "@/components/recall/object-editor";
+import { RichText } from "@/components/recall/rich-text";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,9 +85,9 @@ export function ObjectDetail({
           </CardHeader>
           <CardContent>
             {object.text && (
-              <p className="whitespace-pre-wrap text-lg leading-8 text-body">
-                {object.text}
-              </p>
+              <div className="text-lg text-body">
+                <RichText doc={object.body} />
+              </div>
             )}
             {object.kind === "citation" && object.url && (
               <a

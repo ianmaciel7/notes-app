@@ -1,6 +1,6 @@
 # Architecture
 
-This documents what is actually built on the `prototype` branch today. `spec.md` and `plan.md` describe a larger target system (TipTap block editor, command palette, workspace/context tabs, sidebar parity work) drawn partly from the `.worktrees/old*` reference checkouts — treat those as the design target, not the current state. This file describes what exists in `src/` right now.
+This documents what is actually built on the `prototype` branch today. `spec.md` and `plan.md` describe a larger target system (command palette, workspace/context tabs, sidebar parity work) drawn partly from the `.worktrees/old*` reference checkouts — treat those as the design target, not the current state. This file describes what exists in `src/` right now.
 
 ## Overview
 
@@ -13,14 +13,33 @@ Recall is a Next.js (App Router) app backed by Firebase (Auth + Firestore). It i
 - **`src/proxy.ts`** — Next.js middleware. Redirects based only on whether the `recall-session` cookie is *present*; it is optimistic and not a security boundary. Every Server Action re-verifies the cookie itself via `user()`.
 - **`src/lib/firebase/session.ts`** — server-only, *not* a `"use server"` module: holds `user()` (verifies the session cookie) and `authorized(spaceId)` (caller + Space membership). Shared by every action file; deliberately not exported from one, since a `"use server"` export would be callable from the browser.
 - **`src/actions/recall.ts`**, **`src/actions/api-keys.ts`** (`"use server"`) — the only session-backed path that reads or writes Firestore. `login()`/`logout()` manage the session cookie; `snapshot()` returns the current user + Space + objects + study records in one call; `api-keys.ts` issues, lists, and revokes owner-only MCP keys.
-- **`src/domain/recall.ts`** — pure, framework-agnostic logic: the `objectInput` zod schema (validation + inferred types), `grade()` (per-format answer checking), and `schedule()` (the literal SM-2 `EF'` formula over a 0–5 quality grade). No Firebase or Next.js imports — this is the layer to unit test.
+- **`src/domain/recall.ts`** — pure, framework-agnostic logic: the `objectInput` zod schema (validation + inferred types), `grade()` (per-format answer checking), `schedule()` (the literal SM-2 `EF'` formula over a 0–5 quality grade), and the `richDoc` schema plus `plainText()` for TipTap documents. No Firebase or Next.js imports — this is the layer to unit test.
 - **`src/domain/api-keys.ts`** — pure key logic: `rcl_live_` + 32 base62 characters drawn by rejection sampling, SHA-256 hashing, and `Bearer` header parsing. Only the hash is ever persisted.
 - **`src/lib/mcp/tools.ts`** — the four read-only MCP tools (`list_objects`, `get_object`, `search_space_content`, `get_study_summary`) plus `RpcError`. Each tool's `spaceId` argument is checked against the key's binding, so a key can only ever read its own Space.
 - **`src/lib/firebase/admin.ts`** — server-only (`import "server-only"`) Admin SDK init. Auto-wires the Auth/Firestore emulators in development and refuses to run against a `demo-*` project ID unless the emulator host env vars are set, so a dev build can't accidentally hit a real project.
 - **`src/lib/firebase/client.ts`** — browser Auth SDK init only (no Firestore client). Connects to the local Auth emulator in development.
 - **`src/components/ui/`** — generated shadcn/`base-nova` primitives (see `components.json`). Treat as generated output, not hand-authored app code — see `CONVENTIONS.md`.
-- **`src/components/recall/`** — app-specific components (`object-editor.tsx`, `object-list.tsx`, `object-detail.tsx`, `study-panel.tsx`, `space-switcher.tsx`, `api-keys-card.tsx`, `workspace-skeleton.tsx`) and `workspace-frame.tsx`, built on the `ui/` primitives.
+- **`src/components/recall/`** — app-specific components (`object-editor.tsx`, `object-list.tsx`, `object-detail.tsx`, `study-panel.tsx`, `space-switcher.tsx`, `api-keys-card.tsx`, `rich-text.tsx`, `workspace-skeleton.tsx`) and `workspace-frame.tsx`, built on the `ui/` primitives.
 - **`firestore.rules`** — default-deny (`allow read, write: if false`). All access is via the Admin SDK, which bypasses client-facing rules entirely; the rules file exists to guarantee no client path is ever accidentally open. This also satisfies `spec.md` §8's requirement that `/api_keys` be unreadable from a client.
+
+## Rich text
+
+Object content is a TipTap (ProseMirror) document stored verbatim as `body`.
+`src/components/recall/rich-text.tsx` exports both the editor and the read-only
+renderer, sharing one extension set and the `.rich-text` styles in `globals.css` so
+authored and rendered content cannot drift apart.
+
+Two constraints are load-bearing:
+
+- **The editor owns its document.** It takes `defaultValue`, never a controlled
+  `value`. Re-applying the parent's copy as `content` on each render silently discards
+  structure the editor just created.
+- **`text` is derived, never sent.** `saveObject()` computes it with `plainText(body)`;
+  search, snippets, and the MCP tools read that projection. A client cannot desync the
+  two by sending a mismatched pair, because it does not send `text` at all.
+
+`richDoc` validates the document as untrusted input with a depth cap — TipTap having
+produced it in a browser is not a reason to trust what arrives at the server.
 
 ## Request flow
 
