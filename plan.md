@@ -347,9 +347,23 @@ until they were moved to `useEditorState`.
 Not done: inline object mention chips inside the editor (§3 Phase 2 lists them; linking
 is done through the Linked objects selector instead).
 
-Still not done (later Build-stage work): the full reduced-motion/focus-restoration
-matrix and an axe/visual-regression pass, the command palette / workspace tabs /
-context panel (FR-12, NFR-5), and a CI workflow file.
+### Command palette (fifth pass)
+
+The sidebar's "Search workspace" button was inert, like the mobile nav button before
+it. It now opens a command palette (Cmd/Ctrl+K), built on the existing `cmdk` primitive:
+fuzzy search across the Space's unarchived objects, plus navigation and a hand-off to
+the create dialog. Per FR-12, opening or focusing it mutates nothing — every item either
+navigates or opens an explicit create surface.
+
+It is composed from `Dialog` + `Command` rather than the generated `CommandDialog`,
+which renders its header outside `DialogContent` and therefore crashes with
+`Cannot read properties of undefined (reading 'subscribe')` — the generated
+`src/components/ui/` primitives are not all sound, and `CONVENTIONS.md` says to work
+around them rather than hand-edit generated output.
+
+Still not done (later Build-stage work): workspace tabs and the context panel from
+spec.md §5.5 (FR-12's remaining surfaces), the full reduced-motion/focus-restoration
+matrix and an axe/visual-regression pass, and a CI workflow file.
 
 **Verification run for the second pass:** `pnpm exec tsc --noEmit` (clean), `pnpm lint`
 (clean, same single non-blocking `noDocumentCookie` warning), `pnpm test` (18/18

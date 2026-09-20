@@ -155,3 +155,27 @@ test("rich text formatting survives a save and renders on the detail view", asyn
   await expect(page.locator(".rich-text li")).toHaveCount(2);
   await expect(page.locator(".rich-text strong")).toHaveCount(1);
 });
+
+test("the command palette finds an object and navigates to it", async ({
+  page,
+}) => {
+  await signUp(page);
+  await createSpace(page, "Palette");
+  const noteId = await createObject(page, {
+    kind: "note",
+    title: "Photosynthesis basics",
+    text: "Light to chemical energy.",
+  });
+  await visit(page, "/workspace");
+
+  await page.keyboard.press("ControlOrMeta+k");
+  const search = page.getByPlaceholder("Search objects, or jump to a section");
+  await expect(search).toBeVisible();
+
+  await search.fill("photosynth");
+  await page.getByRole("option", { name: /Photosynthesis basics/ }).click();
+  await page.waitForURL(`**/question/${noteId}`);
+  await expect(
+    page.getByRole("heading", { name: "Photosynthesis basics" }),
+  ).toBeVisible();
+});

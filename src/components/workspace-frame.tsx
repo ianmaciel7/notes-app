@@ -5,9 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
 import { logout } from "@/actions/recall";
+import { CommandPalette } from "@/components/recall/command-palette";
 import { ObjectEditor } from "@/components/recall/object-editor";
 import { SpaceSwitcher } from "@/components/recall/space-switcher";
 import { Button } from "@/components/ui/button";
+import { Kbd } from "@/components/ui/kbd";
 import type { Snapshot } from "@/domain/recall";
 
 const navItems = [
@@ -34,6 +36,7 @@ export function WorkspaceFrame({
   const router = useRouter();
   const [adding, setAdding] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+  const [searching, setSearching] = useState(false);
   useEffect(() => {
     if (!navOpen) return;
     const onKeyDown = (event: KeyboardEvent) =>
@@ -84,8 +87,10 @@ export function WorkspaceFrame({
           <Button
             variant="outline"
             className="w-full justify-start border-hairline bg-canvas"
+            onClick={() => setSearching(true)}
           >
             <Search data-icon="inline-start" /> Search workspace
+            <Kbd className="ml-auto">⌘K</Kbd>
           </Button>
           <Button
             variant="ghost"
@@ -138,6 +143,12 @@ export function WorkspaceFrame({
           {children}
         </main>
       </div>
+      <CommandPalette
+        data={data}
+        open={searching}
+        onOpenChange={setSearching}
+        onNewObject={() => setAdding(true)}
+      />
       {adding && (
         <ObjectEditor
           data={data}
