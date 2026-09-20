@@ -12,18 +12,37 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 `AGENTS.md` is the shared source of truth for AI coding agents in this repository.
 
-### Context strategy
+### Mandatory Tooling Enforcement
 
-- Prefer Serena for symbol-level code navigation, references, and targeted edits.
-- Prefer Graphify for repository architecture, relationships, and broader codebase understanding.
-- Prefer Context7 for external framework and library documentation.
-- Prefer RTK for supported terminal commands to reduce command-output tokens.
-- If `rtk` cannot be started by the current shell (notably the broken WinGet
-  shim on Windows), resolve the installed executable with `Get-Command rtk`,
-  read its `Target`, and invoke that target directly. Do not treat this as a
-  missing dependency when the target executable exists.
-- Use Repomix only when a compact repository-wide snapshot is useful.
-- Prefer targeted retrieval over reading entire files or large parts of the repository.
+All AI coding agents MUST strictly enforce and utilize this specialized toolchain:
+
+- **Serena (MANDATORY)**: MUST be used for symbol-level code navigation, references, AST inspection, and targeted edits. Do NOT scan or read full source files when Serena symbol tools can target the code directly.
+- **Graphify (MANDATORY)**: MUST be queried first for repository architecture, relationships, and broader codebase understanding whenever `graphify-out/` exists or the Graphify MCP/CLI is active.
+- **Context7 (MANDATORY)**: MUST be used (`npx ctx7@latest`) to fetch current documentation whenever inquiring about or implementing external frameworks, libraries, APIs, SDKs, or CLI tools (e.g., Next.js, React, Tailwind, Prisma). Never rely on pre-training assumptions.
+- **RTK (MANDATORY)**: MUST prefix all supported terminal commands with `rtk` (e.g., `rtk git status`, `rtk pnpm ...`, `rtk rg`, etc.) to compress output and eliminate token waste.
+  - If `rtk` cannot be started by the current shell (notably the WinGet shim on Windows), resolve the installed executable with `Get-Command rtk`, read its `Target`, and invoke that target directly. Do not treat this as a missing dependency when the target executable exists.
+- **Repomix**: Permitted ONLY when a compact, comprehensive repository-wide snapshot or token-budget audit is strictly necessary.
+- **Targeted Retrieval Policy**: Strictly avoid reading whole files or large repository sections when targeted retrieval via Serena, Graphify, or RTK is possible.
+
+### Proactive Context Efficiency & Anti-Patterns
+
+Agents must proactively eliminate token waste and context bloat:
+- **No Indiscriminate Reads**: Do not read entire files just to inspect a type definition, function signature, or component prop; use Serena AST tools.
+- **No Unfiltered Diffs/Logs**: Avoid dumping raw diffs or deep logs into context; use `rtk git diff` or `rtk git log -n <limit>`.
+- **No Repeated Exploration**: Do not repeatedly search the directory tree for concepts Graphify already indexes; query the graph first.
+- **Focused Documentation**: Keep Context7 queries strictly scoped to a single concept rather than pulling multi-topic references.
+- **No Repetitive File Reads**: Reuse recently read context within the conversation rather than re-reading unchanged files.
+
+### Token Observability (On-Demand Only)
+
+- **RTK Savings Metrics**: Run `rtk gain` or `rtk gain --history` to inspect terminal token compression and diagnose verbosity during performance reviews (never after every command).
+- **Context-Budget Audits**: Run `repomix --token-count-tree` only when conducting a structured repository token-budget analysis or when context limits are threatened.
+
+### Deterministic Safety & Optimization Hooks (`.agents/hooks.json`)
+
+Mechanical enforcement is decoupled from semantic instructions:
+- **Command Safety**: Destructive commands (`git reset --hard`, `git clean -fd`, `rm -rf`, force-pushes) trigger mandatory user confirmation (`force_ask`).
+- **RTK Gatekeeper**: Commands supported by RTK are intercepted before execution; bypassing RTK is denied (`deny`) with the exact optimized command suggested.
 
 ### Tool-specific configuration
 

@@ -1,5 +1,13 @@
 # Notes App
 
+Recall is currently in the Build stage. The root application includes a responsive entry surface plus verified static Space Home, Question detail, Study Session setup, and Review Queue screens based on [DESING.md](./DESING.md). Authentication, persistence, domain mutations, and external integrations described in [spec.md](./spec.md) are still in progress.
+
+Project lifecycle artifacts:
+
+- [intent.md](./intent.md) — product intent and unresolved decisions (draft)
+- [spec.md](./spec.md) — requirements, design contracts, and screen audit (draft)
+- [plan.md](./plan.md) — implementation sequence, risks, and verification plan (draft)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

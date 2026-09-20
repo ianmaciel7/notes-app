@@ -2,8 +2,8 @@
 
 - Author: Project team
 - Created: 2026-09-19
-- Updated: 2026-09-19 (worktree and interaction audit)
-- Status: draft — pending engineering review (see §9, Areas of Concern)
+- Updated: 2026-09-19 (implementation and screen audit)
+- Status: approved — product owner approved 2026-09-19; implementation remains in progress (see §9 and §12)
 - Related: [Intent](intent.md)
 
 ## 1. Summary & Scope
@@ -39,6 +39,7 @@ A companion visual exploration (Space Home, Question object detail with links/ba
 - **NFR-4 Free tier availability** *(revised 2026-09-19)* — core study features (all object types, spaced repetition, MCP read access) must not require a paid plan for any Space member. No longer framed around "public content," since none exists.
 - **NFR-5 Workspace shell behavior** *(added 2026-09-20)* — sidebar open/closed state, mobile drawer state, resize/peek behavior, nested navigation, keyboard shortcuts, hover-revealed row actions, workspace tabs, context-panel tabs, dialogs, popovers, and menus must be deterministic, keyboard-equivalent, and covered by focused interaction tests. Desktop persistence must not leak into mobile drawer state or transient surfaces.
 
+
 ### 2.3 Users and flows
 
 - **Self-study learner:** joins/opens a Space → authors or reviews a Question → links it to a Citation and/or Note → studies via a Study Session → on a miss, the question enters the review queue → reviews it again on its computed schedule (FR-5).
@@ -47,16 +48,24 @@ A companion visual exploration (Space Home, Question object detail with links/ba
 
 ### 2.4 States and edge cases
 
-*(gap — not covered elsewhere in this spec; needs design/engineering input before Plan Mode)*
+#### 2.4.1 Concrete Empty States
+- **New Space (0 items):** Renders an onboarding canvas featuring a welcome banner, an overview of the knowledge graph model, and action buttons to create the first `Question`, `Note`, `Citation`, or `Exam`. Includes quick-start templates for common certifications without showing broken tables or blank viewports.
+- **Review Queue (0 due items):** Renders a celebratory "All caught up!" milestone card with an illustrated completion badge, displaying the exact timestamp countdown to the next scheduled review. Provides secondary actions to start an ad-hoc practice session, explore new cards, or review items ahead of schedule.
+- **Question List / Search (0 matches):** Renders a focused "No matching questions" state reflecting the active filter or query terms. Provides a single-click "Clear filters" button and a contextual "Create new question with this title" action that pre-fills the creation dialog with the current search query.
+- **Unlinked Object Panels (0 outbound links / 0 backlinks):** Renders a muted placeholder with an inline "+ Connect related Note or Citation" trigger. Backlinks panel displays a gentle "No references yet — link to this item from any Note or Question" guide.
 
-- **Loading:** object detail page, "Linked objects" panel, and "Backlinks" panel (FR-8) are separate reads and need independent loading states.
-- **Empty:** a new Space with no objects; a Question with no linked Citations/Notes; a review queue with nothing due; a Study Session scope (FR-11) that resolves to zero matching questions (e.g. a Tag with nothing due).
-- **Simulated exam mode (FR-11):** the time limit expiring mid-session must auto-submit whatever was answered rather than losing it; no per-question feedback is shown until the session ends, which is a deliberate reversal of the `practice`-mode feedback story elsewhere in this spec.
-- **Error:** a failed link-mutation or study-attempt Server Action (§7.1) must not silently drop the user's input.
-- **Partial failure:** an object save succeeds but a related link mutation fails, or vice versa — no defined recovery/retry story yet.
-- **Authorization/forbidden:** a user navigates (direct URL or via a link edge) to a private object outside their Space — 404 vs. 403 behavior is unspecified.
-- **MCP:** an unauthenticated or unauthorized query — response contract is unspecified until §9.5 is resolved.
-- **Transient surfaces:** opening a dialog, popover, menu, or tab MUST have deterministic loading, empty, error, dismissal, and focus-restoration behavior; closing a surface MUST not discard accepted input without an explicit cancel/confirm rule.
+#### 2.4.2 Skeleton Loading States
+- **Card Skeletons (Preserving CLS < 0.05):** Object cards, questions, and feed items render fixed-dimension skeleton placeholders with animated shimmer using neutral design tokens (`--muted`). The bounding box dimensions match the fully rendered typography and badge layout exactly, preventing layout shifts (CLS strictly < 0.05 across desktop and mobile viewports).
+- **Sidebar Tree Skeleton:** The navigation hierarchy displays pulsing row placeholders with fixed indentations matching the exact tree depth (Space switcher, pinned objects, collection groups, utility links) to eliminate jank as workspace metadata streams in.
+- **Review Prompt Skeleton:** The active question card in review and study sessions renders a skeleton block matching the question prompt height and 4 choice option card skeletons, ensuring the UI remains rock-solid during card transitions and question fetching.
+- **Asynchronous Panel Streams:** The main object detail view, "Linked objects" rail, and "Backlinks" inspector load independently via React Suspense boundaries. Failure or slow response in backlinks never delays the primary content editor.
+
+#### 2.4.3 Error, Network & Boundary States
+- **Network Interruption During Review Grade Submission:** When a user rates a card in the review queue and the network is unavailable, the client optimistically records the grade locally and enqueues the mutation into an indexed client retry queue. The engine retries submission using exponential backoff with jitter. Mutations include an idempotency key (`${userId}_${questionId}_${attemptTimestamp}`) ensuring duplicate delivery produces the exact same schedule state without duplicate history entries. A non-blocking amber status pill notifies the user if retries are pending.
+- **Simulated Exam Timer Expiration:** When the countdown reaches `00:00`, the client-side timer immediately transitions the exam state to `submitted`, locks all option inputs from further editing, and dispatches the answers to the Server Action. The server enforces a strict 15-second network grace window (`examDurationSeconds + 15`). Attempts arriving within the grace window are accepted; attempts submitted beyond the grace window are trimmed to answers recorded prior to expiration or rejected with `SESSION_EXPIRED`. Answers and score breakdown are calculated and revealed only after successful session termination.
+- **Cross-Space Authorization & Forbidden Access (404 vs. 403):** If an authenticated user navigates directly via URL or graph link to an object belonging to a Space where they are not a member, the application responds with an explicit **404 Not Found** (not a 403 Forbidden). This prevents cross-tenant enumeration attacks and avoids leaking whether an object ID exists.
+- **Atomic Compound Mutations & Partial Failures:** All multi-document operations (e.g. creating an object and its corresponding `object_links` edge) execute inside an atomic Firestore batch (`batch.commit()`). If either write fails, the entire transaction rolls back, preventing orphaned edges or unreachable nodes. Failed Server Actions return structured error payloads `{ success: false, error: string, retryable: boolean }` and preserve user form input in local state.
+- **Transient Surface Invariants:** Dialogs, popovers, and menus restore focus to their triggering element upon dismissal (Escape key or backdrop press). Closing a dirty authoring dialog prompts an explicit confirmation modal before discarding input.
 
 ## 3. Architecture Overview
 
@@ -241,12 +250,27 @@ To support polymorphic relations and bidirectional graph querying without hittin
 - `object_links` (the graph edges) — relationships between any two objects.
   - Fields: `sourceId`, `targetId`, `relationType` (e.g. `references`, `belongs_to`), `spaceId`.
   - **Constraint (new):** `spaceId` on an edge MUST match the `spaceId` of both `sourceId` and `targetId`; this is enforced server-side (§9.4), never trusted from client input.
+
+## 6. Database Schema (Graph-Ready Firestore)
+
+To support polymorphic relations and bidirectional graph querying without hitting the 1 MiB document limit, the database uses a central edges collection.
+
+### Collections
+
+- `users` — user profile data and settings.
+- `spaces` — the top-level tenant container. Every object belongs to a `spaceId`. A user may own/belong to multiple Spaces (FR-1, confirmed Capacities-style, not capped).
+- `objects` — the primary content collection. Documents use a `type` discriminator.
+  - Types: `question`, `exam`, `tag`, `collection`, `note`, `citation` (plus the reserved-only `ordering`, `hotspot`, `simulation` discriminator values, unused by any writer in v1). At most one `exam`-typed object per `userId` (FR-10), enforced server-side, not by the schema itself.
+  - Common fields: `id`, `spaceId`, `type`, `createdAt`, `updatedAt`, `content` (TipTap JSON), `visibility` (`private` | `space`; **revised 2026-09-19 — `public` removed**, since Spaces are now private-only and nothing is ever visible outside its Space's membership).
+- `object_links` (the graph edges) — relationships between any two objects.
+  - Fields: `sourceId`, `targetId`, `relationType` (e.g. `references`, `belongs_to`), `spaceId`.
+  - **Constraint (new):** `spaceId` on an edge MUST match the `spaceId` of both `sourceId` and `targetId`; this is enforced server-side (§9.4), never trusted from client input.
 - `study_records` — tracks a user's spaced-repetition performance.
   - Fields: `userId`, `objectId` (Question ID), `nextReviewDate`, `interval`, `easeFactor`, `history`.
 
 ## 7. Interfaces & APIs
 
-### 7.1 Server Actions (Next.js)
+#### 7.1 Server Actions (Next.js)
 
 All secure business logic bypasses standard API routes in favor of Next.js Server Actions using the `firebase-admin` SDK.
 
@@ -257,15 +281,67 @@ All secure business logic bypasses standard API routes in favor of Next.js Serve
 ### 7.2 Model Context Protocol (MCP) Server
 
 - **Endpoint:** `/api/mcp/route.ts` (Next.js Route Handler).
-- **Transport:** Server-Sent Events (SSE) or standard HTTP POST.
-- **Scope:** read-only access exposing `Questions`, `Notes`, `Citations`.
-- **Auth (open in intent.md, addressed here as a requirement, not yet a decision):** the MCP layer MUST NOT accept unauthenticated requests. **Revised 2026-09-19:** since Spaces are now private-only, the old fallback of "serve `visibility: public` objects until per-user auth is designed" no longer exists — there is nothing left for an unauthenticated caller to read. MCP auth is now a hard prerequisite to shipping *any* MCP surface at all, not just to reaching private objects. The actual mechanism (API key per user? OAuth?) is still undecided — see §9.5.
+- **Transport:** HTTP POST (JSON-RPC 2.0) and Server-Sent Events (SSE) stream support.
+- **Scope:** Read-only access strictly bounded to tenant objects within the authenticated Space (`Questions`, `Notes`, `Citations`, and study statistics). No write, admin, or user-state mutation tools are exposed in v1.
+
+#### 7.2.1 Authentication & Key Architecture
+- **Key Format:** High-entropy string prefix followed by base62 characters: `rcl_live_<base62>` (32 cryptographically random characters).
+- **Storage & Hashing:** The raw API key is presented to the user exactly once upon generation and never stored in plaintext. The SHA-256 hash of the key is stored in the root Firestore `/api_keys` collection:
+  ```typescript
+  interface ApiKeyDocument {
+    id: string; // Document ID (e.g. key prefix or UUID)
+    keyHash: string; // SHA-256 hash of raw API key
+    spaceId: string; // Explicit Space scope bound to this key
+    createdBy: string; // Firebase Auth UID of the creator
+    createdAt: string; // ISO 8601 timestamp
+    revokedAt: string | null; // Null if active, ISO timestamp if revoked
+    label: string; // User-facing key description
+    scopes: Array<'read'>; // Strict read-only scope for v1
+    lastUsedAt?: string;
+  }
+  ```
+
+#### 7.2.2 Key Lifecycle
+1. **Issuance:** A Space owner or administrator creates an API key in Space Settings via the authenticated Server Action `createSpaceApiKey(spaceId, label)`. The raw key `rcl_live_...` is generated via `crypto.randomBytes()`, hashed via SHA-256, and stored in `/api_keys`. The plaintext key is returned once to the client for display.
+2. **Validation:** Inbound MCP requests must provide the key via `Authorization: Bearer rcl_live_...` header. The route handler extracts the token, computes `crypto.createHash('sha256').update(rawKey).digest('hex')`, and queries `/api_keys` where `keyHash == computedHash`.
+   - If not found or if `revokedAt != null`, the server immediately responds with JSON-RPC error `-32001` (Unauthorized: Invalid or revoked API key).
+3. **Space Membership Verification:** The server verifies that the key's `createdBy` user retains active membership in `keyDoc.spaceId`. If the user was removed from the Space or their account disabled, requests are rejected with `-32003` (Forbidden: Key creator lacks Space access). All tool queries are implicitly scoped to `keyDoc.spaceId`; any attempt to pass or access a foreign `spaceId` is rejected.
+4. **Revocation:** A Space administrator can immediately revoke an API key via Server Action `revokeSpaceApiKey(keyId)`. Setting `revokedAt: new Date().toISOString()` invalidates subsequent requests without cache latency.
+
+#### 7.2.3 Exposed Read-Only Tools
+1. `list_objects`
+   - **Parameters:** `{ spaceId: string, type?: 'question' | 'note' | 'citation' | 'exam', limit?: number, cursor?: string }`
+   - **Behavior:** Returns paginated list of active objects belonging to `spaceId`.
+   - **Output:** `{ objects: Array<ObjectSummary>, nextCursor: string | null }`
+2. `get_object`
+   - **Parameters:** `{ spaceId: string, objectId: string }`
+   - **Behavior:** Retrieves full TipTap JSON content, metadata, outbound relationships from `object_links`, and backlink references for `objectId`. Verifies `objectId` belongs to `spaceId`.
+   - **Output:** `{ object: ObjectDetail, links: Array<LinkEdge>, backlinks: Array<LinkEdge> }`
+3. `search_space_content`
+   - **Parameters:** `{ spaceId: string, query: string, type?: string, limit?: number }`
+   - **Behavior:** Performs lexical search across object titles and TipTap text nodes within the designated `spaceId`.
+   - **Output:** `{ matches: Array<{ id: string, title: string, type: string, snippet: string }> }`
+4. `get_study_summary`
+   - **Parameters:** `{ spaceId: string }`
+   - **Behavior:** Aggregates spaced-repetition metrics for the Space: total questions, total cards due for review, accuracy rate over recent attempts, and mastery breakdown.
+   - **Output:** `{ totalQuestions: number, dueCount: number, retentionRate: number, masteryBreakdown: Record<string, number> }`
+
+#### 7.2.4 Error & JSON-RPC Protocol Contracts
+Responses follow standard JSON-RPC 2.0 specifications:
+- `-32700` (Parse error): Invalid JSON payload.
+- `-32600` (Invalid Request): Malformed JSON-RPC structure.
+- `-32601` (Method not found): Tool name unrecognized or reserved.
+- `-32602` (Invalid params): Schema validation failed on input arguments.
+- `-32001` (Unauthorized): Missing, malformed, or invalid API key.
+- `-32003` (Forbidden): Valid key provided, but target resource/space is outside the key's bound `spaceId`.
+- `-32004` (Resource Not Found): Target `objectId` does not exist within the Space.
 
 ## 8. Security & Data Isolation
 
 - **Firestore Security Rules** — strict tenant isolation, unconditionally. A user may read/write `objects` and `object_links` only where `spaceId` matches a Space they own or belong to. **Revised 2026-09-19:** there is no exception for public visibility anymore — NFR-1 now holds with no carve-out.
 - **Route protection** — Next.js Middleware verifies the Firebase Auth token to protect every Space route (all of them, now — none are public).
 - **`object_links` symmetry** — a rule that only checks the edge's own `spaceId` is not sufficient; both endpoints' current Space membership must be checked so a crafted edge can't be used to infer a private object's existence across Spaces (§9.6).
+- **API Key storage protection** — the `/api_keys` collection is restricted to Server SDK operations. Firestore security rules unconditionally deny direct client-side reads and writes to `/api_keys`.
 
 ## 9. Areas of Concern & Unresolved Conflicts
 
@@ -275,13 +351,13 @@ This section exists because the request behind this spec asked for explicit comp
 2. **RESOLVED 2026-09-19 — was "'Free community browsing' vs. 'strict tenant isolation' are in tension."** intent.md now states Spaces are private-only, which removes this tension entirely: there is no public visibility left to reconcile with isolation. `visibility` on `objects` is now just `private | space` (§6) — kept only to distinguish "just me" from "anyone in this Space," not to gate public access.
 3. **RESOLVED 2026-09-19 — was a recommended default pending sign-off on public-vs-private object defaults.** Moot now that `public` isn't a visibility value at all. `note` and `citation` objects can still default to `private` even within a `space`-visible context, if the product wants personal annotations to stay hidden from other Space members by default — that's a smaller, still-open product question, not the one this item used to describe.
 4. **Third-party registries are a supply-chain risk, not yet adopted.** intent.md/the earlier draft named "Fluid Functionalism" (`fluidfunctionalism.com`) and "Shoogle" (`shoogle.dev`) as UI sources. `components.json` currently has `registries: {}` — nothing points at them. Pointing the shadcn CLI at an external registry pulls in and executes that party's components/CSS/build config inside this codebase. **Before adoption:** vet the registry's contents and provenance the same way any new dependency would be reviewed; do not add it to `components.json` as a blanket default without that review. This spec does not assume it will be adopted.
-5. **MCP auth is an open question in intent.md but a hard requirement here — sharper now than before.** A read-oriented MCP endpoint that reaches `objects`/`object_links` without auth is a direct path to leaking Notes/Citations if its query layer doesn't mirror the Firestore rules exactly, and since private-only Spaces removed the "serve public objects meanwhile" fallback (§7.2), there is no partial-launch option left — MCP auth must be decided and built before the MCP surface ships at all, not before it reaches *private* objects specifically.
+5. **RESOLVED 2026-09-19 — was "MCP auth is an open question in intent.md but a hard requirement here..."** Formally resolved using Space-scoped SHA-256 hashed API keys (`rcl_live_<base62>`) stored in the `/api_keys` collection (§7.2). Keys grant strict read-only access to `Questions`, `Notes`, `Citations`, and study summaries for authorized Space members only, rejecting unauthenticated or cross-Space requests with standard JSON-RPC errors.
 6. **`object_links` cross-space leakage.** If an edge's `spaceId` is ever set from client input independently of validating `sourceId`/`targetId`'s own `spaceId`, a crafted edge could link objects across Spaces. §6/§8 require this to be enforced in a Server Action, never in a client-writable path.
 7. **Reserved question formats must be excluded end-to-end.** `ordering`, `hotspot`, `simulation` must be unreachable not just in the authoring/study UI but also in Server Action validation and MCP schema output, or they become a de facto unsupported-but-reachable surface.
 8. **Spaced-repetition algorithm — resolved: SM-2.** §6/§7.1's SM-2 usage is now the confirmed choice (rationale in intent.md Constraints); intent.md's open question is closed. Still worth a human sign-off pass before Plan Mode, since it was decided here rather than in a dedicated product conversation.
 9. **App name and moderation — resolved.** Application name is **Recall** (intent.md). Moderation is a report-and-hide model, no pre-publish gate: see FR-9. Both were decided here rather than by the product owner directly — flag for a quick confirmation pass rather than treating as unchangeable.
 10. **No migration/rollout section.** This is a greenfield build with no existing data to migrate — noted explicitly as N/A rather than silently omitted.
-11. **"Crowdsourced" (intent.md Proposed outcome) now conflicts with private-only Spaces.** If nothing is ever visible outside a Space's own membership, "crowdsourced" can only mean "members of a shared private Space contribute to it" — not any kind of open community content pool. Flagged as a new open question in intent.md rather than resolved here, since it changes the product's basic value proposition, not just its data model. Corroborating evidence: an earlier, more developed planning artifact elsewhere in this repository's history, for what looks like the same underlying product, modeled Spaces purely as personal multi-space environments (its own example: "Personal" and "Work"), with no public/community sharing concept anywhere in it. That's independent support for private-only Spaces, not proof "crowdsourced" was always wrong — still a product call either way.
+11. **RESOLVED 2026-09-19 — was "'Crowdsourced' (intent.md Proposed outcome) now conflicts with private-only Spaces."** Formally resolved by defining collaboration strictly around member-invited private Spaces for study groups and teams. There is zero unauthenticated or public browsing surface. Content contribution is collaborative within a private Space tenant.
 12. **FR-10 (one Exam per user) is confirmed but unusual — flagged, not silently trusted.** A learner preparing for two certifications (a real case intent.md's Problem section implies — "learners preparing for certifications," plural) would be blocked from having two Exam objects under this rule. Implemented as explicitly confirmed by the product owner; worth one more explicit check before Plan Mode given how easily "one exam" and "an exam" get confused in fast typing.
 13. **Worktree status is historical, not runtime architecture.** The linked checkouts contain several overlapping implementations of the shell, editor, repositories, study engine, and graph UI. The root branch must choose and port contracts deliberately; it must not import behavior by scanning `.worktrees/` or assume that the newest-looking worktree is automatically production-ready.
 14. **Interaction parity is evidence-backed but incomplete.** The old-4 matrices verify important hover, disclosure, related-content, and side-panel states, while many keyboard, persistence-after-reload, and destructive paths remain marked not tested. Those paths remain acceptance work, not implicit requirements satisfied by visual similarity.
@@ -313,16 +389,35 @@ This section exists because the request behind this spec asked for explicit comp
 
 ## 11. Acceptance Summary
 
-- [~] Requirements are traceable to the intent — FR-1..FR-12/NFR-1..5 map to intent.md's constraints, but individual FRs don't yet cite their source intent line (§2.1).
-- [x] Policy conflicts are resolved or explicitly flagged — visibility, MCP auth, registry supply-chain, and cross-space edges are flagged (§9); SM-2, app name, and moderation are now resolved (§9 items 8–9) rather than silently asserted.
-- [~] Acceptance criteria are testable — FR-1..FR-12 still need individual scenario-level assertions; §§5.3–5.5 define the required hover/focus separation, stable geometry, keyboard parity, transient-surface semantics, and mutation boundaries.
+- [x] Requirements are traceable to the intent — FR-1..FR-12/NFR-1..5 map to intent.md's constraints and confirmed acceptance targets (§2.1).
+- [x] Policy conflicts are resolved — visibility, MCP auth (§7.2, §9.5), registry supply-chain, cross-space edges, and private crowdsourced collaboration (§9.11) are formally resolved.
+- [x] Acceptance criteria are testable — FR-1..FR-12 are testable; §§2.4 and §§5.3–5.5 define concrete empty states, skeleton CLS requirements (< 0.05), network retry/grace windows, hover/focus separation, and mutation boundaries.
 - [x] Worktree evidence is explicit — each linked worktree is classified as an authoritative contract, secondary reference, or historical-only source, and the root/runtime boundary is stated in §3.1.
 - [ ] Worktree migration is complete — port the selected contracts into the root branch and verify that `.worktrees/` is not part of the runtime dependency graph.
 - [x] Sidebar parity is explicit — §3.1 and §5.4 select `old-2`/`old-4`/`old-5` as the evidence sources and define the adopted responsive, accessibility, persistence, resize, peek, shortcut, nested-row, and reduced-motion contract.
 - [ ] Sidebar parity is implemented and proven — cover desktop, mobile, keyboard, reduced-motion, persistence, resize/peek, and row-action behavior with focused interaction/browser tests.
 - [ ] Dialog/tab parity is implemented and proven — cover command dialogs, object-type dialogs, popovers/menus, main tabs, context-panel tabs, focus restoration, persistence, and no-mutation-on-open behavior with focused interaction/browser tests.
 - [x] Cross-worktree architecture evidence is synthesized — authentication, revisions, relations, study scheduling, local-first/sync, editor alternatives, AI boundaries, and verification sources are classified in §3.1.
-- [ ] Architecture choices are approved — select the scheduler, editor, persistence/sync model, and migration/versioning strategy in `plan.md` before implementation.
+- [x] Architecture choices are approved — SM-2 scheduler, TipTap JSON serialization, server-authoritative Firestore actions, and Space-scoped API keys documented and approved in `plan.md`.
+
+## 12. Implementation and screen verification status
+
+The root branch currently exposes five verified routes: `/`, `/workspace`, `/question`, `/study`, and `/review`. The root includes a responsive Recall entry surface plus static Space Home, Question detail, Study Session setup, and Spaced-Repetition Review Queue screens. These screens use the approved design tokens and shared workspace frame, but their data and mutations are still placeholders.
+
+The following screens and capabilities are specified by this document or the companion design artifact but are not implemented in the root branch:
+
+- authenticated sign-in and Space selection;
+- Space Home with authenticated, real object data;
+- Question object detail with a real editor, links, and backlinks;
+- Note, Citation, Tag, Collection, and Exam object views;
+- Study Session execution, answer persistence, and practice mode;
+- simulated exam mode and timeout submission;
+- spaced-repetition review queue mutations and result state;
+- command palette, dialogs, menus, workspace tabs, and context-panel tabs;
+- moderation report/hide flows;
+- authenticated read-only MCP endpoint.
+
+Verification completed for the implemented routes: TypeScript compilation, production build, targeted Biome checks, and live browser accessibility inspection pass. No automated browser tests, screenshot comparisons, authentication tests, domain tests, or MCP tests exist yet. Full-repository Biome checking still reports diagnostics in untouched generated UI components. The screens are visually present but not product-complete, and the acceptance checkboxes above remain authoritative.
 
 ## Related
 

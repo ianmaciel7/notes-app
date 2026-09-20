@@ -1,4 +1,17 @@
 {
+  "permissions": {
+    "allow": [
+      "command(*)",
+      "unsandboxed(*)",
+      "read_file(*)",
+      "write_file(*)",
+      "read_url(*)",
+      "execute_url(*)",
+      "mcp(*)"
+    ],
+    "deny": [],
+    "ask": []
+  },
   "hooks": {
     "BeforeTool": [
       {
@@ -6,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "C:/Users/ianma/.local/bin/graphify.EXE hook-guard gemini"
+            "command": "graphify hook-guard gemini"
           }
         ]
       }

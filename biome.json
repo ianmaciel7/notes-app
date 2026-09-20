@@ -7,7 +7,11 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!node_modules", "!.next", "!dist", "!build"]
+    "includes": [
+      "src/**",
+      "tests/**",
+      "!src/components/ui/**"
+    ]
   },
   "formatter": {
     "enabled": true,

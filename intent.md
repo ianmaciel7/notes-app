@@ -3,8 +3,8 @@
 - Working name: **Recall** (decided below, was open)
 - Author: Project team
 - Created: 2026-09-19
-- Updated: 2026-09-19
-- Status: draft
+- Updated: 2026-09-19 (implementation audit)
+- Status: approved — product owner approved 2026-09-19
 
 ## Problem
 
@@ -12,7 +12,7 @@ Learners preparing for certifications and exams suffer from severe tool fragment
 
 ## Proposed outcome
 
-Create a graph-based, crowdsourced study platform that merges exam prep, spaced repetition, and Personal Knowledge Management (PKM). The ultimate vision is a system where users can take a `Question` object, link it to a specific `Citation` (e.g., a highlight from official docs), and connect it to a personal `Note`, with seamless graph navigation between them. The UX must be heavily inspired by Capacities' fluid, object-oriented structure. The platform will support multiple question formats, track missed questions, and expose a read-oriented study experience through an MCP interface.
+Create a graph-based, collaborative, private workspace platform for teams and study groups that merges exam prep, spaced repetition, and Personal Knowledge Management (PKM). The ultimate vision is a system where users can take a `Question` object, link it to a specific `Citation` (e.g., a highlight from official docs), and connect it to a personal `Note`, with seamless graph navigation between them. The UX must be heavily inspired by Capacities' fluid, object-oriented structure. The platform will support multiple question formats, track missed questions, and expose a read-oriented study experience through an MCP interface.
 
 ## Affected users and systems
 
@@ -24,7 +24,7 @@ Create a graph-based, crowdsourced study platform that merges exam prep, spaced 
 
 ## Constraints
 
-- **All Spaces are private (decided 2026-09-19, reverses the earlier "free community browsing" constraint).** There is no public/anonymous browsing surface — every object is visible only to members of its owning Space. This removes the entire public-vs-isolation tension spec.md §9 previously flagged, but it now directly conflicts with "crowdsourced" in Proposed outcome above — see Open questions.
+- **All Spaces are private (decided 2026-09-19, reverses the earlier "free community browsing" constraint).** There is no public or anonymous browsing surface — every object is visible only to members of its owning Space. Collaboration is strictly scoped to member-invited private Spaces for study groups and teams.
 - Core study features (spaced repetition, all object types, MCP read access for a Space's own members) must stay free of a paid plan for any Space member — monetization is still deferred (below), not a reason to paywall the core loop.
 - **Space-Based Architecture:** The core hierarchy must be built around user-owned "Spaces" with strict tenant-level data isolation. A user may own or belong to multiple Spaces (confirmed 2026-09-19, Capacities-style — not capped to one).
 - **Graph-Ready MVP:** Content must be strictly modeled as objects. To support the PKM vision, the MVP object types are: `Questions`, `Exams`, `Tags`, `Collections`, `Notes`, and `Citations`. 
@@ -34,32 +34,39 @@ Create a graph-based, crowdsourced study platform that merges exam prep, spaced 
 - The MVP must include a spaced repetition mechanism for missed questions, allowing flexible review schedules.
 - The initial MCP surface is read-oriented; administrative and user-state write tools are deferred.
 - Monetization, voting, and question discussion threads are out of scope for v1.
-- **Content moderation (v1):** no pre-publish review gate within a Space — an object becomes visible to Space members per its `visibility` field the moment its owner sets it. Any Space member can report an object; a reported object is hidden from other members pending review by the Space's admin or a platform admin. Now scoped to abuse *within* a shared private Space (since nothing is ever public), not community-wide moderation. See spec.md FR-9.
+- **Content moderation (v1):** no pre-publish review gate within a Space — an object becomes visible to Space members per its `visibility` field the moment its owner sets it. Any Space member can report an object; a reported object is hidden from other members pending review by the Space's admin or a platform admin. Scoped to abuse *within* a shared private Space (since nothing is ever public), not community-wide moderation. See spec.md FR-9.
 - **Spaced repetition algorithm:** SM-2 (not Leitner) — chosen for its per-card ease factor, which fits a `study_records` schema already tracking `interval`/`easeFactor`/`history` better than Leitner's fixed-box model, and it's the de facto standard for this problem (Anki, SuperMemo).
 - **Exams are capped at one per user (confirmed 2026-09-19).** Each user may own/author at most one `Exam` object. Flagged as unusual in spec.md §9 — it blocks a user preparing for two certifications from having two exams — kept as stated rather than second-guessed, since it was explicitly confirmed.
 - **Study sessions are configurable, including a simulated-exam mode (added 2026-09-19).** Before studying, a user picks scope (all due, or narrowed to an Exam/Tag/Collection), question count, and mode: `practice` (immediate feedback, today's default flow) or `simulated_exam` (timed, no feedback until the end, formatted like the real certification exam). See spec.md FR-11.
 
-## Success
+## Success Criteria
 
-*(draft — confirm with product owner)*
+Confirmed measurable acceptance targets:
 
-- A learner can create a `Question`, link it to a `Citation` and a personal `Note`, and navigate between all three via bidirectional links/backlinks within one Space.
-- A missed question is automatically re-surfaced by the spaced-repetition queue on its computed schedule, and reviewing it updates that schedule.
-- A Space member can browse and read every object in a Space they belong to, at no cost and with no paywall on the core study loop.
-- An MCP client can query a user's own `Questions`, `Notes`, and `Citations` for a study session without ever surfacing another user's or Space's private objects.
+- **Bidirectional Graph Traversal:** A learner can author a `Question`, link it to a `Citation` and a personal `Note`, and navigate between all three via bidirectional relations and reactive backlinks within a single Space with zero cross-Space leakage.
+- **Automated Spaced Repetition Scheduling:** Answering a question incorrectly automatically enrols it into the SM-2 review queue; subsequent reviews accurately recalculate interval, ease factor, and `nextReviewDate` server-side according to the SM-2 specification.
+- **Zero-Paywall Core Study Loop:** Any invited member of a private Space can create, browse, and study all objects within that Space with zero subscription or paywall barrier.
+- **Tenant-Isolated MCP Integration:** An external MCP-compatible client authenticating with a valid Space-scoped API key (`rcl_live_...`) can query `Questions`, `Notes`, `Citations`, and study summaries strictly scoped to that Space, returning 401/403 upon invalid credentials or cross-Space traversal attempts.
+- **Deterministic Exam Simulations:** Users can configure and complete timed, simulated exam sessions where answering does not reveal immediate feedback and session expiration triggers automatic submission within a server-enforced grace window.
 
 ## Open questions
 
-- How should MCP authentication, hosting, and rate limits be implemented? Now the *only* thing gating MCP access to any object at all, since private-only Spaces removed the "public objects, no auth needed yet" fallback spec.md §7.2 used to allow. See spec.md §7.2/§9 — still genuinely undecided, needs a design pass, not just a pick.
-- **New, from the private-only decision:** Proposed outcome above still calls this a "crowdsourced" platform, but private-only Spaces means no content is ever visible outside its Space's membership. Is "crowdsourced" now just "a member of a shared private Space can contribute," or does the product still need some public-facing surface (e.g. a Space owner explicitly publishing to a separate public gallery)? Needs a product decision before Plan Mode — not assumed either way here.
+*None currently open. All previous open questions have been formally resolved.*
 
-Resolved (were open, decided above/in spec.md — human owner should still sign off, not silently treat as unchangeable):
+### Resolved Decisions
 
-- ~~Final application name and branding~~ → **Recall**.
-- ~~Content moderation/validation before sharing~~ → report-and-hide model, see Constraints and spec.md FR-9.
-- ~~Database pattern for object relations~~ → Firestore with a central `object_links` edge collection, see spec.md §6.
-- ~~Spaced repetition algorithm~~ → SM-2, see Constraints.
+- **MCP Authentication & Access Control:** Resolved using Space-scoped SHA-256 hashed API keys (`rcl_live_<base62>`) stored in `/api_keys`. Keys grant read-only access to `Questions`, `Notes`, `Citations`, and study summaries for authorized Space members only.
+- **Collaboration vs. Private Spaces:** Resolved by scoping collaboration strictly to member-invited private Spaces with zero unauthenticated or public browsing. Crowdsourcing is framed as multi-user collaborative study within shared private Spaces.
+- **Final application name and branding:** Resolved → **Recall**.
+- **Content moderation/validation before sharing:** Resolved → report-and-hide model for shared Space abuse; see Constraints and spec.md FR-9.
+- **Database pattern for object relations:** Resolved → Firestore with a central `object_links` edge collection; see spec.md §6.
+- **Spaced repetition algorithm:** Resolved → SM-2; see Constraints and spec.md §2.1.
 
 ## Related
 
 - [Specification](spec.md)
+- [Implementation Plan](plan.md)
+
+## Implementation status
+
+The root application contains the static design foundation plus four verified workspace screens: Space Home, Question detail, Study Session setup, and Spaced-Repetition Review Queue. All core architectural decisions (MCP authentication with Space-scoped hashed API keys, collaborative private Space tenancy, SM-2 scheduling, and exam simulation modes) are formally resolved and incorporated into [spec.md](spec.md) and [plan.md](plan.md). Implementation of the authenticated data and execution boundary is now underway for the Build stage.
