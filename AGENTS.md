@@ -33,16 +33,27 @@ Agents must proactively eliminate token waste and context bloat:
 - **Focused Documentation**: Keep Context7 queries strictly scoped to a single concept rather than pulling multi-topic references.
 - **No Repetitive File Reads**: Reuse recently read context within the conversation rather than re-reading unchanged files.
 
-### Token Observability (On-Demand Only)
+### Token Observability & Harness Audits (On-Demand Only)
 
 - **RTK Savings Metrics**: Run `rtk gain` or `rtk gain --history` to inspect terminal token compression and diagnose verbosity during performance reviews (never after every command).
 - **Context-Budget Audits**: Run `repomix --token-count-tree` only when conducting a structured repository token-budget analysis or when context limits are threatened.
+- **Harness Engineering Audits**: Use the `measure-ai-proficiency` skill (`.agents/skills/measure-ai-proficiency/SKILL.md` or `uvx measure-ai-proficiency .`) on-demand to audit AI context maturity, primitive discipline, and harness drift. Do not execute automatically during standard coding tasks.
 
 ### Deterministic Safety & Optimization Hooks (`.agents/hooks.json`)
 
 Mechanical enforcement is decoupled from semantic instructions:
 - **Command Safety**: Destructive commands (`git reset --hard`, `git clean -fd`, `rm -rf`, force-pushes) trigger mandatory user confirmation (`force_ask`).
 - **RTK Gatekeeper**: Commands supported by RTK are intercepted before execution; bypassing RTK is denied (`deny`) with the exact optimized command suggested.
+
+### Primitive Discipline (Cheapest Primitive First)
+
+Agents must choose the most cost-effective primitive for each task:
+- **Always-on Rules (`AGENTS.md`)**: Reserved for universal, compact constraints (zero procedural bloat).
+- **Skills (`.agents/skills/`)**: Use for multi-step procedures, runbooks, and specialized knowledge loaded on demand.
+- **Hooks (`.agents/hooks.json`)**: Use for deterministic, mechanically verifiable guardrails.
+- **Subagents**: Use only when context isolation, parallel execution, or specialized roles are required.
+- **MCP Tools**: Use for semantic code intelligence (Serena AST, Graphify graph, Context7 docs).
+- **Audits (Repomix)**: Reserved for explicit token/context-budget audits; never run in default task loops.
 
 ### Tool-specific configuration
 

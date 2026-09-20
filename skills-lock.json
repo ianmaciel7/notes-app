@@ -18,6 +18,12 @@
       "sourceType": "local",
       "skillPath": ".agents/skills/anthropic-sdlc/SKILL.md",
       "computedHash": "2caffb05ee7ea4e5c33d4ce5f6645f1ed569584896b8ac41c6376af9dcc32297"
+    },
+    "measure-ai-proficiency": {
+      "source": "github:anthropics/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/measure-ai-proficiency/SKILL.md",
+      "computedHash": "64d959b1073babcd193545daad7eb249fc4c071328cfc6fe80b5981094db0398"
     }
   }
 }
