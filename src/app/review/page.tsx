@@ -1,8 +1,8 @@
 import { CheckCircle2 } from "lucide-react";
 import { StudySession } from "@/components/recall/study-session";
 import { Card, CardContent } from "@/components/ui/card";
-import { WorkspaceFrame } from "@/components/workspace-frame";
-import { requireSnapshot } from "@/lib/workspace";
+import { SpaceFrame } from "@/components/space-frame";
+import { requireSnapshot } from "@/lib/space";
 
 export default async function ReviewPage() {
   const data = await requireSnapshot();
@@ -14,7 +14,7 @@ export default async function ReviewPage() {
       (!data.records[obj.id] || data.records[obj.id].due <= Date.now()),
   );
   return (
-    <WorkspaceFrame
+    <SpaceFrame
       title="Review queue"
       eyebrow="Spaced repetition"
       data={data}
@@ -44,6 +44,6 @@ export default async function ReviewPage() {
         )}
         {data.spaceId && <StudySession data={data} />}
       </div>
-    </WorkspaceFrame>
+    </SpaceFrame>
   );
 }

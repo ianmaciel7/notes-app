@@ -14,7 +14,7 @@ export async function ensure(settled: Locator, action: () => Promise<void>) {
   }).toPass({ timeout: 60_000 });
 }
 
-// The Space switcher is on every workspace page and opening it is harmless,
+// The Space switcher is on every space page and opening it is harmless,
 // which makes it the one control usable as a generic hydration probe.
 async function waitHydrated(page: Page) {
   const menuItem = page.getByRole("menuitem", { name: "New Space" });
@@ -45,7 +45,7 @@ export async function signUp(page: Page) {
   await page.locator("#email").fill(email);
   await page.locator("#password").fill("test-password-123");
   await submit.click();
-  await page.waitForURL("**/workspace");
+  await page.waitForURL("**/space");
   return email;
 }
 

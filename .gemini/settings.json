@@ -1,7 +1,16 @@
 {
+  "general": {
+    "defaultApprovalMode": "auto_edit"
+  },
+  "security": {
+    "enablePermanentToolApproval": true,
+    "autoAddToPolicyByDefault": true,
+    "disableYoloMode": false
+  },
   "permissions": {
     "allow": [
       "*",
+      "*(*)",
       "command(*)",
       "run_shell_command(*)",
       "shell(*)",
@@ -20,6 +29,8 @@
       "file_search(*)",
       "read_url(*)",
       "execute_url(*)",
+      "fetch(*)",
+      "browser(*)",
       "mcp(*)"
     ],
     "deny": [],

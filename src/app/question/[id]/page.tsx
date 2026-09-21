@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { ObjectDetail } from "@/components/recall/object-detail";
-import { WorkspaceFrame } from "@/components/workspace-frame";
-import { requireSnapshot } from "@/lib/workspace";
+import { SpaceFrame } from "@/components/space-frame";
+import { requireSnapshot } from "@/lib/space";
 
 export default async function ObjectPage({
   params,
@@ -15,7 +15,7 @@ export default async function ObjectPage({
   // identical here on purpose — see spec.md 2.4.3 (404, never 403).
   if (!object) notFound();
   return (
-    <WorkspaceFrame
+    <SpaceFrame
       title={object.title}
       eyebrow="Object detail"
       data={data}
@@ -23,6 +23,6 @@ export default async function ObjectPage({
       current={object}
     >
       <ObjectDetail data={data} object={object} />
-    </WorkspaceFrame>
+    </SpaceFrame>
   );
 }

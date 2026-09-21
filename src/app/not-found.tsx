@@ -12,8 +12,8 @@ export default function NotFound() {
         It may have been archived, or it belongs to a Space you are not a member
         of.
       </p>
-      <Button render={<Link href="/workspace" />}>
-        Back to your workspace
+      <Button render={<Link href="/space" />}>
+        Back to your space
       </Button>
     </main>
   );

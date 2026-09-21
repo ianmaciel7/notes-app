@@ -1,8 +1,8 @@
 import { listSpaceApiKeys } from "@/actions/api-keys";
 import { ApiKeysCard } from "@/components/recall/api-keys-card";
 import { Card, CardContent } from "@/components/ui/card";
-import { WorkspaceFrame } from "@/components/workspace-frame";
-import { requireSnapshot } from "@/lib/workspace";
+import { SpaceFrame } from "@/components/space-frame";
+import { requireSnapshot } from "@/lib/space";
 
 export default async function SettingsPage() {
   const data = await requireSnapshot();
@@ -11,7 +11,7 @@ export default async function SettingsPage() {
     data.uid;
   const keys = isOwner ? await listSpaceApiKeys(data.spaceId) : [];
   return (
-    <WorkspaceFrame
+    <SpaceFrame
       title="Settings"
       eyebrow="Space settings"
       data={data}
@@ -28,6 +28,6 @@ export default async function SettingsPage() {
           </CardContent>
         </Card>
       )}
-    </WorkspaceFrame>
+    </SpaceFrame>
   );
 }

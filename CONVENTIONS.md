@@ -36,7 +36,7 @@ Day-to-day patterns for working in `src/`. See `ARCHITECTURE.md` for how the pie
 ## Generated UI (`src/components/ui/`)
 
 - These files come from the shadcn `base-nova` registry (`components.json`, `iconLibrary: lucide`, `baseColor: neutral`). Regenerate/add components through the shadcn CLI rather than adding new primitives by hand; see `.agents/skills/shadcn/`.
-- App-specific composition lives in `src/components/recall/` and `src/components/workspace-frame.tsx`, built on top of `ui/` primitives — put feature logic there, not in `ui/`.
+- App-specific composition lives in `src/components/recall/` and `src/components/space-frame.tsx`, built on top of `ui/` primitives — put feature logic there, not in `ui/`.
 
 ## Naming & imports
 
@@ -50,4 +50,4 @@ Day-to-day patterns for working in `src/`. See `ARCHITECTURE.md` for how the pie
 
 ## Comments
 
-- Default to none. Add one only for a non-obvious *why* (see `src/proxy.ts` and `src/lib/workspace.ts` for the existing style — a sentence explaining a constraint or a subtlety, not what the next line does).
+- Default to none. Add one only for a non-obvious *why* (see `src/proxy.ts` and `src/lib/space.ts` for the existing style — a sentence explaining a constraint or a subtlety, not what the next line does).

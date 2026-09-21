@@ -21,7 +21,7 @@ import {
 import type { Snapshot } from "@/domain/recall";
 
 const destinations = [
-  { href: "/workspace", label: "Go to Overview" },
+  { href: "/space", label: "Go to Overview" },
   { href: "/question", label: "Go to Questions" },
   { href: "/study", label: "Go to Study session" },
   { href: "/review", label: "Go to Review queue" },
@@ -69,7 +69,7 @@ export function CommandPalette({
         className="overflow-hidden p-0 sm:max-w-xl"
       >
         <DialogHeader className="sr-only">
-          <DialogTitle>Search workspace</DialogTitle>
+          <DialogTitle>Search space</DialogTitle>
           <DialogDescription>
             Search objects in this Space, or jump to a section.
           </DialogDescription>

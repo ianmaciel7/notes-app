@@ -3,9 +3,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 const navRows = ["overview", "questions", "study", "review", "settings"];
 const cardRows = ["a", "b", "c", "d"];
 
-// Mirrors WorkspaceFrame's box model exactly — 240px rail, h-16 header, the
+// Mirrors SpaceFrame's box model exactly — 240px rail, h-16 header, the
 // same eyebrow/title rhythm — so swapping the real frame in shifts nothing.
-export function WorkspaceSkeleton() {
+export function SpaceSkeleton() {
   return (
     <div className="min-h-screen bg-canvas lg:grid lg:grid-cols-[240px_1fr]">
       <aside className="hidden border-r border-hairline bg-surface-soft lg:flex lg:flex-col">

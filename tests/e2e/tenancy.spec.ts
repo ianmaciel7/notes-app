@@ -2,14 +2,14 @@ import { expect, test } from "@playwright/test";
 import { createObject, createSpace, signUp } from "./helpers";
 
 const protectedRoutes = [
-  "/workspace",
+  "/space",
   "/question",
   "/study",
   "/review",
   "/settings",
 ];
 
-test("every workspace route bounces an unauthenticated visitor to /login", async ({
+test("every space route bounces an unauthenticated visitor to /login", async ({
   page,
 }) => {
   for (const route of protectedRoutes) {
@@ -21,7 +21,7 @@ test("every workspace route bounces an unauthenticated visitor to /login", async
 test("a signed-in caller is redirected away from /login", async ({ page }) => {
   await signUp(page);
   await page.goto("/login");
-  await expect(page).toHaveURL(/\/workspace$/);
+  await expect(page).toHaveURL(/\/space$/);
 });
 
 test("another Space's object answers 404, never 403", async ({

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Recall — your thinking partner",
   description:
-    "A private workspace for connected notes, citations, and exam practice.",
+    "A private space for connected notes, citations, and exam practice.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

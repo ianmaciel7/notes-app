@@ -55,8 +55,8 @@ export default function Home() {
             className="hidden items-center gap-7 text-sm text-muted-foreground md:flex"
             aria-label="Primary navigation"
           >
-            <a className="text-ink" href="#workspace">
-              Workspace
+            <a className="text-ink" href="#space">
+              Space
             </a>
             <a href="#study">Study</a>
             <a href="#graph">Graph</a>
@@ -69,7 +69,7 @@ export default function Home() {
               size="sm"
               className="bg-coral text-white hover:bg-coral-active"
             >
-              Open workspace
+              Open space
             </Button>
           </div>
         </div>
@@ -82,7 +82,7 @@ export default function Home() {
               variant="outline"
               className="mb-6 border-coral/40 bg-surface-soft text-coral"
             >
-              PRIVATE STUDY WORKSPACE
+              PRIVATE STUDY SPACE
             </Badge>
             <h1 className="display-face text-5xl leading-[1.05] text-ink sm:text-6xl">
               Make your knowledge work together.
@@ -180,13 +180,13 @@ export default function Home() {
         </section>
 
         <section
-          id="workspace"
+          id="space"
           className="border-t border-hairline bg-surface-soft"
         >
           <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8">
             <div className="max-w-2xl">
               <p className="text-sm font-medium uppercase tracking-[0.16em] text-coral">
-                One connected workspace
+                One connected space
               </p>
               <h2 className="display-face mt-4 text-4xl text-ink">
                 Study with the whole picture in view.

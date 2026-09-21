@@ -1,5 +1,5 @@
-import { WorkspaceSkeleton } from "@/components/recall/workspace-skeleton";
+import { SpaceSkeleton } from "@/components/recall/space-skeleton";
 
 export default function Loading() {
-  return <WorkspaceSkeleton />;
+  return <SpaceSkeleton />;
 }

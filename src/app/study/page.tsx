@@ -1,13 +1,13 @@
 import { BookOpen, Clock3 } from "lucide-react";
 import { StudySession } from "@/components/recall/study-session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WorkspaceFrame } from "@/components/workspace-frame";
-import { requireSnapshot } from "@/lib/workspace";
+import { SpaceFrame } from "@/components/space-frame";
+import { requireSnapshot } from "@/lib/space";
 
 export default async function StudyPage() {
   const data = await requireSnapshot();
   return (
-    <WorkspaceFrame
+    <SpaceFrame
       title="Study session"
       eyebrow="Practice"
       data={data}
@@ -39,6 +39,6 @@ export default async function StudyPage() {
           </Card>
         </div>
       )}
-    </WorkspaceFrame>
+    </SpaceFrame>
   );
 }

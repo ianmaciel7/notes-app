@@ -3,10 +3,10 @@ import Link from "next/link";
 import { KindIcon } from "@/components/recall/kind-icon";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WorkspaceFrame } from "@/components/workspace-frame";
-import { requireSnapshot } from "@/lib/workspace";
+import { SpaceFrame } from "@/components/space-frame";
+import { requireSnapshot } from "@/lib/space";
 
-export default async function WorkspacePage() {
+export default async function SpacePage() {
   const data = await requireSnapshot();
   const dueCount = data.objects.filter(
     (obj) =>
@@ -17,7 +17,7 @@ export default async function WorkspacePage() {
   ).length;
   const recent = data.objects.slice(0, 3);
   return (
-    <WorkspaceFrame
+    <SpaceFrame
       title="Overview"
       eyebrow="Space home"
       data={data}
@@ -28,7 +28,7 @@ export default async function WorkspacePage() {
           <CardContent className="p-8 text-center">
             <p className="display-face text-2xl">Create your first Space</p>
             <p className="mx-auto mt-3 max-w-sm text-sm text-muted-foreground">
-              Spaces are private workspaces for your questions, notes, and
+              Spaces are private, for your questions, notes, and
               citations. Use the switcher in the sidebar to create one.
             </p>
           </CardContent>
@@ -112,6 +112,6 @@ export default async function WorkspacePage() {
           </div>
         </>
       )}
-    </WorkspaceFrame>
+    </SpaceFrame>
   );
 }

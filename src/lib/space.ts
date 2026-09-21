@@ -4,12 +4,12 @@ import { snapshot } from "@/actions/recall";
 import type { RecallObject, Snapshot } from "@/domain/recall";
 import { parseTabs, tabsCookie } from "@/domain/tabs";
 
-export type WorkspaceData = Snapshot & { tabs: RecallObject[] };
+export type SpaceData = Snapshot & { tabs: RecallObject[] };
 
-// Shared by every /workspace, /question, /study, /review page: resolves the
+// Shared by every /space, /question, /study, /review page: resolves the
 // caller's session and active Space in one place instead of duplicating the
 // try/redirect in each Server Component.
-export async function requireSnapshot(): Promise<WorkspaceData> {
+export async function requireSnapshot(): Promise<SpaceData> {
   const jar = await cookies();
   const selected = jar.get("recall-space")?.value ?? "";
   let data: Snapshot;
@@ -18,7 +18,7 @@ export async function requireSnapshot(): Promise<WorkspaceData> {
   } catch {
     // Not a plain redirect("/login"): proxy.ts only checks cookie presence,
     // so an invalid-but-still-present recall-session cookie would bounce
-    // straight back to /workspace, looping forever. Clear it first.
+    // straight back to /space, looping forever. Clear it first.
     redirect("/api/auth/clear-session");
   }
   // Resolving tabs server-side keeps the strip in the first paint, so opening

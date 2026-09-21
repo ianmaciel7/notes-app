@@ -167,7 +167,7 @@ test("the command palette finds an object and navigates to it", async ({
     title: "Photosynthesis basics",
     text: "Light to chemical energy.",
   });
-  await visit(page, "/workspace");
+  await visit(page, "/space");
 
   await page.keyboard.press("ControlOrMeta+k");
   const search = page.getByPlaceholder("Search objects, or jump to a section");

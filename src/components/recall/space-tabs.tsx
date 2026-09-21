@@ -15,7 +15,7 @@ function persist(ids: string[]) {
   document.cookie = `${tabsCookie}=${serializeTabs(ids)}; path=/; max-age=${60 * 60 * 24 * 30}; samesite=lax`;
 }
 
-export function WorkspaceTabs({
+export function SpaceTabs({
   tabs,
   current,
 }: {

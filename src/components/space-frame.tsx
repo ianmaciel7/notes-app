@@ -8,21 +8,21 @@ import { logout } from "@/actions/recall";
 import { CommandPalette } from "@/components/recall/command-palette";
 import { ObjectEditor } from "@/components/recall/object-editor";
 import { SpaceSwitcher } from "@/components/recall/space-switcher";
-import { WorkspaceTabs } from "@/components/recall/workspace-tabs";
+import { SpaceTabs } from "@/components/recall/space-tabs";
 import { Button } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
 import type { RecallObject } from "@/domain/recall";
-import type { WorkspaceData } from "@/lib/workspace";
+import type { SpaceData } from "@/lib/space";
 
 const navItems = [
-  { key: "overview", href: "/workspace", label: "Overview" },
+  { key: "overview", href: "/space", label: "Overview" },
   { key: "question", href: "/question", label: "Questions" },
   { key: "study", href: "/study", label: "Study session" },
   { key: "review", href: "/review", label: "Review queue" },
   { key: "settings", href: "/settings", label: "Settings" },
 ] as const;
 
-export function WorkspaceFrame({
+export function SpaceFrame({
   children,
   title,
   eyebrow,
@@ -33,7 +33,7 @@ export function WorkspaceFrame({
   children: ReactNode;
   title: string;
   eyebrow: string;
-  data: WorkspaceData;
+  data: SpaceData;
   active: (typeof navItems)[number]["key"];
   current?: RecallObject;
 }) {
@@ -74,7 +74,7 @@ export function WorkspaceFrame({
       <aside
         ref={drawer}
         tabIndex={-1}
-        aria-label="Workspace navigation"
+        aria-label="Space navigation"
         className={`${navOpen ? "fixed inset-y-0 left-0 z-50 flex w-64" : "hidden"} flex-col border-r border-hairline bg-surface-soft outline-none lg:static lg:flex lg:w-auto`}
       >
         <div className="flex h-16 items-center gap-3 border-b border-hairline px-6 text-sm font-medium">
@@ -109,7 +109,7 @@ export function WorkspaceFrame({
             className="w-full justify-start border-hairline bg-canvas"
             onClick={() => setSearching(true)}
           >
-            <Search data-icon="inline-start" /> Search workspace
+            <Search data-icon="inline-start" /> Search space
             <Kbd className="ml-auto">⌘K</Kbd>
           </Button>
           <Button
@@ -156,7 +156,7 @@ export function WorkspaceFrame({
             New object
           </Button>
         </header>
-        <WorkspaceTabs tabs={data.tabs} current={current} />
+        <SpaceTabs tabs={data.tabs} current={current} />
         <main className="mx-auto max-w-6xl px-5 py-10 lg:px-10">
           <p className="text-sm font-medium uppercase tracking-[0.16em] text-coral">
             {eyebrow}

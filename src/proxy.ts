@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 const protectedPrefixes = [
-  "/workspace",
+  "/space",
   "/question",
   "/study",
   "/review",
@@ -17,7 +17,7 @@ export function proxy(request: NextRequest) {
   const signedIn = request.cookies.has("recall-session");
   if (pathname === "/login")
     return signedIn
-      ? NextResponse.redirect(new URL("/workspace", request.url))
+      ? NextResponse.redirect(new URL("/space", request.url))
       : undefined;
   if (protectedPrefixes.some((prefix) => pathname.startsWith(prefix)))
     return signedIn
@@ -27,7 +27,7 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/workspace/:path*",
+    "/space/:path*",
     "/question/:path*",
     "/study/:path*",
     "/review/:path*",

@@ -1,11 +1,11 @@
 import { ObjectList } from "@/components/recall/object-list";
-import { WorkspaceFrame } from "@/components/workspace-frame";
-import { requireSnapshot } from "@/lib/workspace";
+import { SpaceFrame } from "@/components/space-frame";
+import { requireSnapshot } from "@/lib/space";
 
 export default async function QuestionPage() {
   const data = await requireSnapshot();
   return (
-    <WorkspaceFrame
+    <SpaceFrame
       title="Questions"
       eyebrow="All objects"
       data={data}
@@ -18,6 +18,6 @@ export default async function QuestionPage() {
       ) : (
         <ObjectList data={data} />
       )}
-    </WorkspaceFrame>
+    </SpaceFrame>
   );
 }

@@ -1,6 +1,6 @@
 # Architecture
 
-This documents what is actually built on the `prototype` branch today. `spec.md` and `plan.md` describe a larger target system (command palette, workspace/context tabs, sidebar parity work) drawn partly from the `.worktrees/old*` reference checkouts — treat those as the design target, not the current state. This file describes what exists in `src/` right now.
+This documents what is actually built on the `prototype` branch today. `spec.md` and `plan.md` describe a larger target system (command palette, space/context tabs, sidebar parity work) drawn partly from the `.worktrees/old*` reference checkouts — treat those as the design target, not the current state. This file describes what exists in `src/` right now.
 
 ## Overview
 
@@ -8,7 +8,7 @@ Recall is a Next.js (App Router) app backed by Firebase (Auth + Firestore). It i
 
 ## Layers
 
-- **`src/app/`** — App Router pages (React Server Components): `page.tsx` (landing/dashboard), `login/`, `workspace/`, `question/` (+ `question/[id]/` object detail), `study/`, `review/`, `settings/`. Pages that need the current user's data call `requireSnapshot()` (`src/lib/workspace.ts`) rather than duplicating auth/redirect logic. Each workspace segment has a `loading.tsx` rendering `WorkspaceSkeleton`, whose box model mirrors `WorkspaceFrame` so streaming does not shift layout.
+- **`src/app/`** — App Router pages (React Server Components): `page.tsx` (landing/dashboard), `login/`, `space/`, `question/` (+ `question/[id]/` object detail), `study/`, `review/`, `settings/`. Pages that need the current user's data call `requireSnapshot()` (`src/lib/space.ts`) rather than duplicating auth/redirect logic. Each space segment has a `loading.tsx` rendering `SpaceSkeleton`, whose box model mirrors `SpaceFrame` so streaming does not shift layout.
 - **`src/app/api/mcp/route.ts`** — the one non-Server-Action entry point: a JSON-RPC 2.0 Route Handler for external MCP clients, authenticated by a Space-scoped API key rather than a session cookie. Answers plain JSON or SSE depending on `Accept`.
 - **`src/proxy.ts`** — Next.js middleware. Redirects based only on whether the `recall-session` cookie is *present*; it is optimistic and not a security boundary. Every Server Action re-verifies the cookie itself via `user()`.
 - **`src/lib/firebase/session.ts`** — server-only, *not* a `"use server"` module: holds `user()` (verifies the session cookie) and `authorized(spaceId)` (caller + Space membership). Shared by every action file; deliberately not exported from one, since a `"use server"` export would be callable from the browser.
@@ -19,7 +19,7 @@ Recall is a Next.js (App Router) app backed by Firebase (Auth + Firestore). It i
 - **`src/lib/firebase/admin.ts`** — server-only (`import "server-only"`) Admin SDK init. Auto-wires the Auth/Firestore emulators in development and refuses to run against a `demo-*` project ID unless the emulator host env vars are set, so a dev build can't accidentally hit a real project.
 - **`src/lib/firebase/client.ts`** — browser Auth SDK init only (no Firestore client). Connects to the local Auth emulator in development.
 - **`src/components/ui/`** — generated shadcn/`base-nova` primitives (see `components.json`). Treat as generated output, not hand-authored app code — see `CONVENTIONS.md`.
-- **`src/components/recall/`** — app-specific components (`object-editor.tsx`, `object-list.tsx`, `object-detail.tsx`, `study-panel.tsx`, `space-switcher.tsx`, `api-keys-card.tsx`, `rich-text.tsx`, `workspace-skeleton.tsx`) and `workspace-frame.tsx`, built on the `ui/` primitives.
+- **`src/components/recall/`** — app-specific components (`object-editor.tsx`, `object-list.tsx`, `object-detail.tsx`, `study-panel.tsx`, `space-switcher.tsx`, `api-keys-card.tsx`, `rich-text.tsx`, `space-skeleton.tsx`) and `space-frame.tsx`, built on the `ui/` primitives.
 - **`firestore.rules`** — default-deny (`allow read, write: if false`). All access is via the Admin SDK, which bypasses client-facing rules entirely; the rules file exists to guarantee no client path is ever accidentally open. This also satisfies `spec.md` §8's requirement that `/api_keys` be unreadable from a client.
 
 ## Rich text

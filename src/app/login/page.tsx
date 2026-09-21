@@ -54,7 +54,7 @@ export default function LoginPage() {
                   );
                   await login(await credentials.user.getIdToken());
                   await signOut(auth);
-                  window.location.assign("/workspace");
+                  window.location.assign("/space");
                 } catch {
                   setError(
                     "Could not sign in. Check your email and password and make sure the local emulators are running.",

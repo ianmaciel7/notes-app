@@ -8,15 +8,15 @@ test("closing a transient surface returns focus to its opener", async ({
 }) => {
   await signUp(page);
   await createSpace(page, "Focus");
-  await visit(page, "/workspace");
+  await visit(page, "/space");
 
   const palette = page.getByPlaceholder("Search objects, or jump to a section");
-  await page.getByRole("button", { name: "Search workspace" }).click();
+  await page.getByRole("button", { name: "Search space" }).click();
   await expect(palette).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(palette).toBeHidden();
   await expect(
-    page.getByRole("button", { name: "Search workspace" }),
+    page.getByRole("button", { name: "Search space" }),
   ).toBeFocused();
 
   const dialog = page.getByRole("heading", { name: "Add to your Space" });
@@ -33,11 +33,11 @@ test("the mobile drawer traps then restores focus", async ({ page }) => {
   await signUp(page);
   await createSpace(page, "Drawer");
   await page.setViewportSize({ width: 600, height: 900 });
-  await page.goto("/workspace");
+  await page.goto("/space");
 
   const opener = page.getByRole("button", { name: "Open navigation" });
   const drawer = page.getByRole("complementary", {
-    name: "Workspace navigation",
+    name: "Space navigation",
   });
   await ensure(drawer, () => opener.click());
   await expect(drawer).toBeFocused();
@@ -51,7 +51,7 @@ test("the mobile drawer traps then restores focus", async ({ page }) => {
 test("Mod+P opens the same command dialog as Mod+K", async ({ page }) => {
   await signUp(page);
   await createSpace(page, "Shortcuts");
-  await visit(page, "/workspace");
+  await visit(page, "/space");
 
   const palette = page.getByPlaceholder("Search objects, or jump to a section");
   await page.keyboard.press("ControlOrMeta+p");
@@ -75,7 +75,7 @@ test("the palette moves through results with the keyboard alone", async ({
     title: "Keyboard reachable note",
     text: "Reachable without a pointer.",
   });
-  await visit(page, "/workspace");
+  await visit(page, "/space");
 
   await page.keyboard.press("ControlOrMeta+k");
   await page
