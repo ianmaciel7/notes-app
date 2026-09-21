@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "emulators": "firebase emulators:start --only auth,firestore --project demo-recall --import=.firebase-data --export-on-exit=.firebase-data",
+    "emulators:export": "firebase emulators:export .firebase-data --project demo-recall --force",
+    "emulators:exec": "firebase emulators:exec --only auth,firestore --project demo-recall --import=.firebase-data --export-on-exit=.firebase-data",
+    "seed": "tsx scripts/seed.ts",
     "test": "tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",
     "dev": "next dev",
@@ -39,6 +42,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@biomejs/biome": "2.4.2",
     "@playwright/test": "1.63.0",
     "@tailwindcss/postcss": "^4",

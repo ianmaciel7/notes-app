@@ -50,7 +50,7 @@ export default async function SpacePage() {
                 </p>
                 <Link
                   href="/study"
-                  className="mt-8 inline-flex items-center gap-2 text-sm text-coral"
+                  className="mt-8 inline-flex items-center gap-2 text-sm text-white"
                 >
                   Start a study session <ArrowRight className="size-4" />
                 </Link>

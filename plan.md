@@ -710,3 +710,328 @@ inventories were exhaustively formalized and reconciled across `CONVENTIONS.md`,
 - **Verification**: TypeScript compilation, Biome linting (`biome check src tests`), test suite
   (28/28 passing), and production build (`pnpm run build` compiling all 10 routes) all passed cleanly.
 
+### Punch-list pass (2026-09-21) — grace window, CI, retry queue, per-kind layouts; interrupted before sidebar/a11y
+
+A `sdlc-builder` dispatch was given an 8-item punch list surfaced by a `/anthropic-sdlc verify`
+audit (exam grace window, an E2E cold-start flake, a missing CI workflow, an axe-core
+accessibility pass, the undelivered offline retry-queue UI, per-kind object detail layouts, and
+two open `spec.md` §11 checkboxes: worktree-migration completion and sidebar-parity proof). The
+run was interrupted (stopped, resumed by the product owner directly from its transcript, then
+stopped again) partway through item 8. This entry documents what actually landed, verified
+directly against the code on `prototype` at commits `b70aea78`/`9f8cdb1a` rather than trusting
+the interrupted agent's own unwritten summary — the agent never got to append its own drift
+note before being stopped, which is itself a gap in following this repo's "update plan.md in the
+same change" rule; this entry backfills it.
+
+**Landed and verified:**
+
+- **Simulated-exam grace window + configurable time limit (FR-11, spec.md §2.4.3/§9.22).**
+  `src/actions/recall.ts` now imports `examDurationSeconds`, `graceExpired`, and a `SESSION_EXPIRED`
+  code; `startSession` accepts a caller-supplied duration (a "Time limit (minutes)" field in the
+  study-session config surface, defaulting to 60 minutes) validated by `examDurationSeconds`
+  instead of the previous hardcoded 90s/question, and `saveSessionAnswer` rejects a late answer
+  with `SESSION_EXPIRED: ...` only once `graceExpired(current.deadline, Date.now())` is true, i.e.
+  after the grace window, not the instant the nominal deadline passes. spec.md §2.4.3 and §9.22
+  were already updated to "Implemented 2026-09-21" by the interrupted run before it stopped — this
+  entry's own earlier draft incorrectly assumed that update was still outstanding; it was not.
+- **E2E cold-start flake.** `tests/e2e/helpers.ts`'s `signUp()` now waits up to 60s (was the
+  Playwright default 30s) for the post-signup `**/space` navigation, with a comment explaining the
+  Turbopack cold-compile cause documented in plan.md's earlier "sixth pass" verification note.
+- **CI workflow.** `.github/workflows/ci.yml` now exists (75 lines) — not independently re-audited
+  line-by-line in this pass for exact parity with the `pnpm lint && pnpm test && pnpm test:e2e &&
+  pnpm run build` gate; worth a read-through before relying on it.
+- **Offline retry-queue UI (spec.md §2.4.3, §9.23).** `src/components/recall/retry-queue-banner.tsx`
+  (not `src/components/study/` as §2's original file inventory named it — consistent with this
+  repo's existing pattern of domain components living under `src/components/recall/`) and
+  `src/lib/retry-queue.ts` now exist, with `tests/retry-queue.test.ts` added. `study-panel.tsx`'s
+  `rate()` applies the self-grade optimistically and enqueues on failure, retrying with exponential
+  backoff (capped 30s, ±50% jitter) via the `useGradeRetryQueue` hook. It deliberately reuses the
+  existing `rateAttempt` dedup key (`"${session.id}_${question.id}"`) rather than the
+  `${userId}_${questionId}_${attemptTimestamp}` format spec.md used to describe, since
+  `rateAttempt` already overwrites the same attempt document idempotently. Queue persistence is
+  `sessionStorage`, not IndexedDB — an explicit MVP scope decision. spec.md §2.4.3/§9.23 already
+  reflect this as "Implemented 2026-09-21."
+- **Per-kind object detail layouts (spec.md §12).** `src/components/recall/object-detail.tsx`
+  (248 lines, up from a single universal layout) now branches on `object.kind`: `tag`/`collection`
+  render a members/tagged-objects list from backlinks, `exam` renders linked questions with each
+  one's attempt record, `citation` surfaces its URL as a distinct link, and `question` renders its
+  options/format/correct-answer set. The shared `ContextPanel` (Links/Backlinks/Details tabs)
+  remains the common frame per the original brief.
+- **Worktree-migration checkbox (spec.md §11).** Checked off directly in spec.md with recorded
+  evidence: zero matches for `.worktrees`/`worktrees` under `src/`, and
+  `tsc --noEmit --listFiles` includes no files under `.worktrees/`.
+
+**Not done — still open, handed to separate single-task dispatches per the product owner's
+explicit instruction to split remaining work into one sub-agent per task rather than one bundled
+run:**
+
+- **Accessibility regression pass (NFR-3).** No `axe-core`/`@axe-core/playwright` dependency was
+  added; spec.md §11's axe checkbox and plan.md's "not done" note both still apply unchanged.
+- **Sidebar parity implementation + proof (spec.md §11, §5.4/§9.16).** The only sidebar-adjacent
+  code added is `src/domain/sidebar.ts`, a small shared cookie-name/max-age constant — none of the
+  documented gaps (peek modes, drag-to-resize bounds, side-aware `[`/`]` shortcuts) were
+  implemented. The interrupted run left an uncommitted-then-committed scratch file,
+  `tests/e2e/zzz-debug.spec.ts`, mid-investigation of the `[` shortcut interacting with the command
+  palette's search input (it logs `document.activeElement` before/after pressing `[` inside the
+  palette). **This file currently breaks `pnpm lint`** (1 Biome formatting error) and must be
+  removed or turned into a real, passing test as part of closing this item — it should not stay in
+  the tree as-is.
+
+**Verification run for this pass:** `pnpm exec tsc --noEmit` — clean. `pnpm lint` — **1 error, 3
+warnings** (the error is `tests/e2e/zzz-debug.spec.ts`'s formatting, noted above; the warnings are
+the 2 pre-accepted `noDocumentCookie` instances plus one more of the same kind, not yet identified
+by file). Unit tests and `pnpm run build` were not re-run to completion in this pass — deferred to
+the two follow-up dispatches below so their own verification runs are the authoritative record for
+the code they touch. Given the lint failure, this repo's build gate is not currently green;
+whichever follow-up dispatch removes/fixes `zzz-debug.spec.ts` should confirm lint is clean again
+as part of its own verification.
+
+### Component Structure Standardization & Firebase Auth UI Pass (2026-09-21)
+
+Standardized component file organization under `src/components/recall/` and `src/components/firebase/`:
+- **Relocated Recall Components**:
+  - `src/components/space-frame.tsx` → `src/components/recall/space-frame.tsx`
+  - `src/components/study/retry-queue-banner.tsx` → `src/components/recall/retry-queue-banner.tsx`
+  - Removed empty `src/components/study/` directory.
+- **Firebase Auth Primitives (`src/components/firebase/`)**:
+  - `auth-card.tsx` — Unified Sign In & Registration form using shadcn Base UI primitives and Firebase Auth Client SDK (`signInWithEmailAndPassword`, `createUserWithEmailAndPassword`).
+  - `google-sign-in-button.tsx` — OAuth trigger for Google Sign-In using `signInWithPopup(auth, googleProvider)`.
+  - `password-reset-dialog.tsx` — Password recovery modal using `sendPasswordResetEmail`.
+  - `auth-provider.tsx` — React context tracking `onAuthStateChanged` and exposing active user credentials.
+- **Import & URL Wiring**: Updated component and type import paths across app router pages (`src/app/login/page.tsx`, `src/app/study/page.tsx`, `src/app/review/page.tsx`, `src/app/space/page.tsx`, `src/app/settings/page.tsx`, `src/app/question/page.tsx`, `src/app/question/[id]/page.tsx`), domain utilities (`src/domain/sidebar.ts`, `src/lib/retry-queue.ts`), components (`src/components/recall/context-panel.tsx`, `src/components/recall/study-panel.tsx`), and test files (`tests/e2e/interaction.spec.ts`).
+- **Verification**: Run `pnpm run typecheck`, linting (`biome check src tests`), and test verification to confirm zero regressions.
+
+### Accessibility (axe-core) regression pass (2026-09-21)
+
+Closed the accessibility item the prior "Punch-list pass" entry above left open
+(spec.md §11's axe checkbox, this file's Phase 6 §3.1 audit task, and §4's "A11y &
+UI" matrix row). Added `@axe-core/playwright` (^4.13.0, dev dependency) and a new
+`tests/e2e/accessibility.spec.ts` following `tests/e2e/helpers.ts`'s existing
+`signUp`/`createSpace`/`createObject`/`startSession`/`visit` conventions and one
+isolated user per test. Six specs each scan with `AxeBuilder` restricted to
+`["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]` (NFR-3's own WCAG 2.1 AA wording,
+not axe's broader best-practice rules) and assert zero violations:
+
+- `/space` (space home)
+- an object detail page (`/question/[id]`, with a linked note and a backlinks-bearing
+  question so the scan covers a populated page, not just an empty shell)
+- the command palette in its open state (`Mod+K` on `/space`)
+- the practice study-session runner, scanned both mid-question and on the
+  post-answer self-grade feedback state (`/study`, `study-panel.tsx`)
+- the simulated-exam runner, scanned mid-question with the countdown visible
+  (`/study`, same component, `simulated_exam` mode)
+- `/settings`
+
+**Violations found and fixed (real, in this app's own code):**
+
+- **`color-contrast` (serious), widespread.** The brand color token `#cc785c`
+  (`--primary`/`--coral`/`--ring`/`--sidebar-primary`/`--sidebar-ring` in
+  `src/app/globals.css`, all one shared hex) measured 3.11:1 as text against the
+  `--background`/`--canvas` page background and 3.27:1 as white button/badge text
+  against itself as a fill — both below the 4.5:1 AA threshold NFR-3 requires, and
+  below it against `--card`/`--surface-card` too. Darkened the token to `#8f4630`
+  (5.63–6.80:1 against every background/foreground pairing axe found in scope) and
+  deepened `--coral-active` from `#a9583e` to `#74301c` so hover/active states stay
+  visually distinct from the new base shade. `--muted-foreground` (`#6c6a64`)
+  measured 4.47:1 against `--card` — a hairline fail — and was darkened to `#5f5d57`
+  (5.45:1+). All four changes are CSS custom-property edits in `src/app/globals.css`
+  only; no component markup changed for this part.
+- **`color-contrast` (serious), one component.** `src/app/space/page.tsx`'s "Start a
+  study session" link sits inside the dark `bg-surface-dark text-white` hero card;
+  it used the same `text-coral` utility as every light-background use, which the
+  token darkening above would have made worse there (2.63:1 against
+  `--surface-dark`, since that darkening was tuned for light backgrounds). Changed
+  that one link to `text-white`, matching the card's existing heading/body color
+  rather than introducing a third brand-color variant for a single dark-surface use.
+
+**Violation found and deliberately deferred (pre-existing shadcn/ui primitive
+issue, per this task's own scope guidance — not fixed, not silently suppressed):**
+
+- **`aria-required-children` (critical), command palette only.** `cmdk` 1.1.1's
+  compiled output (`node_modules/cmdk/dist/index.js`) hardcodes `role="listbox"` on
+  its `List` and `role="separator"` on its `Separator` — confirmed by reading the
+  installed package's own bundle, not just `src/components/ui/command.tsx` (the
+  unmodified shadcn-generated wrapper around it). ARIA 1.1 disallows a listbox
+  containing anything but `option`/`group` children, so `CommandSeparator` inside
+  `CommandList` (`command-palette.tsx`'s Objects/Actions divider) trips this rule.
+  Fixing it would mean patching or forking the third-party `cmdk` package, which is
+  out of this task's scope. `tests/e2e/accessibility.spec.ts`'s command-palette test
+  narrowly excludes only this one rule ID via an `expectNoViolations(page,
+  ["aria-required-children"])` parameter, with an inline comment pointing back to
+  this note — every other WCAG 2.1 A/AA rule still applies to that test, and no
+  other spec in the file disables anything.
+
+**Not attempted — explicitly out of this task's scope, per its own instructions:**
+visual-regression coverage. TESTING.md's "Genuinely not covered yet" list named
+"Accessibility and visual regression" as one combined item; this pass closes the
+accessibility half only. Visual/viewport parity snapshotting remains open.
+
+**A note on repository state during this pass:** partway through this work, `git
+status` started showing unrelated modified/new files this task never touched —
+`src/components/space-frame.tsx`, `src/domain/sidebar.ts`,
+`tests/e2e/zzz-debug.spec.ts` (deleted), `tests/sidebar.test.ts` (new),
+`.claude/settings.json`, `.gemini/settings.json`, `intent.md`,
+`.agents/skills/tenancy-invariant-check/`, and
+`.claude/agents/tenancy-isolation-reviewer.md` — consistent with the separate
+sidebar-parity follow-up dispatch the prior "Punch-list pass" entry above says was
+handed off independently, apparently running concurrently against the same working
+tree. This pass's own diff is limited to `package.json`/`pnpm-lock.yaml`
+(`@axe-core/playwright`), `tests/e2e/accessibility.spec.ts` (new),
+`src/app/globals.css`, `src/app/space/page.tsx`, and this file/`spec.md`; none of
+the files in the list above were read for content beyond confirming they were not
+mine, and none were modified or reverted by this pass. Whoever integrates both
+passes should diff carefully — this entry's verification commands below were run
+against a tree that included the other pass's in-progress, not-yet-reviewed changes
+too, so a clean result here does not by itself vouch for that other work.
+
+**Verification run for this pass:** `pnpm exec tsc --noEmit` — clean. `pnpm exec
+biome check tests/e2e/accessibility.spec.ts src/app/globals.css
+src/app/space/page.tsx` (this pass's own files, scoped deliberately given the
+concurrent-modification note above) — clean. `pnpm lint` unscoped — 3 errors / 3
+warnings, all inside `src/components/space-frame.tsx`
+(`assist/source/organizeImports`, `lint/a11y/useSemanticElements` on a
+`role="separator"` div, and a formatting diff) plus the pre-existing
+`noDocumentCookie` warnings×3; none of these are in files this pass touched, and
+`space-frame.tsx` was mid-edit by the concurrent pass at the time. `pnpm test` — 38/38
+passing (includes `tests/sidebar.test.ts`, not authored by this pass).
+`pnpm exec playwright test accessibility.spec.ts` — 6/6 passing, run live four times
+across the color-token fix iterations above, final run 6/6 in 30.3s. The full
+`pnpm test:e2e` suite and `pnpm run build` were not re-run in this pass, to avoid
+attributing the concurrent pass's in-progress `space-frame.tsx`/sidebar changes to
+this one's verification record.
+
+### Sidebar parity pass (2026-09-21) — peek, resize, nested groups, and the interrupted run's debug file
+
+Closed the last two open items handed off by the punch-list pass above: spec.md §11's
+sidebar-parity checkbox and the leftover `tests/e2e/zzz-debug.spec.ts` scratch file. Run
+concurrently in the same working tree as the accessibility pass above (and at least one
+other in-flight session touching `.agents/`, `graphify-out/`, and `scripts/`) — this
+entry's own diff is scoped to `src/components/space-frame.tsx`, `src/domain/sidebar.ts`,
+`tests/sidebar.test.ts`, `tests/e2e/interaction.spec.ts`, `tests/e2e/zzz-debug.spec.ts`
+(deleted), and `spec.md`/this file; nothing else was read for content beyond confirming
+it wasn't this pass's own, and nothing else was modified or reverted.
+
+**First finding: the "current sidebar primitive" spec.md pointed at was the wrong file.**
+spec.md §5.4/§9.16 (and this task's own brief) describe the gaps as living in
+`src/components/ui/sidebar.tsx`. That file is a generated shadcn scaffold with **zero
+imports anywhere under `src/`** — `grep -rl "ui/sidebar" src` returns nothing. The shell
+the app actually renders is the bespoke `<aside>` in `src/components/space-frame.tsx`
+(plus `src/components/recall/context-panel.tsx` for the right-hand rail), which already
+had the `sidebar_state` cookie, desktop/mobile split, and side-aware `[`/`]` shortcuts
+(landed in an earlier pass, `src/lib/keyboard.ts`'s `isEditableTarget` guard already
+correctly excluding `INPUT`/`TEXTAREA`/`SELECT`/`contentEditable`). All new work in this
+pass therefore went into `space-frame.tsx`, not the unused primitive. spec.md §5.4's
+"Root-branch gap audit" paragraph and §9 item 16 are annotated with this correction
+in place (history preserved, not rewritten) rather than silently redirected.
+
+**Second finding: `tests/e2e/zzz-debug.spec.ts` was investigating a non-bug.** The
+deleted debug file typed `[` into the command palette's search input and logged
+`document.activeElement` before/after, plus asserted `nav` stayed visible. Reading
+`isEditableTarget`/the `[` handler showed the suppression already worked correctly (the
+palette's `CommandInput` is a real `<input>`). The file was removed rather than kept, but
+its underlying question — "does `[` leak into the palette?" — is now a real, permanent
+regression case: the existing `tests/e2e/interaction.spec.ts` sidebar test asserts
+`palette` gets the literal `[` character and `nav` stays visible. That existing assertion
+was itself broken in a way the debug file never surfaced (see below), which this pass
+also fixed.
+
+**Landed:**
+
+- **Peek (spec.md §5.4 "Collapse and peek").** A `peek` boolean, separate from `collapsed`
+  and never persisted, added to `space-frame.tsx`. Hover over the "Show navigation" toggle
+  (300ms open dwell, 150ms close dwell so moving the pointer from toggle to panel doesn't
+  flicker) or focus it via keyboard previews the collapsed sidebar as a floating overlay;
+  Escape or an outside `pointerdown` dismisses it. `persistCollapsed` is only ever called
+  from `toggleCollapsed`, never from the peek path — proven by an e2e test that reads
+  `document.cookie` before and during a peek and asserts it is unchanged, then reloads to
+  confirm the peek never became durable.
+- **Bounded drag-to-resize (spec.md §5.4 "Resize limits").** `src/domain/sidebar.ts` gained
+  `sidebarMinWidth`/`sidebarMaxWidth`/`sidebarDefaultWidth`/`sidebarWidthStep` (160/360/240/16)
+  and a pure `clampSidebarWidth`, unit-tested in `tests/sidebar.test.ts`. The rail width is
+  a CSS custom property (`--sidebar-w`) driving both the grid column and the aside's own
+  width, dragged via raw Pointer Events (not `react-resizable-panels`, whose percentage-based
+  sizing doesn't fit a fixed-pixel grid column) with `setPointerCapture`. Dragging past the
+  160px floor collapses the rail instead of clamping, per spec. Width is deliberately **not**
+  persisted — spec.md only requires persisting the desktop open/closed cookie, and width
+  resets to the default each session; this is a judgment call, flagged here rather than
+  assumed. The accessible alternative to dragging is an ARIA "window splitter"
+  (`role="separator"`, `aria-orientation="vertical"`, `aria-valuemin/max/now`, focusable,
+  Arrow/Home/End keys) — `lint/a11y/useSemanticElements` wanted `<hr>` instead, which cannot
+  carry `aria-value*` or take focus, so it's suppressed with a `biome-ignore` explaining why.
+- **Nested/grouped nav highlight scope (spec.md §5.4 "Sections and nesting").** The five flat
+  nav items became two collapsible groups ("Workspace": Overview/Questions; "Practice":
+  Study session/Review queue) plus a standalone "Settings" row. Each group header is a
+  `<button aria-expanded>` with its own hover style, independent of the other group's
+  expanded state and of any child row's active/hover styling — there is no shared
+  `group`/`peer` class spanning a header and its rows, so collapsing one group cannot affect
+  another's highlight. `active: NavKey` narrows to the flattened key union so existing
+  `active="overview"` etc. call sites in `src/app/*/page.tsx` needed no changes.
+- **Row-action regression test (spec.md §5.4 "Row actions").** No new row action was added —
+  `src/components/recall/space-tabs.tsx`'s existing per-tab Close button already reveals via
+  `opacity-0`/`group-hover:opacity-100`/`focus-visible:opacity-100` scoped to its own tab's
+  wrapper div, which already satisfies "reveal on the row's own hover/focus... not because a
+  child button is hovered." That contract had no test proving it, so one was added:
+  `toHaveCSS("opacity", ...)` checks for two sibling rows' close buttons, hovering one and
+  confirming the other stays at `0`, then a real Tab keypress (not `.focus()`, which Chromium
+  does not reliably treat as keyboard modality right after a preceding mouse hover, so
+  `:focus-visible` would not otherwise engage) into the other row's own close button.
+
+**Fixed along the way (pre-existing, not introduced by this pass):**
+
+- `tests/e2e/interaction.spec.ts`'s existing `[`-suppression assertion
+  (`expect(nav).toBeVisible()` immediately after typing `[` into the still-open command
+  palette) was asserting through a modal dialog's `aria-hidden`/inert background, which hides
+  `nav` from the accessibility tree regardless of whether the shortcut fired — `getByRole`
+  reported "element(s) not found," not "hidden." This is what `zzz-debug.spec.ts` was
+  circling without landing on. Fixed by closing the dialog (`Escape`) before asserting `nav`
+  is visible, which still proves the shortcut was suppressed while the palette had focus.
+- A `getByRole("link", { name: "Study session" })` locator in the new nested-groups test hit
+  Playwright's default substring matching and also matched the Overview page's own "Start a
+  study session" call-to-action link; added `exact: true`.
+- The reduced-motion assertion first expected `getComputedStyle(...).transitionDuration` to
+  read back the author-written `"0.01ms"` from `globals.css`'s `prefers-reduced-motion`
+  override; Chromium's computed style always serializes CSS time values in seconds
+  (`"1e-05s"`), so the assertion now parses the value numerically and checks it is far below
+  the non-reduced-motion 200ms transition, instead of matching a unit-specific string.
+- An intermediate edit (a Python script used to rename a type import) was run without
+  `newline=""`, which converted the whole file to CRLF on Windows and made `pnpm lint` report
+  it as entirely reformatted; caught immediately by re-running lint and fixed by normalizing
+  the file back to LF before making any further edits.
+
+**Verification run for this pass:** `pnpm exec tsc --noEmit` — clean. `pnpm exec biome check`
+scoped to this pass's own files (`src/components/space-frame.tsx`, `src/domain/sidebar.ts`,
+`tests/sidebar.test.ts`, `tests/e2e/interaction.spec.ts`) — clean (only the pre-existing,
+already-accepted `noDocumentCookie` warning). `pnpm lint` unscoped — clean, 0 errors, 3
+warnings (all three pre-existing `noDocumentCookie` instances). `pnpm test` — 39/39 passing
+(includes this pass's `tests/sidebar.test.ts` and one more test file than the accessibility
+pass's own verification run recorded, from further concurrent activity in the shared tree).
+`pnpm exec playwright test tests/e2e/interaction.spec.ts` — 13/13 passing, run live against
+the already-running local emulators/dev server (reused per `playwright.config.ts`'s
+`reuseExistingServer`), including the mobile-drawer test at a real 600×900 viewport.
+`pnpm exec playwright test tests/e2e/space-flow.spec.ts tests/e2e/tenancy.spec.ts` — 9/9
+passing (regression check: the nav restructuring didn't break anything that navigates
+through it). `tests/e2e/accessibility.spec.ts`, `tests/e2e/mcp.spec.ts`, the full
+`pnpm test:e2e` suite, and `pnpm run build` were not run by this pass, to avoid attributing
+the concurrent accessibility pass's in-progress work to this pass's verification record, and
+because `accessibility.spec.ts`/`mcp.spec.ts` exercise surfaces this pass did not touch.
+
+**Not done / open:**
+
+- **Width is not persisted** (see above) — a deliberate scope decision, not an oversight, but
+  worth a product call before this is considered final.
+- **`useIsMobile`/`ui/sidebar.tsx` itself remains untouched and still unused.** This pass did
+  not delete it or the components that depend on it, since removing an unused-but-intact
+  primitive was outside this task's brief; a future cleanup pass should decide whether to
+  delete it outright or keep it as a documented, deliberately-unused scaffold.
+- **§3.1's "Sidebar migration and rollout boundary" (old-4 port plan) is now stale.** It
+  describes porting `old-4`'s `AppShell`/`SidebarProvider` composition into
+  `src/components/ui/sidebar.tsx`; the shell that actually shipped is the simpler bespoke
+  `space-frame.tsx` described above, which was not built by porting `old-4`. This pass did
+  not rewrite §3.1 — flagging it here as a spec-cleanup item rather than resolving it
+  unilaterally, since it's a larger narrative section than the two smaller, targeted
+  corrections this pass made to §5.4/§9.16.
+- Full `pnpm test:e2e` and `pnpm run build` should be re-run once no other session is
+  concurrently modifying the tree, so a clean result actually vouches for the whole repo
+  rather than a scoped subset.
+
+
