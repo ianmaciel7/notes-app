@@ -5,11 +5,14 @@ import { z } from "zod";
 import {
   type Attempt,
   autoQuality,
+  examDurationSeconds,
+  graceExpired,
   grade,
   objectInput,
   plainText,
   quality,
   type RecallObject,
+  SESSION_EXPIRED,
   type Snapshot,
   type Space,
   type StudyRecord,
@@ -308,11 +311,18 @@ export async function startSession(
   scope: string,
   count: number,
   mode: "practice" | "simulated_exam",
+  // FR-11: simulated_exam additionally requires a user-configured time limit;
+  // practice mode ignores this and never carries a deadline.
+  durationSeconds?: number,
 ) {
   const data = await snapshot(spaceId);
   if (data.spaceId !== spaceId) throw new Error("Space not found.");
   z.number().int().min(1).max(100).parse(count);
   z.enum(["practice", "simulated_exam"]).parse(mode);
+  const duration =
+    mode === "simulated_exam"
+      ? examDurationSeconds.parse(durationSeconds)
+      : null;
   const scopeObject = data.objects.find((obj) => obj.id === scope);
   const questions = data.objects
     .filter(
@@ -341,8 +351,7 @@ export async function startSession(
     mode,
     questions,
     answers: {},
-    deadline:
-      mode === "simulated_exam" ? Date.now() + questions.length * 90000 : null,
+    deadline: duration != null ? Date.now() + duration * 1000 : null,
     results: null,
   };
   await ref.set(session);
@@ -373,8 +382,16 @@ export async function saveSessionAnswer(
   const ref = firebase().db.collection("sessions").doc(sessionId);
   await firebase().db.runTransaction(async (tx) => {
     const current = (await tx.get(ref)).data() as StudySession;
-    if (current.results || (current.deadline && Date.now() >= current.deadline))
+    if (current.results)
       throw new Error("Session has ended. Submit saved answers.");
+    // spec.md §2.4.3: an answer arriving within `deadline + EXAM_GRACE_MS` is
+    // still accepted (a slow network shouldn't forfeit a real answer); one
+    // arriving after the grace window is rejected with a recognizable code so
+    // the client can show a clear "time's up" message instead of a generic one.
+    if (graceExpired(current.deadline, Date.now()))
+      throw new Error(
+        `${SESSION_EXPIRED}: Time's up. The exam's grace window has closed, so this answer wasn't saved.`,
+      );
     tx.update(ref, { [`answers.${objectId}`]: answers });
   });
 }
@@ -385,6 +402,12 @@ export async function finishSession(sessionId: string) {
   return db.runTransaction(async (tx) => {
     const current = (await tx.get(ref)).data() as StudySession;
     if (current.results) return current.results;
+    // spec.md §2.4.3: a late finish is "trimmed to answers recorded prior to
+    // expiration," not rejected outright. saveSessionAnswer above already
+    // refuses any write once `graceExpired(current.deadline, ...)` is true, so
+    // `current.answers` can never contain anything saved after the grace
+    // window closed — scoring off it here is the trim, by construction, for
+    // both an on-time finish and one that arrives arbitrarily late.
     const base = db
       .collection("spaces")
       .doc(session.spaceId)

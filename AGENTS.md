@@ -18,8 +18,8 @@ All AI coding agents MUST strictly enforce and utilize this specialized toolchai
 
 #### 1. Serena Toolchain (AST Navigation, Symbol Edits & Project Memory)
 - **`activate_project`**: Call when Serena reports no active project before running symbol or memory tools.
-- **`write_memory`**: MUST be used to store persistent project context, architectural decisions, discovered patterns, skill inventories, or lessons learned across agent sessions (e.g., `write_memory(memory_name, content)`).
-- **`read_memory` / `list_memories`**: Use to retrieve previously saved project memories or rules before re-analyzing complex subsystems.
+- **`list_memories` / `read_memory` (MANDATORY PRE-CHECK)**: MUST ALWAYS be checked before analyzing complex subsystems, scouting prior art, or writing new documentation/memories, to verify if memory of the information already exists. Never re-investigate or duplicate information already captured in project memory.
+- **`write_memory`**: MUST be used to store persistent project context, architectural decisions, discovered patterns, skill inventories, or lessons learned across agent sessions (e.g., `write_memory(memory_name, content)`). **Deduplication invariant**: Agents MUST call `list_memories` first to verify no existing memory covers the topic; edit/update existing memories (`edit_memory`) instead of creating redundant duplicates, and never duplicate memories into `.agents/docs/` or parallel markdown files.
 - **`find_symbol` / `get_symbols_overview` / `find_referencing_symbols` / `find_implementations`**: Use for precise symbol navigation, inspecting signatures, and finding call sites. Do NOT scan full source files when symbol tools apply.
 - **`replace_symbol_body` / `insert_after_symbol` / `insert_before_symbol`**: Use for targeted, surgical edits to functions, classes, or types without modifying unrelated file content.
 
@@ -50,6 +50,7 @@ Agents must proactively eliminate token waste and context bloat:
 - **No Repeated Exploration**: Do not repeatedly search the directory tree for concepts Graphify already indexes; query the graph first.
 - **Focused Documentation**: Keep Context7 queries strictly scoped to a single concept rather than pulling multi-topic references.
 - **No Repetitive File Reads**: Reuse recently read context within the conversation rather than re-reading unchanged files.
+- **No Duplicate Memories & Re-analysis**: Always inspect existing Serena memories (`list_memories`) before initiating broad subsystem exploration, scouting, or writing new memories. Never create parallel or duplicate memory files for concepts already captured.
 
 ### Token Observability & Harness Audits (On-Demand Only)
 

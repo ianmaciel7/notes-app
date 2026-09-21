@@ -74,11 +74,13 @@ pnpm lint     # biome check src tests
 
 Run this before treating a change as done — it's the cheapest available check and the closest thing this repo has to CI today (there is no CI workflow file yet).
 
-## Two traps in the E2E setup
+## Three traps in the E2E setup
 
 **Use `localhost`, never `127.0.0.1`.** Next 16 blocks cross-origin access to `/_next/*` dev resources, and it does not consider `127.0.0.1` the same origin as `localhost`. Point a browser at `http://127.0.0.1:3000` and the page still renders — server components run, chunks return 200, no error appears in the console — but the client bundle never finishes wiring up, so **nothing hydrates**: every button is inert and every test times out waiting for a click that silently did nothing. The only visible clue is a `Blocked cross-origin request to Next.js dev resource` warning in the dev server's own stdout, which is why `playwright.config.ts` does not set `stdout: "ignore"` on that server lightly. `baseURL` is `http://localhost:3000` for this reason. (The alternative is `allowedDevOrigins: ['127.0.0.1']` in `next.config.ts`; using `localhost` keeps the app config clean.)
 
 **Saving an object navigates from one `/question/<id>` to another.** A `waitForURL(/\/question\/[^/]+$/)` resolves instantly against the page you are already on and hands back the previous object's id. `createObject()` in `tests/e2e/helpers.ts` waits for the URL to actually *change*; keep that if you touch it.
+
+**The first cold navigation to `/space` can outrun the default 30s navigation timeout.** `playwright.config.ts`'s `webServer` health check only warms `/login` (its `url` target) before tests start; `/space` requires an authenticated session, so it cannot be warmed the same way, and Turbopack compiles it from scratch on whichever spec's `signUp()` call is first to reach it. On a cold run (no `.next` cache, first suite run on a machine) that compile has been observed to exceed 30s, failing `signUp()`'s `page.waitForURL("**/space")` with a timeout even though the app itself is working correctly. `signUp()` passes an explicit `{ timeout: 60_000 }` for this one navigation, and `playwright.config.ts` also sets a global `navigationTimeout: 60_000` as a second line of defense for any other route hit cold. If this still flakes, the underlying fix is a longer per-navigation timeout, not a shorter wait — the compile is real work, not a stuck test.
 
 ## Planned, not current
 

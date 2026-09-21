@@ -2,9 +2,13 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { snapshot } from "@/actions/recall";
 import type { RecallObject, Snapshot } from "@/domain/recall";
+import { sidebarCookie } from "@/domain/sidebar";
 import { parseTabs, tabsCookie } from "@/domain/tabs";
 
-export type SpaceData = Snapshot & { tabs: RecallObject[] };
+export type SpaceData = Snapshot & {
+  tabs: RecallObject[];
+  sidebarCollapsed: boolean;
+};
 
 // Shared by every /space, /question, /study, /review page: resolves the
 // caller's session and active Space in one place instead of duplicating the
@@ -30,5 +34,6 @@ export async function requireSnapshot(): Promise<SpaceData> {
     tabs: open
       .map((id) => byId.get(id))
       .filter((object): object is RecallObject => Boolean(object)),
+    sidebarCollapsed: jar.get(sidebarCookie)?.value === "true",
   };
 }

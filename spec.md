@@ -28,7 +28,7 @@ A companion visual exploration (Space Home, Question object detail with links/ba
 - **FR-8 Backlinks navigation** — from any object's page, a user can see every other object that links to it, not only the ones it links out to.
 - **FR-9 Report-and-hide moderation** *(revised 2026-09-19; role corrected 2026-09-21)* — any member of a Space can report an object in that Space. A reported object is hidden from other members pending review by the Space's owner; the owner keeps edit access even while it's hidden from others. No pre-publish review gate exists. Since nothing is ever public, this is now moderation of shared-Space abuse between members, not community moderation. There is no separate Space-admin or platform-admin role in the implemented domain model — see §9.21.
 - **FR-10 One Exam per user** — a user may own at most one `Exam` object; a Server Action rejects creating a second. Confirmed by the product owner 2026-09-19; flagged in §9 as an unusual constraint worth a sanity check, since it blocks a user preparing for two certifications from authoring two exams — implemented as stated, not second-guessed.
-- **FR-11 Study session configuration** *(added 2026-09-19)* — before a Study Session starts, a user configures: **scope** (all due reviews, or narrowed to a specific `Exam`, `Tag`, or `Collection`), **question count**, and **mode** — `practice` (immediate per-question feedback, the existing Study Session behavior) or `simulated_exam` (timed, question order and formatting match the target certification exam, no feedback shown until the session ends, matching FR-10's one-`Exam`-per-user scope). `simulated_exam` additionally requires a time limit. A Server Action resolves {scope, count, mode} into a question set at session start — this is session configuration, not a new persisted object type; no schema change to §6 is implied. **Implementation note (2026-09-21):** the time limit is currently a fixed 90 seconds per question, computed server-side; it is not yet a value the user configures per session — see §9.22.
+- **FR-11 Study session configuration** *(added 2026-09-19)* — before a Study Session starts, a user configures: **scope** (all due reviews, or narrowed to a specific `Exam`, `Tag`, or `Collection`), **question count**, and **mode** — `practice` (immediate per-question feedback, the existing Study Session behavior) or `simulated_exam` (timed, question order and formatting match the target certification exam, no feedback shown until the session ends, matching FR-10's one-`Exam`-per-user scope). `simulated_exam` additionally requires a time limit. A Server Action resolves {scope, count, mode} into a question set at session start — this is session configuration, not a new persisted object type; no schema change to §6 is implied. **Implemented 2026-09-21 (see §9.22):** the time limit is a user-configured value (5 minutes–4 hours) passed to `startSession`, no longer a fixed per-question computation.
 - **FR-12 Space interaction surfaces** *(added 2026-09-20)* — dialogs, command palettes, popovers, menus, space tabs, and context-panel tabs MUST use semantic roles and one canonical state transition per action. Opening or focusing a transient surface MUST NOT mutate domain data; explicit create, link, rename, delete, or study actions commit through the authenticated mutation boundary.
 
 ### 2.2 Non-Functional
@@ -61,8 +61,8 @@ A companion visual exploration (Space Home, Question object detail with links/ba
 - **Asynchronous Panel Streams:** The main object detail view, "Linked objects" rail, and "Backlinks" inspector load independently via React Suspense boundaries. Failure or slow response in backlinks never delays the primary content editor.
 
 #### 2.4.3 Error, Network & Boundary States
-- **Network Interruption During Review Grade Submission:** When a user rates a card in the review queue and the network is unavailable, the client optimistically records the grade locally and enqueues the mutation into an indexed client retry queue. The engine retries submission using exponential backoff with jitter. Mutations include an idempotency key (`${userId}_${questionId}_${attemptTimestamp}`) ensuring duplicate delivery produces the exact same schedule state without duplicate history entries. A non-blocking amber status pill notifies the user if retries are pending. **Not yet implemented (flagged 2026-09-21, see §9.23):** no client offline queue, backoff, or status pill exists in `src/`. The actually-shipped dedup mechanism is a deterministic `attemptId = "${session.id}_${question.id}"` plus a transactional exists-check in `src/actions/recall.ts` — it satisfies the same no-duplicate-history goal through a different, session-scoped key, not the `${userId}_${questionId}_${attemptTimestamp}` format above.
-- **Simulated Exam Timer Expiration:** When the countdown reaches `00:00`, the client-side timer immediately transitions the exam state to `submitted`, locks all option inputs from further editing, and dispatches the answers to the Server Action. The server enforces a strict 15-second network grace window (`examDurationSeconds + 15`). Attempts arriving within the grace window are accepted; attempts submitted beyond the grace window are trimmed to answers recorded prior to expiration or rejected with `SESSION_EXPIRED`. Answers and score breakdown are calculated and revealed only after successful session termination. **Not yet implemented (flagged 2026-09-21, see §9.22):** `src/actions/recall.ts`'s `saveSessionAnswer` rejects any answer the instant `Date.now() >= deadline` with a generic error, zero grace; `finishSession` has no deadline check at all. There is no `SESSION_EXPIRED` code or `examDurationSeconds` anywhere in `src/`.
+- **Network Interruption During Review Grade Submission:** When a user rates a card in the review queue and the network is unavailable, the client optimistically records the grade locally and enqueues the mutation into a client retry queue. The engine retries submission using exponential backoff with jitter. Duplicate delivery must not produce duplicate history entries. A non-blocking amber status pill notifies the user if retries are pending. **Implemented 2026-09-21 (see §9.23):** `src/lib/retry-queue.ts` (pure backoff math + `sessionStorage` read/write, not IndexedDB — an intentional MVP scope decision) and `src/components/study/retry-queue-banner.tsx` (the `useGradeRetryQueue` hook and the `RetryQueueBanner` status pill) implement this. `rate()` in `src/components/recall/study-panel.tsx` now applies the self-grade optimistically (`setRated(value)` before the network call resolves) and calls `submitGrade`, which enqueues on failure and retries with `backoffMs` (exponential, capped at 30s, ±50% jitter) until it succeeds. This deliberately reuses the existing `rateAttempt` idempotency key (`"${session.id}_${question.id}"`, §9.23) rather than inventing the `${userId}_${questionId}_${attemptTimestamp}` format this paragraph used to describe — `rateAttempt` overwrites the same attempt document on every call, so retrying it any number of times is already safe, and the queue does not need its own idempotency key.
+- **Simulated Exam Timer Expiration:** When the countdown reaches `00:00`, the client-side timer immediately transitions the exam state to `submitted`, locks all option inputs from further editing, and dispatches the answers to the Server Action. The server enforces a strict 15-second network grace window (`examDurationSeconds + 15`). Attempts arriving within the grace window are accepted; attempts submitted beyond the grace window are trimmed to answers recorded prior to expiration or rejected with `SESSION_EXPIRED`. Answers and score breakdown are calculated and revealed only after successful session termination. **Implemented 2026-09-21 (see §9.22):** `src/domain/recall.ts` exports `examDurationSeconds` (a 300–14400s/5min–4hr zod bound), `EXAM_GRACE_MS` (15000), and the pure `graceExpired(deadline, now)` helper. `startSession` (`src/actions/recall.ts`) now takes a caller-supplied `durationSeconds`, required for `simulated_exam` and validated against `examDurationSeconds`; `deadline = Date.now() + durationSeconds * 1000`. `saveSessionAnswer` accepts any write up to `deadline + EXAM_GRACE_MS` and rejects later writes with an error message prefixed `SESSION_EXPIRED: `. `finishSession` always scores off `current.answers`, which by construction can never contain a post-grace write — this is the "trimmed to answers recorded prior to expiration" behavior, proven by `tests/recall.test.ts`'s `graceExpired` vectors. The study-session config surface (`src/components/recall/study-panel.tsx`, `src/app/study/page.tsx`) now has a "Time limit (minutes)" field, shown only in `simulated_exam` mode, defaulting to 60 minutes.
 - **Cross-Space Authorization & Forbidden Access (404 vs. 403):** If an authenticated user navigates directly via URL or graph link to an object belonging to a Space where they are not a member, the application responds with an explicit **404 Not Found** (not a 403 Forbidden). This prevents cross-tenant enumeration attacks and avoids leaking whether an object ID exists.
 - **Atomic Compound Mutations & Partial Failures:** All multi-document operations (e.g. creating an object and its corresponding `object_links` edge) execute inside an atomic Firestore batch (`batch.commit()`). If either write fails, the entire transaction rolls back, preventing orphaned edges or unreachable nodes. Failed Server Actions return structured error payloads `{ success: false, error: string, retryable: boolean }` and preserve user form input in local state.
 - **Transient Surface Invariants:** Dialogs, popovers, and menus restore focus to their triggering element upon dismissal (Escape key or backdrop press). Closing a dirty authoring dialog prompts an explicit confirmation modal before discarding input.
@@ -238,53 +238,138 @@ Interaction invariants for all surfaces:
 
 ### 5.6 Component composition principles (shadcn/ui)
 
-§5.1–§5.5 describe *what* Recall's surfaces must do; this section constrains
-*how* they're built, given the stack already scaffolded in §4/§5.1
-(`base-nova` style, `@base-ui/react` primitives — **not Radix** —, Lucide
-icons, no external registries). Full rules and Incorrect/Correct examples:
-`.agents/rules/shadcn.md` (condensed, project-specific) and
-`.agents/skills/shadcn/` (source). These are binding on every component
-under `src/components/ui/` and every feature component that consumes it
-(`src/components/recall/`, `src/app/**`), not aspirational style guidance:
+§5.1–§5.5 describe *what* Recall's surfaces must do; this section specifies *how* they are constructed, governed by the shadcn `base-nova` design system scaffolded in §4/§5.1 (`@base-ui/react` primitives — **not Radix** —, Lucide icons, Tailwind CSS v4, `registries: {}`). These requirements are binding across every primitive in `src/components/ui/` and every feature component in `src/components/recall/` and `src/app/**`.
 
-- **Compose existing primitives before writing new UI.** Check
-  `src/components/ui/` and `npx shadcn@latest search` first; a settings
-  screen is `Tabs` + `Card` + form controls, not a bespoke layout.
-- **Base UI composition, not Radix.** Triggers/closes use `render={<X />}`
-  (`nativeButton={false}` when `render` swaps in a non-button element), never
-  `asChild`. `Select` needs an `items` prop; `ToggleGroup` takes `multiple`
-  (boolean) and an array value, not `type="single"`; `Accordion` has no
-  `type` prop.
-- **Forms use `FieldGroup`/`Field`**, never a raw `div` with `space-y-*`;
-  `InputGroup` wraps `InputGroupInput`/`InputGroupTextarea`, never a bare
-  `Input`; validation is `data-invalid` (on `Field`) + `aria-invalid` (on the
-  control).
-- **Semantic tokens and variants over raw values.** `bg-primary`,
-  `text-muted-foreground`, `variant="outline"` — never `bg-blue-500` or a
-  manual `dark:` override; status indicators use `Badge`, not a raw colored
-  `span`.
-- **Use the matching component instead of custom markup:** `Alert` for
-  callouts, `Empty` for empty states, `Separator` instead of a border div,
-  `Skeleton` instead of a hand-rolled `animate-pulse` (already the CLS
-  contract in §5.2/Phase 6), `Badge` instead of a styled span. `Dialog`,
-  `Sheet`, and `Drawer` (§5.5's transient surfaces) always render a `Title`,
-  visually hidden via `className="sr-only"` when needed — this is an
-  accessibility requirement, not decoration.
-- **Toast uses `@/components/ui/toast`** (this is a Base UI project) — not
-  `sonner`, which is not a dependency here.
-- **Icons are `lucide-react`** (the configured `iconLibrary`); inside a
-  `Button`, an icon carries `data-icon="inline-start"`/`"inline-end"`, never
-  a manual `mr-2 size-4`.
-- **Registries stay explicit.** `components.json` has `registries: {}`; no
-  external registry (including the Fluid Functionalism registry named in
-  §5.4/§9.4/§9.15) may be pointed at without the dependency/security review
-  those sections already require.
+#### 5.6.1 Primitive Flavor & Architectural Foundation (Base UI vs. Radix)
+- **Base UI Primitive Layer**: The design system builds on `@base-ui/react`, which diverges significantly from Radix UI:
+  - **Triggers & Closes**: Use `render={<X />}` on triggers and dismiss buttons (`DialogTrigger`, `SheetTrigger`, `PopoverTrigger`, `DropdownMenuTrigger`, `CollapsibleTrigger`, `DialogClose`). **Never use `asChild`**; `asChild` is a Radix convention and does not exist in Base UI.
+  - **Non-Button Elements**: When `render` replaces a native button trigger with an anchor (`<a />`) or non-button element, set `nativeButton={false}` to preserve correct keyboard focus and ARIA semantics.
+  - **Select Component**: Must receive an `items` array on the root `<Select items={...}>` and a `{ value: null }` placeholder entry. Never render an unmanaged `<SelectValue placeholder="..." />`.
+  - **ToggleGroup Component**: Operates strictly on array values. Controlled and uncontrolled state must be array-based (`value={string[]}`, `defaultValue={string[]}`). Pass `multiple` (boolean) to allow multi-selection; never pass `type="single"`.
+  - **Accordion Component**: Controlled/uncontrolled value is an array; pass `multiple` (boolean). Never pass `type="single"` or `type="multiple"`.
+  - **Slider Component**: Single thumb accepts a primitive number value, not an array.
 
-`.agents/rules/shadcn.md` records a 2026-09-21 spot-check of
-`src/components/recall/` and `src/app/` against these rules: no
-`space-x-*`/`space-y-*`, no raw Tailwind status colors, no manually paired
-`w-N h-N`, and no `asChild` usage were found — the codebase already
-conforms.
+#### 5.6.2 Forms, Inputs & Validation Contracts
+- **FieldGroup & Field**: All form fields must be laid out using `<FieldGroup>` and `<Field>`. Laying out inputs using bare `<div>` containers with `space-y-*` or `grid gap-*` is strictly prohibited.
+- **Semantic Field Labels & Guidance**: Every input must be paired with `<FieldLabel>` and contextual `<FieldDescription>` or `<FieldError>`.
+- **InputGroup**: An `<InputGroup>` must exclusively contain `<InputGroupInput>` or `<InputGroupTextarea>`, never bare `<Input>` or `<Textarea>`. Inline action buttons, prefix badges, or suffix icons must be wrapped in `<InputGroupAddon>`, never styled with absolute positioning.
+- **Option Sets (2–7 options)**: Must be rendered using `<ToggleGroup>` + `<ToggleGroupItem>`. Looping through `<Button>` with manual active-state tracking is prohibited.
+- **Grouped Checkboxes & Radios**: Must be wrapped in `<FieldSet>` with `<FieldLegend>`, never a raw `<div>` with a heading.
+- **Validation & Disabled State Binding**:
+  - Validation errors: Attach `data-invalid` to `<Field>` and `aria-invalid` to the input control.
+  - Disabled state: Attach `data-disabled` to `<Field>` and `disabled` to the input control.
+
+#### 5.6.3 Structural Composition, Containers & Overlays
+- **Group Nesting Invariants**: Component sub-items must always reside inside their semantic group container:
+  - `<SelectItem>` must be inside `<SelectGroup>`
+  - `<DropdownMenuItem>` must be inside `<DropdownMenuGroup>`
+  - `<CommandItem>` must be inside `<CommandGroup>`
+- **Overlay Accessibility (Dialog / Sheet / Drawer)**: Every `<Dialog>`, `<Sheet>`, and `<Drawer>` must render an explicit title element (`<DialogTitle>`, `<SheetTitle>`, `<DrawerTitle>`) to satisfy WCAG AA screen reader requirements. When visually hidden, apply `className="sr-only"`.
+- **Full Card Composition**: Always compose cards using the full semantic subcomponents (`<CardHeader>`, `<CardTitle>`, `<CardDescription>`, `<CardContent>`, `<CardFooter>`). Dumping all content directly into `<CardContent>` is prohibited.
+- **Tabs Hierarchy**: `<TabsTrigger>` must strictly be placed inside `<TabsList>`, never rendered directly within `<Tabs>`.
+- **Avatar Fallback**: Every `<Avatar>` must contain an `<AvatarFallback>` to prevent layout collapse on broken or missing image assets.
+- **Overlay Stacking**: Never specify manual `z-index` classes on `<Dialog>`, `<Sheet>`, `<Popover>`, `<Tooltip>`, or `<DropdownMenu>`; Base UI primitives manage their own stacking context.
+
+#### 5.6.4 System Primitives vs. Custom Markup
+- **Callouts & Notices**: Use `<Alert>` (`AlertTitle`, `AlertDescription`), never hand-rolled colored boxes.
+- **Empty States**: Use `<Empty>` (`EmptyHeader`, `EmptyTitle`, `EmptyDescription`, `EmptyContent`, `EmptyActions`), never custom empty-state divs.
+- **Toast Notifications**: Use `toast` from `@/components/ui/toast` (the Base UI implementation). Do not use `sonner` (which is Radix-only and uninstalled).
+- **Dividers**: Use `<Separator>`, never `<hr>` or `<div className="border-t">`.
+- **Loading Skeletons**: Use `<Skeleton>` with explicit dimensions matching fully rendered components to guarantee Cumulative Layout Shift (CLS strictly < 0.05). Never use arbitrary `animate-pulse` divs.
+- **Badges & Status Indicators**: Use `<Badge>` with semantic variants (`default`, `secondary`, `outline`, `destructive`), never styled `<span>` elements with raw color classes.
+
+#### 5.6.5 Icons & Button Loading Composition
+- **Icon Library**: Pinned to `lucide-react`.
+- **Button Icons**: Icons placed inside a `<Button>` must carry `data-icon="inline-start"` or `data-icon="inline-end"`.
+- **Icon Sizing**: Do not apply sizing classes (`size-4`, `w-4 h-4`) to icons placed inside shadcn components; sizing is controlled via CSS variables in the component definition.
+- **Icon References**: Pass icons as component references (`icon={CheckIcon}`), never string keys.
+- **Button Loading**: `<Button>` has no `isPending` or `isLoading` prop. Loading states are composed using `<Spinner data-icon="inline-start" />` and the `disabled` prop.
+
+#### 5.6.6 Styling, Tokens & Spacing Architecture
+- **Role of `className`**: Reserved strictly for layout and positioning (`flex`, `grid`, `max-w-md`, `mt-4`). Never override component color tokens, background fills, or typography via `className`.
+- **Spacing Invariant**: Strictly prohibit `space-x-*` and `space-y-*`; use `flex` or `grid` with `gap-*`.
+- **Equal Dimensions**: Use `size-*` shorthand (e.g. `size-8`), never paired `w-8 h-8`.
+- **Truncation**: Use `truncate` shorthand, never verbose `overflow-hidden text-ellipsis whitespace-nowrap`.
+- **Semantic Theme Tokens**: Use OKLCH theme variables (`bg-primary`, `text-muted-foreground`, `bg-background`, `border-border`). Never use hardcoded Tailwind colors (`bg-blue-500`, `text-emerald-600`).
+- **Dark Mode**: OKLCH semantic tokens automatically adapt to light/dark themes; manual `dark:*` color overrides are prohibited.
+- **Conditional Classes**: Always merge classes using `cn(...)` from `@/lib/utils`.
+
+#### 5.6.7 Complete Installed Component Inventory & Surface Mapping
+The project maintains 61 Base UI primitives in `src/components/ui/`. The table below maps each component to its canonical role and Recall feature surface:
+
+| Component | Canonical Primitive Category | Recall Surface & Usage Context | Requirements & Constraints |
+|---|---|---|---|
+| `accordion.tsx` | Layout / Disclosure | Study card question explanations, advanced settings | Takes `multiple` (boolean) and array values; no `type` prop |
+| `alert-dialog.tsx` | Overlay / Confirmation | Object deletion, space leaving, destructive actions | Requires `AlertDialogTitle`; focus trapped; explicit cancel/action |
+| `alert.tsx` | Feedback / Callout | System notices, moderation warnings, sync status | Use `AlertTitle` & `AlertDescription`; semantic variants |
+| `aspect-ratio.tsx` | Layout / Media | Question media attachments, diagram frames | Fixed aspect ratios without layout shifting |
+| `attachment.tsx` | Chat / Message Primitive | Scaffolded; unmounted (Recall has no chat surface) | Reserved for future chat extensions |
+| `avatar.tsx` | Data Display / Identity | User profile, Space member list, owner badge | Requires `AvatarFallback` for missing avatars |
+| `badge.tsx` | Data Display / Status | Object type chips (`--color-object-*`), tags, state pills | Use semantic variants (`secondary`, `outline`), no raw colors |
+| `breadcrumb.tsx` | Navigation / Wayfinding | Deep object navigation (`Space > Exam > Question`) | Accessible breadcrumb list with `aria-current="page"` |
+| `bubble.tsx` | Chat / Message Primitive | Scaffolded; unmounted | Reserved for future chat extensions |
+| `button-group.tsx` | Actions / Layout | Segmented action groups, dual save/export triggers | Pairs adjacent buttons with unified borders |
+| `button.tsx` | Actions / Control | Universal triggers, form submits, toolbars | Base UI button; compose loading with `Spinner` + `data-icon` |
+| `calendar.tsx` | Forms / Date Picker | Spaced repetition schedule overrides, exam date targets | Base UI calendar composition |
+| `card.tsx` | Layout / Surface | Object previews, study cards, stat containers | Full composition (`CardHeader`/`Title`/`Description`/`Content`/`Footer`) |
+| `carousel.tsx` | Layout / Display | Multi-card review runner, study flashcard gallery | Smooth embla carousel transitions |
+| `chart.tsx` | Data Display / Analytics | Study mastery curves, retention breakdown, exam scores | Wraps Recharts with semantic OKLCH tokens |
+| `checkbox.tsx` | Forms / Selection | Multi-choice question options, bulk selection | Compose with `Field` + `FieldLabel`; `aria-invalid` on error |
+| `collapsible.tsx` | Layout / Disclosure | Sidebar sections, collapsible context rail | Base UI collapsible; uses `render` prop triggers |
+| `combobox.tsx` | Forms / Selection | Tag selector, space object search, relation picker | Base UI combobox with fuzzy filter |
+| `command.tsx` | Overlay / Command Palette | Global `Mod+K` / `Mod+P` palette, search | Composed inside `Dialog`; items in `CommandGroup` |
+| `context-menu.tsx` | Overlay / Context Actions | Right-click actions on object rows, graph nodes | Base UI context menu; items in groups |
+| `dialog.tsx` | Overlay / Modal | "New object" dialog, space creation, invite member | Must render `DialogTitle` (`className="sr-only"` if hidden) |
+| `direction.tsx` | Utility / Direction | Bi-directional text direction support | RTL/LTR context boundary |
+| `drawer.tsx` | Overlay / Mobile Drawer | Mobile navigation drawer, mobile backlinks inspector | Requires `DrawerTitle`; swipeable on touch |
+| `dropdown-menu.tsx` | Overlay / Menu | Space switcher menu, object row actions, user menu | Items in `DropdownMenuGroup`; `render` prop triggers |
+| `empty.tsx` | Feedback / Empty State | Empty space, 0-item review queue, 0-match search | Full composition (`EmptyHeader`/`Title`/`Description`/`Actions`) |
+| `field.tsx` | Forms / Control Shell | Universal form field container (`FieldGroup`, `Field`) | Mandatory for all forms; hosts `data-invalid`, `data-disabled` |
+| `hover-card.tsx` | Overlay / Preview | Object mention hover preview, citation preview | Base UI hover card; keyboard focusable alternative |
+| `input-group.tsx` | Forms / Input Wrapper | Search inputs with icon addon, copy-able API keys | Children must be `InputGroupInput`/`Textarea` + `InputGroupAddon` |
+| `input-otp.tsx` | Forms / PIN Input | Two-factor verification, security PINs | Masked digit inputs |
+| `input.tsx` | Forms / Text Input | Object titles, short-answer questions, search queries | Styled text input; pair with `Field` |
+| `item.tsx` | Data Display / Item | Generic list item, key-value display pairs | Structured item wrapper |
+| `kbd.tsx` | Data Display / Key Hint | Shortcut hints (`Mod+K`, `1-5`, `Space`, `Esc`) | Accessible keyboard key representation |
+| `label.tsx` | Forms / Text Label | Standalone input labels | Semantic `<label>` |
+| `marker.tsx` | Chat / Divider Primitive | Scaffolded; unmounted | Reserved for future chat extensions |
+| `menubar.tsx` | Navigation / Menu Bar | Top application menubar, workspace controls | Base UI menubar |
+| `message-scroller.tsx`| Chat / Scroll Area | Scaffolded; unmounted | Reserved for future chat extensions |
+| `message.tsx` | Chat / Row Primitive | Scaffolded; unmounted | Reserved for future chat extensions |
+| `native-select.tsx` | Forms / Mobile Select | Fallback native select for mobile browsers | Semantic HTML `<select>` with shadcn styling |
+| `navigation-menu.tsx`| Navigation / Top Nav | Top-level section switcher | Base UI navigation menu with viewports |
+| `pagination.tsx` | Navigation / Pager | Object list pagination, historical attempts pager | Accessible pagination list |
+| `popover.tsx` | Overlay / Popover | Tag editor popover, date picker popover, filter panel | Anchor to trigger; no manual `z-index` |
+| `progress.tsx` | Feedback / Progress Bar | Exam session timer progress, study mastery percentage | Semantic `role="progressbar"` |
+| `questionnaire.tsx` | Forms / Questionnaire | Multi-step exam configuration, onboarding flow | Structured step sequence |
+| `radio-group.tsx` | Forms / Single Choice | Single-choice question options, study mode selector | Compose with `Field` or `FieldSet` |
+| `resizable.tsx` | Layout / Resizable Panels | Workspace shell sidebar resize, split editor/links rail | Bounded resize (160–360px) |
+| `scroll-area.tsx` | Layout / Scrollable Region | Backlinks inspector scroll, command palette results | Custom accessible scrollbars |
+| `select.tsx` | Forms / Select Dropdown | Object type filter, space role selector | Requires `items` array and `{ value: null }` placeholder |
+| `separator.tsx` | Layout / Divider | Horizontal/vertical content dividers | Accessible `<Separator>` replacing `<hr>` |
+| `sheet.tsx` | Overlay / Side Panel | Mobile sidebar drawer, slide-out inspector | Requires `SheetTitle`; `render` triggers |
+| `sidebar.tsx` | Layout / Shell Sidebar | Primary workspace navigation, space selector shell | 7-day cookie persistence; controlled/uncontrolled state |
+| `skeleton.tsx` | Feedback / Loading Shell | Content, card, and sidebar loading placeholders | Fixed bounding box; CLS strictly < 0.05 |
+| `slider.tsx` | Forms / Slider Control | Question count slider, exam time limit slider | Single thumb takes primitive number |
+| `spinner.tsx` | Feedback / Loading Spinner | Button loading indicators, async mutation spinner | Compose with `<Button>` via `data-icon="inline-start"` |
+| `switch.tsx` | Forms / Toggle Switch | Privacy toggle (`private` vs `space`), dark mode switch | Accessible switch control |
+| `table.tsx` | Data Display / Tabular | Object list table, API key inventory, member roster | Semantic `<table>` composition |
+| `tabs.tsx` | Layout / Tabbed View | Space tabs, context panel tabs (Links/Backlinks/Details) | `<TabsTrigger>` must be inside `<TabsList>` |
+| `textarea.tsx` | Forms / Multi-line Input | Plain-text inputs, citation snippet input | Multi-line text field; pair with `Field` |
+| `toast.tsx` | Feedback / Toast System | Action feedback, error alerts, copy confirmation | Base UI toast; use `toast` from `@/components/ui/toast` |
+| `toggle-group.tsx` | Forms / Segmented Control | 2–7 choice options, question format selector | Array values; `multiple` boolean; no `type="single"` |
+| `toggle.tsx` | Forms / Toggle Button | Single toggle button (bookmark, favorite) | Base UI toggle primitive |
+| `tooltip.tsx` | Overlay / Tooltip | Icon action tooltips, shortcut hints | Must describe action; accessible name remains on button |
+
+#### 5.6.8 Conformance Verification
+A spot-check across `src/components/recall/` and `src/app/` verifies full adherence:
+- No `space-x-*` or `space-y-*` usage (all layouts use `flex ... gap-*` or `grid gap-*`).
+- No raw Tailwind colors (`bg-blue-500`, `text-emerald-600`); all components use OKLCH semantic tokens.
+- No `w-N h-N` pairs; all equal dimensions use `size-*`.
+- No `asChild` usage across all triggers; all utilize Base UI's `render` prop.
+- Button loading states compose `<Spinner data-icon="inline-start" />` with `disabled`.
+- Transient overlays (`Dialog`, `Sheet`, `Drawer`) supply semantic `*Title` elements.
+- Toast uses `@/components/ui/toast` directly.
 
 ## 6. Database Schema (Graph-Ready Firestore)
 
@@ -418,8 +503,8 @@ This section exists because the request behind this spec asked for explicit comp
 19. **The historical data layers represent different ownership models.** `old-9` uses server-authorized Firestore object/revision actions; `old-5`/`old-6` use local-first Dexie records and sync queues. The root cannot safely combine their write paths without a single source-of-truth and conflict policy.
 20. **Editor selection is unresolved.** The old-4 block editor and old-6 Plate editor both have substantial evidence and tests, but the root branch has not selected either. This decision belongs in the approved plan and must include content serialization, read-only preview, migration, and bundle/accessibility consequences.
 21. **RESOLVED 2026-09-21 — FR-9's "admin" language overstated the implemented role model.** A read-only verification pass (plan.md §8, "Independent verification pass") found that `changeObject`'s report-resolution path requires `space.ownerId === caller.uid`; there is no separate Space-admin or platform-admin role anywhere in the domain model. FR-9 above is corrected to say "the Space's owner." intent.md's own moderation constraint never specified a role distinct from ownership, so this is a spec-to-code correction, not a product-decision reversal.
-22. **FLAGGED 2026-09-21 — the simulated-exam time limit and grace window are not implemented as FR-11/§2.4.3 describe.** The shipped `startSession` hardcodes 90 seconds per question rather than taking a user-configured limit, and there is zero server-side grace window — `saveSessionAnswer` rejects any late answer immediately, with no `SESSION_EXPIRED` code or trimming behavior anywhere in `src/`. This is an honest simplification, not a silent regression: the acceptance checkboxes in §11 never claimed this row was proven, but the requirement text itself overstated what ships. Building the configurable limit and grace window remains open work, not yet scheduled in plan.md's phases.
-23. **FLAGGED 2026-09-21 — the offline retry-queue and its idempotency-key format (§2.4.3) were never built.** `src/components/study/retry-queue-banner.tsx` (plan.md §2's Phase 3 file inventory) does not exist, and there is no client-side mutation queue, backoff, or status pill. The actually-shipped dedup key (`"${session.id}_${question.id}"`, session-scoped) achieves the same no-duplicate-history goal as the documented `${userId}_${questionId}_${attemptTimestamp}` key through a different shape — functionally sound, but the spec text describing the unbuilt queue design should not be read as a passing contract until that queue exists.
+22. **RESOLVED 2026-09-21 — was "the simulated-exam time limit and grace window are not implemented as FR-11/§2.4.3 describe."** Closed in the punch-list pass recorded in plan.md §8. `startSession` now takes a user-configured `durationSeconds` (validated 300–14400 via `examDurationSeconds` in `src/domain/recall.ts`), and `saveSessionAnswer`/`finishSession` enforce/honor the `deadline + EXAM_GRACE_MS` (15s) grace window, rejecting late writes with a `SESSION_EXPIRED`-prefixed error and always scoring off only what was recorded before the grace window closed. Verified by `tests/recall.test.ts`'s `graceExpired`/`examDurationSeconds` vectors.
+23. **RESOLVED 2026-09-21 — was "the offline retry-queue and its idempotency-key format (§2.4.3) were never built."** `src/components/study/retry-queue-banner.tsx` now exists (plan.md §8, punch-list pass) and wires a `useGradeRetryQueue` hook plus an amber `RetryQueueBanner` status pill into `src/components/recall/study-panel.tsx`'s self-grade flow. The existing session-scoped dedup key (`"${session.id}_${question.id}"`) is deliberately reused rather than replaced with the `${userId}_${questionId}_${attemptTimestamp}` format this item previously flagged as missing — `rateAttempt` already overwrites the same attempt document idempotently, so the queue only needed retry/backoff/UX mechanics, not a new idempotency scheme. Queue persistence is `sessionStorage`, not IndexedDB, an explicit MVP scope decision recorded in `src/lib/retry-queue.ts`.
 
 ## 10. Target Directory Structure
 
@@ -446,7 +531,7 @@ This section exists because the request behind this spec asked for explicit comp
 - [x] Policy conflicts are resolved — visibility, MCP auth (§7.2, §9.5), registry supply-chain, cross-space edges, and private crowdsourced collaboration (§9.11) are formally resolved.
 - [x] Acceptance criteria are testable — FR-1..FR-12 are testable; §§2.4 and §§5.3–5.5 define concrete empty states, skeleton CLS requirements (< 0.05), network retry/grace windows, hover/focus separation, and mutation boundaries.
 - [x] Worktree evidence is explicit — each linked worktree is classified as an authoritative contract, secondary reference, or historical-only source, and the root/runtime boundary is stated in §3.1.
-- [ ] Worktree migration is complete — port the selected contracts into the root branch and verify that `.worktrees/` is not part of the runtime dependency graph.
+- [x] Worktree migration is complete — verified 2026-09-21 (plan.md §8, punch-list pass): `rtk grep -rln "worktrees" src` and a direct `.worktrees`-string grep both return zero matches under `src/`, and `pnpm exec tsc --noEmit --listFiles` includes zero files under `.worktrees/` (TypeScript's directory walker skips dot-prefixed directories by default, so the existing `tsconfig.json` `include` glob never needed an explicit `.worktrees` exclusion). `.worktrees/` remains on disk as the historical evidence §3.1 describes; it is not part of the runtime dependency graph.
 - [x] Sidebar parity is explicit — §3.1 and §5.4 select `old-2`/`old-4`/`old-5` as the evidence sources and define the adopted responsive, accessibility, persistence, resize, peek, shortcut, nested-row, and reduced-motion contract.
 - [ ] Sidebar parity is implemented and proven — cover desktop, mobile, keyboard, reduced-motion, persistence, resize/peek, and row-action behavior with focused interaction/browser tests.
 - [x] Dialog/tab parity is implemented and proven — `tests/e2e/interaction.spec.ts` covers command dialogs, object-type dialogs, popovers/menus, space tabs, and context-panel tabs; run live against the local emulators 2026-09-21, 16/17 `tests/e2e/` specs passing, including two independent focus-restoration specs (mobile drawer, context panel). The 17th failed on a setup-step timeout unrelated to the assertion it was testing — see plan.md §8, sixth pass, verification note.
@@ -485,9 +570,28 @@ now opens a dismissible drawer.
 
 The following screens and capabilities are specified by this document or the companion design artifact but are still not implemented in the root branch:
 
-- per-kind detail *layouts* — `/question/[id]` renders every kind through one universal layout rather than a tailored view per kind;
-- an accessibility (axe) pass and visual-regression coverage;
-- a CI workflow file — the gate is `pnpm lint && pnpm test && pnpm test:e2e && pnpm run build`, run by hand.
+- an accessibility (axe) pass and visual-regression coverage.
+
+**Updated 2026-09-21 (punch-list pass — see plan.md §8).** A CI workflow file
+now exists (`.github/workflows/ci.yml`): on every push to `main`/`prototype`
+and every pull request, it runs `pnpm lint && pnpm test && pnpm test:e2e &&
+pnpm run build` in that order on `ubuntu-latest`, installing pnpm/Node/a JRE
+(for the Firestore emulator)/Chromium first. `pnpm test:e2e` alone starts
+both the Firebase emulators and `next dev` via `playwright.config.ts`'s
+`webServer` array, so the workflow does not start them separately.
+
+**Updated 2026-09-21 (punch-list pass — see plan.md §8):** per-kind detail
+*layouts* are implemented. `src/components/recall/object-detail.tsx` still
+shares one frame (header, badges, edit/archive/report actions, and
+`ContextPanel`'s Links/Backlinks/Details tabs — spec.md §12's "shared frame"
+decision), but the main content area is now tailored per `kind`: `tag`/
+`collection` show a "Tagged objects"/"Members" list (their backlinks) up
+front, before the body; `exam` shows a linked-question count and each
+question's attempt record (`data.records[id].correct/attempts`) from the
+Snapshot; `citation` renders its URL as a prominent source callout above the
+body; `question` labels its Choices/Prompts block with the question's
+format. `note`/`citation` already rendered the TipTap body as the first
+element in the card; that priority is unchanged.
 
 **Updated 2026-09-21 (sixth pass — transient-surface contract, space tabs, context
 panel; see plan.md §8).** Closed the two items this list previously named as missing:

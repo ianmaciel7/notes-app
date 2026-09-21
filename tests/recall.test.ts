@@ -2,6 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   autoQuality,
+  EXAM_GRACE_MS,
+  examDurationSeconds,
+  graceExpired,
   grade,
   objectInput,
   plainText,
@@ -167,6 +170,32 @@ test("plainText: reads text out of nested marks and lists", () => {
     ],
   };
   assert.equal(plainText(nested), "bold and plain");
+});
+
+test("graceExpired: a null deadline (practice mode) never expires", () => {
+  assert.equal(graceExpired(null, now), false);
+  assert.equal(graceExpired(null, now + 1e12), false);
+});
+
+test("graceExpired: false right up to the deadline, and through the 15s grace window", () => {
+  const deadline = now;
+  assert.equal(graceExpired(deadline, deadline - 1), false);
+  assert.equal(graceExpired(deadline, deadline), false); // at 00:00, no grace needed yet
+  assert.equal(graceExpired(deadline, deadline + EXAM_GRACE_MS - 1), false);
+});
+
+test("graceExpired: true once the grace window itself has elapsed", () => {
+  const deadline = now;
+  assert.equal(graceExpired(deadline, deadline + EXAM_GRACE_MS), true);
+  assert.equal(graceExpired(deadline, deadline + EXAM_GRACE_MS + 1), true);
+});
+
+test("examDurationSeconds: accepts 5 minutes to 4 hours, rejects outside that range", () => {
+  assert.equal(examDurationSeconds.safeParse(300).success, true);
+  assert.equal(examDurationSeconds.safeParse(14400).success, true);
+  assert.equal(examDurationSeconds.safeParse(299).success, false);
+  assert.equal(examDurationSeconds.safeParse(14401).success, false);
+  assert.equal(examDurationSeconds.safeParse(undefined).success, false);
 });
 
 test("objectInput: rejects a document nested past the depth cap", () => {

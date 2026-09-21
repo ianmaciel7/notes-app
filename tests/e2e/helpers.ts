@@ -45,7 +45,13 @@ export async function signUp(page: Page) {
   await page.locator("#email").fill(email);
   await page.locator("#password").fill("test-password-123");
   await submit.click();
-  await page.waitForURL("**/space");
+  // /space is almost always the very first request that lands here — unlike
+  // /login (warmed by playwright.config.ts's webServer health check) or a
+  // route another spec already visited, Turbopack has to compile it from
+  // scratch on demand. That first compile can outrun Playwright's default
+  // 30s navigation timeout on a cold run; double it rather than trim the
+  // real work being waited on.
+  await page.waitForURL("**/space", { timeout: 60_000 });
   return email;
 }
 

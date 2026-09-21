@@ -32,8 +32,9 @@ export default async function StudyPage() {
                 and reveals results at the end.
               </p>
               <p className="flex items-center gap-2">
-                <Clock3 className="size-4 text-coral" /> Simulated exams allow
-                90 seconds per question.
+                <Clock3 className="size-4 text-coral" /> Simulated exams use the
+                time limit you set, plus a short network grace window at the
+                end.
               </p>
             </CardContent>
           </Card>

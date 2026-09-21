@@ -13,7 +13,7 @@
 Recall follows a layered, server-authoritative architecture built on Next.js 16 (App
 Router, React 19) and Firebase — the plan was originally approved against Next.js 15;
 §8 records the `middleware.ts` → `proxy.ts` consequence of the actual Next.js 16 pin:
-- **Presentation Layer (`src/app/`, `src/components/`):** React Server Components (RSC) and Client Components styled with Tailwind CSS v4 and shadcn Base UI (`base-nova` neutral palette with object-type accent tokens). View state (modals, active tabs, search queries, sidebar peek) is strictly separated from persisted domain state. Component composition follows `.agents/rules/shadcn.md` (spec.md §5.6): Base UI's `render`/`nativeButton` API (not Radix `asChild`), `FieldGroup`/`Field` for forms, semantic tokens/variants over raw Tailwind colors, and no external shadcn registry without review.
+- **Presentation Layer (`src/app/`, `src/components/`):** React Server Components (RSC) and Client Components styled with Tailwind CSS v4 and shadcn Base UI (`base-nova` neutral palette with object-type accent tokens, 61 installed primitives). View state (modals, active tabs, search queries, sidebar peek) is strictly separated from persisted domain state. Component composition follows `.agents/rules/shadcn.md`, spec.md §5.6, and §1.3 below: Base UI's `render`/`nativeButton` API (not Radix `asChild`), `FieldGroup`/`Field` for forms, semantic tokens/variants over raw Tailwind colors, and no external shadcn registry without review.
 - **Action & Mutation Boundary (`src/actions/`):** Next.js Server Actions execute all business mutations using the server-only `firebase-admin` SDK. Direct client-side Firestore writes are completely disabled by security rules. Every Server Action resolves the caller session, verifies tenant membership, validates schema constraints, and executes atomic batched writes.
 - **Domain Services (`src/domain/`):** Pure, framework-agnostic business logic decoupled from transport and database drivers. Contains the SM-2 spaced repetition calculator, graph relationship invariants, exam attempt evaluators, and validation rules for question formats.
 - **Data & Security Layer (`firestore.rules`, `src/lib/firebase-admin/`):** Firestore NoSQL database enforcing multi-tenant isolation by `spaceId`. Centralized `object_links` collection tracks graph edges with strict endpoint symmetry. API keys are stored hashed in `/api_keys` and are accessible solely via the Admin SDK.
@@ -24,6 +24,50 @@ Router, React 19) and Firebase — the plan was originally approved against Next
 - **Zero Cross-Space Leakage:** Queries must always filter by `spaceId`. Link edges must verify that both `sourceId` and `targetId` share the exact same `spaceId`.
 - **Worktree Isolation:** The repository worktrees (`.worktrees/`) are historical reference checkouts only. Runtime code must never import from or reference `.worktrees/`.
 - **Path Portability:** All documentation and configuration must strictly use repository-relative paths (e.g. `./src/domain/recall.ts`). Absolute machine paths are strictly prohibited.
+
+### 1.3 shadcn/ui Component Architecture & Design System Requirements
+Recall implements a strict shadcn Base UI architecture (`base-nova` style, Lucide icon set, Tailwind CSS v4, `components.json` with `registries: {}`), governed by `.agents/rules/shadcn.md` and spec.md §5.6. All 61 installed primitives under `src/components/ui/` and all consuming features must satisfy these contracts:
+
+1. **Base UI Primitive Discipline (vs. Radix):**
+   - Composition uses Base UI's `render={<X />}` prop on triggers and dismissal controls, paired with `nativeButton={false}` when replacing buttons with anchors or custom elements. Never use Radix `asChild`.
+   - `Select` requires an `items` array on the root and a `{ value: null }` placeholder item (never bare `SelectValue placeholder="..."`).
+   - `ToggleGroup` and `Accordion` accept array values and a `multiple` boolean; scalar values and `type="single"` are invalid.
+   - `Slider` single thumb accepts a plain number.
+
+2. **Form Controls & Layout Standards:**
+   - Every input is wrapped in `<FieldGroup>` and `<Field>` alongside semantic `<FieldLabel>`, `<FieldDescription>`, and `<FieldError>`. Raw `div` wrappers with `space-y-*` or `grid gap-*` are prohibited.
+   - Composite inputs use `<InputGroup>` wrapping `<InputGroupInput>` or `<InputGroupTextarea>`, paired with `<InputGroupAddon>` for buttons or icons.
+   - Mutually exclusive options (2–7 choices) compose `<ToggleGroup>` + `<ToggleGroupItem>`.
+   - Checkbox and radio clusters require `<FieldSet>` + `<FieldLegend>`.
+   - Validation uses `data-invalid` on `<Field>` and `aria-invalid` on the control; disabled states use `data-disabled` on `<Field>` and `disabled` on the control.
+
+3. **Structural & Overlay Accessibility Contracts:**
+   - Sub-items must always reside inside their semantic group (`SelectItem` in `SelectGroup`, `DropdownMenuItem` in `DropdownMenuGroup`, `CommandItem` in `CommandGroup`).
+   - Transient surfaces (`Dialog`, `Sheet`, `Drawer`) must render a corresponding `*Title` element (`DialogTitle`, `SheetTitle`, `DrawerTitle`), visually hidden with `className="sr-only"` when needed.
+   - Cards require complete semantic decomposition (`CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`).
+   - Button loading states compose `<Spinner data-icon="inline-start" />` with `disabled` (no `isPending`/`isLoading` prop on Button).
+   - Tabs strictly require `<TabsTrigger>` inside `<TabsList>`.
+   - `<Avatar>` must render `<AvatarFallback>`.
+
+4. **Component Selection & Semantic Enforcement:**
+   - Callouts use `<Alert>`, empty states use `<Empty>`, toasts use `@/components/ui/toast` (Base UI), dividers use `<Separator>`, loading shells use `<Skeleton>` (maintaining CLS < 0.05), status indicators use `<Badge>`.
+   - Hand-rolled replacements for these primitives are prohibited.
+
+5. **Icon & Styling Guardrails:**
+   - Icons are strictly from `lucide-react`. Inside `<Button>`, icons must carry `data-icon="inline-start"` or `data-icon="inline-end"` with no internal sizing classes (`size-4`). Icons are passed as component references.
+   - `className` is reserved for layout and positioning. Component color, fill, and font overrides are prohibited.
+   - `space-x-*` and `space-y-*` are prohibited; layout stacks use `gap-*`.
+   - Equal dimensions use `size-*`. Truncated strings use `truncate`.
+   - The palette is defined by semantic OKLCH tokens; raw Tailwind colors (`bg-blue-500`, `text-emerald-600`) and manual `dark:*` overrides are prohibited.
+   - Overlays manage their own stacking; manual `z-index` classes are prohibited.
+
+6. **Component Surface Mapping (61 Installed Primitives):**
+   - **Workspace & Navigation Shell:** `sidebar.tsx`, `breadcrumb.tsx`, `navigation-menu.tsx`, `menubar.tsx`, `pagination.tsx`, `resizable.tsx`, `scroll-area.tsx`, `tabs.tsx`.
+   - **Actions & Controls:** `button.tsx`, `button-group.tsx`, `toggle.tsx`, `toggle-group.tsx`.
+   - **Form & Input Elements:** `field.tsx`, `input.tsx`, `textarea.tsx`, `input-group.tsx`, `select.tsx`, `native-select.tsx`, `combobox.tsx`, `checkbox.tsx`, `radio-group.tsx`, `switch.tsx`, `slider.tsx`, `calendar.tsx`, `input-otp.tsx`, `questionnaire.tsx`, `label.tsx`.
+   - **Overlays & Transients:** `dialog.tsx`, `alert-dialog.tsx`, `sheet.tsx`, `drawer.tsx`, `popover.tsx`, `tooltip.tsx`, `hover-card.tsx`, `dropdown-menu.tsx`, `context-menu.tsx`, `command.tsx`.
+   - **Data Display & Feedback:** `card.tsx`, `badge.tsx`, `avatar.tsx`, `table.tsx`, `chart.tsx`, `progress.tsx`, `skeleton.tsx`, `spinner.tsx`, `alert.tsx`, `empty.tsx`, `toast.tsx`, `kbd.tsx`, `item.tsx`, `separator.tsx`, `aspect-ratio.tsx`, `carousel.tsx`, `collapsible.tsx`, `direction.tsx`.
+   - **Scaffolded Residue (Unmounted):** `message.tsx`, `message-scroller.tsx`, `bubble.tsx`, `attachment.tsx`, `marker.tsx` (chat primitives preserved from scaffold but inactive).
 
 ---
 
@@ -171,6 +215,7 @@ The implementation plan introduces and modifies the following files across the 6
 | **Unit** | Vitest | - SM-2 calculation vectors (grades 0-5, interval & EF transitions)<br>- Question format schema validation & reserved format rejection<br>- One-Exam-per-user constraint validation<br>- API key SHA-256 hashing & format parsing<br>- TipTap JSON serialization and content node extractors | `pnpm exec vitest run tests/unit` | 100% pure function coverage |
 | **Integration** | Vitest + Firebase Emulator | - Firestore security rules multi-tenant isolation<br>- Unauthenticated read/write rejection<br>- Cross-space link creation rejection (endpoint symmetry)<br>- `/api_keys` client-side access denial<br>- Server Action atomic batch rollback on failure | `pnpm exec vitest run tests/integration` | 0 rule leaks, 100% tenant isolation |
 | **E2E** | Playwright | - User authentication & Space creation<br>- Question authoring with linked Note & Citation<br>- Backlinks panel navigation<br>- Review queue card flip, grading & SM-2 interval update<br>- Simulated exam timer countdown & auto-submit on `00:00`<br>- MCP JSON-RPC protocol query with `rcl_live_...` key | `pnpm exec playwright test` | 100% critical user path verification |
+| **A11y & UI** | Biome + Playwright | - Base UI `render` prop enforcement (zero `asChild`)<br>- Mandatory `*Title` elements on all transient dialogs/sheets/drawers<br>- Form field `FieldGroup` + `Field` structure enforcement<br>- Layout-stable skeletons (CLS < 0.05) & focus restoration on dismissal | `pnpm lint && pnpm test:e2e` | 100% component compliance & zero regressions |
 
 ---
 
@@ -637,3 +682,31 @@ dev` running together) — the route/label/aria-name updates inside
 `tests/e2e/interaction.spec.ts`, `tenancy.spec.ts`, and the renamed
 `space-flow.spec.ts` are mechanically consistent with the app changes but not yet
 proven live.
+
+### Complete shadcn/ui Component Inventory & Requirements Harmonization (2026-09-21)
+
+All shadcn/ui design system requirements, primitive constraints, and component
+inventories were exhaustively formalized and reconciled across `CONVENTIONS.md`,
+`spec.md` (§5.6.1–§5.6.8), and this document (§1.1, §1.3, §4):
+
+- **Comprehensive Inventory Mapping**: Documented all 61 Base UI primitives currently
+  installed under `src/components/ui/`, categorizing them into Workspace/Shell navigation,
+  Action controls, Form & input controls, Overlays & transients, Data display &
+  feedback, and Scaffolded unmounted residue (chat primitives).
+- **Enforced Architectural Invariants**:
+  - Base UI (`@base-ui/react`) composition: `render={<X />}` prop with `nativeButton={false}`
+    when swapping trigger elements; zero `asChild` usage across all components.
+  - Form field discipline: `<FieldGroup>` + `<Field>` mandatory for all inputs; composite
+    inputs wrapped in `<InputGroup>` + `<InputGroupInput>`/`<InputGroupTextarea>` with
+    `<InputGroupAddon>`; 2–7 option sets mapped to `<ToggleGroup>`; validation states
+    bound to `data-invalid` / `aria-invalid`.
+  - Overlay accessibility: Mandatory `*Title` elements on `<Dialog>`, `<Sheet>`, and `<Drawer>`.
+  - Semantic component usage: Mandatory replacement of custom markup with `<Alert>`, `<Empty>`,
+    `@/components/ui/toast`, `<Separator>`, `<Skeleton>` (guaranteeing CLS < 0.05), and `<Badge>`.
+  - Button loading: Composition via `<Spinner data-icon="inline-start" />` + `disabled`.
+  - Styling guardrails: Layout-only `className`, no `space-x-*`/`space-y-*` (strict `gap-*`),
+    `size-*` shorthand for equal dimensions, `truncate` for overflow text, and semantic OKLCH
+    tokens with zero manual `dark:*` or raw color overrides.
+- **Verification**: TypeScript compilation, Biome linting (`biome check src tests`), test suite
+  (28/28 passing), and production build (`pnpm run build` compiling all 10 routes) all passed cleanly.
+

@@ -13,6 +13,11 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
+    // Turbopack compiles each route on its first real request. /login is
+    // warmed by the webServer health check below, but the first route a spec
+    // navigates to past that (typically /space, right after sign-up) is not,
+    // and a cold compile can outrun the 30s default on a slow machine.
+    navigationTimeout: 60_000,
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: [

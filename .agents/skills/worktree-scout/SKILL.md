@@ -14,10 +14,10 @@ Orchestrates read-only research across historical Git worktrees in `.worktrees/o
 3. **Prefer Light Models**: Always specify `"Model": "flash_lite"` (or `"flash"` when complex synthesis is required) when dispatching subagents for worktree exploration. Never default to heavy or `inherit` models for read-only research tasks.
 4. **Leverage Graphify Skill**: Always consult Graphify (`query_graph` or `graphify query ...`, `get_node`, `shortest_path`) to map architectural relationships, communities, and god nodes before or alongside scouting. After documenting or persisting findings, run `graphify update .`.
 5. **Lean Context Citing**: Subagents must quote at most 15 lines per citation and summarize architectural rationale, file paths, and contract boundaries.
-6. **Persistent Knowledge Storage**: Always save synthesized findings in at least one persistent store:
-   - **Serena Memory**: Use `write_memory(memory_name, content)` for enduring architectural lessons and domain contracts.
-   - **Graphify Knowledge Graph**: Run `graphify update .` after adding documentation or syncing knowledge nodes.
-   - **Structured Plans / Docs**: Write synthesis reports to `.agents/docs/` or update sections in `plan.md`.
+6. **Persistent Knowledge Storage**: Always save synthesized findings in persistent stores:
+   - **Serena Memory (Primary)**: Use `write_memory(memory_name, content)` for enduring architectural lessons and domain contracts. Always call `list_memories` first to prevent duplicates.
+   - **Graphify Knowledge Graph**: Run `graphify update .` after syncing knowledge nodes or architectural notes.
+   - **Structured Plans & Specs**: Integrate findings directly into `plan.md` or `ARCHITECTURE.md`. Never create redundant duplicate files in `.agents/docs/`.
 
 ---
 
@@ -71,14 +71,14 @@ When subagents report back:
 ### Step 4: Persist Findings
 Save the findings to preserve knowledge:
 
-1. **Serena Memory**:
-   Call `write_memory` with an informative slug:
+1. **Serena Memory (Primary)**:
+   Always check `list_memories` first to verify no existing memory covers the topic. Call `write_memory` with an informative slug:
    - `worktree-auth-patterns`: Tenant isolation contracts and permission rules.
    - `worktree-editor-patterns`: Block editor schemas and event lifecycle.
    - `worktree-study-patterns`: Spaced repetition algorithms and scheduling queues.
 
-2. **Project Documentation**:
-   Update or write to `.agents/docs/` (e.g. `.agents/docs/worktree-synthesis-<topic>.md`) or append to `plan.md`.
+2. **Project Plans & Architecture**:
+   Update existing sections in `plan.md`, `spec.md`, or `ARCHITECTURE.md`. Do NOT create redundant duplicate files in `.agents/docs/`.
 
 3. **Graphify Graph**:
    Run `graphify update .` to update the codebase knowledge graph with any new markdown documents or architectural notes.

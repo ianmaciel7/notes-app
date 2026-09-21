@@ -168,6 +168,20 @@ export type StudySession = {
   deadline: number | null;
   results: { objectId: string; correct: boolean; expected: string[] }[] | null;
 };
+
+// FR-11 / spec.md §2.4.3 "Simulated Exam Timer Expiration": a simulated_exam
+// session requires a user-configured time limit (5 minutes to 4 hours), and
+// the server enforces a strict 15-second network grace window beyond it so a
+// slow connection doesn't silently forfeit an in-flight answer.
+export const examDurationSeconds = z.number().int().min(300).max(14400);
+export const EXAM_GRACE_MS = 15000;
+export const SESSION_EXPIRED = "SESSION_EXPIRED";
+
+// True once `now` is at or past the deadline plus the grace window. A null
+// deadline (practice mode) never expires.
+export function graceExpired(deadline: number | null, now: number): boolean {
+  return deadline != null && now >= deadline + EXAM_GRACE_MS;
+}
 export type Snapshot = {
   uid: string;
   email: string;
