@@ -1,29 +1,58 @@
 [Console]::InputEncoding = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-$rawInput = [Console]::In.ReadToEnd()
-if ([string]::IsNullOrWhiteSpace($rawInput)) {
-    @{ decision = "allow" } | ConvertTo-Json -Compress
+# Shared PreToolUse/BeforeTool guard for Antigravity (.agents/hooks.json),
+# Claude Code (.claude/settings.json), Codex (.codex/config.toml) and Gemini
+# CLI (.gemini/settings.json). Detects which caller's payload/response shape
+# it received and replies in kind, so the destructive-command policy below
+# is defined exactly once.
+function Write-Decision {
+    param(
+        [string]$Shape,
+        [string]$Decision,   # allow | deny | ask
+        [string]$Reason = $null
+    )
+    if ($Shape -eq "antigravity") {
+        $out = @{ decision = if ($Decision -eq "ask") { "force_ask" } else { $Decision } }
+        if ($Reason) { $out.reason = $Reason }
+    } elseif ($Shape -eq "gemini") {
+        # Gemini CLI's BeforeTool hook has no "ask" tier - only allow/deny.
+        $out = @{ decision = if ($Decision -eq "ask") { "deny" } else { $Decision } }
+        if ($Reason) { $out.reason = $Reason }
+    } else {
+        $specific = @{ hookEventName = "PreToolUse"; permissionDecision = $Decision }
+        if ($Reason) { $specific.permissionDecisionReason = $Reason }
+        $out = @{ hookSpecificOutput = $specific }
+    }
+    $out | ConvertTo-Json -Compress -Depth 5
     exit 0
 }
+
+$rawInput = [Console]::In.ReadToEnd()
+if ([string]::IsNullOrWhiteSpace($rawInput)) { Write-Decision -Shape "claude" -Decision "allow" }
 
 try {
     $payload = $rawInput | ConvertFrom-Json
 } catch {
-    @{ decision = "allow" } | ConvertTo-Json -Compress
-    exit 0
+    Write-Decision -Shape "claude" -Decision "allow"
 }
 
-if ($payload.toolCall.name -ne "run_command") {
-    @{ decision = "allow" } | ConvertTo-Json -Compress
-    exit 0
+if ($payload.toolCall) {
+    $shape = "antigravity"
+    $toolName = $payload.toolCall.name
+    $cmd = $payload.toolCall.args.CommandLine
+} else {
+    # Claude, Codex and Gemini CLI all send {tool_name, tool_input.command};
+    # only hook_event_name tells them apart (PreToolUse vs BeforeTool).
+    $toolName = $payload.tool_name
+    $cmd = $payload.tool_input.command
+    $shape = if ($payload.hook_event_name -eq "BeforeTool") { "gemini" } else { "claude" }
 }
 
-$cmd = $payload.toolCall.args.CommandLine
-if ([string]::IsNullOrWhiteSpace($cmd)) {
-    @{ decision = "allow" } | ConvertTo-Json -Compress
-    exit 0
-}
+$shellTools = @('run_command', 'Bash', 'shell', 'local_shell', 'exec_command', 'shell_command', 'run_shell_command')
+if ($shellTools -notcontains $toolName) { Write-Decision -Shape $shape -Decision "allow" }
+
+if ([string]::IsNullOrWhiteSpace($cmd)) { Write-Decision -Shape $shape -Decision "allow" }
 
 $trimmed = $cmd.Trim().Trim('"').Trim("'").Trim()
 
@@ -46,14 +75,8 @@ $destructiveRules = @(
 
 foreach ($rule in $destructiveRules) {
     if ($clean -match $rule.Pattern) {
-        $output = @{
-            decision = "force_ask"
-            reason   = "Potentially destructive command detected: '$trimmed'. $($rule.Description) Explicit user confirmation is required."
-        }
-        $output | ConvertTo-Json -Compress
-        exit 0
+        Write-Decision -Shape $shape -Decision "ask" -Reason "Potentially destructive command detected: '$trimmed'. $($rule.Description) Explicit user confirmation is required."
     }
 }
 
-@{ decision = "allow" } | ConvertTo-Json -Compress
-exit 0
+Write-Decision -Shape $shape -Decision "allow"

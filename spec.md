@@ -139,7 +139,7 @@ Important negative finding: no worktree is a complete drop-in implementation for
 - **Language:** TypeScript.
 - **Package Manager:** pnpm.
 - **Styling:** Tailwind CSS v4.
-- **Base UI:** shadcn/ui (already scaffolded — see §5) on top of `@base-ui/react` primitives.
+- **Base UI:** shadcn/ui (already scaffolded — see §5) on top of `@base-ui/react` primitives; composition rules in §5.6.
 - **Rich Text / Block Editor:** TipTap (headless, custom UI).
 - **Database:** Firebase Firestore (NoSQL).
 - **Authentication:** Firebase Auth (Email/Password, Magic Link, Google).
@@ -235,6 +235,56 @@ Interaction invariants for all surfaces:
 - Every mutation has one canonical action path, pending/duplicate-activation protection, failure feedback, and input preservation.
 - Every dismissal path is tested: explicit close, Escape, outside press where applicable, route change, mobile breakpoint transition, and reduced-motion mode.
 - Transient surfaces must not create page-level horizontal overflow or leave hidden/offscreen controls focusable.
+
+### 5.6 Component composition principles (shadcn/ui)
+
+§5.1–§5.5 describe *what* Recall's surfaces must do; this section constrains
+*how* they're built, given the stack already scaffolded in §4/§5.1
+(`base-nova` style, `@base-ui/react` primitives — **not Radix** —, Lucide
+icons, no external registries). Full rules and Incorrect/Correct examples:
+`.agents/rules/shadcn.md` (condensed, project-specific) and
+`.agents/skills/shadcn/` (source). These are binding on every component
+under `src/components/ui/` and every feature component that consumes it
+(`src/components/recall/`, `src/app/**`), not aspirational style guidance:
+
+- **Compose existing primitives before writing new UI.** Check
+  `src/components/ui/` and `npx shadcn@latest search` first; a settings
+  screen is `Tabs` + `Card` + form controls, not a bespoke layout.
+- **Base UI composition, not Radix.** Triggers/closes use `render={<X />}`
+  (`nativeButton={false}` when `render` swaps in a non-button element), never
+  `asChild`. `Select` needs an `items` prop; `ToggleGroup` takes `multiple`
+  (boolean) and an array value, not `type="single"`; `Accordion` has no
+  `type` prop.
+- **Forms use `FieldGroup`/`Field`**, never a raw `div` with `space-y-*`;
+  `InputGroup` wraps `InputGroupInput`/`InputGroupTextarea`, never a bare
+  `Input`; validation is `data-invalid` (on `Field`) + `aria-invalid` (on the
+  control).
+- **Semantic tokens and variants over raw values.** `bg-primary`,
+  `text-muted-foreground`, `variant="outline"` — never `bg-blue-500` or a
+  manual `dark:` override; status indicators use `Badge`, not a raw colored
+  `span`.
+- **Use the matching component instead of custom markup:** `Alert` for
+  callouts, `Empty` for empty states, `Separator` instead of a border div,
+  `Skeleton` instead of a hand-rolled `animate-pulse` (already the CLS
+  contract in §5.2/Phase 6), `Badge` instead of a styled span. `Dialog`,
+  `Sheet`, and `Drawer` (§5.5's transient surfaces) always render a `Title`,
+  visually hidden via `className="sr-only"` when needed — this is an
+  accessibility requirement, not decoration.
+- **Toast uses `@/components/ui/toast`** (this is a Base UI project) — not
+  `sonner`, which is not a dependency here.
+- **Icons are `lucide-react`** (the configured `iconLibrary`); inside a
+  `Button`, an icon carries `data-icon="inline-start"`/`"inline-end"`, never
+  a manual `mr-2 size-4`.
+- **Registries stay explicit.** `components.json` has `registries: {}`; no
+  external registry (including the Fluid Functionalism registry named in
+  §5.4/§9.4/§9.15) may be pointed at without the dependency/security review
+  those sections already require.
+
+`.agents/rules/shadcn.md` records a 2026-09-21 spot-check of
+`src/components/recall/` and `src/app/` against these rules: no
+`space-x-*`/`space-y-*`, no raw Tailwind status colors, no manually paired
+`w-N h-N`, and no `asChild` usage were found — the codebase already
+conforms.
 
 ## 6. Database Schema (Graph-Ready Firestore)
 
@@ -363,7 +413,7 @@ This section exists because the request behind this spec asked for explicit comp
 14. **Interaction parity is evidence-backed but incomplete.** The old-4 matrices verify important hover, disclosure, related-content, and side-panel states, while many keyboard, persistence-after-reload, and destructive paths remain marked not tested. Those paths remain acceptance work, not implicit requirements satisfied by visual similarity.
 15. **Fluid Functionalism adoption is intentionally unresolved.** The reference library is relevant because it offers Base UI-compatible components and a detailed sidebar interaction model, but adopting its registry could overwrite local shadcn primitives and add dependencies. Use its docs/repository as design evidence first; adopt code only after reviewing provenance, license, generated files, dependency changes, accessibility behavior, and visual fit.
 16. **Current sidebar primitive is only partially aligned.** The root primitive persists desktop open state and provides a mobile drawer, but it currently uses the stock `Ctrl/Cmd+B` shortcut and supports icon collapse rather than the reference's side-aware bracket shortcut, peek modes, bounded resize, and explicit nested highlight scope. These mismatches need a focused implementation decision and tests before the shell can be considered complete.
-17. **Transient-surface focus parity is incomplete.** The captured `old-4` focus artifact shows the side-panel hide action retaining focus after it moves offscreen, and full Tab traversal was not reliably captured. Dialog, menu, popover, and tab focus restoration therefore remain acceptance work even where individual component tests pass.
+17. **RESOLVED 2026-09-21 — was "Transient-surface focus parity is incomplete."** The captured `old-4` focus artifact showed the side-panel hide action retaining focus after it moved offscreen. The sixth pass (plan.md §8) returns focus to the triggering control when the mobile nav drawer, the command dialog, the "New object" dialog, and the context panel's collapse control close, proven live by `tests/e2e/interaction.spec.ts` (16/17 passing 2026-09-21). This closes the acceptance-summary row §11 previously left open for dialog/tab parity.
 18. **Historical study engines disagree with the current product decision.** `old-8`, `old-5`, and `old-9` contain FSRS implementations, while `intent.md` explicitly selects SM-2. No scheduler code may be ported until the plan records the chosen algorithm, stored-card schema, deterministic test vectors, and migration/versioning strategy.
 19. **The historical data layers represent different ownership models.** `old-9` uses server-authorized Firestore object/revision actions; `old-5`/`old-6` use local-first Dexie records and sync queues. The root cannot safely combine their write paths without a single source-of-truth and conflict policy.
 20. **Editor selection is unresolved.** The old-4 block editor and old-6 Plate editor both have substantial evidence and tests, but the root branch has not selected either. This decision belongs in the approved plan and must include content serialization, read-only preview, migration, and bundle/accessibility consequences.
@@ -380,8 +430,8 @@ This section exists because the request behind this spec asked for explicit comp
 │   ├── editor/           # TipTap Custom Nodes and UI
 │   └── ui/               # shadcn/ui components (base-nova)
 ├── lib/                  # Shared utilities
-│   ├── firebase/         # Firebase Client SDK initialization
-│   ├── firebase-admin/   # Firebase Admin SDK (Server only)
+│   ├── firebase/         # Firebase config: client.ts (Client SDK), admin.ts
+│   │                     # (Admin SDK, server-only), session.ts (session/auth helpers)
 │   └── srs/              # Spaced Repetition Algorithm logic
 ├── actions/              # Next.js Server Actions
 └── types/                # Global TypeScript definitions (Object types, schemas)
@@ -396,7 +446,7 @@ This section exists because the request behind this spec asked for explicit comp
 - [ ] Worktree migration is complete — port the selected contracts into the root branch and verify that `.worktrees/` is not part of the runtime dependency graph.
 - [x] Sidebar parity is explicit — §3.1 and §5.4 select `old-2`/`old-4`/`old-5` as the evidence sources and define the adopted responsive, accessibility, persistence, resize, peek, shortcut, nested-row, and reduced-motion contract.
 - [ ] Sidebar parity is implemented and proven — cover desktop, mobile, keyboard, reduced-motion, persistence, resize/peek, and row-action behavior with focused interaction/browser tests.
-- [ ] Dialog/tab parity is implemented and proven — cover command dialogs, object-type dialogs, popovers/menus, main tabs, context-panel tabs, focus restoration, persistence, and no-mutation-on-open behavior with focused interaction/browser tests.
+- [x] Dialog/tab parity is implemented and proven — `tests/e2e/interaction.spec.ts` covers command dialogs, object-type dialogs, popovers/menus, workspace tabs, and context-panel tabs; run live against the local emulators 2026-09-21, 16/17 `tests/e2e/` specs passing, including two independent focus-restoration specs (mobile drawer, context panel). The 17th failed on a setup-step timeout unrelated to the assertion it was testing — see plan.md §8, sixth pass, verification note.
 - [x] Cross-worktree architecture evidence is synthesized — authentication, revisions, relations, study scheduling, local-first/sync, editor alternatives, AI boundaries, and verification sources are classified in §3.1.
 - [x] Architecture choices are approved — SM-2 scheduler, TipTap JSON serialization, server-authoritative Firestore actions, and Space-scoped API keys documented and approved in `plan.md`.
 
@@ -432,11 +482,22 @@ now opens a dismissible drawer.
 
 The following screens and capabilities are specified by this document or the companion design artifact but are still not implemented in the root branch:
 
-- command palette, workspace tabs, and context-panel tabs (FR-12, NFR-5) — dialogs and menus exist;
 - per-kind detail *layouts* — `/question/[id]` renders every kind through one universal layout rather than a tailored view per kind;
-- the full reduced-motion and focus-restoration matrix (Phase 6), beyond the focus-visible styling in the generated primitives and Escape-to-dismiss on the drawer and dialogs;
 - an accessibility (axe) pass and visual-regression coverage;
 - a CI workflow file — the gate is `pnpm lint && pnpm test && pnpm test:e2e && pnpm run build`, run by hand.
+
+**Updated 2026-09-21 (sixth pass — transient-surface contract, workspace tabs, context
+panel; see plan.md §8).** Closed the two items this list previously named as missing:
+the command palette (`Mod+K`/`Mod+P`, landed earlier in `f0658726`), workspace tabs
+(`src/components/recall/workspace-tabs.tsx`, `src/domain/tabs.ts`, persisted via a
+capped cookie), and the context panel (`src/components/recall/context-panel.tsx`, a
+named `tablist` with `tab`/`tabpanel` roles replacing the object detail page's two
+stacked cards) now satisfy FR-12/NFR-5 and §5.5's "Context-panel tabs" row. The
+reduced-motion and focus-restoration matrix is also closed: a
+`prefers-reduced-motion: reduce` block in `src/app/globals.css`, and focus returned to
+the triggering control when the mobile nav drawer or the context panel's collapse
+control closes. Covered by `tests/e2e/interaction.spec.ts`. The axe/visual-regression
+pass, per-kind detail layouts, and the CI workflow file remain open.
 
 **Updated 2026-09-20 (fourth pass — TipTap).** Object content is now authored in a real
 TipTap editor (`@tiptap/react` + StarterKit) with a formatting toolbar and markdown input

@@ -22,7 +22,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## AI-Assisted Development
 
-This repository is configured for AI-assisted development across **Antigravity, Codex, Claude Code, and Cursor**.
+This repository is configured for AI-assisted development across **Antigravity, Codex, Claude Code, and Gemini CLI**.
 
 The tooling is designed to reduce unnecessary context and token usage while improving codebase navigation and retrieval.
 
@@ -59,9 +59,23 @@ GEMINI.md
 └── Antigravity-specific integration instructions when required
 
 .agents/
-└── rules/
-    ├── graphify.md
-    └── rtk.md
+├── agents.json, local.json  — @agents-dev/cli scaffold: MCP server sync +
+│                               skill materialization across every tool
+├── rules/
+│   ├── graphify.md
+│   └── rtk.md
+├── skills/                  — portable skills, synced/bridged into
+│                               .claude/skills, .gemini/skills, Codex, Antigravity
+└── hooks/
+    ├── command-safety.ps1   — blocks/asks-to-confirm destructive commands
+    └── enforce-rtk.ps1      — denies shell commands that bypass RTK
+        (both scripts are shared: each auto-detects which tool called it and
+        replies in that tool's own hook schema — see AGENTS.md)
+
+.claude/settings.json   — Claude Code's hook wiring (PreToolUse)
+.gemini/settings.json   — Gemini CLI's hook + permissions config (BeforeTool)
+.codex/config.toml      — Codex MCP + hook wiring (PreToolUse); gitignored,
+                           materialized per machine by `agents sync`
 
 .serena/
 └── project.yml

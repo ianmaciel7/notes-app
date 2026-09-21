@@ -22,7 +22,40 @@
             "command": "graphify hook-guard gemini"
           }
         ]
+      },
+      {
+        "matcher": "run_shell_command",
+        "hooks": [
+          {
+            "name": "command-safety",
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$GEMINI_PROJECT_DIR/.agents/hooks/command-safety.ps1\"",
+            "timeout": 10000
+          },
+          {
+            "name": "enforce-rtk",
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$GEMINI_PROJECT_DIR/.agents/hooks/enforce-rtk.ps1\"",
+            "timeout": 10000
+          }
+        ]
       }
     ]
+  },
+  "context": {
+    "fileName": "AGENTS.md"
+  },
+  "contextFileName": "AGENTS.md",
+  "mcpServers": {
+    "fetch": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      }
+    }
   }
 }

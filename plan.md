@@ -10,8 +10,10 @@
 ## 1. Architecture & Dependency Boundaries
 
 ### 1.1 Architectural Layers
-Recall follows a layered, server-authoritative architecture built on Next.js 15 (App Router, React 19) and Firebase:
-- **Presentation Layer (`src/app/`, `src/components/`):** React Server Components (RSC) and Client Components styled with Tailwind CSS v4 and shadcn Base UI (`base-nova` neutral palette with object-type accent tokens). View state (modals, active tabs, search queries, sidebar peek) is strictly separated from persisted domain state.
+Recall follows a layered, server-authoritative architecture built on Next.js 16 (App
+Router, React 19) and Firebase — the plan was originally approved against Next.js 15;
+§8 records the `middleware.ts` → `proxy.ts` consequence of the actual Next.js 16 pin:
+- **Presentation Layer (`src/app/`, `src/components/`):** React Server Components (RSC) and Client Components styled with Tailwind CSS v4 and shadcn Base UI (`base-nova` neutral palette with object-type accent tokens). View state (modals, active tabs, search queries, sidebar peek) is strictly separated from persisted domain state. Component composition follows `.agents/rules/shadcn.md` (spec.md §5.6): Base UI's `render`/`nativeButton` API (not Radix `asChild`), `FieldGroup`/`Field` for forms, semantic tokens/variants over raw Tailwind colors, and no external shadcn registry without review.
 - **Action & Mutation Boundary (`src/actions/`):** Next.js Server Actions execute all business mutations using the server-only `firebase-admin` SDK. Direct client-side Firestore writes are completely disabled by security rules. Every Server Action resolves the caller session, verifies tenant membership, validates schema constraints, and executes atomic batched writes.
 - **Domain Services (`src/domain/`):** Pure, framework-agnostic business logic decoupled from transport and database drivers. Contains the SM-2 spaced repetition calculator, graph relationship invariants, exam attempt evaluators, and validation rules for question formats.
 - **Data & Security Layer (`firestore.rules`, `src/lib/firebase-admin/`):** Firestore NoSQL database enforcing multi-tenant isolation by `spaceId`. Centralized `object_links` collection tracks graph edges with strict endpoint symmetry. API keys are stored hashed in `/api_keys` and are accessible solely via the Admin SDK.
@@ -257,6 +259,58 @@ same change):
 - **Component locations:** the Space switcher lives at
   `src/components/recall/space-switcher.tsx` (next to the other Recall domain
   components), not `src/components/workspace/space-switcher.tsx` from §2's Phase 1 row.
+- **Firebase configuration is one `src/lib/firebase/` directory, not the
+  `src/lib/firebase/config.ts` + `src/lib/firebase-admin/app.ts` split §1.1/§2's Phase 1
+  rows describe.** Client init is `src/lib/firebase/client.ts` (`browserAuth()`), Admin
+  init is `src/lib/firebase/admin.ts` (`firebase()` returning `{ auth, db }`), and
+  session helpers are `src/lib/firebase/session.ts` (`user()`/`authorized()`, described
+  above). Checked against Context7 docs for the pinned SDK versions
+  (`firebase@12.19.0`, `firebase-admin@14.4.0`):
+  - Both `client.ts` and `admin.ts` guard `initializeApp` with `getApps()[0] ?? ...` —
+    required under Next.js dev-mode module reloads, which would otherwise call
+    `initializeApp` twice on the same default app.
+  - `client.ts` guards `connectAuthEmulator` with `!auth.emulatorConfig` before calling
+    it. This isn't defensive style: the SDK's emulator connector throws
+    `auth/emulator-config-failed` on a second call in the same session unless the
+    config is identical, so an unguarded call breaks on Fast Refresh.
+  - `admin.ts` sets `FIREBASE_AUTH_EMULATOR_HOST` / `FIRESTORE_EMULATOR_HOST` at module
+    load, before `firebase()` ever calls `getAuth()`/`getFirestore()`. The Admin SDK
+    reads the emulator host env var once, at first construction, so setting it any
+    later than this would silently fall through to production Firebase.
+  - `client.ts` reads `NEXT_PUBLIC_FIREBASE_API_KEY` / `_PROJECT_ID` / `_AUTH_DOMAIN`
+    with `demo-recall` fallbacks so local dev needs no `.env` file; `admin.ts` reads
+    `FIREBASE_PROJECT_ID` with no explicit credential (Application Default
+    Credentials apply in a real deployment) and refuses to start against a non-`demo-`
+    project unless the emulator host is set, so a misconfigured environment cannot
+    accidentally write to a live project.
+  - spec.md §10's directory tree is updated alongside this entry to match.
+- **Alternative considered and rejected: FirebaseUI for `src/app/login/page.tsx`.**
+  Firebase ships two libraries under this name, checked against Context7/official docs
+  (`firebase.google.com/docs/auth/web/firebaseui`):
+  - `react-firebaseui` / `firebaseui-web` (Context7's top match by snippet count) wraps
+    the legacy v8 **compat** SDK (`firebase/compat/app`) and is incompatible with this
+    repo's modular-only `firebase@12.19.0` usage — adopting it would mean installing a
+    second, deprecated copy of the Auth SDK.
+  - `@firebase-oss/ui-react@beta` + `@firebase-oss/ui-core` is the current rewrite: built
+    on the modular SDK, and installable through the shadcn registry
+    (`npx shadcn@latest add @firebase/sign-in-auth-screen @firebase/google-sign-in-button`),
+    which fits this repo's existing shadcn/Base UI stack.
+  - This second package is not hypothetical here — `.worktrees/old-9` already used it
+    (`FirebaseUIProvider`/`initializeUI` in
+    `.worktrees/old-9/src/components/auth/firebase-provider.tsx`, documented in
+    `.worktrees/old-9/docs/FIREBASE_AUTHENTICATION.md`): FirebaseUI signs in client-side,
+    then the client POSTs the ID token to a route that verifies it with the Admin SDK and
+    sets an HttpOnly session cookie — evidence only, per spec.md §9.13, not something the
+    root branch imports.
+  - **Not adopted**, because it assumes the client SDK owns persistent Auth state (the
+    component keeps the user signed in after the widget completes), while this repo's
+    Phase 1 design deliberately does the opposite: `src/app/login/page.tsx` calls
+    `signInWithEmailAndPassword`/`createUserWithEmailAndPassword` only to mint an ID
+    token, exchanges it for the `recall-session` cookie via the `login()` Server Action,
+    then immediately `signOut()`s the client SDK — Firebase Auth state is never persisted
+    client-side, matching `firestore.rules`' blanket-deny and the server-only Admin SDK
+    boundary above. Wiring FirebaseUI's screen components to that pattern would mean
+    overriding their built-in state ownership for a two-field form that already works.
 
 ### What this pass actually closed out (Build stage, Phase 1 + UI wiring)
 
@@ -430,3 +484,47 @@ stated at the top of §8; this entry backfills that gap.
 `pnpm test` (28/28 passing), `pnpm run build` (succeeds, all 10 routes compile). Not
 run live in this pass: the Playwright E2E suite (needs Firebase emulators + `next dev`
 up together).
+
+**Verification run 2026-09-21 (`/anthropic-sdlc` verify pass): `pnpm test:e2e` run
+live.** First attempt failed at the `webServer` step — two Firebase emulator processes
+(`java`, `node`) were already bound to ports 8080/9099/4000 from an earlier session and
+never shut down; Playwright's `reuseExistingServer` health check didn't recognize them
+as ready, so it tried to start a second instance and hit "port taken." Stopped the
+stale processes and reran: **16/17 `tests/e2e/` specs passed.** The one failure —
+`interaction.spec.ts` › "closing a transient surface returns focus to its opener" — was
+a `page.waitForURL("**/workspace")` timeout inside the shared `signUp()` helper
+(`tests/e2e/helpers.ts:48`), not a failure of the focus-restoration assertion the test
+never reached. Re-running that spec alone reproduced the same setup-step timeout,
+confirming it's a cold-start cost (Turbopack compiling `/login` and `/workspace` on
+their first-ever hit against a freshly started `next dev`) rather than flake-by-chance
+or a product regression: every other spec that calls the same `signUp()` helper,
+including two other focus-restoration specs in the same file (the mobile drawer and the
+context panel), passed once those routes were warm. Follow-up, not yet done: give the
+first E2E test a longer timeout or add a `webServer`-adjacent warm-up request so a cold
+Turbopack compile can't exceed Playwright's default 30s test timeout.
+
+### shadcn/ui composition rules formalized (2026-09-21)
+
+`.agents/skills/shadcn/` (SKILL.md + `rules/*.md`) was read in full and condensed into
+a project-scoped rule file, `.agents/rules/shadcn.md`, linked from `AGENTS.md`'s
+tool-specific configuration list and referenced from spec.md §5.6 (new) and §1.1 above.
+This is governance, not a code change: §1.1's Presentation Layer boundary and spec.md
+now say explicitly, not just implicitly, that this repo's shadcn usage is Base UI
+(`render`/`nativeButton`, not Radix `asChild`), which registry state is allowed
+(`components.json` has `registries: {}`, matching spec.md §9.4/§9.15's existing
+supply-chain caution), and which primitive to reach for (`FieldGroup`/`Field` over raw
+`div` layout, `toast` from `@/components/ui/toast` over `sonner` since this is a Base UI
+project, semantic tokens/variants over raw Tailwind colors, `data-icon` over manual icon
+margins).
+
+Also recorded: `src/components/ui/message.tsx`, `message-scroller.tsx`, `bubble.tsx`,
+`attachment.tsx`, and `marker.tsx` (the shadcn chat primitives) are present from the
+base-nova scaffold but unused — no file under `src/app` or `src/components/recall`
+imports them. Recall has no chat surface; this is scaffold residue, not a hidden
+feature, and should not be read as evidence one exists.
+
+**Verification:** spot-checked `src/components/recall/` and `src/app/` against the new
+rule file — no `space-x-*`/`space-y-*`, no raw Tailwind status colors
+(`text-emerald-*`/`bg-blue-*`/etc.), no manually paired `w-N h-N`, and no `asChild`
+usage found; `data-icon` is already in use. The codebase already conformed before this
+pass — this entry makes the rule explicit and durable rather than fixing a violation.
