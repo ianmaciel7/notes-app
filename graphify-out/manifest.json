@@ -612,10 +612,10 @@
     "semantic_hash": "e688c2260f81888950d41a20a2d19393"
   },
   ".agents/skills/anthropic-sdlc/SKILL.md": {
-    "mtime": 1789861046.9474292,
-    "seen": 1789987658.8951163,
-    "ast_hash": "258d37f06647b86c4210811f44c17f26",
-    "semantic_hash": "258d37f06647b86c4210811f44c17f26"
+    "mtime": 1790028830.8434591,
+    "seen": 1790029172.4939818,
+    "ast_hash": "c08946ea0b39c5fd9f582905accdef05",
+    "semantic_hash": ""
   },
   ".agents/skills/anthropic-sdlc/assets/intent-template.md": {
     "mtime": 1789859058.3922231,
@@ -1140,22 +1140,22 @@
     "semantic_hash": "885a6d5429b464b8ab4da439641f5e88"
   },
   "ARCHITECTURE.md": {
-    "mtime": 1790027754.137442,
-    "seen": 1790027968.0131128,
-    "ast_hash": "1dd7638512827b5088fe530c73154b4f",
+    "mtime": 1790029103.156548,
+    "seen": 1790029172.4939818,
+    "ast_hash": "1b632145a61c6d64658c90e9d1b59cd3",
     "semantic_hash": ""
   },
   "CONVENTIONS.md": {
-    "mtime": 1790027728.2242424,
-    "seen": 1790027968.0131128,
-    "ast_hash": "503cb233c63856d38014269427ed75f4",
+    "mtime": 1790029091.6203513,
+    "seen": 1790029172.4939818,
+    "ast_hash": "6d18c73cc97f9bd58d633713b96edfae",
     "semantic_hash": ""
   },
   "TESTING.md": {
-    "mtime": 1789940591.515418,
-    "seen": 1789987658.8951163,
-    "ast_hash": "1d29283b62a8eea95e7c0e0ab2ceaf53",
-    "semantic_hash": "1d29283b62a8eea95e7c0e0ab2ceaf53"
+    "mtime": 1790029051.3333087,
+    "seen": 1790029172.4939818,
+    "ast_hash": "874eaf386e556e5255cd0119e803969b",
+    "semantic_hash": ""
   },
   ".agents/docs/worktrees-skills.md": {
     "mtime": 1789989302.4522016,
@@ -1275,6 +1275,12 @@
     "mtime": 1790028699.398671,
     "seen": 1790028714.1175056,
     "ast_hash": "0929253a40de77475ca01a047a5450a2",
+    "semantic_hash": ""
+  },
+  ".claude/agents/sdlc-builder.md": {
+    "mtime": 1790028839.5473282,
+    "seen": 1790029172.4939818,
+    "ast_hash": "2e060a6902566ddd49da8c053603907d",
     "semantic_hash": ""
   }
 }

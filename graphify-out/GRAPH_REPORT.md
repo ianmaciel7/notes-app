@@ -1,17 +1,17 @@
 # Graph Report - notes-app  (2026-09-21)
 
 ## Corpus Check
-- 200 files · ~113,231 words
+- 201 files · ~114,409 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 7 file(s) not represented in the graph (top: (none) 4, .rules 1, .ico 1)
 
 ## Summary
-- 1850 nodes · 3028 edges · 157 communities (112 shown, 45 thin omitted)
+- 1852 nodes · 3029 edges · 170 communities (122 shown, 48 thin omitted)
 - Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 274 edges (avg confidence: 0.92)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `72cd5632`
+- Built from commit: `af93b72b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,18 +19,18 @@
 - breadcrumb.tsx
 - output
 - Technical Specification: Recall — Community Exam Prep Platform
-- Component Structure → [composition.md](./rules/composition.md)
+- toast.tsx
 - actions/recall.ts
 - AI Tooling Mandate
 - menubar.tsx
 - generate_review.py
 - space-tabs.tsx
-- command-palette.tsx
+- space-switcher.tsx
 - biome.json
 - sidebar.tsx
 - Anthropic AI-Native SDLC
 - dependencies
-- lucide-react
+- space-frame.tsx
 - package.json
 - repomix-explorer/SKILL.md
 - run_loop.py
@@ -40,13 +40,13 @@
 - Official Anthropic source map
 - shadcn Skill
 - 3. Phased Implementation Roadmap
-- tools.ts
+- actions/api-keys.ts
 - compilerOptions
 - Specification: <short name>
 - package_skill.py
 - run_eval.py
 - combobox.tsx
-- cn
+- table.tsx
 - tests/e2e/ Playwright Suite
 - Styling & Customization Rules
 - Items always inside their Group component
@@ -58,12 +58,12 @@
 - aggregate_benchmark.py
 - Spec §3.1 Worktree Evidence Map
 - helpers.ts
-- Critical Rules
+- tools.ts
 - Documentation Conventions Rule
 - Worktree Scout Agent
 - carousel.tsx
 - react
-- Forms use FieldGroup + Field
+- Input
 - Skill Creator
 - Subagent Dispatch Templates
 - chart.tsx
@@ -84,16 +84,16 @@
 - alert-dialog.tsx
 - Responsive Behavior
 - shadcn CLI Reference
-- message-scroller.tsx
+- MessageScroller
 - Component Selection
 - sheet.tsx
 - Worktree Code Quality Control Synthesis
 - Creating a skill
-- Plan §8 Recorded Drift From Plan
+- session.ts
 - navigation-menu.tsx
 - Intent: <short name>
 - Intent: Note Tagging
-- Composition: asChild (radix) vs render (base)
+- Base vs Radix
 - improve_description.py
 - Collection: object_links (Graph Edges)
 - layout.tsx
@@ -106,7 +106,7 @@
 - Intent: Recall — Community Exam Prep Platform
 - scripts
 - Implementation Plan: Recall — Collaborative Private Workspace & Exam Prep Platform
-- class-variance-authority
+- cn
 - pagination.tsx
 - input-otp.tsx
 - AI-Native SDLC Skill (Overview)
@@ -122,7 +122,8 @@
 - Running and evaluating test cases
 - popover.tsx
 - Worktree Code Quality Control Patterns
-- toast.tsx
+- Component Structure → [composition.md](./rules/composition.md)
+- firebase
 - Worktrees AI Skills Inventory
 - RTK - Rust Token Killer (Google Antigravity)
 - Capture Intent (Stage 1)
@@ -130,6 +131,7 @@
 - shadcn/ui
 - Typography
 - button-group.tsx
+- drawer.tsx
 - proxy.ts
 - resizable.tsx
 - useIsMobile
@@ -166,7 +168,18 @@
 - Lint as a Gate
 - accordion.tsx
 - ReviewHandler
-- DropdownMenuItem
+- lucide-react
+- object-editor.tsx
+- alert.tsx
+- mcp/route.ts
+- marker.tsx
+- radio-group.tsx
+- tooltip.tsx
+- client.ts
+- changeObject
+- SM-2 Spaced Repetition Algorithm
+- CommandPalette
+- sdlc-builder.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn` - 61 edges
@@ -209,11 +222,7 @@
 - **Blind Comparison and Post-hoc Analysis Workflow** — agents_skills_skill_creator_agents_comparator_blind_comparator_agent, agents_skills_skill_creator_agents_analyzer_post_hoc_analyzer_agent, agents_skills_skill_creator_references_schemas_comparison_json, agents_skills_skill_creator_references_schemas_analysis_json [INFERRED 0.85]
 - **Eval Grading and Metrics Collection** — agents_skills_skill_creator_agents_grader_grader_agent, agents_skills_skill_creator_references_schemas_grading_json, agents_skills_skill_creator_references_schemas_metrics_json, agents_skills_skill_creator_references_schemas_timing_json [INFERRED 0.85]
 
-## Communities (157 total, 45 thin omitted)
-
-### Community 0 - "breadcrumb.tsx"
-Cohesion: 0.16
-Nodes (8): System notes and dividers use Marker, ref_base_ui_react_use_render, Breadcrumb(), BreadcrumbLink(), Marker(), MarkerContent(), MarkerIcon(), markerVariants
+## Communities (170 total, 48 thin omitted)
 
 ### Community 1 - "output"
 Cohesion: 0.05
@@ -223,41 +232,41 @@ Nodes (36): includeDiffs, includeLogs, includeLogsCount, sortByChanges, sortByCh
 Cohesion: 0.06
 Nodes (36): 10. Target Directory Structure, 11. Acceptance Summary, 12. Implementation and screen verification status, 1. Summary & Scope, 2.1 Functional, 2.2 Non-Functional, 2.3 Users and flows, 2.4.1 Concrete Empty States (+28 more)
 
-### Community 3 - "Component Structure → [composition.md](./rules/composition.md)"
-Cohesion: 0.05
-Nodes (30): Avatar always needs AvatarFallback, Button has no isPending or isLoading prop, Callouts use Alert, Card structure, Component Composition, Contents, Dialog, Sheet, and Drawer always need a Title, Empty states use Empty component (+22 more)
+### Community 3 - "toast.tsx"
+Cohesion: 0.06
+Nodes (15): Avatar always needs AvatarFallback, Button has no isPending or isLoading prop, Callouts use Alert, Card structure, Component Composition, Contents, Empty states use Empty component, Toast notifications follow the project base (+7 more)
 
 ### Community 4 - "actions/recall.ts"
-Cohesion: 0.11
-Nodes (40): Request Flow (Session & MCP), Domain Logic Convention, Validation Convention (zod, idSchema), ref_next_headers, ref_node_assert_strict, ref_node_test, zod, addMember() (+32 more)
+Cohesion: 0.15
+Nodes (20): Domain Logic Convention, Validation Convention (zod, idSchema), Consolidated Domain/Action Files Decision, zod, finishSession(), submitAnswer(), Attempt, autoQuality() (+12 more)
 
 ### Community 5 - "AI Tooling Mandate"
 Cohesion: 0.11
 Nodes (19): AI Tooling Mandate, Command Safety Hook, Context7 (Mandatory Docs Lookup), RTK Gatekeeper Hook, Graphify (Mandatory Architecture Query), Primitive Discipline (Cheapest Primitive First), Repomix (Token-Budget Audits Only), RTK (Mandatory Terminal Compression) (+11 more)
 
 ### Community 6 - "menubar.tsx"
-Cohesion: 0.10
-Nodes (10): ref_base_ui_react_menu, ref_base_ui_react_menubar, DropdownMenuContent(), DropdownMenuPortal(), DropdownMenuRadioGroup(), DropdownMenuSeparator(), DropdownMenuShortcut(), DropdownMenuSubContent() (+2 more)
+Cohesion: 0.09
+Nodes (12): ref_base_ui_react_menu, ref_base_ui_react_menubar, DropdownMenu(), DropdownMenuContent(), DropdownMenuPortal(), DropdownMenuRadioGroup(), DropdownMenuSeparator(), DropdownMenuShortcut() (+4 more)
 
 ### Community 7 - "generate_review.py"
 Cohesion: 0.14
 Nodes (22): build_run(), embed_file(), find_runs(), _find_runs_recursive(), generate_html(), get_mime_type(), _kill_port(), load_previous_iteration() (+14 more)
 
 ### Community 8 - "space-tabs.tsx"
-Cohesion: 0.42
-Nodes (8): persist(), SpaceTabs(), close(), maxTabs, nextActiveTab(), parseTabs(), serializeTabs(), tabsCookie
+Cohesion: 0.40
+Nodes (8): ref_node_assert_strict, persist(), SpaceTabs(), close(), maxTabs, nextActiveTab(), parseTabs(), serializeTabs()
 
-### Community 9 - "command-palette.tsx"
-Cohesion: 0.15
-Nodes (13): CommandPalette(), destinations, Command(), CommandEmpty(), CommandGroup(), CommandInput(), CommandItem(), CommandList() (+5 more)
+### Community 9 - "space-switcher.tsx"
+Cohesion: 0.17
+Nodes (14): cmdk, destinations, selectSpace(), SpaceSwitcher(), Command(), CommandEmpty(), CommandInput(), CommandItem() (+6 more)
 
 ### Community 10 - "biome.json"
 Cohesion: 0.07
 Nodes (26): source, assist, actions, css, parser, next, react, files (+18 more)
 
 ### Community 11 - "sidebar.tsx"
-Cohesion: 0.08
-Nodes (12): ref_base_ui_react_tooltip, Sidebar(), SidebarContext, SidebarContextProps, SidebarMenuButton(), sidebarMenuButtonVariants, SidebarRail(), SidebarTrigger() (+4 more)
+Cohesion: 0.09
+Nodes (8): Sidebar(), SidebarContext, SidebarContextProps, SidebarMenuButton(), sidebarMenuButtonVariants, SidebarRail(), SidebarTrigger(), useSidebar()
 
 ### Community 12 - "Anthropic AI-Native SDLC"
 Cohesion: 0.08
@@ -267,13 +276,13 @@ Nodes (24): 10. Maintain / Close the Loop, 1. Capture Intent, 2. Requirements & 
 Cohesion: 0.08
 Nodes (25): dependencies, @base-ui/react, class-variance-authority, cmdk, cn, date-fns, embla-carousel-react, firebase (+17 more)
 
-### Community 14 - "lucide-react"
+### Community 14 - "space-frame.tsx"
 Cohesion: 0.16
-Nodes (20): lucide-react, ref_next_navigation, logout(), ObjectPage(), QuestionPage(), ReviewPage(), SettingsPage(), SpacePage() (+12 more)
+Nodes (16): ref_next_navigation, logout(), ObjectPage(), QuestionPage(), ReviewPage(), SettingsPage(), SpacePage(), StudyPage() (+8 more)
 
 ### Community 15 - "package.json"
 Cohesion: 0.08
-Nodes (23): name, packageManager, private, version, babel-plugin-react-compiler, @biomejs/biome, cmdk, date-fns (+15 more)
+Nodes (23): name, packageManager, private, version, babel-plugin-react-compiler, @biomejs/biome, date-fns, firebase (+15 more)
 
 ### Community 16 - "repomix-explorer/SKILL.md"
 Cohesion: 0.07
@@ -288,12 +297,12 @@ Cohesion: 0.09
 Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent (+13 more)
 
 ### Community 19 - "questionnaire.tsx"
-Cohesion: 0.11
-Nodes (8): react-day-picker, ref_shadcn_react_questionnaire, buttonVariants, Calendar(), QuestionnaireNext(), QuestionnairePrevious(), QuestionnaireSkip(), QuestionnaireSubmit()
+Cohesion: 0.13
+Nodes (7): ref_shadcn_react_questionnaire, buttonVariants, Calendar(), QuestionnaireNext(), QuestionnairePrevious(), QuestionnaireSkip(), QuestionnaireSubmit()
 
 ### Community 20 - "Collection: objects"
-Cohesion: 0.15
-Nodes (19): Content Moderation v1 (Report-and-Hide), One Exam Per User Constraint, Graph-Ready MVP Object Types, Configurable Study Sessions Constraint, Phase 2: Object CRUD, TipTap Editor & Graph, Spec §9 Areas of Concern & Unresolved Conflicts, Collection: objects, FR-10 One Exam Per User (+11 more)
+Cohesion: 0.18
+Nodes (16): Content Moderation v1 (Report-and-Hide), One Exam Per User Constraint, Graph-Ready MVP Object Types, Phase 2: Object CRUD, TipTap Editor & Graph, Spec §9 Areas of Concern & Unresolved Conflicts, Collection: objects, FR-10 One Exam Per User, FR-2 Objects (+8 more)
 
 ### Community 21 - "Official Anthropic source map"
 Cohesion: 0.13
@@ -304,12 +313,12 @@ Cohesion: 0.08
 Nodes (27): base-nova Style, Base UI (@base-ui/react), Button Spinner (no isPending/isLoading prop), Full Card Composition, Chat Primitives (scaffolded, unused), components.json Configuration, Dialog/Sheet/Drawer Title Requirement, FieldGroup + Field Forms Pattern (+19 more)
 
 ### Community 23 - "3. Phased Implementation Roadmap"
-Cohesion: 0.18
-Nodes (17): Read-Oriented MCP Surface Constraint, SM-2 Spaced Repetition Algorithm Decision, Success Criteria, 3. Phased Implementation Roadmap, Phase 1: Auth & Tenant Isolation, Phase 2: Dynamic Object CRUD, TipTap Editor & Graph, Phase 3: SM-2 Spaced Repetition Engine, Phase 4: Simulated Exam Engine & Timers (+9 more)
+Cohesion: 0.17
+Nodes (15): Read-Oriented MCP Surface Constraint, Configurable Study Sessions Constraint, Success Criteria, 3. Phased Implementation Roadmap, Phase 1: Auth & Tenant Isolation, Phase 2: Dynamic Object CRUD, TipTap Editor & Graph, Phase 4: Simulated Exam Engine & Timers, Phase 5: Space-Scoped API Keys & MCP Server (+7 more)
 
-### Community 24 - "tools.ts"
-Cohesion: 0.07
-Nodes (47): Server-Only Boundary Convention, ref_firebase_admin_app, ref_firebase_admin_auth, ref_firebase_admin_firestore, ref_node_crypto, server-only, MCP JSON-RPC Error & Protocol Contracts, Spec §7.2 MCP Server (+39 more)
+### Community 24 - "actions/api-keys.ts"
+Cohesion: 0.20
+Nodes (17): ref_node_crypto, ref_node_test, createSpaceApiKey(), listSpaceApiKeys(), owner(), revokeSpaceApiKey(), ApiKeysCard(), ApiKey (+9 more)
 
 ### Community 25 - "compilerOptions"
 Cohesion: 0.11
@@ -328,16 +337,12 @@ Cohesion: 0.15
 Nodes (16): find_project_root(), main(), Path, Run the full eval set and return results., Run trigger evaluation for a skill description. Tests whether a skill's…, Find the project root by walking up from cwd looking for .claude/. Mimics how…, Run a single query and return whether the skill was triggered. Creates a…, run_eval() (+8 more)
 
 ### Community 29 - "combobox.tsx"
-Cohesion: 0.08
-Nodes (13): FieldSet + FieldLegend for grouping related fields, Forms & Inputs → [forms.md](./rules/forms.md), @base-ui/react, FieldLegend(), FieldSet(), InputGroup(), InputGroupAddon(), inputGroupAddonVariants (+5 more)
-
-### Community 30 - "cn"
 Cohesion: 0.09
-Nodes (7): ref_base_ui_react_scroll_area, ref_base_ui_react_slider, ref_base_ui_react_switch, cn, ScrollArea(), Slider(), Table()
+Nodes (6): @base-ui/react, InputGroupAddon(), inputGroupAddonVariants, InputGroupButton(), inputGroupButtonVariants, InputGroupTextarea()
 
 ### Community 31 - "tests/e2e/ Playwright Suite"
-Cohesion: 0.25
-Nodes (9): Command Palette (Fifth Pass), E2E Verification Run 2026-09-21, Phase 6 Verification Suite (Third Pass), Transient-Surface Contract, Tabs & Context Panel (Sixth Pass), Spec §5.5 Dialog/Popover/Menu/Tab/Context-Panel Contract, FR-12 Workspace Interaction Surfaces, MCP API Key Lifecycle, tests/e2e/ Playwright Suite (+1 more)
+Cohesion: 0.18
+Nodes (13): src/proxy.ts Middleware, Implementation status, Command Palette (Fifth Pass), E2E Verification Run 2026-09-21, middleware.ts to proxy.ts Rename (Next.js 16), Phase 6 Verification Suite (Third Pass), Transient-Surface Contract, Tabs & Context Panel (Sixth Pass), Spec §5.5 Dialog/Popover/Menu/Tab/Context-Panel Contract (+5 more)
 
 ### Community 32 - "Styling & Customization Rules"
 Cohesion: 0.20
@@ -345,7 +350,7 @@ Nodes (17): 1. Built-in variants, 2. Tailwind classes via `className`, 3. Add a 
 
 ### Community 33 - "Items always inside their Group component"
 Cohesion: 0.12
-Nodes (13): Select — multiple selection and object values (base only), Items always inside their Group component, Workflow, ref_base_ui_react_select, ContextMenuItem(), DropdownMenuLabel(), DropdownMenuSub(), MenubarGroup() (+5 more)
+Nodes (13): Items always inside their Group component, Workflow, ref_base_ui_react_select, ContextMenuGroup(), ContextMenuItem(), DropdownMenuLabel(), DropdownMenuSub(), MenubarGroup() (+5 more)
 
 ### Community 34 - "Tool Reference"
 Cohesion: 0.14
@@ -358,10 +363,6 @@ Nodes (16): Categories for Suggestions, Guidelines, Inputs, Output Format, Post-
 ### Community 36 - "Grader Agent"
 Cohesion: 0.15
 Nodes (15): Field Descriptions, Grader Agent, Grading Criteria, Guidelines, Inputs, Output Format, Role, Step 8: Read Executor Metrics and Timing (+7 more)
-
-### Community 37 - "context-menu.tsx"
-Cohesion: 0.12
-Nodes (3): ref_base_ui_react_context_menu, ContextMenu(), ContextMenuGroup()
 
 ### Community 38 - "Agents CLI"
 Cohesion: 0.13
@@ -379,9 +380,9 @@ Nodes (16): Worktrees (.worktrees/old..old-9), Spec §11 Acceptance Summary, Cro
 Cohesion: 0.35
 Nodes (10): @playwright/test, createObject(), createSpace(), ensure(), signUp(), startSession(), visit(), waitHydrated() (+2 more)
 
-### Community 42 - "Critical Rules"
-Cohesion: 0.25
-Nodes (8): Toast notifications follow the project base, CLI, Critical Rules, Icons → [icons.md](./rules/icons.md), Styling & Tailwind → [styling.md](./rules/styling.md), Use Components, Not Custom Markup → [composition.md](./rules/composition.md), Empty(), toast
+### Community 42 - "tools.ts"
+Cohesion: 0.13
+Nodes (16): MCP JSON-RPC Error & Protocol Contracts, Spec §7.2 MCP Server, MCP Tool: get_object, MCP Tool: get_study_summary, MCP Tool: list_objects, MCP Tool: search_space_content, kinds, edges() (+8 more)
 
 ### Community 43 - "Documentation Conventions Rule"
 Cohesion: 0.17
@@ -396,12 +397,12 @@ Cohesion: 0.17
 Nodes (13): embla-carousel-react, CarouselApi, CarouselContent(), CarouselContext, CarouselContextProps, CarouselItem(), CarouselNext(), CarouselOptions (+5 more)
 
 ### Community 46 - "react"
-Cohesion: 0.09
-Nodes (25): Buttons inside inputs use InputGroup + InputGroupAddon, Option sets (2–7 choices) use ToggleGroup, ref_base_ui_react_input, ref_firebase_app, ref_firebase_auth, react, @tiptap/react, @tiptap/starter-kit (+17 more)
+Cohesion: 0.15
+Nodes (4): react, ref_shadcn_react_message_scroller, fieldVariants, Label()
 
-### Community 47 - "Forms use FieldGroup + Field"
-Cohesion: 0.18
-Nodes (14): Contents, Field validation and disabled states, Forms & Inputs, Forms use FieldGroup + Field, InputGroup requires InputGroupInput/InputGroupTextarea, ref_base_ui_react_checkbox, ref_base_ui_react_radio, ref_base_ui_react_radio_group (+6 more)
+### Community 47 - "Input"
+Cohesion: 0.20
+Nodes (18): Buttons inside inputs use InputGroup + InputGroupAddon, Contents, Field validation and disabled states, FieldSet + FieldLegend for grouping related fields, Forms & Inputs, Forms use FieldGroup + Field, InputGroup requires InputGroupInput/InputGroupTextarea, Forms & Inputs → [forms.md](./rules/forms.md) (+10 more)
 
 ### Community 48 - "Skill Creator"
 Cohesion: 0.14
@@ -455,6 +456,10 @@ Nodes (12): Attachment (file/image attachments), Bubble (message surface), Chat 
 Cohesion: 0.17
 Nodes (11): Analyzing Benchmark Results, Guidelines, Inputs, Process, Role, Step 1: Read Benchmark Data, Step 2: Analyze Per-Assertion Patterns, Step 3: Analyze Cross-Eval Patterns (+3 more)
 
+### Community 62 - "empty.tsx"
+Cohesion: 0.25
+Nodes (4): Use Components, Not Custom Markup → [composition.md](./rules/composition.md), Empty(), EmptyMedia(), emptyMediaVariants
+
 ### Community 63 - "DESING.md"
 Cohesion: 0.12
 Nodes (15): Border Radius Scale, Decorative Depth, Do, Do's and Don'ts, Don't, Elevation & Depth, Grid & Container, Iteration Guide (+7 more)
@@ -471,17 +476,17 @@ Nodes (5): Breakpoints, Collapsing Strategy, Image Behavior, Responsive Behavior
 Cohesion: 0.25
 Nodes (11): shadcn/ui Agent Interface Config, apply command, Contents, diff command (deprecated), docs command, init command, Presets, shadcn CLI Reference (+3 more)
 
-### Community 68 - "message-scroller.tsx"
-Cohesion: 0.33
-Nodes (9): Scrollable threads use MessageScroller, Streaming, anchoring, and jump-to-latest are built in, Chat & Messaging → [chat.md](./rules/chat.md), ref_shadcn_react_message_scroller, MessageScroller(), MessageScrollerButton(), MessageScrollerContent(), MessageScrollerItem() (+1 more)
+### Community 68 - "MessageScroller"
+Cohesion: 0.24
+Nodes (8): Scrollable threads use MessageScroller, Streaming, anchoring, and jump-to-latest are built in, ref_base_ui_react_scroll_area, MessageScroller(), MessageScrollerButton(), MessageScrollerItem(), MessageScrollerProvider(), ScrollArea()
 
 ### Community 69 - "Component Selection"
-Cohesion: 0.26
-Nodes (11): Choosing between overlay components, No manual z-index on overlay components, Component Selection, ref_base_ui_react_preview_card, AlertDialog(), Dialog(), Drawer(), DropdownMenu() (+3 more)
+Cohesion: 0.20
+Nodes (13): Choosing between overlay components, No manual z-index on overlay components, Component Selection, ref_base_ui_react_preview_card, ref_base_ui_react_slider, AlertDialog(), Dialog(), Drawer() (+5 more)
 
 ### Community 70 - "sheet.tsx"
-Cohesion: 0.25
-Nodes (4): ref_base_ui_react_dialog, SheetContent(), SheetDescription(), SheetHeader()
+Cohesion: 0.15
+Nodes (10): Composition: asChild (radix) vs render (base), ref_base_ui_react_dialog, AlertDialogTrigger(), DialogClose(), DialogTrigger(), SheetClose(), SheetContent(), SheetDescription() (+2 more)
 
 ### Community 71 - "Worktree Code Quality Control Synthesis"
 Cohesion: 0.40
@@ -491,9 +496,9 @@ Nodes (4): Detailed Matrix: Quality Control Per Worktree, Executive Evolution of
 Cohesion: 0.18
 Nodes (11): Anatomy of a Skill, Capture Intent, Creating a skill, Interview and Research, Principle of Lack of Surprise, Progressive Disclosure, Skill Writing Guide, Test Cases (+3 more)
 
-### Community 73 - "Plan §8 Recorded Drift From Plan"
-Cohesion: 0.22
-Nodes (10): src/proxy.ts Middleware, Implementation status, Consolidated Domain/Action Files Decision, Plan §8 Recorded Drift From Plan, FirebaseUI Alternative Rejected, middleware.ts to proxy.ts Rename (Next.js 16), Literal SM-2 EF' Implementation, Plan §4 Automated Testing Matrix (+2 more)
+### Community 73 - "session.ts"
+Cohesion: 0.14
+Nodes (13): Request Flow (Session & MCP), Server-Only Boundary Convention, Plan §8 Recorded Drift From Plan, FirebaseUI Alternative Rejected, Literal SM-2 EF' Implementation, Plan §4 Automated Testing Matrix, ref_firebase_admin_app, ref_firebase_admin_auth (+5 more)
 
 ### Community 74 - "navigation-menu.tsx"
 Cohesion: 0.20
@@ -507,17 +512,17 @@ Nodes (9): Affected systems, Affected users, Constraints, Intent: <short name>, 
 Cohesion: 0.20
 Nodes (9): Affected systems, Affected users, Constraints, Intent: Note Tagging, Non-goals, Open questions, Problem / unmet need, Proposed outcome (+1 more)
 
-### Community 77 - "Composition: asChild (radix) vs render (base)"
-Cohesion: 0.14
-Nodes (15): Accordion, Base vs Radix, Button/trigger as non-button element (base only, nativeButton), Button / trigger as non-button element (base only), Composition: asChild (radix) vs render (base), Contents, Select, Slider (+7 more)
+### Community 77 - "Base vs Radix"
+Cohesion: 0.20
+Nodes (10): Accordion, Base vs Radix, Button/trigger as non-button element (base only, nativeButton), Button / trigger as non-button element (base only), Contents, Select, Select — multiple selection and object values (base only), Slider (+2 more)
 
 ### Community 78 - "improve_description.py"
 Cohesion: 0.24
 Nodes (9): _call_claude(), improve_description(), main(), Path, Improve a skill description based on eval results. Takes eval results (from…, Run `claude -p` with the prompt on stdin and return the text response. Prompt…, Call Claude to improve the description based on eval results., argparse (+1 more)
 
 ### Community 79 - "Collection: object_links (Graph Edges)"
-Cohesion: 0.22
-Nodes (10): firestore.rules (Default-Deny), Multi-Tenancy Model, Open questions, Resolved Decisions, Blanket-Deny Firestore Rules Decision, Collection: object_links (Graph Edges), FR-8 Backlinks Navigation, MCP Auth & API Key Architecture (+2 more)
+Cohesion: 0.20
+Nodes (11): firestore.rules (Default-Deny), Multi-Tenancy Model, Open questions, Resolved Decisions, Blanket-Deny Firestore Rules Decision, Collection: object_links (Graph Edges), FR-3 Graph Linking, FR-8 Backlinks Navigation (+3 more)
 
 ### Community 80 - "layout.tsx"
 Cohesion: 0.20
@@ -559,9 +564,9 @@ Nodes (9): scripts, build, dev, emulators, format, lint, start, test (+1 more)
 Cohesion: 0.22
 Nodes (9): 1.1 Architectural Layers, 1.2 System Boundary Rules, 1. Architecture & Dependency Boundaries, 2. File Inventory Across Phases, 4. Automated Testing Matrix, 5. Risks, Breakage Points & Mitigations, 6. Traceability Matrix, 7. Approval & Sign-Off Gate (+1 more)
 
-### Community 90 - "class-variance-authority"
-Cohesion: 0.19
-Nodes (9): ref_base_ui_react_toggle, ref_base_ui_react_toggle_group, class-variance-authority, Alert(), alertVariants, ToggleGroupContext, ToggleGroupItem(), Toggle() (+1 more)
+### Community 90 - "cn"
+Cohesion: 0.16
+Nodes (10): ref_base_ui_react_checkbox, ref_base_ui_react_switch, ref_base_ui_react_toggle, ref_base_ui_react_toggle_group, class-variance-authority, cn, ToggleGroupContext, ToggleGroupItem() (+2 more)
 
 ### Community 93 - "AI-Native SDLC Skill (Overview)"
 Cohesion: 0.25
@@ -576,8 +581,8 @@ Cohesion: 0.29
 Nodes (3): Message rows use Message, Message(), MessageGroup()
 
 ### Community 96 - "bubble.tsx"
-Cohesion: 0.39
-Nodes (7): Message surfaces use Bubble, Bubble(), BubbleContent(), BubbleGroup(), BubbleReactions(), bubbleReactionsVariants, bubbleVariants
+Cohesion: 0.33
+Nodes (8): Message surfaces use Bubble, Chat & Messaging → [chat.md](./rules/chat.md), Bubble(), BubbleContent(), BubbleGroup(), BubbleReactions(), bubbleReactionsVariants, bubbleVariants
 
 ### Community 98 - "Process"
 Cohesion: 0.25
@@ -603,6 +608,14 @@ Nodes (3): AI-Native SDLC Skill, Contents, Suggested project installation
 Cohesion: 0.29
 Nodes (7): Running and evaluating test cases, Step 1: Spawn all runs (with-skill AND baseline) in the same turn, Step 2: While runs are in progress, draft assertions, Step 3: As runs complete, capture timing data, Step 4: Grade, aggregate, and launch the viewer, Step 5: Read the feedback, What the user sees in the viewer
 
+### Community 106 - "Component Structure → [composition.md](./rules/composition.md)"
+Cohesion: 0.17
+Nodes (15): Dialog, Sheet, and Drawer always need a Title, TabsTrigger must be inside TabsList, Component Structure → [composition.md](./rules/composition.md), ref_base_ui_react_tabs, CardFooter(), CommandGroup(), DrawerTitle(), DropdownMenuGroup() (+7 more)
+
+### Community 107 - "firebase"
+Cohesion: 0.25
+Nodes (16): addMember(), createSpace(), loadSession(), login(), rateAttempt(), saveObject(), saveSessionAnswer(), snapshot() (+8 more)
+
 ### Community 108 - "Worktrees AI Skills Inventory"
 Cohesion: 0.25
 Nodes (7): 1. Worktree: `old-5` (.agents/skills) — 28 Skills, 2. Worktree: `old-6` (.agents/skills) — 6 Skills, 3. Worktree: `old-7` (.agents/plugins) — Firebase & Vercel Plugins, Firebase Plugin (`.agents/plugins/firebase/skills`) — 10 Skills, Overview & Graphify Context, Vercel Plugin (`.agents/plugins/vercel/skills`) — 26 Skills, Worktrees AI Skills Inventory
@@ -620,8 +633,8 @@ Cohesion: 0.40
 Nodes (5): Brand & Accent, Colors, Semantic, Surface, Text
 
 ### Community 112 - "shadcn/ui"
-Cohesion: 0.22
-Nodes (9): Component Docs, Examples, and Usage, Current Project Context, Detailed References, Key Fields, Key Patterns, Principles, Quick Reference, shadcn/ui (+1 more)
+Cohesion: 0.15
+Nodes (13): CLI, Component Docs, Examples, and Usage, Critical Rules, Current Project Context, Detailed References, Icons → [icons.md](./rules/icons.md), Key Fields, Key Patterns (+5 more)
 
 ### Community 113 - "Typography"
 Cohesion: 0.40
@@ -629,7 +642,11 @@ Nodes (5): Font Family, Hierarchy, Note on Font Substitutes, Principles, Typogra
 
 ### Community 114 - "button-group.tsx"
 Cohesion: 0.28
-Nodes (5): ref_base_ui_react_merge_props, ref_base_ui_react_separator, ButtonGroup(), buttonGroupVariants, Separator()
+Nodes (5): ref_base_ui_react_separator, ref_base_ui_react_use_render, ButtonGroup(), buttonGroupVariants, Separator()
+
+### Community 115 - "drawer.tsx"
+Cohesion: 0.15
+Nodes (5): ref_base_ui_react_drawer, DrawerContent(), DrawerContext, DrawerContextProps, useDrawer()
 
 ### Community 116 - "proxy.ts"
 Cohesion: 0.29
@@ -640,8 +657,8 @@ Cohesion: 0.40
 Nodes (4): 5.4 Sidebar contract and Fluid Functionalism reference, Sidebar migration and rollout boundary, SidebarProvider(), useIsMobile()
 
 ### Community 119 - "Button"
-Cohesion: 0.11
-Nodes (16): ref_base_ui_react_button, ref_next_link, changeObject(), recent, ContextPanel(), KindIcon, ObjectDetail(), act() (+8 more)
+Cohesion: 0.17
+Nodes (15): Option sets (2–7 choices) use ToggleGroup, ref_base_ui_react_button, ref_base_ui_react_input, recent, Badge(), badgeVariants, Button(), Card() (+7 more)
 
 ### Community 120 - "RTK (Rust Token Killer)"
 Cohesion: 0.50
@@ -655,9 +672,45 @@ Nodes (6): add command, `add` — Add components, Dry-Run Mode, Smart Merge from
 Cohesion: 0.33
 Nodes (3): Serves the review HTML and handles feedback saves. Regenerates the HTML on each…, ReviewHandler, BaseHTTPRequestHandler
 
-### Community 158 - "DropdownMenuItem"
-Cohesion: 0.33
-Nodes (5): Icons, Icons in Button use data-icon attribute, No sizing classes on icons inside components, Pass icons as component objects, not string keys, DropdownMenuItem()
+### Community 156 - "lucide-react"
+Cohesion: 0.28
+Nodes (5): lucide-react, ref_next_link, ContextPanel(), KindIcon, RecallObject
+
+### Community 157 - "object-editor.tsx"
+Cohesion: 0.19
+Nodes (10): @tiptap/react, @tiptap/starter-kit, ObjectEditor(), controls, emptyDoc, extensions, RichText(), RichTextEditor() (+2 more)
+
+### Community 158 - "alert.tsx"
+Cohesion: 0.20
+Nodes (6): Icons, Icons in Button use data-icon attribute, No sizing classes on icons inside components, Pass icons as component objects, not string keys, Alert(), alertVariants
+
+### Community 159 - "mcp/route.ts"
+Cohesion: 0.30
+Nodes (10): dispatch(), envelope(), Id, POST(), reply(), resolveKey(), callTool(), describeTools() (+2 more)
+
+### Community 162 - "marker.tsx"
+Cohesion: 0.43
+Nodes (6): System notes and dividers use Marker, ref_base_ui_react_merge_props, Marker(), MarkerContent(), MarkerIcon(), markerVariants
+
+### Community 163 - "radio-group.tsx"
+Cohesion: 0.40
+Nodes (4): ref_base_ui_react_radio, ref_base_ui_react_radio_group, RadioGroup(), RadioGroupItem()
+
+### Community 164 - "tooltip.tsx"
+Cohesion: 0.40
+Nodes (3): ref_base_ui_react_tooltip, TooltipContent(), TooltipTrigger()
+
+### Community 165 - "client.ts"
+Cohesion: 0.40
+Nodes (4): ref_firebase_app, ref_firebase_auth, LoginPage(), browserAuth()
+
+### Community 166 - "changeObject"
+Cohesion: 0.60
+Nodes (5): changeObject(), ObjectDetail(), act(), ObjectList(), act()
+
+### Community 167 - "SM-2 Spaced Repetition Algorithm"
+Cohesion: 0.83
+Nodes (4): SM-2 Spaced Repetition Algorithm Decision, Phase 3: SM-2 Spaced Repetition Engine, FR-5 Spaced Repetition, SM-2 Spaced Repetition Algorithm
 
 ## Ambiguous Edges - Review These
 - `shadcn CLI Reference` → `shadcn/ui Agent Interface Config`  [AMBIGUOUS]
@@ -666,9 +719,9 @@ Nodes (5): Icons, Icons in Button use data-icon attribute, No sizing classes on 
   README.md · relation: conceptually_related_to
 
 ## Knowledge Gaps
-- **634 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `ignoreUnknown` (+629 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 993 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **45 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **635 isolated node(s):** `$schema`, `enabled`, `clientKind`, `useIgnoreFile`, `ignoreUnknown` (+630 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 995 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **48 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -677,12 +730,12 @@ _Questions this graph is uniquely positioned to answer:_
   _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
 - **What is the exact relationship between `Spec §5 Design System & UX Standards` and `Claude.com Design Analysis System`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **Why does `Button()` connect `Button` to `Technical Specification: Recall — Community Exam Prep Platform`, `actions/recall.ts`, `command-palette.tsx`, `sidebar.tsx`, `lucide-react`, `questionnaire.tsx`, `combobox.tsx`, `DropdownMenuItem`, `Critical Rules`, `carousel.tsx`, `react`, `attachment.tsx`, `alert-dialog.tsx`, `message-scroller.tsx`, `Component Selection`, `sheet.tsx`, `Composition: asChild (radix) vs render (base)`, `pagination.tsx`, `toast.tsx`?**
-  _High betweenness centrality (0.101) - this node is a cross-community bridge._
-- **Why does `shadcn Skill` connect `shadcn Skill` to `Styling & Customization Rules`, `Agents CLI`, `shadcn/ui`, `Customization & Theming`, `DropdownMenuItem`?**
-  _High betweenness centrality (0.081) - this node is a cross-community bridge._
-- **Why does `cn` connect `cn` to `breadcrumb.tsx`, `Component Structure → [composition.md](./rules/composition.md)`, `menubar.tsx`, `command-palette.tsx`, `sidebar.tsx`, `lucide-react`, `package.json`, `questionnaire.tsx`, `accordion.tsx`, `combobox.tsx`, `Items always inside their Group component`, `context-menu.tsx`, `carousel.tsx`, `react`, `Forms use FieldGroup + Field`, `chart.tsx`, `attachment.tsx`, `space-skeleton.tsx`, `empty.tsx`, `alert-dialog.tsx`, `message-scroller.tsx`, `Component Selection`, `sheet.tsx`, `navigation-menu.tsx`, `item.tsx`, `class-variance-authority`, `pagination.tsx`, `input-otp.tsx`, `message.tsx`, `bubble.tsx`, `native-select.tsx`, `popover.tsx`, `toast.tsx`, `button-group.tsx`, `resizable.tsx`, `Button`, `progress.tsx`?**
-  _High betweenness centrality (0.081) - this node is a cross-community bridge._
+- **Why does `Button()` connect `Button` to `Technical Specification: Recall — Community Exam Prep Platform`, `toast.tsx`, `space-switcher.tsx`, `sidebar.tsx`, `space-frame.tsx`, `questionnaire.tsx`, `lucide-react`, `combobox.tsx`, `object-editor.tsx`, `alert.tsx`, `carousel.tsx`, `react`, `Input`, `attachment.tsx`, `alert-dialog.tsx`, `Component Selection`, `sheet.tsx`, `Base vs Radix`, `pagination.tsx`, `shadcn/ui`?**
+  _High betweenness centrality (0.103) - this node is a cross-community bridge._
+- **Why does `react` connect `react` to `breadcrumb.tsx`, `toast.tsx`, `menubar.tsx`, `space-tabs.tsx`, `space-switcher.tsx`, `sidebar.tsx`, `space-frame.tsx`, `package.json`, `questionnaire.tsx`, `lucide-react`, `combobox.tsx`, `object-editor.tsx`, `alert.tsx`, `table.tsx`, `Items always inside their Group component`, `marker.tsx`, `context-menu.tsx`, `carousel.tsx`, `chart.tsx`, `attachment.tsx`, `alert-dialog.tsx`, `MessageScroller`, `sheet.tsx`, `item.tsx`, `cn`, `pagination.tsx`, `input-otp.tsx`, `message.tsx`, `bubble.tsx`, `native-select.tsx`, `popover.tsx`, `drawer.tsx`, `useIsMobile`, `Button`?**
+  _High betweenness centrality (0.082) - this node is a cross-community bridge._
+- **Why does `shadcn Skill` connect `shadcn Skill` to `Styling & Customization Rules`, `Agents CLI`, `shadcn/ui`, `Customization & Theming`, `alert.tsx`?**
+  _High betweenness centrality (0.079) - this node is a cross-community bridge._
 - **Are the 45 inferred relationships involving `Component Selection` (e.g. with `Accordion()` and `Alert()`) actually correct?**
   _`Component Selection` has 45 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 9 inferred relationships involving `Button()` (e.g. with `Button / trigger as non-button element (base only)` and `Buttons inside inputs use InputGroup + InputGroupAddon`) actually correct?**
