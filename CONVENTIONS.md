@@ -48,6 +48,12 @@ Day-to-day patterns for working in `src/`. See `ARCHITECTURE.md` for how the pie
 - Components/types: PascalCase. Functions/variables: camelCase.
 - Import app code via the `@/` alias (`@/domain/recall`, `@/lib/firebase/admin`) rather than relative paths that cross `src/` subtrees.
 
+## Mechanical guardrails
+
+- **No Dangerous Direct DOM Injections**: Never use `dangerouslySetInnerHTML` outside dedicated and vetted sanitizer components.
+- **No Unbuffered Real-time Inputs**: Keystroke-driven mutations must be debounced or buffered to prevent database thrashing.
+- **Worktree Isolation**: Never import from or reference `.worktrees/` in runtime code.
+
 ## Paths in docs
 
 - Per `plan.md` §1.2: documentation and config use repo-relative paths only (`./src/domain/recall.ts`). No absolute machine paths.
