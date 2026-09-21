@@ -50,11 +50,21 @@ produced it in a browser is not a reason to trust what arrives at the server.
 
 An MCP request follows the same shape with a different first step: the bearer key is SHA-256 hashed and looked up in `/api_keys`, rejected if revoked, and then checked to confirm its creator is still a member of the key's Space. The resolved `spaceId` — not anything in the request body — scopes every query that follows.
 
-## Multi-tenancy
+## Multi-tenancy & Isolation Invariants
 
-Every object, link edge, and study record carries a `spaceId`. There is no cross-space query path in the current code: `authorized()` is the chokepoint for session traffic, and the key binding is the chokepoint for MCP traffic. Collections in use are `spaces` (with a per-user `study` subcollection of `records` and `attempts`), `objects` (with a `revisions` subcollection), `object_links`, `sessions`, `exam_owners`, and `api_keys`. `saveObject()` writes `object_links` edges only after confirming both endpoints live in the caller's Space.
+Every object, link edge, and study record carries a `spaceId`. There is no cross-space query path in the current code: `authorized()` is the chokepoint for session traffic, and the key binding is the chokepoint for MCP traffic. Collections in use are `spaces` (with a per-user `study` subcollection of `records` and `attempts`), `objects` (with a `revisions` subcollection), `object_links`, `sessions`, `exam_owners`, and `api_keys`.
 
-Cross-Space lookups answer 404, never 403 — both `question/[id]/page.tsx` and the MCP `get_object` tool report a foreign object as missing, so neither can be used to probe which ids exist elsewhere.
+Key invariants established across architecture iterations:
+- **Composite Key Scoping**: Entities are logically partitioned by `[spaceId, id]`. Any sub-resource lookup checks `spaceId` match before returning entity data.
+- **Relational Integrity**: `saveObject()` writes `object_links` edges only after confirming both endpoints live in the caller's active Space, preventing cross-tenant graph leakage.
+- **Constant-Time Information Hiding**: Cross-Space lookups answer uniform 404 (`notFound()`), never 403 — both `question/[id]/page.tsx` and the MCP `get_object` tool report a foreign object as missing, eliminating id probing or timing oracle attacks.
+- **Default-Deny Defense-in-Depth**: `firestore.rules` categorically denies all direct client operations (`allow read, write: if false`). Client code never communicates directly with the persistence store; all mutations traverse server-authoritative Next.js Server Actions or authenticated MCP handlers.
+
+## Pure Domain State Machine
+
+Business rules and scheduling state transitions are encapsulated in `src/domain/recall.ts` as pure, framework-agnostic functions:
+- **Stateless Mathematical Model**: SM-2 interval calculations (`schedule()`) and answer grading (`grade()`) execute without network, database, or UI side-effects.
+- **Contract Decoupling**: Persistence actions simply pass previous state vectors and apply returned transitions, ensuring domain math can be exhaustively tested with zero mocks.
 
 ## Worktrees
 
