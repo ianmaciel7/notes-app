@@ -12,17 +12,35 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 `AGENTS.md` is the shared source of truth for AI coding agents in this repository.
 
-### Mandatory Tooling Enforcement
+### Mandatory Tooling Enforcement & Tool Use Cases
 
-All AI coding agents MUST strictly enforce and utilize this specialized toolchain:
+All AI coding agents MUST strictly enforce and utilize this specialized toolchain according to these explicit scenarios:
 
-- **Serena (MANDATORY)**: MUST be used for symbol-level code navigation, references, AST inspection, and targeted edits. Do NOT scan or read full source files when Serena symbol tools can target the code directly.
-- **Graphify (MANDATORY)**: MUST be queried first for repository architecture, relationships, and broader codebase understanding whenever `graphify-out/` exists or the Graphify MCP/CLI is active.
-- **Context7 (MANDATORY)**: MUST be used (`npx ctx7@latest`) to fetch current documentation whenever inquiring about or implementing external frameworks, libraries, APIs, SDKs, or CLI tools (e.g., Next.js, React, Tailwind, Prisma). Never rely on pre-training assumptions.
-- **RTK (MANDATORY)**: MUST prefix all supported terminal commands with `rtk` (e.g., `rtk git status`, `rtk pnpm ...`, `rtk rg`, etc.) to compress output and eliminate token waste.
-  - If `rtk` cannot be started by the current shell (notably the WinGet shim on Windows), resolve the installed executable with `Get-Command rtk`, read its `Target`, and invoke that target directly. Do not treat this as a missing dependency when the target executable exists.
+#### 1. Serena Toolchain (AST Navigation, Symbol Edits & Project Memory)
+- **`activate_project`**: Call when Serena reports no active project before running symbol or memory tools.
+- **`write_memory`**: MUST be used to store persistent project context, architectural decisions, discovered patterns, skill inventories, or lessons learned across agent sessions (e.g., `write_memory(memory_name, content)`).
+- **`read_memory` / `list_memories`**: Use to retrieve previously saved project memories or rules before re-analyzing complex subsystems.
+- **`find_symbol` / `get_symbols_overview` / `find_referencing_symbols` / `find_implementations`**: Use for precise symbol navigation, inspecting signatures, and finding call sites. Do NOT scan full source files when symbol tools apply.
+- **`replace_symbol_body` / `insert_after_symbol` / `insert_before_symbol`**: Use for targeted, surgical edits to functions, classes, or types without modifying unrelated file content.
+
+#### 2. Graphify Knowledge Graph (`graphify`)
+- **`query_graph`**: MUST be queried first for repository architecture, module dependencies, component relationships, or conceptual questions whenever `graphify-out/graph.json` exists.
+- **`get_node` / `shortest_path`**: Use to trace dependencies or paths between specific architectural components across communities.
+- **`graphify update .`**: MUST be run after modifying code or documentation files in a session to update the knowledge graph (AST & document nodes) deterministically.
+
+#### 3. Context7 (`ctx7`)
+- **`npx ctx7@latest library <name>` / `npx ctx7@latest docs <id>`**: MUST be called whenever inquiring about or implementing external frameworks, libraries, APIs, SDKs, or CLI tools (Next.js, React, Tailwind, Prisma, Firebase, etc.) to fetch up-to-date documentation. Never rely on pre-training assumptions.
+
+#### 4. RTK (`rtk`)
+- **`rtk <command>`**: MUST prefix all supported terminal commands (`rtk git status`, `rtk pnpm ...`, `rtk rg`, etc.) to compress output and eliminate context token waste.
+  - If `rtk` cannot be started by the current shell (notably the WinGet shim on Windows), resolve the installed executable with `Get-Command rtk`, read its `Target`, and invoke that target directly.
+
+#### 5. Repomix
+- **Shoogle (MANDATORY for UI Components)**: MUST search and download existing shadcn/ui components, blocks, and templates via Shoogle (`search_registry_items` MCP or `rtk pnpm dlx shadcn@latest search @shoogle`) before creating UI from scratch.
 - **Repomix**: Permitted ONLY when a compact, comprehensive repository-wide snapshot or token-budget audit is strictly necessary.
-- **Targeted Retrieval Policy**: Strictly avoid reading whole files or large repository sections when targeted retrieval via Serena, Graphify, or RTK is possible.
+
+#### 6. Targeted Retrieval Policy
+- Strictly avoid reading whole files or large repository sections when targeted retrieval via Serena, Graphify, or RTK is possible.
 
 ### Proactive Context Efficiency & Anti-Patterns
 
@@ -74,6 +92,7 @@ Agent-specific integration files may extend these shared instructions:
 - `.agents/rules/graphify.md` — Antigravity Graphify integration.
 - `.agents/rules/rtk.md` — Antigravity RTK integration.
 - `.agents/rules/shadcn.md` — shadcn/ui composition rules for this repo's `base-nova`/Base UI configuration, condensed from `.agents/skills/shadcn/`.
+- `.agents/rules/shoogle.md` — Shoogle discovery and registry download preferences over scratch creation.
 - `GEMINI.md` — Antigravity-specific instructions generated by integrations when required.
 - `CLAUDE.md` — Claude Code adapter to this `AGENTS.md`.
 - `.claude/settings.json` — Claude Code's own hook wiring (see Deterministic Safety & Optimization Hooks above). Not a duplicate of `AGENTS.md` content.

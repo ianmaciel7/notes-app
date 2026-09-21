@@ -119,6 +119,12 @@
           "goose"
         ],
         "enabled": false
+      },
+      "shoogle": {
+        "transport": "http",
+        "enabled": true,
+        "description": "Shoogle shadcn/ui registry search engine",
+        "url": "https://mcp.shoogle.dev/mcp"
       }
     }
   },

@@ -17,8 +17,10 @@ follow the "base" column in the examples below, not the "radix" one.
 
 ## Principles
 
-1. Use existing components first — check `src/components/ui/` and
-   `npx shadcn@latest search` before writing custom UI.
+1. Prefer downloading from Shoogle over building from scratch — ALWAYS check
+   `src/components/ui/` and query Shoogle (`search_registry_items` MCP tool or
+   `rtk pnpm dlx shadcn@latest search @shoogle`) to download and adapt existing
+   community components before writing custom UI.
 2. Compose, don't reinvent — combine existing primitives instead of a new
    one-off component.
 3. Use built-in variants before custom styles (`variant="outline"`,

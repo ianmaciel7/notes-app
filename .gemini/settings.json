@@ -56,6 +56,9 @@
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       }
+    },
+    "shoogle": {
+      "httpUrl": "https://mcp.shoogle.dev/mcp"
     }
   }
 }

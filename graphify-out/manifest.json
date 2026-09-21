@@ -1,9 +1,9 @@
 {
   ".gemini/settings.json": {
-    "mtime": 1789986460.3464615,
-    "seen": 1789987658.8951163,
-    "ast_hash": "45985ddfc11fd30cbfb6f26cce0f6519",
-    "semantic_hash": "45985ddfc11fd30cbfb6f26cce0f6519"
+    "mtime": 1789988947.6664748,
+    "seen": 1789989443.8695502,
+    "ast_hash": "ff7164550df924bd1963be4dbb4b99d1",
+    "semantic_hash": ""
   },
   "biome.json": {
     "mtime": 1789871657.4185505,
@@ -84,10 +84,10 @@
     "semantic_hash": "d66133896019abf902a85e3a452c6dc1"
   },
   "AGENTS.md": {
-    "mtime": 1789986747.0803735,
-    "seen": 1789987658.8951163,
-    "ast_hash": "bf300944c74c689f50bfb98f86bd69e0",
-    "semantic_hash": "bf300944c74c689f50bfb98f86bd69e0"
+    "mtime": 1789989597.1669855,
+    "seen": 1789989602.6788762,
+    "ast_hash": "5f8234d541b12a386e65ee56bb8e398f",
+    "semantic_hash": ""
   },
   "CLAUDE.md": {
     "mtime": 1789832830.8001015,
@@ -222,10 +222,10 @@
     "semantic_hash": "4d09b9e32de7aca99e99d1ed999583af"
   },
   "skills-lock.json": {
-    "mtime": 1789872305.4080298,
-    "seen": 1789987658.8951163,
-    "ast_hash": "5581f4f26b240ff9d349e97c103588ab",
-    "semantic_hash": "5581f4f26b240ff9d349e97c103588ab"
+    "mtime": 1789989282.1473162,
+    "seen": 1789989443.8695502,
+    "ast_hash": "7bef69a79ae85b442ff2a4d58745599a",
+    "semantic_hash": ""
   },
   "src/components/ui/accordion.tsx": {
     "mtime": 1789870381.9730322,
@@ -768,16 +768,16 @@
     "semantic_hash": "914dfa3b885881574e14b406d8c23465"
   },
   "intent.md": {
-    "mtime": 1789928199.3146338,
-    "seen": 1789987658.8951163,
-    "ast_hash": "fba6d7c7d72ac7aa4477581146d6b0e0",
-    "semantic_hash": "fba6d7c7d72ac7aa4477581146d6b0e0"
+    "mtime": 1789987917.8601885,
+    "seen": 1789989443.8705592,
+    "ast_hash": "fc025b74a9f6493ca4cb192f1bebd3ba",
+    "semantic_hash": ""
   },
   "spec.md": {
-    "mtime": 1789986770.610308,
-    "seen": 1789987658.8951163,
-    "ast_hash": "a285f633967bcb25dd3753dc2f485088",
-    "semantic_hash": "a285f633967bcb25dd3753dc2f485088"
+    "mtime": 1789987905.9195151,
+    "seen": 1789989443.8705592,
+    "ast_hash": "d393cb23d910f56b03bf29a16895aa01",
+    "semantic_hash": ""
   },
   ".agents/skills/shadcn/assets/shadcn-small.png": {
     "mtime": 1789859811.301845,
@@ -900,16 +900,16 @@
     "semantic_hash": "9cdc7a3d90c4769827d5111c0950b216"
   },
   "plan.md": {
-    "mtime": 1789986788.5200827,
-    "seen": 1789987658.8951163,
-    "ast_hash": "e9347fefc340da937afe5e82a57db42a",
-    "semantic_hash": "e9347fefc340da937afe5e82a57db42a"
+    "mtime": 1789987855.471492,
+    "seen": 1789989443.8705592,
+    "ast_hash": "9ad124c57fda1c46cf8d532cef932987",
+    "semantic_hash": ""
   },
   ".agents/agents.json": {
-    "mtime": 1789985409.042585,
-    "seen": 1789987658.8951163,
-    "ast_hash": "f7e2aef52628a264e3546bf46335784b",
-    "semantic_hash": "f7e2aef52628a264e3546bf46335784b"
+    "mtime": 1789988947.195599,
+    "seen": 1789989443.8695502,
+    "ast_hash": "9940a265af5f09ac0adf91d3f1b58b69",
+    "semantic_hash": ""
   },
   ".claude/settings.json": {
     "mtime": 1789986229.5176432,
@@ -1198,5 +1198,35 @@
     "seen": 1789987658.8951163,
     "ast_hash": "1d29283b62a8eea95e7c0e0ab2ceaf53",
     "semantic_hash": "1d29283b62a8eea95e7c0e0ab2ceaf53"
+  },
+  ".agents/docs/worktrees-skills.md": {
+    "mtime": 1789989302.4522016,
+    "seen": 1789989443.8705592,
+    "ast_hash": "b75e39bce7c29d62a7cbb4e9e3d37b2d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/search-registry-items/SKILL.md": {
+    "mtime": 1789989263.8455746,
+    "seen": 1789989443.8705592,
+    "ast_hash": "f0cbc828869b701d813a2a5e5395973b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/search-registry-items/references/TOOL-REFERENCE.md": {
+    "mtime": 1789989263.84708,
+    "seen": 1789989443.8705592,
+    "ast_hash": "fe052c2c81b33f2b2e4490ef4b00356b",
+    "semantic_hash": ""
+  },
+  ".serena/memories/worktrees/skills_inventory.md": {
+    "mtime": 1789989397.9880548,
+    "seen": 1789989443.8705592,
+    "ast_hash": "7ac67c979491625d620c4d86d0fbf21d",
+    "semantic_hash": ""
+  },
+  ".agents/rules/shoogle.md": {
+    "mtime": 1789989571.8675647,
+    "seen": 1789989602.6788762,
+    "ast_hash": "66603b9575e33a20d2652735fb817a72",
+    "semantic_hash": ""
   }
 }
