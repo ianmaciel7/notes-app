@@ -84,3 +84,14 @@ E2E suite. All core architectural decisions (MCP authentication with Space-scope
 hashed API keys, collaborative private Space tenancy, SM-2-family scheduling, and exam
 simulation modes) remain formally resolved and incorporated into [spec.md](spec.md) and
 [plan.md](plan.md).
+
+**Updated 2026-09-21:** the TipTap editor, command palette, and workspace/context-panel
+tab surfaces named above as remaining were built in the interim (see plan.md §8's
+fourth/fifth/sixth passes) and a subsequent verification pass confirmed almost every
+resolved decision above still holds in the code exactly as decided. One Success
+Criterion is not yet fully met: "Deterministic Exam Simulations" says session
+expiration triggers automatic submission "within a server-enforced grace window," but
+the shipped exam timer enforces a hard cutoff with no grace window and a fixed
+90-seconds-per-question limit rather than a user-configured one (spec.md §9.22 has the
+detail). The decision itself (timed, no-feedback-until-end simulated exams) stands;
+only the grace-window mechanics remain to be built.

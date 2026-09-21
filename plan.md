@@ -233,7 +233,10 @@ same change):
   proxy`), doing a cheap cookie-presence check only — Next's own guidance is that
   Proxy is for optimistic redirects, not a full session/authorization boundary, and
   every Server Action already re-verifies the session cookie itself
-  (`src/actions/recall.ts`'s `user()`/`authorized()`).
+  (`src/lib/firebase/session.ts`'s `user()`/`authorized()` — corrected 2026-09-21;
+  this paragraph previously pointed at `src/actions/recall.ts`, which was already
+  stale against the file-move this same §8 records further down under "Firebase
+  configuration is one `src/lib/firebase/` directory").
 - **Consolidated domain/action files, not one file per concern.** Auth, Spaces,
   polymorphic objects + links, moderation (archive/report/resolve), and the study/exam
   session engine (Phases 1–4 of §2/§3) are implemented in two files —
@@ -361,7 +364,7 @@ the browser as callable Server Actions.
 
 ### Phase 6 verification suite (third pass)
 
-`tests/e2e/` is now a Playwright suite (Chromium) of 9 specs covering authoring with
+`tests/e2e/` is now a Playwright suite (Chromium) covering authoring with
 links and backlinks (FR-8), practice grading with the 0–5 self-grade, the simulated
 exam, archiving removing a question from scope, route protection across all five
 workspace routes, the cross-Space 404, and the full MCP key lifecycle — issue in
@@ -528,3 +531,61 @@ rule file — no `space-x-*`/`space-y-*`, no raw Tailwind status colors
 (`text-emerald-*`/`bg-blue-*`/etc.), no manually paired `w-N h-N`, and no `asChild`
 usage found; `data-icon` is already in use. The codebase already conformed before this
 pass — this entry makes the rule explicit and durable rather than fixing a violation.
+
+### Independent verification pass (2026-09-21) — exam timer, idempotency, and moderation-role gaps
+
+A subagent-driven read-only audit (six parallel agents reading `src/` directly, one per
+subsystem: auth/tenant, objects/graph/TipTap, SM-2/exam, MCP/API keys, workspace shell,
+and build/test health) checked every material claim in this document and in spec.md
+against the actual code on `prototype` at `4d23c6b0`. Build/lint/test health was
+reconfirmed clean and unchanged (`tsc --noEmit` clean, `pnpm lint` — the same 2
+pre-accepted `noDocumentCookie` warnings, `pnpm test` 28/28, `pnpm run build` — all 10
+routes), and every other subsystem's documented behavior matched the code exactly
+(auth boundary, object/relations/revision handling, TipTap, all 4 MCP tools and JSON-RPC
+error codes, command palette/workspace-tabs/context-panel/reduced-motion/focus
+restoration). Two real gaps were found and are recorded here rather than silently:
+
+- **Simulated-exam grace window and `SESSION_EXPIRED` (spec.md §2.4.3) are not
+  implemented.** `startSession` (`src/actions/recall.ts`) hardcodes a 90-second-per-
+  question deadline rather than the user-configured time limit FR-11 describes, and
+  there is no server-side grace window: `saveSessionAnswer` throws a generic error the
+  instant `Date.now() >= deadline`, with zero tolerance, and `finishSession` has no
+  deadline check at all (it will score and persist whenever called, before or long
+  after expiry). Grepping `src/` for `SESSION_EXPIRED`, `examDurationSeconds`, and
+  `grace` returns nothing. spec.md §2.4.3/FR-11 are corrected to describe this as a
+  known simplification, not a passing contract, until the grace window and configurable
+  limit are actually built.
+- **The documented client retry-queue and idempotency-key format (spec.md §2.4.3
+  "Network Interruption...") were never built.** `src/components/study/` (the
+  `retry-queue-banner.tsx` row from §2's file inventory) does not exist; there is no
+  offline mutation queue, exponential backoff, or "amber status pill." Deduplication is
+  real but uses a simpler mechanism than documented: a deterministic
+  `attemptId = "${session.id}_${question.id}"` plus a transactional exists-check
+  (`src/actions/recall.ts`), not the `${userId}_${questionId}_${attemptTimestamp}` key
+  spec.md names. This meets the no-duplicate-history goal through a different key shape
+  (session+question, scoped by the Firestore path rather than by an explicit timestamp),
+  so it is not a regression — spec.md's wording is corrected to match what actually
+  ships rather than left describing an unbuilt design.
+- **FR-9 "Space's admin or a platform admin" overstates the implemented role model.**
+  `changeObject`'s `"resolve"` action (`src/actions/recall.ts`) requires
+  `space.ownerId === caller.uid` — there is no separate Space-admin or platform-admin
+  role anywhere in the domain model. spec.md FR-9 is corrected to say "the Space's
+  owner," matching intent.md's actual constraint (a report-and-hide model that never
+  itself specified a role distinct from ownership).
+
+Two smaller, non-blocking observations from the same pass, recorded for completeness
+rather than acted on: `saveObject` already refuses to link an archived or reported
+object into another object's `links` ("A linked object is unavailable in this Space")
+— a stricter, undocumented safety behavior beyond what spec.md §6/FR-3 require, not a
+gap; and `finishSession`'s simulated-exam scheduling reads the *current* stored study
+record at session end rather than a baseline captured at session start, so a learner
+running two concurrent sessions touching the same question could compound scheduling in
+an untested way — worth a regression test if concurrent sessions become a supported
+scenario, but not addressed here since single-session use is the only flow either
+spec.md or plan.md describes.
+
+`tests/e2e/` is 4 spec files (`interaction.spec.ts`, `mcp.spec.ts`, `tenancy.spec.ts`,
+`workspace-flow.spec.ts`) totaling 17 individual test cases — the "9 specs" figure the
+third-pass note above used was a stale pre-consolidation file count; the "17" figure
+used elsewhere in this document and in spec.md was already correct and needed no
+change.
