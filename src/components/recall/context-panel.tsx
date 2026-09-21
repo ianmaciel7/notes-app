@@ -6,6 +6,7 @@ import { KindIcon } from "@/components/recall/kind-icon";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { RecallObject } from "@/domain/recall";
+import { isEditableTarget } from "@/lib/keyboard";
 
 function LinkedRow({ object }: { object: RecallObject }) {
   return (
@@ -53,6 +54,26 @@ export function ContextPanel({
     restore.current = false;
     (open ? hide : show).current?.focus();
   }, [open]);
+  // spec.md §5.4 "Shortcuts": side-aware `[`/`]` — this panel is the right
+  // side, so it answers to `]`; the left sidebar's `[` lives in
+  // src/components/space-frame.tsx.
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (
+        event.key !== "]" ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.altKey ||
+        isEditableTarget(event.target)
+      )
+        return;
+      event.preventDefault();
+      restore.current = true;
+      setOpen((previous) => !previous);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  });
 
   if (!open)
     return (

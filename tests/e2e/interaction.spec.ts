@@ -48,6 +48,89 @@ test("the mobile drawer traps then restores focus", async ({ page }) => {
   await expect(opener).toBeFocused();
 });
 
+test("the desktop sidebar collapses, persists across reload, and answers to [", async ({
+  page,
+}) => {
+  await signUp(page);
+  await createSpace(page, "Collapse");
+  await visit(page, "/space");
+
+  const nav = page.getByRole("complementary", { name: "Space navigation" });
+  const toggle = page.getByRole("button", { name: "Hide navigation" });
+  await expect(nav).toBeVisible();
+  await expect(toggle).toBeVisible();
+
+  // Click collapses it, and the toggle's own label/expanded state flips.
+  await toggle.click();
+  await expect(nav).toBeHidden();
+  const show = page.getByRole("button", { name: "Show navigation" });
+  await expect(show).toBeVisible();
+  await expect(show).toHaveAttribute("aria-expanded", "false");
+
+  // Desktop collapse persists across a reload (spec.md §5.4 "Persistence"),
+  // unlike the mobile drawer's `navOpen`, which is never durable. This is
+  // read server-side (requireSnapshot -> data.sidebarCollapsed), true from
+  // SSR HTML alone — no client JS/hydration required for this assertion.
+  await page.reload();
+  await expect(
+    page.getByRole("button", { name: "Show navigation" }),
+  ).toBeVisible();
+  await expect(nav).toBeHidden();
+
+  // Re-expand through a real click (not the keyboard) first: this is also a
+  // hydration probe (`ensure` retries until the click handler actually
+  // fires), which a reload needs before any keyboard shortcut can be trusted.
+  await ensure(nav, () =>
+    page.getByRole("button", { name: "Show navigation" }).click(),
+  );
+  await expect(
+    page.getByRole("button", { name: "Hide navigation" }),
+  ).toBeVisible();
+
+  // `[` is the side-aware shortcut for the left (this) sidebar; it must not
+  // fire while an editable field has focus.
+  await page.keyboard.press("ControlOrMeta+k");
+  const palette = page.getByPlaceholder("Search objects, or jump to a section");
+  await expect(palette).toBeVisible();
+  await palette.press("["); // real keydown, targeted at the query input
+  await expect(palette).toHaveValue("[");
+  await expect(nav).toBeVisible(); // suppressed: focus was in the query input
+  await page.keyboard.press("Escape");
+
+  await page.keyboard.press("[");
+  await expect(nav).toBeHidden();
+  await expect(
+    page.getByRole("button", { name: "Show navigation" }),
+  ).toBeVisible();
+});
+
+test("the context panel answers to the side-aware ] shortcut", async ({
+  page,
+}) => {
+  await signUp(page);
+  await createSpace(page, "Bracket");
+  // createObject already leaves the page on /question/<noteId>, hydrated
+  // (it just drove several real clicks to get there) — no extra navigation
+  // needed, which would reopen the hydration race the sidebar test above
+  // works around explicitly.
+  await createObject(page, {
+    kind: "note",
+    title: "Bracket note",
+    text: "Toggled by keyboard.",
+  });
+
+  const tabs = page.getByRole("tablist", { name: "Context panel" });
+  await expect(tabs).toBeVisible();
+
+  await page.keyboard.press("]");
+  await expect(tabs).toBeHidden();
+  const restore = page.getByRole("button", { name: "Show context panel" });
+  await expect(restore).toBeFocused();
+
+  await page.keyboard.press("]");
+  await expect(tabs).toBeVisible();
+});
+
 test("Mod+P opens the same command dialog as Mod+K", async ({ page }) => {
   await signUp(page);
   await createSpace(page, "Shortcuts");

@@ -95,3 +95,8 @@ the shipped exam timer enforces a hard cutoff with no grace window and a fixed
 90-seconds-per-question limit rather than a user-configured one (spec.md §9.22 has the
 detail). The decision itself (timed, no-feedback-until-end simulated exams) stands;
 only the grace-window mechanics remain to be built.
+
+**Updated 2026-09-21 (Component Structure Standardization):**
+- Relocate `src/components/space-frame.tsx` to `src/components/recall/space-frame.tsx` to align with all other domain components residing under `src/components/recall/`.
+- Relocate `src/components/study/retry-queue-banner.tsx` to `src/components/recall/retry-queue-banner.tsx` to consolidate domain components and eliminate the isolated single-file `src/components/study/` directory.
+- Update all internal component imports and documentation references across `src/` and `tests/`.
