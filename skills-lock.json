@@ -13,6 +13,12 @@
       "skillPath": ".agents/skills/measure-ai-proficiency/SKILL.md",
       "computedHash": "64d959b1073babcd193545daad7eb249fc4c071328cfc6fe80b5981094db0398"
     },
+    "repomix-explorer": {
+      "source": "yamadashy/repomix",
+      "sourceType": "github",
+      "skillPath": "skills/repomix-explorer/SKILL.md",
+      "computedHash": "9598912263c1471a2a95a45737a92ffde00de54934dfa04c7c161f813499ff16"
+    },
     "search-registry-items": {
       "source": "alibey-10/shoogle",
       "sourceType": "github",
