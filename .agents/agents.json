@@ -125,6 +125,42 @@
         "enabled": true,
         "description": "Shoogle shadcn/ui registry search engine",
         "url": "https://mcp.shoogle.dev/mcp"
+      },
+      "firebase": {
+        "label": "Firebase",
+        "description": "Official Firebase MCP server (firestore, auth) for this project's emulator/live data",
+        "transport": "stdio",
+        "command": "pnpm",
+        "args": [
+          "exec",
+          "firebase",
+          "mcp",
+          "--only",
+          "firestore,auth",
+          "--project",
+          "demo-recall"
+        ],
+        "targets": [
+          "codex",
+          "claude",
+          "claude_desktop",
+          "gemini",
+          "copilot_vscode",
+          "copilot_cli",
+          "cursor",
+          "antigravity",
+          "windsurf",
+          "opencode",
+          "junie",
+          "grok",
+          "amp",
+          "droid",
+          "kilo",
+          "devin",
+          "zed",
+          "goose"
+        ],
+        "enabled": true
       }
     }
   },

@@ -26,5 +26,19 @@
         ]
       }
     ]
+  },
+  "post-edit-check": {
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ./hooks/post-edit-check.ps1",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
   }
 }

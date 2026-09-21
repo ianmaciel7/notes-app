@@ -1,6 +1,6 @@
 {
   "general": {
-    "defaultApprovalMode": "auto_edit"
+    "defaultApprovalMode": "yolo"
   },
   "security": {
     "enablePermanentToolApproval": true,
@@ -13,6 +13,32 @@
       "*(*)",
       "command(*)",
       "run_shell_command(*)",
+      "run_command",
+      "run_command(*)",
+      "write_to_file",
+      "write_to_file(*)",
+      "replace_file_content",
+      "replace_file_content(*)",
+      "view_file",
+      "view_file(*)",
+      "call_mcp_tool",
+      "call_mcp_tool(*)",
+      "invoke_subagent",
+      "invoke_subagent(*)",
+      "manage_subagents",
+      "manage_subagents(*)",
+      "manage_task",
+      "manage_task(*)",
+      "schedule",
+      "schedule(*)",
+      "ask_question",
+      "ask_question(*)",
+      "generate_image",
+      "generate_image(*)",
+      "read_url_content",
+      "read_url_content(*)",
+      "search_web",
+      "search_web(*)",
       "shell(*)",
       "bash(*)",
       "terminal(*)",
@@ -64,6 +90,19 @@
           }
         ]
       }
+    ],
+    "AfterTool": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "name": "post-edit-check",
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$GEMINI_PROJECT_DIR/.agents/hooks/post-edit-check.ps1\"",
+            "timeout": 30000
+          }
+        ]
+      }
     ]
   },
   "context": {
@@ -80,6 +119,19 @@
       "env": {
         "FASTMCP_LOG_LEVEL": "ERROR"
       }
+    },
+    "firebase": {
+      "type": "stdio",
+      "command": "pnpm",
+      "args": [
+        "exec",
+        "firebase",
+        "mcp",
+        "--only",
+        "firestore,auth",
+        "--project",
+        "demo-recall"
+      ]
     },
     "shoogle": {
       "httpUrl": "https://mcp.shoogle.dev/mcp"

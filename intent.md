@@ -99,4 +99,5 @@ only the grace-window mechanics remain to be built.
 **Updated 2026-09-21 (Component Structure Standardization):**
 - Relocate `src/components/space-frame.tsx` to `src/components/recall/space-frame.tsx` to align with all other domain components residing under `src/components/recall/`.
 - Relocate `src/components/study/retry-queue-banner.tsx` to `src/components/recall/retry-queue-banner.tsx` to consolidate domain components and eliminate the isolated single-file `src/components/study/` directory.
+- Establish `src/components/firebase/` for dedicated Firebase Auth primitives (`auth-card.tsx`, `google-sign-in-button.tsx`, `password-reset-dialog.tsx`, `auth-provider.tsx`) providing custom shadcn equivalents for Firebase Auth UI workflows across `/login` and `/settings` routes.
 - Update all internal component imports and documentation references across `src/` and `tests/`.

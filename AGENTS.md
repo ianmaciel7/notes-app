@@ -60,19 +60,20 @@ Agents must proactively eliminate token waste and context bloat:
 
 ### Deterministic Safety & Optimization Hooks
 
-Mechanical enforcement is decoupled from semantic instructions. The policy lives in exactly two scripts, shared across every connected agent:
+Mechanical enforcement is decoupled from semantic instructions. The policy lives in exactly three scripts, shared across every connected agent:
 
-- **Command Safety** (`.agents/hooks/command-safety.ps1`): Destructive commands (`git reset --hard`, `git clean -fd`, `rm -rf`, force-pushes) require explicit user confirmation before running.
-- **RTK Gatekeeper** (`.agents/hooks/enforce-rtk.ps1`): Commands supported by RTK are intercepted before execution; bypassing RTK is denied, with the exact optimized command suggested.
+- **Command Safety** (`.agents/hooks/command-safety.ps1`): Destructive commands (`git reset --hard`, `git clean -fd`, `rm -rf`, force-pushes) require explicit user confirmation before running. Fires on `PreToolUse`/`BeforeTool`.
+- **RTK Gatekeeper** (`.agents/hooks/enforce-rtk.ps1`): Commands supported by RTK are intercepted before execution; bypassing RTK is denied, with the exact optimized command suggested. Fires on `PreToolUse`/`BeforeTool`.
+- **Post-Edit Check** (`.agents/hooks/post-edit-check.ps1`): After any tool call touching a `.ts`/`.tsx` file, runs `biome check --write` (format + safe lint fixes) then an incremental `tsc --noEmit`, feeding remaining lint/type issues back to the model as `additionalContext` where the host tool supports it. Fires on `PostToolUse`/`AfterTool`. **Antigravity exception**: its `PostToolUseResponse` accepts no fields at all (must return exactly `{}`), so on Antigravity this script only applies the write-through biome fix — it cannot surface lint/type feedback there.
 
-Each script auto-detects which tool invoked it (Antigravity's `toolCall.name`/`args.CommandLine` shape, or the `tool_name`/`tool_input.command` shape shared by Claude Code, Codex and Gemini CLI — disambiguated by `hook_event_name`) and replies in that tool's expected output format. `@agents-dev/cli` does not manage hooks at all (no schema key, no subcommand) — this wiring is hand-maintained, one native config entry per tool, all pointing at the same two scripts:
+Each script auto-detects which tool invoked it (Antigravity's `toolCall.name`/`args.CommandLine`/`args` shape, or the `tool_name`/`tool_input` shape shared by Claude Code, Codex and Gemini CLI — disambiguated by `hook_event_name`) and replies in that tool's expected output format. `@agents-dev/cli` does not manage hooks at all (no schema key, no subcommand, confirmed against its own docs) — this wiring is hand-maintained, one native config entry per tool, all pointing at the same three scripts:
 
-| Tool | Wired via | Event name | Tracked in git |
-| --- | --- | --- | --- |
-| Antigravity | `.agents/hooks.json` | `PreToolUse` | yes |
-| Claude Code | `.claude/settings.json` | `PreToolUse` | yes |
-| Gemini CLI | `.gemini/settings.json` | `BeforeTool` | yes |
-| Codex | `.codex/config.toml` (appended after the `agents-sync managed MCP` block) | `PreToolUse` | **no** — `.codex/` is gitignored as an `agents-dev/cli`-materialized directory; re-add this block by hand after any fresh `agents connect`/`init --force` on a new machine |
+| Tool | Wired via | Pre-event name | Post-event name | Tracked in git |
+| --- | --- | --- | --- | --- |
+| Antigravity | `.agents/hooks.json` | `PreToolUse` | `PostToolUse` | yes |
+| Claude Code | `.claude/settings.json` | `PreToolUse` | `PostToolUse` | yes |
+| Gemini CLI | `.gemini/settings.json` | `BeforeTool` | `AfterTool` | yes |
+| Codex | `.codex/config.toml` (appended after the `agents-sync managed MCP` block) | `PreToolUse` | `PostToolUse` | **no** — `.codex/` is gitignored as an `agents-dev/cli`-materialized directory; re-add this block by hand after any fresh `agents connect`/`init --force` on a new machine |
 
 Note: Gemini CLI's `BeforeTool` hook output has no "ask" tier (only `allow`/`deny`), so a destructive command that would prompt for confirmation elsewhere is hard-denied there instead.
 
