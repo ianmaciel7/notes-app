@@ -1,7 +1,7 @@
 import { BookOpen, Clock3 } from "lucide-react";
 import { StudySession } from "@/components/recall/study-session";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SpaceFrame } from "@/components/space-frame";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireSnapshot } from "@/lib/space";
 
 export default async function StudyPage() {

@@ -12,7 +12,7 @@ Learners preparing for certifications and exams suffer from severe tool fragment
 
 ## Proposed outcome
 
-Create a graph-based, collaborative, private workspace platform for teams and study groups that merges exam prep, spaced repetition, and Personal Knowledge Management (PKM). The ultimate vision is a system where users can take a `Question` object, link it to a specific `Citation` (e.g., a highlight from official docs), and connect it to a personal `Note`, with seamless graph navigation between them. The UX must be heavily inspired by Capacities' fluid, object-oriented structure. The platform will support multiple question formats, track missed questions, and expose a read-oriented study experience through an MCP interface.
+Create a graph-based, collaborative, private, Space-based platform for teams and study groups that merges exam prep, spaced repetition, and Personal Knowledge Management (PKM). The ultimate vision is a system where users can take a `Question` object, link it to a specific `Citation` (e.g., a highlight from official docs), and connect it to a personal `Note`, with seamless graph navigation between them. The UX must be heavily inspired by Capacities' fluid, object-oriented structure. The platform will support multiple question formats, track missed questions, and expose a read-oriented study experience through an MCP interface.
 
 ## Affected users and systems
 
@@ -70,7 +70,7 @@ Confirmed measurable acceptance targets:
 ## Implementation status
 
 **Updated 2026-09-20:** the authenticated data and execution boundary from the previous
-update is no longer just "underway" — `/workspace`, `/question`, `/study`, and
+update is no longer just "underway" — `/space`, `/question`, `/study`, and
 `/review` are real, route-protected, Space-scoped Server Components backed by the
 existing auth/object/study Server Actions, with a working Space switcher, object
 create/edit/archive/report flow, and practice/simulated-exam session runner. See
@@ -85,7 +85,7 @@ hashed API keys, collaborative private Space tenancy, SM-2-family scheduling, an
 simulation modes) remain formally resolved and incorporated into [spec.md](spec.md) and
 [plan.md](plan.md).
 
-**Updated 2026-09-21:** the TipTap editor, command palette, and workspace/context-panel
+**Updated 2026-09-21:** the TipTap editor, command palette, and space/context-panel
 tab surfaces named above as remaining were built in the interim (see plan.md §8's
 fourth/fifth/sixth passes) and a subsequent verification pass confirmed almost every
 resolved decision above still holds in the code exactly as decided. One Success

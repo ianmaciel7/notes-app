@@ -1,4 +1,4 @@
-# Implementation Plan: Recall — Collaborative Private Workspace & Exam Prep Platform
+# Implementation Plan: Recall — Collaborative Private Space & Exam Prep Platform
 
 - **Document Purpose:** Engineering implementation plan for the Recall platform, defining technical architecture, phased execution roadmap, testing matrix, and verification boundaries.
 - **Scope:** Greenfield production implementation of multi-tenant private Spaces, dynamic object modeling (Questions, Notes, Citations, Exams, Tags, Collections), TipTap rich text serialization, bidirectional knowledge graph links/backlinks, server-authoritative SM-2 spaced repetition engine, timed simulated exam sessions, and Space-scoped Model Context Protocol (MCP) read server.
@@ -200,7 +200,7 @@ The implementation plan introduces and modifies the following files across the 6
 | **FR-8:** Bidirectional Links & Backlinks | Phase 2 | `src/actions/relations.ts`, `src/components/objects/backlinks-panel.tsx` | Graph traversal Playwright test |
 | **FR-10:** One Exam per User Rule | Phase 2 | `src/actions/objects.ts`, `src/domain/recall.ts` | Action unit test attempting to create a second exam |
 | **FR-11:** Practice & Simulated Exam Modes | Phase 4 | `src/domain/exam.ts`, `src/actions/exam.ts`, `exam-runner.tsx` | Timed exam E2E test with auto-submission |
-| **FR-12 / NFR-5:** Workspace Shell & Interaction Contracts | Phase 6 | `src/components/workspace/*`, `src/components/ui/*` | Focus, keyboard, and accessibility inspection tests |
+| **FR-12 / NFR-5:** Space Shell & Interaction Contracts | Phase 6 | `src/components/workspace/*`, `src/components/ui/*` | Focus, keyboard, and accessibility inspection tests |
 | **NFR-3:** Accessibility & WCAG 2.1 AA | Phase 6 | `src/components/ui/skeleton.tsx`, `globals.css` | Lighthouse accessibility audit & Playwright a11y suite |
 | **Intent Target 1:** Bidirectional Graph Traversal | Phase 2 | `src/components/objects/object-detail.tsx` | Playwright Question ↔ Citation ↔ Note workflow |
 | **Intent Target 2:** Automated Spaced Repetition Queue | Phase 3 | `src/actions/study.ts`, `src/lib/srs/sm2.ts` | Incorrect answer queue enrollment integration test |
@@ -228,7 +228,7 @@ same change):
 - **`middleware.ts` → `proxy.ts`.** Next.js 16 (the version pinned in this repo,
   confirmed against `node_modules/next/dist/docs/`) renamed the `middleware.js`
   convention to `proxy.js`; `middleware.ts` is deprecated and no longer the correct
-  file name. Route protection for `/workspace`, `/question`, `/study`, `/review`, and
+  file name. Route protection for `/space`, `/question`, `/study`, `/review`, and
   the reverse redirect off `/login`, now live in `src/proxy.ts` (`export function
   proxy`), doing a cheap cookie-presence check only — Next's own guidance is that
   Proxy is for optimistic redirects, not a full session/authorization boundary, and
@@ -320,17 +320,17 @@ same change):
 Before this pass, `src/actions/recall.ts` and `src/domain/recall.ts` already implemented
 the backend above, and `src/components/recall/object-editor.tsx` and
 `study-panel.tsx` already implemented a real create/edit dialog and a real
-practice/simulated-exam runner — but nothing rendered them: `/workspace`, `/question`,
+practice/simulated-exam runner — but nothing rendered them: `/space`, `/question`,
 `/study`, and `/review` were static mockups with hardcoded fake data, there was no
 `recall-session` cookie route protection, and there was no Space switcher. This pass:
 
 - added `src/proxy.ts` (route protection, described above);
-- added `src/lib/workspace.ts` (`requireSnapshot()`, the shared authenticated
-  Space-scoped data loader for all four workspace pages);
+- added `src/lib/space.ts` (`requireSnapshot()`, the shared authenticated
+  Space-scoped data loader for all four space pages);
 - added `src/components/recall/space-switcher.tsx` (switch/create Space, invite a
   member — Phase 1's last missing piece) and wired it, plus sign-out and a "New
-  object" dialog, into `src/components/workspace-frame.tsx`;
-- rewired `/workspace`, `/question` (now a real object list via new
+  object" dialog, into `src/components/space-frame.tsx`;
+- rewired `/space`, `/question` (now a real object list via new
   `src/components/recall/object-list.tsx`, with edit/archive/restore/report/resolve),
   `/study`, and `/review` (via new `src/components/recall/study-session.tsx`) to real,
   authenticated, Space-scoped data instead of static mockups.
@@ -351,8 +351,8 @@ practice/simulated-exam runner — but nothing rendered them: `/workspace`, `/qu
   once and never stored), `src/lib/mcp/tools.ts` (all four §7.2.3 tools), and
   `src/app/api/mcp/route.ts` (JSON-RPC 2.0 over JSON or SSE). `/settings` exposes
   key management.
-- **Phase 6 — partial.** CLS-stable `loading.tsx` skeletons for every workspace
-  segment via `WorkspaceSkeleton` (mirrors `WorkspaceFrame`'s box model exactly), a
+- **Phase 6 — partial.** CLS-stable `loading.tsx` skeletons for every space
+  segment via `SpaceSkeleton` (mirrors `SpaceFrame`'s box model exactly), a
   real `not-found.tsx`, and a working mobile navigation drawer (the header button
   was previously inert) with Escape-to-close and a labelled backdrop.
 
@@ -367,7 +367,7 @@ the browser as callable Server Actions.
 `tests/e2e/` is now a Playwright suite (Chromium) covering authoring with
 links and backlinks (FR-8), practice grading with the 0–5 self-grade, the simulated
 exam, archiving removing a question from scope, route protection across all five
-workspace routes, the cross-Space 404, and the full MCP key lifecycle — issue in
+space routes, the cross-Space 404, and the full MCP key lifecycle — issue in
 `/settings`, drive all four tools over HTTP, then revoke and confirm `-32001`.
 
 **Deviation from §4's testing matrix:** §4 names Vitest for the unit and integration
@@ -406,7 +406,7 @@ is done through the Linked objects selector instead).
 
 ### Command palette (fifth pass)
 
-The sidebar's "Search workspace" button was inert, like the mobile nav button before
+The sidebar's "Search space" button was inert, like the mobile nav button before
 it. It now opens a command palette (Cmd/Ctrl+K), built on the existing `cmdk` primitive:
 fuzzy search across the Space's unarchived objects, plus navigation and a hand-off to
 the create dialog. Per FR-12, opening or focusing it mutates nothing — every item either
@@ -418,7 +418,7 @@ which renders its header outside `DialogContent` and therefore crashes with
 `src/components/ui/` primitives are not all sound, and `CONVENTIONS.md` says to work
 around them rather than hand-edit generated output.
 
-Still not done (later Build-stage work): workspace tabs and the context panel from
+Still not done (later Build-stage work): space tabs and the context panel from
 spec.md §5.5 (FR-12's remaining surfaces), the full reduced-motion/focus-restoration
 matrix and an axe/visual-regression pass, and a CI workflow file.
 
@@ -441,20 +441,20 @@ which still needs a Playwright or `/qa` pass.
 
 **Verification run for the first pass:** `pnpm exec tsc --noEmit` (clean), `pnpm run lint`
 (clean, one non-blocking `noDocumentCookie` warning), `pnpm test` (8/8 passing,
-unchanged), `pnpm run build` (succeeds; `/workspace`, `/question`, `/study`, `/review`
+unchanged), `pnpm run build` (succeeds; `/space`, `/question`, `/study`, `/review`
 now render dynamically per-request as expected once they read cookies). Additionally
 verified live against the local Firebase emulators (`pnpm run emulators` +
-`pnpm run dev`): an unauthenticated request to `/workspace` and `/study` redirects to
+`pnpm run dev`): an unauthenticated request to `/space` and `/study` redirects to
 `/login` (307); a request to `/login` carrying a valid `recall-session` cookie
-redirects to `/workspace` (307); a request to `/workspace` with a valid session cookie
+redirects to `/space` (307); a request to `/space` with a valid session cookie
 for a freshly created emulator user returns 200 and renders the real "Create your first
 Space" empty state. Not verified in this pass: the create-Space/save-object/study
 mutation flows through an actual browser (would need a Playwright/qa pass, since these
 are Server Actions and not easily driven from curl).
 
-### Transient-surface contract, workspace tabs, and context panel (sixth pass)
+### Transient-surface contract, space tabs, and context panel (sixth pass)
 
-The fifth pass left two §5.5 items open: the context panel and workspace tabs, plus
+The fifth pass left two §5.5 items open: the context panel and space tabs, plus
 the full reduced-motion/focus-restoration matrix. Both are now closed:
 
 - **Context panel (`src/components/recall/context-panel.tsx`).** The object detail
@@ -462,8 +462,8 @@ the full reduced-motion/focus-restoration matrix. Both are now closed:
   / Details), semantic `tab`/`tabpanel` roles, one selected tab, arrow-key traversal
   with Enter to activate, and a reversible collapse — all view state, mutating nothing
   in the graph, per spec.md §5.5's "Context-panel tabs" row.
-- **Workspace tabs (`src/components/recall/workspace-tabs.tsx`, `src/domain/tabs.ts`).**
-  Visited objects open as closable tabs in the workspace header, persisted via a capped
+- **Space tabs (`src/components/recall/space-tabs.tsx`, `src/domain/tabs.ts`).**
+  Visited objects open as closable tabs in the space header, persisted via a capped
   cookie (`parseTabs`/`serializeTabs`, unit-tested in `tests/tabs.test.ts`); closing the
   active tab selects a deterministic neighbour (`nextActiveTab`).
 - **Focus restoration.** The mobile nav drawer and the context panel's collapse
@@ -495,10 +495,10 @@ never shut down; Playwright's `reuseExistingServer` health check didn't recogniz
 as ready, so it tried to start a second instance and hit "port taken." Stopped the
 stale processes and reran: **16/17 `tests/e2e/` specs passed.** The one failure —
 `interaction.spec.ts` › "closing a transient surface returns focus to its opener" — was
-a `page.waitForURL("**/workspace")` timeout inside the shared `signUp()` helper
+a `page.waitForURL("**/space")` timeout inside the shared `signUp()` helper
 (`tests/e2e/helpers.ts:48`), not a failure of the focus-restoration assertion the test
 never reached. Re-running that spec alone reproduced the same setup-step timeout,
-confirming it's a cold-start cost (Turbopack compiling `/login` and `/workspace` on
+confirming it's a cold-start cost (Turbopack compiling `/login` and `/space` on
 their first-ever hit against a freshly started `next dev`) rather than flake-by-chance
 or a product regression: every other spec that calls the same `signUp()` helper,
 including two other focus-restoration specs in the same file (the mobile drawer and the
@@ -535,14 +535,14 @@ pass — this entry makes the rule explicit and durable rather than fixing a vio
 ### Independent verification pass (2026-09-21) — exam timer, idempotency, and moderation-role gaps
 
 A subagent-driven read-only audit (six parallel agents reading `src/` directly, one per
-subsystem: auth/tenant, objects/graph/TipTap, SM-2/exam, MCP/API keys, workspace shell,
+subsystem: auth/tenant, objects/graph/TipTap, SM-2/exam, MCP/API keys, space shell,
 and build/test health) checked every material claim in this document and in spec.md
 against the actual code on `prototype` at `4d23c6b0`. Build/lint/test health was
 reconfirmed clean and unchanged (`tsc --noEmit` clean, `pnpm lint` — the same 2
 pre-accepted `noDocumentCookie` warnings, `pnpm test` 28/28, `pnpm run build` — all 10
 routes), and every other subsystem's documented behavior matched the code exactly
 (auth boundary, object/relations/revision handling, TipTap, all 4 MCP tools and JSON-RPC
-error codes, command palette/workspace-tabs/context-panel/reduced-motion/focus
+error codes, command palette/space-tabs/context-panel/reduced-motion/focus
 restoration). Two real gaps were found and are recorded here rather than silently:
 
 - **Simulated-exam grace window and `SESSION_EXPIRED` (spec.md §2.4.3) are not
@@ -585,7 +585,55 @@ scenario, but not addressed here since single-session use is the only flow eithe
 spec.md or plan.md describes.
 
 `tests/e2e/` is 4 spec files (`interaction.spec.ts`, `mcp.spec.ts`, `tenancy.spec.ts`,
-`workspace-flow.spec.ts`) totaling 17 individual test cases — the "9 specs" figure the
+`space-flow.spec.ts`) totaling 17 individual test cases — the "9 specs" figure the
 third-pass note above used was a stale pre-consolidation file count; the "17" figure
 used elsewhere in this document and in spec.md was already correct and needed no
 change.
+
+### "Workspace" UI-shell terminology renamed to "Space" (2026-09-21)
+
+Product owner request: rename the app's UI-shell naming ("Workspace") to "Space"
+throughout the live app, tests, and this document/spec.md/intent.md. Flagged before
+starting: "Space" already names the tenant/organization domain concept (`spaceId`,
+the `space-switcher.tsx` Space switcher, private Spaces) — the UI shell was a
+*separate* concept (the `/workspace` route and its `WorkspaceFrame`/`WorkspaceTabs`/
+`WorkspaceSkeleton` components), so this rename makes both concepts share one word.
+Product owner confirmed proceeding anyway, scoped to app code + user-facing text +
+the governing docs — not `.worktrees/old-*` (frozen historical checkouts that
+spec.md §3.1/§5.5 cite by their *actual* component/file names, e.g. old-2's
+`WorkspaceShell`, old-4's workspace database layer — renaming those would make the
+citations inaccurate, not just cosmetic) and not this document's own §2/§3 original
+approved-plan text (left as originally written, consistent with how `middleware.ts`
+is still listed there even though it's actually `src/proxy.ts` — see the top of this
+§8). Sanity-checked against `old-9` (spec.md's "most complete application baseline")
+before proceeding: it already routes at `/spaces`, not `/workspace`, supporting this
+direction.
+
+Renamed (`git mv` + content edits): `src/lib/workspace.ts` → `src/lib/space.ts`
+(`WorkspaceData` → `SpaceData`); `src/components/workspace-frame.tsx` →
+`src/components/space-frame.tsx` (`WorkspaceFrame` → `SpaceFrame`);
+`src/components/recall/workspace-tabs.tsx` → `space-tabs.tsx` (`WorkspaceTabs` →
+`SpaceTabs`); `src/components/recall/workspace-skeleton.tsx` → `space-skeleton.tsx`
+(`WorkspaceSkeleton` → `SpaceSkeleton`); the `/workspace` route directory
+(`src/app/workspace/`) → `src/app/space/`; `tests/e2e/workspace-flow.spec.ts` →
+`space-flow.spec.ts`. Every importer (`src/proxy.ts`'s matcher/redirects, all five
+page/loading pairs under `src/app/`, `command-palette.tsx`, `not-found.tsx`,
+`layout.tsx`'s metadata, the marketing `src/app/page.tsx`, `login/page.tsx`, the
+`clear-session` route comment, and `tests/e2e/helpers.ts`/`interaction.spec.ts`/
+`tenancy.spec.ts`) and user-facing strings ("Search workspace" → "Search space",
+`aria-label="Workspace navigation"` → `"Space navigation"`, "Back to your workspace"
+→ "Back to your space") were updated to match. `ARCHITECTURE.md` and
+`CONVENTIONS.md` were updated for the new paths/names. `intent.md` and this
+document's FR-12/NFR-5 titles, §5.5's "Main workspace tabs" row, and §11/§12's
+narrative were updated in spec.md/intent.md to match; §2/§3 here were left alone per
+the paragraph above.
+
+**Verification:** `pnpm exec tsc --noEmit` (clean), `pnpm run lint` (clean, the same
+2 pre-accepted `noDocumentCookie` warnings as every prior pass — unrelated to this
+rename), `pnpm test` (28/28 passing, unchanged), `pnpm run build` (succeeds; `/space`
+appears in the route manifest in place of `/workspace`, all 10 routes compile). Not
+run live in this pass: the Playwright E2E suite (needs Firebase emulators + `next
+dev` running together) — the route/label/aria-name updates inside
+`tests/e2e/interaction.spec.ts`, `tenancy.spec.ts`, and the renamed
+`space-flow.spec.ts` are mechanically consistent with the app changes but not yet
+proven live.

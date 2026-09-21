@@ -1,7 +1,7 @@
 import { listSpaceApiKeys } from "@/actions/api-keys";
 import { ApiKeysCard } from "@/components/recall/api-keys-card";
-import { Card, CardContent } from "@/components/ui/card";
 import { SpaceFrame } from "@/components/space-frame";
+import { Card, CardContent } from "@/components/ui/card";
 import { requireSnapshot } from "@/lib/space";
 
 export default async function SettingsPage() {

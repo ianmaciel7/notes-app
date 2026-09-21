@@ -29,7 +29,7 @@ A companion visual exploration (Space Home, Question object detail with links/ba
 - **FR-9 Report-and-hide moderation** *(revised 2026-09-19; role corrected 2026-09-21)* — any member of a Space can report an object in that Space. A reported object is hidden from other members pending review by the Space's owner; the owner keeps edit access even while it's hidden from others. No pre-publish review gate exists. Since nothing is ever public, this is now moderation of shared-Space abuse between members, not community moderation. There is no separate Space-admin or platform-admin role in the implemented domain model — see §9.21.
 - **FR-10 One Exam per user** — a user may own at most one `Exam` object; a Server Action rejects creating a second. Confirmed by the product owner 2026-09-19; flagged in §9 as an unusual constraint worth a sanity check, since it blocks a user preparing for two certifications from authoring two exams — implemented as stated, not second-guessed.
 - **FR-11 Study session configuration** *(added 2026-09-19)* — before a Study Session starts, a user configures: **scope** (all due reviews, or narrowed to a specific `Exam`, `Tag`, or `Collection`), **question count**, and **mode** — `practice` (immediate per-question feedback, the existing Study Session behavior) or `simulated_exam` (timed, question order and formatting match the target certification exam, no feedback shown until the session ends, matching FR-10's one-`Exam`-per-user scope). `simulated_exam` additionally requires a time limit. A Server Action resolves {scope, count, mode} into a question set at session start — this is session configuration, not a new persisted object type; no schema change to §6 is implied. **Implementation note (2026-09-21):** the time limit is currently a fixed 90 seconds per question, computed server-side; it is not yet a value the user configures per session — see §9.22.
-- **FR-12 Workspace interaction surfaces** *(added 2026-09-20)* — dialogs, command palettes, popovers, menus, workspace tabs, and context-panel tabs MUST use semantic roles and one canonical state transition per action. Opening or focusing a transient surface MUST NOT mutate domain data; explicit create, link, rename, delete, or study actions commit through the authenticated mutation boundary.
+- **FR-12 Space interaction surfaces** *(added 2026-09-20)* — dialogs, command palettes, popovers, menus, space tabs, and context-panel tabs MUST use semantic roles and one canonical state transition per action. Opening or focusing a transient surface MUST NOT mutate domain data; explicit create, link, rename, delete, or study actions commit through the authenticated mutation boundary.
 
 ### 2.2 Non-Functional
 
@@ -37,7 +37,7 @@ A companion visual exploration (Space Home, Question object detail with links/ba
 - **NFR-2 Document size** — no Firestore document may approach the 1 MiB limit; large relation fan-out lives in `object_links`, never as arrays on the object.
 - **NFR-3 Accessibility** — WCAG 2.1 AA: real semantic controls (`button`, `a[href]`, labelled inputs), 4.5:1 text contrast, visible focus states, 44px touch targets.
 - **NFR-4 Free tier availability** *(revised 2026-09-19)* — core study features (all object types, spaced repetition, MCP read access) must not require a paid plan for any Space member. No longer framed around "public content," since none exists.
-- **NFR-5 Workspace shell behavior** *(added 2026-09-20)* — sidebar open/closed state, mobile drawer state, resize/peek behavior, nested navigation, keyboard shortcuts, hover-revealed row actions, workspace tabs, context-panel tabs, dialogs, popovers, and menus must be deterministic, keyboard-equivalent, and covered by focused interaction tests. Desktop persistence must not leak into mobile drawer state or transient surfaces.
+- **NFR-5 Space shell behavior** *(added 2026-09-20)* — sidebar open/closed state, mobile drawer state, resize/peek behavior, nested navigation, keyboard shortcuts, hover-revealed row actions, space tabs, context-panel tabs, dialogs, popovers, and menus must be deterministic, keyboard-equivalent, and covered by focused interaction tests. Desktop persistence must not leak into mobile drawer state or transient surfaces.
 
 
 ### 2.3 Users and flows
@@ -56,7 +56,7 @@ A companion visual exploration (Space Home, Question object detail with links/ba
 
 #### 2.4.2 Skeleton Loading States
 - **Card Skeletons (Preserving CLS < 0.05):** Object cards, questions, and feed items render fixed-dimension skeleton placeholders with animated shimmer using neutral design tokens (`--muted`). The bounding box dimensions match the fully rendered typography and badge layout exactly, preventing layout shifts (CLS strictly < 0.05 across desktop and mobile viewports).
-- **Sidebar Tree Skeleton:** The navigation hierarchy displays pulsing row placeholders with fixed indentations matching the exact tree depth (Space switcher, pinned objects, collection groups, utility links) to eliminate jank as workspace metadata streams in.
+- **Sidebar Tree Skeleton:** The navigation hierarchy displays pulsing row placeholders with fixed indentations matching the exact tree depth (Space switcher, pinned objects, collection groups, utility links) to eliminate jank as space metadata streams in.
 - **Review Prompt Skeleton:** The active question card in review and study sessions renders a skeleton block matching the question prompt height and 4 choice option card skeletons, ensuring the UI remains rock-solid during card transitions and question fetching.
 - **Asynchronous Panel Streams:** The main object detail view, "Linked objects" rail, and "Backlinks" inspector load independently via React Suspense boundaries. Failure or slow response in backlinks never delays the primary content editor.
 
@@ -97,7 +97,7 @@ The linked worktrees were compared as evidence sources, not as competing runtime
 | --- | --- | --- | --- |
 | `old-2` (`7d142092`) | `src/components/workspace-shell.tsx`, `src/lib/workspace-navigation.ts`, focused tests, and the `workspace-sidebar` OpenSpec | Responsive navigation semantics: real links, active parent matching, mobile open/close, Escape, focus order, and reduced motion | Port the navigation contract and labels selectively; do not port the 3,440-line shell wholesale |
 | `old-3` (`19105d01`) | `src/components/capacities-sidebar.tsx` and the stock `ui/sidebar.tsx` | Early Capacities layout comparison only | Historical reference; superseded by `old-4`/`old-5` for implementation decisions |
-| `old-4` (`2839f410`) | `src/components/app-sidebar*.tsx`, `src/components/app-shell.tsx`, `openspec/specs/ui/app-sidebar`, parity behavior JSON, and E2E matrices | Primary visual/composition contract: workspace selector, pinned/object-type sections, nested actions, stable row geometry, scroll regions, shell ownership, and matched reference measurements | Preferred sidebar composition and parity evidence; port in small slices behind the root shell boundary |
+| `old-4` (`2839f410`) | `src/components/app-sidebar*.tsx`, `src/components/app-shell.tsx`, `openspec/specs/ui/app-sidebar`, parity behavior JSON, and E2E matrices | Primary visual/composition contract: space selector, pinned/object-type sections, nested actions, stable row geometry, scroll regions, shell ownership, and matched reference measurements | Preferred sidebar composition and parity evidence; port in small slices behind the root shell boundary |
 | `old-5` (`0857a997`) | `src/app/_components/workspace/app-sidebar*.tsx`, `app-shell.tsx`, `sidebar-navigation-trace.ts`, and `tests/sidebar-scroll-parity.spec.ts` | Runtime interaction instrumentation and focused browser proof: trace capture, scroll behavior, hover affordances, space-switcher focus, and footer/utility semantics | Port observability and test ideas; do not treat Capacities-specific copy or links as product decisions |
 | `old-6` (`f336db18`) | `src/components/space/space-shell.tsx` and its tests/stories | Alternative local-first shell and object-control reference | Secondary architectural reference; not the sidebar source of truth |
 | `old-7` (`e5d9048a`) | `src/components/space/space-sidebar.tsx` and shell tests | Intermediate space-shell prototype | Historical reference; superseded |
@@ -111,7 +111,7 @@ The merged Graphify evidence used for this audit is `graphify-out/worktrees-merg
 #### Sidebar migration and rollout boundary
 
 1. Implement the root shell boundary and the shared navigation model first, using `old-2` for route and mobile semantics.
-2. Port `old-4`'s compositional pieces incrementally: workspace selector, primary rows, pinned/object-type sections, nested actions, and footer. Keep `AppShell`/`SidebarProvider` as the sole owner of width, collapse, and mobile presentation.
+2. Port `old-4`'s compositional pieces incrementally: space selector, primary rows, pinned/object-type sections, nested actions, and footer. Keep `AppShell`/`SidebarProvider` as the sole owner of width, collapse, and mobile presentation.
 3. Port `old-5`'s trace hooks and focused browser assertions as observability/test support, adapting labels and routes to Recall rather than copying Capacities-specific content.
 4. Verify the root branch at desktop and narrow widths, with keyboard, Escape, reduced-motion, persistence, resize/peek, nested-action, and no-horizontal-overflow checks before calling the sidebar migrated.
 5. Keep all linked worktrees and branches until the selected contracts have passed root verification. Any later worktree removal is a separate, explicit cleanup decision; it is not part of sidebar implementation.
@@ -221,7 +221,7 @@ The historical evidence describes one interaction system. These surfaces may be 
 | Shortcut dispatch | Dispatch is centralized and contextual: open modal, specialized component, editor, block selection, page, then global application. Editable targets and IME composition suppress unrelated global shortcuts. | `old-4/openspec/specs/ui/keyboard-command-system/spec.md`; verify the same command identity is used by shortcut, palette, menu, and button. |
 | Object-type studio dialog | The dialog is viewport-bounded, keeps its header fixed, scrolls only its body, focuses the first meaningful field when opened, closes on Escape/backdrop through native Dialog semantics, restores focus to the trigger, and commits creation only after a confirmation action. | `old-4/tests/e2e/runtime-object-types.spec.ts`, `old-4/tests/e2e/workspace-parity.spec.ts`; verify no mutation on open, cancel, or preset selection alone. |
 | Popover and menu | Popovers/menus are anchored to their trigger, have stable focus and keyboard traversal, preserve search focus while filtering, expose truthful empty states, close on Escape/outside action, and keep nested actions separate from the parent row action. | `old-4` sidebar parity specs and nested behavior JSON; `old-2` captured ARIA snapshots; verify opening/focusing is non-mutating and nested activation runs exactly once. |
-| Main workspace tabs | Main tabs represent open object/workspace views and use a stable persisted storage key. A restored tab must reopen the same object/document identity; a tab close must update active-tab selection deterministically and must not delete the underlying object. | `old-4/tests/e2e/block-editor.spec.ts`, `old-4/tests/e2e/block-editor-interactions.spec.ts`, `old-4` CI baseline checks; verify reload restoration and close-without-delete. |
+| Main space tabs | Main tabs represent open object/space views and use a stable persisted storage key. A restored tab must reopen the same object/document identity; a tab close must update active-tab selection deterministically and must not delete the underlying object. | `old-4/tests/e2e/block-editor.spec.ts`, `old-4/tests/e2e/block-editor-interactions.spec.ts`, `old-4` CI baseline checks; verify reload restoration and close-without-delete. |
 | Context-panel tabs | The context panel exposes a named `tablist` (`Abas do painel de contexto` in the captured Portuguese surface), semantic `tab`/`tabpanel` relationships, one selected tab, separate close controls, a `Nova aba` action, and reversible collapse. Tab activation and close are view-state operations, not graph mutations. | `old-2` captured `tipos_tabelas-aria.json` and `__tests__/workspace-shell.test.tsx`; verify `aria-selected`, tab count, close action, new-tab action, and panel collapse. |
 | Tab keyboard interaction | ArrowLeft/ArrowRight/Home/End move focus within the tablist; Enter/Space activates; focus is visible; close controls do not accidentally activate the tab; labels and shortcut hints remain stable when hover/focus actions appear. | `old-2/__tests__/workspace-shell.test.tsx`; `old-4/tests/ci-baseline.test.mjs`; verify keyboard parity and reduced-motion behavior. |
 | Context side panel | The side panel is a contextual read surface. Object context may expose graph, backlinks, and related content; list context may expose list-safe search/AI tools. Loading, empty, and error states are independent from the main panel. | `old-5/docs/workspace/workspace-side-panel-content.architecture.md`; verify panel changes do not duplicate main-page content or mutate relationships. |
@@ -449,23 +449,23 @@ This section exists because the request behind this spec asked for explicit comp
 - [ ] Worktree migration is complete — port the selected contracts into the root branch and verify that `.worktrees/` is not part of the runtime dependency graph.
 - [x] Sidebar parity is explicit — §3.1 and §5.4 select `old-2`/`old-4`/`old-5` as the evidence sources and define the adopted responsive, accessibility, persistence, resize, peek, shortcut, nested-row, and reduced-motion contract.
 - [ ] Sidebar parity is implemented and proven — cover desktop, mobile, keyboard, reduced-motion, persistence, resize/peek, and row-action behavior with focused interaction/browser tests.
-- [x] Dialog/tab parity is implemented and proven — `tests/e2e/interaction.spec.ts` covers command dialogs, object-type dialogs, popovers/menus, workspace tabs, and context-panel tabs; run live against the local emulators 2026-09-21, 16/17 `tests/e2e/` specs passing, including two independent focus-restoration specs (mobile drawer, context panel). The 17th failed on a setup-step timeout unrelated to the assertion it was testing — see plan.md §8, sixth pass, verification note.
+- [x] Dialog/tab parity is implemented and proven — `tests/e2e/interaction.spec.ts` covers command dialogs, object-type dialogs, popovers/menus, space tabs, and context-panel tabs; run live against the local emulators 2026-09-21, 16/17 `tests/e2e/` specs passing, including two independent focus-restoration specs (mobile drawer, context panel). The 17th failed on a setup-step timeout unrelated to the assertion it was testing — see plan.md §8, sixth pass, verification note.
 - [x] Cross-worktree architecture evidence is synthesized — authentication, revisions, relations, study scheduling, local-first/sync, editor alternatives, AI boundaries, and verification sources are classified in §3.1.
 - [x] Architecture choices are approved — SM-2 scheduler, TipTap JSON serialization, server-authoritative Firestore actions, and Space-scoped API keys documented and approved in `plan.md`.
 
 ## 12. Implementation and screen verification status
 
 **Updated 2026-09-20 (Build stage, Phase 1 + UI wiring):** the root branch exposes five
-routes: `/`, `/workspace`, `/question`, `/study`, and `/review`, plus `/login`. `/`
+routes: `/`, `/space`, `/question`, `/study`, and `/review`, plus `/login`. `/`
 remains a static marketing entry surface. `src/proxy.ts` (Next.js 16 renamed
-`middleware.ts` to `proxy.ts` — see plan.md §8) now gates `/workspace`, `/question`,
+`middleware.ts` to `proxy.ts` — see plan.md §8) now gates `/space`, `/question`,
 `/study`, and `/review` behind a `recall-session` cookie check, redirecting
 unauthenticated requests to `/login` and redirecting an already-signed-in caller away
-from `/login`. `/login`, `/workspace`, `/question`, `/study`, and `/review` are real
+from `/login`. `/login`, `/space`, `/question`, `/study`, and `/review` are real
 Server Components reading an authenticated, Space-scoped `Snapshot` via
-`src/lib/workspace.ts#requireSnapshot()` — they are no longer static mockups with
+`src/lib/space.ts#requireSnapshot()` — they are no longer static mockups with
 hardcoded data. A Space switcher (`src/components/recall/space-switcher.tsx`) supports
-creating a Space and inviting a member; the workspace shell supports sign-out and
+creating a Space and inviting a member; the space shell supports sign-out and
 adding a new object (`src/components/recall/object-editor.tsx`, wired but pre-existing
 this pass); `/question` is a real object list (`src/components/recall/object-list.tsx`)
 supporting edit, archive/restore, and report/resolve (FR-9); `/study` and `/review` run
@@ -479,7 +479,7 @@ kind, with a Linked objects rail and a live Backlinks panel — FR-8), `/setting
 key management), and `/api/mcp` (the §7.2 JSON-RPC 2.0 read-only MCP server). `schedule()`
 now implements the literal §3 Phase 3 SM-2 `EF'` formula over a 0–5 quality scale, with a
 self-grade step in practice mode (keyboard 0–5) and `autoQuality()` mapping an auto-graded
-verdict onto that scale. Every workspace segment has a CLS-stable `loading.tsx` skeleton,
+verdict onto that scale. Every space segment has a CLS-stable `loading.tsx` skeleton,
 the app has a real `not-found.tsx`, and the mobile navigation button — previously inert —
 now opens a dismissible drawer.
 
@@ -489,10 +489,10 @@ The following screens and capabilities are specified by this document or the com
 - an accessibility (axe) pass and visual-regression coverage;
 - a CI workflow file — the gate is `pnpm lint && pnpm test && pnpm test:e2e && pnpm run build`, run by hand.
 
-**Updated 2026-09-21 (sixth pass — transient-surface contract, workspace tabs, context
+**Updated 2026-09-21 (sixth pass — transient-surface contract, space tabs, context
 panel; see plan.md §8).** Closed the two items this list previously named as missing:
-the command palette (`Mod+K`/`Mod+P`, landed earlier in `f0658726`), workspace tabs
-(`src/components/recall/workspace-tabs.tsx`, `src/domain/tabs.ts`, persisted via a
+the command palette (`Mod+K`/`Mod+P`, landed earlier in `f0658726`), space tabs
+(`src/components/recall/space-tabs.tsx`, `src/domain/tabs.ts`, persisted via a
 capped cookie), and the context panel (`src/components/recall/context-panel.tsx`, a
 named `tablist` with `tab`/`tabpanel` roles replacing the object detail page's two
 stacked cards) now satisfy FR-12/NFR-5 and §5.5's "Context-panel tabs" row. The
@@ -506,7 +506,7 @@ pass, per-kind detail layouts, and the CI workflow file remain open.
 subagent-driven audit re-checked every material claim in this document and plan.md
 against the code on `prototype`. Auth, tenant isolation, object/relation/revision
 handling, TipTap, all four MCP tools with every JSON-RPC error code, and the
-command-palette/workspace-tabs/context-panel/reduced-motion/focus-restoration surfaces
+command-palette/space-tabs/context-panel/reduced-motion/focus-restoration surfaces
 all matched their documented behavior exactly, as did build/lint/test health (`tsc`
 clean, lint's 2 pre-accepted warnings, 28/28 unit tests, all 10 routes building). Three
 corrections landed from this pass, detailed in §9.21–§9.23 and FR-9/FR-11/§2.4.3/§7.2.2
@@ -537,7 +537,7 @@ production build, Biome checks, and the existing Vitest-via-`tsx` unit suite (8/
 passing, unchanged by this pass). This pass additionally verified live against the
 local Firebase emulators: unauthenticated requests to protected routes redirect to
 `/login` (307); a valid session cookie redirects away from `/login` and renders
-`/workspace`'s real empty state for a freshly created emulator user (200). The
+`/space`'s real empty state for a freshly created emulator user (200). The
 create-Space/save-object/study mutation paths were not driven through an actual
 browser in this pass (see plan.md §8) — that remains a good candidate for a Playwright
 or `/qa` pass.

@@ -1,7 +1,7 @@
 import { CheckCircle2 } from "lucide-react";
 import { StudySession } from "@/components/recall/study-session";
-import { Card, CardContent } from "@/components/ui/card";
 import { SpaceFrame } from "@/components/space-frame";
+import { Card, CardContent } from "@/components/ui/card";
 import { requireSnapshot } from "@/lib/space";
 
 export default async function ReviewPage() {

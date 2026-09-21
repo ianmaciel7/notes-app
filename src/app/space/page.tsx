@@ -1,9 +1,9 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { KindIcon } from "@/components/recall/kind-icon";
+import { SpaceFrame } from "@/components/space-frame";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SpaceFrame } from "@/components/space-frame";
 import { requireSnapshot } from "@/lib/space";
 
 export default async function SpacePage() {
@@ -28,8 +28,8 @@ export default async function SpacePage() {
           <CardContent className="p-8 text-center">
             <p className="display-face text-2xl">Create your first Space</p>
             <p className="mx-auto mt-3 max-w-sm text-sm text-muted-foreground">
-              Spaces are private, for your questions, notes, and
-              citations. Use the switcher in the sidebar to create one.
+              Spaces are private, for your questions, notes, and citations. Use
+              the switcher in the sidebar to create one.
             </p>
           </CardContent>
         </Card>
