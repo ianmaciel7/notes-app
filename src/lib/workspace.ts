@@ -16,7 +16,10 @@ export async function requireSnapshot(): Promise<WorkspaceData> {
   try {
     data = await snapshot(selected);
   } catch {
-    redirect("/login");
+    // Not a plain redirect("/login"): proxy.ts only checks cookie presence,
+    // so an invalid-but-still-present recall-session cookie would bounce
+    // straight back to /workspace, looping forever. Clear it first.
+    redirect("/api/auth/clear-session");
   }
   // Resolving tabs server-side keeps the strip in the first paint, so opening
   // an object does not shift the page once the client hydrates.

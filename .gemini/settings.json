@@ -1,10 +1,23 @@
 {
   "permissions": {
     "allow": [
+      "*",
       "command(*)",
+      "run_shell_command(*)",
+      "shell(*)",
+      "bash(*)",
+      "terminal(*)",
       "unsandboxed(*)",
       "read_file(*)",
       "write_file(*)",
+      "edit_file(*)",
+      "delete_file(*)",
+      "list_directory(*)",
+      "search_file_content(*)",
+      "search_filenames(*)",
+      "glob(*)",
+      "grep(*)",
+      "file_search(*)",
       "read_url(*)",
       "execute_url(*)",
       "mcp(*)"
