@@ -35,6 +35,27 @@ Follow the existing file's shape:
 
 Prefer testing at the `src/domain/` layer: it has no Firebase/Next.js imports, so tests need no emulator and run fast.
 
+### Pure Domain Testing (Zero-Mock Philosophy)
+
+Drawn from proven patterns in historical iterations (`old-9`):
+- **Decoupled Business Logic**: Algorithms (`grade()`, `schedule()`, SM-2 interval calculations), zod input validation schemas, and document parsers (`plainText()`) must live strictly in `src/domain/`.
+- **Zero Mocks**: Domain unit tests never mock databases, network interfaces, or framework routers. If a function requires mocking Firebase or Next.js to test its business logic, the domain function is improperly coupled.
+- **Table-Driven Test Vectors**: Parameterized cases (e.g. testing the full 0–5 SM-2 grade ladder, interval resets, ease floors, and fuzz testing key formats) execute in sub-milliseconds via Node's native runner (`tsx --test`).
+
+## Source-Scanning Micro-Contracts
+
+Inspired by the micro-contract test suites in `old-4` and `old-5`, structural and architectural invariants can be verified mechanically by scanning source files:
+- **Server Boundary Enforcement**: Assert that all files in `src/lib/firebase/` importing `firebase-admin` contain `import "server-only"` on line 1.
+- **No Direct Dangerous APIs**: Enforce that `dangerouslySetInnerHTML` is never used outside dedicated, audited sanitization components.
+- **Worktree Isolation**: Verify that no file in `src/` imports from or references `.worktrees/`.
+- **Relative Path Portability**: Ensure source and test files do not embed hardcoded machine paths (`C:\Users\...` or `/home/...`).
+
+## Interaction, Focus & Responsive Parity
+
+For browser-level tests in `tests/e2e/` (drawing on `old-2` and `old-5` parity specs):
+- **Responsive Overflow Invariant**: Mobile and desktop viewports must verify `document.documentElement.scrollWidth <= window.innerWidth` across all dashboard, study, and editor routes to prevent horizontal overflow breakage.
+- **Focus Trap & Keyboard Restitution**: Modals, command palettes, and dialogs must trap focus cycling via `Tab`/`Shift+Tab` and restore focus to the triggering element upon `Escape` dismissal.
+
 ## Firebase emulators
 
 ```bash
@@ -65,7 +86,7 @@ Run this before treating a change as done — it's the cheapest available check 
 
 Genuinely not covered yet:
 
-- **Firestore security rules.** `firestore.rules` is a blanket deny and every path goes through the Admin SDK, so there are no granular rules to assert. If per-collection rules are ever added, they need an emulator rules suite.
+- **Firestore security rules.** `firestore.rules` is a blanket deny and every path goes through the Admin SDK, so there are no granular rules to assert. If per-collection rules are ever added, they need an emulator rules suite (asserting unauthenticated client reads return 403 while Server Actions succeed).
 - **Server Action failure paths** — optimistic-concurrency conflicts (`version` mismatch on save), the one-Exam-per-user rule, and cross-Space link rejection are enforced in `src/actions/recall.ts` but only exercised through happy-path E2E.
-- **Accessibility and visual regression.** No axe pass, no screenshot comparison.
+- **Accessibility and visual regression.** Automated axe-core accessibility scans and viewport visual parity.
 - **CI.** There is no workflow file; `pnpm lint && pnpm test && pnpm test:e2e && pnpm run build` is the gate to run by hand.

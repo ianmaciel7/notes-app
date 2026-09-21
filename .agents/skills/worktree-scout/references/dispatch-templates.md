@@ -2,16 +2,22 @@
 
 Use these templates when invoking subagents via `invoke_subagent` to scout `.worktrees/old-*`.
 
+### Invariants for Subagent Invocation:
+- **Per-Worktree Scope**: Launch dedicated subagents scoped to 1 worktree each (e.g., Old-9 Scout, Old-4 Scout) rather than bundling multiple worktrees into one prompt.
+- **Model Preference**: Always set `"Model": "flash_lite"` (or `"flash"` if deep synthesis is needed) to preserve context and optimize latency.
+- **Graphify First**: Run `query_graph` or `graphify query` on the subsystem keyword before dispatching subagents to seed them with known architectural nodes and dependencies.
+
 ---
 
-## 1. Domain & Security Scout Template
+## 1. Domain & Security Scout Template (Old-9)
 
 ```markdown
-Role: Worktree Domain Scout
+Role: Worktree Old-9 Domain Scout
 Type: research
+Model: flash_lite
 
 Task:
-Investigate authentication, authorization boundaries, and domain model implementations in .worktrees/old-9 and .worktrees/old-5.
+Investigate authentication, authorization boundaries, and domain model implementations in .worktrees/old-9. Consult Graphify knowledge graph context if available.
 
 Objectives:
 1. Locate how space-membership authorization is enforced on server actions (inspect `.worktrees/old-9/src/data/action-auth.ts`).
@@ -23,56 +29,57 @@ Objectives:
 
 ---
 
-## 2. UI Shell & Navigation Scout Template
+## 2. UI Shell & Navigation Scout Template (Old-2)
 
 ```markdown
-Role: Worktree Shell Scout
+Role: Worktree Old-2 Shell Scout
 Type: research
+Model: flash_lite
 
 Task:
-Investigate sidebar composition, responsive drawers, and keyboard accessibility patterns in .worktrees/old-2 and .worktrees/old-4.
+Investigate sidebar composition, responsive drawers, and keyboard accessibility patterns in .worktrees/old-2. Consult Graphify knowledge graph context if available.
 
 Objectives:
 1. Inspect `.worktrees/old-2/src/components/workspace-shell.tsx` and `.worktrees/old-2/src/lib/workspace-navigation.ts` for ARIA attributes, focus restoration, and Escape dismissal.
-2. Inspect `.worktrees/old-4/src/components/app-sidebar*.tsx` for multi-section sidebar composition and active state matching.
-3. Review `__tests__/workspace-shell.test.tsx` and extract minimal test assertions.
-4. Synthesize the findings with exact line references and key CSS/accessibility patterns.
-5. Do NOT modify any files.
+2. Review `__tests__/workspace-shell.test.tsx` and extract minimal test assertions.
+3. Synthesize the findings with exact line references and key CSS/accessibility patterns.
+4. Do NOT modify any files.
 ```
 
 ---
 
-## 3. Editor & Query Engine Scout Template
+## 3. Editor & Query Engine Scout Template (Old-4)
 
 ```markdown
-Role: Worktree Editor Scout
+Role: Worktree Old-4 Editor Scout
 Type: research
+Model: flash_lite
 
 Task:
-Analyze rich text and block editor implementations across .worktrees/old-4 (custom block editor) and .worktrees/old-6 (Plate.js v53).
+Analyze rich text and block editor implementations in .worktrees/old-4. Consult Graphify knowledge graph context if available.
 
 Objectives:
 1. Inspect `.worktrees/old-4/src/editor/` to evaluate block schema, slash commands, and the query engine.
-2. Inspect `.worktrees/old-6/src/components/space/` to evaluate Plate v53 editor integration.
-3. Compare the tradeoffs between both approaches (dependencies, bundle size, schema stability).
-4. Extract test patterns from `.worktrees/old-4/tests/block-editor-contract.test.mjs`.
-5. Report back findings with citations and recommended adoption path for the prototype runtime.
+2. Extract test patterns from `.worktrees/old-4/tests/block-editor-contract.test.mjs`.
+3. Report back findings with citations and recommended adoption path for the prototype runtime.
+4. Do NOT modify any files.
 ```
 
 ---
 
-## 4. Spaced Repetition & Study Flow Scout Template
+## 4. Spaced Repetition & Study Flow Scout Template (Old-8)
 
 ```markdown
-Role: Worktree Study Scout
+Role: Worktree Old-8 Study Scout
 Type: research
+Model: flash_lite
 
 Task:
-Evaluate study scheduling and session workflows across .worktrees/old-9, .worktrees/old-8, and .worktrees/old-5.
+Evaluate study scheduling and session workflows in .worktrees/old-8. Consult Graphify knowledge graph context if available.
 
 Objectives:
-1. Inspect FSRS algorithm implementations in `.worktrees/old-9/src/domain/study/fsrs-scheduler.ts` and compare with SM-2 mathematical test vectors.
-2. Review study queue state machines and question card interfaces in `.worktrees/old-8`.
-3. Extract deterministic test vectors from companion test files (`fsrs-scheduler.test.ts` or `study-queue.test.ts`).
-4. Report back architectural findings and recommendations.
+1. Review study queue state machines and question card interfaces in `.worktrees/old-8`.
+2. Extract deterministic test vectors from companion test files (`fsrs-scheduler.test.ts` or `study-queue.test.ts`).
+3. Report back architectural findings and recommendations.
+4. Do NOT modify any files.
 ```

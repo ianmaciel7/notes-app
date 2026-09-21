@@ -9,6 +9,7 @@ Day-to-day patterns for working in `src/`. See `ARCHITECTURE.md` for how the pie
 - `pnpm format` — `biome format --write src tests`.
 - `biome.json` excludes `src/components/ui/**` from checks — see "Generated UI" below.
 - Import order is enforced via Biome's `organizeImports` assist action; don't hand-order imports.
+- **Complexity Ceilings**: Functions should stay compact and focused. Keep cognitive complexity $\le 15$ (`noExcessiveCognitiveComplexity: error` in Biome) and cyclomatic branch complexity $\le 12$ per function. Break down complex branching into pure domain sub-functions.
 
 ## Server-only boundary
 
@@ -23,6 +24,9 @@ Day-to-day patterns for working in `src/`. See `ARCHITECTURE.md` for how the pie
 - `session.ts` is intentionally **not** a `"use server"` module: everything exported from one becomes a browser-callable Server Action, so shared internal helpers live outside the action files rather than being exported from one of them.
 - `/api/mcp` is the one request path with no session cookie. It authenticates a Space-scoped API key instead, and the `spaceId` bound to that key — never a `spaceId` from the request body — scopes every query.
 - `src/proxy.ts` (middleware) only checks cookie *presence* for a fast redirect — it is explicitly not a security boundary (see the comment in that file). Don't add real authorization logic there; put it in the Server Action.
+- **Multi-Tenant Invariants & Isolation**:
+  - All inter-entity relationships (e.g. `object_links` edges) must verify that both source and target entities belong to the caller's active `spaceId`.
+  - **Constant-Time Information Hiding**: Missing or unauthorized foreign objects/spaces return uniform 404 (or `notFound()`) rather than 403, preventing resource enumeration across tenant boundaries.
 
 ## Validation
 

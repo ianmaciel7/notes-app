@@ -1242,15 +1242,15 @@
     "semantic_hash": ""
   },
   ".agents/skills/worktree-scout/SKILL.md": {
-    "mtime": 1790028172.368379,
-    "seen": 1790028187.596884,
-    "ast_hash": "e4e212d888f5e9fbf7b9196046691f7e",
+    "mtime": 1790028520.981882,
+    "seen": 1790028714.1175056,
+    "ast_hash": "1c1d1d28871b93b6c19c9d4d99523642",
     "semantic_hash": ""
   },
   ".agents/skills/worktree-scout/references/dispatch-templates.md": {
-    "mtime": 1790028165.261405,
-    "seen": 1790028187.596884,
-    "ast_hash": "23d8aba91f430922c2006c3ba464b68e",
+    "mtime": 1790028556.1872082,
+    "seen": 1790028714.1175056,
+    "ast_hash": "0268b39db68ffc630e18091291a3e4ae",
     "semantic_hash": ""
   },
   ".agents/skills/worktree-scout/references/evidence-map.md": {
@@ -1263,6 +1263,18 @@
     "mtime": 1790028176.1920002,
     "seen": 1790028187.596884,
     "ast_hash": "dd546088b19c35a15a7778aaa569da5f",
+    "semantic_hash": ""
+  },
+  ".agents/docs/worktree-quality-control-synthesis.md": {
+    "mtime": 1790028694.208832,
+    "seen": 1790028714.1175056,
+    "ast_hash": "195d7a1a7d0c7a60ee7269416e89f359",
+    "semantic_hash": ""
+  },
+  ".serena/memories/worktree-quality-control-patterns.md": {
+    "mtime": 1790028699.398671,
+    "seen": 1790028714.1175056,
+    "ast_hash": "0929253a40de77475ca01a047a5450a2",
     "semantic_hash": ""
   }
 }

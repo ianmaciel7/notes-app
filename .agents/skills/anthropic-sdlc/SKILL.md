@@ -24,6 +24,12 @@ The workflow is artifact-driven and human-governed:
 9. When implementation departs materially from the approved plan, update `plan.md` in the same change.
 10. Production incidents and meaningful control-band breaches should re-enter the lifecycle as new intent.
 
+## Editing scope
+
+This skill session is authorized to create or edit only `intent.md`, `spec.md`, and `plan.md` (and their conventional variants, e.g. `intent/<feature>.md` — see the departure note at the end of "1. Capture Intent"). Do not create, edit, or delete any other file — source code, tests, config, docs — directly in this session, even for a change that looks trivial or the human seems to be asking for directly.
+
+Any change to code, tests, or other repository files happens only through a dispatched implementation sub-agent (see "4. Build"), and only after the human has explicitly authorized that dispatch. If a request arrives that skips straight to "just implement X," route it through the normal stage gates (capture/confirm intent, spec, plan, authorize) rather than editing files in this session.
+
 ## Stage selection
 
 First determine the current stage from repository evidence and the user's request.
@@ -133,9 +139,17 @@ Human approval of the plan is the gate to Build.
 
 ## 4. Build
 
-Implement from the approved `plan.md`.
+Prerequisite: approved `plan.md`.
 
-During implementation:
+This session does not implement code itself — per "Editing scope" above, it may only touch `intent.md`, `spec.md`, and `plan.md`. Implementation is always delegated to a dispatched sub-agent.
+
+Before dispatching that sub-agent:
+
+- confirm `plan.md` is approved and current;
+- summarize, for the human, what will be implemented and roughly which files/modules are expected to change;
+- explicitly ask the human to authorize dispatching the implementation sub-agent. This is a distinct gate from approving `plan.md` itself — do not infer authorization from plan approval, an earlier "looks good," or silence. Wait for an explicit yes.
+
+Only after that explicit authorization, dispatch the `sdlc-builder` sub-agent (`.claude/agents/sdlc-builder.md`), guided by this skill, with the approved `plan.md` (plus `spec.md`/`intent.md` for context) as its brief. The sub-agent implements from `plan.md`:
 
 - follow repository `AGENTS.md`;
 - apply relevant skills;
@@ -144,9 +158,9 @@ During implementation:
 - run the feedback loop repeatedly rather than only at the end;
 - add or update tests as required by the plan/spec;
 - avoid unrelated refactors unless needed for correctness;
-- keep `plan.md` synchronized if implementation materially changes.
+- keep `plan.md` synchronized if implementation materially changes, and report any such drift back to this session.
 
-For independent work touching different files, parallel sessions/worktrees may be used. For recurring bounded jobs, use subagents with narrow context and tool permissions.
+For independent work touching different files, multiple sub-agent dispatches (parallel sessions/worktrees) may be used — each still requires its own explicit authorization and stays scoped to `plan.md`. For recurring bounded jobs, use subagents with narrow context and tool permissions.
 
 ## 5. Feedback Loop & Verification
 
@@ -259,7 +273,7 @@ Use for **deterministic enforcement or approval gates**.
 Use for **regression-testing agent configuration and behavior**.
 
 ### Subagents
-Use for **recurring, scoped helper jobs with isolated context and limited tools**.
+Use for **recurring, scoped helper jobs with isolated context and limited tools** — e.g. `sdlc-builder` for Build-stage implementation (stage 4), dispatched only after explicit human authorization.
 
 ## Minimal completion report
 

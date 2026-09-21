@@ -10,9 +10,11 @@ Orchestrates read-only research across historical Git worktrees in `.worktrees/o
 ## Core Rules & Invariants
 
 1. **Strict Runtime Isolation**: Never import or execute code from `.worktrees/` at runtime. Worktrees are prior-art evidence and design blueprints, not runtime dependencies.
-2. **Subagent Delegation**: Do not read multiple large worktree files sequentially in the main orchestrator context. Dispatch targeted subagents using `invoke_subagent` to explore specific worktrees in parallel.
-3. **Lean Context Citing**: Subagents must quote at most 15 lines per citation and summarize architectural rationale, file paths, and contract boundaries.
-4. **Persistent Knowledge Storage**: Always save synthesized findings in at least one persistent store:
+2. **Subagent Delegation (Per-Worktree)**: Do not read multiple large worktree files sequentially in the main orchestrator context. Dispatch targeted subagents scoped per individual worktree (1:1 dedicated worktree per subagent) for maximum context isolation and precision.
+3. **Prefer Light Models**: Always specify `"Model": "flash_lite"` (or `"flash"` when complex synthesis is required) when dispatching subagents for worktree exploration. Never default to heavy or `inherit` models for read-only research tasks.
+4. **Leverage Graphify Skill**: Always consult Graphify (`query_graph` or `graphify query ...`, `get_node`, `shortest_path`) to map architectural relationships, communities, and god nodes before or alongside scouting. After documenting or persisting findings, run `graphify update .`.
+5. **Lean Context Citing**: Subagents must quote at most 15 lines per citation and summarize architectural rationale, file paths, and contract boundaries.
+6. **Persistent Knowledge Storage**: Always save synthesized findings in at least one persistent store:
    - **Serena Memory**: Use `write_memory(memory_name, content)` for enduring architectural lessons and domain contracts.
    - **Graphify Knowledge Graph**: Run `graphify update .` after adding documentation or syncing knowledge nodes.
    - **Structured Plans / Docs**: Write synthesis reports to `.agents/docs/` or update sections in `plan.md`.
@@ -36,22 +38,25 @@ Consult [evidence-map.md](./references/evidence-map.md) for the authoritative ma
 
 ## Execution Workflow
 
-### Step 1: Scope & Subagent Selection
-Identify which subsystem the user needs to investigate. Match it to the target worktrees from the table above.
+### Step 1: Scope & Graphify Pre-Query
+1. Identify the subsystem to investigate and select target worktrees.
+2. Use the `graphify` skill (`query_graph` or `graphify query`) to inspect existing architecture, communities, and known dependencies.
 
-### Step 2: Dispatch Subagents in Parallel
-Use `invoke_subagent` to launch one or more `research` subagents. See [dispatch-templates.md](./references/dispatch-templates.md) for ready-to-use prompts.
+### Step 2: Dispatch Subagents in Parallel (Per Worktree, Light Model)
+Use `invoke_subagent` to launch one `research` subagent per target worktree, always configuring `"Model": "flash_lite"` (or `"flash"`):
 
 ```json
 [
   {
-    "Role": "Auth & Domain Scout",
+    "Role": "Worktree Old-9 Scout",
     "TypeName": "research",
+    "Model": "flash_lite",
     "Prompt": "Investigate space tenancy and server action authentication in .worktrees/old-9/src/data/action-auth.ts and companion tests. Quote <= 15 lines per citation. Do NOT edit files."
   },
   {
-    "Role": "Editor Contract Scout",
+    "Role": "Worktree Old-4 Scout",
     "TypeName": "research",
+    "Model": "flash_lite",
     "Prompt": "Analyze block editor contracts in .worktrees/old-4/tests/block-editor-contract.test.mjs. Summarize invariants and test assertions. Do NOT edit files."
   }
 ]
