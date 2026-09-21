@@ -394,3 +394,39 @@ for a freshly created emulator user returns 200 and renders the real "Create you
 Space" empty state. Not verified in this pass: the create-Space/save-object/study
 mutation flows through an actual browser (would need a Playwright/qa pass, since these
 are Server Actions and not easily driven from curl).
+
+### Transient-surface contract, workspace tabs, and context panel (sixth pass)
+
+The fifth pass left two §5.5 items open: the context panel and workspace tabs, plus
+the full reduced-motion/focus-restoration matrix. Both are now closed:
+
+- **Context panel (`src/components/recall/context-panel.tsx`).** The object detail
+  page's two stacked cards became one panel with a named `tablist` (Links / Backlinks
+  / Details), semantic `tab`/`tabpanel` roles, one selected tab, arrow-key traversal
+  with Enter to activate, and a reversible collapse — all view state, mutating nothing
+  in the graph, per spec.md §5.5's "Context-panel tabs" row.
+- **Workspace tabs (`src/components/recall/workspace-tabs.tsx`, `src/domain/tabs.ts`).**
+  Visited objects open as closable tabs in the workspace header, persisted via a capped
+  cookie (`parseTabs`/`serializeTabs`, unit-tested in `tests/tabs.test.ts`); closing the
+  active tab selects a deterministic neighbour (`nextActiveTab`).
+- **Focus restoration.** The mobile nav drawer and the context panel's collapse
+  control now hand focus back to the control that replaces them on close/collapse —
+  previously only the Base UI dialogs did this, and spec.md §5.5 names focus loss a
+  required regression case.
+- **Reduced motion.** A `prefers-reduced-motion: reduce` block in `src/app/globals.css`
+  drops nonessential transitions while preserving final state.
+- **`Mod+P`** now opens the same command dialog as `Mod+K`.
+
+All of the above is covered by `tests/e2e/interaction.spec.ts`. Still not done from
+§6's Phase 6 list: an axe/visual-regression pass (no `axe-core` dependency is
+installed), and a CI workflow file (no `.github/workflows/`).
+
+**Note:** the commits for this pass (`1c8d62b2`, `94610cc0`) landed without a
+`plan.md` update in the same change, contrary to this repo's own drift-recording rule
+stated at the top of §8; this entry backfills that gap.
+
+**Verification run for this pass:** `pnpm exec tsc --noEmit` (clean), `pnpm run lint`
+(clean, 2 instances of the same pre-accepted non-blocking `noDocumentCookie` warning),
+`pnpm test` (28/28 passing), `pnpm run build` (succeeds, all 10 routes compile). Not
+run live in this pass: the Playwright E2E suite (needs Firebase emulators + `next dev`
+up together).
