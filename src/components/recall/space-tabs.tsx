@@ -12,6 +12,7 @@ import {
 } from "@/domain/tabs";
 
 function persist(ids: string[]) {
+  // biome-ignore lint/suspicious/noDocumentCookie: open tabs are intentionally restored during SSR.
   document.cookie = `${tabsCookie}=${serializeTabs(ids)}; path=/; max-age=${60 * 60 * 24 * 30}; samesite=lax`;
 }
 
