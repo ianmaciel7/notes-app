@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { createObject, createSpace, signUp, visit } from "./helpers";
+import { createObject, createSpace, ensure, signUp, visit } from "./helpers";
 
 test("an owner can invite a member, the member can report, and the owner can resolve", async ({
   page,
@@ -90,12 +90,15 @@ test("saving a stale editor preserves the draft and reports a version conflict",
     text: "Original.",
   });
 
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { name: "Edit", exact: true }).click();
   await page.locator("#title").fill("Stale draft");
 
   const fresh = await context.newPage();
   await fresh.goto(`/question/${id}`);
-  await fresh.getByRole("button", { name: "Edit" }).click();
+  const freshEditor = fresh.getByRole("heading", { name: "Edit object" });
+  await ensure(freshEditor, () =>
+    fresh.getByRole("button", { name: "Edit", exact: true }).click(),
+  );
   await fresh.locator("#title").fill("Fresh save");
   await fresh.getByRole("button", { name: "Save object" }).click();
   await expect(
