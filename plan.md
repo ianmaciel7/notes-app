@@ -1110,5 +1110,136 @@ theming integration, not an architecture change. Decision unchanged: not adopted
 - **Dependencies**: Added `@firebase-oss/ui-core@7.1.0` to `package.json`.
 - **Verification**: `rtk pnpm exec tsc --noEmit` passed with 0 errors; `rtk pnpm test` passed 39 / 39 unit tests.
 
+### Untracked drift sync + current verification status (2026-09-22)
+
+51 commits landed directly on `prototype` between this document's last update
+(`5aedde84`, the eighth-pass Firebase registry entry above) and `c029c621`
+(range `5aedde84..c029c621`), authored by the product owner directly rather than
+through an `sdlc-builder` dispatch, and none were logged here — closing that gap
+per this repo's "update plan.md in the same change" rule, after the fact rather
+than in the same change, since a `/anthropic-sdlc` session did not run during
+that window.
+
+**What the range contains, by kind:**
+
+- **Real bug fixes:** `space-switcher.tsx` now `router.push("/space")` before
+  `router.refresh()` on both select-space and create-space, so switching Spaces
+  returns to the Overview instead of leaving the URL on whatever sub-route was
+  open. `src/app/page.tsx` (landing) and `not-found.tsx` add `nativeButton={false}`
+  to every Base UI `<Button render={<Link .../>}>` — without it, Base UI's
+  `<Button>` defaults to rendering as a native `<button>` internally even when
+  composed with `render`, which strips the underlying `<a>`'s link semantics
+  (no `href` exposed to assistive tech/keyboard `Enter`-as-navigate); this is
+  the concrete failure this repo's own `.agents/rules/shadcn.md` Base UI
+  composition rule (spec.md §5.6.1) exists to prevent, caught here by new e2e
+  assertions rather than by the rule being checked at write time.
+  `sms-multi-factor-assertion-form.tsx` guards against submitting before
+  `recaptchaVerifier` is ready (was a non-null assertion, `recaptchaVerifier!`,
+  on a value that can genuinely still be `null` during the widget's async init).
+  `policies.tsx` was reworked for accessible policy-link rendering (44/30
+  line diff). Dead imports removed from `login/page.tsx`; `sign-in-auth-form.tsx`
+  markup simplified.
+- **New E2E coverage:** `button-actions.spec.ts`, `collaboration-integrity.spec.ts`,
+  `complete-interactions.spec.ts`, `navigation-actions.spec.ts`,
+  `question-formats.spec.ts` (all new), plus `layout-regression.spec.ts` (new) —
+  the last one is a *partial* answer to the "visual regression" gap this document
+  has flagged as open since the accessibility pass: it asserts no horizontal
+  overflow and a non-blank, correctly-sized screenshot per route at mobile
+  (375×812) and desktop (1440×900) viewports for all six authenticated routes
+  plus the landing page. It is not pixel-diff/baseline visual regression (no
+  stored reference screenshots, no diff threshold) — true visual-regression
+  coverage, as originally scoped, remains open.
+- **Test hardening:** ~20 commits stabilizing existing specs (`interaction`,
+  `space-flow`, `tenancy`) against accessible-name collisions, duplicated
+  navigation controls, concurrency/collaboration flakiness, login/edit timing,
+  and rich-text-formatting interaction flakiness; `helpers.ts`'s `signUp()`
+  and related fixtures adjusted alongside.
+- **New unit coverage:** `tests/firestore-rules.test.ts` (new) — asserts a
+  denied read on a `spaces/forbidden` doc against the Firestore emulator,
+  skipping itself if the emulator isn't reachable.
+- **CI overhaul:** `.github/workflows/prototype-validation.yml` (new) —
+  Node 24 + pnpm 11.20.0 + Java 21 (for the Firestore/Auth emulators), running
+  `pnpm lint` → `firebase emulators:exec --only auth,firestore ... "pnpm test"`
+  → `pnpm test:e2e` → `pnpm run build` on every push to `prototype`. The
+  existing `ci.yml` was trimmed and a duplicate quality workflow removed.
+  `TESTING.md` was rewritten to describe this as full coverage.
+
+**Current verification status, checked directly in this session (2026-09-22),
+not carried over from any commit message above:**
+
+- `pnpm exec tsc --noEmit` — **2 errors**, both in
+  `src/components/firebase/policies.tsx` (lines 46 and 57): `policyAction(url:
+  string, label: string)` is called with `termsOfServiceUrl`/`privacyPolicyUrl`,
+  which are typed `PolicyURL` (a `URL`, from the vendored `@firebase-oss/ui-core`
+  types), not `string` — a real type error, not a stale cache artifact.
+- `pnpm lint` (`biome check src tests`) — **16-17 formatting errors** (count
+  varied slightly between two consecutive runs in this session) across
+  `src/app/login/page.tsx`, `src/app/not-found.tsx`, `src/app/page.tsx`,
+  `src/components/firebase/sign-in-auth-form.tsx`,
+  `src/components/firebase/sms-multi-factor-assertion-form.tsx`,
+  `src/components/recall/space-switcher.tsx`,
+  `src/components/recall/space-tabs.tsx`, and `src/components/space-frame.tsx`
+  — the same files the bug-fix commits above touched, apparently edited after
+  (or without) the `style: format ...` commits in the same range applied
+  formatting to the final state.
+- Unit tests, `pnpm test:e2e`, and `pnpm run build` were **not** run in this
+  session (no Firebase emulators were started; this pass was a read-only plan.md
+  sync, not a Build-stage dispatch).
+
+**Net effect:** this repo's build gate is not currently green. The two-line
+`policies.tsx` type fix and a `biome check --write` pass are small, mechanical,
+low-risk fixes; they have not been made in this session per this skill's
+editing-scope restriction (only `intent.md`/`spec.md`/`plan.md`) and require an
+explicit human authorization to dispatch as their own `sdlc-builder` task,
+separate from this drift-logging entry.
+
+**Resolution (2026-09-22, same day, product owner authorized "execute do all"):**
+Three narrow `sdlc-builder` dispatches, run in parallel/sequence per this repo's
+one-task-per-punch-list-item convention, closed this out:
+
+1. **`policies.tsx` type fix.** `termsOfServiceUrl`/`privacyPolicyUrl` are typed
+   `PolicyURL` (`string | URL`, from the vendored `@firebase-oss/ui-react`
+   types) but `policyAction(url: string, label: string)` requires a plain
+   `string`. Fixed by wrapping both call sites in `String(...)` (a 2-line diff,
+   `+2/-2`), which correctly normalizes either member of the union.
+   `policyAction`'s own signature was left unchanged since `url` inside it is
+   only ever used as a `string`.
+2. **8-file lint fix (`src/app/login/page.tsx`, `not-found.tsx`, `page.tsx`,
+   `firebase/sign-in-auth-form.tsx`, `firebase/sms-multi-factor-assertion-form.tsx`,
+   `recall/space-switcher.tsx`, `recall/space-tabs.tsx`, `space-frame.tsx`).**
+   Root cause turned out to be CRLF/LF line-ending drift in the Windows working
+   tree against already-LF committed blobs (`core.autocrlf=true`), not real
+   formatting violations — `biome check --write` plus `git update-index
+   --really-refresh` cleared it with **zero actual content diff**. This left 8
+   more files with the identical symptom, uncovered only once the first 8 were
+   clear.
+3. **Remaining 8-file lint fix (`tests/e2e/button-actions.spec.ts`,
+   `collaboration-integrity.spec.ts`, `complete-interactions.spec.ts`,
+   `helpers.ts`, `navigation-actions.spec.ts`, `question-formats.spec.ts`,
+   `space-flow.spec.ts`, `tests/firestore-rules.test.ts`).** Same CRLF-drift
+   root cause, same zero-diff resolution, confirmed independently rather than
+   assumed.
+
+**Verified independently by the orchestrating session after all three dispatches
+(not just taken from their self-reports):** `pnpm lint` — clean, 76 files
+checked, 0 errors. `pnpm exec tsc --noEmit` — clean, 0 errors. `pnpm test` —
+40/40 passing (0 skipped; a prior run recorded 1 skip here because the Firestore
+emulator wasn't reachable at that moment — same test, environment-dependent,
+not a regression). `pnpm test:e2e` and `pnpm run build` were still not run in
+this session. The build gate is green on the checks that were run.
+
+**Noted, not acted on:** while these dispatches were running, `README.md`,
+`TESTING.md`, and `.agents/rules/docs.md` picked up real (non-CRLF) content
+edits in the working tree that none of the three dispatched tasks made and that
+weren't present at this session's start — likely concurrent work from another
+tool/session sharing this checkout (this repo runs Claude Code, Antigravity,
+Gemini CLI, and Codex against the same tree). Skimmed, not authored by this
+session: they update README.md's status blurb to match the actually-implemented
+scope, document the new `ci.yml`/`prototype-validation.yml` pair in TESTING.md,
+and add `spec.md`/`plan.md`/`ARCHITECTURE.md`/`CONVENTIONS.md`/`TESTING.md` to
+`.agents/rules/docs.md`'s recognized root-doc list. Left untouched, per this
+skill's editing scope and because they're someone/something else's in-progress
+work, not this session's to fold in or take credit for.
+
 
 

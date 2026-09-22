@@ -1,6 +1,6 @@
 # Notes App
 
-Recall is currently in the Build stage. The root application includes a responsive entry surface plus verified static Space Home, Question detail, Study Session setup, and Review Queue screens based on [DESING.md](./DESING.md). Authentication, persistence, domain mutations, and external integrations described in [spec.md](./spec.md) are still in progress.
+Recall is a graph-based, Space-scoped exam-prep and spaced-repetition platform. Per [intent.md](./intent.md) (status: approved) and [plan.md](./plan.md), the core loop described in [spec.md](./spec.md) is implemented: authentication, Space-scoped persistence and domain mutations, the object graph (Questions, Exams, Tags, Collections, Notes, Citations), SM-2 scheduling, and the read-oriented MCP server. See intent.md's latest dated entry for the current build/lint status ahead of any given commit.
 
 Project lifecycle artifacts:
 
@@ -62,8 +62,11 @@ GEMINI.md
 ├── agents.json, local.json  — @agents-dev/cli scaffold: MCP server sync +
 │                               skill materialization across every tool
 ├── rules/
+│   ├── docs.md
 │   ├── graphify.md
-│   └── rtk.md
+│   ├── rtk.md
+│   ├── shadcn.md
+│   └── shoogle.md
 ├── skills/                  — portable skills, synced/bridged into
 │                               .claude/skills, .gemini/skills, Codex, Antigravity
 └── hooks/

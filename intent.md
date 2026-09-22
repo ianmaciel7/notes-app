@@ -102,3 +102,10 @@ only the grace-window mechanics remain to be built.
 - Add `@firebase-oss/ui-core` dependency in `package.json`.
 - Maintain custom domain components in `src/components/recall/` (e.g., `google-sign-in-button.tsx`) and enforce zero unneeded modifications to vendor primitives in `src/components/firebase/`.
 - Update all internal component imports and documentation references across `src/` and `tests/`.
+
+**Updated 2026-09-22:** 51 commits landed directly on `prototype` after the entry
+above (bug fixes, new/hardened E2E coverage, a CI overhaul) without a plan.md sync —
+now logged in [plan.md](plan.md)'s "Untracked drift sync" entry. That sync also found
+the repo is not currently green: `pnpm exec tsc --noEmit` has 2 real type errors in
+`src/components/firebase/policies.tsx`, and `pnpm lint` has 16-17 formatting errors
+across 8 files. See plan.md for the full breakdown and what remains open.

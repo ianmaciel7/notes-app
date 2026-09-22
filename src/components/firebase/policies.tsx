@@ -43,7 +43,7 @@ export function Policies() {
           return (
             <span key={part}>
               {policyAction(
-                termsOfServiceUrl,
+                String(termsOfServiceUrl),
                 getTranslation(ui, "labels", "termsOfService"),
               )}
             </span>
@@ -54,7 +54,7 @@ export function Policies() {
           return (
             <span key={part}>
               {policyAction(
-                privacyPolicyUrl,
+                String(privacyPolicyUrl),
                 getTranslation(ui, "labels", "privacyPolicy"),
               )}
             </span>

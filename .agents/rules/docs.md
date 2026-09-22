@@ -7,11 +7,11 @@ description: Define naming and content conventions for the Markdown files and do
 
 This rule covers only the Markdown files and locations currently established in this repository:
 
-- Root files: `README.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, and `intent.md`.
+- Root files: `README.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `intent.md`, `spec.md`, `plan.md`, `ARCHITECTURE.md`, `CONVENTIONS.md`, and `TESTING.md`.
 - Agent rules: `.agents/rules/<topic>.md`.
 - Project documentation: `/docs`.
 
-Do not add conventions for document types that do not yet exist in the repository. In particular, this rule does not establish `spec.md`, `plan.md`, ADR files, changelogs, or documentation subcategories before they are actually introduced.
+Do not add conventions for document types that do not yet exist in the repository. In particular, this rule does not establish ADR files, changelogs, or documentation subcategories before they are actually introduced.
 
 # Naming conventions
 
@@ -70,6 +70,10 @@ Shared instructions for coding agents. Keep repository-wide rules here and link 
 ## `CLAUDE.md` and `GEMINI.md`
 
 Tool-specific entry points. Keep them short and tool-specific. Shared instructions belong in `AGENTS.md`; these files should point there rather than copy the same rules.
+
+## `spec.md`, `plan.md`, `ARCHITECTURE.md`, `CONVENTIONS.md`, `TESTING.md`
+
+The anthropic-sdlc workflow's downstream artifacts from `intent.md`, plus the architecture, component-convention, and testing references they depend on. Keep each self-correcting: when implementation departs from what the document says, add a dated entry recording the drift rather than silently rewriting history. Link related documents with repository-relative links instead of duplicating their content.
 
 ## `intent.md`
 

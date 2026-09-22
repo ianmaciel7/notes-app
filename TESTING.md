@@ -86,15 +86,17 @@ It also captures in-memory screenshots and verifies that each rendered viewport 
 
 ## CI quality gate
 
-`.github/workflows/quality.yml` runs on pull requests and pushes to `main` and `prototype`.
+`.github/workflows/ci.yml` runs on pull requests and on pushes to `main` and `prototype`. `.github/workflows/prototype-validation.yml` runs the same gate again on every push to `prototype` alone, as a branch-specific safety net.
 
-The quality job runs:
-1. dependency install;
-2. Biome lint;
-3. Auth/Firestore emulators with `pnpm test`;
-4. production build.
+Both workflows run a single job, in order:
+1. dependency install (`pnpm install --frozen-lockfile`);
+2. Playwright's Chromium install;
+3. Biome lint (`pnpm lint`);
+4. unit/emulator-backed tests (`firebase emulators:exec --only auth,firestore ... "pnpm test"`);
+5. the full Playwright E2E suite (`pnpm test:e2e`) against the local emulators and Next.js dev server;
+6. production build (`pnpm run build`).
 
-The E2E job installs Chromium and runs the full Playwright suite against the local emulators and Next.js dev server.
+`ci.yml` also uploads the Playwright report as a build artifact on failure.
 
 ## E2E traps
 
