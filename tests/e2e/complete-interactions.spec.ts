@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { createObject, createSpace, signUp, visit } from "./helpers";
+import { createObject, createSpace, ensure, signUp, visit } from "./helpers";
 
 test("editing and saving an existing object updates its detail view", async ({
   page,
@@ -64,9 +64,8 @@ test("clicking the mobile navigation backdrop closes the drawer and restores foc
   await page.goto("/space");
 
   const opener = page.getByRole("button", { name: "Open navigation" });
-  await opener.click();
   const nav = page.getByRole("complementary", { name: "Space navigation" });
-  await expect(nav).toBeVisible();
+  await ensure(nav, () => opener.click());
 
   await page.getByRole("button", { name: "Close navigation" }).click({
     position: { x: 590, y: 450 },
