@@ -108,7 +108,8 @@ export default function Home() {
               >
                 Create a space <ArrowRight data-icon="inline-end" />
               </Button>
-              <Button nativeButton={false}
+              <Button
+                nativeButton={false}
                 size="lg"
                 variant="outline"
                 className="h-11 border-hairline bg-canvas"
