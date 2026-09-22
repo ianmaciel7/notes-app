@@ -17,11 +17,8 @@ test("multiple-choice questions grade the complete selected set", async ({
     title: "Select prime numbers",
     text: "Choose every prime.",
     format: "multiple-choice",
-    options: "2
-3
-4",
-    answers: "2
-3",
+    options: "2\\n3\\n4",
+    answers: "2\\n3",
   });
 
   await startSession(page, "all", "practice");
@@ -39,8 +36,7 @@ test("fill-blank questions accept a configured answer", async ({ page }) => {
     title: "Cell powerhouse",
     text: "Name the organelle.",
     format: "fill-blank",
-    answers: "mitochondria
-mitochondrion",
+    answers: "mitochondria\\nmitochondrion",
   });
 
   await startSession(page, "all", "practice");
@@ -57,10 +53,8 @@ test("matching questions grade answers in prompt order", async ({ page }) => {
     title: "Match capitals",
     text: "Match country to capital.",
     format: "matching",
-    options: "France
-Brazil",
-    answers: "Paris
-Brasília",
+    options: "France\\nBrazil",
+    answers: "Paris\\nBrasília",
   });
 
   await startSession(page, "all", "practice");
@@ -79,16 +73,14 @@ test("a multi-question practice session advances, finishes, and restarts", async
     kind: "question",
     title: "Question one",
     text: "First.",
-    options: "A
-B",
+    options: "A\\nB",
     answers: "A",
   });
   await createObject(page, {
     kind: "question",
     title: "Question two",
     text: "Second.",
-    options: "A
-B",
+    options: "A\\nB",
     answers: "A",
   });
 
@@ -120,8 +112,7 @@ test("an expired exam exposes the saved-answer fallback after an automatic submi
     kind: "question",
     title: "Expiry question",
     text: "Saved before expiry.",
-    options: "A
-B",
+    options: "A\\nB",
     answers: "A",
   });
 
