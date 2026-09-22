@@ -17,7 +17,7 @@ test("editing and saving an existing object updates its detail view", async ({
   await page.getByRole("button", { name: "Save object" }).click();
 
   await expect(page.getByRole("heading", { name: "After edit" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Edit" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Edit", exact: true })).toBeVisible();
 });
 
 test("a citation persists and renders its source URL", async ({ page }) => {
