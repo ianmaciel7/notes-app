@@ -18,12 +18,18 @@ test("login mode buttons switch between sign in and account creation", async ({
     page.getByRole("button", { name: "Create account" }),
   ).toBeVisible();
 
-  await page
-    .getByRole("button", { name: "Already have an account? Sign in" })
-    .click();
-  await expect(
-    page.getByRole("heading", { name: "Welcome back" }),
-  ).toBeVisible();
+  const welcomeHeading = page.getByRole("heading", {
+    name: "Welcome back",
+    exact: true,
+  });
+  await ensure(welcomeHeading, () =>
+    page
+      .getByRole("button", {
+        name: "Already have an account? Sign in",
+        exact: true,
+      })
+      .click(),
+  );
   await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
 });
 
