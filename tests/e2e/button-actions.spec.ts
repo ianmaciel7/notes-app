@@ -6,7 +6,9 @@ test("login mode buttons switch between sign in and account creation", async ({
 }) => {
   await page.goto("/login");
 
-  await page.getByRole("button", { name: "New here? Create an account" }).click();
+  await page
+    .getByRole("button", { name: "New here? Create an account" })
+    .click();
   await expect(
     page.getByRole("heading", { name: "Create your account" }),
   ).toBeVisible();
@@ -17,7 +19,9 @@ test("login mode buttons switch between sign in and account creation", async ({
   await page
     .getByRole("button", { name: "Already have an account? Sign in" })
     .click();
-  await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Welcome back" }),
+  ).toBeVisible();
   await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
 });
 
@@ -33,7 +37,9 @@ test("object edit cancel protects dirty changes and archive can be restored", as
   });
 
   await page.getByRole("button", { name: "Edit" }).click();
-  await expect(page.getByRole("heading", { name: "Edit object" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Edit object" }),
+  ).toBeVisible();
 
   await page.locator("#title").fill("Unsaved title");
   page.once("dialog", async (dialog) => {
@@ -41,7 +47,9 @@ test("object edit cancel protects dirty changes and archive can be restored", as
     await dialog.dismiss();
   });
   await page.getByRole("button", { name: "Cancel" }).click();
-  await expect(page.getByRole("heading", { name: "Edit object" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Edit object" }),
+  ).toBeVisible();
 
   page.once("dialog", async (dialog) => {
     expect(dialog.message()).toBe("Discard your unsaved changes?");
@@ -49,7 +57,9 @@ test("object edit cancel protects dirty changes and archive can be restored", as
   });
   await page.getByRole("button", { name: "Cancel" }).click();
   await expect(page.getByRole("heading", { name: "Edit object" })).toBeHidden();
-  await expect(page.getByRole("heading", { name: "Action note" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Action note" }),
+  ).toBeVisible();
 
   await page.getByRole("button", { name: "Archive" }).click();
   await expect(page.getByText("Archived", { exact: true })).toBeVisible();
@@ -82,7 +92,9 @@ test("API key buttons generate, copy, and revoke a key", async ({
     .poll(() => page.evaluate(() => navigator.clipboard.readText()))
     .toBe(rawKey);
 
-  await expect(page.getByText("Playwright client", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Playwright client", { exact: true }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Revoke" }).click();
   await expect(page.getByText("Revoked", { exact: true })).toBeVisible();
 });
