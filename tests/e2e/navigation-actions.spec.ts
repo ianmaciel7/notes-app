@@ -29,7 +29,7 @@ test("sign out returns to login and protected navigation no longer remains", asy
   page,
 }) => {
   await signUp(page);
-  await createSpace(page, "Sign out");
+  await createSpace(page, "Logout Space");
   await visit(page, "/space");
 
   await page.getByRole("button", { name: "Sign out" }).click();
@@ -46,7 +46,7 @@ test("New object can be opened and dismissed without creating anything", async (
   page,
 }) => {
   await signUp(page);
-  await createSpace(page, "New object");
+  await createSpace(page, "Object creation");
   await visit(page, "/space");
 
   await page.getByRole("button", { name: "New object" }).click();
