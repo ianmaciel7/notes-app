@@ -1241,5 +1241,105 @@ and add `spec.md`/`plan.md`/`ARCHITECTURE.md`/`CONVENTIONS.md`/`TESTING.md` to
 skill's editing scope and because they're someone/something else's in-progress
 work, not this session's to fold in or take credit for.
 
+### Ninth pass: sidebar width persistence, pixel-diff visual regression, SECURITY.md/CONTRIBUTING.md (2026-09-22, commit `a080e890`, sync backfilled)
+
+One more commit landed directly on `prototype` after the drift sync above (range
+`c029c621..a080e890`), again without its own plan.md entry at commit time — backfilled
+here in a `/anthropic-sdlc` session per the product owner's "try finish" request, the
+same after-the-fact pattern as the prior drift sync.
+
+**What it contains:**
+
+- **Sidebar rail width is now persisted (spec.md §5.4 "Resize limits"/"Persistence").**
+  Previously a deliberate, flagged-for-product-sign-off scope decision (this document's
+  eighth-pass "Sidebar parity pass" entry, "Width is not persisted"). `src/domain/sidebar.ts`
+  gained `sidebarWidthCookie` ("sidebar_width"), same 7-day lifetime family as the existing
+  `sidebar_state` cookie. `src/components/space-frame.tsx`'s drag-release and each discrete
+  keyboard resize (`ArrowLeft`/`ArrowRight`/`Home`/`End`) now write it via a new
+  `persistWidth()`, mirroring `persistCollapsed()`'s "persist on the committed action, not
+  every intermediate pointermove" pattern. `src/lib/space.ts#requireSnapshot()` reads and
+  re-clamps it server-side (`clampSidebarWidth`, guarding against a stale/tampered value
+  outside the 160–360px bounds) so first paint already reflects it, the same SSR guarantee
+  `sidebarCollapsed` already had. `tests/e2e/interaction.spec.ts`'s existing resize test was
+  extended to assert the cookie value after both a drag and a keyboard resize, and that a
+  reload preserves the dragged/keyboard width via `aria-valuenow` — this closes the
+  product-sign-off item rather than leaving it open.
+- **Pixel-diff visual-regression coverage (spec.md §12, closes the item last reopened in the
+  accessibility pass's "remains open" note).** `tests/e2e/layout-regression.spec.ts` now
+  calls `toHaveScreenshot()` (`maxDiffPixelRatio: 0.02`) for all six authenticated routes at
+  mobile (375×812) and desktop (1440×900), plus the landing page at both breakpoints — twelve
+  screenshot assertions on top of the pre-existing overflow/non-blank/dimension checks. Each
+  route got a stable `slug` (independent of `path`, since `/question/[id]` embeds a generated
+  id) to name its baseline file. The object-detail card's "Updated <today>" text is masked
+  (`mask: [page.getByText(/^Updated /)]`) so the date rolling over daily doesn't produce a
+  false diff. Test timeout raised to 120s (`test.setTimeout`) since 12 screenshot comparisons
+  on top of the existing assertions exceed Playwright's 30s default.
+- **New open item this creates: baselines are local-only.** `./tests/e2e/*-snapshots/` is
+  gitignored (new `.gitignore` entry, with an inline comment explaining why) because
+  Playwright encodes the OS/renderer into each baseline filename (`*-chromium-win32.png`
+  locally vs. `*-chromium-linux.png` on `ci.yml`'s `ubuntu-latest` runner) — a baseline
+  generated on one platform is never even looked up on the other. Until a CI step exists to
+  generate and cache/commit Linux baselines, `pnpm test:e2e` in CI will hit
+  `toHaveScreenshot()` with no baseline present, which Playwright treats as "write the
+  baseline and pass" on first run rather than as a real regression check — so this is
+  currently real protection for a developer re-running the suite locally after regenerating
+  baselines, not yet a CI gate. Tracked as an open item below, not silently assumed solved by
+  the spec.md update.
+- **`SECURITY.md` (new, 108 lines) and `CONTRIBUTING.md` (new, 60 lines).** `SECURITY.md` is
+  a real, normative security policy (scope, threat model, trust boundaries, security
+  invariants cross-referenced with `ARCHITECTURE.md`, reportable-findings list, and a "Rules
+  for AI Coding Agents" section binding the same invariants on agents as on humans).
+  `CONTRIBUTING.md` documents setup, workflow, the CI gate, and code-review expectations.
+  Together they close the security half of spec.md §9 item 1's "no documented brand/security/
+  UX policy exists" — the brand/UX half is still genuinely open, no such document exists.
+  `.serena/memories/worktree-security-patterns.md` (new) also landed in this commit; not
+  reviewed for content by this sync pass since it's a Serena memory file, not a governed
+  SDLC artifact.
+
+**Verification status:** not independently re-run by this sync pass (this was a
+plan.md/spec.md/intent.md documentation sync, per this skill's editing-scope restriction,
+not a Build-stage dispatch). The commit's own diff is additive/narrow (three source files
+totaling 53 lines, two test files, three doc/config files) and touches code already covered
+by the existing sidebar and layout-regression specs; a full `pnpm lint && pnpm exec tsc
+--noEmit && pnpm test && pnpm test:e2e && pnpm run build` pass has not been run since this
+commit landed. Recommended as the first check in whichever follow-up dispatch closes the
+CI-baseline item below, so that dispatch's verification run also stands in for this one.
+
+**Punch list still open after this sync (candidates for separate single-task `sdlc-builder`
+dispatches, per the product owner's established one-task-per-item convention):**
+
+1. **CI Linux baseline generation for `toHaveScreenshot()`.** Add a step to
+   `.github/workflows/ci.yml` (or a dedicated job) that generates/caches or commits Linux
+   Chromium baselines so `pnpm test:e2e` actually enforces the pixel-diff assertions in CI
+   instead of silently writing first-run baselines.
+2. **E2E cold-start flake.** The first Playwright test in a fresh `next dev`/Turbopack run can
+   exceed the default 30s timeout on `signUp()`'s `page.waitForURL`. Give the first test (or
+   the `webServer` config) a longer timeout or an explicit warm-up request.
+3. **No E2E coverage for Google sign-in.** Firebase Auth emulator supports fake federated
+   sign-in (`signInWithCredential`/test helpers); wire up a case for the `/login` Google
+   button added in the "Google sign-in added" pass above.
+4. **RESOLVED (moot) — `src/components/firebase/vendor/` disposition.** Confirmed via
+   `git log --all -- src/components/firebase/vendor` (no history) and a direct filesystem
+   check that the directory no longer exists — it was untracked all along and has since
+   been removed outside git, by an unlogged local cleanup rather than a commit. Nothing to
+   decide or dispatch; listed here only so it isn't mistaken for still-open.
+5. **`src/components/ui/sidebar.tsx` disposition.** Unused generated shadcn scaffold, zero
+   imports under `src/` — decide delete-outright vs. keep as a documented, deliberately-
+   unused scaffold.
+6. **RESOLVED (spec-only, no dispatch needed) — spec.md §3.1's "Sidebar migration and
+   rollout boundary" narrative was stale.** It described porting `old-4`'s
+   `AppShell`/`SidebarProvider` into `src/components/ui/sidebar.tsx`; the shell that
+   actually shipped is the bespoke `space-frame.tsx`. Closed directly in this
+   `/anthropic-sdlc` session (spec.md is in this skill's own editing scope) with a
+   correction note in the same pattern as §5.4/§9.16's prior corrections — the original
+   five steps are preserved for audit history, not rewritten in place.
+7. **No single, uncontested full-suite verification run.** Every recent pass's `pnpm
+   test:e2e`/`pnpm run build` results were qualified by "not run" or "concurrent session was
+   also editing the tree." Worth one clean run once no other session holds the working tree,
+   so a green result actually vouches for the whole repo.
+8. **Third-party registry adoption (Fluid Functionalism/Shoogle) — intentionally still
+   unresolved**, pending the supply-chain review spec.md §9 item 4/15 describes. Not a
+   defect; listed here only so it isn't lost from the punch list.
+
 
 

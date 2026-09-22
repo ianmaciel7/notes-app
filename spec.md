@@ -110,11 +110,26 @@ The merged Graphify evidence used for this audit is `graphify-out/worktrees-merg
 
 #### Sidebar migration and rollout boundary
 
+**Correction, 2026-09-22 (plan.md's ninth-pass punch list, item 6):** the five steps below
+describe a plan to port `old-2`/`old-4`/`old-5` into `src/components/ui/sidebar.tsx` via an
+`AppShell`/`SidebarProvider` composition. That is not what shipped. The sidebar that actually
+exists is a bespoke `<aside>` in `src/components/recall/space-frame.tsx`, built independently
+rather than by porting any worktree's shell component — §5.4's "Correction, 2026-09-21"
+paragraph and §9 item 16 already record this for the behavioral contract; this note extends
+the same correction to the migration *plan* itself. `src/components/ui/sidebar.tsx` remains
+an unused, zero-import generated scaffold (§9 item 5 in plan.md's punch list) rather than the
+implementation target steps 1–2 below describe. The five steps are left as originally written,
+for audit history, rather than rewritten in place:
+
 1. Implement the root shell boundary and the shared navigation model first, using `old-2` for route and mobile semantics.
 2. Port `old-4`'s compositional pieces incrementally: space selector, primary rows, pinned/object-type sections, nested actions, and footer. Keep `AppShell`/`SidebarProvider` as the sole owner of width, collapse, and mobile presentation.
 3. Port `old-5`'s trace hooks and focused browser assertions as observability/test support, adapting labels and routes to Recall rather than copying Capacities-specific content.
 4. Verify the root branch at desktop and narrow widths, with keyboard, Escape, reduced-motion, persistence, resize/peek, nested-action, and no-horizontal-overflow checks before calling the sidebar migrated.
 5. Keep all linked worktrees and branches until the selected contracts have passed root verification. Any later worktree removal is a separate, explicit cleanup decision; it is not part of sidebar implementation.
+
+What actually satisfies step 4's verification bar is `tests/e2e/interaction.spec.ts`, run
+live against the local emulators (plan.md §8's "Sidebar parity pass" and this document's
+§11 acceptance checklist), covering `space-frame.tsx` rather than the file named above.
 
 #### Cross-worktree subsystem synthesis
 
@@ -484,7 +499,7 @@ Responses follow standard JSON-RPC 2.0 specifications:
 
 This section exists because the request behind this spec asked for explicit compliance with brand guidelines, security policy, and UX standards — and those don't exist as separate documents in this repository yet. Rather than inventing them, here is what was found, what's ambiguous, and what needs a decision before engineering starts.
 
-1. **No documented brand/security/UX policy exists in this repo.** The only real "policy" today is the shadcn `base-nova` neutral token set and the `Button` component conventions (§5.1). This spec builds on those. If a brand or security policy exists outside this repository, it wasn't available here and should be reconciled against §5–§8 before implementation begins.
+1. **RESOLVED 2026-09-22 (security half only) — was "No documented brand/security/UX policy exists in this repo."** `SECURITY.md` (new, commit `a080e890`) is now a real, normative security policy: scope, threat model, security invariants, reportable-findings list, and rules for AI coding agents, cross-referenced with `ARCHITECTURE.md`'s multi-tenancy invariants. `CONTRIBUTING.md` (same commit) documents the workflow/CI gate. No brand or UX policy document exists yet — the only UX "policy" remains the shadcn `base-nova` neutral token set and §5.1–§5.6 of this spec. If a brand policy exists outside this repository, it wasn't available here and should be reconciled before implementation continues.
 2. **RESOLVED 2026-09-19 — was "'Free community browsing' vs. 'strict tenant isolation' are in tension."** intent.md now states Spaces are private-only, which removes this tension entirely: there is no public visibility left to reconcile with isolation. `visibility` on `objects` is now just `private | space` (§6) — kept only to distinguish "just me" from "anyone in this Space," not to gate public access.
 3. **RESOLVED 2026-09-19 — was a recommended default pending sign-off on public-vs-private object defaults.** Moot now that `public` isn't a visibility value at all. `note` and `citation` objects can still default to `private` even within a `space`-visible context, if the product wants personal annotations to stay hidden from other Space members by default — that's a smaller, still-open product question, not the one this item used to describe.
 4. **Third-party registries are a supply-chain risk, not yet adopted.** intent.md/the earlier draft named "Fluid Functionalism" (`fluidfunctionalism.com`) and "Shoogle" (`shoogle.dev`) as UI sources. `components.json` currently has `registries: {}` — nothing points at them. Pointing the shadcn CLI at an external registry pulls in and executes that party's components/CSS/build config inside this codebase. **Before adoption:** vet the registry's contents and provenance the same way any new dependency would be reviewed; do not add it to `components.json` as a blanket default without that review. This spec does not assume it will be adopted.
@@ -539,7 +554,7 @@ This section exists because the request behind this spec asked for explicit comp
 - [x] Sidebar parity is explicit — §3.1 and §5.4 select `old-2`/`old-4`/`old-5` as the evidence sources and define the adopted responsive, accessibility, persistence, resize, peek, shortcut, nested-row, and reduced-motion contract.
 - [x] Sidebar parity is implemented and proven — `src/components/space-frame.tsx` (the shell's actual sidebar; see §9.16) now implements peek (`hover`/focus, non-persistent), bounded 160-360px drag-to-resize with a keyboard alternative, and independently-collapsible nested nav groups, alongside the pre-existing side-aware `[`/`]` shortcuts and `sidebar_state` persistence. `tests/e2e/interaction.spec.ts` covers desktop collapse/persistence/`[`, mobile drawer focus trap, nested-group `aria-expanded`, drag+keyboard resize (including collapse-past-minimum), hover/focus peek (with an explicit assertion that the cookie never changes during a peek), `prefers-reduced-motion` (functional collapse plus a near-zero computed `transitionDuration`), and row-action hover/focus reveal scoped to one row. Run live against the local emulators 2026-09-21: 13/13 passing (plan.md §8).
 - [x] Dialog/tab parity is implemented and proven — `tests/e2e/interaction.spec.ts` covers command dialogs, object-type dialogs, popovers/menus, space tabs, and context-panel tabs; run live against the local emulators 2026-09-21, 16/17 `tests/e2e/` specs passing, including two independent focus-restoration specs (mobile drawer, context panel). The 17th failed on a setup-step timeout unrelated to the assertion it was testing — see plan.md §8, sixth pass, verification note.
-- [x] An automated accessibility (axe) pass exists and is proven — `tests/e2e/accessibility.spec.ts` (new, plan.md §8's "Accessibility (axe-core) regression pass" entry, 2026-09-21) scans `/space`, an object detail page, the open command palette, the practice study-session runner (mid-question and post-answer feedback states), the simulated-exam runner, and `/settings` with `@axe-core/playwright` restricted to the WCAG 2.1 A/AA rule tags NFR-3 cites. Run live against the local emulators 2026-09-21: 6/6 passing. Two real `color-contrast` violations (the shared `#cc785c` brand token and a dark-card link both below 4.5:1) were fixed in `src/app/globals.css`/`src/app/space/page.tsx`, not just detected. One violation — `aria-required-children` on the command palette's `cmdk`-rendered listbox/separator — is a confirmed third-party `cmdk` 1.1.1 library behavior (not this app's code) and is deliberately excluded by rule ID in that one test only, with an inline comment; every other rule still applies there. Visual-regression coverage (the other half of §12's former "Accessibility and visual regression" gap) was explicitly out of scope for this pass and remains open.
+- [x] An automated accessibility (axe) pass exists and is proven — `tests/e2e/accessibility.spec.ts` (new, plan.md §8's "Accessibility (axe-core) regression pass" entry, 2026-09-21) scans `/space`, an object detail page, the open command palette, the practice study-session runner (mid-question and post-answer feedback states), the simulated-exam runner, and `/settings` with `@axe-core/playwright` restricted to the WCAG 2.1 A/AA rule tags NFR-3 cites. Run live against the local emulators 2026-09-21: 6/6 passing. Two real `color-contrast` violations (the shared `#cc785c` brand token and a dark-card link both below 4.5:1) were fixed in `src/app/globals.css`/`src/app/space/page.tsx`, not just detected. One violation — `aria-required-children` on the command palette's `cmdk`-rendered listbox/separator — is a confirmed third-party `cmdk` 1.1.1 library behavior (not this app's code) and is deliberately excluded by rule ID in that one test only, with an inline comment; every other rule still applies there. Visual-regression coverage (the other half of §12's former "Accessibility and visual regression" gap) was out of scope for this pass; it was closed 2026-09-22 (commit `a080e890`, see §12's update) with local-only pixel-diff baselines — CI has no Linux-baseline generation step yet, so this is not yet enforced in CI.
 - [x] Cross-worktree architecture evidence is synthesized — authentication, revisions, relations, study scheduling, local-first/sync, editor alternatives, AI boundaries, and verification sources are classified in §3.1.
 - [x] Architecture choices are approved — SM-2 scheduler, TipTap JSON serialization, server-authoritative Firestore actions, and Space-scoped API keys documented and approved in `plan.md`.
 
@@ -575,7 +590,7 @@ now opens a dismissible drawer.
 
 The following screens and capabilities are specified by this document or the companion design artifact but are still not implemented in the root branch:
 
-- visual-regression coverage. (The accessibility/axe half of this item closed 2026-09-21 — see the update below and plan.md §8's "Accessibility (axe-core) regression pass" entry.)
+- ~~visual-regression coverage.~~ RESOLVED 2026-09-22 (commit `a080e890`, not yet logged in plan.md's phased history at the time this line was written) — see the update below.
 
 **Updated 2026-09-21 (accessibility/axe pass — see plan.md §8).** `tests/e2e/accessibility.spec.ts`
 (new) scans six surfaces — `/space`, an object detail page, the open command palette,
@@ -593,7 +608,19 @@ was a hairline fail (4.47:1) and was darkened to `#5f5d57`. `src/app/space/page.
 is a confirmed `cmdk` 1.1.1 library behavior, not this app's code, and is excluded by rule
 ID in that one test only, with an inline comment explaining why; it is not fixed and not
 silently suppressed elsewhere. Visual-regression coverage was explicitly out of scope for
-this pass and remains open, per the bullet above.
+this pass and remained open at the time, per the bullet above.
+
+**Updated 2026-09-22 (commit `a080e890`).** `tests/e2e/layout-regression.spec.ts` now
+takes real pixel-diff screenshots (`toHaveScreenshot()`, `maxDiffPixelRatio: 0.02`) for
+all six authenticated routes at mobile/desktop and the landing page, masking the one
+known date-dependent text node so the diff only catches real layout drift. This closes
+the bullet above. It is local-only protection for now: baselines are Playwright's
+OS/renderer-specific filenames (e.g. `*-chromium-win32.png` vs `*-chromium-linux.png`),
+committed nowhere (`.gitignore` excludes `tests/e2e/*-snapshots/`), and CI has no step to
+generate or cache a Linux baseline set — so `pnpm test:e2e` in `.github/workflows/ci.yml`
+will not actually exercise the `toHaveScreenshot()` assertions against a real baseline
+until that CI-side step exists. This is a new, narrower open item replacing the old
+"visual-regression coverage remains open" one; see plan.md's ninth-pass entry.
 
 **Updated 2026-09-21 (punch-list pass — see plan.md §8).** A CI workflow file
 now exists (`.github/workflows/ci.yml`): on every push to `main`/`prototype`

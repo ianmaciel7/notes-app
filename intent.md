@@ -109,3 +109,19 @@ now logged in [plan.md](plan.md)'s "Untracked drift sync" entry. That sync also 
 the repo is not currently green: `pnpm exec tsc --noEmit` has 2 real type errors in
 `src/components/firebase/policies.tsx`, and `pnpm lint` has 16-17 formatting errors
 across 8 files. See plan.md for the full breakdown and what remains open.
+
+**Updated 2026-09-22 (same day, second sync):** one further commit
+(`a080e890`) landed after the drift sync above without its own plan.md entry —
+closed twice-over by this update. It resolves two items the drift sync and
+spec.md §12 had open: the sidebar rail width (spec.md §5.4 "Resize limits")
+is now persisted via a `sidebar_width` cookie the same way the desktop
+collapse state already was, and `tests/e2e/layout-regression.spec.ts` gained
+real pixel-diff baselines (`toHaveScreenshot()`), closing the long-standing
+"visual-regression coverage remains open" item. It introduces one new gap in
+its place: baselines are OS/renderer-specific and gitignored, and CI has no
+step to generate/cache Linux baselines yet, so pixel-diff protection is
+currently local-only — see plan.md's ninth pass entry. The same commit also
+added `SECURITY.md` and `CONTRIBUTING.md`, which resolves the security half
+of spec.md §9 item 1 ("no documented brand/security/UX policy exists") — a
+real, normative security policy now exists; brand/UX policy documents still
+do not.
