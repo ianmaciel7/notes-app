@@ -1,53 +1,67 @@
 import { getTranslation } from "@firebase-oss/ui-core";
 import { PolicyContext, useUI } from "@firebase-oss/ui-react";
-import { cloneElement, useContext } from "react";
+import { useContext } from "react";
 import { cn } from "@/lib/utils";
 
 export function Policies() {
   const ui = useUI();
   const policies = useContext(PolicyContext);
 
-  if (!policies) {
-    return null;
-  }
+  if (!policies) return null;
 
   const { termsOfServiceUrl, privacyPolicyUrl, onNavigate } = policies;
-  const termsAndPrivacyText = getTranslation(ui, "messages", "termsAndPrivacy");
-  const parts = termsAndPrivacyText.split(/(\{tos\}|\{privacy\})/);
-
-  const className = cn("hover:underline font-semibold");
-  const Handler = onNavigate ? (
-    <button className={className} />
-  ) : (
-    <a target="_blank" rel="noopener noreferrer" className={className} />
+  const parts = getTranslation(ui, "messages", "termsAndPrivacy").split(
+    /(\{tos\}|\{privacy\})/,
   );
+  const className = cn("hover:underline font-semibold");
+
+  function policyAction(url: string, label: string) {
+    return onNavigate ? (
+      <button
+        type="button"
+        className={className}
+        onClick={() => onNavigate(url)}
+      >
+        {label}
+      </button>
+    ) : (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+      >
+        {label}
+      </a>
+    );
+  }
 
   return (
     <div className="text-text-muted text-center text-xs">
-      {parts.map((part: string, index: number) => {
+      {parts.map((part: string) => {
         if (part === "{tos}") {
-          return cloneElement(Handler, {
-            key: index,
-            onClick: onNavigate
-              ? () => onNavigate(termsOfServiceUrl)
-              : undefined,
-            href: onNavigate ? undefined : termsOfServiceUrl,
-            children: getTranslation(ui, "labels", "termsOfService"),
-          });
+          return (
+            <span key={part}>
+              {policyAction(
+                termsOfServiceUrl,
+                getTranslation(ui, "labels", "termsOfService"),
+              )}
+            </span>
+          );
         }
 
         if (part === "{privacy}") {
-          return cloneElement(Handler, {
-            key: index,
-            onClick: onNavigate
-              ? () => onNavigate(privacyPolicyUrl)
-              : undefined,
-            href: onNavigate ? undefined : privacyPolicyUrl,
-            children: getTranslation(ui, "labels", "privacyPolicy"),
-          });
+          return (
+            <span key={part}>
+              {policyAction(
+                privacyPolicyUrl,
+                getTranslation(ui, "labels", "privacyPolicy"),
+              )}
+            </span>
+          );
         }
 
-        return <span key={index}>{part}</span>;
+        return <span key={part}>{part}</span>;
       })}
     </div>
   );
