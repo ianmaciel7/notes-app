@@ -2,93 +2,110 @@
 
 ## Current state
 
-Two test files today, both over the pure `src/domain/` layer:
+The repository uses two complementary test layers:
 
-- `tests/recall.test.ts` — `grade()` for all four question formats, `schedule()`'s literal SM-2 behaviour (per-grade `EF'` vectors, the 1/6/`I(n-1)×EF'` interval ladder, the reset below grade 3, the 1.3 ease floor, out-of-range rejection), and one `objectInput` schema case.
-- `tests/api-keys.test.ts` — key format and uniqueness, base62 alphabet coverage under rejection sampling, SHA-256 hashing, and `Bearer` header parsing.
+- **Node test + tsx** for pure domain logic and emulator-backed rule checks.
+- **Playwright** for browser interaction, Server Action integration, Firebase Auth/Firestore flows, accessibility, responsive layout, and MCP HTTP integration.
 
-Unit runner: Node's built-in `node:test` + `node:assert/strict`, executed via `tsx` (no Vitest or Jest — check `package.json` before assuming otherwise).
+Unit/integration files in `tests/*.test.ts` cover:
+- grading for all four question formats;
+- SM-2 scheduling, quality values, exam grace windows, rich-text flattening, schema validation;
+- API-key generation, hashing, parsing, and retry-queue logic;
+- sidebar and open-tab domain helpers;
+- emulator seed expectations;
+- Firestore's unauthenticated blanket-deny rule.
 
 ```bash
-pnpm test                                   # runs tests/*.test.ts
-tsx --test tests/recall.test.ts             # run a single file directly
+pnpm test
+tsx --test tests/recall.test.ts
 ```
 
-Above the domain layer, `tests/e2e/` is a Playwright suite (`@playwright/test`, Chromium only) covering authoring and backlinks, practice grading with the 0–5 self-grade, the simulated exam, archiving, route protection, cross-Space 404s, and the whole MCP key lifecycle over HTTP. It doubles as the integration suite — `/api/mcp` authenticates with a bearer key rather than a session cookie, so `request` can drive it directly.
+The Playwright suite in `tests/e2e/` covers:
+- sign-up/sign-in UI state, Google popup wiring through the Firebase Auth Emulator, and sign-out;
+- Space creation, switching, invitation, member access, reporting, and owner resolution;
+- object creation, editing, dirty-draft cancellation, archiving/restoring, citations, backlinks, context details, and cross-Space isolation;
+- single-choice, multiple-choice, fill-blank, and matching questions;
+- practice grading, 0-5 self-grade, multi-question progression, results, restart, simulated exam, and expired-session fallback;
+- command palette search/actions, sidebar collapse/resize/peek/mobile close, open tabs, and keyboard/focus restoration;
+- optimistic-concurrency conflicts, one-Exam-per-user enforcement, and cross-Space link rejection;
+- MCP API-key UI lifecycle and JSON-RPC HTTP behavior;
+- route protection and tenant 404 behavior;
+- WCAG 2.1 A/AA Axe checks;
+- mobile/desktop overflow invariants plus screenshot render smoke for the primary routes and landing page.
 
 ```bash
-pnpm test:e2e                               # starts emulators + next dev, then runs
-pnpm exec playwright test tenancy.spec.ts   # one file
-pnpm exec playwright test -g "backlink"     # one test
+pnpm test:e2e
+pnpm exec playwright test collaboration-integrity.spec.ts
+pnpm exec playwright test -g "multiple-choice"
 ```
 
-`playwright.config.ts` starts both the Firebase emulators and `next dev` itself and reuses them if they are already running, so no manual setup is needed.
+`playwright.config.ts` starts Firebase Auth/Firestore emulators and `next dev` automatically.
 
 ## Writing a new test
 
-Follow the existing file's shape:
+- Write one test per behavior, not per implementation function.
+- Prefer `node:test` for pure domain code.
+- Prefer Playwright when behavior crosses React, Next.js routing, Server Actions, cookies, auth, Firestore, or browser focus.
+- Avoid mocks for business rules when a real emulator-backed or browser path is practical.
+- Keep selectors semantic: role, label, placeholder, or stable test id.
+- Use `ensure()` from `tests/e2e/helpers.ts` for client handlers reached immediately after a cold Next.js navigation, because Turbopack hydration may lag behind server-rendered HTML.
 
-- One `test("<module>: <behavior>", () => { ... })` block per behavior, not per function.
-- `assert.equal` / `assert.ok` from `node:assert/strict`.
-- A trailing inline comment only where the assertion encodes a non-obvious rule (e.g. `// order independence`, `// duplicates rejected`) — this is the same "comment only the non-obvious why" rule as the rest of the codebase (`CONVENTIONS.md`).
-- New pure-logic modules get a matching `tests/<module>.test.ts`, imported with a relative path (`../src/domain/...`) since `tsx --test` doesn't resolve the `@/` alias.
+## Pure domain testing
 
-Prefer testing at the `src/domain/` layer: it has no Firebase/Next.js imports, so tests need no emulator and run fast.
-
-### Pure Domain Testing (Zero-Mock Philosophy)
-
-Drawn from proven patterns in historical iterations (`old-9`):
-- **Decoupled Business Logic**: Algorithms (`grade()`, `schedule()`, SM-2 interval calculations), zod input validation schemas, and document parsers (`plainText()`) must live strictly in `src/domain/`.
-- **Zero Mocks**: Domain unit tests never mock databases, network interfaces, or framework routers. If a function requires mocking Firebase or Next.js to test its business logic, the domain function is improperly coupled.
-- **Table-Driven Test Vectors**: Parameterized cases (e.g. testing the full 0–5 SM-2 grade ladder, interval resets, ease floors, and fuzz testing key formats) execute in sub-milliseconds via Node's native runner (`tsx --test`).
-
-## Source-Scanning Micro-Contracts
-
-Inspired by the micro-contract test suites in `old-4` and `old-5`, structural and architectural invariants can be verified mechanically by scanning source files:
-- **Server Boundary Enforcement**: Assert that all files in `src/lib/firebase/` importing `firebase-admin` contain `import "server-only"` on line 1.
-- **No Direct Dangerous APIs**: Enforce that `dangerouslySetInnerHTML` is never used outside dedicated, audited sanitization components.
-- **Worktree Isolation**: Verify that no file in `src/` imports from or references `.worktrees/`.
-- **Relative Path Portability**: Ensure source and test files do not embed hardcoded machine paths (`C:\Users\...` or `/home/...`).
-
-## Interaction, Focus & Responsive Parity
-
-For browser-level tests in `tests/e2e/` (drawing on `old-2` and `old-5` parity specs):
-- **Responsive Overflow Invariant**: Mobile and desktop viewports must verify `document.documentElement.scrollWidth <= window.innerWidth` across all dashboard, study, and editor routes to prevent horizontal overflow breakage.
-- **Focus Trap & Keyboard Restitution**: Modals, command palettes, and dialogs must trap focus cycling via `Tab`/`Shift+Tab` and restore focus to the triggering element upon `Escape` dismissal.
+Pure algorithms and schemas belong in `src/domain/` and should stay independent of Firebase and Next.js. Use table-driven vectors for grading/scheduling rules and explicit boundary cases.
 
 ## Firebase emulators
 
 ```bash
-pnpm emulators   # starts Auth + Firestore emulators for project demo-recall, with local persistence
+pnpm emulators
 ```
 
-`src/lib/firebase/admin.ts` auto-points at `127.0.0.1:9099` / `127.0.0.1:8080` when `NODE_ENV=development`, and hard-refuses to initialize against a `demo-*` project ID unless an emulator host env var is set — so `pnpm dev` cannot accidentally write to a real Firebase project. Use the emulators for manual testing of auth/Firestore flows; there is no automated integration suite exercising them yet.
+Development uses:
+- Auth emulator: `127.0.0.1:9099`
+- Firestore emulator: `127.0.0.1:8080`
+- project: `demo-recall`
 
-`/api/mcp` is the one surface that can be driven end-to-end without a browser, since it authenticates with a bearer key rather than a session cookie. With the emulators and `pnpm dev` running, seed a Space, an object, and an `/api_keys` document (hashing the raw key with `hashApiKey()` from `src/domain/api-keys.ts`), then `curl -X POST http://127.0.0.1:3000/api/mcp` with `Authorization: Bearer rcl_live_…`. That covers the whole key lifecycle and every JSON-RPC error path in `spec.md` §7.2.4. Anything driven by a Server Action still needs a real browser.
+`tests/firestore-rules.test.ts` verifies that an unauthenticated client cannot read Firestore. It skips only when the emulator is unavailable. CI runs `pnpm test` inside `firebase emulators:exec`, so the rule test executes rather than skipping.
 
-## Lint as a gate
+The Firebase Auth Emulator is also used for the browser authentication suite, including the local provider page opened by Google `signInWithPopup`.
 
-```bash
-pnpm lint     # biome check src tests
-```
+## Accessibility and responsive regression
 
-Run this before treating a change as done — it's the cheapest available check and the closest thing this repo has to CI today (there is no CI workflow file yet).
+`tests/e2e/accessibility.spec.ts` runs Axe against WCAG 2.1 A/AA rules on the primary authenticated surfaces and interaction states.
 
-## Three traps in the E2E setup
+`tests/e2e/layout-regression.spec.ts` checks the supported mobile and desktop breakpoints for horizontal overflow across:
+- Overview
+- object list
+- object detail
+- Study
+- Review
+- Settings
+- public landing page
 
-**Use `localhost`, never `127.0.0.1`.** Next 16 blocks cross-origin access to `/_next/*` dev resources, and it does not consider `127.0.0.1` the same origin as `localhost`. Point a browser at `http://127.0.0.1:3000` and the page still renders — server components run, chunks return 200, no error appears in the console — but the client bundle never finishes wiring up, so **nothing hydrates**: every button is inert and every test times out waiting for a click that silently did nothing. The only visible clue is a `Blocked cross-origin request to Next.js dev resource` warning in the dev server's own stdout, which is why `playwright.config.ts` does not set `stdout: "ignore"` on that server lightly. `baseURL` is `http://localhost:3000` for this reason. (The alternative is `allowedDevOrigins: ['127.0.0.1']` in `next.config.ts`; using `localhost` keeps the app config clean.)
+It also captures in-memory screenshots and verifies that each rendered viewport produces a non-empty image with the expected dimensions. Pixel-diff golden images are intentionally not committed until they can be generated from the real application runtime; do not fabricate visual baselines.
 
-**Saving an object navigates from one `/question/<id>` to another.** A `waitForURL(/\/question\/[^/]+$/)` resolves instantly against the page you are already on and hands back the previous object's id. `createObject()` in `tests/e2e/helpers.ts` waits for the URL to actually *change*; keep that if you touch it.
+## CI quality gate
 
-**The first cold navigation to `/space` can outrun the default 30s navigation timeout.** `playwright.config.ts`'s `webServer` health check only warms `/login` (its `url` target) before tests start; `/space` requires an authenticated session, so it cannot be warmed the same way, and Turbopack compiles it from scratch on whichever spec's `signUp()` call is first to reach it. On a cold run (no `.next` cache, first suite run on a machine) that compile has been observed to exceed 30s, failing `signUp()`'s `page.waitForURL("**/space")` with a timeout even though the app itself is working correctly. `signUp()` passes an explicit `{ timeout: 60_000 }` for this one navigation, and `playwright.config.ts` also sets a global `navigationTimeout: 60_000` as a second line of defense for any other route hit cold. If this still flakes, the underlying fix is a longer per-navigation timeout, not a shorter wait — the compile is real work, not a stuck test.
+`.github/workflows/quality.yml` runs on pull requests and pushes to `main` and `prototype`.
 
-## Planned, not current
+The quality job runs:
+1. dependency install;
+2. Biome lint;
+3. Auth/Firestore emulators with `pnpm test`;
+4. production build.
 
-`plan.md` §4 specifies the matrix in terms of Vitest for the unit and integration rows. This repo deliberately does not install Vitest: `node:test` covers the pure-domain unit row, and Playwright covers both the E2E row and the integration row (see plan.md §8 for the recorded deviation). Adding a third runner would buy nothing.
+The E2E job installs Chromium and runs the full Playwright suite against the local emulators and Next.js dev server.
 
-Genuinely not covered yet:
+## E2E traps
 
-- **Firestore security rules.** `firestore.rules` is a blanket deny and every path goes through the Admin SDK, so there are no granular rules to assert. If per-collection rules are ever added, they need an emulator rules suite (asserting unauthenticated client reads return 403 while Server Actions succeed).
-- **Server Action failure paths** — optimistic-concurrency conflicts (`version` mismatch on save), the one-Exam-per-user rule, and cross-Space link rejection are enforced in `src/actions/recall.ts` but only exercised through happy-path E2E.
-- **Accessibility and visual regression.** Automated axe-core accessibility scans and viewport visual parity.
-- **CI.** There is no workflow file; `pnpm lint && pnpm test && pnpm test:e2e && pnpm run build` is the gate to run by hand.
+**Use `localhost`, never `127.0.0.1`, for the browser app.** Next dev resources can be blocked as cross-origin when the page origin differs, leaving server-rendered HTML visible but client handlers inert. The configured Playwright base URL is `http://localhost:3000`.
+
+**Saving an object navigates from one `/question/<id>` to another.** Waiting only for a matching pathname can immediately match the old object. `createObject()` waits until the URL actually changes.
+
+**Cold route compilation can exceed the default navigation timeout.** The suite uses a 60-second navigation timeout and `ensure()` retries for hydration-sensitive controls.
+
+**Tests are serial.** They share one emulator process, while each test creates isolated users/Spaces as needed. Do not enable parallel workers without first isolating emulator state.
+
+## Test philosophy
+
+The target is behavioral confidence rather than one test for every DOM node. A button is considered covered when a test exercises the user-visible behavior it owns. Shared primitives such as the generated shadcn/Base UI `Button` are not redundantly tested once their consuming flows are exercised.
