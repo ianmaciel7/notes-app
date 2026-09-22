@@ -46,8 +46,15 @@ export async function createSpace(page: Page, name: string) {
   });
   await menuItem.click();
   await page.locator("#space-name").fill(name);
-  await page.getByRole("button", { name: "Create Space" }).click();
-  await expect(page.getByRole("button", { name })).toBeVisible();
+  await page.getByRole("button", { name: "Create Space", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Create a Space", exact: true }),
+  ).toBeHidden({ timeout: 60_000 });
+  await page.reload();
+  await waitHydrated(page);
+  await expect(
+    page.locator('[aria-haspopup="menu"]').first(),
+  ).toContainText(name, { timeout: 60_000 });
 }
 
 export async function createObject(
