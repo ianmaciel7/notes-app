@@ -8,8 +8,8 @@ test("primary Space navigation reaches every destination", async ({ page }) => {
 
   const destinations = [
     { name: "Questions", path: "/question", heading: "Questions" },
-    { name: "Study session", path: "/study", heading: "Study" },
-    { name: "Review queue", path: "/review", heading: "Review" },
+    { name: "Study session", path: "/study", heading: "Study session" },
+    { name: "Review queue", path: "/review", heading: "Review queue" },
     { name: "Settings", path: "/settings", heading: "Settings" },
     { name: "Overview", path: "/space", heading: "Overview" },
   ] as const;
