@@ -34,7 +34,9 @@ test("sign out returns to login and protected navigation no longer remains", asy
 
   await page.getByRole("button", { name: "Sign out" }).click();
   await page.waitForURL("**/login");
-  await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Welcome back" }),
+  ).toBeVisible();
 
   await page.goto("/space");
   await page.waitForURL("**/login");
