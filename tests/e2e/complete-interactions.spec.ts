@@ -129,18 +129,16 @@ test("landing page CTAs have real destinations instead of inert buttons", async 
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: "Search" })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "See how it works" })).toHaveAttribute(
-    "href",
-    "#space",
-  );
+  await expect(
+    page.getByRole("link", { name: "See how it works" }),
+  ).toHaveAttribute("href", "#space");
   await expect(page.getByRole("link", { name: "Sign in" })).toHaveAttribute(
     "href",
     "/login",
   );
-  await expect(page.getByRole("link", { name: "Create a space" })).toHaveAttribute(
-    "href",
-    "/login",
-  );
+  await expect(
+    page.getByRole("link", { name: "Create a space" }),
+  ).toHaveAttribute("href", "/login");
   await expect(page.getByRole("link", { name: "Open space" })).toHaveAttribute(
     "href",
     "/space",
