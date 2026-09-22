@@ -58,6 +58,7 @@ export function SpaceSwitcher({ data }: { data: Snapshot }) {
                 key={space.id}
                 onClick={() => {
                   selectSpace(space.id);
+                  router.push("/space");
                   router.refresh();
                 }}
               >
@@ -103,6 +104,7 @@ export function SpaceSwitcher({ data }: { data: Snapshot }) {
                 const id = await createSpace(name);
                 selectSpace(id);
                 setCreating(false);
+                router.push("/space");
                 router.refresh();
               } catch (cause) {
                 setError(
