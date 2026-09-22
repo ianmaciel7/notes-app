@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { createObject, createSpace, signUp, startSession } from "./helpers";
+import { createObject, createSpace, signUp, startSession, visit } from "./helpers";
 
 test("multiple-choice questions grade the complete selected set", async ({
   page,
@@ -108,7 +108,7 @@ test("an expired exam exposes the saved-answer fallback after an automatic submi
     answers: "A",
   });
 
-  await page.goto("/study");
+  await visit(page, "/study");
   await page.locator("#scope").selectOption("all");
   await page.locator("#count").fill("1");
   await page.locator("#mode").selectOption("simulated_exam");
