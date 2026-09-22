@@ -33,6 +33,7 @@ import { isEditableTarget } from "@/lib/keyboard";
 import type { SpaceData } from "@/lib/space";
 
 function persistCollapsed(value: boolean) {
+  // biome-ignore lint/suspicious/noDocumentCookie: sidebar state is intentionally read during SSR.
   document.cookie = `${sidebarCookie}=${value}; path=/; max-age=${sidebarCookieMaxAgeSeconds}; samesite=lax`;
 }
 
