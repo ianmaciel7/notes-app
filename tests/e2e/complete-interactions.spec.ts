@@ -49,7 +49,8 @@ test("the context Details tab exposes object metadata", async ({ page }) => {
   });
 
   await page.getByRole("tab", { name: "Details" }).click();
-  const panel = page.getByRole("tabpanel");
+  const panel = page.getByRole("tabpanel").filter({ hasText: "Revision" });
+  await expect(panel).toBeVisible();
   await expect(panel).toContainText("Type");
   await expect(panel).toContainText("note");
   await expect(panel).toContainText("Revision");
@@ -130,21 +131,18 @@ test("landing page CTAs have real destinations instead of inert buttons", async 
 
   await expect(page.getByRole("button", { name: "Search" })).toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: "See how it works" }),
-  ).toHaveAttribute("href", "#space");
-  await expect(page.getByRole("link", { name: "Sign in" })).toHaveAttribute(
-    "href",
-    "/login",
-  );
+    page.locator('a[href="#space"]').filter({ hasText: "See how it works" }),
+  ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Create a space" }),
-  ).toHaveAttribute("href", "/login");
-  await expect(page.getByRole("link", { name: "Open space" })).toHaveAttribute(
-    "href",
-    "/space",
-  );
-  await expect(page.getByRole("link", { name: "Open Recall" })).toHaveAttribute(
-    "href",
-    "/space",
-  );
+    page.locator('a[href="/login"]').filter({ hasText: "Sign in" }),
+  ).toBeVisible();
+  await expect(
+    page.locator('a[href="/login"]').filter({ hasText: "Create a space" }),
+  ).toBeVisible();
+  await expect(
+    page.locator('a[href="/space"]').filter({ hasText: "Open space" }),
+  ).toBeVisible();
+  await expect(
+    page.locator('a[href="/space"]').filter({ hasText: "Open Recall" }),
+  ).toBeVisible();
 });
