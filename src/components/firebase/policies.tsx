@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
 import { getTranslation } from "@firebase-oss/ui-core";
-import { useUI, PolicyContext } from "@firebase-oss/ui-react";
+import { PolicyContext, useUI } from "@firebase-oss/ui-react";
 import { cloneElement, useContext } from "react";
+import { cn } from "@/lib/utils";
 
 export function Policies() {
   const ui = useUI();
@@ -28,7 +28,9 @@ export function Policies() {
         if (part === "{tos}") {
           return cloneElement(Handler, {
             key: index,
-            onClick: onNavigate ? () => onNavigate(termsOfServiceUrl) : undefined,
+            onClick: onNavigate
+              ? () => onNavigate(termsOfServiceUrl)
+              : undefined,
             href: onNavigate ? undefined : termsOfServiceUrl,
             children: getTranslation(ui, "labels", "termsOfService"),
           });
@@ -37,7 +39,9 @@ export function Policies() {
         if (part === "{privacy}") {
           return cloneElement(Handler, {
             key: index,
-            onClick: onNavigate ? () => onNavigate(privacyPolicyUrl) : undefined,
+            onClick: onNavigate
+              ? () => onNavigate(privacyPolicyUrl)
+              : undefined,
             href: onNavigate ? undefined : privacyPolicyUrl,
             children: getTranslation(ui, "labels", "privacyPolicy"),
           });

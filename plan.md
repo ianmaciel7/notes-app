@@ -1101,4 +1101,14 @@ more composable "Forms" (e.g. `useSignInAuthForm`) still read from that same
 `FirebaseUIProvider`/`initializeUI` store, so they don't avoid it either. Shadcn support is a
 theming integration, not an architecture change. Decision unchanged: not adopted.
 
+### 8.8 Eighth Pass Audit: Firebase OpenSource Registry Integration (2026-09-21)
+
+- **Configured Registry**: Registered `"@firebase": "https://firebaseopensource.com/r/{name}.json"` in `components.json`.
+- **Installed UI Primitives**: Installed `@firebase/sign-in-auth-screen` via `pnpm dlx shadcn@latest add` which pulled all dependent screen and form primitives: `sign-in-auth-screen`, `sign-in-auth-form`, `multi-factor-auth-assertion-screen`, `multi-factor-auth-assertion-form`, `sms-multi-factor-assertion-form`, `totp-multi-factor-assertion-form`, `policies`.
+- **Placed Primitives**: Consolidated all 7 installed vendor primitives strictly under `src/components/firebase/`.
+- **Domain Equivalents**: Created `GoogleSignInButton` in `src/components/recall/google-sign-in-button.tsx` for Recall-specific styling/behavior, and re-exported it from `src/components/firebase/google-sign-in-button.tsx`.
+- **Dependencies**: Added `@firebase-oss/ui-core@7.1.0` to `package.json`.
+- **Verification**: `rtk pnpm exec tsc --noEmit` passed with 0 errors; `rtk pnpm test` passed 39 / 39 unit tests.
+
+
 

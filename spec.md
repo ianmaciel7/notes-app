@@ -2,7 +2,7 @@
 
 - Author: Project team
 - Created: 2026-09-19
-- Updated: 2026-09-19 (implementation and screen audit)
+- Updated: 2026-09-21 (Firebase registry and component placement audit)
 - Status: approved — product owner approved 2026-09-19; implementation remains in progress (see §9 and §12)
 - Related: [Intent](intent.md)
 
