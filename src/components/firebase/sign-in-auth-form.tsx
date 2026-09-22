@@ -115,19 +115,17 @@ export function SignInAuthForm(props: SignInAuthFormProps) {
           <FieldError>{form.formState.errors.root.message}</FieldError>
         )}
         {props.onSignUpClick ? (
-          <>
-            <Button
-              type="button"
-              variant="link"
-              size="sm"
-              onClick={props.onSignUpClick}
-            >
-              <span className="text-xs">
-                {getTranslation(ui, "prompts", "noAccount")}{" "}
-                {getTranslation(ui, "labels", "signUp")}
-              </span>
-            </Button>
-          </>
+          <Button
+            type="button"
+            variant="link"
+            size="sm"
+            onClick={props.onSignUpClick}
+          >
+            <span className="text-xs">
+              {getTranslation(ui, "prompts", "noAccount")}{" "}
+              {getTranslation(ui, "labels", "signUp")}
+            </span>
+          </Button>
         ) : null}
       </form>
     </FormProvider>
