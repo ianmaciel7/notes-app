@@ -15,7 +15,9 @@ test("primary Space navigation reaches every destination", async ({ page }) => {
   ] as const;
 
   for (const destination of destinations) {
-    await page.getByRole("link", { name: destination.name, exact: true }).click();
+    await page
+      .getByRole("link", { name: destination.name, exact: true })
+      .click();
     await page.waitForURL(`**${destination.path}`);
     await expect(
       page.getByRole("heading", { name: destination.heading, exact: true }),
