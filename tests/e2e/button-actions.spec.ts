@@ -6,8 +6,8 @@ test("login mode buttons switch between sign in and account creation", async ({
 }) => {
   await page.goto("/login");
 
-  const createHeading = page.getByRole("heading", {
-    name: "Create your account",
+  const createHeading = page.getByText("Create your account", {
+    exact: true,
   });
   await ensure(createHeading, () =>
     page.getByRole("button", { name: "New here? Create an account" }).click(),
@@ -16,8 +16,7 @@ test("login mode buttons switch between sign in and account creation", async ({
     page.getByRole("button", { name: "Create account" }),
   ).toBeVisible();
 
-  const welcomeHeading = page.getByRole("heading", {
-    name: "Welcome back",
+  const welcomeHeading = page.getByText("Welcome back", {
     exact: true,
   });
   await ensure(welcomeHeading, () =>
