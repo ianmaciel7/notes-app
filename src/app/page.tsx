@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   ArrowRight,
   BookOpen,
@@ -62,12 +63,13 @@ export default function Home() {
             <a href="#graph">Graph</a>
           </nav>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" render={<Link href="/login" />}>
               Sign in
             </Button>
             <Button
               size="sm"
               className="bg-coral text-white hover:bg-coral-active"
+              render={<Link href="/space" />}
             >
               Open space
             </Button>
@@ -95,6 +97,7 @@ export default function Home() {
               <Button
                 size="lg"
                 className="h-11 bg-coral px-5 text-white hover:bg-coral-active"
+                render={<Link href="/login" />}
               >
                 Create a space <ArrowRight data-icon="inline-end" />
               </Button>
@@ -102,6 +105,7 @@ export default function Home() {
                 size="lg"
                 variant="outline"
                 className="h-11 border-hairline bg-canvas"
+                render={<a href="#space" />}
               >
                 See how it works
               </Button>
@@ -118,14 +122,12 @@ export default function Home() {
               <div className="flex items-center gap-2 text-sm text-white/70">
                 <span className="size-2 rounded-full bg-coral" /> Personal Space
               </div>
-              <Button
-                size="icon-sm"
-                variant="ghost"
-                className="text-white/70 hover:bg-white/10 hover:text-white"
-                aria-label="Search"
+              <span
+                className="flex size-7 items-center justify-center text-white/70"
+                aria-hidden="true"
               >
-                <Search />
-              </Button>
+                <Search className="size-4" />
+              </span>
             </CardHeader>
             <CardContent className="grid gap-3 px-3 pb-3 sm:grid-cols-[1fr_0.8fr]">
               <div className="rounded-xl bg-surface-dark-elevated p-5">
@@ -240,7 +242,10 @@ export default function Home() {
               Start with one Space and let your knowledge grow from there.
             </p>
           </div>
-          <Button className="w-fit bg-coral text-white hover:bg-coral-active">
+          <Button
+            className="w-fit bg-coral text-white hover:bg-coral-active"
+            render={<Link href="/space" />}
+          >
             Open Recall <ArrowRight data-icon="inline-end" />
           </Button>
         </section>
