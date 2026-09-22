@@ -17,8 +17,11 @@ test("multiple-choice questions grade the complete selected set", async ({
     title: "Select prime numbers",
     text: "Choose every prime.",
     format: "multiple-choice",
-    options: "2\n3\n4",
-    answers: "2\n3",
+    options: "2
+3
+4",
+    answers: "2
+3",
   });
 
   await startSession(page, "all", "practice");
@@ -36,7 +39,8 @@ test("fill-blank questions accept a configured answer", async ({ page }) => {
     title: "Cell powerhouse",
     text: "Name the organelle.",
     format: "fill-blank",
-    answers: "mitochondria\nmitochondrion",
+    answers: "mitochondria
+mitochondrion",
   });
 
   await startSession(page, "all", "practice");
@@ -53,8 +57,10 @@ test("matching questions grade answers in prompt order", async ({ page }) => {
     title: "Match capitals",
     text: "Match country to capital.",
     format: "matching",
-    options: "France\nBrazil",
-    answers: "Paris\nBrasília",
+    options: "France
+Brazil",
+    answers: "Paris
+Brasília",
   });
 
   await startSession(page, "all", "practice");
@@ -73,14 +79,16 @@ test("a multi-question practice session advances, finishes, and restarts", async
     kind: "question",
     title: "Question one",
     text: "First.",
-    options: "A\nB",
+    options: "A
+B",
     answers: "A",
   });
   await createObject(page, {
     kind: "question",
     title: "Question two",
     text: "Second.",
-    options: "A\nB",
+    options: "A
+B",
     answers: "A",
   });
 
@@ -98,7 +106,9 @@ test("a multi-question practice session advances, finishes, and restarts", async
   await expect(page.getByText("Session complete")).toBeVisible();
   await expect(page.getByText("2 of 2 correct.")).toBeVisible();
   await page.getByRole("button", { name: "Start another session" }).click();
-  await expect(page.getByRole("button", { name: "Begin session" })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Begin session" }),
+  ).toBeVisible();
 });
 
 test("an expired exam exposes the saved-answer fallback after an automatic submit fails", async ({
@@ -110,7 +120,8 @@ test("an expired exam exposes the saved-answer fallback after an automatic submi
     kind: "question",
     title: "Expiry question",
     text: "Saved before expiry.",
-    options: "A\nB",
+    options: "A
+B",
     answers: "A",
   });
 
