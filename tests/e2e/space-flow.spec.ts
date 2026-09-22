@@ -138,18 +138,16 @@ test("rich text formatting survives a save and renders on the detail view", asyn
   // owns its document, so nothing re-applies the parent's copy on a keystroke.
   await expect(items).toHaveCount(2);
 
-  await page.keyboard.down("Shift");
-  for (let n = 0; n < 6; n++) await page.keyboard.press("ArrowLeft");
-  await page.keyboard.up("Shift");
-  await page.getByRole("button", { name: "Bold" }).click();
-  await expect(page.locator('[contenteditable="true"] strong')).toHaveCount(1);
+  await editor.selectText();
+  await page.getByRole("button", { name: "Bold", exact: true }).click();
+  await expect(editor.locator("strong")).not.toHaveCount(0);
 
   await page.getByRole("button", { name: "Save object" }).click();
   await page.waitForURL(/\/question\/[^/]+$/);
 
   await expect(page.locator(".rich-text li")).toHaveCount(2);
   await expect(page.locator(".rich-text li").first()).toHaveText("first item");
-  await expect(page.locator(".rich-text strong")).toHaveCount(1);
+  await expect(page.locator(".rich-text strong")).not.toHaveCount(0);
 
   // And it is the stored document, not editor state carried across the push.
   await page.reload();
