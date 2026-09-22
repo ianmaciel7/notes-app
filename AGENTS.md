@@ -35,9 +35,9 @@ All AI coding agents MUST strictly enforce and utilize this specialized toolchai
 - **`rtk <command>`**: MUST prefix all supported terminal commands (`rtk git status`, `rtk pnpm ...`, `rtk rg`, etc.) to compress output and eliminate context token waste.
   - If `rtk` cannot be started by the current shell (notably the WinGet shim on Windows), resolve the installed executable with `Get-Command rtk`, read its `Target`, and invoke that target directly.
 
-#### 5. Repomix
+#### 5. Repomix (`repomix` / `repomix-explorer`)
 - **Shoogle (MANDATORY for UI Components)**: MUST search and download existing shadcn/ui components, blocks, and templates via Shoogle (`search_registry_items` MCP or `rtk pnpm dlx shadcn@latest search @shoogle`) before creating UI from scratch.
-- **Repomix**: Permitted ONLY when a compact, comprehensive repository-wide snapshot or token-budget audit is strictly necessary.
+- **Repomix Explorer (MANDATORY for Codebase Exploration)**: MUST be used whenever analyzing repository structure, performing codebase overviews, discovering patterns across multiple files, or generating repo snapshots (`npx repomix@latest` or `repomix-explorer` skill). Use Serena AST tools for targeted single-symbol lookups and surgical file edits.
 
 #### 6. Targeted Retrieval Policy
 - Strictly avoid reading whole files or large repository sections when targeted retrieval via Serena, Graphify, or RTK is possible.
@@ -55,7 +55,7 @@ Agents must proactively eliminate token waste and context bloat:
 ### Token Observability & Harness Audits (On-Demand Only)
 
 - **RTK Savings Metrics**: Run `rtk gain` or `rtk gain --history` to inspect terminal token compression and diagnose verbosity during performance reviews (never after every command).
-- **Context-Budget Audits**: Run `repomix --token-count-tree` only when conducting a structured repository token-budget analysis or when context limits are threatened.
+- **Context-Budget & Structure Audits**: Use `repomix` / `repomix-explorer` for structured repository analysis, pattern discovery, and token-budget audits.
 - **Harness Engineering Audits**: Use the `measure-ai-proficiency` skill (`.agents/skills/measure-ai-proficiency/SKILL.md` or `uvx measure-ai-proficiency .`) on-demand to audit AI context maturity, primitive discipline, and harness drift. Do not execute automatically during standard coding tasks.
 
 ### Deterministic Safety & Optimization Hooks
@@ -85,7 +85,7 @@ Agents must choose the most cost-effective primitive for each task:
 - **Hooks (`.agents/hooks/*.ps1`, wired per-tool — see below)**: Use for deterministic, mechanically verifiable guardrails.
 - **Subagents**: Use only when context isolation, parallel execution, or specialized roles are required.
 - **MCP Tools**: Use for semantic code intelligence (Serena AST, Graphify graph, Context7 docs).
-- **Audits (Repomix)**: Reserved for explicit token/context-budget audits; never run in default task loops.
+- **Repomix (`repomix-explorer`)**: Mandatory for repository structure analysis, multi-file pattern discovery, and context/token audits; use Serena for targeted symbol edits.
 
 ### Tool-specific configuration
 

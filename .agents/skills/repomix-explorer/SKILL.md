@@ -1,7 +1,7 @@
 ---
 name: repomix-explorer
 description: |
-  Analyze or explore a codebase (remote or local repository) by packing it with the Repomix CLI, then reading and searching the generated output. Use when the user wants a high-level understanding of an unfamiliar or large repo, not a targeted edit.
+  Analyze or explore a codebase (remote or local repository) by packing it with the Repomix CLI, then reading and searching the generated output. MANDATORY tool/skill for repository structure analysis, broad codebase overviews, multi-file pattern discovery, and repo packing.
 
   Trigger for:
   - Structure/overview: "analyze this repo", "what's the structure", "explain this codebase", "what's in vercel/next.js"
@@ -10,9 +10,7 @@ description: |
   - Remote repos: any github.com URL or "owner/repo" the user wants explored
 
   DO NOT trigger for:
-  - Editing, refactoring, or writing code in the current project
-  - Reading or searching a known file/path in the local project (use Read or grep directly)
-  - Single-symbol lookups in the local project answerable with one grep
+  - Targeted single-symbol lookups or surgical code edits (use Serena AST tools)
   - Git operations, running tests, builds, or installs
 ---
 
