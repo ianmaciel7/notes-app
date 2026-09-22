@@ -52,9 +52,10 @@ export async function createSpace(page: Page, name: string) {
   ).toBeHidden({ timeout: 60_000 });
   await page.reload();
   await waitHydrated(page);
-  await expect(
-    page.locator('[aria-haspopup="menu"]').first(),
-  ).toContainText(name, { timeout: 60_000 });
+  await expect(page.locator('[aria-haspopup="menu"]').first()).toContainText(
+    name,
+    { timeout: 60_000 },
+  );
 }
 
 export async function createObject(
