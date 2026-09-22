@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   ArrowRight,
   BookOpen,
@@ -10,6 +9,7 @@ import {
   Plus,
   Search,
 } from "lucide-react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -105,7 +105,7 @@ export default function Home() {
                 size="lg"
                 variant="outline"
                 className="h-11 border-hairline bg-canvas"
-                render={<a href="#space" />}
+                render={<Link href="#space" />}
               >
                 See how it works
               </Button>
