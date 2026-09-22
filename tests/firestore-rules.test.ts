@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { initializeApp } from "firebase/app";
+import { deleteApp, initializeApp } from "firebase/app";
 import {
   connectFirestoreEmulator,
   doc,
@@ -29,12 +29,16 @@ test("firestore rules: unauthenticated client reads are denied", async (t) => {
   const db = getFirestore(app);
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
 
-  await assert.rejects(
-    () => getDoc(doc(db, "spaces", "forbidden")),
-    (error: unknown) =>
-      typeof error === "object" &&
-      error !== null &&
-      "code" in error &&
-      error.code === "permission-denied",
-  );
+  try {
+    await assert.rejects(
+      () => getDoc(doc(db, "spaces", "forbidden")),
+      (error: unknown) =>
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        error.code === "permission-denied",
+    );
+  } finally {
+    await deleteApp(app);
+  }
 });
