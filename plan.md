@@ -1034,4 +1034,71 @@ because `accessibility.spec.ts`/`mcp.spec.ts` exercise surfaces this pass did no
   concurrently modifying the tree, so a clean result actually vouches for the whole repo
   rather than a scoped subset.
 
+### Google sign-in added; §8's FirebaseUI-registry claim corrected (2026-09-21)
+
+Product owner asked to add a Google sign-in option to `/login` (spec.md §4 has always
+listed Google as a Firebase Auth method alongside Email/Password and Magic Link, but no
+UI for it existed before this pass — grepping `src/` for `GoogleAuthProvider`/
+`signInWithPopup`/`Google` returned nothing).
+
+**Registry verification, not adoption.** Before writing code, `search_registry_items`
+(Shoogle) was queried for what this repo's configured shadcn registry (`registries: {}`,
+spec.md §4) could offer. Two things came out of that:
+
+- The exact items this document's own §8 "Alternative considered and rejected: FirebaseUI"
+  entry cites as installable — `npx shadcn@latest add @firebase/sign-in-auth-screen
+  @firebase/google-sign-in-button` — **do not exist in the indexed registry.** Searching
+  `firebase`, `firebase-oss`, `google-sign-in-button`, and `sign-in-auth-screen` returns
+  zero matches for those names; `firebase` only surfaces SVG brand marks (`@svgl/firebase`,
+  `@tailark/core-firebase`). §8's earlier rejection of adopting FirebaseUI itself still
+  stands (see below), but the claim that it was reachable through this registry did not
+  check out and is corrected here rather than left uncorrected.
+- `@flowui/auth-buttons` (a plain Google/GitHub `Button` pair with inline brand SVGs, no
+  bundled auth SDK) was the closest real match. Rather than installing its multi-provider
+  abstraction wholesale (this repo only needs Google, per spec.md §4), its Google SVG mark
+  was hand-copied into a local `GoogleIcon` in `src/app/login/page.tsx` and wired to this
+  app's own `signInWithPopup(auth, new GoogleAuthProvider())` → `login()` Server Action →
+  `signOut()` flow — the same pattern the existing email/password submit handler already
+  uses, so Google sign-in never persists client-side Auth state, matching §8's original
+  server-cookie-only session design.
+
+**FirebaseUI vendored for reference only, not adopted.** Per product owner request, the
+actual `@firebase-oss/ui-react@7.1.0` and `@firebase-oss/ui-core@7.1.0` packages (plus
+their `ui-styles`/`ui-translations` deps) were downloaded from the public npm registry via
+`npm pack` and unpacked into `src/components/firebase/vendor/` purely so their real
+`dist/index.d.ts` component surface could be inspected — see the README in that directory.
+This directory is **not a dependency and not imported anywhere**; `tsconfig.json`'s
+`exclude` and `biome.json`'s `includes` negation were both extended to skip it, verified by
+rerunning `pnpm exec tsc --noEmit` (clean) and `pnpm exec biome check src/components/firebase`
+(0 files processed — correctly ignored) after adding the folder. `@firebase-oss/ui-react` is
+proprietary-licensed (not MIT), a further reason beyond §8's original state-ownership
+objection not to ship it. The FirebaseUI-adoption decision itself is unchanged: still not
+adopted, for the reasons §8 already recorded.
+
+**Verification run for this pass:** `pnpm exec tsc --noEmit` (clean), `pnpm exec biome
+check src/app/login/page.tsx --write` (clean, no fixes needed). Not run in this pass:
+`pnpm test:e2e` (no `signInWithGoogle` E2E case exists yet — Playwright can't drive a real
+Google OAuth popup against the emulator without a stubbed provider, so this remains a
+manual-QA/`/qa` item, not an automated one) and `pnpm run build`.
+
+**Not done / open:**
+
+- No E2E coverage for the Google button — Firebase Auth emulator supports fake Google
+  federated sign-in via `signInWithCredential`/test helpers, which a future pass could wire
+  up; not attempted here.
+- `src/components/firebase/vendor/` is untracked reference material, not committed
+  deliberately either way in this pass — product owner should decide whether it belongs in
+  git or in a local-only, gitignored location before the next commit touching this area.
+
+**Addendum (same day):** product owner asked to verify `firebaseopensource.com/projects/
+firebase/firebaseui-web` as a possible alternative. Confirmed it's the same project already
+vendored above (the legacy discovery-site link to the GitHub repo that publishes
+`@firebase-oss/ui-react@7.1.0`/`ui-core`), not a different library. Checked whether its
+"Shadcn UI framework support" changes the state-ownership objection above — it doesn't:
+`initializeUI({ app: firebaseApp, ... })` in the vendored `ui-core/dist/index.d.ts` takes the
+Firebase `app` directly and drives client-side Auth persistence/redirect handling itself; the
+more composable "Forms" (e.g. `useSignInAuthForm`) still read from that same
+`FirebaseUIProvider`/`initializeUI` store, so they don't avoid it either. Shadcn support is a
+theming integration, not an architecture change. Decision unchanged: not adopted.
+
 

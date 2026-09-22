@@ -2,11 +2,17 @@
 
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  isSignInWithEmailLink,
+  sendSignInLinkToEmail,
   signInWithEmailAndPassword,
+  signInWithEmailLink,
+  signInWithPopup,
   signOut,
 } from "firebase/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { login } from "@/actions/recall";
+import { GoogleSignInButton } from "@/components/recall/google-sign-in-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,12 +23,34 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { browserAuth } from "@/lib/firebase/client";
+
+const MAGIC_LINK_EMAIL_KEY = "recall:emailForSignIn";
+
+type Mode = "password" | "magic";
 
 export default function LoginPage() {
   const [register, setRegister] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+
+  async function signInWithGoogle() {
+    setBusy(true);
+    setError("");
+    try {
+      const auth = browserAuth();
+      const credentials = await signInWithPopup(auth, new GoogleAuthProvider());
+      await login(await credentials.user.getIdToken());
+      await signOut(auth);
+      window.location.assign("/space");
+    } catch {
+      setError("Could not sign in with Google. Please try again.");
+      setBusy(false);
+    }
+  }
+
   return (
     <main className="flex min-h-svh items-center justify-center bg-canvas p-6">
       <div className="w-full max-w-md">
@@ -114,6 +142,16 @@ export default function LoginPage() {
                 </Button>
               </FieldGroup>
             </form>
+            <div className="mt-5 flex items-center gap-2">
+              <Separator className="flex-1" />
+              <span className="text-xs text-muted-foreground">or</span>
+              <Separator className="flex-1" />
+            </div>
+            <GoogleSignInButton
+              className="mt-5 w-full"
+              disabled={busy}
+              onClick={signInWithGoogle}
+            />
           </CardContent>
         </Card>
         {process.env.NODE_ENV === "development" && (
