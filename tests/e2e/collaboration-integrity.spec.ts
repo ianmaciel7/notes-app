@@ -98,7 +98,9 @@ test("saving a stale editor preserves the draft and reports a version conflict",
   await fresh.getByRole("button", { name: "Edit" }).click();
   await fresh.locator("#title").fill("Fresh save");
   await fresh.getByRole("button", { name: "Save object" }).click();
-  await expect(fresh.getByRole("heading", { name: "Fresh save" })).toBeVisible();
+  await expect(
+    fresh.getByRole("heading", { name: "Fresh save" }),
+  ).toBeVisible();
 
   await page.getByRole("button", { name: "Save object" }).click();
   await expect(page.getByRole("alert")).toContainText(
