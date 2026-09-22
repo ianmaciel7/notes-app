@@ -14,6 +14,12 @@
 /playwright-report
 /blob-report
 /playwright/.cache
+# Playwright pixel-diff baselines are OS/renderer-specific (filenames encode
+# the platform, e.g. *-chromium-win32.png vs *-chromium-linux.png). Baselines
+# generated on a local machine will not match CI's Linux Chromium, so they
+# are kept out of git until there is a CI-side generation step; see the note
+# in tests/e2e/layout-regression.spec.ts.
+/tests/e2e/*-snapshots/
 # next.js
 /.next/
 /out/

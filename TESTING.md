@@ -82,7 +82,9 @@ The Firebase Auth Emulator is also used for the browser authentication suite, in
 - Settings
 - public landing page
 
-It also captures in-memory screenshots and verifies that each rendered viewport produces a non-empty image with the expected dimensions. Pixel-diff golden images are intentionally not committed until they can be generated from the real application runtime; do not fabricate visual baselines.
+It also captures in-memory screenshots and verifies that each rendered viewport produces a non-empty image with the expected dimensions, and asserts `expect(page).toHaveScreenshot()` (`maxDiffPixelRatio: 0.02`) for true pixel-diff visual regression. The object detail route's "Updated `<date>`" text is masked since it moves daily.
+
+Baselines live in `tests/e2e/layout-regression.spec.ts-snapshots/`, generated locally with `playwright test tests/e2e/layout-regression.spec.ts --update-snapshots`, and are **gitignored, not committed** — Playwright encodes the OS/renderer into each filename (e.g. `*-chromium-win32.png` vs CI's `*-chromium-linux.png`), so a baseline from one OS is neither used nor valid on another. Until CI has its own step to generate and cache/commit Linux baselines, this spec's pixel-diff coverage is local-only: regenerate baselines on your machine before relying on a clean run to mean "no visual regression."
 
 ## CI quality gate
 

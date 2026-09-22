@@ -175,6 +175,18 @@ test("the sidebar rail drags to resize within bounds, collapses past the minimum
   const widened = await nav.boundingBox();
   expect(widened?.width).toBeGreaterThan(300);
 
+  // The dragged width persists across a reload, the same way the desktop
+  // collapse cookie does (spec.md §5.4 "Persistence") — read server-side via
+  // requireSnapshot() -> data.sidebarWidth, so first paint already reflects
+  // it (true from SSR HTML alone, like the collapse cookie above) rather
+  // than resetting to the 240px default.
+  const cookieAfterDrag = await page.evaluate(() => document.cookie);
+  expect(cookieAfterDrag).toContain("sidebar_width=360");
+  await page.reload();
+  await expect(handle).toHaveAttribute("aria-valuenow", "360");
+  const reloadedWidth = await nav.boundingBox();
+  expect(reloadedWidth?.width).toBeGreaterThan(300);
+
   // Dragging past the documented 160px minimum collapses the rail instead of
   // clamping at the floor.
   box = await handle.boundingBox();
@@ -198,6 +210,15 @@ test("the sidebar rail drags to resize within bounds, collapses past the minimum
   await expect(handle).toHaveAttribute("aria-valuenow", "176");
   await page.keyboard.press("End");
   await expect(handle).toHaveAttribute("aria-valuenow", "360");
+
+  // Arrow keys back down to a distinct, non-default width, and that also
+  // persists — the keyboard alternative writes the same cookie as dragging.
+  await page.keyboard.press("ArrowLeft");
+  await expect(handle).toHaveAttribute("aria-valuenow", "344");
+  const cookieAfterKeyboard = await page.evaluate(() => document.cookie);
+  expect(cookieAfterKeyboard).toContain("sidebar_width=344");
+  await page.reload();
+  await expect(handle).toHaveAttribute("aria-valuenow", "344");
 });
 
 // spec.md §5.4 "Collapse and peek": peek is a floating overlay, separate from

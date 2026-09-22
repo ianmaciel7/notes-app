@@ -24,9 +24,9 @@ import {
   clampSidebarWidth,
   sidebarCookie,
   sidebarCookieMaxAgeSeconds,
-  sidebarDefaultWidth,
   sidebarMaxWidth,
   sidebarMinWidth,
+  sidebarWidthCookie,
   sidebarWidthStep,
 } from "@/domain/sidebar";
 import { isEditableTarget } from "@/lib/keyboard";
@@ -35,6 +35,11 @@ import type { SpaceData } from "@/lib/space";
 function persistCollapsed(value: boolean) {
   // biome-ignore lint/suspicious/noDocumentCookie: sidebar state is intentionally read during SSR.
   document.cookie = `${sidebarCookie}=${value}; path=/; max-age=${sidebarCookieMaxAgeSeconds}; samesite=lax`;
+}
+
+function persistWidth(value: number) {
+  // biome-ignore lint/suspicious/noDocumentCookie: sidebar width is intentionally read during SSR.
+  document.cookie = `${sidebarWidthCookie}=${value}; path=/; max-age=${sidebarCookieMaxAgeSeconds}; samesite=lax`;
 }
 
 // spec.md §5.4 "Sections and nesting": group labels can collapse and each
@@ -100,10 +105,14 @@ export function SpaceFrame({
   const [peek, setPeek] = useState(false);
   const peekOpenTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const peekCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Rail width (spec.md §5.4 "Resize limits": bounded 160-360px). Deliberately
-  // not persisted — only the desktop open/closed cookie is a documented
-  // persistence requirement; width resets to the default each session.
-  const [width, setWidth] = useState(sidebarDefaultWidth);
+  // Rail width (spec.md §5.4 "Resize limits": bounded 160-360px), persisted
+  // the same way as `collapsed` above — a `sidebar_width` cookie in the same
+  // family, read server-side by requireSnapshot() so first paint already
+  // reflects it. Re-clamped here too in case a stale/tampered cookie value
+  // sneaked in outside the documented bounds.
+  const [width, setWidth] = useState(() =>
+    clampSidebarWidth(data.sidebarWidth),
+  );
   const resizing = useRef<{
     pointerId: number;
     startX: number;
@@ -257,22 +266,37 @@ export function SpaceFrame({
     if (resizing.current?.pointerId !== event.pointerId) return;
     resizing.current = null;
     event.currentTarget.releasePointerCapture(event.pointerId);
+    // Persist once the drag settles on a final width, mirroring
+    // persistCollapsed's "write on the discrete, committed action" pattern
+    // rather than on every intermediate pointermove.
+    persistWidth(width);
   }
   // Keyboard-accessible alternative to dragging (spec.md §5.4 "Resize
-  // limits": "an accessible alternative to dragging").
+  // limits": "an accessible alternative to dragging"). Each key press is
+  // itself a discrete, committed change, so it persists immediately.
   function onResizeKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
     if (event.key === "ArrowLeft") {
       event.preventDefault();
-      setWidth((previous) => clampSidebarWidth(previous - sidebarWidthStep));
+      setWidth((previous) => {
+        const next = clampSidebarWidth(previous - sidebarWidthStep);
+        persistWidth(next);
+        return next;
+      });
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
-      setWidth((previous) => clampSidebarWidth(previous + sidebarWidthStep));
+      setWidth((previous) => {
+        const next = clampSidebarWidth(previous + sidebarWidthStep);
+        persistWidth(next);
+        return next;
+      });
     } else if (event.key === "Home") {
       event.preventDefault();
       setWidth(sidebarMinWidth);
+      persistWidth(sidebarMinWidth);
     } else if (event.key === "End") {
       event.preventDefault();
       setWidth(sidebarMaxWidth);
+      persistWidth(sidebarMaxWidth);
     }
   }
   const peeking = collapsed && peek;

@@ -6,6 +6,13 @@
 export const sidebarCookie = "sidebar_state";
 export const sidebarCookieMaxAgeSeconds = 60 * 60 * 24 * 7;
 
+// Same family, same lifetime as `sidebarCookie` above: the resizable rail
+// width (see sidebarMinWidth/sidebarMaxWidth below) is persisted the same
+// way — a direct `document.cookie` write from space-frame.tsx, read back by
+// the server-side requireSnapshot() — rather than inventing a second
+// persistence mechanism for one more piece of shell state.
+export const sidebarWidthCookie = "sidebar_width";
+
 // spec.md §5.4 "Resize limits": "The documented rail resize range is
 // 160-360px; dragging past the minimum collapses." Peek (a transient,
 // non-persistent hover/click overlay) deliberately has no width state of its
