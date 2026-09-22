@@ -1,5 +1,11 @@
 import { expect, test } from "@playwright/test";
-import { createObject, createSpace, signUp, startSession, visit } from "./helpers";
+import {
+  createObject,
+  createSpace,
+  signUp,
+  startSession,
+  visit,
+} from "./helpers";
 
 test("multiple-choice questions grade the complete selected set", async ({
   page,
