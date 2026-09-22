@@ -1,17 +1,19 @@
 import { expect, test } from "@playwright/test";
-import { createObject, createSpace, signUp, visit } from "./helpers";
+import { createObject, createSpace, ensure, signUp, visit } from "./helpers";
 
 test("login mode buttons switch between sign in and account creation", async ({
   page,
 }) => {
   await page.goto("/login");
 
-  await page
-    .getByRole("button", { name: "New here? Create an account" })
-    .click();
-  await expect(
-    page.getByRole("heading", { name: "Create your account" }),
-  ).toBeVisible();
+  const createHeading = page.getByRole("heading", {
+    name: "Create your account",
+  });
+  await ensure(createHeading, () =>
+    page
+      .getByRole("button", { name: "New here? Create an account" })
+      .click(),
+  );
   await expect(
     page.getByRole("button", { name: "Create account" }),
   ).toBeVisible();
@@ -36,7 +38,7 @@ test("object edit cancel protects dirty changes and archive can be restored", as
     text: "Original body.",
   });
 
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { name: "Edit", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Edit object" }),
   ).toBeVisible();
