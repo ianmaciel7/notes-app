@@ -46,9 +46,13 @@ function SmsMultiFactorAssertionPhoneForm(
   const onSubmit = async () => {
     try {
       setError(null);
+      if (!recaptchaVerifier) {
+        setError("Verification is still loading. Try again.");
+        return;
+      }
       const verificationId = await action({
         hint: props.hint,
-        recaptchaVerifier: recaptchaVerifier!,
+        recaptchaVerifier,
       });
       props.onSubmit(verificationId);
     } catch (error) {
