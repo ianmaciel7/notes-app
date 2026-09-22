@@ -52,8 +52,8 @@ jobs:
       - name: Lint (biome check src tests)
         run: pnpm lint
 
-      - name: Unit tests (tests/*.test.ts over src/domain/, src/lib/)
-        run: pnpm test
+      - name: Unit and emulator-backed tests
+        run: pnpm exec firebase emulators:exec --only auth,firestore --project demo-recall "pnpm test"
 
       - name: E2E tests (Firebase emulators + next dev, tests/e2e/)
         run: pnpm test:e2e
