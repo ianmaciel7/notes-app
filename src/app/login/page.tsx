@@ -3,14 +3,11 @@
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  isSignInWithEmailLink,
-  sendSignInLinkToEmail,
   signInWithEmailAndPassword,
-  signInWithEmailLink,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { login } from "@/actions/recall";
 import { GoogleSignInButton } from "@/components/recall/google-sign-in-button";
 import { Button } from "@/components/ui/button";
@@ -24,12 +21,8 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { browserAuth } from "@/lib/firebase/client";
 
-const MAGIC_LINK_EMAIL_KEY = "recall:emailForSignIn";
-
-type Mode = "password" | "magic";
 
 export default function LoginPage() {
   const [register, setRegister] = useState(false);
