@@ -7,7 +7,7 @@ test("primary Space navigation reaches every destination", async ({ page }) => {
   await visit(page, "/space");
 
   const destinations = [
-    { name: "Questions", path: "/question", heading: "Objects" },
+    { name: "Questions", path: "/question", heading: "Questions" },
     { name: "Study session", path: "/study", heading: "Study" },
     { name: "Review queue", path: "/review", heading: "Review" },
     { name: "Settings", path: "/settings", heading: "Settings" },
@@ -46,10 +46,16 @@ test("New object can be opened and dismissed without creating anything", async (
   await visit(page, "/space");
 
   await page.getByRole("button", { name: "New object" }).click();
-  await expect(page.getByRole("heading", { name: "Add to your Space" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Add to your Space" }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Cancel" }).click();
-  await expect(page.getByRole("heading", { name: "Add to your Space" })).toBeHidden();
+  await expect(
+    page.getByRole("heading", { name: "Add to your Space" }),
+  ).toBeHidden();
 
   await page.getByRole("link", { name: "Questions", exact: true }).click();
-  await expect(page.getByText("Nothing here yet", { exact: false })).toBeVisible();
+  await expect(
+    page.getByText('No objects yet. Use "New object" above', { exact: false }),
+  ).toBeVisible();
 });
