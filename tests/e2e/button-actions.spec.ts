@@ -10,9 +10,7 @@ test("login mode buttons switch between sign in and account creation", async ({
     name: "Create your account",
   });
   await ensure(createHeading, () =>
-    page
-      .getByRole("button", { name: "New here? Create an account" })
-      .click(),
+    page.getByRole("button", { name: "New here? Create an account" }).click(),
   );
   await expect(
     page.getByRole("button", { name: "Create account" }),
