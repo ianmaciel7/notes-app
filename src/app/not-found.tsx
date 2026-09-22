@@ -12,7 +12,9 @@ export default function NotFound() {
         It may have been archived, or it belongs to a Space you are not a member
         of.
       </p>
-      <Button nativeButton={false} render={<Link href="/space" />}>Back to your space</Button>
+      <Button nativeButton={false} render={<Link href="/space" />}>
+        Back to your space
+      </Button>
     </main>
   );
 }
