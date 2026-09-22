@@ -12,7 +12,7 @@ test("editing and saving an existing object updates its detail view", async ({
     text: "Original content.",
   });
 
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { name: "Edit", exact: true }).click();
   await page.locator("#title").fill("After edit");
   await page.getByRole("button", { name: "Save object" }).click();
 
@@ -89,13 +89,19 @@ test("the command palette exposes every navigation action and New object", async
     { name: "Go to Overview", path: "/space" },
   ] as const;
 
+  const palette = page.getByPlaceholder("Search objects, or jump to a section");
+
   for (const action of actions) {
-    await page.keyboard.press("ControlOrMeta+k");
+    await ensure(palette, () =>
+      page.getByRole("button", { name: "Search space" }).click(),
+    );
     await page.getByRole("option", { name: action.name }).click();
     await page.waitForURL(`**${action.path}`);
   }
 
-  await page.keyboard.press("ControlOrMeta+k");
+  await ensure(palette, () =>
+    page.getByRole("button", { name: "Search space" }).click(),
+  );
   await page.getByRole("option", { name: "New object" }).click();
   await expect(
     page.getByRole("heading", { name: "Add to your Space" }),
