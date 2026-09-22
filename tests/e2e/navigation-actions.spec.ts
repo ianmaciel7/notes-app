@@ -32,7 +32,10 @@ test("sign out returns to login and protected navigation no longer remains", asy
   await createSpace(page, "Logout Space");
   await visit(page, "/space");
 
-  await page.getByRole("button", { name: "Sign out" }).click();
+  await page
+    .locator("aside")
+    .getByRole("button", { name: "Sign out", exact: true })
+    .click();
   await page.waitForURL("**/login");
   await expect(
     page.getByRole("heading", { name: "Welcome back" }),
@@ -49,7 +52,10 @@ test("New object can be opened and dismissed without creating anything", async (
   await createSpace(page, "Object creation");
   await visit(page, "/space");
 
-  await page.getByRole("button", { name: "New object" }).click();
+  await page
+    .locator("header")
+    .getByRole("button", { name: "New object", exact: true })
+    .click();
   await expect(
     page.getByRole("heading", { name: "Add to your Space" }),
   ).toBeVisible();
