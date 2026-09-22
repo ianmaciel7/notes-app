@@ -23,7 +23,6 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { browserAuth } from "@/lib/firebase/client";
 
-
 export default function LoginPage() {
   const [register, setRegister] = useState(false);
   const [busy, setBusy] = useState(false);
