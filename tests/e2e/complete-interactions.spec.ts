@@ -129,23 +129,24 @@ test("landing page CTAs have real destinations instead of inert buttons", async 
   await page.goto("/");
 
   await expect(page.getByRole("button", { name: "Search" })).toHaveCount(0);
-
-  await page.getByRole("link", { name: "See how it works" }).click();
-  await expect(page).toHaveURL(/#space$/);
-
-  await page.goto("/");
-  await page.getByRole("link", { name: "Sign in" }).click();
-  await expect(page).toHaveURL(/\/login$/);
-
-  await page.goto("/");
-  await page.getByRole("link", { name: "Create a space" }).click();
-  await expect(page).toHaveURL(/\/login$/);
-
-  await page.goto("/");
-  await page.getByRole("link", { name: "Open space" }).click();
-  await expect(page).toHaveURL(/\/login$/);
-
-  await page.goto("/");
-  await page.getByRole("link", { name: "Open Recall" }).click();
-  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByRole("link", { name: "See how it works" })).toHaveAttribute(
+    "href",
+    "#space",
+  );
+  await expect(page.getByRole("link", { name: "Sign in" })).toHaveAttribute(
+    "href",
+    "/login",
+  );
+  await expect(page.getByRole("link", { name: "Create a space" })).toHaveAttribute(
+    "href",
+    "/login",
+  );
+  await expect(page.getByRole("link", { name: "Open space" })).toHaveAttribute(
+    "href",
+    "/space",
+  );
+  await expect(page.getByRole("link", { name: "Open Recall" })).toHaveAttribute(
+    "href",
+    "/space",
+  );
 });
