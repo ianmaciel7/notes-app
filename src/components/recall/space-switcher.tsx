@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import type { Snapshot } from "@/domain/recall";
 
 function selectSpace(spaceId: string) {
+  // biome-ignore lint/suspicious/noDocumentCookie: the selected Space must be available during the next server render.
   document.cookie = `recall-space=${spaceId}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
 }
 
