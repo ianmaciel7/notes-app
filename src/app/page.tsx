@@ -63,10 +63,10 @@ export default function Home() {
             <a href="#graph">Graph</a>
           </nav>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" render={<Link href="/login" />}>
+            <Button nativeButton={false} variant="ghost" size="sm" render={<Link href="/login" />}>
               Sign in
             </Button>
-            <Button
+            <Button nativeButton={false}
               size="sm"
               className="bg-coral text-white hover:bg-coral-active"
               render={<Link href="/space" />}
@@ -94,14 +94,14 @@ export default function Home() {
               calm, connected space.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button
+              <Button nativeButton={false}
                 size="lg"
                 className="h-11 bg-coral px-5 text-white hover:bg-coral-active"
                 render={<Link href="/login" />}
               >
                 Create a space <ArrowRight data-icon="inline-end" />
               </Button>
-              <Button
+              <Button nativeButton={false}
                 size="lg"
                 variant="outline"
                 className="h-11 border-hairline bg-canvas"
@@ -242,7 +242,7 @@ export default function Home() {
               Start with one Space and let your knowledge grow from there.
             </p>
           </div>
-          <Button
+          <Button nativeButton={false}
             className="w-fit bg-coral text-white hover:bg-coral-active"
             render={<Link href="/space" />}
           >
