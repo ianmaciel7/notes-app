@@ -8,12 +8,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
+Read `CONSTRAINTS.md` before writing code. Do not weaken it to make a change pass.
+
 ## Setup commands
 - Install deps: `rtk pnpm install`
 - Start dev server: `rtk pnpm dev`
 - Build: `rtk pnpm build`
 - Check dependency boundaries: `rtk pnpm deps:check`
 - Check unused files, dependencies, and exports: `rtk pnpm knip`
+- Run the task-end quality contract: `rtk pnpm check:fast` and `rtk pnpm check:security`
 - Pack the repository for AI review: `rtk npx repomix@latest` (uses `repomix.config.json`)
 
 Use `rtk` before shell commands so command output stays compact. Run RTK's own
@@ -40,6 +43,7 @@ If PowerShell blocks the global `agents` script shim, invoke the equivalent `age
 
 ## Testing instructions
 - No test suite is configured yet — there is no `pnpm test` script. Run `rtk pnpm lint`, `rtk pnpm build`, `rtk pnpm deps:check`, and `rtk pnpm knip` before considering a task done.
+- Also run `rtk pnpm check:fast` and `rtk pnpm check:security` to enforce the constraints in `CONSTRAINTS.md`.
 - See `TESTING.md` for current coverage status (Ladle stories only, 1 of 61 components covered).
 
 ## PR instructions

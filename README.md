@@ -40,10 +40,25 @@ rtk pnpm lint
 rtk pnpm build
 rtk pnpm deps:check
 rtk pnpm knip
+rtk pnpm check:fast
+rtk pnpm check:security
 ```
 
-There is no automated test runner yet; Ladle is the current component and visual
-verification tool.
+`check:fast` runs type checking, focused Biome checks, dependency-boundary checks,
+and the quality-floor guard. `check:security` runs the high-severity dependency
+audit. There is no automated test runner yet; Ladle is the current component and
+visual verification tool. See [`CONSTRAINTS.md`](./CONSTRAINTS.md) for the
+non-negotiable quality contract.
+
+Run Gitleaks against the repository history when changing configuration or
+before sharing a branch:
+
+```bash
+gitleaks git --config gitleaks.toml .
+```
+
+The optional `.pre-commit-config.yaml` runs the same protection locally when the
+pre-commit framework is installed.
 
 ## Project Status
 Pre-MVP scaffold. See [`INTENT.md`](./INTENT.md) for the current problem statement, constraints, and open questions (e.g. what a "note" is, whether auth is needed).
@@ -59,6 +74,7 @@ The project enables Serena for Codex as a semantic code-retrieval and editing MC
 
 ## Documentation
 - [`INTENT.md`](./INTENT.md) — why this exists, for whom, and current open questions
+- [`CONSTRAINTS.md`](./CONSTRAINTS.md) — enforceable quality contract and thresholds
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — system structure and tech stack
 - [`CONTEXT.md`](./CONTEXT.md) — project vocabulary / ubiquitous language
 - [`CONVENTIONS.md`](./CONVENTIONS.md) — coding standards

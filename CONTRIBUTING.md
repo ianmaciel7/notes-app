@@ -38,7 +38,10 @@ There is no CI and no test suite yet (see `TESTING.md`), so these are manual che
 - [ ] `rtk pnpm build` (Next.js build succeeds)
 - [ ] `rtk pnpm deps:check` (dependency boundary check)
 - [ ] `rtk pnpm knip` (unused files, dependencies, and exports check)
+- [ ] `rtk pnpm check:fast` (types, focused lint, dependency boundaries, and quality-floor guard)
+- [ ] `rtk pnpm check:security` (no high or critical dependency advisories)
 - [ ] Relevant project docs updated if architecture, conventions, design tokens, or intent changed (`ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `INTENT.md`)
+- [ ] `CONSTRAINTS.md` remains satisfied and was not weakened to make checks pass
 - [ ] New/changed `src/components/ui/` primitives get a Ladle story (`*.stories.tsx`) — most existing primitives don't have one yet, but new additions should
 
 ## Component and performance review

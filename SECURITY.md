@@ -19,5 +19,6 @@ There is no authentication or authorization in the codebase — no session/cooki
 
 ## 6. Dependency Management & Auditing
 - No automated dependency scanning (Dependabot/Renovate) is configured yet.
-- Run `rtk pnpm audit` manually before merging dependency changes until automated scanning is added.
+- Run `rtk pnpm check:security` before merging dependency changes; it runs `pnpm audit --audit-level high` and fails on high or critical advisories.
+- Gitleaks is configured in `gitleaks.toml` with the built-in default rules. Run `gitleaks git --config gitleaks.toml .` to scan repository history; the optional `.pre-commit-config.yaml` adds a local pre-commit scan.
 - The one non-standard dependency worth tracking is `@shadcn/react` (used by `questionnaire.tsx` and the other conversational UI primitives, per `DESIGN.md` §5) — verify its advisories same as any other third-party package.

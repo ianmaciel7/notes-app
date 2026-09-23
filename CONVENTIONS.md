@@ -45,6 +45,8 @@ The following rules are normative for shared UI in `src/components/ui/`. Use exi
   - Lint: `rtk pnpm lint` (`biome check`)
   - Dependency boundaries: `rtk pnpm deps:check`
   - Unused-code analysis: `rtk pnpm knip`
+  - Task-end quality gate: `rtk pnpm check:fast`
+  - Dependency security audit: `rtk pnpm check:security`
   - Format: `rtk pnpm format` (`biome format --write`)
 
 ## 2. Naming Conventions

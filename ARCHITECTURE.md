@@ -30,7 +30,7 @@ There are no external dependencies today: no auth provider, no persistence store
 | **UI Primitives** | `@base-ui/react` 1.8.0 + shadcn `base-nova` style | [`docs/adr/0002-adopt-base-ui-with-shadcn-base-nova.md`](./docs/adr/0002-adopt-base-ui-with-shadcn-base-nova.md) |
 | **Styling** | Tailwind CSS v4, OKLCH CSS variable tokens | See `DESIGN.md` |
 | **Linting/Formatting** | Biome 2.4.2 | [`docs/adr/0001-use-biome-for-linting-and-formatting.md`](./docs/adr/0001-use-biome-for-linting-and-formatting.md) |
-| **Static Analysis** | dependency-cruiser 17.3.2 + Knip 6.37.0 | Dependency-cycle and unused-code checks (`.dependency-cruiser.cjs`, `knip.json`) |
+| **Static Analysis** | dependency-cruiser 18.4.0 + Knip 6.37.0 | Dependency-cycle and unused-code checks (`.dependency-cruiser.cjs`, `knip.json`) |
 | **Component Workbench** | Ladle 5.1.1 | [`docs/adr/0003-use-ladle-for-component-development.md`](./docs/adr/0003-use-ladle-for-component-development.md) |
 | **Render Optimization** | React Compiler (`babel-plugin-react-compiler`) | [`docs/adr/0004-enable-react-compiler.md`](./docs/adr/0004-enable-react-compiler.md) |
 | **Package Manager** | pnpm 11.20.0 (pinned via `packageManager` in `package.json`) | — |

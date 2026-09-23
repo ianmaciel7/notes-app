@@ -18,7 +18,10 @@ rtk pnpm ladle          # Launch visual component stories (dev server)
 rtk pnpm ladle:build    # Build static Ladle catalog
 rtk pnpm ladle:preview  # Preview the built static catalog
 ```
-There is no `pnpm test` script — `package.json` only defines `dev`, `build`, `start`, `lint`, `format`, and the three `ladle*` scripts above; run them through `rtk pnpm`.
+There is no `pnpm test` script. The repository also has task-end quality gates:
+`check:fast` covers types, focused lint, dependency boundaries, and the floor
+guard; `check:security` audits high and critical dependency advisories. Run all
+commands through `rtk pnpm`.
 
 ## 4. Test File Conventions & Locations
 - Story files: colocated next to the component, `<name>.stories.tsx` (e.g. `src/components/ui/button.stories.tsx`).
