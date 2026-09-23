@@ -16,6 +16,8 @@ Thank you for contributing to `notes-app`. Please follow these guidelines to kee
 
 When changing MCP servers, skills, integrations, profiles, or generated AI-tool configuration, use the project `agents` CLI through RTK (for example, `rtk agents sync`) and commit only its source files unless the configured synchronization setting says otherwise. Creating, installing, removing, or updating a skill also requires `rtk npx skills update -p -y`, committing the resulting `skills-lock.json` update, and running `rtk agents sync --check` before submitting the change.
 
+To create a repository snapshot for AI-assisted review, run `rtk npx repomix@latest`. The command uses `repomix.config.json`; its generated `repomix-output.xml` is local-only and ignored by Git.
+
 Serena is the project-standard semantic coding MCP server for Codex. Keep its definition in `.agents/agents.json`; do not edit generated `.codex` or `.agents/generated` files directly. Serena should run with `start-mcp-server --context=codex --project-from-cwd` so it resolves the repository from the current working directory.
 
 ## 2. Branching Strategy
@@ -34,6 +36,8 @@ Serena is the project-standard semantic coding MCP server for Codex. Keep its de
 There is no CI and no test suite yet (see `TESTING.md`), so these are manual checks:
 - [ ] `rtk pnpm lint` (Biome check)
 - [ ] `rtk pnpm build` (Next.js build succeeds)
+- [ ] `rtk pnpm deps:check` (dependency boundary check)
+- [ ] `rtk pnpm knip` (unused files, dependencies, and exports check)
 - [ ] Relevant project docs updated if architecture, conventions, design tokens, or intent changed (`ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `INTENT.md`)
 - [ ] New/changed `src/components/ui/` primitives get a Ladle story (`*.stories.tsx`) — most existing primitives don't have one yet, but new additions should
 

@@ -33,4 +33,4 @@ New or changed primitives should add or update a Ladle story covering compositio
 Not applicable yet — there is no data layer, network layer, or backend to mock (see `ARCHITECTURE.md` §4). When one is introduced, prefer testing behavior over internal implementation details and avoid over-mocking.
 
 ## 6. CI Quality Gates & Coverage Requirements
-There is no CI configured — no `.github/workflows/` directory exists in this repository. Until CI is added, treat `rtk pnpm lint` and `rtk pnpm build` as the manual pre-merge checks (see `CONTRIBUTING.md` §4); there are no automated gates enforcing them today.
+There is no CI configured — no `.github/workflows/` directory exists in this repository. Until CI is added, treat `rtk pnpm lint`, `rtk pnpm build`, `rtk pnpm deps:check`, and `rtk pnpm knip` as the manual pre-merge checks (see `CONTRIBUTING.md` §4); there are no automated gates enforcing them today.

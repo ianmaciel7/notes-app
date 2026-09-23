@@ -12,6 +12,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Install deps: `rtk pnpm install`
 - Start dev server: `rtk pnpm dev`
 - Build: `rtk pnpm build`
+- Check dependency boundaries: `rtk pnpm deps:check`
+- Check unused files, dependencies, and exports: `rtk pnpm knip`
+- Pack the repository for AI review: `rtk npx repomix@latest` (uses `repomix.config.json`)
 
 Use `rtk` before shell commands so command output stays compact. Run RTK's own
 commands directly, for example `rtk gain` and `rtk init --codex`.
@@ -36,7 +39,7 @@ If PowerShell blocks the global `agents` script shim, invoke the equivalent `age
 - See `CONVENTIONS.md` for full naming/import rules and `DESIGN.md` for the UI primitive/token catalog.
 
 ## Testing instructions
-- No test suite is configured yet — there is no `pnpm test` script. `rtk pnpm lint` and `rtk pnpm build` are the only automated checks; run both before considering a task done.
+- No test suite is configured yet — there is no `pnpm test` script. Run `rtk pnpm lint`, `rtk pnpm build`, `rtk pnpm deps:check`, and `rtk pnpm knip` before considering a task done.
 - See `TESTING.md` for current coverage status (Ladle stories only, 1 of 61 components covered).
 
 ## PR instructions

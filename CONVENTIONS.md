@@ -38,9 +38,13 @@ The following rules are normative for shared UI in `src/components/ui/`. Use exi
 ## 1. Tooling & Enforcement
 - Formatter & Linter: **Biome** (`biome.json`) — Biome is the only linter/formatter in the repo; there is no ESLint or Prettier config.
 - Strict type checking: `tsconfig.json` has `"strict": true`. Avoid `any` and `@ts-ignore`.
+- Dependency boundaries: **dependency-cruiser** (`.dependency-cruiser.cjs`) checks for circular dependencies under `src/`.
+- Dead-code analysis: **Knip** (`knip.json`) checks unused source files, dependencies, and exports while treating the reusable UI catalog and hooks as intentional entry points.
 - Import organization: Biome's `assist.actions.source.organizeImports` is enabled — imports are auto-sorted on format, don't hand-order them against the tool.
 - Commands:
   - Lint: `rtk pnpm lint` (`biome check`)
+  - Dependency boundaries: `rtk pnpm deps:check`
+  - Unused-code analysis: `rtk pnpm knip`
   - Format: `rtk pnpm format` (`biome format --write`)
 
 ## 2. Naming Conventions

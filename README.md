@@ -20,6 +20,31 @@ There's nothing to show yet — `src/app/page.tsx` is still the unedited Next.js
 rtk pnpm ladle
 ```
 
+To create an AI-friendly repository snapshot, run Repomix with the checked-in
+configuration:
+
+```bash
+rtk npx repomix@latest
+```
+
+This writes `repomix-output.xml`, which is intentionally ignored by Git. See
+[`repomix.config.json`](./repomix.config.json) for the packing and security
+settings.
+
+## Quality Checks
+
+Run the repository checks before submitting changes:
+
+```bash
+rtk pnpm lint
+rtk pnpm build
+rtk pnpm deps:check
+rtk pnpm knip
+```
+
+There is no automated test runner yet; Ladle is the current component and visual
+verification tool.
+
 ## Project Status
 Pre-MVP scaffold. See [`INTENT.md`](./INTENT.md) for the current problem statement, constraints, and open questions (e.g. what a "note" is, whether auth is needed).
 
@@ -42,6 +67,7 @@ The project enables Serena for Codex as a semantic code-retrieval and editing MC
 - [`SECURITY.md`](./SECURITY.md) — security policy
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md) — how to contribute
 - [`AGENTS.md`](./AGENTS.md) — brief for AI coding agents working in this repo
+- [`repomix.config.json`](./repomix.config.json) — repository snapshot configuration
 
 ## License
 Unlicensed / private.
