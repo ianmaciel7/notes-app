@@ -14,7 +14,9 @@ Thank you for contributing to `notes-app`. Please follow these guidelines to kee
   pnpm dev
   ```
 
-When changing MCP servers, skills, integrations, profiles, or generated AI-tool configuration, use the project `agents` CLI and commit only its source files unless the configured sync mode says otherwise. Creating, installing, removing, or updating a skill also requires `npx skills update -p -y`, committing the resulting `skills-lock.json` update, and running `agents sync --check` before submitting the change.
+When changing MCP servers, skills, integrations, profiles, or generated AI-tool configuration, use the project `agents` CLI and commit only its source files unless the configured synchronization setting says otherwise. Creating, installing, removing, or updating a skill also requires `npx skills update -p -y`, committing the resulting `skills-lock.json` update, and running `agents sync --check` before submitting the change.
+
+Serena is the project-standard semantic coding MCP server for Codex. Keep its definition in `.agents/agents.json`; do not edit generated `.codex` or `.agents/generated` files directly. Serena should run with `start-mcp-server --context=codex --project-from-cwd` so it resolves the repository from the current working directory.
 
 ## 2. Branching Strategy
 - Main branch: `main`.

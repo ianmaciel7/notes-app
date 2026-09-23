@@ -30,6 +30,8 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for setup, branching, and PR expectat
 
 Use the project-configured `@agents-dev/cli` (`agents`) for MCP servers, skills, integrations, profiles, and generated tool configuration. The committed source of truth is `.agents/agents.json` plus `.agents/skills/`; run `agents sync` after changes and `agents sync --check` to detect drift. Creating, installing, removing, or updating a skill always requires refreshing the legacy `skills-lock.json` with `npx skills update -p -y` and committing the resulting lock-file change.
 
+The project enables Serena for Codex as a semantic code-retrieval and editing MCP server. Serena discovers this repository from the agent's working directory and uses `.serena/project.yml` for project settings; use `.serena/project.local.yml` for local-only overrides. Run `agents status` to confirm it is selected and `agents sync` after changing the shared MCP configuration.
+
 ## Documentation
 - [`INTENT.md`](./INTENT.md) — why this exists, for whom, and current open questions
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — system structure and tech stack

@@ -116,6 +116,20 @@
           "goose"
         ],
         "enabled": true
+      },
+      "serena": {
+        "transport": "stdio",
+        "enabled": true,
+        "targets": [
+          "codex"
+        ],
+        "description": "Semantic code retrieval and editing for the current project",
+        "command": "serena",
+        "args": [
+          "start-mcp-server",
+          "--context=codex",
+          "--project-from-cwd"
+        ]
       }
     }
   },
@@ -146,5 +160,6 @@
     }
   },
   "lastSync": null,
-  "lastSyncSourceHash": null
+  "lastSyncSourceHash": null,
+  "activeProfile": null
 }

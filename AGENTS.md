@@ -17,6 +17,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 Always use the project-configured `@agents-dev/cli` (`agents`) for MCP servers, skills, integrations, profiles, and generated tool configuration. Treat `.agents/agents.json` and `.agents/skills/` as the source of truth; do not edit generated tool files directly. Run `agents sync` after source changes and `agents sync --check` to verify drift. Use `agents status` or `agents doctor` before troubleshooting. Keep secrets in `.agents/local.json`, never in committed configuration.
 
+Serena is enabled as the project MCP server for Codex. Use it for semantic code navigation, symbol-aware retrieval, and edits when those operations are useful; it starts with `--context=codex --project-from-cwd` and selects this repository from the current working directory. Project-specific Serena settings live in `.serena/project.yml`; use `.serena/project.local.yml` for local-only overrides. Keep the Serena server definition in `.agents/agents.json` and regenerate tool configuration with `agents sync` rather than editing `.codex/config.toml` directly.
+
 Creating, installing, removing, or updating a skill always requires updating and committing the legacy `skills-lock.json` with `npx skills update -p -y`. Even when the command produces only reordered entries or refreshed hashes, include its result and verify the lock file before finishing.
 
 If PowerShell blocks the global `agents` script shim, invoke the equivalent `agents.cmd` command.
