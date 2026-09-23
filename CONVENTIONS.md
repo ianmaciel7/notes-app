@@ -47,7 +47,14 @@ The following rules are normative for shared UI in `src/components/ui/`. Use exi
   - Unused-code analysis: `rtk pnpm knip`
   - Task-end quality gate: `rtk pnpm check:fast`
   - Dependency security audit: `rtk pnpm check:security`
+  - OSV dependency scan: `rtk pnpm check:osv` (configured by `osv-scanner.toml`)
+  - Browser verification: `rtk pnpm lighthouse` (configured by `lighthouserc.cjs`)
   - Format: `rtk pnpm format` (`biome format --write`)
+  - Staged-file checks: `rtk pnpm run lint-staged` (Biome `check --write` for staged JavaScript, TypeScript, CSS, and JSON files)
+
+Husky runs the staged-file checks before the full `check:fast` gate through
+`.husky/pre-commit`. Keep the lint-staged glob aligned with the Biome-supported
+source and configuration file types when adding new tooling.
 
 ## 2. Naming Conventions
 - **Files & Folders**: `kebab-case.ts` / `kebab-case.tsx`, confirmed by every file in `src/components/ui/` (`button-group.tsx`, `dropdown-menu.tsx`) and `src/hooks/use-mobile.ts`.

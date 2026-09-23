@@ -18,6 +18,12 @@ When changing MCP servers, skills, integrations, profiles, or generated AI-tool 
 
 To create a repository snapshot for AI-assisted review, run `rtk npx repomix@latest`. The command uses `repomix.config.json`; its generated `repomix-output.xml` is local-only and ignored by Git.
 
+Installing dependencies also initializes Husky through the `prepare` script.
+The committed `.husky/pre-commit` hook runs `pnpm run lint-staged` first, then
+`pnpm run check:fast` before each commit. This formats and lints staged source
+and configuration files before the type, focused lint, dependency-boundary, and
+quality-floor checks run locally.
+
 Serena is the project-standard semantic coding MCP server for Codex. Keep its definition in `.agents/agents.json`; do not edit generated `.codex` or `.agents/generated` files directly. Serena should run with `start-mcp-server --context=codex --project-from-cwd` so it resolves the repository from the current working directory.
 
 ## 2. Branching Strategy
@@ -40,6 +46,8 @@ There is no CI and no test suite yet (see `TESTING.md`), so these are manual che
 - [ ] `rtk pnpm knip` (unused files, dependencies, and exports check)
 - [ ] `rtk pnpm check:fast` (types, focused lint, dependency boundaries, and quality-floor guard)
 - [ ] `rtk pnpm check:security` (no high or critical dependency advisories)
+- [ ] `rtk pnpm check:osv` (OSV-Scanner finds no known dependency vulnerabilities)
+- [ ] `rtk pnpm lighthouse` (production build and Lighthouse CI accessibility audit)
 - [ ] Relevant project docs updated if architecture, conventions, design tokens, or intent changed (`ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `INTENT.md`)
 - [ ] `CONSTRAINTS.md` remains satisfied and was not weakened to make checks pass
 - [ ] New/changed `src/components/ui/` primitives get a Ladle story (`*.stories.tsx`) — most existing primitives don't have one yet, but new additions should

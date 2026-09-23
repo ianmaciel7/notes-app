@@ -7,3 +7,4 @@ allowBuilds:
 
 overrides:
   dependency-cruiser>picomatch: 4.0.7
+  tmp: 0.2.7

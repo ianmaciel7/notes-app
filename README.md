@@ -42,13 +42,19 @@ rtk pnpm deps:check
 rtk pnpm knip
 rtk pnpm check:fast
 rtk pnpm check:security
+rtk pnpm check:osv
+rtk pnpm lighthouse
 ```
 
 `check:fast` runs type checking, focused Biome checks, dependency-boundary checks,
-and the quality-floor guard. `check:security` runs the high-severity dependency
-audit. There is no automated test runner yet; Ladle is the current component and
-visual verification tool. See [`CONSTRAINTS.md`](./CONSTRAINTS.md) for the
-non-negotiable quality contract.
+and the quality-floor guard. `check:security` runs the high-severity package
+manager audit, while `check:osv` scans repository manifests and lockfiles with
+OSV-Scanner v2 using [`osv-scanner.toml`](./osv-scanner.toml). There is no
+automated test runner yet; Ladle is the current component and visual verification
+tool. `lighthouse` builds the production app, audits the home page with Lighthouse
+CI, enforces the accessibility threshold, and writes local reports to
+`.lighthouseci/`. See [`CONSTRAINTS.md`](./CONSTRAINTS.md) for the non-negotiable
+quality contract.
 
 Run Gitleaks against the repository history when changing configuration or
 before sharing a branch:
@@ -57,8 +63,10 @@ before sharing a branch:
 gitleaks git --config gitleaks.toml .
 ```
 
-The optional `.pre-commit-config.yaml` runs the same protection locally when the
-pre-commit framework is installed.
+Git hooks are installed automatically by the
+Husky `prepare` script during `rtk pnpm install`; the committed
+`.husky/pre-commit` hook runs `pnpm run lint-staged` to format and lint staged
+JavaScript, TypeScript, CSS, and JSON files, followed by `pnpm run check:fast`.
 
 ## Project Status
 Pre-MVP scaffold. See [`INTENT.md`](./INTENT.md) for the current problem statement, constraints, and open questions (e.g. what a "note" is, whether auth is needed).

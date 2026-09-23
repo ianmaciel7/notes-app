@@ -12,12 +12,19 @@
     "check:lint": "biome check .dependency-cruiser.cjs scripts/floor-guard.mjs package.json",
     "check:floor": "node scripts/floor-guard.mjs",
     "check:security": "pnpm audit --audit-level high",
+    "check:osv": "osv-scanner scan source --config osv-scanner.toml --recursive .",
     "check:fast": "pnpm run check:types && pnpm run check:lint && pnpm run deps:check && pnpm run check:floor",
     "knip": "pnpm dlx knip",
+    "lighthouse": "pnpm build && lhci autorun",
     "format": "biome format --write",
     "ladle": "ladle serve",
     "ladle:build": "ladle build",
-    "ladle:preview": "ladle preview"
+    "ladle:preview": "ladle preview",
+    "lint-staged": "lint-staged",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{cjs,css,json,jsonc,js,mjs,ts,tsx}": "biome check --write"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -44,13 +51,16 @@
     "@biomejs/biome": "2.4.2",
     "@fontsource-variable/inter": "5.3.0",
     "@ladle/react": "5.1.1",
+    "@lhci/cli": "^0.15.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
     "dependency-cruiser": "^18.4.0",
+    "husky": "^9.1.7",
     "knip": "^6.37.0",
+    "lint-staged": "^17.5.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

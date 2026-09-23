@@ -18,7 +18,10 @@ Not yet applicable — the app has no forms that submit to a server, no API rout
 There is no authentication or authorization in the codebase — no session/cookie handling, no auth provider dependency in `package.json`. Any note data introduced before an auth model exists should be treated as unauthenticated/local-only.
 
 ## 6. Dependency Management & Auditing
-- No automated dependency scanning (Dependabot/Renovate) is configured yet.
 - Run `rtk pnpm check:security` before merging dependency changes; it runs `pnpm audit --audit-level high` and fails on high or critical advisories.
+- Lighthouse CI is a development-only dependency. Its reports use the filesystem upload target in `lighthouserc.cjs`; audit data is not sent to an external service.
+- The current package audit reports unresolved high-severity transitive `extract-zip` advisories through Lighthouse CI. Do not suppress them; upgrade the upstream dependency when a patched npm release is available.
+- OSV-Scanner v2 is configured in [`osv-scanner.toml`](./osv-scanner.toml). Install the official Windows package with `winget install --id Google.OSVScanner --exact`, then run `rtk pnpm check:osv` to scan repository lockfiles and manifests against the OSV database.
+- Keep any OSV-Scanner exception in `osv-scanner.toml` with a specific reason and an expiry date where possible; do not suppress findings without an owner-approved remediation decision.
 - Gitleaks is configured in `gitleaks.toml` with the built-in default rules. Run `gitleaks git --config gitleaks.toml .` to scan repository history; the optional `.pre-commit-config.yaml` adds a local pre-commit scan.
 - The one non-standard dependency worth tracking is `@shadcn/react` (used by `questionnaire.tsx` and the other conversational UI primitives, per `DESIGN.md` §5) — verify its advisories same as any other third-party package.

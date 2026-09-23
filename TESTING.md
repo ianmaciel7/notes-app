@@ -11,6 +11,7 @@ Unit, integration, and E2E layers are aspirational until test tooling is added â
 - **Component story workbench**: Ladle 5.1.1 (`@ladle/react`) â€” `rtk pnpm ladle`.
 - **E2E**: None installed (no Playwright/Cypress).
 - **Coverage tool**: None configured.
+- **Browser audit**: Lighthouse CI 0.15.1 (`@lhci/cli`) audits the production home page via `rtk pnpm lighthouse`; accessibility has a hard threshold, while performance, best-practices, and SEO are warning-only until a baseline is established.
 
 ## 3. Test Commands
 ```bash
@@ -18,10 +19,13 @@ rtk pnpm ladle          # Launch visual component stories (dev server)
 rtk pnpm ladle:build    # Build static Ladle catalog
 rtk pnpm ladle:preview  # Preview the built static catalog
 ```
-There is no `pnpm test` script. The repository also has task-end quality gates:
+There is no `pnpm test` script. Run `rtk pnpm lighthouse` to build and audit the
+production home page with Lighthouse CI. The repository also has task-end quality gates:
 `check:fast` covers types, focused lint, dependency boundaries, and the floor
-guard; `check:security` audits high and critical dependency advisories. Run all
-commands through `rtk pnpm`.
+guard; `check:security` audits high and critical dependency advisories; and
+`check:osv` scans repository manifests and lockfiles with OSV-Scanner v2. Run
+all commands through `rtk pnpm`. Lighthouse reports are written to the ignored
+`.lighthouseci/` directory and are not uploaded externally.
 
 ## 4. Test File Conventions & Locations
 - Story files: colocated next to the component, `<name>.stories.tsx` (e.g. `src/components/ui/button.stories.tsx`).

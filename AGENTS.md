@@ -16,7 +16,9 @@ Read `CONSTRAINTS.md` before writing code. Do not weaken it to make a change pas
 - Build: `rtk pnpm build`
 - Check dependency boundaries: `rtk pnpm deps:check`
 - Check unused files, dependencies, and exports: `rtk pnpm knip`
-- Run the task-end quality contract: `rtk pnpm check:fast` and `rtk pnpm check:security`
+- Run the task-end quality contract: `rtk pnpm check:fast`, `rtk pnpm check:security`, and `rtk pnpm check:osv`
+- Run browser verification: `rtk pnpm lighthouse` (production build plus Lighthouse CI)
+- Run staged-file checks: `rtk pnpm run lint-staged` (Biome via lint-staged)
 - Pack the repository for AI review: `rtk npx repomix@latest` (uses `repomix.config.json`)
 
 Use `rtk` before shell commands so command output stays compact. Run RTK's own
@@ -43,7 +45,9 @@ If PowerShell blocks the global `agents` script shim, invoke the equivalent `age
 
 ## Testing instructions
 - No test suite is configured yet — there is no `pnpm test` script. Run `rtk pnpm lint`, `rtk pnpm build`, `rtk pnpm deps:check`, and `rtk pnpm knip` before considering a task done.
-- Also run `rtk pnpm check:fast` and `rtk pnpm check:security` to enforce the constraints in `CONSTRAINTS.md`.
+- Also run `rtk pnpm check:fast`, `rtk pnpm check:security`, and `rtk pnpm check:osv` to enforce the constraints in `CONSTRAINTS.md` and scan dependencies against OSV.
+- The Husky pre-commit hook runs `pnpm run lint-staged` before `pnpm run check:fast`.
+- Run `rtk pnpm lighthouse` for production-page accessibility and performance verification; accessibility is enforced and other Lighthouse categories are warning-only.
 - See `TESTING.md` for current coverage status (Ladle stories only, 1 of 61 components covered).
 
 ## PR instructions
