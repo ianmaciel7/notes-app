@@ -1,5 +1,7 @@
 # Contributing Guidelines
 
+Shared UI changes must satisfy the shadcn/Base UI checklist in `CONVENTIONS.md` before submission.
+
 Thank you for contributing to `notes-app`. Please follow these guidelines to keep the repo consistent.
 
 ## 1. Prerequisites & Environment Setup

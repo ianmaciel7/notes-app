@@ -1,5 +1,40 @@
 # Coding Conventions & Standards
 
+## Shadcn / Base UI Component Checklist
+
+`src/components/ui/` currently imports `cn()` directly from the installed `cn` package. `@/lib/utils` re-exports the same function for application code.
+
+The following rules are normative for shared UI in `src/components/ui/`. Use existing shadcn and Base UI primitives first, preserve their public anatomy, and keep domain behavior outside the primitive layer.
+
+### Composition and APIs
+- Prefer existing primitives and variants; compose with `children` and compound subcomponents rather than boolean-prop matrices or `renderX` props.
+- Keep components small and semantic. Avoid rename-only wrappers, unnecessary DOM nodes, domain logic in generic primitives, and nested interactive elements.
+- Derive props from the underlying primitive or native tag (`React.ComponentProps<typeof Primitive>` / `React.ComponentProps<"button">`). Use `Pick`/`Omit` intentionally, avoid `any` and unsafe casts, forward remaining props, and preserve controlled/uncontrolled behavior.
+- Use kebab-case filenames, symmetrical named exports, and `Props`-suffixed prop types. Use CVA only for meaningful variants with typed `VariantProps` and sensible defaults.
+- Preserve `data-slot`, primitive state attributes, refs, consumer event handlers, ARIA attributes, native behavior, and the installed component anatomy.
+
+### Base UI and shadcn rules
+- Use the installed Base UI API, not Radix-only examples. Use `render` for polymorphic slots; use `nativeButton={false}`, `useRender`, or `mergeProps` only when the actual Base UI composition requires them.
+- Use `cn()` for class merging, following the current UI import convention above. Prefer semantic tokens (`bg-background`, `text-foreground`, `bg-primary`, `text-primary-foreground`, `text-muted-foreground`, `border-border`, `border-input`, `ring-ring`, `text-destructive`) over raw colors and one-off `dark:` overrides.
+- Prefer `gap-*`, `size-*`, and `truncate`; avoid manual spacing, arbitrary values, `!important`, and arbitrary stacking overrides. Use configured Lucide icons explicitly and give icon-only controls accessible names.
+- For forms use `FieldGroup`/`Field`, `FieldLabel`, `FieldDescription`, `FieldError`, and `FieldSet`/`FieldLegend` where applicable. Use `data-invalid` on `Field`, `aria-invalid` on the input, and `disabled`/`data-disabled` for disabled state.
+- For `InputGroup`, use `InputGroupInput`/`InputGroupTextarea` and `InputGroupAddon`; do not insert raw `Input`/`Textarea`. Use `ToggleGroup` for small related choices.
+- Preserve required group hierarchies: `SelectItem` in `SelectGroup`, menu items in their menu group, and command items in `CommandGroup`. Follow the installed Base UI value and placeholder APIs for Select, Accordion, Slider, and Tabs.
+
+### Component anatomy and accessibility
+- Use `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, and `CardFooter` according to the content.
+- Choose overlays by intent: `Dialog` for focused modal work, `AlertDialog` for destructive confirmation, `Sheet` for side panels, `Drawer` for bottom/mobile panels, `Popover` for interactive contextual content, `HoverCard` for hover information, and `Tooltip` only for non-interactive information.
+- Preserve overlay root/trigger/content structure, portal, backdrop, close behavior, focus and keyboard behavior, and required titles/descriptions. Use `sr-only` for visually hidden required titles; do not add consumer-level `z-index` overrides.
+- Use semantic HTML, buttons for actions, links for navigation, visible focus styles, and accessible labels/descriptions. Loading, disabled, error, and selected states must not rely on color alone. Use `Alert`, `Empty`, `Separator`, `Skeleton`, `Badge`, `Spinner`, and `Progress` when their semantics apply.
+- Keep components server-compatible where possible. Add `"use client"` only when required; in React 19 pass `ref` as a regular prop and use `use()` for context in new code rather than introducing `forwardRef` or `useContext`.
+
+### Review questions
+- Did the implementation reuse the nearest existing primitive and variant?
+- Does it preserve Base UI anatomy, state attributes, keyboard behavior, refs, events, and ARIA?
+- Are semantic tokens, `cn()`, the configured icon library, and composition APIs used consistently?
+- Are forms, groups, cards, overlays, and loading/error/empty states using the documented anatomy?
+- Is a Ladle story included or updated for new and changed shared UI?
+
 ## 1. Tooling & Enforcement
 - Formatter & Linter: **Biome** (`biome.json`) — Biome is the only linter/formatter in the repo; there is no ESLint or Prettier config.
 - Strict type checking: `tsconfig.json` has `"strict": true`. Avoid `any` and `@ts-ignore`.

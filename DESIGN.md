@@ -118,6 +118,8 @@ components:
 
 # Design System Specification
 
+Shared UI primitives currently import `cn()` directly from the installed `cn` package; `@/lib/utils` re-exports the same function for application code.
+
 ## Overview
 
 This repository uses **shadcn/ui** with the **`base-nova`** design preset, implemented on top of **`@base-ui/react`** accessible unstyled primitives and **Tailwind CSS v4**. Theme tokens are declared in `src/app/globals.css` and mapped via `@theme inline` into Tailwind utility classes — the YAML frontmatter above mirrors that file and is the normative source; if the two ever disagree, `globals.css` wins and this document is out of date.
