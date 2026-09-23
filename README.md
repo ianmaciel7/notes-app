@@ -14,7 +14,7 @@ pnpm dev
 Open [http://localhost:3000](http://localhost:3000) to view it.
 
 ## Usage
-There's nothing to show yet — `src/app/page.tsx` is still the unedited Next.js starter page. What exists so far is a library of ~60 UI primitives under `src/components/ui/` (see [`DESIGN.md`](./DESIGN.md)), viewable via Ladle:
+There's nothing to show yet — `src/app/page.tsx` is still the unedited Next.js starter page. What exists so far is a library of 61 UI primitives under `src/components/ui/` (see [`DESIGN.md`](./DESIGN.md)), viewable via Ladle:
 
 ```bash
 pnpm ladle

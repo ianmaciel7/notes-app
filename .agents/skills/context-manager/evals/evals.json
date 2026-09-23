@@ -1,0 +1,41 @@
+{
+  "skill_name": "context-manager",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I just wired up next-themes in src/app/layout.tsx (it was declared but never actually mounted before). Can you check if any of our root docs still say dark mode isn't hooked up, and fix whatever's stale?",
+      "expected_output": "A short audit of the 10 root control docs that finds the specific stale claim (CONTEXT.md's or ARCHITECTURE.md's theme-provider description saying it isn't wired into layout.tsx), verifies the real state by reading src/app/layout.tsx, and edits only the doc(s) that were actually wrong rather than rewriting unrelated docs.",
+      "files": [],
+      "expectations": [
+        "The output explicitly names which doc(s) contained the stale 'not wired' claim",
+        "The output cites reading src/app/layout.tsx (or an equivalent ground-truth check) before editing, not just editing on assumption",
+        "Docs that were already accurate (e.g. TESTING.md, SECURITY.md) are left untouched or explicitly confirmed clean, not rewritten",
+        "The fix states the theme provider IS now wired (matches ground truth), not the opposite"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "this repo only has a DESIGN.md right now, nothing else — no README, no ARCHITECTURE.md, no CONTRIBUTING.md, none of that. can you set up the rest of the control docs for it? base it on what's actually in the codebase, don't just copy generic boilerplate",
+      "expected_output": "The missing control docs (README.md, AGENTS.md, CONTEXT.md, INTENT.md, ARCHITECTURE.md, CONVENTIONS.md, TESTING.md, SECURITY.md, CONTRIBUTING.md) are created at the repo root, each grounded in real package.json/tsconfig/source-file facts rather than template placeholder text, and each honestly states when a capability (tests, CI, auth) doesn't exist yet instead of inventing one.",
+      "files": [],
+      "expectations": [
+        "Every one of the 9 missing docs is created, none left as a stub with unfilled placeholder brackets",
+        "At least one doc explicitly states something is NOT yet implemented (e.g. no test runner, no CI, no auth) rather than fabricating a plausible-sounding system",
+        "Commands shown (install/dev/lint/test) match the actual package manager and scripts in package.json, not a generic npm/yarn assumption",
+        "AGENTS.md does not overwrite or duplicate a pre-existing tool-generated block if one exists in the repo's real AGENTS.md file"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "our DESIGN.md doesn't really follow the actual design.md spec structure (google-labs-code/design.md) — can you check what's actually required and fix it so it's compliant, without just making up a fuller-looking doc than what our code actually has?",
+      "expected_output": "DESIGN.md is restructured to the real design.md spec's 8 canonical H2 sections in the correct order (Overview, Colors, Typography, Layout, Elevation & Depth, Shapes, Components, Do's and Don'ts), with YAML frontmatter tokens treated as the normative source referenced by the body via {group.key} syntax, and any section the codebase doesn't actually support (e.g. no grid system, no formal elevation scale) stated as not-yet-established rather than invented.",
+      "files": [],
+      "expectations": [
+        "The 8 canonical section headings appear in the exact spec order with no reordering",
+        "The YAML frontmatter contains real token values pulled from the actual CSS/theme file, not placeholder or fabricated values",
+        "At least one section explicitly says a capability doesn't exist yet (e.g. no custom breakpoint scale, no formal shadow tokens) instead of inventing plausible values",
+        "No component list or token table appears twice with different values between the frontmatter and the Markdown body (they reference the same source, not two independently-maintained copies)"
+      ]
+    }
+  ]
+}

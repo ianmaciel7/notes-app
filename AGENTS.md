@@ -19,7 +19,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Testing instructions
 - No test suite is configured yet — there is no `pnpm test` script. `pnpm lint` and `pnpm build` are the only automated checks; run both before considering a task done.
-- See `TESTING.md` for current coverage status (Ladle stories only, 1 of 60 components covered).
+- See `TESTING.md` for current coverage status (Ladle stories only, 1 of 61 components covered).
 
 ## PR instructions
 - See `CONTRIBUTING.md` for branch naming, commit format (Conventional Commits), and the pre-flight checklist.
