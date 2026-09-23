@@ -14,6 +14,8 @@ Thank you for contributing to `notes-app`. Please follow these guidelines to kee
   pnpm dev
   ```
 
+When changing MCP servers, skills, integrations, profiles, or generated AI-tool configuration, use the project `agents` CLI and commit only its source files unless the configured sync mode says otherwise. Creating, installing, removing, or updating a skill also requires `npx skills update -p -y`, committing the resulting `skills-lock.json` update, and running `agents sync --check` before submitting the change.
+
 ## 2. Branching Strategy
 - Main branch: `main`.
 - In practice this repo's branch names have not followed a strict `feat/`/`fix/` pattern (existing branches include `context-engineering`, `dev`, `stag`, tool-specific branches like `anthropic-skill`/`mattpocock-skill`, and numbered `old-*` archive branches). If starting a new pattern, prefer Conventional-Commits-style prefixes (`feat/<short-description>`, `fix/<short-description>`, `docs/<short-description>`) since commit messages already follow that convention (see §3).

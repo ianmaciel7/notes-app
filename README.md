@@ -26,6 +26,10 @@ Pre-MVP scaffold. See [`INTENT.md`](./INTENT.md) for the current problem stateme
 ## Contributing
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for setup, branching, and PR expectations.
 
+## Agent configuration
+
+Use the project-configured `@agents-dev/cli` (`agents`) for MCP servers, skills, integrations, profiles, and generated tool configuration. The committed source of truth is `.agents/agents.json` plus `.agents/skills/`; run `agents sync` after changes and `agents sync --check` to detect drift. Creating, installing, removing, or updating a skill always requires refreshing the legacy `skills-lock.json` with `npx skills update -p -y` and committing the resulting lock-file change.
+
 ## Documentation
 - [`INTENT.md`](./INTENT.md) — why this exists, for whom, and current open questions
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — system structure and tech stack

@@ -64,15 +64,20 @@ Use this workflow to evaluate the health of the repository's control documents.
    - Flag outdated library versions, obsolete paths, or phantom tools (tools mentioned in docs that aren't in `package.json`).
    - Flag token mismatches (e.g., CSS variables in code that differ from `DESIGN.md`).
    - Flag any fact (a count, a token value, a command) restated more than once — across documents OR within the same one — where the restatements disagree. Per Operating Principle #5, one occurrence should be canonical and the rest should point to it.
-4. **Use the bundled scripts instead of re-deriving facts by hand**: this workflow used to mean manually counting files and grepping for numbers every single audit pass — slow, and error-prone enough that this skill's own history has real examples of the count drifting between docs anyway. Run these first:
-   - `node scripts/check-component-count.js <repo-root> --quiet` — cross-checks the real `src/components/ui/*.tsx` count against every count mentioned in the root docs (proximity heuristic, not perfect semantics — see `--help`).
-   - `node scripts/check-doc-links.js <repo-root> --quiet` — verifies every local markdown link between root docs actually resolves.
-   - `node scripts/check-design-md-structure.js <path-to-DESIGN.md>` — validates `DESIGN.md`'s H2 sections follow the real design.md spec's canonical order (see `references/design-template.md`), without shelling out to the external `@google/design.md` linter package.
-   - `node scripts/check-readme-boilerplate.js <repo-root>` — flags leftover scaffold-generated text in `README.md` (per readme-template.md's "No Scaffold Boilerplate" rule).
-   - `node scripts/check-package-scripts.js <repo-root> --quiet` — verifies every `pnpm`/`npm run`/`yarn` command cited in the root docs exists in `package.json`'s `scripts` (ignores commands a doc cites while explicitly saying they *don't* exist).
-   - `node scripts/check-agents-generated-block.js <repo-root>` — for Next.js repos, verifies `AGENTS.md`'s tool-generated block is byte-identical to what `next dev` would currently write, by calling the real generator module directly rather than re-implementing its logic.
-   - All six accept `--json` for structured output, `--help` for full usage, and (except the AGENTS.md/README.md checks) `--quiet`/`-q` to show only problems. Shared argument-parsing and repo-root-discovery logic lives in `scripts/lib/cli.js` — new scripts should use it rather than reimplementing.
-   All three take `--json` for structured output and `--help` for usage. None make network calls or need external dependencies — plain Node.js, safe to run without approval concerns.
+   - Treat `skills-lock.json` as a required legacy lock artifact. Whenever a skill is created, installed, removed, or updated, verify that the lock file was refreshed with `npx skills update -p -y` and that its resulting diff is included.
+4. **Use the bundled verification scripts instead of re-deriving facts by hand**. The scripts live under this skill's `scripts/` directory; do not invoke nonexistent root-level `scripts/check-*.js` paths. Run the applicable checks from the repository root:
+   - `node .agents/skills/context-manager/scripts/verify-agents.js . --quiet`
+   - `node .agents/skills/context-manager/scripts/verify-architecture.js . --quiet`
+   - `node .agents/skills/context-manager/scripts/verify-context.js . --quiet`
+   - `node .agents/skills/context-manager/scripts/verify-contributing.js . --quiet`
+   - `node .agents/skills/context-manager/scripts/verify-conventions.js . --quiet`
+   - `node .agents/skills/context-manager/scripts/verify-design.js . --quiet`
+   - `node .agents/skills/context-manager/scripts/verify-intent.js . --quiet`
+   - `node .agents/skills/context-manager/scripts/verify-readme.js . --quiet`
+   - `node .agents/skills/context-manager/scripts/verify-security.js . --quiet`
+   - `node .agents/skills/context-manager/scripts/verify-testing.js . --quiet`
+
+   Run all ten for a full audit. Each supports `--json`, `--help`, and `--quiet`/`-q`; they use shared argument handling from `scripts/lib/cli.js`, make no network calls, and exit nonzero when a document is stale or inconsistent.
 
 ---
 
@@ -118,6 +123,8 @@ Whenever significant code changes occur:
   - Update `AGENTS.md` and, if user-facing, `README.md`'s Getting Started section.
 - **Adding or Removing a Control Doc**:
   - Update `README.md`'s Documentation links so it never points to a doc that doesn't exist.
+- **Creating, Installing, Removing, or Updating a Skill**:
+  - Run `npx skills update -p -y` and commit the resulting `skills-lock.json` change, even when the update only reorders entries or refreshes hashes.
 
 ---
 
