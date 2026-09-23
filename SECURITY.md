@@ -7,9 +7,9 @@ No formal disclosure process is defined yet (no `.github/` directory, no securit
 This is a pre-release, single-branch project (`main`, actively developed on `context-engineering`) with no versioned releases yet — there is no supported-version matrix to publish.
 
 ## 3. Secrets & Environment Configuration
-- No `.env` files exist in the repo today, and `.gitignore` already excludes `.env*` from version control.
+- No `.env` files exist in the repo today, and `.gitignore` already excludes `.env*` from version tracking.
 - No secrets, API keys, or credentials are referenced anywhere in the current codebase — there is no backend or third-party API integration yet (see `ARCHITECTURE.md`).
-- When a backend/auth layer is introduced, secrets must go through environment variables (never committed) and log output must never include tokens, passwords, or PII.
+- When a backend/auth layer is introduced, secrets must go through environment variables (never committed) and log output must never include tokens, passwords, or personal data.
 
 ## 4. Input Validation & Data Sanitization
 Not yet applicable — the app has no forms that submit to a server, no API routes, and no database (`src/app/page.tsx` is still the unedited Next.js starter page). No validation library (e.g. Zod) is installed. Add this section for real once user input starts flowing to a backend.

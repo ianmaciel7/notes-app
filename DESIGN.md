@@ -32,7 +32,7 @@ colors:
   sidebar-ring: "oklch(0.708 0 0)"
 
 # The design.md v1(alpha) schema's `colors:` map is flat — it has no native concept of a
-# dark-mode pairing yet. Rather than lose real project data, `colors-dark` below is a
+# dark-theme pairing yet. Rather than lose real project data, `colors-dark` below is a
 # clearly-labeled, non-canonical extension: same keys as `colors`, values from the `.dark`
 # block in globals.css. A linter built against strict v1(alpha) may flag these keys as
 # unrecognized — that's expected until the spec adds theme-variant support.
@@ -123,7 +123,7 @@ components:
 This repository uses **shadcn/ui** with the **`base-nova`** design preset, implemented on top of **`@base-ui/react`** accessible unstyled primitives and **Tailwind CSS v4**. Theme tokens are declared in `src/app/globals.css` and mapped via `@theme inline` into Tailwind utility classes — the YAML frontmatter above mirrors that file and is the normative source; if the two ever disagree, `globals.css` wins and this document is out of date.
 
 The visual language emphasizes:
-- High contrast, neutral palette defined via perceptually uniform **OKLCH** color tokens — `{colors.destructive}` is the only non-achromatic hue in the whole palette.
+- High contrast, neutral color system defined via perceptually uniform **OKLCH** color tokens — `{colors.destructive}` is the only non-achromatic hue in the whole system.
 - Accessible keyboard focus and interaction states with `@base-ui/react` and `class-variance-authority` (CVA).
 - Seamless light/dark switching via `next-themes` toggling a `.dark` class (see `ARCHITECTURE.md` §4 for the runtime mechanism — not repeated here).
 - Definition over drop-shadow: surfaces mostly separate via a 1px `ring-foreground/10` hairline rather than heavy elevation (see Elevation & Depth below).
@@ -229,8 +229,23 @@ Frontmatter `components` tokenizes 4 representative primitives to show the compo
 1. **Use CVA & `cn` for class composition** — always merge Tailwind classes via `@/lib/utils` `cn(...)`; use `class-variance-authority` for multi-variant components.
 2. **Leverage Base UI slots** — style sub-elements with data attributes like `data-slot="button"`, `in-data-[slot=...]`, `has-data-[icon=...]`.
 3. **Respect OKLCH token semantics** — never hardcode hex codes (`#ffffff`, `#171717`); use `bg-background`, `text-foreground`, `bg-primary`, `border-border`, etc.
-4. **Maintain the dark theme via CSS variables**, not scattered one-off `dark:` utility overrides. (Per `CONTEXT.md`'s glossary, "mode" is a rejected synonym for "Theme.")
+4. **Maintain the dark theme via CSS variables**, not scattered one-off `dark:` utility overrides. The starter page still contains legacy `dark:` classes; new product UI should follow the token rule.
 5. **Match existing elevation patterns, don't invent new ones** — new overlays follow `popover.tsx`'s shadow+ring pattern; new simple containers follow `card.tsx`'s ring-only pattern.
+
+6. **Compose existing primitives before adding markup** — use full Card, Field, Dialog/Sheet/Drawer, Tabs, Alert, Empty, Skeleton, Badge, Separator, and Spinner compositions where they match the need. Keep required accessibility parts such as dialog titles, grouped items, avatar fallbacks, and `TabsList`/`TabsTrigger` nesting.
+7. **Use shadcn/Base UI conventions** — choose built-in variants, semantic tokens, `cn()`, `gap-*`, `size-*`, `truncate`, and `data-icon`; use `render` for Base UI slots. Do not add raw color tokens, manual overlay z-index, or ad hoc loading variants.
+8. **Design component APIs for composition** — prefer explicit compound subcomponents and children over boolean flag props. Keep shared interaction state in a provider rather than coupling presentational parts to a specific store or hook.
+
+- **Use the form primitives as designed** — compose forms with `FieldGroup` and `Field`; use `InputGroupInput`/`InputGroupTextarea` inside `InputGroup`; use `ToggleGroup` for small option sets; group related controls with `FieldSet`/`FieldLegend`; expose validation with `data-invalid` on `Field` and `aria-invalid` on the input.
+- **Use the icon and chat contracts** — pass icon components rather than string names, mark Button icons with `data-icon`, and let components own icon sizing. Compose conversational UI with `MessageScroller`, `Message`/`Bubble`, `Attachment`, and `Marker` instead of hand-rolled message scrolling or bubbles.
+- **Respect primitive grouping and accessibility** — keep items inside their group components, use `render` for Base UI slots, include titles in Dialog/Sheet/Drawer, and do not add manual overlay stacking values.
+
+## Composition and Performance Constraints
+
+- Treat `src/components/ui/` as a reusable primitive layer, not a place for notes-domain behavior. Domain components should compose primitives from outside this directory.
+- Keep server-renderable primitives free of client directives when they do not need interactivity. Add `"use client"` only at the smallest interactive boundary.
+- Avoid waterfalls in future data-backed surfaces: start independent requests together, defer awaits until their result is needed, and use Suspense for independently streamable regions.
+- Keep client props serializable and minimal. Avoid module-level mutable request state, duplicate serialization, and unnecessary client-side subscriptions.
 
 ---
 
@@ -239,5 +254,5 @@ Frontmatter `components` tokenizes 4 representative primitives to show the compo
 Not a canonical design.md section — repo-specific tooling notes.
 
 - Stories file pattern: `src/components/ui/*.stories.tsx`.
-- Current coverage: only `button.tsx` has a story; the other ~60 primitives in the catalog above do not yet have one. Treat new/changed components as needing a story, not as already covered.
+- Current coverage: only `button.tsx` has a story; all remaining primitives in the catalog above do not yet have one. Treat new/changed components as needing a story, not as already covered.
 - Run local viewer: `pnpm ladle`. Build static catalog: `pnpm ladle:build`.

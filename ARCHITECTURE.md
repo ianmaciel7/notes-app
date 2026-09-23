@@ -41,6 +41,7 @@ There are no external dependencies today: no auth provider, no persistence store
 
 ## 5. Non-Functional Requirements & Cross-Cutting Concerns
 - **Performance**: No bundle budget or Core Web Vitals targets are defined or measured yet.
+- **Component architecture**: Prefer explicit composition and compound components over boolean-prop matrices. Providers own state implementation; composed children consume stable interfaces. Use the React Compiler already enabled in `next.config.ts` before adding manual memoization.
 - **Security & Privacy**: No auth, no data persistence, so no attack surface beyond a static client app today. See `SECURITY.md` for what applies now vs. what must be added before any backend/auth is introduced.
 - **Observability & Logging**: No logging, tracing, or telemetry is wired in.
 

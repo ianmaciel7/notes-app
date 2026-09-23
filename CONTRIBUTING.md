@@ -28,8 +28,13 @@ Thank you for contributing to `notes-app`. Please follow these guidelines to kee
 There is no CI and no test suite yet (see `TESTING.md`), so these are manual checks:
 - [ ] `pnpm lint` (Biome check)
 - [ ] `pnpm build` (Next.js build succeeds)
-- [ ] Relevant control docs updated if architecture, conventions, design tokens, or intent changed (`ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `INTENT.md`)
+- [ ] Relevant project docs updated if architecture, conventions, design tokens, or intent changed (`ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `INTENT.md`)
 - [ ] New/changed `src/components/ui/` primitives get a Ladle story (`*.stories.tsx`) — most existing primitives don't have one yet, but new additions should
+
+## Component and performance review
+
+- New component APIs should use composition and existing shadcn/Base UI primitives before introducing boolean modes or custom markup; verify semantic tokens and required accessibility subcomponents.
+- For performance-sensitive changes, check for request waterfalls, unnecessary client boundaries, barrel imports, and avoidable re-renders; record measured justification for any optimization abstraction.
 
 ## 5. Pull Request Submission & Review
 - Describe *what* changed and *why*.

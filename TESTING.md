@@ -22,8 +22,12 @@ There is no `pnpm test` script — `package.json` only defines `dev`, `build`, `
 
 ## 4. Test File Conventions & Locations
 - Story files: colocated next to the component, `<name>.stories.tsx` (e.g. `src/components/ui/button.stories.tsx`).
-- **Current coverage**: only `button.tsx` has a story. The other ~60 primitives cataloged in `DESIGN.md` §5 (including all of the Overlays & Dialogs and Conversational/Chat UI categories) have no story yet.
+- **Current coverage**: only `button.tsx` has a story. The other 61 primitives cataloged in `DESIGN.md` §5 (including all of the Overlays & Dialogs and Conversational/Chat UI categories) have no story yet.
 - No `*.test.ts`/`*.spec.ts` files or `__tests__/` directories exist anywhere in `src/`.
+
+## Story quality expectations
+
+New or changed primitives should add or update a Ladle story covering composition states, keyboard/focus behavior, required accessibility subparts, and loading/empty/error states where applicable. Prefer stories that exercise the public composed API rather than implementation details.
 
 ## 5. Mocking & Fixtures
 Not applicable yet — there is no data layer, network layer, or backend to mock (see `ARCHITECTURE.md` §4). When one is introduced, prefer testing behavior over internal implementation details and avoid over-mocking.

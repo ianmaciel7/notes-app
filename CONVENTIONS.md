@@ -2,7 +2,7 @@
 
 ## 1. Tooling & Enforcement
 - Formatter & Linter: **Biome** (`biome.json`) — Biome is the only linter/formatter in the repo; there is no ESLint or Prettier config.
-- Strict Mode: `tsconfig.json` has `"strict": true`. Avoid `any` and `@ts-ignore`.
+- Strict type checking: `tsconfig.json` has `"strict": true`. Avoid `any` and `@ts-ignore`.
 - Import organization: Biome's `assist.actions.source.organizeImports` is enabled — imports are auto-sorted on format, don't hand-order them against the tool.
 - Commands:
   - Lint: `pnpm lint` (`biome check`)
@@ -31,8 +31,19 @@
 - **Render optimization**: React Compiler is enabled (`docs/adr/0004`), so manual `useMemo`/`useCallback` should not be added preemptively — let the compiler handle memoization unless profiling shows a real need.
 - No client-side state management library is installed; default to local component state or React context.
 
+### Component architecture and performance
+- Prefer compound components, explicit variants, and `children` composition over boolean prop proliferation or `renderX` props. Keep each public component API focused on one responsibility.
+- If siblings need shared state, lift it into a provider. The provider may choose local state, a future store, or server synchronization; UI primitives consume an interface shaped as `state`, `actions`, and `meta`.
+- In React 19, treat `ref` as a normal prop and use `use()` for context in new code. Avoid `forwardRef` and `useContext` unless a framework or dependency boundary requires them.
+- Avoid defining components inside components, unnecessary effects for derived values, and subscriptions to state used only by callbacks. Use functional state updates and primitive effect dependencies.
+- Preserve bundle boundaries: import from direct module paths, dynamically import heavy client-only features when they are not needed for the initial view, and conditionally load optional dependencies.
+- For future server-backed work, authenticate server actions like API routes, deduplicate independent requests, use `React.cache()` for per-request reads where appropriate, minimize RSC-to-client serialization, and avoid shared mutable module state.
+- Version and minimize browser storage schemas, deduplicate global listeners, use passive listeners for scroll behavior, and defer non-critical third-party scripts until after hydration.
+- Prefer derived values during render over effects, use `startTransition`/`useDeferredValue` for non-urgent expensive updates, and use explicit ternaries for conditional rendering.
+
 ## 5. Anti-Patterns & Code Smells
 - Hardcoded hex colors instead of the OKLCH CSS variable tokens (see `DESIGN.md` §2 and §7 for the required token classes).
 - Bypassing Biome/TypeScript checks with inline suppressions.
 - Adding a new UI primitive to `src/components/ui/` without a matching Ladle story — see `TESTING.md` for current story coverage gaps.
 - Introducing state management, data fetching, or auth patterns without first updating `ARCHITECTURE.md` and `INTENT.md` to reflect the change.
+- Rebuilding shadcn primitives with custom markup when an existing component, variant, or composition already covers the use case.

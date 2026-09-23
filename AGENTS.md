@@ -14,7 +14,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Build: `pnpm build`
 
 ## Code style
-- Biome is the only linter/formatter (no ESLint/Prettier). TypeScript strict mode. Named exports only in `src/components/ui/` — no `export default` outside Next.js route entrypoints.
+- Biome is the only linter/formatter (no ESLint/Prettier). TypeScript strict setting. Named exports only in `src/components/ui/` — no `export default` outside Next.js route entrypoints.
+- Build reusable UI through composition: prefer compound components and `children` over boolean flag props or `renderX` customization props. Lift shared state into providers with an explicit `state`/`actions`/`meta` context contract.
+- For React 19, pass `ref` as a regular prop and use `use()` for context where appropriate; do not introduce `forwardRef` or `useContext` in new code.
+- For shadcn/Base UI primitives, use existing components and variants first, semantic theme tokens, `cn()` for conditional classes, `gap-*` rather than `space-*`, and the project’s `render` slot API rather than assuming Radix `asChild`.
 - See `CONVENTIONS.md` for full naming/import rules and `DESIGN.md` for the UI primitive/token catalog.
 
 ## Testing instructions
