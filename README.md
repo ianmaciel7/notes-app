@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Notes App
+
+A pre-MVP component and design-system foundation for a future notes application — no note-taking feature exists yet; see [`INTENT.md`](./INTENT.md) for what's decided and what's still open.
 
 ## Getting Started
 
-First, run the development server:
+Prerequisites: Node.js (current LTS), pnpm 11.20.0 (pinned via `packageManager` in `package.json`)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view it.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
+There's nothing to show yet — `src/app/page.tsx` is still the unedited Next.js starter page. What exists so far is a library of ~60 UI primitives under `src/components/ui/` (see [`DESIGN.md`](./DESIGN.md)), viewable via Ladle:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm ladle
+```
 
-## Learn More
+## Project Status
+Pre-MVP scaffold. See [`INTENT.md`](./INTENT.md) for the current problem statement, constraints, and open questions (e.g. what a "note" is, whether auth is needed).
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for setup, branching, and PR expectations.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentation
+- [`INTENT.md`](./INTENT.md) — why this exists, for whom, and current open questions
+- [`ARCHITECTURE.md`](./ARCHITECTURE.md) — system structure and tech stack
+- [`CONTEXT.md`](./CONTEXT.md) — project vocabulary / ubiquitous language
+- [`CONVENTIONS.md`](./CONVENTIONS.md) — coding standards
+- [`DESIGN.md`](./DESIGN.md) — design system and UI primitives
+- [`TESTING.md`](./TESTING.md) — test strategy and commands
+- [`SECURITY.md`](./SECURITY.md) — security policy
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md) — how to contribute
+- [`AGENTS.md`](./AGENTS.md) — brief for AI coding agents working in this repo
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+Unlicensed / private.
