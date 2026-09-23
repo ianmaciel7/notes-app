@@ -257,4 +257,4 @@ Not a canonical design.md section — repo-specific tooling notes.
 
 - Stories file pattern: `src/components/ui/*.stories.tsx`.
 - Current coverage: only `button.tsx` has a story; all remaining primitives in the catalog above do not yet have one. Treat new/changed components as needing a story, not as already covered.
-- Run local viewer: `pnpm ladle`. Build static catalog: `pnpm ladle:build`.
+- Run local viewer: `rtk pnpm ladle`. Build static catalog: `rtk pnpm ladle:build`.

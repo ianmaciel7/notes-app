@@ -7,8 +7,8 @@ A pre-MVP component and design-system foundation for a future notes application 
 Prerequisites: Node.js (current LTS), pnpm 11.20.0 (pinned via `packageManager` in `package.json`)
 
 ```bash
-pnpm install
-pnpm dev
+rtk pnpm install
+rtk pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view it.
@@ -17,7 +17,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it.
 There's nothing to show yet — `src/app/page.tsx` is still the unedited Next.js starter page. What exists so far is a library of 61 UI primitives under `src/components/ui/` (see [`DESIGN.md`](./DESIGN.md)), viewable via Ladle:
 
 ```bash
-pnpm ladle
+rtk pnpm ladle
 ```
 
 ## Project Status
@@ -28,9 +28,9 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for setup, branching, and PR expectat
 
 ## Agent configuration
 
-Use the project-configured `@agents-dev/cli` (`agents`) for MCP servers, skills, integrations, profiles, and generated tool configuration. The committed source of truth is `.agents/agents.json` plus `.agents/skills/`; run `agents sync` after changes and `agents sync --check` to detect drift. Creating, installing, removing, or updating a skill always requires refreshing the legacy `skills-lock.json` with `npx skills update -p -y` and committing the resulting lock-file change.
+Use the project-configured `@agents-dev/cli` (`agents`) for MCP servers, skills, integrations, profiles, and generated tool configuration. Prefix its shell commands with `rtk`, for example `rtk agents sync` and `rtk agents sync --check`. The committed source of truth is `.agents/agents.json` plus `.agents/skills/`; creating, installing, removing, or updating a skill always requires refreshing the legacy `skills-lock.json` with `rtk npx skills update -p -y` and committing the resulting lock-file change.
 
-The project enables Serena for Codex as a semantic code-retrieval and editing MCP server. Serena discovers this repository from the agent's working directory and uses `.serena/project.yml` for project settings; use `.serena/project.local.yml` for local-only overrides. Run `agents status` to confirm it is selected and `agents sync` after changing the shared MCP configuration.
+The project enables Serena for Codex as a semantic code-retrieval and editing MCP server. Serena discovers this repository from the agent's working directory and uses `.serena/project.yml` for project settings; use `.serena/project.local.yml` for local-only overrides. Run `rtk agents status` to confirm it is selected and `rtk agents sync` after changing the shared MCP configuration.
 
 ## Documentation
 - [`INTENT.md`](./INTENT.md) — why this exists, for whom, and current open questions

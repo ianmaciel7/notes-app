@@ -9,12 +9,12 @@ Thank you for contributing to `notes-app`. Please follow these guidelines to kee
 - Node.js version is not pinned in the repo (no `.nvmrc`/`engines` field) — use a current LTS Node compatible with Next.js 16.
 - Setup:
   ```bash
-  git clone <repository-url>
-  pnpm install
-  pnpm dev
+  rtk git clone <repository-url>
+  rtk pnpm install
+  rtk pnpm dev
   ```
 
-When changing MCP servers, skills, integrations, profiles, or generated AI-tool configuration, use the project `agents` CLI and commit only its source files unless the configured synchronization setting says otherwise. Creating, installing, removing, or updating a skill also requires `npx skills update -p -y`, committing the resulting `skills-lock.json` update, and running `agents sync --check` before submitting the change.
+When changing MCP servers, skills, integrations, profiles, or generated AI-tool configuration, use the project `agents` CLI through RTK (for example, `rtk agents sync`) and commit only its source files unless the configured synchronization setting says otherwise. Creating, installing, removing, or updating a skill also requires `rtk npx skills update -p -y`, committing the resulting `skills-lock.json` update, and running `rtk agents sync --check` before submitting the change.
 
 Serena is the project-standard semantic coding MCP server for Codex. Keep its definition in `.agents/agents.json`; do not edit generated `.codex` or `.agents/generated` files directly. Serena should run with `start-mcp-server --context=codex --project-from-cwd` so it resolves the repository from the current working directory.
 
@@ -32,8 +32,8 @@ Serena is the project-standard semantic coding MCP server for Codex. Keep its de
 
 ## 4. Pre-Flight Checklist Before Submitting PR
 There is no CI and no test suite yet (see `TESTING.md`), so these are manual checks:
-- [ ] `pnpm lint` (Biome check)
-- [ ] `pnpm build` (Next.js build succeeds)
+- [ ] `rtk pnpm lint` (Biome check)
+- [ ] `rtk pnpm build` (Next.js build succeeds)
 - [ ] Relevant project docs updated if architecture, conventions, design tokens, or intent changed (`ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `INTENT.md`)
 - [ ] New/changed `src/components/ui/` primitives get a Ladle story (`*.stories.tsx`) — most existing primitives don't have one yet, but new additions should
 

@@ -40,8 +40,8 @@ The following rules are normative for shared UI in `src/components/ui/`. Use exi
 - Strict type checking: `tsconfig.json` has `"strict": true`. Avoid `any` and `@ts-ignore`.
 - Import organization: Biome's `assist.actions.source.organizeImports` is enabled — imports are auto-sorted on format, don't hand-order them against the tool.
 - Commands:
-  - Lint: `pnpm lint` (`biome check`)
-  - Format: `pnpm format` (`biome format --write`)
+  - Lint: `rtk pnpm lint` (`biome check`)
+  - Format: `rtk pnpm format` (`biome format --write`)
 
 ## 2. Naming Conventions
 - **Files & Folders**: `kebab-case.ts` / `kebab-case.tsx`, confirmed by every file in `src/components/ui/` (`button-group.tsx`, `dropdown-menu.tsx`) and `src/hooks/use-mobile.ts`.
