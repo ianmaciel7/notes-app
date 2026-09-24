@@ -52,6 +52,38 @@ Control documentation establishes the single source of truth for humans and AI a
 
 Apply the documentation quality contract to every audit, creation, or synchronization task: ground every claim in repository evidence; reject fabricated tools, unresolved links, placeholders, and edits to generated blocks; require executable checks for numbered rules; preserve measured baselines; and give exceptions an owner, reason, and expiry. Use [`references/constraints-template.md`](references/constraints-template.md) when creating `CONSTRAINTS.md`.
 
+### Constraint setup and maintenance
+
+When `CONSTRAINTS.md` is missing or the user asks to define the quality bar, use this compact constraint-driven workflow:
+
+1. Detect before asking: inspect the package manifest, compiler and linter configuration, test runner and coverage output, CI, agent harness, and current scripts. Report the two most relevant facts before asking questions.
+2. Ask at most four focused questions, one at a time: which dimensions should be enforced (coverage, security, performance, accessibility, architecture); whether failures block or warn; whether to measure today's baseline or choose a target; and the acceptable task-end runtime. Use defaults of security plus new-code coverage, blocking the floor, measuring and ratcheting, and roughly 90 seconds.
+3. Write `CONSTRAINTS.md` at the repository root. Include a floor, numbered rules with a real checker and lifecycle stage, measured-but-not-enforced baselines, and owned/dated exceptions. Add the read instruction to agent onboarding docs without overwriting generated blocks.
+4. Choose de facto tools that already fit the repository. Never add a number without a command that can produce its verdict. Scope expensive checks to changed files or CI; use `--redact` for secret scanners; put browser checks behind a reachable URL; and do not run coverage twice when existing lcov data is sufficient.
+5. Wire checks to cost: fast checks after edits, related tests and changed-line coverage at verification, full security and architecture checks at review/CI. A warning is not a gate; document whether each check blocks or informs.
+6. Guard the bar itself. Review diffs for lowered thresholds, deleted or weakened tests, new suppressions, stubs/TODOs, and unreviewed exception rows. Tightening should be quiet; loosening should be explicit. Use the floor-guard contract below or the repository's `scripts/floor-guard.mjs` rather than inventing a new guard.
+7. Ratchet unknowns: if a target fails the current codebase, record today's value and require that it does not worsen. State missing capabilities plainly instead of fabricating CI, auth, tests, or design tokens.
+
+Use these defaults when no number is supplied: changed lines at least 80% covered, project coverage must not fall, high-or-critical dependency findings block, LCP at most 2500 ms, CLS at most 0.1, zero critical/serious accessibility violations, exceptions expire in 90 days, and ratchets tolerate at most 0.5% drift. State the reason with the number.
+
+Use three escalation levels: written contract; scripted checks; tool-backed runner with diff scoping, budgets, ratchets, and guards. Most repositories should stop at scripted checks. Keep at least one external constraint—such as a vulnerability database, browser audit, or standards-based accessibility scanner—because project tests alone are circular.
+
+Do not weaken a threshold to make a change pass, place slow checks in the edit loop, create exceptions without owners or expiry, or let every dimension be judged only by the project's own tests.
+
+### Floor-guard contract
+
+The floor guard is diff-scoped: compare added and removed lines against the merge base, include untracked files, and report the rule and location without printing secret values.
+
+- Exit `0` when clean, `1` when a floor violation is found, and `2` when the guard cannot establish a merge base or otherwise cannot run.
+- Detect lowered constraint thresholds or deleted floor rules.
+- Detect tests made easier: added skips, deleted test assertions, or deleted test files.
+- Detect silenced checkers: new `@ts-ignore`, `eslint-disable`, `biome-ignore`, `noqa`, `nosemgrep`, `gitleaks:allow`, or equivalent suppressions.
+- Detect unfinished work: unimplemented throws, empty catches, and TODO placeholders.
+- Detect new `CONSTRAINTS.md` exception rows.
+- Treat tightening as clean and loosening as loud.
+
+Keep the implementation dependency-free and diff-scoped. Adapt suppression, stub, and test patterns for the repository's language; never turn an inability to run the guard into a successful result. A secret finding reports only its rule and location, never the matched value. Run the cheap floor check at task end and in CI; put mutation testing, full Semgrep, browser audits, and other expensive checks in review or CI. If shell logic grows beyond a maintainable size, replace it with a dedicated runner while preserving this contract and its exit codes.
+
 ---
 
 ## Core Workflows

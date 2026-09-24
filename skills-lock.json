@@ -19,12 +19,6 @@
       "skillPath": "skills/engineering/code-review/SKILL.md",
       "computedHash": "b4f17857c85ca60af1df7d0b623dd03c2a48419f6123e714f3d9748ca744a1bf"
     },
-    "constraint-driven-development": {
-      "source": "addyosmani/agent-skills",
-      "sourceType": "github",
-      "skillPath": "skills/constraint-driven-development/SKILL.md",
-      "computedHash": "0f760f914c6321cbdee7d47773ddb5b27a809f79049010b4aeead9084f38133b"
-    },
     "context7-cli": {
       "source": "upstash/context7",
       "sourceType": "github",
