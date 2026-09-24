@@ -43,6 +43,169 @@ If PowerShell blocks the global `agents` shim, use `agents.cmd`. Keep secrets in
 removing, or updating a skill also requires `rtk npx skills update -p -y` and a
 verified `skills-lock.json` diff.
 
+## Mandatory tooling policy
+
+Configured project tooling is part of the repository contract, not a suggestion.
+When a tool's scope applies, using that tool is part of the definition of done.
+
+Use the smallest specialized project-configured tool that directly supports the
+operation. Do not bypass a specialized tool in favor of a broader, manual, or
+less structured approach merely for convenience, speed, familiarity, or token
+savings.
+
+### Shell commands and RTK
+
+- All supported project shell commands MUST be executed through `rtk`.
+- Do not run a command directly when the same command can be executed correctly
+  through `rtk`.
+- A direct command is allowed only when `rtk` does not support it, changes
+  behavior required by the task, is unavailable, or is itself being diagnosed.
+- When bypassing `rtk`, state the reason and use the narrowest fallback.
+
+### Plain-text and file discovery
+
+- Use `rg --files` for file discovery and `rg` for exact/plain-text search.
+- Do not use recursive `grep`, broad repository dumps, or exhaustive file reads
+  when `rg` can answer the question directly.
+- Use shell reads only for focused file inspection after the target is known.
+
+### Graphify
+
+- For codebase, architecture, dependency, ownership, or cross-file relationship
+  questions, MUST start with `graphify query "<question>"` when
+  `graphify-out/graph.json` exists.
+- Use `graphify path "<A>" "<B>"` for relationships and
+  `graphify explain "<concept>"` for focused explanations.
+- Use `graphify-out/wiki/index.md` for broad navigation when it exists.
+- Do not replace Graphify with raw repository-wide scanning when the graph can
+  answer the question.
+- After modifying code, MUST run `graphify update .` when Graphify is available
+  so the checked-in/local graph remains current.
+
+### ast-grep
+
+- Use `ast-grep outline` to map unfamiliar source files or modules before
+  manually reading large files when an outline is sufficient.
+- Use `ast-grep` for structural searches involving syntax, imports, exports,
+  calls, declarations, components, or equivalent code shapes.
+- Do not use plain-text search as the final method when the task depends on code
+  structure that `ast-grep` can identify reliably.
+
+### Serena
+
+- Use Serena for symbol-aware navigation, definitions, references, semantic
+  retrieval, and supported semantic edits.
+- Do not replace Serena with broad file scanning when the question is fundamentally
+  about symbols or references.
+- Keep Serena configuration owned by `.agents/agents.json`; do not create
+  parallel ad-hoc Serena configuration.
+
+### Context7
+
+- For current behavior, syntax, configuration, migration, or API details of a
+  library, framework, SDK, API, CLI, or cloud service, MUST use Context7 before
+  relying on model memory.
+- Follow the Context7 workflow defined later in this file: resolve the library
+  first, then query its documentation.
+- Do not substitute generic web search for Context7 when the question is
+  specifically about supported library documentation and Context7 is available.
+
+### Agents CLI
+
+- MUST use the project-configured `agents` CLI to manage MCP servers, skills,
+  integrations, profiles, and generated agent configuration.
+- Do not manually recreate or hand-edit configuration owned by the Agents CLI.
+- After changing shared agent source configuration, MUST run
+  `rtk agents sync`.
+- When validating generated configuration or drift, use
+  `rtk agents sync --check`.
+- Use `rtk agents status` or `rtk agents doctor` for diagnosis before creating
+  manual workarounds.
+
+### Project skills
+
+- Before implementing work, inspect the available project-local skills and use
+  every skill whose documented scope applies to the task.
+- Applicable project skills MUST NOT be silently ignored in favor of generic
+  model behavior.
+- Do not replace project-owned skills with unrelated remote skills.
+- Creating, installing, removing, or updating a skill MUST be followed by
+  `rtk npx skills update -p -y` and verification of the resulting
+  `skills-lock.json` diff.
+- Remote skill content MUST NOT be refreshed merely because a newer upstream
+  version exists unless the user explicitly requests the update.
+
+### Repomix
+
+- MUST use the checked-in Repomix configuration when a task requires a portable
+  repository snapshot, AI-review bundle, or consolidated context covering a
+  substantial portion of the repository.
+- Use `rtk npx repomix@latest` and `repomix.config.json`.
+- Do not create ad-hoc repository dumps when Repomix already defines the required
+  snapshot behavior.
+- Repomix is not required for localized tasks that Graphify, Serena, `ast-grep`,
+  or focused file reads can answer.
+
+### Ladle
+
+- Reusable UI component work MUST use Ladle for isolated visual verification when
+  a relevant story exists or when the change warrants a story.
+- New or materially changed shared UI primitives SHOULD add or update the
+  corresponding Ladle story.
+- Do not treat TypeScript compilation alone as sufficient validation for visual
+  component behavior.
+- Use `rtk pnpm ladle` for interactive verification or
+  `rtk pnpm ladle:build` for build verification.
+
+### Local edits
+
+- Intentional local file edits MUST use `apply_patch` when that editing tool is
+  available.
+- Do not use shell redirection, generated one-off scripts, or full-file rewrites
+  merely to avoid a focused patch.
+- Never edit generated agent output directly; change its source configuration and
+  regenerate it through the owning tool.
+
+### Configured MCP servers
+
+When the active agent exposes the MCP servers configured in
+`.agents/agents.json`, use the matching specialized MCP instead of inventing a
+parallel workflow:
+
+- Filesystem MCP: project-scoped file reads/writes when MCP file operations are
+  the appropriate primitive.
+- Git MCP: repository-aware Git inspection and operations.
+- Fetch MCP: HTTP retrieval when direct fetching is required.
+- Serena MCP: semantic code retrieval and editing as defined above.
+
+Do not manually duplicate MCP configuration in tool-specific files. The
+`agents` source configuration remains canonical.
+
+### Git hooks and validation
+
+- Husky, `lint-staged`, and configured local checks MUST NOT be bypassed to make
+  a change or commit pass.
+- Do not use `--no-verify`, disable hooks, remove checks, weaken thresholds, or
+  add suppressions merely to complete a task.
+- Fix the underlying failure or report the blocking tool failure.
+
+### Tool bypass policy
+
+A required tool may be bypassed only when it is unavailable, broken, incompatible
+with the current operation, or itself the subject of the investigation.
+
+When a required tool is bypassed:
+
+1. identify the tool that could not be used;
+2. state why it could not be used;
+3. use the narrowest reasonable fallback;
+4. preserve equivalent validation whenever possible;
+5. do not weaken repository quality or safety rules.
+
+Convenience, speed, preference, or token usage are not valid reasons to bypass
+required tooling.
+
+
 ## Workflow by task
 
 ### Before changing code
