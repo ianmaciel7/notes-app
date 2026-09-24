@@ -41,6 +41,33 @@ instructions:
 These are project-quality recommendations, not requirements of the AGENTS.md open
 format itself.
 
+## Documentation ownership
+
+Treat repository documentation as bounded contexts. Every rule or fact has exactly
+one canonical owner; other files may route to it but must not restate it.
+
+A project using the standard control-doc set should normally assign ownership like:
+
+| Subject | Canonical owner |
+| --- | --- |
+| Human onboarding | `README.md` |
+| Product intent and non-goals | `INTENT.md` |
+| Domain vocabulary | `CONTEXT.md` |
+| System structure and boundaries | `ARCHITECTURE.md` |
+| Code-writing conventions | `CONVENTIONS.md` |
+| UI/UX system | `DESIGN.md` |
+| Test/verification strategy | `TESTING.md` |
+| Security posture | `SECURITY.md` |
+| Contribution/PR workflow | `CONTRIBUTING.md` |
+| Non-regression quality floors | `CONSTRAINTS.md` |
+| Agent routing, autonomy, precedence, completion | `AGENTS.md` |
+| Specialized agent procedure | matching `SKILL.md` |
+| Machine-readable agent configuration | `.agents/agents.json` |
+
+If detailed responsibility boundaries are needed, keep them in the repository's
+documentation-governance source (for this skill, `SKILL.md`) and keep the root
+`AGENTS.md` to a compact subject-to-owner routing table.
+
 ## Canonical structure
 
 Use only sections that materially help the repository. A strong root file usually
@@ -94,10 +121,10 @@ canonical.
    Tell the agent *when* to read a document or Skill. Do not require loading every
    project document or every vaguely related Skill before every task.
 
-3. **Pointer, not duplicate**
-   Link to `CONVENTIONS.md`, `TESTING.md`, `DESIGN.md`, `SECURITY.md`,
-   `ARCHITECTURE.md`, and Skills instead of copying their detailed rules. One fact
-   should have one canonical owner.
+3. **One canonical owner per context**
+   Treat documents as bounded contexts. A rule or fact belongs to exactly one owner.
+   Other files may route to it or describe an interface with it, but must not restate
+   or independently redefine it.
 
 4. **Precise tool routing**
    Define which specialized tool should handle file search, code structure, symbols,

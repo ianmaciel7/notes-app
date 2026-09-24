@@ -11,21 +11,50 @@ Control documentation establishes the single source of truth for humans and AI a
 
 ---
 
-## The 11 Pillars of Repository Control Documentation
+## Documentation Ownership and Boundaries
 
-| Document | Primary Role | Ground Truth Sources in Repo |
-|---|---|---|
-| **`README.md`** | Human-facing front door: what this is, setup, links to every other pillar | `package.json` scripts, actual run/build commands |
-| **`AGENTS.md`** | AI-agent onboarding brief: run/test commands, non-obvious conventions, framework gotchas | `package.json`, tool-generated agent-rule blocks, `CONVENTIONS.md` |
-| **`CONTEXT.md`** | AI-agent codebase briefing: repo layout, domain model, commands, known gaps (or, when a repo deliberately scopes it narrower, a ubiquitous-language glossary — see `references/context-template.md`) | `src/` structure, migrations/schema, route files, code identifiers |
-| **`INTENT.md`** | Problem statement, product vision, personas, non-goals, key success metrics | `README.md`, issues, specs, product briefs |
-| **`ARCHITECTURE.md`** | Topology, directory boundaries, data flow, state model, tech stack, constraints | `package.json`, `tsconfig.json`, `src/`, entrypoints |
-| **`CONVENTIONS.md`** | Code formatting, naming conventions, import ordering, linting, anti-patterns | `biome.json`, `.eslintrc`, tsconfig, repo patterns |
-| **`DESIGN.md`** | Design system tokens (OKLCH/CSS vars), typography, radius, elevation, responsive behavior, UI primitives catalog, representative component token composition | `components.json`, `globals.css`, `src/components/ui/` |
-| **`TESTING.md`** | Testing pyramid, test runners, visual stories, mocking, quality gates, CI | `package.json` scripts, test configs, Ladle/Vitest |
-| **`SECURITY.md`** | Threat models, secret handling, auth/authz, input validation, disclosure policy | Auth handlers, middleware, env validation, dependencies |
-| **`CONTRIBUTING.md`** | Setup guide, branch naming, Conventional Commits, pre-flight verification checklist | Git history, package manager, CI scripts, lint scripts |
-| **`CONSTRAINTS.md`** | Project quality contract: floor rules, measurable gates, baselines, and owned exceptions | package scripts, configs, CI, existing checks, current measurements |
+Every project rule, fact, threshold, workflow, or policy MUST have exactly one
+canonical owner. Other files may reference that owner but MUST NOT copy, restate, or
+independently redefine the same rule. If two documents claim ownership of the same
+fact, choose the document whose responsibility matches the table below and replace
+the other copy with a pointer.
+
+| Document / artifact | Canonical responsibility | Radius of action | Explicitly does NOT own |
+|---|---|---|---|
+| **`README.md`** | Human-facing front door | Project summary, prerequisites, installation, basic run commands, documentation index | Architecture rules, agent behavior, detailed testing, code style |
+| **`INTENT.md`** | Product intent | Problem, vision, users, goals, non-goals, success criteria, product boundaries | Implementation details, commands, architecture decisions |
+| **`CONTEXT.md`** | Domain language and conceptual context | Ubiquitous language, domain concepts, definitions, relationships, terms to avoid | Technical architecture, code conventions, tool procedures |
+| **`ARCHITECTURE.md`** | System structure | Modules, layers, dependency direction, boundaries, topology, data flow, architectural decisions | Formatting/style rules, test commands, visual design |
+| **`CONVENTIONS.md`** | Code-writing rules | Naming, TypeScript/React/Next.js conventions, imports, composition, shadcn/Base UI coding patterns | Product scope, architecture topology, test strategy, Git workflow |
+| **`DESIGN.md`** | Product UI/UX system | Design tokens, typography, spacing, responsive behavior, UI anatomy, interaction/visual rules | Git workflow, backend architecture, general tooling |
+| **`TESTING.md`** | Verification strategy | Test levels, runners, coverage approach, fixtures/mocks, Ladle, mutation testing, browser verification | Code-style rules, contribution process, global quality-floor ownership |
+| **`SECURITY.md`** | Security posture | Threat model, auth/authz, secrets, validation, sensitive-data handling, disclosure/security practices | General coding style, unrelated architecture, PR process |
+| **`CONTRIBUTING.md`** | Human contribution workflow | Environment setup, branches, commits, PR process, contributor pre-flight checklist | Detailed code conventions, test strategy, architecture specification |
+| **`CONSTRAINTS.md`** | Non-regression quality contract | Blocking floors, measurable thresholds, gates, baselines, owned exceptions | Tutorials, tool manuals, implementation style |
+| **`AGENTS.md`** | Agent router and always-on contract | Scope/precedence, doc/tool/skill routing, agent decision boundaries, anti-bypass invariants, definition of done | Full tool manuals, detailed code conventions, test matrices already owned elsewhere |
+| **`RTK.md`** | RTK-specific usage | RTK behavior, supported usage, exceptions, troubleshooting | General shell policy or unrelated tools |
+| **`.agents/agents.json`** | Machine-readable agent configuration | MCP servers, integrations, profiles, targets, synchronization behavior | Long-form human policy or procedural documentation |
+| **`.agents/skills/*/SKILL.md`** | Specialized execution workflow | Trigger and procedure for one focused agent capability | Global repository policy unrelated to that skill |
+| **`skills-lock.json`** | Locked remote-skill provenance/state | Source, path, hash/version state required for reproducibility | Human instructions, tool procedures, project policy |
+
+### Context ownership rule
+
+Use the following decision test before adding documentation:
+
+1. Identify the **subject** of the new fact or rule.
+2. Select exactly one canonical owner from the table above.
+3. Add the full rule only to that owner.
+4. In other files, add only a short pointer when routing is necessary.
+5. If a duplicate already exists, keep the canonical copy and replace the others
+   with references.
+6. If no owner fits, define a new bounded context explicitly instead of spreading
+   the rule across multiple files.
+
+### Boundary rule
+
+A document may mention another context only to route the reader, explain an interface
+between contexts, or state a dependency. Mentioning another context does not transfer
+ownership. Detailed procedures belong to their owner.
 
 ---
 
@@ -38,8 +67,10 @@ Control documentation establishes the single source of truth for humans and AI a
    Never use hardcoded absolute machine paths (`C:\Users\...` or `/home/...`). Always write repo-relative paths (`./src/app/...`, `ARCHITECTURE.md`).
 3. **Living & Anti-Drift**:
    When code, styling, or architecture evolves (e.g. adding shadcn components, migrating to Tailwind v4, adding test runners), immediately update the corresponding control documents.
-4. **Cross-Document Coherence**:
-   Prevent contradictions across docs (e.g., if `CONVENTIONS.md` mandates Biome, `CONTRIBUTING.md` must list `pnpm lint` via Biome, not ESLint).
+4. **Cross-Document Coherence Without Duplication**:
+   Prevent contradictions across docs, but do not solve them by copying the same rule
+   everywhere. The canonical owner defines the rule; dependent documents link to it
+   or expose only the minimum interface needed for their own context.
 5. **Single Source of Truth Within a Document, Not Just Across Documents**:
    Cross-document coherence (#4) isn't the only place duplication hides — the same fact can drift against itself *inside one file* (e.g. a component/story count repeated in prose in two sections of the same doc). When auditing, check a document against itself, not only against other documents: if a fact appears twice in one file as an independently hand-typed value, one occurrence should be the source and the other a pointer to it.
    **Exception — `DESIGN.md`'s frontmatter/body relationship is not this problem.** The [design.md spec](references/design-template.md) defines the YAML frontmatter as normative and the Markdown body as rationale that *references* those tokens via `{group.key}` syntax. A body table showing `{colors.primary}`'s value for human readability, sourced from the same frontmatter, is a rendering of the source, not a second independent copy — don't strip `DESIGN.md`'s frontmatter down to bare metadata under this principle, as an earlier pass in this skill's history mistakenly did before this skill knew the real external spec existed.

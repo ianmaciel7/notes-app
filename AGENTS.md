@@ -34,24 +34,36 @@ Keep the root `AGENTS.md` short, high-signal, and routing-oriented:
 Treat the repository as the source of truth. Inspect files and run tools rather than
 assuming a command, path, dependency, or behavior exists.
 
-Before writing code, read `CONSTRAINTS.md`. It is the quality floor: do not weaken a
-threshold, delete or soften a test, add a suppression, disable a hook, or create an
-exception merely to make a task pass.
+Before writing code, read `CONSTRAINTS.md`. It owns the project's non-negotiable
+quality floor. Do not weaken a threshold, delete or soften a test, add a suppression,
+disable a hook, or create an exception merely to make a task pass.
 
-Read other control docs only when their scope is relevant:
+### Documentation ownership
 
-| Need | Read |
+Each rule or fact MUST have exactly one canonical owner. Other documents may point
+to that owner, but MUST NOT restate or independently redefine the same rule.
+
+| Context / question | Canonical owner |
 | --- | --- |
-| Product purpose, non-goals, open questions | `INTENT.md` |
-| Architecture, boundaries, data flow | `ARCHITECTURE.md` |
-| Vocabulary and domain terms | `CONTEXT.md` |
-| Coding and framework conventions | `CONVENTIONS.md` |
-| UI system, tokens, primitives | `DESIGN.md` |
-| Test strategy and quality checks | `TESTING.md` |
-| Security-sensitive work | `SECURITY.md` |
-| Branch, commit, and PR workflow | `CONTRIBUTING.md` |
+| What is the project and how does a human start it? | `README.md` |
+| Why does the product exist; what is in/out of scope? | `INTENT.md` |
+| What domain terms and concepts mean | `CONTEXT.md` |
+| How the system is structured and where boundaries live | `ARCHITECTURE.md` |
+| How code is written | `CONVENTIONS.md` |
+| How the UI should look and behave | `DESIGN.md` |
+| How behavior is tested and verified | `TESTING.md` |
+| How the system is protected | `SECURITY.md` |
+| How humans contribute, commit, branch, and submit PRs | `CONTRIBUTING.md` |
+| What quality floors may never regress | `CONSTRAINTS.md` |
+| How agents navigate docs, tools, skills, scope, and completion | `AGENTS.md` |
+| How RTK itself is used | `RTK.md` |
+| Machine-readable agent/MCP/integration configuration | `.agents/agents.json` |
+| How to execute a specialized agent workflow | matching `.agents/skills/*/SKILL.md` |
+| Locked provenance/state of remote skills | `skills-lock.json` |
 
-Do not preload every document for every task.
+Detailed responsibility boundaries and explicit out-of-scope ownership are canonical
+in `.agents/skills/context-manager/SKILL.md`. Read only the owner relevant to the
+task; do not preload every document.
 
 ## Tool routing
 
@@ -76,29 +88,6 @@ for convenience, familiarity, speed, or token savings.
 Configured MCP servers in `.agents/agents.json` are canonical. When the active agent
 exposes a matching specialized MCP (Filesystem, Git, Fetch, Serena), use it instead
 of inventing parallel configuration or a less direct workflow.
-
-### Tool-specific triggers
-
-- **RTK**: prefix supported project shell commands with `rtk`. Direct execution is
-  allowed only when RTK is unavailable, incompatible with the operation, changes
-  required behavior, or is itself being diagnosed.
-- **Graphify**: for codebase, dependency, ownership, architecture, or cross-file
-  questions, start with `graphify query` when the graph exists. Use the Graphify
-  skill for `path`/`explain` details. After code changes, run `graphify update .`
-  when Graphify is available.
-- **ast-grep**: prefer structural search when text matching can miss equivalent code
-  shapes. Use the installed `ast-grep` and `ast-grep-outline` skills for procedure.
-- **Serena**: use for symbol-aware retrieval and supported semantic edits; do not
-  replace it with broad file scanning when the task is fundamentally about symbols.
-- **Context7**: for current library/API behavior, resolve and query documentation
-  before relying on model memory. Follow `.agents/skills/context7-cli/SKILL.md`;
-  do not duplicate its full procedure here.
-- **Agents CLI**: use `rtk agents status`/`doctor` for diagnosis, `rtk agents sync`
-  after source configuration changes, and `rtk agents sync --check` for drift.
-- **Repomix**: use only when broad portable context or an AI-review bundle is needed;
-  do not use it for localized work that narrower tools can answer.
-- **Ladle**: use for isolated verification of reusable UI when a relevant story exists
-  or the change warrants one; compilation alone is not visual verification.
 
 A required tool may be bypassed only when it is unavailable, broken, incompatible
 with the operation, or under investigation. State the reason, use the narrowest
@@ -127,9 +116,10 @@ Treat `.agents/skills/` and `skills-lock.json` as project-owned configuration:
    `CONSTRAINTS.md`.
 2. Use the tool-routing rules above to narrow context before broad file reads.
 3. Read only the control documents and skills relevant to the task.
-4. For Next.js work, read the applicable guide under `node_modules/next/dist/docs/`
-   before relying on remembered APIs.
-5. For third-party library or API behavior, use Context7 before implementation.
+4. Follow the generated Next.js instructions at the top of this file when Next.js
+   behavior is in scope.
+5. For third-party library or API behavior, route through the applicable documentation
+   skill rather than duplicating its procedure here.
 
 ### While changing code
 
@@ -152,26 +142,16 @@ Do not perform destructive history rewrites, deployments, secret rotation, billi
 changes, or other external side effects unless the user explicitly requests them.
 Do not weaken quality or safety controls to avoid a failure.
 
-## Verification by risk
+## Verification routing
 
-Run the smallest set that provides confidence for the change; do not run expensive
-checks indiscriminately.
+`CONSTRAINTS.md` owns blocking quality floors, `TESTING.md` owns test strategy and
+verification procedures, and `CONTRIBUTING.md` owns the pre-PR checklist. Use the
+smallest risk-appropriate checks required by those owners; do not duplicate their
+command matrices here.
 
-| Change | Minimum verification |
-| --- | --- |
-| Any source/config change | `rtk pnpm lint`, `rtk pnpm test`, `rtk pnpm check:types` |
-| Dependency/import/module change | `rtk pnpm deps:check`, `rtk pnpm knip` |
-| Testable logic/quality tooling | `rtk pnpm test:coverage`, `rtk pnpm run check:duplication`; mutation when confidence warrants it |
-| Security-sensitive/dependency change | `rtk pnpm check:security`, `rtk pnpm check:osv` |
-| UI/route/styling change | `rtk pnpm build`; Ladle and/or `rtk pnpm lighthouse` when visual, accessibility, or performance behavior is in scope |
-| GitHub Actions change | `rtk pnpm lint:actions`; use `zizmor --offline .` for workflow security |
-| Agent/MCP/skill source change | `rtk agents sync --check`; verify `skills-lock.json` for locked-skill changes |
-
-For a broad task-end gate when the scope warrants it, use `rtk pnpm check:fast`,
-`rtk pnpm check:security`, and `rtk pnpm check:osv`.
-
-Husky and `lint-staged` are mandatory local safeguards. Do not use `--no-verify`,
-disable hooks, lower thresholds, remove checks, or add suppressions merely to pass.
+Quality controls remain non-bypassable. Do not use `--no-verify`, disable hooks,
+lower thresholds, remove checks, delete/soften tests, or add suppressions merely to
+obtain a pass.
 
 ## Definition of done
 
@@ -194,4 +174,5 @@ detailed manual, move that procedure to its owning Skill or control document and
 leave a concise trigger/pointer here. Prefer nested `AGENTS.md` files for rules that
 apply only to a specific subtree.
 
-For RTK-specific details, see `RTK.md`.
+For RTK-specific details, see `RTK.md`. For documentation ownership and boundary
+definitions, `.agents/skills/context-manager/SKILL.md` is canonical.
