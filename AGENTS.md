@@ -8,59 +8,95 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-Read `CONSTRAINTS.md` before writing code. Do not weaken it to make a change pass.
+## Operating rules
 
-## Setup commands
-- Install deps: `rtk pnpm install`
-- Start dev server: `rtk pnpm dev`
-- Build: `rtk pnpm build`
-- Check dependency boundaries: `rtk pnpm deps:check`
-- Check unused files, dependencies, and exports: `rtk pnpm knip`
-- Run the task-end quality contract: `rtk pnpm check:fast`, `rtk pnpm check:security`, and `rtk pnpm check:osv`
-- Run browser verification: `rtk pnpm lighthouse` (production build plus Lighthouse CI)
-- Check GitHub Actions workflows: `rtk pnpm lint:actions` (requires the system `actionlint` binary; no workflows exist yet)
-- Audit repository security inputs: `zizmor --offline .` (install with `uv tool install zizmor`)
-- Run staged-file checks: `rtk pnpm run lint-staged` (Biome via lint-staged)
-- Pack the repository for AI review: `rtk npx repomix@latest` (uses `repomix.config.json`)
+Read `CONSTRAINTS.md` before writing code. It is the quality contract: never weaken
+it, delete a test, add a checker suppression, or create an exception just to make
+the task pass. Read the relevant project document before changing its subject:
+`ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `TESTING.md`, `SECURITY.md`, or
+`CONTRIBUTING.md`.
 
-Use `rtk` before shell commands so command output stays compact. Run RTK's own
-commands directly, for example `rtk gain` and `rtk init --codex`.
+Treat the repository as the source of truth. Always use a tool to inspect files,
+search, edit, or verify; do not infer that a command or file was checked. Keep
+paths repository-relative in documentation.
 
-## Agent tooling
+## Tool selection guide
 
-### Tool-use requirement
+Use the smallest tool that answers the question:
 
-Always call the available tools when inspecting the repository, reading or searching files, making edits, or verifying changes. Do not claim to have checked a file, command, or external state unless the relevant tool was actually called. For codebase and documentation questions, inspect the current repository state before answering and treat tool output as the source of truth.
+| Need | Use | When and how |
+| --- | --- | --- |
+| List or read files | `rg --files`, `rg`, shell read commands | Start here for names and plain-text matches. Prefer `rg` over recursive `grep`. |
+| Understand unfamiliar code | `graphify` first, then `ast-grep outline` | For codebase/architecture questions, run `graphify query` when `graphify-out/graph.json` exists. Use `graphify path` for relationships and `graphify explain` for a focused concept. Use `ast-grep outline` to map unfamiliar files. |
+| Find syntax or code structure | `ast-grep` | Use structural search when text search could miss equivalent syntax or when locating imports, exports, calls, or component patterns. |
+| Navigate symbols or make semantic edits | Serena | Use for symbol-aware retrieval, references, definitions, and edits when the operation benefits from code semantics. Keep its server definition in `.agents/agents.json`. |
+| Make a local file edit | `apply_patch` | Use for all intentional edits, including documentation. Do not use shell redirection or scripts to rewrite files. Never edit generated tool output directly. |
+| Run a local command | `exec_command` with `rtk` | Prefix project commands with `rtk` for compact output. Use the package scripts below instead of retyping tool invocations. |
+| Configure agents, MCP, skills, or profiles | `agents` CLI | Use `rtk agents status`/`doctor` to diagnose, `rtk agents sync` after source changes, and `rtk agents sync --check` to detect drift. Source of truth: `.agents/agents.json` and `.agents/skills/`. |
+| Research a library, framework, SDK, API, CLI, or cloud service | Context7 CLI | Run `rtk npx ctx7@latest library ...` first, then `docs ...` for the selected ID. Use no more than three Context7 commands per question and run them outside the default sandbox. |
+| Browse current public information | Web search/fetch | Use only when the user asks to browse or facts may have changed. Prefer official or primary sources; cite web sources in the answer. |
+| Verify a live browser or UI flow | CUA/browser tool | Use for interaction with a running browser, screenshots, or end-to-end visual checks. Use `lighthouse` for repeatable project-level audits. |
+| Create a repository snapshot | Repomix | Run `rtk npx repomix@latest` when an AI-review bundle is requested; follow `repomix.config.json`. |
 
-Always use the project-configured `@agents-dev/cli` (`agents`) for MCP servers, skills, integrations, profiles, and generated tool configuration. Treat `.agents/agents.json` and `.agents/skills/` as the source of truth; do not edit generated tool files directly. Run `rtk agents sync` after source changes and `rtk agents sync --check` to verify drift. Use `rtk agents status` or `rtk agents doctor` before troubleshooting. Keep secrets in `.agents/local.json`, never in committed configuration.
+If PowerShell blocks the global `agents` shim, use `agents.cmd`. Keep secrets in
+`.agents/local.json`, never in committed configuration. Creating, installing,
+removing, or updating a skill also requires `rtk npx skills update -p -y` and a
+verified `skills-lock.json` diff.
 
-Serena is enabled as the project MCP server for Codex. Use it for semantic code navigation, symbol-aware retrieval, and edits when those operations are useful; it starts with `--context=codex --project-from-cwd` and selects this repository from the current working directory. Project-specific Serena settings live in `.serena/project.yml`; use `.serena/project.local.yml` for local-only overrides. Keep the Serena server definition in `.agents/agents.json` and regenerate tool configuration with `rtk agents sync` rather than editing `.codex/config.toml` directly.
+## Workflow by task
 
-When a code search depends on syntax or code structure, prefer `ast-grep` structural search over text-only search. Use `ast-grep outline` to get a compact map of unfamiliar source files before reading or editing them; use `rg` for plain-text searches.
+### Before changing code
 
-Creating, installing, removing, or updating a skill always requires updating and committing the legacy `skills-lock.json` with `rtk npx skills update -p -y`. Even when the command produces only reordered entries or refreshed hashes, include its result and verify the lock file before finishing.
+1. Inspect `git status --short`, the relevant files, `package.json`, and
+   `CONSTRAINTS.md`.
+2. For a codebase question, query graphify first when its graph exists; use
+   `ast-grep` and Serena only as needed to narrow the scope.
+3. Read the relevant project documentation. For Next.js changes, also read the
+   applicable guide under `node_modules/next/dist/docs/`.
+4. For library-specific behavior or API syntax, use Context7 before relying on
+   memory.
 
-If PowerShell blocks the global `agents` script shim, invoke the equivalent `agents.cmd` command.
+### While changing code
 
-## Code style
-- Biome is the only linter/formatter (no ESLint/Prettier). TypeScript strict setting. Named exports only in `src/components/ui/` — no `export default` outside Next.js route entrypoints.
-- Build reusable UI through composition: prefer compound components and `children` over boolean flag props or `renderX` customization props. Lift shared state into providers with an explicit `state`/`actions`/`meta` context contract.
-- For React 19, pass `ref` as a regular prop and use `use()` for context where appropriate; do not introduce `forwardRef` or `useContext` in new code.
-- For shadcn/Base UI primitives, use existing components and variants first, semantic theme tokens, `cn()` for conditional classes, `gap-*` rather than `space-*`, and the project’s `render` slot API rather than assuming Radix `asChild`.
-- See `CONVENTIONS.md` for full naming/import rules and `DESIGN.md` for the UI primitive/token catalog.
+- Prefer existing patterns, primitives, tokens, and scripts.
+- Use Biome, strict TypeScript, named exports in `src/components/ui/`, and
+  composition (`children`/compound components) instead of boolean-prop matrices.
+- For React 19, pass `ref` as a regular prop and use `use()` for new context
+  access; do not introduce `forwardRef` or `useContext` without a documented need.
+- For shadcn/Base UI, use existing variants, semantic tokens, `cn()`, `gap-*`,
+  and the installed `render` slot API; do not assume Radix `asChild`.
+- When changing agent configuration, edit only source configuration and then run
+  `rtk agents sync`; never edit `.codex` or generated agent files directly.
 
-## Testing instructions
-- Run `rtk pnpm test`, `rtk pnpm lint`, `rtk pnpm build`, `rtk pnpm deps:check`, and `rtk pnpm knip` before considering a task done.
-- Run `rtk pnpm test:coverage`, `rtk pnpm test:mutation`, and `rtk pnpm run check:duplication` when changing testable logic or quality tooling.
-- A Vitest unit-test foundation is configured via `pnpm test`; run `rtk pnpm test` alongside `rtk pnpm lint`, `rtk pnpm build`, `rtk pnpm deps:check`, and `rtk pnpm knip` before considering a task done.
-- Also run `rtk pnpm check:fast`, `rtk pnpm check:security`, and `rtk pnpm check:osv` to enforce the constraints in `CONSTRAINTS.md` and scan dependencies against OSV.
-- The Husky pre-commit hook runs `pnpm run lint-staged` before `pnpm run check:fast`.
-- The optional `.pre-commit-config.yaml` also provides an `actionlint-system` hook for GitHub Actions workflows; install `actionlint` locally before enabling pre-commit.
-- Run `rtk pnpm lighthouse` for production-page accessibility and performance verification; accessibility is enforced and other Lighthouse categories are warning-only.
-- See `TESTING.md` for current coverage status (Ladle stories only, 1 of 61 components covered).
+### After changing code or tooling
 
-## PR instructions
-- See `CONTRIBUTING.md` for branch naming, commit format (Conventional Commits), and the pre-flight checklist.
+Run checks according to risk:
+
+| Change | Minimum verification |
+| --- | --- |
+| Any source or config change | `rtk pnpm lint`, `rtk pnpm test`, `rtk pnpm check:types` |
+| Dependency, import, or module change | `rtk pnpm deps:check`, `rtk pnpm knip` |
+| Testable logic or quality tooling | `rtk pnpm test:coverage`, `rtk pnpm run check:duplication`; use `rtk pnpm test:mutation` when mutation confidence matters |
+| Security-sensitive or dependency change | `rtk pnpm check:security`, `rtk pnpm check:osv`; use `zizmor --offline .` for workflow security |
+| UI, route, or styling change | `rtk pnpm build`, then `rtk pnpm lighthouse` when browser accessibility/performance is in scope |
+| GitHub Actions change | `rtk pnpm lint:actions` (requires the system `actionlint` binary) |
+| Agent/MCP/skill source change | `rtk agents sync --check`; for skill changes also verify `skills-lock.json` |
+
+For a complete task-end gate, run `rtk pnpm check:fast`,
+`rtk pnpm check:security`, and `rtk pnpm check:osv`. Before a PR, also run the
+checks listed in `CONTRIBUTING.md`; the Husky hook runs staged Biome checks and
+`check:fast` before commits.
+
+## Project conventions
+
+- Biome is the only formatter/linter; there is no ESLint or Prettier.
+- TypeScript is strict. Do not add `any`, `@ts-ignore`, `eslint-disable`, or
+  `biome-ignore` to bypass a check.
+- Shared UI belongs in the established shadcn/Base UI anatomy and should get a
+  Ladle story when a new or changed primitive needs coverage.
+- Keep architecture, design, security, testing, and intent documentation aligned
+  with significant changes. See each project document for its scope.
+- Use Conventional Commits and the PR checklist in `CONTRIBUTING.md`.
 
 <!-- context7 -->
 Use the `ctx7` CLI to fetch current documentation whenever the user asks about a library, framework, SDK, API, CLI tool, or cloud service — even well-known ones like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. This includes API syntax, configuration, version migration, library-specific debugging, setup instructions, and CLI tool usage. Use even when you think you know the answer — your training data may not reflect recent changes. Prefer this over web search for library docs.
