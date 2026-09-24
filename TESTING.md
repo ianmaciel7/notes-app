@@ -1,66 +1,67 @@
 # Testing Strategy & Guidelines
 
-## 1. Testing Pyramid & Philosophy
+This file owns **how behavior is verified**. Blocking thresholds belong to
+`CONSTRAINTS.md`; security scanning policy belongs to `SECURITY.md`.
 
-The repository has a small unit-test foundation; integration and E2E coverage
-remain aspirational. Verification layers currently include:
+## 1. Verification Model
 
-- Unit tests with Vitest.
-- Component and visual stories with Ladle.
-- Production browser auditing with Lighthouse CI.
-- Mutation testing with StrykerJS.
-- Source duplication detection with jscpd.
+The repository currently uses:
 
-## 2. Test Frameworks & Toolchain
+- unit tests for executable logic;
+- Ladle stories for isolated component states and interactions;
+- Lighthouse CI for production-browser accessibility/performance auditing;
+- mutation testing for production logic with focused tests.
 
-- **Test runner**: Vitest 4.1.11 (`rtk pnpm test`).
-- **Coverage**: V8 coverage via `rtk pnpm test:coverage`.
-- **Component story workbench**: Ladle 5.1.1 (`rtk pnpm ladle`).
-- **E2E**: None installed yet.
-- **Mutation testing**: StrykerJS 10 (`rtk pnpm test:mutation`) targets
-  `src/lib/utils.ts` until more production logic has focused tests.
-- **Duplication**: jscpd 5 (`rtk pnpm run check:duplication`) with a 10% ceiling.
-- **Browser audit**: Lighthouse CI 0.15.1 (`rtk pnpm lighthouse`) audits the
-  production home page; accessibility is enforced while other categories are
-  warning-only until a baseline is established.
+Integration and end-to-end suites are not configured yet.
 
-## 3. Test Commands
+## 2. Toolchain
+
+- **Vitest**: unit test runner.
+- **V8 coverage**: coverage reporting through Vitest.
+- **Ladle**: component story workbench.
+- **StrykerJS**: mutation testing.
+- **Lighthouse CI**: production-browser audit.
+- **E2E runner**: none configured.
+
+Exact versions are owned by `package.json`.
+
+## 3. Commands
 
 ```bash
 rtk pnpm test
+rtk pnpm test:watch
 rtk pnpm test:coverage
 rtk pnpm test:mutation
-rtk pnpm run check:duplication
 rtk pnpm ladle
 rtk pnpm ladle:build
 rtk pnpm lighthouse
 ```
 
-`check:fast` covers types, focused lint, dependency boundaries, the floor guard,
-and duplication. `check:security` audits high and critical dependency
-advisories; `check:osv` scans manifests and lockfiles with OSV-Scanner v2.
+Use the smallest relevant subset during development. Task-end/merge requirements and
+numeric thresholds are owned by `CONSTRAINTS.md` and `CONTRIBUTING.md`.
 
-## 4. Test File Conventions & Locations
+## 4. File Conventions
 
-- Story files: colocated next to the component as `<name>.stories.tsx`.
-- Unit tests: colocated under `src/` as `*.test.ts` or `*.test.tsx`.
-- Current unit coverage starts with `src/lib/utils.test.ts`.
-- The reusable UI catalog still has many components without stories.
+- Unit tests are colocated under `src/` as `*.test.ts` or `*.test.tsx`.
+- Component stories are colocated as `*.stories.tsx`.
+- The current unit-test foundation includes `src/lib/utils.test.ts`.
+- New or materially changed shared UI should add or update a Ladle story when visual
+  or interaction behavior needs verification.
 
-New or changed primitives should add or update a Ladle story covering
-composition states, keyboard/focus behavior, required accessibility subparts,
-and loading/empty/error states where applicable.
+## 5. Test Design
 
-## 5. Mocking & Fixtures
+- Test observable behavior rather than implementation details.
+- Keep unit tests deterministic and isolated.
+- Add integration tests when multiple application boundaries must be verified
+  together rather than forcing that behavior into unit mocks.
+- Add E2E coverage only when real critical user flows exist.
+- Avoid over-mocking; there is currently no product network/database layer to mock.
 
-There is no data, network, or backend layer to mock yet. When one is introduced,
-prefer behavior-focused tests and avoid over-mocking.
+## 6. Automation Status
 
-## 6. CI Quality Gates & Coverage Requirements
+GitHub Actions exists for CodeQL security analysis, but the Vitest/Ladle/Lighthouse
+verification commands are not currently wired into a general test CI pipeline.
+Do not describe local test commands as CI gates until a workflow actually runs them.
 
-There is no CI configured yet. Until CI is added, treat the commands above plus
-`rtk pnpm lint`, `rtk pnpm build`, `rtk pnpm deps:check`, and `rtk pnpm knip` as
-the manual pre-merge checks.
-
-Agent behavioral evaluation scenarios live in `.agents/evals/README.md` and
-remain runner-neutral until an official provider is selected.
+Agent-behavior evaluation scenarios are separate from product testing and live under
+`.agents/evals/`.

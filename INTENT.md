@@ -1,27 +1,41 @@
 # Intent: Notes App
 
-**Author:** Ian Maciel
-**Status:** Draft
+**Author:** Ian Maciel  
+**Status:** Draft  
 **Last Updated:** 2026-09-23
 
 ## Problem
-The repository is named `notes-app`, but no note-taking feature exists yet — `src/app/page.tsx` is still the unedited `create-next-app` starter page. What exists so far is a component and design-system foundation (shadcn `base-nova` primitives on Base UI, OKLCH tokens, Ladle stories) intended to be built on top of.
+
+The repository is named `notes-app`, but a note-taking product has not yet been
+defined or implemented. The current repository is a product shell and UI foundation,
+so implementation decisions must not silently become product requirements.
 
 ## Proposed Outcome
-Not yet defined. The functional scope of "notes" (creating/editing/organizing notes, storage, sync, sharing, etc.) has no spec in the repo. This document should be revised once that scope is decided — until then it records the current (pre-feature) state honestly rather than inventing a product spec.
 
-## Affected Users and Systems
-- **Target Personas / Users:** TBD — no persona definitions exist in the repo.
-- **Systems & Components:** Currently limited to the Next.js App Router shell (`src/app/`), the shared UI primitive library (`src/components/ui/`), and the theme provider (`src/components/theme-provider.tsx`). There is no data layer, API, or auth system yet (see `ARCHITECTURE.md` and `SECURITY.md`).
+Define a notes product whose core behavior, target users, persistence model, and
+scope are explicit enough to guide implementation without inventing requirements.
+Until those decisions are made, this repository remains a pre-MVP foundation.
 
-## Constraints
-- **Security & Privacy:** No PII or auth model exists yet; none should be introduced without a corresponding `SECURITY.md` update.
-- **Architecture & Tech Stack:** New work must build on the existing stack — Next.js App Router, `@base-ui/react` + shadcn `base-nova`, Tailwind CSS v4, Biome. See `ARCHITECTURE.md` §3.
-- **Performance & Budgets:** Not yet measured or budgeted.
-- **Scope / Non-Goals:** Not yet defined.
+## Affected Users
+
+The primary user and target use case are not yet defined.
+
+## Product Boundaries
+
+While this intent remains Draft:
+
+- do not assume notes are plain text, rich text, block-based, or file-based;
+- do not assume authentication, synchronization, sharing, collaboration, or AI;
+- do not infer product requirements from installed components or dependencies;
+- implementation constraints belong to the relevant engineering control document,
+  not to product intent.
 
 ## Open Questions
-- [ ] What is a "note" in this product (plain text, rich text, attachments)?
-- [ ] Where is note data persisted (local-only, a backend, a third-party store)?
-- [ ] Is authentication required, and if so, single-user or multi-user?
-- [ ] Do the conversational/chat UI primitives already in `src/components/ui/` (`bubble.tsx`, `message.tsx`, `attachment.tsx`, `questionnaire.tsx`) imply an AI-assisted notes feature, or are they unused scaffolding from the shadcn install?
+
+- [ ] What is a "note" in this product?
+- [ ] Who is the primary user and what problem are they solving?
+- [ ] How should notes be organized, searched, and related?
+- [ ] Where is note data persisted and synchronized, if at all?
+- [ ] Is authentication required, and is the product single-user or multi-user?
+- [ ] Are collaboration, sharing, attachments, highlights, or AI assistance in scope?
+- [ ] What defines an MVP useful enough to validate?

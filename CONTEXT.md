@@ -1,21 +1,25 @@
-# Notes App
+# Notes App Context
 
-The application shell and component foundation for the notes application workspace.
+Canonical vocabulary for concepts used in code, documentation, commits, and review.
 
 ## Language
 
-**Application Shell**:
-The root layout and structural framing that provides global typography, viewport setup, and theme context for the application.
+**Application Shell**  
+The structural application frame that provides global layout, typography, viewport,
+and theme context.  
 _Avoid_: Frame, wrapper, master page, template
 
-**Theme**:
-The visual appearance mode (light, dark, or system-inherited) managed across the interface by the theme provider. See `ARCHITECTURE.md` §4 for how it's wired.
+**Theme**  
+The visual appearance mode applied across the interface: light, dark, or inherited
+from the system preference. Runtime wiring belongs to `ARCHITECTURE.md`.  
 _Avoid_: Skin, palette, colorway, mode
 
-**UI Primitive**:
-A foundational, accessible user interface element built on Base UI and styled with the base-nova design tokens.
-_Avoid_: Widget, control, gadget, element
+**UI Primitive**  
+A reusable, domain-neutral interface building block from the shared UI layer. Its
+visual semantics belong to `DESIGN.md` and coding rules to `CONVENTIONS.md`.  
+_Avoid_: Widget, gadget
 
-**Component Story**:
-An isolated visual representation and state preview of a UI component rendered within the Ladle development environment.
-_Avoid_: Mockup, preview fixture, component test
+**Component Story**  
+An isolated state/example of a UI component rendered by the component workbench for
+visual and interaction verification. Testing policy belongs to `TESTING.md`.  
+_Avoid_: Mockup, preview fixture

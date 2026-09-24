@@ -92,8 +92,8 @@ spacing:
   card-sm: "--spacing(3)"
   calendar-cell: "--spacing(7)"
 
-# Representative only — 4 of 61 primitives. Full catalog lives in the "Components" body
-# section, grouped by category; exact class strings live in source, never copied here.
+# Representative only — four primitives illustrate the composition pattern.
+# Exact component inventory and class strings live in source.
 components:
   button-default:
     backgroundColor: "{colors.primary}"
@@ -118,143 +118,116 @@ components:
 
 # Design System Specification
 
-Shared UI primitives currently import `cn()` directly from the installed `cn` package; `@/lib/utils` re-exports the same function for application code.
+This file owns the **visual and interaction language**. Exact implementation details
+belong to source code and code-writing rules to `CONVENTIONS.md`. The YAML
+frontmatter above mirrors design tokens from `src/app/globals.css`; if they diverge,
+the stylesheet is ground truth and this document is stale.
 
 ## Overview
 
-This repository uses **shadcn/ui** with the **`base-nova`** design preset, implemented on top of **`@base-ui/react`** accessible unstyled primitives and **Tailwind CSS v4**. Theme tokens are declared in `src/app/globals.css` and mapped via `@theme inline` into Tailwind utility classes — the YAML frontmatter above mirrors that file and is the normative source; if the two ever disagree, `globals.css` wins and this document is out of date.
+The system uses shadcn/ui's `base-nova` preset on Base UI with Tailwind CSS v4.
+The current visual language is deliberately restrained:
 
-The visual language emphasizes:
-- High contrast, neutral color system defined via perceptually uniform **OKLCH** color tokens — `{colors.destructive}` is the only non-achromatic hue in the whole system.
-- Accessible keyboard focus and interaction states with `@base-ui/react` and `class-variance-authority` (CVA).
-- Seamless light/dark switching via `next-themes` toggling a `.dark` class (see `ARCHITECTURE.md` §4 for the runtime mechanism — not repeated here).
-- Definition over drop-shadow: surfaces mostly separate via a 1px `ring-foreground/10` hairline rather than heavy elevation (see Elevation & Depth below).
-- Component development and state verification via **Ladle** (see Storybook section at the end).
+- neutral, high-contrast OKLCH surfaces and text;
+- semantic color roles instead of raw color selection;
+- light/dark themes driven by CSS variables;
+- modest depth, usually rings or restrained shadows;
+- accessible focus and interaction states.
 
-**Not yet established** — don't assume these exist when writing UI, and don't invent values for them: a formal elevation/shadow token scale, a custom responsive breakpoint scale, and a grid/container/layout system (no app shell or marketing surface exists yet — see `INTENT.md`).
-
----
+Not yet established: a product-specific grid/container system, custom breakpoint
+scale, or formal elevation hierarchy. Do not invent those systems before real
+product surfaces require them.
 
 ## Colors
 
-Roles fall into three groups: **surface** (`{colors.background}`/`{colors.card}`/`{colors.popover}`/`{colors.sidebar}` — what a region sits on), **interactive** (`{colors.primary}`/`{colors.secondary}`/`{colors.accent}`/`{colors.ring}` — buttons, links, focus), and **semantic** (`{colors.destructive}` only). Every value lives in the frontmatter above (`colors` for light, `colors-dark` for dark) — this table restates them for readability but the frontmatter is authoritative if they ever diverge.
+The frontmatter is the normative design-token view; `src/app/globals.css` is the
+implementation source of truth.
 
-| Token | Light | Dark | Purpose |
-|---|---|---|---|
-| `background` / `foreground` | `oklch(1 0 0)` / `oklch(0.145 0 0)` | `oklch(0.145 0 0)` / `oklch(0.985 0 0)` | Canvas + primary text |
-| `card` / `card-foreground` | `oklch(1 0 0)` / `oklch(0.145 0 0)` | `oklch(0.205 0 0)` / `oklch(0.985 0 0)` | Elevated surfaces |
-| `popover` / `popover-foreground` | `oklch(1 0 0)` / `oklch(0.145 0 0)` | `oklch(0.205 0 0)` / `oklch(0.985 0 0)` | Menus, tooltips, dialogs |
-| `primary` / `primary-foreground` | `oklch(0.205 0 0)` / `oklch(0.985 0 0)` | `oklch(0.922 0 0)` / `oklch(0.205 0 0)` | Main buttons and CTAs |
-| `secondary` / `secondary-foreground` | `oklch(0.97 0 0)` / `oklch(0.205 0 0)` | `oklch(0.269 0 0)` / `oklch(0.985 0 0)` | Secondary buttons, badges |
-| `muted` / `muted-foreground` | `oklch(0.97 0 0)` / `oklch(0.556 0 0)` | `oklch(0.269 0 0)` / `oklch(0.708 0 0)` | Inactive items, placeholders |
-| `accent` / `accent-foreground` | `oklch(0.97 0 0)` / `oklch(0.205 0 0)` | `oklch(0.269 0 0)` / `oklch(0.985 0 0)` | Hover, selected menu items |
-| `destructive` | `oklch(0.577 0.245 27.325)` | `oklch(0.704 0.191 22.216)` | Errors, deletions |
-| `border` | `oklch(0.922 0 0)` | `oklch(1 0 0 / 10%)` | Dividers, outlines |
-| `input` | `oklch(0.922 0 0)` | `oklch(1 0 0 / 15%)` | Form field boundaries |
-| `ring` | `oklch(0.708 0 0)` | `oklch(0.556 0 0)` | Focus-visible rings |
-| `sidebar*` | see frontmatter | see frontmatter | Sidebar background/text/accent/border — same role pattern as above, scoped to `sidebar.tsx` |
+Color roles:
 
----
+- **Surface:** background, card, popover, sidebar.
+- **Text:** foreground and role-specific foreground tokens.
+- **Interactive:** primary, secondary, accent, ring.
+- **Semantic:** destructive.
+- **Structure:** border and input.
+
+Use semantic roles consistently. Dark mode is represented by the project-specific
+`colors-dark` extension because the current frontmatter schema used by this project
+does not model paired theme variants.
 
 ## Typography
 
-| Role | Token | Font | Tailwind Class | Usage |
-|---|---|---|---|---|
-| Headings | `{typography.heading}` | Inter Variable, weight 600 | `font-heading`, `font-semibold` | Page titles, dialog titles |
-| Body | `{typography.body}` | Inter Variable, weight 400 | `font-sans`, `text-sm`/`text-base` | Paragraphs, descriptions |
-| Code / Mono | `{typography.mono}` | Geist Mono, weight 400 | `font-mono`, `text-xs`/`text-sm` | Code, `kbd`, hashes |
+- `{typography.heading}`: headings and emphasized structural labels.
+- `{typography.body}`: default application copy.
+- `{typography.mono}`: code and technical identifiers only.
 
-**Principles:**
-- No custom type scale beyond Tailwind's defaults — sizes come from Tailwind utilities directly; there's no `--font-size-*`/`--tracking-*` system layered on top, unlike colors/radii.
-- `{typography.heading}` and `{typography.body}` both resolve to the same Inter Variable font today (`globals.css`: `--font-heading: var(--font-sans)`) — separate classes for future flexibility, not currently distinct faces.
-- Mono is reserved for code/technical content (`kbd.tsx`, `chart.tsx` axis labels) — body copy and headings never use it.
-
----
+Heading/body currently share Inter Variable with different weight intent; mono uses
+Geist Mono. There is no product-specific type scale beyond configured Tailwind
+utilities.
 
 ## Layout
 
-**Spacing:** no global `--spacing-*` tokens exist — padding/gap values come from Tailwind v4's default 4px-based scale used inline per component. A few components define their own local spacing custom property instead of a global token (frontmatter `spacing`): `card.tsx`'s `{spacing.card}`/`{spacing.card-sm}` (every card sub-part reads the same variable, so changing it once re-spaces the whole card) and `calendar.tsx`'s `{spacing.calendar-cell}`. If a third component needs the same trick, that's the signal to promote it to a real global token.
-
-**Responsive behavior:** no custom breakpoint scale exists — `globals.css` has no `@theme --breakpoint-*` overrides, so `sm`/`md`/`lg`/`xl`/`2xl` resolve to Tailwind v4 defaults (640/768/1024/1280/1536px). Only `sm`/`md`/`lg` are actually used today, in: `button.tsx`, `dialog.tsx`, `alert.tsx`, `alert-dialog.tsx`, `sheet.tsx`, `sidebar.tsx`, `calendar.tsx`, `drawer.tsx`, `input.tsx`, `input-group.tsx`, `item.tsx`, `pagination.tsx`, `textarea.tsx`, `toggle.tsx`, `attachment.tsx`, `questionnaire.tsx`.
-
-**Grid & container:** none to document — no app shell or marketing surface exists yet (`src/app/page.tsx` is still the unedited Next.js starter). Add this once real layout surfaces exist, grounded in what's actually built.
-
----
+- Spacing uses the standard Tailwind scale unless a component has a justified local
+  custom property recorded in frontmatter.
+- No custom breakpoint scale is defined; responsive behavior uses configured
+  framework defaults.
+- No product grid/container system exists yet.
+- Promote a repeated local spacing rule to a shared token only after the pattern is
+  genuinely shared.
 
 ## Elevation & Depth
 
-There's no formal elevation system (no `--shadow-*` CSS variables in `globals.css`) — components reach for Tailwind's default `shadow-sm`/`md`/`lg`/`xl` utilities individually, and several use a **1px ring instead of a shadow**:
+There is no formal elevation token scale.
 
-- **Ring-only** (no shadow): `card.tsx` — `ring-1 ring-foreground/10`. Cards separate from the page via a hairline ring, not elevation.
-- **Shadow + ring**: `popover.tsx` — `shadow-md ring-1 ring-foreground/10`.
-- **Shadow only**: `sheet.tsx` (`shadow-lg`), `dropdown-menu.tsx`, `context-menu.tsx`, `menubar.tsx`, `combobox.tsx`, `command.tsx`, `select.tsx`, `hover-card.tsx`, `sidebar.tsx`, `tabs.tsx`, `chart.tsx`, `input-group.tsx`, `navigation-menu.tsx` — each picks its own scale step without a documented rule for which step maps to which surface type.
-
-If adding elevation to a new component, match the nearest existing pattern (overlays → `shadow-md`/`lg`; simple containers → `ring-1 ring-foreground/10`) rather than inventing a new value. If a real tiered system becomes worth formalizing, promote it to named `--shadow-*` tokens in `globals.css`, same as colors/radii.
-
----
+- Simple surfaces generally prefer a subtle ring/hairline.
+- Floating overlays may combine a restrained shadow with a ring.
+- Match the nearest established surface role instead of inventing a new elevation
+  value.
+- Introduce named elevation tokens only when repeated product patterns justify a
+  real hierarchy.
 
 ## Shapes
 
-Border radii derive from a single `--radius` base (`0.625rem` / `10px`) via `calc()` — change the base variable, not individual `rounded-*` classes. See frontmatter `rounded` for the full scale; typical use:
+Radii derive from the shared `--radius` base and the `{rounded.*}` frontmatter
+tokens. Change the shared token system rather than hardcoding one-off radii.
 
-| Token | Value | Typical Use |
-|---|---|---|
-| `{rounded.sm}` | 6px | Inputs, small buttons, tags |
-| `{rounded.md}` | 8px | Dropdown items, badges |
-| `{rounded.lg}` | 10px (base) | Default button radius, cards, dialogs, popovers |
-| `{rounded.xl}` | 14px | Large panels |
-| `{rounded.2xl}`–`{rounded.4xl}` | 18–26px | Drawer sheets, modal cards |
-
----
+Use smaller radii for compact controls, the base radius for common interactive
+surfaces, and larger radii only where an established component role already uses
+them.
 
 ## Components
 
-Frontmatter `components` tokenizes 4 representative primitives to show the composition pattern — this is illustrative, not a mirror of the source files. Read the `.tsx` directly before relying on exact class strings:
+The `components` frontmatter entries are representative examples of token
+composition, not a mirror of every source file.
 
-- **`button.tsx`**: 6 `variant`s (`default`→`{components.button-default}`, `outline`, `secondary`, `ghost`, `destructive`→`{components.button-destructive}`, `link`) × 8 `size`s, independent axes. `destructive` is a soft-fill (`bg-destructive/10`), not solid, in both themes.
-- **`card.tsx`** (`{components.card}`): spacing driven by the local `{spacing.card}` custom property so sub-parts (`CardHeader`/`CardContent`/`CardFooter`) stay consistent if it's changed once.
-- **`popover.tsx`** (`{components.popover}`): the one primitive combining a shadow and a ring; animated via Base UI's `data-open`/`data-closed` attributes rather than a separate animation library.
+Current shared UI families include:
 
-### Full Catalog (`src/components/ui/`, 61 primitives)
+- actions and triggers;
+- layout and navigation;
+- overlays and contextual surfaces;
+- data input and forms;
+- data display and feedback;
+- conversational/chat-oriented extensions.
 
-1. **Actions & Triggers**: `button.tsx`, `button-group.tsx`, `toggle.tsx`, `toggle-group.tsx`.
-2. **Layout & Navigation**: `sidebar.tsx`, `tabs.tsx`, `breadcrumb.tsx`, `navigation-menu.tsx`, `pagination.tsx`, `accordion.tsx`, `collapsible.tsx`, `separator.tsx`, `resizable.tsx`, `scroll-area.tsx`, `aspect-ratio.tsx`.
-3. **Overlays & Dialogs**: `dialog.tsx`, `alert-dialog.tsx`, `sheet.tsx`, `drawer.tsx`, `popover.tsx`, `tooltip.tsx`, `hover-card.tsx`, `context-menu.tsx`, `dropdown-menu.tsx`, `menubar.tsx`, `command.tsx`.
-4. **Data Input & Forms**: `input.tsx`, `textarea.tsx`, `field.tsx`, `input-group.tsx`, `checkbox.tsx`, `radio-group.tsx`, `select.tsx`, `native-select.tsx`, `combobox.tsx`, `input-otp.tsx`, `slider.tsx`, `switch.tsx`, `calendar.tsx`, `label.tsx`, `direction.tsx`.
-5. **Data Display & Feedback**: `card.tsx`, `table.tsx`, `badge.tsx`, `avatar.tsx`, `alert.tsx`, `progress.tsx`, `skeleton.tsx`, `sonner.tsx`, `chart.tsx`, `carousel.tsx`, `empty.tsx`, `kbd.tsx`, `spinner.tsx`, `item.tsx`.
-6. **Conversational / Chat UI** (`@shadcn/react` extensions, not vanilla `@base-ui/react`): `bubble.tsx`, `message.tsx`, `message-scroller.tsx`, `attachment.tsx`, `questionnaire.tsx`, `marker.tsx`.
-
----
+`src/components/ui/` is authoritative for exact inventory and implementation.
+`CONVENTIONS.md` owns component API/anatomy rules. `TESTING.md` owns Ladle story
+and visual-verification policy.
 
 ## Do's and Don'ts
 
-1. **Use CVA & `cn` for class composition** — always merge Tailwind classes via `@/lib/utils` `cn(...)`; use `class-variance-authority` for multi-variant components.
-2. **Leverage Base UI slots** — style sub-elements with data attributes like `data-slot="button"`, `in-data-[slot=...]`, `has-data-[icon=...]`.
-3. **Respect OKLCH token semantics** — never hardcode hex codes (`#ffffff`, `#171717`); use `bg-background`, `text-foreground`, `bg-primary`, `border-border`, etc.
-4. **Maintain the dark theme via CSS variables**, not scattered one-off `dark:` utility overrides. The starter page still contains legacy `dark:` classes; new product UI should follow the token rule.
-5. **Match existing elevation patterns, don't invent new ones** — new overlays follow `popover.tsx`'s shadow+ring pattern; new simple containers follow `card.tsx`'s ring-only pattern.
+**Do**
 
-6. **Compose existing primitives before adding markup** — use full Card, Field, Dialog/Sheet/Drawer, Tabs, Alert, Empty, Skeleton, Badge, Separator, and Spinner compositions where they match the need. Keep required accessibility parts such as dialog titles, grouped items, avatar fallbacks, and `TabsList`/`TabsTrigger` nesting.
-7. **Use shadcn/Base UI conventions** — choose built-in variants, semantic tokens, `cn()`, `gap-*`, `size-*`, `truncate`, and `data-icon`; use `render` for Base UI slots. Do not add raw color tokens, manual overlay z-index, or ad hoc loading variants.
-8. **Design component APIs for composition** — prefer explicit compound subcomponents and children over boolean flag props. Keep shared interaction state in a provider rather than coupling presentational parts to a specific store or hook.
+- use semantic tokens such as background/foreground/primary/border roles;
+- preserve light/dark behavior through shared CSS variables;
+- choose surface depth and radius from the nearest established component role;
+- reuse existing primitives and visual states before introducing a new visual idiom;
+- keep interaction states visible with keyboard/focus use.
 
-- **Use the form primitives as designed** — compose forms with `FieldGroup` and `Field`; use `InputGroupInput`/`InputGroupTextarea` inside `InputGroup`; use `ToggleGroup` for small option sets; group related controls with `FieldSet`/`FieldLegend`; expose validation with `data-invalid` on `Field` and `aria-invalid` on the input.
-- **Use the icon and chat contracts** — pass icon components rather than string names, mark Button icons with `data-icon`, and let components own icon sizing. Compose conversational UI with `MessageScroller`, `Message`/`Bubble`, `Attachment`, and `Marker` instead of hand-rolled message scrolling or bubbles.
-- **Respect primitive grouping and accessibility** — keep items inside their group components, use `render` for Base UI slots, include titles in Dialog/Sheet/Drawer, and do not add manual overlay stacking values.
+**Don't**
 
-## Composition and Performance Constraints
-
-- Treat `src/components/ui/` as a reusable primitive layer, not a place for notes-domain behavior. Domain components should compose primitives from outside this directory.
-- Keep server-renderable primitives free of client directives when they do not need interactivity. Add `"use client"` only at the smallest interactive boundary.
-- Avoid waterfalls in future data-backed surfaces: start independent requests together, defer awaits until their result is needed, and use Suspense for independently streamable regions.
-- Keep client props serializable and minimal. Avoid module-level mutable request state, duplicate serialization, and unnecessary client-side subscriptions.
-
----
-
-## Storybook / Visual Verification (`ladle`)
-
-Not a canonical design.md section — repo-specific tooling notes.
-
-- Stories file pattern: `src/components/ui/*.stories.tsx`.
-- Current coverage: only `button.tsx` has a story; all remaining primitives in the catalog above do not yet have one. Treat new/changed components as needing a story, not as already covered.
-- Run local viewer: `rtk pnpm ladle`. Build static catalog: `rtk pnpm ladle:build`.
+- hardcode hex colors or duplicate token values in component-specific styling;
+- scatter one-off dark-mode colors when a semantic variable should own the role;
+- invent a new spacing, breakpoint, radius, or elevation system for one component;
+- use color alone to communicate selected, error, disabled, or loading state;
+- treat the design document as the owner of testing commands or React implementation
+  patterns.

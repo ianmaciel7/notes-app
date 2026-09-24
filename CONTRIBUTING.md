@@ -1,66 +1,68 @@
 # Contributing Guidelines
 
-Shared UI changes must satisfy the shadcn/Base UI checklist in `CONVENTIONS.md` before submission.
+This file owns the **human contribution workflow**. Code rules live in
+`CONVENTIONS.md`, verification strategy in `TESTING.md`, security policy in
+`SECURITY.md`, and blocking quality floors in `CONSTRAINTS.md`.
 
-Thank you for contributing to `notes-app`. Please follow these guidelines to keep the repo consistent.
+## 1. Environment Setup
 
-## 1. Prerequisites & Environment Setup
-- Package manager: **pnpm 11.20.0**, pinned via `packageManager` in `package.json` — use pnpm, not npm/yarn.
-- Node.js version is not pinned in the repo (no `.nvmrc`/`engines` field) — use a current LTS Node compatible with Next.js 16.
-- Workflow linting: install the system `actionlint` binary. On Windows, use `winget install --id rhysd.actionlint --exact`; then run `rtk pnpm lint:actions`.
-- GitHub Actions security auditing: install the isolated CLI with `uv tool install zizmor`; then run `zizmor --offline .`.
-- Setup:
-  ```bash
-  rtk git clone <repository-url>
-  rtk pnpm install
-  rtk pnpm dev
-  ```
+- Use pnpm 11.20.0, pinned by `packageManager` in `package.json`.
+- Use a current Node.js LTS release compatible with the pinned Next.js version.
 
-When changing MCP servers, skills, integrations, profiles, or generated AI-tool configuration, use the project `agents` CLI through RTK (for example, `rtk agents sync`) and commit only its source files unless the configured synchronization setting says otherwise. Creating, installing, removing, or updating a skill also requires `rtk npx skills update -p -y`, committing the resulting `skills-lock.json` update, and running `rtk agents sync --check` before submitting the change.
+```bash
+rtk git clone <repository-url>
+rtk pnpm install
+rtk pnpm dev
+```
 
-To create a repository snapshot for AI-assisted review, run `rtk npx repomix@latest`. The command uses `repomix.config.json`; its generated `repomix-output.xml` is local-only and ignored by Git.
+The install step initializes repository Husky hooks through the package `prepare`
+script.
 
-Installing dependencies also initializes Husky through the `prepare` script.
-The committed `.husky/pre-commit` hook runs `pnpm run lint-staged` first, then
-`pnpm run check:fast` before each commit. This formats and lints staged source
-and configuration files before the type, focused lint, dependency-boundary, and
-quality-floor checks run locally.
+## 2. Branches
 
-Serena is the project-standard semantic coding MCP server for Codex. Keep its definition in `.agents/agents.json`; do not edit generated `.codex` or `.agents/generated` files directly. Serena should run with `start-mcp-server --context=codex --project-from-cwd` so it resolves the repository from the current working directory.
+- `main` is the primary branch.
+- Branch names use lowercase kebab-case.
+- Use a short conventional prefix such as `feat/`, `fix/`, `docs/`,
+  `refactor/`, or `chore/` when it improves intent.
+- Do not rewrite shared branch history unless the repository owner explicitly asks.
 
-## 2. Branching Strategy
-- Main branch: `main`.
-- In practice this repo's branch names have not followed a strict `feat/`/`fix/` pattern (existing branches include `context-engineering`, `dev`, `stag`, tool-specific branches like `anthropic-skill`/`mattpocock-skill`, and numbered `old-*` archive branches). If starting a new pattern, prefer Conventional-Commits-style prefixes (`feat/<short-description>`, `fix/<short-description>`, `docs/<short-description>`) since commit messages already follow that convention (see §3).
+## 3. Commits
 
-## 3. Commit Message Standards
-- The existing git history follows **Conventional Commits** (`feat:`, `docs:`, e.g. `feat: add new agent skills and workflows`, `docs: add project context and initial architecture decision records`) — continue that pattern:
-  - `feat`: a new feature
-  - `fix`: a bug fix
-  - `docs`: documentation-only changes
-  - `refactor`: a code change that neither fixes a bug nor adds a feature
-  - `chore`: build process or tooling changes
+Use Conventional Commits:
 
-## 4. Pre-Flight Checklist Before Submitting PR
-There is no CI and no test suite yet (see `TESTING.md`), so these are manual checks:
-- [ ] `rtk pnpm lint` (Biome check)
-- [ ] `rtk pnpm build` (Next.js build succeeds)
-- [ ] `rtk pnpm deps:check` (dependency boundary check)
-- [ ] `rtk pnpm knip` (unused files, dependencies, and exports check)
-- [ ] `rtk pnpm check:fast` (types, focused lint, dependency boundaries, and quality-floor guard)
-- [ ] `rtk pnpm check:security` (no high or critical dependency advisories)
-- [ ] `rtk pnpm check:osv` (OSV-Scanner finds no known dependency vulnerabilities)
-- [ ] `rtk pnpm lighthouse` (production build and Lighthouse CI accessibility audit)
-- [ ] `rtk pnpm lint:actions` (GitHub Actions workflow validation; currently no workflows exist)
-- [ ] Relevant project docs updated if architecture, conventions, design tokens, or intent changed (`ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `INTENT.md`)
-- [ ] `CONSTRAINTS.md` remains satisfied and was not weakened to make checks pass
-- [ ] New/changed `src/components/ui/` primitives get a Ladle story (`*.stories.tsx`) — most existing primitives don't have one yet, but new additions should
+```text
+<type>(<optional-scope>): <description>
+```
 
-## Component and performance review
+Common types: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`,
+`chore`, `build`, and `ci`.
 
-- New component APIs should use composition and existing shadcn/Base UI primitives before introducing boolean modes or custom markup; verify semantic tokens and required accessibility subcomponents.
-- For performance-sensitive changes, check for request waterfalls, unnecessary client boundaries, barrel imports, and avoidable re-renders; record measured justification for any optimization abstraction.
+Keep commits focused and do not bypass hooks with `--no-verify` merely to obtain a
+commit.
 
-## 5. Pull Request Submission & Review
-- Describe *what* changed and *why*.
-- Include before/after screenshots for UI/design token changes.
-- Keep PRs focused; this repo has no automated review gate today, so manual review rigor matters more.
+## 4. Pre-PR Checklist
+
+Before opening a PR:
+
+- [ ] The requested change is complete and the final diff contains no unrelated edits.
+- [ ] `rtk pnpm check:fast` passes.
+- [ ] Additional checks required by `TESTING.md`, `SECURITY.md`, and
+      `CONSTRAINTS.md` were run for the change's risk area.
+- [ ] `rtk pnpm build` passes when runtime/build behavior is affected.
+- [ ] GitHub Actions changes pass `rtk pnpm lint:actions` and the security review
+      required by `SECURITY.md`.
+- [ ] UI changes include appropriate visual verification and screenshots/recordings
+      when useful for review.
+- [ ] Every changed rule/fact was updated in its canonical documentation owner.
+
+Agent/MCP/skill configuration changes follow the workflows routed by `AGENTS.md`;
+do not copy those procedures into this contributor guide.
+
+## 5. Pull Requests
+
+- Explain what changed and why.
+- Keep the PR narrowly scoped.
+- Call out migrations, risk, follow-up work, or known limitations explicitly.
+- Include before/after visual evidence for user-visible UI changes.
+- Prefer squash merging for a focused feature/fix branch unless preserving commit
+  history serves a clear purpose.
