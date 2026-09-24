@@ -31,6 +31,12 @@
       "skillPath": "skills/context7-cli/SKILL.md",
       "computedHash": "5244306f18a412922be7718a35e265bbd65e6700424d21f048fdee48369ae9e9"
     },
+    "dependabot": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/dependabot/SKILL.md",
+      "computedHash": "a7f64786f061e1ec9a513757a54f96e3c05b1f88d9d7e380222defbcd87a56e4"
+    },
     "domain-modeling": {
       "source": "mattpocock/skills",
       "sourceType": "github",

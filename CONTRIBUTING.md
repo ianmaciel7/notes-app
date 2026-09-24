@@ -7,6 +7,8 @@ Thank you for contributing to `notes-app`. Please follow these guidelines to kee
 ## 1. Prerequisites & Environment Setup
 - Package manager: **pnpm 11.20.0**, pinned via `packageManager` in `package.json` — use pnpm, not npm/yarn.
 - Node.js version is not pinned in the repo (no `.nvmrc`/`engines` field) — use a current LTS Node compatible with Next.js 16.
+- Workflow linting: install the system `actionlint` binary. On Windows, use `winget install --id rhysd.actionlint --exact`; then run `rtk pnpm lint:actions`.
+- GitHub Actions security auditing: install the isolated CLI with `uv tool install zizmor`; then run `zizmor --offline .`.
 - Setup:
   ```bash
   rtk git clone <repository-url>
@@ -48,6 +50,7 @@ There is no CI and no test suite yet (see `TESTING.md`), so these are manual che
 - [ ] `rtk pnpm check:security` (no high or critical dependency advisories)
 - [ ] `rtk pnpm check:osv` (OSV-Scanner finds no known dependency vulnerabilities)
 - [ ] `rtk pnpm lighthouse` (production build and Lighthouse CI accessibility audit)
+- [ ] `rtk pnpm lint:actions` (GitHub Actions workflow validation; currently no workflows exist)
 - [ ] Relevant project docs updated if architecture, conventions, design tokens, or intent changed (`ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `INTENT.md`)
 - [ ] `CONSTRAINTS.md` remains satisfied and was not weakened to make checks pass
 - [ ] New/changed `src/components/ui/` primitives get a Ladle story (`*.stories.tsx`) — most existing primitives don't have one yet, but new additions should

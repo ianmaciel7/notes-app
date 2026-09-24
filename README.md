@@ -44,6 +44,8 @@ rtk pnpm check:fast
 rtk pnpm check:security
 rtk pnpm check:osv
 rtk pnpm lighthouse
+rtk pnpm lint:actions
+zizmor --offline .
 ```
 
 `check:fast` runs type checking, focused Biome checks, dependency-boundary checks,
@@ -53,8 +55,10 @@ OSV-Scanner v2 using [`osv-scanner.toml`](./osv-scanner.toml). There is no
 automated test runner yet; Ladle is the current component and visual verification
 tool. `lighthouse` builds the production app, audits the home page with Lighthouse
 CI, enforces the accessibility threshold, and writes local reports to
-`.lighthouseci/`. See [`CONSTRAINTS.md`](./CONSTRAINTS.md) for the non-negotiable
-quality contract.
+`.lighthouseci/`. `lint:actions` validates GitHub Actions workflows with the
+system `actionlint` binary; there are no workflows yet. `zizmor --offline .`
+audits collected repository security inputs; install it with `uv tool install zizmor`. See
+[`CONSTRAINTS.md`](./CONSTRAINTS.md) for the non-negotiable quality contract.
 
 Run Gitleaks against the repository history when changing configuration or
 before sharing a branch:
@@ -67,6 +71,9 @@ Git hooks are installed automatically by the
 Husky `prepare` script during `rtk pnpm install`; the committed
 `.husky/pre-commit` hook runs `pnpm run lint-staged` to format and lint staged
 JavaScript, TypeScript, CSS, and JSON files, followed by `pnpm run check:fast`.
+The optional `.pre-commit-config.yaml` also defines an `actionlint-system` hook
+for workflow files when `pre-commit` and the system `actionlint` binary are
+installed.
 
 ## Project Status
 Pre-MVP scaffold. See [`INTENT.md`](./INTENT.md) for the current problem statement, constraints, and open questions (e.g. what a "note" is, whether auth is needed).

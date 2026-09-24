@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
+    "lint:actions": "actionlint",
     "deps:check": "dependency-cruiser --config .dependency-cruiser.cjs src",
     "check:types": "tsc --noEmit",
     "check:lint": "biome check .dependency-cruiser.cjs scripts/floor-guard.mjs package.json",
@@ -21,6 +22,7 @@
     "ladle:build": "ladle build",
     "ladle:preview": "ladle preview",
     "lint-staged": "lint-staged",
+    "commitlint": "commitlint --edit",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -49,6 +51,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.2",
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
     "@fontsource-variable/inter": "5.3.0",
     "@ladle/react": "5.1.1",
     "@lhci/cli": "^0.15.1",

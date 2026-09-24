@@ -40,6 +40,7 @@ The following rules are normative for shared UI in `src/components/ui/`. Use exi
 - Strict type checking: `tsconfig.json` has `"strict": true`. Avoid `any` and `@ts-ignore`.
 - Dependency boundaries: **dependency-cruiser** (`.dependency-cruiser.cjs`) checks for circular dependencies under `src/`.
 - Dead-code analysis: **Knip** (`knip.json`) checks unused source files, dependencies, and exports while treating the reusable UI catalog and hooks as intentional entry points.
+- GitHub Actions validation: **actionlint** (`.github/actionlint.yaml`) checks workflow syntax and security; the repository provides `rtk pnpm lint:actions` and an optional `actionlint-system` pre-commit hook.
 - Import organization: Biome's `assist.actions.source.organizeImports` is enabled — imports are auto-sorted on format, don't hand-order them against the tool.
 - Commands:
   - Lint: `rtk pnpm lint` (`biome check`)
@@ -49,6 +50,7 @@ The following rules are normative for shared UI in `src/components/ui/`. Use exi
   - Dependency security audit: `rtk pnpm check:security`
   - OSV dependency scan: `rtk pnpm check:osv` (configured by `osv-scanner.toml`)
   - Browser verification: `rtk pnpm lighthouse` (configured by `lighthouserc.cjs`)
+  - GitHub Actions validation: `rtk pnpm lint:actions` (requires the system `actionlint` binary; no workflows exist yet)
   - Format: `rtk pnpm format` (`biome format --write`)
   - Staged-file checks: `rtk pnpm run lint-staged` (Biome `check --write` for staged JavaScript, TypeScript, CSS, and JSON files)
 

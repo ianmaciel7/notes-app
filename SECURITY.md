@@ -1,7 +1,7 @@
 # Security Policy & Guidelines
 
 ## 1. Reporting a Vulnerability
-No formal disclosure process is defined yet (no `.github/` directory, no security contact published). Until one is set up, report suspected issues privately to the repository owner rather than opening a public issue.
+No formal disclosure process or security contact is published yet. The repository has a `.github/` directory for tooling configuration, but no security-advisory workflow. Until a disclosure process is set up, report suspected issues privately to the repository owner rather than opening a public issue.
 
 ## 2. Supported Versions
 This is a pre-release, single-branch project (`main`, actively developed on `context-engineering`) with no versioned releases yet — there is no supported-version matrix to publish.
@@ -24,4 +24,5 @@ There is no authentication or authorization in the codebase — no session/cooki
 - OSV-Scanner v2 is configured in [`osv-scanner.toml`](./osv-scanner.toml). Install the official Windows package with `winget install --id Google.OSVScanner --exact`, then run `rtk pnpm check:osv` to scan repository lockfiles and manifests against the OSV database.
 - Keep any OSV-Scanner exception in `osv-scanner.toml` with a specific reason and an expiry date where possible; do not suppress findings without an owner-approved remediation decision.
 - Gitleaks is configured in `gitleaks.toml` with the built-in default rules. Run `gitleaks git --config gitleaks.toml .` to scan repository history; the optional `.pre-commit-config.yaml` adds a local pre-commit scan.
+- Zizmor is installed as an isolated local CLI with `uv tool install zizmor`. Run `zizmor --offline .` to audit collected GitHub Actions and repository security inputs without network access; use `zizmor --collect=workflows --offline .` when workflows are present and only workflow files should be scanned.
 - The one non-standard dependency worth tracking is `@shadcn/react` (used by `questionnaire.tsx` and the other conversational UI primitives, per `DESIGN.md` §5) — verify its advisories same as any other third-party package.
