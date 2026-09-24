@@ -269,6 +269,42 @@ function verifyAgentsGeneratedBlock(repoRoot) {
 }
 
 // ===========================================================================
+// 7. AGENTS.md instruction budget and cited local paths
+// ===========================================================================
+
+function verifyAgentsInstructionBudget(text, targetChars = 12000, maxBytes = 16000) {
+  const chars = Array.from(text).length;
+  const bytes = Buffer.byteLength(text, "utf8");
+  if (bytes > maxBytes) {
+    return [fail("agents-budget", `AGENTS.md is ${bytes} UTF-8 bytes (hard maximum: ${maxBytes}; target: <= ${targetChars} characters).`)];
+  }
+  if (chars > targetChars) {
+    return [skip("agents-budget", `AGENTS.md is ${chars} characters / ${bytes} bytes: within the hard maximum but above the ${targetChars}-character target; split task-specific guidance.`)];
+  }
+  return [ok("agents-budget", `AGENTS.md is ${chars} characters / ${bytes} bytes, within the ${targetChars}-character target and ${maxBytes}-byte hard maximum.`)];
+}
+
+function verifyAgentsCitedPaths(repoRoot, text) {
+  const results = [];
+  const seen = new Set();
+  const re = /`([a-zA-Z0-9_./-]+\.(?:md|json))`/g;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const cited = m[1];
+    if (seen.has(cited) || cited.includes("*")) continue;
+    seen.add(cited);
+    const resolved = path.join(repoRoot, cited);
+    results.push(
+      fs.existsSync(resolved)
+        ? ok("agents-paths", `${cited} exists.`)
+        : fail("agents-paths", `${cited} is cited by AGENTS.md but does not exist at repository root-relative path ${resolved}.`)
+    );
+  }
+  if (results.length === 0) results.push(skip("agents-paths", "No local Markdown/JSON paths cited."));
+  return results;
+}
+
+// ===========================================================================
 // 7. Secrets / .env handling (SECURITY.md)
 // ===========================================================================
 
@@ -461,6 +497,8 @@ module.exports = {
   verifyReadmeBoilerplate,
   verifyDesignMdStructure,
   verifyAgentsGeneratedBlock,
+  verifyAgentsInstructionBudget,
+  verifyAgentsCitedPaths,
   verifyEnvHandling,
   verifyCiExistence,
   verifyVersionClaims,

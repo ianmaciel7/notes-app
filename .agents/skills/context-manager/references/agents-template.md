@@ -96,8 +96,8 @@ looks like this:
 ## Change workflow
 [Short before/while rules and safe autonomy boundaries.]
 
-## Verification by risk
-[Minimal checks by change category; avoid 'run everything always'.]
+## Verification routing
+[Point to the canonical quality/test/contribution owners; do not copy their command matrices.]
 
 ## Definition of done
 [What must be true before the agent reports completion.]
@@ -142,10 +142,10 @@ canonical.
    fix failures they introduced) and which destructive or external side effects need
    explicit user intent.
 
-7. **Verification by risk**
-   Map change categories to minimum checks. Fast checks belong in the edit loop;
-   expensive mutation/security/browser checks should run only when their risk area
-   is relevant or at review/CI gates.
+7. **Verification routing**
+   Keep detailed check matrices in their canonical quality/testing/contribution
+   owners. AGENTS.md should route to them and require the smallest risk-appropriate
+   set rather than copying commands into always-on context.
 
 8. **Explicit definition of done**
    Completion should require the requested implementation, relevant green checks,
@@ -211,12 +211,12 @@ Do not say 'read all docs first'. Route by subject instead:
 Before finalizing an `AGENTS.md` change, verify:
 
 - [ ] Generated blocks are byte-for-byte preserved.
-- [ ] Root guidance is within the project size budget or has a documented reason.
+- [ ] Root guidance is <= 12,000 characters when practical and never exceeds 16,000 UTF-8 bytes.
 - [ ] No detailed procedure is duplicated from a Skill or control document.
 - [ ] Nested scope/precedence is clear where nested files exist.
 - [ ] Tool and Skill triggers are specific enough to avoid unnecessary loading.
 - [ ] Commands cited by the file actually exist in the repository.
-- [ ] Verification is risk-based rather than 'run everything always'.
+- [ ] Verification routes to canonical owners and avoids duplicated command matrices.
 - [ ] Safe autonomy and destructive/external boundaries are explicit.
 - [ ] Definition of done is concrete.
 - [ ] Obsolete instructions were removed rather than merely appended around.
