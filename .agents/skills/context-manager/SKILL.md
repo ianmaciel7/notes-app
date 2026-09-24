@@ -95,7 +95,10 @@ When `CONSTRAINTS.md` is missing or the user asks to define the quality bar, use
 6. Guard the bar itself. Review diffs for lowered thresholds, deleted or weakened tests, new suppressions, stubs/TODOs, and unreviewed exception rows. Tightening should be quiet; loosening should be explicit. Use the floor-guard contract below or the repository's `scripts/floor-guard.mjs` rather than inventing a new guard.
 7. Ratchet unknowns: if a target fails the current codebase, record today's value and require that it does not worsen. State missing capabilities plainly instead of fabricating CI, auth, tests, or design tokens.
 
-Use these defaults when no number is supplied: changed lines at least 80% covered, project coverage must not fall, high-or-critical dependency findings block, LCP at most 2500 ms, CLS at most 0.1, zero critical/serious accessibility violations, exceptions expire in 90 days, and ratchets tolerate at most 0.5% drift. State the reason with the number.
+Do not silently invent numeric defaults. If the user has not chosen a threshold,
+measure the current state and keep the metric non-blocking until a real floor is
+adopted. Recommendations may be proposed separately, but the committed contract must
+distinguish recommendations from enforced repository policy.
 
 Use three escalation levels: written contract; scripted checks; tool-backed runner with diff scoping, budgets, ratchets, and guards. Most repositories should stop at scripted checks. Keep at least one external constraint—such as a vulnerability database, browser audit, or standards-based accessibility scanner—because project tests alone are circular.
 
@@ -106,14 +109,20 @@ Do not weaken a threshold to make a change pass, place slow checks in the edit l
 The floor guard is diff-scoped: compare added and removed lines against the merge base, include untracked files, and report the rule and location without printing secret values.
 
 - Exit `0` when clean, `1` when a floor violation is found, and `2` when the guard cannot establish a merge base or otherwise cannot run.
-- Detect lowered constraint thresholds or deleted floor rules.
+- Detect only floor violations the implementation actually recognizes. Do not claim
+  threshold-diff detection unless the guard implements it.
 - Detect tests made easier: added skips, deleted test assertions, or deleted test files.
 - Detect silenced checkers: new `@ts-ignore`, `eslint-disable`, `biome-ignore`, `noqa`, `nosemgrep`, `gitleaks:allow`, or equivalent suppressions.
 - Detect unfinished work: unimplemented throws, empty catches, and TODO placeholders.
 - Detect new `CONSTRAINTS.md` exception rows.
 - Treat tightening as clean and loosening as loud.
 
-Keep the implementation dependency-free and diff-scoped. Adapt suppression, stub, and test patterns for the repository's language; never turn an inability to run the guard into a successful result. A secret finding reports only its rule and location, never the matched value. Run the cheap floor check at task end and in CI; put mutation testing, full Semgrep, browser audits, and other expensive checks in review or CI. If shell logic grows beyond a maintainable size, replace it with a dedicated runner while preserving this contract and its exit codes.
+Keep the implementation dependency-free and diff-scoped. Adapt suppression, stub,
+and test patterns for the repository's language; never turn an inability to run the
+guard into a successful result. A secret finding reports only its rule and location,
+never the matched value. Run the cheap floor check where the repository actually
+wires it; describe it as CI only after a workflow executes it. Keep expensive checks
+scoped to their real review/CI usage.
 
 ---
 
@@ -184,17 +193,21 @@ Whenever significant code changes occur:
 - **Adding / Modifying UI Components or Theme**:
   - Update `DESIGN.md` token tables and UI primitive catalog.
   - If visual stories were added (`*.stories.tsx`), verify `TESTING.md` reflects story verification workflows.
-- **Changing Build, Lint, or Tooling Settings**:
-  - Update `CONVENTIONS.md` (rules and commands).
-  - Update `CONTRIBUTING.md` (pre-flight checklist).
+- **Changing Tooling**:
+  - Update only the canonical owner: code-writing behavior -> `CONVENTIONS.md`;
+    test/verification tooling -> `TESTING.md`; security tooling -> `SECURITY.md`;
+    quality thresholds -> `CONSTRAINTS.md`; human setup/PR flow -> `CONTRIBUTING.md`;
+    agent tooling/config -> `AGENTS.md` or `.agents/agents.json` as appropriate.
 - **Refactoring Modules or Adding Core Services**:
   - Update `ARCHITECTURE.md` (topology, directory boundaries, and data flow).
 - **Modifying Auth, Data Ingestion, or Sensitive Endpoints**:
   - Update `SECURITY.md` (threat model, access policies, validation schemas).
 - **Introducing a New Domain Concept or Renaming One**:
   - Update `CONTEXT.md` (add the term and its `_Avoid_` synonyms) in the same change, not as follow-up.
-- **Changing Setup/Run/Test Commands or Adding a Framework-Specific Agent Gotcha**:
-  - Update `AGENTS.md` and, if user-facing, `README.md`'s Getting Started section.
+- **Changing Commands or Framework Behavior**:
+  - Update the command's canonical owner only. README gets basic human start commands;
+    TESTING gets test commands; SECURITY gets security commands; CONTRIBUTING gets
+    contributor/PR flow; AGENTS gets only agent routing/invariants.
 - **Adding or Removing a Control Doc**:
   - Update `README.md`'s Documentation links so it never points to a doc that doesn't exist.
 - **Creating, Installing, Removing, or Updating a Skill**:

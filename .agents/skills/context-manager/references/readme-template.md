@@ -25,8 +25,9 @@ Prerequisites: [runtime + version, package manager + version]
 
 Open [http://localhost:PORT](http://localhost:PORT) to view it.
 
-## Usage
-[The smallest example that shows the thing working — a command, a code snippet, or a screenshot. If there's nothing to show yet (pre-feature scaffold), say so plainly instead of omitting the section silently.]
+## Development
+[Only the smallest human-facing development entry point that earns a place here.
+Route detailed checks/tool procedures to their canonical docs.]
 
 ## Roadmap
 [Optional. A short list of what's next, or a link to `INTENT.md`'s Open Questions / an issue tracker. Omit the heading entirely rather than leaving it empty.]
@@ -46,7 +47,9 @@ Open [http://localhost:PORT](http://localhost:PORT) to view it.
 - [`TESTING.md`](./TESTING.md) — test strategy and commands
 - [`SECURITY.md`](./SECURITY.md) — security policy
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md) — how to contribute
+- [`CONSTRAINTS.md`](./CONSTRAINTS.md) — non-regression quality floor
 - [`AGENTS.md`](./AGENTS.md) — brief for AI coding agents working in this repo
+- [`RTK.md`](./RTK.md) — RTK-specific wrapper guidance
 
 ## License
 [License name, or "Unlicensed / private" if none applies yet — do not omit silently.]

@@ -1,9 +1,11 @@
 # SECURITY.md Template
 
 ## Document Purpose
-`SECURITY.md` defines the security policies, vulnerability reporting procedures, authentication & authorization models, secrets management, and defensive engineering practices.
 
----
+`SECURITY.md` owns security posture: disclosure, supported-release policy,
+secrets/sensitive data, trust-boundary validation, authentication/authorization,
+security tooling, and remediation policy. Blocking numeric floors may be referenced
+from `CONSTRAINTS.md` rather than duplicated.
 
 ## Canonical Structure
 
@@ -11,31 +13,29 @@
 # Security Policy & Guidelines
 
 ## 1. Reporting a Vulnerability
-- Instructions on how to report suspected security flaws (e.g., email address, private security advisory link).
-- Expected response time and disclosure embargo process.
-- What NOT to do (do not open public GitHub issues for active vulnerabilities).
+[Private reporting path and disclosure expectations.]
 
 ## 2. Supported Versions
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.x.x   | :white_check_mark: |
-| < 1.0   | :x:                |
+[Real release support policy; if pre-release, say there is no matrix.]
 
 ## 3. Secrets & Environment Configuration
-- No secrets in version control (enforced via `.gitignore` and git pre-commit hooks).
-- Production secrets injection (e.g., Vercel Environment Variables, Vault, Secret Manager).
-- Sanitization of log outputs: Never log tokens, passwords, or PII.
+[Secret storage, logs, env handling.]
 
-## 4. Input Validation & Data Sanitization
-- Form validation and payload boundaries (e.g., Zod schemas, strict type parsing).
-- XSS prevention: Escaping user content, safe markdown rendering libraries, Content Security Policy (CSP).
-- SQL / Query injection defenses (parameterized queries, ORM safety).
+## 4. Input & Data Boundaries
+[Validation/sanitization at trust boundaries that actually exist.]
 
-## 5. Authentication & Authorization Policies
-- Session management, JWT / cookie flags (`HttpOnly`, `SameSite=Lax`, `Secure`).
-- Role-Based Access Control (RBAC) or ownership verification on all data mutations.
+## 5. Authentication & Authorization
+[Current model or explicit absence; ownership checks when implemented.]
 
-## 6. Dependency Management & Auditing
-- Automated scanning commands (`pnpm audit`, Dependabot / Renovate).
-- Policy for resolving high and critical severity advisories.
+## 6. Security Tooling
+[Configured dependency, secret, static-analysis, and workflow-security scanners.]
 ```
+
+## Governance Rules
+
+1. Do not publish transient vulnerability findings as long-lived policy; scanner
+   output owns current findings.
+2. Never invent auth/data defenses before those boundaries exist.
+3. Keep branch names out of supported-version policy unless a branch is truly a
+   maintained security-support channel.
+4. Ground CI/security-automation claims in actual workflows/configuration.

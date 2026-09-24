@@ -1,7 +1,7 @@
 # DESIGN.md Template
 
 ## Document Purpose
-`DESIGN.md` documents the design system specification: color tokens (light & dark), typography, spacing/radius scales, elevation, UI primitive catalog, and visual testing workflow.
+`DESIGN.md` documents the design system specification: color tokens (light & dark), typography, spacing/radius scales, elevation, UI primitive language, and interaction semantics.
 
 **This is a real, external, tooling-enforced spec** — [design.md](https://github.com/google-labs-code/design.md) by Google Labs (context7 ID `/google-labs-code/design.md`), with an npm linter package (`@google/design.md`) that validates structure, WCAG contrast, and token references. Before writing or auditing `DESIGN.md`, pull its docs via context7/ctx7 rather than relying on this template alone — the spec is versioned (`alpha` at time of writing) and may have evolved.
 
@@ -94,9 +94,7 @@ components:
 ## Do's and Don'ts
 - Concrete rules and anti-patterns, including at least one that follows from what the Elevation section found.
 
-<!-- Non-canonical, repo-specific sections go here, after all 8 canonical sections -->
-## Storybook / Visual Verification
-- Story tooling, current real coverage (a number, not "comprehensive").
+<!-- Testing/Storybook/Ladle procedures belong to TESTING.md, not DESIGN.md. -->
 ```
 
 ---
@@ -111,8 +109,10 @@ components:
    Overview → Colors → Typography → Layout → Elevation & Depth → Shapes → Components → Do's and Don'ts (aliases apply — "Layout & Spacing" and "Elevation" are accepted alternate headings for "Layout" and "Elevation & Depth"). Omit a section if it's genuinely irrelevant; don't reorder the ones you keep. Repo-specific extras go after, not interleaved.
 4. **Say "Not Yet Established," Don't Fabricate a System**:
    A young or component-library-stage repo usually has no formal elevation scale, spacing scale, or grid system yet. Document what's real (even "ad hoc, no formal system, see file X") rather than inventing a fuller-looking spec than the codebase implements.
-5. **Representative Components, Not a Component-by-Component Mirror**:
-   Both the frontmatter `components` block and the body's worked examples should cover 2-4 primitives, showing the *pattern*. Never let either grow into a restatement of every component's full variant table — that duplicates the source `.tsx` files, which remain the actual source of truth for exact class strings.
+5. **Representative Components, Not a Source Mirror**:
+   Frontmatter and body examples should show design patterns and component families,
+   not duplicate every file, variant, or class string. Source remains authoritative
+   for exact inventory and implementation.
 6. **A Marketing-Site Design System and a Component-Library DESIGN.md Are Different Documents**:
    A brand-analysis example (gradient tokens, hero/pricing/nav catalogs, photography geometry) describes a live marketing site's design.md instance. A pre-product component library has none of those surfaces yet — don't import that structure wholesale. Match the canonical sections to what the repo actually is.
 7. **Extend the Spec Transparently When It Has a Real Gap**:

@@ -1,45 +1,46 @@
 # CONVENTIONS.md Template
 
 ## Document Purpose
-`CONVENTIONS.md` establishes repository-wide coding standards, naming rules, formatting/linting configurations, structural patterns, and code smells to avoid.
 
----
+`CONVENTIONS.md` owns **how code is written**: naming, file/API shape, framework
+patterns, composition, formatting/lint ownership, implementation performance rules,
+and code smells.
+
+It does not own test strategy, quality thresholds, Git/PR workflow, or design-token
+values.
 
 ## Canonical Structure
 
 ```markdown
 # Coding Conventions & Standards
 
-## 1. Tooling & Enforcement
-- Formatter & Linter: Tool name and config file (e.g., Biome via `biome.json`).
-- Strict Mode: TypeScript strict configuration, no implicit any.
-- Commands:
-  - Lint: `pnpm lint`
-  - Format: `pnpm format`
+## 1. Tool-Owned Conventions
+[Which formatter/linter/type/architecture tools own code-shape behavior; avoid a full
+task-end command matrix.]
 
-## 2. Naming Conventions
-- **Files & Folders**: `kebab-case.ts` / `kebab-case.tsx` (e.g., `user-profile.tsx`, `use-mobile.ts`).
-- **Components**: `PascalCase` (e.g., `UserProfile`, `Button`).
-- **Functions & Hooks**: `camelCase` (e.g., `calculateTotal`, `useNotes`).
-- **Constants**: `UPPER_SNAKE_CASE` or `camelCase` config objects.
-- **Types & Interfaces**: `PascalCase` without Hungarian prefixes (prefer `Note` over `INote`).
+## 2. Naming & File Shape
+[Files, components, functions, types, exports.]
 
-## 3. Component & File Anatomy
-- Preferred export style: Named exports or default exports (document repository rule).
-- Import ordering:
-  1. External packages (`react`, `next`, `@base-ui/...`)
-  2. Workspace aliases (`@/components/...`, `@/lib/...`)
-  3. Relative imports (`./sub-component`)
-  4. Styles / CSS
+## 3. Component / Module Composition
+[Composition rules, boundaries, public API conventions.]
 
-## 4. State & React Best Practices
-- Server vs. Client Components: Explicit `"use client"` directives only when required for event handlers or state.
-- Separation of UI and business logic (use custom hooks for complex state).
-- Pure utility functions with zero side-effects in `lib/`.
+## 4. Framework-Specific Rules
+[Only rules grounded in the installed framework/library.]
 
-## 5. Anti-Patterns & Code Smells
-- Direct DOM manipulation outside React lifecycles.
-- Hardcoded magic strings and numbers.
-- Unhandled async promise rejections.
-- Bypassing lint/type checks with `@ts-ignore` or `any`.
+## 5. Styling / Data / Runtime Rules
+[Implementation conventions whose owner is code, not visual product design.]
+
+## 6. Performance-Sensitive Code
+[Implementation-level performance patterns.]
+
+## 7. Anti-Patterns
+[Repository-specific code smells and forbidden shortcuts.]
 ```
+
+## Governance Rules
+
+1. Prefer tool/config ownership over manually duplicated formatter/import rules.
+2. Keep commands/checklists in `TESTING.md`, `CONSTRAINTS.md`, or
+   `CONTRIBUTING.md` as appropriate.
+3. Reference `DESIGN.md` for visual-token semantics rather than copying token values.
+4. Do not document speculative framework patterns that the repository does not use.
