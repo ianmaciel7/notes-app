@@ -243,6 +243,51 @@ function verifyDesignMdStructure(text) {
   return results;
 }
 
+
+function getDesignFrontmatter(text) {
+  if (!text.startsWith("---\n")) return null;
+  const end = text.indexOf("\n---\n", 4);
+  return end < 0 ? null : text.slice(4, end);
+}
+
+function verifyDesignTopLevelKeys(text) {
+  const fm = getDesignFrontmatter(text);
+  if (fm === null) return [fail("design-frontmatter", "DESIGN.md is missing valid YAML frontmatter fences.")];
+  const allowed = new Set(["version", "name", "description", "omitted", "colors", "typography", "rounded", "spacing", "components"]);
+  const keys = [];
+  for (const line of fm.split("\n")) {
+    const m = line.match(/^([A-Za-z][\w-]*):(?:\s|$)/);
+    if (m) keys.push(m[1]);
+  }
+  const unknown = keys.filter((key) => !allowed.has(key));
+  return unknown.length === 0
+    ? [ok("design-frontmatter", "DESIGN.md uses only documented top-level frontmatter groups.")]
+    : [fail("design-frontmatter", `Unknown top-level DESIGN.md key(s): ${unknown.join(", ")}.`)];
+}
+
+function verifyDesignDimensionValues(text) {
+  const fm = getDesignFrontmatter(text);
+  if (fm === null) return [skip("design-dimensions", "No frontmatter to inspect.")];
+  const invalid = [];
+  let section = null;
+  for (const line of fm.split("\n")) {
+    const top = line.match(/^([A-Za-z][\w-]*):(?:\s|$)/);
+    if (top) {
+      section = top[1];
+      continue;
+    }
+    if (!["rounded", "spacing"].includes(section)) continue;
+    const m = line.match(/^\s{2}([\w-]+):\s*(.+?)\s*(?:#.*)?$/);
+    if (!m) continue;
+    const raw = m[2].replace(/^["']|["']$/g, "").trim();
+    if (section === "spacing" && /^-?\d+(?:\.\d+)?$/.test(raw)) continue;
+    if (!/^-?\d+(?:\.\d+)?(?:px|em|rem)$/.test(raw)) invalid.push(`${section}.${m[1]}=${raw}`);
+  }
+  return invalid.length === 0
+    ? [ok("design-dimensions", "Rounded/spacing frontmatter values use schema-compatible dimensions/numbers.")]
+    : [fail("design-dimensions", `Invalid DESIGN.md dimension token(s): ${invalid.join(", ")}.`)];
+}
+
 // ===========================================================================
 // 6. AGENTS.md tool-generated block (Next.js-specific; delegates to the real
 //    generator module rather than re-implementing its logic)
@@ -592,6 +637,8 @@ module.exports = {
   verifyCitedPackageScripts,
   verifyReadmeBoilerplate,
   verifyDesignMdStructure,
+  verifyDesignTopLevelKeys,
+  verifyDesignDimensionValues,
   verifyAgentsGeneratedBlock,
   verifyAgentsInstructionBudget,
   verifyAgentsCitedPaths,

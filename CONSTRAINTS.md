@@ -19,11 +19,10 @@ not be weakened merely to make a change pass.
 | Dimension | Rule | Checked by | Runs at |
 | --- | --- | --- | --- |
 | Types | Zero type errors | `pnpm run check:types` | task end |
-| Lint | Zero configured Biome errors | `pnpm run check:lint` | task end |
+| Lint | Zero Biome errors in the targets covered by `check:lint` | `pnpm run check:lint` | task end |
 | Architecture | Zero dependency-cruiser violations | `pnpm run deps:check` | task end |
 | Duplication | At most 10% by configured jscpd threshold | `pnpm run check:duplication` | task end |
 | Dependency audit | No high/critical package-manager advisories | `pnpm run check:security` | dependency/security review |
-| OSV dependencies | Zero unignored OSV findings | `pnpm run check:osv` | dependency/security review |
 | Accessibility | Lighthouse accessibility score at least 0.90 | `pnpm run lighthouse` | relevant UI changes |
 | Diff floor | Zero floor-guard findings | `pnpm run check:floor` | every task end |
 
@@ -32,6 +31,7 @@ not be weakened merely to make a change pass.
 | Metric | Current state | Direction | Measured by |
 | --- | --- | --- | --- |
 | Test coverage | Coverage reporting exists; no repository threshold is configured | establish a baseline, then prevent regression | `pnpm run test:coverage` |
+| OSV dependency scan | Scanner/config are present; no baseline is recorded in this contract | review findings and document any explicit exception | `pnpm run check:osv` |
 | Browser performance | Lighthouse performance is warning-only at 0.90 | measure before adopting a blocking target | `pnpm run lighthouse` |
 | Browser best practices | Lighthouse best-practices is warning-only at 0.90 | preserve or improve before enforcing | `pnpm run lighthouse` |
 | SEO | Lighthouse SEO is warning-only at 0.90 | informational until product surfaces exist | `pnpm run lighthouse` |

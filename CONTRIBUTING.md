@@ -8,6 +8,8 @@ This file owns the **human contribution workflow**. Code rules live in
 
 - Use pnpm 11.20.0, pinned by `packageManager` in `package.json`.
 - Use a current Node.js LTS release compatible with the pinned Next.js version.
+- Command examples use RTK; direct execution is the fallback only under the conditions
+  documented in `RTK.md`.
 
 ```bash
 rtk git clone <repository-url>

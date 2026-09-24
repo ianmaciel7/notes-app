@@ -14,6 +14,8 @@ Verifies DESIGN.md against the real external design.md spec
     Pure text parsing — does not shell out to \`npx @google/design.md lint\`.
   - Every component/primitive count it cites matches the real
     src/components/ui/*.tsx count.
+  - Frontmatter uses only documented top-level schema groups.
+  - Rounded/spacing tokens use schema-compatible dimensions.
 
 Arguments:
   ROOT_DIR       Repo root containing DESIGN.md (default: walk up from cwd).
@@ -31,5 +33,10 @@ Exit codes:
 runVerify(process.argv.slice(2), {
   docFile: "DESIGN.md",
   help: HELP,
-  buildResults: ({ repoRoot, text }) => [...checks.verifyDesignMdStructure(text), ...checks.verifyComponentCountMentions(repoRoot, text, "DESIGN.md")],
+  buildResults: ({ repoRoot, text }) => [
+    ...checks.verifyDesignMdStructure(text),
+    ...checks.verifyDesignTopLevelKeys(text),
+    ...checks.verifyDesignDimensionValues(text),
+    ...checks.verifyComponentCountMentions(repoRoot, text, "DESIGN.md"),
+  ],
 });

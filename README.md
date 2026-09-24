@@ -7,7 +7,8 @@ is still being defined in [`INTENT.md`](./INTENT.md).
 ## Getting Started
 
 Prerequisites: a current Node.js LTS release and pnpm 11.20.0, pinned by
-`packageManager` in `package.json`.
+`packageManager` in `package.json`. Command examples use RTK; if RTK is unavailable,
+follow the direct-execution fallback in [`RTK.md`](./RTK.md).
 
 ```bash
 rtk pnpm install

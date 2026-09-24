@@ -1,7 +1,7 @@
 # DESIGN.md Template
 
 ## Document Purpose
-`DESIGN.md` documents the design system specification: color tokens (light & dark), typography, spacing/radius scales, elevation, UI primitive language, and interaction semantics.
+`DESIGN.md` documents the design system specification: color tokens and theme roles, typography, spacing/radius scales, elevation, UI primitive language, and interaction semantics.
 
 **This is a real, external, tooling-enforced spec** — [design.md](https://github.com/google-labs-code/design.md) by Google Labs (context7 ID `/google-labs-code/design.md`), with an npm linter package (`@google/design.md`) that validates structure, WCAG contrast, and token references. Before writing or auditing `DESIGN.md`, pull its docs via context7/ctx7 rather than relying on this template alone — the spec is versioned (`alpha` at time of writing) and may have evolved.
 
@@ -9,7 +9,10 @@
 - **The YAML frontmatter is the normative source of values; the Markdown body is rationale.** This inverts a naive reading of "don't duplicate data" — the body is *supposed* to reference frontmatter tokens (via `{group.key}` curly-brace syntax) and add human context, not just restate raw values. Only avoid duplication that isn't a token reference (e.g. a stray literal OKLCH value typed by hand instead of `{colors.foreground}`).
 - **8 canonical H2 sections, in this exact order, with aliases**: Overview (alias: Brand & Style) → Colors → Typography → Layout (alias: Layout & Spacing) → Elevation & Depth (alias: Elevation) → Shapes → Components → Do's and Don'ts. Sections may be omitted if irrelevant, but included ones must stay in this order. Non-canonical, repo-specific sections (e.g. a Ladle/Storybook workflow note) can be appended *after* all canonical sections.
 - **Frontmatter schema** (top-level keys): `version`, `name`, `description` (optional), `omitted` (optional — suppresses linter warnings for a whole missing category, with an optional reason), `colors`, `typography`, `rounded`, `spacing`, `components`. Token references inside `components` use `{group.key}` pointing into the other top-level groups.
-- **`colors` is a flat map — the spec (as of `alpha`) has no native light/dark pairing.** If the project has a dark theme (most shadcn/Tailwind projects do), document it as a clearly-labeled, non-canonical extension (e.g. a sibling `colors-dark` key) rather than silently dropping real data or inventing a nested structure the spec doesn't define. Say explicitly that this is a project extension, not spec-defined, and why.
+- **`colors` is a flat map.** Keep theme variants inside that documented group
+  using explicit flat token names (for example `dark-background`) or explain them in
+  prose. Do not add unknown top-level groups such as `colors-dark` merely to model a
+  second theme.
 - **`components` in the frontmatter is for a handful of representative primitives, not every component.** Full-catalog detail belongs in the "Components" body section, grouped by category, referencing but not exhaustively duplicating source `.tsx` files.
 
 ---
@@ -27,11 +30,12 @@ colors:
   foreground: <value>
   primary: <value>
   primary-foreground: <value>
-  # ...every token actually defined in globals.css (or equivalent), nothing invented
+  dark-background: <value> # optional project naming for a paired dark token
+  # ...only real design tokens
 
-colors-dark:            # non-canonical extension — see "Key facts" above
-  background: <value>
-  # ...
+omitted:
+  - section: spacing
+    reason: "No project-level spacing token scale."
 
 typography:
   heading:
@@ -45,13 +49,13 @@ typography:
     fontWeight: <value>
 
 rounded:
-  sm: <value>
-  md: <value>
-  lg: <value>
-  # ...
+  sm: 4px
+  md: 8px
+  lg: 12px
+  # Dimensions must use values accepted by the current schema.
 
-spacing:
-  <name>: <value>        # only real, grep-able values — see Layout section guidance below
+# Define spacing only when the project has a real shared spacing-token scale.
+# Otherwise omit it and record the omission in `omitted`.
 
 components:
   <component-name>:
@@ -115,5 +119,8 @@ components:
    for exact inventory and implementation.
 6. **A Marketing-Site Design System and a Component-Library DESIGN.md Are Different Documents**:
    A brand-analysis example (gradient tokens, hero/pricing/nav catalogs, photography geometry) describes a live marketing site's design.md instance. A pre-product component library has none of those surfaces yet — don't import that structure wholesale. Match the canonical sections to what the repo actually is.
-7. **Extend the Spec Transparently When It Has a Real Gap**:
-   The `alpha` spec has no native dark-mode pairing. If the project has one (most do), add it as a clearly-labeled non-canonical key (e.g. `colors-dark`) with a comment explaining it's a project extension, not part of the spec — don't silently drop real data, and don't pretend an invented structure is spec-defined.
+7. **Stay Inside the Machine-Readable Schema**:
+   Do not add unknown top-level YAML groups to solve a project-specific modeling gap.
+   Use valid token names inside documented groups or explain unsupported relationships
+   in prose/source-of-truth code. Re-check the current upstream spec before changing
+   schema assumptions.
