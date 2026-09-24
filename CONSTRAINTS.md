@@ -10,7 +10,7 @@ not be weakened merely to make a change pass.
 - No new checker suppressions such as `@ts-ignore`, `eslint-disable`, or
   `biome-ignore` merely to silence a finding.
 - No unimplemented stubs, empty catches, or TODO placeholders in production source.
-- No skipped/deleted tests or removed assertions merely to obtain a pass.
+- No skipped or deleted tests, and no removed assertions, merely to obtain a pass.
 - No secrets in source.
 - No new exception without a documented owner, reason, and expiry.
 

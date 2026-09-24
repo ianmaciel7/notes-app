@@ -10,8 +10,8 @@ Verifies CONTRIBUTING.md against real repo state:
   - Every pnpm/npm/yarn command it cites exists in package.json.
   - If package.json pins a "packageManager" version, that exact version is
     actually mentioned in the doc.
-  - The most recent commits follow Conventional Commits (if the doc claims
-    that convention — this is an informational cross-check either way).
+  - The most recent commits follow Conventional Commits.
+  - Stale "no CI/no tests" claims are rejected when repository evidence disagrees.
 
 Arguments:
   ROOT_DIR       Repo root containing CONTRIBUTING.md (default: walk up from cwd).
@@ -33,5 +33,7 @@ runVerify(process.argv.slice(2), {
     ...checks.verifyCitedPackageScripts(repoRoot, text),
     ...checks.verifyPackageManagerPin(repoRoot, text),
     ...checks.verifyConventionalCommits(repoRoot, 10),
+    ...checks.verifyCiClaims(repoRoot, text),
+    ...checks.verifyTestPresenceClaims(repoRoot, text),
   ],
 });

@@ -19,12 +19,14 @@
 //   5. DESIGN.md canonical structure   verifyDesignMdStructure
 //   6. AGENTS.md generated block       verifyAgentsGeneratedBlock
 //   7. Secrets / .env handling         verifyEnvHandling
-//   8. CI existence                    verifyCiExistence
-//   9. Dependency version claims       verifyVersionClaims
-//  10. CONTEXT.md _Avoid_ leakage      verifyAvoidSynonymLeakage
-//  11. Cited source files exist        verifyCitedFilesExist
-//  12. Git history conventions         verifyConventionalCommits
-//  13. Package manager pin             verifyPackageManagerPin
+//   8. CI/test drift claims            verifyCiExistence, verifyCiClaims, verifyTestPresenceClaims
+//   9. Repository-path citations       verifyCitedRepoPaths
+//  10. Configured quality thresholds   verifyJscpdThreshold, verifyLighthouseAccessibilityThreshold
+//  11. Dependency version claims       verifyVersionClaims
+//  12. CONTEXT.md _Avoid_ leakage      verifyAvoidSynonymLeakage
+//  13. Cited source files exist        verifyCitedFilesExist
+//  14. Git history conventions         verifyConventionalCommits
+//  15. Package manager pin             verifyPackageManagerPin
 
 const fs = require("fs");
 const path = require("path");
@@ -351,6 +353,100 @@ function verifyCiExistence(repoRoot, expectNoCi) {
   return [ok("ci", `CI existence (${exists}) matches what the doc says.`)];
 }
 
+function verifyCiClaims(repoRoot, text) {
+  const workflowsDir = path.join(repoRoot, ".github", "workflows");
+  const workflows = fs.existsSync(workflowsDir)
+    ? fs.readdirSync(workflowsDir).filter((f) => /\.ya?ml$/i.test(f))
+    : [];
+  const exists = workflows.length > 0;
+  const claimsNoCi = /\b(?:there (?:is|are)|there's|repository has)\s+no\s+(?:general\s+|test\s+)?(?:ci|github actions|workflows?)\b/i.test(text);
+  const claimsCi = /\bGitHub Actions exists\b/i.test(text) || /\.github\/workflows\/[\w.-]+\.ya?ml/i.test(text);
+
+  if (claimsNoCi && exists) {
+    return [fail("ci-claim", `Document claims CI/workflows are absent, but found: ${workflows.join(", ")}.`)];
+  }
+  if (claimsCi && !exists) {
+    return [fail("ci-claim", "Document claims CI/workflow automation exists, but .github/workflows/ is empty or absent.")];
+  }
+  return [ok("ci-claim", `CI claim is compatible with repository state (${workflows.length} workflow file(s)).`)];
+}
+
+function listSourceTests(repoRoot) {
+  const root = path.join(repoRoot, "src");
+  if (!fs.existsSync(root)) return [];
+  const found = [];
+  const visit = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) visit(full);
+      else if (/\.(?:test|spec)\.(?:[cm]?[jt]sx?)$/i.test(entry.name)) found.push(path.relative(repoRoot, full));
+    }
+  };
+  visit(root);
+  return found;
+}
+
+function verifyTestPresenceClaims(repoRoot, text) {
+  const tests = listSourceTests(repoRoot);
+  const claimsNoTests = /\b(?:there (?:is|are)|there's|repository has)\s+no\s+(?:automated\s+)?(?:test suite|tests?)\b/i.test(text);
+  const claimsTests = /\b(?:unit-test foundation|unit tests?|test suite)\b/i.test(text);
+
+  if (claimsNoTests && tests.length > 0) {
+    return [fail("test-presence", `Document claims tests are absent, but found: ${tests.join(", ")}.`)];
+  }
+  if (claimsTests && tests.length === 0) {
+    return [fail("test-presence", "Document describes an existing test suite/foundation, but no src/**/*.test|spec files were found.")];
+  }
+  return [ok("test-presence", `Test-presence claim is compatible with repository state (${tests.length} source test file(s)).`)];
+}
+
+function verifyCitedRepoPaths(repoRoot, text) {
+  const results = [];
+  const seen = new Set();
+  const re = /`([.a-zA-Z0-9_/-]+\.(?:md|json|ya?ml|toml|cjs|mjs|js|ts|tsx))`/g;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const cited = m[1];
+    if (seen.has(cited) || cited.includes("*")) continue;
+    seen.add(cited);
+    const resolved = path.join(repoRoot, cited);
+    results.push(
+      fs.existsSync(resolved)
+        ? ok("repo-paths", `${cited} exists.`)
+        : fail("repo-paths", `${cited} is cited but does not exist at ${resolved}.`)
+    );
+  }
+  if (results.length === 0) results.push(skip("repo-paths", "No concrete repository file paths cited."));
+  return results;
+}
+
+function verifyJscpdThreshold(repoRoot, text) {
+  const configPath = path.join(repoRoot, ".jscpd.json");
+  if (!fs.existsSync(configPath)) return [skip("jscpd-threshold", "No .jscpd.json found.")];
+  const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+  const actual = Number(config.threshold);
+  const claim = text.match(/Duplication\s*\|\s*At most\s+(\d+(?:\.\d+)?)%/i);
+  if (!claim) return [skip("jscpd-threshold", "No duplication percentage claim found in CONSTRAINTS.md.")];
+  const documented = Number(claim[1]);
+  return [documented === actual
+    ? ok("jscpd-threshold", `Documented duplication threshold (${documented}%) matches .jscpd.json.`)
+    : fail("jscpd-threshold", `Documented duplication threshold is ${documented}% but .jscpd.json is ${actual}%.`)];
+}
+
+function verifyLighthouseAccessibilityThreshold(repoRoot, text) {
+  const configPath = path.join(repoRoot, "lighthouserc.cjs");
+  if (!fs.existsSync(configPath)) return [skip("lighthouse-accessibility", "No lighthouserc.cjs found.")];
+  const config = fs.readFileSync(configPath, "utf8");
+  const actualMatch = config.match(/["']categories:accessibility["']\s*:\s*\[\s*["']error["']\s*,\s*\{\s*minScore:\s*([0-9.]+)/);
+  const docMatch = text.match(/Accessibility\s*\|\s*Lighthouse accessibility score at least\s*([0-9.]+)/i);
+  if (!actualMatch || !docMatch) return [skip("lighthouse-accessibility", "Could not compare an enforced accessibility minScore claim.")];
+  const actual = Number(actualMatch[1]);
+  const documented = Number(docMatch[1]);
+  return [documented === actual
+    ? ok("lighthouse-accessibility", `Documented accessibility floor (${documented}) matches lighthouserc.cjs.`)
+    : fail("lighthouse-accessibility", `Documented accessibility floor is ${documented} but lighthouserc.cjs is ${actual}.`)];
+}
+
 // ===========================================================================
 // 9. Dependency version claims (ARCHITECTURE.md vs package.json)
 // ===========================================================================
@@ -501,6 +597,11 @@ module.exports = {
   verifyAgentsCitedPaths,
   verifyEnvHandling,
   verifyCiExistence,
+  verifyCiClaims,
+  verifyTestPresenceClaims,
+  verifyCitedRepoPaths,
+  verifyJscpdThreshold,
+  verifyLighthouseAccessibilityThreshold,
   verifyVersionClaims,
   verifyAvoidSynonymLeakage,
   verifyCitedFilesExist,

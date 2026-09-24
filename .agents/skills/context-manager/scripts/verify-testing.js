@@ -12,7 +12,9 @@ Verifies TESTING.md's grounded claims against real repo state:
     script" as documenting an absence, not citing a real command.
   - Story-coverage and component-count mentions match the real
     src/components/ui/*.tsx count.
-  - CI existence — informational cross-check against .github/workflows/.
+  - CI claims match .github/workflows/.
+  - Claims about an existing/absent test suite match source test files.
+  - Concrete cited repository paths exist.
 
 Arguments:
   ROOT_DIR       Repo root containing TESTING.md (default: walk up from cwd).
@@ -33,6 +35,8 @@ runVerify(process.argv.slice(2), {
   buildResults: ({ repoRoot, text }) => [
     ...checks.verifyCitedPackageScripts(repoRoot, text),
     ...checks.verifyComponentCountMentions(repoRoot, text, "TESTING.md"),
-    ...checks.verifyCiExistence(repoRoot, null),
+    ...checks.verifyCiClaims(repoRoot, text),
+    ...checks.verifyTestPresenceClaims(repoRoot, text),
+    ...checks.verifyCitedRepoPaths(repoRoot, text),
   ],
 });

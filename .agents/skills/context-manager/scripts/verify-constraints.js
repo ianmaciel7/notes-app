@@ -134,5 +134,7 @@ runVerify(process.argv.slice(2), {
     ...verifyExceptions(text),
     ...checks.verifyCitedPackageScripts(repoRoot, text),
     ...verifyConstraintCommands(repoRoot, text),
+    ...checks.verifyJscpdThreshold(repoRoot, text),
+    ...checks.verifyLighthouseAccessibilityThreshold(repoRoot, text),
   ],
 });

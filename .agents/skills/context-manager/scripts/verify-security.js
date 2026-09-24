@@ -9,8 +9,9 @@ const HELP = `Usage: scripts/verify-security.js [OPTIONS] [ROOT_DIR]
 Verifies SECURITY.md's grounded claims against real repo state:
   - .env* file handling: no .env* files present, OR if present, .gitignore
     actually excludes them (a real secret-leak check, not just a doc check).
-  - CI existence — informational: reports whether .github/workflows/ exists
-    so you can eyeball it against what SECURITY.md claims.
+  - Security package scripts it cites exist.
+  - CI/workflow claims match .github/workflows/.
+  - Concrete cited repository paths exist.
 
 Arguments:
   ROOT_DIR       Repo root containing SECURITY.md (default: walk up from cwd).
@@ -28,5 +29,10 @@ Exit codes:
 runVerify(process.argv.slice(2), {
   docFile: "SECURITY.md",
   help: HELP,
-  buildResults: ({ repoRoot }) => [...checks.verifyEnvHandling(repoRoot), ...checks.verifyCiExistence(repoRoot, null)],
+  buildResults: ({ repoRoot, text }) => [
+    ...checks.verifyEnvHandling(repoRoot),
+    ...checks.verifyCitedPackageScripts(repoRoot, text),
+    ...checks.verifyCiClaims(repoRoot, text),
+    ...checks.verifyCitedRepoPaths(repoRoot, text),
+  ],
 });
