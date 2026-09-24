@@ -28,7 +28,8 @@ not be weakened to make a change pass.
 
 | Metric | Today | Direction |
 |--------|-------|-----------|
-| Test coverage | No test runner configured | establish a baseline when tests are added; must not fall |
+| Test coverage | Vitest configured; coverage baseline is not yet enforced | establish a baseline; must not fall |
+| Duplication | jscpd ≤ 10% duplicated source code | `pnpm run check:duplication` | task end |
 | Performance | Lighthouse CI performance assertions are warning-only | establish a baseline for LCP and CLS before enforcement |
 
 ## Exceptions

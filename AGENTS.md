@@ -28,6 +28,10 @@ commands directly, for example `rtk gain` and `rtk init --codex`.
 
 ## Agent tooling
 
+### Tool-use requirement
+
+Always call the available tools when inspecting the repository, reading or searching files, making edits, or verifying changes. Do not claim to have checked a file, command, or external state unless the relevant tool was actually called. For codebase and documentation questions, inspect the current repository state before answering and treat tool output as the source of truth.
+
 Always use the project-configured `@agents-dev/cli` (`agents`) for MCP servers, skills, integrations, profiles, and generated tool configuration. Treat `.agents/agents.json` and `.agents/skills/` as the source of truth; do not edit generated tool files directly. Run `rtk agents sync` after source changes and `rtk agents sync --check` to verify drift. Use `rtk agents status` or `rtk agents doctor` before troubleshooting. Keep secrets in `.agents/local.json`, never in committed configuration.
 
 Serena is enabled as the project MCP server for Codex. Use it for semantic code navigation, symbol-aware retrieval, and edits when those operations are useful; it starts with `--context=codex --project-from-cwd` and selects this repository from the current working directory. Project-specific Serena settings live in `.serena/project.yml`; use `.serena/project.local.yml` for local-only overrides. Keep the Serena server definition in `.agents/agents.json` and regenerate tool configuration with `rtk agents sync` rather than editing `.codex/config.toml` directly.
@@ -46,7 +50,9 @@ If PowerShell blocks the global `agents` script shim, invoke the equivalent `age
 - See `CONVENTIONS.md` for full naming/import rules and `DESIGN.md` for the UI primitive/token catalog.
 
 ## Testing instructions
-- No test suite is configured yet — there is no `pnpm test` script. Run `rtk pnpm lint`, `rtk pnpm build`, `rtk pnpm deps:check`, and `rtk pnpm knip` before considering a task done.
+- Run `rtk pnpm test`, `rtk pnpm lint`, `rtk pnpm build`, `rtk pnpm deps:check`, and `rtk pnpm knip` before considering a task done.
+- Run `rtk pnpm test:coverage`, `rtk pnpm test:mutation`, and `rtk pnpm run check:duplication` when changing testable logic or quality tooling.
+- A Vitest unit-test foundation is configured via `pnpm test`; run `rtk pnpm test` alongside `rtk pnpm lint`, `rtk pnpm build`, `rtk pnpm deps:check`, and `rtk pnpm knip` before considering a task done.
 - Also run `rtk pnpm check:fast`, `rtk pnpm check:security`, and `rtk pnpm check:osv` to enforce the constraints in `CONSTRAINTS.md` and scan dependencies against OSV.
 - The Husky pre-commit hook runs `pnpm run lint-staged` before `pnpm run check:fast`.
 - The optional `.pre-commit-config.yaml` also provides an `actionlint-system` hook for GitHub Actions workflows; install `actionlint` locally before enabling pre-commit.
@@ -90,3 +96,10 @@ Rules:
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+## Skill ownership and updates
+
+- Treat `.agents/skills/` and `skills-lock.json` as project-owned configuration.
+- Do not update, overwrite, or replace remote skill content merely because a newer upstream version exists.
+- Reinstall or refresh a remote skill only when explicitly requested, and preserve the locked source and project-local skills.
+- Do not add skills discovered from a remote repository unless they are explicitly requested and recorded in the project configuration.

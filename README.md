@@ -37,6 +37,10 @@ Run the repository checks before submitting changes:
 
 ```bash
 rtk pnpm lint
+rtk pnpm test
+rtk pnpm test:coverage
+rtk pnpm test:mutation
+rtk pnpm run check:duplication
 rtk pnpm build
 rtk pnpm deps:check
 rtk pnpm knip
@@ -49,11 +53,11 @@ zizmor --offline .
 ```
 
 `check:fast` runs type checking, focused Biome checks, dependency-boundary checks,
-and the quality-floor guard. `check:security` runs the high-severity package
+the quality-floor guard, unit tests, and duplication detection. `check:security` runs the high-severity package
 manager audit, while `check:osv` scans repository manifests and lockfiles with
-OSV-Scanner v2 using [`osv-scanner.toml`](./osv-scanner.toml). There is no
-automated test runner yet; Ladle is the current component and visual verification
-tool. `lighthouse` builds the production app, audits the home page with Lighthouse
+OSV-Scanner v2 using [`osv-scanner.toml`](./osv-scanner.toml). Vitest is the unit
+test runner, StrykerJS provides mutation testing, and Ladle remains the component
+and visual verification tool. `lighthouse` builds the production app, audits the home page with Lighthouse
 CI, enforces the accessibility threshold, and writes local reports to
 `.lighthouseci/`. `lint:actions` validates GitHub Actions workflows with the
 system `actionlint` binary; there are no workflows yet. `zizmor --offline .`

@@ -53,6 +53,9 @@ The following rules are normative for shared UI in `src/components/ui/`. Use exi
   - GitHub Actions validation: `rtk pnpm lint:actions` (requires the system `actionlint` binary; no workflows exist yet)
   - Format: `rtk pnpm format` (`biome format --write`)
   - Staged-file checks: `rtk pnpm run lint-staged` (Biome `check --write` for staged JavaScript, TypeScript, CSS, and JSON files)
+  - Unit tests: `rtk pnpm test` and V8 coverage: `rtk pnpm test:coverage`
+  - Mutation testing: `rtk pnpm test:mutation` (StrykerJS; production targets are configured in `stryker.config.mjs`)
+  - Duplication: `rtk pnpm run check:duplication` (jscpd; 10% ceiling)
 
 Husky runs the staged-file checks before the full `check:fast` gate through
 `.husky/pre-commit`. Keep the lint-staged glob aligned with the Biome-supported
