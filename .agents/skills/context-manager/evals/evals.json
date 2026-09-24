@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "I just wired up next-themes in src/app/layout.tsx (it was declared but never actually mounted before). Can you check if any of our root docs still say dark mode isn't hooked up, and fix whatever's stale?",
-      "expected_output": "A short audit of the 10 root control docs that finds the specific stale claim (CONTEXT.md's or ARCHITECTURE.md's theme-provider description saying it isn't wired into layout.tsx), verifies the real state by reading src/app/layout.tsx, and edits only the doc(s) that were actually wrong rather than rewriting unrelated docs.",
+      "expected_output": "A short audit of the 11 root control docs that finds the specific stale claim (CONTEXT.md's or ARCHITECTURE.md's theme-provider description saying it isn't wired into layout.tsx), verifies the real state by reading src/app/layout.tsx, and edits only the doc(s) that were actually wrong rather than rewriting unrelated docs.",
       "files": [],
       "expectations": [
         "The output explicitly names which doc(s) contained the stale 'not wired' claim",
@@ -35,6 +35,18 @@
         "The YAML frontmatter contains real token values pulled from the actual CSS/theme file, not placeholder or fabricated values",
         "At least one section explicitly says a capability doesn't exist yet (e.g. no custom breakpoint scale, no formal shadow tokens) instead of inventing plausible values",
         "No component list or token table appears twice with different values between the frontmatter and the Markdown body (they reference the same source, not two independently-maintained copies)"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Can you audit the repository control docs after a tooling change, but keep the quality bar intact? Run the context-manager checks, identify any stale claims from the actual codebase, and don't relax a verifier or invent missing capabilities just to get green.",
+      "expected_output": "A grounded control-doc audit that runs all eleven pillar verifiers, reports failures and skips distinctly, fixes only claims contradicted by repository evidence, and leaves the documentation quality floor and existing project constraints intact.",
+      "files": [],
+      "expectations": [
+        "All eleven individual pillar verifiers are actually run",
+        "The output distinguishes a missing capability from a failing capability and does not invent an implementation",
+        "No verifier, threshold, or repository constraint is weakened or bypassed to obtain a pass",
+        "Edits, if any, are limited to docs contradicted by inspected repository ground truth"
       ]
     }
   ]

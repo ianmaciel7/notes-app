@@ -1,6 +1,6 @@
 ---
 name: context-manager
-description: "Manage, audit, create, update, and align repository-level control documentation including README.md, AGENTS.md, CONTEXT.md, ARCHITECTURE.md, CONVENTIONS.md, TESTING.md, DESIGN.md, SECURITY.md, CONTRIBUTING.md, and INTENT.md. Use this skill whenever the user asks to create, update, audit, sync, or review project documentation standards, architectural specs, design system guides, test strategies, security policies, contribution guides, agent onboarding files, project vocabulary, or project intent, even if they only mention one of these files."
+description: "Manage, audit, create, update, and align repository-level control documentation including README.md, AGENTS.md, CONTEXT.md, ARCHITECTURE.md, CONVENTIONS.md, TESTING.md, DESIGN.md, SECURITY.md, CONTRIBUTING.md, INTENT.md, and CONSTRAINTS.md. Use this skill whenever the user asks to create, update, audit, sync, or review project documentation standards, quality gates, architectural specs, design system guides, test strategies, security policies, contribution guides, agent onboarding files, project vocabulary, or project intent, even if they only mention one of these files."
 ---
 
 # Control Docs
@@ -11,7 +11,7 @@ Control documentation establishes the single source of truth for humans and AI a
 
 ---
 
-## The 10 Pillars of Repository Control Documentation
+## The 11 Pillars of Repository Control Documentation
 
 | Document | Primary Role | Ground Truth Sources in Repo |
 |---|---|---|
@@ -25,6 +25,7 @@ Control documentation establishes the single source of truth for humans and AI a
 | **`TESTING.md`** | Testing pyramid, test runners, visual stories, mocking, quality gates, CI | `package.json` scripts, test configs, Ladle/Vitest |
 | **`SECURITY.md`** | Threat models, secret handling, auth/authz, input validation, disclosure policy | Auth handlers, middleware, env validation, dependencies |
 | **`CONTRIBUTING.md`** | Setup guide, branch naming, Conventional Commits, pre-flight verification checklist | Git history, package manager, CI scripts, lint scripts |
+| **`CONSTRAINTS.md`** | Project quality contract: floor rules, measurable gates, baselines, and owned exceptions | package scripts, configs, CI, existing checks, current measurements |
 
 ---
 
@@ -47,13 +48,19 @@ Control documentation establishes the single source of truth for humans and AI a
 
 ---
 
+## Documentation Quality Contract
+
+Apply the documentation quality contract to every audit, creation, or synchronization task: ground every claim in repository evidence; reject fabricated tools, unresolved links, placeholders, and edits to generated blocks; require executable checks for numbered rules; preserve measured baselines; and give exceptions an owner, reason, and expiry. Use [`references/constraints-template.md`](references/constraints-template.md) when creating `CONSTRAINTS.md`.
+
+---
+
 ## Core Workflows
 
 ### Workflow 1: Documentation Audit & Drift Detection
 
 Use this workflow to evaluate the health of the repository's control documents.
 
-1. **Inventory Existing Docs**: Check which of the 10 files exist in the repository root (`README.md`, `AGENTS.md`, `CONTEXT.md`, `INTENT.md`, `ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `TESTING.md`, `SECURITY.md`, `CONTRIBUTING.md`). For `README.md`, also check whether it's still unedited scaffold boilerplate (e.g. default `create-next-app` text) — that counts as effectively missing.
+1. **Inventory Existing Docs**: Check which of the 11 files exist in the repository root (`README.md`, `AGENTS.md`, `CONTEXT.md`, `INTENT.md`, `ARCHITECTURE.md`, `CONVENTIONS.md`, `DESIGN.md`, `TESTING.md`, `SECURITY.md`, `CONTRIBUTING.md`, `CONSTRAINTS.md`). For `README.md`, also check whether it's still unedited scaffold boilerplate (e.g. default `create-next-app` text) — that counts as effectively missing.
 2. **Inspect Codebase Reality**:
    - Check framework and runtime versions in `package.json`.
    - Check UI library, styling engine, and theme variables (`components.json`, `src/app/globals.css`).
@@ -76,8 +83,11 @@ Use this workflow to evaluate the health of the repository's control documents.
    - `node .agents/skills/context-manager/scripts/verify-readme.js . --quiet`
    - `node .agents/skills/context-manager/scripts/verify-security.js . --quiet`
    - `node .agents/skills/context-manager/scripts/verify-testing.js . --quiet`
+   - `node .agents/skills/context-manager/scripts/verify-constraints.js . --quiet`
 
-   Run all ten for a full audit. Each supports `--json`, `--help`, and `--quiet`/`-q`; they use shared argument handling from `scripts/lib/cli.js`, make no network calls, and exit nonzero when a document is stale or inconsistent.
+   Each pillar supports `--json`, `--help`, and `--quiet`/`-q`; they use shared
+   argument handling from `scripts/lib/cli.js`, make no network calls, and exit
+   nonzero when a document is stale or inconsistent.
 
 ---
 
@@ -96,6 +106,7 @@ When creating a new control document from scratch:
    - `references/testing-template.md`
    - `references/security-template.md`
    - `references/contributing-template.md`
+   - `references/constraints-template.md`
 2. **Tailor to Project Implementation**:
    - Replace placeholders with the actual project technology, file paths, script names, and conventions.
    - Do not leave empty boilerplate sections; if a section is not applicable yet, state the current status or planned milestone.
@@ -125,6 +136,18 @@ Whenever significant code changes occur:
   - Update `README.md`'s Documentation links so it never points to a doc that doesn't exist.
 - **Creating, Installing, Removing, or Updating a Skill**:
   - Run `npx skills update -p -y` and commit the resulting `skills-lock.json` change, even when the update only reorders entries or refreshes hashes.
+
+---
+
+## Verification
+
+The skill was applied correctly when:
+
+- [ ] Every edited claim was checked against repository ground truth.
+- [ ] Missing capabilities are stated plainly rather than invented.
+- [ ] Local links, cited files, package scripts, versions, and generated blocks pass their applicable checks.
+- [ ] The documentation quality floor was checked and no verifier was weakened, skipped, or hidden to obtain a pass.
+- [ ] All eleven individual verifiers were run for a full audit.
 
 ---
 
