@@ -43,6 +43,7 @@ Read only the owner relevant to the task:
 | Security posture | `SECURITY.md` |
 | Blocking quality floors | `CONSTRAINTS.md` |
 | Contribution, Git, and PR workflow | `CONTRIBUTING.md` |
+| Search, discovery, and navigation hierarchy | `.agents/rules/search-and-discovery.md` |
 
 The complete ownership/boundary map is canonical in
 `.agents/skills/context-manager/SKILL.md`.
@@ -76,7 +77,7 @@ token savings.
 
 ### Command execution invariant
 
-Detailed command and tool invariants are canonical in `.agents/rules/command-invariants.md`.
+Detailed command, search, and tool invariants are canonical in `.agents/rules/command-invariants.md` and `.agents/rules/search-and-discovery.md`.
 
 - **RTK**: Mandatory for all shell commands; exceptions and fallback conditions are documented in `RTK.md`.
 - **Graphify**: `graphify-out/` MUST be queried before manually tracing cross-file architecture or call graphs (see `.agents/skills/graphify/skill.md`).
