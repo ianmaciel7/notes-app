@@ -41,6 +41,11 @@ next-env.d.ts
 .agents/local.json
 .agents/generated/
 .agents/agents.json.*.bak
+analyze_wt.js
+build_worktrees_graph.py
+detailed_investigation.js
+detailed_report.json
+wt_analysis.json
 CLAUDE.md
 .agents/mcp_config.json
 .codex/
