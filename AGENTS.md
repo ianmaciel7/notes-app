@@ -111,6 +111,7 @@ skill behavior from its name alone.
 | AST structural search; pattern matching across files | `ast-grep` |
 | Structural map of a file or directory before editing | `ast-grep-outline` |
 | Control doc create / audit / sync (`README`, `AGENTS`, `DESIGN`, etc.) | `context-manager` |
+| Verify all markdown docs are consistent: links, paths, commands, routing, `docs/` tree | `verify-docs` |
 | React composition patterns; compound components; render props | `vercel-composition-patterns` |
 | React / Next.js performance; bundle; data fetching | `vercel-react-best-practices` |
 | RTK setup / troubleshoot; `RTK.md` integration | `rtk-cli` |

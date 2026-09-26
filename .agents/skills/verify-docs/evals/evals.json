@@ -1,0 +1,46 @@
+{
+  "skill_name": "verify-docs",
+  "evals": [
+    {
+      "id": 1,
+      "name": "pr-readiness",
+      "prompt": "I'm about to open a PR. Can you check that all of our markdown docs are consistent with each other and up to date with the code? Report only, don't change any files.",
+      "expected_output": "Runs the docs verifier, reports a verdict with errors/warnings, and does a judgment pass for duplicated ownership and contradictions.",
+      "files": [],
+      "assertions": [
+        "States an explicit overall verdict (pass / pass with warnings / fail)",
+        "Actually ran the control-doc verifiers (check:docs or verify-control-docs) rather than assuming they pass",
+        "Reports that verify-health is missing from the AGENTS.md skill routing table",
+        "Reports the unlinked docs under docs/ (guide/ files and the worktree report)",
+        "Cites concrete file paths for every finding"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "skills-and-scripts-sync",
+      "prompt": "I've been adding skills and shuffling scripts around this week. Are the docs still in sync with what's actually in .agents/skills and scripts/? Just report what's out of sync, don't edit anything.",
+      "expected_output": "Finds project skills missing from the AGENTS.md routing table and any undocumented scripts, using the verifier plus manual cross-checks.",
+      "files": [],
+      "assertions": [
+        "Reports all five project skills missing from AGENTS.md routing: agents-dev-cli, docs-research, new-component, skill-guide, verify-health",
+        "Cross-checks .agents/skills against the AGENTS.md routing table (does not just skim one list)",
+        "Cites concrete file paths for every finding",
+        "States what was not verified or the scope of the check"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "routing-and-links",
+      "prompt": "Do all the relative links in our docs resolve, and do the docs under docs/ (ADRs, exec plans, product specs) follow the repo's own rules? Report only, no edits.",
+      "expected_output": "Reports link/anchor validity and docs/ tree rule compliance (ADR numbering, plan sections, spec index, orphan docs).",
+      "files": [],
+      "assertions": [
+        "States whether relative links resolve, backed by an actual programmatic or scripted check (not eyeballing)",
+        "Reports the three docs with no inbound links (two docs/guide files plus the worktree report)",
+        "Checks ADR numbering and filename rules (0001-0007 contiguous, kebab-case)",
+        "Notes the non-ASCII/Portuguese text in CONTEXT.md and the product spec as needing confirmation",
+        "Cites concrete file paths for every finding"
+      ]
+    }
+  ]
+}

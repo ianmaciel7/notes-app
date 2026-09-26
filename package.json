@@ -38,7 +38,8 @@
     "verify:health": "node scripts/verify-health.mjs",
     "harness:health": "pnpm run check:ci && pnpm run knip && pnpm run test:mutation && pnpm run check:security",
     "test:ai-tooling": "node scripts/verify-ai-tooling.mjs",
-    "test:guards": "node --test scripts/floor-guard.test.mjs scripts/hooks.test.mjs"
+    "verify:docs": "node scripts/verify-docs.mjs",
+    "test:guards": "node --test scripts/floor-guard.test.mjs scripts/hooks.test.mjs scripts/verify-docs.test.mjs"
   },
   "lint-staged": {
     "*.{cjs,css,json,jsonc,js,mjs,ts,tsx}": "biome check --write"

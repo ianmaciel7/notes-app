@@ -7,12 +7,12 @@ description: Pack repository codebases into single AI-friendly files using Repom
 
 Repomix (formerly Repopack) packs your entire repository or targeted directories into a single, structured file (XML, Markdown, or Plain Text) optimized for Large Language Models (LLMs) and coding agents.
 
-In this repository, [`repomix.config.json`](../../repomix.config.json) is the canonical configuration, and [`AGENTS.md`](../../AGENTS.md) mandates using Repomix whenever a broad, portable repository snapshot is needed.
+In this repository, [`repomix.config.json`](../../../repomix.config.json) is the canonical configuration, and [`AGENTS.md`](../../../AGENTS.md) mandates using Repomix whenever a broad, portable repository snapshot is needed.
 
 ## When to Use This Skill
 
 - When creating or refreshing a repository snapshot for AI analysis.
-- When configuring or auditing [`repomix.config.json`](../../repomix.config.json).
+- When configuring or auditing [`repomix.config.json`](../../../repomix.config.json).
 - When filtering files with `.repomixignore` or custom security patterns.
 - When generating compressed outputs for large codebases.
 
