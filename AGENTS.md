@@ -34,6 +34,8 @@ Read only the owner relevant to the task:
 | --- | --- |
 | Human setup and project entry point | `README.md` |
 | Product scope, goals, non-goals | `INTENT.md` |
+| Detailed product requirements, invariants, phases, decisions | `docs/product-specs/index.md` |
+| Complex multi-step work state | `docs/exec-plans/README.md` |
 | Domain language and concepts | `CONTEXT.md` |
 | Architecture and boundaries | `ARCHITECTURE.md` |
 | Code-writing rules | `CONVENTIONS.md` |
@@ -94,6 +96,8 @@ While changing code:
 - Follow existing patterns and the canonical owner for the affected context.
 - Prefer focused edits; do not edit generated outputs directly.
 - Keep affected canonical documentation aligned with the implementation.
+- When an execution plan is active, update its progress and decision log as material
+  facts change; move it to `docs/exec-plans/completed/` only after verification.
 
 ## Decision boundaries
 
@@ -121,7 +125,9 @@ A task is complete when:
 - failures introduced by the change are fixed;
 - derived/generated artifacts affected by the change are refreshed from their owner;
 - affected canonical documentation is synchronized;
-- the final diff is reviewed for unintended changes and quality-floor regressions.
+- the final diff is reviewed for unintended changes and quality-floor regressions;
+- broad or high-risk diffs receive a fresh independent review (human or separate
+  agent) before handoff when that review is available and proportionate.
 
 Correct code that bypasses required project tooling or validation is incomplete.
 

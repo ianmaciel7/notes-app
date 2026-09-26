@@ -32,6 +32,8 @@ For contribution checks and pull-request expectations, use
 ## Documentation
 
 - [`INTENT.md`](./INTENT.md) — product purpose, scope, non-goals, and open questions
+- [`docs/product-specs/index.md`](./docs/product-specs/index.md) — detailed requirements, invariants, phases, and decisions
+- [`docs/exec-plans/README.md`](./docs/exec-plans/README.md) — durable plans for complex work
 - [`CONTEXT.md`](./CONTEXT.md) — domain vocabulary
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — system structure and boundaries
 - [`CONVENTIONS.md`](./CONVENTIONS.md) — code-writing rules
