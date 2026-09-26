@@ -57,9 +57,9 @@ try {
 try {
   const agentsMd = await readFile(path.join(root, "AGENTS.md"), "utf8");
   const rtkMd = await readFile(path.join(root, "RTK.md"), "utf8");
-  const hasAgentsMandate = agentsMd.includes(
-    "RTK is mandatory for all shell commands",
-  );
+  const hasAgentsMandate =
+    agentsMd.includes("Mandatory for all shell commands") ||
+    agentsMd.includes("RTK is mandatory");
   const hasRtkPrefixEnforcement = rtkMd.includes("MUST be prefixed with `rtk`");
   const hasToolRouting =
     agentsMd.includes("Graphify first") &&

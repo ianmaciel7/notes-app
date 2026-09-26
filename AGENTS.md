@@ -116,6 +116,8 @@ skill behavior from its name alone.
 | Implement work from a spec or tickets | `implement` |
 | Stress-test a plan interactively | `grilling` |
 | Code review since a branch/commit | `code-review` |
+| Broad repository snapshot; repomix packing; `repomix.config.json` | `repomix` |
+| Unit and component testing; Vitest test runner; mocking; coverage | `vitest` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
 Do not add, refresh, replace, or remove remote skills unless explicitly requested.
