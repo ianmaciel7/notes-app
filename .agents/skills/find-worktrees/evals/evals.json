@@ -1,0 +1,23 @@
+{
+  "skill_name": "find-worktrees",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Investigate how space tenancy and auth boundaries were handled in the historical worktrees, and extract the test contracts.",
+      "expected_output": "Synthesizes tenancy and auth patterns from .worktrees/old-9 and companion tests, adheres to <= 15 line citations, does not edit files, and provides persistent storage suggestions.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "How did previous branches solve the block editor slash commands and contracts? Compare old-4 and old-6.",
+      "expected_output": "Dispatches scoped subagents for old-4 and old-6, extracts block editor contract assertions, notes trade-offs, and documents invariants.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Check prior art for offline sync queue and telemetry across old worktrees.",
+      "expected_output": "Explores .worktrees/old-5 sync implementations, extracts queue lifecycle and retry patterns without runtime imports.",
+      "files": []
+    }
+  ]
+}

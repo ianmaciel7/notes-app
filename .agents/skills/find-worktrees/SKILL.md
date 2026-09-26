@@ -43,7 +43,7 @@ Authoritative mapping of subsystem domains to historical worktrees:
 2. Use the `graphify` skill (`query_graph` or `graphify query`) to inspect existing architecture, communities, and known dependencies.
 
 ### Step 2: Dispatch Subagents in Parallel (Per Worktree)
-Use `invoke_subagent` to launch one `research` subagent per target worktree. Consult [dispatch-templates.md](./references/dispatch-templates.md) for ready-to-use subsystem prompts:
+Use `invoke_subagent` (or equivalent subagent dispatch in Codex, AGY, Claude Code) to launch one `research` subagent per target worktree:
 
 ```json
 [
