@@ -59,3 +59,5 @@ opencode.json
 .claude/settings.local.json
 .junie/skills
 .kilo/skills
+# temp files
+.tmp

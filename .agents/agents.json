@@ -4,9 +4,7 @@
     "path": "AGENTS.md"
   },
   "integrations": {
-    "enabled": [
-      "codex"
-    ],
+    "enabled": ["codex", "antigravity"],
     "options": {
       "cursorAutoApprove": true,
       "antigravityGlobalSync": true,
@@ -54,9 +52,7 @@
         "description": "HTTP fetching and scraping helpers",
         "transport": "stdio",
         "command": "uvx",
-        "args": [
-          "mcp-server-fetch"
-        ],
+        "args": ["mcp-server-fetch"],
         "env": {
           "FASTMCP_LOG_LEVEL": "ERROR"
         },
@@ -87,11 +83,7 @@
         "description": "Repository-aware git operations",
         "transport": "stdio",
         "command": "uvx",
-        "args": [
-          "mcp-server-git",
-          "--repository",
-          "${PROJECT_ROOT}"
-        ],
+        "args": ["mcp-server-git", "--repository", "${PROJECT_ROOT}"],
         "env": {
           "FASTMCP_LOG_LEVEL": "ERROR"
         },
@@ -120,16 +112,10 @@
       "serena": {
         "transport": "stdio",
         "enabled": true,
-        "targets": [
-          "codex"
-        ],
+        "targets": ["codex", "antigravity"],
         "description": "Semantic code retrieval and editing for the current project",
         "command": "serena",
-        "args": [
-          "start-mcp-server",
-          "--context=codex",
-          "--project-from-cwd"
-        ]
+        "args": ["start-mcp-server", "--context=codex", "--project-from-cwd"]
       }
     }
   },
@@ -139,9 +125,7 @@
       "hiddenPaths": [
         "**/.codex",
         "**/.claude",
-        "**/.gemini",
         "**/.cursor",
-        "**/.antigravity",
         "**/.agents/mcp_config.json",
         "**/.windsurf",
         "**/.opencode",
