@@ -4,7 +4,7 @@
     "path": "AGENTS.md"
   },
   "integrations": {
-    "enabled": ["codex", "antigravity"],
+    "enabled": ["codex", "antigravity", "claude"],
     "options": {
       "cursorAutoApprove": true,
       "antigravityGlobalSync": true,
@@ -116,6 +116,22 @@
         "description": "Semantic code retrieval and editing for the current project",
         "command": "serena",
         "args": ["start-mcp-server", "--context=codex", "--project-from-cwd"]
+      },
+      "playwright": {
+        "transport": "stdio",
+        "enabled": true,
+        "targets": ["claude", "codex", "antigravity"],
+        "description": "Browser automation for verifying UI in the running app",
+        "command": "npx",
+        "args": ["-y", "@playwright/mcp@0.0.82"]
+      },
+      "graphify": {
+        "transport": "stdio",
+        "enabled": true,
+        "targets": ["codex", "antigravity", "claude"],
+        "description": "Code knowledge graph, architecture analysis, and call-path tracing",
+        "command": "graphify",
+        "args": ["serve", "--project", "${PROJECT_ROOT}"]
       }
     }
   },

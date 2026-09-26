@@ -9,11 +9,14 @@ export default defineConfig({
     },
   },
   test: {
+    environment: "happy-dom",
     include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
     exclude: ["node_modules", ".next", "build"],
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
+      include: ["src/lib/**/*.ts", "src/hooks/**/*.ts"],
+      exclude: ["src/**/*.test.ts", "src/**/*.test.tsx"],
       thresholds: {
         lines: 80,
         functions: 80,

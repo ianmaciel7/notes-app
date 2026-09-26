@@ -13,6 +13,12 @@ Project-local standard for AGENTS.md + MCP + SKILLS.
 - `agents.json`: selected integrations + MCP servers + workspace behavior
 - `skills/*/SKILL.md`: project skills
 
+## Editor hooks
+Hook wiring lives in `.claude/settings.json` (Claude Code) and `hooks.json` (other tools' edit-tool names); the scripts live in `scripts/` and are tested by `pnpm test:guards`.
+- `scripts/hook-biome-on-edit.mjs`: PostToolUse; runs Biome on the edited file and reports unfixable findings.
+- `scripts/hook-guard-paths.mjs`: PreToolUse; denies edits to generated outputs and asks before edits to lockfiles, `skills-lock.json`, and `.env*`.
+- `scripts/hooks-lib.mjs`: shared path and payload logic, covered by `scripts/hooks.test.mjs`.
+
 ## Root instruction file
 - `../AGENTS.md`: canonical instruction document
 

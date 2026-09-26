@@ -62,6 +62,8 @@ opencode.json
 .factory/mcp.json
 .devin/mcp_config.json
 .claude/skills
+.claude/agents
+.playwright-mcp/
 .claude/settings.local.json
 .junie/skills
 .kilo/skills
@@ -69,3 +71,4 @@ opencode.json
 .tmp
 INTENT.pt-BR.md
 /.agents/evals/artifacts/
+.claude

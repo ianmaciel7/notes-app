@@ -1,0 +1,28 @@
+{
+  "biome-auto-format": {
+    "PostToolUse": [
+      {
+        "matcher": "write_to_file|replace_file_content|write_file|edit_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ../scripts/hook-biome-on-edit.mjs"
+          }
+        ]
+      }
+    ]
+  },
+  "protected-paths-guard": {
+    "PreToolUse": [
+      {
+        "matcher": "write_to_file|replace_file_content|write_file|edit_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ../scripts/hook-guard-paths.mjs"
+          }
+        ]
+      }
+    ]
+  }
+}

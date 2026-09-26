@@ -15,7 +15,7 @@ flowchart TD
     %% Architecture & Cross-file
     Type -->|"Architecture, cross-module flow, or impact"| Arch["1. Graphify MCP / CLI"]
     Arch --> ArchQuery["query_graph or shortest_path"]
-    ArchQuery --> ArchWiki["graphify-out/wiki/index.md"]
+    ArchQuery --> ArchReport["graphify-out/GRAPH_REPORT.md"]
 
     %% Code symbols & Semantic references
     Type -->|"Symbol definition, usage, or implementation"| Semantic["2. Serena MCP"]
@@ -50,7 +50,7 @@ flowchart TD
 | **Locate file path by name** | `rtk rg --files` | `search_files` (Filesystem MCP) |
 | **Search exact text or string pattern** | `rtk rg "<pattern>"` | `search_for_pattern` (Serena MCP) |
 | **Inspect symbols, callers, and definitions** | `find_symbol` / `find_referencing_symbols` (Serena) | `get_symbols_overview` |
-| **Analyze module relationships & call chains** | `query_graph` / `shortest_path` (Graphify MCP) | `graphify-out/wiki/index.md` |
+| **Analyze module relationships & call chains** | `query_graph` / `shortest_path` (Graphify MCP) | `graphify-out/GRAPH_REPORT.md` |
 | **Outline file structure before reading** | `ast-grep outline` | `get_symbols_overview` |
 | **Search structural code/AST patterns** | `ast-grep scan` / `ast-grep run` | `rtk rg` |
 | **Third-party library & API docs** | Context7 (`ctx7 library` → `ctx7 docs`) | `search_web` (only if not on ctx7) |

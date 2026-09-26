@@ -121,6 +121,7 @@ skill behavior from its name alone.
 | Unit and component testing; Vitest test runner; mocking; coverage | `vitest` |
 | Atomic commits, clean commit separation, git branching, release tagging | `git-workflow-and-versioning` |
 | Conventional commit messages, diff analysis, intelligent staging | `git-commit` |
+| Save/persist a rule, decision, term, or procedure; "save this"; before creating a skill | `save-info` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
 Do not add, refresh, replace, or remove remote skills unless explicitly requested.
