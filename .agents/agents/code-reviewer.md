@@ -6,7 +6,7 @@ description: >-
   verifying lint/formatting standards, and checking spec compliance before concluding tasks.
 model: inherit
 capabilities:
-  enable_write_tools: false
+  enable_write_tools: true
   enable_mcp_tools: true
   enable_subagent_tools: false
 ---

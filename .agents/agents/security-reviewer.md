@@ -6,7 +6,7 @@ description: >-
   threat modeling, running Semgrep security scans, and ensuring data privacy compliance.
 model: inherit
 capabilities:
-  enable_write_tools: false
+  enable_write_tools: true
   enable_mcp_tools: true
   enable_subagent_tools: false
 ---
