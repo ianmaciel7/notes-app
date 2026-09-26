@@ -212,7 +212,8 @@ Whenever significant code changes occur:
 - **Adding or Removing a Control Doc**:
   - Update `README.md`'s Documentation links so it never points to a doc that doesn't exist.
 - **Creating, Installing, Removing, or Updating a Skill**:
-  - Run `npx skills update -p -y` and commit the resulting `skills-lock.json` change, even when the update only reorders entries or refreshes hashes.
+  - Remote skills authored by third parties (`skills-lock.json`) are immutable third-party dependencies: never edit remote skills directly.
+  - Run `npx skills update -p -y` and commit the resulting `skills-lock.json` change only when explicitly requested by the user, even when the update only reorders entries or refreshes hashes.
 
 ---
 

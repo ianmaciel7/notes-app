@@ -115,6 +115,12 @@
       "skillPath": ".agents/skills/lighthouse-verification/SKILL.md",
       "computedHash": "a641e175d4315cd87b3690314a84b333a31a507312312d6d23ceab955224c792"
     },
+    "search-registry-items": {
+      "source": "alibey-10/shoogle",
+      "sourceType": "github",
+      "skillPath": "skills/search-registry-items/SKILL.md",
+      "computedHash": "109b782b2697d70a2bc31728bcde618eca8d88d6df227952e4bbcf9c39eca10e"
+    },
     "semgrep": {
       "source": "semgrep/skills",
       "sourceType": "github",

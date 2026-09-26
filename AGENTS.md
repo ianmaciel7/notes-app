@@ -22,6 +22,7 @@ Preserve marked tool-generated blocks verbatim.
 - Keep this file routing-oriented. Target <= 12,000 characters; hard maximum
   16,000 UTF-8 bytes.
 - Ownership rules (one fact, one canonical owner): `.agents/skills/context-manager/SKILL.md`.
+- All documentation, specs, and execution plans MUST be written in English unless explicitly requested otherwise by the user (`CONTRIBUTING.md`).
 - Do not weaken quality controls, tests, thresholds, hooks, or suppressions merely
   to make a task pass.
 
@@ -44,6 +45,7 @@ Read only the owner relevant to the task:
 | Blocking quality floors | `CONSTRAINTS.md` |
 | Contribution, Git, and PR workflow | `CONTRIBUTING.md` |
 | Search, discovery, and navigation hierarchy | `.agents/rules/search-and-discovery.md` |
+| Lead Orchestrator & subagent execution | `.agents/rules/orchestration.md` |
 
 The complete ownership/boundary map is canonical in
 `.agents/skills/context-manager/SKILL.md`.
@@ -101,6 +103,7 @@ skill behavior from its name alone.
 | Any codebase question; cross-file architecture when `graphify-out/` exists | `graphify` |
 | Biome, lint, format, `biome check`, import sort, lint rule config | `biome` |
 | shadcn component add / search / style / debug; `components.json` | `shadcn` |
+| Search community shadcn registry items by keyword via Shoogle | `search-registry-items` |
 | UI component story / Ladle dev / accessibility / visual preview | `ladle` |
 | Module boundary violation; circular dependency; `dependency-cruiser` | `dependency-cruiser` |
 | Security scan; bug pattern; Semgrep rule; "find vulnerabilities" | `semgrep` |
@@ -122,9 +125,11 @@ skill behavior from its name alone.
 | Atomic commits, clean commit separation, git branching, release tagging | `git-workflow-and-versioning` |
 | Conventional commit messages, diff analysis, intelligent staging | `git-commit` |
 | Save/persist a rule, decision, term, or procedure; "save this"; before creating a skill | `save-info` |
+| Explore, compare, and extract prior art or contracts from historical worktrees (`.worktrees/old-*`) | `find-worktrees` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
-Do not add, refresh, replace, or remove remote skills unless explicitly requested.
+Never edit remote skills authored by others or modify installed third-party skills directly.
+Do not add, refresh, replace, or remove remote skills unless explicitly requested by the user.
 Follow the applicable skill-management workflow for lifecycle and lock updates.
 
 ## Change workflow

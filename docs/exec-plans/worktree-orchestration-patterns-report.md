@@ -1,18 +1,18 @@
-# Síntese Executiva: Evolução dos Padrões de Orquestração e Subagentes nas Worktrees
+# Executive Summary: Orchestration and Subagent Patterns Evolution across Worktrees
 
-## 1. Visão Geral da Arquitetura Histórica
+## 1. Historical Architecture Overview
 
-A análise cruzada das branches e worktrees do repositório revela uma progressão nítida em direção ao desacoplamento de contexto, isolamento por subagentes e uso de grafos de conhecimento:
+Cross-branch and worktree analysis across repository history reveals a clear progression toward context decoupling, subagent isolation, and knowledge graph adoption:
 
 ```mermaid
 flowchart TD
-    W_Old["Fase Monolítica (.worktrees/old - old-5)<br/>• AGENTS.md acumulativo e misturado com regras de produto<br/>• Subagentes definidos com metadados legados em .agents/agents/*<br/>• Falta de isolamento de contexto (risco de compactação)"]
+    W_Old["Monolithic Phase (.worktrees/old - old-5)<br/>• Accumulative AGENTS.md mixed with product rules<br/>• Legacy agent metadata in .agents/agents/*<br/>• Lack of context isolation (context compaction risk)"]
     
-    W_Inter["Fase de Transição & Modularização (.worktrees/old-6 - old-9)<br/>• Introdução de OpenSpec e regras comportamentais específicas (.agents/rules/)<br/>• Gestão de worktrees como evidência arquitetural (.worktrees/old-*)<br/>• Adoção inicial de Graphify para mapeamento de dependências"]
+    W_Inter["Transition & Modularization Phase (.worktrees/old-6 - old-9)<br/>• Introduction of OpenSpec and behavioral rules (.agents/rules/)<br/>• Worktree management as architectural evidence (.worktrees/old-*)<br/>• Initial Graphify adoption for dependency mapping"]
     
-    W_Proto["Fase Proto-Orquestração (.worktrees/old-prototype)<br/>• Subagent-Driven Development (SDD) com ledger físico<br/>• Criação da skill worktree-scout com modelo tiered (Flash/Flash-lite)<br/>• Strict Runtime Isolation de worktrees"]
+    W_Proto["Proto-Orchestration Phase (.worktrees/old-prototype)<br/>• Subagent-Driven Development (SDD) with physical ledger<br/>• worktree-scout skill with tiered models (Flash/Flash-lite)<br/>• Strict runtime isolation for worktrees"]
     
-    W_Current["Fase Atual (harness-engineering / Root)<br/>• Lead Orchestrator Pattern como diretriz global<br/>• One fact, one canonical owner (CONTEXT, ARCHITECTURE, CONSTRAINTS)<br/>• Pipeline em 4 fases: Grilling -> Slicing -> TDD Subagents -> Dual-Axis Review<br/>• RTK mandatório e hierarquia Graphify -> Serena -> ast-grep -> rg"]
+    W_Current["Current Phase (harness-engineering / Root)<br/>• Lead Orchestrator Pattern as primary operating guideline<br/>• One fact, one canonical owner (CONTEXT, ARCHITECTURE, CONSTRAINTS)<br/>• 4-phase pipeline: Grilling -> Slicing -> TDD Subagents -> Dual-Axis Review<br/>• Mandatory RTK and Graphify -> Serena -> ast-grep -> rg hierarchy"]
 
     W_Old --> W_Inter
     W_Inter --> W_Proto
@@ -21,21 +21,21 @@ flowchart TD
 
 ---
 
-## 2. Invariantes de Orquestração Extraídos
+## 2. Extracted Orchestration Invariants
 
-### A. Isolamento de Worktrees (Worktree Scout Pattern)
-- **Localização:** `.worktrees/old-prototype/.agents/skills/worktree-scout/SKILL.md`
-- **Invariante:** Código em `.worktrees/` nunca deve ser importado em tempo de execução; atua estritamente como modelo, evidência e especificação de prior-art.
-- **Delegação 1:1:** O orquestrador central nunca lê sequencialmente múltiplos arquivos de worktrees. Ele despacha um subagente leve (`flash_lite` / `flash`) dedicado para cada branch ou subsistema específico, preservando o contexto principal.
+### A. Worktree Isolation (Worktree Scout Pattern)
+- **Location:** `.worktrees/old-prototype/.agents/skills/worktree-scout/SKILL.md`
+- **Invariant:** Code under `.worktrees/` must never be imported at runtime; it acts strictly as reference models, evidence, and prior-art specification.
+- **1:1 Delegation:** The central orchestrator never reads worktree files sequentially. It dispatches a lightweight subagent (`flash_lite` / `flash`) scoped to each branch or specific subsystem, keeping the root conversation context clean.
 
-### B. Ciclo de Desenvolvimento Subagent-Driven (SDD)
-- **Localização:** `.agents/skills/subagent-driven-development/SKILL.md`
-- **Ledger Físico vs. Memória de Conversação:** A memória de chat não sobrevive à compactação de contexto (`context compaction`). Por isso, todo progresso, decisão de arbitragem (`Ruling`) e estado de tarefas são persistidos em arquivos em disco (`.superpowers/sdd/` ou `docs/exec-plans/active/`).
-- **Dual-Axis Review:** Cada incremento concluído é submetido a dois subagentes avaliadores paralelos:
-  1. **Standards Reviewer:** Valida formatação, linter (Biome), tipagem e code smells de Fowler.
-  2. **Spec Reviewer:** Valida aderência às histórias de usuário originais e invariantes de produto (`INTENT.md` e `CONTEXT.md`).
-- **Breaker Loop:** No máximo 5 ciclos de correção por tarefa. Se não convergir, o orquestrador assume a decisão (`Ruling: <decisão> — <motivo> — <custo se errada>`) e destrava o pipeline.
+### B. Subagent-Driven Development (SDD) Cycle
+- **Location:** `.agents/skills/subagent-driven-development/SKILL.md`
+- **Physical Ledger vs. Ephemeral Memory:** In-flight chat context does not survive context compaction. Progress, rulings, and task states are durably persisted to disk files (`.superpowers/sdd/` or `docs/exec-plans/active/`).
+- **Dual-Axis Review:** Completed units undergo parallel evaluation by two specialized reviewers:
+  1. **Standards Reviewer:** Verifies formatting, Biome linting, typing, and architectural code smells.
+  2. **Spec Reviewer:** Validates conformance against user requirements and canonical product invariants (`INTENT.md` and `CONTEXT.md`).
+- **Circuit Breaker Loop:** Max 5 corrective cycles per task. If not converging, the lead orchestrator issues a ruling (`Ruling: <decision> — <rationale> — <cost if wrong>`) to unblock the pipeline.
 
-### C. Navegação e Memória
-- **Graphify (`graphify-out/graph.json`):** Primeira linha de pesquisa para relacionamentos e topologia arquitetural, prevenindo varreduras cegas de arquivos via grep.
-- **Serena MCP (`.serena/memories/`):** Memória permanente versionada em Git para decisões de engenharia, limites de segurança e contratos de multi-tenancy.
+### C. Search Navigation and Memory Hierarchy
+- **Graphify (`graphify-out/graph.json`):** First line of discovery for relationships and architectural topology, preventing unguided filesystem grepping.
+- **Serena MCP (`.serena/memories/`):** Durable memory tracked in Git for architectural decisions, security boundaries, and multi-tenancy contracts.

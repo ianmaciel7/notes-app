@@ -62,6 +62,10 @@ do not copy those procedures into this contributor guide.
 
 When multiple agents work concurrently, give each agent its own branch/worktree. Do not let independent agents share one mutable worktree.
 
+### Documentation Language Standard
+
+All documentation, architectural records, execution plans, specs, comments, and PR descriptions MUST be written in English by default, unless the user explicitly requests another language.
+
 ## 5. Pull Requests
 
 - Explain what changed and why.

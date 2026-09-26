@@ -132,6 +132,23 @@
         "description": "Code knowledge graph, architecture analysis, and call-path tracing",
         "command": "graphify",
         "args": ["serve", "--project", "${PROJECT_ROOT}"]
+      },
+      "shoogle": {
+        "transport": "http",
+        "enabled": true,
+        "url": "https://mcp.shoogle.dev/mcp",
+        "description": "Shoogle MCP server for searching community shadcn registries",
+        "targets": [
+          "codex",
+          "claude",
+          "claude_desktop",
+          "gemini",
+          "copilot_vscode",
+          "copilot_cli",
+          "cursor",
+          "antigravity",
+          "windsurf"
+        ]
       }
     }
   },
