@@ -58,7 +58,9 @@ export function qualityRegressions(path, baseline, current) {
       const before=JSON.parse(baseline).threshold;
       const after=JSON.parse(current).threshold;
       if (typeof before==="number" && (typeof after!=="number" || after>before)) findings.push(`duplication threshold: ${before} -> ${after ?? "missing"}`);
-    } catch {}
+    } catch {
+      return findings;
+    }
   } else if (path === "lighthouserc.cjs") {
     const rank={error:2,warn:1};
     const before=lighthouseAssertions(baseline), after=lighthouseAssertions(current);

@@ -23,6 +23,7 @@ not be weakened merely to make a change pass.
 | Architecture | Zero dependency-cruiser violations | `pnpm run deps:check` | task end |
 | Duplication | At most 10% by configured jscpd threshold | `pnpm run check:duplication` | task end |
 | Dependency audit | No high/critical package-manager advisories | `pnpm run check:security` | dependency/security review |
+| Dependency vulnerability regression | No newly introduced known vulnerability | OSV-Scanner differential workflow | PR |
 | Accessibility | Lighthouse accessibility score at least 0.90 | `pnpm run lighthouse` | relevant UI changes |
 | Diff floor | Zero floor-guard findings | `pnpm run check:floor` | every task end |
 | Coverage | ≥ 80% lines, functions, branches, and statements | `pnpm run test:coverage` | CI |
@@ -34,7 +35,7 @@ not be weakened merely to make a change pass.
 
 | Metric | Current state | Direction | Measured by |
 | --- | --- | --- | --- |
-| OSV dependency scan | Scanner/config are present; no baseline is recorded in this contract | review findings and document any explicit exception | `pnpm run check:osv` |
+| Existing OSV baseline | Full scan reports existing known vulnerabilities without blocking | reduce the baseline and document explicit exceptions | `pnpm run check:osv` |
 | Browser performance | Lighthouse performance is warning-only at 0.90 | measure before adopting a blocking target | `pnpm run lighthouse` |
 | Browser best practices | Lighthouse best-practices is warning-only at 0.90 | preserve or improve before enforcing | `pnpm run lighthouse` |
 | SEO | Lighthouse SEO is warning-only at 0.90 | informational until product surfaces exist | `pnpm run lighthouse` |

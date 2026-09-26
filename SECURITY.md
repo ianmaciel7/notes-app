@@ -52,7 +52,7 @@ Do not infer an auth model from framework defaults.
   `osv-scanner.toml`.
 - Gitleaks scans repository history using `gitleaks.toml` in `.github/workflows/security.yml` and as a pre-commit hook.
 - Zizmor 1.30.1 audits GitHub Actions in `.github/workflows/security.yml`.
-- OSV-Scanner 2.6.0 runs PR differential scans plus scheduled/full dependency scans in `.github/workflows/osv-scanner.yml`.
+- OSV-Scanner 2.6.0 blocks newly introduced vulnerabilities on PRs and runs non-blocking scheduled/full scans to expose the existing baseline in `.github/workflows/osv-scanner.yml`.
 - `.github/workflows/codeql.yml` runs CodeQL Action v4 static security analysis on the configured branch/PR targets and schedule.
 - Third-party GitHub Actions are pinned to full commit SHAs; workflow permissions are least-privilege and jobs have bounded timeouts where locally controlled.
 
