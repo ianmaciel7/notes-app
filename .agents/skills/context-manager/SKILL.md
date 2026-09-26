@@ -34,6 +34,7 @@ the other copy with a pointer.
 | **`AGENTS.md`** | Agent router and always-on contract | Scope/precedence, doc/tool/skill routing, agent decision boundaries, anti-bypass invariants, definition of done | Full tool manuals, detailed code conventions, test matrices already owned elsewhere |
 | **`RTK.md`** | RTK-specific usage | RTK behavior, supported usage, exceptions, troubleshooting | General shell policy or unrelated tools |
 | **`.agents/agents.json`** | Machine-readable agent configuration | MCP servers, integrations, profiles, targets, synchronization behavior | Long-form human policy or procedural documentation |
+| **`.agents/rules/*.md`** | Modular agent rules | Targeted, always-on invariant and enforcement rules | Global routing, full manuals |
 | **`.agents/skills/*/SKILL.md`** | Specialized execution workflow | Trigger and procedure for one focused agent capability | Global repository policy unrelated to that skill |
 | **`skills-lock.json`** | Locked remote-skill provenance/state | Source, path, hash/version state required for reproducibility | Human instructions, tool procedures, project policy |
 

@@ -76,20 +76,12 @@ token savings.
 
 ### Command execution invariant
 
-RTK is mandatory for all shell commands; exceptions and fallback conditions are
-documented in `RTK.md`.
+Detailed command and tool invariants are canonical in `.agents/rules/command-invariants.md`.
 
-**Graphify (`graphify-out/`) MUST be queried before manually tracing cross-file
-architecture, dependency chains, or call graphs.** Read `.agents/skills/graphify/skill.md`
-before the first graphify query in a session.
-
-**Repomix (`repomix.config.json`) MUST be used** when a broad, portable snapshot of
-the repository is needed. Do not manually concatenate or enumerate files as a
-substitute.
-
-**Context7 (`ctx7 library` → `ctx7 docs`) MUST be used** before writing code against
-any third-party library API; do not rely on training-data memory for API signatures
-or configuration. Read `.agents/skills/context7-cli/SKILL.md` before fetching docs.
+- **RTK**: Mandatory for all shell commands; exceptions and fallback conditions are documented in `RTK.md`.
+- **Graphify**: `graphify-out/` MUST be queried before manually tracing cross-file architecture or call graphs (see `.agents/skills/graphify/skill.md`).
+- **Repomix**: `repomix.config.json` MUST be used for broad repository snapshots.
+- **Context7**: `ctx7 library` → `ctx7 docs` MUST be used before writing code against third-party library APIs (see `.agents/skills/context7-cli/SKILL.md`).
 
 When the active agent exposes a matching configured MCP, use it rather than creating
 parallel configuration. A required tool may be bypassed only when unavailable,
@@ -151,7 +143,7 @@ Agents may inspect the repository, make requested local edits, run relevant loca
 checks, and fix failures introduced by their own changes without repeated approval.
 
 Never write hardcoded absolute machine paths into committed files, docs, or scripts.
-Use repository-relative paths only.
+Use repository-relative paths only (see `.agents/rules/path-portability.md`).
 
 Destructive history rewrites, deployments, secret rotation, billing changes, and
 other external side effects require explicit user intent.
