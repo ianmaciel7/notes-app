@@ -118,6 +118,8 @@ skill behavior from its name alone.
 | Code review since a branch/commit | `code-review` |
 | Broad repository snapshot; repomix packing; `repomix.config.json` | `repomix` |
 | Unit and component testing; Vitest test runner; mocking; coverage | `vitest` |
+| Atomic commits, clean commit separation, git branching, release tagging | `git-workflow-and-versioning` |
+| Conventional commit messages, diff analysis, intelligent staging | `git-commit` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
 Do not add, refresh, replace, or remove remote skills unless explicitly requested.
