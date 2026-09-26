@@ -25,16 +25,20 @@ not be weakened merely to make a change pass.
 | Dependency audit | No high/critical package-manager advisories | `pnpm run check:security` | dependency/security review |
 | Accessibility | Lighthouse accessibility score at least 0.90 | `pnpm run lighthouse` | relevant UI changes |
 | Diff floor | Zero floor-guard findings | `pnpm run check:floor` | every task end |
+| Coverage | ≥ 80% lines, functions, branches, and statements | `pnpm run test:coverage` | CI |
+| Control-doc drift | Zero verifier failures | `pnpm run check:docs` | CI |
+| Harness evaluator | Deterministic evaluator tests pass | `pnpm run test:harness` | CI |
 
 ## Measured, not yet enforced
 
 | Metric | Current state | Direction | Measured by |
 | --- | --- | --- | --- |
-| Test coverage | Coverage reporting exists; no repository threshold is configured | establish a baseline, then prevent regression | `pnpm run test:coverage` |
 | OSV dependency scan | Scanner/config are present; no baseline is recorded in this contract | review findings and document any explicit exception | `pnpm run check:osv` |
 | Browser performance | Lighthouse performance is warning-only at 0.90 | measure before adopting a blocking target | `pnpm run lighthouse` |
 | Browser best practices | Lighthouse best-practices is warning-only at 0.90 | preserve or improve before enforcing | `pnpm run lighthouse` |
 | SEO | Lighthouse SEO is warning-only at 0.90 | informational until product surfaces exist | `pnpm run lighthouse` |
+
+Behavioral agent success rates are measured by live eval runs but are not yet a blocking PR threshold. Establish a provider/model baseline before adopting a numeric regression floor.
 
 ## Exceptions
 

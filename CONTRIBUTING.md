@@ -7,7 +7,7 @@ This file owns the **human contribution workflow**. Code rules live in
 ## 1. Environment Setup
 
 - Use pnpm 11.20.0, pinned by `packageManager` in `package.json`.
-- Use a current Node.js LTS release compatible with the pinned Next.js version.
+- Use Node.js 22.19.0, pinned by `.node-version`.
 - Command examples use RTK; direct execution is the fallback only under the conditions
   documented in `RTK.md`.
 
@@ -47,7 +47,7 @@ commit.
 Before opening a PR:
 
 - [ ] The requested change is complete and the final diff contains no unrelated edits.
-- [ ] `rtk pnpm check:fast` passes.
+- [ ] `rtk pnpm check:ci` passes.
 - [ ] Additional checks required by `TESTING.md`, `SECURITY.md`, and
       `CONSTRAINTS.md` were run for the change's risk area.
 - [ ] `rtk pnpm build` passes when runtime/build behavior is affected.
@@ -59,6 +59,8 @@ Before opening a PR:
 
 Agent/MCP/skill configuration changes follow the workflows routed by `AGENTS.md`;
 do not copy those procedures into this contributor guide.
+
+When multiple agents work concurrently, give each agent its own branch/worktree. Do not let independent agents share one mutable worktree.
 
 ## 5. Pull Requests
 

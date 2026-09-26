@@ -12,7 +12,7 @@ The repository currently uses:
 - Lighthouse CI for production-browser accessibility/performance auditing;
 - mutation testing for production logic with focused tests.
 
-Integration and end-to-end suites are not configured yet.
+Integration and end-to-end product suites are not configured yet. Agent behavioral evaluations are configured separately under `.agents/evals/`.
 
 ## 2. Toolchain
 
@@ -21,7 +21,8 @@ Integration and end-to-end suites are not configured yet.
 - **Ladle**: component story workbench.
 - **StrykerJS**: mutation testing.
 - **Lighthouse CI**: production-browser audit.
-- **E2E runner**: none configured.
+- **E2E runner**: none configured for product flows.
+- **Harness eval runner**: provider-neutral Node runner with Codex and Antigravity adapters.
 
 Exact versions are owned by `package.json`.
 
@@ -35,6 +36,15 @@ rtk pnpm test:mutation
 rtk pnpm ladle
 rtk pnpm ladle:build
 rtk pnpm lighthouse
+rtk pnpm test:harness
+rtk pnpm check:ci
+```
+
+Live model behavioral evals are separate from normal PR CI:
+
+```bash
+pnpm eval:codex
+pnpm eval:antigravity
 ```
 
 Use the smallest relevant subset during development. Task-end/merge requirements and
@@ -59,9 +69,6 @@ numeric thresholds are owned by `CONSTRAINTS.md` and `CONTRIBUTING.md`.
 
 ## 6. Automation Status
 
-GitHub Actions exists for CodeQL security analysis, but the Vitest/Ladle/Lighthouse
-verification commands are not currently wired into a general test CI pipeline.
-Do not describe local test commands as CI gates until a workflow actually runs them.
+`.github/workflows/quality.yml` runs the deterministic repository gate (`pnpm check:ci`) on pull requests and the main development branches. It includes types, lint, architecture, the diff floor, unit tests, duplication, agent-config drift, control-doc verifiers, evaluator unit tests, coverage, and a production build.
 
-Agent-behavior evaluation scenarios are separate from product testing and live under
-`.agents/evals/`.
+Ladle visual review, Lighthouse, mutation testing, and live model behavioral trials remain risk/cadence-based rather than every-PR gates. Agent-behavior evaluations live under `.agents/evals/`; they use multiple independent trials and score traces plus workspace outcomes rather than final prose alone.

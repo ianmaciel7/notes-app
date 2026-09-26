@@ -63,3 +63,4 @@ opencode.json
 # temp files
 .tmp
 INTENT.pt-BR.md
+/.agents/evals/artifacts/
