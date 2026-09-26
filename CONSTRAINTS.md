@@ -28,6 +28,7 @@ not be weakened merely to make a change pass.
 | Coverage | ≥ 80% lines, functions, branches, and statements | `pnpm run test:coverage` | CI |
 | Control-doc drift | Zero verifier failures | `pnpm run check:docs` | CI |
 | Harness evaluator | Deterministic evaluator tests pass | `pnpm run test:harness` | CI |
+| Guard implementation | Deterministic floor-guard tests pass | `pnpm run test:guards` | CI |
 
 ## Measured, not yet enforced
 

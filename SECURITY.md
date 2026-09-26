@@ -50,10 +50,11 @@ Do not infer an auth model from framework defaults.
   advisories according to `CONSTRAINTS.md`.
 - `rtk pnpm check:osv` scans manifests/lockfiles with OSV-Scanner using
   `osv-scanner.toml`.
-- Gitleaks scans repository history using `gitleaks.toml`.
-- Zizmor audits GitHub Actions/repository security inputs.
-- `.github/workflows/codeql.yml` runs CodeQL static security analysis on the
-  workflow's configured branch/PR targets and schedule.
+- Gitleaks scans repository history using `gitleaks.toml` in `.github/workflows/security.yml` and as a pre-commit hook.
+- Zizmor 1.30.1 audits GitHub Actions in `.github/workflows/security.yml`.
+- OSV-Scanner 2.6.0 runs PR differential scans plus scheduled/full dependency scans in `.github/workflows/osv-scanner.yml`.
+- `.github/workflows/codeql.yml` runs CodeQL Action v4 static security analysis on the configured branch/PR targets and schedule.
+- Third-party GitHub Actions are pinned to full commit SHAs; workflow permissions are least-privilege and jobs have bounded timeouts where locally controlled.
 
 Do not document transient vulnerability findings here. Scanner output is the source
 of truth for current findings. Exceptions/suppressions require an explicit rationale

@@ -32,10 +32,11 @@
     "prepare": "husky",
     "check:docs": "node scripts/verify-control-docs.mjs",
     "test:harness": "node --test .agents/evals/lib.test.mjs",
-    "check:ci": "pnpm run check:fast && pnpm run check:docs && pnpm run test:harness && pnpm run test:coverage && pnpm run build",
+    "check:ci": "pnpm run check:fast && pnpm run check:docs && pnpm run test:harness && pnpm run test:guards && pnpm run test:coverage && pnpm run build",
     "eval:codex": "node .agents/evals/run.mjs --provider codex",
     "eval:antigravity": "node .agents/evals/run.mjs --provider antigravity",
-    "harness:health": "pnpm run check:ci && pnpm run knip && pnpm run test:mutation && pnpm run check:security"
+    "harness:health": "pnpm run check:ci && pnpm run knip && pnpm run test:mutation && pnpm run check:security",
+    "test:guards": "node --test scripts/floor-guard.test.mjs"
   },
   "lint-staged": {
     "*.{cjs,css,json,jsonc,js,mjs,ts,tsx}": "biome check --write"

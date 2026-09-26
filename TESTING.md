@@ -37,6 +37,7 @@ rtk pnpm ladle
 rtk pnpm ladle:build
 rtk pnpm lighthouse
 rtk pnpm test:harness
+rtk pnpm test:guards
 rtk pnpm check:ci
 ```
 
@@ -69,6 +70,6 @@ numeric thresholds are owned by `CONSTRAINTS.md` and `CONTRIBUTING.md`.
 
 ## 6. Automation Status
 
-`.github/workflows/quality.yml` runs the deterministic repository gate (`pnpm check:ci`) on pull requests and the main development branches. It includes types, lint, architecture, the diff floor, unit tests, duplication, agent-config drift, control-doc verifiers, evaluator unit tests, coverage, and a production build.
+`.github/workflows/quality.yml` runs the deterministic repository gate (`pnpm check:ci`) on pull requests and the main development branches. It includes types, lint, architecture, the diff floor, unit tests, duplication, agent-config drift, control-doc verifiers, evaluator unit tests, floor-guard unit tests, coverage, and a production build.
 
 Ladle visual review, Lighthouse, mutation testing, and live model behavioral trials remain risk/cadence-based rather than every-PR gates. Agent-behavior evaluations live under `.agents/evals/`; they use multiple independent trials and score traces plus workspace outcomes rather than final prose alone.
