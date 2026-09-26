@@ -5,7 +5,7 @@ import "../src/app/globals.css";
 import type { GlobalProvider } from "@ladle/react";
 import type { CSSProperties } from "react";
 
-import { ThemeProvider } from "../src/components/theme-provider";
+import { ThemeProvider } from "../src/components/notes-app/theme-provider";
 
 const ladleStyles = {
   "--font-sans":

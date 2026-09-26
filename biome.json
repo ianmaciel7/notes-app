@@ -14,7 +14,8 @@
       "!dist",
       "!build",
       "!.stryker-tmp",
-      "!coverage"
+      "!coverage",
+      "!!src/components/firebase"
     ]
   },
   "formatter": {
@@ -52,7 +53,11 @@
   },
   "overrides": [
     {
-      "includes": ["src/components/ui/**", ".agents/skills/**"],
+      "includes": [
+        "src/components/ui/**",
+        "src/components/firebase/**",
+        ".agents/skills/**"
+      ],
       "linter": {
         "enabled": false
       }

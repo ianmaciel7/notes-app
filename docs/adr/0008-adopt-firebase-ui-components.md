@@ -1,0 +1,3 @@
+# Adopt Firebase Open Source Auth UI Components
+
+We needed production-ready, accessible authentication and multi-factor authentication UI components integrated with `@firebase-oss/ui-core` and `@firebase-oss/ui-react`. We integrated the Firebase Open Source UI components into `src/components/firebase` via the `@firebase` registry (`https://firebaseopensource.com/r/{name}.json`), providing modular auth flows (sign-in, sign-up, phone auth, email link, OAuth, SMS MFA, and TOTP MFA) matching our Base UI / shadcn design system while skipping linter and duplicate checks on external vendor templates.

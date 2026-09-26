@@ -6,7 +6,8 @@
     "**/build/**",
     "**/*.stories.tsx",
     "**/*.test.ts",
-    "**/*.test.tsx"
+    "**/*.test.tsx",
+    "**/src/components/firebase/**"
   ],
   "minTokens": 50,
   "minLines": 5,
