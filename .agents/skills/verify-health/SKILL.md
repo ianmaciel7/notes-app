@@ -8,11 +8,11 @@ description: Runs the consolidated single-command health check for quality, test
 Use this skill whenever you need to evaluate the complete health of the repository in a single execution.
 
 ## Triggering Keywords
-- "verificar saúde"
-- "saúde do projeto"
+- "verify health"
 - "project health"
-- "extraia métricas"
-- "verificar tokens e qualidade"
+- "health check"
+- "extract metrics"
+- "verify tokens and quality"
 - "verify:health"
 
 ## Workflow

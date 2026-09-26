@@ -44,8 +44,8 @@ rtk pnpm check:ci
 Live model behavioral evals are separate from normal PR CI:
 
 ```bash
-pnpm eval:codex
-pnpm eval:antigravity
+rtk pnpm eval:codex
+rtk pnpm eval:antigravity
 ```
 
 Use the smallest relevant subset during development. Task-end/merge requirements and
