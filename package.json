@@ -36,6 +36,7 @@
     "eval:codex": "node .agents/evals/run.mjs --provider codex",
     "eval:antigravity": "node .agents/evals/run.mjs --provider antigravity",
     "harness:health": "pnpm run check:ci && pnpm run knip && pnpm run test:mutation && pnpm run check:security",
+    "test:ai-tooling": "node scripts/verify-ai-tooling.mjs",
     "test:guards": "node --test scripts/floor-guard.test.mjs"
   },
   "lint-staged": {

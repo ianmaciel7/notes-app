@@ -21,8 +21,7 @@ Preserve marked tool-generated blocks verbatim.
 - Treat the repository as ground truth; inspect before assuming.
 - Keep this file routing-oriented. Target <= 12,000 characters; hard maximum
   16,000 UTF-8 bytes.
-- One rule or fact has one canonical owner. Other files may route to it but MUST NOT
-  restate or independently redefine it.
+- Ownership rules (one fact, one canonical owner): `.agents/skills/context-manager/SKILL.md`.
 - Do not weaken quality controls, tests, thresholds, hooks, or suppressions merely
   to make a task pass.
 
@@ -56,17 +55,41 @@ token savings.
 
 | Need | Route |
 | --- | --- |
+| **Any shell command** | **`rtk <command>`** — see `RTK.md`; direct execution is the fallback only under conditions documented there |
 | File discovery / exact text | `rg --files`, then `rg` |
-| Cross-file architecture / dependencies | Graphify when its graph exists |
-| Unfamiliar source outline | `ast-grep outline` |
-| Structural syntax | `ast-grep` |
-| Symbols / references / semantic edits | Serena |
-| Local project commands | RTK; details in `RTK.md` |
+| Cross-file architecture / dependencies | **Graphify first** when `graphify-out/` exists; see `.agents/skills/graphify/skill.md` |
+| Broad portable repository snapshot | **Repomix** with `repomix.config.json`; do not manually concatenate files |
+| Unfamiliar source outline | `ast-grep outline` — structural map before reading full source |
+| Structural AST pattern search | `ast-grep run` / `ast-grep scan`; see `.agents/skills/ast-grep/SKILL.md` |
+| Symbols / references / rename / semantic edits | **Serena MCP** (`mcp-server-serena`); falls back to `rg` only when Serena is unavailable |
+| Git operations | **git MCP** (`mcp-server-git`); falls back to `rtk git <command>` |
+| File read / write via MCP | **filesystem MCP** (`@modelcontextprotocol/server-filesystem`) |
+| HTTP fetch / web content | **fetch MCP** (`mcp-server-fetch`) |
+| Lint / format / import organization | `rtk pnpm lint` (Biome); see `.agents/skills/biome/SKILL.md` |
+| Add / search / update shadcn components | `rtk pnpm dlx shadcn@latest`; see `.agents/skills/shadcn/SKILL.md` |
+| Module boundary / circular-dep check | `rtk pnpm run deps:check` (dependency-cruiser); see `.agents/skills/dependency-cruiser/SKILL.md` |
+| Security / bug pattern scan | Semgrep; see `.agents/skills/semgrep/SKILL.md` |
 | MCPs / integrations / agent config | `agents` CLI; source is `.agents/agents.json` |
-| Current library / API documentation | matching documentation skill / Context7 |
-| Broad portable repository snapshot | Repomix with `repomix.config.json` |
-| Reusable UI isolation | Ladle |
+| Current library / API documentation | Context7 (`ctx7 library` → `ctx7 docs`); see `.agents/skills/context7-cli/SKILL.md` |
+| Reusable UI isolation / story preview | Ladle (`rtk pnpm ladle`); see `.agents/skills/ladle/SKILL.md` |
 | Focused local edit | `apply_patch` when available |
+
+### Command execution invariant
+
+RTK is mandatory for all shell commands; exceptions and fallback conditions are
+documented in `RTK.md`.
+
+**Graphify (`graphify-out/`) MUST be queried before manually tracing cross-file
+architecture, dependency chains, or call graphs.** Read `.agents/skills/graphify/skill.md`
+before the first graphify query in a session.
+
+**Repomix (`repomix.config.json`) MUST be used** when a broad, portable snapshot of
+the repository is needed. Do not manually concatenate or enumerate files as a
+substitute.
+
+**Context7 (`ctx7 library` → `ctx7 docs`) MUST be used** before writing code against
+any third-party library API; do not rely on training-data memory for API signatures
+or configuration. Read `.agents/skills/context7-cli/SKILL.md` before fetching docs.
 
 When the active agent exposes a matching configured MCP, use it rather than creating
 parallel configuration. A required tool may be bypassed only when unavailable,
@@ -77,6 +100,30 @@ fallback.
 
 Project skills live under `.agents/skills/`. Load the most specific skill whose
 documented trigger matches the task; do not preload vaguely related skills.
+Before invoking or applying a skill, read its SKILL.md instructions. Never infer
+skill behavior from its name alone.
+
+| Trigger | Skill |
+| --- | --- |
+| Any codebase question; cross-file architecture when `graphify-out/` exists | `graphify` |
+| Biome, lint, format, `biome check`, import sort, lint rule config | `biome` |
+| shadcn component add / search / style / debug; `components.json` | `shadcn` |
+| UI component story / Ladle dev / accessibility / visual preview | `ladle` |
+| Module boundary violation; circular dependency; `dependency-cruiser` | `dependency-cruiser` |
+| Security scan; bug pattern; Semgrep rule; "find vulnerabilities" | `semgrep` |
+| Library API docs; unfamiliar SDK; version migration | `context7-cli` |
+| AST structural search; pattern matching across files | `ast-grep` |
+| Structural map of a file or directory before editing | `ast-grep-outline` |
+| Control doc create / audit / sync (`README`, `AGENTS`, `DESIGN`, etc.) | `context-manager` |
+| React composition patterns; compound components; render props | `vercel-composition-patterns` |
+| React / Next.js performance; bundle; data fetching | `vercel-react-best-practices` |
+| RTK setup / troubleshoot; `RTK.md` integration | `rtk-cli` |
+| MCP config/runtime issues; `agents` CLI | `mcp-troubleshooting` |
+| Create / edit / eval a skill | `skill-creator` |
+| Domain modeling; ubiquitous language; ADR | `domain-modeling` |
+| Implement work from a spec or tickets | `implement` |
+| Stress-test a plan interactively | `grilling` |
+| Code review since a branch/commit | `code-review` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
 Do not add, refresh, replace, or remove remote skills unless explicitly requested.
@@ -96,13 +143,15 @@ While changing code:
 - Follow existing patterns and the canonical owner for the affected context.
 - Prefer focused edits; do not edit generated outputs directly.
 - Keep affected canonical documentation aligned with the implementation.
-- When an execution plan is active, update its progress and decision log as material
-  facts change; move it to `docs/exec-plans/completed/` only after verification.
+- When an execution plan is active, follow the lifecycle in `.agents/skills/implement/SKILL.md`.
 
 ## Decision boundaries
 
 Agents may inspect the repository, make requested local edits, run relevant local
 checks, and fix failures introduced by their own changes without repeated approval.
+
+Never write hardcoded absolute machine paths into committed files, docs, or scripts.
+Use repository-relative paths only.
 
 Destructive history rewrites, deployments, secret rotation, billing changes, and
 other external side effects require explicit user intent.

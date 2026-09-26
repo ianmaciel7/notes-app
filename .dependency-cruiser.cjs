@@ -4,14 +4,16 @@ module.exports = {
     {
       name: "no-circular",
       severity: "error",
-      comment: "Circular dependencies make module boundaries harder to reason about.",
+      comment:
+        "Circular dependencies make module boundaries harder to reason about.",
       from: {},
       to: { circular: true },
     },
     {
       name: "lib-does-not-depend-on-ui",
       severity: "error",
-      comment: "Shared utilities must stay independent of application and UI layers.",
+      comment:
+        "Shared utilities must stay independent of application and UI layers.",
       from: { path: "^src/lib" },
       to: { path: "^src/(app|components|hooks)" },
     },

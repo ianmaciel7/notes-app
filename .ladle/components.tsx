@@ -12,14 +12,8 @@ const ladleStyles = {
     '"Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif',
 } as CSSProperties;
 
-export const Provider: GlobalProvider = ({
-  children,
-  globalState,
-}) => {
-  const theme =
-    globalState.theme === "auto"
-      ? "system"
-      : globalState.theme;
+export const Provider: GlobalProvider = ({ children, globalState }) => {
+  const theme = globalState.theme === "auto" ? "system" : globalState.theme;
 
   return (
     <ThemeProvider

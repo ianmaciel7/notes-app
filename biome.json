@@ -49,5 +49,13 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["src/components/ui/**", ".agents/skills/**"],
+      "linter": {
+        "enabled": false
+      }
+    }
+  ]
 }

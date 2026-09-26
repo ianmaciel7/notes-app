@@ -32,7 +32,8 @@ runVerify(process.argv.slice(2), {
   help: HELP,
   requireDoc: false, // AGENTS.md is optional in the 10-pillar sense — absence is its own signal, not a hard failure here
   buildResults: ({ repoRoot, text }) => {
-    if (text === null) return [checks.skip("doc-exists", "No AGENTS.md at repo root.")];
+    if (text === null)
+      return [checks.skip("doc-exists", "No AGENTS.md at repo root.")];
     return [
       ...checks.verifyAgentsGeneratedBlock(repoRoot),
       ...checks.verifyAgentsInstructionBudget(text),

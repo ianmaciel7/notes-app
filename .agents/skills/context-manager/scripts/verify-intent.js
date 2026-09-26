@@ -28,5 +28,6 @@ Exit codes:
 runVerify(process.argv.slice(2), {
   docFile: "INTENT.md",
   help: HELP,
-  buildResults: ({ repoRoot, text }) => checks.verifyCitedFilesExist(repoRoot, text),
+  buildResults: ({ repoRoot, text }) =>
+    checks.verifyCitedFilesExist(repoRoot, text),
 });

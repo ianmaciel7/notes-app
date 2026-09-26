@@ -29,7 +29,11 @@ runVerify(process.argv.slice(2), {
   docFile: "CONVENTIONS.md",
   help: HELP,
   buildResults: ({ repoRoot, text }) => [
-    ...checks.verifyNOfMClaim(repoRoot, text, { label: "use-client-count", keyword: "component files", countRealFn: checks.getUseClientFileCount }),
+    ...checks.verifyNOfMClaim(repoRoot, text, {
+      label: "use-client-count",
+      keyword: "component files",
+      countRealFn: checks.getUseClientFileCount,
+    }),
     ...checks.verifyComponentCountMentions(repoRoot, text, "CONVENTIONS.md"),
   ],
 });

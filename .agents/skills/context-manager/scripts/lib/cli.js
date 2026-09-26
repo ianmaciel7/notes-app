@@ -30,7 +30,9 @@ function parseArgs(argv, { valueFlags = {}, boolFlags = {} } = {}) {
     }
     if (a in valueFlags) {
       if (i + 1 >= argv.length) {
-        errorExit(`Error: ${a} requires a value.\n       Received nothing after ${a}.\nRun with --help for usage.`);
+        errorExit(
+          `Error: ${a} requires a value.\n       Received nothing after ${a}.\nRun with --help for usage.`,
+        );
       }
       result[valueFlags[a]] = argv[++i];
       continue;
@@ -93,19 +95,41 @@ function report(args, docLabel, results) {
   const skipped = results.filter((r) => r.status === "skip");
 
   if (args.json) {
-    process.stdout.write(JSON.stringify({ doc: docLabel, results, failed: failed.length, skipped: skipped.length, total: results.length }, null, 2) + "\n");
+    process.stdout.write(
+      JSON.stringify(
+        {
+          doc: docLabel,
+          results,
+          failed: failed.length,
+          skipped: skipped.length,
+          total: results.length,
+        },
+        null,
+        2,
+      ) + "\n",
+    );
   } else {
     process.stdout.write(`Verifying ${docLabel}\n\n`);
-    const toShow = args.quiet ? results.filter((r) => r.status !== "ok") : results;
+    const toShow = args.quiet
+      ? results.filter((r) => r.status !== "ok")
+      : results;
     if (toShow.length === 0) {
-      process.stdout.write(results.length === 0 ? "No checks applicable.\n" : `All ${results.length} check(s) passed. (--quiet: OK lines suppressed)\n`);
+      process.stdout.write(
+        results.length === 0
+          ? "No checks applicable.\n"
+          : `All ${results.length} check(s) passed. (--quiet: OK lines suppressed)\n`,
+      );
     } else {
       for (const r of toShow) {
-        const flag = r.status === "ok" ? "OK  " : r.status === "skip" ? "SKIP" : "FAIL";
+        const flag =
+          r.status === "ok" ? "OK  " : r.status === "skip" ? "SKIP" : "FAIL";
         process.stdout.write(`${flag}  [${r.id}] ${r.message}\n`);
       }
     }
-    if (failed.length > 0) process.stderr.write(`\n${failed.length} of ${results.length} check(s) failed.\n`);
+    if (failed.length > 0)
+      process.stderr.write(
+        `\n${failed.length} of ${results.length} check(s) failed.\n`,
+      );
   }
 
   process.exit(failed.length > 0 ? 1 : 0);
@@ -128,15 +152,23 @@ function report(args, docLabel, results) {
 function runVerify(argv, { docFile, help, requireDoc = true, buildResults }) {
   const args = parseArgs(argv, {
     valueFlags: { "--root": "root" },
-    boolFlags: { "--json": "json", "--quiet": "quiet", "-q": "quiet", "--help": "help", "-h": "help" },
+    boolFlags: {
+      "--json": "json",
+      "--quiet": "quiet",
+      "-q": "quiet",
+      "--help": "help",
+      "-h": "help",
+    },
   });
   if (args.help) printHelpAndExit(help);
 
   const rootArg = args.root || args.positionals[0] || null;
-  const repoRoot = rootArg ? path.resolve(rootArg) : findRepoRoot(process.cwd(), ["package.json"]);
+  const repoRoot = rootArg
+    ? path.resolve(rootArg)
+    : findRepoRoot(process.cwd(), ["package.json"]);
   if (!repoRoot) {
     errorExit(
-      `Error: could not find a repo root containing package.json.\n       Searched from: ${rootArg ? path.resolve(rootArg) : process.cwd()}\nPass ROOT_DIR explicitly.`
+      `Error: could not find a repo root containing package.json.\n       Searched from: ${rootArg ? path.resolve(rootArg) : process.cwd()}\nPass ROOT_DIR explicitly.`,
     );
   }
 
@@ -145,7 +177,13 @@ function runVerify(argv, { docFile, help, requireDoc = true, buildResults }) {
   const text = exists ? fs.readFileSync(docPath, "utf8") : null;
 
   if (!exists && requireDoc) {
-    report(args, docFile, [{ id: "doc-exists", status: "fail", message: `${docFile} not found at repo root (${repoRoot}).` }]);
+    report(args, docFile, [
+      {
+        id: "doc-exists",
+        status: "fail",
+        message: `${docFile} not found at repo root (${repoRoot}).`,
+      },
+    ]);
     return;
   }
 
@@ -153,4 +191,12 @@ function runVerify(argv, { docFile, help, requireDoc = true, buildResults }) {
   report(args, docFile, results);
 }
 
-module.exports = { parseArgs, errorExit, printHelpAndExit, findRepoRoot, findRootMarkdownFiles, report, runVerify };
+module.exports = {
+  parseArgs,
+  errorExit,
+  printHelpAndExit,
+  findRepoRoot,
+  findRootMarkdownFiles,
+  report,
+  runVerify,
+};
