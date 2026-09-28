@@ -25,7 +25,7 @@ contributor workflow to `CONTRIBUTING.md`.
 - Shared UI files use named exports. Next.js route/layout entrypoints may use the
   framework-required default exports.
 - Derive props from the underlying primitive or native element where practical
-  instead of duplicating them manually.
+  instead of duplicating them manually (enforced by `check:props`).
 
 ## 3. Component Composition
 
@@ -56,7 +56,7 @@ contributor workflow to `CONTRIBUTING.md`.
 
 ## 5. React & Next.js
 
-- Add `"use client"` only at the smallest boundary that requires client behavior.
+- Add `"use client"` only at the smallest boundary that requires client behavior (enforced by `check:rsc`).
 - In React 19, pass `ref` as a normal prop and prefer `use()` for new context
   access; do not introduce `forwardRef` or `useContext` without a dependency or
   framework reason.

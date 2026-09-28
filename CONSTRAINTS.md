@@ -21,6 +21,8 @@ not be weakened merely to make a change pass.
 | Types | Zero type errors | `pnpm run check:types` | task end |
 | Lint | Zero Biome errors in the targets covered by `check:lint` | `pnpm run check:lint` | task end |
 | Architecture | Zero dependency-cruiser violations | `pnpm run deps:check` | task end |
+| RSC Boundaries | Zero server component boundary findings | `pnpm run check:rsc` | task end |
+| Component Props | Zero invalid component prop interface findings | `pnpm run check:props` | task end |
 | Duplication | At most 10% by configured jscpd threshold | `pnpm run check:duplication` | task end |
 | Dependency audit | No high/critical package-manager advisories | `pnpm run check:security` | dependency/security review |
 | Dependency vulnerability regression | No newly introduced known vulnerability | OSV-Scanner differential workflow | PR |

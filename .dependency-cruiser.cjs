@@ -25,6 +25,14 @@ module.exports = {
       to: { path: "^src/app" },
     },
     {
+      name: "ui-does-not-depend-on-domain",
+      severity: "error",
+      comment:
+        "Generic UI primitives must not depend on notes-domain or vendor components.",
+      from: { path: "^src/components/ui" },
+      to: { path: "^src/components/(notes-app|firebase)" },
+    },
+    {
       name: "hooks-do-not-depend-on-app",
       severity: "error",
       comment: "Reusable hooks must not depend on application routes.",
