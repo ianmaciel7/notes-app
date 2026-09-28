@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "emulator": "firebase emulators:start --only auth --import=./firebase/seeds --export-on-exit=./firebase/seeds",
+    "emulator": "firebase emulators:start --only auth --import=./.firebase/seeds --export-on-exit=./.firebase/seeds",
     "emulator:start": "firebase emulators:start --only auth",
     "lint": "biome check",
     "test": "vitest run",

@@ -31,6 +31,14 @@ module.exports = {
       from: { path: "^src/hooks" },
       to: { path: "^src/app" },
     },
+    {
+      name: "firebase-vendor-does-not-depend-on-app",
+      severity: "error",
+      comment:
+        "Immutable Firebase vendor components must not depend on application routes or notes-domain components.",
+      from: { path: "^src/components/firebase" },
+      to: { path: "^src/(app|components/notes-app)" },
+    },
   ],
   options: {
     includeOnly: ["^src"],

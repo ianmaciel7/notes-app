@@ -74,3 +74,6 @@ INTENT.pt-BR.md
 /.agents/evals/artifacts/
 .claude
 RTK.md.bak
+.firebase/logs/
+.firebase/logs/*
+.firebase/logs/vsce-debug.log

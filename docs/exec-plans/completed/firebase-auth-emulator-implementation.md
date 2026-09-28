@@ -45,7 +45,7 @@ Establish basic authentication using Firebase Auth and Firebase Local Emulator (
 - [x] Step 3: Enforce `src/components/firebase/` as immutable vendor drop; copy and adapt auth forms/screens to `src/components/notes-app/` with full type safety.
 - [x] Step 4: Implement Auth state provider in `src/components/notes-app/auth-provider.tsx`, hooks in `src/hooks/use-auth.ts` and `src/hooks/use-require-auth.ts`, and components (`require-auth.tsx`, `user-menu.tsx`) using native `User` types and React 19 `use()`.
 - [x] Step 5: Build accessible login and registration UI in `src/app/(auth)/login/page.tsx` integrating with adapted screens in `src/components/notes-app/`.
-- [x] Step 6: Create seed export/import structure in `firebase/seeds/` with test accounts.
+- [x] Step 6: Create seed export/import structure in `.firebase/seeds/` with test accounts.
 - [x] Step 7: Write colocated unit & emulator integration tests alongside implementation files (`src/lib/firebase/client.test.ts`, `src/lib/firebase/auth-emulator.test.ts`, `src/components/notes-app/auth-provider.test.tsx`, `src/hooks/use-auth.test.ts`, `src/hooks/use-require-auth.test.tsx`) with Vitest.
 - [x] Step 8: Add integration testing against live emulator verifying interactive login and logout flow.
 - [x] Step 9: Author documentation in `ARCHITECTURE.md`, `docs/adr/0008-adopt-firebase-ui-components.md`, and `docs/adr/0009-adopt-firebase-auth-with-local-emulator.md`.
@@ -59,7 +59,7 @@ Establish basic authentication using Firebase Auth and Firebase Local Emulator (
 - 2026-09-28 — Preserved `src/components/firebase/` completely unmodified; copied and adapted required auth components into `src/components/notes-app/`.
 - 2026-09-28 — AuthProvider, useAuth, useRequireAuth, RequireAuth, UserMenu implemented and tested.
 - 2026-09-28 — Dedicated login page `src/app/(auth)/login/page.tsx` created.
-- 2026-09-28 — `firebase/seeds/` account metadata and configs generated.
+- 2026-09-28 — `.firebase/seeds/` account metadata and configs generated.
 - 2026-09-28 — Live integration test `auth-emulator.test.ts` passed against local emulator on port 9099.
 - 2026-09-28 — ADR 0008 updated with immutability rule, ADR 0009 authored, and ARCHITECTURE.md synced.
 - 2026-09-28 — Quality gates passed: `check:fast`, `check:docs`, and 100% test coverage.

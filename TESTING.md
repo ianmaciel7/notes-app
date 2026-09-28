@@ -57,10 +57,31 @@ numeric thresholds are owned by `CONSTRAINTS.md` and `CONTRIBUTING.md`.
 
 - Unit tests are colocated under `src/` as `*.test.ts` or `*.test.tsx`, with scoped coverage enforced on `src/lib/**/*.ts` and `src/hooks/**/*.ts`.
 - Component stories are colocated under `src/components/ui/` as `*.stories.tsx`.
-- The current unit-test foundation includes `src/lib/utils.test.ts`.
+- The current unit-test foundation includes `src/lib/utils.test.ts`, `src/hooks/use-auth.test.ts`, `src/hooks/use-require-auth.test.tsx`, `src/lib/firebase/auth-emulator.test.ts`, and `src/app/(auth)/login/page.test.tsx`.
 - Declarative UI primitives under `src/components/ui/` should add or update a Ladle story when visual or interaction behavior needs verification.
 
-## 5. Test Design
+## 5. Firebase Authentication Testing Strategy
+
+The repository employs a multi-layered testing strategy for Firebase Authentication:
+
+- **State Observer Lifecycle & Context Hooks**:
+  - `AuthProvider` and `AuthContext` (`src/components/notes-app/auth-provider.test.tsx`) verify subscriber initialization, authentication state propagation, and child component rendering under authenticated and unauthenticated states.
+  - `useAuth` hook (`src/hooks/use-auth.test.ts`) verifies context boundary enforcement (throwing errors when invoked outside `AuthProvider`).
+  - `useRequireAuth` hook (`src/hooks/use-require-auth.test.tsx`) verifies route protection behavior, triggering navigation redirects for unauthenticated sessions while allowing access to authenticated users.
+
+- **Local Emulator Integration**:
+  - Integration suite (`src/lib/firebase/auth-emulator.test.ts`) exercises real Firebase Auth SDK methods against a running Firebase Auth emulator daemon on `127.0.0.1:9099`.
+  - Verifies anonymous authentication (`signInAnonymously`), user account creation (`createUserWithEmailAndPassword`), credential authentication (`signInWithEmailAndPassword`), and session cleanup (`signOut`).
+  - Includes a pre-check ping to gracefully skip execution when the emulator daemon is unreachable in isolated unit environments.
+
+- **Component-Level Login Workflows**:
+  - Login page component suite (`src/app/(auth)/login/page.test.tsx`) tests authentication interaction patterns and mode toggling (`signIn` vs `signUp`).
+  - Verifies primary popup sign-in flows using `signInWithPopup`.
+  - Verifies resilient fallback to `signInWithRedirect` when popup or iframe communication fails (e.g., `popup-blocked`, `No matching frame`, or `popup-closed-by-user`).
+  - Verifies guest access via `signInAnonymously`.
+  - Verifies post-redirect credential processing via `getRedirectResult` and post-login routing according to the `next` query parameter.
+
+## 6. Test Design
 
 - Test observable behavior rather than implementation details.
 - Keep unit tests deterministic and isolated.
@@ -69,7 +90,7 @@ numeric thresholds are owned by `CONSTRAINTS.md` and `CONTRIBUTING.md`.
 - Add E2E coverage only when real critical user flows exist.
 - Avoid over-mocking; there is currently no product network/database layer to mock.
 
-## 6. Automation Status
+## 7. Automation Status
 
 `.github/workflows/quality.yml` runs the deterministic repository gate (`pnpm check:ci`) on pull requests and the main development branches. It includes types, lint, architecture, the diff floor, unit tests, duplication, agent-config drift, control-doc verifiers, evaluator unit tests, floor-guard unit tests, coverage, and a production build.
 
