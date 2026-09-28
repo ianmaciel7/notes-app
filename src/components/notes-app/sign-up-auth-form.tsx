@@ -140,6 +140,7 @@ export function SignUpAuthForm({
         )}
         {onSignInClick ? (
           <Button
+            data-testid="auth-mode-toggle"
             type="button"
             variant="link"
             size="sm"

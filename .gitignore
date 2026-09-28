@@ -13,6 +13,10 @@
 /coverage
 /.stryker-tmp/
 /.lighthouseci/
+/test-results/
+/playwright-report/
+/blob-report/
+/.playwright/
 # next.js
 /.next/
 /out/

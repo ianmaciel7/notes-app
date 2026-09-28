@@ -132,6 +132,7 @@ export function SignInAuthForm({
         {onSignUpClick ? (
           <div className="text-center">
             <Button
+              data-testid="auth-mode-toggle"
               type="button"
               variant="link"
               size="sm"
