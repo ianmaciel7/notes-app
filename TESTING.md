@@ -20,7 +20,7 @@ Integration and end-to-end product suites are not configured yet. Agent behavior
 - **Ladle**: component story workbench.
 - **StrykerJS**: mutation testing.
 - **Lighthouse CI**: production-browser audit.
-- **Automated Guards**: custom floor guard and hook regression test suite (`scripts/floor-guard.mjs`, `scripts/hooks.test.mjs`).
+- **Automated Guards**: custom floor, React Server Component boundary, component-prop, and hook regression guards (`scripts/floor-guard.mjs`, `scripts/guard-rsc-boundaries.mjs`, `scripts/guard-component-props.mjs`, `scripts/hooks.test.mjs`).
 - **Documentation verifier**: `scripts/verify-docs.mjs` runs the control-doc verifiers plus repository-wide markdown checks (links and anchors, referenced paths and `pnpm` commands, path portability, English-only text, `AGENTS.md` size and skill routing, skill frontmatter, and the `docs/` tree rules for ADRs, execution plans, and product specs). Its logic is covered by `scripts/verify-docs.test.mjs`.
 - **E2E runner**: none configured for product flows.
 - **Harness eval runner**: provider-neutral Node runner with Codex and Antigravity adapters.

@@ -24,11 +24,11 @@ Biome runs formatting, linting, and import organization in a single pass via `bi
 | Intent | Command |
 |---|---|
 | Check all (no write) | `pnpm lint` → `biome check` |
-| Apply **safe** fixes | `pnpm biome check --write` |
-| Apply **safe + unsafe** fixes | `pnpm biome check --write --unsafe` |
+| Apply **safe** fixes | `pnpm exec biome check --write` |
+| Apply **safe + unsafe** fixes | `pnpm exec biome check --write --unsafe` |
 | Format only | `pnpm format` → `biome format --write` |
-| Check specific paths | `pnpm biome check --write src/ scripts/` |
-| Increase diagnostic output | `pnpm biome check --max-diagnostics=200` |
+| Check specific paths | `pnpm exec biome check --write src/ scripts/` |
+| Increase diagnostic output | `pnpm exec biome check --max-diagnostics=200` |
 
 > **`pnpm lint`** (`biome check` with no args) runs on the full project root.
 > Passing extra words after it (e.g. `pnpm lint fix`) treats them as **file paths**, not subcommands — this is a common mistake.
@@ -40,7 +40,7 @@ Biome runs formatting, linting, and import organization in a single pass via `bi
 ### 1. Run safe-only fixes first
 
 ```bash
-pnpm biome check --write src/ scripts/ .agents/
+pnpm exec biome check --write src/ scripts/ .agents/
 ```
 
 Safe fixes are semantics-preserving and can be applied automatically. They include:
@@ -65,7 +65,7 @@ After safe fixes, remaining diagnostics typically fall into:
 
 ```bash
 # Only when you understand the implication:
-pnpm biome check --write --unsafe src/specific-file.tsx
+pnpm exec biome check --write --unsafe src/specific-file.tsx
 ```
 
 Unsafe fixes may change semantics (e.g. renaming an unused variable to `_name`). Review the diff before committing.
@@ -158,7 +158,7 @@ Override whether a fix is treated as safe or unsafe per-rule:
 
 ## Common Pitfalls
 
-- `pnpm lint fix` → **wrong** — treats `fix` as a path. Use `pnpm biome check --write` instead.
+- `pnpm lint fix` → **wrong** — treats `fix` as a path. Use `pnpm exec biome check --write` instead.
 - `biome check --write --unsafe` on generated `src/components/ui/` → **avoid** — shadcn components should be regenerated from their registry, not hand-edited.
 - Running `biome check .` picks up `.agents/` scripts — these are CJS CommonJS files; Biome may panic on empty-shebang files. Use path scoping or `overrides` to handle them.
 - Biome internal panics (`internalError/panic`) on `.agents/skills/context-manager/scripts/` files are a known upstream issue with certain CJS patterns — add them to a `biome-ignore` override or exclude them from the scan.

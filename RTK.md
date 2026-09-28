@@ -1,34 +1,10 @@
-# RTK
+<!-- rtk-owned: written by `rtk init --codex`, removed by `rtk init --codex --uninstall` -->
 
-RTK is the repository's shell-command wrapper for reducing command-output noise.
+# Command output
 
-## Usage
-
-Prefix supported project shell commands with `rtk`:
-
-```text
-rtk <command> [args...]
-```
-
-Use direct execution only when RTK is unavailable, incompatible with the operation,
-changes required behavior, or RTK itself is being diagnosed.
-
-## Enforcement
-
-Every shell command in agent and contributor workflows MUST be prefixed with `rtk`.
-Running a command bare — without the `rtk` prefix — is a policy violation equivalent
-to bypassing a required check.
-
-Permitted exceptions:
-- The RTK diagnostic commands themselves: `rtk --version`, `rtk gain`.
-- Cases where RTK is verifiably unavailable or broken; the reason must be stated
-  explicitly, and the narrowest direct-execution fallback used.
-
-## RTK Commands
-
-These are RTK's own commands rather than wrapped project commands:
-
-```text
-rtk gain
-rtk --version
-```
+Command output here is condensed to save tokens, keeping every signal and
+dropping costly noise. Treat it as the complete result: run commands
+normally, and batch related commands into one call to avoid extra turns.
+Truncated results state their recovery path in their own output. Re-run a
+command as `rtk proxy <cmd>` only when its result is unusable: empty when
+output was clearly expected, contradicting its exit code, or garbled.

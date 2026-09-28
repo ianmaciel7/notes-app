@@ -206,3 +206,5 @@ Single-context (`CONTEXT.md` + `docs/adr/`). See `docs/agents/domain.md`.
 Remove obsolete instructions instead of accumulating them. Move detailed procedures
 to their owning Skill/doc and leave only routing here. Prefer nested `AGENTS.md`
 files for subtree-specific rules.
+
+@RTK.md
