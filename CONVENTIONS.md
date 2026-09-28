@@ -26,6 +26,15 @@ contributor workflow to `CONTRIBUTING.md`.
   framework-required default exports.
 - Derive props from the underlying primitive or native element where practical
   instead of duplicating them manually (enforced by `check:props`).
+- **Component File Role Suffixes (`src/components/notes-app/`)**: Application UI components
+  must carry an explicit archetype suffix in both filename (`kebab-case`) and component name
+  (`PascalCase`) to preserve contract clarity:
+  - `-card` / `*Card` for screen or container cards (e.g. `login-card.tsx` -> `LoginCard`)
+  - `-form` / `*Form` for form sections and submit containers (e.g. `login-form.tsx` -> `LoginForm`)
+  - `-header` / `*Header` for heading and greeting presentation blocks (e.g. `auth-greeting-header.tsx` -> `AuthGreetingHeader`)
+  - `-alert` / `*Alert` for notification and error banners (e.g. `redirect-error-alert.tsx` -> `RedirectErrorAlert`)
+  - `-button` / `*Button`, `-select` / `*Select`, `-menu` / `*Menu`, `-switcher` / `*Switcher` for interactive UI controls
+  - `-provider` / `*Provider` for React context providers
 
 ## 3. Component Composition
 

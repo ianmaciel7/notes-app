@@ -3,7 +3,7 @@ import type { User } from "firebase/auth";
 import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import messages from "@/messages/en.json";
-import { AuthGreeting } from "./auth-greeting";
+import { AuthGreeting, AuthGreetingHeader } from "./auth-greeting-header";
 
 vi.mock("@/hooks/use-auth", () => ({
   useAuth: vi.fn(),
@@ -19,7 +19,7 @@ function renderWithIntl(ui: React.ReactNode, locale = "en") {
   );
 }
 
-describe("AuthGreeting", () => {
+describe("AuthGreetingHeader", () => {
   afterEach(() => {
     cleanup();
   });
@@ -31,7 +31,7 @@ describe("AuthGreeting", () => {
       signOutUser: vi.fn(),
     });
 
-    renderWithIntl(<AuthGreeting />);
+    renderWithIntl(<AuthGreetingHeader />);
     expect(screen.getByText("Notes App")).toBeDefined();
     expect(screen.getByText("Sign in to access your notes.")).toBeDefined();
   });
@@ -48,7 +48,7 @@ describe("AuthGreeting", () => {
       signOutUser: vi.fn(),
     });
 
-    renderWithIntl(<AuthGreeting />);
+    renderWithIntl(<AuthGreetingHeader />);
     expect(screen.getByText("Hello, Ian Maciel!")).toBeDefined();
     expect(
       screen.getByText("You are successfully connected to Firebase."),
@@ -67,7 +67,7 @@ describe("AuthGreeting", () => {
       signOutUser: vi.fn(),
     });
 
-    renderWithIntl(<AuthGreeting />);
+    renderWithIntl(<AuthGreetingHeader />);
     expect(screen.getByText("Hello, test!")).toBeDefined();
   });
 
@@ -79,7 +79,7 @@ describe("AuthGreeting", () => {
     });
 
     renderWithIntl(
-      <AuthGreeting
+      <AuthGreetingHeader
         data-testid="auth-greeting-container"
         className="custom-greeting-class"
         aria-label="auth-greeting"
