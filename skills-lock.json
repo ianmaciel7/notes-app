@@ -7,6 +7,12 @@
       "skillPath": "plugins/plugin-dev/skills/agent-development/SKILL.md",
       "computedHash": "4931c2867890bfef5881225adb691c3d719fe9ad556e3d5fae15f83e0668fa60"
     },
+    "ask-matt": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/ask-matt/SKILL.md",
+      "computedHash": "e5404aef8525ca0c8fc76692567a38dfdd5d0cc1a9f8d47c02c18f29f60d92a6"
+    },
     "ast-grep": {
       "source": "ast-grep/agent-skill",
       "sourceType": "github",
@@ -126,6 +132,12 @@
       "sourceType": "github",
       "skillPath": "skills/semgrep/SKILL.md",
       "computedHash": "fb16e4b9a879b326e35394fbb31cc528b2812aad8821b412b5f5fd8a67e40d69"
+    },
+    "setup-matt-pocock-skills": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+      "computedHash": "a45163cba56f72f5f224c46557c047d51547147a29e383e5a769ec39eecd1188"
     },
     "shadcn": {
       "source": "shadcn-ui/ui",

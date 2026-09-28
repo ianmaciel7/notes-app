@@ -1,0 +1,41 @@
+{
+  "kind": "identitytoolkit#DownloadAccountResponse",
+  "users": [
+    {
+      "localId": "tester1-uid-123456",
+      "email": "tester1@notesapp.dev",
+      "emailVerified": true,
+      "displayName": "Tester One",
+      "passwordHash": "fakeHash123",
+      "salt": "fakeSalt123",
+      "createdAt": "1727500000000",
+      "lastLoginAt": "1727500000000",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "rawId": "tester1@notesapp.dev",
+          "email": "tester1@notesapp.dev",
+          "displayName": "Tester One"
+        }
+      ]
+    },
+    {
+      "localId": "tester2-uid-654321",
+      "email": "tester2@notesapp.dev",
+      "emailVerified": true,
+      "displayName": "Tester Two",
+      "passwordHash": "fakeHash123",
+      "salt": "fakeSalt123",
+      "createdAt": "1727500000000",
+      "lastLoginAt": "1727500000000",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "rawId": "tester2@notesapp.dev",
+          "email": "tester2@notesapp.dev",
+          "displayName": "Tester Two"
+        }
+      ]
+    }
+  ]
+}

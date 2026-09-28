@@ -1,0 +1,3 @@
+# Adopt FirebaseUI v7 Canonical Architecture and Resilient Auth Fallback
+
+We adopted the modular FirebaseUI v7 (`@firebase-oss/ui-react` and `@firebase-oss/ui-core`) architecture with centralized provider initialization and resilient popup-to-redirect fallback. We wrap the application in `FirebaseUIProvider` via `AuthProvider` in `src/app/layout.tsx` and delegate authentication flows directly to canonical screen components (`SignInAuthScreen` and `SignUpAuthScreen` in `src/components/notes-app/`), avoiding custom form state duplication. When local emulator iframe communication fails (`auth/internal-error: No matching frame`), client login automatically falls back to `signInWithRedirect` and `getRedirectResult`.

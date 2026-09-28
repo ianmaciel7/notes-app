@@ -1,0 +1,85 @@
+import { cleanup, render, screen } from "@testing-library/react";
+import type { User } from "firebase/auth";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { AuthGreeting } from "./auth-greeting";
+
+vi.mock("@/hooks/use-auth", () => ({
+  useAuth: vi.fn(),
+}));
+
+import { useAuth } from "@/hooks/use-auth";
+
+describe("AuthGreeting", () => {
+  afterEach(() => {
+    cleanup();
+  });
+
+  it("renders guest greeting when user is null", () => {
+    vi.mocked(useAuth).mockReturnValue({
+      user: null,
+      isLoading: false,
+      signOutUser: vi.fn(),
+    });
+
+    render(<AuthGreeting />);
+    expect(screen.getByText("Notes App")).toBeDefined();
+    expect(
+      screen.getByText("Faça login para acessar suas anotações."),
+    ).toBeDefined();
+  });
+
+  it("renders user name when authenticated", () => {
+    vi.mocked(useAuth).mockReturnValue({
+      user: {
+        uid: "user-1",
+        displayName: "Ian Maciel",
+        email: "ian@example.com",
+        isAnonymous: false,
+      } as unknown as User,
+      isLoading: false,
+      signOutUser: vi.fn(),
+    });
+
+    render(<AuthGreeting />);
+    expect(screen.getByText("Olá, Ian Maciel!")).toBeDefined();
+    expect(
+      screen.getByText("Você está conectado com sucesso ao Firebase."),
+    ).toBeDefined();
+  });
+
+  it("falls back to 'Usuário' when displayName is empty", () => {
+    vi.mocked(useAuth).mockReturnValue({
+      user: {
+        uid: "user-2",
+        displayName: "",
+        email: "test@example.com",
+        isAnonymous: false,
+      } as unknown as User,
+      isLoading: false,
+      signOutUser: vi.fn(),
+    });
+
+    render(<AuthGreeting />);
+    expect(screen.getByText("Olá, Usuário!")).toBeDefined();
+  });
+
+  it("forwards className and HTML attributes", () => {
+    vi.mocked(useAuth).mockReturnValue({
+      user: null,
+      isLoading: false,
+      signOutUser: vi.fn(),
+    });
+
+    render(
+      <AuthGreeting
+        data-testid="auth-greeting-container"
+        className="custom-greeting-class"
+        aria-label="auth-greeting"
+      />,
+    );
+    const element = screen.getByTestId("auth-greeting-container");
+    expect(element.getAttribute("aria-label")).toBe("auth-greeting");
+    expect(element.classList.contains("custom-greeting-class")).toBe(true);
+    expect(element.classList.contains("space-y-2")).toBe(true);
+  });
+});

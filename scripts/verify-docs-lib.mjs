@@ -31,13 +31,14 @@ const IGNORED_ROOTS = new Set([
   "node_modules",
   "tasks",
   ".worktrees",
+  ".claude",
 ]);
 const IGNORED_PATH_PREFIXES = [
   ".agents/generated",
   ".agents/local.json",
   ".agents/mcp_config.json",
 ];
-const KNOWN_ROOTS = new Set(["src", "scripts", "docs", ".agents", ".claude"]);
+const KNOWN_ROOTS = new Set(["src", "scripts", "docs", ".agents"]);
 
 const PNPM_BUILTINS = new Set([
   "add",

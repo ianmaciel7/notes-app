@@ -129,6 +129,11 @@ skill behavior from its name alone.
 | Explore, compare, and extract prior art or contracts from historical worktrees (`.worktrees/old-*`) | `find-worktrees` |
 | Guide through engineering skill workflows (idea to ship, triage, diagnosing, wayfinding) | `ask-matt` |
 | Scaffold repo configuration for engineering skills (issue tracker, triage, domain docs) | `setup-matt-pocock-skills` |
+| Manage multi-agent project configuration and MCP servers via `agents` CLI | `agents-dev-cli` |
+| Gather official up-to-date documentation into a concise implementation checklist | `docs-research` |
+| Scaffold a shadcn/Base UI component with story, test, and checks | `new-component` |
+| Create, organize, and maintain agent skills under `.agents/skills` | `skill-guide` |
+| Consolidated health check for quality, tests, context, and token savings | `verify-health` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
 Never edit remote skills authored by others or modify installed third-party skills directly.

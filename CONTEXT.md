@@ -36,11 +36,11 @@ references remain understandable while vocabulary has one canonical owner.
 
 Single source of truth for project vocabulary. Format: **UI display name (PT-BR)** · `code_name (EN)`. The UI is in Portuguese (PT-BR); code, database, and API use the English name. Use these terms in code, schema, API, and UI; do not create synonyms. When a new term is approved, add it here.
 
-### Account and Spaces
+### User and Spaces
 
-**Conta** · `Account`:  
-Person who uses the app, identified by login. Each Account has its own Spaces; nothing is shared across Accounts.  
-**Avoid in this product context:** user (in code), profile, workspace, team
+**Usuário** · `User`:  
+Person who uses the app, authenticated via Firebase Authentication (`uid`). Each User has their own Spaces; nothing is shared across Users.  
+**Avoid in this product context:** Account (in code), profile, workspace, team
 
 **Space** · `Space`:  
 A completely isolated knowledge context within an Account. Each Space has its own Types, Concepts, Collections, and Views. Objects from one Space never link to Objects in another.  
@@ -276,8 +276,15 @@ Lifecycle state for an Object created by an agent (MCP or AI) that has not yet b
 AI conversation grounded in the current Space or an explicit selection of its Objects. Every response cites specific Objects and source excerpts. Can be saved as a permanent Object, matching Capacities AI Chat.  
 **Avoid in this product context:** assistant, bot, copilot
 
-**Ação de IA** · `AiAction`:  
-Contextual AI invocation executed over selected text or an Object (explain, summarize, generate Questions), matching Readwise Ghostreader. Always cites origin; created Objects enter Pending approval.  
-**Avoid in this product context:** prompt, command, AI tool
+### Internationalization and Locales
+
+**Idioma** · `Locale`:  
+The active language/regional preference (`en`, `pt-BR`, `es`) resolved via cookie (`NEXT_LOCALE`), synchronized with client storage and Firebase Auth user preferences, without mutating URL routes.  
+**Avoid in this product context:** languageCode, langParam, urlLocale
+
+**Mensagem Localizada** · `LocalizedMessage`:  
+A UI display string looked up dynamically from namespace dictionaries (`messages/*.json`) using typed message keys, keeping data schemas and canonical model identifiers in English.  
+**Avoid in this product context:** translationKey, translatedSchema, i18nString
 
 ---
+

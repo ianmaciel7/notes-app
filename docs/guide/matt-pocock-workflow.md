@@ -139,3 +139,9 @@ Follow this step-by-step example to take a raw idea through the entire lifecycle
 
 ---
 By adhering to this structured, predictable cycle, you maximize the efficiency of AI tooling while maintaining an exceptionally high bar for code quality.
+
+## Related Guides
+
+- [Product-to-Engineering Lifecycle Flow](product-engineering-lifecycle-flow.md): Deep-dive into how product intent and domain invariants ground each stage.
+- [Memory Architecture and Flow Guide](memory-architecture-flow.md): Overview of persistence, Serena MCP, Graphify work-memory, and SRS domain memory.
+

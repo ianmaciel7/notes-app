@@ -19,3 +19,8 @@ do not create process overhead for routine edits.
 
 Plans coordinate work; they do not replace `INTENT.md`, product specs, ADRs, or
 quality contracts.
+
+## Research and Architecture Reports
+
+- [Orchestration and Subagent Patterns Evolution across Worktrees](worktree-orchestration-patterns-report.md): Historical architecture analysis and extracted invariants across `.worktrees/`.
+

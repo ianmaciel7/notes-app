@@ -49,13 +49,10 @@ architectural choices rather than duplicating version pins.
 
 ## 4. Runtime State & Data Flow
 
-Theming is currently the only application-wide runtime state:
-`ThemeProvider` wraps `next-themes`, which controls the root theme class consumed
-by CSS variables in `src/app/globals.css`.
+- **Theme:** `ThemeProvider` wraps `next-themes`, controlling root theme class consumed by CSS variables.
+- **Authentication:** `AuthProvider` wraps Firebase Authentication observer (`onAuthStateChanged`) and `@firebase-oss/ui-react` store, providing authenticated `User` context and local Firebase Auth Emulator support.
 
-There is currently no product data layer, server mutation flow, cache strategy, or
-client state store. Those choices must be documented here when they become real
-architecture rather than being selected preemptively.
+There is currently no product data layer, server mutation flow, or cache strategy. Those choices must be documented here when they become real architecture rather than being selected preemptively.
 
 ## 5. Cross-Cutting Architecture
 
@@ -76,3 +73,7 @@ architecture rather than being selected preemptively.
 - [`docs/adr/0005-adopt-tailwind-css-v4.md`](./docs/adr/0005-adopt-tailwind-css-v4.md)
 - [`docs/adr/0006-enforce-module-boundaries-with-dependency-cruiser.md`](./docs/adr/0006-enforce-module-boundaries-with-dependency-cruiser.md)
 - [`docs/adr/0007-eliminate-dead-code-with-knip.md`](./docs/adr/0007-eliminate-dead-code-with-knip.md)
+- [`docs/adr/0008-adopt-firebase-ui-components.md`](./docs/adr/0008-adopt-firebase-ui-components.md)
+- [`docs/adr/0009-adopt-firebase-auth-with-local-emulator.md`](./docs/adr/0009-adopt-firebase-auth-with-local-emulator.md)
+- [`docs/adr/0010-adopt-firebase-ui-v7-and-auth-resilience.md`](./docs/adr/0010-adopt-firebase-ui-v7-and-auth-resilience.md)
+- [`docs/adr/0011-adopt-cookie-based-next-intl-with-firebase-sync.md`](./docs/adr/0011-adopt-cookie-based-next-intl-with-firebase-sync.md)
