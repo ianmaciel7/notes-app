@@ -17,18 +17,37 @@ The current runtime boundary is the client web application and local emulator en
 
 - `src/app/`: routing, root layout, application entry surfaces, and global styles.
 - `src/components/`: reusable application-level components and providers.
-- `src/components/ui/`: generic shadcn/Base UI primitives; no notes-domain behavior.
-- `src/hooks/`: reusable React hooks.
+- `src/components/ui/`: generic shadcn/Base UI primitives; no notes-domain behavior. Must only import `@/lib/utils` (or `cn`) from `src/lib/`.
+- `src/hooks/`: reusable, cross-cutting React hooks (device sensors, browser APIs, shared auth state). Must not depend on application routes (`src/app/`). Component-specific hooks coupled to compound context providers (e.g. `useSidebar`, `useToastManager`) remain co-located within their component files.
 - `src/lib/`: shared utilities that do not depend on UI components.
+- `src/lib/dal/` (or DAL): Data Access Layer isolating data operations, queries, mutations, and authorization. Server DAL modules (`server-only`) must never leak into client components.
 
 Current dependency direction:
 
-- application surfaces may compose application components and UI primitives;
-- UI primitives may compose other UI primitives and shared utilities;
-- shared utilities must not depend on UI or application layers.
+- application surfaces may compose application components, UI primitives, and hooks;
+- UI primitives may compose other UI primitives and shared utilities (`@/lib/utils`);
+- atomic UI primitives must not depend on composite UI components;
+- shared utilities and DAL modules must not depend on UI or application layers;
+- client UI components and hooks must not import server-side DAL modules.
 
 Dependency-cruiser is the executable source of truth for machine-enforced dependency
 rules. This document owns the architectural intent behind those rules.
+
+### 2.1 Next.js App Router Routing File Conventions (`src/app/`)
+
+Next.js App Router relies on nested folder hierarchies to define routes and reserved file conventions to govern UI and server boundaries:
+
+| Routing File | Role | Boundary & Behavior |
+| --- | --- | --- |
+| `page.tsx` | Route Leaf UI | Defines the publicly accessible UI for a route segment. |
+| `layout.tsx` | Shared Layout | Wraps child pages and segments; preserves state across route transitions without re-mounting. |
+| `loading.tsx` | Suspense Loading | Instant streaming loading state; automatically wraps child pages in React `Suspense`. |
+| `error.tsx` | Segment Error Boundary | Catches runtime errors in child segments; must be a Client Component (`'use client'`). |
+| `global-error.tsx` | Root Error Boundary | Catches unhandled errors in the root layout; replaces root `<html>` and `<body>` on fatal crashes. |
+| `not-found.tsx` | 404 UI Boundary | Rendered when `notFound()` is invoked or a route segment is not matched. |
+| `route.ts` | Server Route Handler | Dedicated server HTTP endpoint (`GET`, `POST`, etc.); cannot coexist with `page.tsx` at the same path. |
+| `template.tsx` | Re-mounted Layout | Similar to layout, but instantiates a fresh component instance and resets state on navigation. |
+| `default.tsx` | Parallel Route Fallback | Unmatched slot fallback for Parallel Routes (`@slot`) during hard reloads. |
 
 ## 3. Technology Decisions
 

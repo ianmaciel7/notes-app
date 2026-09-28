@@ -24,8 +24,12 @@ We adopted dependency-cruiser configured via `.dependency-cruiser.cjs` to valida
 
 ## Architectural Rules and Invariants
 
-- `src/components/ui/` primitives must not import application components (`src/components/notes-app/`) or routing code (`src/app/`).
+- `src/components/ui/` primitives must not import application components (`src/components/notes-app/`), vendor components (`src/components/firebase/`), or routing code (`src/app/`).
+- `src/components/ui/` primitives may only import `@/lib/utils` (or `cn`) from the `src/lib/` layer, never domain, data access, auth, or sync services.
+- `src/hooks/` reusable hooks must not depend on application routes (`src/app/`).
 - `src/lib/` shared utilities must not depend on UI primitives or application components.
+- Direct imports of `@radix-ui` are barred across `src/` in favor of `@base-ui/react` primitives.
+- Foundation atomic UI primitives must not depend on composite UI components.
 - Builds must fail if dependency-cruiser detects any circular dependencies or boundary rule violations.
 
 ## Related References and Control Documents

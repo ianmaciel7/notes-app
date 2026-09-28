@@ -70,6 +70,17 @@ contributor workflow to `CONTRIBUTING.md`.
 - Avoid request waterfalls: start independent work together and use Suspense where
   independent regions can stream.
 
+### Hook Placement & Usage
+- **Co-located Component Hooks (inside component file):** Keep custom hooks co-located
+  within the component file when they are strictly coupled to that component family's
+  context provider (e.g., `useSidebar` in `sidebar.tsx`, `useToastManager` in `toast.tsx`)
+  or manage private compound state. Declare them as top-level exported functions; never define
+  hooks inside a component render body.
+- **Shared Standalone Hooks (`src/hooks/`):** Place hooks in `src/hooks/` only when they
+  are generic, shared across multiple independent components or routes (e.g., `useIsMobile`,
+  `useAuth`), encapsulate reusable browser APIs (media queries, listeners, sensors), or require
+  isolated unit testing. Hooks in `src/hooks/` must never depend on application routes (`src/app/`).
+
 ## 6. Styling
 
 - Merge classes with the project `cn()` convention.
