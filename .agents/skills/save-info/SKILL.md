@@ -43,7 +43,11 @@ Do **not** save:
 - Read the candidate owner in full, or the relevant section of a long one.
 - Search for an existing statement first: `rtk rg -n "<key term>" --glob '!node_modules' --glob '!graphify-out'`.
 - If the subject fits no owner cleanly, read the ownership table in `context-manager` before deciding.
-- Read the format file when the destination has one: `.agents/skills/domain-modeling/CONTEXT-FORMAT.md`, `.agents/skills/domain-modeling/ADR-FORMAT.md`, `docs/exec-plans/template.md`.
+- Read the format and guidance files when the destination has one:
+  - `.agents/skills/domain-modeling/CONTEXT-FORMAT.md`
+  - `.agents/skills/domain-modeling/ADR-FORMAT.md`
+  - `docs/exec-plans/template.md`
+  - `docs/agents/issue-tracker.md` and `docs/agents/domain.md`
 
 ## 3. Where to save
 
@@ -51,10 +55,15 @@ Pick by the **subject** of the fact, not by where you happen to be working.
 
 | Subject | Destination | How |
 | --- | --- | --- |
-| Domain term, definition, or forbidden synonym | `CONTEXT.md` | Glossary only, no implementation detail. One or two sentences plus `_Avoid_`. Follow `domain-modeling`. |
+| Domain term, definition, or forbidden synonym | `CONTEXT.md` (or `src/<context>/CONTEXT.md` in multi-context) | Glossary only, no implementation detail. One or two sentences plus `_Avoid_`. Follow `domain-modeling` and `docs/agents/domain.md`. |
 | Product goal, non-goal, success criterion | `INTENT.md` | Keep it concise. Detailed requirements, invariants, and phases go in `docs/product-specs/` under their stable IDs. |
 | Module boundary, layering, data flow | `ARCHITECTURE.md` | Intent lives here. Machine enforcement lives in `.dependency-cruiser.cjs`. |
-| Hard-to-reverse, surprising, real trade-off | `docs/adr/NNNN-slug.md` | Only if all three hold. Next number is highest existing plus one. Follow `ADR-FORMAT.md`. |
+| Hard-to-reverse, surprising, real trade-off | `docs/adr/NNNN-slug.md` (or `src/<context>/docs/adr/` in multi-context) | Only if all three hold. Next number is highest existing plus one. Follow `ADR-FORMAT.md`. Flag conflicts with existing ADRs. |
+| Agent skills setup (issue tracker, domain docs, triage) | `docs/agents/*.md` (`issue-tracker.md`, `domain.md`, `triage-labels.md`) | Follow `setup-matt-pocock-skills`. Route one-line pointer under `## Agent skills` in `AGENTS.md`. |
+| Feature ticket, task, or tracer bullet | Configured issue tracker (GitHub Issues via `gh` CLI, or `.scratch/<feature>/issues/<ticket>.md`) | Follow `to-tickets` and `docs/agents/issue-tracker.md`. Always declare blocking edges (native issue dependencies or `Blocked by` lines). |
+| Feature spec synthesized from discussion | Issue tracker issue (per `to-spec`) or `docs/product-specs/` | Follow `to-spec` template (Problem, Solution, User Stories, Implementation/Testing Decisions). Trim ephemeral code. |
+| Throwaway prototype, spike, or exploratory UI/state | `prototype/<name>` git branch off `main` | Primary source kept on branch. Link gist and branch from ticket/spec. Follow `/prototype`. |
+| Portable session or phase handoff | `.scratch/<feature>/handoff.md` (or task path) | Portable markdown summary between phases/sessions. Follow `/handoff`. |
 | Code-writing rule (naming, file shape, patterns) | `CONVENTIONS.md` | Tool-owned rules stay with the tool config. |
 | UI tokens, visual or interaction rules | `DESIGN.md` | Frontmatter tokens are normative. |
 | Verification strategy, test commands | `TESTING.md` | |
@@ -86,8 +95,8 @@ Run only what you touched, each prefixed with `rtk`:
 
 | Touched | Run |
 | --- | --- |
-| Any control doc or `AGENTS.md` | `rtk pnpm run check:docs` |
-| `.agents/` skills, agents, or `agents.json` | `rtk agents sync`, then `rtk pnpm run check:agents` |
+| Any control doc, `AGENTS.md`, or `docs/agents/` | `rtk pnpm run check:docs` |
+| `.agents/` skills, agents, or `agents.json` | `rtk node scripts/run-agents-cli.mjs sync`, then `rtk pnpm run check:agents` |
 | Scripts | `rtk pnpm run check:lint`, `rtk pnpm run test:guards` |
 | Anything | `rtk pnpm run check:floor` |
 

@@ -127,6 +127,8 @@ skill behavior from its name alone.
 | Conventional commit messages, diff analysis, intelligent staging | `git-commit` |
 | Save/persist a rule, decision, term, or procedure; "save this"; before creating a skill | `save-info` |
 | Explore, compare, and extract prior art or contracts from historical worktrees (`.worktrees/old-*`) | `find-worktrees` |
+| Guide through engineering skill workflows (idea to ship, triage, diagnosing, wayfinding) | `ask-matt` |
+| Scaffold repo configuration for engineering skills (issue tracker, triage, domain docs) | `setup-matt-pocock-skills` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.
 Never edit remote skills authored by others or modify installed third-party skills directly.
@@ -183,6 +185,16 @@ A task is complete when:
   agent) before handoff when that review is available and proportionate.
 
 Correct code that bypasses required project tooling or validation is incomplete.
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues via `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Domain docs
+
+Single-context (`CONTEXT.md` + `docs/adr/`). See `docs/agents/domain.md`.
 
 ## Maintenance
 
