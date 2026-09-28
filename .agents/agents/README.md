@@ -8,7 +8,7 @@ The primary orchestrator delegates tasks according to this matrix:
 
 | Subagent | Role | Capabilities | Spec File |
 | :--- | :--- | :--- | :--- |
-| **`research`** | Codebase & documentation exploration | Read + Write + Tools | [`research.md`](./research.md) |
+| **`research`** | Codebase & documentation exploration | Read + Write + Subagents + Tools | [`research.md`](./research.md) |
 | **`architect`** | System boundaries, component modeling & ADRs | Read + Write + Tools | [`architect.md`](./architect.md) |
 | **`code-reviewer`** | Diff auditing, regression checks & quality | Read + Write + Tools | [`code-reviewer.md`](./code-reviewer.md) |
 | **`test-engineer`** | Unit/integration tests & test execution | Read + Write + Tools | [`test-engineer.md`](./test-engineer.md) |

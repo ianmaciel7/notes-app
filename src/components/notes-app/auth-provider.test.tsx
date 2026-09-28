@@ -7,9 +7,11 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
+import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useAuth } from "@/hooks/use-auth";
 import { auth } from "@/lib/firebase/client";
+import messages from "@/messages/en.json";
 import { AuthContext, AuthProvider } from "./auth-provider";
 import { RequireAuth } from "./require-auth";
 import { UserMenu } from "./user-menu";
@@ -25,6 +27,7 @@ vi.mock("firebase/auth", async (importOriginal) => {
     ...actual,
     onAuthStateChanged: mockOnAuthStateChanged,
     signOut: mockSignOut,
+    useDeviceLanguage: vi.fn(),
   };
 });
 
@@ -32,9 +35,18 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: vi.fn(),
     replace: vi.fn(),
+    refresh: vi.fn(),
     prefetch: vi.fn(),
   }),
 }));
+
+function renderWithIntl(ui: React.ReactNode) {
+  return render(
+    <NextIntlClientProvider locale="en" messages={messages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
+}
 
 describe("AuthProvider and Auth components", () => {
   afterEach(() => {
@@ -147,7 +159,7 @@ describe("AuthProvider and Auth components", () => {
   });
 
   it("UserMenu displays login button when unauthenticated", () => {
-    render(
+    renderWithIntl(
       <AuthContext
         value={{
           user: null,
@@ -160,7 +172,7 @@ describe("AuthProvider and Auth components", () => {
     );
 
     expect(screen.getByTestId("login-link")).toBeDefined();
-    expect(screen.getByText("Entrar")).toBeDefined();
+    expect(screen.getByText("Sign in")).toBeDefined();
   });
 
   it("UserMenu displays user email and Sair button when authenticated", () => {
@@ -171,7 +183,7 @@ describe("AuthProvider and Auth components", () => {
       isAnonymous: false,
     } as unknown as User;
 
-    render(
+    renderWithIntl(
       <AuthContext
         value={{
           user: mockUser,
@@ -234,7 +246,7 @@ describe("AuthProvider and Auth components", () => {
   });
 
   it("UserMenu forwards className and HTML attributes when unauthenticated", () => {
-    render(
+    renderWithIntl(
       <AuthContext
         value={{
           user: null,
@@ -263,7 +275,7 @@ describe("AuthProvider and Auth components", () => {
       isAnonymous: false,
     } as unknown as User;
 
-    render(
+    renderWithIntl(
       <AuthContext
         value={{
           user: mockUser,

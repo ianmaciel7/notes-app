@@ -6,7 +6,6 @@ import {
   waitFor,
 } from "@testing-library/react";
 import {
-  GoogleAuthProvider,
   getRedirectResult,
   signInAnonymously,
   signInWithPopup,

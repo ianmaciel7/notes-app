@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { ComponentProps } from "react";
+import { LanguageSwitcher } from "@/components/notes-app/language-switcher";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
@@ -10,6 +12,7 @@ export interface UserMenuProps extends ComponentProps<"div"> {}
 
 export function UserMenu({ className, ...props }: UserMenuProps) {
   const { user, isLoading, signOutUser } = useAuth();
+  const t = useTranslations("auth");
 
   if (isLoading) {
     return (
@@ -23,11 +26,12 @@ export function UserMenu({ className, ...props }: UserMenuProps) {
 
   if (!user) {
     return (
-      <div className={className} {...props}>
+      <div className={cn("flex items-center gap-3", className)} {...props}>
+        <LanguageSwitcher />
         <Button
           render={
             <Link href="/login" data-testid="login-link">
-              Entrar
+              {t("signIn")}
             </Link>
           }
           nativeButton={false}
@@ -41,7 +45,7 @@ export function UserMenu({ className, ...props }: UserMenuProps) {
   const userIdentifier =
     user.displayName ||
     user.email ||
-    (user.isAnonymous ? "Convidado" : "Usuário");
+    (user.isAnonymous ? t("anonymous") : t("defaultUser"));
 
   return (
     <div
@@ -52,6 +56,7 @@ export function UserMenu({ className, ...props }: UserMenuProps) {
       )}
       {...props}
     >
+      <LanguageSwitcher />
       <span
         data-testid="user-identifier"
         className="truncate font-medium max-w-[180px]"
@@ -64,7 +69,7 @@ export function UserMenu({ className, ...props }: UserMenuProps) {
         variant="ghost"
         onClick={() => signOutUser()}
       >
-        Sair
+        {t("signOut")}
       </Button>
     </div>
   );

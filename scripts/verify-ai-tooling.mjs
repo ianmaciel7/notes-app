@@ -60,7 +60,9 @@ try {
   const hasAgentsMandate =
     agentsMd.includes("Mandatory for all shell commands") ||
     agentsMd.includes("RTK is mandatory");
-  const hasRtkPrefixEnforcement = rtkMd.includes("MUST be prefixed with `rtk`");
+  const hasRtkPrefixEnforcement =
+    rtkMd.includes("MUST be prefixed with `rtk`") ||
+    rtkMd.includes("Always prefix shell commands with `rtk`");
   const hasToolRouting =
     agentsMd.includes("Graphify first") &&
     agentsMd.includes("Serena MCP") &&

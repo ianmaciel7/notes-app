@@ -1,6 +1,6 @@
 # Execution Plan: Playwright End-to-End Testing Setup & Firebase Auth E2E Flow
 
-**Status:** Active  
+**Status:** Completed  
 **Owner:** Antigravity Orchestrator  
 **Started:** 2026-09-28  
 **Last Updated:** 2026-09-28
@@ -45,7 +45,7 @@ Establish an automated end-to-end (E2E) testing foundation with `@playwright/tes
 
 ## Progress
 
-- 2026-09-28 — Authored initial active execution plan for Playwright E2E testing setup and Firebase Auth E2E flow in `docs/exec-plans/active/playwright-e2e-setup.md`.
+- 2026-09-28 — Authored initial active execution plan for Playwright E2E testing setup and Firebase Auth E2E flow in `docs/exec-plans/completed/playwright-e2e-setup.md`.
 - 2026-09-28 — Installed Playwright Chromium binary, created `playwright.config.ts`, authored `e2e/auth-flow.spec.ts`, and verified 3/3 tests passing clean via `pnpm test:e2e`.
 
 ## Decision Log

@@ -1,6 +1,8 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import type { User } from "firebase/auth";
+import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import messages from "@/messages/en.json";
 import { AuthGreeting } from "./auth-greeting";
 
 vi.mock("@/hooks/use-auth", () => ({
@@ -8,6 +10,14 @@ vi.mock("@/hooks/use-auth", () => ({
 }));
 
 import { useAuth } from "@/hooks/use-auth";
+
+function renderWithIntl(ui: React.ReactNode, locale = "en") {
+  return render(
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
+}
 
 describe("AuthGreeting", () => {
   afterEach(() => {
@@ -21,11 +31,9 @@ describe("AuthGreeting", () => {
       signOutUser: vi.fn(),
     });
 
-    render(<AuthGreeting />);
+    renderWithIntl(<AuthGreeting />);
     expect(screen.getByText("Notes App")).toBeDefined();
-    expect(
-      screen.getByText("Faça login para acessar suas anotações."),
-    ).toBeDefined();
+    expect(screen.getByText("Sign in to access your notes.")).toBeDefined();
   });
 
   it("renders user name when authenticated", () => {
@@ -40,14 +48,14 @@ describe("AuthGreeting", () => {
       signOutUser: vi.fn(),
     });
 
-    render(<AuthGreeting />);
-    expect(screen.getByText("Olá, Ian Maciel!")).toBeDefined();
+    renderWithIntl(<AuthGreeting />);
+    expect(screen.getByText("Hello, Ian Maciel!")).toBeDefined();
     expect(
-      screen.getByText("Você está conectado com sucesso ao Firebase."),
+      screen.getByText("You are successfully connected to Firebase."),
     ).toBeDefined();
   });
 
-  it("falls back to 'Usuário' when displayName is empty", () => {
+  it("falls back to 'User' when displayName is empty", () => {
     vi.mocked(useAuth).mockReturnValue({
       user: {
         uid: "user-2",
@@ -59,8 +67,8 @@ describe("AuthGreeting", () => {
       signOutUser: vi.fn(),
     });
 
-    render(<AuthGreeting />);
-    expect(screen.getByText("Olá, Usuário!")).toBeDefined();
+    renderWithIntl(<AuthGreeting />);
+    expect(screen.getByText("Hello, test!")).toBeDefined();
   });
 
   it("forwards className and HTML attributes", () => {
@@ -70,7 +78,7 @@ describe("AuthGreeting", () => {
       signOutUser: vi.fn(),
     });
 
-    render(
+    renderWithIntl(
       <AuthGreeting
         data-testid="auth-greeting-container"
         className="custom-greeting-class"

@@ -1,0 +1,23 @@
+{
+  "app": {
+    "title": "Notes App",
+    "subtitle": "Personal knowledge & learning workspace",
+    "footer": "Notes App • Firebase Auth"
+  },
+  "auth": {
+    "guestGreeting": "Notes App",
+    "guestDescription": "Sign in to access your notes.",
+    "userGreeting": "Hello, {name}!",
+    "userDescription": "You are successfully connected to Firebase.",
+    "defaultUser": "User",
+    "anonymous": "Guest",
+    "signIn": "Sign in",
+    "signOut": "Sign out"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "ptBR": "Português (Brasil)",
+    "es": "Español"
+  }
+}

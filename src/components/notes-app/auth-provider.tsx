@@ -8,6 +8,11 @@ import {
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import { app, auth } from "@/lib/firebase/client";
+import {
+  getClientCookieLocale,
+  initGuestFirebaseLocale,
+  syncFirebaseLocale,
+} from "@/lib/i18n/locale-sync";
 
 export interface AuthContextValue {
   user: User | null;
@@ -34,9 +39,29 @@ export function AuthProvider({
   const [isLoading, setIsLoading] = useState(!initialUser);
 
   useEffect(() => {
+    // Initial guest/user language setup for Firebase Auth instance
+    const initialCookieLocale = getClientCookieLocale();
+    if (initialCookieLocale) {
+      auth.languageCode = initialCookieLocale;
+    } else {
+      initGuestFirebaseLocale(auth);
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setIsLoading(false);
+
+      if (currentUser) {
+        const activeLocale = getClientCookieLocale();
+        if (activeLocale) {
+          syncFirebaseLocale(auth, activeLocale);
+        }
+      } else {
+        const activeLocale = getClientCookieLocale();
+        if (!activeLocale) {
+          initGuestFirebaseLocale(auth);
+        }
+      }
     });
 
     return () => unsubscribe();
