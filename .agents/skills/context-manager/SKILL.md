@@ -33,6 +33,8 @@ the other copy with a pointer.
 | **`CONSTRAINTS.md`** | Non-regression quality contract | Blocking floors, measurable thresholds, gates, baselines, owned exceptions | Tutorials, tool manuals, implementation style |
 | **`AGENTS.md`** | Agent router and always-on contract | Scope/precedence, doc/tool/skill routing, agent decision boundaries, anti-bypass invariants, definition of done | Full tool manuals, detailed code conventions, test matrices already owned elsewhere |
 | **`RTK.md`** | RTK-specific usage | RTK behavior, supported usage, exceptions, troubleshooting | General shell policy or unrelated tools |
+| **`TOOLING.md`** | Tool catalog & capabilities | Comprehensive inventory of project tools, scripts, guards, and MCP servers | Product requirements, code conventions, test thresholds owned elsewhere |
+| **Tool config files (`.dependency-cruiser.cjs`, `biome.json`, etc.)** | Machine-enforced tool configuration | Executable rules, linter configs, module boundary constraints, compiler options | High-level architectural intent (`ARCHITECTURE.md`), human style guides (`CONVENTIONS.md`) |
 | **`.agents/agents.json`** | Machine-readable agent configuration | MCP servers, integrations, profiles, targets, synchronization behavior | Long-form human policy or procedural documentation |
 | **`.agents/rules/*.md`** | Modular agent rules | Targeted, always-on invariant and enforcement rules | Global routing, full manuals |
 | **`.agents/skills/*/SKILL.md`** | Specialized execution workflow | Trigger and procedure for one focused agent capability | Global repository policy unrelated to that skill |

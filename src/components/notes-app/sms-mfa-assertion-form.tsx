@@ -183,7 +183,7 @@ export type SmsMultiFactorAssertionFormProps = React.ComponentProps<"div"> & {
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function SmsMultiFactorAssertionForm({
+export function SmsMfaAssertionForm({
   hint,
   onSuccess,
   className,
@@ -211,3 +211,8 @@ export function SmsMultiFactorAssertionForm({
     </div>
   );
 }
+
+export {
+  SmsMfaAssertionForm as SmsMultiFactorAssertionForm,
+  type SmsMultiFactorAssertionFormProps as SmsMfaAssertionFormProps,
+};

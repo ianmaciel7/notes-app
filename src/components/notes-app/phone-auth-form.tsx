@@ -21,11 +21,11 @@ import type { UserCredential } from "firebase/auth";
 import type { ComponentProps } from "react";
 import { useRef, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+import { Policies } from "@/components/notes-app/auth-policies-card";
 import {
-  CountrySelector,
+  CountrySelect,
   type CountrySelectorRef,
-} from "@/components/notes-app/country-selector";
-import { Policies } from "@/components/notes-app/policies";
+} from "@/components/notes-app/country-select";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -194,7 +194,7 @@ function PhoneNumberForm({
                 {getTranslation(ui, "labels", "phoneNumber")}
               </FieldLabel>
               <div className="flex items-center gap-2">
-                <CountrySelector ref={countrySelector} />
+                <CountrySelect ref={countrySelector} />
                 <Input
                   {...field}
                   id="phoneNumber"

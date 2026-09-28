@@ -19,12 +19,11 @@ import {
 
 export type { CountrySelectorRef };
 
-export interface CountrySelectorComponentProps
-  extends Omit<CountrySelectorProps, "ref"> {
+export interface CountrySelectProps extends Omit<CountrySelectorProps, "ref"> {
   ref?: Ref<CountrySelectorRef>;
 }
 
-export function CountrySelector({ ref }: CountrySelectorComponentProps) {
+export function CountrySelect({ ref }: CountrySelectProps) {
   const countries = useCountries();
   const defaultCountry = useDefaultCountry();
   const [selected, setSelected] = useState<CountryData>(defaultCountry);

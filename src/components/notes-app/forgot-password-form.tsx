@@ -17,13 +17,13 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Policies } from "./policies";
+import { Policies } from "./auth-policies-card";
 
 export interface ForgotPasswordAuthFormProps
   extends Omit<ComponentProps<"form">, "onSubmit">,
     FirebaseForgotPasswordAuthFormProps {}
 
-export function ForgotPasswordAuthForm({
+export function ForgotPasswordForm({
   onPasswordSent,
   onBackToSignInClick,
   className,
@@ -117,3 +117,8 @@ export function ForgotPasswordAuthForm({
     </FormProvider>
   );
 }
+
+export {
+  ForgotPasswordForm as ForgotPasswordAuthForm,
+  type ForgotPasswordAuthFormProps as ForgotPasswordFormProps,
+};

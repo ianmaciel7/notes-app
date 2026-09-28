@@ -72,6 +72,8 @@ Pick by the **subject** of the fact, not by where you happen to be working.
 | Human setup, branch, commit, PR workflow | `CONTRIBUTING.md` / `README.md` | README gets only basic start commands. |
 | Always-on agent invariant or enforcement rule | `.agents/rules/<topic>.md` | Plus one routing line in `AGENTS.md`. |
 | Which doc, tool, or skill to route to | `AGENTS.md` | Routing only. Edit outside any tool-generated block. Stay under its size budget. |
+| Tool catalog, capabilities & tool decision flows | `TOOLING.md` | Comprehensive inventory of project tools, scripts, guards, and MCP servers. |
+| Tool configuration & machine-enforced rules | Tool config files (e.g. `.dependency-cruiser.cjs`, `biome.json`, `tsconfig.json`) | Enforced directly by tools; explain intent in owner doc (`ARCHITECTURE.md`, `CONVENTIONS.md`, `TESTING.md`). |
 | Multi-session task state | `docs/exec-plans/active/<name>.md` | Copy `template.md`. Deferred debt goes in `tech-debt-tracker.md`. |
 | Operational directive for all coding agents | `.serena/memories/<topic>/<name>.md` | Use Serena `write_memory`. Git-tracked. |
 | MCP servers, integrations, targets | `.agents/agents.json` | Use the `agents` CLI (`agents-dev-cli`). |

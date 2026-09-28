@@ -22,9 +22,9 @@ import {
 import { useRef, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import {
-  CountrySelector,
+  CountrySelect,
   type CountrySelectorRef,
-} from "@/components/notes-app/country-selector";
+} from "@/components/notes-app/country-select";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -131,7 +131,7 @@ function MultiFactorEnrollmentPhoneNumberForm({
                 {getTranslation(ui, "labels", "phoneNumber")}
               </FieldLabel>
               <div className="flex items-center gap-2">
-                <CountrySelector ref={countrySelector} />
+                <CountrySelect ref={countrySelector} />
                 <Input
                   {...field}
                   id="phoneNumber"
@@ -259,7 +259,7 @@ export type SmsMultiFactorEnrollmentFormProps = React.ComponentProps<"div"> & {
   onSuccess?: () => void;
 };
 
-export function SmsMultiFactorEnrollmentForm({
+export function SmsMfaEnrollmentForm({
   onSuccess,
   className,
   ...props
@@ -296,3 +296,8 @@ export function SmsMultiFactorEnrollmentForm({
     </div>
   );
 }
+
+export {
+  SmsMfaEnrollmentForm as SmsMultiFactorEnrollmentForm,
+  type SmsMultiFactorEnrollmentFormProps as SmsMfaEnrollmentFormProps,
+};

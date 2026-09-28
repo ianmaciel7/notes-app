@@ -4,9 +4,9 @@ import { getTranslation } from "@firebase-oss/ui-core";
 import { useOnUserAuthenticated, useUI } from "@firebase-oss/ui-react";
 import type { User } from "firebase/auth";
 import type { ComponentProps, PropsWithChildren } from "react";
-import { MultiFactorAuthAssertionScreen } from "@/components/notes-app/multi-factor-auth-assertion-screen";
+import { MfaAssertionCard } from "@/components/notes-app/mfa-assertion-card";
 import { PhoneAuthForm } from "@/components/notes-app/phone-auth-form";
-import { RedirectError } from "@/components/notes-app/redirect-error";
+import { RedirectError } from "@/components/notes-app/redirect-error-alert";
 import {
   Card,
   CardContent,
@@ -22,7 +22,7 @@ export interface PhoneAuthScreenProps
   onSignIn?: (user: User) => void;
 }
 
-export function PhoneAuthScreen({
+export function PhoneAuthCard({
   children,
   onSignIn,
   className,
@@ -36,7 +36,7 @@ export function PhoneAuthScreen({
   useOnUserAuthenticated(onSignIn);
 
   if (ui.multiFactorResolver) {
-    return <MultiFactorAuthAssertionScreen />;
+    return <MfaAssertionCard />;
   }
 
   return (
@@ -62,3 +62,8 @@ export function PhoneAuthScreen({
     </div>
   );
 }
+
+export {
+  PhoneAuthCard as PhoneAuthScreen,
+  type PhoneAuthScreenProps as PhoneAuthCardProps,
+};

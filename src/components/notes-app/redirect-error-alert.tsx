@@ -4,9 +4,12 @@ import { useRedirectError } from "@firebase-oss/ui-react";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
-export interface RedirectErrorProps extends ComponentProps<"div"> {}
+export interface RedirectErrorAlertProps extends ComponentProps<"div"> {}
 
-export function RedirectError({ className, ...props }: RedirectErrorProps) {
+export function RedirectErrorAlert({
+  className,
+  ...props
+}: RedirectErrorAlertProps) {
   const error = useRedirectError();
 
   if (!error) {
@@ -19,3 +22,8 @@ export function RedirectError({ className, ...props }: RedirectErrorProps) {
     </div>
   );
 }
+
+export {
+  RedirectErrorAlert as RedirectError,
+  type RedirectErrorAlertProps as RedirectErrorProps,
+};

@@ -6,7 +6,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { ComponentProps } from "react";
-import { ForgotPasswordAuthForm } from "@/components/notes-app/forgot-password-auth-form";
+import { ForgotPasswordForm } from "@/components/notes-app/forgot-password-form";
 import {
   Card,
   CardContent,
@@ -20,7 +20,7 @@ export interface ForgotPasswordAuthScreenProps
   extends FirebaseForgotPasswordAuthScreenProps,
     Omit<ComponentProps<"div">, "children"> {}
 
-export function ForgotPasswordAuthScreen({
+export function ForgotPasswordCard({
   onPasswordSent,
   onBackToSignInClick,
   className,
@@ -39,7 +39,7 @@ export function ForgotPasswordAuthScreen({
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <ForgotPasswordAuthForm
+          <ForgotPasswordForm
             onPasswordSent={onPasswordSent}
             onBackToSignInClick={onBackToSignInClick}
           />
@@ -48,3 +48,8 @@ export function ForgotPasswordAuthScreen({
     </div>
   );
 }
+
+export {
+  ForgotPasswordCard as ForgotPasswordAuthScreen,
+  type ForgotPasswordAuthScreenProps as ForgotPasswordCardProps,
+};

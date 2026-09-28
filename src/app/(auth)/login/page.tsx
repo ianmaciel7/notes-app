@@ -11,8 +11,8 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { GoogleSignInButton } from "@/components/notes-app/google-sign-in-button";
-import { SignInAuthScreen } from "@/components/notes-app/sign-in-auth-screen";
-import { SignUpAuthScreen } from "@/components/notes-app/sign-up-auth-screen";
+import { SignInAuthScreen } from "@/components/notes-app/login-card";
+import { SignUpAuthScreen } from "@/components/notes-app/sign-up-card";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/firebase/client";
 

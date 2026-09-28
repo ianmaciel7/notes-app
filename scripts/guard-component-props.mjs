@@ -22,15 +22,24 @@ const ALLOWED_PROP_PATTERNS = [
   "CountrySelectorProps",
   "EmailLinkAuthFormProps",
   "EmailLinkAuthScreenProps",
+  "EmailLinkCardProps",
   "ForgotPasswordAuthFormProps",
   "ForgotPasswordAuthScreenProps",
+  "ForgotPasswordCardProps",
+  "LoginCardProps",
   "MultiFactorAuthAssertionScreenProps",
+  "MfaAssertionCardProps",
   "MultiFactorAuthEnrollmentFormProps",
+  "MfaEnrollmentCardProps",
+  "OAuthCardProps",
+  "PhoneAuthCardProps",
   "PhoneAuthFormProps",
   "SignInAuthFormProps",
   "SignInAuthScreenProps",
   "SignUpAuthFormProps",
   "SignUpAuthScreenProps",
+  "SignUpCardProps",
+  "AuthPoliciesCardProps",
 ];
 
 function isAllowedTypeReference(typeNode, sf) {
@@ -89,6 +98,145 @@ function checkTypeAliasDeclaration(node, filePath, sf) {
   return null;
 }
 
+function toPascalCase(str) {
+  return str.replace(/(?:^|-)([a-z0-9])/gi, (_, g) => g.toUpperCase());
+}
+
+function addExportedDeclarationNames(node, exportedNames) {
+  const hasExportModifier = node.modifiers?.some(
+    (m) => m.kind === ts.SyntaxKind.ExportKeyword,
+  );
+  if (!hasExportModifier) return;
+
+  if (node.name?.text) {
+    exportedNames.add(node.name.text);
+    return;
+  }
+
+  if (ts.isVariableStatement(node)) {
+    for (const decl of node.declarationList.declarations) {
+      if (decl.name?.text) {
+        exportedNames.add(decl.name.text);
+      }
+    }
+  }
+}
+
+function addNamedExportClauseNames(node, exportedNames) {
+  if (
+    !ts.isExportDeclaration(node) ||
+    !node.exportClause ||
+    !ts.isNamedExports(node.exportClause)
+  ) {
+    return;
+  }
+
+  for (const element of node.exportClause.elements) {
+    exportedNames.add(element.name.text);
+  }
+}
+
+function collectExportedNames(sf) {
+  const exportedNames = new Set();
+  ts.forEachChild(sf, (node) => {
+    addExportedDeclarationNames(node, exportedNames);
+    addNamedExportClauseNames(node, exportedNames);
+  });
+  return exportedNames;
+}
+
+export function checkCardExports(sf, filePath) {
+  const baseName = path.basename(filePath);
+  if (!baseName.endsWith("-card.tsx")) {
+    return null;
+  }
+
+  const rawName = baseName.replace(/\.tsx$/, "");
+  const expectedName = toPascalCase(rawName);
+  const normalizedExpected = expectedName.toLowerCase();
+  const exportedNames = collectExportedNames(sf);
+
+  const hasMatchingExport = Array.from(exportedNames).some(
+    (name) => name.toLowerCase() === normalizedExpected,
+  );
+
+  if (!hasMatchingExport) {
+    return {
+      file: path.relative(root, filePath),
+      propName: expectedName,
+      message: `Card file '${baseName}' must export '${expectedName}' (as component or export alias) to maintain contract symmetry and prevent broken imports.`,
+    };
+  }
+
+  return null;
+}
+
+/**
+ * Enforces that the PRIMARY export function/class/const declaration in a
+ * notes-app component file matches the PascalCase derived from the filename.
+ *
+ * A re-export alias at the bottom (e.g. `export { Foo as Bar }`) is NOT
+ * sufficient — the declaration name itself must be canonical.
+ *
+ * Files with no exported PascalCase function (e.g. pure-context files) are
+ * skipped — the rule only fires when at least one exported function exists
+ * whose name does NOT match the filename.
+ *
+ * Example violation:
+ *   File: login-card.tsx
+ *   Primary fn: export function SignInAuthScreen(...)  ← ❌ must be LoginCard
+ *   Fix:        export function LoginCard(...)          ← ✅
+ *               export { LoginCard as SignInAuthScreen }; ← backwards-compat alias
+ */
+export function checkPrimaryExportMatchesFilename(sf, filePath) {
+  const baseName = path.basename(filePath);
+  if (!baseName.endsWith(".tsx") || baseName.endsWith(".test.tsx")) {
+    return null;
+  }
+
+  const rawName = baseName.replace(/\.tsx$/, "");
+  const expectedName = toPascalCase(rawName);
+  const normalizedExpected = expectedName.toLowerCase();
+
+  // Collect names of top-level `export function Foo` / `export class Foo` declarations.
+  const primaryExportedFnNames = [];
+  ts.forEachChild(sf, (node) => {
+    const hasExportModifier = node.modifiers?.some(
+      (m) => m.kind === ts.SyntaxKind.ExportKeyword,
+    );
+    if (!hasExportModifier) return;
+
+    if (
+      (ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node)) &&
+      node.name?.text
+    ) {
+      const name = node.name.text;
+      // Only care about PascalCase names (React components), not lowercase helpers
+      if (/^[A-Z]/.test(name)) {
+        primaryExportedFnNames.push(name);
+      }
+    }
+  });
+
+  if (primaryExportedFnNames.length === 0) return null;
+
+  // If any primary declaration already carries the canonical name, we're fine.
+  const hasCanonical = primaryExportedFnNames.some(
+    (name) => name.toLowerCase() === normalizedExpected,
+  );
+  if (hasCanonical) return null;
+
+  // Find the "main" component — the one most likely to be the primary export.
+  // Heuristic: first exported PascalCase function.
+  const actual = primaryExportedFnNames[0];
+
+  return {
+    file: path.relative(root, filePath),
+    propName: expectedName,
+    message: `Primary export in '${baseName}' is '${actual}' but must be '${expectedName}' (derived from filename). Rename the declaration and keep the old name as a backwards-compat alias: export { ${expectedName} as ${actual} };`,
+  };
+}
+
 export function checkPropsInFile(filePath, content) {
   const sf = ts.createSourceFile(
     filePath,
@@ -99,6 +247,15 @@ export function checkPropsInFile(filePath, content) {
   );
 
   const violations = [];
+
+  const cardViolation = checkCardExports(sf, filePath);
+  if (cardViolation) violations.push(cardViolation);
+
+  const primaryExportViolation = checkPrimaryExportMatchesFilename(
+    sf,
+    filePath,
+  );
+  if (primaryExportViolation) violations.push(primaryExportViolation);
 
   ts.forEachChild(sf, (node) => {
     if (ts.isInterfaceDeclaration(node) && node.name.text.endsWith("Props")) {

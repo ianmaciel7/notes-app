@@ -16,18 +16,18 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Policies } from "./policies";
+import { Policies } from "./auth-policies-card";
 
-export interface SignUpAuthFormProps
+export interface SignUpFormProps
   extends Omit<ComponentProps<"form">, "onSubmit">,
     FirebaseSignUpAuthFormProps {}
 
-export function SignUpAuthForm({
+export function SignUpForm({
   onSignUp,
   onSignInClick,
   className,
   ...props
-}: SignUpAuthFormProps) {
+}: SignUpFormProps) {
   const ui = useUI();
   const schema = useSignUpAuthFormSchema();
   const action = useSignUpAuthFormAction();
@@ -156,3 +156,8 @@ export function SignUpAuthForm({
     </FormProvider>
   );
 }
+
+export {
+  SignUpForm as SignUpAuthForm,
+  type SignUpFormProps as SignUpAuthFormProps,
+};

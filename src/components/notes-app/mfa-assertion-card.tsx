@@ -6,7 +6,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { ComponentProps } from "react";
-import { MultiFactorAuthAssertionForm } from "@/components/notes-app/multi-factor-auth-assertion-form";
+import { MfaAssertionForm } from "@/components/notes-app/mfa-assertion-form";
 import {
   Card,
   CardContent,
@@ -20,7 +20,7 @@ export interface MultiFactorAuthAssertionScreenProps
   extends FirebaseMultiFactorAuthAssertionScreenProps,
     Omit<ComponentProps<"div">, "children"> {}
 
-export function MultiFactorAuthAssertionScreen({
+export function MfaAssertionCard({
   className,
   ...props
 }: MultiFactorAuthAssertionScreenProps) {
@@ -37,9 +37,14 @@ export function MultiFactorAuthAssertionScreen({
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <MultiFactorAuthAssertionForm {...props} />
+          <MfaAssertionForm {...props} />
         </CardContent>
       </Card>
     </div>
   );
 }
+
+export {
+  MfaAssertionCard as MultiFactorAuthAssertionScreen,
+  type MultiFactorAuthAssertionScreenProps as MfaAssertionCardProps,
+};

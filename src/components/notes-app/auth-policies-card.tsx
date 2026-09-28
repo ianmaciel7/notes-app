@@ -41,7 +41,7 @@ function PolicyLink({
   );
 }
 
-export function Policies({ className, ...props }: PoliciesProps) {
+export function AuthPoliciesCard({ className, ...props }: PoliciesProps) {
   const ui = useUI();
   const policies = use(PolicyContext);
 
@@ -97,3 +97,8 @@ export function Policies({ className, ...props }: PoliciesProps) {
     </div>
   );
 }
+
+export {
+  AuthPoliciesCard as Policies,
+  type PoliciesProps as AuthPoliciesCardProps,
+};

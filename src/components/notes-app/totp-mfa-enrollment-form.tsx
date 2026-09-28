@@ -35,7 +35,7 @@ export type TotpMultiFactorSecretGenerationFormProps = Omit<
   onSubmit: (secret: TotpSecret, displayName: string) => void;
 };
 
-export function TotpMultiFactorSecretGenerationForm({
+function TotpMultiFactorSecretGenerationForm({
   onSubmit: onSubmitProp,
   className,
   ...props
@@ -210,7 +210,7 @@ export type TotpMultiFactorEnrollmentFormProps = ComponentProps<"div"> & {
   onSuccess?: () => void;
 };
 
-export function TotpMultiFactorEnrollmentForm({
+export function TotpMfaEnrollmentForm({
   onSuccess,
   className,
   ...props
@@ -247,3 +247,8 @@ export function TotpMultiFactorEnrollmentForm({
     </div>
   );
 }
+
+export {
+  TotpMfaEnrollmentForm as TotpMultiFactorEnrollmentForm,
+  type TotpMultiFactorEnrollmentFormProps as TotpMfaEnrollmentFormProps,
+};

@@ -9,9 +9,9 @@ The primary orchestrator delegates tasks according to this matrix:
 | Subagent | Role | Capabilities | Spec File |
 | :--- | :--- | :--- | :--- |
 | **`research`** | Codebase & documentation exploration | Read + Write + Subagents + Tools | [`research.md`](./research.md) |
-| **`architect`** | System boundaries, component modeling & ADRs | Read + Write + Tools | [`architect.md`](./architect.md) |
+| **`architect`** | System boundaries, component modeling & ADRs | Read + Write + Subagents + Tools | [`architect.md`](./architect.md) |
 | **`code-reviewer`** | Diff auditing, regression checks & quality | Read + Write + Tools | [`code-reviewer.md`](./code-reviewer.md) |
-| **`test-engineer`** | Unit/integration tests & test execution | Read + Write + Tools | [`test-engineer.md`](./test-engineer.md) |
+| **`test-engineer`** | Unit/integration tests & test execution | Read + Write + Subagents + Tools | [`test-engineer.md`](./test-engineer.md) |
 | **`security-reviewer`** | Auth, secrets scanning & threat modeling | Read + Write + Tools | [`security-reviewer.md`](./security-reviewer.md) |
 | **`doc-maintainer`** | Control docs & documentation synchronization | Read + Write + Tools | [`doc-maintainer.md`](./doc-maintainer.md) |
 | **`a11y-reviewer`** | UI accessibility audits (WCAG 2.1 AA, keyboard, contrast) | Read-only + Tools | [`a11y-reviewer.md`](./a11y-reviewer.md) |

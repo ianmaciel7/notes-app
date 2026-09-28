@@ -15,13 +15,13 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Policies } from "./policies";
+import { Policies } from "./auth-policies-card";
 
 export interface SignInAuthFormProps
   extends Omit<ComponentProps<"form">, "onSubmit">,
     FirebaseSignInAuthFormProps {}
 
-export function SignInAuthForm({
+export function LoginForm({
   onSignIn,
   onForgotPasswordClick,
   onSignUpClick,
@@ -150,3 +150,8 @@ export function SignInAuthForm({
     </FormProvider>
   );
 }
+
+export {
+  LoginForm as SignInAuthForm,
+  type SignInAuthFormProps as LoginFormProps,
+};

@@ -44,6 +44,7 @@ Read only the owner relevant to the task:
 | Security posture | `SECURITY.md` |
 | Blocking quality floors | `CONSTRAINTS.md` |
 | Contribution, Git, and PR workflow | `CONTRIBUTING.md` |
+| Tool catalog & capabilities | `TOOLING.md` |
 | Search, discovery, and navigation hierarchy | `.agents/rules/search-and-discovery.md` |
 | Lead Orchestrator & subagent execution | `.agents/rules/orchestration.md` |
 

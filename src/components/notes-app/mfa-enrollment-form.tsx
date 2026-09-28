@@ -6,32 +6,30 @@ import { FactorId } from "firebase/auth";
 import type { ComponentProps } from "react";
 import { useState } from "react";
 
-import { SmsMultiFactorEnrollmentForm } from "@/components/notes-app/sms-multi-factor-enrollment-form";
-import { TotpMultiFactorEnrollmentForm } from "@/components/notes-app/totp-multi-factor-enrollment-form";
+import { SmsMultiFactorEnrollmentForm } from "@/components/notes-app/sms-mfa-enrollment-form";
+import { TotpMultiFactorEnrollmentForm } from "@/components/notes-app/totp-mfa-enrollment-form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type Hint = (typeof FactorId)[keyof typeof FactorId];
 
-export type MultiFactorAuthEnrollmentFormProps = ComponentProps<"div"> & {
+export type MfaEnrollmentFormProps = ComponentProps<"div"> & {
   onEnrollment?: () => void;
   hints?: Hint[];
 };
 
 const DEFAULT_HINTS = [FactorId.TOTP, FactorId.PHONE] as const;
 
-export function MultiFactorAuthEnrollmentForm({
+export function MfaEnrollmentForm({
   onEnrollment,
   hints: hintsProp,
   className,
   ...props
-}: MultiFactorAuthEnrollmentFormProps) {
+}: MfaEnrollmentFormProps) {
   const hints = hintsProp ?? DEFAULT_HINTS;
 
   if (hints.length === 0) {
-    throw new Error(
-      "MultiFactorAuthEnrollmentForm must have at least one hint",
-    );
+    throw new Error("MfaEnrollmentForm must have at least one hint");
   }
 
   // If only a single hint is provided, select it by default to improve UX.

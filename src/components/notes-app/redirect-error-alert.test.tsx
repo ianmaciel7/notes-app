@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { RedirectError } from "./redirect-error";
+import { RedirectError } from "./redirect-error-alert";
 
 vi.mock("@firebase-oss/ui-react", () => ({
   useRedirectError: vi.fn(),

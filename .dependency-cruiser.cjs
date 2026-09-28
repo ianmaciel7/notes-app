@@ -48,6 +48,14 @@ module.exports = {
       to: { path: "^src/(app|components/notes-app)" },
     },
     {
+      name: "app-must-use-notes-app-auth-components",
+      severity: "error",
+      comment:
+        "Application routes must import customized auth components from @/components/notes-app, never directly from immutable vendor drops in @/components/firebase.",
+      from: { path: "^src/app" },
+      to: { path: "^src/components/firebase" },
+    },
+    {
       name: "no-client-firebase-admin",
       severity: "error",
       comment:

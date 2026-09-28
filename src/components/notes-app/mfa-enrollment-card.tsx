@@ -6,7 +6,7 @@ import {
   useUI,
 } from "@firebase-oss/ui-react";
 import type { ComponentProps } from "react";
-import { MultiFactorAuthEnrollmentForm } from "@/components/notes-app/multi-factor-auth-enrollment-form";
+import { MfaEnrollmentForm } from "@/components/notes-app/mfa-enrollment-form";
 import {
   Card,
   CardContent,
@@ -16,14 +16,14 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export interface MultiFactorAuthEnrollmentScreenProps
+export interface MfaEnrollmentCardProps
   extends FirebaseMultiFactorAuthEnrollmentFormProps,
     Omit<ComponentProps<"div">, "children"> {}
 
-export function MultiFactorAuthEnrollmentScreen({
+export function MfaEnrollmentCard({
   className,
   ...props
-}: MultiFactorAuthEnrollmentScreenProps) {
+}: MfaEnrollmentCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "multiFactorEnrollment");
@@ -37,7 +37,7 @@ export function MultiFactorAuthEnrollmentScreen({
           <CardDescription>{subtitleText}</CardDescription>
         </CardHeader>
         <CardContent>
-          <MultiFactorAuthEnrollmentForm {...props} />
+          <MfaEnrollmentForm {...props} />
         </CardContent>
       </Card>
     </div>

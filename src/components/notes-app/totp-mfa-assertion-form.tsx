@@ -25,7 +25,7 @@ export type TotpMultiFactorAssertionFormProps = ComponentProps<"div"> & {
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function TotpMultiFactorAssertionForm({
+export function TotpMfaAssertionForm({
   hint,
   onSuccess,
   className,
@@ -104,3 +104,8 @@ export function TotpMultiFactorAssertionForm({
     </div>
   );
 }
+
+export {
+  TotpMfaAssertionForm as TotpMultiFactorAssertionForm,
+  type TotpMultiFactorAssertionFormProps as TotpMfaAssertionFormProps,
+};

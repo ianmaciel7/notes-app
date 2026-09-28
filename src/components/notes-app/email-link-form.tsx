@@ -14,7 +14,7 @@ import type { ComponentProps } from "react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
-import { Policies } from "@/components/notes-app/policies";
+import { Policies } from "@/components/notes-app/auth-policies-card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
@@ -25,7 +25,7 @@ export interface EmailLinkAuthFormProps
   extends Omit<ComponentProps<"form">, "onSubmit">,
     FirebaseEmailLinkAuthFormProps {}
 
-export function EmailLinkAuthForm({
+export function EmailLinkForm({
   onEmailSent,
   onSignIn,
   className,
@@ -109,3 +109,8 @@ export function EmailLinkAuthForm({
     </FormProvider>
   );
 }
+
+export {
+  EmailLinkForm as EmailLinkAuthForm,
+  type EmailLinkAuthFormProps as EmailLinkFormProps,
+};

@@ -6,10 +6,11 @@ import {
   useOnUserAuthenticated,
   useUI,
 } from "@firebase-oss/ui-react";
+import type { UserCredential } from "firebase/auth";
 import type { ComponentProps } from "react";
-import { EmailLinkAuthForm } from "@/components/notes-app/email-link-auth-form";
-import { MultiFactorAuthAssertionScreen } from "@/components/notes-app/multi-factor-auth-assertion-screen";
-import { RedirectError } from "@/components/notes-app/redirect-error";
+import { EmailLinkAuthForm } from "@/components/notes-app/email-link-form";
+import { MfaAssertionCard } from "@/components/notes-app/mfa-assertion-card";
+import { RedirectError } from "@/components/notes-app/redirect-error-alert";
 import {
   Card,
   CardContent,
@@ -24,7 +25,7 @@ export interface EmailLinkAuthScreenProps
   extends FirebaseEmailLinkAuthScreenProps,
     Omit<ComponentProps<"div">, "children"> {}
 
-export function EmailLinkAuthScreen({
+export function EmailLinkCard({
   children,
   onSignIn,
   onEmailSent,
@@ -40,7 +41,7 @@ export function EmailLinkAuthScreen({
   useOnUserAuthenticated(onSignIn);
 
   if (ui.multiFactorResolver) {
-    return <MultiFactorAuthAssertionScreen />;
+    return <MfaAssertionCard />;
   }
 
   return (
@@ -52,7 +53,9 @@ export function EmailLinkAuthScreen({
         </CardHeader>
         <CardContent>
           <EmailLinkAuthForm
-            onSignIn={(credential) => onSignIn?.(credential.user)}
+            onSignIn={(credential: UserCredential) =>
+              onSignIn?.(credential.user)
+            }
             onEmailSent={onEmailSent}
           />
           {children ? (
@@ -69,3 +72,8 @@ export function EmailLinkAuthScreen({
     </div>
   );
 }
+
+export {
+  EmailLinkCard as EmailLinkAuthScreen,
+  type EmailLinkAuthScreenProps as EmailLinkCardProps,
+};

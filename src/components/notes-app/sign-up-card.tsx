@@ -6,7 +6,7 @@ import {
   useOnUserAuthenticated,
   useUI,
 } from "@firebase-oss/ui-react";
-import type { User } from "firebase/auth";
+import type { User, UserCredential } from "firebase/auth";
 import { type ComponentProps, useCallback, useRef } from "react";
 import {
   Card,
@@ -16,13 +16,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { SignUpAuthForm } from "./sign-up-auth-form";
+import { SignUpForm } from "./sign-up-form";
 
 export interface SignUpAuthScreenProps
   extends FirebaseSignUpAuthScreenProps,
     Omit<ComponentProps<"div">, "children"> {}
 
-export function SignUpAuthScreen({
+export function SignUpCard({
   children,
   onSignUp,
   onSignInClick,
@@ -66,9 +66,9 @@ export function SignUpAuthScreen({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <SignUpAuthForm
+          <SignUpForm
             onSignInClick={onSignInClick}
-            onSignUp={(credential) => {
+            onSignUp={(credential: UserCredential) => {
               handleSignUp(credential.user);
             }}
           />
@@ -92,3 +92,8 @@ export function SignUpAuthScreen({
     </div>
   );
 }
+
+export {
+  SignUpCard as SignUpAuthScreen,
+  type SignUpAuthScreenProps as SignUpCardProps,
+};

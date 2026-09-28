@@ -4,9 +4,9 @@ import { getTranslation } from "@firebase-oss/ui-core";
 import { useOnUserAuthenticated, useUI } from "@firebase-oss/ui-react";
 import type { User } from "firebase/auth";
 import type { ComponentProps, PropsWithChildren } from "react";
-import { MultiFactorAuthAssertionScreen } from "@/components/notes-app/multi-factor-auth-assertion-screen";
-import { Policies } from "@/components/notes-app/policies";
-import { RedirectError } from "@/components/notes-app/redirect-error";
+import { Policies } from "@/components/notes-app/auth-policies-card";
+import { MultiFactorAuthAssertionScreen } from "@/components/notes-app/mfa-assertion-card";
+import { RedirectError } from "@/components/notes-app/redirect-error-alert";
 import {
   Card,
   CardContent,
@@ -16,17 +16,17 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export interface OAuthScreenProps
+export interface OAuthCardProps
   extends PropsWithChildren<Omit<ComponentProps<"div">, "children">> {
   onSignIn?: (user: User) => void;
 }
 
-export function OAuthScreen({
+export function OAuthCard({
   children,
   onSignIn,
   className,
   ...props
-}: OAuthScreenProps) {
+}: OAuthCardProps) {
   const ui = useUI();
 
   const titleText = getTranslation(ui, "labels", "signIn");

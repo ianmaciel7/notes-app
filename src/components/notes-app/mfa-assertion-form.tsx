@@ -11,8 +11,8 @@ import {
 import type { ComponentProps } from "react";
 import { useState } from "react";
 
-import { SmsMultiFactorAssertionForm } from "@/components/notes-app/sms-multi-factor-assertion-form";
-import { TotpMultiFactorAssertionForm } from "@/components/notes-app/totp-multi-factor-assertion-form";
+import { SmsMfaAssertionForm } from "@/components/notes-app/sms-mfa-assertion-form";
+import { TotpMfaAssertionForm } from "@/components/notes-app/totp-mfa-assertion-form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -20,7 +20,7 @@ export type MultiFactorAuthAssertionFormProps = ComponentProps<"div"> & {
   onSuccess?: (credential: UserCredential) => void;
 };
 
-export function MultiFactorAuthAssertionForm({
+export function MfaAssertionForm({
   onSuccess,
   className,
   ...props
@@ -49,7 +49,7 @@ export function MultiFactorAuthAssertionForm({
   if (hint) {
     if (hint.factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
       return (
-        <SmsMultiFactorAssertionForm
+        <SmsMfaAssertionForm
           hint={hint}
           onSuccess={onSuccess}
           className={className}
@@ -60,7 +60,7 @@ export function MultiFactorAuthAssertionForm({
 
     if (hint.factorId === TotpMultiFactorGenerator.FACTOR_ID) {
       return (
-        <TotpMultiFactorAssertionForm
+        <TotpMfaAssertionForm
           hint={hint}
           onSuccess={onSuccess}
           className={className}
@@ -105,3 +105,8 @@ function SmsButton(props: ComponentProps<typeof Button>) {
   const labelText = getTranslation(ui, "labels", "mfaSmsVerification");
   return <Button {...props}>{labelText}</Button>;
 }
+
+export {
+  MfaAssertionForm as MultiFactorAuthAssertionForm,
+  type MultiFactorAuthAssertionFormProps as MfaAssertionFormProps,
+};

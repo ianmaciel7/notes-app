@@ -44,6 +44,7 @@ For contribution checks and pull-request expectations, use
 - [`CONTRIBUTING.md`](./CONTRIBUTING.md) — contribution, Git, and PR workflow
 - [`AGENTS.md`](./AGENTS.md) — agent routing and always-on contract
 - [`RTK.md`](./RTK.md) — RTK-specific command-wrapper guidance
+- [`TOOLING.md`](./TOOLING.md) — repository tooling, guards, and MCP catalog
 
 ## License
 
