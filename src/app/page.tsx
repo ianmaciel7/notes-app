@@ -1,4 +1,5 @@
 import { AuthGreetingHeader } from "@/components/notes-app/auth-greeting-header";
+import { SpaceSwitcher } from "@/components/notes-app/space-switcher";
 import { UserMenu } from "@/components/notes-app/user-menu";
 
 export default function Home() {
@@ -9,8 +10,9 @@ export default function Home() {
         <UserMenu />
       </header>
 
-      <main className="flex flex-col items-center justify-center text-center p-8 space-y-4 max-w-md">
+      <main className="flex flex-col items-center justify-center text-center p-8 space-y-6 max-w-md w-full">
         <AuthGreetingHeader />
+        <SpaceSwitcher />
       </main>
 
       <footer className="p-6 text-center text-xs text-zinc-500">
