@@ -18,7 +18,8 @@ rtk pnpm dev
 ```
 
 The install step initializes repository Husky hooks through the package `prepare`
-script.
+script. Pre-commit runs only staged-file formatting/linting; the full deterministic gate
+remains `rtk pnpm check:ci` so commits stay fast while CI remains authoritative.
 
 ## 2. Branches
 
