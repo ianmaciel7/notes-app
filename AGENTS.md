@@ -134,6 +134,8 @@ skill behavior from its name alone.
 | Gather official up-to-date documentation into a concise implementation checklist | `docs-research` |
 | Scaffold a shadcn/Base UI component with story, test, and checks | `new-component` |
 | Create, organize, and maintain agent skills under `.agents/skills` | `skill-guide` |
+| Agent behavioral eval runs, report comparison, regression detection | `eval-harness` |
+| Firebase Auth emulator, seeds, and auth test environment | `firebase-setup` |
 | Consolidated health check for quality, tests, context, and token savings | `verify-health` |
 
 Treat project-owned skills and `skills-lock.json` as controlled configuration.

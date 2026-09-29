@@ -20,7 +20,7 @@ support guarantees.
 - Never commit API keys, tokens, credentials, private keys, or production secrets.
 - Runtime secrets must enter through environment configuration rather than source.
 - Logs, errors, fixtures, screenshots, and emulator diagnostics must not expose credentials or sensitive user data.
-- `.firebase/logs/` is machine-local diagnostic output and must remain untracked.
+- Firebase emulator and editor-plugin diagnostic logs are machine-local output and must remain untracked.
 - Generated tool configuration that can contain machine-specific paths or credentials is local output, not canonical repository source.
 
 ## 4. Input & Data Boundaries

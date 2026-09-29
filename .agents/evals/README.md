@@ -27,7 +27,7 @@ rtk pnpm eval:antigravity
 
 Narrow a run with `--scenario <id> --trials <n>`.
 
-Generated reports live under `.agents/evals/artifacts/` and are gitignored.
+Generated reports are written to a gitignored `artifacts` directory beneath `.agents/evals/`.
 
 ## Compare
 

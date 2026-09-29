@@ -8,3 +8,10 @@ This directory contains deterministic repository automation. The canonical tool 
 - `tooling/`: adapters around external CLIs.
 
 Keep tests and helper modules beside the entry point they support. Prefer stable `pnpm` commands over direct script paths in contributor-facing documentation. Scripts must use repository-relative paths, avoid secrets, remain non-interactive in CI, and avoid product-domain behavior.
+
+## Compatibility entry points
+
+Root-level wrappers are retained only when installed third-party skills reference legacy script paths. New project-owned code and documentation should use the grouped paths above.
+
+- `scripts/floor-guard.mjs` delegates to `scripts/guards/floor-guard.mjs`.
+- `scripts/verify-health.mjs` delegates to `scripts/verify/verify-health.mjs`.

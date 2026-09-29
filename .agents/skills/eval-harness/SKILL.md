@@ -28,7 +28,7 @@ Valid scenario IDs are defined in `.agents/evals/scenarios.json`.
 
 ## Compare reports
 
-Reports are written under `.agents/evals/artifacts/`. Compare two concrete reports with:
+Reports are written to the gitignored `artifacts` directory beneath `.agents/evals/`. Compare two concrete reports with:
 
 ```bash
 rtk pnpm eval:compare -- --baseline <baseline.json> --candidate <candidate.json>

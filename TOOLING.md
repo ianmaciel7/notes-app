@@ -98,13 +98,13 @@ Third-party actions remain pinned to full commit SHAs. Workflow-level permission
 
 `.agents/agents.json` is the canonical source. The repository uses `syncMode: "source-only"`, so tool-specific materializations are generated locally and are not canonical Git sources.
 
-- `rtk pnpm run .agents:sync` materializes local outputs.
-- `rtk pnpm run check:agents` materializes, then verifies that a second sync is clean.
+- `rtk pnpm .agents:sync` materializes local outputs.
+- `rtk pnpm check:agents` materializes, then verifies that a second sync is clean.
 - Generated files such as `.agents/generated/*`, `.mcp.json`, and `CLAUDE.md` remain gitignored.
 
 ### Graphify hooks
 
-Graphify's Git hooks are installed **per clone** with `rtk graphify hook install`. The generated hook records the interpreter available on that machine, so `.husky/post-commit` and `.husky/post-checkout` are intentionally gitignored and must not be committed.
+Graphify's Git hooks are installed **per clone** with `rtk graphify hook install`. The generated post-commit and post-checkout hooks under `.husky/` record the interpreter available on that machine, so those generated hook bodies are intentionally gitignored and must not be committed.
 
 The repository stores Graphify policy and skill configuration, not machine-generated hook bodies.
 

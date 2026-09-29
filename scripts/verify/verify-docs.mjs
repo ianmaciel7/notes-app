@@ -59,7 +59,11 @@ function skillDirs() {
   if (!existsSync(base)) return [];
   return readdirSync(base, { withFileTypes: true })
     .filter(
-      (d) => d.isDirectory() && existsSync(path.join(base, d.name, "SKILL.md")),
+      (d) =>
+        d.isDirectory() &&
+        ["SKILL.md", "skill.md"].some((entry) =>
+          existsSync(path.join(base, d.name, entry)),
+        ),
     )
     .map((d) => d.name);
 }
