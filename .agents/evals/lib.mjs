@@ -225,7 +225,9 @@ export function compareReports(baseline, candidate) {
   }
 
   const mode =
-    baseline?.provider === candidate?.provider ? "regression" : "cross-provider";
+    baseline?.provider === candidate?.provider
+      ? "regression"
+      : "cross-provider";
   const baselineById = new Map(
     (baseline?.scenarios ?? []).map((scenario) => [scenario.id, scenario]),
   );

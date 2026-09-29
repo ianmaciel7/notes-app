@@ -4,13 +4,13 @@ import { compareReports } from "./lib.mjs";
 
 const args = process.argv.slice(2);
 
-function valueOf(name) {
+function argValue(name) {
   const index = args.indexOf(name);
   return index >= 0 ? args[index + 1] : undefined;
 }
 
-const baselinePath = valueOf("--baseline");
-const candidatePath = valueOf("--candidate");
+const baselinePath = argValue("--baseline");
+const candidatePath = argValue("--candidate");
 
 if (!baselinePath || !candidatePath) {
   console.error(
